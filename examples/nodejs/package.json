@@ -1,0 +1,10 @@
+{
+  "name": "cognitesdk-nodejs-example",
+  "version": "1.0.0",
+  "description": "Nodejs example using the cognite javascript sdk",
+  "main": "index.js",
+  "license": "Cognite",
+  "scripts": {
+    "start": "node index.js"
+  }
+}

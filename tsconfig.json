@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "es5",
+    "declaration": true,
+    "declarationDir": "dist",
+    "outDir": "dist",
+    "strict": true,
+    "sourceMap": false,
+    "moduleResolution": "node",
+    "lib": ["es2015"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "src/__tests__/**/*"]
+}

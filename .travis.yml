@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+- node
+install:
+- yarn
+- npm install -g codecov
+script:
+- yarn lint
+- yarn build
+- yarn test && codecov
+before_deploy: yarn generateDocs
+deploy:
+  - provider: firebase
+    on: master
+    skip_cleanup: true
+    token:
+      secure: mYFm8FK8gSCKixfyZlOmcm7uxnIqcz/o3V52UZQr/IcriVJJnUJZsNEK/mMypy255JUQm3TBWyAtJV1sOIHpl5a7SZLhnlddh3YWvNtbRyoe4HutcVgoiCo8tQg8c5RacPe+pums/W5+699c45x0UcpNIb1UCQsjGavCjaHjpMOZ2osqWLMnOWtT1RyTEkWP2vVnElFNizvAYy1ird8tX0vibUnwYy6fm/Ltx/GighJLj4aozvepRAMmHbnG6dfbGmikzFo/UmBG7g+asX1Go7QBypYrBI+bKa4WsPCCAmQe+lFXKot7ha5x4KtYdO8ibJnSf5duvyo4/NCoaG+ezWOhJfLF3FGOrgsfCoX3NvAC/OaoP9TqCyd/OyvP6gOXcm67xTFGoYmLzQ5O1Iy2NbMA6T6WMfAdTFeb9/6Qd27VrcQGWGWVK3KOeGo+xn0hmdyf3yXSqnMm9qc1o3l/WxRkFfe/sk8vBPE7P258+mZmIfgJ+ixEQMrqJmYtfD3PauA5eq91BqsAOauKVDOiBGb2Bjb9CBuXJnyaEQChQHyRLTKJpuKo/lOehDC852ovuHDCvWwAi0TZ2YP3WKm6deOJsy3C425HeELpXbG8+XNo82Hh+AykH7NSM2ML3zGfe6hUnqpZUKuQbB0P60TGgHtM9EVqqveSrTHs/DMwv80=
+  - provider: npm
+    on:
+      branch: master
+      tags: true
+    skip_cleanup: true
+    email: cicd@cognite.com
+    api_key:
+      secure: ZRfpzsn8Xgkrq706u+GWd+HcFztaFL+dyeCeU3aoperJ4/r8WHkJ4Kd/ZAOl8ZcOCKy71YQfCrxFBrR6qzm0Dxo96zFwM18xh/g0GmWyfesTNhEE05GKkVf1Jj4j66ZN4rZkt/TPkdrQbmEFABATY1kPljBxwstwHKAFBlGINd04X+wPRUl3kKWT1K3oEinRrzDLF78TcciIet7oa9atQb7JY8mhr/rtlzyVL7Yz9fwb5l+wxPJpqN4G8ZvknCVtO3bGybRQuE7xu+BJ8+CvKR67ui0zfuOIgyHZxUe31yxceADRnes+0kFtrOhnbpHJ+WtroA0HUlBEfZTamelTZUciyLic9z34An/yNyJvfcHA6vfz8dGrVwHMxtGNz9DPy16hajzoik5XJGKq5YFCNalb1go1t/M7HpHqG68MR117zpDvEX8dJQwGWdrctA9y7Q3TZa5Xw6wNlIbCX9/nc/WwnbO0tutXk8+yHQzxuylM4Gqm9SRxfuYXrsAqciMVGOMBGppq9pDzilWPQMmShacNa80iL86NU2nF7G6R7EAf/Z98XUPo5lNZcvaUNWwlPzXy30/vRHDHC+fjkqYkIkGcds9u/LGIPF+87zK1x+h0kW34C0/wDC52nExqBBTmoQ6tF62HvBwFaPmwIxNXhomv4FksizlLu+4Afe9R0gg=

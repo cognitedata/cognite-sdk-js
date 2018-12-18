@@ -1,0 +1,11 @@
+node_modules
+coverage
+.coveralls.yml
+es
+build
+lib
+yarn-error.log
+.rpt2_cache
+dist
+docs
+.firebase
