@@ -1,4 +1,4 @@
-This project is an example application with `@cognite/cognitesdk` in plain nodejs.
+This project is an example application with `@cognite/sdk` in plain nodejs.
 
 ## Available Scripts
 

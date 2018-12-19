@@ -1,5 +1,5 @@
 import React from 'react';
-import * as sdk from '@cognite/cognitesdk';
+import * as sdk from '@cognite/sdk';
 import qs from 'query-string';
 import './App.css';
 

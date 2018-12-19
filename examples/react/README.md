@@ -1,4 +1,4 @@
-This project is an example application for authentication with `@cognite/cognitesdk` written in React.
+This project is an example application for authentication with `@cognite/sdk` written in React.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
