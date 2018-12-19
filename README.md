@@ -16,16 +16,16 @@ The SDK supports authentication through api-keys (_for server-side applications_
 
 Install the package with yarn:
 
-    yarn add @cognite/cognitesdk
+    yarn add @cognite/sdk
 
 or npm
 
-    npm install @cognite/cognitesdk --save
+    npm install @cognite/sdk --save
 
 ## Usage
 
 ```js
-const sdk = require('@cognite/cognitesdk');
+const sdk = require('@cognite/sdk');
 
 sdk.configure({
   project,
@@ -36,7 +36,7 @@ sdk.configure({
 ### Using ES modules
 
 ```js
-import * as sdk from '@cognite/cognitesdk';
+import * as sdk from '@cognite/sdk';
 ```
 
 ### Using typescript
@@ -50,7 +50,7 @@ The SDK is written in native typescript, so no extra types needs to be defined.
 Authenticating with an api key should only happen when building server-side applications.
 
 ```js
-const sdk = require('@cognite/cognitesdk');
+const sdk = require('@cognite/sdk');
 sdk.configure({
   project: 'yourProject',
   apiKey: 'yourApiKey',
