@@ -1,4 +1,4 @@
-const sdk = require('@cognite/cognitesdk');
+const sdk = require('@cognite/sdk');
 
 sdk.configure({
   project: process.env.COGNITE_PROJECT || 'publicdata',
