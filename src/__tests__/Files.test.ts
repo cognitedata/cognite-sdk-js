@@ -40,7 +40,7 @@ const files: File[] = [
   },
 ];
 
-const requestFiles: Array<Partial<File>> = [
+const requestFiles: Partial<File>[] = [
   {
     fileName: 'random-filename.fbx',
   },

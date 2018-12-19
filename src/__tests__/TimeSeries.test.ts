@@ -44,7 +44,7 @@ const timeseries: Timeseries[] = [
   },
 ];
 
-const requestTimeseries: Array<Partial<Timeseries>> = [
+const requestTimeseries: Partial<Timeseries>[] = [
   {
     name: `Timeseries1`,
     isString: false,

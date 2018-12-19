@@ -51,7 +51,7 @@ const assets: Asset[] = [
   },
 ];
 
-const requestAssets: Array<Partial<Asset>> = [
+const requestAssets: Partial<Asset>[] = [
   { name: assets[0].name },
   {
     name: 'Sub asset',
