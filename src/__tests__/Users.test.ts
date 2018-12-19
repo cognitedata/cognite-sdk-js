@@ -32,7 +32,7 @@ const users: User[] = [
   },
 ];
 
-const requestUsers: Array<Partial<User>> = [
+const requestUsers: Partial<User>[] = [
   { uniqueName: 'f2@cognite.com' },
   {
     uniqueName: 'admin@cognite.com',

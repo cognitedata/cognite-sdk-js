@@ -26,7 +26,7 @@ describe('Asset integration test', () => {
       project: 'cognitesdk-js',
       apiKey: process.env.COGNITE_CREDENTIALS,
     });
-    const assets: Array<Partial<sdk.Asset>> = [rootAsset, childAsset];
+    const assets: Partial<sdk.Asset>[] = [rootAsset, childAsset];
     try {
       await sdk.Assets.create(assets);
     } catch (ex) {

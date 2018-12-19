@@ -33,7 +33,7 @@ const groups: Group[] = [
   },
 ];
 
-const requestGroups: Array<Partial<Group>> = [
+const requestGroups: Partial<Group>[] = [
   {
     name: 'Test name',
     source: 'sourceStr',

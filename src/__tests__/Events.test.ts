@@ -40,7 +40,7 @@ const events: Event[] = [
   },
 ];
 
-const requestEvents: Array<Partial<Event>> = [
+const requestEvents: Partial<Event>[] = [
   {},
   {
     startTime: 100,
