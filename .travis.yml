@@ -5,6 +5,7 @@ install:
 - yarn
 - npm install -g codecov
 script:
+- yarn validateDocLinks
 - yarn lint
 - yarn build
 - yarn test && codecov

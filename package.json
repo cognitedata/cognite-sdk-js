@@ -29,6 +29,7 @@
     "axios-mock-adapter": "^1.15.0",
     "es-check": "^5.0.0",
     "jest": "^23.6.0",
+    "markdown-link-check": "^3.7.2",
     "prettier": "^1.10.2",
     "rollup": "^0.67.0",
     "rollup-plugin-typescript2": "^0.17.2",
@@ -50,7 +51,8 @@
     "watch": "rollup -cw",
     "docs": "typedoc --options typedoc.js src/index.ts",
     "prepush": "yarn lint && yarn test",
-    "esCheck": "es-check es5 './dist/index.js'"
+    "esCheck": "es-check es5 './dist/index.js'",
+    "validateDocLinks": "markdown-link-check README.md"
   },
   "dependencies": {
     "axios": "^0.18.0",
