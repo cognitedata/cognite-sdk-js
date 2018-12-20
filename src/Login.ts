@@ -3,12 +3,15 @@
 import { AxiosResponse } from 'axios';
 import { configure, rawGet, rawPost } from './core';
 
-interface LoginRetriveveUrlParams {
+export interface LoginRetriveveUrlParams {
   project?: string;
   redirectUrl: string;
   errorRedirectUrl?: string;
 }
 
+/**
+ * @hidden
+ */
 export interface LoginUrlResponse {
   data: {
     url: string;
@@ -22,11 +25,14 @@ export interface LoginStatus {
   projectId: number;
 }
 
+/**
+ * @hidden
+ */
 export interface LoginStatusResponse {
   data: LoginStatus;
 }
 
-interface TokenStatus {
+export interface TokenStatus {
   token: string;
   valid: boolean;
   expired: boolean;

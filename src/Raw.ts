@@ -34,22 +34,22 @@ interface RawRowResponse {
   };
 }
 
-interface RawInsertRowsParams {
+export interface RawInsertRowsParams {
   ensureParent?: boolean;
 }
 
-interface RawListRowsParams {
+export interface RawListRowsParams {
   limit?: number;
   cursor?: string;
   columns?: string[];
 }
 
-interface RawListDatabasesParams {
+export interface RawListDatabasesParams {
   limit?: number;
   cursor?: string;
 }
 
-interface RawListTablesParams {
+export interface RawListTablesParams {
   limit?: number;
   cursor?: string;
 }

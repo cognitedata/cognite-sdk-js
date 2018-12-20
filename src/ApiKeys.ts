@@ -3,23 +3,6 @@
 import { AxiosResponse } from 'axios';
 import { apiUrl, projectUrl, rawGet, rawPost } from './core';
 
-export interface Asset {
-  id: number;
-  depth?: number;
-  name?: string;
-  path?: number[];
-  parentId?: number;
-  description?: string;
-  metadata?: { [k: string]: string };
-  source?: string;
-  sourceId?: string;
-  createdTime?: number;
-  lastUpdatedTime?: number;
-  refId?: string;
-  parentName?: string;
-  parentRefId?: string;
-}
-
 export interface ApiKey {
   value?: string;
   id: number;
@@ -34,7 +17,7 @@ interface ApiKeyResponse {
   };
 }
 
-interface ApiKeyListParams {
+export interface ApiKeyListParams {
   all?: boolean;
   userId?: number;
   includeDeleted?: boolean;

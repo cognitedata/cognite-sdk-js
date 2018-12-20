@@ -26,7 +26,7 @@ interface GroupDataResponse {
   };
 }
 
-interface GroupListParams {
+export interface GroupListParams {
   all?: boolean;
 }
 

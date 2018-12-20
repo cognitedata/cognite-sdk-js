@@ -14,7 +14,7 @@ interface SecuritycategoryResponse {
   };
 }
 
-interface SecuritycategoriesWithCursor {
+export interface SecuritycategoriesWithCursor {
   previousCursor?: string;
   nextCursor?: string;
   items: Securitycategory[];
@@ -24,7 +24,7 @@ interface SecuritycategoriesWithCursorResponse {
   data: SecuritycategoriesWithCursor;
 }
 
-interface SecuritycategoryListParams {
+export interface SecuritycategoryListParams {
   sort?: string;
   cursor?: string;
   limit?: number;

@@ -2,6 +2,7 @@
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
+/** @hidden */
 export const BASE_URL: string = 'https://api.cognitedata.com';
 
 export class CogniteSDKError extends Error {
@@ -77,7 +78,7 @@ function handleCogniteErrorResponse(err: AxiosError) {
 }
 
 type HttpVerb = 'get' | 'post' | 'put' | 'delete';
-export async function rawRequest(
+async function rawRequest(
   verb: HttpVerb,
   url: string,
   reqOpt: AxiosRequestConfig = {}

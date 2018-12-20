@@ -16,11 +16,11 @@ export interface Model {
   createdTime: number;
 }
 
-type DONE = 'Done';
-type FAILED = 'Failed';
-type QUEUED = 'Queued';
-type PROCESSING = 'Processing';
-type RevisionStatus = DONE | FAILED | QUEUED | PROCESSING;
+export type DONE = 'Done';
+export type FAILED = 'Failed';
+export type QUEUED = 'Queued';
+export type PROCESSING = 'Processing';
+export type RevisionStatus = DONE | FAILED | QUEUED | PROCESSING;
 export interface Revision {
   published: boolean;
   rotation?: number[];
@@ -66,7 +66,7 @@ interface DataResponse<T> {
   };
 }
 
-interface DataWithCursor<T> {
+export interface DataWithCursor<T> {
   previousCursor?: string;
   nextCursor?: string;
   items: T[];
@@ -76,31 +76,31 @@ interface DataResponseWithCursor<T> {
   data: DataWithCursor<T>;
 }
 
-interface Camera {
+export interface Camera {
   target: number[];
   position: number[];
 }
 
-interface CreateRevision {
+export interface CreateRevision {
   fileId: number;
   rotation?: number[];
   camera?: Camera;
 }
 
-interface ThreeDListAssetMappingsParams {
+export interface ThreeDListAssetMappingsParams {
   cursor?: string;
   limit?: number;
   nodeId?: number;
   assetId?: number;
 }
 
-interface ThreeDListModelsParams {
+export interface ThreeDListModelsParams {
   cursor?: string;
   limit?: number;
   published?: boolean;
 }
 
-interface ThreeDListNodesParams {
+export interface ThreeDListNodesParams {
   cursor?: string;
   limit?: number;
   depth?: number;
@@ -108,26 +108,26 @@ interface ThreeDListNodesParams {
   includeAncestors?: boolean;
 }
 
-interface ThreeDListRevisionsParams {
+export interface ThreeDListRevisionsParams {
   cursor?: string;
   limit?: number;
   published?: boolean;
 }
 
-interface ThreeDListSectorsParams {
+export interface ThreeDListSectorsParams {
   boundingBox?: BoundingBox;
   cursor?: string;
   limit?: number;
 }
 
-type ResponseType =
+export type ResponseType =
   | 'arraybuffer'
   | 'blob'
   | 'document'
   | 'json'
   | 'text'
   | 'stream';
-type DownloadProgress = (progressEvent: any) => void;
+export type DownloadProgress = (progressEvent: any) => void;
 
 /**
  * @hidden

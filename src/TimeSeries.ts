@@ -23,7 +23,7 @@ interface TimeseriesResponse {
   };
 }
 
-interface TimeseriesWithCursor {
+export interface TimeseriesWithCursor {
   previousCursor?: string;
   nextCursor?: string;
   items: Timeseries[];
@@ -43,7 +43,7 @@ export interface TimeseriesListParams {
   path?: string;
 }
 
-interface TimeseriesSearchParams {
+export interface TimeseriesSearchParams {
   description?: string;
   query?: string;
   unit?: string;
