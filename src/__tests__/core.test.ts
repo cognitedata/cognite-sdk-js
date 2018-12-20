@@ -47,13 +47,15 @@ describe('Core', () => {
     await rawGet('/test');
     mock.reset();
 
+    const newBaseUrl = 'https://greenfield.cognitedata.com';
     configure({
+      baseUrl: newBaseUrl,
       withCredentials: false,
     });
     mock
       .onGet(/\/test\/abc$/, { params: { enabled: true } })
       .reply((config: AxiosRequestConfig) => {
-        if (config.baseURL !== BASE_URL) {
+        if (config.baseURL !== newBaseUrl) {
           return [404];
         }
         if (config.headers['api-key'] !== apiKey) {

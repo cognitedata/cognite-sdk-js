@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { rawGet } from './core';
 import { LoginStatus, LoginStatusResponse, LoginUrlResponse } from './Login';
 
-interface LogoutRetriveveUrlParams {
+export interface LogoutRetriveveUrlParams {
   redirectUrl: string;
 }
 

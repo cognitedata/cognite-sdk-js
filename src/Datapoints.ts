@@ -8,10 +8,6 @@ export interface Datapoint {
   value: number | string;
 }
 
-export interface DataDatapoint {
-  items: Datapoint[];
-}
-
 export interface DataDatapoints {
   name: string;
   datapoints: Datapoint[];

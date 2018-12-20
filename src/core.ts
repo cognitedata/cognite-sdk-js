@@ -2,6 +2,7 @@
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
+/** @hidden */
 export const BASE_URL: string = 'https://api.cognitedata.com';
 
 export class CogniteSDKError extends Error {
@@ -17,24 +18,29 @@ export class CogniteSDKError extends Error {
   }
 }
 
-interface Options {
+export interface Options {
   project: string | null;
   apiKey: string | null;
+  baseUrl: string;
   withCredentials: boolean;
 }
 
 const initialOptions: Options = {
   project: null,
   apiKey: null,
+  baseUrl: BASE_URL,
   withCredentials: false,
 };
 
 const options: Options = { ...initialOptions };
 
+/** @hidden */
 export const apiUrl = (version: number): string => `api/${version}`;
+/** @hidden */
 export const projectUrl = (project?: string): string =>
   `projects/${encodeURIComponent(project || (options.project as string))}`;
 
+/** @hidden */
 export const instance = axios.create({
   baseURL: BASE_URL,
 });
@@ -54,6 +60,7 @@ instance.interceptors.request.use(
 
 export function configure(opts: Partial<Options>): Options {
   Object.assign(options, opts);
+  instance.defaults.baseURL = options.baseUrl;
   if (options.apiKey) {
     instance.defaults.headers['api-key'] = options.apiKey;
   }
@@ -77,7 +84,7 @@ function handleCogniteErrorResponse(err: AxiosError) {
 }
 
 type HttpVerb = 'get' | 'post' | 'put' | 'delete';
-export async function rawRequest(
+async function rawRequest(
   verb: HttpVerb,
   url: string,
   reqOpt: AxiosRequestConfig = {}

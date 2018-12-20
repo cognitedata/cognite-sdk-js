@@ -23,7 +23,7 @@ interface FileMetadataResponse {
   };
 }
 
-interface FileMetadataWithCursor {
+export interface FileMetadataWithCursor {
   previousCursor?: string;
   nextCursor?: string;
   items: File[];
@@ -50,7 +50,7 @@ export interface FileDeleteResponse {
   failed: number[];
 }
 
-interface FileListParams {
+export interface FileListParams {
   assetId?: number;
   dir?: string;
   name?: string;
@@ -62,7 +62,7 @@ interface FileListParams {
   cursor?: string;
 }
 
-interface FileSearchParams {
+export interface FileSearchParams {
   name?: string;
   directory?: string;
   type?: string;

@@ -23,7 +23,7 @@ interface EventDataResponse {
   };
 }
 
-interface EventDataWithCursor {
+export interface EventDataWithCursor {
   previousCursor?: string;
   nextCursor?: string;
   items: Event[];
@@ -33,7 +33,7 @@ interface EventDataWithCursorResponse {
   data: EventDataWithCursor;
 }
 
-interface EventListParams {
+export interface EventListParams {
   type?: string;
   subtype?: string;
   assetId?: number;
@@ -46,7 +46,7 @@ interface EventListParams {
   source?: string;
 }
 
-interface EventSearchParams {
+export interface EventSearchParams {
   description?: string;
   type?: string;
   subtype?: string;

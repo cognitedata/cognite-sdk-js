@@ -5,10 +5,11 @@ install:
 - yarn
 - npm install -g codecov
 script:
+- yarn validateDocLinks
 - yarn lint
 - yarn build
 - yarn test && codecov
-before_deploy: yarn generateDocs
+before_deploy: yarn docs
 deploy:
   - provider: firebase
     on: master

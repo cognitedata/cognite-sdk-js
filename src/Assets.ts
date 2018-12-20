@@ -26,7 +26,7 @@ interface AssetDataResponse {
   };
 }
 
-interface AssetDataWithCursor {
+export interface AssetDataWithCursor {
   previousCursor?: string;
   nextCursor?: string;
   items: Asset[];
@@ -36,7 +36,7 @@ interface AssetDataWithCursorResponse {
   data: AssetDataWithCursor;
 }
 
-interface AssetListParams {
+export interface AssetListParams {
   name?: string;
   fuzziness?: number;
   path?: string;
@@ -48,13 +48,13 @@ interface AssetListParams {
   limit?: number;
 }
 
-interface AssetListDescendantsParams {
+export interface AssetListDescendantsParams {
   depth?: number;
   cursor?: string;
   limit?: number;
 }
 
-interface AssetSearchParams {
+export interface AssetSearchParams {
   name?: string;
   description?: string;
   query?: string;

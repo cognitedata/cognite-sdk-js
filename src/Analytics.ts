@@ -32,7 +32,7 @@ export interface AnalyticsPatternSearchParams {
   arguments?: PatternSearchArguments;
 }
 
-export interface AnalyticsJobIdResponse {
+interface AnalyticsJobIdResponse {
   jobId: number;
 }
 

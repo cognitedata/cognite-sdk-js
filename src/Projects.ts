@@ -27,22 +27,16 @@ export interface Project {
   };
 }
 
-interface ProjectDataWithCursor {
-  previousCursor?: string;
-  nextCursor?: string;
-  items: Project[];
-}
-
-interface ProjectDataWithCursorResponse {
-  data: ProjectDataWithCursor;
+interface ProjectResponse {
+  data: {
+    items: Project[];
+  };
 }
 
 export class Projects {
   public static async retrieve(projectName: string): Promise<Project> {
     const url = `${apiUrl(0.5)}/${projectUrl(projectName)}`;
-    const response = (await rawGet(url)) as AxiosResponse<
-      ProjectDataWithCursorResponse
-    >;
+    const response = (await rawGet(url)) as AxiosResponse<ProjectResponse>;
     return response.data.data.items[0];
   }
 
@@ -55,7 +49,7 @@ export class Projects {
       items: [project],
     };
     const response = (await rawPut(url, { data: body })) as AxiosResponse<
-      ProjectDataWithCursorResponse
+      ProjectResponse
     >;
     return response.data.data.items[0];
   }

@@ -29,6 +29,7 @@
     "axios-mock-adapter": "^1.15.0",
     "es-check": "^5.0.0",
     "jest": "^23.6.0",
+    "markdown-link-check": "^3.7.2",
     "prettier": "^1.10.2",
     "rollup": "^0.67.0",
     "rollup-plugin-typescript2": "^0.17.2",
@@ -37,7 +38,9 @@
     "tslint-config-prettier": "^1.16.0",
     "tslint-plugin-prettier": "^2.0.1",
     "typedoc": "^0.13.0",
-    "typescript": "^3.1.6"
+    "typedoc-plugin-markdown": "^1.1.19",
+    "typescript": "^3.1.6",
+    "vuepress": "^0.14.8"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -47,9 +50,10 @@
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c tslint.json -p tsconfig.json --fix",
     "build": "yarn clean && rollup -c && yarn esCheck",
     "watch": "rollup -cw",
-    "generateDocs": "typedoc --options typedoc.js src/index.ts",
+    "docs": "typedoc --options typedoc.js src/index.ts && vuepress build docs",
     "prepush": "yarn lint && yarn test",
-    "esCheck": "es-check es5 './dist/index.js'"
+    "esCheck": "es-check es5 './dist/index.js'",
+    "validateDocLinks": "markdown-link-check README.md"
   },
   "dependencies": {
     "axios": "^0.18.0",
