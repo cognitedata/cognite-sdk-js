@@ -11,11 +11,6 @@ script:
 - yarn test && codecov
 before_deploy: yarn generateDocs
 deploy:
-  - provider: firebase
-    on: master
-    skip_cleanup: true
-    token:
-      secure: mYFm8FK8gSCKixfyZlOmcm7uxnIqcz/o3V52UZQr/IcriVJJnUJZsNEK/mMypy255JUQm3TBWyAtJV1sOIHpl5a7SZLhnlddh3YWvNtbRyoe4HutcVgoiCo8tQg8c5RacPe+pums/W5+699c45x0UcpNIb1UCQsjGavCjaHjpMOZ2osqWLMnOWtT1RyTEkWP2vVnElFNizvAYy1ird8tX0vibUnwYy6fm/Ltx/GighJLj4aozvepRAMmHbnG6dfbGmikzFo/UmBG7g+asX1Go7QBypYrBI+bKa4WsPCCAmQe+lFXKot7ha5x4KtYdO8ibJnSf5duvyo4/NCoaG+ezWOhJfLF3FGOrgsfCoX3NvAC/OaoP9TqCyd/OyvP6gOXcm67xTFGoYmLzQ5O1Iy2NbMA6T6WMfAdTFeb9/6Qd27VrcQGWGWVK3KOeGo+xn0hmdyf3yXSqnMm9qc1o3l/WxRkFfe/sk8vBPE7P258+mZmIfgJ+ixEQMrqJmYtfD3PauA5eq91BqsAOauKVDOiBGb2Bjb9CBuXJnyaEQChQHyRLTKJpuKo/lOehDC852ovuHDCvWwAi0TZ2YP3WKm6deOJsy3C425HeELpXbG8+XNo82Hh+AykH7NSM2ML3zGfe6hUnqpZUKuQbB0P60TGgHtM9EVqqveSrTHs/DMwv80=
   - provider: npm
     on:
       branch: master
