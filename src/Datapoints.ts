@@ -127,6 +127,17 @@ export class Datapoints {
     return response.data.data.items[0];
   }
 
+  public static async retrieveByName(
+    timeseriesName: string,
+    params?: DatapointsRetrieveParams
+  ): Promise<DataDatapoints> {
+    const url = `${datapointsUrl()}/data/${encodeURIComponent(timeseriesName)}`;
+    const response = (await rawGet(url, { params })) as AxiosResponse<
+      DatapointsResponse
+    >;
+    return response.data.data.items[0];
+  }
+
   public static async retrieveMultiple(
     query: DatapointsMultiQuery
   ): Promise<DataDatapoints[]> {
