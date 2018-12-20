@@ -105,7 +105,7 @@ describe('Datapoints', () => {
     });
   });
 
-  test('retrive datapoints by name', async () => {
+  test('retrieve datapoints by name', async () => {
     const params = {
       aggregates: 'avg,max',
       granularity: '12h',
