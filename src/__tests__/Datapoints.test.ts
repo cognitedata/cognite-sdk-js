@@ -105,6 +105,38 @@ describe('Datapoints', () => {
     });
   });
 
+  test('retrive datapoints by name', async () => {
+    const params = {
+      aggregates: 'avg,max',
+      granularity: '12h',
+      includeOutsidePoints: false,
+    };
+    const name = 'sensor abc';
+    const reg = new RegExp(`/timeseries/data/${encodeURIComponent(name)}$`);
+    mock
+      .onGet(reg, {
+        data: {
+          items: datapoints,
+        },
+      })
+      .reply(200, {
+        data: {
+          items: [
+            {
+              name: 'Cognite',
+              datapoints,
+            },
+          ],
+        },
+      });
+
+    const result = await Datapoints.retrieveByName(name, params);
+    expect(result).toEqual({
+      name: 'Cognite',
+      datapoints,
+    });
+  });
+
   test('retrive multiple datapoints', async () => {
     const params = {
       items: [
