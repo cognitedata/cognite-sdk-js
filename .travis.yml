@@ -19,7 +19,6 @@ deploy:
   - provider: npm
     on:
       branch: master
-      tags: true
     skip_cleanup: true
     email: cicd@cognite.com
     api_key:
