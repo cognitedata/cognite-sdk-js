@@ -82,6 +82,16 @@ describe('Core', () => {
     await rawGet(`${apiUrl(0.6)}/${projectUrl()}/test-url`);
   });
 
+  test('x-user-agent header', async () => {
+    mock.onGet(/\/test$/).reply((config: AxiosRequestConfig) => {
+      if (config.headers['X-User-Agent'] !== 'js-sdk') {
+        return [400];
+      }
+      return [200];
+    });
+    await rawGet('test');
+  });
+
   test('handling error messages', async () => {
     const errorCode = 418;
     const errorMessage = 'Custom error message';
