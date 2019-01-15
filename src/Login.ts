@@ -86,6 +86,18 @@ export class Login {
     const response = (await rawPost(url, { data: body })) as AxiosResponse<
       LoginStatusResponse
     >;
+    const { project } = response.data.data;
+    if (configure({}).project && configure({}).project !== project) {
+      throw new Error(
+        `The api key is for a different project than configured: ${project} vs ${
+          configure({}).project
+        }`
+      );
+    }
+    configure({
+      project,
+      apiKey,
+    });
     return response.data.data;
   }
 
