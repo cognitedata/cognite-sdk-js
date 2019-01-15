@@ -1,9 +1,10 @@
 // Copyright 2018 Cognite AS
 
 import { AxiosResponse } from 'axios';
+import { stringify } from 'query-string';
 import { configure, rawGet, rawPost } from './core';
 
-export interface LoginRetriveveUrlParams {
+export interface LoginParams {
   project?: string;
   redirectUrl: string;
   errorRedirectUrl?: string;
@@ -48,9 +49,29 @@ interface TokenStatusResponse {
 const loginUrl = (): string => `/login`;
 
 export class Login {
-  public static async retrieveLoginUrl(
-    params: LoginRetriveveUrlParams
-  ): Promise<string> {
+  public static getLoginUrl(params: LoginParams): string {
+    const defaultProject = configure({}).project;
+    const queryParams = {
+      project: defaultProject,
+      ...params,
+    };
+    const baseUrl = configure({}).baseUrl;
+    const url = `${baseUrl}${loginUrl()}/redirect?${stringify(queryParams)}`;
+    return url;
+  }
+
+  public static loginWithRedirect(params: LoginParams): void {
+    const url = Login.getLoginUrl(params);
+    try {
+      window.location.assign(url);
+    } catch (err) {
+      console.warn(
+        'You can only call loginWithRedirect in a browser environment'
+      );
+    }
+  }
+
+  public static async retrieveLoginUrl(params: LoginParams): Promise<string> {
     const url = `${loginUrl()}/url`;
     const defaultProject = configure({}).project;
     const response = (await rawGet(url, {
