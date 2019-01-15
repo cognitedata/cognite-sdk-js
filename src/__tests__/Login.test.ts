@@ -1,6 +1,7 @@
 // Copyright 2018 Cognite AS
 
 import MockAdapter from 'axios-mock-adapter';
+import { configure } from '../core';
 import { instance, Login } from '../index';
 
 let mock: MockAdapter;
@@ -19,6 +20,55 @@ afterEach(() => {
 });
 
 describe('Login', () => {
+  test('get login url', async () => {
+    configure({
+      baseUrl: 'https://api.cognitedata.com',
+    });
+    {
+      const actual = Login.getLoginUrl({
+        project: 'my-tenant',
+        redirectUrl: 'https://mywebapp.com',
+        errorRedirectUrl: 'https://mybrokenwebapp.com',
+      });
+      const expected =
+        'https://api.cognitedata.com/login/redirect?errorRedirectUrl=https%3A%2F%2Fmybrokenwebapp.com&project=my-tenant&redirectUrl=https%3A%2F%2Fmywebapp.com';
+      expect(actual).toBe(expected);
+    }
+    {
+      const actual = Login.getLoginUrl({
+        project: 'my-tenant',
+        redirectUrl: 'https://mywebapp.com',
+      });
+      const expected =
+        'https://api.cognitedata.com/login/redirect?project=my-tenant&redirectUrl=https%3A%2F%2Fmywebapp.com';
+      expect(actual).toBe(expected);
+    }
+    {
+      configure({
+        project: 'abc',
+        baseUrl: 'https://mynewdomain.com',
+      });
+      const actual = Login.getLoginUrl({
+        redirectUrl: 'https://mywebapp.com',
+      });
+      const expected =
+        'https://mynewdomain.com/login/redirect?project=abc&redirectUrl=https%3A%2F%2Fmywebapp.com';
+      expect(actual).toBe(expected);
+    }
+  });
+
+  test('login with redirect', async () => {
+    const params = {
+      project: 'cognitesdk-js',
+      redirectUrl: 'https://sdk.cognite.com/js',
+      errorRedirectUrl: 'https://sdk.cognite.com/js/error',
+    };
+    window.location.assign = jest.fn();
+    Login.loginWithRedirect(params);
+    expect(window.location.assign).toBeCalledTimes(1);
+    expect(window.location.assign).toBeCalledWith(expect.any(String));
+  });
+
   test('retrieve login url', async () => {
     const params = {
       project: 'cognitesdk-js',
