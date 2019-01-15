@@ -82,9 +82,9 @@ describe('Core', () => {
     await rawGet(`${apiUrl(0.6)}/${projectUrl()}/test-url`);
   });
 
-  test('x-user-agent header', async () => {
+  test('X-CDP-Client header', async () => {
     mock.onGet(/\/test$/).reply((config: AxiosRequestConfig) => {
-      if (config.headers['X-User-Agent'] !== 'js-sdk') {
+      if (config.headers['X-CDP-Client'] !== 'js-sdk') {
         return [400];
       }
       return [200];

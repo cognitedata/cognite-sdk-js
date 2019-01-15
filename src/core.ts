@@ -44,7 +44,7 @@ export const projectUrl = (project?: string): string =>
 export const instance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    'X-User-Agent': 'js-sdk',
+    'X-CDP-Client': 'js-sdk',
   },
 });
 
