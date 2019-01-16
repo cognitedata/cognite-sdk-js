@@ -99,13 +99,9 @@ describe('Login', () => {
         project: undefined,
         apiKey: undefined,
       });
-      mock
-        .onPost(/\/login$/, {
-          apiKey,
-        })
-        .reply(200, {
-          data: response,
-        });
+      mock.onGet(/\/login\/status$/).reply(200, {
+        data: response,
+      });
 
       const result = await Login.loginWithApiKey(apiKey);
       expect(result).toEqual(response);
@@ -118,13 +114,9 @@ describe('Login', () => {
         project: 'another-project',
         apiKey: undefined,
       });
-      mock
-        .onPost(/\/login$/, {
-          apiKey,
-        })
-        .reply(200, {
-          data: response,
-        });
+      mock.onGet(/\/login\/status$/).reply(200, {
+        data: response,
+      });
       await expect(Login.loginWithApiKey(apiKey)).rejects.toThrow();
     });
 
@@ -133,13 +125,9 @@ describe('Login', () => {
         project: undefined,
         apiKey: 'some-api-key',
       });
-      mock
-        .onPost(/\/login$/, {
-          apiKey,
-        })
-        .reply(200, {
-          data: response,
-        });
+      mock.onGet(/\/login\/status$/).reply(200, {
+        data: response,
+      });
       const result = await Login.loginWithApiKey(apiKey);
       expect(result).toEqual(response);
       expect(configure({}).apiKey).toBe(apiKey);
