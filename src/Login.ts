@@ -2,7 +2,7 @@
 
 import { AxiosResponse } from 'axios';
 import { stringify } from 'query-string';
-import { configure, rawGet, rawPost } from './core';
+import { configure, rawGet } from './core';
 
 export interface LoginParams {
   project?: string;
