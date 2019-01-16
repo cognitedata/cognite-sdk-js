@@ -82,11 +82,9 @@ export class Login {
 
   public static async loginWithApiKey(apiKey: string): Promise<LoginStatus> {
     const url = loginUrl();
-    const body = { apiKey };
-    const response = (await rawPost(url, { data: body })) as AxiosResponse<
-      LoginStatusResponse
-    >;
-    const { project } = response.data.data;
+    configure({ apiKey });
+    const loginStatus = await Login.verifyStatus();
+    const { project } = loginStatus;
     if (configure({}).project && configure({}).project !== project) {
       throw new Error(
         `The api key is for a different project than configured: ${project} vs ${
@@ -94,11 +92,8 @@ export class Login {
         }`
       );
     }
-    configure({
-      project,
-      apiKey,
-    });
-    return response.data.data;
+    configure({ project });
+    return loginStatus;
   }
 
   public static async validateJWT(token: string): Promise<TokenStatus> {
