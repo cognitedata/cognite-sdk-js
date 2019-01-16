@@ -85,7 +85,7 @@ describe('Login', () => {
     expect(result).toBe(loginUrl);
   });
 
-  test('login with api key', async () => {
+  describe('login with api key', () => {
     const apiKey = 'test-api-key';
     const response = {
       user: 'sdk-test',
@@ -94,16 +94,57 @@ describe('Login', () => {
       projectId: 12345,
     };
 
-    mock
-      .onPost(/\/login$/, {
-        apiKey,
-      })
-      .reply(200, {
-        data: response,
+    test('not defined project, apikey', async () => {
+      configure({
+        project: undefined,
+        apiKey: undefined,
       });
+      mock
+        .onPost(/\/login$/, {
+          apiKey,
+        })
+        .reply(200, {
+          data: response,
+        });
 
-    const result = await Login.loginWithApiKey(apiKey);
-    expect(result).toEqual(response);
+      const result = await Login.loginWithApiKey(apiKey);
+      expect(result).toEqual(response);
+      expect(configure({}).apiKey).toBe(apiKey);
+      expect(configure({}).project).toBe(response.project);
+    });
+
+    test('not matching project', async () => {
+      configure({
+        project: 'another-project',
+        apiKey: undefined,
+      });
+      mock
+        .onPost(/\/login$/, {
+          apiKey,
+        })
+        .reply(200, {
+          data: response,
+        });
+      await expect(Login.loginWithApiKey(apiKey)).rejects.toThrow();
+    });
+
+    test('defined apiKey', async () => {
+      configure({
+        project: undefined,
+        apiKey: 'some-api-key',
+      });
+      mock
+        .onPost(/\/login$/, {
+          apiKey,
+        })
+        .reply(200, {
+          data: response,
+        });
+      const result = await Login.loginWithApiKey(apiKey);
+      expect(result).toEqual(response);
+      expect(configure({}).apiKey).toBe(apiKey);
+      expect(configure({}).project).toBe(response.project);
+    });
   });
 
   test('validate jwt', async () => {
