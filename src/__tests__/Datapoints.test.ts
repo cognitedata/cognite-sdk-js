@@ -193,6 +193,20 @@ describe('Datapoints', () => {
     expect(result).toEqual(datapoints[0]);
   });
 
+  test('retrive latest datapoint with empty list', async () => {
+    mock
+      .onGet(/\/timeseries\/latest\/Cognite$/, {
+        before: 400,
+      })
+      .reply(200, {
+        data: {
+          items: [],
+        },
+      });
+    const result = await Datapoints.retrieveLatest('Cognite');
+    expect(result).toEqual(undefined);
+  });
+
   test('retrive datapoints as csv', async () => {
     const params = {
       items: [
