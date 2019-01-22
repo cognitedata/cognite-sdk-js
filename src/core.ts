@@ -43,6 +43,7 @@ export const projectUrl = (project?: string): string =>
 /** @hidden */
 export const instance = axios.create({
   baseURL: BASE_URL,
+  headers: {},
 });
 
 instance.interceptors.request.use(

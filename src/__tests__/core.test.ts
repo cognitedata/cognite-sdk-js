@@ -1,6 +1,6 @@
 // Copyright 2018 Cognite AS
 
-import { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { apiUrl, BASE_URL, projectUrl, setBearerToken } from '../core';
 import { configure, instance, rawGet } from '../index';
@@ -112,5 +112,25 @@ describe('Core', () => {
       return [200];
     });
     await rawGet('/test');
+  });
+
+  test('header leakage', async () => {
+    const DONE = 'Done';
+    configure({
+      apiKey: 'abc',
+    });
+    setBearerToken('abc');
+    const axiosGlobalMock = new MockAdapter(axios);
+    axiosGlobalMock.onGet(/\/test$/).reply((config: AxiosRequestConfig) => {
+      expect(config.headers.Authorization).toBeUndefined();
+      expect(config.headers['api-key']).toBeUndefined();
+      return [200, DONE];
+    });
+    const response = await axios({
+      url: '/test',
+      method: 'GET',
+    });
+    expect(response.data).toBe(DONE);
+    axiosGlobalMock.restore();
   });
 });
