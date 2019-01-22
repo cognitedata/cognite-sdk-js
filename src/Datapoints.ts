@@ -8,6 +8,12 @@ export interface Datapoint {
   value: number | string;
 }
 
+interface DataPointResponse {
+  data: {
+    items: Datapoint[];
+  };
+}
+
 export interface DataDatapoints {
   name: string;
   datapoints: Datapoint[];
@@ -148,13 +154,15 @@ export class Datapoints {
   public static async retrieveLatest(
     timeseriesName: string,
     before?: number
-  ): Promise<Datapoint[]> {
+  ): Promise<undefined | Datapoint> {
     const url = `${datapointsUrl()}/latest/${encodeURIComponent(
       timeseriesName
     )}`;
     const params = { before };
-    const response = (await rawGet(url, { params })) as AxiosResponse<any>;
-    return response.data.data.items[0].datapoints;
+    const response = (await rawGet(url, { params })) as AxiosResponse<
+      DataPointResponse
+    >;
+    return response.data.data.items[0];
   }
 
   public static async retrieveCSV(
