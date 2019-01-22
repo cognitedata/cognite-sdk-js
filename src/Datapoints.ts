@@ -154,7 +154,7 @@ export class Datapoints {
     )}`;
     const params = { before };
     const response = (await rawGet(url, { params })) as AxiosResponse<any>;
-    return response.data.data.items[0].datapoints;
+    return response.data.data.items[0];
   }
 
   public static async retrieveCSV(

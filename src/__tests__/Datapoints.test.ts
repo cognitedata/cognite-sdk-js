@@ -186,16 +186,11 @@ describe('Datapoints', () => {
       })
       .reply(200, {
         data: {
-          items: [
-            {
-              name: 'Cognite',
-              datapoints,
-            },
-          ],
+          items: [datapoints[0]],
         },
       });
     const result = await Datapoints.retrieveLatest('Cognite');
-    expect(result).toEqual(datapoints);
+    expect(result).toEqual(datapoints[0]);
   });
 
   test('retrive datapoints as csv', async () => {
