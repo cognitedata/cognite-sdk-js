@@ -35,6 +35,10 @@ export interface Revision {
   createdTime: number;
 }
 
+export interface NodeMetadata {
+  [key: string]: string;
+}
+
 export interface Node {
   id: number;
   treeIndex: number;
@@ -44,6 +48,7 @@ export interface Node {
   subtreeSize: number;
   boundingBox?: BoundingBox;
   sectorId?: number;
+  metadata: NodeMetadata;
 }
 
 export interface Sector {
@@ -106,6 +111,7 @@ export interface ThreeDListNodesParams {
   depth?: number;
   nodeId?: number;
   includeAncestors?: boolean;
+  metadata: NodeMetadata;
 }
 
 export interface ThreeDListRevisionsParams {
