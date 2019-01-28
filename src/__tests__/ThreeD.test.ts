@@ -109,6 +109,7 @@ const nodes = [
     subtreeSize: 13,
     boundingBox: { min: [12, 3, -19], max: [18, 6, 0] },
     sectorId: 1235,
+    metadata: {},
   },
   {
     id: 1223,
@@ -119,6 +120,10 @@ const nodes = [
     subtreeSize: 1,
     boundingBox: { min: [12, 3, -19], max: [18, 6, 0] },
     sectorId: 1235,
+    metadata: {
+      key1: 'value1',
+      key2: 'value2',
+    },
   },
 ];
 
@@ -376,6 +381,10 @@ describe('3D', () => {
       limit: 12,
       depth: 20,
       nodeId: 5,
+      metadata: {
+        key1: 'value1',
+        key2: 'value2',
+      },
     };
     const reg = new RegExp(`/3d/models/12/revisions/34/nodes$`);
     const previousCursor = 'abcdef';
