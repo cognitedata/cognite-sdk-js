@@ -157,7 +157,7 @@ describe('Login', () => {
       expect(spiedReplaceState).toHaveBeenCalledWith(
         null,
         '',
-        'https://example.com/some/random/path?query=true&random=123'
+        'https://localhost/some/random/path?query=true&random=123'
       );
 
       expect(configure({}).project).toBe(status.project);
@@ -370,7 +370,7 @@ describe('Login', () => {
     test('valid short living token', () => {
       const loginParams: LoginParams = {
         project: 'my-tenant',
-        redirectUrl: 'https://example.com',
+        redirectUrl: 'https://localhost',
       };
       const tokenCallbackMock = jest.fn();
       const accessToken = jwt.encode(
@@ -405,7 +405,7 @@ describe('Login', () => {
     test('valid long living token', () => {
       const loginParams: LoginParams = {
         project: 'my-tenant',
-        redirectUrl: 'https://example.com',
+        redirectUrl: 'https://localhost',
       };
       const tokenCallbackMock = jest.fn();
       const nextYearInMs = Date.now() + 365 * 24 * 60 * 60 * 1000;
@@ -462,7 +462,7 @@ describe('Login', () => {
 
     test('invalid tokens', async () => {
       const params: LoginParams = {
-        redirectUrl: 'https://example.com/some/random/path',
+        redirectUrl: 'https://localhost/some/random/path',
         project: 'my-tenant',
       };
 
@@ -500,7 +500,7 @@ describe('Login', () => {
 
     test('valid tokens', async () => {
       const params: LoginParams = {
-        redirectUrl: 'https://example.com/some/random/path',
+        redirectUrl: 'https://localhost/some/random/path',
         project: 'my-tenant',
       };
 

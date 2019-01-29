@@ -10,5 +10,5 @@ module.exports = {
   moduleNameMapper: {
     '^lodash-es$': 'lodash',
   },
-  testURL: 'https://example.com',
+  testURL: 'https://localhost',
 };
