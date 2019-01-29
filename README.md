@@ -45,9 +45,9 @@ The SDK is written in native typescript, so no extra types needs to be defined.
 
 ## Authentication
 
-### Api key
+### Server-side - API key
 
-Authenticating with an api key should only happen when building server-side applications.
+> Authenticating with an api key should only happen when building server-side applications.
 
 ```js
 const sdk = require('@cognite/sdk');
@@ -59,9 +59,32 @@ sdk.configure({
 
 It is generally a good idea store the api key as an environment variable, so it's not directly part of your code.
 
-### Configuring for a web application
+See [the nodejs example](./examples/nodejs/index.js)
 
-See [the react example](./examples/react)
+### Web application - tokens
+
+```js
+import * as sdk from '@cognite/sdk';
+
+// the next line can throw exception if it fails to log in
+const authResult = await sdk.Login.authorize({
+  project: 'YOUR-PROJECT-NAME',
+  redirectUrl: window.location.href, // where you want the user to end up after successful login
+  errorRedirectUrl: window.location.href, // OPTIONAL: where you want the user to end up after failed login
+});
+
+// at this point you are logged in and you can do calls with the SDK.
+
+authResult = {
+  accessToken: string,
+  idToken: string,
+  project: string,
+  projectId: number,
+  user: string,
+}
+```
+
+See [the react example](./examples/react/src/App.js)
 
 ## Examples
 

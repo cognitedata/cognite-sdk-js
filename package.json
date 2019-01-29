@@ -41,8 +41,7 @@
     "tslint-plugin-prettier": "^2.0.1",
     "typedoc": "^0.13.0",
     "typedoc-plugin-markdown": "^1.1.19",
-    "typescript": "^3.1.6",
-    "vuepress": "^0.14.8"
+    "typescript": "^3.1.6"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -52,7 +51,7 @@
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c tslint.json -p tsconfig.json --fix",
     "build": "yarn clean && rollup -c && yarn esCheck",
     "watch": "rollup -cw",
-    "docs": "typedoc --options typedoc.js src/index.ts && vuepress build docs",
+    "docs": "typedoc --options typedoc.js src/index.ts && npx vuepress build docs",
     "prepush": "yarn lint && yarn test",
     "esCheck": "es-check es5 './dist/index.js'",
     "validateDocLinks": "markdown-link-check README.md"
