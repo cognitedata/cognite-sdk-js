@@ -7,4 +7,8 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
   coverageDirectory: './coverage/',
   collectCoverage: true,
+  moduleNameMapper: {
+    '^lodash-es$': 'lodash',
+  },
+  testURL: 'https://example.com',
 };
