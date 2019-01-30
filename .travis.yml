@@ -1,16 +1,17 @@
 language: node_js
 node_js:
-- node
+  - node
 install:
-- yarn
-- npm install -g codecov
-- yarn add vuepress@0.14.8
+  - yarn
+  - npm install -g codecov
 script:
-- yarn validateDocLinks
-- yarn lint
-- yarn build
-- yarn test && codecov
-before_deploy: yarn docs
+  - yarn validateDocLinks
+  - yarn lint
+  - yarn build
+  - yarn test && codecov
+before_deploy:
+  - yarn global add vuepress@0.14.8
+  - yarn docs
 deploy:
   - provider: firebase
     on: master
