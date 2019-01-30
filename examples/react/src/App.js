@@ -10,11 +10,17 @@ class App extends React.Component {
 
   async componentDidMount() {
     try {
-      await sdk.Login.authorize({
-        project: 'publicdata',
-        redirectUrl: window.location,
-        errorRedirectUrl: window.location,
-      });
+      await sdk.Login.authorize(
+        {
+          project: 'publicdata',
+          redirectUrl: window.location,
+          errorRedirectUrl: window.location,
+        },
+        // optional callback function
+        // (token) => {
+        //   // every time a new authorization (Bearer) token is generated this function will be called.
+        // },
+      );
       this.setState({ loggedIn: true });
       const assets = await sdk.Assets.search({});
       this.setState({

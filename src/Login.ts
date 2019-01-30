@@ -120,6 +120,18 @@ export class Login {
       return;
     }
 
+    const verifyAuthTokens = async (
+      tokens: AuthTokens
+    ): Promise<null | AuthResult> => {
+      const authResult = await Login.verifyAccessToken(tokens);
+      if (authResult !== null) {
+        configure({ project: authResult.project });
+        Login.scheduleRenewal(params, authResult.accessToken, tokenCallback);
+        return authResult;
+      }
+      return null;
+    };
+
     // Step 1
     const authTokens = Login.parseQuery(window.location.search);
     if (authTokens !== null) {
@@ -129,10 +141,8 @@ export class Login {
       url = removeParameterFromUrl(url, ID_TOKEN);
       window.history.replaceState(null, '', url);
       // Step 2.2
-      const authResult = await Login.verifyAccessToken(authTokens);
+      const authResult = await verifyAuthTokens(authTokens);
       if (authResult !== null) {
-        configure({ project: authResult.project });
-        Login.scheduleRenewal(params, authResult.accessToken, tokenCallback);
         return authResult;
       }
     }
@@ -140,10 +150,8 @@ export class Login {
     // try iframe login
     try {
       const silentAuthTokens = await Login.silentLogin(params);
-      const authResult = await Login.verifyAccessToken(silentAuthTokens);
+      const authResult = await verifyAuthTokens(silentAuthTokens);
       if (authResult !== null) {
-        configure({ project: authResult.project });
-        Login.scheduleRenewal(params, authResult.accessToken, tokenCallback);
         return authResult;
       }
     } catch (e) {
