@@ -68,9 +68,9 @@ import * as sdk from '@cognite/sdk';
 
 // the next line can throw exception if it fails to log in
 const authResult = await sdk.Login.authorize({
-  project: 'YOUR-PROJECT-NAME',
+  project: 'YOUR-PROJECT-NAME', // project you want to login to (can be skipped if you have configured the project with 'configure')
   redirectUrl: window.location.href, // where you want the user to end up after successful login
-  errorRedirectUrl: window.location.href, // OPTIONAL: where you want the user to end up after failed login
+  errorRedirectUrl: window.location.href, // where you want the user to end up after failed login
 });
 
 // at this point you are logged in and you can do calls with the SDK.

@@ -12,7 +12,7 @@ const jwtDecode = jwtDecode_;
 export interface LoginParams {
   project?: string;
   redirectUrl: string;
-  errorRedirectUrl?: string;
+  errorRedirectUrl: string;
 }
 
 /**
@@ -219,7 +219,7 @@ export class Login {
       throw new Error(`${error}: ${errorDescription}`);
     }
 
-    if (error === undefined && isString(accessToken) && isString(idToken)) {
+    if (isString(accessToken) && isString(idToken)) {
       return {
         accessToken: accessToken as string,
         idToken: idToken as string,

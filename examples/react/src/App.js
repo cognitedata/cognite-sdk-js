@@ -13,6 +13,7 @@ class App extends React.Component {
       await sdk.Login.authorize({
         project: 'publicdata',
         redirectUrl: window.location,
+        errorRedirectUrl: window.location,
       });
       this.setState({ loggedIn: true });
       const assets = await sdk.Assets.search({});
