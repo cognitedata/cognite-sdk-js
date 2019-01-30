@@ -40,9 +40,10 @@ describe('Login', () => {
       const actual = Login.getLoginUrl({
         project: 'my-tenant',
         redirectUrl: 'https://mywebapp.com',
+        errorRedirectUrl: 'https://mywebapp.com',
       });
       const expected =
-        'https://api.cognitedata.com/login/redirect?project=my-tenant&redirectUrl=https%3A%2F%2Fmywebapp.com';
+        'https://api.cognitedata.com/login/redirect?errorRedirectUrl=https%3A%2F%2Fmywebapp.com&project=my-tenant&redirectUrl=https%3A%2F%2Fmywebapp.com';
       expect(actual).toBe(expected);
     }
     {
@@ -52,9 +53,10 @@ describe('Login', () => {
       });
       const actual = Login.getLoginUrl({
         redirectUrl: 'https://mywebapp.com',
+        errorRedirectUrl: 'https://mywebapp.com',
       });
       const expected =
-        'https://mynewdomain.com/login/redirect?project=abc&redirectUrl=https%3A%2F%2Fmywebapp.com';
+        'https://mynewdomain.com/login/redirect?errorRedirectUrl=https%3A%2F%2Fmywebapp.com&project=abc&redirectUrl=https%3A%2F%2Fmywebapp.com';
       expect(actual).toBe(expected);
     }
   });
@@ -127,6 +129,7 @@ describe('Login', () => {
       await expect(
         Login.authorize({
           redirectUrl: window.location.href,
+          errorRedirectUrl: window.location.href,
         })
       ).rejects.toThrowError('queryTest');
     });
@@ -146,6 +149,7 @@ describe('Login', () => {
       expect(
         await Login.authorize({
           redirectUrl: window.location.href,
+          errorRedirectUrl: window.location.href,
         })
       ).toEqual({
         ...authTokens,
@@ -168,6 +172,7 @@ describe('Login', () => {
     test('successful silent login', async () => {
       const params = {
         redirectUrl: window.location.href,
+        errorRedirectUrl: window.location.href,
       };
       const tokenCallback = () => {};
 
@@ -191,6 +196,7 @@ describe('Login', () => {
     test('full browser redirect', async () => {
       const params = {
         redirectUrl: window.location.href,
+        errorRedirectUrl: window.location.href,
       };
       const tokenCallback = () => {};
 
@@ -371,6 +377,7 @@ describe('Login', () => {
       const loginParams: LoginParams = {
         project: 'my-tenant',
         redirectUrl: 'https://localhost',
+        errorRedirectUrl: 'https://localhost',
       };
       const tokenCallbackMock = jest.fn();
       const accessToken = jwt.encode(
@@ -406,6 +413,7 @@ describe('Login', () => {
       const loginParams: LoginParams = {
         project: 'my-tenant',
         redirectUrl: 'https://localhost',
+        errorRedirectUrl: 'https://localhost',
       };
       const tokenCallbackMock = jest.fn();
       const nextYearInMs = Date.now() + 365 * 24 * 60 * 60 * 1000;
@@ -462,8 +470,9 @@ describe('Login', () => {
 
     test('invalid tokens', async () => {
       const params: LoginParams = {
-        redirectUrl: 'https://localhost/some/random/path',
         project: 'my-tenant',
+        redirectUrl: 'https://localhost/some/random/path',
+        errorRedirectUrl: 'https://localhost/some/random/path',
       };
 
       let iframe: any = {};
@@ -500,8 +509,9 @@ describe('Login', () => {
 
     test('valid tokens', async () => {
       const params: LoginParams = {
-        redirectUrl: 'https://localhost/some/random/path',
         project: 'my-tenant',
+        redirectUrl: 'https://localhost/some/random/path',
+        errorRedirectUrl: 'https://localhost/some/random/path',
       };
 
       let iframe: any = {};
