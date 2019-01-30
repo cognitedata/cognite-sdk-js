@@ -35,6 +35,9 @@ const initialOptions: Options = {
 const options: Options = { ...initialOptions };
 
 /** @hidden */
+export const isBrowser =
+  typeof window !== 'undefined' && typeof window.document !== 'undefined';
+
 export const apiUrl = (version: number): string => `api/${version}`;
 /** @hidden */
 export const projectUrl = (project?: string): string =>

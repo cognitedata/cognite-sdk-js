@@ -4,6 +4,7 @@ node_js:
 install:
 - yarn
 - npm install -g codecov
+- yarn add vuepress@0.14.8
 script:
 - yarn validateDocLinks
 - yarn lint

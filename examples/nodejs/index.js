@@ -8,9 +8,6 @@ sdk.configure({
   // baseUrl: 'https://myown.base.url'
 });
 
-// configure with bearer token instead of api-key (apikey will override bearer tokens)
-sdk.setBearerToken('YOUR_TOKEN');
-
 // with .then
 const assetId = 123456789;
 sdk.Assets.retrieve(assetId).then(asset => {
