@@ -82,7 +82,35 @@ describe('Core', () => {
     await rawGet(`${apiUrl(0.6)}/${projectUrl()}/test-url`);
   });
 
-  test('handling error messages', async () => {
+  test('handling error messages with request id', async done => {
+    const errorCode = 418;
+    const errorMessage = 'Custom error message';
+    const xRequestId = 'my-request-id';
+    mock.onGet(/\/error$/).reply(
+      errorCode,
+      {
+        error: {
+          code: errorCode,
+          message: errorMessage,
+        },
+      },
+      { 'X-Request-Id': xRequestId }
+    );
+
+    const exceptionMessage = `${errorMessage} | code: ${errorCode} | X-Request-ID: ${xRequestId}`;
+
+    try {
+      await rawGet('/error');
+    } catch (error) {
+      await expect(rawGet('/error')).rejects.toThrowError(exceptionMessage);
+      expect(error.message).toBe(exceptionMessage);
+      expect(error.status).toBe(errorCode);
+      expect(error.requestId).toBe(xRequestId);
+      done();
+    }
+  });
+
+  test('handling error messages without request id', async done => {
     const errorCode = 418;
     const errorMessage = 'Custom error message';
     mock.onGet(/\/error$/).reply(errorCode, {
@@ -92,13 +120,16 @@ describe('Core', () => {
       },
     });
 
-    await expect(rawGet('/error')).rejects.toThrow();
+    const exceptionMessage = `${errorMessage} | code: ${errorCode}`;
+
     try {
       await rawGet('/error');
-      expect(false).toBe(true); // dummy test
     } catch (error) {
-      expect(error.message).toBe(errorMessage);
+      await expect(rawGet('/error')).rejects.toThrowError(exceptionMessage);
+      expect(error.message).toBe(exceptionMessage);
       expect(error.status).toBe(errorCode);
+      expect(error.requestId).toBeUndefined();
+      done();
     }
   });
 

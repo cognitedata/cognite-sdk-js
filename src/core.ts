@@ -7,9 +7,15 @@ export const BASE_URL: string = 'https://api.cognitedata.com';
 
 export class CogniteSDKError extends Error {
   public status: number;
-  constructor(message: string, status: number) {
+  public requestId?: string;
+  constructor(errorMessage: string, status: number, requestId?: string) {
+    let message = `${errorMessage} | code: ${status}`;
+    if (requestId) {
+      message += ` | X-Request-ID: ${requestId}`;
+    }
     super(message);
     this.status = status;
+    this.requestId = requestId;
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     } else {
@@ -78,13 +84,15 @@ export function setBearerToken(token: string) {
 function handleCogniteErrorResponse(err: AxiosError) {
   let message;
   let code;
+  let requestId;
   try {
     message = err.response!.data.error.message;
     code = err.response!.data.error.code;
+    requestId = (err.response!.headers || {})['X-Request-Id'];
   } catch (_) {
     throw err;
   }
-  throw new CogniteSDKError(message, code);
+  throw new CogniteSDKError(message, code, requestId);
 }
 
 type HttpVerb = 'get' | 'post' | 'put' | 'delete';
