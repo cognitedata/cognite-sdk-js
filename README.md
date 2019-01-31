@@ -84,7 +84,11 @@ authResult = {
 }
 ```
 
-See [the react example](./examples/react/src/App.js)
+See an example [here](./examples/react/src/App.js).
+
+#### React
+
+We also provide a [seperate package](https://github.com/cognitedata/react-auth) to easily authenticate in React.
 
 ## Examples
 
