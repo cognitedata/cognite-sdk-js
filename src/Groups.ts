@@ -10,12 +10,160 @@ export interface Permissions {
   securityCategoryIds?: number[];
 }
 
+export type READ = 'READ';
+export type WRITE = 'WRITE';
+export type LIST = 'LIST';
+export type CREATE = 'CREATE';
+export type EXECUTE = 'EXECUTE';
+export type UPDATE = 'UPDATE';
+export type DELETE = 'DELETE';
+export type MEMBEROF = 'MEMBEROF';
+
+export interface GroupsAcl {
+  groupsAcl: {
+    actions?: (LIST | READ | CREATE | UPDATE | DELETE)[];
+    scope: {
+      all?: {};
+      currentuserscope?: {};
+    };
+  };
+}
+
+export interface AssetsAcl {
+  assetsAcl: {
+    actions?: (READ | WRITE)[];
+    scope: {
+      all?: {};
+    };
+  };
+}
+
+export interface EventsAcl {
+  eventsAcl: {
+    actions?: (READ | WRITE)[];
+    scope: {
+      all?: {};
+    };
+  };
+}
+
+export interface FilesAcl {
+  filesAcl: {
+    actions?: (READ | WRITE)[];
+    scope: {
+      all?: {};
+    };
+  };
+}
+
+export interface UsersAcl {
+  usersAcl: {
+    actions?: (LIST | CREATE | DELETE)[];
+    scope: {
+      all?: {};
+      currentuserscope?: {};
+    };
+  };
+}
+
+export interface ProjectsAcl {
+  projectsAcl: {
+    actions?: (LIST | READ | CREATE | UPDATE)[];
+    scope: {
+      all?: {};
+    };
+  };
+}
+
+export interface SecurityCategoriesAcl {
+  securityCategoriesAcl: {
+    actions?: (MEMBEROF | LIST | CREATE | DELETE)[];
+    scope: {
+      all?: {};
+    };
+  };
+}
+
+export interface RawAcl {
+  rawAcl: {
+    actions?: (READ | WRITE | LIST)[];
+    scope: {
+      all?: {};
+    };
+  };
+}
+
+export interface TimeSeriesAcl {
+  timeSeriesAcl: {
+    actions?: (READ | WRITE)[];
+    scope: {
+      all?: {};
+      assetIdScope?: {
+        subtreeIds: number[];
+      };
+    };
+  };
+}
+
+export interface ApiKeysAcl {
+  apikeysAcl: {
+    actions?: (LIST | CREATE | DELETE)[];
+    scope: {
+      all?: {};
+      currentuserscope?: {};
+    };
+  };
+}
+
+export interface ThreeDAcl {
+  threedAcl: {
+    actions?: (READ | CREATE | UPDATE | DELETE)[];
+    scope: {
+      all?: {};
+    };
+  };
+}
+
+export interface SequencesAcl {
+  sequencesAcl: {
+    actions?: (READ | WRITE)[];
+    scope: {
+      all?: {};
+    };
+  };
+}
+
+export interface AnalyticsAcl {
+  analyticsAcl: {
+    actions?: (READ | EXECUTE | LIST)[];
+    scope: {
+      all?: {};
+    };
+  };
+}
+
+export type Capabilities = (
+  | GroupsAcl
+  | AssetsAcl
+  | EventsAcl
+  | FilesAcl
+  | UsersAcl
+  | ProjectsAcl
+  | SecurityCategoriesAcl
+  | RawAcl
+  | TimeSeriesAcl
+  | ApiKeysAcl
+  | ThreeDAcl
+  | SequencesAcl
+  | AnalyticsAcl)[];
+
 export interface Group {
   id: number;
   name?: string;
   source?: string;
   sourceId?: string;
   permissions?: Permissions;
+  capabilities?: Capabilities;
   isDeleted?: boolean;
   deletedTime?: number;
 }
