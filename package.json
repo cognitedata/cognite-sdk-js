@@ -59,7 +59,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "jwt-decode": "^2.2.0",
-    "query-string": "^5.1.1"
+    "query-string": "^5.1.1",
+    "retry-axios": "^0.4.1"
   },
   "publishConfig": {
     "access": "public",

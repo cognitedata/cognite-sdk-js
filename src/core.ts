@@ -1,6 +1,7 @@
 // Copyright 2018 Cognite AS
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { attach } from 'retry-axios';
 
 /** @hidden */
 export const BASE_URL: string = 'https://api.cognitedata.com';
@@ -29,6 +30,7 @@ export interface Options {
   apiKey: string | null;
   baseUrl: string;
   withCredentials: boolean;
+  timeout: number;
 }
 
 const initialOptions: Options = {
@@ -36,6 +38,7 @@ const initialOptions: Options = {
   apiKey: null,
   baseUrl: BASE_URL,
   withCredentials: false,
+  timeout: 60 * 1000, // 1 minute timeout by default
 };
 
 const options: Options = { ...initialOptions };
@@ -55,6 +58,39 @@ export const instance = axios.create({
   headers: {},
 });
 
+const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT'];
+const statusCodesToRetry = [[100, 199], [429, 429], [500, 599]];
+
+// config for retry-axios package
+(instance.defaults as any).raxConfig = {
+  instance,
+  retryDelay: 2,
+  retry: 2,
+  shouldRetry: (err: any) => {
+    const { config } = err;
+
+    const httpMethod = config.method.toUpperCase();
+    if (httpMethodsToRetry.indexOf(httpMethod) === -1) {
+      return false;
+    }
+
+    const responseStatusCode = err.response.status;
+    let isCodeInValidRange = false;
+    statusCodesToRetry.forEach(([start, end]: any) => {
+      if (responseStatusCode >= start && responseStatusCode <= end) {
+        isCodeInValidRange = true;
+      }
+    });
+    if (!isCodeInValidRange) {
+      return false;
+    }
+
+    const { currentRetryAttempt, retry } = config.raxConfig;
+    return currentRetryAttempt < retry;
+  },
+};
+attach(instance);
+
 instance.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
     // loop through params
@@ -73,6 +109,9 @@ export function configure(opts: Partial<Options>): Options {
   instance.defaults.baseURL = options.baseUrl;
   if (options.apiKey) {
     instance.defaults.headers['api-key'] = options.apiKey;
+  }
+  if (options.timeout) {
+    instance.defaults.timeout = options.timeout;
   }
   return options;
 }

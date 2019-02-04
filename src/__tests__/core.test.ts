@@ -1,9 +1,12 @@
 // Copyright 2018 Cognite AS
 
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { apiUrl, BASE_URL, projectUrl, setBearerToken } from '../core';
-import { configure, instance, rawGet } from '../index';
+import { configure, instance, rawGet, rawPost } from '../index';
+
+// testing a lot of retry requests with exponential-backoff
+jest.setTimeout(10000);
 
 let mock: MockAdapter;
 
@@ -131,6 +134,65 @@ describe('Core', () => {
       expect(error.requestId).toBeUndefined();
       done();
     }
+  });
+
+  test('retry requests', async () => {
+    const { raxConfig } = instance.defaults as any;
+    expect(raxConfig.retry).toBeGreaterThan(1);
+    const responseMock = jest.fn();
+    responseMock.mockImplementation(_ => {
+      return [500, {}];
+    });
+    mock.onGet(/\/retry$/).reply((config: any) => {
+      return responseMock(config);
+    });
+    await expect(rawGet('/retry')).rejects.toThrowError(
+      'Request failed with status code 500'
+    );
+    expect(responseMock).toHaveBeenCalledTimes(raxConfig.retry + 1);
+  });
+
+  test('retry requests and end with success', async () => {
+    const responseMock = jest.fn();
+    responseMock.mockImplementationOnce(_ => {
+      return [500, {}];
+    });
+    responseMock.mockImplementationOnce(_ => {
+      return [200, {}];
+    });
+    mock.onGet(/\/retry$/).reply((config: any) => {
+      return responseMock(config);
+    });
+    const response = (await rawGet('/retry')) as AxiosResponse;
+    expect(responseMock).toHaveBeenCalledTimes(2);
+    expect(response.data).toEqual({});
+  });
+
+  test('dont retry post', async () => {
+    const responseMock = jest.fn();
+    responseMock.mockImplementation(_ => {
+      return [500, {}];
+    });
+    mock.onPost(/\/retry$/).reply((config: any) => {
+      return responseMock(config);
+    });
+    await expect(rawPost('/retry')).rejects.toThrowError(
+      'Request failed with status code 500'
+    );
+    expect(responseMock).toHaveBeenCalledTimes(1);
+  });
+
+  test('dont retry all status codes', async () => {
+    const responseMock = jest.fn();
+    responseMock.mockImplementation(_ => {
+      return [200, {}];
+    });
+    mock.onPost(/\/retry$/).reply((config: any) => {
+      return responseMock(config);
+    });
+    const response = (await rawPost('/retry')) as AxiosResponse;
+    expect(response.data).toEqual({});
+    expect(responseMock).toHaveBeenCalledTimes(1);
   });
 
   test('test setBearerToken', async () => {
