@@ -1,15 +1,22 @@
 // Copyright 2018 Cognite AS
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import { attach } from 'retry-axios';
 
 /** @hidden */
 export const BASE_URL: string = 'https://api.cognitedata.com';
 
 export class CogniteSDKError extends Error {
   public status: number;
-  constructor(message: string, status: number) {
+  public requestId?: string;
+  constructor(errorMessage: string, status: number, requestId?: string) {
+    let message = `${errorMessage} | code: ${status}`;
+    if (requestId) {
+      message += ` | X-Request-ID: ${requestId}`;
+    }
     super(message);
     this.status = status;
+    this.requestId = requestId;
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     } else {
@@ -23,6 +30,7 @@ export interface Options {
   apiKey: string | null;
   baseUrl: string;
   withCredentials: boolean;
+  timeout: number;
 }
 
 const initialOptions: Options = {
@@ -30,6 +38,7 @@ const initialOptions: Options = {
   apiKey: null,
   baseUrl: BASE_URL,
   withCredentials: false,
+  timeout: 60 * 1000, // 1 minute timeout by default
 };
 
 const options: Options = { ...initialOptions };
@@ -48,6 +57,39 @@ export const instance = axios.create({
   baseURL: BASE_URL,
   headers: {},
 });
+
+const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT'];
+const statusCodesToRetry = [[100, 199], [429, 429], [500, 599]];
+
+// config for retry-axios package
+(instance.defaults as any).raxConfig = {
+  instance,
+  retryDelay: 2,
+  retry: 2,
+  shouldRetry: (err: any) => {
+    const { config } = err;
+
+    const httpMethod = config.method.toUpperCase();
+    if (httpMethodsToRetry.indexOf(httpMethod) === -1) {
+      return false;
+    }
+
+    const responseStatusCode = err.response.status;
+    let isCodeInValidRange = false;
+    statusCodesToRetry.forEach(([start, end]: any) => {
+      if (responseStatusCode >= start && responseStatusCode <= end) {
+        isCodeInValidRange = true;
+      }
+    });
+    if (!isCodeInValidRange) {
+      return false;
+    }
+
+    const { currentRetryAttempt, retry } = config.raxConfig;
+    return currentRetryAttempt < retry;
+  },
+};
+attach(instance);
 
 instance.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
@@ -68,6 +110,9 @@ export function configure(opts: Partial<Options>): Options {
   if (options.apiKey) {
     instance.defaults.headers['api-key'] = options.apiKey;
   }
+  if (options.timeout) {
+    instance.defaults.timeout = options.timeout;
+  }
   return options;
 }
 
@@ -78,13 +123,15 @@ export function setBearerToken(token: string) {
 function handleCogniteErrorResponse(err: AxiosError) {
   let message;
   let code;
+  let requestId;
   try {
     message = err.response!.data.error.message;
     code = err.response!.data.error.code;
+    requestId = (err.response!.headers || {})['X-Request-Id'];
   } catch (_) {
     throw err;
   }
-  throw new CogniteSDKError(message, code);
+  throw new CogniteSDKError(message, code, requestId);
 }
 
 type HttpVerb = 'get' | 'post' | 'put' | 'delete';
