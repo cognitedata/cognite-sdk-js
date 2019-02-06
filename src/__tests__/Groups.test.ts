@@ -30,6 +30,21 @@ const groups: Group[] = [
       assetIds: [123],
       securityCategoryIds: [456],
     },
+    capabilities: [
+      {
+        groupsAcl: {
+          scope: { all: {} },
+        },
+        timeSeriesAcl: {
+          actions: ['READ', 'WRITE'],
+          scope: {
+            assetIdScope: {
+              subtreeIds: [123],
+            },
+          },
+        },
+      },
+    ],
   },
 ];
 
@@ -43,6 +58,21 @@ const requestGroups: Partial<Group>[] = [
       assetIds: [123],
       securityCategoryIds: [456],
     },
+    capabilities: [
+      {
+        groupsAcl: {
+          scope: { all: {} },
+        },
+        timeSeriesAcl: {
+          actions: ['READ', 'WRITE'],
+          scope: {
+            assetIdScope: {
+              subtreeIds: [123],
+            },
+          },
+        },
+      },
+    ],
   },
 ];
 
