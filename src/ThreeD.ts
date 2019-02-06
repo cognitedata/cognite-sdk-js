@@ -111,7 +111,7 @@ export interface ThreeDListNodesParams {
   depth?: number;
   nodeId?: number;
   includeAncestors?: boolean;
-  metadata: NodeMetadata;
+  metadata?: NodeMetadata;
 }
 
 export interface ThreeDListRevisionsParams {
