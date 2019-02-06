@@ -81,6 +81,20 @@ describe('Events', () => {
     expect(result).toEqual(events[0]);
   });
 
+  test('retrive multiple events', async () => {
+    mock
+      .onPost(/\/events\/byids$/, {
+        items: events.map(item => item.id),
+      })
+      .reply(200, {
+        data: {
+          items: events,
+        },
+      });
+    const result = await Events.retrieveMultiple(events.map(item => item.id));
+    expect(result).toEqual(events);
+  });
+
   test('update events', async () => {
     mock
       .onPost(/\/events\/update$/, {

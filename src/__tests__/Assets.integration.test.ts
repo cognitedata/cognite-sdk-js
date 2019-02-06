@@ -42,21 +42,27 @@ describe('Asset integration test', () => {
     }
   });
 
-  test('search for root test asset', async () => {
-    const result = await sdk.Assets.search({
-      metadata: { refId: rootAsset.metadata.refId },
-    });
-    const asset = result.items[0];
-    expect(rootAsset.name).toBe(asset.name);
-    expect(rootAsset.description).toBe(asset.description);
+  test(
+    'search for root test asset',
+    async () => {
+      const result = await sdk.Assets.search({
+        metadata: { refId: rootAsset.metadata.refId },
+      });
+      const asset = result.items[0];
+      expect(rootAsset.name).toBe(asset.name);
+      expect(rootAsset.description).toBe(asset.description);
 
-    const childResult = await sdk.Assets.search({
-      assetSubtrees: [asset.id],
-    });
-    // We get both the root and child here.
-    expect(childResult.items.length).toEqual(2);
-    const childSearchAsset = childResult.items[1];
-    expect(childSearchAsset.name).toEqual(childAsset.name);
-    expect(childSearchAsset.metadata!.refId).toEqual(childAsset.metadata.refId);
-  });
+      const childResult = await sdk.Assets.search({
+        assetSubtrees: [asset.id],
+      });
+      // We get both the root and child here.
+      expect(childResult.items.length).toEqual(2);
+      const childSearchAsset = childResult.items[1];
+      expect(childSearchAsset.name).toEqual(childAsset.name);
+      expect(childSearchAsset.metadata!.refId).toEqual(
+        childAsset.metadata.refId
+      );
+    },
+    15000
+  );
 });
