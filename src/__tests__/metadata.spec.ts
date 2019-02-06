@@ -1,5 +1,7 @@
+// Copyright 2019 Cognite AS
+
 import { AxiosResponse } from 'axios';
-import { MetadataMap } from '../MetadataMap';
+import { MetadataMap } from '../metadata';
 
 test('metadata', async () => {
   const map = new MetadataMap();

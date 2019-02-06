@@ -28,6 +28,7 @@
     "@types/node": "^10.12.0",
     "@types/query-string": "^6.1.0",
     "axios-mock-adapter": "^1.15.0",
+    "dtsgenerator": "^2.0.6",
     "es-check": "^5.0.0",
     "jest": "^23.6.0",
     "jwt-simple": "^0.5.5",
@@ -35,13 +36,15 @@
     "prettier": "^1.10.2",
     "rollup": "^0.67.0",
     "rollup-plugin-typescript2": "^0.17.2",
+    "sleep-promise": "^8.0.1",
+    "swagger-parser": "^6.0.5",
     "ts-jest": "^23.10.4",
-    "tslint": "^5.12.0",
-    "tslint-config-prettier": "^1.16.0",
+    "tslint": "^5.13.0",
+    "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
     "typedoc": "^0.13.0",
     "typedoc-plugin-markdown": "^1.1.19",
-    "typescript": "^3.1.6"
+    "typescript": "^3.3.3333"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -49,16 +52,19 @@
     "test": "jest --config=jest.config.js",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "yarn clean && rollup -c && yarn esCheck",
+    "build": "yarn clean && rollup -c && yarn copyCdpTypes && yarn esCheck",
     "watch": "rollup -cw",
-    "docs": "typedoc --options typedoc.js src/index.ts && npx vuepress build docs",
+    "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json",
     "prepush": "yarn lint && yarn test",
     "esCheck": "es-check es5 './dist/index.js'",
-    "validateDocLinks": "markdown-link-check README.md"
+    "validateDocLinks": "markdown-link-check README.md",
+    "copyCdpTypes": "cp -r ./src/types/cdp ./dist/types/",
+    "generate-cdp-types": "node ./scripts/generateCdpTypes.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "jwt-decode": "^2.2.0",
+    "lodash-es": "^4.17.11",
     "query-string": "^5.1.1",
     "retry-axios": "0.3.2"
   },
