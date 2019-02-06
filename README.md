@@ -122,12 +122,11 @@ We use `jest` to run tests, see [their documentation](https://github.com/faceboo
 How to release a new version:
 
 1. Create a new branch
-2. Run `yarn docs` to update the documentation
-3. Commit changes (if any)
-4. Run
+2. Commit changes (if any)
+3. Run
     ```bash
     $ npm version [patch/minor/major]
     ```
-5. Push branch and push tags (`git push --tags`)
-6. Create a new pull requests
-7. A new version will be published when PR is merged
+4. Push branch and push tags (`git push --tags`)
+5. Create a new pull requests
+6. A new version will be published when PR is merged
