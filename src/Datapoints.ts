@@ -5,7 +5,18 @@ import { apiUrl, projectUrl, rawDelete, rawGet, rawPost } from './core';
 
 export interface Datapoint {
   timestamp: number;
-  value: number | string;
+  value?: number | string;
+  average?: number;
+  max?: number;
+  min?: number;
+  count?: number;
+  sum?: number;
+  interpolation?: number;
+  stepInterpolation?: number;
+  // Yes, this typo reflects the field name in 0.5
+  continousVariance?: number;
+  discreteVariance?: number;
+  totalVariation?: number;
 }
 
 interface DataPointResponse {
