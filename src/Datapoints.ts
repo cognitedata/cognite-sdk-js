@@ -5,7 +5,7 @@ import { apiUrl, projectUrl, rawDelete, rawGet, rawPost } from './core';
 
 export interface Datapoint {
   timestamp: number;
-  value: number | string;
+  value?: number | string;
   average?: number;
   max?: number;
   min?: number;
