@@ -212,7 +212,7 @@ describe('Assets', () => {
       depth: 12,
       limit: 1,
       fuzziness: 3,
-      path: '123/456',
+      path: [123, 456],
       metadata: { abc: 'def' },
       description: 'Description',
       source: 'src',
