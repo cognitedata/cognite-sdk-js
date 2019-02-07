@@ -64,8 +64,8 @@ const statusCodesToRetry = [[100, 199], [429, 429], [500, 599]];
 // config for retry-axios package
 (instance.defaults as any).raxConfig = {
   instance,
-  retryDelay: 2,
-  retry: 2,
+  retryDelay: 50,
+  retry: 3,
   shouldRetry: (err: any) => {
     const { config } = err;
 
