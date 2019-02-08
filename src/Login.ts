@@ -297,9 +297,7 @@ export class Login {
     if (loginStatus.loggedIn) {
       return {
         ...authTokens,
-        user: loginStatus.user,
-        project: loginStatus.project,
-        projectId: loginStatus.projectId,
+        ...loginStatus,
       };
     }
     return null;
