@@ -1,5 +1,6 @@
 // Copyright 2018 Cognite AS
 
+import { Asset } from '../Assets';
 import * as sdk from '../index';
 
 describe('Asset integration test', () => {
@@ -45,23 +46,26 @@ describe('Asset integration test', () => {
   test(
     'search for root test asset',
     async () => {
-      const result = await sdk.Assets.search({
-        metadata: { refId: rootAsset.metadata.refId },
+      const result = await sdk.Assets.list({
+        name: rootAsset.name,
       });
       const asset = result.items[0];
       expect(rootAsset.name).toBe(asset.name);
       expect(rootAsset.description).toBe(asset.description);
 
-      const childResult = await sdk.Assets.search({
-        assetSubtrees: [asset.id],
+      const childResult = await sdk.Assets.list({
+        path: [asset.id],
+        depth: 1,
       });
+      childResult.items.sort((a: Asset, b: Asset) => {
+        return (a.depth as number) - (b.depth as number);
+      });
+
       // We get both the root and child here.
       expect(childResult.items.length).toEqual(2);
-      const childSearchAsset = childResult.items[1];
-      expect(childSearchAsset.name).toEqual(childAsset.name);
-      expect(childSearchAsset.metadata!.refId).toEqual(
-        childAsset.metadata.refId
-      );
+      const childListAsset = childResult.items[1];
+      expect(childListAsset.name).toEqual(childAsset.name);
+      expect(childListAsset.metadata!.refId).toEqual(childAsset.metadata.refId);
     },
     15000
   );

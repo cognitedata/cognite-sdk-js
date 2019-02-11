@@ -39,7 +39,7 @@ interface AssetDataWithCursorResponse {
 export interface AssetListParams {
   name?: string;
   fuzziness?: number;
-  path?: string;
+  path?: (string | number)[];
   depth?: number;
   metadata?: { [k: string]: string };
   description?: string;
