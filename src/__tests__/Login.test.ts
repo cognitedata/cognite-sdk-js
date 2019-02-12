@@ -87,7 +87,7 @@ describe('Login', () => {
       spiedLoginVerifyAccessToken = jest
         .spyOn(Login as any, 'verifyAccessToken')
         .mockReturnValue({
-          ...authTokens,
+          accessToken: authTokens.accessToken,
           ...status,
         });
 
@@ -134,6 +134,21 @@ describe('Login', () => {
       ).rejects.toThrowError('queryTest');
     });
 
+    test('pass in valid accessToken', async () => {
+      expect(
+        await Login.authorize({
+          redirectUrl: window.location.href,
+          errorRedirectUrl: window.location.href,
+          accessToken: authTokens.accessToken,
+        })
+      ).toEqual({
+        accessToken: authTokens.accessToken,
+        ...status,
+      });
+      // make sure step 2 of authorize has skipped
+      expect(spiedLoginParseQuery).not.toBeCalled();
+    });
+
     test('success when valid tokens is present in url', async () => {
       const spiedReplaceState = jest.spyOn(window.history, 'replaceState');
 
@@ -152,7 +167,7 @@ describe('Login', () => {
           errorRedirectUrl: window.location.href,
         })
       ).toEqual({
-        ...authTokens,
+        accessToken: authTokens.accessToken,
         ...status,
       });
 
@@ -177,7 +192,7 @@ describe('Login', () => {
       const tokenCallback = () => {};
 
       expect(await Login.authorize(params, tokenCallback)).toEqual({
-        ...authTokens,
+        accessToken: authTokens.accessToken,
         ...status,
       });
 
@@ -549,10 +564,7 @@ describe('Login', () => {
 
   test('verify access status', async () => {
     const spiedLoginVerifyStatus = jest.spyOn(Login, 'verifyStatus');
-    const authTokens = {
-      accessToken: 'abc',
-      idToken: 'def',
-    };
+    const accessToken = 'abc';
     spiedLoginVerifyStatus.mockReturnValueOnce({
       loggedIn: false,
     });
@@ -567,14 +579,14 @@ describe('Login', () => {
       loggedIn: true,
     });
 
-    expect(await (Login as any).verifyAccessToken(authTokens)).toBe(null);
-    expect(await (Login as any).verifyAccessToken(authTokens)).toEqual({
-      ...authTokens,
+    expect(await (Login as any).verifyAccessToken(accessToken)).toBe(null);
+    expect(await (Login as any).verifyAccessToken(accessToken)).toEqual({
+      accessToken,
       ...status,
     });
 
     expect(instance.defaults.headers.Authorization).toBe(
-      `Bearer ${authTokens.accessToken}`
+      `Bearer ${accessToken}`
     );
 
     spiedLoginVerifyStatus.mockRestore();

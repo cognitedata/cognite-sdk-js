@@ -15,6 +15,13 @@ export interface LoginParams {
   errorRedirectUrl: string;
 }
 
+export interface AuthorizeParams {
+  project?: string;
+  redirectUrl: string;
+  errorRedirectUrl: string;
+  accessToken?: string;
+}
+
 /**
  * @hidden
  */
@@ -55,7 +62,6 @@ interface AuthTokens {
 
 export interface AuthResult {
   accessToken: string;
-  idToken: string;
   user: string;
   project: string;
   projectId: number;
@@ -99,15 +105,18 @@ export class Login {
   }
 
   // 0. Check if you are in a iFrame (don't do anything)
-  // 1. Check if error is present in the URL (if yes, throw error with error_description)
-  // 2. Check if access_token & id_token is present in the URL
+  // 1. Check if existing accessToken was passed in (in params).
+  //   1. Check if the token is valid (if not ignore jump to step 3)
+  //   2. Return AuthResult and set bearer token
+  // 2. Check if error is present in the URL (if yes, throw error with error_description)
+  // 3. Check if access_token & id_token is present in the URL
   //   1. Remove tokens from URL
   //   2. Validate the tokens with CDP. If not valid then ignore them. If valid then return AuthResult and set bearer token
-  // 3. Try silent login (spin up an invisible iFrame and do login flow in there and grab access/id-tokens)
+  // 4. Try silent login (spin up an invisible iFrame and do login flow in there and grab access/id-tokens)
   //   - If successfull then return AuthResult and set bearer token
-  // 4. Login with redirect
+  // 5. Login with redirect
   public static async authorize(
-    params: LoginParams,
+    params: AuthorizeParams,
     tokenCallback: (token: string) => void = () => {}
   ): Promise<AuthResult> {
     if (!isBrowser) {
@@ -120,10 +129,10 @@ export class Login {
       return;
     }
 
-    const verifyAuthTokens = async (
-      tokens: AuthTokens
+    const verifyAuthToken = async (
+      accessToken: string
     ): Promise<null | AuthResult> => {
-      const authResult = await Login.verifyAccessToken(tokens);
+      const authResult = await Login.verifyAccessToken(accessToken);
       if (authResult !== null) {
         configure({ project: authResult.project });
         Login.scheduleRenewal(params, authResult.accessToken, tokenCallback);
@@ -133,15 +142,23 @@ export class Login {
     };
 
     // Step 1
-    const authTokens = Login.parseQuery(window.location.search);
+    if (params.accessToken != null) {
+      const authResult = await verifyAuthToken(params.accessToken);
+      if (authResult !== null) {
+        return authResult;
+      }
+    }
+
+    // Step 2
+    const authTokens = Login.parseQuery(window.location.search); // this line can throw
     if (authTokens !== null) {
-      // Step 2.1
+      // Step 3.1
       let url = window.location.href;
       url = removeParameterFromUrl(url, ACCESS_TOKEN);
       url = removeParameterFromUrl(url, ID_TOKEN);
       window.history.replaceState(null, '', url);
-      // Step 2.2
-      const authResult = await verifyAuthTokens(authTokens);
+      // Step 3.2
+      const authResult = await verifyAuthToken(authTokens.accessToken);
       if (authResult !== null) {
         return authResult;
       }
@@ -150,7 +167,7 @@ export class Login {
     // try iframe login
     try {
       const silentAuthTokens = await Login.silentLogin(params);
-      const authResult = await verifyAuthTokens(silentAuthTokens);
+      const authResult = await verifyAuthToken(silentAuthTokens.accessToken);
       if (authResult !== null) {
         return authResult;
       }
@@ -290,13 +307,13 @@ export class Login {
   }
 
   private static async verifyAccessToken(
-    authTokens: AuthTokens
+    accessToken: string
   ): Promise<null | AuthResult> {
-    setBearerToken(authTokens.accessToken);
+    setBearerToken(accessToken);
     const loginStatus = await Login.verifyStatus();
     if (loginStatus.loggedIn) {
       return {
-        ...authTokens,
+        accessToken,
         user: loginStatus.user,
         project: loginStatus.project,
         projectId: loginStatus.projectId,
