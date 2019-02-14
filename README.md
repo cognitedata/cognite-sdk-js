@@ -99,6 +99,15 @@ See [examples](./examples).
 - [SDK documentation](https://js-sdk-docs.cogniteapp.com/)
 - [API documentation](https://doc.cognitedata.com)
 
+## Response headers
+
+On `Assets.search`, `Events.search`, `Files.search` and `TimeSeries.search` it is possible to read the response headers from the server with the following code:
+
+```js
+const result = await sdk.Assets.search({ ... });
+const { headers, status } = sdk.getMetadata(result);
+```
+
 ## License
 
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)

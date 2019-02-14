@@ -2,6 +2,7 @@
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { attach } from 'retry-axios';
+import { MetadataMap } from './MetadataMap';
 
 /** @hidden */
 export const BASE_URL: string = 'https://api.cognitedata.com';
@@ -162,4 +163,11 @@ export function rawPut(url: string, reqOpt: AxiosRequestConfig = {}) {
 
 export function rawDelete(url: string, reqOpt: AxiosRequestConfig = {}) {
   return rawRequest('delete', url, reqOpt);
+}
+
+/** @hidden */
+export const metadataMap = new MetadataMap();
+
+export function getMetadata(response: any) {
+  return metadataMap.get(response);
 }

@@ -1,7 +1,14 @@
 // Copyright 2018 Cognite AS
 
 import { AxiosResponse } from 'axios';
-import { apiUrl, projectUrl, rawGet, rawPost, rawPut } from './core';
+import {
+  apiUrl,
+  metadataMap,
+  projectUrl,
+  rawGet,
+  rawPost,
+  rawPut,
+} from './core';
 
 export interface Asset {
   id: number;
@@ -168,6 +175,6 @@ export class Assets {
     const response = (await rawGet(url, { params })) as AxiosResponse<
       AssetDataWithCursorResponse
     >;
-    return response.data.data;
+    return metadataMap.addAndReturn(response.data.data, response);
   }
 }

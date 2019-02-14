@@ -1,7 +1,7 @@
 // Copyright 2018 Cognite AS
 
 import MockAdapter from 'axios-mock-adapter';
-import { instance, TimeSeries, Timeseries } from '../index';
+import { getMetadata, instance, TimeSeries, Timeseries } from '../index';
 
 let mock: MockAdapter;
 
@@ -223,18 +223,25 @@ describe('TimeSeries', () => {
       metadata: { key1: 'value1' },
       assetSubtrees: [123, 456],
     };
+    const headers = {};
     mock
       .onGet(/\/timeseries\/search$/, {
         params,
       })
-      .reply(200, {
-        data: {
-          items: [timeseries[0]],
+      .reply(
+        200,
+        {
+          data: {
+            items: [timeseries[0]],
+          },
         },
-      });
+        headers
+      );
 
     const result = await TimeSeries.search(params);
     expect(result).toEqual({ items: [timeseries[0]] });
+    expect(getMetadata(result)!.headers).toBe(headers);
+    expect(getMetadata(result)!.status).toBe(200);
   });
 
   test('delete timeseries', async () => {

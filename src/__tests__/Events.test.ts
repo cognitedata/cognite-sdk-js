@@ -1,7 +1,7 @@
 // Copyright 2018 Cognite AS
 
 import MockAdapter from 'axios-mock-adapter';
-import { Event, Events, instance } from '../index';
+import { Event, Events, getMetadata, instance } from '../index';
 
 let mock: MockAdapter;
 
@@ -141,16 +141,23 @@ describe('Events', () => {
       assetIds: [123, 456],
       offset: 10,
     };
+    const headers = {};
     mock
       .onGet(/\/events\/search$/, {
         params,
       })
-      .reply(200, {
-        data: {
-          items: [events[0]],
+      .reply(
+        200,
+        {
+          data: {
+            items: [events[0]],
+          },
         },
-      });
+        headers
+      );
     const result = await Events.search(params);
     expect(result).toEqual({ items: [events[0]] });
+    expect(getMetadata(result)!.headers).toBe(headers);
+    expect(getMetadata(result)!.status).toBe(200);
   });
 });
