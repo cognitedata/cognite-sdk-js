@@ -7,6 +7,7 @@ export interface Metadata {
   headers: { [key: string]: string };
 }
 
+/** @hidden */
 export class MetadataMap {
   private map: WeakMap<any, Metadata>;
   constructor() {

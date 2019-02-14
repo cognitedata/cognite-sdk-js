@@ -26,7 +26,7 @@ export class CogniteSDKError extends Error {
   }
 }
 
-export interface Options {
+export interface SDKOptions {
   project: string | null;
   apiKey: string | null;
   baseUrl: string;
@@ -34,7 +34,7 @@ export interface Options {
   timeout: number;
 }
 
-const initialOptions: Options = {
+const initialOptions: SDKOptions = {
   project: null,
   apiKey: null,
   baseUrl: BASE_URL,
@@ -42,12 +42,13 @@ const initialOptions: Options = {
   timeout: 60 * 1000, // 1 minute timeout by default
 };
 
-const options: Options = { ...initialOptions };
+const options: SDKOptions = { ...initialOptions };
 
 /** @hidden */
 export const isBrowser =
   typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
+/** @hidden */
 export const apiUrl = (version: number): string => `api/${version}`;
 /** @hidden */
 export const projectUrl = (project?: string): string =>
@@ -105,7 +106,7 @@ instance.interceptors.request.use(
   }
 );
 
-export function configure(opts: Partial<Options>): Options {
+export function configure(opts: Partial<SDKOptions>): SDKOptions {
   Object.assign(options, opts);
   instance.defaults.baseURL = options.baseUrl;
   if (options.apiKey) {
