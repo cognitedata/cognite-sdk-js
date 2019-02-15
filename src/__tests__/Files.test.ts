@@ -1,7 +1,7 @@
 // Copyright 2018 Cognite AS
 
 import MockAdapter from 'axios-mock-adapter';
-import { File, Files, instance } from '../index';
+import { File, Files, getMetadata, instance } from '../index';
 
 let mock: MockAdapter;
 
@@ -218,17 +218,24 @@ describe('Files', () => {
       assetIds: [123, 456],
       offset: 10,
     };
+    const headers = {};
     mock
       .onGet(/\/files\/search$/, {
         params,
       })
-      .reply(200, {
-        data: {
-          items: [files[1]],
+      .reply(
+        200,
+        {
+          data: {
+            items: [files[1]],
+          },
         },
-      });
+        headers
+      );
     const result = await Files.search(params);
     expect(result).toEqual({ items: [files[1]] });
+    expect(getMetadata(result)!.headers).toBe(headers);
+    expect(getMetadata(result)!.status).toBe(200);
   });
 
   test('replace file metadata', async () => {

@@ -1,6 +1,7 @@
 // Copyright 2018 Cognite AS
 
 import MockAdapter from 'axios-mock-adapter';
+import { getMetadata } from '../core';
 import { Asset, Assets, instance } from '../index';
 import * as sdk from '../index';
 
@@ -278,18 +279,25 @@ describe('Assets', () => {
       metadata: { key1: 'value1' },
       assetSubtrees: [assets[0].id],
     };
+    const headers = {};
     mock
       .onGet(/\/assets\/search$/, {
         params,
       })
-      .reply(200, {
-        data: {
-          items: [assets[1]],
+      .reply(
+        200,
+        {
+          data: {
+            items: [assets[1]],
+          },
         },
-      });
+        headers
+      );
 
     const result = await Assets.search(params);
     expect(result).toEqual({ items: [assets[1]] });
+    expect(getMetadata(result)!.headers).toBe(headers);
+    expect(getMetadata(result)!.status).toBe(200);
   });
 
   test('delete assets', async () => {

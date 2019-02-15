@@ -1,7 +1,7 @@
 // Copyright 2018 Cognite AS
 
 import { AxiosResponse } from 'axios';
-import { apiUrl, projectUrl, rawGet, rawPost } from './core';
+import { apiUrl, metadataMap, projectUrl, rawGet, rawPost } from './core';
 
 export interface Event {
   id: number;
@@ -134,6 +134,6 @@ export class Events {
     const response = (await rawGet(url, { params })) as AxiosResponse<
       EventDataWithCursorResponse
     >;
-    return response.data.data;
+    return metadataMap.addAndReturn(response.data.data, response);
   }
 }

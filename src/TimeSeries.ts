@@ -1,7 +1,15 @@
 // Copyright 2018 Cognite AS
 
 import { AxiosResponse } from 'axios';
-import { apiUrl, projectUrl, rawDelete, rawGet, rawPost, rawPut } from './core';
+import {
+  apiUrl,
+  metadataMap,
+  projectUrl,
+  rawDelete,
+  rawGet,
+  rawPost,
+  rawPut,
+} from './core';
 
 export interface Timeseries {
   name: string;
@@ -157,6 +165,6 @@ export class TimeSeries {
     const response = (await rawGet(url, { params })) as AxiosResponse<
       TimeseriesWithCursorResponse
     >;
-    return response.data.data;
+    return metadataMap.addAndReturn(response.data.data, response);
   }
 }

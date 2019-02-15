@@ -1,3 +1,4 @@
+/** @hidden */
 export function scheduleTask(
   task: () => any,
   triggerTimeInMs: number,
