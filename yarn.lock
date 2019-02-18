@@ -3045,9 +3045,10 @@ ret@~0.1.10:
   version "0.1.15"
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
 
-"retry-axios@git://github.com/f1cognite/retry-axios.git#7ea9b893cf730b4f75743f623a6d321ed7699acf":
-  version "0.3.2"
-  resolved "git://github.com/f1cognite/retry-axios.git#7ea9b893cf730b4f75743f623a6d321ed7699acf"
+retry-axios@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/retry-axios/-/retry-axios-0.4.1.tgz#22ee392c6f20ae858d06650fa06091ea4f3406e5"
+  integrity sha512-h3mdzDUw4MlvzjxJ96mysapyxcHzAmGVywrBtU5oAtXI2aBxMEgcmyepkKfoVXK6we2padRl1BwwvL1N7+lPwA==
 
 rimraf@^2.5.4, rimraf@^2.6.1:
   version "2.6.2"

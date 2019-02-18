@@ -60,7 +60,7 @@
     "axios": "^0.18.0",
     "jwt-decode": "^2.2.0",
     "query-string": "^5.1.1",
-    "retry-axios": "git://github.com/f1cognite/retry-axios.git#7ea9b893cf730b4f75743f623a6d321ed7699acf"
+    "retry-axios": "^0.4.1"
   },
   "publishConfig": {
     "access": "public",
