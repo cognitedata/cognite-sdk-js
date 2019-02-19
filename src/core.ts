@@ -1,7 +1,7 @@
 // Copyright 2018 Cognite AS
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { attach } from 'retry-axios';
+import { attach } from './helpers/retry-axios';
 import { MetadataMap } from './MetadataMap';
 
 /** @hidden */
