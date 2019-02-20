@@ -408,6 +408,34 @@ describe('3D', () => {
     });
   });
 
+  test('list node ancestors', async () => {
+    const params = {
+      nodeId: 5,
+      cursor: 'crs',
+      limit: 12,
+    };
+    const reg = new RegExp(`/3d/models/12/revisions/34/nodes/ancestors$`);
+    const previousCursor = 'abcdef';
+    const nextCursor = 'defgh';
+    mock
+      .onGet(reg, {
+        params,
+      })
+      .reply(200, {
+        data: {
+          previousCursor,
+          nextCursor,
+          items: nodes,
+        },
+      });
+    const result = await ThreeD.listNodeAncestors(12, 34, params);
+    expect(result).toEqual({
+      previousCursor,
+      nextCursor,
+      items: nodes,
+    });
+  });
+
   test('list revisions', async () => {
     const params = {
       cursor: 'crs',
