@@ -114,6 +114,12 @@ export interface ThreeDListNodesParams {
   metadata?: NodeMetadata;
 }
 
+export interface ThreeDListNodeAncestorsParams {
+  nodeId: number;
+  cursor?: string;
+  limit?: number;
+}
+
 export interface ThreeDListRevisionsParams {
   cursor?: string;
   limit?: number;
@@ -288,6 +294,18 @@ export class ThreeD {
     params?: ThreeDListNodesParams
   ): Promise<DataWithCursor<Node>> {
     const url = `${threeDUrl()}/models/${modelId}/revisions/${revisionId}/nodes`;
+    const response = (await rawGet(url, { params })) as AxiosResponse<
+      DataResponseWithCursor<Node>
+    >;
+    return response.data.data;
+  }
+
+  public static async listNodeAncestors(
+    modelId: number,
+    revisionId: number,
+    params: ThreeDListNodeAncestorsParams
+  ): Promise<DataWithCursor<Node>> {
+    const url = `${threeDUrl()}/models/${modelId}/revisions/${revisionId}/nodes/ancestors`;
     const response = (await rawGet(url, { params })) as AxiosResponse<
       DataResponseWithCursor<Node>
     >;
