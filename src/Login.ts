@@ -192,6 +192,9 @@ export class Login {
   public static async loginWithApiKey(apiKey: string): Promise<LoginStatus> {
     configure({ apiKey });
     const loginStatus = await Login.verifyStatus();
+    if (loginStatus === null) {
+      throw Error('Invalid apikey');
+    }
     const { project } = loginStatus;
     if (configure({}).project && configure({}).project !== project) {
       throw new Error(
@@ -213,10 +216,19 @@ export class Login {
     return response.data.data;
   }
 
-  public static async verifyStatus(): Promise<LoginStatus> {
+  public static async verifyStatus(): Promise<null | LoginStatus> {
     const url = `${loginUrl()}/status`;
-    const response = (await rawGet(url)) as AxiosResponse<LoginStatusResponse>;
-    return response.data.data;
+    try {
+      const response = (await rawGet(url)) as AxiosResponse<
+        LoginStatusResponse
+      >;
+      return response.data.data;
+    } catch (err) {
+      if (err.status === 401) {
+        return null;
+      }
+      throw err;
+    }
   }
 
   public static async retrieveLoginUrl(params: LoginParams): Promise<string> {
@@ -311,7 +323,7 @@ export class Login {
   ): Promise<null | AuthResult> {
     setBearerToken(accessToken);
     const loginStatus = await Login.verifyStatus();
-    if (loginStatus.loggedIn) {
+    if (loginStatus !== null && loginStatus.loggedIn) {
       return {
         accessToken,
         user: loginStatus.user,
