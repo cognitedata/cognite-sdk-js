@@ -149,6 +149,22 @@ describe('Login', () => {
       expect(spiedLoginParseQuery).not.toBeCalled();
     });
 
+    test('pass in invalid accessToken', async () => {
+      spiedLoginVerifyAccessToken.mockReturnValueOnce(null);
+      expect(
+        await Login.authorize({
+          redirectUrl: window.location.href,
+          errorRedirectUrl: window.location.href,
+          accessToken: 'abc',
+        })
+      ).toEqual({
+        accessToken: authTokens.accessToken,
+        ...status,
+      });
+      // make sure step 2 of authorize isn't skipped
+      expect(spiedLoginParseQuery).toBeCalled();
+    });
+
     test('success when valid tokens is present in url', async () => {
       const spiedReplaceState = jest.spyOn(window.history, 'replaceState');
 
