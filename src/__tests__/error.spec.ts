@@ -34,9 +34,9 @@ describe('handleErrorResponse', () => {
   test('without requestId', () => {
     const axiosError = {
       response: {
+        status: 500,
         data: {
           error: {
-            code: 500,
             message: 'abc',
           },
         },
@@ -51,9 +51,9 @@ describe('handleErrorResponse', () => {
   test('with requestId', () => {
     const axiosError = {
       response: {
+        status: 500,
         data: {
           error: {
-            code: 500,
             message: 'abc',
           },
         },

@@ -5,6 +5,7 @@ import { Metadata, MetadataMap } from '../metadata';
 import { AssetAPI, generateAssetsObject } from './assets';
 
 export interface API {
+  project: string;
   getMetadata: (value: any) => undefined | Metadata;
   assets: AssetAPI;
 }
@@ -16,6 +17,7 @@ export function generateAPIObject(
   metadataMap: MetadataMap
 ): API {
   return {
+    project,
     getMetadata: value => metadataMap.get(value),
     assets: generateAssetsObject(project, axiosInstance, metadataMap),
   };

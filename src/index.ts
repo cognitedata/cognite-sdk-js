@@ -5,6 +5,7 @@ import { generateAxiosInstance } from './axiosWrappers';
 import { MetadataMap } from './metadata';
 import { generateAPIObject } from './resources/api';
 import { ApiKeyInfo, getApiKeyInfo } from './resources/login';
+import { isBrowser } from './utils';
 
 export interface BaseOptions {
   /**
@@ -19,15 +20,28 @@ export interface ApiKeyLoginOptions extends BaseOptions {
    */
   apiKey: string;
   /**
-   * CDP project
+   * CDP project. If present and api-key don't match this project `createClientWithApiKey` will throw an exception
    */
   project?: string;
 }
 
 export interface OAuthLoginOptions extends BaseOptions {
+  /**
+   * CDP project to login into
+   */
   project: string;
+  /**
+   * Where to redirect after successful login
+   */
   redirectUrl?: string;
+  /**
+   * Where to redirect after failed login
+   */
   errorRedirectUrl?: string;
+  /**
+   * If you pass in a valid accessToken it will use this token to avoid login prompt screen
+   */
+  accessToken?: string;
 }
 
 /**
@@ -73,14 +87,13 @@ export class CDP {
     const { apiKey, project } = options;
     const axiosInstance = generateAxiosInstance(options.baseUrl);
 
-    console.log(options.apiKey);
-    if (!isString(options.apiKey)) {
+    if (!isString(apiKey)) {
       throw Error(
         'Property `apiKey` not provided to param `options` in `createClientWithApiKey`'
       );
     }
     const apiKeyInfo = await getApiKeyInfo(axiosInstance, apiKey);
-    if (!apiKeyInfo.loggedIn) {
+    if (apiKeyInfo === null) {
       throw Error(
         'The api key provided to `createClientWithApiKey` is not recognized by CDP (invalid)'
       );
@@ -104,6 +117,25 @@ export class CDP {
     );
   }
 
+  public static async createClientWithOAuth(options: OAuthLoginOptions) {
+    if (!isBrowser()) {
+      throw Error(
+        '`createClientWithOAuth` can only be used in a browser. For non-browser environments please use `createClientWithApiKey`'
+      );
+    }
+
+    if (!isObject(options)) {
+      throw Error('`createClientWithOAuth` is missing parameter `options`');
+    }
+
+    const { project } = options;
+    if (!isString(project)) {
+      throw Error(
+        'Property `project` not provided to param `options` in `createClientWithOAuth`'
+      );
+    }
+  }
+
   /**
    * Retrieve information from CDP about an api-key
    *
@@ -121,7 +153,7 @@ export class CDP {
   public static async getApiKeyInfo(
     apiKey: string,
     baseUrl?: string
-  ): Promise<ApiKeyInfo> {
+  ): Promise<null | ApiKeyInfo> {
     const axiosInstance = generateAxiosInstance(baseUrl);
     return getApiKeyInfo(axiosInstance, apiKey);
   }

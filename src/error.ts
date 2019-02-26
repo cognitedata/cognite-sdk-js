@@ -23,12 +23,12 @@ export class CogniteError extends Error {
 
 /** @hidden */
 export function handleErrorResponse(err: AxiosError) {
-  let message;
   let code;
+  let message;
   let requestId;
   try {
+    code = err.response!.status;
     message = err.response!.data.error.message;
-    code = err.response!.data.error.code;
     requestId = (err.response!.headers || {})['X-Request-Id'];
   } catch (_) {
     throw err;
