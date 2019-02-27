@@ -224,7 +224,7 @@ describe('Login', () => {
       expect(configure({}).project).toBe(status.project);
     });
 
-    test('full browser redirect', async () => {
+    test('full browser redirect', async done => {
       const params = {
         redirectUrl: window.location.href,
         errorRedirectUrl: window.location.href,
@@ -234,12 +234,18 @@ describe('Login', () => {
       spiedSilentLogin.mockImplementationOnce(() => {
         throw new Error(); // fail silent login to trigger full redirect
       });
-
-      await Login.authorize(params, tokenCallback);
+      let isResolved = false;
+      Login.authorize(params, tokenCallback).then(() => {
+        isResolved = true;
+      });
       expect(spiedSilentLogin).toBeCalledTimes(1);
-
       expect(spiedLoginWithRedirect).toBeCalledTimes(1);
       expect(spiedLoginWithRedirect).toBeCalledWith(params);
+      // Login.authorize should never resolve on browser redirect
+      setTimeout(() => {
+        expect(isResolved).toBeFalsy();
+        done();
+      }, 100);
     });
   });
 
@@ -402,9 +408,9 @@ describe('Login', () => {
   });
 
   describe('schedule renewal', () => {
-    jest.useFakeTimers();
     const timeLeftToRenewInMs = 50000; // 50 sec
     test('valid short living token', () => {
+      jest.useFakeTimers();
       const loginParams: LoginParams = {
         project: 'my-tenant',
         redirectUrl: 'https://localhost',
@@ -441,6 +447,7 @@ describe('Login', () => {
     });
 
     test('valid long living token', () => {
+      jest.useFakeTimers();
       const loginParams: LoginParams = {
         project: 'my-tenant',
         redirectUrl: 'https://localhost',

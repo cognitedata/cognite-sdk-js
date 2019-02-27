@@ -174,9 +174,12 @@ export class Login {
     } catch (e) {
       //
     }
-    Login.loginWithRedirect(params);
-    // @ts-ignore (will do a browser redirect so nothing to care about)
-    return;
+
+    // Login.authorize should never resolve on browser redirect (to avoid return value undefined)
+    // @ts-ignore
+    return new Promise(() => {
+      Login.loginWithRedirect(params);
+    });
   }
 
   public static loginWithRedirect(params: LoginParams): void {
