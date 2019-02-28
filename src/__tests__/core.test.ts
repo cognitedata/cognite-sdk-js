@@ -195,6 +195,13 @@ describe('Core', () => {
     expect(responseMock).toHaveBeenCalledTimes(1);
   });
 
+  test('network error', async () => {
+    mock.onPost(/\/retry$/).networkError();
+    await expect(rawPost('/retry')).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Network Error"`
+    );
+  });
+
   test('test setBearerToken', async () => {
     const token = 'test-token';
     setBearerToken(token);

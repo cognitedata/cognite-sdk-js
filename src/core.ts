@@ -69,14 +69,18 @@ const statusCodesToRetry = [[100, 199], [429, 429], [500, 599]];
   retryDelay: 50,
   retry: 3,
   shouldRetry: (err: any) => {
-    const { config } = err;
+    const { config, response } = err;
 
     const httpMethod = config.method.toUpperCase();
     if (httpMethodsToRetry.indexOf(httpMethod) === -1) {
       return false;
     }
 
-    const responseStatusCode = err.response.status;
+    if (response == null) {
+      return true;
+    }
+
+    const responseStatusCode = response.status;
     let isCodeInValidRange = false;
     statusCodesToRetry.forEach(([start, end]: any) => {
       if (responseStatusCode >= start && responseStatusCode <= end) {
