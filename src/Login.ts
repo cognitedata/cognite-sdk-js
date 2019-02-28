@@ -143,8 +143,13 @@ export class Login {
 
     // Step 1
     if (params.accessToken != null) {
+      const defaultProject = params.project || configure({}).project || '';
       const authResult = await verifyAuthToken(params.accessToken);
-      if (authResult !== null) {
+
+      if (
+        authResult !== null &&
+        authResult.project.toLowerCase() === defaultProject.toLowerCase()
+      ) {
         return authResult;
       }
     }

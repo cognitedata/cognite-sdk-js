@@ -137,6 +137,7 @@ describe('Login', () => {
     test('pass in valid accessToken', async () => {
       expect(
         await Login.authorize({
+          project: 'my-tenant',
           redirectUrl: window.location.href,
           errorRedirectUrl: window.location.href,
           accessToken: authTokens.accessToken,
@@ -147,6 +148,43 @@ describe('Login', () => {
       });
       // make sure step 2 of authorize has skipped
       expect(spiedLoginParseQuery).not.toBeCalled();
+    });
+
+    test('pass in valid accessToken and specified project', async () => {
+      expect(
+        await Login.authorize({
+          project: status.project,
+          redirectUrl: window.location.href,
+          errorRedirectUrl: window.location.href,
+          accessToken: authTokens.accessToken,
+        })
+      ).toEqual({
+        accessToken: authTokens.accessToken,
+        ...status,
+      });
+      // make sure step 2 of authorize has skipped
+      expect(spiedLoginParseQuery).not.toBeCalled();
+    });
+
+    test('pass in valid accessToken for different project', async () => {
+      spiedLoginVerifyAccessToken.mockReturnValueOnce({
+        accessToken: authTokens.accessToken,
+        user: '',
+        project: 'another-tenant',
+        projectId: 123,
+      });
+      expect(
+        await Login.authorize({
+          redirectUrl: window.location.href,
+          errorRedirectUrl: window.location.href,
+          accessToken: authTokens.accessToken,
+        })
+      ).toEqual({
+        accessToken: authTokens.accessToken,
+        ...status,
+      });
+      expect(spiedLoginVerifyAccessToken).toBeCalled();
+      expect(spiedLoginParseQuery).toBeCalled();
     });
 
     test('pass in invalid accessToken', async () => {
