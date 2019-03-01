@@ -187,6 +187,11 @@ export class Login {
     });
   }
 
+  public static stopAutoAuthorize(): void {
+    cancelSchedule();
+    cancelSchedule = () => {};
+  }
+
   public static loginWithRedirect(params: LoginParams): void {
     if (!isBrowser) {
       throw new Error(
