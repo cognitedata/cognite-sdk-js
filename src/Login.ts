@@ -85,7 +85,7 @@ function isString(value: any): boolean {
   return typeof value === 'string';
 }
 
-let cancelSchedule = () => {};
+const scheduleList = new Map<AuthResult, () => void>(); // access token -> function
 
 /**
  * @hidden
@@ -102,6 +102,14 @@ export class Login {
     const baseUrl = configure({}).baseUrl;
     const url = `${baseUrl}${loginUrl()}/redirect?${stringify(queryParams)}`;
     return url;
+  }
+
+  public static stopAutoAuthorize(authResult: AuthResult): void {
+    const cancelFunction = scheduleList.get(authResult);
+    if (cancelFunction) {
+      cancelFunction();
+      scheduleList.delete(authResult);
+    }
   }
 
   // 0. Check if you are in a iFrame (don't do anything)
@@ -135,7 +143,7 @@ export class Login {
       const authResult = await Login.verifyAccessToken(accessToken);
       if (authResult !== null) {
         configure({ project: authResult.project });
-        Login.scheduleRenewal(params, authResult.accessToken, tokenCallback);
+        Login.scheduleRenewal(params, authResult, tokenCallback);
         return authResult;
       }
       return null;
@@ -270,27 +278,30 @@ export class Login {
   }
 
   private static scheduleRenewal(
-    params: LoginParams,
-    accessToken: string,
+    params: AuthorizeParams,
+    authResult: AuthResult,
     tokenCallback: (token: string) => void,
     timeLeftToRenewInMs: number = 50000,
     intervalInMs: number = 5000
   ) {
     // cancel potensially former scheduleRenewal
-    cancelSchedule();
 
-    tokenCallback(accessToken);
+    tokenCallback(authResult.accessToken);
     // falsy token will throw an error.
-    const decodedToken = jwtDecode<{ expire_time: number }>(accessToken);
+    const decodedToken = jwtDecode<{ expire_time: number }>(
+      authResult.accessToken
+    );
     const expireTimeInMs = decodedToken.expire_time * 1000;
 
-    cancelSchedule = scheduleTask(
+    const cancelSchedule = scheduleTask(
       () => {
+        Login.stopAutoAuthorize(authResult);
         Login.authorize(params, tokenCallback);
       },
       expireTimeInMs - timeLeftToRenewInMs,
       intervalInMs
     );
+    scheduleList.set(authResult, cancelSchedule);
   }
 
   private static async silentLogin(params: LoginParams): Promise<AuthTokens> {

@@ -4,7 +4,7 @@ import MockAdapter from 'axios-mock-adapter';
 import * as jwt from 'jwt-simple';
 import { configure } from '../core';
 import { instance } from '../index';
-import { Login, LoginParams } from '../Login';
+import { AuthResult, Login, LoginParams } from '../Login';
 
 let mock: MockAdapter;
 
@@ -207,7 +207,8 @@ describe('Login', () => {
       };
       const tokenCallback = () => {};
 
-      expect(await Login.authorize(params, tokenCallback)).toEqual({
+      const authResult = await Login.authorize(params, tokenCallback);
+      expect(authResult).toEqual({
         accessToken: authTokens.accessToken,
         ...status,
       });
@@ -218,7 +219,7 @@ describe('Login', () => {
       expect(spiedScheduleRenewal).toBeCalledTimes(1);
       expect(spiedScheduleRenewal).toBeCalledWith(
         params,
-        authTokens.accessToken,
+        authResult,
         tokenCallback
       );
       expect(configure({}).project).toBe(status.project);
@@ -409,13 +410,13 @@ describe('Login', () => {
 
   describe('schedule renewal', () => {
     const timeLeftToRenewInMs = 50000; // 50 sec
+    const loginParams: LoginParams = {
+      project: 'my-tenant',
+      redirectUrl: 'https://localhost',
+      errorRedirectUrl: 'https://localhost',
+    };
     test('valid short living token', () => {
       jest.useFakeTimers();
-      const loginParams: LoginParams = {
-        project: 'my-tenant',
-        redirectUrl: 'https://localhost',
-        errorRedirectUrl: 'https://localhost',
-      };
       const tokenCallbackMock = jest.fn();
       const accessToken = jwt.encode(
         {
@@ -424,9 +425,16 @@ describe('Login', () => {
         'secret'
       );
 
+      const authResult = {
+        project: loginParams.project as string,
+        accessToken,
+        projectId: 1,
+        user: 'user@example.com',
+      };
+
       (Login as any).scheduleRenewal(
         loginParams,
-        accessToken,
+        authResult,
         tokenCallbackMock,
         timeLeftToRenewInMs,
         5000
@@ -448,11 +456,6 @@ describe('Login', () => {
 
     test('valid long living token', () => {
       jest.useFakeTimers();
-      const loginParams: LoginParams = {
-        project: 'my-tenant',
-        redirectUrl: 'https://localhost',
-        errorRedirectUrl: 'https://localhost',
-      };
       const tokenCallbackMock = jest.fn();
       const nextYearInMs = Date.now() + 365 * 24 * 60 * 60 * 1000;
       const accessToken = jwt.encode(
@@ -461,10 +464,16 @@ describe('Login', () => {
         },
         'secret'
       );
+      const authResult = {
+        project: loginParams.project as string,
+        accessToken,
+        projectId: 1,
+        user: 'user@example.com',
+      };
 
       (Login as any).scheduleRenewal(
         loginParams,
-        accessToken,
+        authResult,
         tokenCallbackMock,
         timeLeftToRenewInMs,
         5000
