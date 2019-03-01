@@ -20,6 +20,7 @@ export interface AuthorizeParams {
   redirectUrl: string;
   errorRedirectUrl: string;
   accessToken?: string;
+  idToken?: string;
 }
 
 /**
@@ -62,6 +63,7 @@ interface AuthTokens {
 
 export interface AuthResult {
   accessToken: string;
+  idToken: string;
   user: string;
   project: string;
   projectId: number;
@@ -129,22 +131,26 @@ export class Login {
       return;
     }
 
-    const verifyAuthToken = async (
-      accessToken: string
+    const verifyAuthTokens = async (
+      accessToken: string,
+      idToken: string
     ): Promise<null | AuthResult> => {
-      const authResult = await Login.verifyAccessToken(accessToken);
+      const authResult = await Login.verifyTokens(accessToken, idToken);
       if (authResult !== null) {
         configure({ project: authResult.project });
-        Login.scheduleRenewal(params, authResult.accessToken, tokenCallback);
+        Login.scheduleRenewal(params, accessToken, idToken, tokenCallback);
         return authResult;
       }
       return null;
     };
 
     // Step 1
-    if (params.accessToken != null) {
+    if (params.accessToken != null && params.idToken != null) {
       const defaultProject = params.project || configure({}).project || '';
-      const authResult = await verifyAuthToken(params.accessToken);
+      const authResult = await verifyAuthTokens(
+        params.accessToken,
+        params.idToken
+      );
 
       if (
         authResult !== null &&
@@ -163,7 +169,10 @@ export class Login {
       url = removeParameterFromUrl(url, ID_TOKEN);
       window.history.replaceState(null, '', url);
       // Step 3.2
-      const authResult = await verifyAuthToken(authTokens.accessToken);
+      const authResult = await verifyAuthTokens(
+        authTokens.accessToken,
+        authTokens.idToken
+      );
       if (authResult !== null) {
         return authResult;
       }
@@ -172,7 +181,10 @@ export class Login {
     // try iframe login
     try {
       const silentAuthTokens = await Login.silentLogin(params);
-      const authResult = await verifyAuthToken(silentAuthTokens.accessToken);
+      const authResult = await verifyAuthTokens(
+        silentAuthTokens.accessToken,
+        silentAuthTokens.idToken
+      );
       if (authResult !== null) {
         return authResult;
       }
@@ -282,6 +294,7 @@ export class Login {
   private static scheduleRenewal(
     params: LoginParams,
     accessToken: string,
+    idToken: string,
     tokenCallback: (token: string) => void,
     timeLeftToRenewInMs: number = 50000,
     intervalInMs: number = 5000
@@ -291,7 +304,7 @@ export class Login {
 
     tokenCallback(accessToken);
     // falsy token will throw an error.
-    const decodedToken = jwtDecode<{ expire_time: number }>(accessToken);
+    const decodedToken = jwtDecode<{ expire_time: number }>(idToken);
     const expireTimeInMs = decodedToken.expire_time * 1000;
 
     cancelSchedule = scheduleTask(
@@ -331,14 +344,35 @@ export class Login {
     });
   }
 
-  private static async verifyAccessToken(
-    accessToken: string
+  private static async verifyTokens(
+    accessToken: string,
+    idToken: string
   ): Promise<null | AuthResult> {
+    let decodedToken;
+    try {
+      decodedToken = jwtDecode<{ expire_time: number; project_name: string }>(
+        idToken
+      );
+    } catch (_) {
+      // invalid JWT token
+      return null;
+    }
+
     setBearerToken(accessToken);
-    const loginStatus = await Login.verifyStatus();
-    if (loginStatus !== null && loginStatus.loggedIn) {
+    const [loginStatus, idTokenInfo] = await Promise.all([
+      Login.verifyStatus(),
+      Login.validateJWT(idToken),
+    ]);
+    if (
+      loginStatus !== null &&
+      loginStatus.loggedIn &&
+      idTokenInfo.valid === true &&
+      idTokenInfo.expired === false &&
+      decodedToken.project_name === loginStatus.project
+    ) {
       return {
         accessToken,
+        idToken,
         user: loginStatus.user,
         project: loginStatus.project,
         projectId: loginStatus.projectId,
