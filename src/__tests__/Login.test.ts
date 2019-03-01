@@ -447,13 +447,13 @@ describe('Login', () => {
 
   describe('schedule renewal', () => {
     const timeLeftToRenewInMs = 50000; // 50 sec
+    const loginParams: LoginParams = {
+      project: 'my-tenant',
+      redirectUrl: 'https://localhost',
+      errorRedirectUrl: 'https://localhost',
+    };
     test('valid short living token', () => {
       jest.useFakeTimers();
-      const loginParams: LoginParams = {
-        project: 'my-tenant',
-        redirectUrl: 'https://localhost',
-        errorRedirectUrl: 'https://localhost',
-      };
       const tokenCallbackMock = jest.fn();
       const accessToken = jwt.encode(
         {
@@ -486,11 +486,6 @@ describe('Login', () => {
 
     test('valid long living token', () => {
       jest.useFakeTimers();
-      const loginParams: LoginParams = {
-        project: 'my-tenant',
-        redirectUrl: 'https://localhost',
-        errorRedirectUrl: 'https://localhost',
-      };
       const tokenCallbackMock = jest.fn();
       const nextYearInMs = Date.now() + 365 * 24 * 60 * 60 * 1000;
       const accessToken = jwt.encode(
@@ -511,6 +506,38 @@ describe('Login', () => {
       const spiedLoginAuthorize = jest.spyOn(Login, 'authorize');
       jest.runOnlyPendingTimers();
       expect(spiedLoginAuthorize).not.toBeCalled();
+      spiedLoginAuthorize.mockRestore();
+    });
+
+    test('cancelSchedule', () => {
+      jest.useFakeTimers();
+      const tokenCallbackMock = jest.fn();
+      const accessToken = jwt.encode(
+        {
+          expire_time: Date.now() / 1000, // expiring token
+        },
+        'secret'
+      );
+
+      (Login as any).scheduleRenewal(
+        loginParams,
+        accessToken,
+        tokenCallbackMock,
+        timeLeftToRenewInMs,
+        5000
+      );
+
+      const spiedLoginAuthorize = jest
+        .spyOn(Login, 'authorize')
+        .mockImplementation(() => {});
+
+      jest.advanceTimersByTime(4500);
+      expect(Login.authorize).not.toBeCalled();
+
+      Login.stopAutoAuthorize();
+
+      jest.advanceTimersByTime(500);
+      expect(Login.authorize).not.toBeCalled();
       spiedLoginAuthorize.mockRestore();
     });
   });
