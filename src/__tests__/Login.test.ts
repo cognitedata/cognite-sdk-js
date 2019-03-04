@@ -69,12 +69,12 @@ describe('Login', () => {
     };
 
     const authTokens = {
-      accessToken: jwt.encode({}, 'secret'),
+      accessToken: 'abc',
       idToken: jwt.encode({}, 'secret'),
     };
 
     let spiedLoginParseQuery: jest.SpyInstance<any>;
-    let spiedLoginVerifyAccessToken: jest.SpyInstance<any>;
+    let spiedLoginVerifyTokens: jest.SpyInstance<any>;
     let spiedSilentLogin: jest.SpyInstance<any>;
     let spiedScheduleRenewal: jest.SpyInstance<any>;
     let spiedLoginWithRedirect: jest.SpyInstance<any>;
@@ -84,8 +84,8 @@ describe('Login', () => {
         .spyOn(Login as any, 'parseQuery')
         .mockImplementation(() => null);
 
-      spiedLoginVerifyAccessToken = jest
-        .spyOn(Login as any, 'verifyAccessToken')
+      spiedLoginVerifyTokens = jest
+        .spyOn(Login as any, 'verifyTokens')
         .mockReturnValue({
           accessToken: authTokens.accessToken,
           ...status,
@@ -107,7 +107,7 @@ describe('Login', () => {
 
     afterEach(() => {
       spiedLoginParseQuery.mockClear();
-      spiedLoginVerifyAccessToken.mockClear();
+      spiedLoginVerifyTokens.mockClear();
       spiedSilentLogin.mockClear();
       spiedScheduleRenewal.mockClear();
       spiedLoginWithRedirect.mockClear();
@@ -115,7 +115,7 @@ describe('Login', () => {
 
     afterAll(() => {
       spiedLoginParseQuery.mockRestore();
-      spiedLoginVerifyAccessToken.mockRestore();
+      spiedLoginVerifyTokens.mockRestore();
       spiedSilentLogin.mockRestore();
       spiedScheduleRenewal.mockRestore();
       spiedLoginWithRedirect.mockRestore();
@@ -141,6 +141,7 @@ describe('Login', () => {
           redirectUrl: window.location.href,
           errorRedirectUrl: window.location.href,
           accessToken: authTokens.accessToken,
+          idToken: authTokens.idToken,
         })
       ).toEqual({
         accessToken: authTokens.accessToken,
@@ -157,6 +158,7 @@ describe('Login', () => {
           redirectUrl: window.location.href,
           errorRedirectUrl: window.location.href,
           accessToken: authTokens.accessToken,
+          idToken: authTokens.idToken,
         })
       ).toEqual({
         accessToken: authTokens.accessToken,
@@ -167,7 +169,7 @@ describe('Login', () => {
     });
 
     test('pass in valid accessToken for different project', async () => {
-      spiedLoginVerifyAccessToken.mockReturnValueOnce({
+      spiedLoginVerifyTokens.mockReturnValueOnce({
         accessToken: authTokens.accessToken,
         user: '',
         project: 'another-tenant',
@@ -178,22 +180,24 @@ describe('Login', () => {
           redirectUrl: window.location.href,
           errorRedirectUrl: window.location.href,
           accessToken: authTokens.accessToken,
+          idToken: authTokens.idToken,
         })
       ).toEqual({
         accessToken: authTokens.accessToken,
         ...status,
       });
-      expect(spiedLoginVerifyAccessToken).toBeCalled();
+      expect(spiedLoginVerifyTokens).toBeCalled();
       expect(spiedLoginParseQuery).toBeCalled();
     });
 
-    test('pass in invalid accessToken', async () => {
-      spiedLoginVerifyAccessToken.mockReturnValueOnce(null);
+    test('pass in invalid tokens', async () => {
+      spiedLoginVerifyTokens.mockReturnValueOnce(null);
       expect(
         await Login.authorize({
           redirectUrl: window.location.href,
           errorRedirectUrl: window.location.href,
           accessToken: 'abc',
+          idToken: 'abc',
         })
       ).toEqual({
         accessToken: authTokens.accessToken,
@@ -210,10 +214,12 @@ describe('Login', () => {
       window.history.pushState(
         {},
         'Test Title',
-        '/some/random/path?query=true&access_token=abc&id_token=def&random=123'
+        `/some/random/path?query=true&access_token=abc&id_token=${
+          authTokens.idToken
+        }&random=123`
       );
 
-      spiedLoginParseQuery.mockReturnValueOnce(() => authTokens);
+      spiedLoginParseQuery.mockReturnValueOnce(authTokens);
 
       expect(
         await Login.authorize({
@@ -257,6 +263,7 @@ describe('Login', () => {
       expect(spiedScheduleRenewal).toBeCalledWith(
         params,
         authTokens.accessToken,
+        authTokens.idToken,
         tokenCallback
       );
       expect(configure({}).project).toBe(status.project);
@@ -452,10 +459,11 @@ describe('Login', () => {
       redirectUrl: 'https://localhost',
       errorRedirectUrl: 'https://localhost',
     };
+    const accessToken = 'abc';
     test('valid short living token', () => {
       jest.useFakeTimers();
       const tokenCallbackMock = jest.fn();
-      const accessToken = jwt.encode(
+      const idToken = jwt.encode(
         {
           expire_time: Date.now() / 1000, // expiring token
         },
@@ -465,6 +473,7 @@ describe('Login', () => {
       (Login as any).scheduleRenewal(
         loginParams,
         accessToken,
+        idToken,
         tokenCallbackMock,
         timeLeftToRenewInMs,
         5000
@@ -488,7 +497,7 @@ describe('Login', () => {
       jest.useFakeTimers();
       const tokenCallbackMock = jest.fn();
       const nextYearInMs = Date.now() + 365 * 24 * 60 * 60 * 1000;
-      const accessToken = jwt.encode(
+      const idToken = jwt.encode(
         {
           expire_time: nextYearInMs / 1000, // token that lives long enough
         },
@@ -498,6 +507,7 @@ describe('Login', () => {
       (Login as any).scheduleRenewal(
         loginParams,
         accessToken,
+        idToken,
         tokenCallbackMock,
         timeLeftToRenewInMs,
         5000
@@ -512,7 +522,7 @@ describe('Login', () => {
     test('cancelSchedule', () => {
       jest.useFakeTimers();
       const tokenCallbackMock = jest.fn();
-      const accessToken = jwt.encode(
+      const idToken = jwt.encode(
         {
           expire_time: Date.now() / 1000, // expiring token
         },
@@ -522,6 +532,7 @@ describe('Login', () => {
       (Login as any).scheduleRenewal(
         loginParams,
         accessToken,
+        idToken,
         tokenCallbackMock,
         timeLeftToRenewInMs,
         5000
@@ -652,24 +663,47 @@ describe('Login', () => {
 
   test('verify access status', async () => {
     const spiedLoginVerifyStatus = jest.spyOn(Login, 'verifyStatus');
+    const spiedLoginValidateJWT = jest.spyOn(Login, 'validateJWT');
     const accessToken = 'abc';
-    spiedLoginVerifyStatus.mockReturnValueOnce({
-      loggedIn: false,
-    });
-
     const status = {
       user: 'user@example.com',
       project: 'my-tenant',
       projectId: 314,
     };
+    const idToken = jwt.encode({ project_name: status.project }, 'secret');
+    spiedLoginVerifyStatus.mockReturnValueOnce({
+      loggedIn: false,
+    });
+    spiedLoginValidateJWT.mockReturnValueOnce({
+      valid: true,
+      expired: false,
+    });
+    expect(await (Login as any).verifyTokens(accessToken, idToken)).toBe(null);
+
     spiedLoginVerifyStatus.mockReturnValueOnce({
       ...status,
       loggedIn: true,
     });
+    spiedLoginValidateJWT.mockReturnValueOnce({
+      valid: false,
+      expired: false,
+      project: status.project,
+    });
+    expect(await (Login as any).verifyTokens(accessToken, idToken)).toBe(null);
 
-    expect(await (Login as any).verifyAccessToken(accessToken)).toBe(null);
-    expect(await (Login as any).verifyAccessToken(accessToken)).toEqual({
+    spiedLoginVerifyStatus.mockReturnValueOnce({
+      ...status,
+      loggedIn: true,
+    });
+    spiedLoginValidateJWT.mockReturnValueOnce({
+      valid: true,
+      expired: false,
+      project: status.project,
+    });
+
+    expect(await (Login as any).verifyTokens(accessToken, idToken)).toEqual({
       accessToken,
+      idToken,
       ...status,
     });
 
