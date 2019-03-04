@@ -203,7 +203,7 @@ async function getIdInfo(
   }
 }
 
-function clearParametersFromUrl(...params: string[]): void {
+export function clearParametersFromUrl(...params: string[]): void {
   let url = window.location.href;
   params.forEach(param => {
     url = removeParameterFromUrl(url, param);
@@ -211,9 +211,10 @@ function clearParametersFromUrl(...params: string[]): void {
   window.history.replaceState(null, '', url);
 }
 
-function generateLoginUrl(params: AuthorizeParams): string {
-  const { baseUrl, redirectUrl, errorRedirectUrl } = params;
+export function generateLoginUrl(params: AuthorizeParams): string {
+  const { project, baseUrl, redirectUrl, errorRedirectUrl } = params;
   const queryParams = {
+    project,
     redirectUrl,
     errorRedirectUrl,
   };
@@ -232,7 +233,7 @@ function isAuthIFrame(): boolean {
   return window.name === IFRAME_NAME;
 }
 
-function parseTokenQueryParameters(query: string): null | AuthTokens {
+export function parseTokenQueryParameters(query: string): null | AuthTokens {
   const {
     [ACCESS_TOKEN_PARAM]: accessToken,
     [ID_TOKEN_PARAM]: idToken,

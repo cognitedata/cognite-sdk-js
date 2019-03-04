@@ -4,7 +4,7 @@ import { isObject, isString } from 'lodash';
 import { generateAxiosInstance } from './axiosWrappers';
 import { MetadataMap } from './metadata';
 import { generateAPIObject } from './resources/api';
-import { ApiKeyInfo, getApiKeyInfo } from './resources/login';
+import { getIdInfoFromApiKey, IdInfo } from './resources/login';
 import { isBrowser } from './utils';
 
 export interface BaseOptions {
@@ -92,7 +92,7 @@ export class CDP {
         'Property `apiKey` not provided to param `options` in `createClientWithApiKey`'
       );
     }
-    const apiKeyInfo = await getApiKeyInfo(axiosInstance, apiKey);
+    const apiKeyInfo = await getIdInfoFromApiKey(axiosInstance, apiKey);
     if (apiKeyInfo === null) {
       throw Error(
         'The api key provided to `createClientWithApiKey` is not recognized by CDP (invalid)'
@@ -153,8 +153,8 @@ export class CDP {
   public static async getApiKeyInfo(
     apiKey: string,
     baseUrl?: string
-  ): Promise<null | ApiKeyInfo> {
+  ): Promise<null | IdInfo> {
     const axiosInstance = generateAxiosInstance(baseUrl);
-    return getApiKeyInfo(axiosInstance, apiKey);
+    return getIdInfoFromApiKey(axiosInstance, apiKey);
   }
 }
