@@ -3,7 +3,7 @@
 import { AxiosResponse } from 'axios';
 import * as jwtDecode_ from 'jwt-decode';
 import { parse, stringify } from 'query-string';
-import { configure, isBrowser, rawGet, setBearerToken } from './core';
+import { configure, instance, isBrowser, rawGet, setBearerToken } from './core';
 import { scheduleTask } from './helpers/scheduler';
 
 // https://github.com/jvandemo/generator-angular2-library/issues/221#issuecomment-387462303
@@ -235,9 +235,12 @@ export class Login {
   public static async validateJWT(token: string): Promise<TokenStatus> {
     const url = `${loginUrl()}/token`;
     const params = { token };
+    const authHeader = instance.defaults.headers.Authorization;
+    delete instance.defaults.headers.Authorization;
     const response = (await rawGet(url, { params })) as AxiosResponse<
       TokenStatusResponse
     >;
+    instance.defaults.headers.Authorization = authHeader;
     return response.data.data;
   }
 
@@ -309,6 +312,7 @@ export class Login {
 
     cancelSchedule = scheduleTask(
       () => {
+        cancelSchedule();
         Login.authorize(params, tokenCallback);
       },
       expireTimeInMs - timeLeftToRenewInMs,
@@ -348,15 +352,10 @@ export class Login {
     accessToken: string,
     idToken: string
   ): Promise<null | AuthResult> {
-    let decodedToken;
-    try {
-      decodedToken = jwtDecode<{ expire_time: number; project_name: string }>(
-        idToken
-      );
-    } catch (_) {
-      // invalid JWT token
-      return null;
-    }
+    const decodedToken = jwtDecode<{
+      expire_time: number;
+      project_name: string;
+    }>(idToken);
 
     setBearerToken(accessToken);
     const [loginStatus, idTokenInfo] = await Promise.all([
