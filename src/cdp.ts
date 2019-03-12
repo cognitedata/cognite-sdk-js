@@ -1,17 +1,29 @@
 // Copyright 2019 Cognite AS
 
+import { AxiosInstance } from 'axios';
 import { isObject, isString } from 'lodash';
-import { generateAxiosInstance } from './axiosWrappers';
+import {
+  generateAxiosInstance,
+  listenForNonSuccessStatusCode,
+  setBearerToken,
+} from './axiosWrappers';
 import { MetadataMap } from './metadata';
 import { generateAPIObject } from './resources/api';
-import { getIdInfoFromApiKey, IdInfo } from './resources/login';
-import { isBrowser } from './utils';
+import {
+  authenticate,
+  getIdInfoFromApiKey,
+  IdInfo,
+  RedirectOptions,
+} from './resources/login';
+import { addRetryToAxiosInstance } from './retryRequests';
+import { getBaseUrl, isBrowser } from './utils';
 
 export interface BaseOptions {
   /**
    * Specify CDP base url if it differs from `https://api.cognitedata.com`
    */
   baseUrl?: string;
+  _axiosInstance?: AxiosInstance;
 }
 
 export interface ApiKeyLoginOptions extends BaseOptions {
@@ -20,9 +32,9 @@ export interface ApiKeyLoginOptions extends BaseOptions {
    */
   apiKey: string;
   /**
-   * CDP project. If present and api-key don't match this project `createClientWithApiKey` will throw an exception
+   * CDP project
    */
-  project?: string;
+  project: string;
 }
 
 export interface OAuthLoginOptions extends BaseOptions {
@@ -30,18 +42,13 @@ export interface OAuthLoginOptions extends BaseOptions {
    * CDP project to login into
    */
   project: string;
-  /**
-   * Where to redirect after successful login
-   */
-  redirectUrl?: string;
-  /**
-   * Where to redirect after failed login
-   */
-  errorRedirectUrl?: string;
-  /**
-   * If you pass in a valid accessToken it will use this token to avoid login prompt screen
-   */
-  accessToken?: string;
+  onAuthenticate: (
+    login: {
+      redirect: (options: RedirectOptions) => void;
+      skip: () => void;
+    }
+  ) => void;
+  onTokens?: (accessToken: string, idToken: string) => void;
 }
 
 /**
@@ -84,14 +91,24 @@ export class CDP {
     if (!isObject(options)) {
       throw Error('`createClientWithApiKey` is missing parameter `options`');
     }
-    const { apiKey, project } = options;
-    const axiosInstance = generateAxiosInstance(options.baseUrl);
-
+    const { project } = options;
+    if (!isString(project)) {
+      throw Error(
+        'Property `project` not provided to param `options` in `createClientWithApiKey`'
+      );
+    }
+    const { apiKey } = options;
     if (!isString(apiKey)) {
       throw Error(
         'Property `apiKey` not provided to param `options` in `createClientWithApiKey`'
       );
     }
+
+    const { baseUrl, _axiosInstance } = options;
+    const axiosInstance =
+      _axiosInstance || generateAxiosInstance(getBaseUrl(baseUrl));
+    addRetryToAxiosInstance(axiosInstance);
+
     const apiKeyInfo = await getIdInfoFromApiKey(axiosInstance, apiKey);
     if (apiKeyInfo === null) {
       throw Error(
@@ -100,8 +117,8 @@ export class CDP {
     }
 
     const isSameProject =
-      apiKeyInfo.project.toLowerCase() === (project || '').toLowerCase();
-    if (isString(project) && !isSameProject) {
+      apiKeyInfo.project.toLowerCase() === project.toLowerCase();
+    if (!isSameProject) {
       throw Error(
         `Projects didn't match. Api key is for project "${
           apiKeyInfo.project
@@ -134,6 +151,38 @@ export class CDP {
         'Property `project` not provided to param `options` in `createClientWithOAuth`'
       );
     }
+
+    const baseUrl = getBaseUrl(options.baseUrl);
+    const axiosInstance =
+      options._axiosInstance || generateAxiosInstance(baseUrl);
+
+    const doAuthenticate = () => {
+      const { onAuthenticate } = options;
+      return authenticate({
+        project,
+        baseUrl,
+        onAuthenticate,
+        onTokens: (accessToken, idToken) => {
+          setBearerToken(axiosInstance, accessToken);
+          if (options.onTokens) {
+            options.onTokens(accessToken, idToken);
+          }
+        },
+      });
+    };
+    listenForNonSuccessStatusCode(axiosInstance, 401, async retry => {
+      console.log('her1');
+      await doAuthenticate();
+      console.log('her2');
+      return retry();
+    });
+    addRetryToAxiosInstance(axiosInstance);
+    const api = generateAPIObject(project, axiosInstance, new MetadataMap());
+
+    return {
+      ...api,
+      authenticate: doAuthenticate,
+    };
   }
 
   /**
@@ -152,9 +201,12 @@ export class CDP {
    */
   public static async getApiKeyInfo(
     apiKey: string,
-    baseUrl?: string
+    baseUrl?: string,
+    axiosInstance?: AxiosInstance
   ): Promise<null | IdInfo> {
-    const axiosInstance = generateAxiosInstance(baseUrl);
-    return getIdInfoFromApiKey(axiosInstance, apiKey);
+    return getIdInfoFromApiKey(
+      axiosInstance || generateAxiosInstance(getBaseUrl(baseUrl)),
+      apiKey
+    );
   }
 }

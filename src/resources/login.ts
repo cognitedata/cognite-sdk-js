@@ -15,30 +15,27 @@ const ERROR_PARAM = 'error';
 const ERROR_DESCRIPTION_PARAM = 'error_description';
 const IFRAME_NAME = 'cognite-js-sdk-auth-iframe';
 
-interface AuthTokens {
-  accessToken: string;
-  idToken: string;
-}
-
 export interface IdInfo {
   project: string;
   user: string;
 }
 
+export interface RedirectOptions {
+  redirectUrl: string;
+  errorRedirectUrl?: string;
+}
+
 /** @hidden */
-export interface AuthorizeParams {
+export interface AuthorizeParams extends RedirectOptions {
   baseUrl: string;
   project: string;
-  redirectUrl: string;
-  errorRedirectUrl: string;
   accessToken?: string;
 }
 
 /** @hidden */
-export interface OAuthResult {
+export interface AuthTokens {
   accessToken: string;
-  user: string;
-  project: string;
+  idToken: string;
 }
 
 type TokenCallback = (token: string) => void;
@@ -61,6 +58,71 @@ function getIdInfoFromAccessToken(
   });
 }
 
+/** @hidden */
+export interface AuthenticateParams {
+  project: string;
+  baseUrl: string;
+  onTokens: (accessToken: string, idToken: string) => void;
+  onAuthenticate: (
+    login: {
+      redirect: (options: RedirectOptions) => void;
+      skip: () => void;
+    }
+  ) => void;
+}
+
+/** @hidden */
+export async function authenticate(params: AuthenticateParams): Promise<void> {
+  if (isAuthIFrame()) {
+    return;
+  }
+
+  const { project, onTokens } = params;
+  {
+    const tokens = await parseTokenQueryParameters(window.location.search);
+    if (tokens !== null && (await isTokensValid(project, tokens))) {
+      onTokens(tokens.accessToken, tokens.idToken);
+      return;
+    }
+  }
+
+  const { baseUrl } = params;
+  try {
+    const href = window.location.href;
+    const tokens = await silentLogin({
+      baseUrl,
+      project,
+      redirectUrl: href,
+      errorRedirectUrl: href,
+    });
+    if (tokens !== null) {
+      onTokens(tokens.accessToken, tokens.idToken);
+      return;
+    }
+  } catch (_) {
+    // don't do anything.
+  }
+
+  return new Promise((resolve, reject) => {
+    const login = {
+      skip: () => {
+        resolve();
+      },
+      redirect: (options: RedirectOptions) => {
+        const authorizeParams = {
+          baseUrl,
+          project,
+          ...options,
+        };
+        loginWithRedirect(authorizeParams)
+          .then(resolve)
+          .catch(reject);
+      },
+    };
+    params.onAuthenticate(login);
+  });
+}
+
 /**
  * @hidden
  *
@@ -79,7 +141,7 @@ function getIdInfoFromAccessToken(
 export async function authorize(
   axiosInstance: AxiosInstance,
   params: AuthorizeParams
-): Promise<OAuthResult> {
+): Promise<AuthTokens> {
   // Step 0
   if (isAuthIFrame()) {
     // @ts-ignore
@@ -90,21 +152,13 @@ export async function authorize(
     return getIdInfoFromAccessToken(axiosInstance, accessToken);
   };
 
-  const constructReturnValue = (accessToken: string, idInfo: IdInfo) => {
-    return {
-      accessToken,
-      project: idInfo.project,
-      user: idInfo.user,
-    };
-  };
-
   // Step 1
-  if (params.accessToken != null) {
-    const idInfo = await checkAccessToken(params.accessToken);
-    if (idInfo !== null) {
-      return constructReturnValue(params.accessToken, idInfo);
-    }
-  }
+  // if (params.accessToken != null) {
+  //   const idInfo = await checkAccessToken(params.accessToken);
+  //   if (idInfo !== null) {
+  //     return constructReturnValue(params.accessToken);
+  //   }
+  // }
 
   // Step 2 & 3
   let authTokens;
@@ -120,7 +174,7 @@ export async function authorize(
     // Step 3.2
     const idInfo = await checkAccessToken(authTokens.accessToken);
     if (idInfo !== null) {
-      return constructReturnValue(authTokens.accessToken, idInfo);
+      return authTokens;
     }
   }
 
@@ -129,7 +183,7 @@ export async function authorize(
     const silentAuthTokens = await silentLogin(params);
     const idInfo = await checkAccessToken(silentAuthTokens.accessToken);
     if (idInfo !== null) {
-      return constructReturnValue(silentAuthTokens.accessToken, idInfo);
+      return silentAuthTokens;
     }
   } catch (e) {
     //
@@ -139,6 +193,7 @@ export async function authorize(
   return;
 }
 
+/** @hidden */
 export function scheduleAccessTokenRenewal(
   accessToken: string,
   axiosInstance: AxiosInstance,
@@ -203,7 +258,7 @@ async function getIdInfo(
   }
 }
 
-export function clearParametersFromUrl(...params: string[]): void {
+function clearParametersFromUrl(...params: string[]): void {
   let url = window.location.href;
   params.forEach(param => {
     url = removeParameterFromUrl(url, param);
@@ -211,17 +266,17 @@ export function clearParametersFromUrl(...params: string[]): void {
   window.history.replaceState(null, '', url);
 }
 
-export function generateLoginUrl(params: AuthorizeParams): string {
+function generateLoginUrl(params: AuthorizeParams): string {
   const { project, baseUrl, redirectUrl, errorRedirectUrl } = params;
   const queryParams = {
     project,
     redirectUrl,
-    errorRedirectUrl,
+    errorRedirectUrl: errorRedirectUrl || redirectUrl,
   };
   return `${baseUrl}/login/redirect?${stringify(queryParams)}`;
 }
 
-function loginWithRedirect(params: AuthorizeParams): Promise<void> {
+export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
   return new Promise(() => {
     const url = generateLoginUrl(params);
     window.location.assign(url);
@@ -252,7 +307,9 @@ export function parseTokenQueryParameters(query: string): null | AuthTokens {
   return null;
 }
 
-async function silentLogin(params: AuthorizeParams): Promise<AuthTokens> {
+export async function silentLogin(
+  params: AuthorizeParams
+): Promise<AuthTokens> {
   return new Promise<AuthTokens>((resolve, reject) => {
     const iframe = document.createElement('iframe');
     iframe.name = IFRAME_NAME;
@@ -278,4 +335,9 @@ async function silentLogin(params: AuthorizeParams): Promise<AuthTokens> {
     iframe.src = `${generateLoginUrl(params)}&prompt=none`;
     document.body.appendChild(iframe);
   });
+}
+
+export async function isTokensValid(project: string, tokens: AuthTokens) {
+  console.log(project, tokens.accessToken, tokens.idToken);
+  return true;
 }

@@ -1,48 +1,79 @@
 // Copyright 2019 Cognite AS
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { BASE_URL } from './constants';
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from 'axios';
 import { handleErrorResponse } from './error';
-import { addRetryToAxiosInstance } from './retryRequests';
 import { CogniteResponse } from './types/types';
 
 /** @hidden */
-export function generateAxiosInstance(baseUrl?: string): AxiosInstance {
+export function generateAxiosInstance(baseUrl: string): AxiosInstance {
   const instance = axios.create({
-    baseURL: baseUrl || BASE_URL,
+    baseURL: baseUrl,
     headers: {},
   });
-  addRetryToAxiosInstance(instance);
   return instance;
 }
 
-async function rawRequest(
+/** @hidden */
+export function setBearerToken(axiosInstance: AxiosInstance, token: string) {
+  axiosInstance.defaults.headers.Authorization = `Bearer ${token}`;
+}
+
+/** @hidden */
+export function listenForNonSuccessStatusCode(
   axiosInstance: AxiosInstance,
-  verb: 'get' | 'post' | 'put' | 'delete',
-  path: string,
-  reqOpt: AxiosRequestConfig = {}
+  status: number,
+  handler: (retry: () => void) => Promise<void>
+) {
+  axiosInstance.interceptors.response.use(
+    response => response,
+    (error: AxiosError) => {
+      const response = (error.response as AxiosResponse) || {};
+      if (response.status === status) {
+        const retry = () => {
+          return rawRequest(axiosInstance, error.config);
+        };
+        return handler(retry);
+      }
+      return Promise.reject(error);
+    }
+  );
+}
+
+/** @hidden */
+export async function rawRequest(
+  axiosInstance: AxiosInstance,
+  requestConfig: AxiosRequestConfig
 ): Promise<any> {
-  return axiosInstance({
-    url: path,
-    method: verb,
-    ...reqOpt,
-  }).catch(handleErrorResponse);
+  return axiosInstance(requestConfig).catch(handleErrorResponse);
 }
 
 /** @hidden */
 export async function rawGet<T>(
   axiosInstance: AxiosInstance,
   path: string,
-  reqOpt: AxiosRequestConfig = {}
+  requestConfig: AxiosRequestConfig = {}
 ): Promise<AxiosResponse<CogniteResponse<T>>> {
-  return rawRequest(axiosInstance, 'get', path, reqOpt);
+  return rawRequest(axiosInstance, {
+    method: 'get',
+    url: path,
+    ...requestConfig,
+  });
 }
 
 /** @hidden */
 export async function rawPost<T>(
   axiosInstance: AxiosInstance,
   path: string,
-  reqOpt: AxiosRequestConfig = {}
+  requestConfig: AxiosRequestConfig = {}
 ): Promise<AxiosResponse<CogniteResponse<T>>> {
-  return rawRequest(axiosInstance, 'post', path, reqOpt);
+  return rawRequest(axiosInstance, {
+    method: 'post',
+    url: path,
+    ...requestConfig,
+  });
 }
