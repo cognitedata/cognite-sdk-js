@@ -27,7 +27,7 @@ export function setBearerToken(axiosInstance: AxiosInstance, token: string) {
 export function listenForNonSuccessStatusCode(
   axiosInstance: AxiosInstance,
   status: number,
-  handler: (retry: () => void) => Promise<void>
+  handler: (error: AxiosError, retry: () => void) => Promise<void>
 ) {
   axiosInstance.interceptors.response.use(
     response => response,
@@ -37,7 +37,7 @@ export function listenForNonSuccessStatusCode(
         const retry = () => {
           return rawRequest(axiosInstance, error.config);
         };
-        return handler(retry);
+        return handler(error, retry);
       }
       return Promise.reject(error);
     }

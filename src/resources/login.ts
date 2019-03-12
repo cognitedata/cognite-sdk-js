@@ -1,13 +1,10 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import * as jwtDecode_ from 'jwt-decode';
 import { isString } from 'lodash';
 import { parse, stringify } from 'query-string';
 import { rawGet } from '../axiosWrappers';
 import { removeParameterFromUrl } from '../utils';
-// https://github.com/jvandemo/generator-angular2-library/issues/221#issuecomment-387462303
-const jwtDecode = jwtDecode_;
 
 const ACCESS_TOKEN_PARAM = 'access_token';
 const ID_TOKEN_PARAM = 'id_token';
@@ -38,23 +35,21 @@ export interface AuthTokens {
   idToken: string;
 }
 
-type TokenCallback = (token: string) => void;
-type StopSchedule = () => void;
-
 /** @hidden */
-export async function getIdInfoFromApiKey(
+export function getIdInfoFromApiKey(
   axiosInstance: AxiosInstance,
   apiKey: string
 ): Promise<null | IdInfo> {
   return getIdInfo(axiosInstance, { 'api-key': apiKey });
 }
 
-function getIdInfoFromAccessToken(
+/** @hidden */
+export function getIdInfoFromAccessToken(
   axiosInstance: AxiosInstance,
   accessToken: string
 ): Promise<null | IdInfo> {
   return getIdInfo(axiosInstance, {
-    Authorization: `Bearer: ${accessToken}`,
+    Authorization: `Bearer ${accessToken}`,
   });
 }
 
@@ -62,27 +57,26 @@ function getIdInfoFromAccessToken(
 export interface AuthenticateParams {
   project: string;
   baseUrl: string;
-  onTokens: (accessToken: string, idToken: string) => void;
-  onAuthenticate: (
-    login: {
-      redirect: (options: RedirectOptions) => void;
-      skip: () => void;
-    }
-  ) => void;
 }
 
 /** @hidden */
-export async function authenticate(params: AuthenticateParams): Promise<void> {
+export async function loginSilently(
+  axiosInstance: AxiosInstance,
+  params: AuthenticateParams
+): Promise<null | AuthTokens> {
   if (isAuthIFrame()) {
-    return;
+    return null;
   }
 
-  const { project, onTokens } = params;
+  const { project } = params;
   {
-    const tokens = await parseTokenQueryParameters(window.location.search);
-    if (tokens !== null && (await isTokensValid(project, tokens))) {
-      onTokens(tokens.accessToken, tokens.idToken);
-      return;
+    const tokens = extractTokensFromUrl();
+    if (
+      tokens !== null &&
+      (await isTokensValid(axiosInstance, project, tokens))
+    ) {
+      clearParametersFromUrl(ACCESS_TOKEN_PARAM, ID_TOKEN_PARAM);
+      return tokens;
     }
   }
 
@@ -96,143 +90,14 @@ export async function authenticate(params: AuthenticateParams): Promise<void> {
       errorRedirectUrl: href,
     });
     if (tokens !== null) {
-      onTokens(tokens.accessToken, tokens.idToken);
-      return;
+      return tokens;
     }
   } catch (_) {
     // don't do anything.
   }
 
-  return new Promise((resolve, reject) => {
-    const login = {
-      skip: () => {
-        resolve();
-      },
-      redirect: (options: RedirectOptions) => {
-        const authorizeParams = {
-          baseUrl,
-          project,
-          ...options,
-        };
-        loginWithRedirect(authorizeParams)
-          .then(resolve)
-          .catch(reject);
-      },
-    };
-    params.onAuthenticate(login);
-  });
+  return null;
 }
-
-/**
- * @hidden
- *
- * 0. Check if you are in a iFrame (don't do anything)
- * 1. Check if existing accessToken was passed in (in params).
- *   1. Check if the token is valid (if not ignore jump to step 3)
- *   2. Return AuthResult and set bearer token
- * 2. Check if error is present in the URL (if yes, throw error with error_description)
- * 3. Check if access_token & id_token is present in the URL
- *   1. Remove tokens from URL
- *   2. Validate the tokens with CDP. If not valid then ignore them. If valid then return AuthResult and set bearer token
- * 4. Try silent login (spin up an invisible iFrame and do login flow in there and grab access/id-tokens)
- *   - If successfull then return AuthResult and set bearer token
- * 5. Login with redirect
- */
-export async function authorize(
-  axiosInstance: AxiosInstance,
-  params: AuthorizeParams
-): Promise<AuthTokens> {
-  // Step 0
-  if (isAuthIFrame()) {
-    // @ts-ignore
-    return;
-  }
-
-  const checkAccessToken = (accessToken: string) => {
-    return getIdInfoFromAccessToken(axiosInstance, accessToken);
-  };
-
-  // Step 1
-  // if (params.accessToken != null) {
-  //   const idInfo = await checkAccessToken(params.accessToken);
-  //   if (idInfo !== null) {
-  //     return constructReturnValue(params.accessToken);
-  //   }
-  // }
-
-  // Step 2 & 3
-  let authTokens;
-  try {
-    authTokens = parseTokenQueryParameters(window.location.search); // this line can throw exception
-  } catch (e) {
-    clearParametersFromUrl(ERROR_PARAM, ERROR_DESCRIPTION_PARAM);
-    throw e;
-  }
-  if (authTokens !== null) {
-    // Step 3.1
-    clearParametersFromUrl(ACCESS_TOKEN_PARAM, ID_TOKEN_PARAM);
-    // Step 3.2
-    const idInfo = await checkAccessToken(authTokens.accessToken);
-    if (idInfo !== null) {
-      return authTokens;
-    }
-  }
-
-  // try iframe login
-  try {
-    const silentAuthTokens = await silentLogin(params);
-    const idInfo = await checkAccessToken(silentAuthTokens.accessToken);
-    if (idInfo !== null) {
-      return silentAuthTokens;
-    }
-  } catch (e) {
-    //
-  }
-  await loginWithRedirect(params);
-  // @ts-ignore (will do a browser redirect so nothing to care about)
-  return;
-}
-
-/** @hidden */
-export function scheduleAccessTokenRenewal(
-  accessToken: string,
-  axiosInstance: AxiosInstance,
-  oAuthParams: AuthorizeParams,
-  tokenCallback: TokenCallback
-): StopSchedule {
-  const timeLeftToRenewInMs = 50000; // when < 50 sec left
-  const intervalInMs = 5000; // every 5 sec
-
-  const getExpireTimeInMs = (token: string) => {
-    // falsy token will throw an error.
-    const decodedToken = jwtDecode<{ expire_time: number }>(token);
-    return decodedToken.expire_time * 1000;
-  };
-  let expireTimeInMs: number = getExpireTimeInMs(accessToken);
-
-  const task = setInterval(async () => {
-    const nowInMs = Date.now();
-    const timeToTriggerInMs = expireTimeInMs - timeLeftToRenewInMs;
-    if (nowInMs < timeToTriggerInMs) {
-      return;
-    }
-    const { baseUrl, project, redirectUrl, errorRedirectUrl } = oAuthParams;
-    const authResult = await authorize(axiosInstance, {
-      baseUrl,
-      redirectUrl,
-      errorRedirectUrl,
-      project,
-    });
-    expireTimeInMs = getExpireTimeInMs(authResult.accessToken);
-    tokenCallback(authResult.accessToken);
-  }, intervalInMs);
-
-  return () => {
-    clearInterval(task);
-  };
-}
-
-// utils
 
 async function getIdInfo(
   axiosInstance: AxiosInstance,
@@ -288,7 +153,7 @@ function isAuthIFrame(): boolean {
   return window.name === IFRAME_NAME;
 }
 
-export function parseTokenQueryParameters(query: string): null | AuthTokens {
+function parseTokenQueryParameters(query: string): null | AuthTokens {
   const {
     [ACCESS_TOKEN_PARAM]: accessToken,
     [ID_TOKEN_PARAM]: idToken,
@@ -307,9 +172,19 @@ export function parseTokenQueryParameters(query: string): null | AuthTokens {
   return null;
 }
 
-export async function silentLogin(
-  params: AuthorizeParams
-): Promise<AuthTokens> {
+function extractTokensFromUrl() {
+  let tokens;
+  try {
+    tokens = parseTokenQueryParameters(window.location.search);
+    clearParametersFromUrl(ACCESS_TOKEN_PARAM, ID_TOKEN_PARAM);
+    return tokens;
+  } catch (err) {
+    clearParametersFromUrl(ERROR_PARAM, ERROR_DESCRIPTION_PARAM);
+    throw err;
+  }
+}
+
+async function silentLogin(params: AuthorizeParams): Promise<AuthTokens> {
   return new Promise<AuthTokens>((resolve, reject) => {
     const iframe = document.createElement('iframe');
     iframe.name = IFRAME_NAME;
@@ -337,7 +212,16 @@ export async function silentLogin(
   });
 }
 
-export async function isTokensValid(project: string, tokens: AuthTokens) {
-  console.log(project, tokens.accessToken, tokens.idToken);
-  return true;
+export async function isTokensValid(
+  axiosInstance: AxiosInstance,
+  project: string,
+  tokens: AuthTokens
+) {
+  const idInfo = await getIdInfoFromAccessToken(
+    axiosInstance,
+    tokens.accessToken
+  );
+  return (
+    idInfo !== null && idInfo.project.toLowerCase() === project.toLowerCase()
+  );
 }

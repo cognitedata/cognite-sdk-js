@@ -10,9 +10,11 @@ import {
 import { MetadataMap } from './metadata';
 import { generateAPIObject } from './resources/api';
 import {
-  authenticate,
+  AuthTokens,
   getIdInfoFromApiKey,
   IdInfo,
+  loginSilently,
+  loginWithRedirect,
   RedirectOptions,
 } from './resources/login';
 import { addRetryToAxiosInstance } from './retryRequests';
@@ -48,7 +50,7 @@ export interface OAuthLoginOptions extends BaseOptions {
       skip: () => void;
     }
   ) => void;
-  onTokens?: (accessToken: string, idToken: string) => void;
+  onTokens?: (tokens: AuthTokens) => void;
 }
 
 /**
@@ -156,33 +158,49 @@ export class CDP {
     const axiosInstance =
       options._axiosInstance || generateAxiosInstance(baseUrl);
 
-    const doAuthenticate = () => {
-      const { onAuthenticate } = options;
-      return authenticate({
-        project,
-        baseUrl,
-        onAuthenticate,
-        onTokens: (accessToken, idToken) => {
-          setBearerToken(axiosInstance, accessToken);
+    const api = {
+      ...generateAPIObject(project, axiosInstance, new MetadataMap()),
+      authenticate: async (): Promise<boolean> => {
+        const tokens = await loginSilently(axiosInstance, { baseUrl, project });
+        if (tokens) {
+          setBearerToken(axiosInstance, tokens.accessToken);
           if (options.onTokens) {
-            options.onTokens(accessToken, idToken);
+            options.onTokens(tokens);
           }
-        },
-      });
-    };
-    listenForNonSuccessStatusCode(axiosInstance, 401, async retry => {
-      console.log('her1');
-      await doAuthenticate();
-      console.log('her2');
-      return retry();
-    });
-    addRetryToAxiosInstance(axiosInstance);
-    const api = generateAPIObject(project, axiosInstance, new MetadataMap());
+          return true;
+        }
 
-    return {
-      ...api,
-      authenticate: doAuthenticate,
+        return new Promise((resolve, reject) => {
+          const login = {
+            skip: () => {
+              resolve(false);
+            },
+            redirect: (params: RedirectOptions) => {
+              const authorizeParams = {
+                baseUrl,
+                project,
+                ...params,
+              };
+              loginWithRedirect(authorizeParams).catch(reject);
+            },
+          };
+          options.onAuthenticate(login);
+        });
+      },
     };
+
+    addRetryToAxiosInstance(axiosInstance);
+    listenForNonSuccessStatusCode(axiosInstance, 401, async (error, retry) => {
+      // ignore calls to /login/status
+      const config = error.config || {};
+      if (config.url === '/login/status') {
+        return Promise.reject(error);
+      }
+      const didAuthenticate = await api.authenticate();
+      return didAuthenticate ? retry() : Promise.reject(error);
+    });
+
+    return api;
   }
 
   /**

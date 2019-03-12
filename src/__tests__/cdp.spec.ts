@@ -3,7 +3,15 @@
 import MockAdapter from 'axios-mock-adapter';
 import { generateAxiosInstance } from '../axiosWrappers';
 import { CDP } from '../cdp';
+import { getIdInfoFromAccessToken, loginSilently } from '../resources/login';
 import { createErrorReponse } from './testUtils';
+
+jest.mock('../resources/login', () => {
+  return {
+    ...require.requireActual('../resources/login'),
+    loginSilently: jest.fn(),
+  };
+});
 
 describe('CDP', () => {
   const apiKey = 'TEST_KEY';
@@ -15,6 +23,10 @@ describe('CDP', () => {
     projectId: 123,
   };
   const baseUrl = 'https://example.com';
+  const authTokens = {
+    accessToken: 'abc',
+    idToken: 'def',
+  };
 
   describe('createClientWithApiKey', async () => {
     test('missing parameter', async () => {
@@ -114,9 +126,13 @@ describe('CDP', () => {
       );
     });
 
-    test(
-      'should call onAuthenticate on 401',
-      async () => {
+    describe('authentication', () => {
+      const mockLoginSilently = loginSilently as jest.Mock;
+      beforeEach(() => {
+        mockLoginSilently.mockReset();
+      });
+
+      test('should call onAuthenticate on 401', async () => {
         const axiosInstance = generateAxiosInstance(baseUrl);
         const axiosMock = new MockAdapter(axiosInstance);
         const onAuthenticate = jest.fn();
@@ -126,20 +142,96 @@ describe('CDP', () => {
           _axiosInstance: axiosInstance,
         });
         onAuthenticate.mockImplementation(login => {
-          console.log('onAuthenticate');
           login.skip();
         });
-        axiosMock.onGet('/401').reply(config => {
-          console.log('reply...: ', config);
+        axiosMock.onGet('/401').replyOnce(401);
+        await expect(
+          cdp.get('/401')
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          `"Request failed with status code 401"`
+        );
+        expect(mockLoginSilently).toHaveBeenCalledTimes(1);
+      });
+
+      test('manually trigger authentication', async () => {
+        const onAuthenticate = jest.fn().mockImplementationOnce(login => {
+          login.skip();
+        });
+        const cdp = await CDP.createClientWithOAuth({
+          project,
+          onAuthenticate,
+        });
+        await expect(cdp.authenticate()).resolves.toBe(false);
+        expect(mockLoginSilently).toHaveBeenCalledTimes(1);
+      });
+
+      test('handle error query params', async () => {
+        const onAuthenticate = jest.fn();
+        const cdp = await CDP.createClientWithOAuth({
+          project,
+          onAuthenticate,
+        });
+        const errorMessage = 'Failed login';
+        mockLoginSilently.mockImplementationOnce(() => {
+          throw Error(errorMessage);
+        });
+        await expect(cdp.authenticate()).rejects.toThrowError(errorMessage);
+      });
+
+      test('retry request after silent login', async () => {
+        const axiosInstance = generateAxiosInstance(baseUrl);
+        const axiosMock = new MockAdapter(axiosInstance);
+        const onAuthenticate = jest.fn();
+        const cdp = await CDP.createClientWithOAuth({
+          project,
+          onAuthenticate,
+          _axiosInstance: axiosInstance,
+        });
+        mockLoginSilently.mockReturnValueOnce(authTokens);
+        expect.assertions(3);
+        axiosMock.onGet('/').replyOnce(config => {
+          expect(config.headers.Authorization).not.toBeDefined();
           return [401];
         });
-        await cdp.get('/401');
-        expect(onAuthenticate).toHaveBeenCalledTimes(1);
-        expect(onAuthenticate.mock.calls[0][0].redirect).toBeDefined();
-        expect(onAuthenticate.mock.calls[0][0].skip).toBeDefined();
-      },
-      1000
-    );
+        const body = 'hello';
+        axiosMock.onGet('/').replyOnce(config => {
+          expect(config.headers.Authorization).toBe(
+            `Bearer ${authTokens.accessToken}`
+          );
+          return [200, body];
+        });
+        const response = await cdp.get('/');
+        expect(response.data).toBe(body);
+      });
+
+      test(
+        'handle 401 from /login/status when authenticating',
+        async () => {
+          const axiosInstance = generateAxiosInstance(baseUrl);
+          const axiosMock = new MockAdapter(axiosInstance);
+          const onAuthenticate = jest.fn();
+          const cdp = await CDP.createClientWithOAuth({
+            project,
+            onAuthenticate,
+            _axiosInstance: axiosInstance,
+          });
+          expect.assertions(1);
+          mockLoginSilently.mockImplementationOnce(async () => {
+            await expect(
+              getIdInfoFromAccessToken(axiosInstance, authTokens.accessToken)
+            ).resolves.toBeNull();
+            return authTokens;
+          });
+          axiosMock.onGet('/').replyOnce(401);
+          axiosMock
+            .onGet('/login/status')
+            .replyOnce(401, { error: { code: 401, message: 'Unauthorized' } });
+          axiosMock.onGet('/').reply(200);
+          await cdp.get('/');
+        },
+        500
+      );
+    });
   });
 
   describe('getApiKeyInfo', () => {
