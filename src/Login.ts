@@ -127,8 +127,8 @@ export class Login {
 
     // Step 0
     if (isAuthIFrame()) {
-      // @ts-ignore
-      return;
+      // @ts-ignore (it will never resolve)
+      return new Promise(() => {});
     }
 
     const verifyAuthTokens = async (
