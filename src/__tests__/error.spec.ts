@@ -2,6 +2,7 @@
 
 import { AxiosError } from 'axios';
 import { CogniteError, handleErrorResponse } from '../error';
+import { createErrorReponse } from './testUtils';
 
 describe('CogniteError', () => {
   test('without requestId', () => {
@@ -35,11 +36,7 @@ describe('handleErrorResponse', () => {
     const axiosError = {
       response: {
         status: 500,
-        data: {
-          error: {
-            message: 'abc',
-          },
-        },
+        data: createErrorReponse(500, 'abc'),
       },
     } as AxiosError;
 
@@ -52,11 +49,7 @@ describe('handleErrorResponse', () => {
     const axiosError = {
       response: {
         status: 500,
-        data: {
-          error: {
-            message: 'abc',
-          },
-        },
+        data: createErrorReponse(500, 'abc'),
         headers: {
           'X-Request-Id': 'def',
         },

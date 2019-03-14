@@ -27,7 +27,6 @@ async function fibListResponse() {
     return {
       items,
       nextCursor: '',
-      previousCursor: '',
       next,
     };
   };
@@ -49,20 +48,7 @@ describe('makeAutoPaginationMethods', () => {
     const secondFibArray = await makeAutoPaginationMethods(
       fibListResponse()
     ).autoPagingToArray({ limit });
-    expect(secondFibArray).toMatchInlineSnapshot(`
-Array [
-  1,
-  2,
-  3,
-  5,
-  8,
-  13,
-  21,
-  34,
-  55,
-  89,
-]
-`);
+    expect(secondFibArray).toMatchSnapshot();
     expect(secondFibArray).toEqual(firstFibArray);
 
     const maxArraySize = 10000;
@@ -86,7 +72,7 @@ Array [
         limit: Infinity,
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"You cannot specify a limit of more than 10,000 items to fetch in \`autoPagingToArray\`; use \`autoPagingEach\` to iterate through longer lists."`
+      `"You cannot specify a limit of more than 10,000 items to fetch in \`autoPagingToArray\`; use \`autoPagingEach\` or for-await to iterate through longer lists."`
     );
   });
 });

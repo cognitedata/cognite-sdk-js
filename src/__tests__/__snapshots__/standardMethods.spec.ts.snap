@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`standard methods generateListEndpoint authPagingForEach 1`] = `
+Array [
+  0,
+  1,
+  2,
+]
+`;
+
+exports[`standard methods generateListEndpoint authPagingForEach 2`] = `
+Array [
+  0,
+  1,
+  2,
+]
+`;
+
+exports[`standard methods generateListEndpoint authPagingForEach 3`] = `
+Array [
+  0,
+  1,
+  2,
+]
+`;
+
+exports[`standard methods generateListEndpoint autoPagingToArray 1`] = `
+Array [
+  0,
+]
+`;
+
+exports[`standard methods generateListEndpoint autoPagingToArray 2`] = `
+Array [
+  0,
+  1,
+  2,
+]
+`;
+
+exports[`standard methods generateListEndpoint autoPagingToArray 3`] = `
+Array [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+]
+`;
+
+exports[`standard methods generateListEndpoint for-await 1`] = `
+Array [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+]
+`;

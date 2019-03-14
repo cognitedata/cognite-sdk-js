@@ -10,7 +10,6 @@ export interface ItemsResponse<T> {
 
 export interface CursorResponse<T> extends ItemsResponse<T> {
   nextCursor: string;
-  previousCursor: string;
 }
 
 export interface ListResponse<T> extends CursorResponse<T> {

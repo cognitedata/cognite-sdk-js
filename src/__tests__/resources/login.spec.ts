@@ -8,19 +8,17 @@ import {
   loginSilently,
   loginWithRedirect,
 } from '../../resources/login';
+import {
+  apiKey,
+  authTokens,
+  baseUrl,
+  loggedInResponse,
+  notLoggedInResponse,
+  project,
+} from '../testUtils';
 
 describe('Login', () => {
-  const baseUrl = 'https://example.com';
-  const project = 'my-tenant';
-  const user = 'user@example.com';
   const response401 = { error: { code: 401, message: '' } };
-  const notLoggedInResponse = {
-    data: { loggedIn: false, user: '', project: '' },
-  };
-  const projectId = 123;
-  const loggedInResponse = {
-    data: { loggedIn: true, user, project, projectId },
-  };
   const statusUrl = `${baseUrl}/login/status`;
   const axiosInstance = axios.create({ baseURL: baseUrl });
   const axiosMock = new MockAdapter(axiosInstance);
@@ -36,10 +34,6 @@ describe('Login', () => {
       project,
       redirectUrl: 'https://redirect.com',
       errorRedirectUrl: 'https://error-redirect.com',
-    };
-    const authTokens = {
-      accessToken: 'abc',
-      idToken: 'def',
     };
     const spiedCreateElement = jest.spyOn(document, 'createElement');
     const spiedAppendChild = jest.spyOn(document.body, 'appendChild');
@@ -97,7 +91,7 @@ describe('Login', () => {
       expect(spiedRemoveChild).toBeCalledTimes(1);
       expect(spiedRemoveChild).toBeCalledWith(iframe);
       expect(iframe.src).toMatchInlineSnapshot(
-        `"https://example.com/login/redirect?errorRedirectUrl=https%3A%2F%2Flocalhost%2Fabc%2Fdef&project=my-tenant&redirectUrl=https%3A%2F%2Flocalhost%2Fabc%2Fdef&prompt=none"`
+        `"https://example.com/login/redirect?errorRedirectUrl=https%3A%2F%2Flocalhost%2Fabc%2Fdef&project=TEST_PROJECT&redirectUrl=https%3A%2F%2Flocalhost%2Fabc%2Fdef&prompt=none"`
       );
     });
 
@@ -138,7 +132,6 @@ describe('Login', () => {
     };
 
     test('successful getIdInfoFromApiKey', async () => {
-      const apiKey = 'abc123';
       axiosMock.onGet(statusUrl).replyOnce(config => {
         expect(config.headers['api-key']).toBe(apiKey);
         return [200, successResponse];
@@ -149,7 +142,6 @@ describe('Login', () => {
     });
 
     test('getIdInfoFromApiKey - 401', async () => {
-      const apiKey = 'abc123';
       axiosMock.onGet(statusUrl).replyOnce(401, response401);
       await expect(
         getIdInfoFromApiKey(axiosInstance, apiKey)
@@ -157,7 +149,6 @@ describe('Login', () => {
     });
 
     test('getIdInfoFromApiKey - not logged in', async () => {
-      const apiKey = 'abc123';
       axiosMock.onGet(statusUrl).replyOnce(200, notLoggedInResponse);
       await expect(
         getIdInfoFromApiKey(axiosInstance, apiKey)

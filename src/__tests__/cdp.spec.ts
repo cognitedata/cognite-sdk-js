@@ -4,7 +4,14 @@ import MockAdapter from 'axios-mock-adapter';
 import { generateAxiosInstance } from '../axiosWrappers';
 import { CDP } from '../cdp';
 import { getIdInfoFromAccessToken, loginSilently } from '../resources/login';
-import { createErrorReponse } from './testUtils';
+import {
+  apiKey,
+  authTokens,
+  baseUrl,
+  createErrorReponse,
+  loggedInResponse,
+  project,
+} from './testUtils';
 
 jest.mock('../resources/login', () => {
   return {
@@ -14,20 +21,6 @@ jest.mock('../resources/login', () => {
 });
 
 describe('CDP', () => {
-  const apiKey = 'TEST_KEY';
-  const project = 'TEST_PROJECT';
-  const loginInfo = {
-    loggedIn: true,
-    user: 'user@example.com',
-    project,
-    projectId: 123,
-  };
-  const baseUrl = 'https://example.com';
-  const authTokens = {
-    accessToken: 'abc',
-    idToken: 'def',
-  };
-
   describe('createClientWithApiKey', async () => {
     test('missing parameter', async () => {
       await expect(
@@ -79,7 +72,7 @@ describe('CDP', () => {
       const axiosMock = new MockAdapter(axiosInstance);
       axiosMock.onGet(`${baseUrl}/login/status`).replyOnce(config => {
         expect(config.headers['api-key']).toBe(apiKey);
-        return [200, { data: loginInfo }];
+        return [200, loggedInResponse];
       });
       await expect(
         CDP.createClientWithApiKey({
@@ -97,13 +90,13 @@ describe('CDP', () => {
       const axiosMock = new MockAdapter(axiosInstance);
       axiosMock
         .onGet(`${baseUrl}/login/status`)
-        .replyOnce(200, { data: loginInfo });
+        .replyOnce(200, loggedInResponse);
       const cdp = await CDP.createClientWithApiKey({
         project,
         apiKey,
         _axiosInstance: axiosInstance,
       });
-      expect(cdp.project).toBe(loginInfo.project);
+      expect(cdp.project).toBe(loggedInResponse.data.project);
     });
   });
 
@@ -240,12 +233,12 @@ describe('CDP', () => {
       const axiosMock = new MockAdapter(axiosInstance);
       axiosMock
         .onGet(`${baseUrl}/login/status`)
-        .replyOnce(200, { data: loginInfo });
+        .replyOnce(200, loggedInResponse);
       await expect(
         CDP.getApiKeyInfo(apiKey, baseUrl, axiosInstance)
       ).resolves.toEqual({
-        project: loginInfo.project,
-        user: loginInfo.user,
+        project: loggedInResponse.data.project,
+        user: loggedInResponse.data.user,
       });
     });
 

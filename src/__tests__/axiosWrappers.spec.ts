@@ -3,6 +3,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { rawGet, rawPost } from '../axiosWrappers';
+import { createErrorReponse } from './testUtils';
 
 describe('axiosWrappers', () => {
   const responseMock = jest.fn();
@@ -104,12 +105,7 @@ describe('axiosWrappers', () => {
       const requestId = 'def';
       responseMock.mockReturnValueOnce([
         status,
-        {
-          error: {
-            message: 'abc',
-            code: status,
-          },
-        },
+        createErrorReponse(500, 'abc'),
         { 'X-Request-Id': requestId },
       ]);
       try {

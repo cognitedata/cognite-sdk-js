@@ -58,7 +58,7 @@ export function generateListEndpoint<
   return (params: RequestParams = {} as RequestParams) => {
     const listPromise = list(params);
     const autoPaginationMethods = makeAutoPaginationMethods(listPromise);
-    return Object.assign(listPromise, autoPaginationMethods);
+    return autoPaginationMethods;
   };
 }
 

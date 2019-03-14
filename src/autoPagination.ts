@@ -104,7 +104,7 @@ function makeAutoPagingToArray<T>(autoPagingEach: AutoPagingEach<T>) {
     }
     if (limit > 10000) {
       throw Error(
-        'You cannot specify a limit of more than 10,000 items to fetch in `autoPagingToArray`; use `autoPagingEach` to iterate through longer lists.'
+        'You cannot specify a limit of more than 10,000 items to fetch in `autoPagingToArray`; use `autoPagingEach` or for-await to iterate through longer lists.'
       );
     }
     const items: T[] = [];
