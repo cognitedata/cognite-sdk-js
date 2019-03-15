@@ -10,7 +10,7 @@
   "repository": "cognitedata/cognitesdk-js",
   "homepage": "https://github.com/cognitedata/cognitesdk-js#readme",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/cdp.d.ts",
   "files": [
     "dist/*.d.ts",
     "dist/*.js"

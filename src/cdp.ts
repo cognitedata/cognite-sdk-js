@@ -13,7 +13,10 @@ import {
   AuthTokens,
   getIdInfoFromApiKey,
   IdInfo,
+  isLoginPopupWindow,
+  loginPopupHandler,
   loginSilently,
+  loginWithPopup,
   loginWithRedirect,
   RedirectOptions,
 } from './resources/login';
@@ -161,13 +164,22 @@ export class CDP {
     const api = {
       ...generateAPIObject(project, axiosInstance, new MetadataMap()),
       authenticate: async (): Promise<boolean> => {
-        const tokens = await loginSilently(axiosInstance, { baseUrl, project });
-        if (tokens) {
+        const handleTokens = (tokens: AuthTokens) => {
           setBearerToken(axiosInstance, tokens.accessToken);
           if (options.onTokens) {
             options.onTokens(tokens);
           }
-          return true;
+        };
+
+        {
+          const tokens = await loginSilently(axiosInstance, {
+            baseUrl,
+            project,
+          });
+          if (tokens) {
+            handleTokens(tokens);
+            return true;
+          }
         }
 
         return new Promise((resolve, reject) => {
@@ -182,6 +194,22 @@ export class CDP {
                 ...params,
               };
               loginWithRedirect(authorizeParams).catch(reject);
+            },
+            popup: async (params: RedirectOptions) => {
+              const authorizeParams = {
+                baseUrl,
+                project,
+                ...params,
+              };
+              loginWithPopup(authorizeParams)
+                .then(tokens => {
+                  if (tokens) {
+                    handleTokens(tokens);
+                    resolve(true);
+                  }
+                  throw Error('Unable to login with popup');
+                })
+                .catch(reject);
             },
           };
           options.onAuthenticate(login);
@@ -226,5 +254,13 @@ export class CDP {
       axiosInstance || generateAxiosInstance(getBaseUrl(baseUrl)),
       apiKey
     );
+  }
+
+  public static loginPopupHandler() {
+    loginPopupHandler();
+  }
+
+  public static isLoginPopupWindow(): boolean {
+    return isLoginPopupWindow();
   }
 }

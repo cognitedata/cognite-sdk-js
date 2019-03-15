@@ -10,7 +10,8 @@ const ACCESS_TOKEN_PARAM = 'access_token';
 const ID_TOKEN_PARAM = 'id_token';
 const ERROR_PARAM = 'error';
 const ERROR_DESCRIPTION_PARAM = 'error_description';
-const IFRAME_NAME = 'cognite-js-sdk-auth-iframe';
+const LOGIN_IFRAME_NAME = 'cognite-js-sdk-auth-iframe';
+const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
 
 export interface IdInfo {
   project: string;
@@ -65,7 +66,8 @@ export async function loginSilently(
   params: AuthenticateParams
 ): Promise<null | AuthTokens> {
   if (isAuthIFrame()) {
-    return null;
+    // don't resolve when inside iframe (we don't want to do any logic)
+    return new Promise(() => {});
   }
 
   const { project } = params;
@@ -149,8 +151,47 @@ export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
   });
 }
 
+interface CogniteParentWindow extends Window {
+  postLoginTokens?: (tokens: null | AuthTokens) => void;
+}
+export function loginWithPopup(
+  params: AuthorizeParams
+): Promise<null | AuthTokens> {
+  return new Promise((resolve, reject) => {
+    const url = generateLoginUrl(params);
+    const loginPopup = window.open(url, LOGIN_POPUP_NAME);
+    if (loginPopup === null) {
+      reject(new Error('Failed to create login popup window'));
+      return;
+    }
+    const cogniteWindow: CogniteParentWindow = window;
+    cogniteWindow.postLoginTokens = tokens => {
+      delete cogniteWindow.postLoginTokens;
+      resolve(tokens);
+    };
+  });
+}
+
+export function isLoginPopupWindow(): boolean {
+  return window.name === LOGIN_POPUP_NAME;
+}
+
+export function loginPopupHandler() {
+  if (!isLoginPopupWindow()) {
+    throw Error(
+      'loginPopupHandler can only be used inside a popup window created by the SDK. Please call isLoginPopupWindow to check for this'
+    );
+  }
+  if (!(window.opener && window.opener.postLoginTokens)) {
+    throw Error('Incorrect environment to run loginPopupHandler');
+  }
+  const tokens = parseTokenQueryParameters(window.location.search);
+  window.opener.postLoginTokens(tokens);
+  window.close();
+}
+
 function isAuthIFrame(): boolean {
-  return window.name === IFRAME_NAME;
+  return window.name === LOGIN_IFRAME_NAME;
 }
 
 function parseTokenQueryParameters(query: string): null | AuthTokens {
@@ -187,7 +228,7 @@ function extractTokensFromUrl() {
 async function silentLogin(params: AuthorizeParams): Promise<AuthTokens> {
   return new Promise<AuthTokens>((resolve, reject) => {
     const iframe = document.createElement('iframe');
-    iframe.name = IFRAME_NAME;
+    iframe.name = LOGIN_IFRAME_NAME;
     iframe.style.width = '0';
     iframe.style.height = '0';
     iframe.style.border = '0';

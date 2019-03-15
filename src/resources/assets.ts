@@ -27,7 +27,6 @@ import {
   // UpdateField,
   // UpdateType,
 } from '../types/cdpTypes';
-import { ListResponse } from '../types/types';
 import { projectUrl } from '../utils';
 
 export interface AssetAPI {
@@ -51,9 +50,7 @@ export interface AssetAPI {
    * const response = await cdp.assets.list({ depth: 0 });
    * ```
    */
-  list: (
-    params?: ListAssetsParams
-  ) => Promise<ListResponse<Asset>> & CogniteAsyncIterator<Asset>;
+  list: (params?: ListAssetsParams) => CogniteAsyncIterator<Asset>;
 }
 
 /** @hidden */
