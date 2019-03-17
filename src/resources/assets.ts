@@ -38,7 +38,7 @@ export interface AssetAPI {
    *   { name: 'First asset' },
    *   { name: 'Second asset', description: 'Child asset' },
    * ];
-   * const createdAssets = await cdp.assets.create(assets);
+   * const createdAssets = await client.assets.create(assets);
    * ```
    */
   create: (items: CreateAsset[]) => Promise<Asset[]>;
@@ -47,7 +47,7 @@ export interface AssetAPI {
    * [List assets](https://doc.cognitedata.com/api/0.6/#operation/getAssets)
    *
    * ```js
-   * const response = await cdp.assets.list({ depth: 0 });
+   * const response = await client.assets.list({ depth: 0 });
    * ```
    */
   list: (params?: ListAssetsParams) => CogniteAsyncIterator<Asset>;

@@ -2,7 +2,11 @@
 
 import MockAdapter from 'axios-mock-adapter';
 import { generateAxiosInstance } from '../axiosWrappers';
-import { CDP } from '../cdp';
+import {
+  createClientWithApiKey,
+  createClientWithOAuth,
+  getApiKeyInfo,
+} from '../index';
 import { getIdInfoFromAccessToken, loginSilently } from '../resources/login';
 import {
   apiKey,
@@ -20,12 +24,12 @@ jest.mock('../resources/login', () => {
   };
 });
 
-describe('CDP', () => {
+describe('SDK-client', () => {
   describe('createClientWithApiKey', async () => {
     test('missing parameter', async () => {
       await expect(
         // @ts-ignore
-        CDP.createClientWithApiKey()
+        createClientWithApiKey()
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"\`createClientWithApiKey\` is missing parameter \`options\`"`
       );
@@ -34,7 +38,7 @@ describe('CDP', () => {
     test('missing project', async () => {
       await expect(
         // @ts-ignore
-        CDP.createClientWithApiKey({})
+        createClientWithApiKey({})
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"Property \`project\` not provided to param \`options\` in \`createClientWithApiKey\`"`
       );
@@ -43,7 +47,7 @@ describe('CDP', () => {
     test('missing api key', async () => {
       await expect(
         // @ts-ignore
-        CDP.createClientWithApiKey({ project })
+        createClientWithApiKey({ project })
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"Property \`apiKey\` not provided to param \`options\` in \`createClientWithApiKey\`"`
       );
@@ -57,13 +61,13 @@ describe('CDP', () => {
         return [401, createErrorReponse(401, '')];
       });
       await expect(
-        CDP.createClientWithApiKey({
+        createClientWithApiKey({
           project,
           apiKey,
           _axiosInstance: axiosInstance,
         })
       ).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"The api key provided to \`createClientWithApiKey\` is not recognized by CDP (invalid)"`
+        `"The api key provided to \`createClientWithApiKey\` is not recognized by Cognite (invalid)"`
       );
     });
 
@@ -75,7 +79,7 @@ describe('CDP', () => {
         return [200, loggedInResponse];
       });
       await expect(
-        CDP.createClientWithApiKey({
+        createClientWithApiKey({
           apiKey,
           project: 'another-project',
           _axiosInstance: axiosInstance,
@@ -91,12 +95,12 @@ describe('CDP', () => {
       axiosMock
         .onGet(`${baseUrl}/login/status`)
         .replyOnce(200, loggedInResponse);
-      const cdp = await CDP.createClientWithApiKey({
+      const client = await createClientWithApiKey({
         project,
         apiKey,
         _axiosInstance: axiosInstance,
       });
-      expect(cdp.project).toBe(loggedInResponse.data.project);
+      expect(client.project).toBe(loggedInResponse.data.project);
     });
   });
 
@@ -104,7 +108,7 @@ describe('CDP', () => {
     test('missing parameter', async () => {
       await expect(
         // @ts-ignore
-        CDP.createClientWithOAuth()
+        createClientWithOAuth()
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"\`createClientWithOAuth\` is missing parameter \`options\`"`
       );
@@ -113,7 +117,7 @@ describe('CDP', () => {
     test('missing project name', async () => {
       await expect(
         // @ts-ignore
-        CDP.createClientWithOAuth({})
+        createClientWithOAuth({})
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"Property \`project\` not provided to param \`options\` in \`createClientWithOAuth\`"`
       );
@@ -129,7 +133,7 @@ describe('CDP', () => {
         const axiosInstance = generateAxiosInstance(baseUrl);
         const axiosMock = new MockAdapter(axiosInstance);
         const onAuthenticate = jest.fn();
-        const cdp = await CDP.createClientWithOAuth({
+        const client = await createClientWithOAuth({
           project,
           onAuthenticate,
           _axiosInstance: axiosInstance,
@@ -139,7 +143,7 @@ describe('CDP', () => {
         });
         axiosMock.onGet('/401').replyOnce(401);
         await expect(
-          cdp.get('/401')
+          client.get('/401')
         ).rejects.toThrowErrorMatchingInlineSnapshot(
           `"Request failed with status code 401"`
         );
@@ -150,17 +154,17 @@ describe('CDP', () => {
         const onAuthenticate = jest.fn().mockImplementationOnce(login => {
           login.skip();
         });
-        const cdp = await CDP.createClientWithOAuth({
+        const client = await createClientWithOAuth({
           project,
           onAuthenticate,
         });
-        await expect(cdp.authenticate()).resolves.toBe(false);
+        await expect(client.authenticate()).resolves.toBe(false);
         expect(mockLoginSilently).toHaveBeenCalledTimes(1);
       });
 
       test('handle error query params', async () => {
         const onAuthenticate = jest.fn();
-        const cdp = await CDP.createClientWithOAuth({
+        const client = await createClientWithOAuth({
           project,
           onAuthenticate,
         });
@@ -168,14 +172,14 @@ describe('CDP', () => {
         mockLoginSilently.mockImplementationOnce(() => {
           throw Error(errorMessage);
         });
-        await expect(cdp.authenticate()).rejects.toThrowError(errorMessage);
+        await expect(client.authenticate()).rejects.toThrowError(errorMessage);
       });
 
       test('retry request after silent login', async () => {
         const axiosInstance = generateAxiosInstance(baseUrl);
         const axiosMock = new MockAdapter(axiosInstance);
         const onAuthenticate = jest.fn();
-        const cdp = await CDP.createClientWithOAuth({
+        const client = await createClientWithOAuth({
           project,
           onAuthenticate,
           _axiosInstance: axiosInstance,
@@ -193,7 +197,7 @@ describe('CDP', () => {
           );
           return [200, body];
         });
-        const response = await cdp.get('/');
+        const response = await client.get('/');
         expect(response.data).toBe(body);
       });
 
@@ -203,7 +207,7 @@ describe('CDP', () => {
           const axiosInstance = generateAxiosInstance(baseUrl);
           const axiosMock = new MockAdapter(axiosInstance);
           const onAuthenticate = jest.fn();
-          const cdp = await CDP.createClientWithOAuth({
+          const client = await createClientWithOAuth({
             project,
             onAuthenticate,
             _axiosInstance: axiosInstance,
@@ -220,7 +224,7 @@ describe('CDP', () => {
             .onGet('/login/status')
             .replyOnce(401, { error: { code: 401, message: 'Unauthorized' } });
           axiosMock.onGet('/').reply(200);
-          await cdp.get('/');
+          await client.get('/');
         },
         500
       );
@@ -235,7 +239,7 @@ describe('CDP', () => {
         .onGet(`${baseUrl}/login/status`)
         .replyOnce(200, loggedInResponse);
       await expect(
-        CDP.getApiKeyInfo(apiKey, baseUrl, axiosInstance)
+        getApiKeyInfo(apiKey, baseUrl, axiosInstance)
       ).resolves.toEqual({
         project: loggedInResponse.data.project,
         user: loggedInResponse.data.user,
@@ -247,7 +251,7 @@ describe('CDP', () => {
       const axiosMock = new MockAdapter(axiosInstance);
       axiosMock.onGet(`${baseUrl}/login/status`).replyOnce(401, { error: {} });
       await expect(
-        CDP.getApiKeyInfo(apiKey, baseUrl, axiosInstance)
+        getApiKeyInfo(apiKey, baseUrl, axiosInstance)
       ).resolves.toBeNull();
     });
 
@@ -258,7 +262,7 @@ describe('CDP', () => {
         .onGet(`${baseUrl}/login/status`)
         .replyOnce(200, { data: { loggedIn: false } });
       await expect(
-        CDP.getApiKeyInfo(apiKey, baseUrl, axiosInstance)
+        getApiKeyInfo(apiKey, baseUrl, axiosInstance)
       ).resolves.toBeNull();
     });
   });

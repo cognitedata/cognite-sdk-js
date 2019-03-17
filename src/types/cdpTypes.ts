@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { Components, Paths } from './cdp/index'; // cdp types auto-generated from OpenAPI spec
-// to update the auto-generated OpenAPI spec run `yarn generate-cdp-types`
+import { Components, Paths } from './cogniteApi/index'; // cognite types auto-generated from OpenAPI spec
+// to update the auto-generated OpenAPI spec run `yarn generate-cognite-types`
 
 // assets
 export type Asset = Components.Schemas.AssetV2;
