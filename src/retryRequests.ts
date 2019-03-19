@@ -11,7 +11,7 @@ export function addRetryToAxiosInstance(instance: AxiosInstance) {
   // config for retry-axios package
   (instance.defaults as any).raxConfig = {
     instance,
-    retryDelay: 50,
+    retryDelay: 250,
     retry: 3,
     shouldRetry: (err: any) => {
       const { config } = err;

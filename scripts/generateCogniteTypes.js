@@ -19,7 +19,7 @@ async function main() {
   // dts = dts.replace(/^\s+namespace /gm, 'export namespace ');
   dts = dts.replace(/(?<!export )namespace /gm, 'export namespace ');
   
-  fs.writeFileSync('./src/types/cdp/index.d.ts', dts);
+  fs.writeFileSync('./src/types/cogniteApi/index.d.ts', dts);
 }
 
 main().catch(console.err);
