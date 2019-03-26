@@ -13,20 +13,7 @@ import {
   // generateSearchEndpoint,
   // generateUpdateEndpoint,
 } from '../StandardMethods';
-import {
-  // AddField,
-  Asset,
-  CreateAsset,
-  // CreateType,
-  // Field,
-  ListAssetsParams,
-  // ListTypesParams,
-  // SearchAssetsParams,
-  // Type,
-  // UpdateAsset,
-  // UpdateField,
-  // UpdateType,
-} from '../types/cdpTypes';
+import { Asset, CreateAsset, ListAssetsParams } from '../types/asset';
 import { projectUrl } from '../utils';
 
 export interface AssetAPI {

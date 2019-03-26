@@ -67,7 +67,7 @@ export async function loginSilently(
 ): Promise<null | AuthTokens> {
   if (isAuthIFrame()) {
     // don't resolve when inside iframe (we don't want to do any logic)
-    return new Promise(() => {});
+    return new Promise<null>(() => {});
   }
 
   const { project } = params;

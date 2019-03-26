@@ -25,3 +25,8 @@ export function removeParameterFromUrl(url: string, parameter: string): string {
     .replace(new RegExp('[?&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
     .replace(new RegExp('([?&])' + parameter + '=[^&]*&'), '$1');
 }
+
+/** @hidden */
+export function convertToTimestampToDateTime(timestamp: number): Date {
+  return new Date(timestamp);
+}

@@ -176,7 +176,7 @@ export async function createClientWithOAuth(options: OAuthLoginOptions) {
         }
       }
 
-      return new Promise((resolve, reject) => {
+      return new Promise<boolean>((resolve, reject) => {
         const login = {
           skip: () => {
             resolve(false);
