@@ -76,7 +76,7 @@ function makeAutoPagingEach<T>(
       if (iterResult.done) {
         return;
       }
-      const item = iterResult.value as T;
+      const item = iterResult.value;
       const shouldContinue = await handler(item);
       if (shouldContinue === false) {
         return;

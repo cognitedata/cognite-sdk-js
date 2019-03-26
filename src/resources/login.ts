@@ -3,8 +3,9 @@
 import { AxiosInstance } from 'axios';
 import { isString } from 'lodash';
 import { parse, stringify } from 'query-string';
-import { rawGet } from '../axiosWrappers';
-import { removeParameterFromUrl } from '../utils';
+import { rawRequest, setBearerToken } from '../axiosWrappers';
+import { isSameProject, promiseCache, removeParameterFromUrl } from '../utils';
+import * as Login from './login';
 
 const ACCESS_TOKEN_PARAM = 'access_token';
 const ID_TOKEN_PARAM = 'id_token';
@@ -18,13 +19,13 @@ export interface IdInfo {
   user: string;
 }
 
-export interface RedirectOptions {
+export interface AuthorizeOptions {
   redirectUrl: string;
   errorRedirectUrl?: string;
 }
 
 /** @hidden */
-export interface AuthorizeParams extends RedirectOptions {
+export interface AuthorizeParams extends AuthorizeOptions {
   baseUrl: string;
   project: string;
   accessToken?: string;
@@ -35,6 +36,14 @@ export interface AuthTokens {
   accessToken: string;
   idToken: string;
 }
+
+export type OnTokens = (tokens: AuthTokens) => void;
+export interface OnAuthenticateLoginObject {
+  redirect: (options: AuthorizeOptions) => void;
+  popup: (options: AuthorizeOptions) => void;
+  skip: () => void;
+}
+export type OnAuthenticate = (login: OnAuthenticateLoginObject) => void;
 
 /** @hidden */
 export function getIdInfoFromApiKey(
@@ -106,7 +115,9 @@ async function getIdInfo(
   headers: object
 ): Promise<null | IdInfo> {
   try {
-    const response = await rawGet<any>(axiosInstance, '/login/status', {
+    const response = await rawRequest<any>(axiosInstance, {
+      method: 'get',
+      url: '/login/status',
       headers,
     });
     const { loggedIn, user, project } = response.data.data;
@@ -206,8 +217,8 @@ function parseTokenQueryParameters(query: string): null | AuthTokens {
   }
   if (isString(accessToken) && isString(idToken)) {
     return {
-      accessToken: accessToken as string,
-      idToken: idToken as string,
+      accessToken,
+      idToken,
     };
   }
   return null;
@@ -262,7 +273,71 @@ export async function isTokensValid(
     axiosInstance,
     tokens.accessToken
   );
-  return (
-    idInfo !== null && idInfo.project.toLowerCase() === project.toLowerCase()
+  return idInfo !== null && isSameProject(idInfo.project, project);
+}
+
+interface CreateAuthFunctionOptions {
+  project: string;
+  baseUrl: string;
+  axiosInstance: AxiosInstance;
+  onTokens: OnTokens;
+  onAuthenticate: OnAuthenticate;
+}
+/** @hidden */
+export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
+  const { project, baseUrl, axiosInstance, onTokens, onAuthenticate } = options;
+  return promiseCache(
+    async (): Promise<boolean> => {
+      const handleTokens = (tokens: AuthTokens) => {
+        setBearerToken(axiosInstance, tokens.accessToken);
+        if (onTokens) {
+          onTokens(tokens);
+        }
+      };
+
+      {
+        const tokens = await Login.loginSilently(axiosInstance, {
+          baseUrl,
+          project,
+        });
+        if (tokens) {
+          handleTokens(tokens);
+          return true;
+        }
+      }
+
+      return new Promise<boolean>((resolve, reject) => {
+        const login: OnAuthenticateLoginObject = {
+          skip: () => {
+            resolve(false);
+          },
+          redirect: params => {
+            const authorizeParams = {
+              baseUrl,
+              project,
+              ...params,
+            };
+            loginWithRedirect(authorizeParams).catch(reject);
+          },
+          popup: async params => {
+            const authorizeParams = {
+              baseUrl,
+              project,
+              ...params,
+            };
+            loginWithPopup(authorizeParams)
+              .then(tokens => {
+                if (tokens) {
+                  handleTokens(tokens);
+                  resolve(true);
+                }
+                throw Error('Unable to login with popup');
+              })
+              .catch(reject);
+          },
+        };
+        onAuthenticate(login);
+      });
+    }
   );
 }

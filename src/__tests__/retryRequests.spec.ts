@@ -30,7 +30,8 @@ describe('retry requests', () => {
     addRetryToAxiosInstance(instance);
     responseMock.mockReturnValueOnce([500, {}]);
     responseMock.mockReturnValueOnce([200, {}]);
-    await expect((await instance.get('/retry')).status).toBe(200);
+    const { status } = await instance.get('/retry');
+    expect(status).toBe(200);
     expect(responseMock).toHaveBeenCalledTimes(2);
   });
 

@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { MetadataMap } from '../metadata';
 import { generateListEndpoint } from '../StandardMethods';
-import { sleepPromise } from './testUtils';
+import { sleepPromise } from '../utils';
 
 function numberGeneratorAPIEndpoint(config: AxiosRequestConfig) {
   const params = config.params || {};

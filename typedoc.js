@@ -3,7 +3,7 @@ module.exports = {
   mode: 'file',
   module: 'umd',
   target: 'ES6',
-  exclude: '**/*.spec.ts',
+  exclude: '**/__tests__/**',
   out: './docs/',
   // theme: 'markdown',
   readme: 'none',

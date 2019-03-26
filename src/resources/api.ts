@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance, AxiosResponse } from 'axios';
-import { rawGet } from '../axiosWrappers';
+import { rawRequest } from '../axiosWrappers';
 import { Metadata, MetadataMap } from '../metadata';
 import { AssetAPI, generateAssetsObject } from './assets';
 
@@ -42,7 +42,9 @@ export function generateAPIObject(
   return {
     project,
     get: (path, options) =>
-      rawGet(axiosInstance, path, options).then(responseTransformer),
+      rawRequest(axiosInstance, { method: 'get', url: path, ...options }).then(
+        responseTransformer
+      ),
     getMetadata: value => metadataMap.get(value),
     assets: generateAssetsObject(project, axiosInstance, metadataMap),
     _instance: axiosInstance,

@@ -30,3 +30,31 @@ export function removeParameterFromUrl(url: string, parameter: string): string {
 export function convertToTimestampToDateTime(timestamp: number): Date {
   return new Date(timestamp);
 }
+
+/** @hidden */
+export function sleepPromise(durationInMs: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, durationInMs);
+  });
+}
+
+/** @hidden */
+export function promiseCache<ReturnValue>(
+  promiseFn: () => Promise<ReturnValue>
+) {
+  let unresolvedPromise: Promise<ReturnValue> | null = null;
+  return () => {
+    if (unresolvedPromise) {
+      return unresolvedPromise;
+    }
+    return (unresolvedPromise = promiseFn().then(res => {
+      unresolvedPromise = null;
+      return res;
+    }));
+  };
+}
+
+/** @hidden */
+export function isSameProject(project1: string, project2: string): boolean {
+  return project1.toLowerCase() === project2.toLowerCase();
+}

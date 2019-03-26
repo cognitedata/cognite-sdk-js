@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-/** @hidden */
 export function createErrorReponse(status: number, message: string) {
   return {
     error: {
@@ -25,12 +24,6 @@ export const authTokens = {
   accessToken: 'abc',
   idToken: 'def',
 };
-
-export function sleepPromise(durationInMs: number) {
-  return new Promise(resolve => {
-    setTimeout(resolve, durationInMs);
-  });
-}
 
 test('createErrorResponse', () => {
   expect(createErrorReponse(200, 'Abc')).toEqual({

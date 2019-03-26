@@ -11,11 +11,10 @@ import { CogniteResponse } from './types/types';
 
 /** @hidden */
 export function generateAxiosInstance(baseUrl: string): AxiosInstance {
-  const instance = axios.create({
+  return axios.create({
     baseURL: baseUrl,
     headers: {},
   });
-  return instance;
 }
 
 /** @hidden */
@@ -44,36 +43,13 @@ export function listenForNonSuccessStatusCode(
   );
 }
 
+type RawRequestResponseType<T> = AxiosResponse<CogniteResponse<T>>;
 /** @hidden */
-export async function rawRequest(
+export async function rawRequest<ResponseType>(
   axiosInstance: AxiosInstance,
   requestConfig: AxiosRequestConfig
-): Promise<any> {
-  return axiosInstance(requestConfig).catch(handleErrorResponse);
-}
-
-/** @hidden */
-export async function rawGet<T>(
-  axiosInstance: AxiosInstance,
-  path: string,
-  requestConfig: AxiosRequestConfig = {}
-): Promise<AxiosResponse<CogniteResponse<T>>> {
-  return rawRequest(axiosInstance, {
-    method: 'get',
-    url: path,
-    ...requestConfig,
-  });
-}
-
-/** @hidden */
-export async function rawPost<T>(
-  axiosInstance: AxiosInstance,
-  path: string,
-  requestConfig: AxiosRequestConfig = {}
-): Promise<AxiosResponse<CogniteResponse<T>>> {
-  return rawRequest(axiosInstance, {
-    method: 'post',
-    url: path,
-    ...requestConfig,
-  });
+): Promise<RawRequestResponseType<ResponseType>> {
+  return axiosInstance(requestConfig).catch(handleErrorResponse) as Promise<
+    RawRequestResponseType<ResponseType>
+  >;
 }

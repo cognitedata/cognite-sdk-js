@@ -2,7 +2,7 @@
 
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { rawGet, rawPost } from '../axiosWrappers';
+import { rawRequest } from '../axiosWrappers';
 import { createErrorReponse } from './testUtils';
 
 describe('axiosWrappers', () => {
@@ -22,7 +22,7 @@ describe('axiosWrappers', () => {
     test('simple', async () => {
       const body = { data: {} };
       responseMock.mockReturnValueOnce([200, body]);
-      const response = await rawGet(instance, url);
+      const response = await rawRequest(instance, { method: 'get', url });
       expect(response.data).toEqual(body);
       expect(responseMock).toHaveBeenCalledTimes(1);
       const config = responseMock.mock.calls[0][0] as AxiosRequestConfig;
@@ -36,31 +36,7 @@ describe('axiosWrappers', () => {
         name: 'cdp',
         limit: 10,
       };
-      await rawGet(instance, url, { params });
-      const config = responseMock.mock.calls[0][0] as AxiosRequestConfig;
-      expect(config.params).toBe(params);
-    });
-  });
-
-  describe('rawPost', () => {
-    test('simple', async () => {
-      const body = { data: {} };
-      responseMock.mockReturnValueOnce([201, body]);
-      const response = await rawPost(instance, url);
-      expect(response.data).toEqual(body);
-      expect(responseMock).toHaveBeenCalledTimes(1);
-      const config = responseMock.mock.calls[0][0] as AxiosRequestConfig;
-      expect(config.method).toBe('post');
-      expect(config.url).toBe(url);
-    });
-
-    test('with query params', async () => {
-      responseMock.mockReturnValueOnce([200, {}]);
-      const params = {
-        name: 'cdp',
-        limit: 10,
-      };
-      await rawPost(instance, url, { params });
+      await rawRequest(instance, { method: 'get', url, params });
       const config = responseMock.mock.calls[0][0] as AxiosRequestConfig;
       expect(config.params).toBe(params);
     });
@@ -71,7 +47,7 @@ describe('axiosWrappers', () => {
       const status = 500;
       responseMock.mockReturnValueOnce([status, {}]);
       await expect(
-        rawGet(instance, '/path')
+        rawRequest(instance, { method: 'get', url: '/path' })
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"Request failed with status code 500"`
       );
@@ -89,7 +65,7 @@ describe('axiosWrappers', () => {
         },
       ]);
       try {
-        await rawGet(instance, '/path');
+        await rawRequest(instance, { method: 'get', url: '/path' });
       } catch (err) {
         expect(err.status).toBe(status);
         expect(err.requestId).toBeUndefined();
@@ -109,7 +85,7 @@ describe('axiosWrappers', () => {
         { 'X-Request-Id': requestId },
       ]);
       try {
-        await rawGet(instance, '/path');
+        await rawRequest(instance, { method: 'get', url: '/path' });
       } catch (err) {
         expect(err.status).toBe(status);
         expect(err.requestId).toBe(requestId);

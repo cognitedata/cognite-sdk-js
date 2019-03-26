@@ -5,21 +5,18 @@ import { isObject, isString } from 'lodash';
 import {
   generateAxiosInstance,
   listenForNonSuccessStatusCode,
-  setBearerToken,
 } from './axiosWrappers';
 import { MetadataMap } from './metadata';
 import { generateAPIObject } from './resources/api';
 import {
-  AuthTokens,
+  createAuthenticateFunction,
   getIdInfoFromApiKey,
   IdInfo,
-  loginSilently,
-  loginWithPopup,
-  loginWithRedirect,
-  RedirectOptions,
+  OnAuthenticate,
+  OnTokens,
 } from './resources/login';
 import { addRetryToAxiosInstance } from './retryRequests';
-import { getBaseUrl, isBrowser } from './utils';
+import { getBaseUrl, isBrowser, isSameProject } from './utils';
 
 export interface BaseOptions {
   /**
@@ -45,13 +42,8 @@ export interface OAuthLoginOptions extends BaseOptions {
    * Cognite project to login into
    */
   project: string;
-  onAuthenticate: (
-    login: {
-      redirect: (options: RedirectOptions) => void;
-      skip: () => void;
-    }
-  ) => void;
-  onTokens?: (tokens: AuthTokens) => void;
+  onAuthenticate: OnAuthenticate;
+  onTokens?: OnTokens;
 }
 
 /**
@@ -115,9 +107,7 @@ export async function createClientWithApiKey(options: ApiKeyLoginOptions) {
     );
   }
 
-  const isSameProject =
-    apiKeyInfo.project.toLowerCase() === project.toLowerCase();
-  if (!isSameProject) {
+  if (!isSameProject(project, apiKeyInfo.project)) {
     throw Error(
       `Projects didn't match. Api key is for project "${
         apiKeyInfo.project
@@ -155,74 +145,30 @@ export async function createClientWithOAuth(options: OAuthLoginOptions) {
   const axiosInstance =
     options._axiosInstance || generateAxiosInstance(baseUrl);
 
-  const api = {
-    ...generateAPIObject(project, axiosInstance, new MetadataMap()),
-    authenticate: async (): Promise<boolean> => {
-      const handleTokens = (tokens: AuthTokens) => {
-        setBearerToken(axiosInstance, tokens.accessToken);
-        if (options.onTokens) {
-          options.onTokens(tokens);
-        }
-      };
-
-      {
-        const tokens = await loginSilently(axiosInstance, {
-          baseUrl,
-          project,
-        });
-        if (tokens) {
-          handleTokens(tokens);
-          return true;
-        }
-      }
-
-      return new Promise<boolean>((resolve, reject) => {
-        const login = {
-          skip: () => {
-            resolve(false);
-          },
-          redirect: (params: RedirectOptions) => {
-            const authorizeParams = {
-              baseUrl,
-              project,
-              ...params,
-            };
-            loginWithRedirect(authorizeParams).catch(reject);
-          },
-          popup: async (params: RedirectOptions) => {
-            const authorizeParams = {
-              baseUrl,
-              project,
-              ...params,
-            };
-            loginWithPopup(authorizeParams)
-              .then(tokens => {
-                if (tokens) {
-                  handleTokens(tokens);
-                  resolve(true);
-                }
-                throw Error('Unable to login with popup');
-              })
-              .catch(reject);
-          },
-        };
-        options.onAuthenticate(login);
-      });
-    },
-  };
+  const onTokens = options.onTokens || (() => {});
+  const authenticate = createAuthenticateFunction({
+    project,
+    axiosInstance,
+    baseUrl,
+    onAuthenticate: options.onAuthenticate,
+    onTokens,
+  });
 
   addRetryToAxiosInstance(axiosInstance);
   listenForNonSuccessStatusCode(axiosInstance, 401, async (error, retry) => {
     // ignore calls to /login/status
-    const config = error.config || {};
+    const { config } = error;
     if (config.url === '/login/status') {
       return Promise.reject(error);
     }
-    const didAuthenticate = await api.authenticate();
+    const didAuthenticate = await authenticate();
     return didAuthenticate ? retry() : Promise.reject(error);
   });
 
-  return api;
+  return {
+    ...generateAPIObject(project, axiosInstance, new MetadataMap()),
+    authenticate,
+  };
 }
 
 /**

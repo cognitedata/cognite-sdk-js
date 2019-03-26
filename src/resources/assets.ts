@@ -47,9 +47,6 @@ export function generateAssetsObject(
   map: MetadataMap
 ): AssetAPI {
   const assetsPath = projectUrl(project) + '/assets';
-  // const typesPath = projectUrl(project) + '/assets/types';
-  // const generateFieldPath = (typeId: number) =>
-  //   projectUrl(project) + `/assets/types/${typeId}/fields`;
 
   return {
     // assets
