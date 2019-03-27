@@ -18,6 +18,7 @@ export default {
     typescript({
       typescript: require('typescript'),
       clean: true,
+      exclude: '**/__tests__/**',
     }),
   ],
 };

@@ -16,21 +16,16 @@ The SDK supports authentication through api-keys (_for server-side applications_
 
 Install the package with yarn:
 
-    yarn add @cognite/sdk
+    $ yarn add @cognite/sdk
 
 or npm
 
-    npm install @cognite/sdk --save
+    $ npm install @cognite/sdk --save
 
 ## Usage
 
 ```js
 const sdk = require('@cognite/sdk');
-
-sdk.configure({
-  project,
-  apiKey,
-});
 ```
 
 ### Using ES modules
@@ -43,70 +38,14 @@ import * as sdk from '@cognite/sdk';
 
 The SDK is written in native typescript, so no extra types needs to be defined.
 
-## Authentication
+## Samples
 
-### Server-side - API key
-
-> Authenticating with an api key should only happen when building server-side applications.
-
-```js
-const sdk = require('@cognite/sdk');
-sdk.configure({
-  project: 'yourProject',
-  apiKey: 'yourApiKey',
-});
-```
-
-It is generally a good idea store the api key as an environment variable, so it's not directly part of your code.
-
-See [the nodejs example](./examples/nodejs/index.js)
-
-### Web application - tokens
-
-```js
-import * as sdk from '@cognite/sdk';
-
-// the next line can throw exception if it fails to log in
-const authResult = await sdk.Login.authorize({
-  project: 'YOUR-PROJECT-NAME', // project you want to login to (can be skipped if you have configured the project with 'configure')
-  redirectUrl: window.location.href, // where you want the user to end up after successful login
-  errorRedirectUrl: window.location.href, // where you want the user to end up after failed login
-});
-
-// at this point you are logged in and you can do calls with the SDK.
-
-authResult = {
-  accessToken: string,
-  idToken: string,
-  project: string,
-  projectId: number,
-  user: string,
-}
-```
-
-See an example [here](./examples/react/src/App.js).
-
-#### React
-
-We also provide a [seperate package](https://github.com/cognitedata/react-auth) to easily authenticate in React.
-
-## Examples
-
-See [examples](./examples).
+Samples are in the [samples/](./samples) directory. The samples' [README.md](./samples/README.md) has instructions for running the samples.
 
 ## Documentation
 
 - [SDK documentation](https://js-sdk-docs.cogniteapp.com/)
 - [API documentation](https://doc.cognitedata.com)
-
-## Response headers
-
-On `Assets.search`, `Events.search`, `Files.search` and `TimeSeries.search` it is possible to read the response headers from the server with the following code:
-
-```js
-const result = await sdk.Assets.search({ ... });
-const { headers, status } = sdk.getMetadata(result);
-```
 
 ## License
 
@@ -126,6 +65,14 @@ $ yarn test
 
 We use `jest` to run tests, see [their documentation](https://github.com/facebook/jest) for more information.
 
+## Versioning
+
+The library follow [Semantic Versioning](https://semver.org/).
+
+## Contributing
+
+Contributions welcome! See the [code of conduct](./CODE_OF_CONDUCT.md).
+
 ## Release
 
 How to release a new version:
@@ -135,7 +82,8 @@ How to release a new version:
 3. Run
     ```bash
     $ npm version [patch/minor/major]
+    # example: $ npm version patch
     ```
 4. Push branch and push tags (`git push --tags`)
 5. Create a new pull requests
-6. A new version will be published when PR is merged
+6. A new version will be published when the PR is merged

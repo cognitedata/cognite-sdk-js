@@ -3,8 +3,8 @@
 // cog:StartDTO AssetV2
 // cog:Description
 export interface Asset {
-  // cog:Insert id, description, path, depth, name, parentId, metadata, source, sourceId
-  // cog:Skip createdTime, lastUpdatedTime, types
+  // cog:Insert id, description, path, depth, name, parentId, metadata, source, sourceId, createdTime, lastUpdatedTime
+  // cog:Skip types
 }
 // cog:EndDTO AssetV2
 

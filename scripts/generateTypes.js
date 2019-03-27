@@ -39,9 +39,23 @@ function createPropertyDeclaration(name, description, type, items = {}, isRequir
   };
   let tsType;
   const metadataType = createType('{ [key: string]: string }');
+  const dateType = createType('Date');
   switch (type) {
     case 'integer': {
-      tsType = createType('number');
+      switch (name) {
+        case 'createdTime':
+          tsType = dateType;
+          description = 'Time when the resource was created';
+          break;
+        case 'lastUpdatedTime':
+          tsType = dateType;
+          description = 'Time when the resource was last modified';
+          break;
+        default: {
+          tsType = createType('number');
+          break;
+        }
+      }
       break;
     }
 

@@ -40,6 +40,14 @@ export interface Asset {
    * ID of the asset in the source. Only applicable if source is specified. The combination of source and sourceId must be unique.
    */
   sourceId?: string;
+  /**
+   * Time when the resource was created
+   */
+  createdTime?: Date;
+  /**
+   * Time when the resource was last modified
+   */
+  lastUpdatedTime?: Date;
 }
 
 /**

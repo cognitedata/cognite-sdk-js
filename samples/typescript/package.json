@@ -1,0 +1,14 @@
+{
+  "name": "typescript-example",
+  "license": "Apache-2.0",
+  "scripts": {
+    "tsc": "tsc",
+    "test": "yarn tsc && node build/quickstart.js"
+  },
+  "dependencies": {
+    "typescript": "^3.3.4000"
+  },
+  "devDependencies": {
+    "@types/node": "^11.12.0"
+  }
+}

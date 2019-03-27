@@ -4,19 +4,24 @@ node_js:
   - "9"
   - "10"
 sudo: false
+env:
+  - COGNITE_PROJECT=cognitesdk-js
 install:
   - yarn
   - npm install -g codecov
 script:
+  - yarn validate-samples-sdk-version
   - yarn validateDocLinks
   - yarn lint
   - yarn build
   - yarn test && codecov
+  - yarn test-samples
 before_deploy:
   - yarn docs
 deploy:
   - provider: npm
-    tag: next
+    on:
+      branch: master
     skip_cleanup: true
     email: cicd@cognite.com
     api_key:

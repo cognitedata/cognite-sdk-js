@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "author": "Fredrik Anfinsen",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@cognite/sdk": "2.0.0-alpha.3"
+  },
+  "scripts": {
+    "link-sdk": "cd .. && yarn link && cd ./samples && yarn link @cognite/sdk",
+    "install-dependencies": "cd nodejs && yarn",
+    "test": "yarn test-typescript && yarn test-nodejs",
+    "test-typescript": "cd typescript && yarn test",
+    "test-nodejs": "cd nodejs && yarn test"
+  }
+}
