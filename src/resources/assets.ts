@@ -12,7 +12,7 @@ import {
   // generateRetrieveMultipleEndpoint,
   // generateSearchEndpoint,
   // generateUpdateEndpoint,
-} from '../StandardMethods';
+} from '../standardMethods';
 import { Asset, CreateAsset, ListAssetsParams } from '../types/asset';
 import { projectUrl } from '../utils';
 

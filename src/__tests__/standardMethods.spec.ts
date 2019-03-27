@@ -3,7 +3,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { MetadataMap } from '../metadata';
-import { generateListEndpoint } from '../StandardMethods';
+import { generateListEndpoint } from '../standardMethods';
 import { sleepPromise } from '../utils';
 
 function numberGeneratorAPIEndpoint(config: AxiosRequestConfig) {
