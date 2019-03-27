@@ -58,3 +58,30 @@ export function promiseCache<ReturnValue>(
 export function isSameProject(project1: string, project2: string): boolean {
   return project1.toLowerCase() === project2.toLowerCase();
 }
+
+export type CancelablePromise<T> = {
+  cancel: () => void;
+} & Promise<T>;
+/** @hidden */
+export function makePromiseCancelable<T>(
+  promise: Promise<T>
+): CancelablePromise<T> {
+  let hasBeenCancelled = false;
+  const cancelablePromise = new Promise<T>((resolve, reject) => {
+    promise
+      .then(res => {
+        if (!hasBeenCancelled) {
+          resolve(res);
+        }
+      })
+      .catch(err => {
+        if (!hasBeenCancelled) {
+          reject(err);
+        }
+      });
+  });
+  (cancelablePromise as CancelablePromise<T>).cancel = () => {
+    hasBeenCancelled = true;
+  };
+  return cancelablePromise as CancelablePromise<T>;
+}

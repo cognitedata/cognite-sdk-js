@@ -18,10 +18,11 @@ export interface Response {
 }
 
 function responseTransformer(axiosResponse: AxiosResponse): Response {
+  const { data, headers, status } = axiosResponse;
   return {
-    data: axiosResponse.data,
-    headers: axiosResponse.headers,
-    status: axiosResponse.status,
+    data,
+    headers,
+    status,
   };
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "@cognite/sdk",
-  "version": "1.4.8",
+  "version": "2.0.0-alpha.1",
   "description": "Javascript client library for Cognite SDK",
   "contributors": [
     "Fredrik Anfinsen <fredrik.anfinsen@cognite.com>",
@@ -51,14 +51,12 @@
     "test": "jest --config=jest.config.js",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "yarn clean && rollup -c && yarn copyCogniteTypes && yarn esCheck",
+    "build": "yarn clean && rollup -c && yarn esCheck",
     "watch": "rollup -cw",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json",
     "prepush": "yarn lint && yarn test",
     "esCheck": "es-check es5 './dist/index.js'",
-    "validateDocLinks": "markdown-link-check README.md",
-    "copyCogniteTypes": "cp -r ./src/types/cogniteApi ./dist/types/",
-    "generate-cognite-types": "node ./scripts/generateCogniteTypes.js"
+    "validateDocLinks": "markdown-link-check README.md"
   },
   "dependencies": {
     "axios": "^0.18.0",

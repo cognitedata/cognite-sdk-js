@@ -43,13 +43,12 @@ export function listenForNonSuccessStatusCode(
   );
 }
 
-type RawRequestResponseType<T> = AxiosResponse<CogniteResponse<T>>;
 /** @hidden */
-export async function rawRequest<ResponseType>(
+export function rawRequest<ResponseType>(
   axiosInstance: AxiosInstance,
   requestConfig: AxiosRequestConfig
-): Promise<RawRequestResponseType<ResponseType>> {
+) {
   return axiosInstance(requestConfig).catch(handleErrorResponse) as Promise<
-    RawRequestResponseType<ResponseType>
+    AxiosResponse<CogniteResponse<ResponseType>>
   >;
 }
