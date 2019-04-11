@@ -318,6 +318,26 @@ describe('3D', () => {
     await ThreeD.deleteRevisions(8765, revisionIds);
   });
 
+  test('delete asset mappings', async () => {
+    const mappings = [
+      {
+        assetId: 123,
+        nodeId: 321,
+      },
+      {
+        assetId: 1234,
+        nodeId: 4321,
+      },
+    ];
+    const reg = new RegExp(`/3d/models/8765/revisions/1632/mappings/delete$`);
+    mock
+      .onPost(reg, {
+        items: mappings,
+      })
+      .reply(200);
+    await ThreeD.deleteAssetMappings(8765, 1632, mappings);
+  });
+
   test('list asset mappings', async () => {
     const params = {
       cursor: 'crs',
