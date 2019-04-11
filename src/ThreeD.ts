@@ -266,6 +266,16 @@ export class ThreeD {
     await rawPost(url, { data: body });
   }
 
+  public static async deleteAssetMappings(
+    modelId: number,
+    revisionId: number,
+    mappings: AssetMapping[]
+  ): Promise<void> {
+    const url = `${threeDUrl()}/models/${modelId}/revisions/${revisionId}/mappings/delete`;
+    const body = { items: mappings };
+    await rawPost(url, { data: body });
+  }
+
   public static async listAssetMappings(
     modelId: number,
     revisionId: number,
