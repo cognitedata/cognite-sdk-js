@@ -112,10 +112,10 @@ export class TimeSeries {
   }
 
   public static async update(
-    assetId: number,
+    timeseriesId: number,
     changes: object
   ): Promise<Timeseries> {
-    const url = `${timeSeriesUrl()}/${assetId}/update`;
+    const url = `${timeSeriesUrl()}/${timeseriesId}/update`;
     const response = (await rawPost(url, { data: changes })) as AxiosResponse<
       TimeseriesResponse
     >;
