@@ -111,8 +111,8 @@ export class Login {
   //   1. Check if the token is valid (if not ignore jump to step 3)
   //   2. Return AuthResult and set bearer token
   // 2. Check if error is present in the URL (if yes, throw error with error_description)
-  // 3. Check if access_token & id_token is present in the URL
   //   1. Remove tokens from URL
+  // 3. Check if access_token & id_token is present in the URL
   //   2. Validate the tokens with CDP. If not valid then ignore them. If valid then return AuthResult and set bearer token
   // 4. Try silent login (spin up an invisible iFrame and do login flow in there and grab access/id-tokens)
   //   - If successfull then return AuthResult and set bearer token
@@ -162,12 +162,13 @@ export class Login {
 
     // Step 2
     const authTokens = Login.parseQuery(window.location.search); // this line can throw
+    // Step 2.1
+    let url = window.location.href;
+    url = removeParameterFromUrl(url, ACCESS_TOKEN);
+    url = removeParameterFromUrl(url, ID_TOKEN);
+    window.history.replaceState(null, '', url);
+
     if (authTokens !== null) {
-      // Step 3.1
-      let url = window.location.href;
-      url = removeParameterFromUrl(url, ACCESS_TOKEN);
-      url = removeParameterFromUrl(url, ID_TOKEN);
-      window.history.replaceState(null, '', url);
       // Step 3.2
       const authResult = await verifyAuthTokens(
         authTokens.accessToken,
