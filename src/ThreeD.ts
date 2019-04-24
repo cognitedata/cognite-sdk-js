@@ -59,6 +59,7 @@ export interface Sector {
   depth: number;
   boundingBox: BoundingBox;
   threedFileId: number;
+  threedFiles: VersionedThreedFile[];
 }
 
 export interface BoundingBox {
