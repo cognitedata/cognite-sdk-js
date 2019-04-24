@@ -138,6 +138,7 @@ const sectors = [
       max: [18, 6, 0],
     },
     threedFileId: 27823,
+    threedFiles: [{ version: 4, fileId: 27823 }],
   },
   {
     id: 18,
@@ -149,6 +150,7 @@ const sectors = [
       max: [18, 6, 11],
     },
     threedFileId: 223,
+    threedFiles: [{ version: 4, fileId: 223 }],
   },
 ];
 
