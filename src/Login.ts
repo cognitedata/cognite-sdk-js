@@ -214,8 +214,14 @@ export class Login {
       //
     }
 
+    const loginParams = {
+      project: params.project,
+      redirectUrl: params.redirectUrl,
+      errorRedirectUrl: params.errorRedirectUrl,
+    };
+
     if (params.popup) {
-      const tokens = await loginWithPopup(params);
+      const tokens = await loginWithPopup(loginParams);
       if (tokens === null) {
         throw Error('Failed to authorize with popup. Tokens === null');
       }
@@ -231,7 +237,7 @@ export class Login {
     // Login.authorize should never resolve on browser redirect (to avoid return value undefined)
     // @ts-ignore
     return new Promise(() => {
-      Login.loginWithRedirect(params);
+      Login.loginWithRedirect(loginParams);
     });
   }
 

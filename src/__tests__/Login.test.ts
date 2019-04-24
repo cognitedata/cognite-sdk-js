@@ -292,6 +292,31 @@ describe('Login', () => {
         done();
       }, 100);
     });
+
+    test('login with popup', async () => {
+      const params = {
+        redirectUrl: window.location.href,
+        errorRedirectUrl: window.location.href,
+        popup: true,
+      };
+      spiedSilentLogin.mockImplementationOnce(() => {
+        throw new Error(); // fail silent login to trigger full redirect
+      });
+      const spiedWindowOpen = jest.spyOn(window, 'open');
+      const windowMock: any = {};
+      spiedWindowOpen.mockImplementationOnce((url, name) => {
+        expect(url).toMatchInlineSnapshot(
+          `"https://api.cognitedata.com/login/redirect?errorRedirectUrl=https%3A%2F%2Flocalhost%2F&redirectUrl=https%3A%2F%2Flocalhost%2F"`
+        );
+        expect(name).toMatchInlineSnapshot(`"cognite-js-sdk-auth-popup"`);
+        // test that it attach a function to windowMock
+        setTimeout(() => {
+          (window as any).postLoginTokens(authTokens);
+        }, 50);
+        return windowMock;
+      });
+      const authResult = await Login.authorize(params);
+    });
   });
 
   test('login with redirect', async () => {
