@@ -19,6 +19,7 @@ export interface AuthorizeParams {
   project?: string;
   redirectUrl: string;
   errorRedirectUrl: string;
+  popup?: boolean;
   accessToken?: string;
   idToken?: string;
 }
@@ -70,6 +71,7 @@ export interface AuthResult {
 }
 
 const IFRAME_NAME = 'cognite-js-sdk-auth-iframe';
+const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
 const ACCESS_TOKEN = 'access_token';
 const ID_TOKEN = 'id_token';
 
@@ -88,6 +90,25 @@ function isString(value: any): boolean {
 }
 
 let cancelSchedule = () => {};
+
+interface CogniteParentWindow extends Window {
+  postLoginTokens?: (tokens: null | AuthTokens) => void;
+}
+function loginWithPopup(params: LoginParams): Promise<null | AuthTokens> {
+  return new Promise((resolve, reject) => {
+    const url = Login.getLoginUrl(params);
+    const loginPopup = window.open(url, LOGIN_POPUP_NAME);
+    if (loginPopup === null) {
+      reject(new Error('Failed to create login popup window'));
+      return;
+    }
+    const cogniteWindow: CogniteParentWindow = window;
+    cogniteWindow.postLoginTokens = tokens => {
+      delete cogniteWindow.postLoginTokens;
+      resolve(tokens);
+    };
+  });
+}
 
 /**
  * @hidden
@@ -116,7 +137,7 @@ export class Login {
   //   2. Validate the tokens with CDP. If not valid then ignore them. If valid then return AuthResult and set bearer token
   // 4. Try silent login (spin up an invisible iFrame and do login flow in there and grab access/id-tokens)
   //   - If successfull then return AuthResult and set bearer token
-  // 5. Login with redirect
+  // 5. Login with redirect or with popup
   public static async authorize(
     params: AuthorizeParams,
     tokenCallback: (token: string) => void = () => {}
@@ -193,6 +214,20 @@ export class Login {
       //
     }
 
+    if (params.popup) {
+      const tokens = await loginWithPopup(params);
+      if (tokens === null) {
+        throw Error('Failed to authorize with popup. Tokens === null');
+      }
+      const authResult = await verifyAuthTokens(
+        tokens.accessToken,
+        tokens.idToken
+      );
+      if (authResult === null) {
+        throw Error('Failed to authorize with popup. AuthResult === null');
+      }
+      return authResult;
+    }
     // Login.authorize should never resolve on browser redirect (to avoid return value undefined)
     // @ts-ignore
     return new Promise(() => {
@@ -270,6 +305,24 @@ export class Login {
       params: { project: defaultProject, ...params },
     })) as AxiosResponse<LoginUrlResponse>;
     return response.data.data.url;
+  }
+
+  public static isPopupWindow() {
+    return window.name === LOGIN_POPUP_NAME;
+  }
+
+  public static popupHandler() {
+    if (!Login.isPopupWindow()) {
+      throw Error(
+        'loginPopupHandler can only be used inside a popup window created by the SDK. Please call isLoginPopupWindow to check for this'
+      );
+    }
+    if (!(window.opener && window.opener.postLoginTokens)) {
+      throw Error('Incorrect environment to run loginPopupHandler');
+    }
+    const tokens = Login.parseQuery(window.location.search);
+    window.opener.postLoginTokens(tokens);
+    window.close();
   }
 
   private static parseQuery(
