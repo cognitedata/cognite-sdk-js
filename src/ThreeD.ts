@@ -31,6 +31,7 @@ export interface Revision {
   thumbnailThreedFileId?: number;
   thumbnailURL?: string;
   sceneThreedFileId?: number;
+  sceneThreedFiles?: VersionedThreedFile[];
   assetMappingCount: number;
   createdTime: number;
 }
@@ -84,6 +85,11 @@ interface DataResponseWithCursor<T> {
 export interface Camera {
   target: number[];
   position: number[];
+}
+
+export interface VersionedThreedFile {
+  version: number;
+  fileId: number;
 }
 
 export interface CreateRevision {
