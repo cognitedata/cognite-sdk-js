@@ -294,6 +294,9 @@ describe('Login', () => {
     });
 
     test('login with popup', async () => {
+      configure({
+        baseUrl: 'https://example.com',
+      });
       const params = {
         redirectUrl: window.location.href,
         errorRedirectUrl: window.location.href,
@@ -306,7 +309,7 @@ describe('Login', () => {
       const windowMock: any = {};
       spiedWindowOpen.mockImplementationOnce((url, name) => {
         expect(url).toMatchInlineSnapshot(
-          `"https://api.cognitedata.com/login/redirect?errorRedirectUrl=https%3A%2F%2Flocalhost%2F&redirectUrl=https%3A%2F%2Flocalhost%2F"`
+          `"https://example.com/login/redirect?errorRedirectUrl=https%3A%2F%2Flocalhost%2Fsome%2Frandom%2Fpath%3Fquery%3Dtrue%26random%3D123&redirectUrl=https%3A%2F%2Flocalhost%2Fsome%2Frandom%2Fpath%3Fquery%3Dtrue%26random%3D123"`
         );
         expect(name).toMatchInlineSnapshot(`"cognite-js-sdk-auth-popup"`);
         // test that it attach a function to windowMock
