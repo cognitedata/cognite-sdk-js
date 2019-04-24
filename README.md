@@ -84,7 +84,7 @@ authResult = {
 }
 ```
 
-See an example [here](./examples/react/src/App.js).
+> See an example [here](./examples/react/basic/src/App.js) on how to login using redirect and see [this example](./examples/react/login-with-popup/src/App.js) on how to login with popup window.
 
 #### React
 
