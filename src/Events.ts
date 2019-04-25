@@ -13,6 +13,7 @@ export interface Event {
   assetIds: number[];
   source?: string;
   sourceId?: string;
+  metadata?: { [key: string]: string };
   createdTime: number;
   lastUpdatedTime: number;
 }
