@@ -1,0 +1,23 @@
+// Copyright 2019 Cognite AS
+
+{{#AssetV2}}
+export interface Asset {
+  {{id}}
+  {{description}}
+}
+{{/AssetV2}}
+
+// cog:StartDTO CreateAssetV2
+// cog:Description
+export interface CreateAsset {
+  // cog:Insert name, description, refId, parentRefId, parentId, source, sourceId, metadata
+  // cog:Skip parentName, types, createdTime, lastUpdatedTime
+}
+// cog:EndDTO CreateAssetV2
+
+// cog:StartQuery getAssets
+export interface ListAssetsParams {
+  // cog:Insert name, depth, metadata, description
+  // cog:Skip source, cursor, limit
+}
+// cog:EndQuery getAssets

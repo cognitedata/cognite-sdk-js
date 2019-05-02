@@ -1,69 +1,12 @@
 const fs = require('fs');
 const ls = require('ls');
 const SwaggerParser = require('swagger-parser');
-const Mustache = require('Mustache');
 
 const START_TEMPLATE = 'cog:Start';
 const END_TEMPLATE = 'cog:End';
 const INSERT_TEMPLATE = 'cog:Insert';
 const SKIP_TEMPLATE = 'cog:Skip';
 const DESCRIPTION_TEMPLATE = 'cog:Description';
-
-// Javascript
-function createSimpleJavascriptDocComment(comment) {
-  return `
-    /**
-     * ${comment}
-     */`;
-}
-
-// { type: 'object',
-//   required: [ 'code', 'message' ],
-//   properties:
-//    { code:
-//       { type: 'integer',
-//         description: 'HTTP status code',
-//         format: 'int32',
-//         example: 401 },
-//      message:
-//       { type: 'string',
-//         description: 'Error message',
-//         example: 'Could not authenticate.' },
-//      extra: { type: 'object', description: 'Additional data' } } }
-
-function parseObject(name, schema) {
-  const requiredProps = new Set(schema.required);
-  const result = createJavascriptObject(requiredProps, schema.properties);
-  console.log(result);
-}
-
-function createJavascriptObject(requiredProps, props) {
-  const typedProps = {};
-  Object.keys(props).forEach(propName => {
-    const typedProp = createJavascriptProp(propName, props[propName], requiredProps.has(propName));
-    typedProps[propName] = typedProp;
-  });
-  return typedProps;
-}
-
-function createJavascriptProp(name, schema, isRequired) {
-  const comment = createSimpleJavascriptDocComment(schema.description);
-  let typeStr = comment + name + (isRequired ? ': ' : '?: ');
-  const jsMap = {
-    integer: 'number',
-    string: 'string',
-    object: 'object',
-  };
-
-  const { type } = schema;
-  if (jsMap[type]) {
-    typeStr += jsMap[type];
-  } else {
-    throw Error(`Unknow type ${type}`);
-  }
-
-  return typeStr + ';';
-}
 
 function getSchemaFromDTO(openApi, dtoName) {
   return openApi.components.schemas[dtoName];
@@ -80,6 +23,14 @@ function getSchemaFromOperationId(openApi, operationId) {
     });
   });
   return result;
+}
+
+function createSimpleJsDocComment(comment) {
+  return [
+    '/**',
+    ` * ${comment}`,
+    ` */`
+  ];
 }
 
 function createPropertyDeclaration(name, description, type, items = {}, isRequired = false) {
@@ -350,28 +301,13 @@ function fillInTemplate(openApi, template) {
 }
 
 async function main() {
-  const parser = new SwaggerParser();
-  const openApi = await parser.dereference('https://storage.googleapis.com/cognitedata-api-docs/dist/v1.json');
+  const openApi = await SwaggerParser.bundle('https://storage.googleapis.com/cognitedata-api-docs/openapi.0.6.json');
   const inputDir = './type_templates';
   const outputDir = './src/types';
-
-  const error = parser.$refs.get('#/components/schemas/Error');
-
-  parseObject('Error', error);
-  // console.log(error);
-  return;
-
-  for (const { full, file } of ls(`${inputDir}/*.mustache`)) {
+  for (const { full, file } of ls(`${inputDir}/*`)) {
     const template = fs.readFileSync(full).toString('utf-8');
-    const output = Mustache.render(template, {
-      'AssetV2': {
-        'id': () => {console.log('nice!'); return 'halla';},
-        'description': 'abc\nnew line 1\nnew line 2',
-      },
-    });
-    console.log(output);
-    // const output = fillInTemplate(openApi, template);
-    // fs.writeFileSync(`${outputDir}/${file}`, output);
+    const output = fillInTemplate(openApi, template);
+    fs.writeFileSync(`${outputDir}/${file}`, output);
   }
 }
 
