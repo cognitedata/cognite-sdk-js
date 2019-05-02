@@ -156,11 +156,15 @@ export class Login {
       accessToken: string,
       idToken: string
     ): Promise<null | AuthResult> => {
-      const authResult = await Login.verifyTokens(accessToken, idToken);
-      if (authResult !== null) {
-        configure({ project: authResult.project });
-        Login.scheduleRenewal(params, accessToken, idToken, tokenCallback);
-        return authResult;
+      try {
+        const authResult = await Login.verifyTokens(accessToken, idToken);
+        if (authResult !== null) {
+          configure({ project: authResult.project });
+          Login.scheduleRenewal(params, accessToken, idToken, tokenCallback);
+          return authResult;
+        }
+      } catch (e) {
+        //
       }
       return null;
     };
@@ -237,7 +241,17 @@ export class Login {
     // Login.authorize should never resolve on browser redirect (to avoid return value undefined)
     // @ts-ignore
     return new Promise(() => {
-      Login.loginWithRedirect(loginParams);
+      // make sure tokens is removed from url
+      const removeTokens = (uri: string) =>
+        removeParameterFromUrl(
+          removeParameterFromUrl(uri, ACCESS_TOKEN),
+          ID_TOKEN
+        );
+      Login.loginWithRedirect({
+        ...loginParams,
+        redirectUrl: removeTokens(loginParams.redirectUrl),
+        errorRedirectUrl: removeTokens(loginParams.errorRedirectUrl),
+      });
     });
   }
 
@@ -437,6 +451,6 @@ export class Login {
         projectId: loginStatus.projectId,
       };
     }
-    return null;
+    throw Error('Invalid token');
   }
 }
