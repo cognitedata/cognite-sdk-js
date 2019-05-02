@@ -11,6 +11,7 @@ export interface File {
   sourceId?: string;
   fileType?: string;
   assetIds?: number[];
+  metadata?: { [key: string]: string };
   uploadedAt?: number;
   createdTime?: number;
   lastUpdatedTime?: number;
