@@ -1,5 +1,13 @@
 // Copyright 2019 Cognite AS
 
+{{#Asset}}
+export interface {{name}} {
+  {{#skip}}
+  {{/skip}}
+  {{props}}
+}
+{{/Asset}}
+
 {{#AssetV2}}
 export interface Asset {
   {{id}}

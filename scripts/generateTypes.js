@@ -11,10 +11,10 @@ const DESCRIPTION_TEMPLATE = 'cog:Description';
 
 // Javascript
 function createSimpleJavascriptDocComment(comment) {
-  return `
-    /**
-     * ${comment}
-     */`;
+  console.log(comment);
+  return fillTemplateFromFile('./type_templates/comment.mustache', {
+    comment
+  });
 }
 
 // { type: 'object',
@@ -33,36 +33,51 @@ function createSimpleJavascriptDocComment(comment) {
 
 function parseObject(name, schema) {
   const requiredProps = new Set(schema.required);
-  const result = createJavascriptObject(requiredProps, schema.properties);
+  console.log(schema);
+  const result = createJavascriptObject(name, requiredProps, schema.properties);
   console.log(result);
+  return result;
 }
 
-function createJavascriptObject(requiredProps, props) {
+function createJavascriptObject(name, requiredProps, props) {
   const typedProps = {};
   Object.keys(props).forEach(propName => {
     const typedProp = createJavascriptProp(propName, props[propName], requiredProps.has(propName));
     typedProps[propName] = typedProp;
   });
-  return typedProps;
+
+  return {
+    name,
+    props: Object.keys(typedProps).map(propName => {
+      return {
+        prop: typedProps[propName],
+      };
+    }),
+  };
 }
 
 function createJavascriptProp(name, schema, isRequired) {
-  const comment = createSimpleJavascriptDocComment(schema.description);
-  let typeStr = comment + name + (isRequired ? ': ' : '?: ');
   const jsMap = {
     integer: 'number',
     string: 'string',
     object: 'object',
   };
 
-  const { type } = schema;
-  if (jsMap[type]) {
-    typeStr += jsMap[type];
+  let type;
+  if (jsMap[schema.type]) {
+    type = jsMap[schema.type];
   } else {
-    throw Error(`Unknow type ${type}`);
+    throw Error(`Unknown type ${schema.type}`);
   }
 
-  return typeStr + ';';
+  const view = {
+    name,
+    isRequired,
+    type,
+    description: schema.description,
+  };
+
+  return fillTemplateFromFile('./type_templates/property.mustache', view);
 }
 
 function getSchemaFromDTO(openApi, dtoName) {
@@ -349,15 +364,58 @@ function fillInTemplate(openApi, template) {
   return lines.join('\n');
 }
 
+function fillTemplateFromFile(filename, view) {
+  const template = fs.readFileSync(filename).toString('utf-8');
+  return Mustache.render(template, view);
+}
+
+function isAllOfObject(schema) {
+  return schema.allOf;
+}
+
+function parseAllOfObject(schema) {
+  const extend = [];
+  const schemas = [];
+  schema.allOf.forEach(innerSchema => {
+    if (innerSchema.$ref) {
+      extend.push(innerSchema.$ref);
+    } else {
+      schemas.push(innerSchema);
+    }
+  });
+  // if (schemas.length >= 2) {
+  //   throw Error(`Can't handle num schemas >= 2`);
+  // }
+  return { extend, schemas };
+}
+
+function parseSchemas(openApi) {
+  const { schemas } = openApi.components;
+  Object.keys(schemas).forEach(schemaName => {
+    const schema = schemas[schemaName];
+    if (schemaName === 'Asset') {
+      console.log(schema);
+    }
+    if (isAllOfObject(schema)) {
+      console.log(schemaName);
+      console.log(parseAllOfObject(schema));
+    }
+    // console.log(schemaName);
+    // console.log(schemas[schemaName]);
+  });
+}
+
 async function main() {
   const parser = new SwaggerParser();
-  const openApi = await parser.dereference('https://storage.googleapis.com/cognitedata-api-docs/dist/v1.json');
+  const openApi = await parser.parse('https://storage.googleapis.com/cognitedata-api-docs/dist/v1.json');
   const inputDir = './type_templates';
   const outputDir = './src/types';
 
-  const error = parser.$refs.get('#/components/schemas/Error');
+  console.log(openApi);
+  parseSchemas(openApi);
+  // const error = parser.$refs.get('#/components/schemas/Asset');
 
-  parseObject('Error', error);
+  // parseObject('Asset', error);
   // console.log(error);
   return;
 
