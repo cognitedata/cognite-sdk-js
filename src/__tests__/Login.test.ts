@@ -706,7 +706,9 @@ describe('Login', () => {
       valid: true,
       expired: false,
     });
-    expect(await (Login as any).verifyTokens(accessToken, idToken)).toBe(null);
+    await expect(
+      (Login as any).verifyTokens(accessToken, idToken)
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`"Invalid token"`);
 
     spiedLoginVerifyStatus.mockReturnValueOnce({
       ...status,
@@ -717,7 +719,9 @@ describe('Login', () => {
       expired: false,
       project: status.project,
     });
-    expect(await (Login as any).verifyTokens(accessToken, idToken)).toBe(null);
+    await expect(
+      (Login as any).verifyTokens(accessToken, idToken)
+    ).rejects.toMatchInlineSnapshot(`[Error: Invalid token]`);
 
     spiedLoginVerifyStatus.mockReturnValueOnce({
       ...status,
