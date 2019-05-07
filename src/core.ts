@@ -110,6 +110,23 @@ instance.interceptors.request.use(
   }
 );
 
+instance.interceptors.request.use((config: AxiosRequestConfig) => {
+  const url = config.url || '';
+  const baseUrl = config.baseURL || '';
+  const cogniteUrl = /^https:\/\/.*\.cognitedata.com/;
+  const isUnknownDomain =
+    // rawGet('https://example.com');
+    (/^http/.test(url) && !cogniteUrl.test(url)) ||
+    // rawGet('/path') with baseUrl !== cognite
+    (!cogniteUrl.test(baseUrl) && !cogniteUrl.test(url));
+  if (isUnknownDomain) {
+    const newHeaders = { ...config.headers };
+    delete newHeaders.Authorization;
+    config.headers = newHeaders;
+  }
+  return config;
+});
+
 export function configure(opts: Partial<SDKOptions>): SDKOptions {
   Object.assign(options, opts);
   instance.defaults.baseURL = options.baseUrl;

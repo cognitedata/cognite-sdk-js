@@ -233,4 +233,50 @@ describe('Core', () => {
     expect(response.data).toBe(DONE);
     axiosGlobalMock.restore();
   });
+
+  describe('token leakage', () => {
+    const token = 'abc';
+    const nonPresentTokenChecker = (config: AxiosRequestConfig) => {
+      if (config.headers.Authorization !== undefined) {
+        return [404];
+      }
+      return [200];
+    };
+
+    const presentTokenChecker = (config: AxiosRequestConfig) => {
+      if (config.headers.Authorization !== `Bearer ${token}`) {
+        return [404];
+      }
+      return [200];
+    };
+
+    test('raw request', async () => {
+      configure({
+        baseUrl: 'https://api.cognitedata.com',
+      });
+      setBearerToken(token);
+      mock.onGet('http://localhost:8888').reply(nonPresentTokenChecker);
+      await rawGet('http://localhost:8888');
+
+      mock.onGet('https://another-company.com').reply(nonPresentTokenChecker);
+      await rawGet('https://another-company.com');
+
+      mock.onGet('/test').reply(presentTokenChecker);
+      await rawGet('/test');
+    });
+
+    test('other base url', async () => {
+      configure({
+        baseUrl: 'https://another-base-url.com',
+      });
+      setBearerToken(token);
+      mock
+        .onGet('https://another-base-url.com/test')
+        .reply(nonPresentTokenChecker);
+      await rawGet('https://another-base-url.com/test');
+
+      mock.onGet('/test').reply(nonPresentTokenChecker);
+      await rawGet('/test');
+    });
+  });
 });
