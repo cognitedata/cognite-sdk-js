@@ -105,6 +105,10 @@ export type ObjectPatch =
       remove: string[];
     };
 
+export type NullableSinglePatchString = { set: string; } | { setNull: true };
+export type NullableSinglePatchLong = { set: number; } | { setNull: true };
+export type ArrayPatchLong = { set: number[]; } | { add?: number[]; remove?: number[]; };
+
 export interface AssetPatch {
   update: {
     externalId?: SinglePatchString;
@@ -239,6 +243,122 @@ export interface GetTimeSeriesMetadataDTO {
   createdTime: Date;
   lastUpdatedTime: Date;
 }
+
+export interface PostTimeSeriesMetadataDTO {
+  /**
+   * Externally provided id for the time series (optional but recommended)
+   */
+  externalId?: CogniteExternalId;
+  /**
+   * Human readable name of time series
+   */
+  name?: string;
+  /**
+   * Whether the time series is string valued or not.
+   */
+  isString?: boolean;
+  /**
+   * Additional metadata. String key -> String value.
+   */
+  metadata?: Metadata;
+  /**
+   * The physical unit of the time series.
+   */
+  unit?: string;
+  /**
+   * Asset that this time series belongs to.
+   */
+  assetId?: CogniteInternalId;
+  /**
+   * Whether the time series is a step series or not.
+   */
+  isStep?: boolean;
+  /**
+   * Description of the time series.
+   */
+  description?: string;
+  /**
+   * Security categories required in order to access this time series."
+   */
+  securityCategories?: number[];
+}
+
+export interface Filter {
+  /**
+   * Filter on unit (case-sensitive).
+   */
+  unit?: string;
+  /**
+   * Filter on isString.
+   */
+  isString?: boolean;
+  /**
+   * Filter on isStep.
+   */
+  isStep?: boolean;
+  /**
+   * Filter out timeseries that do not match these metadata fields and values (case-sensitive)
+   */
+  metadata?: Metadata;
+  /**
+   * Filter out time series that are not linked to any of these assets.
+   */
+  assetIds?: CogniteInternalId[];
+  /**
+   * Filter out time series that are not linked to assets in the subtree rooted at these assets. Format is list of ids.
+   */
+  assetSubtrees?: CogniteInternalId[];
+  createdTime?: Date;
+  lastUpdatedTime?: Date;
+}
+
+export interface Search {
+  /**
+   * Prefix and fuzzy search on name.
+   */
+  name?: string;
+  /**
+   * Prefix and fuzzy search on description.
+   */
+  description?: string;
+  /**
+   * Search on name and description using wildcard search on each of the words (separated by spaces). Retrieves results where at least one word must match. Example: '*some* *other*'
+   */
+  query?: string;
+}
+
+export interface TimeSeriesSearchDTO {
+  filter?: Filter;
+  search?: Search;
+  /**
+   * Return up to this many results.
+   */
+  limit?: number;
+}
+
+export type TimeseriesIdEither = { id: CogniteInternalId } | { externalId: CogniteExternalId };
+
+export interface TimeSeriesPatch {
+  update: {
+    externalId: NullableSinglePatchString;
+    name: NullableSinglePatchString;
+    metadata: ObjectPatch;
+    unit: NullableSinglePatchString;
+    assetId: NullableSinglePatchLong;
+    description: NullableSinglePatchString;
+    securityCategories: ArrayPatchLong;
+  };
+}
+
+export interface TimeSeriesUpdateById extends TimeSeriesPatch {
+  id: CogniteInternalId;
+}
+
+export interface TimeSeriesUpdateByExternalId extends TimeSeriesPatch {
+  externalId: CogniteExternalId;
+}
+
+export type TimeSeriesUpdate = TimeSeriesUpdateById | TimeSeriesUpdateByExternalId;
 
 export interface CogniteResponse<T> {
   data: T;
