@@ -270,6 +270,13 @@ aws4@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.8.0.tgz#f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
 
+axios-debug-log@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/axios-debug-log/-/axios-debug-log-0.4.0.tgz#f3fee09b3c0c52cc710cf32c099ec04206c2f7b4"
+  integrity sha512-i7WAvhMajEoqG0GaLefAegSlBkzljtg9PC+sNu9lygtF4Wg/UgY4Ou3kOUI4L7Tm2RlVQmYI+3EVrWAKoJFohg==
+  dependencies:
+    debug "^3.0.0"
+
 axios-mock-adapter@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/axios-mock-adapter/-/axios-mock-adapter-1.15.0.tgz#fbc06825d8302c95c3334d21023bba996255d45d"
@@ -790,7 +797,7 @@ debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.8, debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@^3.1.0:
+debug@^3.0.0, debug@^3.1.0:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
   dependencies:

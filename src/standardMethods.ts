@@ -26,17 +26,42 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
   };
 }
 
+export function listByGet<RequestFilter, ResponseType>(
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  filter: RequestFilter
+) {
+  return rawRequest<CursorResponse<ResponseType>>(axiosInstance, {
+    method: 'get',
+    url: resourcePath,
+    params: filter,
+  });
+}
+
+export function listByPost<RequestFilter, ResponseType>(
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  filter: RequestFilter
+) {
+  return rawRequest<CursorResponse<ResponseType>>(axiosInstance, {
+    method: 'post',
+    url: `${resourcePath}/list`,
+    data: filter,
+  });
+}
+
 export function generateListEndpoint<
-  RequestParams extends object,
+  RequestFilter extends object,
   ResponseType
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  withPost: boolean
 ) {
   function addNextPageFunction<T>(
     dataWithCursor: CursorResponse<T>,
-    params: RequestParams
+    params: RequestFilter
   ) {
     const { nextCursor } = dataWithCursor;
     const next = nextCursor
@@ -45,39 +70,43 @@ export function generateListEndpoint<
     Object.assign(dataWithCursor, { next });
   }
 
-  async function list(params: RequestParams) {
-    const response = await rawRequest<CursorResponse<ResponseType>>(
-      axiosInstance,
-      {
-        method: 'get',
-        url: resourcePath,
-        params,
-      }
-    );
-    addNextPageFunction(response.data.data, params);
+  async function list(filter: RequestFilter) {
+    const response = await (withPost
+      ? listByPost<RequestFilter, ResponseType>(
+          axiosInstance,
+          resourcePath,
+          filter
+        )
+      : listByGet<RequestFilter, ResponseType>(
+          axiosInstance,
+          resourcePath,
+          filter
+        ));
+    addNextPageFunction(response.data.data, filter);
     return metadataMap.addAndReturn(response.data.data, response);
   }
 
-  return (params: RequestParams = {} as RequestParams) => {
+  return (params: RequestFilter = {} as RequestFilter) => {
     const listPromise = list(params);
     return makeAutoPaginationMethods(listPromise);
   };
 }
 
-export function generateRetrieveEndpoint<ResponseType>(
+export function generateRetrieveEndpoint<IdType, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
-  return async function retrieve(id: number): Promise<ResponseType> {
+  return async function retrieve(ids: IdType[]): Promise<ResponseType[]> {
     const response = await rawRequest<ItemsResponse<ResponseType>>(
       axiosInstance,
       {
-        method: 'get',
-        url: `${resourcePath}/${id}`,
+        method: 'post',
+        url: `${resourcePath}/byids`,
+        data: { items: ids },
       }
     );
-    return metadataMap.addAndReturn(response.data.data.items[0], response);
+    return metadataMap.addAndReturn(response.data.data.items, response);
   };
 }
 
@@ -101,12 +130,12 @@ export function generateRetrieveMultipleEndpoint<ResponseType>(
   };
 }
 
-export function generateDeleteEndpoint(
+export function generateDeleteEndpoint<IdType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
-  return async function remove(ids: number[]): Promise<{}> {
+  return async function remove(ids: IdType[]): Promise<{}> {
     const response = await rawRequest<{}>(axiosInstance, {
       url: `${resourcePath}/delete`,
       method: 'post',
@@ -139,15 +168,13 @@ export function generateSearchEndpoint<RequestParams, ResponseType>(
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
-  return async function search(
-    params?: RequestParams
-  ): Promise<ResponseType[]> {
+  return async function search(query: RequestParams): Promise<ResponseType[]> {
     const response = await rawRequest<ItemsResponse<ResponseType>>(
       axiosInstance,
       {
-        method: 'get',
+        method: 'post',
         url: `${resourcePath}/search`,
-        params,
+        data: query,
       }
     );
     return metadataMap.addAndReturn(response.data.data.items, response);

@@ -18,31 +18,35 @@ import {
   AssetListScope,
   AssetSearchFilter,
   ExternalAssetItem,
+  GetTimeSeriesMetadataDTO,
+  TimeseriesFilter,
 } from '../types/types';
 import { projectUrl } from '../utils';
 
-export interface AssetAPI {
+export interface TimeseriesAPI {
   /**
-   * [Creates new assets](https://doc.cognitedata.com/api/v1/#operation/createAssets)
+   * [List time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeries)
    *
    * ```js
-   * const assets = [
-   *   { name: 'First asset' },
-   *   { name: 'Second asset', description: 'Child asset' },
-   * ];
-   * const createdAssets = await client.assets.create(assets);
+   * const timeseries = await client.timeseries.list({ includeMetadata: false, assetIds: [1, 2] });
    * ```
    */
-  create: (items: ExternalAssetItem[]) => Promise<Asset[]>;
+  list: (
+    filter?: TimeseriesFilter
+  ) => CogniteAsyncIterator<GetTimeSeriesMetadataDTO[]>;
 
   /**
-   * [List assets](https://doc.cognitedata.com/api/v1/#operation/listAssets)
+   * [Create time series](https://doc.cognitedata.com/api/v1/#operation/postTimeSeries)
    *
    * ```js
-   * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
+   * const timeseries = [
+   *   { name: 'Pressure sensor', assetId: 123 },
+   *   { name: 'Temprature sensor', description: 'Pump abc', unit: 'C' },
+   * ];
+   * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    */
-  list: (scope?: AssetListScope) => CogniteAsyncIterator<Asset>;
+  // create: (items: ExternalAssetItem[]) => Promise<Asset[]>;
 
   /**
    * [Retrieve assets](https://doc.cognitedata.com/api/v1/#operation/byIdsAssets)
@@ -51,7 +55,7 @@ export interface AssetAPI {
    * const assets = await client.assets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  retrieve: (ids: AssetIdEither[]) => Promise<Asset[]>;
+  // retrieve: (ids: AssetIdEither[]) => Promise<Asset[]>;
 
   /**
    * [Update assets](https://doc.cognitedata.com/api/v1/#operation/updateAssets)
@@ -60,7 +64,7 @@ export interface AssetAPI {
    * const assets = await client.assets.update([{id: 123, update: { name: 'New name' }}]);
    * ```
    */
-  update: (changes: AssetChange[]) => Promise<Asset[]>;
+  // update: (changes: AssetChange[]) => Promise<Asset[]>;
 
   /**
    * [Search for assets](https://doc.cognitedata.com/api/v1/#operation/searchAssets)
@@ -76,7 +80,7 @@ export interface AssetAPI {
    * }]);
    * ```
    */
-  search: (query: AssetSearchFilter) => Promise<Asset[]>;
+  // search: (query: AssetSearchFilter) => Promise<Asset[]>;
 
   /**
    * [Delete assets](https://doc.cognitedata.com/api/v1/#operation/deleteAssets)
@@ -84,22 +88,17 @@ export interface AssetAPI {
    * ```js
    * const assets = await client.assets.delete([{id: 123}, {externalId: 'abc'}]);
    */
-  delete: (ids: AssetIdEither[]) => Promise<{}>;
+  // delete: (ids: AssetIdEither[]) => Promise<{}>;
 }
 
 /** @hidden */
-export function generateAssetsObject(
+export function generateTimeseriesObject(
   project: string,
   instance: AxiosInstance,
   map: MetadataMap
-): AssetAPI {
-  const path = projectUrl(project) + '/assets';
+): TimeseriesAPI {
+  const path = projectUrl(project) + '/timeseries';
   return {
-    create: generateCreateEndpoint(instance, path, map),
-    list: generateListEndpoint(instance, path, map, true),
-    retrieve: generateRetrieveEndpoint(instance, path, map),
-    update: generateUpdateEndpoint(instance, path, map),
-    search: generateSearchEndpoint(instance, path, map),
-    delete: generateDeleteEndpoint(instance, path, map),
+    list: generateListEndpoint(instance, path, map, false),
   };
 }
