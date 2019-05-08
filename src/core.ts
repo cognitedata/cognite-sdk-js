@@ -2,6 +2,7 @@
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { attach } from 'retry-axios';
+import * as url from 'url';
 import { MetadataMap } from './MetadataMap';
 
 /** @hidden */
@@ -110,15 +111,18 @@ instance.interceptors.request.use(
   }
 );
 
+function isSameOrigin(baseUrl: string, newUrl: string) {
+  const baseUrlParsed = url.parse(baseUrl);
+  const newUrlParsed = url.parse(url.resolve(baseUrl, newUrl));
+  // check that protocol and hostname are the same
+  return (
+    baseUrlParsed.protocol === newUrlParsed.protocol &&
+    baseUrlParsed.host === newUrlParsed.host
+  );
+}
+
 instance.interceptors.request.use((config: AxiosRequestConfig) => {
-  const url = config.url || '';
-  const baseUrl = config.baseURL || '';
-  const cogniteUrl = /^https:\/\/.*\.cognitedata.com/;
-  const isUnknownDomain =
-    // rawGet('https://example.com');
-    (/^http/.test(url) && !cogniteUrl.test(url)) ||
-    // rawGet('/path') with baseUrl !== cognite
-    (!cogniteUrl.test(baseUrl) && !cogniteUrl.test(url));
+  const isUnknownDomain = !isSameOrigin(config.baseURL || '', config.url || '');
   if (isUnknownDomain) {
     const newHeaders = { ...config.headers };
     delete newHeaders.Authorization;
