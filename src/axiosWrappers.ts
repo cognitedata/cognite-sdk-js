@@ -7,7 +7,6 @@ import axios, {
   AxiosResponse,
 } from 'axios';
 import { handleErrorResponse } from './error';
-import { CogniteResponse } from './types/types';
 
 /** @hidden */
 export function generateAxiosInstance(baseUrl: string): AxiosInstance {
@@ -49,6 +48,6 @@ export function rawRequest<ResponseType>(
   requestConfig: AxiosRequestConfig
 ) {
   return axiosInstance(requestConfig).catch(handleErrorResponse) as Promise<
-    AxiosResponse<CogniteResponse<ResponseType>>
+    AxiosResponse<ResponseType>
   >;
 }

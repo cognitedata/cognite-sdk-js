@@ -48,6 +48,7 @@ export function generateAPIObject(
       ),
     getMetadata: value => metadataMap.get(value),
     assets: generateAssetsObject(project, axiosInstance, metadataMap),
+    // datapoints: generateAssetsObject(project, axiosInstance, metadataMap),
     _instance: axiosInstance,
   };
 }

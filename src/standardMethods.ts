@@ -22,7 +22,7 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
       url: resourcePath,
       data: { items },
     });
-    return metadataMap.addAndReturn(response.data.data.items, response);
+    return metadataMap.addAndReturn(response.data.items, response);
   };
 }
 
@@ -57,7 +57,7 @@ export function generateListEndpoint<
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  withPost: boolean
+  withPost: boolean = true,
 ) {
   function addNextPageFunction<T>(
     dataWithCursor: CursorResponse<T>,
@@ -82,13 +82,31 @@ export function generateListEndpoint<
           resourcePath,
           filter
         ));
-    addNextPageFunction(response.data.data, filter);
-    return metadataMap.addAndReturn(response.data.data, response);
+    addNextPageFunction(response.data, filter);
+    return metadataMap.addAndReturn(response.data, response);
   }
 
   return (params: RequestFilter = {} as RequestFilter) => {
     const listPromise = list(params);
     return makeAutoPaginationMethods(listPromise);
+  };
+}
+
+export function generateSimpleListEndpoint<RequestParams, ResponseType>(
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  metadataMap: MetadataMap
+) {
+  return async function list(filter: RequestParams): Promise<ResponseType[]> {
+    const response = await rawRequest<ItemsResponse<ResponseType>>(
+      axiosInstance,
+      {
+        method: 'post',
+        url: `${resourcePath}/list`,
+        data: filter,
+      }
+    );
+    return metadataMap.addAndReturn(response.data.items, response);
   };
 }
 
@@ -106,7 +124,7 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
         data: { items: ids },
       }
     );
-    return metadataMap.addAndReturn(response.data.data.items, response);
+    return metadataMap.addAndReturn(response.data.items, response);
   };
 }
 
@@ -126,7 +144,7 @@ export function generateRetrieveMultipleEndpoint<ResponseType>(
         data: { items: ids },
       }
     );
-    return metadataMap.addAndReturn(response.data.data.items, response);
+    return metadataMap.addAndReturn(response.data.items, response);
   };
 }
 
@@ -159,7 +177,7 @@ export function generateUpdateEndpoint<RequestType, ResponseType>(
       method: 'post',
       data: { items: changes },
     });
-    return metadataMap.addAndReturn(response.data.data.items, response);
+    return metadataMap.addAndReturn(response.data.items, response);
   };
 }
 
@@ -177,6 +195,42 @@ export function generateSearchEndpoint<RequestParams, ResponseType>(
         data: query,
       }
     );
-    return metadataMap.addAndReturn(response.data.data.items, response);
+    return metadataMap.addAndReturn(response.data.items, response);
+  };
+}
+
+export function generateRetrieveLatestEndpoint<RequestParams, ResponseType>(
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  metadataMap: MetadataMap
+) {
+  return async function retrieveLatest(query: RequestParams): Promise<ResponseType[]> {
+    const response = await rawRequest<ItemsResponse<ResponseType>>(
+      axiosInstance,
+      {
+        method: 'post',
+        url: `${resourcePath}/latest`,
+        data: query,
+      }
+    );
+    return metadataMap.addAndReturn(response.data.items, response);
+  };
+}
+
+export function generateInsertEndpoint<RequestParams, ResponseType>(
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  metadataMap: MetadataMap
+) {
+  return async function insert(query: RequestParams): Promise<{}> {
+    const response = await rawRequest<ItemsResponse<ResponseType>>(
+      axiosInstance,
+      {
+        method: 'post',
+        url: resourcePath,
+        data: query,
+      }
+    );
+    return metadataMap.addAndReturn({}, response);
   };
 }

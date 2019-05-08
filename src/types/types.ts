@@ -360,9 +360,166 @@ export interface TimeSeriesUpdateByExternalId extends TimeSeriesPatch {
 
 export type TimeSeriesUpdate = TimeSeriesUpdateById | TimeSeriesUpdateByExternalId;
 
-export interface CogniteResponse<T> {
-  data: T;
+export interface DatapointsInsertProperties {
+
 }
+
+// datapoints
+export interface PostDatapoint {
+  timestamp: Date;
+  value: number | string;
+};
+
+export interface DatapointsInsertProperties {
+  datapoints: PostDatapoint[];
+}
+
+export type DatapointsPostDatapoint = { id: CogniteInternalId; }&DatapointsInsertProperties | { externalId: CogniteExternalId; }&DatapointsInsertProperties;
+
+export interface DatapointsQueryProperties {
+  /**
+   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
+   */
+  start?: string | Date;
+  /**
+   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
+   */
+  end?: string | Date;
+  /**
+   * Return up to this number of datapoints.
+   */
+  limit?: number;
+  /**
+   * The aggregates to be returned.  Use default if null. An empty string must be sent to get raw data if the default is a set of aggregates.
+   */
+  aggregates?: Aggregate[];
+  /**
+   * The granularity size and granularity of the aggregates (2h)
+   */
+  granularity?: string;
+  /**
+   * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
+   */
+  includeOutsidePoints?: boolean;
+}
+
+export type DatapointsQuery =  { id: CogniteInternalId; }&DatapointsQueryProperties | { externalId: CogniteExternalId; }&DatapointsQueryProperties;
+
+export type Aggregate = 'average' | 'max' | 'min' | 'count' | 'sum' | 'interpolation' | 'stepInterpolation' | 'totalVariation' | 'continuousVariance' | 'discreteVariance';
+
+export interface DatapointsMultiQuery {
+  items: DatapointsQuery;
+  /**
+   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in a Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
+   */
+  start?: string | Date;
+  /**
+   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
+   */
+  end?: string | Date;
+  /**
+   * Return up to this number of datapoints.
+   */
+  limit?: number;
+  /**
+   * The aggregates to be returned. This value overrides top-level default aggregates list when set. Specify all aggregates to be retrieved here. Specify empty array if this sub-query needs to return datapoints without aggregation.
+   */
+  aggregates?: Aggregate[];
+  /**
+   * The time granularity size and unit to aggregate over.
+   */
+  granularity?: string;
+  /**
+   * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
+   */
+  includeOutsidePoints?: boolean;
+}
+
+export interface DatapointsMetadata {
+  /**
+   * Id of the timeseries the datapoints belong to
+   */
+  id: CogniteInternalId;
+  /**
+   * External id of the timeseries the datapoints belong to.
+   */
+  externalId?: CogniteExternalId;
+}
+
+export interface GetDatapointMetadata {
+  timestamp: Date;
+}
+
+export interface GetAggregateDatapoint extends GetDatapointMetadata {
+  average?: number;
+  max?: number;
+  min?: number;
+  count?: number;
+  sum?: number;
+  interpolation?: number;
+  stepInterpolation?: number;
+  continuousVariance?: number;
+  discreteVariance?: number;
+  totalVariation?: number;
+}
+
+export interface DatapointsGetAggregateDatapoint extends DatapointsMetadata {
+  datapoints: GetAggregateDatapoint[];
+}
+
+export interface GetStringDatapoint extends GetDatapointMetadata {
+  value: string;
+}
+
+export interface GetDoubleDatapoint extends GetDatapointMetadata {
+  value: number;
+}
+
+export interface DatapointsGetStringDatapoint extends DatapointsMetadata {
+  /**
+   * Whether the time series is string valued or not.
+   */
+  isString: true;
+  /**
+   * The list of datapoints
+   */
+  datapoints: GetStringDatapoint[];
+}
+
+export interface DatapointsGetDoubleDatapoint extends DatapointsMetadata {
+  /**
+   * Whether the time series is string valued or not.
+   */
+  isString: false;
+  /**
+   * The list of datapoints
+   */
+  datapoints: GetDoubleDatapoint[];
+}
+
+export type DatapointsGetDatapoint = DatapointsGetStringDatapoint | DatapointsGetDoubleDatapoint;
+
+export interface LatestDataPropertyFilter {
+  /**
+   * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send time as a Date object.
+   */
+  before: string | Date;
+}
+
+export type LatestDataBeforeRequest = {id: CogniteInternalId;}&LatestDataPropertyFilter | {externalId: CogniteExternalId;}&LatestDataPropertyFilter;
+
+export interface DatapointsDeleteRange {
+  /**
+   * The timestamp of first datapoint to delete
+   */
+  inclusiveBegin: number | Date;
+  /**
+   * If set, the timestamp of first datapoint after inclusiveBegin to not delete. If not set, only deletes the datapoint at inclusiveBegin.
+   */
+  exclusiveEnd: number | Date;
+}
+
+export type DatapointsDeleteRequest = {id: CogniteInternalId;}&DatapointsDeleteRange | {externalId: CogniteExternalId;}&DatapointsDeleteRange;
 
 export interface ItemsResponse<T> {
   items: T[];
