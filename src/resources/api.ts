@@ -4,8 +4,9 @@ import { AxiosInstance, AxiosResponse } from 'axios';
 import { rawRequest } from '../axiosWrappers';
 import { Metadata, MetadataMap } from '../metadata';
 import { AssetAPI, generateAssetsObject } from './assets';
+import { DatapointsAPI, generateDatapointsObject } from './datapoints';
+import { EventAPI, generateEventsObject } from './events';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
-import { generateDatapointsObject, DatapointsAPI } from './datapoints';
 
 export interface BaseRequestOptions {
   params?: object;
@@ -35,6 +36,7 @@ export interface API {
   assets: AssetAPI;
   timeseries: TimeseriesAPI;
   datapoints: DatapointsAPI;
+  events: EventAPI;
   _instance: AxiosInstance;
 }
 
@@ -54,6 +56,7 @@ export function generateAPIObject(
     assets: generateAssetsObject(project, axiosInstance, metadataMap),
     timeseries: generateTimeseriesObject(project, axiosInstance, metadataMap),
     datapoints: generateDatapointsObject(project, axiosInstance, metadataMap),
+    events: generateEventsObject(project, axiosInstance, metadataMap),
     _instance: axiosInstance,
   };
 }

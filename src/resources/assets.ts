@@ -57,7 +57,7 @@ export interface AssetAPI {
    * [Update assets](https://doc.cognitedata.com/api/v1/#operation/updateAssets)
    *
    * ```js
-   * const assets = await client.assets.update([{id: 123, update: { name: 'New name' }}]);
+   * const assets = await client.assets.update([{id: 123, update: {name: {set: 'New name'}}}]);
    * ```
    */
   update: (changes: AssetChange[]) => Promise<Asset[]>;
@@ -82,7 +82,7 @@ export interface AssetAPI {
    * [Delete assets](https://doc.cognitedata.com/api/v1/#operation/deleteAssets)
    *
    * ```js
-   * const assets = await client.assets.delete([{id: 123}, {externalId: 'abc'}]);
+   * await client.assets.delete([{id: 123}, {externalId: 'abc'}]);
    */
   delete: (ids: AssetIdEither[]) => Promise<{}>;
 }

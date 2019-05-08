@@ -63,7 +63,7 @@ export interface DatapointsAPI {
    * [Delete data points](https://doc.cognitedata.com/api/v1/#operation/deleteDatapoints)
    *
    * ```js
-   * const timeseries = await client.timeseries.delete([{id: 123}, {externalId: 'abc'}]);
+   * await client.datapoints.delete([{id: 123, inclusiveBegin: new Date('1 jan 2019')}]);
    */
   delete: (query: DatapointsDeleteRequest[]) => Promise<{}>;
 }

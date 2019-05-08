@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-// import { isNumber } from 'lodash';
 import { ListResponse } from './types/types';
 
 // polyfill
@@ -97,16 +96,6 @@ export type AutoPagingToArray<T> = (
 function makeAutoPagingToArray<T>(autoPagingEach: AutoPagingEach<T>) {
   return async function autoPagingToArray(options?: AutoPagingToArrayOptions) {
     const limit = (options && options.limit) || Infinity;
-    // if (!isNumber(limit)) {
-    //   throw Error(
-    //     'You must pass a `limit` option to autoPagingToArray, eg; `autoPagingToArray({limit: 1000});`.'
-    //   );
-    // }
-    // if (limit > 10000) {
-    //   throw Error(
-    //     'You cannot specify a limit of more than 10,000 items to fetch in `autoPagingToArray`; use `autoPagingEach` or for-await to iterate through longer lists.'
-    //   );
-    // }
     const items: T[] = [];
     await autoPagingEach(async item => {
       items.push(item);

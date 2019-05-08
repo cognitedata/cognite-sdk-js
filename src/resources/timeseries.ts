@@ -13,10 +13,10 @@ import {
 } from '../standardMethods';
 import {
   GetTimeSeriesMetadataDTO,
-  TimeseriesFilter,
   PostTimeSeriesMetadataDTO,
-  TimeSeriesSearchDTO,
+  TimeseriesFilter,
   TimeseriesIdEither,
+  TimeSeriesSearchDTO,
   TimeSeriesUpdate,
 } from '../types/types';
 import { projectUrl } from '../utils';
@@ -44,23 +44,25 @@ export interface TimeseriesAPI {
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    */
-  create: (items: PostTimeSeriesMetadataDTO[]) => Promise<GetTimeSeriesMetadataDTO[]>;
+  create: (
+    items: PostTimeSeriesMetadataDTO[]
+  ) => Promise<GetTimeSeriesMetadataDTO[]>;
 
   /**
    * [Search for time series](https://doc.cognitedata.com/api/v1/#operation/searchTimeSeries)
    *
    * ```js
    * const timeseries = await client.timeseries.search([{
-    *   filter: {
-    *     isString: false,
-    *   },
-    *   search: {
-    *     name: 'Temprature'
-    *   }
-    * }]);
-    * ```
-    */
-   search: (query: TimeSeriesSearchDTO) => Promise<GetTimeSeriesMetadataDTO[]>;
+   *   filter: {
+   *     isString: false,
+   *   },
+   *   search: {
+   *     name: 'Temprature'
+   *   }
+   * }]);
+   * ```
+   */
+  search: (query: TimeSeriesSearchDTO) => Promise<GetTimeSeriesMetadataDTO[]>;
 
   /**
    * [Retrieve time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeriesByIds)
@@ -84,7 +86,7 @@ export interface TimeseriesAPI {
    * [Delete time series](https://doc.cognitedata.com/api/v1/#operation/deleteTimeSeries)
    *
    * ```js
-   * const timeseries = await client.timeseries.delete([{id: 123}, {externalId: 'abc'}]);
+   * await client.timeseries.delete([{id: 123}, {externalId: 'abc'}]);
    */
   delete: (ids: TimeseriesIdEither[]) => Promise<{}>;
 }
