@@ -2,7 +2,7 @@
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { attach } from 'retry-axios';
-import * as url from 'url';
+import * as Url from 'url';
 import { MetadataMap } from './MetadataMap';
 
 /** @hidden */
@@ -112,8 +112,8 @@ instance.interceptors.request.use(
 );
 
 function isSameOrigin(baseUrl: string, newUrl: string) {
-  const baseUrlParsed = url.parse(baseUrl);
-  const newUrlParsed = url.parse(url.resolve(baseUrl, newUrl));
+  const baseUrlParsed = Url.parse(baseUrl);
+  const newUrlParsed = Url.parse(Url.resolve(baseUrl, newUrl));
   // check that protocol and hostname are the same
   return (
     baseUrlParsed.protocol === newUrlParsed.protocol &&

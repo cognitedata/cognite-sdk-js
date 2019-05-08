@@ -290,12 +290,10 @@ describe('Core', () => {
         baseUrl: 'https://another-base-url.com',
       });
       setBearerToken(token);
-      mock
-        .onGet('https://another-base-url.com/test')
-        .reply(nonPresentTokenChecker);
-      await rawGet('https://another-base-url.com/test');
+      mock.onGet('https://another-base-url.com/abc').reply(presentTokenChecker);
+      await rawGet('https://another-base-url.com/abc');
 
-      mock.onGet('/test').reply(nonPresentTokenChecker);
+      mock.onGet('/test').reply(presentTokenChecker);
       await rawGet('/test');
     });
   });
