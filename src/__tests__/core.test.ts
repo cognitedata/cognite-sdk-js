@@ -233,4 +233,68 @@ describe('Core', () => {
     expect(response.data).toBe(DONE);
     axiosGlobalMock.restore();
   });
+
+  describe('token leakage', () => {
+    const token = 'abc';
+    const nonPresentTokenChecker = (config: AxiosRequestConfig) => {
+      if (config.headers.Authorization !== undefined) {
+        return [400];
+      }
+      return [200];
+    };
+
+    const presentTokenChecker = (config: AxiosRequestConfig) => {
+      if (config.headers.Authorization !== `Bearer ${token}`) {
+        return [400];
+      }
+      return [200];
+    };
+
+    test('raw request', async () => {
+      configure({
+        baseUrl: 'https://api.cognitedata.com',
+      });
+      setBearerToken(token);
+
+      // [url, shouldTokenPresent, mockUrl?]
+      const tests: [string, boolean, string?][] = [
+        ['http://localhost:8888', false],
+        ['https://another-company.com', false],
+        ['http/path', true],
+        ['//example.com/path', false],
+        [
+          'https://api.cognitedata.com.my-evil-domain.com/path',
+          false,
+          '.my-evil-domain.com/path',
+        ],
+        ['https://api.cognitedata-com.com/path', false],
+        ['https://my-evil.domain.com/cognitedata.com/path', false],
+        ['ftp://my-evil-domain.com', false],
+        ['/test', true],
+      ];
+
+      const promises: Promise<any>[] = [];
+      tests.forEach(([url, shouldTokenPresent, mockUrl]) => {
+        const tester = shouldTokenPresent
+          ? presentTokenChecker
+          : nonPresentTokenChecker;
+        mock.onGet(mockUrl ? mockUrl : url).reply(tester);
+        promises.push(rawGet(url));
+      });
+
+      await Promise.all(promises);
+    });
+
+    test('other base url', async () => {
+      configure({
+        baseUrl: 'https://another-base-url.com',
+      });
+      setBearerToken(token);
+      mock.onGet('https://another-base-url.com/abc').reply(presentTokenChecker);
+      await rawGet('https://another-base-url.com/abc');
+
+      mock.onGet('/test').reply(presentTokenChecker);
+      await rawGet('/test');
+    });
+  });
 });

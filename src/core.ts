@@ -2,6 +2,7 @@
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { attach } from 'retry-axios';
+import * as Url from 'url';
 import { MetadataMap } from './MetadataMap';
 
 /** @hidden */
@@ -109,6 +110,26 @@ instance.interceptors.request.use(
     return config;
   }
 );
+
+function isSameOrigin(baseUrl: string, newUrl: string) {
+  const baseUrlParsed = Url.parse(baseUrl);
+  const newUrlParsed = Url.parse(Url.resolve(baseUrl, newUrl));
+  // check that protocol and hostname are the same
+  return (
+    baseUrlParsed.protocol === newUrlParsed.protocol &&
+    baseUrlParsed.host === newUrlParsed.host
+  );
+}
+
+instance.interceptors.request.use((config: AxiosRequestConfig) => {
+  const isUnknownDomain = !isSameOrigin(config.baseURL || '', config.url || '');
+  if (isUnknownDomain) {
+    const newHeaders = { ...config.headers };
+    delete newHeaders.Authorization;
+    config.headers = newHeaders;
+  }
+  return config;
+});
 
 export function configure(opts: Partial<SDKOptions>): SDKOptions {
   Object.assign(options, opts);

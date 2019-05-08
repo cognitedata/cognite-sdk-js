@@ -1,6 +1,6 @@
 {
   "name": "@cognite/sdk",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "Javascript client library for Cognite SDK",
   "contributors": [
     "Fredrik Anfinsen <fredrik.anfinsen@cognite.com>",
@@ -59,7 +59,8 @@
     "axios": "^0.18.0",
     "jwt-decode": "^2.2.0",
     "query-string": "^5.1.1",
-    "retry-axios": "0.3.2"
+    "retry-axios": "0.3.2",
+    "url": "^0.11.0"
   },
   "publishConfig": {
     "access": "public",
