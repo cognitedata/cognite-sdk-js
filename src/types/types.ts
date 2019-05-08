@@ -105,9 +105,11 @@ export type ObjectPatch =
       remove: string[];
     };
 
-export type NullableSinglePatchString = { set: string; } | { setNull: true };
-export type NullableSinglePatchLong = { set: number; } | { setNull: true };
-export type ArrayPatchLong = { set: number[]; } | { add?: number[]; remove?: number[]; };
+export type NullableSinglePatchString = { set: string } | { setNull: true };
+export type NullableSinglePatchLong = { set: number } | { setNull: true };
+export type ArrayPatchLong =
+  | { set: number[] }
+  | { add?: number[]; remove?: number[] };
 
 export interface AssetPatch {
   update: {
@@ -192,11 +194,11 @@ export interface TimeseriesFilter {
   /**
    * Cursor for paging through time series.
    */
-  cursor: string;
+  cursor?: string;
   /**
    * Get time series related to these assets. Takes [ 1 .. 100 ] unique items.
    */
-  assetIds: number[];
+  assetIds?: number[];
 }
 
 export interface GetTimeSeriesMetadataDTO {
@@ -336,17 +338,19 @@ export interface TimeSeriesSearchDTO {
   limit?: number;
 }
 
-export type TimeseriesIdEither = { id: CogniteInternalId } | { externalId: CogniteExternalId };
+export type TimeseriesIdEither =
+  | { id: CogniteInternalId }
+  | { externalId: CogniteExternalId };
 
 export interface TimeSeriesPatch {
   update: {
-    externalId: NullableSinglePatchString;
-    name: NullableSinglePatchString;
-    metadata: ObjectPatch;
-    unit: NullableSinglePatchString;
-    assetId: NullableSinglePatchLong;
-    description: NullableSinglePatchString;
-    securityCategories: ArrayPatchLong;
+    externalId?: NullableSinglePatchString;
+    name?: NullableSinglePatchString;
+    metadata?: ObjectPatch;
+    unit?: NullableSinglePatchString;
+    assetId?: NullableSinglePatchLong;
+    description?: NullableSinglePatchString;
+    securityCategories?: ArrayPatchLong;
   };
 }
 
@@ -358,23 +362,32 @@ export interface TimeSeriesUpdateByExternalId extends TimeSeriesPatch {
   externalId: CogniteExternalId;
 }
 
-export type TimeSeriesUpdate = TimeSeriesUpdateById | TimeSeriesUpdateByExternalId;
-
-export interface DatapointsInsertProperties {
-
-}
+export type TimeSeriesUpdate =
+  | TimeSeriesUpdateById
+  | TimeSeriesUpdateByExternalId;
 
 // datapoints
 export interface PostDatapoint {
-  timestamp: Date;
+  timestamp: number | Date;
   value: number | string;
-};
+}
 
 export interface DatapointsInsertProperties {
   datapoints: PostDatapoint[];
 }
 
-export type DatapointsPostDatapoint = { id: CogniteInternalId; }&DatapointsInsertProperties | { externalId: CogniteExternalId; }&DatapointsInsertProperties;
+export interface DatapointsPostDatapointId extends DatapointsInsertProperties {
+  id: CogniteInternalId;
+}
+
+export interface DatapointsPostDatapointExternalId
+  extends DatapointsInsertProperties {
+  externalId: CogniteExternalId;
+}
+
+export type DatapointsPostDatapoint =
+  | DatapointsPostDatapointId
+  | DatapointsPostDatapointExternalId;
 
 export interface DatapointsQueryProperties {
   /**
@@ -403,20 +416,38 @@ export interface DatapointsQueryProperties {
   includeOutsidePoints?: boolean;
 }
 
-export type DatapointsQuery =  { id: CogniteInternalId; }&DatapointsQueryProperties | { externalId: CogniteExternalId; }&DatapointsQueryProperties;
+export interface DatapointsQueryId extends DatapointsQueryProperties {
+  id: CogniteInternalId;
+}
 
-export type Aggregate = 'average' | 'max' | 'min' | 'count' | 'sum' | 'interpolation' | 'stepInterpolation' | 'totalVariation' | 'continuousVariance' | 'discreteVariance';
+export interface DatapointsQueryExternalId extends DatapointsQueryProperties {
+  externalId: CogniteExternalId;
+}
+
+export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
+
+export type Aggregate =
+  | 'average'
+  | 'max'
+  | 'min'
+  | 'count'
+  | 'sum'
+  | 'interpolation'
+  | 'stepInterpolation'
+  | 'totalVariation'
+  | 'continuousVariance'
+  | 'discreteVariance';
 
 export interface DatapointsMultiQuery {
-  items: DatapointsQuery;
+  items: DatapointsQuery[];
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in a Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
    */
-  start?: string | Date;
+  start?: number | string | Date;
   /**
    * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
    */
-  end?: string | Date;
+  end?: number | string | Date;
   /**
    * Return up to this number of datapoints.
    */
@@ -497,7 +528,9 @@ export interface DatapointsGetDoubleDatapoint extends DatapointsMetadata {
   datapoints: GetDoubleDatapoint[];
 }
 
-export type DatapointsGetDatapoint = DatapointsGetStringDatapoint | DatapointsGetDoubleDatapoint;
+export type DatapointsGetDatapoint =
+  | DatapointsGetStringDatapoint
+  | DatapointsGetDoubleDatapoint;
 
 export interface LatestDataPropertyFilter {
   /**
@@ -506,7 +539,9 @@ export interface LatestDataPropertyFilter {
   before: string | Date;
 }
 
-export type LatestDataBeforeRequest = {id: CogniteInternalId;}&LatestDataPropertyFilter | {externalId: CogniteExternalId;}&LatestDataPropertyFilter;
+export type LatestDataBeforeRequest =
+  | { id: CogniteInternalId } & LatestDataPropertyFilter
+  | { externalId: CogniteExternalId } & LatestDataPropertyFilter;
 
 export interface DatapointsDeleteRange {
   /**
@@ -519,7 +554,9 @@ export interface DatapointsDeleteRange {
   exclusiveEnd: number | Date;
 }
 
-export type DatapointsDeleteRequest = {id: CogniteInternalId;}&DatapointsDeleteRange | {externalId: CogniteExternalId;}&DatapointsDeleteRange;
+export type DatapointsDeleteRequest =
+  | { id: CogniteInternalId } & DatapointsDeleteRange
+  | { externalId: CogniteExternalId } & DatapointsDeleteRange;
 
 export interface ItemsResponse<T> {
   items: T[];

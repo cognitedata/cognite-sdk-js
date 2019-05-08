@@ -1,15 +1,12 @@
 // Copyright 2019 Cognite AS
 
-import { createClientWithApiKey } from '../../index';
 import { API } from '../../resources/api';
+import { setupClient } from '../testUtils';
 
 describe('Asset integration test', async () => {
   let client: API;
   beforeAll(async () => {
-    client = await createClientWithApiKey({
-      project: process.env.COGNITE_PROJECT as string,
-      apiKey: process.env.COGNITE_CREDENTIALS as string,
-    });
+    client = await setupClient();
   });
   const rootAsset = {
     name: 'test-root',

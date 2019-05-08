@@ -5,16 +5,16 @@ import { MetadataMap } from '../metadata';
 import {
   generateDeleteEndpoint,
   generateInsertEndpoint,
-  generateSimpleListEndpoint,
   generateRetrieveLatestEndpoint,
+  generateSimpleListEndpoint,
 } from '../standardMethods';
 import {
-  DatapointsPostDatapoint,
-  DatapointsMultiQuery,
+  DatapointsDeleteRequest,
   DatapointsGetAggregateDatapoint,
   DatapointsGetDatapoint,
+  DatapointsMultiQuery,
+  DatapointsPostDatapoint,
   LatestDataBeforeRequest,
-  DatapointsDeleteRequest,
 } from '../types/types';
 import { projectUrl } from '../utils';
 
@@ -26,7 +26,7 @@ export interface DatapointsAPI {
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
    */
-  insert: (items: DatapointsPostDatapoint) => Promise<{}>;
+  insert: (items: DatapointsPostDatapoint[]) => Promise<{}>;
 
   /**
    * [Retrieve data points](https://doc.cognitedata.com/api/v1/#operation/getMultiTimeSeriesDatapoints)
@@ -35,7 +35,9 @@ export interface DatapointsAPI {
    * const data = await client.datapoints.retrieve({ items: [{ id: 123 }] });
    * ```
    */
-  retrieve: (query: DatapointsMultiQuery) => Promise<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]>;
+  retrieve: (
+    query: DatapointsMultiQuery
+  ) => Promise<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]>;
 
   /**
    * [Get latest data point in a time series](https://doc.cognitedata.com/api/v1/#operation/getLatest)
@@ -43,17 +45,19 @@ export interface DatapointsAPI {
    * ```js
    * const datapoints = await client.datapoints.retrieveLatest([
    *   {
-    *    before: 'now',
-    *    id: 123
-    *  },
-    *  {
-    *    externalId: 'abc',
-    *    before: new Date('21 jan 2018'),
-    *  }
-    * ]);
-    * ```
-    */
-   retrieveLatest: (items: LatestDataBeforeRequest[]) => Promise<DatapointsGetDatapoint[]>;
+   *    before: 'now',
+   *    id: 123
+   *  },
+   *  {
+   *    externalId: 'abc',
+   *    before: new Date('21 jan 2018'),
+   *  }
+   * ]);
+   * ```
+   */
+  retrieveLatest: (
+    items: LatestDataBeforeRequest[]
+  ) => Promise<DatapointsGetDatapoint[]>;
 
   /**
    * [Delete data points](https://doc.cognitedata.com/api/v1/#operation/deleteDatapoints)

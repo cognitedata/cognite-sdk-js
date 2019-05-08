@@ -10,17 +10,15 @@ function numberGeneratorAPIEndpoint(config: AxiosRequestConfig) {
   const params = config.params || {};
   const cursor = Number(params.cursor);
   if (cursor > 10) {
-    return [200, { data: { items: [cursor] } }];
+    return [200, { items: [cursor] }];
   } else if (isNaN(cursor)) {
-    return [200, { data: { items: [0, 1], nextCursor: '2' } }];
+    return [200, { items: [0, 1], nextCursor: '2' }];
   } else {
     return [
       200,
       {
-        data: {
-          items: [cursor, cursor + 1],
-          nextCursor: `${cursor + 2}`,
-        },
+        items: [cursor, cursor + 1],
+        nextCursor: `${cursor + 2}`,
       },
     ];
   }
@@ -32,7 +30,8 @@ describe('standard methods', () => {
     const listEndpoint = generateListEndpoint<any, number>(
       axiosInstance,
       '/',
-      new MetadataMap()
+      new MetadataMap(),
+      false
     );
     const axiosMock = new MockAdapter(axiosInstance);
     axiosMock.onGet('/').reply(numberGeneratorAPIEndpoint);
@@ -60,19 +59,6 @@ describe('standard methods', () => {
       await expect(
         listEndpoint().autoPagingToArray({ limit: 100 })
       ).resolves.toMatchSnapshot();
-
-      await expect(
-        // @ts-ignore
-        listEndpoint().autoPagingToArray()
-      ).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"You must pass a \`limit\` option to autoPagingToArray, eg; \`autoPagingToArray({limit: 1000});\`."`
-      );
-
-      await expect(
-        listEndpoint().autoPagingToArray({ limit: Infinity })
-      ).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"You cannot specify a limit of more than 10,000 items to fetch in \`autoPagingToArray\`; use \`autoPagingEach\` or for-await to iterate through longer lists."`
-      );
     });
 
     test('authPagingForEach', async () => {

@@ -58,21 +58,4 @@ describe('makeAutoPaginationMethods', () => {
     expect(thirdFibArray.length).toBeGreaterThan(firstFibArray.length);
     expect(thirdFibArray.length).toBeLessThan(maxArraySize); // fib generator will not produce 10K numbers (check that this works)
   });
-
-  test('throw on bad user input', async () => {
-    await expect(
-      // @ts-ignore
-      makeAutoPaginationMethods(fibListResponse()).autoPagingToArray()
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"You must pass a \`limit\` option to autoPagingToArray, eg; \`autoPagingToArray({limit: 1000});\`."`
-    );
-
-    await expect(
-      makeAutoPaginationMethods(fibListResponse()).autoPagingToArray({
-        limit: Infinity,
-      })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"You cannot specify a limit of more than 10,000 items to fetch in \`autoPagingToArray\`; use \`autoPagingEach\` or for-await to iterate through longer lists."`
-    );
-  });
 });

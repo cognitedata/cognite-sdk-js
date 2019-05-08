@@ -1,5 +1,7 @@
 // Copyright 2019 Cognite AS
 
+import { createClientWithApiKey } from '../index';
+
 export function createErrorReponse(status: number, message: string) {
   return {
     error: {
@@ -24,6 +26,12 @@ export const authTokens = {
   accessToken: 'abc',
   idToken: 'def',
 };
+export function setupClient() {
+  return createClientWithApiKey({
+    project: process.env.COGNITE_PROJECT as string,
+    apiKey: process.env.COGNITE_CREDENTIALS as string,
+  });
+}
 
 test('createErrorResponse', () => {
   expect(createErrorReponse(200, 'Abc')).toEqual({

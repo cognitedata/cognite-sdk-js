@@ -7,5 +7,5 @@ test('BASE_URL', () => {
 });
 
 test('API_VERSION', () => {
-  expect(API_VERSION).toMatchInlineSnapshot(`"0.6"`);
+  expect(API_VERSION).toMatchInlineSnapshot(`"v1"`);
 });

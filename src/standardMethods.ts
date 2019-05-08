@@ -57,7 +57,7 @@ export function generateListEndpoint<
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  withPost: boolean = true,
+  withPost: boolean = true
 ) {
   function addNextPageFunction<T>(
     dataWithCursor: CursorResponse<T>,
@@ -88,7 +88,11 @@ export function generateListEndpoint<
 
   return (params: RequestFilter = {} as RequestFilter) => {
     const listPromise = list(params);
-    return makeAutoPaginationMethods(listPromise);
+    return Object.assign(
+      listPromise,
+      listPromise,
+      makeAutoPaginationMethods(listPromise)
+    );
   };
 }
 
@@ -204,7 +208,9 @@ export function generateRetrieveLatestEndpoint<RequestParams, ResponseType>(
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
-  return async function retrieveLatest(query: RequestParams): Promise<ResponseType[]> {
+  return async function retrieveLatest(
+    query: RequestParams
+  ): Promise<ResponseType[]> {
     const response = await rawRequest<ItemsResponse<ResponseType>>(
       axiosInstance,
       {
@@ -222,13 +228,13 @@ export function generateInsertEndpoint<RequestParams, ResponseType>(
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
-  return async function insert(query: RequestParams): Promise<{}> {
+  return async function insert(items: RequestParams): Promise<{}> {
     const response = await rawRequest<ItemsResponse<ResponseType>>(
       axiosInstance,
       {
         method: 'post',
         url: resourcePath,
-        data: query,
+        data: { items },
       }
     );
     return metadataMap.addAndReturn({}, response);
