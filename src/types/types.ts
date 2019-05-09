@@ -184,6 +184,33 @@ export interface AssetSearchFilter extends AssetFilter {
   };
 }
 
+export interface Model3d {
+  /**
+   * The name of the model.
+   */
+  name: string;
+  /**
+   * The ID of the model.
+   */
+  id: CogniteInternalId;
+  createdTime: Date;
+}
+
+export interface CreateModel3d {
+  /**
+   * The name of the model.
+   */
+  name: string;
+}
+
+export interface UpdateModelNameField {
+  update: {
+    name: SetStringField;
+  };
+}
+
+export interface UpdateModel3D extends UpdateModelNameField, InternalId {}
+
 export interface Asset extends ExternalAsset, AssetInternalId {
   lastUpdatedTime: Date;
   /**
@@ -791,6 +818,14 @@ export interface ServiceAccount {
 export interface ServiceAccountInput {
   name: ServiceAccountName;
   groups?: Groups;
+}
+
+export interface Model3dListRequest {
+  limit?: number;
+  /**
+   * Filter based on whether or not it has published revisions.
+   */
+  published?: boolean;
 }
 
 export interface ItemsResponse<T> {
