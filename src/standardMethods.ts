@@ -132,23 +132,17 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
   };
 }
 
-export function generateRetrieveMultipleEndpoint<ResponseType>(
+export function generateRetrieveSingleEndpoint<IdType, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
-  return async function retrieveMultiple(
-    ids: number[]
-  ): Promise<ResponseType[]> {
-    const response = await rawRequest<ItemsResponse<ResponseType>>(
-      axiosInstance,
-      {
-        url: `${resourcePath}/byids`,
-        method: 'post',
-        data: { items: ids },
-      }
-    );
-    return metadataMap.addAndReturn(response.data.items, response);
+  return async function retrieveSingle(id: IdType): Promise<ResponseType> {
+    const response = await rawRequest<ResponseType>(axiosInstance, {
+      url: `${resourcePath}/${id}`,
+      method: 'get',
+    });
+    return metadataMap.addAndReturn(response.data, response);
   };
 }
 
