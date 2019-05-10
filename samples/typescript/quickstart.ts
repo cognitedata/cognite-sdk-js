@@ -27,7 +27,7 @@ async function quickstart() {
 
   // get maximum 5 root assets
   const rootAssets = await client.assets
-    .list({ depth: 0 })
+    .list({ filter: { depth: { min: 0, max: 0 } } })
     .autoPagingToArray({ limit: 5 });
   console.log('List of the first 5 (maximum) root assets:\n');
   console.log(rootAssets);
