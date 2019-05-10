@@ -15,6 +15,7 @@ export interface RetryConfig {
   instance: AxiosInstance;
   shouldRetry: (err: AxiosError) => boolean;
   currentRetryAttempt?: number;
+  isSafeToRetry?: boolean;
 }
 
 // name borrowed from retry-axios package
@@ -52,16 +53,20 @@ export function addRetryToAxiosInstance(instance: AxiosInstance) {
   (instance.defaults as RaxConfig).raxConfig = {
     instance,
     retryDelay: 250,
-    numRetries: 3,
+    numRetries: 5,
     shouldRetry: (err: AxiosError) => {
       const config = err.config as RaxConfig;
-      const { currentRetryAttempt, numRetries } = config.raxConfig;
+      const {
+        currentRetryAttempt,
+        numRetries,
+        isSafeToRetry,
+      } = config.raxConfig;
 
       if (currentRetryAttempt! >= numRetries) {
         return false;
       }
 
-      if (!config.method) {
+      if (isSafeToRetry || !config.method) {
         return true;
       }
 
@@ -81,12 +86,15 @@ export function addRetryToAxiosInstance(instance: AxiosInstance) {
           isCodeInValidRange = true;
         }
       });
-      if (!isCodeInValidRange) {
-        return false;
-      }
 
-      return true;
+      return isCodeInValidRange;
     },
   };
   attach(instance);
+}
+
+export function makeRequestSafeToRetry(config: AxiosRequestConfig) {
+  const raxConfig = (config as RaxConfig).raxConfig || {};
+  raxConfig.isSafeToRetry = true;
+  (config as RaxConfig).raxConfig = raxConfig;
 }

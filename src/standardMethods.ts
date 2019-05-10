@@ -10,6 +10,7 @@ type CreateEndpoint<RequestType, ResponseType> = (
   items: RequestType[]
 ) => Promise<ResponseType[]>;
 
+/** @hidden */
 export function generateCreateEndpoint<RequestType, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -26,30 +27,41 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
   };
 }
 
+/** @hidden */
 export function listByGet<RequestFilter, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   filter: RequestFilter
 ) {
-  return rawRequest<CursorResponse<ResponseType>>(axiosInstance, {
-    method: 'get',
-    url: resourcePath,
-    params: filter,
-  });
+  return rawRequest<CursorResponse<ResponseType>>(
+    axiosInstance,
+    {
+      method: 'get',
+      url: resourcePath,
+      params: filter,
+    },
+    true
+  );
 }
 
+/** @hidden */
 export function listByPost<RequestFilter, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   filter: RequestFilter
 ) {
-  return rawRequest<CursorResponse<ResponseType>>(axiosInstance, {
-    method: 'post',
-    url: `${resourcePath}/list`,
-    data: filter,
-  });
+  return rawRequest<CursorResponse<ResponseType>>(
+    axiosInstance,
+    {
+      method: 'post',
+      url: `${resourcePath}/list`,
+      data: filter,
+    },
+    true
+  );
 }
 
+/** @hidden */
 export function generateListEndpoint<
   RequestFilter extends object,
   ResponseType
@@ -96,6 +108,7 @@ export function generateListEndpoint<
   };
 }
 
+/** @hidden */
 export function generateSimpleListEndpoint<RequestParams, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -108,7 +121,8 @@ export function generateSimpleListEndpoint<RequestParams, ResponseType>(
         method: 'post',
         url: `${resourcePath}/list`,
         data: filter,
-      }
+      },
+      true
     );
     return metadataMap.addAndReturn(response.data.items, response);
   };
@@ -126,7 +140,8 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
         method: 'post',
         url: `${resourcePath}/byids`,
         data: { items: ids },
-      }
+      },
+      true
     );
     return metadataMap.addAndReturn(response.data.items, response);
   };
@@ -146,21 +161,27 @@ export function generateRetrieveSingleEndpoint<IdType, ResponseType>(
   };
 }
 
+/** @hidden */
 export function generateDeleteEndpoint<IdType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
   return async function remove(ids: IdType[]): Promise<{}> {
-    const response = await rawRequest<{}>(axiosInstance, {
-      url: `${resourcePath}/delete`,
-      method: 'post',
-      data: { items: ids },
-    });
+    const response = await rawRequest<{}>(
+      axiosInstance,
+      {
+        url: `${resourcePath}/delete`,
+        method: 'post',
+        data: { items: ids },
+      },
+      true
+    );
     return metadataMap.addAndReturn({}, response);
   };
 }
 
+/** @hidden */
 export function generateUpdateEndpoint<RequestType, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -179,6 +200,7 @@ export function generateUpdateEndpoint<RequestType, ResponseType>(
   };
 }
 
+/** @hidden */
 export function generateSearchEndpoint<RequestParams, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -191,12 +213,14 @@ export function generateSearchEndpoint<RequestParams, ResponseType>(
         method: 'post',
         url: `${resourcePath}/search`,
         data: query,
-      }
+      },
+      true
     );
     return metadataMap.addAndReturn(response.data.items, response);
   };
 }
 
+/** @hidden */
 export function generateRetrieveLatestEndpoint<RequestParams, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -211,12 +235,14 @@ export function generateRetrieveLatestEndpoint<RequestParams, ResponseType>(
         method: 'post',
         url: `${resourcePath}/latest`,
         data: query,
-      }
+      },
+      true
     );
     return metadataMap.addAndReturn(response.data.items, response);
   };
 }
 
+/** @hidden */
 export function generateInsertEndpoint<RequestParams, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -229,7 +255,8 @@ export function generateInsertEndpoint<RequestParams, ResponseType>(
         method: 'post',
         url: resourcePath,
         data: { items },
-      }
+      },
+      true
     );
     return metadataMap.addAndReturn({}, response);
   };

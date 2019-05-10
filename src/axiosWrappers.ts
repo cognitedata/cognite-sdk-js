@@ -7,6 +7,7 @@ import axios, {
   AxiosResponse,
 } from 'axios';
 import { handleErrorResponse } from './error';
+import { makeRequestSafeToRetry } from './retryRequests';
 
 /** @hidden */
 export function generateAxiosInstance(baseUrl: string): AxiosInstance {
@@ -45,8 +46,12 @@ export function listenForNonSuccessStatusCode(
 /** @hidden */
 export function rawRequest<ResponseType>(
   axiosInstance: AxiosInstance,
-  requestConfig: AxiosRequestConfig
+  requestConfig: AxiosRequestConfig,
+  isSafeToRetry: boolean = false
 ) {
+  if (isSafeToRetry) {
+    makeRequestSafeToRetry(requestConfig);
+  }
   return axiosInstance(requestConfig).catch(handleErrorResponse) as Promise<
     AxiosResponse<ResponseType>
   >;

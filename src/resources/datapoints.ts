@@ -20,7 +20,7 @@ import { projectUrl } from '../utils';
 
 export interface DatapointsAPI {
   /**
-   * [Insert datapoints](https://doc.cognitedata.com/api/v1/#operation/postMultiTimeSeriesDatapoints)
+   * [Insert data points](https://doc.cognitedata.com/api/v1/#operation/postMultiTimeSeriesDatapoints)
    *
    * ```js
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
