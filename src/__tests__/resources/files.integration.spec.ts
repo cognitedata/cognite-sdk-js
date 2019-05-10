@@ -23,31 +23,30 @@ describe('Files integration test', async () => {
     },
   ];
 
-  test.only('create,retrieve,update,delete', async () => {
+  test('create,retrieve,update,delete', async () => {
     const fileContent = 'content_' + new Date();
     const file = await client.files.upload(files[1], fileContent);
 
-    // const [retrievedFile] = await client.files.retrieve([{ id: file.id }]);
-    // expect(retrievedFile.mimeType).toBe(files[0].mimeType);
+    const [retrievedFile] = await client.files.retrieve([{ id: file.id }]);
+    expect(retrievedFile.mimeType).toBe(files[0].mimeType);
 
     const [{ downloadUrl }] = await client.files.getDownloadUrls([
       { id: file.id },
     ]);
-    console.log(downloadUrl);
     expect(downloadUrl).toBeDefined();
 
-    // const newSource = 'def';
-    // const updatedFiles = await client.files.update([
-    //   {
-    //     id: file.id,
-    //     update: {
-    //       source: { set: newSource },
-    //     },
-    //   },
-    // ]);
-    // expect(updatedFiles[0].source).toBe(newSource);
+    const newSource = 'def';
+    const updatedFiles = await client.files.update([
+      {
+        id: file.id,
+        update: {
+          source: { set: newSource },
+        },
+      },
+    ]);
+    expect(updatedFiles[0].source).toBe(newSource);
 
-    // await client.files.delete([{ id: file.id }]);
+    await client.files.delete([{ id: file.id }]);
   });
 
   test('list', async () => {
