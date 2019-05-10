@@ -620,6 +620,95 @@ export interface EventSearchRequest {
   limit?: number;
 }
 
+// Files
+
+/**
+ * Name of the file.
+ */
+export type FileName = string;
+
+/**
+ * File type. E.g. text/plain, application/pdf, ...
+ */
+export type FileMimeType = string;
+
+export interface FileFilter {
+  filter?: {
+    name?: FileName;
+    mimeType?: FileMimeType;
+    metadata?: Metadata;
+    /**
+     * Only include files that reference these specific asset IDs.
+     */
+    assetIds?: CogniteInternalId[];
+    /**
+     * Only include files that reference these asset Ids or any  sub-nodes of the specified asset Ids.
+     */
+    assetSubtrees?: CogniteInternalId[];
+    source?: string;
+    createdTime?: DateRange;
+    lastUpdatedTime?: DateRange;
+    uploadedTime?: DateRange;
+    externalIdPrefix?: CogniteExternalId;
+    uploaded?: boolean;
+  };
+  limit?: number;
+}
+
+export interface FileRequestFilter extends Cursor, FileFilter {}
+
+export interface ExternalFilesMetadata {
+  externalId?: CogniteExternalId;
+  name: FileName;
+  source?: string;
+  mimeType?: FileMimeType;
+  metadata?: Metadata;
+  assetIds?: CogniteInternalId[];
+}
+
+export interface FilesMetadata extends ExternalFilesMetadata {
+  id: CogniteInternalId;
+  /**
+   * Whether or not the actual file is uploaded
+   */
+  uploaded: boolean;
+  uploadedTime: Date;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+}
+
+export type FileContent = ArrayBuffer | File | Blob | Buffer | any;
+
+export interface UploadFileMetadataResponse extends FilesMetadata {
+  uploadUrl: string;
+}
+
+export interface FilesSearchFilter extends FileFilter {
+  search?: {
+    name?: FileName;
+  };
+}
+
+export interface FileLink {
+  downloadUrl: string;
+}
+
+export interface FileChange {
+  update: {
+    externalId?: SinglePatchString;
+    source?: SinglePatchString;
+    metadata?: ObjectPatch;
+    assetIds?: ArrayPatchLong;
+  };
+}
+
+export interface FileChangeUpdateById extends InternalId, FileChange {}
+export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
+
+export type FileChangeUpdate =
+  | FileChangeUpdateById
+  | FileChangeUpdateByExternalId;
+
 export interface ItemsResponse<T> {
   items: T[];
 }

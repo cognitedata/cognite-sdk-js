@@ -6,6 +6,7 @@ import { Metadata, MetadataMap } from '../metadata';
 import { AssetAPI, generateAssetsObject } from './assets';
 import { DatapointsAPI, generateDatapointsObject } from './datapoints';
 import { EventAPI, generateEventsObject } from './events';
+import { FileAPI, generateFilesObject } from './files';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
 
 export interface BaseRequestOptions {
@@ -37,6 +38,7 @@ export interface API {
   timeseries: TimeseriesAPI;
   datapoints: DatapointsAPI;
   events: EventAPI;
+  files: FileAPI;
   _instance: AxiosInstance;
 }
 
@@ -57,6 +59,7 @@ export function generateAPIObject(
     timeseries: generateTimeseriesObject(project, axiosInstance, metadataMap),
     datapoints: generateDatapointsObject(project, axiosInstance, metadataMap),
     events: generateEventsObject(project, axiosInstance, metadataMap),
+    files: generateFilesObject(project, axiosInstance, metadataMap),
     _instance: axiosInstance,
   };
 }
