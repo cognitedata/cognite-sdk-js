@@ -37,6 +37,7 @@ describe('Asset integration test', async () => {
         },
       },
     ]);
+
     await client.assets.delete(
       assets.map(asset => ({
         id: asset.id,
