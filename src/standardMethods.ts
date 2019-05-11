@@ -154,7 +154,7 @@ export function generateRetrieveSingleEndpoint<IdType, ResponseType>(
 ) {
   return async function retrieveSingle(id: IdType): Promise<ResponseType> {
     const response = await rawRequest<ResponseType>(axiosInstance, {
-      url: `${resourcePath}/${id}`,
+      url: `${resourcePath}/${encodeURIComponent('' + id)}`,
       method: 'get',
     });
     return metadataMap.addAndReturn(response.data, response);
@@ -243,13 +243,13 @@ export function generateRetrieveLatestEndpoint<RequestParams, ResponseType>(
 }
 
 /** @hidden */
-export function generateInsertEndpoint<RequestParams, ResponseType>(
+export function generateInsertEndpoint<RequestParams>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
-  return async function insert(items: RequestParams): Promise<{}> {
-    const response = await rawRequest<ItemsResponse<ResponseType>>(
+  return async function insert(items: RequestParams[]): Promise<{}> {
+    const response = await rawRequest<ItemsResponse<{}>>(
       axiosInstance,
       {
         method: 'post',

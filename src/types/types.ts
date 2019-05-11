@@ -31,6 +31,10 @@ export interface Cursor {
   cursor?: string;
 }
 
+export interface Limit {
+  limit?: number;
+}
+
 export type Timestamp = number | Date;
 
 export interface Range<T> {
@@ -157,7 +161,7 @@ export interface ExternalAssetItem extends ExternalAsset {
 /**
  * Filter on assets with exact match
  */
-export interface AssetFilter {
+export interface AssetFilter extends Limit {
   filter?: {
     name?: AssetName;
     parentIds?: CogniteInternalId[];
@@ -169,7 +173,6 @@ export interface AssetFilter {
     depth?: IntegerRange;
     externalIdPrefix?: CogniteExternalId;
   };
-  limit?: number;
 }
 
 export interface AssetListScope extends AssetFilter, Cursor {}
@@ -194,8 +197,7 @@ export interface Asset extends ExternalAsset, AssetInternalId {
 }
 
 // Time series
-export interface TimeseriesFilter {
-  limit?: number;
+export interface TimeseriesFilter extends Limit {
   /**
    * Decide if the metadata field should be returned or not.
    */
@@ -334,13 +336,12 @@ export interface Search {
   query?: string;
 }
 
-export interface TimeSeriesSearchDTO {
+export interface TimeSeriesSearchDTO extends Limit {
   filter?: Filter;
   search?: Search;
   /**
    * Return up to this many results.
    */
-  limit?: number;
 }
 
 export type TimeseriesIdEither = InternalId | ExternalId;
@@ -389,7 +390,7 @@ export type DatapointsPostDatapoint =
   | DatapointsPostDatapointId
   | DatapointsPostDatapointExternalId;
 
-export interface DatapointsQueryProperties {
+export interface DatapointsQueryProperties extends Limit {
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
    */
@@ -398,10 +399,6 @@ export interface DatapointsQueryProperties {
    * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
    */
   end?: string | Timestamp;
-  /**
-   * Return up to this number of datapoints.
-   */
-  limit?: number;
   /**
    * The aggregates to be returned.  Use default if null. An empty string must be sent to get raw data if the default is a set of aggregates.
    */
@@ -438,7 +435,7 @@ export type Aggregate =
   | 'continuousVariance'
   | 'discreteVariance';
 
-export interface DatapointsMultiQuery {
+export interface DatapointsMultiQuery extends Limit {
   items: DatapointsQuery[];
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in a Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
@@ -448,10 +445,6 @@ export interface DatapointsMultiQuery {
    * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
    */
   end?: string | Timestamp;
-  /**
-   * Return up to this number of datapoints.
-   */
-  limit?: number;
   /**
    * The aggregates to be returned. This value overrides top-level default aggregates list when set. Specify all aggregates to be retrieved here. Specify empty array if this sub-query needs to return datapoints without aggregation.
    */
@@ -588,9 +581,8 @@ export interface EventFilter {
   assetSubtrees?: CogniteInternalId[];
 }
 
-export interface EventFilterRequest extends Cursor {
+export interface EventFilterRequest extends Cursor, Limit {
   filter?: EventFilter;
-  limit?: number;
 }
 
 export interface EventPatch {
@@ -614,10 +606,9 @@ export interface EventSearch {
   description?: string;
 }
 
-export interface EventSearchRequest {
+export interface EventSearchRequest extends Limit {
   filter?: EventFilter;
   search?: EventSearch;
-  limit?: number;
 }
 
 // Files
@@ -632,7 +623,7 @@ export type FileName = string;
  */
 export type FileMimeType = string;
 
-export interface FileFilter {
+export interface FileFilter extends Limit {
   filter?: {
     name?: FileName;
     mimeType?: FileMimeType;
@@ -652,7 +643,6 @@ export interface FileFilter {
     externalIdPrefix?: CogniteExternalId;
     uploaded?: boolean;
   };
-  limit?: number;
 }
 
 export interface FileRequestFilter extends Cursor, FileFilter {}
@@ -708,6 +698,48 @@ export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
 export type FileChangeUpdate =
   | FileChangeUpdateById
   | FileChangeUpdateByExternalId;
+
+// raw
+
+export interface ListRawDatabases extends Cursor, Limit {}
+
+/**
+ * A NoSQL database to store customer data.
+ */
+export interface RawDB {
+  /**
+   * Unique name of a database.
+   */
+  name: string;
+}
+
+export interface ListRawTables extends Cursor, Limit {}
+
+export interface RawDBTable {
+  /**
+   * Unique name of the table
+   */
+  name: string;
+}
+
+export interface ListRawRows extends Cursor, Limit {
+  onlyRowKeys?: boolean;
+  columns?: string[];
+}
+
+export interface RawDBRowKey {
+  /**
+   * Unique row key
+   */
+  key: string;
+}
+
+export interface RawDBRow extends RawDBRowKey {
+  /**
+   * Row data stored as a JSON object.
+   */
+  columns: { [key: string]: string };
+}
 
 export interface ItemsResponse<T> {
   items: T[];

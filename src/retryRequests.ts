@@ -66,12 +66,12 @@ export function addRetryToAxiosInstance(instance: AxiosInstance) {
         return false;
       }
 
-      if (isSafeToRetry || !config.method) {
+      if (!config.method) {
         return true;
       }
 
       const httpMethod = config.method.toUpperCase();
-      if (httpMethodsToRetry.indexOf(httpMethod) === -1) {
+      if (!isSafeToRetry && httpMethodsToRetry.indexOf(httpMethod) === -1) {
         return false;
       }
 
