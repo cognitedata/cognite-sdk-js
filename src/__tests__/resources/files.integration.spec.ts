@@ -19,13 +19,13 @@ describe('Files integration test', async () => {
       },
     },
     {
-      name: 'filename_' + postfix++,
+      name: 'filename_' + postfix,
     },
   ];
 
   test('create,retrieve,update,delete', async () => {
     const fileContent = 'content_' + new Date();
-    const file = await client.files.upload(files[1], fileContent);
+    const file = await client.files.upload(files[0], fileContent);
 
     const [retrievedFile] = await client.files.retrieve([{ id: file.id }]);
     expect(retrievedFile.mimeType).toBe(files[0].mimeType);
