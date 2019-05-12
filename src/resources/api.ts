@@ -7,7 +7,14 @@ import { AssetAPI, generateAssetsObject } from './assets';
 import { DatapointsAPI, generateDatapointsObject } from './datapoints';
 import { EventAPI, generateEventsObject } from './events';
 import { FileAPI, generateFilesObject } from './files';
+<<<<<<< HEAD
 import { generateRawObject, RawAPI } from './raw';
+=======
+import {
+  generateSecuritycategoryObject,
+  SecurityCategoriesAPI,
+} from './securitycategories';
+>>>>>>> Added Security category API
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
 
 export interface BaseRequestOptions {
@@ -41,6 +48,7 @@ export interface API {
   events: EventAPI;
   files: FileAPI;
   raw: RawAPI;
+  securitycategories: SecurityCategoriesAPI;
   _instance: AxiosInstance;
 }
 
@@ -63,6 +71,11 @@ export function generateAPIObject(
     events: generateEventsObject(project, axiosInstance, metadataMap),
     files: generateFilesObject(project, axiosInstance, metadataMap),
     raw: generateRawObject(project, axiosInstance, metadataMap),
+    securitycategories: generateSecuritycategoryObject(
+      project,
+      axiosInstance,
+      metadataMap
+    ),
     _instance: axiosInstance,
   };
 }
