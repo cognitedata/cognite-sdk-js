@@ -120,8 +120,7 @@ function generateUploadEndpoint(
         data: fileMetadata,
       }
     );
-    // @ts-ignore (files API still wraps response with 'data')
-    const file = response.data.data;
+    const file = response.data;
     if (fileContent != null) {
       const { uploadUrl } = file;
       const headers: any = {};
