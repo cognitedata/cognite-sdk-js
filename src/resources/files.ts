@@ -25,7 +25,7 @@ import {
 } from '../types/types';
 import { projectUrl } from '../utils';
 
-export interface FileAPI {
+export interface FilesAPI {
   /**
    * [List files](https://doc.cognitedata.com/api/v1/#operation/advancedListFiles)
    *
@@ -164,7 +164,7 @@ export function generateFilesObject(
   project: string,
   instance: AxiosInstance,
   map: MetadataMap
-): FileAPI {
+): FilesAPI {
   const path = projectUrl(project) + '/files';
   return {
     list: generateListEndpoint(instance, path, map, true),
