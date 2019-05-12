@@ -21,7 +21,7 @@ import {
 } from '../types/types';
 import { projectUrl } from '../utils';
 
-export interface AssetAPI {
+export interface AssetsAPI {
   /**
    * [Creates new assets](https://doc.cognitedata.com/api/v1/#operation/createAssets)
    *
@@ -92,7 +92,7 @@ export function generateAssetsObject(
   project: string,
   instance: AxiosInstance,
   map: MetadataMap
-): AssetAPI {
+): AssetsAPI {
   const path = projectUrl(project) + '/assets';
   return {
     create: generateCreateEndpoint(instance, path, map),

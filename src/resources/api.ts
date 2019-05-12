@@ -3,10 +3,14 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { rawRequest } from '../axiosWrappers';
 import { Metadata, MetadataMap } from '../metadata';
-import { AssetAPI, generateAssetsObject } from './assets';
+import { AssetsAPI, generateAssetsObject } from './assets';
 import { DatapointsAPI, generateDatapointsObject } from './datapoints';
-import { EventAPI, generateEventsObject } from './events';
-import { FileAPI, generateFilesObject } from './files';
+import { EventsAPI, generateEventsObject } from './events';
+import { FilesAPI, generateFilesObject } from './files';
+import {
+  generateServiceaccountsObject,
+  ServiceaccountsAPI,
+} from './servicecccounts';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
 
 export interface BaseRequestOptions {
@@ -34,11 +38,12 @@ export interface API {
   project: string;
   get: (path: string, options?: BaseRequestOptions) => Promise<Response>;
   getMetadata: (value: any) => undefined | Metadata;
-  assets: AssetAPI;
+  assets: AssetsAPI;
   timeseries: TimeseriesAPI;
   datapoints: DatapointsAPI;
-  events: EventAPI;
-  files: FileAPI;
+  events: EventsAPI;
+  files: FilesAPI;
+  serviceAccounts: ServiceaccountsAPI;
   _instance: AxiosInstance;
 }
 
@@ -60,6 +65,11 @@ export function generateAPIObject(
     datapoints: generateDatapointsObject(project, axiosInstance, metadataMap),
     events: generateEventsObject(project, axiosInstance, metadataMap),
     files: generateFilesObject(project, axiosInstance, metadataMap),
+    serviceAccounts: generateServiceaccountsObject(
+      project,
+      axiosInstance,
+      metadataMap
+    ),
     _instance: axiosInstance,
   };
 }

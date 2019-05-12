@@ -109,6 +109,25 @@ export function generateListEndpoint<
 }
 
 /** @hidden */
+export function generateListNoCursorEndpoint<ResponseType>(
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  metadataMap: MetadataMap
+) {
+  return async function list(): Promise<ResponseType[]> {
+    const response = await rawRequest<ItemsResponse<ResponseType>>(
+      axiosInstance,
+      {
+        method: 'get',
+        url: resourcePath,
+      },
+      true
+    );
+    return metadataMap.addAndReturn(response.data.items, response);
+  };
+}
+
+/** @hidden */
 export function generateSimpleListEndpoint<RequestParams, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
