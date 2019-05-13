@@ -12,10 +12,10 @@ import {
 } from '../standardMethods';
 import {
   CogniteInternalId,
-  CreateModel3d,
+  CreateModel3D,
   InternalId,
-  Model3d,
-  Model3dListRequest,
+  Model3D,
+  Model3DListRequest,
   UpdateModel3D,
 } from '../types/types';
 import { projectUrl } from '../utils';
@@ -28,7 +28,7 @@ export interface Models3DAPI {
    * const models3D = await client.models3D.list({ published: true });
    * ```
    */
-  list: (scope?: Model3dListRequest) => CogniteAsyncIterator<Model3d>;
+  list: (scope?: Model3DListRequest) => CogniteAsyncIterator<Model3D>;
   /**
    * [Create 3D models](https://doc.cognitedata.com/api/v1/#operation/create3DModels)
    *
@@ -40,7 +40,7 @@ export interface Models3DAPI {
    * const models3D = await client.models3D.create(modelsToCreate);
    * ```
    */
-  create: (models: CreateModel3d[]) => Promise<Model3d[]>;
+  create: (models: CreateModel3D[]) => Promise<Model3D[]>;
   /**
    * [Update 3D models](https://doc.cognitedata.com/api/v1/#operation/update3DModels)
    *
@@ -52,7 +52,7 @@ export interface Models3DAPI {
    * const models3D = await client.models3D.update(modelsToUpdate);
    * ```
    */
-  update: (items: UpdateModel3D[]) => Promise<Model3d[]>;
+  update: (items: UpdateModel3D[]) => Promise<Model3D[]>;
   /**
    * [Delete 3D models](https://doc.cognitedata.com/api/v1/#operation/delete3DModels)
    *
@@ -68,7 +68,7 @@ export interface Models3DAPI {
    * await client.models3D.retrieve(3744350296805509);
    * ```
    */
-  retrieve: (id: CogniteInternalId) => Promise<Model3d>;
+  retrieve: (id: CogniteInternalId) => Promise<Model3D>;
 }
 
 /** @hidden */

@@ -18,6 +18,7 @@ import {
 } from './serviceAccounts';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
 import { generateModels3DObject, Models3DAPI } from './models3D';
+import { generateRevisions3DObject, Revisions3DAPI } from './revisions3d';
 
 export interface BaseRequestOptions {
   params?: object;
@@ -53,6 +54,7 @@ export interface API {
   securityCategories: SecurityCategoriesAPI;
   serviceAccounts: ServiceAccountsAPI;
   models3D: Models3DAPI;
+  revisions3D: Revisions3DAPI;
   _instance: AxiosInstance;
 }
 
@@ -86,6 +88,7 @@ export function generateAPIObject(
       metadataMap
     ),
     models3D: generateModels3DObject(project, axiosInstance, metadataMap),
+    revisions3D: generateRevisions3DObject(project, axiosInstance, metadataMap),
     _instance: axiosInstance,
   };
 }
