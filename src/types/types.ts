@@ -86,14 +86,14 @@ export type AssetExternalId = ExternalId;
 export type AssetIdEither = IdEither;
 
 export interface SetField<T> {
-  set: T
+  set: T;
 }
 
 export interface RemoveField {
   setNull: boolean;
 }
 
-export type SinglePatchString = SetField<String> | RemoveField;
+export type SinglePatchString = SetField<string> | RemoveField;
 
 export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
@@ -106,21 +106,21 @@ export interface SinglePatchRequiredString {
 
 export type ObjectPatch =
   | {
-      /**
-       * Set the key-value pairs. All existing key-value pairs will be removed.
-       */
-      set: { [key: string]: string };
-    }
+    /**
+     * Set the key-value pairs. All existing key-value pairs will be removed.
+     */
+    set: { [key: string]: string };
+  }
   | {
-      /**
-       * Add the key-value pairs. Values for existing keys will be overwritten.
-       */
-      add: { [key: string]: string };
-      /**
-       * Remove the key-value pairs with given keys.
-       */
-      remove: string[];
-    };
+    /**
+     * Add the key-value pairs. Values for existing keys will be overwritten.
+     */
+    add: { [key: string]: string };
+    /**
+     * Remove the key-value pairs with given keys.
+     */
+    remove: string[];
+  };
 
 export type NullableSinglePatchString = { set: string } | { setNull: true };
 export type NullableSinglePatchLong = { set: number } | { setNull: true };
@@ -138,9 +138,9 @@ export interface AssetPatch {
   };
 }
 
-export interface AssetChangeById extends AssetPatch, InternalId {}
+export interface AssetChangeById extends AssetPatch, InternalId { }
 
-export interface AssetChangeByExternalId extends AssetPatch, ExternalId {}
+export interface AssetChangeByExternalId extends AssetPatch, ExternalId { }
 
 export type AssetChange = AssetChangeById | AssetChangeByExternalId;
 
@@ -175,7 +175,7 @@ export interface AssetFilter extends Limit {
   };
 }
 
-export interface AssetListScope extends AssetFilter, Cursor {}
+export interface AssetListScope extends AssetFilter, Cursor { }
 
 export interface AssetSearchFilter extends AssetFilter {
   search?: {
@@ -213,7 +213,7 @@ export interface UpdateModelNameField {
   };
 }
 
-export interface UpdateModel3D extends UpdateModelNameField, InternalId {}
+export interface UpdateModel3D extends UpdateModelNameField, InternalId { }
 
 export interface Asset extends ExternalAsset, AssetInternalId {
   lastUpdatedTime: Date;
@@ -389,11 +389,11 @@ export interface TimeSeriesPatch {
   };
 }
 
-export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
+export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId { }
 
 export interface TimeSeriesUpdateByExternalId
   extends TimeSeriesPatch,
-    ExternalId {}
+  ExternalId { }
 
 export type TimeSeriesUpdate =
   | TimeSeriesUpdateById
@@ -411,11 +411,11 @@ export interface DatapointsInsertProperties {
 
 export interface DatapointsPostDatapointId
   extends DatapointsInsertProperties,
-    InternalId {}
+  InternalId { }
 
 export interface DatapointsPostDatapointExternalId
   extends DatapointsInsertProperties,
-    ExternalId {}
+  ExternalId { }
 
 export type DatapointsPostDatapoint =
   | DatapointsPostDatapointId
@@ -446,11 +446,11 @@ export interface DatapointsQueryProperties extends Limit {
 
 export interface DatapointsQueryId
   extends DatapointsQueryProperties,
-    InternalId {}
+  InternalId { }
 
 export interface DatapointsQueryExternalId
   extends DatapointsQueryProperties,
-    ExternalId {}
+  ExternalId { }
 
 export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
 
@@ -628,8 +628,8 @@ export interface EventPatch {
   };
 }
 
-export interface EventChangeById extends EventPatch, InternalId {}
-export interface EventChangeByExternalId extends EventPatch, ExternalId {}
+export interface EventChangeById extends EventPatch, InternalId { }
+export interface EventChangeByExternalId extends EventPatch, ExternalId { }
 
 export type EventChange = EventChangeById | EventChangeByExternalId;
 
@@ -676,7 +676,7 @@ export interface FileFilter extends Limit {
   };
 }
 
-export interface FileRequestFilter extends Cursor, FileFilter {}
+export interface FileRequestFilter extends Cursor, FileFilter { }
 
 export interface ExternalFilesMetadata {
   externalId?: CogniteExternalId;
@@ -723,8 +723,8 @@ export interface FileChange {
   };
 }
 
-export interface FileChangeUpdateById extends InternalId, FileChange {}
-export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
+export interface FileChangeUpdateById extends InternalId, FileChange { }
+export interface FileChangeUpdateByExternalId extends ExternalId, FileChange { }
 
 export type FileChangeUpdate =
   | FileChangeUpdateById
@@ -732,7 +732,7 @@ export type FileChangeUpdate =
 
 // raw
 
-export interface ListRawDatabases extends Cursor, Limit {}
+export interface ListRawDatabases extends Cursor, Limit { }
 
 /**
  * A NoSQL database to store customer data.
@@ -744,7 +744,7 @@ export interface RawDB {
   name: string;
 }
 
-export interface ListRawTables extends Cursor, Limit {}
+export interface ListRawTables extends Cursor, Limit { }
 
 export interface RawDBTable {
   /**
@@ -850,7 +850,7 @@ export interface CreateRevision3D {
   fileId: CogniteInternalId;
 }
 
-export type Tuple3<T> = [T, T, T]
+export type Tuple3<T> = [T, T, T];
 
 export interface UpdateRevision3D {
   id: CogniteInternalId;
@@ -858,17 +858,17 @@ export interface UpdateRevision3D {
     /**
      * True if the revision is marked as published.
      */
-    published?: SetField<boolean>
+    published?: SetField<boolean>;
     /**
      * Global rotation to be applied to the entire model.
      * The rotation is expressed by Euler angles in radians and in XYZ order.
      */
-    rotation?: SetField<Tuple3<number>>
+    rotation?: SetField<Tuple3<number>>;
     /**
      * Initial camera target.
      */
-    camera?: SetField<RevisionCameraProperties>
-  }
+    camera?: SetField<RevisionCameraProperties>;
+  };
 }
 
 export interface Revision3DListRequest {
@@ -887,53 +887,55 @@ export interface RevisionCameraProperties {
   /**
    * Initial camera target.
    */
-  target?: [number, number, number],
+  target?: [number, number, number];
   /**
    * Initial camera position.
    */
-  position?: [number, number, number],
+  position?: [number, number, number];
 }
 
 export interface Revision3D {
   /**
    * The ID of the revision.
    */
-  id: CogniteInternalId,
+  id: CogniteInternalId;
   /**
    * The file id.
-  */
-  fileId: CogniteInternalId,
+   */
+  fileId: CogniteInternalId;
   /**
    * True if the revision is marked as published.
-  */
-  published: boolean,
+   */
+  published: boolean;
   /**
    * Global rotation to be applied to the entire model.
    * The rotation is expressed by Euler angles in radians and in XYZ order.
-  */
-  rotation?: [number, number, number],
-  camera?: RevisionCameraProperties,
+   */
+  rotation?: [number, number, number];
+  camera?: RevisionCameraProperties;
   /**
    * The status of the revision.
-  */
-  status: 'Queued' | 'Processing' | 'Done' | 'Failed',
+   */
+  // tslint:disable-next-lineconsole.log
+
+  status: 'Queued' | 'Processing' | 'Done' | 'Failed';
   /**
    * The threed file ID of a thumbnail for the revision.
    * Use /3d/files/{id} to retrieve the file.
-  */
-  thumbnailThreedFileId?: number,
+   */
+  thumbnailThreedFileId?: number;
   /**
    * The URL of a thumbnail for the revision.
-  */
-  thumbnailURL?: string,
+   */
+  thumbnailURL?: string;
   /**
    * The number of asset mappings for this revision.
-  */
-  assetMappingCount: number,
+   */
+  assetMappingCount: number;
   /**
-   * 
-  */
-  createdTime: Date,
+   *
+   */
+  createdTime: Date;
 }
 
 export interface Limit {
@@ -941,50 +943,50 @@ export interface Limit {
    * Limits the number of results to be returned.
    * The maximum results returned by the server is 1000 even if the limit specified is larger.
    */
-  limit?: number
+  limit?: number;
 }
 
 export interface List3DNodesQuery extends Cursor, Limit {
   /**
    * Get sub nodes up to this many levels below the specified node. Depth 0 is the root node.
    */
-  depth?: number
+  depth?: number;
   /**
    * ID of a node that are the root of the subtree you request (default is the root node).
    */
-  nodeId?: CogniteInternalId
+  nodeId?: CogniteInternalId;
 }
 
 export interface Node3D {
   /**
    * The ID of the node.
-  */
-  id: CogniteInternalId
+   */
+  id: CogniteInternalId;
   /**
    * The index of the node in the 3D model hierarchy, starting from 0.
    * The tree is traversed in a depth-first order.
-  */
-  treeIndex: number
+   */
+  treeIndex: number;
   /**
    * The parent of the node, null if it is the root node.
-  */
-  parentId: number
+   */
+  parentId: number;
   /**
    * The depth of the node in the tree, starting from 0 at the root node.
-  */
-  depth: number
+   */
+  depth: number;
   /**
    * The name of the node.
-  */
-  name: string
+   */
+  name: string;
   /**
    * The number of descendants of the node, plus one (counting itself).
-  */
-  subtreeSize: number
+   */
+  subtreeSize: number;
   /**
-   * 
-  */
-  boundingBox: BoundingBox3D 
+   *
+   */
+  boundingBox: BoundingBox3D;
 }
 
 /**
@@ -995,11 +997,11 @@ export interface BoundingBox3D {
   /**
    * The minimal coordinates of the bounding box.
    */
-  min: Tuple3<number>
+  min: Tuple3<number>;
   /**
    * The maximal coordinates of the bounding box.
    */
-  max: Tuple3<number>
+  max: Tuple3<number>;
 }
 
 export interface ItemsResponse<T> {
