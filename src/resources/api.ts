@@ -7,14 +7,11 @@ import { AssetAPI, generateAssetsObject } from './assets';
 import { DatapointsAPI, generateDatapointsObject } from './datapoints';
 import { EventAPI, generateEventsObject } from './events';
 import { FileAPI, generateFilesObject } from './files';
-<<<<<<< HEAD
 import { generateRawObject, RawAPI } from './raw';
-=======
 import {
   generateSecurityCategoryObject,
   SecurityCategoriesAPI,
-} from './securitycategories';
->>>>>>> Added Security category API
+} from './securityCategories';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
 
 export interface BaseRequestOptions {
