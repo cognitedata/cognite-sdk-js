@@ -13,9 +13,9 @@ import {
 import { EventsAPI, generateEventsObject } from './events';
 import { FilesAPI, generateFilesObject } from './files';
 import {
-  generateServiceaccountsObject,
-  ServiceaccountsAPI,
-} from './servicecccounts';
+  generateServiceAccountsObject,
+  ServiceAccountsAPI,
+} from './serviceAccounts';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
 
 export interface BaseRequestOptions {
@@ -48,7 +48,7 @@ export interface API {
   datapoints: DatapointsAPI;
   events: EventsAPI;
   files: FilesAPI;
-  serviceAccounts: ServiceaccountsAPI;
+  serviceAccounts: ServiceAccountsAPI;
   _instance: AxiosInstance;
 }
 
@@ -70,9 +70,7 @@ export function generateAPIObject(
     datapoints: generateDatapointsObject(project, axiosInstance, metadataMap),
     events: generateEventsObject(project, axiosInstance, metadataMap),
     files: generateFilesObject(project, axiosInstance, metadataMap),
-    raw: generateRawObject(project, axiosInstance, metadataMap),
-    securityCategories: generateSecurityCategoryObject(
-    serviceAccounts: generateServiceaccountsObject(
+    serviceAccounts: generateServiceAccountsObject(
       project,
       axiosInstance,
       metadataMap

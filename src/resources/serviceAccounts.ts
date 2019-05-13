@@ -14,12 +14,12 @@ import {
 } from '../types/types';
 import { projectUrl } from '../utils';
 
-export interface ServiceaccountsAPI {
+export interface ServiceAccountsAPI {
   /**
    * [List all service accounts](https://doc.cognitedata.com/api/v1/#operation/getServiceAccounts)
    *
    * ```js
-   * const serviceaccounts = await client.serviceaccounts.list();
+   * const serviceaccounts = await client.serviceAccounts.list();
    * ```
    */
   list: () => Promise<ServiceAccount[]>;
@@ -32,7 +32,7 @@ export interface ServiceaccountsAPI {
    *   { name: 'Data extractor' },
    *   { name: 'Monitor', groups: [123, 456] },
    * ];
-   * const createdServiceAccounts = await client.serviceaccounts.create(serviceAccounts);
+   * const createdServiceAccounts = await client.serviceAccounts.create(serviceAccounts);
    * ```
    */
   create: (items: ServiceAccountInput[]) => Promise<ServiceAccount[]>;
@@ -41,18 +41,18 @@ export interface ServiceaccountsAPI {
    * [Delete service accounts](https://doc.cognitedata.com/api/v1/#operation/deleteServiceAccounts)
    *
    * ```js
-   * await client.serviceaccounts.delete([123, 456]);
+   * await client.serviceAccounts.delete([123, 456]);
    * ```
    */
   delete: (items: CogniteInternalId[]) => Promise<{}>;
 }
 
 /** @hidden */
-export function generateServiceaccountsObject(
+export function generateServiceAccountsObject(
   project: string,
   instance: AxiosInstance,
   map: MetadataMap
-): ServiceaccountsAPI {
+): ServiceAccountsAPI {
   const path = projectUrl(project) + '/serviceaccounts';
   return {
     list: generateListNoCursorEndpoint(instance, path, map),
