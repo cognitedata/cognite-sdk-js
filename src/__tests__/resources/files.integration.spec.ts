@@ -9,10 +9,10 @@ describe('Files integration test', async () => {
     jest.setTimeout(15000);
     client = await setupClient();
   });
-  let postfix = new Date().getTime();
+  const postfix = new Date().getTime();
   const files = [
     {
-      name: 'filename_' + postfix++,
+      name: 'filename_0_' + postfix,
       mimeType: 'image/jpg',
       metadata: {
         key: 'value',
