@@ -741,6 +741,30 @@ export interface RawDBRow extends RawDBRowKey {
   columns: { [key: string]: string };
 }
 
+// Security categories
+export interface ListSecurityCategories extends Cursor {
+  sort?: 'ASC' | 'DESC';
+  limit?: number;
+}
+
+export interface SecurityCategory {
+  /**
+   * Name of the security category
+   */
+  name: string;
+  /**
+   * Id of the security category
+   */
+  id: number;
+}
+
+export interface SecurityCategorySpec {
+  /**
+   * Name of the security category
+   */
+  name: string;
+}
+
 export interface ItemsResponse<T> {
   items: T[];
 }
