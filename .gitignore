@@ -9,3 +9,4 @@ yarn-error.log
 dist
 docs
 .firebase
+.DS_Store

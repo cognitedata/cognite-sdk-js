@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { API } from '../../resources/api';
-import { Model3d } from '../../types/types';
+import { Model3D } from '../../types/types';
 import { setupClient } from '../testUtils';
 
 describe('Model3d integration test', async () => {
@@ -11,7 +11,7 @@ describe('Model3d integration test', async () => {
     client = await setupClient();
   });
 
-  let models: Model3d[];
+  let models: Model3D[];
   test('create', async () => {
     const now = Date.now();
     const modelsToCreate = [

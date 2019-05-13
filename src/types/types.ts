@@ -85,15 +85,15 @@ export type AssetExternalId = ExternalId;
 
 export type AssetIdEither = IdEither;
 
-export interface SetStringField {
-  set: string;
+export interface SetField<T> {
+  set: T
 }
 
 export interface RemoveField {
   setNull: boolean;
 }
 
-export type SinglePatchString = SetStringField | RemoveField;
+export type SinglePatchString = SetField<String> | RemoveField;
 
 export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
@@ -184,7 +184,7 @@ export interface AssetSearchFilter extends AssetFilter {
   };
 }
 
-export interface Model3d {
+export interface Model3D {
   /**
    * The name of the model.
    */
@@ -196,16 +196,20 @@ export interface Model3d {
   createdTime: Date;
 }
 
-export interface CreateModel3d {
+export interface CreateModel3D {
   /**
    * The name of the model.
    */
   name: string;
 }
 
+export type GenericGetPathParams<T> = (obj: T) => Partial<T>;
+
+export type GenericGetParameterizedPath<T> = (obj: T) => string;
+
 export interface UpdateModelNameField {
   update: {
-    name: SetStringField;
+    name: SetField<string>;
   };
 }
 
@@ -820,12 +824,182 @@ export interface ServiceAccountInput {
   groups?: Groups;
 }
 
-export interface Model3dListRequest {
+export interface Model3DListRequest {
   limit?: number;
   /**
    * Filter based on whether or not it has published revisions.
    */
   published?: boolean;
+}
+
+export interface CreateRevision3D {
+  /**
+   * True if the revision is marked as published.
+   */
+  published?: boolean;
+  /**
+   * Global rotation to be applied to the entire model.
+   * The rotation is expressed by Euler angles in radians and in XYZ order.
+   */
+  rotation?: [boolean, boolean, boolean];
+  camera?: RevisionCameraProperties;
+  /**
+   * The file id to a file uploaded to Cognite's Files API.
+   * Can only be set on revision creation, and can never be updated. _Only FBX files are supported_.
+   */
+  fileId: CogniteInternalId;
+}
+
+export type Tuple3<T> = [T, T, T]
+
+export interface UpdateRevision3D {
+  id: CogniteInternalId;
+  update?: {
+    /**
+     * True if the revision is marked as published.
+     */
+    published?: SetField<boolean>
+    /**
+     * Global rotation to be applied to the entire model.
+     * The rotation is expressed by Euler angles in radians and in XYZ order.
+     */
+    rotation?: SetField<Tuple3<number>>
+    /**
+     * Initial camera target.
+     */
+    camera?: SetField<RevisionCameraProperties>
+  }
+}
+
+export interface Revision3DListRequest {
+  /**
+   * Limits the number of results to be returned.
+   * The maximum results returned by the server is 1000 even if the limit specified is larger.
+   */
+  limit?: number;
+  /**
+   * Filter based on whether or not it has published revisions.
+   */
+  published?: boolean;
+}
+
+export interface RevisionCameraProperties {
+  /**
+   * Initial camera target.
+   */
+  target?: [number, number, number],
+  /**
+   * Initial camera position.
+   */
+  position?: [number, number, number],
+}
+
+export interface Revision3D {
+  /**
+   * The ID of the revision.
+   */
+  id: CogniteInternalId,
+  /**
+   * The file id.
+  */
+  fileId: CogniteInternalId,
+  /**
+   * True if the revision is marked as published.
+  */
+  published: boolean,
+  /**
+   * Global rotation to be applied to the entire model.
+   * The rotation is expressed by Euler angles in radians and in XYZ order.
+  */
+  rotation?: [number, number, number],
+  camera?: RevisionCameraProperties,
+  /**
+   * The status of the revision.
+  */
+  status: 'Queued' | 'Processing' | 'Done' | 'Failed',
+  /**
+   * The threed file ID of a thumbnail for the revision.
+   * Use /3d/files/{id} to retrieve the file.
+  */
+  thumbnailThreedFileId?: number,
+  /**
+   * The URL of a thumbnail for the revision.
+  */
+  thumbnailURL?: string,
+  /**
+   * The number of asset mappings for this revision.
+  */
+  assetMappingCount: number,
+  /**
+   * 
+  */
+  createdTime: Date,
+}
+
+export interface Limit {
+  /**
+   * Limits the number of results to be returned.
+   * The maximum results returned by the server is 1000 even if the limit specified is larger.
+   */
+  limit?: number
+}
+
+export interface List3DNodesQuery extends Cursor, Limit {
+  /**
+   * Get sub nodes up to this many levels below the specified node. Depth 0 is the root node.
+   */
+  depth?: number
+  /**
+   * ID of a node that are the root of the subtree you request (default is the root node).
+   */
+  nodeId?: CogniteInternalId
+}
+
+export interface Node3D {
+  /**
+   * The ID of the node.
+  */
+  id: CogniteInternalId
+  /**
+   * The index of the node in the 3D model hierarchy, starting from 0.
+   * The tree is traversed in a depth-first order.
+  */
+  treeIndex: number
+  /**
+   * The parent of the node, null if it is the root node.
+  */
+  parentId: number
+  /**
+   * The depth of the node in the tree, starting from 0 at the root node.
+  */
+  depth: number
+  /**
+   * The name of the node.
+  */
+  name: string
+  /**
+   * The number of descendants of the node, plus one (counting itself).
+  */
+  subtreeSize: number
+  /**
+   * 
+  */
+  boundingBox: BoundingBox3D 
+}
+
+/**
+ * The bounding box of the subtree with this sector as the root sector.
+ * Is null if there are no geometries in the subtree.
+ */
+export interface BoundingBox3D {
+  /**
+   * The minimal coordinates of the bounding box.
+   */
+  min: Tuple3<number>
+  /**
+   * The maximal coordinates of the bounding box.
+   */
+  max: Tuple3<number>
 }
 
 export interface ItemsResponse<T> {
