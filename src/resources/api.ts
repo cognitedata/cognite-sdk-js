@@ -11,7 +11,7 @@ import { FileAPI, generateFilesObject } from './files';
 import { generateRawObject, RawAPI } from './raw';
 =======
 import {
-  generateSecuritycategoryObject,
+  generateSecurityCategoryObject,
   SecurityCategoriesAPI,
 } from './securitycategories';
 >>>>>>> Added Security category API
@@ -48,7 +48,7 @@ export interface API {
   events: EventAPI;
   files: FileAPI;
   raw: RawAPI;
-  securitycategories: SecurityCategoriesAPI;
+  securityCategories: SecurityCategoriesAPI;
   _instance: AxiosInstance;
 }
 
@@ -71,7 +71,7 @@ export function generateAPIObject(
     events: generateEventsObject(project, axiosInstance, metadataMap),
     files: generateFilesObject(project, axiosInstance, metadataMap),
     raw: generateRawObject(project, axiosInstance, metadataMap),
-    securitycategories: generateSecuritycategoryObject(
+    securityCategories: generateSecurityCategoryObject(
       project,
       axiosInstance,
       metadataMap

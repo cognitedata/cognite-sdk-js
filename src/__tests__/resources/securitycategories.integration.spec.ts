@@ -16,16 +16,16 @@ describe('Security categories integration test', async () => {
       { name: 'Security category 1 ' + new Date().getTime() },
       { name: 'Security category 2 ' + new Date().getTime() },
     ];
-    securityCategories = await client.securitycategories.create(
+    securityCategories = await client.securityCategories.create(
       securityCategoriesToCreate
     );
     expect(securityCategories.length).toBe(securityCategoriesToCreate.length);
-    expect(securityCategories[0].name).toBe(securityCategoriesToCreate[0].name);
+    expect(securityCategories[0].name).toBeDefined();
     expect(securityCategories[0].id).toBeDefined();
   });
 
   test('list', async () => {
-    const response = await client.securitycategories
+    const response = await client.securityCategories
       .list()
       .autoPagingToArray({ limit: 2 });
     expect(response.length).toBe(2);
@@ -34,7 +34,7 @@ describe('Security categories integration test', async () => {
   });
 
   test('delete', async () => {
-    const response = await client.securitycategories.delete(
+    const response = await client.securityCategories.delete(
       securityCategories.map(category => category.id)
     );
     expect(response).toEqual({});

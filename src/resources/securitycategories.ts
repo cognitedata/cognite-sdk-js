@@ -21,7 +21,7 @@ export interface SecurityCategoriesAPI {
    * [List security categories](https://doc.cognitedata.com/api/v1/#operation/getSecurityCategories)
    *
    * ```js
-   * const securityCategories = await client.securitycategories.list({ sort: 'ASC' });
+   * const securityCategories = await client.securityCategories.list({ sort: 'ASC' });
    * ```
    */
   list: (
@@ -36,7 +36,7 @@ export interface SecurityCategoriesAPI {
    *   { name: 'Admins' },
    *   { name: 'Developers' },
    * ];
-   * const createdSecurityCategories = await client.securitycategories.create(securityCategories);
+   * const createdSecurityCategories = await client.securityCategories.create(securityCategories);
    * ```
    */
   create: (items: SecurityCategorySpec[]) => Promise<SecurityCategory[]>;
@@ -45,13 +45,13 @@ export interface SecurityCategoriesAPI {
    * [Delete security categories](https://doc.cognitedata.com/api/v1/#operation/deleteSecurityCategories)
    *
    * ```js
-   * await client.securitycategories.delete([123, 456]);
+   * await client.securityCategories.delete([123, 456]);
    */
   delete: (ids: CogniteInternalId[]) => Promise<{}>;
 }
 
 /** @hidden */
-export function generateSecuritycategoryObject(
+export function generateSecurityCategoryObject(
   project: string,
   instance: AxiosInstance,
   map: MetadataMap
