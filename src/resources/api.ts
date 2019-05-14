@@ -5,13 +5,13 @@ import { rawRequest } from '../axiosWrappers';
 import { Metadata, MetadataMap } from '../metadata';
 import { AssetsAPI, generateAssetsObject } from './assets';
 import { DatapointsAPI, generateDatapointsObject } from './datapoints';
+import { EventsAPI, generateEventsObject } from './events';
+import { FilesAPI, generateFilesObject } from './files';
 import { generateRawObject, RawAPI } from './raw';
 import {
   generateSecurityCategoryObject,
   SecurityCategoriesAPI,
 } from './securityCategories';
-import { EventsAPI, generateEventsObject } from './events';
-import { FilesAPI, generateFilesObject } from './files';
 import {
   generateServiceAccountsObject,
   ServiceAccountsAPI,
@@ -48,6 +48,8 @@ export interface API {
   datapoints: DatapointsAPI;
   events: EventsAPI;
   files: FilesAPI;
+  raw: RawAPI;
+  securityCategories: SecurityCategoriesAPI;
   serviceAccounts: ServiceAccountsAPI;
   _instance: AxiosInstance;
 }
@@ -70,6 +72,12 @@ export function generateAPIObject(
     datapoints: generateDatapointsObject(project, axiosInstance, metadataMap),
     events: generateEventsObject(project, axiosInstance, metadataMap),
     files: generateFilesObject(project, axiosInstance, metadataMap),
+    raw: generateRawObject(project, axiosInstance, metadataMap),
+    securityCategories: generateSecurityCategoryObject(
+      project,
+      axiosInstance,
+      metadataMap
+    ),
     serviceAccounts: generateServiceAccountsObject(
       project,
       axiosInstance,
