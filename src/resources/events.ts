@@ -21,7 +21,7 @@ import {
 } from '../types/types';
 import { projectUrl } from '../utils';
 
-export interface EventAPI {
+export interface EventsAPI {
   /**
    * [Create events](https://doc.cognitedata.com/api/v1/#operation/createEvents)
    *
@@ -92,7 +92,7 @@ export function generateEventsObject(
   project: string,
   instance: AxiosInstance,
   map: MetadataMap
-): EventAPI {
+): EventsAPI {
   const path = projectUrl(project) + '/events';
   return {
     create: generateCreateEndpoint(instance, path, map),

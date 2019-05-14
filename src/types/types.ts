@@ -667,7 +667,7 @@ export interface FilesMetadata extends ExternalFilesMetadata {
   lastUpdatedTime: Date;
 }
 
-export type FileContent = ArrayBuffer | File | Blob | Buffer | any;
+export type FileContent = ArrayBuffer | Buffer | any;
 
 export interface UploadFileMetadataResponse extends FilesMetadata {
   uploadUrl: string;
@@ -763,6 +763,34 @@ export interface SecurityCategorySpec {
    * Name of the security category
    */
   name: string;
+}
+
+// service accounts
+
+/**
+ * Unique name of the service account
+ */
+export type ServiceAccountName = string;
+
+export type Groups = CogniteInternalId[];
+
+export interface ServiceAccount {
+  name: ServiceAccountName;
+  groups?: Groups;
+  id: CogniteInternalId;
+  /**
+   * If this service account has been logically deleted
+   */
+  isDeleted?: boolean;
+  /**
+   * Time of deletion
+   */
+  deletedTime?: Date;
+}
+
+export interface ServiceAccountInput {
+  name: ServiceAccountName;
+  groups?: Groups;
 }
 
 export interface ItemsResponse<T> {

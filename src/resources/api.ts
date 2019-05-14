@@ -3,15 +3,19 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { rawRequest } from '../axiosWrappers';
 import { Metadata, MetadataMap } from '../metadata';
-import { AssetAPI, generateAssetsObject } from './assets';
+import { AssetsAPI, generateAssetsObject } from './assets';
 import { DatapointsAPI, generateDatapointsObject } from './datapoints';
-import { EventAPI, generateEventsObject } from './events';
-import { FileAPI, generateFilesObject } from './files';
+import { EventsAPI, generateEventsObject } from './events';
+import { FilesAPI, generateFilesObject } from './files';
 import { generateRawObject, RawAPI } from './raw';
 import {
   generateSecurityCategoryObject,
   SecurityCategoriesAPI,
 } from './securityCategories';
+import {
+  generateServiceAccountsObject,
+  ServiceAccountsAPI,
+} from './serviceAccounts';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
 
 export interface BaseRequestOptions {
@@ -39,13 +43,14 @@ export interface API {
   project: string;
   get: (path: string, options?: BaseRequestOptions) => Promise<Response>;
   getMetadata: (value: any) => undefined | Metadata;
-  assets: AssetAPI;
+  assets: AssetsAPI;
   timeseries: TimeseriesAPI;
   datapoints: DatapointsAPI;
-  events: EventAPI;
-  files: FileAPI;
+  events: EventsAPI;
+  files: FilesAPI;
   raw: RawAPI;
   securityCategories: SecurityCategoriesAPI;
+  serviceAccounts: ServiceAccountsAPI;
   _instance: AxiosInstance;
 }
 
@@ -69,6 +74,11 @@ export function generateAPIObject(
     files: generateFilesObject(project, axiosInstance, metadataMap),
     raw: generateRawObject(project, axiosInstance, metadataMap),
     securityCategories: generateSecurityCategoryObject(
+      project,
+      axiosInstance,
+      metadataMap
+    ),
+    serviceAccounts: generateServiceAccountsObject(
       project,
       axiosInstance,
       metadataMap
