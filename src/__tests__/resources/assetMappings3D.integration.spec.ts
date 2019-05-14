@@ -53,7 +53,6 @@ describe('Asset mappings integration test', async () => {
         60
       );
       expect(revisions.length).toBe(1);
-      console.log('123 modelId', model.id, '123 revisioId', revisions[0].id);
       done();
     },
     10 * 1000
@@ -111,7 +110,6 @@ describe('Asset mappings integration test', async () => {
       assetMappingsToCreate.map(a => a.assetId).sort(simpleCompare)
     );
     expect(assetMappings.length).toBe(2);
-    console.log(assetMappings);
   });
 
   test('list asset mappings 3d', async () => {

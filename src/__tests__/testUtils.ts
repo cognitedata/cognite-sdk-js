@@ -59,7 +59,6 @@ export async function retryInSeconds<O>(
     try {
       return await func();
     } catch (error) {
-      console.log('123', error, error.status);
       if (Number(error.status) !== statusCodeToRetry) {
         throw error;
       }

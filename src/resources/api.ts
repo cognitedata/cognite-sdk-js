@@ -20,10 +20,8 @@ import {
   generateServiceAccountsObject,
   ServiceAccountsAPI,
 } from './serviceAccounts';
-import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
 import { Files3DAPI, generateFiles3DObject } from './files3D';
 import { generateModels3DObject, Models3DAPI } from './models3D';
-import { generateRawObject, RawAPI } from './raw';
 import { generateRevisions3DObject, Revisions3DAPI } from './revisions3d';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
 
