@@ -667,7 +667,7 @@ export interface FilesMetadata extends ExternalFilesMetadata {
   lastUpdatedTime: Date;
 }
 
-export type FileContent = ArrayBuffer | File | Blob | Buffer | any;
+export type FileContent = ArrayBuffer | Buffer | any;
 
 export interface UploadFileMetadataResponse extends FilesMetadata {
   uploadUrl: string;
