@@ -11,7 +11,7 @@ import {
   UpdateRevision3D,
   UploadFileMetadataResponse,
 } from '../../types/types';
-import { setupClient } from '../testUtils';
+import { setupClient, simpleCompare } from '../testUtils';
 
 describe('Revision3d integration test', async () => {
   let client: API;
@@ -30,12 +30,14 @@ describe('Revision3d integration test', async () => {
   test('create model', async () => {
     const modelToCreate = { name: `Model revision test ${now}` };
     model = (await client.models3D.create([modelToCreate]))[0];
+    expect(model).toBeTruthy();
   });
 
   test('create file', async () => {
     const fileContent = readFileSync('src/__tests__/test3dFile.fbx');
     const fileProps = { name: `file_revision_test_${now}.fbx` };
     file = await client.files.upload(fileProps, fileContent);
+    expect(file).toBeTruthy();
   });
 
   test('create revision', async () => {
@@ -91,9 +93,8 @@ describe('Revision3d integration test', async () => {
 
   test('list', async () => {
     const listed = await client.revisions3D.list(model.id).autoPagingToArray();
-    const comparator = (a: number, b: number) => a - b;
-    expect(revisions.map(r => r.id).sort(comparator)).toEqual(
-      listed.map(r => r.id).sort(comparator)
+    expect(revisions.map(r => r.id).sort(simpleCompare)).toEqual(
+      listed.map(r => r.id).sort(simpleCompare)
     );
   });
 
@@ -141,29 +142,6 @@ describe('Revision3d integration test', async () => {
     expect(result).toEqual(itemsMock);
     mock.restore();
   });
-
-  test(
-    'list 3d nodes',
-    async done => {
-      const req = async () =>
-        client.revisions3D
-          .list3DNodes(model.id, revisions[0].id)
-          .autoPagingToArray();
-      let res;
-      while (!res) {
-        try {
-          res = await req();
-        } catch (error) {
-          await new Promise(resolve => {
-            setTimeout(resolve, 3000);
-          });
-        }
-      }
-      expect(res.map(n => n.name)).toContain('input_Input_1.fbx');
-      done();
-    },
-    3 * 60 * 1000
-  );
 
   test('delete revisions', async () => {
     await client.revisions3D.delete(

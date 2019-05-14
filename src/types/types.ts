@@ -106,21 +106,21 @@ export interface SinglePatchRequiredString {
 
 export type ObjectPatch =
   | {
-    /**
-     * Set the key-value pairs. All existing key-value pairs will be removed.
-     */
-    set: { [key: string]: string };
-  }
+      /**
+       * Set the key-value pairs. All existing key-value pairs will be removed.
+       */
+      set: { [key: string]: string };
+    }
   | {
-    /**
-     * Add the key-value pairs. Values for existing keys will be overwritten.
-     */
-    add: { [key: string]: string };
-    /**
-     * Remove the key-value pairs with given keys.
-     */
-    remove: string[];
-  };
+      /**
+       * Add the key-value pairs. Values for existing keys will be overwritten.
+       */
+      add: { [key: string]: string };
+      /**
+       * Remove the key-value pairs with given keys.
+       */
+      remove: string[];
+    };
 
 export type NullableSinglePatchString = { set: string } | { setNull: true };
 export type NullableSinglePatchLong = { set: number } | { setNull: true };
@@ -138,9 +138,9 @@ export interface AssetPatch {
   };
 }
 
-export interface AssetChangeById extends AssetPatch, InternalId { }
+export interface AssetChangeById extends AssetPatch, InternalId {}
 
-export interface AssetChangeByExternalId extends AssetPatch, ExternalId { }
+export interface AssetChangeByExternalId extends AssetPatch, ExternalId {}
 
 export type AssetChange = AssetChangeById | AssetChangeByExternalId;
 
@@ -175,7 +175,7 @@ export interface AssetFilter extends Limit {
   };
 }
 
-export interface AssetListScope extends AssetFilter, Cursor { }
+export interface AssetListScope extends AssetFilter, Cursor {}
 
 export interface AssetSearchFilter extends AssetFilter {
   search?: {
@@ -213,7 +213,7 @@ export interface UpdateModelNameField {
   };
 }
 
-export interface UpdateModel3D extends UpdateModelNameField, InternalId { }
+export interface UpdateModel3D extends UpdateModelNameField, InternalId {}
 
 export interface Asset extends ExternalAsset, AssetInternalId {
   lastUpdatedTime: Date;
@@ -389,11 +389,11 @@ export interface TimeSeriesPatch {
   };
 }
 
-export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId { }
+export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
 
 export interface TimeSeriesUpdateByExternalId
   extends TimeSeriesPatch,
-  ExternalId { }
+    ExternalId {}
 
 export type TimeSeriesUpdate =
   | TimeSeriesUpdateById
@@ -411,11 +411,11 @@ export interface DatapointsInsertProperties {
 
 export interface DatapointsPostDatapointId
   extends DatapointsInsertProperties,
-  InternalId { }
+    InternalId {}
 
 export interface DatapointsPostDatapointExternalId
   extends DatapointsInsertProperties,
-  ExternalId { }
+    ExternalId {}
 
 export type DatapointsPostDatapoint =
   | DatapointsPostDatapointId
@@ -446,11 +446,11 @@ export interface DatapointsQueryProperties extends Limit {
 
 export interface DatapointsQueryId
   extends DatapointsQueryProperties,
-  InternalId { }
+    InternalId {}
 
 export interface DatapointsQueryExternalId
   extends DatapointsQueryProperties,
-  ExternalId { }
+    ExternalId {}
 
 export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
 
@@ -628,8 +628,8 @@ export interface EventPatch {
   };
 }
 
-export interface EventChangeById extends EventPatch, InternalId { }
-export interface EventChangeByExternalId extends EventPatch, ExternalId { }
+export interface EventChangeById extends EventPatch, InternalId {}
+export interface EventChangeByExternalId extends EventPatch, ExternalId {}
 
 export type EventChange = EventChangeById | EventChangeByExternalId;
 
@@ -676,7 +676,7 @@ export interface FileFilter extends Limit {
   };
 }
 
-export interface FileRequestFilter extends Cursor, FileFilter { }
+export interface FileRequestFilter extends Cursor, FileFilter {}
 
 export interface ExternalFilesMetadata {
   externalId?: CogniteExternalId;
@@ -723,8 +723,8 @@ export interface FileChange {
   };
 }
 
-export interface FileChangeUpdateById extends InternalId, FileChange { }
-export interface FileChangeUpdateByExternalId extends ExternalId, FileChange { }
+export interface FileChangeUpdateById extends InternalId, FileChange {}
+export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
 
 export type FileChangeUpdate =
   | FileChangeUpdateById
@@ -732,7 +732,7 @@ export type FileChangeUpdate =
 
 // raw
 
-export interface ListRawDatabases extends Cursor, Limit { }
+export interface ListRawDatabases extends Cursor, Limit {}
 
 /**
  * A NoSQL database to store customer data.
@@ -744,7 +744,7 @@ export interface RawDB {
   name: string;
 }
 
-export interface ListRawTables extends Cursor, Limit { }
+export interface ListRawTables extends Cursor, Limit {}
 
 export interface RawDBTable {
   /**
@@ -916,8 +916,7 @@ export interface Revision3D {
   /**
    * The status of the revision.
    */
-  // tslint:disable-next-lineconsole.log
-
+  // tslint:disable-next-line
   status: 'Queued' | 'Processing' | 'Done' | 'Failed';
   /**
    * The threed file ID of a thumbnail for the revision.
@@ -1002,6 +1001,38 @@ export interface BoundingBox3D {
    * The maximal coordinates of the bounding box.
    */
   max: Tuple3<number>;
+}
+
+export interface AssetMappings3DListFilter extends Cursor, Limit {
+  nodeId: CogniteInternalId;
+  assetId: CogniteInternalId;
+}
+
+export interface AssetMapping3D extends AssetMapping3DBase {
+  /**
+   * A number describing the position of this node in the 3D hierarchy, starting from 0.
+   * The tree is traversed in a depth-first order.
+   */
+  treeIndex: number;
+  /**
+   * The number of nodes in the subtree of this node (this number included the node itself).
+   */
+  subtreeSize: number;
+}
+
+export type DeleteAssetMapping3D = AssetMapping3DBase;
+
+export type CreateAssetMapping3D = AssetMapping3DBase;
+
+export interface AssetMapping3DBase {
+  /**
+   * The ID of the node.
+   */
+  nodeId: CogniteInternalId;
+  /**
+   * The ID of the associated asset (Cognite's Assets API).
+   */
+  assetId: CogniteInternalId;
 }
 
 export interface ItemsResponse<T> {

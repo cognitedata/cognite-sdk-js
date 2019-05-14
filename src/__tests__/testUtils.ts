@@ -41,3 +41,32 @@ test('createErrorResponse', () => {
     },
   });
 });
+
+export function waitSeconds(seconds: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, seconds * 1000);
+  });
+}
+
+export async function retryInSeconds<O>(
+  func: () => Promise<O>,
+  secondsBetweenRetries = 3,
+  statusCodeToRetry = 404,
+  finishAfterSeconds: number = 300
+): Promise<O> {
+  const timeStart = Date.now();
+  while (Date.now() - timeStart < finishAfterSeconds * 1000) {
+    try {
+      return await func();
+    } catch (error) {
+      console.log('123', error, error.status);
+      if (Number(error.status) !== statusCodeToRetry) {
+        throw error;
+      }
+      await waitSeconds(secondsBetweenRetries);
+    }
+  }
+  throw new Error('Time limit has been exceeded');
+}
+
+export const simpleCompare = (a: number, b: number) => a - b;

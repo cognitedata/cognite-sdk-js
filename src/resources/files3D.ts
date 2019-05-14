@@ -3,7 +3,6 @@
 import { AxiosInstance } from 'axios';
 import { rawRequest } from '../axiosWrappers';
 import { MetadataMap } from '../metadata';
-import { generateRetrieveSingleEndpoint } from '../standardMethods';
 import { CogniteInternalId } from '../types/types';
 import { projectUrl } from '../utils';
 
