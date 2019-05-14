@@ -11,7 +11,7 @@ import {
   UpdateRevision3D,
   UploadFileMetadataResponse,
 } from '../../types/types';
-import { setupClient, simpleCompare } from '../testUtils';
+import { setupClient, simpleCompare, retryInSeconds } from '../testUtils';
 
 describe('Revision3d integration test', async () => {
   let client: API;
@@ -40,11 +40,21 @@ describe('Revision3d integration test', async () => {
     expect(file).toBeTruthy();
   });
 
-  test('create revision', async () => {
-    const revisionsToCreate: CreateRevision3D[] = [{ fileId: file.id }];
-    revisions = await client.revisions3D.create(model.id, revisionsToCreate);
-    expect(revisions.length).toBe(1);
-  });
+  test(
+    'create revision',
+    async done => {
+      const revisionsToCreate: CreateRevision3D[] = [{ fileId: file.id }];
+      revisions = await retryInSeconds(
+        () => client.revisions3D.create(model.id, revisionsToCreate),
+        3,
+        400,
+        60
+      );
+      expect(revisions.length).toBe(1);
+      done();
+    },
+    10 * 1000
+  );
 
   test('retrieve', async () => {
     const retrieved = await client.revisions3D.retrieve(
