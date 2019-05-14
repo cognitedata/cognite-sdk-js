@@ -3,6 +3,10 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { rawRequest } from '../axiosWrappers';
 import { Metadata, MetadataMap } from '../metadata';
+import {
+  AssetMappings3DAPI,
+  generateAssetMappings3DObject,
+} from './assetMappings3D';
 import { AssetsAPI, generateAssetsObject } from './assets';
 import { DatapointsAPI, generateDatapointsObject } from './datapoints';
 import { EventsAPI, generateEventsObject } from './events';
@@ -59,6 +63,7 @@ export interface API {
   models3D: Models3DAPI;
   revisions3D: Revisions3DAPI;
   files3D: Files3DAPI;
+  assetMappings3D: AssetMappings3DAPI;
   _instance: AxiosInstance;
 }
 
@@ -94,6 +99,11 @@ export function generateAPIObject(
     models3D: generateModels3DObject(project, axiosInstance, metadataMap),
     revisions3D: generateRevisions3DObject(project, axiosInstance, metadataMap),
     files3D: generateFiles3DObject(project, axiosInstance, metadataMap),
+    assetMappings3D: generateAssetMappings3DObject(
+      project,
+      axiosInstance,
+      metadataMap
+    ),
     _instance: axiosInstance,
   };
 }
