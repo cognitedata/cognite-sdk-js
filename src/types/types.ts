@@ -1166,6 +1166,205 @@ export interface NewApiKeyResponse extends ApiKeyObject {
   value: string;
 }
 
+// groups
+
+export interface ListGroups {
+  /**
+   * Whether to get all groups, only available with the groups:list acl.
+   */
+  all?: boolean;
+}
+
+/**
+ * Name of the group
+ * @example Production Engineers
+ */
+export type GroupName = string;
+
+/**
+ * ID of the group in the source. If this is the same ID as a group in the IDP, a user in that group will implicitly be a part of this group as well.
+ * @example b7c9a5a4-99c2-4785-bed3-5e6ad9a78603
+ */
+export type GroupSourceId = string;
+
+export interface Group {
+  name: GroupName;
+  sourceId?: GroupSourceId;
+  capabilities?: cogniteCapability;
+  id: number;
+  isDeleted: boolean;
+  deletedTime?: Date;
+}
+
+export type LIST = 'LIST';
+export type READ = 'READ';
+export type WRITE = 'WRITE';
+export type CREATE = 'CREATE';
+export type UPDATE = 'UPDATE';
+export type DELETE = 'DELETE';
+export type MEMBEROF = 'MEMBEROF';
+export type EXECUTE = 'EXECUTE';
+
+export interface Acl<ActionsType, ScopeType> {
+  actions?: ActionsType[];
+  scope?: ScopeType;
+}
+
+export interface GenericAclAllScope {
+  all: {};
+}
+
+export interface GenericAclCurrentUserScope {
+  currentuserscope: {};
+}
+
+export type cognitegroups_aclAction = LIST | READ | CREATE | UPDATE | DELETE;
+export type cognitegroups_aclScope =
+  | GenericAclAllScope
+  | GenericAclCurrentUserScope;
+export type cognitegroups_aclAcl = Acl<
+  cognitegroups_aclAction,
+  cognitegroups_aclScope
+>;
+
+export type cogniteassets_aclAction = LIST | WRITE;
+export type cogniteassets_aclScope = GenericAclAllScope;
+export type cogniteassets_aclAcl = Acl<
+  cogniteassets_aclAction,
+  cogniteassets_aclScope
+>;
+
+export type cogniteevents_aclAction = READ | WRITE;
+export type cogniteevents_aclScope = GenericAclAllScope;
+export type cogniteevents_aclAcl = Acl<
+  cogniteevents_aclAction,
+  cogniteevents_aclScope
+>;
+
+export type cognitefiles_aclAction = READ | WRITE;
+export type cognitefiles_aclScope = GenericAclAllScope;
+export type cognitefiles_aclAcl = Acl<
+  cognitefiles_aclAction,
+  cognitefiles_aclScope
+>;
+
+export type cogniteusers_aclAction = LIST | CREATE | DELETE;
+export type cogniteusers_aclScope = GenericAclAllScope;
+export type cogniteusers_aclAcl = Acl<
+  cogniteusers_aclAction,
+  cogniteusers_aclScope
+>;
+
+export type cogniteprojects_aclAction = LIST | READ | CREATE | UPDATE;
+export type cogniteprojects_aclScope = GenericAclAllScope;
+export type cogniteprojects_aclAcl = Acl<
+  cogniteprojects_aclAction,
+  cogniteprojects_aclScope
+>;
+
+export type cognitesecuritycategories_aclAction =
+  | MEMBEROF
+  | LIST
+  | CREATE
+  | DELETE;
+export type cognitesecuritycategories_aclScope = GenericAclAllScope;
+export type cognitesecuritycategories_aclAcl = Acl<
+  cognitesecuritycategories_aclAction,
+  cognitesecuritycategories_aclScope
+>;
+
+export type cogniteraw_aclAction = READ | WRITE | LIST;
+export type cogniteraw_aclScope = GenericAclAllScope;
+export type cogniteraw_aclAcl = Acl<cogniteraw_aclAction, cogniteraw_aclScope>;
+
+export interface CogniteAssetsAclIdScope {
+  assetIdScope: {
+    subtreeIds: CogniteInternalId[];
+  };
+}
+export type cognitetimeseries_aclAction = READ | WRITE;
+export type cognitetimeseries_aclScope =
+  | GenericAclAllScope
+  | CogniteAssetsAclIdScope;
+export type cognitetimeseries_aclAcl = Acl<
+  cognitetimeseries_aclAction,
+  cognitetimeseries_aclScope
+>;
+
+export type cogniteapikeys_aclAction = LIST | CREATE | DELETE;
+export type cogniteapikeys_aclScope =
+  | GenericAclAllScope
+  | GenericAclCurrentUserScope;
+export type cogniteapikeys_aclAcl = Acl<
+  cogniteapikeys_aclAction,
+  cogniteapikeys_aclScope
+>;
+
+export type cognitethreed_aclAction = READ | CREATE | UPDATE | DELETE;
+export type cognitethreed_aclScope = GenericAclAllScope;
+export type cognitethreed_aclAcl = Acl<
+  cognitethreed_aclAction,
+  cognitethreed_aclScope
+>;
+
+export type cognitesequences_aclAction = READ | WRITE;
+export type cognitesequences_aclScope = GenericAclAllScope;
+export type cognitesequences_aclAcl = Acl<
+  cognitesequences_aclAction,
+  cognitesequences_aclScope
+>;
+
+export type cogniteanalytics_aclAction = READ | EXECUTE | LIST;
+export type cogniteanalytics_aclScope = GenericAclAllScope;
+export type cogniteanalytics_aclAcl = Acl<
+  cogniteanalytics_aclAction,
+  cogniteanalytics_aclScope
+>;
+
+export type SingleCogniteCapability =
+  | { groupsAcl: cognitegroups_aclAcl }
+  | { assetsAcl: cogniteassets_aclAcl }
+  | { eventsAcl: cogniteevents_aclAcl }
+  | { filesAcl: cognitefiles_aclAcl }
+  | { usersAcl: cogniteusers_aclAcl }
+  | { projectsAcl: cogniteprojects_aclAcl }
+  | { securityCategoriesAcl: cognitesecuritycategories_aclAcl }
+  | { rawAcl: cogniteraw_aclAcl }
+  | { timeSeriesAcl: cognitetimeseries_aclAcl }
+  | { apikeysAcl: cogniteapikeys_aclAcl }
+  | { threedAcl: cognitethreed_aclAcl }
+  | { sequencesAcl: cognitesequences_aclAcl }
+  | { analyticsAcl: cogniteanalytics_aclAcl };
+
+export type cogniteCapability = SingleCogniteCapability[];
+
+export interface GroupSpec {
+  name: GroupName;
+  sourceId?: GroupSourceId;
+  capabilities?: cogniteCapability;
+}
+
+export interface GroupServiceAccount {
+  /**
+   * Unique name of the service account
+   * @example some-internal-service@apple.com
+   */
+  name: string;
+  id: CogniteInternalId;
+  /**
+   * List of group ids
+   */
+  groups: CogniteInternalId[];
+  /**
+   * If this service account has been logically deleted
+   */
+  isDeleted: boolean;
+  /**
+   * Time of deletion
+   */
+  deletedTime?: Date;
+}
+
 export interface ItemsResponse<T> {
   items: T[];
 }
