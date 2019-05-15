@@ -1125,9 +1125,18 @@ export interface ProjectUpdate {
 // api keys
 
 export interface ApiKeyObject {
+  /**
+   * Internal id for the api key
+   */
   id: CogniteInternalId;
+  /**
+   * Id of the service account
+   */
   serviceAccountId: CogniteInternalId;
   createdTime: Date;
+  /**
+   * The status of the api key
+   */
   status: 'ACTIVE' | 'DELETED';
 }
 
@@ -1150,11 +1159,7 @@ export interface ApiKeyRequest {
   serviceAccountId: CogniteInternalId;
 }
 
-export interface NewApiKeyResponse {
-  id: CogniteInternalId;
-  serviceAccountId: CogniteInternalId;
-  createdTime: Date;
-  status: 'ACTIVE' | 'DELETED';
+export interface NewApiKeyResponse extends ApiKeyObject {
   /**
    * The api key to be used against the API
    */
