@@ -7,6 +7,7 @@ import { AssetsAPI, generateAssetsObject } from './assets';
 import { DatapointsAPI, generateDatapointsObject } from './datapoints';
 import { EventsAPI, generateEventsObject } from './events';
 import { FilesAPI, generateFilesObject } from './files';
+import { generateProjectObject, ProjectsAPI } from './projects';
 import { generateRawObject, RawAPI } from './raw';
 import {
   generateSecurityCategoryObject,
@@ -49,6 +50,7 @@ export interface API {
   events: EventsAPI;
   files: FilesAPI;
   raw: RawAPI;
+  projects: ProjectsAPI;
   securityCategories: SecurityCategoriesAPI;
   serviceAccounts: ServiceAccountsAPI;
   _instance: AxiosInstance;
@@ -73,6 +75,7 @@ export function generateAPIObject(
     events: generateEventsObject(project, axiosInstance, metadataMap),
     files: generateFilesObject(project, axiosInstance, metadataMap),
     raw: generateRawObject(project, axiosInstance, metadataMap),
+    projects: generateProjectObject(axiosInstance, metadataMap),
     securityCategories: generateSecurityCategoryObject(
       project,
       axiosInstance,
