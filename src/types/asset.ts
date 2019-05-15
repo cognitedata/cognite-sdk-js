@@ -7,7 +7,7 @@ export interface Asset {
   /**
    * ID of the asset.
    */
-  id?: number;
+  id: number;
   /**
    * Description of asset.
    */

@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import * as sleep from 'sleep-promise';
 import { createClientWithApiKey } from '../index';
 
 export function createErrorReponse(status: number, message: string) {
@@ -42,18 +43,12 @@ test('createErrorResponse', () => {
   });
 });
 
-export function waitSeconds(seconds: number) {
-  return new Promise(resolve => {
-    setTimeout(resolve, seconds * 1000);
-  });
-}
-
-export async function retryInSeconds<O>(
-  func: () => Promise<O>,
+export async function retryInSeconds<ResponseType>(
+  func: () => Promise<ResponseType>,
   secondsBetweenRetries = 3,
   statusCodeToRetry = 404,
   finishAfterSeconds: number = 300
-): Promise<O> {
+): Promise<ResponseType> {
   const timeStart = Date.now();
   while (Date.now() - timeStart < finishAfterSeconds * 1000) {
     try {
@@ -62,10 +57,17 @@ export async function retryInSeconds<O>(
       if (Number(error.status) !== statusCodeToRetry) {
         throw error;
       }
-      await waitSeconds(secondsBetweenRetries);
+      await sleep(secondsBetweenRetries * 1000);
     }
   }
   throw new Error('Time limit has been exceeded');
 }
 
 export const simpleCompare = (a: number, b: number) => a - b;
+
+export function getSortedPropInArray<T extends { [key: string]: any }>(
+  arr: T[],
+  propName: string
+) {
+  return arr.map(elem => elem[propName]).sort(simpleCompare);
+}

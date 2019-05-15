@@ -11,7 +11,7 @@ import {
   UpdateRevision3D,
   UploadFileMetadataResponse,
 } from '../../types/types';
-import { setupClient, simpleCompare, retryInSeconds } from '../testUtils';
+import { retryInSeconds, setupClient, simpleCompare } from '../testUtils';
 
 describe('Revision3d integration test', async () => {
   let client: API;
@@ -29,7 +29,7 @@ describe('Revision3d integration test', async () => {
 
   test('create model', async () => {
     const modelToCreate = { name: `Model revision test ${now}` };
-    model = (await client.models3D.create([modelToCreate]))[0];
+    [model] = await client.models3D.create([modelToCreate]);
     expect(model).toBeTruthy();
   });
 
@@ -40,21 +40,17 @@ describe('Revision3d integration test', async () => {
     expect(file).toBeTruthy();
   });
 
-  test(
-    'create revision',
-    async done => {
-      const revisionsToCreate: CreateRevision3D[] = [{ fileId: file.id }];
-      revisions = await retryInSeconds(
-        () => client.revisions3D.create(model.id, revisionsToCreate),
-        3,
-        400,
-        60
-      );
-      expect(revisions.length).toBe(1);
-      done();
-    },
-    10 * 1000
-  );
+  test('create revision', async done => {
+    const revisionsToCreate: CreateRevision3D[] = [{ fileId: file.id }];
+    revisions = await retryInSeconds(
+      () => client.revisions3D.create(model.id, revisionsToCreate),
+      3,
+      400,
+      60
+    );
+    expect(revisions.length).toBe(1);
+    done();
+  });
 
   test('retrieve', async () => {
     const retrieved = await client.revisions3D.retrieve(
@@ -63,7 +59,7 @@ describe('Revision3d integration test', async () => {
     );
     expect(retrieved.fileId).toBe(file.id);
     expect(retrieved.published).toBeFalsy();
-    expect(retrieved.rotation).toBeFalsy();
+    expect(retrieved.rotation).not.toBeDefined();
   });
 
   test('update', async () => {
@@ -102,9 +98,9 @@ describe('Revision3d integration test', async () => {
   });
 
   test('list', async () => {
-    const listed = await client.revisions3D.list(model.id).autoPagingToArray();
+    const list = await client.revisions3D.list(model.id).autoPagingToArray();
     expect(revisions.map(r => r.id).sort(simpleCompare)).toEqual(
-      listed.map(r => r.id).sort(simpleCompare)
+      list.map(r => r.id).sort(simpleCompare)
     );
   });
 
@@ -154,19 +150,21 @@ describe('Revision3d integration test', async () => {
   });
 
   test('delete revisions', async () => {
-    await client.revisions3D.delete(
+    const deleted = await client.revisions3D.delete(
       model.id,
       revisions.map(r => ({ id: r.id }))
     );
+    expect(deleted).toEqual({});
   });
 
   test('list empty', async () => {
-    const listed = await client.revisions3D.list(model.id).autoPagingToArray();
-    expect(listed).toEqual([]);
+    const list = await client.revisions3D.list(model.id).autoPagingToArray();
+    expect(list).toEqual([]);
   });
 
   test('delete model', async () => {
-    await client.models3D.delete([{ id: model.id }]);
+    const deleted = await client.models3D.delete([{ id: model.id }]);
+    expect(deleted).toEqual({});
   });
 
   test('delete file', async () => {

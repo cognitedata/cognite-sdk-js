@@ -31,7 +31,7 @@ export function generateFiles3DObject(
         method: 'get',
         responseType: 'arraybuffer',
       });
-      return map.addAndReturn<ArrayBuffer>(response.data, response);
+      return map.addAndReturn(response.data, response);
     },
   };
 }

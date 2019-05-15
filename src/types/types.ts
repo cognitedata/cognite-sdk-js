@@ -203,10 +203,6 @@ export interface CreateModel3D {
   name: string;
 }
 
-export type GenericGetPathParams<T> = (obj: T) => Partial<T>;
-
-export type GenericGetParameterizedPath<T> = (obj: T) => string;
-
 export interface UpdateModelNameField {
   update: {
     name: SetField<string>;
@@ -773,9 +769,8 @@ export interface RawDBRow extends RawDBRowKey {
 }
 
 // Security categories
-export interface ListSecurityCategories extends Cursor {
+export interface ListSecurityCategories extends Cursor, Limit {
   sort?: 'ASC' | 'DESC';
-  limit?: number;
 }
 
 export interface SecurityCategory {
@@ -824,8 +819,7 @@ export interface ServiceAccountInput {
   groups?: Groups;
 }
 
-export interface Model3DListRequest {
-  limit?: number;
+export interface Model3DListRequest extends Limit {
   /**
    * Filter based on whether or not it has published revisions.
    */
@@ -854,7 +848,7 @@ export type Tuple3<T> = [T, T, T];
 
 export interface UpdateRevision3D {
   id: CogniteInternalId;
-  update?: {
+  update: {
     /**
      * True if the revision is marked as published.
      */
@@ -871,12 +865,7 @@ export interface UpdateRevision3D {
   };
 }
 
-export interface Revision3DListRequest {
-  /**
-   * Limits the number of results to be returned.
-   * The maximum results returned by the server is 1000 even if the limit specified is larger.
-   */
-  limit?: number;
+export interface Revision3DListRequest extends Limit {
   /**
    * Filter based on whether or not it has published revisions.
    */
@@ -887,12 +876,14 @@ export interface RevisionCameraProperties {
   /**
    * Initial camera target.
    */
-  target?: [number, number, number];
+  target?: Tuple3<number>;
   /**
    * Initial camera position.
    */
-  position?: [number, number, number];
+  position?: Tuple3<number>;
 }
+
+type Revision3DStatus = 'Queued' | 'Processing' | 'Done' | 'Failed';
 
 export interface Revision3D {
   /**
@@ -916,8 +907,7 @@ export interface Revision3D {
   /**
    * The status of the revision.
    */
-  // tslint:disable-next-line
-  status: 'Queued' | 'Processing' | 'Done' | 'Failed';
+  status: Revision3DStatus;
   /**
    * The threed file ID of a thumbnail for the revision.
    * Use /3d/files/{id} to retrieve the file.
@@ -935,14 +925,6 @@ export interface Revision3D {
    *
    */
   createdTime: Date;
-}
-
-export interface Limit {
-  /**
-   * Limits the number of results to be returned.
-   * The maximum results returned by the server is 1000 even if the limit specified is larger.
-   */
-  limit?: number;
 }
 
 export interface List3DNodesQuery extends Cursor, Limit {
@@ -969,7 +951,7 @@ export interface Node3D {
   /**
    * The parent of the node, null if it is the root node.
    */
-  parentId: number;
+  parentId: CogniteInternalId;
   /**
    * The depth of the node in the tree, starting from 0 at the root node.
    */
@@ -983,7 +965,8 @@ export interface Node3D {
    */
   subtreeSize: number;
   /**
-   *
+   *  The bounding box of the subtree with this sector as the root sector.
+   *  Is null if there are no geometries in the subtree.
    */
   boundingBox: BoundingBox3D;
 }

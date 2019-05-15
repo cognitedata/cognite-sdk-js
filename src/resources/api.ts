@@ -11,7 +11,10 @@ import { AssetsAPI, generateAssetsObject } from './assets';
 import { DatapointsAPI, generateDatapointsObject } from './datapoints';
 import { EventsAPI, generateEventsObject } from './events';
 import { FilesAPI, generateFilesObject } from './files';
+import { Files3DAPI, generateFiles3DObject } from './files3D';
+import { generateModels3DObject, Models3DAPI } from './models3D';
 import { generateRawObject, RawAPI } from './raw';
+import { generateRevisions3DObject, Revisions3DAPI } from './revisions3D';
 import {
   generateSecurityCategoryObject,
   SecurityCategoriesAPI,
@@ -20,9 +23,6 @@ import {
   generateServiceAccountsObject,
   ServiceAccountsAPI,
 } from './serviceAccounts';
-import { Files3DAPI, generateFiles3DObject } from './files3D';
-import { generateModels3DObject, Models3DAPI } from './models3D';
-import { generateRevisions3DObject, Revisions3DAPI } from './revisions3d';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
 
 export interface BaseRequestOptions {
