@@ -8,6 +8,7 @@ import axios, {
 } from 'axios';
 import { handleErrorResponse } from './error';
 import { makeRequestSafeToRetry } from './retryRequests';
+import { transformDateInRequest, transformDateInResponse } from './utils';
 
 /** @hidden */
 export function generateAxiosInstance(baseUrl: string): AxiosInstance {
@@ -44,7 +45,7 @@ export function listenForNonSuccessStatusCode(
 }
 
 /** @hidden */
-export function rawRequest<ResponseType>(
+export async function rawRequest<ResponseType>(
   axiosInstance: AxiosInstance,
   requestConfig: AxiosRequestConfig,
   isSafeToRetry: boolean = false
@@ -52,7 +53,10 @@ export function rawRequest<ResponseType>(
   if (isSafeToRetry) {
     makeRequestSafeToRetry(requestConfig);
   }
-  return axiosInstance(requestConfig).catch(handleErrorResponse) as Promise<
-    AxiosResponse<ResponseType>
-  >;
+  requestConfig.data = transformDateInRequest(requestConfig.data);
+  const response = (await axiosInstance(requestConfig).catch(
+    handleErrorResponse
+  )) as AxiosResponse<ResponseType>;
+  response.data = transformDateInResponse(response.data);
+  return response;
 }

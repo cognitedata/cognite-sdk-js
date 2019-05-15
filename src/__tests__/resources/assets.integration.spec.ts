@@ -29,6 +29,8 @@ describe('Asset integration test', async () => {
 
   test('create,retrieve,update,delete', async () => {
     const assets = await client.assets.create([childAsset, rootAsset]);
+    expect(assets[0].createdTime).toBeInstanceOf(Date);
+    expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
     await client.assets.retrieve([{ id: assets[0].id }]);
     await client.assets.update([
       {
@@ -48,7 +50,12 @@ describe('Asset integration test', async () => {
 
   test('list', async () => {
     await client.assets
-      .list({ filter: { name: rootAsset.name } })
+      .list({
+        filter: {
+          name: rootAsset.name,
+          createdTime: { min: 0, max: Date.now() },
+        },
+      })
       .autoPagingToArray({ limit: 100 });
   });
 

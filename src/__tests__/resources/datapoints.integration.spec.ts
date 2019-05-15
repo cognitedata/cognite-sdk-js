@@ -19,11 +19,11 @@ describe('Datapoints integration test', async () => {
   test('insert', async () => {
     const datapoints = [
       {
-        timestamp: 0,
+        timestamp: new Date(0),
         value: 10,
       },
       {
-        timestamp: 10,
+        timestamp: new Date(10),
         value: 100,
       },
     ];

@@ -71,3 +71,12 @@ export function getSortedPropInArray<T extends { [key: string]: any }>(
 ) {
   return arr.map(elem => elem[propName]).sort(simpleCompare);
 }
+
+export function string2arrayBuffer(str: string) {
+  const buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
+  const bufView = new Uint16Array(buf);
+  for (let i = 0, strLen = str.length; i < strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}
