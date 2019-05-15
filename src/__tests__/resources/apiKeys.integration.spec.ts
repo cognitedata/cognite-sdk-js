@@ -1,0 +1,50 @@
+// Copyright 2019 Cognite AS
+
+import { API } from '../../resources/api';
+import { NewApiKeyResponseDTO, ServiceAccount } from '../../types/types';
+import { setupClient } from '../testUtils';
+
+describe('API keys integration test', async () => {
+  let client: API;
+  let serviceAccount: ServiceAccount;
+  const now = Date.now();
+  beforeAll(async () => {
+    jest.setTimeout(20000);
+    client = await setupClient();
+    [serviceAccount] = await client.serviceAccounts.create([
+      { name: 'Test' + now },
+    ]);
+  });
+
+  afterAll(async () => {
+    await client.serviceAccounts.delete([serviceAccount.id]);
+  });
+
+  let apiKeys: NewApiKeyResponseDTO[];
+
+  test('create', async () => {
+    apiKeys = await client.apiKeys.create([
+      {
+        serviceAccountId: serviceAccount.id,
+      },
+    ]);
+    expect(apiKeys).toBeDefined();
+    expect(apiKeys.length).toBe(1);
+    expect(apiKeys[0].id).toBeDefined();
+    expect(apiKeys[0].value).toBeDefined();
+  });
+
+  test('list', async () => {
+    const response = await client.apiKeys.list({
+      serviceAccountId: serviceAccount.id,
+    });
+    expect(response).toBeDefined();
+    expect(response.length).toBe(1);
+    expect(response[0].id).toBe(apiKeys[0].id);
+  });
+
+  test('delete', async () => {
+    const response = await client.apiKeys.delete(apiKeys.map(key => key.id));
+    expect(response).toEqual({});
+  });
+});

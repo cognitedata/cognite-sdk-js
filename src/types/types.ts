@@ -1122,6 +1122,36 @@ export interface ProjectUpdate {
   authentication?: InputProjectAuthentication;
 }
 
+// api keys
+
+export interface ApiKeyObject {
+  id: CogniteInternalId;
+  serviceAccountId: CogniteInternalId;
+  createdTime: Date;
+  status: 'ACTIVE' | 'DELETED';
+}
+
+export interface ApiKeyListScope {
+  all?: boolean;
+  serviceAccountId?: CogniteInternalId;
+  includeDeleted?: boolean;
+}
+
+export interface ApiKeyRequest {
+  serviceAccountId: CogniteInternalId;
+}
+
+export interface NewApiKeyResponseDTO {
+  id: CogniteInternalId;
+  serviceAccountId: CogniteInternalId;
+  createdTime: Date;
+  status: 'ACTIVE' | 'DELETED';
+  /**
+   * The api key to be used against the API
+   */
+  value: string;
+}
+
 export interface ItemsResponse<T> {
   items: T[];
 }
