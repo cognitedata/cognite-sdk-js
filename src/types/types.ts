@@ -1132,8 +1132,17 @@ export interface ApiKeyObject {
 }
 
 export interface ApiKeyListScope {
+  /**
+   * Only available with users:list acl, returns all api keys for this project.
+   */
   all?: boolean;
+  /**
+   * Get api keys for a specific service account, only available to admin users.
+   */
   serviceAccountId?: CogniteInternalId;
+  /**
+   * Whether to include deleted api keys
+   */
   includeDeleted?: boolean;
 }
 
@@ -1141,7 +1150,7 @@ export interface ApiKeyRequest {
   serviceAccountId: CogniteInternalId;
 }
 
-export interface NewApiKeyResponseDTO {
+export interface NewApiKeyResponse {
   id: CogniteInternalId;
   serviceAccountId: CogniteInternalId;
   createdTime: Date;

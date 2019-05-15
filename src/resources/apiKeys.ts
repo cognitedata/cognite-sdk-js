@@ -12,7 +12,7 @@ import {
   ApiKeyObject,
   ApiKeyRequest,
   CogniteInternalId,
-  NewApiKeyResponseDTO,
+  NewApiKeyResponse,
 } from '../types/types';
 import { projectUrl } from '../utils';
 
@@ -33,7 +33,7 @@ export interface ApiKeysAPI {
    * const createdApiKeys = await client.apiKeys.create([{ serviceAccountId: 123 }]);
    * ```
    */
-  create: (items: ApiKeyRequest[]) => Promise<NewApiKeyResponseDTO[]>;
+  create: (items: ApiKeyRequest[]) => Promise<NewApiKeyResponse[]>;
 
   /**
    * [Delete API keys](https://doc.cognitedata.com/api/v1/#operation/deleteApiKeys)
