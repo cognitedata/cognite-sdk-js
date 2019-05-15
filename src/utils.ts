@@ -7,9 +7,11 @@ export function getBaseUrl(baseUrl?: string) {
   return baseUrl || BASE_URL;
 }
 
+export const apiUrl = () => `/api/${API_VERSION}`;
+
 /** @hidden */
 export function projectUrl(project: string) {
-  return `/api/${API_VERSION}/projects/${encodeURIComponent(project)}`;
+  return `${apiUrl()}/projects/${encodeURIComponent(project)}`;
 }
 
 /** @hidden */
