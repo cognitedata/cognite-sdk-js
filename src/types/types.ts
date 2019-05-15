@@ -213,6 +213,7 @@ export interface UpdateModel3D extends UpdateModelNameField, InternalId {}
 
 export interface Asset extends ExternalAsset, AssetInternalId {
   lastUpdatedTime: Date;
+  createdTime: Date;
   /**
    * IDs of assets on the path to the asset.
    */
@@ -987,8 +988,8 @@ export interface BoundingBox3D {
 }
 
 export interface AssetMappings3DListFilter extends Cursor, Limit {
-  nodeId: CogniteInternalId;
-  assetId: CogniteInternalId;
+  nodeId?: CogniteInternalId;
+  assetId?: CogniteInternalId;
 }
 
 export interface AssetMapping3D extends AssetMapping3DBase {

@@ -8,10 +8,12 @@ import {
   generateDeleteEndpoint,
   generateListEndpoint,
   generateRetrieveEndpoint,
+  generateRetrieveSingleEndpoint,
   generateSearchEndpoint,
   generateUpdateEndpoint,
 } from '../standardMethods';
 import {
+  CogniteInternalId,
   ExternalFilesMetadata,
   FileChangeUpdate,
   FileContent,
@@ -49,7 +51,9 @@ export interface FilesAPI {
    */
   upload: (
     metadata: ExternalFilesMetadata,
-    fileContent?: FileContent
+    fileContent?: FileContent,
+    // tslint:disable-next-line:bool-param-default
+    waitUntilAcknowledged?: boolean
   ) => Promise<UploadFileMetadataResponse>;
 
   /**
@@ -103,6 +107,31 @@ export interface FilesAPI {
   update: (changes: FileChangeUpdate[]) => Promise<FilesMetadata[]>;
 }
 
+function waitUntilFileIsUploaded(
+  fileId: CogniteInternalId,
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  frequencyInMs: number = 1000
+) {
+  return new Promise((resolve, reject) => {
+    try {
+      const retrieve = generateRetrieveSingleEndpoint<
+        CogniteInternalId,
+        FilesMetadata
+      >(axiosInstance, resourcePath, new MetadataMap());
+
+      const myInterval = setInterval(async () => {
+        if ((await retrieve(fileId)).uploaded) {
+          clearInterval(myInterval);
+          resolve();
+        }
+      }, frequencyInMs);
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
 function generateUploadEndpoint(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -110,7 +139,8 @@ function generateUploadEndpoint(
 ) {
   return async function upload(
     fileMetadata: ExternalFilesMetadata,
-    fileContent?: FileContent
+    fileContent?: FileContent,
+    waitUntilAcknowledged: boolean = false
   ): Promise<UploadFileMetadataResponse> {
     const response = await rawRequest<UploadFileMetadataResponse>(
       axiosInstance,
@@ -133,6 +163,9 @@ function generateUploadEndpoint(
         headers,
         data: fileContent,
       });
+    }
+    if (waitUntilAcknowledged) {
+      await waitUntilFileIsUploaded(file.id, axiosInstance, resourcePath);
     }
     return metadataMap.addAndReturn(file, response);
   };
