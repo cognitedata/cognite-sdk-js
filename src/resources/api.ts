@@ -3,6 +3,7 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { rawRequest } from '../axiosWrappers';
 import { Metadata, MetadataMap } from '../metadata';
+import { ApiKeysAPI, generateApiKeysObject } from './apiKeys';
 import {
   AssetMappings3DAPI,
   generateAssetMappings3DObject,
@@ -64,6 +65,7 @@ export interface API {
   revisions3D: Revisions3DAPI;
   files3D: Files3DAPI;
   assetMappings3D: AssetMappings3DAPI;
+  apiKeys: ApiKeysAPI;
   _instance: AxiosInstance;
 }
 
@@ -105,6 +107,7 @@ export function generateAPIObject(
       axiosInstance,
       metadataMap
     ),
+    apiKeys: generateApiKeysObject(project, axiosInstance, metadataMap),
     _instance: axiosInstance,
   };
 }

@@ -1122,6 +1122,50 @@ export interface ProjectUpdate {
   authentication?: InputProjectAuthentication;
 }
 
+// api keys
+
+export interface ApiKeyObject {
+  /**
+   * Internal id for the api key
+   */
+  id: CogniteInternalId;
+  /**
+   * Id of the service account
+   */
+  serviceAccountId: CogniteInternalId;
+  createdTime: Date;
+  /**
+   * The status of the api key
+   */
+  status: 'ACTIVE' | 'DELETED';
+}
+
+export interface ApiKeyListScope {
+  /**
+   * Only available with users:list acl, returns all api keys for this project.
+   */
+  all?: boolean;
+  /**
+   * Get api keys for a specific service account, only available to admin users.
+   */
+  serviceAccountId?: CogniteInternalId;
+  /**
+   * Whether to include deleted api keys
+   */
+  includeDeleted?: boolean;
+}
+
+export interface ApiKeyRequest {
+  serviceAccountId: CogniteInternalId;
+}
+
+export interface NewApiKeyResponse extends ApiKeyObject {
+  /**
+   * The api key to be used against the API
+   */
+  value: string;
+}
+
 export interface ItemsResponse<T> {
   items: T[];
 }
