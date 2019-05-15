@@ -12,9 +12,13 @@ import {
   Revision3D,
   UploadFileMetadataResponse,
 } from '../../types/types';
-import { retryInSeconds, setupClient, simpleCompare } from '../testUtils';
+import {
+  getSortedPropInArray,
+  retryInSeconds,
+  setupClient,
+} from '../testUtils';
 
-describe('Asset mappings integration test', async () => {
+describe('3D Asset mappings integration test', async () => {
   let client: API;
 
   beforeAll(async () => {
@@ -31,7 +35,7 @@ describe('Asset mappings integration test', async () => {
 
   test('create model', async () => {
     const modelToCreate = { name: `Model revision test ${now}` };
-    model = (await client.models3D.create([modelToCreate]))[0];
+    [model] = await client.models3D.create([modelToCreate]);
     expect(model).toBeTruthy();
   });
 
@@ -42,21 +46,17 @@ describe('Asset mappings integration test', async () => {
     expect(file).toBeTruthy();
   });
 
-  test(
-    'create revision',
-    async done => {
-      const revisionsToCreate: CreateRevision3D[] = [{ fileId: file.id }];
-      revisions = await retryInSeconds(
-        () => client.revisions3D.create(model.id, revisionsToCreate),
-        3,
-        400,
-        60
-      );
-      expect(revisions.length).toBe(1);
-      done();
-    },
-    10 * 1000
-  );
+  test('create revision', async done => {
+    const revisionsToCreate: CreateRevision3D[] = [{ fileId: file.id }];
+    revisions = await retryInSeconds(
+      () => client.revisions3D.create(model.id, revisionsToCreate),
+      3,
+      400,
+      60
+    );
+    expect(revisions.length).toBe(1);
+    done();
+  });
 
   const rootAsset = {
     name: 'test-root',
@@ -99,30 +99,31 @@ describe('Asset mappings integration test', async () => {
   test('create asset mappings 3d', async () => {
     assetMappingsToCreate = nodes3D.slice(0, 2).map((node, index) => ({
       nodeId: node.id,
-      assetId: Number(assets[index].id),
+      assetId: assets[index].id,
     }));
     assetMappings = await client.assetMappings3D.create(
       model.id,
       revisions[0].id,
       assetMappingsToCreate
     );
-    expect(assetMappings.map(a => a.assetId).sort(simpleCompare)).toEqual(
-      assetMappingsToCreate.map(a => a.assetId).sort(simpleCompare)
+    expect(getSortedPropInArray(assetMappings, 'assetId')).toEqual(
+      getSortedPropInArray(assetMappingsToCreate, 'assetId')
     );
     expect(assetMappings.length).toBe(2);
   });
 
   test('list asset mappings 3d', async () => {
-    const listed = await client.assetMappings3D
+    const list = await client.assetMappings3D
       .list(model.id, revisions[0].id)
       .autoPagingToArray({ limit: 2 });
-    expect(listed.map(m => m.assetId).sort(simpleCompare)).toEqual(
-      assetMappingsToCreate.map(m => m.assetId).sort(simpleCompare)
+
+    expect(getSortedPropInArray(list, 'assetId')).toEqual(
+      getSortedPropInArray(assetMappingsToCreate, 'assetId')
     );
-    expect(listed.map(m => m.nodeId).sort(simpleCompare)).toEqual(
-      assetMappingsToCreate.map(m => m.nodeId).sort(simpleCompare)
+    expect(getSortedPropInArray(list, 'nodeId')).toEqual(
+      getSortedPropInArray(list, 'nodeId')
     );
-    expect(listed.length).toBe(2);
+    expect(list.length).toBe(2);
   });
 
   test('delete asset mappings 3d', async () => {
@@ -135,21 +136,23 @@ describe('Asset mappings integration test', async () => {
   });
 
   test('list asset mappings 3d (empty)', async () => {
-    const listed = await client.assetMappings3D
+    const list = await client.assetMappings3D
       .list(model.id, revisions[0].id)
       .autoPagingToArray();
-    expect(listed).toEqual([]);
+    expect(list).toEqual([]);
   });
 
   test('delete revisions', async () => {
-    await client.revisions3D.delete(
+    const deleted = await client.revisions3D.delete(
       model.id,
       revisions.map(r => ({ id: r.id }))
     );
+    expect(deleted).toEqual({});
   });
 
   test('delete model', async () => {
-    await client.models3D.delete([{ id: model.id }]);
+    const deleted = await client.models3D.delete([{ id: model.id }]);
+    expect(deleted).toEqual({});
   });
 
   test('delete file', async () => {

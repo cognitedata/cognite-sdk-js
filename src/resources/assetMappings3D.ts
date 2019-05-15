@@ -22,7 +22,7 @@ export interface AssetMappings3DAPI {
    * [List 3D asset mappings](https://doc.cognitedata.com/api/v1/#operation/get3DMappings)
    *
    * ```js
-   * const revisions3D = await client.revisions3D.list();
+   * const mappings3D = await client.assetMappings3D.list();
    * ```
    */
   list: (
@@ -34,7 +34,21 @@ export interface AssetMappings3DAPI {
    * [Create 3D asset mappings](https://doc.cognitedata.com/api/v1/#operation/create3DMappings)
    *
    * ```js
-   * const revisions = await client.revisions3D.create(model.id, [{ fileId: 8252999965991682 }, { fileId: 6305529564379596 }]);
+   * const assetMappingsToCreate = [
+   *  {
+   *    nodeId: 8252999965991682
+   *    assetId: 4354399876978078
+   *  },
+   *  {
+   *    nodeId: 9034285498543958
+   *    assetId: 1042345809544395
+   *  }
+   * ];
+   * const mappings3D = await client.assetMappings3D.create(
+   *  25432542356436,
+   *  33485743958747,
+   *  assetMappingsToCreate
+   * );
    * ```
    */
   create: (
@@ -46,7 +60,17 @@ export interface AssetMappings3DAPI {
    * [Delete a list of asset mappings](https://doc.cognitedata.com/api/v1/#operation/delete3DMappings)
    *
    * ```js
-   * await client.revisions3D.delete(8252999965991682, [{ id: 4190022127342195 }]);
+   * const assetMappingsToDelete = [
+   *  {
+   *    nodeId: 8252999965991682
+   *    assetId: 4354399876978078
+   *  },
+   *  {
+   *    nodeId: 9034285498543958
+   *    assetId: 1042345809544395
+   *  }
+   * ];
+   * await client.assetMappings3D.delete(8252999965991682, 4190022127342195, assetMappingsToDelete);
    * ```
    */
   delete: (

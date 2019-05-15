@@ -2,7 +2,7 @@
 
 import { API } from '../../resources/api';
 import { Model3D } from '../../types/types';
-import { setupClient } from '../testUtils';
+import { getSortedPropInArray, setupClient } from '../testUtils';
 
 describe('Model3d integration test', async () => {
   let client: API;
@@ -19,7 +19,14 @@ describe('Model3d integration test', async () => {
       { name: `Model 2 ${now}` },
     ];
     models = await client.models3D.create(modelsToCreate);
-    expect(models.length).toBe(2);
+    expect(getSortedPropInArray(models, 'name')).toEqual(
+      getSortedPropInArray(modelsToCreate, 'name')
+    );
+  });
+
+  test('list', async () => {
+    const list = await client.models3D.list().autoPagingToArray({ limit: 2 });
+    expect(list.length).toEqual(2);
   });
 
   test('retrieve', async () => {
@@ -41,10 +48,9 @@ describe('Model3d integration test', async () => {
   });
 
   test('delete', async () => {
-    await client.models3D.delete(models.map(model => ({ id: model.id })));
-  });
-
-  test('list', async () => {
-    await client.models3D.list().autoPagingToArray();
+    const deleted = await client.models3D.delete(
+      models.map(model => ({ id: model.id }))
+    );
+    expect(deleted).toEqual({});
   });
 });
