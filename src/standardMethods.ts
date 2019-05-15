@@ -280,3 +280,23 @@ export function generateInsertEndpoint<RequestParams>(
     return metadataMap.addAndReturn({}, response);
   };
 }
+
+/** @hidden */
+export function generateSingleReplaceEndpoint<RequestType, RepsonseType>(
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  metadataMap: MetadataMap
+) {
+  return async function replace(change: RequestType): Promise<RepsonseType> {
+    const response = await rawRequest<RepsonseType>(
+      axiosInstance,
+      {
+        method: 'put',
+        url: resourcePath,
+        data: change,
+      },
+      true
+    );
+    return metadataMap.addAndReturn(response.data, response);
+  };
+}

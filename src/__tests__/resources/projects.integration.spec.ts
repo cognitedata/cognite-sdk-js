@@ -18,6 +18,6 @@ describe('Projects integration test', async () => {
   });
 
   test('update', () => {
-    client.projects.update();
+    // no tests because endpoint is overriding config
   });
 });

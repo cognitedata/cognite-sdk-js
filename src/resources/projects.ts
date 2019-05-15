@@ -2,9 +2,12 @@
 
 import { AxiosInstance } from 'axios';
 import { MetadataMap } from '../metadata';
-import { generateRetrieveSingleEndpoint } from '../standardMethods';
-import { ProjectResponse } from '../types/types';
-import { apiUrl } from '../utils';
+import {
+  generateRetrieveSingleEndpoint,
+  generateSingleReplaceEndpoint,
+} from '../standardMethods';
+import { ProjectResponse, ProjectUpdate } from '../types/types';
+import { apiUrl, projectUrl } from '../utils';
 
 export interface ProjectsAPI {
   /**
@@ -25,8 +28,7 @@ export interface ProjectsAPI {
    *   defaultGroupId: 123,
    * });
    */
-  update: () => void;
-  // update: (updates: ProjectUpdate[]) => Promise<ProjectResponse>;
+  update: (urlName: string, updates: ProjectUpdate) => Promise<ProjectResponse>;
 }
 
 /** @hidden */
@@ -37,9 +39,12 @@ export function generateProjectObject(
   const path = apiUrl() + '/projects';
   return {
     retrieve: generateRetrieveSingleEndpoint(instance, path, map),
-    update: () => {
-      // https://github.com/cognitedata/service-contracts/issues/227
-      throw Error('Not implemented');
+    update: (urlName, updates) => {
+      return generateSingleReplaceEndpoint<ProjectUpdate, ProjectResponse>(
+        instance,
+        projectUrl(urlName),
+        map
+      )(updates);
     },
   };
 }
