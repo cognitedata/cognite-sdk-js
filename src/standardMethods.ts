@@ -287,13 +287,15 @@ export function generateSingleReplaceEndpoint<RequestType, RepsonseType>(
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
-  return async function replace(change: RequestType): Promise<RepsonseType> {
+  return async function replace(
+    replacement: RequestType
+  ): Promise<RepsonseType> {
     const response = await rawRequest<RepsonseType>(
       axiosInstance,
       {
         method: 'put',
         url: resourcePath,
-        data: change,
+        data: replacement,
       },
       true
     );

@@ -28,7 +28,10 @@ export interface ProjectsAPI {
    *   defaultGroupId: 123,
    * });
    */
-  update: (urlName: string, updates: ProjectUpdate) => Promise<ProjectResponse>;
+  update: (
+    urlName: string,
+    replacement: ProjectUpdate
+  ) => Promise<ProjectResponse>;
 }
 
 /** @hidden */
@@ -39,12 +42,12 @@ export function generateProjectObject(
   const path = apiUrl() + '/projects';
   return {
     retrieve: generateRetrieveSingleEndpoint(instance, path, map),
-    update: (urlName, updates) => {
+    update: (urlName, replacement) => {
       return generateSingleReplaceEndpoint<ProjectUpdate, ProjectResponse>(
         instance,
         projectUrl(urlName),
         map
-      )(updates);
+      )(replacement);
     },
   };
 }

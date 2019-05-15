@@ -1033,7 +1033,7 @@ export type ProjectName = string;
 export type UrlName = string;
 
 /**
- * A default group for all project users. Can be used to establish default capabilities.WARNING: this group may be logically deleted
+ * A default group for all project users. Can be used to establish default capabilities. WARNING: this group may be logically deleted
  */
 export type DefaultGroupId = number;
 
