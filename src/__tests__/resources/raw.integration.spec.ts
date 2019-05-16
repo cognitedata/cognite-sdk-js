@@ -19,7 +19,7 @@ const createRow = () => ({
   columns,
 });
 
-describe.skip('Raw integration test', async () => {
+describe('Raw integration test', async () => {
   let client: API;
   beforeAll(async () => {
     client = await setupClient();
