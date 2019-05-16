@@ -6,7 +6,6 @@ import { setupClient } from '../testUtils';
 describe('Files integration test', async () => {
   let client: API;
   beforeAll(async () => {
-    jest.setTimeout(15000);
     client = await setupClient();
   });
   const postfix = new Date().getTime();

@@ -52,16 +52,6 @@ export interface DataIds {
   items?: AssetIdEither[];
 }
 
-/**
- * Reference ID used only in post request to disambiguate references to duplicate names.
- */
-export type CogniteRefId = string;
-
-/**
- * Reference ID of parent, to disambiguate if multiple nodes have the same name.
- */
-export type CogniteParentRefId = string;
-
 // Assets
 
 /**
@@ -154,8 +144,10 @@ export interface ExternalAsset {
 }
 
 export interface ExternalAssetItem extends ExternalAsset {
-  refId?: CogniteRefId;
-  parentRefId?: CogniteParentRefId;
+  /**
+   * External id to the parent asset
+   */
+  parentExternalId?: CogniteExternalId;
 }
 
 /**
@@ -213,6 +205,7 @@ export interface UpdateModel3D extends UpdateModelNameField, InternalId {}
 
 export interface Asset extends ExternalAsset, AssetInternalId {
   lastUpdatedTime: Date;
+  createdTime: Date;
   /**
    * IDs of assets on the path to the asset.
    */
@@ -689,7 +682,7 @@ export interface FilesMetadata extends ExternalFilesMetadata {
    * Whether or not the actual file is uploaded
    */
   uploaded: boolean;
-  uploadedTime: Date;
+  uploadedTime?: Date;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
@@ -987,8 +980,8 @@ export interface BoundingBox3D {
 }
 
 export interface AssetMappings3DListFilter extends Cursor, Limit {
-  nodeId: CogniteInternalId;
-  assetId: CogniteInternalId;
+  nodeId?: CogniteInternalId;
+  assetId?: CogniteInternalId;
 }
 
 export interface AssetMapping3D extends AssetMapping3DBase {
@@ -1320,6 +1313,74 @@ export interface GroupServiceAccount {
    * Time of deletion
    */
   deletedTime?: Date;
+}
+
+// Viewer 3D
+
+export interface ListReveal3DNodeAncestors extends Cursor, Limit {}
+
+export interface RevealNode3D extends Node3D {
+  /**
+   * The sector the node is contained in.
+   */
+  sectorId: CogniteInternalId;
+}
+
+export interface RevealRevision3D extends Revision3D {
+  sceneThreedFiles: Versioned3DFile[];
+}
+
+/**
+ * The file ID of the data file for this resource, with multiple versions supported.
+ * Use /3d/files/{id} to retrieve the file.
+ */
+export interface Versioned3DFile {
+  /**
+   * Version of the file format.
+   */
+  version: number;
+  /**
+   * File ID. Use /3d/files/{id} to retrieve the file.
+   */
+  fileId: CogniteInternalId;
+}
+
+export interface ListRevealSectors3DQuery extends Cursor, Limit {
+  /**
+   * Bounding box to restrict search to. If given, only return sectors that intersect the given bounding box. Given as a JSON-encoded object of two arrays \"min\" and \"max\" with 3 coordinates each.
+   */
+  boundingBox?: BoundingBox3D;
+}
+
+export interface RevealSector3D {
+  /**
+   * The id of the sector.
+   */
+  id: CogniteInternalId;
+  /**
+   * The parent of the sector, null if it is the root sector.
+   */
+  parentId: CogniteInternalId;
+  /**
+   * String representing the path to the sector: 0/2/6/ etc.
+   */
+  path: string;
+  /**
+   * The depth of the sector in the sector tree, starting from 0 at the root sector.
+   */
+  depth: number;
+  /**
+   * The bounding box of the subtree with this sector as the root sector. Is null if there are no geometries in the subtree.
+   */
+  boundingBox: BoundingBox3D;
+  /**
+   * The file ID of the data file for this sector, with multiple versions supported. Use /3d/files/{id} to retrieve the file.
+   */
+  threedFiles: Versioned3DFile[];
+}
+
+export interface UnrealRevision3D extends Revision3D {
+  sceneThreedFiles: Versioned3DFile[];
 }
 
 export interface ItemsResponse<T> {

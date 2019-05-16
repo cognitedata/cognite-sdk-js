@@ -8,10 +8,12 @@ import {
   generateDeleteEndpoint,
   generateListEndpoint,
   generateRetrieveEndpoint,
+  generateRetrieveSingleEndpoint,
   generateSearchEndpoint,
   generateUpdateEndpoint,
 } from '../standardMethods';
 import {
+  CogniteInternalId,
   ExternalFilesMetadata,
   FileChangeUpdate,
   FileContent,
@@ -49,8 +51,10 @@ export interface FilesAPI {
    */
   upload: (
     metadata: ExternalFilesMetadata,
-    fileContent?: FileContent
-  ) => Promise<UploadFileMetadataResponse>;
+    fileContent?: FileContent,
+    // tslint:disable-next-line:bool-param-default
+    waitUntilAcknowledged?: boolean
+  ) => Promise<UploadFileMetadataResponse | FilesMetadata>;
 
   /**
    * [Retrieve files](https://doc.cognitedata.com/api/v1/#operation/byIdsFiles)
@@ -103,6 +107,39 @@ export interface FilesAPI {
   update: (changes: FileChangeUpdate[]) => Promise<FilesMetadata[]>;
 }
 
+function waitUntilFileIsUploaded(
+  fileId: CogniteInternalId,
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  frequencyInMs: number = 1000,
+  maxTime: number = 2 * 60 * 1000
+): Promise<FilesMetadata> {
+  return new Promise((resolve, reject) => {
+    try {
+      const retrieve = generateRetrieveSingleEndpoint<
+        CogniteInternalId,
+        FilesMetadata
+      >(axiosInstance, resourcePath, new MetadataMap());
+
+      const startTime = Date.now();
+      const myInterval = setInterval(async () => {
+        const now = Date.now();
+        if (now - startTime > maxTime) {
+          clearInterval(myInterval);
+          reject(new Error(`File never marked as 'uploaded'`));
+        }
+        const fileInfo = await retrieve(fileId);
+        if (fileInfo.uploaded) {
+          clearInterval(myInterval);
+          resolve(fileInfo);
+        }
+      }, frequencyInMs);
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
 function generateUploadEndpoint(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -110,8 +147,9 @@ function generateUploadEndpoint(
 ) {
   return async function upload(
     fileMetadata: ExternalFilesMetadata,
-    fileContent?: FileContent
-  ): Promise<UploadFileMetadataResponse> {
+    fileContent?: FileContent,
+    waitUntilAcknowledged: boolean = false
+  ): Promise<UploadFileMetadataResponse | FilesMetadata> {
     const response = await rawRequest<UploadFileMetadataResponse>(
       axiosInstance,
       {
@@ -133,6 +171,14 @@ function generateUploadEndpoint(
         headers,
         data: fileContent,
       });
+    }
+    if (waitUntilAcknowledged) {
+      const fileInfo = await waitUntilFileIsUploaded(
+        file.id,
+        axiosInstance,
+        resourcePath
+      );
+      return metadataMap.addAndReturn(fileInfo, response);
     }
     return metadataMap.addAndReturn(file, response);
   };

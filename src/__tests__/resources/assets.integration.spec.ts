@@ -6,16 +6,16 @@ import { setupClient } from '../testUtils';
 describe('Asset integration test', async () => {
   let client: API;
   beforeAll(async () => {
-    jest.setTimeout(15 * 1000);
     client = await setupClient();
   });
+  const now = new Date().getTime();
   const rootAsset = {
     name: 'test-root',
     description: 'Root asset for cognitesdk-js test',
     metadata: {
       refId: 'test-root',
     },
-    refId: 'test-root',
+    externalId: 'test-root' + now,
   };
 
   const childAsset = {
@@ -24,11 +24,13 @@ describe('Asset integration test', async () => {
     metadata: {
       refId: 'test-child',
     },
-    parentRefId: 'test-root',
+    parentExternalId: rootAsset.externalId,
   };
 
   test('create,retrieve,update,delete', async () => {
     const assets = await client.assets.create([childAsset, rootAsset]);
+    expect(assets[0].createdTime).toBeInstanceOf(Date);
+    expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
     await client.assets.retrieve([{ id: assets[0].id }]);
     await client.assets.update([
       {
@@ -48,7 +50,12 @@ describe('Asset integration test', async () => {
 
   test('list', async () => {
     await client.assets
-      .list({ filter: { name: rootAsset.name } })
+      .list({
+        filter: {
+          name: rootAsset.name,
+          createdTime: { min: 0, max: Date.now() },
+        },
+      })
       .autoPagingToArray({ limit: 100 });
   });
 

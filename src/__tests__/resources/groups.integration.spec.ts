@@ -2,6 +2,7 @@
 
 import { API } from '../../resources/api';
 import { Group, GroupSpec, ServiceAccount } from '../../types/types';
+import { sleepPromise } from '../../utils';
 import { retryInSeconds, setupClient } from '../testUtils';
 
 describe('Groups integration test', async () => {
@@ -9,7 +10,6 @@ describe('Groups integration test', async () => {
   let serviceAccount: ServiceAccount;
   const now = Date.now();
   beforeAll(async () => {
-    jest.setTimeout(20000);
     client = await setupClient();
     [serviceAccount] = await client.serviceAccounts.create([
       { name: 'Test' + now },
@@ -37,6 +37,7 @@ describe('Groups integration test', async () => {
     expect(response.length).toBe(1);
     [group] = response;
     expect(group.name).toBe(groupsToCreate[0].name);
+    await sleepPromise(15 * 1000);
   });
 
   test('add service account', async done => {

@@ -8,7 +8,6 @@ describe('Datapoints integration test', async () => {
   let client: API;
   let timeserie: GetTimeSeriesMetadataDTO;
   beforeAll(async () => {
-    jest.setTimeout(10000);
     client = await setupClient();
     [timeserie] = await client.timeseries.create([{ name: 'tmp' }]);
   });
@@ -19,11 +18,11 @@ describe('Datapoints integration test', async () => {
   test('insert', async () => {
     const datapoints = [
       {
-        timestamp: 0,
+        timestamp: new Date(0),
         value: 10,
       },
       {
-        timestamp: 10,
+        timestamp: new Date(10),
         value: 100,
       },
     ];

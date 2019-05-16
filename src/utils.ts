@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import { cloneDeepWith } from 'lodash';
 import { API_VERSION, BASE_URL } from './constants';
 
 /** @hidden */
@@ -86,4 +87,27 @@ export function makePromiseCancelable<T>(
     hasBeenCancelled = true;
   };
   return cancelablePromise as CancelablePromise<T>;
+}
+
+export function transformDateInRequest(data: any) {
+  return cloneDeepWith(data, value => {
+    if (value instanceof Date) {
+      return value.getTime();
+    }
+  });
+}
+
+export function transformDateInResponse(data: any) {
+  const dateKeys = [
+    'createdTime',
+    'lastUpdatedTime',
+    'uploadedTime',
+    'deletedTime',
+    'timestamp',
+  ];
+  return cloneDeepWith(data, (value, key) => {
+    if (dateKeys.indexOf('' + key) !== -1) {
+      return new Date(value);
+    }
+  });
 }

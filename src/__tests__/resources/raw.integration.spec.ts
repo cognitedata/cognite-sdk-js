@@ -22,7 +22,6 @@ const createRow = () => ({
 describe('Raw integration test', async () => {
   let client: API;
   beforeAll(async () => {
-    jest.setTimeout(25000);
     client = await setupClient();
   });
 

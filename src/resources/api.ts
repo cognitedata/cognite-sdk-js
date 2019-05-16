@@ -27,6 +27,7 @@ import {
   ServiceAccountsAPI,
 } from './serviceAccounts';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
+import { generateViewer3DObject, Viewer3DAPI } from './viewer3D';
 
 export interface BaseRequestOptions {
   params?: object;
@@ -67,6 +68,7 @@ export interface API {
   revisions3D: Revisions3DAPI;
   files3D: Files3DAPI;
   assetMappings3D: AssetMappings3DAPI;
+  viewer3D: Viewer3DAPI;
   apiKeys: ApiKeysAPI;
   _instance: AxiosInstance;
 }
@@ -77,6 +79,11 @@ export function generateAPIObject(
   axiosInstance: AxiosInstance,
   metadataMap: MetadataMap
 ): API {
+  const defaultArgs: [string, AxiosInstance, MetadataMap] = [
+    project,
+    axiosInstance,
+    metadataMap,
+  ];
   return {
     project,
     get: (path, options) =>
@@ -84,33 +91,22 @@ export function generateAPIObject(
         responseTransformer
       ),
     getMetadata: value => metadataMap.get(value),
-    assets: generateAssetsObject(project, axiosInstance, metadataMap),
-    timeseries: generateTimeseriesObject(project, axiosInstance, metadataMap),
-    datapoints: generateDatapointsObject(project, axiosInstance, metadataMap),
-    events: generateEventsObject(project, axiosInstance, metadataMap),
-    files: generateFilesObject(project, axiosInstance, metadataMap),
-    raw: generateRawObject(project, axiosInstance, metadataMap),
+    assets: generateAssetsObject(...defaultArgs),
+    timeseries: generateTimeseriesObject(...defaultArgs),
+    datapoints: generateDatapointsObject(...defaultArgs),
+    events: generateEventsObject(...defaultArgs),
+    files: generateFilesObject(...defaultArgs),
+    raw: generateRawObject(...defaultArgs),
     projects: generateProjectObject(axiosInstance, metadataMap),
-    groups: generateGroupsObject(project, axiosInstance, metadataMap),
-    securityCategories: generateSecurityCategoryObject(
-      project,
-      axiosInstance,
-      metadataMap
-    ),
-    serviceAccounts: generateServiceAccountsObject(
-      project,
-      axiosInstance,
-      metadataMap
-    ),
-    models3D: generateModels3DObject(project, axiosInstance, metadataMap),
-    revisions3D: generateRevisions3DObject(project, axiosInstance, metadataMap),
-    files3D: generateFiles3DObject(project, axiosInstance, metadataMap),
-    assetMappings3D: generateAssetMappings3DObject(
-      project,
-      axiosInstance,
-      metadataMap
-    ),
-    apiKeys: generateApiKeysObject(project, axiosInstance, metadataMap),
+    groups: generateGroupsObject(...defaultArgs),
+    securityCategories: generateSecurityCategoryObject(...defaultArgs),
+    serviceAccounts: generateServiceAccountsObject(...defaultArgs),
+    models3D: generateModels3DObject(...defaultArgs),
+    revisions3D: generateRevisions3DObject(...defaultArgs),
+    files3D: generateFiles3DObject(...defaultArgs),
+    assetMappings3D: generateAssetMappings3DObject(...defaultArgs),
+    viewer3D: generateViewer3DObject(...defaultArgs),
+    apiKeys: generateApiKeysObject(...defaultArgs),
     _instance: axiosInstance,
   };
 }

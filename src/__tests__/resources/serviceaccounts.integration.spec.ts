@@ -7,7 +7,6 @@ import { setupClient } from '../testUtils';
 describe('Service accounts integration test', async () => {
   let client: API;
   beforeAll(async () => {
-    jest.setTimeout(20000);
     client = await setupClient();
   });
 

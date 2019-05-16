@@ -28,6 +28,7 @@ export const authTokens = {
   idToken: 'def',
 };
 export function setupClient() {
+  jest.setTimeout(30 * 1000);
   return createClientWithApiKey({
     project: process.env.COGNITE_PROJECT as string,
     apiKey: process.env.COGNITE_CREDENTIALS as string,
@@ -70,4 +71,17 @@ export function getSortedPropInArray<T extends { [key: string]: any }>(
   propName: string
 ) {
   return arr.map(elem => elem[propName]).sort(simpleCompare);
+}
+
+export function string2arrayBuffer(str: string) {
+  const buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
+  const bufView = new Uint16Array(buf);
+  for (let i = 0, strLen = str.length; i < strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}
+
+export function randomInt() {
+  return Math.floor(Math.random() * 10000000000);
 }
