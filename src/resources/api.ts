@@ -26,6 +26,7 @@ import {
   ServiceAccountsAPI,
 } from './serviceAccounts';
 import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
+import { generateViewer3DObject, Viewer3DAPI } from './viewer3D';
 
 export interface BaseRequestOptions {
   params?: object;
@@ -65,6 +66,7 @@ export interface API {
   revisions3D: Revisions3DAPI;
   files3D: Files3DAPI;
   assetMappings3D: AssetMappings3DAPI;
+  viewer3D: Viewer3DAPI;
   apiKeys: ApiKeysAPI;
   _instance: AxiosInstance;
 }
@@ -107,6 +109,7 @@ export function generateAPIObject(
       axiosInstance,
       metadataMap
     ),
+    viewer3D: generateViewer3DObject(project, axiosInstance, metadataMap),
     apiKeys: generateApiKeysObject(project, axiosInstance, metadataMap),
     _instance: axiosInstance,
   };
