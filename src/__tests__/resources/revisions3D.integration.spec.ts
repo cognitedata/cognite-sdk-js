@@ -7,12 +7,12 @@ import {
   AssetMapping3D,
   CreateAssetMapping3D,
   CreateRevision3D,
+  FilesMetadata,
   Model3D,
   Node3D,
   Revision3D,
   Tuple3,
   UpdateRevision3D,
-  UploadFileMetadataResponse,
 } from '../../types/types';
 import {
   getSortedPropInArray,
@@ -34,14 +34,13 @@ describeIfCondition(
 
     const now = Date.now();
     let revisions: Revision3D[];
-    let file: UploadFileMetadataResponse;
+    let file: FilesMetadata;
     let model: Model3D;
     let assets: Asset[];
     let assetMappings: AssetMapping3D[];
     let nodes3D: Node3D[];
 
     beforeAll(async () => {
-      jest.setTimeout(30000);
       client = await setupClient();
 
       const rootAsset = {
