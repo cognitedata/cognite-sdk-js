@@ -2,6 +2,7 @@
 
 import { API } from '../../resources/api';
 import { Group, GroupSpec, ServiceAccount } from '../../types/types';
+import { sleepPromise } from '../../utils';
 import { retryInSeconds, setupClient } from '../testUtils';
 
 describe('Groups integration test', async () => {
@@ -36,6 +37,7 @@ describe('Groups integration test', async () => {
     expect(response.length).toBe(1);
     [group] = response;
     expect(group.name).toBe(groupsToCreate[0].name);
+    await sleepPromise(15 * 1000);
   });
 
   test('add service account', async done => {
