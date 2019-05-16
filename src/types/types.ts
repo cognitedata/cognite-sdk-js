@@ -682,7 +682,7 @@ export interface FilesMetadata extends ExternalFilesMetadata {
    * Whether or not the actual file is uploaded
    */
   uploaded: boolean;
-  uploadedTime: Date;
+  uploadedTime?: Date;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
