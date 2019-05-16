@@ -2,8 +2,7 @@
 
 import { API } from '../../resources/api';
 import { Group, GroupSpec, ServiceAccount } from '../../types/types';
-import { sleepPromise } from '../../utils';
-import { setupClient } from '../testUtils';
+import { retryInSeconds, setupClient } from '../testUtils';
 
 describe('Groups integration test', async () => {
   let client: API;
@@ -38,20 +37,23 @@ describe('Groups integration test', async () => {
     expect(response.length).toBe(1);
     [group] = response;
     expect(group.name).toBe(groupsToCreate[0].name);
-    await sleepPromise(10000);
+  });
+
+  test('add service account', async done => {
+    const response = await retryInSeconds(
+      () => client.groups.addServiceAccounts(group.id, [serviceAccount.id]),
+      5,
+      400,
+      60
+    );
+    expect(response).toEqual({});
+    done();
   });
 
   test('list', async () => {
     const response = await client.groups.list({ all: true });
     expect(response.length).toBeGreaterThan(0);
     expect(response.map(item => item.name)).toContain(group.name);
-  });
-
-  test('add service account', async () => {
-    const response = await client.groups.addServiceAccounts(group.id, [
-      serviceAccount.id,
-    ]);
-    expect(response).toEqual({});
   });
 
   test('list service account', async () => {
