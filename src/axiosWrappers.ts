@@ -54,9 +54,13 @@ export async function rawRequest<ResponseType>(
     makeRequestSafeToRetry(requestConfig);
   }
   requestConfig.data = transformDateInRequest(requestConfig.data);
-  const response = (await axiosInstance(requestConfig).catch(
-    handleErrorResponse
-  )) as AxiosResponse<ResponseType>;
-  response.data = transformDateInResponse(response.data);
-  return response;
+  try {
+    const response = (await axiosInstance(requestConfig)) as AxiosResponse<
+      ResponseType
+    >;
+    response.data = transformDateInResponse(response.data);
+    return response;
+  } catch (e) {
+    handleErrorResponse(e);
+  }
 }
