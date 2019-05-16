@@ -1206,8 +1206,8 @@ export type MEMBEROF = 'MEMBEROF';
 export type EXECUTE = 'EXECUTE';
 
 export interface Acl<ActionsType, ScopeType> {
-  actions?: ActionsType[];
-  scope?: ScopeType;
+  actions: ActionsType[];
+  scope: ScopeType;
 }
 
 export interface GenericAclAllScope {
