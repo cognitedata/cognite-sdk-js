@@ -89,14 +89,6 @@ export function makePromiseCancelable<T>(
   return cancelablePromise as CancelablePromise<T>;
 }
 
-export function convertDateToTimestamp(date: Date) {
-  return date.getTime();
-}
-
-export function convertTimestampToDate(timestamp: number) {
-  return new Date(timestamp);
-}
-
 export function transformDateInRequest(data: any) {
   return cloneDeepWith(data, value => {
     if (value instanceof Date) {
@@ -115,7 +107,7 @@ export function transformDateInResponse(data: any) {
   ];
   return cloneDeepWith(data, (value, key) => {
     if (dateKeys.indexOf('' + key) !== -1) {
-      return convertTimestampToDate(value);
+      return new Date(value);
     }
   });
 }

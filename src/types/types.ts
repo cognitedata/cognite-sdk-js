@@ -52,16 +52,6 @@ export interface DataIds {
   items?: AssetIdEither[];
 }
 
-/**
- * Reference ID used only in post request to disambiguate references to duplicate names.
- */
-export type CogniteRefId = string;
-
-/**
- * Reference ID of parent, to disambiguate if multiple nodes have the same name.
- */
-export type CogniteParentRefId = string;
-
 // Assets
 
 /**
@@ -154,8 +144,10 @@ export interface ExternalAsset {
 }
 
 export interface ExternalAssetItem extends ExternalAsset {
-  refId?: CogniteRefId;
-  parentRefId?: CogniteParentRefId;
+  /**
+   * External id to the parent asset
+   */
+  parentExternalId?: CogniteExternalId;
 }
 
 /**

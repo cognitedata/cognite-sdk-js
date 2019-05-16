@@ -9,13 +9,14 @@ describe('Asset integration test', async () => {
     jest.setTimeout(15 * 1000);
     client = await setupClient();
   });
+  const now = new Date().getTime();
   const rootAsset = {
     name: 'test-root',
     description: 'Root asset for cognitesdk-js test',
     metadata: {
       refId: 'test-root',
     },
-    refId: 'test-root',
+    externalId: 'test-root' + now,
   };
 
   const childAsset = {
@@ -24,7 +25,7 @@ describe('Asset integration test', async () => {
     metadata: {
       refId: 'test-child',
     },
-    parentRefId: 'test-root',
+    parentExternalId: rootAsset.externalId,
   };
 
   test('create,retrieve,update,delete', async () => {

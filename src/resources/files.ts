@@ -111,7 +111,8 @@ function waitUntilFileIsUploaded(
   fileId: CogniteInternalId,
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  frequencyInMs: number = 1000
+  frequencyInMs: number = 1000,
+  maxTime: number = 2 * 60 * 1000
 ) {
   return new Promise((resolve, reject) => {
     try {
@@ -120,7 +121,13 @@ function waitUntilFileIsUploaded(
         FilesMetadata
       >(axiosInstance, resourcePath, new MetadataMap());
 
+      const startTime = Date.now();
       const myInterval = setInterval(async () => {
+        const now = Date.now();
+        if (now - startTime > maxTime) {
+          clearInterval(myInterval);
+          reject(new Error(`File never marked as 'uploaded'`));
+        }
         if ((await retrieve(fileId)).uploaded) {
           clearInterval(myInterval);
           resolve();
@@ -166,6 +173,7 @@ function generateUploadEndpoint(
     }
     if (waitUntilAcknowledged) {
       await waitUntilFileIsUploaded(file.id, axiosInstance, resourcePath);
+      file.uploaded = true;
     }
     return metadataMap.addAndReturn(file, response);
   };

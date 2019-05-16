@@ -46,11 +46,11 @@ describeIfCondition(
 
       const rootAsset = {
         name: 'test-root' + now,
-        refId: 'test-root',
+        externalId: 'test-root' + now,
       };
       const childAsset = {
         name: 'test-child' + now,
-        parentRefId: 'test-root',
+        parentExternalId: rootAsset.externalId,
       };
 
       const fileContent = readFileSync('src/__tests__/test3dFile.fbx');
