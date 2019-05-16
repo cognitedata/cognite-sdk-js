@@ -61,6 +61,6 @@ export async function rawRequest<ResponseType>(
     response.data = transformDateInResponse(response.data);
     return response;
   } catch (e) {
-    handleErrorResponse(e);
+    throw handleErrorResponse(e);
   }
 }
