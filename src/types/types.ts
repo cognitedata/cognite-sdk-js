@@ -1218,123 +1218,80 @@ export interface GenericAclCurrentUserScope {
   currentuserscope: {};
 }
 
-export type cognitegroups_aclAction = LIST | READ | CREATE | UPDATE | DELETE;
-export type cognitegroups_aclScope =
-  | GenericAclAllScope
-  | GenericAclCurrentUserScope;
-export type cognitegroups_aclAcl = Acl<
-  cognitegroups_aclAction,
-  cognitegroups_aclScope
+export type GroupsAclAction = LIST | READ | CREATE | UPDATE | DELETE;
+export type GroupsAclScope = GenericAclAllScope | GenericAclCurrentUserScope;
+export type GroupsAcl = Acl<GroupsAclAction, GroupsAclScope>;
+
+export type AssetsAclAction = LIST | WRITE;
+export type AssetsAclScope = GenericAclAllScope;
+export type AssetsAclAcl = Acl<AssetsAclAction, AssetsAclScope>;
+
+export type EventsAclAction = READ | WRITE;
+export type EventsAclScope = GenericAclAllScope;
+export type EventsAcl = Acl<EventsAclAction, EventsAclScope>;
+
+export type FilesAclAction = READ | WRITE;
+export type FilesAclScope = GenericAclAllScope;
+export type FilesAcl = Acl<FilesAclAction, FilesAclScope>;
+
+export type UsersAclAction = LIST | CREATE | DELETE;
+export type UsersAclScope = GenericAclAllScope;
+export type UsersAcl = Acl<UsersAclAction, UsersAclScope>;
+
+export type ProjectsclAction = LIST | READ | CREATE | UPDATE;
+export type ProjectsAclScope = GenericAclAllScope;
+export type ProjectsAcl = Acl<ProjectsclAction, ProjectsAclScope>;
+
+export type SecurityCategoriesAclAction = MEMBEROF | LIST | CREATE | DELETE;
+export type SecurityCategoriesAclScope = GenericAclAllScope;
+export type SecurityCategoriesAcl = Acl<
+  SecurityCategoriesAclAction,
+  SecurityCategoriesAclScope
 >;
 
-export type cogniteassets_aclAction = LIST | WRITE;
-export type cogniteassets_aclScope = GenericAclAllScope;
-export type cogniteassets_aclAcl = Acl<
-  cogniteassets_aclAction,
-  cogniteassets_aclScope
->;
+export type RawAclAction = READ | WRITE | LIST;
+export type RawAclScope = GenericAclAllScope;
+export type RawAcl = Acl<RawAclAction, RawAclScope>;
 
-export type cogniteevents_aclAction = READ | WRITE;
-export type cogniteevents_aclScope = GenericAclAllScope;
-export type cogniteevents_aclAcl = Acl<
-  cogniteevents_aclAction,
-  cogniteevents_aclScope
->;
-
-export type cognitefiles_aclAction = READ | WRITE;
-export type cognitefiles_aclScope = GenericAclAllScope;
-export type cognitefiles_aclAcl = Acl<
-  cognitefiles_aclAction,
-  cognitefiles_aclScope
->;
-
-export type cogniteusers_aclAction = LIST | CREATE | DELETE;
-export type cogniteusers_aclScope = GenericAclAllScope;
-export type cogniteusers_aclAcl = Acl<
-  cogniteusers_aclAction,
-  cogniteusers_aclScope
->;
-
-export type cogniteprojects_aclAction = LIST | READ | CREATE | UPDATE;
-export type cogniteprojects_aclScope = GenericAclAllScope;
-export type cogniteprojects_aclAcl = Acl<
-  cogniteprojects_aclAction,
-  cogniteprojects_aclScope
->;
-
-export type cognitesecuritycategories_aclAction =
-  | MEMBEROF
-  | LIST
-  | CREATE
-  | DELETE;
-export type cognitesecuritycategories_aclScope = GenericAclAllScope;
-export type cognitesecuritycategories_aclAcl = Acl<
-  cognitesecuritycategories_aclAction,
-  cognitesecuritycategories_aclScope
->;
-
-export type cogniteraw_aclAction = READ | WRITE | LIST;
-export type cogniteraw_aclScope = GenericAclAllScope;
-export type cogniteraw_aclAcl = Acl<cogniteraw_aclAction, cogniteraw_aclScope>;
-
-export interface CogniteAssetsAclIdScope {
+export interface AssetsAclIdScope {
   assetIdScope: {
     subtreeIds: CogniteInternalId[];
   };
 }
-export type cognitetimeseries_aclAction = READ | WRITE;
-export type cognitetimeseries_aclScope =
-  | GenericAclAllScope
-  | CogniteAssetsAclIdScope;
-export type cognitetimeseries_aclAcl = Acl<
-  cognitetimeseries_aclAction,
-  cognitetimeseries_aclScope
->;
+export type TimeseriesAclAction = READ | WRITE;
+export type TimeseriesAclScope = GenericAclAllScope | AssetsAclIdScope;
+export type TimeseriesAcl = Acl<TimeseriesAclAction, TimeseriesAclScope>;
 
-export type cogniteapikeys_aclAction = LIST | CREATE | DELETE;
-export type cogniteapikeys_aclScope =
-  | GenericAclAllScope
-  | GenericAclCurrentUserScope;
-export type cogniteapikeys_aclAcl = Acl<
-  cogniteapikeys_aclAction,
-  cogniteapikeys_aclScope
->;
+export type ApiKeysAclAction = LIST | CREATE | DELETE;
+export type ApiKeysAclScope = GenericAclAllScope | GenericAclCurrentUserScope;
+export type ApiKeysAcl = Acl<ApiKeysAclAction, ApiKeysAclScope>;
 
-export type cognitethreed_aclAction = READ | CREATE | UPDATE | DELETE;
-export type cognitethreed_aclScope = GenericAclAllScope;
-export type cognitethreed_aclAcl = Acl<
-  cognitethreed_aclAction,
-  cognitethreed_aclScope
->;
+export type ThreeDAclAction = READ | CREATE | UPDATE | DELETE;
+export type ThreeDAclScope = GenericAclAllScope;
+export type ThreeDAcl = Acl<ThreeDAclAction, ThreeDAclScope>;
 
-export type cognitesequences_aclAction = READ | WRITE;
-export type cognitesequences_aclScope = GenericAclAllScope;
-export type cognitesequences_aclAcl = Acl<
-  cognitesequences_aclAction,
-  cognitesequences_aclScope
->;
+export type SequencesAclAction = READ | WRITE;
+export type SequencesAclScope = GenericAclAllScope;
+export type SequencesAcl = Acl<SequencesAclAction, SequencesAclScope>;
 
-export type cogniteanalytics_aclAction = READ | EXECUTE | LIST;
-export type cogniteanalytics_aclScope = GenericAclAllScope;
-export type cogniteanalytics_aclAcl = Acl<
-  cogniteanalytics_aclAction,
-  cogniteanalytics_aclScope
->;
+export type AnalyticsAclAction = READ | EXECUTE | LIST;
+export type AnalyticsAclScope = GenericAclAllScope;
+export type AnalyticsAcl = Acl<AnalyticsAclAction, AnalyticsAclScope>;
 
 export type SingleCogniteCapability =
-  | { groupsAcl: cognitegroups_aclAcl }
-  | { assetsAcl: cogniteassets_aclAcl }
-  | { eventsAcl: cogniteevents_aclAcl }
-  | { filesAcl: cognitefiles_aclAcl }
-  | { usersAcl: cogniteusers_aclAcl }
-  | { projectsAcl: cogniteprojects_aclAcl }
-  | { securityCategoriesAcl: cognitesecuritycategories_aclAcl }
-  | { rawAcl: cogniteraw_aclAcl }
-  | { timeSeriesAcl: cognitetimeseries_aclAcl }
-  | { apikeysAcl: cogniteapikeys_aclAcl }
-  | { threedAcl: cognitethreed_aclAcl }
-  | { sequencesAcl: cognitesequences_aclAcl }
-  | { analyticsAcl: cogniteanalytics_aclAcl };
+  | { groupsAcl: GroupsAcl }
+  | { assetsAcl: AssetsAclAcl }
+  | { eventsAcl: EventsAcl }
+  | { filesAcl: FilesAcl }
+  | { usersAcl: UsersAcl }
+  | { projectsAcl: ProjectsAcl }
+  | { securityCategoriesAcl: SecurityCategoriesAcl }
+  | { rawAcl: RawAcl }
+  | { timeSeriesAcl: TimeseriesAcl }
+  | { apikeysAcl: ApiKeysAcl }
+  | { threedAcl: ThreeDAcl }
+  | { sequencesAcl: SequencesAcl }
+  | { analyticsAcl: AnalyticsAcl };
 
 export type cogniteCapability = SingleCogniteCapability[];
 
