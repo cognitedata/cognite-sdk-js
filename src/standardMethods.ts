@@ -103,7 +103,7 @@ export function generateListEndpoint<
     return Object.assign(
       {},
       listPromise,
-      makeAutoPaginationMethods(listPromise)
+      makeAutoPaginationMethods<ResponseType>(listPromise)
     );
   };
 }

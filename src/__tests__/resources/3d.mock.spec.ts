@@ -2,29 +2,38 @@
 
 import MockAdapter from 'axios-mock-adapter';
 import { API } from '../../resources/api';
-import { Model3D, Node3D, Revision3D } from '../../types/types';
+import {
+  Model3D,
+  Node3D,
+  RevealNode3D,
+  RevealRevision3D,
+  RevealSector3D,
+  Revision3D,
+  UnrealRevision3D,
+} from '../../types/types';
 import { transformDateInRequest } from '../../utils';
-import { setupClient, string2arrayBuffer } from '../testUtils';
+import { randomInt, setupClient, string2arrayBuffer } from '../testUtils';
 
+// tslint:disable-next-line:no-big-function
 describe('3D mocked', async () => {
   let client: API;
   let mock: MockAdapter;
   const model: Model3D = {
-    id: 1122344,
+    id: randomInt(),
     name: 'Model name',
     createdTime: new Date(),
   };
   const revision: Revision3D = {
     assetMappingCount: 10,
     createdTime: new Date(),
-    fileId: 2872490428,
+    fileId: randomInt(),
     published: true,
-    id: 10983290309,
+    id: randomInt(),
     status: 'Done',
   };
   const nodes: Node3D[] = [
     {
-      id: 1000,
+      id: randomInt(),
       treeIndex: 3,
       parentId: 2,
       depth: 2,
@@ -36,11 +45,47 @@ describe('3D mocked', async () => {
       },
     },
   ];
+  const revisionReveal: RevealRevision3D = {
+    ...revision,
+    sceneThreedFiles: [
+      {
+        version: randomInt(),
+      },
+    ],
+  };
+  const nodesReveal: RevealNode3D[] = nodes.map(node3D => ({
+    ...node3D,
+    sectorId: randomInt(),
+  }));
+  const sectors: RevealSector3D[] = [
+    {
+      id: randomInt(),
+      path: 'ftps/stairway/to/heaven',
+      parentId: randomInt(),
+      depth: randomInt(),
+      boundingBox: {
+        min: [0, 0, 0],
+        max: [100, 100, 100],
+      },
+      threedFiles: [
+        {
+          version: randomInt(),
+        },
+        {
+          fileId: randomInt(),
+          version: 0,
+        },
+      ],
+    },
+  ];
+  const revisionUnreal: UnrealRevision3D = { ...revisionReveal };
+
   beforeAll(async () => {
     jest.setTimeout(20000);
     client = await setupClient();
     mock = new MockAdapter(client._instance);
   });
+
   beforeEach(() => {
     mock.reset();
   });
@@ -187,6 +232,71 @@ describe('3D mocked', async () => {
         mappingsToDelete
       );
       expect(response).toEqual({});
+    });
+  });
+
+  describe('Viewer 3D', () => {
+    test('Retrieve a 3D revision (Reveal)', async () => {
+      const regExp = new RegExp(
+        `/3d/reveal/models/${model.id}/revisions/${revisionReveal.id}`
+      );
+      mock.onGet(regExp).reply(200, revisionReveal);
+      const result = await client.viewer3D.retrieveRevealRevision3D(
+        model.id,
+        revisionReveal.id
+      );
+      expect(result).toEqual(revisionReveal);
+    });
+
+    test('List 3d nodes (Reveal)', async () => {
+      const regExp = new RegExp(
+        `/3d/reveal/models/${model.id}/revisions/${revisionReveal.id}/nodes`
+      );
+      mock.onGet(regExp).reply(200, {
+        items: nodesReveal,
+      });
+      const result = await client.viewer3D
+        .listRevealNodes3D(model.id, revisionReveal.id)
+        .autoPagingToArray();
+      expect(result).toEqual(nodesReveal);
+    });
+
+    test('List 3d node ancestors (Reveal)', async () => {
+      const regExp = new RegExp(
+        `/3d/reveal/models/${model.id}/revisions/${revisionReveal.id}/nodes`
+      );
+      mock.onGet(regExp).reply(200, {
+        items: nodesReveal,
+      });
+      const result = await client.viewer3D
+        .listRevealNode3DAncestors(model.id, revisionReveal.id, randomInt())
+        .autoPagingToArray();
+      expect(result).toEqual(nodesReveal);
+    });
+
+    test('List 3d sectors (Reveal)', async () => {
+      const regExp = new RegExp(
+        `/3d/reveal/models/${model.id}/revisions/${revisionReveal.id}/sectors`
+      );
+      mock.onGet(regExp).reply(200, {
+        items: sectors,
+      });
+      const result = await client.viewer3D
+        .listRevealSectors3D(model.id, revisionReveal.id, { limit: 1 })
+        .autoPagingToArray();
+      expect(result).toEqual(sectors);
+    });
+
+    test('Retrieve a 3d revision (unreal)', async () => {
+      const regExp = new RegExp(
+        `/3d/unreal/models/${model.id}/revisions/${revisionUnreal.id}`
+      );
+      mock.onGet(regExp).reply(200, revisionUnreal);
+      const response = await client.viewer3D.retrieveUnrealRevision3D(
+        model.id,
+        revisionUnreal.id
+      );
+      expect(response).toEqual(revisionUnreal);
     });
   });
 });

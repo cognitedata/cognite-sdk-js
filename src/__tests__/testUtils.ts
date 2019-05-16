@@ -80,3 +80,7 @@ export function string2arrayBuffer(str: string) {
   }
   return buf;
 }
+
+export function randomInt() {
+  return Math.floor(Math.random() * 10000000000);
+}
