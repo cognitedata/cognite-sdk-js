@@ -1338,11 +1338,11 @@ export interface Versioned3DFile {
   /**
    * Version of the file format.
    */
-  version?: number;
+  version: number;
   /**
    * File ID. Use /3d/files/{id} to retrieve the file.
    */
-  fileId?: CogniteInternalId;
+  fileId: CogniteInternalId;
 }
 
 export interface ListRevealSectors3DQuery extends Cursor, Limit {

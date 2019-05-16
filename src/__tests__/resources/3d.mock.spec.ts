@@ -50,6 +50,7 @@ describe('3D mocked', async () => {
     sceneThreedFiles: [
       {
         version: randomInt(),
+        fileId: randomInt(),
       },
     ],
   };
@@ -60,7 +61,7 @@ describe('3D mocked', async () => {
   const sectors: RevealSector3D[] = [
     {
       id: randomInt(),
-      path: 'ftps/stairway/to/heaven',
+      path: '1/9/8/4',
       parentId: randomInt(),
       depth: randomInt(),
       boundingBox: {
@@ -70,10 +71,11 @@ describe('3D mocked', async () => {
       threedFiles: [
         {
           version: randomInt(),
+          fileId: randomInt(),
         },
         {
           fileId: randomInt(),
-          version: 0,
+          version: randomInt(),
         },
       ],
     },
