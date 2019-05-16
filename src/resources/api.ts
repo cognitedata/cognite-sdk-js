@@ -13,6 +13,7 @@ import { DatapointsAPI, generateDatapointsObject } from './datapoints';
 import { EventsAPI, generateEventsObject } from './events';
 import { FilesAPI, generateFilesObject } from './files';
 import { Files3DAPI, generateFiles3DObject } from './files3D';
+import { generateGroupsObject, GroupsAPI } from './groups';
 import { generateModels3DObject, Models3DAPI } from './models3D';
 import { generateProjectObject, ProjectsAPI } from './projects';
 import { generateRawObject, RawAPI } from './raw';
@@ -59,6 +60,7 @@ export interface API {
   files: FilesAPI;
   raw: RawAPI;
   projects: ProjectsAPI;
+  groups: GroupsAPI;
   securityCategories: SecurityCategoriesAPI;
   serviceAccounts: ServiceAccountsAPI;
   models3D: Models3DAPI;
@@ -89,6 +91,7 @@ export function generateAPIObject(
     files: generateFilesObject(project, axiosInstance, metadataMap),
     raw: generateRawObject(project, axiosInstance, metadataMap),
     projects: generateProjectObject(axiosInstance, metadataMap),
+    groups: generateGroupsObject(project, axiosInstance, metadataMap),
     securityCategories: generateSecurityCategoryObject(
       project,
       axiosInstance,
