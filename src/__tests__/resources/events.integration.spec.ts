@@ -6,7 +6,6 @@ import { setupClient } from '../testUtils';
 describe('Events integration test', async () => {
   let client: API;
   beforeAll(async () => {
-    jest.setTimeout(20000);
     client = await setupClient();
   });
 

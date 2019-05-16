@@ -83,7 +83,6 @@ describe('3D mocked', async () => {
   const revisionUnreal: UnrealRevision3D = { ...revisionReveal };
 
   beforeAll(async () => {
-    jest.setTimeout(20000);
     client = await setupClient();
     mock = new MockAdapter(client._instance);
   });

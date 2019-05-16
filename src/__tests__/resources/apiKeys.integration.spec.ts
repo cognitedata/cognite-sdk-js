@@ -9,7 +9,6 @@ describe('API keys integration test', async () => {
   let serviceAccount: ServiceAccount;
   const now = Date.now();
   beforeAll(async () => {
-    jest.setTimeout(20000);
     client = await setupClient();
     [serviceAccount] = await client.serviceAccounts.create([
       { name: 'Test' + now },

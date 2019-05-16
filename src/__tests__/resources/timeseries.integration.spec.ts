@@ -7,7 +7,6 @@ describe('Timeseries integration test', async () => {
   let client: API;
   beforeAll(async () => {
     client = await setupClient();
-    jest.setTimeout(15 * 1000);
   });
 
   const timeseries = [

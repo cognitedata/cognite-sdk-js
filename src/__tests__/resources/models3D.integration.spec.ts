@@ -7,7 +7,6 @@ import { getSortedPropInArray, setupClient } from '../testUtils';
 describe('Model3d integration test', async () => {
   let client: API;
   beforeAll(async () => {
-    jest.setTimeout(20000);
     client = await setupClient();
   });
 

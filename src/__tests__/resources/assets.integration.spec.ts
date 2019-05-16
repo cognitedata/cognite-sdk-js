@@ -6,7 +6,6 @@ import { setupClient } from '../testUtils';
 describe('Asset integration test', async () => {
   let client: API;
   beforeAll(async () => {
-    jest.setTimeout(15 * 1000);
     client = await setupClient();
   });
   const now = new Date().getTime();

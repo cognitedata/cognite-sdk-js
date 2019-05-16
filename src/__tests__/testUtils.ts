@@ -28,6 +28,7 @@ export const authTokens = {
   idToken: 'def',
 };
 export function setupClient() {
+  jest.setTimeout(30 * 1000);
   return createClientWithApiKey({
     project: process.env.COGNITE_PROJECT as string,
     apiKey: process.env.COGNITE_CREDENTIALS as string,
