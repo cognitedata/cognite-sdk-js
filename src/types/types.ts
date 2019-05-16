@@ -1210,72 +1210,72 @@ export interface Acl<ActionsType, ScopeType> {
   scope: ScopeType;
 }
 
-export interface GenericAclAllScope {
+export interface AclScopeAll {
   all: {};
 }
 
-export interface GenericAclCurrentUserScope {
+export interface AclScopeCurrentUser {
   currentuserscope: {};
 }
 
 export type AclActionGroups = LIST | READ | CREATE | UPDATE | DELETE;
-export type AclScopeGroups = GenericAclAllScope | GenericAclCurrentUserScope;
+export type AclScopeGroups = AclScopeAll | AclScopeCurrentUser;
 export type AclGroups = Acl<AclActionGroups, AclScopeGroups>;
 
 export type AclActionAssets = LIST | WRITE;
-export type AclScopeAssets = GenericAclAllScope;
+export type AclScopeAssets = AclScopeAll;
 export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
 
 export type AclActionEvents = READ | WRITE;
-export type AclScopeEvents = GenericAclAllScope;
+export type AclScopeEvents = AclScopeAll;
 export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
 
 export type AclActionFiles = READ | WRITE;
-export type AclScopeFiles = GenericAclAllScope;
+export type AclScopeFiles = AclScopeAll;
 export type AclFiles = Acl<AclActionFiles, AclScopeFiles>;
 
 export type AclActionUsers = LIST | CREATE | DELETE;
-export type AclScopeUsers = GenericAclAllScope;
+export type AclScopeUsers = AclScopeAll;
 export type AclUsers = Acl<AclActionUsers, AclScopeUsers>;
 
-export type ProjectsclAction = LIST | READ | CREATE | UPDATE;
-export type AclScopeProjects = GenericAclAllScope;
-export type AclProjects = Acl<ProjectsclAction, AclScopeProjects>;
+export type AclActionProjects = LIST | READ | CREATE | UPDATE;
+export type AclScopeProjects = AclScopeAll;
+export type AclProjects = Acl<AclActionProjects, AclScopeProjects>;
 
 export type AclActionSecurityCategories = MEMBEROF | LIST | CREATE | DELETE;
-export type AclScopeSecurityCategories = GenericAclAllScope;
+export type AclScopeSecurityCategories = AclScopeAll;
 export type AclSecurityCategories = Acl<
   AclActionSecurityCategories,
   AclScopeSecurityCategories
 >;
 
 export type AclActionRaw = READ | WRITE | LIST;
-export type AclScopeRaw = GenericAclAllScope;
+export type AclScopeRaw = AclScopeAll;
 export type AclRaw = Acl<AclActionRaw, AclScopeRaw>;
 
-export interface AssetsAclIdScope {
+export interface AclScopeAssetsId {
   assetIdScope: {
     subtreeIds: CogniteInternalId[];
   };
 }
 export type AclActionTimeseries = READ | WRITE;
-export type AclScopeTimeseries = GenericAclAllScope | AssetsAclIdScope;
+export type AclScopeTimeseries = AclScopeAll | AclScopeAssetsId;
 export type AclTimeseries = Acl<AclActionTimeseries, AclScopeTimeseries>;
 
 export type AclActionApiKeys = LIST | CREATE | DELETE;
-export type AclScopeApiKeys = GenericAclAllScope | GenericAclCurrentUserScope;
+export type AclScopeApiKeys = AclScopeAll | AclScopeCurrentUser;
 export type AclApiKeys = Acl<AclActionApiKeys, AclScopeApiKeys>;
 
 export type AclAction3D = READ | CREATE | UPDATE | DELETE;
-export type AclScope3D = GenericAclAllScope;
+export type AclScope3D = AclScopeAll;
 export type Acl3D = Acl<AclAction3D, AclScope3D>;
 
 export type AclActionSequences = READ | WRITE;
-export type AclScopeSequences = GenericAclAllScope;
+export type AclScopeSequences = AclScopeAll;
 export type AclSequences = Acl<AclActionSequences, AclScopeSequences>;
 
 export type AclActionAnalytics = READ | EXECUTE | LIST;
-export type AclScopeAnalytics = GenericAclAllScope;
+export type AclScopeAnalytics = AclScopeAll;
 export type AclAnalytics = Acl<AclActionAnalytics, AclScopeAnalytics>;
 
 export type SingleCogniteCapability =
