@@ -50,7 +50,7 @@ describe('axiosWrappers', () => {
       expect(responseMock).toHaveBeenCalledTimes(1);
       const config = responseMock.mock.calls[0][0] as AxiosRequestConfig;
       expect(config.headers['x-cdp-sdk']).toBeDefined();
-      expect(config.headers['x-cdp-sdk']).toMatch(/^CogniteJavascriptSDK:.+$/);
+      expect(config.headers['x-cdp-sdk']).toMatch(/^CogniteJavaScriptSDK:.+$/);
     });
 
     test('x-cdp-app', async () => {
