@@ -17,7 +17,7 @@ export function generateAxiosInstance(
   appId?: string
 ): AxiosInstance {
   const headers: { [key: string]: string } = {
-    'x-cdp-sdk': `CogniteJavascriptSDK:${packageJson.version}`,
+    'x-cdp-sdk': `CogniteJavaScriptSDK:${packageJson.version}`,
   };
   if (appId) {
     headers['x-cdp-app'] = appId;
