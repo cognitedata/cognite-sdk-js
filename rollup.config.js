@@ -16,6 +16,11 @@ export default {
     ...Object.keys(pkg.peerDependencies || {}),
   ],
   plugins: [
+    typescript({
+      typescript: require('typescript'),
+      clean: true,
+      exclude: '**/__tests__/**',
+    }),
     json({
       // All JSON files will be parsed by default,
       // but you can also specifically include/exclude files
@@ -34,11 +39,6 @@ export default {
 
       // generate a named export for every property of the JSON object
       namedExports: true // Default: true
-    }),
-    typescript({
-      typescript: require('typescript'),
-      clean: true,
-      exclude: '**/__tests__/**',
     }),
   ],
 };
