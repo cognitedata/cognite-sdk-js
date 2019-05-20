@@ -127,6 +127,7 @@ How to release a new version:
     $ npm version [patch/minor/major]
     # example: $ npm version patch
     ```
-4. Push branch and push tags (`git push --tags`)
-5. Create a new pull requests
-6. A new version will be published when the PR is merged
+4. Update the SDK-version in ./samples/package.json
+5. Push branch and push tags (`git push --tags`)
+6. Create a new pull requests
+7. A new version will be published when the PR is merged
