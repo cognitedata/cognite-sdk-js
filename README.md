@@ -38,6 +38,46 @@ import * as sdk from '@cognite/sdk';
 
 The SDK is written in native typescript, so no extra types needs to be defined.
 
+## Quickstart
+
+### Web
+```js
+import * as sdk from '@cognite/sdk';
+
+async function quickstart() {
+  const client = await sdk.createClientWithOAuth({
+    project: 'publicdata',
+    onAuthenticate: (login) => {
+      login.redirect({
+        redirectUrl: window.location.href,
+      });
+    },
+  });
+
+  const assets = await client.assets
+    .list()
+    .autoPagingToArray({ limit: 100 });
+}
+quickstart();
+```
+
+### Backend
+```js
+const sdk = require('@cognite/sdk');
+
+async function quickstart() {
+  const client = await sdk.createClientWithApiKey({
+    project: 'publicdata',
+    apiKey: 'YOUR_SECRET_API_KEY',
+  });
+
+  const assets = await client.assets
+    .list()
+    .autoPagingToArray({ limit: 100 });
+}
+quickstart();
+```
+
 ## Samples
 
 Samples are in the [samples/](./samples) directory. The samples' [README.md](./samples/README.md) has instructions for running the samples.
