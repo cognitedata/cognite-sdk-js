@@ -6,7 +6,7 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
-import * as packageJson from '../package.json';
+import { version } from '../package.json';
 import { handleErrorResponse } from './error';
 import { makeRequestSafeToRetry } from './retryRequests';
 import { transformDateInRequest, transformDateInResponse } from './utils';
@@ -17,7 +17,7 @@ export function generateAxiosInstance(
   appId?: string
 ): AxiosInstance {
   const headers: { [key: string]: string } = {
-    'x-cdp-sdk': `CogniteJavascriptSDK:${packageJson.version}`,
+    'x-cdp-sdk': `CogniteJavaScriptSDK:${version}`,
   };
   if (appId) {
     headers['x-cdp-app'] = appId;
