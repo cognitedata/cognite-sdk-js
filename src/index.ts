@@ -23,6 +23,7 @@ export interface BaseOptions {
    * Specify Cognite API base url if it differs from `https://api.cognitedata.com`
    */
   baseUrl?: string;
+  appId?: string;
   _axiosInstance?: AxiosInstance;
 }
 
@@ -97,7 +98,7 @@ export async function createClientWithApiKey(options: ApiKeyLoginOptions) {
 
   const { baseUrl, _axiosInstance } = options;
   const axiosInstance =
-    _axiosInstance || generateAxiosInstance(getBaseUrl(baseUrl));
+    _axiosInstance || generateAxiosInstance(getBaseUrl(baseUrl), options.appId);
   addRetryToAxiosInstance(axiosInstance);
 
   const apiKeyInfo = await getIdInfoFromApiKey(axiosInstance, apiKey);
@@ -143,7 +144,7 @@ export async function createClientWithOAuth(options: OAuthLoginOptions) {
 
   const baseUrl = getBaseUrl(options.baseUrl);
   const axiosInstance =
-    options._axiosInstance || generateAxiosInstance(baseUrl);
+    options._axiosInstance || generateAxiosInstance(baseUrl, options.appId);
 
   const onTokens = options.onTokens || (() => {});
   const authenticate = createAuthenticateFunction({
