@@ -1,8 +1,9 @@
 // Copyright 2019 Cognite AS
 
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { rawRequest } from '../axiosWrappers';
+import { generateAxiosInstance, rawRequest } from '../axiosWrappers';
+import { BASE_URL } from '../constants';
 import { createErrorReponse } from './testUtils';
 
 describe('axiosWrappers', () => {
@@ -12,7 +13,7 @@ describe('axiosWrappers', () => {
   const url = '/path';
 
   beforeEach(() => {
-    instance = axios.create();
+    instance = generateAxiosInstance(BASE_URL);
     mock = new MockAdapter(instance);
     responseMock.mockReset();
     mock.onAny(url).reply((config: any) => responseMock(config));
@@ -39,6 +40,31 @@ describe('axiosWrappers', () => {
       await rawRequest(instance, { method: 'get', url, params });
       const config = responseMock.mock.calls[0][0] as AxiosRequestConfig;
       expect(config.params).toBe(params);
+    });
+  });
+
+  describe('x-cdp headers', () => {
+    test('x-cdp-sdk', async () => {
+      responseMock.mockReturnValueOnce([200, {}]);
+      await rawRequest(instance, { method: 'get', url });
+      expect(responseMock).toHaveBeenCalledTimes(1);
+      const config = responseMock.mock.calls[0][0] as AxiosRequestConfig;
+      expect(config.headers['x-cdp-sdk']).toBeDefined();
+      expect(config.headers['x-cdp-sdk']).toMatch(/^CogniteJavaScriptSDK:.+$/);
+    });
+
+    test('x-cdp-app', async () => {
+      const appId = 'my-app';
+      const axiosInstance = generateAxiosInstance(BASE_URL, appId);
+      const axiosMock = new MockAdapter(axiosInstance);
+      axiosMock
+        .onAny(url)
+        .reply((requestConfig: any) => responseMock(requestConfig));
+      responseMock.mockReturnValueOnce([200, {}]);
+      await rawRequest(axiosInstance, { method: 'get', url });
+      expect(responseMock).toHaveBeenCalledTimes(1);
+      const config = responseMock.mock.calls[0][0] as AxiosRequestConfig;
+      expect(config.headers['x-cdp-app']).toBe(appId);
     });
   });
 

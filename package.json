@@ -10,7 +10,7 @@
   "repository": "cognitedata/cognitesdk-js",
   "homepage": "https://github.com/cognitedata/cognitesdk-js#readme",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "files": [
     "dist/"
   ],
@@ -34,6 +34,7 @@
     "mustache": "^3.0.1",
     "prettier": "^1.10.2",
     "rollup": "^0.67.0",
+    "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-typescript2": "^0.17.2",
     "sleep-promise": "^8.0.1",
     "swagger-parser": "^6.0.5",
