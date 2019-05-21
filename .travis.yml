@@ -18,12 +18,12 @@ jobs:
   include:
     - stage: Build & Test
       script: 
-        - yarn validate-samples-sdk-version
-        - yarn validateDocLinks
-        - yarn lint
-        - yarn build
-        - yarn test && codecov
-        - yarn test-samples
+      - yarn validate-samples-sdk-version
+      - yarn validateDocLinks
+      - yarn lint
+      - yarn build
+      - yarn test && codecov
+      - yarn test-samples
       deploy:
         - provider: script
           on: 
