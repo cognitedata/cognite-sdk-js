@@ -36,6 +36,7 @@
     "rollup": "^0.67.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-typescript2": "^0.17.2",
+    "semantic-release": "^15.13.12",
     "sleep-promise": "^8.0.1",
     "swagger-parser": "^6.0.5",
     "ts-jest": "^23.10.4",
