@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ApiKeyRequest | Cognite JavaScript SDK</title>
+	<title>Node | Cognite JavaScript SDK</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,21 +52,29 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="apikeyrequest.html">ApiKeyRequest</a>
+					<a href="node.html">Node</a>
 				</li>
 			</ul>
-			<h1>Interface ApiKeyRequest</h1>
+			<h1>Interface Node&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>T</h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ApiKeyRequest</span>
+						<span class="target">Node</span>
 					</li>
 				</ul>
 			</section>
@@ -77,7 +85,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="apikeyrequest.html#serviceaccountid" class="tsd-kind-icon">service<wbr>Account<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="node.html#data" class="tsd-kind-icon">data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="node.html#parentnode" class="tsd-kind-icon">parent<wbr>Node</a></li>
 							</ul>
 						</section>
 					</div>
@@ -86,12 +95,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="serviceaccountid" class="tsd-anchor"></a>
-					<h3>service<wbr>Account<wbr>Id</h3>
-					<div class="tsd-signature tsd-kind-icon">service<wbr>Account<wbr>Id<span class="tsd-signature-symbol">:</span> <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></div>
+					<a name="data" class="tsd-anchor"></a>
+					<h3>data</h3>
+					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/07b56a3/src/types/types.ts#L1152">types/types.ts:1152</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/07b56a3/src/graphUtils.ts#L7">graphUtils.ts:7</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="parentnode" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> parent<wbr>Node</h3>
+					<div class="tsd-signature tsd-kind-icon">parent<wbr>Node<span class="tsd-signature-symbol">:</span> <a href="node.html" class="tsd-signature-type">Node</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/07b56a3/src/graphUtils.ts#L6">graphUtils.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -109,11 +128,14 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="apikeyrequest.html" class="tsd-kind-icon">Api<wbr>Key<wbr>Request</a>
+					<li class="current tsd-kind-interface tsd-has-type-parameter">
+						<a href="node.html" class="tsd-kind-icon">Node</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="apikeyrequest.html#serviceaccountid" class="tsd-kind-icon">service<wbr>Account<wbr>Id</a>
+								<a href="node.html#data" class="tsd-kind-icon">data</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="node.html#parentnode" class="tsd-kind-icon">parent<wbr>Node</a>
 							</li>
 						</ul>
 					</li>
