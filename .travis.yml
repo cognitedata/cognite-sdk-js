@@ -29,24 +29,24 @@ jobs:
         - codecov
         - yarn test-samples
     - stage: release
-        node_js: lts/*
-        script: echo "Semantic release to npm ..
-        deploy:
-          - provider: script
-            on: 
-              branch: master
-            script: npx semantic-release
-            skip_cleanup: true
-          - provider: script 
-            on: 
-              branch: v1
-            script: npx semantic-release --tag-format=alpha
-            skip_cleanup: true
-          - provider: pages
-            on: 
-              branch: master
-            github_token: $GITHUB_TOKEN
-            local_dir: docs
-            skip_cleanup: true
-            keep_history: true
+      node_js: lts/*
+      script: echo "Semantic release to npm ..
+      deploy:
+        - provider: script
+          on: 
+            branch: master
+          script: npx semantic-release
+          skip_cleanup: true
+        - provider: script 
+          on: 
+            branch: v1
+          script: npx semantic-release --tag-format=alpha
+          skip_cleanup: true
+        - provider: pages
+          on: 
+            branch: master
+          github_token: $GITHUB_TOKEN
+          local_dir: docs
+          skip_cleanup: true
+          keep_history: true
 
