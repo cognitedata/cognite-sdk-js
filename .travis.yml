@@ -12,7 +12,7 @@ install:
   - yarn
   - npm install -g codecov
 
-script: 'true'
+script: skip
 
 # before_deploy: 
 #   - yarn docs
@@ -28,7 +28,7 @@ jobs:
         - yarn test
         - codecov
         - yarn test-samples
-      script: 'true'
+      script: true
       # deploy:
       #   - provider: script
       #     on: 
