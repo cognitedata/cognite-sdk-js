@@ -6,48 +6,42 @@ node_js:
   - "10"
 
 env:
-  - COGNITE_PROJECT=cognitesdk-js
-  # - secure: ZRfpzsn8Xgkrq706u+GWd+HcFztaFL+dyeCeU3aoperJ4/r8WHkJ4Kd/ZAOl8ZcOCKy71YQfCrxFBrR6qzm0Dxo96zFwM18xh/g0GmWyfesTNhEE05GKkVf1Jj4j66ZN4rZkt/TPkdrQbmEFABATY1kPljBxwstwHKAFBlGINd04X+wPRUl3kKWT1K3oEinRrzDLF78TcciIet7oa9atQb7JY8mhr/rtlzyVL7Yz9fwb5l+wxPJpqN4G8ZvknCVtO3bGybRQuE7xu+BJ8+CvKR67ui0zfuOIgyHZxUe31yxceADRnes+0kFtrOhnbpHJ+WtroA0HUlBEfZTamelTZUciyLic9z34An/yNyJvfcHA6vfz8dGrVwHMxtGNz9DPy16hajzoik5XJGKq5YFCNalb1go1t/M7HpHqG68MR117zpDvEX8dJQwGWdrctA9y7Q3TZa5Xw6wNlIbCX9/nc/WwnbO0tutXk8+yHQzxuylM4Gqm9SRxfuYXrsAqciMVGOMBGppq9pDzilWPQMmShacNa80iL86NU2nF7G6R7EAf/Z98XUPo5lNZcvaUNWwlPzXy30/vRHDHC+fjkqYkIkGcds9u/LGIPF+87zK1x+h0kW34C0/wDC52nExqBBTmoQ6tF62HvBwFaPmwIxNXhomv4FksizlLu+4Afe9R0gg=
+  - COGNITE_PROJECT=cognitesdk-js ZRfpzsn8Xgkrq706u+GWd+HcFztaFL+dyeCeU3aoperJ4/r8WHkJ4Kd/ZAOl8ZcOCKy71YQfCrxFBrR6qzm0Dxo96zFwM18xh/g0GmWyfesTNhEE05GKkVf1Jj4j66ZN4rZkt/TPkdrQbmEFABATY1kPljBxwstwHKAFBlGINd04X+wPRUl3kKWT1K3oEinRrzDLF78TcciIet7oa9atQb7JY8mhr/rtlzyVL7Yz9fwb5l+wxPJpqN4G8ZvknCVtO3bGybRQuE7xu+BJ8+CvKR67ui0zfuOIgyHZxUe31yxceADRnes+0kFtrOhnbpHJ+WtroA0HUlBEfZTamelTZUciyLic9z34An/yNyJvfcHA6vfz8dGrVwHMxtGNz9DPy16hajzoik5XJGKq5YFCNalb1go1t/M7HpHqG68MR117zpDvEX8dJQwGWdrctA9y7Q3TZa5Xw6wNlIbCX9/nc/WwnbO0tutXk8+yHQzxuylM4Gqm9SRxfuYXrsAqciMVGOMBGppq9pDzilWPQMmShacNa80iL86NU2nF7G6R7EAf/Z98XUPo5lNZcvaUNWwlPzXy30/vRHDHC+fjkqYkIkGcds9u/LGIPF+87zK1x+h0kW34C0/wDC52nExqBBTmoQ6tF62HvBwFaPmwIxNXhomv4FksizlLu+4Afe9R0gg=
 
-script: echo "Starting the job $(node -v)"
+install:
+  - yarn
+  - npm install -g codecov
 
-# before_deploy: 
-#   - yarn docs
+script: 
+  - yarn validate-samples-sdk-version
+  - yarn validateDocLinks
+  - yarn lint
+  - yarn build
+  - yarn test
+  - codecov
+  - yarn test-samples
+
+before_deploy: 
+  - yarn docs
 
 jobs:
   include:
-    - stage: build & test
-      node_js:
-        - "8"
-        - "9"
-        - "10"
-      install:
-        - yarn
-        - npm install -g codecov
-      script: 
-        - yarn validate-samples-sdk-version
-        - yarn validateDocLinks
-        - yarn lint
-        - yarn build
-        - yarn test
-        - codecov
-        - yarn test-samples
-    - stage: release
-      node_js: lts/*
-      script: echo "Semantic release to npm .."
-      deploy:
-        - provider: script
-          if: branch = master
-          script: npx semantic-release
-          skip_cleanup: true
-        - provider: script 
-          if: branch = v1
-          script: npx semantic-release --tag-format=alpha
-          skip_cleanup: true
-        - provider: pages
-          if: branch = master
-          github_token: $GITHUB_TOKEN
-          local_dir: docs
-          skip_cleanup: true
-          keep_history: true
+    stage: release
+    node_js: lts/*
+    script: echo "Semantic release to npm .."
+    deploy:
+      - provider: script
+        if: branch = master
+        script: npx semantic-release
+        skip_cleanup: true
+      - provider: script 
+        if: branch = v1
+        script: npx semantic-release --tag-format=alpha
+        skip_cleanup: true
+      - provider: pages
+        if: branch = master
+        github_token: $GITHUB_TOKEN
+        local_dir: docs
+        skip_cleanup: true
+        keep_history: true
 
