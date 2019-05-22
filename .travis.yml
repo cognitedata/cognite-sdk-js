@@ -12,6 +12,8 @@ install:
   - yarn
   - npm install -g codecov
 
+script: 'true'
+
 # before_deploy: 
 #   - yarn docs
 
