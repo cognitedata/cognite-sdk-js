@@ -12,7 +12,7 @@ install:
   - yarn
   - npm install -g codecov
 
-script: skip
+script: true
 
 # before_deploy: 
 #   - yarn docs
