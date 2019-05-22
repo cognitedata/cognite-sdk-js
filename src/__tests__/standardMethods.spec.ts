@@ -3,7 +3,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { MetadataMap } from '../metadata';
-import { generateListEndpoint } from '../standardMethods';
+import {
+  generateCreateEndpoint,
+  generateListEndpoint,
+} from '../standardMethods';
 import { sleepPromise } from '../utils';
 
 function numberGeneratorAPIEndpoint(config: AxiosRequestConfig) {
@@ -25,20 +28,50 @@ function numberGeneratorAPIEndpoint(config: AxiosRequestConfig) {
 }
 
 describe('standard methods', () => {
-  function createMockedListEndpoint() {
-    const axiosInstance = axios.create();
-    const listEndpoint = generateListEndpoint<any, number>(
-      axiosInstance,
-      '/',
-      new MetadataMap(),
-      false
-    );
-    const axiosMock = new MockAdapter(axiosInstance);
-    axiosMock.onGet('/').reply(numberGeneratorAPIEndpoint);
-    return listEndpoint;
-  }
+  const axiosInstance = axios.create();
+  const axiosMock = new MockAdapter(axiosInstance);
+  beforeEach(() => {
+    axiosMock.reset();
+  });
 
+  describe('generateCreateEndpoint', () => {
+    test('automatic chunking', async () => {
+      const metadataMap = new MetadataMap();
+      const items = new Array(3002).fill(null).map((_, index) => ({
+        name: '' + index,
+      }));
+      const create = generateCreateEndpoint(
+        axiosInstance,
+        '/path',
+        metadataMap
+      );
+      let counter = 0;
+      axiosMock.onPost('/path').reply(config => {
+        counter++;
+        const { items: requestItems } = JSON.parse(config.data);
+        const responseItems = requestItems.map((item: any) => ({
+          ...item,
+          id: Number(item.name),
+        }));
+        return [201, { items: responseItems }];
+      });
+      const response = await create(items);
+      expect(counter).toBe(4);
+      expect(response.length).toBe(items.length);
+      expect(metadataMap.get(response)).toBeDefined();
+    });
+  });
   describe('generateListEndpoint', () => {
+    function createMockedListEndpoint() {
+      const listEndpoint = generateListEndpoint<any, number>(
+        axiosInstance,
+        '/',
+        new MetadataMap(),
+        false
+      );
+      axiosMock.onGet('/').reply(numberGeneratorAPIEndpoint);
+      return listEndpoint;
+    }
     test('for-await', async () => {
       const listEndpoint = createMockedListEndpoint();
       const numbers = [];

@@ -1,6 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
+import { chunk, concat } from 'lodash';
 import { makeAutoPaginationMethods } from './autoPagination';
 import { rawRequest } from './axiosWrappers';
 import { MetadataMap } from './metadata';
@@ -14,16 +15,26 @@ type CreateEndpoint<RequestType, ResponseType> = (
 export function generateCreateEndpoint<RequestType, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  chunkFunction?: (items: RequestType[]) => RequestType[][]
 ): CreateEndpoint<RequestType, ResponseType> {
   return async function create(items) {
     type Response = ItemsResponse<ResponseType>;
-    const response = await rawRequest<Response>(axiosInstance, {
-      method: 'post',
-      url: resourcePath,
-      data: { items },
-    });
-    return metadataMap.addAndReturn(response.data.items, response);
+    const chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
+    const responses = await Promise.all(
+      chunks.map(singleChunk =>
+        rawRequest<Response>(axiosInstance, {
+          method: 'post',
+          url: resourcePath,
+          data: { items: singleChunk },
+        })
+      )
+    );
+    const mergedResponses = concat(
+      [],
+      ...responses.map(response => response.data.items)
+    );
+    return metadataMap.addAndReturn(mergedResponses, responses[0]);
   };
 }
 
