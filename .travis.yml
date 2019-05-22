@@ -17,7 +17,7 @@ install:
 
 jobs:
   include:
-    - stage: test
+    - stage: build & test
       script: 
         - yarn validate-samples-sdk-version
         - yarn validateDocLinks
@@ -26,6 +26,7 @@ jobs:
         - yarn test
         - codecov
         - yarn test-samples
+      script: 'true'
       # deploy:
       #   - provider: script
       #     on: 
