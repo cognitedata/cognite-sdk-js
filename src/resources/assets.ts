@@ -1,7 +1,9 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
+import { chunk } from 'lodash';
 import { CogniteAsyncIterator } from '../autoPagination';
+import { Node, topologicalSort } from '../graphUtils';
 import { MetadataMap } from '../metadata';
 import {
   generateCreateEndpoint,
@@ -87,6 +89,36 @@ export interface AssetsAPI {
   delete: (ids: AssetIdEither[]) => Promise<{}>;
 }
 
+export function assetChunker(
+  assets: ExternalAssetItem[],
+  chunkSize: number = 1000
+): ExternalAssetItem[][] {
+  const nodes: Node<ExternalAssetItem>[] = assets.map(asset => {
+    return { data: asset };
+  });
+
+  // find all new exteralIds and map the new externalId to the asset
+  const externalIdMap = new Map<string, Node<ExternalAssetItem>>();
+  nodes.forEach(node => {
+    const { externalId } = node.data;
+    if (externalId) {
+      externalIdMap.set(externalId, node);
+    }
+  });
+
+  // set correct Node.parentNode
+  nodes.forEach(node => {
+    const { parentExternalId } = node.data;
+    // has an internal parent
+    if (parentExternalId && externalIdMap.has(parentExternalId)) {
+      node.parentNode = externalIdMap.get(parentExternalId);
+    }
+  });
+
+  const sortedNodes = topologicalSort(nodes);
+  return chunk(sortedNodes.map(node => node.data), chunkSize);
+}
+
 /** @hidden */
 export function generateAssetsObject(
   project: string,
@@ -95,7 +127,7 @@ export function generateAssetsObject(
 ): AssetsAPI {
   const path = projectUrl(project) + '/assets';
   return {
-    create: generateCreateEndpoint(instance, path, map),
+    create: generateCreateEndpoint(instance, path, map, assetChunker),
     list: generateListEndpoint(instance, path, map, true),
     retrieve: generateRetrieveEndpoint(instance, path, map),
     update: generateUpdateEndpoint(instance, path, map),

@@ -3,6 +3,7 @@
 import { AxiosInstance } from 'axios';
 import { CogniteAsyncIterator } from '../autoPagination';
 import { MetadataMap } from '../metadata';
+
 import {
   generateCreateEndpoint,
   generateDeleteEndpoint,
