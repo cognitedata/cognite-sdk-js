@@ -1,9 +1,9 @@
 // Copyright 2018 Cognite AS
 
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { attach } from 'retry-axios';
 import * as Url from 'url';
 import { MetadataMap } from './MetadataMap';
+import { addRetryToAxiosInstance } from './retryRequests';
 
 /** @hidden */
 export const BASE_URL: string = 'https://api.cognitedata.com';
@@ -63,40 +63,7 @@ export const instance = axios.create({
 
 const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT'];
 const statusCodesToRetry = [[100, 199], [429, 429], [500, 599]];
-
-// config for retry-axios package
-(instance.defaults as any).raxConfig = {
-  instance,
-  retryDelay: 50,
-  retry: 3,
-  shouldRetry: (err: any) => {
-    const { config, response } = err;
-
-    const httpMethod = config.method.toUpperCase();
-    if (httpMethodsToRetry.indexOf(httpMethod) === -1) {
-      return false;
-    }
-
-    if (response == null) {
-      return true;
-    }
-
-    const responseStatusCode = response.status;
-    let isCodeInValidRange = false;
-    statusCodesToRetry.forEach(([start, end]: any) => {
-      if (responseStatusCode >= start && responseStatusCode <= end) {
-        isCodeInValidRange = true;
-      }
-    });
-    if (!isCodeInValidRange) {
-      return false;
-    }
-
-    const { currentRetryAttempt, retry } = config.raxConfig;
-    return currentRetryAttempt < retry;
-  },
-};
-attach(instance);
+addRetryToAxiosInstance(instance);
 
 instance.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {

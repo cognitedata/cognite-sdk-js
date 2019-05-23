@@ -138,7 +138,7 @@ describe('Core', () => {
 
   test('retry requests', async () => {
     const { raxConfig } = instance.defaults as any;
-    expect(raxConfig.retry).toBeGreaterThan(1);
+    expect(raxConfig.numRetries).toBeGreaterThan(1);
     const responseMock = jest.fn();
     responseMock.mockImplementation(_ => {
       return [500, {}];
@@ -149,7 +149,7 @@ describe('Core', () => {
     await expect(rawGet('/retry')).rejects.toThrowError(
       'Request failed with status code 500'
     );
-    expect(responseMock).toHaveBeenCalledTimes(raxConfig.retry + 1);
+    expect(responseMock).toHaveBeenCalledTimes(raxConfig.numRetries + 1);
   });
 
   test('retry requests and end with success', async () => {
