@@ -39,7 +39,7 @@ describe('axiosWrappers', () => {
       };
       await rawRequest(instance, { method: 'get', url, params });
       const config = responseMock.mock.calls[0][0] as AxiosRequestConfig;
-      expect(config.params).toBe(params);
+      expect(config.params).toEqual(params);
     });
   });
 
