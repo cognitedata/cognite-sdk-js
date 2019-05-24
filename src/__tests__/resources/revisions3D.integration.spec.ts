@@ -60,6 +60,7 @@ describeIfCondition(
         client.files.upload(
           { name: `file_revision_test_${now}.fbx` },
           fileContent,
+          false,
           true
         ),
         // create assets

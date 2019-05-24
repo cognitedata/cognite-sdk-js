@@ -53,6 +53,8 @@ export interface FilesAPI {
     metadata: ExternalFilesMetadata,
     fileContent?: FileContent,
     // tslint:disable-next-line:bool-param-default
+    overwrite?: boolean,
+    // tslint:disable-next-line:bool-param-default
     waitUntilAcknowledged?: boolean
   ) => Promise<UploadFileMetadataResponse | FilesMetadata>;
 
@@ -148,14 +150,20 @@ function generateUploadEndpoint(
   return async function upload(
     fileMetadata: ExternalFilesMetadata,
     fileContent?: FileContent,
+    overwrite: boolean = false,
     waitUntilAcknowledged: boolean = false
   ): Promise<UploadFileMetadataResponse | FilesMetadata> {
+    const params: { [key: string]: any } = {};
+    if (overwrite) {
+      params.overwrite = true;
+    }
     const response = await rawRequest<UploadFileMetadataResponse>(
       axiosInstance,
       {
         method: 'post',
-        url: `${resourcePath}/initupload`,
+        url: resourcePath,
         data: fileMetadata,
+        params,
       }
     );
     const file = response.data;
