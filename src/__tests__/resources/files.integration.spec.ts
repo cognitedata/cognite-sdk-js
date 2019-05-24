@@ -45,6 +45,9 @@ describe('Files integration test', async () => {
     ]);
     expect(updatedFiles[0].source).toBe(newSource);
 
+    // test overwrite
+    await client.files.upload(files[0], fileContent, true);
+
     await client.files.delete([{ id: file.id }]);
   });
 
