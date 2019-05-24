@@ -43,6 +43,36 @@ describe('axiosWrappers', () => {
     });
   });
 
+  describe('transform date', () => {
+    test('transform date in body', async done => {
+      const now = new Date();
+      responseMock.mockImplementationOnce(config => {
+        const { myDate } = JSON.parse(config.data);
+        expect(myDate).toBe(now.getTime());
+        done();
+      });
+      await rawRequest(instance, {
+        method: 'get',
+        url,
+        data: { myDate: now },
+      });
+    });
+
+    test('transform date in query params', async done => {
+      const now = new Date();
+      responseMock.mockImplementationOnce(config => {
+        const { minLastUpdatedTime } = config.params;
+        expect(minLastUpdatedTime).toBe(now.getTime());
+        done();
+      });
+      await rawRequest(instance, {
+        method: 'get',
+        url,
+        params: { minLastUpdatedTime: now },
+      });
+    });
+  });
+
   describe('x-cdp headers', () => {
     test('x-cdp-sdk', async () => {
       responseMock.mockReturnValueOnce([200, {}]);
