@@ -161,8 +161,11 @@ export interface AssetFilter extends Limit {
     source?: AssetSource;
     createdTime?: DateRange;
     lastUpdatedTime?: DateRange;
-    assetSubtrees?: CogniteInternalId[];
     depth?: IntegerRange;
+    /**
+     * Filtered assets are root assets or not
+     */
+    root?: boolean;
     externalIdPrefix?: CogniteExternalId;
   };
 }
@@ -333,10 +336,6 @@ export interface Filter {
    * Filter out time series that are not linked to any of these assets.
    */
   assetIds?: CogniteInternalId[];
-  /**
-   * Filter out time series that are not linked to assets in the subtree rooted at these assets. Format is list of ids.
-   */
-  assetSubtrees?: CogniteInternalId[];
   createdTime?: Date;
   lastUpdatedTime?: Date;
 }
@@ -595,10 +594,6 @@ export interface EventFilter {
    * Asset IDs of related equipment that this event relates to.
    */
   assetIds?: CogniteInternalId[];
-  /**
-   * Filter out events that are not linked to assets in the subtree rooted at these assets.
-   */
-  assetSubtrees?: CogniteInternalId[];
 }
 
 export interface EventFilterRequest extends Cursor, Limit {
@@ -652,10 +647,6 @@ export interface FileFilter extends Limit {
      * Only include files that reference these specific asset IDs.
      */
     assetIds?: CogniteInternalId[];
-    /**
-     * Only include files that reference these asset Ids or any  sub-nodes of the specified asset Ids.
-     */
-    assetSubtrees?: CogniteInternalId[];
     source?: string;
     createdTime?: DateRange;
     lastUpdatedTime?: DateRange;
