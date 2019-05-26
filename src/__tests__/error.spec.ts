@@ -2,9 +2,9 @@
 
 import { AxiosError } from 'axios';
 import { CogniteError, handleErrorResponse } from '../error';
-import { createErrorReponse, randomInt } from './testUtils';
+import { createErrorReponse } from './testUtils';
 
-const internalIdObject = { id: randomInt() };
+const internalIdObject = { id: 4190022127342195 };
 const externalIdObject = { externalId: 'abc' };
 const event = {
   externalId: 'string',

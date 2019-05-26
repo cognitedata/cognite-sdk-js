@@ -3,7 +3,7 @@
 exports[`CogniteError extra field 1`] = `
 "Abc | code: 500
 Missing:
-  {\\"id\\":5250643903}
+  {\\"id\\":4190022127342195}
   {\\"externalId\\":\\"abc\\"}
 Duplicated:
   {\\"externalId\\":\\"string\\",\\"startTime\\":0,\\"endTime\\":0,\\"description\\":\\"string\\",\\"source\\":\\"string\\"}"
@@ -12,7 +12,7 @@ Duplicated:
 exports[`handleErrorResponse extra fields 1`] = `
 "abc | code: 500 | X-Request-ID: def
 Missing:
-  {\\"id\\":5250643903}
+  {\\"id\\":4190022127342195}
   {\\"externalId\\":\\"abc\\"}
 Duplicated:
   {\\"externalId\\":\\"string\\",\\"startTime\\":0,\\"endTime\\":0,\\"description\\":\\"string\\",\\"source\\":\\"string\\"}"
