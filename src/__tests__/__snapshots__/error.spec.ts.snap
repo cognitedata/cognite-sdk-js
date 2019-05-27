@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CogniteError extra field 1`] = `
+"Abc | code: 500
+{
+  \\"missing\\": [
+    {
+      \\"id\\": 4190022127342195
+    },
+    {
+      \\"externalId\\": \\"abc\\"
+    }
+  ],
+  \\"duplicated\\": [
+    {
+      \\"externalId\\": \\"string\\",
+      \\"startTime\\": 0,
+      \\"endTime\\": 0,
+      \\"description\\": \\"string\\",
+      \\"source\\": \\"string\\"
+    }
+  ]
+}"
+`;
+
+exports[`handleErrorResponse extra fields 1`] = `
+"abc | code: 500 | X-Request-ID: def
+{
+  \\"missing\\": [
+    {
+      \\"id\\": 4190022127342195
+    },
+    {
+      \\"externalId\\": \\"abc\\"
+    }
+  ],
+  \\"duplicated\\": [
+    {
+      \\"externalId\\": \\"string\\",
+      \\"startTime\\": 0,
+      \\"endTime\\": 0,
+      \\"description\\": \\"string\\",
+      \\"source\\": \\"string\\"
+    }
+  ]
+}"
+`;

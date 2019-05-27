@@ -3,11 +3,16 @@
 import * as sleep from 'sleep-promise';
 import { createClientWithApiKey } from '../index';
 
-export function createErrorReponse(status: number, message: string) {
+export function createErrorReponse(
+  status: number,
+  message: string,
+  extra: any = {}
+) {
   return {
     error: {
       code: status,
       message,
+      ...extra,
     },
   };
 }

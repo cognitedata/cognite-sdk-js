@@ -4,6 +4,16 @@ import { AxiosError } from 'axios';
 import { CogniteError, handleErrorResponse } from '../error';
 import { createErrorReponse } from './testUtils';
 
+const internalIdObject = { id: 4190022127342195 };
+const externalIdObject = { externalId: 'abc' };
+const event = {
+  externalId: 'string',
+  startTime: 0,
+  endTime: 0,
+  description: 'string',
+  source: 'string',
+};
+
 describe('CogniteError', () => {
   test('without requestId', () => {
     const errorMessage = 'Abc';
@@ -28,6 +38,18 @@ describe('CogniteError', () => {
     }).toThrowErrorMatchingInlineSnapshot(
       `"Abc | code: 500 | X-Request-ID: def"`
     );
+  });
+
+  test('extra field', () => {
+    const errorMessage = 'Abc';
+    const status = 500;
+    const error = new CogniteError(errorMessage, status, undefined, {
+      missing: [internalIdObject, externalIdObject],
+      duplicated: [event],
+    });
+    expect(() => {
+      throw error;
+    }).toThrowErrorMatchingSnapshot();
   });
 });
 
@@ -61,5 +83,36 @@ describe('handleErrorResponse', () => {
     }).toThrowErrorMatchingInlineSnapshot(
       `"abc | code: 500 | X-Request-ID: def"`
     );
+  });
+
+  test('extra fields', () => {
+    const status = 500;
+    const message = 'abc';
+    const xRequestId = 'def';
+    const axiosError = {
+      response: {
+        status,
+        data: createErrorReponse(status, message, {
+          missing: [internalIdObject, externalIdObject],
+          duplicated: [event],
+        }),
+        headers: {
+          'X-Request-Id': xRequestId,
+        },
+      },
+    } as AxiosError;
+
+    expect(() => {
+      handleErrorResponse(axiosError);
+    }).toThrowErrorMatchingSnapshot();
+
+    try {
+      handleErrorResponse(axiosError);
+    } catch (e) {
+      expect(e.status).toBe(status);
+      expect(e.requestId).toBe(xRequestId);
+      expect(e.missing).toEqual([internalIdObject, externalIdObject]);
+      expect(e.duplicated).toEqual([event]);
+    }
   });
 });
