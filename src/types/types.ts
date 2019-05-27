@@ -734,8 +734,22 @@ export interface RawDBTable {
 }
 
 export interface ListRawRows extends Cursor, Limit {
+  /**
+   * Set this to true if you only want to fetch row keys
+   */
   onlyRowKeys?: boolean;
+  /**
+   * Specify this to limit columns to retrieve. Array of column keys
+   */
   columns?: string[];
+  /**
+   * Exclusive filter for last updated time. When specified only rows updated after this time will be returned
+   */
+  minLastUpdatedTime?: Date;
+  /**
+   * Inclusive filter for last updated time. When specified only rows updated before this time will be returned
+   */
+  maxLastUpdatedTime?: Date;
 }
 
 export interface RawDBRowKey {
@@ -745,11 +759,18 @@ export interface RawDBRowKey {
   key: string;
 }
 
-export interface RawDBRow extends RawDBRowKey {
+export interface RawDBRowInsert extends RawDBRowKey {
   /**
    * Row data stored as a JSON object.
    */
   columns: { [key: string]: string };
+}
+
+export interface RawDBRow extends RawDBRowInsert {
+  /**
+   * Time when the row was last updated
+   */
+  lastUpdatedTime: Date;
 }
 
 // Security categories

@@ -17,6 +17,7 @@ import {
   ListRawTables,
   RawDB,
   RawDBRow,
+  RawDBRowInsert,
   RawDBRowKey,
   RawDBTable,
 } from '../types/types';
@@ -104,7 +105,7 @@ export interface RawAPI {
   insertRows: (
     databaseName: string,
     tableName: string,
-    items: RawDBRow[],
+    items: RawDBRowInsert[],
     // tslint:disable-next-line:bool-param-default
     ensureParent?: boolean
   ) => Promise<{}>;

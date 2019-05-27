@@ -64,6 +64,7 @@ export async function rawRequest<ResponseType>(
     makeRequestSafeToRetry(requestConfig);
   }
   requestConfig.data = transformDateInRequest(requestConfig.data);
+  requestConfig.params = transformDateInRequest(requestConfig.params || {});
   try {
     const response = (await axiosInstance(requestConfig)) as AxiosResponse<
       ResponseType
