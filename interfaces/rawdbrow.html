@@ -66,7 +66,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="rawdbrowkey.html" class="tsd-signature-type">RawDBRowKey</a>
+						<a href="rawdbrowinsert.html" class="tsd-signature-type">RawDBRowInsert</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">RawDBRow</span>
@@ -82,8 +82,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rawdbrow.html#columns" class="tsd-kind-icon">columns</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rawdbrow.html#columns" class="tsd-kind-icon">columns</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="rawdbrow.html#key" class="tsd-kind-icon">key</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="rawdbrow.html#lastupdatedtime" class="tsd-kind-icon">last<wbr>Updated<wbr>Time</a></li>
 							</ul>
 						</section>
 					</div>
@@ -91,13 +92,14 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="columns" class="tsd-anchor"></a>
 					<h3>columns</h3>
 					<div class="tsd-signature tsd-kind-icon">columns<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="rawdbrowinsert.html">RawDBRowInsert</a>.<a href="rawdbrowinsert.html#columns">columns</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/531ffe4/src/types/types.ts#L752">types/types.ts:752</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/types/types.ts#L766">types/types.ts:766</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -121,12 +123,27 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="rawdbrowkey.html">RawDBRowKey</a>.<a href="rawdbrowkey.html#key">key</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/531ffe4/src/types/types.ts#L745">types/types.ts:745</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/types/types.ts#L759">types/types.ts:759</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Unique row key</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="lastupdatedtime" class="tsd-anchor"></a>
+					<h3>last<wbr>Updated<wbr>Time</h3>
+					<div class="tsd-signature tsd-kind-icon">last<wbr>Updated<wbr>Time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/types/types.ts#L773">types/types.ts:773</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Time when the row was last updated</p>
 						</div>
 					</div>
 				</section>
@@ -147,11 +164,14 @@
 					<li class="current tsd-kind-interface">
 						<a href="rawdbrow.html" class="tsd-kind-icon">RawDBRow</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="rawdbrow.html#columns" class="tsd-kind-icon">columns</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="rawdbrow.html#key" class="tsd-kind-icon">key</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="rawdbrow.html#lastupdatedtime" class="tsd-kind-icon">last<wbr>Updated<wbr>Time</a>
 							</li>
 						</ul>
 					</li>

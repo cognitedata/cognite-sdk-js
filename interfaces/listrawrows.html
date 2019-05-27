@@ -88,6 +88,8 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listrawrows.html#columns" class="tsd-kind-icon">columns</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="listrawrows.html#cursor" class="tsd-kind-icon">cursor</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="listrawrows.html#limit" class="tsd-kind-icon">limit</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listrawrows.html#maxlastupdatedtime" class="tsd-kind-icon">max<wbr>Last<wbr>Updated<wbr>Time</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listrawrows.html#minlastupdatedtime" class="tsd-kind-icon">min<wbr>Last<wbr>Updated<wbr>Time</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="listrawrows.html#onlyrowkeys" class="tsd-kind-icon">only<wbr>Row<wbr>Keys</a></li>
 							</ul>
 						</section>
@@ -102,9 +104,14 @@
 					<div class="tsd-signature tsd-kind-icon">columns<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/531ffe4/src/types/types.ts#L738">types/types.ts:738</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/types/types.ts#L744">types/types.ts:744</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Specify this to limit columns to retrieve. Array of column keys</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="cursor" class="tsd-anchor"></a>
@@ -113,7 +120,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="cursor.html">Cursor</a>.<a href="cursor.html#cursor-1">cursor</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/531ffe4/src/types/types.ts#L31">types/types.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/types/types.ts#L31">types/types.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -124,9 +131,39 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="limit.html">Limit</a>.<a href="limit.html#limit-1">limit</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/531ffe4/src/types/types.ts#L35">types/types.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/types/types.ts#L35">types/types.ts:35</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="maxlastupdatedtime" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> max<wbr>Last<wbr>Updated<wbr>Time</h3>
+					<div class="tsd-signature tsd-kind-icon">max<wbr>Last<wbr>Updated<wbr>Time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/types/types.ts#L752">types/types.ts:752</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Inclusive filter for last updated time. When specified only rows updated before this time will be returned</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="minlastupdatedtime" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> min<wbr>Last<wbr>Updated<wbr>Time</h3>
+					<div class="tsd-signature tsd-kind-icon">min<wbr>Last<wbr>Updated<wbr>Time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/types/types.ts#L748">types/types.ts:748</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Exclusive filter for last updated time. When specified only rows updated after this time will be returned</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="onlyrowkeys" class="tsd-anchor"></a>
@@ -134,9 +171,14 @@
 					<div class="tsd-signature tsd-kind-icon">only<wbr>Row<wbr>Keys<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/531ffe4/src/types/types.ts#L737">types/types.ts:737</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/types/types.ts#L740">types/types.ts:740</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Set this to true if you only want to fetch row keys</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -163,6 +205,12 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="listrawrows.html#limit" class="tsd-kind-icon">limit</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="listrawrows.html#maxlastupdatedtime" class="tsd-kind-icon">max<wbr>Last<wbr>Updated<wbr>Time</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="listrawrows.html#minlastupdatedtime" class="tsd-kind-icon">min<wbr>Last<wbr>Updated<wbr>Time</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="listrawrows.html#onlyrowkeys" class="tsd-kind-icon">only<wbr>Row<wbr>Keys</a>
