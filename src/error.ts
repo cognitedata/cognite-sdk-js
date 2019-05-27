@@ -18,17 +18,8 @@ export class CogniteError extends Error {
       message += ` | X-Request-ID: ${requestId}`;
     }
     const { missing, duplicated } = extra;
-    if (missing && missing.length > 0) {
-      message += '\nMissing:';
-      missing.forEach((item: object) => {
-        message += `\n  ${JSON.stringify(item)}`;
-      });
-    }
-    if (duplicated && duplicated.length > 0) {
-      message += '\nDuplicated:';
-      duplicated.forEach((item: object) => {
-        message += `\n  ${JSON.stringify(item)}`;
-      });
+    if (missing || duplicated) {
+      message += `\n${JSON.stringify(extra, null, 2)}`;
     }
     super(message);
     this.status = status;
