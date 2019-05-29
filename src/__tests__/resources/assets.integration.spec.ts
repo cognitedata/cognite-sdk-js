@@ -1,9 +1,10 @@
 // Copyright 2019 Cognite AS
 
 import { API } from '../../resources/api';
+import { Asset } from '../../types/types';
 import { setupClient } from '../testUtils';
 
-describe('Asset integration test', async () => {
+describe('Asset integration test', () => {
   let client: API;
   beforeAll(async () => {
     client = await setupClient();
@@ -17,6 +18,7 @@ describe('Asset integration test', async () => {
     },
     externalId: 'test-root' + now,
   };
+
   const childAsset = {
     name: 'test-child',
     description: 'Child asset for cognitesdk-js test',
@@ -25,12 +27,20 @@ describe('Asset integration test', async () => {
     },
     parentExternalId: rootAsset.externalId,
   };
+  let assets: Asset[];
 
   test('create,retrieve,update,delete', async () => {
-    const assets = await client.assets.create([childAsset, rootAsset]);
+    assets = await client.assets.create([childAsset, rootAsset]);
     expect(assets[0].createdTime).toBeInstanceOf(Date);
     expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
-    await client.assets.retrieve([{ id: assets[0].id }]);
+  });
+
+  test('retrieve', async () => {
+    const response = await client.assets.retrieve([{ id: assets[0].id }]);
+    expect(response).toEqual([assets[0]]);
+  });
+
+  test('update', async () => {
     await client.assets.update([
       {
         id: assets[0].id,
@@ -39,7 +49,9 @@ describe('Asset integration test', async () => {
         },
       },
     ]);
+  });
 
+  test('delete', async () => {
     await client.assets.delete(
       assets.map(asset => ({
         id: asset.id,

@@ -4,7 +4,7 @@ import { API } from '../../resources/api';
 import { NewApiKeyResponse, ServiceAccount } from '../../types/types';
 import { setupClient } from '../testUtils';
 
-describe('API keys integration test', async () => {
+describe('API keys integration test', () => {
   let client: API;
   let serviceAccount: ServiceAccount;
   const now = Date.now();

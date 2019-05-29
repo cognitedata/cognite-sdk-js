@@ -1,9 +1,10 @@
 // Copyright 2019 Cognite AS
 
 import { API } from '../../resources/api';
+import { FilesMetadata } from '../../types/types';
 import { setupClient } from '../testUtils';
 
-describe('Files integration test', async () => {
+describe('Files integration test', () => {
   let client: API;
   beforeAll(async () => {
     client = await setupClient();
@@ -21,19 +22,27 @@ describe('Files integration test', async () => {
       name: 'filename_' + postfix,
     },
   ];
+  const fileContent = 'content_' + new Date();
+  let file: FilesMetadata;
 
-  test('create,retrieve,update,delete', async () => {
-    const fileContent = 'content_' + new Date();
-    const file = await client.files.upload(files[0], fileContent);
+  test('create', async () => {
+    file = await client.files.upload(files[0], fileContent, false, true);
+  });
 
+  test('retrieve', async () => {
     const [retrievedFile] = await client.files.retrieve([{ id: file.id }]);
     expect(retrievedFile.mimeType).toBe(files[0].mimeType);
+    expect(retrievedFile.uploaded).toBeTruthy();
+  });
 
+  test('download', async () => {
     const [{ downloadUrl }] = await client.files.getDownloadUrls([
       { id: file.id },
     ]);
     expect(downloadUrl).toBeDefined();
+  });
 
+  test('update', async () => {
     const newSource = 'def';
     const updatedFiles = await client.files.update([
       {
@@ -44,11 +53,15 @@ describe('Files integration test', async () => {
       },
     ]);
     expect(updatedFiles[0].source).toBe(newSource);
+  });
 
-    // test overwrite
-    await client.files.upload(files[0], fileContent, true);
+  test('upload with overwrite', async () => {
+    await client.files.upload(files[0], fileContent, true, true);
+  });
 
-    await client.files.delete([{ id: file.id }]);
+  test('delete', async () => {
+    const response = await client.files.delete([{ id: file.id }]);
+    expect(response).toEqual({});
   });
 
   test('list', async () => {

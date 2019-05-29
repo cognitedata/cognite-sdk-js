@@ -4,7 +4,7 @@ import { API } from '../../resources/api';
 import { SecurityCategory } from '../../types/types';
 import { setupClient } from '../testUtils';
 
-describe('Security categories integration test', async () => {
+describe('Security categories integration test', () => {
   let client: API;
   beforeAll(async () => {
     client = await setupClient();

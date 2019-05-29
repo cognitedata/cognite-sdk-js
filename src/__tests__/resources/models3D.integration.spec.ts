@@ -4,7 +4,7 @@ import { API } from '../../resources/api';
 import { Model3D } from '../../types/types';
 import { getSortedPropInArray, setupClient } from '../testUtils';
 
-describe('Model3d integration test', async () => {
+describe('Model3d integration test', () => {
   let client: API;
   beforeAll(async () => {
     client = await setupClient();

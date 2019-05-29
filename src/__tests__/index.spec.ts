@@ -18,7 +18,7 @@ import {
   project,
 } from './testUtils';
 
-describe('createClientWithApiKey', async () => {
+describe('createClientWithApiKey', () => {
   test('missing parameter', async () => {
     await expect(
       // @ts-ignore
@@ -95,7 +95,7 @@ describe('createClientWithApiKey', async () => {
   });
 });
 
-describe('createClientWithOAuth', async () => {
+describe('createClientWithOAuth', () => {
   test('missing parameter', async () => {
     await expect(
       // @ts-ignore

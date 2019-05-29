@@ -19,13 +19,13 @@ const createRow = () => ({
   columns,
 });
 
-describe('Raw integration test', async () => {
+describe('Raw integration test', () => {
   let client: API;
   beforeAll(async () => {
     client = await setupClient();
   });
 
-  describe('databases', async () => {
+  describe('databases', () => {
     let databases: RawDB[];
     test('create', async () => {
       const databasesToCreate = [createDb(), createDb()];
@@ -46,7 +46,7 @@ describe('Raw integration test', async () => {
     });
   });
 
-  describe('tables', async () => {
+  describe('tables', () => {
     let database: RawDB;
     beforeAll(async () => {
       [database] = await client.raw.createDatabases([createDb()]);
@@ -83,7 +83,7 @@ describe('Raw integration test', async () => {
     });
   });
 
-  describe('rows', async () => {
+  describe('rows', () => {
     let database: RawDB;
     let table: RawDBTable;
     beforeAll(async () => {

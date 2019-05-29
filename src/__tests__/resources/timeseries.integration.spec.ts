@@ -1,9 +1,10 @@
 // Copyright 2019 Cognite AS
 
 import { API } from '../../resources/api';
+import { GetTimeSeriesMetadataDTO } from '../../types/types';
 import { setupClient } from '../testUtils';
 
-describe('Timeseries integration test', async () => {
+describe('Timeseries integration test', () => {
   let client: API;
   beforeAll(async () => {
     client = await setupClient();
@@ -21,10 +22,21 @@ describe('Timeseries integration test', async () => {
     },
   ];
 
-  test('create,retrieve,update,delete', async () => {
-    const result = await client.timeseries.create(timeseries);
-    const single = await client.timeseries.retrieve([{ id: result[0].id }]);
+  let createdTimeseries: GetTimeSeriesMetadataDTO[];
+
+  test('create', async () => {
+    createdTimeseries = await client.timeseries.create(timeseries);
+    expect(createdTimeseries[0].id).toBeDefined();
+  });
+
+  test('retrieve', async () => {
+    const single = await client.timeseries.retrieve([
+      { id: createdTimeseries[0].id },
+    ]);
     expect(single[0].name).toBe(timeseries[0].name);
+  });
+
+  test('update', async () => {
     const newName = 'new name';
     const updateResult = await client.timeseries.update([
       {
@@ -36,9 +48,11 @@ describe('Timeseries integration test', async () => {
     ]);
     expect(updateResult[0].externalId).toBe(timeseries[0].externalId);
     expect(updateResult[0].name).toBe(newName);
+  });
 
+  test('delete', async () => {
     await client.timeseries.delete(
-      result.map(timeserie => ({ id: timeserie.id }))
+      createdTimeseries.map(timeserie => ({ id: timeserie.id }))
     );
   });
 

@@ -5,7 +5,7 @@ import { Group, GroupSpec, ServiceAccount } from '../../types/types';
 import { sleepPromise } from '../../utils';
 import { retryInSeconds, setupClient } from '../testUtils';
 
-describe('Groups integration test', async () => {
+describe('Groups integration test', () => {
   let client: API;
   let serviceAccount: ServiceAccount;
   const now = Date.now();
