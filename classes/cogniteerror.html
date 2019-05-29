@@ -88,7 +88,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cogniteerror.html#duplicated" class="tsd-kind-icon">duplicated</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="cogniteerror.html#message" class="tsd-kind-icon">message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cogniteerror.html#missing" class="tsd-kind-icon">missing</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="cogniteerror.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cogniteerror.html#requestid" class="tsd-kind-icon">request<wbr>Id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="cogniteerror.html#stack" class="tsd-kind-icon">stack</a></li>
@@ -105,13 +107,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Cognite<wbr>Error<span class="tsd-signature-symbol">(</span>errorMessage<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, requestId<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="cogniteerror.html" class="tsd-signature-type">CogniteError</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Cognite<wbr>Error<span class="tsd-signature-symbol">(</span>errorMessage<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, requestId<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, extra<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="cogniteerror.html" class="tsd-signature-type">CogniteError</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/error.ts#L7">error.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2a9191a/src/error.ts#L9">error.ts:9</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -125,6 +127,9 @@
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> requestId: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> extra: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="cogniteerror.html" class="tsd-signature-type">CogniteError</a></h4>
 						</li>
@@ -133,6 +138,16 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="duplicated" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> duplicated</h3>
+					<div class="tsd-signature tsd-kind-icon">duplicated<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2a9191a/src/error.ts#L9">error.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="message" class="tsd-anchor"></a>
 					<h3>message</h3>
@@ -141,6 +156,16 @@
 						<p>Inherited from Error.message</p>
 						<ul>
 							<li>Defined in /home/travis/build/cognitedata/cognitesdk-js/node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:904</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="missing" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> missing</h3>
+					<div class="tsd-signature tsd-kind-icon">missing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2a9191a/src/error.ts#L8">error.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -161,7 +186,7 @@
 					<div class="tsd-signature tsd-kind-icon">request<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/error.ts#L7">error.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2a9191a/src/error.ts#L7">error.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -183,7 +208,7 @@
 					<div class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/092c645/src/error.ts#L6">error.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2a9191a/src/error.ts#L6">error.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -217,8 +242,14 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="cogniteerror.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="cogniteerror.html#duplicated" class="tsd-kind-icon">duplicated</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="cogniteerror.html#message" class="tsd-kind-icon">message</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="cogniteerror.html#missing" class="tsd-kind-icon">missing</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="cogniteerror.html#name" class="tsd-kind-icon">name</a>
