@@ -15,7 +15,7 @@ import { transformDateInRequest } from '../../utils';
 import { randomInt, setupClient, string2arrayBuffer } from '../testUtils';
 
 // tslint:disable-next-line:no-big-function
-describe('3D mocked', async () => {
+describe('3D mocked', () => {
   let client: API;
   let mock: MockAdapter;
   const model: Model3D = {

@@ -4,7 +4,7 @@ import { API } from '../../resources/api';
 import { ServiceAccount } from '../../types/types';
 import { setupClient } from '../testUtils';
 
-describe('Service accounts integration test', async () => {
+describe('Service accounts integration test', () => {
   let client: API;
   beforeAll(async () => {
     client = await setupClient();
@@ -32,8 +32,9 @@ describe('Service accounts integration test', async () => {
   });
 
   test('delete', async () => {
-    await client.serviceAccounts.delete(
+    const response = await client.serviceAccounts.delete(
       serviceAccounts.map(account => account.id)
     );
+    expect(response).toEqual({});
   });
 });

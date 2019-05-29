@@ -2,7 +2,7 @@
 
 import { assetChunker } from '../../resources/assets';
 
-describe('Asset unit test', async () => {
+describe('Asset unit test', () => {
   describe('assetChunker', () => {
     test.each([{ parentId: 123 }, { parentExternalId: 'abc' }, {}])(
       'single asset',

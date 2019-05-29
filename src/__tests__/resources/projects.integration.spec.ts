@@ -3,7 +3,7 @@
 import { API } from '../../resources/api';
 import { setupClient } from '../testUtils';
 
-describe('Projects integration test', async () => {
+describe('Projects integration test', () => {
   let client: API;
   beforeAll(async () => {
     client = await setupClient();

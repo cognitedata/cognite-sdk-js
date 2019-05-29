@@ -14,7 +14,7 @@ script:
   - yarn validateDocLinks
   - yarn lint
   - yarn build
-  - yarn test && codecov
+  - yarn test --maxWorkers=1 && codecov
   - yarn test-samples
 before_deploy:
   - yarn docs

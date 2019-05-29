@@ -4,7 +4,7 @@ import { API } from '../../resources/api';
 import { GetTimeSeriesMetadataDTO } from '../../types/types';
 import { setupClient } from '../testUtils';
 
-describe('Datapoints integration test', async () => {
+describe('Datapoints integration test', () => {
   let client: API;
   let timeserie: GetTimeSeriesMetadataDTO;
   beforeAll(async () => {
