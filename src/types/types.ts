@@ -161,7 +161,6 @@ export interface AssetFilter extends Limit {
     source?: AssetSource;
     createdTime?: DateRange;
     lastUpdatedTime?: DateRange;
-    depth?: IntegerRange;
     /**
      * Filtered assets are root assets or not
      */

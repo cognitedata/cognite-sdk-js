@@ -50,6 +50,7 @@ describe('axiosWrappers', () => {
         const { myDate } = JSON.parse(config.data);
         expect(myDate).toBe(now.getTime());
         done();
+        return [200];
       });
       await rawRequest(instance, {
         method: 'get',
@@ -64,6 +65,7 @@ describe('axiosWrappers', () => {
         const { minLastUpdatedTime } = config.params;
         expect(minLastUpdatedTime).toBe(now.getTime());
         done();
+        return [200];
       });
       await rawRequest(instance, {
         method: 'get',

@@ -17,7 +17,6 @@ describe('Asset integration test', async () => {
     },
     externalId: 'test-root' + now,
   };
-
   const childAsset = {
     name: 'test-child',
     description: 'Child asset for cognitesdk-js test',

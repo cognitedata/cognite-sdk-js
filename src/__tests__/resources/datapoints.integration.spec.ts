@@ -15,25 +15,27 @@ describe('Datapoints integration test', async () => {
     await client.timeseries.delete([{ id: timeserie.id }]);
   });
 
-  test('insert', async () => {
-    const datapoints = [
-      {
-        timestamp: new Date(0),
-        value: 10,
-      },
-      {
-        timestamp: new Date(10),
-        value: 100,
-      },
-    ];
+  const datapoints = [
+    {
+      timestamp: new Date('1 may 2017'),
+      value: 10,
+    },
+    {
+      timestamp: new Date('2 may 2017'),
+      value: 100,
+    },
+  ];
 
+  test('insert', async () => {
     await client.datapoints.insert([
       {
         id: timeserie.id,
         datapoints,
       },
     ]);
+  });
 
+  test('retrieve', async () => {
     const response = await client.datapoints.retrieve({
       items: [{ id: timeserie.id }],
       start: 0,
