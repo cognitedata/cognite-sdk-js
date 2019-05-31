@@ -29,7 +29,7 @@ describe('Asset integration test', () => {
   };
   let assets: Asset[];
 
-  test('create,retrieve,update,delete', async () => {
+  test('create', async () => {
     assets = await client.assets.create([childAsset, rootAsset]);
     expect(assets[0].createdTime).toBeInstanceOf(Date);
     expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);

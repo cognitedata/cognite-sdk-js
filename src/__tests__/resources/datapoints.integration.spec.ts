@@ -7,9 +7,14 @@ import { setupClient } from '../testUtils';
 describe('Datapoints integration test', () => {
   let client: API;
   let timeserie: GetTimeSeriesMetadataDTO;
+  let testTimeserieWithDatapoints: GetTimeSeriesMetadataDTO;
   beforeAll(async () => {
     client = await setupClient();
     [timeserie] = await client.timeseries.create([{ name: 'tmp' }]);
+    [testTimeserieWithDatapoints] = await client.timeseries.search({
+      // this timeseries comes from https://github.com/cognitedata/test-data-populator
+      search: { name: 'test__constant_' },
+    });
   });
   afterAll(async () => {
     await client.timeseries.delete([{ id: timeserie.id }]);
@@ -37,10 +42,11 @@ describe('Datapoints integration test', () => {
 
   test('retrieve', async () => {
     const response = await client.datapoints.retrieve({
-      items: [{ id: timeserie.id }],
-      start: 0,
-      end: new Date().getTime(),
+      items: [{ id: testTimeserieWithDatapoints.id }],
+      start: '2d-ago',
+      end: new Date(),
     });
-    expect(response[0].datapoints).toEqual(datapoints);
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+    expect(response[0].datapoints[0].timestamp).toBeDefined();
   });
 });
