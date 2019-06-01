@@ -14,9 +14,9 @@ or with yarn:
 
 ## Start example
 
-`$ HTTPS=true npm start`
+`$ npm start`
 
 or with yarn:
 
-`$ HTTPS=true yarn start`
+`$ yarn start`
 
