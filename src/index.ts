@@ -16,7 +16,7 @@ import {
   OnTokens,
 } from './resources/login';
 import { addRetryToAxiosInstance } from './retryRequests';
-import { getBaseUrl, isBrowser, isSameProject } from './utils';
+import { getBaseUrl, isBrowser } from './utils';
 
 export interface BaseOptions {
   /**
@@ -48,29 +48,17 @@ export interface OAuthLoginOptions extends BaseOptions {
 }
 
 /**
- * Create Cognite instance from API key
+ * Create Cognite client from API key
  *
- * @param options Instance options
+ * @param options Client options
  *
  * ```js
- * // create with async / await
- * const client = await createClientWithApiKey({
+ * const client = createClientWithApiKey({
  *   apiKey: '[API KEY]',
  *   project: '[PROJECT]',
  * });
  * // do calls with the instance
  * const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
- *
- * // create with .then
- * createClientWithApiKey({
- *   apiKey: '[API KEY]',
- *   project: '[PROJECT]',
- * }).then(client => {
- *   // do calls with the instance
- *   client.assets.create([{ name: 'My first asset' }]).then(createdAsset => {
- *     //
- *   });
- * });
  *
  * // also supports custom base url
  * createClientWithApiKey({
@@ -79,7 +67,7 @@ export interface OAuthLoginOptions extends BaseOptions {
  * });
  * ```
  */
-export async function createClientWithApiKey(options: ApiKeyLoginOptions) {
+export function createClientWithApiKey(options: ApiKeyLoginOptions) {
   if (!isObject(options)) {
     throw Error('`createClientWithApiKey` is missing parameter `options`');
   }
@@ -101,30 +89,30 @@ export async function createClientWithApiKey(options: ApiKeyLoginOptions) {
     _axiosInstance || generateAxiosInstance(getBaseUrl(baseUrl), options.appId);
   addRetryToAxiosInstance(axiosInstance);
 
-  const apiKeyInfo = await getIdInfoFromApiKey(axiosInstance, apiKey);
-  if (apiKeyInfo === null) {
-    throw Error(
-      'The api key provided to `createClientWithApiKey` is not recognized by Cognite (invalid)'
-    );
-  }
-
-  if (!isSameProject(project, apiKeyInfo.project)) {
-    throw Error(
-      `Projects didn't match. Api key is for project "${
-        apiKeyInfo.project
-      }" but you tried to login to "${project}"`
-    );
-  }
-
   axiosInstance.defaults.headers['api-key'] = apiKey;
-  return generateAPIObject(
-    apiKeyInfo.project,
-    axiosInstance,
-    new MetadataMap()
-  );
+  return generateAPIObject(project, axiosInstance, new MetadataMap());
 }
 
-export async function createClientWithOAuth(options: OAuthLoginOptions) {
+/**
+ * Create Cognite client with OAuth login flow
+ *
+ * @param options Client options
+ *
+ * ```js
+ * const client = createClientWithOAuth({
+ *   project: '[PROJECT]',
+ * });
+ * // do calls with the instance
+ * const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
+ *
+ * // also supports custom base url
+ * createClientWithOAuth({
+ *   ...
+ *   baseUrl: 'https://greenfield.cognitedata.com',
+ * });
+ * ```
+ */
+export function createClientWithOAuth(options: OAuthLoginOptions) {
   if (!isBrowser()) {
     throw Error(
       '`createClientWithOAuth` can only be used in a browser. For non-browser environments please use `createClientWithApiKey`'

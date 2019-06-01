@@ -45,7 +45,7 @@ The SDK is written in native typescript, so no extra types needs to be defined.
 import * as sdk from '@cognite/sdk';
 
 async function quickstart() {
-  const client = await sdk.createClientWithOAuth({
+  const client = sdk.createClientWithOAuth({
     project: 'publicdata',
     onAuthenticate: (login) => {
       login.redirect({
@@ -66,7 +66,7 @@ quickstart();
 const sdk = require('@cognite/sdk');
 
 async function quickstart() {
-  const client = await sdk.createClientWithApiKey({
+  const client = sdk.createClientWithApiKey({
     project: 'publicdata',
     apiKey: 'YOUR_SECRET_API_KEY',
   });

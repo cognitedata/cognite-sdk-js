@@ -22,7 +22,7 @@ const createRow = () => ({
 describe('Raw integration test', () => {
   let client: API;
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
   });
 
   describe('databases', () => {

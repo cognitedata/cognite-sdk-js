@@ -13,103 +13,86 @@ import {
   apiKey,
   authTokens,
   baseUrl,
-  createErrorReponse,
   loggedInResponse,
   project,
 } from './testUtils';
 
 describe('createClientWithApiKey', () => {
   test('missing parameter', async () => {
-    await expect(
+    expect(
       // @ts-ignore
-      createClientWithApiKey()
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      () => createClientWithApiKey()
+    ).toThrowErrorMatchingInlineSnapshot(
       `"\`createClientWithApiKey\` is missing parameter \`options\`"`
     );
   });
 
   test('missing project', async () => {
-    await expect(
+    expect(
       // @ts-ignore
-      createClientWithApiKey({})
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      () => createClientWithApiKey({})
+    ).toThrowErrorMatchingInlineSnapshot(
       `"Property \`project\` not provided to param \`options\` in \`createClientWithApiKey\`"`
     );
   });
 
   test('missing api key', async () => {
-    await expect(
+    expect(
       // @ts-ignore
-      createClientWithApiKey({ project })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      () => createClientWithApiKey({ project })
+    ).toThrowErrorMatchingInlineSnapshot(
       `"Property \`apiKey\` not provided to param \`options\` in \`createClientWithApiKey\`"`
     );
   });
 
-  test('invalid api key', async () => {
-    const axiosInstance = generateAxiosInstance(baseUrl);
-    const axiosMock = new MockAdapter(axiosInstance);
-    axiosMock.onGet(`${baseUrl}/login/status`).replyOnce(config => {
-      expect(config.headers['api-key']).toBe(apiKey);
-      return [401, createErrorReponse(401, '')];
+  test('create client with invalid api-key/project', async () => {
+    const client = createClientWithApiKey({
+      project,
+      apiKey,
     });
-    await expect(
-      createClientWithApiKey({
-        project,
-        apiKey,
-        _axiosInstance: axiosInstance,
-      })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"The api key provided to \`createClientWithApiKey\` is not recognized by Cognite (invalid)"`
-    );
+    expect(client).toBeTruthy();
   });
 
-  test('project mismatch', async () => {
+  test('set correct apikey', async () => {
+    expect.assertions(1);
     const axiosInstance = generateAxiosInstance(baseUrl);
-    const axiosMock = new MockAdapter(axiosInstance);
-    axiosMock.onGet(`${baseUrl}/login/status`).replyOnce(config => {
-      expect(config.headers['api-key']).toBe(apiKey);
-      return [200, loggedInResponse];
-    });
-    await expect(
-      createClientWithApiKey({
-        apiKey,
-        project: 'another-project',
-        _axiosInstance: axiosInstance,
-      })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Projects didn't match. Api key is for project \\"TEST_PROJECT\\" but you tried to login to \\"another-project\\""`
-    );
-  });
-
-  test('set correct project', async () => {
-    const axiosInstance = generateAxiosInstance(baseUrl);
-    const axiosMock = new MockAdapter(axiosInstance);
-    axiosMock.onGet(`${baseUrl}/login/status`).replyOnce(200, loggedInResponse);
-    const client = await createClientWithApiKey({
+    const client = createClientWithApiKey({
       project,
       apiKey,
       _axiosInstance: axiosInstance,
     });
-    expect(client.project).toBe(loggedInResponse.data.project);
+    const axiosMock = new MockAdapter(axiosInstance);
+    axiosMock.onGet('/test').replyOnce(config => {
+      expect(config.headers['api-key']).toBe(apiKey);
+      return [200];
+    });
+    await client.get('/test');
+  });
+
+  test('set correct project', async () => {
+    const client = createClientWithApiKey({
+      project,
+      apiKey,
+    });
+    expect(client.project).toBe(project);
   });
 });
 
 describe('createClientWithOAuth', () => {
   test('missing parameter', async () => {
-    await expect(
+    expect(
       // @ts-ignore
-      createClientWithOAuth()
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      () => createClientWithOAuth()
+    ).toThrowErrorMatchingInlineSnapshot(
       `"\`createClientWithOAuth\` is missing parameter \`options\`"`
     );
   });
 
   test('missing project name', async () => {
-    await expect(
+    expect(
       // @ts-ignore
-      createClientWithOAuth({})
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      () => createClientWithOAuth({})
+    ).toThrowErrorMatchingInlineSnapshot(
       `"Property \`project\` not provided to param \`options\` in \`createClientWithOAuth\`"`
     );
   });
@@ -130,7 +113,7 @@ describe('createClientWithOAuth', () => {
       const axiosInstance = generateAxiosInstance(baseUrl);
       const axiosMock = new MockAdapter(axiosInstance);
       const onAuthenticate = jest.fn();
-      const client = await createClientWithOAuth({
+      const client = createClientWithOAuth({
         project,
         onAuthenticate,
         _axiosInstance: axiosInstance,
@@ -151,7 +134,7 @@ describe('createClientWithOAuth', () => {
       const onAuthenticate = jest.fn().mockImplementationOnce(login => {
         login.skip();
       });
-      const client = await createClientWithOAuth({
+      const client = createClientWithOAuth({
         project,
         onAuthenticate,
       });
@@ -161,7 +144,7 @@ describe('createClientWithOAuth', () => {
 
     test('handle error query params', async () => {
       const onAuthenticate = jest.fn();
-      const client = await createClientWithOAuth({
+      const client = createClientWithOAuth({
         project,
         onAuthenticate,
       });
@@ -176,7 +159,7 @@ describe('createClientWithOAuth', () => {
       const axiosInstance = generateAxiosInstance(baseUrl);
       const axiosMock = new MockAdapter(axiosInstance);
       const onAuthenticate = jest.fn();
-      const client = await createClientWithOAuth({
+      const client = createClientWithOAuth({
         project,
         onAuthenticate,
         _axiosInstance: axiosInstance,
@@ -205,7 +188,7 @@ describe('createClientWithOAuth', () => {
         await sleepPromise(100);
         login.skip();
       });
-      const client = await createClientWithOAuth({
+      const client = createClientWithOAuth({
         project,
         onAuthenticate,
         _axiosInstance: axiosInstance,
@@ -228,7 +211,7 @@ describe('createClientWithOAuth', () => {
         const axiosInstance = generateAxiosInstance(baseUrl);
         const axiosMock = new MockAdapter(axiosInstance);
         const onAuthenticate = jest.fn();
-        const client = await createClientWithOAuth({
+        const client = createClientWithOAuth({
           project,
           onAuthenticate,
           _axiosInstance: axiosInstance,

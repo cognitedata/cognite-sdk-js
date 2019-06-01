@@ -7,7 +7,7 @@ import { setupClient } from '../testUtils';
 describe('Service accounts integration test', () => {
   let client: API;
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
   });
 
   let serviceAccounts: ServiceAccount[];

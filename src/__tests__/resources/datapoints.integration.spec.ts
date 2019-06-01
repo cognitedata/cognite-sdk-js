@@ -9,7 +9,7 @@ describe('Datapoints integration test', () => {
   let timeserie: GetTimeSeriesMetadataDTO;
   let testTimeserieWithDatapoints: GetTimeSeriesMetadataDTO;
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
     [timeserie] = await client.timeseries.create([{ name: 'tmp' }]);
     [testTimeserieWithDatapoints] = await client.timeseries.search({
       // this timeseries comes from https://github.com/cognitedata/test-data-populator

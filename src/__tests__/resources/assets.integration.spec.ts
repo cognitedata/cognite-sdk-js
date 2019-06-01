@@ -7,7 +7,7 @@ import { setupClient } from '../testUtils';
 describe('Asset integration test', () => {
   let client: API;
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
   });
   const now = new Date().getTime();
   const rootAsset = {

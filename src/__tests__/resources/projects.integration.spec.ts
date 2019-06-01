@@ -6,7 +6,7 @@ import { setupClient } from '../testUtils';
 describe('Projects integration test', () => {
   let client: API;
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
   });
 
   test('retrieve', async () => {

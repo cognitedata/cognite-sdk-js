@@ -7,7 +7,7 @@ import { setupClient } from '../testUtils';
 describe('Events integration test', () => {
   let client: API;
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
   });
 
   const events = [

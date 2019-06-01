@@ -41,7 +41,7 @@ describeIfCondition(
     let nodes3D: Node3D[];
 
     beforeAll(async () => {
-      client = await setupClient();
+      client = setupClient();
 
       const rootAsset = {
         name: 'test-root' + now,

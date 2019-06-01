@@ -15,7 +15,7 @@ if (!apiKey) {
 
 async function quickstart() {
   // create a SDK client
-  const client = await sdk.createClientWithApiKey({
+  const client = sdk.createClientWithApiKey({
     project,
     apiKey,
   });
