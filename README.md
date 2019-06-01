@@ -47,11 +47,6 @@ import * as sdk from '@cognite/sdk';
 async function quickstart() {
   const client = sdk.createClientWithOAuth({
     project: 'publicdata',
-    onAuthenticate: (login) => {
-      login.redirect({
-        redirectUrl: window.location.href,
-      });
-    },
   });
 
   const assets = await client.assets
@@ -60,6 +55,8 @@ async function quickstart() {
 }
 quickstart();
 ```
+
+> For more details see this [document](./guides/authentication.md).
 
 ### Backend
 ```js
