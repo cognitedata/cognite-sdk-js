@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { isObject, isString } from 'lodash';
+import { isFunction, isObject, isString } from 'lodash';
 import {
   generateAxiosInstance,
   listenForNonSuccessStatusCode,
@@ -13,6 +13,7 @@ import {
   getIdInfoFromApiKey,
   IdInfo,
   OnAuthenticate,
+  OnAuthenticateLoginObject,
   OnTokens,
 } from './resources/login';
 import { addRetryToAxiosInstance } from './retryRequests';
@@ -38,12 +39,14 @@ export interface ApiKeyLoginOptions extends BaseOptions {
   project: string;
 }
 
+export const REDIRECT = 'REDIRECT';
+export const POPUP = 'POPUP';
 export interface OAuthLoginOptions extends BaseOptions {
   /**
    * Cognite project to login into
    */
   project: string;
-  onAuthenticate: OnAuthenticate;
+  onAuthenticate?: OnAuthenticate | 'REDIRECT' | 'POPUP';
   onTokens?: OnTokens;
 }
 
@@ -135,11 +138,18 @@ export function createClientWithOAuth(options: OAuthLoginOptions) {
     options._axiosInstance || generateAxiosInstance(baseUrl, options.appId);
 
   const onTokens = options.onTokens || (() => {});
+  let onAuthenticate: OnAuthenticate = onAuthenticateWithRedirect;
+  if (options.onAuthenticate === POPUP) {
+    onAuthenticate = onAuthenticateWithPopup;
+  } else if (isFunction(options.onAuthenticate)) {
+    onAuthenticate = options.onAuthenticate;
+  }
+
   const authenticate = createAuthenticateFunction({
     project,
     axiosInstance,
     baseUrl,
-    onAuthenticate: options.onAuthenticate,
+    onAuthenticate,
     onTokens,
   });
 
@@ -186,3 +196,15 @@ export async function getApiKeyInfo(
 }
 
 export { loginPopupHandler, isLoginPopupWindow } from './resources/login';
+
+function onAuthenticateWithRedirect(login: OnAuthenticateLoginObject) {
+  login.redirect({
+    redirectUrl: window.location.href,
+  });
+}
+
+function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
+  login.popup({
+    redirectUrl: window.location.href,
+  });
+}

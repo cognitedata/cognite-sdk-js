@@ -6,6 +6,8 @@ import {
   createClientWithApiKey,
   createClientWithOAuth,
   getApiKeyInfo,
+  POPUP,
+  REDIRECT,
 } from '../index';
 import * as Login from '../resources/login';
 import { sleepPromise } from '../utils';
@@ -99,14 +101,54 @@ describe('createClientWithOAuth', () => {
 
   describe('authentication', () => {
     let mockLoginSilently: jest.SpyInstance;
+    let mockRedirect: jest.SpyInstance;
+    let mockPopup: jest.SpyInstance;
 
     beforeEach(() => {
       mockLoginSilently = jest.spyOn(Login, 'loginSilently');
       mockLoginSilently.mockImplementation(() => {});
+
+      mockRedirect = jest.spyOn(Login, 'loginWithRedirect');
+      mockRedirect.mockImplementation(async () => {});
+
+      mockPopup = jest.spyOn(Login, 'loginWithPopup');
+      mockPopup.mockImplementation(async () => {});
     });
 
     afterEach(() => {
       mockLoginSilently.mockRestore();
+      mockRedirect.mockRestore();
+    });
+
+    test('default onAuthenticate function should be redirect', async done => {
+      const client = await createClientWithOAuth({ project });
+      mockRedirect.mockImplementationOnce(async () => {
+        done();
+      });
+      client.authenticate();
+    });
+
+    test('onAuthenticate: REDIRECT', async done => {
+      const client = await createClientWithOAuth({
+        project,
+        onAuthenticate: REDIRECT,
+      });
+      mockRedirect.mockImplementationOnce(async () => {
+        done();
+      });
+      await client.authenticate();
+    });
+
+    test('onAuthenticate: POPUP', async done => {
+      const client = await createClientWithOAuth({
+        project,
+        onAuthenticate: POPUP,
+      });
+      mockPopup.mockImplementationOnce(async () => {
+        done();
+        return {};
+      });
+      await client.authenticate();
     });
 
     test('should call onAuthenticate on 401', async () => {

@@ -12,11 +12,7 @@ class App extends Component {
   async componentDidMount() {
     const client = sdk.createClientWithOAuth({
       project,
-      onAuthenticate: (login) => {
-        login.redirect({
-          redirectUrl: window.location.href,
-        });
-      },
+      onAuthenticate: 'REDIRECT',
     });
     this.setState({ client });
     // Login will be triggered on first API call with "client"

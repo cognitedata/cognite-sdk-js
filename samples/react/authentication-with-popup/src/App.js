@@ -15,17 +15,13 @@ class App extends Component {
       return;
     }
 
+    // for popups you should design your application so the `login.popup`-call is based on a user interaction
+    // to avoid the browser blocking the popup window. See https://stackoverflow.com/a/2587692/4462088
+    // You can call `login.popup` whenever you want. The SDK will pause all requests until you have called it.
+    // So it is possible to create a user-interface with a "Click here to login"-button that triggers `login.popup`.
     const client = sdk.createClientWithOAuth({
       project,
-      onAuthenticate: (login) => {
-        login.popup({
-          redirectUrl: window.location.href,
-        });
-        // for popups you should design your application so the `login.popup`-call is based on a user interaction
-        // to avoid the browser blocking the popup window. See https://stackoverflow.com/a/2587692/4462088
-        // You can call `login.popup` whenever you want. The SDK will pause all requests until you have called it.
-        // So it is possible to create a user-interface with a "Click here to login"-button that triggers `login.popup`.
-      },
+      onAuthenticate: 'POPUP',
     });
 
     this.setState({ client });
