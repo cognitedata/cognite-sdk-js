@@ -47,8 +47,7 @@
     "typedoc": "^0.13.0",
     "typedoc-plugin-markdown": "^1.1.19",
     "typescript": "^3.3.3333",
-    "typescript-parser": "^2.6.1",
-    "yargs": "^13.2.4"
+    "typescript-parser": "^2.6.1"
   },
   "scripts": {
     "clean": "rm -rf dist",
