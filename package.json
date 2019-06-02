@@ -32,6 +32,7 @@
     "ls": "^0.2.1",
     "markdown-link-check": "^3.7.2",
     "mustache": "^3.0.1",
+    "parse-comments": "^1.0.0",
     "prettier": "^1.10.2",
     "rollup": "^0.67.0",
     "rollup-plugin-json": "^4.0.0",
@@ -45,7 +46,9 @@
     "tslint-sonarts": "^1.9.0",
     "typedoc": "^0.13.0",
     "typedoc-plugin-markdown": "^1.1.19",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.3333",
+    "typescript-parser": "^2.6.1",
+    "yargs": "^13.2.4"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -60,7 +63,8 @@
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json",
     "prepush": "yarn lint && yarn test",
     "esCheck": "es-check es5 './dist/index.js'",
-    "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;"
+    "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
+    "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\""
   },
   "dependencies": {
     "axios": "^0.18.0",
