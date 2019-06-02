@@ -52,8 +52,6 @@ export interface DataIds {
   items?: AssetIdEither[];
 }
 
-// Assets
-
 /**
  * The source of this asset
  */
@@ -217,8 +215,6 @@ export interface Asset extends ExternalAsset, AssetInternalId {
    */
   depth: number;
 }
-
-// Time series
 export interface TimeseriesFilter extends Limit {
   /**
    * Decide if the metadata field should be returned or not.
@@ -385,8 +381,6 @@ export interface TimeSeriesUpdateByExternalId
 export type TimeSeriesUpdate =
   | TimeSeriesUpdateById
   | TimeSeriesUpdateByExternalId;
-
-// datapoints
 export interface PostDatapoint {
   timestamp: Timestamp;
   value: number | string;
@@ -565,8 +559,6 @@ export type DatapointsDeleteRequest =
   | InternalId & DatapointsDeleteRange
   | ExternalId & DatapointsDeleteRange;
 
-// events
-
 /**
  * An event represents something that happened at a given interval in time, e.g a failure, a work order etc.
  */
@@ -624,8 +616,6 @@ export interface EventSearchRequest extends Limit {
   filter?: EventFilter;
   search?: EventSearch;
 }
-
-// Files
 
 /**
  * Name of the file.
@@ -709,8 +699,6 @@ export type FileChangeUpdate =
   | FileChangeUpdateById
   | FileChangeUpdateByExternalId;
 
-// raw
-
 export interface ListRawDatabases extends Cursor, Limit {}
 
 /**
@@ -771,8 +759,6 @@ export interface RawDBRow extends RawDBRowInsert {
    */
   lastUpdatedTime: Date;
 }
-
-// Security categories
 export interface ListSecurityCategories extends Cursor, Limit {
   sort?: 'ASC' | 'DESC';
 }
@@ -794,8 +780,6 @@ export interface SecurityCategorySpec {
    */
   name: string;
 }
-
-// service accounts
 
 /**
  * Unique name of the service account
@@ -1022,8 +1006,6 @@ export interface AssetMapping3DBase {
   assetId: CogniteInternalId;
 }
 
-// projects
-
 /**
  * The display name of the project.
  * @example Open Industrial Data
@@ -1126,8 +1108,6 @@ export interface ProjectUpdate {
   authentication?: InputProjectAuthentication;
 }
 
-// api keys
-
 export interface ApiKeyObject {
   /**
    * Internal id for the api key
@@ -1169,8 +1149,6 @@ export interface NewApiKeyResponse extends ApiKeyObject {
    */
   value: string;
 }
-
-// groups
 
 export interface ListGroups {
   /**
@@ -1325,8 +1303,6 @@ export interface GroupServiceAccount {
    */
   deletedTime?: Date;
 }
-
-// Viewer 3D
 
 export interface ListReveal3DNodeAncestors extends Cursor, Limit {}
 
