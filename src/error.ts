@@ -7,6 +7,7 @@ export class CogniteError extends Error {
   public requestId?: string;
   public missing?: object[];
   public duplicated?: any[];
+  /** @hidden */
   constructor(
     errorMessage: string,
     status: number,

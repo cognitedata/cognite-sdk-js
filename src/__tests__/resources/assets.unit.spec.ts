@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { assetChunker } from '../../resources/assets';
+import { assetChunker } from '../../resources/assets/assetUtils';
 
 describe('Asset unit test', () => {
   describe('assetChunker', () => {

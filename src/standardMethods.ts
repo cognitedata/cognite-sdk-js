@@ -4,7 +4,7 @@ import { AxiosInstance } from 'axios';
 import { chunk, concat } from 'lodash';
 import { makeAutoPaginationMethods } from './autoPagination';
 import { rawRequest } from './axiosWrappers';
-import { MetadataMap } from './metadata';
+import { convertAxiosResponseToMetadata, MetadataMap } from './metadata';
 import { CursorResponse, ItemsResponse } from './types/types';
 
 type CreateEndpoint<RequestType, ResponseType> = (
@@ -34,7 +34,10 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
       [],
       ...responses.map(response => response.data.items)
     );
-    return metadataMap.addAndReturn(mergedResponses, responses[0]);
+    return metadataMap.addAndReturn(
+      mergedResponses,
+      convertAxiosResponseToMetadata(responses[0])
+    );
   };
 }
 
@@ -106,7 +109,10 @@ export function generateListEndpoint<
           filter
         ));
     addNextPageFunction(response.data, filter);
-    return metadataMap.addAndReturn(response.data, response);
+    return metadataMap.addAndReturn(
+      response.data,
+      convertAxiosResponseToMetadata(response)
+    );
   }
 
   return (params: RequestFilter = {} as RequestFilter) => {
@@ -134,7 +140,10 @@ export function generateListNoCursorEndpoint<ResponseType>(
       },
       true
     );
-    return metadataMap.addAndReturn(response.data.items, response);
+    return metadataMap.addAndReturn(
+      response.data.items,
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }
 
@@ -157,7 +166,10 @@ export function generateListNoCursorEndpointWithQueryParams<
       },
       true
     );
-    return metadataMap.addAndReturn(response.data.items, response);
+    return metadataMap.addAndReturn(
+      response.data.items,
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }
 
@@ -177,7 +189,10 @@ export function generateSimpleListEndpoint<RequestParams, ResponseType>(
       },
       true
     );
-    return metadataMap.addAndReturn(response.data.items, response);
+    return metadataMap.addAndReturn(
+      response.data.items,
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }
 
@@ -196,7 +211,10 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
       },
       true
     );
-    return metadataMap.addAndReturn(response.data.items, response);
+    return metadataMap.addAndReturn(
+      response.data.items,
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }
 
@@ -210,7 +228,10 @@ export function generateRetrieveSingleEndpoint<IdType, ResponseType>(
       url: `${resourcePath}/${encodeURIComponent('' + id)}`,
       method: 'get',
     });
-    return metadataMap.addAndReturn(response.data, response);
+    return metadataMap.addAndReturn(
+      response.data,
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }
 
@@ -230,7 +251,10 @@ export function generateDeleteEndpoint<IdType>(
       },
       true
     );
-    return metadataMap.addAndReturn({}, response);
+    return metadataMap.addAndReturn(
+      {},
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }
 
@@ -249,7 +273,10 @@ export function generateUpdateEndpoint<RequestType, ResponseType>(
       method: 'post',
       data: { items: changes },
     });
-    return metadataMap.addAndReturn(response.data.items, response);
+    return metadataMap.addAndReturn(
+      response.data.items,
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }
 
@@ -269,7 +296,10 @@ export function generateSearchEndpoint<RequestParams, ResponseType>(
       },
       true
     );
-    return metadataMap.addAndReturn(response.data.items, response);
+    return metadataMap.addAndReturn(
+      response.data.items,
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }
 
@@ -291,7 +321,10 @@ export function generateRetrieveLatestEndpoint<RequestParams, ResponseType>(
       },
       true
     );
-    return metadataMap.addAndReturn(response.data.items, response);
+    return metadataMap.addAndReturn(
+      response.data.items,
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }
 
@@ -311,7 +344,10 @@ export function generateInsertEndpoint<RequestParams>(
       },
       true
     );
-    return metadataMap.addAndReturn({}, response);
+    return metadataMap.addAndReturn(
+      {},
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }
 
@@ -333,6 +369,9 @@ export function generateSingleReplaceEndpoint<RequestType, RepsonseType>(
       },
       true
     );
-    return metadataMap.addAndReturn(response.data, response);
+    return metadataMap.addAndReturn(
+      response.data,
+      convertAxiosResponseToMetadata(response)
+    );
   };
 }

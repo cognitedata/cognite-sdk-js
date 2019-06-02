@@ -14,13 +14,19 @@ export class MetadataMap {
     this.map = new WeakMap();
   }
 
-  public addAndReturn<T>(value: T, axiosResponse: AxiosResponse): T {
-    const { status, headers } = axiosResponse;
-    this.map.set(value, { status, headers });
+  public addAndReturn<T>(value: T, metadata: Metadata): T {
+    this.map.set(value, metadata);
     return value;
   }
 
   public get(value: any): undefined | Metadata {
     return this.map.get(value);
   }
+}
+
+export function convertAxiosResponseToMetadata(
+  axiosResponse: AxiosResponse
+): Metadata {
+  const { status, headers } = axiosResponse;
+  return { status, headers };
 }

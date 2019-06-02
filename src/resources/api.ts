@@ -3,31 +3,22 @@
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { rawRequest } from '../axiosWrappers';
 import { Metadata, MetadataMap } from '../metadata';
-import { ApiKeysAPI, generateApiKeysObject } from './apiKeys';
-import {
-  AssetMappings3DAPI,
-  generateAssetMappings3DObject,
-} from './assetMappings3D';
-import { AssetsAPI, generateAssetsObject } from './assets';
-import { DatapointsAPI, generateDatapointsObject } from './datapoints';
-import { EventsAPI, generateEventsObject } from './events';
-import { FilesAPI, generateFilesObject } from './files';
-import { Files3DAPI, generateFiles3DObject } from './files3D';
-import { generateGroupsObject, GroupsAPI } from './groups';
-import { generateModels3DObject, Models3DAPI } from './models3D';
-import { generateProjectObject, ProjectsAPI } from './projects';
-import { generateRawObject, RawAPI } from './raw';
-import { generateRevisions3DObject, Revisions3DAPI } from './revisions3D';
-import {
-  generateSecurityCategoryObject,
-  SecurityCategoriesAPI,
-} from './securityCategories';
-import {
-  generateServiceAccountsObject,
-  ServiceAccountsAPI,
-} from './serviceAccounts';
-import { generateTimeseriesObject, TimeseriesAPI } from './timeseries';
-import { generateViewer3DObject, Viewer3DAPI } from './viewer3D';
+import { AssetMappings3DAPI } from './3d/assetMappings3DApi';
+import { Files3DAPI } from './3d/files3DApi';
+import { Models3DAPI } from './3d/models3DApi';
+import { Revisions3DAPI } from './3d/revisions3DApi';
+import { Viewer3DAPI } from './3d/viewer3DApi';
+import { ApiKeysAPI } from './apiKeys/apiKeysApi';
+import { AssetsAPI } from './assets/assetsApi';
+import { DataPointsAPI } from './dataPoints/dataPointsApi';
+import { EventsAPI } from './events/eventsApi';
+import { FilesAPI } from './files/filesApi';
+import { GroupsAPI } from './groups/groupsApi';
+import { ProjectsAPI } from './projects/projectsApi';
+import { RawAPI } from './raw/rawApi';
+import { SecurityCategoriesAPI } from './securityCategories/securityCategoriesApi';
+import { ServiceAccountsAPI } from './serviceAccounts/serviceAccountsApi';
+import { TimeSeriesAPI } from './timeSeries/timeSeriesApi';
 
 export interface BaseRequestOptions {
   params?: object;
@@ -55,8 +46,8 @@ export interface API {
   get: (path: string, options?: BaseRequestOptions) => Promise<Response>;
   getMetadata: (value: any) => undefined | Metadata;
   assets: AssetsAPI;
-  timeseries: TimeseriesAPI;
-  datapoints: DatapointsAPI;
+  timeseries: TimeSeriesAPI;
+  datapoints: DataPointsAPI;
   events: EventsAPI;
   files: FilesAPI;
   raw: RawAPI;
@@ -91,22 +82,22 @@ export function generateAPIObject(
         responseTransformer
       ),
     getMetadata: value => metadataMap.get(value),
-    assets: generateAssetsObject(...defaultArgs),
-    timeseries: generateTimeseriesObject(...defaultArgs),
-    datapoints: generateDatapointsObject(...defaultArgs),
-    events: generateEventsObject(...defaultArgs),
-    files: generateFilesObject(...defaultArgs),
-    raw: generateRawObject(...defaultArgs),
-    projects: generateProjectObject(axiosInstance, metadataMap),
-    groups: generateGroupsObject(...defaultArgs),
-    securityCategories: generateSecurityCategoryObject(...defaultArgs),
-    serviceAccounts: generateServiceAccountsObject(...defaultArgs),
-    models3D: generateModels3DObject(...defaultArgs),
-    revisions3D: generateRevisions3DObject(...defaultArgs),
-    files3D: generateFiles3DObject(...defaultArgs),
-    assetMappings3D: generateAssetMappings3DObject(...defaultArgs),
-    viewer3D: generateViewer3DObject(...defaultArgs),
-    apiKeys: generateApiKeysObject(...defaultArgs),
+    assets: new AssetsAPI(...defaultArgs),
+    timeseries: new TimeSeriesAPI(...defaultArgs),
+    datapoints: new DataPointsAPI(...defaultArgs),
+    events: new EventsAPI(...defaultArgs),
+    files: new FilesAPI(...defaultArgs),
+    raw: new RawAPI(...defaultArgs),
+    projects: new ProjectsAPI(axiosInstance, metadataMap),
+    groups: new GroupsAPI(...defaultArgs),
+    securityCategories: new SecurityCategoriesAPI(...defaultArgs),
+    serviceAccounts: new ServiceAccountsAPI(...defaultArgs),
+    models3D: new Models3DAPI(...defaultArgs),
+    revisions3D: new Revisions3DAPI(...defaultArgs),
+    files3D: new Files3DAPI(...defaultArgs),
+    assetMappings3D: new AssetMappings3DAPI(...defaultArgs),
+    viewer3D: new Viewer3DAPI(...defaultArgs),
+    apiKeys: new ApiKeysAPI(...defaultArgs),
     _instance: axiosInstance,
   };
 }

@@ -2,7 +2,7 @@
 
 import { API } from '../../resources/api';
 import { GetTimeSeriesMetadataDTO } from '../../types/types';
-import { setupClient } from '../testUtils';
+import { randomInt, setupClient } from '../testUtils';
 
 describe('Timeseries integration test', () => {
   let client: API;
@@ -13,7 +13,7 @@ describe('Timeseries integration test', () => {
   const timeseries = [
     {
       name: 'timeserie1',
-      externalId: 'external_' + Math.random(),
+      externalId: 'external_' + randomInt(),
     },
     {
       name: 'timeserie2',

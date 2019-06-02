@@ -3,16 +3,15 @@
 import { API } from '../../resources/api';
 import { Group, GroupSpec, ServiceAccount } from '../../types/types';
 import { sleepPromise } from '../../utils';
-import { retryInSeconds, setupClient } from '../testUtils';
+import { randomInt, retryInSeconds, setupClient } from '../testUtils';
 
 describe('Groups integration test', () => {
   let client: API;
   let serviceAccount: ServiceAccount;
-  const now = Date.now();
   beforeAll(async () => {
     client = setupClient();
     [serviceAccount] = await client.serviceAccounts.create([
-      { name: 'Test' + now },
+      { name: 'Test' + randomInt() },
     ]);
   });
 
@@ -25,7 +24,7 @@ describe('Groups integration test', () => {
   test('create', async () => {
     const groupsToCreate: GroupSpec[] = [
       {
-        name: 'Group name' + now,
+        name: 'Group name' + randomInt(),
         capabilities: [
           {
             eventsAcl: { actions: ['READ'], scope: { all: {} } },

@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+/** @hidden */
 export class Queue<T> {
   private data: T[];
   constructor() {

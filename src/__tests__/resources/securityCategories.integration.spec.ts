@@ -2,7 +2,7 @@
 
 import { API } from '../../resources/api';
 import { SecurityCategory } from '../../types/types';
-import { setupClient } from '../testUtils';
+import { randomInt, setupClient } from '../testUtils';
 
 describe('Security categories integration test', () => {
   let client: API;
@@ -13,8 +13,8 @@ describe('Security categories integration test', () => {
 
   test('create', async () => {
     const securityCategoriesToCreate = [
-      { name: 'Security category 1 ' + new Date().getTime() },
-      { name: 'Security category 2 ' + new Date().getTime() },
+      { name: 'Security category 1 ' + randomInt() },
+      { name: 'Security category 2 ' + randomInt() },
     ];
     securityCategories = await client.securityCategories.create(
       securityCategoriesToCreate
