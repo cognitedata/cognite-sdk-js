@@ -1,152 +1,181 @@
 // Copyright 2019 Cognite AS
 
-export type CogniteInternalId = number;
+export interface Acl<ActionsType, ScopeType> {
+  actions: ActionsType[];
+  scope: ScopeType;
+}
 
-/**
- * External Id provided by client. Should be unique within the project.
- */
-export type CogniteExternalId = string;
+export type Acl3D = Acl<AclAction3D, AclScope3D>;
 
-export type IdEither = InternalId | ExternalId;
+export type AclAction3D = READ | CREATE | UPDATE | DELETE;
 
-export interface InternalId {
+export type AclActionAnalytics = READ | EXECUTE | LIST;
+
+export type AclActionApiKeys = LIST | CREATE | DELETE;
+
+export type AclActionAssets = LIST | WRITE;
+
+export type AclActionEvents = READ | WRITE;
+
+export type AclActionFiles = READ | WRITE;
+
+export type AclActionGroups = LIST | READ | CREATE | UPDATE | DELETE;
+
+export type AclActionProjects = LIST | READ | CREATE | UPDATE;
+
+export type AclActionRaw = READ | WRITE | LIST;
+
+export type AclActionSecurityCategories = MEMBEROF | LIST | CREATE | DELETE;
+
+export type AclActionSequences = READ | WRITE;
+
+export type AclActionTimeseries = READ | WRITE;
+
+export type AclActionUsers = LIST | CREATE | DELETE;
+
+export type AclAnalytics = Acl<AclActionAnalytics, AclScopeAnalytics>;
+
+export type AclApiKeys = Acl<AclActionApiKeys, AclScopeApiKeys>;
+
+export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
+
+export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
+
+export type AclFiles = Acl<AclActionFiles, AclScopeFiles>;
+
+export type AclGroups = Acl<AclActionGroups, AclScopeGroups>;
+
+export type AclProjects = Acl<AclActionProjects, AclScopeProjects>;
+
+export type AclRaw = Acl<AclActionRaw, AclScopeRaw>;
+
+export type AclScope3D = AclScopeAll;
+
+export interface AclScopeAll {
+  all: {};
+}
+
+export type AclScopeAnalytics = AclScopeAll;
+
+export type AclScopeApiKeys = AclScopeAll | AclScopeCurrentUser;
+
+export type AclScopeAssets = AclScopeAll;
+
+export interface AclScopeAssetsId {
+  assetIdScope: {
+    subtreeIds: CogniteInternalId[];
+  };
+}
+
+export interface AclScopeCurrentUser {
+  currentuserscope: {};
+}
+
+export type AclScopeEvents = AclScopeAll;
+
+export type AclScopeFiles = AclScopeAll;
+
+export type AclScopeGroups = AclScopeAll | AclScopeCurrentUser;
+
+export type AclScopeProjects = AclScopeAll;
+
+export type AclScopeRaw = AclScopeAll;
+
+export type AclScopeSecurityCategories = AclScopeAll;
+
+export type AclScopeSequences = AclScopeAll;
+
+export type AclScopeTimeseries = AclScopeAll | AclScopeAssetsId;
+
+export type AclScopeUsers = AclScopeAll;
+
+export type AclSecurityCategories = Acl<
+  AclActionSecurityCategories,
+  AclScopeSecurityCategories
+>;
+
+export type AclSequences = Acl<AclActionSequences, AclScopeSequences>;
+
+export type AclTimeseries = Acl<AclActionTimeseries, AclScopeTimeseries>;
+
+export type AclUsers = Acl<AclActionUsers, AclScopeUsers>;
+
+export type Aggregate =
+  | 'average'
+  | 'max'
+  | 'min'
+  | 'count'
+  | 'sum'
+  | 'interpolation'
+  | 'stepInterpolation'
+  | 'totalVariation'
+  | 'continuousVariance'
+  | 'discreteVariance';
+
+export interface ApiKeyListScope {
+  /**
+   * Only available with users:list acl, returns all api keys for this project.
+   */
+  all?: boolean;
+  /**
+   * Get api keys for a specific service account, only available to admin users.
+   */
+  serviceAccountId?: CogniteInternalId;
+  /**
+   * Whether to include deleted api keys
+   */
+  includeDeleted?: boolean;
+}
+
+export interface ApiKeyObject {
+  /**
+   * Internal id for the api key
+   */
   id: CogniteInternalId;
+  /**
+   * Id of the service account
+   */
+  serviceAccountId: CogniteInternalId;
+  createdTime: Date;
+  /**
+   * The status of the api key
+   */
+  status: 'ACTIVE' | 'DELETED';
 }
 
-export interface ExternalId {
-  externalId: CogniteExternalId;
+export interface ApiKeyRequest {
+  serviceAccountId: CogniteInternalId;
 }
 
-/**
- * Custom, application specific metadata. String key -> String value
- */
-export interface Metadata {
-  [key: string]: string;
+export type ArrayPatchLong =
+  | { set: number[] }
+  | { add?: number[]; remove?: number[] };
+
+export interface Asset extends ExternalAsset, AssetInternalId {
+  lastUpdatedTime: Date;
+  createdTime: Date;
+  /**
+   * IDs of assets on the path to the asset.
+   */
+  path: number[];
+  /**
+   * Asset path depth (number of levels below root node).
+   */
+  depth: number;
 }
 
-/**
- * Cursor for paging through results
- */
-export interface Cursor {
-  cursor?: string;
-}
+export type AssetChange = AssetChangeById | AssetChangeByExternalId;
 
-export interface Limit {
-  limit?: number;
-}
+export interface AssetChangeByExternalId extends AssetPatch, ExternalId {}
 
-export type Timestamp = number | Date;
-
-export interface Range<T> {
-  min?: T;
-  max?: T;
-}
-
-/**
- * Range between two integers
- */
-export type IntegerRange = Range<number>;
-export type DateRange = Range<Timestamp>;
-
-export interface DataIds {
-  items?: AssetIdEither[];
-}
-
-/**
- * The source of this asset
- */
-export type AssetSource = string;
+export interface AssetChangeById extends AssetPatch, InternalId {}
 
 /**
  * Description of asset.
  */
 export type AssetDescription = string;
 
-/**
- * Name of asset. Often referred to as tag.
- */
-export type AssetName = string;
-
-export type AssetInternalId = InternalId;
-
 export type AssetExternalId = ExternalId;
-
-export type AssetIdEither = IdEither;
-
-export interface SetField<T> {
-  set: T;
-}
-
-export interface RemoveField {
-  setNull: boolean;
-}
-
-export type SinglePatchString = SetField<string> | RemoveField;
-
-export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
-
-/**
- * Non removable string change.
- */
-export interface SinglePatchRequiredString {
-  set: string;
-}
-
-export type ObjectPatch =
-  | {
-      /**
-       * Set the key-value pairs. All existing key-value pairs will be removed.
-       */
-      set: { [key: string]: string };
-    }
-  | {
-      /**
-       * Add the key-value pairs. Values for existing keys will be overwritten.
-       */
-      add: { [key: string]: string };
-      /**
-       * Remove the key-value pairs with given keys.
-       */
-      remove: string[];
-    };
-
-export type NullableSinglePatchString = { set: string } | { setNull: true };
-export type NullableSinglePatchLong = { set: number } | { setNull: true };
-export type ArrayPatchLong =
-  | { set: number[] }
-  | { add?: number[]; remove?: number[] };
-
-export interface AssetPatch {
-  update: {
-    externalId?: SinglePatchString;
-    name?: SinglePatchRequiredString;
-    description?: SinglePatchString;
-    metadata?: ObjectPatch;
-    source?: SinglePatchString;
-  };
-}
-
-export interface AssetChangeById extends AssetPatch, InternalId {}
-
-export interface AssetChangeByExternalId extends AssetPatch, ExternalId {}
-
-export type AssetChange = AssetChangeById | AssetChangeByExternalId;
-
-export interface ExternalAsset {
-  externalId?: CogniteExternalId;
-  name?: AssetName;
-  parentId?: CogniteInternalId;
-  description?: AssetDescription;
-  metadata?: Metadata;
-  source?: AssetSource;
-}
-
-export interface ExternalAssetItem extends ExternalAsset {
-  /**
-   * External id to the parent asset
-   */
-  parentExternalId?: CogniteExternalId;
-}
 
 /**
  * Filter on assets with exact match
@@ -167,7 +196,54 @@ export interface AssetFilter extends Limit {
   };
 }
 
+export type AssetIdEither = IdEither;
+
+export type AssetInternalId = InternalId;
+
 export interface AssetListScope extends AssetFilter, Cursor {}
+
+export interface AssetMapping3D extends AssetMapping3DBase {
+  /**
+   * A number describing the position of this node in the 3D hierarchy, starting from 0.
+   * The tree is traversed in a depth-first order.
+   */
+  treeIndex: number;
+  /**
+   * The number of nodes in the subtree of this node (this number included the node itself).
+   */
+  subtreeSize: number;
+}
+
+export interface AssetMapping3DBase {
+  /**
+   * The ID of the node.
+   */
+  nodeId: CogniteInternalId;
+  /**
+   * The ID of the associated asset (Cognite's Assets API).
+   */
+  assetId: CogniteInternalId;
+}
+
+export interface AssetMappings3DListFilter extends Cursor, Limit {
+  nodeId?: CogniteInternalId;
+  assetId?: CogniteInternalId;
+}
+
+/**
+ * Name of asset. Often referred to as tag.
+ */
+export type AssetName = string;
+
+export interface AssetPatch {
+  update: {
+    externalId?: SinglePatchString;
+    name?: SinglePatchRequiredString;
+    description?: SinglePatchString;
+    metadata?: ObjectPatch;
+    source?: SinglePatchString;
+  };
+}
 
 export interface AssetSearchFilter extends AssetFilter {
   search?: {
@@ -176,17 +252,65 @@ export interface AssetSearchFilter extends AssetFilter {
   };
 }
 
-export interface Model3D {
+/**
+ * The source of this asset
+ */
+export type AssetSource = string;
+
+/**
+ * Data specific to Azure AD authentication
+ */
+export interface AzureADConfigurationDTO {
   /**
-   * The name of the model.
+   * Azure application ID. You get this when creating the Azure app.
    */
-  name: string;
+  appId?: string;
   /**
-   * The ID of the model.
+   * Azure application secret. You get this when creating the Azure app.
    */
-  id: CogniteInternalId;
+  appSecret?: string;
+  /**
+   * Azure tenant ID.
+   */
+  tenantId?: string;
+  /**
+   * Resource to grant access to. This is usually (always?) 00000002-0000-0000-c000-000000000000
+   */
+  appResourceId?: string;
+}
+
+/**
+ * The bounding box of the subtree with this sector as the root sector.
+ * Is null if there are no geometries in the subtree.
+ */
+export interface BoundingBox3D {
+  /**
+   * The minimal coordinates of the bounding box.
+   */
+  min: Tuple3<number>;
+  /**
+   * The maximal coordinates of the bounding box.
+   */
+  max: Tuple3<number>;
+}
+
+export type CREATE = 'CREATE';
+
+export type CogniteCapability = SingleCogniteCapability[];
+
+export interface CogniteEvent extends ExternalEvent, InternalId {
+  lastUpdatedTime: Date;
   createdTime: Date;
 }
+
+/**
+ * External Id provided by client. Should be unique within the project.
+ */
+export type CogniteExternalId = string;
+
+export type CogniteInternalId = number;
+
+export type CreateAssetMapping3D = AssetMapping3DBase;
 
 export interface CreateModel3D {
   /**
@@ -195,39 +319,378 @@ export interface CreateModel3D {
   name: string;
 }
 
-export interface UpdateModelNameField {
+export interface CreateRevision3D {
+  /**
+   * True if the revision is marked as published.
+   */
+  published?: boolean;
+  /**
+   * Global rotation to be applied to the entire model.
+   * The rotation is expressed by Euler angles in radians and in XYZ order.
+   */
+  rotation?: [boolean, boolean, boolean];
+  camera?: RevisionCameraProperties;
+  /**
+   * The file id to a file uploaded to Cognite's Files API.
+   * Can only be set on revision creation, and can never be updated. _Only FBX files are supported_.
+   */
+  fileId: CogniteInternalId;
+}
+
+/**
+ * Cursor for paging through results
+ */
+export interface Cursor {
+  cursor?: string;
+}
+
+export interface CursorResponse<T> extends ItemsResponse<T> {
+  nextCursor: string;
+}
+
+export type DELETE = 'DELETE';
+
+export interface DataIds {
+  items?: AssetIdEither[];
+}
+
+export interface DatapointsDeleteRange {
+  /**
+   * The timestamp of first datapoint to delete
+   */
+  inclusiveBegin: Timestamp;
+  /**
+   * If set, the timestamp of first datapoint after inclusiveBegin to not delete. If not set, only deletes the datapoint at inclusiveBegin.
+   */
+  exclusiveEnd: Timestamp;
+}
+
+export type DatapointsDeleteRequest =
+  | InternalId & DatapointsDeleteRange
+  | ExternalId & DatapointsDeleteRange;
+
+export interface DatapointsGetAggregateDatapoint extends DatapointsMetadata {
+  datapoints: GetAggregateDatapoint[];
+}
+
+export type DatapointsGetDatapoint =
+  | DatapointsGetStringDatapoint
+  | DatapointsGetDoubleDatapoint;
+
+export interface DatapointsGetDoubleDatapoint extends DatapointsMetadata {
+  /**
+   * Whether the time series is string valued or not.
+   */
+  isString: false;
+  /**
+   * The list of datapoints
+   */
+  datapoints: GetDoubleDatapoint[];
+}
+
+export interface DatapointsGetStringDatapoint extends DatapointsMetadata {
+  /**
+   * Whether the time series is string valued or not.
+   */
+  isString: true;
+  /**
+   * The list of datapoints
+   */
+  datapoints: GetStringDatapoint[];
+}
+
+export interface DatapointsInsertProperties {
+  datapoints: PostDatapoint[];
+}
+
+export interface DatapointsMetadata extends InternalId {
+  /**
+   * External id of the timeseries the datapoints belong to.
+   */
+  externalId?: CogniteExternalId;
+}
+
+export interface DatapointsMultiQuery extends Limit {
+  items: DatapointsQuery[];
+  /**
+   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in a Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
+   */
+  start?: string | Timestamp;
+  /**
+   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
+   */
+  end?: string | Timestamp;
+  /**
+   * The aggregates to be returned. This value overrides top-level default aggregates list when set. Specify all aggregates to be retrieved here. Specify empty array if this sub-query needs to return datapoints without aggregation.
+   */
+  aggregates?: Aggregate[];
+  /**
+   * The time granularity size and unit to aggregate over.
+   */
+  granularity?: string;
+  /**
+   * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
+   */
+  includeOutsidePoints?: boolean;
+}
+
+export type DatapointsPostDatapoint =
+  | DatapointsPostDatapointId
+  | DatapointsPostDatapointExternalId;
+
+export interface DatapointsPostDatapointExternalId
+  extends DatapointsInsertProperties,
+    ExternalId {}
+
+export interface DatapointsPostDatapointId
+  extends DatapointsInsertProperties,
+    InternalId {}
+
+export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
+
+export interface DatapointsQueryExternalId
+  extends DatapointsQueryProperties,
+    ExternalId {}
+
+export interface DatapointsQueryId
+  extends DatapointsQueryProperties,
+    InternalId {}
+
+export interface DatapointsQueryProperties extends Limit {
+  /**
+   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
+   */
+  start?: string | Timestamp;
+  /**
+   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
+   */
+  end?: string | Timestamp;
+  /**
+   * The aggregates to be returned.  Use default if null. An empty string must be sent to get raw data if the default is a set of aggregates.
+   */
+  aggregates?: Aggregate[];
+  /**
+   * The granularity size and granularity of the aggregates (2h)
+   */
+  granularity?: string;
+  /**
+   * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
+   */
+  includeOutsidePoints?: boolean;
+}
+
+export type DateRange = Range<Timestamp>;
+
+/**
+ * A default group for all project users. Can be used to establish default capabilities. WARNING: this group may be logically deleted
+ */
+export type DefaultGroupId = number;
+
+export type DeleteAssetMapping3D = AssetMapping3DBase;
+
+export type EXECUTE = 'EXECUTE';
+
+export type EventChange = EventChangeById | EventChangeByExternalId;
+
+export interface EventChangeByExternalId extends EventPatch, ExternalId {}
+
+export interface EventChangeById extends EventPatch, InternalId {}
+
+export interface EventFilter {
+  startTime?: DateRange;
+  endTime?: DateRange;
+  metadata?: Metadata;
+  /**
+   * Asset IDs of related equipment that this event relates to.
+   */
+  assetIds?: CogniteInternalId[];
+}
+
+export interface EventFilterRequest extends Cursor, Limit {
+  filter?: EventFilter;
+}
+
+export interface EventPatch {
   update: {
-    name: SetField<string>;
+    externalId?: SinglePatchString;
+    startTime?: SinglePatchDate;
+    endTime?: SinglePatchDate;
+    description?: SinglePatchString;
+    metadata?: ObjectPatch;
+    assetIds?: ArrayPatchLong;
+    source?: SinglePatchString;
   };
 }
 
-export interface UpdateModel3D extends UpdateModelNameField, InternalId {}
-
-export interface Asset extends ExternalAsset, AssetInternalId {
-  lastUpdatedTime: Date;
-  createdTime: Date;
-  /**
-   * IDs of assets on the path to the asset.
-   */
-  path: number[];
-  /**
-   * Asset path depth (number of levels below root node).
-   */
-  depth: number;
+export interface EventSearch {
+  description?: string;
 }
-export interface TimeseriesFilter extends Limit {
+
+export interface EventSearchRequest extends Limit {
+  filter?: EventFilter;
+  search?: EventSearch;
+}
+
+export interface ExternalAsset {
+  externalId?: CogniteExternalId;
+  name?: AssetName;
+  parentId?: CogniteInternalId;
+  description?: AssetDescription;
+  metadata?: Metadata;
+  source?: AssetSource;
+}
+
+export interface ExternalAssetItem extends ExternalAsset {
   /**
-   * Decide if the metadata field should be returned or not.
+   * External id to the parent asset
    */
-  includeMetadata?: boolean;
+  parentExternalId?: CogniteExternalId;
+}
+
+/**
+ * An event represents something that happened at a given interval in time, e.g a failure, a work order etc.
+ */
+export interface ExternalEvent {
+  externalId?: CogniteExternalId;
+  startTime?: Timestamp;
+  endTime?: Timestamp;
+  description?: string;
+  metadata?: Metadata;
+  assetIds?: CogniteInternalId[];
+  source?: string;
+}
+
+export interface ExternalFilesMetadata {
+  externalId?: CogniteExternalId;
+  name: FileName;
+  source?: string;
+  mimeType?: FileMimeType;
+  metadata?: Metadata;
+  assetIds?: CogniteInternalId[];
+}
+
+export interface ExternalId {
+  externalId: CogniteExternalId;
+}
+
+export interface FileChange {
+  update: {
+    externalId?: SinglePatchString;
+    source?: SinglePatchString;
+    metadata?: ObjectPatch;
+    assetIds?: ArrayPatchLong;
+  };
+}
+
+export type FileChangeUpdate =
+  | FileChangeUpdateById
+  | FileChangeUpdateByExternalId;
+
+export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
+
+export interface FileChangeUpdateById extends InternalId, FileChange {}
+
+export type FileContent = ArrayBuffer | Buffer | any;
+
+export interface FileFilter extends Limit {
+  filter?: {
+    name?: FileName;
+    mimeType?: FileMimeType;
+    metadata?: Metadata;
+    /**
+     * Only include files that reference these specific asset IDs.
+     */
+    assetIds?: CogniteInternalId[];
+    source?: string;
+    createdTime?: DateRange;
+    lastUpdatedTime?: DateRange;
+    uploadedTime?: DateRange;
+    externalIdPrefix?: CogniteExternalId;
+    uploaded?: boolean;
+  };
+}
+
+export interface FileLink {
+  downloadUrl: string;
+}
+
+/**
+ * File type. E.g. text/plain, application/pdf, ...
+ */
+export type FileMimeType = string;
+
+/**
+ * Name of the file.
+ */
+export type FileName = string;
+
+export interface FileRequestFilter extends Cursor, FileFilter {}
+
+export interface FilesMetadata extends ExternalFilesMetadata {
+  id: CogniteInternalId;
   /**
-   * Cursor for paging through time series.
+   * Whether or not the actual file is uploaded
    */
-  cursor?: string;
+  uploaded: boolean;
+  uploadedTime?: Date;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+}
+
+export interface FilesSearchFilter extends FileFilter {
+  search?: {
+    name?: FileName;
+  };
+}
+
+export interface Filter {
   /**
-   * Get time series related to these assets. Takes [ 1 .. 100 ] unique items.
+   * Filter on unit (case-sensitive).
    */
-  assetIds?: number[];
+  unit?: string;
+  /**
+   * Filter on isString.
+   */
+  isString?: boolean;
+  /**
+   * Filter on isStep.
+   */
+  isStep?: boolean;
+  /**
+   * Filter out timeseries that do not match these metadata fields and values (case-sensitive)
+   */
+  metadata?: Metadata;
+  /**
+   * Filter out time series that are not linked to any of these assets.
+   */
+  assetIds?: CogniteInternalId[];
+  createdTime?: Date;
+  lastUpdatedTime?: Date;
+}
+
+export interface GetAggregateDatapoint extends GetDatapointMetadata {
+  average?: number;
+  max?: number;
+  min?: number;
+  count?: number;
+  sum?: number;
+  interpolation?: number;
+  stepInterpolation?: number;
+  continuousVariance?: number;
+  discreteVariance?: number;
+  totalVariation?: number;
+}
+
+export interface GetDatapointMetadata {
+  timestamp: Date;
+}
+
+export interface GetDoubleDatapoint extends GetDatapointMetadata {
+  value: number;
+}
+
+export interface GetStringDatapoint extends GetDatapointMetadata {
+  value: string;
 }
 
 export interface GetTimeSeriesMetadataDTO extends InternalId {
@@ -271,6 +734,283 @@ export interface GetTimeSeriesMetadataDTO extends InternalId {
   lastUpdatedTime: Date;
 }
 
+export interface Group {
+  name: GroupName;
+  sourceId?: GroupSourceId;
+  capabilities?: CogniteCapability;
+  id: number;
+  isDeleted: boolean;
+  deletedTime?: Date;
+}
+
+/**
+ * Name of the group
+ * @example Production Engineers
+ */
+export type GroupName = string;
+
+export interface GroupServiceAccount {
+  /**
+   * Unique name of the service account
+   * @example some-internal-service@apple.com
+   */
+  name: string;
+  id: CogniteInternalId;
+  /**
+   * List of group ids
+   */
+  groups: CogniteInternalId[];
+  /**
+   * If this service account has been logically deleted
+   */
+  isDeleted: boolean;
+  /**
+   * Time of deletion
+   */
+  deletedTime?: Date;
+}
+
+/**
+ * ID of the group in the source. If this is the same ID as a group in the IDP, a user in that group will implicitly be a part of this group as well.
+ * @example b7c9a5a4-99c2-4785-bed3-5e6ad9a78603
+ */
+export type GroupSourceId = string;
+
+export interface GroupSpec {
+  name: GroupName;
+  sourceId?: GroupSourceId;
+  capabilities?: CogniteCapability;
+}
+
+export type Groups = CogniteInternalId[];
+
+export type IdEither = InternalId | ExternalId;
+
+/**
+ * Data about how to authenticate and authorize users
+ */
+export interface InputProjectAuthentication {
+  azureADConfiguration?: AzureADConfigurationDTO;
+  validDomains?: ValidDomains;
+  oAuth2Configuration?: OAuth2ConfigurationDTO;
+}
+
+/**
+ * Range between two integers
+ */
+export type IntegerRange = Range<number>;
+
+export interface InternalId {
+  id: CogniteInternalId;
+}
+
+export interface ItemsResponse<T> {
+  items: T[];
+}
+
+export type LIST = 'LIST';
+
+export type LatestDataBeforeRequest =
+  | InternalId & LatestDataPropertyFilter
+  | ExternalId & LatestDataPropertyFilter;
+
+export interface LatestDataPropertyFilter {
+  /**
+   * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send time as a Date object.
+   */
+  before: string | Date;
+}
+
+export interface Limit {
+  limit?: number;
+}
+
+export interface List3DNodesQuery extends Cursor, Limit {
+  /**
+   * Get sub nodes up to this many levels below the specified node. Depth 0 is the root node.
+   */
+  depth?: number;
+  /**
+   * ID of a node that are the root of the subtree you request (default is the root node).
+   */
+  nodeId?: CogniteInternalId;
+}
+
+export interface ListGroups {
+  /**
+   * Whether to get all groups, only available with the groups:list acl.
+   */
+  all?: boolean;
+}
+
+export interface ListRawDatabases extends Cursor, Limit {}
+
+export interface ListRawRows extends Cursor, Limit {
+  /**
+   * Set this to true if you only want to fetch row keys
+   */
+  onlyRowKeys?: boolean;
+  /**
+   * Specify this to limit columns to retrieve. Array of column keys
+   */
+  columns?: string[];
+  /**
+   * Exclusive filter for last updated time. When specified only rows updated after this time will be returned
+   */
+  minLastUpdatedTime?: Date;
+  /**
+   * Inclusive filter for last updated time. When specified only rows updated before this time will be returned
+   */
+  maxLastUpdatedTime?: Date;
+}
+
+export interface ListRawTables extends Cursor, Limit {}
+
+export interface ListResponse<T> extends CursorResponse<T> {
+  next?: () => Promise<ListResponse<T>>;
+}
+
+export interface ListReveal3DNodeAncestors extends Cursor, Limit {}
+
+export interface ListRevealSectors3DQuery extends Cursor, Limit {
+  /**
+   * Bounding box to restrict search to. If given, only return sectors that intersect the given bounding box. Given as a JSON-encoded object of two arrays \"min\" and \"max\" with 3 coordinates each.
+   */
+  boundingBox?: BoundingBox3D;
+}
+
+export interface ListSecurityCategories extends Cursor, Limit {
+  sort?: 'ASC' | 'DESC';
+}
+
+export type MEMBEROF = 'MEMBEROF';
+
+/**
+ * Custom, application specific metadata. String key -> String value
+ */
+export interface Metadata {
+  [key: string]: string;
+}
+
+export interface Model3D {
+  /**
+   * The name of the model.
+   */
+  name: string;
+  /**
+   * The ID of the model.
+   */
+  id: CogniteInternalId;
+  createdTime: Date;
+}
+
+export interface Model3DListRequest extends Limit {
+  /**
+   * Filter based on whether or not it has published revisions.
+   */
+  published?: boolean;
+}
+
+export interface NewApiKeyResponse extends ApiKeyObject {
+  /**
+   * The api key to be used against the API
+   */
+  value: string;
+}
+
+export interface Node3D {
+  /**
+   * The ID of the node.
+   */
+  id: CogniteInternalId;
+  /**
+   * The index of the node in the 3D model hierarchy, starting from 0.
+   * The tree is traversed in a depth-first order.
+   */
+  treeIndex: number;
+  /**
+   * The parent of the node, null if it is the root node.
+   */
+  parentId: CogniteInternalId;
+  /**
+   * The depth of the node in the tree, starting from 0 at the root node.
+   */
+  depth: number;
+  /**
+   * The name of the node.
+   */
+  name: string;
+  /**
+   * The number of descendants of the node, plus one (counting itself).
+   */
+  subtreeSize: number;
+  /**
+   *  The bounding box of the subtree with this sector as the root sector.
+   *  Is null if there are no geometries in the subtree.
+   */
+  boundingBox: BoundingBox3D;
+}
+
+export type NullableSinglePatchLong = { set: number } | { setNull: true };
+
+export type NullableSinglePatchString = { set: string } | { setNull: true };
+
+/**
+ * Data related to generic OAuth2 authentication. Not used for Azure AD
+ */
+export interface OAuth2ConfigurationDTO {
+  /**
+   * Login URL of OAuth2 provider. E.g https://accounts.google.com/o/oauth2/v2/auth.
+   */
+  loginUrl?: string;
+  /**
+   * Logout URL of OAuth2 provider. E.g https://accounts.google.com/Logout.
+   */
+  logoutUrl?: string;
+  /**
+   * URL to get access token from OAuth2 provider. E.g https://www.googleapis.com/oauth2/v4/token.
+   */
+  tokenUrl?: string;
+  /**
+   * Client ID. You probably get this when registering your client with the OAuth2 provider.
+   */
+  clientId?: string;
+  /**
+   * Client secret. You probably get this when registering your client with the OAuth2 provider.
+   */
+  clientSecret?: string;
+}
+
+export type ObjectPatch =
+  | {
+      /**
+       * Set the key-value pairs. All existing key-value pairs will be removed.
+       */
+      set: { [key: string]: string };
+    }
+  | {
+      /**
+       * Add the key-value pairs. Values for existing keys will be overwritten.
+       */
+      add: { [key: string]: string };
+      /**
+       * Remove the key-value pairs with given keys.
+       */
+      remove: string[];
+    };
+
+/**
+ * Data about how to authenticate and authorize users. The authentication configuration is hidden.
+ */
+export interface OutputProjectAuthentication {
+  validDomains?: ValidDomains;
+}
+
+export interface PostDatapoint {
+  timestamp: Timestamp;
+  value: number | string;
+}
+
 export interface PostTimeSeriesMetadataDTO {
   /**
    * Externally provided id for the time series (optional but recommended)
@@ -310,396 +1050,34 @@ export interface PostTimeSeriesMetadataDTO {
   securityCategories?: number[];
 }
 
-export interface Filter {
-  /**
-   * Filter on unit (case-sensitive).
-   */
-  unit?: string;
-  /**
-   * Filter on isString.
-   */
-  isString?: boolean;
-  /**
-   * Filter on isStep.
-   */
-  isStep?: boolean;
-  /**
-   * Filter out timeseries that do not match these metadata fields and values (case-sensitive)
-   */
-  metadata?: Metadata;
-  /**
-   * Filter out time series that are not linked to any of these assets.
-   */
-  assetIds?: CogniteInternalId[];
-  createdTime?: Date;
-  lastUpdatedTime?: Date;
-}
-
-export interface Search {
-  /**
-   * Prefix and fuzzy search on name.
-   */
-  name?: string;
-  /**
-   * Prefix and fuzzy search on description.
-   */
-  description?: string;
-  /**
-   * Search on name and description using wildcard search on each of the words (separated by spaces). Retrieves results where at least one word must match. Example: '*some* *other*'
-   */
-  query?: string;
-}
-
-export interface TimeSeriesSearchDTO extends Limit {
-  filter?: Filter;
-  search?: Search;
-  /**
-   * Return up to this many results.
-   */
-}
-
-export type TimeseriesIdEither = InternalId | ExternalId;
-
-export interface TimeSeriesPatch {
-  update: {
-    externalId?: NullableSinglePatchString;
-    name?: NullableSinglePatchString;
-    metadata?: ObjectPatch;
-    unit?: NullableSinglePatchString;
-    assetId?: NullableSinglePatchLong;
-    description?: NullableSinglePatchString;
-    securityCategories?: ArrayPatchLong;
-  };
-}
-
-export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
-
-export interface TimeSeriesUpdateByExternalId
-  extends TimeSeriesPatch,
-    ExternalId {}
-
-export type TimeSeriesUpdate =
-  | TimeSeriesUpdateById
-  | TimeSeriesUpdateByExternalId;
-export interface PostDatapoint {
-  timestamp: Timestamp;
-  value: number | string;
-}
-
-export interface DatapointsInsertProperties {
-  datapoints: PostDatapoint[];
-}
-
-export interface DatapointsPostDatapointId
-  extends DatapointsInsertProperties,
-    InternalId {}
-
-export interface DatapointsPostDatapointExternalId
-  extends DatapointsInsertProperties,
-    ExternalId {}
-
-export type DatapointsPostDatapoint =
-  | DatapointsPostDatapointId
-  | DatapointsPostDatapointExternalId;
-
-export interface DatapointsQueryProperties extends Limit {
-  /**
-   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
-   */
-  start?: string | Timestamp;
-  /**
-   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
-   */
-  end?: string | Timestamp;
-  /**
-   * The aggregates to be returned.  Use default if null. An empty string must be sent to get raw data if the default is a set of aggregates.
-   */
-  aggregates?: Aggregate[];
-  /**
-   * The granularity size and granularity of the aggregates (2h)
-   */
-  granularity?: string;
-  /**
-   * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
-   */
-  includeOutsidePoints?: boolean;
-}
-
-export interface DatapointsQueryId
-  extends DatapointsQueryProperties,
-    InternalId {}
-
-export interface DatapointsQueryExternalId
-  extends DatapointsQueryProperties,
-    ExternalId {}
-
-export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
-
-export type Aggregate =
-  | 'average'
-  | 'max'
-  | 'min'
-  | 'count'
-  | 'sum'
-  | 'interpolation'
-  | 'stepInterpolation'
-  | 'totalVariation'
-  | 'continuousVariance'
-  | 'discreteVariance';
-
-export interface DatapointsMultiQuery extends Limit {
-  items: DatapointsQuery[];
-  /**
-   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in a Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
-   */
-  start?: string | Timestamp;
-  /**
-   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
-   */
-  end?: string | Timestamp;
-  /**
-   * The aggregates to be returned. This value overrides top-level default aggregates list when set. Specify all aggregates to be retrieved here. Specify empty array if this sub-query needs to return datapoints without aggregation.
-   */
-  aggregates?: Aggregate[];
-  /**
-   * The time granularity size and unit to aggregate over.
-   */
-  granularity?: string;
-  /**
-   * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
-   */
-  includeOutsidePoints?: boolean;
-}
-
-export interface DatapointsMetadata extends InternalId {
-  /**
-   * External id of the timeseries the datapoints belong to.
-   */
-  externalId?: CogniteExternalId;
-}
-
-export interface GetDatapointMetadata {
-  timestamp: Date;
-}
-
-export interface GetAggregateDatapoint extends GetDatapointMetadata {
-  average?: number;
-  max?: number;
-  min?: number;
-  count?: number;
-  sum?: number;
-  interpolation?: number;
-  stepInterpolation?: number;
-  continuousVariance?: number;
-  discreteVariance?: number;
-  totalVariation?: number;
-}
-
-export interface DatapointsGetAggregateDatapoint extends DatapointsMetadata {
-  datapoints: GetAggregateDatapoint[];
-}
-
-export interface GetStringDatapoint extends GetDatapointMetadata {
-  value: string;
-}
-
-export interface GetDoubleDatapoint extends GetDatapointMetadata {
-  value: number;
-}
-
-export interface DatapointsGetStringDatapoint extends DatapointsMetadata {
-  /**
-   * Whether the time series is string valued or not.
-   */
-  isString: true;
-  /**
-   * The list of datapoints
-   */
-  datapoints: GetStringDatapoint[];
-}
-
-export interface DatapointsGetDoubleDatapoint extends DatapointsMetadata {
-  /**
-   * Whether the time series is string valued or not.
-   */
-  isString: false;
-  /**
-   * The list of datapoints
-   */
-  datapoints: GetDoubleDatapoint[];
-}
-
-export type DatapointsGetDatapoint =
-  | DatapointsGetStringDatapoint
-  | DatapointsGetDoubleDatapoint;
-
-export interface LatestDataPropertyFilter {
-  /**
-   * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send time as a Date object.
-   */
-  before: string | Date;
-}
-
-export type LatestDataBeforeRequest =
-  | InternalId & LatestDataPropertyFilter
-  | ExternalId & LatestDataPropertyFilter;
-
-export interface DatapointsDeleteRange {
-  /**
-   * The timestamp of first datapoint to delete
-   */
-  inclusiveBegin: Timestamp;
-  /**
-   * If set, the timestamp of first datapoint after inclusiveBegin to not delete. If not set, only deletes the datapoint at inclusiveBegin.
-   */
-  exclusiveEnd: Timestamp;
-}
-
-export type DatapointsDeleteRequest =
-  | InternalId & DatapointsDeleteRange
-  | ExternalId & DatapointsDeleteRange;
+/**
+ * The display name of the project.
+ * @example Open Industrial Data
+ */
+export type ProjectName = string;
 
 /**
- * An event represents something that happened at a given interval in time, e.g a failure, a work order etc.
+ * Information about the project
  */
-export interface ExternalEvent {
-  externalId?: CogniteExternalId;
-  startTime?: Timestamp;
-  endTime?: Timestamp;
-  description?: string;
-  metadata?: Metadata;
-  assetIds?: CogniteInternalId[];
-  source?: string;
+export interface ProjectResponse {
+  name: ProjectName;
+  urlName: UrlName;
+  defaultGroupId?: DefaultGroupId;
+  authentication?: OutputProjectAuthentication;
 }
 
-export interface CogniteEvent extends ExternalEvent, InternalId {
-  lastUpdatedTime: Date;
-  createdTime: Date;
+export interface ProjectUpdate {
+  name?: ProjectName;
+  defaultGroupId?: DefaultGroupId;
+  authentication?: InputProjectAuthentication;
 }
 
-export interface EventFilter {
-  startTime?: DateRange;
-  endTime?: DateRange;
-  metadata?: Metadata;
-  /**
-   * Asset IDs of related equipment that this event relates to.
-   */
-  assetIds?: CogniteInternalId[];
+export type READ = 'READ';
+
+export interface Range<T> {
+  min?: T;
+  max?: T;
 }
-
-export interface EventFilterRequest extends Cursor, Limit {
-  filter?: EventFilter;
-}
-
-export interface EventPatch {
-  update: {
-    externalId?: SinglePatchString;
-    startTime?: SinglePatchDate;
-    endTime?: SinglePatchDate;
-    description?: SinglePatchString;
-    metadata?: ObjectPatch;
-    assetIds?: ArrayPatchLong;
-    source?: SinglePatchString;
-  };
-}
-
-export interface EventChangeById extends EventPatch, InternalId {}
-export interface EventChangeByExternalId extends EventPatch, ExternalId {}
-
-export type EventChange = EventChangeById | EventChangeByExternalId;
-
-export interface EventSearch {
-  description?: string;
-}
-
-export interface EventSearchRequest extends Limit {
-  filter?: EventFilter;
-  search?: EventSearch;
-}
-
-/**
- * Name of the file.
- */
-export type FileName = string;
-
-/**
- * File type. E.g. text/plain, application/pdf, ...
- */
-export type FileMimeType = string;
-
-export interface FileFilter extends Limit {
-  filter?: {
-    name?: FileName;
-    mimeType?: FileMimeType;
-    metadata?: Metadata;
-    /**
-     * Only include files that reference these specific asset IDs.
-     */
-    assetIds?: CogniteInternalId[];
-    source?: string;
-    createdTime?: DateRange;
-    lastUpdatedTime?: DateRange;
-    uploadedTime?: DateRange;
-    externalIdPrefix?: CogniteExternalId;
-    uploaded?: boolean;
-  };
-}
-
-export interface FileRequestFilter extends Cursor, FileFilter {}
-
-export interface ExternalFilesMetadata {
-  externalId?: CogniteExternalId;
-  name: FileName;
-  source?: string;
-  mimeType?: FileMimeType;
-  metadata?: Metadata;
-  assetIds?: CogniteInternalId[];
-}
-
-export interface FilesMetadata extends ExternalFilesMetadata {
-  id: CogniteInternalId;
-  /**
-   * Whether or not the actual file is uploaded
-   */
-  uploaded: boolean;
-  uploadedTime?: Date;
-  createdTime: Date;
-  lastUpdatedTime: Date;
-}
-
-export type FileContent = ArrayBuffer | Buffer | any;
-
-export interface UploadFileMetadataResponse extends FilesMetadata {
-  uploadUrl: string;
-}
-
-export interface FilesSearchFilter extends FileFilter {
-  search?: {
-    name?: FileName;
-  };
-}
-
-export interface FileLink {
-  downloadUrl: string;
-}
-
-export interface FileChange {
-  update: {
-    externalId?: SinglePatchString;
-    source?: SinglePatchString;
-    metadata?: ObjectPatch;
-    assetIds?: ArrayPatchLong;
-  };
-}
-
-export interface FileChangeUpdateById extends InternalId, FileChange {}
-export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
-
-export type FileChangeUpdate =
-  | FileChangeUpdateById
-  | FileChangeUpdateByExternalId;
-
-export interface ListRawDatabases extends Cursor, Limit {}
 
 /**
  * A NoSQL database to store customer data.
@@ -711,39 +1089,11 @@ export interface RawDB {
   name: string;
 }
 
-export interface ListRawTables extends Cursor, Limit {}
-
-export interface RawDBTable {
+export interface RawDBRow extends RawDBRowInsert {
   /**
-   * Unique name of the table
+   * Time when the row was last updated
    */
-  name: string;
-}
-
-export interface ListRawRows extends Cursor, Limit {
-  /**
-   * Set this to true if you only want to fetch row keys
-   */
-  onlyRowKeys?: boolean;
-  /**
-   * Specify this to limit columns to retrieve. Array of column keys
-   */
-  columns?: string[];
-  /**
-   * Exclusive filter for last updated time. When specified only rows updated after this time will be returned
-   */
-  minLastUpdatedTime?: Date;
-  /**
-   * Inclusive filter for last updated time. When specified only rows updated before this time will be returned
-   */
-  maxLastUpdatedTime?: Date;
-}
-
-export interface RawDBRowKey {
-  /**
-   * Unique row key
-   */
-  key: string;
+  lastUpdatedTime: Date;
 }
 
 export interface RawDBRowInsert extends RawDBRowKey {
@@ -753,125 +1103,61 @@ export interface RawDBRowInsert extends RawDBRowKey {
   columns: { [key: string]: string };
 }
 
-export interface RawDBRow extends RawDBRowInsert {
+export interface RawDBRowKey {
   /**
-   * Time when the row was last updated
+   * Unique row key
    */
-  lastUpdatedTime: Date;
-}
-export interface ListSecurityCategories extends Cursor, Limit {
-  sort?: 'ASC' | 'DESC';
+  key: string;
 }
 
-export interface SecurityCategory {
+export interface RawDBTable {
   /**
-   * Name of the security category
-   */
-  name: string;
-  /**
-   * Id of the security category
-   */
-  id: number;
-}
-
-export interface SecurityCategorySpec {
-  /**
-   * Name of the security category
+   * Unique name of the table
    */
   name: string;
 }
 
-/**
- * Unique name of the service account
- */
-export type ServiceAccountName = string;
+export interface RemoveField {
+  setNull: boolean;
+}
 
-export type Groups = CogniteInternalId[];
+export interface RevealNode3D extends Node3D {
+  /**
+   * The sector the node is contained in.
+   */
+  sectorId: CogniteInternalId;
+}
 
-export interface ServiceAccount {
-  name: ServiceAccountName;
-  groups?: Groups;
+export interface RevealRevision3D extends Revision3D {
+  sceneThreedFiles: Versioned3DFile[];
+}
+
+export interface RevealSector3D {
+  /**
+   * The id of the sector.
+   */
   id: CogniteInternalId;
   /**
-   * If this service account has been logically deleted
+   * The parent of the sector, null if it is the root sector.
    */
-  isDeleted?: boolean;
+  parentId: CogniteInternalId;
   /**
-   * Time of deletion
+   * String representing the path to the sector: 0/2/6/ etc.
    */
-  deletedTime?: Date;
+  path: string;
+  /**
+   * The depth of the sector in the sector tree, starting from 0 at the root sector.
+   */
+  depth: number;
+  /**
+   * The bounding box of the subtree with this sector as the root sector. Is null if there are no geometries in the subtree.
+   */
+  boundingBox: BoundingBox3D;
+  /**
+   * The file ID of the data file for this sector, with multiple versions supported. Use /3d/files/{id} to retrieve the file.
+   */
+  threedFiles: Versioned3DFile[];
 }
-
-export interface ServiceAccountInput {
-  name: ServiceAccountName;
-  groups?: Groups;
-}
-
-export interface Model3DListRequest extends Limit {
-  /**
-   * Filter based on whether or not it has published revisions.
-   */
-  published?: boolean;
-}
-
-export interface CreateRevision3D {
-  /**
-   * True if the revision is marked as published.
-   */
-  published?: boolean;
-  /**
-   * Global rotation to be applied to the entire model.
-   * The rotation is expressed by Euler angles in radians and in XYZ order.
-   */
-  rotation?: [boolean, boolean, boolean];
-  camera?: RevisionCameraProperties;
-  /**
-   * The file id to a file uploaded to Cognite's Files API.
-   * Can only be set on revision creation, and can never be updated. _Only FBX files are supported_.
-   */
-  fileId: CogniteInternalId;
-}
-
-export type Tuple3<T> = [T, T, T];
-
-export interface UpdateRevision3D {
-  id: CogniteInternalId;
-  update: {
-    /**
-     * True if the revision is marked as published.
-     */
-    published?: SetField<boolean>;
-    /**
-     * Global rotation to be applied to the entire model.
-     * The rotation is expressed by Euler angles in radians and in XYZ order.
-     */
-    rotation?: SetField<Tuple3<number>>;
-    /**
-     * Initial camera target.
-     */
-    camera?: SetField<RevisionCameraProperties>;
-  };
-}
-
-export interface Revision3DListRequest extends Limit {
-  /**
-   * Filter based on whether or not it has published revisions.
-   */
-  published?: boolean;
-}
-
-export interface RevisionCameraProperties {
-  /**
-   * Initial camera target.
-   */
-  target?: Tuple3<number>;
-  /**
-   * Initial camera position.
-   */
-  position?: Tuple3<number>;
-}
-
-type Revision3DStatus = 'Queued' | 'Processing' | 'Done' | 'Failed';
 
 export interface Revision3D {
   /**
@@ -915,350 +1201,86 @@ export interface Revision3D {
   createdTime: Date;
 }
 
-export interface List3DNodesQuery extends Cursor, Limit {
+export interface Revision3DListRequest extends Limit {
   /**
-   * Get sub nodes up to this many levels below the specified node. Depth 0 is the root node.
+   * Filter based on whether or not it has published revisions.
    */
-  depth?: number;
-  /**
-   * ID of a node that are the root of the subtree you request (default is the root node).
-   */
-  nodeId?: CogniteInternalId;
+  published?: boolean;
 }
 
-export interface Node3D {
+type Revision3DStatus = 'Queued' | 'Processing' | 'Done' | 'Failed';
+
+export interface RevisionCameraProperties {
   /**
-   * The ID of the node.
+   * Initial camera target.
    */
-  id: CogniteInternalId;
+  target?: Tuple3<number>;
   /**
-   * The index of the node in the 3D model hierarchy, starting from 0.
-   * The tree is traversed in a depth-first order.
+   * Initial camera position.
    */
-  treeIndex: number;
+  position?: Tuple3<number>;
+}
+
+export interface Search {
   /**
-   * The parent of the node, null if it is the root node.
+   * Prefix and fuzzy search on name.
    */
-  parentId: CogniteInternalId;
+  name?: string;
   /**
-   * The depth of the node in the tree, starting from 0 at the root node.
+   * Prefix and fuzzy search on description.
    */
-  depth: number;
+  description?: string;
   /**
-   * The name of the node.
+   * Search on name and description using wildcard search on each of the words (separated by spaces). Retrieves results where at least one word must match. Example: '*some* *other*'
+   */
+  query?: string;
+}
+
+export interface SecurityCategory {
+  /**
+   * Name of the security category
    */
   name: string;
   /**
-   * The number of descendants of the node, plus one (counting itself).
+   * Id of the security category
    */
-  subtreeSize: number;
-  /**
-   *  The bounding box of the subtree with this sector as the root sector.
-   *  Is null if there are no geometries in the subtree.
-   */
-  boundingBox: BoundingBox3D;
+  id: number;
 }
 
-/**
- * The bounding box of the subtree with this sector as the root sector.
- * Is null if there are no geometries in the subtree.
- */
-export interface BoundingBox3D {
+export interface SecurityCategorySpec {
   /**
-   * The minimal coordinates of the bounding box.
+   * Name of the security category
    */
-  min: Tuple3<number>;
-  /**
-   * The maximal coordinates of the bounding box.
-   */
-  max: Tuple3<number>;
+  name: string;
 }
 
-export interface AssetMappings3DListFilter extends Cursor, Limit {
-  nodeId?: CogniteInternalId;
-  assetId?: CogniteInternalId;
-}
-
-export interface AssetMapping3D extends AssetMapping3DBase {
-  /**
-   * A number describing the position of this node in the 3D hierarchy, starting from 0.
-   * The tree is traversed in a depth-first order.
-   */
-  treeIndex: number;
-  /**
-   * The number of nodes in the subtree of this node (this number included the node itself).
-   */
-  subtreeSize: number;
-}
-
-export type DeleteAssetMapping3D = AssetMapping3DBase;
-
-export type CreateAssetMapping3D = AssetMapping3DBase;
-
-export interface AssetMapping3DBase {
-  /**
-   * The ID of the node.
-   */
-  nodeId: CogniteInternalId;
-  /**
-   * The ID of the associated asset (Cognite's Assets API).
-   */
-  assetId: CogniteInternalId;
-}
-
-/**
- * The display name of the project.
- * @example Open Industrial Data
- */
-export type ProjectName = string;
-
-/**
- * The url name of the project. This is used as part of API calls. It should only contain letters, digits and hyphens, as long as the hyphens are not at the start or end.
- * @example publicdata
- */
-export type UrlName = string;
-
-/**
- * A default group for all project users. Can be used to establish default capabilities. WARNING: this group may be logically deleted
- */
-export type DefaultGroupId = number;
-
-/**
- * List of valid domains. If left empty, any user registered with the OAuth2 provider will get access.
- */
-export type ValidDomains = string[];
-
-/**
- * Data about how to authenticate and authorize users. The authentication configuration is hidden.
- */
-export interface OutputProjectAuthentication {
-  validDomains?: ValidDomains;
-}
-
-/**
- * Information about the project
- */
-export interface ProjectResponse {
-  name: ProjectName;
-  urlName: UrlName;
-  defaultGroupId?: DefaultGroupId;
-  authentication?: OutputProjectAuthentication;
-}
-
-/**
- * Data specific to Azure AD authentication
- */
-export interface AzureADConfigurationDTO {
-  /**
-   * Azure application ID. You get this when creating the Azure app.
-   */
-  appId?: string;
-  /**
-   * Azure application secret. You get this when creating the Azure app.
-   */
-  appSecret?: string;
-  /**
-   * Azure tenant ID.
-   */
-  tenantId?: string;
-  /**
-   * Resource to grant access to. This is usually (always?) 00000002-0000-0000-c000-000000000000
-   */
-  appResourceId?: string;
-}
-
-/**
- * Data related to generic OAuth2 authentication. Not used for Azure AD
- */
-export interface OAuth2ConfigurationDTO {
-  /**
-   * Login URL of OAuth2 provider. E.g https://accounts.google.com/o/oauth2/v2/auth.
-   */
-  loginUrl?: string;
-  /**
-   * Logout URL of OAuth2 provider. E.g https://accounts.google.com/Logout.
-   */
-  logoutUrl?: string;
-  /**
-   * URL to get access token from OAuth2 provider. E.g https://www.googleapis.com/oauth2/v4/token.
-   */
-  tokenUrl?: string;
-  /**
-   * Client ID. You probably get this when registering your client with the OAuth2 provider.
-   */
-  clientId?: string;
-  /**
-   * Client secret. You probably get this when registering your client with the OAuth2 provider.
-   */
-  clientSecret?: string;
-}
-
-/**
- * Data about how to authenticate and authorize users
- */
-export interface InputProjectAuthentication {
-  azureADConfiguration?: AzureADConfigurationDTO;
-  validDomains?: ValidDomains;
-  oAuth2Configuration?: OAuth2ConfigurationDTO;
-}
-
-export interface ProjectUpdate {
-  name?: ProjectName;
-  defaultGroupId?: DefaultGroupId;
-  authentication?: InputProjectAuthentication;
-}
-
-export interface ApiKeyObject {
-  /**
-   * Internal id for the api key
-   */
+export interface ServiceAccount {
+  name: ServiceAccountName;
+  groups?: Groups;
   id: CogniteInternalId;
   /**
-   * Id of the service account
+   * If this service account has been logically deleted
    */
-  serviceAccountId: CogniteInternalId;
-  createdTime: Date;
+  isDeleted?: boolean;
   /**
-   * The status of the api key
+   * Time of deletion
    */
-  status: 'ACTIVE' | 'DELETED';
-}
-
-export interface ApiKeyListScope {
-  /**
-   * Only available with users:list acl, returns all api keys for this project.
-   */
-  all?: boolean;
-  /**
-   * Get api keys for a specific service account, only available to admin users.
-   */
-  serviceAccountId?: CogniteInternalId;
-  /**
-   * Whether to include deleted api keys
-   */
-  includeDeleted?: boolean;
-}
-
-export interface ApiKeyRequest {
-  serviceAccountId: CogniteInternalId;
-}
-
-export interface NewApiKeyResponse extends ApiKeyObject {
-  /**
-   * The api key to be used against the API
-   */
-  value: string;
-}
-
-export interface ListGroups {
-  /**
-   * Whether to get all groups, only available with the groups:list acl.
-   */
-  all?: boolean;
-}
-
-/**
- * Name of the group
- * @example Production Engineers
- */
-export type GroupName = string;
-
-/**
- * ID of the group in the source. If this is the same ID as a group in the IDP, a user in that group will implicitly be a part of this group as well.
- * @example b7c9a5a4-99c2-4785-bed3-5e6ad9a78603
- */
-export type GroupSourceId = string;
-
-export interface Group {
-  name: GroupName;
-  sourceId?: GroupSourceId;
-  capabilities?: CogniteCapability;
-  id: number;
-  isDeleted: boolean;
   deletedTime?: Date;
 }
 
-export type LIST = 'LIST';
-export type READ = 'READ';
-export type WRITE = 'WRITE';
-export type CREATE = 'CREATE';
-export type UPDATE = 'UPDATE';
-export type DELETE = 'DELETE';
-export type MEMBEROF = 'MEMBEROF';
-export type EXECUTE = 'EXECUTE';
-
-export interface Acl<ActionsType, ScopeType> {
-  actions: ActionsType[];
-  scope: ScopeType;
+export interface ServiceAccountInput {
+  name: ServiceAccountName;
+  groups?: Groups;
 }
 
-export interface AclScopeAll {
-  all: {};
+/**
+ * Unique name of the service account
+ */
+export type ServiceAccountName = string;
+
+export interface SetField<T> {
+  set: T;
 }
-
-export interface AclScopeCurrentUser {
-  currentuserscope: {};
-}
-
-export type AclActionGroups = LIST | READ | CREATE | UPDATE | DELETE;
-export type AclScopeGroups = AclScopeAll | AclScopeCurrentUser;
-export type AclGroups = Acl<AclActionGroups, AclScopeGroups>;
-
-export type AclActionAssets = LIST | WRITE;
-export type AclScopeAssets = AclScopeAll;
-export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
-
-export type AclActionEvents = READ | WRITE;
-export type AclScopeEvents = AclScopeAll;
-export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
-
-export type AclActionFiles = READ | WRITE;
-export type AclScopeFiles = AclScopeAll;
-export type AclFiles = Acl<AclActionFiles, AclScopeFiles>;
-
-export type AclActionUsers = LIST | CREATE | DELETE;
-export type AclScopeUsers = AclScopeAll;
-export type AclUsers = Acl<AclActionUsers, AclScopeUsers>;
-
-export type AclActionProjects = LIST | READ | CREATE | UPDATE;
-export type AclScopeProjects = AclScopeAll;
-export type AclProjects = Acl<AclActionProjects, AclScopeProjects>;
-
-export type AclActionSecurityCategories = MEMBEROF | LIST | CREATE | DELETE;
-export type AclScopeSecurityCategories = AclScopeAll;
-export type AclSecurityCategories = Acl<
-  AclActionSecurityCategories,
-  AclScopeSecurityCategories
->;
-
-export type AclActionRaw = READ | WRITE | LIST;
-export type AclScopeRaw = AclScopeAll;
-export type AclRaw = Acl<AclActionRaw, AclScopeRaw>;
-
-export interface AclScopeAssetsId {
-  assetIdScope: {
-    subtreeIds: CogniteInternalId[];
-  };
-}
-export type AclActionTimeseries = READ | WRITE;
-export type AclScopeTimeseries = AclScopeAll | AclScopeAssetsId;
-export type AclTimeseries = Acl<AclActionTimeseries, AclScopeTimeseries>;
-
-export type AclActionApiKeys = LIST | CREATE | DELETE;
-export type AclScopeApiKeys = AclScopeAll | AclScopeCurrentUser;
-export type AclApiKeys = Acl<AclActionApiKeys, AclScopeApiKeys>;
-
-export type AclAction3D = READ | CREATE | UPDATE | DELETE;
-export type AclScope3D = AclScopeAll;
-export type Acl3D = Acl<AclAction3D, AclScope3D>;
-
-export type AclActionSequences = READ | WRITE;
-export type AclScopeSequences = AclScopeAll;
-export type AclSequences = Acl<AclActionSequences, AclScopeSequences>;
-
-export type AclActionAnalytics = READ | EXECUTE | LIST;
-export type AclScopeAnalytics = AclScopeAll;
-export type AclAnalytics = Acl<AclActionAnalytics, AclScopeAnalytics>;
 
 export type SingleCogniteCapability =
   | { groupsAcl: AclGroups }
@@ -1275,47 +1297,115 @@ export type SingleCogniteCapability =
   | { sequencesAcl: AclSequences }
   | { analyticsAcl: AclAnalytics };
 
-export type CogniteCapability = SingleCogniteCapability[];
+export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
-export interface GroupSpec {
-  name: GroupName;
-  sourceId?: GroupSourceId;
-  capabilities?: CogniteCapability;
+/**
+ * Non removable string change.
+ */
+export interface SinglePatchRequiredString {
+  set: string;
 }
 
-export interface GroupServiceAccount {
-  /**
-   * Unique name of the service account
-   * @example some-internal-service@apple.com
-   */
-  name: string;
-  id: CogniteInternalId;
-  /**
-   * List of group ids
-   */
-  groups: CogniteInternalId[];
-  /**
-   * If this service account has been logically deleted
-   */
-  isDeleted: boolean;
-  /**
-   * Time of deletion
-   */
-  deletedTime?: Date;
+export type SinglePatchString = SetField<string> | RemoveField;
+
+export interface TimeSeriesPatch {
+  update: {
+    externalId?: NullableSinglePatchString;
+    name?: NullableSinglePatchString;
+    metadata?: ObjectPatch;
+    unit?: NullableSinglePatchString;
+    assetId?: NullableSinglePatchLong;
+    description?: NullableSinglePatchString;
+    securityCategories?: ArrayPatchLong;
+  };
 }
 
-export interface ListReveal3DNodeAncestors extends Cursor, Limit {}
-
-export interface RevealNode3D extends Node3D {
+export interface TimeSeriesSearchDTO extends Limit {
+  filter?: Filter;
+  search?: Search;
   /**
-   * The sector the node is contained in.
+   * Return up to this many results.
    */
-  sectorId: CogniteInternalId;
 }
 
-export interface RevealRevision3D extends Revision3D {
+export type TimeSeriesUpdate =
+  | TimeSeriesUpdateById
+  | TimeSeriesUpdateByExternalId;
+
+export interface TimeSeriesUpdateByExternalId
+  extends TimeSeriesPatch,
+    ExternalId {}
+
+export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
+
+export interface TimeseriesFilter extends Limit {
+  /**
+   * Decide if the metadata field should be returned or not.
+   */
+  includeMetadata?: boolean;
+  /**
+   * Cursor for paging through time series.
+   */
+  cursor?: string;
+  /**
+   * Get time series related to these assets. Takes [ 1 .. 100 ] unique items.
+   */
+  assetIds?: number[];
+}
+
+export type TimeseriesIdEither = InternalId | ExternalId;
+
+export type Timestamp = number | Date;
+
+export type Tuple3<T> = [T, T, T];
+
+export type UPDATE = 'UPDATE';
+
+export interface UnrealRevision3D extends Revision3D {
   sceneThreedFiles: Versioned3DFile[];
 }
+
+export interface UpdateModel3D extends UpdateModelNameField, InternalId {}
+
+export interface UpdateModelNameField {
+  update: {
+    name: SetField<string>;
+  };
+}
+
+export interface UpdateRevision3D {
+  id: CogniteInternalId;
+  update: {
+    /**
+     * True if the revision is marked as published.
+     */
+    published?: SetField<boolean>;
+    /**
+     * Global rotation to be applied to the entire model.
+     * The rotation is expressed by Euler angles in radians and in XYZ order.
+     */
+    rotation?: SetField<Tuple3<number>>;
+    /**
+     * Initial camera target.
+     */
+    camera?: SetField<RevisionCameraProperties>;
+  };
+}
+
+export interface UploadFileMetadataResponse extends FilesMetadata {
+  uploadUrl: string;
+}
+
+/**
+ * The url name of the project. This is used as part of API calls. It should only contain letters, digits and hyphens, as long as the hyphens are not at the start or end.
+ * @example publicdata
+ */
+export type UrlName = string;
+
+/**
+ * List of valid domains. If left empty, any user registered with the OAuth2 provider will get access.
+ */
+export type ValidDomains = string[];
 
 /**
  * The file ID of the data file for this resource, with multiple versions supported.
@@ -1332,52 +1422,4 @@ export interface Versioned3DFile {
   fileId: CogniteInternalId;
 }
 
-export interface ListRevealSectors3DQuery extends Cursor, Limit {
-  /**
-   * Bounding box to restrict search to. If given, only return sectors that intersect the given bounding box. Given as a JSON-encoded object of two arrays \"min\" and \"max\" with 3 coordinates each.
-   */
-  boundingBox?: BoundingBox3D;
-}
-
-export interface RevealSector3D {
-  /**
-   * The id of the sector.
-   */
-  id: CogniteInternalId;
-  /**
-   * The parent of the sector, null if it is the root sector.
-   */
-  parentId: CogniteInternalId;
-  /**
-   * String representing the path to the sector: 0/2/6/ etc.
-   */
-  path: string;
-  /**
-   * The depth of the sector in the sector tree, starting from 0 at the root sector.
-   */
-  depth: number;
-  /**
-   * The bounding box of the subtree with this sector as the root sector. Is null if there are no geometries in the subtree.
-   */
-  boundingBox: BoundingBox3D;
-  /**
-   * The file ID of the data file for this sector, with multiple versions supported. Use /3d/files/{id} to retrieve the file.
-   */
-  threedFiles: Versioned3DFile[];
-}
-
-export interface UnrealRevision3D extends Revision3D {
-  sceneThreedFiles: Versioned3DFile[];
-}
-
-export interface ItemsResponse<T> {
-  items: T[];
-}
-
-export interface CursorResponse<T> extends ItemsResponse<T> {
-  nextCursor: string;
-}
-
-export interface ListResponse<T> extends CursorResponse<T> {
-  next?: () => Promise<ListResponse<T>>;
-}
+export type WRITE = 'WRITE';
