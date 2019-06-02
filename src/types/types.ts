@@ -1172,7 +1172,7 @@ export type GroupSourceId = string;
 export interface Group {
   name: GroupName;
   sourceId?: GroupSourceId;
-  capabilities?: cogniteCapability;
+  capabilities?: CogniteCapability;
   id: number;
   isDeleted: boolean;
   deletedTime?: Date;
@@ -1275,12 +1275,12 @@ export type SingleCogniteCapability =
   | { sequencesAcl: AclSequences }
   | { analyticsAcl: AclAnalytics };
 
-export type cogniteCapability = SingleCogniteCapability[];
+export type CogniteCapability = SingleCogniteCapability[];
 
 export interface GroupSpec {
   name: GroupName;
   sourceId?: GroupSourceId;
-  capabilities?: cogniteCapability;
+  capabilities?: CogniteCapability;
 }
 
 export interface GroupServiceAccount {
