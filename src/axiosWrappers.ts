@@ -6,26 +6,26 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
+import * as Url from 'url';
 import { version } from '../package.json';
 import { handleErrorResponse } from './error';
 import { makeRequestSafeToRetry } from './retryRequests';
 import { transformDateInRequest, transformDateInResponse } from './utils';
 
 /** @hidden */
-export function generateAxiosInstance(
-  baseUrl: string,
-  appId?: string
-): AxiosInstance {
+export function generateAxiosInstance(baseUrl: string, appId?: string) {
   const headers: { [key: string]: string } = {
     'x-cdp-sdk': `CogniteJavaScriptSDK:${version}`,
   };
   if (appId) {
     headers['x-cdp-app'] = appId;
   }
-  return axios.create({
-    baseURL: baseUrl,
-    headers,
-  });
+  return addTokenLeakageProtection(
+    axios.create({
+      baseURL: baseUrl,
+      headers,
+    })
+  );
 }
 
 /** @hidden */
@@ -74,4 +74,33 @@ export async function rawRequest<ResponseType>(
   } catch (e) {
     throw handleErrorResponse(e);
   }
+}
+
+function isSameOrigin(baseUrl: string, newUrl: string) {
+  const baseUrlParsed = Url.parse(baseUrl);
+  const newUrlParsed = Url.parse(Url.resolve(baseUrl, newUrl));
+  // check that protocol and hostname are the same
+  return (
+    baseUrlParsed.protocol === newUrlParsed.protocol &&
+    baseUrlParsed.host === newUrlParsed.host
+  );
+}
+
+function addTokenLeakageProtection(
+  axiosInstance: AxiosInstance
+): AxiosInstance {
+  axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
+    const isUnknownDomain = !isSameOrigin(
+      config.baseURL || '',
+      config.url || ''
+    );
+    if (isUnknownDomain) {
+      const newHeaders = { ...config.headers };
+      delete newHeaders.Authorization;
+      config.headers = newHeaders;
+    }
+    return config;
+  });
+
+  return axiosInstance;
 }
