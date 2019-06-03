@@ -76,7 +76,7 @@ export function addRetryToAxiosInstance(instance: AxiosInstance) {
       }
 
       if (!err.response) {
-        return true;
+        return false;
       }
 
       const responseStatusCode = err.response.status;
