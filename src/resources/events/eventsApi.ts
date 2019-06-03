@@ -11,13 +11,13 @@ import {
   generateSearchEndpoint,
   generateUpdateEndpoint,
 } from '../../standardMethods';
+import { IdEither } from '../../types/custom';
 import {
-  CogniteEvent,
+  Event,
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
   ExternalEvent,
-  IdEither,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
 
@@ -99,24 +99,18 @@ export class EventsAPI {
   }
 }
 
-export type EventsCreateEndpoint = (
-  items: ExternalEvent[]
-) => Promise<CogniteEvent[]>;
+export type EventsCreateEndpoint = (items: ExternalEvent[]) => Promise<Event[]>;
 
 export type EventsListEndpoint = (
   scope?: EventFilterRequest
-) => CogniteAsyncIterator<CogniteEvent>;
+) => CogniteAsyncIterator<Event>;
 
-export type EventsRetrieveEndpoint = (
-  ids: IdEither[]
-) => Promise<CogniteEvent[]>;
+export type EventsRetrieveEndpoint = (ids: IdEither[]) => Promise<Event[]>;
 
-export type EventsUpdateEndpoint = (
-  changes: EventChange[]
-) => Promise<CogniteEvent[]>;
+export type EventsUpdateEndpoint = (changes: EventChange[]) => Promise<Event[]>;
 
 export type EventsSearchEndpoint = (
   query: EventSearchRequest
-) => Promise<CogniteEvent[]>;
+) => Promise<Event[]>;
 
 export type EventsDeleteEndpoint = (ids: IdEither[]) => Promise<{}>;

@@ -11,11 +11,10 @@ import {
 } from '../../standardMethods';
 import {
   CogniteInternalId,
-  Group,
   GroupServiceAccount,
-  GroupSpec,
   ListGroups,
-} from '../../types/types';
+} from '../../types/custom';
+import { Group, GroupSpec } from '../../types/types';
 import { projectUrl } from '../../utils';
 
 export class GroupsAPI {

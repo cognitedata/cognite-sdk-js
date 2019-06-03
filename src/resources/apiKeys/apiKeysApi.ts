@@ -7,11 +7,10 @@ import {
   generateDeleteEndpoint,
   generateListNoCursorEndpointWithQueryParams,
 } from '../../standardMethods';
+import { ApiKeyListScope, CogniteInternalId } from '../../types/custom';
 import {
-  ApiKeyListScope,
   ApiKeyObject,
   ApiKeyRequest,
-  CogniteInternalId,
   NewApiKeyResponse,
 } from '../../types/types';
 import { projectUrl } from '../../utils';

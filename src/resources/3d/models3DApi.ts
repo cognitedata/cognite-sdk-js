@@ -10,12 +10,11 @@ import {
   generateRetrieveSingleEndpoint,
   generateUpdateEndpoint,
 } from '../../standardMethods';
+import { CogniteInternalId, Model3DListRequest } from '../../types/custom';
 import {
-  CogniteInternalId,
   CreateModel3D,
   InternalId,
   Model3D,
-  Model3DListRequest,
   UpdateModel3D,
 } from '../../types/types';
 import { projectUrl } from '../../utils';

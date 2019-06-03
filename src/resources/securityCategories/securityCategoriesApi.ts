@@ -8,11 +8,10 @@ import {
   generateDeleteEndpoint,
   generateListEndpoint,
 } from '../../standardMethods';
+import { CogniteInternalId, ListSecurityCategories } from '../../types/custom';
 import {
-  CogniteInternalId,
-  ListSecurityCategories,
-  SecurityCategory,
-  SecurityCategorySpec,
+  SecurityCategoryDTO,
+  SecurityCategorySpecDTO,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
 
@@ -59,11 +58,11 @@ export class SecurityCategoriesAPI {
 
 export type SecurityCategoriesListEndpoint = (
   query?: ListSecurityCategories
-) => CogniteAsyncIterator<SecurityCategory>;
+) => CogniteAsyncIterator<SecurityCategoryDTO>;
 
 export type SecurityCategoriesCreateEndpoint = (
-  items: SecurityCategorySpec[]
-) => Promise<SecurityCategory[]>;
+  items: SecurityCategorySpecDTO[]
+) => Promise<SecurityCategoryDTO[]>;
 
 export type SecurityCategoriesDeleteEndpoint = (
   ids: CogniteInternalId[]

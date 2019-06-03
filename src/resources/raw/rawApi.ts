@@ -15,12 +15,10 @@ import {
   ListRawDatabases,
   ListRawRows,
   ListRawTables,
-  RawDB,
   RawDBRow,
   RawDBRowInsert,
-  RawDBRowKey,
-  RawDBTable,
-} from '../../types/types';
+} from '../../types/custom';
+import { RawDB, RawDBRowKey, RawDBTable } from '../../types/types';
 import { projectUrl } from '../../utils';
 
 export class RawAPI {

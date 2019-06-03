@@ -2,7 +2,7 @@
 
 import { chunk } from 'lodash';
 import { Node, topologicalSort } from '../../graphUtils';
-import { ExternalAssetItem } from '../../types/types';
+import { ExternalAssetItem } from '../../types/custom';
 
 /** @hidden */
 export function assetChunker(

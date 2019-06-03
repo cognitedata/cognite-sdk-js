@@ -11,13 +11,13 @@ import {
   generateSearchEndpoint,
   generateUpdateEndpoint,
 } from '../../standardMethods';
+import { ExternalAssetItem } from '../../types/custom';
 import {
   Asset,
   AssetChange,
   AssetIdEither,
   AssetListScope,
   AssetSearchFilter,
-  ExternalAssetItem,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
 import { assetChunker } from './assetUtils';

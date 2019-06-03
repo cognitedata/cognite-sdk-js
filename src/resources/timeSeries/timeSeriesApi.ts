@@ -11,11 +11,10 @@ import {
   generateSearchEndpoint,
   generateUpdateEndpoint,
 } from '../../standardMethods';
+import { IdEither, TimeseriesFilter } from '../../types/custom';
 import {
   GetTimeSeriesMetadataDTO,
   PostTimeSeriesMetadataDTO,
-  TimeseriesFilter,
-  TimeseriesIdEither,
   TimeSeriesSearchDTO,
   TimeSeriesUpdate,
 } from '../../types/types';
@@ -112,13 +111,11 @@ export type TimeSeriesSearchEndpoint = (
 ) => Promise<GetTimeSeriesMetadataDTO[]>;
 
 export type TimeSeriesRetrieveEndpoint = (
-  ids: TimeseriesIdEither[]
+  ids: IdEither[]
 ) => Promise<GetTimeSeriesMetadataDTO[]>;
 
 export type TimeSeriesUpdateEndpoint = (
   changes: TimeSeriesUpdate[]
 ) => Promise<GetTimeSeriesMetadataDTO[]>;
 
-export type TimeSeriesDeleteEndpoint = (
-  ids: TimeseriesIdEither[]
-) => Promise<{}>;
+export type TimeSeriesDeleteEndpoint = (ids: IdEither[]) => Promise<{}>;

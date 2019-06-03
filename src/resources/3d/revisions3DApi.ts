@@ -12,12 +12,14 @@ import {
 } from '../../standardMethods';
 import {
   CogniteInternalId,
+  List3DNodesQuery,
+  Revision3DListRequest,
+} from '../../types/custom';
+import {
   CreateRevision3D,
   InternalId,
-  List3DNodesQuery,
   Node3D,
   Revision3D,
-  Revision3DListRequest,
   UpdateRevision3D,
 } from '../../types/types';
 import { projectUrl } from '../../utils';

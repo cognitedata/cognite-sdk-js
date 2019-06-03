@@ -5,7 +5,7 @@ import { chunk, concat } from 'lodash';
 import { makeAutoPaginationMethods } from './autoPagination';
 import { rawRequest } from './axiosWrappers';
 import { MetadataMap } from './metadata';
-import { CursorResponse, ItemsResponse } from './types/types';
+import { CursorResponse, ItemsResponse } from './types/custom';
 
 type CreateEndpoint<RequestType, ResponseType> = (
   items: RequestType[]

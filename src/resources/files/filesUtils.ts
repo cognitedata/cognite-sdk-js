@@ -6,12 +6,11 @@ import { MetadataMap } from '../../metadata';
 import { generateRetrieveSingleEndpoint } from '../../standardMethods';
 import {
   CogniteInternalId,
-  ExternalFilesMetadata,
   FileContent,
-  FilesMetadata,
   ItemsResponse,
   UploadFileMetadataResponse,
-} from '../../types/types';
+} from '../../types/custom';
+import { ExternalFilesMetadata, FilesMetadata } from '../../types/types';
 
 /** @hidden */
 export function waitUntilFileIsUploaded(

@@ -2,6 +2,7 @@
 
 import { readFileSync } from 'fs';
 import { API } from '../../resources/api';
+import { Tuple3 } from '../../types/custom';
 import {
   Asset,
   AssetMapping3D,
@@ -11,7 +12,6 @@ import {
   Model3D,
   Node3D,
   Revision3D,
-  Tuple3,
   UpdateRevision3D,
 } from '../../types/types';
 import {

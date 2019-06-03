@@ -9,9 +9,11 @@ import {
   generateListEndpoint,
 } from '../../standardMethods';
 import {
-  AssetMapping3D,
   AssetMappings3DListFilter,
   CogniteInternalId,
+} from '../../types/custom';
+import {
+  AssetMapping3D,
   CreateAssetMapping3D,
   DeleteAssetMapping3D,
 } from '../../types/types';

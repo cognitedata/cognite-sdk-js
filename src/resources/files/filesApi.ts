@@ -11,15 +11,17 @@ import {
   generateUpdateEndpoint,
 } from '../../standardMethods';
 import {
-  ExternalFilesMetadata,
-  FileChangeUpdate,
   FileContent,
-  FileLink,
   FileRequestFilter,
-  FilesMetadata,
-  FilesSearchFilter,
   IdEither,
   UploadFileMetadataResponse,
+} from '../../types/custom';
+import {
+  ExternalFilesMetadata,
+  FileChangeItem,
+  FileLink,
+  FilesMetadata,
+  FilesSearchFilter,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
 import {
@@ -144,5 +146,5 @@ export type FilesGetDownloadUrlsEndpoint = (
 ) => Promise<(FileLink & IdEither)[]>;
 
 export type FilesUpdateEndpoint = (
-  changes: FileChangeUpdate[]
+  changes: FileChangeItem[]
 ) => Promise<FilesMetadata[]>;

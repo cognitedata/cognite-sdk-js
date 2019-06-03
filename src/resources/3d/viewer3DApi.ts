@@ -11,6 +11,8 @@ import {
   CogniteInternalId,
   List3DNodesQuery,
   ListRevealSectors3DQuery,
+} from '../../types/custom';
+import {
   RevealNode3D,
   RevealRevision3D,
   RevealSector3D,

@@ -7,11 +7,8 @@ import {
   generateDeleteEndpoint,
   generateListNoCursorEndpoint,
 } from '../../standardMethods';
-import {
-  CogniteInternalId,
-  ServiceAccount,
-  ServiceAccountInput,
-} from '../../types/types';
+import { CogniteInternalId } from '../../types/custom';
+import { ServiceAccount, ServiceAccountInput } from '../../types/types';
 import { projectUrl } from '../../utils';
 
 export class ServiceAccountsAPI {

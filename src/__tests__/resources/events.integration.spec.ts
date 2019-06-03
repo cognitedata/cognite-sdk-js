@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { API } from '../../resources/api';
-import { CogniteEvent } from '../../types/types';
+import { Event } from '../../types/types';
 import { setupClient } from '../testUtils';
 
 describe('Events integration test', () => {
@@ -23,7 +23,7 @@ describe('Events integration test', () => {
   ];
   const newDescription = 'New description';
 
-  let createdEvents: CogniteEvent[];
+  let createdEvents: Event[];
 
   test('create', async () => {
     createdEvents = await client.events.create(events);

@@ -7,9 +7,12 @@ import {
   Node3D,
   RevealNode3D,
   RevealRevision3D,
+  RevealRevision3DStatusEnum,
   RevealSector3D,
   Revision3D,
+  Revision3DStatusEnum,
   UnrealRevision3D,
+  UnrealRevision3DStatusEnum,
 } from '../../types/types';
 import { transformDateInRequest } from '../../utils';
 import { randomInt, setupClient, string2arrayBuffer } from '../testUtils';
@@ -29,7 +32,7 @@ describe('3D mocked', () => {
     fileId: randomInt(),
     published: true,
     id: randomInt(),
-    status: 'Done',
+    status: Revision3DStatusEnum.Done,
   };
   const nodes: Node3D[] = [
     {
@@ -47,6 +50,7 @@ describe('3D mocked', () => {
   ];
   const revisionReveal: RevealRevision3D = {
     ...revision,
+    status: RevealRevision3DStatusEnum.Done,
     sceneThreedFiles: [
       {
         version: randomInt(),
@@ -80,7 +84,10 @@ describe('3D mocked', () => {
       ],
     },
   ];
-  const revisionUnreal: UnrealRevision3D = { ...revisionReveal };
+  const revisionUnreal: UnrealRevision3D = {
+    ...revisionReveal,
+    status: UnrealRevision3DStatusEnum.Done,
+  };
 
   beforeAll(async () => {
     client = setupClient();

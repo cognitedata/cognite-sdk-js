@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { API } from '../../resources/api';
-import { SecurityCategory } from '../../types/types';
+import { SecurityCategoryDTO } from '../../types/types';
 import { randomInt, setupClient } from '../testUtils';
 
 describe('Security categories integration test', () => {
@@ -9,7 +9,7 @@ describe('Security categories integration test', () => {
   beforeAll(async () => {
     client = setupClient();
   });
-  let securityCategories: SecurityCategory[];
+  let securityCategories: SecurityCategoryDTO[];
 
   test('create', async () => {
     const securityCategoriesToCreate = [
