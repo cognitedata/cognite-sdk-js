@@ -17,21 +17,14 @@ import {
 import { projectUrl } from '../../utils';
 
 export class ApiKeysAPI {
-  private listEndpoint: ApiKeysListEndpoint;
-  private createEndpoint: ApiKeysCreateEndpoint;
-  private deleteEndpoint: ApiKeysDeleteEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/apikeys';
-    this.createEndpoint = generateCreateEndpoint(instance, path, map);
-    this.listEndpoint = generateListNoCursorEndpointWithQueryParams(
-      instance,
-      path,
-      map
-    );
-    this.deleteEndpoint = generateDeleteEndpoint(instance, path, map);
-  }
+  /**
+   * [List all api keys](https://doc.cognitedata.com/api/v1/#operation/getApiKeys)
+   *
+   * ```js
+   * const apiKeys = await client.apiKeys.list({ all: true });
+   * ```
+   */
+  public list: ApiKeysListEndpoint;
 
   /**
    * [Create API keys](https://doc.cognitedata.com/api/v1/#operation/createApiKeys)
@@ -40,20 +33,7 @@ export class ApiKeysAPI {
    * const createdApiKeys = await client.apiKeys.create([{ serviceAccountId: 123 }]);
    * ```
    */
-  public create: ApiKeysCreateEndpoint = items => {
-    return this.createEndpoint(items);
-  };
-
-  /**
-   * [List all api keys](https://doc.cognitedata.com/api/v1/#operation/getApiKeys)
-   *
-   * ```js
-   * const apiKeys = await client.apiKeys.list({ all: true });
-   * ```
-   */
-  public list: ApiKeysListEndpoint = scope => {
-    return this.listEndpoint(scope);
-  };
+  public create: ApiKeysCreateEndpoint;
 
   /**
    * [Delete API keys](https://doc.cognitedata.com/api/v1/#operation/deleteApiKeys)
@@ -62,9 +42,19 @@ export class ApiKeysAPI {
    * await client.apiKeys.delete([123, 456]);
    * ```
    */
-  public delete: ApiKeysDeleteEndpoint = ids => {
-    return this.deleteEndpoint(ids);
-  };
+  public delete: ApiKeysDeleteEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/apikeys';
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.list = generateListNoCursorEndpointWithQueryParams(
+      instance,
+      path,
+      map
+    );
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 }
 
 export type ApiKeysListEndpoint = (

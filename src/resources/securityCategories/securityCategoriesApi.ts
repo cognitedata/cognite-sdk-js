@@ -17,18 +17,6 @@ import {
 import { projectUrl } from '../../utils';
 
 export class SecurityCategoriesAPI {
-  private listEndpoint: SecurityCategoriesListEndpoint;
-  private createEndpoint: SecurityCategoriesCreateEndpoint;
-  private deleteEndpoint: SecurityCategoriesDeleteEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/securitycategories';
-    this.listEndpoint = generateListEndpoint(instance, path, map, false);
-    this.createEndpoint = generateCreateEndpoint(instance, path, map);
-    this.deleteEndpoint = generateDeleteEndpoint(instance, path, map);
-  }
-
   /**
    * [List security categories](https://doc.cognitedata.com/api/v1/#operation/getSecurityCategories)
    *
@@ -36,9 +24,7 @@ export class SecurityCategoriesAPI {
    * const securityCategories = await client.securityCategories.list({ sort: 'ASC' });
    * ```
    */
-  public list: SecurityCategoriesListEndpoint = query => {
-    return this.listEndpoint(query);
-  };
+  public list: SecurityCategoriesListEndpoint;
 
   /**
    * [Create security categories](https://doc.cognitedata.com/api/v1/#operation/createSecurityCategories)
@@ -51,9 +37,7 @@ export class SecurityCategoriesAPI {
    * const createdSecurityCategories = await client.securityCategories.create(securityCategories);
    * ```
    */
-  public create: SecurityCategoriesCreateEndpoint = items => {
-    return this.createEndpoint(items);
-  };
+  public create: SecurityCategoriesCreateEndpoint;
 
   /**
    * [Delete security categories](https://doc.cognitedata.com/api/v1/#operation/deleteSecurityCategories)
@@ -62,9 +46,15 @@ export class SecurityCategoriesAPI {
    * await client.securityCategories.delete([123, 456]);
    * ```
    */
-  public delete: SecurityCategoriesDeleteEndpoint = ids => {
-    return this.deleteEndpoint(ids);
-  };
+  public delete: SecurityCategoriesDeleteEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/securitycategories';
+    this.list = generateListEndpoint(instance, path, map, false);
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 }
 
 export type SecurityCategoriesListEndpoint = (

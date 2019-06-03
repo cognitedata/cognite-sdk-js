@@ -19,27 +19,6 @@ import {
 import { projectUrl } from '../../utils';
 
 export class GroupsAPI {
-  private path: string;
-  private instance: AxiosInstance;
-  private map: MetadataMap;
-  private listEndpoint: GroupsListEndpoint;
-  private createEndpoint: GroupsCreateEndpoint;
-  private deleteEndpoint: GroupsDeleteEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = (this.path = projectUrl(project) + '/groups');
-    this.instance = instance;
-    this.map = map;
-    this.listEndpoint = generateListNoCursorEndpointWithQueryParams(
-      instance,
-      path,
-      map
-    );
-    this.createEndpoint = generateCreateEndpoint(instance, path, map);
-    this.deleteEndpoint = generateDeleteEndpoint(instance, path, map);
-  }
-
   /**
    * [List groups](https://doc.cognitedata.com/api/v1/#operation/getGroups)
    *
@@ -47,9 +26,7 @@ export class GroupsAPI {
    * const groups = await client.groups.list({ all: true });
    * ```
    */
-  public list: GroupsListEndpoint = scope => {
-    return this.listEndpoint(scope);
-  };
+  public list: GroupsListEndpoint;
 
   /**
    * [Create groups](https://doc.cognitedata.com/api/v1/#operation/createGroups)
@@ -63,9 +40,7 @@ export class GroupsAPI {
    * }]);
    * ```
    */
-  public create: GroupsCreateEndpoint = items => {
-    return this.createEndpoint(items);
-  };
+  public create: GroupsCreateEndpoint;
 
   /**
    * [Delete groups](https://doc.cognitedata.com/api/v1/#operation/deleteGroups)
@@ -74,9 +49,24 @@ export class GroupsAPI {
    * await client.groups.delete([921923342342323, 871621872721323]);
    * ```
    */
-  public delete: GroupsDeleteEndpoint = ids => {
-    return this.deleteEndpoint(ids);
-  };
+  public delete: GroupsDeleteEndpoint;
+  private path: string;
+  private instance: AxiosInstance;
+  private map: MetadataMap;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = (this.path = projectUrl(project) + '/groups');
+    this.instance = instance;
+    this.map = map;
+    this.list = generateListNoCursorEndpointWithQueryParams(
+      instance,
+      path,
+      map
+    );
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 
   /**
    * [List service accounts in a group](https://doc.cognitedata.com/api/v1/#operation/getMembersOfGroups)

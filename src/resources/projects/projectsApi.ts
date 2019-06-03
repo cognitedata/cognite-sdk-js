@@ -10,18 +10,6 @@ import { ProjectResponse, ProjectUpdate } from '../../types/types';
 import { apiUrl, projectUrl } from '../../utils';
 
 export class ProjectsAPI {
-  private instance: AxiosInstance;
-  private map: MetadataMap;
-  private retrieveEndpoint: ProjectsRetrieveEndpoint;
-
-  /** @hidden */
-  constructor(instance: AxiosInstance, map: MetadataMap) {
-    const path = apiUrl() + '/projects';
-    this.instance = instance;
-    this.map = map;
-    this.retrieveEndpoint = generateRetrieveSingleEndpoint(instance, path, map);
-  }
-
   /**
    * [Retrieve a project](https://doc.cognitedata.com/api/v1/#tag/Projects)
    *
@@ -29,9 +17,17 @@ export class ProjectsAPI {
    * const projectInfo = await client.projects.retrieve('publicdata');
    * ```
    */
-  public retrieve: ProjectsRetrieveEndpoint = projectName => {
-    return this.retrieveEndpoint(projectName);
-  };
+  public retrieve: ProjectsRetrieveEndpoint;
+  private instance: AxiosInstance;
+  private map: MetadataMap;
+
+  /** @hidden */
+  constructor(instance: AxiosInstance, map: MetadataMap) {
+    const path = apiUrl() + '/projects';
+    this.instance = instance;
+    this.map = map;
+    this.retrieve = generateRetrieveSingleEndpoint(instance, path, map);
+  }
 
   /**
    * [Update a project](https://doc.cognitedata.com/api/v1/#operation/putProject)

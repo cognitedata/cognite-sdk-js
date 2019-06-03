@@ -19,24 +19,6 @@ import {
 import { projectUrl } from '../../utils';
 
 export class DataPointsAPI {
-  private insertEndpoint: DataPointsInsertEndpoint;
-  private retrieveEndpoint: DataPointsRetrieveEndpoint;
-  private retrieveLatestEndpoint: DataPointsRetrieveLatestEndpoint;
-  private deleteEndpoint: DataPointsDeleteEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/timeseries/data';
-    this.insertEndpoint = generateInsertEndpoint(instance, path, map);
-    this.retrieveEndpoint = generateSimpleListEndpoint(instance, path, map);
-    this.retrieveLatestEndpoint = generateRetrieveLatestEndpoint(
-      instance,
-      path,
-      map
-    );
-    this.deleteEndpoint = generateDeleteEndpoint(instance, path, map);
-  }
-
   /**
    * [Insert data points](https://doc.cognitedata.com/api/v1/#operation/postMultiTimeSeriesDatapoints)
    *
@@ -44,9 +26,7 @@ export class DataPointsAPI {
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
    */
-  public insert: DataPointsInsertEndpoint = items => {
-    return this.insertEndpoint(items);
-  };
+  public insert: DataPointsInsertEndpoint;
 
   /**
    * [Retrieve data points](https://doc.cognitedata.com/api/v1/#operation/getMultiTimeSeriesDatapoints)
@@ -55,9 +35,7 @@ export class DataPointsAPI {
    * const data = await client.datapoints.retrieve({ items: [{ id: 123 }] });
    * ```
    */
-  public retrieve: DataPointsRetrieveEndpoint = query => {
-    return this.retrieveEndpoint(query);
-  };
+  public retrieve: DataPointsRetrieveEndpoint;
 
   /**
    * [Get latest data point in a time series](https://doc.cognitedata.com/api/v1/#operation/getLatest)
@@ -75,9 +53,7 @@ export class DataPointsAPI {
    * ]);
    * ```
    */
-  public retrieveLatest: DataPointsRetrieveLatestEndpoint = items => {
-    return this.retrieveLatestEndpoint(items);
-  };
+  public retrieveLatest: DataPointsRetrieveLatestEndpoint;
 
   /**
    * [Delete data points](https://doc.cognitedata.com/api/v1/#operation/deleteDatapoints)
@@ -86,9 +62,16 @@ export class DataPointsAPI {
    * await client.datapoints.delete([{id: 123, inclusiveBegin: new Date('1 jan 2019')}]);
    * ```
    */
-  public delete: DataPointsDeleteEndpoint = query => {
-    return this.deleteEndpoint(query);
-  };
+  public delete: DataPointsDeleteEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/timeseries/data';
+    this.insert = generateInsertEndpoint(instance, path, map);
+    this.retrieve = generateSimpleListEndpoint(instance, path, map);
+    this.retrieveLatest = generateRetrieveLatestEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 }
 
 export type DataPointsInsertEndpoint = (

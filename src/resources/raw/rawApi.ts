@@ -24,27 +24,14 @@ import {
 import { projectUrl } from '../../utils';
 
 export class RawAPI {
-  private path: string;
-  private instance: AxiosInstance;
-  private map: MetadataMap;
-  private listDatabasesEndpoint: RawListDatabasesEndpoint;
-  private createDatabasesEndpoint: RawCreateDatabasesEndpoint;
-  private deleteDatabasesEndpoint: RawDeleteDatabasesEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    this.instance = instance;
-    this.map = map;
-    const path = (this.path = projectUrl(project) + '/raw/dbs');
-    this.listDatabasesEndpoint = generateListEndpoint(
-      instance,
-      this.path,
-      map,
-      false
-    );
-    this.createDatabasesEndpoint = generateCreateEndpoint(instance, path, map);
-    this.deleteDatabasesEndpoint = generateDeleteEndpoint(instance, path, map);
-  }
+  /**
+   * [List databases](https://doc.cognitedata.com/api/v1/#operation/getDBs)
+   *
+   * ```js
+   * const databases = await client.raw.listDatabases();
+   * ```
+   */
+  public listDatabases: RawListDatabasesEndpoint;
 
   /**
    * [Create databases](https://doc.cognitedata.com/api/v1/#operation/createDBs)
@@ -53,20 +40,7 @@ export class RawAPI {
    * const databases = await client.raw.createDatabases([{ name: 'My company' }]);
    * ```
    */
-  public createDatabases: RawCreateDatabasesEndpoint = items => {
-    return this.createDatabasesEndpoint(items);
-  };
-
-  /**
-   * [List databases](https://doc.cognitedata.com/api/v1/#operation/getDBs)
-   *
-   * ```js
-   * const databases = await client.raw.listDatabases();
-   * ```
-   */
-  public listDatabases: RawListDatabasesEndpoint = query => {
-    return this.listDatabasesEndpoint(query);
-  };
+  public createDatabases: RawCreateDatabasesEndpoint;
 
   /**
    * [Delete databases](https://doc.cognitedata.com/api/v1/#operation/deleteDBs)
@@ -75,9 +49,20 @@ export class RawAPI {
    * await client.raw.deleteDatabases([{ name: 'My company' }]);
    * ```
    */
-  public deleteDatabases: RawDeleteDatabasesEndpoint = items => {
-    return this.deleteDatabasesEndpoint(items);
-  };
+  public deleteDatabases: RawDeleteDatabasesEndpoint;
+  private path: string;
+  private instance: AxiosInstance;
+  private map: MetadataMap;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    this.instance = instance;
+    this.map = map;
+    const path = (this.path = projectUrl(project) + '/raw/dbs');
+    this.listDatabases = generateListEndpoint(instance, this.path, map, false);
+    this.createDatabases = generateCreateEndpoint(instance, path, map);
+    this.deleteDatabases = generateDeleteEndpoint(instance, path, map);
+  }
 
   /**
    * [List tables in database](https://doc.cognitedata.com/api/v1/#operation/getTables)

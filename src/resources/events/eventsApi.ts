@@ -22,24 +22,6 @@ import {
 import { projectUrl } from '../../utils';
 
 export class EventsAPI {
-  private createEndpoint: EventsCreateEndpoint;
-  private listEndpoint: EventsListEndpoint;
-  private retrieveEndpoint: EventsRetrieveEndpoint;
-  private updateEndpoint: EventsUpdateEndpoint;
-  private searchEndpoint: EventsSearchEndpoint;
-  private deleteEndpoint: EventsDeleteEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/events';
-    this.createEndpoint = generateCreateEndpoint(instance, path, map);
-    this.listEndpoint = generateListEndpoint(instance, path, map, true);
-    this.retrieveEndpoint = generateRetrieveEndpoint(instance, path, map);
-    this.updateEndpoint = generateUpdateEndpoint(instance, path, map);
-    this.searchEndpoint = generateSearchEndpoint(instance, path, map);
-    this.deleteEndpoint = generateDeleteEndpoint(instance, path, map);
-  }
-
   /**
    * [Create events](https://doc.cognitedata.com/api/v1/#operation/createEvents)
    *
@@ -51,9 +33,7 @@ export class EventsAPI {
    * const createdEvents = await client.events.create(events);
    * ```
    */
-  public create: EventsCreateEndpoint = items => {
-    return this.createEndpoint(items);
-  };
+  public create: EventsCreateEndpoint;
 
   /**
    * [List events](https://doc.cognitedata.com/api/v1/#operation/advancedListEvents)
@@ -62,9 +42,7 @@ export class EventsAPI {
    * const events = await client.events.list({ filter: { startTime: { min: new Date('1 jan 2018') }, endTime: { max: new Date('1 jan 2019') } } });
    * ```
    */
-  public list: EventsListEndpoint = scope => {
-    return this.listEndpoint(scope);
-  };
+  public list: EventsListEndpoint;
 
   /**
    * [Retrieve events](https://doc.cognitedata.com/api/v1/#operation/byIdsEvents)
@@ -73,9 +51,7 @@ export class EventsAPI {
    * const events = await client.events.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve: EventsRetrieveEndpoint = ids => {
-    return this.retrieveEndpoint(ids);
-  };
+  public retrieve: EventsRetrieveEndpoint;
 
   /**
    * [Update events](https://doc.cognitedata.com/api/v1/#operation/updateEvents)
@@ -84,9 +60,7 @@ export class EventsAPI {
    * const events = await client.events.update([{id: 123, update: {description: {set: 'New description'}}}]);
    * ```
    */
-  public update: EventsUpdateEndpoint = changes => {
-    return this.updateEndpoint(changes);
-  };
+  public update: EventsUpdateEndpoint;
 
   /**
    * [Search for events](https://doc.cognitedata.com/api/v1/#operation/searchEvents)
@@ -102,9 +76,7 @@ export class EventsAPI {
    * }]);
    * ```
    */
-  public search: EventsSearchEndpoint = query => {
-    return this.searchEndpoint(query);
-  };
+  public search: EventsSearchEndpoint;
 
   /**
    * [Delete events](https://doc.cognitedata.com/api/v1/#operation/deleteEvents)
@@ -113,9 +85,18 @@ export class EventsAPI {
    * await client.events.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public delete: EventsDeleteEndpoint = ids => {
-    return this.deleteEndpoint(ids);
-  };
+  public delete: EventsDeleteEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/events';
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.list = generateListEndpoint(instance, path, map, true);
+    this.retrieve = generateRetrieveEndpoint(instance, path, map);
+    this.update = generateUpdateEndpoint(instance, path, map);
+    this.search = generateSearchEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 }
 
 export type EventsCreateEndpoint = (

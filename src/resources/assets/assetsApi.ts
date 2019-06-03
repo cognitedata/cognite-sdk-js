@@ -23,29 +23,6 @@ import { projectUrl } from '../../utils';
 import { assetChunker } from './assetUtils';
 
 export class AssetsAPI {
-  private createEndpoint: AssetCreateEndpoint;
-  private listEndpoint: AssetListEndpoint;
-  private retrieveEndpoint: AssetRetrieveEndpoint;
-  private updateEndpoint: AssetUpdateEndpoint;
-  private searchEndpoint: AssetSearchEndpoint;
-  private deleteEndpoint: AssetDeleteEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/assets';
-    this.createEndpoint = generateCreateEndpoint(
-      instance,
-      path,
-      map,
-      assetChunker
-    );
-    this.listEndpoint = generateListEndpoint(instance, path, map, true);
-    this.retrieveEndpoint = generateRetrieveEndpoint(instance, path, map);
-    this.updateEndpoint = generateUpdateEndpoint(instance, path, map);
-    this.searchEndpoint = generateSearchEndpoint(instance, path, map);
-    this.deleteEndpoint = generateDeleteEndpoint(instance, path, map);
-  }
-
   /**
    * [Creates new assets](https://doc.cognitedata.com/api/v1/#operation/createAssets)
    *
@@ -57,9 +34,7 @@ export class AssetsAPI {
    * const createdAssets = await client.assets.create(assets);
    * ```
    */
-  public create: AssetCreateEndpoint = items => {
-    return this.createEndpoint(items);
-  };
+  public create: AssetCreateEndpoint;
 
   /**
    * [List assets](https://doc.cognitedata.com/api/v1/#operation/listAssets)
@@ -68,9 +43,7 @@ export class AssetsAPI {
    * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
    * ```
    */
-  public list: AssetListEndpoint = scope => {
-    return this.listEndpoint(scope);
-  };
+  public list: AssetListEndpoint;
 
   /**
    * [Retrieve assets](https://doc.cognitedata.com/api/v1/#operation/byIdsAssets)
@@ -79,9 +52,7 @@ export class AssetsAPI {
    * const assets = await client.assets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve: AssetRetrieveEndpoint = ids => {
-    return this.retrieveEndpoint(ids);
-  };
+  public retrieve: AssetRetrieveEndpoint;
 
   /**
    * [Update assets](https://doc.cognitedata.com/api/v1/#operation/updateAssets)
@@ -90,9 +61,7 @@ export class AssetsAPI {
    * const assets = await client.assets.update([{id: 123, update: {name: {set: 'New name'}}}]);
    * ```
    */
-  public update: AssetUpdateEndpoint = changes => {
-    return this.updateEndpoint(changes);
-  };
+  public update: AssetUpdateEndpoint;
 
   /**
    * [Search for assets](https://doc.cognitedata.com/api/v1/#operation/searchAssets)
@@ -108,9 +77,7 @@ export class AssetsAPI {
    * }]);
    * ```
    */
-  public search: AssetSearchEndpoint = query => {
-    return this.searchEndpoint(query);
-  };
+  public search: AssetSearchEndpoint;
 
   /**
    * [Delete assets](https://doc.cognitedata.com/api/v1/#operation/deleteAssets)
@@ -119,9 +86,18 @@ export class AssetsAPI {
    * await client.assets.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public delete: AssetDeleteEndpoint = ids => {
-    return this.deleteEndpoint(ids);
-  };
+  public delete: AssetDeleteEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/assets';
+    this.create = generateCreateEndpoint(instance, path, map, assetChunker);
+    this.list = generateListEndpoint(instance, path, map, true);
+    this.retrieve = generateRetrieveEndpoint(instance, path, map);
+    this.update = generateUpdateEndpoint(instance, path, map);
+    this.search = generateSearchEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 }
 
 export type AssetCreateEndpoint = (

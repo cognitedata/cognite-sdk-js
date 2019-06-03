@@ -28,30 +28,6 @@ import {
 } from './filesUtils';
 
 export class FilesAPI {
-  private listEndpoint: FilesListEndpoint;
-  private uploadEndpoint: FilesUploadEndpoint;
-  private retrieveEndpoint: FilesRetrieveEndpoint;
-  private searchEndpoint: FilesSearchEndpoint;
-  private deleteEndpoint: FilesDeleteEndpoint;
-  private getDownloadUrlsEndpoint: FilesGetDownloadUrlsEndpoint;
-  private updateEndpoint: FilesUpdateEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/files';
-    this.listEndpoint = generateListEndpoint(instance, path, map, true);
-    this.uploadEndpoint = generateUploadEndpoint(instance, path, map);
-    this.retrieveEndpoint = generateRetrieveEndpoint(instance, path, map);
-    this.searchEndpoint = generateSearchEndpoint(instance, path, map);
-    this.deleteEndpoint = generateDeleteEndpoint(instance, path, map);
-    this.getDownloadUrlsEndpoint = generateDownloadUrlEndpoint(
-      instance,
-      path,
-      map
-    );
-    this.updateEndpoint = generateUpdateEndpoint(instance, path, map);
-  }
-
   /**
    * [List files](https://doc.cognitedata.com/api/v1/#operation/advancedListFiles)
    *
@@ -59,9 +35,7 @@ export class FilesAPI {
    * const files = await client.files.list({filter: {mimeType: 'image/png'}});
    * ```
    */
-  public list: FilesListEndpoint = scope => {
-    return this.listEndpoint(scope);
-  };
+  public list: FilesListEndpoint;
 
   /**
    * [Upload a file](https://doc.cognitedata.com/api/v1/#operation/initFileUpload)
@@ -75,19 +49,7 @@ export class FilesAPI {
    * // then upload using the file.uploadUrl
    * ```
    */
-  public upload: FilesUploadEndpoint = (
-    metadata,
-    fileContent,
-    overwrite,
-    waitUntilAcknowledged
-  ) => {
-    return this.uploadEndpoint(
-      metadata,
-      fileContent,
-      overwrite,
-      waitUntilAcknowledged
-    );
-  };
+  public upload: FilesUploadEndpoint;
 
   /**
    * [Retrieve files](https://doc.cognitedata.com/api/v1/#operation/byIdsFiles)
@@ -96,9 +58,7 @@ export class FilesAPI {
    * const files = await client.files.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve: FilesRetrieveEndpoint = ids => {
-    return this.retrieveEndpoint(ids);
-  };
+  public retrieve: FilesRetrieveEndpoint;
 
   /**
    * [Search for files](https://doc.cognitedata.com/api/v1/#operation/searchFiles)
@@ -114,9 +74,7 @@ export class FilesAPI {
    * }]);
    * ```
    */
-  public search: FilesSearchEndpoint = query => {
-    return this.searchEndpoint(query);
-  };
+  public search: FilesSearchEndpoint;
 
   /**
    * [Delete files](https://doc.cognitedata.com/api/v1/#operation/deleteFiles)
@@ -125,9 +83,7 @@ export class FilesAPI {
    * await client.files.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public delete: FilesDeleteEndpoint = ids => {
-    return this.deleteEndpoint(ids);
-  };
+  public delete: FilesDeleteEndpoint;
 
   /**
    * [Get download urls](https://doc.cognitedata.com/api/v1/#operation/deleteFiles)
@@ -136,9 +92,7 @@ export class FilesAPI {
    * await client.files.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public getDownloadUrls: FilesGetDownloadUrlsEndpoint = ids => {
-    return this.getDownloadUrlsEndpoint(ids);
-  };
+  public getDownloadUrls: FilesGetDownloadUrlsEndpoint;
 
   /**
    * [Update files](https://doc.cognitedata.com/api/v1/#operation/updateFiles)
@@ -147,9 +101,19 @@ export class FilesAPI {
    * const files = await client.files.update([{id: 123, update: {description: {set: 'New description'}}}]);
    * ```
    */
-  public update: FilesUpdateEndpoint = changes => {
-    return this.updateEndpoint(changes);
-  };
+  public update: FilesUpdateEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/files';
+    this.list = generateListEndpoint(instance, path, map, true);
+    this.upload = generateUploadEndpoint(instance, path, map);
+    this.retrieve = generateRetrieveEndpoint(instance, path, map);
+    this.search = generateSearchEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+    this.getDownloadUrls = generateDownloadUrlEndpoint(instance, path, map);
+    this.update = generateUpdateEndpoint(instance, path, map);
+  }
 }
 
 export type FilesListEndpoint = (

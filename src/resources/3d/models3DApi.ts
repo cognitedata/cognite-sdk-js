@@ -21,22 +21,6 @@ import {
 import { projectUrl } from '../../utils';
 
 export class Models3DAPI {
-  private listEndpoint: Models3DListEndpoint;
-  private createEndpoint: Models3DCreateEndpoint;
-  private updateEndpoint: Models3DUpdateEndpoint;
-  private deleteEndpoint: Models3DDeleteEndpoint;
-  private retrieveEndpoint: Models3DRetrieveEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/3d/models';
-    this.listEndpoint = generateListEndpoint(instance, path, map, false);
-    this.createEndpoint = generateCreateEndpoint(instance, path, map);
-    this.updateEndpoint = generateUpdateEndpoint(instance, path, map);
-    this.deleteEndpoint = generateDeleteEndpoint(instance, path, map);
-    this.retrieveEndpoint = generateRetrieveSingleEndpoint(instance, path, map);
-  }
-
   /**
    * [List 3D models](https://doc.cognitedata.com/api/v1/#operation/get3DModels)
    *
@@ -44,9 +28,7 @@ export class Models3DAPI {
    * const models3D = await client.models3D.list({ published: true });
    * ```
    */
-  public list: Models3DListEndpoint = scope => {
-    return this.listEndpoint(scope);
-  };
+  public list: Models3DListEndpoint;
 
   /**
    * [Create 3D models](https://doc.cognitedata.com/api/v1/#operation/create3DModels)
@@ -59,9 +41,7 @@ export class Models3DAPI {
    * const models3D = await client.models3D.create(modelsToCreate);
    * ```
    */
-  public create: Models3DCreateEndpoint = models => {
-    return this.createEndpoint(models);
-  };
+  public create: Models3DCreateEndpoint;
 
   /**
    * [Update 3D models](https://doc.cognitedata.com/api/v1/#operation/update3DModels)
@@ -74,9 +54,7 @@ export class Models3DAPI {
    * const models3D = await client.models3D.update(modelsToUpdate);
    * ```
    */
-  public update: Models3DUpdateEndpoint = items => {
-    return this.updateEndpoint(items);
-  };
+  public update: Models3DUpdateEndpoint;
 
   /**
    * [Delete 3D models](https://doc.cognitedata.com/api/v1/#operation/delete3DModels)
@@ -85,9 +63,7 @@ export class Models3DAPI {
    * await client.models3D.delete([{ id: 3744350296805509 }, { id: 8163365893677939 }]);
    * ```
    */
-  public delete: Models3DDeleteEndpoint = ids => {
-    return this.deleteEndpoint(ids);
-  };
+  public delete: Models3DDeleteEndpoint;
 
   /**
    * [Retrieve a 3D model](https://doc.cognitedata.com/api/v1/#operation/get3DModel)
@@ -96,9 +72,17 @@ export class Models3DAPI {
    * await client.models3D.retrieve(3744350296805509);
    * ```
    */
-  public retrieve: Models3DRetrieveEndpoint = ids => {
-    return this.retrieveEndpoint(ids);
-  };
+  public retrieve: Models3DRetrieveEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/3d/models';
+    this.list = generateListEndpoint(instance, path, map, false);
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.update = generateUpdateEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+    this.retrieve = generateRetrieveSingleEndpoint(instance, path, map);
+  }
 }
 
 export type Models3DListEndpoint = (

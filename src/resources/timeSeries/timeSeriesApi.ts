@@ -22,23 +22,14 @@ import {
 import { projectUrl } from '../../utils';
 
 export class TimeSeriesAPI {
-  private listEndpoint: TimeSeriesListEndpoint;
-  private createEndpoint: TimeSeriesCreateEndpoint;
-  private searchEndpoint: TimeSeriesSearchEndpoint;
-  private retrieveEndpoint: TimeSeriesRetrieveEndpoint;
-  private updateEndpoint: TimeSeriesUpdateEndpoint;
-  private deleteEndpoint: TimeSeriesDeleteEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/timeseries';
-    this.createEndpoint = generateCreateEndpoint(instance, path, map);
-    this.listEndpoint = generateListEndpoint(instance, path, map, false);
-    this.searchEndpoint = generateSearchEndpoint(instance, path, map);
-    this.retrieveEndpoint = generateRetrieveEndpoint(instance, path, map);
-    this.updateEndpoint = generateUpdateEndpoint(instance, path, map);
-    this.deleteEndpoint = generateDeleteEndpoint(instance, path, map);
-  }
+  /**
+   * [List time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeries)
+   *
+   * ```js
+   * const timeseries = await client.timeseries.list({ includeMetadata: false, assetIds: [1, 2] });
+   * ```
+   */
+  public list: TimeSeriesListEndpoint;
 
   /**
    * [Create time series](https://doc.cognitedata.com/api/v1/#operation/postTimeSeries)
@@ -51,20 +42,7 @@ export class TimeSeriesAPI {
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    */
-  public create: TimeSeriesCreateEndpoint = items => {
-    return this.createEndpoint(items);
-  };
-
-  /**
-   * [List time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeries)
-   *
-   * ```js
-   * const timeseries = await client.timeseries.list({ includeMetadata: false, assetIds: [1, 2] });
-   * ```
-   */
-  public list: TimeSeriesListEndpoint = scope => {
-    return this.listEndpoint(scope);
-  };
+  public create: TimeSeriesCreateEndpoint;
 
   /**
    * [Search for time series](https://doc.cognitedata.com/api/v1/#operation/searchTimeSeries)
@@ -80,9 +58,7 @@ export class TimeSeriesAPI {
    * }]);
    * ```
    */
-  public search: TimeSeriesSearchEndpoint = query => {
-    return this.searchEndpoint(query);
-  };
+  public search: TimeSeriesSearchEndpoint;
 
   /**
    * [Retrieve time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeriesByIds)
@@ -91,9 +67,7 @@ export class TimeSeriesAPI {
    * const timeseries = await client.timeseries.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve: TimeSeriesRetrieveEndpoint = ids => {
-    return this.retrieveEndpoint(ids);
-  };
+  public retrieve: TimeSeriesRetrieveEndpoint;
 
   /**
    * [Update time series](https://doc.cognitedata.com/api/v1/#operation/alterTimeSeries)
@@ -102,9 +76,7 @@ export class TimeSeriesAPI {
    * const timeseries = await client.timeseries.update([{id: 123, update: { name: 'New name' }}]);
    * ```
    */
-  public update: TimeSeriesUpdateEndpoint = changes => {
-    return this.updateEndpoint(changes);
-  };
+  public update: TimeSeriesUpdateEndpoint;
 
   /**
    * [Delete time series](https://doc.cognitedata.com/api/v1/#operation/deleteTimeSeries)
@@ -113,9 +85,18 @@ export class TimeSeriesAPI {
    * await client.timeseries.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public delete: TimeSeriesDeleteEndpoint = ids => {
-    return this.deleteEndpoint(ids);
-  };
+  public delete: TimeSeriesDeleteEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/timeseries';
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.list = generateListEndpoint(instance, path, map, false);
+    this.search = generateSearchEndpoint(instance, path, map);
+    this.retrieve = generateRetrieveEndpoint(instance, path, map);
+    this.update = generateUpdateEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 }
 
 export type TimeSeriesListEndpoint = (

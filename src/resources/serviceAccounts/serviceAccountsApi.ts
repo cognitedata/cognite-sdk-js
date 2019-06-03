@@ -15,18 +15,6 @@ import {
 import { projectUrl } from '../../utils';
 
 export class ServiceAccountsAPI {
-  private listEndpoint: ServiceAccountsListEndpoint;
-  private createEndpoint: ServiceAccountsCreateEndpoint;
-  private deleteEndpoint: ServiceAccountsDeleteEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/serviceaccounts';
-    this.listEndpoint = generateListNoCursorEndpoint(instance, path, map);
-    this.createEndpoint = generateCreateEndpoint(instance, path, map);
-    this.deleteEndpoint = generateDeleteEndpoint(instance, path, map);
-  }
-
   /**
    * [List all service accounts](https://doc.cognitedata.com/api/v1/#operation/getServiceAccounts)
    *
@@ -34,9 +22,7 @@ export class ServiceAccountsAPI {
    * const serviceaccounts = await client.serviceAccounts.list();
    * ```
    */
-  public list: ServiceAccountsListEndpoint = () => {
-    return this.listEndpoint();
-  };
+  public list: ServiceAccountsListEndpoint;
 
   /**
    * [Create service accounts](https://doc.cognitedata.com/api/v1/#operation/createServiceAccounts)
@@ -49,9 +35,7 @@ export class ServiceAccountsAPI {
    * const createdServiceAccounts = await client.serviceAccounts.create(serviceAccounts);
    * ```
    */
-  public create: ServiceAccountsCreateEndpoint = items => {
-    return this.createEndpoint(items);
-  };
+  public create: ServiceAccountsCreateEndpoint;
 
   /**
    * [Delete service accounts](https://doc.cognitedata.com/api/v1/#operation/deleteServiceAccounts)
@@ -60,9 +44,15 @@ export class ServiceAccountsAPI {
    * await client.serviceAccounts.delete([123, 456]);
    * ```
    */
-  public delete: ServiceAccountsDeleteEndpoint = items => {
-    return this.deleteEndpoint(items);
-  };
+  public delete: ServiceAccountsDeleteEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/serviceaccounts';
+    this.list = generateListNoCursorEndpoint(instance, path, map);
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 }
 
 export type ServiceAccountsListEndpoint = () => Promise<ServiceAccount[]>;
