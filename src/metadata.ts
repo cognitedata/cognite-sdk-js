@@ -1,7 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosResponse } from 'axios';
-
 export interface Metadata {
   status: number;
   headers: { [key: string]: string };
@@ -15,18 +13,15 @@ export class MetadataMap {
   }
 
   public addAndReturn<T>(value: T, metadata: Metadata): T {
-    this.map.set(value, metadata);
+    this.map.set(value, {
+      // we extract out only what is necessary
+      status: metadata.status,
+      headers: metadata.headers,
+    });
     return value;
   }
 
   public get(value: any): undefined | Metadata {
     return this.map.get(value);
   }
-}
-
-export function convertAxiosResponseToMetadata(
-  axiosResponse: AxiosResponse
-): Metadata {
-  const { status, headers } = axiosResponse;
-  return { status, headers };
 }

@@ -2,7 +2,7 @@
 
 import { AxiosInstance } from 'axios';
 import { rawRequest } from '../../axiosWrappers';
-import { convertAxiosResponseToMetadata, MetadataMap } from '../../metadata';
+import { MetadataMap } from '../../metadata';
 import { generateRetrieveSingleEndpoint } from '../../standardMethods';
 import {
   CogniteInternalId,
@@ -92,15 +92,9 @@ export function generateUploadEndpoint(
         axiosInstance,
         resourcePath
       );
-      return metadataMap.addAndReturn(
-        fileInfo,
-        convertAxiosResponseToMetadata(response)
-      );
+      return metadataMap.addAndReturn(fileInfo, response);
     }
-    return metadataMap.addAndReturn(
-      file,
-      convertAxiosResponseToMetadata(response)
-    );
+    return metadataMap.addAndReturn(file, response);
   };
 }
 
@@ -122,9 +116,6 @@ export function generateDownloadUrlEndpoint<RequestType, ResponseType>(
       },
       true
     );
-    return metadataMap.addAndReturn(
-      response.data.items,
-      convertAxiosResponseToMetadata(response)
-    );
+    return metadataMap.addAndReturn(response.data.items, response);
   };
 }

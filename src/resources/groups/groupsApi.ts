@@ -2,7 +2,7 @@
 
 import { AxiosInstance } from 'axios';
 import { rawRequest } from '../../axiosWrappers';
-import { convertAxiosResponseToMetadata, MetadataMap } from '../../metadata';
+import { MetadataMap } from '../../metadata';
 import {
   generateCreateEndpoint,
   generateDeleteEndpoint,
@@ -103,7 +103,7 @@ export class GroupsAPI {
       },
       true
     );
-    return this.map.addAndReturn({}, convertAxiosResponseToMetadata(response));
+    return this.map.addAndReturn({}, response);
   };
 
   /**
@@ -126,7 +126,7 @@ export class GroupsAPI {
       },
       true
     );
-    return this.map.addAndReturn({}, convertAxiosResponseToMetadata(response));
+    return this.map.addAndReturn({}, response);
   };
 
   private serviceAccountPath = (groupId: number) =>

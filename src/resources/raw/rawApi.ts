@@ -3,7 +3,7 @@
 import { AxiosInstance } from 'axios';
 import { CogniteAsyncIterator } from '../../autoPagination';
 import { rawRequest } from '../../axiosWrappers';
-import { convertAxiosResponseToMetadata, MetadataMap } from '../../metadata';
+import { MetadataMap } from '../../metadata';
 import {
   generateCreateEndpoint,
   generateDeleteEndpoint,
@@ -100,10 +100,7 @@ export class RawAPI {
       data: { items },
       params: { ensureParent },
     });
-    return this.map.addAndReturn(
-      response.data.items,
-      convertAxiosResponseToMetadata(response)
-    );
+    return this.map.addAndReturn(response.data.items, response);
   };
 
   /**
@@ -167,7 +164,7 @@ export class RawAPI {
       data: { items },
       params: { ensureParent },
     });
-    return this.map.addAndReturn({}, convertAxiosResponseToMetadata(response));
+    return this.map.addAndReturn({}, response);
   };
 
   /**

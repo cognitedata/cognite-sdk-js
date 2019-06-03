@@ -2,7 +2,7 @@
 
 import { AxiosInstance } from 'axios';
 import { rawRequest } from '../../axiosWrappers';
-import { convertAxiosResponseToMetadata, MetadataMap } from '../../metadata';
+import { MetadataMap } from '../../metadata';
 import { CogniteInternalId } from '../../types/types';
 import { projectUrl } from '../../utils';
 
@@ -31,10 +31,7 @@ export class Files3DAPI {
       method: 'get',
       responseType: 'arraybuffer',
     });
-    return this.map.addAndReturn(
-      response.data,
-      convertAxiosResponseToMetadata(response)
-    );
+    return this.map.addAndReturn(response.data, response);
   };
 }
 
