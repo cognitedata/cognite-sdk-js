@@ -43,6 +43,7 @@ describeIfCondition(
 
     beforeAll(async () => {
       client = setupClient();
+      jest.setTimeout(2 * 60 * 1000);
 
       const rootAsset = {
         name: 'test-root' + randomInt(),
