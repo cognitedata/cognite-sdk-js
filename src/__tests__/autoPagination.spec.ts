@@ -13,7 +13,7 @@ async function fibListResponse() {
     let first = a;
     let second = b;
     const items = [];
-    const maxFibNumber = 10000;
+    const maxFibNumber = 50000;
     while (first < maxFibNumber && items.length < 2) {
       const sum = first + second;
       items.push(sum);
@@ -57,5 +57,12 @@ describe('makeAutoPaginationMethods', () => {
     ).autoPagingToArray({ limit: maxArraySize });
     expect(thirdFibArray.length).toBeGreaterThan(firstFibArray.length);
     expect(thirdFibArray.length).toBeLessThan(maxArraySize); // fib generator will not produce 10K numbers (check that this works)
+  });
+
+  test('has default limit', async () => {
+    const arr = await makeAutoPaginationMethods(
+      fibListResponse()
+    ).autoPagingToArray();
+    expect(arr.length).toBe(25);
   });
 });
