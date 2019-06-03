@@ -121,7 +121,7 @@ describe('createClientWithOAuth', () => {
     });
 
     test('default onAuthenticate function should be redirect', async done => {
-      const client = await createClientWithOAuth({ project });
+      const client = createClientWithOAuth({ project });
       mockRedirect.mockImplementationOnce(async () => {
         done();
       });
@@ -129,7 +129,7 @@ describe('createClientWithOAuth', () => {
     });
 
     test('onAuthenticate: REDIRECT', async done => {
-      const client = await createClientWithOAuth({
+      const client = createClientWithOAuth({
         project,
         onAuthenticate: REDIRECT,
       });
@@ -140,7 +140,7 @@ describe('createClientWithOAuth', () => {
     });
 
     test('onAuthenticate: POPUP', async done => {
-      const client = await createClientWithOAuth({
+      const client = createClientWithOAuth({
         project,
         onAuthenticate: POPUP,
       });
