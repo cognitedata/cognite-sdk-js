@@ -10,7 +10,7 @@ describe('Groups integration test', () => {
   let serviceAccount: ServiceAccount;
   const now = Date.now();
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
     [serviceAccount] = await client.serviceAccounts.create([
       { name: 'Test' + now },
     ]);

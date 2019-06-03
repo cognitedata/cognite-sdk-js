@@ -7,7 +7,7 @@ import { setupClient } from '../testUtils';
 describe('Files integration test', () => {
   let client: API;
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
   });
   const postfix = new Date().getTime();
   const files = [

@@ -83,7 +83,7 @@ describe('3D mocked', () => {
   const revisionUnreal: UnrealRevision3D = { ...revisionReveal };
 
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
     mock = new MockAdapter(client._instance);
   });
 

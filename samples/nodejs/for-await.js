@@ -12,7 +12,7 @@ if (!apiKey) {
 // Read more about async/await: https://javascript.info/async-await
 
 async function quickstart() {
-  const client = await sdk.createClientWithApiKey({
+  const client = sdk.createClientWithApiKey({
     project,
     apiKey,
   });

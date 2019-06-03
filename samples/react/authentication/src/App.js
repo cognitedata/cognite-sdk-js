@@ -10,7 +10,7 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    const client = await sdk.createClientWithOAuth({
+    const client = sdk.createClientWithOAuth({
       project,
       onAuthenticate: (login) => {
         login.redirect({

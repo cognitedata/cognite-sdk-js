@@ -7,7 +7,7 @@ import { setupClient } from '../testUtils';
 describe('Security categories integration test', () => {
   let client: API;
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
   });
   let securityCategories: SecurityCategory[];
 

@@ -7,7 +7,7 @@ import { setupClient } from '../testUtils';
 describe('Timeseries integration test', () => {
   let client: API;
   beforeAll(async () => {
-    client = await setupClient();
+    client = setupClient();
   });
 
   const timeseries = [

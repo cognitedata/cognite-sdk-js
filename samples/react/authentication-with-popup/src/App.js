@@ -15,7 +15,7 @@ class App extends Component {
       return;
     }
 
-    const client = await sdk.createClientWithOAuth({
+    const client = sdk.createClientWithOAuth({
       project,
       onAuthenticate: (login) => {
         login.popup({
