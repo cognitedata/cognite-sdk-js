@@ -1,0 +1,328 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>FilesAPI | Cognite JavaScript SDK</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">Cognite JavaScript SDK</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../index.html">Globals</a>
+				</li>
+				<li>
+					<a href="filesapi.html">FilesAPI</a>
+				</li>
+			</ul>
+			<h1>Class FilesAPI</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">FilesAPI</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#delete" class="tsd-kind-icon">delete</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#getdownloadurls" class="tsd-kind-icon">get<wbr>Download<wbr>Urls</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#search" class="tsd-kind-icon">search</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#update" class="tsd-kind-icon">update</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#upload" class="tsd-kind-icon">upload</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="delete" class="tsd-anchor"></a>
+					<h3>delete</h3>
+					<div class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesdeleteendpoint" class="tsd-signature-type">FilesDeleteEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/files/filesApi.ts#L86">resources/files/filesApi.ts:86</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteFiles">Delete files</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="getdownloadurls" class="tsd-anchor"></a>
+					<h3>get<wbr>Download<wbr>Urls</h3>
+					<div class="tsd-signature tsd-kind-icon">get<wbr>Download<wbr>Urls<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesgetdownloadurlsendpoint" class="tsd-signature-type">FilesGetDownloadUrlsEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/files/filesApi.ts#L95">resources/files/filesApi.ts:95</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteFiles">Get download urls</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="list" class="tsd-anchor"></a>
+					<h3>list</h3>
+					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <a href="../index.html#fileslistendpoint" class="tsd-signature-type">FilesListEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/files/filesApi.ts#L38">resources/files/filesApi.ts:38</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/advancedListFiles">List files</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.list({<span class="hljs-attr">filter</span>: {<span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/png'</span>}});</code></pre>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="retrieve" class="tsd-anchor"></a>
+					<h3>retrieve</h3>
+					<div class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesretrieveendpoint" class="tsd-signature-type">FilesRetrieveEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/files/filesApi.ts#L61">resources/files/filesApi.ts:61</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/byIdsFiles">Retrieve files</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="search" class="tsd-anchor"></a>
+					<h3>search</h3>
+					<div class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">:</span> <a href="../index.html#filessearchendpoint" class="tsd-signature-type">FilesSearchEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/files/filesApi.ts#L77">resources/files/filesApi.ts:77</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/searchFiles">Search for files</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.search([{
+  <span class="hljs-attr">filter</span>: {
+    <span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/jpg'</span>,
+  },
+  <span class="hljs-attr">search</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'Pump'</span>
+  }
+}]);</code></pre>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="update" class="tsd-anchor"></a>
+					<h3>update</h3>
+					<div class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesupdateendpoint" class="tsd-signature-type">FilesUpdateEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/files/filesApi.ts#L104">resources/files/filesApi.ts:104</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/updateFiles">Update files</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">description</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">'New description'</span>}}}]);</code></pre>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="upload" class="tsd-anchor"></a>
+					<h3>upload</h3>
+					<div class="tsd-signature tsd-kind-icon">upload<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesuploadendpoint" class="tsd-signature-type">FilesUploadEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/files/filesApi.ts#L52">resources/files/filesApi.ts:52</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/initFileUpload">Upload a file</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-comment">// automatic upload:</span>
+<span class="hljs-keyword">const</span> file = <span class="hljs-keyword">await</span> client.files.upload({<span class="hljs-attr">name</span>: <span class="hljs-string">'examplefile.jpg'</span>, <span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/jpg'</span>}, fileContent);
+
+<span class="hljs-comment">// manual with uploadUrl:</span>
+<span class="hljs-keyword">const</span> file = <span class="hljs-keyword">await</span> client.files.upload({<span class="hljs-attr">name</span>: <span class="hljs-string">'examplefile.jpg'</span>, <span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/jpg'</span>});
+<span class="hljs-comment">// then upload using the file.uploadUrl</span></code></pre>
+					</div>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../index.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class">
+						<a href="filesapi.html" class="tsd-kind-icon">FilesAPI</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="filesapi.html#delete" class="tsd-kind-icon">delete</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="filesapi.html#getdownloadurls" class="tsd-kind-icon">get<wbr>Download<wbr>Urls</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="filesapi.html#list" class="tsd-kind-icon">list</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="filesapi.html#retrieve" class="tsd-kind-icon">retrieve</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="filesapi.html#search" class="tsd-kind-icon">search</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="filesapi.html#update" class="tsd-kind-icon">update</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="filesapi.html#upload" class="tsd-kind-icon">upload</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

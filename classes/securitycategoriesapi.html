@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ServiceAccountsAPI | Cognite JavaScript SDK</title>
+	<title>SecurityCategoriesAPI | Cognite JavaScript SDK</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,10 +52,10 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="serviceaccountsapi.html">ServiceAccountsAPI</a>
+					<a href="securitycategoriesapi.html">SecurityCategoriesAPI</a>
 				</li>
 			</ul>
-			<h1>Interface ServiceAccountsAPI</h1>
+			<h1>Class SecurityCategoriesAPI</h1>
 		</div>
 	</div>
 </header>
@@ -66,7 +66,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ServiceAccountsAPI</span>
+						<span class="target">SecurityCategoriesAPI</span>
 					</li>
 				</ul>
 			</section>
@@ -77,9 +77,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="serviceaccountsapi.html#create" class="tsd-kind-icon">create</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="serviceaccountsapi.html#delete" class="tsd-kind-icon">delete</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="serviceaccountsapi.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="securitycategoriesapi.html#create" class="tsd-kind-icon">create</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="securitycategoriesapi.html#delete" class="tsd-kind-icon">delete</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="securitycategoriesapi.html#list" class="tsd-kind-icon">list</a></li>
 							</ul>
 						</section>
 					</div>
@@ -87,113 +87,56 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="create" class="tsd-anchor"></a>
 					<h3>create</h3>
-					<div class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">:</span> <a href="../index.html#securitycategoriescreateendpoint" class="tsd-signature-type">SecurityCategoriesCreateEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2843045/src/resources/serviceAccounts.ts#L38">resources/serviceAccounts.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/securityCategories/securityCategoriesApi.ts#L40">resources/securityCategories/securityCategoriesApi.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/createServiceAccounts">Create service accounts</a></p>
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/createSecurityCategories">Create security categories</a></p>
 						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> serviceAccounts = [
-  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Data extractor'</span> },
-  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Monitor'</span>, <span class="hljs-attr">groups</span>: [<span class="hljs-number">123</span>, <span class="hljs-number">456</span>] },
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> securityCategories = [
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Admins'</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Developers'</span> },
 ];
-<span class="hljs-keyword">const</span> createdServiceAccounts = <span class="hljs-keyword">await</span> client.serviceAccounts.create(serviceAccounts);</code></pre>
-					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="serviceaccountinput.html" class="tsd-signature-type">ServiceAccountInput</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="serviceaccount.html" class="tsd-signature-type">ServiceAccount</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>items: <a href="serviceaccountinput.html" class="tsd-signature-type">ServiceAccountInput</a><span class="tsd-signature-symbol">[]</span></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="serviceaccount.html" class="tsd-signature-type">ServiceAccount</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
+<span class="hljs-keyword">const</span> createdSecurityCategories = <span class="hljs-keyword">await</span> client.securityCategories.create(securityCategories);</code></pre>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="delete" class="tsd-anchor"></a>
 					<h3>delete</h3>
-					<div class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">:</span> <a href="../index.html#securitycategoriesdeleteendpoint" class="tsd-signature-type">SecurityCategoriesDeleteEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2843045/src/resources/serviceAccounts.ts#L47">resources/serviceAccounts.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/securityCategories/securityCategoriesApi.ts#L49">resources/securityCategories/securityCategoriesApi.ts:49</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteServiceAccounts">Delete service accounts</a></p>
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteSecurityCategories">Delete security categories</a></p>
 						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.serviceAccounts.delete([<span class="hljs-number">123</span>, <span class="hljs-number">456</span>]);</code></pre>
-					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>items: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
+						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.securityCategories.delete([<span class="hljs-number">123</span>, <span class="hljs-number">456</span>]);</code></pre>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="list" class="tsd-anchor"></a>
 					<h3>list</h3>
-					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <a href="../index.html#securitycategorieslistendpoint" class="tsd-signature-type">SecurityCategoriesListEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2843045/src/resources/serviceAccounts.ts#L25">resources/serviceAccounts.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/securityCategories/securityCategoriesApi.ts#L27">resources/securityCategories/securityCategoriesApi.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/getServiceAccounts">List all service accounts</a></p>
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/getSecurityCategories">List security categories</a></p>
 						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> serviceaccounts = <span class="hljs-keyword">await</span> client.serviceAccounts.list();</code></pre>
-					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="serviceaccount.html" class="tsd-signature-type">ServiceAccount</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="serviceaccount.html" class="tsd-signature-type">ServiceAccount</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> securityCategories = <span class="hljs-keyword">await</span> client.securityCategories.list({ <span class="hljs-attr">sort</span>: <span class="hljs-string">'ASC'</span> });</code></pre>
 					</div>
 				</section>
 			</section>
@@ -210,17 +153,17 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="serviceaccountsapi.html" class="tsd-kind-icon">Service<wbr>AccountsAPI</a>
+					<li class="current tsd-kind-class">
+						<a href="securitycategoriesapi.html" class="tsd-kind-icon">Security<wbr>CategoriesAPI</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="serviceaccountsapi.html#create" class="tsd-kind-icon">create</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="securitycategoriesapi.html#create" class="tsd-kind-icon">create</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="serviceaccountsapi.html#delete" class="tsd-kind-icon">delete</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="securitycategoriesapi.html#delete" class="tsd-kind-icon">delete</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="serviceaccountsapi.html#list" class="tsd-kind-icon">list</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="securitycategoriesapi.html#list" class="tsd-kind-icon">list</a>
 							</li>
 						</ul>
 					</li>

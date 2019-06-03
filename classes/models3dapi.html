@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Files3DAPI | Cognite JavaScript SDK</title>
+	<title>Models3DAPI | Cognite JavaScript SDK</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,10 +52,10 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="files3dapi.html">Files3DAPI</a>
+					<a href="models3dapi.html">Models3DAPI</a>
 				</li>
 			</ul>
-			<h1>Interface Files3DAPI</h1>
+			<h1>Class Models3DAPI</h1>
 		</div>
 	</div>
 </header>
@@ -66,7 +66,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Files3DAPI</span>
+						<span class="target">Models3DAPI</span>
 					</li>
 				</ul>
 			</section>
@@ -77,7 +77,11 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="files3dapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="models3dapi.html#create" class="tsd-kind-icon">create</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="models3dapi.html#delete" class="tsd-kind-icon">delete</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="models3dapi.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="models3dapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="models3dapi.html#update" class="tsd-kind-icon">update</a></li>
 							</ul>
 						</section>
 					</div>
@@ -85,41 +89,92 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="retrieve" class="tsd-anchor"></a>
-					<h3>retrieve</h3>
-					<div class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="create" class="tsd-anchor"></a>
+					<h3>create</h3>
+					<div class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">:</span> <a href="../index.html#models3dcreateendpoint" class="tsd-signature-type">Models3DCreateEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2843045/src/resources/files3D.ts#L17">resources/files3D.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/3d/models3DApi.ts#L44">resources/3d/models3DApi.ts:44</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/get3DFile">Retrieve a 3D file&quot;</a></p>
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/create3DModels">Create 3D models</a></p>
 						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files3D.retrieve(<span class="hljs-number">3744350296805509</span>);</code></pre>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> modelsToCreate = [
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Model 0'</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Model 2'</span> },
+];
+<span class="hljs-keyword">const</span> models3D = <span class="hljs-keyword">await</span> client.models3D.create(modelsToCreate);</code></pre>
 					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ArrayBuffer</span><span class="tsd-signature-symbol">&gt;</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>id: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ArrayBuffer</span><span class="tsd-signature-symbol">&gt;</span></h4>
-									</li>
-								</ul>
-							</li>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="delete" class="tsd-anchor"></a>
+					<h3>delete</h3>
+					<div class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">:</span> <a href="../index.html#models3ddeleteendpoint" class="tsd-signature-type">Models3DDeleteEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/3d/models3DApi.ts#L66">resources/3d/models3DApi.ts:66</a></li>
 						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/delete3DModels">Delete 3D models</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.models3D.delete([{ <span class="hljs-attr">id</span>: <span class="hljs-number">3744350296805509</span> }, { <span class="hljs-attr">id</span>: <span class="hljs-number">8163365893677939</span> }]);</code></pre>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="list" class="tsd-anchor"></a>
+					<h3>list</h3>
+					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <a href="../index.html#models3dlistendpoint" class="tsd-signature-type">Models3DListEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/3d/models3DApi.ts#L31">resources/3d/models3DApi.ts:31</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/get3DModels">List 3D models</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> models3D = <span class="hljs-keyword">await</span> client.models3D.list({ <span class="hljs-attr">published</span>: <span class="hljs-literal">true</span> });</code></pre>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="retrieve" class="tsd-anchor"></a>
+					<h3>retrieve</h3>
+					<div class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">:</span> <a href="../index.html#models3dretrieveendpoint" class="tsd-signature-type">Models3DRetrieveEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/3d/models3DApi.ts#L75">resources/3d/models3DApi.ts:75</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/get3DModel">Retrieve a 3D model</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.models3D.retrieve(<span class="hljs-number">3744350296805509</span>);</code></pre>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="update" class="tsd-anchor"></a>
+					<h3>update</h3>
+					<div class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">:</span> <a href="../index.html#models3dupdateendpoint" class="tsd-signature-type">Models3DUpdateEndpoint</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/21905c6/src/resources/3d/models3DApi.ts#L57">resources/3d/models3DApi.ts:57</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p><a href="https://doc.cognitedata.com/api/v1/#operation/update3DModels">Update 3D models</a></p>
+						</div>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> modelsToUpdate = [
+  { <span class="hljs-attr">id</span>: <span class="hljs-number">3744350296805509</span>, <span class="hljs-attr">update</span>: { <span class="hljs-attr">name</span>: { <span class="hljs-attr">set</span>: <span class="hljs-string">'Model 0 updated'</span> }}},
+  { <span class="hljs-attr">id</span>: <span class="hljs-number">8163365893677939</span>, <span class="hljs-attr">update</span>: { <span class="hljs-attr">name</span>: { <span class="hljs-attr">set</span>: <span class="hljs-string">'Model 2 updated'</span> }}},
+];
+<span class="hljs-keyword">const</span> models3D = <span class="hljs-keyword">await</span> client.models3D.update(modelsToUpdate);</code></pre>
 					</div>
 				</section>
 			</section>
@@ -136,11 +191,23 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="files3dapi.html" class="tsd-kind-icon">Files3DAPI</a>
+					<li class="current tsd-kind-class">
+						<a href="models3dapi.html" class="tsd-kind-icon">Models3DAPI</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="files3dapi.html#retrieve" class="tsd-kind-icon">retrieve</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="models3dapi.html#create" class="tsd-kind-icon">create</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="models3dapi.html#delete" class="tsd-kind-icon">delete</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="models3dapi.html#list" class="tsd-kind-icon">list</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="models3dapi.html#retrieve" class="tsd-kind-icon">retrieve</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="models3dapi.html#update" class="tsd-kind-icon">update</a>
 							</li>
 						</ul>
 					</li>
