@@ -1,13 +1,13 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { MetadataMap } from '../metadata';
+import { MetadataMap } from '../../metadata';
 import {
   generateDeleteEndpoint,
   generateInsertEndpoint,
   generateRetrieveLatestEndpoint,
   generateSimpleListEndpoint,
-} from '../standardMethods';
+} from '../../standardMethods';
 import {
   DatapointsDeleteRequest,
   DatapointsGetAggregateDatapoint,
@@ -15,10 +15,10 @@ import {
   DatapointsMultiQuery,
   DatapointsPostDatapoint,
   LatestDataBeforeRequest,
-} from '../types/types';
-import { projectUrl } from '../utils';
+} from '../../types/types';
+import { projectUrl } from '../../utils';
 
-export interface DatapointsAPI {
+export class DataPointsAPI {
   /**
    * [Insert data points](https://doc.cognitedata.com/api/v1/#operation/postMultiTimeSeriesDatapoints)
    *
@@ -26,7 +26,7 @@ export interface DatapointsAPI {
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
    */
-  insert: (items: DatapointsPostDatapoint[]) => Promise<{}>;
+  public insert: DataPointsInsertEndpoint;
 
   /**
    * [Retrieve data points](https://doc.cognitedata.com/api/v1/#operation/getMultiTimeSeriesDatapoints)
@@ -35,9 +35,7 @@ export interface DatapointsAPI {
    * const data = await client.datapoints.retrieve({ items: [{ id: 123 }] });
    * ```
    */
-  retrieve: (
-    query: DatapointsMultiQuery
-  ) => Promise<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]>;
+  public retrieve: DataPointsRetrieveEndpoint;
 
   /**
    * [Get latest data point in a time series](https://doc.cognitedata.com/api/v1/#operation/getLatest)
@@ -55,30 +53,39 @@ export interface DatapointsAPI {
    * ]);
    * ```
    */
-  retrieveLatest: (
-    items: LatestDataBeforeRequest[]
-  ) => Promise<DatapointsGetDatapoint[]>;
+  public retrieveLatest: DataPointsRetrieveLatestEndpoint;
 
   /**
    * [Delete data points](https://doc.cognitedata.com/api/v1/#operation/deleteDatapoints)
    *
    * ```js
    * await client.datapoints.delete([{id: 123, inclusiveBegin: new Date('1 jan 2019')}]);
+   * ```
    */
-  delete: (query: DatapointsDeleteRequest[]) => Promise<{}>;
+  public delete: DataPointsDeleteEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/timeseries/data';
+    this.insert = generateInsertEndpoint(instance, path, map);
+    this.retrieve = generateSimpleListEndpoint(instance, path, map);
+    this.retrieveLatest = generateRetrieveLatestEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 }
 
-/** @hidden */
-export function generateDatapointsObject(
-  project: string,
-  instance: AxiosInstance,
-  map: MetadataMap
-): DatapointsAPI {
-  const path = projectUrl(project) + '/timeseries/data';
-  return {
-    insert: generateInsertEndpoint(instance, path, map),
-    retrieve: generateSimpleListEndpoint(instance, path, map),
-    retrieveLatest: generateRetrieveLatestEndpoint(instance, path, map),
-    delete: generateDeleteEndpoint(instance, path, map),
-  };
-}
+export type DataPointsInsertEndpoint = (
+  items: DatapointsPostDatapoint[]
+) => Promise<{}>;
+
+export type DataPointsRetrieveEndpoint = (
+  query: DatapointsMultiQuery
+) => Promise<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]>;
+
+export type DataPointsRetrieveLatestEndpoint = (
+  items: LatestDataBeforeRequest[]
+) => Promise<DatapointsGetDatapoint[]>;
+
+export type DataPointsDeleteEndpoint = (
+  query: DatapointsDeleteRequest[]
+) => Promise<{}>;

@@ -16,6 +16,7 @@ import {
 } from '../../types/types';
 import {
   getSortedPropInArray,
+  randomInt,
   retryInSeconds,
   setupClient,
   simpleCompare,
@@ -29,10 +30,10 @@ const describeIfCondition =
 
 describeIfCondition(
   '3D - Revision, nodes, assetMappings integration test',
+  // tslint:disable-next-line:no-big-function
   async () => {
     let client: API;
 
-    const now = Date.now();
     let revisions: Revision3D[];
     let file: FilesMetadata;
     let model: Model3D;
@@ -42,23 +43,26 @@ describeIfCondition(
 
     beforeAll(async () => {
       client = setupClient();
+      jest.setTimeout(2 * 60 * 1000);
 
       const rootAsset = {
-        name: 'test-root' + now,
-        externalId: 'test-root' + now,
+        name: 'test-root' + randomInt(),
+        externalId: 'test-root' + randomInt(),
       };
       const childAsset = {
-        name: 'test-child' + now,
+        name: 'test-child' + randomInt(),
         parentExternalId: rootAsset.externalId,
       };
 
       const fileContent = readFileSync('src/__tests__/test3dFile.fbx');
       [[model], file, assets] = await Promise.all([
         // create 3D model
-        client.models3D.create([{ name: `Model revision test ${now}` }]),
+        client.models3D.create([
+          { name: `Model revision test ${randomInt()}` },
+        ]),
         // upload file
         client.files.upload(
-          { name: `file_revision_test_${now}.fbx` },
+          { name: `file_revision_test_${randomInt()}.fbx` },
           fileContent,
           false,
           true
@@ -83,6 +87,25 @@ describeIfCondition(
       const revisionsToCreate: CreateRevision3D[] = [{ fileId: file.id }];
       revisions = await client.revisions3D.create(model.id, revisionsToCreate);
       expect(revisions.length).toBe(1);
+
+      // wait for revision to process
+      const req = async () => {
+        const processingRevision = await client.revisions3D.retrieve(
+          model.id,
+          revisions[0].id
+        );
+        if (
+          ['Queued', 'Processing'].indexOf(processingRevision.status) !== -1
+        ) {
+          const error = new Error('Still processing');
+          // @ts-ignore
+          error.status = 500;
+          throw error;
+        }
+        return processingRevision;
+      };
+      const revision = await retryInSeconds(req, 5, 500, 5 * 60);
+      expect(revision.status).toBe('Done');
     });
 
     test('retrieve', async () => {
@@ -142,11 +165,9 @@ describeIfCondition(
     test(
       'list 3d nodes',
       async done => {
-        const req = async () =>
-          client.revisions3D
-            .list3DNodes(model.id, revisions[0].id)
-            .autoPagingToArray();
-        nodes3D = await retryInSeconds(req, 5, 404, 5 * 60);
+        nodes3D = await client.revisions3D
+          .list3DNodes(model.id, revisions[0].id)
+          .autoPagingToArray();
         expect(nodes3D.map(n => n.name)).toContain('input_Input_1.fbx');
         done();
       },

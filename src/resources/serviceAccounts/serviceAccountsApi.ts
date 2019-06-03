@@ -1,20 +1,20 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { MetadataMap } from '../metadata';
+import { MetadataMap } from '../../metadata';
 import {
   generateCreateEndpoint,
   generateDeleteEndpoint,
   generateListNoCursorEndpoint,
-} from '../standardMethods';
+} from '../../standardMethods';
 import {
   CogniteInternalId,
   ServiceAccount,
   ServiceAccountInput,
-} from '../types/types';
-import { projectUrl } from '../utils';
+} from '../../types/types';
+import { projectUrl } from '../../utils';
 
-export interface ServiceAccountsAPI {
+export class ServiceAccountsAPI {
   /**
    * [List all service accounts](https://doc.cognitedata.com/api/v1/#operation/getServiceAccounts)
    *
@@ -22,7 +22,7 @@ export interface ServiceAccountsAPI {
    * const serviceaccounts = await client.serviceAccounts.list();
    * ```
    */
-  list: () => Promise<ServiceAccount[]>;
+  public list: ServiceAccountsListEndpoint;
 
   /**
    * [Create service accounts](https://doc.cognitedata.com/api/v1/#operation/createServiceAccounts)
@@ -35,7 +35,7 @@ export interface ServiceAccountsAPI {
    * const createdServiceAccounts = await client.serviceAccounts.create(serviceAccounts);
    * ```
    */
-  create: (items: ServiceAccountInput[]) => Promise<ServiceAccount[]>;
+  public create: ServiceAccountsCreateEndpoint;
 
   /**
    * [Delete service accounts](https://doc.cognitedata.com/api/v1/#operation/deleteServiceAccounts)
@@ -44,19 +44,23 @@ export interface ServiceAccountsAPI {
    * await client.serviceAccounts.delete([123, 456]);
    * ```
    */
-  delete: (items: CogniteInternalId[]) => Promise<{}>;
+  public delete: ServiceAccountsDeleteEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/serviceaccounts';
+    this.list = generateListNoCursorEndpoint(instance, path, map);
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 }
 
-/** @hidden */
-export function generateServiceAccountsObject(
-  project: string,
-  instance: AxiosInstance,
-  map: MetadataMap
-): ServiceAccountsAPI {
-  const path = projectUrl(project) + '/serviceaccounts';
-  return {
-    list: generateListNoCursorEndpoint(instance, path, map),
-    create: generateCreateEndpoint(instance, path, map),
-    delete: generateDeleteEndpoint(instance, path, map),
-  };
-}
+export type ServiceAccountsListEndpoint = () => Promise<ServiceAccount[]>;
+
+export type ServiceAccountsCreateEndpoint = (
+  items: ServiceAccountInput[]
+) => Promise<ServiceAccount[]>;
+
+export type ServiceAccountsDeleteEndpoint = (
+  items: CogniteInternalId[]
+) => Promise<{}>;

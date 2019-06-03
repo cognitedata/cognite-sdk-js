@@ -2,14 +2,14 @@
 
 import { API } from '../../resources/api';
 import { FilesMetadata } from '../../types/types';
-import { setupClient } from '../testUtils';
+import { randomInt, setupClient } from '../testUtils';
 
 describe('Files integration test', () => {
   let client: API;
   beforeAll(async () => {
     client = setupClient();
   });
-  const postfix = new Date().getTime();
+  const postfix = randomInt();
   const files = [
     {
       name: 'filename_0_' + postfix,

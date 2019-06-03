@@ -2,11 +2,10 @@
 
 import { API } from '../../resources/api';
 import { RawDB, RawDBTable } from '../../types/types';
-import { setupClient } from '../testUtils';
+import { randomInt, setupClient } from '../testUtils';
 
 let index = 0;
-const createName = (prefix: string) =>
-  `${prefix}_${index++}_${new Date().getTime()}`;
+const createName = (prefix: string) => `${prefix}_${index++}_${randomInt()}`;
 const createDb = () => ({ name: createName('Database') });
 const createTable = () => ({ name: createName('Table') });
 

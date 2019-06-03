@@ -2,7 +2,7 @@
 
 import { API } from '../../resources/api';
 import { ServiceAccount } from '../../types/types';
-import { setupClient } from '../testUtils';
+import { randomInt, setupClient } from '../testUtils';
 
 describe('Service accounts integration test', () => {
   let client: API;
@@ -14,8 +14,8 @@ describe('Service accounts integration test', () => {
 
   test('create', async () => {
     const serviceAccountsToCreate = [
-      { name: 'Service Account 1 ' + new Date().getTime() },
-      { name: 'Service Account 2 ' + new Date().getTime() },
+      { name: 'Service Account 1 ' + randomInt() },
+      { name: 'Service Account 2 ' + randomInt() },
     ];
     serviceAccounts = await client.serviceAccounts.create(
       serviceAccountsToCreate

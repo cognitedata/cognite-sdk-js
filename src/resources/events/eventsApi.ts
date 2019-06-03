@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../autoPagination';
-import { MetadataMap } from '../metadata';
+import { CogniteAsyncIterator } from '../../autoPagination';
+import { MetadataMap } from '../../metadata';
 import {
   generateCreateEndpoint,
   generateDeleteEndpoint,
@@ -10,7 +10,7 @@ import {
   generateRetrieveEndpoint,
   generateSearchEndpoint,
   generateUpdateEndpoint,
-} from '../standardMethods';
+} from '../../standardMethods';
 import {
   CogniteEvent,
   EventChange,
@@ -18,10 +18,10 @@ import {
   EventSearchRequest,
   ExternalEvent,
   IdEither,
-} from '../types/types';
-import { projectUrl } from '../utils';
+} from '../../types/types';
+import { projectUrl } from '../../utils';
 
-export interface EventsAPI {
+export class EventsAPI {
   /**
    * [Create events](https://doc.cognitedata.com/api/v1/#operation/createEvents)
    *
@@ -33,7 +33,7 @@ export interface EventsAPI {
    * const createdEvents = await client.events.create(events);
    * ```
    */
-  create: (items: ExternalEvent[]) => Promise<CogniteEvent[]>;
+  public create: EventsCreateEndpoint;
 
   /**
    * [List events](https://doc.cognitedata.com/api/v1/#operation/advancedListEvents)
@@ -42,7 +42,7 @@ export interface EventsAPI {
    * const events = await client.events.list({ filter: { startTime: { min: new Date('1 jan 2018') }, endTime: { max: new Date('1 jan 2019') } } });
    * ```
    */
-  list: (scope?: EventFilterRequest) => CogniteAsyncIterator<CogniteEvent>;
+  public list: EventsListEndpoint;
 
   /**
    * [Retrieve events](https://doc.cognitedata.com/api/v1/#operation/byIdsEvents)
@@ -51,7 +51,7 @@ export interface EventsAPI {
    * const events = await client.events.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  retrieve: (ids: IdEither[]) => Promise<CogniteEvent[]>;
+  public retrieve: EventsRetrieveEndpoint;
 
   /**
    * [Update events](https://doc.cognitedata.com/api/v1/#operation/updateEvents)
@@ -60,7 +60,7 @@ export interface EventsAPI {
    * const events = await client.events.update([{id: 123, update: {description: {set: 'New description'}}}]);
    * ```
    */
-  update: (changes: EventChange[]) => Promise<CogniteEvent[]>;
+  public update: EventsUpdateEndpoint;
 
   /**
    * [Search for events](https://doc.cognitedata.com/api/v1/#operation/searchEvents)
@@ -76,30 +76,47 @@ export interface EventsAPI {
    * }]);
    * ```
    */
-  search: (query: EventSearchRequest) => Promise<CogniteEvent[]>;
+  public search: EventsSearchEndpoint;
 
   /**
    * [Delete events](https://doc.cognitedata.com/api/v1/#operation/deleteEvents)
    *
    * ```js
    * await client.events.delete([{id: 123}, {externalId: 'abc'}]);
+   * ```
    */
-  delete: (ids: IdEither[]) => Promise<{}>;
+  public delete: EventsDeleteEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/events';
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.list = generateListEndpoint(instance, path, map, true);
+    this.retrieve = generateRetrieveEndpoint(instance, path, map);
+    this.update = generateUpdateEndpoint(instance, path, map);
+    this.search = generateSearchEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+  }
 }
 
-/** @hidden */
-export function generateEventsObject(
-  project: string,
-  instance: AxiosInstance,
-  map: MetadataMap
-): EventsAPI {
-  const path = projectUrl(project) + '/events';
-  return {
-    create: generateCreateEndpoint(instance, path, map),
-    list: generateListEndpoint(instance, path, map, true),
-    retrieve: generateRetrieveEndpoint(instance, path, map),
-    update: generateUpdateEndpoint(instance, path, map),
-    search: generateSearchEndpoint(instance, path, map),
-    delete: generateDeleteEndpoint(instance, path, map),
-  };
-}
+export type EventsCreateEndpoint = (
+  items: ExternalEvent[]
+) => Promise<CogniteEvent[]>;
+
+export type EventsListEndpoint = (
+  scope?: EventFilterRequest
+) => CogniteAsyncIterator<CogniteEvent>;
+
+export type EventsRetrieveEndpoint = (
+  ids: IdEither[]
+) => Promise<CogniteEvent[]>;
+
+export type EventsUpdateEndpoint = (
+  changes: EventChange[]
+) => Promise<CogniteEvent[]>;
+
+export type EventsSearchEndpoint = (
+  query: EventSearchRequest
+) => Promise<CogniteEvent[]>;
+
+export type EventsDeleteEndpoint = (ids: IdEither[]) => Promise<{}>;

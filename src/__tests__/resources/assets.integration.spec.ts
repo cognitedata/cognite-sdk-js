@@ -2,21 +2,20 @@
 
 import { API } from '../../resources/api';
 import { Asset } from '../../types/types';
-import { setupClient } from '../testUtils';
+import { randomInt, setupClient } from '../testUtils';
 
 describe('Asset integration test', () => {
   let client: API;
   beforeAll(async () => {
     client = setupClient();
   });
-  const now = new Date().getTime();
   const rootAsset = {
     name: 'test-root',
     description: 'Root asset for cognitesdk-js test',
     metadata: {
       refId: 'test-root',
     },
-    externalId: 'test-root' + now,
+    externalId: 'test-root' + randomInt(),
   };
 
   const childAsset = {

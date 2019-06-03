@@ -1,15 +1,15 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../autoPagination';
-import { MetadataMap } from '../metadata';
+import { CogniteAsyncIterator } from '../../autoPagination';
+import { MetadataMap } from '../../metadata';
 import {
   generateCreateEndpoint,
   generateDeleteEndpoint,
   generateListEndpoint,
   generateRetrieveSingleEndpoint,
   generateUpdateEndpoint,
-} from '../standardMethods';
+} from '../../standardMethods';
 import {
   CogniteInternalId,
   CreateModel3D,
@@ -17,10 +17,10 @@ import {
   Model3D,
   Model3DListRequest,
   UpdateModel3D,
-} from '../types/types';
-import { projectUrl } from '../utils';
+} from '../../types/types';
+import { projectUrl } from '../../utils';
 
-export interface Models3DAPI {
+export class Models3DAPI {
   /**
    * [List 3D models](https://doc.cognitedata.com/api/v1/#operation/get3DModels)
    *
@@ -28,7 +28,8 @@ export interface Models3DAPI {
    * const models3D = await client.models3D.list({ published: true });
    * ```
    */
-  list: (scope?: Model3DListRequest) => CogniteAsyncIterator<Model3D>;
+  public list: Models3DListEndpoint;
+
   /**
    * [Create 3D models](https://doc.cognitedata.com/api/v1/#operation/create3DModels)
    *
@@ -40,7 +41,8 @@ export interface Models3DAPI {
    * const models3D = await client.models3D.create(modelsToCreate);
    * ```
    */
-  create: (models: CreateModel3D[]) => Promise<Model3D[]>;
+  public create: Models3DCreateEndpoint;
+
   /**
    * [Update 3D models](https://doc.cognitedata.com/api/v1/#operation/update3DModels)
    *
@@ -52,7 +54,8 @@ export interface Models3DAPI {
    * const models3D = await client.models3D.update(modelsToUpdate);
    * ```
    */
-  update: (items: UpdateModel3D[]) => Promise<Model3D[]>;
+  public update: Models3DUpdateEndpoint;
+
   /**
    * [Delete 3D models](https://doc.cognitedata.com/api/v1/#operation/delete3DModels)
    *
@@ -60,7 +63,8 @@ export interface Models3DAPI {
    * await client.models3D.delete([{ id: 3744350296805509 }, { id: 8163365893677939 }]);
    * ```
    */
-  delete: (ids: InternalId[]) => Promise<{}>;
+  public delete: Models3DDeleteEndpoint;
+
   /**
    * [Retrieve a 3D model](https://doc.cognitedata.com/api/v1/#operation/get3DModel)
    *
@@ -68,21 +72,33 @@ export interface Models3DAPI {
    * await client.models3D.retrieve(3744350296805509);
    * ```
    */
-  retrieve: (id: CogniteInternalId) => Promise<Model3D>;
+  public retrieve: Models3DRetrieveEndpoint;
+
+  /** @hidden */
+  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+    const path = projectUrl(project) + '/3d/models';
+    this.list = generateListEndpoint(instance, path, map, false);
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.update = generateUpdateEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpoint(instance, path, map);
+    this.retrieve = generateRetrieveSingleEndpoint(instance, path, map);
+  }
 }
 
-/** @hidden */
-export function generateModels3DObject(
-  project: string,
-  instance: AxiosInstance,
-  map: MetadataMap
-): Models3DAPI {
-  const path = projectUrl(project) + '/3d/models';
-  return {
-    list: generateListEndpoint(instance, path, map, false),
-    create: generateCreateEndpoint(instance, path, map),
-    update: generateUpdateEndpoint(instance, path, map),
-    delete: generateDeleteEndpoint(instance, path, map),
-    retrieve: generateRetrieveSingleEndpoint(instance, path, map),
-  };
-}
+export type Models3DListEndpoint = (
+  scope?: Model3DListRequest
+) => CogniteAsyncIterator<Model3D>;
+
+export type Models3DCreateEndpoint = (
+  models: CreateModel3D[]
+) => Promise<Model3D[]>;
+
+export type Models3DUpdateEndpoint = (
+  items: UpdateModel3D[]
+) => Promise<Model3D[]>;
+
+export type Models3DDeleteEndpoint = (ids: InternalId[]) => Promise<{}>;
+
+export type Models3DRetrieveEndpoint = (
+  id: CogniteInternalId
+) => Promise<Model3D>;

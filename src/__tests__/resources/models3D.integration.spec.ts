@@ -2,7 +2,7 @@
 
 import { API } from '../../resources/api';
 import { Model3D } from '../../types/types';
-import { getSortedPropInArray, setupClient } from '../testUtils';
+import { getSortedPropInArray, randomInt, setupClient } from '../testUtils';
 
 describe('Model3d integration test', () => {
   let client: API;
@@ -12,10 +12,9 @@ describe('Model3d integration test', () => {
 
   let models: Model3D[];
   test('create', async () => {
-    const now = Date.now();
     const modelsToCreate = [
-      { name: `Model 0 ${now}` },
-      { name: `Model 2 ${now}` },
+      { name: `Model 0 ${randomInt()}` },
+      { name: `Model 2 ${randomInt()}` },
     ];
     models = await client.models3D.create(modelsToCreate);
     expect(getSortedPropInArray(models, 'name')).toEqual(
