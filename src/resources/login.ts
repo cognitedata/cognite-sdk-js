@@ -317,7 +317,7 @@ export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
               project,
               ...params,
             };
-            loginWithRedirect(authorizeParams).catch(reject);
+            Login.loginWithRedirect(authorizeParams).catch(reject);
           },
           popup: async params => {
             const authorizeParams = {
@@ -325,7 +325,7 @@ export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
               project,
               ...params,
             };
-            loginWithPopup(authorizeParams)
+            Login.loginWithPopup(authorizeParams)
               .then(tokens => {
                 if (tokens) {
                   handleTokens(tokens);
