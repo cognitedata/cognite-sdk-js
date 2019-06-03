@@ -27,17 +27,17 @@ To utilize authentication in browsers using the SDK you need to use the `createC
 
 ## Why not using api keys?
 
-It is **strongly recommended** to not use api keys in web applications since the api key is easily readable by everyone that have access to the application. Another restriction is that all users of your app share the same api-key. This means that all users have the same access level.
+It is **strongly recommended** to not use api keys in web applications since the api key is easily readable by everyone that have access to the application. Another restriction is that all users of your app share the same api-key. This means that all users have the same access level, you lose tracing/auditing per user, keys are not time limited etc.
 
 ## Access tokens
 
-The solution to avoid using api keys is to use access tokens. This is short living tokens which grants the user access to CDF. The application get an access token by asking the user to login to the IdP-provier (Google, Active Directory etc) of a CDF project.
+The solution to avoid using api keys is to use access tokens. This is short living tokens which grants the user access to CDF. The application get an access token by asking the user to login to the identity provider (Google, Active Directory etc) of a CDF project.
 
 ## Authentication flow
 
 This describes the flow for the user using your application:
 1. The user is using your app on this url: `https://my-app.com/some/path?someQuery=someValue`
-2. The SDK redirect the user to the project's IdP provider
+2. The SDK redirect the user to the project's identity provider
 3. After a successful log in the browser will redirect the user back to the url `https://my-app.com/some/path?someQuery=someValue&access_token=someToken&id_token=someToken`
 4. The app will initialize again and `createClientWithOAuth` will be called again
 5. The SDK now sees the query parameters `access_token` and `id_token` in the URL. It will parse them and remove them from the URL
@@ -54,7 +54,7 @@ There are two ways to authenticate using the SDK:
 
 ### Authentication with redirects
 
-When doing authentication with redirects the currect browser window will be redirected to the IdP-provider for the user to log in. After login the same browser window will be redirect back to your application.
+When doing authentication with redirects the currect browser window will be redirected to the identity provider for the user to log in. After login the same browser window will be redirect back to your application.
 
 > You can find a running example application using redirects [here](../samples/react/authentication/src/App.js).
 
@@ -88,7 +88,7 @@ const client = sdk.createClientWithOAuth({
   onAuthenticate: login => {
     login.redirect({
       redirectUrl: 'https://my-app.com/successful-login',
-      errorRedirectUrl: 'https://my-app.com/unsuccessful-login', // this one is optional. Will default to redirectUrl
+      errorRedirectUrl: 'https://my-app.com/unsuccessful-login', // We encourage you to use this property as well. If not specified it will default to redirectUrl
     });
   },
 });
@@ -96,7 +96,7 @@ const client = sdk.createClientWithOAuth({
 
 ### Authentication with popups
 
-When doing authentication with popups the currect browser window of your application will remain the same but a new window will pop-up asking the user to login into the IdP-provider. After a sucessful login the popup-window will automatically close itself.
+When doing authentication with popups the currect browser window of your application will remain the same but a new window will pop-up asking the user to login into the identity provider. After a sucessful login the popup-window will automatically close itself.
 
 > You can find a running example application using popups [here](../samples/react/authentication-with-popup/src/App.js).
 
@@ -118,7 +118,7 @@ const client = sdk.createClientWithOAuth({
 const assets = await client.assets.retrive({ id: 23232789217132 });
 ```
 
-The first time this will run the user will get a `401`-response from CDF in the first call to `client.assets`. This will trigger the SDK to perform authentication of the user using a popup-window. A new window will popup showing the login screen of the IdP-provider. After a successful login the popup-window will be redirected back to your app (the same URL as the main browser window) where `sdk.loginPopupHandler` will be executed and handle the tokens in the URL and close the window. **Therefore it is important** that `sdk.loginPopupHandler` will run when the popup window gets redirected back to your app (otherwise the authentication process will fail).
+The first time this will run the user will get a `401`-response from CDF in the first call to `client.assets`. This will trigger the SDK to perform authentication of the user using a popup-window. A new window will popup showing the login screen of the identity provider. After a successful login the popup-window will be redirected back to your app (the same URL as the main browser window) where `sdk.loginPopupHandler` will be executed and handle the tokens in the URL and close the window. **Therefore it is important** that `sdk.loginPopupHandler` will run when the popup window gets redirected back to your app (otherwise the authentication process will fail).
 
 After a successful authentication process the SDK will automatically retry the `client.assets` request and will eventually resolve and return the correct result.
 
@@ -133,7 +133,7 @@ const client = sdk.createClientWithOAuth({
   onAuthenticate: login => {
     login.popup({
       redirectUrl: 'https://my-app.com/popup-handler',
-      errorRedirectUrl: 'https://my-app.com/unsuccessful-login', // this one is optional. Will default to redirectUrl
+      errorRedirectUrl: 'https://my-app.com/unsuccessful-login', // We encourage you to use this property as well. If not specified it will default to redirectUrl
     });
   },
 });
@@ -145,7 +145,7 @@ This only affect the popup-window.
 
 ### Manually trigger authentication
 
-To avoid waiting for the first `401`-response to occour you can trigger the authentication flow manually like this:
+To avoid waiting for the first `401`-response to occur you can trigger the authentication flow manually like this:
 ```js
 import * as sdk from '@cognite/sdk';
 const client = sdk.createClientWithOAuth({
@@ -169,7 +169,7 @@ const client = sdk.createClientWithOAuth({
 
 ### Combine different authentication methods
 
-If you want to use redirect-method in the initialization of your app and use the popup-method later (to not loose the state of your app) you can implement something like this:
+If you want to use redirect-method in the initialization of your app and use the popup-method later (to not lose the state of your app) you can implement something like this:
 
 ```js
 import * as sdk from '@cognite/sdk';
@@ -194,12 +194,8 @@ If you need access to the tokens (access token, id token) from the login flow yo
 import * as sdk from '@cognite/sdk';
 const client = sdk.createClientWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
-  onTokens: tokens => {
-    // where tokens will be an object on this format:
-    // {
-    //   accessToken: string;
-    //   idToken: string;
-    // }
+  onTokens: ({accessToken, idToken}) => {
+    // your logic here
   },
 });
 ```

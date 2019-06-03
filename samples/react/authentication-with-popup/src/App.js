@@ -21,7 +21,7 @@ class App extends Component {
     // So it is possible to create a user-interface with a "Click here to login"-button that triggers `login.popup`.
     const client = sdk.createClientWithOAuth({
       project,
-      onAuthenticate: 'POPUP',
+      onAuthenticate: sdk.POPUP,
     });
 
     this.setState({ client });
