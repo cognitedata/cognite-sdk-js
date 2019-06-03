@@ -10,6 +10,7 @@ import {
 import { BASE_URL } from '../constants';
 import { createErrorReponse } from './testUtils';
 
+// tslint:disable-next-line:no-big-function
 describe('axiosWrappers', () => {
   const responseMock = jest.fn();
   let instance: AxiosInstance;
