@@ -963,7 +963,7 @@ export interface DatapointsMultiQuery {
   /**
    * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
    */
-  end?: Date;
+  end?: string;
   /**
    * Return up to this number of datapoints.
    */
@@ -1009,7 +1009,7 @@ export interface DatapointsQuery {
   /**
    * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
    */
-  end?: Date;
+  end?: string;
   /**
    * Return up to this number of datapoints.
    */
@@ -1040,7 +1040,7 @@ export interface DatapointsQueryProperties {
   /**
    * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
    */
-  end?: Date;
+  end?: string;
   /**
    * Return up to this number of datapoints.
    */
@@ -1655,7 +1655,7 @@ export interface FilesMetadata {
   /**
    * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
-  uploadedTime?: number;
+  uploadedTime?: Date;
   /**
    * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
@@ -1678,7 +1678,7 @@ export interface FilesMetadataAllOf {
   /**
    * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
-  uploadedTime?: number;
+  uploadedTime?: Date;
   /**
    * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
@@ -1939,7 +1939,7 @@ export interface Group {
 
   isDeleted: boolean;
 
-  deletedTime?: number;
+  deletedTime?: Date;
 }
 /**
  * A specification for creating a new group
@@ -2051,7 +2051,7 @@ export interface InlineResponse2002Items {
   /**
    * Time of deletion
    */
-  deletedTime?: number;
+  deletedTime?: Date;
 }
 
 export interface InlineResponse2003 {
@@ -2826,7 +2826,7 @@ export interface ServiceAccount {
   /**
    * Time of deletion
    */
-  deletedTime?: number;
+  deletedTime?: Date;
 }
 
 export interface ServiceAccountInput {
