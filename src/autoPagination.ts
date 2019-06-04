@@ -95,7 +95,10 @@ export type AutoPagingToArray<T> = (
 
 function makeAutoPagingToArray<T>(autoPagingEach: AutoPagingEach<T>) {
   return async function autoPagingToArray(options?: AutoPagingToArrayOptions) {
-    const limit = (options && options.limit) || Infinity;
+    let limit = (options && options.limit) || 25;
+    if (limit === -1) {
+      limit = Infinity;
+    }
     const items: T[] = [];
     await autoPagingEach(async item => {
       items.push(item);
