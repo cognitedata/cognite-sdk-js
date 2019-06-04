@@ -2,7 +2,7 @@
 
 import { API } from '../../resources/api';
 import {
-  AclActionevents,
+  CogniteeventsAclAction,
   Group,
   GroupSpec,
   ServiceAccount,
@@ -32,7 +32,10 @@ describe('Groups integration test', () => {
         name: 'Group name' + randomInt(),
         capabilities: [
           {
-            eventsAcl: { actions: [AclActionevents.READ], scope: { all: {} } },
+            eventsAcl: {
+              actions: [CogniteeventsAclAction.READ],
+              scope: { all: {} },
+            },
           },
         ],
       },

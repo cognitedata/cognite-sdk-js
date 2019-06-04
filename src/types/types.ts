@@ -1,214 +1,6 @@
 // Copyright 2019 Cognite AS
-
 import { RawDBRow, RawDBRowInsert } from './custom';
 
-export enum AclActionanalytics {
-  READ = 'READ',
-  EXECUTE = 'EXECUTE',
-  LIST = 'LIST',
-}
-
-export enum AclActionapikeys {
-  LIST = 'LIST',
-  CREATE = 'CREATE',
-  DELETE = 'DELETE',
-}
-
-export enum AclActionassets {
-  READ = 'READ',
-  WRITE = 'WRITE',
-}
-
-export enum AclActionevents {
-  READ = 'READ',
-  WRITE = 'WRITE',
-}
-
-export enum AclActionfiles {
-  READ = 'READ',
-  WRITE = 'WRITE',
-}
-
-export enum AclActiongroups {
-  LIST = 'LIST',
-  READ = 'READ',
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
-}
-
-export enum AclActionprojects {
-  LIST = 'LIST',
-  READ = 'READ',
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
-}
-
-export enum AclActionraw {
-  READ = 'READ',
-  WRITE = 'WRITE',
-  LIST = 'LIST',
-}
-
-export enum AclActionsecuritycategories {
-  MEMBEROF = 'MEMBEROF',
-  LIST = 'LIST',
-  CREATE = 'CREATE',
-  DELETE = 'DELETE',
-}
-
-export enum AclActionsequences {
-  READ = 'READ',
-  WRITE = 'WRITE',
-}
-
-export enum AclActionthreed {
-  READ = 'READ',
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
-}
-
-export enum AclActiontimeseries {
-  READ = 'READ',
-  WRITE = 'WRITE',
-}
-
-export enum AclActionusers {
-  LIST = 'LIST',
-  CREATE = 'CREATE',
-  DELETE = 'DELETE',
-}
-
-export interface AclApiKeys {
-  actions: AclActionapikeys[];
-
-  scope: AclScopeapikeys;
-}
-
-export interface AclScopeanalytics {
-  all?: object;
-}
-
-export interface AclScopeapikeys {
-  all?: object;
-}
-
-export interface AclScopeassets {
-  all?: object;
-}
-
-export interface AclScopeevents {
-  all?: object;
-}
-
-export interface AclScopefiles {
-  all?: object;
-}
-
-export interface AclScopegroups {
-  all?: object;
-}
-
-export interface AclScopeprojects {
-  all?: object;
-}
-
-export interface AclScoperaw {
-  all?: object;
-}
-
-export interface AclScopesecuritycategories {
-  all?: object;
-}
-
-export interface AclScopesequences {
-  all?: object;
-}
-
-export interface AclScopethreed {
-  all?: object;
-}
-
-export interface AclScopetimeseries {
-  all?: object;
-}
-
-export interface AclScopeusers {
-  all?: object;
-}
-
-export interface AclSequences {
-  actions: AclActionsequences[];
-
-  scope: AclScopesequences;
-}
-
-export interface AclThreed {
-  actions: AclActionthreed[];
-
-  scope: AclScopethreed;
-}
-
-export interface Aclanalytics {
-  actions: AclActionanalytics[];
-
-  scope: AclScopeanalytics;
-}
-
-export interface Aclassets {
-  actions: AclActionassets[];
-
-  scope: AclScopeassets;
-}
-
-export interface Aclevents {
-  actions: AclActionevents[];
-
-  scope: AclScopeevents;
-}
-
-export interface Aclfiles {
-  actions: AclActionfiles[];
-
-  scope: AclScopefiles;
-}
-
-export interface Aclgroups {
-  actions: AclActiongroups[];
-
-  scope: AclScopegroups;
-}
-
-export interface Aclprojects {
-  actions: AclActionprojects[];
-
-  scope: AclScopeprojects;
-}
-
-export interface Aclraw {
-  actions: AclActionraw[];
-
-  scope: AclScoperaw;
-}
-
-export interface Aclsecuritycategories {
-  actions: AclActionsecuritycategories[];
-
-  scope: AclScopesecuritycategories;
-}
-
-export interface Acltimeseries {
-  actions: AclActiontimeseries[];
-
-  scope: AclScopetimeseries;
-}
-
-export interface Aclusers {
-  actions: AclActionusers[];
-
-  scope: AclScopeusers;
-}
 export enum Aggregate {
   Average = 'average',
   Max = 'max',
@@ -223,7 +15,7 @@ export enum Aggregate {
 }
 
 export interface AnalyticsAcl {
-  analyticsAcl?: Aclanalytics;
+  analyticsAcl?: CogniteanalyticsAclAcl;
 }
 
 export interface ApiKeyObject {
@@ -257,7 +49,7 @@ export interface ApiKeyResponse {
 }
 
 export interface ApikeysAcl {
-  apikeysAcl?: AclApiKeys;
+  apikeysAcl?: CogniteapikeysAclAcl;
 }
 /**
  * Change that will be applied to array object.
@@ -506,7 +298,7 @@ export interface AssetSearchSearch {
 }
 
 export interface AssetsAcl {
-  assetsAcl?: Aclassets;
+  assetsAcl?: CogniteassetsAclAcl;
 }
 /**
  * Data specific to Azure AD authentication
@@ -553,8 +345,203 @@ export type CogniteCapabilityItem =
   | TimeSeriesAcl
   | UsersAcl;
 
+export interface CogniteanalyticsAclAcl {
+  actions: CogniteanalyticsAclAction[];
+
+  scope: CogniteanalyticsAclScope;
+}
+export enum CogniteanalyticsAclAction {
+  READ = 'READ',
+  EXECUTE = 'EXECUTE',
+  LIST = 'LIST',
+}
+
+export interface CogniteanalyticsAclScope {
+  all?: object;
+}
+
+export interface CogniteapikeysAclAcl {
+  actions: CogniteapikeysAclAction[];
+
+  scope: CogniteapikeysAclScope;
+}
+export enum CogniteapikeysAclAction {
+  LIST = 'LIST',
+  CREATE = 'CREATE',
+  DELETE = 'DELETE',
+}
+
+export interface CogniteapikeysAclScope {
+  all?: object;
+}
+
+export interface CogniteassetsAclAcl {
+  actions: CogniteassetsAclAction[];
+
+  scope: CogniteassetsAclScope;
+}
+export enum CogniteassetsAclAction {
+  READ = 'READ',
+  WRITE = 'WRITE',
+}
+
 export interface CogniteassetsAclIdScope {
   subtreeIds?: string[];
+}
+
+export interface CogniteassetsAclScope {
+  all?: object;
+}
+
+export interface CogniteeventsAclAcl {
+  actions: CogniteeventsAclAction[];
+
+  scope: CogniteeventsAclScope;
+}
+export enum CogniteeventsAclAction {
+  READ = 'READ',
+  WRITE = 'WRITE',
+}
+
+export interface CogniteeventsAclScope {
+  all?: object;
+}
+
+export interface CognitefilesAclAcl {
+  actions: CognitefilesAclAction[];
+
+  scope: CognitefilesAclScope;
+}
+export enum CognitefilesAclAction {
+  READ = 'READ',
+  WRITE = 'WRITE',
+}
+
+export interface CognitefilesAclScope {
+  all?: object;
+}
+
+export interface CognitegroupsAclAcl {
+  actions: CognitegroupsAclAction[];
+
+  scope: CognitegroupsAclScope;
+}
+export enum CognitegroupsAclAction {
+  LIST = 'LIST',
+  READ = 'READ',
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
+}
+
+export interface CognitegroupsAclScope {
+  all?: object;
+}
+
+export interface CogniteprojectsAclAcl {
+  actions: CogniteprojectsAclAction[];
+
+  scope: CogniteprojectsAclScope;
+}
+export enum CogniteprojectsAclAction {
+  LIST = 'LIST',
+  READ = 'READ',
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+}
+
+export interface CogniteprojectsAclScope {
+  all?: object;
+}
+
+export interface CogniterawAclAcl {
+  actions: CogniterawAclAction[];
+
+  scope: CogniterawAclScope;
+}
+export enum CogniterawAclAction {
+  READ = 'READ',
+  WRITE = 'WRITE',
+  LIST = 'LIST',
+}
+
+export interface CogniterawAclScope {
+  all?: object;
+}
+
+export interface CognitesecuritycategoriesAclAcl {
+  actions: CognitesecuritycategoriesAclAction[];
+
+  scope: CognitesecuritycategoriesAclScope;
+}
+export enum CognitesecuritycategoriesAclAction {
+  MEMBEROF = 'MEMBEROF',
+  LIST = 'LIST',
+  CREATE = 'CREATE',
+  DELETE = 'DELETE',
+}
+
+export interface CognitesecuritycategoriesAclScope {
+  all?: object;
+}
+
+export interface CognitesequencesAclAcl {
+  actions: CognitesequencesAclAction[];
+
+  scope: CognitesequencesAclScope;
+}
+export enum CognitesequencesAclAction {
+  READ = 'READ',
+  WRITE = 'WRITE',
+}
+
+export interface CognitesequencesAclScope {
+  all?: object;
+}
+
+export interface CognitethreedAclAcl {
+  actions: CognitethreedAclAction[];
+
+  scope: CognitethreedAclScope;
+}
+export enum CognitethreedAclAction {
+  READ = 'READ',
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
+}
+
+export interface CognitethreedAclScope {
+  all?: object;
+}
+
+export interface CognitetimeseriesAclAcl {
+  actions: CognitetimeseriesAclAction[];
+
+  scope: CognitetimeseriesAclScope;
+}
+export enum CognitetimeseriesAclAction {
+  READ = 'READ',
+  WRITE = 'WRITE',
+}
+
+export interface CognitetimeseriesAclScope {
+  all?: object;
+}
+
+export interface CogniteusersAclAcl {
+  actions: CogniteusersAclAction[];
+
+  scope: CogniteusersAclScope;
+}
+export enum CogniteusersAclAction {
+  LIST = 'LIST',
+  CREATE = 'CREATE',
+  DELETE = 'DELETE',
+}
+
+export interface CogniteusersAclScope {
+  all?: object;
 }
 
 export interface CreateAssetMapping3D {
@@ -1350,7 +1337,7 @@ export interface EventWithCursorResponse {
 }
 
 export interface EventsAcl {
-  eventsAcl?: Aclevents;
+  eventsAcl?: CogniteeventsAclAcl;
 }
 /**
  * Representation of a physical asset, e.g plant or piece of equipment
@@ -1618,7 +1605,7 @@ export interface FileLinkIds {
 }
 
 export interface FilesAcl {
-  filesAcl?: Aclfiles;
+  filesAcl?: CognitefilesAclAcl;
 }
 
 export interface FilesMetadata {
@@ -1958,7 +1945,7 @@ export interface GroupSpec {
 }
 
 export interface GroupsAcl {
-  groupsAcl?: Aclgroups;
+  groupsAcl?: CognitegroupsAclAcl;
 }
 /**
  * An ID JWT token
@@ -2511,11 +2498,11 @@ export interface ProjectObject {
 }
 
 export interface ProjectsAcl {
-  projectsAcl?: Aclprojects;
+  projectsAcl?: CogniteprojectsAclAcl;
 }
 
 export interface RawAcl {
-  rawAcl?: Aclraw;
+  rawAcl?: CogniterawAclAcl;
 }
 /**
  * A NoSQL database to store customer data.
@@ -2769,7 +2756,7 @@ export interface Search {
 }
 
 export interface SecurityCategoriesAcl {
-  securityCategoriesAcl?: Aclsecuritycategories;
+  securityCategoriesAcl?: CognitesecuritycategoriesAclAcl;
 }
 
 export interface SecurityCategoryDTO {
@@ -2805,7 +2792,7 @@ export interface SecurityCategoryWithCursorResponse {
 }
 
 export interface SequencesAcl {
-  sequencesAcl?: AclSequences;
+  sequencesAcl?: CognitesequencesAclAcl;
 }
 
 export interface ServiceAccount {
@@ -2886,11 +2873,11 @@ export interface SingleTokenStatusDTOResponse {
 }
 
 export interface ThreedAcl {
-  threedAcl?: AclThreed;
+  threedAcl?: CognitethreedAclAcl;
 }
 
 export interface TimeSeriesAcl {
-  timeSeriesAcl?: Acltimeseries;
+  timeSeriesAcl?: CognitetimeseriesAclAcl;
 }
 
 export interface TimeSeriesCreateRequest {
@@ -3087,7 +3074,7 @@ export interface UpdateRevision3DThumbnail {
 }
 
 export interface UsersAcl {
-  usersAcl?: Aclusers;
+  usersAcl?: CogniteusersAclAcl;
 }
 /**
  * The file ID of the data file for this resource, with multiple versions supported. Use /3d/files/{id} to retrieve the file.
