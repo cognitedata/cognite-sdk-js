@@ -151,91 +151,9 @@ export interface Revision3DListRequest extends Limit {
   published?: boolean;
 }
 
-export interface ExternalAssetItem extends ExternalAsset {
-  /**
-   * External id to the parent asset
-   */
-  parentExternalId?: CogniteExternalId;
-}
-
-export interface GroupServiceAccount {
-  /**
-   * Unique name of the service account
-   * @example some-internal-service@apple.com
-   */
-  name: string;
-  id: CogniteInternalId;
-  /**
-   * List of group ids
-   */
-  groups: CogniteInternalId[];
-  /**
-   * If this service account has been logically deleted
-   */
-  isDeleted: boolean;
-  /**
-   * Time of deletion
-   */
-  deletedTime?: Date;
-}
-
 export interface ListGroups {
   /**
    * Whether to get all groups, only available with the groups:list acl.
    */
   all?: boolean;
 }
-
-/**
- * The display name of the project.
- * @example Open Industrial Data
- */
-export type ProjectName = string;
-
-/**
- * The url name of the project. This is used as part of API calls. It should only contain letters, digits and hyphens, as long as the hyphens are not at the start or end.
- * @example publicdata
- */
-export type UrlName = string;
-
-/**
- * Information about the project
- */
-export interface ProjectResponse {
-  name: ProjectName;
-  urlName: UrlName;
-  defaultGroupId?: DefaultGroupId;
-  authentication?: OutputProjectAuthentication;
-}
-
-/**
- * A default group for all project users. Can be used to establish default capabilities. WARNING: this group may be logically deleted
- */
-export type DefaultGroupId = number;
-
-export interface ProjectUpdate {
-  name?: ProjectName;
-  defaultGroupId?: DefaultGroupId;
-  authentication?: InputProjectAuthentication;
-}
-
-/**
- * Data about how to authenticate and authorize users. The authentication configuration is hidden.
- */
-export interface OutputProjectAuthentication {
-  validDomains?: ValidDomains;
-}
-
-/**
- * Data about how to authenticate and authorize users
- */
-export interface InputProjectAuthentication {
-  azureADConfiguration?: AzureADConfigurationDTO;
-  validDomains?: ValidDomains;
-  oAuth2Configuration?: OAuth2ConfigurationDTO;
-}
-
-/**
- * List of valid domains. If left empty, any user registered with the OAuth2 provider will get access.
- */
-export type ValidDomains = string[];

@@ -2,7 +2,7 @@
 
 import * as sleep from 'sleep-promise';
 import { makeAutoPaginationMethods } from '../autoPagination';
-import { ListResponse } from '../types/types';
+import { ListResponse } from '../types/custom';
 
 async function fibListResponse() {
   const generateResponse = async (

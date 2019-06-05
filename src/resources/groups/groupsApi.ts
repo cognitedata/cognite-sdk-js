@@ -9,12 +9,8 @@ import {
   generateListNoCursorEndpoint,
   generateListNoCursorEndpointWithQueryParams,
 } from '../../standardMethods';
-import {
-  CogniteInternalId,
-  GroupServiceAccount,
-  ListGroups,
-} from '../../types/custom';
-import { Group, GroupSpec } from '../../types/types';
+import { CogniteInternalId, ListGroups } from '../../types/custom';
+import { Group, GroupSpec, ServiceAccount } from '../../types/types';
 import { projectUrl } from '../../utils';
 
 export class GroupsAPI {
@@ -75,7 +71,7 @@ export class GroupsAPI {
    * ```
    */
   public listServiceAccounts: GroupsListServiceAccountsEndpoint = groupId => {
-    return generateListNoCursorEndpoint<GroupServiceAccount>(
+    return generateListNoCursorEndpoint<ServiceAccount>(
       this.instance,
       this.serviceAccountPath(groupId),
       this.map
@@ -140,7 +136,7 @@ export type GroupsDeleteEndpoint = (ids: CogniteInternalId[]) => Promise<{}>;
 
 export type GroupsListServiceAccountsEndpoint = (
   groupId: CogniteInternalId
-) => Promise<GroupServiceAccount[]>;
+) => Promise<ServiceAccount[]>;
 
 export type GroupsAddServiceAccountsEndpoint = (
   groupId: CogniteInternalId,

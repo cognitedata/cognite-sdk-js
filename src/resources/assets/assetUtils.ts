@@ -2,19 +2,19 @@
 
 import { chunk } from 'lodash';
 import { Node, topologicalSort } from '../../graphUtils';
-import { ExternalAssetItem } from '../../types/custom';
+import { DataExternalAssetItem } from '../../types/types';
 
 /** @hidden */
 export function assetChunker(
-  assets: ExternalAssetItem[],
+  assets: DataExternalAssetItem[],
   chunkSize: number = 1000
-): ExternalAssetItem[][] {
-  const nodes: Node<ExternalAssetItem>[] = assets.map(asset => {
+): DataExternalAssetItem[][] {
+  const nodes: Node<DataExternalAssetItem>[] = assets.map(asset => {
     return { data: asset };
   });
 
   // find all new exteralIds and map the new externalId to the asset
-  const externalIdMap = new Map<string, Node<ExternalAssetItem>>();
+  const externalIdMap = new Map<string, Node<DataExternalAssetItem>>();
   nodes.forEach(node => {
     const { externalId } = node.data;
     if (externalId) {

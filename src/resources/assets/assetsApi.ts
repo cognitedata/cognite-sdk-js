@@ -11,13 +11,13 @@ import {
   generateSearchEndpoint,
   generateUpdateEndpoint,
 } from '../../standardMethods';
-import { ExternalAssetItem } from '../../types/custom';
 import {
   Asset,
   AssetChange,
   AssetIdEither,
   AssetListScope,
   AssetSearchFilter,
+  DataExternalAssetItem,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
 import { assetChunker } from './assetUtils';
@@ -101,7 +101,7 @@ export class AssetsAPI {
 }
 
 export type AssetCreateEndpoint = (
-  items: ExternalAssetItem[]
+  items: DataExternalAssetItem[]
 ) => Promise<Asset[]>;
 
 export type AssetListEndpoint = (
