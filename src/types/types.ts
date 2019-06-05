@@ -14,11 +14,15 @@ export enum Aggregate {
   DiscreteVariance = 'discreteVariance',
 }
 
-export interface AnalyticsAcl {
-  analyticsAcl?: CogniteanalyticsAclAcl;
+export interface ApiKeyRequest {
+  serviceAccountId: number;
 }
 
-export interface ApiKeyObject {
+export interface ApiKeyResponse {
+  items: ApiKeyResponseItemsItem[];
+}
+
+export interface ApiKeyResponseItemsItem {
   /**
    * id of the api key
    */
@@ -32,25 +36,14 @@ export interface ApiKeyObject {
    */
   createdTime: Date;
 
-  status: ApiKeyObjectStatusEnum;
+  status: ApiKeyResponseItemsItemStatusEnum;
 }
 
-export enum ApiKeyObjectStatusEnum {
+export enum ApiKeyResponseItemsItemStatusEnum {
   ACTIVE = 'ACTIVE',
   DELETED = 'DELETED',
 }
 
-export interface ApiKeyRequest {
-  serviceAccountId: number;
-}
-
-export interface ApiKeyResponse {
-  items: ApiKeyObject[];
-}
-
-export interface ApikeysAcl {
-  apikeysAcl?: CogniteapikeysAclAcl;
-}
 /**
  * Change that will be applied to array object.
  */
@@ -113,25 +106,6 @@ export interface Asset {
   depth: number;
 }
 
-export interface AssetAllOf {
-  /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
-   */
-  createdTime: Date;
-  /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
-   */
-  lastUpdatedTime: Date;
-  /**
-   * IDs of assets on the path to the asset.
-   */
-  path: number[];
-  /**
-   * Asset path depth (number of levels below root node).
-   */
-  depth: number;
-}
-
 export type AssetChange = AssetChangeByExternalId | AssetChangeById;
 
 export interface AssetChangeByExternalId {
@@ -142,7 +116,7 @@ export interface AssetChangeByExternalId {
   externalId: string;
 }
 
-export interface AssetChangeByExternalIdAllOf {
+export interface AssetChangeByExternalIdMember {
   /**
    * External Id provided by client. Should be unique within the project.
    */
@@ -157,7 +131,7 @@ export interface AssetChangeById {
   id: number;
 }
 
-export interface AssetChangeByIdAllOf {
+export interface AssetChangeByIdMember {
   /**
    * Javascript friendly internal ID given to the object.
    */
@@ -251,6 +225,25 @@ export interface AssetMapping3D {
 export interface AssetMapping3DList {
   items: AssetMapping3D[];
 }
+
+export interface AssetMember {
+  /**
+   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  createdTime: Date;
+  /**
+   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  lastUpdatedTime: Date;
+  /**
+   * IDs of assets on the path to the asset.
+   */
+  path: number[];
+  /**
+   * Asset path depth (number of levels below root node).
+   */
+  depth: number;
+}
 /**
  * Changes applied to asset
  */
@@ -296,10 +289,6 @@ export interface AssetSearchSearch {
    */
   description?: string;
 }
-
-export interface AssetsAcl {
-  assetsAcl?: CogniteassetsAclAcl;
-}
 /**
  * Data specific to Azure AD authentication
  */
@@ -331,19 +320,71 @@ export interface BoundingBox3D {
 }
 
 export type CogniteCapabilityItem =
-  | AnalyticsAcl
-  | ApikeysAcl
-  | AssetsAcl
-  | EventsAcl
-  | FilesAcl
-  | GroupsAcl
-  | ProjectsAcl
-  | RawAcl
-  | SecurityCategoriesAcl
-  | SequencesAcl
-  | ThreedAcl
-  | TimeSeriesAcl
-  | UsersAcl;
+  | CogniteCapabilityItemAnalyticsAcl
+  | CogniteCapabilityItemApikeysAcl
+  | CogniteCapabilityItemAssetsAcl
+  | CogniteCapabilityItemEventsAcl
+  | CogniteCapabilityItemFilesAcl
+  | CogniteCapabilityItemGroupsAcl
+  | CogniteCapabilityItemProjectsAcl
+  | CogniteCapabilityItemRawAcl
+  | CogniteCapabilityItemSecurityCategoriesAcl
+  | CogniteCapabilityItemSequencesAcl
+  | CogniteCapabilityItemThreedAcl
+  | CogniteCapabilityItemTimeSeriesAcl
+  | CogniteCapabilityItemUsersAcl;
+
+export interface CogniteCapabilityItemAnalyticsAcl {
+  analyticsAcl?: CogniteanalyticsAclAcl;
+}
+
+export interface CogniteCapabilityItemApikeysAcl {
+  apikeysAcl?: CogniteapikeysAclAcl;
+}
+
+export interface CogniteCapabilityItemAssetsAcl {
+  assetsAcl?: CogniteassetsAclAcl;
+}
+
+export interface CogniteCapabilityItemEventsAcl {
+  eventsAcl?: CogniteeventsAclAcl;
+}
+
+export interface CogniteCapabilityItemFilesAcl {
+  filesAcl?: CognitefilesAclAcl;
+}
+
+export interface CogniteCapabilityItemGroupsAcl {
+  groupsAcl?: CognitegroupsAclAcl;
+}
+
+export interface CogniteCapabilityItemProjectsAcl {
+  projectsAcl?: CogniteprojectsAclAcl;
+}
+
+export interface CogniteCapabilityItemRawAcl {
+  rawAcl?: CogniterawAclAcl;
+}
+
+export interface CogniteCapabilityItemSecurityCategoriesAcl {
+  securityCategoriesAcl?: CognitesecuritycategoriesAclAcl;
+}
+
+export interface CogniteCapabilityItemSequencesAcl {
+  sequencesAcl?: CognitesequencesAclAcl;
+}
+
+export interface CogniteCapabilityItemThreedAcl {
+  threedAcl?: CognitethreedAclAcl;
+}
+
+export interface CogniteCapabilityItemTimeSeriesAcl {
+  timeSeriesAcl?: CognitetimeseriesAclAcl;
+}
+
+export interface CogniteCapabilityItemUsersAcl {
+  usersAcl?: CogniteusersAclAcl;
+}
 
 export interface CogniteanalyticsAclAcl {
   actions: CogniteanalyticsAclAction[];
@@ -371,8 +412,16 @@ export enum CogniteapikeysAclAction {
   DELETE = 'DELETE',
 }
 
-export interface CogniteapikeysAclScope {
+export type CogniteapikeysAclScope =
+  | CogniteapikeysAclScopeMember
+  | CogniteapikeysAclScopeMember1;
+
+export interface CogniteapikeysAclScopeMember {
   all?: object;
+}
+
+export interface CogniteapikeysAclScopeMember1 {
+  currentuserscope?: object;
 }
 
 export interface CogniteassetsAclAcl {
@@ -434,8 +483,16 @@ export enum CognitegroupsAclAction {
   DELETE = 'DELETE',
 }
 
-export interface CognitegroupsAclScope {
+export type CognitegroupsAclScope =
+  | CognitegroupsAclScopeMember
+  | CognitegroupsAclScopeMember1;
+
+export interface CognitegroupsAclScopeMember {
   all?: object;
+}
+
+export interface CognitegroupsAclScopeMember1 {
+  currentuserscope?: object;
 }
 
 export interface CogniteprojectsAclAcl {
@@ -525,8 +582,16 @@ export enum CognitetimeseriesAclAction {
   WRITE = 'WRITE',
 }
 
-export interface CognitetimeseriesAclScope {
+export type CognitetimeseriesAclScope =
+  | CognitetimeseriesAclScopeMember
+  | CognitetimeseriesAclScopeMember1;
+
+export interface CognitetimeseriesAclScopeMember {
   all?: object;
+}
+
+export interface CognitetimeseriesAclScopeMember1 {
+  assetIdScope?: CogniteassetsAclIdScope;
 }
 
 export interface CogniteusersAclAcl {
@@ -540,8 +605,16 @@ export enum CogniteusersAclAction {
   DELETE = 'DELETE',
 }
 
-export interface CogniteusersAclScope {
+export type CogniteusersAclScope =
+  | CogniteusersAclScopeMember
+  | CogniteusersAclScopeMember1;
+
+export interface CogniteusersAclScopeMember {
   all?: object;
+}
+
+export interface CogniteusersAclScopeMember1 {
+  currentuserscope?: object;
 }
 
 export interface CreateAssetMapping3D {
@@ -638,7 +711,7 @@ export interface DataExternalAssetItem {
   parentExternalId?: string;
 }
 
-export interface DataExternalAssetItemAllOf {
+export interface DataExternalAssetItemMember {
   /**
    * External Id provided by client. Should be unique within the project.
    */
@@ -654,7 +727,7 @@ export interface DataExternalFileMetadata {
 }
 
 export interface DataFileChange {
-  items: FileChangeItem[];
+  items: FileChangeUpdate[];
 }
 
 export interface DataFileMetadata {
@@ -787,10 +860,6 @@ export interface DataWithCursorRawDBTable {
   nextCursor?: string;
 }
 
-export type DatapointOrAggregate =
-  | DatapointsGetAggregateDatapoint
-  | DatapointsGetDatapoint;
-
 export interface DatapointsDeleteQuery {
   /**
    * List of delete filters
@@ -811,7 +880,11 @@ export interface DatapointsDeleteRange {
 /**
  * Select timeseries and datapoints to delete.
  */
-export interface DatapointsDeleteRequest {
+export type DatapointsDeleteRequest =
+  | DatapointsDeleteRequestMember
+  | DatapointsDeleteRequestMember1;
+
+export interface DatapointsDeleteRequestMember {
   /**
    * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
@@ -820,6 +893,35 @@ export interface DatapointsDeleteRequest {
    * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   exclusiveEnd?: number;
+  /**
+   * Javascript friendly internal ID given to the object.
+   */
+  id?: number;
+}
+
+export interface DatapointsDeleteRequestMember1 {
+  /**
+   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  inclusiveBegin: number;
+  /**
+   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  exclusiveEnd?: number;
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId?: string;
+}
+
+export interface DatapointsDeleteRequestMember1Member {
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId?: string;
+}
+
+export interface DatapointsDeleteRequestMemberMember {
   /**
    * Javascript friendly internal ID given to the object.
    */
@@ -841,7 +943,7 @@ export interface DatapointsGetAggregateDatapoint {
   datapoints: GetAggregateDatapoint[];
 }
 
-export interface DatapointsGetAggregateDatapointAllOf {
+export interface DatapointsGetAggregateDatapointMember {
   /**
    * The list of datapoints
    */
@@ -871,7 +973,7 @@ export interface DatapointsGetDoubleDatapoint {
   datapoints: GetDoubleDatapoint[];
 }
 
-export interface DatapointsGetDoubleDatapointAllOf {
+export interface DatapointsGetDoubleDatapointMember {
   /**
    * Whether the time series is string valued or not.
    */
@@ -901,7 +1003,7 @@ export interface DatapointsGetStringDatapoint {
   datapoints: GetStringDatapoint[];
 }
 
-export interface DatapointsGetStringDatapointAllOf {
+export interface DatapointsGetStringDatapointMember {
   /**
    * Whether the time series is string valued or not.
    */
@@ -972,10 +1074,18 @@ export interface DatapointsMultiQuery {
  * List of responses. Order matches the requests order.
  */
 export interface DatapointsOrAggregatesResponse {
-  items: DatapointOrAggregate[];
+  items: DatapointsOrAggregatesResponseItemsItem[];
 }
 
-export interface DatapointsPostDatapoint {
+export type DatapointsOrAggregatesResponseItemsItem =
+  | DatapointsGetAggregateDatapoint
+  | DatapointsGetDatapoint;
+
+export type DatapointsPostDatapoint =
+  | DatapointsPostDatapointMember
+  | DatapointsPostDatapointMember1;
+
+export interface DatapointsPostDatapointMember {
   /**
    * The list of datapoints. Total limit per request is 100000 datapoints.
    */
@@ -985,10 +1095,37 @@ export interface DatapointsPostDatapoint {
    */
   id?: number;
 }
+
+export interface DatapointsPostDatapointMember1 {
+  /**
+   * The list of datapoints. Total limit per request is 100000 datapoints.
+   */
+  datapoints: PostDatapoint[];
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId?: string;
+}
+
+export interface DatapointsPostDatapointMember1Member {
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId?: string;
+}
+
+export interface DatapointsPostDatapointMemberMember {
+  /**
+   * Javascript friendly internal ID given to the object.
+   */
+  id?: number;
+}
 /**
  * Parameters describing a query for datapoints.
  */
-export interface DatapointsQuery {
+export type DatapointsQuery = DatapointsQueryMember | DatapointsQueryMember1;
+
+export interface DatapointsQueryMember {
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
    */
@@ -1013,6 +1150,51 @@ export interface DatapointsQuery {
    * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
    */
   includeOutsidePoints?: boolean;
+  /**
+   * Javascript friendly internal ID given to the object.
+   */
+  id?: number;
+}
+
+export interface DatapointsQueryMember1 {
+  /**
+   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
+   */
+  start?: string;
+  /**
+   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
+   */
+  end?: string;
+  /**
+   * Return up to this number of datapoints.
+   */
+  limit?: number;
+  /**
+   * The aggregates to be returned.  Use default if null. An empty string must be sent to get raw data if the default is a set of aggregates.
+   */
+  aggregates?: Aggregate[];
+  /**
+   * The granularity size and granularity of the aggregates.
+   */
+  granularity?: string;
+  /**
+   * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
+   */
+  includeOutsidePoints?: boolean;
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId?: string;
+}
+
+export interface DatapointsQueryMember1Member {
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId?: string;
+}
+
+export interface DatapointsQueryMemberMember {
   /**
    * Javascript friendly internal ID given to the object.
    */
@@ -1063,31 +1245,6 @@ export interface DeleteAssetMapping3D {
   assetId: number;
 }
 
-export interface DetailedErrorResponse {
-  error?: DetailedErrorResponseError;
-}
-/**
- * Cognite API error
- */
-export interface DetailedErrorResponseError {
-  /**
-   * HTTP status code
-   */
-  code: number;
-  /**
-   * Error message
-   */
-  message: string;
-  /**
-   * List of lookup objects that have not matched any results.
-   */
-  missing?: { [key: string]: string }[];
-  /**
-   * List of objects that violate the uniqueness constraint.
-   */
-  duplicated?: { [key: string]: string }[];
-}
-
 export interface DuplicatedIdsInRequestResponse {
   error: DuplicatedIdsInRequestResponseError;
 }
@@ -1106,7 +1263,27 @@ export interface DuplicatedIdsInRequestResponseError {
   /**
    * Items which are duplicated
    */
-  duplicated: InternalIdOrExternalId[];
+  duplicated: DuplicatedIdsInRequestResponseErrorDuplicatedItem[];
+}
+/**
+ * Ids and ExternalIds which are duplicated in request
+ */
+export type DuplicatedIdsInRequestResponseErrorDuplicatedItem =
+  | DuplicatedIdsInRequestResponseErrorDuplicatedItemMember
+  | DuplicatedIdsInRequestResponseErrorDuplicatedItemMember1;
+
+export interface DuplicatedIdsInRequestResponseErrorDuplicatedItemMember {
+  /**
+   * Javascript friendly internal ID given to the object.
+   */
+  id: number;
+}
+
+export interface DuplicatedIdsInRequestResponseErrorDuplicatedItemMember1 {
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId: string;
 }
 
 export type EitherId = ExternalId | InternalId;
@@ -1124,10 +1301,6 @@ export interface EpochTimestampRange {
    */
   min?: number;
 }
-
-export type ErrorMissingItem =
-  | AssetChangeByExternalIdAllOf
-  | AssetChangeByIdAllOf;
 
 export interface Event {
   /**
@@ -1180,17 +1353,6 @@ export interface Event {
   createdTime: Date;
 }
 
-export interface EventAllOf {
-  /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
-   */
-  lastUpdatedTime: Date;
-  /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
-   */
-  createdTime: Date;
-}
-
 export type EventChange = EventChangeByExternalId | EventChangeById;
 
 export interface EventChangeByExternalId {
@@ -1201,7 +1363,7 @@ export interface EventChangeByExternalId {
   externalId: string;
 }
 
-export interface EventChangeByExternalIdAllOf {
+export interface EventChangeByExternalIdMember {
   /**
    * External Id provided by client. Should be unique within the project
    */
@@ -1216,7 +1378,7 @@ export interface EventChangeById {
   id: number;
 }
 
-export interface EventChangeByIdAllOf {
+export interface EventChangeByIdMember {
   /**
    * Javascript friendly internal ID given to the object.
    */
@@ -1271,12 +1433,23 @@ export interface EventFilterRequest {
   cursor?: string;
 }
 
-export interface EventFilterRequestAllOf {
+export interface EventFilterRequestMember {
   filter?: EventFilter;
   /**
    * <- Limits the maximum number of results to be returned by single request. In case there are more results to the request \'nextCursor\' attribute will be provided as part of response. Request may contain less results than request limit.
    */
   limit?: number;
+}
+
+export interface EventMember {
+  /**
+   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  lastUpdatedTime: Date;
+  /**
+   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  createdTime: Date;
 }
 /**
  * Changes will be applied to event.
@@ -1334,10 +1507,6 @@ export interface EventWithCursorResponse {
    * Cursor to get the next page of results (if available).
    */
   nextCursor?: string;
-}
-
-export interface EventsAcl {
-  eventsAcl?: CogniteeventsAclAcl;
 }
 /**
  * Representation of a physical asset, e.g plant or piece of equipment
@@ -1460,12 +1629,12 @@ export interface ExternalIdsAlreadyExistResponseError {
   /**
    * Items which are duplicated
    */
-  duplicated: ExternalIdsAlreadyExistResponseErrorDuplicated[];
+  duplicated: ExternalIdsAlreadyExistResponseErrorDuplicatedItem[];
 }
 /**
  * ExternalIds which already exist
  */
-export interface ExternalIdsAlreadyExistResponseErrorDuplicated {
+export interface ExternalIdsAlreadyExistResponseErrorDuplicatedItem {
   /**
    * External Id provided by client. Should be unique within the project.
    */
@@ -1475,44 +1644,19 @@ export interface ExternalIdsAlreadyExistResponseErrorDuplicated {
  * Changes will be applied to file.
  */
 export interface FileChange {
-  update: FileChangeUpdate;
+  update: FileChangeUpdate1;
 }
 
-export type FileChangeItem =
+export type FileChangeUpdate =
   | FileChangeUpdateByExternalId
   | FileChangeUpdateById;
 
-/**
- * Object change
- */
-export type FileChangeMetadata =
-  | FileChangeMetadataOneOf
-  | FileChangeMetadataOneOf1;
-
-export interface FileChangeMetadataOneOf {
-  /**
-   * Set the key-value pairs. All existing key-value pairs will be removed.
-   */
-  set: { [key: string]: string };
-}
-
-export interface FileChangeMetadataOneOf1 {
-  /**
-   * Add the key-value pairs. Values for existing keys will be overwritten.
-   */
-  add?: { [key: string]: string };
-  /**
-   * Remove the key-value pairs with given keys.
-   */
-  remove?: string[];
-}
-
-export interface FileChangeUpdate {
+export interface FileChangeUpdate1 {
   externalId?: SinglePatchString;
 
   source?: SinglePatchString;
 
-  metadata?: FileChangeMetadata;
+  metadata?: ObjectPatch;
 
   assetIds?: ArrayPatchLong;
 }
@@ -1523,7 +1667,14 @@ export interface FileChangeUpdateByExternalId {
    */
   externalId: string;
 
-  update: FileChangeUpdate;
+  update: FileChangeUpdate1;
+}
+
+export interface FileChangeUpdateByExternalIdMember {
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId: string;
 }
 
 export interface FileChangeUpdateById {
@@ -1532,7 +1683,14 @@ export interface FileChangeUpdateById {
    */
   id: number;
 
-  update: FileChangeUpdate;
+  update: FileChangeUpdate1;
+}
+
+export interface FileChangeUpdateByIdMember {
+  /**
+   * Javascript friendly internal ID given to the object.
+   */
+  id: number;
 }
 
 export interface FileExternalId {
@@ -1604,10 +1762,6 @@ export interface FileLinkIds {
   items?: FileIdEither[];
 }
 
-export interface FilesAcl {
-  filesAcl?: CognitefilesAclAcl;
-}
-
 export interface FilesMetadata {
   /**
    * External Id provided by client. Should be unique within the project.
@@ -1653,7 +1807,7 @@ export interface FilesMetadata {
   lastUpdatedTime: Date;
 }
 
-export interface FilesMetadataAllOf {
+export interface FilesMetadataMember {
   /**
    * Javascript friendly internal ID given to the object.
    */
@@ -1685,14 +1839,14 @@ export interface FilesSearchFilter {
    */
   limit?: number;
 
-  search?: FilesSearchFilterAllOfSearch;
+  search?: FilesSearchFilterMemberSearch;
 }
 
-export interface FilesSearchFilterAllOf {
-  search?: FilesSearchFilterAllOfSearch;
+export interface FilesSearchFilterMember {
+  search?: FilesSearchFilterMemberSearch;
 }
 
-export interface FilesSearchFilterAllOfSearch {
+export interface FilesSearchFilterMemberSearch {
   /**
    * Name of the file.
    */
@@ -1773,7 +1927,7 @@ export interface GetAggregateDatapoint {
   totalVariation?: number;
 }
 
-export interface GetAggregateDatapointAllOf {
+export interface GetAggregateDatapointMember {
   /**
    * The integral average value in the aggregate period
    */
@@ -1834,7 +1988,7 @@ export interface GetDoubleDatapoint {
   value: number;
 }
 
-export interface GetDoubleDatapointAllOf {
+export interface GetDoubleDatapointMember {
   /**
    * The data value.
    */
@@ -1852,7 +2006,7 @@ export interface GetStringDatapoint {
   value: string;
 }
 
-export interface GetStringDatapointAllOf {
+export interface GetStringDatapointMember {
   /**
    * The data value.
    */
@@ -1928,6 +2082,7 @@ export interface Group {
 
   deletedTime?: Date;
 }
+
 /**
  * A specification for creating a new group
  */
@@ -1942,10 +2097,6 @@ export interface GroupSpec {
   sourceId?: string;
 
   capabilities?: CogniteCapabilityItem[];
-}
-
-export interface GroupsAcl {
-  groupsAcl?: CognitegroupsAclAcl;
 }
 /**
  * An ID JWT token
@@ -1998,10 +2149,6 @@ export interface InlineObject5 {
 }
 
 export interface InlineObject6 {
-  items: number[];
-}
-
-export interface InlineObject7 {
   items: ServiceAccountInput[];
 }
 
@@ -2017,28 +2164,7 @@ export interface InlineResponse2002 {
   /**
    * List of service accounts
    */
-  items: InlineResponse2002Items[];
-}
-
-export interface InlineResponse2002Items {
-  /**
-   * Unique name of the service account
-   */
-  name: string;
-  /**
-   * List of group ids
-   */
-  groups: number[];
-
-  id: number;
-  /**
-   * If this service account has been logically deleted
-   */
-  isDeleted: boolean;
-  /**
-   * Time of deletion
-   */
-  deletedTime?: Date;
+  items: ServiceAccount[];
 }
 
 export interface InlineResponse2003 {
@@ -2056,13 +2182,6 @@ export interface InlineResponse2003 {
   defaultGroupId?: number;
 
   authentication?: OutputProjectAuthentication;
-}
-
-export interface InlineResponse2004 {
-  /**
-   * List of service accounts
-   */
-  items: ServiceAccount[];
 }
 
 export interface InlineResponse400 {
@@ -2102,12 +2221,45 @@ export interface InputProjectAuthentication {
   oAuth2Configuration?: OAuth2ConfigurationDTO;
 }
 /**
- * Range between two integers
+ * An event represents something that happened at a given interval in time, e.g a failure, a work order etc.
  */
-export interface IntegerRange {
-  max?: number;
-
-  min?: number;
+export interface InternalEvent {
+  /**
+   * External Id provided by client. Should be unique within the project
+   */
+  externalId?: string;
+  /**
+   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  startTime?: number;
+  /**
+   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  endTime?: number;
+  /**
+   * Type of the event, e.g \'failure\'.
+   */
+  type?: string;
+  /**
+   * Subtype of the event, e.g \'electrical\'.
+   */
+  subtype?: string;
+  /**
+   * Textual description of the event.
+   */
+  description?: string;
+  /**
+   * Custom, application specific metadata. String key -> String value
+   */
+  metadata?: { [key: string]: string };
+  /**
+   * Asset IDs of related equipment that this event relates to.
+   */
+  assetIds?: number[];
+  /**
+   * The source of this event.
+   */
+  source?: string;
 }
 
 export interface InternalId {
@@ -2116,19 +2268,43 @@ export interface InternalId {
    */
   id: number;
 }
-
-export type InternalIdOrExternalId =
-  | AssetChangeByExternalIdAllOf
-  | AssetChangeByIdAllOf;
-
 /**
  * Describes latest query
  */
-export interface LatestDataBeforeRequest {
+export type LatestDataBeforeRequest =
+  | LatestDataBeforeRequestMember
+  | LatestDataBeforeRequestMember1;
+
+export interface LatestDataBeforeRequestMember {
   /**
    * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch.
    */
   before?: string;
+  /**
+   * Javascript friendly internal ID given to the object.
+   */
+  id?: number;
+}
+
+export interface LatestDataBeforeRequestMember1 {
+  /**
+   * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch.
+   */
+  before?: string;
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId?: string;
+}
+
+export interface LatestDataBeforeRequestMember1Member {
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId?: string;
+}
+
+export interface LatestDataBeforeRequestMemberMember {
   /**
    * Javascript friendly internal ID given to the object.
    */
@@ -2236,18 +2412,15 @@ export interface ModelError {
   /**
    * List of lookup objects that have not matched any results.
    */
-  missing?: { [key: string]: string }[];
+  missing?: { [key: string]: object }[];
   /**
    * List of objects that violate the uniqueness constraint.
    */
-  duplicated?: { [key: string]: string }[];
+  duplicated?: { [key: string]: object }[];
 }
 
-export interface NewApiKeyResponse extends ApiKeyObject {
-  /**
-   * The api key to be used against the API
-   */
-  value: string;
+export interface NewApiKeyResponse {
+  items: NewApiKeyResponseDTO[];
 }
 
 export interface NewApiKeyResponseDTO {
@@ -2266,11 +2439,16 @@ export interface NewApiKeyResponseDTO {
   /**
    * The status of the api key.
    */
-  status: ApiKeyObjectStatusEnum;
+  status: NewApiKeyResponseDTOStatusEnum;
   /**
    * The api key to be used against the API
    */
   value: string;
+}
+
+export enum NewApiKeyResponseDTOStatusEnum {
+  ACTIVE = 'ACTIVE',
+  DELETED = 'DELETED',
 }
 
 export interface NextCursorData {
@@ -2331,24 +2509,44 @@ export interface NotFoundResponseError {
   /**
    * Items which are not found
    */
-  missing: ErrorMissingItem[];
+  missing: NotFoundResponseErrorMissingItem[];
+}
+/**
+ * Ids or ExternalIds which are not found
+ */
+export type NotFoundResponseErrorMissingItem =
+  | NotFoundResponseErrorMissingItemMember
+  | NotFoundResponseErrorMissingItemMember1;
+
+export interface NotFoundResponseErrorMissingItemMember {
+  /**
+   * Javascript friendly internal ID given to the object.
+   */
+  id: number;
+}
+
+export interface NotFoundResponseErrorMissingItemMember1 {
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId: string;
 }
 /**
  * Change that will be applied to assetId.
  */
 export type NullableSinglePatchLong =
-  | NullableSinglePatchLongOneOf
-  | NullableSinglePatchLongOneOf1;
+  | NullableSinglePatchLongMember
+  | NullableSinglePatchLongMember1;
 
-export interface NullableSinglePatchLongOneOf {
+export interface NullableSinglePatchLongMember {
   set: number;
 }
 
-export interface NullableSinglePatchLongOneOf1 {
-  setNull: NullableSinglePatchLongOneOf1SetNullEnum;
+export interface NullableSinglePatchLongMember1 {
+  setNull: NullableSinglePatchLongMember1SetNullEnum;
 }
 
-export enum NullableSinglePatchLongOneOf1SetNullEnum {
+export enum NullableSinglePatchLongMember1SetNullEnum {
   True = 'true',
 }
 
@@ -2356,12 +2554,21 @@ export enum NullableSinglePatchLongOneOf1SetNullEnum {
  * Change that will be applied to description.
  */
 export type NullableSinglePatchString =
-  | NullableSinglePatchLongOneOf1
-  | NullableSinglePatchStringOneOf;
+  | NullableSinglePatchStringMember
+  | NullableSinglePatchStringMember1;
 
-export interface NullableSinglePatchStringOneOf {
+export interface NullableSinglePatchStringMember {
   set: string;
 }
+
+export interface NullableSinglePatchStringMember1 {
+  setNull: NullableSinglePatchStringMember1SetNullEnum;
+}
+
+export enum NullableSinglePatchStringMember1SetNullEnum {
+  True = 'true',
+}
+
 /**
  * Data related to generic OAuth2 authentication. Not used for Azure AD
  */
@@ -2419,9 +2626,9 @@ export interface OutputProjectAuthentication {
   validDomains?: string[];
 }
 
-export type PostDatapoint = PostDatapointOneOf | PostDatapointOneOf1;
+export type PostDatapoint = PostDatapointMember | PostDatapointMember1;
 
-export interface PostDatapointOneOf {
+export interface PostDatapointMember {
   /**
    * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
@@ -2432,7 +2639,7 @@ export interface PostDatapointOneOf {
   value: number;
 }
 
-export interface PostDatapointOneOf1 {
+export interface PostDatapointMember1 {
   /**
    * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
@@ -2496,14 +2703,6 @@ export interface ProjectObject {
 
   authentication?: InputProjectAuthentication;
 }
-
-export interface ProjectsAcl {
-  projectsAcl?: CogniteprojectsAclAcl;
-}
-
-export interface RawAcl {
-  rawAcl?: CogniterawAclAcl;
-}
 /**
  * A NoSQL database to store customer data.
  */
@@ -2514,6 +2713,31 @@ export interface RawDB {
   name: string;
 }
 
+export interface RawDBRow {
+  /**
+   * Unique row key
+   */
+  key: string;
+  /**
+   * Row data stored as a JSON object.
+   */
+  columns: object;
+  /**
+   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  lastUpdatedTime: Date;
+}
+
+export interface RawDBRowInsert {
+  /**
+   * Unique row key
+   */
+  key: string;
+  /**
+   * Row data stored as a JSON object.
+   */
+  columns: object;
+}
 /**
  * A row key
  */
@@ -2523,7 +2747,6 @@ export interface RawDBRowKey {
    */
   key: string;
 }
-
 /**
  * A NoSQL database table to store customer data
  */
@@ -2533,7 +2756,6 @@ export interface RawDBTable {
    */
   name: string;
 }
-
 /**
  * Raw row result written in CSV format, with column columnHeaders.
  */
@@ -2545,7 +2767,7 @@ export interface RawRowCSV {
   /**
    * Rows of column values, in same order as columnHeaders.
    */
-  rows?: object[][];
+  rows?: any[][];
 }
 
 export interface RemoveField {
@@ -2585,15 +2807,15 @@ export interface RevealNode3D {
   sectorId?: number;
 }
 
-export interface RevealNode3DAllOf {
+export interface RevealNode3DList {
+  items: RevealNode3D[];
+}
+
+export interface RevealNode3DMember {
   /**
    * The sector the node is contained in.
    */
   sectorId?: number;
-}
-
-export interface RevealNode3DList {
-  items: RevealNode3D[];
 }
 
 export interface RevealRevision3D {
@@ -2644,7 +2866,7 @@ export enum RevealRevision3DStatusEnum {
   Failed = 'Failed',
 }
 
-export interface RevealRevision3DAllOf {
+export interface RevealRevision3DMember {
   sceneThreedFiles: Versioned3DFile[];
 }
 
@@ -2755,10 +2977,6 @@ export interface Search {
   query?: string;
 }
 
-export interface SecurityCategoriesAcl {
-  securityCategoriesAcl?: CognitesecuritycategoriesAclAcl;
-}
-
 export interface SecurityCategoryDTO {
   /**
    * Name of the security category
@@ -2789,10 +3007,6 @@ export interface SecurityCategoryWithCursorResponse {
    * Cursor to get the next page of results (if available).
    */
   nextCursor?: string;
-}
-
-export interface SequencesAcl {
-  sequencesAcl?: CognitesequencesAclAcl;
 }
 
 export interface ServiceAccount {
@@ -2828,7 +3042,7 @@ export interface ServiceAccountInput {
 }
 
 export interface SetLongField {
-  set?: number;
+  set: number;
 }
 
 export interface SetModelNameField {
@@ -2872,14 +3086,6 @@ export interface SingleTokenStatusDTOResponse {
   data: TokenStatusDTO;
 }
 
-export interface ThreedAcl {
-  threedAcl?: CognitethreedAclAcl;
-}
-
-export interface TimeSeriesAcl {
-  timeSeriesAcl?: CognitetimeseriesAclAcl;
-}
-
 export interface TimeSeriesCreateRequest {
   items: PostTimeSeriesMetadataDTO[];
 }
@@ -2888,7 +3094,25 @@ export interface TimeSeriesLookupById {
   /**
    * List of ID objects
    */
-  items: InternalIdOrExternalId[];
+  items: TimeSeriesLookupByIdItemsItem[];
+}
+
+export type TimeSeriesLookupByIdItemsItem =
+  | TimeSeriesLookupByIdItemsItemMember
+  | TimeSeriesLookupByIdItemsItemMember1;
+
+export interface TimeSeriesLookupByIdItemsItemMember {
+  /**
+   * Javascript friendly internal ID given to the object.
+   */
+  id?: number;
+}
+
+export interface TimeSeriesLookupByIdItemsItemMember1 {
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId?: string;
 }
 /**
  * Changes will be applied to timeseries.
@@ -2935,8 +3159,22 @@ export interface TimeSeriesUpdateByExternalId {
   externalId: string;
 }
 
+export interface TimeSeriesUpdateByExternalIdMember {
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId: string;
+}
+
 export interface TimeSeriesUpdateById {
   update: TimeSeriesPatchUpdate;
+  /**
+   * Javascript friendly internal ID given to the object.
+   */
+  id: number;
+}
+
+export interface TimeSeriesUpdateByIdMember {
   /**
    * Javascript friendly internal ID given to the object.
    */
@@ -3019,20 +3257,24 @@ export enum UnrealRevision3DStatusEnum {
   Failed = 'Failed',
 }
 
+export interface UnrealRevision3DMember {
+  sceneThreedFiles: Versioned3DFile[];
+}
+
 export interface UpdateModel3D {
   /**
    * Javascript friendly internal ID given to the object.
    */
   id: number;
 
-  update?: UpdateModel3DAllOfUpdate;
+  update?: UpdateModel3DMemberUpdate;
 }
 
-export interface UpdateModel3DAllOf {
-  update?: UpdateModel3DAllOfUpdate;
+export interface UpdateModel3DMember {
+  update?: UpdateModel3DMemberUpdate;
 }
 
-export interface UpdateModel3DAllOfUpdate {
+export interface UpdateModel3DMemberUpdate {
   name?: SetModelNameField;
 }
 
@@ -3042,22 +3284,22 @@ export interface UpdateRevision3D {
    */
   id: number;
 
-  update?: UpdateRevision3DAllOfUpdate;
+  update?: UpdateRevision3DMemberUpdate;
 }
 
-export interface UpdateRevision3DAllOf {
-  update?: UpdateRevision3DAllOfUpdate;
+export interface UpdateRevision3DMember {
+  update?: UpdateRevision3DMemberUpdate;
 }
 
-export interface UpdateRevision3DAllOfUpdate {
-  published?: UpdateRevision3DAllOfUpdatePublished;
+export interface UpdateRevision3DMemberUpdate {
+  published?: UpdateRevision3DMemberUpdatePublished;
 
   rotation?: SetRevisionRotation;
 
   camera?: SetRevisionCameraProperties;
 }
 
-export interface UpdateRevision3DAllOfUpdatePublished {
+export interface UpdateRevision3DMemberUpdatePublished {
   /**
    * True if the revision is marked as published.
    */
@@ -3071,10 +3313,6 @@ export interface UpdateRevision3DThumbnail {
    * File ID of thumbnail file in Files API. _Only JPEG and PNG files are supported_.
    */
   fileId: number;
-}
-
-export interface UsersAcl {
-  usersAcl?: CogniteusersAclAcl;
 }
 /**
  * The file ID of the data file for this resource, with multiple versions supported. Use /3d/files/{id} to retrieve the file.
