@@ -18,7 +18,7 @@ import {
 } from '../../types/custom';
 import {
   ExternalFilesMetadata,
-  FileChangeItem,
+  FileChangeUpdate,
   FileLink,
   FilesMetadata,
   FilesSearchFilter,
@@ -146,5 +146,5 @@ export type FilesGetDownloadUrlsEndpoint = (
 ) => Promise<(FileLink & IdEither)[]>;
 
 export type FilesUpdateEndpoint = (
-  changes: FileChangeItem[]
+  changes: FileChangeUpdate[]
 ) => Promise<FilesMetadata[]>;

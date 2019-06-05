@@ -6,7 +6,6 @@ import {
   ExternalAsset,
   FileFilter,
   FilesMetadata,
-  RawDBRowKey,
 } from './types';
 
 export interface FileRequestFilter extends Cursor, FileFilter {}
@@ -137,20 +136,6 @@ export interface TimeseriesFilter extends Limit {
    * Get time series related to these assets. Takes [ 1 .. 100 ] unique items.
    */
   assetIds?: number[];
-}
-
-export interface RawDBRow extends RawDBRowInsert {
-  /**
-   * Time when the row was last updated
-   */
-  lastUpdatedTime: Date;
-}
-
-export interface RawDBRowInsert extends RawDBRowKey {
-  /**
-   * Row data stored as a JSON object.
-   */
-  columns: { [key: string]: string };
 }
 
 export interface ListResponse<T> extends CursorResponse<T> {

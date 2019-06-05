@@ -1,5 +1,4 @@
 // Copyright 2019 Cognite AS
-import { RawDBRow, RawDBRowInsert } from './custom';
 
 export enum Aggregate {
   Average = 'average',
@@ -14,15 +13,11 @@ export enum Aggregate {
   DiscreteVariance = 'discreteVariance',
 }
 
-export interface ApiKeyRequest {
-  serviceAccountId: number;
+export interface AnalyticsAcl {
+  analyticsAcl?: CogniteanalyticsAclAcl;
 }
 
-export interface ApiKeyResponse {
-  items: ApiKeyResponseItemsItem[];
-}
-
-export interface ApiKeyResponseItemsItem {
+export interface ApiKeyObject {
   /**
    * id of the api key
    */
@@ -36,14 +31,25 @@ export interface ApiKeyResponseItemsItem {
    */
   createdTime: Date;
 
-  status: ApiKeyResponseItemsItemStatusEnum;
+  status: ApiKeyObjectStatusEnum;
 }
 
-export enum ApiKeyResponseItemsItemStatusEnum {
+export enum ApiKeyObjectStatusEnum {
   ACTIVE = 'ACTIVE',
   DELETED = 'DELETED',
 }
 
+export interface ApiKeyRequest {
+  serviceAccountId: number;
+}
+
+export interface ApiKeyResponse {
+  items: ApiKeyObject[];
+}
+
+export interface ApikeysAcl {
+  apikeysAcl?: CogniteapikeysAclAcl;
+}
 /**
  * Change that will be applied to array object.
  */
@@ -289,6 +295,10 @@ export interface AssetSearchSearch {
    */
   description?: string;
 }
+
+export interface AssetsAcl {
+  assetsAcl?: CogniteassetsAclAcl;
+}
 /**
  * Data specific to Azure AD authentication
  */
@@ -320,71 +330,19 @@ export interface BoundingBox3D {
 }
 
 export type CogniteCapabilityItem =
-  | CogniteCapabilityItemAnalyticsAcl
-  | CogniteCapabilityItemApikeysAcl
-  | CogniteCapabilityItemAssetsAcl
-  | CogniteCapabilityItemEventsAcl
-  | CogniteCapabilityItemFilesAcl
-  | CogniteCapabilityItemGroupsAcl
-  | CogniteCapabilityItemProjectsAcl
-  | CogniteCapabilityItemRawAcl
-  | CogniteCapabilityItemSecurityCategoriesAcl
-  | CogniteCapabilityItemSequencesAcl
-  | CogniteCapabilityItemThreedAcl
-  | CogniteCapabilityItemTimeSeriesAcl
-  | CogniteCapabilityItemUsersAcl;
-
-export interface CogniteCapabilityItemAnalyticsAcl {
-  analyticsAcl?: CogniteanalyticsAclAcl;
-}
-
-export interface CogniteCapabilityItemApikeysAcl {
-  apikeysAcl?: CogniteapikeysAclAcl;
-}
-
-export interface CogniteCapabilityItemAssetsAcl {
-  assetsAcl?: CogniteassetsAclAcl;
-}
-
-export interface CogniteCapabilityItemEventsAcl {
-  eventsAcl?: CogniteeventsAclAcl;
-}
-
-export interface CogniteCapabilityItemFilesAcl {
-  filesAcl?: CognitefilesAclAcl;
-}
-
-export interface CogniteCapabilityItemGroupsAcl {
-  groupsAcl?: CognitegroupsAclAcl;
-}
-
-export interface CogniteCapabilityItemProjectsAcl {
-  projectsAcl?: CogniteprojectsAclAcl;
-}
-
-export interface CogniteCapabilityItemRawAcl {
-  rawAcl?: CogniterawAclAcl;
-}
-
-export interface CogniteCapabilityItemSecurityCategoriesAcl {
-  securityCategoriesAcl?: CognitesecuritycategoriesAclAcl;
-}
-
-export interface CogniteCapabilityItemSequencesAcl {
-  sequencesAcl?: CognitesequencesAclAcl;
-}
-
-export interface CogniteCapabilityItemThreedAcl {
-  threedAcl?: CognitethreedAclAcl;
-}
-
-export interface CogniteCapabilityItemTimeSeriesAcl {
-  timeSeriesAcl?: CognitetimeseriesAclAcl;
-}
-
-export interface CogniteCapabilityItemUsersAcl {
-  usersAcl?: CogniteusersAclAcl;
-}
+  | AnalyticsAcl
+  | ApikeysAcl
+  | AssetsAcl
+  | EventsAcl
+  | FilesAcl
+  | GroupsAcl
+  | ProjectsAcl
+  | RawAcl
+  | SecurityCategoriesAcl
+  | SequencesAcl
+  | ThreedAcl
+  | TimeSeriesAcl
+  | UsersAcl;
 
 export interface CogniteanalyticsAclAcl {
   actions: CogniteanalyticsAclAction[];
@@ -1508,6 +1466,10 @@ export interface EventWithCursorResponse {
    */
   nextCursor?: string;
 }
+
+export interface EventsAcl {
+  eventsAcl?: CogniteeventsAclAcl;
+}
 /**
  * Representation of a physical asset, e.g plant or piece of equipment
  */
@@ -1760,6 +1722,10 @@ export interface FileLink {
 
 export interface FileLinkIds {
   items?: FileIdEither[];
+}
+
+export interface FilesAcl {
+  filesAcl?: CognitefilesAclAcl;
 }
 
 export interface FilesMetadata {
@@ -2097,6 +2063,10 @@ export interface GroupSpec {
   sourceId?: string;
 
   capabilities?: CogniteCapabilityItem[];
+}
+
+export interface GroupsAcl {
+  groupsAcl?: CognitegroupsAclAcl;
 }
 /**
  * An ID JWT token
@@ -2703,6 +2673,14 @@ export interface ProjectObject {
 
   authentication?: InputProjectAuthentication;
 }
+
+export interface ProjectsAcl {
+  projectsAcl?: CogniteprojectsAclAcl;
+}
+
+export interface RawAcl {
+  rawAcl?: CogniterawAclAcl;
+}
 /**
  * A NoSQL database to store customer data.
  */
@@ -2977,6 +2955,10 @@ export interface Search {
   query?: string;
 }
 
+export interface SecurityCategoriesAcl {
+  securityCategoriesAcl?: CognitesecuritycategoriesAclAcl;
+}
+
 export interface SecurityCategoryDTO {
   /**
    * Name of the security category
@@ -3007,6 +2989,10 @@ export interface SecurityCategoryWithCursorResponse {
    * Cursor to get the next page of results (if available).
    */
   nextCursor?: string;
+}
+
+export interface SequencesAcl {
+  sequencesAcl?: CognitesequencesAclAcl;
 }
 
 export interface ServiceAccount {
@@ -3084,6 +3070,14 @@ export type SinglePatchString = RemoveField | SetStringField;
 
 export interface SingleTokenStatusDTOResponse {
   data: TokenStatusDTO;
+}
+
+export interface ThreedAcl {
+  threedAcl?: CognitethreedAclAcl;
+}
+
+export interface TimeSeriesAcl {
+  timeSeriesAcl?: CognitetimeseriesAclAcl;
 }
 
 export interface TimeSeriesCreateRequest {
@@ -3313,6 +3307,10 @@ export interface UpdateRevision3DThumbnail {
    * File ID of thumbnail file in Files API. _Only JPEG and PNG files are supported_.
    */
   fileId: number;
+}
+
+export interface UsersAcl {
+  usersAcl?: CogniteusersAclAcl;
 }
 /**
  * The file ID of the data file for this resource, with multiple versions supported. Use /3d/files/{id} to retrieve the file.
