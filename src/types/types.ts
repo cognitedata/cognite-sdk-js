@@ -1006,11 +1006,11 @@ export interface DatapointsMultiQuery {
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
    */
-  start?: string;
+  start?: Date | string;
   /**
    * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
    */
-  end?: string;
+  end?: Date | string;
   /**
    * Return up to this number of datapoints.
    */
@@ -1499,6 +1499,7 @@ export interface ExternalAsset {
    */
   source?: string;
 }
+
 /**
  * An event represents something that happened at a given interval in time, e.g a failure, a work order etc.
  */
@@ -2699,7 +2700,7 @@ export interface RawDBRow {
   /**
    * Row data stored as a JSON object.
    */
-  columns: object;
+  columns: any;
   /**
    * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
@@ -2714,7 +2715,7 @@ export interface RawDBRowInsert {
   /**
    * Row data stored as a JSON object.
    */
-  columns: object;
+  columns: any;
 }
 /**
  * A row key
