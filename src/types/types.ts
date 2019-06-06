@@ -405,9 +405,12 @@ export interface CogniteeventsAclAcl {
 
   scope: CogniteeventsAclScope;
 }
-export enum CogniteeventsAclAction {
-  READ = 'READ',
-  WRITE = 'WRITE',
+
+export type CogniteeventsAclAction = 'READ' | 'WRITE'
+
+export const CogniteeventsAclAction = {
+  READ: 'READ' as CogniteeventsAclAction,
+  EXECUTE: 'WRITE' as CogniteeventsAclAction
 }
 
 export interface CogniteeventsAclScope {

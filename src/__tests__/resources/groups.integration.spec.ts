@@ -2,10 +2,9 @@
 
 import { API } from '../../resources/api';
 import {
-  CogniteeventsAclAction,
   Group,
   GroupSpec,
-  ServiceAccount,
+  ServiceAccount
 } from '../../types/types';
 import { sleepPromise } from '../../utils';
 import { randomInt, retryInSeconds, setupClient } from '../testUtils';
@@ -33,7 +32,7 @@ describe('Groups integration test', () => {
         capabilities: [
           {
             eventsAcl: {
-              actions: [CogniteeventsAclAction.READ],
+              actions: ['READ'],
               scope: { all: {} },
             },
           },
