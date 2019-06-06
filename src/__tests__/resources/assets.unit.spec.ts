@@ -32,9 +32,17 @@ describe('Asset unit test', () => {
     });
 
     test('regular tree', () => {
-      const assetA = { name:'', externalId: 'A' };
-      const assetAA = { name:'', externalId: 'AA', parentExternalId: assetA.externalId };
-      const assetAB = { name:'', externalId: 'AB', parentExternalId: assetA.externalId };
+      const assetA = { name: '', externalId: 'A' };
+      const assetAA = {
+        name: '',
+        externalId: 'AA',
+        parentExternalId: assetA.externalId,
+      };
+      const assetAB = {
+        name: '',
+        externalId: 'AB',
+        parentExternalId: assetA.externalId,
+      };
       const assetAAA = {
         name: '',
         externalId: 'AAA',
@@ -47,7 +55,7 @@ describe('Asset unit test', () => {
       };
       const someAsset = {
         parentId: 123,
-        name: ''
+        name: '',
       };
       const inputOrder = [
         assetAB,
