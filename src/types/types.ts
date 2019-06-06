@@ -1,17 +1,29 @@
 // Copyright 2019 Cognite AS
 
-export enum Aggregate {
-  Average = 'average',
-  Max = 'max',
-  Min = 'min',
-  Count = 'count',
-  Sum = 'sum',
-  Interpolation = 'interpolation',
-  StepInterpolation = 'stepInterpolation',
-  TotalVariation = 'totalVariation',
-  ContinuousVariance = 'continuousVariance',
-  DiscreteVariance = 'discreteVariance',
-}
+export type Aggregate =
+  | 'average'
+  | 'max'
+  | 'min'
+  | 'count'
+  | 'sum'
+  | 'interpolation'
+  | 'stepInterpolation'
+  | 'totalVariation'
+  | 'continuousVariance'
+  | 'discreteVariance';
+
+export const Aggregate = {
+  Average: 'average' as Aggregate,
+  Max: 'max' as Aggregate,
+  Min: 'min' as Aggregate,
+  Count: 'count' as Aggregate,
+  Sum: 'sum' as Aggregate,
+  Interpolation: 'interpolation' as Aggregate,
+  StepInterpolation: 'stepInterpolation' as Aggregate,
+  TotalVariation: 'totalVariation' as Aggregate,
+  ContinuousVariance: 'continuousVariance' as Aggregate,
+  DiscreteVariance: 'discreteVariance' as Aggregate,
+};
 
 export interface AnalyticsAcl {
   analyticsAcl?: CogniteanalyticsAclAcl;
@@ -95,11 +107,11 @@ export interface Asset {
    */
   id: number;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   createdTime: Date;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   lastUpdatedTime: Date;
   /**
@@ -234,11 +246,11 @@ export interface AssetMapping3DList {
 
 export interface AssetMember {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   createdTime: Date;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   lastUpdatedTime: Date;
   /**
@@ -349,11 +361,13 @@ export interface CogniteanalyticsAclAcl {
 
   scope: CogniteanalyticsAclScope;
 }
-export enum CogniteanalyticsAclAction {
-  READ = 'READ',
-  EXECUTE = 'EXECUTE',
-  LIST = 'LIST',
-}
+export type CogniteanalyticsAclAction = 'READ' | 'EXECUTE' | 'LIST';
+
+export const CogniteanalyticsAclAction = {
+  READ: 'READ' as CogniteanalyticsAclAction,
+  EXECUTE: 'EXECUTE' as CogniteanalyticsAclAction,
+  LIST: 'LIST' as CogniteanalyticsAclAction,
+};
 
 export interface CogniteanalyticsAclScope {
   all?: object;
@@ -364,11 +378,13 @@ export interface CogniteapikeysAclAcl {
 
   scope: CogniteapikeysAclScope;
 }
-export enum CogniteapikeysAclAction {
-  LIST = 'LIST',
-  CREATE = 'CREATE',
-  DELETE = 'DELETE',
-}
+export type CogniteapikeysAclAction = 'LIST' | 'CREATE' | 'DELETE';
+
+export const CogniteapikeysAclAction = {
+  LIST: 'LIST' as CogniteapikeysAclAction,
+  CREATE: 'CREATE' as CogniteapikeysAclAction,
+  DELETE: 'DELETE' as CogniteapikeysAclAction,
+};
 
 export type CogniteapikeysAclScope =
   | CogniteapikeysAclScopeMember
@@ -387,10 +403,12 @@ export interface CogniteassetsAclAcl {
 
   scope: CogniteassetsAclScope;
 }
-export enum CogniteassetsAclAction {
-  READ = 'READ',
-  WRITE = 'WRITE',
-}
+export type CogniteassetsAclAction = 'READ' | 'WRITE';
+
+export const CogniteassetsAclAction = {
+  READ: 'READ' as CogniteassetsAclAction,
+  WRITE: 'WRITE' as CogniteassetsAclAction,
+};
 
 export interface CogniteassetsAclIdScope {
   subtreeIds?: string[];
@@ -405,13 +423,12 @@ export interface CogniteeventsAclAcl {
 
   scope: CogniteeventsAclScope;
 }
-
-export type CogniteeventsAclAction = 'READ' | 'WRITE'
+export type CogniteeventsAclAction = 'READ' | 'WRITE';
 
 export const CogniteeventsAclAction = {
   READ: 'READ' as CogniteeventsAclAction,
-  EXECUTE: 'WRITE' as CogniteeventsAclAction
-}
+  WRITE: 'WRITE' as CogniteeventsAclAction,
+};
 
 export interface CogniteeventsAclScope {
   all?: object;
@@ -422,10 +439,12 @@ export interface CognitefilesAclAcl {
 
   scope: CognitefilesAclScope;
 }
-export enum CognitefilesAclAction {
-  READ = 'READ',
-  WRITE = 'WRITE',
-}
+export type CognitefilesAclAction = 'READ' | 'WRITE';
+
+export const CognitefilesAclAction = {
+  READ: 'READ' as CognitefilesAclAction,
+  WRITE: 'WRITE' as CognitefilesAclAction,
+};
 
 export interface CognitefilesAclScope {
   all?: object;
@@ -436,13 +455,20 @@ export interface CognitegroupsAclAcl {
 
   scope: CognitegroupsAclScope;
 }
-export enum CognitegroupsAclAction {
-  LIST = 'LIST',
-  READ = 'READ',
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
-}
+export type CognitegroupsAclAction =
+  | 'LIST'
+  | 'READ'
+  | 'CREATE'
+  | 'UPDATE'
+  | 'DELETE';
+
+export const CognitegroupsAclAction = {
+  LIST: 'LIST' as CognitegroupsAclAction,
+  READ: 'READ' as CognitegroupsAclAction,
+  CREATE: 'CREATE' as CognitegroupsAclAction,
+  UPDATE: 'UPDATE' as CognitegroupsAclAction,
+  DELETE: 'DELETE' as CognitegroupsAclAction,
+};
 
 export type CognitegroupsAclScope =
   | CognitegroupsAclScopeMember
@@ -461,12 +487,14 @@ export interface CogniteprojectsAclAcl {
 
   scope: CogniteprojectsAclScope;
 }
-export enum CogniteprojectsAclAction {
-  LIST = 'LIST',
-  READ = 'READ',
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
-}
+export type CogniteprojectsAclAction = 'LIST' | 'READ' | 'CREATE' | 'UPDATE';
+
+export const CogniteprojectsAclAction = {
+  LIST: 'LIST' as CogniteprojectsAclAction,
+  READ: 'READ' as CogniteprojectsAclAction,
+  CREATE: 'CREATE' as CogniteprojectsAclAction,
+  UPDATE: 'UPDATE' as CogniteprojectsAclAction,
+};
 
 export interface CogniteprojectsAclScope {
   all?: object;
@@ -477,11 +505,13 @@ export interface CogniterawAclAcl {
 
   scope: CogniterawAclScope;
 }
-export enum CogniterawAclAction {
-  READ = 'READ',
-  WRITE = 'WRITE',
-  LIST = 'LIST',
-}
+export type CogniterawAclAction = 'READ' | 'WRITE' | 'LIST';
+
+export const CogniterawAclAction = {
+  READ: 'READ' as CogniterawAclAction,
+  WRITE: 'WRITE' as CogniterawAclAction,
+  LIST: 'LIST' as CogniterawAclAction,
+};
 
 export interface CogniterawAclScope {
   all?: object;
@@ -492,12 +522,18 @@ export interface CognitesecuritycategoriesAclAcl {
 
   scope: CognitesecuritycategoriesAclScope;
 }
-export enum CognitesecuritycategoriesAclAction {
-  MEMBEROF = 'MEMBEROF',
-  LIST = 'LIST',
-  CREATE = 'CREATE',
-  DELETE = 'DELETE',
-}
+export type CognitesecuritycategoriesAclAction =
+  | 'MEMBEROF'
+  | 'LIST'
+  | 'CREATE'
+  | 'DELETE';
+
+export const CognitesecuritycategoriesAclAction = {
+  MEMBEROF: 'MEMBEROF' as CognitesecuritycategoriesAclAction,
+  LIST: 'LIST' as CognitesecuritycategoriesAclAction,
+  CREATE: 'CREATE' as CognitesecuritycategoriesAclAction,
+  DELETE: 'DELETE' as CognitesecuritycategoriesAclAction,
+};
 
 export interface CognitesecuritycategoriesAclScope {
   all?: object;
@@ -508,10 +544,12 @@ export interface CognitesequencesAclAcl {
 
   scope: CognitesequencesAclScope;
 }
-export enum CognitesequencesAclAction {
-  READ = 'READ',
-  WRITE = 'WRITE',
-}
+export type CognitesequencesAclAction = 'READ' | 'WRITE';
+
+export const CognitesequencesAclAction = {
+  READ: 'READ' as CognitesequencesAclAction,
+  WRITE: 'WRITE' as CognitesequencesAclAction,
+};
 
 export interface CognitesequencesAclScope {
   all?: object;
@@ -522,12 +560,14 @@ export interface CognitethreedAclAcl {
 
   scope: CognitethreedAclScope;
 }
-export enum CognitethreedAclAction {
-  READ = 'READ',
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
-}
+export type CognitethreedAclAction = 'READ' | 'CREATE' | 'UPDATE' | 'DELETE';
+
+export const CognitethreedAclAction = {
+  READ: 'READ' as CognitethreedAclAction,
+  CREATE: 'CREATE' as CognitethreedAclAction,
+  UPDATE: 'UPDATE' as CognitethreedAclAction,
+  DELETE: 'DELETE' as CognitethreedAclAction,
+};
 
 export interface CognitethreedAclScope {
   all?: object;
@@ -538,10 +578,12 @@ export interface CognitetimeseriesAclAcl {
 
   scope: CognitetimeseriesAclScope;
 }
-export enum CognitetimeseriesAclAction {
-  READ = 'READ',
-  WRITE = 'WRITE',
-}
+export type CognitetimeseriesAclAction = 'READ' | 'WRITE';
+
+export const CognitetimeseriesAclAction = {
+  READ: 'READ' as CognitetimeseriesAclAction,
+  WRITE: 'WRITE' as CognitetimeseriesAclAction,
+};
 
 export type CognitetimeseriesAclScope =
   | CognitetimeseriesAclScopeMember
@@ -560,11 +602,13 @@ export interface CogniteusersAclAcl {
 
   scope: CogniteusersAclScope;
 }
-export enum CogniteusersAclAction {
-  LIST = 'LIST',
-  CREATE = 'CREATE',
-  DELETE = 'DELETE',
-}
+export type CogniteusersAclAction = 'LIST' | 'CREATE' | 'DELETE';
+
+export const CogniteusersAclAction = {
+  LIST: 'LIST' as CogniteusersAclAction,
+  CREATE: 'CREATE' as CogniteusersAclAction,
+  DELETE: 'DELETE' as CogniteusersAclAction,
+};
 
 export type CogniteusersAclScope =
   | CogniteusersAclScopeMember
@@ -603,6 +647,10 @@ export interface CreateRevision3D {
   published?: boolean;
 
   rotation?: number[];
+  /**
+   * Custom, application specific metadata. String key -> String value
+   */
+  metadata?: { [key: string]: string };
 
   camera?: RevisionCameraProperties;
   /**
@@ -821,6 +869,14 @@ export interface DataWithCursorRawDBTable {
   nextCursor?: string;
 }
 
+export interface DataWithLinksObject {
+  items?: DataWithLinksObjectItemsItem[];
+}
+
+export interface DataWithLinksObjectItemsItem {
+  downloadUrl?: string;
+}
+
 export interface DatapointsDeleteQuery {
   /**
    * List of delete filters
@@ -830,11 +886,11 @@ export interface DatapointsDeleteQuery {
 
 export interface DatapointsDeleteRange {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   inclusiveBegin: number;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   exclusiveEnd?: number;
 }
@@ -847,11 +903,11 @@ export type DatapointsDeleteRequest =
 
 export interface DatapointsDeleteRequestMember {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   inclusiveBegin: number;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   exclusiveEnd?: number;
   /**
@@ -862,11 +918,11 @@ export interface DatapointsDeleteRequestMember {
 
 export interface DatapointsDeleteRequestMember1 {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   inclusiveBegin: number;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   exclusiveEnd?: number;
   /**
@@ -1006,14 +1062,10 @@ export interface DatapointsMetadata {
 
 export interface DatapointsMultiQuery {
   items: DatapointsQuery[];
-  /**
-   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
-   */
-  start?: Date | string;
-  /**
-   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
-   */
-  end?: Date | string;
+
+  start?: TimestampOrStringStart;
+
+  end?: TimestampOrStringEnd;
   /**
    * Return up to this number of datapoints.
    */
@@ -1087,14 +1139,9 @@ export interface DatapointsPostDatapointMemberMember {
 export type DatapointsQuery = DatapointsQueryMember | DatapointsQueryMember1;
 
 export interface DatapointsQueryMember {
-  /**
-   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
-   */
-  start?: string;
-  /**
-   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
-   */
-  end?: string;
+  start?: TimestampOrStringStart;
+
+  end?: TimestampOrStringEnd;
   /**
    * Return up to this number of datapoints.
    */
@@ -1118,14 +1165,9 @@ export interface DatapointsQueryMember {
 }
 
 export interface DatapointsQueryMember1 {
-  /**
-   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
-   */
-  start?: string;
-  /**
-   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
-   */
-  end?: string;
+  start?: TimestampOrStringStart;
+
+  end?: TimestampOrStringEnd;
   /**
    * Return up to this number of datapoints.
    */
@@ -1163,14 +1205,9 @@ export interface DatapointsQueryMemberMember {
 }
 
 export interface DatapointsQueryProperties {
-  /**
-   * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
-   */
-  start?: string;
-  /**
-   * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
-   */
-  end?: string;
+  start?: TimestampOrStringStart;
+
+  end?: TimestampOrStringEnd;
   /**
    * Return up to this number of datapoints.
    */
@@ -1254,13 +1291,17 @@ export type EitherId = ExternalId | InternalId;
  */
 export interface EpochTimestampRange {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   max?: number;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   min?: number;
+}
+
+export interface ErrorResponseObject {
+  error: Error;
 }
 
 export interface Event {
@@ -1269,11 +1310,11 @@ export interface Event {
    */
   externalId?: string;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   startTime?: number;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   endTime?: number;
   /**
@@ -1305,11 +1346,11 @@ export interface Event {
    */
   id: number;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   lastUpdatedTime: Date;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   createdTime: Date;
 }
@@ -1404,11 +1445,11 @@ export interface EventFilterRequestMember {
 
 export interface EventMember {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   lastUpdatedTime: Date;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   createdTime: Date;
 }
@@ -1502,7 +1543,6 @@ export interface ExternalAsset {
    */
   source?: string;
 }
-
 /**
  * An event represents something that happened at a given interval in time, e.g a failure, a work order etc.
  */
@@ -1512,11 +1552,11 @@ export interface ExternalEvent {
    */
   externalId?: string;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   startTime?: number;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   endTime?: number;
   /**
@@ -1681,8 +1721,10 @@ export interface FileFilterFilter {
    * Name of the file.
    */
   name?: string;
-
-  mimeType?: MimeType;
+  /**
+   * File type. E.g. text/plain, application/pdf, ..
+   */
+  mimeType?: string;
   /**
    * Custom, application specific metadata. String key -> String value
    */
@@ -1764,15 +1806,15 @@ export interface FilesMetadata {
    */
   uploaded: boolean;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   uploadedTime?: Date;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   createdTime: Date;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   lastUpdatedTime: Date;
 }
@@ -1787,15 +1829,15 @@ export interface FilesMetadataMember {
    */
   uploaded: boolean;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   uploadedTime?: Date;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   createdTime: Date;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   lastUpdatedTime: Date;
 }
@@ -1852,7 +1894,7 @@ export interface Filter {
 
 export interface GetAggregateDatapoint {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   timestamp: Date;
   /**
@@ -1942,14 +1984,14 @@ export interface GetAggregateDatapointMember {
 
 export interface GetDatapointMetadata {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   timestamp: Date;
 }
 
 export interface GetDoubleDatapoint {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   timestamp: Date;
   /**
@@ -1967,7 +2009,7 @@ export interface GetDoubleDatapointMember {
 
 export interface GetStringDatapoint {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   timestamp: Date;
   /**
@@ -2025,11 +2067,11 @@ export interface GetTimeSeriesMetadataDTO {
    */
   securityCategories?: number[];
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   createdTime: Date;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   lastUpdatedTime: Date;
 }
@@ -2052,7 +2094,6 @@ export interface Group {
 
   deletedTime?: Date;
 }
-
 /**
  * A specification for creating a new group
  */
@@ -2127,60 +2168,7 @@ export interface InlineObject6 {
 }
 
 export interface InlineResponse200 {
-  items?: FileLink[];
-}
-
-export interface InlineResponse2001 {
   data: URLResponse;
-}
-
-export interface InlineResponse2002 {
-  /**
-   * List of service accounts
-   */
-  items: ServiceAccount[];
-}
-
-export interface InlineResponse2003 {
-  /**
-   * The display name of the project.
-   */
-  name: string;
-  /**
-   * The url name of the project. This is used as part of API calls. It should only contain letters, digits and hyphens, as long as the hyphens are not at the start or end.
-   */
-  urlName: string;
-  /**
-   * A default group for all project users. Can be used to establish default capabilities.WARNING: this group may be logically deleted
-   */
-  defaultGroupId?: number;
-
-  authentication?: OutputProjectAuthentication;
-}
-
-export interface InlineResponse400 {
-  error: Error;
-}
-/**
- * Some required fields are missing
- */
-export interface InlineResponse4001 {
-  /**
-   * HTTP status code
-   */
-  code: number;
-  /**
-   * Error message
-   */
-  message: string;
-  /**
-   * Additional data
-   */
-  extra?: object;
-  /**
-   * Fields that are missing.
-   */
-  missingFields: object[];
 }
 /**
  * Data about how to authenticate and authorize users
@@ -2203,11 +2191,11 @@ export interface InternalEvent {
    */
   externalId?: string;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   startTime?: number;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   endTime?: number;
   /**
@@ -2347,6 +2335,27 @@ export interface MissingFieldErrorError {
    * Error message
    */
   message: string;
+  /**
+   * Fields that are missing.
+   */
+  missingFields: object[];
+}
+/**
+ * Some required fields are missing
+ */
+export interface MissingFieldObject {
+  /**
+   * HTTP status code
+   */
+  code: number;
+  /**
+   * Error message
+   */
+  message: string;
+  /**
+   * Additional data
+   */
+  extra?: any;
   /**
    * Fields that are missing.
    */
@@ -2604,7 +2613,7 @@ export type PostDatapoint = PostDatapointMember | PostDatapointMember1;
 
 export interface PostDatapointMember {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   timestamp: Date;
   /**
@@ -2615,7 +2624,7 @@ export interface PostDatapointMember {
 
 export interface PostDatapointMember1 {
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   timestamp: Date;
   /**
@@ -2678,6 +2687,23 @@ export interface ProjectObject {
   authentication?: InputProjectAuthentication;
 }
 
+export interface ProjectResponseObject {
+  /**
+   * The display name of the project.
+   */
+  name: string;
+  /**
+   * The url name of the project. This is used as part of API calls. It should only contain letters, digits and hyphens, as long as the hyphens are not at the start or end.
+   */
+  urlName: string;
+  /**
+   * A default group for all project users. Can be used to establish default capabilities.WARNING: this group may be logically deleted
+   */
+  defaultGroupId?: number;
+
+  authentication?: OutputProjectAuthentication;
+}
+
 export interface ProjectsAcl {
   projectsAcl?: CogniteprojectsAclAcl;
 }
@@ -2705,7 +2731,7 @@ export interface RawDBRow {
    */
   columns: any;
   /**
-   * It is the number of seconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
    */
   lastUpdatedTime: Date;
 }
@@ -2822,6 +2848,10 @@ export interface RevealRevision3D {
    */
   status: RevealRevision3DStatusEnum;
   /**
+   * Custom, application specific metadata. String key -> String value
+   */
+  metadata?: { [key: string]: string };
+  /**
    * The threed file ID of a thumbnail for the revision. Use /3d/files/{id} to retrieve the file.
    */
   thumbnailThreedFileId?: number;
@@ -2902,6 +2932,10 @@ export interface Revision3D {
    * The status of the revision.
    */
   status: Revision3DStatusEnum;
+  /**
+   * Custom, application specific metadata. String key -> String value
+   */
+  metadata?: { [key: string]: string };
   /**
    * The threed file ID of a thumbnail for the revision. Use /3d/files/{id} to retrieve the file.
    */
@@ -3031,6 +3065,13 @@ export interface ServiceAccountInput {
   groups?: number[];
 }
 
+export interface ServiceAccountResponseObject {
+  /**
+   * List of service accounts
+   */
+  items: ServiceAccount[];
+}
+
 export interface SetLongField {
   set: number;
 }
@@ -3075,6 +3116,8 @@ export type SinglePatchString = RemoveField | SetStringField;
 export interface SingleTokenStatusDTOResponse {
   data: TokenStatusDTO;
 }
+
+export type StringOrNumber = number | string;
 
 export interface ThreedAcl {
   threedAcl?: CognitethreedAclAcl;
@@ -3182,6 +3225,15 @@ export interface TimeSeriesUpdateByIdMember {
 export interface TimeSeriesUpdateRequest {
   items: TimeSeriesUpdate[];
 }
+/**
+ * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
+ */
+export type TimestampOrStringEnd = number | string;
+
+/**
+ * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
+ */
+export type TimestampOrStringStart = number | string;
 
 export interface TokenStatusDTO {
   /**
@@ -3228,6 +3280,10 @@ export interface UnrealRevision3D {
    * The status of the revision.
    */
   status: UnrealRevision3DStatusEnum;
+  /**
+   * Custom, application specific metadata. String key -> String value
+   */
+  metadata?: { [key: string]: string };
   /**
    * The threed file ID of a thumbnail for the revision. Use /3d/files/{id} to retrieve the file.
    */
@@ -3295,6 +3351,8 @@ export interface UpdateRevision3DMemberUpdate {
   rotation?: SetRevisionRotation;
 
   camera?: SetRevisionCameraProperties;
+
+  metadata?: ObjectPatch;
 }
 
 export interface UpdateRevision3DMemberUpdatePublished {
@@ -3311,6 +3369,62 @@ export interface UpdateRevision3DThumbnail {
    * File ID of thumbnail file in Files API. _Only JPEG and PNG files are supported_.
    */
   fileId: number;
+}
+
+export interface UploadFileMetadataResponseObject {
+  /**
+   * External Id provided by client. Should be unique within the project.
+   */
+  externalId?: string;
+  /**
+   * Name of the file.
+   */
+  name: string;
+  /**
+   * The source of the file.
+   */
+  source?: string;
+  /**
+   * File type. E.g. text/plain, application/pdf, ..
+   */
+  mimeType?: string;
+  /**
+   * Custom, application specific metadata. String key -> String value
+   */
+  metadata?: { [key: string]: string };
+
+  assetIds?: number[];
+  /**
+   * Javascript friendly internal ID given to the object.
+   */
+  id: number;
+  /**
+   * Whether or not the actual file is uploaded.  This field is returned only by the API, it has no effect in a post body.
+   */
+  uploaded: boolean;
+  /**
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  uploadedTime?: Date;
+  /**
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  createdTime: Date;
+  /**
+   * It is the number of milliseconds that have elapsed since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+   */
+  lastUpdatedTime: Date;
+  /**
+   * The URL where the file contents should be uploaded.
+   */
+  uploadUrl: string;
+}
+
+export interface UploadFileMetadataResponseObjectMember {
+  /**
+   * The URL where the file contents should be uploaded.
+   */
+  uploadUrl: string;
 }
 
 export interface UsersAcl {
