@@ -12,12 +12,20 @@ describe('Asset unit test', () => {
     );
 
     test('straight tree', () => {
-      const rootAsset = { externalId: '123', parentExternalId: 'abc' };
+      const rootAsset = {
+        externalId: '123',
+        parentExternalId: 'abc',
+        name: 'qwe',
+      };
       const childAsset = {
         externalId: 'def',
+        name: 'qwer', // TODO: check if the name is actually required
         parentExternalId: rootAsset.externalId,
       };
-      const grandChildAsset = { parentExternalId: childAsset.externalId };
+      const grandChildAsset = {
+        parentExternalId: childAsset.externalId,
+        name: 'zxc',
+      };
       expect(assetChunker([childAsset, rootAsset, grandChildAsset], 2)).toEqual(
         [[rootAsset, childAsset], [grandChildAsset]]
       );
