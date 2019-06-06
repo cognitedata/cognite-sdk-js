@@ -142,7 +142,11 @@ describe('Raw integration test', () => {
         table.name,
         rows[0].key
       );
-      expect(row).toEqual(rows[0]);
+      expect(row.lastUpdatedTime).toBeDefined();
+      expect(row).toEqual({
+        ...rows[0],
+        lastUpdatedTime: row.lastUpdatedTime,
+      });
     });
 
     test('delete', async () => {
