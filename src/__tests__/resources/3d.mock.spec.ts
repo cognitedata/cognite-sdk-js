@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import MockAdapter from 'axios-mock-adapter';
-import { API } from '../../resources/api';
+import CogniteClient from '../../cogniteClient';
 import {
   Model3D,
   Node3D,
@@ -12,11 +12,15 @@ import {
   UnrealRevision3D,
 } from '../../types/types';
 import { transformDateInRequest } from '../../utils';
-import { randomInt, setupClient, string2arrayBuffer } from '../testUtils';
+import {
+  randomInt,
+  setupLoggedInClient,
+  string2arrayBuffer,
+} from '../testUtils';
 
 // tslint:disable-next-line:no-big-function
 describe('3D mocked', () => {
-  let client: API;
+  let client: CogniteClient;
   let mock: MockAdapter;
   const model: Model3D = {
     id: randomInt(),
@@ -83,8 +87,8 @@ describe('3D mocked', () => {
   const revisionUnreal: UnrealRevision3D = { ...revisionReveal };
 
   beforeAll(async () => {
-    client = setupClient();
-    mock = new MockAdapter(client._instance);
+    client = setupLoggedInClient();
+    mock = new MockAdapter(client.instance);
   });
 
   beforeEach(() => {

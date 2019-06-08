@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 
-import { API } from '../../resources/api';
+import CogniteClient from '../../cogniteClient';
 import { RawDB, RawDBTable } from '../../types/types';
-import { randomInt, setupClient } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 let index = 0;
 const createName = (prefix: string) => `${prefix}_${index++}_${randomInt()}`;
@@ -19,9 +19,9 @@ const createRow = () => ({
 });
 
 describe('Raw integration test', () => {
-  let client: API;
+  let client: CogniteClient;
   beforeAll(async () => {
-    client = setupClient();
+    client = setupLoggedInClient();
   });
 
   describe('databases', () => {
@@ -142,7 +142,11 @@ describe('Raw integration test', () => {
         table.name,
         rows[0].key
       );
-      expect(row).toEqual(rows[0]);
+      expect(row.lastUpdatedTime).toBeDefined();
+      expect(row).toEqual({
+        ...rows[0],
+        lastUpdatedTime: row.lastUpdatedTime,
+      });
     });
 
     test('delete', async () => {

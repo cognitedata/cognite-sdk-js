@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as sdk from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 
 const project = 'publicdata';
 
@@ -10,7 +10,8 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    const client = sdk.createClientWithOAuth({
+    const client = new CogniteClient({ appId: 'Cognite SDK samples' });
+    client.loginWithOAuth({
       project,
       onAuthenticate: 'REDIRECT',
     });

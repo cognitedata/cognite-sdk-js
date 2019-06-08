@@ -61,12 +61,13 @@ When doing authentication with redirects the currect browser window will be redi
 #### Simple example
 
 ```js
-import * as sdk from '@cognite/sdk';
-const client = sdk.createClientWithOAuth({
+import { CogniteClient, REDIRECT } from '@cognite/sdk';
+const client = new CogniteClient({ ... });
+client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
   // default is redirect
   // but can be explicitly specified:
-  onAuthenticate: sdk.REDIRECT,
+  onAuthenticate: REDIRECT,
 });
 
 // then use the SDK:
@@ -82,8 +83,9 @@ The second time `client.assets` is called the SDK will be authenticated and the 
 If you want a different redirect url back to your app after a successful / unsuccessful login you can implement this:
 
 ```js
-import * as sdk from '@cognite/sdk';
-const client = sdk.createClientWithOAuth({
+import { CogniteClient, REDIRECT } from '@cognite/sdk';
+const client = new CogniteClient({ ... });
+client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
   onAuthenticate: login => {
     login.redirect({
@@ -103,15 +105,16 @@ When doing authentication with popups the currect browser window of your applica
 #### Simple example
 
 ```js
-import * as sdk from '@cognite/sdk';
+import { CogniteClient, POPUP, isLoginPopupWindow, loginPopupHandler } from '@cognite/sdk';
 
-if (sdk.isLoginPopupWindow()) {
-  sdk.loginPopupHandler();
+if (isLoginPopupWindow()) {
+  loginPopupHandler();
   return;
 }
-const client = sdk.createClientWithOAuth({
+const client = new CogniteClient({ ... });
+client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
-  onAuthenticate: sdk.POPUP,
+  onAuthenticate: POPUP,
 });
 
 // then use the SDK:
@@ -127,8 +130,9 @@ After a successful authentication process the SDK will automatically retry the `
 If you want a different redirect url back to your application after a successful / unsuccessful login you can do this:
 
 ```js
-import * as sdk from '@cognite/sdk';
-const client = sdk.createClientWithOAuth({
+import { CogniteClient, POPUP } from '@cognite/sdk';
+const client = new CogniteClient({ ... });
+client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
   onAuthenticate: login => {
     login.popup({
@@ -147,8 +151,7 @@ This only affect the popup-window.
 
 To avoid waiting for the first `401`-response to occur you can trigger the authentication flow manually like this:
 ```js
-import * as sdk from '@cognite/sdk';
-const client = sdk.createClientWithOAuth({
+client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
 });
 await client.authenticate(); // this will also return a boolean based on if the user successfully authenticated or not.
@@ -158,8 +161,7 @@ await client.authenticate(); // this will also return a boolean based on if the 
 
 It is possible to skip the authentication like this:
 ```js
-import * as sdk from '@cognite/sdk';
-const client = sdk.createClientWithOAuth({
+client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
   onAuthenticate: login => {
     login.skip();
@@ -172,8 +174,7 @@ const client = sdk.createClientWithOAuth({
 If you want to use redirect-method in the initialization of your app and use the popup-method later (to not lose the state of your app) you can implement something like this:
 
 ```js
-import * as sdk from '@cognite/sdk';
-const client = sdk.createClientWithOAuth({
+client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
   onAuthenticate: login => {
     // some check:
@@ -191,8 +192,7 @@ const client = sdk.createClientWithOAuth({
 If you need access to the tokens (access token, id token) from the login flow you can add a callback like this:
 
 ```js
-import * as sdk from '@cognite/sdk';
-const client = sdk.createClientWithOAuth({
+client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
   onTokens: ({accessToken, idToken}) => {
     // your logic here

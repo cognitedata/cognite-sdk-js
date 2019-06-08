@@ -25,13 +25,13 @@ or npm
 ## Usage
 
 ```js
-const sdk = require('@cognite/sdk');
+const { CogniteClient } = require('@cognite/sdk');
 ```
 
 ### Using ES modules
 
 ```js
-import * as sdk from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 ```
 
 ### Using typescript
@@ -42,10 +42,11 @@ The SDK is written in native typescript, so no extra types needs to be defined.
 
 ### Web
 ```js
-import * as sdk from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 
 async function quickstart() {
-  const client = sdk.createClientWithOAuth({
+  const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
+  client.loginWithOAuth({
     project: 'publicdata',
   });
 
@@ -60,10 +61,11 @@ quickstart();
 
 ### Backend
 ```js
-const sdk = require('@cognite/sdk');
+const { CogniteClient } = require('@cognite/sdk');
 
 async function quickstart() {
-  const client = sdk.createClientWithApiKey({
+  const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
+  client.loginWithApiKey({
     project: 'publicdata',
     apiKey: 'YOUR_SECRET_API_KEY',
   });

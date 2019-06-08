@@ -1,4 +1,4 @@
-const sdk = require('@cognite/sdk');
+const { CogniteClient } = require('@cognite/sdk');
 
 const project = process.env.COGNITE_PROJECT || 'publicdata';
 const apiKey = process.env.COGNITE_CREDENTIALS;
@@ -10,13 +10,9 @@ if (!apiKey) {
 // Read more about async/await: https://javascript.info/async-await
 
 async function quickstart() {
-  // get information about your api-key
-  const apiKeyInfo = await sdk.getApiKeyInfo(apiKey);
-  console.log('Api-key info:');
-  console.log(apiKeyInfo);
-
   // create a SDK client
-  const client = sdk.createClientWithApiKey({
+  const client = new CogniteClient({ appId: 'Cognite SDK samples' });
+  client.loginWithApiKey({
     project,
     apiKey,
   });
