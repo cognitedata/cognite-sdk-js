@@ -1,9 +1,10 @@
 {
   "name": "@cognite/sdk",
-  "version": "2.0.0-alpha.6",
+  "version": "2.0.0-alpha.7",
   "description": "Javascript client library for Cognite SDK",
   "contributors": [
     "Fredrik Anfinsen <fredrik.anfinsen@cognite.com>",
+    "Ivan Polomanyi <ivan.polomanyi@cognite.com>",
     "Martin Røed <martin.roed@cognite.com>"
   ],
   "license": "Apache-2.0",
