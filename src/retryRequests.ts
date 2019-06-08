@@ -93,6 +93,7 @@ export function addRetryToAxiosInstance(instance: AxiosInstance) {
   attach(instance);
 }
 
+/** @hidden */
 export function makeRequestSafeToRetry(config: AxiosRequestConfig) {
   const raxConfig = (config as RaxConfig).raxConfig || {};
   raxConfig.isSafeToRetry = true;

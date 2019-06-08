@@ -181,6 +181,7 @@ export function generateSimpleListEndpoint<RequestParams, ResponseType>(
   };
 }
 
+/** @hidden */
 export function generateRetrieveEndpoint<IdType, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -200,6 +201,7 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
   };
 }
 
+/** @hidden */
 export function generateRetrieveSingleEndpoint<IdType, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
