@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { readFileSync } from 'fs';
-import { API } from '../../resources/api';
+import CogniteClient from '../../cogniteClient';
 import {
   Asset,
   AssetMapping3D,
@@ -18,7 +18,7 @@ import {
   getSortedPropInArray,
   randomInt,
   retryInSeconds,
-  setupClient,
+  setupLoggedInClient,
   simpleCompare,
 } from '../testUtils';
 
@@ -32,7 +32,7 @@ describeIfCondition(
   '3D - Revision, nodes, assetMappings integration test',
   // tslint:disable-next-line:no-big-function
   async () => {
-    let client: API;
+    let client: CogniteClient;
 
     let revisions: Revision3D[];
     let file: FilesMetadata;
@@ -42,7 +42,7 @@ describeIfCondition(
     let nodes3D: Node3D[];
 
     beforeAll(async () => {
-      client = setupClient();
+      client = setupLoggedInClient();
       jest.setTimeout(2 * 60 * 1000);
 
       const rootAsset = {

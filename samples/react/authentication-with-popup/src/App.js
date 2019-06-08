@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as sdk from '@cognite/sdk';
+import { CogniteClient, isLoginPopupWindow, loginPopupHandler, POPUP } from '@cognite/sdk';
 
 const project = 'publicdata';
 
@@ -10,8 +10,8 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    if (sdk.isLoginPopupWindow()) {
-      sdk.loginPopupHandler();
+    if (isLoginPopupWindow()) {
+      loginPopupHandler();
       return;
     }
 
@@ -19,9 +19,10 @@ class App extends Component {
     // to avoid the browser blocking the popup window. See https://stackoverflow.com/a/2587692/4462088
     // You can call `login.popup` whenever you want. The SDK will pause all requests until you have called it.
     // So it is possible to create a user-interface with a "Click here to login"-button that triggers `login.popup`.
-    const client = sdk.createClientWithOAuth({
+    const client = new CogniteClient({ appId: 'Cognite SDK samples' });
+    client.loginWithOAuth({
       project,
-      onAuthenticate: sdk.POPUP,
+      onAuthenticate: POPUP,
     });
 
     this.setState({ client });

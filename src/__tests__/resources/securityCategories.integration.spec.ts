@@ -1,13 +1,13 @@
 // Copyright 2019 Cognite AS
 
-import { API } from '../../resources/api';
+import CogniteClient from '../../cogniteClient';
 import { SecurityCategory } from '../../types/types';
-import { randomInt, setupClient } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Security categories integration test', () => {
-  let client: API;
+  let client: CogniteClient;
   beforeAll(async () => {
-    client = setupClient();
+    client = setupLoggedInClient();
   });
   let securityCategories: SecurityCategory[];
 

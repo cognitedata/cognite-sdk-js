@@ -1,13 +1,17 @@
 // Copyright 2019 Cognite AS
 
-import { API } from '../../resources/api';
+import CogniteClient from '../../cogniteClient';
 import { Model3D } from '../../types/types';
-import { getSortedPropInArray, randomInt, setupClient } from '../testUtils';
+import {
+  getSortedPropInArray,
+  randomInt,
+  setupLoggedInClient,
+} from '../testUtils';
 
 describe('Model3d integration test', () => {
-  let client: API;
+  let client: CogniteClient;
   beforeAll(async () => {
-    client = setupClient();
+    client = setupLoggedInClient();
   });
 
   let models: Model3D[];

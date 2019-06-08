@@ -1,15 +1,15 @@
 // Copyright 2019 Cognite AS
 
-import { API } from '../../resources/api';
+import CogniteClient from '../../cogniteClient';
 import { GetTimeSeriesMetadataDTO } from '../../types/types';
-import { setupClient } from '../testUtils';
+import { setupLoggedInClient } from '../testUtils';
 
 describe('Datapoints integration test', () => {
-  let client: API;
+  let client: CogniteClient;
   let timeserie: GetTimeSeriesMetadataDTO;
   let testTimeserieWithDatapoints: GetTimeSeriesMetadataDTO;
   beforeAll(async () => {
-    client = setupClient();
+    client = setupLoggedInClient();
     [timeserie] = await client.timeseries.create([{ name: 'tmp' }]);
     [testTimeserieWithDatapoints] = await client.timeseries.search({
       // this timeseries comes from https://github.com/cognitedata/test-data-populator

@@ -4,7 +4,12 @@ import { AxiosInstance } from 'axios';
 import { isString } from 'lodash';
 import { parse, stringify } from 'query-string';
 import { rawRequest, setBearerToken } from '../axiosWrappers';
-import { isSameProject, promiseCache, removeParameterFromUrl } from '../utils';
+import {
+  getBaseUrl,
+  isSameProject,
+  promiseCache,
+  removeParameterFromUrl,
+} from '../utils';
 import * as Login from './login';
 
 const ACCESS_TOKEN_PARAM = 'access_token';
@@ -110,7 +115,8 @@ export async function loginSilently(
   return null;
 }
 
-async function getIdInfo(
+/** @hidden */
+export async function getIdInfo(
   axiosInstance: AxiosInstance,
   headers: object
 ): Promise<null | IdInfo> {
@@ -278,14 +284,14 @@ export async function isTokensValid(
 
 interface CreateAuthFunctionOptions {
   project: string;
-  baseUrl: string;
   axiosInstance: AxiosInstance;
   onTokens: OnTokens;
   onAuthenticate: OnAuthenticate;
 }
 /** @hidden */
 export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
-  const { project, baseUrl, axiosInstance, onTokens, onAuthenticate } = options;
+  const { project, axiosInstance, onTokens, onAuthenticate } = options;
+  const baseUrl = getBaseUrl(axiosInstance.defaults.baseURL);
   return promiseCache(
     async (): Promise<boolean> => {
       const handleTokens = (tokens: AuthTokens) => {

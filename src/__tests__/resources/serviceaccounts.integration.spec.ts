@@ -1,13 +1,13 @@
 // Copyright 2019 Cognite AS
 
-import { API } from '../../resources/api';
+import CogniteClient from '../../cogniteClient';
 import { ServiceAccount } from '../../types/types';
-import { randomInt, setupClient } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Service accounts integration test', () => {
-  let client: API;
+  let client: CogniteClient;
   beforeAll(async () => {
-    client = setupClient();
+    client = setupLoggedInClient();
   });
 
   let serviceAccounts: ServiceAccount[];

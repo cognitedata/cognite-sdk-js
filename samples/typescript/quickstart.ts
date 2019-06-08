@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import * as sdk from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 
 const project: string = process.env.COGNITE_PROJECT || 'publicdata';
 const apiKey: string = process.env.COGNITE_CREDENTIALS || '';
@@ -15,7 +15,8 @@ if (!apiKey) {
 
 async function quickstart() {
   // create a SDK client
-  const client = sdk.createClientWithApiKey({
+  const client = new CogniteClient({ appId: 'Cognite SDK samples' });
+  client.loginWithApiKey({
     project,
     apiKey,
   });

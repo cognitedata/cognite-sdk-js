@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import * as sleep from 'sleep-promise';
-import { createClientWithApiKey } from '../index';
+import CogniteClient from '../cogniteClient';
 
 export function createErrorReponse(
   status: number,
@@ -32,12 +32,19 @@ export const authTokens = {
   accessToken: 'abc',
   idToken: 'def',
 };
+
 export function setupClient() {
+  return new CogniteClient({ appId: 'JS SDK integration tests' });
+}
+
+export function setupLoggedInClient() {
   jest.setTimeout(60 * 1000);
-  return createClientWithApiKey({
+  const client = setupClient();
+  client.loginWithApiKey({
     project: process.env.COGNITE_PROJECT as string,
     apiKey: process.env.COGNITE_CREDENTIALS as string,
   });
+  return client;
 }
 
 test('createErrorResponse', () => {

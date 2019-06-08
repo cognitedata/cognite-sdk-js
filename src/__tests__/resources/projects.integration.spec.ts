@@ -1,12 +1,12 @@
 // Copyright 2019 Cognite AS
 
-import { API } from '../../resources/api';
-import { setupClient } from '../testUtils';
+import CogniteClient from '../../cogniteClient';
+import { setupLoggedInClient } from '../testUtils';
 
 describe('Projects integration test', () => {
-  let client: API;
+  let client: CogniteClient;
   beforeAll(async () => {
-    client = setupClient();
+    client = setupLoggedInClient();
   });
 
   test('retrieve', async () => {
