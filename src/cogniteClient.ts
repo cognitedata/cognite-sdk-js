@@ -131,6 +131,7 @@ export default class CogniteClient {
   }
 
   public project: string = '';
+  /** @hidden */
   public instance: AxiosInstance;
   private metadataMap: MetadataMap;
   private hasBeenLoggedIn: boolean = false;
@@ -151,6 +152,18 @@ export default class CogniteClient {
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
   private loginApi: LoginAPI;
+  /**
+   * Create a new SDK client
+   *
+   * @param options Client options
+   *
+   * ```js
+   * const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
+   *
+   * // can also specify a base URL
+   * const client = new CogniteClient({ ..., baseUrl: 'https://greenfield.cognitedata.com' });
+   * ```
+   */
   constructor(options: ClientOptions) {
     if (!isObject(options)) {
       throw Error('`CogniteClient` is missing parameter `options`');
@@ -172,7 +185,7 @@ export default class CogniteClient {
   /**
    * Login client with api-key
    *
-   * @param options Client options
+   * @param options Login options
    *
    * ```js
    * client.loginWithApiKey({
@@ -206,7 +219,7 @@ export default class CogniteClient {
   /**
    * Login client with OAuth login flow
    *
-   * @param options Client options
+   * @param options Login options
    *
    * ```js
    * client.loginWithOAuth({

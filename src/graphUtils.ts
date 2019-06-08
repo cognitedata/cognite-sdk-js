@@ -7,6 +7,7 @@ export interface Node<T> {
   data: T;
 }
 
+/** @hidden */
 export function topologicalSort<T>(nodes: Node<T>[]): Node<T>[] {
   const queue = new Queue<Node<T>>();
   const sortedList = [];

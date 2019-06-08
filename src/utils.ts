@@ -8,6 +8,7 @@ export function getBaseUrl(baseUrl?: string) {
   return baseUrl || BASE_URL;
 }
 
+/** @hidden */
 export const apiUrl = () => `/api/${API_VERSION}`;
 
 /** @hidden */
@@ -89,6 +90,7 @@ export function makePromiseCancelable<T>(
   return cancelablePromise as CancelablePromise<T>;
 }
 
+/** @hidden */
 export function transformDateInRequest(data: any) {
   return cloneDeepWith(data, value => {
     if (value instanceof Date) {
@@ -97,6 +99,7 @@ export function transformDateInRequest(data: any) {
   });
 }
 
+/** @hidden */
 export function transformDateInResponse(data: any) {
   const dateKeys = [
     'createdTime',

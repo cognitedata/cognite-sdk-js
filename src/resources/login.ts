@@ -160,6 +160,7 @@ function generateLoginUrl(params: AuthorizeParams): string {
   return `${baseUrl}/login/redirect?${stringify(queryParams)}`;
 }
 
+/** @hidden */
 export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
   return new Promise(() => {
     const url = generateLoginUrl(params);
@@ -270,6 +271,7 @@ async function silentLogin(params: AuthorizeParams): Promise<AuthTokens> {
   });
 }
 
+/** @hidden */
 export async function isTokensValid(
   axiosInstance: AxiosInstance,
   project: string,
