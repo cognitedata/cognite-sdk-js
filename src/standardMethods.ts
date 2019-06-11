@@ -20,7 +20,10 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
 ): CreateEndpoint<RequestType, ResponseType> {
   return async function create(items) {
     type Response = ItemsResponse<ResponseType>;
-    const chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
+    let chunks: RequestType[][] = [[]];
+    if (items.length) {
+      chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
+    }
     const responses = await Promise.all(
       chunks.map(singleChunk =>
         rawRequest<Response>(axiosInstance, {
