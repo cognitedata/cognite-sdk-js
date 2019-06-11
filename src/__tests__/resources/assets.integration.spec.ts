@@ -34,6 +34,14 @@ describe('Asset integration test', () => {
     expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
   });
 
+  test('create empty asset array', async () => {
+    await expect(
+      client.assets.create([])
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"createAssets.arg0.items: size must be between 1 and 1000 | code: 400"`
+    );
+  });
+
   test('retrieve', async () => {
     const response = await client.assets.retrieve([{ id: assets[0].id }]);
     expect(response).toEqual([assets[0]]);
