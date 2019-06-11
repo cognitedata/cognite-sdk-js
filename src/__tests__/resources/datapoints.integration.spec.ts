@@ -49,4 +49,15 @@ describe('Datapoints integration test', () => {
     expect(response[0].datapoints.length).toBeGreaterThan(0);
     expect(response[0].datapoints[0].timestamp).toBeDefined();
   });
+
+  test('retrieve latest', async () => {
+    const response = await client.datapoints.retrieveLatest([
+      {
+        before: '1d-ago',
+        id: testTimeserieWithDatapoints.id,
+      },
+    ]);
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+    expect(response[0].datapoints[0].timestamp).toBeDefined();
+  });
 });

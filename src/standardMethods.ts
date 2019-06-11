@@ -289,7 +289,7 @@ export function generateRetrieveLatestEndpoint<RequestParams, ResponseType>(
       {
         method: 'post',
         url: `${resourcePath}/latest`,
-        data: query,
+        data: { items: query },
       },
       true
     );
