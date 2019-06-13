@@ -23,6 +23,7 @@ export class CogniteError extends Error {
       message += `\n${JSON.stringify(extra, null, 2)}`;
     }
     super(message);
+    Object.setPrototypeOf(this, CogniteError.prototype);
     this.status = status;
     this.requestId = requestId;
     this.missing = missing;

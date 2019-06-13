@@ -5,6 +5,7 @@ import { chunk, concat } from 'lodash';
 import { makeAutoPaginationMethods } from './autoPagination';
 import { rawRequest } from './axiosWrappers';
 import { MetadataMap } from './metadata';
+import { promiseAllWithData } from './resources/assets/assetUtils';
 import { CursorResponse, ItemsResponse } from './types/types';
 
 type CreateEndpoint<RequestType, ResponseType> = (
@@ -24,14 +25,15 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
     if (items.length) {
       chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
     }
-    const responses = await Promise.all(
-      chunks.map(singleChunk =>
+    const responses = await promiseAllWithData(
+      chunks,
+      input =>
         rawRequest<Response>(axiosInstance, {
           method: 'post',
           url: resourcePath,
-          data: { items: singleChunk },
-        })
-      )
+          data: { items: input },
+        }),
+      true
     );
     const mergedResponses = concat(
       [],
