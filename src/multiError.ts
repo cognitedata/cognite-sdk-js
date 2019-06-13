@@ -30,7 +30,6 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
     failed,
     errors,
   }: MultiErrorRawSummary<RequestType, ResponseType>) {
-    
     super('The API Failed to process some items.');
     Object.setPrototypeOf(this, CogniteMultiError.prototype);
 

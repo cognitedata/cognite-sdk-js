@@ -43,7 +43,7 @@ describe('Asset integration test', () => {
       errors: [
         new CogniteError(
           'createAssets.arg0.items: size must be between 1 and 1000',
-          400,
+          400
         ),
       ],
       responses: [],
