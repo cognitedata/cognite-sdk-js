@@ -554,6 +554,8 @@ export interface ExternalEvent {
   externalId?: CogniteExternalId;
   startTime?: Timestamp;
   endTime?: Timestamp;
+  type?: string;
+  subtype?: string;
   description?: string;
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
