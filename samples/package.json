@@ -3,7 +3,7 @@
   "author": "Fredrik Anfinsen",
   "license": "Apache-2.0",
   "dependencies": {
-    "@cognite/sdk": "2.0.0-alpha.7"
+    "@cognite/sdk": "2.0.0-beta.1"
   },
   "scripts": {
     "link-sdk": "cd .. && yarn link && cd ./samples && yarn link @cognite/sdk",
