@@ -31,7 +31,7 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
     errors,
   }: MultiErrorRawSummary<RequestType, ResponseType>) {
     super('The API Failed to process some items.');
-    Object.setPrototypeOf(this, CogniteMultiError.prototype);
+    Object.setPrototypeOf(this, CogniteMultiError.prototype); // https://stackoverflow.com/questions/51229574/why-instanceof-returns-false-for-a-child-object-in-javascript
 
     this.responses = responses.map(response => response.data);
     this.errors = errors;

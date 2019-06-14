@@ -50,12 +50,15 @@ describe('Asset unit test', () => {
       expect(
         await promiseEachInSequence([], input => Promise.resolve(input))
       ).toEqual([]);
+
       expect(
         await promiseEachInSequence([1], input => Promise.resolve(input))
       ).toEqual([1]);
+
       expect(
         await promiseEachInSequence([1, 2, 3], input => Promise.resolve(input))
       ).toEqual([1, 2, 3]);
+
       await expect(
         promiseEachInSequence([1, 2], () => Promise.reject('reject'))
       ).rejects.toEqual({
@@ -64,6 +67,7 @@ describe('Asset unit test', () => {
         errors: ['reject'],
         responses: [],
       });
+
       await expect(
         promiseEachInSequence(
           [1, 0, 2, 3],

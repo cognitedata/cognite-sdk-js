@@ -23,7 +23,7 @@ export class CogniteError extends Error {
       message += `\n${JSON.stringify(extra, null, 2)}`;
     }
     super(message);
-    Object.setPrototypeOf(this, CogniteError.prototype);
+    Object.setPrototypeOf(this, CogniteError.prototype); // https://stackoverflow.com/questions/51229574/why-instanceof-returns-false-for-a-child-object-in-javascript
     this.status = status;
     this.requestId = requestId;
     this.missing = missing;
