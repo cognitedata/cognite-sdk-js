@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CogniteError | Cognite JavaScript SDK</title>
+	<title>CogniteMultiError | Cognite JavaScript SDK</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,16 +52,27 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="cogniteerror.html">CogniteError</a>
+					<a href="cognitemultierror.html">CogniteMultiError</a>
 				</li>
 			</ul>
-			<h1>Class CogniteError</h1>
+			<h1>Class CogniteMultiError&lt;RequestType, ResponseType&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>RequestType</h4>
+					</li>
+					<li>
+						<h4>ResponseType</h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -69,7 +80,7 @@
 						<span class="tsd-signature-type">Error</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">CogniteError</span>
+								<span class="target">CogniteMultiError</span>
 							</li>
 						</ul>
 					</li>
@@ -80,30 +91,90 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="cognitemultierror.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cogniteerror.html#duplicated" class="tsd-kind-icon">duplicated</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="cogniteerror.html#message" class="tsd-kind-icon">message</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cogniteerror.html#missing" class="tsd-kind-icon">missing</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="cogniteerror.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cogniteerror.html#requestid" class="tsd-kind-icon">request<wbr>Id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="cogniteerror.html#stack" class="tsd-kind-icon">stack</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cogniteerror.html#status" class="tsd-kind-icon">status</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="cogniteerror.html#error" class="tsd-kind-icon">Error</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cognitemultierror.html#duplicated" class="tsd-kind-icon">duplicated</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cognitemultierror.html#errors" class="tsd-kind-icon">errors</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cognitemultierror.html#failed" class="tsd-kind-icon">failed</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="cognitemultierror.html#message" class="tsd-kind-icon">message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cognitemultierror.html#missing" class="tsd-kind-icon">missing</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="cognitemultierror.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cognitemultierror.html#requestid" class="tsd-kind-icon">request<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cognitemultierror.html#requestids" class="tsd-kind-icon">request<wbr>Ids</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cognitemultierror.html#responses" class="tsd-kind-icon">responses</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="cognitemultierror.html#stack" class="tsd-kind-icon">stack</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cognitemultierror.html#status" class="tsd-kind-icon">status</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cognitemultierror.html#statuses" class="tsd-kind-icon">statuses</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="cognitemultierror.html#succeded" class="tsd-kind-icon">succeded</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="cognitemultierror.html#error" class="tsd-kind-icon">Error</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Cognite<wbr>Multi<wbr>Error<span class="tsd-signature-symbol">(</span>__namedParameters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="cognitemultierror.html" class="tsd-signature-type">CogniteMultiError</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L25">multiError.ts:25</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>__namedParameters: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="cognitemultierror.html" class="tsd-signature-type">CogniteMultiError</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="duplicated" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> duplicated</h3>
-					<div class="tsd-signature tsd-kind-icon">duplicated<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
+					<h3>duplicated</h3>
+					<div class="tsd-signature tsd-kind-icon">duplicated<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/error.ts#L9">error.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L21">multiError.ts:21</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="errors" class="tsd-anchor"></a>
+					<h3>errors</h3>
+					<div class="tsd-signature tsd-kind-icon">errors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><a href="cogniteerror.html" class="tsd-signature-type">CogniteError</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L25">multiError.ts:25</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="failed" class="tsd-anchor"></a>
+					<h3>failed</h3>
+					<div class="tsd-signature tsd-kind-icon">failed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RequestType</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L15">multiError.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -120,11 +191,11 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="missing" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> missing</h3>
-					<div class="tsd-signature tsd-kind-icon">missing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
+					<h3>missing</h3>
+					<div class="tsd-signature tsd-kind-icon">missing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/error.ts#L8">error.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L20">multiError.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -145,7 +216,27 @@
 					<div class="tsd-signature tsd-kind-icon">request<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/error.ts#L7">error.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L19">multiError.ts:19</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="requestids" class="tsd-anchor"></a>
+					<h3>request<wbr>Ids</h3>
+					<div class="tsd-signature tsd-kind-icon">request<wbr>Ids<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L23">multiError.ts:23</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="responses" class="tsd-anchor"></a>
+					<h3>responses</h3>
+					<div class="tsd-signature tsd-kind-icon">responses<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ResponseType</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L24">multiError.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -163,11 +254,31 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="status" class="tsd-anchor"></a>
-					<h3>status</h3>
-					<div class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> status</h3>
+					<div class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/error.ts#L6">error.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L18">multiError.ts:18</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="statuses" class="tsd-anchor"></a>
+					<h3>statuses</h3>
+					<div class="tsd-signature tsd-kind-icon">statuses<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L22">multiError.ts:22</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="succeded" class="tsd-anchor"></a>
+					<h3>succeded</h3>
+					<div class="tsd-signature tsd-kind-icon">succeded<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RequestType</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/b5caba1/src/multiError.ts#L16">multiError.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -195,32 +306,53 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
-						<a href="cogniteerror.html" class="tsd-kind-icon">Cognite<wbr>Error</a>
+					<li class="current tsd-kind-class tsd-has-type-parameter">
+						<a href="cognitemultierror.html" class="tsd-kind-icon">Cognite<wbr>Multi<wbr>Error</a>
 						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="cognitemultierror.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="cogniteerror.html#duplicated" class="tsd-kind-icon">duplicated</a>
+								<a href="cognitemultierror.html#duplicated" class="tsd-kind-icon">duplicated</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="cognitemultierror.html#errors" class="tsd-kind-icon">errors</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="cognitemultierror.html#failed" class="tsd-kind-icon">failed</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="cogniteerror.html#message" class="tsd-kind-icon">message</a>
+								<a href="cognitemultierror.html#message" class="tsd-kind-icon">message</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="cogniteerror.html#missing" class="tsd-kind-icon">missing</a>
+								<a href="cognitemultierror.html#missing" class="tsd-kind-icon">missing</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="cogniteerror.html#name" class="tsd-kind-icon">name</a>
+								<a href="cognitemultierror.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="cogniteerror.html#requestid" class="tsd-kind-icon">request<wbr>Id</a>
+								<a href="cognitemultierror.html#requestid" class="tsd-kind-icon">request<wbr>Id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="cognitemultierror.html#requestids" class="tsd-kind-icon">request<wbr>Ids</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="cognitemultierror.html#responses" class="tsd-kind-icon">responses</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-								<a href="cogniteerror.html#stack" class="tsd-kind-icon">stack</a>
+								<a href="cognitemultierror.html#stack" class="tsd-kind-icon">stack</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="cogniteerror.html#status" class="tsd-kind-icon">status</a>
+								<a href="cognitemultierror.html#status" class="tsd-kind-icon">status</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="cognitemultierror.html#statuses" class="tsd-kind-icon">statuses</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="cognitemultierror.html#succeded" class="tsd-kind-icon">succeded</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-								<a href="cogniteerror.html#error" class="tsd-kind-icon">Error</a>
+								<a href="cognitemultierror.html#error" class="tsd-kind-icon">Error</a>
 							</li>
 						</ul>
 					</li>
