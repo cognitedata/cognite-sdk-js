@@ -19,6 +19,8 @@ describe('Events integration test', () => {
     {
       startTime: new Date('1 jan 2016').getTime(),
       source: 'WORKMATE',
+      type: 'ACTION',
+      subtype: 'POKE',
     },
   ];
   const newDescription = 'New description';
@@ -28,6 +30,8 @@ describe('Events integration test', () => {
   test('create', async () => {
     createdEvents = await client.events.create(events);
     expect(createdEvents[0].description).toBe(events[0].description);
+    expect(createdEvents[1].type).toBe(events[1].type);
+    expect(createdEvents[1].subtype).toBe(events[1].subtype);
   });
 
   test('retrieve', async () => {
