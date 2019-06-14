@@ -74,9 +74,7 @@ describe('Asset integration test', () => {
     };
     const childArr = new Array(999).fill(newChildAsset);
     try {
-      expect(
-        await client.assets.create([newRootAsset, ...childArr, corruptedChild])
-      ).rejects.toBeTruthy();
+      await client.assets.create([newRootAsset, ...childArr, corruptedChild]);
     } catch (e) {
       expect(e).toBeInstanceOf(CogniteMultiError);
       if (e instanceof CogniteMultiError) {
@@ -92,6 +90,7 @@ describe('Asset integration test', () => {
         );
       }
     }
+    expect.assertions(8);
   });
 
   test('create 1001 assets sequencially', async () => {
