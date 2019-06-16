@@ -64,7 +64,8 @@
     "prepush": "yarn lint && yarn test",
     "esCheck": "es-check es5 './dist/index.js'",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
-    "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\""
+    "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
+    "extractSnippetsToJSON": "yarn docs --json docs.json && node scripts/postProcessDocs.js && rm docs.json"
   },
   "dependencies": {
     "axios": "0.18.1",

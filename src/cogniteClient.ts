@@ -159,7 +159,7 @@ export default class CogniteClient {
    *
    * ```js
    * import { CogniteClient } from '@cognite/sdk';
-   * 
+   *
    * const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
    *
    * // can also specify a base URL
@@ -191,7 +191,7 @@ export default class CogniteClient {
    *
    * ```js
    * import { CogniteClient } from '@cognite/sdk';
-   * 
+   *
    * const client = new CogniteClient({ appId: '[YOUR APP NAME]' });
    * client.loginWithApiKey({
    *   apiKey: '[API KEY]',
@@ -227,9 +227,9 @@ export default class CogniteClient {
    *
    * ```js
    * import { CogniteClient, REDIRECT } from '@cognite/sdk';
-   * 
+   *
    * const client = new CogniteClient({ appId: '[YOUR APP NAME]' });
-   * 
+   *
    * client.loginWithOAuth({
    *   project: '[PROJECT]',
    *   onAuthenticate: REDIRECT // optional, REDIRECT is by default
