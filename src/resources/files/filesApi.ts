@@ -31,7 +31,7 @@ export class FilesAPI {
   /**
    * [List files](https://doc.cognitedata.com/api/v1/#operation/advancedListFiles)
    * <!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listFiles) -->
-   * 
+   *
    * ```js
    * const files = await client.files.list({filter: {mimeType: 'image/png'}});
    * ```
