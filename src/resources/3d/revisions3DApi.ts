@@ -139,7 +139,7 @@ export class Revisions3DAPI {
   };
 
   /**
-   * [List 3D ancestor nodes](https://doc.cognitedata.com/api/v1/#operation/get3DNodeAncestorss)
+   * [List 3D ancestor nodes](https://doc.cognitedata.com/api/v1/#operation/get3DNodeAncestors)
    *
    * ```js
    * const nodes3d = await client.revisions3D.list3DNodes(8252999965991682, 4190022127342195, 572413075141081);
