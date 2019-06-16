@@ -3,7 +3,12 @@ const _ = require('lodash');
 const fs = require('fs');
 
 const docRegEx = /https:\/\/doc.cognitedata.com\/api\/v1\/#operation\/([a-zA-Z0-9]+)/g;
-const header =  `import { CogniteClient } from '@cognite/sdk';\n\nconst client = new CogniteClient({ appId: '[YOUR APP NAME]' });\n\n`;
+const header =
+`import { CogniteClient } from '@cognite/sdk';\n
+const client = new CogniteClient({ appId: '[APP NAME]' });
+client.loginWithOAuth({
+  project: '[PROJECT]'
+});\n\n`;
 
 const operationsWithoutHeader = ['redirectUrl'];
 
