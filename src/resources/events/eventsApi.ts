@@ -37,6 +37,7 @@ export class EventsAPI {
 
   /**
    * [List events](https://doc.cognitedata.com/api/v1/#operation/advancedListEvents)
+   * <!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listEvents) -->
    *
    * ```js
    * const events = await client.events.list({ filter: { startTime: { min: new Date('1 jan 2018') }, endTime: { max: new Date('1 jan 2019') } } });
@@ -46,6 +47,7 @@ export class EventsAPI {
 
   /**
    * [Retrieve events](https://doc.cognitedata.com/api/v1/#operation/byIdsEvents)
+   * <!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getEventByInternalId) -->
    *
    * ```js
    * const events = await client.events.retrieve([{id: 123}, {externalId: 'abc'}]);

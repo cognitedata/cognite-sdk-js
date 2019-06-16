@@ -38,6 +38,7 @@ export class AssetsAPI {
 
   /**
    * [List assets](https://doc.cognitedata.com/api/v1/#operation/listAssets)
+   * <!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getAssets) -->
    *
    * ```js
    * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
@@ -47,6 +48,7 @@ export class AssetsAPI {
 
   /**
    * [Retrieve assets](https://doc.cognitedata.com/api/v1/#operation/byIdsAssets)
+   * <!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getAsset) -->
    *
    * ```js
    * const assets = await client.assets.retrieve([{id: 123}, {externalId: 'abc'}]);

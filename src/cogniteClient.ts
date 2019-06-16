@@ -158,6 +158,8 @@ export default class CogniteClient {
    * @param options Client options
    *
    * ```js
+   * import { CogniteClient } from '@cognite/sdk';
+   * 
    * const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
    *
    * // can also specify a base URL
@@ -188,6 +190,9 @@ export default class CogniteClient {
    * @param options Login options
    *
    * ```js
+   * import { CogniteClient } from '@cognite/sdk';
+   * 
+   * const client = new CogniteClient({ appId: '[YOUR APP NAME]' });
    * client.loginWithApiKey({
    *   apiKey: '[API KEY]',
    *   project: '[PROJECT]',
@@ -218,16 +223,22 @@ export default class CogniteClient {
 
   /**
    * Login client with OAuth login flow
-   *
-   * @param options Login options
+   * <!-- [Login with redirect](https://doc.cognitedata.com/api/v1/#operation/redirectUrl) -->
    *
    * ```js
+   * import { CogniteClient, REDIRECT } from '@cognite/sdk';
+   * 
+   * const client = new CogniteClient({ appId: '[YOUR APP NAME]' });
+   * 
    * client.loginWithOAuth({
    *   project: '[PROJECT]',
+   *   onAuthenticate: REDIRECT // optional, REDIRECT is by default
    * });
    * // after login you can do calls with the client
    * const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
    * ```
+   *
+   * @param options Login options
    */
   public loginWithOAuth = (options: OAuthLoginOptions) => {
     if (this.hasBeenLoggedIn) {

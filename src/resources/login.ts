@@ -172,6 +172,8 @@ export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
 interface CogniteParentWindow extends Window {
   postLoginTokens?: (tokens: null | AuthTokens) => void;
 }
+
+/** @hidden */
 export function loginWithPopup(
   params: AuthorizeParams
 ): Promise<null | AuthTokens> {

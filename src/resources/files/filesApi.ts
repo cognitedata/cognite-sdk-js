@@ -30,7 +30,8 @@ import {
 export class FilesAPI {
   /**
    * [List files](https://doc.cognitedata.com/api/v1/#operation/advancedListFiles)
-   *
+   * <!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listFiles) -->
+   * 
    * ```js
    * const files = await client.files.list({filter: {mimeType: 'image/png'}});
    * ```
@@ -53,6 +54,7 @@ export class FilesAPI {
 
   /**
    * [Retrieve files](https://doc.cognitedata.com/api/v1/#operation/byIdsFiles)
+   * <!-- or [just one](https://doc.cognitedata.com/api/v1/#operation/getFileByInternalId) -->
    *
    * ```js
    * const files = await client.files.retrieve([{id: 123}, {externalId: 'abc'}]);
@@ -86,7 +88,7 @@ export class FilesAPI {
   public delete: FilesDeleteEndpoint;
 
   /**
-   * [Get download urls](https://doc.cognitedata.com/api/v1/#operation/deleteFiles)
+   * [Get download urls](https://doc.cognitedata.com/api/v1/#operation/downloadLinks)
    *
    * ```js
    * await client.files.getDownloadUrls([{id: 123}, {externalId: 'abc'}]);

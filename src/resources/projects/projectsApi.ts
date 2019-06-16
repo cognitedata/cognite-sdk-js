@@ -11,7 +11,7 @@ import { apiUrl, projectUrl } from '../../utils';
 
 export class ProjectsAPI {
   /**
-   * [Retrieve a project](https://doc.cognitedata.com/api/v1/#tag/Projects)
+   * [Retrieve a project](https://doc.cognitedata.com/api/v1/#operation/getProject)
    *
    * ```js
    * const projectInfo = await client.projects.retrieve('publicdata');
