@@ -1,13 +1,10 @@
 // Copyright 2019 Cognite AS
 import {
   AssetIdEither,
-  AzureADConfigurationDTO,
   BoundingBox3D,
   Cursor,
-  ExternalAsset,
   FileFilter,
   FilesMetadata,
-  OAuth2ConfigurationDTO,
 } from './types';
 
 export interface FileRequestFilter extends Cursor, FileFilter {}
