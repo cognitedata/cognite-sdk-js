@@ -6,7 +6,7 @@ import {
   generateRetrieveSingleEndpoint,
   generateSingleReplaceEndpoint,
 } from '../../standardMethods';
-import { ProjectResponseObject, ProjectObject } from '../../types/types';
+import { ProjectObject, ProjectResponseObject } from '../../types/types';
 import { apiUrl, projectUrl } from '../../utils';
 
 export class ProjectsAPI {
