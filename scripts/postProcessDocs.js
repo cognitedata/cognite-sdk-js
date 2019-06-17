@@ -6,8 +6,9 @@ const docRegEx = /https:\/\/doc.cognitedata.com\/api\/v1\/#operation\/([a-zA-Z0-
 const header =
 `import { CogniteClient } from '@cognite/sdk';\n
 const client = new CogniteClient({ appId: '[APP NAME]' });
-client.loginWithOAuth({
-  project: '[PROJECT]'
+client.loginWithApiKey({
+  project: '[PROJECT]',
+  apiKey: '[API_KEY]'
 });\n\n`;
 
 const operationsWithoutHeader = ['redirectUrl'];
