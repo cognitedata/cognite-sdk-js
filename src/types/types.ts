@@ -1,3 +1,4 @@
+// Copyright 2019 Cognite AS
 /**
  * Cognite API
  * This is the reference documentation for the Cognite API. Here you can see an overview of all methods available through the API.
