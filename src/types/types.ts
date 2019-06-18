@@ -86,13 +86,16 @@ export interface ApiKeyObject {
 }
 
 /**
+ *
  * @export
  * @enum {string}
  */
-export enum ApiKeyObjectStatusEnum {
-  ACTIVE = 'ACTIVE',
-  DELETED = 'DELETED',
-}
+export type ApiKeyObjectStatusEnum = 'ACTIVE' | 'DELETED';
+
+export const ApiKeyObjectStatusEnum = {
+  ACTIVE: 'ACTIVE' as ApiKeyObjectStatusEnum,
+  DELETED: 'DELETED' as ApiKeyObjectStatusEnum,
+};
 
 /**
  *
@@ -4740,7 +4743,7 @@ export interface MissingFieldObject {
    * @type {object}
    * @memberof MissingFieldObject
    */
-  extra?: object;
+  extra?: any;
   /**
    * Fields that are missing.
    * @type {Array<object>}
@@ -4869,13 +4872,16 @@ export interface NewApiKeyResponseDTO {
 }
 
 /**
+ * The status of the api key.
  * @export
  * @enum {string}
  */
-export enum NewApiKeyResponseDTOStatusEnum {
-  ACTIVE = 'ACTIVE',
-  DELETED = 'DELETED',
-}
+export type NewApiKeyResponseDTOStatusEnum = 'ACTIVE' | 'DELETED';
+
+export const NewApiKeyResponseDTOStatusEnum = {
+  ACTIVE: 'ACTIVE' as NewApiKeyResponseDTOStatusEnum,
+  DELETED: 'DELETED' as NewApiKeyResponseDTOStatusEnum,
+};
 
 /**
  *
@@ -5062,12 +5068,15 @@ export interface NullableSinglePatchLongMember1 {
 }
 
 /**
+ *
  * @export
  * @enum {string}
  */
-export enum NullableSinglePatchLongMember1SetNullEnum {
-  True = 'true',
-}
+export type NullableSinglePatchLongMember1SetNullEnum = 'true';
+
+export const NullableSinglePatchLongMember1SetNullEnum = {
+  True: 'true' as NullableSinglePatchLongMember1SetNullEnum,
+};
 
 /**
  * @type NullableSinglePatchString
@@ -5106,12 +5115,15 @@ export interface NullableSinglePatchStringMember1 {
 }
 
 /**
+ *
  * @export
  * @enum {string}
  */
-export enum NullableSinglePatchStringMember1SetNullEnum {
-  True = 'true',
-}
+export type NullableSinglePatchStringMember1SetNullEnum = 'true';
+
+export const NullableSinglePatchStringMember1SetNullEnum = {
+  True: 'true' as NullableSinglePatchStringMember1SetNullEnum,
+};
 
 /**
  * Data related to generic OAuth2 authentication. Not used for Azure AD
@@ -5666,15 +5678,22 @@ export interface RevealRevision3D {
 }
 
 /**
+ * The status of the revision.
  * @export
  * @enum {string}
  */
-export enum RevealRevision3DStatusEnum {
-  Queued = 'Queued',
-  Processing = 'Processing',
-  Done = 'Done',
-  Failed = 'Failed',
-}
+export type RevealRevision3DStatusEnum =
+  | 'Queued'
+  | 'Processing'
+  | 'Done'
+  | 'Failed';
+
+export const RevealRevision3DStatusEnum = {
+  Queued: 'Queued' as RevealRevision3DStatusEnum,
+  Processing: 'Processing' as RevealRevision3DStatusEnum,
+  Done: 'Done' as RevealRevision3DStatusEnum,
+  Failed: 'Failed' as RevealRevision3DStatusEnum,
+};
 
 /**
  *
@@ -5820,15 +5839,18 @@ export interface Revision3D {
 }
 
 /**
+ * The status of the revision.
  * @export
  * @enum {string}
  */
-export enum Revision3DStatusEnum {
-  Queued = 'Queued',
-  Processing = 'Processing',
-  Done = 'Done',
-  Failed = 'Failed',
-}
+export type Revision3DStatusEnum = 'Queued' | 'Processing' | 'Done' | 'Failed';
+
+export const Revision3DStatusEnum = {
+  Queued: 'Queued' as Revision3DStatusEnum,
+  Processing: 'Processing' as Revision3DStatusEnum,
+  Done: 'Done' as Revision3DStatusEnum,
+  Failed: 'Failed' as Revision3DStatusEnum,
+};
 
 /**
  *
@@ -6567,15 +6589,22 @@ export interface UnrealRevision3D {
 }
 
 /**
+ * The status of the revision.
  * @export
  * @enum {string}
  */
-export enum UnrealRevision3DStatusEnum {
-  Queued = 'Queued',
-  Processing = 'Processing',
-  Done = 'Done',
-  Failed = 'Failed',
-}
+export type UnrealRevision3DStatusEnum =
+  | 'Queued'
+  | 'Processing'
+  | 'Done'
+  | 'Failed';
+
+export const UnrealRevision3DStatusEnum = {
+  Queued: 'Queued' as UnrealRevision3DStatusEnum,
+  Processing: 'Processing' as UnrealRevision3DStatusEnum,
+  Done: 'Done' as UnrealRevision3DStatusEnum,
+  Failed: 'Failed' as UnrealRevision3DStatusEnum,
+};
 
 /**
  *
