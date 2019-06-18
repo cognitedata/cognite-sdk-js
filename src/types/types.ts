@@ -1,5 +1,10 @@
 // Copyright 2019 Cognite AS
 
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type Aggregate =
   | 'average'
   | 'max'
@@ -63,7 +68,9 @@ export interface ApikeysAcl {
   apikeysAcl?: CogniteapikeysAclAcl;
 }
 /**
+ * @type ArrayPatchLong
  * Change that will be applied to array object.
+ * @export
  */
 export type ArrayPatchLong = ArrayPatchLongAddOrRemove | ArrayPatchLongSet;
 
@@ -123,7 +130,10 @@ export interface Asset {
    */
   depth: number;
 }
-
+/**
+ * @type AssetChange
+ * @export
+ */
 export type AssetChange = AssetChangeByExternalId | AssetChangeById;
 
 export interface AssetChangeByExternalId {
@@ -201,7 +211,10 @@ export interface AssetFilterFilter {
    */
   externalIdPrefix?: string;
 }
-
+/**
+ * @type AssetIdEither
+ * @export
+ */
 export type AssetIdEither = AssetExternalId | AssetInternalId;
 
 export interface AssetInternalId {
@@ -340,7 +353,10 @@ export interface BoundingBox3D {
 
   min: number[];
 }
-
+/**
+ * @type CogniteCapabilityItem
+ * @export
+ */
 export type CogniteCapabilityItem =
   | AnalyticsAcl
   | ApikeysAcl
@@ -361,6 +377,11 @@ export interface CogniteanalyticsAclAcl {
 
   scope: CogniteanalyticsAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CogniteanalyticsAclAction = 'READ' | 'EXECUTE' | 'LIST';
 
 export const CogniteanalyticsAclAction = {
@@ -378,6 +399,11 @@ export interface CogniteapikeysAclAcl {
 
   scope: CogniteapikeysAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CogniteapikeysAclAction = 'LIST' | 'CREATE' | 'DELETE';
 
 export const CogniteapikeysAclAction = {
@@ -386,6 +412,10 @@ export const CogniteapikeysAclAction = {
   DELETE: 'DELETE' as CogniteapikeysAclAction,
 };
 
+/**
+ * @type CogniteapikeysAclScope
+ * @export
+ */
 export type CogniteapikeysAclScope =
   | CogniteapikeysAclScopeMember
   | CogniteapikeysAclScopeMember1;
@@ -403,6 +433,11 @@ export interface CogniteassetsAclAcl {
 
   scope: CogniteassetsAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CogniteassetsAclAction = 'READ' | 'WRITE';
 
 export const CogniteassetsAclAction = {
@@ -423,6 +458,11 @@ export interface CogniteeventsAclAcl {
 
   scope: CogniteeventsAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CogniteeventsAclAction = 'READ' | 'WRITE';
 
 export const CogniteeventsAclAction = {
@@ -439,6 +479,11 @@ export interface CognitefilesAclAcl {
 
   scope: CognitefilesAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CognitefilesAclAction = 'READ' | 'WRITE';
 
 export const CognitefilesAclAction = {
@@ -455,6 +500,11 @@ export interface CognitegroupsAclAcl {
 
   scope: CognitegroupsAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CognitegroupsAclAction =
   | 'LIST'
   | 'READ'
@@ -470,6 +520,10 @@ export const CognitegroupsAclAction = {
   DELETE: 'DELETE' as CognitegroupsAclAction,
 };
 
+/**
+ * @type CognitegroupsAclScope
+ * @export
+ */
 export type CognitegroupsAclScope =
   | CognitegroupsAclScopeMember
   | CognitegroupsAclScopeMember1;
@@ -487,6 +541,11 @@ export interface CogniteprojectsAclAcl {
 
   scope: CogniteprojectsAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CogniteprojectsAclAction = 'LIST' | 'READ' | 'CREATE' | 'UPDATE';
 
 export const CogniteprojectsAclAction = {
@@ -505,6 +564,11 @@ export interface CogniterawAclAcl {
 
   scope: CogniterawAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CogniterawAclAction = 'READ' | 'WRITE' | 'LIST';
 
 export const CogniterawAclAction = {
@@ -522,6 +586,11 @@ export interface CognitesecuritycategoriesAclAcl {
 
   scope: CognitesecuritycategoriesAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CognitesecuritycategoriesAclAction =
   | 'MEMBEROF'
   | 'LIST'
@@ -544,6 +613,11 @@ export interface CognitesequencesAclAcl {
 
   scope: CognitesequencesAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CognitesequencesAclAction = 'READ' | 'WRITE';
 
 export const CognitesequencesAclAction = {
@@ -560,6 +634,11 @@ export interface CognitethreedAclAcl {
 
   scope: CognitethreedAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CognitethreedAclAction = 'READ' | 'CREATE' | 'UPDATE' | 'DELETE';
 
 export const CognitethreedAclAction = {
@@ -578,6 +657,11 @@ export interface CognitetimeseriesAclAcl {
 
   scope: CognitetimeseriesAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CognitetimeseriesAclAction = 'READ' | 'WRITE';
 
 export const CognitetimeseriesAclAction = {
@@ -585,6 +669,10 @@ export const CognitetimeseriesAclAction = {
   WRITE: 'WRITE' as CognitetimeseriesAclAction,
 };
 
+/**
+ * @type CognitetimeseriesAclScope
+ * @export
+ */
 export type CognitetimeseriesAclScope =
   | CognitetimeseriesAclScopeMember
   | CognitetimeseriesAclScopeMember1;
@@ -602,6 +690,11 @@ export interface CogniteusersAclAcl {
 
   scope: CogniteusersAclScope;
 }
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 export type CogniteusersAclAction = 'LIST' | 'CREATE' | 'DELETE';
 
 export const CogniteusersAclAction = {
@@ -610,6 +703,10 @@ export const CogniteusersAclAction = {
   DELETE: 'DELETE' as CogniteusersAclAction,
 };
 
+/**
+ * @type CogniteusersAclScope
+ * @export
+ */
 export type CogniteusersAclScope =
   | CogniteusersAclScopeMember
   | CogniteusersAclScopeMember1;
@@ -895,7 +992,9 @@ export interface DatapointsDeleteRange {
   exclusiveEnd?: number;
 }
 /**
+ * @type DatapointsDeleteRequest
  * Select timeseries and datapoints to delete.
+ * @export
  */
 export type DatapointsDeleteRequest =
   | DatapointsDeleteRequestMember
@@ -966,7 +1065,10 @@ export interface DatapointsGetAggregateDatapointMember {
    */
   datapoints: GetAggregateDatapoint[];
 }
-
+/**
+ * @type DatapointsGetDatapoint
+ * @export
+ */
 export type DatapointsGetDatapoint =
   | DatapointsGetDoubleDatapoint
   | DatapointsGetStringDatapoint;
@@ -1089,11 +1191,18 @@ export interface DatapointsMultiQuery {
 export interface DatapointsOrAggregatesResponse {
   items: DatapointsOrAggregatesResponseItemsItem[];
 }
-
+/**
+ * @type DatapointsOrAggregatesResponseItemsItem
+ * @export
+ */
 export type DatapointsOrAggregatesResponseItemsItem =
   | DatapointsGetAggregateDatapoint
   | DatapointsGetDatapoint;
 
+/**
+ * @type DatapointsPostDatapoint
+ * @export
+ */
 export type DatapointsPostDatapoint =
   | DatapointsPostDatapointMember
   | DatapointsPostDatapointMember1;
@@ -1134,7 +1243,9 @@ export interface DatapointsPostDatapointMemberMember {
   id?: number;
 }
 /**
+ * @type DatapointsQuery
  * Parameters describing a query for datapoints.
+ * @export
  */
 export type DatapointsQuery = DatapointsQueryMember | DatapointsQueryMember1;
 
@@ -1264,7 +1375,9 @@ export interface DuplicatedIdsInRequestResponseError {
   duplicated: DuplicatedIdsInRequestResponseErrorDuplicatedItem[];
 }
 /**
+ * @type DuplicatedIdsInRequestResponseErrorDuplicatedItem
  * Ids and ExternalIds which are duplicated in request
+ * @export
  */
 export type DuplicatedIdsInRequestResponseErrorDuplicatedItem =
   | DuplicatedIdsInRequestResponseErrorDuplicatedItemMember
@@ -1283,7 +1396,10 @@ export interface DuplicatedIdsInRequestResponseErrorDuplicatedItemMember1 {
    */
   externalId: string;
 }
-
+/**
+ * @type EitherId
+ * @export
+ */
 export type EitherId = ExternalId | InternalId;
 
 /**
@@ -1354,7 +1470,10 @@ export interface Event {
    */
   createdTime: Date;
 }
-
+/**
+ * @type EventChange
+ * @export
+ */
 export type EventChange = EventChangeByExternalId | EventChangeById;
 
 export interface EventChangeByExternalId {
@@ -1652,7 +1771,10 @@ export interface ExternalIdsAlreadyExistResponseErrorDuplicatedItem {
 export interface FileChange {
   update: FileChangeUpdate1;
 }
-
+/**
+ * @type FileChangeUpdate
+ * @export
+ */
 export type FileChangeUpdate =
   | FileChangeUpdateByExternalId
   | FileChangeUpdateById;
@@ -1752,7 +1874,10 @@ export interface FileFilterFilter {
    */
   uploaded?: boolean;
 }
-
+/**
+ * @type FileIdEither
+ * @export
+ */
 export type FileIdEither = FileExternalId | FileInternalId;
 
 export interface FileInternalId {
@@ -2231,7 +2356,9 @@ export interface InternalId {
   id: number;
 }
 /**
+ * @type LatestDataBeforeRequest
  * Describes latest query
+ * @export
  */
 export type LatestDataBeforeRequest =
   | LatestDataBeforeRequestMember
@@ -2495,7 +2622,9 @@ export interface NotFoundResponseError {
   missing: NotFoundResponseErrorMissingItem[];
 }
 /**
+ * @type NotFoundResponseErrorMissingItem
  * Ids or ExternalIds which are not found
+ * @export
  */
 export type NotFoundResponseErrorMissingItem =
   | NotFoundResponseErrorMissingItemMember
@@ -2515,7 +2644,9 @@ export interface NotFoundResponseErrorMissingItemMember1 {
   externalId: string;
 }
 /**
+ * @type NullableSinglePatchLong
  * Change that will be applied to assetId.
+ * @export
  */
 export type NullableSinglePatchLong =
   | NullableSinglePatchLongMember
@@ -2534,7 +2665,9 @@ export enum NullableSinglePatchLongMember1SetNullEnum {
 }
 
 /**
+ * @type NullableSinglePatchString
  * Change that will be applied to description.
+ * @export
  */
 export type NullableSinglePatchString =
   | NullableSinglePatchStringMember
@@ -2578,7 +2711,9 @@ export interface OAuth2ConfigurationDTO {
   clientSecret?: string;
 }
 /**
+ * @type ObjectPatch
  * Object change
+ * @export
  */
 export type ObjectPatch = ObjectPatchAddRemove | ObjectPatchSet;
 
@@ -2608,7 +2743,10 @@ export interface OutputProjectAuthentication {
    */
   validDomains?: string[];
 }
-
+/**
+ * @type PostDatapoint
+ * @export
+ */
 export type PostDatapoint = PostDatapointMember | PostDatapointMember1;
 
 export interface PostDatapointMember {
@@ -3096,10 +3234,16 @@ export interface SetStringField {
   set: string;
 }
 /**
+ * @type SinglePatch
  * Object change
+ * @export
  */
 export type SinglePatch = RemoveField | SetObjectField;
 
+/**
+ * @type SinglePatchLong
+ * @export
+ */
 export type SinglePatchLong = RemoveField | SetLongField;
 
 /**
@@ -3109,14 +3253,19 @@ export interface SinglePatchRequiredString {
   set: string;
 }
 /**
+ * @type SinglePatchString
  * Removable string change.
+ * @export
  */
 export type SinglePatchString = RemoveField | SetStringField;
 
 export interface SingleTokenStatusDTOResponse {
   data: TokenStatusDTO;
 }
-
+/**
+ * @type StringOrNumber
+ * @export
+ */
 export type StringOrNumber = number | string;
 
 export interface ThreedAcl {
@@ -3137,7 +3286,10 @@ export interface TimeSeriesLookupById {
    */
   items: TimeSeriesLookupByIdItemsItem[];
 }
-
+/**
+ * @type TimeSeriesLookupByIdItemsItem
+ * @export
+ */
 export type TimeSeriesLookupByIdItemsItem =
   | TimeSeriesLookupByIdItemsItemMember
   | TimeSeriesLookupByIdItemsItemMember1;
@@ -3187,7 +3339,10 @@ export interface TimeSeriesSearchDTO {
    */
   limit?: number;
 }
-
+/**
+ * @type TimeSeriesUpdate
+ * @export
+ */
 export type TimeSeriesUpdate =
   | TimeSeriesUpdateByExternalId
   | TimeSeriesUpdateById;
@@ -3226,12 +3381,16 @@ export interface TimeSeriesUpdateRequest {
   items: TimeSeriesUpdate[];
 }
 /**
+ * @type TimestampOrStringEnd
  * Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.
+ * @export
  */
 export type TimestampOrStringEnd = Date | string;
 
 /**
+ * @type TimestampOrStringStart
  * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: \'2d-ago\' will get everything that is up to 2 days old. Can also send time in ms since epoch. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
+ * @export
  */
 export type TimestampOrStringStart = number | string;
 
