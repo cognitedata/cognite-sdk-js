@@ -5075,7 +5075,7 @@ export interface NullableSinglePatchLongMember1 {
 export type NullableSinglePatchLongMember1SetNullEnum = 'true';
 
 export const NullableSinglePatchLongMember1SetNullEnum = {
-  True: 'true' as NullableSinglePatchLongMember1SetNullEnum,
+  True: 'true'
 };
 
 /**
@@ -5122,7 +5122,7 @@ export interface NullableSinglePatchStringMember1 {
 export type NullableSinglePatchStringMember1SetNullEnum = 'true';
 
 export const NullableSinglePatchStringMember1SetNullEnum = {
-  True: 'true' as NullableSinglePatchStringMember1SetNullEnum,
+  True: 'true'
 };
 
 /**
