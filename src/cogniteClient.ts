@@ -289,26 +289,33 @@ export default class CogniteClient {
    * ```
    */
   public getMetadata = (value: any) => this.metadataMap.get(value);
-
-  /**
-   * Do plain get-requests using the client
-  */ 
-  private doRawRequest = (methodType: string, path: string, options?: BaseRequestOptions) =>
-    rawRequest(this.instance, { method: methodType, url: path, ...options }).then(
-      responseTransformer
-    );
   public get = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('get', path, options);
-  
+
   public put = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('put', path, options);
-  
+
   public post = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('post', path, options);
 
   public delete = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('delete', path, options);
-  
+
+  /**
+   * Do plain get-requests using the client
+   */
+
+  private doRawRequest = (
+    methodType: string,
+    path: string,
+    options?: BaseRequestOptions
+  ) =>
+    rawRequest(this.instance, {
+      method: methodType,
+      url: path,
+      ...options,
+    }).then(responseTransformer);
+
   private initAPIs = () => {
     const defaultArgs: [string, AxiosInstance, MetadataMap] = [
       this.project,

@@ -24,11 +24,11 @@ describe('http methods - integration', () => {
     client = setupLoggedInClient();
   });
   test('post method', async () => {
-    const assets = [
-      { name: 'First asset' },
-      { name: 'Second asset' }
-    ]
-    let response = await client.post('/api/v1/projects/cognitesdk-js/assets', {data: {items: assets}});
+    const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
+    const response = await client.post(
+      '/api/v1/projects/cognitesdk-js/assets',
+      { data: { items: assets } }
+    );
     expect(response.data.items).toHaveLength(2);
   });
 });

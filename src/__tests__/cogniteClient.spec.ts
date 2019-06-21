@@ -1,11 +1,11 @@
 // Copyright 2019 Cognite AS
 
 import MockAdapter from 'axios-mock-adapter';
+import { CogniteClient } from '..';
 import { POPUP, REDIRECT } from '../cogniteClient';
 import * as Login from '../resources/login';
 import { sleepPromise } from '../utils';
 import { apiKey, authTokens, project, setupClient } from './testUtils';
-import { CogniteClient } from '..';
 
 // tslint:disable-next-line:no-big-function
 describe('CogniteClient', () => {
@@ -76,21 +76,21 @@ describe('CogniteClient', () => {
   describe('http requests', () => {
     let mock: MockAdapter;
     let client: CogniteClient;
-    
+
     beforeAll(async () => {
       client = setupClient();
       mock = new MockAdapter(client.instance);
     });
-    beforeEach(async () =>{
+    beforeEach(async () => {
       mock.reset();
-    })
+    });
 
     test('get method', async () => {
       mock.onGet('/').reply(200, 'test');
       const response = await client.get('/');
       expect(response.data).toEqual('test');
     });
-    
+
     test('post method', async () => {
       mock.onPost('/').reply(200, 'test');
       const response = await client.post('/');
