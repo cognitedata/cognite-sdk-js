@@ -101,7 +101,7 @@ export class TimeSeriesAPI {
 
 export type TimeSeriesListEndpoint = (
   filter?: TimeseriesFilter
-) => CogniteAsyncIterator<GetTimeSeriesMetadataDTO[]>;
+) => CogniteAsyncIterator<GetTimeSeriesMetadataDTO>;
 
 export type TimeSeriesCreateEndpoint = (
   items: PostTimeSeriesMetadataDTO[]
