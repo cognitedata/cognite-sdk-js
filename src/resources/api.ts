@@ -21,6 +21,7 @@ import { ServiceAccountsAPI } from './serviceAccounts/serviceAccountsApi';
 import { TimeSeriesAPI } from './timeSeries/timeSeriesApi';
 
 export interface BaseRequestOptions {
+  data?: object;
   params?: object;
   headers?: { [key: string]: string };
   responseType?: 'json' | 'arraybuffer' | 'text';

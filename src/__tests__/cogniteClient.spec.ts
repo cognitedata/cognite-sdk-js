@@ -73,7 +73,7 @@ describe('CogniteClient', () => {
     });
   });
 
-  describe.only('http requests', () => {
+  describe('http requests', () => {
     let mock: MockAdapter;
     let client: CogniteClient;
     
@@ -108,8 +108,6 @@ describe('CogniteClient', () => {
       const response = await client.delete('/');
       expect(response.data).toEqual('test');
     });
-
-    
   });
 
   // tslint:disable-next-line:no-big-function
