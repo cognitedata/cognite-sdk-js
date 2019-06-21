@@ -292,12 +292,18 @@ export default class CogniteClient {
 
   /**
    * Do plain get-requests using the client
-   */
+   
+
+  private doRawRequest = (methodType: string, path: string, options?: BaseRequestOptions) => {}
+     rawRequest(this.instance, { method: methodType, url: path, ...options }).then(
+      responseTransformer
+    );
+*/
   public get = (path: string, options?: BaseRequestOptions) =>
     rawRequest(this.instance, { method: 'get', url: path, ...options }).then(
       responseTransformer
     );
-
+  
   private initAPIs = () => {
     const defaultArgs: [string, AxiosInstance, MetadataMap] = [
       this.project,
