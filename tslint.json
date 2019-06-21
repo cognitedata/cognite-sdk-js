@@ -9,7 +9,11 @@
     "array-type": [true, "array"],
     "no-reference": false,
     "no-return-await": true,
-    "file-header": [true, "Copyright \\d{4} Cognite AS"]
+    "file-header": [true, "Copyright \\d{4} Cognite AS"],
+    "no-namespace": [false, "allow-declarations"],
+    "no-empty-interface": false,
+    "max-union-size": false,
+    "use-type-alias": false
   },
   "rulesDirectory": ["tslint-plugin-prettier"]
 }

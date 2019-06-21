@@ -20,7 +20,7 @@ import {
   FilesSearchFilter,
   IdEither,
   UploadFileMetadataResponse,
-} from '../../types/types';
+} from '../../types';
 import { projectUrl } from '../../utils';
 import {
   generateDownloadUrlEndpoint,

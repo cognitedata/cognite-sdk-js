@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { CogniteEvent } from '../../types/types';
+import { CogniteEvent } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('Events integration test', () => {
@@ -13,11 +13,11 @@ describe('Events integration test', () => {
   const events = [
     {
       description: 'Test event',
-      startTime: 10,
-      endTime: 100,
+      startTime: new Date(10),
+      endTime: new Date(100),
     },
     {
-      startTime: new Date('1 jan 2016').getTime(),
+      startTime: new Date('1 jan 2016'),
       source: 'WORKMATE',
       type: 'ACTION',
       subtype: 'POKE',
@@ -71,8 +71,8 @@ describe('Events integration test', () => {
       .list({
         filter: {
           startTime: {
-            min: events[0].startTime - 1,
-            max: events[0].endTime! + 1,
+            min: new Date(events[0].startTime.getTime() - 1),
+            max: new Date(events[0].endTime!.getTime() + 1),
           },
         },
         limit: 3,

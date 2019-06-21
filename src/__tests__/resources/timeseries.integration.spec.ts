@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { GetTimeSeriesMetadataDTO } from '../../types/types';
+import { GetTimeSeriesMetadataDTO } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Timeseries integration test', () => {

@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { Model3D } from '../../types/types';
+import { Model3D } from '../../types';
 import {
   getSortedPropInArray,
   randomInt,

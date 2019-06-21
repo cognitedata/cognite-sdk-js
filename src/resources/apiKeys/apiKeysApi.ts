@@ -9,11 +9,10 @@ import {
 } from '../../standardMethods';
 import {
   ApiKeyListScope,
-  ApiKeyObject,
   ApiKeyRequest,
   CogniteInternalId,
-  NewApiKeyResponse,
-} from '../../types/types';
+  NewApiKeyResponseDTO,
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class ApiKeysAPI {
@@ -59,10 +58,10 @@ export class ApiKeysAPI {
 
 export type ApiKeysListEndpoint = (
   scope?: ApiKeyListScope
-) => Promise<ApiKeyObject[]>;
+) => Promise<NewApiKeyResponseDTO[]>;
 
 export type ApiKeysCreateEndpoint = (
   items: ApiKeyRequest[]
-) => Promise<NewApiKeyResponse[]>;
+) => Promise<NewApiKeyResponseDTO[]>;
 
 export type ApiKeysDeleteEndpoint = (items: CogniteInternalId[]) => Promise<{}>;

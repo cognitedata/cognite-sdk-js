@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { ListResponse } from './types/types';
+import { ListResponse } from './types';
 
 // polyfill
 if (Symbol.asyncIterator === undefined) {

@@ -11,7 +11,7 @@ import {
   CogniteInternalId,
   ServiceAccount,
   ServiceAccountInput,
-} from '../../types/types';
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class ServiceAccountsAPI {

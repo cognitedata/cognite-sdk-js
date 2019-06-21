@@ -14,7 +14,7 @@ import {
   CogniteInternalId,
   CreateAssetMapping3D,
   DeleteAssetMapping3D,
-} from '../../types/types';
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class AssetMappings3DAPI {

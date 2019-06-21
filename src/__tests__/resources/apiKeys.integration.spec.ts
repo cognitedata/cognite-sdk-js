@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { NewApiKeyResponse, ServiceAccount } from '../../types/types';
+import { NewApiKeyResponseDTO, ServiceAccount } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('API keys integration test', () => {
@@ -18,7 +18,7 @@ describe('API keys integration test', () => {
     await client.serviceAccounts.delete([serviceAccount.id]);
   });
 
-  let apiKeys: NewApiKeyResponse[];
+  let apiKeys: NewApiKeyResponseDTO[];
 
   test('create', async () => {
     apiKeys = await client.apiKeys.create([

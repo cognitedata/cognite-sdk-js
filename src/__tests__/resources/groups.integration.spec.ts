@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { Group, GroupSpec, ServiceAccount } from '../../types/types';
+import { Group, GroupSpec, ServiceAccount } from '../../types';
 import { sleepPromise } from '../../utils';
 import { randomInt, retryInSeconds, setupLoggedInClient } from '../testUtils';
 

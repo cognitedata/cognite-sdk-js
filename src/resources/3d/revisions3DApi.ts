@@ -20,7 +20,7 @@ import {
   Revision3D,
   Revision3DListRequest,
   UpdateRevision3D,
-} from '../../types/types';
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class Revisions3DAPI {

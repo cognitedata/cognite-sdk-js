@@ -12,10 +12,10 @@ import {
 import {
   CogniteInternalId,
   Group,
-  GroupServiceAccount,
   GroupSpec,
   ListGroups,
-} from '../../types/types';
+  ServiceAccount,
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class GroupsAPI {
@@ -76,7 +76,7 @@ export class GroupsAPI {
    * ```
    */
   public listServiceAccounts: GroupsListServiceAccountsEndpoint = groupId => {
-    return generateListNoCursorEndpoint<GroupServiceAccount>(
+    return generateListNoCursorEndpoint<ServiceAccount>(
       this.instance,
       this.serviceAccountPath(groupId),
       this.map
@@ -141,7 +141,7 @@ export type GroupsDeleteEndpoint = (ids: CogniteInternalId[]) => Promise<{}>;
 
 export type GroupsListServiceAccountsEndpoint = (
   groupId: CogniteInternalId
-) => Promise<GroupServiceAccount[]>;
+) => Promise<ServiceAccount[]>;
 
 export type GroupsAddServiceAccountsEndpoint = (
   groupId: CogniteInternalId,

@@ -14,7 +14,7 @@ import {
   RevealNode3D,
   RevealRevision3D,
   RevealSector3D,
-} from '../../types/types';
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class Viewer3DAPI {

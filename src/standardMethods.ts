@@ -6,7 +6,7 @@ import { makeAutoPaginationMethods } from './autoPagination';
 import { rawRequest } from './axiosWrappers';
 import { MetadataMap } from './metadata';
 import { promiseAllWithData } from './resources/assets/assetUtils';
-import { CursorResponse, ItemsResponse } from './types/types';
+import { CursorResponse, ItemsResponse } from './types';
 
 type CreateEndpoint<RequestType, ResponseType> = (
   items: RequestType[]

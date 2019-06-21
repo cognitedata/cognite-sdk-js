@@ -17,8 +17,8 @@ import {
   AssetIdEither,
   AssetListScope,
   AssetSearchFilter,
-  ExternalAssetItem,
-} from '../../types/types';
+  DataExternalAssetItem,
+} from '../../types';
 import { projectUrl } from '../../utils';
 import { assetChunker } from './assetUtils';
 
@@ -103,7 +103,7 @@ export class AssetsAPI {
 }
 
 export type AssetCreateEndpoint = (
-  items: ExternalAssetItem[]
+  items: DataExternalAssetItem[]
 ) => Promise<Asset[]>;
 
 export type AssetListEndpoint = (

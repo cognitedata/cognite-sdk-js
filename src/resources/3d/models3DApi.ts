@@ -17,7 +17,7 @@ import {
   Model3D,
   Model3DListRequest,
   UpdateModel3D,
-} from '../../types/types';
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class Models3DAPI {

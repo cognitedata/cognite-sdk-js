@@ -3,7 +3,7 @@
 import CogniteClient from '../../cogniteClient';
 import { CogniteError } from '../../error';
 import { CogniteMultiError } from '../../multiError';
-import { Asset } from '../../types/types';
+import { Asset } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Asset integration test', () => {
@@ -143,7 +143,7 @@ describe('Asset integration test', () => {
       .list({
         filter: {
           name: rootAsset.name,
-          createdTime: { min: 0, max: Date.now() },
+          createdTime: { min: new Date(0), max: new Date() },
         },
       })
       .autoPagingToArray({ limit: 100 });

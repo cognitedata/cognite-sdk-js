@@ -20,7 +20,7 @@ import {
   RawDBRowInsert,
   RawDBRowKey,
   RawDBTable,
-} from '../../types/types';
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class RawAPI {

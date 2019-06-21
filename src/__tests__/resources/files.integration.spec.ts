@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { FilesMetadata } from '../../types/types';
+import { FilesMetadata } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Files integration test', () => {

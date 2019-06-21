@@ -18,7 +18,7 @@ import {
   EventSearchRequest,
   ExternalEvent,
   IdEither,
-} from '../../types/types';
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class EventsAPI {

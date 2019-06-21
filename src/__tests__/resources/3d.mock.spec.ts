@@ -10,7 +10,7 @@ import {
   RevealSector3D,
   Revision3D,
   UnrealRevision3D,
-} from '../../types/types';
+} from '../../types';
 import { transformDateInRequest } from '../../utils';
 import {
   randomInt,

@@ -3,7 +3,7 @@
 import { AxiosInstance } from 'axios';
 import { rawRequest } from '../../axiosWrappers';
 import { MetadataMap } from '../../metadata';
-import { CogniteInternalId } from '../../types/types';
+import { CogniteInternalId } from '../../types';
 import { projectUrl } from '../../utils';
 
 export class Files3DAPI {

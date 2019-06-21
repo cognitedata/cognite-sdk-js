@@ -6,7 +6,7 @@ import {
   generateRetrieveSingleEndpoint,
   generateSingleReplaceEndpoint,
 } from '../../standardMethods';
-import { ProjectResponse, ProjectUpdate } from '../../types/types';
+import { ProjectObject, ProjectResponse } from '../../types';
 import { apiUrl, projectUrl } from '../../utils';
 
 export class ProjectsAPI {
@@ -40,7 +40,7 @@ export class ProjectsAPI {
    * ```
    */
   public update: ProjectsUpdateEndpoint = (urlName, replacement) => {
-    return generateSingleReplaceEndpoint<ProjectUpdate, ProjectResponse>(
+    return generateSingleReplaceEndpoint<ProjectObject, ProjectResponse>(
       this.instance,
       projectUrl(urlName),
       this.map
@@ -54,5 +54,5 @@ export type ProjectsRetrieveEndpoint = (
 
 export type ProjectsUpdateEndpoint = (
   urlName: string,
-  replacement: ProjectUpdate
+  replacement: ProjectObject
 ) => Promise<ProjectResponse>;

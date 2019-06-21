@@ -11,7 +11,7 @@ import {
   FilesMetadata,
   ItemsResponse,
   UploadFileMetadataResponse,
-} from '../../types/types';
+} from '../../types';
 
 /** @hidden */
 export function waitUntilFileIsUploaded(

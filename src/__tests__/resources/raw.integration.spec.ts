@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { RawDB, RawDBTable } from '../../types/types';
+import { RawDB, RawDBTable } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 let index = 0;

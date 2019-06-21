@@ -18,7 +18,7 @@ import {
   TimeseriesIdEither,
   TimeSeriesSearchDTO,
   TimeSeriesUpdate,
-} from '../../types/types';
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class TimeSeriesAPI {

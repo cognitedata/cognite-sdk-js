@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { ServiceAccount } from '../../types/types';
+import { ServiceAccount } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Service accounts integration test', () => {

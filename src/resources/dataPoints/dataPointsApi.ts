@@ -15,7 +15,7 @@ import {
   DatapointsMultiQuery,
   DatapointsPostDatapoint,
   LatestDataBeforeRequest,
-} from '../../types/types';
+} from '../../types';
 import { projectUrl } from '../../utils';
 
 export class DataPointsAPI {

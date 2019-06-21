@@ -13,7 +13,7 @@ import {
   Revision3D,
   Tuple3,
   UpdateRevision3D,
-} from '../../types/types';
+} from '../../types';
 import {
   getSortedPropInArray,
   randomInt,
