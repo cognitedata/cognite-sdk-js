@@ -83,8 +83,7 @@ For quickstarts and samples go [here](../samples/).
 | `sdk.Files.search({name: 'abc'})`                                | `client.files.search([{search: {name: 'abc'}}])`                                                  |
 | `sdk.Files.replaceMetadata(...)`                                 | Removed                                                                                           |
 | **3D**                                                           |
-| `sdk.ThreeD.createAssetMappings(modelId, revisionId, mappings)`  |
-| `client.assetMappings3D.create(modelId, revisionId, mappings)`   |
+| `sdk.ThreeD.createAssetMappings(modelId, revisionId, mappings)`  | `client.assetMappings3D.create(modelId, revisionId, mappings)`                                    |
 | `sdk.ThreeD.createModels([name])`                                | `client.models3D.create([{name}])`                                                                |
 | `sdk.ThreeD.createRevisions(modelId, revisions)`                 | `client.revisions3D.create(modelId, revisions)`                                                   |
 | `sdk.ThreeD.retrieveFile(fileId, responseType)`                  | `client.files3D.retrieve(fileId)`                                                                 |
