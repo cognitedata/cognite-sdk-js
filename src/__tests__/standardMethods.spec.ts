@@ -7,6 +7,7 @@ import {
   generateCreateEndpoint,
   generateListEndpoint,
   generateRetrieveEndpoint,
+  generateDeleteEndpoint,
 } from '../standardMethods';
 import { sleepPromise } from '../utils';
 
@@ -159,6 +160,33 @@ describe('standard methods', () => {
         });
         expect(numbers).toMatchSnapshot();
       }
+    });
+  });
+  describe('generateDeleteEndpoint', () => {
+    test('automatic chunking', async () => {
+      const metadataMap = new MetadataMap();
+      const ids = new Array(4500).fill(null).map((_, index) => ({
+        id: Number(index),
+      }));
+      const remove = generateDeleteEndpoint(
+        axiosInstance,
+        '/path',
+        metadataMap
+      );
+      let counter = 0;
+      axiosMock.onPost('/path/delete').reply(config => {
+        counter++;
+        const { items: requestItems } = JSON.parse(config.data);
+        const responseItems = requestItems.map((item: any) => ({
+          ...item,
+          id: Number(item.name),
+        }));
+        return [201, { items: responseItems }];
+      });
+      const response = await remove(ids);
+      expect(counter).toBe(5);
+      expect(response).toMatchObject({});
+      expect(metadataMap.get(response)).toBeDefined();
     });
   });
 });
