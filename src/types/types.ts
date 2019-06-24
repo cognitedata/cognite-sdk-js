@@ -1553,7 +1553,7 @@ export interface Filter {
    * example:
    * [object Object]
    */
-  metadata?: {};
+  metadata?: TimeSeriesMetadata;
   /**
    * Filter out time series that are not linked to any of these assets.
    * example:
@@ -1666,10 +1666,7 @@ export interface GetTimeSeriesMetadataDTO {
    * Whether the time series is string valued or not.
    */
   isString: boolean;
-  /**
-   * Additional metadata. String key -> String value.
-   */
-  metadata?: {};
+  metadata?: TimeSeriesMetadata;
   /**
    * The physical unit of the time series.
    */
@@ -2248,10 +2245,7 @@ export interface PostTimeSeriesMetadataDTO {
    * Whether the time series is string valued or not.
    */
   isString?: boolean;
-  /**
-   * Additional metadata. String key -> String value.
-   */
-  metadata?: {};
+  metadata?: TimeSeriesMetadata;
   /**
    * The physical unit of the time series.
    */
@@ -2694,6 +2688,12 @@ export interface TimeSeriesLookupById {
     | {
         externalId?: CogniteExternalId;
       })[];
+}
+/**
+ * Additional metadata. String key -> String value
+ */
+export interface TimeSeriesMetadata {
+  [name: string]: string;
 }
 /**
  * Changes will be applied to timeseries.
