@@ -89,7 +89,7 @@ export class FilesAPI {
    * [Get download urls](https://doc.cognitedata.com/api/v1/#operation/deleteFiles)
    *
    * ```js
-   * await client.files.delete([{id: 123}, {externalId: 'abc'}]);
+   * await client.files.getDownloadUrls([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
   public getDownloadUrls: FilesGetDownloadUrlsEndpoint;
