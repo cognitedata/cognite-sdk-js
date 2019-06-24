@@ -289,22 +289,44 @@ export default class CogniteClient {
    * ```
    */
   public getMetadata = (value: any) => this.metadataMap.get(value);
+
+  /**
+   * Basic HTTP method for GET
+   *
+   * @param path The URL path
+   * @param options Request options, optional
+   */
   public get = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('get', path, options);
 
+  /**
+   * Basic HTTP method for PUT
+   *
+   * @param path The URL path
+   * @param options Request options, optional
+   */
   public put = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('put', path, options);
 
+  /**
+   * Basic HTTP method for POST
+   *
+   * @param path The URL path
+   * @param options Request options, optional
+   */
   public post = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('post', path, options);
 
+  /**
+   * Basic HTTP method for DELETE
+   *
+   * @param path The URL path
+   * @param options Request options, optional
+   */
   public delete = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('delete', path, options);
 
-  /**
-   * Do plain get-requests using the client
-   */
-
+  /** @hidden */
   private doRawRequest = (
     methodType: string,
     path: string,
