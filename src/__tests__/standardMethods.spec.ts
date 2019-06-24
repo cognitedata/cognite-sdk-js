@@ -8,6 +8,7 @@ import {
   generateListEndpoint,
   generateRetrieveEndpoint,
   generateDeleteEndpoint,
+  generateUpdateEndpoint,
 } from '../standardMethods';
 import { sleepPromise } from '../utils';
 
@@ -37,7 +38,7 @@ describe('standard methods', () => {
   });
 
   describe('generateCreateEndpoint', () => {
-    test('automatic chunking', async () => {
+    test('automatic chunking for create', async () => {
       const metadataMap = new MetadataMap();
       const items = new Array(3002).fill(null).map((_, index) => ({
         name: '' + index,
@@ -64,7 +65,7 @@ describe('standard methods', () => {
     });
   });
   describe('generateRetrieveEndpoint', () => {
-    test('automatic chunking', async () => {
+    test('automatic chunking for retrieve', async () => {
       const metadataMap = new MetadataMap();
       const ids = new Array(3002).fill(null).map((_, index) => ({
         id: Number(index),
@@ -163,7 +164,7 @@ describe('standard methods', () => {
     });
   });
   describe('generateDeleteEndpoint', () => {
-    test('automatic chunking', async () => {
+    test('automatic chunking for delete', async () => {
       const metadataMap = new MetadataMap();
       const ids = new Array(4500).fill(null).map((_, index) => ({
         id: Number(index),
@@ -186,6 +187,33 @@ describe('standard methods', () => {
       const response = await remove(ids);
       expect(counter).toBe(5);
       expect(response).toMatchObject({});
+      expect(metadataMap.get(response)).toBeDefined();
+    });
+  });
+  describe('generateUpdateEndpoint', () => {
+    test('automatic chunking for update', async () => {
+      const metadataMap = new MetadataMap();
+      const changes = new Array(2003).fill(null).map((_, index) => ({
+        id: Number(index),
+      }));
+      const update = generateUpdateEndpoint(
+        axiosInstance,
+        '/path',
+        metadataMap
+      );
+      let counter = 0;
+      axiosMock.onPost('/path/update').reply(config => {
+        counter++;
+        const { items: requestItems } = JSON.parse(config.data);
+        const responseItems = requestItems.map((item: any) => ({
+          ...item,
+          id: Number(item.name),
+        }));
+        return [201, { items: responseItems }];
+      });
+      const response = await update(changes);
+      expect(counter).toBe(3);
+      expect(response.length).toBe(changes.length);
       expect(metadataMap.get(response)).toBeDefined();
     });
   });
