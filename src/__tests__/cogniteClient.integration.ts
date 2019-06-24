@@ -31,4 +31,8 @@ describe('http methods - integration', () => {
     );
     expect(response.data.items).toHaveLength(2);
   });
+  test('get method', async () => {
+    const response = await client.get('/api/v1/projects/cognitesdk-js/assets');
+    expect(response.data).toHaveProperty('items');
+  });
 });
