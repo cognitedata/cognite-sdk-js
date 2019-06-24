@@ -87,6 +87,10 @@ Samples are in the [samples/](./samples) directory. The samples' [README.md](./s
 - [API documentation](https://doc.cognitedata.com)
 - [API reference documentation](https://doc.cognitedata.com/api/v1)
 
+## Migration
+
+See [this guide](./guides/MIGRATION_GUIDE_1xx_2xx.md) on how to migrate from version `1.x.x` to version `2.x.x`.
+
 ## License
 
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
