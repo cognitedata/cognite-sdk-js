@@ -27,7 +27,7 @@
     "@types/query-string": "^6.1.0",
     "axios-debug-log": "^0.4.0",
     "axios-mock-adapter": "1.15.0",
-    "dtsgenerator": "^2.0.6",
+    "dtsgenerator": "cognitedata/dtsgenerator#feat/typeMappings",
     "es-check": "^5.0.0",
     "jest": "^23.6.0",
     "ls": "^0.2.1",
