@@ -6,6 +6,7 @@ import { MetadataMap } from '../metadata';
 import {
   generateCreateEndpoint,
   generateListEndpoint,
+  generateRetrieveEndpoint,
 } from '../standardMethods';
 import { sleepPromise } from '../utils';
 
@@ -58,6 +59,33 @@ describe('standard methods', () => {
       const response = await create(items);
       expect(counter).toBe(4);
       expect(response.length).toBe(items.length);
+      expect(metadataMap.get(response)).toBeDefined();
+    });
+  });
+  describe('generateRetrieveEndpoint', () => {
+    test('automatic chunking', async () => {
+      const metadataMap = new MetadataMap();
+      const ids = new Array(3002).fill(null).map((_, index) => ({
+        id: Number(index),
+      }));
+      const retrieve = generateRetrieveEndpoint(
+        axiosInstance,
+        '/path',
+        metadataMap
+      );
+      let counter = 0;
+      axiosMock.onPost('/path/byids').reply(config => {
+        counter++;
+        const { items: requestItems } = JSON.parse(config.data);
+        const responseItems = requestItems.map((item: any) => ({
+          ...item,
+          id: Number(item.name),
+        }));
+        return [201, { items: responseItems }];
+      });
+      const response = await retrieve(ids);
+      expect(counter).toBe(4);
+      expect(response.length).toBe(ids.length);
       expect(metadataMap.get(response)).toBeDefined();
     });
   });
