@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import MockAdapter from 'axios-mock-adapter';
-import { POPUP, REDIRECT } from '../cogniteClient';
+import CogniteClient, { POPUP, REDIRECT } from '../cogniteClient';
 import * as Login from '../resources/login';
 import { sleepPromise } from '../utils';
 import { apiKey, authTokens, project, setupClient } from './testUtils';
@@ -69,6 +69,43 @@ describe('CogniteClient', () => {
         apiKey,
       });
       expect(client.project).toBe(project);
+    });
+  });
+
+  describe('http requests', () => {
+    let mock: MockAdapter;
+    let client: CogniteClient;
+
+    beforeAll(async () => {
+      client = setupClient();
+      mock = new MockAdapter(client.instance);
+    });
+    beforeEach(async () => {
+      mock.reset();
+    });
+
+    test('get method', async () => {
+      mock.onGet('/').replyOnce(200, 'test');
+      const response = await client.get('/');
+      expect(response.data).toEqual('test');
+    });
+
+    test('post method', async () => {
+      mock.onPost('/').replyOnce(200, 'test');
+      const response = await client.post('/');
+      expect(response.data).toEqual('test');
+    });
+
+    test('put method', async () => {
+      mock.onPut('/').replyOnce(200, 'test');
+      const response = await client.put('/');
+      expect(response.data).toEqual('test');
+    });
+
+    test('delete method', async () => {
+      mock.onDelete('/').replyOnce(200, 'test');
+      const response = await client.delete('/');
+      expect(response.data).toEqual('test');
     });
   });
 

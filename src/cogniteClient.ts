@@ -302,12 +302,68 @@ export default class CogniteClient {
   public getMetadata = (value: any) => this.metadataMap.get(value);
 
   /**
-   * Do plain get-requests using the client
+   * Basic HTTP method for GET
+   *
+   * @param path The URL path
+   * @param options Request options, optional
+   *
+   * ```js
+   * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
+   * ```
    */
   public get = (path: string, options?: BaseRequestOptions) =>
-    rawRequest(this.instance, { method: 'get', url: path, ...options }).then(
-      responseTransformer
-    );
+    this.doRawRequest('get', path, options);
+
+  /**
+   * Basic HTTP method for PUT
+   *
+   * @param path The URL path
+   * @param options Request options, optional
+   *
+   * ```js
+   * const response = await client.put('someUrl');
+   * ```
+   */
+  public put = (path: string, options?: BaseRequestOptions) =>
+    this.doRawRequest('put', path, options);
+
+  /**
+   * Basic HTTP method for POST
+   *
+   * @param path The URL path
+   * @param options Request options, optional
+   *
+   * ```js
+   * const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
+   * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
+   * ```
+   */
+  public post = (path: string, options?: BaseRequestOptions) =>
+    this.doRawRequest('post', path, options);
+
+  /**
+   * Basic HTTP method for DELETE
+   *
+   * @param path The URL path
+   * @param options Request options, optional
+   * ```js
+   * const response = await client.delete('someUrl');
+   * ```
+   */
+  public delete = (path: string, options?: BaseRequestOptions) =>
+    this.doRawRequest('delete', path, options);
+
+  /** @hidden */
+  private doRawRequest = (
+    methodType: string,
+    path: string,
+    options?: BaseRequestOptions
+  ) =>
+    rawRequest(this.instance, {
+      method: methodType,
+      url: path,
+      ...options,
+    }).then(responseTransformer);
 
   private initAPIs = () => {
     const defaultArgs: [string, AxiosInstance, MetadataMap] = [
