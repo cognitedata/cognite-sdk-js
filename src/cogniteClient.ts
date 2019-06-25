@@ -297,15 +297,7 @@ export default class CogniteClient {
    * @param options Request options, optional
    *
    * ```js
-   * import { CogniteClient } from '@cognite/sdk';
-   * const client = new CogniteClient({ appId: '[APP NAME]' });
-   * client.loginWithApiKey({
-   *  project: '[PROJECT]',
-   *  apiKey: '[API_KEY]'
-   * });
-   *
-   * // Get all assets for this client
-   * const assets = await client.get('/api/v1/projects/{project}/assets');
+   * const response = await client.get('/api/v1/projects/{project}/assets');
    * ```
    */
   public get = (path: string, options?: BaseRequestOptions) =>
@@ -316,6 +308,10 @@ export default class CogniteClient {
    *
    * @param path The URL path
    * @param options Request options, optional
+   *
+   * ```js
+   * const response = await client.put('someUrl');
+   * ```
    */
   public put = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('put', path, options);
@@ -325,6 +321,11 @@ export default class CogniteClient {
    *
    * @param path The URL path
    * @param options Request options, optional
+   *
+   * ```js
+   * const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
+   * const response = await client.post('/api/v1/projects/cognitesdk-js/assets', { data: { items: assets } });
+   * ```
    */
   public post = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('post', path, options);
@@ -334,6 +335,9 @@ export default class CogniteClient {
    *
    * @param path The URL path
    * @param options Request options, optional
+   * ```js
+   * const response = await client.delete('someUrl');
+   * ```
    */
   public delete = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('delete', path, options);
