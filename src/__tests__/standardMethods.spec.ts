@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { MetadataMap } from '../metadata';
 import {
@@ -180,29 +180,19 @@ describe('standard methods', () => {
   });
   describe('generateUpdateEndpoint', () => {
     test('automatic chunking for update', async () => {
-      /** const metadataMap = new MetadataMap();
-      const changes = fillArray();
-      const update = generateUpdateEndpoint(
-        axiosInstance,
-        '/path',
-        metadataMap
-      );
-      const chunkCounter = countChunks(axiosMock, 'path/update');
-      const response = await update(changes);
-      expect(chunkCounter.value).toBe(3);
-      expect(response.length).toBe(changes.length);
-      expect(metadataMap.get(response)).toBeDefined();*/
-      // const response = tester(axiosMock, axiosInstance, 'path', generateUpdateEndpoint);
-      // expect(response.length).toBe(changes.length);
+      // const metadataMap = new MetadataMap();
+      // const response = tester(axiosMock, metadataMap, 'path', generateUpdateEndpoint(axiosInstance, 'path/update', metadataMap));
+      // expect(response.length).toBe(items.length);
     });
   });
   describe('generateInsertEndpoint', () => {
     test('automatic chunking for insert', async () => {
+      const metadataMap = new MetadataMap();
       const response = tester(
         axiosMock,
-        axiosInstance,
+        metadataMap,
         'path',
-        generateInsertEndpoint
+        generateInsertEndpoint(axiosInstance, '/path', metadataMap)
       );
       expect(response).toMatchObject({});
     });
@@ -211,20 +201,13 @@ describe('standard methods', () => {
 
 async function tester(
   axiosMock: MockAdapter,
-  axiosInstance: AxiosInstance,
+  metadataMap: MetadataMap,
   url: string,
-  generateEndpointFunction: any
-): Promise<object> {
-  const metadataMap = new MetadataMap();
+  generateEndpointFunction: (items: unknown[]) => Promise<any>
+) {
   const items = fillArray();
   const chunkCounter = countChunks(axiosMock, url);
-  const endpoint = generateEndpointFunction(
-    axiosInstance,
-    '/path',
-    metadataMap
-  );
-  const response = await endpoint(items);
+  const response = await generateEndpointFunction(items);
   expect(chunkCounter.value).toBe(3);
   expect(metadataMap.get(response)).toBeDefined();
-  return { response, items };
 }
