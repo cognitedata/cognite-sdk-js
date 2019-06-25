@@ -9,6 +9,7 @@ import {
   generateRetrieveEndpoint,
   generateDeleteEndpoint,
   generateUpdateEndpoint,
+  generateInsertEndpoint,
 } from '../standardMethods';
 import { sleepPromise } from '../utils';
 
@@ -214,6 +215,33 @@ describe('standard methods', () => {
       const response = await update(changes);
       expect(counter).toBe(3);
       expect(response.length).toBe(changes.length);
+      expect(metadataMap.get(response)).toBeDefined();
+    });
+  });
+  describe('generateInsertEndpoint', () => {
+    test('automatic chunking for insert', async () => {
+      const metadataMap = new MetadataMap();
+      const items = new Array(2003).fill(null).map((_, index) => ({
+        id: Number(index),
+      }));
+      const insert = generateInsertEndpoint(
+        axiosInstance,
+        '/path',
+        metadataMap
+      );
+      let counter = 0;
+      axiosMock.onPost('/path').reply(config => {
+        counter++;
+        const { items: requestItems } = JSON.parse(config.data);
+        const responseItems = requestItems.map((item: any) => ({
+          ...item,
+          id: Number(item.name),
+        }));
+        return [201, { items: responseItems }];
+      });
+      const response = await insert(items);
+      expect(counter).toBe(3);
+      expect(response).toMatchObject({});
       expect(metadataMap.get(response)).toBeDefined();
     });
   });

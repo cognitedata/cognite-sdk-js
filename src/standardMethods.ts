@@ -333,19 +333,25 @@ export function generateRetrieveLatestEndpoint<RequestParams, ResponseType>(
 export function generateInsertEndpoint<RequestParams>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  chunkFunction?: (items: RequestParams[]) => RequestParams[][]
 ) {
   return async function insert(items: RequestParams[]): Promise<{}> {
-    const response = await rawRequest<ItemsResponse<{}>>(
-      axiosInstance,
-      {
-        method: 'post',
-        url: resourcePath,
-        data: { items },
-      },
+    let chunks: RequestParams[][] = [[]];
+    if (items.length) {
+      chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
+    }
+    const responses = await promiseAllWithData(
+      chunks, items => rawRequest<ItemsResponse<{}>>(
+        axiosInstance,
+        {
+          method: 'post',
+          url: resourcePath,
+          data: { items },
+        }),
       true
     );
-    return metadataMap.addAndReturn({}, response);
+    return metadataMap.addAndReturn({}, responses[0]);
   };
 }
 
