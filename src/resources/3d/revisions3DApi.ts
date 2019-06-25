@@ -119,16 +119,25 @@ export class Revisions3DAPI {
     )(revisionId);
   };
 
-  public updateThumbnail: Revisions3DUpdateThumbnailEndpoint = (
+  public updateThumbnail: Revisions3DUpdateThumbnailEndpoint = async (
     modelId,
     revisionId,
     fileId
   ) => {
-    return generateUpdateThumbnailEndpoint(
+    const resourcePath = `${parameterizePath(
+      this.project,
+      modelId
+    )}/${revisionId}`;
+    const response = await rawRequest(
       this.instance,
-      `${parameterizePath(this.project, modelId)}/${revisionId}`,
-      this.map
-    )(fileId);
+      {
+        method: 'post',
+        url: `${resourcePath}/thumbnail`,
+        data: { fileId },
+      },
+      true
+    );
+    return this.map.addAndReturn({}, response);
   };
 
   /**
@@ -231,26 +240,4 @@ function parameterizePath(
     }
   }
   return url;
-}
-
-/** @hidden */
-export function generateUpdateThumbnailEndpoint(
-  axiosInstance: AxiosInstance,
-  resourcePath: string,
-  metadataMap: MetadataMap
-) {
-  return async function updateThumbnail(
-    fileId: CogniteInternalId
-  ): Promise<{}> {
-    const response = await rawRequest(
-      axiosInstance,
-      {
-        method: 'post',
-        url: `${resourcePath}/thumbnail`,
-        data: { fileId },
-      },
-      true
-    );
-    return metadataMap.addAndReturn({}, response);
-  };
 }
