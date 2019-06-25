@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { MetadataMap } from '../metadata';
 import {
@@ -9,7 +9,6 @@ import {
   generateInsertEndpoint,
   generateListEndpoint,
   generateRetrieveEndpoint,
-  generateUpdateEndpoint,
 } from '../standardMethods';
 import { sleepPromise } from '../utils';
 
@@ -61,9 +60,7 @@ describe('standard methods', () => {
   describe('generateCreateEndpoint', () => {
     test('automatic chunking for create', async () => {
       const metadataMap = new MetadataMap();
-      const items = new Array(3002).fill(null).map((_, index) => ({
-        name: '' + index,
-      }));
+      const items = fillArray();
       const create = generateCreateEndpoint(
         axiosInstance,
         '/path',
@@ -71,7 +68,8 @@ describe('standard methods', () => {
       );
       const chunkCounter = countChunks(axiosMock, 'path');
       const response = await create(items);
-      expect(chunkCounter.value).toBe(4);
+      // testChunks(axiosMock, 'path');
+      expect(chunkCounter.value).toBe(3);
       expect(response.length).toBe(items.length);
       expect(metadataMap.get(response)).toBeDefined();
     });
@@ -182,7 +180,7 @@ describe('standard methods', () => {
   });
   describe('generateUpdateEndpoint', () => {
     test('automatic chunking for update', async () => {
-      const metadataMap = new MetadataMap();
+      /** const metadataMap = new MetadataMap();
       const changes = fillArray();
       const update = generateUpdateEndpoint(
         axiosInstance,
@@ -193,23 +191,40 @@ describe('standard methods', () => {
       const response = await update(changes);
       expect(chunkCounter.value).toBe(3);
       expect(response.length).toBe(changes.length);
-      expect(metadataMap.get(response)).toBeDefined();
+      expect(metadataMap.get(response)).toBeDefined();*/
+      // const response = tester(axiosMock, axiosInstance, 'path', generateUpdateEndpoint);
+      // expect(response.length).toBe(changes.length);
     });
   });
   describe('generateInsertEndpoint', () => {
     test('automatic chunking for insert', async () => {
-      const metadataMap = new MetadataMap();
-      const items = fillArray();
-      const insert = generateInsertEndpoint(
+      const response = tester(
+        axiosMock,
         axiosInstance,
-        '/path',
-        metadataMap
+        'path',
+        generateInsertEndpoint
       );
-      const chunkCounter = countChunks(axiosMock, 'path');
-      const response = await insert(items);
-      expect(chunkCounter.value).toBe(3);
       expect(response).toMatchObject({});
-      expect(metadataMap.get(response)).toBeDefined();
     });
   });
 });
+
+async function tester(
+  axiosMock: MockAdapter,
+  axiosInstance: AxiosInstance,
+  url: string,
+  generateEndpointFunction: any
+): Promise<object> {
+  const metadataMap = new MetadataMap();
+  const items = fillArray();
+  const chunkCounter = countChunks(axiosMock, url);
+  const endpoint = generateEndpointFunction(
+    axiosInstance,
+    '/path',
+    metadataMap
+  );
+  const response = await endpoint(items);
+  expect(chunkCounter.value).toBe(3);
+  expect(metadataMap.get(response)).toBeDefined();
+  return { response, items };
+}
