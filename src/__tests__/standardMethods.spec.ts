@@ -5,11 +5,11 @@ import MockAdapter from 'axios-mock-adapter';
 import { MetadataMap } from '../metadata';
 import {
   generateCreateEndpoint,
+  generateDeleteEndpoint,
+  generateInsertEndpoint,
   generateListEndpoint,
   generateRetrieveEndpoint,
-  generateDeleteEndpoint,
   generateUpdateEndpoint,
-  generateInsertEndpoint,
 } from '../standardMethods';
 import { sleepPromise } from '../utils';
 
@@ -31,6 +31,20 @@ function numberGeneratorAPIEndpoint(config: AxiosRequestConfig) {
   }
 }
 
+function countChunks(axiosMock: MockAdapter, url: string) {
+  const counterObject = { value: 0 };
+  axiosMock.onPost(url).reply(config => {
+    counterObject.value++;
+    const { items: requestItems } = JSON.parse(config.data);
+    const responseItems = requestItems.map((item: any) => ({
+      ...item,
+      id: Number(item.name),
+    }));
+    return [201, { items: responseItems }];
+  });
+  return counterObject;
+}
+
 describe('standard methods', () => {
   const axiosInstance = axios.create();
   const axiosMock = new MockAdapter(axiosInstance);
@@ -49,18 +63,9 @@ describe('standard methods', () => {
         '/path',
         metadataMap
       );
-      let counter = 0;
-      axiosMock.onPost('/path').reply(config => {
-        counter++;
-        const { items: requestItems } = JSON.parse(config.data);
-        const responseItems = requestItems.map((item: any) => ({
-          ...item,
-          id: Number(item.name),
-        }));
-        return [201, { items: responseItems }];
-      });
+      const chunkCounter = countChunks(axiosMock, 'path');
       const response = await create(items);
-      expect(counter).toBe(4);
+      expect(chunkCounter.value).toBe(4);
       expect(response.length).toBe(items.length);
       expect(metadataMap.get(response)).toBeDefined();
     });
@@ -76,18 +81,9 @@ describe('standard methods', () => {
         '/path',
         metadataMap
       );
-      let counter = 0;
-      axiosMock.onPost('/path/byids').reply(config => {
-        counter++;
-        const { items: requestItems } = JSON.parse(config.data);
-        const responseItems = requestItems.map((item: any) => ({
-          ...item,
-          id: Number(item.name),
-        }));
-        return [201, { items: responseItems }];
-      });
+      const chunkCounter = countChunks(axiosMock, 'path/byids');
       const response = await retrieve(ids);
-      expect(counter).toBe(4);
+      expect(chunkCounter.value).toBe(4);
       expect(response.length).toBe(ids.length);
       expect(metadataMap.get(response)).toBeDefined();
     });
@@ -175,18 +171,9 @@ describe('standard methods', () => {
         '/path',
         metadataMap
       );
-      let counter = 0;
-      axiosMock.onPost('/path/delete').reply(config => {
-        counter++;
-        const { items: requestItems } = JSON.parse(config.data);
-        const responseItems = requestItems.map((item: any) => ({
-          ...item,
-          id: Number(item.name),
-        }));
-        return [201, { items: responseItems }];
-      });
+      const chunkCounter = countChunks(axiosMock, 'path/delete');
       const response = await remove(ids);
-      expect(counter).toBe(5);
+      expect(chunkCounter.value).toBe(5);
       expect(response).toMatchObject({});
       expect(metadataMap.get(response)).toBeDefined();
     });
@@ -202,18 +189,9 @@ describe('standard methods', () => {
         '/path',
         metadataMap
       );
-      let counter = 0;
-      axiosMock.onPost('/path/update').reply(config => {
-        counter++;
-        const { items: requestItems } = JSON.parse(config.data);
-        const responseItems = requestItems.map((item: any) => ({
-          ...item,
-          id: Number(item.name),
-        }));
-        return [201, { items: responseItems }];
-      });
+      const chunkCounter = countChunks(axiosMock, 'path/update');
       const response = await update(changes);
-      expect(counter).toBe(3);
+      expect(chunkCounter.value).toBe(3);
       expect(response.length).toBe(changes.length);
       expect(metadataMap.get(response)).toBeDefined();
     });
@@ -229,18 +207,9 @@ describe('standard methods', () => {
         '/path',
         metadataMap
       );
-      let counter = 0;
-      axiosMock.onPost('/path').reply(config => {
-        counter++;
-        const { items: requestItems } = JSON.parse(config.data);
-        const responseItems = requestItems.map((item: any) => ({
-          ...item,
-          id: Number(item.name),
-        }));
-        return [201, { items: responseItems }];
-      });
+      const chunkCounter = countChunks(axiosMock, 'path');
       const response = await insert(items);
-      expect(counter).toBe(3);
+      expect(chunkCounter.value).toBe(3);
       expect(response).toMatchObject({});
       expect(metadataMap.get(response)).toBeDefined();
     });

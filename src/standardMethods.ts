@@ -199,16 +199,19 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
       chunks = chunkFunction ? chunkFunction(ids) : chunk(ids, 1000);
     }
     const responses = await promiseAllWithData(
-      chunks, input => rawRequest<ItemsResponse<ResponseType>>(
-        axiosInstance,
-        {
+      chunks,
+      input =>
+        rawRequest<ItemsResponse<ResponseType>>(axiosInstance, {
           method: 'post',
           url: `${resourcePath}/byids`,
           data: { items: input },
         }),
       true
     );
-    const mergedResponses = concat([], ...responses.map(response => response.data.items));
+    const mergedResponses = concat(
+      [],
+      ...responses.map(response => response.data.items)
+    );
     return metadataMap.addAndReturn(mergedResponses, responses[0]);
   };
 }
@@ -241,12 +244,12 @@ export function generateDeleteEndpoint<IdType>(
       chunks = chunkFunction ? chunkFunction(ids) : chunk(ids, 1000);
     }
     const responses = await promiseAllWithData(
-      chunks, ids => rawRequest<ItemsResponse<ResponseType>>(
-        axiosInstance,
-        {
+      chunks,
+      input =>
+        rawRequest<ItemsResponse<ResponseType>>(axiosInstance, {
           method: 'post',
           url: `${resourcePath}/delete`,
-          data: { items: ids },
+          data: { items: input },
         }),
       true
     );
@@ -270,9 +273,9 @@ export function generateUpdateEndpoint<RequestType, ResponseType>(
       chunks = chunkFunction ? chunkFunction(changes) : chunk(changes, 1000);
     }
     const responses = await promiseAllWithData(
-      chunks, input => rawRequest<Response>(
-        axiosInstance,
-        {
+      chunks,
+      input =>
+        rawRequest<Response>(axiosInstance, {
           method: 'post',
           url: `${resourcePath}/update`,
           data: { items: input },
@@ -342,12 +345,12 @@ export function generateInsertEndpoint<RequestParams>(
       chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
     }
     const responses = await promiseAllWithData(
-      chunks, items => rawRequest<ItemsResponse<{}>>(
-        axiosInstance,
-        {
+      chunks,
+      input =>
+        rawRequest<ItemsResponse<{}>>(axiosInstance, {
           method: 'post',
           url: resourcePath,
-          data: { items },
+          data: { items: input },
         }),
       true
     );
