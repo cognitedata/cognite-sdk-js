@@ -21,10 +21,7 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
 ): CreateEndpoint<RequestType, ResponseType> {
   return async function create(items) {
     type Response = ItemsResponse<ResponseType>;
-    let chunks: RequestType[][] = [[]];
-    if (items.length) {
-      chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
-    }
+    const chunks = doChunking<RequestType>(items, chunkFunction);
     const responses = await promiseAllWithData(
       chunks,
       input =>
@@ -194,10 +191,7 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
   chunkFunction?: (ids: IdType[]) => IdType[][]
 ) {
   return async function retrieve(ids: IdType[]): Promise<ResponseType[]> {
-    let chunks: IdType[][] = [[]];
-    if (ids.length) {
-      chunks = chunkFunction ? chunkFunction(ids) : chunk(ids, 1000);
-    }
+    const chunks = doChunking<IdType>(ids, chunkFunction);
     const responses = await promiseAllWithData(
       chunks,
       input =>
@@ -239,10 +233,7 @@ export function generateDeleteEndpoint<IdType>(
   chunkFunction?: (ids: IdType[]) => IdType[][]
 ) {
   return async function remove(ids: IdType[]): Promise<{}> {
-    let chunks: IdType[][] = [[]];
-    if (ids.length) {
-      chunks = chunkFunction ? chunkFunction(ids) : chunk(ids, 1000);
-    }
+    const chunks = doChunking<IdType>(ids, chunkFunction);
     const responses = await promiseAllWithData(
       chunks,
       input =>
@@ -268,10 +259,7 @@ export function generateUpdateEndpoint<RequestType, ResponseType>(
     changes: RequestType[]
   ): Promise<ResponseType[]> {
     type Response = ItemsResponse<ResponseType>;
-    let chunks: RequestType[][] = [[]];
-    if (changes.length) {
-      chunks = chunkFunction ? chunkFunction(changes) : chunk(changes, 1000);
-    }
+    const chunks = doChunking<RequestType>(changes, chunkFunction);
     const responses = await promiseAllWithData(
       chunks,
       input =>
@@ -340,10 +328,7 @@ export function generateInsertEndpoint<RequestParams>(
   chunkFunction?: (items: RequestParams[]) => RequestParams[][]
 ) {
   return async function insert(items: RequestParams[]): Promise<{}> {
-    let chunks: RequestParams[][] = [[]];
-    if (items.length) {
-      chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
-    }
+    const chunks = doChunking<RequestParams>(items, chunkFunction);
     const responses = await promiseAllWithData(
       chunks,
       input =>
@@ -378,4 +363,15 @@ export function generateSingleReplaceEndpoint<RequestType, RepsonseType>(
     );
     return metadataMap.addAndReturn(response.data, response);
   };
+}
+
+function doChunking<Type>(
+  items: Type[],
+  chunkFunction?: (ids: Type[]) => Type[][]
+) {
+  let chunks: Type[][] = [[]];
+  if (items.length) {
+    chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
+  }
+  return chunks;
 }

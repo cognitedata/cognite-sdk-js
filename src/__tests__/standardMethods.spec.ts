@@ -45,6 +45,12 @@ function countChunks(axiosMock: MockAdapter, url: string) {
   return counterObject;
 }
 
+function fillArray() {
+  return new Array(2003).fill(null).map((_, index) => ({
+    id: Number(index),
+  }));
+}
+
 describe('standard methods', () => {
   const axiosInstance = axios.create();
   const axiosMock = new MockAdapter(axiosInstance);
@@ -73,9 +79,7 @@ describe('standard methods', () => {
   describe('generateRetrieveEndpoint', () => {
     test('automatic chunking for retrieve', async () => {
       const metadataMap = new MetadataMap();
-      const ids = new Array(3002).fill(null).map((_, index) => ({
-        id: Number(index),
-      }));
+      const ids = fillArray();
       const retrieve = generateRetrieveEndpoint(
         axiosInstance,
         '/path',
@@ -83,7 +87,7 @@ describe('standard methods', () => {
       );
       const chunkCounter = countChunks(axiosMock, 'path/byids');
       const response = await retrieve(ids);
-      expect(chunkCounter.value).toBe(4);
+      expect(chunkCounter.value).toBe(3);
       expect(response.length).toBe(ids.length);
       expect(metadataMap.get(response)).toBeDefined();
     });
@@ -163,9 +167,7 @@ describe('standard methods', () => {
   describe('generateDeleteEndpoint', () => {
     test('automatic chunking for delete', async () => {
       const metadataMap = new MetadataMap();
-      const ids = new Array(4500).fill(null).map((_, index) => ({
-        id: Number(index),
-      }));
+      const ids = fillArray();
       const remove = generateDeleteEndpoint(
         axiosInstance,
         '/path',
@@ -173,7 +175,7 @@ describe('standard methods', () => {
       );
       const chunkCounter = countChunks(axiosMock, 'path/delete');
       const response = await remove(ids);
-      expect(chunkCounter.value).toBe(5);
+      expect(chunkCounter.value).toBe(3);
       expect(response).toMatchObject({});
       expect(metadataMap.get(response)).toBeDefined();
     });
@@ -181,9 +183,7 @@ describe('standard methods', () => {
   describe('generateUpdateEndpoint', () => {
     test('automatic chunking for update', async () => {
       const metadataMap = new MetadataMap();
-      const changes = new Array(2003).fill(null).map((_, index) => ({
-        id: Number(index),
-      }));
+      const changes = fillArray();
       const update = generateUpdateEndpoint(
         axiosInstance,
         '/path',
@@ -199,9 +199,7 @@ describe('standard methods', () => {
   describe('generateInsertEndpoint', () => {
     test('automatic chunking for insert', async () => {
       const metadataMap = new MetadataMap();
-      const items = new Array(2003).fill(null).map((_, index) => ({
-        id: Number(index),
-      }));
+      const items = fillArray();
       const insert = generateInsertEndpoint(
         axiosInstance,
         '/path',
