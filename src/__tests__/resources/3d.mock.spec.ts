@@ -152,6 +152,24 @@ describe('3D mocked', () => {
       expect(response).toEqual(revision);
     });
 
+    test('update thumbnail', async () => {
+      expect.assertions(2);
+      const regExp = new RegExp(
+        `/3d/models/${model.id}/revisions/${revision.id}/thumbnail`
+      );
+      const fileId = randomInt();
+      mock.onPost(regExp).replyOnce(config => {
+        expect(JSON.parse(config.data)).toEqual({ fileId });
+        return [200, {}];
+      });
+      const response = await client.revisions3D.updateThumbnail(
+        model.id,
+        revision.id,
+        fileId
+      );
+      expect(response).toEqual({});
+    });
+
     test('list 3d nodes', async () => {
       const regExp = new RegExp(
         `/3d/models/${model.id}/revisions/${revision.id}/nodes`

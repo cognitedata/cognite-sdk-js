@@ -2,6 +2,7 @@
 
 import { AxiosInstance } from 'axios';
 import { CogniteAsyncIterator } from '../../autoPagination';
+import { rawRequest } from '../../axiosWrappers';
 import { MetadataMap } from '../../metadata';
 import {
   generateCreateEndpoint,
@@ -118,6 +119,27 @@ export class Revisions3DAPI {
     )(revisionId);
   };
 
+  public updateThumbnail: Revisions3DUpdateThumbnailEndpoint = async (
+    modelId,
+    revisionId,
+    fileId
+  ) => {
+    const resourcePath = `${parameterizePath(
+      this.project,
+      modelId
+    )}/${revisionId}`;
+    const response = await rawRequest(
+      this.instance,
+      {
+        method: 'post',
+        url: `${resourcePath}/thumbnail`,
+        data: { fileId },
+      },
+      true
+    );
+    return this.map.addAndReturn({}, response);
+  };
+
   /**
    * [List 3D nodes](https://doc.cognitedata.com/api/v1/#operation/get3DNodes)
    *
@@ -184,6 +206,12 @@ export type Revisions3DRetrieveEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId
 ) => Promise<Revision3D>;
+
+export type Revisions3DUpdateThumbnailEndpoint = (
+  modelId: CogniteInternalId,
+  revisionId: CogniteInternalId,
+  fileId: CogniteInternalId
+) => Promise<{}>;
 
 export type Revisions3DListNodesEndpoint = (
   modelId: CogniteInternalId,
