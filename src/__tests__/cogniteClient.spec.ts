@@ -1,8 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import MockAdapter from 'axios-mock-adapter';
-import { POPUP, REDIRECT } from '../cogniteClient';
-import { CogniteClient } from '..';
+import CogniteClient, { POPUP, REDIRECT } from '../cogniteClient';
 import * as Login from '../resources/login';
 import { sleepPromise } from '../utils';
 import { apiKey, authTokens, project, setupClient } from './testUtils';
