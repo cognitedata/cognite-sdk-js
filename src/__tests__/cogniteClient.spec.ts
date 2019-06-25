@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 
 import MockAdapter from 'axios-mock-adapter';
-import { CogniteClient } from '..';
 import { POPUP, REDIRECT } from '../cogniteClient';
+import { CogniteClient } from '..';
 import * as Login from '../resources/login';
 import { sleepPromise } from '../utils';
 import { apiKey, authTokens, project, setupClient } from './testUtils';
@@ -86,25 +86,25 @@ describe('CogniteClient', () => {
     });
 
     test('get method', async () => {
-      mock.onGet('/').reply(200, 'test');
+      mock.onGet('/').replyOnce(200, 'test');
       const response = await client.get('/');
       expect(response.data).toEqual('test');
     });
 
     test('post method', async () => {
-      mock.onPost('/').reply(200, 'test');
+      mock.onPost('/').replyOnce(200, 'test');
       const response = await client.post('/');
       expect(response.data).toEqual('test');
     });
 
     test('put method', async () => {
-      mock.onPut('/').reply(200, 'test');
+      mock.onPut('/').replyOnce(200, 'test');
       const response = await client.put('/');
       expect(response.data).toEqual('test');
     });
 
     test('delete method', async () => {
-      mock.onDelete('/').reply(200, 'test');
+      mock.onDelete('/').replyOnce(200, 'test');
       const response = await client.delete('/');
       expect(response.data).toEqual('test');
     });

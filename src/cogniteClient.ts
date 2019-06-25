@@ -295,6 +295,18 @@ export default class CogniteClient {
    *
    * @param path The URL path
    * @param options Request options, optional
+   *
+   * ```js
+   * import { CogniteClient } from '@cognite/sdk';
+   * const client = new CogniteClient({ appId: '[APP NAME]' });
+   * client.loginWithApiKey({
+   *  project: '[PROJECT]',
+   *  apiKey: '[API_KEY]'
+   * });
+   *
+   * // Get all assets for this client
+   * const assets = await client.get('/api/v1/projects/{project}/assets');
+   * ```
    */
   public get = (path: string, options?: BaseRequestOptions) =>
     this.doRawRequest('get', path, options);
