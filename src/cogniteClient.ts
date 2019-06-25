@@ -324,7 +324,7 @@ export default class CogniteClient {
    *
    * ```js
    * const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
-   * const response = await client.post('/api/v1/projects/cognitesdk-js/assets', { data: { items: assets } });
+   * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
    * ```
    */
   public post = (path: string, options?: BaseRequestOptions) =>
