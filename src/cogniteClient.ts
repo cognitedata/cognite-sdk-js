@@ -297,7 +297,7 @@ export default class CogniteClient {
    * @param options Request options, optional
    *
    * ```js
-   * const response = await client.get('/api/v1/projects/{project}/assets');
+   * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
    * ```
    */
   public get = (path: string, options?: BaseRequestOptions) =>
