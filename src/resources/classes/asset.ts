@@ -1,7 +1,11 @@
 // Copyright 2019 Cognite AS
 
 import { CogniteClient } from '../..';
+import { CogniteAsyncIterator } from '../../autoPagination';
 import * as types from '../../types/types';
+import { EventsListEndpoint } from '../events/eventsApi';
+import { FilesListEndpoint } from '../files/filesApi';
+import { TimeSeriesListEndpoint } from '../timeSeries/timeSeriesApi';
 import { AssetList } from './assetList';
 
 export class Asset implements types.Asset {
@@ -13,8 +17,6 @@ export class Asset implements types.Asset {
   public source?: types.AssetSource;
   public lastUpdatedTime: Date;
   public createdTime: Date;
-  public path: number[];
-  public depth: number;
   private client: CogniteClient;
 
   constructor(client: CogniteClient, props: types.Asset) {
@@ -27,8 +29,6 @@ export class Asset implements types.Asset {
     this.source = props.source;
     this.lastUpdatedTime = props.lastUpdatedTime;
     this.createdTime = props.createdTime;
-    this.path = props.path;
-    this.depth = props.depth;
   }
 
   public delete = () => {
