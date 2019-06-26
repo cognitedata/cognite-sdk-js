@@ -21,7 +21,8 @@ cd ./../../scripts
 
 # generate types and do some post generation rain-dance
 node ../node_modules/dtsgenerator/bin/dtsgen --out ../src/types/types.ts ../v1.json  -n ""
-printf '%s\n%s\n' "// Copyright 2019 Cognite AS" "$(cat ../src/types/types.ts)" > ../src/types/types.ts
+printf '%s\n%s\n' "/* tslint:disable no-namespace no-empty-interface max-union-size use-type-alias */" "$(cat ../src/types/types.ts)" > ../src/types/types.ts
+printf '%s\n\n%s\n' "// Copyright 2019 Cognite AS" "$(cat ../src/types/types.ts)" > ../src/types/types.ts
 sed -i "" 's/declare type/export type/g' ../src/types/types.ts
 sed -i "" 's/declare interface/export interface/g' ../src/types/types.ts
 sed -i "" 's/declare namespace/export declare namespace/g' ../src/types/types.ts
