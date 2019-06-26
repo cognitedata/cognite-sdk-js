@@ -21,8 +21,37 @@ import {
 } from '../../types/types';
 import { projectUrl } from '../../utils';
 import { assetChunker } from './assetUtils';
+import { AssetList } from '../classes/assetList';
 
 export class AssetsAPI {
+
+  retrieveSubtree(id: number, externalId: string | undefined, depth: Number): [any] | PromiseLike<[any]> {
+    let currentDepth: number = 0;
+    const asset = this.retrieve([id]);
+    const subtree = this.getAssetSubtree(AssetList([asset]), currentDepth, depth);
+
+  }
+  getAssetSubtree(assets: AssetList, currentDepth: number, depth: Number): AssetList {
+    let subtree: AssetList = assets;
+    if (depth > currentDepth) {
+      const children = this.getChildren(assets);
+      if (children) {
+        // Need to extend the ArrayList here
+        subtree = subtree.push(...this.getAssetSubtree(children, currentDepth + 1, depth));
+      }
+    }
+    return subtree;
+  }
+  getChildren(assets: AssetList): AssetList {
+    const children: AssetList = new AssetList([]);
+    children.add(assets.children(assets.map(asset => ({id: asset.id}))));
+    return children;
+  }
+
+
+
+
+
   /**
    * [Creates new assets](https://doc.cognitedata.com/api/v1/#operation/createAssets)
    *

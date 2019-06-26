@@ -14,4 +14,6 @@ export class AssetList extends Array<Asset> {
     return this.client.assets.delete(this.map(asset => ({ id: asset.id })));
   }; 
 
+
+
 }

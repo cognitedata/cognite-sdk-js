@@ -3,9 +3,6 @@
 import * as types from '../../types/types';
 import { API } from '../api';
 import { AssetList } from './assetList';
-import { TimeSeriesListEndpoint } from '../timeSeries/timeSeriesApi';
-import { EventsListEndpoint } from '../events/eventsApi';
-import { FilesListEndpoint } from '../files/filesApi';
 import { CogniteAsyncIterator } from '../../autoPagination';
 
 export class Asset implements types.Asset {
@@ -63,11 +60,7 @@ export class Asset implements types.Asset {
   };
 
   public subtree: () => Promise<AssetList> = async (depth: Number = this.depth) => {
-    const { parentId } = this;
-    if (!parentId) {
-      return null;
-    }
-    const [subtree] = await this.client.assets.retrieveSubtree([{ id: this.parentId, depth }])
+    const [subtree] = await this.client.assets.retrieveSubtree(this.id, this.externalId, depth);
     return subtree;
   }
 
