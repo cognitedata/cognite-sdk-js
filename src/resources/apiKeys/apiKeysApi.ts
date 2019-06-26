@@ -9,6 +9,7 @@ import {
 } from '../../standardMethods';
 import {
   ApiKeyListScope,
+  ApiKeyObject,
   ApiKeyRequest,
   CogniteInternalId,
   NewApiKeyResponseDTO,
@@ -58,7 +59,7 @@ export class ApiKeysAPI {
 
 export type ApiKeysListEndpoint = (
   scope?: ApiKeyListScope
-) => Promise<NewApiKeyResponseDTO[]>;
+) => Promise<ApiKeyObject[]>;
 
 export type ApiKeysCreateEndpoint = (
   items: ApiKeyRequest[]
