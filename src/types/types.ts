@@ -1,4 +1,6 @@
 // Copyright 2019 Cognite AS
+
+/* tslint:disable no-namespace no-empty-interface max-union-size use-type-alias */
 export type Aggregate =
   | 'average'
   | 'max'
