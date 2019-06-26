@@ -4,19 +4,19 @@ import { chunk } from 'lodash';
 import { CogniteError } from '../../error';
 import { Node, topologicalSort } from '../../graphUtils';
 import { CogniteMultiError } from '../../multiError';
-import { DataExternalAssetItem } from '../../types';
+import { ExternalAssetItem } from '../../types';
 
 /** @hidden */
 export function assetChunker(
-  assets: DataExternalAssetItem[],
+  assets: ExternalAssetItem[],
   chunkSize: number = 1000
-): DataExternalAssetItem[][] {
-  const nodes: Node<DataExternalAssetItem>[] = assets.map(asset => {
+): ExternalAssetItem[][] {
+  const nodes: Node<ExternalAssetItem>[] = assets.map(asset => {
     return { data: asset };
   });
 
   // find all new exteralIds and map the new externalId to the asset
-  const externalIdMap = new Map<string, Node<DataExternalAssetItem>>();
+  const externalIdMap = new Map<string, Node<ExternalAssetItem>>();
   nodes.forEach(node => {
     const { externalId } = node.data;
     if (externalId) {

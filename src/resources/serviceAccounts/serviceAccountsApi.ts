@@ -9,7 +9,7 @@ import {
 } from '../../standardMethods';
 import {
   CogniteInternalId,
-  ServiceAccount,
+  GroupServiceAccount,
   ServiceAccountInput,
 } from '../../types';
 import { projectUrl } from '../../utils';
@@ -55,11 +55,11 @@ export class ServiceAccountsAPI {
   }
 }
 
-export type ServiceAccountsListEndpoint = () => Promise<ServiceAccount[]>;
+export type ServiceAccountsListEndpoint = () => Promise<GroupServiceAccount[]>;
 
 export type ServiceAccountsCreateEndpoint = (
   items: ServiceAccountInput[]
-) => Promise<ServiceAccount[]>;
+) => Promise<GroupServiceAccount[]>;
 
 export type ServiceAccountsDeleteEndpoint = (
   items: CogniteInternalId[]

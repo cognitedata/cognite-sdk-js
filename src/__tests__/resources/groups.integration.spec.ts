@@ -1,13 +1,13 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { Group, GroupSpec, ServiceAccount } from '../../types';
+import { Group, GroupServiceAccount, GroupSpec } from '../../types';
 import { sleepPromise } from '../../utils';
 import { randomInt, retryInSeconds, setupLoggedInClient } from '../testUtils';
 
 describe('Groups integration test', () => {
   let client: CogniteClient;
-  let serviceAccount: ServiceAccount;
+  let serviceAccount: GroupServiceAccount;
   beforeAll(async () => {
     client = setupLoggedInClient();
     [serviceAccount] = await client.serviceAccounts.create([

@@ -4,11 +4,15 @@ import {
   BoundingBox3D,
   CogniteInternalId,
   Cursor,
+  DataExternalAssetItem,
   DefaultGroupId,
   Event,
   FileFilter,
   OutputProjectAuthentication,
   ProjectName,
+  SecurityCategoryDTO,
+  SecurityCategorySpecDTO,
+  ServiceAccount,
 } from './types';
 
 export interface FileRequestFilter extends Cursor, FileFilter {}
@@ -144,7 +148,7 @@ export interface Revision3DListRequest extends Limit {
   published?: boolean;
 }
 
-export interface ProjectObject {
+export interface ProjectUpdate {
   name?: ProjectName;
   defaultGroupId?: DefaultGroupId; // int64
   authentication?: OutputProjectAuthentication;
@@ -160,3 +164,8 @@ export interface ListGroups {
 export type CogniteEvent = Event;
 
 export type TimeseriesIdEither = IdEither;
+
+export type SecurityCategory = SecurityCategoryDTO;
+export type SecurityCategorySpec = SecurityCategorySpecDTO;
+export type ExternalAssetItem = DataExternalAssetItem;
+export type GroupServiceAccount = ServiceAccount;

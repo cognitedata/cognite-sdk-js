@@ -1,12 +1,12 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { NewApiKeyResponseDTO, ServiceAccount } from '../../types';
+import { GroupServiceAccount, NewApiKeyResponseDTO } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('API keys integration test', () => {
   let client: CogniteClient;
-  let serviceAccount: ServiceAccount;
+  let serviceAccount: GroupServiceAccount;
   beforeAll(async () => {
     client = setupLoggedInClient();
     [serviceAccount] = await client.serviceAccounts.create([

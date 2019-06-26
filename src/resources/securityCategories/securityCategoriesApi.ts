@@ -11,8 +11,8 @@ import {
 import {
   CogniteInternalId,
   ListSecurityCategories,
-  SecurityCategoryDTO,
-  SecurityCategorySpecDTO,
+  SecurityCategory,
+  SecurityCategorySpec,
 } from '../../types';
 import { projectUrl } from '../../utils';
 
@@ -59,11 +59,11 @@ export class SecurityCategoriesAPI {
 
 export type SecurityCategoriesListEndpoint = (
   query?: ListSecurityCategories
-) => CogniteAsyncIterator<SecurityCategoryDTO>;
+) => CogniteAsyncIterator<SecurityCategory>;
 
 export type SecurityCategoriesCreateEndpoint = (
-  items: SecurityCategorySpecDTO[]
-) => Promise<SecurityCategoryDTO[]>;
+  items: SecurityCategorySpec[]
+) => Promise<SecurityCategory[]>;
 
 export type SecurityCategoriesDeleteEndpoint = (
   ids: CogniteInternalId[]

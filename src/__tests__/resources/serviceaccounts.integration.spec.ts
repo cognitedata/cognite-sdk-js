@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { ServiceAccount } from '../../types';
+import { GroupServiceAccount } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Service accounts integration test', () => {
@@ -10,7 +10,7 @@ describe('Service accounts integration test', () => {
     client = setupLoggedInClient();
   });
 
-  let serviceAccounts: ServiceAccount[];
+  let serviceAccounts: GroupServiceAccount[];
 
   test('create', async () => {
     const serviceAccountsToCreate = [
