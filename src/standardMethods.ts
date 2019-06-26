@@ -11,9 +11,37 @@ import { MetadataMap } from './metadata';
 import { promiseAllWithData } from './resources/assets/assetUtils';
 import { CursorResponse, ItemsResponse } from './types/types';
 
+export type Newable<T> = new (...args: any[]) => T;
+
 type CreateEndpoint<RequestType, ResponseType> = (
   items: RequestType[]
 ) => Promise<ResponseType[]>;
+
+// export function generateCollectionCreateEndpoint<
+//   RequestType,
+//   ResponseType,
+//   ItemClass,
+//   CollectionClass
+// >(
+//   axiosInstance: AxiosInstance,
+//   resourcePath: string,
+//   metadataMap: MetadataMap,
+//   itemClass: Newable<ResponseType>,
+//   collectionClass: Newable<CollectionClass>,
+//   chunkFunction?: (items: RequestType[]) => RequestType[][]
+// ): CreateEndpoint<RequestType, ResponseType> {
+//   const endpoint = generateCreateEndpoint<RequestType, ResponseType>(
+//     axiosInstance,
+//     resourcePath,
+//     metadataMap,
+//     chunkFunction
+//   );
+//   return async function create(items) {
+//     const responses = await endpoint(items);
+//     const collection = new collectionClass(responses.map(item => (new itemClass(item))));
+//     return metadataMap.addAndReturn(collection, );
+//   };
+// }
 
 /** @hidden */
 export function generateCreateEndpoint<RequestType, ResponseType>(
