@@ -10,9 +10,9 @@ import { CursorResponse, ItemsResponse } from './types/types';
 
 export type Newable<T> = new (...args: any[]) => T;
 
-type CreateEndpoint<RequestType, ResponseType> = (
-  items: RequestType[]
-) => Promise<ResponseType[]>;
+// type CreateEndpoint<RequestType, ResponseType> = (
+//   items: RequestType[]
+// ) => Promise<ResponseType[]>;
 
 // export function generateCollectionCreateEndpoint<
 //   RequestType,
@@ -41,17 +41,18 @@ type CreateEndpoint<RequestType, ResponseType> = (
 // }
 
 /** @hidden */
-export function generateCreateEndpoint<RequestType, ResponseType>(
+export function generateCreateEndpoint<RequestType, ResponseType, TransformType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
+  transform: (items: ResponseType[]) => TransformType[],
   chunkFunction?: (items: RequestType[]) => RequestType[][]
-): CreateEndpoint<RequestType, ResponseType> {
-  return async function create(items) {
+){
+  return async function create(itemsArray: RequestType[]) {
     type Response = ItemsResponse<ResponseType>;
     let chunks: RequestType[][] = [[]];
-    if (items.length) {
-      chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
+    if (itemsArray.length) {
+      chunks = chunkFunction ? chunkFunction(itemsArray) : chunk(itemsArray, 1000);
     }
     const responses = await promiseAllWithData(
       chunks,
@@ -67,7 +68,7 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
       [],
       ...responses.map(response => response.data.items)
     );
-    return metadataMap.addAndReturn(mergedResponses, responses[0]);
+    return metadataMap.addAndReturn(transform(mergedResponses), responses[0]);
   };
 }
 
@@ -272,21 +273,23 @@ export function generateDeleteEndpoint<IdType>(
 }
 
 /** @hidden */
-export function generateUpdateEndpoint<RequestType, ResponseType>(
+export function generateUpdateEndpoint<RequestType, ResponseType, TransformType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  transform: (items: ResponseType[]) => TransformType[]
 ) {
   return async function update(
     changes: RequestType[]
-  ): Promise<ResponseType[]> {
+  ){
     type Response = ItemsResponse<ResponseType>;
     const response = await rawRequest<Response>(axiosInstance, {
       url: `${resourcePath}/update`,
       method: 'post',
       data: { items: changes },
     });
-    return metadataMap.addAndReturn(response.data.items, response);
+    const { items } = response.data;
+    return metadataMap.addAndReturn(transform(items), response);
   };
 }
 
@@ -294,7 +297,7 @@ export function generateUpdateEndpoint<RequestType, ResponseType>(
 export function generateSearchEndpoint<RequestParams, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
 ) {
   return async function search(query: RequestParams): Promise<ResponseType[]> {
     const response = await rawRequest<ItemsResponse<ResponseType>>(

@@ -13,7 +13,6 @@ import { Files3DAPI } from './resources/3d/files3DApi';
 import { Models3DAPI } from './resources/3d/models3DApi';
 import { Revisions3DAPI } from './resources/3d/revisions3DApi';
 import { Viewer3DAPI } from './resources/3d/viewer3DApi';
-import { BaseRequestOptions } from './resources/api';
 import { ApiKeysAPI } from './resources/apiKeys/apiKeysApi';
 import { AssetsAPI } from './resources/assets/assetsApi';
 import { DataPointsAPI } from './resources/dataPoints/dataPointsApi';
@@ -304,7 +303,7 @@ export default class CogniteClient {
       this.instance,
       this.metadataMap,
     ];
-    this.assetsApi = new AssetsAPI(...defaultArgs, this);
+    this.assetsApi = new AssetsAPI(this, ...defaultArgs);
     this.timeSeriesApi = new TimeSeriesAPI(...defaultArgs);
     this.dataPointsApi = new DataPointsAPI(...defaultArgs);
     this.eventsApi = new EventsAPI(...defaultArgs);
@@ -334,7 +333,11 @@ function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
     redirectUrl: window.location.href,
   });
 }
-
+export interface BaseRequestOptions {
+  params?: object;
+  headers?: { [key: string]: string };
+  responseType?: 'json' | 'arraybuffer' | 'text';
+}
 export interface Response {
   data: any;
   headers: { [key: string]: string };
