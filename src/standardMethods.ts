@@ -212,13 +212,14 @@ export function generateSimpleListEndpoint<RequestParams, ResponseType>(
 }
 
 /** @hidden */
-export function generateRetrieveEndpoint<IdType, ResponseType>(
+export function generateRetrieveEndpoint<IdType, ResponseType, TransformType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
+  transform: (items: ResponseType[]) => TransformType[],
   chunkFunction?: (ids: IdType[]) => IdType[][]
 ) {
-  return async function retrieve(ids: IdType[]): Promise<ResponseType[]> {
+  return async function retrieve(ids: IdType[]) {
     const chunks = doChunking<IdType>(ids, chunkFunction);
     const responses = await promiseAllWithData(
       chunks,
@@ -238,7 +239,7 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
       [],
       ...responses.map(response => response.data.items)
     );
-    return metadataMap.addAndReturn(mergedResponses, responses[0]);
+    return metadataMap.addAndReturn(transform(mergedResponses), responses[0]);
   };
 }
 

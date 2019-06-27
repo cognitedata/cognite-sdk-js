@@ -2,6 +2,7 @@
 
 import { AxiosInstance } from 'axios';
 import { CogniteAsyncIterator } from '../../autoPagination';
+import CogniteClient from '../../cogniteClient';
 import { MetadataMap } from '../../metadata';
 import {
   generateCreateEndpoint,
@@ -11,47 +12,13 @@ import {
   generateSearchEndpoint,
   generateUpdateEndpoint,
 } from '../../standardMethods';
-import {
-  Asset,
-  AssetChange,
-  AssetIdEither,
-  AssetListScope,
-  AssetSearchFilter,
-  ExternalAssetItem,
-} from '../../types/types';
+import * as types from '../../types/types';
 import { projectUrl } from '../../utils';
-import { assetChunker } from './assetUtils';
+import { Asset } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
+import { assetChunker } from './assetUtils';
 
 export class AssetsAPI {
-
-  retrieveSubtree(id: number, externalId: string | undefined, depth: Number): [any] | PromiseLike<[any]> {
-    let currentDepth: number = 0;
-    const asset = this.retrieve([id]);
-    const subtree = this.getAssetSubtree(AssetList([asset]), currentDepth, depth);
-
-  }
-  getAssetSubtree(assets: AssetList, currentDepth: number, depth: Number): AssetList {
-    let subtree: AssetList = assets;
-    if (depth > currentDepth) {
-      const children = this.getChildren(assets);
-      if (children) {
-        // Need to extend the ArrayList here
-        subtree = subtree.push(...this.getAssetSubtree(children, currentDepth + 1, depth));
-      }
-    }
-    return subtree;
-  }
-  getChildren(assets: AssetList): AssetList {
-    const children: AssetList = new AssetList([]);
-    children.add(assets.children(assets.map(asset => ({id: asset.id}))));
-    return children;
-  }
-
-
-
-
-
   /**
    * [Creates new assets](https://doc.cognitedata.com/api/v1/#operation/createAssets)
    *
@@ -119,32 +86,87 @@ export class AssetsAPI {
    */
   public delete: AssetDeleteEndpoint;
 
+  private client: CogniteClient;
+
   /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+  constructor(
+    project: string,
+    instance: AxiosInstance,
+    map: MetadataMap,
+    client: CogniteClient
+  ) {
+    this.client = client;
     const path = projectUrl(project) + '/assets';
+    const transformResponse = (assets: types.Asset[]) =>
+      assets.map(asset => new Asset(this.client, asset));
     this.create = generateCreateEndpoint(instance, path, map, assetChunker);
     this.list = generateListEndpoint(instance, path, map, true);
-    this.retrieve = generateRetrieveEndpoint(instance, path, map);
+    this.retrieve = generateRetrieveEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse
+    );
     this.update = generateUpdateEndpoint(instance, path, map);
     this.search = generateSearchEndpoint(instance, path, map);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
+
+  // public retrieveSubtree(
+  //   id: number,
+  //   externalId: string | undefined,
+  //   depth: Number
+  // ): [any] | PromiseLike<[any]> {
+  //   const currentDepth: number = 0;
+  //   const asset = this.retrieve([id]);
+  //   const subtree = this.getAssetSubtree(
+  //     AssetList([asset]),
+  //     currentDepth,
+  //     depth
+  //   );
+  // }
+  // public getAssetSubtree(
+  //   assets: AssetList,
+  //   currentDepth: number,
+  //   depth: Number
+  // ): AssetList {
+  //   let subtree: AssetList = assets;
+  //   if (depth > currentDepth) {
+  //     const children = this.getChildren(assets);
+  //     if (children) {
+  //       // Need to extend the ArrayList here
+  //       subtree = subtree.push(
+  //         ...this.getAssetSubtree(children, currentDepth + 1, depth)
+  //       );
+  //     }
+  //   }
+  //   return subtree;
+  // }
+  // public getChildren(assets: AssetList): AssetList {
+  //   const children: AssetList = new AssetList([]);
+  //   children.add(assets.children(assets.map(asset => ({ id: asset.id }))));
+  //   return children;
+  // }
 }
 
 export type AssetCreateEndpoint = (
-  items: ExternalAssetItem[]
-) => Promise<Asset[]>;
+  items: types.ExternalAssetItem[]
+) => Promise<types.Asset[]>;
 
 export type AssetListEndpoint = (
-  scope?: AssetListScope
-) => CogniteAsyncIterator<Asset>;
+  scope?: types.AssetListScope
+) => CogniteAsyncIterator<types.Asset>;
 
-export type AssetRetrieveEndpoint = (ids: AssetIdEither[]) => Promise<Asset[]>;
-
-export type AssetUpdateEndpoint = (changes: AssetChange[]) => Promise<Asset[]>;
-
-export type AssetSearchEndpoint = (
-  query: AssetSearchFilter
+export type AssetRetrieveEndpoint = (
+  ids: types.AssetIdEither[]
 ) => Promise<Asset[]>;
 
-export type AssetDeleteEndpoint = (ids: AssetIdEither[]) => Promise<{}>;
+export type AssetUpdateEndpoint = (
+  changes: types.AssetChange[]
+) => Promise<types.Asset[]>;
+
+export type AssetSearchEndpoint = (
+  query: types.AssetSearchFilter
+) => Promise<types.Asset[]>;
+
+export type AssetDeleteEndpoint = (ids: types.AssetIdEither[]) => Promise<{}>;
