@@ -199,7 +199,7 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
           method: 'post',
           url: `${resourcePath}/byids`,
           data: { items: input },
-        }),
+        }, true),
       true
     );
     const mergedResponses = concat(
