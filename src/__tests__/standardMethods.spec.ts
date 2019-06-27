@@ -9,6 +9,7 @@ import {
   generateInsertEndpoint,
   generateListEndpoint,
   generateRetrieveEndpoint,
+  generateUpdateEndpoint,
 } from '../standardMethods';
 import { sleepPromise } from '../utils';
 
@@ -178,17 +179,17 @@ describe('standard methods', () => {
       expect(metadataMap.get(response)).toBeDefined();
     });
   });
-  describe('generateUpdateEndpoint', () => {
+  describe.only('generateUpdateEndpoint', () => {
     test('automatic chunking for update', async () => {
-      // const metadataMap = new MetadataMap();
-      // const response = tester(axiosMock, metadataMap, 'path', generateUpdateEndpoint(axiosInstance, 'path/update', metadataMap));
-      // expect(response.length).toBe(items.length);
+      const metadataMap = new MetadataMap();
+      const object = await tester(axiosMock, metadataMap, 'path', generateUpdateEndpoint(axiosInstance, 'path/update', metadataMap));
+      expect(object.response.length).toBe(object.items.length);
     });
   });
   describe('generateInsertEndpoint', () => {
     test('automatic chunking for insert', async () => {
       const metadataMap = new MetadataMap();
-      const response = tester(
+      const {response} = await tester(
         axiosMock,
         metadataMap,
         'path',
@@ -198,6 +199,8 @@ describe('standard methods', () => {
     });
   });
 });
+
+
 
 async function tester(
   axiosMock: MockAdapter,
@@ -210,4 +213,5 @@ async function tester(
   const response = await generateEndpointFunction(items);
   expect(chunkCounter.value).toBe(3);
   expect(metadataMap.get(response)).toBeDefined();
+  return { items, response};
 }
