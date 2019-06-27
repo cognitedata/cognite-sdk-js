@@ -15,7 +15,6 @@ import {
 import * as types from '../../types/types';
 import { projectUrl } from '../../utils';
 import { Asset } from '../classes/asset';
-import { AssetList } from '../classes/assetList';
 import { assetChunker } from './assetUtils';
 
 export class AssetsAPI {
@@ -90,16 +89,16 @@ export class AssetsAPI {
 
   /** @hidden */
   constructor(
+    client: CogniteClient,
     project: string,
     instance: AxiosInstance,
-    map: MetadataMap,
-    client: CogniteClient
+    map: MetadataMap
   ) {
     this.client = client;
     const path = projectUrl(project) + '/assets';
     const transformResponse = (assets: types.Asset[]) =>
       assets.map(asset => new Asset(this.client, asset));
-    this.create = generateCreateEndpoint(instance, path, map, assetChunker);
+    this.create = generateCreateEndpoint(instance, path, map, transformResponse, assetChunker);
     this.list = generateListEndpoint(instance, path, map, true);
     this.retrieve = generateRetrieveEndpoint(
       instance,
@@ -107,7 +106,7 @@ export class AssetsAPI {
       map,
       transformResponse
     );
-    this.update = generateUpdateEndpoint(instance, path, map);
+    this.update = generateUpdateEndpoint(instance, path, map, transformResponse);
     this.search = generateSearchEndpoint(instance, path, map);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
