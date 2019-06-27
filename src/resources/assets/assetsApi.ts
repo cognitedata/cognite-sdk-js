@@ -17,6 +17,7 @@ import * as types from '../../types/types';
 import { projectUrl } from '../../utils';
 import { Asset } from '../classes/asset';
 import { assetChunker } from './assetUtils';
+import { AssetList } from '../classes/assetList';
 
 export class AssetsAPI {
   /**

@@ -18,14 +18,22 @@ export class AssetList extends Array<Asset> {
 
   public timeSeries = async () => {
     type TimeSeries = object;
-    const chunkedArray: number[][] = this.toChunkedArrayOfIds();
     let timeSeriesArray: Array<TimeSeries> = [];
-    chunkedArray.forEach(async idArray => {
+    this.toChunkedArrayOfIds().forEach(async idArray => {
       const response = await this.client.timeseries.list({ assetIds: idArray });
       timeSeriesArray.push(response);
     });
     return timeSeriesArray;
+  }
 
+  public files = async () => {
+    type Files = object;
+    let filesArray: Array<Files> = [];
+    this.toChunkedArrayOfIds().forEach(async idArray => {
+      const response = await this.client.files.list({filter : { assetIds: idArray }});
+      filesArray.push(response);
+    });
+    return filesArray;
   }
 
   private toChunkedArrayOfIds = (): number[][] => {
@@ -35,8 +43,5 @@ export class AssetList extends Array<Asset> {
       chunks = chunk(ids, 100);
     }
     return chunks;
-
   }
-
-
 }
