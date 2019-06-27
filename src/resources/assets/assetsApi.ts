@@ -18,6 +18,7 @@ import { projectUrl } from '../../utils';
 import { Asset } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
 import { assetChunker } from './assetUtils';
+import { AssetList } from '../classes/assetList';
 
 export class AssetsAPI {
   /**
