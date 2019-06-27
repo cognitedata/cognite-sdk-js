@@ -215,12 +215,13 @@ export function generateSimpleListEndpoint<RequestParams, ResponseType>(
 }
 
 /** @hidden */
-export function generateRetrieveEndpoint<IdType, ResponseType>(
+export function generateRetrieveEndpoint<IdType, ResponseType, TransformType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  transform: (items: ResponseType[]) => TransformType[]
 ) {
-  return async function retrieve(ids: IdType[]): Promise<ResponseType[]> {
+  return async function retrieve(ids: IdType[]) {
     const response = await rawRequest<ItemsResponse<ResponseType>>(
       axiosInstance,
       {
@@ -230,7 +231,8 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
       },
       true
     );
-    return metadataMap.addAndReturn(response.data.items, response);
+    const { items } = response.data;
+    return metadataMap.addAndReturn(transform(items), response);
   };
 }
 

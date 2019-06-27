@@ -5,8 +5,8 @@ import { Asset } from './asset';
 
 export class AssetList extends Array<Asset> {
   private client: API;
-  constructor(client: API, ...args: any) {
-    super(...args);
+  constructor(client: API, items: Asset[]) {
+    super(...items);
     this.client = client;
   }
 

@@ -1,9 +1,10 @@
 // Copyright 2019 Cognite AS
 
+import { CogniteClient } from '../..';
+import { CogniteAsyncIterator } from '../../autoPagination';
 import * as types from '../../types/types';
 import { API } from '../api';
 import { AssetList } from './assetList';
-import { CogniteAsyncIterator } from '../../autoPagination';
 
 export class Asset implements types.Asset {
   public id: types.CogniteInternalId;
@@ -16,9 +17,9 @@ export class Asset implements types.Asset {
   public createdTime: Date;
   public path: number[];
   public depth: number;
-  private client: API;
+  private client: CogniteClient;
 
-  constructor(client: API, props: types.Asset) {
+  constructor(client: CogniteClient, props: types.Asset) {
     this.client = client;
     this.id = props.id;
     this.externalId = props.externalId;
@@ -59,24 +60,38 @@ export class Asset implements types.Asset {
       .autoPagingToArray();
   };
 
-  public subtree: () => Promise<AssetList> = async (depth: Number = this.depth) => {
-    const [subtree] = await this.client.assets.retrieveSubtree(this.id, this.externalId, depth);
+  public subtree: () => Promise<AssetList> = async (
+    depth: Number = this.depth
+  ) => {
+    const [subtree] = await this.client.assets.retrieveSubtree(
+      this.id,
+      this.externalId,
+      depth
+    );
     return subtree;
-  }
+  };
 
-  public timeSeries: () => Promise<CogniteAsyncIterator<types.GetTimeSeriesMetadataDTO[]>> = async (...args) => {
-    return this.client.timeseries.list({assetIds: [this.id], ...args});
-  }
+  public timeSeries = async filter => {
+    return this.client.timeseries.list({ assetIds: [this.id], ...filter });
+  };
 
-  public events: () => Promise<CogniteAsyncIterator<types.CogniteEvent>> = async (...args) => {
-    return this.client.events.list({ filter: {assetIds: [this.id], ...args}});
-  }
+  public events: () => Promise<
+    CogniteAsyncIterator<types.CogniteEvent>
+  > = async (...args) => {
+    return this.client.events.list({
+      filter: { assetIds: [this.id], ...args },
+    });
+  };
 
-  public files: () => Promise<CogniteAsyncIterator<types.FilesMetadata>> = async (...args) => {
-    return this.client.files.list({ filter: {assetIds: [this.id], ...args}});
-  }
+  public files: () => Promise<
+    CogniteAsyncIterator<types.FilesMetadata>
+  > = async (...args) => {
+    return this.client.files.list({ filter: { assetIds: [this.id], ...args } });
+  };
 
-  public nodes3D: () => Promise<CogniteAsyncIterator<types.Node3D>> = async () => {
+  public nodes3D: () => Promise<
+    CogniteAsyncIterator<types.Node3D>
+  > = async () => {
     return this.client.viewer3D.listRevealNodes3D();
-  }
+  };
 }
