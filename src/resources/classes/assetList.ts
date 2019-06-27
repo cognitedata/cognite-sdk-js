@@ -2,6 +2,7 @@
 
 import { chunk } from 'lodash';
 import { CogniteClient } from '../..';
+import { AssetsAPI } from '../assets/assetsApi';
 import { Asset } from './asset';
 
 export class AssetList extends Array<Asset> {
