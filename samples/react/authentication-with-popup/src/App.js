@@ -32,10 +32,14 @@ class App extends Component {
     const { client } = this.state;
     if (client === null) return;
     // fetch the first 10 (maximum) assets
-    const assets = await client.assets
-      .list()
-      .autoPagingToArray({ limit: 10 });
-    this.setState({ assets });
+    try {
+      const assets = await client.assets
+        .list()
+        .autoPagingToArray({ limit: 10 });
+      this.setState({ assets });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   renderAssetsInTable = (assets) => {
