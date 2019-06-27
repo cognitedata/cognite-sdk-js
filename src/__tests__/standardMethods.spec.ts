@@ -45,7 +45,7 @@ function countChunks(axiosMock: MockAdapter, url: string) {
   return counterObject;
 }
 
-function fillArray() {
+function fillArray(): { id: number }[] {
   return new Array(2003).fill(null).map(index => ({
     id: index,
   }));
@@ -196,11 +196,11 @@ async function chunkingTester(
   axiosMock: MockAdapter,
   metadataMap: MetadataMap,
   url: string,
-  generateEndpointFunction: (items: unknown[]) => Promise<any>
+  endpoint: (items: unknown[]) => Promise<any>
 ) {
   const items = fillArray();
   const chunkCounter = countChunks(axiosMock, url);
-  const response = await generateEndpointFunction(items);
+  const response = await endpoint(items);
   expect(chunkCounter.value).toBe(3);
   expect(metadataMap.get(response)).toBeDefined();
   return { items, response };
