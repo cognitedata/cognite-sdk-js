@@ -59,16 +59,12 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
         responses.push(result);
       })
       .catch(error => {
-        console.log("hei");
         failed.push(inputs[index]);
         errors.push(error);
       })
   );
-  console.log("hei2");
   await Promise.all(wrappedPromises);
-  console.log("hei4");
   if (failed.length) {
-    console.log("hei3");
     throw {
       succeded,
       responses,

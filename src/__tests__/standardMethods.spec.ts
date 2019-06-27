@@ -46,8 +46,8 @@ function countChunks(axiosMock: MockAdapter, url: string) {
 }
 
 function fillArray() {
-  return new Array(2003).fill(null).map((_, index) => ({
-    id: Number(index),
+  return new Array(2003).fill(null).map(index => ({
+    id: index,
   }));
 }
 
@@ -61,34 +61,25 @@ describe('standard methods', () => {
   describe('generateCreateEndpoint', () => {
     test('automatic chunking for create', async () => {
       const metadataMap = new MetadataMap();
-      const items = fillArray();
-      const create = generateCreateEndpoint(
-        axiosInstance,
-        '/path',
-        metadataMap
+      const object = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path',
+        generateCreateEndpoint(axiosInstance, 'path', metadataMap)
       );
-      const chunkCounter = countChunks(axiosMock, 'path');
-      const response = await create(items);
-      // testChunks(axiosMock, 'path');
-      expect(chunkCounter.value).toBe(3);
-      expect(response.length).toBe(items.length);
-      expect(metadataMap.get(response)).toBeDefined();
+      expect(object.response.length).toBe(object.items.length);
     });
   });
   describe('generateRetrieveEndpoint', () => {
     test('automatic chunking for retrieve', async () => {
       const metadataMap = new MetadataMap();
-      const ids = fillArray();
-      const retrieve = generateRetrieveEndpoint(
-        axiosInstance,
-        '/path',
-        metadataMap
+      const object = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path/byids',
+        generateRetrieveEndpoint(axiosInstance, 'path', metadataMap)
       );
-      const chunkCounter = countChunks(axiosMock, 'path/byids');
-      const response = await retrieve(ids);
-      expect(chunkCounter.value).toBe(3);
-      expect(response.length).toBe(ids.length);
-      expect(metadataMap.get(response)).toBeDefined();
+      expect(object.response.length).toBe(object.items.length);
     });
   });
   describe('generateListEndpoint', () => {
@@ -166,30 +157,31 @@ describe('standard methods', () => {
   describe('generateDeleteEndpoint', () => {
     test('automatic chunking for delete', async () => {
       const metadataMap = new MetadataMap();
-      const ids = fillArray();
-      const remove = generateDeleteEndpoint(
-        axiosInstance,
-        '/path',
-        metadataMap
+      const { response } = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path/delete',
+        generateDeleteEndpoint(axiosInstance, '/path', metadataMap)
       );
-      const chunkCounter = countChunks(axiosMock, 'path/delete');
-      const response = await remove(ids);
-      expect(chunkCounter.value).toBe(3);
       expect(response).toMatchObject({});
-      expect(metadataMap.get(response)).toBeDefined();
     });
   });
-  describe.only('generateUpdateEndpoint', () => {
+  describe('generateUpdateEndpoint', () => {
     test('automatic chunking for update', async () => {
       const metadataMap = new MetadataMap();
-      const object = await tester(axiosMock, metadataMap, 'path', generateUpdateEndpoint(axiosInstance, 'path/update', metadataMap));
+      const object = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path/update',
+        generateUpdateEndpoint(axiosInstance, 'path', metadataMap)
+      );
       expect(object.response.length).toBe(object.items.length);
     });
   });
   describe('generateInsertEndpoint', () => {
     test('automatic chunking for insert', async () => {
       const metadataMap = new MetadataMap();
-      const {response} = await tester(
+      const { response } = await chunkingTester(
         axiosMock,
         metadataMap,
         'path',
@@ -200,9 +192,7 @@ describe('standard methods', () => {
   });
 });
 
-
-
-async function tester(
+async function chunkingTester(
   axiosMock: MockAdapter,
   metadataMap: MetadataMap,
   url: string,
@@ -213,5 +203,5 @@ async function tester(
   const response = await generateEndpointFunction(items);
   expect(chunkCounter.value).toBe(3);
   expect(metadataMap.get(response)).toBeDefined();
-  return { items, response};
+  return { items, response };
 }
