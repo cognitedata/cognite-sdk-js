@@ -17,32 +17,6 @@ type CreateEndpoint<RequestType, ResponseType> = (
   items: RequestType[]
 ) => Promise<ResponseType[]>;
 
-// export function generateCollectionCreateEndpoint<
-//   RequestType,
-//   ResponseType,
-//   ItemClass,
-//   CollectionClass
-// >(
-//   axiosInstance: AxiosInstance,
-//   resourcePath: string,
-//   metadataMap: MetadataMap,
-//   itemClass: Newable<ResponseType>,
-//   collectionClass: Newable<CollectionClass>,
-//   chunkFunction?: (items: RequestType[]) => RequestType[][]
-// ): CreateEndpoint<RequestType, ResponseType> {
-//   const endpoint = generateCreateEndpoint<RequestType, ResponseType>(
-//     axiosInstance,
-//     resourcePath,
-//     metadataMap,
-//     chunkFunction
-//   );
-//   return async function create(items) {
-//     const responses = await endpoint(items);
-//     const collection = new collectionClass(responses.map(item => (new itemClass(item))));
-//     return metadataMap.addAndReturn(collection, );
-//   };
-// }
-
 /** @hidden */
 export function generateCreateEndpoint<RequestType, ResponseType>(
   axiosInstance: AxiosInstance,
@@ -236,13 +210,14 @@ export function generateSimpleListEndpoint<RequestParams, ResponseType>(
 }
 
 /** @hidden */
-export function generateRetrieveEndpoint<IdType, ResponseType>(
+export function generateRetrieveEndpoint<IdType, ResponseType, TransformType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
+  transform: (items: ResponseType[]) => TransformType[],
   chunkFunction?: (ids: IdType[]) => IdType[][]
 ) {
-  return async function retrieve(ids: IdType[]): Promise<ResponseType[]> {
+  return async function retrieve(ids: IdType[]) {
     const chunks = doChunking<IdType>(ids, chunkFunction);
     const responses = await promiseAllWithData(
       chunks,
@@ -262,7 +237,7 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
       [],
       ...responses.map(response => response.data.items)
     );
-    return metadataMap.addAndReturn(mergedResponses, responses[0]);
+    return metadataMap.addAndReturn(transform(mergedResponses), responses[0]);
   };
 }
 
