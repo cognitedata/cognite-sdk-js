@@ -50,16 +50,16 @@ export class Asset implements types.Asset {
   };
 
   public children: () => Promise<AssetList> = async () => {
-    return this.client.assets
+    const childAssets = await this.client.assets
       .list({
         filter: {
           parentIds: [this.id],
         },
-      })
-      .autoPagingToArray();
+      }).autoPagingToArray();
+    return new AssetList(this.client, childAssets);
   };
 
-  public subtree: () => Promise<AssetList> = async (depth: Number = this.depth) => {
+  public subtree: () => Promise<AssetList> = async (depth: number = this.depth) => {
     const [subtree] = await this.client.assets.retrieveSubtree(this.id, this.externalId, depth);
     return subtree;
   }
@@ -68,15 +68,11 @@ export class Asset implements types.Asset {
     return this.client.timeseries.list({assetIds: [this.id], ...(filter || {})});
   }
 
-  public events: () => Promise<CogniteAsyncIterator<types.CogniteEvent>> = async (...args) => {
-    return this.client.events.list({ filter: {assetIds: [this.id], ...args}});
+  public events = async (filter?: types.EventFilter) => {
+    return this.client.events.list({ filter: {assetIds: [this.id], ...(filter || {})}});
   }
 
-  public files: () => Promise<CogniteAsyncIterator<types.FilesMetadata>> = async (...args) => {
-    return this.client.files.list({ filter: {assetIds: [this.id], ...args}});
-  }
-
-  public nodes3D: () => Promise<CogniteAsyncIterator<types.Node3D>> = async () => {
-    return this.client.viewer3D.listRevealNodes3D();
+  public files = async (filter?: types.FileFilter) => {
+    return this.client.files.list({ filter: {assetIds: [this.id], ...(filter || {})}});
   }
 }
