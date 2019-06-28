@@ -18,7 +18,6 @@ import { projectUrl } from '../../utils';
 import { Asset } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
 import { assetChunker } from './assetUtils';
-import { AssetList } from '../classes/assetList';
 
 export class AssetsAPI {
   /**
@@ -137,6 +136,13 @@ export class AssetsAPI {
     return this.getAssetSubtree(assetList, currentDepth, depth);
   }
 
+  public async retrieveSubtree(id: number, depth: Number) {
+    const currentDepth: number = 0;
+    const asset = await this.retrieve([{ id }]);
+    const assetList = new AssetList(this.client, asset);
+    return this.getAssetSubtree(assetList, currentDepth, depth);
+  }
+
   private transformToAssetObjects = () => {
     return (assets: types.Asset[]) =>
       assets.map(asset => new Asset(this.client, asset));
@@ -145,15 +151,14 @@ export class AssetsAPI {
   private getAssetSubtree(
     assets: AssetList,
     currentDepth: number,
-    depth: number
-  ): AssetList {
+    depth: Number
+  ): Promise<AssetList> {
     const subtree: AssetList = assets;
     if (depth > currentDepth) {
       const children = this.getChildren(assets);
       if (children) {
-        subtree.push(
-          ...this.getAssetSubtree(children, currentDepth + 1, depth)
-        );
+        children;
+        // Need to extend the ArrayList here
       }
     }
     return subtree;
@@ -175,7 +180,7 @@ export type AssetCreateEndpoint = (
 
 export type AssetListEndpoint = (
   scope?: types.AssetListScope
-) => CogniteAsyncIterator<types.Asset>;
+) => CogniteAsyncIterator<Asset>;
 
 export type AssetRetrieveEndpoint = (
   ids: types.AssetIdEither[]

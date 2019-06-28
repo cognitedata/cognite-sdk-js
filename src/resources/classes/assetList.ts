@@ -18,6 +18,8 @@ export class AssetList extends Array<Asset> {
 
   public timeSeries = async () => {
     type TimeSeries = object;
+    // return this.getResourcesFromAssets<TimeSeries>(this.client.timeseries);
+    // Replace this codeblock with return statement above when TimeSeries-class is implemented
     const timeSeriesArray: TimeSeries[] = [];
     this.toChunkedArrayOfIds().forEach(async idArray => {
       const response = await this.client.timeseries.list({ assetIds: idArray });
