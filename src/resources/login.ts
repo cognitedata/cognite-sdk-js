@@ -4,6 +4,7 @@ import { AxiosInstance } from 'axios';
 import { isString } from 'lodash';
 import { parse, stringify } from 'query-string';
 import { rawRequest, setBearerToken } from '../axiosWrappers';
+import { CogniteLoginError } from '../loginError';
 import {
   getBaseUrl,
   isSameProject,
@@ -169,26 +170,34 @@ export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
   });
 }
 
-interface CogniteParentWindow extends Window {
-  postLoginTokens?: (tokens: null | AuthTokens) => void;
-}
-
 /** @hidden */
 export function loginWithPopup(
   params: AuthorizeParams
 ): Promise<null | AuthTokens> {
   return new Promise((resolve, reject) => {
     const url = generateLoginUrl(params);
-    const loginPopup = window.open(url, LOGIN_POPUP_NAME);
+    const loginPopup = window.open(
+      url,
+      LOGIN_POPUP_NAME,
+      // https://www.quackit.com/javascript/popup_windows.cfm
+      'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes'
+    );
     if (loginPopup === null) {
-      reject(new Error('Failed to create login popup window'));
+      reject(new CogniteLoginError('Failed to create login popup window'));
       return;
     }
-    const cogniteWindow: CogniteParentWindow = window;
-    cogniteWindow.postLoginTokens = tokens => {
-      delete cogniteWindow.postLoginTokens;
-      resolve(tokens);
+    const tokenListener = (message: MessageEvent) => {
+      if (message.source !== loginPopup) {
+        return;
+      }
+      if (!message.data || message.data.error) {
+        reject(new CogniteLoginError());
+        return;
+      }
+      window.removeEventListener('message', tokenListener);
+      resolve(message.data);
     };
+    window.addEventListener('message', tokenListener, false);
   });
 }
 
@@ -198,16 +207,16 @@ export function isLoginPopupWindow(): boolean {
 
 export function loginPopupHandler() {
   if (!isLoginPopupWindow()) {
-    throw Error(
-      'loginPopupHandler can only be used inside a popup window created by the SDK. Please call isLoginPopupWindow to check for this'
-    );
+    return;
   }
-  if (!(window.opener && window.opener.postLoginTokens)) {
-    throw Error('Incorrect environment to run loginPopupHandler');
+  try {
+    const tokens = parseTokenQueryParameters(window.location.search);
+    window.opener.postMessage(tokens);
+  } catch (err) {
+    window.opener.postMessage({ error: err.message });
+  } finally {
+    window.close();
   }
-  const tokens = parseTokenQueryParameters(window.location.search);
-  window.opener.postLoginTokens(tokens);
-  window.close();
 }
 
 function isAuthIFrame(): boolean {
@@ -341,7 +350,7 @@ export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
                   handleTokens(tokens);
                   resolve(true);
                 }
-                throw Error('Unable to login with popup');
+                throw new CogniteLoginError();
               })
               .catch(reject);
           },
