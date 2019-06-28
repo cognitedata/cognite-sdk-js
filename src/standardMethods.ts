@@ -9,7 +9,7 @@ import {
 import { rawRequest } from './axiosWrappers';
 import { MetadataMap } from './metadata';
 import { promiseAllWithData } from './resources/assets/assetUtils';
-import { CursorResponse, ItemsResponse } from './types/types';
+import { CursorResponse, ItemsResponse, ListResponse } from './types/types';
 
 export type Newable<T> = new (...args: any[]) => T;
 
@@ -87,12 +87,13 @@ export type CursorAndAsyncIterator<T> = Promise<CursorResponse<T>> &
 /** @hidden */
 export function generateListEndpoint<
   RequestFilter extends object,
-  ResponseType
+  ResponseType, TransformType
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  withPost: boolean = true
+  withPost: boolean = true,
+  transform: (items: ResponseType[]) => TransformType[]
 ) {
   function addNextPageFunction<T>(
     dataWithCursor: CursorResponse<T>,
@@ -117,15 +118,17 @@ export function generateListEndpoint<
           resourcePath,
           filter
         ));
-    addNextPageFunction(response.data, filter);
-    return metadataMap.addAndReturn(response.data, response);
+      const transformedResponse: CursorResponse<TransformType> = { items: transform(response.data.items), nextCursor: response.data.nextCursor };
+      // would want to transform into Asset[] but gives error on line:158 
+      addNextPageFunction(transformedResponse, filter);
+      return metadataMap.addAndReturn(transformedResponse, response);
   }
 
   return (params: RequestFilter = {} as RequestFilter) => {
     const listPromise = list(params);
     return Object.assign(
       listPromise,
-      makeAutoPaginationMethods<ResponseType>(listPromise)
+      makeAutoPaginationMethods<TransformType>(listPromise)
     );
   };
 }
