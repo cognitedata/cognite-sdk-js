@@ -97,10 +97,9 @@ export class AssetsAPI {
   ) {
     this.client = client;
     const path = projectUrl(project) + '/assets';
-    const transformResponse = (assets: types.Asset[]) =>
-      assets.map(asset => new Asset(this.client, asset));
+    const transformResponse = this.transformToAssetObjects();
     this.create = generateCreateEndpoint(instance, path, map, transformResponse, assetChunker);
-    this.list = generateListEndpoint(instance, path, map, true);
+    this.list = generateListEndpoint(instance, path, map, true, transformResponse);
     this.retrieve = generateRetrieveEndpoint(
       instance,
       path,
@@ -112,41 +111,45 @@ export class AssetsAPI {
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
 
-  // public retrieveSubtree(
-  //   id: number,
-  //   externalId: string | undefined,
-  //   depth: Number
-  // ): [any] | PromiseLike<[any]> {
-  //   const currentDepth: number = 0;
-  //   const asset = this.retrieve([id]);
-  //   const subtree = this.getAssetSubtree(
-  //     AssetList([asset]),
-  //     currentDepth,
-  //     depth
-  //   );
-  // }
-  // public getAssetSubtree(
-  //   assets: AssetList,
-  //   currentDepth: number,
-  //   depth: Number
-  // ): AssetList {
-  //   let subtree: AssetList = assets;
-  //   if (depth > currentDepth) {
-  //     const children = this.getChildren(assets);
-  //     if (children) {
-  //       // Need to extend the ArrayList here
-  //       subtree = subtree.push(
-  //         ...this.getAssetSubtree(children, currentDepth + 1, depth)
-  //       );
-  //     }
-  //   }
-  //   return subtree;
-  // }
-  // public getChildren(assets: AssetList): AssetList {
-  //   const children: AssetList = new AssetList([]);
-  //   children.add(assets.children(assets.map(asset => ({ id: asset.id }))));
-  //   return children;
-  // }
+  private transformToAssetObjects = () => {
+    return (assets: types.Asset[]) => assets.map(asset => new Asset(this.client, asset));
+  }
+
+  public async retrieveSubtree(
+    id: number,
+    depth: Number
+  ) {
+    const currentDepth: number = 0;
+    const asset = await this.retrieve([{id}]);
+    const assetList = new AssetList(this.client, asset);
+    return this.getAssetSubtree(
+      assetList,
+      currentDepth,
+      depth
+    );
+  }
+  // List that includes the assets requesting the subtree
+  private getAssetSubtree(
+    assets: AssetList,
+    currentDepth: number,
+    depth: Number
+  ): Promise<AssetList> {
+    let subtree: AssetList = assets;
+    if (depth > currentDepth) {
+      const children = this.getChildren(assets);
+      if (children) {
+        children
+        // Need to extend the ArrayList here
+        
+      }
+    }
+    return subtree;
+  }
+
+  private getChildren = (assets: AssetList) => {
+    let children: AssetList;
+    
+  }
 }
 
 export type AssetCreateEndpoint = (
@@ -155,7 +158,7 @@ export type AssetCreateEndpoint = (
 
 export type AssetListEndpoint = (
   scope?: types.AssetListScope
-) => CogniteAsyncIterator<types.Asset>;
+) => CogniteAsyncIterator<Asset>;
 
 export type AssetRetrieveEndpoint = (
   ids: types.AssetIdEither[]
