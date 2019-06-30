@@ -1,13 +1,23 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { GetTimeSeriesMetadataDTO } from '../../types/types';
+import { Asset, GetTimeSeriesMetadataDTO } from '../../types/types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Timeseries integration test', () => {
   let client: CogniteClient;
+  let asset: Asset;
   beforeAll(async () => {
     client = setupLoggedInClient();
+    [asset] = await client.assets.create([
+      {
+        name: 'asset_' + randomInt(),
+      },
+    ]);
+  });
+
+  afterAll(async () => {
+    await client.assets.delete([{ id: asset.id }]);
   });
 
   const timeseries = [
@@ -48,6 +58,25 @@ describe('Timeseries integration test', () => {
     ]);
     expect(updateResult[0].externalId).toBe(timeseries[0].externalId);
     expect(updateResult[0].name).toBe(newName);
+  });
+
+  test('connect to an asset', async () => {
+    await client.timeseries.update([
+      {
+        externalId: timeseries[0].externalId as string,
+        update: {
+          assetId: { set: asset.id },
+        },
+      },
+    ]);
+  });
+
+  test('list from assetIds', async () => {
+    const result = await client.timeseries
+      .list({ assetIds: [asset.id] })
+      .autoPagingToArray({ limit: Infinity });
+    expect(result.length).toBe(1);
+    expect(result[0].id).toBe(createdTimeseries[0].id);
   });
 
   test('delete', async () => {
