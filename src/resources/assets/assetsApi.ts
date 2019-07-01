@@ -15,8 +15,8 @@ import {
 import * as types from '../../types/types';
 import { projectUrl } from '../../utils';
 import { Asset } from '../classes/asset';
-import { assetChunker } from './assetUtils';
 import { AssetList } from '../classes/assetList';
+import { assetChunker } from './assetUtils';
 
 export class AssetsAPI {
   /**
@@ -98,47 +98,60 @@ export class AssetsAPI {
     this.client = client;
     const path = projectUrl(project) + '/assets';
     const transformResponse = this.transformToAssetObjects();
-    this.create = generateCreateEndpoint(instance, path, map, transformResponse, assetChunker);
-    this.list = generateListEndpoint(instance, path, map, true, transformResponse);
+    this.create = generateCreateEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse,
+      assetChunker
+    );
+    this.list = generateListEndpoint(
+      instance,
+      path,
+      map,
+      true,
+      transformResponse
+    );
     this.retrieve = generateRetrieveEndpoint(
       instance,
       path,
       map,
       transformResponse
     );
-    this.update = generateUpdateEndpoint(instance, path, map, transformResponse);
+    this.update = generateUpdateEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse
+    );
     this.search = generateSearchEndpoint(instance, path, map);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
 
-  private transformToAssetObjects = () => {
-    return (assets: types.Asset[]) => assets.map(asset => new Asset(this.client, asset));
+  public async retrieveSubtree(id: number, depth: number) {
+    const currentDepth: number = 0;
+    const asset = await this.retrieve([{ id }]);
+    const assetList = new AssetList(this.client, asset);
+    return this.getAssetSubtree(assetList, currentDepth, depth);
   }
 
-  public async retrieveSubtree(
-    id: number,
-    depth: number
-  ) {
-    const currentDepth: number = 0;
-    const asset = await this.retrieve([{id}]);
-    const assetList = new AssetList(this.client, asset);
-    return this.getAssetSubtree(
-      assetList,
-      currentDepth,
-      depth
-    );
-  }
+  private transformToAssetObjects = () => {
+    return (assets: types.Asset[]) =>
+      assets.map(asset => new Asset(this.client, asset));
+  };
   // List that includes the assets requesting the subtree
   private getAssetSubtree(
     assets: AssetList,
     currentDepth: number,
     depth: number
   ): AssetList {
-    let subtree: AssetList = assets;
+    const subtree: AssetList = assets;
     if (depth > currentDepth) {
       const children = this.getChildren(assets);
       if (children) {
-        subtree.push(...this.getAssetSubtree(children, currentDepth + 1, depth));
+        subtree.push(
+          ...this.getAssetSubtree(children, currentDepth + 1, depth)
+        );
       }
     }
     return subtree;
@@ -151,7 +164,7 @@ export class AssetsAPI {
       children = children.concat(childrenList);
     });
     return new AssetList(this.client, children);
-  }
+  };
 }
 
 export type AssetCreateEndpoint = (

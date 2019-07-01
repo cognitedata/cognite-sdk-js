@@ -10,10 +10,12 @@ import { CursorResponse, ItemsResponse, ListResponse } from './types/types';
 
 export type Newable<T> = new (...args: any[]) => T;
 
+// tslint:disable-next-line:no-commented-code
 // type CreateEndpoint<RequestType, ResponseType> = (
 //   items: RequestType[]
 // ) => Promise<ResponseType[]>;
 
+// tslint:disable-next-line:no-commented-code
 // export function generateCollectionCreateEndpoint<
 //   RequestType,
 //   ResponseType,
@@ -110,7 +112,8 @@ export function listByPost<RequestFilter, ResponseType>(
 /** @hidden */
 export function generateListEndpoint<
   RequestFilter extends object,
-  ResponseType, TransformType
+  ResponseType,
+  TransformType
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -141,10 +144,13 @@ export function generateListEndpoint<
           resourcePath,
           filter
         ));
-      const transformedResponse: CursorResponse<TransformType> = { items: transform(response.data.items), nextCursor: response.data.nextCursor };
-      // would want to transform into Asset[] but gives error on line:158 
-      addNextPageFunction(transformedResponse, filter);
-      return metadataMap.addAndReturn(transformedResponse, response);
+    const transformedResponse: CursorResponse<TransformType> = {
+      items: transform(response.data.items),
+      nextCursor: response.data.nextCursor,
+    };
+    // would want to transform into Asset[] but gives error on line:158
+    addNextPageFunction(transformedResponse, filter);
+    return metadataMap.addAndReturn(transformedResponse, response);
   }
 
   return (params: RequestFilter = {} as RequestFilter) => {
