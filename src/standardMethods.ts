@@ -28,7 +28,6 @@ export function generateCreateEndpoint<
   return async function create(itemsArray: RequestType[]) {
     type Response = ItemsResponse<ResponseType>;
     const chunks = doChunking<RequestType>(itemsArray, chunkFunction);
-
     const responses = await promiseAllWithData(
       chunks,
       input =>
@@ -87,7 +86,8 @@ export type CursorAndAsyncIterator<T> = Promise<CursorResponse<T>> &
 /** @hidden */
 export function generateListEndpoint<
   RequestFilter extends object,
-  ResponseType, TransformType
+  ResponseType,
+  TransformType
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -118,10 +118,13 @@ export function generateListEndpoint<
           resourcePath,
           filter
         ));
-      const transformedResponse: CursorResponse<TransformType> = { items: transform(response.data.items), nextCursor: response.data.nextCursor };
-      // would want to transform into Asset[] but gives error on line:158 
-      addNextPageFunction(transformedResponse, filter);
-      return metadataMap.addAndReturn(transformedResponse, response);
+    const transformedResponse: CursorResponse<TransformType> = {
+      items: transform(response.data.items),
+      nextCursor: response.data.nextCursor,
+    };
+    // would want to transform into Asset[] but gives error on line:158
+    addNextPageFunction(transformedResponse, filter);
+    return metadataMap.addAndReturn(transformedResponse, response);
   }
 
   return (params: RequestFilter = {} as RequestFilter) => {
