@@ -43,11 +43,12 @@ export class Revisions3DAPI {
    * ```
    */
   public list: Revisions3DListEndpoint = (modelId, filter) => {
-    return generateListEndpoint<Revision3DListRequest, Revision3D>(
+    return generateListEndpoint<Revision3DListRequest, Revision3D, Revision3D>(
       this.instance,
       parameterizePath(this.project, modelId),
       this.map,
-      false
+      false,
+      items => items
     )(filter);
   };
 
@@ -59,10 +60,11 @@ export class Revisions3DAPI {
    * ```
    */
   public create: Revisions3DCreateEndpoint = (modelId, items) => {
-    return generateCreateEndpoint<CreateRevision3D, Revision3D>(
+    return generateCreateEndpoint<CreateRevision3D, Revision3D, Revision3D>(
       this.instance,
       parameterizePath(this.project, modelId),
-      this.map
+      this.map,
+      item => item
     )(items);
   };
 
@@ -82,10 +84,11 @@ export class Revisions3DAPI {
    * ```
    */
   public update: Revisions3DUpdateEndpoint = (modelId, items) => {
-    return generateUpdateEndpoint<UpdateRevision3D, Revision3D>(
+    return generateUpdateEndpoint<UpdateRevision3D, Revision3D, Revision3D>(
       this.instance,
       parameterizePath(this.project, modelId),
-      this.map
+      this.map,
+      item => item
     )(items);
   };
 
@@ -152,11 +155,12 @@ export class Revisions3DAPI {
     revisionId,
     query
   ) => {
-    return generateListEndpoint<List3DNodesQuery, Node3D>(
+    return generateListEndpoint<List3DNodesQuery, Node3D, Node3D>(
       this.instance,
       parameterizePath(this.project, modelId, revisionId),
       this.map,
-      false
+      false,
+      items => items
     )(query);
   };
 
@@ -173,11 +177,12 @@ export class Revisions3DAPI {
     nodeId,
     query
   ) => {
-    return generateListEndpoint<List3DNodesQuery, Node3D>(
+    return generateListEndpoint<List3DNodesQuery, Node3D, Node3D>(
       this.instance,
       parameterizePath(this.project, modelId, revisionId, nodeId),
       this.map,
-      false
+      false,
+      items => items
     )(query);
   };
 }

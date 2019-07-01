@@ -64,7 +64,12 @@ export class GroupsAPI {
       path,
       map
     );
-    this.create = generateCreateEndpoint(instance, path, map);
+    this.create = generateCreateEndpoint<GroupSpec, Group, Group>(
+      instance,
+      path,
+      map,
+      items => items
+    );
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
 

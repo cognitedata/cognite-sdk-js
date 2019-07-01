@@ -401,6 +401,7 @@ function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
   });
 }
 export interface BaseRequestOptions {
+  data?: any;
   params?: object;
   headers?: { [key: string]: string };
   responseType?: 'json' | 'arraybuffer' | 'text';

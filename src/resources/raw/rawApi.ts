@@ -59,8 +59,19 @@ export class RawAPI {
     this.instance = instance;
     this.map = map;
     const path = (this.path = projectUrl(project) + '/raw/dbs');
-    this.listDatabases = generateListEndpoint(instance, this.path, map, false);
-    this.createDatabases = generateCreateEndpoint(instance, path, map);
+    this.listDatabases = generateListEndpoint<ListRawDatabases, RawDB, RawDB>(
+      instance,
+      this.path,
+      map,
+      false,
+      items => items
+    );
+    this.createDatabases = generateCreateEndpoint<RawDB, RawDB, RawDB>(
+      instance,
+      path,
+      map,
+      items => items
+    );
     this.deleteDatabases = generateDeleteEndpoint(instance, path, map);
   }
 
@@ -72,11 +83,16 @@ export class RawAPI {
    * ```
    */
   public listTables: RawListTablesEndpoint = (databaseName, query) => {
-    const endpoint = generateListEndpoint<ListRawTables, RawDBTable>(
+    const endpoint = generateListEndpoint<
+      ListRawTables,
+      RawDBTable,
+      RawDBTable
+    >(
       this.instance,
       this.tablePath(databaseName),
       this.map,
-      false
+      false,
+      items => items
     );
     return endpoint(query);
   };
@@ -127,11 +143,12 @@ export class RawAPI {
    * ```
    */
   public listRows: RawListRowsEndpoint = (databaseName, tableName, query) => {
-    const endpoint = generateListEndpoint<ListRawRows, RawDBRow>(
+    const endpoint = generateListEndpoint<ListRawRows, RawDBRow, RawDBRow>(
       this.instance,
       this.rowPath(databaseName, tableName),
       this.map,
-      false
+      false,
+      items => items
     );
     if (query && query.onlyRowKeys) {
       // @ts-ignore - we transform it

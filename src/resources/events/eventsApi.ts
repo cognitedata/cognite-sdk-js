@@ -92,10 +92,26 @@ export class EventsAPI {
   /** @hidden */
   constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
     const path = projectUrl(project) + '/events';
-    this.create = generateCreateEndpoint(instance, path, map);
-    this.list = generateListEndpoint(instance, path, map, true);
-    this.retrieve = generateRetrieveEndpoint(instance, path, map);
-    this.update = generateUpdateEndpoint(instance, path, map);
+    this.create = generateCreateEndpoint<
+      ExternalEvent,
+      CogniteEvent,
+      CogniteEvent
+    >(instance, path, map, items => items);
+    this.list = generateListEndpoint<
+      EventFilterRequest,
+      CogniteEvent,
+      CogniteEvent
+    >(instance, path, map, true, items => items);
+    this.retrieve = generateRetrieveEndpoint<
+      IdEither,
+      CogniteEvent,
+      CogniteEvent
+    >(instance, path, map, items => items);
+    this.update = generateUpdateEndpoint<
+      EventChange,
+      CogniteEvent,
+      CogniteEvent
+    >(instance, path, map, items => items);
     this.search = generateSearchEndpoint(instance, path, map);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
