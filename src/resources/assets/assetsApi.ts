@@ -117,7 +117,7 @@ export class AssetsAPI {
 
   public async retrieveSubtree(
     id: number,
-    depth: Number
+    depth: number
   ) {
     const currentDepth: number = 0;
     const asset = await this.retrieve([{id}]);
@@ -132,23 +132,25 @@ export class AssetsAPI {
   private getAssetSubtree(
     assets: AssetList,
     currentDepth: number,
-    depth: Number
-  ): Promise<AssetList> {
+    depth: number
+  ): AssetList {
     let subtree: AssetList = assets;
     if (depth > currentDepth) {
       const children = this.getChildren(assets);
       if (children) {
-        children
-        // Need to extend the ArrayList here
-        
+        subtree.push(...this.getAssetSubtree(children, currentDepth + 1, depth));
       }
     }
     return subtree;
   }
 
   private getChildren = (assets: AssetList) => {
-    let children: AssetList;
-    
+    let children: Asset[] = [];
+    assets.forEach(async asset => {
+      const childrenList = await asset.children();
+      children = children.concat(childrenList);
+    });
+    return new AssetList(this.client, children);
   }
 }
 
