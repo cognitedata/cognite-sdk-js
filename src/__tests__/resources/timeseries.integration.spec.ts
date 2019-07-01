@@ -2,6 +2,7 @@
 
 import CogniteClient from '../../cogniteClient';
 import { Asset, GetTimeSeriesMetadataDTO } from '../../types/types';
+import { sleepPromise } from '../../utils';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Timeseries integration test', () => {
@@ -72,6 +73,8 @@ describe('Timeseries integration test', () => {
   });
 
   test('list from assetIds', async () => {
+    // wait (eventual consistency delay)
+    await sleepPromise(2000);
     const result = await client.timeseries
       .list({ assetIds: [asset.id] })
       .autoPagingToArray({ limit: Infinity });
