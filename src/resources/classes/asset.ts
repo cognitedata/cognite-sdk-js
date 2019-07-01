@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 
+import { CogniteClient } from '../..';
 import * as types from '../../types/types';
 import { AssetList } from './assetList';
-import { CogniteClient } from '../..';
 
 export class Asset implements types.Asset {
   public id: types.CogniteInternalId;
@@ -54,24 +54,34 @@ export class Asset implements types.Asset {
         filter: {
           parentIds: [this.id],
         },
-      }).autoPagingToArray();
+      })
+      .autoPagingToArray();
     return new AssetList(this.client, childAssets);
   };
 
-  public subtree: () => Promise<AssetList> = async (depth: number = this.depth) => {
+  public subtree: () => Promise<AssetList> = async (
+    depth: number = this.depth
+  ) => {
     const subtree = await this.client.assets.retrieveSubtree(this.id, depth);
     return subtree;
-  }
+  };
 
   public timeSeries = async (filter?: types.TimeseriesFilter) => {
-    return this.client.timeseries.list({assetIds: [this.id], ...(filter || {})});
-  }
+    return this.client.timeseries.list({
+      assetIds: [this.id],
+      ...(filter || {}),
+    });
+  };
 
   public events = async (filter?: types.EventFilter) => {
-    return this.client.events.list({ filter: {assetIds: [this.id], ...(filter || {})}});
-  }
+    return this.client.events.list({
+      filter: { assetIds: [this.id], ...(filter || {}) },
+    });
+  };
 
   public files = async (filter?: types.FileFilter) => {
-    return this.client.files.list({ filter: {assetIds: [this.id], ...(filter || {})}});
-  }
+    return this.client.files.list({
+      filter: { assetIds: [this.id], ...(filter || {}) },
+    });
+  };
 }

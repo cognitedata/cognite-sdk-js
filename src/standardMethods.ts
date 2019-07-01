@@ -10,10 +10,12 @@ import { CursorResponse, ItemsResponse, ListResponse } from './types/types';
 
 export type Newable<T> = new (...args: any[]) => T;
 
+// tslint:disable-next-line:no-commented-code
 // type CreateEndpoint<RequestType, ResponseType> = (
 //   items: RequestType[]
 // ) => Promise<ResponseType[]>;
 
+// tslint:disable-next-line:no-commented-code
 // export function generateCollectionCreateEndpoint<
 //   RequestType,
 //   ResponseType,
@@ -41,18 +43,24 @@ export type Newable<T> = new (...args: any[]) => T;
 // }
 
 /** @hidden */
-export function generateCreateEndpoint<RequestType, ResponseType, TransformType>(
+export function generateCreateEndpoint<
+  RequestType,
+  ResponseType,
+  TransformType
+>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
   transform: (items: ResponseType[]) => TransformType[],
   chunkFunction?: (items: RequestType[]) => RequestType[][]
-){
+) {
   return async function create(itemsArray: RequestType[]) {
     type Response = ItemsResponse<ResponseType>;
     let chunks: RequestType[][] = [[]];
     if (itemsArray.length) {
-      chunks = chunkFunction ? chunkFunction(itemsArray) : chunk(itemsArray, 1000);
+      chunks = chunkFunction
+        ? chunkFunction(itemsArray)
+        : chunk(itemsArray, 1000);
     }
     const responses = await promiseAllWithData(
       chunks,
@@ -109,7 +117,8 @@ export function listByPost<RequestFilter, ResponseType>(
 /** @hidden */
 export function generateListEndpoint<
   RequestFilter extends object,
-  ResponseType, TransformType
+  ResponseType,
+  TransformType
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -140,10 +149,13 @@ export function generateListEndpoint<
           resourcePath,
           filter
         ));
-      const transformedResponse: CursorResponse<TransformType> = { items: transform(response.data.items), nextCursor: response.data.nextCursor };
-      // would want to transform into Asset[] but gives error on line:158 
-      addNextPageFunction(transformedResponse, filter);
-      return metadataMap.addAndReturn(transformedResponse, response);
+    const transformedResponse: CursorResponse<TransformType> = {
+      items: transform(response.data.items),
+      nextCursor: response.data.nextCursor,
+    };
+    // would want to transform into Asset[] but gives error on line:158
+    addNextPageFunction(transformedResponse, filter);
+    return metadataMap.addAndReturn(transformedResponse, response);
   }
 
   return (params: RequestFilter = {} as RequestFilter) => {
@@ -276,15 +288,17 @@ export function generateDeleteEndpoint<IdType>(
 }
 
 /** @hidden */
-export function generateUpdateEndpoint<RequestType, ResponseType, TransformType>(
+export function generateUpdateEndpoint<
+  RequestType,
+  ResponseType,
+  TransformType
+>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
   transform: (items: ResponseType[]) => TransformType[]
 ) {
-  return async function update(
-    changes: RequestType[]
-  ){
+  return async function update(changes: RequestType[]) {
     type Response = ItemsResponse<ResponseType>;
     const response = await rawRequest<Response>(axiosInstance, {
       url: `${resourcePath}/update`,
@@ -300,7 +314,7 @@ export function generateUpdateEndpoint<RequestType, ResponseType, TransformType>
 export function generateSearchEndpoint<RequestParams, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap,
+  metadataMap: MetadataMap
 ) {
   return async function search(query: RequestParams): Promise<ResponseType[]> {
     const response = await rawRequest<ItemsResponse<ResponseType>>(
