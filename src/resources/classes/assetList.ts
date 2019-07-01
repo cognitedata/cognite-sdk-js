@@ -64,4 +64,22 @@ export class AssetList extends Array<Asset> {
     }
     return chunks;
   };
+
+  // Cant really be implemented until we have own classes for TimeSeries, Files, Events as well
+  // because we need to pass the correct RequestType
+  // --------------------------------------------------
+  // private getResourcesFromAssets<RequestType>(accessedApi: any) {
+  //   let resourcesArray: Array<RequestType> = [];
+  //   this.toChunkedArrayOfIds().forEach(async idArray => {
+  //     const assetIds = { assetIds: idArray};
+  //     if (resourcesArray instanceof Array<TimeSeries>) {
+  //       const response = await accessedApi.list(assetIds);
+  //       resourcesArray.push(response);
+  //     } else {
+  //       const response = await accessedApi.list({filter : assetIds});
+  //       resourcesArray.push(response);
+  //     }
+  //   });
+  //   return resourcesArray;
+  // }
 }
