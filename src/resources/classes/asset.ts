@@ -2,7 +2,6 @@
 
 import * as types from '../../types/types';
 import { AssetList } from './assetList';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { CogniteClient } from '../..';
 
 export class Asset implements types.Asset {
@@ -60,7 +59,7 @@ export class Asset implements types.Asset {
   };
 
   public subtree: () => Promise<AssetList> = async (depth: number = this.depth) => {
-    const [subtree] = await this.client.assets.retrieveSubtree(this.id, this.externalId, depth);
+    const subtree = await this.client.assets.retrieveSubtree(this.id, depth);
     return subtree;
   }
 
