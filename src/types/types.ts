@@ -530,7 +530,7 @@ export interface EventSearchRequest extends Limit {
 
 export interface ExternalAsset {
   externalId?: CogniteExternalId;
-  name?: AssetName;
+  name: AssetName;
   parentId?: CogniteInternalId;
   description?: AssetDescription;
   metadata?: Metadata;

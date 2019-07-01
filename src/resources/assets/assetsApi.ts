@@ -129,7 +129,7 @@ export class AssetsAPI {
     this.delete = generateDeleteEndpointWithParams(instance, path, map);
   }
 
-  public async retrieveSubtree(id: number, depth: number | any) {
+  public async retrieveSubtree(id: number, depth: number) {
     const currentDepth: number = 0;
     const asset = await this.retrieve([{ id }]);
     const assetList = new AssetList(this.client, asset);
@@ -137,8 +137,10 @@ export class AssetsAPI {
   }
 
   private transformToAssetObjects = () => {
-    return (assets: types.Asset[]) =>
-      assets.map(asset => new Asset(this.client, asset));
+    return (assets: types.Asset[]) => {
+      const assetArray = assets.map(asset => new Asset(this.client, asset));
+      return new AssetList(this.client, assetArray);
+    };
   };
   // List that includes the assets requesting the subtree
   private getAssetSubtree(
@@ -170,7 +172,7 @@ export class AssetsAPI {
 
 export type AssetCreateEndpoint = (
   items: types.ExternalAssetItem[]
-) => Promise<Asset[]>;
+) => Promise<AssetList>;
 
 export type AssetListEndpoint = (
   scope?: types.AssetListScope
@@ -178,15 +180,15 @@ export type AssetListEndpoint = (
 
 export type AssetRetrieveEndpoint = (
   ids: types.AssetIdEither[]
-) => Promise<Asset[]>;
+) => Promise<AssetList>;
 
 export type AssetUpdateEndpoint = (
   changes: types.AssetChange[]
-) => Promise<Asset[]>;
+) => Promise<AssetList>;
 
 export type AssetSearchEndpoint = (
   query: types.AssetSearchFilter
-) => Promise<Asset[]>;
+) => Promise<AssetList>;
 
 export interface AssetDeleteParams {
   recursive?: boolean;
