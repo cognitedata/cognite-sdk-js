@@ -195,11 +195,15 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
     const responses = await promiseAllWithData(
       chunks,
       input =>
-        rawRequest<ItemsResponse<ResponseType>>(axiosInstance, {
-          method: 'post',
-          url: `${resourcePath}/byids`,
-          data: { items: input },
-        }),
+        rawRequest<ItemsResponse<ResponseType>>(
+          axiosInstance,
+          {
+            method: 'post',
+            url: `${resourcePath}/byids`,
+            data: { items: input },
+          },
+          true
+        ),
       false
     );
     const mergedResponses = concat(
