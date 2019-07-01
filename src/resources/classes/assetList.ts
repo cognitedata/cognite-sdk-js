@@ -2,7 +2,6 @@
 
 import { Asset } from './asset';
 import { CogniteClient } from '../..';
-import { AssetsAPI } from '../assets/assetsApi';
 import { chunk } from 'lodash';
 
 export class AssetList extends Array<Asset> {
@@ -61,7 +60,7 @@ export class AssetList extends Array<Asset> {
     return chunks;
   }
 
-  
+
 
   // Cant really be implemented until we have own classes for TimeSeries, Files, Events as well
   // because we need to pass the correct RequestType
