@@ -21,10 +21,7 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
 ): CreateEndpoint<RequestType, ResponseType> {
   return async function create(items) {
     type Response = ItemsResponse<ResponseType>;
-    let chunks: RequestType[][] = [[]];
-    if (items.length) {
-      chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
-    }
+    const chunks = doChunking<RequestType>(items, chunkFunction);
     const responses = await promiseAllWithData(
       chunks,
       input =>
@@ -190,19 +187,30 @@ export function generateSimpleListEndpoint<RequestParams, ResponseType>(
 export function generateRetrieveEndpoint<IdType, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  chunkFunction?: (ids: IdType[]) => IdType[][]
 ) {
   return async function retrieve(ids: IdType[]): Promise<ResponseType[]> {
-    const response = await rawRequest<ItemsResponse<ResponseType>>(
-      axiosInstance,
-      {
-        method: 'post',
-        url: `${resourcePath}/byids`,
-        data: { items: ids },
-      },
-      true
+    const chunks = doChunking<IdType>(ids, chunkFunction);
+    const responses = await promiseAllWithData(
+      chunks,
+      input =>
+        rawRequest<ItemsResponse<ResponseType>>(
+          axiosInstance,
+          {
+            method: 'post',
+            url: `${resourcePath}/byids`,
+            data: { items: input },
+          },
+          true
+        ),
+      false
     );
-    return metadataMap.addAndReturn(response.data.items, response);
+    const mergedResponses = concat(
+      [],
+      ...responses.map(response => response.data.items)
+    );
+    return metadataMap.addAndReturn(mergedResponses, responses[0]);
   };
 }
 
@@ -225,19 +233,22 @@ export function generateRetrieveSingleEndpoint<IdType, ResponseType>(
 export function generateDeleteEndpoint<IdType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  chunkFunction?: (ids: IdType[]) => IdType[][]
 ) {
   return async function remove(ids: IdType[]): Promise<{}> {
-    const response = await rawRequest<{}>(
-      axiosInstance,
-      {
-        url: `${resourcePath}/delete`,
-        method: 'post',
-        data: { items: ids },
-      },
+    const chunks = doChunking<IdType>(ids, chunkFunction);
+    const responses = await promiseAllWithData(
+      chunks,
+      input =>
+        rawRequest<ItemsResponse<ResponseType>>(axiosInstance, {
+          method: 'post',
+          url: `${resourcePath}/delete`,
+          data: { items: input },
+        }),
       true
     );
-    return metadataMap.addAndReturn({}, response);
+    return metadataMap.addAndReturn({}, responses[0]);
   };
 }
 
@@ -245,18 +256,29 @@ export function generateDeleteEndpoint<IdType>(
 export function generateUpdateEndpoint<RequestType, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  chunkFunction?: (changes: RequestType[]) => RequestType[][]
 ) {
   return async function update(
     changes: RequestType[]
   ): Promise<ResponseType[]> {
     type Response = ItemsResponse<ResponseType>;
-    const response = await rawRequest<Response>(axiosInstance, {
-      url: `${resourcePath}/update`,
-      method: 'post',
-      data: { items: changes },
-    });
-    return metadataMap.addAndReturn(response.data.items, response);
+    const chunks = doChunking<RequestType>(changes, chunkFunction);
+    const responses = await promiseAllWithData(
+      chunks,
+      input =>
+        rawRequest<Response>(axiosInstance, {
+          method: 'post',
+          url: `${resourcePath}/update`,
+          data: { items: input },
+        }),
+      false
+    );
+    const mergedResponses = concat(
+      [],
+      ...responses.map(response => response.data.items)
+    );
+    return metadataMap.addAndReturn(mergedResponses, responses[0]);
   };
 }
 
@@ -306,19 +328,22 @@ export function generateRetrieveLatestEndpoint<RequestParams, ResponseType>(
 export function generateInsertEndpoint<RequestParams>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  chunkFunction?: (items: RequestParams[]) => RequestParams[][]
 ) {
   return async function insert(items: RequestParams[]): Promise<{}> {
-    const response = await rawRequest<ItemsResponse<{}>>(
-      axiosInstance,
-      {
-        method: 'post',
-        url: resourcePath,
-        data: { items },
-      },
+    const chunks = doChunking<RequestParams>(items, chunkFunction);
+    const responses = await promiseAllWithData(
+      chunks,
+      input =>
+        rawRequest<ItemsResponse<{}>>(axiosInstance, {
+          method: 'post',
+          url: resourcePath,
+          data: { items: input },
+        }),
       true
     );
-    return metadataMap.addAndReturn({}, response);
+    return metadataMap.addAndReturn({}, responses[0]);
   };
 }
 
@@ -342,4 +367,15 @@ export function generateSingleReplaceEndpoint<RequestType, RepsonseType>(
     );
     return metadataMap.addAndReturn(response.data, response);
   };
+}
+
+function doChunking<Type>(
+  items: Type[],
+  chunkFunction?: (ids: Type[]) => Type[][]
+) {
+  let chunks: Type[][] = [[]];
+  if (items.length) {
+    chunks = chunkFunction ? chunkFunction(items) : chunk(items, 1000);
+  }
+  return chunks;
 }

@@ -63,9 +63,7 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
         errors.push(error);
       })
   );
-
   await Promise.all(wrappedPromises);
-
   if (failed.length) {
     throw {
       succeded,

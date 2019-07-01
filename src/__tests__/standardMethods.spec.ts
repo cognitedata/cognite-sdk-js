@@ -5,7 +5,11 @@ import MockAdapter from 'axios-mock-adapter';
 import { MetadataMap } from '../metadata';
 import {
   generateCreateEndpoint,
+  generateDeleteEndpoint,
+  generateInsertEndpoint,
   generateListEndpoint,
+  generateRetrieveEndpoint,
+  generateUpdateEndpoint,
 } from '../standardMethods';
 import { sleepPromise } from '../utils';
 
@@ -27,6 +31,26 @@ function numberGeneratorAPIEndpoint(config: AxiosRequestConfig) {
   }
 }
 
+function countChunks(axiosMock: MockAdapter, url: string) {
+  const counterObject = { value: 0 };
+  axiosMock.onPost(url).reply(config => {
+    counterObject.value++;
+    const { items: requestItems } = JSON.parse(config.data);
+    const responseItems = requestItems.map((item: any) => ({
+      ...item,
+      id: Number(item.name),
+    }));
+    return [201, { items: responseItems }];
+  });
+  return counterObject;
+}
+
+function fillArray(): { id: number }[] {
+  return new Array(2003).fill(null).map(index => ({
+    id: index,
+  }));
+}
+
 describe('standard methods', () => {
   const axiosInstance = axios.create();
   const axiosMock = new MockAdapter(axiosInstance);
@@ -35,30 +59,64 @@ describe('standard methods', () => {
   });
 
   describe('generateCreateEndpoint', () => {
-    test('automatic chunking', async () => {
+    test('automatic chunking for create', async () => {
       const metadataMap = new MetadataMap();
-      const items = new Array(3002).fill(null).map((_, index) => ({
-        name: '' + index,
-      }));
-      const create = generateCreateEndpoint(
-        axiosInstance,
-        '/path',
-        metadataMap
+      const object = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path',
+        generateCreateEndpoint(axiosInstance, 'path', metadataMap)
       );
-      let counter = 0;
-      axiosMock.onPost('/path').reply(config => {
-        counter++;
-        const { items: requestItems } = JSON.parse(config.data);
-        const responseItems = requestItems.map((item: any) => ({
-          ...item,
-          id: Number(item.name),
-        }));
-        return [201, { items: responseItems }];
-      });
-      const response = await create(items);
-      expect(counter).toBe(4);
-      expect(response.length).toBe(items.length);
-      expect(metadataMap.get(response)).toBeDefined();
+      expect(object.response.length).toBe(object.items.length);
+    });
+  });
+  describe('generateRetrieveEndpoint', () => {
+    test('automatic chunking for retrieve', async () => {
+      const metadataMap = new MetadataMap();
+      const object = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path/byids',
+        generateRetrieveEndpoint(axiosInstance, 'path', metadataMap)
+      );
+      expect(object.response.length).toBe(object.items.length);
+    });
+  });
+
+  describe('generateDeleteEndpoint', () => {
+    test('automatic chunking for delete', async () => {
+      const metadataMap = new MetadataMap();
+      const { response } = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path/delete',
+        generateDeleteEndpoint(axiosInstance, '/path', metadataMap)
+      );
+      expect(response).toMatchObject({});
+    });
+  });
+  describe('generateUpdateEndpoint', () => {
+    test('automatic chunking for update', async () => {
+      const metadataMap = new MetadataMap();
+      const object = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path/update',
+        generateUpdateEndpoint(axiosInstance, 'path', metadataMap)
+      );
+      expect(object.response.length).toBe(object.items.length);
+    });
+  });
+  describe('generateInsertEndpoint', () => {
+    test('automatic chunking for insert', async () => {
+      const metadataMap = new MetadataMap();
+      const { response } = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path',
+        generateInsertEndpoint(axiosInstance, '/path', metadataMap)
+      );
+      expect(response).toMatchObject({});
     });
   });
   describe('generateListEndpoint', () => {
@@ -134,3 +192,17 @@ describe('standard methods', () => {
     });
   });
 });
+
+async function chunkingTester(
+  axiosMock: MockAdapter,
+  metadataMap: MetadataMap,
+  url: string,
+  endpoint: (items: unknown[]) => Promise<any>
+) {
+  const items = fillArray();
+  const chunkCounter = countChunks(axiosMock, url);
+  const response = await endpoint(items);
+  expect(chunkCounter.value).toBe(3);
+  expect(metadataMap.get(response)).toBeDefined();
+  return { items, response };
+}
