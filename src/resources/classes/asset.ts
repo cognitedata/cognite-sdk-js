@@ -8,6 +8,7 @@ export class Asset implements types.Asset {
   public id: types.CogniteInternalId;
   public externalId?: types.CogniteExternalId;
   public parentId?: types.CogniteInternalId;
+  public name: types.AssetName;
   public description?: types.AssetDescription;
   public metadata?: types.Metadata;
   public source?: types.AssetSource;
@@ -22,6 +23,7 @@ export class Asset implements types.Asset {
     this.id = props.id;
     this.externalId = props.externalId;
     this.parentId = props.parentId;
+    this.name = props.name;
     this.description = props.description;
     this.metadata = props.metadata;
     this.source = props.source;
@@ -59,7 +61,7 @@ export class Asset implements types.Asset {
     return new AssetList(this.client, childAssets);
   };
 
-  public subtree = async (depth: number | null = null) => {
+  public subtree = async (depth: number = this.depth) => {
     const subtree = await this.client.assets.retrieveSubtree(this.id, depth);
     return subtree;
   };
