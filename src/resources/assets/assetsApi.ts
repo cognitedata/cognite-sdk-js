@@ -136,13 +136,6 @@ export class AssetsAPI {
     return this.getAssetSubtree(assetList, currentDepth, depth);
   }
 
-  public async retrieveSubtree(id: number, depth: number) {
-    const currentDepth: number = 0;
-    const asset = await this.retrieve([{ id }]);
-    const assetList = new AssetList(this.client, asset);
-    return this.getAssetSubtree(assetList, currentDepth, depth);
-  }
-
   private transformToAssetObjects = () => {
     return (assets: types.Asset[]) =>
       assets.map(asset => new Asset(this.client, asset));

@@ -1,7 +1,6 @@
 // Copyright 2019 Cognite AS
 
 import { CogniteClient } from '../..';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import * as types from '../../types/types';
 import { EventsListEndpoint } from '../events/eventsApi';
 import { FilesListEndpoint } from '../files/filesApi';
