@@ -59,9 +59,7 @@ export class Asset implements types.Asset {
     return new AssetList(this.client, childAssets);
   };
 
-  public subtree: () => Promise<AssetList> = async (
-    depth: number = this.depth
-  ) => {
+  public subtree = async (depth: number | null = null) => {
     const subtree = await this.client.assets.retrieveSubtree(this.id, depth);
     return subtree;
   };

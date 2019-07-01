@@ -51,8 +51,16 @@ export class SecurityCategoriesAPI {
   /** @hidden */
   constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
     const path = projectUrl(project) + '/securitycategories';
-    this.list = generateListEndpoint(instance, path, map, false);
-    this.create = generateCreateEndpoint(instance, path, map);
+    this.list = generateListEndpoint<
+      ListSecurityCategories,
+      SecurityCategory,
+      SecurityCategory
+    >(instance, path, map, false, items => items);
+    this.create = generateCreateEndpoint<
+      SecurityCategorySpec,
+      SecurityCategory,
+      SecurityCategory
+    >(instance, path, map, items => items);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
 }

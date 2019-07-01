@@ -61,11 +61,12 @@ export class Viewer3DAPI {
     revisionId,
     query
   ) => {
-    return generateListEndpoint<List3DNodesQuery, RevealNode3D>(
+    return generateListEndpoint<List3DNodesQuery, RevealNode3D, RevealNode3D>(
       this.instance,
       parameterizePath(this.project, modelId, revisionId) + '/nodes',
       this.map,
-      false
+      false,
+      items => items
     )(query);
   };
 
@@ -84,11 +85,12 @@ export class Viewer3DAPI {
     nodeId,
     query
   ) => {
-    return generateListEndpoint<List3DNodesQuery, RevealNode3D>(
+    return generateListEndpoint<List3DNodesQuery, RevealNode3D, RevealNode3D>(
       this.instance,
       parameterizePath(this.project, modelId, revisionId) + `/nodes/${nodeId}`,
       this.map,
-      false
+      false,
+      items => items
     )(query);
   };
 
@@ -106,11 +108,16 @@ export class Viewer3DAPI {
     revisionId,
     query
   ) => {
-    return generateListEndpoint<ListRevealSectors3DQuery, RevealSector3D>(
+    return generateListEndpoint<
+      ListRevealSectors3DQuery,
+      RevealSector3D,
+      RevealSector3D
+    >(
       this.instance,
       parameterizePath(this.project, modelId, revisionId) + `/sectors`,
       this.map,
-      false
+      false,
+      items => items
     )(query);
   };
 
