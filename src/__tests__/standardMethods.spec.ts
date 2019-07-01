@@ -82,6 +82,43 @@ describe('standard methods', () => {
       expect(object.response.length).toBe(object.items.length);
     });
   });
+
+  describe('generateDeleteEndpoint', () => {
+    test('automatic chunking for delete', async () => {
+      const metadataMap = new MetadataMap();
+      const { response } = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path/delete',
+        generateDeleteEndpoint(axiosInstance, '/path', metadataMap)
+      );
+      expect(response).toMatchObject({});
+    });
+  });
+  describe('generateUpdateEndpoint', () => {
+    test('automatic chunking for update', async () => {
+      const metadataMap = new MetadataMap();
+      const object = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path/update',
+        generateUpdateEndpoint(axiosInstance, 'path', metadataMap)
+      );
+      expect(object.response.length).toBe(object.items.length);
+    });
+  });
+  describe('generateInsertEndpoint', () => {
+    test('automatic chunking for insert', async () => {
+      const metadataMap = new MetadataMap();
+      const { response } = await chunkingTester(
+        axiosMock,
+        metadataMap,
+        'path',
+        generateInsertEndpoint(axiosInstance, '/path', metadataMap)
+      );
+      expect(response).toMatchObject({});
+    });
+  });
   describe('generateListEndpoint', () => {
     function createMockedListEndpoint() {
       const listEndpoint = generateListEndpoint<any, number>(
@@ -152,42 +189,6 @@ describe('standard methods', () => {
         });
         expect(numbers).toMatchSnapshot();
       }
-    });
-  });
-  describe('generateDeleteEndpoint', () => {
-    test('automatic chunking for delete', async () => {
-      const metadataMap = new MetadataMap();
-      const { response } = await chunkingTester(
-        axiosMock,
-        metadataMap,
-        'path/delete',
-        generateDeleteEndpoint(axiosInstance, '/path', metadataMap)
-      );
-      expect(response).toMatchObject({});
-    });
-  });
-  describe('generateUpdateEndpoint', () => {
-    test('automatic chunking for update', async () => {
-      const metadataMap = new MetadataMap();
-      const object = await chunkingTester(
-        axiosMock,
-        metadataMap,
-        'path/update',
-        generateUpdateEndpoint(axiosInstance, 'path', metadataMap)
-      );
-      expect(object.response.length).toBe(object.items.length);
-    });
-  });
-  describe('generateInsertEndpoint', () => {
-    test('automatic chunking for insert', async () => {
-      const metadataMap = new MetadataMap();
-      const { response } = await chunkingTester(
-        axiosMock,
-        metadataMap,
-        'path',
-        generateInsertEndpoint(axiosInstance, '/path', metadataMap)
-      );
-      expect(response).toMatchObject({});
     });
   });
 });

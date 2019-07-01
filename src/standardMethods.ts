@@ -199,8 +199,8 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
           method: 'post',
           url: `${resourcePath}/byids`,
           data: { items: input },
-        }, true),
-      true
+        }),
+      false
     );
     const mergedResponses = concat(
       [],
@@ -268,7 +268,7 @@ export function generateUpdateEndpoint<RequestType, ResponseType>(
           url: `${resourcePath}/update`,
           data: { items: input },
         }),
-      true
+      false
     );
     const mergedResponses = concat(
       [],
