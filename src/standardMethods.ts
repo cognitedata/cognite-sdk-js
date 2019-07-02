@@ -22,7 +22,7 @@ export function generateCreateEndpoint<
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  transform: (items: ResponseType[]) => TransformType[],
+  transform: (items: ResponseType[]) => TransformType,
   chunkFunction?: (items: RequestType[]) => RequestType[][]
 ) {
   return async function create(itemsArray: RequestType[]) {
@@ -203,7 +203,7 @@ export function generateRetrieveEndpoint<IdType, ResponseType, TransformType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  transform: (items: ResponseType[]) => TransformType[],
+  transform: (items: ResponseType[]) => TransformType,
   chunkFunction?: (ids: IdType[]) => IdType[][]
 ) {
   return async function retrieve(ids: IdType[]) {
@@ -303,7 +303,7 @@ export function generateUpdateEndpoint<
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  transform: (items: ResponseType[]) => TransformType[],
+  transform: (items: ResponseType[]) => TransformType,
   chunkFunction?: (changes: RequestType[]) => RequestType[][]
 ) {
   return async function update(changes: RequestType[]) {
@@ -328,12 +328,17 @@ export function generateUpdateEndpoint<
 }
 
 /** @hidden */
-export function generateSearchEndpoint<RequestParams, ResponseType>(
+export function generateSearchEndpoint<
+  RequestParams,
+  ResponseType,
+  TransformType
+>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  transform: (items: ResponseType[]) => TransformType
 ) {
-  return async function search(query: RequestParams): Promise<ResponseType[]> {
+  return async function search(query: RequestParams) {
     const response = await rawRequest<ItemsResponse<ResponseType>>(
       axiosInstance,
       {
@@ -343,7 +348,9 @@ export function generateSearchEndpoint<RequestParams, ResponseType>(
       },
       true
     );
-    return metadataMap.addAndReturn(response.data.items, response);
+    const { items } = response.data;
+
+    return metadataMap.addAndReturn(transform(items), response);
   };
 }
 

@@ -98,7 +98,7 @@ export class AssetsAPI {
   ) {
     this.client = client;
     const path = projectUrl(project) + '/assets';
-    const transformResponse = this.transformToAssetObjects();
+    const transformResponse = this.transformToAssetListObject;
     this.create = generateCreateEndpoint(
       instance,
       path,
@@ -125,22 +125,24 @@ export class AssetsAPI {
       map,
       transformResponse
     );
-    this.search = generateSearchEndpoint(instance, path, map);
-    this.delete = generateDeleteEndpointWithParams(instance, path, map);
+    this.search = generateSearchEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse
+    );
+    this.delete = generateDeleteEndpoint(instance, path, map);
   }
 
   public async retrieveSubtree(id: number, depth: number) {
     const currentDepth: number = 0;
-    const asset = await this.retrieve([{ id }]);
-    const assetList = new AssetList(this.client, asset);
-    return this.getAssetSubtree(assetList, currentDepth, depth);
+    const rootAssetList = await this.retrieve([{ id }]);
+    return this.getAssetSubtree(rootAssetList, currentDepth, depth);
   }
 
-  private transformToAssetObjects = () => {
-    return (assets: types.Asset[]) => {
-      const assetArray = assets.map(asset => new Asset(this.client, asset));
-      return new AssetList(this.client, assetArray);
-    };
+  private transformToAssetListObject = (assets: types.Asset[]) => {
+    const assetArray = assets.map(asset => new Asset(this.client, asset));
+    return new AssetList(this.client, assetArray);
   };
   // List that includes the assets requesting the subtree
   private getAssetSubtree(
