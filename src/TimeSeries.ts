@@ -77,13 +77,14 @@ export interface TimeseriesSearchParams {
 const timeSeriesUrl = (): string => `${apiUrl(0.5)}/${projectUrl()}/timeseries`;
 
 export class TimeSeries {
-  public static async create(timeSeries: Partial<Timeseries>[]): Promise<void> {
+  public static async create(timeSeries: Partial<Timeseries>[]): Promise<Timeseries[]> {
     const body = {
       items: timeSeries,
     };
     const url = timeSeriesUrl();
-    await rawPost(url, { data: body });
-    return;
+    const response = (await rawPost(url, { data: body })) as AxiosResponse<
+    TimeseriesResponse>;
+    return response.data.data.items;
   }
 
   public static async retrieve(
