@@ -114,7 +114,6 @@ export function generateListEndpoint<
   return (params: RequestFilter = {} as RequestFilter) => {
     const listPromise = list(params);
     return Object.assign(
-      {},
       listPromise,
       makeAutoPaginationMethods<ResponseType>(listPromise)
     );
