@@ -100,7 +100,11 @@ export class TimeSeriesAPI {
       GetTimeSeriesMetadataDTO,
       GetTimeSeriesMetadataDTO
     >(instance, path, map, false, items => items);
-    this.search = generateSearchEndpoint(instance, path, map);
+    this.search = generateSearchEndpoint<
+      TimeSeriesSearchDTO,
+      GetTimeSeriesMetadataDTO,
+      GetTimeSeriesMetadataDTO
+    >(instance, path, map, items => items);
     this.retrieve = generateRetrieveEndpoint<
       TimeseriesIdEither,
       GetTimeSeriesMetadataDTO,

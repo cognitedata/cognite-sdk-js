@@ -112,7 +112,11 @@ export class EventsAPI {
       CogniteEvent,
       CogniteEvent
     >(instance, path, map, items => items);
-    this.search = generateSearchEndpoint(instance, path, map);
+    this.search = generateSearchEndpoint<
+      EventSearchRequest,
+      CogniteEvent,
+      CogniteEvent
+    >(instance, path, map, items => items);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
 }

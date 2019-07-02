@@ -119,7 +119,11 @@ export class FilesAPI {
       FilesMetadata,
       FilesMetadata
     >(instance, path, map, items => items);
-    this.search = generateSearchEndpoint(instance, path, map);
+    this.search = generateSearchEndpoint<
+      FilesSearchFilter,
+      FilesMetadata,
+      FilesMetadata
+    >(instance, path, map, items => items);
     this.delete = generateDeleteEndpoint(instance, path, map);
     this.getDownloadUrls = generateDownloadUrlEndpoint(instance, path, map);
     this.update = generateUpdateEndpoint<

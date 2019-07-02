@@ -1,7 +1,16 @@
 // Copyright 2019 Cognite AS
 
 import { chunk } from 'lodash';
+import { types } from 'util';
 import { CogniteClient } from '../..';
+import {
+  CogniteEvent,
+  FilesMetadata,
+  GetTimeSeriesMetadataDTO,
+} from '../../types/types';
+import { EventsAPI } from '../events/eventsApi';
+import { FilesAPI } from '../files/filesApi';
+import { TimeSeriesAPI } from '../timeSeries/timeSeriesApi';
 import { Asset } from './asset';
 
 export class AssetList extends Array<Asset> {
@@ -16,41 +25,41 @@ export class AssetList extends Array<Asset> {
   };
 
   public timeSeries = async () => {
-    type TimeSeries = object;
     // return this.getResourcesFromAssets<TimeSeries>(this.client.timeseries);
-    // Replace this codeblock with return statement above when TimeSeries-class is implemented
-    const timeSeriesArray: TimeSeries[] = [];
+    const timeSeriesArray: GetTimeSeriesMetadataDTO[] = [];
     this.toChunkedArrayOfIds().forEach(async idArray => {
-      const response = await this.client.timeseries.list({ assetIds: idArray });
-      timeSeriesArray.push(response);
+      const response = await this.client.timeseries
+        .list({ assetIds: idArray })
+        .autoPagingToArray({ limit: Infinity });
+      timeSeriesArray.push(...response);
     });
     return timeSeriesArray;
   };
 
   public files = async () => {
-    type Files = object;
     // return this.getResourcesFromAssets<Files>(this.client.files);
-    // Replace this codeblock with return statement above when Files-class is implemented
-    const filesArray: Files[] = [];
+    const filesArray: FilesMetadata[] = [];
     this.toChunkedArrayOfIds().forEach(async idArray => {
-      const response = await this.client.files.list({
-        filter: { assetIds: idArray },
-      });
-      filesArray.push(response);
+      const response = await this.client.files
+        .list({
+          filter: { assetIds: idArray },
+        })
+        .autoPagingToArray({ limit: Infinity });
+      filesArray.push(...response);
     });
     return filesArray;
   };
 
   public events = async () => {
-    type Event = object;
     // return this.getResourcesFromAssets<Event>(this.client.events);
-    // Replace this codeblock with return statement above when Event-class is implemented
-    const eventArray: Event[] = [];
+    const eventArray: CogniteEvent[] = [];
     this.toChunkedArrayOfIds().forEach(async idArray => {
-      const response = await this.client.events.list({
-        filter: { assetIds: idArray },
-      });
-      eventArray.push(response);
+      const response = await this.client.events
+        .list({
+          filter: { assetIds: idArray },
+        })
+        .autoPagingToArray({ limit: Infinity });
+      eventArray.push(...response);
     });
     return eventArray;
   };
@@ -64,21 +73,24 @@ export class AssetList extends Array<Asset> {
     return chunks;
   };
 
-  // Cant really be implemented until we have own classes for TimeSeries, Files, Events as well
-  // because we need to pass the correct RequestType
-  // --------------------------------------------------
-  // private getResourcesFromAssets<RequestType>(accessedApi: any) {
-  //   let resourcesArray: Array<RequestType> = [];
-  //   this.toChunkedArrayOfIds().forEach(async idArray => {
-  //     const assetIds = { assetIds: idArray};
-  //     if (resourcesArray instanceof Array<TimeSeries>) {
-  //       const response = await accessedApi.list(assetIds);
-  //       resourcesArray.push(response);
-  //     } else {
-  //       const response = await accessedApi.list({filter : assetIds});
-  //       resourcesArray.push(response);
-  //     }
-  //   });
-  //   return resourcesArray;
-  // }
+  private getResourcesFromAssets<Type>(
+    accessedApi: TimeSeriesAPI | FilesAPI | EventsAPI
+  ) {
+    const resourcesArray: Type[] = [];
+    this.toChunkedArrayOfIds().forEach(async idArray => {
+      const assetIds = { assetIds: idArray };
+      if (resourcesArray instanceof TimeSeriesAPI) {
+        const response = await accessedApi
+          .list(assetIds)
+          .autoPagingToArray({ limit: Infinity });
+        resourcesArray.push(...response);
+      } else {
+        const response = await accessedApi
+          .list({ filter: assetIds })
+          .autoPagingToArray({ limit: Infinity });
+        resourcesArray.push(...response);
+      }
+    });
+    return resourcesArray;
+  }
 }

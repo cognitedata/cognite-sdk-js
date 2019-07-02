@@ -3,8 +3,9 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { CogniteClient } from '../..';
-import { Asset } from '../../resources/classes/asset';
 import { AssetList } from '../../resources/classes/assetList';
+import { EventsAPI } from '../../resources/events/eventsApi';
+import { TimeSeriesAPI } from '../../resources/timeSeries/timeSeriesApi';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Asset class', () => {
@@ -37,83 +38,106 @@ describe('Asset class', () => {
 
     externalId: 'test-child' + randomInt(),
   };
-  let assets: Asset[];
+  let assets: AssetList;
 
   test('create', async () => {
     assets = await client.assets.create([childAsset, rootAsset]);
-    const assetList = new AssetList(client, assets);
     expect(assets[0].createdTime).toBeInstanceOf(Date);
     expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
-    expect(assetList).toBeInstanceOf(Array);
   });
 
-  test('create 1001 assets sequencially', async () => {
+  describe('Asset Class', () => {
     const newRootAsset = {
       ...rootAsset,
       externalId: 'test-root' + randomInt(),
     };
-    const newChildAsset = {
+    let newChildAsset = {
       ...childAsset,
       parentExternalId: newRootAsset.externalId,
     };
-    // const newGrandChildAsset = {
-    //   ...childAsset,
-    //   parentExternalId: newChildAsset.externalId,
-    // };
-    const childArr = new Array(1000).fill(newChildAsset);
-    const createdAssets = await client.assets.create([
-      newRootAsset,
-      ...childArr,
-    ]);
-    expect(createdAssets.length).toBe(1001);
-    const assetListObject = new AssetList(client, createdAssets);
-    expect(assetListObject).toBeDefined();
-    // await assetListObject.delete();
-    // const s = await client.assets.list({
-    //   filter: { name: assetListObject[0].name },
-    // });
-    // console.log(s);
-    await client.assets.delete(
-      createdAssets.slice(1).map(asset => ({ id: asset.id }))
-    );
-    await client.assets.delete([{ id: createdAssets[0].id }]);
-  });
-
-  test('subtree', async () => {
-    const newRootAsset = {
-      ...rootAsset,
-      externalId: 'test-root' + randomInt(),
+    let newGrandChildAsset = {
+      ...childAsset,
+      name: 'test-grandchild',
+      parentExternalId: newChildAsset.externalId,
     };
 
-    const childArray = [];
-    for (let index = 0; index < 3; index++) {
-      const newChildAsset = {
-        ...childAsset,
-        parentExternalId: newRootAsset.externalId,
-        externalId: 'test-child' + randomInt() + index,
-      };
-      childArray.push(newChildAsset);
-    }
-    const grandChildArray = [];
-    for (let index = 5; index < 7; index++) {
-      const newGrandChildAsset = {
-        ...childAsset,
-        name: 'test-grandchild',
-        parentExternalId: childArray[0].parentExternalId,
-        externalId: 'test-grandchild' + randomInt() + index,
-      };
-      grandChildArray.push(newGrandChildAsset);
-    }
-    const createdAssets = await client.assets.create([
-      newRootAsset,
-      ...childArray,
-      ...grandChildArray,
-    ]);
-    expect(createdAssets.length).toBe(6);
-    expect(childArray[0]);
-    const subtree = await createdAssets[0].subtree(2);
-    console.log(subtree);
-    expect(subtree.length).toBe(6);
+    test('create 1001 assets sequencially', async () => {
+      const childArr = new Array(1000).fill(newChildAsset);
+      const createdAssets = await client.assets.create([
+        newRootAsset,
+        ...childArr,
+      ]);
+      expect(createdAssets.length).toBe(1001);
+      await client.assets.delete(
+        createdAssets.slice(1).map(asset => ({ id: asset.id }))
+      );
+      await client.assets.delete([{ id: createdAssets[0].id }]);
+    });
+
+    test('subtree', async () => {
+      const childArray = [];
+      for (let index = 0; index < 3; index++) {
+        newChildAsset = {
+          ...childAsset,
+          externalId: 'test-child' + randomInt() + index,
+        };
+        childArray.push(newChildAsset);
+      }
+      const grandChildArray = [];
+      for (let index = 5; index < 7; index++) {
+        newGrandChildAsset = {
+          ...childAsset,
+          externalId: 'test-grandchild' + randomInt() + index,
+        };
+        grandChildArray.push(newGrandChildAsset);
+      }
+      const createdAssets = await client.assets.create([
+        newRootAsset,
+        ...childArray,
+        ...grandChildArray,
+      ]);
+      expect(createdAssets.length).toBe(6);
+      const subtree = await createdAssets[0].subtree(2);
+      const subtree2 = await createdAssets[0].subtree(1);
+      console.log(subtree);
+      expect(subtree.length).toBe(6);
+      expect(subtree2.length).toBe(4);
+      await client.assets.delete(
+        createdAssets.map(asset => ({ id: asset.id }))
+      );
+    });
+
+    test('events from Asset', async () => {
+      const events = new Array(1002).fill({
+        assetId: newRootAsset.externalId,
+        description: 'Huge event',
+      });
+      const createdResources = await fetchResourceFromAssetClass(
+        client,
+        client.events,
+        events,
+        newRootAsset
+      );
+      await client.assets.delete([{ id: createdResources.createdAsset[0].id }]);
+    });
+
+    test('timeseries from Asset', async () => {
+      const timeseries = new Array(2003).fill({
+        name: 'Sensor',
+        assetId: newRootAsset.externalId,
+      });
+      const createdAsset = await client.assets.create([newRootAsset]);
+      const createdTimeseries = await client.timeseries.create(timeseries);
+      expect(createdAsset.length).toBe(1);
+      expect(createdTimeseries.length).toBe(timeseries.length);
+      const fetchedTimeseries = await createdAsset[0].timeSeries();
+      const fetchedTimeseriesArray = await fetchedTimeseries.autoPagingToArray();
+      expect(fetchedTimeseriesArray.length).toBe(createdTimeseries.length);
+      await client.assets.delete([{ id: createdAsset[0].id }]);
+      await client.timeseries.delete(
+        createdTimeseries.map(timeserie => ({ id: timeserie.id }))
+      );
+    });
   });
 
   test('update', async () => {
@@ -157,3 +181,24 @@ describe('Asset class', () => {
     expect(rootAsset.description).toBe(asset.description);
   });
 });
+
+async function fetchResourceFromAssetClass(
+  client: CogniteClient,
+  api: TimeSeriesAPI | EventsAPI,
+  resourceList: any[],
+  newRootAsset: any
+) {
+  const createdAsset = await client.assets.create([newRootAsset]);
+  const resources = await api.create(resourceList);
+  expect(resources.length).toBe(resourceList.length);
+  let fetchedResource;
+  if (api instanceof TimeSeriesAPI) {
+    fetchedResource = await createdAsset[0].timeSeries();
+  } else {
+    fetchedResource = await createdAsset[0].events();
+  }
+  const fetchedResourceArray = await fetchedResource.autoPagingToArray();
+  expect(fetchedResourceArray.length).toBe(resources.length);
+  await client.events.delete(resources.map(resource => ({ id: resource.id })));
+  return { createdAsset, resources };
+}

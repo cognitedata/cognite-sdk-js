@@ -62,26 +62,25 @@ export class Asset implements types.Asset {
   };
 
   public subtree = async (depth: number = this.depth) => {
-    const subtree = await this.client.assets.retrieveSubtree(this.id, depth);
-    return subtree;
+    return this.client.assets.retrieveSubtree(this.id, depth);
   };
 
   public timeSeries = async (filter?: types.TimeseriesFilter) => {
     return this.client.timeseries.list({
-      assetIds: [this.id],
       ...(filter || {}),
+      assetIds: [this.id],
     });
   };
 
   public events = async (filter?: types.EventFilter) => {
     return this.client.events.list({
-      filter: { assetIds: [this.id], ...(filter || {}) },
+      filter: { ...(filter || {}), assetIds: [this.id] },
     });
   };
 
   public files = async (filter?: types.FileFilter) => {
     return this.client.files.list({
-      filter: { assetIds: [this.id], ...(filter || {}) },
+      filter: { ...(filter || {}), assetIds: [this.id] },
     });
   };
 }
