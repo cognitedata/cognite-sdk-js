@@ -143,30 +143,33 @@ export class AssetsAPI {
     const assetArray = assets.map(asset => new Asset(this.client, asset));
     return new AssetList(this.client, assetArray);
   };
-  // List that includes the assets requesting the subtree
-  private getAssetSubtree(
+
+  private async getAssetSubtree(
     assets: AssetList,
     currentDepth: number,
     depth: number | any
-  ): AssetList {
+  ): Promise<AssetList> {
     const subtree: AssetList = assets;
     if (depth > currentDepth || depth === null) {
-      const children = this.getChildren(assets);
+      const children = await this.getChildren(assets);
       if (children) {
-        subtree.push(
-          ...this.getAssetSubtree(children, currentDepth + 1, depth)
+        const subtreeOfChildren = await this.getAssetSubtree(
+          children,
+          currentDepth + 1,
+          depth
         );
+        subtree.push(...subtreeOfChildren);
       }
     }
     return subtree;
   }
 
-  private getChildren = (assets: AssetList) => {
-    let children: Asset[] = [];
-    assets.forEach(async asset => {
+  private getChildren = async (assets: AssetList) => {
+    const children: Asset[] = [];
+    for (const asset of assets) {
       const childrenList = await asset.children();
-      children = children.concat(childrenList);
-    });
+      children.push(...childrenList);
+    }
     return new AssetList(this.client, children);
   };
 }

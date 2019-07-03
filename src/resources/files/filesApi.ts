@@ -117,19 +117,19 @@ export class FilesAPI {
     this.retrieve = generateRetrieveEndpoint<
       IdEither,
       FilesMetadata,
-      FilesMetadata
+      FilesMetadata[]
     >(instance, path, map, items => items);
     this.search = generateSearchEndpoint<
       FilesSearchFilter,
       FilesMetadata,
-      FilesMetadata
+      FilesMetadata[]
     >(instance, path, map, items => items);
     this.delete = generateDeleteEndpoint(instance, path, map);
     this.getDownloadUrls = generateDownloadUrlEndpoint(instance, path, map);
     this.update = generateUpdateEndpoint<
       FileChangeUpdate,
       FilesMetadata,
-      FilesMetadata
+      FilesMetadata[]
     >(instance, path, map, items => items);
   }
 }

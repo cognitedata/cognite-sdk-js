@@ -50,7 +50,7 @@ export class ApiKeysAPI {
     this.create = generateCreateEndpoint<
       ApiKeyRequest,
       NewApiKeyResponse,
-      NewApiKeyResponse
+      NewApiKeyResponse[]
     >(instance, path, map, items => items);
     this.list = generateListNoCursorEndpointWithQueryParams(
       instance,

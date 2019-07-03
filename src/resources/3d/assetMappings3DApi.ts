@@ -79,12 +79,12 @@ export class AssetMappings3DAPI {
     return generateCreateEndpoint<
       CreateAssetMapping3D,
       AssetMapping3D,
-      AssetMapping3D
+      AssetMapping3D[]
     >(
       this.instance,
       parameterizePath(this.project, modelId, revisionId),
       this.map,
-      items => items
+      item => item
     )(items);
   };
 

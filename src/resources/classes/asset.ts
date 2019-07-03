@@ -4,6 +4,9 @@ import { CogniteClient } from '../..';
 import * as types from '../../types/types';
 import { AssetList } from './assetList';
 
+export interface SubtreeOptions {
+  depth?: number;
+}
 export class Asset implements types.Asset {
   public id: types.CogniteInternalId;
   public externalId?: types.CogniteExternalId;
@@ -57,30 +60,39 @@ export class Asset implements types.Asset {
           parentIds: [this.id],
         },
       })
-      .autoPagingToArray();
+      .autoPagingToArray({ limit: Infinity });
     return new AssetList(this.client, childAssets);
   };
 
-  public subtree = async (depth: number = this.depth) => {
-    return this.client.assets.retrieveSubtree(this.id, depth);
+  public subtree = async (options?: SubtreeOptions) => {
+    const query: SubtreeOptions = options || {};
+    return this.client.assets.retrieveSubtree(this.id, query.depth || Infinity);
   };
 
   public timeSeries = async (filter?: types.TimeseriesFilter) => {
-    return this.client.timeseries.list({
-      ...(filter || {}),
-      assetIds: [this.id],
-    });
+    console.log('timeseries1');
+    return this.client.timeseries
+      .list({
+        ...(filter || {}),
+        assetIds: [this.id],
+      })
+      .autoPagingToArray();
   };
 
   public events = async (filter?: types.EventFilter) => {
-    return this.client.events.list({
-      filter: { ...(filter || {}), assetIds: [this.id] },
-    });
+    console.log('events1');
+    return this.client.events
+      .list({
+        filter: { ...(filter || {}), assetIds: [this.id] },
+      })
+      .autoPagingToArray();
   };
 
   public files = async (filter?: types.FileFilter) => {
-    return this.client.files.list({
-      filter: { ...(filter || {}), assetIds: [this.id] },
-    });
+    return this.client.files
+      .list({
+        filter: { ...(filter || {}), assetIds: [this.id] },
+      })
+      .autoPagingToArray();
   };
 }
