@@ -1,6 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
+import { chunk } from 'lodash';
 import { CogniteAsyncIterator } from '../../autoPagination';
 import CogniteClient from '../../cogniteClient';
 import { MetadataMap } from '../../metadata';
@@ -151,9 +152,9 @@ export class AssetsAPI {
     depth: number | any
   ): Promise<AssetList> {
     const subtree: AssetList = assets;
-    if (depth > currentDepth || depth === null) {
+    if (depth > currentDepth || depth === Infinity) {
       const children = await this.getChildren(assets);
-      if (children) {
+      if (children.length !== 0) {
         const subtreeOfChildren = await this.getAssetSubtree(
           children,
           currentDepth + 1,
@@ -166,12 +167,21 @@ export class AssetsAPI {
   }
 
   private getChildren = async (assets: AssetList) => {
-    const children: Asset[] = [];
-    for (const asset of assets) {
-      const childrenList = await asset.children();
-      children.push(...childrenList);
+    const ids = assets.map(asset => asset.id);
+    const chunks = chunk(ids, 100);
+    const assetsArray: Asset[] = [];
+    // tslint:disable-next-line:no-shadowed-variable
+    for (const chunk of chunks) {
+      const childrenList = await this.client.assets
+        .list({
+          filter: {
+            parentIds: chunk,
+          },
+        })
+        .autoPagingToArray({ limit: Infinity });
+      assetsArray.push(...childrenList);
     }
-    return new AssetList(this.client, children);
+    return new AssetList(this.client, assetsArray);
   };
 }
 

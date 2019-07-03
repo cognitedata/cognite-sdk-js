@@ -30,7 +30,6 @@ describe('Asset', () => {
       refId: 'test-child',
     },
     parentExternalId: rootAsset.externalId,
-
     externalId: 'test-child' + randomInt(),
   };
   let assets: AssetList;
@@ -41,14 +40,46 @@ describe('Asset', () => {
     expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
   });
 
-  // describe('AssetList Class', () => {
-  //   test('timeseries', () => {
-  //     const timeseries = new Array(2003).fill({
-  //       name: 'Sensor',
-  //       assetId: assets[1].externalId,
-  //     });
-  //   });
-  // });
+  test('update', async () => {
+    await client.assets.update([
+      {
+        id: assets[0].id,
+        update: {
+          name: { set: 'New name' },
+        },
+      },
+    ]);
+  });
+
+  test('delete', async () => {
+    await client.assets.delete(
+      assets.map(asset => ({
+        id: asset.id,
+      }))
+    );
+  });
+
+  test('list', async () => {
+    await client.assets
+      .list({
+        filter: {
+          name: rootAsset.name,
+          createdTime: { min: 0, max: Date.now() },
+        },
+      })
+      .autoPagingToArray({ limit: 100 });
+  });
+
+  test('search for root test asset', async () => {
+    const result = await client.assets.search({
+      search: {
+        name: rootAsset.name,
+      },
+    });
+    const asset = result[0];
+    expect(rootAsset.name).toBe(asset.name);
+    expect(rootAsset.description).toBe(asset.description);
+  });
 
   describe('Asset Class', () => {
     const newRootAsset = {
@@ -93,7 +124,7 @@ describe('Asset', () => {
       await createdAssets.map(asset => asset.delete());
     });
 
-    test('subtree', async () => {
+    test.only('subtree', async () => {
       const newRoot = {
         ...newRootAsset,
         externalId: 'test-root' + randomInt(),
@@ -107,7 +138,7 @@ describe('Asset', () => {
         });
       }
       const grandChildArray = [];
-      for (let index = 5; index < 7; index++) {
+      for (let index = 0; index < 105; index++) {
         grandChildArray.push({
           ...newGrandChildAsset,
           parentExternalId: childArray[0].externalId,
@@ -119,12 +150,13 @@ describe('Asset', () => {
         ...childArray,
         ...grandChildArray,
       ]);
-      expect(createdAssets.length).toBe(6);
-      await sleepPromise(2000);
+      await sleepPromise(2000); // eventual consistency in the backend
       const subtree = await createdAssets[0].subtree({ depth: 2 });
       const subtree2 = await createdAssets[0].subtree({ depth: 1 });
-      expect(subtree.length).toBe(6);
+      const subtree3 = await createdAssets[0].subtree();
+      expect(subtree.length).toBe(109);
       expect(subtree2.length).toBe(4);
+      expect(subtree3.length).toBe(109);
       await client.assets.delete(
         createdAssets.map(asset => ({ id: asset.id }))
       );
@@ -135,76 +167,16 @@ describe('Asset', () => {
         ...newRootAsset,
         externalId: 'test-root' + randomInt(),
       };
-      console.log('event2');
-      const createdAsset = await fetchResourceFromAssetClass(
-        client,
-        client.events,
-        newRoot
-      );
-      await client.assets.delete([{ id: createdAsset.createdAsset[0].id }]);
-      // await client.events.delete(events.map(event => ({ id: event.id })));
+      await fetchResourceFromAssetClass(client, client.events, newRoot);
     });
 
-    test.only('timeseries from Asset', async () => {
+    test('timeseries from Asset', async () => {
       const newRoot = {
         ...newRootAsset,
         externalId: 'test-root' + randomInt(),
       };
-      // const timeseries = new Array(2003).fill({
-      //   assetId: newRoot.externalId,
-      // });
-      console.log('timeseries2');
-      const createdAsset = await fetchResourceFromAssetClass(
-        client,
-        client.timeseries,
-        newRoot
-      );
-      await client.assets.delete([{ id: createdAsset.createdAsset[0].id }]);
-      // await client.timeseries.delete(
-      //   createdAsset.fetchedResource.map(timeserie => ({ id: timeserie.id }))
-      // );
+      await fetchResourceFromAssetClass(client, client.timeseries, newRoot);
     });
-  });
-
-  test('update', async () => {
-    await client.assets.update([
-      {
-        id: assets[0].id,
-        update: {
-          name: { set: 'New name' },
-        },
-      },
-    ]);
-  });
-
-  test('delete', async () => {
-    await client.assets.delete(
-      assets.map(asset => ({
-        id: asset.id,
-      }))
-    );
-  });
-
-  test('list', async () => {
-    await client.assets
-      .list({
-        filter: {
-          name: rootAsset.name,
-          createdTime: { min: 0, max: Date.now() },
-        },
-      })
-      .autoPagingToArray({ limit: 100 });
-  });
-
-  test('search for root test asset', async () => {
-    const result = await client.assets.search({
-      search: {
-        name: rootAsset.name,
-      },
-    });
-    const asset = result[0];
-    expect(rootAsset.name).toBe(asset.name);
-    expect(rootAsset.description).toBe(asset.description);
   });
 });
 
@@ -214,21 +186,21 @@ async function fetchResourceFromAssetClass(
   newRootAsset: any
 ) {
   const createdAsset = await client.assets.create([newRootAsset]);
-  const resourceList = new Array(2003).fill({
-    assetId: createdAsset[0].id,
-  });
+  const content =
+    api instanceof TimeSeriesAPI
+      ? { assetId: createdAsset[0].id }
+      : { assetIds: [createdAsset[0].id] };
+  const resourceList = new Array(2003).fill(content);
   const resources = await api.create(resourceList);
-  expect(resources.length).toBe(resourceList.length);
+  await sleepPromise(10000); // eventual consistency in the backend
   let fetchedResource: GetTimeSeriesMetadataDTO[] | CogniteEvent[];
   if (api instanceof TimeSeriesAPI) {
     fetchedResource = await createdAsset[0].timeSeries();
   } else {
     fetchedResource = await createdAsset[0].events();
   }
-  console.log('test2');
-  console.log(fetchedResource);
   expect(fetchedResource.length).toBe(resources.length);
   // @ts-ignore
   await api.delete(fetchedResource.map(resource => ({ id: resource.id })));
-  return { createdAsset, fetchedResource };
+  await client.assets.delete([{ id: createdAsset[0].id }]);
 }

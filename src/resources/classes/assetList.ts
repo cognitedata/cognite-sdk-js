@@ -39,18 +39,9 @@ export class AssetList extends Array<Asset> {
     return this.getResourcesFromAssets(this.client.events);
   };
 
-  private toChunkedArrayOfIds = (): number[][] => {
-    const ids = this.map(asset => asset.id);
-    let chunks: number[][] = [[]];
-    if (ids.length) {
-      chunks = chunk(ids, 100);
-    }
-    return chunks;
-  };
-
-  private async getResourcesFromAssets(
+  private getResourcesFromAssets = async (
     accessedApi: TimeSeriesAPI | FilesAPI | EventsAPI
-  ) {
+  ) => {
     type Type = GetTimeSeriesMetadataDTO | FilesMetadata | CogniteEvent;
     const chunks = this.toChunkedArrayOfIds();
     const promises: Promise<Type[]>[] = [];
@@ -74,5 +65,14 @@ export class AssetList extends Array<Asset> {
       responses.push(...result);
     });
     return responses;
-  }
+  };
+
+  private toChunkedArrayOfIds = (): number[][] => {
+    const ids = this.map(asset => asset.id);
+    let chunks: number[][] = [[]];
+    if (ids.length) {
+      chunks = chunk(ids, 100);
+    }
+    return chunks;
+  };
 }
