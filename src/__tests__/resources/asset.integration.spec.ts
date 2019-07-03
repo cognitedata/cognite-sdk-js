@@ -52,11 +52,7 @@ describe('Asset', () => {
   });
 
   test('delete', async () => {
-    await client.assets.delete(
-      assets.map(asset => ({
-        id: asset.id,
-      }))
-    );
+    await assets[0].delete();
   });
 
   test('list', async () => {
@@ -102,7 +98,7 @@ describe('Asset', () => {
       await client.assets.delete(
         createdAssets.slice(1).map(asset => ({ id: asset.id }))
       );
-      deleteAssets(createdAssets);
+      await client.assets.delete([{ id: createdAssets[0].id }]);
     });
 
     test('parent', async () => {
@@ -121,7 +117,7 @@ describe('Asset', () => {
       }
       const parent2 = await createdAssets[0].parent();
       expect(parent2).toBe(null);
-      deleteAssets(createdAssets);
+      await client.assets.delete([{ id: createdAssets[0].id }]);
     });
 
     test('children', async () => {
@@ -140,7 +136,7 @@ describe('Asset', () => {
       ]);
       const children = await createdAssets[0].children();
       expect(children.length).toBe(2);
-      deleteAssets(createdAssets);
+      await client.assets.delete([{ id: createdAssets[0].id }]);
     });
 
     test('subtree', async () => {
@@ -176,7 +172,7 @@ describe('Asset', () => {
       expect(subtree.length).toBe(109);
       expect(subtree2.length).toBe(4);
       expect(subtree3.length).toBe(109);
-      deleteAssets(createdAssets);
+      await client.assets.delete([{ id: createdAssets[0].id }]);
     });
 
     test('events from Asset', async () => {
@@ -196,10 +192,6 @@ describe('Asset', () => {
     });
   });
 });
-
-async function deleteAssets(createdAssets: AssetList) {
-  createdAssets.map(asset => asset.delete());
-}
 
 async function fetchResourceFromAssetClass(
   client: CogniteClient,
@@ -223,5 +215,5 @@ async function fetchResourceFromAssetClass(
   expect(fetchedResource.length).toBe(resources.length);
   // @ts-ignore
   await api.delete(fetchedResource.map(resource => ({ id: resource.id })));
-  deleteAssets(createdAssets);
+  await client.assets.delete([{ id: createdAssets[0].id }]);
 }
