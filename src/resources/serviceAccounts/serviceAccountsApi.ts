@@ -53,7 +53,7 @@ export class ServiceAccountsAPI {
     this.create = generateCreateEndpoint<
       ServiceAccountInput,
       ServiceAccount,
-      ServiceAccount
+      ServiceAccount[]
     >(instance, path, map, items => items);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }

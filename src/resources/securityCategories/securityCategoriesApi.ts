@@ -59,7 +59,7 @@ export class SecurityCategoriesAPI {
     this.create = generateCreateEndpoint<
       SecurityCategorySpec,
       SecurityCategory,
-      SecurityCategory
+      SecurityCategory[]
     >(instance, path, map, items => items);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
