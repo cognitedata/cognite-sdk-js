@@ -121,7 +121,7 @@ describe('Asset', () => {
       }
       const parent2 = await createdAssets[0].parent();
       expect(parent2).toBe(null);
-      await createdAssets.map(asset => asset.delete());
+      createdAssets.map(asset => asset.delete());
     });
 
     test('subtree', async () => {
