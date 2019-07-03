@@ -211,7 +211,7 @@ async function fetchResourceFromAssetClass(
     api instanceof TimeSeriesAPI
       ? { assetId: createdAssets[0].id }
       : { assetIds: [createdAssets[0].id] };
-  const resourceList = new Array(2003).fill(content);
+  const resourceList = new Array(1003).fill(content);
   const resources = await api.create(resourceList);
   await sleepPromise(10000); // eventual consistency in the backend
   let fetchedResource: GetTimeSeriesMetadataDTO[] | CogniteEvent[];
