@@ -70,22 +70,20 @@ export class Asset implements types.Asset {
   };
 
   public timeSeries = async (filter?: types.TimeseriesFilter) => {
-    console.log('timeseries1');
     return this.client.timeseries
       .list({
         ...(filter || {}),
         assetIds: [this.id],
       })
-      .autoPagingToArray();
+      .autoPagingToArray({ limit: Infinity });
   };
 
   public events = async (filter?: types.EventFilter) => {
-    console.log('events1');
     return this.client.events
       .list({
         filter: { ...(filter || {}), assetIds: [this.id] },
       })
-      .autoPagingToArray();
+      .autoPagingToArray({ limit: Infinity });
   };
 
   public files = async (filter?: types.FileFilter) => {
@@ -93,6 +91,6 @@ export class Asset implements types.Asset {
       .list({
         filter: { ...(filter || {}), assetIds: [this.id] },
       })
-      .autoPagingToArray();
+      .autoPagingToArray({ limit: Infinity });
   };
 }
