@@ -20,11 +20,13 @@ export function generateAxiosInstance(baseUrl: string, appId?: string) {
   if (appId) {
     headers['x-cdp-app'] = appId;
   }
-  return addTokenLeakageProtection(
-    axios.create({
-      baseURL: baseUrl,
-      headers,
-    })
+  return addArraySerializer(
+    addTokenLeakageProtection(
+      axios.create({
+        baseURL: baseUrl,
+        headers,
+      })
+    )
   );
 }
 
@@ -102,5 +104,21 @@ function addTokenLeakageProtection(
     return config;
   });
 
+  return axiosInstance;
+}
+
+function addArraySerializer(axiosInstance: AxiosInstance): AxiosInstance {
+  axiosInstance.interceptors.request.use(
+    (config: AxiosRequestConfig): AxiosRequestConfig => {
+      // loop through params
+      Object.keys(config.params || {}).forEach(key => {
+        const param = config.params[key];
+        if (Array.isArray(param)) {
+          config.params[key] = JSON.stringify(param);
+        }
+      });
+      return config;
+    }
+  );
   return axiosInstance;
 }
