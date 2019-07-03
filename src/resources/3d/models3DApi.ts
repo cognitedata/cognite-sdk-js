@@ -84,13 +84,13 @@ export class Models3DAPI {
       false,
       items => items
     );
-    this.create = generateCreateEndpoint<CreateModel3D, Model3D, Model3D>(
+    this.create = generateCreateEndpoint<CreateModel3D, Model3D, Model3D[]>(
       instance,
       path,
       map,
       items => items
     );
-    this.update = generateUpdateEndpoint<UpdateModel3D, Model3D, Model3D>(
+    this.update = generateUpdateEndpoint<UpdateModel3D, Model3D, Model3D[]>(
       instance,
       path,
       map,

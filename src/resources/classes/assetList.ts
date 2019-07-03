@@ -1,7 +1,6 @@
 // Copyright 2019 Cognite AS
 
 import { chunk } from 'lodash';
-import { types } from 'util';
 import { CogniteClient } from '../..';
 import {
   CogniteEvent,
@@ -24,44 +23,20 @@ export class AssetList extends Array<Asset> {
     return this.client.assets.delete(this.map(asset => ({ id: asset.id })));
   };
 
-  public timeSeries = async () => {
-    // return this.getResourcesFromAssets<TimeSeries>(this.client.timeseries);
-    const timeSeriesArray: GetTimeSeriesMetadataDTO[] = [];
-    this.toChunkedArrayOfIds().forEach(async idArray => {
-      const response = await this.client.timeseries
-        .list({ assetIds: idArray })
-        .autoPagingToArray({ limit: Infinity });
-      timeSeriesArray.push(...response);
-    });
-    return timeSeriesArray;
+  public timeSeries = async (): Promise<GetTimeSeriesMetadataDTO[]> => {
+    return (await this.getResourcesFromAssets(
+      this.client.timeseries
+    )) as GetTimeSeriesMetadataDTO[];
   };
 
-  public files = async () => {
-    // return this.getResourcesFromAssets<Files>(this.client.files);
-    const filesArray: FilesMetadata[] = [];
-    this.toChunkedArrayOfIds().forEach(async idArray => {
-      const response = await this.client.files
-        .list({
-          filter: { assetIds: idArray },
-        })
-        .autoPagingToArray({ limit: Infinity });
-      filesArray.push(...response);
-    });
-    return filesArray;
+  public files = async (): Promise<FilesMetadata[]> => {
+    return (await this.getResourcesFromAssets(
+      this.client.files
+    )) as FilesMetadata[];
   };
 
-  public events = async () => {
-    // return this.getResourcesFromAssets<Event>(this.client.events);
-    const eventArray: CogniteEvent[] = [];
-    this.toChunkedArrayOfIds().forEach(async idArray => {
-      const response = await this.client.events
-        .list({
-          filter: { assetIds: idArray },
-        })
-        .autoPagingToArray({ limit: Infinity });
-      eventArray.push(...response);
-    });
-    return eventArray;
+  public events = async (): Promise<CogniteEvent[]> => {
+    return this.getResourcesFromAssets(this.client.events);
   };
 
   private toChunkedArrayOfIds = (): number[][] => {
@@ -73,24 +48,31 @@ export class AssetList extends Array<Asset> {
     return chunks;
   };
 
-  private getResourcesFromAssets<Type>(
+  private async getResourcesFromAssets(
     accessedApi: TimeSeriesAPI | FilesAPI | EventsAPI
   ) {
-    const resourcesArray: Type[] = [];
-    this.toChunkedArrayOfIds().forEach(async idArray => {
+    type Type = GetTimeSeriesMetadataDTO | FilesMetadata | CogniteEvent;
+    const chunks = this.toChunkedArrayOfIds();
+    const promises: Promise<Type[]>[] = [];
+    for (const idArray of chunks) {
       const assetIds = { assetIds: idArray };
-      if (resourcesArray instanceof TimeSeriesAPI) {
-        const response = await accessedApi
-          .list(assetIds)
-          .autoPagingToArray({ limit: Infinity });
-        resourcesArray.push(...response);
+      if (accessedApi instanceof TimeSeriesAPI) {
+        promises.push(
+          accessedApi.list(assetIds).autoPagingToArray({ limit: Infinity })
+        );
       } else {
-        const response = await accessedApi
-          .list({ filter: assetIds })
-          .autoPagingToArray({ limit: Infinity });
-        resourcesArray.push(...response);
+        promises.push(
+          accessedApi
+            .list({ filter: assetIds })
+            .autoPagingToArray({ limit: Infinity })
+        );
       }
+    }
+    const results = await Promise.all(promises);
+    const responses: Type[] = [];
+    results.forEach(result => {
+      responses.push(...result);
     });
-    return resourcesArray;
+    return responses;
   }
 }

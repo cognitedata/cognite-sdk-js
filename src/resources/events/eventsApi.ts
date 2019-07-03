@@ -95,7 +95,7 @@ export class EventsAPI {
     this.create = generateCreateEndpoint<
       ExternalEvent,
       CogniteEvent,
-      CogniteEvent
+      CogniteEvent[]
     >(instance, path, map, items => items);
     this.list = generateListEndpoint<
       EventFilterRequest,
@@ -105,17 +105,17 @@ export class EventsAPI {
     this.retrieve = generateRetrieveEndpoint<
       IdEither,
       CogniteEvent,
-      CogniteEvent
+      CogniteEvent[]
     >(instance, path, map, items => items);
     this.update = generateUpdateEndpoint<
       EventChange,
       CogniteEvent,
-      CogniteEvent
+      CogniteEvent[]
     >(instance, path, map, items => items);
     this.search = generateSearchEndpoint<
       EventSearchRequest,
       CogniteEvent,
-      CogniteEvent
+      CogniteEvent[]
     >(instance, path, map, items => items);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }

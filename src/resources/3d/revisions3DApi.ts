@@ -60,7 +60,7 @@ export class Revisions3DAPI {
    * ```
    */
   public create: Revisions3DCreateEndpoint = (modelId, items) => {
-    return generateCreateEndpoint<CreateRevision3D, Revision3D, Revision3D>(
+    return generateCreateEndpoint<CreateRevision3D, Revision3D, Revision3D[]>(
       this.instance,
       parameterizePath(this.project, modelId),
       this.map,
@@ -84,7 +84,7 @@ export class Revisions3DAPI {
    * ```
    */
   public update: Revisions3DUpdateEndpoint = (modelId, items) => {
-    return generateUpdateEndpoint<UpdateRevision3D, Revision3D, Revision3D>(
+    return generateUpdateEndpoint<UpdateRevision3D, Revision3D, Revision3D[]>(
       this.instance,
       parameterizePath(this.project, modelId),
       this.map,

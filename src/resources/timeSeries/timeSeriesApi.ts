@@ -93,7 +93,7 @@ export class TimeSeriesAPI {
     this.create = generateCreateEndpoint<
       PostTimeSeriesMetadataDTO,
       GetTimeSeriesMetadataDTO,
-      GetTimeSeriesMetadataDTO
+      GetTimeSeriesMetadataDTO[]
     >(instance, path, map, items => items);
     this.list = generateListEndpoint<
       TimeseriesFilter,
@@ -103,17 +103,17 @@ export class TimeSeriesAPI {
     this.search = generateSearchEndpoint<
       TimeSeriesSearchDTO,
       GetTimeSeriesMetadataDTO,
-      GetTimeSeriesMetadataDTO
+      GetTimeSeriesMetadataDTO[]
     >(instance, path, map, items => items);
     this.retrieve = generateRetrieveEndpoint<
       TimeseriesIdEither,
       GetTimeSeriesMetadataDTO,
-      GetTimeSeriesMetadataDTO
+      GetTimeSeriesMetadataDTO[]
     >(instance, path, map, items => items);
     this.update = generateUpdateEndpoint<
       TimeSeriesUpdate,
       GetTimeSeriesMetadataDTO,
-      GetTimeSeriesMetadataDTO
+      GetTimeSeriesMetadataDTO[]
     >(instance, path, map, items => items);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
