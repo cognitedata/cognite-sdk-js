@@ -102,7 +102,7 @@ describe('Asset', () => {
       await client.assets.delete(
         createdAssets.slice(1).map(asset => ({ id: asset.id }))
       );
-      await client.assets.delete([{ id: createdAssets[0].id }]);
+      deleteAssets(createdAssets);
     });
 
     test('parent', async () => {
@@ -121,7 +121,26 @@ describe('Asset', () => {
       }
       const parent2 = await createdAssets[0].parent();
       expect(parent2).toBe(null);
-      createdAssets.map(asset => asset.delete());
+      deleteAssets(createdAssets);
+    });
+
+    test('children', async () => {
+      const newRoot = {
+        ...newRootAsset,
+        externalId: 'test-root' + randomInt(),
+      };
+      const newChild = {
+        ...newChildAsset,
+        parentExternalId: newRoot.externalId,
+      };
+      const createdAssets = await client.assets.create([
+        newRoot,
+        newChild,
+        newChild,
+      ]);
+      const children = await createdAssets[0].children();
+      expect(children.length).toBe(2);
+      deleteAssets(createdAssets);
     });
 
     test('subtree', async () => {
@@ -157,9 +176,7 @@ describe('Asset', () => {
       expect(subtree.length).toBe(109);
       expect(subtree2.length).toBe(4);
       expect(subtree3.length).toBe(109);
-      await client.assets.delete(
-        createdAssets.map(asset => ({ id: asset.id }))
-      );
+      deleteAssets(createdAssets);
     });
 
     test('events from Asset', async () => {
@@ -180,27 +197,31 @@ describe('Asset', () => {
   });
 });
 
+async function deleteAssets(createdAssets: AssetList) {
+  createdAssets.map(asset => asset.delete());
+}
+
 async function fetchResourceFromAssetClass(
   client: CogniteClient,
   api: TimeSeriesAPI | EventsAPI,
   newRootAsset: any
 ) {
-  const createdAsset = await client.assets.create([newRootAsset]);
+  const createdAssets = await client.assets.create([newRootAsset]);
   const content =
     api instanceof TimeSeriesAPI
-      ? { assetId: createdAsset[0].id }
-      : { assetIds: [createdAsset[0].id] };
+      ? { assetId: createdAssets[0].id }
+      : { assetIds: [createdAssets[0].id] };
   const resourceList = new Array(2003).fill(content);
   const resources = await api.create(resourceList);
   await sleepPromise(10000); // eventual consistency in the backend
   let fetchedResource: GetTimeSeriesMetadataDTO[] | CogniteEvent[];
   if (api instanceof TimeSeriesAPI) {
-    fetchedResource = await createdAsset[0].timeSeries();
+    fetchedResource = await createdAssets[0].timeSeries();
   } else {
-    fetchedResource = await createdAsset[0].events();
+    fetchedResource = await createdAssets[0].events();
   }
   expect(fetchedResource.length).toBe(resources.length);
   // @ts-ignore
   await api.delete(fetchedResource.map(resource => ({ id: resource.id })));
-  await client.assets.delete([{ id: createdAsset[0].id }]);
+  deleteAssets(createdAssets);
 }
