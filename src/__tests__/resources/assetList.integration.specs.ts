@@ -17,7 +17,6 @@ describe('assetList', () => {
       { name: 'Temprature sensor', assetId: createdAssets[1].id },
     ];
     const createdTimeseries = await client.timeseries.create(timeseries);
-    console.log(createdTimeseries);
     await sleepPromise(2000); // Backend issues
     const timeSeriesFromAssetList = await createdAssets.timeSeries();
     expect(timeSeriesFromAssetList.length).toBe(createdTimeseries.length);
