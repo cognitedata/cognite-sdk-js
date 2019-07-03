@@ -124,7 +124,7 @@ describe('Asset', () => {
       await createdAssets.map(asset => asset.delete());
     });
 
-    test.only('subtree', async () => {
+    test('subtree', async () => {
       const newRoot = {
         ...newRootAsset,
         externalId: 'test-root' + randomInt(),
