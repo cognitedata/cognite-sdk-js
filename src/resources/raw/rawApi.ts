@@ -66,7 +66,7 @@ export class RawAPI {
       false,
       items => items
     );
-    this.createDatabases = generateCreateEndpoint<RawDB, RawDB, RawDB>(
+    this.createDatabases = generateCreateEndpoint<RawDB, RawDB, RawDB[]>(
       instance,
       path,
       map,
