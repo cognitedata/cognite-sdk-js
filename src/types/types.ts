@@ -154,14 +154,6 @@ export type ArrayPatchLong =
 export interface Asset extends ExternalAsset, AssetInternalId {
   lastUpdatedTime: Date;
   createdTime: Date;
-  /**
-   * IDs of assets on the path to the asset.
-   */
-  path: number[];
-  /**
-   * Asset path depth (number of levels below root node).
-   */
-  depth: number;
 }
 
 export type AssetChange = AssetChangeById | AssetChangeByExternalId;
