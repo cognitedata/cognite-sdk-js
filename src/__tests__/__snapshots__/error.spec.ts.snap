@@ -1,5 +1,42 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Cognite multi error create with 2 fails and 1 success 1`] = `
+"The API Failed to process some items
+{
+  \\"succeded\\": [
+    [
+      2
+    ]
+  ],
+  \\"responses\\": [],
+  \\"failed\\": [
+    [
+      0,
+      1
+    ]
+  ],
+  \\"errors\\": [
+    {
+      \\"status\\": 400,
+      \\"requestId\\": \\"r1\\",
+      \\"missing\\": [
+        \\"something\\"
+      ]
+    },
+    {
+      \\"status\\": 500,
+      \\"requestId\\": \\"r2\\",
+      \\"missing\\": [
+        \\"more\\"
+      ],
+      \\"duplicated\\": [
+        \\"this one\\"
+      ]
+    }
+  ]
+}"
+`;
+
 exports[`CogniteError extra field 1`] = `
 "Abc | code: 500
 {
