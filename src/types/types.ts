@@ -1019,6 +1019,10 @@ export interface PostTimeSeriesMetadataDTO {
    */
   externalId?: CogniteExternalId;
   /**
+   * Set a value for legacyName to allow applications using API v0.3, v04, v05, and v0.6 to access this time series. The legacy name is the human-readable name for the time series and is mapped to the name field used in API versions 0.3-0.6. The legacyName field value must be unique, and setting this value to an already existing value will return an error. We recommend that you set this field to the same value as externalId.
+   */
+  legacyName?: string;
+  /**
    * Human readable name of time series
    */
   name?: string;
