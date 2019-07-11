@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateCreateEndpoint,
   generateDeleteEndpoint,
   generateListEndpoint,
@@ -13,7 +13,6 @@ import {
 import {
   CogniteInternalId,
   CreateModel3D,
-  CursorResponse,
   InternalId,
   Model3D,
   Model3DListRequest,
@@ -88,7 +87,7 @@ export class Models3DAPI {
 
 export type Models3DListEndpoint = (
   scope?: Model3DListRequest
-) => Promise<CursorResponse<Model3D>> & CogniteAsyncIterator<Model3D>;
+) => CursorAndAsyncIterator<Model3D>;
 
 export type Models3DCreateEndpoint = (
   models: CreateModel3D[]

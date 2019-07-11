@@ -1,10 +1,10 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { rawRequest } from '../../axiosWrappers';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateCreateEndpoint,
   generateDeleteEndpoint,
   generateListEndpoint,
@@ -14,7 +14,6 @@ import {
 import {
   CogniteInternalId,
   CreateRevision3D,
-  CursorResponse,
   InternalId,
   List3DNodesQuery,
   Node3D,
@@ -186,7 +185,7 @@ export class Revisions3DAPI {
 export type Revisions3DListEndpoint = (
   modelId: CogniteInternalId,
   filter?: Revision3DListRequest
-) => Promise<CursorResponse<Revision3D>> & CogniteAsyncIterator<Revision3D>;
+) => CursorAndAsyncIterator<Revision3D>;
 
 export type Revisions3DCreateEndpoint = (
   modelId: CogniteInternalId,
@@ -218,14 +217,14 @@ export type Revisions3DListNodesEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   query?: List3DNodesQuery
-) => Promise<CursorResponse<Node3D>> & CogniteAsyncIterator<Node3D>;
+) => CursorAndAsyncIterator<Node3D>;
 
 export type Revisions3DListNodesAncestorsEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   nodeId: CogniteInternalId,
   query?: List3DNodesQuery
-) => Promise<CursorResponse<Node3D>> & CogniteAsyncIterator<Node3D>;
+) => CursorAndAsyncIterator<Node3D>;
 
 function parameterizePath(
   project: string,

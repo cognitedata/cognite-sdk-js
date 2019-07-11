@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateCreateEndpoint,
   generateDeleteEndpoint,
   generateListEndpoint,
@@ -17,7 +17,6 @@ import {
   AssetIdEither,
   AssetListScope,
   AssetSearchFilter,
-  CursorResponse,
   ExternalAssetItem,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
@@ -109,7 +108,7 @@ export type AssetCreateEndpoint = (
 
 export type AssetListEndpoint = (
   scope?: AssetListScope
-) => Promise<CursorResponse<Asset>> & CogniteAsyncIterator<Asset>;
+) => CursorAndAsyncIterator<Asset>;
 
 export type AssetRetrieveEndpoint = (ids: AssetIdEither[]) => Promise<Asset[]>;
 

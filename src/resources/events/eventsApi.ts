@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateCreateEndpoint,
   generateDeleteEndpoint,
   generateListEndpoint,
@@ -13,7 +13,6 @@ import {
 } from '../../standardMethods';
 import {
   CogniteEvent,
-  CursorResponse,
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
@@ -108,7 +107,7 @@ export type EventsCreateEndpoint = (
 
 export type EventsListEndpoint = (
   scope?: EventFilterRequest
-) => Promise<CursorResponse<CogniteEvent>> & CogniteAsyncIterator<CogniteEvent>;
+) => CursorAndAsyncIterator<CogniteEvent>;
 
 export type EventsRetrieveEndpoint = (
   ids: IdEither[]

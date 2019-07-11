@@ -2,7 +2,10 @@
 
 import { AxiosInstance } from 'axios';
 import { chunk, concat } from 'lodash';
-import { makeAutoPaginationMethods } from './autoPagination';
+import {
+  CogniteAsyncIterator,
+  makeAutoPaginationMethods,
+} from './autoPagination';
 import { rawRequest } from './axiosWrappers';
 import { MetadataMap } from './metadata';
 import { promiseAllWithData } from './resources/assets/assetUtils';
@@ -73,6 +76,9 @@ export function listByPost<RequestFilter, ResponseType>(
     true
   );
 }
+
+export type CursorAndAsyncIterator<T> = Promise<CursorResponse<T>> &
+  CogniteAsyncIterator<T>;
 
 /** @hidden */
 export function generateListEndpoint<
