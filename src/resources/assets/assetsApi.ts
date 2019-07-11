@@ -5,7 +5,7 @@ import { CogniteAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
   generateCreateEndpoint,
-  generateDeleteEndpoint,
+  generateDeleteEndpointWithParams,
   generateListEndpoint,
   generateRetrieveEndpoint,
   generateSearchEndpoint,
@@ -98,7 +98,7 @@ export class AssetsAPI {
     this.retrieve = generateRetrieveEndpoint(instance, path, map);
     this.update = generateUpdateEndpoint(instance, path, map);
     this.search = generateSearchEndpoint(instance, path, map);
-    this.delete = generateDeleteEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpointWithParams(instance, path, map);
   }
 }
 
@@ -118,4 +118,11 @@ export type AssetSearchEndpoint = (
   query: AssetSearchFilter
 ) => Promise<Asset[]>;
 
-export type AssetDeleteEndpoint = (ids: AssetIdEither[]) => Promise<{}>;
+export interface AssetDeleteParams {
+  recursive?: boolean;
+}
+
+export type AssetDeleteEndpoint = (
+  ids: AssetIdEither[],
+  params?: AssetDeleteParams
+) => Promise<{}>;

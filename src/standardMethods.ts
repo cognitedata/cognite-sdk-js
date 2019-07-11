@@ -252,6 +252,32 @@ export function generateDeleteEndpoint<IdType>(
 }
 
 /** @hidden */
+export function generateDeleteEndpointWithParams<IdType, ParamsType>(
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  metadataMap: MetadataMap,
+  chunkFunction?: (ids: IdType[]) => IdType[][]
+) {
+  return async function remove(
+    ids: IdType[],
+    params?: ParamsType
+  ): Promise<{}> {
+    const chunks = doChunking<IdType>(ids, chunkFunction);
+    const responses = await promiseAllWithData(
+      chunks,
+      input =>
+        rawRequest<ItemsResponse<ResponseType>>(axiosInstance, {
+          method: 'post',
+          url: `${resourcePath}/delete`,
+          data: { ...(params || {}), items: input },
+        }),
+      true
+    );
+    return metadataMap.addAndReturn({}, responses[0]);
+  };
+}
+
+/** @hidden */
 export function generateUpdateEndpoint<RequestType, ResponseType>(
   axiosInstance: AxiosInstance,
   resourcePath: string,

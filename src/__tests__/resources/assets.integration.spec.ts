@@ -4,6 +4,7 @@ import CogniteClient from '../../cogniteClient';
 import { CogniteError } from '../../error';
 import { CogniteMultiError } from '../../multiError';
 import { Asset } from '../../types/types';
+import { sleepPromise } from '../../utils';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Asset integration test', () => {
@@ -108,10 +109,31 @@ describe('Asset integration test', () => {
       ...childArr,
     ]);
     expect(createdAssets.length).toBe(1001);
-    await client.assets.delete(
-      createdAssets.slice(1).map(asset => ({ id: asset.id }))
-    );
-    await client.assets.delete([{ id: createdAssets[0].id }]);
+    await client.assets.delete([{ id: createdAssets[0].id }], {
+      recursive: true,
+    }); // only need to delete the root asset
+  });
+
+  test('fail to delete a root asset with children', async () => {
+    const newRootAsset = {
+      ...rootAsset,
+      externalId: 'test-root' + randomInt(),
+    };
+    const newChildAsset = {
+      ...childAsset,
+      parentExternalId: newRootAsset.externalId,
+    };
+    await client.assets.create([newRootAsset, newChildAsset]);
+    await sleepPromise(2000);
+    const prom = client.assets.delete([
+      { externalId: newRootAsset.externalId },
+    ]);
+    expect(prom).rejects.toThrow();
+
+    // clean up
+    await client.assets.delete([{ externalId: newRootAsset.externalId }], {
+      recursive: true,
+    });
   });
 
   test('retrieve', async () => {
