@@ -1,13 +1,19 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { CogniteEvent } from '../../types/types';
+import { Asset, CogniteEvent } from '../../types/types';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('Events integration test', () => {
   let client: CogniteClient;
+  let asset: Asset;
   beforeAll(async () => {
     client = setupLoggedInClient();
+    [asset] = await client.assets.create([{ name: 'Test-asset' }]);
+  });
+
+  afterAll(async () => {
+    await client.assets.delete([{ id: asset.id }]);
   });
 
   const events = [
@@ -79,5 +85,27 @@ describe('Events integration test', () => {
       })
       .autoPagingToArray({ limit: 5 });
     expect(response.length).toBeGreaterThan(0);
+  });
+
+  test('list with rootAssetIds', async () => {
+    const response = await client.events
+      .list({
+        filter: {
+          rootAssetIds: [{ id: asset.id }],
+        },
+        limit: 1,
+      })
+      .autoPagingToArray({ limit: 1 });
+    expect(response.length).toBe(0); // no events attached to the asset
+  });
+
+  test('search with rootAssetIds', async () => {
+    const response = await client.events.search({
+      filter: {
+        rootAssetIds: [{ id: asset.id }],
+      },
+      limit: 1,
+    });
+    expect(response.length).toBe(0); // no events attached to the asset
   });
 });
