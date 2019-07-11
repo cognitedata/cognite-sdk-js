@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { CogniteClient } from '../..';
+import CogniteClient from '../cogniteClient';
 import { AssetList } from '../../resources/classes/assetList';
 import { EventsAPI } from '../../resources/events/eventsApi';
 import { TimeSeriesAPI } from '../../resources/timeSeries/timeSeriesApi';
