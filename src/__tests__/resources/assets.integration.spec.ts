@@ -4,6 +4,7 @@ import CogniteClient from '../../cogniteClient';
 import { CogniteError } from '../../error';
 import { CogniteMultiError } from '../../multiError';
 import { Asset } from '../../types/types';
+import { sleepPromise } from '../../utils';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Asset integration test', () => {
@@ -123,9 +124,11 @@ describe('Asset integration test', () => {
       parentExternalId: newRootAsset.externalId,
     };
     await client.assets.create([newRootAsset, newChildAsset]);
-    expect(
-      client.assets.delete([{ externalId: newRootAsset.externalId }])
-    ).rejects.toThrowErrorMatchingSnapshot();
+    await sleepPromise(2000);
+    const prom = client.assets.delete([
+      { externalId: newRootAsset.externalId },
+    ]);
+    expect(prom).rejects.toThrow();
 
     // clean up
     await client.assets.delete([{ externalId: newRootAsset.externalId }], {
