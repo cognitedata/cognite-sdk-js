@@ -9,6 +9,7 @@ import {
 } from '../../standardMethods';
 import {
   CogniteInternalId,
+  CursorResponse,
   List3DNodesQuery,
   ListRevealSectors3DQuery,
   RevealNode3D,
@@ -142,20 +143,21 @@ export type Viewer3DListRevealNodes3DEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   query?: List3DNodesQuery
-) => CogniteAsyncIterator<RevealNode3D>;
+) => Promise<CursorResponse<RevealNode3D>> & CogniteAsyncIterator<RevealNode3D>;
 
 export type Viewer3DListRevealNodeAncestorsEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   nodeId: CogniteInternalId,
   query?: List3DNodesQuery
-) => CogniteAsyncIterator<RevealNode3D>;
+) => Promise<CursorResponse<RevealNode3D>> & CogniteAsyncIterator<RevealNode3D>;
 
 export type Viewer3DListRevealSectorsEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   query?: ListRevealSectors3DQuery
-) => CogniteAsyncIterator<RevealSector3D>;
+) => Promise<CursorResponse<RevealSector3D>> &
+  CogniteAsyncIterator<RevealSector3D>;
 
 export type Viewer3DRetrieveUnrealRevisionEndpoint = (
   modelId: CogniteInternalId,

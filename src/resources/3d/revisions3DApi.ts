@@ -14,6 +14,7 @@ import {
 import {
   CogniteInternalId,
   CreateRevision3D,
+  CursorResponse,
   InternalId,
   List3DNodesQuery,
   Node3D,
@@ -185,7 +186,7 @@ export class Revisions3DAPI {
 export type Revisions3DListEndpoint = (
   modelId: CogniteInternalId,
   filter?: Revision3DListRequest
-) => CogniteAsyncIterator<Revision3D>;
+) => Promise<CursorResponse<Revision3D>> & CogniteAsyncIterator<Revision3D>;
 
 export type Revisions3DCreateEndpoint = (
   modelId: CogniteInternalId,
@@ -217,14 +218,14 @@ export type Revisions3DListNodesEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   query?: List3DNodesQuery
-) => CogniteAsyncIterator<Node3D>;
+) => Promise<CursorResponse<Node3D>> & CogniteAsyncIterator<Node3D>;
 
 export type Revisions3DListNodesAncestorsEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   nodeId: CogniteInternalId,
   query?: List3DNodesQuery
-) => CogniteAsyncIterator<Node3D>;
+) => Promise<CursorResponse<Node3D>> & CogniteAsyncIterator<Node3D>;
 
 function parameterizePath(
   project: string,

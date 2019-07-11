@@ -11,6 +11,7 @@ import {
   generateRetrieveSingleEndpoint,
 } from '../../standardMethods';
 import {
+  CursorResponse,
   ItemsResponse,
   ListRawDatabases,
   ListRawRows,
@@ -215,7 +216,7 @@ export class RawAPI {
 
 export type RawListDatabasesEndpoint = (
   query?: ListRawDatabases
-) => CogniteAsyncIterator<RawDB>;
+) => Promise<CursorResponse<RawDB>> & CogniteAsyncIterator<RawDB>;
 
 export type RawCreateDatabasesEndpoint = (items: RawDB[]) => Promise<RawDB[]>;
 
@@ -224,7 +225,7 @@ export type RawDeleteDatabasesEndpoint = (items: RawDB[]) => Promise<{}>;
 export type RawListTablesEndpoint = (
   databaseName: string,
   query?: ListRawTables
-) => CogniteAsyncIterator<RawDBTable>;
+) => Promise<CursorResponse<RawDBTable>> & CogniteAsyncIterator<RawDBTable>;
 
 export type RawCreateTablesEndpoint = (
   databaseName: string,
@@ -242,7 +243,7 @@ export type RawListRowsEndpoint = (
   databaseName: string,
   tableName: string,
   query?: ListRawRows
-) => CogniteAsyncIterator<RawDBRow>;
+) => Promise<CursorResponse<RawDBRow>> & CogniteAsyncIterator<RawDBRow>;
 
 export type RawInsertRowsEndpoint = (
   databaseName: string,

@@ -17,6 +17,7 @@ import {
   AssetIdEither,
   AssetListScope,
   AssetSearchFilter,
+  CursorResponse,
   ExternalAssetItem,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
@@ -108,7 +109,7 @@ export type AssetCreateEndpoint = (
 
 export type AssetListEndpoint = (
   scope?: AssetListScope
-) => CogniteAsyncIterator<Asset>;
+) => Promise<CursorResponse<Asset>> & CogniteAsyncIterator<Asset>;
 
 export type AssetRetrieveEndpoint = (ids: AssetIdEither[]) => Promise<Asset[]>;
 

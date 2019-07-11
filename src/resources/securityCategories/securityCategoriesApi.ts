@@ -10,6 +10,7 @@ import {
 } from '../../standardMethods';
 import {
   CogniteInternalId,
+  CursorResponse,
   ListSecurityCategories,
   SecurityCategory,
   SecurityCategorySpec,
@@ -59,7 +60,8 @@ export class SecurityCategoriesAPI {
 
 export type SecurityCategoriesListEndpoint = (
   query?: ListSecurityCategories
-) => CogniteAsyncIterator<SecurityCategory>;
+) => Promise<CursorResponse<SecurityCategory>> &
+  CogniteAsyncIterator<SecurityCategory>;
 
 export type SecurityCategoriesCreateEndpoint = (
   items: SecurityCategorySpec[]

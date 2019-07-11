@@ -12,6 +12,7 @@ import {
   generateUpdateEndpoint,
 } from '../../standardMethods';
 import {
+  CursorResponse,
   GetTimeSeriesMetadataDTO,
   PostTimeSeriesMetadataDTO,
   TimeseriesFilter,
@@ -101,7 +102,8 @@ export class TimeSeriesAPI {
 
 export type TimeSeriesListEndpoint = (
   filter?: TimeseriesFilter
-) => CogniteAsyncIterator<GetTimeSeriesMetadataDTO>;
+) => Promise<CursorResponse<GetTimeSeriesMetadataDTO>> &
+  CogniteAsyncIterator<GetTimeSeriesMetadataDTO>;
 
 export type TimeSeriesCreateEndpoint = (
   items: PostTimeSeriesMetadataDTO[]

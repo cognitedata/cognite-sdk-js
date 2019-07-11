@@ -13,6 +13,7 @@ import {
 } from '../../standardMethods';
 import {
   CogniteEvent,
+  CursorResponse,
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
@@ -107,7 +108,7 @@ export type EventsCreateEndpoint = (
 
 export type EventsListEndpoint = (
   scope?: EventFilterRequest
-) => CogniteAsyncIterator<CogniteEvent>;
+) => Promise<CursorResponse<CogniteEvent>> & CogniteAsyncIterator<CogniteEvent>;
 
 export type EventsRetrieveEndpoint = (
   ids: IdEither[]

@@ -11,6 +11,7 @@ import {
   generateUpdateEndpoint,
 } from '../../standardMethods';
 import {
+  CursorResponse,
   ExternalFilesMetadata,
   FileChangeUpdate,
   FileContent,
@@ -120,7 +121,8 @@ export class FilesAPI {
 
 export type FilesListEndpoint = (
   scope?: FileRequestFilter
-) => CogniteAsyncIterator<FilesMetadata>;
+) => Promise<CursorResponse<FilesMetadata>> &
+  CogniteAsyncIterator<FilesMetadata>;
 
 export type FilesUploadEndpoint = (
   metadata: ExternalFilesMetadata,

@@ -13,6 +13,7 @@ import {
   AssetMappings3DListFilter,
   CogniteInternalId,
   CreateAssetMapping3D,
+  CursorResponse,
   DeleteAssetMapping3D,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
@@ -112,7 +113,8 @@ export type AssetMappings3DListEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   filter?: AssetMappings3DListFilter
-) => CogniteAsyncIterator<AssetMapping3D>;
+) => Promise<CursorResponse<AssetMapping3D>> &
+  CogniteAsyncIterator<AssetMapping3D>;
 
 export type AssetMappings3DCreateEndpoint = (
   modelId: CogniteInternalId,

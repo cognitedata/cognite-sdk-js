@@ -13,6 +13,7 @@ import {
 import {
   CogniteInternalId,
   CreateModel3D,
+  CursorResponse,
   InternalId,
   Model3D,
   Model3DListRequest,
@@ -87,7 +88,7 @@ export class Models3DAPI {
 
 export type Models3DListEndpoint = (
   scope?: Model3DListRequest
-) => CogniteAsyncIterator<Model3D>;
+) => Promise<CursorResponse<Model3D>> & CogniteAsyncIterator<Model3D>;
 
 export type Models3DCreateEndpoint = (
   models: CreateModel3D[]
