@@ -116,7 +116,7 @@ describe('Asset', () => {
         expect(parent.id).toEqual(createdAssets[0].id);
       }
       const parent2 = await createdAssets[0].parent();
-      expect(parent2).toBe(null);
+      expect(await createdAssets[0].parent()).toBe(null);
       await client.assets.delete([{ id: createdAssets[0].id }]);
     });
 
