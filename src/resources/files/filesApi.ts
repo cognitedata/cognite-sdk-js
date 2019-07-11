@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateDeleteEndpoint,
   generateListEndpoint,
   generateRetrieveEndpoint,
@@ -120,7 +120,7 @@ export class FilesAPI {
 
 export type FilesListEndpoint = (
   scope?: FileRequestFilter
-) => CogniteAsyncIterator<FilesMetadata>;
+) => CursorAndAsyncIterator<FilesMetadata>;
 
 export type FilesUploadEndpoint = (
   metadata: ExternalFilesMetadata,

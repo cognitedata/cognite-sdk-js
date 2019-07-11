@@ -161,6 +161,13 @@ describe('Asset integration test', () => {
   });
 
   test('list', async () => {
+    const response = await client.assets.list({ limit: 1 });
+    expect(response.nextCursor).toBeDefined();
+    expect(response.items).toBeDefined();
+    expect(response.items[0].id).toBeDefined();
+  });
+
+  test('list with autoPaging', async () => {
     await client.assets
       .list({
         filter: {

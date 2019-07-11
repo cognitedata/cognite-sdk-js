@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateListEndpoint,
   generateRetrieveSingleEndpoint,
 } from '../../standardMethods';
@@ -142,20 +142,20 @@ export type Viewer3DListRevealNodes3DEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   query?: List3DNodesQuery
-) => CogniteAsyncIterator<RevealNode3D>;
+) => CursorAndAsyncIterator<RevealNode3D>;
 
 export type Viewer3DListRevealNodeAncestorsEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   nodeId: CogniteInternalId,
   query?: List3DNodesQuery
-) => CogniteAsyncIterator<RevealNode3D>;
+) => CursorAndAsyncIterator<RevealNode3D>;
 
 export type Viewer3DListRevealSectorsEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   query?: ListRevealSectors3DQuery
-) => CogniteAsyncIterator<RevealSector3D>;
+) => CursorAndAsyncIterator<RevealSector3D>;
 
 export type Viewer3DRetrieveUnrealRevisionEndpoint = (
   modelId: CogniteInternalId,
