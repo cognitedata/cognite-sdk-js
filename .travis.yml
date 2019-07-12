@@ -42,4 +42,7 @@ deploy:
     on:
       branch: v1
 after_deploy:
+  - sudo add-apt-repository ppa:cpick/hub
+  - sudo apt-get update
+  - sudo apt-get install hub
   - sh scripts/afterRelease.sh
