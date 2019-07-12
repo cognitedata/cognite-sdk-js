@@ -25,6 +25,18 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
   return async function create(items) {
     type Response = ItemsResponse<ResponseType>;
     const chunks = doChunking<RequestType>(items, chunkFunction);
+
+    // create a map that maps index in chunks to the original index in items (chunkFunction can change the order - assets)
+    const itemIndex = new Map<RequestType, number>();
+    items.forEach((item, index) => {
+      itemIndex.set(item, index);
+    });
+    const chunkIndexToItemsIndex = new Map<number, number>();
+    concat([], ...chunks).forEach((item, index) => {
+      const originalIndex = itemIndex.get(item) as number;
+      chunkIndexToItemsIndex.set(index, originalIndex);
+    });
+
     const responses = await promiseAllWithData(
       chunks,
       input =>
@@ -39,7 +51,14 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
       [],
       ...responses.map(response => response.data.items)
     );
-    return metadataMap.addAndReturn(mergedResponses, responses[0]);
+
+    // make sure that the response has the same order as items (sortedResponse[index] should match items[index])
+    const sortedResponse: ResponseType[] = [];
+    mergedResponses.forEach((item, index) => {
+      const originalIndex = chunkIndexToItemsIndex.get(index) as number;
+      sortedResponse[originalIndex] = item;
+    });
+    return metadataMap.addAndReturn(sortedResponse, responses[0]);
   };
 }
 

@@ -7,6 +7,7 @@ import { Asset } from '../../types/types';
 import { sleepPromise } from '../../utils';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
+// tslint:disable-next-line:no-big-function
 describe('Asset integration test', () => {
   let client: CogniteClient;
   beforeAll(async () => {
@@ -124,7 +125,7 @@ describe('Asset integration test', () => {
       parentExternalId: newRootAsset.externalId,
     };
     await client.assets.create([newRootAsset, newChildAsset]);
-    await sleepPromise(2000);
+    await sleepPromise(5000);
     const prom = client.assets.delete([
       { externalId: newRootAsset.externalId },
     ]);
@@ -196,6 +197,7 @@ describe('Asset integration test', () => {
       })
       .autoPagingToArray({ limit: 2 });
     expect(nonRootAssets.length).toBe(2);
+    await sleepPromise(15000);
     const nonRootAssetsUnderRootId = await client.assets
       .list({
         filter: { root: false, rootIds: [{ externalId: root1.externalId }] },
