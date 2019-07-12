@@ -176,6 +176,7 @@ export interface AssetFilter extends Limit {
   filter?: {
     name?: AssetName;
     parentIds?: CogniteInternalId[];
+    rootIds?: IdEither[];
     metadata?: Metadata;
     source?: AssetSource;
     createdTime?: DateRange;
@@ -496,6 +497,10 @@ export interface EventFilter {
    * Asset IDs of related equipment that this event relates to.
    */
   assetIds?: CogniteInternalId[];
+  /**
+   * The IDs of the root assets that the related assets should be children of.
+   */
+  rootAssetIds?: IdEither[];
 }
 
 export interface EventFilterRequest extends Cursor, Limit {

@@ -7,6 +7,7 @@ import { Asset } from '../../types/types';
 import { sleepPromise } from '../../utils';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
+// tslint:disable-next-line:no-big-function
 describe('Asset integration test', () => {
   let client: CogniteClient;
   beforeAll(async () => {
@@ -124,7 +125,7 @@ describe('Asset integration test', () => {
       parentExternalId: newRootAsset.externalId,
     };
     await client.assets.create([newRootAsset, newChildAsset]);
-    await sleepPromise(2000);
+    await sleepPromise(5000);
     const prom = client.assets.delete([
       { externalId: newRootAsset.externalId },
     ]);
@@ -176,6 +177,35 @@ describe('Asset integration test', () => {
         },
       })
       .autoPagingToArray({ limit: 100 });
+  });
+
+  test('filter rootIds', async () => {
+    const root1 = { name: 'root-1', externalId: 'root-1' + randomInt() };
+    const root2 = { name: 'root-2', externalId: 'root-2' + randomInt() };
+    const child1 = { name: 'child-1', parentExternalId: root1.externalId };
+    const child2 = { name: 'child-2', parentExternalId: root2.externalId };
+    const [createdChild1] = await client.assets.create([
+      child1,
+      root1,
+      root2,
+      child2,
+    ]);
+    const nonRootAssets = await client.assets
+      .list({
+        filter: { root: false },
+        limit: 2,
+      })
+      .autoPagingToArray({ limit: 2 });
+    expect(nonRootAssets.length).toBe(2);
+    await sleepPromise(15000);
+    const nonRootAssetsUnderRootId = await client.assets
+      .list({
+        filter: { root: false, rootIds: [{ externalId: root1.externalId }] },
+        limit: 2,
+      })
+      .autoPagingToArray({ limit: 2 });
+    expect(nonRootAssetsUnderRootId.length).toBe(1);
+    expect(nonRootAssetsUnderRootId[0].id).toBe(createdChild1.id);
   });
 
   test('search for root test asset', async () => {
