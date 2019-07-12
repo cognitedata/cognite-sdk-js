@@ -45,4 +45,5 @@ after_deploy:
   - sudo add-apt-repository ppa:cpick/hub
   - sudo apt-get update
   - sudo apt-get install hub
+  - sudo apt-get install jq
   - sh scripts/afterRelease.sh

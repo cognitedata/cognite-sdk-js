@@ -1,10 +1,7 @@
 yarn typedoc --json docs.json
 node scripts/postProcessDocs.js
 
-packageVersion=$(node -e "const fs = require('fs');\
-const packageFile = fs.readFileSync('./package.json');\
-const packageJson = JSON.parse(packageFile.toString());\
-console.log(packageJson.version)")
+packageVersion=$(jq -r ".version" package.json)
 branchName="feat/updateSDKJsExamples$packageVersion"
 
 hub clone git@github.com:cognitedata/service-contracts.git
