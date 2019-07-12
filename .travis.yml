@@ -41,3 +41,5 @@ deploy:
     local_dir: docs
     on:
       branch: v1
+after_deploy:
+  - sh scripts/afterRelease.sh
