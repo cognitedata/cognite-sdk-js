@@ -1,4 +1,3 @@
-brew install hub
 yarn typedoc --json docs.json
 node scripts/postProcessDocs.js
 
