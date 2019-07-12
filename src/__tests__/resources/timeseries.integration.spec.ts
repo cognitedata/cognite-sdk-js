@@ -74,7 +74,7 @@ describe('Timeseries integration test', () => {
 
   test('list from assetIds', async () => {
     // wait (eventual consistency delay)
-    await sleepPromise(2000);
+    await sleepPromise(5000);
     const result = await client.timeseries
       .list({ assetIds: [asset.id] })
       .autoPagingToArray({ limit: Infinity });
