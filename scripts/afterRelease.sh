@@ -7,7 +7,7 @@ node scripts/postProcessDocs.js
 packageVersion=$(jq -r ".version" package.json)
 branchName="feat/updateSDKJsExamples$packageVersion"
 
-hub clone cognitedata/service-contracts
+hub clone git@github.com:cognitedata/service-contracts.git
 cd service-contracts
 
 hub checkout -b "$branchName"
