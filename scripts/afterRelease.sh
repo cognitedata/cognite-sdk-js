@@ -1,10 +1,13 @@
+# exit when any command fails
+set -e
+
 yarn typedoc --json docs.json
 node scripts/postProcessDocs.js
 
 packageVersion=$(jq -r ".version" package.json)
 branchName="feat/updateSDKJsExamples$packageVersion"
 
-hub clone git@github.com:cognitedata/service-contracts.git
+hub clone cognitedata/service-contracts
 cd service-contracts
 
 hub checkout -b "$branchName"
