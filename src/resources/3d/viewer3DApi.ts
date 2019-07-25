@@ -44,7 +44,7 @@ export class Viewer3DAPI {
       this.instance,
       parameterizePath(this.project, modelId, revisionId),
       this.map
-    )(revisionId);
+    )();
   };
 
   /**
@@ -129,7 +129,7 @@ export class Viewer3DAPI {
       this.instance,
       parameterizePath(this.project, modelId, revisionId, true),
       this.map
-    )(revisionId);
+    )();
   };
 }
 
