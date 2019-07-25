@@ -73,7 +73,7 @@ export class Revisions3DAPI {
    * const revisionsToUpdate = [{
    *  id: 6305529564379596,
    *  update: {
-   *    rotation: { 
+   *    rotation: {
    *      set: [1, 2, 3]
    *    }
    *  }
