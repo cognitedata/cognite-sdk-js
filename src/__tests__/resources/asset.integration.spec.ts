@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import CogniteClient from '../cogniteClient';
-import { AssetList } from '../../resources/classes/assetList';
+import CogniteClient from '../../cogniteClient';
+import { Asset } from '../../resources/classes/asset';
 import { EventsAPI } from '../../resources/events/eventsApi';
 import { TimeSeriesAPI } from '../../resources/timeSeries/timeSeriesApi';
 import { CogniteEvent, GetTimeSeriesMetadataDTO } from '../../types/types';
@@ -12,69 +12,6 @@ describe('Asset', () => {
   let client: CogniteClient;
   beforeAll(() => {
     client = setupLoggedInClient();
-  });
-  const rootAsset = {
-    name: 'test-root',
-    description: 'Root asset for cognitesdk-js test',
-    metadata: {
-      refId: 'test-root',
-    },
-    externalId: 'test-root' + randomInt(),
-  };
-
-  const childAsset = {
-    // tslint:disable-next-line:no-duplicate-string
-    name: 'test-child',
-    description: 'Child asset for cognitesdk-js test',
-    metadata: {
-      refId: 'test-child',
-    },
-    parentExternalId: rootAsset.externalId,
-    externalId: 'test-child' + randomInt(),
-  };
-  let assets: AssetList;
-
-  test('create', async () => {
-    assets = await client.assets.create([childAsset, rootAsset]);
-    expect(assets[0].createdTime).toBeInstanceOf(Date);
-    expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
-  });
-
-  test('update', async () => {
-    await client.assets.update([
-      {
-        id: assets[0].id,
-        update: {
-          name: { set: 'New name' },
-        },
-      },
-    ]);
-  });
-
-  test('delete', async () => {
-    await assets[0].delete();
-  });
-
-  test('list', async () => {
-    await client.assets
-      .list({
-        filter: {
-          name: rootAsset.name,
-          createdTime: { min: 0, max: Date.now() },
-        },
-      })
-      .autoPagingToArray({ limit: 100 });
-  });
-
-  test('search for root test asset', async () => {
-    const result = await client.assets.search({
-      search: {
-        name: rootAsset.name,
-      },
-    });
-    const asset = result[0];
-    expect(rootAsset.name).toBe(asset.name);
-    expect(rootAsset.description).toBe(asset.description);
   });
 
   describe('Asset Class', () => {
@@ -88,19 +25,6 @@ describe('Asset', () => {
       name: 'test-grandchild',
     };
 
-    test('create 1001 assets sequencially', async () => {
-      const childArr = new Array(1000).fill(newChildAsset);
-      const createdAssets = await client.assets.create([
-        newRootAsset,
-        ...childArr,
-      ]);
-      expect(createdAssets.length).toBe(1001);
-      await client.assets.delete(
-        createdAssets.slice(1).map(asset => ({ id: asset.id }))
-      );
-      await client.assets.delete([{ id: createdAssets[0].id }]);
-    });
-
     test('parent', async () => {
       const newRoot = {
         ...newRootAsset,
@@ -112,10 +36,7 @@ describe('Asset', () => {
       };
       const createdAssets = await client.assets.create([newRoot, newChild]);
       const parent = await createdAssets[1].parent();
-      if (parent) {
-        expect(parent.id).toEqual(createdAssets[0].id);
-      }
-      const parent2 = await createdAssets[0].parent();
+      expect(parent).toBeInstanceOf(Asset);
       expect(await createdAssets[0].parent()).toBe(null);
       await client.assets.delete([{ id: createdAssets[0].id }]);
     });
@@ -135,6 +56,7 @@ describe('Asset', () => {
         newChild,
       ]);
       const children = await createdAssets[0].children();
+      expect(children[0]).toBeInstanceOf(Asset);
       expect(children.length).toBe(2);
       await client.assets.delete([{ id: createdAssets[0].id }]);
     });
