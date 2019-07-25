@@ -210,7 +210,7 @@ describe('Asset integration test', () => {
 
   test('search for root test asset', async () => {
     const result = await client.assets.search({
-      search: {
+      filter: {
         name: rootAsset.name,
       },
     });
