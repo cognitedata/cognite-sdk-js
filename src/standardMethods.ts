@@ -244,9 +244,9 @@ export function generateRetrieveSingleEndpoint<IdType, ResponseType>(
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
-  return async function retrieveSingle(id: IdType): Promise<ResponseType> {
+  return async function retrieveSingle(id?: IdType): Promise<ResponseType> {
     const response = await rawRequest<ResponseType>(axiosInstance, {
-      url: `${resourcePath}/${encodeURIComponent('' + id)}`,
+      url: `${resourcePath}${id ? '/' + encodeURIComponent('' + id) : ''}`,
       method: 'get',
     });
     return metadataMap.addAndReturn(response.data, response);
