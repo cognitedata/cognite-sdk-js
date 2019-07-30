@@ -134,7 +134,7 @@ export class AssetsAPI {
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
 
-  public async retrieveSubtree(id: number, depth: number) {
+  public async retrieveSubtree(id: types.CogniteInternalId, depth: number) {
     const currentDepth: number = 0;
     const rootAssetList = await this.retrieve([{ id }]);
     return this.getAssetSubtree(rootAssetList, currentDepth, depth);
@@ -148,10 +148,10 @@ export class AssetsAPI {
   private async getAssetSubtree(
     assets: AssetList,
     currentDepth: number,
-    depth: number | any
+    depth: number = Infinity
   ): Promise<AssetList> {
     const subtree: AssetList = assets;
-    if (depth > currentDepth || depth === Infinity) {
+    if (depth > currentDepth) {
       const children = await this.getChildren(assets);
       if (children.length !== 0) {
         const subtreeOfChildren = await this.getAssetSubtree(
@@ -169,12 +169,11 @@ export class AssetsAPI {
     const ids = assets.map(asset => asset.id);
     const chunks = chunk(ids, 100);
     const assetsArray: Asset[] = [];
-    // tslint:disable-next-line:no-shadowed-variable
-    for (const chunk of chunks) {
+    for (const chunkOfAssetIds of chunks) {
       const childrenList = await this.client.assets
         .list({
           filter: {
-            parentIds: chunk,
+            parentIds: chunkOfAssetIds,
           },
         })
         .autoPagingToArray({ limit: Infinity });

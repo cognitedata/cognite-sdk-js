@@ -7,6 +7,9 @@ import { AssetList } from './assetList';
 export interface SubtreeOptions {
   depth?: number;
 }
+export interface DeleteOptions {
+  recursive?: boolean;
+}
 export class Asset implements types.Asset {
   public id: types.CogniteInternalId;
   public externalId?: types.CogniteExternalId;
@@ -36,12 +39,15 @@ export class Asset implements types.Asset {
     this.depth = props.depth;
   }
 
-  public delete = () => {
-    return this.client.assets.delete([
-      {
-        id: this.id,
-      },
-    ]);
+  public delete = (options: DeleteOptions = {}) => {
+    return this.client.assets.delete(
+      [
+        {
+          id: this.id,
+        },
+      ],
+      options
+    );
   };
 
   public parent: () => Promise<null | Asset> = async () => {

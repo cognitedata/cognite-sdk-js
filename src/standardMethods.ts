@@ -148,7 +148,6 @@ export function generateListEndpoint<
       items: transform(response.data.items),
       nextCursor: response.data.nextCursor,
     };
-    // would want to transform into Asset[] but gives error on line:158
     addNextPageFunction(transformedResponse, filter);
     return metadataMap.addAndReturn(transformedResponse, response);
   }
