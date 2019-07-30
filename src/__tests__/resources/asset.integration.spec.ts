@@ -38,7 +38,9 @@ describe('Asset', () => {
       const parent = await createdAssets[1].parent();
       expect(parent).toBeInstanceOf(Asset);
       expect(await createdAssets[0].parent()).toBe(null);
-      await client.assets.delete([{ id: createdAssets[0].id }]);
+      await client.assets.delete([{ id: createdAssets[0].id }], {
+        recursive: true,
+      });
     });
 
     test('children', async () => {
@@ -58,7 +60,9 @@ describe('Asset', () => {
       const children = await createdAssets[0].children();
       expect(children[0]).toBeInstanceOf(Asset);
       expect(children.length).toBe(2);
-      await client.assets.delete([{ id: createdAssets[0].id }]);
+      await client.assets.delete([{ id: createdAssets[0].id }], {
+        recursive: true,
+      });
     });
 
     test('subtree', async () => {
@@ -88,39 +92,37 @@ describe('Asset', () => {
         ...grandChildArray,
       ]);
       await sleepPromise(2000); // eventual consistency in the backend
-      const subtree = await createdAssets[0].subtree({ depth: 2 });
-      const subtree2 = await createdAssets[0].subtree({ depth: 1 });
-      const subtree3 = await createdAssets[0].subtree();
-      expect(subtree.length).toBe(109);
-      expect(subtree2.length).toBe(4);
-      expect(subtree3.length).toBe(109);
-      await client.assets.delete([{ id: createdAssets[0].id }]);
+      const subtreeWithDepth2 = await createdAssets[0].subtree({ depth: 2 });
+      const subtreeWithDepth1 = await createdAssets[0].subtree({ depth: 1 });
+      const subtreeWithoutSpecifiedDepth = await createdAssets[0].subtree();
+      expect(subtreeWithDepth2.length).toBe(109);
+      expect(subtreeWithDepth1.length).toBe(4);
+      expect(subtreeWithoutSpecifiedDepth.length).toBe(109);
+      await client.assets.delete([{ id: createdAssets[0].id }], {
+        recursive: true,
+      });
     });
 
     test('events from Asset', async () => {
-      const newRoot = {
-        ...newRootAsset,
-        externalId: 'test-root' + randomInt(),
-      };
-      await fetchResourceFromAssetClass(client, client.events, newRoot);
+      await testResourceType(client, client.events, newRootAsset);
     });
 
     test('timeseries from Asset', async () => {
-      const newRoot = {
-        ...newRootAsset,
-        externalId: 'test-root' + randomInt(),
-      };
-      await fetchResourceFromAssetClass(client, client.timeseries, newRoot);
+      await testResourceType(client, client.timeseries, newRootAsset);
     });
   });
 });
 
-async function fetchResourceFromAssetClass(
+async function testResourceType(
   client: CogniteClient,
   api: TimeSeriesAPI | EventsAPI,
   newRootAsset: any
 ) {
-  const createdAssets = await client.assets.create([newRootAsset]);
+  const newRoot = {
+    ...newRootAsset,
+    externalId: 'test-root' + randomInt(),
+  };
+  const createdAssets = await client.assets.create([newRoot]);
   const content =
     api instanceof TimeSeriesAPI
       ? { assetId: createdAssets[0].id }
@@ -137,5 +139,7 @@ async function fetchResourceFromAssetClass(
   expect(fetchedResource.length).toBe(resources.length);
   // @ts-ignore
   await api.delete(fetchedResource.map(resource => ({ id: resource.id })));
-  await client.assets.delete([{ id: createdAssets[0].id }]);
+  await client.assets.delete([{ id: createdAssets[0].id }], {
+    recursive: true,
+  });
 }

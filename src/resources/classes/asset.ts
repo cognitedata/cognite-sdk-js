@@ -2,9 +2,6 @@
 
 import { CogniteClient } from '../..';
 import * as types from '../../types/types';
-import { EventsListEndpoint } from '../events/eventsApi';
-import { FilesListEndpoint } from '../files/filesApi';
-import { TimeSeriesListEndpoint } from '../timeSeries/timeSeriesApi';
 import { AssetList } from './assetList';
 
 export interface SubtreeOptions {
@@ -35,12 +32,15 @@ export class Asset implements types.Asset {
     this.createdTime = props.createdTime;
   }
 
-  public delete = () => {
-    return this.client.assets.delete([
-      {
-        id: this.id,
-      },
-    ]);
+  public delete = (recursive: boolean = false) => {
+    return this.client.assets.delete(
+      [
+        {
+          id: this.id,
+        },
+      ],
+      { recursive }
+    );
   };
 
   public parent: () => Promise<null | Asset> = async () => {

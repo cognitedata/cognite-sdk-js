@@ -4,6 +4,7 @@ import { chunk } from 'lodash';
 import { CogniteClient } from '../..';
 import {
   CogniteEvent,
+  CogniteInternalId,
   FilesMetadata,
   GetTimeSeriesMetadataDTO,
 } from '../../types/types';
@@ -67,9 +68,9 @@ export class AssetList extends Array<Asset> {
     return responses;
   };
 
-  private toChunkedArrayOfIds = (): number[][] => {
+  private toChunkedArrayOfIds = (): CogniteInternalId[][] => {
     const ids = this.map(asset => asset.id);
-    let chunks: number[][] = [[]];
+    let chunks: CogniteInternalId[][] = [[]];
     if (ids.length) {
       chunks = chunk(ids, 100);
     }
