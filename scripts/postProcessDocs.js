@@ -13,7 +13,10 @@ client.loginWithApiKey({
 
 const operationsWithoutHeader = ['redirectUrl'];
 
-const lookupTable = {};
+const resultJson = {
+  language: "JavaScript",
+  operations: {}
+};
 _.cloneDeepWith(jsonDoc, (value, _, object) => {
   let matches;
   
@@ -24,10 +27,10 @@ _.cloneDeepWith(jsonDoc, (value, _, object) => {
     if (operationsWithoutHeader.indexOf(operationId) < 0) {
       code = header + code;
     }
-    lookupTable[operationId] = code;
+    resultJson.operations[operationId] = code;
   }
 });
 
-fs.writeFileSync('./jsSnippets.json', JSON.stringify(lookupTable, null, 2));
+fs.writeFileSync('./jsSnippets.json', JSON.stringify(resultJson, null, 2) + '\n');
 
 console.log('JS code snippets saved to: jsSnippets.json');

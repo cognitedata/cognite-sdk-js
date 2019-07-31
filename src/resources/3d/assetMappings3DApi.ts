@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateCreateEndpoint,
   generateDeleteEndpoint,
   generateListEndpoint,
@@ -122,7 +122,7 @@ export type AssetMappings3DListEndpoint = (
   modelId: CogniteInternalId,
   revisionId: CogniteInternalId,
   filter?: AssetMappings3DListFilter
-) => CogniteAsyncIterator<AssetMapping3D>;
+) => CursorAndAsyncIterator<AssetMapping3D>;
 
 export type AssetMappings3DCreateEndpoint = (
   modelId: CogniteInternalId,

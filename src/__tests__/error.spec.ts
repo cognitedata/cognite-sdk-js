@@ -141,7 +141,7 @@ describe('Cognite multi error', () => {
     expect(err.status).toEqual(400);
     expect(err.requestId).toEqual('r1');
     expect(err.errors).toEqual([nestedErr, nestedErr2]);
-    expect(err.message).toEqual('The API Failed to process some items.');
+    expect(err.message).toMatchSnapshot();
     expect(err.missing).toEqual(['something', 'more']);
     expect(err.duplicated).toEqual(['this one']);
     expect(err.requestIds).toEqual(['r1', 'r2']);

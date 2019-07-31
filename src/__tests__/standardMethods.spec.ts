@@ -206,6 +206,18 @@ describe('standard methods', () => {
         expect(numbers).toMatchSnapshot();
       }
     });
+
+    test('returns result from first request when not using auto-paging', async done => {
+      const listEndpoint = createMockedListEndpoint();
+      const response = await listEndpoint();
+      expect(response).toMatchSnapshot();
+      expect(response.items).toBeInstanceOf(Array);
+
+      listEndpoint().then(res => {
+        expect(res).toMatchSnapshot();
+        done();
+      });
+    });
   });
 });
 

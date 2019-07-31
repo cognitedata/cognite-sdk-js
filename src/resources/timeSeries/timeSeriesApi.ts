@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateCreateEndpoint,
   generateDeleteEndpoint,
   generateListEndpoint,
@@ -121,7 +121,7 @@ export class TimeSeriesAPI {
 
 export type TimeSeriesListEndpoint = (
   filter?: TimeseriesFilter
-) => CogniteAsyncIterator<GetTimeSeriesMetadataDTO>;
+) => CursorAndAsyncIterator<GetTimeSeriesMetadataDTO>;
 
 export type TimeSeriesCreateEndpoint = (
   items: PostTimeSeriesMetadataDTO[]

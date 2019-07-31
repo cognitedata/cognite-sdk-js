@@ -1,10 +1,10 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { rawRequest } from '../../axiosWrappers';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateCreateEndpoint,
   generateDeleteEndpoint,
   generateListEndpoint,
@@ -232,7 +232,7 @@ export class RawAPI {
 
 export type RawListDatabasesEndpoint = (
   query?: ListRawDatabases
-) => CogniteAsyncIterator<RawDB>;
+) => CursorAndAsyncIterator<RawDB>;
 
 export type RawCreateDatabasesEndpoint = (items: RawDB[]) => Promise<RawDB[]>;
 
@@ -241,7 +241,7 @@ export type RawDeleteDatabasesEndpoint = (items: RawDB[]) => Promise<{}>;
 export type RawListTablesEndpoint = (
   databaseName: string,
   query?: ListRawTables
-) => CogniteAsyncIterator<RawDBTable>;
+) => CursorAndAsyncIterator<RawDBTable>;
 
 export type RawCreateTablesEndpoint = (
   databaseName: string,
@@ -259,7 +259,7 @@ export type RawListRowsEndpoint = (
   databaseName: string,
   tableName: string,
   query?: ListRawRows
-) => CogniteAsyncIterator<RawDBRow>;
+) => CursorAndAsyncIterator<RawDBRow>;
 
 export type RawInsertRowsEndpoint = (
   databaseName: string,

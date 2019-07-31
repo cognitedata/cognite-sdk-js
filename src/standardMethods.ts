@@ -2,7 +2,10 @@
 
 import { AxiosInstance } from 'axios';
 import { chunk, concat } from 'lodash';
-import { makeAutoPaginationMethods } from './autoPagination';
+import {
+  CogniteAsyncIterator,
+  makeAutoPaginationMethods,
+} from './autoPagination';
 import { rawRequest } from './axiosWrappers';
 import { MetadataMap } from './metadata';
 import { promiseAllWithData } from './resources/assets/assetUtils';
@@ -57,6 +60,18 @@ export function generateCreateEndpoint<
   return async function create(itemsArray: RequestType[]) {
     type Response = ItemsResponse<ResponseType>;
     const chunks = doChunking<RequestType>(itemsArray, chunkFunction);
+
+    // create a map that maps index in chunks to the original index in items (chunkFunction can change the order - assets)
+    const itemIndex = new Map<RequestType, number>();
+    itemsArray.forEach((item, index) => {
+      itemIndex.set(item, index);
+    });
+    const chunkIndexToItemsIndex = new Map<number, number>();
+    concat([], ...chunks).forEach((item, index) => {
+      const originalIndex = itemIndex.get(item) as number;
+      chunkIndexToItemsIndex.set(index, originalIndex);
+    });
+
     const responses = await promiseAllWithData(
       chunks,
       input =>
@@ -71,7 +86,14 @@ export function generateCreateEndpoint<
       [],
       ...responses.map(response => response.data.items)
     );
-    return metadataMap.addAndReturn(transform(mergedResponses), responses[0]);
+
+    // make sure that the response has the same order as items (sortedResponse[index] should match items[index])
+    const sortedResponse: ResponseType[] = [];
+    mergedResponses.forEach((item, index) => {
+      const originalIndex = chunkIndexToItemsIndex.get(index) as number;
+      sortedResponse[originalIndex] = item;
+    });
+    return metadataMap.addAndReturn(transform(sortedResponse), responses[0]);
   };
 }
 
@@ -108,6 +130,9 @@ export function listByPost<RequestFilter, ResponseType>(
     true
   );
 }
+
+export type CursorAndAsyncIterator<T> = Promise<CursorResponse<T>> &
+  CogniteAsyncIterator<T>;
 
 /** @hidden */
 export function generateListEndpoint<
@@ -155,7 +180,6 @@ export function generateListEndpoint<
   return (params: RequestFilter = {} as RequestFilter) => {
     const listPromise = list(params);
     return Object.assign(
-      {},
       listPromise,
       makeAutoPaginationMethods<TransformType>(listPromise)
     );
@@ -262,9 +286,9 @@ export function generateRetrieveSingleEndpoint<IdType, ResponseType>(
   resourcePath: string,
   metadataMap: MetadataMap
 ) {
-  return async function retrieveSingle(id: IdType): Promise<ResponseType> {
+  return async function retrieveSingle(id?: IdType): Promise<ResponseType> {
     const response = await rawRequest<ResponseType>(axiosInstance, {
-      url: `${resourcePath}/${encodeURIComponent('' + id)}`,
+      url: `${resourcePath}${id ? '/' + encodeURIComponent('' + id) : ''}`,
       method: 'get',
     });
     return metadataMap.addAndReturn(response.data, response);
@@ -287,6 +311,32 @@ export function generateDeleteEndpoint<IdType>(
           method: 'post',
           url: `${resourcePath}/delete`,
           data: { items: input },
+        }),
+      true
+    );
+    return metadataMap.addAndReturn({}, responses[0]);
+  };
+}
+
+/** @hidden */
+export function generateDeleteEndpointWithParams<IdType, ParamsType>(
+  axiosInstance: AxiosInstance,
+  resourcePath: string,
+  metadataMap: MetadataMap,
+  chunkFunction?: (ids: IdType[]) => IdType[][]
+) {
+  return async function remove(
+    ids: IdType[],
+    params?: ParamsType
+  ): Promise<{}> {
+    const chunks = doChunking<IdType>(ids, chunkFunction);
+    const responses = await promiseAllWithData(
+      chunks,
+      input =>
+        rawRequest<ItemsResponse<ResponseType>>(axiosInstance, {
+          method: 'post',
+          url: `${resourcePath}/delete`,
+          data: { ...(params || {}), items: input },
         }),
       true
     );

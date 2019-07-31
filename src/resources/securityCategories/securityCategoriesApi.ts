@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateCreateEndpoint,
   generateDeleteEndpoint,
   generateListEndpoint,
@@ -67,7 +67,7 @@ export class SecurityCategoriesAPI {
 
 export type SecurityCategoriesListEndpoint = (
   query?: ListSecurityCategories
-) => CogniteAsyncIterator<SecurityCategory>;
+) => CursorAndAsyncIterator<SecurityCategory>;
 
 export type SecurityCategoriesCreateEndpoint = (
   items: SecurityCategorySpec[]

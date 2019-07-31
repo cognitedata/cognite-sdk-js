@@ -73,3 +73,25 @@ Array [
   12,
 ]
 `;
+
+exports[`standard methods generateListEndpoint returns result from first request when not using auto-paging 1`] = `
+Object {
+  "items": Array [
+    0,
+    1,
+  ],
+  "next": [Function],
+  "nextCursor": "2",
+}
+`;
+
+exports[`standard methods generateListEndpoint returns result from first request when not using auto-paging 2`] = `
+Object {
+  "items": Array [
+    0,
+    1,
+  ],
+  "next": [Function],
+  "nextCursor": "2",
+}
+`;

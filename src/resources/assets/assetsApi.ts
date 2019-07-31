@@ -6,8 +6,9 @@ import { CogniteAsyncIterator } from '../../autoPagination';
 import CogniteClient from '../../cogniteClient';
 import { MetadataMap } from '../../metadata';
 import {
+  CursorAndAsyncIterator,
   generateCreateEndpoint,
-  generateDeleteEndpoint,
+  generateDeleteEndpointWithParams,
   generateListEndpoint,
   generateRetrieveEndpoint,
   generateSearchEndpoint,
@@ -131,7 +132,7 @@ export class AssetsAPI {
       map,
       transformResponse
     );
-    this.delete = generateDeleteEndpoint(instance, path, map);
+    this.delete = generateDeleteEndpointWithParams(instance, path, map);
   }
 
   public async retrieveSubtree(id: types.CogniteInternalId, depth: number) {
@@ -203,4 +204,11 @@ export type AssetSearchEndpoint = (
   query: types.AssetSearchFilter
 ) => Promise<AssetList>;
 
-export type AssetDeleteEndpoint = (ids: types.AssetIdEither[]) => Promise<{}>;
+export interface AssetDeleteParams {
+  recursive?: boolean;
+}
+
+export type AssetDeleteEndpoint = (
+  ids: types.AssetIdEither[],
+  params?: AssetDeleteParams
+) => Promise<{}>;

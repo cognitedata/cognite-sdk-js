@@ -154,14 +154,6 @@ export type ArrayPatchLong =
 export interface Asset extends ExternalAsset, AssetInternalId {
   lastUpdatedTime: Date;
   createdTime: Date;
-  /**
-   * IDs of assets on the path to the asset.
-   */
-  path: number[];
-  /**
-   * Asset path depth (number of levels below root node).
-   */
-  depth: number;
 }
 
 export type AssetChange = AssetChangeById | AssetChangeByExternalId;
@@ -184,6 +176,7 @@ export interface AssetFilter extends Limit {
   filter?: {
     name?: AssetName;
     parentIds?: CogniteInternalId[];
+    rootIds?: IdEither[];
     metadata?: Metadata;
     source?: AssetSource;
     createdTime?: DateRange;
@@ -504,6 +497,10 @@ export interface EventFilter {
    * Asset IDs of related equipment that this event relates to.
    */
   assetIds?: CogniteInternalId[];
+  /**
+   * The IDs of the root assets that the related assets should be children of.
+   */
+  rootAssetIds?: IdEither[];
 }
 
 export interface EventFilterRequest extends Cursor, Limit {
@@ -1018,6 +1015,10 @@ export interface PostTimeSeriesMetadataDTO {
    * Externally provided id for the time series (optional but recommended)
    */
   externalId?: CogniteExternalId;
+  /**
+   * Set a value for legacyName to allow applications using API v0.3, v04, v05, and v0.6 to access this time series. The legacy name is the human-readable name for the time series and is mapped to the name field used in API versions 0.3-0.6. The legacyName field value must be unique, and setting this value to an already existing value will return an error. We recommend that you set this field to the same value as externalId.
+   */
+  legacyName?: string;
   /**
    * Human readable name of time series
    */
