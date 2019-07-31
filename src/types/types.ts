@@ -152,6 +152,9 @@ export type ArrayPatchLong =
   | { add?: number[]; remove?: number[] };
 
 export interface Asset extends ExternalAsset, AssetInternalId {
+  /**
+   * The id of the root for the tree this asset belongs to
+   */
   rootId: CogniteInternalId;
   lastUpdatedTime: Date;
   createdTime: Date;
