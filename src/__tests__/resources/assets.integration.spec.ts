@@ -125,7 +125,7 @@ describe('Asset integration test', () => {
       parentExternalId: newRootAsset.externalId,
     };
     await client.assets.create([newRootAsset, newChildAsset]);
-    await sleepPromise(5000);
+    await sleepPromise(8000);
     const prom = client.assets.delete([
       { externalId: newRootAsset.externalId },
     ]);
