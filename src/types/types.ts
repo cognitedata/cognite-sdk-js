@@ -152,6 +152,7 @@ export type ArrayPatchLong =
   | { add?: number[]; remove?: number[] };
 
 export interface Asset extends ExternalAsset, AssetInternalId {
+  rootId: CogniteInternalId;
   lastUpdatedTime: Date;
   createdTime: Date;
 }
