@@ -20,6 +20,7 @@ export class Asset implements types.Asset {
   public source?: types.AssetSource;
   public lastUpdatedTime: Date;
   public createdTime: Date;
+  public rootId: types.CogniteInternalId;
   private client: CogniteClient;
 
   constructor(client: CogniteClient, props: types.Asset) {
@@ -33,6 +34,7 @@ export class Asset implements types.Asset {
     this.source = props.source;
     this.lastUpdatedTime = props.lastUpdatedTime;
     this.createdTime = props.createdTime;
+    this.rootId = props.rootId;
   }
 
   public delete = (options: DeleteOptions = {}) => {
