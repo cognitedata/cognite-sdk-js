@@ -35,8 +35,7 @@ describe('Asset', () => {
         parentExternalId: newRoot.externalId,
       };
       const createdAssets = await client.assets.create([newRoot, newChild]);
-      const parent = await createdAssets[1].parent();
-      expect(parent).toBeInstanceOf(Asset);
+      expect(await createdAssets[1].parent()).toBeInstanceOf(Asset);
       expect(await createdAssets[0].parent()).toBe(null);
       await client.assets.delete([{ id: createdAssets[0].id }], {
         recursive: true,

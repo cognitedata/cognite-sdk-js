@@ -1,6 +1,7 @@
 // Copyright 2019 Cognite AS
 import MockAdapter from 'axios-mock-adapter';
 import { CogniteClient } from '../..';
+import { Asset } from '../../resources/classes/asset';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Asset class unit test', () => {
@@ -44,5 +45,7 @@ describe('Asset class unit test', () => {
     const createdAssets = await client.assets.create([newRoot, ...childArray]);
     const children = await createdAssets[0].children();
     expect(children.length).toBe(50);
+    expect(children[0]).toBeInstanceOf(Asset);
+    expect(children[0].name).toEqual(childArray[0].name);
   });
 });
