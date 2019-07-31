@@ -43,27 +43,6 @@ describe('Asset', () => {
       });
     });
 
-    test('children', async () => {
-      const newRoot = {
-        ...newRootAsset,
-        externalId: 'test-root' + randomInt(),
-      };
-      const newChild = {
-        ...newChildAsset,
-        parentExternalId: newRoot.externalId,
-      };
-      const createdAssets = await client.assets.create([
-        newRoot,
-        newChild,
-        newChild,
-      ]);
-      const children = await createdAssets[0].children();
-      expect(children.length).toBe(2);
-      await client.assets.delete([{ id: createdAssets[0].id }], {
-        recursive: true,
-      });
-    });
-
     test('subtree', async () => {
       const newRoot = {
         ...newRootAsset,
@@ -90,7 +69,7 @@ describe('Asset', () => {
         ...childArray,
         ...grandChildArray,
       ]);
-      await sleepPromise(2000); // eventual consistency in the backend
+      await sleepPromise(5000); // eventual consistency in the backend
       const subtreeWithDepth2 = await createdAssets[0].subtree({ depth: 2 });
       const subtreeWithDepth1 = await createdAssets[0].subtree({ depth: 1 });
       const subtreeWithoutSpecifiedDepth = await createdAssets[0].subtree();
@@ -128,7 +107,7 @@ async function testResourceType(
       : { assetIds: [createdAssets[0].id] };
   const resourceList = new Array(1003).fill(content);
   const resources = await api.create(resourceList);
-  await sleepPromise(10000); // eventual consistency in the backend
+  await sleepPromise(8000); // eventual consistency in the backend
   let fetchedResource: GetTimeSeriesMetadataDTO[] | CogniteEvent[];
   if (api instanceof TimeSeriesAPI) {
     fetchedResource = await createdAssets[0].timeSeries();

@@ -103,31 +103,50 @@ describe('Asset unit test', () => {
     );
 
     test('straight tree', () => {
-      const rootAsset = { externalId: '123', parentExternalId: 'abc' };
+      const rootAsset = {
+        externalId: '123',
+        parentExternalId: 'abc',
+        name: 'root',
+      };
       const childAsset = {
         externalId: 'def',
         parentExternalId: rootAsset.externalId,
+        name: 'child',
       };
-      const grandChildAsset = { parentExternalId: childAsset.externalId };
+      const grandChildAsset = {
+        parentExternalId: childAsset.externalId,
+        name: 'grandchild',
+      };
       expect(assetChunker([childAsset, rootAsset, grandChildAsset], 2)).toEqual(
         [[rootAsset, childAsset], [grandChildAsset]]
       );
     });
 
     test('regular tree', () => {
-      const assetA = { externalId: 'A' };
-      const assetAA = { externalId: 'AA', parentExternalId: assetA.externalId };
-      const assetAB = { externalId: 'AB', parentExternalId: assetA.externalId };
+      const assetA = { externalId: 'A', name: 'A' };
+      const assetAA = {
+        externalId: 'AA',
+        parentExternalId: assetA.externalId,
+        name: 'AA',
+      };
+      const assetAB = {
+        externalId: 'AB',
+        parentExternalId: assetA.externalId,
+        name: 'AB',
+      };
       const assetAAA = {
         externalId: 'AAA',
         parentExternalId: assetAA.externalId,
+        name: 'AAA',
       };
       const assetAAB = {
         externalId: 'AAB',
         parentExternalId: assetAA.externalId,
+        name: 'AAB',
       };
       const someAsset = {
         parentId: 123,
+        name: 'someAsset',
       };
       const inputOrder = [
         assetAB,

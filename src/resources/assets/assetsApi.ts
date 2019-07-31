@@ -2,7 +2,6 @@
 
 import { AxiosInstance } from 'axios';
 import { chunk } from 'lodash';
-import { CogniteAsyncIterator } from '../../autoPagination';
 import CogniteClient from '../../cogniteClient';
 import { MetadataMap } from '../../metadata';
 import {
@@ -190,7 +189,7 @@ export type AssetCreateEndpoint = (
 
 export type AssetListEndpoint = (
   scope?: types.AssetListScope
-) => CogniteAsyncIterator<Asset>;
+) => CursorAndAsyncIterator<Asset>;
 
 export type AssetRetrieveEndpoint = (
   ids: types.AssetIdEither[]
