@@ -107,7 +107,7 @@ async function testResourceType(
       : { assetIds: [createdAssets[0].id] };
   const resourceList = new Array(1003).fill(content);
   const resources = await api.create(resourceList);
-  await sleepPromise(8000); // eventual consistency in the backend
+  await sleepPromise(10000); // eventual consistency in the backend
   let fetchedResource: GetTimeSeriesMetadataDTO[] | CogniteEvent[];
   if (api instanceof TimeSeriesAPI) {
     fetchedResource = await createdAssets[0].timeSeries();

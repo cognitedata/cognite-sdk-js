@@ -139,7 +139,9 @@ describe('Asset integration test', () => {
 
   test('retrieve', async () => {
     const response = await client.assets.retrieve([{ id: assets[0].id }]);
-    expect(response).toEqual([assets[0]]);
+    expect(response[0].name).toEqual(assets[0].name);
+    expect(response).toHaveLength(1);
+    expect(response[0].createdTime).toBeInstanceOf(Date);
   });
 
   test('update', async () => {
