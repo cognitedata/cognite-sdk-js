@@ -2,8 +2,11 @@
 
 import CogniteClient from '../../cogniteClient';
 import { Group, GroupSpec, ServiceAccount } from '../../types/types';
-import { sleepPromise } from '../../utils';
-import { randomInt, retryInSeconds, setupLoggedInClient } from '../testUtils';
+import {
+  randomInt,
+  runTestWithRetryWhenFailing,
+  setupLoggedInClient,
+} from '../testUtils';
 
 describe('Groups integration test', () => {
   let client: CogniteClient;
@@ -36,29 +39,30 @@ describe('Groups integration test', () => {
     expect(response.length).toBe(1);
     [group] = response;
     expect(group.name).toBe(groupsToCreate[0].name);
-    await sleepPromise(15 * 1000);
   });
 
-  test('add service account', async done => {
-    const response = await retryInSeconds(
-      () => client.groups.addServiceAccounts(group.id, [serviceAccount.id]),
-      5,
-      400,
-      60
-    );
-    expect(response).toEqual({});
-    done();
+  test('add service account', async () => {
+    await runTestWithRetryWhenFailing(async () => {
+      const response = await client.groups.addServiceAccounts(group.id, [
+        serviceAccount.id,
+      ]);
+      expect(response).toEqual({});
+    });
   });
 
   test('list', async () => {
-    const response = await client.groups.list({ all: true });
-    expect(response.length).toBeGreaterThan(0);
-    expect(response.map(item => item.name)).toContain(group.name);
+    await runTestWithRetryWhenFailing(async () => {
+      const response = await client.groups.list({ all: true });
+      expect(response.length).toBeGreaterThan(0);
+      expect(response.map(item => item.name)).toContain(group.name);
+    });
   });
 
   test('list service account', async () => {
-    const response = await client.groups.listServiceAccounts(group.id);
-    expect(response.map(item => item.id)).toContain(serviceAccount.id);
+    await runTestWithRetryWhenFailing(async () => {
+      const response = await client.groups.listServiceAccounts(group.id);
+      expect(response.map(item => item.id)).toContain(serviceAccount.id);
+    });
   });
 
   test('remove service account', async () => {
