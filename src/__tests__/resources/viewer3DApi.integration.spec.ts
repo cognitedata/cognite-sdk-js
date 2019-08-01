@@ -16,7 +16,7 @@ const describeIfCondition =
     ? describe
     : describe.skip;
 
-describeIfCondition('Viewer3D integration test', async () => {
+describeIfCondition('Viewer3D integration test', () => {
   let client: CogniteClient;
 
   let revisions: Revision3D[];

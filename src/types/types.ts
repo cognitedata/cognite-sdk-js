@@ -496,6 +496,8 @@ export interface EventChangeById extends EventPatch, InternalId {}
 export interface EventFilter {
   startTime?: DateRange;
   endTime?: DateRange;
+  createdTime?: DateRange;
+  lastUpdatedTime?: DateRange;
   metadata?: Metadata;
   /**
    * Asset IDs of related equipment that this event relates to.
@@ -505,6 +507,22 @@ export interface EventFilter {
    * The IDs of the root assets that the related assets should be children of.
    */
   rootAssetIds?: IdEither[];
+  /**
+   * Filter by event source
+   */
+  source?: string;
+  /**
+   * Filter by event type
+   */
+  type?: string;
+  /**
+   * Filter by event subtype
+   */
+  subtype?: string;
+  /**
+   * Filter events with an externalId starting with this value
+   */
+  externalIdPrefix?: string;
 }
 
 export interface EventFilterRequest extends Cursor, Limit {

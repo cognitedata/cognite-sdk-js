@@ -5,7 +5,11 @@ import { CogniteError } from '../../error';
 import { CogniteMultiError } from '../../multiError';
 import { Asset } from '../../types/types';
 import { sleepPromise } from '../../utils';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  randomInt,
+  runTestWithRetryWhenFailing,
+  setupLoggedInClient,
+} from '../testUtils';
 
 // tslint:disable-next-line:no-big-function
 describe('Asset integration test', () => {
@@ -116,6 +120,7 @@ describe('Asset integration test', () => {
   });
 
   test('fail to delete a root asset with children', async () => {
+<<<<<<< HEAD
     const newRootAsset = {
       ...rootAsset,
       externalId: 'test-root' + randomInt(),
@@ -134,6 +139,28 @@ describe('Asset integration test', () => {
     // clean up
     await client.assets.delete([{ externalId: newRootAsset.externalId }], {
       recursive: true,
+=======
+    await runTestWithRetryWhenFailing(async () => {
+      const newRootAsset = {
+        ...rootAsset,
+        externalId: 'test-root' + randomInt(),
+      };
+      const newChildAsset = {
+        ...childAsset,
+        parentExternalId: newRootAsset.externalId,
+      };
+      await client.assets.create([newRootAsset, newChildAsset]);
+      await sleepPromise(5000);
+      const prom = client.assets.delete([
+        { externalId: newRootAsset.externalId },
+      ]);
+      expect(prom).rejects.toThrow();
+
+      // clean up
+      await client.assets.delete([{ externalId: newRootAsset.externalId }], {
+        recursive: true,
+      });
+>>>>>>> v1
     });
   });
 
@@ -199,15 +226,17 @@ describe('Asset integration test', () => {
       })
       .autoPagingToArray({ limit: 2 });
     expect(nonRootAssets.length).toBe(2);
-    await sleepPromise(15000);
-    const nonRootAssetsUnderRootId = await client.assets
-      .list({
-        filter: { root: false, rootIds: [{ externalId: root1.externalId }] },
-        limit: 2,
-      })
-      .autoPagingToArray({ limit: 2 });
-    expect(nonRootAssetsUnderRootId.length).toBe(1);
-    expect(nonRootAssetsUnderRootId[0].id).toBe(createdChild1.id);
+
+    await runTestWithRetryWhenFailing(async () => {
+      const nonRootAssetsUnderRootId = await client.assets
+        .list({
+          filter: { root: false, rootIds: [{ externalId: root1.externalId }] },
+          limit: 2,
+        })
+        .autoPagingToArray({ limit: 2 });
+      expect(nonRootAssetsUnderRootId.length).toBe(1);
+      expect(nonRootAssetsUnderRootId[0].id).toBe(createdChild1.id);
+    });
   });
 
   test('search for root test asset', async () => {

@@ -2,6 +2,7 @@
 
 import * as sleep from 'sleep-promise';
 import CogniteClient from '../cogniteClient';
+import { sleepPromise } from '../utils';
 
 export function createErrorReponse(
   status: number,
@@ -74,6 +75,26 @@ export async function retryInSeconds<ResponseType>(
     }
   }
   throw new Error('Time limit has been exceeded');
+}
+
+export async function runTestWithRetryWhenFailing(
+  testFunction: () => Promise<void>
+) {
+  let delayInMs = 500;
+  let numberOfRetries = 0;
+  let error;
+  do {
+    try {
+      await testFunction();
+      return;
+    } catch (err) {
+      error = err;
+      await sleepPromise(delayInMs);
+      delayInMs *= 2;
+      numberOfRetries++;
+    }
+  } while (numberOfRetries < 5);
+  throw error;
 }
 
 export const simpleCompare = (a: number, b: number) => a - b;
