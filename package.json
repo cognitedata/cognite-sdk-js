@@ -21,6 +21,10 @@
     "typescript"
   ],
   "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/git": "^7.0.16",
     "@types/es6-promise": "^3.3.0",
     "@types/jest": "^23.3.7",
     "@types/node": "^10.12.0",
@@ -29,6 +33,7 @@
     "axios-mock-adapter": "1.15.0",
     "dtsgenerator": "^2.0.6",
     "es-check": "^5.0.0",
+    "husky": "^3.0.2",
     "jest": "^23.6.0",
     "ls": "^0.2.1",
     "markdown-link-check": "^3.7.2",
@@ -48,9 +53,7 @@
     "typedoc": "^0.13.0",
     "typedoc-plugin-markdown": "^1.1.19",
     "typescript": "^3.3.3333",
-    "typescript-parser": "^2.6.1",
-    "@semantic-release/changelog": "^3.0.4",
-    "@semantic-release/git": "^7.0.16"
+    "typescript-parser": "^2.6.1"
   },
   "scripts": {
     "clean": "rm -rf dist",
@@ -63,7 +66,6 @@
     "build": "yarn clean && rollup -c && yarn esCheck",
     "watch": "rollup -cw",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json",
-    "prepush": "yarn lint && yarn test",
     "esCheck": "es-check es5 './dist/index.js'",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
     "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
@@ -78,6 +80,11 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   },
   "release": {
     "branch": "v1",
