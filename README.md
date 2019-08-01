@@ -121,16 +121,14 @@ Contributions welcome! See the [code of conduct](./CODE_OF_CONDUCT.md).
 
 ## Release
 
-How to release a new version:
+Our releases are fully [automated](https://github.com/semantic-release/semantic-release).
+Only basic steps are needed:
 
 1. Create a new branch
-2. Commit changes (if any)
-3. Run
-    ```bash
-    $ npm version [patch/minor/major]
-    # example: $ npm version patch
-    ```
-4. Update the SDK-version in ./samples/package.json
-5. Push branch and push tags (`git push --tags`)
-6. Create a new pull requests
+2. Commit changes (if any) and remember about [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)
+6. Create a new pull request
 7. A new version will be published when the PR is merged
+
+## CHANGELOG
+
+You can find it [here](./CHANGELOG.md).
