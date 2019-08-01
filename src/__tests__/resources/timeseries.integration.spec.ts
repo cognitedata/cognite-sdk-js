@@ -2,8 +2,11 @@
 
 import CogniteClient from '../../cogniteClient';
 import { Asset, GetTimeSeriesMetadataDTO } from '../../types/types';
-import { sleepPromise } from '../../utils';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import {
+  randomInt,
+  runTestWithRetryWhenFailing,
+  setupLoggedInClient,
+} from '../testUtils';
 
 describe('Timeseries integration test', () => {
   let client: CogniteClient;
@@ -73,13 +76,13 @@ describe('Timeseries integration test', () => {
   });
 
   test('list from assetIds', async () => {
-    // wait (eventual consistency delay)
-    await sleepPromise(5000);
-    const result = await client.timeseries
-      .list({ assetIds: [asset.id] })
-      .autoPagingToArray({ limit: Infinity });
-    expect(result.length).toBe(1);
-    expect(result[0].id).toBe(createdTimeseries[0].id);
+    await runTestWithRetryWhenFailing(async () => {
+      const result = await client.timeseries
+        .list({ assetIds: [asset.id] })
+        .autoPagingToArray({ limit: Infinity });
+      expect(result.length).toBe(1);
+      expect(result[0].id).toBe(createdTimeseries[0].id);
+    });
   });
 
   test('delete', async () => {
