@@ -367,7 +367,6 @@ export function generateSearchEndpoint<
       true
     );
     const { items } = response.data;
-
     return metadataMap.addAndReturn(transform(items), response);
   };
 }
