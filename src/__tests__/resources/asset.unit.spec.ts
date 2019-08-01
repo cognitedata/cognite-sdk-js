@@ -36,7 +36,7 @@ describe('Asset class unit test', () => {
         items: [newRoot, ...childArray],
       });
     axiosMock
-      .onPost(new RegExp('/assets'), {
+      .onPost(new RegExp('/assets/list$'), {
         filter: {
           parentIds: [newRoot.id],
         },
