@@ -80,6 +80,8 @@ export async function retryInSeconds<ResponseType>(
 export async function runTestWithRetryWhenFailing(
   testFunction: () => Promise<void>
 ) {
+  const maxNumberOfRetries = 15;
+  const delayFactor = 2;
   let delayInMs = 500;
   let numberOfRetries = 0;
   let error;
@@ -90,10 +92,10 @@ export async function runTestWithRetryWhenFailing(
     } catch (err) {
       error = err;
       await sleepPromise(delayInMs);
-      delayInMs *= 2;
+      delayInMs *= delayFactor;
       numberOfRetries++;
     }
-  } while (numberOfRetries < 5);
+  } while (numberOfRetries < maxNumberOfRetries);
   throw error;
 }
 
