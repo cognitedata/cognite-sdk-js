@@ -54,7 +54,7 @@ describe('Asset', () => {
       for (let index = 0; index < 3; index++) {
         childArray.push({
           ...newChildAsset,
-          externalId: 'test-child' + randomInt() + index,
+          externalId: 'test-child' + randomInt(),
           parentExternalId: newRoot.externalId,
         });
       }
@@ -63,7 +63,7 @@ describe('Asset', () => {
         grandChildArray.push({
           ...newGrandChildAsset,
           parentExternalId: childArray[0].externalId,
-          externalId: 'test-grandchild' + randomInt() + index,
+          externalId: 'test-grandchild' + randomInt(),
         });
       }
       const createdAssets = await client.assets.create([
@@ -96,7 +96,8 @@ describe('Asset', () => {
 
 async function testResourceType(
   client: CogniteClient,
-  api: TimeSeriesAPI | EventsAPI
+  api: TimeSeriesAPI | EventsAPI,
+  newRootAsset: any
 ) {
   const newRoot = {
     ...newRootAsset,
@@ -107,9 +108,9 @@ async function testResourceType(
     api instanceof TimeSeriesAPI
       ? { assetId: createdAssets[0].id }
       : { assetIds: [createdAssets[0].id] };
-  const resourceList = new Array(1003).fill(content);
+  const resourceList = new Array(5).fill(content);
   const resources = await api.create(resourceList);
-  let fetchedResource: GetTimeSeriesMetadataDTO[] | CogniteEvent[];
+  let fetchedResource: (GetTimeSeriesMetadataDTO | CogniteEvent)[];
   await runTestWithRetryWhenFailing(async () => {
     if (api instanceof TimeSeriesAPI) {
       fetchedResource = await createdAssets[0].timeSeries();
@@ -117,9 +118,8 @@ async function testResourceType(
       fetchedResource = await createdAssets[0].events();
     }
     expect(fetchedResource.length).toBe(resources.length);
+    await api.delete(fetchedResource.map(resource => ({ id: resource.id })));
   });
-  // @ts-ignore
-  await api.delete(fetchedResource.map(resource => ({ id: resource.id })));
   await client.assets.delete([{ id: createdAssets[0].id }], {
     recursive: true,
   });

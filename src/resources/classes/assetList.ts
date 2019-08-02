@@ -20,24 +20,26 @@ export class AssetList extends Array<Asset> {
     this.client = client;
   }
 
-  public delete = () => {
+  public delete = async () => {
     return this.client.assets.delete(this.map(asset => ({ id: asset.id })));
   };
 
-  public timeSeries = async (): Promise<GetTimeSeriesMetadataDTO[]> => {
+  public timeSeries = async () => {
     return (await this.getResourcesFromAssets(
       this.client.timeseries
     )) as GetTimeSeriesMetadataDTO[];
   };
 
-  public files = async (): Promise<FilesMetadata[]> => {
+  public files = async () => {
     return (await this.getResourcesFromAssets(
       this.client.files
     )) as FilesMetadata[];
   };
 
-  public events = async (): Promise<CogniteEvent[]> => {
-    return this.getResourcesFromAssets(this.client.events);
+  public events = async () => {
+    return (await this.getResourcesFromAssets(
+      this.client.events
+    )) as CogniteEvent[];
   };
 
   private getResourcesFromAssets = async (

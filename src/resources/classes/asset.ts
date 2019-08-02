@@ -82,27 +82,27 @@ export class Asset implements types.Asset {
     );
   };
 
-  public timeSeries = async (filter?: types.TimeseriesFilter) => {
+  public timeSeries = async (filter: types.TimeseriesFilter = {}) => {
     return this.client.timeseries
       .list({
-        ...(filter || {}),
+        ...filter,
         assetIds: [this.id],
       })
       .autoPagingToArray({ limit: Infinity });
   };
 
-  public events = async (filter?: types.EventFilter) => {
+  public events = async (filter: types.EventFilter = {}) => {
     return this.client.events
       .list({
-        filter: { ...(filter || {}), assetIds: [this.id] },
+        filter: { ...filter, assetIds: [this.id] },
       })
       .autoPagingToArray({ limit: Infinity });
   };
 
-  public files = async (filter?: types.FileFilter) => {
+  public files = async (filter: types.FileFilter = {}) => {
     return this.client.files
       .list({
-        filter: { ...(filter || {}), assetIds: [this.id] },
+        filter: { ...filter, assetIds: [this.id] },
       })
       .autoPagingToArray({ limit: Infinity });
   };
