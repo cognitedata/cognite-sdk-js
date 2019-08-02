@@ -2,6 +2,15 @@
 
 import { AxiosInstance } from 'axios';
 import { chunk } from 'lodash';
+import {
+  Asset as TypeAsset,
+  AssetChange,
+  AssetIdEither,
+  AssetListScope,
+  AssetSearchFilter,
+  ExternalAssetItem,
+  IdEither,
+} from '../..';
 import CogniteClient from '../../cogniteClient';
 import { MetadataMap } from '../../metadata';
 import {
@@ -13,7 +22,6 @@ import {
   generateSearchEndpoint,
   generateUpdateEndpoint,
 } from '../../standardMethods';
-import * as types from '../../types/types';
 import { projectUrl } from '../../utils';
 import { Asset } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
@@ -134,13 +142,13 @@ export class AssetsAPI {
     this.delete = generateDeleteEndpointWithParams(instance, path, map);
   }
 
-  public async retrieveSubtree(id: types.IdEither, depth: number) {
+  public async retrieveSubtree(id: IdEither, depth: number) {
     const currentDepth: number = 0;
     const rootAssetList = await this.retrieve([id]);
     return this.getAssetSubtree(rootAssetList, currentDepth, depth);
   }
 
-  private transformToAssetListObject = (assets: types.Asset[]) => {
+  private transformToAssetListObject = (assets: TypeAsset[]) => {
     const assetArray = assets.map(asset => new Asset(this.client, asset));
     return new AssetList(this.client, assetArray);
   };
@@ -184,23 +192,23 @@ export class AssetsAPI {
 }
 
 export type AssetCreateEndpoint = (
-  items: types.ExternalAssetItem[]
+  items: ExternalAssetItem[]
 ) => Promise<AssetList>;
 
 export type AssetListEndpoint = (
-  scope?: types.AssetListScope
+  scope?: AssetListScope
 ) => CursorAndAsyncIterator<Asset>;
 
 export type AssetRetrieveEndpoint = (
-  ids: types.AssetIdEither[]
+  ids: AssetIdEither[]
 ) => Promise<AssetList>;
 
 export type AssetUpdateEndpoint = (
-  changes: types.AssetChange[]
+  changes: AssetChange[]
 ) => Promise<AssetList>;
 
 export type AssetSearchEndpoint = (
-  query: types.AssetSearchFilter
+  query: AssetSearchFilter
 ) => Promise<AssetList>;
 
 export interface AssetDeleteParams {
@@ -208,6 +216,6 @@ export interface AssetDeleteParams {
 }
 
 export type AssetDeleteEndpoint = (
-  ids: types.AssetIdEither[],
+  ids: AssetIdEither[],
   params?: AssetDeleteParams
 ) => Promise<{}>;

@@ -11,8 +11,6 @@ import { MetadataMap } from './metadata';
 import { promiseAllWithData } from './resources/assets/assetUtils';
 import { CursorResponse, ItemsResponse } from './types/types';
 
-export type Newable<T> = new (...args: any[]) => T;
-
 function noTransformFunction<ResponseType, TransformType>(
   items: ResponseType[]
 ) {

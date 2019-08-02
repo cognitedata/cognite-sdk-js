@@ -1,7 +1,18 @@
 // Copyright 2019 Cognite AS
 
-import { CogniteClient } from '../..';
-import * as types from '../../types/types';
+import {
+  Asset as TypeAsset,
+  AssetDescription,
+  AssetName,
+  AssetSource,
+  CogniteClient,
+  CogniteExternalId,
+  CogniteInternalId,
+  EventFilter,
+  FileFilter,
+  Metadata,
+  TimeseriesFilter,
+} from '../..';
 import { AssetList } from './assetList';
 
 export interface SubtreeOptions {
@@ -10,20 +21,20 @@ export interface SubtreeOptions {
 export interface DeleteOptions {
   recursive?: boolean;
 }
-export class Asset implements types.Asset {
-  public id: types.CogniteInternalId;
-  public externalId?: types.CogniteExternalId;
-  public parentId?: types.CogniteInternalId;
-  public name: types.AssetName;
-  public description?: types.AssetDescription;
-  public metadata?: types.Metadata;
-  public source?: types.AssetSource;
+export class Asset implements TypeAsset {
+  public id: CogniteInternalId;
+  public externalId?: CogniteExternalId;
+  public parentId?: CogniteInternalId;
+  public name: AssetName;
+  public description?: AssetDescription;
+  public metadata?: Metadata;
+  public source?: AssetSource;
   public lastUpdatedTime: Date;
   public createdTime: Date;
-  public rootId: types.CogniteInternalId;
+  public rootId: CogniteInternalId;
   private client: CogniteClient;
 
-  constructor(client: CogniteClient, props: types.Asset) {
+  constructor(client: CogniteClient, props: TypeAsset) {
     this.client = client;
     this.id = props.id;
     this.externalId = props.externalId;
@@ -37,7 +48,13 @@ export class Asset implements types.Asset {
     this.rootId = props.rootId;
   }
 
-  public delete = (options: DeleteOptions = {}) => {
+  /**
+   * Deletes the current asset
+   * ```js
+   * await asset.delete();
+   * ```
+   */
+  public delete = async (options: DeleteOptions = {}) => {
     return this.client.assets.delete(
       [
         {
@@ -55,14 +72,21 @@ export class Asset implements types.Asset {
    * ```
    */
   public parent: () => Promise<null | Asset> = async () => {
-    const { parentId } = this;
-    if (!parentId) {
-      return null;
+    if (this.parentId) {
+      const [parentAsset] = await this.client.assets.retrieve([
+        { id: this.parentId },
+      ]);
+      return parentAsset;
     }
-    const [parentAsset] = await this.client.assets.retrieve([{ id: parentId }]);
-    return parentAsset;
+    return null;
   };
 
+  /**
+   * Returns an AssetList object with all children of the current asset
+   * ```js
+   * const children = await asset.children();
+   * ```
+   */
   public children: () => Promise<AssetList> = async () => {
     const childAssets = await this.client.assets
       .list({
@@ -74,6 +98,12 @@ export class Asset implements types.Asset {
     return new AssetList(this.client, childAssets);
   };
 
+  /**
+   * Returns the full subtree of the current asset, including the asset itself
+   * ```js
+   * const subtree = await asset.subtree();
+   * ```
+   */
   public subtree = async (options?: SubtreeOptions) => {
     const query: SubtreeOptions = options || {};
     return this.client.assets.retrieveSubtree(
@@ -82,7 +112,13 @@ export class Asset implements types.Asset {
     );
   };
 
-  public timeSeries = async (filter: types.TimeseriesFilter = {}) => {
+  /**
+   * Returns all timeseries for the current asset
+   * ```js
+   * const timeSeries = await asset.timeSeries();
+   * ```
+   */
+  public timeSeries = async (filter: TimeseriesFilter = {}) => {
     return this.client.timeseries
       .list({
         ...filter,
@@ -91,7 +127,13 @@ export class Asset implements types.Asset {
       .autoPagingToArray({ limit: Infinity });
   };
 
-  public events = async (filter: types.EventFilter = {}) => {
+  /**
+   * Returns all events for the current asset
+   * ```js
+   * const events = await asset.events();
+   * ```
+   */
+  public events = async (filter: EventFilter = {}) => {
     return this.client.events
       .list({
         filter: { ...filter, assetIds: [this.id] },
@@ -99,7 +141,13 @@ export class Asset implements types.Asset {
       .autoPagingToArray({ limit: Infinity });
   };
 
-  public files = async (filter: types.FileFilter = {}) => {
+  /**
+   * Returns all files for the current asset
+   * ```js
+   * const files = await asset.files();
+   * ```
+   */
+  public files = async (filter: FileFilter = {}) => {
     return this.client.files
       .list({
         filter: { ...filter, assetIds: [this.id] },

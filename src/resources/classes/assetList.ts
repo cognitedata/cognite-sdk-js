@@ -20,22 +20,46 @@ export class AssetList extends Array<Asset> {
     this.client = client;
   }
 
+  /**
+   * Deletes all assets in the AssetList
+   * ```js
+   * await assetList.delete();
+   * ```
+   */
   public delete = async () => {
     return this.client.assets.delete(this.map(asset => ({ id: asset.id })));
   };
 
+  /**
+   * Return all timeseries for assets in the AssetList
+   * ```js
+   * const timeseries = await assetList.timeSeries();
+   * ```
+   */
   public timeSeries = async () => {
     return (await this.getResourcesFromAssets(
       this.client.timeseries
     )) as GetTimeSeriesMetadataDTO[];
   };
 
+  /**
+   * Return all files for assets in the AssetList
+   * ```js
+   * const files = await assetList.files();
+   * ```
+   */
   public files = async () => {
     return (await this.getResourcesFromAssets(
       this.client.files
     )) as FilesMetadata[];
   };
 
+  /**
+   * Return all events for assets in the AssetList
+   * ```js
+   * const events = await assetList.events();
+   * ```
+   */
   public events = async () => {
     return (await this.getResourcesFromAssets(
       this.client.events
