@@ -43,7 +43,7 @@ export class Revisions3DAPI {
    * ```
    */
   public list: Revisions3DListEndpoint = (modelId, filter) => {
-    return generateListEndpoint<Revision3DListRequest, Revision3D, Revision3D>(
+    return generateListEndpoint<Revision3DListRequest, Revision3D>(
       this.instance,
       parameterizePath(this.project, modelId),
       this.map,
