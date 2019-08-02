@@ -170,6 +170,9 @@ export default class CogniteClient {
     if (!isObject(options)) {
       throw Error('`CogniteClient` is missing parameter `options`');
     }
+    if (!isString(options.appId)) {
+      throw Error('options.appId is required and must be of type string');
+    }
     const { baseUrl } = options;
     this.instance = generateAxiosInstance(getBaseUrl(baseUrl), options.appId);
     addRetryToAxiosInstance(this.instance);
@@ -210,11 +213,14 @@ export default class CogniteClient {
       throw Error('`loginWithApiKey` is missing parameter `options`');
     }
     const { project, apiKey } = options;
-    if (!isString(project) || !isString(apiKey)) {
-      throw Error(
-        'The properties `project` and `apiKey` must be provided to param `options` in `loginWithApiKey`'
-      );
-    }
+    ['project', 'apiKey'].forEach(property => {
+      // @ts-ignore
+      if (!isString(options[property])) {
+        throw Error(
+          `options.${property} is required and must be of type string`
+        );
+      }
+    });
     this.project = project;
     this.instance.defaults.headers['api-key'] = apiKey;
 
@@ -250,9 +256,7 @@ export default class CogniteClient {
     }
     const { project } = options;
     if (!isString(project)) {
-      throw Error(
-        'The properties `project` must be provided to param `options` in `loginWithOAuth`'
-      );
+      throw Error('options.project is required and must be of type string');
     }
     this.project = project;
 
