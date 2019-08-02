@@ -45,8 +45,7 @@ export class AssetMappings3DAPI {
       this.instance,
       parameterizePath(this.project, modelId, revisionId),
       this.map,
-      false,
-      items => items
+      false
     )(filter);
   };
 
@@ -76,15 +75,10 @@ export class AssetMappings3DAPI {
     revisionId,
     items
   ) => {
-    return generateCreateEndpoint<
-      CreateAssetMapping3D,
-      AssetMapping3D,
-      AssetMapping3D[]
-    >(
+    return generateCreateEndpoint<CreateAssetMapping3D, AssetMapping3D>(
       this.instance,
       parameterizePath(this.project, modelId, revisionId),
-      this.map,
-      item => item
+      this.map
     )(items);
   };
 

@@ -47,11 +47,11 @@ export class ApiKeysAPI {
   /** @hidden */
   constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
     const path = projectUrl(project) + '/apikeys';
-    this.create = generateCreateEndpoint<
-      ApiKeyRequest,
-      NewApiKeyResponse,
-      NewApiKeyResponse[]
-    >(instance, path, map, items => items);
+    this.create = generateCreateEndpoint<ApiKeyRequest, NewApiKeyResponse>(
+      instance,
+      path,
+      map
+    );
     this.list = generateListNoCursorEndpointWithQueryParams(
       instance,
       path,

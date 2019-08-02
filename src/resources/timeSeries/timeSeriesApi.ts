@@ -92,29 +92,24 @@ export class TimeSeriesAPI {
     const path = projectUrl(project) + '/timeseries';
     this.create = generateCreateEndpoint<
       PostTimeSeriesMetadataDTO,
-      GetTimeSeriesMetadataDTO,
-      GetTimeSeriesMetadataDTO[]
-    >(instance, path, map, items => items);
+      GetTimeSeriesMetadataDTO
+    >(instance, path, map);
     this.list = generateListEndpoint<
       TimeseriesFilter,
-      GetTimeSeriesMetadataDTO,
       GetTimeSeriesMetadataDTO
-    >(instance, path, map, false, items => items);
+    >(instance, path, map, false);
     this.search = generateSearchEndpoint<
       TimeSeriesSearchDTO,
-      GetTimeSeriesMetadataDTO,
-      GetTimeSeriesMetadataDTO[]
-    >(instance, path, map, items => items);
+      GetTimeSeriesMetadataDTO
+    >(instance, path, map);
     this.retrieve = generateRetrieveEndpoint<
       TimeseriesIdEither,
-      GetTimeSeriesMetadataDTO,
-      GetTimeSeriesMetadataDTO[]
-    >(instance, path, map, items => items);
+      GetTimeSeriesMetadataDTO
+    >(instance, path, map);
     this.update = generateUpdateEndpoint<
       TimeSeriesUpdate,
-      GetTimeSeriesMetadataDTO,
-      GetTimeSeriesMetadataDTO[]
-    >(instance, path, map, items => items);
+      GetTimeSeriesMetadataDTO
+    >(instance, path, map);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
 }

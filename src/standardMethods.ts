@@ -13,16 +13,25 @@ import { CursorResponse, ItemsResponse } from './types/types';
 
 export type Newable<T> = new (...args: any[]) => T;
 
+function noTransformFunction<ResponseType, TransformType>(
+  items: ResponseType[]
+) {
+  return (items as unknown) as TransformType;
+}
+type Transformer<ResponseType, TransformType> = (
+  items: ResponseType[]
+) => TransformType[];
+
 /** @hidden */
 export function generateCreateEndpoint<
   RequestType,
   ResponseType,
-  TransformType
+  TransformType = ResponseType
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  transform: (items: ResponseType[]) => TransformType,
+  transform: Transformer<ResponseType, TransformType> = noTransformFunction,
   chunkFunction?: (items: RequestType[]) => RequestType[][]
 ) {
   return async function create(itemsArray: RequestType[]) {
@@ -106,13 +115,13 @@ export type CursorAndAsyncIterator<T> = Promise<CursorResponse<T>> &
 export function generateListEndpoint<
   RequestFilter extends object,
   ResponseType,
-  TransformType
+  TransformType = ResponseType
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
   withPost: boolean = true,
-  transform: (items: ResponseType[]) => TransformType[]
+  transform: Transformer<ResponseType, TransformType> = noTransformFunction
 ) {
   function addNextPageFunction<T>(
     dataWithCursor: CursorResponse<T>,
@@ -217,11 +226,15 @@ export function generateSimpleListEndpoint<RequestParams, ResponseType>(
 }
 
 /** @hidden */
-export function generateRetrieveEndpoint<IdType, ResponseType, TransformType>(
+export function generateRetrieveEndpoint<
+  IdType,
+  ResponseType,
+  TransformType = ResponseType
+>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  transform: (items: ResponseType[]) => TransformType,
+  transform: Transformer<ResponseType, TransformType> = noTransformFunction,
   chunkFunction?: (ids: IdType[]) => IdType[][]
 ) {
   return async function retrieve(ids: IdType[]) {
@@ -316,12 +329,12 @@ export function generateDeleteEndpointWithParams<IdType, ParamsType>(
 export function generateUpdateEndpoint<
   RequestType,
   ResponseType,
-  TransformType
+  TransformType = ResponseType
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  transform: (items: ResponseType[]) => TransformType,
+  transform: Transformer<ResponseType, TransformType> = noTransformFunction,
   chunkFunction?: (changes: RequestType[]) => RequestType[][]
 ) {
   return async function update(changes: RequestType[]) {
@@ -349,12 +362,12 @@ export function generateUpdateEndpoint<
 export function generateSearchEndpoint<
   RequestParams,
   ResponseType,
-  TransformType
+  TransformType = ResponseType
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  transform: (items: ResponseType[]) => TransformType
+  transform: Transformer<ResponseType, TransformType> = noTransformFunction
 ) {
   return async function search(query: RequestParams) {
     const response = await rawRequest<ItemsResponse<ResponseType>>(

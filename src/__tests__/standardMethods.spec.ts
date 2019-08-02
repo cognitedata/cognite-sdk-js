@@ -65,12 +65,7 @@ describe('standard methods', () => {
         axiosMock,
         metadataMap,
         'path',
-        generateCreateEndpoint(
-          axiosInstance,
-          'path',
-          metadataMap,
-          items => items
-        )
+        generateCreateEndpoint(axiosInstance, 'path', metadataMap)
       );
       expect(object.response.length).toBe(object.items.length);
     });
@@ -82,12 +77,7 @@ describe('standard methods', () => {
         axiosMock,
         metadataMap,
         'path/byids',
-        generateRetrieveEndpoint(
-          axiosInstance,
-          'path',
-          metadataMap,
-          items => items
-        )
+        generateRetrieveEndpoint(axiosInstance, 'path', metadataMap)
       );
       expect(object.response.length).toBe(object.items.length);
     });
@@ -112,12 +102,7 @@ describe('standard methods', () => {
         axiosMock,
         metadataMap,
         'path/update',
-        generateUpdateEndpoint(
-          axiosInstance,
-          'path',
-          metadataMap,
-          items => items
-        )
+        generateUpdateEndpoint(axiosInstance, 'path', metadataMap)
       );
       expect(object.response.length).toBe(object.items.length);
     });
@@ -140,8 +125,7 @@ describe('standard methods', () => {
         axiosInstance,
         '/',
         new MetadataMap(),
-        false,
-        items => items
+        false
       );
       axiosMock.onGet('/').reply(numberGeneratorAPIEndpoint);
       return listEndpoint;

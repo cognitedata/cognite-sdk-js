@@ -47,8 +47,7 @@ export class Revisions3DAPI {
       this.instance,
       parameterizePath(this.project, modelId),
       this.map,
-      false,
-      items => items
+      false
     )(filter);
   };
 
@@ -60,11 +59,10 @@ export class Revisions3DAPI {
    * ```
    */
   public create: Revisions3DCreateEndpoint = (modelId, items) => {
-    return generateCreateEndpoint<CreateRevision3D, Revision3D, Revision3D[]>(
+    return generateCreateEndpoint<CreateRevision3D, Revision3D>(
       this.instance,
       parameterizePath(this.project, modelId),
-      this.map,
-      item => item
+      this.map
     )(items);
   };
 
@@ -84,11 +82,10 @@ export class Revisions3DAPI {
    * ```
    */
   public update: Revisions3DUpdateEndpoint = (modelId, items) => {
-    return generateUpdateEndpoint<UpdateRevision3D, Revision3D, Revision3D[]>(
+    return generateUpdateEndpoint<UpdateRevision3D, Revision3D>(
       this.instance,
       parameterizePath(this.project, modelId),
-      this.map,
-      item => item
+      this.map
     )(items);
   };
 
@@ -155,12 +152,11 @@ export class Revisions3DAPI {
     revisionId,
     query
   ) => {
-    return generateListEndpoint<List3DNodesQuery, Node3D, Node3D>(
+    return generateListEndpoint<List3DNodesQuery, Node3D>(
       this.instance,
       parameterizePath(this.project, modelId, revisionId),
       this.map,
-      false,
-      items => items
+      false
     )(query);
   };
 
@@ -177,12 +173,11 @@ export class Revisions3DAPI {
     nodeId,
     query
   ) => {
-    return generateListEndpoint<List3DNodesQuery, Node3D, Node3D>(
+    return generateListEndpoint<List3DNodesQuery, Node3D>(
       this.instance,
       parameterizePath(this.project, modelId, revisionId, nodeId),
       this.map,
-      false,
-      items => items
+      false
     )(query);
   };
 }
