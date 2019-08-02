@@ -7,6 +7,7 @@ import {
   CursorAndAsyncIterator,
   generateCreateEndpoint,
   generateDeleteEndpoint,
+  generateDeleteEndpointWithParams,
   generateListEndpoint,
   generateRetrieveSingleEndpoint,
 } from '../../standardMethods';
@@ -61,7 +62,11 @@ export class RawAPI {
     const path = (this.path = projectUrl(project) + '/raw/dbs');
     this.listDatabases = generateListEndpoint(instance, this.path, map, false);
     this.createDatabases = generateCreateEndpoint(instance, path, map);
-    this.deleteDatabases = generateDeleteEndpoint(instance, path, map);
+    this.deleteDatabases = generateDeleteEndpointWithParams(
+      instance,
+      path,
+      map
+    );
   }
 
   /**
@@ -219,7 +224,13 @@ export type RawListDatabasesEndpoint = (
 
 export type RawCreateDatabasesEndpoint = (items: RawDB[]) => Promise<RawDB[]>;
 
-export type RawDeleteDatabasesEndpoint = (items: RawDB[]) => Promise<{}>;
+export interface RawDatabaseDeleteParams {
+  recursive?: boolean;
+}
+export type RawDeleteDatabasesEndpoint = (
+  items: RawDB[],
+  params?: RawDatabaseDeleteParams
+) => Promise<{}>;
 
 export type RawListTablesEndpoint = (
   databaseName: string,

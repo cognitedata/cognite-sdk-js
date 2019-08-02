@@ -77,8 +77,9 @@ describe('Raw integration test', () => {
       const tmpDatabase = createDb();
       const tmpTable = createTable();
       await client.raw.createTables(tmpDatabase.name, [tmpTable], true);
+      await expect(client.raw.deleteDatabases([tmpDatabase])).rejects.toThrow();
       // clean up
-      await client.raw.deleteDatabases([tmpDatabase]);
+      await client.raw.deleteDatabases([tmpDatabase], { recursive: true });
     });
   });
 
@@ -166,8 +167,9 @@ describe('Raw integration test', () => {
         [tmpRow],
         true
       );
+      await expect(client.raw.deleteDatabases([tmpDatabase])).rejects.toThrow();
       // clean up
-      await client.raw.deleteDatabases([tmpDatabase]);
+      await client.raw.deleteDatabases([tmpDatabase], { recursive: true });
     });
   });
 });
