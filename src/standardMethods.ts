@@ -18,13 +18,13 @@ function noTransformFunction<ResponseType, TransformType>(
 }
 type Transformer<ResponseType, TransformType> = (
   items: ResponseType[]
-) => TransformType[];
+) => TransformType;
 
 /** @hidden */
 export function generateCreateEndpoint<
   RequestType,
   ResponseType,
-  TransformType = ResponseType
+  TransformType = ResponseType[]
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -119,7 +119,7 @@ export function generateListEndpoint<
   resourcePath: string,
   metadataMap: MetadataMap,
   withPost: boolean = true,
-  transform: Transformer<ResponseType, TransformType> = noTransformFunction
+  transform: Transformer<ResponseType, TransformType[]> = noTransformFunction
 ) {
   function addNextPageFunction<T>(
     dataWithCursor: CursorResponse<T>,
@@ -227,7 +227,7 @@ export function generateSimpleListEndpoint<RequestParams, ResponseType>(
 export function generateRetrieveEndpoint<
   IdType,
   ResponseType,
-  TransformType = ResponseType
+  TransformType = ResponseType[]
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -327,7 +327,7 @@ export function generateDeleteEndpointWithParams<IdType, ParamsType>(
 export function generateUpdateEndpoint<
   RequestType,
   ResponseType,
-  TransformType = ResponseType
+  TransformType = ResponseType[]
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
@@ -360,7 +360,7 @@ export function generateUpdateEndpoint<
 export function generateSearchEndpoint<
   RequestParams,
   ResponseType,
-  TransformType = ResponseType
+  TransformType = ResponseType[]
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
