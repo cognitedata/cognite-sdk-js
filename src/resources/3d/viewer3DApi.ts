@@ -106,11 +106,7 @@ export class Viewer3DAPI {
     revisionId,
     query
   ) => {
-    return generateListEndpoint<
-      ListRevealSectors3DQuery,
-      RevealSector3D,
-      RevealSector3D
-    >(
+    return generateListEndpoint<ListRevealSectors3DQuery, RevealSector3D>(
       this.instance,
       parameterizePath(this.project, modelId, revisionId) + `/sectors`,
       this.map,

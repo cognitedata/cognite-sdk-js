@@ -37,11 +37,7 @@ export class AssetMappings3DAPI {
    * ```
    */
   public list: AssetMappings3DListEndpoint = (modelId, revisionId, filter) => {
-    return generateListEndpoint<
-      AssetMappings3DListFilter,
-      AssetMapping3D,
-      AssetMapping3D
-    >(
+    return generateListEndpoint<AssetMappings3DListFilter, AssetMapping3D>(
       this.instance,
       parameterizePath(this.project, modelId, revisionId),
       this.map,
