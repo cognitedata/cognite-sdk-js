@@ -134,9 +134,9 @@ export class AssetsAPI {
     this.delete = generateDeleteEndpointWithParams(instance, path, map);
   }
 
-  public async retrieveSubtree(id: types.CogniteInternalId, depth: number) {
+  public async retrieveSubtree(id: types.IdEither, depth: number) {
     const currentDepth: number = 0;
-    const rootAssetList = await this.retrieve([{ id }]);
+    const rootAssetList = await this.retrieve([id]);
     return this.getAssetSubtree(rootAssetList, currentDepth, depth);
   }
 

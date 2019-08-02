@@ -48,6 +48,12 @@ export class Asset implements types.Asset {
     );
   };
 
+  /**
+   * Retrieves the parent of the current asset
+   * ```js
+   * const parentAsset = await asset.parent();
+   * ```
+   */
   public parent: () => Promise<null | Asset> = async () => {
     const { parentId } = this;
     if (!parentId) {
@@ -70,7 +76,10 @@ export class Asset implements types.Asset {
 
   public subtree = async (options?: SubtreeOptions) => {
     const query: SubtreeOptions = options || {};
-    return this.client.assets.retrieveSubtree(this.id, query.depth || Infinity);
+    return this.client.assets.retrieveSubtree(
+      { id: this.id },
+      query.depth || Infinity
+    );
   };
 
   public timeSeries = async (filter?: types.TimeseriesFilter) => {

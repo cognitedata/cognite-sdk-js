@@ -120,26 +120,6 @@ describe('Asset integration test', () => {
   });
 
   test('fail to delete a root asset with children', async () => {
-<<<<<<< HEAD
-    const newRootAsset = {
-      ...rootAsset,
-      externalId: 'test-root' + randomInt(),
-    };
-    const newChildAsset = {
-      ...childAsset,
-      parentExternalId: newRootAsset.externalId,
-    };
-    await client.assets.create([newRootAsset, newChildAsset]);
-    await sleepPromise(8000);
-    const prom = client.assets.delete([
-      { externalId: newRootAsset.externalId },
-    ]);
-    expect(prom).rejects.toThrow();
-
-    // clean up
-    await client.assets.delete([{ externalId: newRootAsset.externalId }], {
-      recursive: true,
-=======
     await runTestWithRetryWhenFailing(async () => {
       const newRootAsset = {
         ...rootAsset,
@@ -160,7 +140,6 @@ describe('Asset integration test', () => {
       await client.assets.delete([{ externalId: newRootAsset.externalId }], {
         recursive: true,
       });
->>>>>>> v1
     });
   });
 

@@ -80,6 +80,7 @@ export async function retryInSeconds<ResponseType>(
 export async function runTestWithRetryWhenFailing(
   testFunction: () => Promise<void>
 ) {
+  jest.setTimeout(3 * 60 * 1000);
   let delayInMs = 500;
   let numberOfRetries = 0;
   let error;
