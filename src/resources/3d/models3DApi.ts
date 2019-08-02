@@ -77,22 +77,9 @@ export class Models3DAPI {
   /** @hidden */
   constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
     const path = projectUrl(project) + '/3d/models';
-    this.list = generateListEndpoint<Model3DListRequest, Model3D>(
-      instance,
-      path,
-      map,
-      false
-    );
-    this.create = generateCreateEndpoint<CreateModel3D, Model3D>(
-      instance,
-      path,
-      map
-    );
-    this.update = generateUpdateEndpoint<UpdateModel3D, Model3D>(
-      instance,
-      path,
-      map
-    );
+    this.list = generateListEndpoint(instance, path, map, false);
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.update = generateUpdateEndpoint(instance, path, map);
     this.delete = generateDeleteEndpoint(instance, path, map);
     this.retrieve = generateRetrieveSingleEndpoint(instance, path, map);
   }

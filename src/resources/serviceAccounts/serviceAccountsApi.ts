@@ -50,11 +50,7 @@ export class ServiceAccountsAPI {
   constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
     const path = projectUrl(project) + '/serviceaccounts';
     this.list = generateListNoCursorEndpoint(instance, path, map);
-    this.create = generateCreateEndpoint<ServiceAccountInput, ServiceAccount>(
-      instance,
-      path,
-      map
-    );
+    this.create = generateCreateEndpoint(instance, path, map);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
 }

@@ -90,26 +90,11 @@ export class TimeSeriesAPI {
   /** @hidden */
   constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
     const path = projectUrl(project) + '/timeseries';
-    this.create = generateCreateEndpoint<
-      PostTimeSeriesMetadataDTO,
-      GetTimeSeriesMetadataDTO
-    >(instance, path, map);
-    this.list = generateListEndpoint<
-      TimeseriesFilter,
-      GetTimeSeriesMetadataDTO
-    >(instance, path, map, false);
-    this.search = generateSearchEndpoint<
-      TimeSeriesSearchDTO,
-      GetTimeSeriesMetadataDTO
-    >(instance, path, map);
-    this.retrieve = generateRetrieveEndpoint<
-      TimeseriesIdEither,
-      GetTimeSeriesMetadataDTO
-    >(instance, path, map);
-    this.update = generateUpdateEndpoint<
-      TimeSeriesUpdate,
-      GetTimeSeriesMetadataDTO
-    >(instance, path, map);
+    this.create = generateCreateEndpoint(instance, path, map);
+    this.list = generateListEndpoint(instance, path, map, false);
+    this.search = generateSearchEndpoint(instance, path, map);
+    this.retrieve = generateRetrieveEndpoint(instance, path, map);
+    this.update = generateUpdateEndpoint(instance, path, map);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
 }

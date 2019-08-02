@@ -108,30 +108,13 @@ export class FilesAPI {
   /** @hidden */
   constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
     const path = projectUrl(project) + '/files';
-    this.list = generateListEndpoint<FileRequestFilter, FilesMetadata>(
-      instance,
-      path,
-      map,
-      true
-    );
+    this.list = generateListEndpoint(instance, path, map, true);
     this.upload = generateUploadEndpoint(instance, path, map);
-    this.retrieve = generateRetrieveEndpoint<IdEither, FilesMetadata>(
-      instance,
-      path,
-      map
-    );
-    this.search = generateSearchEndpoint<FilesSearchFilter, FilesMetadata>(
-      instance,
-      path,
-      map
-    );
+    this.retrieve = generateRetrieveEndpoint(instance, path, map);
+    this.search = generateSearchEndpoint(instance, path, map);
     this.delete = generateDeleteEndpoint(instance, path, map);
     this.getDownloadUrls = generateDownloadUrlEndpoint(instance, path, map);
-    this.update = generateUpdateEndpoint<FileChangeUpdate, FilesMetadata>(
-      instance,
-      path,
-      map
-    );
+    this.update = generateUpdateEndpoint(instance, path, map);
   }
 }
 

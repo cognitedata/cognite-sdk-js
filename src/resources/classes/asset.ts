@@ -71,7 +71,7 @@ export class Asset implements TypeAsset {
    * const parentAsset = await asset.parent();
    * ```
    */
-  public parent: () => Promise<null | Asset> = async () => {
+  public parent = async () => {
     if (this.parentId) {
       const [parentAsset] = await this.client.assets.retrieve([
         { id: this.parentId },
@@ -87,7 +87,7 @@ export class Asset implements TypeAsset {
    * const children = await asset.children();
    * ```
    */
-  public children: () => Promise<AssetList> = async () => {
+  public children = async () => {
     const childAssets = await this.client.assets
       .list({
         filter: {

@@ -59,17 +59,8 @@ export class RawAPI {
     this.instance = instance;
     this.map = map;
     const path = (this.path = projectUrl(project) + '/raw/dbs');
-    this.listDatabases = generateListEndpoint<ListRawDatabases, RawDB>(
-      instance,
-      this.path,
-      map,
-      false
-    );
-    this.createDatabases = generateCreateEndpoint<RawDB, RawDB>(
-      instance,
-      path,
-      map
-    );
+    this.listDatabases = generateListEndpoint(instance, this.path, map, false);
+    this.createDatabases = generateCreateEndpoint(instance, path, map);
     this.deleteDatabases = generateDeleteEndpoint(instance, path, map);
   }
 
