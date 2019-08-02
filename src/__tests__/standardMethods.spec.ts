@@ -121,7 +121,7 @@ describe('standard methods', () => {
   });
   describe('generateListEndpoint', () => {
     function createMockedListEndpoint() {
-      const listEndpoint = generateListEndpoint<any, number, number>(
+      const listEndpoint = generateListEndpoint<any, number>(
         axiosInstance,
         '/',
         new MetadataMap(),
