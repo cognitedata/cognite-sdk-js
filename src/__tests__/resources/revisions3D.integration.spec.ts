@@ -168,7 +168,7 @@ describeIfCondition(
         nodes3D = await client.revisions3D
           .list3DNodes(model.id, revisions[0].id)
           .autoPagingToArray();
-        expect(nodes3D.map(n => n.name)).toContain('input_Input_1.fbx');
+        expect(nodes3D.map(n => n.name)).toContain('RootNode');
         done();
       },
       5 * 60 * 1000
@@ -219,6 +219,38 @@ describeIfCondition(
         .list(model.id, revisions[0].id)
         .autoPagingToArray();
       expect(list).toEqual([]);
+    });
+
+    test('retrieve a 3d revision (reveal)', async () => {
+      const response = await client.viewer3D.retrieveRevealRevision3D(
+        model.id,
+        revisions[0].id
+      );
+      expect(response.sceneThreedFiles.length).toBeTruthy();
+    });
+
+    test('retrieve a 3d revision (unreal)', async () => {
+      const response = await client.viewer3D.retrieveUnrealRevision3D(
+        model.id,
+        revisions[0].id
+      );
+      expect(response.sceneThreedFiles.length).toBeTruthy();
+    });
+
+    test('retrieve 3d reveal node list', async () => {
+      const response = await client.viewer3D.listRevealNodes3D(
+        model.id,
+        revisions[0].id
+      );
+      expect(response.items.length).toBeTruthy();
+    });
+
+    test('retrieve 3d reveal 3d sectors', async () => {
+      const response = await client.viewer3D.listRevealSectors3D(
+        model.id,
+        revisions[0].id
+      );
+      expect(response.items.length).toBeTruthy();
     });
 
     test('delete revisions', async () => {
