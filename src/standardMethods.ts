@@ -11,24 +11,34 @@ import { MetadataMap } from './metadata';
 import { promiseAllWithData } from './resources/assets/assetUtils';
 import { CursorResponse, ItemsResponse } from './types/types';
 
-type CreateEndpoint<RequestType, ResponseType> = (
-  items: RequestType[]
-) => Promise<ResponseType[]>;
+function noTransformFunction<ResponseType, TransformType>(
+  items: ResponseType[]
+) {
+  return (items as unknown) as TransformType;
+}
+type Transformer<ResponseType, TransformType> = (
+  items: ResponseType[]
+) => TransformType;
 
 /** @hidden */
-export function generateCreateEndpoint<RequestType, ResponseType>(
+export function generateCreateEndpoint<
+  RequestType,
+  ResponseType,
+  TransformType = ResponseType[]
+>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
+  transform: Transformer<ResponseType, TransformType> = noTransformFunction,
   chunkFunction?: (items: RequestType[]) => RequestType[][]
-): CreateEndpoint<RequestType, ResponseType> {
-  return async function create(items) {
+) {
+  return async function create(itemsArray: RequestType[]) {
     type Response = ItemsResponse<ResponseType>;
-    const chunks = doChunking<RequestType>(items, chunkFunction);
+    const chunks = doChunking<RequestType>(itemsArray, chunkFunction);
 
     // create a map that maps index in chunks to the original index in items (chunkFunction can change the order - assets)
     const itemIndex = new Map<RequestType, number>();
-    items.forEach((item, index) => {
+    itemsArray.forEach((item, index) => {
       itemIndex.set(item, index);
     });
     const chunkIndexToItemsIndex = new Map<number, number>();
@@ -58,7 +68,7 @@ export function generateCreateEndpoint<RequestType, ResponseType>(
       const originalIndex = chunkIndexToItemsIndex.get(index) as number;
       sortedResponse[originalIndex] = item;
     });
-    return metadataMap.addAndReturn(sortedResponse, responses[0]);
+    return metadataMap.addAndReturn(transform(sortedResponse), responses[0]);
   };
 }
 
@@ -102,12 +112,14 @@ export type CursorAndAsyncIterator<T> = Promise<CursorResponse<T>> &
 /** @hidden */
 export function generateListEndpoint<
   RequestFilter extends object,
-  ResponseType
+  ResponseType,
+  TransformType = ResponseType
 >(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
-  withPost: boolean = true
+  withPost: boolean = true,
+  transform: Transformer<ResponseType, TransformType[]> = noTransformFunction
 ) {
   function addNextPageFunction<T>(
     dataWithCursor: CursorResponse<T>,
@@ -132,15 +144,19 @@ export function generateListEndpoint<
           resourcePath,
           filter
         ));
-    addNextPageFunction(response.data, filter);
-    return metadataMap.addAndReturn(response.data, response);
+    const transformedResponse: CursorResponse<TransformType> = {
+      items: transform(response.data.items),
+      nextCursor: response.data.nextCursor,
+    };
+    addNextPageFunction(transformedResponse, filter);
+    return metadataMap.addAndReturn(transformedResponse, response);
   }
 
   return (params: RequestFilter = {} as RequestFilter) => {
     const listPromise = list(params);
     return Object.assign(
       listPromise,
-      makeAutoPaginationMethods<ResponseType>(listPromise)
+      makeAutoPaginationMethods<TransformType>(listPromise)
     );
   };
 }
@@ -208,13 +224,18 @@ export function generateSimpleListEndpoint<RequestParams, ResponseType>(
 }
 
 /** @hidden */
-export function generateRetrieveEndpoint<IdType, ResponseType>(
+export function generateRetrieveEndpoint<
+  IdType,
+  ResponseType,
+  TransformType = ResponseType[]
+>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
+  transform: Transformer<ResponseType, TransformType> = noTransformFunction,
   chunkFunction?: (ids: IdType[]) => IdType[][]
 ) {
-  return async function retrieve(ids: IdType[]): Promise<ResponseType[]> {
+  return async function retrieve(ids: IdType[]) {
     const chunks = doChunking<IdType>(ids, chunkFunction);
     const responses = await promiseAllWithData(
       chunks,
@@ -234,7 +255,7 @@ export function generateRetrieveEndpoint<IdType, ResponseType>(
       [],
       ...responses.map(response => response.data.items)
     );
-    return metadataMap.addAndReturn(mergedResponses, responses[0]);
+    return metadataMap.addAndReturn(transform(mergedResponses), responses[0]);
   };
 }
 
@@ -303,15 +324,18 @@ export function generateDeleteEndpointWithParams<IdType, ParamsType>(
 }
 
 /** @hidden */
-export function generateUpdateEndpoint<RequestType, ResponseType>(
+export function generateUpdateEndpoint<
+  RequestType,
+  ResponseType,
+  TransformType = ResponseType[]
+>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
   metadataMap: MetadataMap,
+  transform: Transformer<ResponseType, TransformType> = noTransformFunction,
   chunkFunction?: (changes: RequestType[]) => RequestType[][]
 ) {
-  return async function update(
-    changes: RequestType[]
-  ): Promise<ResponseType[]> {
+  return async function update(changes: RequestType[]) {
     type Response = ItemsResponse<ResponseType>;
     const chunks = doChunking<RequestType>(changes, chunkFunction);
     const responses = await promiseAllWithData(
@@ -328,17 +352,22 @@ export function generateUpdateEndpoint<RequestType, ResponseType>(
       [],
       ...responses.map(response => response.data.items)
     );
-    return metadataMap.addAndReturn(mergedResponses, responses[0]);
+    return metadataMap.addAndReturn(transform(mergedResponses), responses[0]);
   };
 }
 
 /** @hidden */
-export function generateSearchEndpoint<RequestParams, ResponseType>(
+export function generateSearchEndpoint<
+  RequestParams,
+  ResponseType,
+  TransformType = ResponseType[]
+>(
   axiosInstance: AxiosInstance,
   resourcePath: string,
-  metadataMap: MetadataMap
+  metadataMap: MetadataMap,
+  transform: Transformer<ResponseType, TransformType> = noTransformFunction
 ) {
-  return async function search(query: RequestParams): Promise<ResponseType[]> {
+  return async function search(query: RequestParams) {
     const response = await rawRequest<ItemsResponse<ResponseType>>(
       axiosInstance,
       {
@@ -348,7 +377,8 @@ export function generateSearchEndpoint<RequestParams, ResponseType>(
       },
       true
     );
-    return metadataMap.addAndReturn(response.data.items, response);
+    const { items } = response.data;
+    return metadataMap.addAndReturn(transform(items), response);
   };
 }
 

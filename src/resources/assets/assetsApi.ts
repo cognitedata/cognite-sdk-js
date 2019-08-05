@@ -1,6 +1,17 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
+import { chunk } from 'lodash';
+import {
+  Asset as TypeAsset,
+  AssetChange,
+  AssetIdEither,
+  AssetListScope,
+  AssetSearchFilter,
+  ExternalAssetItem,
+  IdEither,
+} from '../..';
+import CogniteClient from '../../cogniteClient';
 import { MetadataMap } from '../../metadata';
 import {
   CursorAndAsyncIterator,
@@ -11,15 +22,9 @@ import {
   generateSearchEndpoint,
   generateUpdateEndpoint,
 } from '../../standardMethods';
-import {
-  Asset,
-  AssetChange,
-  AssetIdEither,
-  AssetListScope,
-  AssetSearchFilter,
-  ExternalAssetItem,
-} from '../../types/types';
 import { projectUrl } from '../../utils';
+import { Asset } from '../classes/asset';
+import { AssetList } from '../classes/assetList';
 import { assetChunker } from './assetUtils';
 
 export class AssetsAPI {
@@ -90,33 +95,121 @@ export class AssetsAPI {
    */
   public delete: AssetDeleteEndpoint;
 
+  private client: CogniteClient;
+
   /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+  constructor(
+    client: CogniteClient,
+    project: string,
+    instance: AxiosInstance,
+    map: MetadataMap
+  ) {
+    this.client = client;
     const path = projectUrl(project) + '/assets';
-    this.create = generateCreateEndpoint(instance, path, map, assetChunker);
-    this.list = generateListEndpoint(instance, path, map, true);
-    this.retrieve = generateRetrieveEndpoint(instance, path, map);
-    this.update = generateUpdateEndpoint(instance, path, map);
-    this.search = generateSearchEndpoint(instance, path, map);
+    const transformResponse = this.transformToAssetListObject;
+    this.create = generateCreateEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse,
+      assetChunker
+    );
+    this.list = generateListEndpoint(
+      instance,
+      path,
+      map,
+      true,
+      transformResponse
+    );
+    this.retrieve = generateRetrieveEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse
+    );
+    this.update = generateUpdateEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse
+    );
+    this.search = generateSearchEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse
+    );
     this.delete = generateDeleteEndpointWithParams(instance, path, map);
   }
+
+  public async retrieveSubtree(id: IdEither, depth: number) {
+    const currentDepth: number = 0;
+    const rootAssetList = await this.retrieve([id]);
+    return this.getAssetSubtree(rootAssetList, currentDepth, depth);
+  }
+
+  private transformToAssetListObject = (assets: TypeAsset[]) => {
+    const assetArray = assets.map(asset => new Asset(this.client, asset));
+    return new AssetList(this.client, assetArray);
+  };
+
+  private async getAssetSubtree(
+    assets: AssetList,
+    currentDepth: number,
+    depth: number = Infinity
+  ): Promise<AssetList> {
+    const subtree = assets;
+    if (depth > currentDepth) {
+      const children = await this.getChildren(assets);
+      if (children.length !== 0) {
+        const subtreeOfChildren = await this.getAssetSubtree(
+          children,
+          currentDepth + 1,
+          depth
+        );
+        subtree.push(...subtreeOfChildren);
+      }
+    }
+    return subtree;
+  }
+
+  private getChildren = async (assets: AssetList) => {
+    const ids = assets.map(asset => asset.id);
+    const chunks = chunk(ids, 100);
+    const assetsArray: Asset[] = [];
+    for (const chunkOfAssetIds of chunks) {
+      const childrenList = await this.client.assets
+        .list({
+          filter: {
+            parentIds: chunkOfAssetIds,
+          },
+        })
+        .autoPagingToArray({ limit: Infinity });
+      assetsArray.push(...childrenList);
+    }
+    return new AssetList(this.client, assetsArray);
+  };
 }
 
 export type AssetCreateEndpoint = (
   items: ExternalAssetItem[]
-) => Promise<Asset[]>;
+) => Promise<AssetList>;
 
 export type AssetListEndpoint = (
   scope?: AssetListScope
 ) => CursorAndAsyncIterator<Asset>;
 
-export type AssetRetrieveEndpoint = (ids: AssetIdEither[]) => Promise<Asset[]>;
+export type AssetRetrieveEndpoint = (
+  ids: AssetIdEither[]
+) => Promise<AssetList>;
 
-export type AssetUpdateEndpoint = (changes: AssetChange[]) => Promise<Asset[]>;
+export type AssetUpdateEndpoint = (
+  changes: AssetChange[]
+) => Promise<AssetList>;
 
 export type AssetSearchEndpoint = (
   query: AssetSearchFilter
-) => Promise<Asset[]>;
+) => Promise<AssetList>;
 
 export interface AssetDeleteParams {
   recursive?: boolean;

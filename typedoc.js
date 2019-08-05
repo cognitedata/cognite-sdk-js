@@ -7,7 +7,7 @@ module.exports = {
   out: './docs/',
   // theme: 'markdown',
   readme: 'none',
-  ignoreCompilerErrors: false,
+  ignoreCompilerErrors: true,
   excludeNotExported: true,
   hideGenerator: true,
   excludePrivate: true,
