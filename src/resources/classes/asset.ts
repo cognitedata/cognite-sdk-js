@@ -102,6 +102,7 @@ export class Asset implements TypeAsset {
 
   /**
    * Returns the full subtree of the current asset, including the asset itself
+   * @param {SubtreeOptions} options Specify the depth of the required subtree, default is the whole asset-hierarchy
    * ```js
    * const subtree = await asset.subtree();
    * ```
@@ -116,6 +117,7 @@ export class Asset implements TypeAsset {
 
   /**
    * Returns all timeseries for the current asset
+   * @param {TimeseriesFilter} filter Allow specified filter for what timeseries to retrieve
    * ```js
    * const timeSeries = await asset.timeSeries();
    * ```
@@ -131,6 +133,7 @@ export class Asset implements TypeAsset {
 
   /**
    * Returns all events for the current asset
+   * @param {EventFilter} filter Allow specified filter for what events to retrieve
    * ```js
    * const events = await asset.events();
    * ```
@@ -145,6 +148,7 @@ export class Asset implements TypeAsset {
 
   /**
    * Returns all files for the current asset
+   * @param {FileFilter} filter Allow specified filter for what files to retrieve
    * ```js
    * const files = await asset.files();
    * ```
