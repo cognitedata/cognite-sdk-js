@@ -8,6 +8,38 @@ import { apiKey, authTokens, project, setupClient } from './testUtils';
 
 // tslint:disable-next-line:no-big-function
 describe('CogniteClient', () => {
+  describe('constructor', () => {
+    test('throw on missing parameter', () => {
+      expect(() => {
+        // @ts-ignore
+        // tslint:disable-next-line:no-unused-expression
+        new CogniteClient();
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"\`CogniteClient\` is missing parameter \`options\`"`
+      );
+    });
+
+    test('missing appId', () => {
+      expect(() => {
+        // @ts-ignore
+        // tslint:disable-next-line:no-unused-expression
+        new CogniteClient({});
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"options.appId is required and must be of type string"`
+      );
+    });
+
+    test('invalid appId', () => {
+      expect(() => {
+        // @ts-ignore
+        // tslint:disable-next-line:no-unused-expression
+        new CogniteClient({ appId: 12 });
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"options.appId is required and must be of type string"`
+      );
+    });
+  });
+
   describe('loginWithApiKey', () => {
     test('missing parameter', async () => {
       const client = setupClient();
@@ -25,7 +57,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         () => client.loginWithApiKey({})
       ).toThrowErrorMatchingInlineSnapshot(
-        `"The properties \`project\` and \`apiKey\` must be provided to param \`options\` in \`loginWithApiKey\`"`
+        `"options.project is required and must be of type string"`
       );
     });
 
@@ -35,7 +67,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         () => client.loginWithApiKey({ project })
       ).toThrowErrorMatchingInlineSnapshot(
-        `"The properties \`project\` and \`apiKey\` must be provided to param \`options\` in \`loginWithApiKey\`"`
+        `"options.apiKey is required and must be of type string"`
       );
     });
 
@@ -127,7 +159,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         () => client.loginWithOAuth({})
       ).toThrowErrorMatchingInlineSnapshot(
-        `"The properties \`project\` must be provided to param \`options\` in \`loginWithOAuth\`"`
+        `"options.project is required and must be of type string"`
       );
     });
 
