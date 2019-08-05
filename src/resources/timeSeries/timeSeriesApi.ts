@@ -1,6 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
+import { CogniteClient } from '../..';
 import { MetadataMap } from '../../metadata';
 import {
   CursorAndAsyncIterator,
@@ -87,8 +88,16 @@ export class TimeSeriesAPI {
    */
   public delete: TimeSeriesDeleteEndpoint;
 
+  private client: CogniteClient;
+
   /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+  constructor(
+    client: CogniteClient,
+    project: string,
+    instance: AxiosInstance,
+    map: MetadataMap
+  ) {
+    this.client = client;
     const path = projectUrl(project) + '/timeseries';
     this.create = generateCreateEndpoint(instance, path, map);
     this.list = generateListEndpoint(instance, path, map, false);
