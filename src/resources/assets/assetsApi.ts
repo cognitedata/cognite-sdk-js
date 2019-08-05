@@ -158,7 +158,7 @@ export class AssetsAPI {
     currentDepth: number,
     depth: number = Infinity
   ): Promise<AssetList> {
-    const subtree: AssetList = assets;
+    const subtree = assets;
     if (depth > currentDepth) {
       const children = await this.getChildren(assets);
       if (children.length !== 0) {
