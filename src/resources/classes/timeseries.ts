@@ -3,6 +3,7 @@ import { CogniteClient } from '../..';
 import {
   CogniteExternalId,
   CogniteInternalId,
+  DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
   Metadata,
 } from '../../types/types';
@@ -43,8 +44,15 @@ export class TimeSeries implements GetTimeSeriesMetadataDTO {
   };
 
   public getAsset = async () => {
-    this.assetId ? this.client.assets.retrieve([{ id: this.assetId }]) : null;
+    if (this.assetId === undefined) {
+      return null;
+    }
+    return this.client.assets.retrieve([{ id: this.assetId }]);
   };
 
-  public datapoints = async () => {};
+  public datapoints = async (options?: DatapointsMultiQuery) => {
+    return this.client.datapoints.retrieve({
+      items: [{ id: this.id, ...options }],
+    });
+  };
 }
