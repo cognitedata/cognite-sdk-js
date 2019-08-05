@@ -12,7 +12,7 @@ import {
   FileFilter,
   Metadata,
   TimeseriesFilter,
-} from '../..';
+} from '../../index';
 import { AssetList } from './assetList';
 
 export interface SubtreeOptions {
@@ -50,6 +50,8 @@ export class Asset implements TypeAsset {
 
   /**
    * Deletes the current asset
+   *
+   * @param {DeleteOptions} options Allow to delete recursively, default ({}) is recursive = false
    * ```js
    * await asset.delete();
    * ```
