@@ -148,23 +148,23 @@ export class TimeSeriesAPI {
 
 export type TimeSeriesListEndpoint = (
   filter?: TimeseriesFilter
-) => CursorAndAsyncIterator<GetTimeSeriesMetadataDTO>;
+) => CursorAndAsyncIterator<TimeSeries>;
 
 export type TimeSeriesCreateEndpoint = (
   items: PostTimeSeriesMetadataDTO[]
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+) => Promise<TimeSeriesList>;
 
 export type TimeSeriesSearchEndpoint = (
   query: TimeSeriesSearchDTO
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+) => Promise<TimeSeriesList>;
 
 export type TimeSeriesRetrieveEndpoint = (
   ids: TimeseriesIdEither[]
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+) => Promise<TimeSeriesList>;
 
 export type TimeSeriesUpdateEndpoint = (
   changes: TimeSeriesUpdate[]
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+) => Promise<TimeSeriesList>;
 
 export type TimeSeriesDeleteEndpoint = (
   ids: TimeseriesIdEither[]
