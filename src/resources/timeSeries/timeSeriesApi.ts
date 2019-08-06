@@ -21,6 +21,8 @@ import {
   TimeSeriesUpdate,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
+import { TimeSeries } from '../classes/timeseries';
+import { TimeSeriesList } from '../classes/timeseriesList';
 
 export class TimeSeriesAPI {
   /**
@@ -99,13 +101,49 @@ export class TimeSeriesAPI {
   ) {
     this.client = client;
     const path = projectUrl(project) + '/timeseries';
-    this.create = generateCreateEndpoint(instance, path, map);
-    this.list = generateListEndpoint(instance, path, map, false);
-    this.search = generateSearchEndpoint(instance, path, map);
-    this.retrieve = generateRetrieveEndpoint(instance, path, map);
-    this.update = generateUpdateEndpoint(instance, path, map);
+    const transformResponse = this.transformToTimeSeriesListObject;
+    this.create = generateCreateEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse
+    );
+    this.list = generateListEndpoint(
+      instance,
+      path,
+      map,
+      false,
+      transformResponse
+    );
+    this.search = generateSearchEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse
+    );
+    this.retrieve = generateRetrieveEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse
+    );
+    this.update = generateUpdateEndpoint(
+      instance,
+      path,
+      map,
+      transformResponse
+    );
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
+
+  private transformToTimeSeriesListObject = (
+    timeseries: GetTimeSeriesMetadataDTO[]
+  ) => {
+    const timeSeriesArray = timeseries.map(
+      timeserie => new TimeSeries(this.client, timeserie)
+    );
+    return new TimeSeriesList(this.client, timeSeriesArray);
+  };
 }
 
 export type TimeSeriesListEndpoint = (
