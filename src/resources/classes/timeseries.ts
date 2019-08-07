@@ -40,10 +40,24 @@ export class TimeSeries implements GetTimeSeriesMetadataDTO {
     this.client = client;
   }
 
+  /**
+   * Deletes the current timeseries
+   *
+   * ```js
+   * await timeseries.delete();
+   * ```
+   */
   public delete = async () => {
     return this.client.timeseries.delete([{ id: this.id }]);
   };
 
+  /**
+   * Retrieves the asset that the current timeseries is related to
+   *
+   * ```js
+   * const assetList = await timeseries.getAsset();
+   * ```
+   */
   public getAsset = async () => {
     if (this.assetId === undefined) {
       return null;
@@ -51,12 +65,28 @@ export class TimeSeries implements GetTimeSeriesMetadataDTO {
     return this.client.assets.retrieve([{ id: this.assetId }]);
   };
 
+  /**
+   * Retrieves all datapoints related to the current timeseries
+   *
+   * @param {DatapointsMultiQuery} options Query-options for datapoints
+   * ```js
+   * const datapoints = await timeseries.getDatapoints();
+   * ```
+   */
   public getDatapoints = async (options?: DatapointsMultiQuery) => {
     return this.client.datapoints.retrieve({
       items: [{ id: this.id, ...options }],
     });
   };
 
+  /**
+   * Retrieves the latest datapoints related to the current timeseries
+   *
+   * @param {LatestDataPropertyFilter} option Filter-options for latest datapoints
+   * ```js
+   * const latestDatapoints = await timeseries.getLatestDatapoints();
+   * ```
+   */
   public getLatestDatapoints = async (option?: LatestDataPropertyFilter) => {
     const filter: LatestDataPropertyFilter = option || {};
     return this.client.datapoints.retrieveLatest([{ ...filter, id: this.id }]);

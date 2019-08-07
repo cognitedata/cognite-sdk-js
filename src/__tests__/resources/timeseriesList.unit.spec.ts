@@ -97,12 +97,10 @@ describe('TimeSeriesList class unit test', async () => {
         id: timeseries.assetId,
       }))
       .filter(assetId => assetId.id !== undefined);
-    console.log(uniqBy(assetIds, 'id'));
     axiosMock
       .onPost(new RegExp('/assets/byids$'), { items: uniqBy(assetIds, 'id') })
       .replyOnce(200, { items: assetsArray });
     const assetsFromTimeSeries = await createdTimeSeries.getAllAssets();
-    console.log(assetsFromTimeSeries);
     expect(assetsFromTimeSeries).toHaveLength(5);
     expect(assetsFromTimeSeries[0].id).toBeDefined();
   });
