@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 import { uniqBy } from 'lodash';
 import { CogniteClient } from '../..';
-import { DatapointsMultiQuery, IdEither } from '../../types/types';
-import { TimeSeries } from './timeseries';
+import { DatapointsMultiQuery } from '../../types/types';
+import { TimeSeries } from './timeSeries';
 
 export class TimeSeriesList extends Array<TimeSeries> {
   private client: CogniteClient;
@@ -30,7 +30,7 @@ export class TimeSeriesList extends Array<TimeSeries> {
    * ```
    */
   public getAllAssets = async () => {
-    const assetIds: IdEither[] = this.map(timeseries => ({
+    const assetIds = this.map(timeseries => ({
       id: timeseries.assetId as number,
     })).filter(assetId => assetId.id !== undefined);
     return this.client.assets.retrieve(uniqBy(assetIds, 'id'));

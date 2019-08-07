@@ -3,8 +3,8 @@ import MockAdapter from 'axios-mock-adapter';
 import { CogniteClient } from '../..';
 import { Asset } from '../../resources/classes/asset';
 import { AssetList } from '../../resources/classes/assetList';
-import { TimeSeries } from '../../resources/classes/timeseries';
-import { TimeSeriesList } from '../../resources/classes/timeseriesList';
+import { TimeSeries } from '../../resources/classes/timeSeries';
+import { TimeSeriesList } from '../../resources/classes/timeSeriesList';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('TimeSeries class unit test', () => {

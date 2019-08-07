@@ -21,8 +21,8 @@ import {
   TimeSeriesUpdate,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
-import { TimeSeries } from '../classes/timeseries';
-import { TimeSeriesList } from '../classes/timeseriesList';
+import { TimeSeries } from '../classes/timeSeries';
+import { TimeSeriesList } from '../classes/timeSeriesList';
 
 export class TimeSeriesAPI {
   /**

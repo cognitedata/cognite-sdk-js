@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { uniqBy } from 'lodash';
 import { CogniteClient } from '../..';
 import { AssetList } from '../../resources/classes/assetList';
-import { TimeSeriesList } from '../../resources/classes/timeseriesList';
+import { TimeSeriesList } from '../../resources/classes/timeSeriesList';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('TimeSeriesList class unit test', async () => {
