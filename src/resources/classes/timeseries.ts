@@ -5,6 +5,7 @@ import {
   CogniteInternalId,
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
+  LatestDataPropertyFilter,
   Metadata,
 } from '../../types/types';
 
@@ -50,9 +51,14 @@ export class TimeSeries implements GetTimeSeriesMetadataDTO {
     return this.client.assets.retrieve([{ id: this.assetId }]);
   };
 
-  public datapoints = async (options?: DatapointsMultiQuery) => {
+  public getDatapoints = async (options?: DatapointsMultiQuery) => {
     return this.client.datapoints.retrieve({
       items: [{ id: this.id, ...options }],
     });
+  };
+
+  public getLatestDatapoints = async (option?: LatestDataPropertyFilter) => {
+    const filter: LatestDataPropertyFilter = option || {};
+    return this.client.datapoints.retrieveLatest([{ ...filter, id: this.id }]);
   };
 }

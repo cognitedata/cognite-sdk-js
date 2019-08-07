@@ -839,7 +839,7 @@ export interface LatestDataPropertyFilter {
   /**
    * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send time as a Date object.
    */
-  before: string | Date;
+  before?: string | Date;
 }
 
 export interface Limit {
