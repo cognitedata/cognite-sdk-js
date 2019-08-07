@@ -22,11 +22,8 @@ describe('TimeSeries class unit test', () => {
   });
   beforeEach(async () => {
     axiosMock.reset();
-    newTimeSeries = {
-      name: 'test-timeseries',
-      externalId: 'timeseries' + randomInt(),
-      id: randomInt(),
-    };
+
+    // Create assets
     newAsset = {
       name: 'test-asset' + randomInt(),
       externalId: 'asset' + randomInt(),
@@ -36,6 +33,13 @@ describe('TimeSeries class unit test', () => {
       .onPost(new RegExp('/assets$'), { items: [newAsset] })
       .replyOnce(200, { items: [newAsset] });
     createdAssets = await client.assets.create([newAsset]);
+
+    // Create timeseries
+    newTimeSeries = {
+      name: 'test-timeseries',
+      externalId: 'timeseries' + randomInt(),
+      id: randomInt(),
+    };
     timeSeriesWithAssetId = {
       ...newTimeSeries,
       assetId: createdAssets[0].id,
@@ -51,6 +55,8 @@ describe('TimeSeries class unit test', () => {
       newTimeSeries,
       timeSeriesWithAssetId,
     ]);
+
+    // Create datapoints
     datapointArray = [];
     const time = randomInt();
     for (let index = 0; index < 3; index++) {
@@ -110,6 +116,7 @@ describe('TimeSeries class unit test', () => {
     expect(fetchedDatapoints).toHaveLength(3);
     expect(fetchedDatapoints[0].datapoints[0].timestamp).toBeDefined();
   });
+
   test('get latest datapoints', async () => {
     axiosMock
       .onPost(new RegExp('/timeseries/data/latest$'), {
