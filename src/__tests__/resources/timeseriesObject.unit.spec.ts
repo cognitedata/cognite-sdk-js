@@ -84,10 +84,10 @@ describe('TimeSeries class unit test', () => {
         items: [{ id: createdTimeSeries[1].assetId }],
       })
       .replyOnce(200, { items: [newAsset] });
-    const assetFromTimeseries = await createdTimeSeries[1].getAsset();
-    if (assetFromTimeseries) {
-      expect(assetFromTimeseries[0]).toBeInstanceOf(Asset);
-      expect(assetFromTimeseries[0].name).toEqual(createdAssets[0].name);
+    const assetsFromTimeseries = await createdTimeSeries[1].getAsset();
+    if (assetsFromTimeseries) {
+      expect(assetsFromTimeseries[0]).toBeInstanceOf(Asset);
+      expect(assetsFromTimeseries[0].name).toEqual(createdAssets[0].name);
     }
   });
 
