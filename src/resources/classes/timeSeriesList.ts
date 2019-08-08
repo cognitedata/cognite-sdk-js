@@ -30,9 +30,11 @@ export class TimeSeriesList extends Array<TimeSeries> {
    * ```
    */
   public getAllAssets = async () => {
-    const assetIds = this.map(timeseries => ({
-      id: timeseries.assetId as number,
-    })).filter(assetId => assetId.id !== undefined);
+    const assetIds = this.filter(
+      timeseries => timeseries.assetId !== undefined
+    ).map(timeseries => ({
+      id: timeseries.assetId,
+    }));
     return this.client.assets.retrieve(uniqBy(assetIds, 'id'));
   };
 
@@ -48,7 +50,7 @@ export class TimeSeriesList extends Array<TimeSeries> {
     const timeseriesIds = this.map(timeseries => ({ id: timeseries.id }));
     return this.client.datapoints.retrieve({
       items: timeseriesIds,
-      ...options,
+      ...(options || {}),
     });
   };
 }

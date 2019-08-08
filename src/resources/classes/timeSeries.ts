@@ -62,7 +62,8 @@ export class TimeSeries implements GetTimeSeriesMetadataDTO {
     if (this.assetId === undefined) {
       return null;
     }
-    return this.client.assets.retrieve([{ id: this.assetId }]);
+    const assetList = await this.client.assets.retrieve([{ id: this.assetId }]);
+    return assetList[0];
   };
 
   /**
@@ -75,7 +76,7 @@ export class TimeSeries implements GetTimeSeriesMetadataDTO {
    */
   public getDatapoints = async (options?: DatapointsMultiQuery) => {
     return this.client.datapoints.retrieve({
-      items: [{ id: this.id, ...options }],
+      items: [{ ...options, id: this.id }],
     });
   };
 

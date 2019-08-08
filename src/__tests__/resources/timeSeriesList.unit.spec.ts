@@ -1,37 +1,31 @@
 // Copyright 2019 Cognite AS
 import MockAdapter from 'axios-mock-adapter';
 import { uniqBy } from 'lodash';
-import { CogniteClient } from '../..';
+import { CogniteClient } from '../../index';
 import { AssetList } from '../../resources/classes/assetList';
 import { TimeSeriesList } from '../../resources/classes/timeSeriesList';
+import { DatapointsPostDatapoint } from '../../types/types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('TimeSeriesList class unit test', async () => {
   let axiosMock: MockAdapter;
   let client: CogniteClient;
-  let newAsset: any;
   let createdTimeSeries: TimeSeriesList;
-  let timeSeriesWithAssetId: any;
   let createdAssets: AssetList;
-  let datapointArray: any[];
+  let datapointArray: DatapointsPostDatapoint[] = [];
   let assetsArray: any[] = [];
   let timeseriesArray: any[] = [];
-  beforeAll(() => {
+  beforeAll(async () => {
     client = setupLoggedInClient();
     axiosMock = new MockAdapter(client.instance);
-  });
-  beforeEach(async () => {
-    axiosMock.reset();
-
     // Create assets
     assetsArray = [];
     for (let index = 0; index < 5; index++) {
-      newAsset = {
+      assetsArray.push({
         name: 'test-asset' + randomInt(),
         externalId: 'asset' + randomInt(),
         id: randomInt(),
-      };
-      assetsArray.push(newAsset);
+      });
     }
     axiosMock
       .onPost(new RegExp('/assets$'), { items: assetsArray })
@@ -47,12 +41,11 @@ describe('TimeSeriesList class unit test', async () => {
       },
     ];
     for (let index = 0; index < 5; index++) {
-      timeSeriesWithAssetId = {
+      timeseriesArray.push({
         name: 'test-timeseries' + randomInt(),
         assetId: createdAssets[index].id,
         id: randomInt(),
-      };
-      timeseriesArray.push(timeSeriesWithAssetId);
+      });
     }
     axiosMock
       .onPost(new RegExp('/timeseries$'), {
@@ -77,6 +70,9 @@ describe('TimeSeriesList class unit test', async () => {
       })
       .replyOnce(200);
     await client.datapoints.insert(datapointArray);
+  });
+  beforeEach(async () => {
+    axiosMock.reset();
   });
 
   test('delete', async () => {

@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 import MockAdapter from 'axios-mock-adapter';
-import { CogniteClient } from '../..';
+import { CogniteClient, DatapointsPostDatapoint } from '../../index';
 import { Asset } from '../../resources/classes/asset';
 import { AssetList } from '../../resources/classes/assetList';
 import { TimeSeries } from '../../resources/classes/timeSeries';
@@ -15,7 +15,7 @@ describe('TimeSeries class unit test', () => {
   let createdTimeSeries: TimeSeriesList;
   let timeSeriesWithAssetId: TimeSeries;
   let createdAssets: AssetList;
-  let datapointArray: any[] = [];
+  let datapointArray: DatapointsPostDatapoint[] = [];
   beforeAll(() => {
     client = setupLoggedInClient();
     axiosMock = new MockAdapter(client.instance);
@@ -89,11 +89,11 @@ describe('TimeSeries class unit test', () => {
       .onPost(new RegExp('/assets/byids$'), {
         items: [{ id: createdTimeSeries[1].assetId }],
       })
-      .replyOnce(200, { items: [newAsset] });
+      .replyOnce(200, { items: newAsset });
     const assetsFromTimeseries = await createdTimeSeries[1].getAsset();
     if (assetsFromTimeseries) {
-      expect(assetsFromTimeseries[0]).toBeInstanceOf(Asset);
-      expect(assetsFromTimeseries[0].name).toEqual(createdAssets[0].name);
+      expect(assetsFromTimeseries).toBeInstanceOf(Asset);
+      expect(assetsFromTimeseries.name).toEqual(createdAssets[0].name);
     }
   });
 

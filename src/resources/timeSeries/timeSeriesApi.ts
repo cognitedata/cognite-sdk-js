@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
-import { CogniteClient } from '../..';
+import { CogniteClient } from '../../index';
 import { MetadataMap } from '../../metadata';
 import {
   CursorAndAsyncIterator,
