@@ -22,7 +22,7 @@ export class TimeSeries implements GetTimeSeriesMetadataDTO {
   public createdTime: Date;
   public lastUpdatedTime: Date;
   public id: CogniteInternalId;
-  public client: CogniteClient;
+  private client: CogniteClient;
 
   constructor(client: CogniteClient, props: GetTimeSeriesMetadataDTO) {
     this.externalId = props.externalId;

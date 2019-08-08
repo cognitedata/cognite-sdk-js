@@ -54,12 +54,6 @@ describe('TimeSeriesList class unit test', async () => {
       };
       datapointArray.push(datapoint);
     }
-    axiosMock
-      .onPost(new RegExp('/timeseries/data$'), {
-        items: datapointArray,
-      })
-      .replyOnce(200);
-    await client.datapoints.insert(datapointArray);
   });
 
   beforeEach(async () => {
