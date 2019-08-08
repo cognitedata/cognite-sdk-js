@@ -1,20 +1,20 @@
 // Copyright 2019 Cognite AS
 import MockAdapter from 'axios-mock-adapter';
-import { CogniteClient, DatapointsPostDatapoint } from '../../index';
+import {
+  CogniteClient,
+  DatapointsPostDatapoint,
+  PostTimeSeriesMetadataDTO,
+} from '../../index';
 import { Asset } from '../../resources/classes/asset';
-import { AssetList } from '../../resources/classes/assetList';
-import { TimeSeries } from '../../resources/classes/timeSeries';
 import { TimeSeriesList } from '../../resources/classes/timeSeriesList';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('TimeSeries class unit test', () => {
   let axiosMock: MockAdapter;
   let client: CogniteClient;
-  let newTimeSeries: any;
-  let newAsset: any;
+  let newTimeSeries: PostTimeSeriesMetadataDTO;
   let createdTimeSeries: TimeSeriesList;
-  let timeSeriesWithAssetId: TimeSeries;
-  let createdAssets: AssetList;
+  let timeSeriesWithAssetId: PostTimeSeriesMetadataDTO;
   let datapointArray: DatapointsPostDatapoint[] = [];
   beforeAll(() => {
     client = setupLoggedInClient();
@@ -23,34 +23,26 @@ describe('TimeSeries class unit test', () => {
   beforeEach(async () => {
     axiosMock.reset();
 
-    // Create assets
-    newAsset = {
-      name: 'test-asset' + randomInt(),
-      externalId: 'asset' + randomInt(),
-      id: randomInt(),
-    };
-    axiosMock
-      .onPost(new RegExp('/assets$'), { items: [newAsset] })
-      .replyOnce(200, { items: [newAsset] });
-    createdAssets = await client.assets.create([newAsset]);
-
     // Create timeseries
     newTimeSeries = {
       name: 'test-timeseries',
       externalId: 'timeseries' + randomInt(),
-      id: randomInt(),
     };
     timeSeriesWithAssetId = {
       ...newTimeSeries,
-      assetId: createdAssets[0].id,
+      assetId: randomInt(),
       externalId: 'timeseriesWithAssetId' + randomInt(),
-      id: randomInt(),
     };
     axiosMock
       .onPost(new RegExp('/timeseries$'), {
         items: [newTimeSeries, timeSeriesWithAssetId],
       })
-      .replyOnce(200, { items: [newTimeSeries, timeSeriesWithAssetId] });
+      .replyOnce(200, {
+        items: [newTimeSeries, timeSeriesWithAssetId].map(timeseries => ({
+          ...timeseries,
+          id: randomInt(),
+        })),
+      });
     createdTimeSeries = await client.timeseries.create([
       newTimeSeries,
       timeSeriesWithAssetId,
@@ -74,27 +66,17 @@ describe('TimeSeries class unit test', () => {
     await client.datapoints.insert(datapointArray);
   });
 
-  test('create', async () => {
-    expect(createdTimeSeries[0]).toBeInstanceOf(TimeSeries);
-    expect(createdTimeSeries[0].externalId).toEqual(newTimeSeries.externalId);
-    expect(createdTimeSeries[1]).toBeInstanceOf(TimeSeries);
-    expect(createdTimeSeries[1].externalId).toEqual(
-      timeSeriesWithAssetId.externalId
-    );
-    expect(createdTimeSeries[1].assetId).toBeDefined();
-  });
-
   test('get asset', async () => {
     axiosMock
       .onPost(new RegExp('/assets/byids$'), {
         items: [{ id: createdTimeSeries[1].assetId }],
       })
-      .replyOnce(200, { items: newAsset });
-    const assetsFromTimeseries = await createdTimeSeries[1].getAsset();
-    if (assetsFromTimeseries) {
-      expect(assetsFromTimeseries).toBeInstanceOf(Asset);
-      expect(assetsFromTimeseries.name).toEqual(createdAssets[0].name);
-    }
+      .replyOnce(200, {
+        items: [{ id: createdTimeSeries[1].assetId }],
+      });
+    const assetFromTimeseries = await createdTimeSeries[1].getAsset();
+    expect(assetFromTimeseries).not.toBe(null);
+    expect(assetFromTimeseries).toBeInstanceOf(Asset);
   });
 
   test('delete', async () => {

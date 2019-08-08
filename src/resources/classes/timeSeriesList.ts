@@ -33,7 +33,7 @@ export class TimeSeriesList extends Array<TimeSeries> {
     const assetIds = this.filter(
       timeseries => timeseries.assetId !== undefined
     ).map(timeseries => ({
-      id: timeseries.assetId,
+      id: timeseries.assetId as number,
     }));
     return this.client.assets.retrieve(uniqBy(assetIds, 'id'));
   };
