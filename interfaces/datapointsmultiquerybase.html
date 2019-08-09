@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>FilesSearchFilter | Cognite JavaScript SDK</title>
+	<title>DatapointsMultiQueryBase | Cognite JavaScript SDK</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,10 +52,10 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="filessearchfilter.html">FilesSearchFilter</a>
+					<a href="datapointsmultiquerybase.html">DatapointsMultiQueryBase</a>
 				</li>
 			</ul>
-			<h1>Interface FilesSearchFilter</h1>
+			<h1>Interface DatapointsMultiQueryBase</h1>
 		</div>
 	</div>
 </header>
@@ -66,10 +66,15 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="filefilter.html" class="tsd-signature-type">FileFilter</a>
+						<a href="limit.html" class="tsd-signature-type">Limit</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">FilesSearchFilter</span>
+								<span class="target">DatapointsMultiQueryBase</span>
+								<ul class="tsd-hierarchy">
+									<li>
+										<a href="datapointsmultiquery.html" class="tsd-signature-type">DatapointsMultiQuery</a>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</li>
@@ -82,9 +87,12 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="filessearchfilter.html#filter" class="tsd-kind-icon">filter</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="filessearchfilter.html#limit" class="tsd-kind-icon">limit</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filessearchfilter.html#search" class="tsd-kind-icon">search</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#aggregates" class="tsd-kind-icon">aggregates</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#end" class="tsd-kind-icon">end</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#granularity" class="tsd-kind-icon">granularity</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#includeoutsidepoints" class="tsd-kind-icon">include<wbr>Outside<wbr>Points</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="datapointsmultiquerybase.html#limit" class="tsd-kind-icon">limit</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#start" class="tsd-kind-icon">start</a></li>
 							</ul>
 						</section>
 					</div>
@@ -92,16 +100,65 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="filter" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> filter</h3>
-					<div class="tsd-signature tsd-kind-icon">filter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="aggregates" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> aggregates</h3>
+					<div class="tsd-signature tsd-kind-icon">aggregates<span class="tsd-signature-symbol">:</span> <a href="../index.html#aggregate" class="tsd-signature-type">Aggregate</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="filefilter.html">FileFilter</a>.<a href="filefilter.html#filter">filter</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2aeb12f/src/types/types.ts#L620">types/types.ts:620</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2aeb12f/src/types/types.ts#L422">types/types.ts:422</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The aggregates to be returned. This value overrides top-level default aggregates list when set. Specify all aggregates to be retrieved here. Specify empty array if this sub-query needs to return datapoints without aggregation.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="end" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> end</h3>
+					<div class="tsd-signature tsd-kind-icon">end<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../index.html#timestamp" class="tsd-signature-type">Timestamp</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2aeb12f/src/types/types.ts#L418">types/types.ts:418</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Get datapoints up to this time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="granularity" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> granularity</h3>
+					<div class="tsd-signature tsd-kind-icon">granularity<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2aeb12f/src/types/types.ts#L426">types/types.ts:426</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The time granularity size and unit to aggregate over.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="includeoutsidepoints" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> include<wbr>Outside<wbr>Points</h3>
+					<div class="tsd-signature tsd-kind-icon">include<wbr>Outside<wbr>Points<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2aeb12f/src/types/types.ts#L430">types/types.ts:430</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="limit" class="tsd-anchor"></a>
@@ -115,14 +172,19 @@
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="search" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> search</h3>
-					<div class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span></div>
+					<a name="start" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> start</h3>
+					<div class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../index.html#timestamp" class="tsd-signature-type">Timestamp</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2aeb12f/src/types/types.ts#L665">types/types.ts:665</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/2aeb12f/src/types/types.ts#L414">types/types.ts:414</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: &#39;2d-ago&#39; will get everything that is up to 2 days old. Can also send in a Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -139,16 +201,25 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="filessearchfilter.html" class="tsd-kind-icon">Files<wbr>Search<wbr>Filter</a>
+						<a href="datapointsmultiquerybase.html" class="tsd-kind-icon">Datapoints<wbr>Multi<wbr>Query<wbr>Base</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="filessearchfilter.html#filter" class="tsd-kind-icon">filter</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="filessearchfilter.html#limit" class="tsd-kind-icon">limit</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="datapointsmultiquerybase.html#aggregates" class="tsd-kind-icon">aggregates</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="filessearchfilter.html#search" class="tsd-kind-icon">search</a>
+								<a href="datapointsmultiquerybase.html#end" class="tsd-kind-icon">end</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="datapointsmultiquerybase.html#granularity" class="tsd-kind-icon">granularity</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="datapointsmultiquerybase.html#includeoutsidepoints" class="tsd-kind-icon">include<wbr>Outside<wbr>Points</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="datapointsmultiquerybase.html#limit" class="tsd-kind-icon">limit</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="datapointsmultiquerybase.html#start" class="tsd-kind-icon">start</a>
 							</li>
 						</ul>
 					</li>
