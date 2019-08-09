@@ -1,6 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { AxiosInstance } from 'axios';
+import { CogniteClient } from '../../index';
 import { MetadataMap } from '../../metadata';
 import {
   CursorAndAsyncIterator,
@@ -20,6 +21,8 @@ import {
   TimeSeriesUpdate,
 } from '../../types/types';
 import { projectUrl } from '../../utils';
+import { TimeSeries } from '../classes/timeSeries';
+import { TimeSeriesList } from '../classes/timeSeriesList';
 
 export class TimeSeriesAPI {
   /**
@@ -87,37 +90,67 @@ export class TimeSeriesAPI {
    */
   public delete: TimeSeriesDeleteEndpoint;
 
+  private client: CogniteClient;
+
   /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
+  constructor(
+    client: CogniteClient,
+    project: string,
+    instance: AxiosInstance,
+    map: MetadataMap
+  ) {
+    this.client = client;
     const path = projectUrl(project) + '/timeseries';
-    this.create = generateCreateEndpoint(instance, path, map);
-    this.list = generateListEndpoint(instance, path, map, false);
-    this.search = generateSearchEndpoint(instance, path, map);
-    this.retrieve = generateRetrieveEndpoint(instance, path, map);
-    this.update = generateUpdateEndpoint(instance, path, map);
+    const transformResponse = this.transformToTimeSeriesListObject;
+    const defaultArgs: [
+      AxiosInstance,
+      string,
+      MetadataMap,
+      (timeseries: GetTimeSeriesMetadataDTO[]) => TimeSeriesList
+    ] = [instance, path, map, transformResponse];
+    this.create = generateCreateEndpoint(...defaultArgs);
+    this.list = generateListEndpoint(
+      instance,
+      path,
+      map,
+      false,
+      transformResponse
+    );
+    this.search = generateSearchEndpoint(...defaultArgs);
+    this.retrieve = generateRetrieveEndpoint(...defaultArgs);
+    this.update = generateUpdateEndpoint(...defaultArgs);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
+
+  private transformToTimeSeriesListObject = (
+    timeseries: GetTimeSeriesMetadataDTO[]
+  ) => {
+    const timeSeriesArray = timeseries.map(
+      timeserie => new TimeSeries(this.client, timeserie)
+    );
+    return new TimeSeriesList(this.client, timeSeriesArray);
+  };
 }
 
 export type TimeSeriesListEndpoint = (
   filter?: TimeseriesFilter
-) => CursorAndAsyncIterator<GetTimeSeriesMetadataDTO>;
+) => CursorAndAsyncIterator<TimeSeries>;
 
 export type TimeSeriesCreateEndpoint = (
   items: PostTimeSeriesMetadataDTO[]
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+) => Promise<TimeSeriesList>;
 
 export type TimeSeriesSearchEndpoint = (
   query: TimeSeriesSearchDTO
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+) => Promise<TimeSeriesList>;
 
 export type TimeSeriesRetrieveEndpoint = (
   ids: TimeseriesIdEither[]
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+) => Promise<TimeSeriesList>;
 
 export type TimeSeriesUpdateEndpoint = (
   changes: TimeSeriesUpdate[]
-) => Promise<GetTimeSeriesMetadataDTO[]>;
+) => Promise<TimeSeriesList>;
 
 export type TimeSeriesDeleteEndpoint = (
   ids: TimeseriesIdEither[]

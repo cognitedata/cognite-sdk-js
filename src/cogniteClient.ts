@@ -375,7 +375,7 @@ export default class CogniteClient {
       this.metadataMap,
     ];
     this.assetsApi = new AssetsAPI(this, ...defaultArgs);
-    this.timeSeriesApi = new TimeSeriesAPI(...defaultArgs);
+    this.timeSeriesApi = new TimeSeriesAPI(this, ...defaultArgs);
     this.dataPointsApi = new DataPointsAPI(...defaultArgs);
     this.eventsApi = new EventsAPI(...defaultArgs);
     this.filesApi = new FilesAPI(...defaultArgs);
