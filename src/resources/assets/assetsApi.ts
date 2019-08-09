@@ -74,14 +74,14 @@ export class AssetsAPI {
    * [Search for assets](https://doc.cognitedata.com/api/v1/#operation/searchAssets)
    *
    * ```js
-   * const assets = await client.assets.search([{
+   * const assets = await client.assets.search({
    *   filter: {
    *     parentIds: [1, 2]
    *   },
    *   search: {
    *     name: '21PT1019'
    *   }
-   * }]);
+   * });
    * ```
    */
   public search: AssetSearchEndpoint;

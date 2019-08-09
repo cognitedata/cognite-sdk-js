@@ -1,8 +1,11 @@
 # Migration guide from 1.x.x to 2.x.x
+
 Short migration guide on how to upgrade from SDK version 1.x.x to 2.x.x.
 
 ## Constructor
+
 In 2.x.x you need to create a new SDK instance before you can use the SDK:
+
 ```js
 const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
 ```
@@ -10,16 +13,19 @@ const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
 After that you need to authenticate your client with calling one of these methods on the client:
 
 With api-key:
+
 ```js
 client.loginWithApiKey({ project, apiKey });
 ```
 
 With OAuth:
+
 ```js
 client.loginWithOAuth({
   project: 'publicdata',
 });
 ```
+
 For more info about OAuth-authentication look [here](./authentication.md).
 
 For quickstarts and samples go [here](../samples/).
@@ -43,7 +49,7 @@ For quickstarts and samples go [here](../samples/).
 | `sdk.Assets.delete([id])`                                        | `client.assets.delete([{id: 123}])`                                                               |
 | `sdk.Assets.list({name: 'abc'})`                                 | `client.assets.list({filter: {name: 'abc'}}).autoPagingToArray({limit: 1000})`                    |
 | `sdk.Assets.listDescendants(id, params)`                         | Not implemented yet. Follow issue [here](https://github.com/cognitedata/cognitesdk-js/issues/129) |
-| `sdk.Assets.search({name: 'abc'})`                               | `client.assets.search([{search: {name: 'abc'}])`                                                  |
+| `sdk.Assets.search({name: 'abc'})`                               | `client.assets.search({search: {name: 'abc'})`                                                    |
 | **TIME SERIES**                                                  |
 | `sdk.TimeSeries.create([...])`                                   | `client.timeseries.create([...])`                                                                 |
 | `sdk.TimeSeries.retrieve(123)`                                   | `client.timeseries.retrieve([{id: 123}])`                                                         |
