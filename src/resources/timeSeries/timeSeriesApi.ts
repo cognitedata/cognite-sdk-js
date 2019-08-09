@@ -102,12 +102,13 @@ export class TimeSeriesAPI {
     this.client = client;
     const path = projectUrl(project) + '/timeseries';
     const transformResponse = this.transformToTimeSeriesListObject;
-    this.create = generateCreateEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse
-    );
+    const defaultArgs: [
+      AxiosInstance,
+      string,
+      MetadataMap,
+      (timeseries: GetTimeSeriesMetadataDTO[]) => TimeSeriesList
+    ] = [instance, path, map, transformResponse];
+    this.create = generateCreateEndpoint(...defaultArgs);
     this.list = generateListEndpoint(
       instance,
       path,
@@ -115,24 +116,9 @@ export class TimeSeriesAPI {
       false,
       transformResponse
     );
-    this.search = generateSearchEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse
-    );
-    this.retrieve = generateRetrieveEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse
-    );
-    this.update = generateUpdateEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse
-    );
+    this.search = generateSearchEndpoint(...defaultArgs);
+    this.retrieve = generateRetrieveEndpoint(...defaultArgs);
+    this.update = generateUpdateEndpoint(...defaultArgs);
     this.delete = generateDeleteEndpoint(instance, path, map);
   }
 
