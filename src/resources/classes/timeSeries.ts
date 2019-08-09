@@ -88,8 +88,10 @@ export class TimeSeries implements GetTimeSeriesMetadataDTO {
    * const latestDatapoints = await timeseries.getLatestDatapoints();
    * ```
    */
-  public getLatestDatapoints = async (option?: LatestDataPropertyFilter) => {
-    const filter: LatestDataPropertyFilter = option || {};
+  public getLatestDatapoints = async (
+    option: LatestDataPropertyFilter = {}
+  ) => {
+    const filter: LatestDataPropertyFilter = option;
     return this.client.datapoints.retrieveLatest([{ ...filter, id: this.id }]);
   };
 }

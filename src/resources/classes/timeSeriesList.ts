@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 import { uniqBy } from 'lodash';
 import { CogniteClient } from '../..';
-import { DatapointsMultiQuery } from '../../types/types';
+import { DatapointsMultiQueryBase } from '../../types/types';
 import { TimeSeries } from './timeSeries';
 
 export class TimeSeriesList extends Array<TimeSeries> {
@@ -46,11 +46,11 @@ export class TimeSeriesList extends Array<TimeSeries> {
    * const datapoints = await timeSeriesList.getAllDatapoints();
    * ```
    */
-  public getAllDatapoints = async (options?: DatapointsMultiQuery) => {
+  public getAllDatapoints = async (options: DatapointsMultiQueryBase = {}) => {
     const timeseriesIds = this.map(timeseries => ({ id: timeseries.id }));
     return this.client.datapoints.retrieve({
       items: timeseriesIds,
-      ...(options || {}),
+      ...options,
     });
   };
 }
