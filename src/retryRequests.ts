@@ -48,6 +48,7 @@ const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT'];
 const statusCodesToRetry = [[100, 199], [429, 429], [500, 599]];
 
 /** @hidden */
+// tslint:disable-next-line:cognitive-complexity
 export function addRetryToAxiosInstance(instance: AxiosInstance) {
   // config for retry-axios package
   (instance.defaults as RaxConfig).raxConfig = {
@@ -64,6 +65,18 @@ export function addRetryToAxiosInstance(instance: AxiosInstance) {
 
       if (currentRetryAttempt! >= numRetries) {
         return false;
+      }
+
+      // Handle ETIMEDOUT's
+      // An unexpected error occurred { Error: connect ETIMEDOUT 34.76.254.249:443
+      //   at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1083:14)
+      // errno: 'ETIMEDOUT',
+      // code: 'ETIMEDOUT',
+      // syscall: 'connect',
+      // ...
+      // @ts-ignore
+      if (err.errno === 'ETIMEDOUT' && err.syscall === 'connect') {
+        return true;
       }
 
       if (!config.method) {
