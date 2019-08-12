@@ -51,14 +51,14 @@ export class TimeSeriesAPI {
    * [Search for time series](https://doc.cognitedata.com/api/v1/#operation/searchTimeSeries)
    *
    * ```js
-   * const timeseries = await client.timeseries.search([{
+   * const timeseries = await client.timeseries.search({
    *   filter: {
    *     isString: false,
    *   },
    *   search: {
-   *     name: 'Temprature'
+   *     name: 'Temperature'
    *   }
-   * }]);
+   * });
    * ```
    */
   public search: TimeSeriesSearchEndpoint;
@@ -76,7 +76,12 @@ export class TimeSeriesAPI {
    * [Update time series](https://doc.cognitedata.com/api/v1/#operation/alterTimeSeries)
    *
    * ```js
-   * const timeseries = await client.timeseries.update([{id: 123, update: { name: 'New name' }}]);
+   * const timeseries = await client.timeseries.update([{
+   *   id: 3785438579439,
+   *   update: {
+   *     name: { set: 'New name' }
+   *   }
+   * }]);
    * ```
    */
   public update: TimeSeriesUpdateEndpoint;

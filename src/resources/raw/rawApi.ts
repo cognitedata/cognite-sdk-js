@@ -128,7 +128,7 @@ export class RawAPI {
    * [List rows in a table](https://doc.cognitedata.com/api/v1/#operation/getRows)
    *
    * ```js
-   * await client.raw.listRows('My company', [{ name: 'Customers' }]);
+   * await client.raw.listRows('My company', 'Employees', { columns: ['last_name'] });
    * ```
    */
   public listRows: RawListRowsEndpoint = (databaseName, tableName, query) => {
@@ -153,7 +153,7 @@ export class RawAPI {
    * [Insert rows into a table](https://doc.cognitedata.com/api/v1/#operation/postRows)
    *
    * ```js
-   * await client.raw.insertRows('My company', 'Customers' [{ key: 'customer1', columns: { 'First name': 'Steve', 'Last name': 'Jobs' } }]);
+   * await client.raw.insertRows('My company', 'Customers', [{ key: 'customer1', columns: { 'First name': 'Steve', 'Last name': 'Jobs' } }]);
    * ```
    */
   public insertRows: RawInsertRowsEndpoint = async (

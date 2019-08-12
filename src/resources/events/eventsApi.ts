@@ -68,14 +68,14 @@ export class EventsAPI {
    * [Search for events](https://doc.cognitedata.com/api/v1/#operation/searchEvents)
    *
    * ```js
-   * const events = await client.events.search([{
+   * const events = await client.events.search({
    *   filter: {
-   *     assetSubtrees: [1, 2]
+   *     assetIds: [1, 2]
    *   },
    *   search: {
    *     description: 'Pump'
    *   }
-   * }]);
+   * });
    * ```
    */
   public search: EventsSearchEndpoint;

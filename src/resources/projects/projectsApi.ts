@@ -33,7 +33,7 @@ export class ProjectsAPI {
    * [Update a project](https://doc.cognitedata.com/api/v1/#operation/putProject)
    *
    * ```js
-   * await client.projects.update({
+   * await client.projects.update('new-project-name', {
    *   name: 'New project display name',
    *   defaultGroupId: 123,
    * });

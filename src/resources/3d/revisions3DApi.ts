@@ -39,7 +39,7 @@ export class Revisions3DAPI {
    * [List 3D revisions](https://doc.cognitedata.com/api/v1/#operation/get3DRevisions)
    *
    * ```js
-   * const revisions3D = await client.revisions3D.list();
+   * const revisions3D = await client.revisions3D.list(324566546546346);
    * ```
    */
   public list: Revisions3DListEndpoint = (modelId, filter) => {
@@ -55,7 +55,7 @@ export class Revisions3DAPI {
    * [Create 3D revisions](https://doc.cognitedata.com/api/v1/#operation/create3DRevisions)
    *
    * ```js
-   * const revisions = await client.revisions3D.create(model.id, [{ fileId: 8252999965991682 }, { fileId: 6305529564379596 }]);
+   * const revisions = await client.revisions3D.create(4234325345643654, [{ fileId: 8252999965991682 }, { fileId: 6305529564379596 }]);
    * ```
    */
   public create: Revisions3DCreateEndpoint = (modelId, items) => {
@@ -77,7 +77,7 @@ export class Revisions3DAPI {
    *      set: [1, 2, 3]
    *    }
    *  }
-   * }]
+   * }];
    * const updated = await client.revisions3D.update(8252999965991682, revisionsToUpdate);
    * ```
    */
@@ -164,7 +164,7 @@ export class Revisions3DAPI {
    * [List 3D ancestor nodes](https://doc.cognitedata.com/api/v1/#operation/get3DNodeAncestors)
    *
    * ```js
-   * const nodes3d = await client.revisions3D.list3DNodes(8252999965991682, 4190022127342195, 572413075141081);
+   * const nodes3d = await client.revisions3D.list3DNodeAncestors(8252999965991682, 4190022127342195, 572413075141081);
    * ```
    */
   public list3DNodeAncestors: Revisions3DListNodesAncestorsEndpoint = (
