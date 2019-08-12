@@ -16,6 +16,7 @@ script:
   - yarn build
   - yarn test --maxWorkers=1 && codecov
   - yarn test-samples
+  - yarn test-snippets
 before_deploy:
   - yarn docs
 deploy:
