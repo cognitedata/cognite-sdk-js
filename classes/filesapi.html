@@ -97,7 +97,7 @@
 					<div class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesdeleteendpoint" class="tsd-signature-type">FilesDeleteEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/files/filesApi.ts#L88">resources/files/filesApi.ts:88</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/files/filesApi.ts#L89">resources/files/filesApi.ts:89</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -113,7 +113,7 @@
 					<div class="tsd-signature tsd-kind-icon">get<wbr>Download<wbr>Urls<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesgetdownloadurlsendpoint" class="tsd-signature-type">FilesGetDownloadUrlsEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/files/filesApi.ts#L97">resources/files/filesApi.ts:97</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/files/filesApi.ts#L98">resources/files/filesApi.ts:98</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -129,7 +129,7 @@
 					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <a href="../index.html#fileslistendpoint" class="tsd-signature-type">FilesListEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/files/filesApi.ts#L39">resources/files/filesApi.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/files/filesApi.ts#L39">resources/files/filesApi.ts:39</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -146,7 +146,7 @@
 					<div class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesretrieveendpoint" class="tsd-signature-type">FilesRetrieveEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/files/filesApi.ts#L63">resources/files/filesApi.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/files/filesApi.ts#L64">resources/files/filesApi.ts:64</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -163,21 +163,21 @@
 					<div class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">:</span> <a href="../index.html#filessearchendpoint" class="tsd-signature-type">FilesSearchEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/files/filesApi.ts#L79">resources/files/filesApi.ts:79</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/files/filesApi.ts#L80">resources/files/filesApi.ts:80</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p><a href="https://doc.cognitedata.com/api/v1/#operation/searchFiles">Search for files</a></p>
 						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.search([{
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.search({
   <span class="hljs-attr">filter</span>: {
     <span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/jpg'</span>,
   },
   <span class="hljs-attr">search</span>: {
     <span class="hljs-attr">name</span>: <span class="hljs-string">'Pump'</span>
   }
-}]);</code></pre>
+});</code></pre>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
@@ -186,14 +186,19 @@
 					<div class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesupdateendpoint" class="tsd-signature-type">FilesUpdateEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/files/filesApi.ts#L106">resources/files/filesApi.ts:106</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/files/filesApi.ts#L112">resources/files/filesApi.ts:112</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p><a href="https://doc.cognitedata.com/api/v1/#operation/updateFiles">Update files</a></p>
 						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">description</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">'New description'</span>}}}]);</code></pre>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.update([{
+  <span class="hljs-attr">id</span>: <span class="hljs-number">123</span>,
+  <span class="hljs-attr">update</span>: {
+    <span class="hljs-attr">source</span>: { <span class="hljs-attr">set</span>: <span class="hljs-string">'new source'</span> }
+  }
+}]);</code></pre>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
@@ -202,18 +207,19 @@
 					<div class="tsd-signature tsd-kind-icon">upload<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesuploadendpoint" class="tsd-signature-type">FilesUploadEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/files/filesApi.ts#L53">resources/files/filesApi.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/files/filesApi.ts#L54">resources/files/filesApi.ts:54</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p><a href="https://doc.cognitedata.com/api/v1/#operation/initFileUpload">Upload a file</a></p>
 						</div>
-						<pre><code class="language-js"><span class="hljs-comment">// automatic upload:</span>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> fileContent = <span class="hljs-string">'file data here'</span>; <span class="hljs-comment">// can also be of type ArrayBuffer, Buffer, Blob, File or any</span>
+<span class="hljs-comment">// automatic upload:</span>
 <span class="hljs-keyword">const</span> file = <span class="hljs-keyword">await</span> client.files.upload({<span class="hljs-attr">name</span>: <span class="hljs-string">'examplefile.jpg'</span>, <span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/jpg'</span>}, fileContent);
 
 <span class="hljs-comment">// manual with uploadUrl:</span>
-<span class="hljs-keyword">const</span> file = <span class="hljs-keyword">await</span> client.files.upload({<span class="hljs-attr">name</span>: <span class="hljs-string">'examplefile.jpg'</span>, <span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/jpg'</span>});
+<span class="hljs-keyword">const</span> file2 = <span class="hljs-keyword">await</span> client.files.upload({<span class="hljs-attr">name</span>: <span class="hljs-string">'examplefile.jpg'</span>, <span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/jpg'</span>});
 <span class="hljs-comment">// then upload using the file.uploadUrl</span></code></pre>
 					</div>
 				</section>

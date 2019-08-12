@@ -97,7 +97,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/3d/assetMappings3DApi.ts#L69">resources/3d/assetMappings3DApi.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/3d/assetMappings3DApi.ts#L69">resources/3d/assetMappings3DApi.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -106,12 +106,12 @@
 								</div>
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> assetMappingsToCreate = [
  {
-   <span class="hljs-attr">nodeId</span>: <span class="hljs-number">8252999965991682</span>
-   assetId: <span class="hljs-number">4354399876978078</span>
+   <span class="hljs-attr">nodeId</span>: <span class="hljs-number">8252999965991682</span>,
+   <span class="hljs-attr">assetId</span>: <span class="hljs-number">4354399876978078</span>
  },
  {
-   <span class="hljs-attr">nodeId</span>: <span class="hljs-number">9034285498543958</span>
-   assetId: <span class="hljs-number">1042345809544395</span>
+   <span class="hljs-attr">nodeId</span>: <span class="hljs-number">9034285498543958</span>,
+   <span class="hljs-attr">assetId</span>: <span class="hljs-number">1042345809544395</span>
  }
 ];
 <span class="hljs-keyword">const</span> mappings3D = <span class="hljs-keyword">await</span> client.assetMappings3D.create(
@@ -146,7 +146,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/3d/assetMappings3DApi.ts#L98">resources/3d/assetMappings3DApi.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/3d/assetMappings3DApi.ts#L98">resources/3d/assetMappings3DApi.ts:98</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -155,12 +155,12 @@
 								</div>
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> assetMappingsToDelete = [
  {
-   <span class="hljs-attr">nodeId</span>: <span class="hljs-number">8252999965991682</span>
-   assetId: <span class="hljs-number">4354399876978078</span>
+   <span class="hljs-attr">nodeId</span>: <span class="hljs-number">8252999965991682</span>,
+   <span class="hljs-attr">assetId</span>: <span class="hljs-number">4354399876978078</span>
  },
  {
-   <span class="hljs-attr">nodeId</span>: <span class="hljs-number">9034285498543958</span>
-   assetId: <span class="hljs-number">1042345809544395</span>
+   <span class="hljs-attr">nodeId</span>: <span class="hljs-number">9034285498543958</span>,
+   <span class="hljs-attr">assetId</span>: <span class="hljs-number">1042345809544395</span>
  }
 ];
 <span class="hljs-keyword">await</span> client.assetMappings3D.delete(<span class="hljs-number">8252999965991682</span>, <span class="hljs-number">4190022127342195</span>, assetMappingsToDelete);</code></pre>
@@ -191,14 +191,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/3d/assetMappings3DApi.ts#L39">resources/3d/assetMappings3DApi.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/3d/assetMappings3DApi.ts#L39">resources/3d/assetMappings3DApi.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/get3DMappings">List 3D asset mappings</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> mappings3D = <span class="hljs-keyword">await</span> client.assetMappings3D.list();</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> mappings3D = <span class="hljs-keyword">await</span> client.assetMappings3D.list(<span class="hljs-number">3244265346345</span>, <span class="hljs-number">32423454353545</span>);</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

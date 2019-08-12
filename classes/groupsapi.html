@@ -101,7 +101,7 @@
 					<div class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">:</span> <a href="../index.html#groupscreateendpoint" class="tsd-signature-type">GroupsCreateEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/groups/groupsApi.ts#L43">resources/groups/groupsApi.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/groups/groupsApi.ts#L46">resources/groups/groupsApi.ts:46</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -110,9 +110,12 @@
 						</div>
 						<pre><code class="language-js"><span class="hljs-keyword">const</span> createdGroups = <span class="hljs-keyword">await</span> client.groups.create([{
   <span class="hljs-attr">name</span>: <span class="hljs-string">'Developers'</span>,
-  <span class="hljs-attr">capabilities</span>: [
-    { <span class="hljs-attr">assetsAcl</span>: { <span class="hljs-attr">actions</span>: [<span class="hljs-string">'LIST'</span>] }
-  ],
+  <span class="hljs-attr">capabilities</span>: [{
+    <span class="hljs-attr">assetsAcl</span>: {
+      <span class="hljs-attr">actions</span>: [<span class="hljs-string">'LIST'</span>],
+      <span class="hljs-attr">scope</span>: { <span class="hljs-attr">all</span>: {}}
+    }
+  }],
 }]);</code></pre>
 					</div>
 				</section>
@@ -122,7 +125,7 @@
 					<div class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">:</span> <a href="../index.html#groupsdeleteendpoint" class="tsd-signature-type">GroupsDeleteEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/groups/groupsApi.ts#L52">resources/groups/groupsApi.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/groups/groupsApi.ts#L55">resources/groups/groupsApi.ts:55</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -138,7 +141,7 @@
 					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <a href="../index.html#groupslistendpoint" class="tsd-signature-type">GroupsListEndpoint</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/groups/groupsApi.ts#L29">resources/groups/groupsApi.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/groups/groupsApi.ts#L29">resources/groups/groupsApi.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -161,7 +164,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/groups/groupsApi.ts#L93">resources/groups/groupsApi.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/groups/groupsApi.ts#L96">resources/groups/groupsApi.ts:96</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -193,7 +196,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/groups/groupsApi.ts#L78">resources/groups/groupsApi.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/groups/groupsApi.ts#L81">resources/groups/groupsApi.ts:81</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -222,7 +225,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/fed14a6/src/resources/groups/groupsApi.ts#L116">resources/groups/groupsApi.ts:116</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/8892ffe/src/resources/groups/groupsApi.ts#L119">resources/groups/groupsApi.ts:119</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
