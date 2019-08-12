@@ -359,7 +359,7 @@ export interface DatapointsDeleteRange {
   /**
    * If set, the timestamp of first datapoint after inclusiveBegin to not delete. If not set, only deletes the datapoint at inclusiveBegin.
    */
-  exclusiveEnd: Timestamp;
+  exclusiveEnd?: Timestamp;
 }
 
 export type DatapointsDeleteRequest =
