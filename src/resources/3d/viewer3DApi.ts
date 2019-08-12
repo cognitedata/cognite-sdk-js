@@ -96,7 +96,7 @@ export class Viewer3DAPI {
    * [List 3D sectors (Reveal)](https://doc.cognitedata.com/api/v1/#operation/revealGet3DSectors)
    *
    * ```js
-   * const sectors3D = await client.viewer3D.revisions3D
+   * const sectors3D = await client.viewer3D
    *  .listRevealSectors3D(8252999965991682, 4190022127342195, { limit: 10 })
    *  .autoPagingToArray();
    * ```

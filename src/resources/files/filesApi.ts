@@ -42,11 +42,12 @@ export class FilesAPI {
    * [Upload a file](https://doc.cognitedata.com/api/v1/#operation/initFileUpload)
    *
    * ```js
+   * const fileContent = 'file data here'; // can also be of type ArrayBuffer, Buffer, Blob, File or any
    * // automatic upload:
    * const file = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpg'}, fileContent);
    *
    * // manual with uploadUrl:
-   * const file = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpg'});
+   * const file2 = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpg'});
    * // then upload using the file.uploadUrl
    * ```
    */
@@ -66,14 +67,14 @@ export class FilesAPI {
    * [Search for files](https://doc.cognitedata.com/api/v1/#operation/searchFiles)
    *
    * ```js
-   * const files = await client.files.search([{
+   * const files = await client.files.search({
    *   filter: {
    *     mimeType: 'image/jpg',
    *   },
    *   search: {
    *     name: 'Pump'
    *   }
-   * }]);
+   * });
    * ```
    */
   public search: FilesSearchEndpoint;
@@ -100,7 +101,12 @@ export class FilesAPI {
    * [Update files](https://doc.cognitedata.com/api/v1/#operation/updateFiles)
    *
    * ```js
-   * const files = await client.files.update([{id: 123, update: {description: {set: 'New description'}}}]);
+   * const files = await client.files.update([{
+   *   id: 123,
+   *   update: {
+   *     source: { set: 'new source' }
+   *   }
+   * }]);
    * ```
    */
   public update: FilesUpdateEndpoint;

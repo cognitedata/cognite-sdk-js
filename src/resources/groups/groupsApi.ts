@@ -34,9 +34,12 @@ export class GroupsAPI {
    * ```js
    * const createdGroups = await client.groups.create([{
    *   name: 'Developers',
-   *   capabilities: [
-   *     { assetsAcl: { actions: ['LIST'] }
-   *   ],
+   *   capabilities: [{
+   *     assetsAcl: {
+   *       actions: ['LIST'],
+   *       scope: { all: {}}
+   *     }
+   *   }],
    * }]);
    * ```
    */

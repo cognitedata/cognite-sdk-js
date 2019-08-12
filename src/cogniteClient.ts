@@ -240,7 +240,9 @@ export default class CogniteClient {
    *   onAuthenticate: REDIRECT // optional, REDIRECT is by default
    * });
    * // after login you can do calls with the client
-   * const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
+   * (async () => {
+   *   const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
+   * })();
    * ```
    *
    * @param options Login options
