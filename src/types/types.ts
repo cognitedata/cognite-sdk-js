@@ -1385,7 +1385,7 @@ export type TimeseriesIdEither = InternalId | ExternalId;
 
 export type Timestamp = number | Date;
 
-export type Tuple3<T> = [T, T, T];
+export type Tuple3<T> = T[];
 
 export type UPDATE = 'UPDATE';
 
