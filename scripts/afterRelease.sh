@@ -4,17 +4,18 @@ set -e
 yarn extract-snippets
 
 packageVersion=$(jq -r ".version" package.json)
-branchName="feat/updateSDKJsExamples$packageVersion"
+branchName="bot/jsCodeSnippets_v$packageVersion"
+message="[JS SDK]: update code snippets to v$packageVersion"
 
-hub clone git@github.com:cognitedata/service-contracts.git
+git clone https://$GITHUB_TOKEN@github.com/cognitedata/service-contracts.git >/dev/null 2>&1
 cd service-contracts
 
-hub checkout -b "$branchName"
+git checkout -b "$branchName"
 cp ../codeSnippets/index.json ./versions/v1/js-sdk-examples.json
-hub add ./versions/v1/js-sdk-examples.json
-hub commit -m "feat: update js code samples for sdk version $packageVersion"
+git add ./versions/v1/js-sdk-examples.json
+git commit -m "$message"
 git push origin "$branchName"
-hub pull-request --no-edit -a polomani -r martincognite,f1cognite
+hub pull-request -m "$message"
 
 cd ../
 rm -rf service-contracts
