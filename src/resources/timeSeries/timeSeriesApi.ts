@@ -67,7 +67,10 @@ export class TimeSeriesAPI {
    * [Retrieve time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeriesByIds)
    *
    * ```js
-   * const timeseries = await client.timeseries.retrieve([{id: 123}, {externalId: 'abc'}]);
+   * const timeseries = await client.timeseries.retrieve([
+   *   { id: 123 },
+   *   { externalId: 'abc' }
+   * ]);
    * ```
    */
   public retrieve: TimeSeriesRetrieveEndpoint;
@@ -90,7 +93,10 @@ export class TimeSeriesAPI {
    * [Delete time series](https://doc.cognitedata.com/api/v1/#operation/deleteTimeSeries)
    *
    * ```js
-   * await client.timeseries.delete([{id: 123}, {externalId: 'abc'}]);
+   * await client.timeseries.delete([
+   *   { id: 123 },
+   *   { externalId: 'abc' }
+   * ]);
    * ```
    */
   public delete: TimeSeriesDeleteEndpoint;
