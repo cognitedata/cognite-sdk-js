@@ -57,7 +57,7 @@ For quickstarts and samples go [here](../samples/).
 | `sdk.TimeSeries.update(id, changes)`                             | `client.timeseries.update([{id, update: changes}])`                                               |
 | `sdk.TimeSeries.updateMultiple([{id, ...changes}])`              | `client.timeseries.update([{id, update: changes}])`                                               |
 | `sdk.TimeSeries.list({limit: 20})`                               | `client.timeseries.list().autoPagingToArray({limit: 20})`                                         |
-| `sdk.TimeSeries.search({name: 'abc'})`                           | `client.timeseries.search([{search: {name: 'abc'}])`                                              |
+| `sdk.TimeSeries.search({name: 'abc'})`                           | `client.timeseries.search({search: {name: 'abc'}})`                                              |
 | **DATA POINTS**                                                  |
 | `sdk.Datapoints.insert(id, datapoints)`                          | `client.datapoints.insert([{id, datapoints}])`                                                    |
 | `sdk.Datapoints.insertByName(...)`                               | Removed                                                                                           |
@@ -76,7 +76,7 @@ For quickstarts and samples go [here](../samples/).
 | `sdk.Events.update([{id, ...changes}])`                          | `client.events.update([{id, update: changes}])`                                                   |
 | `sdk.Events.delete([id])`                                        | `client.events.delete([{id}])`                                                                    |
 | `sdk.Events.list({limit: 20})`                                   | `client.events.list().autoPagingToArray({limit: 20})`                                             |
-| `sdk.Events.search({name: 'abc'})`                               | `client.events.search([{search: {name: 'abc'}}])`                                                 |
+| `sdk.Events.search({name: 'abc'})`                               | `client.events.search({search: {name: 'abc'}})`                                                 |
 | **FILES**                                                        |
 | `sdk.Files.upload(fileMetadata, params)`                         | `client.files.upload(fileMetadata, fileContent?, overwrite?, waitUntilAcknowledged?)`             |
 | `sdk.Files.download(id)`                                         | `client.files.getDownloadUrls([{id}])`                                                            |
@@ -86,7 +86,7 @@ For quickstarts and samples go [here](../samples/).
 | `sdk.Files.updateMultipleMetadata([id, ...changes])`             | `client.files.update([{id, update: changes}])`                                                    |
 | `sdk.Files.delete([id])`                                         | `client.files.delete([{id}])`                                                                     |
 | `sdk.Files.list({limit: 20})`                                    | `client.files.list().autoPagingToArray({limit: 20})`                                              |
-| `sdk.Files.search({name: 'abc'})`                                | `client.files.search([{search: {name: 'abc'}}])`                                                  |
+| `sdk.Files.search({name: 'abc'})`                                | `client.files.search({search: {name: 'abc'}})`                                                  |
 | `sdk.Files.replaceMetadata(...)`                                 | Removed                                                                                           |
 | **3D**                                                           |
 | `sdk.ThreeD.createAssetMappings(modelId, revisionId, mappings)`  | `client.assetMappings3D.create(modelId, revisionId, mappings)`                                    |
