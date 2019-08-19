@@ -91,7 +91,7 @@ export function makePromiseCancelable<T>(
 }
 
 /** @hidden */
-export function transformDateInRequest(data: any) {
+export function transformDateInRequest<T>(data: T): T {
   return cloneDeepWith(data, value => {
     if (value instanceof Date) {
       return value.getTime();
@@ -100,7 +100,7 @@ export function transformDateInRequest(data: any) {
 }
 
 /** @hidden */
-export function transformDateInResponse(data: any) {
+export function transformDateInResponse<T>(data: T): T {
   const dateKeys = [
     'createdTime',
     'lastUpdatedTime',

@@ -1,33 +1,37 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
 import { chunk } from 'lodash';
+import { makeAutoPaginationMethods } from '../../autoPagination';
+import CogniteClient from '../../cogniteClient';
+import { HttpClient } from '../../httpClient';
+import { MetadataMap } from '../../metadata';
+import { CursorAndAsyncIterator } from '../../standardMethods';
 import {
   Asset as TypeAsset,
   AssetChange,
+  AssetDeleteParams,
   AssetIdEither,
   AssetListScope,
   AssetSearchFilter,
   ExternalAssetItem,
   IdEither,
-} from '../..';
-import CogniteClient from '../../cogniteClient';
-import { MetadataMap } from '../../metadata';
-import {
-  CursorAndAsyncIterator,
-  generateCreateEndpoint,
-  generateDeleteEndpointWithParams,
-  generateListEndpoint,
-  generateRetrieveEndpoint,
-  generateSearchEndpoint,
-  generateUpdateEndpoint,
-} from '../../standardMethods';
-import { projectUrl } from '../../utils';
+} from '../../types/types';
+import { BaseResourceAPI } from '../baseResourceApi';
 import { Asset } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
-import { assetChunker } from './assetUtils';
+import { sortAssetCreateItems, undoArrayShuffle } from './assetUtils';
 
-export class AssetsAPI {
+export class AssetsAPI extends BaseResourceAPI {
+  /** @hidden */
+  constructor(
+    private client: CogniteClient,
+    resourcePath: string,
+    httpClient: HttpClient,
+    private map: MetadataMap
+  ) {
+    super(httpClient, resourcePath);
+  }
+
   /**
    * [Creates new assets](https://doc.cognitedata.com/api/v1/#operation/createAssets)
    *
@@ -39,7 +43,24 @@ export class AssetsAPI {
    * const createdAssets = await client.assets.create(assets);
    * ```
    */
-  public create: AssetCreateEndpoint;
+  public async create(items: ExternalAssetItem[]): Promise<AssetList> {
+    const [topologicalSortedItems, orginalIndices] = sortAssetCreateItems(
+      items
+    );
+    const responses = await this.callCreateEndpoint<
+      ExternalAssetItem,
+      TypeAsset
+    >(topologicalSortedItems);
+    const mergedResponseItems = super.mergeResponsesOfItemsResponse(responses);
+    const mergedResponseItemsInOriginalOrder = undoArrayShuffle(
+      mergedResponseItems,
+      orginalIndices
+    );
+    const assetList = this.transformToAssetList(
+      mergedResponseItemsInOriginalOrder
+    );
+    return this.map.addAndReturn(assetList, responses[0]);
+  }
 
   /**
    * [List assets](https://doc.cognitedata.com/api/v1/#operation/listAssets)
@@ -49,7 +70,23 @@ export class AssetsAPI {
    * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
    * ```
    */
-  public list: AssetListEndpoint;
+  public list(query?: AssetListScope): CursorAndAsyncIterator<Asset> {
+    const listPromise = super
+      .callListEndpointWithPost<AssetListScope, TypeAsset>(query)
+      .then(response => ({
+        ...response.data,
+        items: this.transformToListOfAsset(response.data.items),
+      }))
+      .then(transformedResponse =>
+        super.addNextPageFunction<AssetListScope, Asset>(
+          super.callListEndpointWithPost,
+          transformedResponse,
+          query
+        )
+      );
+    const autoPaginationMethods = makeAutoPaginationMethods(listPromise);
+    return Object.assign(listPromise, autoPaginationMethods);
+  }
 
   /**
    * [Retrieve assets](https://doc.cognitedata.com/api/v1/#operation/byIdsAssets)
@@ -59,7 +96,12 @@ export class AssetsAPI {
    * const assets = await client.assets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve: AssetRetrieveEndpoint;
+  public async retrieve(ids: IdEither[]): Promise<AssetList> {
+    const responses = await super.callRetrieveEndpoint<TypeAsset>(ids);
+    const mergedResponseItems = super.mergeResponsesOfItemsResponse(responses);
+    const assetList = this.transformToAssetList(mergedResponseItems);
+    return this.map.addAndReturn(assetList, responses[0]);
+  }
 
   /**
    * [Update assets](https://doc.cognitedata.com/api/v1/#operation/updateAssets)
@@ -68,7 +110,14 @@ export class AssetsAPI {
    * const assets = await client.assets.update([{id: 123, update: {name: {set: 'New name'}}}]);
    * ```
    */
-  public update: AssetUpdateEndpoint;
+  public async update(changes: AssetChange[]): Promise<AssetList> {
+    const responses = await super.callUpdateEndpoint<AssetChange, TypeAsset>(
+      changes
+    );
+    const mergedResponseItems = super.mergeResponsesOfItemsResponse(responses);
+    const assetList = this.transformToAssetList(mergedResponseItems);
+    return this.map.addAndReturn(assetList, responses[0]);
+  }
 
   /**
    * [Search for assets](https://doc.cognitedata.com/api/v1/#operation/searchAssets)
@@ -84,7 +133,14 @@ export class AssetsAPI {
    * });
    * ```
    */
-  public search: AssetSearchEndpoint;
+  public async search(query: AssetSearchFilter): Promise<AssetList> {
+    const response = await super.callSearchEndpoint<
+      AssetSearchFilter,
+      TypeAsset
+    >(query);
+    const assetList = this.transformToAssetList(response.data.items);
+    return this.map.addAndReturn(assetList, response);
+  }
 
   /**
    * [Delete assets](https://doc.cognitedata.com/api/v1/#operation/deleteAssets)
@@ -93,53 +149,12 @@ export class AssetsAPI {
    * await client.assets.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public delete: AssetDeleteEndpoint;
-
-  private client: CogniteClient;
-
-  /** @hidden */
-  constructor(
-    client: CogniteClient,
-    project: string,
-    instance: AxiosInstance,
-    map: MetadataMap
-  ) {
-    this.client = client;
-    const path = projectUrl(project) + '/assets';
-    const transformResponse = this.transformToAssetListObject;
-    this.create = generateCreateEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse,
-      assetChunker
-    );
-    this.list = generateListEndpoint(
-      instance,
-      path,
-      map,
-      true,
-      transformResponse
-    );
-    this.retrieve = generateRetrieveEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse
-    );
-    this.update = generateUpdateEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse
-    );
-    this.search = generateSearchEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse
-    );
-    this.delete = generateDeleteEndpointWithParams(instance, path, map);
+  public async delete(
+    ids: AssetIdEither[],
+    params?: AssetDeleteParams
+  ): Promise<{}> {
+    const responses = await super.callDeleteEndpoint(ids, params);
+    return this.map.addAndReturn({}, responses[0]);
   }
 
   public async retrieveSubtree(id: IdEither, depth: number) {
@@ -148,10 +163,14 @@ export class AssetsAPI {
     return this.getAssetSubtree(rootAssetList, currentDepth, depth);
   }
 
-  private transformToAssetListObject = (assets: TypeAsset[]) => {
+  private transformToAssetList(assets: TypeAsset[]): AssetList {
     const assetArray = assets.map(asset => new Asset(this.client, asset));
     return new AssetList(this.client, assetArray);
-  };
+  }
+
+  private transformToListOfAsset(assets: TypeAsset[]): Asset[] {
+    return assets.map(asset => new Asset(this.client, asset));
+  }
 
   private async getAssetSubtree(
     assets: AssetList,
@@ -190,32 +209,3 @@ export class AssetsAPI {
     return new AssetList(this.client, assetsArray);
   };
 }
-
-export type AssetCreateEndpoint = (
-  items: ExternalAssetItem[]
-) => Promise<AssetList>;
-
-export type AssetListEndpoint = (
-  scope?: AssetListScope
-) => CursorAndAsyncIterator<Asset>;
-
-export type AssetRetrieveEndpoint = (
-  ids: AssetIdEither[]
-) => Promise<AssetList>;
-
-export type AssetUpdateEndpoint = (
-  changes: AssetChange[]
-) => Promise<AssetList>;
-
-export type AssetSearchEndpoint = (
-  query: AssetSearchFilter
-) => Promise<AssetList>;
-
-export interface AssetDeleteParams {
-  recursive?: boolean;
-}
-
-export type AssetDeleteEndpoint = (
-  ids: AssetIdEither[],
-  params?: AssetDeleteParams
-) => Promise<{}>;

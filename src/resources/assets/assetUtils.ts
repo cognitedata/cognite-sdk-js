@@ -1,16 +1,14 @@
 // Copyright 2019 Cognite AS
 
-import { chunk } from 'lodash';
 import { CogniteError } from '../../error';
 import { Node, topologicalSort } from '../../graphUtils';
 import { CogniteMultiError } from '../../multiError';
 import { ExternalAssetItem } from '../../types/types';
 
 /** @hidden */
-export function assetChunker(
-  assets: ExternalAssetItem[],
-  chunkSize: number = 1000
-): ExternalAssetItem[][] {
+export function sortAssetCreateItems(
+  assets: ReadonlyArray<ExternalAssetItem>
+): [ExternalAssetItem[], number[]] {
   const nodes: Node<ExternalAssetItem>[] = assets.map(asset => {
     return { data: asset };
   });
@@ -33,8 +31,22 @@ export function assetChunker(
     }
   });
 
-  const sortedNodes = topologicalSort(nodes);
-  return chunk(sortedNodes.map(node => node.data), chunkSize);
+  const [sortedNodes, orginalIndexMap] = topologicalSort(nodes);
+  return [sortedNodes.map(node => node.data), orginalIndexMap];
+}
+
+export function undoArrayShuffle<T>(
+  shuffledArray: T[],
+  orginalIndices: number[]
+) {
+  if (shuffledArray.length !== orginalIndices.length) {
+    throw new Error('shuffledArray.length must match orginalIndices.length');
+  }
+  const orginalOrderArray: T[] = [];
+  orginalIndices.forEach((originalIndex, index) => {
+    orginalOrderArray[originalIndex] = shuffledArray[index];
+  });
+  return orginalOrderArray;
 }
 
 /**

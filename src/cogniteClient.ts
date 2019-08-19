@@ -7,6 +7,7 @@ import {
   listenForNonSuccessStatusCode,
   rawRequest,
 } from './axiosWrappers';
+import { HttpClient } from './httpClient';
 import { MetadataMap } from './metadata';
 import { AssetMappings3DAPI } from './resources/3d/assetMappings3DApi';
 import { Files3DAPI } from './resources/3d/files3DApi';
@@ -32,7 +33,7 @@ import { SecurityCategoriesAPI } from './resources/securityCategories/securityCa
 import { ServiceAccountsAPI } from './resources/serviceAccounts/serviceAccountsApi';
 import { TimeSeriesAPI } from './resources/timeSeries/timeSeriesApi';
 import { addRetryToAxiosInstance } from './retryRequests';
-import { getBaseUrl } from './utils';
+import { getBaseUrl, projectUrl } from './utils';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -132,6 +133,7 @@ export default class CogniteClient {
   public project: string = '';
   /** @hidden */
   public instance: AxiosInstance;
+  public httpClient: HttpClient;
   private metadataMap: MetadataMap;
   private hasBeenLoggedIn: boolean = false;
   private assetsApi?: AssetsAPI;
@@ -173,6 +175,7 @@ export default class CogniteClient {
       throw Error('options.appId is required and must be of type string');
     }
     const { baseUrl } = options;
+    this.httpClient = new HttpClient(getBaseUrl(baseUrl));
     this.instance = generateAxiosInstance(getBaseUrl(baseUrl), options.appId);
     addRetryToAxiosInstance(this.instance);
 
@@ -222,6 +225,7 @@ export default class CogniteClient {
     });
     this.project = project;
     this.instance.defaults.headers['api-key'] = apiKey;
+    this.httpClient.setHeader('api-key', apiKey);
 
     this.initAPIs();
   };
@@ -376,7 +380,12 @@ export default class CogniteClient {
       this.instance,
       this.metadataMap,
     ];
-    this.assetsApi = new AssetsAPI(this, ...defaultArgs);
+    this.assetsApi = new AssetsAPI(
+      this,
+      projectUrl(this.project) + '/assets',
+      this.httpClient,
+      this.metadataMap
+    );
     this.timeSeriesApi = new TimeSeriesAPI(this, ...defaultArgs);
     this.dataPointsApi = new DataPointsAPI(...defaultArgs);
     this.eventsApi = new EventsAPI(...defaultArgs);

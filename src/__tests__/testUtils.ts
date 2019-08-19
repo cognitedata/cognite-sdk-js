@@ -91,6 +91,7 @@ export async function runTestWithRetryWhenFailing(
       await testFunction();
       return;
     } catch (err) {
+      console.log(err);
       error = err;
       await sleepPromise(delayInMs);
       delayInMs *= delayFactor;

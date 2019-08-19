@@ -9,7 +9,7 @@ import {
 import { rawRequest } from './axiosWrappers';
 import { MetadataMap } from './metadata';
 import { promiseAllWithData } from './resources/assets/assetUtils';
-import { CursorResponse, ItemsResponse } from './types/types';
+import { CursorResponse, ItemsResponse, ListResponse } from './types/types';
 
 function noTransformFunction<ResponseType, TransformType>(
   items: ResponseType[]
@@ -106,7 +106,7 @@ export function listByPost<RequestFilter, ResponseType>(
   );
 }
 
-export type CursorAndAsyncIterator<T> = Promise<CursorResponse<T>> &
+export type CursorAndAsyncIterator<T> = Promise<ListResponse<T>> &
   CogniteAsyncIterator<T>;
 
 /** @hidden */
