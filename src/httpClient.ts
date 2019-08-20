@@ -44,6 +44,10 @@ export class HttpClient {
     return this.rawRequest<ResponseType>(path, 'delete', options);
   }
 
+  public put<ResponseType>(path: string, options: BaseRequestOptions = {}) {
+    return this.rawRequest<ResponseType>(path, 'put', options);
+  }
+
   private async rawRequest<ResponseType>(
     path: string,
     method: HttpMethod,
