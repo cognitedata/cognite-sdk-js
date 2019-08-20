@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { chunk } from 'lodash';
-import { HttpClient, Response } from '../httpClient';
+import { HttpClient, HttpResponse } from '../httpClient';
 import {
   CursorResponse,
   FilterQuery,
@@ -88,7 +88,7 @@ export abstract class BaseResourceAPI {
   }
 
   protected mergeItemsFromItemsResponse<T>(
-    responses: Response<ItemsResponse<T>>[]
+    responses: HttpResponse<ItemsResponse<T>>[]
   ): T[] {
     const itemsResponses = responses.map(response => response.data);
     return this.flattenItemsResponses(itemsResponses);
@@ -118,7 +118,9 @@ export abstract class BaseResourceAPI {
       .reduce((a, b) => [...a, ...b], []);
   }
 
-  private transformDateInResponse<T>(response: Response<T>): Response<T> {
+  private transformDateInResponse<T>(
+    response: HttpResponse<T>
+  ): HttpResponse<T> {
     return {
       ...response,
       data: transformDateInResponse(response.data),
@@ -168,4 +170,4 @@ export abstract class BaseResourceAPI {
 
 type ListEndpoint<QueryType extends FilterQuery, ResponseType> = (
   query?: QueryType
-) => Promise<Response<CursorResponse<ResponseType>>>;
+) => Promise<HttpResponse<CursorResponse<ResponseType>>>;
