@@ -12,7 +12,7 @@ export interface BaseRequestOptions {
   responseType?: 'json' | 'arraybuffer' | 'text';
 }
 
-export interface Response<T> {
+export interface HttpResponse<T> {
   data: T;
   headers: { [key: string]: string };
   status: number;
@@ -48,7 +48,7 @@ export class HttpClient {
     path: string,
     method: HttpMethod,
     requestConfig: BaseRequestOptions
-  ): Promise<Response<ResponseType>> {
+  ): Promise<HttpResponse<ResponseType>> {
     try {
       const response = await this.axiosInstance.request<ResponseType>({
         ...requestConfig,
