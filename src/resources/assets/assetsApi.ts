@@ -5,6 +5,7 @@ import { makeAutoPaginationMethods } from '../../autoPagination';
 import CogniteClient from '../../cogniteClient';
 import { HttpClient } from '../../httpClient';
 import { MetadataMap } from '../../metadata';
+import { RevertableArraySorter } from '../../revertableArraySorter';
 import { CursorAndAsyncIterator } from '../../standardMethods';
 import {
   Asset as TypeAsset,
@@ -19,7 +20,7 @@ import {
 import { BaseResourceAPI } from '../baseResourceApi';
 import { Asset } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
-import { sortAssetCreateItems, undoArrayShuffle } from './assetUtils';
+import { sortAssetCreateItems } from './assetUtils';
 
 export class AssetsAPI extends BaseResourceAPI {
   /** @hidden */
@@ -44,21 +45,14 @@ export class AssetsAPI extends BaseResourceAPI {
    * ```
    */
   public async create(items: ExternalAssetItem[]): Promise<AssetList> {
-    const [topologicalSortedItems, orginalIndices] = sortAssetCreateItems(
-      items
-    );
+    const sorter = new RevertableArraySorter(items, sortAssetCreateItems);
     const responses = await this.callCreateEndpoint<
       ExternalAssetItem,
       TypeAsset
-    >(topologicalSortedItems);
-    const mergedResponseItems = super.mergeResponsesOfItemsResponse(responses);
-    const mergedResponseItemsInOriginalOrder = undoArrayShuffle(
-      mergedResponseItems,
-      orginalIndices
-    );
-    const assetList = this.transformToAssetList(
-      mergedResponseItemsInOriginalOrder
-    );
+    >(sorter.getSorted());
+    const responseItems = super.mergeItemsFromItemsResponse(responses);
+    const responseItemsInOriginalOrder = sorter.unsort(responseItems);
+    const assetList = this.transformToAssetList(responseItemsInOriginalOrder);
     return this.map.addAndReturn(assetList, responses[0]);
   }
 
@@ -98,7 +92,7 @@ export class AssetsAPI extends BaseResourceAPI {
    */
   public async retrieve(ids: IdEither[]): Promise<AssetList> {
     const responses = await super.callRetrieveEndpoint<TypeAsset>(ids);
-    const mergedResponseItems = super.mergeResponsesOfItemsResponse(responses);
+    const mergedResponseItems = super.mergeItemsFromItemsResponse(responses);
     const assetList = this.transformToAssetList(mergedResponseItems);
     return this.map.addAndReturn(assetList, responses[0]);
   }
@@ -114,7 +108,7 @@ export class AssetsAPI extends BaseResourceAPI {
     const responses = await super.callUpdateEndpoint<AssetChange, TypeAsset>(
       changes
     );
-    const mergedResponseItems = super.mergeResponsesOfItemsResponse(responses);
+    const mergedResponseItems = super.mergeItemsFromItemsResponse(responses);
     const assetList = this.transformToAssetList(mergedResponseItems);
     return this.map.addAndReturn(assetList, responses[0]);
   }

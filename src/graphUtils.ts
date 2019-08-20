@@ -8,15 +8,10 @@ export interface Node<T> {
 }
 
 /** @hidden */
-export function topologicalSort<T>(nodes: Node<T>[]): [Node<T>[], number[]] {
+export function topologicalSort<T>(nodes: Node<T>[]): Node<T>[] {
   const queue = new Queue<Node<T>>();
   const sortedList: Node<T>[] = [];
   const childrenMap = getChildrenMap(nodes);
-
-  const originalIndexMap = new Map<Node<T>, number>();
-  nodes.forEach((node, index) => {
-    originalIndexMap.set(node, index);
-  });
 
   // insert root nodes
   nodes.forEach(node => {
@@ -40,11 +35,7 @@ export function topologicalSort<T>(nodes: Node<T>[]): [Node<T>[], number[]] {
     throw Error('Impossible to topological sort nodes');
   }
 
-  const newOrder: number[] = sortedList.map(
-    node => originalIndexMap.get(node) as number // we know it exists
-  );
-
-  return [sortedList, newOrder];
+  return sortedList;
 }
 
 function getChildrenMap<T>(nodes: Node<T>[]): Map<Node<T>, Node<T>[]> {

@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { chunk, concat } from 'lodash';
+import { chunk } from 'lodash';
 import { HttpClient, Response } from '../httpClient';
 import {
   CursorResponse,
@@ -87,11 +87,11 @@ export abstract class BaseResourceAPI {
     );
   }
 
-  protected mergeResponsesOfItemsResponse<T>(
+  protected mergeItemsFromItemsResponse<T>(
     responses: Response<ItemsResponse<T>>[]
   ): T[] {
     const itemsResponses = responses.map(response => response.data);
-    return this.mergeItemsResponses(itemsResponses);
+    return this.flattenItemsResponses(itemsResponses);
   }
 
   protected addNextPageFunction<QueryType extends FilterQuery, ResponseType>(
@@ -112,12 +112,10 @@ export abstract class BaseResourceAPI {
     };
   }
 
-  private mergeItemsResponses<T>(responses: ItemsResponse<T>[]): T[] {
-    const mergedItems = concat(
-      [],
-      ...responses.map(response => response.items)
-    );
-    return mergedItems;
+  private flattenItemsResponses<T>(responses: ItemsResponse<T>[]): T[] {
+    return responses
+      .map(response => response.items)
+      .reduce((a, b) => [...a, ...b], []);
   }
 
   private transformDateInResponse<T>(response: Response<T>): Response<T> {

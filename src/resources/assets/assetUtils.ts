@@ -6,15 +6,15 @@ import { CogniteMultiError } from '../../multiError';
 import { ExternalAssetItem } from '../../types/types';
 
 /** @hidden */
-export function sortAssetCreateItems(
+export function enrichAssestsWithTheirParents(
   assets: ReadonlyArray<ExternalAssetItem>
-): [ExternalAssetItem[], number[]] {
-  const nodes: Node<ExternalAssetItem>[] = assets.map(asset => {
-    return { data: asset };
-  });
+): Node<ExternalAssetItem>[] {
+  const externalIdMap = new Map<string, Node<ExternalAssetItem>>();
+  const nodes: Node<ExternalAssetItem>[] = assets.map(asset => ({
+    data: asset,
+  }));
 
   // find all new exteralIds and map the new externalId to the asset
-  const externalIdMap = new Map<string, Node<ExternalAssetItem>>();
   nodes.forEach(node => {
     const { externalId } = node.data;
     if (externalId) {
@@ -31,22 +31,16 @@ export function sortAssetCreateItems(
     }
   });
 
-  const [sortedNodes, orginalIndexMap] = topologicalSort(nodes);
-  return [sortedNodes.map(node => node.data), orginalIndexMap];
+  return nodes;
 }
 
-export function undoArrayShuffle<T>(
-  shuffledArray: T[],
-  orginalIndices: number[]
-) {
-  if (shuffledArray.length !== orginalIndices.length) {
-    throw new Error('shuffledArray.length must match orginalIndices.length');
-  }
-  const orginalOrderArray: T[] = [];
-  orginalIndices.forEach((originalIndex, index) => {
-    orginalOrderArray[originalIndex] = shuffledArray[index];
-  });
-  return orginalOrderArray;
+/** @hidden */
+export function sortAssetCreateItems(
+  assets: ReadonlyArray<ExternalAssetItem>
+): ExternalAssetItem[] {
+  const nodes = enrichAssestsWithTheirParents(assets);
+  const sortedNodes = topologicalSort(nodes);
+  return sortedNodes.map(node => node.data);
 }
 
 /**
