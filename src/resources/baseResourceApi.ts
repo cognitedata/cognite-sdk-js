@@ -14,7 +14,7 @@ import { promiseAllWithData } from './assets/assetUtils';
 import { MetadataMap } from '../metadata';
 import { makeAutoPaginationMethods } from '../autoPagination';
 
-export abstract class BaseResourceAPI<ResponseType, TransformType, TransformedItem> {
+export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType extends Array<TransformedType>> {
 
   constructor(
     public readonly httpClient: HttpClient,
@@ -73,7 +73,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformType, TransformedIt
     return transformDateInResponse(response);
   }
 
-  protected async callListEndpointWithThenAddCursorAndAsyncIterator<
+  protected callListEndpointWithThenAddCursorAndAsyncIterator<
     QueryType extends FilterQuery
   >(query?: QueryType) {
     const listPromise = this
@@ -83,7 +83,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformType, TransformedIt
         items: this.transformToList(response.data.items),
       }))
       .then(transformedResponse =>
-        this.addNextPageFunction<QueryType, TransformedItem>(
+        this.addNextPageFunction<QueryType, TransformedType>(
           this.callListEndpointWithPost,
           transformedResponse,
           query
@@ -93,25 +93,36 @@ export abstract class BaseResourceAPI<ResponseType, TransformType, TransformedIt
     return Object.assign(listPromise, autoPaginationMethods);
   }
   
-  protected abstract transformToClass(array: ResponseType[]): TransformType;
-  protected abstract transformToList(item: ResponseType[]): TransformedItem[];
+  protected abstract transformToClass(array: ResponseType[]): WrapperType;
+  protected abstract transformToList(item: ResponseType[]): TransformedType[];
 
-  protected async callRetrieveEndpoint<ResponseType>(ids: IdEither[]) {
+
+  protected async postEndpointinParalelWithAutomaticChunking<
+    DataType,
+    ParamsType extends object
+  >(url: string, requestData: DataType[], params?: ParamsType) {
     const responses = await this.postInParallelWithAutomaticChunking<
-      IdEither,
+      DataType,
       ItemsResponse<ResponseType>
-    >(this.byIdsUrl(), ids);
+    >(url, transformDateInRequest(requestData), params);
     return responses.map(this.transformDateInResponse);
   }
 
-  protected async callUpdateEndpoint<ChangeType, ResponseType>(
+  protected async callRetrieveEndpoint(ids: IdEither[]) {
+    return this.postEndpointinParalelWithAutomaticChunking(this.byIdsUrl(), ids);
+  }
+
+  protected async callUpdateEndpoint<ChangeType>(
     changes: ChangeType[]
   ) {
-    const responses = await this.postInParallelWithAutomaticChunking<
-      ChangeType,
-      ItemsResponse<ResponseType>
-    >(this.updateUrl(), transformDateInRequest(changes));
-    return responses.map(this.transformDateInResponse);
+    return this.postEndpointinParalelWithAutomaticChunking(this.updateUrl(), changes);
+  }
+
+  protected callDeleteEndpoint<ParamsType extends object>(
+    ids: IdEither[],
+    params?: ParamsType
+  ) {
+    return this.postEndpointinParalelWithAutomaticChunking(this.deleteUrl(), ids, params);
   }
 
   protected async callSearchEndpoint<QueryType, ResponseType>(
@@ -125,17 +136,6 @@ export abstract class BaseResourceAPI<ResponseType, TransformType, TransformedIt
       }
     );
     return transformDateInResponse(response);
-  }
-
-  protected callDeleteEndpoint<ParamsType extends object>(
-    ids: IdEither[],
-    params?: ParamsType
-  ) {
-    return this.postInParallelWithAutomaticChunking<IdEither, {}, ParamsType>(
-      this.deleteUrl(),
-      ids,
-      params
-    );
   }
 
   protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>) {

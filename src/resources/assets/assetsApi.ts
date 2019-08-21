@@ -1,7 +1,6 @@
 // Copyright 2019 Cognite AS
 
 import { chunk } from 'lodash';
-import { makeAutoPaginationMethods } from '../../autoPagination';
 import CogniteClient from '../../cogniteClient';
 import { HttpClient } from '../../httpClient';
 import { MetadataMap } from '../../metadata';
@@ -22,7 +21,7 @@ import { Asset } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
 import { sortAssetCreateItems } from './assetUtils';
 
-export class AssetsAPI extends BaseResourceAPI<TypeAsset, AssetList, Asset> {
+export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
   /** @hidden */
   constructor(
     private client: CogniteClient,
@@ -58,21 +57,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, AssetList, Asset> {
    * ```
    */
   public list(query?: AssetListScope): CursorAndAsyncIterator<Asset> {
-    const listPromise = super
-      .callListEndpointWithPost<AssetListScope, TypeAsset>(query)
-      .then(response => ({
-        ...response.data,
-        items: this.transformToList(response.data.items),
-      }))
-      .then(transformedResponse =>
-        super.addNextPageFunction<AssetListScope, Asset>(
-          super.callListEndpointWithPost,
-          transformedResponse,
-          query
-        )
-      );
-    const autoPaginationMethods = makeAutoPaginationMethods(listPromise);
-    return Object.assign(listPromise, autoPaginationMethods);
+    return this.callListEndpointWithThenAddCursorAndAsyncIterator(query);
   }
 
   /**
@@ -83,7 +68,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, AssetList, Asset> {
    * const assets = await client.assets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public async retrieve(ids: IdEither[]): Promise<AssetList> {
+  public async retrieve(ids: IdEither[]) {
     return super.callRetrieveWithMergeAndTransform(ids)
   }
 
@@ -94,7 +79,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, AssetList, Asset> {
    * const assets = await client.assets.update([{id: 123, update: {name: {set: 'New name'}}}]);
    * ```
    */
-  public async update(changes: AssetChange[]): Promise<AssetList> {
+  public async update(changes: AssetChange[]) {
     return super.callUpdateWithMergeAndTransform(changes)
   }
 
@@ -112,7 +97,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, AssetList, Asset> {
    * });
    * ```
    */
-  public async search(query: AssetSearchFilter): Promise<AssetList> {
+  public async search(query: AssetSearchFilter) {
     return super.callSearchWithTransform(query);
   }
 
@@ -137,7 +122,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, AssetList, Asset> {
     return assets.map(asset => new Asset(this.client, asset));
   }
 
-  protected transformToClass(assets: TypeAsset[]): AssetList {
+  protected transformToClass(assets: TypeAsset[]) {
     const assetArray = this.transformToList(assets);
     return new AssetList(this.client, assetArray);
   }
