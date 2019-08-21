@@ -1,9 +1,9 @@
 Authentication in browsers
 ==========================
 
-To utilize authentication in browsers using the SDK you need to use the `createClientWithOAuth` function from the SDK.
+To utilize authentication in browsers using the SDK you need to use the `client.loginWithOAuth(...)` from `CogniteClient` instance of the SDK.
 
-`createClientWithOAuth` will automatically handle authentication of the user and respond when the client get a `401`-response (not logged in) response from the API.
+`loginWithOAuth(...)` will automatically handle authentication of the user and respond when the client get a `401`-response (not logged in) response from the API.
 
 # Table of Contents
 - [Authentication in browsers](#authentication-in-browsers)
