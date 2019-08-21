@@ -14,7 +14,7 @@ import { promiseAllWithData } from './assets/assetUtils';
 import { MetadataMap } from '../metadata';
 import { makeAutoPaginationMethods } from '../autoPagination';
 
-export abstract class BaseResourceAPI<ResponseType, TransformedItem> {
+export abstract class BaseResourceAPI<ResponseType, TransformType, TransformedItem> {
 
   constructor(
     public readonly httpClient: HttpClient,
@@ -93,7 +93,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformedItem> {
     return Object.assign(listPromise, autoPaginationMethods);
   }
   
-  protected abstract transformToClass(array: ResponseType[]): Array<TransformedItem>;
+  protected abstract transformToClass(array: ResponseType[]): TransformType;
   protected abstract transformToList(item: ResponseType[]): TransformedItem[];
 
   protected async callRetrieveEndpoint<ResponseType>(ids: IdEither[]) {

@@ -22,7 +22,7 @@ import { Asset } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
 import { sortAssetCreateItems } from './assetUtils';
 
-export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset> {
+export class AssetsAPI extends BaseResourceAPI<TypeAsset, AssetList, Asset> {
   /** @hidden */
   constructor(
     private client: CogniteClient,
