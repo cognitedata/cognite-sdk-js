@@ -1,24 +1,30 @@
 // Copyright 2019 Cognite AS
 
-export class RevertableArraySorter<IntputType> {
-  private originalIndexMap = new Map<IntputType, number>();
-  private sortedArray: IntputType[];
+export class RevertableArraySorter<InputType> {
+  private originalIndexMap: Map<InputType, number> = new Map();
+  private sortedArray: InputType[] | undefined;
+  private originalArray: InputType[] | undefined;
 
   constructor(
-    private originalArray: IntputType[],
-    private sortFunction: (array: IntputType[]) => IntputType[]
-  ) {
-    originalArray.forEach((item, index) => {
+    private sortFunction: (array: InputType[]) => InputType[]
+  ) { }
+
+  sort = (array: InputType[]) => {
+    this.originalIndexMap = new Map();
+    this.originalArray = array;
+    array.forEach((item, index) => {
       this.originalIndexMap.set(item, index);
     });
-    this.sortedArray = this.sortFunction(originalArray);
-  }
-
-  public getSorted() {
+    this.sortedArray = this.sortFunction(array);
     return this.sortedArray;
   }
 
-  public unsort<OutputType>(arrayToUnsort: OutputType[]) {
+  unsort = <OutputType>(arrayToUnsort: OutputType[]) => {
+    if(!this.originalArray || !this.sortedArray) {
+      throw Error(
+        'Impossible to unsort. Call sort(...) first.'
+      );
+    }
     if (arrayToUnsort.length !== this.originalArray.length) {
       throw Error(
         'Impossible to unsort. Input array has a different length from original.'

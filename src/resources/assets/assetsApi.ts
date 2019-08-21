@@ -22,15 +22,15 @@ import { Asset } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
 import { sortAssetCreateItems } from './assetUtils';
 
-export class AssetsAPI extends BaseResourceAPI {
+export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset> {
   /** @hidden */
   constructor(
     private client: CogniteClient,
     resourcePath: string,
     httpClient: HttpClient,
-    private map: MetadataMap
+    map: MetadataMap
   ) {
-    super(httpClient, resourcePath);
+    super(httpClient, resourcePath, map);
   }
 
   /**
@@ -45,15 +45,8 @@ export class AssetsAPI extends BaseResourceAPI {
    * ```
    */
   public async create(items: ExternalAssetItem[]): Promise<AssetList> {
-    const sorter = new RevertableArraySorter(items, sortAssetCreateItems);
-    const responses = await this.callCreateEndpoint<
-      ExternalAssetItem,
-      TypeAsset
-    >(sorter.getSorted());
-    const responseItems = super.mergeItemsFromItemsResponse(responses);
-    const responseItemsInOriginalOrder = sorter.unsort(responseItems);
-    const assetList = this.transformToAssetList(responseItemsInOriginalOrder);
-    return this.map.addAndReturn(assetList, responses[0]);
+    const { sort, unsort } = new RevertableArraySorter(sortAssetCreateItems);
+    return super.callCreateWithPrePostModifiersMergeAndTransform(items, sort, unsort);
   }
 
   /**
@@ -69,7 +62,7 @@ export class AssetsAPI extends BaseResourceAPI {
       .callListEndpointWithPost<AssetListScope, TypeAsset>(query)
       .then(response => ({
         ...response.data,
-        items: this.transformToListOfAsset(response.data.items),
+        items: this.transformToList(response.data.items),
       }))
       .then(transformedResponse =>
         super.addNextPageFunction<AssetListScope, Asset>(
@@ -91,10 +84,7 @@ export class AssetsAPI extends BaseResourceAPI {
    * ```
    */
   public async retrieve(ids: IdEither[]): Promise<AssetList> {
-    const responses = await super.callRetrieveEndpoint<TypeAsset>(ids);
-    const mergedResponseItems = super.mergeItemsFromItemsResponse(responses);
-    const assetList = this.transformToAssetList(mergedResponseItems);
-    return this.map.addAndReturn(assetList, responses[0]);
+    return super.callRetrieveWithMergeAndTransform(ids)
   }
 
   /**
@@ -105,12 +95,7 @@ export class AssetsAPI extends BaseResourceAPI {
    * ```
    */
   public async update(changes: AssetChange[]): Promise<AssetList> {
-    const responses = await super.callUpdateEndpoint<AssetChange, TypeAsset>(
-      changes
-    );
-    const mergedResponseItems = super.mergeItemsFromItemsResponse(responses);
-    const assetList = this.transformToAssetList(mergedResponseItems);
-    return this.map.addAndReturn(assetList, responses[0]);
+    return super.callUpdateWithMergeAndTransform(changes)
   }
 
   /**
@@ -128,12 +113,7 @@ export class AssetsAPI extends BaseResourceAPI {
    * ```
    */
   public async search(query: AssetSearchFilter): Promise<AssetList> {
-    const response = await super.callSearchEndpoint<
-      AssetSearchFilter,
-      TypeAsset
-    >(query);
-    const assetList = this.transformToAssetList(response.data.items);
-    return this.map.addAndReturn(assetList, response);
+    return super.callSearchWithTransform(query);
   }
 
   /**
@@ -143,12 +123,8 @@ export class AssetsAPI extends BaseResourceAPI {
    * await client.assets.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public async delete(
-    ids: AssetIdEither[],
-    params?: AssetDeleteParams
-  ): Promise<{}> {
-    const responses = await super.callDeleteEndpoint(ids, params);
-    return this.map.addAndReturn({}, responses[0]);
+  public async delete(ids: AssetIdEither[], params?: AssetDeleteParams) {
+    return super.callDelete(ids, params);
   }
 
   public async retrieveSubtree(id: IdEither, depth: number) {
@@ -157,13 +133,13 @@ export class AssetsAPI extends BaseResourceAPI {
     return this.getAssetSubtree(rootAssetList, currentDepth, depth);
   }
 
-  private transformToAssetList(assets: TypeAsset[]): AssetList {
-    const assetArray = assets.map(asset => new Asset(this.client, asset));
-    return new AssetList(this.client, assetArray);
+  protected transformToList(assets: TypeAsset[]) {
+    return assets.map(asset => new Asset(this.client, asset));
   }
 
-  private transformToListOfAsset(assets: TypeAsset[]): Asset[] {
-    return assets.map(asset => new Asset(this.client, asset));
+  protected transformToClass(assets: TypeAsset[]): AssetList {
+    const assetArray = this.transformToList(assets);
+    return new AssetList(this.client, assetArray);
   }
 
   private async getAssetSubtree(

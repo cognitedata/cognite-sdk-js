@@ -2,16 +2,22 @@
 
 import { RevertableArraySorter } from '../revertableArraySorter';
 
-describe('revetable array sorter', () => {
+describe('revertable array sorter', () => {
   test('small array', () => {
-    const revertableSorter = new RevertableArraySorter(
-      [1, 2, 3],
-      (array: number[]) => array.slice().reverse()
+    const revertableSorter = new RevertableArraySorter((array: number[]) =>
+      array.slice().reverse()
     );
-    expect(revertableSorter.getSorted()).toEqual([3, 2, 1]);
+    expect(() =>
+      revertableSorter.unsort(['a'])
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"Impossible to unsort. Call sort(...) first."`
+    );
+    expect(revertableSorter.sort([1, 2, 3])).toEqual([3, 2, 1]);
     expect(revertableSorter.unsort(['a', 'b', 'c'])).toEqual(['c', 'b', 'a']);
     expect(() =>
       revertableSorter.unsort(['a', 'b'])
-    ).toThrowErrorMatchingSnapshot();
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"Impossible to unsort. Input array has a different length from original."`
+    );
   });
 });
