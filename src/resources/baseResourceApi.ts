@@ -56,7 +56,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     const responses = await this.postInSequenceWithAutomaticChunking<
       RequestType,
       ItemsResponse<ResponseType>
-    >(this.url(), transformDateInRequest(items));
+    >(this.url(), items);
     return responses.map(transformDateInResponse);
   }
 
@@ -245,6 +245,17 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
       ...response,
       data: transformDateInResponse(response.data),
     };
+  }
+
+  public postWithTransformsDates<
+    RequestType,
+    ResponseType,
+    ParamsType extends object = {},
+  >(url: string, data?: RequestType, params?: ParamsType) {
+    return this.httpClient.post<ResponseType>(url, {
+      data: transformDateInRequest(data),
+      params
+    }).then(this.transformDateInResponse)
   }
 
   private postInParallelWithAutomaticChunking<
