@@ -53,6 +53,10 @@ export abstract class BaseResourceAPI<
     return this.url('byids');
   }
 
+  protected updateUrl() {
+    return this.url('update');
+  }
+
   protected searchUrl() {
     return this.url('search');
   }
@@ -61,8 +65,62 @@ export abstract class BaseResourceAPI<
     return this.url('delete');
   }
 
-  protected updateUrl() {
-    return this.url('update');
+  protected async createEndpoint<RequestType>(
+    items: RequestType[],
+    preRequestModifier?: (items: RequestType[]) => RequestType[],
+    postRequestModifier?: (items: ResponseType[]) => ResponseType[]
+  ) {
+    return this.callEndpointWithMergeAndTransform(
+      items,
+      this.callCreateEndpoint,
+      preRequestModifier,
+      postRequestModifier
+    );
+  }
+
+  protected listEndpoint<QueryType extends FilterQuery>(query?: QueryType) {
+    const listPromise = this.callListEndpointWithPost<QueryType, ResponseType>(
+      query
+    )
+      .then(response => ({
+        ...response.data,
+        items: this.transformToList(response.data.items),
+      }))
+      .then(transformedResponse =>
+        this.addNextPageFunction<QueryType, TransformedType>(
+          this.callListEndpointWithPost,
+          transformedResponse,
+          query
+        )
+      );
+    const autoPaginationMethods = makeAutoPaginationMethods(listPromise);
+    return Object.assign(listPromise, autoPaginationMethods);
+  }
+
+  protected async retrieveEndpoint(ids: IdEither[]) {
+    return this.callEndpointWithMergeAndTransform(
+      ids,
+      this.callRetrieveEndpoint
+    );
+  }
+
+  protected async updateEndpoint<ChangeType>(changes: ChangeType[]) {
+    return this.callEndpointWithMergeAndTransform(
+      changes,
+      this.callUpdateEndpoint
+    );
+  }
+
+  protected async searchEndpoint<FilterType>(query: FilterType) {
+    return this.callEndpointWithTransform(query, this.callSearchEndpoint);
+  }
+
+  protected async deleteEndpoint<RequestParams extends object>(
+    ids: IdEither[],
+    params?: RequestParams
+  ) {
+    const responses = await this.callDeleteEndpoint(ids, params);
+    return this.addToMapAndReturn({}, responses[0]);
   }
 
   protected async callCreateEndpoint<RequestType>(items: RequestType[]) {
@@ -82,36 +140,19 @@ export abstract class BaseResourceAPI<
     );
   }
 
-  protected callListEndpointWithThenAddCursorAndAsyncIterator<
-    QueryType extends FilterQuery
-  >(query?: QueryType) {
-    const listPromise = this.callListEndpointWithPost<QueryType, ResponseType>(
-      query
-    )
-      .then(response => ({
-        ...response.data,
-        items: this.transformToList(response.data.items),
-      }))
-      .then(transformedResponse =>
-        this.addNextPageFunction<QueryType, TransformedType>(
-          this.callListEndpointWithPost,
-          transformedResponse,
-          query
-        )
-      );
-    const autoPaginationMethods = makeAutoPaginationMethods(listPromise);
-    return Object.assign(listPromise, autoPaginationMethods);
-  }
-
-  protected abstract transformToClass(array: ResponseType[]): WrapperType;
-  protected abstract transformToList(item: ResponseType[]): TransformedType[];
-
   protected async callRetrieveEndpoint(ids: IdEither[]) {
     return this.postInParallelWithAutomaticChunking(this.byIdsUrl(), ids);
   }
 
   protected async callUpdateEndpoint<ChangeType>(changes: ChangeType[]) {
     return this.postInParallelWithAutomaticChunking(this.updateUrl(), changes);
+  }
+
+  protected async callSearchEndpoint<QueryType, Response>(query: QueryType) {
+    return this.postAndTransformDates<QueryType, Response>(
+      this.searchUrl(),
+      query
+    );
   }
 
   protected callDeleteEndpoint<ParamsType extends object>(
@@ -122,13 +163,6 @@ export abstract class BaseResourceAPI<
       this.deleteUrl(),
       ids,
       params
-    );
-  }
-
-  protected async callSearchEndpoint<QueryType, Response>(query: QueryType) {
-    return this.postAndTransformDates<QueryType, Response>(
-      this.searchUrl(),
-      query
     );
   }
 
@@ -172,47 +206,6 @@ export abstract class BaseResourceAPI<
     return this.transformAndReturn(response.data.items, response);
   }
 
-  protected async callRetrieveWithMergeAndTransform(ids: IdEither[]) {
-    return this.callEndpointWithMergeAndTransform(
-      ids,
-      this.callRetrieveEndpoint
-    );
-  }
-
-  protected async callCreateWithPrePostModifiersMergeAndTransform<RequestType>(
-    items: RequestType[],
-    preRequestModifier?: (items: RequestType[]) => RequestType[],
-    postRequestModifier?: (items: ResponseType[]) => ResponseType[]
-  ) {
-    return this.callEndpointWithMergeAndTransform(
-      items,
-      this.callCreateEndpoint,
-      preRequestModifier,
-      postRequestModifier
-    );
-  }
-
-  protected async callUpdateWithMergeAndTransform<ChangeType>(
-    changes: ChangeType[]
-  ) {
-    return this.callEndpointWithMergeAndTransform(
-      changes,
-      this.callUpdateEndpoint
-    );
-  }
-
-  protected async callSearchWithTransform<FilterType>(query: FilterType) {
-    return this.callEndpointWithTransform(query, this.callSearchEndpoint);
-  }
-
-  protected async callDelete<RequestParams extends object>(
-    ids: IdEither[],
-    params?: RequestParams
-  ) {
-    const responses = await this.callDeleteEndpoint(ids, params);
-    return this.addToMapAndReturn({}, responses[0]);
-  }
-
   protected mergeItemsFromItemsResponse<T>(
     responses: HttpResponse<ItemsResponse<T>>[]
   ): T[] {
@@ -238,6 +231,9 @@ export abstract class BaseResourceAPI<
       next,
     };
   }
+
+  protected abstract transformToClass(array: ResponseType[]): WrapperType;
+  protected abstract transformToList(item: ResponseType[]): TransformedType[];
 
   private applyIfApplicable<ArgumentType, ResultType>(
     args: ArgumentType,

@@ -45,11 +45,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    */
   public async create(items: ExternalAssetItem[]): Promise<AssetList> {
     const { sort, unsort } = new RevertableArraySorter(sortAssetCreateItems);
-    return super.callCreateWithPrePostModifiersMergeAndTransform(
-      items,
-      sort,
-      unsort
-    );
+    return super.createEndpoint(items, sort, unsort);
   }
 
   /**
@@ -61,7 +57,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * ```
    */
   public list(query?: AssetListScope): CursorAndAsyncIterator<Asset> {
-    return this.callListEndpointWithThenAddCursorAndAsyncIterator(query);
+    return super.listEndpoint(query);
   }
 
   /**
@@ -73,7 +69,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * ```
    */
   public async retrieve(ids: IdEither[]) {
-    return super.callRetrieveWithMergeAndTransform(ids);
+    return super.retrieveEndpoint(ids);
   }
 
   /**
@@ -84,7 +80,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * ```
    */
   public async update(changes: AssetChange[]) {
-    return super.callUpdateWithMergeAndTransform(changes);
+    return super.updateEndpoint(changes);
   }
 
   /**
@@ -102,7 +98,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * ```
    */
   public async search(query: AssetSearchFilter) {
-    return super.callSearchWithTransform(query);
+    return super.searchEndpoint(query);
   }
 
   /**
@@ -113,7 +109,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * ```
    */
   public async delete(ids: AssetIdEither[], params?: AssetDeleteParams) {
-    return super.callDelete(ids, params);
+    return super.deleteEndpoint(ids, params);
   }
 
   public async retrieveSubtree(id: IdEither, depth: number) {
