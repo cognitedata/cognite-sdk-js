@@ -58,19 +58,14 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
       ItemsResponse<ResponseType>
     >(this.url(), items);
     return responses.map(transformDateInResponse);
+    // return this.postWithTransformsDates<RequestType[], ItemsResponse<ResponseType>>(this.url(), items);
   }
 
   protected async callListEndpointWithPost<
     QueryType extends FilterQuery,
     ResponseType
   >(query?: QueryType) {
-    const response = await this.httpClient.post<CursorResponse<ResponseType>>(
-      this.listUrl(),
-      {
-        data: transformDateInRequest(query),
-      }
-    );
-    return transformDateInResponse(response);
+    return this.postWithTransformsDates<QueryType, CursorResponse<ResponseType>>(this.listUrl(), query);
   }
 
   protected callListEndpointWithThenAddCursorAndAsyncIterator<
@@ -183,11 +178,11 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
   }
 
   protected async callCreateWithPrePostModifiersMergeAndTransform<RequestType>(
-    changes: RequestType[],
+    items: RequestType[],
     preRequestModifier?: (items: RequestType[]) => RequestType[],
     postRequestModifier?: (items: ResponseType[]) => ResponseType[]) {
     return this.callEndpointWithMergeAndTransform(
-      changes,
+      items,
       this.callCreateEndpoint,
       preRequestModifier,
       postRequestModifier
@@ -202,7 +197,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     return this.callEndpointWithTransform(query, this.callSearchEndpoint);
   }
 
-  protected async callDelete<RequestParams extends object>(ids: IdEither[],params?: RequestParams) {
+  protected async callDelete<RequestParams extends object>(ids: IdEither[], params?: RequestParams) {
     const responses = await this.callDeleteEndpoint(ids, params);
     return this.addToMapAndReturn({}, responses[0]);
   }
@@ -263,13 +258,10 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     ResponseType,
     ParamsType extends object = {}
   >(path: string, items: RequestType[], params?: ParamsType) {
-    const { httpClient } = this;
     return promiseAllWithData(
       this.chunk(items, 1000),
       singleChunk =>
-        httpClient.post<ResponseType>(path, {
-          data: { ...params, items: singleChunk },
-        }),
+        this.postWithTransformsDates<{items:RequestType[]}, ResponseType>(path, { ...params, items: singleChunk }),
       false
     );
   }
@@ -279,14 +271,10 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     ResponseType,
     ParamsType extends object = {}
   >(path: string, items: RequestType[], params?: ParamsType) {
-    const { httpClient } = this;
     return promiseAllWithData(
       this.chunk(items, 1000),
       singleChunk =>
-        httpClient.post<ResponseType>(path, {
-          data: { items: singleChunk },
-          params,
-        }),
+        this.postWithTransformsDates<{items:RequestType[]}, ResponseType>(path, { items: singleChunk }, params),
       true
     );
   }
