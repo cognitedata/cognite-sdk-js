@@ -1,33 +1,48 @@
 // Copyright 2019 Cognite AS
 
 import { chunk } from 'lodash';
+import { makeAutoPaginationMethods } from '../autoPagination';
 import { HttpClient, HttpResponse } from '../httpClient';
+import { MetadataMap } from '../metadata';
 import {
   CursorResponse,
   FilterQuery,
   IdEither,
   ItemsResponse,
-  ListResponse
+  ListResponse,
 } from '../types/types';
 import { transformDateInRequest, transformDateInResponse } from '../utils';
 import { promiseAllWithData } from './assets/assetUtils';
-import { MetadataMap } from '../metadata';
-import { makeAutoPaginationMethods } from '../autoPagination';
 
-export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType extends Array<TransformedType>> {
-
+export abstract class BaseResourceAPI<
+  ResponseType,
+  TransformedType,
+  WrapperType extends TransformedType[]
+> {
   constructor(
     public readonly httpClient: HttpClient,
     public readonly resourcePath: string,
     private map: MetadataMap
   ) {}
 
+  public postWithTransformsDates<
+    RequestType,
+    Response,
+    ParamsType extends object = {}
+  >(url: string, data?: RequestType, params?: ParamsType) {
+    return this.httpClient
+      .post<Response>(url, {
+        data: { ...transformDateInRequest(data), ...params },
+      })
+      .then(this.transformDateInResponse);
+  }
+
   protected getMetadataMap() {
     return this.map;
   }
 
   protected url(path: string = '') {
-    return this.resourcePath + '/' + path
+    return this.resourcePath + '/' + path;
   }
 
   protected listUrl() {
@@ -50,27 +65,31 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     return this.url('update');
   }
 
-  protected async callCreateEndpoint<RequestType, ResponseType>(
+  protected async callCreateEndpoint<RequestType, Response>(
     items: RequestType[]
   ) {
-    return await this.postInSequenceWithAutomaticChunking<
+    return this.postInSequenceWithAutomaticChunking<
       RequestType,
-      ItemsResponse<ResponseType>
+      ItemsResponse<Response>
     >(this.url(), items);
   }
 
   protected async callListEndpointWithPost<
     QueryType extends FilterQuery,
-    ResponseType
+    Response
   >(query?: QueryType) {
-    return this.postWithTransformsDates<QueryType, CursorResponse<ResponseType>>(this.listUrl(), query);
+    return this.postWithTransformsDates<QueryType, CursorResponse<Response>>(
+      this.listUrl(),
+      query
+    );
   }
 
   protected callListEndpointWithThenAddCursorAndAsyncIterator<
     QueryType extends FilterQuery
   >(query?: QueryType) {
-    const listPromise = this
-      .callListEndpointWithPost<QueryType, ResponseType>(query)
+    const listPromise = this.callListEndpointWithPost<QueryType, ResponseType>(
+      query
+    )
       .then(response => ({
         ...response.data,
         items: this.transformToList(response.data.items),
@@ -85,7 +104,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     const autoPaginationMethods = makeAutoPaginationMethods(listPromise);
     return Object.assign(listPromise, autoPaginationMethods);
   }
-  
+
   protected abstract transformToClass(array: ResponseType[]): WrapperType;
   protected abstract transformToList(item: ResponseType[]): TransformedType[];
 
@@ -93,9 +112,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     return this.postInParallelWithAutomaticChunking(this.byIdsUrl(), ids);
   }
 
-  protected async callUpdateEndpoint<ChangeType>(
-    changes: ChangeType[]
-  ) {
+  protected async callUpdateEndpoint<ChangeType>(changes: ChangeType[]) {
     return this.postInParallelWithAutomaticChunking(this.updateUrl(), changes);
   }
 
@@ -103,63 +120,72 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     ids: IdEither[],
     params?: ParamsType
   ) {
-    return this.postInParallelWithAutomaticChunking(this.deleteUrl(), ids, params);
+    return this.postInParallelWithAutomaticChunking(
+      this.deleteUrl(),
+      ids,
+      params
+    );
   }
 
-  protected async callSearchEndpoint<QueryType, ResponseType>(
-    query: QueryType
-  ) {
-    return this.postWithTransformsDates<QueryType, ResponseType>(this.searchUrl(), query)
+  protected async callSearchEndpoint<QueryType, Response>(query: QueryType) {
+    return this.postWithTransformsDates<QueryType, Response>(
+      this.searchUrl(),
+      query
+    );
   }
 
   protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>) {
     return this.map.addAndReturn(response, metadata);
   }
 
-  protected transformAndReturn(items: ResponseType[], metadata: HttpResponse<ItemsResponse<ResponseType>>) {
+  protected transformAndReturn(
+    items: ResponseType[],
+    metadata: HttpResponse<ItemsResponse<ResponseType>>
+  ) {
     const transformedResponse = this.transformToClass(items);
     return this.addToMapAndReturn(transformedResponse, metadata);
   }
 
-  private applyIfApplicable<ArgumentType, ResultType>(
-    args: ArgumentType,
-    action?: (input: ArgumentType) => ResultType
-  ) {
-    if(action) {
-      return action(args);
-    }
-    return args;
-  }
-
   protected async callEndpointWithMergeAndTransform<RequestType>(
     query: RequestType,
-    requester: (request: RequestType) => Promise<HttpResponse<ItemsResponse<ResponseType>>[]>,
+    requester: (
+      request: RequestType
+    ) => Promise<HttpResponse<ItemsResponse<ResponseType>>[]>,
     preRequestModifier?: (items: RequestType) => RequestType,
     postRequestModifier?: (items: ResponseType[]) => ResponseType[]
   ) {
     const modifiedQuery = this.applyIfApplicable(query, preRequestModifier);
     const responses = await requester.bind(this)(modifiedQuery);
     const mergedResponseItems = this.mergeItemsFromItemsResponse(responses);
-    const modifiedResponseItems = this.applyIfApplicable(mergedResponseItems, postRequestModifier);
+    const modifiedResponseItems = this.applyIfApplicable(
+      mergedResponseItems,
+      postRequestModifier
+    );
     return this.transformAndReturn(modifiedResponseItems, responses[0]);
   }
 
   protected async callEndpointWithTransform<RequestType>(
     query: RequestType,
-    requester: (request: RequestType) => Promise<HttpResponse<ItemsResponse<ResponseType>>>
+    requester: (
+      request: RequestType
+    ) => Promise<HttpResponse<ItemsResponse<ResponseType>>>
   ) {
     const response = await requester.bind(this)(query);
     return this.transformAndReturn(response.data.items, response);
   }
 
   protected async callRetrieveWithMergeAndTransform(ids: IdEither[]) {
-    return this.callEndpointWithMergeAndTransform(ids, this.callRetrieveEndpoint);
+    return this.callEndpointWithMergeAndTransform(
+      ids,
+      this.callRetrieveEndpoint
+    );
   }
 
   protected async callCreateWithPrePostModifiersMergeAndTransform<RequestType>(
     items: RequestType[],
     preRequestModifier?: (items: RequestType[]) => RequestType[],
-    postRequestModifier?: (items: ResponseType[]) => ResponseType[]) {
+    postRequestModifier?: (items: ResponseType[]) => ResponseType[]
+  ) {
     return this.callEndpointWithMergeAndTransform(
       items,
       this.callCreateEndpoint,
@@ -168,15 +194,23 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     );
   }
 
-  protected async callUpdateWithMergeAndTransform<ChangeType>(changes: ChangeType[]) {
-    return this.callEndpointWithMergeAndTransform(changes, this.callUpdateEndpoint);
+  protected async callUpdateWithMergeAndTransform<ChangeType>(
+    changes: ChangeType[]
+  ) {
+    return this.callEndpointWithMergeAndTransform(
+      changes,
+      this.callUpdateEndpoint
+    );
   }
 
   protected async callSearchWithTransform<FilterType>(query: FilterType) {
     return this.callEndpointWithTransform(query, this.callSearchEndpoint);
   }
 
-  protected async callDelete<RequestParams extends object>(ids: IdEither[], params?: RequestParams) {
+  protected async callDelete<RequestParams extends object>(
+    ids: IdEither[],
+    params?: RequestParams
+  ) {
     const responses = await this.callDeleteEndpoint(ids, params);
     return this.addToMapAndReturn({}, responses[0]);
   }
@@ -188,11 +222,11 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     return this.flattenItemsResponses(itemsResponses);
   }
 
-  protected addNextPageFunction<QueryType extends FilterQuery, ResponseType>(
-    endpoint: ListEndpoint<QueryType, ResponseType>,
-    cursorResponse: CursorResponse<ResponseType>,
+  protected addNextPageFunction<QueryType extends FilterQuery, Response>(
+    endpoint: ListEndpoint<QueryType, Response>,
+    cursorResponse: CursorResponse<Response>,
     query: QueryType = {} as QueryType
-  ): ListResponse<ResponseType> {
+  ): ListResponse<Response> {
     const { nextCursor } = cursorResponse;
     const next = nextCursor
       ? () =>
@@ -204,6 +238,16 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
       ...cursorResponse,
       next,
     };
+  }
+
+  private applyIfApplicable<ArgumentType, ResultType>(
+    args: ArgumentType,
+    action?: (input: ArgumentType) => ResultType
+  ) {
+    if (action) {
+      return action(args);
+    }
+    return args;
   }
 
   private flattenItemsResponses<T>(responses: ItemsResponse<T>[]): T[] {
@@ -221,16 +265,6 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     };
   }
 
-  public postWithTransformsDates<
-    RequestType,
-    ResponseType,
-    ParamsType extends object = {}
-  >(url: string, data?: RequestType, params?: ParamsType) {
-    return this.httpClient.post<ResponseType>(url, {
-      data: { ...transformDateInRequest(data), ...params },
-    }).then(this.transformDateInResponse)
-  }
-
   private postInParallelWithAutomaticChunking<
     RequestType,
     ParamsType extends object = {}
@@ -238,20 +272,27 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     return promiseAllWithData(
       this.chunk(items, 1000),
       singleChunk =>
-        this.postWithTransformsDates<{items:RequestType[]}, ItemsResponse<ResponseType>>(path, { items: singleChunk }, params),
+        this.postWithTransformsDates<
+          { items: RequestType[] },
+          ItemsResponse<ResponseType>
+        >(path, { items: singleChunk }, params),
       false
     );
   }
 
   private postInSequenceWithAutomaticChunking<
     RequestType,
-    ResponseType,
+    Response,
     ParamsType extends object = {}
   >(path: string, items: RequestType[], params?: ParamsType) {
     return promiseAllWithData(
       this.chunk(items, 1000),
       singleChunk =>
-        this.postWithTransformsDates<{items:RequestType[]}, ResponseType>(path, { items: singleChunk }, params),
+        this.postWithTransformsDates<{ items: RequestType[] }, Response>(
+          path,
+          { items: singleChunk },
+          params
+        ),
       true
     );
   }

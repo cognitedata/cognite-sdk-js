@@ -45,7 +45,11 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    */
   public async create(items: ExternalAssetItem[]): Promise<AssetList> {
     const { sort, unsort } = new RevertableArraySorter(sortAssetCreateItems);
-    return super.callCreateWithPrePostModifiersMergeAndTransform(items, sort, unsort);
+    return super.callCreateWithPrePostModifiersMergeAndTransform(
+      items,
+      sort,
+      unsort
+    );
   }
 
   /**
@@ -69,7 +73,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * ```
    */
   public async retrieve(ids: IdEither[]) {
-    return super.callRetrieveWithMergeAndTransform(ids)
+    return super.callRetrieveWithMergeAndTransform(ids);
   }
 
   /**
@@ -80,7 +84,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * ```
    */
   public async update(changes: AssetChange[]) {
-    return super.callUpdateWithMergeAndTransform(changes)
+    return super.callUpdateWithMergeAndTransform(changes);
   }
 
   /**

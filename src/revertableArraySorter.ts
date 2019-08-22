@@ -2,14 +2,12 @@
 
 export class RevertableArraySorter<InputType> {
   private originalIndexMap: Map<InputType, number> = new Map();
-  private sortedArray: InputType[] | undefined;
-  private originalArray: InputType[] | undefined;
+  private sortedArray?: InputType[];
+  private originalArray?: InputType[];
 
-  constructor(
-    private sortFunction: (array: InputType[]) => InputType[]
-  ) { }
+  constructor(private sortFunction: (array: InputType[]) => InputType[]) {}
 
-  sort = (array: InputType[]) => {
+  public sort = (array: InputType[]) => {
     this.originalIndexMap = new Map();
     this.originalArray = array;
     array.forEach((item, index) => {
@@ -17,13 +15,11 @@ export class RevertableArraySorter<InputType> {
     });
     this.sortedArray = this.sortFunction(array);
     return this.sortedArray;
-  }
+  };
 
-  unsort = <OutputType>(arrayToUnsort: OutputType[]) => {
-    if(!this.originalArray || !this.sortedArray) {
-      throw Error(
-        'Impossible to unsort. Call sort(...) first.'
-      );
+  public unsort = <OutputType>(arrayToUnsort: OutputType[]) => {
+    if (!this.originalArray || !this.sortedArray) {
+      throw Error('Impossible to unsort. Call sort(...) first.');
     }
     if (arrayToUnsort.length !== this.originalArray.length) {
       throw Error(
@@ -37,5 +33,5 @@ export class RevertableArraySorter<InputType> {
       originallySortedArray[originalIndex] = arrayToUnsort[index];
     });
     return originallySortedArray;
-  }
+  };
 }
