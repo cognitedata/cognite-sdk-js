@@ -223,10 +223,11 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
 
   public postWithTransformsDates<
     RequestType,
-    ResponseType
-  >(url: string, data?: RequestType) {
+    ResponseType,
+    ParamsType extends object = {}
+  >(url: string, data?: RequestType, params?: ParamsType) {
     return this.httpClient.post<ResponseType>(url, {
-      data: transformDateInRequest(data),
+      data: { ...transformDateInRequest(data), ...params },
     }).then(this.transformDateInResponse)
   }
 
@@ -237,7 +238,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     return promiseAllWithData(
       this.chunk(items, 1000),
       singleChunk =>
-        this.postWithTransformsDates<{items:RequestType[]}, ItemsResponse<ResponseType>>(path, { ...params, items: singleChunk }),
+        this.postWithTransformsDates<{items:RequestType[]}, ItemsResponse<ResponseType>>(path, { items: singleChunk }, params),
       false
     );
   }
@@ -250,7 +251,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     return promiseAllWithData(
       this.chunk(items, 1000),
       singleChunk =>
-        this.postWithTransformsDates<{items:RequestType[]}, ResponseType>(path, { ...params, items: singleChunk }),
+        this.postWithTransformsDates<{items:RequestType[]}, ResponseType>(path, { items: singleChunk }, params),
       true
     );
   }
