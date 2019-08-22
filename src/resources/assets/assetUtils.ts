@@ -6,7 +6,7 @@ import { CogniteMultiError } from '../../multiError';
 import { ExternalAssetItem } from '../../types/types';
 
 /** @hidden */
-export function enrichAssestsWithTheirParents(
+export function enrichAssetsWithTheirParents(
   assets: ReadonlyArray<ExternalAssetItem>
 ): Node<ExternalAssetItem>[] {
   const externalIdMap = new Map<string, Node<ExternalAssetItem>>();
@@ -38,7 +38,7 @@ export function enrichAssestsWithTheirParents(
 export function sortAssetCreateItems(
   assets: ReadonlyArray<ExternalAssetItem>
 ): ExternalAssetItem[] {
-  const nodes = enrichAssestsWithTheirParents(assets);
+  const nodes = enrichAssetsWithTheirParents(assets);
   const sortedNodes = topologicalSort(nodes);
   return sortedNodes.map(node => node.data);
 }
