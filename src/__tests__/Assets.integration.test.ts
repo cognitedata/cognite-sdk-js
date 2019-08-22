@@ -2,10 +2,15 @@
 
 import { Asset } from '../Assets';
 import * as sdk from '../index';
+import { sleepPromise } from '../utils';
+
+function randomInt() {
+  return Math.floor(Math.random() * 10000000000);
+}
 
 describe('Asset integration test', () => {
   const rootAsset = {
-    name: 'test-root',
+    name: 'test-root-' + randomInt(),
     description: 'Root asset for cognitesdk-js test',
     metadata: {
       refId: 'test-root',
@@ -46,6 +51,7 @@ describe('Asset integration test', () => {
   test(
     'search for root test asset',
     async () => {
+      await sleepPromise(5000); // annoying eventual consistency
       const result = await sdk.Assets.list({
         name: rootAsset.name,
       });
