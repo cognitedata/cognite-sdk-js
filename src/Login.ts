@@ -387,7 +387,10 @@ export class Login {
     cancelSchedule = scheduleTask(
       () => {
         cancelSchedule();
-        Login.authorize(params, tokenCallback);
+        Login.authorize(
+          { ...params, idToken: undefined, accessToken: undefined },
+          tokenCallback
+        );
       },
       expireTimeInMs - timeLeftToRenewInMs,
       intervalInMs
