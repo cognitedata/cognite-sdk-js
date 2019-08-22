@@ -25,7 +25,7 @@ export abstract class BaseResourceAPI<
     private map: MetadataMap
   ) {}
 
-  public postWithTransformsDates<
+  public postAndTransformDates<
     RequestType,
     Response,
     ParamsType extends object = {}
@@ -65,12 +65,10 @@ export abstract class BaseResourceAPI<
     return this.url('update');
   }
 
-  protected async callCreateEndpoint<RequestType, Response>(
-    items: RequestType[]
-  ) {
+  protected async callCreateEndpoint<RequestType>(items: RequestType[]) {
     return this.postInSequenceWithAutomaticChunking<
       RequestType,
-      ItemsResponse<Response>
+      ItemsResponse<ResponseType>
     >(this.url(), items);
   }
 
@@ -78,7 +76,7 @@ export abstract class BaseResourceAPI<
     QueryType extends FilterQuery,
     Response
   >(query?: QueryType) {
-    return this.postWithTransformsDates<QueryType, CursorResponse<Response>>(
+    return this.postAndTransformDates<QueryType, CursorResponse<Response>>(
       this.listUrl(),
       query
     );
@@ -128,7 +126,7 @@ export abstract class BaseResourceAPI<
   }
 
   protected async callSearchEndpoint<QueryType, Response>(query: QueryType) {
-    return this.postWithTransformsDates<QueryType, Response>(
+    return this.postAndTransformDates<QueryType, Response>(
       this.searchUrl(),
       query
     );
@@ -218,8 +216,9 @@ export abstract class BaseResourceAPI<
   protected mergeItemsFromItemsResponse<T>(
     responses: HttpResponse<ItemsResponse<T>>[]
   ): T[] {
-    const itemsResponses = responses.map(response => response.data);
-    return this.flattenItemsResponses(itemsResponses);
+    return responses
+      .map(response => response.data.items)
+      .reduce((a, b) => [...a, ...b], []);
   }
 
   protected addNextPageFunction<QueryType extends FilterQuery, Response>(
@@ -250,12 +249,6 @@ export abstract class BaseResourceAPI<
     return args;
   }
 
-  private flattenItemsResponses<T>(responses: ItemsResponse<T>[]): T[] {
-    return responses
-      .map(response => response.items)
-      .reduce((a, b) => [...a, ...b], []);
-  }
-
   private transformDateInResponse<T>(
     response: HttpResponse<T>
   ): HttpResponse<T> {
@@ -272,7 +265,7 @@ export abstract class BaseResourceAPI<
     return promiseAllWithData(
       this.chunk(items, 1000),
       singleChunk =>
-        this.postWithTransformsDates<
+        this.postAndTransformDates<
           { items: RequestType[] },
           ItemsResponse<ResponseType>
         >(path, { items: singleChunk }, params),
@@ -288,7 +281,7 @@ export abstract class BaseResourceAPI<
     return promiseAllWithData(
       this.chunk(items, 1000),
       singleChunk =>
-        this.postWithTransformsDates<{ items: RequestType[] }, Response>(
+        this.postAndTransformDates<{ items: RequestType[] }, Response>(
           path,
           { items: singleChunk },
           params
