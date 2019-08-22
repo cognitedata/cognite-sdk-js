@@ -123,14 +123,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
   protected async callSearchEndpoint<QueryType, ResponseType>(
     query: QueryType
   ) {
-    const { httpClient } = this;
-    const response = await httpClient.post<ItemsResponse<ResponseType>>(
-      this.searchUrl(),
-      {
-        data: transformDateInRequest(query),
-      }
-    );
-    return transformDateInResponse(response);
+    return this.postWithTransformsDates<QueryType, ResponseType>(this.searchUrl(), query)
   }
 
   protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>) {
