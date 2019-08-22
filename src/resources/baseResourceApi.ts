@@ -53,12 +53,10 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
   protected async callCreateEndpoint<RequestType, ResponseType>(
     items: RequestType[]
   ) {
-    const responses = await this.postInSequenceWithAutomaticChunking<
+    return await this.postInSequenceWithAutomaticChunking<
       RequestType,
       ItemsResponse<ResponseType>
     >(this.url(), items);
-    return responses.map(transformDateInResponse);
-    // return this.postWithTransformsDates<RequestType[], ItemsResponse<ResponseType>>(this.url(), items);
   }
 
   protected async callListEndpointWithPost<
@@ -91,33 +89,21 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
   protected abstract transformToClass(array: ResponseType[]): WrapperType;
   protected abstract transformToList(item: ResponseType[]): TransformedType[];
 
-
-  protected async postEndpointinParalelWithAutomaticChunking<
-    DataType,
-    ParamsType extends object
-  >(url: string, requestData: DataType[], params?: ParamsType) {
-    const responses = await this.postInParallelWithAutomaticChunking<
-      DataType,
-      ItemsResponse<ResponseType>
-    >(url, transformDateInRequest(requestData), params);
-    return responses.map(this.transformDateInResponse);
-  }
-
   protected async callRetrieveEndpoint(ids: IdEither[]) {
-    return this.postEndpointinParalelWithAutomaticChunking(this.byIdsUrl(), ids);
+    return this.postInParallelWithAutomaticChunking(this.byIdsUrl(), ids);
   }
 
   protected async callUpdateEndpoint<ChangeType>(
     changes: ChangeType[]
   ) {
-    return this.postEndpointinParalelWithAutomaticChunking(this.updateUrl(), changes);
+    return this.postInParallelWithAutomaticChunking(this.updateUrl(), changes);
   }
 
   protected callDeleteEndpoint<ParamsType extends object>(
     ids: IdEither[],
     params?: ParamsType
   ) {
-    return this.postEndpointinParalelWithAutomaticChunking(this.deleteUrl(), ids, params);
+    return this.postInParallelWithAutomaticChunking(this.deleteUrl(), ids, params);
   }
 
   protected async callSearchEndpoint<QueryType, ResponseType>(
@@ -237,24 +223,21 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
 
   public postWithTransformsDates<
     RequestType,
-    ResponseType,
-    ParamsType extends object = {},
-  >(url: string, data?: RequestType, params?: ParamsType) {
+    ResponseType
+  >(url: string, data?: RequestType) {
     return this.httpClient.post<ResponseType>(url, {
       data: transformDateInRequest(data),
-      params
     }).then(this.transformDateInResponse)
   }
 
   private postInParallelWithAutomaticChunking<
     RequestType,
-    ResponseType,
     ParamsType extends object = {}
   >(path: string, items: RequestType[], params?: ParamsType) {
     return promiseAllWithData(
       this.chunk(items, 1000),
       singleChunk =>
-        this.postWithTransformsDates<{items:RequestType[]}, ResponseType>(path, { ...params, items: singleChunk }),
+        this.postWithTransformsDates<{items:RequestType[]}, ItemsResponse<ResponseType>>(path, { ...params, items: singleChunk }),
       false
     );
   }
@@ -267,7 +250,7 @@ export abstract class BaseResourceAPI<ResponseType, TransformedType, WrapperType
     return promiseAllWithData(
       this.chunk(items, 1000),
       singleChunk =>
-        this.postWithTransformsDates<{items:RequestType[]}, ResponseType>(path, { items: singleChunk }, params),
+        this.postWithTransformsDates<{items:RequestType[]}, ResponseType>(path, { ...params, items: singleChunk }),
       true
     );
   }
