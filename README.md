@@ -17,10 +17,9 @@ The SDK supports authentication through api-keys (_for server-side applications_
 <p align="right">
   <a href="https://youtu.be/29Cuv6OhBmA">
     Video quickstart<br />
-    <img src="https://img.youtube.com/vi/29Cuv6OhBmA/3.jpg" alt="Cognite logo" title="Cognite" align="right" />
+    <img src="https://img.youtube.com/vi/29Cuv6OhBmA/3.jpg" alt="Cognite JS SDK video guide" title="Watch our video guide" align="right" />
   </a>
 </p>
-
 
 Install the package with yarn:
 
