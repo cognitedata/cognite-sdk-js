@@ -14,6 +14,14 @@ The SDK supports authentication through api-keys (_for server-side applications_
 
 ## Installation
 
+<p align="right">
+  <a href="https://youtu.be/29Cuv6OhBmA">
+    Video quickstart<br />
+    <img src="https://img.youtube.com/vi/29Cuv6OhBmA/3.jpg" alt="Cognite logo" title="Cognite" align="right" />
+  </a>
+</p>
+
+
 Install the package with yarn:
 
     $ yarn add @cognite/sdk
