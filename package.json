@@ -1,6 +1,6 @@
 {
   "name": "@cognite/sdk",
-  "version": "1.7.7",
+  "version": "1.7.8",
   "description": "Javascript client library for Cognite SDK",
   "contributors": [
     "Fredrik Anfinsen <fredrik.anfinsen@cognite.com>",
