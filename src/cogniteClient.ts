@@ -2,8 +2,9 @@
 
 import { AxiosInstance, AxiosResponse } from 'axios';
 import { isFunction, isObject, isString } from 'lodash';
+import { version } from '../package.json';
 import {
-  generateAxiosInstance,
+  addArraySerializer,
   listenForNonSuccessStatusCode,
   rawRequest,
 } from './axiosWrappers';
@@ -132,7 +133,6 @@ export default class CogniteClient {
 
   public project: string = '';
   /** @hidden */
-  public instance: AxiosInstance;
   public httpClient: HttpClient;
   private metadataMap: MetadataMap;
   private hasBeenLoggedIn: boolean = false;
@@ -176,7 +176,10 @@ export default class CogniteClient {
     }
     const { baseUrl } = options;
     this.httpClient = new HttpClient(getBaseUrl(baseUrl));
-    this.instance = generateAxiosInstance(getBaseUrl(baseUrl), options.appId);
+    this.httpClient
+      .setHeader('x-cdp-sdk', `CogniteJavaScriptSDK:${version}`)
+      .setHeader('x-cdp-app', options.appId);
+    addArraySerializer(this.instance);
     addRetryToAxiosInstance(this.instance);
 
     this.metadataMap = new MetadataMap();
@@ -188,6 +191,14 @@ export default class CogniteClient {
       'You can only call authenticate after you have called loginWithOAuth'
     );
   };
+
+  /**
+   * @hidden
+   * DO NOT USE OUTSIDE THE SDK!
+   */
+  get instance() {
+    return this.httpClient.getInstance();
+  }
 
   /**
    * Login client with api-key
@@ -224,7 +235,6 @@ export default class CogniteClient {
       }
     });
     this.project = project;
-    this.instance.defaults.headers['api-key'] = apiKey;
     this.httpClient.setHeader('api-key', apiKey);
 
     this.initAPIs();

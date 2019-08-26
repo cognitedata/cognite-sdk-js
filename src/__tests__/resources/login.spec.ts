@@ -11,16 +11,16 @@ import {
 import {
   apiKey,
   authTokens,
-  baseUrl,
   loggedInResponse,
+  mockBaseUrl,
   notLoggedInResponse,
   project,
 } from '../testUtils';
 
 describe('Login', () => {
   const response401 = { error: { code: 401, message: '' } };
-  const statusUrl = `${baseUrl}/login/status`;
-  const axiosInstance = axios.create({ baseURL: baseUrl });
+  const statusUrl = `${mockBaseUrl}/login/status`;
+  const axiosInstance = axios.create({ baseURL: mockBaseUrl });
   const axiosMock = new MockAdapter(axiosInstance);
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe('Login', () => {
 
   describe('loginSilently', () => {
     const authorizeParams = {
-      baseUrl,
+      baseUrl: mockBaseUrl,
       project,
       redirectUrl: 'https://redirect.com',
       errorRedirectUrl: 'https://error-redirect.com',
@@ -104,7 +104,7 @@ describe('Login', () => {
           authTokens.accessToken
         }&id_token=${authTokens.idToken}&random=123`
       );
-      axiosMock.onGet(`${baseUrl}/login/status`).replyOnce(config => {
+      axiosMock.onGet(`${mockBaseUrl}/login/status`).replyOnce(config => {
         expect(config.headers.Authorization).toBe(
           `Bearer ${authTokens.accessToken}`
         );

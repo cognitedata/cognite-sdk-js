@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import { BASE_URL } from '@/constants';
 import * as sleep from 'sleep-promise';
 import CogniteClient from '../cogniteClient';
 import { sleepPromise } from '../utils';
@@ -28,14 +29,14 @@ export const loggedInResponse = {
 export const notLoggedInResponse = {
   data: { loggedIn: false, user: '', project: '' },
 };
-export const baseUrl = 'https://example.com';
+export const mockBaseUrl = 'https://example.com';
 export const authTokens = {
   accessToken: 'abc',
   idToken: 'def',
 };
 
-export function setupClient() {
-  return new CogniteClient({ appId: 'JS SDK integration tests' });
+export function setupClient(baseUrl: string = BASE_URL) {
+  return new CogniteClient({ appId: 'JS SDK integration tests', baseUrl });
 }
 
 export function setupLoggedInClient() {
@@ -45,6 +46,17 @@ export function setupLoggedInClient() {
     project: process.env.COGNITE_PROJECT as string,
     apiKey: process.env.COGNITE_CREDENTIALS as string,
   });
+  return client;
+}
+
+export function setupMockableClient() {
+  const client = setupClient(mockBaseUrl);
+  client.loginWithApiKey({
+    project,
+    apiKey,
+  });
+  // avoid OPTIONS requests: https://github.com/axios/axios/issues/305#issuecomment-222747336
+  client.httpClient.getInstance().defaults.adapter = require('axios/lib/adapters/http');
   return client;
 }
 
@@ -91,7 +103,6 @@ export async function runTestWithRetryWhenFailing(
       await testFunction();
       return;
     } catch (err) {
-      console.log(err);
       error = err;
       await sleepPromise(delayInMs);
       delayInMs *= delayFactor;

@@ -5,9 +5,13 @@ import { CogniteError } from './error';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
+export interface QueryParams {
+  [key: string]: any;
+}
+
 export interface BaseRequestOptions {
   data?: any;
-  params?: object;
+  params?: QueryParams;
   headers?: { [key: string]: string };
   responseType?: 'json' | 'arraybuffer' | 'text';
 }
@@ -28,7 +32,7 @@ export class HttpClient {
   }
 
   public setHeader(name: string, value: string) {
-    this.axiosInstance.defaults.headers[name] = value;
+    this.getInstance().defaults.headers[name] = value;
     return this;
   }
 
@@ -48,14 +52,22 @@ export class HttpClient {
     return this.rawRequest<ResponseType>(path, 'put', options);
   }
 
+  public getInstance() {
+    return this.axiosInstance;
+  }
+
   private async rawRequest<ResponseType>(
     path: string,
     method: HttpMethod,
     requestConfig: BaseRequestOptions
   ): Promise<HttpResponse<ResponseType>> {
     try {
-      const response = await this.axiosInstance.request<ResponseType>({
+      const config = {
         ...requestConfig,
+        params: this.serializeQueryParameters(requestConfig.params),
+      };
+      const response = await this.getInstance().request<ResponseType>({
+        ...config,
         method,
         url: path,
       });
@@ -88,5 +100,20 @@ export class HttpClient {
       missing,
       duplicated,
     });
+  }
+
+  private serializeQueryParameters(params: QueryParams = {}): QueryParams {
+    return Object.keys(params).reduce(
+      (serializedParams, key) => {
+        const param = params[key];
+        if (Array.isArray(param)) {
+          serializedParams[key] = JSON.stringify(param);
+        } else {
+          serializedParams[key] = param;
+        }
+        return serializedParams;
+      },
+      {} as QueryParams
+    );
   }
 }

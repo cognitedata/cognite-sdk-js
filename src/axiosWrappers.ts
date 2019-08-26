@@ -107,7 +107,10 @@ function addTokenLeakageProtection(
   return axiosInstance;
 }
 
-function addArraySerializer(axiosInstance: AxiosInstance): AxiosInstance {
+/** @hidden */
+export function addArraySerializer(
+  axiosInstance: AxiosInstance
+): AxiosInstance {
   axiosInstance.interceptors.request.use(
     (config: AxiosRequestConfig): AxiosRequestConfig => {
       // loop through params

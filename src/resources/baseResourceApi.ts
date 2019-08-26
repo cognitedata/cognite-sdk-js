@@ -88,7 +88,7 @@ export abstract class BaseResourceAPI<
       }))
       .then(transformedResponse =>
         this.addNextPageFunction<QueryType, TransformedType>(
-          this.callListEndpointWithPost,
+          this.callListEndpointWithPost.bind(this),
           transformedResponse,
           query
         )
