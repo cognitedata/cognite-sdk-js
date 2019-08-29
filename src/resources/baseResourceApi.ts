@@ -1,8 +1,11 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '@/standardMethods';
+import { applyIfApplicable } from '@/utils';
+import { HttpResponse } from '@/utils/http/basicHttpClient';
+import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 import { chunk } from 'lodash';
 import { makeAutoPaginationMethods } from '../autoPagination';
-import { HttpClient, HttpResponse } from '../httpClient';
 import { MetadataMap } from '../metadata';
 import {
   CursorResponse,
@@ -11,31 +14,48 @@ import {
   ItemsResponse,
   ListResponse,
 } from '../types/types';
-import { transformDateInRequest, transformDateInResponse } from '../utils';
 import { promiseAllWithData } from './assets/assetUtils';
 
 export abstract class BaseResourceAPI<
   ResponseType,
-  TransformedType,
-  WrapperType extends TransformedType[]
+  TransformedType = ResponseType,
+  WrapperType extends TransformedType[] = TransformedType[]
 > {
+  protected get listGetUrl() {
+    return this.url('');
+  }
+
+  protected get listPostUrl() {
+    return this.url('list');
+  }
+
+  protected get byIdsUrl() {
+    return this.url('byids');
+  }
+
+  protected get updateUrl() {
+    return this.url('update');
+  }
+
+  protected get searchUrl() {
+    return this.url('search');
+  }
+
+  protected get deleteUrl() {
+    return this.url('delete');
+  }
+
+  protected static chunk<T>(items: T[], chunkSize: number): T[][] {
+    if (items.length === 0) {
+      return [[]];
+    }
+    return chunk(items, chunkSize);
+  }
   constructor(
-    public readonly httpClient: HttpClient,
     public readonly resourcePath: string,
+    public readonly httpClient: CDFHttpClient,
     private map: MetadataMap
   ) {}
-
-  public postAndTransformDates<
-    RequestType,
-    Response,
-    ParamsType extends object = {}
-  >(url: string, data?: RequestType, params?: ParamsType) {
-    return this.httpClient
-      .post<Response>(url, {
-        data: { ...transformDateInRequest(data), ...params },
-      })
-      .then(this.transformDateInResponse);
-  }
 
   protected getMetadataMap() {
     return this.map;
@@ -43,26 +63,6 @@ export abstract class BaseResourceAPI<
 
   protected url(path: string = '') {
     return this.resourcePath + '/' + path;
-  }
-
-  protected listUrl() {
-    return this.url('list');
-  }
-
-  protected byIdsUrl() {
-    return this.url('byids');
-  }
-
-  protected updateUrl() {
-    return this.url('update');
-  }
-
-  protected searchUrl() {
-    return this.url('search');
-  }
-
-  protected deleteUrl() {
-    return this.url('delete');
   }
 
   protected async createEndpoint<RequestType>(
@@ -78,21 +78,17 @@ export abstract class BaseResourceAPI<
     );
   }
 
-  protected listEndpoint<QueryType extends FilterQuery>(query?: QueryType) {
-    const listPromise = this.callListEndpointWithPost<QueryType, ResponseType>(
-      query
-    )
-      .then(response => ({
-        ...response.data,
-        items: this.transformToList(response.data.items),
-      }))
-      .then(transformedResponse =>
-        this.addNextPageFunction<QueryType, TransformedType>(
-          this.callListEndpointWithPost.bind(this),
-          transformedResponse,
-          query
-        )
-      );
+  protected listEndpoint<QueryType extends FilterQuery>(
+    endpointCaller: ListEndpoint<QueryType, WrapperType>,
+    scope?: QueryType
+  ): CursorAndAsyncIterator<TransformedType, WrapperType> {
+    const listPromise = endpointCaller(scope).then(transformedResponse =>
+      this.addNextPageFunction<QueryType>(
+        endpointCaller.bind(this),
+        transformedResponse.data,
+        scope
+      )
+    );
     const autoPaginationMethods = makeAutoPaginationMethods(listPromise);
     return Object.assign(listPromise, autoPaginationMethods);
   }
@@ -115,8 +111,8 @@ export abstract class BaseResourceAPI<
     return this.callEndpointWithTransform(query, this.callSearchEndpoint);
   }
 
-  protected async deleteEndpoint<RequestParams extends object>(
-    ids: IdEither[],
+  protected async deleteEndpoint<RequestParams extends object, T = IdEither>(
+    ids: T[],
     params?: RequestParams
   ) {
     const responses = await this.callDeleteEndpoint(ids, params);
@@ -130,37 +126,48 @@ export abstract class BaseResourceAPI<
     >(this.url(), items);
   }
 
-  protected async callListEndpointWithPost<
-    QueryType extends FilterQuery,
-    Response
-  >(query?: QueryType) {
-    return this.postAndTransformDates<QueryType, CursorResponse<Response>>(
-      this.listUrl(),
-      query
+  protected callListEndpointWithGet = async <QueryType extends FilterQuery>(
+    scope?: QueryType
+  ): Promise<HttpResponse<CursorResponse<WrapperType>>> => {
+    const response = await this.httpClient.get<CursorResponse<ResponseType[]>>(
+      this.listGetUrl,
+      {
+        params: scope,
+      }
     );
-  }
+    return this.transformResponse(response);
+  };
+
+  protected callListEndpointWithPost = async <QueryType extends FilterQuery>(
+    scope?: QueryType
+  ): Promise<HttpResponse<CursorResponse<WrapperType>>> => {
+    const response = await this.httpClient.post<CursorResponse<ResponseType[]>>(
+      this.listPostUrl,
+      {
+        data: scope || {},
+      }
+    );
+    return this.transformResponse(response);
+  };
 
   protected async callRetrieveEndpoint(ids: IdEither[]) {
-    return this.postInParallelWithAutomaticChunking(this.byIdsUrl(), ids);
+    return this.postInParallelWithAutomaticChunking(this.byIdsUrl, ids);
   }
 
   protected async callUpdateEndpoint<ChangeType>(changes: ChangeType[]) {
-    return this.postInParallelWithAutomaticChunking(this.updateUrl(), changes);
+    return this.postInParallelWithAutomaticChunking(this.updateUrl, changes);
   }
 
   protected async callSearchEndpoint<QueryType, Response>(query: QueryType) {
-    return this.postAndTransformDates<QueryType, Response>(
-      this.searchUrl(),
-      query
-    );
+    return this.httpClient.post<Response>(this.searchUrl, { data: query });
   }
 
-  protected callDeleteEndpoint<ParamsType extends object>(
-    ids: IdEither[],
+  protected callDeleteEndpoint<ParamsType extends object, T = IdEither>(
+    ids: T[],
     params?: ParamsType
   ) {
     return this.postInParallelWithAutomaticChunking(
-      this.deleteUrl(),
+      this.deleteUrl,
       ids,
       params
     );
@@ -172,7 +179,7 @@ export abstract class BaseResourceAPI<
 
   protected transformAndReturn(
     items: ResponseType[],
-    metadata: HttpResponse<ItemsResponse<ResponseType>>
+    metadata: HttpResponse<ItemsResponse<ResponseType[]>>
   ) {
     const transformedResponse = this.transformToClass(items);
     return this.addToMapAndReturn(transformedResponse, metadata);
@@ -182,14 +189,14 @@ export abstract class BaseResourceAPI<
     query: RequestType,
     requester: (
       request: RequestType
-    ) => Promise<HttpResponse<ItemsResponse<ResponseType>>[]>,
+    ) => Promise<HttpResponse<ItemsResponse<ResponseType[]>>[]>,
     preRequestModifier?: (items: RequestType) => RequestType,
     postRequestModifier?: (items: ResponseType[]) => ResponseType[]
   ) {
-    const modifiedQuery = this.applyIfApplicable(query, preRequestModifier);
+    const modifiedQuery = applyIfApplicable(query, preRequestModifier);
     const responses = await requester.bind(this)(modifiedQuery);
     const mergedResponseItems = this.mergeItemsFromItemsResponse(responses);
-    const modifiedResponseItems = this.applyIfApplicable(
+    const modifiedResponseItems = applyIfApplicable(
       mergedResponseItems,
       postRequestModifier
     );
@@ -200,25 +207,25 @@ export abstract class BaseResourceAPI<
     query: RequestType,
     requester: (
       request: RequestType
-    ) => Promise<HttpResponse<ItemsResponse<ResponseType>>>
+    ) => Promise<HttpResponse<ItemsResponse<ResponseType[]>>>
   ) {
     const response = await requester.bind(this)(query);
     return this.transformAndReturn(response.data.items, response);
   }
 
   protected mergeItemsFromItemsResponse<T>(
-    responses: HttpResponse<ItemsResponse<T>>[]
+    responses: HttpResponse<ItemsResponse<T[]>>[]
   ): T[] {
     return responses
       .map(response => response.data.items)
       .reduce((a, b) => [...a, ...b], []);
   }
 
-  protected addNextPageFunction<QueryType extends FilterQuery, Response>(
-    endpoint: ListEndpoint<QueryType, Response>,
-    cursorResponse: CursorResponse<Response>,
+  protected addNextPageFunction<QueryType extends FilterQuery>(
+    endpoint: ListEndpoint<QueryType, WrapperType>,
+    cursorResponse: CursorResponse<WrapperType>,
     query: QueryType = {} as QueryType
-  ): ListResponse<Response> {
+  ): ListResponse<WrapperType> {
     const { nextCursor } = cursorResponse;
     const next = nextCursor
       ? () =>
@@ -235,65 +242,49 @@ export abstract class BaseResourceAPI<
   protected abstract transformToClass(array: ResponseType[]): WrapperType;
   protected abstract transformToList(item: ResponseType[]): TransformedType[];
 
-  private applyIfApplicable<ArgumentType, ResultType>(
-    args: ArgumentType,
-    action?: (input: ArgumentType) => ResultType
-  ) {
-    if (action) {
-      return action(args);
-    }
-    return args;
-  }
-
-  private transformDateInResponse<T>(
-    response: HttpResponse<T>
-  ): HttpResponse<T> {
-    return {
-      ...response,
-      data: transformDateInResponse(response.data),
-    };
-  }
-
-  private postInParallelWithAutomaticChunking<
+  protected postInParallelWithAutomaticChunking<
     RequestType,
     ParamsType extends object = {}
   >(path: string, items: RequestType[], params?: ParamsType) {
     return promiseAllWithData(
-      this.chunk(items, 1000),
+      BaseResourceAPI.chunk(items, 1000),
       singleChunk =>
-        this.postAndTransformDates<
-          { items: RequestType[] },
-          ItemsResponse<ResponseType>
-        >(path, { items: singleChunk }, params),
+        this.httpClient.post<ItemsResponse<ResponseType[]>>(path, {
+          data: { ...params, items: singleChunk },
+        }),
       false
     );
   }
 
+  private transformResponse(
+    response: HttpResponse<ItemsResponse<ResponseType[]>>
+  ): HttpResponse<ItemsResponse<WrapperType>> {
+    const transformedResponse = {
+      ...response,
+      data: {
+        ...response.data,
+        items: this.transformToClass(response.data.items),
+      },
+    };
+    return transformedResponse;
+  }
+
   private postInSequenceWithAutomaticChunking<
     RequestType,
-    Response,
     ParamsType extends object = {}
   >(path: string, items: RequestType[], params?: ParamsType) {
     return promiseAllWithData(
-      this.chunk(items, 1000),
+      BaseResourceAPI.chunk(items, 1000),
       singleChunk =>
-        this.postAndTransformDates<{ items: RequestType[] }, Response>(
-          path,
-          { items: singleChunk },
-          params
-        ),
+        this.httpClient.post<ItemsResponse<ResponseType[]>>(path, {
+          data: { items: singleChunk },
+          params,
+        }),
       true
     );
   }
-
-  private chunk<T>(items: T[], chunkSize: number): T[][] {
-    if (items.length === 0) {
-      return [[]];
-    }
-    return chunk(items, chunkSize);
-  }
 }
 
-type ListEndpoint<QueryType extends FilterQuery, ResponseType> = (
+type ListEndpoint<QueryType extends FilterQuery, WrapperType> = (
   query?: QueryType
-) => Promise<HttpResponse<CursorResponse<ResponseType>>>;
+) => Promise<HttpResponse<CursorResponse<WrapperType>>>;

@@ -1,16 +1,10 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
-import { MetadataMap } from '../../metadata';
+import { MetadataMap } from '@/metadata';
+import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
-  CursorAndAsyncIterator,
-  generateDeleteEndpoint,
-  generateListEndpoint,
-  generateRetrieveEndpoint,
-  generateSearchEndpoint,
-  generateUpdateEndpoint,
-} from '../../standardMethods';
-import {
+  CogniteInternalId,
   ExternalFilesMetadata,
   FileChangeUpdate,
   FileContent,
@@ -19,24 +13,26 @@ import {
   FilesMetadata,
   FilesSearchFilter,
   IdEither,
+  ItemsResponse,
   UploadFileMetadataResponse,
-} from '../../types/types';
-import { projectUrl } from '../../utils';
-import {
-  generateDownloadUrlEndpoint,
-  generateUploadEndpoint,
-} from './filesUtils';
+} from '@/types/types';
+import { sleepPromise } from '@/utils';
+import { HttpHeaders } from '@/utils/http/basicHttpClient';
+import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 
-export class FilesAPI {
-  /**
-   * [List files](https://doc.cognitedata.com/api/v1/#operation/advancedListFiles)
-   * <!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listFiles) -->
-   *
-   * ```js
-   * const files = await client.files.list({filter: {mimeType: 'image/png'}});
-   * ```
-   */
-  public list: FilesListEndpoint;
+export class FilesAPI extends BaseResourceAPI<
+  FilesMetadata,
+  FilesMetadata,
+  FilesMetadata[]
+> {
+  /** @hidden */
+  constructor(
+    resourcePath: string,
+    httpClient: CDFHttpClient,
+    map: MetadataMap
+  ) {
+    super(resourcePath, httpClient, map);
+  }
 
   /**
    * [Upload a file](https://doc.cognitedata.com/api/v1/#operation/initFileUpload)
@@ -51,7 +47,33 @@ export class FilesAPI {
    * // then upload using the file.uploadUrl
    * ```
    */
-  public upload: FilesUploadEndpoint;
+  public async upload(
+    metadata: ExternalFilesMetadata,
+    fileContent?: FileContent,
+    overwrite: boolean = false,
+    waitUntilAcknowledged: boolean = false
+  ): Promise<UploadFileMetadataResponse | FilesMetadata> {
+    return this.uploadEndpoint(
+      metadata,
+      fileContent,
+      overwrite,
+      waitUntilAcknowledged
+    );
+  }
+
+  /**
+   * [List files](https://doc.cognitedata.com/api/v1/#operation/advancedListFiles)
+   * <!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listFiles) -->
+   *
+   * ```js
+   * const files = await client.files.list({filter: {mimeType: 'image/png'}});
+   * ```
+   */
+  public list(
+    scope?: FileRequestFilter
+  ): CursorAndAsyncIterator<FilesMetadata> {
+    return super.listEndpoint(this.callListEndpointWithPost, scope);
+  }
 
   /**
    * [Retrieve files](https://doc.cognitedata.com/api/v1/#operation/byIdsFiles)
@@ -61,7 +83,25 @@ export class FilesAPI {
    * const files = await client.files.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve: FilesRetrieveEndpoint;
+  public async retrieve(ids: IdEither[]): Promise<FilesMetadata[]> {
+    return super.retrieveEndpoint(ids);
+  }
+
+  /**
+   * [Update files](https://doc.cognitedata.com/api/v1/#operation/updateFiles)
+   *
+   * ```js
+   * const files = await client.files.update([{
+   *   id: 123,
+   *   update: {
+   *     source: { set: 'new source' }
+   *   }
+   * }]);
+   * ```
+   */
+  public async update(changes: FileChangeUpdate[]) {
+    return super.updateEndpoint(changes);
+  }
 
   /**
    * [Search for files](https://doc.cognitedata.com/api/v1/#operation/searchFiles)
@@ -77,7 +117,9 @@ export class FilesAPI {
    * });
    * ```
    */
-  public search: FilesSearchEndpoint;
+  public async search(query: FilesSearchFilter) {
+    return super.searchEndpoint(query);
+  }
 
   /**
    * [Delete files](https://doc.cognitedata.com/api/v1/#operation/deleteFiles)
@@ -86,7 +128,9 @@ export class FilesAPI {
    * await client.files.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public delete: FilesDeleteEndpoint;
+  public async delete(ids: IdEither[]) {
+    return super.deleteEndpoint(ids);
+  }
 
   /**
    * [Get download urls](https://doc.cognitedata.com/api/v1/#operation/downloadLinks)
@@ -95,62 +139,85 @@ export class FilesAPI {
    * await client.files.getDownloadUrls([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public getDownloadUrls: FilesGetDownloadUrlsEndpoint;
+  public getDownloadUrls(ids: IdEither[]): Promise<(FileLink & IdEither)[]> {
+    return this.getDownloadUrlsEndpoint(ids);
+  }
 
-  /**
-   * [Update files](https://doc.cognitedata.com/api/v1/#operation/updateFiles)
-   *
-   * ```js
-   * const files = await client.files.update([{
-   *   id: 123,
-   *   update: {
-   *     source: { set: 'new source' }
-   *   }
-   * }]);
-   * ```
-   */
-  public update: FilesUpdateEndpoint;
+  protected transformToList(items: FilesMetadata[]) {
+    return items;
+  }
 
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/files';
-    this.list = generateListEndpoint(instance, path, map, true);
-    this.upload = generateUploadEndpoint(instance, path, map);
-    this.retrieve = generateRetrieveEndpoint(instance, path, map);
-    this.search = generateSearchEndpoint(instance, path, map);
-    this.delete = generateDeleteEndpoint(instance, path, map);
-    this.getDownloadUrls = generateDownloadUrlEndpoint(instance, path, map);
-    this.update = generateUpdateEndpoint(instance, path, map);
+  protected transformToClass(items: FilesMetadata[]) {
+    return items;
+  }
+
+  private async uploadEndpoint(
+    metadata: ExternalFilesMetadata,
+    fileContent?: FileContent,
+    overwrite: boolean = false,
+    waitUntilAcknowledged: boolean = false
+  ) {
+    const hasFileContent = fileContent != null;
+    if (!hasFileContent && waitUntilAcknowledged) {
+      throw Error(
+        "Don't set waitUntilAcknowledged to true when you are not uploading a file"
+      );
+    }
+
+    const params = { overwrite };
+    const path = this.url();
+    const response = await this.httpClient.post<UploadFileMetadataResponse>(
+      path,
+      {
+        params,
+        data: metadata,
+      }
+    );
+    const file = response.data;
+    if (fileContent != null) {
+      await this.uploadFile(file.uploadUrl, fileContent, metadata.mimeType);
+    }
+    if (waitUntilAcknowledged) {
+      const uploadedFile = await this.waitUntilFileIsUploaded(file.id);
+      return this.addToMapAndReturn(uploadedFile, response);
+    }
+    return this.addToMapAndReturn(file, response);
+  }
+
+  private uploadFile(url: string, fileContent: FileContent, mimeType?: string) {
+    const headers: HttpHeaders = {};
+    if (mimeType) {
+      headers['Content-Type'] = mimeType;
+    }
+    return this.httpClient.put(url, {
+      headers,
+      data: fileContent,
+    });
+  }
+
+  // TODO: refactor - similar to RetryableHttpClient.rawRequest
+  private async waitUntilFileIsUploaded(
+    fileId: CogniteInternalId
+  ): Promise<FilesMetadata> {
+    const MAX_RETRIES = 10;
+    const DELAY_IN_MS = 500;
+    let retryCount = 0;
+    do {
+      const [fileInfo] = await this.retrieve([{ id: fileId }]);
+      if (fileInfo.uploaded) {
+        return fileInfo;
+      }
+      retryCount++;
+      await sleepPromise(DELAY_IN_MS);
+    } while (retryCount < MAX_RETRIES);
+    throw Error(`File never marked as 'uploaded'`);
+  }
+
+  private async getDownloadUrlsEndpoint(items: IdEither[]) {
+    const path = this.url('downloadlink');
+    const response = await this.httpClient.post<
+      ItemsResponse<(FileLink & IdEither)[]>
+    >(path, { data: { items } });
+    return this.addToMapAndReturn(response.data.items, response);
   }
 }
-
-export type FilesListEndpoint = (
-  scope?: FileRequestFilter
-) => CursorAndAsyncIterator<FilesMetadata>;
-
-export type FilesUploadEndpoint = (
-  metadata: ExternalFilesMetadata,
-  fileContent?: FileContent,
-  // tslint:disable-next-line:bool-param-default
-  overwrite?: boolean,
-  // tslint:disable-next-line:bool-param-default
-  waitUntilAcknowledged?: boolean
-) => Promise<UploadFileMetadataResponse | FilesMetadata>;
-
-export type FilesRetrieveEndpoint = (
-  ids: IdEither[]
-) => Promise<FilesMetadata[]>;
-
-export type FilesSearchEndpoint = (
-  query: FilesSearchFilter
-) => Promise<FilesMetadata[]>;
-
-export type FilesDeleteEndpoint = (ids: IdEither[]) => Promise<{}>;
-
-export type FilesGetDownloadUrlsEndpoint = (
-  ids: IdEither[]
-) => Promise<(FileLink & IdEither)[]>;
-
-export type FilesUpdateEndpoint = (
-  changes: FileChangeUpdate[]
-) => Promise<FilesMetadata[]>;

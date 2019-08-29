@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
-
-import { HttpResponse } from './httpClient';
+import { HttpResponse } from './utils/http/basicHttpClient';
 
 export interface Metadata {
   status: number;

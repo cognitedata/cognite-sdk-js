@@ -1,38 +1,35 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
-import { CogniteClient } from '../../index';
-import { MetadataMap } from '../../metadata';
-import {
-  CursorAndAsyncIterator,
-  generateCreateEndpoint,
-  generateDeleteEndpoint,
-  generateListEndpoint,
-  generateRetrieveEndpoint,
-  generateSearchEndpoint,
-  generateUpdateEndpoint,
-} from '../../standardMethods';
+import CogniteClient from '@/cogniteClient';
+import { MetadataMap } from '@/metadata';
+import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   GetTimeSeriesMetadataDTO,
+  IdEither,
   PostTimeSeriesMetadataDTO,
   TimeseriesFilter,
-  TimeseriesIdEither,
   TimeSeriesSearchDTO,
   TimeSeriesUpdate,
-} from '../../types/types';
-import { projectUrl } from '../../utils';
+} from '@/types/types';
+import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 import { TimeSeries } from '../classes/timeSeries';
 import { TimeSeriesList } from '../classes/timeSeriesList';
 
-export class TimeSeriesAPI {
-  /**
-   * [List time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeries)
-   *
-   * ```js
-   * const timeseries = await client.timeseries.list({ includeMetadata: false, assetIds: [1, 2] });
-   * ```
-   */
-  public list: TimeSeriesListEndpoint;
+export class TimeSeriesAPI extends BaseResourceAPI<
+  GetTimeSeriesMetadataDTO,
+  TimeSeries,
+  TimeSeriesList
+> {
+  /** @hidden */
+  constructor(
+    private client: CogniteClient,
+    resourcePath: string,
+    httpClient: CDFHttpClient,
+    map: MetadataMap
+  ) {
+    super(httpClient, resourcePath, map);
+  }
 
   /**
    * [Create time series](https://doc.cognitedata.com/api/v1/#operation/postTimeSeries)
@@ -45,7 +42,52 @@ export class TimeSeriesAPI {
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    */
-  public create: TimeSeriesCreateEndpoint;
+  public async create(
+    items: PostTimeSeriesMetadataDTO[]
+  ): Promise<TimeSeriesList> {
+    return super.createEndpoint(items);
+  }
+
+  /**
+   * [List time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeries)
+   *
+   * ```js
+   * const timeseries = await client.timeseries.list({ includeMetadata: false, assetIds: [1, 2] });
+   * ```
+   */
+  public list(scope?: TimeseriesFilter): CursorAndAsyncIterator<TimeSeries> {
+    return super.listEndpoint(this.callListEndpointWithGet, scope);
+  }
+
+  /**
+   * [Retrieve time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeriesByIds)
+   *
+   * ```js
+   * const timeseries = await client.timeseries.retrieve([
+   *   { id: 123 },
+   *   { externalId: 'abc' }
+   * ]);
+   * ```
+   */
+  public async retrieve(ids: IdEither[]) {
+    return super.retrieveEndpoint(ids);
+  }
+
+  /**
+   * [Update time series](https://doc.cognitedata.com/api/v1/#operation/alterTimeSeries)
+   *
+   * ```js
+   * const timeseries = await client.timeseries.update([{
+   *   id: 3785438579439,
+   *   update: {
+   *     name: { set: 'New name' }
+   *   }
+   * }]);
+   * ```
+   */
+  public async update(changes: TimeSeriesUpdate[]) {
+    return super.updateEndpoint(changes);
+  }
 
   /**
    * [Search for time series](https://doc.cognitedata.com/api/v1/#operation/searchTimeSeries)
@@ -61,33 +103,9 @@ export class TimeSeriesAPI {
    * });
    * ```
    */
-  public search: TimeSeriesSearchEndpoint;
-
-  /**
-   * [Retrieve time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeriesByIds)
-   *
-   * ```js
-   * const timeseries = await client.timeseries.retrieve([
-   *   { id: 123 },
-   *   { externalId: 'abc' }
-   * ]);
-   * ```
-   */
-  public retrieve: TimeSeriesRetrieveEndpoint;
-
-  /**
-   * [Update time series](https://doc.cognitedata.com/api/v1/#operation/alterTimeSeries)
-   *
-   * ```js
-   * const timeseries = await client.timeseries.update([{
-   *   id: 3785438579439,
-   *   update: {
-   *     name: { set: 'New name' }
-   *   }
-   * }]);
-   * ```
-   */
-  public update: TimeSeriesUpdateEndpoint;
+  public async search(query: TimeSeriesSearchDTO) {
+    return super.searchEndpoint(query);
+  }
 
   /**
    * [Delete time series](https://doc.cognitedata.com/api/v1/#operation/deleteTimeSeries)
@@ -99,70 +117,16 @@ export class TimeSeriesAPI {
    * ]);
    * ```
    */
-  public delete: TimeSeriesDeleteEndpoint;
-
-  private client: CogniteClient;
-
-  /** @hidden */
-  constructor(
-    client: CogniteClient,
-    project: string,
-    instance: AxiosInstance,
-    map: MetadataMap
-  ) {
-    this.client = client;
-    const path = projectUrl(project) + '/timeseries';
-    const transformResponse = this.transformToTimeSeriesListObject;
-    const defaultArgs: [
-      AxiosInstance,
-      string,
-      MetadataMap,
-      (timeseries: GetTimeSeriesMetadataDTO[]) => TimeSeriesList
-    ] = [instance, path, map, transformResponse];
-    this.create = generateCreateEndpoint(...defaultArgs);
-    this.list = generateListEndpoint(
-      instance,
-      path,
-      map,
-      false,
-      transformResponse
-    );
-    this.search = generateSearchEndpoint(...defaultArgs);
-    this.retrieve = generateRetrieveEndpoint(...defaultArgs);
-    this.update = generateUpdateEndpoint(...defaultArgs);
-    this.delete = generateDeleteEndpoint(instance, path, map);
+  public async delete(ids: IdEither[]) {
+    return super.deleteEndpoint(ids);
   }
 
-  private transformToTimeSeriesListObject = (
-    timeseries: GetTimeSeriesMetadataDTO[]
-  ) => {
-    const timeSeriesArray = timeseries.map(
-      timeserie => new TimeSeries(this.client, timeserie)
-    );
-    return new TimeSeriesList(this.client, timeSeriesArray);
-  };
+  protected transformToList(timeSeries: GetTimeSeriesMetadataDTO[]) {
+    return timeSeries.map(timeSerie => new TimeSeries(this.client, timeSerie));
+  }
+
+  protected transformToClass(timeSeries: GetTimeSeriesMetadataDTO[]) {
+    const timeseriesArray = this.transformToList(timeSeries);
+    return new TimeSeriesList(this.client, timeseriesArray);
+  }
 }
-
-export type TimeSeriesListEndpoint = (
-  filter?: TimeseriesFilter
-) => CursorAndAsyncIterator<TimeSeries>;
-
-export type TimeSeriesCreateEndpoint = (
-  items: PostTimeSeriesMetadataDTO[]
-) => Promise<TimeSeriesList>;
-
-export type TimeSeriesSearchEndpoint = (
-  query: TimeSeriesSearchDTO
-) => Promise<TimeSeriesList>;
-
-export type TimeSeriesRetrieveEndpoint = (
-  ids: TimeseriesIdEither[]
-) => Promise<TimeSeriesList>;
-
-export type TimeSeriesUpdateEndpoint = (
-  changes: TimeSeriesUpdate[]
-) => Promise<TimeSeriesList>;
-
-export type TimeSeriesDeleteEndpoint = (
-  ids: TimeseriesIdEither[]
-) => Promise<{}>;

@@ -55,8 +55,6 @@ export function setupMockableClient() {
     project,
     apiKey,
   });
-  // avoid OPTIONS requests: https://github.com/axios/axios/issues/305#issuecomment-222747336
-  client.httpClient.getInstance().defaults.adapter = require('axios/lib/adapters/http');
   return client;
 }
 

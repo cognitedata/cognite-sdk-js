@@ -1,40 +1,34 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance, AxiosResponse } from 'axios';
-import { isFunction, isObject, isString } from 'lodash';
-import { version } from '../package.json';
+import { version } from '@/../package.json';
+import { MetadataMap } from '@/metadata';
+import { AssetMappings3DAPI } from '@/resources/3d/assetMappings3DApi';
+import { Files3DAPI } from '@/resources/3d/files3DApi';
+import { Models3DAPI } from '@/resources/3d/models3DApi';
+import { Revisions3DAPI } from '@/resources/3d/revisions3DApi';
+import { Viewer3DAPI } from '@/resources/3d/viewer3DApi';
+import { ApiKeysAPI } from '@/resources/apiKeys/apiKeysApi';
+import { AssetsAPI } from '@/resources/assets/assetsApi';
+import { DataPointsAPI } from '@/resources/dataPoints/dataPointsApi';
+import { EventsAPI } from '@/resources/events/eventsApi';
+import { FilesAPI } from '@/resources/files/filesApi';
+import { GroupsAPI } from '@/resources/groups/groupsApi';
 import {
-  addArraySerializer,
-  listenForNonSuccessStatusCode,
-  rawRequest,
-} from './axiosWrappers';
-import { HttpClient } from './httpClient';
-import { MetadataMap } from './metadata';
-import { AssetMappings3DAPI } from './resources/3d/assetMappings3DApi';
-import { Files3DAPI } from './resources/3d/files3DApi';
-import { Models3DAPI } from './resources/3d/models3DApi';
-import { Revisions3DAPI } from './resources/3d/revisions3DApi';
-import { Viewer3DAPI } from './resources/3d/viewer3DApi';
-import { ApiKeysAPI } from './resources/apiKeys/apiKeysApi';
-import { AssetsAPI } from './resources/assets/assetsApi';
-import { DataPointsAPI } from './resources/dataPoints/dataPointsApi';
-import { EventsAPI } from './resources/events/eventsApi';
-import { FilesAPI } from './resources/files/filesApi';
-import { GroupsAPI } from './resources/groups/groupsApi';
-import {
-  createAuthenticateFunction,
+  // createAuthenticateFunction,
   OnAuthenticate,
-  OnAuthenticateLoginObject,
+  // OnAuthenticateLoginObject,
   OnTokens,
-} from './resources/login';
-import { LoginAPI } from './resources/login/loginApi';
-import { ProjectsAPI } from './resources/projects/projectsApi';
-import { RawAPI } from './resources/raw/rawApi';
-import { SecurityCategoriesAPI } from './resources/securityCategories/securityCategoriesApi';
-import { ServiceAccountsAPI } from './resources/serviceAccounts/serviceAccountsApi';
-import { TimeSeriesAPI } from './resources/timeSeries/timeSeriesApi';
-import { addRetryToAxiosInstance } from './retryRequests';
-import { getBaseUrl, projectUrl } from './utils';
+} from '@/resources/login';
+// import { LoginAPI } from '@/resources/login/loginApi';
+import { ProjectsAPI } from '@/resources/projects/projectsApi';
+import { RawAPI } from '@/resources/raw/rawApi';
+import { SecurityCategoriesAPI } from '@/resources/securityCategories/securityCategoriesApi';
+import { ServiceAccountsAPI } from '@/resources/serviceAccounts/serviceAccountsApi';
+import { TimeSeriesAPI } from '@/resources/timeSeries/timeSeriesApi';
+import { getBaseUrl, projectUrl } from '@/utils';
+import { isObject, isString } from 'lodash';
+import { HttpRequestOptions } from './utils/http/basicHttpClient';
+import { CDFHttpClient } from './utils/http/cdfHttpClient';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -127,13 +121,12 @@ export default class CogniteClient {
   public get apiKeys() {
     return validateAndReturnAPI(this.apiKeysApi);
   }
-  public get login() {
-    return this.loginApi;
-  }
+  // public get login() {
+  //   return this.loginApi;
+  // }
 
-  public project: string = '';
-  /** @hidden */
-  public httpClient: HttpClient;
+  private projectName: string = '';
+  private httpClient: CDFHttpClient;
   private metadataMap: MetadataMap;
   private hasBeenLoggedIn: boolean = false;
   private assetsApi?: AssetsAPI;
@@ -152,7 +145,7 @@ export default class CogniteClient {
   private assetMappings3DApi?: AssetMappings3DAPI;
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
-  private loginApi: LoginAPI;
+  // private loginApi: LoginAPI;
   /**
    * Create a new SDK client
    *
@@ -175,15 +168,13 @@ export default class CogniteClient {
       throw Error('options.appId is required and must be of type string');
     }
     const { baseUrl } = options;
-    this.httpClient = new HttpClient(getBaseUrl(baseUrl));
+    this.httpClient = new CDFHttpClient(getBaseUrl(baseUrl));
     this.httpClient
-      .setHeader('x-cdp-sdk', `CogniteJavaScriptSDK:${version}`)
-      .setHeader('x-cdp-app', options.appId);
-    addArraySerializer(this.instance);
-    addRetryToAxiosInstance(this.instance);
+      .setDefaultHeader('x-cdp-sdk', `CogniteJavaScriptSDK:${version}`)
+      .setDefaultHeader('x-cdp-app', options.appId);
 
     this.metadataMap = new MetadataMap();
-    this.loginApi = new LoginAPI(this.instance);
+    // this.loginApi = new LoginAPI(this.instance);
   }
   // tslint:disable-next-line:no-identical-functions
   public authenticate: () => Promise<boolean> = async () => {
@@ -192,12 +183,8 @@ export default class CogniteClient {
     );
   };
 
-  /**
-   * @hidden
-   * DO NOT USE OUTSIDE THE SDK!
-   */
-  get instance() {
-    return this.httpClient.getInstance();
+  public get project() {
+    return this.projectName;
   }
 
   /**
@@ -234,8 +221,8 @@ export default class CogniteClient {
         );
       }
     });
-    this.project = project;
-    this.httpClient.setHeader('api-key', apiKey);
+    this.projectName = project;
+    this.httpClient.setDefaultHeader('api-key', apiKey);
 
     this.initAPIs();
   };
@@ -261,53 +248,53 @@ export default class CogniteClient {
    *
    * @param options Login options
    */
-  public loginWithOAuth = (options: OAuthLoginOptions) => {
-    if (this.hasBeenLoggedIn) {
-      throwReLogginError();
-    }
+  // public loginWithOAuth = (options: OAuthLoginOptions) => {
+  //   if (this.hasBeenLoggedIn) {
+  //     throwReLogginError();
+  //   }
 
-    if (!isObject(options)) {
-      throw Error('`loginWithOAuth` is missing parameter `options`');
-    }
-    const { project } = options;
-    if (!isString(project)) {
-      throw Error('options.project is required and must be of type string');
-    }
-    this.project = project;
+  //   if (!isObject(options)) {
+  //     throw Error('`loginWithOAuth` is missing parameter `options`');
+  //   }
+  //   const { project } = options;
+  //   if (!isString(project)) {
+  //     throw Error('options.project is required and must be of type string');
+  //   }
+  //   this.projectName = project;
 
-    const onTokens = options.onTokens || (() => {});
-    let onAuthenticate: OnAuthenticate = onAuthenticateWithRedirect;
-    if (options.onAuthenticate === POPUP) {
-      onAuthenticate = onAuthenticateWithPopup;
-    } else if (isFunction(options.onAuthenticate)) {
-      onAuthenticate = options.onAuthenticate;
-    }
-    const authenticate = createAuthenticateFunction({
-      project,
-      axiosInstance: this.instance,
-      onAuthenticate,
-      onTokens,
-    });
+  //   const onTokens = options.onTokens || (() => {});
+  //   let onAuthenticate: OnAuthenticate = onAuthenticateWithRedirect;
+  //   if (options.onAuthenticate === POPUP) {
+  //     onAuthenticate = onAuthenticateWithPopup;
+  //   } else if (isFunction(options.onAuthenticate)) {
+  //     onAuthenticate = options.onAuthenticate;
+  //   }
+  //   const authenticate = createAuthenticateFunction({
+  //     project,
+  //     axiosInstance: this.instance,
+  //     onAuthenticate,
+  //     onTokens,
+  //   });
 
-    listenForNonSuccessStatusCode(this.instance, 401, async (error, retry) => {
-      // ignore calls to /login/status
-      const { config } = error;
-      if (config.url === '/login/status') {
-        return Promise.reject(error);
-      }
-      const didAuthenticate = await authenticate();
-      return didAuthenticate ? retry() : Promise.reject(error);
-    });
+  //   listenForNonSuccessStatusCode(this.instance, 401, async (error, retry) => {
+  //     // ignore calls to /login/status
+  //     const { config } = error;
+  //     if (config.url === '/login/status') {
+  //       return Promise.reject(error);
+  //     }
+  //     const didAuthenticate = await authenticate();
+  //     return didAuthenticate ? retry() : Promise.reject(error);
+  //   });
 
-    this.initAPIs();
-    this.authenticate = authenticate;
-  };
+  //   this.initAPIs();
+  //   this.authenticate = authenticate;
+  // };
 
   /**
    * To modify the base-url at any point in time
    */
   public setBaseUrl = (baseUrl: string) => {
-    this.instance.defaults.baseURL = baseUrl;
+    this.httpClient.setBaseUrl(baseUrl);
   };
 
   /**
@@ -330,8 +317,8 @@ export default class CogniteClient {
    * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
    * ```
    */
-  public get = (path: string, options?: BaseRequestOptions) =>
-    this.doRawRequest('get', path, options);
+  public get = (path: string, options?: HttpRequestOptions) =>
+    this.httpClient.get(path, options);
 
   /**
    * Basic HTTP method for PUT
@@ -343,8 +330,8 @@ export default class CogniteClient {
    * const response = await client.put('someUrl');
    * ```
    */
-  public put = (path: string, options?: BaseRequestOptions) =>
-    this.doRawRequest('put', path, options);
+  public put = (path: string, options?: HttpRequestOptions) =>
+    this.httpClient.put(path, options);
 
   /**
    * Basic HTTP method for POST
@@ -357,8 +344,8 @@ export default class CogniteClient {
    * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
    * ```
    */
-  public post = (path: string, options?: BaseRequestOptions) =>
-    this.doRawRequest('post', path, options);
+  public post = (path: string, options?: HttpRequestOptions) =>
+    this.httpClient.post(path, options);
 
   /**
    * Basic HTTP method for DELETE
@@ -369,78 +356,68 @@ export default class CogniteClient {
    * const response = await client.delete('someUrl');
    * ```
    */
-  public delete = (path: string, options?: BaseRequestOptions) =>
-    this.doRawRequest('delete', path, options);
-
-  /** @hidden */
-  private doRawRequest = (
-    methodType: string,
-    path: string,
-    options?: BaseRequestOptions
-  ) =>
-    rawRequest(this.instance, {
-      method: methodType,
-      url: path,
-      ...options,
-    }).then(responseTransformer);
+  public delete = (path: string, options?: HttpRequestOptions) =>
+    this.httpClient.delete(path, options);
 
   private initAPIs = () => {
-    const defaultArgs: [string, AxiosInstance, MetadataMap] = [
-      this.project,
-      this.instance,
-      this.metadataMap,
-    ];
+    // const defaultArgs: [string, AxiosInstance, MetadataMap] = [
+    //   this.project,
+    //   this.instance,
+    //   this.metadataMap,
+    // ];
     this.assetsApi = new AssetsAPI(
       this,
       projectUrl(this.project) + '/assets',
       this.httpClient,
       this.metadataMap
     );
-    this.timeSeriesApi = new TimeSeriesAPI(this, ...defaultArgs);
-    this.dataPointsApi = new DataPointsAPI(...defaultArgs);
-    this.eventsApi = new EventsAPI(...defaultArgs);
-    this.filesApi = new FilesAPI(...defaultArgs);
-    this.rawApi = new RawAPI(...defaultArgs);
-    this.projectsApi = new ProjectsAPI(this.instance, this.metadataMap);
-    this.groupsApi = new GroupsAPI(...defaultArgs);
-    this.securityCategoriesApi = new SecurityCategoriesAPI(...defaultArgs);
-    this.serviceAccountsApi = new ServiceAccountsAPI(...defaultArgs);
-    this.models3DApi = new Models3DAPI(...defaultArgs);
-    this.revisions3DApi = new Revisions3DAPI(...defaultArgs);
-    this.files3DApi = new Files3DAPI(...defaultArgs);
-    this.assetMappings3DApi = new AssetMappings3DAPI(...defaultArgs);
-    this.viewer3DApi = new Viewer3DAPI(...defaultArgs);
-    this.apiKeysApi = new ApiKeysAPI(...defaultArgs);
+    this.timeSeriesApi = new TimeSeriesAPI(
+      this,
+      projectUrl(this.project) + '/timeseries',
+      this.httpClient,
+      this.metadataMap
+    );
+    this.dataPointsApi = new DataPointsAPI(
+      projectUrl(this.project) + '/timeseries',
+      this.httpClient,
+      this.metadataMap
+    );
+    this.eventsApi = new EventsAPI(
+      projectUrl(this.project) + '/events',
+      this.httpClient,
+      this.metadataMap
+    );
+    this.filesApi = new FilesAPI(
+      projectUrl(this.project) + '/files',
+      this.httpClient,
+      this.metadataMap
+    );
+    this.rawApi = new RawAPI(
+      projectUrl(this.project) + '/raw/dbs',
+      this.httpClient,
+      this.metadataMap
+    );
+    // this.projectsApi = new ProjectsAPI(this.instance, this.metadataMap);
+    // this.groupsApi = new GroupsAPI(...defaultArgs);
+    // this.securityCategoriesApi = new SecurityCategoriesAPI(...defaultArgs);
+    // this.serviceAccountsApi = new ServiceAccountsAPI(...defaultArgs);
+    // this.models3DApi = new Models3DAPI(...defaultArgs);
+    // this.revisions3DApi = new Revisions3DAPI(...defaultArgs);
+    // this.files3DApi = new Files3DAPI(...defaultArgs);
+    // this.assetMappings3DApi = new AssetMappings3DAPI(...defaultArgs);
+    // this.viewer3DApi = new Viewer3DAPI(...defaultArgs);
+    // this.apiKeysApi = new ApiKeysAPI(...defaultArgs);
   };
 }
 
-function onAuthenticateWithRedirect(login: OnAuthenticateLoginObject) {
-  login.redirect({
-    redirectUrl: window.location.href,
-  });
-}
+// function onAuthenticateWithRedirect(login: OnAuthenticateLoginObject) {
+//   login.redirect({
+//     redirectUrl: window.location.href,
+//   });
+// }
 
-function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
-  login.popup({
-    redirectUrl: window.location.href,
-  });
-}
-export interface BaseRequestOptions {
-  data?: any;
-  params?: object;
-  headers?: { [key: string]: string };
-  responseType?: 'json' | 'arraybuffer' | 'text';
-}
-export interface Response {
-  data: any;
-  headers: { [key: string]: string };
-  status: number;
-}
-function responseTransformer(axiosResponse: AxiosResponse): Response {
-  const { data, headers, status } = axiosResponse;
-  return {
-    data,
-    headers,
-    status,
-  };
-}
+// function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
+//   login.popup({
+//     redirectUrl: window.location.href,
+//   });
+// }

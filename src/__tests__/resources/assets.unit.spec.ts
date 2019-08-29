@@ -1,12 +1,12 @@
 // Copyright 2019 Cognite AS
 
-import { Node } from '../../graphUtils';
+import { Node } from '@/graphUtils';
 import {
   enrichAssetsWithTheirParents,
   promiseAllAtOnce,
   promiseEachInSequence,
-} from '../../resources/assets/assetUtils';
-import { ExternalAssetItem } from '../../types/types';
+} from '@/resources/assets/assetUtils';
+import { ExternalAssetItem } from '@/types/types';
 
 describe('Asset unit test', () => {
   describe('multi promise resolution', () => {

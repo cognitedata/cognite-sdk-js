@@ -14,13 +14,13 @@ export interface CogniteAsyncIterator<T> extends AsyncIterableIterator<T> {
 
 /** @hidden */
 export function makeAutoPaginationMethods<T>(
-  firstPagePromise: Promise<ListResponse<T>>
+  firstPagePromise: Promise<ListResponse<T[]>>
 ) {
   let listPromise = firstPagePromise;
   let i = 0;
 
   function iterate(
-    listResult: ListResponse<T>
+    listResult: ListResponse<T[]>
   ): IteratorResult<T> | Promise<IteratorResult<T>> {
     if (i < listResult.items.length) {
       return {

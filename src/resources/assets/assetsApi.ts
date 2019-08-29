@@ -1,11 +1,12 @@
 // Copyright 2019 Cognite AS
 
-import { chunk } from 'lodash';
-import CogniteClient from '../../cogniteClient';
-import { HttpClient } from '../../httpClient';
-import { MetadataMap } from '../../metadata';
-import { RevertableArraySorter } from '../../revertableArraySorter';
-import { CursorAndAsyncIterator } from '../../standardMethods';
+import CogniteClient from '@/cogniteClient';
+import { MetadataMap } from '@/metadata';
+import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { Asset } from '@/resources/classes/asset';
+import { AssetList } from '@/resources/classes/assetList';
+import { RevertableArraySorter } from '@/revertableArraySorter';
+import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   Asset as TypeAsset,
   AssetChange,
@@ -15,10 +16,9 @@ import {
   AssetSearchFilter,
   ExternalAssetItem,
   IdEither,
-} from '../../types/types';
-import { BaseResourceAPI } from '../baseResourceApi';
-import { Asset } from '../classes/asset';
-import { AssetList } from '../classes/assetList';
+} from '@/types/types';
+import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
+import { chunk } from 'lodash';
 import { sortAssetCreateItems } from './assetUtils';
 
 export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
@@ -26,10 +26,10 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
   constructor(
     private client: CogniteClient,
     resourcePath: string,
-    httpClient: HttpClient,
+    httpClient: CDFHttpClient,
     map: MetadataMap
   ) {
-    super(httpClient, resourcePath, map);
+    super(resourcePath, httpClient, map);
   }
 
   /**
@@ -56,8 +56,10 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
    * ```
    */
-  public list(query?: AssetListScope): CursorAndAsyncIterator<Asset> {
-    return super.listEndpoint(query);
+  public list(
+    scope?: AssetListScope
+  ): CursorAndAsyncIterator<Asset, AssetList> {
+    return super.listEndpoint(this.callListEndpointWithPost, scope);
   }
 
   /**

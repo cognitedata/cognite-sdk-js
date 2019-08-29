@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { cloneDeepWith } from 'lodash';
+import { cloneDeepWith, isArray, isObject } from 'lodash';
 import { API_VERSION, BASE_URL } from './constants';
 
 /** @hidden */
@@ -36,6 +36,11 @@ export function convertToTimestampToDateTime(timestamp: number): Date {
 }
 
 /** @hidden */
+export function isJson(data: any) {
+  return isArray(data) || isObject(data);
+}
+
+/** @hidden */
 export function sleepPromise(durationInMs: number) {
   return new Promise(resolve => {
     setTimeout(resolve, durationInMs);
@@ -63,31 +68,15 @@ export function isSameProject(project1: string, project2: string): boolean {
   return project1.toLowerCase() === project2.toLowerCase();
 }
 
-export type CancelablePromise<T> = {
-  cancel: () => void;
-} & Promise<T>;
 /** @hidden */
-export function makePromiseCancelable<T>(
-  promise: Promise<T>
-): CancelablePromise<T> {
-  let hasBeenCancelled = false;
-  const cancelablePromise = new Promise<T>((resolve, reject) => {
-    promise
-      .then(res => {
-        if (!hasBeenCancelled) {
-          resolve(res);
-        }
-      })
-      .catch(err => {
-        if (!hasBeenCancelled) {
-          reject(err);
-        }
-      });
-  });
-  (cancelablePromise as CancelablePromise<T>).cancel = () => {
-    hasBeenCancelled = true;
-  };
-  return cancelablePromise as CancelablePromise<T>;
+export function applyIfApplicable<ArgumentType, ResultType>(
+  args: ArgumentType,
+  action?: (input: ArgumentType) => ResultType
+) {
+  if (action) {
+    return action(args);
+  }
+  return args;
 }
 
 /** @hidden */

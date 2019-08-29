@@ -106,7 +106,9 @@ export function listByPost<RequestFilter, ResponseType>(
   );
 }
 
-export type CursorAndAsyncIterator<T> = Promise<ListResponse<T>> &
+export type CursorAndAsyncIterator<T, Wrapper = T[]> = Promise<
+  ListResponse<Wrapper>
+> &
   CogniteAsyncIterator<T>;
 
 /** @hidden */

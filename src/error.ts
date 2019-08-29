@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
-
-import { AxiosError } from 'axios';
+import { HttpError } from './utils/http/httpError';
 
 export class CogniteError extends Error {
   public status: number;
@@ -56,18 +55,18 @@ export class CogniteError extends Error {
 }
 
 /** @hidden */
-export function handleErrorResponse(err: AxiosError) {
+export function handleErrorResponse(err: HttpError) {
   let code;
   let message;
   let requestId;
   let missing;
   let duplicated;
   try {
-    code = err.response!.status;
-    message = err.response!.data.error.message;
-    missing = err.response!.data.error.missing;
-    duplicated = err.response!.data.error.duplicated;
-    requestId = (err.response!.headers || {})['X-Request-Id'];
+    code = err.status;
+    message = err.data.error.message;
+    missing = err.data.error.missing;
+    duplicated = err.data.error.duplicated;
+    requestId = (err.headers || {})['X-Request-Id'];
   } catch (_) {
     throw err;
   }

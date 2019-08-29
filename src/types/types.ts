@@ -346,7 +346,7 @@ export interface Cursor {
 }
 
 export interface CursorResponse<T> extends ItemsResponse<T> {
-  nextCursor: string;
+  nextCursor?: string;
 }
 
 export type DELETE = 'DELETE';
@@ -835,7 +835,7 @@ export interface InternalId {
 }
 
 export interface ItemsResponse<T> {
-  items: T[];
+  items: T;
 }
 
 export type LIST = 'LIST';
