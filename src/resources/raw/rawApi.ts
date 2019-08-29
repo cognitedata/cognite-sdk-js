@@ -169,14 +169,6 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
   ): Promise<{}> {
     return this.rawRowsApi.delete(databaseName, tableName, items);
   }
-
-  protected transformToList(items: RawDB[]) {
-    return items;
-  }
-
-  protected transformToClass(items: RawDB[]) {
-    return items;
-  }
 }
 
 export interface RawDatabaseDeleteParams {

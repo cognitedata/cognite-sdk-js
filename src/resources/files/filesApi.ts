@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { MetadataMap } from '@/metadata';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
 import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
@@ -18,22 +17,8 @@ import {
 } from '@/types/types';
 import { sleepPromise } from '@/utils';
 import { HttpHeaders } from '@/utils/http/basicHttpClient';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 
-export class FilesAPI extends BaseResourceAPI<
-  FilesMetadata,
-  FilesMetadata,
-  FilesMetadata[]
-> {
-  /** @hidden */
-  constructor(
-    resourcePath: string,
-    httpClient: CDFHttpClient,
-    map: MetadataMap
-  ) {
-    super(resourcePath, httpClient, map);
-  }
-
+export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
   /**
    * [Upload a file](https://doc.cognitedata.com/api/v1/#operation/initFileUpload)
    *
@@ -141,14 +126,6 @@ export class FilesAPI extends BaseResourceAPI<
    */
   public getDownloadUrls(ids: IdEither[]): Promise<(FileLink & IdEither)[]> {
     return this.getDownloadUrlsEndpoint(ids);
-  }
-
-  protected transformToList(items: FilesMetadata[]) {
-    return items;
-  }
-
-  protected transformToClass(items: FilesMetadata[]) {
-    return items;
   }
 
   private async uploadEndpoint(

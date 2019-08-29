@@ -1,31 +1,16 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
-import { MetadataMap } from '../../metadata';
-import {
-  generateCreateEndpoint,
-  generateDeleteEndpoint,
-  generateListNoCursorEndpointWithQueryParams,
-} from '../../standardMethods';
+import { BaseResourceAPI } from '@/resources/baseResourceApi';
 import {
   ApiKeyListScope,
   ApiKeyObject,
   ApiKeyRequest,
   CogniteInternalId,
+  ItemsResponse,
   NewApiKeyResponse,
-} from '../../types/types';
-import { projectUrl } from '../../utils';
+} from '@/types/types';
 
-export class ApiKeysAPI {
-  /**
-   * [List all api keys](https://doc.cognitedata.com/api/v1/#operation/getApiKeys)
-   *
-   * ```js
-   * const apiKeys = await client.apiKeys.list({ all: true });
-   * ```
-   */
-  public list: ApiKeysListEndpoint;
-
+export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
   /**
    * [Create API keys](https://doc.cognitedata.com/api/v1/#operation/createApiKeys)
    *
@@ -33,7 +18,25 @@ export class ApiKeysAPI {
    * const createdApiKeys = await client.apiKeys.create([{ serviceAccountId: 123 }]);
    * ```
    */
-  public create: ApiKeysCreateEndpoint;
+  public async create(items: ApiKeyRequest[]): Promise<NewApiKeyResponse[]> {
+    return this.createEndpoint(items);
+  }
+
+  /**
+   * [List all api keys](https://doc.cognitedata.com/api/v1/#operation/getApiKeys)
+   *
+   * ```js
+   * const apiKeys = await client.apiKeys.list({ all: true });
+   * ```
+   */
+  public async list(scope?: ApiKeyListScope): Promise<ApiKeyObject[]> {
+    const path = this.url();
+    const response = await this.httpClient.get<ItemsResponse<ApiKeyObject[]>>(
+      path,
+      { params: scope }
+    );
+    return this.addToMapAndReturn(response.data.items, response);
+  }
 
   /**
    * [Delete API keys](https://doc.cognitedata.com/api/v1/#operation/deleteApiKeys)
@@ -42,27 +45,7 @@ export class ApiKeysAPI {
    * await client.apiKeys.delete([123, 456]);
    * ```
    */
-  public delete: ApiKeysDeleteEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/apikeys';
-    this.create = generateCreateEndpoint(instance, path, map);
-    this.list = generateListNoCursorEndpointWithQueryParams(
-      instance,
-      path,
-      map
-    );
-    this.delete = generateDeleteEndpoint(instance, path, map);
+  public async delete(ids: CogniteInternalId[]): Promise<{}> {
+    return super.deleteEndpoint(ids);
   }
 }
-
-export type ApiKeysListEndpoint = (
-  scope?: ApiKeyListScope
-) => Promise<ApiKeyObject[]>;
-
-export type ApiKeysCreateEndpoint = (
-  items: ApiKeyRequest[]
-) => Promise<NewApiKeyResponse[]>;
-
-export type ApiKeysDeleteEndpoint = (items: CogniteInternalId[]) => Promise<{}>;

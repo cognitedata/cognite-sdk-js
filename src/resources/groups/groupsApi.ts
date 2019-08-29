@@ -1,33 +1,16 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
-import { rawRequest } from '../../axiosWrappers';
-import { MetadataMap } from '../../metadata';
-import {
-  generateCreateEndpoint,
-  generateDeleteEndpoint,
-  generateListNoCursorEndpoint,
-  generateListNoCursorEndpointWithQueryParams,
-} from '../../standardMethods';
+import { BaseResourceAPI } from '@/resources/baseResourceApi';
 import {
   CogniteInternalId,
   Group,
   GroupServiceAccount,
   GroupSpec,
+  ItemsResponse,
   ListGroups,
-} from '../../types/types';
-import { projectUrl } from '../../utils';
+} from '@/types/types';
 
-export class GroupsAPI {
-  /**
-   * [List groups](https://doc.cognitedata.com/api/v1/#operation/getGroups)
-   *
-   * ```js
-   * const groups = await client.groups.list({ all: true });
-   * ```
-   */
-  public list: GroupsListEndpoint;
-
+export class GroupsAPI extends BaseResourceAPI<Group> {
   /**
    * [Create groups](https://doc.cognitedata.com/api/v1/#operation/createGroups)
    *
@@ -43,7 +26,24 @@ export class GroupsAPI {
    * }]);
    * ```
    */
-  public create: GroupsCreateEndpoint;
+  public async create(items: GroupSpec[]): Promise<Group[]> {
+    return this.createEndpoint(items);
+  }
+
+  /**
+   * [List groups](https://doc.cognitedata.com/api/v1/#operation/getGroups)
+   *
+   * ```js
+   * const groups = await client.groups.list({ all: true });
+   * ```
+   */
+  public async list(scope?: ListGroups): Promise<Group[]> {
+    const path = this.url();
+    const response = await this.httpClient.get<ItemsResponse<Group[]>>(path, {
+      params: scope,
+    });
+    return this.addToMapAndReturn(response.data.items, response);
+  }
 
   /**
    * [Delete groups](https://doc.cognitedata.com/api/v1/#operation/deleteGroups)
@@ -52,23 +52,8 @@ export class GroupsAPI {
    * await client.groups.delete([921923342342323, 871621872721323]);
    * ```
    */
-  public delete: GroupsDeleteEndpoint;
-  private path: string;
-  private instance: AxiosInstance;
-  private map: MetadataMap;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = (this.path = projectUrl(project) + '/groups');
-    this.instance = instance;
-    this.map = map;
-    this.list = generateListNoCursorEndpointWithQueryParams(
-      instance,
-      path,
-      map
-    );
-    this.create = generateCreateEndpoint(instance, path, map);
-    this.delete = generateDeleteEndpoint(instance, path, map);
+  public async delete(ids: CogniteInternalId[]): Promise<{}> {
+    return super.deleteEndpoint(ids);
   }
 
   /**
@@ -78,13 +63,15 @@ export class GroupsAPI {
    * const serviceAccounts = await client.groups.listServiceAccounts(921923342342323);
    * ```
    */
-  public listServiceAccounts: GroupsListServiceAccountsEndpoint = groupId => {
-    return generateListNoCursorEndpoint<GroupServiceAccount>(
-      this.instance,
-      this.serviceAccountPath(groupId),
-      this.map
-    )();
-  };
+  public async listServiceAccounts(
+    groupId: CogniteInternalId
+  ): Promise<GroupServiceAccount[]> {
+    const path = this.encodeServiceAccountUrl(groupId);
+    const response = await this.httpClient.get<
+      ItemsResponse<GroupServiceAccount[]>
+    >(path);
+    return this.addToMapAndReturn(response.data.items, response);
+  }
 
   /**
    * [Add service accounts to a group](https://doc.cognitedata.com/api/v1/#operation/addServiceAccountsToGroup)
@@ -93,21 +80,16 @@ export class GroupsAPI {
    * await client.groups.addServiceAccounts(921923342342323, [123312763989213, 23232789217132]);
    * ```
    */
-  public addServiceAccounts: GroupsAddServiceAccountsEndpoint = async (
-    groupId,
-    serviceAccountIds
-  ) => {
-    const response = await rawRequest(
-      this.instance,
-      {
-        url: this.serviceAccountPath(groupId),
-        method: 'post',
-        data: { items: serviceAccountIds },
-      },
-      true
-    );
-    return this.map.addAndReturn({}, response);
-  };
+  public async addServiceAccounts(
+    groupId: CogniteInternalId,
+    serviceAccountIds: CogniteInternalId[]
+  ): Promise<{}> {
+    const path = this.encodeServiceAccountUrl(groupId);
+    const response = await this.httpClient.post<{}>(path, {
+      data: { items: serviceAccountIds },
+    });
+    return this.addToMapAndReturn({}, response);
+  }
 
   /**
    * [Remove service accounts from a group](https://doc.cognitedata.com/api/v1/#operation/removeServiceAccountsFromGroup)
@@ -116,42 +98,17 @@ export class GroupsAPI {
    * await client.groups.removeServiceAccounts(921923342342323, [123312763989213, 23232789217132]);
    * ```
    */
-  public removeServiceAccounts: GroupsRemoveServiceAccountsEndpoint = async (
-    groupId,
-    serviceAccountIds
-  ) => {
-    const response = await rawRequest(
-      this.instance,
-      {
-        url: `${this.serviceAccountPath(groupId)}/remove`,
-        method: 'post',
-        data: { items: serviceAccountIds },
-      },
-      true
-    );
-    return this.map.addAndReturn({}, response);
-  };
+  public async removeServiceAccounts(
+    groupId: CogniteInternalId,
+    serviceAccountIds: CogniteInternalId[]
+  ): Promise<{}> {
+    const path = this.encodeServiceAccountUrl(groupId) + '/remove';
+    const response = await this.httpClient.post<{}>(path, {
+      data: { items: serviceAccountIds },
+    });
+    return this.addToMapAndReturn({}, response);
+  }
 
-  private serviceAccountPath = (groupId: number) =>
-    `${this.path}/${groupId}/serviceaccounts`;
+  private encodeServiceAccountUrl = (groupId: number) =>
+    this.url(`${groupId}/serviceaccounts`);
 }
-
-export type GroupsListEndpoint = (scope?: ListGroups) => Promise<Group[]>;
-
-export type GroupsCreateEndpoint = (items: GroupSpec[]) => Promise<Group[]>;
-
-export type GroupsDeleteEndpoint = (ids: CogniteInternalId[]) => Promise<{}>;
-
-export type GroupsListServiceAccountsEndpoint = (
-  groupId: CogniteInternalId
-) => Promise<GroupServiceAccount[]>;
-
-export type GroupsAddServiceAccountsEndpoint = (
-  groupId: CogniteInternalId,
-  serviceAccountIds: CogniteInternalId[]
-) => Promise<{}>;
-
-export type GroupsRemoveServiceAccountsEndpoint = (
-  groupId: CogniteInternalId,
-  serviceAccountIds: CogniteInternalId[]
-) => Promise<{}>;

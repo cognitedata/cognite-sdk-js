@@ -1,31 +1,15 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
-import { MetadataMap } from '../../metadata';
-import {
-  CursorAndAsyncIterator,
-  generateCreateEndpoint,
-  generateDeleteEndpoint,
-  generateListEndpoint,
-} from '../../standardMethods';
+import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   CogniteInternalId,
   ListSecurityCategories,
   SecurityCategory,
   SecurityCategorySpec,
-} from '../../types/types';
-import { projectUrl } from '../../utils';
+} from '@/types/types';
 
-export class SecurityCategoriesAPI {
-  /**
-   * [List security categories](https://doc.cognitedata.com/api/v1/#operation/getSecurityCategories)
-   *
-   * ```js
-   * const securityCategories = await client.securityCategories.list({ sort: 'ASC' });
-   * ```
-   */
-  public list: SecurityCategoriesListEndpoint;
-
+export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
   /**
    * [Create security categories](https://doc.cognitedata.com/api/v1/#operation/createSecurityCategories)
    *
@@ -37,7 +21,24 @@ export class SecurityCategoriesAPI {
    * const createdSecurityCategories = await client.securityCategories.create(securityCategories);
    * ```
    */
-  public create: SecurityCategoriesCreateEndpoint;
+  public async create(
+    items: SecurityCategorySpec[]
+  ): Promise<SecurityCategory[]> {
+    return this.createEndpoint(items);
+  }
+
+  /**
+   * [List security categories](https://doc.cognitedata.com/api/v1/#operation/getSecurityCategories)
+   *
+   * ```js
+   * const securityCategories = await client.securityCategories.list({ sort: 'ASC' });
+   * ```
+   */
+  public list(
+    query?: ListSecurityCategories
+  ): CursorAndAsyncIterator<SecurityCategory> {
+    return super.listEndpoint(this.callListEndpointWithGet, query);
+  }
 
   /**
    * [Delete security categories](https://doc.cognitedata.com/api/v1/#operation/deleteSecurityCategories)
@@ -46,25 +47,7 @@ export class SecurityCategoriesAPI {
    * await client.securityCategories.delete([123, 456]);
    * ```
    */
-  public delete: SecurityCategoriesDeleteEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/securitycategories';
-    this.list = generateListEndpoint(instance, path, map, false);
-    this.create = generateCreateEndpoint(instance, path, map);
-    this.delete = generateDeleteEndpoint(instance, path, map);
+  public async delete(ids: CogniteInternalId[]): Promise<{}> {
+    return super.deleteEndpoint(ids);
   }
 }
-
-export type SecurityCategoriesListEndpoint = (
-  query?: ListSecurityCategories
-) => CursorAndAsyncIterator<SecurityCategory>;
-
-export type SecurityCategoriesCreateEndpoint = (
-  items: SecurityCategorySpec[]
-) => Promise<SecurityCategory[]>;
-
-export type SecurityCategoriesDeleteEndpoint = (
-  ids: CogniteInternalId[]
-) => Promise<{}>;

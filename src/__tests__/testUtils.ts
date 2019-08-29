@@ -59,9 +59,9 @@ export function setupMockableClient() {
 }
 
 test('createErrorResponse', () => {
-  expect(createErrorReponse(200, 'Abc')).toEqual({
+  expect(createErrorReponse(400, 'Abc')).toEqual({
     error: {
-      code: 200,
+      code: 400,
       message: 'Abc',
     },
   });

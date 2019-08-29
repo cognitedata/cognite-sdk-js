@@ -25,7 +25,7 @@ import { RawAPI } from '@/resources/raw/rawApi';
 import { SecurityCategoriesAPI } from '@/resources/securityCategories/securityCategoriesApi';
 import { ServiceAccountsAPI } from '@/resources/serviceAccounts/serviceAccountsApi';
 import { TimeSeriesAPI } from '@/resources/timeSeries/timeSeriesApi';
-import { getBaseUrl, projectUrl } from '@/utils';
+import { apiUrl, getBaseUrl, projectUrl } from '@/utils';
 import { isObject, isString } from 'lodash';
 import { HttpRequestOptions } from './utils/http/basicHttpClient';
 import { CDFHttpClient } from './utils/http/cdfHttpClient';
@@ -360,53 +360,58 @@ export default class CogniteClient {
     this.httpClient.delete(path, options);
 
   private initAPIs = () => {
-    // const defaultArgs: [string, AxiosInstance, MetadataMap] = [
-    //   this.project,
-    //   this.instance,
-    //   this.metadataMap,
-    // ];
+    const defaultArgs: [CDFHttpClient, MetadataMap] = [
+      this.httpClient,
+      this.metadataMap,
+    ];
     this.assetsApi = new AssetsAPI(
       this,
       projectUrl(this.project) + '/assets',
-      this.httpClient,
-      this.metadataMap
+      ...defaultArgs
     );
     this.timeSeriesApi = new TimeSeriesAPI(
       this,
       projectUrl(this.project) + '/timeseries',
-      this.httpClient,
-      this.metadataMap
+      ...defaultArgs
     );
     this.dataPointsApi = new DataPointsAPI(
       projectUrl(this.project) + '/timeseries',
-      this.httpClient,
-      this.metadataMap
+      ...defaultArgs
     );
     this.eventsApi = new EventsAPI(
       projectUrl(this.project) + '/events',
-      this.httpClient,
-      this.metadataMap
+      ...defaultArgs
     );
     this.filesApi = new FilesAPI(
       projectUrl(this.project) + '/files',
-      this.httpClient,
-      this.metadataMap
+      ...defaultArgs
     );
     this.rawApi = new RawAPI(
       projectUrl(this.project) + '/raw/dbs',
-      this.httpClient,
-      this.metadataMap
+      ...defaultArgs
     );
-    // this.projectsApi = new ProjectsAPI(this.instance, this.metadataMap);
-    // this.groupsApi = new GroupsAPI(...defaultArgs);
-    // this.securityCategoriesApi = new SecurityCategoriesAPI(...defaultArgs);
-    // this.serviceAccountsApi = new ServiceAccountsAPI(...defaultArgs);
+    this.projectsApi = new ProjectsAPI(apiUrl(), ...defaultArgs);
+    this.groupsApi = new GroupsAPI(
+      projectUrl(this.project) + '/groups',
+      ...defaultArgs
+    );
+    this.securityCategoriesApi = new SecurityCategoriesAPI(
+      projectUrl(this.project) + '/securitycategories',
+      ...defaultArgs
+    );
+    this.serviceAccountsApi = new ServiceAccountsAPI(
+      projectUrl(this.project) + '/serviceaccounts',
+      ...defaultArgs
+    );
+    this.apiKeysApi = new ApiKeysAPI(
+      projectUrl(this.project) + '/apikeys',
+      ...defaultArgs
+    );
     // this.models3DApi = new Models3DAPI(...defaultArgs);
     // this.revisions3DApi = new Revisions3DAPI(...defaultArgs);
     // this.files3DApi = new Files3DAPI(...defaultArgs);
     // this.assetMappings3DApi = new AssetMappings3DAPI(...defaultArgs);
     // this.viewer3DApi = new Viewer3DAPI(...defaultArgs);
-    // this.apiKeysApi = new ApiKeysAPI(...defaultArgs);
   };
 }
 

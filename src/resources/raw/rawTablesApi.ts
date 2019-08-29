@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { MetadataMap } from '@/metadata';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
 import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
@@ -10,19 +9,9 @@ import {
   RawDB,
   RawDBTable,
 } from '@/types/types';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 import { promiseAllWithData } from '../assets/assetUtils';
 
 export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
-  /** @hidden */
-  constructor(
-    resourcePath: string,
-    httpClient: CDFHttpClient,
-    map: MetadataMap
-  ) {
-    super(resourcePath, httpClient, map);
-  }
-
   public async create(
     databaseName: string,
     items: RawDBTable[],

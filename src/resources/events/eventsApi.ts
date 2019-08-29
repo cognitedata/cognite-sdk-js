@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { MetadataMap } from '@/metadata';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
 import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
@@ -11,22 +10,8 @@ import {
   ExternalEvent,
   IdEither,
 } from '@/types/types';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 
-export class EventsAPI extends BaseResourceAPI<
-  CogniteEvent,
-  CogniteEvent,
-  CogniteEvent[]
-> {
-  /** @hidden */
-  constructor(
-    resourcePath: string,
-    httpClient: CDFHttpClient,
-    map: MetadataMap
-  ) {
-    super(resourcePath, httpClient, map);
-  }
-
+export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
   /**
    * [Create events](https://doc.cognitedata.com/api/v1/#operation/createEvents)
    *
@@ -106,13 +91,5 @@ export class EventsAPI extends BaseResourceAPI<
    */
   public async delete(ids: IdEither[]) {
     return super.deleteEndpoint(ids);
-  }
-
-  protected transformToList(events: CogniteEvent[]) {
-    return events;
-  }
-
-  protected transformToClass(events: CogniteEvent[]) {
-    return events;
   }
 }

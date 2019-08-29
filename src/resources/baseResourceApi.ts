@@ -239,8 +239,12 @@ export abstract class BaseResourceAPI<
     };
   }
 
-  protected abstract transformToClass(array: ResponseType[]): WrapperType;
-  protected abstract transformToList(item: ResponseType[]): TransformedType[];
+  protected transformToClass(array: ResponseType[]): WrapperType {
+    return (array as unknown) as WrapperType;
+  }
+  protected transformToList(items: ResponseType[]): TransformedType[] {
+    return (items as unknown) as TransformedType[];
+  }
 
   protected postInParallelWithAutomaticChunking<
     RequestType,

@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { MetadataMap } from '@/metadata';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
 import {
   DatapointsDeleteRequest,
@@ -11,19 +10,9 @@ import {
   ItemsResponse,
   LatestDataBeforeRequest,
 } from '@/types/types';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 import { promiseAllWithData } from '../assets/assetUtils';
 
-export class DataPointsAPI extends BaseResourceAPI<any, any, any> {
-  /** @hidden */
-  constructor(
-    resourcePath: string,
-    httpClient: CDFHttpClient,
-    map: MetadataMap
-  ) {
-    super(resourcePath, httpClient, map);
-  }
-
+export class DataPointsAPI extends BaseResourceAPI<any> {
   /**
    * [Insert data points](https://doc.cognitedata.com/api/v1/#operation/postMultiTimeSeriesDatapoints)
    *
@@ -79,14 +68,6 @@ export class DataPointsAPI extends BaseResourceAPI<any, any, any> {
    */
   public async delete(items: DatapointsDeleteRequest[]) {
     return this.deleteDatapointsEndpoint(items);
-  }
-
-  protected transformToList(items: any) {
-    return items;
-  }
-
-  protected transformToClass(items: any) {
-    return items;
   }
 
   private async insertEndpoint(items: DatapointsPostDatapoint[]) {

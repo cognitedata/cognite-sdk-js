@@ -28,7 +28,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
     httpClient: CDFHttpClient,
     map: MetadataMap
   ) {
-    super(httpClient, resourcePath, map);
+    super(resourcePath, httpClient, map);
   }
 
   /**

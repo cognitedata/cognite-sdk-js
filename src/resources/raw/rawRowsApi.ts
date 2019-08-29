@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { MetadataMap } from '@/metadata';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
 import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
@@ -11,19 +10,9 @@ import {
   RawDBRowKey,
 } from '@/types/types';
 import { HttpHeaders } from '@/utils/http/basicHttpClient';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 import { promiseAllWithData } from '../assets/assetUtils';
 
 export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
-  /** @hidden */
-  constructor(
-    resourcePath: string,
-    httpClient: CDFHttpClient,
-    map: MetadataMap
-  ) {
-    super(resourcePath, httpClient, map);
-  }
-
   public async insert(
     databaseName: string,
     tableName: string,
