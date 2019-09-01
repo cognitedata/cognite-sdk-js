@@ -29,7 +29,10 @@ export function isBrowser() {
 }
 
 /** @hidden */
-export function removeParameterFromUrl(url: string, parameter: string): string {
+export function removeQueryParameterFromUrl(
+  url: string,
+  parameter: string
+): string {
   return url
     .replace(new RegExp('[?&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
     .replace(new RegExp('([?&])' + parameter + '=[^&]*&'), '$1');
@@ -107,4 +110,30 @@ export function transformDateInResponse<T>(data: T): T {
       return new Date(value);
     }
   });
+}
+
+/** @hidden */
+export function generatePopupWindow(url: string, name: string) {
+  const popupWindow = window.open(
+    url,
+    name,
+    // https://www.quackit.com/javascript/popup_windows.cfm
+    'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes'
+  );
+  return popupWindow;
+}
+
+/** @hidden */
+export function createInvisibleIframe(
+  url: string,
+  name: string
+): HTMLIFrameElement {
+  const iframe = document.createElement('iframe');
+  iframe.name = name;
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = '0';
+  iframe.style.border = 'none';
+  iframe.src = url;
+  return iframe;
 }

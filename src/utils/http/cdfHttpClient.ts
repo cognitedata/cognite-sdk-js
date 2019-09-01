@@ -96,6 +96,25 @@ export class CDFHttpClient extends RetryableHttpClient {
     this.notAuthenticatedHandler = handler;
   }
 
+  public async getIdInfo(headers: HttpHeaders): Promise<null | IdInfo> {
+    try {
+      const response = await this.get<any>('/login/status', { headers });
+      const { loggedIn, user, project } = response.data.data;
+      if (!loggedIn) {
+        return null;
+      }
+      return {
+        user,
+        project,
+      };
+    } catch (err) {
+      if (err.status === 401) {
+        return null;
+      }
+      throw err;
+    }
+  }
+
   protected async preRequest(request: HttpRequest): Promise<HttpRequest> {
     const headersWithDefaultHeaders = this.populateDefaultHeaders(
       request.headers
@@ -140,6 +159,11 @@ export class CDFHttpClient extends RetryableHttpClient {
       X_CDF_SDK_HEADER,
     ]);
   }
+}
+
+export interface IdInfo {
+  project: string;
+  user: string;
 }
 
 type NotAuthenticatedHandler = (
