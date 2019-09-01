@@ -5,16 +5,14 @@ import * as nock from 'nock';
 
 describe('CDFHttpClient', () => {
   const baseUrl = 'https://example.com';
+  const anotherDomain = 'https://another-domain.com';
   const now = new Date();
   const nowInUnixTimestamp = now.getTime();
   const error400 = { error: { code: 400, message: 'Some message' } };
+  // const error401 = { error: { code: 401, message: 'Some message' } };
   let client: CDFHttpClient;
   beforeEach(() => {
     client = new CDFHttpClient(baseUrl);
-  });
-
-  beforeAll(() => {
-    nock.disableNetConnect();
   });
 
   describe('get', () => {
@@ -36,10 +34,29 @@ describe('CDFHttpClient', () => {
 
     test('dont expose bearer token to other domains', async () => {
       client.setBearerToken('abc');
-      nock('https://another-domain.com', { badheaders: ['authorization'] })
+      nock(anotherDomain, { badheaders: ['authorization'] })
         .get('/')
         .reply(200, {});
-      await client.get('https://another-domain.com');
+      await client.get(anotherDomain);
+    });
+
+    test('dont expose api-key to other domains', async () => {
+      client.setDefaultHeader('api-key', '123');
+      nock(anotherDomain, { badheaders: ['api-key'] })
+        .get('/')
+        .reply(200, {});
+      await client.get(anotherDomain);
+    });
+
+    test('dont expose x-cdp-* to other domains', async () => {
+      client.setDefaultHeader('x-cdp-app', '123');
+      client.setDefaultHeader('x-cdp-sdk', 'abc');
+      nock(anotherDomain, {
+        badheaders: ['x-cdp-app', 'x-cdp-sdk'],
+      })
+        .get('/')
+        .reply(200, {});
+      await client.get(anotherDomain);
     });
 
     test('transform Date in query param to unix timestamp', async () => {
@@ -90,6 +107,16 @@ describe('CDFHttpClient', () => {
         expect(err.status).toBe(400);
       }
     });
+
+    // test('set custom not authenticated handler', async () => {
+    //   const mockFunction = jest.fn();
+    //   client.setNotAuthenticatedHandler(mockFunction);
+    //   nock(baseUrl)
+    //     .get('/')
+    //     .reply(401, {});
+    //   client.get('/');
+    //   expect(mockFunction).toHaveBeenCalledTimes(1);
+    // });
   });
 
   describe('post', () => {

@@ -14,19 +14,24 @@ import { EventsAPI } from '@/resources/events/eventsApi';
 import { FilesAPI } from '@/resources/files/filesApi';
 import { GroupsAPI } from '@/resources/groups/groupsApi';
 import {
-  // createAuthenticateFunction,
+  createAuthenticateFunction,
   OnAuthenticate,
-  // OnAuthenticateLoginObject,
+  OnAuthenticateLoginObject,
   OnTokens,
 } from '@/resources/login';
-// import { LoginAPI } from '@/resources/login/loginApi';
+import { LoginAPI } from '@/resources/login/loginApi';
 import { ProjectsAPI } from '@/resources/projects/projectsApi';
 import { RawAPI } from '@/resources/raw/rawApi';
 import { SecurityCategoriesAPI } from '@/resources/securityCategories/securityCategoriesApi';
 import { ServiceAccountsAPI } from '@/resources/serviceAccounts/serviceAccountsApi';
 import { TimeSeriesAPI } from '@/resources/timeSeries/timeSeriesApi';
 import { apiUrl, getBaseUrl, projectUrl } from '@/utils';
-import { isObject, isString } from 'lodash';
+import { isFunction, isObject, isString } from 'lodash';
+import {
+  API_KEY_HEADER,
+  X_CDF_APP_HEADER,
+  X_CDF_SDK_HEADER,
+} from './constants';
 import { HttpRequestOptions } from './utils/http/basicHttpClient';
 import { CDFHttpClient } from './utils/http/cdfHttpClient';
 
@@ -121,9 +126,9 @@ export default class CogniteClient {
   public get apiKeys() {
     return validateAndReturnAPI(this.apiKeysApi);
   }
-  // public get login() {
-  //   return this.loginApi;
-  // }
+  public get login() {
+    return this.loginApi;
+  }
 
   private projectName: string = '';
   private httpClient: CDFHttpClient;
@@ -145,7 +150,7 @@ export default class CogniteClient {
   private assetMappings3DApi?: AssetMappings3DAPI;
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
-  // private loginApi: LoginAPI;
+  private loginApi: LoginAPI;
   /**
    * Create a new SDK client
    *
@@ -170,11 +175,11 @@ export default class CogniteClient {
     const { baseUrl } = options;
     this.httpClient = new CDFHttpClient(getBaseUrl(baseUrl));
     this.httpClient
-      .setDefaultHeader('x-cdp-sdk', `CogniteJavaScriptSDK:${version}`)
-      .setDefaultHeader('x-cdp-app', options.appId);
+      .setDefaultHeader(X_CDF_SDK_HEADER, `CogniteJavaScriptSDK:${version}`)
+      .setDefaultHeader(X_CDF_APP_HEADER, options.appId);
 
     this.metadataMap = new MetadataMap();
-    // this.loginApi = new LoginAPI(this.instance);
+    this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
   }
   // tslint:disable-next-line:no-identical-functions
   public authenticate: () => Promise<boolean> = async () => {
@@ -222,7 +227,7 @@ export default class CogniteClient {
       }
     });
     this.projectName = project;
-    this.httpClient.setDefaultHeader('api-key', apiKey);
+    this.httpClient.setDefaultHeader(API_KEY_HEADER, apiKey);
 
     this.initAPIs();
   };
@@ -248,47 +253,47 @@ export default class CogniteClient {
    *
    * @param options Login options
    */
-  // public loginWithOAuth = (options: OAuthLoginOptions) => {
-  //   if (this.hasBeenLoggedIn) {
-  //     throwReLogginError();
-  //   }
+  public loginWithOAuth = (options: OAuthLoginOptions) => {
+    if (this.hasBeenLoggedIn) {
+      throwReLogginError();
+    }
 
-  //   if (!isObject(options)) {
-  //     throw Error('`loginWithOAuth` is missing parameter `options`');
-  //   }
-  //   const { project } = options;
-  //   if (!isString(project)) {
-  //     throw Error('options.project is required and must be of type string');
-  //   }
-  //   this.projectName = project;
+    if (!isObject(options)) {
+      throw Error('`loginWithOAuth` is missing parameter `options`');
+    }
+    const { project } = options;
+    if (!isString(project)) {
+      throw Error('options.project is required and must be of type string');
+    }
+    this.projectName = project;
 
-  //   const onTokens = options.onTokens || (() => {});
-  //   let onAuthenticate: OnAuthenticate = onAuthenticateWithRedirect;
-  //   if (options.onAuthenticate === POPUP) {
-  //     onAuthenticate = onAuthenticateWithPopup;
-  //   } else if (isFunction(options.onAuthenticate)) {
-  //     onAuthenticate = options.onAuthenticate;
-  //   }
-  //   const authenticate = createAuthenticateFunction({
-  //     project,
-  //     axiosInstance: this.instance,
-  //     onAuthenticate,
-  //     onTokens,
-  //   });
+    const onTokens = options.onTokens || (() => {});
+    let onAuthenticate: OnAuthenticate = onAuthenticateWithRedirect;
+    if (options.onAuthenticate === POPUP) {
+      onAuthenticate = onAuthenticateWithPopup;
+    } else if (isFunction(options.onAuthenticate)) {
+      onAuthenticate = options.onAuthenticate;
+    }
+    const authenticate = createAuthenticateFunction({
+      project,
+      httpClient: this.httpClient,
+      onAuthenticate,
+      onTokens,
+    });
 
-  //   listenForNonSuccessStatusCode(this.instance, 401, async (error, retry) => {
-  //     // ignore calls to /login/status
-  //     const { config } = error;
-  //     if (config.url === '/login/status') {
-  //       return Promise.reject(error);
-  //     }
-  //     const didAuthenticate = await authenticate();
-  //     return didAuthenticate ? retry() : Promise.reject(error);
-  //   });
+    listenForNonSuccessStatusCode(this.instance, 401, async (error, retry) => {
+      // ignore calls to /login/status
+      const { config } = error;
+      if (config.url === '/login/status') {
+        return Promise.reject(error);
+      }
+      const didAuthenticate = await authenticate();
+      return didAuthenticate ? retry() : Promise.reject(error);
+    });
 
-  //   this.initAPIs();
-  //   this.authenticate = authenticate;
-  // };
+    this.initAPIs();
+    this.authenticate = authenticate;
+  };
 
   /**
    * To modify the base-url at any point in time
@@ -407,22 +412,32 @@ export default class CogniteClient {
       projectUrl(this.project) + '/apikeys',
       ...defaultArgs
     );
-    // this.models3DApi = new Models3DAPI(...defaultArgs);
-    // this.revisions3DApi = new Revisions3DAPI(...defaultArgs);
-    // this.files3DApi = new Files3DAPI(...defaultArgs);
-    // this.assetMappings3DApi = new AssetMappings3DAPI(...defaultArgs);
-    // this.viewer3DApi = new Viewer3DAPI(...defaultArgs);
+    const models3DPath = projectUrl(this.project) + '/3d/models';
+    this.models3DApi = new Models3DAPI(models3DPath, ...defaultArgs);
+    this.revisions3DApi = new Revisions3DAPI(models3DPath, ...defaultArgs);
+    this.files3DApi = new Files3DAPI(
+      projectUrl(this.project) + '/3d/files',
+      ...defaultArgs
+    );
+    this.assetMappings3DApi = new AssetMappings3DAPI(
+      models3DPath,
+      ...defaultArgs
+    );
+    this.viewer3DApi = new Viewer3DAPI(
+      projectUrl(this.project) + '/3d',
+      ...defaultArgs
+    );
   };
 }
 
-// function onAuthenticateWithRedirect(login: OnAuthenticateLoginObject) {
-//   login.redirect({
-//     redirectUrl: window.location.href,
-//   });
-// }
+function onAuthenticateWithRedirect(login: OnAuthenticateLoginObject) {
+  login.redirect({
+    redirectUrl: window.location.href,
+  });
+}
 
-// function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
-//   login.popup({
-//     redirectUrl: window.location.href,
-//   });
-// }
+function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
+  login.popup({
+    redirectUrl: window.location.href,
+  });
+}

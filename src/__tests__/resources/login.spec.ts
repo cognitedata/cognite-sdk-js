@@ -1,13 +1,15 @@
 // Copyright 2019 Cognite AS
 
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '@/constants';
 import {
   getIdInfoFromAccessToken,
   getIdInfoFromApiKey,
   loginSilently,
   loginWithRedirect,
-} from '../../resources/login';
+} from '@/resources/login';
+import { bearerString } from '@/utils';
+import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
+import * as nock from 'nock';
 import {
   apiKey,
   authTokens,
@@ -19,12 +21,10 @@ import {
 
 describe('Login', () => {
   const response401 = { error: { code: 401, message: '' } };
-  const statusUrl = `${mockBaseUrl}/login/status`;
-  const axiosInstance = axios.create({ baseURL: mockBaseUrl });
-  const axiosMock = new MockAdapter(axiosInstance);
+  const statusPath = '/login/status';
+  const httpClient = new CDFHttpClient(mockBaseUrl);
 
   beforeEach(() => {
-    axiosMock.reset();
     window.history.pushState({}, '', '');
   });
 
@@ -59,7 +59,7 @@ describe('Login', () => {
         `/some/random/path?query=true&error=failed&error_description=message`
       );
       await expect(
-        loginSilently(axiosInstance, authorizeParams)
+        loginSilently(httpClient, authorizeParams)
       ).rejects.toThrowErrorMatchingInlineSnapshot(`"failed: message"`);
     });
 
@@ -81,7 +81,7 @@ describe('Login', () => {
         `?access_token=${authTokens.accessToken}&id_token=${authTokens.idToken}`
       );
       spiedCreateElement.mockReturnValueOnce(iframe);
-      const tokens = await loginSilently(axiosInstance, authorizeParams);
+      const tokens = await loginSilently(httpClient, authorizeParams);
       expect(tokens).toEqual(authTokens);
       expect(spiedCreateElement).toBeCalledTimes(1);
       expect(spiedCreateElement).toBeCalledWith('iframe');
@@ -96,7 +96,7 @@ describe('Login', () => {
     });
 
     test('valid tokens in url', async () => {
-      expect.assertions(3);
+      expect.assertions(2);
       window.history.pushState(
         {},
         '',
@@ -104,13 +104,14 @@ describe('Login', () => {
           authTokens.accessToken
         }&id_token=${authTokens.idToken}&random=123`
       );
-      axiosMock.onGet(`${mockBaseUrl}/login/status`).replyOnce(config => {
-        expect(config.headers.Authorization).toBe(
-          `Bearer ${authTokens.accessToken}`
-        );
-        return [200, loggedInResponse];
-      });
-      const tokens = await loginSilently(axiosInstance, authorizeParams);
+      nock(mockBaseUrl, {
+        reqheaders: {
+          [AUTHORIZATION_HEADER]: bearerString(authTokens.accessToken),
+        },
+      })
+        .get('/login/status')
+        .reply(200, loggedInResponse);
+      const tokens = await loginSilently(httpClient, authorizeParams);
       expect(tokens).toEqual(authTokens);
       expect(window.location.href).toMatchInlineSnapshot(
         `"https://localhost/some/random/path?query=true&random=123"`
@@ -132,53 +133,62 @@ describe('Login', () => {
     };
 
     test('successful getIdInfoFromApiKey', async () => {
-      axiosMock.onGet(statusUrl).replyOnce(config => {
-        expect(config.headers['api-key']).toBe(apiKey);
-        return [200, successResponse];
-      });
-      await expect(getIdInfoFromApiKey(axiosInstance, apiKey)).resolves.toEqual(
+      nock(mockBaseUrl, { reqheaders: { [API_KEY_HEADER]: apiKey } })
+        .get(statusPath)
+        .once()
+        .reply(200, successResponse);
+      await expect(getIdInfoFromApiKey(httpClient, apiKey)).resolves.toEqual(
         idInfo
       );
     });
 
     test('getIdInfoFromApiKey - 401', async () => {
-      axiosMock.onGet(statusUrl).replyOnce(401, response401);
-      await expect(
-        getIdInfoFromApiKey(axiosInstance, apiKey)
-      ).resolves.toBeNull();
+      nock(mockBaseUrl)
+        .get(statusPath)
+        .once()
+        .reply(401, response401);
+      await expect(getIdInfoFromApiKey(httpClient, apiKey)).resolves.toBeNull();
     });
 
     test('getIdInfoFromApiKey - not logged in', async () => {
-      axiosMock.onGet(statusUrl).replyOnce(200, notLoggedInResponse);
-      await expect(
-        getIdInfoFromApiKey(axiosInstance, apiKey)
-      ).resolves.toBeNull();
+      nock(mockBaseUrl)
+        .get(statusPath)
+        .once()
+        .reply(200, notLoggedInResponse);
+      await expect(getIdInfoFromApiKey(httpClient, apiKey)).resolves.toBeNull();
     });
 
     test('successful getIdInfoFromAccessToken', async () => {
       const token = 'abc123';
-      axiosMock.onGet(statusUrl).replyOnce(config => {
-        expect(config.headers.Authorization).toBe(`Bearer ${token}`);
-        return [200, successResponse];
-      });
+      nock(mockBaseUrl, {
+        reqheaders: { [AUTHORIZATION_HEADER]: bearerString(token) },
+      })
+        .get(statusPath)
+        .once()
+        .reply(200, successResponse);
       await expect(
-        getIdInfoFromAccessToken(axiosInstance, token)
+        getIdInfoFromAccessToken(httpClient, token)
       ).resolves.toEqual(idInfo);
     });
 
     test('getIdInfoFromAccessToken - 401', async () => {
       const token = 'abc123';
-      axiosMock.onGet(statusUrl).replyOnce(401, response401);
+      nock(mockBaseUrl)
+        .get(statusPath)
+        .once()
+        .reply(401, response401);
       await expect(
-        getIdInfoFromAccessToken(axiosInstance, token)
+        getIdInfoFromAccessToken(httpClient, token)
       ).resolves.toBeNull();
     });
 
     test('getIdInfoFromAccessToken - not logged in', async () => {
       const token = 'abc123';
-      axiosMock.onGet(statusUrl).replyOnce(200, notLoggedInResponse);
+      nock(mockBaseUrl)
+        .get(statusPath)
+        .reply(200, notLoggedInResponse);
       await expect(
-        getIdInfoFromAccessToken(axiosInstance, token)
+        getIdInfoFromAccessToken(httpClient, token)
       ).resolves.toBeNull();
     });
   });

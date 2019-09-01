@@ -1,23 +1,10 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
-import { rawRequest } from '../../axiosWrappers';
-import { MetadataMap } from '../../metadata';
-import { CogniteInternalId } from '../../types/types';
-import { projectUrl } from '../../utils';
+import { CogniteInternalId } from '@/types/types';
+import { HttpResponseType } from '@/utils/http/basicHttpClient';
+import { BaseResourceAPI } from '../baseResourceApi';
 
-export class Files3DAPI {
-  private path: string;
-  private instance: AxiosInstance;
-  private map: MetadataMap;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    this.path = projectUrl(project) + '/3d/files';
-    this.instance = instance;
-    this.map = map;
-  }
-
+export class Files3DAPI extends BaseResourceAPI<any> {
   /**
    * [Retrieve a 3D file"](https://doc.cognitedata.com/api/v1/#operation/get3DFile)
    *
@@ -25,16 +12,11 @@ export class Files3DAPI {
    * await client.files3D.retrieve(3744350296805509);
    * ```
    */
-  public retrieve: Files3DRetrieveEndpoint = async file3DId => {
-    const response = await rawRequest<ArrayBuffer>(this.instance, {
-      url: `${this.path}/${encodeURIComponent('' + file3DId)}`,
-      method: 'get',
-      responseType: 'arraybuffer',
+  public async retrieve(fileId: CogniteInternalId): Promise<ArrayBuffer> {
+    const path = this.url(`${fileId}`);
+    const response = await this.httpClient.get<ArrayBuffer>(path, {
+      responseType: HttpResponseType.ArrayBuffer,
     });
-    return this.map.addAndReturn(response.data, response);
-  };
+    return this.addToMapAndReturn(response.data, response);
+  }
 }
-
-export type Files3DRetrieveEndpoint = (
-  id: CogniteInternalId
-) => Promise<ArrayBuffer>;

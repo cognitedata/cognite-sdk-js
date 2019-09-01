@@ -12,10 +12,6 @@ describe('RetryableHttpClient', () => {
     );
   });
 
-  beforeAll(() => {
-    nock.disableNetConnect();
-  });
-
   test('should retry', async () => {
     const scope = nock(baseUrl)
       .get('/')

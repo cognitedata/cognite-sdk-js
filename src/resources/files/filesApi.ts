@@ -162,10 +162,9 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
   }
 
   private uploadFile(url: string, fileContent: FileContent, mimeType?: string) {
-    const headers: HttpHeaders = {};
-    if (mimeType) {
-      headers['Content-Type'] = mimeType;
-    }
+    const headers: HttpHeaders = {
+      'Content-Type': mimeType || 'application/octet-stream',
+    };
     return this.httpClient.put(url, {
       headers,
       data: fileContent,

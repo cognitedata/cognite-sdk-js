@@ -1,6 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosError } from 'axios';
+import { X_REQUEST_ID } from '@/constants';
+import { HttpError } from '@/utils/http/httpError';
 import { CogniteError, handleErrorResponse } from '../error';
 import { CogniteMultiError } from '../multiError';
 import { createErrorReponse } from './testUtils';
@@ -56,31 +57,18 @@ describe('CogniteError', () => {
 
 describe('handleErrorResponse', () => {
   test('without requestId', () => {
-    const axiosError = {
-      response: {
-        status: 500,
-        data: createErrorReponse(500, 'abc'),
-      },
-    } as AxiosError;
-
+    const httpError = new HttpError(500, createErrorReponse(500, 'abc'), {});
     expect(() => {
-      handleErrorResponse(axiosError);
+      handleErrorResponse(httpError);
     }).toThrowErrorMatchingInlineSnapshot(`"abc | code: 500"`);
   });
 
   test('with requestId', () => {
-    const axiosError = {
-      response: {
-        status: 500,
-        data: createErrorReponse(500, 'abc'),
-        headers: {
-          'X-Request-Id': 'def',
-        },
-      },
-    } as AxiosError;
-
+    const httpError = new HttpError(500, createErrorReponse(500, 'abc'), {
+      [X_REQUEST_ID]: 'def',
+    });
     expect(() => {
-      handleErrorResponse(axiosError);
+      handleErrorResponse(httpError);
     }).toThrowErrorMatchingInlineSnapshot(
       `"abc | code: 500 | X-Request-ID: def"`
     );
@@ -90,25 +78,21 @@ describe('handleErrorResponse', () => {
     const status = 500;
     const message = 'abc';
     const xRequestId = 'def';
-    const axiosError = {
-      response: {
-        status,
-        data: createErrorReponse(status, message, {
-          missing: [internalIdObject, externalIdObject],
-          duplicated: [event],
-        }),
-        headers: {
-          'X-Request-Id': xRequestId,
-        },
-      },
-    } as AxiosError;
+    const httpError = new HttpError(
+      status,
+      createErrorReponse(status, message, {
+        missing: [internalIdObject, externalIdObject],
+        duplicated: [event],
+      }),
+      { [X_REQUEST_ID]: xRequestId }
+    );
 
     expect(() => {
-      handleErrorResponse(axiosError);
+      handleErrorResponse(httpError);
     }).toThrowErrorMatchingSnapshot();
 
     try {
-      handleErrorResponse(axiosError);
+      handleErrorResponse(httpError);
     } catch (e) {
       expect(e.status).toBe(status);
       expect(e.requestId).toBe(xRequestId);

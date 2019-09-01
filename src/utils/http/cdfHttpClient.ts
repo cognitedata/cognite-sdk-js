@@ -1,12 +1,17 @@
 // Copyright 2019 Cognite AS
 
+import {
+  API_KEY_HEADER,
+  AUTHORIZATION_HEADER,
+  X_CDF_APP_HEADER,
+  X_CDF_SDK_HEADER,
+} from '@/constants';
 import { handleErrorResponse } from '@/error';
 import {
-  // isJson,
+  bearerString,
   isJson,
   transformDateInRequest,
   transformDateInResponse,
-  // transformDateInResponse,
 } from '@/utils';
 import * as Url from 'url';
 import {
@@ -16,9 +21,8 @@ import {
   HttpResponse,
 } from './basicHttpClient';
 import { cdfRetryValidator } from './cdfRetryValidator';
+import { HttpError } from './httpError';
 import { RetryableHttpClient } from './retryableHttpClient';
-
-const AUTHORIZATION = 'Authorization';
 
 export class CDFHttpClient extends RetryableHttpClient {
   private static serializeQueryParameters(
@@ -59,6 +63,16 @@ export class CDFHttpClient extends RetryableHttpClient {
     return hasSameProtocol && hasSameHost;
   }
 
+  private static filterHeaders(headers: HttpHeaders, names: string[]) {
+    const filteredHeaders = names.reduce(
+      (partiallyFilteredHeaders, headerName) => {
+        return CDFHttpClient.filterHeader(partiallyFilteredHeaders, headerName);
+      },
+      headers
+    );
+    return filteredHeaders;
+  }
+
   private static filterHeader(headers: HttpHeaders, name: string) {
     const filteredHeaders: HttpHeaders = {
       ...headers,
@@ -67,15 +81,22 @@ export class CDFHttpClient extends RetryableHttpClient {
     return filteredHeaders;
   }
 
+  // @ts-ignore
+  private notAuthenticatedHandler: NotAuthenticatedHandler;
   constructor(baseUrl: string) {
     super(baseUrl, cdfRetryValidator);
+    this.notAuthenticatedHandler = (_, __, ignore) => ignore();
   }
 
   public setBearerToken(token: string) {
-    this.setDefaultHeader(AUTHORIZATION, `Bearer ${token}`);
+    this.setDefaultHeader(AUTHORIZATION_HEADER, bearerString(token));
   }
 
-  protected preRequest(request: HttpRequest): HttpRequest {
+  public setNotAuthenticatedHandler(handler: NotAuthenticatedHandler) {
+    this.notAuthenticatedHandler = handler;
+  }
+
+  protected async preRequest(request: HttpRequest): Promise<HttpRequest> {
     const headersWithDefaultHeaders = this.populateDefaultHeaders(
       request.headers
     );
@@ -96,10 +117,13 @@ export class CDFHttpClient extends RetryableHttpClient {
     };
   }
 
-  protected postRequest<T>(response: HttpResponse<T>): HttpResponse<T> {
+  protected async postRequest<T>(
+    response: HttpResponse<T>,
+    request: HttpRequest
+  ): Promise<HttpResponse<T>> {
     const transformedResponse = CDFHttpClient.transformDateInResponse(response);
     try {
-      return super.postRequest(transformedResponse);
+      return await super.postRequest(transformedResponse, request);
     } catch (err) {
       throw handleErrorResponse(err);
     }
@@ -109,6 +133,17 @@ export class CDFHttpClient extends RetryableHttpClient {
     if (CDFHttpClient.isSameOrigin(this.baseUrl, path)) {
       return headers;
     }
-    return CDFHttpClient.filterHeader(headers, AUTHORIZATION);
+    return CDFHttpClient.filterHeaders(headers, [
+      AUTHORIZATION_HEADER,
+      API_KEY_HEADER,
+      X_CDF_APP_HEADER,
+      X_CDF_SDK_HEADER,
+    ]);
   }
 }
+
+type NotAuthenticatedHandler = (
+  err: HttpError,
+  retry: () => void,
+  ignore: () => void
+) => void;

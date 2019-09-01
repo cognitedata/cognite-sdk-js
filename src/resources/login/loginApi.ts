@@ -1,14 +1,14 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
+import { MetadataMap } from '@/metadata';
+import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
+import { BaseResourceAPI } from '../baseResourceApi';
 import { getIdInfo, IdInfo } from '../login';
 
-export class LoginAPI {
-  private instance: AxiosInstance;
-
+export class LoginAPI extends BaseResourceAPI<any> {
   /** @hidden */
-  constructor(instance: AxiosInstance) {
-    this.instance = instance;
+  constructor(httpClient: CDFHttpClient, map: MetadataMap) {
+    super('', httpClient, map);
   }
 
   /**
@@ -19,7 +19,7 @@ export class LoginAPI {
    * // if status === null means you are not logged in
    * ```
    */
-  public status: LoginStatusEndpoint = () => getIdInfo(this.instance, {});
+  public async status(): Promise<null | IdInfo> {
+    return getIdInfo(this.httpClient, {});
+  }
 }
-
-export type LoginStatusEndpoint = () => Promise<null | IdInfo>;

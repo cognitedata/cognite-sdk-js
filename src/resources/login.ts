@@ -1,11 +1,13 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
+import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '@/constants';
+import { HttpHeaders } from '@/utils/http/basicHttpClient';
+import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 import { isString } from 'lodash';
 import { parse, stringify } from 'query-string';
-import { rawRequest, setBearerToken } from '../axiosWrappers';
 import { CogniteLoginError } from '../loginError';
 import {
+  bearerString,
   getBaseUrl,
   isSameProject,
   promiseCache,
@@ -53,19 +55,19 @@ export type OnAuthenticate = (login: OnAuthenticateLoginObject) => void;
 
 /** @hidden */
 export function getIdInfoFromApiKey(
-  axiosInstance: AxiosInstance,
+  httpClient: CDFHttpClient,
   apiKey: string
 ): Promise<null | IdInfo> {
-  return getIdInfo(axiosInstance, { 'api-key': apiKey });
+  return getIdInfo(httpClient, { [API_KEY_HEADER]: apiKey });
 }
 
 /** @hidden */
 export function getIdInfoFromAccessToken(
-  axiosInstance: AxiosInstance,
+  httpClient: CDFHttpClient,
   accessToken: string
 ): Promise<null | IdInfo> {
-  return getIdInfo(axiosInstance, {
-    Authorization: `Bearer ${accessToken}`,
+  return getIdInfo(httpClient, {
+    [AUTHORIZATION_HEADER]: bearerString(accessToken),
   });
 }
 
@@ -77,7 +79,7 @@ export interface AuthenticateParams {
 
 /** @hidden */
 export async function loginSilently(
-  axiosInstance: AxiosInstance,
+  httpClient: CDFHttpClient,
   params: AuthenticateParams
 ): Promise<null | AuthTokens> {
   if (isAuthIFrame()) {
@@ -88,10 +90,7 @@ export async function loginSilently(
   const { project } = params;
   {
     const tokens = extractTokensFromUrl();
-    if (
-      tokens !== null &&
-      (await isTokensValid(axiosInstance, project, tokens))
-    ) {
+    if (tokens !== null && (await isTokensValid(httpClient, project, tokens))) {
       clearParametersFromUrl(ACCESS_TOKEN_PARAM, ID_TOKEN_PARAM);
       return tokens;
     }
@@ -118,15 +117,11 @@ export async function loginSilently(
 
 /** @hidden */
 export async function getIdInfo(
-  axiosInstance: AxiosInstance,
-  headers: object
+  httpClient: CDFHttpClient,
+  headers: HttpHeaders
 ): Promise<null | IdInfo> {
   try {
-    const response = await rawRequest<any>(axiosInstance, {
-      method: 'get',
-      url: '/login/status',
-      headers,
-    });
+    const response = await httpClient.get<any>('/login/status', { headers });
     const { loggedIn, user, project } = response.data.data;
     if (!loggedIn) {
       return null;
@@ -163,11 +158,11 @@ function generateLoginUrl(params: AuthorizeParams): string {
 
 /** @hidden */
 export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
-  return new Promise(() => {
+  const unresolveablePromise = new Promise<void>(() => {
     const url = generateLoginUrl(params);
     window.location.assign(url);
-    // don't resolve promise since we do redirect
   });
+  return unresolveablePromise;
 }
 
 /** @hidden */
@@ -243,9 +238,8 @@ function parseTokenQueryParameters(query: string): null | AuthTokens {
 }
 
 function extractTokensFromUrl() {
-  let tokens;
   try {
-    tokens = parseTokenQueryParameters(window.location.search);
+    const tokens = parseTokenQueryParameters(window.location.search);
     clearParametersFromUrl(ACCESS_TOKEN_PARAM, ID_TOKEN_PARAM);
     return tokens;
   } catch (err) {
@@ -284,38 +278,35 @@ async function silentLogin(params: AuthorizeParams): Promise<AuthTokens> {
 
 /** @hidden */
 export async function isTokensValid(
-  axiosInstance: AxiosInstance,
+  httpClient: CDFHttpClient,
   project: string,
   tokens: AuthTokens
 ) {
-  const idInfo = await getIdInfoFromAccessToken(
-    axiosInstance,
-    tokens.accessToken
-  );
+  const idInfo = await getIdInfoFromAccessToken(httpClient, tokens.accessToken);
   return idInfo !== null && isSameProject(idInfo.project, project);
 }
 
 interface CreateAuthFunctionOptions {
   project: string;
-  axiosInstance: AxiosInstance;
+  httpClient: CDFHttpClient;
   onTokens: OnTokens;
   onAuthenticate: OnAuthenticate;
 }
 /** @hidden */
 export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
-  const { project, axiosInstance, onTokens, onAuthenticate } = options;
-  const baseUrl = getBaseUrl(axiosInstance.defaults.baseURL);
+  const { project, httpClient, onTokens, onAuthenticate } = options;
+  const baseUrl = getBaseUrl(httpClient.getBaseUrl());
   return promiseCache(
     async (): Promise<boolean> => {
       const handleTokens = (tokens: AuthTokens) => {
-        setBearerToken(axiosInstance, tokens.accessToken);
+        httpClient.setBearerToken(tokens.accessToken);
         if (onTokens) {
           onTokens(tokens);
         }
       };
 
       {
-        const tokens = await Login.loginSilently(axiosInstance, {
+        const tokens = await Login.loginSilently(httpClient, {
           baseUrl,
           project,
         });

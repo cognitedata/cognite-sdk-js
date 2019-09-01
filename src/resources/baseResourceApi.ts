@@ -67,12 +67,13 @@ export abstract class BaseResourceAPI<
 
   protected async createEndpoint<RequestType>(
     items: RequestType[],
+    path: string = this.url(),
     preRequestModifier?: (items: RequestType[]) => RequestType[],
     postRequestModifier?: (items: ResponseType[]) => ResponseType[]
   ) {
     return this.callEndpointWithMergeAndTransform(
       items,
-      this.callCreateEndpoint,
+      data => this.callCreateEndpoint(data, path),
       preRequestModifier,
       postRequestModifier
     );
@@ -93,17 +94,18 @@ export abstract class BaseResourceAPI<
     return Object.assign(listPromise, autoPaginationMethods);
   }
 
-  protected async retrieveEndpoint(ids: IdEither[]) {
-    return this.callEndpointWithMergeAndTransform(
-      ids,
-      this.callRetrieveEndpoint
+  protected async retrieveEndpoint(ids: IdEither[], path?: string) {
+    return this.callEndpointWithMergeAndTransform(ids, request =>
+      this.callRetrieveEndpoint(request, path)
     );
   }
 
-  protected async updateEndpoint<ChangeType>(changes: ChangeType[]) {
-    return this.callEndpointWithMergeAndTransform(
-      changes,
-      this.callUpdateEndpoint
+  protected async updateEndpoint<ChangeType>(
+    changes: ChangeType[],
+    path?: string
+  ) {
+    return this.callEndpointWithMergeAndTransform(changes, data =>
+      this.callUpdateEndpoint(data, path)
     );
   }
 
@@ -113,17 +115,11 @@ export abstract class BaseResourceAPI<
 
   protected async deleteEndpoint<RequestParams extends object, T = IdEither>(
     ids: T[],
-    params?: RequestParams
+    params?: RequestParams,
+    path?: string
   ) {
-    const responses = await this.callDeleteEndpoint(ids, params);
+    const responses = await this.callDeleteEndpoint(ids, params, path);
     return this.addToMapAndReturn({}, responses[0]);
-  }
-
-  protected async callCreateEndpoint<RequestType>(items: RequestType[]) {
-    return this.postInSequenceWithAutomaticChunking<
-      RequestType,
-      ItemsResponse<ResponseType>
-    >(this.url(), items);
   }
 
   protected callListEndpointWithGet = async <QueryType extends FilterQuery>(
@@ -150,12 +146,18 @@ export abstract class BaseResourceAPI<
     return this.transformResponse(response);
   };
 
-  protected async callRetrieveEndpoint(ids: IdEither[]) {
-    return this.postInParallelWithAutomaticChunking(this.byIdsUrl, ids);
+  protected async callRetrieveEndpoint(
+    ids: IdEither[],
+    path: string = this.byIdsUrl
+  ) {
+    return this.postInParallelWithAutomaticChunking(path, ids);
   }
 
-  protected async callUpdateEndpoint<ChangeType>(changes: ChangeType[]) {
-    return this.postInParallelWithAutomaticChunking(this.updateUrl, changes);
+  protected async callUpdateEndpoint<ChangeType>(
+    changes: ChangeType[],
+    path: string = this.updateUrl
+  ) {
+    return this.postInParallelWithAutomaticChunking(path, changes);
   }
 
   protected async callSearchEndpoint<QueryType, Response>(query: QueryType) {
@@ -164,13 +166,10 @@ export abstract class BaseResourceAPI<
 
   protected callDeleteEndpoint<ParamsType extends object, T = IdEither>(
     ids: T[],
-    params?: ParamsType
+    params?: ParamsType,
+    path: string = this.deleteUrl
   ) {
-    return this.postInParallelWithAutomaticChunking(
-      this.deleteUrl,
-      ids,
-      params
-    );
+    return this.postInParallelWithAutomaticChunking(path, ids, params);
   }
 
   protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>) {
@@ -258,6 +257,16 @@ export abstract class BaseResourceAPI<
         }),
       false
     );
+  }
+
+  private async callCreateEndpoint<RequestType>(
+    items: RequestType[],
+    path: string
+  ) {
+    return this.postInSequenceWithAutomaticChunking<
+      RequestType,
+      ItemsResponse<ResponseType>
+    >(path, items);
   }
 
   private transformResponse(

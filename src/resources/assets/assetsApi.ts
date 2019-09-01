@@ -45,7 +45,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    */
   public async create(items: ExternalAssetItem[]): Promise<AssetList> {
     const { sort, unsort } = new RevertableArraySorter(sortAssetCreateItems);
-    return super.createEndpoint(items, sort, unsort);
+    return super.createEndpoint(items, undefined, sort, unsort);
   }
 
   /**

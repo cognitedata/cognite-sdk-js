@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import { HttpResponseType } from '@/utils/http/basicHttpClient';
 import CogniteClient from '../../cogniteClient';
 import { FilesMetadata } from '../../types/types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
@@ -13,7 +14,7 @@ describe('Files integration test', () => {
   const files = [
     {
       name: 'filename_0_' + postfix,
-      mimeType: 'image/jpg',
+      mimeType: 'text/plain;charset=UTF-8',
       metadata: {
         key: 'value',
       },
@@ -40,6 +41,10 @@ describe('Files integration test', () => {
       { id: file.id },
     ]);
     expect(downloadUrl).toBeDefined();
+    const response = await client.get(downloadUrl, {
+      responseType: HttpResponseType.Text,
+    });
+    expect(response.data).toBe(fileContent);
   });
 
   test('update', async () => {

@@ -1,15 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
-import { MetadataMap } from '../../metadata';
-import {
-  CursorAndAsyncIterator,
-  generateCreateEndpoint,
-  generateDeleteEndpoint,
-  generateListEndpoint,
-  generateRetrieveSingleEndpoint,
-  generateUpdateEndpoint,
-} from '../../standardMethods';
+import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   CogniteInternalId,
   CreateModel3D,
@@ -17,19 +9,9 @@ import {
   Model3D,
   Model3DListRequest,
   UpdateModel3D,
-} from '../../types/types';
-import { projectUrl } from '../../utils';
+} from '@/types/types';
 
-export class Models3DAPI {
-  /**
-   * [List 3D models](https://doc.cognitedata.com/api/v1/#operation/get3DModels)
-   *
-   * ```js
-   * const models3D = await client.models3D.list({ published: true });
-   * ```
-   */
-  public list: Models3DListEndpoint;
-
+export class Models3DAPI extends BaseResourceAPI<Model3D> {
   /**
    * [Create 3D models](https://doc.cognitedata.com/api/v1/#operation/create3DModels)
    *
@@ -41,7 +23,33 @@ export class Models3DAPI {
    * const models3D = await client.models3D.create(modelsToCreate);
    * ```
    */
-  public create: Models3DCreateEndpoint;
+  public async create(models: CreateModel3D[]): Promise<Model3D[]> {
+    return super.createEndpoint(models);
+  }
+
+  /**
+   * [List 3D models](https://doc.cognitedata.com/api/v1/#operation/get3DModels)
+   *
+   * ```js
+   * const models3D = await client.models3D.list({ published: true });
+   * ```
+   */
+  public list(scope?: Model3DListRequest): CursorAndAsyncIterator<Model3D> {
+    return super.listEndpoint(this.callListEndpointWithGet, scope);
+  }
+
+  /**
+   * [Retrieve a 3D model](https://doc.cognitedata.com/api/v1/#operation/get3DModel)
+   *
+   * ```js
+   * await client.models3D.retrieve(3744350296805509);
+   * ```
+   */
+  public async retrieve(id: CogniteInternalId): Promise<Model3D> {
+    const path = this.url(`${id}`);
+    const response = await this.httpClient.get<Model3D>(path);
+    return this.addToMapAndReturn(response.data, response);
+  }
 
   /**
    * [Update 3D models](https://doc.cognitedata.com/api/v1/#operation/update3DModels)
@@ -54,7 +62,9 @@ export class Models3DAPI {
    * const models3D = await client.models3D.update(modelsToUpdate);
    * ```
    */
-  public update: Models3DUpdateEndpoint;
+  public async update(changes: UpdateModel3D[]): Promise<Model3D[]> {
+    return super.updateEndpoint(changes);
+  }
 
   /**
    * [Delete 3D models](https://doc.cognitedata.com/api/v1/#operation/delete3DModels)
@@ -63,42 +73,7 @@ export class Models3DAPI {
    * await client.models3D.delete([{ id: 3744350296805509 }, { id: 8163365893677939 }]);
    * ```
    */
-  public delete: Models3DDeleteEndpoint;
-
-  /**
-   * [Retrieve a 3D model](https://doc.cognitedata.com/api/v1/#operation/get3DModel)
-   *
-   * ```js
-   * await client.models3D.retrieve(3744350296805509);
-   * ```
-   */
-  public retrieve: Models3DRetrieveEndpoint;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    const path = projectUrl(project) + '/3d/models';
-    this.list = generateListEndpoint(instance, path, map, false);
-    this.create = generateCreateEndpoint(instance, path, map);
-    this.update = generateUpdateEndpoint(instance, path, map);
-    this.delete = generateDeleteEndpoint(instance, path, map);
-    this.retrieve = generateRetrieveSingleEndpoint(instance, path, map);
+  public async delete(ids: InternalId[]) {
+    return super.deleteEndpoint(ids);
   }
 }
-
-export type Models3DListEndpoint = (
-  scope?: Model3DListRequest
-) => CursorAndAsyncIterator<Model3D>;
-
-export type Models3DCreateEndpoint = (
-  models: CreateModel3D[]
-) => Promise<Model3D[]>;
-
-export type Models3DUpdateEndpoint = (
-  items: UpdateModel3D[]
-) => Promise<Model3D[]>;
-
-export type Models3DDeleteEndpoint = (ids: InternalId[]) => Promise<{}>;
-
-export type Models3DRetrieveEndpoint = (
-  id: CogniteInternalId
-) => Promise<Model3D>;

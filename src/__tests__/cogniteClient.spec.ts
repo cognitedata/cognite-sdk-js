@@ -1,10 +1,18 @@
 // Copyright 2019 Cognite AS
 
-import MockAdapter from 'axios-mock-adapter';
+import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '@/constants';
+import * as nock from 'nock';
 import CogniteClient, { POPUP, REDIRECT } from '../cogniteClient';
 import * as Login from '../resources/login';
-import { sleepPromise } from '../utils';
-import { apiKey, authTokens, project, setupClient } from './testUtils';
+import { bearerString, sleepPromise } from '../utils';
+import {
+  apiKey,
+  authTokens,
+  mockBaseUrl,
+  project,
+  setupClient,
+  setupMockableClient,
+} from './testUtils';
 
 // tslint:disable-next-line:no-big-function
 describe('CogniteClient', () => {
@@ -81,16 +89,14 @@ describe('CogniteClient', () => {
 
     test('set correct apikey', async () => {
       expect.assertions(1);
-      const client = setupClient();
+      const client = setupMockableClient();
       client.loginWithApiKey({
         project,
         apiKey,
       });
-      const axiosMock = new MockAdapter(client.instance);
-      axiosMock.onGet('/test').replyOnce(config => {
-        expect(config.headers['api-key']).toBe(apiKey);
-        return [200];
-      });
+      nock(mockBaseUrl, { reqheaders: { [API_KEY_HEADER]: apiKey } })
+        .get('/test')
+        .reply(200, {});
       await client.get('/test');
     });
 
@@ -105,37 +111,44 @@ describe('CogniteClient', () => {
   });
 
   describe('http requests', () => {
-    let mock: MockAdapter;
     let client: CogniteClient;
 
     beforeAll(async () => {
-      client = setupClient();
-      mock = new MockAdapter(client.instance);
-    });
-    beforeEach(async () => {
-      mock.reset();
+      client = setupMockableClient();
     });
 
     test('get method', async () => {
-      mock.onGet('/').replyOnce(200, 'test');
+      nock(mockBaseUrl)
+        .get('/')
+        .once()
+        .reply(200, 'test');
       const response = await client.get('/');
       expect(response.data).toEqual('test');
     });
 
     test('post method', async () => {
-      mock.onPost('/').replyOnce(200, 'test');
+      nock(mockBaseUrl)
+        .post('/')
+        .once()
+        .reply(200, 'test');
       const response = await client.post('/');
       expect(response.data).toEqual('test');
     });
 
     test('put method', async () => {
-      mock.onPut('/').replyOnce(200, 'test');
+      nock(mockBaseUrl)
+        .put('/')
+        .once()
+        .reply(200, 'test');
       const response = await client.put('/');
       expect(response.data).toEqual('test');
     });
 
     test('delete method', async () => {
-      mock.onDelete('/').replyOnce(200, 'test');
+      nock(mockBaseUrl)
+        .delete('/')
+        .once()
+        .reply(200, 'test');
       const response = await client.delete('/');
       expect(response.data).toEqual('test');
     });
@@ -220,8 +233,7 @@ describe('CogniteClient', () => {
 
       test('should call onAuthenticate on 401', async () => {
         const onAuthenticate = jest.fn();
-        const client = setupClient();
-        const axiosMock = new MockAdapter(client.instance);
+        const client = setupClient(mockBaseUrl);
         client.loginWithOAuth({
           project,
           onAuthenticate,
@@ -229,7 +241,10 @@ describe('CogniteClient', () => {
         onAuthenticate.mockImplementation(login => {
           login.skip();
         });
-        axiosMock.onGet('/401').replyOnce(401);
+        nock(mockBaseUrl)
+          .get('/401')
+          .once()
+          .reply(401);
         await expect(
           client.get('/401')
         ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -242,7 +257,7 @@ describe('CogniteClient', () => {
         const onAuthenticate = jest.fn().mockImplementationOnce(login => {
           login.skip();
         });
-        const client = setupClient();
+        const client = setupClient(mockBaseUrl);
         client.loginWithOAuth({
           project,
           onAuthenticate,
@@ -253,7 +268,7 @@ describe('CogniteClient', () => {
 
       test('handle error query params', async () => {
         const onAuthenticate = jest.fn();
-        const client = setupClient();
+        const client = setupClient(mockBaseUrl);
         client.loginWithOAuth({
           project,
           onAuthenticate,
@@ -267,32 +282,32 @@ describe('CogniteClient', () => {
 
       test('retry request after silent login', async () => {
         const onAuthenticate = jest.fn();
-        const client = setupClient();
-        const axiosMock = new MockAdapter(client.instance);
+        const client = setupClient(mockBaseUrl);
         client.loginWithOAuth({
           project,
           onAuthenticate,
         });
         mockLoginSilently.mockReturnValueOnce(authTokens);
         expect.assertions(3);
-        axiosMock.onGet('/').replyOnce(config => {
-          expect(config.headers.Authorization).not.toBeDefined();
-          return [401];
-        });
+        nock(mockBaseUrl, { badheaders: [AUTHORIZATION_HEADER] })
+          .get('/')
+          .once()
+          .reply(401);
         const body = 'hello';
-        axiosMock.onGet('/').replyOnce(config => {
-          expect(config.headers.Authorization).toBe(
-            `Bearer ${authTokens.accessToken}`
-          );
-          return [200, body];
-        });
+        nock(mockBaseUrl, {
+          reqheaders: {
+            [AUTHORIZATION_HEADER]: bearerString(authTokens.accessToken),
+          },
+        })
+          .get('/')
+          .once()
+          .reply(200, body);
         const response = await client.get('/');
         expect(response.data).toBe(body);
       });
 
       test('dont call onAuthenticate twice when first call hasnt returned yet', async () => {
-        const client = setupClient();
-        const axiosMock = new MockAdapter(client.instance);
+        const client = setupClient(mockBaseUrl);
         const onAuthenticate = jest.fn().mockImplementationOnce(async login => {
           await sleepPromise(100);
           login.skip();
@@ -301,7 +316,10 @@ describe('CogniteClient', () => {
           project,
           onAuthenticate,
         });
-        axiosMock.onGet('/401').replyOnce(401);
+        nock(mockBaseUrl)
+          .get('/401')
+          .once()
+          .reply(401);
         let promise401Throwed = false;
         client.get('/401').catch(() => {
           promise401Throwed = true;
@@ -317,7 +335,6 @@ describe('CogniteClient', () => {
         'handle 401 from /login/status when authenticating',
         async () => {
           const client = setupClient();
-          const axiosMock = new MockAdapter(client.instance);
           const onAuthenticate = jest.fn();
           client.loginWithOAuth({
             project,
@@ -327,17 +344,23 @@ describe('CogniteClient', () => {
           mockLoginSilently.mockImplementationOnce(async () => {
             await expect(
               Login.getIdInfoFromAccessToken(
-                client.instance,
+                client.getHttpClient(),
                 authTokens.accessToken
               )
             ).resolves.toBeNull();
             return authTokens;
           });
-          axiosMock.onGet('/').replyOnce(401);
-          axiosMock
-            .onGet('/login/status')
-            .replyOnce(401, { error: { code: 401, message: 'Unauthorized' } });
-          axiosMock.onGet('/').reply(200);
+          nock(mockBaseUrl)
+            .get('/')
+            .once()
+            .reply(401);
+          nock(mockBaseUrl)
+            .get('/login/status')
+            .once()
+            .reply(401, { error: { code: 401, message: 'Unauthorized' } });
+          nock(mockBaseUrl)
+            .get('/')
+            .reply(200);
           await client.get('/');
         },
         500

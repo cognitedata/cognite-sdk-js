@@ -4,18 +4,18 @@ import { readFileSync } from 'fs';
 import CogniteClient from '../../cogniteClient';
 import {
   Asset,
-  AssetMapping3D,
-  CreateAssetMapping3D,
+  // AssetMapping3D,
+  // CreateAssetMapping3D,
   CreateRevision3D,
   FilesMetadata,
   Model3D,
-  Node3D,
+  // Node3D,
   Revision3D,
   Tuple3,
   UpdateRevision3D,
 } from '../../types/types';
 import {
-  getSortedPropInArray,
+  // getSortedPropInArray,
   randomInt,
   retryInSeconds,
   setupLoggedInClient,
@@ -38,8 +38,8 @@ describeIfCondition(
     let file: FilesMetadata;
     let model: Model3D;
     let assets: Asset[];
-    let assetMappings: AssetMapping3D[];
-    let nodes3D: Node3D[];
+    // let assetMappings: AssetMapping3D[];
+    // let nodes3D: Node3D[];
 
     beforeAll(async () => {
       client = setupLoggedInClient();
@@ -162,96 +162,96 @@ describeIfCondition(
       );
     });
 
-    test(
-      'list 3d nodes',
-      async done => {
-        nodes3D = await client.revisions3D
-          .list3DNodes(model.id, revisions[0].id)
-          .autoPagingToArray();
-        expect(nodes3D.map(n => n.name)).toContain('RootNode');
-        done();
-      },
-      5 * 60 * 1000
-    );
+    // test(
+    //   'list 3d nodes',
+    //   async done => {
+    //     nodes3D = await client.revisions3D
+    //       .list3DNodes(model.id, revisions[0].id)
+    //       .autoPagingToArray();
+    //     expect(nodes3D.map(n => n.name)).toContain('RootNode');
+    //     done();
+    //   },
+    //   5 * 60 * 1000
+    // );
 
-    let assetMappingsToCreate: CreateAssetMapping3D[];
-    test('create asset mappings 3d', async () => {
-      assetMappingsToCreate = nodes3D.slice(0, 2).map((node, index) => ({
-        nodeId: node.id,
-        assetId: assets[index].id,
-      }));
-      assetMappings = await client.assetMappings3D.create(
-        model.id,
-        revisions[0].id,
-        assetMappingsToCreate
-      );
-      expect(getSortedPropInArray(assetMappings, 'assetId')).toEqual(
-        getSortedPropInArray(assetMappingsToCreate, 'assetId')
-      );
-      expect(assetMappings.length).toBe(2);
-    });
+    // let assetMappingsToCreate: CreateAssetMapping3D[];
+    // test('create asset mappings 3d', async () => {
+    //   assetMappingsToCreate = nodes3D.slice(0, 2).map((node, index) => ({
+    //     nodeId: node.id,
+    //     assetId: assets[index].id,
+    //   }));
+    //   assetMappings = await client.assetMappings3D.create(
+    //     model.id,
+    //     revisions[0].id,
+    //     assetMappingsToCreate
+    //   );
+    //   expect(getSortedPropInArray(assetMappings, 'assetId')).toEqual(
+    //     getSortedPropInArray(assetMappingsToCreate, 'assetId')
+    //   );
+    //   expect(assetMappings.length).toBe(2);
+    // });
 
-    test('list asset mappings 3d', async () => {
-      const list = await client.assetMappings3D
-        .list(model.id, revisions[0].id)
-        .autoPagingToArray({ limit: 2 });
+    // test('list asset mappings 3d', async () => {
+    //   const list = await client.assetMappings3D
+    //     .list(model.id, revisions[0].id)
+    //     .autoPagingToArray({ limit: 2 });
 
-      expect(getSortedPropInArray(list, 'assetId')).toEqual(
-        getSortedPropInArray(assetMappingsToCreate, 'assetId')
-      );
-      expect(getSortedPropInArray(list, 'nodeId')).toEqual(
-        getSortedPropInArray(list, 'nodeId')
-      );
-      expect(list.length).toBe(2);
-    });
+    //   expect(getSortedPropInArray(list, 'assetId')).toEqual(
+    //     getSortedPropInArray(assetMappingsToCreate, 'assetId')
+    //   );
+    //   expect(getSortedPropInArray(list, 'nodeId')).toEqual(
+    //     getSortedPropInArray(list, 'nodeId')
+    //   );
+    //   expect(list.length).toBe(2);
+    // });
 
-    test('delete asset mappings 3d', async () => {
-      const deleted = await client.assetMappings3D.delete(
-        model.id,
-        revisions[0].id,
-        assetMappingsToCreate
-      );
-      expect(deleted).toEqual({});
-    });
+    // test('delete asset mappings 3d', async () => {
+    //   const deleted = await client.assetMappings3D.delete(
+    //     model.id,
+    //     revisions[0].id,
+    //     assetMappingsToCreate
+    //   );
+    //   expect(deleted).toEqual({});
+    // });
 
-    test('list asset mappings 3d (empty)', async () => {
-      const list = await client.assetMappings3D
-        .list(model.id, revisions[0].id)
-        .autoPagingToArray();
-      expect(list).toEqual([]);
-    });
+    // test('list asset mappings 3d (empty)', async () => {
+    //   const list = await client.assetMappings3D
+    //     .list(model.id, revisions[0].id)
+    //     .autoPagingToArray();
+    //   expect(list).toEqual([]);
+    // });
 
-    test('retrieve a 3d revision (reveal)', async () => {
-      const response = await client.viewer3D.retrieveRevealRevision3D(
-        model.id,
-        revisions[0].id
-      );
-      expect(response.sceneThreedFiles.length).toBeTruthy();
-    });
+    // test('retrieve a 3d revision (reveal)', async () => {
+    //   const response = await client.viewer3D.retrieveRevealRevision3D(
+    //     model.id,
+    //     revisions[0].id
+    //   );
+    //   expect(response.sceneThreedFiles.length).toBeTruthy();
+    // });
 
-    test('retrieve a 3d revision (unreal)', async () => {
-      const response = await client.viewer3D.retrieveUnrealRevision3D(
-        model.id,
-        revisions[0].id
-      );
-      expect(response.sceneThreedFiles.length).toBeTruthy();
-    });
+    // test('retrieve a 3d revision (unreal)', async () => {
+    //   const response = await client.viewer3D.retrieveUnrealRevision3D(
+    //     model.id,
+    //     revisions[0].id
+    //   );
+    //   expect(response.sceneThreedFiles.length).toBeTruthy();
+    // });
 
-    test('retrieve 3d reveal node list', async () => {
-      const response = await client.viewer3D.listRevealNodes3D(
-        model.id,
-        revisions[0].id
-      );
-      expect(response.items.length).toBeTruthy();
-    });
+    // test('retrieve 3d reveal node list', async () => {
+    //   const response = await client.viewer3D.listRevealNodes3D(
+    //     model.id,
+    //     revisions[0].id
+    //   );
+    //   expect(response.items.length).toBeTruthy();
+    // });
 
-    test('retrieve 3d reveal 3d sectors', async () => {
-      const response = await client.viewer3D.listRevealSectors3D(
-        model.id,
-        revisions[0].id
-      );
-      expect(response.items.length).toBeTruthy();
-    });
+    // test('retrieve 3d reveal 3d sectors', async () => {
+    //   const response = await client.viewer3D.listRevealSectors3D(
+    //     model.id,
+    //     revisions[0].id
+    //   );
+    //   expect(response.items.length).toBeTruthy();
+    // });
 
     test('delete revisions', async () => {
       const deleted = await client.revisions3D.delete(

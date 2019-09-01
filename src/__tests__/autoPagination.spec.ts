@@ -8,7 +8,7 @@ async function fibListResponse() {
   const generateResponse = async (
     a: number,
     b: number
-  ): Promise<ListResponse<number>> => {
+  ): Promise<ListResponse<number[]>> => {
     await sleep(100);
     let first = a;
     let second = b;

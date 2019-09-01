@@ -13,10 +13,6 @@ describe('BasicHttpClient', () => {
     client = new BasicHttpClient(baseUrl);
   });
 
-  beforeAll(() => {
-    nock.disableNetConnect();
-  });
-
   describe('setDefaultHeader', () => {
     test('should set default header', async () => {
       client.setDefaultHeader(header.name, header.value);

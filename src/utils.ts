@@ -17,6 +17,11 @@ export function projectUrl(project: string) {
 }
 
 /** @hidden */
+export function bearerString(token: string) {
+  return `Bearer ${token}`;
+}
+
+/** @hidden */
 export function isBrowser() {
   return (
     typeof window !== 'undefined' && typeof window.document !== 'undefined'

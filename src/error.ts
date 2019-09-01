@@ -1,4 +1,5 @@
 // Copyright 2019 Cognite AS
+import { X_REQUEST_ID } from './constants';
 import { HttpError } from './utils/http/httpError';
 
 export class CogniteError extends Error {
@@ -66,7 +67,7 @@ export function handleErrorResponse(err: HttpError) {
     message = err.data.error.message;
     missing = err.data.error.missing;
     duplicated = err.data.error.duplicated;
-    requestId = (err.headers || {})['X-Request-Id'];
+    requestId = (err.headers || {})[X_REQUEST_ID];
   } catch (_) {
     throw err;
   }

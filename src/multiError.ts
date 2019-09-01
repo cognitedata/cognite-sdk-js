@@ -1,12 +1,12 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosResponse } from 'axios';
 import { CogniteError } from './error';
+import { HttpResponse } from './utils/http/basicHttpClient';
 
 /** @hidden */
 export interface MultiErrorRawSummary<RequestType, ResponseType> {
   succeded: RequestType[][];
-  responses: AxiosResponse<ResponseType>[];
+  responses: HttpResponse<ResponseType>[];
   failed: RequestType[][];
   errors: (Error | CogniteError)[];
 }

@@ -1,7 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import MockAdapter from 'axios-mock-adapter';
-import CogniteClient from '../../cogniteClient';
+import CogniteClient from '@/cogniteClient';
 import {
   Model3D,
   Node3D,
@@ -10,18 +9,19 @@ import {
   RevealSector3D,
   Revision3D,
   UnrealRevision3D,
-} from '../../types/types';
-import { transformDateInRequest } from '../../utils';
+} from '@/types/types';
+import { transformDateInRequest } from '@/utils';
+import * as nock from 'nock';
 import {
+  mockBaseUrl,
   randomInt,
-  setupLoggedInClient,
+  setupMockableClient,
   string2arrayBuffer,
 } from '../testUtils';
 
 // tslint:disable-next-line:no-big-function
 describe('3D mocked', () => {
   let client: CogniteClient;
-  let mock: MockAdapter;
   const model: Model3D = {
     id: randomInt(),
     name: 'Model name',
@@ -87,21 +87,18 @@ describe('3D mocked', () => {
   const revisionUnreal: UnrealRevision3D = { ...revisionReveal };
 
   beforeAll(async () => {
-    client = setupLoggedInClient();
-    mock = new MockAdapter(client.instance);
-  });
-
-  beforeEach(() => {
-    mock.reset();
+    client = setupMockableClient();
   });
 
   describe('revisions', () => {
     test('create', async () => {
       const regExp = new RegExp(`/3d/models/${model.id}/revisions`);
       const revisionsToCreate = [{ fileId: revision.fileId }];
-      mock.onPost(regExp, { items: revisionsToCreate }).reply(200, {
-        items: [transformDateInRequest(revision)],
-      });
+      nock(mockBaseUrl)
+        .post(regExp, { items: revisionsToCreate })
+        .reply(200, {
+          items: [transformDateInRequest(revision)],
+        });
       const createdRevisions = await client.revisions3D.create(
         model.id,
         revisionsToCreate
@@ -111,9 +108,9 @@ describe('3D mocked', () => {
 
     test('list', async () => {
       const regExp = new RegExp(`/3d/models/${model.id}/revisions`);
-      mock.onGet(regExp).reply(200, {
-        items: [revision],
-      });
+      nock(mockBaseUrl)
+        .get(regExp)
+        .reply(200, { items: [revision] });
       const response = await client.revisions3D
         .list(model.id)
         .autoPagingToArray();
@@ -128,9 +125,9 @@ describe('3D mocked', () => {
         },
       ];
       const regExp = new RegExp(`/3d/models/${model.id}/revisions/update`);
-      mock.onPost(regExp, { items: updateRequest }).reply(200, {
-        items: [revision],
-      });
+      nock(mockBaseUrl)
+        .post(regExp, { items: updateRequest })
+        .reply(200, { items: [revision] });
       const response = await client.revisions3D.update(model.id, updateRequest);
       expect(response).toEqual([revision]);
     });
@@ -138,7 +135,9 @@ describe('3D mocked', () => {
     test('delete', async () => {
       const deleteRequest = [revision].map(item => ({ id: item.id }));
       const regExp = new RegExp(`/3d/models/${model.id}/revisions/delete`);
-      mock.onPost(regExp, { items: deleteRequest }).reply(200, {});
+      nock(mockBaseUrl)
+        .post(regExp, { items: deleteRequest })
+        .reply(200, {});
       const response = await client.revisions3D.delete(model.id, deleteRequest);
       expect(response).toEqual({});
     });
@@ -147,21 +146,22 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/models/${model.id}/revisions/${revision.id}`
       );
-      mock.onGet(regExp).reply(200, revision);
+      nock(mockBaseUrl)
+        .get(regExp)
+        .reply(200, revision);
       const response = await client.revisions3D.retrieve(model.id, revision.id);
       expect(response).toEqual(revision);
     });
 
     test('update thumbnail', async () => {
-      expect.assertions(2);
+      expect.assertions(1);
       const regExp = new RegExp(
         `/3d/models/${model.id}/revisions/${revision.id}/thumbnail`
       );
       const fileId = randomInt();
-      mock.onPost(regExp).replyOnce(config => {
-        expect(JSON.parse(config.data)).toEqual({ fileId });
-        return [200, {}];
-      });
+      nock(mockBaseUrl)
+        .post(regExp, { fileId })
+        .reply(200, {});
       const response = await client.revisions3D.updateThumbnail(
         model.id,
         revision.id,
@@ -174,9 +174,9 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/models/${model.id}/revisions/${revision.id}/nodes`
       );
-      mock.onGet(regExp).reply(200, {
-        items: nodes,
-      });
+      nock(mockBaseUrl)
+        .get(regExp)
+        .reply(200, { items: nodes });
       const result = await client.revisions3D
         .list3DNodes(model.id, revision.id)
         .autoPagingToArray();
@@ -187,9 +187,9 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/models/${model.id}/revisions/${revision.id}/nodes/1/ancestors`
       );
-      mock.onGet(regExp).reply(200, {
-        items: nodes,
-      });
+      nock(mockBaseUrl)
+        .get(regExp)
+        .reply(200, { items: nodes });
       const result = await client.revisions3D
         .list3DNodeAncestors(model.id, revision.id, 1)
         .autoPagingToArray();
@@ -201,7 +201,9 @@ describe('3D mocked', () => {
     test('retrieve', async () => {
       const content = string2arrayBuffer('some content');
       const regExp = new RegExp(`/3d/files/123`);
-      mock.onGet(regExp).reply(200, content);
+      nock(mockBaseUrl)
+        .get(regExp)
+        .reply(200, content);
       const response = await client.files3D.retrieve(123);
       expect(response).toEqual(content);
     });
@@ -219,8 +221,9 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/models/${model.id}/revisions/${revision.id}/mappings`
       );
-      mock
-        .onGet(regExp, { params: { limit: 5 } })
+      nock(mockBaseUrl)
+        .get(regExp)
+        .query({ limit: 5 })
         .reply(200, { items: mappings });
       const response = await client.assetMappings3D
         .list(model.id, revision.id, { limit: 5 })
@@ -232,8 +235,8 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/models/${model.id}/revisions/${revision.id}/mappings`
       );
-      mock
-        .onPost(regExp, { items: mappingsToCreate })
+      nock(mockBaseUrl)
+        .post(regExp, { items: mappingsToCreate })
         .reply(200, { items: mappings });
       const response = await client.assetMappings3D.create(
         model.id,
@@ -248,7 +251,9 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/models/${model.id}/revisions/${revision.id}/mappings/delete`
       );
-      mock.onPost(regExp, { items: mappingsToDelete }).reply(200, {});
+      nock(mockBaseUrl)
+        .post(regExp, { items: mappingsToDelete })
+        .reply(200, {});
       const response = await client.assetMappings3D.delete(
         model.id,
         revision.id,
@@ -263,7 +268,9 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/reveal/models/${model.id}/revisions/${revisionReveal.id}`
       );
-      mock.onGet(regExp).reply(200, revisionReveal);
+      nock(mockBaseUrl)
+        .get(regExp)
+        .reply(200, revisionReveal);
       const result = await client.viewer3D.retrieveRevealRevision3D(
         model.id,
         revisionReveal.id
@@ -275,9 +282,9 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/reveal/models/${model.id}/revisions/${revisionReveal.id}/nodes`
       );
-      mock.onGet(regExp).reply(200, {
-        items: nodesReveal,
-      });
+      nock(mockBaseUrl)
+        .get(regExp)
+        .reply(200, { items: nodesReveal });
       const result = await client.viewer3D
         .listRevealNodes3D(model.id, revisionReveal.id)
         .autoPagingToArray();
@@ -288,9 +295,9 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/reveal/models/${model.id}/revisions/${revisionReveal.id}/nodes`
       );
-      mock.onGet(regExp).reply(200, {
-        items: nodesReveal,
-      });
+      nock(mockBaseUrl)
+        .get(regExp)
+        .reply(200, { items: nodesReveal });
       const result = await client.viewer3D
         .listRevealNode3DAncestors(model.id, revisionReveal.id, randomInt())
         .autoPagingToArray();
@@ -301,9 +308,9 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/reveal/models/${model.id}/revisions/${revisionReveal.id}/sectors`
       );
-      mock.onGet(regExp).reply(200, {
-        items: sectors,
-      });
+      nock(mockBaseUrl)
+        .get(regExp)
+        .reply(200, { items: sectors });
       const result = await client.viewer3D
         .listRevealSectors3D(model.id, revisionReveal.id, { limit: 1 })
         .autoPagingToArray();
@@ -314,7 +321,9 @@ describe('3D mocked', () => {
       const regExp = new RegExp(
         `/3d/unreal/models/${model.id}/revisions/${revisionUnreal.id}`
       );
-      mock.onGet(regExp).reply(200, revisionUnreal);
+      nock(mockBaseUrl)
+        .get(regExp)
+        .reply(200, revisionUnreal);
       const response = await client.viewer3D.retrieveUnrealRevision3D(
         model.id,
         revisionUnreal.id

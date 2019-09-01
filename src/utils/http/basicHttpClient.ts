@@ -74,6 +74,10 @@ export class BasicHttpClient {
     this.baseUrl = baseUrl;
   }
 
+  public getBaseUrl() {
+    return this.baseUrl;
+  }
+
   public get<ResponseType>(path: string, options: HttpRequestOptions = {}) {
     return this.request<ResponseType>({
       ...options,
@@ -107,7 +111,7 @@ export class BasicHttpClient {
     });
   }
 
-  protected preRequest(request: HttpRequest): HttpRequest {
+  protected async preRequest(request: HttpRequest): Promise<HttpRequest> {
     const populatedHeaders = this.populateDefaultHeaders(request.headers);
     return {
       ...request,
@@ -115,7 +119,10 @@ export class BasicHttpClient {
     };
   }
 
-  protected postRequest<T>(response: HttpResponse<T>): HttpResponse<T> {
+  protected async postRequest<T>(
+    response: HttpResponse<T>,
+    _: HttpRequest
+  ): Promise<HttpResponse<T>> {
     const requestIsOk = BasicHttpClient.validateStatusCode(response.status);
     if (!requestIsOk) {
       BasicHttpClient.throwCustomErrorResponse(response);
@@ -135,14 +142,17 @@ export class BasicHttpClient {
   ): Promise<HttpResponse<ResponseType>> {
     const url = this.constructUrl(request.path, request.params);
     const body = BasicHttpClient.transformRequestBody(request.data);
+    const headers: HttpHeaders = {
+      Accept: 'application/json',
+      ...request.headers,
+    };
+    if (isJson(request.data)) {
+      headers['Content-Type'] = 'application/json';
+    }
     const res = await fetch(url, {
       body,
       method: request.method,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        ...request.headers,
-      },
+      headers,
     });
     const responseHandler = BasicHttpClient.getResponseHandler<ResponseType>(
       request.responseType
@@ -156,9 +166,9 @@ export class BasicHttpClient {
   }
 
   private async request<ResponseType>(request: HttpRequest) {
-    const mutatedRequest = this.preRequest(request);
+    const mutatedRequest = await this.preRequest(request);
     const rawResponse = await this.rawRequest<ResponseType>(mutatedRequest);
-    const response = this.postRequest(rawResponse);
+    const response = await this.postRequest(rawResponse, request);
     return response;
   }
 
