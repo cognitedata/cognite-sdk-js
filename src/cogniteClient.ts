@@ -127,7 +127,7 @@ export default class CogniteClient {
     return validateAndReturnAPI(this.apiKeysApi);
   }
   public get login() {
-    return validateAndReturnAPI(this.loginApi);
+    return this.loginApi;
   }
 
   private projectName: string = '';
@@ -150,7 +150,7 @@ export default class CogniteClient {
   private assetMappings3DApi?: AssetMappings3DAPI;
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
-  private loginApi?: LoginAPI;
+  private loginApi: LoginAPI;
   /**
    * Create a new SDK client
    *
@@ -179,6 +179,7 @@ export default class CogniteClient {
       .setDefaultHeader(X_CDF_APP_HEADER, options.appId);
 
     this.metadataMap = new MetadataMap();
+    this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
   }
   // tslint:disable-next-line:no-identical-functions
   public authenticate: () => Promise<boolean> = async () => {
