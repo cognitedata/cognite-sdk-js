@@ -127,7 +127,7 @@ export default class CogniteClient {
     return validateAndReturnAPI(this.apiKeysApi);
   }
   public get login() {
-    return this.loginApi;
+    return validateAndReturnAPI(this.loginApi);
   }
 
   private projectName: string = '';
@@ -150,7 +150,7 @@ export default class CogniteClient {
   private assetMappings3DApi?: AssetMappings3DAPI;
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
-  private loginApi: LoginAPI;
+  private loginApi?: LoginAPI;
   /**
    * Create a new SDK client
    *
@@ -179,7 +179,6 @@ export default class CogniteClient {
       .setDefaultHeader(X_CDF_APP_HEADER, options.appId);
 
     this.metadataMap = new MetadataMap();
-    this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
   }
   // tslint:disable-next-line:no-identical-functions
   public authenticate: () => Promise<boolean> = async () => {
@@ -369,64 +368,50 @@ export default class CogniteClient {
       this.httpClient,
       this.metadataMap,
     ];
+    const projectPath = projectUrl(this.project);
+    const apiFactory = <ApiType>(
+      api: new (
+        relativePath: string,
+        httpClient: CDFHttpClient,
+        map: MetadataMap
+      ) => ApiType,
+      relativePath: string
+    ) => {
+      return new api(projectPath + relativePath, ...defaultArgs);
+    };
+    const models3DPath = projectPath + '/3d/models';
+
     this.assetsApi = new AssetsAPI(
       this,
-      projectUrl(this.project) + '/assets',
+      projectPath + '/assets',
       ...defaultArgs
     );
     this.timeSeriesApi = new TimeSeriesAPI(
       this,
-      projectUrl(this.project) + '/timeseries',
+      projectPath + '/timeseries',
       ...defaultArgs
     );
-    this.dataPointsApi = new DataPointsAPI(
-      projectUrl(this.project) + '/timeseries',
-      ...defaultArgs
+    this.dataPointsApi = apiFactory(DataPointsAPI, '/timeseries');
+    this.eventsApi = apiFactory(EventsAPI, '/events');
+    this.filesApi = apiFactory(FilesAPI, '/files');
+    this.rawApi = apiFactory(RawAPI, '/raw/dbs');
+    this.projectsApi = apiFactory(ProjectsAPI, apiUrl());
+    this.groupsApi = apiFactory(GroupsAPI, '/groups');
+    this.securityCategoriesApi = apiFactory(
+      SecurityCategoriesAPI,
+      '/securitycategories'
     );
-    this.eventsApi = new EventsAPI(
-      projectUrl(this.project) + '/events',
-      ...defaultArgs
+    this.serviceAccountsApi = apiFactory(
+      ServiceAccountsAPI,
+      '/serviceaccounts'
     );
-    this.filesApi = new FilesAPI(
-      projectUrl(this.project) + '/files',
-      ...defaultArgs
-    );
-    this.rawApi = new RawAPI(
-      projectUrl(this.project) + '/raw/dbs',
-      ...defaultArgs
-    );
-    this.projectsApi = new ProjectsAPI(apiUrl(), ...defaultArgs);
-    this.groupsApi = new GroupsAPI(
-      projectUrl(this.project) + '/groups',
-      ...defaultArgs
-    );
-    this.securityCategoriesApi = new SecurityCategoriesAPI(
-      projectUrl(this.project) + '/securitycategories',
-      ...defaultArgs
-    );
-    this.serviceAccountsApi = new ServiceAccountsAPI(
-      projectUrl(this.project) + '/serviceaccounts',
-      ...defaultArgs
-    );
-    this.apiKeysApi = new ApiKeysAPI(
-      projectUrl(this.project) + '/apikeys',
-      ...defaultArgs
-    );
-    const models3DPath = projectUrl(this.project) + '/3d/models';
-    this.models3DApi = new Models3DAPI(models3DPath, ...defaultArgs);
-    this.revisions3DApi = new Revisions3DAPI(models3DPath, ...defaultArgs);
-    this.files3DApi = new Files3DAPI(
-      projectUrl(this.project) + '/3d/files',
-      ...defaultArgs
-    );
-    this.assetMappings3DApi = new AssetMappings3DAPI(
-      models3DPath,
-      ...defaultArgs
-    );
-    this.viewer3DApi = new Viewer3DAPI(
-      projectUrl(this.project) + '/3d',
-      ...defaultArgs
-    );
+    this.apiKeysApi = apiFactory(ApiKeysAPI, '/apikeys');
+    this.models3DApi = apiFactory(Models3DAPI, models3DPath);
+    this.revisions3DApi = apiFactory(Revisions3DAPI, models3DPath);
+    this.files3DApi = apiFactory(Files3DAPI, '/3d/files');
+    this.assetMappings3DApi = apiFactory(AssetMappings3DAPI, models3DPath);
+    this.viewer3DApi = apiFactory(Viewer3DAPI, '/3d');
+    this.loginApi = new LoginAPI(...defaultArgs);
   };
 }
 
