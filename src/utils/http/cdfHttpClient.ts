@@ -21,7 +21,6 @@ import {
   HttpResponse,
 } from './basicHttpClient';
 import { cdfRetryValidator } from './cdfRetryValidator';
-import { HttpError } from './httpError';
 import { RetryableHttpClient } from './retryableHttpClient';
 
 export class CDFHttpClient extends RetryableHttpClient {
@@ -81,19 +80,12 @@ export class CDFHttpClient extends RetryableHttpClient {
     return filteredHeaders;
   }
 
-  // @ts-ignore
-  private notAuthenticatedHandler: NotAuthenticatedHandler;
   constructor(baseUrl: string) {
     super(baseUrl, cdfRetryValidator);
-    this.notAuthenticatedHandler = (_, __, ignore) => ignore();
   }
 
   public setBearerToken(token: string) {
     this.setDefaultHeader(AUTHORIZATION_HEADER, bearerString(token));
-  }
-
-  public setNotAuthenticatedHandler(handler: NotAuthenticatedHandler) {
-    this.notAuthenticatedHandler = handler;
   }
 
   public async getIdInfo(headers: HttpHeaders): Promise<null | IdInfo> {
@@ -165,9 +157,3 @@ export interface IdInfo {
   project: string;
   user: string;
 }
-
-type NotAuthenticatedHandler = (
-  err: HttpError,
-  retry: () => void,
-  ignore: () => void
-) => void;
