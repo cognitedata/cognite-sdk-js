@@ -1,10 +1,10 @@
 // Copyright 2019 Cognite AS
 
 import { HttpResponseType } from '@/utils/http/basicHttpClient';
+import { readFileSync } from 'fs';
 import CogniteClient from '../../cogniteClient';
 import { FilesMetadata } from '../../types/types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
-import { readFileSync } from 'fs';
 
 describe('Files integration test', () => {
   let client: CogniteClient;
@@ -18,9 +18,9 @@ describe('Files integration test', () => {
     metadata: {
       key: 'value',
     },
-  }
+  };
   const fileContent = 'content_' + new Date();
-  
+
   let file: FilesMetadata;
 
   test('create', async () => {
@@ -86,14 +86,19 @@ describe('Files integration test', () => {
     const fileMeta = {
       name: 'filename_1_' + postfix,
       mimeType: 'application/octet-stream',
-    }
+    };
     const fileContentBinary = readFileSync('src/__tests__/test3dFile.fbx');
     let file: FilesMetadata;
 
     test('create', async () => {
-      file = await client.files.upload(fileMeta, fileContentBinary, false, true);
+      file = await client.files.upload(
+        fileMeta,
+        fileContentBinary,
+        false,
+        true
+      );
     });
- 
+
     test('download', async () => {
       const [{ downloadUrl }] = await client.files.getDownloadUrls([
         { id: file.id },
@@ -104,6 +109,5 @@ describe('Files integration test', () => {
       });
       expect(response.data).toEqual(fileContentBinary.buffer);
     });
-
-  })
+  });
 });

@@ -29,7 +29,11 @@ export class BasicHttpClient {
   private static arrayBufferResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
-    return (res.blob().then(blob => new Response(blob).arrayBuffer()) as unknown) as Promise<ResponseType>;
+    return (res
+      .blob()
+      .then(blob => new Response(blob).arrayBuffer()) as unknown) as Promise<
+      ResponseType
+    >;
   }
 
   private static getResponseHandler<ResponseType>(
@@ -149,7 +153,7 @@ export class BasicHttpClient {
     if (isJson(body)) {
       body = BasicHttpClient.transformRequestBody(body);
       headers['Content-Type'] = 'application/json';
-    } 
+    }
     const res = await fetch(url, {
       body,
       method: request.method,

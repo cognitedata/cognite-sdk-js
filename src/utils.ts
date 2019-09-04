@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 
 import { cloneDeepWith, isArray, isObject } from 'lodash';
-import { API_VERSION, BASE_URL } from './constants';
 import { isBuffer } from 'util';
+import { API_VERSION, BASE_URL } from './constants';
 
 /** @hidden */
 export function getBaseUrl(baseUrl?: string) {
