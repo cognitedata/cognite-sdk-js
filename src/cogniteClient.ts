@@ -317,8 +317,8 @@ export default class CogniteClient {
    * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
    * ```
    */
-  public get = (path: string, options?: HttpRequestOptions) =>
-    this.httpClient.get(path, options);
+  public get = <T>(path: string, options?: HttpRequestOptions) =>
+    this.httpClient.get<T>(path, options);
 
   /**
    * Basic HTTP method for PUT
@@ -330,8 +330,8 @@ export default class CogniteClient {
    * const response = await client.put('someUrl');
    * ```
    */
-  public put = (path: string, options?: HttpRequestOptions) =>
-    this.httpClient.put(path, options);
+  public put = <T>(path: string, options?: HttpRequestOptions) =>
+    this.httpClient.put<T>(path, options);
 
   /**
    * Basic HTTP method for POST
@@ -356,8 +356,8 @@ export default class CogniteClient {
    * const response = await client.delete('someUrl');
    * ```
    */
-  public delete = (path: string, options?: HttpRequestOptions) =>
-    this.httpClient.delete(path, options);
+  public delete = <T>(path: string, options?: HttpRequestOptions) =>
+    this.httpClient.delete<T>(path, options);
 
   private initAPIs = () => {
     const defaultArgs: [CDFHttpClient, MetadataMap] = [

@@ -2,6 +2,7 @@
 
 import { cloneDeepWith, isArray, isObject } from 'lodash';
 import { API_VERSION, BASE_URL } from './constants';
+import { isBuffer } from 'util';
 
 /** @hidden */
 export function getBaseUrl(baseUrl?: string) {
@@ -45,7 +46,7 @@ export function convertToTimestampToDateTime(timestamp: number): Date {
 
 /** @hidden */
 export function isJson(data: any) {
-  return isArray(data) || isObject(data);
+  return (isArray(data) || isObject(data)) && !isBuffer(data);
 }
 
 /** @hidden */

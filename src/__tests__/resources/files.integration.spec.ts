@@ -4,6 +4,7 @@ import { HttpResponseType } from '@/utils/http/basicHttpClient';
 import CogniteClient from '../../cogniteClient';
 import { FilesMetadata } from '../../types/types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
+import { readFileSync } from 'fs';
 
 describe('Files integration test', () => {
   let client: CogniteClient;
@@ -11,28 +12,24 @@ describe('Files integration test', () => {
     client = setupLoggedInClient();
   });
   const postfix = randomInt();
-  const files = [
-    {
-      name: 'filename_0_' + postfix,
-      mimeType: 'text/plain;charset=UTF-8',
-      metadata: {
-        key: 'value',
-      },
+  const fileMeta = {
+    name: 'filename_0_' + postfix,
+    mimeType: 'text/plain;charset=UTF-8',
+    metadata: {
+      key: 'value',
     },
-    {
-      name: 'filename_' + postfix,
-    },
-  ];
+  }
   const fileContent = 'content_' + new Date();
+  
   let file: FilesMetadata;
 
   test('create', async () => {
-    file = await client.files.upload(files[0], fileContent, false, true);
+    file = await client.files.upload(fileMeta, fileContent, false, true);
   });
 
   test('retrieve', async () => {
     const [retrievedFile] = await client.files.retrieve([{ id: file.id }]);
-    expect(retrievedFile.mimeType).toBe(files[0].mimeType);
+    expect(retrievedFile.mimeType).toBe(fileMeta.mimeType);
     expect(retrievedFile.uploaded).toBeTruthy();
   });
 
@@ -61,7 +58,7 @@ describe('Files integration test', () => {
   });
 
   test('upload with overwrite', async () => {
-    await client.files.upload(files[0], fileContent, true, true);
+    await client.files.upload(fileMeta, fileContent, true, true);
   });
 
   test('delete', async () => {
@@ -84,4 +81,29 @@ describe('Files integration test', () => {
     expect(result).toBeDefined();
     expect(result.length).toBeGreaterThan(0);
   });
+
+  describe('binary file', () => {
+    const fileMeta = {
+      name: 'filename_1_' + postfix,
+      mimeType: 'application/octet-stream',
+    }
+    const fileContentBinary = readFileSync('src/__tests__/test3dFile.fbx');
+    let file: FilesMetadata;
+
+    test('create', async () => {
+      file = await client.files.upload(fileMeta, fileContentBinary, false, true);
+    });
+ 
+    test('download', async () => {
+      const [{ downloadUrl }] = await client.files.getDownloadUrls([
+        { id: file.id },
+      ]);
+      expect(downloadUrl).toBeDefined();
+      const response = await client.get<ArrayBuffer>(downloadUrl, {
+        responseType: HttpResponseType.ArrayBuffer,
+      });
+      expect(response.data).toEqual(fileContentBinary.buffer);
+    });
+
+  })
 });

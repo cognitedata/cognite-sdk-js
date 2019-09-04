@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { isJson } from '@/utils';
-import fetch from 'cross-fetch';
+import fetch, { Response } from 'cross-fetch';
 import { stringify } from 'query-string';
 import * as Url from 'url';
 import { HttpError } from './httpError';
@@ -29,7 +29,7 @@ export class BasicHttpClient {
   private static arrayBufferResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
-    return (res.arrayBuffer() as unknown) as Promise<ResponseType>;
+    return (res.blob().then(blob => new Response(blob).arrayBuffer()) as unknown) as Promise<ResponseType>;
   }
 
   private static getResponseHandler<ResponseType>(
@@ -103,7 +103,7 @@ export class BasicHttpClient {
     });
   }
 
-  public delete(path: string, options: HttpRequestOptions = {}) {
+  public delete<ResponseType>(path: string, options: HttpRequestOptions = {}) {
     return this.request<ResponseType>({
       ...options,
       path,
@@ -141,14 +141,15 @@ export class BasicHttpClient {
     request: HttpRequest
   ): Promise<HttpResponse<ResponseType>> {
     const url = this.constructUrl(request.path, request.params);
-    const body = BasicHttpClient.transformRequestBody(request.data);
     const headers: HttpHeaders = {
       Accept: 'application/json',
       ...request.headers,
     };
-    if (isJson(request.data)) {
+    let body = request.data;
+    if (isJson(body)) {
+      body = BasicHttpClient.transformRequestBody(body);
       headers['Content-Type'] = 'application/json';
-    }
+    } 
     const res = await fetch(url, {
       body,
       method: request.method,
