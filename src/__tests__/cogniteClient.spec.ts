@@ -88,7 +88,6 @@ describe('CogniteClient', () => {
     });
 
     test('set correct apikey', async () => {
-      expect.assertions(1);
       const client = setupMockableClient();
       client.loginWithApiKey({
         project,
@@ -121,36 +120,36 @@ describe('CogniteClient', () => {
       nock(mockBaseUrl)
         .get('/')
         .once()
-        .reply(200, 'test');
+        .reply(200, []);
       const response = await client.get('/');
-      expect(response.data).toEqual('test');
+      expect(response.data).toEqual([]);
     });
 
     test('post method', async () => {
       nock(mockBaseUrl)
         .post('/')
         .once()
-        .reply(200, 'test');
+        .reply(200, []);
       const response = await client.post('/');
-      expect(response.data).toEqual('test');
+      expect(response.data).toEqual([]);
     });
 
     test('put method', async () => {
       nock(mockBaseUrl)
         .put('/')
         .once()
-        .reply(200, 'test');
+        .reply(200, []);
       const response = await client.put('/');
-      expect(response.data).toEqual('test');
+      expect(response.data).toEqual([]);
     });
 
     test('delete method', async () => {
       nock(mockBaseUrl)
         .delete('/')
         .once()
-        .reply(200, 'test');
+        .reply(200, []);
       const response = await client.delete('/');
-      expect(response.data).toEqual('test');
+      expect(response.data).toEqual([]);
     });
   });
 
@@ -244,11 +243,11 @@ describe('CogniteClient', () => {
         nock(mockBaseUrl)
           .get('/401')
           .once()
-          .reply(401);
+          .reply(401, {});
         await expect(
           client.get('/401')
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"Request failed with status code 401"`
+          `"Request failed | status code: 401"`
         );
         expect(mockLoginSilently).toHaveBeenCalledTimes(1);
       });
@@ -288,12 +287,10 @@ describe('CogniteClient', () => {
           onAuthenticate,
         });
         mockLoginSilently.mockReturnValueOnce(authTokens);
-        expect.assertions(3);
         nock(mockBaseUrl, { badheaders: [AUTHORIZATION_HEADER] })
           .get('/')
           .once()
-          .reply(401);
-        const body = 'hello';
+          .reply(401, {});
         nock(mockBaseUrl, {
           reqheaders: {
             [AUTHORIZATION_HEADER]: bearerString(authTokens.accessToken),
@@ -301,9 +298,9 @@ describe('CogniteClient', () => {
         })
           .get('/')
           .once()
-          .reply(200, body);
+          .reply(200, []);
         const response = await client.get('/');
-        expect(response.data).toBe(body);
+        expect(response.data).toEqual([]);
       });
 
       test('dont call onAuthenticate twice when first call hasnt returned yet', async () => {
@@ -330,41 +327,6 @@ describe('CogniteClient', () => {
         expect(promise401Throwed).toBe(true);
         await expect(promiseAuthenticate).resolves.toBe(false);
       });
-
-      test(
-        'handle 401 from /login/status when authenticating',
-        async () => {
-          const client = setupClient();
-          const onAuthenticate = jest.fn();
-          client.loginWithOAuth({
-            project,
-            onAuthenticate,
-          });
-          expect.assertions(1);
-          mockLoginSilently.mockImplementationOnce(async () => {
-            await expect(
-              Login.getIdInfoFromAccessToken(
-                client.getHttpClient(),
-                authTokens.accessToken
-              )
-            ).resolves.toBeNull();
-            return authTokens;
-          });
-          nock(mockBaseUrl)
-            .get('/')
-            .once()
-            .reply(401);
-          nock(mockBaseUrl)
-            .get('/login/status')
-            .once()
-            .reply(401, { error: { code: 401, message: 'Unauthorized' } });
-          nock(mockBaseUrl)
-            .get('/')
-            .reply(200);
-          await client.get('/');
-        },
-        500
-      );
     });
   });
 });

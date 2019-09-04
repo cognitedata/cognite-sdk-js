@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import { Asset, ItemsResponse } from '@/types/types';
 import CogniteClient from '../cogniteClient';
 import { setupLoggedInClient } from './testUtils';
 
@@ -14,7 +15,9 @@ describe('createClientWithApiKey - integration', () => {
     });
     await expect(
       client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(`"Unauthorized | code: 401"`);
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"Request failed | status code: 401"`
+    );
   });
 });
 
@@ -25,7 +28,7 @@ describe('http methods - integration', () => {
   });
   test('post method', async () => {
     const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
-    const response = await client.post(
+    const response = await client.post<ItemsResponse<Asset[]>>(
       '/api/v1/projects/cognitesdk-js/assets',
       { data: { items: assets } }
     );

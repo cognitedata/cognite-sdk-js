@@ -11,7 +11,7 @@ import {
   getBaseUrl,
   isSameProject,
   promiseCache,
-  removeParameterFromUrl,
+  removeQueryParameterFromUrl,
 } from '../utils';
 import * as Login from './login';
 
@@ -141,7 +141,7 @@ export async function getIdInfo(
 function clearParametersFromUrl(...params: string[]): void {
   let url = window.location.href;
   params.forEach(param => {
-    url = removeParameterFromUrl(url, param);
+    url = removeQueryParameterFromUrl(url, param);
   });
   window.history.replaceState(null, '', url);
 }

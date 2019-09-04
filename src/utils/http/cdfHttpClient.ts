@@ -21,6 +21,7 @@ import {
   HttpResponse,
 } from './basicHttpClient';
 import { cdfRetryValidator } from './cdfRetryValidator';
+import { HttpError } from './httpError';
 import { RetryableHttpClient } from './retryableHttpClient';
 
 export class CDFHttpClient extends RetryableHttpClient {
@@ -79,7 +80,6 @@ export class CDFHttpClient extends RetryableHttpClient {
     delete filteredHeaders[name];
     return filteredHeaders;
   }
-
   constructor(baseUrl: string) {
     super(baseUrl, cdfRetryValidator);
   }
@@ -105,6 +105,10 @@ export class CDFHttpClient extends RetryableHttpClient {
       }
       throw err;
     }
+  }
+
+  public set401ResponseHandler(handler: Response401Handler) {
+    this.response401Handler = handler;
   }
 
   protected async preRequest(request: HttpRequest): Promise<HttpRequest> {
@@ -136,9 +140,18 @@ export class CDFHttpClient extends RetryableHttpClient {
     try {
       return await super.postRequest(transformedResponse, request);
     } catch (err) {
+      if (err.status === 401 && !this.isLoginEndpoint(request.path)) {
+        return new Promise((resolvePromise, rejectPromise) => {
+          const retry = () => resolvePromise(this.request(request));
+          const reject = () => rejectPromise(err);
+          this.response401Handler(err, retry, reject);
+        });
+      }
       throw handleErrorResponse(err);
     }
   }
+
+  private response401Handler: Response401Handler = (_, __, reject) => reject();
 
   private preventTokenLeakage(headers: HttpHeaders, path: string) {
     if (CDFHttpClient.isSameOrigin(this.baseUrl, path)) {
@@ -151,9 +164,19 @@ export class CDFHttpClient extends RetryableHttpClient {
       X_CDF_SDK_HEADER,
     ]);
   }
+
+  private isLoginEndpoint(url: string) {
+    return url.toLowerCase().indexOf('/login/status') !== -1;
+  }
 }
 
 export interface IdInfo {
   project: string;
   user: string;
 }
+
+type Response401Handler = (
+  err: HttpError,
+  retry: () => void,
+  reject: () => void
+) => void;

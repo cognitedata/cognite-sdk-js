@@ -165,7 +165,7 @@ export class BasicHttpClient {
     };
   }
 
-  private async request<ResponseType>(request: HttpRequest) {
+  protected async request<ResponseType>(request: HttpRequest) {
     const mutatedRequest = await this.preRequest(request);
     const rawResponse = await this.rawRequest<ResponseType>(mutatedRequest);
     const response = await this.postRequest(rawResponse, request);

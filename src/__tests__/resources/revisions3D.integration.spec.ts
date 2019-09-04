@@ -62,7 +62,10 @@ describeIfCondition(
         ]),
         // upload file
         client.files.upload(
-          { name: `file_revision_test_${randomInt()}.fbx` },
+          {
+            name: `file_revision_test_${randomInt()}.fbx`,
+            mimeType: 'application/octet-stream',
+          },
           fileContent,
           false,
           true

@@ -281,14 +281,9 @@ export default class CogniteClient {
       onTokens,
     });
 
-    listenForNonSuccessStatusCode(this.instance, 401, async (error, retry) => {
-      // ignore calls to /login/status
-      const { config } = error;
-      if (config.url === '/login/status') {
-        return Promise.reject(error);
-      }
+    this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
       const didAuthenticate = await authenticate();
-      return didAuthenticate ? retry() : Promise.reject(error);
+      return didAuthenticate ? retry() : reject();
     });
 
     this.initAPIs();
@@ -349,8 +344,8 @@ export default class CogniteClient {
    * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
    * ```
    */
-  public post = (path: string, options?: HttpRequestOptions) =>
-    this.httpClient.post(path, options);
+  public post = <T>(path: string, options?: HttpRequestOptions) =>
+    this.httpClient.post<T>(path, options);
 
   /**
    * Basic HTTP method for DELETE
@@ -380,7 +375,7 @@ export default class CogniteClient {
     ) => {
       return new api(projectPath + relativePath, ...defaultArgs);
     };
-    const models3DPath = projectPath + '/3d/models';
+    const models3DPath = '/3d/models';
 
     this.assetsApi = new AssetsAPI(
       this,
@@ -396,7 +391,6 @@ export default class CogniteClient {
     this.eventsApi = apiFactory(EventsAPI, '/events');
     this.filesApi = apiFactory(FilesAPI, '/files');
     this.rawApi = apiFactory(RawAPI, '/raw/dbs');
-    this.projectsApi = apiFactory(ProjectsAPI, apiUrl());
     this.groupsApi = apiFactory(GroupsAPI, '/groups');
     this.securityCategoriesApi = apiFactory(
       SecurityCategoriesAPI,
@@ -412,6 +406,7 @@ export default class CogniteClient {
     this.files3DApi = apiFactory(Files3DAPI, '/3d/files');
     this.assetMappings3DApi = apiFactory(AssetMappings3DAPI, models3DPath);
     this.viewer3DApi = apiFactory(Viewer3DAPI, '/3d');
+    this.projectsApi = new ProjectsAPI(apiUrl(), ...defaultArgs);
     this.loginApi = new LoginAPI(...defaultArgs);
   };
 }

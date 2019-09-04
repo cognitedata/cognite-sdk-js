@@ -9,7 +9,7 @@ describe('CDFHttpClient', () => {
   const now = new Date();
   const nowInUnixTimestamp = now.getTime();
   const error400 = { error: { code: 400, message: 'Some message' } };
-  // const error401 = { error: { code: 401, message: 'Some message' } };
+  const error401 = { error: { code: 401, message: 'Some message' } };
   let client: CDFHttpClient;
   beforeEach(() => {
     client = new CDFHttpClient(baseUrl);
@@ -108,15 +108,70 @@ describe('CDFHttpClient', () => {
       }
     });
 
-    // test('set custom not authenticated handler', async () => {
-    //   const mockFunction = jest.fn();
-    //   client.setNotAuthenticatedHandler(mockFunction);
-    //   nock(baseUrl)
-    //     .get('/')
-    //     .reply(401, {});
-    //   client.get('/');
-    //   expect(mockFunction).toHaveBeenCalledTimes(1);
-    // });
+    describe('response401Handler', () => {
+      test('throw on 401 with default handler', async () => {
+        nock(baseUrl)
+          .get('/')
+          .reply(401, error401);
+        expect.assertions(1);
+        try {
+          await client.get('/');
+        } catch (err) {
+          expect(err.status).toBe(401);
+        }
+      });
+
+      test('set custom 401 handler', async done => {
+        nock(baseUrl)
+          .get('/')
+          .reply(401, error401);
+        client.set401ResponseHandler(err => {
+          expect(err.status).toBe(401);
+          done();
+        });
+        client.get('/');
+      });
+
+      test('respect reject call', async () => {
+        nock(baseUrl)
+          .get('/')
+          .reply(401, error401);
+        client.set401ResponseHandler((_, __, reject) => {
+          reject();
+        });
+        await expect(client.get('/')).rejects.toMatchInlineSnapshot(
+          `[Error: Request failed | status code: 401]`
+        );
+      });
+
+      test('respect retry call', async () => {
+        const scope = nock(baseUrl)
+          .get('/')
+          .reply(401, error401);
+        nock(baseUrl)
+          .get('/')
+          .reply(200, {});
+        client.set401ResponseHandler((_, retry) => {
+          retry();
+        });
+        expect((await client.get('/')).status).toBe(200);
+        expect(scope.isDone).toBeTruthy();
+      });
+
+      test('ignore errors to /login/status', async () => {
+        nock(baseUrl)
+          .get('/login/status')
+          .reply(401, error401);
+        const mockFn = jest.fn();
+        client.set401ResponseHandler(mockFn);
+        await expect(
+          client.get('/login/status')
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          `"Some message | code: 401"`
+        );
+        expect(mockFn).not.toBeCalled();
+      });
+    });
   });
 
   describe('post', () => {
