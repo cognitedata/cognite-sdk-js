@@ -8,6 +8,8 @@ import { parse, stringify } from 'query-string';
 import { CogniteLoginError } from '../loginError';
 import {
   bearerString,
+  createInvisibleIframe,
+  generatePopupWindow,
   getBaseUrl,
   isSameProject,
   promiseCache,
@@ -158,11 +160,11 @@ function generateLoginUrl(params: AuthorizeParams): string {
 
 /** @hidden */
 export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
-  const unresolveablePromise = new Promise<void>(() => {
+  // @ts-ignore we want to return a promise which never gets resolved (window will redirect)
+  return new Promise<void>(() => {
     const url = generateLoginUrl(params);
     window.location.assign(url);
   });
-  return unresolveablePromise;
 }
 
 /** @hidden */
@@ -171,12 +173,7 @@ export function loginWithPopup(
 ): Promise<null | AuthTokens> {
   return new Promise((resolve, reject) => {
     const url = generateLoginUrl(params);
-    const loginPopup = window.open(
-      url,
-      LOGIN_POPUP_NAME,
-      // https://www.quackit.com/javascript/popup_windows.cfm
-      'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes'
-    );
+    const loginPopup = generatePopupWindow(url, LOGIN_POPUP_NAME);
     if (loginPopup === null) {
       reject(new CogniteLoginError('Failed to create login popup window'));
       return;
@@ -250,12 +247,8 @@ function extractTokensFromUrl() {
 
 async function silentLogin(params: AuthorizeParams): Promise<AuthTokens> {
   return new Promise<AuthTokens>((resolve, reject) => {
-    const iframe = document.createElement('iframe');
-    iframe.name = LOGIN_IFRAME_NAME;
-    iframe.style.width = '0';
-    iframe.style.height = '0';
-    iframe.style.border = '0';
-    iframe.style.border = 'none';
+    const url = `${generateLoginUrl(params)}&prompt=none`;
+    const iframe = createInvisibleIframe(url, LOGIN_IFRAME_NAME);
     iframe.onload = () => {
       try {
         const authTokens = parseTokenQueryParameters(
@@ -271,7 +264,6 @@ async function silentLogin(params: AuthorizeParams): Promise<AuthTokens> {
         document.body.removeChild(iframe);
       }
     };
-    iframe.src = `${generateLoginUrl(params)}&prompt=none`;
     document.body.appendChild(iframe);
   });
 }

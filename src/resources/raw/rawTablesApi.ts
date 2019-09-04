@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '@/autoPagination';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
-import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   CursorResponse,
   ItemsResponse,
@@ -28,8 +28,7 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
         }),
       false
     );
-    const mergedItems = this.mergeItemsFromItemsResponse(responses);
-    return mergedItems;
+    return this.mergeItemsFromItemsResponse(responses);
   }
 
   public list(
@@ -37,15 +36,13 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
     scope?: ListRawTables
   ): CursorAndAsyncIterator<RawDBTable> {
     const path = `${this.encodeUrl(databaseName)}/tables`;
-    return super.listEndpoint(async params => {
-      const response = await this.httpClient.get<CursorResponse<RawDBTable[]>>(
-        path,
-        {
+    return super.listEndpoint(
+      async params =>
+        this.httpClient.get<CursorResponse<RawDBTable[]>>(path, {
           params,
-        }
-      );
-      return response;
-    }, scope);
+        }),
+      scope
+    );
   }
 
   public async delete(databaseName: string, items: RawDBTable[]) {

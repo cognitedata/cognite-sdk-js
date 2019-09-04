@@ -109,3 +109,8 @@ function makeAutoPagingToArray<T>(autoPagingEach: AutoPagingEach<T>) {
     return items;
   };
 }
+
+export type CursorAndAsyncIterator<T, Wrapper = T[]> = Promise<
+  ListResponse<Wrapper>
+> &
+  CogniteAsyncIterator<T>;

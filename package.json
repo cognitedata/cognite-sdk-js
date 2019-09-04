@@ -30,9 +30,6 @@
     "@types/nock": "^10.0.3",
     "@types/node": "^10.12.0",
     "@types/query-string": "^6.1.0",
-    "axios-debug-log": "^0.4.0",
-    "axios-mock-adapter": "1.15.0",
-    "dtsgenerator": "^2.0.6",
     "es-check": "^5.0.0",
     "husky": "^3.0.2",
     "jest": "^23.6.0",
@@ -45,7 +42,6 @@
     "rollup": "^0.67.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-typescript2": "^0.17.2",
-    "sleep-promise": "^8.0.1",
     "swagger-parser": "^6.0.5",
     "ts-jest": "^23.10.4",
     "tslint": "^5.13.0",
@@ -75,7 +71,6 @@
     "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.json && rm -rf codeSnippets/"
   },
   "dependencies": {
-    "axios": "0.18.1",
     "cross-fetch": "^3.0.4",
     "lodash": "^4.17.11",
     "query-string": "^5.1.1",

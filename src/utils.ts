@@ -115,13 +115,12 @@ export function transformDateInResponse<T>(data: T): T {
 
 /** @hidden */
 export function generatePopupWindow(url: string, name: string) {
-  const popupWindow = window.open(
+  return window.open(
     url,
     name,
     // https://www.quackit.com/javascript/popup_windows.cfm
     'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes'
   );
-  return popupWindow;
 }
 
 /** @hidden */

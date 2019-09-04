@@ -1,11 +1,13 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/standardMethods';
 import { applyIfApplicable } from '@/utils';
 import { HttpResponse } from '@/utils/http/basicHttpClient';
 import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 import { chunk } from 'lodash';
-import { makeAutoPaginationMethods } from '../autoPagination';
+import {
+  CursorAndAsyncIterator,
+  makeAutoPaginationMethods,
+} from '../autoPagination';
 import { MetadataMap } from '../metadata';
 import {
   CursorResponse,
@@ -272,14 +274,13 @@ export abstract class BaseResourceAPI<
   private transformResponse(
     response: HttpResponse<ItemsResponse<ResponseType[]>>
   ): HttpResponse<ItemsResponse<WrapperType>> {
-    const transformedResponse = {
+    return {
       ...response,
       data: {
         ...response.data,
         items: this.transformToClass(response.data.items),
       },
     };
-    return transformedResponse;
   }
 
   private postInSequenceWithAutomaticChunking<

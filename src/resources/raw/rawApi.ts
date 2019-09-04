@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '@/autoPagination';
 import { MetadataMap } from '@/metadata';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
-import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   ListRawDatabases,
   ListRawRows,

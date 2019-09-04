@@ -83,16 +83,16 @@ describe('Files integration test', () => {
   });
 
   describe('binary file', () => {
-    const fileMeta = {
+    const binaryFileMeta = {
       name: 'filename_1_' + postfix,
       mimeType: 'application/octet-stream',
     };
     const fileContentBinary = readFileSync('src/__tests__/test3dFile.fbx');
-    let file: FilesMetadata;
+    let binaryFile: FilesMetadata;
 
     test('create', async () => {
-      file = await client.files.upload(
-        fileMeta,
+      binaryFile = await client.files.upload(
+        binaryFileMeta,
         fileContentBinary,
         false,
         true
@@ -101,7 +101,7 @@ describe('Files integration test', () => {
 
     test('download', async () => {
       const [{ downloadUrl }] = await client.files.getDownloadUrls([
-        { id: file.id },
+        { id: binaryFile.id },
       ]);
       expect(downloadUrl).toBeDefined();
       const response = await client.get<ArrayBuffer>(downloadUrl, {

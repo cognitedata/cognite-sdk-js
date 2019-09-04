@@ -64,13 +64,11 @@ export class CDFHttpClient extends RetryableHttpClient {
   }
 
   private static filterHeaders(headers: HttpHeaders, names: string[]) {
-    const filteredHeaders = names.reduce(
-      (partiallyFilteredHeaders, headerName) => {
-        return CDFHttpClient.filterHeader(partiallyFilteredHeaders, headerName);
-      },
+    return names.reduce(
+      (partiallyFilteredHeaders, headerName) =>
+        CDFHttpClient.filterHeader(partiallyFilteredHeaders, headerName),
       headers
     );
-    return filteredHeaders;
   }
 
   private static filterHeader(headers: HttpHeaders, name: string) {

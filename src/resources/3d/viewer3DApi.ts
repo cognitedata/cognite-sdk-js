@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '@/autoPagination';
 import { MetadataMap } from '@/metadata';
-import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   CogniteInternalId,
   List3DNodesQuery,

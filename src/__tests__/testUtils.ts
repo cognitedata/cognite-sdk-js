@@ -1,7 +1,6 @@
 // Copyright 2019 Cognite AS
 
 import { BASE_URL } from '@/constants';
-import * as sleep from 'sleep-promise';
 import CogniteClient from '../cogniteClient';
 import { sleepPromise } from '../utils';
 
@@ -81,7 +80,7 @@ export async function retryInSeconds<ResponseType>(
       if (Number(error.status) !== statusCodeToRetry) {
         throw error;
       }
-      await sleep(secondsBetweenRetries * 1000);
+      await sleepPromise(secondsBetweenRetries * 1000);
     }
   }
   throw new Error('Time limit has been exceeded');

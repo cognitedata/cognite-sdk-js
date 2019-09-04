@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '@/autoPagination';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
-import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   CogniteInternalId,
   ListRevealSectors3DQuery,

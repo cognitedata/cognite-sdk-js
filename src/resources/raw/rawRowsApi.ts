@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '@/autoPagination';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
-import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   CursorResponse,
   ListRawRows,
@@ -47,15 +47,13 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     }
 
     const path = `${this.encodeUrl(databaseName, tableName)}/rows`;
-    return super.listEndpoint(async params => {
-      const response = await this.httpClient.get<CursorResponse<RawDBRow[]>>(
-        path,
-        {
+    return super.listEndpoint(
+      async params =>
+        this.httpClient.get<CursorResponse<RawDBRow[]>>(path, {
           params,
-        }
-      );
-      return response;
-    }, query);
+        }),
+      query
+    );
   }
 
   public async retrieve(

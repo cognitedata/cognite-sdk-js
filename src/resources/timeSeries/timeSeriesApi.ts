@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '@/autoPagination';
 import CogniteClient from '@/cogniteClient';
 import { MetadataMap } from '@/metadata';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
-import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   GetTimeSeriesMetadataDTO,
   IdEither,

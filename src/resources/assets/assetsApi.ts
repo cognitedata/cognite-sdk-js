@@ -1,12 +1,12 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '@/autoPagination';
 import CogniteClient from '@/cogniteClient';
 import { MetadataMap } from '@/metadata';
 import { BaseResourceAPI } from '@/resources/baseResourceApi';
 import { Asset } from '@/resources/classes/asset';
 import { AssetList } from '@/resources/classes/assetList';
 import { RevertableArraySorter } from '@/revertableArraySorter';
-import { CursorAndAsyncIterator } from '@/standardMethods';
 import {
   Asset as TypeAsset,
   AssetChange,
