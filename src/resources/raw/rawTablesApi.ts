@@ -6,7 +6,6 @@ import {
   CursorResponse,
   ItemsWrapper,
   ListRawTables,
-  RawDB,
   RawDBTable,
 } from '../../types/types';
 import { promiseAllWithData } from '../assets/assetUtils';
@@ -49,14 +48,6 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
     const path = `${this.encodeUrl(databaseName)}/tables/delete`;
     await this.postInParallelWithAutomaticChunking(path, items);
     return {};
-  }
-
-  protected transformToList(items: RawDB[]) {
-    return items;
-  }
-
-  protected transformToClass(items: RawDB[]) {
-    return items;
   }
 
   private encodeUrl(databaseName: string) {

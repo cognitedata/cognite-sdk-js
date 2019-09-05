@@ -79,14 +79,6 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     return {};
   }
 
-  protected transformToList(items: RawDBRow[]) {
-    return items;
-  }
-
-  protected transformToClass(items: RawDBRow[]) {
-    return items;
-  }
-
   private encodeUrl(databaseName: string, tableName: string) {
     return this.url(
       `${encodeURIComponent(databaseName)}/tables/${encodeURIComponent(
