@@ -139,7 +139,9 @@ describe('CogniteClient', () => {
         .put('/')
         .once()
         .reply(200, []);
-      const response = await client.put('/');
+      const response = await client.put('/', {
+        responseType: 'json',
+      });
       expect(response.data).toEqual([]);
     });
 
@@ -147,9 +149,9 @@ describe('CogniteClient', () => {
       nock(mockBaseUrl)
         .delete('/')
         .once()
-        .reply(200, []);
-      const response = await client.delete('/');
-      expect(response.data).toEqual([]);
+        .reply(200, 'abc');
+      const response = await client.delete('/', { responseType: 'text' });
+      expect(response.data).toBe('abc');
     });
   });
 

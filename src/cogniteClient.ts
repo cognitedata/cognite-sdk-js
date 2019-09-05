@@ -32,7 +32,7 @@ import { SecurityCategoriesAPI } from './resources/securityCategories/securityCa
 import { ServiceAccountsAPI } from './resources/serviceAccounts/serviceAccountsApi';
 import { TimeSeriesAPI } from './resources/timeSeries/timeSeriesApi';
 import { apiUrl, getBaseUrl, projectUrl } from './utils';
-import { HttpRequestOptions } from './utils/http/basicHttpClient';
+import { HttpRequestOptions, HttpResponse } from './utils/http/basicHttpClient';
 import { CDFHttpClient } from './utils/http/cdfHttpClient';
 
 export interface ClientOptions {
@@ -422,3 +422,6 @@ function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
     redirectUrl: window.location.href,
   });
 }
+
+export type BaseRequestOptions = HttpRequestOptions;
+export type Response = HttpResponse<any>;
