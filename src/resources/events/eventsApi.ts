@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteEvent,
   EventChange,
@@ -9,7 +9,7 @@ import {
   EventSearchRequest,
   ExternalEvent,
   IdEither,
-} from '@/types/types';
+} from '../../types/types';
 
 export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
   /**

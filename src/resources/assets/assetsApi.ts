@@ -1,12 +1,13 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import CogniteClient from '@/cogniteClient';
-import { MetadataMap } from '@/metadata';
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
-import { Asset } from '@/resources/classes/asset';
-import { AssetList } from '@/resources/classes/assetList';
-import { RevertableArraySorter } from '@/revertableArraySorter';
+import { chunk } from 'lodash';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import CogniteClient from '../../cogniteClient';
+import { MetadataMap } from '../../metadata';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
+import { Asset } from '../../resources/classes/asset';
+import { AssetList } from '../../resources/classes/assetList';
+import { RevertableArraySorter } from '../../revertableArraySorter';
 import {
   Asset as TypeAsset,
   AssetChange,
@@ -16,9 +17,8 @@ import {
   AssetSearchFilter,
   ExternalAssetItem,
   IdEither,
-} from '@/types/types';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
-import { chunk } from 'lodash';
+} from '../../types/types';
+import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { sortAssetCreateItems } from './assetUtils';
 
 export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {

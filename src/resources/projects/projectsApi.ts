@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
-import { ProjectResponse, ProjectUpdate } from '@/types/types';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
+import { ProjectResponse, ProjectUpdate } from '../../types/types';
 
 export class ProjectsAPI extends BaseResourceAPI<any> {
   /**

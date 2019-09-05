@@ -1,14 +1,14 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CursorResponse,
   ItemsResponse,
   ListRawTables,
   RawDB,
   RawDBTable,
-} from '@/types/types';
+} from '../../types/types';
 import { promiseAllWithData } from '../assets/assetUtils';
 
 export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {

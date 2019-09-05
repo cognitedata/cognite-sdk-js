@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { HttpResponse } from '@/utils/http/basicHttpClient';
 import { MetadataMap } from '../metadata';
+import { HttpResponse } from '../utils/http/basicHttpClient';
 
 test('metadata', async () => {
   const map = new MetadataMap();

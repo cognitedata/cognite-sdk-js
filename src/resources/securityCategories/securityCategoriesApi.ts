@@ -1,13 +1,13 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteInternalId,
   ListSecurityCategories,
   SecurityCategory,
   SecurityCategorySpec,
-} from '@/types/types';
+} from '../../types/types';
 
 export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
   /**

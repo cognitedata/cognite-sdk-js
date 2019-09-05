@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteInternalId,
   Group,
@@ -8,7 +8,7 @@ import {
   GroupSpec,
   ItemsResponse,
   ListGroups,
-} from '@/types/types';
+} from '../../types/types';
 
 export class GroupsAPI extends BaseResourceAPI<Group> {
   /**

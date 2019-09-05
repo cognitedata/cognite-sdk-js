@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
-import { X_REQUEST_ID } from '@/constants';
-import { HttpError } from '@/utils/http/httpError';
+import { X_REQUEST_ID } from '../constants';
 import { CogniteError, handleErrorResponse } from '../error';
 import { CogniteMultiError } from '../multiError';
+import { HttpError } from '../utils/http/httpError';
 import { createErrorReponse } from './testUtils';
 
 const internalIdObject = { id: 4190022127342195 };

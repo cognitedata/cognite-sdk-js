@@ -1,15 +1,15 @@
 // Copyright 2019 Cognite AS
 
-import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '@/constants';
+import * as nock from 'nock';
+import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../../constants';
 import {
   getIdInfoFromAccessToken,
   getIdInfoFromApiKey,
   loginSilently,
   loginWithRedirect,
-} from '@/resources/login';
-import { bearerString } from '@/utils';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
-import * as nock from 'nock';
+} from '../../resources/login';
+import { bearerString } from '../../utils';
+import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import {
   apiKey,
   authTokens,

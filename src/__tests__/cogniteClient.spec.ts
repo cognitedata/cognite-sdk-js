@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 
-import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '@/constants';
 import * as nock from 'nock';
 import CogniteClient, { POPUP, REDIRECT } from '../cogniteClient';
+import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
 import * as Login from '../resources/login';
 import { bearerString, sleepPromise } from '../utils';
 import {

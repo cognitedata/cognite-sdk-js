@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
-import { CogniteError } from '@/error';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 import * as nock from 'nock';
+import { CogniteError } from '../../../error';
+import { CDFHttpClient } from '../../../utils/http/cdfHttpClient';
 
 describe('CDFHttpClient', () => {
   const baseUrl = 'https://example.com';

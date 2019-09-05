@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import { MetadataMap } from '@/metadata';
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import { MetadataMap } from '../../metadata';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   ListRawDatabases,
   ListRawRows,
@@ -12,8 +12,8 @@ import {
   RawDBRowInsert,
   RawDBRowKey,
   RawDBTable,
-} from '@/types/types';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
+} from '../../types/types';
+import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { RawRowsAPI } from './rawRowsApi';
 import { RawTablesAPI } from './rawTablesApi';
 

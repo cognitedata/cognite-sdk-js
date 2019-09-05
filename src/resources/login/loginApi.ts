@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { MetadataMap } from '@/metadata';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
+import { MetadataMap } from '../../metadata';
+import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { BaseResourceAPI } from '../baseResourceApi';
 import { getIdInfo, IdInfo } from '../login';
 

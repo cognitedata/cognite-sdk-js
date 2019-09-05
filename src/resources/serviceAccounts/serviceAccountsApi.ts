@@ -1,12 +1,12 @@
 // Copyright 2019 Cognite AS
 
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteInternalId,
   ItemsResponse,
   ServiceAccount,
   ServiceAccountInput,
-} from '@/types/types';
+} from '../../types/types';
 
 export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
   /**

@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { CogniteInternalId, RevealRevision3D } from '@/types/types';
+import { CogniteInternalId, RevealRevision3D } from '../../types/types';
 import { BaseResourceAPI } from '../baseResourceApi';
 
 export class RevealRevisions3DAPI extends BaseResourceAPI<RevealRevision3D> {

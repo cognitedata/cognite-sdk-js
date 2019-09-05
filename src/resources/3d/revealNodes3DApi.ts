@@ -1,11 +1,11 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import {
   CogniteInternalId,
   List3DNodesQuery,
   RevealNode3D,
-} from '@/types/types';
+} from '../../types/types';
 import { BaseResourceAPI } from '../baseResourceApi';
 
 export class RevealNodes3DAPI extends BaseResourceAPI<RevealNode3D> {

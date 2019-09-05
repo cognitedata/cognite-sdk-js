@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import { MetadataMap } from '@/metadata';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import { MetadataMap } from '../../metadata';
 import {
   CogniteInternalId,
   List3DNodesQuery,
@@ -9,8 +9,8 @@ import {
   RevealNode3D,
   RevealRevision3D,
   RevealSector3D,
-} from '@/types/types';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
+} from '../../types/types';
+import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { BaseResourceAPI } from '../baseResourceApi';
 import { RevealNodes3DAPI } from './revealNodes3DApi';
 import { RevealRevisions3DAPI } from './revealRevisions3DApi';

@@ -3,8 +3,8 @@ import {
   HttpMethod,
   HttpRequest,
   HttpResponse,
-} from '@/utils/http/basicHttpClient';
-import { cdfRetryValidator } from '@/utils/http/cdfRetryValidator';
+} from '../../../utils/http/basicHttpClient';
+import { cdfRetryValidator } from '../../../utils/http/cdfRetryValidator';
 
 describe('cdfRetryValidator', () => {
   const baseRequest = {

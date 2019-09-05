@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
-import { RetryableHttpClient } from '@/utils/http/retryableHttpClient';
 import * as nock from 'nock';
+import { RetryableHttpClient } from '../../../utils/http/retryableHttpClient';
 
 describe('RetryableHttpClient', () => {
   const baseUrl = 'https://example.com';

@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import {
   AssetMapping3D,
   AssetMappings3DListFilter,

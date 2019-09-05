@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   ApiKeyListScope,
   ApiKeyObject,
@@ -8,7 +8,7 @@ import {
   CogniteInternalId,
   ItemsResponse,
   NewApiKeyResponse,
-} from '@/types/types';
+} from '../../types/types';
 
 export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
   /**

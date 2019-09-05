@@ -1,19 +1,19 @@
 // Copyright 2019 Cognite AS
 
+import * as Url from 'url';
 import {
   API_KEY_HEADER,
   AUTHORIZATION_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
-} from '@/constants';
-import { handleErrorResponse } from '@/error';
+} from '../../constants';
+import { handleErrorResponse } from '../../error';
 import {
   bearerString,
   isJson,
   transformDateInRequest,
   transformDateInResponse,
-} from '@/utils';
-import * as Url from 'url';
+} from '../../utils';
 import {
   HttpHeaders,
   HttpQueryParams,

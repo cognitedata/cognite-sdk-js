@@ -1,8 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { applyIfApplicable } from '@/utils';
-import { HttpResponse } from '@/utils/http/basicHttpClient';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 import { chunk } from 'lodash';
 import {
   CursorAndAsyncIterator,
@@ -16,6 +13,9 @@ import {
   ItemsResponse,
   ListResponse,
 } from '../types/types';
+import { applyIfApplicable } from '../utils';
+import { HttpResponse } from '../utils/http/basicHttpClient';
+import { CDFHttpClient } from '../utils/http/cdfHttpClient';
 import { promiseAllWithData } from './assets/assetUtils';
 
 export abstract class BaseResourceAPI<

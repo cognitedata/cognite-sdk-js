@@ -1,12 +1,12 @@
 // Copyright 2019 Cognite AS
+import * as nock from 'nock';
+import CogniteClient from '../../cogniteClient';
+import { Asset } from '../../resources/classes/asset';
+import { TimeSeriesList } from '../../resources/classes/timeSeriesList';
 import {
-  CogniteClient,
   DatapointsPostDatapoint,
   PostTimeSeriesMetadataDTO,
-} from '@/index';
-import { Asset } from '@/resources/classes/asset';
-import { TimeSeriesList } from '@/resources/classes/timeSeriesList';
-import * as nock from 'nock';
+} from '../../types/types';
 import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
 
 describe('TimeSeries class unit test', () => {

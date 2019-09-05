@@ -1,6 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import CogniteClient from '@/cogniteClient';
+import * as nock from 'nock';
+import CogniteClient from '../../cogniteClient';
 import {
   Model3D,
   Node3D,
@@ -9,9 +10,8 @@ import {
   RevealSector3D,
   Revision3D,
   UnrealRevision3D,
-} from '@/types/types';
-import { transformDateInRequest } from '@/utils';
-import * as nock from 'nock';
+} from '../../types/types';
+import { transformDateInRequest } from '../../utils';
 import {
   mockBaseUrl,
   randomInt,

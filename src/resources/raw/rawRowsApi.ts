@@ -1,15 +1,15 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CursorResponse,
   ListRawRows,
   RawDBRow,
   RawDBRowInsert,
   RawDBRowKey,
-} from '@/types/types';
-import { HttpHeaders } from '@/utils/http/basicHttpClient';
+} from '../../types/types';
+import { HttpHeaders } from '../../utils/http/basicHttpClient';
 import { promiseAllWithData } from '../assets/assetUtils';
 
 export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {

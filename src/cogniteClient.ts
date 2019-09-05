@@ -1,37 +1,37 @@
 // Copyright 2019 Cognite AS
 
-import { version } from '@/../package.json';
-import { MetadataMap } from '@/metadata';
-import { AssetMappings3DAPI } from '@/resources/3d/assetMappings3DApi';
-import { Files3DAPI } from '@/resources/3d/files3DApi';
-import { Models3DAPI } from '@/resources/3d/models3DApi';
-import { Revisions3DAPI } from '@/resources/3d/revisions3DApi';
-import { Viewer3DAPI } from '@/resources/3d/viewer3DApi';
-import { ApiKeysAPI } from '@/resources/apiKeys/apiKeysApi';
-import { AssetsAPI } from '@/resources/assets/assetsApi';
-import { DataPointsAPI } from '@/resources/dataPoints/dataPointsApi';
-import { EventsAPI } from '@/resources/events/eventsApi';
-import { FilesAPI } from '@/resources/files/filesApi';
-import { GroupsAPI } from '@/resources/groups/groupsApi';
-import {
-  createAuthenticateFunction,
-  OnAuthenticate,
-  OnAuthenticateLoginObject,
-  OnTokens,
-} from '@/resources/login';
-import { LoginAPI } from '@/resources/login/loginApi';
-import { ProjectsAPI } from '@/resources/projects/projectsApi';
-import { RawAPI } from '@/resources/raw/rawApi';
-import { SecurityCategoriesAPI } from '@/resources/securityCategories/securityCategoriesApi';
-import { ServiceAccountsAPI } from '@/resources/serviceAccounts/serviceAccountsApi';
-import { TimeSeriesAPI } from '@/resources/timeSeries/timeSeriesApi';
-import { apiUrl, getBaseUrl, projectUrl } from '@/utils';
 import { isFunction, isObject, isString } from 'lodash';
+import { version } from '../package.json';
 import {
   API_KEY_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
 } from './constants';
+import { MetadataMap } from './metadata';
+import { AssetMappings3DAPI } from './resources/3d/assetMappings3DApi';
+import { Files3DAPI } from './resources/3d/files3DApi';
+import { Models3DAPI } from './resources/3d/models3DApi';
+import { Revisions3DAPI } from './resources/3d/revisions3DApi';
+import { Viewer3DAPI } from './resources/3d/viewer3DApi';
+import { ApiKeysAPI } from './resources/apiKeys/apiKeysApi';
+import { AssetsAPI } from './resources/assets/assetsApi';
+import { DataPointsAPI } from './resources/dataPoints/dataPointsApi';
+import { EventsAPI } from './resources/events/eventsApi';
+import { FilesAPI } from './resources/files/filesApi';
+import { GroupsAPI } from './resources/groups/groupsApi';
+import {
+  createAuthenticateFunction,
+  OnAuthenticate,
+  OnAuthenticateLoginObject,
+  OnTokens,
+} from './resources/login';
+import { LoginAPI } from './resources/login/loginApi';
+import { ProjectsAPI } from './resources/projects/projectsApi';
+import { RawAPI } from './resources/raw/rawApi';
+import { SecurityCategoriesAPI } from './resources/securityCategories/securityCategoriesApi';
+import { ServiceAccountsAPI } from './resources/serviceAccounts/serviceAccountsApi';
+import { TimeSeriesAPI } from './resources/timeSeries/timeSeriesApi';
+import { apiUrl, getBaseUrl, projectUrl } from './utils';
 import { HttpRequestOptions } from './utils/http/basicHttpClient';
 import { CDFHttpClient } from './utils/http/cdfHttpClient';
 
@@ -317,7 +317,7 @@ export default class CogniteClient {
    * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
    * ```
    */
-  public get = <T>(path: string, options?: HttpRequestOptions) =>
+  public get = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.get<T>(path, options);
 
   /**
@@ -330,7 +330,7 @@ export default class CogniteClient {
    * const response = await client.put('someUrl');
    * ```
    */
-  public put = <T>(path: string, options?: HttpRequestOptions) =>
+  public put = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.put<T>(path, options);
 
   /**
@@ -344,7 +344,7 @@ export default class CogniteClient {
    * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
    * ```
    */
-  public post = <T>(path: string, options?: HttpRequestOptions) =>
+  public post = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.post<T>(path, options);
 
   /**
@@ -356,7 +356,7 @@ export default class CogniteClient {
    * const response = await client.delete('someUrl');
    * ```
    */
-  public delete = <T>(path: string, options?: HttpRequestOptions) =>
+  public delete = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.delete<T>(path, options);
 
   private initAPIs = () => {

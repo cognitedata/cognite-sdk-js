@@ -1,5 +1,5 @@
 // Copyright 2019 Cognite AS
-import { sleepPromise } from '@/utils';
+import { sleepPromise } from '../../utils';
 import { BasicHttpClient, HttpRequest, HttpResponse } from './basicHttpClient';
 
 export class RetryableHttpClient extends BasicHttpClient {

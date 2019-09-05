@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteInternalId,
   ExternalFilesMetadata,
@@ -14,9 +14,9 @@ import {
   IdEither,
   ItemsResponse,
   UploadFileMetadataResponse,
-} from '@/types/types';
-import { sleepPromise } from '@/utils';
-import { HttpHeaders } from '@/utils/http/basicHttpClient';
+} from '../../types/types';
+import { sleepPromise } from '../../utils';
+import { HttpHeaders } from '../../utils/http/basicHttpClient';
 
 export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
   /**

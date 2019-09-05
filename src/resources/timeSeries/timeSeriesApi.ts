@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import CogniteClient from '@/cogniteClient';
-import { MetadataMap } from '@/metadata';
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import CogniteClient from '../../cogniteClient';
+import { MetadataMap } from '../../metadata';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   GetTimeSeriesMetadataDTO,
   IdEither,
@@ -11,8 +11,8 @@ import {
   TimeseriesFilter,
   TimeSeriesSearchDTO,
   TimeSeriesUpdate,
-} from '@/types/types';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
+} from '../../types/types';
+import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { TimeSeries } from '../classes/timeSeries';
 import { TimeSeriesList } from '../classes/timeSeriesList';
 

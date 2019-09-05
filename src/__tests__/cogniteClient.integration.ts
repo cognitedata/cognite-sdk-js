@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { Asset, ItemsResponse } from '@/types/types';
 import CogniteClient from '../cogniteClient';
+import { Asset, ItemsResponse } from '../types/types';
 import { setupLoggedInClient } from './testUtils';
 
 describe('createClientWithApiKey - integration', () => {

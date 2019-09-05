@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
-import { HttpResponseType } from '@/utils/http/basicHttpClient';
 import { readFileSync } from 'fs';
 import CogniteClient from '../../cogniteClient';
 import { FilesMetadata } from '../../types/types';
+import { HttpResponseType } from '../../utils/http/basicHttpClient';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Files integration test', () => {

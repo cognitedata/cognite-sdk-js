@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   DatapointsDeleteRequest,
   DatapointsGetAggregateDatapoint,
@@ -9,7 +9,7 @@ import {
   DatapointsPostDatapoint,
   ItemsResponse,
   LatestDataBeforeRequest,
-} from '@/types/types';
+} from '../../types/types';
 import { promiseAllWithData } from '../assets/assetUtils';
 
 export class DataPointsAPI extends BaseResourceAPI<any> {

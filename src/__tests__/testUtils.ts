@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { BASE_URL } from '@/constants';
 import CogniteClient from '../cogniteClient';
+import { BASE_URL } from '../constants';
 import { sleepPromise } from '../utils';
 
 export function createErrorReponse(

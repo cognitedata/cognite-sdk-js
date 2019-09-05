@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import { MetadataMap } from '@/metadata';
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import { MetadataMap } from '../../metadata';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteInternalId,
   CreateRevision3D,
@@ -12,8 +12,8 @@ import {
   Revision3D,
   Revision3DListRequest,
   UpdateRevision3D,
-} from '@/types/types';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
+} from '../../types/types';
+import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { Nodes3DAPI } from './nodes3DApi';
 
 export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {

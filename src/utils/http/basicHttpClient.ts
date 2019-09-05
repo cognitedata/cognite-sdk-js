@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
-import { isJson } from '@/utils';
 import fetch, { Response } from 'cross-fetch';
 import { stringify } from 'query-string';
 import * as Url from 'url';
+import { isJson } from '../../utils';
 import { HttpError } from './httpError';
 
 export class BasicHttpClient {

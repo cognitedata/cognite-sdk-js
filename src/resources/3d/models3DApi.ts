@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '@/autoPagination';
-import { BaseResourceAPI } from '@/resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteInternalId,
   CreateModel3D,
@@ -9,7 +9,7 @@ import {
   Model3D,
   Model3DListRequest,
   UpdateModel3D,
-} from '@/types/types';
+} from '../../types/types';
 
 export class Models3DAPI extends BaseResourceAPI<Model3D> {
   /**

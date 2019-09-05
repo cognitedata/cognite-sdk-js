@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
+import * as nock from 'nock';
 import {
   BasicHttpClient,
   HttpResponseType,
-} from '@/utils/http/basicHttpClient';
-import * as nock from 'nock';
+} from '../../../utils/http/basicHttpClient';
 
 describe('BasicHttpClient', () => {
   const baseUrl = 'https://example.com';

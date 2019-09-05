@@ -9,7 +9,6 @@ module.exports = {
   collectCoverage: true,
   moduleNameMapper: {
     '^lodash-es$': 'lodash',
-    "@/(.*)$": "<rootDir>/src/$1",
   },
   testURL: 'https://localhost',
 };

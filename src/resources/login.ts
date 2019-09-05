@@ -1,10 +1,8 @@
 // Copyright 2019 Cognite AS
 
-import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '@/constants';
-import { HttpHeaders } from '@/utils/http/basicHttpClient';
-import { CDFHttpClient } from '@/utils/http/cdfHttpClient';
 import { isString } from 'lodash';
 import { parse, stringify } from 'query-string';
+import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
 import { CogniteLoginError } from '../loginError';
 import {
   bearerString,
@@ -15,6 +13,8 @@ import {
   promiseCache,
   removeQueryParameterFromUrl,
 } from '../utils';
+import { HttpHeaders } from '../utils/http/basicHttpClient';
+import { CDFHttpClient } from '../utils/http/cdfHttpClient';
 import * as Login from './login';
 
 const ACCESS_TOKEN_PARAM = 'access_token';

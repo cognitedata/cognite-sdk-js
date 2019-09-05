@@ -1,9 +1,9 @@
 // Copyright 2019 Cognite AS
 
-import { Asset as AssetClass } from '@/resources/classes/asset';
 import CogniteClient from '../../cogniteClient';
 import { CogniteError } from '../../error';
 import { CogniteMultiError } from '../../multiError';
+import { Asset as AssetClass } from '../../resources/classes/asset';
 import { Asset } from '../../types/types';
 import {
   randomInt,
