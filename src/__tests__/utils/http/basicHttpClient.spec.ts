@@ -11,6 +11,7 @@ describe('BasicHttpClient', () => {
   let client: BasicHttpClient;
   beforeEach(() => {
     client = new BasicHttpClient(baseUrl);
+    nock.cleanAll();
   });
 
   describe('setDefaultHeader', () => {

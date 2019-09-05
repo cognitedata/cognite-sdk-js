@@ -17,6 +17,7 @@ describe('TimeSeries class unit test', () => {
   let datapointArray: DatapointsPostDatapoint[] = [];
   beforeAll(() => {
     client = setupMockableClient();
+    nock.cleanAll();
   });
   beforeEach(async () => {
     // Create timeseries

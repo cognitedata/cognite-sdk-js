@@ -10,6 +10,7 @@ describe('RetryableHttpClient', () => {
       baseUrl,
       (_, response) => response.status === 500
     );
+    nock.cleanAll();
   });
 
   test('should retry', async () => {

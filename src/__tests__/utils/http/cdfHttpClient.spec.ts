@@ -13,6 +13,7 @@ describe('CDFHttpClient', () => {
   let client: CDFHttpClient;
   beforeEach(() => {
     client = new CDFHttpClient(baseUrl);
+    nock.cleanAll();
   });
 
   describe('get', () => {

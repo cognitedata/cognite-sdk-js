@@ -10,6 +10,7 @@ describe('Asset class unit test', () => {
   let childArray: any[];
   beforeAll(() => {
     client = setupMockableClient();
+    nock.cleanAll();
   });
   beforeEach(() => {
     newRoot = {

@@ -26,6 +26,7 @@ describe('Login', () => {
 
   beforeEach(() => {
     window.history.pushState({}, '', '');
+    nock.cleanAll();
   });
 
   describe('loginSilently', () => {

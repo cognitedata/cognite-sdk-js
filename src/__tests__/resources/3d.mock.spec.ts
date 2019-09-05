@@ -88,6 +88,7 @@ describe('3D mocked', () => {
 
   beforeAll(async () => {
     client = setupMockableClient();
+    nock.cleanAll();
   });
 
   describe('revisions', () => {

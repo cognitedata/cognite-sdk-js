@@ -16,6 +16,10 @@ import {
 
 // tslint:disable-next-line:no-big-function
 describe('CogniteClient', () => {
+  beforeEach(() => {
+    nock.cleanAll();
+  });
+
   describe('constructor', () => {
     test('throw on missing parameter', () => {
       expect(() => {

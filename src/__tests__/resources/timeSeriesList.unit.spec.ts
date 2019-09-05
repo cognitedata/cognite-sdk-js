@@ -16,6 +16,7 @@ describe('TimeSeriesList class unit test', async () => {
   let timeseriesArray: PostTimeSeriesMetadataDTO[] = [];
   beforeAll(async () => {
     client = setupMockableClient();
+    nock.cleanAll();
 
     // Create timeseries
     timeseriesArray = [
