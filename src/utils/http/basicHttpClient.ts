@@ -211,10 +211,12 @@ export enum HttpMethod {
   Delete = 'delete',
 }
 
-export enum HttpResponseType {
-  Json = 'json',
-  ArrayBuffer = 'arraybuffer',
-  Text = 'text',
+export type HttpResponseType = 'json' | 'arraybuffer' | 'text'
+
+export const HttpResponseType = {
+  Json: 'json' as HttpResponseType,
+  ArrayBuffer: 'arraybuffer' as HttpResponseType,
+  Text: 'text' as HttpResponseType
 }
 
 export interface HttpQueryParams {
