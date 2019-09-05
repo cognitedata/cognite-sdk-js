@@ -66,7 +66,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AssetsAPI</span>
+						<a href="baseresourceapi.html" class="tsd-signature-type">BaseResourceAPI</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TypeAsset</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Asset</span><span class="tsd-signature-symbol">, </span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">AssetsAPI</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -74,140 +79,180 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="assetsapi.html#create" class="tsd-kind-icon">create</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="assetsapi.html#delete" class="tsd-kind-icon">delete</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="assetsapi.html#list" class="tsd-kind-icon">list</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="assetsapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="assetsapi.html#search" class="tsd-kind-icon">search</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="assetsapi.html#update" class="tsd-kind-icon">update</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="assetsapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="assetsapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="assetsapi.html#create" class="tsd-kind-icon">create</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="assetsapi.html#delete" class="tsd-kind-icon">delete</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="assetsapi.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="assetsapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="assetsapi.html#retrievesubtree" class="tsd-kind-icon">retrieve<wbr>Subtree</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="assetsapi.html#search" class="tsd-kind-icon">search</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="assetsapi.html#update" class="tsd-kind-icon">update</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="create" class="tsd-anchor"></a>
-					<h3>create</h3>
-					<div class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">:</span> <a href="../index.html#assetcreateendpoint" class="tsd-signature-type">AssetCreateEndpoint</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="httpclient" class="tsd-anchor"></a>
+					<h3>http<wbr>Client</h3>
+					<div class="tsd-signature tsd-kind-icon">http<wbr>Client<span class="tsd-signature-symbol">:</span> <a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#httpclient">httpClient</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/assets/assetsApi.ts#L42">resources/assets/assetsApi.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L58">resources/baseResourceApi.ts:58</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/createAssets">Creates new assets</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = [
-  { <span class="hljs-attr">name</span>: <span class="hljs-string">'First asset'</span> },
-  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Second asset'</span>, <span class="hljs-attr">description</span>: <span class="hljs-string">'Child asset'</span> },
-];
-<span class="hljs-keyword">const</span> createdAssets = <span class="hljs-keyword">await</span> client.assets.create(assets);</code></pre>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="delete" class="tsd-anchor"></a>
-					<h3>delete</h3>
-					<div class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">:</span> <a href="../index.html#assetdeleteendpoint" class="tsd-signature-type">AssetDeleteEndpoint</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="resourcepath" class="tsd-anchor"></a>
+					<h3>resource<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">resource<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#resourcepath">resourcePath</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/assets/assetsApi.ts#L96">resources/assets/assetsApi.ts:96</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L57">resources/baseResourceApi.ts:57</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteAssets">Delete assets</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.assets.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="list" class="tsd-anchor"></a>
-					<h3>list</h3>
-					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <a href="../index.html#assetlistendpoint" class="tsd-signature-type">AssetListEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/assets/assetsApi.ts#L52">resources/assets/assetsApi.ts:52</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/listAssets">List assets</a></p>
-							<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getAssets) -->
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">'21PT1019'</span> } });</code></pre>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="retrieve" class="tsd-anchor"></a>
-					<h3>retrieve</h3>
-					<div class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">:</span> <a href="../index.html#assetretrieveendpoint" class="tsd-signature-type">AssetRetrieveEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/assets/assetsApi.ts#L62">resources/assets/assetsApi.ts:62</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/byIdsAssets">Retrieve assets</a></p>
-							<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getAsset) -->
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="search" class="tsd-anchor"></a>
-					<h3>search</h3>
-					<div class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">:</span> <a href="../index.html#assetsearchendpoint" class="tsd-signature-type">AssetSearchEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/assets/assetsApi.ts#L87">resources/assets/assetsApi.ts:87</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/searchAssets">Search for assets</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.search({
-  <span class="hljs-attr">filter</span>: {
-    <span class="hljs-attr">parentIds</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
-  },
-  <span class="hljs-attr">search</span>: {
-    <span class="hljs-attr">name</span>: <span class="hljs-string">'21PT1019'</span>
-  }
-});</code></pre>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="update" class="tsd-anchor"></a>
-					<h3>update</h3>
-					<div class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">:</span> <a href="../index.html#assetupdateendpoint" class="tsd-signature-type">AssetUpdateEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/assets/assetsApi.ts#L71">resources/assets/assetsApi.ts:71</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/updateAssets">Update assets</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">name</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">'New name'</span>}}}]);</code></pre>
-					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="create" class="tsd-anchor"></a>
+					<h3>create</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../interfaces/externalassetitem.html" class="tsd-signature-type">ExternalAssetItem</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L45">resources/assets/assetsApi.ts:45</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/createAssets">Creates new assets</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = [
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'First asset'</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Second asset'</span>, <span class="hljs-attr">description</span>: <span class="hljs-string">'Child asset'</span> },
+];
+<span class="hljs-keyword">const</span> createdAssets = <span class="hljs-keyword">await</span> client.assets.create(assets);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <a href="../interfaces/externalassetitem.html" class="tsd-signature-type">ExternalAssetItem</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="delete" class="tsd-anchor"></a>
+					<h3>delete</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../index.html#assetideither" class="tsd-signature-type">AssetIdEither</a><span class="tsd-signature-symbol">[]</span>, params<span class="tsd-signature-symbol">?: </span><a href="../interfaces/assetdeleteparams.html" class="tsd-signature-type">AssetDeleteParams</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L112">resources/assets/assetsApi.ts:112</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteAssets">Delete assets</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.assets.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ids: <a href="../index.html#assetideither" class="tsd-signature-type">AssetIdEither</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <a href="../interfaces/assetdeleteparams.html" class="tsd-signature-type">AssetDeleteParams</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="list" class="tsd-anchor"></a>
+					<h3>list</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">?: </span><a href="../interfaces/assetlistscope.html" class="tsd-signature-type">AssetListScope</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Asset</span><span class="tsd-signature-symbol">, </span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L58">resources/assets/assetsApi.ts:58</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/listAssets">List assets</a></p>
+									<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getAssets) -->
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">'21PT1019'</span> } });</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> scope: <a href="../interfaces/assetlistscope.html" class="tsd-signature-type">AssetListScope</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Asset</span><span class="tsd-signature-symbol">, </span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="retrieve" class="tsd-anchor"></a>
+					<h3>retrieve</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L72">resources/assets/assetsApi.ts:72</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/byIdsAssets">Retrieve assets</a></p>
+									<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getAsset) -->
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ids: <a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="retrievesubtree" class="tsd-anchor"></a>
 					<h3>retrieve<wbr>Subtree</h3>
@@ -218,7 +263,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/assets/assetsApi.ts#L145">resources/assets/assetsApi.ts:145</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L116">resources/assets/assetsApi.ts:116</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -228,6 +273,71 @@
 								</li>
 								<li>
 									<h5>depth: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="search" class="tsd-anchor"></a>
+					<h3>search</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><a href="../interfaces/assetsearchfilter.html" class="tsd-signature-type">AssetSearchFilter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L101">resources/assets/assetsApi.ts:101</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/searchAssets">Search for assets</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.search({
+  <span class="hljs-attr">filter</span>: {
+    <span class="hljs-attr">parentIds</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+  },
+  <span class="hljs-attr">search</span>: {
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'21PT1019'</span>
+  }
+});</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>query: <a href="../interfaces/assetsearchfilter.html" class="tsd-signature-type">AssetSearchFilter</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="update" class="tsd-anchor"></a>
+					<h3>update</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span>changes<span class="tsd-signature-symbol">: </span><a href="../index.html#assetchange" class="tsd-signature-type">AssetChange</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L83">resources/assets/assetsApi.ts:83</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/updateAssets">Update assets</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">name</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">'New name'</span>}}}]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>changes: <a href="../index.html#assetchange" class="tsd-signature-type">AssetChange</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="assetlist.html" class="tsd-signature-type">AssetList</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -251,26 +361,32 @@
 					<li class="current tsd-kind-class">
 						<a href="assetsapi.html" class="tsd-kind-icon">AssetsAPI</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="assetsapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="assetsapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="assetsapi.html#create" class="tsd-kind-icon">create</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="assetsapi.html#delete" class="tsd-kind-icon">delete</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="assetsapi.html#list" class="tsd-kind-icon">list</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="assetsapi.html#retrieve" class="tsd-kind-icon">retrieve</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="assetsapi.html#search" class="tsd-kind-icon">search</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="assetsapi.html#update" class="tsd-kind-icon">update</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="assetsapi.html#retrievesubtree" class="tsd-kind-icon">retrieve<wbr>Subtree</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="assetsapi.html#search" class="tsd-kind-icon">search</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="assetsapi.html#update" class="tsd-kind-icon">update</a>
 							</li>
 						</ul>
 					</li>

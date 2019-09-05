@@ -55,18 +55,34 @@
 					<a href="loginapi.html">LoginAPI</a>
 				</li>
 			</ul>
-			<h1>Class LoginAPI</h1>
+			<h1>Class LoginAPI&lt;TransformedType, WrapperType&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>TransformedType</h4>
+					</li>
+					<li>
+						<h4>WrapperType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransformedType</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">LoginAPI</span>
+						<a href="baseresourceapi.html" class="tsd-signature-type">BaseResourceAPI</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">LoginAPI</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -74,6 +90,13 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="loginapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="loginapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
@@ -83,19 +106,44 @@
 					</div>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="httpclient" class="tsd-anchor"></a>
+					<h3>http<wbr>Client</h3>
+					<div class="tsd-signature tsd-kind-icon">http<wbr>Client<span class="tsd-signature-symbol">:</span> <a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#httpclient">httpClient</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L58">resources/baseResourceApi.ts:58</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="resourcepath" class="tsd-anchor"></a>
+					<h3>resource<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">resource<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#resourcepath">resourcePath</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L57">resources/baseResourceApi.ts:57</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="status" class="tsd-anchor"></a>
 					<h3>status</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/idinfo.html" class="tsd-signature-type">IdInfo</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IdInfo</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/login/loginApi.ts#L22">resources/login/loginApi.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/login/loginApi.ts#L22">resources/login/loginApi.ts:22</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -105,7 +153,7 @@
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> status = <span class="hljs-keyword">await</span> client.login.status();
 <span class="hljs-comment">// if status === null means you are not logged in</span></code></pre>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/idinfo.html" class="tsd-signature-type">IdInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">IdInfo</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -123,9 +171,15 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class="current tsd-kind-class tsd-has-type-parameter">
 						<a href="loginapi.html" class="tsd-kind-icon">LoginAPI</a>
 						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="loginapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="loginapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="loginapi.html#status" class="tsd-kind-icon">status</a>
 							</li>

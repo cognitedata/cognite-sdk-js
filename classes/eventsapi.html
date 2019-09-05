@@ -55,18 +55,34 @@
 					<a href="eventsapi.html">EventsAPI</a>
 				</li>
 			</ul>
-			<h1>Class EventsAPI</h1>
+			<h1>Class EventsAPI&lt;TransformedType, WrapperType&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>TransformedType</h4>
+					</li>
+					<li>
+						<h4>WrapperType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransformedType</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">EventsAPI</span>
+						<a href="baseresourceapi.html" class="tsd-signature-type">BaseResourceAPI</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">EventsAPI</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -74,106 +90,233 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="eventsapi.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="eventsapi.html#create" class="tsd-kind-icon">create</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="eventsapi.html#delete" class="tsd-kind-icon">delete</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="eventsapi.html#list" class="tsd-kind-icon">list</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="eventsapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="eventsapi.html#search" class="tsd-kind-icon">search</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="eventsapi.html#update" class="tsd-kind-icon">update</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="eventsapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="eventsapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="eventsapi.html#create" class="tsd-kind-icon">create</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="eventsapi.html#delete" class="tsd-kind-icon">delete</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="eventsapi.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="eventsapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="eventsapi.html#search" class="tsd-kind-icon">search</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="eventsapi.html#update" class="tsd-kind-icon">update</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>EventsAPI<span class="tsd-signature-symbol">(</span>resourcePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, httpClient<span class="tsd-signature-symbol">: </span><a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a>, map<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MetadataMap</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="eventsapi.html" class="tsd-signature-type">EventsAPI</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#constructor">constructor</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L55">resources/baseResourceApi.ts:55</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>resourcePath: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>httpClient: <a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></h5>
+								</li>
+								<li>
+									<h5>map: <span class="tsd-signature-type">MetadataMap</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="eventsapi.html" class="tsd-signature-type">EventsAPI</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="create" class="tsd-anchor"></a>
-					<h3>create</h3>
-					<div class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">:</span> <a href="../index.html#eventscreateendpoint" class="tsd-signature-type">EventsCreateEndpoint</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="httpclient" class="tsd-anchor"></a>
+					<h3>http<wbr>Client</h3>
+					<div class="tsd-signature tsd-kind-icon">http<wbr>Client<span class="tsd-signature-symbol">:</span> <a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#httpclient">httpClient</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/events/eventsApi.ts#L36">resources/events/eventsApi.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L58">resources/baseResourceApi.ts:58</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/createEvents">Create events</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> events = [
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="resourcepath" class="tsd-anchor"></a>
+					<h3>resource<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">resource<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#resourcepath">resourcePath</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L57">resources/baseResourceApi.ts:57</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="create" class="tsd-anchor"></a>
+					<h3>create</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../interfaces/externalevent.html" class="tsd-signature-type">ExternalEvent</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/events/eventsApi.ts#L26">resources/events/eventsApi.ts:26</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/createEvents">Create events</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = [
   { <span class="hljs-attr">description</span>: <span class="hljs-string">'Workorder pump abc'</span>, <span class="hljs-attr">startTime</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'22 jan 2019'</span>) },
   { <span class="hljs-attr">description</span>: <span class="hljs-string">'Broken rule'</span>, <span class="hljs-attr">externalId</span>: <span class="hljs-string">'rule123'</span>, <span class="hljs-attr">startTime</span>: <span class="hljs-number">1557346524667000</span> },
 ];
 <span class="hljs-keyword">const</span> createdEvents = <span class="hljs-keyword">await</span> client.events.create(events);</code></pre>
-					</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <a href="../interfaces/externalevent.html" class="tsd-signature-type">ExternalEvent</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="delete" class="tsd-anchor"></a>
 					<h3>delete</h3>
-					<div class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">:</span> <a href="../index.html#eventsdeleteendpoint" class="tsd-signature-type">EventsDeleteEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/events/eventsApi.ts#L90">resources/events/eventsApi.ts:90</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteEvents">Delete events</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.events.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
-					</div>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/events/eventsApi.ts#L92">resources/events/eventsApi.ts:92</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteEvents">Delete events</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.events.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ids: <a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="list" class="tsd-anchor"></a>
 					<h3>list</h3>
-					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <a href="../index.html#eventslistendpoint" class="tsd-signature-type">EventsListEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/events/eventsApi.ts#L46">resources/events/eventsApi.ts:46</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/advancedListEvents">List events</a></p>
-							<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listEvents) -->
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">startTime</span>: { <span class="hljs-attr">min</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'1 jan 2018'</span>) }, <span class="hljs-attr">endTime</span>: { <span class="hljs-attr">max</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'1 jan 2019'</span>) } } });</code></pre>
-					</div>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">?: </span><a href="../interfaces/eventfilterrequest.html" class="tsd-signature-type">EventFilterRequest</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/events/eventsApi.ts#L38">resources/events/eventsApi.ts:38</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/advancedListEvents">List events</a></p>
+									<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listEvents) -->
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">startTime</span>: { <span class="hljs-attr">min</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'1 jan 2018'</span>) }, <span class="hljs-attr">endTime</span>: { <span class="hljs-attr">max</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'1 jan 2019'</span>) } } });</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> scope: <a href="../interfaces/eventfilterrequest.html" class="tsd-signature-type">EventFilterRequest</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="retrieve" class="tsd-anchor"></a>
 					<h3>retrieve</h3>
-					<div class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">:</span> <a href="../index.html#eventsretrieveendpoint" class="tsd-signature-type">EventsRetrieveEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/events/eventsApi.ts#L56">resources/events/eventsApi.ts:56</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/byIdsEvents">Retrieve events</a></p>
-							<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getEventByInternalId) -->
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
-					</div>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/events/eventsApi.ts#L52">resources/events/eventsApi.ts:52</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/byIdsEvents">Retrieve events</a></p>
+									<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getEventByInternalId) -->
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ids: <a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="search" class="tsd-anchor"></a>
 					<h3>search</h3>
-					<div class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">:</span> <a href="../index.html#eventssearchendpoint" class="tsd-signature-type">EventsSearchEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/events/eventsApi.ts#L81">resources/events/eventsApi.ts:81</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/searchEvents">Search for events</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.search({
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><a href="../interfaces/eventsearchrequest.html" class="tsd-signature-type">EventSearchRequest</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/events/eventsApi.ts#L81">resources/events/eventsApi.ts:81</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/searchEvents">Search for events</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.search({
   <span class="hljs-attr">filter</span>: {
     <span class="hljs-attr">assetIds</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
   },
@@ -181,23 +324,45 @@
     <span class="hljs-attr">description</span>: <span class="hljs-string">'Pump'</span>
   }
 });</code></pre>
-					</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>query: <a href="../interfaces/eventsearchrequest.html" class="tsd-signature-type">EventSearchRequest</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="update" class="tsd-anchor"></a>
 					<h3>update</h3>
-					<div class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">:</span> <a href="../index.html#eventsupdateendpoint" class="tsd-signature-type">EventsUpdateEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/events/eventsApi.ts#L65">resources/events/eventsApi.ts:65</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/updateEvents">Update events</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">description</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">'New description'</span>}}}]);</code></pre>
-					</div>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span>changes<span class="tsd-signature-symbol">: </span><a href="../index.html#eventchange" class="tsd-signature-type">EventChange</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/events/eventsApi.ts#L63">resources/events/eventsApi.ts:63</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/updateEvents">Update events</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">description</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">'New description'</span>}}}]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>changes: <a href="../index.html#eventchange" class="tsd-signature-type">EventChange</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cogniteevent.html" class="tsd-signature-type">CogniteEvent</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -213,25 +378,34 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class="current tsd-kind-class tsd-has-type-parameter">
 						<a href="eventsapi.html" class="tsd-kind-icon">EventsAPI</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+								<a href="eventsapi.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="eventsapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="eventsapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="eventsapi.html#create" class="tsd-kind-icon">create</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="eventsapi.html#delete" class="tsd-kind-icon">delete</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="eventsapi.html#list" class="tsd-kind-icon">list</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="eventsapi.html#retrieve" class="tsd-kind-icon">retrieve</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="eventsapi.html#search" class="tsd-kind-icon">search</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="eventsapi.html#update" class="tsd-kind-icon">update</a>
 							</li>
 						</ul>

@@ -55,18 +55,34 @@
 					<a href="groupsapi.html">GroupsAPI</a>
 				</li>
 			</ul>
-			<h1>Class GroupsAPI</h1>
+			<h1>Class GroupsAPI&lt;TransformedType, WrapperType&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>TransformedType</h4>
+					</li>
+					<li>
+						<h4>WrapperType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransformedType</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">GroupsAPI</span>
+						<a href="baseresourceapi.html" class="tsd-signature-type">BaseResourceAPI</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">GroupsAPI</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -74,18 +90,26 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="groupsapi.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="groupsapi.html#create" class="tsd-kind-icon">create</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="groupsapi.html#delete" class="tsd-kind-icon">delete</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="groupsapi.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="groupsapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="groupsapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="groupsapi.html#addserviceaccounts" class="tsd-kind-icon">add<wbr>Service<wbr>Accounts</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="groupsapi.html#create" class="tsd-kind-icon">create</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="groupsapi.html#delete" class="tsd-kind-icon">delete</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="groupsapi.html#list" class="tsd-kind-icon">list</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="groupsapi.html#listserviceaccounts" class="tsd-kind-icon">list<wbr>Service<wbr>Accounts</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="groupsapi.html#removeserviceaccounts" class="tsd-kind-icon">remove<wbr>Service<wbr>Accounts</a></li>
 							</ul>
@@ -93,63 +117,62 @@
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>GroupsAPI<span class="tsd-signature-symbol">(</span>resourcePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, httpClient<span class="tsd-signature-symbol">: </span><a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a>, map<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MetadataMap</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="groupsapi.html" class="tsd-signature-type">GroupsAPI</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#constructor">constructor</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L55">resources/baseResourceApi.ts:55</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>resourcePath: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>httpClient: <a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></h5>
+								</li>
+								<li>
+									<h5>map: <span class="tsd-signature-type">MetadataMap</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="groupsapi.html" class="tsd-signature-type">GroupsAPI</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="create" class="tsd-anchor"></a>
-					<h3>create</h3>
-					<div class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">:</span> <a href="../index.html#groupscreateendpoint" class="tsd-signature-type">GroupsCreateEndpoint</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="httpclient" class="tsd-anchor"></a>
+					<h3>http<wbr>Client</h3>
+					<div class="tsd-signature tsd-kind-icon">http<wbr>Client<span class="tsd-signature-symbol">:</span> <a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#httpclient">httpClient</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/groups/groupsApi.ts#L46">resources/groups/groupsApi.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L58">resources/baseResourceApi.ts:58</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/createGroups">Create groups</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> createdGroups = <span class="hljs-keyword">await</span> client.groups.create([{
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'Developers'</span>,
-  <span class="hljs-attr">capabilities</span>: [{
-    <span class="hljs-attr">assetsAcl</span>: {
-      <span class="hljs-attr">actions</span>: [<span class="hljs-string">'LIST'</span>],
-      <span class="hljs-attr">scope</span>: { <span class="hljs-attr">all</span>: {}}
-    }
-  }],
-}]);</code></pre>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="delete" class="tsd-anchor"></a>
-					<h3>delete</h3>
-					<div class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">:</span> <a href="../index.html#groupsdeleteendpoint" class="tsd-signature-type">GroupsDeleteEndpoint</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="resourcepath" class="tsd-anchor"></a>
+					<h3>resource<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">resource<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#resourcepath">resourcePath</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/groups/groupsApi.ts#L55">resources/groups/groupsApi.ts:55</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L57">resources/baseResourceApi.ts:57</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteGroups">Delete groups</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.groups.delete([<span class="hljs-number">921923342342323</span>, <span class="hljs-number">871621872721323</span>]);</code></pre>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="list" class="tsd-anchor"></a>
-					<h3>list</h3>
-					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <a href="../index.html#groupslistendpoint" class="tsd-signature-type">GroupsListEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/groups/groupsApi.ts#L29">resources/groups/groupsApi.ts:29</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/getGroups">List groups</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> groups = <span class="hljs-keyword">await</span> client.groups.list({ <span class="hljs-attr">all</span>: <span class="hljs-literal">true</span> });</code></pre>
-					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -158,13 +181,13 @@
 					<a name="addserviceaccounts" class="tsd-anchor"></a>
 					<h3>add<wbr>Service<wbr>Accounts</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Service<wbr>Accounts<span class="tsd-signature-symbol">(</span>groupId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, serviceAccountIds<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Service<wbr>Accounts<span class="tsd-signature-symbol">(</span>groupId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, serviceAccountIds<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/groups/groupsApi.ts#L96">resources/groups/groupsApi.ts:96</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/groups/groupsApi.ts#L83">resources/groups/groupsApi.ts:83</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -176,13 +199,108 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>groupId: <span class="tsd-signature-type">number</span></h5>
+									<h5>groupId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>serviceAccountIds: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>serviceAccountIds: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="create" class="tsd-anchor"></a>
+					<h3>create</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../interfaces/groupspec.html" class="tsd-signature-type">GroupSpec</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/groups/groupsApi.ts#L29">resources/groups/groupsApi.ts:29</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/createGroups">Create groups</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> createdGroups = <span class="hljs-keyword">await</span> client.groups.create([{
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'Developers'</span>,
+  <span class="hljs-attr">capabilities</span>: [{
+    <span class="hljs-attr">assetsAcl</span>: {
+      <span class="hljs-attr">actions</span>: [<span class="hljs-string">'LIST'</span>],
+      <span class="hljs-attr">scope</span>: { <span class="hljs-attr">all</span>: {}}
+    }
+  }],
+}]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <a href="../interfaces/groupspec.html" class="tsd-signature-type">GroupSpec</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="delete" class="tsd-anchor"></a>
+					<h3>delete</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/groups/groupsApi.ts#L55">resources/groups/groupsApi.ts:55</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteGroups">Delete groups</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.groups.delete([<span class="hljs-number">921923342342323</span>, <span class="hljs-number">871621872721323</span>]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ids: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="list" class="tsd-anchor"></a>
+					<h3>list</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">?: </span><a href="../interfaces/listgroups.html" class="tsd-signature-type">ListGroups</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/groups/groupsApi.ts#L40">resources/groups/groupsApi.ts:40</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/getGroups">List groups</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> groups = <span class="hljs-keyword">await</span> client.groups.list({ <span class="hljs-attr">all</span>: <span class="hljs-literal">true</span> });</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> scope: <a href="../interfaces/listgroups.html" class="tsd-signature-type">ListGroups</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/group.html" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -190,13 +308,13 @@
 					<a name="listserviceaccounts" class="tsd-anchor"></a>
 					<h3>list<wbr>Service<wbr>Accounts</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">list<wbr>Service<wbr>Accounts<span class="tsd-signature-symbol">(</span>groupId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/groupserviceaccount.html" class="tsd-signature-type">GroupServiceAccount</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">list<wbr>Service<wbr>Accounts<span class="tsd-signature-symbol">(</span>groupId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/groupserviceaccount.html" class="tsd-signature-type">GroupServiceAccount</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/groups/groupsApi.ts#L81">resources/groups/groupsApi.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/groups/groupsApi.ts#L66">resources/groups/groupsApi.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -208,7 +326,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>groupId: <span class="tsd-signature-type">number</span></h5>
+									<h5>groupId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/groupserviceaccount.html" class="tsd-signature-type">GroupServiceAccount</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -219,13 +337,13 @@
 					<a name="removeserviceaccounts" class="tsd-anchor"></a>
 					<h3>remove<wbr>Service<wbr>Accounts</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">remove<wbr>Service<wbr>Accounts<span class="tsd-signature-symbol">(</span>groupId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, serviceAccountIds<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">remove<wbr>Service<wbr>Accounts<span class="tsd-signature-symbol">(</span>groupId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, serviceAccountIds<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/groups/groupsApi.ts#L119">resources/groups/groupsApi.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/groups/groupsApi.ts#L101">resources/groups/groupsApi.ts:101</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -237,13 +355,13 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>groupId: <span class="tsd-signature-type">number</span></h5>
+									<h5>groupId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>serviceAccountIds: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>serviceAccountIds: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -261,20 +379,29 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class="current tsd-kind-class tsd-has-type-parameter">
 						<a href="groupsapi.html" class="tsd-kind-icon">GroupsAPI</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="groupsapi.html#create" class="tsd-kind-icon">create</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+								<a href="groupsapi.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="groupsapi.html#delete" class="tsd-kind-icon">delete</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="groupsapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="groupsapi.html#list" class="tsd-kind-icon">list</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="groupsapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="groupsapi.html#addserviceaccounts" class="tsd-kind-icon">add<wbr>Service<wbr>Accounts</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="groupsapi.html#create" class="tsd-kind-icon">create</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="groupsapi.html#delete" class="tsd-kind-icon">delete</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="groupsapi.html#list" class="tsd-kind-icon">list</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="groupsapi.html#listserviceaccounts" class="tsd-kind-icon">list<wbr>Service<wbr>Accounts</a>

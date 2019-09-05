@@ -55,18 +55,34 @@
 					<a href="filesapi.html">FilesAPI</a>
 				</li>
 			</ul>
-			<h1>Class FilesAPI</h1>
+			<h1>Class FilesAPI&lt;TransformedType, WrapperType&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>TransformedType</h4>
+					</li>
+					<li>
+						<h4>WrapperType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransformedType</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">FilesAPI</span>
+						<a href="baseresourceapi.html" class="tsd-signature-type">BaseResourceAPI</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">FilesAPI</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -74,103 +90,230 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><a href="filesapi.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#delete" class="tsd-kind-icon">delete</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#getdownloadurls" class="tsd-kind-icon">get<wbr>Download<wbr>Urls</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#list" class="tsd-kind-icon">list</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#search" class="tsd-kind-icon">search</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#update" class="tsd-kind-icon">update</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="filesapi.html#upload" class="tsd-kind-icon">upload</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="filesapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="filesapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#delete" class="tsd-kind-icon">delete</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#getdownloadurls" class="tsd-kind-icon">get<wbr>Download<wbr>Urls</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#search" class="tsd-kind-icon">search</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#update" class="tsd-kind-icon">update</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#upload" class="tsd-kind-icon">upload</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>FilesAPI<span class="tsd-signature-symbol">(</span>resourcePath<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, httpClient<span class="tsd-signature-symbol">: </span><a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a>, map<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MetadataMap</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="filesapi.html" class="tsd-signature-type">FilesAPI</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#constructor">constructor</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L55">resources/baseResourceApi.ts:55</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>resourcePath: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>httpClient: <a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></h5>
+								</li>
+								<li>
+									<h5>map: <span class="tsd-signature-type">MetadataMap</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="filesapi.html" class="tsd-signature-type">FilesAPI</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="httpclient" class="tsd-anchor"></a>
+					<h3>http<wbr>Client</h3>
+					<div class="tsd-signature tsd-kind-icon">http<wbr>Client<span class="tsd-signature-symbol">:</span> <a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#httpclient">httpClient</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L58">resources/baseResourceApi.ts:58</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="resourcepath" class="tsd-anchor"></a>
+					<h3>resource<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">resource<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#resourcepath">resourcePath</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L57">resources/baseResourceApi.ts:57</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="delete" class="tsd-anchor"></a>
 					<h3>delete</h3>
-					<div class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesdeleteendpoint" class="tsd-signature-type">FilesDeleteEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/files/filesApi.ts#L89">resources/files/filesApi.ts:89</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteFiles">Delete files</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
-					</div>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/files/filesApi.ts#L116">resources/files/filesApi.ts:116</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteFiles">Delete files</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ids: <a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="getdownloadurls" class="tsd-anchor"></a>
 					<h3>get<wbr>Download<wbr>Urls</h3>
-					<div class="tsd-signature tsd-kind-icon">get<wbr>Download<wbr>Urls<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesgetdownloadurlsendpoint" class="tsd-signature-type">FilesGetDownloadUrlsEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/files/filesApi.ts#L98">resources/files/filesApi.ts:98</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/downloadLinks">Get download urls</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files.getDownloadUrls([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
-					</div>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Download<wbr>Urls<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><a href="../interfaces/filelink.html" class="tsd-signature-type">FileLink</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/internalid.html" class="tsd-signature-type">InternalId</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/filelink.html" class="tsd-signature-type">FileLink</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/externalid.html" class="tsd-signature-type">ExternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/files/filesApi.ts#L127">resources/files/filesApi.ts:127</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/downloadLinks">Get download urls</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files.getDownloadUrls([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ids: <a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><a href="../interfaces/filelink.html" class="tsd-signature-type">FileLink</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/internalid.html" class="tsd-signature-type">InternalId</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/filelink.html" class="tsd-signature-type">FileLink</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/externalid.html" class="tsd-signature-type">ExternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="list" class="tsd-anchor"></a>
 					<h3>list</h3>
-					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <a href="../index.html#fileslistendpoint" class="tsd-signature-type">FilesListEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/files/filesApi.ts#L39">resources/files/filesApi.ts:39</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/advancedListFiles">List files</a></p>
-							<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listFiles) -->
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.list({<span class="hljs-attr">filter</span>: {<span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/png'</span>}});</code></pre>
-					</div>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">?: </span><a href="../interfaces/filerequestfilter.html" class="tsd-signature-type">FileRequestFilter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/files/filesApi.ts#L57">resources/files/filesApi.ts:57</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/advancedListFiles">List files</a></p>
+									<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listFiles) -->
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.list({<span class="hljs-attr">filter</span>: {<span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/png'</span>}});</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> scope: <a href="../interfaces/filerequestfilter.html" class="tsd-signature-type">FileRequestFilter</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="retrieve" class="tsd-anchor"></a>
 					<h3>retrieve</h3>
-					<div class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesretrieveendpoint" class="tsd-signature-type">FilesRetrieveEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/files/filesApi.ts#L64">resources/files/filesApi.ts:64</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/byIdsFiles">Retrieve files</a></p>
-							<!-- or [just one](https://doc.cognitedata.com/api/v1/#operation/getFileByInternalId) -->
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
-					</div>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/files/filesApi.ts#L71">resources/files/filesApi.ts:71</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/byIdsFiles">Retrieve files</a></p>
+									<!-- or [just one](https://doc.cognitedata.com/api/v1/#operation/getFileByInternalId) -->
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">'abc'</span>}]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ids: <a href="../index.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="search" class="tsd-anchor"></a>
 					<h3>search</h3>
-					<div class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">:</span> <a href="../index.html#filessearchendpoint" class="tsd-signature-type">FilesSearchEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/files/filesApi.ts#L80">resources/files/filesApi.ts:80</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/searchFiles">Search for files</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.search({
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">search<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><a href="../interfaces/filessearchfilter.html" class="tsd-signature-type">FilesSearchFilter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/files/filesApi.ts#L105">resources/files/filesApi.ts:105</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/searchFiles">Search for files</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.search({
   <span class="hljs-attr">filter</span>: {
     <span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/jpg'</span>,
   },
@@ -178,50 +321,94 @@
     <span class="hljs-attr">name</span>: <span class="hljs-string">'Pump'</span>
   }
 });</code></pre>
-					</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>query: <a href="../interfaces/filessearchfilter.html" class="tsd-signature-type">FilesSearchFilter</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="update" class="tsd-anchor"></a>
 					<h3>update</h3>
-					<div class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesupdateendpoint" class="tsd-signature-type">FilesUpdateEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/files/filesApi.ts#L112">resources/files/filesApi.ts:112</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/updateFiles">Update files</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.update([{
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span>changes<span class="tsd-signature-symbol">: </span><a href="../index.html#filechangeupdate" class="tsd-signature-type">FileChangeUpdate</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/files/filesApi.ts#L87">resources/files/filesApi.ts:87</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/updateFiles">Update files</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.update([{
   <span class="hljs-attr">id</span>: <span class="hljs-number">123</span>,
   <span class="hljs-attr">update</span>: {
     <span class="hljs-attr">source</span>: { <span class="hljs-attr">set</span>: <span class="hljs-string">'new source'</span> }
   }
 }]);</code></pre>
-					</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>changes: <a href="../index.html#filechangeupdate" class="tsd-signature-type">FileChangeUpdate</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="upload" class="tsd-anchor"></a>
 					<h3>upload</h3>
-					<div class="tsd-signature tsd-kind-icon">upload<span class="tsd-signature-symbol">:</span> <a href="../index.html#filesuploadendpoint" class="tsd-signature-type">FilesUploadEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/files/filesApi.ts#L54">resources/files/filesApi.ts:54</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/initFileUpload">Upload a file</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> fileContent = <span class="hljs-string">'file data here'</span>; <span class="hljs-comment">// can also be of type ArrayBuffer, Buffer, Blob, File or any</span>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">upload<span class="tsd-signature-symbol">(</span>metadata<span class="tsd-signature-symbol">: </span><a href="../interfaces/externalfilesmetadata.html" class="tsd-signature-type">ExternalFilesMetadata</a>, fileContent<span class="tsd-signature-symbol">?: </span><a href="../index.html#filecontent" class="tsd-signature-type">FileContent</a>, overwrite<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, waitUntilAcknowledged<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/uploadfilemetadataresponse.html" class="tsd-signature-type">UploadFileMetadataResponse</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/files/filesApi.ts#L35">resources/files/filesApi.ts:35</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/initFileUpload">Upload a file</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> fileContent = <span class="hljs-string">'file data here'</span>; <span class="hljs-comment">// can also be of type ArrayBuffer, Buffer, Blob, File or any</span>
 <span class="hljs-comment">// automatic upload:</span>
 <span class="hljs-keyword">const</span> file = <span class="hljs-keyword">await</span> client.files.upload({<span class="hljs-attr">name</span>: <span class="hljs-string">'examplefile.jpg'</span>, <span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/jpg'</span>}, fileContent);
 
 <span class="hljs-comment">// manual with uploadUrl:</span>
 <span class="hljs-keyword">const</span> file2 = <span class="hljs-keyword">await</span> client.files.upload({<span class="hljs-attr">name</span>: <span class="hljs-string">'examplefile.jpg'</span>, <span class="hljs-attr">mimeType</span>: <span class="hljs-string">'image/jpg'</span>});
 <span class="hljs-comment">// then upload using the file.uploadUrl</span></code></pre>
-					</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>metadata: <a href="../interfaces/externalfilesmetadata.html" class="tsd-signature-type">ExternalFilesMetadata</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> fileContent: <a href="../index.html#filecontent" class="tsd-signature-type">FileContent</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> overwrite: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> waitUntilAcknowledged: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/uploadfilemetadataresponse.html" class="tsd-signature-type">UploadFileMetadataResponse</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/filesmetadata.html" class="tsd-signature-type">FilesMetadata</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -237,28 +424,37 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class="current tsd-kind-class tsd-has-type-parameter">
 						<a href="filesapi.html" class="tsd-kind-icon">FilesAPI</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
+								<a href="filesapi.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="filesapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="filesapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="filesapi.html#delete" class="tsd-kind-icon">delete</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="filesapi.html#getdownloadurls" class="tsd-kind-icon">get<wbr>Download<wbr>Urls</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="filesapi.html#list" class="tsd-kind-icon">list</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="filesapi.html#retrieve" class="tsd-kind-icon">retrieve</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="filesapi.html#search" class="tsd-kind-icon">search</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="filesapi.html#update" class="tsd-kind-icon">update</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="filesapi.html#upload" class="tsd-kind-icon">upload</a>
 							</li>
 						</ul>

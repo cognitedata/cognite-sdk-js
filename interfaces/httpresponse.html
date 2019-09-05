@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ListReveal3DNodeAncestors | Cognite JavaScript SDK</title>
+	<title>HttpResponse | Cognite JavaScript SDK</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,29 +52,29 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="listreveal3dnodeancestors.html">ListReveal3DNodeAncestors</a>
+					<a href="httpresponse.html">HttpResponse</a>
 				</li>
 			</ul>
-			<h1>Interface ListReveal3DNodeAncestors</h1>
+			<h1>Interface HttpResponse&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>T</h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="cursor.html" class="tsd-signature-type">Cursor</a>
-					</li>
-					<li>
-						<a href="limit.html" class="tsd-signature-type">Limit</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">ListReveal3DNodeAncestors</span>
-							</li>
-						</ul>
+						<span class="target">HttpResponse</span>
 					</li>
 				</ul>
 			</section>
@@ -82,37 +82,46 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-inherited">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="listreveal3dnodeancestors.html#cursor" class="tsd-kind-icon">cursor</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="listreveal3dnodeancestors.html#limit" class="tsd-kind-icon">limit</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="httpresponse.html#data" class="tsd-kind-icon">data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="httpresponse.html#headers" class="tsd-kind-icon">headers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="httpresponse.html#status" class="tsd-kind-icon">status</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="cursor" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cursor</h3>
-					<div class="tsd-signature tsd-kind-icon">cursor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="data" class="tsd-anchor"></a>
+					<h3>data</h3>
+					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="cursor.html">Cursor</a>.<a href="cursor.html#cursor-1">cursor</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/types/types.ts#L341">types/types.ts:341</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/utils/http/basicHttpClient.ts#L202">utils/http/basicHttpClient.ts:202</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="limit" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> limit</h3>
-					<div class="tsd-signature tsd-kind-icon">limit<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="headers" class="tsd-anchor"></a>
+					<h3>headers</h3>
+					<div class="tsd-signature tsd-kind-icon">headers<span class="tsd-signature-symbol">:</span> <a href="httpheaders.html" class="tsd-signature-type">HttpHeaders</a></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="limit.html">Limit</a>.<a href="limit.html#limit-1">limit</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/types/types.ts#L849">types/types.ts:849</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/utils/http/basicHttpClient.ts#L204">utils/http/basicHttpClient.ts:204</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="status" class="tsd-anchor"></a>
+					<h3>status</h3>
+					<div class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/utils/http/basicHttpClient.ts#L203">utils/http/basicHttpClient.ts:203</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -130,14 +139,17 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface">
-						<a href="listreveal3dnodeancestors.html" class="tsd-kind-icon">List<wbr>Reveal3DNode<wbr>Ancestors</a>
+					<li class="current tsd-kind-interface tsd-has-type-parameter">
+						<a href="httpresponse.html" class="tsd-kind-icon">Http<wbr>Response</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="listreveal3dnodeancestors.html#cursor" class="tsd-kind-icon">cursor</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="httpresponse.html#data" class="tsd-kind-icon">data</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="listreveal3dnodeancestors.html#limit" class="tsd-kind-icon">limit</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="httpresponse.html#headers" class="tsd-kind-icon">headers</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="httpresponse.html#status" class="tsd-kind-icon">status</a>
 							</li>
 						</ul>
 					</li>

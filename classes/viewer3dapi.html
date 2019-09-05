@@ -55,18 +55,34 @@
 					<a href="viewer3dapi.html">Viewer3DAPI</a>
 				</li>
 			</ul>
-			<h1>Class Viewer3DAPI</h1>
+			<h1>Class Viewer3DAPI&lt;TransformedType, WrapperType&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>TransformedType</h4>
+					</li>
+					<li>
+						<h4>WrapperType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransformedType</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Viewer3DAPI</span>
+						<a href="baseresourceapi.html" class="tsd-signature-type">BaseResourceAPI</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">Viewer3DAPI</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -74,6 +90,13 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="viewer3dapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="viewer3dapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
@@ -87,19 +110,44 @@
 					</div>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="httpclient" class="tsd-anchor"></a>
+					<h3>http<wbr>Client</h3>
+					<div class="tsd-signature tsd-kind-icon">http<wbr>Client<span class="tsd-signature-symbol">:</span> <a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#httpclient">httpClient</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L58">resources/baseResourceApi.ts:58</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="resourcepath" class="tsd-anchor"></a>
+					<h3>resource<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">resource<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#resourcepath">resourcePath</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L57">resources/baseResourceApi.ts:57</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="listrevealnode3dancestors" class="tsd-anchor"></a>
 					<h3>list<wbr>Reveal<wbr>Node3DAncestors</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">list<wbr>Reveal<wbr>Node3DAncestors<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, revisionId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, nodeId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/list3dnodesquery.html" class="tsd-signature-type">List3DNodesQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cursorresponse.html" class="tsd-signature-type">CursorResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">list<wbr>Reveal<wbr>Node3DAncestors<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, revisionId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, nodeId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/list3dnodesquery.html" class="tsd-signature-type">List3DNodesQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/3d/viewer3DApi.ts#L81">resources/3d/viewer3DApi.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/3d/viewer3DApi.ts#L92">resources/3d/viewer3DApi.ts:92</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -113,22 +161,19 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>modelId: <span class="tsd-signature-type">number</span></h5>
+									<h5>modelId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>revisionId: <span class="tsd-signature-type">number</span></h5>
+									<h5>revisionId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>nodeId: <span class="tsd-signature-type">number</span></h5>
+									<h5>nodeId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>query: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/list3dnodesquery.html" class="tsd-signature-type">List3DNodesQuery</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/list3dnodesquery.html" class="tsd-signature-type">List3DNodesQuery</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cursorresponse.html" class="tsd-signature-type">CursorResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>
-								<span class="tsd-signature-symbol"> &amp; </span>
-								<a href="../interfaces/cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -136,13 +181,13 @@
 					<a name="listrevealnodes3d" class="tsd-anchor"></a>
 					<h3>list<wbr>Reveal<wbr>Nodes3D</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">list<wbr>Reveal<wbr>Nodes3D<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, revisionId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/list3dnodesquery.html" class="tsd-signature-type">List3DNodesQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cursorresponse.html" class="tsd-signature-type">CursorResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">list<wbr>Reveal<wbr>Nodes3D<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, revisionId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/list3dnodesquery.html" class="tsd-signature-type">List3DNodesQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/3d/viewer3DApi.ts#L59">resources/3d/viewer3DApi.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/3d/viewer3DApi.ts#L75">resources/3d/viewer3DApi.ts:75</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -156,19 +201,16 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>modelId: <span class="tsd-signature-type">number</span></h5>
+									<h5>modelId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>revisionId: <span class="tsd-signature-type">number</span></h5>
+									<h5>revisionId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>query: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/list3dnodesquery.html" class="tsd-signature-type">List3DNodesQuery</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/list3dnodesquery.html" class="tsd-signature-type">List3DNodesQuery</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cursorresponse.html" class="tsd-signature-type">CursorResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>
-								<span class="tsd-signature-symbol"> &amp; </span>
-								<a href="../interfaces/cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealnode3d.html" class="tsd-signature-type">RevealNode3D</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -176,13 +218,13 @@
 					<a name="listrevealsectors3d" class="tsd-anchor"></a>
 					<h3>list<wbr>Reveal<wbr>Sectors3D</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">list<wbr>Reveal<wbr>Sectors3D<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, revisionId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/listrevealsectors3dquery.html" class="tsd-signature-type">ListRevealSectors3DQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cursorresponse.html" class="tsd-signature-type">CursorResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealsector3d.html" class="tsd-signature-type">RevealSector3D</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealsector3d.html" class="tsd-signature-type">RevealSector3D</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">list<wbr>Reveal<wbr>Sectors3D<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, revisionId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/listrevealsectors3dquery.html" class="tsd-signature-type">ListRevealSectors3DQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealsector3d.html" class="tsd-signature-type">RevealSector3D</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/3d/viewer3DApi.ts#L104">resources/3d/viewer3DApi.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/3d/viewer3DApi.ts#L115">resources/3d/viewer3DApi.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -196,19 +238,16 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>modelId: <span class="tsd-signature-type">number</span></h5>
+									<h5>modelId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>revisionId: <span class="tsd-signature-type">number</span></h5>
+									<h5>revisionId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>query: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/listrevealsectors3dquery.html" class="tsd-signature-type">ListRevealSectors3DQuery</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/listrevealsectors3dquery.html" class="tsd-signature-type">ListRevealSectors3DQuery</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cursorresponse.html" class="tsd-signature-type">CursorResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealsector3d.html" class="tsd-signature-type">RevealSector3D</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>
-								<span class="tsd-signature-symbol"> &amp; </span>
-								<a href="../interfaces/cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealsector3d.html" class="tsd-signature-type">RevealSector3D</a><span class="tsd-signature-symbol">&gt;</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealsector3d.html" class="tsd-signature-type">RevealSector3D</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -216,13 +255,13 @@
 					<a name="retrieverevealrevision3d" class="tsd-anchor"></a>
 					<h3>retrieve<wbr>Reveal<wbr>Revision3D</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">retrieve<wbr>Reveal<wbr>Revision3D<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, revisionId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealrevision3d.html" class="tsd-signature-type">RevealRevision3D</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">retrieve<wbr>Reveal<wbr>Revision3D<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, revisionId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealrevision3d.html" class="tsd-signature-type">RevealRevision3D</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/3d/viewer3DApi.ts#L39">resources/3d/viewer3DApi.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/3d/viewer3DApi.ts#L59">resources/3d/viewer3DApi.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -234,10 +273,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>modelId: <span class="tsd-signature-type">number</span></h5>
+									<h5>modelId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>revisionId: <span class="tsd-signature-type">number</span></h5>
+									<h5>revisionId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealrevision3d.html" class="tsd-signature-type">RevealRevision3D</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -248,13 +287,13 @@
 					<a name="retrieveunrealrevision3d" class="tsd-anchor"></a>
 					<h3>retrieve<wbr>Unreal<wbr>Revision3D</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">retrieve<wbr>Unreal<wbr>Revision3D<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, revisionId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealrevision3d.html" class="tsd-signature-type">RevealRevision3D</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">retrieve<wbr>Unreal<wbr>Revision3D<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, revisionId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealrevision3d.html" class="tsd-signature-type">RevealRevision3D</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/3d/viewer3DApi.ts#L124">resources/3d/viewer3DApi.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/3d/viewer3DApi.ts#L130">resources/3d/viewer3DApi.ts:130</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -266,10 +305,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>modelId: <span class="tsd-signature-type">number</span></h5>
+									<h5>modelId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 								<li>
-									<h5>revisionId: <span class="tsd-signature-type">number</span></h5>
+									<h5>revisionId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/revealrevision3d.html" class="tsd-signature-type">RevealRevision3D</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -290,9 +329,15 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class="current tsd-kind-class tsd-has-type-parameter">
 						<a href="viewer3dapi.html" class="tsd-kind-icon">Viewer3DAPI</a>
 						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="viewer3dapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="viewer3dapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="viewer3dapi.html#listrevealnode3dancestors" class="tsd-kind-icon">list<wbr>Reveal<wbr>Node3DAncestors</a>
 							</li>

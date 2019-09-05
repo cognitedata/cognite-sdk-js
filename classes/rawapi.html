@@ -55,18 +55,34 @@
 					<a href="rawapi.html">RawAPI</a>
 				</li>
 			</ul>
-			<h1>Class RawAPI</h1>
+			<h1>Class RawAPI&lt;TransformedType, WrapperType&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>TransformedType</h4>
+					</li>
+					<li>
+						<h4>WrapperType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransformedType</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">RawAPI</span>
+						<a href="baseresourceapi.html" class="tsd-signature-type">BaseResourceAPI</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdb.html" class="tsd-signature-type">RawDB</a><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">RawAPI</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -74,21 +90,23 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="rawapi.html#createdatabases" class="tsd-kind-icon">create<wbr>Databases</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="rawapi.html#deletedatabases" class="tsd-kind-icon">delete<wbr>Databases</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="rawapi.html#listdatabases" class="tsd-kind-icon">list<wbr>Databases</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="rawapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="rawapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rawapi.html#createdatabases" class="tsd-kind-icon">create<wbr>Databases</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rawapi.html#createtables" class="tsd-kind-icon">create<wbr>Tables</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rawapi.html#deletedatabases" class="tsd-kind-icon">delete<wbr>Databases</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rawapi.html#deleterows" class="tsd-kind-icon">delete<wbr>Rows</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rawapi.html#deletetables" class="tsd-kind-icon">delete<wbr>Tables</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rawapi.html#insertrows" class="tsd-kind-icon">insert<wbr>Rows</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rawapi.html#listdatabases" class="tsd-kind-icon">list<wbr>Databases</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rawapi.html#listrows" class="tsd-kind-icon">list<wbr>Rows</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rawapi.html#listtables" class="tsd-kind-icon">list<wbr>Tables</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rawapi.html#retrieverow" class="tsd-kind-icon">retrieve<wbr>Row</a></li>
@@ -97,70 +115,73 @@
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="createdatabases" class="tsd-anchor"></a>
-					<h3>create<wbr>Databases</h3>
-					<div class="tsd-signature tsd-kind-icon">create<wbr>Databases<span class="tsd-signature-symbol">:</span> <a href="../index.html#rawcreatedatabasesendpoint" class="tsd-signature-type">RawCreateDatabasesEndpoint</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="httpclient" class="tsd-anchor"></a>
+					<h3>http<wbr>Client</h3>
+					<div class="tsd-signature tsd-kind-icon">http<wbr>Client<span class="tsd-signature-symbol">:</span> <a href="cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#httpclient">httpClient</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/raw/rawApi.ts#L44">resources/raw/rawApi.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L58">resources/baseResourceApi.ts:58</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/createDBs">Create databases</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> databases = <span class="hljs-keyword">await</span> client.raw.createDatabases([{ <span class="hljs-attr">name</span>: <span class="hljs-string">'My company'</span> }]);</code></pre>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="deletedatabases" class="tsd-anchor"></a>
-					<h3>delete<wbr>Databases</h3>
-					<div class="tsd-signature tsd-kind-icon">delete<wbr>Databases<span class="tsd-signature-symbol">:</span> <a href="../index.html#rawdeletedatabasesendpoint" class="tsd-signature-type">RawDeleteDatabasesEndpoint</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="resourcepath" class="tsd-anchor"></a>
+					<h3>resource<wbr>Path</h3>
+					<div class="tsd-signature tsd-kind-icon">resource<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#resourcepath">resourcePath</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/raw/rawApi.ts#L53">resources/raw/rawApi.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L57">resources/baseResourceApi.ts:57</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteDBs">Delete databases</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">await</span> client.raw.deleteDatabases([{ <span class="hljs-attr">name</span>: <span class="hljs-string">'My company'</span> }]);</code></pre>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="listdatabases" class="tsd-anchor"></a>
-					<h3>list<wbr>Databases</h3>
-					<div class="tsd-signature tsd-kind-icon">list<wbr>Databases<span class="tsd-signature-symbol">:</span> <a href="../index.html#rawlistdatabasesendpoint" class="tsd-signature-type">RawListDatabasesEndpoint</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/raw/rawApi.ts#L35">resources/raw/rawApi.ts:35</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p><a href="https://doc.cognitedata.com/api/v1/#operation/getDBs">List databases</a></p>
-						</div>
-						<pre><code class="language-js"><span class="hljs-keyword">const</span> databases = <span class="hljs-keyword">await</span> client.raw.listDatabases();</code></pre>
-					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="createtables" class="tsd-anchor"></a>
-					<h3>create<wbr>Tables</h3>
+					<a name="createdatabases" class="tsd-anchor"></a>
+					<h3>create<wbr>Databases</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Tables<span class="tsd-signature-symbol">(</span>databaseName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, items<span class="tsd-signature-symbol">: </span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">[]</span>, ensureParent<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Databases<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../interfaces/rawdb.html" class="tsd-signature-type">RawDB</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdb.html" class="tsd-signature-type">RawDB</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/raw/rawApi.ts#L96">resources/raw/rawApi.ts:96</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/raw/rawApi.ts#L41">resources/raw/rawApi.ts:41</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/createDBs">Create databases</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> databases = <span class="hljs-keyword">await</span> client.raw.createDatabases([{ <span class="hljs-attr">name</span>: <span class="hljs-string">'My company'</span> }]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <a href="../interfaces/rawdb.html" class="tsd-signature-type">RawDB</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdb.html" class="tsd-signature-type">RawDB</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="createtables" class="tsd-anchor"></a>
+					<h3>create<wbr>Tables</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Tables<span class="tsd-signature-symbol">(</span>databaseName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, items<span class="tsd-signature-symbol">: </span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">[]</span>, ensureParent<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/raw/rawApi.ts#L79">resources/raw/rawApi.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -178,10 +199,42 @@
 									<h5>items: <a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> ensureParent: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> ensureParent: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="deletedatabases" class="tsd-anchor"></a>
+					<h3>delete<wbr>Databases</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Databases<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../interfaces/rawdb.html" class="tsd-signature-type">RawDB</a><span class="tsd-signature-symbol">[]</span>, params<span class="tsd-signature-symbol">?: </span><a href="../interfaces/rawdatabasedeleteparams.html" class="tsd-signature-type">RawDatabaseDeleteParams</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/raw/rawApi.ts#L65">resources/raw/rawApi.ts:65</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteDBs">Delete databases</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.raw.deleteDatabases([{ <span class="hljs-attr">name</span>: <span class="hljs-string">'My company'</span> }]);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <a href="../interfaces/rawdb.html" class="tsd-signature-type">RawDB</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <a href="../interfaces/rawdatabasedeleteparams.html" class="tsd-signature-type">RawDatabaseDeleteParams</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -195,7 +248,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/raw/rawApi.ts#L202">resources/raw/rawApi.ts:202</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/raw/rawApi.ts#L165">resources/raw/rawApi.ts:165</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -230,7 +283,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/raw/rawApi.ts#L118">resources/raw/rawApi.ts:118</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/raw/rawApi.ts#L108">resources/raw/rawApi.ts:108</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -256,13 +309,13 @@
 					<a name="insertrows" class="tsd-anchor"></a>
 					<h3>insert<wbr>Rows</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">insert<wbr>Rows<span class="tsd-signature-symbol">(</span>databaseName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, tableName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, items<span class="tsd-signature-symbol">: </span><a href="../interfaces/rawdbrowinsert.html" class="tsd-signature-type">RawDBRowInsert</a><span class="tsd-signature-symbol">[]</span>, ensureParent<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">insert<wbr>Rows<span class="tsd-signature-symbol">(</span>databaseName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, tableName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, items<span class="tsd-signature-symbol">: </span><a href="../interfaces/rawdbrowinsert.html" class="tsd-signature-type">RawDBRowInsert</a><span class="tsd-signature-symbol">[]</span>, ensureParent<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/raw/rawApi.ts#L159">resources/raw/rawApi.ts:159</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/raw/rawApi.ts#L119">resources/raw/rawApi.ts:119</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -283,10 +336,39 @@
 									<h5>items: <a href="../interfaces/rawdbrowinsert.html" class="tsd-signature-type">RawDBRowInsert</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> ensureParent: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> ensureParent: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="listdatabases" class="tsd-anchor"></a>
+					<h3>list<wbr>Databases</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">list<wbr>Databases<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">?: </span><a href="../index.html#listrawdatabases" class="tsd-signature-type">ListRawDatabases</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdb.html" class="tsd-signature-type">RawDB</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/raw/rawApi.ts#L52">resources/raw/rawApi.ts:52</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/getDBs">List databases</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> databases = <span class="hljs-keyword">await</span> client.raw.listDatabases();</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> scope: <a href="../index.html#listrawdatabases" class="tsd-signature-type">ListRawDatabases</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdb.html" class="tsd-signature-type">RawDB</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -294,13 +376,13 @@
 					<a name="listrows" class="tsd-anchor"></a>
 					<h3>list<wbr>Rows</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">list<wbr>Rows<span class="tsd-signature-symbol">(</span>databaseName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, tableName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/listrawrows.html" class="tsd-signature-type">ListRawRows</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cursorresponse.html" class="tsd-signature-type">CursorResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbrow.html" class="tsd-signature-type">RawDBRow</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbrow.html" class="tsd-signature-type">RawDBRow</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">list<wbr>Rows<span class="tsd-signature-symbol">(</span>databaseName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, tableName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/listrawrows.html" class="tsd-signature-type">ListRawRows</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbrow.html" class="tsd-signature-type">RawDBRow</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/raw/rawApi.ts#L134">resources/raw/rawApi.ts:134</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/raw/rawApi.ts#L135">resources/raw/rawApi.ts:135</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -318,13 +400,10 @@
 									<h5>tableName: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>query: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/listrawrows.html" class="tsd-signature-type">ListRawRows</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/listrawrows.html" class="tsd-signature-type">ListRawRows</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cursorresponse.html" class="tsd-signature-type">CursorResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbrow.html" class="tsd-signature-type">RawDBRow</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>
-								<span class="tsd-signature-symbol"> &amp; </span>
-								<a href="../interfaces/cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbrow.html" class="tsd-signature-type">RawDBRow</a><span class="tsd-signature-symbol">&gt;</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbrow.html" class="tsd-signature-type">RawDBRow</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -332,13 +411,13 @@
 					<a name="listtables" class="tsd-anchor"></a>
 					<h3>list<wbr>Tables</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">list<wbr>Tables<span class="tsd-signature-symbol">(</span>databaseName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/listrawtables.html" class="tsd-signature-type">ListRawTables</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cursorresponse.html" class="tsd-signature-type">CursorResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">list<wbr>Tables<span class="tsd-signature-symbol">(</span>databaseName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, scope<span class="tsd-signature-symbol">?: </span><a href="../index.html#listrawtables" class="tsd-signature-type">ListRawTables</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/raw/rawApi.ts#L79">resources/raw/rawApi.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/raw/rawApi.ts#L94">resources/raw/rawApi.ts:94</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -353,13 +432,10 @@
 									<h5>databaseName: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>query: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/listrawtables.html" class="tsd-signature-type">ListRawTables</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> scope: <a href="../index.html#listrawtables" class="tsd-signature-type">ListRawTables</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/cursorresponse.html" class="tsd-signature-type">CursorResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>
-								<span class="tsd-signature-symbol"> &amp; </span>
-								<a href="../interfaces/cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">&gt;</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/rawdbtable.html" class="tsd-signature-type">RawDBTable</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -373,7 +449,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/df6e7d8/src/resources/raw/rawApi.ts#L182">resources/raw/rawApi.ts:182</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/raw/rawApi.ts#L150">resources/raw/rawApi.ts:150</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -412,20 +488,23 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class="current tsd-kind-class tsd-has-type-parameter">
 						<a href="rawapi.html" class="tsd-kind-icon">RawAPI</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="rawapi.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="rawapi.html#resourcepath" class="tsd-kind-icon">resource<wbr>Path</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="rawapi.html#createdatabases" class="tsd-kind-icon">create<wbr>Databases</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="rawapi.html#deletedatabases" class="tsd-kind-icon">delete<wbr>Databases</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="rawapi.html#listdatabases" class="tsd-kind-icon">list<wbr>Databases</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="rawapi.html#createtables" class="tsd-kind-icon">create<wbr>Tables</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="rawapi.html#deletedatabases" class="tsd-kind-icon">delete<wbr>Databases</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="rawapi.html#deleterows" class="tsd-kind-icon">delete<wbr>Rows</a>
@@ -435,6 +514,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="rawapi.html#insertrows" class="tsd-kind-icon">insert<wbr>Rows</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="rawapi.html#listdatabases" class="tsd-kind-icon">list<wbr>Databases</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="rawapi.html#listrows" class="tsd-kind-icon">list<wbr>Rows</a>
