@@ -66,6 +66,17 @@ describe('BasicHttpClient', () => {
       expect(response.data).toBe('hello');
     });
 
+    test('handle arraybuffer response', async () => {
+      const buffer = new ArrayBuffer(42);
+      nock(baseUrl)
+        .get('/')
+        .reply(200, buffer);
+      const response = await client.get<string>('/', {
+        responseType: HttpResponseType.ArrayBuffer,
+      });
+      expect(response.data).toEqual(buffer);
+    });
+
     test('handle query params', async () => {
       nock(baseUrl)
         .get('/')
