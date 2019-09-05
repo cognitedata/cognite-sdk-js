@@ -105,7 +105,7 @@ See [this guide](./guides/MIGRATION_GUIDE_1xx_2xx.md) on how to migrate from ver
 
 ## Development
 
-There is one integration test that requires a api key. In order to run this, you need an api key for the `cognitesdk-js` tenant. Talk to any of the contributors or leave an issue and it'll get sorted. Jenkins will run the test and has its own api key.
+There is one integration test that requires a api key. In order to run this, you need an api key for the `cognitesdk-js` tenant. Talk to any of the contributors or leave an issue and it'll get sorted. Travis will run the test and has its own api key.
 Set the environment variable `COGNITE_CREDENTIALS` to your api-key.
 
 Run all tests:
