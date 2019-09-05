@@ -174,8 +174,6 @@ describe('Asset integration test', () => {
     expect(response.items).toBeDefined();
     expect(response.items[0].id).toBeDefined();
     expect(response.items[0]).toBeInstanceOf(AssetClass);
-    // TODO: uncomment line below
-    // expect(response.items).toBeInstanceOf(AssetList);
   });
 
   test('list.next', async () => {
@@ -183,8 +181,6 @@ describe('Asset integration test', () => {
     expect(response.next).toBeDefined();
     const nextPage = await response.next!();
     expect(nextPage.items[0]).toBeInstanceOf(AssetClass);
-    // TODO: uncomment line below
-    // expect(nextPage.items).toBeInstanceOf(AssetList);
   });
 
   test('list with autoPaging', async () => {
