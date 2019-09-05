@@ -11,7 +11,6 @@ import { RevertableArraySorter } from '../../revertableArraySorter';
 import {
   Asset as TypeAsset,
   AssetChange,
-  AssetDeleteParams,
   AssetIdEither,
   AssetListScope,
   AssetSearchFilter,
@@ -165,4 +164,8 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
     }
     return new AssetList(this.client, assetsArray);
   };
+}
+
+export interface AssetDeleteParams {
+  recursive?: boolean;
 }

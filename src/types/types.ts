@@ -166,10 +166,6 @@ export interface AssetChangeByExternalId extends AssetPatch, ExternalId {}
 
 export interface AssetChangeById extends AssetPatch, InternalId {}
 
-export interface AssetDeleteParams {
-  recursive?: boolean;
-}
-
 /**
  * Description of asset.
  */
