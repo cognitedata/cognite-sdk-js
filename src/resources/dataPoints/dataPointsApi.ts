@@ -33,7 +33,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    */
   public async retrieve(
     query: DatapointsMultiQuery
-  ): Promise<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]> {
+  ): Promise<DatapointsGetAggregateDatapoint[] | DatapointsGetDatapoint[]> {
     return this.retrieveDatapointsEndpoint(query);
   }
 
