@@ -6,7 +6,7 @@ import {
   Group,
   GroupServiceAccount,
   GroupSpec,
-  ItemsResponse,
+  ItemsWrapper,
   ListGroups,
 } from '../../types/types';
 
@@ -39,7 +39,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    */
   public async list(scope?: ListGroups): Promise<Group[]> {
     const path = this.url();
-    const response = await this.httpClient.get<ItemsResponse<Group[]>>(path, {
+    const response = await this.httpClient.get<ItemsWrapper<Group[]>>(path, {
       params: scope,
     });
     return this.addToMapAndReturn(response.data.items, response);
@@ -68,7 +68,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
   ): Promise<GroupServiceAccount[]> {
     const path = this.encodeServiceAccountUrl(groupId);
     const response = await this.httpClient.get<
-      ItemsResponse<GroupServiceAccount[]>
+      ItemsWrapper<GroupServiceAccount[]>
     >(path);
     return this.addToMapAndReturn(response.data.items, response);
   }

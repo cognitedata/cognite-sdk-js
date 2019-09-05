@@ -7,7 +7,7 @@ import {
   DatapointsGetDatapoint,
   DatapointsMultiQuery,
   DatapointsPostDatapoint,
-  ItemsResponse,
+  ItemsWrapper,
   LatestDataBeforeRequest,
 } from '../../types/types';
 import { promiseAllWithData } from '../assets/assetUtils';
@@ -79,9 +79,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
   private async retrieveDatapointsEndpoint(query: DatapointsMultiQuery) {
     const path = this.url('data/list');
     const response = await this.httpClient.post<
-      ItemsResponse<
-        (DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]
-      >
+      ItemsWrapper<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]>
     >(path, {
       data: query,
     });
@@ -91,7 +89,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
   private async retrieveLatestEndpoint(items: LatestDataBeforeRequest[]) {
     const path = this.url('data/latest');
     const response = await this.httpClient.post<
-      ItemsResponse<DatapointsGetDatapoint[]>
+      ItemsWrapper<DatapointsGetDatapoint[]>
     >(path, {
       data: { items },
     });
@@ -103,7 +101,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     await promiseAllWithData(
       BaseResourceAPI.chunk(items, 10000),
       singleChunk =>
-        this.httpClient.post<ItemsResponse<ResponseType[]>>(path, {
+        this.httpClient.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { singleChunk },
         }),
       false

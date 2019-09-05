@@ -3,7 +3,7 @@
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteInternalId,
-  ItemsResponse,
+  ItemsWrapper,
   ServiceAccount,
   ServiceAccountInput,
 } from '../../types/types';
@@ -33,7 +33,7 @@ export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
    */
   public async list(): Promise<ServiceAccount[]> {
     const path = this.url();
-    const response = await this.httpClient.get<ItemsResponse<ServiceAccount[]>>(
+    const response = await this.httpClient.get<ItemsWrapper<ServiceAccount[]>>(
       path
     );
     return this.addToMapAndReturn(response.data.items, response);

@@ -6,7 +6,7 @@ import {
   ApiKeyObject,
   ApiKeyRequest,
   CogniteInternalId,
-  ItemsResponse,
+  ItemsWrapper,
   NewApiKeyResponse,
 } from '../../types/types';
 
@@ -31,7 +31,7 @@ export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
    */
   public async list(scope?: ApiKeyListScope): Promise<ApiKeyObject[]> {
     const path = this.url();
-    const response = await this.httpClient.get<ItemsResponse<ApiKeyObject[]>>(
+    const response = await this.httpClient.get<ItemsWrapper<ApiKeyObject[]>>(
       path,
       { params: scope }
     );

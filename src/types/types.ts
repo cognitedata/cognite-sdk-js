@@ -341,7 +341,7 @@ export interface Cursor {
   cursor?: string;
 }
 
-export interface CursorResponse<T> extends ItemsResponse<T> {
+export interface CursorResponse<T> extends ItemsWrapper<T> {
   nextCursor?: string;
 }
 
@@ -830,7 +830,10 @@ export interface InternalId {
   id: CogniteInternalId;
 }
 
-export interface ItemsResponse<T> {
+export type ItemsResponse<T> = ItemsWrapper<T[]>;
+
+/** @hidden */
+export interface ItemsWrapper<T> {
   items: T;
 }
 

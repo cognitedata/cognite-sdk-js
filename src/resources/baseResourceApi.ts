@@ -10,7 +10,7 @@ import {
   CursorResponse,
   FilterQuery,
   IdEither,
-  ItemsResponse,
+  ItemsWrapper,
   ListResponse,
 } from '../types/types';
 import { applyIfApplicable } from '../utils';
@@ -180,7 +180,7 @@ export abstract class BaseResourceAPI<
 
   protected transformAndReturn(
     items: ResponseType[],
-    metadata: HttpResponse<ItemsResponse<ResponseType[]>>
+    metadata: HttpResponse<ItemsWrapper<ResponseType[]>>
   ) {
     const transformedResponse = this.transformToClass(items);
     return this.addToMapAndReturn(transformedResponse, metadata);
@@ -190,7 +190,7 @@ export abstract class BaseResourceAPI<
     query: RequestType,
     requester: (
       request: RequestType
-    ) => Promise<HttpResponse<ItemsResponse<ResponseType[]>>[]>,
+    ) => Promise<HttpResponse<ItemsWrapper<ResponseType[]>>[]>,
     preRequestModifier?: (items: RequestType) => RequestType,
     postRequestModifier?: (items: ResponseType[]) => ResponseType[]
   ) {
@@ -208,14 +208,14 @@ export abstract class BaseResourceAPI<
     query: RequestType,
     requester: (
       request: RequestType
-    ) => Promise<HttpResponse<ItemsResponse<ResponseType[]>>>
+    ) => Promise<HttpResponse<ItemsWrapper<ResponseType[]>>>
   ) {
     const response = await requester.bind(this)(query);
     return this.transformAndReturn(response.data.items, response);
   }
 
   protected mergeItemsFromItemsResponse<T>(
-    responses: HttpResponse<ItemsResponse<T[]>>[]
+    responses: HttpResponse<ItemsWrapper<T[]>>[]
   ): T[] {
     return responses
       .map(response => response.data.items)
@@ -254,7 +254,7 @@ export abstract class BaseResourceAPI<
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, 1000),
       singleChunk =>
-        this.httpClient.post<ItemsResponse<ResponseType[]>>(path, {
+        this.httpClient.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { ...params, items: singleChunk },
         }),
       false
@@ -267,13 +267,13 @@ export abstract class BaseResourceAPI<
   ) {
     return this.postInSequenceWithAutomaticChunking<
       RequestType,
-      ItemsResponse<ResponseType>
+      ItemsWrapper<ResponseType>
     >(path, items);
   }
 
   private transformResponse(
-    response: HttpResponse<ItemsResponse<ResponseType[]>>
-  ): HttpResponse<ItemsResponse<WrapperType>> {
+    response: HttpResponse<ItemsWrapper<ResponseType[]>>
+  ): HttpResponse<ItemsWrapper<WrapperType>> {
     return {
       ...response,
       data: {
@@ -290,7 +290,7 @@ export abstract class BaseResourceAPI<
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, 1000),
       singleChunk =>
-        this.httpClient.post<ItemsResponse<ResponseType[]>>(path, {
+        this.httpClient.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { items: singleChunk },
           params,
         }),

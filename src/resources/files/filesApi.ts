@@ -12,7 +12,7 @@ import {
   FilesMetadata,
   FilesSearchFilter,
   IdEither,
-  ItemsResponse,
+  ItemsWrapper,
   UploadFileMetadataResponse,
 } from '../../types/types';
 import { sleepPromise } from '../../utils';
@@ -192,7 +192,7 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
   private async getDownloadUrlsEndpoint(items: IdEither[]) {
     const path = this.url('downloadlink');
     const response = await this.httpClient.post<
-      ItemsResponse<(FileLink & IdEither)[]>
+      ItemsWrapper<(FileLink & IdEither)[]>
     >(path, { data: { items } });
     return this.addToMapAndReturn(response.data.items, response);
   }

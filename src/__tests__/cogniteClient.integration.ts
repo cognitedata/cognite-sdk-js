@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../cogniteClient';
-import { Asset, ItemsResponse } from '../types/types';
+import { Asset, ItemsWrapper } from '../types/types';
 import { setupLoggedInClient } from './testUtils';
 
 describe('createClientWithApiKey - integration', () => {
@@ -28,7 +28,7 @@ describe('http methods - integration', () => {
   });
   test('post method', async () => {
     const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
-    const response = await client.post<ItemsResponse<Asset[]>>(
+    const response = await client.post<ItemsWrapper<Asset[]>>(
       '/api/v1/projects/cognitesdk-js/assets',
       { data: { items: assets } }
     );

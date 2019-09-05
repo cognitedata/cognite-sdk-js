@@ -4,7 +4,7 @@ import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CursorResponse,
-  ItemsResponse,
+  ItemsWrapper,
   ListRawTables,
   RawDB,
   RawDBTable,
@@ -22,7 +22,7 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
     const responses = await promiseAllWithData(
       BaseResourceAPI.chunk(items, 1000),
       singleChunk =>
-        this.httpClient.post<ItemsResponse<RawDBTable[]>>(path, {
+        this.httpClient.post<ItemsWrapper<RawDBTable[]>>(path, {
           params,
           data: { items: singleChunk },
         }),
