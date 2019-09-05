@@ -16,7 +16,6 @@
     "noUnusedParameters": true,
     "noImplicitAny": true,
     "resolveJsonModule": true,
-    "resolveMappedPaths": true,
     "baseUrl": "./src",
     "paths": {
       "@/*": ["*"]
