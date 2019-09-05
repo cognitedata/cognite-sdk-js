@@ -46,7 +46,7 @@ describe('cdfRetryValidator', () => {
   });
 
   test('only retry reasonable times', () => {
-    expect(cdfRetryValidator(getRequest, response500, 1000)).toBeFalsy();
+    expect(cdfRetryValidator(getRequest, response500, 10)).toBeFalsy();
   });
 
   test('retry GET 500', () => {
