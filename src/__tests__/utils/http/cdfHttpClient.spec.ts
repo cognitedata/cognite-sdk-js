@@ -155,7 +155,7 @@ describe('CDFHttpClient', () => {
           retry();
         });
         expect((await client.get('/')).status).toBe(200);
-        expect(scope.isDone).toBeTruthy();
+        expect(scope.isDone()).toBeTruthy();
       });
 
       test('ignore errors to /login/status', async () => {
