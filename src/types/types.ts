@@ -197,7 +197,7 @@ export type AssetIdEither = IdEither;
 
 export type AssetInternalId = InternalId;
 
-export interface AssetListScope extends AssetFilter, Cursor {}
+export interface AssetListScope extends AssetFilter, FilterQuery {}
 
 export interface AssetMapping3D extends AssetMapping3DBase {
   /**
@@ -222,7 +222,7 @@ export interface AssetMapping3DBase {
   assetId: CogniteInternalId;
 }
 
-export interface AssetMappings3DListFilter extends Cursor, Limit {
+export interface AssetMappings3DListFilter extends FilterQuery {
   nodeId?: CogniteInternalId;
   assetId?: CogniteInternalId;
 }
@@ -341,8 +341,8 @@ export interface Cursor {
   cursor?: string;
 }
 
-export interface CursorResponse<T> extends ItemsResponse<T> {
-  nextCursor: string;
+export interface CursorResponse<T> extends ItemsWrapper<T> {
+  nextCursor?: string;
 }
 
 export type DELETE = 'DELETE';
@@ -528,7 +528,7 @@ export interface EventFilter {
   externalIdPrefix?: string;
 }
 
-export interface EventFilterRequest extends Cursor, Limit {
+export interface EventFilterRequest extends FilterQuery {
   filter?: EventFilter;
 }
 
@@ -648,7 +648,7 @@ export type FileMimeType = string;
  */
 export type FileName = string;
 
-export interface FileRequestFilter extends Cursor, FileFilter {}
+export interface FileRequestFilter extends FilterQuery, FileFilter {}
 
 export interface FilesMetadata extends ExternalFilesMetadata {
   id: CogniteInternalId;
@@ -691,6 +691,8 @@ export interface Filter {
   createdTime?: Date;
   lastUpdatedTime?: Date;
 }
+
+export interface FilterQuery extends Cursor, Limit {}
 
 export interface GetAggregateDatapoint extends GetDatapointMetadata {
   average?: number;
@@ -828,8 +830,11 @@ export interface InternalId {
   id: CogniteInternalId;
 }
 
-export interface ItemsResponse<T> {
-  items: T[];
+export type ItemsResponse<T> = ItemsWrapper<T[]>;
+
+/** @hidden */
+export interface ItemsWrapper<T> {
+  items: T;
 }
 
 export type LIST = 'LIST';
@@ -849,7 +854,7 @@ export interface Limit {
   limit?: number;
 }
 
-export interface List3DNodesQuery extends Cursor, Limit {
+export interface List3DNodesQuery extends FilterQuery {
   /**
    * Get sub nodes up to this many levels below the specified node. Depth 0 is the root node.
    */
@@ -867,9 +872,9 @@ export interface ListGroups {
   all?: boolean;
 }
 
-export interface ListRawDatabases extends Cursor, Limit {}
+export type ListRawDatabases = FilterQuery;
 
-export interface ListRawRows extends Cursor, Limit {
+export interface ListRawRows extends FilterQuery {
   /**
    * Set this to true if you only want to fetch row keys
    */
@@ -888,22 +893,22 @@ export interface ListRawRows extends Cursor, Limit {
   maxLastUpdatedTime?: Date;
 }
 
-export interface ListRawTables extends Cursor, Limit {}
+export type ListRawTables = FilterQuery;
 
 export interface ListResponse<T> extends CursorResponse<T> {
   next?: () => Promise<ListResponse<T>>;
 }
 
-export interface ListReveal3DNodeAncestors extends Cursor, Limit {}
+export type ListReveal3DNodeAncestors = FilterQuery;
 
-export interface ListRevealSectors3DQuery extends Cursor, Limit {
+export interface ListRevealSectors3DQuery extends FilterQuery {
   /**
    * Bounding box to restrict search to. If given, only return sectors that intersect the given bounding box. Given as a JSON-encoded object of two arrays \"min\" and \"max\" with 3 coordinates each.
    */
   boundingBox?: BoundingBox3D;
 }
 
-export interface ListSecurityCategories extends Cursor, Limit {
+export interface ListSecurityCategories extends FilterQuery {
   sort?: 'ASC' | 'DESC';
 }
 
@@ -1366,15 +1371,11 @@ export interface TimeSeriesUpdateByExternalId
 
 export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
 
-export interface TimeseriesFilter extends Limit {
+export interface TimeseriesFilter extends FilterQuery {
   /**
    * Decide if the metadata field should be returned or not.
    */
   includeMetadata?: boolean;
-  /**
-   * Cursor for paging through time series.
-   */
-  cursor?: string;
   /**
    * Get time series related to these assets. Takes [ 1 .. 100 ] unique items.
    */

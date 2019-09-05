@@ -1,7 +1,13 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
 import { chunk } from 'lodash';
+import { CursorAndAsyncIterator } from '../../autoPagination';
+import CogniteClient from '../../cogniteClient';
+import { MetadataMap } from '../../metadata';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
+import { Asset } from '../../resources/classes/asset';
+import { AssetList } from '../../resources/classes/assetList';
+import { RevertableArraySorter } from '../../revertableArraySorter';
 import {
   Asset as TypeAsset,
   AssetChange,
@@ -10,24 +16,21 @@ import {
   AssetSearchFilter,
   ExternalAssetItem,
   IdEither,
-} from '../..';
-import CogniteClient from '../../cogniteClient';
-import { MetadataMap } from '../../metadata';
-import {
-  CursorAndAsyncIterator,
-  generateCreateEndpoint,
-  generateDeleteEndpointWithParams,
-  generateListEndpoint,
-  generateRetrieveEndpoint,
-  generateSearchEndpoint,
-  generateUpdateEndpoint,
-} from '../../standardMethods';
-import { projectUrl } from '../../utils';
-import { Asset } from '../classes/asset';
-import { AssetList } from '../classes/assetList';
-import { assetChunker } from './assetUtils';
+} from '../../types/types';
+import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
+import { sortAssetCreateItems } from './assetUtils';
 
-export class AssetsAPI {
+export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
+  /** @hidden */
+  constructor(
+    private client: CogniteClient,
+    resourcePath: string,
+    httpClient: CDFHttpClient,
+    map: MetadataMap
+  ) {
+    super(resourcePath, httpClient, map);
+  }
+
   /**
    * [Creates new assets](https://doc.cognitedata.com/api/v1/#operation/createAssets)
    *
@@ -39,7 +42,10 @@ export class AssetsAPI {
    * const createdAssets = await client.assets.create(assets);
    * ```
    */
-  public create: AssetCreateEndpoint;
+  public async create(items: ExternalAssetItem[]): Promise<AssetList> {
+    const { sort, unsort } = new RevertableArraySorter(sortAssetCreateItems);
+    return super.createEndpoint(items, undefined, sort, unsort);
+  }
 
   /**
    * [List assets](https://doc.cognitedata.com/api/v1/#operation/listAssets)
@@ -49,7 +55,11 @@ export class AssetsAPI {
    * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
    * ```
    */
-  public list: AssetListEndpoint;
+  public list(
+    scope?: AssetListScope
+  ): CursorAndAsyncIterator<Asset, AssetList> {
+    return super.listEndpoint(this.callListEndpointWithPost, scope);
+  }
 
   /**
    * [Retrieve assets](https://doc.cognitedata.com/api/v1/#operation/byIdsAssets)
@@ -59,7 +69,9 @@ export class AssetsAPI {
    * const assets = await client.assets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve: AssetRetrieveEndpoint;
+  public async retrieve(ids: IdEither[]) {
+    return super.retrieveEndpoint(ids);
+  }
 
   /**
    * [Update assets](https://doc.cognitedata.com/api/v1/#operation/updateAssets)
@@ -68,7 +80,9 @@ export class AssetsAPI {
    * const assets = await client.assets.update([{id: 123, update: {name: {set: 'New name'}}}]);
    * ```
    */
-  public update: AssetUpdateEndpoint;
+  public async update(changes: AssetChange[]) {
+    return super.updateEndpoint(changes);
+  }
 
   /**
    * [Search for assets](https://doc.cognitedata.com/api/v1/#operation/searchAssets)
@@ -84,7 +98,9 @@ export class AssetsAPI {
    * });
    * ```
    */
-  public search: AssetSearchEndpoint;
+  public async search(query: AssetSearchFilter) {
+    return super.searchEndpoint(query);
+  }
 
   /**
    * [Delete assets](https://doc.cognitedata.com/api/v1/#operation/deleteAssets)
@@ -93,53 +109,8 @@ export class AssetsAPI {
    * await client.assets.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public delete: AssetDeleteEndpoint;
-
-  private client: CogniteClient;
-
-  /** @hidden */
-  constructor(
-    client: CogniteClient,
-    project: string,
-    instance: AxiosInstance,
-    map: MetadataMap
-  ) {
-    this.client = client;
-    const path = projectUrl(project) + '/assets';
-    const transformResponse = this.transformToAssetListObject;
-    this.create = generateCreateEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse,
-      assetChunker
-    );
-    this.list = generateListEndpoint(
-      instance,
-      path,
-      map,
-      true,
-      transformResponse
-    );
-    this.retrieve = generateRetrieveEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse
-    );
-    this.update = generateUpdateEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse
-    );
-    this.search = generateSearchEndpoint(
-      instance,
-      path,
-      map,
-      transformResponse
-    );
-    this.delete = generateDeleteEndpointWithParams(instance, path, map);
+  public async delete(ids: AssetIdEither[], params?: AssetDeleteParams) {
+    return super.deleteEndpoint(ids, params);
   }
 
   public async retrieveSubtree(id: IdEither, depth: number) {
@@ -148,10 +119,14 @@ export class AssetsAPI {
     return this.getAssetSubtree(rootAssetList, currentDepth, depth);
   }
 
-  private transformToAssetListObject = (assets: TypeAsset[]) => {
-    const assetArray = assets.map(asset => new Asset(this.client, asset));
+  protected transformToList(assets: TypeAsset[]) {
+    return assets.map(asset => new Asset(this.client, asset));
+  }
+
+  protected transformToClass(assets: TypeAsset[]) {
+    const assetArray = this.transformToList(assets);
     return new AssetList(this.client, assetArray);
-  };
+  }
 
   private async getAssetSubtree(
     assets: AssetList,
@@ -191,31 +166,6 @@ export class AssetsAPI {
   };
 }
 
-export type AssetCreateEndpoint = (
-  items: ExternalAssetItem[]
-) => Promise<AssetList>;
-
-export type AssetListEndpoint = (
-  scope?: AssetListScope
-) => CursorAndAsyncIterator<Asset>;
-
-export type AssetRetrieveEndpoint = (
-  ids: AssetIdEither[]
-) => Promise<AssetList>;
-
-export type AssetUpdateEndpoint = (
-  changes: AssetChange[]
-) => Promise<AssetList>;
-
-export type AssetSearchEndpoint = (
-  query: AssetSearchFilter
-) => Promise<AssetList>;
-
 export interface AssetDeleteParams {
   recursive?: boolean;
 }
-
-export type AssetDeleteEndpoint = (
-  ids: AssetIdEither[],
-  params?: AssetDeleteParams
-) => Promise<{}>;

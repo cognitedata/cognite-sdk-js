@@ -1,20 +1,18 @@
 // Copyright 2019 Cognite AS
-import MockAdapter from 'axios-mock-adapter';
+import * as nock from 'nock';
 import { CogniteClient } from '../..';
 import { Asset } from '../../resources/classes/asset';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
 
 describe('Asset class unit test', () => {
-  let axiosMock: MockAdapter;
   let client: CogniteClient;
   let newRoot: any;
   let childArray: any[];
   beforeAll(() => {
-    client = setupLoggedInClient();
-    axiosMock = new MockAdapter(client.instance);
+    client = setupMockableClient();
+    nock.cleanAll();
   });
   beforeEach(() => {
-    axiosMock.reset();
     newRoot = {
       externalId: 'test-root' + randomInt(),
       name: 'root',
@@ -29,22 +27,24 @@ describe('Asset class unit test', () => {
       });
     }
   });
-
   test('children', async () => {
-    axiosMock
-      .onPost(new RegExp('/assets$'), {
+    nock(mockBaseUrl)
+      .post(new RegExp('/assets'), {
         items: [newRoot, ...childArray],
       })
-      .replyOnce(200, {
+      .once()
+      .reply(200, {
         items: [newRoot, ...childArray],
       });
-    axiosMock
-      .onPost(new RegExp('/assets/list$'), {
+
+    nock(mockBaseUrl)
+      .post(new RegExp('/assets/list'), {
         filter: {
           parentIds: [newRoot.id],
         },
       })
-      .replyOnce(200, { items: childArray });
+      .once()
+      .reply(200, { items: childArray });
     const createdAssets = await client.assets.create([newRoot, ...childArray]);
     const children = await createdAssets[0].children();
     expect(children.length).toBe(102);

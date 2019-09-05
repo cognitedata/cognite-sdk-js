@@ -43,7 +43,7 @@ describeIfCondition(
 
     beforeAll(async () => {
       client = setupLoggedInClient();
-      jest.setTimeout(2 * 60 * 1000);
+      jest.setTimeout(5 * 60 * 1000);
 
       const rootAsset = {
         name: 'test-root' + randomInt(),
@@ -62,7 +62,10 @@ describeIfCondition(
         ]),
         // upload file
         client.files.upload(
-          { name: `file_revision_test_${randomInt()}.fbx` },
+          {
+            name: `file_revision_test_${randomInt()}.fbx`,
+            mimeType: 'application/octet-stream',
+          },
           fileContent,
           false,
           true

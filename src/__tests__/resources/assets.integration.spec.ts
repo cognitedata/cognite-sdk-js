@@ -3,6 +3,7 @@
 import CogniteClient from '../../cogniteClient';
 import { CogniteError } from '../../error';
 import { CogniteMultiError } from '../../multiError';
+import { Asset as AssetClass } from '../../resources/classes/asset';
 import { Asset } from '../../types/types';
 import {
   randomInt,
@@ -172,6 +173,14 @@ describe('Asset integration test', () => {
     expect(response.nextCursor).toBeDefined();
     expect(response.items).toBeDefined();
     expect(response.items[0].id).toBeDefined();
+    expect(response.items[0]).toBeInstanceOf(AssetClass);
+  });
+
+  test('list.next', async () => {
+    const response = await client.assets.list({ limit: 1 });
+    expect(response.next).toBeDefined();
+    const nextPage = await response.next!();
+    expect(nextPage.items[0]).toBeInstanceOf(AssetClass);
   });
 
   test('list with autoPaging', async () => {
@@ -196,6 +205,7 @@ describe('Asset integration test', () => {
       root2,
       child2,
     ]);
+
     const nonRootAssets = await client.assets
       .list({
         filter: { root: false },

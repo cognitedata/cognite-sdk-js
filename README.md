@@ -65,7 +65,7 @@ quickstart();
 ```
 
 > For more details about SDK authentication see this [document](./guides/authentication.md).  
-> Also, more comprehensive intro guide with a demo app can be found [here](https://github.com/cognitedata/javascript-getting-started/tree/sdk/introGuide/sdk-auth-and-fetch-data) 
+> Also, more comprehensive intro guide with a demo app can be found [here](https://github.com/cognitedata/javascript-getting-started/tree/master/sdk-auth-and-fetch-data) 
 
 ### Backend
 ```js

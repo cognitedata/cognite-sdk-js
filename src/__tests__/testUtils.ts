@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import * as sleep from 'sleep-promise';
 import CogniteClient from '../cogniteClient';
+import { BASE_URL } from '../constants';
 import { sleepPromise } from '../utils';
 
 export function createErrorReponse(
@@ -28,14 +28,14 @@ export const loggedInResponse = {
 export const notLoggedInResponse = {
   data: { loggedIn: false, user: '', project: '' },
 };
-export const baseUrl = 'https://example.com';
+export const mockBaseUrl = 'https://example.com';
 export const authTokens = {
   accessToken: 'abc',
   idToken: 'def',
 };
 
-export function setupClient() {
-  return new CogniteClient({ appId: 'JS SDK integration tests' });
+export function setupClient(baseUrl: string = BASE_URL) {
+  return new CogniteClient({ appId: 'JS SDK integration tests', baseUrl });
 }
 
 export function setupLoggedInClient() {
@@ -48,10 +48,19 @@ export function setupLoggedInClient() {
   return client;
 }
 
+export function setupMockableClient() {
+  const client = setupClient(mockBaseUrl);
+  client.loginWithApiKey({
+    project,
+    apiKey,
+  });
+  return client;
+}
+
 test('createErrorResponse', () => {
-  expect(createErrorReponse(200, 'Abc')).toEqual({
+  expect(createErrorReponse(400, 'Abc')).toEqual({
     error: {
-      code: 200,
+      code: 400,
       message: 'Abc',
     },
   });
@@ -71,7 +80,7 @@ export async function retryInSeconds<ResponseType>(
       if (Number(error.status) !== statusCodeToRetry) {
         throw error;
       }
-      await sleep(secondsBetweenRetries * 1000);
+      await sleepPromise(secondsBetweenRetries * 1000);
     }
   }
   throw new Error('Time limit has been exceeded');

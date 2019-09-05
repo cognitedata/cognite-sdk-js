@@ -1,15 +1,15 @@
 // Copyright 2019 Cognite AS
 
-import * as sleep from 'sleep-promise';
 import { makeAutoPaginationMethods } from '../autoPagination';
 import { ListResponse } from '../types/types';
+import { sleepPromise } from '../utils';
 
 async function fibListResponse() {
   const generateResponse = async (
     a: number,
     b: number
-  ): Promise<ListResponse<number>> => {
-    await sleep(100);
+  ): Promise<ListResponse<number[]>> => {
+    await sleepPromise(100);
     let first = a;
     let second = b;
     const items = [];

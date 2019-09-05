@@ -1,12 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
-import {
-  CursorAndAsyncIterator,
-  generateListEndpoint,
-  generateRetrieveSingleEndpoint,
-} from '../../standardMethods';
 import {
   CogniteInternalId,
   List3DNodesQuery,
@@ -15,18 +10,43 @@ import {
   RevealRevision3D,
   RevealSector3D,
 } from '../../types/types';
-import { projectUrl } from '../../utils';
+import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
+import { BaseResourceAPI } from '../baseResourceApi';
+import { RevealNodes3DAPI } from './revealNodes3DApi';
+import { RevealRevisions3DAPI } from './revealRevisions3DApi';
+import { RevealSectors3DAPI } from './revealSectors3DApi';
+import { UnrealRevisions3DAPI } from './unrealRevisions3DApi';
 
-export class Viewer3DAPI {
-  private project: string;
-  private instance: AxiosInstance;
-  private map: MetadataMap;
-
+export class Viewer3DAPI extends BaseResourceAPI<any> {
+  private revealRevisions3DAPI: RevealRevisions3DAPI;
+  private revealNodes3DAPI: RevealNodes3DAPI;
+  private revealSectors3DAPI: RevealSectors3DAPI;
+  private unrealRevisions3DAPI: UnrealRevisions3DAPI;
   /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    this.project = project;
-    this.instance = instance;
-    this.map = map;
+  constructor(
+    resourcePath: string,
+    httpClient: CDFHttpClient,
+    map: MetadataMap
+  ) {
+    super(resourcePath, httpClient, map);
+    const revealPath = resourcePath + '/reveal';
+    const unrealPath = resourcePath + '/unreal';
+    this.revealRevisions3DAPI = new RevealRevisions3DAPI(
+      revealPath,
+      httpClient,
+      map
+    );
+    this.revealNodes3DAPI = new RevealNodes3DAPI(revealPath, httpClient, map);
+    this.revealSectors3DAPI = new RevealSectors3DAPI(
+      revealPath,
+      httpClient,
+      map
+    );
+    this.unrealRevisions3DAPI = new UnrealRevisions3DAPI(
+      unrealPath,
+      httpClient,
+      map
+    );
   }
 
   /**
@@ -36,16 +56,12 @@ export class Viewer3DAPI {
    * const revisionReveal = await client.viewer3D.retrieveRevealRevision3D(294879032167592, 3247239473298342)
    * ```
    */
-  public retrieveRevealRevision3D: Viewer3DRetrieveRevealRevisionEndpoint = (
-    modelId,
-    revisionId
-  ) => {
-    return generateRetrieveSingleEndpoint<CogniteInternalId, RevealRevision3D>(
-      this.instance,
-      parameterizePath(this.project, modelId, revisionId),
-      this.map
-    )();
-  };
+  public async retrieveRevealRevision3D(
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId
+  ): Promise<RevealRevision3D> {
+    return this.revealRevisions3DAPI.retrieve(modelId, revisionId);
+  }
 
   /**
    * [List 3D nodes (Reveal)](https://doc.cognitedata.com/api/v1/#operation/revealGet3DNodes)
@@ -56,18 +72,13 @@ export class Viewer3DAPI {
    *  .autoPagingToArray();
    * ```
    */
-  public listRevealNodes3D: Viewer3DListRevealNodes3DEndpoint = (
-    modelId,
-    revisionId,
-    query
-  ) => {
-    return generateListEndpoint<List3DNodesQuery, RevealNode3D>(
-      this.instance,
-      parameterizePath(this.project, modelId, revisionId) + '/nodes',
-      this.map,
-      false
-    )(query);
-  };
+  public listRevealNodes3D(
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId,
+    query?: List3DNodesQuery
+  ): CursorAndAsyncIterator<RevealNode3D> {
+    return this.revealNodes3DAPI.list(modelId, revisionId, query);
+  }
 
   /**
    * [List 3D ancestor nodes (Reveal)](https://doc.cognitedata.com/api/v1/#operation/revealGet3DNodeAncestors)
@@ -78,19 +89,19 @@ export class Viewer3DAPI {
    *  .autoPagingToArray();
    * ```
    */
-  public listRevealNode3DAncestors: Viewer3DListRevealNodeAncestorsEndpoint = (
-    modelId,
-    revisionId,
-    nodeId,
-    query
-  ) => {
-    return generateListEndpoint<List3DNodesQuery, RevealNode3D>(
-      this.instance,
-      parameterizePath(this.project, modelId, revisionId) + `/nodes/${nodeId}`,
-      this.map,
-      false
-    )(query);
-  };
+  public listRevealNode3DAncestors(
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId,
+    nodeId: CogniteInternalId,
+    query?: List3DNodesQuery
+  ): CursorAndAsyncIterator<RevealNode3D> {
+    return this.revealNodes3DAPI.listAncestors(
+      modelId,
+      revisionId,
+      nodeId,
+      query
+    );
+  }
 
   /**
    * [List 3D sectors (Reveal)](https://doc.cognitedata.com/api/v1/#operation/revealGet3DSectors)
@@ -101,18 +112,13 @@ export class Viewer3DAPI {
    *  .autoPagingToArray();
    * ```
    */
-  public listRevealSectors3D: Viewer3DListRevealSectorsEndpoint = (
-    modelId,
-    revisionId,
-    query
-  ) => {
-    return generateListEndpoint<ListRevealSectors3DQuery, RevealSector3D>(
-      this.instance,
-      parameterizePath(this.project, modelId, revisionId) + `/sectors`,
-      this.map,
-      false
-    )(query);
-  };
+  public listRevealSectors3D(
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId,
+    query?: ListRevealSectors3DQuery
+  ): CursorAndAsyncIterator<RevealSector3D> {
+    return this.revealSectors3DAPI.list(modelId, revisionId, query);
+  }
 
   /**
    * [Retrieve a 3D revision (Unreal)](https://doc.cognitedata.com/api/v1/#operation/getUnreal3DRevision)
@@ -121,55 +127,10 @@ export class Viewer3DAPI {
    * const revisions3DUnreal = await client.viewer3D.retrieveUnrealRevision3D(8252999965991682, 4190022127342195);
    * ```
    */
-  public retrieveUnrealRevision3D: Viewer3DRetrieveUnrealRevisionEndpoint = (
-    modelId,
-    revisionId
-  ) => {
-    return generateRetrieveSingleEndpoint<CogniteInternalId, RevealRevision3D>(
-      this.instance,
-      parameterizePath(this.project, modelId, revisionId, true),
-      this.map
-    )();
-  };
-}
-
-export type Viewer3DRetrieveRevealRevisionEndpoint = (
-  modelId: CogniteInternalId,
-  revisionId: CogniteInternalId
-) => Promise<RevealRevision3D>;
-
-export type Viewer3DListRevealNodes3DEndpoint = (
-  modelId: CogniteInternalId,
-  revisionId: CogniteInternalId,
-  query?: List3DNodesQuery
-) => CursorAndAsyncIterator<RevealNode3D>;
-
-export type Viewer3DListRevealNodeAncestorsEndpoint = (
-  modelId: CogniteInternalId,
-  revisionId: CogniteInternalId,
-  nodeId: CogniteInternalId,
-  query?: List3DNodesQuery
-) => CursorAndAsyncIterator<RevealNode3D>;
-
-export type Viewer3DListRevealSectorsEndpoint = (
-  modelId: CogniteInternalId,
-  revisionId: CogniteInternalId,
-  query?: ListRevealSectors3DQuery
-) => CursorAndAsyncIterator<RevealSector3D>;
-
-export type Viewer3DRetrieveUnrealRevisionEndpoint = (
-  modelId: CogniteInternalId,
-  revisionId: CogniteInternalId
-) => Promise<RevealRevision3D>;
-
-function parameterizePath(
-  project: string,
-  modelId: CogniteInternalId,
-  revisionId: CogniteInternalId,
-  unreal: boolean = false
-) {
-  const type3D = unreal ? 'unreal' : 'reveal';
-  return `${projectUrl(
-    project
-  )}/3d/${type3D}/models/${modelId}/revisions/${revisionId}`;
+  public retrieveUnrealRevision3D(
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId
+  ): Promise<RevealRevision3D> {
+    return this.unrealRevisions3DAPI.retrieve(modelId, revisionId);
+  }
 }

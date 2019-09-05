@@ -1,10 +1,12 @@
 // Copyright 2019 Cognite AS
 
+import { Node } from '../../graphUtils';
 import {
-  assetChunker,
+  enrichAssetsWithTheirParents,
   promiseAllAtOnce,
   promiseEachInSequence,
 } from '../../resources/assets/assetUtils';
+import { ExternalAssetItem } from '../../types/types';
 
 describe('Asset unit test', () => {
   describe('multi promise resolution', () => {
@@ -94,11 +96,13 @@ describe('Asset unit test', () => {
     });
   });
 
-  describe('assetChunker', () => {
+  describe('enrichAssestsWithTheirParents(...)', () => {
     test.each([{ parentId: 123 }, { parentExternalId: 'abc' }, {}])(
       'single asset',
       asset => {
-        expect(assetChunker([asset], 1000)).toEqual([[asset]]);
+        expect(enrichAssetsWithTheirParents([asset])).toEqual([
+          { data: asset },
+        ]);
       }
     );
 
@@ -117,9 +121,14 @@ describe('Asset unit test', () => {
         parentExternalId: childAsset.externalId,
         name: 'grandchild',
       };
-      expect(assetChunker([childAsset, rootAsset, grandChildAsset], 2)).toEqual(
-        [[rootAsset, childAsset], [grandChildAsset]]
-      );
+      const assets = [childAsset, rootAsset, grandChildAsset];
+      const nodes: Node<ExternalAssetItem>[] = assets.map(asset => ({
+        data: asset,
+        parentNode: undefined,
+      }));
+      nodes[0].parentNode = nodes[1];
+      nodes[2].parentNode = nodes[0];
+      expect(enrichAssetsWithTheirParents(assets)).toEqual(nodes);
     });
 
     test('regular tree', () => {
@@ -148,15 +157,8 @@ describe('Asset unit test', () => {
         parentId: 123,
         name: 'someAsset',
       };
-      const inputOrder = [
-        assetAB,
-        assetAAA,
-        someAsset,
-        assetA,
-        assetAAB,
-        assetAA,
-      ];
-      const chunks = assetChunker(inputOrder, 2);
+      const assets = [assetAB, assetAAA, someAsset, assetA, assetAAB, assetAA];
+      const nodes = enrichAssetsWithTheirParents(assets);
 
       const dependencies = new Map();
       dependencies.set(assetAA, assetA);
@@ -166,13 +168,12 @@ describe('Asset unit test', () => {
 
       const visitedAssets = new Set();
 
-      chunks.forEach(chunk => {
-        chunk.forEach(asset => {
-          if (dependencies.has(asset)) {
-            expect(visitedAssets.has(dependencies.get(asset))).toBeTruthy();
-          }
-          visitedAssets.add(asset);
-        });
+      nodes.forEach(node => {
+        const dependency = dependencies.get(node);
+        if (dependency) {
+          expect(visitedAssets.has(dependency)).toBeTruthy();
+        }
+        visitedAssets.add(node);
       });
     });
   });

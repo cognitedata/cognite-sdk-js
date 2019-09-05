@@ -1,4 +1,5 @@
 // Copyright 2019 Cognite AS
+import { HttpResponse } from './utils/http/basicHttpClient';
 
 export interface Metadata {
   status: number;
@@ -12,7 +13,7 @@ export class MetadataMap {
     this.map = new WeakMap();
   }
 
-  public addAndReturn<T>(value: T, metadata: Metadata): T {
+  public addAndReturn<T, V>(value: T, metadata: HttpResponse<V>): T {
     this.map.set(value, {
       // we extract out only what is necessary
       status: metadata.status,

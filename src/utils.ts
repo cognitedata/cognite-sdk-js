@@ -1,6 +1,7 @@
 // Copyright 2019 Cognite AS
 
-import { cloneDeepWith } from 'lodash';
+import { cloneDeepWith, isArray, isObject } from 'lodash';
+import { isBuffer } from 'util';
 import { API_VERSION, BASE_URL } from './constants';
 
 /** @hidden */
@@ -17,6 +18,11 @@ export function projectUrl(project: string) {
 }
 
 /** @hidden */
+export function bearerString(token: string) {
+  return `Bearer ${token}`;
+}
+
+/** @hidden */
 export function isBrowser() {
   return (
     typeof window !== 'undefined' && typeof window.document !== 'undefined'
@@ -24,7 +30,10 @@ export function isBrowser() {
 }
 
 /** @hidden */
-export function removeParameterFromUrl(url: string, parameter: string): string {
+export function removeQueryParameterFromUrl(
+  url: string,
+  parameter: string
+): string {
   return url
     .replace(new RegExp('[?&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
     .replace(new RegExp('([?&])' + parameter + '=[^&]*&'), '$1');
@@ -33,6 +42,11 @@ export function removeParameterFromUrl(url: string, parameter: string): string {
 /** @hidden */
 export function convertToTimestampToDateTime(timestamp: number): Date {
   return new Date(timestamp);
+}
+
+/** @hidden */
+export function isJson(data: any) {
+  return (isArray(data) || isObject(data)) && !isBuffer(data);
 }
 
 /** @hidden */
@@ -63,35 +77,19 @@ export function isSameProject(project1: string, project2: string): boolean {
   return project1.toLowerCase() === project2.toLowerCase();
 }
 
-export type CancelablePromise<T> = {
-  cancel: () => void;
-} & Promise<T>;
 /** @hidden */
-export function makePromiseCancelable<T>(
-  promise: Promise<T>
-): CancelablePromise<T> {
-  let hasBeenCancelled = false;
-  const cancelablePromise = new Promise<T>((resolve, reject) => {
-    promise
-      .then(res => {
-        if (!hasBeenCancelled) {
-          resolve(res);
-        }
-      })
-      .catch(err => {
-        if (!hasBeenCancelled) {
-          reject(err);
-        }
-      });
-  });
-  (cancelablePromise as CancelablePromise<T>).cancel = () => {
-    hasBeenCancelled = true;
-  };
-  return cancelablePromise as CancelablePromise<T>;
+export function applyIfApplicable<ArgumentType, ResultType>(
+  args: ArgumentType,
+  action?: (input: ArgumentType) => ResultType
+) {
+  if (action) {
+    return action(args);
+  }
+  return args;
 }
 
 /** @hidden */
-export function transformDateInRequest(data: any) {
+export function transformDateInRequest<T>(data: T): T {
   return cloneDeepWith(data, value => {
     if (value instanceof Date) {
       return value.getTime();
@@ -100,7 +98,7 @@ export function transformDateInRequest(data: any) {
 }
 
 /** @hidden */
-export function transformDateInResponse(data: any) {
+export function transformDateInResponse<T>(data: T): T {
   const dateKeys = [
     'createdTime',
     'lastUpdatedTime',
@@ -113,4 +111,29 @@ export function transformDateInResponse(data: any) {
       return new Date(value);
     }
   });
+}
+
+/** @hidden */
+export function generatePopupWindow(url: string, name: string) {
+  return window.open(
+    url,
+    name,
+    // https://www.quackit.com/javascript/popup_windows.cfm
+    'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes'
+  );
+}
+
+/** @hidden */
+export function createInvisibleIframe(
+  url: string,
+  name: string
+): HTMLIFrameElement {
+  const iframe = document.createElement('iframe');
+  iframe.name = name;
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = '0';
+  iframe.style.border = 'none';
+  iframe.src = url;
+  return iframe;
 }

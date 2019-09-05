@@ -1,12 +1,12 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance, AxiosResponse } from 'axios';
 import { isFunction, isObject, isString } from 'lodash';
+import { version } from '../package.json';
 import {
-  generateAxiosInstance,
-  listenForNonSuccessStatusCode,
-  rawRequest,
-} from './axiosWrappers';
+  API_KEY_HEADER,
+  X_CDF_APP_HEADER,
+  X_CDF_SDK_HEADER,
+} from './constants';
 import { MetadataMap } from './metadata';
 import { AssetMappings3DAPI } from './resources/3d/assetMappings3DApi';
 import { Files3DAPI } from './resources/3d/files3DApi';
@@ -31,8 +31,9 @@ import { RawAPI } from './resources/raw/rawApi';
 import { SecurityCategoriesAPI } from './resources/securityCategories/securityCategoriesApi';
 import { ServiceAccountsAPI } from './resources/serviceAccounts/serviceAccountsApi';
 import { TimeSeriesAPI } from './resources/timeSeries/timeSeriesApi';
-import { addRetryToAxiosInstance } from './retryRequests';
-import { getBaseUrl } from './utils';
+import { apiUrl, getBaseUrl, projectUrl } from './utils';
+import { HttpRequestOptions, HttpResponse } from './utils/http/basicHttpClient';
+import { CDFHttpClient } from './utils/http/cdfHttpClient';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -129,9 +130,8 @@ export default class CogniteClient {
     return this.loginApi;
   }
 
-  public project: string = '';
-  /** @hidden */
-  public instance: AxiosInstance;
+  private projectName: string = '';
+  private httpClient: CDFHttpClient;
   private metadataMap: MetadataMap;
   private hasBeenLoggedIn: boolean = false;
   private assetsApi?: AssetsAPI;
@@ -173,11 +173,13 @@ export default class CogniteClient {
       throw Error('options.appId is required and must be of type string');
     }
     const { baseUrl } = options;
-    this.instance = generateAxiosInstance(getBaseUrl(baseUrl), options.appId);
-    addRetryToAxiosInstance(this.instance);
+    this.httpClient = new CDFHttpClient(getBaseUrl(baseUrl));
+    this.httpClient
+      .setDefaultHeader(X_CDF_SDK_HEADER, `CogniteJavaScriptSDK:${version}`)
+      .setDefaultHeader(X_CDF_APP_HEADER, options.appId);
 
     this.metadataMap = new MetadataMap();
-    this.loginApi = new LoginAPI(this.instance);
+    this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
   }
   // tslint:disable-next-line:no-identical-functions
   public authenticate: () => Promise<boolean> = async () => {
@@ -185,6 +187,10 @@ export default class CogniteClient {
       'You can only call authenticate after you have called loginWithOAuth'
     );
   };
+
+  public get project() {
+    return this.projectName;
+  }
 
   /**
    * Login client with api-key
@@ -220,8 +226,8 @@ export default class CogniteClient {
         );
       }
     });
-    this.project = project;
-    this.instance.defaults.headers['api-key'] = apiKey;
+    this.projectName = project;
+    this.httpClient.setDefaultHeader(API_KEY_HEADER, apiKey);
 
     this.initAPIs();
   };
@@ -259,7 +265,7 @@ export default class CogniteClient {
     if (!isString(project)) {
       throw Error('options.project is required and must be of type string');
     }
-    this.project = project;
+    this.projectName = project;
 
     const onTokens = options.onTokens || (() => {});
     let onAuthenticate: OnAuthenticate = onAuthenticateWithRedirect;
@@ -270,19 +276,14 @@ export default class CogniteClient {
     }
     const authenticate = createAuthenticateFunction({
       project,
-      axiosInstance: this.instance,
+      httpClient: this.httpClient,
       onAuthenticate,
       onTokens,
     });
 
-    listenForNonSuccessStatusCode(this.instance, 401, async (error, retry) => {
-      // ignore calls to /login/status
-      const { config } = error;
-      if (config.url === '/login/status') {
-        return Promise.reject(error);
-      }
+    this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
       const didAuthenticate = await authenticate();
-      return didAuthenticate ? retry() : Promise.reject(error);
+      return didAuthenticate ? retry() : reject();
     });
 
     this.initAPIs();
@@ -293,7 +294,7 @@ export default class CogniteClient {
    * To modify the base-url at any point in time
    */
   public setBaseUrl = (baseUrl: string) => {
-    this.instance.defaults.baseURL = baseUrl;
+    this.httpClient.setBaseUrl(baseUrl);
   };
 
   /**
@@ -316,8 +317,8 @@ export default class CogniteClient {
    * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
    * ```
    */
-  public get = (path: string, options?: BaseRequestOptions) =>
-    this.doRawRequest('get', path, options);
+  public get = <T = any>(path: string, options?: HttpRequestOptions) =>
+    this.httpClient.get<T>(path, options);
 
   /**
    * Basic HTTP method for PUT
@@ -329,8 +330,8 @@ export default class CogniteClient {
    * const response = await client.put('someUrl');
    * ```
    */
-  public put = (path: string, options?: BaseRequestOptions) =>
-    this.doRawRequest('put', path, options);
+  public put = <T = any>(path: string, options?: HttpRequestOptions) =>
+    this.httpClient.put<T>(path, options);
 
   /**
    * Basic HTTP method for POST
@@ -343,8 +344,8 @@ export default class CogniteClient {
    * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
    * ```
    */
-  public post = (path: string, options?: BaseRequestOptions) =>
-    this.doRawRequest('post', path, options);
+  public post = <T = any>(path: string, options?: HttpRequestOptions) =>
+    this.httpClient.post<T>(path, options);
 
   /**
    * Basic HTTP method for DELETE
@@ -355,43 +356,58 @@ export default class CogniteClient {
    * const response = await client.delete('someUrl');
    * ```
    */
-  public delete = (path: string, options?: BaseRequestOptions) =>
-    this.doRawRequest('delete', path, options);
-
-  /** @hidden */
-  private doRawRequest = (
-    methodType: string,
-    path: string,
-    options?: BaseRequestOptions
-  ) =>
-    rawRequest(this.instance, {
-      method: methodType,
-      url: path,
-      ...options,
-    }).then(responseTransformer);
+  public delete = <T = any>(path: string, options?: HttpRequestOptions) =>
+    this.httpClient.delete<T>(path, options);
 
   private initAPIs = () => {
-    const defaultArgs: [string, AxiosInstance, MetadataMap] = [
-      this.project,
-      this.instance,
+    const defaultArgs: [CDFHttpClient, MetadataMap] = [
+      this.httpClient,
       this.metadataMap,
     ];
-    this.assetsApi = new AssetsAPI(this, ...defaultArgs);
-    this.timeSeriesApi = new TimeSeriesAPI(this, ...defaultArgs);
-    this.dataPointsApi = new DataPointsAPI(...defaultArgs);
-    this.eventsApi = new EventsAPI(...defaultArgs);
-    this.filesApi = new FilesAPI(...defaultArgs);
-    this.rawApi = new RawAPI(...defaultArgs);
-    this.projectsApi = new ProjectsAPI(this.instance, this.metadataMap);
-    this.groupsApi = new GroupsAPI(...defaultArgs);
-    this.securityCategoriesApi = new SecurityCategoriesAPI(...defaultArgs);
-    this.serviceAccountsApi = new ServiceAccountsAPI(...defaultArgs);
-    this.models3DApi = new Models3DAPI(...defaultArgs);
-    this.revisions3DApi = new Revisions3DAPI(...defaultArgs);
-    this.files3DApi = new Files3DAPI(...defaultArgs);
-    this.assetMappings3DApi = new AssetMappings3DAPI(...defaultArgs);
-    this.viewer3DApi = new Viewer3DAPI(...defaultArgs);
-    this.apiKeysApi = new ApiKeysAPI(...defaultArgs);
+    const projectPath = projectUrl(this.project);
+    const apiFactory = <ApiType>(
+      api: new (
+        relativePath: string,
+        httpClient: CDFHttpClient,
+        map: MetadataMap
+      ) => ApiType,
+      relativePath: string
+    ) => {
+      return new api(projectPath + relativePath, ...defaultArgs);
+    };
+    const models3DPath = '/3d/models';
+
+    this.assetsApi = new AssetsAPI(
+      this,
+      projectPath + '/assets',
+      ...defaultArgs
+    );
+    this.timeSeriesApi = new TimeSeriesAPI(
+      this,
+      projectPath + '/timeseries',
+      ...defaultArgs
+    );
+    this.dataPointsApi = apiFactory(DataPointsAPI, '/timeseries');
+    this.eventsApi = apiFactory(EventsAPI, '/events');
+    this.filesApi = apiFactory(FilesAPI, '/files');
+    this.rawApi = apiFactory(RawAPI, '/raw/dbs');
+    this.groupsApi = apiFactory(GroupsAPI, '/groups');
+    this.securityCategoriesApi = apiFactory(
+      SecurityCategoriesAPI,
+      '/securitycategories'
+    );
+    this.serviceAccountsApi = apiFactory(
+      ServiceAccountsAPI,
+      '/serviceaccounts'
+    );
+    this.apiKeysApi = apiFactory(ApiKeysAPI, '/apikeys');
+    this.models3DApi = apiFactory(Models3DAPI, models3DPath);
+    this.revisions3DApi = apiFactory(Revisions3DAPI, models3DPath);
+    this.files3DApi = apiFactory(Files3DAPI, '/3d/files');
+    this.assetMappings3DApi = apiFactory(AssetMappings3DAPI, models3DPath);
+    this.viewer3DApi = apiFactory(Viewer3DAPI, '/3d');
+    this.projectsApi = new ProjectsAPI(apiUrl(), ...defaultArgs);
+    this.loginApi = new LoginAPI(...defaultArgs);
   };
 }
 
@@ -406,22 +422,6 @@ function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
     redirectUrl: window.location.href,
   });
 }
-export interface BaseRequestOptions {
-  data?: any;
-  params?: object;
-  headers?: { [key: string]: string };
-  responseType?: 'json' | 'arraybuffer' | 'text';
-}
-export interface Response {
-  data: any;
-  headers: { [key: string]: string };
-  status: number;
-}
-function responseTransformer(axiosResponse: AxiosResponse): Response {
-  const { data, headers, status } = axiosResponse;
-  return {
-    data,
-    headers,
-    status,
-  };
-}
+
+export type BaseRequestOptions = HttpRequestOptions;
+export type Response = HttpResponse<any>;

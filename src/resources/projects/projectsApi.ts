@@ -1,15 +1,9 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
-import { MetadataMap } from '../../metadata';
-import {
-  generateRetrieveSingleEndpoint,
-  generateSingleReplaceEndpoint,
-} from '../../standardMethods';
+import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import { ProjectResponse, ProjectUpdate } from '../../types/types';
-import { apiUrl, projectUrl } from '../../utils';
 
-export class ProjectsAPI {
+export class ProjectsAPI extends BaseResourceAPI<any> {
   /**
    * [Retrieve a project](https://doc.cognitedata.com/api/v1/#operation/getProject)
    *
@@ -17,16 +11,10 @@ export class ProjectsAPI {
    * const projectInfo = await client.projects.retrieve('publicdata');
    * ```
    */
-  public retrieve: ProjectsRetrieveEndpoint;
-  private instance: AxiosInstance;
-  private map: MetadataMap;
-
-  /** @hidden */
-  constructor(instance: AxiosInstance, map: MetadataMap) {
-    const path = apiUrl() + '/projects';
-    this.instance = instance;
-    this.map = map;
-    this.retrieve = generateRetrieveSingleEndpoint(instance, path, map);
+  public async retrieve(projectName: string): Promise<ProjectResponse> {
+    const path = this.encodeUrl(projectName);
+    const response = await this.httpClient.get<ProjectResponse>(path);
+    return this.addToMapAndReturn(response.data, response);
   }
 
   /**
@@ -39,20 +27,18 @@ export class ProjectsAPI {
    * });
    * ```
    */
-  public update: ProjectsUpdateEndpoint = (urlName, replacement) => {
-    return generateSingleReplaceEndpoint<ProjectUpdate, ProjectResponse>(
-      this.instance,
-      projectUrl(urlName),
-      this.map
-    )(replacement);
-  };
+  public async update(
+    projectName: string,
+    replacement: ProjectUpdate
+  ): Promise<ProjectResponse> {
+    const path = this.encodeUrl(projectName);
+    const response = await this.httpClient.put<ProjectResponse>(path, {
+      data: replacement,
+    });
+    return this.addToMapAndReturn(response.data, response);
+  }
+
+  private encodeUrl(projectName: string) {
+    return this.url(`projects/${encodeURIComponent(projectName)}`);
+  }
 }
-
-export type ProjectsRetrieveEndpoint = (
-  projectName: string
-) => Promise<ProjectResponse>;
-
-export type ProjectsUpdateEndpoint = (
-  urlName: string,
-  replacement: ProjectUpdate
-) => Promise<ProjectResponse>;

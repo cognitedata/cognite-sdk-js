@@ -10,7 +10,7 @@ export interface Node<T> {
 /** @hidden */
 export function topologicalSort<T>(nodes: Node<T>[]): Node<T>[] {
   const queue = new Queue<Node<T>>();
-  const sortedList = [];
+  const sortedList: Node<T>[] = [];
   const childrenMap = getChildrenMap(nodes);
 
   // insert root nodes

@@ -1,34 +1,17 @@
 // Copyright 2019 Cognite AS
 
-import { AxiosInstance } from 'axios';
-import { MetadataMap } from '../../metadata';
-import {
-  CursorAndAsyncIterator,
-  generateCreateEndpoint,
-  generateDeleteEndpoint,
-  generateListEndpoint,
-} from '../../standardMethods';
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import {
   AssetMapping3D,
   AssetMappings3DListFilter,
   CogniteInternalId,
   CreateAssetMapping3D,
+  CursorResponse,
   DeleteAssetMapping3D,
 } from '../../types/types';
-import { projectUrl } from '../../utils';
+import { BaseResourceAPI } from '../baseResourceApi';
 
-export class AssetMappings3DAPI {
-  private project: string;
-  private instance: AxiosInstance;
-  private map: MetadataMap;
-
-  /** @hidden */
-  constructor(project: string, instance: AxiosInstance, map: MetadataMap) {
-    this.project = project;
-    this.instance = instance;
-    this.map = map;
-  }
-
+export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   /**
    * [List 3D asset mappings](https://doc.cognitedata.com/api/v1/#operation/get3DMappings)
    *
@@ -36,14 +19,18 @@ export class AssetMappings3DAPI {
    * const mappings3D = await client.assetMappings3D.list(3244265346345, 32423454353545);
    * ```
    */
-  public list: AssetMappings3DListEndpoint = (modelId, revisionId, filter) => {
-    return generateListEndpoint<AssetMappings3DListFilter, AssetMapping3D>(
-      this.instance,
-      parameterizePath(this.project, modelId, revisionId),
-      this.map,
-      false
-    )(filter);
-  };
+  public list(
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId,
+    scope?: AssetMappings3DListFilter
+  ): CursorAndAsyncIterator<AssetMapping3D> {
+    const path = this.encodeUrl(modelId, revisionId);
+    return super.listEndpoint(
+      params =>
+        this.httpClient.get<CursorResponse<AssetMapping3D[]>>(path, { params }),
+      scope
+    );
+  }
 
   /**
    * [Create 3D asset mappings](https://doc.cognitedata.com/api/v1/#operation/create3DMappings)
@@ -66,17 +53,14 @@ export class AssetMappings3DAPI {
    * );
    * ```
    */
-  public create: AssetMappings3DCreateEndpoint = (
-    modelId,
-    revisionId,
-    items
-  ) => {
-    return generateCreateEndpoint<CreateAssetMapping3D, AssetMapping3D>(
-      this.instance,
-      parameterizePath(this.project, modelId, revisionId),
-      this.map
-    )(items);
-  };
+  public create(
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId,
+    items: CreateAssetMapping3D[]
+  ): Promise<AssetMapping3D[]> {
+    const path = this.encodeUrl(modelId, revisionId);
+    return super.createEndpoint(items, path);
+  }
 
   /**
    * [Delete a list of asset mappings](https://doc.cognitedata.com/api/v1/#operation/delete3DMappings)
@@ -95,43 +79,16 @@ export class AssetMappings3DAPI {
    * await client.assetMappings3D.delete(8252999965991682, 4190022127342195, assetMappingsToDelete);
    * ```
    */
-  public delete: AssetMappings3DDeleteEndpoint = (
-    modelId,
-    revisionId,
-    items
-  ) => {
-    return generateDeleteEndpoint(
-      this.instance,
-      parameterizePath(this.project, modelId, revisionId),
-      this.map
-    )(items);
-  };
-}
+  public delete(
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId,
+    ids: DeleteAssetMapping3D[]
+  ): Promise<{}> {
+    const path = this.encodeUrl(modelId, revisionId) + '/delete';
+    return super.deleteEndpoint(ids, undefined, path);
+  }
 
-export type AssetMappings3DListEndpoint = (
-  modelId: CogniteInternalId,
-  revisionId: CogniteInternalId,
-  filter?: AssetMappings3DListFilter
-) => CursorAndAsyncIterator<AssetMapping3D>;
-
-export type AssetMappings3DCreateEndpoint = (
-  modelId: CogniteInternalId,
-  revisionId: CogniteInternalId,
-  items: CreateAssetMapping3D[]
-) => Promise<AssetMapping3D[]>;
-
-export type AssetMappings3DDeleteEndpoint = (
-  modelId: CogniteInternalId,
-  revisionId: CogniteInternalId,
-  ids: DeleteAssetMapping3D[]
-) => Promise<{}>;
-
-function parameterizePath(
-  project: string,
-  modelId: CogniteInternalId,
-  revisionId: CogniteInternalId
-) {
-  return `${projectUrl(
-    project
-  )}/3d/models/${modelId}/revisions/${revisionId}/mappings`;
+  private encodeUrl(modelId: CogniteInternalId, revisionId: CogniteInternalId) {
+    return this.url(`${modelId}/revisions/${revisionId}/mappings`);
+  }
 }
