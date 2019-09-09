@@ -109,8 +109,12 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * await client.assets.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public async delete(ids: AssetIdEither[], params?: AssetDeleteParams) {
-    return super.deleteEndpoint(ids, params);
+  public async delete(ids: AssetIdEither[], params: AssetDeleteParams = {}) {
+    const paramsWithIgnoreUnknownIds = {
+      ...params,
+      ignoreUnknownIds: true,
+    };
+    return super.deleteEndpoint(ids, paramsWithIgnoreUnknownIds);
   }
 
   public async retrieveSubtree(id: IdEither, depth: number) {
