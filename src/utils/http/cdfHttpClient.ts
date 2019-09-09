@@ -31,11 +31,7 @@ export class CDFHttpClient extends RetryableHttpClient {
     return Object.keys(params).reduce(
       (serializedParams, key) => {
         const param = params[key];
-        if (Array.isArray(param)) {
-          serializedParams[key] = JSON.stringify(param);
-        } else {
-          serializedParams[key] = param;
-        }
+        serializedParams[key] = isJson(param) ? JSON.stringify(param) : param;
         return serializedParams;
       },
       {} as HttpQueryParams
