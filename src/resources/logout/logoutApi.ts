@@ -17,10 +17,10 @@ export class LogoutApi extends BaseResourceAPI<any> {
    * ```js
    * // You can specify the url to send the user to after the logout is successful.
    * // If no url is passed, you will end up at the IDPs log out page.
-   * const logoutUrl = await client.logout.getUrl('[url to redirect]');
+   * const logoutUrl = await client.logout.getUrl({ redirectUrl: '[url to redirect]' });
    * ```
    */
-  public async getUrl(redirectUrl?: string) {
-    return getLogoutUrl(this.httpClient, { redirectUrl });
+  public async getUrl(options: { redirectUrl?: string } = {}) {
+    return getLogoutUrl(this.httpClient, options);
   }
 }
