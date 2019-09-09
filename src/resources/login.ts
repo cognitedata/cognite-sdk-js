@@ -25,6 +25,7 @@ const LOGIN_IFRAME_NAME = 'cognite-js-sdk-auth-iframe';
 const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
 
 export interface IdInfo {
+  projectId: number;
   project: string;
   user: string;
 }
@@ -124,13 +125,14 @@ export async function getIdInfo(
 ): Promise<null | IdInfo> {
   try {
     const response = await httpClient.get<any>('/login/status', { headers });
-    const { loggedIn, user, project } = response.data.data;
+    const { loggedIn, user, project, projectId } = response.data.data;
     if (!loggedIn) {
       return null;
     }
     return {
       user,
       project,
+      projectId,
     };
   } catch (err) {
     if (err.status === 401) {
