@@ -26,6 +26,7 @@ import {
   OnTokens,
 } from './resources/login';
 import { LoginAPI } from './resources/login/loginApi';
+import { LogoutApi } from './resources/logout/logoutApi';
 import { ProjectsAPI } from './resources/projects/projectsApi';
 import { RawAPI } from './resources/raw/rawApi';
 import { SecurityCategoriesAPI } from './resources/securityCategories/securityCategoriesApi';
@@ -129,6 +130,9 @@ export default class CogniteClient {
   public get login() {
     return this.loginApi;
   }
+  public get logout() {
+    return this.logoutApi;
+  }
 
   private projectName: string = '';
   private httpClient: CDFHttpClient;
@@ -151,6 +155,7 @@ export default class CogniteClient {
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
   private loginApi: LoginAPI;
+  private logoutApi: LogoutApi;
   /**
    * Create a new SDK client
    *
@@ -180,6 +185,7 @@ export default class CogniteClient {
 
     this.metadataMap = new MetadataMap();
     this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
+    this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
   }
   // tslint:disable-next-line:no-identical-functions
   public authenticate: () => Promise<boolean> = async () => {

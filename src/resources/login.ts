@@ -4,6 +4,7 @@ import { isString } from 'lodash';
 import { parse, stringify } from 'query-string';
 import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
 import { CogniteLoginError } from '../loginError';
+import { LogoutUrlResponse } from '../types/types';
 import {
   bearerString,
   createInvisibleIframe,
@@ -13,7 +14,7 @@ import {
   promiseCache,
   removeQueryParameterFromUrl,
 } from '../utils';
-import { HttpHeaders } from '../utils/http/basicHttpClient';
+import { HttpHeaders, HttpQueryParams } from '../utils/http/basicHttpClient';
 import { CDFHttpClient } from '../utils/http/cdfHttpClient';
 import * as Login from './login';
 
@@ -134,6 +135,24 @@ export async function getIdInfo(
       project,
       projectId,
     };
+  } catch (err) {
+    if (err.status === 401) {
+      return null;
+    }
+    throw err;
+  }
+}
+
+/** @hidden */
+export async function getLogoutUrl(
+  httpClient: CDFHttpClient,
+  params: HttpQueryParams
+) {
+  try {
+    const response = await httpClient.get<LogoutUrlResponse>('/logout/url', {
+      params,
+    });
+    return response.data.data.url;
   } catch (err) {
     if (err.status === 401) {
       return null;

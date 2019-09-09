@@ -159,19 +159,25 @@ describe('CDFHttpClient', () => {
         expect(scope.isDone()).toBeTruthy();
       });
 
-      test('ignore errors to /login/status', async () => {
-        nock(baseUrl)
-          .get('/login/status')
-          .reply(401, error401);
-        const mockFn = jest.fn();
-        client.set401ResponseHandler(mockFn);
-        await expect(
-          client.get('/login/status')
-        ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"Some message | code: 401"`
-        );
-        expect(mockFn).not.toBeCalled();
-      });
+      function checkIfThrows401(url: string) {
+        return async () => {
+          nock(baseUrl)
+            .get(url)
+            .reply(401, error401);
+          const mockFn = jest.fn();
+          client.set401ResponseHandler(mockFn);
+          await expect(
+            client.get(url)
+          ).rejects.toThrowErrorMatchingInlineSnapshot(
+            `"Some message | code: 401"`
+          );
+          expect(mockFn).not.toBeCalled();
+        };
+      }
+
+      test('ignore errors to /login/status', checkIfThrows401('/login/status'));
+
+      test('ignore errors to /logout/url', checkIfThrows401('/logout/url'));
     });
   });
 
