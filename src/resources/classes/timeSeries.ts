@@ -1,43 +1,53 @@
 // Copyright 2019 Cognite AS
 import { CogniteClient } from '../..';
 import {
-  CogniteExternalId,
-  CogniteInternalId,
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
   LatestDataPropertyFilter,
-  Metadata,
 } from '../../types/types';
+import { BaseResource } from './baseResource';
 
-export class TimeSeries implements GetTimeSeriesMetadataDTO {
-  public externalId?: CogniteExternalId;
-  public name?: string;
-  public isString: boolean;
-  public metadata?: Metadata;
-  public unit?: string;
-  public assetId?: CogniteInternalId;
-  public isStep: boolean;
-  public description: string;
-  public securityCategories?: number[];
-  public createdTime: Date;
-  public lastUpdatedTime: Date;
-  public id: CogniteInternalId;
-  private client: CogniteClient;
+export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
+  implements GetTimeSeriesMetadataDTO {
+  public get externalId() {
+    return this.props.externalId;
+  }
+  public get name() {
+    return this.props.name;
+  }
+  public get isString() {
+    return this.props.isString;
+  }
+  public get metadata() {
+    return this.props.metadata;
+  }
+  public get unit() {
+    return this.props.unit;
+  }
+  public get assetId() {
+    return this.props.assetId;
+  }
+  public get isStep() {
+    return this.props.isStep;
+  }
+  public get description() {
+    return this.props.description;
+  }
+  public get securityCategories() {
+    return this.props.securityCategories;
+  }
+  public get createdTime() {
+    return this.props.createdTime;
+  }
+  public get lastUpdatedTime() {
+    return this.props.lastUpdatedTime;
+  }
+  public get id() {
+    return this.props.id;
+  }
 
   constructor(client: CogniteClient, props: GetTimeSeriesMetadataDTO) {
-    this.externalId = props.externalId;
-    this.name = props.name;
-    this.isString = props.isString;
-    this.metadata = props.metadata;
-    this.unit = props.unit;
-    this.assetId = props.assetId;
-    this.isStep = props.isStep;
-    this.description = props.description;
-    this.securityCategories = props.securityCategories;
-    this.createdTime = props.createdTime;
-    this.lastUpdatedTime = props.lastUpdatedTime;
-    this.id = props.id;
-    this.client = client;
+    super(client, props);
   }
 
   /**

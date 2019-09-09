@@ -41,4 +41,10 @@ describe('assetList', () => {
     await client.assets.delete(createdAssets.map(asset => ({ id: asset.id })));
     await client.events.delete(createdEvents.map(event => ({ id: event.id })));
   });
+
+  test('json stringify', async () => {
+    const response = await client.assets.list({ limit: 2 });
+    const stringRes = JSON.stringify(response.items);
+    expect(typeof stringRes).toBe('string');
+  });
 });
