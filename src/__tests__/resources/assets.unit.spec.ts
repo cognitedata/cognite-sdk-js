@@ -1,5 +1,7 @@
 // Copyright 2019 Cognite AS
 
+import * as nock from 'nock';
+import CogniteClient from '../../cogniteClient';
 import { Node } from '../../graphUtils';
 import {
   enrichAssetsWithTheirParents,
@@ -7,8 +9,27 @@ import {
   promiseEachInSequence,
 } from '../../resources/assets/assetUtils';
 import { ExternalAssetItem } from '../../types/types';
+import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('Asset unit test', () => {
+  let client: CogniteClient;
+  beforeEach(() => {
+    client = setupMockableClient();
+    nock.cleanAll();
+  });
+
+  test('delete with ignoreUnknownIds', async () => {
+    const assetIds = [{ id: 123 }];
+    nock(mockBaseUrl)
+      .post(new RegExp('/assets/delete'), {
+        ignoreUnknownIds: true,
+        items: [{ id: 123 }],
+      })
+      .once()
+      .reply(200, {});
+    await client.assets.delete(assetIds);
+  });
+
   describe('multi promise resolution', () => {
     test('promiseAllAtOnce: fail', async () => {
       const data = ['x', 'a', 'b', 'c'];
