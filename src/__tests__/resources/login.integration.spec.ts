@@ -15,6 +15,7 @@ describe('Login-api integration test', () => {
       expect(status).toBeDefined();
       expect(status!.project).toBeDefined();
       expect(status!.user).toBeDefined();
+      expect(typeof status!.projectId).toBe('number');
     });
 
     test('not logged in', async () => {

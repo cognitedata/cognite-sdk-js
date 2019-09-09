@@ -17,6 +17,7 @@ import {
   mockBaseUrl,
   notLoggedInResponse,
   project,
+  projectId,
 } from '../testUtils';
 
 describe('Login', () => {
@@ -123,12 +124,12 @@ describe('Login', () => {
   describe('getIdInfo', () => {
     const idInfo = {
       project,
+      projectId,
       user: 'user@example.com',
     };
     const successResponse = {
       data: {
         loggedIn: true,
-        projectId: 1,
         ...idInfo,
       },
     };
