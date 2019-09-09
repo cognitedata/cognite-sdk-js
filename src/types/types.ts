@@ -863,6 +863,10 @@ export interface List3DNodesQuery extends FilterQuery {
    * ID of a node that are the root of the subtree you request (default is the root node).
    */
   nodeId?: CogniteInternalId;
+  /**
+   * Filter for node properties. Only nodes that match all the given properties exactly will be listed. The filter must be a JSON object with the same format as the properties field.
+   */
+  properties?: Node3DProperties;
 }
 
 export interface ListGroups {
@@ -974,10 +978,23 @@ export interface Node3D {
    */
   subtreeSize: number;
   /**
+   * Properties extracted from 3D model, with property categories containing key/value string pairs.
+   */
+  properties?: Node3DProperties;
+  /**
    *  The bounding box of the subtree with this sector as the root sector.
    *  Is null if there are no geometries in the subtree.
    */
   boundingBox: BoundingBox3D;
+}
+
+/**
+ * Properties extracted from 3D model, with property categories containing key/value string pairs.
+ */
+export interface Node3DProperties {
+  [category: string]: {
+    [key: string]: string;
+  };
 }
 
 export type NullableSinglePatchLong = { set: number } | { setNull: true };

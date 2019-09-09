@@ -46,7 +46,11 @@ export function convertToTimestampToDateTime(timestamp: number): Date {
 
 /** @hidden */
 export function isJson(data: any) {
-  return (isArray(data) || isObject(data)) && !isBuffer(data);
+  return (
+    (isArray(data) || isObject(data)) &&
+    !isBuffer(data) &&
+    !(data instanceof Date)
+  );
 }
 
 /** @hidden */
