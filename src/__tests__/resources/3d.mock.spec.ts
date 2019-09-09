@@ -43,6 +43,15 @@ describe('3D mocked', () => {
       depth: 2,
       name: 'Node name',
       subtreeSize: 4,
+      properties: {
+        someCategory: {
+          someKey1: 'someValue1',
+          someKey2: 'someValue2',
+        },
+        someCategory2: {
+          someKey: 'someValue',
+        },
+      },
       boundingBox: {
         max: [0, 0, 0],
         min: [0, 0, 0],
@@ -180,6 +189,24 @@ describe('3D mocked', () => {
         .reply(200, { items: nodes });
       const result = await client.revisions3D
         .list3DNodes(model.id, revision.id)
+        .autoPagingToArray();
+      expect(result).toEqual(nodes);
+    });
+
+    test('list 3d nodes with property filter', async () => {
+      const regExp = new RegExp(
+        `/3d/models/${model.id}/revisions/${revision.id}/nodes`
+      );
+      nock(mockBaseUrl)
+        .get(regExp)
+        .query({
+          properties: '{"category1":{"property1":"value1"}}',
+        })
+        .reply(200, { items: nodes });
+      const result = await client.revisions3D
+        .list3DNodes(model.id, revision.id, {
+          properties: { category1: { property1: 'value1' } },
+        })
         .autoPagingToArray();
       expect(result).toEqual(nodes);
     });
