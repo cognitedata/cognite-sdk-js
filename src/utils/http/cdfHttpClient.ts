@@ -115,7 +115,7 @@ export class CDFHttpClient extends RetryableHttpClient {
     try {
       return await super.postRequest(transformedResponse, request);
     } catch (err) {
-      if (err.status === 401 && !this.isLoginEndpoint(request.path)) {
+      if (err.status === 401 && !this.isLoginOrLogoutApi(request.path)) {
         return new Promise((resolvePromise, rejectPromise) => {
           const retry = () => resolvePromise(this.request(request));
           const reject = () => rejectPromise(err);
@@ -140,8 +140,12 @@ export class CDFHttpClient extends RetryableHttpClient {
     ]);
   }
 
-  private isLoginEndpoint(url: string) {
-    return url.toLowerCase().indexOf('/login/status') !== -1;
+  private isLoginOrLogoutApi(url: string) {
+    const lowerCaseUrl = url.toLowerCase();
+    return (
+      lowerCaseUrl.indexOf('/logout/url') !== -1 ||
+      lowerCaseUrl.indexOf('/login/status') !== -1
+    );
   }
 }
 

@@ -928,6 +928,19 @@ export interface ListSecurityCategories extends FilterQuery {
   sort?: 'ASC' | 'DESC';
 }
 
+/**
+ * The url to send the user to in order to log out
+ * @example https://accounts.google.com/logout
+ */
+export type LogoutUrl = string;
+
+/**
+ * Object containing the log out URL
+ */
+export interface LogoutUrlResponse {
+  data: { url: LogoutUrl };
+}
+
 export type MEMBEROF = 'MEMBEROF';
 
 /**
