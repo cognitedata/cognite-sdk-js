@@ -2,18 +2,13 @@
 
 import {
   Asset as TypeAsset,
-  AssetDescription,
-  AssetName,
-  AssetSource,
   CogniteClient,
-  CogniteExternalId,
-  CogniteInternalId,
   EventFilter,
   FileFilter,
-  Metadata,
   TimeseriesFilter,
 } from '../../index';
 import { AssetList } from './assetList';
+import { BaseResource } from './baseResource';
 
 export interface SubtreeOptions {
   depth?: number;
@@ -21,31 +16,37 @@ export interface SubtreeOptions {
 export interface DeleteOptions {
   recursive?: boolean;
 }
-export class Asset implements TypeAsset {
-  public id: CogniteInternalId;
-  public externalId?: CogniteExternalId;
-  public parentId?: CogniteInternalId;
-  public name: AssetName;
-  public description?: AssetDescription;
-  public metadata?: Metadata;
-  public source?: AssetSource;
-  public lastUpdatedTime: Date;
-  public createdTime: Date;
-  public rootId: CogniteInternalId;
-  private client: CogniteClient;
+export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
+  public get id() {
+    return this.props.id;
+  }
+  public get parentId() {
+    return this.props.parentId;
+  }
+  public get name() {
+    return this.props.name;
+  }
+  public get description() {
+    return this.props.description;
+  }
+  public get metadata() {
+    return this.props.metadata;
+  }
+  public get source() {
+    return this.props.source;
+  }
+  public get lastUpdatedTime() {
+    return this.props.lastUpdatedTime;
+  }
+  public get createdTime() {
+    return this.props.createdTime;
+  }
+  public get rootId() {
+    return this.props.rootId;
+  }
 
   constructor(client: CogniteClient, props: TypeAsset) {
-    this.client = client;
-    this.id = props.id;
-    this.externalId = props.externalId;
-    this.parentId = props.parentId;
-    this.name = props.name;
-    this.description = props.description;
-    this.metadata = props.metadata;
-    this.source = props.source;
-    this.lastUpdatedTime = props.lastUpdatedTime;
-    this.createdTime = props.createdTime;
-    this.rootId = props.rootId;
+    super(client, props);
   }
 
   /**

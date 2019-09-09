@@ -87,6 +87,11 @@ describe('Events integration test', () => {
     expect(response.length).toBeGreaterThan(0);
   });
 
+  test('list to json|string', async () => {
+    const response = await client.events.list({ limit: 2 });
+    expect(typeof JSON.stringify(response.items)).toBe('string');
+  });
+
   test('list with rootAssetIds', async () => {
     const response = await client.events
       .list({
