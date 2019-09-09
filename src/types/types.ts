@@ -669,6 +669,10 @@ export interface FilesSearchFilter extends FileFilter {
 
 export interface Filter {
   /**
+   * Filter on name
+   */
+  name?: string;
+  /**
    * Filter on unit (case-sensitive).
    */
   unit?: string;
@@ -688,8 +692,16 @@ export interface Filter {
    * Filter out time series that are not linked to any of these assets.
    */
   assetIds?: CogniteInternalId[];
-  createdTime?: Date;
-  lastUpdatedTime?: Date;
+  /**
+   * The IDs of the root assets that the related assets should be children of.
+   */
+  rootAssetIds?: CogniteInternalId[];
+  /**
+   * Prefix filter on externalId. (case-sensitive)
+   */
+  externalIdPrefix?: CogniteExternalId;
+  createdTime?: DateRange;
+  lastUpdatedTime?: DateRange;
 }
 
 export interface FilterQuery extends Cursor, Limit {}
@@ -1356,9 +1368,6 @@ export interface TimeSeriesPatch {
 export interface TimeSeriesSearchDTO extends Limit {
   filter?: Filter;
   search?: Search;
-  /**
-   * Return up to this many results.
-   */
 }
 
 export type TimeSeriesUpdate =
@@ -1380,6 +1389,10 @@ export interface TimeseriesFilter extends FilterQuery {
    * Get time series related to these assets. Takes [ 1 .. 100 ] unique items.
    */
   assetIds?: number[];
+  /**
+   * The IDs of the root assets that the related assets should be a descendant of (or match).
+   */
+  rootAssetIds?: CogniteInternalId[];
 }
 
 export type TimeseriesIdEither = InternalId | ExternalId;
