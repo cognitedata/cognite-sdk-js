@@ -86,25 +86,6 @@ export class CDFHttpClient extends RetryableHttpClient {
     this.setDefaultHeader(AUTHORIZATION_HEADER, bearerString(token));
   }
 
-  public async getIdInfo(headers: HttpHeaders): Promise<null | IdInfo> {
-    try {
-      const response = await this.get<any>('/login/status', { headers });
-      const { loggedIn, user, project } = response.data.data;
-      if (!loggedIn) {
-        return null;
-      }
-      return {
-        user,
-        project,
-      };
-    } catch (err) {
-      if (err.status === 401) {
-        return null;
-      }
-      throw err;
-    }
-  }
-
   public set401ResponseHandler(handler: Response401Handler) {
     this.response401Handler = handler;
   }
@@ -166,11 +147,6 @@ export class CDFHttpClient extends RetryableHttpClient {
   private isLoginEndpoint(url: string) {
     return url.toLowerCase().indexOf('/login/status') !== -1;
   }
-}
-
-export interface IdInfo {
-  project: string;
-  user: string;
 }
 
 type Response401Handler = (
