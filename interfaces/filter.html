@@ -79,10 +79,13 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filter.html#assetids" class="tsd-kind-icon">asset<wbr>Ids</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filter.html#createdtime" class="tsd-kind-icon">created<wbr>Time</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filter.html#externalidprefix" class="tsd-kind-icon">external<wbr>IdPrefix</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filter.html#isstep" class="tsd-kind-icon">is<wbr>Step</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filter.html#isstring" class="tsd-kind-icon">is<wbr>String</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filter.html#lastupdatedtime" class="tsd-kind-icon">last<wbr>Updated<wbr>Time</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filter.html#metadata" class="tsd-kind-icon">metadata</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filter.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filter.html#rootassetids" class="tsd-kind-icon">root<wbr>Asset<wbr>Ids</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="filter.html#unit" class="tsd-kind-icon">unit</a></li>
 							</ul>
 						</section>
@@ -97,7 +100,7 @@
 					<div class="tsd-signature tsd-kind-icon">asset<wbr>Ids<span class="tsd-signature-symbol">:</span> <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L690">types/types.ts:690</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L694">types/types.ts:694</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -109,12 +112,27 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="createdtime" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> created<wbr>Time</h3>
-					<div class="tsd-signature tsd-kind-icon">created<wbr>Time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
+					<div class="tsd-signature tsd-kind-icon">created<wbr>Time<span class="tsd-signature-symbol">:</span> <a href="../index.html#daterange" class="tsd-signature-type">DateRange</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L691">types/types.ts:691</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L703">types/types.ts:703</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="externalidprefix" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> external<wbr>IdPrefix</h3>
+					<div class="tsd-signature tsd-kind-icon">external<wbr>IdPrefix<span class="tsd-signature-symbol">:</span> <a href="../index.html#cogniteexternalid" class="tsd-signature-type">CogniteExternalId</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L702">types/types.ts:702</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Prefix filter on externalId. (case-sensitive)</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="isstep" class="tsd-anchor"></a>
@@ -122,7 +140,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Step<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L682">types/types.ts:682</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L686">types/types.ts:686</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -137,7 +155,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>String<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L678">types/types.ts:678</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L682">types/types.ts:682</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -149,10 +167,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="lastupdatedtime" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> last<wbr>Updated<wbr>Time</h3>
-					<div class="tsd-signature tsd-kind-icon">last<wbr>Updated<wbr>Time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
+					<div class="tsd-signature tsd-kind-icon">last<wbr>Updated<wbr>Time<span class="tsd-signature-symbol">:</span> <a href="../index.html#daterange" class="tsd-signature-type">DateRange</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L692">types/types.ts:692</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L704">types/types.ts:704</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -162,7 +180,7 @@
 					<div class="tsd-signature tsd-kind-icon">metadata<span class="tsd-signature-symbol">:</span> <a href="metadata.html" class="tsd-signature-type">Metadata</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L686">types/types.ts:686</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L690">types/types.ts:690</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -172,12 +190,42 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="name" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L674">types/types.ts:674</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Filter on name</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rootassetids" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> root<wbr>Asset<wbr>Ids</h3>
+					<div class="tsd-signature tsd-kind-icon">root<wbr>Asset<wbr>Ids<span class="tsd-signature-symbol">:</span> <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L698">types/types.ts:698</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The IDs of the root assets that the related assets should be children of.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="unit" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> unit</h3>
 					<div class="tsd-signature tsd-kind-icon">unit<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L674">types/types.ts:674</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L678">types/types.ts:678</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -210,6 +258,9 @@
 								<a href="filter.html#createdtime" class="tsd-kind-icon">created<wbr>Time</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="filter.html#externalidprefix" class="tsd-kind-icon">external<wbr>IdPrefix</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="filter.html#isstep" class="tsd-kind-icon">is<wbr>Step</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
@@ -220,6 +271,12 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="filter.html#metadata" class="tsd-kind-icon">metadata</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="filter.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="filter.html#rootassetids" class="tsd-kind-icon">root<wbr>Asset<wbr>Ids</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="filter.html#unit" class="tsd-kind-icon">unit</a>

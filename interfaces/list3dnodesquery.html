@@ -86,6 +86,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="list3dnodesquery.html#depth" class="tsd-kind-icon">depth</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="list3dnodesquery.html#limit" class="tsd-kind-icon">limit</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="list3dnodesquery.html#nodeid" class="tsd-kind-icon">node<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="list3dnodesquery.html#properties" class="tsd-kind-icon">properties</a></li>
 							</ul>
 						</section>
 					</div>
@@ -100,7 +101,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="cursor.html">Cursor</a>.<a href="cursor.html#cursor-1">cursor</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L341">types/types.ts:341</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L341">types/types.ts:341</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -110,7 +111,7 @@
 					<div class="tsd-signature tsd-kind-icon">depth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L861">types/types.ts:861</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L873">types/types.ts:873</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -126,7 +127,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="limit.html">Limit</a>.<a href="limit.html#limit-1">limit</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L854">types/types.ts:854</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L866">types/types.ts:866</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -136,12 +137,27 @@
 					<div class="tsd-signature tsd-kind-icon">node<wbr>Id<span class="tsd-signature-symbol">:</span> <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/types/types.ts#L865">types/types.ts:865</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L877">types/types.ts:877</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>ID of a node that are the root of the subtree you request (default is the root node).</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="properties" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> properties</h3>
+					<div class="tsd-signature tsd-kind-icon">properties<span class="tsd-signature-symbol">:</span> <a href="node3dproperties.html" class="tsd-signature-type">Node3DProperties</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/types/types.ts#L881">types/types.ts:881</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Filter for node properties. Only nodes that match all the given properties exactly will be listed. The filter must be a JSON object with the same format as the properties field.</p>
 						</div>
 					</div>
 				</section>
@@ -173,6 +189,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="list3dnodesquery.html#nodeid" class="tsd-kind-icon">node<wbr>Id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="list3dnodesquery.html#properties" class="tsd-kind-icon">properties</a>
 							</li>
 						</ul>
 					</li>

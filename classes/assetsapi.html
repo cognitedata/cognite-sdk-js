@@ -110,7 +110,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#httpclient">httpClient</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L58">resources/baseResourceApi.ts:58</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/resources/baseResourceApi.ts#L58">resources/baseResourceApi.ts:58</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -121,7 +121,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#resourcepath">resourcePath</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/baseResourceApi.ts#L57">resources/baseResourceApi.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/resources/baseResourceApi.ts#L57">resources/baseResourceApi.ts:57</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -138,7 +138,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L45">resources/assets/assetsApi.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/resources/assets/assetsApi.ts#L46">resources/assets/assetsApi.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -147,7 +147,8 @@
 								</div>
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = [
   { <span class="hljs-attr">name</span>: <span class="hljs-string">'First asset'</span> },
-  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Second asset'</span>, <span class="hljs-attr">description</span>: <span class="hljs-string">'Child asset'</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Second asset'</span>, <span class="hljs-attr">description</span>: <span class="hljs-string">'Another asset'</span>, <span class="hljs-attr">externalId</span>: <span class="hljs-string">'anotherAsset'</span> },
+  { <span class="hljs-attr">name</span>: <span class="hljs-string">'Child asset'</span>, <span class="hljs-attr">parentExternalId</span>: <span class="hljs-string">'anotherAsset'</span>},
 ];
 <span class="hljs-keyword">const</span> createdAssets = <span class="hljs-keyword">await</span> client.assets.create(assets);</code></pre>
 							</div>
@@ -171,7 +172,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L112">resources/assets/assetsApi.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/resources/assets/assetsApi.ts#L113">resources/assets/assetsApi.ts:113</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -186,7 +187,7 @@
 									<h5>ids: <a href="../index.html#assetideither" class="tsd-signature-type">AssetIdEither</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <a href="../interfaces/assetdeleteparams.html" class="tsd-signature-type">AssetDeleteParams</a></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> params: <a href="../interfaces/assetdeleteparams.html" class="tsd-signature-type">AssetDeleteParams</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -203,7 +204,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L58">resources/assets/assetsApi.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/resources/assets/assetsApi.ts#L59">resources/assets/assetsApi.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -233,7 +234,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L72">resources/assets/assetsApi.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/resources/assets/assetsApi.ts#L73">resources/assets/assetsApi.ts:73</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -263,7 +264,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L116">resources/assets/assetsApi.ts:116</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/resources/assets/assetsApi.ts#L121">resources/assets/assetsApi.ts:121</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -289,7 +290,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L101">resources/assets/assetsApi.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/resources/assets/assetsApi.ts#L102">resources/assets/assetsApi.ts:102</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -325,7 +326,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/1b4a0f4/src/resources/assets/assetsApi.ts#L83">resources/assets/assetsApi.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognitesdk-js/blob/9f57c58/src/resources/assets/assetsApi.ts#L84">resources/assets/assetsApi.ts:84</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
