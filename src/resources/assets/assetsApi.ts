@@ -37,7 +37,8 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * ```js
    * const assets = [
    *   { name: 'First asset' },
-   *   { name: 'Second asset', description: 'Child asset' },
+   *   { name: 'Second asset', description: 'Another asset', externalId: 'anotherAsset' },
+   *   { name: 'Child asset', parentExternalId: 'anotherAsset'},
    * ];
    * const createdAssets = await client.assets.create(assets);
    * ```
