@@ -61,6 +61,10 @@ export const POPUP = 'POPUP';
 export interface OAuthLoginOptions extends Project {
   onAuthenticate?: OnAuthenticate | 'REDIRECT' | 'POPUP';
   onTokens?: OnTokens;
+  /**
+   * Provide optional cached access token to skip the authentication flow (client.authenticate will still override this).
+   */
+  accessToken?: string;
 }
 
 function validateAndReturnAPI<T>(api: T | undefined): T {
@@ -274,12 +278,13 @@ export default class CogniteClient {
     this.projectName = project;
 
     const onTokens = options.onTokens || (() => {});
-    let onAuthenticate: OnAuthenticate = onAuthenticateWithRedirect;
-    if (options.onAuthenticate === POPUP) {
-      onAuthenticate = onAuthenticateWithPopup;
-    } else if (isFunction(options.onAuthenticate)) {
-      onAuthenticate = options.onAuthenticate;
-    }
+    const onAuthenticate =
+      options.onAuthenticate === POPUP
+        ? onAuthenticateWithPopup
+        : isFunction(options.onAuthenticate)
+          ? options.onAuthenticate
+          : onAuthenticateWithRedirect;
+
     const authenticate = createAuthenticateFunction({
       project,
       httpClient: this.httpClient,
@@ -291,6 +296,11 @@ export default class CogniteClient {
       const didAuthenticate = await authenticate();
       return didAuthenticate ? retry() : reject();
     });
+
+    const { accessToken } = options;
+    if (accessToken) {
+      this.httpClient.setBearerToken(accessToken);
+    }
 
     this.initAPIs();
     this.authenticate = authenticate;
