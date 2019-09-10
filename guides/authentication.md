@@ -20,6 +20,7 @@ To utilize authentication in browsers using the SDK you need to use the `client.
       - [Customize redirect URL](#customize-redirect-url-1)
   - [Advance](#advance)
     - [Manually trigger authentication](#manually-trigger-authentication)
+    - [Cache access tokens](#cache-access-tokens)
     - [Skip authentication](#skip-authentication)
     - [Combine different authentication methods](#combine-different-authentication-methods)
     - [Tokens](#tokens)
@@ -156,6 +157,17 @@ client.loginWithOAuth({
 });
 await client.authenticate(); // this will also return a boolean based on if the user successfully authenticated or not.
 ```
+
+### Cache access tokens
+
+If you already have a valid access token you can use it to skip the authentication flow (see this [section](#tokens) on how to get hold of the token).
+```js
+client.loginWithOAuth({
+  project: 'YOUR PROJECT NAME HERE',
+  accessToken: 'ACCESS TOKEN FOR THE PROJECT HERE',
+});
+```
+> `client.authenticate()` will still override this and trigger a new authentication flow.
 
 ### Skip authentication
 
