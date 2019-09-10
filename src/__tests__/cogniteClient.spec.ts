@@ -333,6 +333,39 @@ describe('CogniteClient', () => {
         expect(promise401Throwed).toBe(true);
         await expect(promiseAuthenticate).resolves.toBe(false);
       });
+
+      describe('cached access token', () => {
+        test('should be able to provide an access token', async () => {
+          const client = setupClient(mockBaseUrl);
+          client.loginWithOAuth({
+            project,
+            accessToken: authTokens.accessToken,
+          });
+          nock(mockBaseUrl, {
+            reqheaders: {
+              [AUTHORIZATION_HEADER]: bearerString(authTokens.accessToken),
+            },
+          })
+            .get('/')
+            .once()
+            .reply(200, {});
+          await client.get('/');
+        });
+
+        test('re-authenticate on 401', async done => {
+          const client = setupClient(mockBaseUrl);
+          client.loginWithOAuth({
+            project,
+            accessToken: authTokens.accessToken,
+            onAuthenticate: () => done(),
+          });
+          nock(mockBaseUrl)
+            .get('/')
+            .once()
+            .reply(401, {});
+          client.get('/');
+        });
+      });
     });
   });
 });

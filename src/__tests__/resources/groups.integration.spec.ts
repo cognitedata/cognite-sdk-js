@@ -73,7 +73,9 @@ describe('Groups integration test', () => {
   });
 
   test('delete', async () => {
-    const response = await client.groups.delete([group.id]);
-    expect(response).toEqual({});
+    await runTestWithRetryWhenFailing(async () => {
+      const response = await client.groups.delete([group.id]);
+      expect(response).toEqual({});
+    });
   });
 });
