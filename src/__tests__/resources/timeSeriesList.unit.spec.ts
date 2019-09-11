@@ -2,9 +2,11 @@
 import { uniqBy } from 'lodash';
 import * as nock from 'nock';
 import CogniteClient from '../../cogniteClient';
+import { TimeSeries } from '../../resources/classes/timeSeries';
 import { TimeSeriesList } from '../../resources/classes/timeSeriesList';
 import {
   DatapointsPostDatapoint,
+  GetTimeSeriesMetadataDTO,
   PostTimeSeriesMetadataDTO,
 } from '../../types/types';
 import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
@@ -98,5 +100,39 @@ describe('TimeSeriesList class unit test', async () => {
     const fetchedDatapoints = await createdTimeSeries.getAllDatapoints();
     expect(fetchedDatapoints).toHaveLength(3);
     expect(fetchedDatapoints[0].datapoints[0].timestamp).toBeDefined();
+  });
+
+  describe('shallow copy + JSON.stringify()', () => {
+    const items = [
+      {
+        id: 1,
+      },
+      {
+        id: 2,
+      },
+    ];
+
+    test('timeseries.list().autoPagingToArray()', async () => {
+      nock(mockBaseUrl)
+        .get(new RegExp('/timeseries'))
+        .once()
+        .reply(200, { items });
+
+      const timeseries = await client.timeseries
+        .list()
+        .autoPagingToArray({ limit: 2 });
+      expect(JSON.stringify(timeseries)).toBeTruthy();
+      const shallowCopyItems: TimeSeries[] = [...timeseries, timeseries[0]];
+      expect(JSON.stringify(shallowCopyItems)).toBeTruthy();
+      const destructedTimeseries: GetTimeSeriesMetadataDTO = {
+        ...timeseries[1],
+      };
+      expect(destructedTimeseries.id).toBeDefined();
+      expect(() => JSON.stringify(destructedTimeseries)).toThrowError();
+      const destructedJsonTimeseries: GetTimeSeriesMetadataDTO = {
+        ...timeseries[1].toJSON(),
+      };
+      expect(JSON.stringify(destructedJsonTimeseries)).toBeTruthy();
+    });
   });
 });

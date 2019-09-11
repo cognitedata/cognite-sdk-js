@@ -4,18 +4,14 @@ import { CogniteClient } from '../..';
 
 export abstract class BaseResource<T> {
   protected client: CogniteClient;
-  protected props: T;
 
-  constructor(client: CogniteClient, props: T) {
+  constructor(client: CogniteClient) {
     this.client = client;
-    this.props = props;
   }
 
-  public toJSON() {
-    return this.props;
-  }
+  public abstract toJSON(): T;
 
   public toString() {
-    return JSON.stringify(this.props);
+    return JSON.stringify(this.toJSON());
   }
 }
