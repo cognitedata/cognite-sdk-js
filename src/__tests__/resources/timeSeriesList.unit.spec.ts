@@ -2,11 +2,9 @@
 import { uniqBy } from 'lodash';
 import * as nock from 'nock';
 import CogniteClient from '../../cogniteClient';
-import { TimeSeries } from '../../resources/classes/timeSeries';
 import { TimeSeriesList } from '../../resources/classes/timeSeriesList';
 import {
   DatapointsPostDatapoint,
-  GetTimeSeriesMetadataDTO,
   PostTimeSeriesMetadataDTO,
 } from '../../types/types';
 import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
@@ -102,7 +100,7 @@ describe('TimeSeriesList class unit test', async () => {
     expect(fetchedDatapoints[0].datapoints[0].timestamp).toBeDefined();
   });
 
-  describe('shallow copy + JSON.stringify()', () => {
+  describe('class is not polluted with enumerable props', () => {
     const items = [
       {
         id: 1,
@@ -112,27 +110,37 @@ describe('TimeSeriesList class unit test', async () => {
       },
     ];
 
-    test('timeseries.list().autoPagingToArray()', async () => {
+    beforeEach(() => {
+      nock.cleanAll();
       nock(mockBaseUrl)
-        .get(new RegExp('/timeseries'))
+        .get(new RegExp('/timeseries/'))
         .once()
         .reply(200, { items });
+    });
 
-      const timeseries = await client.timeseries
-        .list()
-        .autoPagingToArray({ limit: 2 });
-      expect(JSON.stringify(timeseries)).toBeTruthy();
-      const shallowCopyItems: TimeSeries[] = [...timeseries, timeseries[0]];
-      expect(JSON.stringify(shallowCopyItems)).toBeTruthy();
-      const destructedTimeseries: GetTimeSeriesMetadataDTO = {
-        ...timeseries[1],
-      };
-      expect(destructedTimeseries.id).toBeDefined();
-      expect(() => JSON.stringify(destructedTimeseries)).toThrowError();
-      const destructedJsonTimeseries: GetTimeSeriesMetadataDTO = {
-        ...timeseries[1].toJSON(),
-      };
-      expect(JSON.stringify(destructedJsonTimeseries)).toBeTruthy();
+    test('JSON.stringify works', async () => {
+      const timeseries = await client.timeseries.list().autoPagingToArray();
+      expect(() => JSON.stringify(timeseries)).not.toThrow();
+      expect(() => JSON.stringify(timeseries[0])).not.toThrow();
+    });
+
+    test('change context for asset utility methods', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/timeseries/data/list'))
+        .twice()
+        .reply(200, { items });
+      const timeseries = await client.timeseries.list().autoPagingToArray();
+      const utilMethod = timeseries[0].getDatapoints;
+      const result = await utilMethod();
+      const resultAfterBind = await utilMethod.call(null);
+      expect({ ...result[0] }).toEqual({ ...resultAfterBind[0] });
+      expect([{ ...result[0] }, { ...result[1] }]).toEqual(items);
+    });
+
+    test('spread operator receives only object data props', async () => {
+      const timeseries = await client.timeseries.list().autoPagingToArray();
+      expect([{ ...timeseries[0] }, { ...timeseries[1] }]).toEqual(items);
+      expect(Object.assign({}, timeseries[1])).toEqual(items[1]);
     });
   });
 });

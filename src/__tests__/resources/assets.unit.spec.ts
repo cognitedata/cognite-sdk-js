@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import * as nock from 'nock';
-import { Asset as TypeAsset, ExternalAssetItem } from '../../';
+import { ExternalAssetItem } from '../../';
 import CogniteClient from '../../cogniteClient';
 import { Node } from '../../graphUtils';
 import {
@@ -200,7 +200,7 @@ describe('Assets unit test', () => {
     });
   });
 
-  describe('shallow copy + JSON.stringify()', () => {
+  describe('class is not polluted with enumerable props', async () => {
     const items = [
       {
         id: 1,
@@ -210,38 +210,33 @@ describe('Assets unit test', () => {
       },
     ];
 
-    test('assets.list().autoPagingToArray()', async () => {
+    beforeEach(() => {
+      nock.cleanAll();
       nock(mockBaseUrl)
-        .post(new RegExp('/assets/list'), {})
-        .once()
+        .post(new RegExp('/assets/list'))
+        .thrice()
         .reply(200, { items });
-
-      const assets = await client.assets.list().autoPagingToArray({ limit: 2 });
-      expect(JSON.stringify(assets)).toBeTruthy();
-      const shallowCopyItems: TypeAsset[] = [...assets, assets[0]];
-      expect(JSON.stringify(shallowCopyItems)).toBeTruthy();
-      const destructedAsset: TypeAsset = { ...assets[1] };
-      expect(destructedAsset.id).toBeDefined();
-      expect(() => JSON.stringify(destructedAsset)).toThrowError();
-      const destructedJsonAsset: TypeAsset = { ...assets[1].toJSON() };
-      expect(JSON.stringify(destructedJsonAsset)).toBeTruthy();
     });
 
-    test('assets.list()', async () => {
-      nock(mockBaseUrl)
-        .post(new RegExp('/assets/list'), {})
-        .once()
-        .reply(200, { items });
+    test('JSON.stringify works', async () => {
+      const assets = await client.assets.list().autoPagingToArray();
+      expect(() => JSON.stringify(assets)).not.toThrow();
+      expect(() => JSON.stringify(assets[0])).not.toThrow();
+    });
 
-      const response = await client.assets.list();
-      expect(JSON.stringify(response.items)).toBeTruthy();
-      const responseItemsShallowCopy: TypeAsset[] = [...response.items];
-      expect(JSON.stringify(responseItemsShallowCopy)).toBeTruthy();
-      const destructedItem: TypeAsset = { ...response.items[1] };
-      expect(destructedItem.id).toBeDefined();
-      expect(() => JSON.stringify(destructedItem)).toThrowError();
-      const destructedJsonItem: TypeAsset = { ...response.items[1].toJSON() };
-      expect(JSON.stringify(destructedJsonItem)).toBeTruthy();
+    test('change context for asset utility methods', async () => {
+      const assets = await client.assets.list().autoPagingToArray();
+      const utilMethod = assets[0].children;
+      const result = await utilMethod();
+      const resultAfterBind = await utilMethod.call(null);
+      expect({ ...result[0] }).toEqual({ ...resultAfterBind[0] });
+      expect([{ ...result[0] }, { ...result[1] }]).toEqual(items);
+    });
+
+    test('spread operator receives only object data props', async () => {
+      const assets = await client.assets.list().autoPagingToArray();
+      expect([{ ...assets[0] }, { ...assets[1] }]).toEqual(items);
+      expect(Object.assign({}, assets[1])).toEqual(items[1]);
     });
   });
 });

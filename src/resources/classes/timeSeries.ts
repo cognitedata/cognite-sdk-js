@@ -39,6 +39,19 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
     this.createdTime = props.createdTime;
     this.lastUpdatedTime = props.lastUpdatedTime;
     this.id = props.id;
+
+    Object.defineProperties(this, {
+      delete: { value: this.delete.bind(this), enumerable: false },
+      getAsset: { value: this.getAsset.bind(this), enumerable: false },
+      getDatapoints: {
+        value: this.getDatapoints.bind(this),
+        enumerable: false,
+      },
+      getLatestDatapoints: {
+        value: this.getLatestDatapoints.bind(this),
+        enumerable: false,
+      },
+    });
   }
 
   /**
@@ -48,9 +61,9 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
    * await timeseries.delete();
    * ```
    */
-  public delete = async () => {
+  public async delete() {
     return this.client.timeseries.delete([{ id: this.id }]);
-  };
+  }
 
   /**
    * Retrieves the asset that the current timeseries is related to
@@ -59,13 +72,13 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
    * const assetList = await timeseries.getAsset();
    * ```
    */
-  public getAsset = async () => {
+  public async getAsset() {
     if (this.assetId === undefined) {
       return null;
     }
     const assetList = await this.client.assets.retrieve([{ id: this.assetId }]);
     return assetList[0];
-  };
+  }
 
   /**
    * Retrieves all datapoints related to the current timeseries
@@ -75,11 +88,11 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
    * const datapoints = await timeseries.getDatapoints();
    * ```
    */
-  public getDatapoints = async (options?: DatapointsMultiQuery) => {
+  public async getDatapoints(options?: DatapointsMultiQuery) {
     return this.client.datapoints.retrieve({
       items: [{ ...options, id: this.id }],
     });
-  };
+  }
 
   /**
    * Retrieves the latest datapoints related to the current timeseries
@@ -89,27 +102,14 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
    * const latestDatapoints = await timeseries.getLatestDatapoints();
    * ```
    */
-  public getLatestDatapoints = async (
-    option: LatestDataPropertyFilter = {}
-  ) => {
+  public async getLatestDatapoints(option: LatestDataPropertyFilter = {}) {
     const filter: LatestDataPropertyFilter = option;
     return this.client.datapoints.retrieveLatest([{ ...filter, id: this.id }]);
-  };
+  }
 
   public toJSON() {
     return {
-      externalId: this.externalId,
-      name: this.name,
-      isString: this.isString,
-      metadata: this.metadata,
-      unit: this.unit,
-      assetId: this.assetId,
-      isStep: this.isStep,
-      description: this.description,
-      securityCategories: this.securityCategories,
-      createdTime: this.createdTime,
-      lastUpdatedTime: this.lastUpdatedTime,
-      id: this.id,
+      ...this,
     };
   }
 }

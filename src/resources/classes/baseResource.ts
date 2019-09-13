@@ -7,6 +7,10 @@ export abstract class BaseResource<T> {
 
   constructor(client: CogniteClient) {
     this.client = client;
+    Object.defineProperty(this, 'client', {
+      value: this.client,
+      enumerable: false,
+    });
   }
 
   public abstract toJSON(): T;
