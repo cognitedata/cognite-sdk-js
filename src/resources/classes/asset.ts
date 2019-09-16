@@ -8,6 +8,7 @@ import {
   TimeseriesFilter,
 } from '../../index';
 import {
+  AssetAggregateResult,
   AssetDescription,
   AssetName,
   AssetSource,
@@ -35,6 +36,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
   public lastUpdatedTime: Date;
   public createdTime: Date;
   public rootId: CogniteInternalId;
+  public aggregates?: AssetAggregateResult;
 
   constructor(client: CogniteClient, props: TypeAsset) {
     super(client);
@@ -48,6 +50,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
     this.lastUpdatedTime = props.lastUpdatedTime;
     this.createdTime = props.createdTime;
     this.rootId = props.rootId;
+    this.aggregates = props.aggregates;
 
     Object.defineProperties(this, {
       delete: { value: this.delete.bind(this), enumerable: false },
