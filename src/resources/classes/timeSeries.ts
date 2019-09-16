@@ -1,53 +1,57 @@
 // Copyright 2019 Cognite AS
 import { CogniteClient } from '../..';
 import {
+  CogniteExternalId,
+  CogniteInternalId,
   DatapointsMultiQuery,
   GetTimeSeriesMetadataDTO,
   LatestDataPropertyFilter,
+  Metadata,
 } from '../../types/types';
 import { BaseResource } from './baseResource';
 
 export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
   implements GetTimeSeriesMetadataDTO {
-  public get externalId() {
-    return this.props.externalId;
-  }
-  public get name() {
-    return this.props.name;
-  }
-  public get isString() {
-    return this.props.isString;
-  }
-  public get metadata() {
-    return this.props.metadata;
-  }
-  public get unit() {
-    return this.props.unit;
-  }
-  public get assetId() {
-    return this.props.assetId;
-  }
-  public get isStep() {
-    return this.props.isStep;
-  }
-  public get description() {
-    return this.props.description;
-  }
-  public get securityCategories() {
-    return this.props.securityCategories;
-  }
-  public get createdTime() {
-    return this.props.createdTime;
-  }
-  public get lastUpdatedTime() {
-    return this.props.lastUpdatedTime;
-  }
-  public get id() {
-    return this.props.id;
-  }
+  public externalId?: CogniteExternalId;
+  public name?: string;
+  public isString: boolean;
+  public metadata?: Metadata;
+  public unit?: string;
+  public assetId?: CogniteInternalId;
+  public isStep: boolean;
+  public description: string;
+  public securityCategories?: number[];
+  public createdTime: Date;
+  public lastUpdatedTime: Date;
+  public id: CogniteInternalId;
 
   constructor(client: CogniteClient, props: GetTimeSeriesMetadataDTO) {
-    super(client, props);
+    super(client);
+    this.externalId = props.externalId;
+    this.name = props.name;
+    this.isString = props.isString;
+    this.metadata = props.metadata;
+    this.unit = props.unit;
+    this.assetId = props.assetId;
+    this.isStep = props.isStep;
+    this.description = props.description;
+    this.securityCategories = props.securityCategories;
+    this.createdTime = props.createdTime;
+    this.lastUpdatedTime = props.lastUpdatedTime;
+    this.id = props.id;
+
+    Object.defineProperties(this, {
+      delete: { value: this.delete.bind(this), enumerable: false },
+      getAsset: { value: this.getAsset.bind(this), enumerable: false },
+      getDatapoints: {
+        value: this.getDatapoints.bind(this),
+        enumerable: false,
+      },
+      getLatestDatapoints: {
+        value: this.getLatestDatapoints.bind(this),
+        enumerable: false,
+      },
+    });
   }
 
   /**
@@ -57,9 +61,9 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
    * await timeseries.delete();
    * ```
    */
-  public delete = async () => {
+  public async delete() {
     return this.client.timeseries.delete([{ id: this.id }]);
-  };
+  }
 
   /**
    * Retrieves the asset that the current timeseries is related to
@@ -68,13 +72,13 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
    * const assetList = await timeseries.getAsset();
    * ```
    */
-  public getAsset = async () => {
+  public async getAsset() {
     if (this.assetId === undefined) {
       return null;
     }
     const assetList = await this.client.assets.retrieve([{ id: this.assetId }]);
     return assetList[0];
-  };
+  }
 
   /**
    * Retrieves all datapoints related to the current timeseries
@@ -84,11 +88,11 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
    * const datapoints = await timeseries.getDatapoints();
    * ```
    */
-  public getDatapoints = async (options?: DatapointsMultiQuery) => {
+  public async getDatapoints(options?: DatapointsMultiQuery) {
     return this.client.datapoints.retrieve({
       items: [{ ...options, id: this.id }],
     });
-  };
+  }
 
   /**
    * Retrieves the latest datapoints related to the current timeseries
@@ -98,10 +102,14 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
    * const latestDatapoints = await timeseries.getLatestDatapoints();
    * ```
    */
-  public getLatestDatapoints = async (
-    option: LatestDataPropertyFilter = {}
-  ) => {
+  public async getLatestDatapoints(option: LatestDataPropertyFilter = {}) {
     const filter: LatestDataPropertyFilter = option;
     return this.client.datapoints.retrieveLatest([{ ...filter, id: this.id }]);
-  };
+  }
+
+  public toJSON() {
+    return {
+      ...this,
+    };
+  }
 }

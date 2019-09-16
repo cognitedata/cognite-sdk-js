@@ -54,8 +54,8 @@ export abstract class BaseResourceAPI<
     return chunk(items, chunkSize);
   }
   constructor(
-    public readonly resourcePath: string,
-    public readonly httpClient: CDFHttpClient,
+    private readonly resourcePath: string,
+    protected readonly httpClient: CDFHttpClient,
     private map: MetadataMap
   ) {}
 

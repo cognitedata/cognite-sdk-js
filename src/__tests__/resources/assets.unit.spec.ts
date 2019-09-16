@@ -1,6 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import * as nock from 'nock';
+import { ExternalAssetItem } from '../../';
 import CogniteClient from '../../cogniteClient';
 import { Node } from '../../graphUtils';
 import {
@@ -8,10 +9,10 @@ import {
   promiseAllAtOnce,
   promiseEachInSequence,
 } from '../../resources/assets/assetUtils';
-import { ExternalAssetItem } from '../../types/types';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
-describe('Asset unit test', () => {
+// tslint:disable-next-line:no-big-function
+describe('Assets unit test', () => {
   let client: CogniteClient;
   beforeEach(() => {
     client = setupMockableClient();
@@ -196,6 +197,46 @@ describe('Asset unit test', () => {
         }
         visitedAssets.add(node);
       });
+    });
+  });
+
+  describe('class is not polluted with enumerable props', async () => {
+    const items = [
+      {
+        id: 1,
+      },
+      {
+        id: 2,
+      },
+    ];
+
+    beforeEach(() => {
+      nock.cleanAll();
+      nock(mockBaseUrl)
+        .post(new RegExp('/assets/list'))
+        .thrice()
+        .reply(200, { items });
+    });
+
+    test('JSON.stringify works', async () => {
+      const assets = await client.assets.list().autoPagingToArray();
+      expect(() => JSON.stringify(assets)).not.toThrow();
+      expect(() => JSON.stringify(assets[0])).not.toThrow();
+    });
+
+    test('change context for asset utility methods', async () => {
+      const assets = await client.assets.list().autoPagingToArray();
+      const utilMethod = assets[0].children;
+      const result = await utilMethod();
+      const resultAfterBind = await utilMethod.call(null);
+      expect({ ...result[0] }).toEqual({ ...resultAfterBind[0] });
+      expect([{ ...result[0] }, { ...result[1] }]).toEqual(items);
+    });
+
+    test('spread operator receives only object data props', async () => {
+      const assets = await client.assets.list().autoPagingToArray();
+      expect([{ ...assets[0] }, { ...assets[1] }]).toEqual(items);
+      expect(Object.assign({}, assets[1])).toEqual(items[1]);
     });
   });
 });

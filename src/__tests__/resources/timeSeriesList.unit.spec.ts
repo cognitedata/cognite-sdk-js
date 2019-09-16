@@ -99,4 +99,48 @@ describe('TimeSeriesList class unit test', async () => {
     expect(fetchedDatapoints).toHaveLength(3);
     expect(fetchedDatapoints[0].datapoints[0].timestamp).toBeDefined();
   });
+
+  describe('class is not polluted with enumerable props', () => {
+    const items = [
+      {
+        id: 1,
+      },
+      {
+        id: 2,
+      },
+    ];
+
+    beforeEach(() => {
+      nock.cleanAll();
+      nock(mockBaseUrl)
+        .get(new RegExp('/timeseries/'))
+        .once()
+        .reply(200, { items });
+    });
+
+    test('JSON.stringify works', async () => {
+      const timeseries = await client.timeseries.list().autoPagingToArray();
+      expect(() => JSON.stringify(timeseries)).not.toThrow();
+      expect(() => JSON.stringify(timeseries[0])).not.toThrow();
+    });
+
+    test('change context for asset utility methods', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/timeseries/data/list'))
+        .twice()
+        .reply(200, { items });
+      const timeseries = await client.timeseries.list().autoPagingToArray();
+      const utilMethod = timeseries[0].getDatapoints;
+      const result = await utilMethod();
+      const resultAfterBind = await utilMethod.call(null);
+      expect({ ...result[0] }).toEqual({ ...resultAfterBind[0] });
+      expect([{ ...result[0] }, { ...result[1] }]).toEqual(items);
+    });
+
+    test('spread operator receives only object data props', async () => {
+      const timeseries = await client.timeseries.list().autoPagingToArray();
+      expect([{ ...timeseries[0] }, { ...timeseries[1] }]).toEqual(items);
+      expect(Object.assign({}, timeseries[1])).toEqual(items[1]);
+    });
+  });
 });

@@ -7,6 +7,14 @@ import {
   FileFilter,
   TimeseriesFilter,
 } from '../../index';
+import {
+  AssetDescription,
+  AssetName,
+  AssetSource,
+  CogniteExternalId,
+  CogniteInternalId,
+  Metadata,
+} from '../../types/types';
 import { AssetList } from './assetList';
 import { BaseResource } from './baseResource';
 
@@ -17,36 +25,39 @@ export interface DeleteOptions {
   recursive?: boolean;
 }
 export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
-  public get id() {
-    return this.props.id;
-  }
-  public get parentId() {
-    return this.props.parentId;
-  }
-  public get name() {
-    return this.props.name;
-  }
-  public get description() {
-    return this.props.description;
-  }
-  public get metadata() {
-    return this.props.metadata;
-  }
-  public get source() {
-    return this.props.source;
-  }
-  public get lastUpdatedTime() {
-    return this.props.lastUpdatedTime;
-  }
-  public get createdTime() {
-    return this.props.createdTime;
-  }
-  public get rootId() {
-    return this.props.rootId;
-  }
+  public id: CogniteInternalId;
+  public externalId?: CogniteExternalId;
+  public parentId?: CogniteInternalId;
+  public name: AssetName;
+  public description?: AssetDescription;
+  public metadata?: Metadata;
+  public source?: AssetSource;
+  public lastUpdatedTime: Date;
+  public createdTime: Date;
+  public rootId: CogniteInternalId;
 
   constructor(client: CogniteClient, props: TypeAsset) {
-    super(client, props);
+    super(client);
+    this.id = props.id;
+    this.externalId = props.externalId;
+    this.parentId = props.parentId;
+    this.name = props.name;
+    this.description = props.description;
+    this.metadata = props.metadata;
+    this.source = props.source;
+    this.lastUpdatedTime = props.lastUpdatedTime;
+    this.createdTime = props.createdTime;
+    this.rootId = props.rootId;
+
+    Object.defineProperties(this, {
+      delete: { value: this.delete.bind(this), enumerable: false },
+      parent: { value: this.parent.bind(this), enumerable: false },
+      children: { value: this.children.bind(this), enumerable: false },
+      subtree: { value: this.subtree.bind(this), enumerable: false },
+      timeSeries: { value: this.timeSeries.bind(this), enumerable: false },
+      events: { value: this.events.bind(this), enumerable: false },
+      files: { value: this.files.bind(this), enumerable: false },
+    });
   }
 
   /**
@@ -57,7 +68,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
    * await asset.delete();
    * ```
    */
-  public delete = async (options: DeleteOptions = {}) => {
+  public async delete(options: DeleteOptions = {}) {
     return this.client.assets.delete(
       [
         {
@@ -66,7 +77,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
       ],
       options
     );
-  };
+  }
 
   /**
    * Retrieves the parent of the current asset
@@ -74,7 +85,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
    * const parentAsset = await asset.parent();
    * ```
    */
-  public parent = async () => {
+  public async parent() {
     if (this.parentId) {
       const [parentAsset] = await this.client.assets.retrieve([
         { id: this.parentId },
@@ -82,7 +93,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
       return parentAsset;
     }
     return null;
-  };
+  }
 
   /**
    * Returns an AssetList object with all children of the current asset
@@ -90,7 +101,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
    * const children = await asset.children();
    * ```
    */
-  public children = async () => {
+  public async children() {
     const childAssets = await this.client.assets
       .list({
         filter: {
@@ -99,7 +110,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
       })
       .autoPagingToArray({ limit: Infinity });
     return new AssetList(this.client, childAssets);
-  };
+  }
 
   /**
    * Returns the full subtree of the current asset, including the asset itself
@@ -108,13 +119,13 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
    * const subtree = await asset.subtree();
    * ```
    */
-  public subtree = async (options?: SubtreeOptions) => {
+  public async subtree(options?: SubtreeOptions) {
     const query: SubtreeOptions = options || {};
     return this.client.assets.retrieveSubtree(
       { id: this.id },
       query.depth || Infinity
     );
-  };
+  }
 
   /**
    * Returns all timeseries for the current asset
@@ -123,14 +134,14 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
    * const timeSeries = await asset.timeSeries();
    * ```
    */
-  public timeSeries = async (filter: TimeseriesFilter = {}) => {
+  public async timeSeries(filter: TimeseriesFilter = {}) {
     return this.client.timeseries
       .list({
         ...filter,
         assetIds: [this.id],
       })
       .autoPagingToArray({ limit: Infinity });
-  };
+  }
 
   /**
    * Returns all events for the current asset
@@ -139,13 +150,13 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
    * const events = await asset.events();
    * ```
    */
-  public events = async (filter: EventFilter = {}) => {
+  public async events(filter: EventFilter = {}) {
     return this.client.events
       .list({
         filter: { ...filter, assetIds: [this.id] },
       })
       .autoPagingToArray({ limit: Infinity });
-  };
+  }
 
   /**
    * Returns all files for the current asset
@@ -154,11 +165,15 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
    * const files = await asset.files();
    * ```
    */
-  public files = async (filter: FileFilter = {}) => {
+  public async files(filter: FileFilter = {}) {
     return this.client.files
       .list({
         filter: { ...filter, assetIds: [this.id] },
       })
       .autoPagingToArray({ limit: Infinity });
-  };
+  }
+
+  public toJSON() {
+    return { ...this };
+  }
 }

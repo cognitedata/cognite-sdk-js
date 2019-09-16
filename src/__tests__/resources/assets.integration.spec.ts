@@ -199,7 +199,7 @@ describe('Asset integration test', () => {
     const root2 = { name: 'root-2', externalId: 'root-2' + randomInt() };
     const child1 = { name: 'child-1', parentExternalId: root1.externalId };
     const child2 = { name: 'child-2', parentExternalId: root2.externalId };
-    const [createdChild1] = await client.assets.create([
+    const [createdChild1, createdRoot1] = await client.assets.create([
       child1,
       root1,
       root2,
@@ -217,7 +217,7 @@ describe('Asset integration test', () => {
     await runTestWithRetryWhenFailing(async () => {
       const nonRootAssetsUnderRootId = await client.assets
         .list({
-          filter: { root: false, rootIds: [{ externalId: root1.externalId }] },
+          filter: { root: false, rootIds: [{ id: createdRoot1.id }] },
           limit: 2,
         })
         .autoPagingToArray({ limit: 2 });
