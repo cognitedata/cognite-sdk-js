@@ -161,15 +161,17 @@ describe('Asset integration test', () => {
   });
 
   test('childCount aggregate', async () => {
-    const [assetInfo] = await client.assets
-      .list({
-        aggregatedProperties: ['childCount'],
-        filter: {
-          externalIdPrefix: rootAsset.externalId,
-        },
-      })
-      .autoPagingToArray({ limit: 1 });
-    expect(assetInfo.aggregates!.childCount).toBe(1);
+    await runTestWithRetryWhenFailing(async () => {
+      const [assetInfo] = await client.assets
+        .list({
+          aggregatedProperties: ['childCount'],
+          filter: {
+            externalIdPrefix: rootAsset.externalId,
+          },
+        })
+        .autoPagingToArray({ limit: 1 });
+      expect(assetInfo.aggregates!.childCount).toBe(1);
+    });
   });
 
   test('delete', async () => {

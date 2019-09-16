@@ -44,44 +44,52 @@ describe('Asset', () => {
       });
     });
 
-    test('subtree', async () => {
-      const newRoot = {
-        ...newRootAsset,
-        externalId: 'test-root' + randomInt(),
-      };
-      const childArray = [];
-      for (let index = 0; index < 3; index++) {
-        childArray.push({
-          ...newChildAsset,
-          externalId: 'test-child' + randomInt(),
-          parentExternalId: newRoot.externalId,
+    test(
+      'subtree',
+      async () => {
+        const newRoot = {
+          ...newRootAsset,
+          externalId: 'test-root' + randomInt(),
+        };
+        const childArray = [];
+        for (let index = 0; index < 3; index++) {
+          childArray.push({
+            ...newChildAsset,
+            externalId: 'test-child' + randomInt(),
+            parentExternalId: newRoot.externalId,
+          });
+        }
+        const grandChildArray = [];
+        for (let index = 0; index < 105; index++) {
+          grandChildArray.push({
+            ...newGrandChildAsset,
+            parentExternalId: childArray[0].externalId,
+            externalId: 'test-grandchild' + randomInt(),
+          });
+        }
+        const createdAssets = await client.assets.create([
+          newRoot,
+          ...childArray,
+          ...grandChildArray,
+        ]);
+        await runTestWithRetryWhenFailing(async () => {
+          const subtreeWithDepth2 = await createdAssets[0].subtree({
+            depth: 2,
+          });
+          const subtreeWithDepth1 = await createdAssets[0].subtree({
+            depth: 1,
+          });
+          const subtreeWithoutSpecifiedDepth = await createdAssets[0].subtree();
+          expect(subtreeWithDepth2.length).toBe(109);
+          expect(subtreeWithDepth1.length).toBe(4);
+          expect(subtreeWithoutSpecifiedDepth.length).toBe(109);
         });
-      }
-      const grandChildArray = [];
-      for (let index = 0; index < 105; index++) {
-        grandChildArray.push({
-          ...newGrandChildAsset,
-          parentExternalId: childArray[0].externalId,
-          externalId: 'test-grandchild' + randomInt(),
+        await client.assets.delete([{ id: createdAssets[0].id }], {
+          recursive: true,
         });
-      }
-      const createdAssets = await client.assets.create([
-        newRoot,
-        ...childArray,
-        ...grandChildArray,
-      ]);
-      await runTestWithRetryWhenFailing(async () => {
-        const subtreeWithDepth2 = await createdAssets[0].subtree({ depth: 2 });
-        const subtreeWithDepth1 = await createdAssets[0].subtree({ depth: 1 });
-        const subtreeWithoutSpecifiedDepth = await createdAssets[0].subtree();
-        expect(subtreeWithDepth2.length).toBe(109);
-        expect(subtreeWithDepth1.length).toBe(4);
-        expect(subtreeWithoutSpecifiedDepth.length).toBe(109);
-      });
-      await client.assets.delete([{ id: createdAssets[0].id }], {
-        recursive: true,
-      });
-    });
+      },
+      3 * 60 * 1000
+    );
 
     test('events from Asset', async () => {
       await testResourceType(client.events);
