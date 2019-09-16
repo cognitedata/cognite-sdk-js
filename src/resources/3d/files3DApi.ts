@@ -12,11 +12,11 @@ export class Files3DAPI extends BaseResourceAPI<any> {
    * await client.files3D.retrieve(3744350296805509);
    * ```
    */
-  public async retrieve(fileId: CogniteInternalId): Promise<ArrayBuffer> {
+  public retrieve = async (fileId: CogniteInternalId) => {
     const path = this.url(`${fileId}`);
     const response = await this.httpClient.get<ArrayBuffer>(path, {
       responseType: HttpResponseType.ArrayBuffer,
     });
     return this.addToMapAndReturn(response.data, response);
-  }
+  };
 }

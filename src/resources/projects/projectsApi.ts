@@ -11,11 +11,11 @@ export class ProjectsAPI extends BaseResourceAPI<any> {
    * const projectInfo = await client.projects.retrieve('publicdata');
    * ```
    */
-  public async retrieve(projectName: string): Promise<ProjectResponse> {
+  public retrieve = async (projectName: string) => {
     const path = this.encodeUrl(projectName);
     const response = await this.httpClient.get<ProjectResponse>(path);
     return this.addToMapAndReturn(response.data, response);
-  }
+  };
 
   /**
    * [Update a project](https://doc.cognitedata.com/api/v1/#operation/putProject)
@@ -27,16 +27,13 @@ export class ProjectsAPI extends BaseResourceAPI<any> {
    * });
    * ```
    */
-  public async update(
-    projectName: string,
-    replacement: ProjectUpdate
-  ): Promise<ProjectResponse> {
+  public update = async (projectName: string, replacement: ProjectUpdate) => {
     const path = this.encodeUrl(projectName);
     const response = await this.httpClient.put<ProjectResponse>(path, {
       data: replacement,
     });
     return this.addToMapAndReturn(response.data, response);
-  }
+  };
 
   private encodeUrl(projectName: string) {
     return this.url(`projects/${encodeURIComponent(projectName)}`);

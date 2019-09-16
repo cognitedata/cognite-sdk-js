@@ -3,7 +3,7 @@
 import { MetadataMap } from '../../metadata';
 import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { BaseResourceAPI } from '../baseResourceApi';
-import { getIdInfo, IdInfo } from '../login';
+import { getIdInfo } from '../login';
 
 export class LoginAPI extends BaseResourceAPI<any> {
   /** @hidden */
@@ -19,7 +19,7 @@ export class LoginAPI extends BaseResourceAPI<any> {
    * // if status === null means you are not logged in
    * ```
    */
-  public async status(): Promise<null | IdInfo> {
+  public status = () => {
     return getIdInfo(this.httpClient, {});
-  }
+  };
 }

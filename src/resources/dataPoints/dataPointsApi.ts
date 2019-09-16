@@ -20,9 +20,9 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
    */
-  public async insert(items: DatapointsPostDatapoint[]): Promise<{}> {
+  public insert = (items: DatapointsPostDatapoint[]) => {
     return this.insertEndpoint(items);
-  }
+  };
 
   /**
    * [Retrieve data points](https://doc.cognitedata.com/api/v1/#operation/getMultiTimeSeriesDatapoints)
@@ -31,11 +31,11 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    * const data = await client.datapoints.retrieve({ items: [{ id: 123 }] });
    * ```
    */
-  public async retrieve(
+  public retrieve = (
     query: DatapointsMultiQuery
-  ): Promise<DatapointsGetAggregateDatapoint[] | DatapointsGetDatapoint[]> {
+  ): Promise<DatapointsGetAggregateDatapoint[] | DatapointsGetDatapoint[]> => {
     return this.retrieveDatapointsEndpoint(query);
-  }
+  };
 
   /**
    * [Get latest data point in a time series](https://doc.cognitedata.com/api/v1/#operation/getLatest)
@@ -53,11 +53,9 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    * ]);
    * ```
    */
-  public async retrieveLatest(
-    items: LatestDataBeforeRequest[]
-  ): Promise<DatapointsGetDatapoint[]> {
+  public retrieveLatest = (items: LatestDataBeforeRequest[]) => {
     return this.retrieveLatestEndpoint(items);
-  }
+  };
 
   /**
    * [Delete data points](https://doc.cognitedata.com/api/v1/#operation/deleteDatapoints)
@@ -66,9 +64,9 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    * await client.datapoints.delete([{id: 123, inclusiveBegin: new Date('1 jan 2019')}]);
    * ```
    */
-  public async delete(items: DatapointsDeleteRequest[]) {
+  public delete = (items: DatapointsDeleteRequest[]) => {
     return this.deleteDatapointsEndpoint(items);
-  }
+  };
 
   private async insertEndpoint(items: DatapointsPostDatapoint[]) {
     const path = this.url('data');

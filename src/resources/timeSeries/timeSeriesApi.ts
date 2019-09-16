@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '../../autoPagination';
 import CogniteClient from '../../cogniteClient';
 import { MetadataMap } from '../../metadata';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
@@ -42,11 +41,9 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    */
-  public async create(
-    items: PostTimeSeriesMetadataDTO[]
-  ): Promise<TimeSeriesList> {
+  public create = (items: PostTimeSeriesMetadataDTO[]) => {
     return super.createEndpoint(items);
-  }
+  };
 
   /**
    * [List time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeries)
@@ -55,9 +52,9 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * const timeseries = await client.timeseries.list({ includeMetadata: false, assetIds: [1, 2] });
    * ```
    */
-  public list(scope?: TimeseriesFilter): CursorAndAsyncIterator<TimeSeries> {
+  public list = (scope?: TimeseriesFilter) => {
     return super.listEndpoint(this.callListEndpointWithGet, scope);
-  }
+  };
 
   /**
    * [Retrieve time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeriesByIds)
@@ -69,9 +66,9 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * ]);
    * ```
    */
-  public async retrieve(ids: IdEither[]) {
+  public retrieve = (ids: IdEither[]) => {
     return super.retrieveEndpoint(ids);
-  }
+  };
 
   /**
    * [Update time series](https://doc.cognitedata.com/api/v1/#operation/alterTimeSeries)
@@ -85,9 +82,9 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * }]);
    * ```
    */
-  public async update(changes: TimeSeriesUpdate[]) {
+  public update = (changes: TimeSeriesUpdate[]) => {
     return super.updateEndpoint(changes);
-  }
+  };
 
   /**
    * [Search for time series](https://doc.cognitedata.com/api/v1/#operation/searchTimeSeries)
@@ -103,9 +100,9 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * });
    * ```
    */
-  public async search(query: TimeSeriesSearchDTO) {
+  public search = (query: TimeSeriesSearchDTO) => {
     return super.searchEndpoint(query);
-  }
+  };
 
   /**
    * [Delete time series](https://doc.cognitedata.com/api/v1/#operation/deleteTimeSeries)
@@ -117,9 +114,9 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * ]);
    * ```
    */
-  public async delete(ids: IdEither[]) {
+  public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
-  }
+  };
 
   protected transformToList(timeSeries: GetTimeSeriesMetadataDTO[]) {
     return timeSeries.map(timeSerie => new TimeSeries(this.client, timeSerie));

@@ -1,7 +1,6 @@
 // Copyright 2019 Cognite AS
 
 import { chunk } from 'lodash';
-import { CursorAndAsyncIterator } from '../../autoPagination';
 import CogniteClient from '../../cogniteClient';
 import { MetadataMap } from '../../metadata';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
@@ -43,10 +42,10 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const createdAssets = await client.assets.create(assets);
    * ```
    */
-  public async create(items: ExternalAssetItem[]): Promise<AssetList> {
+  public create = (items: ExternalAssetItem[]) => {
     const { sort, unsort } = new RevertableArraySorter(sortAssetCreateItems);
     return super.createEndpoint(items, undefined, sort, unsort);
-  }
+  };
 
   /**
    * [List assets](https://doc.cognitedata.com/api/v1/#operation/listAssets)
@@ -56,9 +55,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
    * ```
    */
-  public list(
-    scope?: AssetListScope
-  ): CursorAndAsyncIterator<Asset, AssetList> {
+  public list(scope?: AssetListScope) {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   }
 
@@ -70,9 +67,9 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const assets = await client.assets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public async retrieve(ids: IdEither[]) {
+  public retrieve = (ids: IdEither[]) => {
     return super.retrieveEndpoint(ids);
-  }
+  };
 
   /**
    * [Update assets](https://doc.cognitedata.com/api/v1/#operation/updateAssets)
@@ -81,9 +78,9 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const assets = await client.assets.update([{id: 123, update: {name: {set: 'New name'}}}]);
    * ```
    */
-  public async update(changes: AssetChange[]) {
+  public update = (changes: AssetChange[]) => {
     return super.updateEndpoint(changes);
-  }
+  };
 
   /**
    * [Search for assets](https://doc.cognitedata.com/api/v1/#operation/searchAssets)
@@ -99,9 +96,9 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * });
    * ```
    */
-  public async search(query: AssetSearchFilter) {
+  public search = (query: AssetSearchFilter) => {
     return super.searchEndpoint(query);
-  }
+  };
 
   /**
    * [Delete assets](https://doc.cognitedata.com/api/v1/#operation/deleteAssets)
@@ -110,19 +107,19 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * await client.assets.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public async delete(ids: AssetIdEither[], params: AssetDeleteParams = {}) {
+  public delete = (ids: AssetIdEither[], params: AssetDeleteParams = {}) => {
     const paramsWithIgnoreUnknownIds = {
       ...params,
       ignoreUnknownIds: true,
     };
     return super.deleteEndpoint(ids, paramsWithIgnoreUnknownIds);
-  }
+  };
 
-  public async retrieveSubtree(id: IdEither, depth: number) {
+  public retrieveSubtree = async (id: IdEither, depth: number) => {
     const currentDepth: number = 0;
     const rootAssetList = await this.retrieve([id]);
     return this.getAssetSubtree(rootAssetList, currentDepth, depth);
-  }
+  };
 
   protected transformToList(assets: TypeAsset[]) {
     return assets.map(asset => new Asset(this.client, asset));

@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '../../autoPagination';
 import {
   AssetMapping3D,
   AssetMappings3DListFilter,
@@ -19,18 +18,18 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    * const mappings3D = await client.assetMappings3D.list(3244265346345, 32423454353545);
    * ```
    */
-  public list(
+  public list = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     scope?: AssetMappings3DListFilter
-  ): CursorAndAsyncIterator<AssetMapping3D> {
+  ) => {
     const path = this.encodeUrl(modelId, revisionId);
     return super.listEndpoint(
       params =>
         this.httpClient.get<CursorResponse<AssetMapping3D[]>>(path, { params }),
       scope
     );
-  }
+  };
 
   /**
    * [Create 3D asset mappings](https://doc.cognitedata.com/api/v1/#operation/create3DMappings)
@@ -53,14 +52,14 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    * );
    * ```
    */
-  public create(
+  public create = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     items: CreateAssetMapping3D[]
-  ): Promise<AssetMapping3D[]> {
+  ) => {
     const path = this.encodeUrl(modelId, revisionId);
     return super.createEndpoint(items, path);
-  }
+  };
 
   /**
    * [Delete a list of asset mappings](https://doc.cognitedata.com/api/v1/#operation/delete3DMappings)
@@ -79,14 +78,14 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
    * await client.assetMappings3D.delete(8252999965991682, 4190022127342195, assetMappingsToDelete);
    * ```
    */
-  public delete(
+  public delete = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     ids: DeleteAssetMapping3D[]
-  ): Promise<{}> {
+  ) => {
     const path = this.encodeUrl(modelId, revisionId) + '/delete';
     return super.deleteEndpoint(ids, undefined, path);
-  }
+  };
 
   private encodeUrl(modelId: CogniteInternalId, revisionId: CogniteInternalId) {
     return this.url(`${modelId}/revisions/${revisionId}/mappings`);

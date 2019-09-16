@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteEvent,
@@ -23,9 +22,9 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const createdEvents = await client.events.create(events);
    * ```
    */
-  public async create(items: ExternalEvent[]): Promise<CogniteEvent[]> {
+  public create = (items: ExternalEvent[]) => {
     return super.createEndpoint(items);
-  }
+  };
 
   /**
    * [List events](https://doc.cognitedata.com/api/v1/#operation/advancedListEvents)
@@ -35,11 +34,9 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const events = await client.events.list({ filter: { startTime: { min: new Date('1 jan 2018') }, endTime: { max: new Date('1 jan 2019') } } });
    * ```
    */
-  public list(
-    scope?: EventFilterRequest
-  ): CursorAndAsyncIterator<CogniteEvent> {
+  public list = (scope?: EventFilterRequest) => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
-  }
+  };
 
   /**
    * [Retrieve events](https://doc.cognitedata.com/api/v1/#operation/byIdsEvents)
@@ -49,9 +46,9 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const events = await client.events.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public async retrieve(ids: IdEither[]) {
+  public retrieve = (ids: IdEither[]) => {
     return super.retrieveEndpoint(ids);
-  }
+  };
 
   /**
    * [Update events](https://doc.cognitedata.com/api/v1/#operation/updateEvents)
@@ -60,9 +57,9 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const events = await client.events.update([{id: 123, update: {description: {set: 'New description'}}}]);
    * ```
    */
-  public async update(changes: EventChange[]) {
+  public update = (changes: EventChange[]) => {
     return super.updateEndpoint(changes);
-  }
+  };
 
   /**
    * [Search for events](https://doc.cognitedata.com/api/v1/#operation/searchEvents)
@@ -78,9 +75,9 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * });
    * ```
    */
-  public async search(query: EventSearchRequest) {
+  public search = (query: EventSearchRequest) => {
     return super.searchEndpoint(query);
-  }
+  };
 
   /**
    * [Delete events](https://doc.cognitedata.com/api/v1/#operation/deleteEvents)
@@ -89,7 +86,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * await client.events.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public async delete(ids: IdEither[]) {
+  public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
-  }
+  };
 }

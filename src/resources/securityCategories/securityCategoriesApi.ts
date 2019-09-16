@@ -1,6 +1,5 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteInternalId,
@@ -21,11 +20,9 @@ export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
    * const createdSecurityCategories = await client.securityCategories.create(securityCategories);
    * ```
    */
-  public async create(
-    items: SecurityCategorySpec[]
-  ): Promise<SecurityCategory[]> {
+  public create = (items: SecurityCategorySpec[]) => {
     return this.createEndpoint(items);
-  }
+  };
 
   /**
    * [List security categories](https://doc.cognitedata.com/api/v1/#operation/getSecurityCategories)
@@ -34,11 +31,9 @@ export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
    * const securityCategories = await client.securityCategories.list({ sort: 'ASC' });
    * ```
    */
-  public list(
-    query?: ListSecurityCategories
-  ): CursorAndAsyncIterator<SecurityCategory> {
+  public list = (query?: ListSecurityCategories) => {
     return super.listEndpoint(this.callListEndpointWithGet, query);
-  }
+  };
 
   /**
    * [Delete security categories](https://doc.cognitedata.com/api/v1/#operation/deleteSecurityCategories)
@@ -47,7 +42,7 @@ export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
    * await client.securityCategories.delete([123, 456]);
    * ```
    */
-  public async delete(ids: CogniteInternalId[]): Promise<{}> {
+  public delete = (ids: CogniteInternalId[]) => {
     return super.deleteEndpoint(ids);
-  }
+  };
 }

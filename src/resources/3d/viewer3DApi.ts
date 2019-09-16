@@ -1,14 +1,10 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
   CogniteInternalId,
   List3DNodesQuery,
   ListRevealSectors3DQuery,
-  RevealNode3D,
-  RevealRevision3D,
-  RevealSector3D,
 } from '../../types/types';
 import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { BaseResourceAPI } from '../baseResourceApi';
@@ -56,12 +52,12 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
    * const revisionReveal = await client.viewer3D.retrieveRevealRevision3D(294879032167592, 3247239473298342)
    * ```
    */
-  public async retrieveRevealRevision3D(
+  public retrieveRevealRevision3D = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId
-  ): Promise<RevealRevision3D> {
+  ) => {
     return this.revealRevisions3DAPI.retrieve(modelId, revisionId);
-  }
+  };
 
   /**
    * [List 3D nodes (Reveal)](https://doc.cognitedata.com/api/v1/#operation/revealGet3DNodes)
@@ -72,13 +68,13 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
    *  .autoPagingToArray();
    * ```
    */
-  public listRevealNodes3D(
+  public listRevealNodes3D = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     query?: List3DNodesQuery
-  ): CursorAndAsyncIterator<RevealNode3D> {
+  ) => {
     return this.revealNodes3DAPI.list(modelId, revisionId, query);
-  }
+  };
 
   /**
    * [List 3D ancestor nodes (Reveal)](https://doc.cognitedata.com/api/v1/#operation/revealGet3DNodeAncestors)
@@ -89,19 +85,19 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
    *  .autoPagingToArray();
    * ```
    */
-  public listRevealNode3DAncestors(
+  public listRevealNode3DAncestors = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     nodeId: CogniteInternalId,
     query?: List3DNodesQuery
-  ): CursorAndAsyncIterator<RevealNode3D> {
+  ) => {
     return this.revealNodes3DAPI.listAncestors(
       modelId,
       revisionId,
       nodeId,
       query
     );
-  }
+  };
 
   /**
    * [List 3D sectors (Reveal)](https://doc.cognitedata.com/api/v1/#operation/revealGet3DSectors)
@@ -112,13 +108,13 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
    *  .autoPagingToArray();
    * ```
    */
-  public listRevealSectors3D(
+  public listRevealSectors3D = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     query?: ListRevealSectors3DQuery
-  ): CursorAndAsyncIterator<RevealSector3D> {
+  ) => {
     return this.revealSectors3DAPI.list(modelId, revisionId, query);
-  }
+  };
 
   /**
    * [Retrieve a 3D revision (Unreal)](https://doc.cognitedata.com/api/v1/#operation/getUnreal3DRevision)
@@ -127,10 +123,10 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
    * const revisions3DUnreal = await client.viewer3D.retrieveUnrealRevision3D(8252999965991682, 4190022127342195);
    * ```
    */
-  public retrieveUnrealRevision3D(
+  public retrieveUnrealRevision3D = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId
-  ): Promise<RevealRevision3D> {
+  ) => {
     return this.unrealRevisions3DAPI.retrieve(modelId, revisionId);
-  }
+  };
 }
