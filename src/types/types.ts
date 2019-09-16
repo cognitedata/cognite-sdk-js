@@ -151,11 +151,22 @@ export type ArrayPatchLong =
   | { set: number[] }
   | { add?: number[]; remove?: number[] };
 
+export interface AssetAggregateResult {
+  /**
+   * Number of descendants in its subtree
+   */
+  childCount?: number;
+}
+
 export interface Asset extends ExternalAsset, AssetInternalId {
   /**
    * The id of the root for the tree this asset belongs to
    */
   rootId: CogniteInternalId;
+  /**
+   * Aggregated metrics of the asset
+   */
+  aggregates?: AssetAggregateResult;
   lastUpdatedTime: Date;
   createdTime: Date;
 }
@@ -197,7 +208,14 @@ export type AssetIdEither = IdEither;
 
 export type AssetInternalId = InternalId;
 
-export interface AssetListScope extends AssetFilter, FilterQuery {}
+export type AssetAggregatedProperty = 'childCount';
+
+export interface AssetListScope extends AssetFilter, FilterQuery {
+  /**
+   * Set of aggregated properties to include
+   */
+  aggregatedProperties?: AssetAggregatedProperty[];
+}
 
 export interface AssetMapping3D extends AssetMapping3DBase {
   /**
