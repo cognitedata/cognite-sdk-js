@@ -55,9 +55,9 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
    * ```
    */
-  public list(scope?: AssetListScope) {
+  public list = (scope?: AssetListScope) => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
-  }
+  };
 
   /**
    * [Retrieve assets](https://doc.cognitedata.com/api/v1/#operation/byIdsAssets)
