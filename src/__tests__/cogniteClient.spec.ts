@@ -369,7 +369,7 @@ describe('CogniteClient', () => {
     });
   });
 
-  describe.only('api endpoints smoke test', () => {
+  describe('api endpoints smoke test', () => {
     let client: CogniteClient;
 
     beforeEach(() => {
