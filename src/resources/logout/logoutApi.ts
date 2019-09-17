@@ -20,7 +20,9 @@ export class LogoutApi extends BaseResourceAPI<any> {
    * const logoutUrl = await client.logout.getUrl({ redirectUrl: '[url to redirect]' });
    * ```
    */
-  public async getUrl(options: { redirectUrl?: string } = {}) {
+  public getUrl = (
+    options: { redirectUrl?: string } = {}
+  ): Promise<string | null> => {
     return getLogoutUrl(this.httpClient, options);
-  }
+  };
 }

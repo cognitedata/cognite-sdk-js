@@ -19,7 +19,7 @@ export class LoginAPI extends BaseResourceAPI<any> {
    * // if status === null means you are not logged in
    * ```
    */
-  public async status(): Promise<null | IdInfo> {
+  public status = (): Promise<null | IdInfo> => {
     return getIdInfo(this.httpClient, {});
-  }
+  };
 }
