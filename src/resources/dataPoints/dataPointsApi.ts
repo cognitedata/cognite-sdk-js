@@ -20,7 +20,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
    */
-  public insert = (items: DatapointsPostDatapoint[]) => {
+  public insert = (items: DatapointsPostDatapoint[]): Promise<{}> => {
     return this.insertEndpoint(items);
   };
 
@@ -53,7 +53,9 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    * ]);
    * ```
    */
-  public retrieveLatest = (items: LatestDataBeforeRequest[]) => {
+  public retrieveLatest = (
+    items: LatestDataBeforeRequest[]
+  ): Promise<DatapointsGetDatapoint[]> => {
     return this.retrieveLatestEndpoint(items);
   };
 
@@ -64,7 +66,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    * await client.datapoints.delete([{id: 123, inclusiveBegin: new Date('1 jan 2019')}]);
    * ```
    */
-  public delete = (items: DatapointsDeleteRequest[]) => {
+  public delete = (items: DatapointsDeleteRequest[]): Promise<{}> => {
     return this.deleteDatapointsEndpoint(items);
   };
 

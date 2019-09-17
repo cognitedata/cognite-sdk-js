@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteInternalId,
@@ -22,7 +23,7 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * const models3D = await client.models3D.create(modelsToCreate);
    * ```
    */
-  public create = (models: CreateModel3D[]) => {
+  public create = (models: CreateModel3D[]): Promise<Model3D[]> => {
     return super.createEndpoint(models);
   };
 
@@ -33,7 +34,9 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * const models3D = await client.models3D.list({ published: true });
    * ```
    */
-  public list = (scope?: Model3DListRequest) => {
+  public list = (
+    scope?: Model3DListRequest
+  ): CursorAndAsyncIterator<Model3D> => {
     return super.listEndpoint(this.callListEndpointWithGet, scope);
   };
 
@@ -44,7 +47,7 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * await client.models3D.retrieve(3744350296805509);
    * ```
    */
-  public retrieve = async (id: CogniteInternalId) => {
+  public retrieve = async (id: CogniteInternalId): Promise<Model3D> => {
     const path = this.url(`${id}`);
     const response = await this.httpClient.get<Model3D>(path);
     return this.addToMapAndReturn(response.data, response);
@@ -61,7 +64,7 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * const models3D = await client.models3D.update(modelsToUpdate);
    * ```
    */
-  public update = (changes: UpdateModel3D[]) => {
+  public update = (changes: UpdateModel3D[]): Promise<Model3D[]> => {
     return super.updateEndpoint(changes);
   };
 

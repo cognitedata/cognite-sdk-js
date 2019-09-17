@@ -1,10 +1,14 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
   CogniteInternalId,
   List3DNodesQuery,
   ListRevealSectors3DQuery,
+  RevealNode3D,
+  RevealRevision3D,
+  RevealSector3D,
 } from '../../types/types';
 import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { BaseResourceAPI } from '../baseResourceApi';
@@ -55,7 +59,7 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
   public retrieveRevealRevision3D = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId
-  ) => {
+  ): Promise<RevealRevision3D> => {
     return this.revealRevisions3DAPI.retrieve(modelId, revisionId);
   };
 
@@ -72,7 +76,7 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     query?: List3DNodesQuery
-  ) => {
+  ): CursorAndAsyncIterator<RevealNode3D> => {
     return this.revealNodes3DAPI.list(modelId, revisionId, query);
   };
 
@@ -90,7 +94,7 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
     revisionId: CogniteInternalId,
     nodeId: CogniteInternalId,
     query?: List3DNodesQuery
-  ) => {
+  ): CursorAndAsyncIterator<RevealNode3D> => {
     return this.revealNodes3DAPI.listAncestors(
       modelId,
       revisionId,
@@ -112,7 +116,7 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     query?: ListRevealSectors3DQuery
-  ) => {
+  ): CursorAndAsyncIterator<RevealSector3D> => {
     return this.revealSectors3DAPI.list(modelId, revisionId, query);
   };
 
@@ -126,7 +130,7 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
   public retrieveUnrealRevision3D = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId
-  ) => {
+  ): Promise<RevealRevision3D> => {
     return this.unrealRevisions3DAPI.retrieve(modelId, revisionId);
   };
 }

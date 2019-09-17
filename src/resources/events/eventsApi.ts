@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteEvent,
@@ -22,7 +23,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const createdEvents = await client.events.create(events);
    * ```
    */
-  public create = (items: ExternalEvent[]) => {
+  public create = (items: ExternalEvent[]): Promise<CogniteEvent[]> => {
     return super.createEndpoint(items);
   };
 
@@ -34,7 +35,9 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const events = await client.events.list({ filter: { startTime: { min: new Date('1 jan 2018') }, endTime: { max: new Date('1 jan 2019') } } });
    * ```
    */
-  public list = (scope?: EventFilterRequest) => {
+  public list = (
+    scope?: EventFilterRequest
+  ): CursorAndAsyncIterator<CogniteEvent> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 

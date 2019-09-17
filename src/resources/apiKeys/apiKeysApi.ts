@@ -18,7 +18,7 @@ export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
    * const createdApiKeys = await client.apiKeys.create([{ serviceAccountId: 123 }]);
    * ```
    */
-  public create = (items: ApiKeyRequest[]) => {
+  public create = (items: ApiKeyRequest[]): Promise<NewApiKeyResponse[]> => {
     return this.createEndpoint(items);
   };
 
@@ -29,7 +29,7 @@ export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
    * const apiKeys = await client.apiKeys.list({ all: true });
    * ```
    */
-  public list = async (scope?: ApiKeyListScope) => {
+  public list = async (scope?: ApiKeyListScope): Promise<ApiKeyObject[]> => {
     const path = this.url();
     const response = await this.httpClient.get<ItemsWrapper<ApiKeyObject[]>>(
       path,
@@ -45,7 +45,7 @@ export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
    * await client.apiKeys.delete([123, 456]);
    * ```
    */
-  public delete = (ids: CogniteInternalId[]) => {
+  public delete = (ids: CogniteInternalId[]): Promise<{}> => {
     return super.deleteEndpoint(ids);
   };
 }

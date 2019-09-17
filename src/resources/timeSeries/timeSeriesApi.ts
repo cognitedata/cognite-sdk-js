@@ -3,6 +3,7 @@
 import CogniteClient from '../../cogniteClient';
 import { MetadataMap } from '../../metadata';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../standardMethods';
 import {
   GetTimeSeriesMetadataDTO,
   IdEither,
@@ -41,7 +42,9 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    */
-  public create = (items: PostTimeSeriesMetadataDTO[]) => {
+  public create = (
+    items: PostTimeSeriesMetadataDTO[]
+  ): Promise<TimeSeriesList> => {
     return super.createEndpoint(items);
   };
 
@@ -52,7 +55,9 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * const timeseries = await client.timeseries.list({ includeMetadata: false, assetIds: [1, 2] });
    * ```
    */
-  public list = (scope?: TimeseriesFilter) => {
+  public list = (
+    scope?: TimeseriesFilter
+  ): CursorAndAsyncIterator<TimeSeries> => {
     return super.listEndpoint(this.callListEndpointWithGet, scope);
   };
 

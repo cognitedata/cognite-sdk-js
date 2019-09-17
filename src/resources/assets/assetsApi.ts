@@ -1,6 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import { chunk } from 'lodash';
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import CogniteClient from '../../cogniteClient';
 import { MetadataMap } from '../../metadata';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
@@ -42,7 +43,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const createdAssets = await client.assets.create(assets);
    * ```
    */
-  public create = (items: ExternalAssetItem[]) => {
+  public create = (items: ExternalAssetItem[]): Promise<AssetList> => {
     const { sort, unsort } = new RevertableArraySorter(sortAssetCreateItems);
     return super.createEndpoint(items, undefined, sort, unsort);
   };
@@ -55,7 +56,9 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
    * ```
    */
-  public list = (scope?: AssetListScope) => {
+  public list = (
+    scope?: AssetListScope
+  ): CursorAndAsyncIterator<Asset, AssetList> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
@@ -67,7 +70,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const assets = await client.assets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve = (ids: IdEither[]) => {
+  public retrieve = (ids: IdEither[]): Promise<AssetList> => {
     return super.retrieveEndpoint(ids);
   };
 
@@ -78,7 +81,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const assets = await client.assets.update([{id: 123, update: {name: {set: 'New name'}}}]);
    * ```
    */
-  public update = (changes: AssetChange[]) => {
+  public update = (changes: AssetChange[]): Promise<AssetList> => {
     return super.updateEndpoint(changes);
   };
 
@@ -96,7 +99,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * });
    * ```
    */
-  public search = (query: AssetSearchFilter) => {
+  public search = (query: AssetSearchFilter): Promise<AssetList> => {
     return super.searchEndpoint(query);
   };
 

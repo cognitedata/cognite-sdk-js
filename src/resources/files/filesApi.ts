@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteInternalId,
@@ -53,7 +54,9 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * const files = await client.files.list({filter: {mimeType: 'image/png'}});
    * ```
    */
-  public list = (scope?: FileRequestFilter) => {
+  public list = (
+    scope?: FileRequestFilter
+  ): CursorAndAsyncIterator<FilesMetadata> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
@@ -65,7 +68,7 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * const files = await client.files.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve = (ids: IdEither[]) => {
+  public retrieve = (ids: IdEither[]): Promise<FilesMetadata[]> => {
     return super.retrieveEndpoint(ids);
   };
 
@@ -121,7 +124,9 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * await client.files.getDownloadUrls([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public getDownloadUrls = (ids: IdEither[]) => {
+  public getDownloadUrls = (
+    ids: IdEither[]
+  ): Promise<(FileLink & IdEither)[]> => {
     return this.getDownloadUrlsEndpoint(ids);
   };
 

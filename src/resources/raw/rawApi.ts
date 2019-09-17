@@ -2,11 +2,13 @@
 
 import { MetadataMap } from '../../metadata';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../standardMethods';
 import {
   ListRawDatabases,
   ListRawRows,
   ListRawTables,
   RawDB,
+  RawDBRow,
   RawDBRowInsert,
   RawDBRowKey,
   RawDBTable,
@@ -36,7 +38,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * const databases = await client.raw.createDatabases([{ name: 'My company' }]);
    * ```
    */
-  public createDatabases = (items: RawDB[]) => {
+  public createDatabases = (items: RawDB[]): Promise<RawDB[]> => {
     return super.createEndpoint(items);
   };
 
@@ -47,7 +49,9 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * const databases = await client.raw.listDatabases();
    * ```
    */
-  public listDatabases = (scope?: ListRawDatabases) => {
+  public listDatabases = (
+    scope?: ListRawDatabases
+  ): CursorAndAsyncIterator<RawDB> => {
     return super.listEndpoint(this.callListEndpointWithGet, scope);
   };
 
@@ -76,7 +80,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     databaseName: string,
     items: RawDBTable[],
     ensureParent: boolean = false
-  ) => {
+  ): Promise<RawDBTable[]> => {
     return this.rawTablesApi.create(databaseName, items, ensureParent);
   };
 
@@ -87,7 +91,10 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * const tables = await client.raw.listTables('My company');
    * ```
    */
-  public listTables = (databaseName: string, scope?: ListRawTables) => {
+  public listTables = (
+    databaseName: string,
+    scope?: ListRawTables
+  ): CursorAndAsyncIterator<RawDBTable> => {
     return this.rawTablesApi.list(databaseName, scope);
   };
 
@@ -98,7 +105,10 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * await client.raw.deleteTables('My company', [{ name: 'Customers' }]);
    * ```
    */
-  public deleteTables = (databaseName: string, items: RawDBTable[]) => {
+  public deleteTables = (
+    databaseName: string,
+    items: RawDBTable[]
+  ): Promise<{}> => {
     return this.rawTablesApi.delete(databaseName, items);
   };
 
@@ -114,7 +124,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     tableName: string,
     items: RawDBRowInsert[],
     ensureParent: boolean = false
-  ) => {
+  ): Promise<{}> => {
     return this.rawRowsApi.insert(databaseName, tableName, items, ensureParent);
   };
 
@@ -129,7 +139,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     databaseName: string,
     tableName: string,
     query?: ListRawRows
-  ) => {
+  ): CursorAndAsyncIterator<RawDBRow> => {
     return this.rawRowsApi.list(databaseName, tableName, query);
   };
 
@@ -144,7 +154,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     databaseName: string,
     tableName: string,
     rowKey: string
-  ) => {
+  ): Promise<RawDBRow> => {
     return this.rawRowsApi.retrieve(databaseName, tableName, rowKey);
   };
 
@@ -159,7 +169,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     databaseName: string,
     tableName: string,
     items: RawDBRowKey[]
-  ) => {
+  ): Promise<{}> => {
     return this.rawRowsApi.delete(databaseName, tableName, items);
   };
 }

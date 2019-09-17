@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import {
   AssetMapping3D,
   AssetMappings3DListFilter,
@@ -22,7 +23,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     scope?: AssetMappings3DListFilter
-  ) => {
+  ): CursorAndAsyncIterator<AssetMapping3D> => {
     const path = this.encodeUrl(modelId, revisionId);
     return super.listEndpoint(
       params =>
@@ -56,7 +57,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     items: CreateAssetMapping3D[]
-  ) => {
+  ): Promise<AssetMapping3D[]> => {
     const path = this.encodeUrl(modelId, revisionId);
     return super.createEndpoint(items, path);
   };
@@ -82,7 +83,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     ids: DeleteAssetMapping3D[]
-  ) => {
+  ): Promise<{}> => {
     const path = this.encodeUrl(modelId, revisionId) + '/delete';
     return super.deleteEndpoint(ids, undefined, path);
   };

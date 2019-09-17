@@ -26,7 +26,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    * }]);
    * ```
    */
-  public create = (items: GroupSpec[]) => {
+  public create = (items: GroupSpec[]): Promise<Group[]> => {
     return this.createEndpoint(items);
   };
 
@@ -37,7 +37,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    * const groups = await client.groups.list({ all: true });
    * ```
    */
-  public list = async (scope?: ListGroups) => {
+  public list = async (scope?: ListGroups): Promise<Group[]> => {
     const path = this.url();
     const response = await this.httpClient.get<ItemsWrapper<Group[]>>(path, {
       params: scope,
@@ -52,7 +52,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    * await client.groups.delete([921923342342323, 871621872721323]);
    * ```
    */
-  public delete = (ids: CogniteInternalId[]) => {
+  public delete = (ids: CogniteInternalId[]): Promise<{}> => {
     return super.deleteEndpoint(ids);
   };
 
@@ -63,7 +63,9 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    * const serviceAccounts = await client.groups.listServiceAccounts(921923342342323);
    * ```
    */
-  public listServiceAccounts = async (groupId: CogniteInternalId) => {
+  public listServiceAccounts = async (
+    groupId: CogniteInternalId
+  ): Promise<GroupServiceAccount[]> => {
     const path = this.encodeServiceAccountUrl(groupId);
     const response = await this.httpClient.get<
       ItemsWrapper<GroupServiceAccount[]>
@@ -81,7 +83,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
   public addServiceAccounts = async (
     groupId: CogniteInternalId,
     serviceAccountIds: CogniteInternalId[]
-  ) => {
+  ): Promise<{}> => {
     const path = this.encodeServiceAccountUrl(groupId);
     const response = await this.httpClient.post<{}>(path, {
       data: { items: serviceAccountIds },
@@ -99,7 +101,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
   public removeServiceAccounts = async (
     groupId: CogniteInternalId,
     serviceAccountIds: CogniteInternalId[]
-  ) => {
+  ): Promise<{}> => {
     const path = this.encodeServiceAccountUrl(groupId) + '/remove';
     const response = await this.httpClient.post<{}>(path, {
       data: { items: serviceAccountIds },

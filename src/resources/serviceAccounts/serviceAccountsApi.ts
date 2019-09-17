@@ -20,7 +20,7 @@ export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
    * const createdServiceAccounts = await client.serviceAccounts.create(serviceAccounts);
    * ```
    */
-  public create = (items: ServiceAccountInput[]) => {
+  public create = (items: ServiceAccountInput[]): Promise<ServiceAccount[]> => {
     return this.createEndpoint(items);
   };
 
@@ -31,7 +31,7 @@ export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
    * const serviceaccounts = await client.serviceAccounts.list();
    * ```
    */
-  public list = async () => {
+  public list = async (): Promise<ServiceAccount[]> => {
     const path = this.url();
     const response = await this.httpClient.get<ItemsWrapper<ServiceAccount[]>>(
       path
@@ -46,7 +46,7 @@ export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
    * await client.serviceAccounts.delete([123, 456]);
    * ```
    */
-  public delete = (ids: CogniteInternalId[]) => {
+  public delete = (ids: CogniteInternalId[]): Promise<{}> => {
     return super.deleteEndpoint(ids);
   };
 }
