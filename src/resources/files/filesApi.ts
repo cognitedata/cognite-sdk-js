@@ -32,19 +32,19 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * // then upload using the file.uploadUrl
    * ```
    */
-  public async upload(
+  public upload = (
     metadata: ExternalFilesMetadata,
     fileContent?: FileContent,
     overwrite: boolean = false,
     waitUntilAcknowledged: boolean = false
-  ): Promise<UploadFileMetadataResponse | FilesMetadata> {
+  ): Promise<UploadFileMetadataResponse | FilesMetadata> => {
     return this.uploadEndpoint(
       metadata,
       fileContent,
       overwrite,
       waitUntilAcknowledged
     );
-  }
+  };
 
   /**
    * [List files](https://doc.cognitedata.com/api/v1/#operation/advancedListFiles)
@@ -54,11 +54,11 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * const files = await client.files.list({filter: {mimeType: 'image/png'}});
    * ```
    */
-  public list(
+  public list = (
     scope?: FileRequestFilter
-  ): CursorAndAsyncIterator<FilesMetadata> {
+  ): CursorAndAsyncIterator<FilesMetadata> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
-  }
+  };
 
   /**
    * [Retrieve files](https://doc.cognitedata.com/api/v1/#operation/byIdsFiles)
@@ -68,9 +68,9 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * const files = await client.files.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public async retrieve(ids: IdEither[]): Promise<FilesMetadata[]> {
+  public retrieve = (ids: IdEither[]): Promise<FilesMetadata[]> => {
     return super.retrieveEndpoint(ids);
-  }
+  };
 
   /**
    * [Update files](https://doc.cognitedata.com/api/v1/#operation/updateFiles)
@@ -84,9 +84,9 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * }]);
    * ```
    */
-  public async update(changes: FileChangeUpdate[]) {
+  public update = (changes: FileChangeUpdate[]) => {
     return super.updateEndpoint(changes);
-  }
+  };
 
   /**
    * [Search for files](https://doc.cognitedata.com/api/v1/#operation/searchFiles)
@@ -102,9 +102,9 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * });
    * ```
    */
-  public async search(query: FilesSearchFilter) {
+  public search = (query: FilesSearchFilter) => {
     return super.searchEndpoint(query);
-  }
+  };
 
   /**
    * [Delete files](https://doc.cognitedata.com/api/v1/#operation/deleteFiles)
@@ -113,9 +113,9 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * await client.files.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public async delete(ids: IdEither[]) {
+  public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
-  }
+  };
 
   /**
    * [Get download urls](https://doc.cognitedata.com/api/v1/#operation/downloadLinks)
@@ -124,9 +124,11 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * await client.files.getDownloadUrls([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public getDownloadUrls(ids: IdEither[]): Promise<(FileLink & IdEither)[]> {
+  public getDownloadUrls = (
+    ids: IdEither[]
+  ): Promise<(FileLink & IdEither)[]> => {
     return this.getDownloadUrlsEndpoint(ids);
-  }
+  };
 
   private async uploadEndpoint(
     metadata: ExternalFilesMetadata,

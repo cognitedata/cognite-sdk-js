@@ -34,12 +34,12 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * const revisions = await client.revisions3D.create(4234325345643654, [{ fileId: 8252999965991682 }, { fileId: 6305529564379596 }]);
    * ```
    */
-  public async create(
+  public create = (
     modelId: CogniteInternalId,
     items: CreateRevision3D[]
-  ): Promise<Revision3D[]> {
+  ): Promise<Revision3D[]> => {
     return super.createEndpoint(items, this.url(`${modelId}/revisions`));
-  }
+  };
 
   /**
    * [List 3D revisions](https://doc.cognitedata.com/api/v1/#operation/get3DRevisions)
@@ -48,16 +48,16 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * const revisions3D = await client.revisions3D.list(324566546546346);
    * ```
    */
-  public list(
+  public list = (
     modelId: CogniteInternalId,
     filter?: Revision3DListRequest
-  ): CursorAndAsyncIterator<Revision3D> {
+  ): CursorAndAsyncIterator<Revision3D> => {
     const path = this.url(`${modelId}/revisions`);
     return super.listEndpoint(
       params => this.httpClient.get(path, { params }),
       filter
     );
-  }
+  };
 
   /**
    * [Retrieve a 3D revision](https://doc.cognitedata.com/api/v1/#operation/get3DRevision)
@@ -66,14 +66,14 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * const revisions3D = await client.revisions3D.retrieve(8252999965991682, 4190022127342195)
    * ```
    */
-  public async retrieve(
+  public retrieve = async (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId
-  ): Promise<Revision3D> {
+  ): Promise<Revision3D> => {
     const path = this.url(`${modelId}/revisions/${revisionId}`);
     const response = await this.httpClient.get<Revision3D>(path);
     return this.addToMapAndReturn(response.data, response);
-  }
+  };
 
   /**
    * [Update 3D revisions](https://doc.cognitedata.com/api/v1/#operation/update3DRevisions)
@@ -90,13 +90,13 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * const updated = await client.revisions3D.update(8252999965991682, revisionsToUpdate);
    * ```
    */
-  public async update(
+  public update = (
     modelId: CogniteInternalId,
     items: UpdateRevision3D[]
-  ): Promise<Revision3D[]> {
+  ): Promise<Revision3D[]> => {
     const path = this.url(`${modelId}/revisions/update`);
     return super.updateEndpoint(items, path);
-  }
+  };
 
   /**
    * [Delete 3D revisions](https://doc.cognitedata.com/api/v1/#operation/delete3DRevisions)
@@ -105,13 +105,13 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * await client.revisions3D.delete(8252999965991682, [{ id: 4190022127342195 }]);
    * ```
    */
-  public async delete(
+  public delete = (
     modelId: CogniteInternalId,
     ids: InternalId[]
-  ): Promise<{}> {
+  ): Promise<{}> => {
     const path = this.url(`${modelId}/revisions/delete`);
     return super.deleteEndpoint(ids, undefined, path);
-  }
+  };
 
   /**
    * [Update 3D revision thumbnail](https://docs.cognite.com/api/v1/#operation/updateThumbnail)
@@ -120,15 +120,15 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * await client.revisions3D.updateThumbnail(8252999965991682, 4190022127342195, 3243334242324);
    * ```
    */
-  public async updateThumbnail(
+  public updateThumbnail = async (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     fileId: CogniteInternalId
-  ): Promise<{}> {
+  ): Promise<{}> => {
     const path = this.url(`${modelId}/revisions/${revisionId}/thumbnail`);
     const response = await this.httpClient.post<{}>(path, { data: { fileId } });
     return this.addToMapAndReturn({}, response);
-  }
+  };
 
   /**
    * [List 3D nodes](https://doc.cognitedata.com/api/v1/#operation/get3DNodes)
@@ -137,13 +137,13 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * const nodes3d = await client.revisions3D.list3DNodes(8252999965991682, 4190022127342195);
    * ```
    */
-  public list3DNodes(
+  public list3DNodes = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     query?: List3DNodesQuery
-  ): CursorAndAsyncIterator<Node3D> {
+  ): CursorAndAsyncIterator<Node3D> => {
     return this.nodes3DApi.list(modelId, revisionId, query);
-  }
+  };
 
   /**
    * [List 3D ancestor nodes](https://doc.cognitedata.com/api/v1/#operation/get3DNodeAncestors)
@@ -152,12 +152,12 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * const nodes3d = await client.revisions3D.list3DNodeAncestors(8252999965991682, 4190022127342195, 572413075141081);
    * ```
    */
-  public list3DNodeAncestors(
+  public list3DNodeAncestors = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     nodeId: CogniteInternalId,
     query?: List3DNodesQuery
-  ): CursorAndAsyncIterator<Node3D> {
+  ): CursorAndAsyncIterator<Node3D> => {
     return this.nodes3DApi.listAncestors(modelId, revisionId, nodeId, query);
-  }
+  };
 }

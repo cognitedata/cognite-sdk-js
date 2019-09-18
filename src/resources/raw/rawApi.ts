@@ -1,8 +1,8 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
+import { CursorAndAsyncIterator } from '../../standardMethods';
 import {
   ListRawDatabases,
   ListRawRows,
@@ -38,9 +38,9 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * const databases = await client.raw.createDatabases([{ name: 'My company' }]);
    * ```
    */
-  public async createDatabases(items: RawDB[]): Promise<RawDB[]> {
+  public createDatabases = (items: RawDB[]): Promise<RawDB[]> => {
     return super.createEndpoint(items);
-  }
+  };
 
   /**
    * [List databases](https://doc.cognitedata.com/api/v1/#operation/getDBs)
@@ -49,11 +49,11 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * const databases = await client.raw.listDatabases();
    * ```
    */
-  public listDatabases(
+  public listDatabases = (
     scope?: ListRawDatabases
-  ): CursorAndAsyncIterator<RawDB> {
+  ): CursorAndAsyncIterator<RawDB> => {
     return super.listEndpoint(this.callListEndpointWithGet, scope);
-  }
+  };
 
   /**
    * [Delete databases](https://doc.cognitedata.com/api/v1/#operation/deleteDBs)
@@ -62,12 +62,12 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * await client.raw.deleteDatabases([{ name: 'My company' }]);
    * ```
    */
-  public async deleteDatabases(
+  public deleteDatabases = (
     items: RawDB[],
     params?: RawDatabaseDeleteParams
-  ) {
+  ) => {
     return super.deleteEndpoint<RawDatabaseDeleteParams, RawDB>(items, params);
-  }
+  };
 
   /**
    * [Create tables in a database](https://doc.cognitedata.com/api/v1/#operation/createTables)
@@ -76,13 +76,13 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * const tables = await client.raw.createTables('My company', [{ name: 'Customers' }]);
    * ```
    */
-  public createTables(
+  public createTables = (
     databaseName: string,
     items: RawDBTable[],
     ensureParent: boolean = false
-  ): Promise<RawDBTable[]> {
+  ): Promise<RawDBTable[]> => {
     return this.rawTablesApi.create(databaseName, items, ensureParent);
-  }
+  };
 
   /**
    * [List tables in database](https://doc.cognitedata.com/api/v1/#operation/getTables)
@@ -91,12 +91,12 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * const tables = await client.raw.listTables('My company');
    * ```
    */
-  public listTables(
+  public listTables = (
     databaseName: string,
     scope?: ListRawTables
-  ): CursorAndAsyncIterator<RawDBTable> {
+  ): CursorAndAsyncIterator<RawDBTable> => {
     return this.rawTablesApi.list(databaseName, scope);
-  }
+  };
 
   /**
    * [Delete tables in a database](https://doc.cognitedata.com/api/v1/#operation/deleteTables)
@@ -105,9 +105,12 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * await client.raw.deleteTables('My company', [{ name: 'Customers' }]);
    * ```
    */
-  public deleteTables(databaseName: string, items: RawDBTable[]): Promise<{}> {
+  public deleteTables = (
+    databaseName: string,
+    items: RawDBTable[]
+  ): Promise<{}> => {
     return this.rawTablesApi.delete(databaseName, items);
-  }
+  };
 
   /**
    * [Insert rows into a table](https://doc.cognitedata.com/api/v1/#operation/postRows)
@@ -116,14 +119,14 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * await client.raw.insertRows('My company', 'Customers', [{ key: 'customer1', columns: { 'First name': 'Steve', 'Last name': 'Jobs' } }]);
    * ```
    */
-  public insertRows(
+  public insertRows = (
     databaseName: string,
     tableName: string,
     items: RawDBRowInsert[],
     ensureParent: boolean = false
-  ): Promise<{}> {
+  ): Promise<{}> => {
     return this.rawRowsApi.insert(databaseName, tableName, items, ensureParent);
-  }
+  };
 
   /**
    * [List rows in a table](https://doc.cognitedata.com/api/v1/#operation/getRows)
@@ -132,13 +135,13 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * await client.raw.listRows('My company', 'Employees', { columns: ['last_name'] });
    * ```
    */
-  public listRows(
+  public listRows = (
     databaseName: string,
     tableName: string,
     query?: ListRawRows
-  ): CursorAndAsyncIterator<RawDBRow> {
+  ): CursorAndAsyncIterator<RawDBRow> => {
     return this.rawRowsApi.list(databaseName, tableName, query);
-  }
+  };
 
   /**
    * [Retrieve a single row from a table](https://doc.cognitedata.com/api/v1/#operation/getRow)
@@ -147,13 +150,13 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * await client.raw.retrieveRow('My company', 'Customers', 'customer1');
    * ```
    */
-  public retrieveRow(
+  public retrieveRow = (
     databaseName: string,
     tableName: string,
     rowKey: string
-  ): Promise<RawDBRow> {
+  ): Promise<RawDBRow> => {
     return this.rawRowsApi.retrieve(databaseName, tableName, rowKey);
-  }
+  };
 
   /**
    * [Delete rows in a table](https://doc.cognitedata.com/api/v1/#operation/deleteRows)
@@ -162,13 +165,13 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * await client.raw.deleteRows('My company', 'Customers', [{key: 'customer1'}]);
    * ```
    */
-  public deleteRows(
+  public deleteRows = (
     databaseName: string,
     tableName: string,
     items: RawDBRowKey[]
-  ): Promise<{}> {
+  ): Promise<{}> => {
     return this.rawRowsApi.delete(databaseName, tableName, items);
-  }
+  };
 }
 
 export interface RawDatabaseDeleteParams {

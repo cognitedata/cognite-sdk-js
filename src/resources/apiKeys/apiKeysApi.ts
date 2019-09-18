@@ -18,9 +18,9 @@ export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
    * const createdApiKeys = await client.apiKeys.create([{ serviceAccountId: 123 }]);
    * ```
    */
-  public async create(items: ApiKeyRequest[]): Promise<NewApiKeyResponse[]> {
+  public create = (items: ApiKeyRequest[]): Promise<NewApiKeyResponse[]> => {
     return this.createEndpoint(items);
-  }
+  };
 
   /**
    * [List all api keys](https://doc.cognitedata.com/api/v1/#operation/getApiKeys)
@@ -29,14 +29,14 @@ export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
    * const apiKeys = await client.apiKeys.list({ all: true });
    * ```
    */
-  public async list(scope?: ApiKeyListScope): Promise<ApiKeyObject[]> {
+  public list = async (scope?: ApiKeyListScope): Promise<ApiKeyObject[]> => {
     const path = this.url();
     const response = await this.httpClient.get<ItemsWrapper<ApiKeyObject[]>>(
       path,
       { params: scope }
     );
     return this.addToMapAndReturn(response.data.items, response);
-  }
+  };
 
   /**
    * [Delete API keys](https://doc.cognitedata.com/api/v1/#operation/deleteApiKeys)
@@ -45,7 +45,7 @@ export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
    * await client.apiKeys.delete([123, 456]);
    * ```
    */
-  public async delete(ids: CogniteInternalId[]): Promise<{}> {
+  public delete = (ids: CogniteInternalId[]): Promise<{}> => {
     return super.deleteEndpoint(ids);
-  }
+  };
 }

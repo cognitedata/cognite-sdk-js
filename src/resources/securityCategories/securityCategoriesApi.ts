@@ -21,11 +21,11 @@ export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
    * const createdSecurityCategories = await client.securityCategories.create(securityCategories);
    * ```
    */
-  public async create(
+  public create = (
     items: SecurityCategorySpec[]
-  ): Promise<SecurityCategory[]> {
+  ): Promise<SecurityCategory[]> => {
     return this.createEndpoint(items);
-  }
+  };
 
   /**
    * [List security categories](https://doc.cognitedata.com/api/v1/#operation/getSecurityCategories)
@@ -34,11 +34,11 @@ export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
    * const securityCategories = await client.securityCategories.list({ sort: 'ASC' });
    * ```
    */
-  public list(
+  public list = (
     query?: ListSecurityCategories
-  ): CursorAndAsyncIterator<SecurityCategory> {
+  ): CursorAndAsyncIterator<SecurityCategory> => {
     return super.listEndpoint(this.callListEndpointWithGet, query);
-  }
+  };
 
   /**
    * [Delete security categories](https://doc.cognitedata.com/api/v1/#operation/deleteSecurityCategories)
@@ -47,7 +47,7 @@ export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
    * await client.securityCategories.delete([123, 456]);
    * ```
    */
-  public async delete(ids: CogniteInternalId[]): Promise<{}> {
+  public delete = (ids: CogniteInternalId[]): Promise<{}> => {
     return super.deleteEndpoint(ids);
-  }
+  };
 }

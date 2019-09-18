@@ -20,9 +20,9 @@ export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
    * const createdServiceAccounts = await client.serviceAccounts.create(serviceAccounts);
    * ```
    */
-  public async create(items: ServiceAccountInput[]): Promise<ServiceAccount[]> {
+  public create = (items: ServiceAccountInput[]): Promise<ServiceAccount[]> => {
     return this.createEndpoint(items);
-  }
+  };
 
   /**
    * [List all service accounts](https://doc.cognitedata.com/api/v1/#operation/getServiceAccounts)
@@ -31,13 +31,13 @@ export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
    * const serviceaccounts = await client.serviceAccounts.list();
    * ```
    */
-  public async list(): Promise<ServiceAccount[]> {
+  public list = async (): Promise<ServiceAccount[]> => {
     const path = this.url();
     const response = await this.httpClient.get<ItemsWrapper<ServiceAccount[]>>(
       path
     );
     return this.addToMapAndReturn(response.data.items, response);
-  }
+  };
 
   /**
    * [Delete service accounts](https://doc.cognitedata.com/api/v1/#operation/deleteServiceAccounts)
@@ -46,7 +46,7 @@ export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
    * await client.serviceAccounts.delete([123, 456]);
    * ```
    */
-  public async delete(ids: CogniteInternalId[]): Promise<{}> {
+  public delete = (ids: CogniteInternalId[]): Promise<{}> => {
     return super.deleteEndpoint(ids);
-  }
+  };
 }
