@@ -141,3 +141,8 @@ export function createInvisibleIframe(
   iframe.src = url;
   return iframe;
 }
+
+/** @hidden */
+export function isUsingSSL() {
+  return location.protocol.toLowerCase() === 'https:';
+}
