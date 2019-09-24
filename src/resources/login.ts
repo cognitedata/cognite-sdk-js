@@ -11,6 +11,7 @@ import {
   generatePopupWindow,
   getBaseUrl,
   isSameProject,
+  isUsingSSL,
   promiseCache,
   removeQueryParameterFromUrl,
 } from '../utils';
@@ -318,7 +319,7 @@ export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
         }
       };
 
-      {
+      if (isUsingSSL()) {
         const tokens = await Login.loginSilently(httpClient, {
           baseUrl,
           project,

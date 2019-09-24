@@ -32,7 +32,7 @@ import { RawAPI } from './resources/raw/rawApi';
 import { SecurityCategoriesAPI } from './resources/securityCategories/securityCategoriesApi';
 import { ServiceAccountsAPI } from './resources/serviceAccounts/serviceAccountsApi';
 import { TimeSeriesAPI } from './resources/timeSeries/timeSeriesApi';
-import { apiUrl, getBaseUrl, projectUrl } from './utils';
+import { apiUrl, getBaseUrl, isUsingSSL, projectUrl } from './utils';
 import { HttpRequestOptions, HttpResponse } from './utils/http/basicHttpClient';
 import { CDFHttpClient } from './utils/http/cdfHttpClient';
 
@@ -276,6 +276,12 @@ export default class CogniteClient {
       throw Error('options.project is required and must be of type string');
     }
     this.projectName = project;
+
+    if (!isUsingSSL()) {
+      console.warn(
+        'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
+      );
+    }
 
     const onTokens = options.onTokens || (() => {});
     const onAuthenticate =

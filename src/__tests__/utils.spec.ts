@@ -3,6 +3,7 @@
 import {
   convertToTimestampToDateTime,
   isSameProject,
+  isUsingSSL,
   projectUrl,
   promiseCache,
   sleepPromise,
@@ -50,5 +51,9 @@ describe('utils', () => {
     await expect(result1).resolves.toBe(123);
     await expect(result2).resolves.toBe(123);
     await expect(result3).resolves.toBe(123);
+  });
+
+  test('isUsingSSL', () => {
+    expect(isUsingSSL()).toBeTruthy();
   });
 });
