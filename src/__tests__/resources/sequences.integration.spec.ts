@@ -35,6 +35,7 @@ describe('Sequences integration test', () => {
         },
         {
           externalId: 'one_and_a_half',
+          valueType: SequenceValueType.DOUBLE,
         },
         {
           externalId: 'two',
@@ -50,9 +51,10 @@ describe('Sequences integration test', () => {
   test('create', async () => {
     sequences = await client.sequences.create(sequenceToCreate);
     const [sequence] = sequences;
-    expect(sequence.columns.map(({ externalId }) => ({ externalId }))).toEqual(
-      sequenceToCreate[0].columns
-    );
+    const sequenceColumns = sequence.columns.map(({ externalId }) => ({
+      externalId,
+    }));
+    expect(sequenceColumns).toEqual(sequenceToCreate[0].columns);
     expect(sequence.lastUpdatedTime).toBeInstanceOf(Date);
   });
 
@@ -147,6 +149,7 @@ describe('Sequences integration test', () => {
     });
     expect(result.items[0].values).toEqual(testValues);
     expect(result.items.length).toBe(2);
+    expect(result.columns.length).toBe(3);
     expect(result.next).toBeDefined();
     const nextResult = await result.next!();
     expect(nextResult.items.length).toBe(1);

@@ -1,11 +1,16 @@
 // Copyright 2019 Cognite AS
-import { CursorAndAsyncIterator } from '../../autoPagination';
+import {
+  CogniteAsyncIterator,
+  CursorAndAsyncIterator,
+} from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
   ExternalSequence,
   IdEither,
+  ListResponse,
   Sequence,
   SequenceChange,
+  SequenceColumnBasicInfo,
   SequenceListScope,
   SequenceRow,
   SequenceRowsDelete,
@@ -153,8 +158,8 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    */
   public retrieveRows = (
     query: SequenceRowsRetrieve
-  ): CursorAndAsyncIterator<SequenceRow> => {
-    return this.sequenceRowsAPI.retrieve(query);
+  ): RetrieveSequenceRowsEndpoint => {
+    return this.sequenceRowsAPI.retrieve(query) as RetrieveSequenceRowsEndpoint;
   };
 
   /**
@@ -168,3 +173,8 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
     return this.sequenceRowsAPI.delete(query);
   };
 }
+
+type RetrieveSequenceRowsEndpoint = Promise<
+  ListResponse<SequenceRow[]> & { columns: SequenceColumnBasicInfo[] }
+> &
+  CogniteAsyncIterator<SequenceRow>;

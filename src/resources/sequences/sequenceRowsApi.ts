@@ -27,12 +27,13 @@ export class SequenceRowsAPI extends BaseResourceAPI<any> {
             data: params,
           })
           .then(response => {
-            const { rows, nextCursor } = response.data;
+            const { rows, nextCursor, columns } = response.data;
             return {
               ...response,
               data: {
                 items: rows,
                 nextCursor,
+                columns,
               },
             };
           }),
