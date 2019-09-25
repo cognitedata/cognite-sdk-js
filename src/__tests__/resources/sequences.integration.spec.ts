@@ -35,11 +35,10 @@ describe('Sequences integration test', () => {
         },
         {
           externalId: 'one_and_a_half',
-          valueType: SequenceValueType.DOUBLE,
         },
         {
           externalId: 'two',
-          valueType: SequenceValueType.STRING, // not a default??
+          valueType: SequenceValueType.STRING,
         },
       ],
     },

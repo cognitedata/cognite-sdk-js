@@ -39,6 +39,22 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    *
    * ```js
    * const sequences = [
+   *  {
+   *   externalId: 'sequence_name',
+   *   columns: [
+   *    {
+   *      externalId: 'one',
+   *      valueType: SequenceValueType.LONG,
+   *    },
+   *    {
+   *      externalId: 'two',
+   *    },
+   *    {
+   *      externalId: 'three',
+   *      valueType: SequenceValueType.STRING,
+   *    }
+   *   ]
+   *  }
    * ];
    * const [sequence] = await client.sequences.create(sequences);
    * ```
@@ -52,7 +68,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * <!-- or [similar](https://docs.cognite.com/api/v1/#operation/listSequences) -->
    *
    * ```js
-   * const sequences = await client.sequences.list({ filter: { name: 'sequence1' } });
+   * const sequences = await client.sequences.list({ filter: { name: 'sequence_name' } });
    * ```
    */
   public list = (
