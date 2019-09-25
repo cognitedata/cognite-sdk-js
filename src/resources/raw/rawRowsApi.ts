@@ -22,6 +22,7 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     await this.postInParallelWithAutomaticChunking({
       path,
       items,
+      chunkSize: 10000,
       queryParams: { ensureParent },
     });
     return {};

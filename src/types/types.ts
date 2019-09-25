@@ -257,6 +257,9 @@ export interface ExternalSequence extends SequenceBase {
   columns: ExternalSequenceColumn[];
 }
 
+/**
+ * Information about the sequence stored in the database
+ */
 export interface Sequence
   extends SequenceBase,
     InternalId,
