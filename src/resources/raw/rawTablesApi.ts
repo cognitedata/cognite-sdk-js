@@ -11,9 +11,8 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
     ensureParent: boolean = false
   ): Promise<RawDBTable[]> {
     const path = `${this.encodeUrl(databaseName)}/tables`;
-    const params = { ensureParent };
     const responses = await this.postInParallelWithAutomaticChunking({
-      params,
+      queryParams: { ensureParent },
       items,
       path,
     });

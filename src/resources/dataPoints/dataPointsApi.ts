@@ -70,7 +70,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
   };
 
   private async insertEndpoint(items: DatapointsPostDatapoint[]) {
-    const path = this.url('data');
+    const path = this.url();
     await this.postInParallelWithAutomaticChunking({ path, items });
     return {};
   }
@@ -86,7 +86,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
   }
 
   private async retrieveLatestEndpoint(items: LatestDataBeforeRequest[]) {
-    const path = this.url('/latest');
+    const path = this.url('latest');
     const response = await this.httpClient.post<
       ItemsWrapper<DatapointsGetDatapoint[]>
     >(path, {

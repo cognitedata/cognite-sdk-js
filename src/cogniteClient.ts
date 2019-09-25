@@ -408,7 +408,7 @@ export default class CogniteClient {
       projectPath + '/timeseries',
       ...defaultArgs
     );
-    this.dataPointsApi = apiFactory(DataPointsAPI, '/timeseries/datapoints');
+    this.dataPointsApi = apiFactory(DataPointsAPI, '/timeseries/data');
     this.sequencesApi = apiFactory(SequencesAPI, '/sequences');
     this.eventsApi = apiFactory(EventsAPI, '/events');
     this.filesApi = apiFactory(FilesAPI, '/files');

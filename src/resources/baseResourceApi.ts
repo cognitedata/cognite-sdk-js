@@ -258,6 +258,7 @@ export abstract class BaseResourceAPI<
     path,
     items,
     params,
+    queryParams,
     chunkSize = 1000,
   }: PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType>) {
     return promiseAllWithData(
@@ -265,6 +266,7 @@ export abstract class BaseResourceAPI<
       singleChunk =>
         this.httpClient.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { ...params, items: singleChunk },
+          params: queryParams,
         }),
       false
     );
@@ -316,5 +318,6 @@ interface PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType> {
   path: string;
   items: RequestType[];
   params?: ParamsType;
+  queryParams?: ParamsType;
   chunkSize?: number;
 }

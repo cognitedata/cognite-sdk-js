@@ -19,12 +19,10 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     ensureParent: boolean = false
   ): Promise<{}> {
     const path = `${this.encodeUrl(databaseName, tableName)}/rows`;
-    const params = { ensureParent };
     await this.postInParallelWithAutomaticChunking({
       path,
       items,
-      chunkSize: 1000,
-      params: { params },
+      queryParams: { ensureParent },
     });
     return {};
   }

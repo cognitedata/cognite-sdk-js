@@ -27,7 +27,6 @@ export class SequenceRowsAPI extends BaseResourceAPI<any> {
             data: params,
           })
           .then(response => {
-            console.log(response);
             const { rows, nextCursor } = response.data;
             return {
               ...response,
