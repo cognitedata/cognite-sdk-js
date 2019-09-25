@@ -69,10 +69,9 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     return this.deleteDatapointsEndpoint(items);
   };
 
-
   private async insertEndpoint(items: DatapointsPostDatapoint[]) {
     const path = this.url('data');
-    await this.postInParallelWithAutomaticChunking({path, items});
+    await this.postInParallelWithAutomaticChunking({ path, items });
     return {};
   }
 
@@ -100,8 +99,8 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     await this.postInParallelWithAutomaticChunking({
       chunkSize: 10000,
       items,
-      path: this.deleteUrl
-    })
+      path: this.deleteUrl,
+    });
     return {};
   }
 }

@@ -20,11 +20,11 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
   ): Promise<{}> {
     const path = `${this.encodeUrl(databaseName, tableName)}/rows`;
     const params = { ensureParent };
-    await this.postInParallelWithAutomaticChunking({ 
+    await this.postInParallelWithAutomaticChunking({
       path,
       items,
       chunkSize: 1000,
-      params: { params }
+      params: { params },
     });
     return {};
   }
@@ -71,7 +71,7 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     items: RawDBRowKey[]
   ) {
     const path = `${this.encodeUrl(databaseName, tableName)}/rows/delete`;
-    await this.postInParallelWithAutomaticChunking({path, items});
+    await this.postInParallelWithAutomaticChunking({ path, items });
     return {};
   }
 

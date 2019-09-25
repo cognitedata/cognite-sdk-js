@@ -322,7 +322,6 @@ export interface SequenceFilter {
   };
 }
 
-
 export interface AssetMapping3D extends AssetMapping3DBase {
   /**
    * A number describing the position of this node in the 3D hierarchy, starting from 0.
@@ -633,15 +632,11 @@ export type EXECUTE = 'EXECUTE';
 
 export type EventChange = EventChangeById | EventChangeByExternalId;
 
-export type SequenceChange = SequenceChangeById | SequenceChangeByExternalId;
+export type SequenceChange = SequencePatch & IdEither;
 
 export interface EventChangeByExternalId extends EventPatch, ExternalId {}
 
 export interface EventChangeById extends EventPatch, InternalId {}
-
-export interface SequenceChangeById extends SequencePatch, InternalId {}
-
-export interface SequenceChangeByExternalId extends SequencePatch, ExternalId {}
 
 export interface SequencePatch {
   update: {
@@ -864,14 +859,14 @@ export interface Filter {
 
 export interface FilterQuery extends Cursor, Limit {}
 
-interface SequenceRetriveRowsQuery extends Cursor, Limit {
+interface SequenceRowsRetriveData extends Cursor, Limit {
   /**
    * Lowest row number included.
    * @default 0
    */
   start?: number;
   /**
-   * Get rows up to, but excluding, this row number. 
+   * Get rows up to, but excluding, this row number.
    * @default "no limit"
    */
   end?: number;
@@ -885,13 +880,12 @@ interface SequenceRetriveRowsQuery extends Cursor, Limit {
 /**
  * A request for datapoints stored
  */
-export type SequenceRetrieveRows = SequenceRetriveRowsQuery & InternalId | SequenceRetriveRowsQuery & ExternalId;
+export type SequenceRowsRetrieve = SequenceRowsRetriveData & IdEither;
 
 export interface SequenceRowsResponse extends InternalId {
   externalId?: ExternalId;
   columns: SequenceColumnBasicInfo[];
   rows: SequenceRow[];
-  // items: SequenceRow[];
   nextCursor?: string;
 }
 
@@ -1037,8 +1031,6 @@ export type ItemsResponse<T> = ItemsWrapper<T[]>;
 export interface ItemsWrapper<T> {
   items: T;
 }
-
-
 
 export type LIST = 'LIST';
 
@@ -1422,13 +1414,18 @@ export interface SequenceRow {
 /**
  * Element of type corresponding to the column type. May include NULL!
  */
-type SequenceItem = number | string | null
+type SequenceItem = number | string | null;
 
-// export interface SequenceRowsInsertById extends InternalId, SequenceRowsInsertData {}
+export type SequenceRowsInsert = SequenceRowsInsertData & IdEither;
 
-// export interface SequenceRowsInsertByExternalId extends ExternalId, SequenceRowsInsertData{}
+export type SequenceRowsDelete = SequenceRowsDeleteData & IdEither;
 
-export type SequenceRowsInsert = InternalId & SequenceRowsInsertData | ExternalId & SequenceRowsInsertData
+interface SequenceRowsDeleteData {
+  /**
+   * Rows to delete from a sequence
+   */
+  rows: number[];
+}
 
 export interface RawDBTable {
   /**

@@ -2,13 +2,7 @@
 
 import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
-import {
-  CursorResponse,
-  ItemsWrapper,
-  ListRawTables,
-  RawDBTable,
-} from '../../types/types';
-import { promiseAllWithData } from '../assets/assetUtils';
+import { CursorResponse, ListRawTables, RawDBTable } from '../../types/types';
 
 export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
   public async create(
@@ -18,15 +12,11 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
   ): Promise<RawDBTable[]> {
     const path = `${this.encodeUrl(databaseName)}/tables`;
     const params = { ensureParent };
-    const responses = await promiseAllWithData(
-      BaseResourceAPI.chunk(items, 1000),
-      singleChunk =>
-        this.httpClient.post<ItemsWrapper<RawDBTable[]>>(path, {
-          params,
-          data: { items: singleChunk },
-        }),
-      false
-    );
+    const responses = await this.postInParallelWithAutomaticChunking({
+      params,
+      items,
+      path,
+    });
     return this.mergeItemsFromItemsResponse(responses);
   }
 
@@ -44,10 +34,9 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
     );
   }
 
-  public async delete(databaseName: string, items: RawDBTable[]) {
+  public delete(databaseName: string, items: RawDBTable[]) {
     const path = `${this.encodeUrl(databaseName)}/tables/delete`;
-    await this.postInParallelWithAutomaticChunking(path, items);
-    return {};
+    return this.deleteEndpoint(items, {}, path);
   }
 
   private encodeUrl(databaseName: string) {

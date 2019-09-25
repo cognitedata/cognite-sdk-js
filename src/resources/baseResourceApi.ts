@@ -152,14 +152,14 @@ export abstract class BaseResourceAPI<
     ids: IdEither[],
     path: string = this.byIdsUrl
   ) {
-    return this.postInParallelWithAutomaticChunking({path, items: ids});
+    return this.postInParallelWithAutomaticChunking({ path, items: ids });
   }
 
   protected async callUpdateEndpoint<ChangeType>(
     changes: ChangeType[],
     path: string = this.updateUrl
   ) {
-    return this.postInParallelWithAutomaticChunking({path, items: changes});
+    return this.postInParallelWithAutomaticChunking({ path, items: changes });
   }
 
   protected async callSearchEndpoint<QueryType, Response>(query: QueryType) {
@@ -171,7 +171,11 @@ export abstract class BaseResourceAPI<
     params?: ParamsType,
     path: string = this.deleteUrl
   ) {
-    return this.postInParallelWithAutomaticChunking({path, items: ids, params});
+    return this.postInParallelWithAutomaticChunking({
+      path,
+      items: ids,
+      params,
+    });
   }
 
   protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>) {
@@ -249,14 +253,13 @@ export abstract class BaseResourceAPI<
 
   protected postInParallelWithAutomaticChunking<
     RequestType,
-    ParamsType extends object = {},
+    ParamsType extends object = {}
   >({
     path,
     items,
     params,
-    chunkSize = 1000
-    }:PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType>
-  ) {
+    chunkSize = 1000,
+  }: PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType>) {
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, chunkSize),
       singleChunk =>
@@ -305,9 +308,9 @@ export abstract class BaseResourceAPI<
   }
 }
 
-type ListEndpoint<QueryType extends FilterQuery, WrapperType, AdditionalData = {}> = (
+type ListEndpoint<QueryType extends FilterQuery, WrapperType> = (
   query?: QueryType
-) => Promise<HttpResponse<CursorResponse<WrapperType> & AdditionalData>>;
+) => Promise<HttpResponse<CursorResponse<WrapperType>>>;
 
 interface PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType> {
   path: string;

@@ -6,11 +6,12 @@ import {
   IdEither,
   Sequence,
   SequenceChange,
-  SequenceSearchFilter,
-  SequenceRowsInsert,
-  SequenceRetrieveRows,
   SequenceListScope,
   SequenceRow,
+  SequenceRowsDelete,
+  SequenceRowsInsert,
+  SequenceRowsRetrieve,
+  SequenceSearchFilter,
 } from '../../types/types';
 import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { BaseResourceAPI } from '../baseResourceApi';
@@ -18,7 +19,7 @@ import { SequenceRowsAPI } from './sequenceRowsApi';
 
 export class SequencesAPI extends BaseResourceAPI<Sequence> {
   private sequenceRowsAPI: SequenceRowsAPI;
-  
+
   /** @hidden */
   constructor(
     resourcePath: string,
@@ -26,7 +27,11 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
     map: MetadataMap
   ) {
     super(resourcePath, httpClient, map);
-    this.sequenceRowsAPI = new SequenceRowsAPI(`${this.url()}data`, httpClient, map);
+    this.sequenceRowsAPI = new SequenceRowsAPI(
+      `${this.url()}data`,
+      httpClient,
+      map
+    );
   }
 
   /**
@@ -111,27 +116,39 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * [Insert rows](https://docs.cognite.com/api/v1/#operation/postSequenceData)
    *
    * ```js
-   * // todo: fix this
-   * await client.sequences.insertRows('My company', 'Customers', [{ key: 'customer1', columns: { 'First name': 'Steve', 'Last name': 'Jobs' } }]);
+   *
+   * const rows = [
+   *  { rowNumber: 0, values: [1, 2.2, 'three'] },
+   *  { rowNumber: 1, values: [4, 5, 'six'] }
+   * ];
+   * await client.sequences.insertRows({ id: 123, rows, columns: ['one', 'two', 'three'] });
    * ```
    */
-  public insertRows = (
-    items: SequenceRowsInsert[]
-  ): Promise<{}> => {
+  public insertRows = (items: SequenceRowsInsert[]): Promise<{}> => {
     return this.sequenceRowsAPI.insert(items);
   };
 
   /**
-   * [Insert rows](https://docs.cognite.com/api/v1/#operation/getSequenceData)
+   * [Retrieve rows](https://docs.cognite.com/api/v1/#operation/getSequenceData)
    *
    * ```js
-   * // todo: fix this
-   * await client.sequences.retrieveRows('My company', 'Customers', [{ key: 'customer1', columns: { 'First name': 'Steve', 'Last name': 'Jobs' } }]);
+   * const rows = await client.sequences.retrieveRows({ externalId: 'sequence1' }).autoPagingToArray({ limit: 100 });
    * ```
    */
   public retrieveRows = (
-    query: SequenceRetrieveRows
+    query: SequenceRowsRetrieve
   ): CursorAndAsyncIterator<SequenceRow> => {
     return this.sequenceRowsAPI.retrieve(query);
+  };
+
+  /**
+   * [Delete rows](https://docs.cognite.com/api/v1/#operation/deleteSequenceData)
+   *
+   * ```js
+   * await client.sequences.deleteRows([{ id: 32423849, rows: [1,2,3] }]);
+   * ```
+   */
+  public deleteRows = (query: SequenceRowsDelete[]): Promise<{}> => {
+    return this.sequenceRowsAPI.delete(query);
   };
 }
