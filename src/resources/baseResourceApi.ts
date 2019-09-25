@@ -152,14 +152,14 @@ export abstract class BaseResourceAPI<
     ids: IdEither[],
     path: string = this.byIdsUrl
   ) {
-    return this.postInParallelWithAutomaticChunking(path, ids);
+    return this.postInParallelWithAutomaticChunking({path, items: ids});
   }
 
   protected async callUpdateEndpoint<ChangeType>(
     changes: ChangeType[],
     path: string = this.updateUrl
   ) {
-    return this.postInParallelWithAutomaticChunking(path, changes);
+    return this.postInParallelWithAutomaticChunking({path, items: changes});
   }
 
   protected async callSearchEndpoint<QueryType, Response>(query: QueryType) {
@@ -171,7 +171,7 @@ export abstract class BaseResourceAPI<
     params?: ParamsType,
     path: string = this.deleteUrl
   ) {
-    return this.postInParallelWithAutomaticChunking(path, ids, params);
+    return this.postInParallelWithAutomaticChunking({path, items: ids, params});
   }
 
   protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>) {
@@ -249,10 +249,16 @@ export abstract class BaseResourceAPI<
 
   protected postInParallelWithAutomaticChunking<
     RequestType,
-    ParamsType extends object = {}
-  >(path: string, items: RequestType[], params?: ParamsType) {
+    ParamsType extends object = {},
+  >({
+    path,
+    items,
+    params,
+    chunkSize = 1000
+    }:PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType>
+  ) {
     return promiseAllWithData(
-      BaseResourceAPI.chunk(items, 1000),
+      BaseResourceAPI.chunk(items, chunkSize),
       singleChunk =>
         this.httpClient.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { ...params, items: singleChunk },
@@ -299,6 +305,13 @@ export abstract class BaseResourceAPI<
   }
 }
 
-type ListEndpoint<QueryType extends FilterQuery, WrapperType> = (
+type ListEndpoint<QueryType extends FilterQuery, WrapperType, AdditionalData = {}> = (
   query?: QueryType
-) => Promise<HttpResponse<CursorResponse<WrapperType>>>;
+) => Promise<HttpResponse<CursorResponse<WrapperType> & AdditionalData>>;
+
+interface PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType> {
+  path: string;
+  items: RequestType[];
+  params?: ParamsType;
+  chunkSize?: number;
+}

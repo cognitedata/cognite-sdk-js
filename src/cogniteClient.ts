@@ -30,6 +30,7 @@ import { LogoutApi } from './resources/logout/logoutApi';
 import { ProjectsAPI } from './resources/projects/projectsApi';
 import { RawAPI } from './resources/raw/rawApi';
 import { SecurityCategoriesAPI } from './resources/securityCategories/securityCategoriesApi';
+import { SequencesAPI } from './resources/sequences/sequencesApi';
 import { ServiceAccountsAPI } from './resources/serviceAccounts/serviceAccountsApi';
 import { TimeSeriesAPI } from './resources/timeSeries/timeSeriesApi';
 import { apiUrl, getBaseUrl, projectUrl } from './utils';
@@ -92,6 +93,9 @@ export default class CogniteClient {
   public get datapoints() {
     return validateAndReturnAPI(this.dataPointsApi);
   }
+  public get sequences() {
+    return validateAndReturnAPI(this.sequencesApi);
+  }
   public get events() {
     return validateAndReturnAPI(this.eventsApi);
   }
@@ -145,6 +149,7 @@ export default class CogniteClient {
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   private dataPointsApi?: DataPointsAPI;
+  private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
   private filesApi?: FilesAPI;
   private rawApi?: RawAPI;
@@ -403,7 +408,8 @@ export default class CogniteClient {
       projectPath + '/timeseries',
       ...defaultArgs
     );
-    this.dataPointsApi = apiFactory(DataPointsAPI, '/timeseries');
+    this.dataPointsApi = apiFactory(DataPointsAPI, '/timeseries/datapoints');
+    this.sequencesApi = apiFactory(SequencesAPI, '/sequences');
     this.eventsApi = apiFactory(EventsAPI, '/events');
     this.filesApi = apiFactory(FilesAPI, '/files');
     this.rawApi = apiFactory(RawAPI, '/raw/dbs');

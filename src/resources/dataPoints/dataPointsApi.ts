@@ -10,7 +10,6 @@ import {
   ItemsWrapper,
   LatestDataBeforeRequest,
 } from '../../types/types';
-import { promiseAllWithData } from '../assets/assetUtils';
 
 export class DataPointsAPI extends BaseResourceAPI<any> {
   /**
@@ -70,14 +69,15 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     return this.deleteDatapointsEndpoint(items);
   };
 
+
   private async insertEndpoint(items: DatapointsPostDatapoint[]) {
     const path = this.url('data');
-    await this.postInParallelWithAutomaticChunking(path, items);
+    await this.postInParallelWithAutomaticChunking({path, items});
     return {};
   }
 
   private async retrieveDatapointsEndpoint(query: DatapointsMultiQuery) {
-    const path = this.url('data/list');
+    const path = this.listPostUrl;
     const response = await this.httpClient.post<
       ItemsWrapper<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]>
     >(path, {
@@ -87,7 +87,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
   }
 
   private async retrieveLatestEndpoint(items: LatestDataBeforeRequest[]) {
-    const path = this.url('data/latest');
+    const path = this.url('/latest');
     const response = await this.httpClient.post<
       ItemsWrapper<DatapointsGetDatapoint[]>
     >(path, {
@@ -97,15 +97,11 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
   }
 
   private async deleteDatapointsEndpoint(items: LatestDataBeforeRequest[]) {
-    const path = this.url('data/delete');
-    await promiseAllWithData(
-      BaseResourceAPI.chunk(items, 10000),
-      singleChunk =>
-        this.httpClient.post<ItemsWrapper<ResponseType[]>>(path, {
-          data: { singleChunk },
-        }),
-      false
-    );
+    await this.postInParallelWithAutomaticChunking({
+      chunkSize: 10000,
+      items,
+      path: this.deleteUrl
+    })
     return {};
   }
 }
