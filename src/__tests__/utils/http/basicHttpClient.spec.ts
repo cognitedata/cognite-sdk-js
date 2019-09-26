@@ -178,4 +178,14 @@ describe('BasicHttpClient', () => {
       await client.post('/', { data: {} });
     });
   });
+
+  describe('baseUrl', () => {
+    test('should handle baseUrl with path', async () => {
+      const customClient = new BasicHttpClient('https://example.com/some/path');
+      nock('https://example.com/some/path')
+        .get('/abc')
+        .reply(200, {});
+      await customClient.get('/abc');
+    });
+  });
 });
