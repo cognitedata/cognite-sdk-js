@@ -2,7 +2,6 @@
 
 import fetch, { Response } from 'cross-fetch';
 import { stringify } from 'query-string';
-import * as Url from 'url';
 import { isJson } from '../../utils';
 import { HttpError } from './httpError';
 
@@ -63,6 +62,12 @@ export class BasicHttpClient {
       return JSON.stringify(data, null, 2);
     }
     return data;
+  }
+
+  private static resolveUrl(baseUrl: string, path: string) {
+    const trimmedBaseUrl = baseUrl.replace(/\/$/, '');
+    const pathWithPrefix = (path[0] === '/' ? '' : '/') + path;
+    return trimmedBaseUrl + pathWithPrefix;
   }
 
   private defaultHeaders: HttpHeaders = {};
@@ -182,7 +187,11 @@ export class BasicHttpClient {
     if (hasQueryParams) {
       url += `?${stringify(params)}`;
     }
-    return Url.resolve(this.baseUrl, url);
+    const urlContainsHost = url.match(/^https?:\/\//i) !== null;
+    if (urlContainsHost) {
+      return url;
+    }
+    return BasicHttpClient.resolveUrl(this.baseUrl, url);
   }
 }
 
