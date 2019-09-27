@@ -37,7 +37,7 @@ export class SequenceRowsAPI extends BaseResourceAPI<
     );
   }
 
-  public delete(items: SequenceRowsDelete[]) {
+  public delete(items: SequenceRowsDelete[]): Promise<{}> {
     return this.deleteEndpoint(items);
   }
 

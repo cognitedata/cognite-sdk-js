@@ -124,7 +124,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * await client.sequences.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public delete = (ids: IdEither[]) => {
+  public delete = (ids: IdEither[]): Promise<{}> => {
     return super.deleteEndpoint(ids);
   };
 
