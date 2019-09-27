@@ -5,7 +5,7 @@ import { SequenceColumnBasicInfo, SequenceItem } from '../../types/types';
 /**
  * A list of sequence row values with row number and columns information
  */
-export class SequenceRow extends Array<SequenceItem> implements SequenceRow {
+export class SequenceRow extends Array<SequenceItem> {
   constructor(
     public rowNumber: number,
     values: SequenceItem[],
