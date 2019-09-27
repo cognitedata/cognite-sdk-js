@@ -180,8 +180,8 @@ export interface ExternalSequenceColumn
     ExternalId {}
 
 interface ExternalSequenceColumnBase {
-  name?: ColumnName;
-  description?: ColumnDescription;
+  name?: SequenceColumnName;
+  description?: SequenceColumnDescription;
   valueType?: SequenceValueType;
   metadata?: Metadata;
 }
@@ -201,7 +201,7 @@ export interface SequenceColumn
  * Information about a column stored in the database
  */
 export interface SequenceColumnBasicInfo {
-  name?: ColumnName;
+  name?: SequenceColumnName;
   externalId?: ExternalId;
   valueType?: SequenceValueType;
 }
@@ -227,7 +227,7 @@ export type SequenceName = string;
 /**
  *  Human readable name of the column
  */
-export type ColumnName = string;
+export type SequenceColumnName = string;
 
 /**
  * Description of the sequence
@@ -237,7 +237,7 @@ export type SequenceDescription = string;
 /**
  * Description of the column
  */
-export type ColumnDescription = string;
+export type SequenceColumnDescription = string;
 
 interface SequenceBase {
   name?: SequenceName;
