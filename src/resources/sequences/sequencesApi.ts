@@ -1,18 +1,12 @@
 // Copyright 2019 Cognite AS
-import {
-  CogniteAsyncIterator,
-  CursorAndAsyncIterator,
-} from '../../autoPagination';
+import { CursorAndAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
   ExternalSequence,
   IdEither,
-  ListResponse,
   Sequence,
   SequenceChange,
-  SequenceColumnBasicInfo,
   SequenceListScope,
-  SequenceRow,
   SequenceRowsDelete,
   SequenceRowsInsert,
   SequenceRowsRetrieve,
@@ -20,6 +14,7 @@ import {
 } from '../../types/types';
 import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { BaseResourceAPI } from '../baseResourceApi';
+import { SequenceRow } from '../classes/sequenceRow';
 import { SequenceRowsAPI } from './sequenceRowsApi';
 
 export class SequencesAPI extends BaseResourceAPI<Sequence> {
@@ -158,8 +153,8 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    */
   public retrieveRows = (
     query: SequenceRowsRetrieve
-  ): RetrieveSequenceRowsEndpoint => {
-    return this.sequenceRowsAPI.retrieve(query) as RetrieveSequenceRowsEndpoint;
+  ): CursorAndAsyncIterator<SequenceRow> => {
+    return this.sequenceRowsAPI.retrieve(query);
   };
 
   /**
@@ -173,8 +168,3 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
     return this.sequenceRowsAPI.delete(query);
   };
 }
-
-type RetrieveSequenceRowsEndpoint = Promise<
-  ListResponse<SequenceRow[]> & { columns: SequenceColumnBasicInfo[] }
-> &
-  CogniteAsyncIterator<SequenceRow>;

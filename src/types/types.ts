@@ -885,10 +885,10 @@ interface SequenceRowsRetriveData extends Cursor, Limit {
  */
 export type SequenceRowsRetrieve = SequenceRowsRetriveData & IdEither;
 
-export interface SequenceRowsResponse extends InternalId {
+export interface SequenceRowsResponseData extends InternalId {
   externalId?: ExternalId;
   columns: SequenceColumnBasicInfo[];
-  rows: SequenceRow[];
+  rows: SequenceRowData[];
   nextCursor?: string;
 }
 
@@ -1384,7 +1384,7 @@ export interface SequenceRowsInsertData {
   /**
    * List of row information
    */
-  rows: SequenceRow[];
+  rows: SequenceRowData[];
 }
 
 export interface SequenceRowsData extends InternalId {
@@ -1396,13 +1396,13 @@ export interface SequenceRowsData extends InternalId {
   /**
    * List of row information
    */
-  rows: SequenceRow[];
+  rows: SequenceRowData[];
 }
 
 /**
  * A single row of datapoints
  */
-export interface SequenceRow {
+export interface SequenceRowData {
   /**
    * The row number for this row
    */
@@ -1417,7 +1417,7 @@ export interface SequenceRow {
 /**
  * Element of type corresponding to the column type. May include NULL!
  */
-type SequenceItem = number | string | null;
+export type SequenceItem = number | string | null;
 
 export type SequenceRowsInsert = SequenceRowsInsertData & IdEither;
 

@@ -1,14 +1,21 @@
 // Copyright 2019 Cognite AS
 
+import { CursorAndAsyncIterator } from '../../standardMethods';
 import {
+  CursorResponse,
   SequenceRowsDelete,
   SequenceRowsInsert,
-  SequenceRowsResponse,
+  SequenceRowsResponseData,
   SequenceRowsRetrieve,
 } from '../../types/types';
+import { HttpResponse } from '../../utils/http/basicHttpClient';
 import { BaseResourceAPI } from '../baseResourceApi';
+import { SequenceRow } from '../classes/sequenceRow';
 
-export class SequenceRowsAPI extends BaseResourceAPI<any> {
+export class SequenceRowsAPI extends BaseResourceAPI<
+  SequenceRowsResponseData,
+  SequenceRow
+> {
   public async insert(items: SequenceRowsInsert[]): Promise<{}> {
     await this.postInParallelWithAutomaticChunking({
       path: this.url(),
@@ -18,30 +25,35 @@ export class SequenceRowsAPI extends BaseResourceAPI<any> {
     return {};
   }
 
-  public retrieve(query: SequenceRowsRetrieve) {
-    const path = this.listPostUrl;
+  public retrieve(
+    query: SequenceRowsRetrieve
+  ): CursorAndAsyncIterator<SequenceRow> {
     return super.listEndpoint(
-      async params =>
+      data =>
         this.httpClient
-          .post<SequenceRowsResponse>(path, {
-            data: params,
-          })
-          .then(response => {
-            const { rows, nextCursor, columns } = response.data;
-            return {
-              ...response,
-              data: {
-                items: rows,
-                nextCursor,
-                columns,
-              },
-            };
-          }),
+          .post<SequenceRowsResponseData>(this.listPostUrl, { data })
+          .then(this.transformRetrieveResponse),
       query
     );
   }
 
   public delete(items: SequenceRowsDelete[]) {
     return this.deleteEndpoint(items);
+  }
+
+  private transformRetrieveResponse(
+    response: HttpResponse<SequenceRowsResponseData>
+  ): HttpResponse<CursorResponse<SequenceRow[]>> {
+    const { rows, nextCursor, columns } = response.data;
+    const items = rows.map(
+      ({ rowNumber, values }) => new SequenceRow(rowNumber, values, columns)
+    );
+    return {
+      ...response,
+      data: {
+        items,
+        nextCursor,
+      },
+    };
   }
 }

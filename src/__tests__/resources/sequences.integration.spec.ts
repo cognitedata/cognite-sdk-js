@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import * as nock from 'nock';
 import CogniteClient from '../../cogniteClient';
 import {
   ExternalSequence,
@@ -8,14 +9,19 @@ import {
   SequenceValueType,
 } from '../../types/types';
 import {
+  mockBaseUrl,
   randomInt,
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
+  setupMockableClient,
 } from '../testUtils';
 
 describe('Sequences integration test', () => {
   let client: CogniteClient;
+  let mockedClient: CogniteClient;
   let sequences: Sequence[];
+  const testValues = [1, 1.5, 'two'];
+  const testExternalId = 'sequence' + randomInt();
   const sequenceToCreate: ExternalSequence[] = [
     {
       name: 'sequence1',
@@ -27,7 +33,7 @@ describe('Sequences integration test', () => {
       ],
     },
     {
-      externalId: 'sequence' + randomInt(),
+      externalId: testExternalId,
       columns: [
         {
           externalId: 'one',
@@ -44,8 +50,20 @@ describe('Sequences integration test', () => {
       ],
     },
   ];
+  const testRows = new Array(3).fill(null).map((_, i) => ({
+    rowNumber: i,
+    values: testValues,
+  }));
+  const mockedResponse = {
+    nextCursor: 1,
+    externalId: sequenceToCreate[1].externalId,
+    columns: sequenceToCreate[1].columns,
+    rows: testRows,
+  };
   beforeAll(async () => {
     client = setupLoggedInClient();
+    mockedClient = setupMockableClient();
+    nock.cleanAll();
   });
 
   test('create', async () => {
@@ -70,7 +88,7 @@ describe('Sequences integration test', () => {
   test('retrieve', async () => {
     const response = await client.sequences.retrieve([
       { id: sequences[0].id },
-      { externalId: sequences[1].externalId! },
+      { externalId: testExternalId },
     ]);
     expect(response[0].name).toEqual(sequences[0].name);
     expect(response).toHaveLength(2);
@@ -100,16 +118,11 @@ describe('Sequences integration test', () => {
     expect(result.length).toBeGreaterThan(0);
   });
 
-  const testValues = [1, 1.5, 'two'];
   test('insert rows', async () => {
-    const rows = new Array(3).fill(null).map((_, i) => ({
-      rowNumber: i,
-      values: testValues,
-    }));
     const rowsData: SequenceRowsInsert[] = [
       {
-        externalId: sequences[1].externalId!,
-        rows,
+        externalId: testExternalId,
+        rows: testRows,
         columns: sequences[1].columns.map(({ externalId }) => externalId!),
       },
       {
@@ -127,32 +140,28 @@ describe('Sequences integration test', () => {
     expect(result).toEqual({});
   });
 
-  test('retrieve rows with auto-paging', async () => {
-    await runTestWithRetryWhenFailing(async () => {
-      const result = await client.sequences
-        .retrieveRows({
-          externalId: sequences[1].externalId!,
-          limit: 1,
-        })
-        .autoPagingToArray({ limit: 2 });
-      expect(result.map(({ values }) => values)).toEqual([
-        testValues,
-        testValues,
-      ]);
-    });
-  });
+  test('retrieve rows (mocked)', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/sequences/data/list'), {
+        externalId: testExternalId,
+      })
+      .once()
+      .reply(200, {
+        ...mockedResponse,
+        id: sequences[1].id,
+      });
 
-  test('retrieve rows', async () => {
-    const result = await client.sequences.retrieveRows({
-      externalId: sequences[1].externalId!,
-      limit: 2,
+    const { items, next } = await mockedClient.sequences.retrieveRows({
+      externalId: testExternalId,
     });
-    expect(result.items[0].values).toEqual(testValues);
-    expect(result.items.length).toBe(2);
-    expect(result.columns.length).toBe(3);
-    expect(result.next).toBeDefined();
-    const nextResult = await result.next!();
-    expect(nextResult.items.length).toBe(1);
+
+    expect(items.length).toBe(3);
+    items.forEach((row, index) => {
+      expect([...row]).toEqual(testValues);
+      expect(row.columns.length).toEqual(3);
+      expect(row.rowNumber).toEqual(index);
+    });
+    expect(typeof next).toBe('function');
   });
 
   test('delete rows', async () => {
@@ -164,20 +173,13 @@ describe('Sequences integration test', () => {
         },
       ]);
       expect(result).toEqual({});
-      const leftover = await client.sequences
-        .retrieveRows({
-          id: sequences[1].id,
-        })
-        .autoPagingToArray();
-      expect(leftover.length).toBe(1);
-      expect(leftover[0].rowNumber).toEqual(1);
     });
   });
 
   test('delete', async () => {
     const result = await client.sequences.delete([
       { id: sequences[0].id },
-      { externalId: sequences[1].externalId! },
+      { externalId: testExternalId },
     ]);
     expect(result).toEqual({});
   });
