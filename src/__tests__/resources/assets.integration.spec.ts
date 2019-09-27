@@ -48,7 +48,7 @@ describe('Asset integration test', () => {
       failed: [[]],
       errors: [
         new CogniteError(
-          'createAssets.arg0.items: size must be between 1 and 1000',
+          'Request had 1 constraint violations. Please fix the request and try again.',
           400
         ),
       ],
