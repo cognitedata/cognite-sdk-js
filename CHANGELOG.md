@@ -1,3 +1,10 @@
+## [2.4.3](https://github.com/cognitedata/cognitesdk-js/compare/v2.4.2...v2.4.3) (2019-09-27)
+
+
+### Bug Fixes
+
+* support baseUrl with path ([e8670a9](https://github.com/cognitedata/cognitesdk-js/commit/e8670a9))
+
 ## [2.4.2](https://github.com/cognitedata/cognitesdk-js/compare/v2.4.1...v2.4.2) (2019-09-25)
 
 
