@@ -100,7 +100,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
   };
 
   /**
-   * [Search sequences](https://doc.cognitedata.com/api/v1/#operation/searchAssets)
+   * [Search sequences](https://doc.cognitedata.com/api/v1/#operation/searchSequences)
    *
    * ```js
    * const sequences = await client.sequences.search({
