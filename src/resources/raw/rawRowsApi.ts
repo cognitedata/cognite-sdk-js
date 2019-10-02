@@ -10,7 +10,6 @@ import {
   RawDBRowKey,
 } from '../../types/types';
 import { HttpHeaders } from '../../utils/http/basicHttpClient';
-import { promiseAllWithData } from '../assets/assetUtils';
 
 export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
   public async insert(
@@ -20,16 +19,12 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     ensureParent: boolean = false
   ): Promise<{}> {
     const path = `${this.encodeUrl(databaseName, tableName)}/rows`;
-    const params = { ensureParent };
-    await promiseAllWithData(
-      BaseResourceAPI.chunk(items, 10000),
-      singleChunk =>
-        this.httpClient.post(path, {
-          params,
-          data: { items: singleChunk },
-        }),
-      false
-    );
+    await this.postInParallelWithAutomaticChunking({
+      path,
+      items,
+      chunkSize: 10000,
+      queryParams: { ensureParent },
+    });
     return {};
   }
 
@@ -75,7 +70,7 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     items: RawDBRowKey[]
   ) {
     const path = `${this.encodeUrl(databaseName, tableName)}/rows/delete`;
-    await this.postInParallelWithAutomaticChunking(path, items);
+    await this.postInParallelWithAutomaticChunking({ path, items });
     return {};
   }
 

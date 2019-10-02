@@ -158,7 +158,10 @@ export interface AssetAggregateResult {
   childCount?: number;
 }
 
-export interface Asset extends ExternalAsset, AssetInternalId {
+export interface Asset
+  extends ExternalAsset,
+    AssetInternalId,
+    CreatedAndLastUpdatedTime {
   /**
    * The id of the root for the tree this asset belongs to
    */
@@ -167,8 +170,101 @@ export interface Asset extends ExternalAsset, AssetInternalId {
    * Aggregated metrics of the asset
    */
   aggregates?: AssetAggregateResult;
-  lastUpdatedTime: Date;
-  createdTime: Date;
+}
+
+/**
+ * Describes a new column
+ */
+export interface ExternalSequenceColumn
+  extends ExternalSequenceColumnBase,
+    ExternalId {}
+
+interface ExternalSequenceColumnBase {
+  name?: SequenceColumnName;
+  description?: SequenceColumnDescription;
+  valueType?: SequenceValueType;
+  metadata?: Metadata;
+}
+
+/**
+ * Information about a column stored in the database
+ */
+export interface SequenceColumn
+  extends ExternalSequenceColumnBase,
+    InternalId,
+    CreatedAndLastUpdatedTime {
+  valueType: SequenceValueType;
+  externalId?: CogniteExternalId;
+}
+
+/**
+ * Information about a column stored in the database
+ */
+export interface SequenceColumnBasicInfo {
+  name?: SequenceColumnName;
+  externalId?: ExternalId;
+  valueType?: SequenceValueType;
+}
+
+/**
+ * What type the datapoints in a column will have.
+ * DOUBLE is restricted to the range [-1E100, 1E100]
+ * @default STRING
+ */
+export type SequenceValueType = 'STRING' | 'DOUBLE' | 'LONG';
+
+export const SequenceValueType = {
+  STRING: 'STRING' as SequenceValueType,
+  DOUBLE: 'DOUBLE' as SequenceValueType,
+  LONG: 'LONG' as SequenceValueType,
+};
+
+/**
+ * Name of the sequence
+ */
+export type SequenceName = string;
+
+/**
+ *  Human readable name of the column
+ */
+export type SequenceColumnName = string;
+
+/**
+ * Description of the sequence
+ */
+export type SequenceDescription = string;
+
+/**
+ * Description of the column
+ */
+export type SequenceColumnDescription = string;
+
+interface SequenceBase {
+  name?: SequenceName;
+  description?: SequenceDescription;
+  /**
+   * Asset this sequence is associated with
+   */
+  assetId?: CogniteInternalId;
+  externalId?: CogniteExternalId;
+  metadata?: Metadata;
+}
+
+export interface ExternalSequence extends SequenceBase {
+  /**
+   * List of column definitions
+   */
+  columns: ExternalSequenceColumn[];
+}
+
+/**
+ * Information about the sequence stored in the database
+ */
+export interface Sequence
+  extends SequenceBase,
+    InternalId,
+    CreatedAndLastUpdatedTime {
+  columns: SequenceColumn[];
 }
 
 export type AssetChange = AssetChangeById | AssetChangeByExternalId;
@@ -215,6 +311,18 @@ export interface AssetListScope extends AssetFilter, FilterQuery {
    * Set of aggregated properties to include
    */
   aggregatedProperties?: AssetAggregatedProperty[];
+}
+
+export interface SequenceFilter {
+  filter?: {
+    name?: SequenceName;
+    externalIdPrefix?: CogniteExternalId;
+    metadata?: Metadata;
+    assetIds?: CogniteInternalId[];
+    rootAssetIds?: IdEither[];
+    createdTime?: DateRange;
+    lastUpdatedTime?: DateRange;
+  };
 }
 
 export interface AssetMapping3D extends AssetMapping3DBase {
@@ -267,6 +375,18 @@ export interface AssetSearchFilter extends AssetFilter {
   };
 }
 
+export interface SequenceSearchFilter extends SequenceFilter {
+  search?: {
+    name?: SequenceName;
+    description?: SequenceDescription;
+    /**
+     * Search on name and description using wildcard search on each of the words (separated by spaces).
+     * Retrieves results where at least one word must match. Example: '*some* *other*'
+     */
+    query?: string;
+  };
+}
+
 /**
  * The source of this asset
  */
@@ -313,7 +433,12 @@ export type CREATE = 'CREATE';
 
 export type CogniteCapability = SingleCogniteCapability[];
 
-export interface CogniteEvent extends ExternalEvent, InternalId {
+export interface CogniteEvent
+  extends ExternalEvent,
+    InternalId,
+    CreatedAndLastUpdatedTime {}
+
+export interface CreatedAndLastUpdatedTime {
   lastUpdatedTime: Date;
   createdTime: Date;
 }
@@ -510,9 +635,22 @@ export type EXECUTE = 'EXECUTE';
 
 export type EventChange = EventChangeById | EventChangeByExternalId;
 
+export type SequenceChange = SequencePatch & IdEither;
+
 export interface EventChangeByExternalId extends EventPatch, ExternalId {}
 
 export interface EventChangeById extends EventPatch, InternalId {}
+
+export interface SequencePatch {
+  update: {
+    name?: SinglePatchString;
+    description?: SinglePatchString;
+    assetId?: NullableSinglePatchLong;
+    externalId?: SinglePatchString;
+    endTime?: SinglePatchDate;
+    metadata?: ObjectPatch;
+  };
+}
 
 export interface EventFilter {
   startTime?: DateRange;
@@ -668,15 +806,15 @@ export type FileName = string;
 
 export interface FileRequestFilter extends FilterQuery, FileFilter {}
 
-export interface FilesMetadata extends ExternalFilesMetadata {
+export interface FilesMetadata
+  extends ExternalFilesMetadata,
+    CreatedAndLastUpdatedTime {
   id: CogniteInternalId;
   /**
    * Whether or not the actual file is uploaded
    */
   uploaded: boolean;
   uploadedTime?: Date;
-  createdTime: Date;
-  lastUpdatedTime: Date;
 }
 
 export interface FilesSearchFilter extends FileFilter {
@@ -724,6 +862,36 @@ export interface Filter {
 
 export interface FilterQuery extends Cursor, Limit {}
 
+interface SequenceRowsRetriveData extends Cursor, Limit {
+  /**
+   * Lowest row number included.
+   * @default 0
+   */
+  start?: number;
+  /**
+   * Get rows up to, but excluding, this row number.
+   * @default "no limit"
+   */
+  end?: number;
+  /**
+   * Columns to be included. Specified as list of column externalIds.
+   * In case this filter is not set, all available columns will be returned.
+   */
+  columns?: string[];
+}
+
+/**
+ * A request for datapoints stored
+ */
+export type SequenceRowsRetrieve = SequenceRowsRetriveData & IdEither;
+
+export interface SequenceRowsResponseData extends InternalId {
+  externalId?: ExternalId;
+  columns: SequenceColumnBasicInfo[];
+  rows: SequenceRowData[];
+  nextCursor?: string;
+}
+
 export interface GetAggregateDatapoint extends GetDatapointMetadata {
   average?: number;
   max?: number;
@@ -749,7 +917,9 @@ export interface GetStringDatapoint extends GetDatapointMetadata {
   value: string;
 }
 
-export interface GetTimeSeriesMetadataDTO extends InternalId {
+export interface GetTimeSeriesMetadataDTO
+  extends InternalId,
+    CreatedAndLastUpdatedTime {
   /**
    * Externally supplied id of the time series
    */
@@ -786,8 +956,6 @@ export interface GetTimeSeriesMetadataDTO extends InternalId {
    * Security categories required in order to access this time series.
    */
   securityCategories?: number[];
-  createdTime: Date;
-  lastUpdatedTime: Date;
 }
 
 export interface Group {
@@ -1201,6 +1369,65 @@ export interface RawDBRowKey {
    * Unique row key
    */
   key: string;
+}
+
+export interface SequenceListScope extends SequenceFilter, Limit, Cursor {}
+
+/**
+ * Data from a sequence
+ */
+export interface SequenceRowsInsertData {
+  /**
+   * Column external ids in the same order as the values for each row
+   */
+  columns: string[];
+  /**
+   * List of row information
+   */
+  rows: SequenceRowData[];
+}
+
+export interface SequenceRowsData extends InternalId {
+  externalId?: ExternalId;
+  /**
+   * Column external ids in the same order as the values for each row
+   */
+  columns: string[];
+  /**
+   * List of row information
+   */
+  rows: SequenceRowData[];
+}
+
+/**
+ * A single row of datapoints
+ */
+export interface SequenceRowData {
+  /**
+   * The row number for this row
+   */
+  rowNumber: number;
+  /**
+   * List of values in order defined in the columns field
+   * (Number of items must match. Null is accepted for missing values)
+   */
+  values: SequenceItem[];
+}
+
+/**
+ * Element of type corresponding to the column type. May include NULL!
+ */
+export type SequenceItem = number | string | null;
+
+export type SequenceRowsInsert = SequenceRowsInsertData & IdEither;
+
+export type SequenceRowsDelete = SequenceRowsDeleteData & IdEither;
+
+interface SequenceRowsDeleteData {
+  /**
+   * Rows to delete from a sequence
+   */
+  rows: number[];
 }
 
 export interface RawDBTable {
