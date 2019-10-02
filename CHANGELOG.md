@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.4.3...v2.5.0) (2019-10-02)
+
+
+### Features
+
+* **new api:** sequences api support ([00bcb4a](https://github.com/cognitedata/cognitesdk-js/commit/00bcb4a))
+
 ## [2.4.3](https://github.com/cognitedata/cognitesdk-js/compare/v2.4.2...v2.4.3) (2019-09-27)
 
 
