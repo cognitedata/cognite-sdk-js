@@ -7,7 +7,7 @@ const tsconfig = require('../tsconfig.json');
 
 const docRegEx = /https:\/\/(doc.cognitedata.com|docs.cognite.com)\/api\/v1\/#operation\/([a-zA-Z0-9]+)/g;
 const header =
-`import { CogniteClient } from '@cognite/sdk';\n
+`import { CogniteClient, SequenceValueType } from '@cognite/sdk';\n
 const client = new CogniteClient({ appId: '[APP NAME]' });
 client.loginWithApiKey({
   project: '[PROJECT]',
