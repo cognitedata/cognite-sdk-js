@@ -5,7 +5,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const tsconfig = require('../tsconfig.json');
 
-const docRegEx = /https:\/\/doc.cognitedata.com\/api\/v1\/#operation\/([a-zA-Z0-9]+)/g;
+const docRegEx = /https:\/\/(doc.cognitedata.com|docs.cognite.com)\/api\/v1\/#operation\/([a-zA-Z0-9]+)/g;
 const header =
 `import { CogniteClient } from '@cognite/sdk';\n
 const client = new CogniteClient({ appId: '[APP NAME]' });
@@ -26,7 +26,7 @@ _.cloneDeepWith(jsonDoc, (value, _, object) => {
   let matches;
   
   while (matches = docRegEx.exec(value)) {
-    const operationId = matches[1];
+    const operationId = matches[2];
     const rawCode = object.text;
     let code = rawCode.replace('```js', '').replace('```', '').trim();
     let codeToTest = code;
