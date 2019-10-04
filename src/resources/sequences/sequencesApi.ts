@@ -100,7 +100,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
   };
 
   /**
-   * [Search sequences](https://doc.cognitedata.com/api/v1/#operation/searchAssets)
+   * [Search sequences](https://docs.cognite.com/api/v1/#operation/searchSequences)
    *
    * ```js
    * const sequences = await client.sequences.search({
@@ -137,7 +137,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    *  { rowNumber: 0, values: [1, 2.2, 'three'] },
    *  { rowNumber: 1, values: [4, 5, 'six'] }
    * ];
-   * await client.sequences.insertRows({ id: 123, rows, columns: ['one', 'two', 'three'] });
+   * await client.sequences.insertRows([{ id: 123, rows, columns: ['one', 'two', 'three'] }]);
    * ```
    */
   public insertRows = (items: SequenceRowsInsert[]): Promise<{}> => {

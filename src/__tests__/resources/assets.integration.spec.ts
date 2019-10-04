@@ -48,7 +48,7 @@ describe('Asset integration test', () => {
       failed: [[]],
       errors: [
         new CogniteError(
-          'Request had 1 constraint violations. Please fix the request and try again.',
+          'Request had 1 constraint violations. Please fix the request and try again. [items size must be between 1 and 1000]',
           400
         ),
       ],
