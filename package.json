@@ -98,7 +98,7 @@
         {
           "assets": [
             "CHANGELOG.md",
-            "package.json",
+            "package.json"
           ]
         }
       ]
