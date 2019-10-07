@@ -10,11 +10,11 @@ export { Asset as AssetClass } from './resources/classes/asset';
 export { TimeSeries as TimeSeriesClass } from './resources/classes/timeSeries';
 export { AssetList } from './resources/classes/assetList';
 export { TimeSeriesList } from './resources/classes/timeSeriesList';
-export { 
-    AuthTokens,
-    AuthenticateParams,
-    AuthorizeOptions,
-    AuthorizeParams,
-    IdInfo,
-    OnAuthenticateLoginObject
-} from './resources/login'
+export {
+  AuthTokens,
+  AuthenticateParams,
+  AuthorizeOptions,
+  AuthorizeParams,
+  IdInfo,
+  OnAuthenticateLoginObject,
+} from './resources/login';
