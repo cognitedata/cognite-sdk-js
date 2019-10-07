@@ -18,7 +18,7 @@ describe('Model3d integration test', () => {
   test('create', async () => {
     const modelsToCreate = [
       { name: `Model 0 ${randomInt()}` },
-      { name: `Model 2 ${randomInt()}` },
+      { name: `Model 2 ${randomInt()}`, metadata: { prop: 'value' } },
     ];
     models = await client.models3D.create(modelsToCreate);
     expect(getSortedPropInArray(models, 'name')).toEqual(

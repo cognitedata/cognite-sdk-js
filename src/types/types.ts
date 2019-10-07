@@ -457,6 +457,7 @@ export interface CreateModel3D {
    * The name of the model.
    */
   name: string;
+  metadata?: Metadata;
 }
 
 export interface CreateRevision3D {
@@ -475,6 +476,7 @@ export interface CreateRevision3D {
    * Can only be set on revision creation, and can never be updated. _Only FBX files are supported_.
    */
   fileId: CogniteInternalId;
+  metadata?: Metadata;
 }
 
 /**
@@ -1130,7 +1132,8 @@ export interface LogoutUrlResponse {
 export type MEMBEROF = 'MEMBEROF';
 
 /**
- * Custom, application specific metadata. String key -> String value
+ * Custom, application specific metadata.
+ * Maximum length of key is 32 bytes, value 512 bytes, up to 16 key-value pairs.
  */
 export interface Metadata {
   [key: string]: string;
@@ -1146,6 +1149,7 @@ export interface Model3D {
    */
   id: CogniteInternalId;
   createdTime: Date;
+  metadata?: Metadata;
 }
 
 export interface Model3DListRequest extends Limit {
@@ -1519,6 +1523,7 @@ export interface Revision3D {
    *
    */
   createdTime: Date;
+  metadata?: Metadata;
 }
 
 export interface Revision3DListRequest extends Limit {
