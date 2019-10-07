@@ -1,3 +1,16 @@
+# [2.6.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.5.1...v2.6.0) (2019-10-07)
+
+
+### Bug Fixes
+
+* export asset and timeseries helper classes ([7cde371](https://github.com/cognitedata/cognitesdk-js/commit/7cde371))
+* export auth-related types ([7f24e74](https://github.com/cognitedata/cognitesdk-js/commit/7f24e74))
+
+
+### Features
+
+* add metadata property to 3d models and revisions ([04bffc6](https://github.com/cognitedata/cognitesdk-js/commit/04bffc6))
+
 ## [2.5.1](https://github.com/cognitedata/cognitesdk-js/compare/v2.5.0...v2.5.1) (2019-10-07)
 
 
