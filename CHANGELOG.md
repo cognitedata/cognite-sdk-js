@@ -1,3 +1,10 @@
+## [2.5.1](https://github.com/cognitedata/cognitesdk-js/compare/v2.5.0...v2.5.1) (2019-10-07)
+
+
+### Bug Fixes
+
+* export error types from main module ([c5fc35d](https://github.com/cognitedata/cognitesdk-js/commit/c5fc35d))
+
 # [2.5.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.4.3...v2.5.0) (2019-10-02)
 
 
