@@ -234,8 +234,8 @@ export abstract class BaseResourceAPI<
     const { nextCursor } = cursorResponse;
     const next = nextCursor
       ? () =>
-          endpoint({ ...query, cursor: nextCursor }).then(
-            response => response.data
+          endpoint({ ...query, cursor: nextCursor }).then(response =>
+            this.addNextPageFunction(endpoint, response.data, query)
           )
       : undefined;
     return {

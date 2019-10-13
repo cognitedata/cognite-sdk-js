@@ -248,4 +248,12 @@ describe('Asset integration test', () => {
     });
     expect(result.length).toBeGreaterThan(0);
   });
+
+  test('strange limit behaviour', async () => {
+    const limit = 5;
+    const result = await client.assets
+      .list({ limit: 1 })
+      .autoPagingToArray({ limit });
+    expect(result.length).toBe(limit);
+  });
 });
