@@ -1,3 +1,10 @@
+## [2.6.1](https://github.com/cognitedata/cognitesdk-js/compare/v2.6.0...v2.6.1) (2019-10-13)
+
+
+### Bug Fixes
+
+* **autoPagination:** failing autoPagination - recursively add .next-property ([f7208cf](https://github.com/cognitedata/cognitesdk-js/commit/f7208cf4c5ef0135112ee6ba08c8ee163c65d616))
+
 # [2.6.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.5.1...v2.6.0) (2019-10-07)
 
 
