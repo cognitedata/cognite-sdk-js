@@ -118,6 +118,19 @@ describe('TimeSeriesList class unit test', async () => {
         .reply(200, { items });
     });
 
+    test('only useful functions are enumerable', async () => {
+      const keys = Object.keys(client.timeseries);
+      expect(keys).toEqual([
+        'create',
+        'delete',
+        'list',
+        'retrieve',
+        'search',
+        'update',
+        'update'
+      ]);
+    });
+
     test('JSON.stringify works', async () => {
       const timeseries = await client.timeseries.list().autoPagingToArray();
       expect(() => JSON.stringify(timeseries)).not.toThrow();

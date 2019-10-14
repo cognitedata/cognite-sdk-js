@@ -224,6 +224,19 @@ describe('Assets unit test', () => {
       expect(() => JSON.stringify(assets[0])).not.toThrow();
     });
 
+    test('only useful functions are enumerable', async () => {
+      const keys = Object.keys(client.assets);
+      expect(keys).toEqual([
+        'create',
+        'delete',
+        'list',
+        'retrieve',
+        'retrieveSubtree',
+        'search',
+        'update',
+      ]);
+    });
+
     test('change context for asset utility methods', async () => {
       const assets = await client.assets.list().autoPagingToArray();
       const utilMethod = assets[0].children;

@@ -57,7 +57,13 @@ export abstract class BaseResourceAPI<
     private readonly resourcePath: string,
     protected readonly httpClient: CDFHttpClient,
     private map: MetadataMap
-  ) {}
+  ) {
+    Object.defineProperties(this, {
+      resourcePath: { value: this.resourcePath, enumerable: false },
+      httpClient: { value: this.httpClient, enumerable: false },
+      map: { value: this.map, enumerable: false },
+    });
+  }
 
   protected getMetadataMap() {
     return this.map;
@@ -124,9 +130,9 @@ export abstract class BaseResourceAPI<
     return this.addToMapAndReturn({}, responses[0]);
   }
 
-  protected callListEndpointWithGet = async <QueryType extends FilterQuery>(
+  protected async callListEndpointWithGet<QueryType extends FilterQuery>(
     scope?: QueryType
-  ): Promise<HttpResponse<CursorResponse<WrapperType>>> => {
+  ): Promise<HttpResponse<CursorResponse<WrapperType>>> {
     const response = await this.httpClient.get<CursorResponse<ResponseType[]>>(
       this.listGetUrl,
       {
@@ -136,9 +142,9 @@ export abstract class BaseResourceAPI<
     return this.transformResponse(response);
   };
 
-  protected callListEndpointWithPost = async <QueryType extends FilterQuery>(
+  protected async callListEndpointWithPost <QueryType extends FilterQuery>(
     scope?: QueryType
-  ): Promise<HttpResponse<CursorResponse<WrapperType>>> => {
+  ): Promise<HttpResponse<CursorResponse<WrapperType>>> {
     const response = await this.httpClient.post<CursorResponse<ResponseType[]>>(
       this.listPostUrl,
       {

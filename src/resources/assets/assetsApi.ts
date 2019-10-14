@@ -21,6 +21,7 @@ import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { sortAssetCreateItems } from './assetUtils';
 
 export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
+
   /** @hidden */
   constructor(
     private client: CogniteClient,
@@ -29,6 +30,10 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
     map: MetadataMap
   ) {
     super(resourcePath, httpClient, map);
+    Object.defineProperty(this, 'client', {
+      value: this.client,
+      enumerable: false,
+    });
   }
 
   /**
@@ -153,7 +158,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
     return subtree;
   }
 
-  private getChildren = async (assets: AssetList) => {
+  private async getChildren(assets: AssetList) {
     const ids = assets.map(asset => asset.id);
     const chunks = chunk(ids, 100);
     const assetsArray: Asset[] = [];
