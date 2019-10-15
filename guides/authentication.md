@@ -160,7 +160,7 @@ await client.authenticate(); // this will also return a boolean based on if the 
 
 ### Cache access tokens
 
-If you already have a valid access token you can use it to skip the authentication flow (see this [section](#tokens) on how to get hold of the token).
+If you already have a access token you can use it to skip the authentication flow (see this [section](#tokens) on how to get hold of the token). If the token is invalid or timed out the SDK will trigger a standard auth-flow on the first 401-response from CDF.
 ```js
 client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
