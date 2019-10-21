@@ -1,6 +1,8 @@
 // Copyright 2019 Cognite AS
 import * as nock from 'nock';
+import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../../../constants';
 import { CogniteError } from '../../../error';
+import { bearerString } from '../../../utils';
 import { CDFHttpClient } from '../../../utils/http/cdfHttpClient';
 
 describe('CDFHttpClient', () => {
@@ -26,8 +28,9 @@ describe('CDFHttpClient', () => {
     });
 
     test('use configured bearer token', async () => {
-      client.setBearerToken('abc');
-      nock(baseUrl, { reqheaders: { authorization: 'Bearer abc' } })
+      const token = 'abc';
+      client.setBearerToken(token);
+      nock(baseUrl, { reqheaders: { authorization: bearerString(token) } })
         .get('/')
         .reply(200, {});
       await client.get('/');
@@ -35,18 +38,38 @@ describe('CDFHttpClient', () => {
 
     test('dont expose bearer token to other domains', async () => {
       client.setBearerToken('abc');
-      nock(anotherDomain, { badheaders: ['authorization'] })
+      nock(anotherDomain, { badheaders: [AUTHORIZATION_HEADER] })
         .get('/')
         .reply(200, {});
       await client.get(anotherDomain);
     });
 
     test('dont expose api-key to other domains', async () => {
-      client.setDefaultHeader('api-key', '123');
-      nock(anotherDomain, { badheaders: ['api-key'] })
+      client.setDefaultHeader(API_KEY_HEADER, '123');
+      nock(anotherDomain, { badheaders: [API_KEY_HEADER] })
         .get('/')
         .reply(200, {});
       await client.get(anotherDomain);
+    });
+
+    test('send bearer token to other doman when withCredentials == true', async () => {
+      const token = 'abc';
+      client.setBearerToken(token);
+      nock(anotherDomain, {
+        reqheaders: { [AUTHORIZATION_HEADER]: bearerString(token) },
+      })
+        .get('/')
+        .reply(200, {});
+      await client.get(anotherDomain, { withCredentials: true });
+    });
+
+    test('send api-key to other doman when withCredentials == true', async () => {
+      const apiKey = '123';
+      client.setDefaultHeader(API_KEY_HEADER, apiKey);
+      nock(anotherDomain, { reqheaders: { [API_KEY_HEADER]: apiKey } })
+        .get('/')
+        .reply(200, {});
+      await client.get(anotherDomain, { withCredentials: true });
     });
 
     test('dont expose x-cdp-* to other domains', async () => {
