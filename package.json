@@ -58,7 +58,6 @@
     "prepublishOnly": "yarn build",
     "test": "jest --config=jest.config.js",
     "test-samples": "cd samples && yarn link-sdk && yarn install-dependencies && yarn test",
-    "validate-samples-sdk-version": "node ./scripts/validateSDKVersion.js",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c tslint.json -p tsconfig.json --fix",
     "build": "yarn clean && rollup -c && yarn esCheck",

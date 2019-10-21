@@ -90,10 +90,9 @@ export class CDFHttpClient extends RetryableHttpClient {
     const headersWithDefaultHeaders = this.populateDefaultHeaders(
       request.headers
     );
-    const headers = this.preventTokenLeakage(
-      headersWithDefaultHeaders,
-      request.path
-    );
+    const headers = request.withCredentials
+      ? headersWithDefaultHeaders
+      : this.preventTokenLeakage(headersWithDefaultHeaders, request.path);
     const data = transformDateInRequest(request.data);
     const serializedQueryParams = CDFHttpClient.serializeQueryParameters(
       request.params

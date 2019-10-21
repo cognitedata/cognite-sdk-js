@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@cognite/sdk@^2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-2.6.0.tgz#6684c109259e9782db6a8f52afcda42587e629fd"
-  integrity sha512-6TVb67X/ELsOslgNdzjtfIGLRwjqqA3k6RMzzPhn9nLPPHETQgPQZpc4l7XFzHA6AFy0wxV3YTFdl9AVs2uabQ==
+"@cognite/sdk@2":
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-2.6.1.tgz#74641d904b088a8f62f3864e5875c0435ff4c725"
+  integrity sha512-VHrQIP1PZV1m9jXNuxfHxugF1hjOUwhhqFnH1NKKTa0tbhpOMzcrKFd1Mw2nbVYU93mCGLn8RLqcypgF8Gyg3g==
   dependencies:
     cross-fetch "^3.0.4"
     lodash "^4.17.11"
@@ -26,9 +26,9 @@ decode-uri-component@^0.2.0:
   integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
 
 lodash@^4.17.11:
-  version "4.17.14"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
-  integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
 node-fetch@2.6.0:
   version "2.6.0"
