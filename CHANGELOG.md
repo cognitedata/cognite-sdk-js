@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.6.1...v2.7.0) (2019-10-21)
+
+
+### Features
+
+* added withCredentials option to send raw HTTP request to other domains ([#299](https://github.com/cognitedata/cognitesdk-js/issues/299)) ([036dedc](https://github.com/cognitedata/cognitesdk-js/commit/036dedcbb8bf3e0e5df493401207bd25f84ea801))
+
 ## [2.6.1](https://github.com/cognitedata/cognitesdk-js/compare/v2.6.0...v2.6.1) (2019-10-13)
 
 
