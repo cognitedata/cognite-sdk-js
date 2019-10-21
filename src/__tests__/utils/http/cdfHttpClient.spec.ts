@@ -5,6 +5,7 @@ import { CogniteError } from '../../../error';
 import { bearerString } from '../../../utils';
 import { CDFHttpClient } from '../../../utils/http/cdfHttpClient';
 
+// tslint:disable-next-line:no-big-function
 describe('CDFHttpClient', () => {
   const baseUrl = 'https://example.com';
   const anotherDomain = 'https://another-domain.com';
