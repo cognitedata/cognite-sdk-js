@@ -1,3 +1,10 @@
+## [2.7.1](https://github.com/cognitedata/cognitesdk-js/compare/v2.7.0...v2.7.1) (2019-10-22)
+
+
+### Bug Fixes
+
+* message serialisation for non-api errors ([b33e758](https://github.com/cognitedata/cognitesdk-js/commit/b33e7589ac6295c6d30185be5f04d5601675db3f))
+
 # [2.7.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.6.1...v2.7.0) (2019-10-21)
 
 
