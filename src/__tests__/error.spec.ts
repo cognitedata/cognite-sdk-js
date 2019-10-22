@@ -130,4 +130,17 @@ describe('Cognite multi error', () => {
     expect(err.duplicated).toEqual(['this one']);
     expect(err.requestIds).toEqual(['r1', 'r2']);
   });
+
+  test('multierror serialises non-api errors', () => {
+    const unknownError = new Error('unknown');
+
+    const err = new CogniteMultiError({
+      failed: [],
+      errors: [unknownError],
+      succeded: [],
+      responses: [],
+    });
+
+    expect(err.message).toContain(`"message": "${unknownError.message}"`);
+  });
 });
