@@ -10,7 +10,6 @@ install:
   - yarn
   - npm install -g codecov
 script:
-  - yarn validate-samples-sdk-version
   - yarn validateDocLinks
   - yarn lint
   - yarn build

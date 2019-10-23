@@ -11,6 +11,16 @@ export interface MultiErrorRawSummary<RequestType, ResponseType> {
   errors: (Error | CogniteError)[];
 }
 
+function serialiseErrors(errors: (Error | CogniteError)[]) {
+  return errors.map(err => {
+    if (err instanceof CogniteError) {
+      return err;
+    }
+    const { message, name, stack } = err;
+    return { name, message, stack };
+  });
+}
+
 export class CogniteMultiError<RequestType, ResponseType> extends Error {
   public failed: RequestType[];
   public succeded: RequestType[];
@@ -36,7 +46,7 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
           succeded,
           responses,
           failed,
-          errors,
+          errors: serialiseErrors(errors),
         },
         null,
         2

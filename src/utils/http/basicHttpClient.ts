@@ -205,6 +205,10 @@ export interface HttpRequestOptions {
   params?: HttpQueryParams;
   headers?: HttpHeaders;
   responseType?: HttpResponseType;
+  /**
+   * Set this to 'true' if you want to send credentials (api-key, access token) with the request to other domains than the specified base url.
+   */
+  withCredentials?: boolean;
 }
 
 export interface HttpResponse<T> {
