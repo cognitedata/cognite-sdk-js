@@ -13,7 +13,7 @@ export type AclActionAnalytics = READ | EXECUTE | LIST;
 
 export type AclActionApiKeys = LIST | CREATE | DELETE;
 
-export type AclActionAssets = LIST | WRITE;
+export type AclActionAssets = READ | WRITE;
 
 export type AclActionEvents = READ | WRITE;
 

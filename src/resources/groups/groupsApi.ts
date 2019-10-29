@@ -19,7 +19,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    *   name: 'Developers',
    *   capabilities: [{
    *     assetsAcl: {
-   *       actions: ['LIST'],
+   *       actions: ['READ'],
    *       scope: { all: {}}
    *     }
    *   }],
