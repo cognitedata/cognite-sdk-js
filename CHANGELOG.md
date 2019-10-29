@@ -1,3 +1,10 @@
+## [2.7.2](https://github.com/cognitedata/cognitesdk-js/compare/v2.7.1...v2.7.2) (2019-10-29)
+
+
+### Bug Fixes
+
+* assets acl actions enum didn't match API value [DEVX-126] ([98b3733](https://github.com/cognitedata/cognitesdk-js/commit/98b37331fd56a847b68ea4de2f721532696c4ac3))
+
 ## [2.7.1](https://github.com/cognitedata/cognitesdk-js/compare/v2.7.0...v2.7.1) (2019-10-22)
 
 
