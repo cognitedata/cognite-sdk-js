@@ -20,6 +20,7 @@ const operationsWithHeader = ['redirectUrl'];
 
 const resultJson = {
   language: "JavaScript",
+  label: "JavaScript SDK",
   operations: {}
 };
 _.cloneDeepWith(jsonDoc, (value, _, object) => {
