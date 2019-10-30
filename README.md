@@ -91,7 +91,7 @@ Samples are in the [samples/](./samples) directory. The samples' [README.md](./s
 
 ## Documentation
 
-- [SDK documentation](https://cognitedata.github.io/cognitesdk-js)
+- [SDK documentation](https://cognitedata.github.io/cognite-sdk-js)
 - [API documentation](https://doc.cognitedata.com)
 - [API reference documentation](https://doc.cognitedata.com/api/v1)
 
