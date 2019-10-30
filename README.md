@@ -4,8 +4,8 @@
 
 Cognite Javascript SDK
 ==========================
-[![Build Status](https://travis-ci.org/cognitedata/cognitesdk-js.svg?branch=master)](https://travis-ci.org/cognitedata/cognitesdk-js)
-[![codecov](https://codecov.io/gh/cognitedata/cognitesdk-js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/cognitesdk-js)
+[![Build Status](https://travis-ci.org/cognitedata/cognite-sdk-js.svg?branch=master)](https://travis-ci.org/cognitedata/cognite-sdk-js)
+[![codecov](https://codecov.io/gh/cognitedata/cognite-sdk-js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/cognite-sdk-js)
 
 The Cognite js library provides convenient access to the [Cognite API](https://doc.cognitedata.com/dev/) from
 applications written in client- or server-side JavaScript.
@@ -91,7 +91,7 @@ Samples are in the [samples/](./samples) directory. The samples' [README.md](./s
 
 ## Documentation
 
-- [SDK documentation](https://cognitedata.github.io/cognitesdk-js)
+- [SDK documentation](https://cognitedata.github.io/cognite-sdk-js)
 - [API documentation](https://doc.cognitedata.com)
 - [API reference documentation](https://doc.cognitedata.com/api/v1)
 
