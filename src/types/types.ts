@@ -311,6 +311,11 @@ export interface AssetListScope extends AssetFilter, FilterQuery {
    * Set of aggregated properties to include
    */
   aggregatedProperties?: AssetAggregatedProperty[];
+  /**
+   * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
+   * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
+   */
+  partition?: string;
 }
 
 export interface SequenceFilter {

@@ -265,4 +265,10 @@ describe('Asset integration test', () => {
       .autoPagingToArray({ limit });
     expect(result.length).toBe(limit);
   });
+
+  test('list partition', async () => {
+    const limit = 5;
+    const result = await client.assets.list({ partition: '1/10', limit });
+    expect(result.items.length).toBe(limit);
+  });
 });
