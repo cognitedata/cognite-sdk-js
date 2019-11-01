@@ -100,7 +100,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    *     isString: false,
    *   },
    *   search: {
-   *     name: 'Temperature'
+   *     query: 'Temperature'
    *   }
    * });
    * ```

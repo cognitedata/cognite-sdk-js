@@ -371,6 +371,7 @@ export interface AssetPatch {
 export interface AssetSearchFilter extends AssetFilter {
   search?: {
     name?: AssetName;
+    query?: AssetName | AssetDescription;
     description?: AssetDescription;
   };
 }
