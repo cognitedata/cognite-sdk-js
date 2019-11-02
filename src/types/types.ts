@@ -283,15 +283,13 @@ export type AssetExternalId = ExternalId;
 /**
  * Filter on assets with exact match
  */
-export interface AssetFilter extends Limit {
+export interface AssetFilter extends Limit, CreatedAndLastUpdatedTimeFilter {
   filter?: {
     name?: AssetName;
     parentIds?: CogniteInternalId[];
     rootIds?: IdEither[];
     metadata?: Metadata;
     source?: AssetSource;
-    createdTime?: DateRange;
-    lastUpdatedTime?: DateRange;
     /**
      * Filtered assets are root assets or not
      */
@@ -313,15 +311,13 @@ export interface AssetListScope extends AssetFilter, FilterQuery {
   aggregatedProperties?: AssetAggregatedProperty[];
 }
 
-export interface SequenceFilter {
+export interface SequenceFilter extends CreatedAndLastUpdatedTimeFilter {
   filter?: {
     name?: SequenceName;
     externalIdPrefix?: ExternalIdPrefix;
     metadata?: Metadata;
     assetIds?: CogniteInternalId[];
     rootAssetIds?: IdEither[];
-    createdTime?: DateRange;
-    lastUpdatedTime?: DateRange;
   };
 }
 
@@ -660,11 +656,9 @@ export interface SequencePatch {
   };
 }
 
-export interface EventFilter {
+export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
   startTime?: DateRange;
   endTime?: DateRange;
-  createdTime?: DateRange;
-  lastUpdatedTime?: DateRange;
   metadata?: Metadata;
   /**
    * Asset IDs of related equipment that this event relates to.
@@ -777,7 +771,7 @@ export interface FileChangeUpdateById extends InternalId, FileChange {}
 
 export type FileContent = ArrayBuffer | Buffer | any;
 
-export interface FileFilter extends Limit {
+export interface FileFilter extends Limit, CreatedAndLastUpdatedTimeFilter {
   filter?: {
     name?: FileName;
     mimeType?: FileMimeType;
@@ -787,8 +781,6 @@ export interface FileFilter extends Limit {
      */
     assetIds?: CogniteInternalId[];
     source?: string;
-    createdTime?: DateRange;
-    lastUpdatedTime?: DateRange;
     uploadedTime?: DateRange;
     externalIdPrefix?: ExternalIdPrefix;
     uploaded?: boolean;
@@ -1689,9 +1681,12 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
 }
 
 /**
+ * Splits the data set into N partitions.
  * This should NOT be used for frontend applications.
  * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
  * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
+ * You need to use `autoPagingToArray(...)` on each partition in order to receive all the data.
+ * @example 1/10
  */
 export type Partition = string;
 
