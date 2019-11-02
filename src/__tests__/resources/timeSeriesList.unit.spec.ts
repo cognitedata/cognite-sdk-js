@@ -113,7 +113,7 @@ describe('TimeSeriesList class unit test', async () => {
     beforeEach(() => {
       nock.cleanAll();
       nock(mockBaseUrl)
-        .get(new RegExp('/timeseries/'))
+        .post(new RegExp('/timeseries/list'))
         .once()
         .reply(200, { items });
     });

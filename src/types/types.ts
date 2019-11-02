@@ -283,13 +283,15 @@ export type AssetExternalId = ExternalId;
 /**
  * Filter on assets with exact match
  */
-export interface AssetFilter extends Limit, CreatedAndLastUpdatedTimeFilter {
+export interface AssetFilter extends Limit {
   filter?: {
     name?: AssetName;
     parentIds?: CogniteInternalId[];
     rootIds?: IdEither[];
     metadata?: Metadata;
     source?: AssetSource;
+    createdTime?: DateRange;
+    lastUpdatedTime?: DateRange;
     /**
      * Filtered assets are root assets or not
      */
