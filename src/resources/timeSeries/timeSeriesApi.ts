@@ -61,8 +61,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<
   ): CursorAndAsyncIterator<TimeSeries> => {
     let query: TimeseriesFilterQuery = {};
     if (scope) {
-      const { includeMetadata, limit, partition, ...filter } = scope;
-      query = { filter, limit, partition };
+      const { includeMetadata, limit, ...filter } = scope;
+      query = { filter, limit };
     }
     return super.listEndpoint(this.callListEndpointWithPost, query);
   };

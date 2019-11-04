@@ -1681,16 +1681,8 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
   externalIdPrefix?: ExternalIdPrefix;
 }
 
-/**
- * Splits the data set into N partitions.
- * You need to follow the cursors within each partition in order to receive all the data.
- * @example 1/10
- */
-export type Partition = string;
-
 export interface TimeseriesFilterQuery extends FilterQuery {
   filter?: TimeseriesFilterProps;
-  partition?: Partition;
 }
 
 export interface TimeseriesFilter extends TimeseriesFilterProps, Limit {
@@ -1699,7 +1691,6 @@ export interface TimeseriesFilter extends TimeseriesFilterProps, Limit {
    * This property is ignored by SDK, you can call the endpoint manually if you want to leverage it.
    */
   includeMetadata?: boolean;
-  partition?: Partition;
 }
 
 export type TimeseriesIdEither = InternalId | ExternalId;
