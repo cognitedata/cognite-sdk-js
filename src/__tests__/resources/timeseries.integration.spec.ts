@@ -88,7 +88,7 @@ describe('Timeseries integration test', () => {
   test('list with some more filters', async () => {
     const { isString, name, unit } = timeseries[1];
     const { items } = await client.timeseries.list({
-      partition: '1/2',
+      limit: 2,
       isString,
       name,
       unit,
