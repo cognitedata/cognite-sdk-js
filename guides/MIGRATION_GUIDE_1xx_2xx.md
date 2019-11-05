@@ -48,7 +48,7 @@ For quickstarts and samples go [here](../samples/).
 | `sdk.Assets.overwriteMultiple(...)`                              | Removed                                                                                           |
 | `sdk.Assets.delete([id])`                                        | `client.assets.delete([{id: 123}])`                                                               |
 | `sdk.Assets.list({name: 'abc'})`                                 | `client.assets.list({filter: {name: 'abc'}}).autoPagingToArray({limit: 1000})`                    |
-| `sdk.Assets.listDescendants(id, params)`                         | Not implemented yet. Follow issue [here](https://github.com/cognitedata/cognitesdk-js/issues/129) |
+| `sdk.Assets.listDescendants(id, params)`                         | Not implemented yet. Follow issue [here](https://github.com/cognitedata/cognite-sdk-js/issues/129) |
 | `sdk.Assets.search({name: 'abc'})`                               | `client.assets.search({search: {name: 'abc'})`                                                    |
 | **TIME SERIES**                                                  |
 | `sdk.TimeSeries.create([...])`                                   | `client.timeseries.create([...])`                                                                 |
@@ -97,7 +97,7 @@ For quickstarts and samples go [here](../samples/).
 | `sdk.ThreeD.retrieveRevision(modelId, revisionId)`               | `client.models3D.retrieve(modelId, revisionId)`                                                   |
 | `sdk.ThreeD.updateModels({id, name})`                            | `client.models3D.update([{id, update: {name}])`                                                   |
 | `sdk.ThreeD.updateRevisions(modelId, {id, ...changes})`          | `client.revisions3D.update(modelId, [{id, update: changes])`                                      |
-| `sdk.ThreeD.updateRevisionThumbnail(...)`                        | Not implemented yet. Follow issue [here](https://github.com/cognitedata/cognitesdk-js/issues/173) |
+| `sdk.ThreeD.updateRevisionThumbnail(...)`                        | Not implemented yet. Follow issue [here](https://github.com/cognitedata/cognite-sdk-js/issues/173) |
 | `sdk.ThreeD.deleteModels([id])`                                  | `client.models3D.delete([{id}])`                                                                  |
 | `sdk.ThreeD.deleteRevisions(modelId, [id])`                      | `client.revisions3D.delete(modelId, [{id}])`                                                      |
 | `sdk.ThreeD.deleteAssetMappings(modelId, revisionId, mappings)`  | `client.assetMappings3D.delete(modelId, revisionId, mappings)`                                    |
