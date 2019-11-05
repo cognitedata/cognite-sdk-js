@@ -1,3 +1,10 @@
+# [2.8.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.7.2...v2.8.0) (2019-11-05)
+
+
+### Features
+
+* add query parameters for assets search ([#309](https://github.com/cognitedata/cognitesdk-js/issues/309)) ([438b134](https://github.com/cognitedata/cognitesdk-js/commit/438b1346b4995e8089c774132d5bf32db37906b4))
+
 ## [2.7.2](https://github.com/cognitedata/cognitesdk-js/compare/v2.7.1...v2.7.2) (2019-10-29)
 
 
