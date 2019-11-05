@@ -15,7 +15,7 @@ cp ../codeSnippets/index.json ./versions/v1/js-sdk-examples.json
 git add ./versions/v1/js-sdk-examples.json
 git commit -m "$message"
 git push origin "$branchName"
-hub pull-request -m "$message" -l "auto-merge,auto-update"
+hub pull-request -m "$message"
 
 cd ../
 rm -rf service-contracts
