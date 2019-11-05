@@ -87,6 +87,22 @@ describe('Events integration test', () => {
     expect(response.length).toBeGreaterThan(0);
   });
 
+  test('list', async () => {
+    const response = await client.events
+      .list({
+        filter: {
+          startTime: {
+            min: events[0].startTime - 1,
+            max: events[0].endTime! + 1,
+          },
+        },
+        limit: 3,
+        partition: '1/10',
+      })
+      .autoPagingToArray({ limit: 5 });
+    expect(response.length).toBeGreaterThan(0);
+  });
+
   test('list to json|string', async () => {
     const response = await client.events.list({ limit: 2 });
     expect(typeof JSON.stringify(response.items)).toBe('string');

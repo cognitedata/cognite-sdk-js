@@ -106,6 +106,12 @@ describe('Timeseries integration test', () => {
       .autoPagingToArray({ limit: 100 });
   });
 
+  test('list partition', async () => {
+    await client.timeseries
+      .list({ includeMetadata: false, partition: '1/10' })
+      .autoPagingToArray({ limit: 100 });
+  });
+
   test('search', async () => {
     const name = 'test__constant_0_with_noise';
     const result = await client.timeseries.search({
