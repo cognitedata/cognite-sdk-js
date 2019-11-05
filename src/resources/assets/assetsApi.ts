@@ -94,7 +94,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    *     parentIds: [1, 2]
    *   },
    *   search: {
-   *     name: '21PT1019'
+   *     query: '21PT1019'
    *   }
    * });
    * ```

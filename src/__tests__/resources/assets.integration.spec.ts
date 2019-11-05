@@ -249,6 +249,15 @@ describe('Asset integration test', () => {
     expect(result.length).toBeGreaterThan(0);
   });
 
+  test('search query for root test asset', async () => {
+    const result = await client.assets.search({
+      search: {
+        query: rootAsset.name,
+      },
+    });
+    expect(result.length).toBeGreaterThan(0);
+  });
+
   test('strange limit behaviour', async () => {
     const limit = 5;
     const result = await client.assets
