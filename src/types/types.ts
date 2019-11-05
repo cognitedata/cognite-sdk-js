@@ -1685,7 +1685,7 @@ export interface TimeseriesFilterQuery extends FilterQuery {
   filter?: TimeseriesFilterProps;
 }
 
-export interface TimeseriesFilter extends TimeseriesFilterProps, Limit {
+export interface TimeseriesFilter extends TimeseriesFilterProps, FilterQuery {
   /**
    * Decide if the metadata field should be returned or not.
    * This property is ignored by SDK, you can call the endpoint manually if you want to leverage it.
