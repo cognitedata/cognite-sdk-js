@@ -107,9 +107,10 @@ describe('Timeseries integration test', () => {
   });
 
   test('list partition', async () => {
-    await client.timeseries
+    const items = await client.timeseries
       .list({ includeMetadata: false, partition: '1/10' })
       .autoPagingToArray({ limit: 100 });
+    expect(items.length).toBeGreaterThan(0);
   });
 
   test('search', async () => {
