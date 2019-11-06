@@ -87,6 +87,11 @@ describe('Events integration test', () => {
     expect(response.length).toBeGreaterThan(0);
   });
 
+  test('list with partitions', async () => {
+    const response = await client.events.list({ partition: '1/10', limit: 10 });
+    expect(response.items.length).toBeGreaterThan(0);
+  });
+
   test('list to json|string', async () => {
     const response = await client.events.list({ limit: 2 });
     expect(typeof JSON.stringify(response.items)).toBe('string');

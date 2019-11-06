@@ -311,6 +311,7 @@ export interface AssetListScope extends AssetFilter, FilterQuery {
    * Set of aggregated properties to include
    */
   aggregatedProperties?: AssetAggregatedProperty[];
+  partition?: Partition;
 }
 
 export interface SequenceFilter {
@@ -691,6 +692,7 @@ export interface EventFilter {
 
 export interface EventFilterRequest extends FilterQuery {
   filter?: EventFilter;
+  partition?: Partition;
 }
 
 export interface EventPatch {
@@ -1689,9 +1691,12 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
 }
 
 /**
+ * Splits the data set into N partitions.
  * This should NOT be used for frontend applications.
  * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
  * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
+ * You need to use `autoPagingToArray(...)` on each partition in order to receive all the data.
+ * @example 1/10
  */
 export type Partition = string;
 
