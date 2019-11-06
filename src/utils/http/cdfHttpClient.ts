@@ -74,8 +74,16 @@ export class CDFHttpClient extends RetryableHttpClient {
     delete filteredHeaders[name];
     return filteredHeaders;
   }
+
+  private disposableHeaders: HttpHeaders = {};
+
   constructor(baseUrl: string) {
     super(baseUrl, cdfRetryValidator);
+  }
+
+  public addDisposableHeader(name: string, value: string) {
+    this.disposableHeaders[name] = value;
+    return this;
   }
 
   public setBearerToken(token: string) {
@@ -106,6 +114,11 @@ export class CDFHttpClient extends RetryableHttpClient {
     };
   }
 
+  protected async request<ResponseType>(request: HttpRequest) {
+    request.headers = this.enrichWithOneTimeHeaders(request.headers);
+    return super.request<ResponseType>(request);
+  }
+
   protected async postRequest<T>(
     response: HttpResponse<T>,
     request: HttpRequest
@@ -123,6 +136,15 @@ export class CDFHttpClient extends RetryableHttpClient {
       }
       throw handleErrorResponse(err);
     }
+  }
+
+  private enrichWithOneTimeHeaders(headers?: HttpHeaders) {
+    const disposableHeaders = this.disposableHeaders;
+    this.disposableHeaders = {};
+    return {
+      ...headers,
+      ...disposableHeaders,
+    };
   }
 
   private response401Handler: Response401Handler = (_, __, reject) => reject();

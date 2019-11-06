@@ -2,7 +2,11 @@
 
 import * as nock from 'nock';
 import CogniteClient, { POPUP, REDIRECT } from '../cogniteClient';
-import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
+import {
+  API_KEY_HEADER,
+  AUTHORIZATION_HEADER,
+  X_CDF_SDK_HEADER,
+} from '../constants';
 import * as Login from '../resources/login';
 import { bearerString, sleepPromise } from '../utils';
 import {
@@ -181,6 +185,7 @@ describe('CogniteClient', () => {
       );
     });
 
+    // tslint:disable-next-line:no-big-function
     describe('authentication', () => {
       let mockLoginSilently: jest.SpyInstance;
       let mockRedirect: jest.SpyInstance;
@@ -256,6 +261,32 @@ describe('CogniteClient', () => {
           `"Request failed | status code: 401"`
         );
         expect(mockLoginSilently).toHaveBeenCalledTimes(1);
+      });
+
+      test('should send one-time header again after silent login', async () => {
+        const disposableSdkHeader = 'something';
+        const onAuthenticate = jest.fn();
+        const client = setupClient(mockBaseUrl);
+        client.loginWithOAuth({ project, onAuthenticate });
+        client.setNextRequestSdkHeader(disposableSdkHeader);
+        mockLoginSilently.mockReturnValueOnce(authTokens);
+        const reqheaders = { [X_CDF_SDK_HEADER]: disposableSdkHeader };
+        const normalReqheaders = { [X_CDF_SDK_HEADER]: /CogniteJavaScriptSDK/ };
+
+        nock(mockBaseUrl, { reqheaders })
+          .get('/')
+          .once()
+          .reply(401, {})
+          .get('/')
+          .once()
+          .reply(200, {});
+        nock(mockBaseUrl, { reqheaders: normalReqheaders })
+          .get('/')
+          .once()
+          .reply(200, {});
+
+        await client.get('/');
+        await client.get('/');
       });
 
       test('manually trigger authentication', async () => {
