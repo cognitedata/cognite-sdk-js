@@ -66,6 +66,9 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
+						<span class="tsd-signature-type">TimeseriesFilterProps</span>
+					</li>
+					<li>
 						<a href="filterquery.html" class="tsd-signature-type">FilterQuery</a>
 						<ul class="tsd-hierarchy">
 							<li>
@@ -82,11 +85,20 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="timeseriesfilter.html#assetids" class="tsd-kind-icon">asset<wbr>Ids</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#assetids" class="tsd-kind-icon">asset<wbr>Ids</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#createdtime" class="tsd-kind-icon">created<wbr>Time</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#cursor" class="tsd-kind-icon">cursor</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#externalidprefix" class="tsd-kind-icon">external<wbr>IdPrefix</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="timeseriesfilter.html#includemetadata" class="tsd-kind-icon">include<wbr>Metadata</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#isstep" class="tsd-kind-icon">is<wbr>Step</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#isstring" class="tsd-kind-icon">is<wbr>String</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#lastupdatedtime" class="tsd-kind-icon">last<wbr>Updated<wbr>Time</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#limit" class="tsd-kind-icon">limit</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="timeseriesfilter.html#rootassetids" class="tsd-kind-icon">root<wbr>Asset<wbr>Ids</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#metadata" class="tsd-kind-icon">metadata</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="timeseriesfilter.html#partition" class="tsd-kind-icon">partition</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#rootassetids" class="tsd-kind-icon">root<wbr>Asset<wbr>Ids</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="timeseriesfilter.html#unit" class="tsd-kind-icon">unit</a></li>
 							</ul>
 						</section>
 					</div>
@@ -94,13 +106,14 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="assetids" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> asset<wbr>Ids</h3>
-					<div class="tsd-signature tsd-kind-icon">asset<wbr>Ids<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">asset<wbr>Ids<span class="tsd-signature-symbol">:</span> <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from TimeseriesFilterProps.assetIds</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/4bd2055/src/types/types.ts#L1672">types/types.ts:1672</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1683">types/types.ts:1683</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -110,13 +123,35 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="createdtime" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> created<wbr>Time</h3>
+					<div class="tsd-signature tsd-kind-icon">created<wbr>Time<span class="tsd-signature-symbol">:</span> <a href="../index.html#daterange" class="tsd-signature-type">DateRange</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="createdandlastupdatedtimefilter.html">CreatedAndLastUpdatedTimeFilter</a>.<a href="createdandlastupdatedtimefilter.html#createdtime">createdTime</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L449">types/types.ts:449</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="cursor" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cursor</h3>
 					<div class="tsd-signature tsd-kind-icon">cursor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="cursor.html">Cursor</a>.<a href="cursor.html#cursor-1">cursor</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/4bd2055/src/types/types.ts#L487">types/types.ts:487</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L492">types/types.ts:492</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="externalidprefix" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> external<wbr>IdPrefix</h3>
+					<div class="tsd-signature tsd-kind-icon">external<wbr>IdPrefix<span class="tsd-signature-symbol">:</span> <a href="../index.html#externalidprefix" class="tsd-signature-type">ExternalIdPrefix</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from TimeseriesFilterProps.externalIdPrefix</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1688">types/types.ts:1688</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -126,14 +161,48 @@
 					<div class="tsd-signature tsd-kind-icon">include<wbr>Metadata<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/4bd2055/src/types/types.ts#L1668">types/types.ts:1668</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1708">types/types.ts:1708</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Decide if the metadata field should be returned or not.</p>
+							<p>Decide if the metadata field should be returned or not.
+							This property is ignored by SDK, you can call the endpoint manually if you want to leverage it.</p>
 						</div>
 					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="isstep" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> is<wbr>Step</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Step<span class="tsd-signature-symbol">:</span> <a href="../index.html#timeseriesisstep" class="tsd-signature-type">TimeseriesIsStep</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from TimeseriesFilterProps.isStep</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1678">types/types.ts:1678</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="isstring" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> is<wbr>String</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>String<span class="tsd-signature-symbol">:</span> <a href="../index.html#timeseriesisstring" class="tsd-signature-type">TimeseriesIsString</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from TimeseriesFilterProps.isString</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1677">types/types.ts:1677</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="lastupdatedtime" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> last<wbr>Updated<wbr>Time</h3>
+					<div class="tsd-signature tsd-kind-icon">last<wbr>Updated<wbr>Time<span class="tsd-signature-symbol">:</span> <a href="../index.html#daterange" class="tsd-signature-type">DateRange</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="createdandlastupdatedtimefilter.html">CreatedAndLastUpdatedTimeFilter</a>.<a href="createdandlastupdatedtimefilter.html#lastupdatedtime">lastUpdatedTime</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L448">types/types.ts:448</a></li>
+						</ul>
+					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="limit" class="tsd-anchor"></a>
@@ -142,17 +211,50 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="limit.html">Limit</a>.<a href="limit.html#limit-1">limit</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/4bd2055/src/types/types.ts#L1055">types/types.ts:1055</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1065">types/types.ts:1065</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="metadata" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">metadata<span class="tsd-signature-symbol">:</span> <a href="metadata.html" class="tsd-signature-type">Metadata</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from TimeseriesFilterProps.metadata</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1679">types/types.ts:1679</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="name" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <a href="../index.html#timeseriesname" class="tsd-signature-type">TimeseriesName</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from TimeseriesFilterProps.name</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1675">types/types.ts:1675</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="partition" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> partition</h3>
+					<div class="tsd-signature tsd-kind-icon">partition<span class="tsd-signature-symbol">:</span> <a href="../index.html#partition" class="tsd-signature-type">Partition</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1709">types/types.ts:1709</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="rootassetids" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> root<wbr>Asset<wbr>Ids</h3>
 					<div class="tsd-signature tsd-kind-icon">root<wbr>Asset<wbr>Ids<span class="tsd-signature-symbol">:</span> <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from TimeseriesFilterProps.rootAssetIds</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/4bd2055/src/types/types.ts#L1676">types/types.ts:1676</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1687">types/types.ts:1687</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -160,6 +262,17 @@
 							<p>The IDs of the root assets that the related assets should be a descendant of (or match).</p>
 						</div>
 					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="unit" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> unit</h3>
+					<div class="tsd-signature tsd-kind-icon">unit<span class="tsd-signature-symbol">:</span> <a href="../index.html#timeseriesunit" class="tsd-signature-type">TimeseriesUnit</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from TimeseriesFilterProps.unit</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fbd4d69/src/types/types.ts#L1676">types/types.ts:1676</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -178,20 +291,47 @@
 					<li class="current tsd-kind-interface">
 						<a href="timeseriesfilter.html" class="tsd-kind-icon">Timeseries<wbr>Filter</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="timeseriesfilter.html#assetids" class="tsd-kind-icon">asset<wbr>Ids</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="timeseriesfilter.html#createdtime" class="tsd-kind-icon">created<wbr>Time</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="timeseriesfilter.html#cursor" class="tsd-kind-icon">cursor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="timeseriesfilter.html#externalidprefix" class="tsd-kind-icon">external<wbr>IdPrefix</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="timeseriesfilter.html#includemetadata" class="tsd-kind-icon">include<wbr>Metadata</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="timeseriesfilter.html#isstep" class="tsd-kind-icon">is<wbr>Step</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="timeseriesfilter.html#isstring" class="tsd-kind-icon">is<wbr>String</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="timeseriesfilter.html#lastupdatedtime" class="tsd-kind-icon">last<wbr>Updated<wbr>Time</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="timeseriesfilter.html#limit" class="tsd-kind-icon">limit</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="timeseriesfilter.html#metadata" class="tsd-kind-icon">metadata</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="timeseriesfilter.html#name" class="tsd-kind-icon">name</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="timeseriesfilter.html#partition" class="tsd-kind-icon">partition</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="timeseriesfilter.html#rootassetids" class="tsd-kind-icon">root<wbr>Asset<wbr>Ids</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="timeseriesfilter.html#unit" class="tsd-kind-icon">unit</a>
 							</li>
 						</ul>
 					</li>
