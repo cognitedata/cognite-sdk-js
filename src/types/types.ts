@@ -313,13 +313,15 @@ export interface AssetListScope extends AssetFilter, FilterQuery {
   aggregatedProperties?: AssetAggregatedProperty[];
 }
 
-export interface SequenceFilter extends CreatedAndLastUpdatedTimeFilter {
+export interface SequenceFilter {
   filter?: {
     name?: SequenceName;
     externalIdPrefix?: ExternalIdPrefix;
     metadata?: Metadata;
     assetIds?: CogniteInternalId[];
     rootAssetIds?: IdEither[];
+    createdTime?: DateRange;
+    lastUpdatedTime?: DateRange;
   };
 }
 
@@ -658,9 +660,11 @@ export interface SequencePatch {
   };
 }
 
-export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
+export interface EventFilter {
   startTime?: DateRange;
   endTime?: DateRange;
+  createdTime?: DateRange;
+  lastUpdatedTime?: DateRange;
   metadata?: Metadata;
   /**
    * Asset IDs of related equipment that this event relates to.
@@ -773,7 +777,7 @@ export interface FileChangeUpdateById extends InternalId, FileChange {}
 
 export type FileContent = ArrayBuffer | Buffer | any;
 
-export interface FileFilter extends Limit, CreatedAndLastUpdatedTimeFilter {
+export interface FileFilter extends Limit {
   filter?: {
     name?: FileName;
     mimeType?: FileMimeType;
@@ -783,6 +787,8 @@ export interface FileFilter extends Limit, CreatedAndLastUpdatedTimeFilter {
      */
     assetIds?: CogniteInternalId[];
     source?: string;
+    createdTime?: DateRange;
+    lastUpdatedTime?: DateRange;
     uploadedTime?: DateRange;
     externalIdPrefix?: ExternalIdPrefix;
     uploaded?: boolean;
