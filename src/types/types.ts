@@ -311,12 +311,7 @@ export interface AssetListScope extends AssetFilter, FilterQuery {
    * Set of aggregated properties to include
    */
   aggregatedProperties?: AssetAggregatedProperty[];
-  /**
-   * This should NOT be used for frontend applications.
-   * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
-   * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
-   */
-  partition?: string;
+  partition?: Partition;
 }
 
 export interface SequenceFilter {
@@ -697,12 +692,7 @@ export interface EventFilter {
 
 export interface EventFilterRequest extends FilterQuery {
   filter?: EventFilter;
-  /**
-   * This should NOT be used for frontend applications.
-   * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
-   * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
-   */
-  partition?: string;
+  partition?: Partition;
 }
 
 export interface EventPatch {
@@ -1721,12 +1711,7 @@ export interface TimeseriesFilter extends TimeseriesFilterProps, FilterQuery {
    * This property is ignored by SDK, you can call the endpoint manually if you want to leverage it.
    */
   includeMetadata?: boolean;
-  /**
-   * This should NOT be used for frontend applications.
-   * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
-   * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
-   */
-  partition?: string;
+  partition?: Partition;
 }
 
 export type TimeseriesIdEither = InternalId | ExternalId;
