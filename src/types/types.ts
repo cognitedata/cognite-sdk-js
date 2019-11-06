@@ -1694,6 +1694,7 @@ export type Partition = string;
 
 export interface TimeseriesFilterQuery extends FilterQuery {
   filter?: TimeseriesFilterProps;
+  partition?: Partition;
 }
 
 export interface TimeseriesFilter extends TimeseriesFilterProps, FilterQuery {
@@ -1702,6 +1703,7 @@ export interface TimeseriesFilter extends TimeseriesFilterProps, FilterQuery {
    * This property is ignored by SDK, you can call the endpoint manually if you want to leverage it.
    */
   includeMetadata?: boolean;
+  partition?: Partition;
 }
 
 export type TimeseriesIdEither = InternalId | ExternalId;
