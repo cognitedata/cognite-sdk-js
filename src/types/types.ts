@@ -296,7 +296,7 @@ export interface AssetFilter extends Limit {
      * Filtered assets are root assets or not
      */
     root?: boolean;
-    externalIdPrefix?: CogniteExternalId;
+    externalIdPrefix?: ExternalIdPrefix;
   };
 }
 
@@ -316,7 +316,7 @@ export interface AssetListScope extends AssetFilter, FilterQuery {
 export interface SequenceFilter {
   filter?: {
     name?: SequenceName;
-    externalIdPrefix?: CogniteExternalId;
+    externalIdPrefix?: ExternalIdPrefix;
     metadata?: Metadata;
     assetIds?: CogniteInternalId[];
     rootAssetIds?: IdEither[];
@@ -442,6 +442,11 @@ export interface CogniteEvent
 export interface CreatedAndLastUpdatedTime {
   lastUpdatedTime: Date;
   createdTime: Date;
+}
+
+export interface CreatedAndLastUpdatedTimeFilter {
+  lastUpdatedTime?: DateRange;
+  createdTime?: DateRange;
 }
 
 /**
@@ -681,10 +686,7 @@ export interface EventFilter {
    * Filter by event subtype
    */
   subtype?: string;
-  /**
-   * Filter events with an externalId starting with this value
-   */
-  externalIdPrefix?: string;
+  externalIdPrefix?: ExternalIdPrefix;
 }
 
 export interface EventFilterRequest extends FilterQuery {
@@ -788,7 +790,7 @@ export interface FileFilter extends Limit {
     createdTime?: DateRange;
     lastUpdatedTime?: DateRange;
     uploadedTime?: DateRange;
-    externalIdPrefix?: CogniteExternalId;
+    externalIdPrefix?: ExternalIdPrefix;
     uploaded?: boolean;
   };
 }
@@ -826,7 +828,7 @@ export interface FilesSearchFilter extends FileFilter {
   };
 }
 
-export interface Filter {
+export interface Filter extends CreatedAndLastUpdatedTimeFilter {
   /**
    * Filter on name
    */
@@ -855,13 +857,13 @@ export interface Filter {
    * The IDs of the root assets that the related assets should be children of.
    */
   rootAssetIds?: CogniteInternalId[];
-  /**
-   * Prefix filter on externalId. (case-sensitive)
-   */
-  externalIdPrefix?: CogniteExternalId;
-  createdTime?: DateRange;
-  lastUpdatedTime?: DateRange;
+  externalIdPrefix?: ExternalIdPrefix;
 }
+
+/**
+ * Prefix filter on externalId. (case-sensitive)
+ */
+export type ExternalIdPrefix = string;
 
 export interface FilterQuery extends Cursor, Limit {}
 
@@ -920,6 +922,26 @@ export interface GetStringDatapoint extends GetDatapointMetadata {
   value: string;
 }
 
+/**
+ * Name of time series
+ */
+export type TimeseriesName = string;
+
+/**
+ * Whether the time series is string valued or not.
+ */
+export type TimeseriesIsString = boolean;
+
+/**
+ * The physical unit of the time series.
+ */
+export type TimeseriesUnit = string;
+
+/**
+ * Whether the time series is a step series or not.
+ */
+export type TimeseriesIsStep = boolean;
+
 export interface GetTimeSeriesMetadataDTO
   extends InternalId,
     CreatedAndLastUpdatedTime {
@@ -927,30 +949,18 @@ export interface GetTimeSeriesMetadataDTO
    * Externally supplied id of the time series
    */
   externalId?: CogniteExternalId;
-  /**
-   * Name of time series
-   */
-  name?: string;
-  /**
-   * Whether the time series is string valued or not.
-   */
-  isString: boolean;
+  name?: TimeseriesName;
+  isString: TimeseriesIsString;
   /**
    * Additional metadata. String key -> String value.
    */
   metadata?: Metadata;
-  /**
-   * The physical unit of the time series.
-   */
-  unit?: string;
+  unit?: TimeseriesUnit;
   /**
    * Asset that this time series belongs to.
    */
   assetId?: CogniteInternalId;
-  /**
-   * Whether the time series is a step series or not.
-   */
-  isStep: boolean;
+  isStep: TimeseriesIsStep;
   /**
    * Description of the time series.
    */
@@ -1661,19 +1671,42 @@ export interface TimeSeriesUpdateByExternalId
 
 export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
 
-export interface TimeseriesFilter extends FilterQuery {
-  /**
-   * Decide if the metadata field should be returned or not.
-   */
-  includeMetadata?: boolean;
+interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
+  name?: TimeseriesName;
+  unit?: TimeseriesUnit;
+  isString?: TimeseriesIsString;
+  isStep?: TimeseriesIsStep;
+  metadata?: Metadata;
   /**
    * Get time series related to these assets. Takes [ 1 .. 100 ] unique items.
    */
-  assetIds?: number[];
+  assetIds?: CogniteInternalId[];
   /**
    * The IDs of the root assets that the related assets should be a descendant of (or match).
    */
   rootAssetIds?: CogniteInternalId[];
+  externalIdPrefix?: ExternalIdPrefix;
+}
+
+/**
+ * This should NOT be used for frontend applications.
+ * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
+ * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
+ */
+export type Partition = string;
+
+export interface TimeseriesFilterQuery extends FilterQuery {
+  filter?: TimeseriesFilterProps;
+  partition?: Partition;
+}
+
+export interface TimeseriesFilter extends TimeseriesFilterProps, FilterQuery {
+  /**
+   * Decide if the metadata field should be returned or not.
+   * This property is ignored by SDK, you can call the endpoint manually if you want to leverage it.
+   */
+  includeMetadata?: boolean;
+  partition?: Partition;
 }
 
 export type TimeseriesIdEither = InternalId | ExternalId;

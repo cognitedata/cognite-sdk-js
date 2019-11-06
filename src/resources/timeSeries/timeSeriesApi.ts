@@ -9,6 +9,7 @@ import {
   IdEither,
   PostTimeSeriesMetadataDTO,
   TimeseriesFilter,
+  TimeseriesFilterQuery,
   TimeSeriesSearchDTO,
   TimeSeriesUpdate,
 } from '../../types/types';
@@ -58,7 +59,12 @@ export class TimeSeriesAPI extends BaseResourceAPI<
   public list = (
     scope?: TimeseriesFilter
   ): CursorAndAsyncIterator<TimeSeries> => {
-    return super.listEndpoint(this.callListEndpointWithGet, scope);
+    let query: TimeseriesFilterQuery = {};
+    if (scope) {
+      const { includeMetadata, limit, cursor, partition, ...filter } = scope;
+      query = { filter, limit, partition, cursor };
+    }
+    return super.listEndpoint(this.callListEndpointWithPost, query);
   };
 
   /**
