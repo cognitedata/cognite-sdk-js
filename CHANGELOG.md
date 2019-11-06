@@ -1,3 +1,10 @@
+# [2.10.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.9.0...v2.10.0) (2019-11-06)
+
+
+### Features
+
+* **assets, events:** add list partition parameter ([96db310](https://github.com/cognitedata/cognitesdk-js/commit/96db31019e87c2a73d6ab31a1ebac7137db73ed3))
+
 # [2.9.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.8.0...v2.9.0) (2019-11-06)
 
 
