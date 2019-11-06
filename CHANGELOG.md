@@ -1,3 +1,10 @@
+# [2.9.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.8.0...v2.9.0) (2019-11-06)
+
+
+### Features
+
+* **timeseries:** support advanced filters, partitions [DEVX-162] ([fbd4d69](https://github.com/cognitedata/cognitesdk-js/commit/fbd4d69db17a9e6a4920d587899762ba4615a335))
+
 # [2.8.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.7.2...v2.8.0) (2019-11-05)
 
 
