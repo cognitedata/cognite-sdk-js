@@ -213,4 +213,38 @@ describe('CDFHttpClient', () => {
       await client.post('/', { data: { time: now } });
     });
   });
+
+  describe('handle one time headers', () => {
+    test('should send header once', async () => {
+      const headerKey = 'test';
+      const headerValue = '123';
+      client.addOneTimeHeader(headerKey, headerValue);
+      nock(baseUrl, { reqheaders: { [headerKey]: headerValue } })
+        .put('/')
+        .reply(200, {});
+      nock(baseUrl, { badheaders: [headerKey] })
+        .put('/')
+        .reply(200, {});
+      await client.put(baseUrl);
+      await client.put(baseUrl);
+    });
+
+    test('should send it after retry', async () => {
+      const headerKey = 'test';
+      const headerValue = '123';
+      client.addOneTimeHeader(headerKey, headerValue);
+      nock(baseUrl, { reqheaders: { [headerKey]: headerValue } })
+        .delete('/')
+        .reply(101, {});
+      nock(baseUrl, { reqheaders: { [headerKey]: headerValue } })
+        .delete('/')
+        .reply(200, [1]);
+      nock(baseUrl, { badheaders: [headerKey] })
+        .delete('/')
+        .reply(200, {});
+      const res = await client.delete(baseUrl);
+      expect(res.data).toEqual([1]);
+      await client.delete(baseUrl);
+    });
+  });
 });

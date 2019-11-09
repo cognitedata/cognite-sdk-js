@@ -386,6 +386,10 @@ export default class CogniteClient {
   public delete = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.delete<T>(path, options);
 
+  public setOneTimeSdkHeader(value: string) {
+    this.httpClient.addOneTimeHeader(X_CDF_SDK_HEADER, value);
+  }
+
   private initAPIs = () => {
     const defaultArgs: [CDFHttpClient, MetadataMap] = [
       this.httpClient,
