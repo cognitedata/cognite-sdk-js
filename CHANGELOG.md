@@ -1,3 +1,10 @@
+# [2.11.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.10.0...v2.11.0) (2019-11-09)
+
+
+### Features
+
+* add support for one-time sdk header ([ff9931f](https://github.com/cognitedata/cognitesdk-js/commit/ff9931fa5763c8ac788d6b40a451e87edd9d160c))
+
 # [2.10.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.9.0...v2.10.0) (2019-11-06)
 
 
