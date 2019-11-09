@@ -218,7 +218,7 @@ describe('CDFHttpClient', () => {
     test('should send header once', async () => {
       const headerKey = 'test';
       const headerValue = '123';
-      client.addDisposableHeader(headerKey, headerValue);
+      client.addOneTimeHeader(headerKey, headerValue);
       nock(baseUrl, { reqheaders: { [headerKey]: headerValue } })
         .put('/')
         .reply(200, {});
@@ -232,7 +232,7 @@ describe('CDFHttpClient', () => {
     test('should send it after retry', async () => {
       const headerKey = 'test';
       const headerValue = '123';
-      client.addDisposableHeader(headerKey, headerValue);
+      client.addOneTimeHeader(headerKey, headerValue);
       nock(baseUrl, { reqheaders: { [headerKey]: headerValue } })
         .delete('/')
         .reply(101, {});

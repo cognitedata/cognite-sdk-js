@@ -75,14 +75,14 @@ export class CDFHttpClient extends RetryableHttpClient {
     return filteredHeaders;
   }
 
-  private disposableHeaders: HttpHeaders = {};
+  private oneTimeHeaders: HttpHeaders = {};
 
   constructor(baseUrl: string) {
     super(baseUrl, cdfRetryValidator);
   }
 
-  public addDisposableHeader(name: string, value: string) {
-    this.disposableHeaders[name] = value;
+  public addOneTimeHeader(name: string, value: string) {
+    this.oneTimeHeaders[name] = value;
     return this;
   }
 
@@ -139,8 +139,8 @@ export class CDFHttpClient extends RetryableHttpClient {
   }
 
   private enrichWithOneTimeHeaders(headers?: HttpHeaders) {
-    const disposableHeaders = this.disposableHeaders;
-    this.disposableHeaders = {};
+    const disposableHeaders = this.oneTimeHeaders;
+    this.oneTimeHeaders = {};
     return {
       ...headers,
       ...disposableHeaders,

@@ -268,7 +268,7 @@ describe('CogniteClient', () => {
         const onAuthenticate = jest.fn();
         const client = setupClient(mockBaseUrl);
         client.loginWithOAuth({ project, onAuthenticate });
-        client.setNextRequestSdkHeader(disposableSdkHeader);
+        client.setOneTimeSdkHeader(disposableSdkHeader);
         mockLoginSilently.mockReturnValueOnce(authTokens);
         const reqheaders = { [X_CDF_SDK_HEADER]: disposableSdkHeader };
         const normalReqheaders = { [X_CDF_SDK_HEADER]: /CogniteJavaScriptSDK/ };
