@@ -10,6 +10,7 @@ install:
   - yarn
   - npm install -g codecov
 script:
+  - yarn commitlint-travis
   - yarn validateDocLinks
   - yarn lint
   - yarn build
