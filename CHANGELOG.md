@@ -1,3 +1,10 @@
+## [2.11.1](https://github.com/cognitedata/cognite-sdk-js/compare/v2.11.0...v2.11.1) (2019-11-18)
+
+
+### Bug Fixes
+
+* expose HttpError from main module ([12ecffa](https://github.com/cognitedata/cognite-sdk-js/commit/12ecffab8c4a2fa2ac0fe6e2d991922fbc87ea09))
+
 # [2.11.0](https://github.com/cognitedata/cognitesdk-js/compare/v2.10.0...v2.11.0) (2019-11-09)
 
 
