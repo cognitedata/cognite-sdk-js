@@ -1,3 +1,10 @@
+# [2.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.11.1...v2.12.0) (2019-11-19)
+
+
+### Features
+
+* **events api:** support sorting [DEVX-145] ([97883ee](https://github.com/cognitedata/cognite-sdk-js/commit/97883eede2d6cdb88b466a11b12d4ae9f21cc6c8))
+
 ## [2.11.1](https://github.com/cognitedata/cognite-sdk-js/compare/v2.11.0...v2.11.1) (2019-11-18)
 
 
