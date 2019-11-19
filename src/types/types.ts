@@ -690,8 +690,31 @@ export interface EventFilter {
   externalIdPrefix?: ExternalIdPrefix;
 }
 
+/**
+ * Items can be sorted in either ascending or descending order
+ */
+export type SortOrder = 'asc' | 'desc';
+
+export const SortOrder = {
+  ASC: 'asc' as SortOrder,
+  DESC: 'desc' as SortOrder,
+};
+
+/**
+ * Sort by selected fields.
+ * Only sorting on 1 field is currently supported.
+ * Partitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.
+ */
+export interface EventSort {
+  startTime?: SortOrder;
+  endTime?: SortOrder;
+  createdTime?: SortOrder;
+  lastUpdatedTime?: SortOrder;
+}
+
 export interface EventFilterRequest extends FilterQuery {
   filter?: EventFilter;
+  sort?: EventSort;
   partition?: Partition;
 }
 
