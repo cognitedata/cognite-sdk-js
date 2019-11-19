@@ -7,6 +7,7 @@ import {
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
+  EventSort,
   ExternalEvent,
   IdEither,
 } from '../../types/types';
@@ -38,7 +39,9 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
   public list = (
     scope?: EventFilterRequest
   ): CursorAndAsyncIterator<CogniteEvent> => {
-    return super.listEndpoint(this.callListEndpointWithPost, scope);
+    const { sort: sortObject = {}, ...rest } = scope || {};
+    const query = { sort: this.convertSortObjectToArray(sortObject), ...rest };
+    return super.listEndpoint(this.callListEndpointWithPost, query);
   };
 
   /**
@@ -92,4 +95,10 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
   public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
   };
+
+  private convertSortObjectToArray(sortObject: EventSort) {
+    return Object.entries(sortObject).map(
+      ([prop, order]) => `${prop}:${order}`
+    );
+  }
 }

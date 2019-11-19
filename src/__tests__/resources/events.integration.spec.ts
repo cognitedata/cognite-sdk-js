@@ -1,7 +1,7 @@
 // Copyright 2019 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { Asset, CogniteEvent } from '../../types/types';
+import { Asset, CogniteEvent, SortOrder } from '../../types/types';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('Events integration test', () => {
@@ -90,6 +90,25 @@ describe('Events integration test', () => {
   test('list with partitions', async () => {
     const response = await client.events.list({ partition: '1/10', limit: 10 });
     expect(response.items.length).toBeGreaterThan(0);
+  });
+
+  describe('list with sorting', async () => {
+    test('ascending', async () => {
+      await client.events.list({ sort: { createdTime: 'asc' } });
+    });
+    test('descending', async () => {
+      await client.events.list({ sort: { endTime: SortOrder.DESC } });
+    });
+    test('multiple props not supported', async () => {
+      await expect(
+        client.events.list({
+          sort: {
+            startTime: 'asc',
+            lastUpdatedTime: 'desc',
+          },
+        })
+      ).rejects.toThrowError();
+    });
   });
 
   test('list to json|string', async () => {

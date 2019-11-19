@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "downlevelIteration": true,
-    "lib": ["es2015", "dom", "esnext.asynciterable"],
+    "lib": ["es2015", "dom", "esnext.asynciterable", "es2017.object"],
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitAny": true,
