@@ -92,17 +92,23 @@ describe('Events integration test', () => {
     expect(response.items.length).toBeGreaterThan(0);
   });
 
-  test('list with sorting', async () => {
-    await client.events.list({ sort: { createdTime: 'asc' } });
-    await client.events.list({ sort: { endTime: SortOrder.DESC } });
-    await expect(
-      client.events.list({
-        sort: {
-          startTime: 'asc',
-          lastUpdatedTime: 'desc',
-        },
-      })
-    ).rejects.toThrowError();
+  describe('list with sorting', async () => {
+    test('ascending', async () => {
+      await client.events.list({ sort: { createdTime: 'asc' } });
+    });
+    test('descending', async () => {
+      await client.events.list({ sort: { endTime: SortOrder.DESC } });
+    });
+    test('multiple props not supported', async () => {
+      await expect(
+        client.events.list({
+          sort: {
+            startTime: 'asc',
+            lastUpdatedTime: 'desc',
+          },
+        })
+      ).rejects.toThrowError();
+    });
   });
 
   test('list to json|string', async () => {
