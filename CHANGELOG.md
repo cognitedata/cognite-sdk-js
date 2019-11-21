@@ -1,3 +1,10 @@
+# [2.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.12.0...v2.13.0) (2019-11-21)
+
+
+### Features
+
+* **asset mappings 3d:** add intersectsBoundingBox to filter [DEVX-185] ([a845b56](https://github.com/cognitedata/cognite-sdk-js/commit/a845b56b65c8d5fe4a699c10aead488179b4c44a))
+
 # [2.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.11.1...v2.12.0) (2019-11-19)
 
 
