@@ -265,12 +265,12 @@ describe('3D mocked', () => {
       );
       nock(mockBaseUrl)
         .get(regExp)
-        .query({ intersectsBoundingBox: '{"min":[],"max":[]}' })
+        .query({ intersectsBoundingBox: '{"min":[0,0,0],"max":[1,1,1]}' })
         .reply(200, { items: mappings });
       const { items } = await client.assetMappings3D.list(
         model.id,
         revision.id,
-        { intersectsBoundingBox: { min: [], max: [] } }
+        { intersectsBoundingBox: { min: [0, 0, 0], max: [1, 1, 1] } }
       );
       expect(items).toEqual(mappings);
     });
