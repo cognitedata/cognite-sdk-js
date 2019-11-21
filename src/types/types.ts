@@ -352,6 +352,10 @@ export interface AssetMapping3DBase {
 export interface AssetMappings3DListFilter extends FilterQuery {
   nodeId?: CogniteInternalId;
   assetId?: CogniteInternalId;
+  /**
+   * If given, only return asset mappings for assets whose bounding box intersects the given bounding box.
+   */
+  intersectsBoundingBox?: BoundingBox3D;
 }
 
 /**
