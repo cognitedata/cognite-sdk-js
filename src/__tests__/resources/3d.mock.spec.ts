@@ -193,6 +193,22 @@ describe('3D mocked', () => {
       expect(result).toEqual(nodes);
     });
 
+    test('retrieve 3d nodes by ids', async () => {
+      const regExp = new RegExp(
+        `/3d/models/${model.id}/revisions/${revision.id}/nodes`
+      );
+      const ids = [{ id: 123 }, { id: 456 }];
+      nock(mockBaseUrl)
+        .post(regExp, { items: ids })
+        .reply(200, { items: nodes });
+      const result = await client.revisions3D.retrieve3DNodes(
+        model.id,
+        revision.id,
+        ids
+      );
+      expect(result).toEqual(nodes);
+    });
+
     test('list 3d nodes with property filter', async () => {
       const regExp = new RegExp(
         `/3d/models/${model.id}/revisions/${revision.id}/nodes`

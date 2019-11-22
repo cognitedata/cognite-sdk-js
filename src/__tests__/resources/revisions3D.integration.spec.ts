@@ -177,6 +177,24 @@ describeIfCondition(
       5 * 60 * 1000
     );
 
+    test(
+      'retrieve 3d nodes by ids',
+      async () => {
+        nodes3D = await client.revisions3D
+          .list3DNodes(model.id, revisions[0].id)
+          .autoPagingToArray({ limit: 2 });
+        const nodes = await client.revisions3D.retrieve3DNodes(
+          model.id,
+          revisions[0].id,
+          nodes3D.map(node => ({ id: node.id }))
+        );
+        expect(nodes.length).toBe(2);
+        expect(nodes[0]).toEqual(nodes3D[0]);
+        expect(nodes[1]).toEqual(nodes3D[1]);
+      },
+      5 * 60 * 1000
+    );
+
     let assetMappingsToCreate: CreateAssetMapping3D[];
     test('create asset mappings 3d', async () => {
       assetMappingsToCreate = nodes3D.slice(0, 2).map((node, index) => ({
