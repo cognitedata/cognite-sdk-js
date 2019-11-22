@@ -149,7 +149,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * [Get 3D nodes by ID](https://docs.cognite.com/api/v1/#operation/get3DNodesById)
    *
    * ```js
-   * const nodes3d = await client.revisions3D.retrieve(8252999965991682, 4190022127342195, [{id: 123}, {id: 456}]);
+   * const nodes3d = await client.revisions3D.retrieve3DNodes(8252999965991682, 4190022127342195, [{id: 123}, {id: 456}]);
    * ```
    */
   public retrieve3DNodes = (
