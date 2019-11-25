@@ -1,3 +1,10 @@
+# [2.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.13.0...v2.14.0) (2019-11-25)
+
+
+### Features
+
+* **capability:** add type for scope with time series ids ([5492adf](https://github.com/cognitedata/cognite-sdk-js/commit/5492adf5975e39c00210164bae3a50abf38b8d41))
+
 # [2.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.12.0...v2.13.0) (2019-11-21)
 
 
