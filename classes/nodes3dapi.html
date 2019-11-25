@@ -101,6 +101,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="nodes3dapi.html#list" class="tsd-kind-icon">list</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="nodes3dapi.html#listancestors" class="tsd-kind-icon">list<wbr>Ancestors</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="nodes3dapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
 							</ul>
 						</section>
 					</div>
@@ -119,7 +120,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/a845b56/src/resources/baseResourceApi.ts#L55">resources/baseResourceApi.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/191c3db/src/resources/baseResourceApi.ts#L55">resources/baseResourceApi.ts:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -151,7 +152,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/a845b56/src/resources/3d/nodes3DApi.ts#L13">resources/3d/nodes3DApi.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/191c3db/src/resources/3d/nodes3DApi.ts#L14">resources/3d/nodes3DApi.ts:14</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -180,7 +181,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/a845b56/src/resources/3d/nodes3DApi.ts#L25">resources/3d/nodes3DApi.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/191c3db/src/resources/3d/nodes3DApi.ts#L35">resources/3d/nodes3DApi.ts:35</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -199,6 +200,35 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../index.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/node3d.html" class="tsd-signature-type">Node3D</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="retrieve" class="tsd-anchor"></a>
+					<h3>retrieve</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">(</span>modelId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, revisionId<span class="tsd-signature-symbol">: </span><a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a>, ids<span class="tsd-signature-symbol">: </span><a href="../interfaces/internalid.html" class="tsd-signature-type">InternalId</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/node3d.html" class="tsd-signature-type">Node3D</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/191c3db/src/resources/3d/nodes3DApi.ts#L26">resources/3d/nodes3DApi.ts:26</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>modelId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
+								</li>
+								<li>
+									<h5>revisionId: <a href="../index.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
+								</li>
+								<li>
+									<h5>ids: <a href="../interfaces/internalid.html" class="tsd-signature-type">InternalId</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/node3d.html" class="tsd-signature-type">Node3D</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -227,6 +257,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="nodes3dapi.html#listancestors" class="tsd-kind-icon">list<wbr>Ancestors</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="nodes3dapi.html#retrieve" class="tsd-kind-icon">retrieve</a>
 							</li>
 						</ul>
 					</li>
