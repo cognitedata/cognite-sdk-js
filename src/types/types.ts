@@ -67,6 +67,12 @@ export interface AclScopeAssetsId {
   };
 }
 
+export interface AclScopeTimeSeriesIds {
+  idscope: {
+    ids: CogniteInternalId[];
+  };
+}
+
 export interface AclScopeCurrentUser {
   currentuserscope: {};
 }
@@ -85,7 +91,10 @@ export type AclScopeSecurityCategories = AclScopeAll;
 
 export type AclScopeSequences = AclScopeAll;
 
-export type AclScopeTimeseries = AclScopeAll | AclScopeAssetsId;
+export type AclScopeTimeseries =
+  | AclScopeAll
+  | AclScopeAssetsId
+  | AclScopeTimeSeriesIds;
 
 export type AclScopeUsers = AclScopeAll;
 
