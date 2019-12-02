@@ -386,6 +386,18 @@ export default class CogniteClient {
   public delete = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.delete<T>(path, options);
 
+  /**
+   * Basic HTTP method for PATCH
+   *
+   * @param path The URL path
+   * @param options Request options, optional
+   * ```js
+   * const response = await client.patch('someUrl');
+   * ```
+   */
+  public patch = <T = any>(path: string, options?: HttpRequestOptions) =>
+    this.httpClient.patch<T>(path, options);
+
   public setOneTimeSdkHeader(value: string) {
     this.httpClient.addOneTimeHeader(X_CDF_SDK_HEADER, value);
   }
