@@ -120,6 +120,14 @@ export class BasicHttpClient {
     });
   }
 
+  public patch<ResponseType>(path: string, options: HttpRequestOptions = {}) {
+    return this.request<ResponseType>({
+      ...options,
+      path,
+      method: HttpMethod.Patch,
+    });
+  }
+
   protected async preRequest(request: HttpRequest): Promise<HttpRequest> {
     const populatedHeaders = this.populateDefaultHeaders(request.headers);
     return {
@@ -222,6 +230,7 @@ export enum HttpMethod {
   Post = 'post',
   Put = 'put',
   Delete = 'delete',
+  Patch = 'patch',
 }
 
 export type HttpResponseType = 'json' | 'arraybuffer' | 'text';
