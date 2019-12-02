@@ -1,3 +1,10 @@
+# [2.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.14.0...v2.15.0) (2019-12-02)
+
+
+### Features
+
+* add HTTP patch method to httpClient ([e37614d](https://github.com/cognitedata/cognite-sdk-js/commit/e37614d57a6f4bf2be29916960fab507d7129113))
+
 # [2.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.13.0...v2.14.0) (2019-11-25)
 
 
