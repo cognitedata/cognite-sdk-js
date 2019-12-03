@@ -533,6 +533,8 @@ export type DatapointsDeleteRequest =
 
 export interface DatapointsGetAggregateDatapoint extends DatapointsMetadata {
   datapoints: GetAggregateDatapoint[];
+  /** Aggregates cannot be strings, as this is unsupported by CDF. */
+  isString: false;
 }
 
 export type DatapointsGetDatapoint =
