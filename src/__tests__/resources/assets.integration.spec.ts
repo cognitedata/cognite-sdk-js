@@ -174,14 +174,6 @@ describe('Asset integration test', () => {
     });
   });
 
-  test('delete', async () => {
-    await client.assets.delete(
-      assets.map(asset => ({
-        id: asset.id,
-      }))
-    );
-  });
-
   test('list', async () => {
     const response = await client.assets.list({ limit: 1 });
     expect(response.nextCursor).toBeDefined();
@@ -208,17 +200,17 @@ describe('Asset integration test', () => {
       .autoPagingToArray({ limit: 100 });
   });
 
+  let [createdChild1, createdRoot1, ...createdAssets2] = new Array(2);
   test('filter rootIds', async () => {
     const root1 = { name: 'root-1', externalId: 'root-1' + randomInt() };
     const root2 = { name: 'root-2', externalId: 'root-2' + randomInt() };
     const child1 = { name: 'child-1', parentExternalId: root1.externalId };
     const child2 = { name: 'child-2', parentExternalId: root2.externalId };
-    const [createdChild1, createdRoot1] = await client.assets.create([
-      child1,
-      root1,
-      root2,
-      child2,
-    ]);
+    [
+      createdChild1,
+      createdRoot1,
+      ...createdAssets2
+    ] = await client.assets.create([child1, root1, root2, child2]);
 
     const nonRootAssets = await client.assets
       .list({
@@ -238,6 +230,17 @@ describe('Asset integration test', () => {
       expect(nonRootAssetsUnderRootId.length).toBe(1);
       expect(nonRootAssetsUnderRootId[0].id).toBe(createdChild1.id);
     });
+  });
+
+  test('filter on asset subtree ids', async () => {
+    const { items } = await client.assets.list({
+      limit: 1,
+      filter: {
+        assetSubtreeIds: [{ id: createdChild1.id }],
+      },
+    });
+    expect(items[0].id).toEqual(createdChild1.id);
+    expect(items.length).toBe(1);
   });
 
   test('search for root test asset', async () => {
@@ -270,5 +273,13 @@ describe('Asset integration test', () => {
     const limit = 5;
     const result = await client.assets.list({ partition: '1/10', limit });
     expect(result.items.length).toBe(limit);
+  });
+
+  test('delete', async () => {
+    await client.assets.delete(
+      [createdChild1, createdRoot1, ...createdAssets2, ...assets].map(
+        ({ id }) => ({ id })
+      )
+    );
   });
 });
