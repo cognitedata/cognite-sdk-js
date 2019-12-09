@@ -16,6 +16,7 @@ describe('Timeseries integration test', () => {
     [asset] = await client.assets.create([
       {
         name: 'asset_' + randomInt(),
+        externalId: 'external_' + randomInt(),
       },
     ]);
   });
@@ -96,10 +97,6 @@ describe('Timeseries integration test', () => {
     expect(items.length).toBeGreaterThan(0);
   });
 
-  test('delete', async () => {
-    await client.timeseries.delete(createdTimeseries.map(({ id }) => ({ id })));
-  });
-
   test('list', async () => {
     await client.timeseries
       .list({ includeMetadata: false })
@@ -113,6 +110,22 @@ describe('Timeseries integration test', () => {
     expect(items.length).toBeGreaterThan(0);
   });
 
+  test('list with assetExternalIds', async () => {
+    const { items } = await client.timeseries.list({
+      assetExternalIds: [asset.externalId!],
+      limit: 1,
+    });
+    expect(items[0].id).toBe(createdTimeseries[0].id);
+  });
+
+  test('list with assetSubtreeIds', async () => {
+    const { items } = await client.timeseries.list({
+      assetSubtreeIds: [{ id: asset.id }],
+      limit: 1,
+    });
+    expect(items[0].id).toBe(createdTimeseries[0].id);
+  });
+
   test('search', async () => {
     const name = 'test__constant_0_with_noise';
     const result = await client.timeseries.search({
@@ -123,5 +136,9 @@ describe('Timeseries integration test', () => {
     expect(result.length).toBeGreaterThan(0);
     expect(result[0].id).toBeDefined();
     expect(result[0].name).toBe(name);
+  });
+
+  test('delete', async () => {
+    await client.timeseries.delete(createdTimeseries.map(({ id }) => ({ id })));
   });
 });

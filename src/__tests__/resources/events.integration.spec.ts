@@ -2,14 +2,16 @@
 
 import CogniteClient from '../../cogniteClient';
 import { Asset, CogniteEvent, SortOrder } from '../../types/types';
-import { setupLoggedInClient } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Events integration test', () => {
   let client: CogniteClient;
   let asset: Asset;
   beforeAll(async () => {
     client = setupLoggedInClient();
-    [asset] = await client.assets.create([{ name: 'Test-asset' }]);
+    [asset] = await client.assets.create([
+      { name: 'Test-asset', externalId: `events-test-${randomInt()}` },
+    ]);
   });
 
   afterAll(async () => {
@@ -72,26 +74,6 @@ describe('Events integration test', () => {
     expect(response.length).toBeDefined(); // we can't check content because of eventual consistency
   });
 
-  test('list', async () => {
-    const response = await client.events
-      .list({
-        filter: {
-          startTime: {
-            min: events[0].startTime - 1,
-            max: events[0].endTime! + 1,
-          },
-        },
-        limit: 3,
-      })
-      .autoPagingToArray({ limit: 5 });
-    expect(response.length).toBeGreaterThan(0);
-  });
-
-  test('list with partitions', async () => {
-    const response = await client.events.list({ partition: '1/10', limit: 10 });
-    expect(response.items.length).toBeGreaterThan(0);
-  });
-
   describe('list with sorting', async () => {
     test('ascending', async () => {
       await client.events.list({ sort: { createdTime: 'asc' } });
@@ -111,21 +93,67 @@ describe('Events integration test', () => {
     });
   });
 
-  test('list to json|string', async () => {
-    const response = await client.events.list({ limit: 2 });
-    expect(typeof JSON.stringify(response.items)).toBe('string');
-  });
+  describe('list with filter', () => {
+    test('last one', async () => {
+      const response = await client.events
+        .list({
+          filter: {
+            startTime: {
+              min: events[0].startTime - 1,
+              max: events[0].endTime! + 1,
+            },
+          },
+          limit: 3,
+        })
+        .autoPagingToArray({ limit: 5 });
+      expect(response.length).toBeGreaterThan(0);
+    });
 
-  test('list with rootAssetIds', async () => {
-    const response = await client.events
-      .list({
+    test('partitions', async () => {
+      const response = await client.events.list({
+        partition: '1/10',
+        limit: 10,
+      });
+      expect(response.items.length).toBeGreaterThan(0);
+    });
+
+    test('to json|string', async () => {
+      const response = await client.events.list({ limit: 2 });
+      expect(typeof JSON.stringify(response.items)).toBe('string');
+    });
+
+    /**
+     * No events attached to the asset, will return zero in each case
+     */
+    test('rootAssetIds', async () => {
+      const { items } = await client.events.list({
         filter: {
           rootAssetIds: [{ id: asset.id }],
         },
         limit: 1,
-      })
-      .autoPagingToArray({ limit: 1 });
-    expect(response.length).toBe(0); // no events attached to the asset
+      });
+      expect(items).toEqual([]);
+    });
+
+    test('assetSubtreeIds', async () => {
+      const { items } = await client.events.list({
+        filter: {
+          assetSubtreeIds: [{ id: asset.id }],
+        },
+        limit: 1,
+      });
+      expect(items).toEqual([]);
+    });
+
+    test('externalIdPrefix', async () => {
+      const { items } = await client.events.list({
+        filter: {
+          assetExternalIds: [asset.externalId!],
+        },
+        limit: 1,
+      });
+      expect(items).toEqual([]);
+    });
   });
 
   test('search with rootAssetIds', async () => {
@@ -135,6 +163,6 @@ describe('Events integration test', () => {
       },
       limit: 1,
     });
-    expect(response.length).toBe(0); // no events attached to the asset
+    expect(response).toEqual([]);
   });
 });

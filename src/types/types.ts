@@ -297,6 +297,11 @@ export interface AssetFilter extends Limit {
     name?: AssetName;
     parentIds?: CogniteInternalId[];
     rootIds?: IdEither[];
+    /**
+     * Only include assets in subtrees rooted at the specified assets.
+     * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
+     */
+    assetSubtreeIds?: IdEither[];
     metadata?: Metadata;
     source?: AssetSource;
     createdTime?: DateRange;
@@ -674,20 +679,27 @@ export interface SequencePatch {
   };
 }
 
-export interface EventFilter {
+export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
   startTime?: DateRange;
   endTime?: DateRange;
-  createdTime?: DateRange;
-  lastUpdatedTime?: DateRange;
   metadata?: Metadata;
   /**
    * Asset IDs of related equipment that this event relates to.
    */
   assetIds?: CogniteInternalId[];
   /**
+   * Asset External IDs of related equipment that this event relates to.
+   */
+  assetExternalIds?: CogniteExternalId[];
+  /**
    * The IDs of the root assets that the related assets should be children of.
    */
   rootAssetIds?: IdEither[];
+  /**
+   * Only include events that have a related asset in a subtree rooted at any of these assetIds.
+   * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
+   */
+  assetSubtreeIds?: IdEither[];
   /**
    * Filter by event source
    */
@@ -1720,9 +1732,18 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
    */
   assetIds?: CogniteInternalId[];
   /**
+   * Asset External IDs of related equipment that this time series relates to.
+   */
+  assetExternalIds?: CogniteExternalId[];
+  /**
    * The IDs of the root assets that the related assets should be a descendant of (or match).
    */
   rootAssetIds?: CogniteInternalId[];
+  /**
+   * Only include time series that are related to an asset in a subtree rooted at any of these assetIds.
+   * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
+   */
+  assetSubtreeIds?: IdEither[];
   externalIdPrefix?: ExternalIdPrefix;
 }
 
