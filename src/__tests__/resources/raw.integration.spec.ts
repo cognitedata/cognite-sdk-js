@@ -116,6 +116,13 @@ describe('Raw integration test', () => {
       expect(result[0].columns).toEqual({});
     });
 
+    test('list with limit', async () => {
+      const { items } = await client.raw.listRows(database.name, table.name, {
+        limit: 1,
+      });
+      expect(items.length).toBe(1);
+    });
+
     test('list all columns', async () => {
       const result = await client.raw
         .listRows(database.name, table.name)
