@@ -33,12 +33,13 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     tableName: string,
     scope: ListRawRows = {}
   ): CursorAndAsyncIterator<RawDBRow> {
-    const query: HttpHeaders = {};
-    if (scope.onlyRowKeys) {
+    const { onlyRowKeys, columns, ...rest } = scope;
+    const query: HttpHeaders = rest as HttpHeaders;
+    if (onlyRowKeys) {
       query.columns = ',';
     }
-    if (scope.columns) {
-      query.columns = scope.columns.join(',');
+    if (columns) {
+      query.columns = columns.join(',');
     }
 
     const path = `${this.encodeUrl(databaseName, tableName)}/rows`;
