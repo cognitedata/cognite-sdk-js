@@ -200,7 +200,7 @@ describe('Asset integration test', () => {
       .autoPagingToArray({ limit: 100 });
   });
 
-  let [createdChild1, createdRoot1, ...createdAssets2] = new Array(2);
+  let [createdChild1, createdRoot1, ...createdAssets2]: Asset[] = [];
   test('filter rootIds', async () => {
     const root1 = { name: 'root-1', externalId: 'root-1' + randomInt() };
     const root2 = { name: 'root-2', externalId: 'root-2' + randomInt() };
@@ -247,7 +247,7 @@ describe('Asset integration test', () => {
     const { items } = await client.assets.list({
       limit: 1,
       filter: {
-        parentExternalIds: [createdRoot1.externalId],
+        parentExternalIds: [createdRoot1.externalId!],
       },
     });
     expect(items[0].id).toEqual(createdChild1.id);

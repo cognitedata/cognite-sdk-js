@@ -341,7 +341,15 @@ export interface SequenceFilter {
     externalIdPrefix?: ExternalIdPrefix;
     metadata?: Metadata;
     assetIds?: CogniteInternalId[];
-    rootAssetIds?: IdEither[];
+    /**
+     * Only include sequences that have a related asset in a tree rooted at any of these root assetIds.
+     */
+    rootAssetIds?: CogniteInternalId[];
+    /**
+     * Only include sequences that have a related asset in a subtree rooted at any of these assetIds.
+     * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
+     */
+    assetSubtreeIds?: IdEither[];
     createdTime?: DateRange;
     lastUpdatedTime?: DateRange;
   };
@@ -699,7 +707,7 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
    */
   assetExternalIds?: CogniteExternalId[];
   /**
-   * The IDs of the root assets that the related assets should be children of.
+   * Only include events that have a related asset in a tree rooted at any of these root assetIds.
    */
   rootAssetIds?: IdEither[];
   /**
@@ -852,6 +860,10 @@ export interface FileFilter extends Limit {
      * Only include files that have a related asset in a tree rooted at any of these root assetIds.
      */
     rootAssetIds?: IdEither[];
+    /**
+     * Only include files that are related to an asset in a subtree rooted at any of these assetIds.
+     * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
+     */
     assetSubtreeIds?: IdEither[];
     source?: string;
     createdTime?: DateRange;
@@ -1755,11 +1767,11 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
    */
   assetExternalIds?: CogniteExternalId[];
   /**
-   * The IDs of the root assets that the related assets should be a descendant of (or match).
+   * Only include timeseries that have a related asset in a tree rooted at any of these root assetIds.
    */
   rootAssetIds?: CogniteInternalId[];
   /**
-   * Only include time series that are related to an asset in a subtree rooted at any of these assetIds.
+   * Only include timeseries that are related to an asset in a subtree rooted at any of these assetIds.
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
   assetSubtreeIds?: IdEither[];
