@@ -295,7 +295,14 @@ export type AssetExternalId = ExternalId;
 export interface AssetFilter extends Limit {
   filter?: {
     name?: AssetName;
+    /**
+     * Return only the direct descendants of the specified assets.
+     */
     parentIds?: CogniteInternalId[];
+    /**
+     * Return only the direct descendants of the specified assets.
+     */
+    parentExternalIds?: CogniteExternalId[];
     rootIds?: IdEither[];
     /**
      * Only include assets in subtrees rooted at the specified assets.
