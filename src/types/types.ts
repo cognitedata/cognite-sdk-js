@@ -802,6 +802,8 @@ export interface ExternalFilesMetadata {
   mimeType?: FileMimeType;
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
+  sourceCreatedTime?: Date;
+  sourceModifiedTime?: Date;
 }
 
 export interface ExternalId {
@@ -812,8 +814,11 @@ export interface FileChange {
   update: {
     externalId?: SinglePatchString;
     source?: SinglePatchString;
+    mimeType?: SinglePatchString;
     metadata?: ObjectPatch;
     assetIds?: ArrayPatchLong;
+    sourceCreatedTime?: SinglePatchDate;
+    sourceModifiedTime?: SinglePatchDate;
   };
 }
 
@@ -836,10 +841,17 @@ export interface FileFilter extends Limit {
      * Only include files that reference these specific asset IDs.
      */
     assetIds?: CogniteInternalId[];
+    /**
+     * Only include files that have a related asset in a tree rooted at any of these root assetIds.
+     */
+    rootAssetIds?: IdEither[];
+    assetSubtreeIds?: IdEither[];
     source?: string;
     createdTime?: DateRange;
     lastUpdatedTime?: DateRange;
     uploadedTime?: DateRange;
+    sourceCreatedTime?: DateRange;
+    sourceModifiedTime?: DateRange;
     externalIdPrefix?: ExternalIdPrefix;
     uploaded?: boolean;
   };
