@@ -109,6 +109,8 @@ export function transformDateInResponse<T>(data: T): T {
     'uploadedTime',
     'deletedTime',
     'timestamp',
+    'sourceCreatedTime',
+    'sourceModifiedTime',
   ];
   return cloneDeepWith(data, (value, key) => {
     if (dateKeys.indexOf('' + key) !== -1) {
