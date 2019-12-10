@@ -243,6 +243,17 @@ describe('Asset integration test', () => {
     expect(items.length).toBe(1);
   });
 
+  test('filter on parent external ids', async () => {
+    const { items } = await client.assets.list({
+      limit: 1,
+      filter: {
+        parentExternalIds: [createdRoot1.externalId],
+      },
+    });
+    expect(items[0].id).toEqual(createdChild1.id);
+    expect(items.length).toBe(1);
+  });
+
   test('search for root test asset', async () => {
     const result = await client.assets.search({
       filter: {
