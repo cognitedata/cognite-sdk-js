@@ -1,3 +1,10 @@
+## [2.16.1](https://github.com/cognitedata/cognite-sdk-js/compare/v2.16.0...v2.16.1) (2019-12-11)
+
+
+### Bug Fixes
+
+* support all query parameters on client.raw.listRows(...) ([03681cd](https://github.com/cognitedata/cognite-sdk-js/commit/03681cd9cb6823e7949f4605a404684b4c0a7556))
+
 # [2.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.15.0...v2.16.0) (2019-12-11)
 
 
