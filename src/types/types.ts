@@ -909,38 +909,6 @@ export interface FilesSearchFilter extends FileFilter {
   };
 }
 
-export interface Filter extends CreatedAndLastUpdatedTimeFilter {
-  /**
-   * Filter on name
-   */
-  name?: string;
-  /**
-   * Filter on unit (case-sensitive).
-   */
-  unit?: string;
-  /**
-   * Filter on isString.
-   */
-  isString?: boolean;
-  /**
-   * Filter on isStep.
-   */
-  isStep?: boolean;
-  /**
-   * Filter out timeseries that do not match these metadata fields and values (case-sensitive)
-   */
-  metadata?: Metadata;
-  /**
-   * Filter out time series that are not linked to any of these assets.
-   */
-  assetIds?: CogniteInternalId[];
-  /**
-   * The IDs of the root assets that the related assets should be children of.
-   */
-  rootAssetIds?: CogniteInternalId[];
-  externalIdPrefix?: ExternalIdPrefix;
-}
-
 /**
  * Prefix filter on externalId. (case-sensitive)
  */
@@ -1777,6 +1745,8 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
   assetSubtreeIds?: IdEither[];
   externalIdPrefix?: ExternalIdPrefix;
 }
+
+export type Filter = TimeseriesFilterProps;
 
 /**
  * Splits the data set into N partitions.
