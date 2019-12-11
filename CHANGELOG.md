@@ -1,3 +1,13 @@
+# [2.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.15.0...v2.16.0) (2019-12-11)
+
+
+### Features
+
+* support assetSubtreeIds and assetExternalIds filters ([2f34364](https://github.com/cognitedata/cognite-sdk-js/commit/2f34364af3423f4eabc9b8da7a01d1326c9b9354))
+* **assets:** parentExternalIds filter ([3579640](https://github.com/cognitedata/cognite-sdk-js/commit/3579640b694ded55858b2409d6f316fab36d2f09))
+* **files:** source created/modified time, rootAssetIds, assetSubtreeIds ([3886331](https://github.com/cognitedata/cognite-sdk-js/commit/388633134b5621cd4f85e07ae1d27904c807c261))
+* **sequences:** assetSubtreeIds filter ([b5f7ece](https://github.com/cognitedata/cognite-sdk-js/commit/b5f7ece4ba91362fc403f80c3aa341e9c83763b7))
+
 # [2.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.14.0...v2.15.0) (2019-12-02)
 
 
