@@ -230,7 +230,7 @@ export enum HttpMethod {
   Post = 'post',
   Put = 'put',
   Delete = 'delete',
-  Patch = 'patch',
+  Patch = 'PATCH',
 }
 
 export type HttpResponseType = 'json' | 'arraybuffer' | 'text';
