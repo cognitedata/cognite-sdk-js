@@ -226,11 +226,11 @@ export interface HttpResponse<T> {
 }
 
 export enum HttpMethod {
-  Get = 'get',
-  Post = 'post',
-  Put = 'put',
-  Delete = 'delete',
-  Patch = 'patch',
+  Get = 'GET',
+  Post = 'POST',
+  Put = 'PUT',
+  Delete = 'DELETE',
+  Patch = 'PATCH',
 }
 
 export type HttpResponseType = 'json' | 'arraybuffer' | 'text';
