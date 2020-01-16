@@ -24,7 +24,7 @@ deploy:
     node_js: lts/*
     on:
       branch: v1
-      node_js: '0.10'
+      node_js: "10"
     skip_cleanup: true
     script:
       - npx semantic-release
