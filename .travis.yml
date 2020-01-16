@@ -10,13 +10,14 @@ install:
   - yarn
   - npm install -g codecov
 script:
-  - yarn commitlint-travis
-  - yarn validateDocLinks
-  - yarn lint
-  - yarn build
-  - yarn test --maxWorkers=1 && codecov
-  - yarn test-samples
-  - yarn test-snippets
+  - node_version=$(node -v); if [ ${node_version:1:2} == "10" ]; echo "one 1"; else echo "two 2"; fi
+  # - yarn commitlint-travis
+  # - yarn validateDocLinks
+  # - yarn lint
+  # - yarn build
+  # - yarn test --maxWorkers=1 && codecov
+  # - yarn test-samples
+  # - yarn test-snippets
 before_deploy:
   - yarn docs
 deploy:
@@ -26,7 +27,7 @@ deploy:
       branch: v1
     skip_cleanup: true
     script:
-      - node_version=$(node -v); if [ ${node_version:1:2} = 10 ]; then npx semantic-release; else echo "node_version != 10. skip"; fi
+      - node_version=$(node -v); if [ ${node_version:1:2} == "10" ]; then npx semantic-release; else echo "node_version != 10. skip"; fi
   - provider: pages
     skip_cleanup: true
     github_token: $GITHUB_TOKEN
