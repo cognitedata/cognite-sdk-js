@@ -155,12 +155,14 @@ describe('Sequences integration test', () => {
   });
 
   test('search', async () => {
-    const result = await client.sequences.search({
-      search: {
-        query: 'n*m* des*tion',
-      },
+    runTestWithRetryWhenFailing(async () => {
+      const result = await client.sequences.search({
+        search: {
+          query: 'n*m* des*tion',
+        },
+      });
+      expect(result.length).toBeGreaterThan(0);
     });
-    expect(result.length).toBeGreaterThan(0);
   });
 
   test('insert rows', async () => {
