@@ -26,7 +26,7 @@ deploy:
       branch: v1
     skip_cleanup: true
     script:
-      - npx semantic-release
+      - node_version=$(node -v); if [ ${node_version:1:2} = 10 ]; then npx semantic-release; else echo "node_version != 10. skip"; fi
   - provider: pages
     skip_cleanup: true
     github_token: $GITHUB_TOKEN
