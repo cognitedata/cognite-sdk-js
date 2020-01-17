@@ -27,8 +27,7 @@ deploy:
       node_js: "10"
     skip_cleanup: true
     script:
-      - npm install -g @semantic-release/changelog@4 @semantic-release/git@8
-      - npx semantic-release
+      - npm install -g @semantic-release/changelog@4 @semantic-release/git@8 && npx semantic-release
   - provider: pages
     skip_cleanup: true
     github_token: $GITHUB_TOKEN
