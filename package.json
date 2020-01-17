@@ -1,6 +1,6 @@
 {
   "name": "@cognite/sdk",
-  "version": "2.16.1",
+  "version": "2.16.2",
   "description": "Javascript client library for Cognite SDK",
   "contributors": [
     "Fredrik Anfinsen <fredrik.anfinsen@cognite.com>",
@@ -84,7 +84,9 @@
     }
   },
   "release": {
-    "branches": ["v1"],
+    "branches": [
+      "v1"
+    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",

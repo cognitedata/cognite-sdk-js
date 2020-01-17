@@ -1,3 +1,10 @@
+## [2.16.2](https://github.com/cognitedata/cognite-sdk-js/compare/v2.16.1...v2.16.2) (2020-01-17)
+
+
+### Bug Fixes
+
+* capitalize all HTTP method strings ([dedd4de](https://github.com/cognitedata/cognite-sdk-js/commit/dedd4de379c460b9dcdd370b44b0c4a7bdffd6a9))
+
 ## [2.16.1](https://github.com/cognitedata/cognite-sdk-js/compare/v2.16.0...v2.16.1) (2019-12-11)
 
 
