@@ -95,7 +95,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     return this.addToMapAndReturn(response.data.items, response);
   }
 
-  private async deleteDatapointsEndpoint(items: LatestDataBeforeRequest[]) {
+  private async deleteDatapointsEndpoint(items: DatapointsDeleteRequest[]) {
     await this.postInParallelWithAutomaticChunking({
       chunkSize: 10000,
       items,
