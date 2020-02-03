@@ -1912,4 +1912,45 @@ export interface Versioned3DFile {
   fileId: CogniteInternalId;
 }
 
+/**
+ * Write-protected data sets impose additional restrictions on write access to resources inside a data set which can help ensuring data integrity of the data set.
+ * For write-protected data set in addition to a writing capability that has given resource data in scope, principal must be an owners of the data set.
+ * Note that this does not affect any security categories set for given resource data, both security category membership and data set ownership is required in such case
+ */
+export type DatasetWriteProtected = boolean;
+
+export interface ExternalDataset {
+  externalId?: CogniteExternalId;
+  /**
+   * Name of data set
+   */
+  name?: string;
+  /**
+   * Description of data set
+   */
+  description?: string;
+  metadata?: Metadata;
+  writeProtected?: DatasetWriteProtected;
+}
+
+export interface Dataset
+  extends ExternalDataset,
+    InternalId,
+    CreatedAndLastUpdatedTime {
+  writeProtected: DatasetWriteProtected;
+}
+
+/**
+ * Filter on data sets with exact match
+ */
+export interface DatasetFilter extends CreatedAndLastUpdatedTimeFilter {
+  metadata?: Metadata;
+  externalIdPrefix?: ExternalIdPrefix;
+  writeProtected?: DatasetWriteProtected;
+}
+
+export interface DatasetFilterRequest extends FilterQuery {
+  filter?: DatasetFilter;
+}
+
 export type WRITE = 'WRITE';
