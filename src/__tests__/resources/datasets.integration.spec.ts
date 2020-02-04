@@ -4,10 +4,10 @@ import CogniteClient from '../../cogniteClient';
 import {
   Dataset,
   DatasetFilterRequest,
-  ExternalFilesMetadata,
   FilesMetadata,
 } from '../../types/types';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+import { getFileCreateArgs } from '../helper';
+import { setupLoggedInClient } from '../testUtils';
 
 describe('Datasets integration test', () => {
   let client: CogniteClient;
@@ -59,18 +59,10 @@ describe('Datasets integration test', () => {
 
     test('upload', async () => {
       const [{ id }] = datasets;
-      const postfix = randomInt();
-      const fileContent = 'content_' + new Date();
-      const sourceCreatedTime = new Date();
-      const localFileMeta: ExternalFilesMetadata = {
-        name: 'filename_0_' + postfix,
-        mimeType: 'text/plain;charset=UTF-8',
-        metadata: {
-          key: 'value',
-        },
+      const { localFileMeta, fileContent } = getFileCreateArgs({
         dataSetId: id,
-        sourceCreatedTime,
-      };
+      });
+
       file = await client.files.upload(localFileMeta, fileContent, false, true);
 
       expect(file.dataSetId).toEqual(id);
