@@ -16,7 +16,7 @@ import { Viewer3DAPI } from './resources/3d/viewer3DApi';
 import { ApiKeysAPI } from './resources/apiKeys/apiKeysApi';
 import { AssetsAPI } from './resources/assets/assetsApi';
 import { DataPointsAPI } from './resources/dataPoints/dataPointsApi';
-import { DatasetsApi } from './resources/datasets/datasetsApi';
+import { DataSetsApi } from './resources/datasets/datasetsApi';
 import { EventsAPI } from './resources/events/eventsApi';
 import { FilesAPI } from './resources/files/filesApi';
 import { GroupsAPI } from './resources/groups/groupsApi';
@@ -168,7 +168,7 @@ export default class CogniteClient {
   private models3DApi?: Models3DAPI;
   private revisions3DApi?: Revisions3DAPI;
   private files3DApi?: Files3DAPI;
-  private datasetsApi?: DatasetsApi;
+  private datasetsApi?: DataSetsApi;
   private assetMappings3DApi?: AssetMappings3DAPI;
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
@@ -452,9 +452,12 @@ export default class CogniteClient {
     };
     const models3DPath = '/3d/models';
 
+    // Todo: has to be removed after data sets API release
+    const playgroundPath = `/api/playground/projects/${this.project}`;
+
     this.assetsApi = new AssetsAPI(
       this,
-      projectPath + '/assets',
+      playgroundPath + '/assets',
       ...defaultArgs
     );
     this.timeSeriesApi = new TimeSeriesAPI(
@@ -463,8 +466,13 @@ export default class CogniteClient {
       ...defaultArgs
     );
     this.dataPointsApi = apiFactory(DataPointsAPI, '/timeseries/data');
-    this.sequencesApi = apiFactory(SequencesAPI, '/sequences');
-    this.eventsApi = apiFactory(EventsAPI, '/events');
+    // todo: has to be redone via `apiFactory()` after data sets API release
+    this.sequencesApi = new SequencesAPI(
+      `${playgroundPath}/sequences`,
+      ...defaultArgs
+    );
+    // todo: has to be redone via `apiFactory()` after data sets API release
+    this.eventsApi = new EventsAPI(`${playgroundPath}/events`, ...defaultArgs);
     this.filesApi = apiFactory(FilesAPI, '/files');
     this.rawApi = apiFactory(RawAPI, '/raw/dbs');
     this.groupsApi = apiFactory(GroupsAPI, '/groups');
@@ -485,9 +493,9 @@ export default class CogniteClient {
     this.projectsApi = new ProjectsAPI(apiUrl(), ...defaultArgs);
     this.loginApi = new LoginAPI(...defaultArgs);
 
-    // todo: change init call
-    this.datasetsApi = new DatasetsApi(
-      `/api/playground/projects/${this.project}/datasets`,
+    // todo: replace init call with `apiFactory()`
+    this.datasetsApi = new DataSetsApi(
+      `${playgroundPath}/datasets`,
       ...defaultArgs
     );
   };

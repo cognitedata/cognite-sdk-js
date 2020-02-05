@@ -18,6 +18,7 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
   public metadata?: Metadata;
   public unit?: string;
   public assetId?: CogniteInternalId;
+  public dataSetId?: CogniteInternalId;
   public isStep: boolean;
   public description: string;
   public securityCategories?: number[];
@@ -33,6 +34,7 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
     this.metadata = props.metadata;
     this.unit = props.unit;
     this.assetId = props.assetId;
+    this.dataSetId = props.dataSetId;
     this.isStep = props.isStep;
     this.description = props.description;
     this.securityCategories = props.securityCategories;

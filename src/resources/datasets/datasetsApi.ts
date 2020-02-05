@@ -2,15 +2,15 @@
 
 import { CursorAndAsyncIterator } from '../../autoPagination';
 import {
-  Dataset,
-  DatasetChange,
-  DatasetFilterRequest,
-  ExternalDataset,
+  DataSet,
+  DataSetChange,
+  DataSetFilterRequest,
+  ExternalDataSet,
   IdEither,
 } from '../../types/types';
 import { BaseResourceAPI } from '../baseResourceApi';
 
-export class DatasetsApi extends BaseResourceAPI<Dataset> {
+export class DataSetsApi extends BaseResourceAPI<DataSet> {
   /**
    * [Create datasets](https://docs.cognite.com/api/v1/#operation/createDataSets)
    *
@@ -22,41 +22,52 @@ export class DatasetsApi extends BaseResourceAPI<Dataset> {
    * const createdDatasets = await client.datasets.create(datasets);
    * ```
    */
-  public create = (items: ExternalDataset[]): Promise<Dataset[]> => {
+  public create = (items: ExternalDataSet[]): Promise<DataSet[]> => {
     return super.createEndpoint(items);
   };
 
   /**
-   * [List datasets](https://docs.cognite.com/api/v1/#operation/listDataSets)
+   * [List data sets](https://docs.cognite.com/api/v1/#operation/listDataSets)
    * ```js
-   * const datasets = await client.datasets.list({ filter: { createdTime: { min: new Date('1 jan 2018'), max: new Date('1 jan 2019') }}});
+   * const dataSets = await client.datasets.list({ filter: { createdTime: { min: new Date('1 jan 2018'), max: new Date('1 jan 2019') }}});
    * ```
    */
   public list = (
-    query?: DatasetFilterRequest
-  ): CursorAndAsyncIterator<Dataset> => {
+    query?: DataSetFilterRequest
+  ): CursorAndAsyncIterator<DataSet> => {
     return super.listEndpoint(this.callListEndpointWithPost, query);
   };
 
   /**
-   * [Retrieve datasets](https://docs.cognite.com/api/v1/#operation/getDataSets)
+   * [Retrieve data sets](https://docs.cognite.com/api/v1/#operation/getDataSets)
    *
    * ```js
-   * const datasets = await client.datasets.retrieve([{id: 123}, {externalId: 'abc'}]);
+   * const dataSets = await client.datasets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve = (ids: IdEither[]): Promise<Dataset[]> => {
+  public retrieve = (ids: IdEither[]): Promise<DataSet[]> => {
     return super.retrieveEndpoint(ids);
   };
 
   /**
-   * [Update datasets](https://docs.cognite.com/api/v1/#operation/updateDataSets)
+   * [Update data sets](https://docs.cognite.com/api/v1/#operation/updateDataSets)
    *
    * ```js
-   * const datasets = await client.datasets.update([{id: 123, update: {description: {set: 'New description'}}}]);
+   * const dataSets = await client.datasets.update([{id: 123, update: {description: {set: 'New description'}}}]);
    * ```
    */
-  public update = (changes: DatasetChange[]): Promise<Dataset[]> => {
+  public update = (changes: DataSetChange[]): Promise<DataSet[]> => {
     return super.updateEndpoint(changes);
+  };
+
+  /**
+   * [Delete data sets](https://doc.cognitedata.com/api/v1/#operation/deleteDataSets)
+   *
+   * ```js
+   * await client.datasets.delete([{id: 123}, {externalId: 'abc'}]);
+   * ```
+   */
+  public delete = (ids: IdEither[]) => {
+    return super.deleteEndpoint(ids);
   };
 }
