@@ -28,7 +28,7 @@ export class DataSetsApi extends BaseResourceAPI<DataSet> {
 
   /**
    * [List data sets](https://docs.cognite.com/api/v1/#operation/listDataSets)
-   * 
+   *
    * ```js
    * const dataSets = await client.datasets.list({ filter: { createdTime: { min: new Date('1 jan 2018'), max: new Date('1 jan 2019') }}});
    * ```
