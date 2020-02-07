@@ -3,7 +3,6 @@ node_js:
   - "8"
   - "9"
   - "10"
-sudo: false
 env:
   - COGNITE_PROJECT=cognitesdk-js
 install:
@@ -25,11 +24,8 @@ deploy:
     on:
       branch: v1
       node_js: "10"
-    skip_cleanup: true
-    script:
-      - npx -p @semantic-release/changelog@4 -p @semantic-release/git@8 -p semantic-release semantic-release
+    script: npx -p @semantic-release/changelog@4 -p @semantic-release/git@8 -p semantic-release semantic-release
   - provider: pages
-    skip_cleanup: true
     github_token: $GITHUB_TOKEN
     keep_history: true
     local_dir: docs
