@@ -5,19 +5,19 @@ import { TimeSeries } from '../../resources/classes/timeSeries';
 import {
   Asset,
   CogniteEvent,
+  CogniteInternalId,
   DataSet,
   DataSetFilterRequest,
   FilesMetadata,
-  Sequence,
   NullableSinglePatchLong,
-  CogniteInternalId,
+  Sequence,
 } from '../../types/types';
 import { getFileCreateArgs } from '../helper';
 import { runTestWithRetryWhenFailing, setupLoggedInClient } from '../testUtils';
 
 const dataSetFilter = (id: number) => {
   return { filter: { dataSetIds: [{ id }] } };
-}
+};
 
 // tslint:disable-next-line:no-big-function
 describe('data sets integration test', () => {
@@ -34,7 +34,7 @@ describe('data sets integration test', () => {
       { description: 'integration-1' },
       { description: 'integration-2' },
     ]);
-    updateDataSetObject = { update: { dataSetId: { set: datasets[1].id } } }
+    updateDataSetObject = { update: { dataSetId: { set: datasets[1].id } } };
     expect(datasets[0].id).toBeTruthy();
   });
 
@@ -66,15 +66,15 @@ describe('data sets integration test', () => {
   describe('files data sets', () => {
     let dataSetId: CogniteInternalId;
     let file: FilesMetadata;
-    
+
     beforeAll(() => {
       dataSetId = datasets[0].id;
-    })
+    });
 
     afterAll(async () => {
       await client.files.delete([{ id: file.id }]);
     });
-    
+
     test('upload', async () => {
       const { localFileMeta, fileContent } = getFileCreateArgs({ dataSetId });
 
@@ -94,26 +94,25 @@ describe('data sets integration test', () => {
     });
 
     test('update', async () => {
-      const [{ dataSetId }] = await client.files.update([
+      const [updated] = await client.files.update([
         { id: file.id, ...updateDataSetObject },
       ]);
 
-      expect(dataSetId).toEqual(datasets[1].id);
+      expect(updated.dataSetId).toEqual(datasets[1].id);
     });
   });
   describe('assets data sets', () => {
     let dataSetId: CogniteInternalId;
     let asset: Asset;
-    
+
     beforeAll(() => {
       dataSetId = datasets[0].id;
-    })
+    });
     afterAll(async () => {
       await client.assets.delete([{ id: asset.id }]);
     });
 
     test('create', async () => {
-
       [asset] = await client.assets.create([
         { name: 'asset_with_dataset', dataSetId },
       ]);
@@ -141,10 +140,10 @@ describe('data sets integration test', () => {
   describe('events data sets', () => {
     let dataSetId: CogniteInternalId;
     let event: CogniteEvent;
-    
+
     beforeAll(() => {
       dataSetId = datasets[0].id;
-    })
+    });
     afterAll(async () => {
       await client.events.delete([{ id: event.id }]);
     });
@@ -175,16 +174,15 @@ describe('data sets integration test', () => {
   describe('timeseries data sets', () => {
     let timeseries: TimeSeries;
     let dataSetId: CogniteInternalId;
-    
+
     beforeAll(() => {
       dataSetId = datasets[0].id;
-    })
+    });
     afterAll(async () => {
       await client.timeseries.delete([{ id: timeseries.id }]);
     });
 
     test('create', async () => {
-
       [timeseries] = await client.timeseries.create([{ dataSetId }]);
 
       expect(timeseries.dataSetId).toEqual(dataSetId);
@@ -209,10 +207,10 @@ describe('data sets integration test', () => {
   describe('sequences data sets', async () => {
     let dataSetId: CogniteInternalId;
     let sequence: Sequence;
-    
+
     beforeAll(() => {
       dataSetId = datasets[0].id;
-    })
+    });
     afterAll(async () => {
       await client.sequences.delete([{ id: sequence.id }]);
     });
