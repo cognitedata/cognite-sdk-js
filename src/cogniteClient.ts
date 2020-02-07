@@ -297,7 +297,7 @@ export default class CogniteClient {
       );
     }
 
-    const onTokens = options.onTokens || (() => {});
+    const onTokens = options.onTokens || (() => { });
     const onAuthenticate =
       options.onAuthenticate === POPUP
         ? onAuthenticateWithPopup
@@ -448,16 +448,13 @@ export default class CogniteClient {
       ) => ApiType,
       relativePath: string
     ) => {
-      return new api(projectPath + relativePath, ...defaultArgs);
+      return new api(`${projectPath}/${relativePath}`, ...defaultArgs);
     };
-    const models3DPath = '/3d/models';
-
-    // Todo: has to be removed after data sets API release
-    const playgroundPath = `/api/playground/projects/${this.project}`;
+    const models3DPath = '3d/models';
 
     this.assetsApi = new AssetsAPI(
       this,
-      playgroundPath + '/assets',
+      projectPath + '/assets',
       ...defaultArgs
     );
     this.timeSeriesApi = new TimeSeriesAPI(
@@ -465,39 +462,30 @@ export default class CogniteClient {
       projectPath + '/timeseries',
       ...defaultArgs
     );
-    this.dataPointsApi = apiFactory(DataPointsAPI, '/timeseries/data');
-    // todo: has to be redone via `apiFactory()` after data sets API release
-    this.sequencesApi = new SequencesAPI(
-      `${playgroundPath}/sequences`,
-      ...defaultArgs
-    );
-    // todo: has to be redone via `apiFactory()` after data sets API release
-    this.eventsApi = new EventsAPI(`${playgroundPath}/events`, ...defaultArgs);
-    this.filesApi = apiFactory(FilesAPI, '/files');
-    this.rawApi = apiFactory(RawAPI, '/raw/dbs');
-    this.groupsApi = apiFactory(GroupsAPI, '/groups');
+    this.dataPointsApi = apiFactory(DataPointsAPI, 'timeseries/data');
+    this.sequencesApi = apiFactory(SequencesAPI, 'sequences');
+    this.eventsApi = apiFactory(EventsAPI, 'events');
+    this.filesApi = apiFactory(FilesAPI, 'files');
+    this.datasetsApi = apiFactory(DataSetsApi, 'datasets');
+    this.rawApi = apiFactory(RawAPI, 'raw/dbs');
+    this.groupsApi = apiFactory(GroupsAPI, 'groups');
     this.securityCategoriesApi = apiFactory(
       SecurityCategoriesAPI,
-      '/securitycategories'
+      'securitycategories'
     );
     this.serviceAccountsApi = apiFactory(
       ServiceAccountsAPI,
-      '/serviceaccounts'
+      'serviceaccounts'
     );
-    this.apiKeysApi = apiFactory(ApiKeysAPI, '/apikeys');
+    this.apiKeysApi = apiFactory(ApiKeysAPI, 'apikeys');
     this.models3DApi = apiFactory(Models3DAPI, models3DPath);
     this.revisions3DApi = apiFactory(Revisions3DAPI, models3DPath);
-    this.files3DApi = apiFactory(Files3DAPI, '/3d/files');
+    this.files3DApi = apiFactory(Files3DAPI, '3d/files');
     this.assetMappings3DApi = apiFactory(AssetMappings3DAPI, models3DPath);
-    this.viewer3DApi = apiFactory(Viewer3DAPI, '/3d');
+    this.viewer3DApi = apiFactory(Viewer3DAPI, '3d');
     this.projectsApi = new ProjectsAPI(apiUrl(), ...defaultArgs);
     this.loginApi = new LoginAPI(...defaultArgs);
 
-    // todo: replace init call with `apiFactory()`
-    this.datasetsApi = new DataSetsApi(
-      `${playgroundPath}/datasets`,
-      ...defaultArgs
-    );
   };
 }
 

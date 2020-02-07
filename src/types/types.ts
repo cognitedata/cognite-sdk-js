@@ -395,7 +395,7 @@ export interface SequenceFilter {
      * Only include sequences that have a related asset in a tree rooted at any of these root assetIds.
      */
     rootAssetIds?: CogniteInternalId[];
-    dataSetIds?: CogniteInternalId[];
+    dataSetIds?: IdEither[];
     /**
      * Only include sequences that have a related asset in a subtree rooted at any of these assetIds.
      * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
@@ -1839,7 +1839,7 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
   /**
    * Only include assets that reference these specific dataSet IDs
    */
-  dataSetIds?: CogniteInternalId[];
+  dataSetIds?: IdEither[];
   /**
    * Only include timeseries that are related to an asset in a subtree rooted at any of these assetIds.
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
