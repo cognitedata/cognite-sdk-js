@@ -79,6 +79,10 @@ export class BasicHttpClient {
     return this;
   }
 
+  public getDefaultHeaders(): HttpHeaders {
+    return this.defaultHeaders;
+  }
+
   public setBaseUrl(baseUrl: string) {
     this.baseUrl = baseUrl;
   }

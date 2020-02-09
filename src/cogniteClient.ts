@@ -34,7 +34,11 @@ import { SequencesAPI } from './resources/sequences/sequencesApi';
 import { ServiceAccountsAPI } from './resources/serviceAccounts/serviceAccountsApi';
 import { TimeSeriesAPI } from './resources/timeSeries/timeSeriesApi';
 import { apiUrl, getBaseUrl, isUsingSSL, projectUrl } from './utils';
-import { HttpRequestOptions, HttpResponse } from './utils/http/basicHttpClient';
+import {
+  HttpHeaders,
+  HttpRequestOptions,
+  HttpResponse,
+} from './utils/http/basicHttpClient';
 import { CDFHttpClient } from './utils/http/cdfHttpClient';
 
 export interface ClientOptions {
@@ -323,6 +327,29 @@ export default class CogniteClient {
   public setBaseUrl = (baseUrl: string) => {
     this.httpClient.setBaseUrl(baseUrl);
   };
+
+  /**
+   * Returns the base-url used for all requests.
+   */
+  public getBaseUrl(): string {
+    return this.httpClient.getBaseUrl();
+  }
+
+  /**
+   * Returns the default HTTP request headers, including e.g. authentication
+   * headers that is included in all requests. Headers provided per-requests is not
+   * included in this list. This function is useful when constructing API requests
+   * outside the SDK.
+   *
+   * ```js
+   * const customUrl = [...];
+   * const headers = client.getDefaultRequestHeaders();
+   * const result = await fetch(customUrl, { headers: new Headers(headers) });
+   * ```
+   */
+  public getDefaultRequestHeaders(): HttpHeaders {
+    return Object.assign({}, this.httpClient.getDefaultHeaders());
+  }
 
   /**
    * Lookup response metadata from an request using the response as the parameter
