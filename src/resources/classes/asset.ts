@@ -52,6 +52,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
     this.createdTime = props.createdTime;
     this.rootId = props.rootId;
     this.aggregates = props.aggregates;
+    this.parentExternalId = props.parentExternalId;
 
     Object.defineProperties(this, {
       delete: { value: this.delete.bind(this), enumerable: false },
