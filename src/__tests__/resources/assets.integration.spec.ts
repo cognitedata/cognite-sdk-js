@@ -119,6 +119,25 @@ describe('Asset integration test', () => {
     }); // only need to delete the root asset
   });
 
+  test('return parentExternalId', async () => {
+    const newRootAsset = {
+      ...rootAsset,
+      externalId: 'test-root' + randomInt(),
+    };
+    const newChildAsset = {
+      ...childAsset,
+      parentExternalId: newRootAsset.externalId,
+    };
+    const createdAssets = await client.assets.create([
+      newRootAsset,
+      newChildAsset,
+    ]);
+    expect(createdAssets[1].parentExternalId).toBe(newRootAsset.externalId);
+    await client.assets.delete([{ id: createdAssets[0].id }], {
+      recursive: true,
+    }); // only need to delete the root asset
+  });
+
   test('fail to delete a root asset with children', async () => {
     await runTestWithRetryWhenFailing(async () => {
       const newRootAsset = {
