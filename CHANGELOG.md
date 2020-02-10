@@ -1,3 +1,15 @@
+# [2.17.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.16.2...v2.17.0) (2020-02-10)
+
+
+### Bug Fixes
+
+* correct type on deleteDatapointsEndpoint method ([32630b7](https://github.com/cognitedata/cognite-sdk-js/commit/32630b72c551991c74b9d99b50df14ac6f717264))
+
+
+### Features
+
+* return parentExternalId for assets ([#346](https://github.com/cognitedata/cognite-sdk-js/issues/346)) ([c464632](https://github.com/cognitedata/cognite-sdk-js/commit/c464632b9226ac89ac39955235a4c896c2a24c8c))
+
 ## [2.16.2](https://github.com/cognitedata/cognite-sdk-js/compare/v2.16.1...v2.16.2) (2020-01-17)
 
 
