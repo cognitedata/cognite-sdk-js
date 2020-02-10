@@ -179,6 +179,10 @@ export interface Asset
    * Aggregated metrics of the asset
    */
   aggregates?: AssetAggregateResult;
+  /**
+   * The parent's externalId if defined
+   */
+  parentExternalId?: CogniteExternalId;
 }
 
 /**

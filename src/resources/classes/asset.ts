@@ -37,6 +37,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
   public createdTime: Date;
   public rootId: CogniteInternalId;
   public aggregates?: AssetAggregateResult;
+  public parentExternalId?: CogniteExternalId;
 
   constructor(client: CogniteClient, props: TypeAsset) {
     super(client);

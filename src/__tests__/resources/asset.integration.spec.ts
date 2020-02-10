@@ -44,6 +44,22 @@ describe('Asset', () => {
       });
     });
 
+    test('parentExternalId', async () => {
+      const newRoot = {
+        ...newRootAsset,
+        externalId: 'test-root' + randomInt(),
+      };
+      const newChild = {
+        ...newChildAsset,
+        parentExternalId: newRoot.externalId,
+      };
+      const createdAssets = await client.assets.create([newRoot, newChild]);
+      expect(await createdAssets[1].parentExternalId).toBe(newRoot.externalId);
+      await client.assets.delete([{ id: createdAssets[0].id }], {
+        recursive: true,
+      });
+    });
+
     test(
       'subtree',
       async () => {
