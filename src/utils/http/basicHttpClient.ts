@@ -80,7 +80,7 @@ export class BasicHttpClient {
   }
 
   public getDefaultHeaders(): HttpHeaders {
-    return this.defaultHeaders;
+    return { ...this.defaultHeaders };
   }
 
   public setBaseUrl(baseUrl: string) {

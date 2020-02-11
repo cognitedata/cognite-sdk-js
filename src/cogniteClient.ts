@@ -342,13 +342,13 @@ export default class CogniteClient {
    * outside the SDK.
    *
    * ```js
-   * const customUrl = [...];
+   * const customUrl = '...';
    * const headers = client.getDefaultRequestHeaders();
-   * const result = await fetch(customUrl, { headers: new Headers(headers) });
+   * const result = await fetch(customUrl, { headers });
    * ```
    */
   public getDefaultRequestHeaders(): HttpHeaders {
-    return Object.assign({}, this.httpClient.getDefaultHeaders());
+    return { ...this.httpClient.getDefaultHeaders() };
   }
 
   /**

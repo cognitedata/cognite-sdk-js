@@ -134,6 +134,13 @@ describe('CogniteClient', () => {
       .reply(200, {});
   });
 
+  test('getBaseUrl() returns set value', () => {
+    const baseUrl = 'https://example.com';
+    const client = setupMockableClient();
+    client.setBaseUrl(baseUrl);
+    expect(client.getBaseUrl()).toEqual(baseUrl);
+  });
+
   describe('http requests', () => {
     let client: CogniteClient;
 
