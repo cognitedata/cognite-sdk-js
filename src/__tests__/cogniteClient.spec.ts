@@ -105,6 +105,9 @@ describe('CogniteClient', () => {
         .get('/test')
         .reply(200, {});
       await client.get('/test');
+      expect(client.getDefaultRequestHeaders()).toMatchObject({
+        [API_KEY_HEADER]: apiKey,
+      });
     });
 
     test('set correct project', async () => {
@@ -115,6 +118,27 @@ describe('CogniteClient', () => {
       });
       expect(client.project).toBe(project);
     });
+  });
+
+  test('getDefaultRequestHeaders() returns clone', () => {
+    const client = setupMockableClient();
+    client.loginWithApiKey({
+      project,
+      apiKey,
+    });
+    const headers = client.getDefaultRequestHeaders();
+    headers[API_KEY_HEADER] = 'overriden';
+    const expectedHeaders = { [API_KEY_HEADER]: apiKey };
+    nock(mockBaseUrl, { reqheaders: expectedHeaders })
+      .get('/')
+      .reply(200, {});
+  });
+
+  test('getBaseUrl() returns set value', () => {
+    const baseUrl = 'https://example.com';
+    const client = setupMockableClient();
+    client.setBaseUrl(baseUrl);
+    expect(client.getBaseUrl()).toEqual(baseUrl);
   });
 
   describe('http requests', () => {

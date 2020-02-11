@@ -21,6 +21,9 @@ describe('BasicHttpClient', () => {
         .post('/')
         .reply(200, {});
       await client.post('/');
+      expect(client.getDefaultHeaders()).toMatchObject({
+        [header.name]: header.value,
+      });
     });
 
     test('override default header', async () => {
@@ -30,6 +33,9 @@ describe('BasicHttpClient', () => {
         .post('/')
         .reply(200, {});
       await client.post('/');
+      expect(client.getDefaultHeaders()).toMatchObject({
+        [header.name]: header.value,
+      });
     });
   });
 
