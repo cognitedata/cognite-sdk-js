@@ -1,3 +1,10 @@
+# [2.18.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.17.0...v2.18.0) (2020-02-11)
+
+
+### Features
+
+* add getDefaultRequestHeaders() to get headers required by the API ([c5f01eb](https://github.com/cognitedata/cognite-sdk-js/commit/c5f01eb2ac3f5938032a55ede184ec0b62ad2111))
+
 # [2.17.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.16.2...v2.17.0) (2020-02-10)
 
 
