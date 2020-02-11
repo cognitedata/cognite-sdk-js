@@ -29,6 +29,8 @@ export type AclActionSecurityCategories = MEMBEROF | LIST | CREATE | DELETE;
 
 export type AclActionSequences = READ | WRITE;
 
+export type AclActionDataSets = READ | WRITE;
+
 export type AclActionTimeseries = READ | WRITE;
 
 export type AclActionUsers = LIST | CREATE | DELETE;
@@ -104,6 +106,8 @@ export type AclSecurityCategories = Acl<
 >;
 
 export type AclSequences = Acl<AclActionSequences, AclScopeSequences>;
+
+export type AclDataSets = Acl<AclActionDataSets, AclScopeSequences>;
 
 export type AclTimeseries = Acl<AclActionTimeseries, AclScopeTimeseries>;
 
@@ -1777,7 +1781,8 @@ export type SingleCogniteCapability =
   | { apikeysAcl: AclApiKeys }
   | { threedAcl: Acl3D }
   | { sequencesAcl: AclSequences }
-  | { analyticsAcl: AclAnalytics };
+  | { analyticsAcl: AclAnalytics }
+  | { datasetsAcl: AclDataSets };
 
 export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
