@@ -254,14 +254,16 @@ describe('Asset integration test', () => {
   });
 
   test('filter on asset subtree ids', async () => {
-    const { items } = await client.assets.list({
-      limit: 1,
-      filter: {
-        assetSubtreeIds: [{ id: createdChild1.id }],
-      },
+    await runTestWithRetryWhenFailing(async () => {
+      const { items } = await client.assets.list({
+        limit: 1,
+        filter: {
+          assetSubtreeIds: [{ id: createdChild1.id }],
+        },
+      });
+      expect(items[0].id).toEqual(createdChild1.id);
+      expect(items.length).toBe(1);
     });
-    expect(items[0].id).toEqual(createdChild1.id);
-    expect(items.length).toBe(1);
   });
 
   test('filter on parent external ids', async () => {
