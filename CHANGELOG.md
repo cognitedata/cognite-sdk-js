@@ -1,3 +1,10 @@
+# [2.19.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.18.0...v2.19.0) (2020-02-12)
+
+
+### Features
+
+* **assets:** added support for depth & path aggregates ([#347](https://github.com/cognitedata/cognite-sdk-js/issues/347)) ([367d163](https://github.com/cognitedata/cognite-sdk-js/commit/367d163c683d262f909d42c6685c8c4bd2ed5a35))
+
 # [2.18.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.17.0...v2.18.0) (2020-02-11)
 
 
