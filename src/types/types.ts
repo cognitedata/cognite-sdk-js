@@ -162,9 +162,17 @@ export type ArrayPatchLong =
 
 export interface AssetAggregateResult {
   /**
-   * Number of descendants in its subtree
+   * Number of direct descendants for the asset
    */
   childCount?: number;
+  /**
+   * Asset path depth (number of levels below root node).
+   */
+  depth?: number;
+  /**
+   * IDs of assets on the path to the asset.
+   */
+  path?: AssetIdEither[];
 }
 
 export interface Asset
@@ -329,7 +337,7 @@ export type AssetIdEither = IdEither;
 
 export type AssetInternalId = InternalId;
 
-export type AssetAggregatedProperty = 'childCount';
+export type AssetAggregatedProperty = 'childCount' | 'path' | 'depth';
 
 export interface AssetListScope extends AssetFilter, FilterQuery {
   /**

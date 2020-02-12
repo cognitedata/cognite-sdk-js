@@ -179,17 +179,19 @@ describe('Asset integration test', () => {
     ]);
   });
 
-  test('childCount aggregate', async () => {
+  test('aggregates', async () => {
     await runTestWithRetryWhenFailing(async () => {
       const [assetInfo] = await client.assets
         .list({
-          aggregatedProperties: ['childCount'],
+          aggregatedProperties: ['childCount', 'path', 'depth'],
           filter: {
             externalIdPrefix: rootAsset.externalId,
           },
         })
         .autoPagingToArray({ limit: 1 });
       expect(assetInfo.aggregates!.childCount).toBe(1);
+      expect(assetInfo.aggregates!.depth).toBe(0);
+      expect(assetInfo.aggregates!.path).toEqual([{ id: assetInfo.id }]);
     });
   });
 
@@ -252,14 +254,16 @@ describe('Asset integration test', () => {
   });
 
   test('filter on asset subtree ids', async () => {
-    const { items } = await client.assets.list({
-      limit: 1,
-      filter: {
-        assetSubtreeIds: [{ id: createdChild1.id }],
-      },
+    await runTestWithRetryWhenFailing(async () => {
+      const { items } = await client.assets.list({
+        limit: 1,
+        filter: {
+          assetSubtreeIds: [{ id: createdChild1.id }],
+        },
+      });
+      expect(items[0].id).toEqual(createdChild1.id);
+      expect(items.length).toBe(1);
     });
-    expect(items[0].id).toEqual(createdChild1.id);
-    expect(items.length).toBe(1);
   });
 
   test('filter on parent external ids', async () => {
