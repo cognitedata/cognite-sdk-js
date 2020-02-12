@@ -179,17 +179,19 @@ describe('Asset integration test', () => {
     ]);
   });
 
-  test('childCount aggregate', async () => {
+  test('aggregates', async () => {
     await runTestWithRetryWhenFailing(async () => {
       const [assetInfo] = await client.assets
         .list({
-          aggregatedProperties: ['childCount'],
+          aggregatedProperties: ['childCount', 'path', 'depth'],
           filter: {
             externalIdPrefix: rootAsset.externalId,
           },
         })
         .autoPagingToArray({ limit: 1 });
       expect(assetInfo.aggregates!.childCount).toBe(1);
+      expect(assetInfo.aggregates!.depth).toBe(0);
+      expect(assetInfo.aggregates!.path).toEqual([{ id: assetInfo.id }]);
     });
   });
 
