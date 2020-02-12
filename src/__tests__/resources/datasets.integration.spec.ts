@@ -86,7 +86,7 @@ describe('data sets integration test', () => {
     test('list', async () => {
       await runTestWithRetryWhenFailing(async () => {
         const files = await client.files
-          .list({ filter: { dataSetIds: [dataSetId] } })
+          .list(dataSetFilter(dataSetId))
           .autoPagingToArray();
         expect(files.length).toBeTruthy();
         expect(files[0].dataSetId).toEqual(dataSetId);

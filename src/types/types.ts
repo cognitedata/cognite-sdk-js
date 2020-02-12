@@ -955,7 +955,7 @@ export interface FileFilter extends Limit {
     /**
      * Only include items that reference these specific dataSet IDs
      */
-    dataSetIds?: CogniteInternalId[];
+    dataSetIds?: IdEither[];
     /**
      * Only include files that are related to an asset in a subtree rooted at any of these assetIds.
      * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
