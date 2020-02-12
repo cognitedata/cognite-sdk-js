@@ -162,7 +162,7 @@ export type ArrayPatchLong =
 
 export interface AssetAggregateResult {
   /**
-   * Number of descendants in its subtree
+   * Number of direct descendants for the asset
    */
   childCount?: number;
 }
