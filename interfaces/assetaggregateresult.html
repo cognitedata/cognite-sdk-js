@@ -78,6 +78,8 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="assetaggregateresult.html#childcount" class="tsd-kind-icon">child<wbr>Count</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="assetaggregateresult.html#depth" class="tsd-kind-icon">depth</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="assetaggregateresult.html#path" class="tsd-kind-icon">path</a></li>
 							</ul>
 						</section>
 					</div>
@@ -91,12 +93,42 @@
 					<div class="tsd-signature tsd-kind-icon">child<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/9d77e58/src/types/types.ts#L167">types/types.ts:167</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/367d163/src/types/types.ts#L167">types/types.ts:167</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Number of descendants in its subtree</p>
+							<p>Number of direct descendants for the asset</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="depth" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> depth</h3>
+					<div class="tsd-signature tsd-kind-icon">depth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/367d163/src/types/types.ts#L171">types/types.ts:171</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Asset path depth (number of levels below root node).</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="path" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> path</h3>
+					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <a href="../index.html#assetideither" class="tsd-signature-type">AssetIdEither</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/367d163/src/types/types.ts#L175">types/types.ts:175</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>IDs of assets on the path to the asset.</p>
 						</div>
 					</div>
 				</section>
@@ -119,6 +151,12 @@
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="assetaggregateresult.html#childcount" class="tsd-kind-icon">child<wbr>Count</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="assetaggregateresult.html#depth" class="tsd-kind-icon">depth</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="assetaggregateresult.html#path" class="tsd-kind-icon">path</a>
 							</li>
 						</ul>
 					</li>
