@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import { API_MAX_DATAPOINTS_PER_REQUEST } from '../../constants';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   DatapointsDeleteRequest,
@@ -10,6 +11,12 @@ import {
   ItemsWrapper,
   LatestDataBeforeRequest,
 } from '../../types/types';
+import {
+  createRequests,
+  extrapolateValues,
+  mergeResponses,
+} from './multiQueryFetchHelpers';
+import { QueryResponse } from './types';
 
 export class DataPointsAPI extends BaseResourceAPI<any> {
   /**
@@ -76,12 +83,30 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
   }
 
   private async retrieveDatapointsEndpoint(query: DatapointsMultiQuery) {
+    let response: QueryResponse;
+    const { limit } = extrapolateValues(query);
     const path = this.listPostUrl;
-    const response = await this.httpClient.post<
-      ItemsWrapper<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]>
-    >(path, {
-      data: query,
-    });
+
+    if (limit > API_MAX_DATAPOINTS_PER_REQUEST) {
+      const responses = await Promise.all(
+        createRequests(query, this.httpClient, path)
+      );
+      // For API consistency we reduce the responses into a single one
+      // containing all data.
+      response = responses.reduce(mergeResponses, {} as QueryResponse);
+      // It's polite to tell the user that their request is manipulated
+      response.headers['sdk-concat-info'] =
+        'multiple requests merged to one by sdk';
+    } else {
+      query.limit = limit;
+      response = await this.httpClient.post<
+        ItemsWrapper<
+          (DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]
+        >
+      >(path, {
+        data: query,
+      });
+    }
     return this.addToMapAndReturn(response.data.items, response);
   }
 
@@ -95,7 +120,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     return this.addToMapAndReturn(response.data.items, response);
   }
 
-  private async deleteDatapointsEndpoint(items: DatapointsDeleteRequest[]) {
+  private async deleteDatapointsEndpoint(items: LatestDataBeforeRequest[]) {
     await this.postInParallelWithAutomaticChunking({
       chunkSize: 10000,
       items,
