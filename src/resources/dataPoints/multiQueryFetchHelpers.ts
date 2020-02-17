@@ -1,7 +1,14 @@
 // Copyright 2019 Cognite AS
 
 import ms from 'ms';
-import { DatapointsMultiQuery } from '../..';
+import {
+  DatapointsGetAggregateDatapoint,
+  DatapointsGetDatapoint,
+  DatapointsMultiQuery,
+  ItemsWrapper,
+} from '../..';
+import { API_MAX_DATAPOINTS_PER_REQUEST } from '../../constants';
+import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import {
   ConsolidatedQueryValues,
   PotentiallyUndefinedQueryValues,
@@ -78,4 +85,34 @@ export function extrapolateValues(
     throw new Error('Invalid query composition');
   }
   return { start, end, limit, granularity } as ConsolidatedQueryValues;
+}
+
+export function createRequests(
+  originalQuery: DatapointsMultiQuery,
+  httpClient: CDFHttpClient,
+  path: string
+) {
+  const { start, end, granularity } = extrapolateValues(originalQuery);
+
+  const requests = [];
+  originalQuery.limit = API_MAX_DATAPOINTS_PER_REQUEST;
+  originalQuery.granularity = ms(granularity);
+  let newStart = start;
+  let newEnd = 0;
+  while (newEnd < end) {
+    const { ...newQuery } = originalQuery;
+    const potentialNewEnd =
+      newStart + API_MAX_DATAPOINTS_PER_REQUEST * granularity;
+    newEnd = potentialNewEnd < end ? potentialNewEnd : end;
+    newQuery.start = newStart;
+    newQuery.end = newEnd;
+    const request = httpClient.post<
+      ItemsWrapper<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]>
+    >(path, {
+      data: newQuery,
+    });
+    requests.push(request);
+    newStart = newEnd;
+  }
+  return requests;
 }

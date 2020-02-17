@@ -15,3 +15,5 @@ export const X_CDF_APP_HEADER = 'x-cdp-app';
 export const X_CDF_SDK_HEADER = 'x-cdp-sdk';
 /** @hidden */
 export const X_REQUEST_ID = 'X-Request-Id';
+
+export const API_MAX_DATAPOINTS_PER_REQUEST = 10000;
