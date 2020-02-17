@@ -1,5 +1,6 @@
 // Copyright 2019 Cognite AS
 
+import _ from 'lodash';
 import ms from 'ms';
 import {
   DatapointsGetAggregateDatapoint,
@@ -12,6 +13,7 @@ import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import {
   ConsolidatedQueryValues,
   PotentiallyUndefinedQueryValues,
+  QueryResponse,
 } from './types';
 
 function cleanQueryInput(
@@ -115,4 +117,26 @@ export function createRequests(
     newStart = newEnd;
   }
   return requests;
+}
+
+export function mergeResponses(acc: QueryResponse, cur: QueryResponse) {
+  // Override 'mergeWith' default behaviour for the datapoint array
+  const concatAndSortDatapoints = (
+    objValue: any,
+    srcValue: any,
+    key: string
+  ) => {
+    if (key === 'datapoints') {
+      return (
+        objValue
+          .concat(srcValue)
+          // Sorting has significant performance impact on larger data sets
+          .sort(
+            (a: { timestamp: Date }, b: { timestamp: Date }) =>
+              a.timestamp.getTime() - b.timestamp.getTime()
+          )
+      );
+    }
+  };
+  return _.mergeWith(cur, acc, concatAndSortDatapoints);
 }

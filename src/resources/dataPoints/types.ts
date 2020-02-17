@@ -1,5 +1,12 @@
 // Copyright 2019 Cognite AS
 
+import {
+  DatapointsGetAggregateDatapoint,
+  DatapointsGetDatapoint,
+  ItemsWrapper,
+} from '../..';
+import { HttpResponse } from '../../utils/http/basicHttpClient';
+
 export interface PotentiallyUndefinedQueryValues {
   start?: number;
   end?: number;
@@ -13,3 +20,7 @@ export interface ConsolidatedQueryValues {
   limit: number;
   granularity: number;
 }
+
+export type QueryResponse = HttpResponse<
+  ItemsWrapper<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]>
+>;
