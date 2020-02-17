@@ -6,3 +6,10 @@ export interface PotentiallyUndefinedQueryValues {
   limit?: number;
   granularity?: number;
 }
+
+export interface ConsolidatedQueryValues {
+  start: number;
+  end: number;
+  limit: number;
+  granularity: number;
+}
