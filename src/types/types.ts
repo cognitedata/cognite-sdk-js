@@ -339,6 +339,17 @@ export type AssetInternalId = InternalId;
 
 export type AssetAggregatedProperty = 'childCount' | 'path' | 'depth';
 
+export interface AssetRetrieveParams {
+  /**
+   * Set of aggregated properties to include
+   */
+  aggregatedProperties?: AssetAggregatedProperty[];
+  /**
+   * Ignore IDs and external IDs that are not found
+   */
+  ignoreUnknownIds?: boolean;
+}
+
 export interface AssetListScope extends AssetFilter, FilterQuery {
   /**
    * Set of aggregated properties to include

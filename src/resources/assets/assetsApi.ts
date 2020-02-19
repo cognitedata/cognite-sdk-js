@@ -13,6 +13,7 @@ import {
   AssetChange,
   AssetIdEither,
   AssetListScope,
+  AssetRetrieveParams,
   AssetSearchFilter,
   ExternalAssetItem,
   IdEither,
@@ -70,8 +71,11 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    * const assets = await client.assets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve = (ids: IdEither[]): Promise<AssetList> => {
-    return super.retrieveEndpoint(ids);
+  public retrieve = (
+    ids: IdEither[],
+    params: AssetRetrieveParams = {}
+  ): Promise<AssetList> => {
+    return super.retrieveEndpoint(ids, params);
   };
 
   /**

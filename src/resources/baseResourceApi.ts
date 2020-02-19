@@ -96,9 +96,13 @@ export abstract class BaseResourceAPI<
     return Object.assign(listPromise, autoPaginationMethods);
   }
 
-  protected async retrieveEndpoint(ids: IdEither[], path?: string) {
+  protected async retrieveEndpoint<RequestParams extends object>(
+    ids: IdEither[],
+    params?: RequestParams,
+    path?: string
+  ) {
     return this.callEndpointWithMergeAndTransform(ids, request =>
-      this.callRetrieveEndpoint(request, path)
+      this.callRetrieveEndpoint(request, path, params)
     );
   }
 
@@ -148,11 +152,12 @@ export abstract class BaseResourceAPI<
     return this.transformResponse(response);
   };
 
-  protected async callRetrieveEndpoint(
-    ids: IdEither[],
-    path: string = this.byIdsUrl
+  protected async callRetrieveEndpoint<RequestParams extends object>(
+    items: IdEither[],
+    path: string = this.byIdsUrl,
+    params?: RequestParams
   ) {
-    return this.postInParallelWithAutomaticChunking({ path, items: ids });
+    return this.postInParallelWithAutomaticChunking({ params, path, items });
   }
 
   protected async callUpdateEndpoint<ChangeType>(
