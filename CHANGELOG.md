@@ -1,3 +1,10 @@
+# [2.20.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.19.0...v2.20.0) (2020-02-20)
+
+
+### Features
+
+* **assets:** ignoreUnknownIds and aggregates for retrieve(...) ([cb04c46](https://github.com/cognitedata/cognite-sdk-js/commit/cb04c46172e52bcae0409890faebecc1f50fad28))
+
 # [2.19.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.18.0...v2.19.0) (2020-02-12)
 
 
