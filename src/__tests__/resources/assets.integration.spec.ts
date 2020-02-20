@@ -168,6 +168,17 @@ describe('Asset integration test', () => {
     expect(response[0].createdTime).toBeInstanceOf(Date);
   });
 
+  test('retrieve with unknown ids and aggregatedProperties', async () => {
+    const response = await client.assets.retrieve(
+      [{ externalId: '<does not exist>' }],
+      {
+        ignoreUnknownIds: true,
+        aggregatedProperties: ['childCount'],
+      }
+    );
+    expect(response).toHaveLength(0);
+  });
+
   test('update', async () => {
     await client.assets.update([
       {

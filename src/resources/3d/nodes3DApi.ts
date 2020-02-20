@@ -29,7 +29,7 @@ export class Nodes3DAPI extends BaseResourceAPI<Node3D> {
     ids: InternalId[]
   ): Promise<Node3D[]> => {
     const path = this.url(`${modelId}/revisions/${revisionId}/nodes/byids`);
-    return super.retrieveEndpoint(ids, path);
+    return super.retrieveEndpoint(ids, {}, path);
   };
 
   public listAncestors(
