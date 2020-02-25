@@ -10,6 +10,8 @@ import { AssetList } from '../../resources/classes/assetList';
 import { RevertableArraySorter } from '../../revertableArraySorter';
 import {
   Asset as TypeAsset,
+  AssetAggregateQuery,
+  AssetAggregateResponse,
   AssetChange,
   AssetIdEither,
   AssetListScope,
@@ -61,6 +63,20 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
     scope?: AssetListScope
   ): CursorAndAsyncIterator<Asset, AssetList> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
+  };
+
+  /**
+   * [Aggregate assets](https://docs.cognite.com/api/v1/#operation/aggregateAssets)
+   *
+   * ```js
+   * const aggregates = await client.assets.aggregate({ filter: { root: true } });
+   * console.log('Number of root assets: ', aggregates[0].count)
+   * ```
+   */
+  public aggregate = (
+    query: AssetAggregateQuery
+  ): Promise<AssetAggregateResponse[]> => {
+    return super.aggregateEndpoint(query);
   };
 
   /**

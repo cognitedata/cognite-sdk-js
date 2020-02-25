@@ -301,36 +301,58 @@ export type AssetDescription = string;
 
 export type AssetExternalId = ExternalId;
 
+export interface AssetFilterObject {
+  name?: AssetName;
+  /**
+   * Return only the direct descendants of the specified assets.
+   */
+  parentIds?: CogniteInternalId[];
+  /**
+   * Return only the direct descendants of the specified assets.
+   */
+  parentExternalIds?: CogniteExternalId[];
+  rootIds?: IdEither[];
+  /**
+   * Only include assets in subtrees rooted at the specified assets.
+   * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
+   */
+  assetSubtreeIds?: IdEither[];
+  metadata?: Metadata;
+  source?: AssetSource;
+  createdTime?: DateRange;
+  lastUpdatedTime?: DateRange;
+  /**
+   * Filtered assets are root assets or not
+   */
+  root?: boolean;
+  externalIdPrefix?: ExternalIdPrefix;
+}
+
 /**
  * Filter on assets with exact match
  */
 export interface AssetFilter extends Limit {
-  filter?: {
-    name?: AssetName;
-    /**
-     * Return only the direct descendants of the specified assets.
-     */
-    parentIds?: CogniteInternalId[];
-    /**
-     * Return only the direct descendants of the specified assets.
-     */
-    parentExternalIds?: CogniteExternalId[];
-    rootIds?: IdEither[];
-    /**
-     * Only include assets in subtrees rooted at the specified assets.
-     * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
-     */
-    assetSubtreeIds?: IdEither[];
-    metadata?: Metadata;
-    source?: AssetSource;
-    createdTime?: DateRange;
-    lastUpdatedTime?: DateRange;
-    /**
-     * Filtered assets are root assets or not
-     */
-    root?: boolean;
-    externalIdPrefix?: ExternalIdPrefix;
-  };
+  filter?: AssetFilterObject;
+}
+
+/**
+ * Query schema for asset aggregate endpoint
+ */
+export interface AssetAggregateQuery {
+  /**
+   * Filter on assets with strict matching.
+   */
+  filter?: AssetFilterObject;
+}
+
+/**
+ * Response from asset aggregate endpoint
+ */
+export interface AssetAggregateResponse {
+  /**
+   * Size of the aggregation group
+   */
+  count: number;
 }
 
 export type AssetIdEither = IdEither;
@@ -800,6 +822,26 @@ export interface EventSearch {
 export interface EventSearchRequest extends Limit {
   filter?: EventFilter;
   search?: EventSearch;
+}
+
+/**
+ * Query schema for asset aggregate endpoint
+ */
+export interface EventAggregateQuery {
+  /**
+   * Filter on events with strict matching.
+   */
+  filter?: EventFilter;
+}
+
+/**
+ * Response from event aggregate endpoint
+ */
+export interface EventAggregateResponse {
+  /**
+   * Size of the aggregation group
+   */
+  count: number;
 }
 
 export interface ExternalAsset {

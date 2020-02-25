@@ -61,6 +61,16 @@ describe('Events integration test', () => {
     expect(response[0].description).toBe(newDescription);
   });
 
+  test('count aggregate', async () => {
+    const aggregates = await client.events.aggregate({
+      filter: {
+        source: 'WORKMATE',
+      },
+    });
+    expect(aggregates.length).toBe(1);
+    expect(aggregates[0].count).toBeDefined();
+  });
+
   test('delete', async () => {
     await client.events.delete(createdEvents.map(event => ({ id: event.id })));
   });

@@ -4,6 +4,8 @@ import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteEvent,
+  EventAggregateQuery,
+  EventAggregateResponse,
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
@@ -42,6 +44,20 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
     const { sort: sortObject = {}, ...rest } = scope || {};
     const query = { sort: this.convertSortObjectToArray(sortObject), ...rest };
     return super.listEndpoint(this.callListEndpointWithPost, query);
+  };
+
+  /**
+   * [Aggregate events](https://docs.cognite.com/api/v1/#operation/aggregateEvents)
+   *
+   * ```js
+   * const aggregates = await client.events.aggregate({ filter: { assetIds: [1, 2, 3] } });
+   * console.log('Number of events: ', aggregates[0].count)
+   * ```
+   */
+  public aggregate = (
+    query: EventAggregateQuery
+  ): Promise<EventAggregateResponse[]> => {
+    return super.aggregateEndpoint(query);
   };
 
   /**
