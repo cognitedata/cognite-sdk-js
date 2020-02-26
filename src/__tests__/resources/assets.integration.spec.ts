@@ -288,6 +288,16 @@ describe('Asset integration test', () => {
     expect(items.length).toBe(1);
   });
 
+  test('count aggregate', async () => {
+    const aggregates = await client.assets.aggregate({
+      filter: {
+        parentExternalIds: [createdRoot1.externalId!],
+      },
+    });
+    expect(aggregates.length).toBe(1);
+    expect(aggregates[0].count).toBeGreaterThan(0);
+  });
+
   test('search for root test asset', async () => {
     const result = await client.assets.search({
       filter: {

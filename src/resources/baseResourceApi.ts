@@ -47,6 +47,10 @@ export abstract class BaseResourceAPI<
     return this.url('delete');
   }
 
+  protected get aggregateUrl() {
+    return this.url('aggregate');
+  }
+
   protected static chunk<T>(items: T[], chunkSize: number): T[][] {
     if (items.length === 0) {
       return [[]];
@@ -128,6 +132,16 @@ export abstract class BaseResourceAPI<
     return this.addToMapAndReturn({}, responses[0]);
   }
 
+  protected async aggregateEndpoint<QueryType, AggregateResponse>(
+    query: QueryType
+  ) {
+    const response = await this.callAggregateEndpoint<
+      QueryType,
+      AggregateResponse
+    >(query);
+    return this.addToMapAndReturn(response.data.items, response);
+  }
+
   protected callListEndpointWithGet = async <QueryType extends FilterQuery>(
     scope?: QueryType
   ): Promise<HttpResponse<CursorResponse<WrapperType>>> => {
@@ -181,6 +195,17 @@ export abstract class BaseResourceAPI<
       items: ids,
       params,
     });
+  }
+
+  protected async callAggregateEndpoint<QueryType, AggregateResponse>(
+    query: QueryType
+  ) {
+    return this.httpClient.post<ItemsWrapper<AggregateResponse[]>>(
+      this.aggregateUrl,
+      {
+        data: query,
+      }
+    );
   }
 
   protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>) {
