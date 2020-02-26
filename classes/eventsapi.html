@@ -99,6 +99,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="eventsapi.html#aggregate" class="tsd-kind-icon">aggregate</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="eventsapi.html#create" class="tsd-kind-icon">create</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="eventsapi.html#delete" class="tsd-kind-icon">delete</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="eventsapi.html#list" class="tsd-kind-icon">list</a></li>
@@ -123,7 +124,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e0e3384/src/resources/baseResourceApi.ts#L55">resources/baseResourceApi.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/2cac4dc/src/resources/baseResourceApi.ts#L59">resources/baseResourceApi.ts:59</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -146,6 +147,36 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="aggregate" class="tsd-anchor"></a>
+					<h3>aggregate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">aggregate<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><a href="../interfaces/eventaggregatequery.html" class="tsd-signature-type">EventAggregateQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/eventaggregate.html" class="tsd-signature-type">EventAggregate</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/2cac4dc/src/resources/events/eventsApi.ts#L57">resources/events/eventsApi.ts:57</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://docs.cognite.com/api/v1/#operation/aggregateEvents">Aggregate events</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> aggregates = <span class="hljs-keyword">await</span> client.events.aggregate({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">assetIds</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>] } });
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Number of events: '</span>, aggregates[<span class="hljs-number">0</span>].count)</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>query: <a href="../interfaces/eventaggregatequery.html" class="tsd-signature-type">EventAggregateQuery</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/eventaggregate.html" class="tsd-signature-type">EventAggregate</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="create" class="tsd-anchor"></a>
 					<h3>create</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -155,7 +186,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e0e3384/src/resources/events/eventsApi.ts#L27">resources/events/eventsApi.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/2cac4dc/src/resources/events/eventsApi.ts#L29">resources/events/eventsApi.ts:29</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -188,7 +219,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e0e3384/src/resources/events/eventsApi.ts#L95">resources/events/eventsApi.ts:95</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/2cac4dc/src/resources/events/eventsApi.ts#L111">resources/events/eventsApi.ts:111</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -217,7 +248,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e0e3384/src/resources/events/eventsApi.ts#L39">resources/events/eventsApi.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/2cac4dc/src/resources/events/eventsApi.ts#L41">resources/events/eventsApi.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -247,7 +278,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e0e3384/src/resources/events/eventsApi.ts#L55">resources/events/eventsApi.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/2cac4dc/src/resources/events/eventsApi.ts#L71">resources/events/eventsApi.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -277,7 +308,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e0e3384/src/resources/events/eventsApi.ts#L84">resources/events/eventsApi.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/2cac4dc/src/resources/events/eventsApi.ts#L100">resources/events/eventsApi.ts:100</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -313,7 +344,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e0e3384/src/resources/events/eventsApi.ts#L66">resources/events/eventsApi.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/2cac4dc/src/resources/events/eventsApi.ts#L82">resources/events/eventsApi.ts:82</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -351,6 +382,9 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
 								<a href="eventsapi.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="eventsapi.html#aggregate" class="tsd-kind-icon">aggregate</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="eventsapi.html#create" class="tsd-kind-icon">create</a>
