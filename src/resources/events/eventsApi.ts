@@ -4,8 +4,8 @@ import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteEvent,
+  EventAggregate,
   EventAggregateQuery,
-  EventAggregateResponse,
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
@@ -56,7 +56,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    */
   public aggregate = (
     query: EventAggregateQuery
-  ): Promise<EventAggregateResponse[]> => {
+  ): Promise<EventAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
 

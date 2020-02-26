@@ -301,7 +301,7 @@ export type AssetDescription = string;
 
 export type AssetExternalId = ExternalId;
 
-export interface AssetFilterObject {
+export interface AssetFilterProps {
   name?: AssetName;
   /**
    * Return only the direct descendants of the specified assets.
@@ -332,7 +332,7 @@ export interface AssetFilterObject {
  * Filter on assets with exact match
  */
 export interface AssetFilter extends Limit {
-  filter?: AssetFilterObject;
+  filter?: AssetFilterProps;
 }
 
 /**
@@ -342,13 +342,13 @@ export interface AssetAggregateQuery {
   /**
    * Filter on assets with strict matching.
    */
-  filter?: AssetFilterObject;
+  filter?: AssetFilterProps;
 }
 
 /**
  * Response from asset aggregate endpoint
  */
-export interface AssetAggregateResponse {
+export interface AssetAggregate {
   /**
    * Size of the aggregation group
    */
@@ -837,7 +837,7 @@ export interface EventAggregateQuery {
 /**
  * Response from event aggregate endpoint
  */
-export interface EventAggregateResponse {
+export interface EventAggregate {
   /**
    * Size of the aggregation group
    */
