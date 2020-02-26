@@ -1,3 +1,10 @@
+# [2.21.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.20.0...v2.21.0) (2020-02-26)
+
+
+### Features
+
+* **assets-and-events:** aggregate endpoint ([#350](https://github.com/cognitedata/cognite-sdk-js/issues/350)) ([efe933f](https://github.com/cognitedata/cognite-sdk-js/commit/efe933f8f5577a32c6f93d2698025325ace20c9b))
+
 # [2.20.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.19.0...v2.20.0) (2020-02-20)
 
 
