@@ -1,3 +1,12 @@
+# [2.22.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.21.0...v2.22.0) (2020-03-05)
+
+
+### Features
+
+* **datapoints:** added ignoreUnknownIds to getAllDatapoints ([aa25062](https://github.com/cognitedata/cognite-sdk-js/commit/aa250621a860070260b024b00a06c598d687f2af))
+* **datapoints:** added ignoreUnknownIds to retrieveLatest in datapoints ([60832e6](https://github.com/cognitedata/cognite-sdk-js/commit/60832e6d00ba915232433569cde9ec45312311ae))
+* **events:** added type and subtype to event update ([e3fdf74](https://github.com/cognitedata/cognite-sdk-js/commit/e3fdf7407eeb6f59ba5fb8e75616b0b105a8cf6d))
+
 # [2.21.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.20.0...v2.21.0) (2020-02-26)
 
 
