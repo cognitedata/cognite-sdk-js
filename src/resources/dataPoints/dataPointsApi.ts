@@ -53,9 +53,10 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    * ```
    */
   public retrieveLatest = (
-    items: LatestDataBeforeRequest[]
+    items: LatestDataBeforeRequest[],
+    params: LatestDataParams = {}
   ): Promise<DatapointsGetDatapoint[]> => {
-    return this.retrieveLatestEndpoint(items);
+    return this.retrieveLatestEndpoint(items, params);
   };
 
   /**
@@ -85,12 +86,15 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     return this.addToMapAndReturn(response.data.items, response);
   }
 
-  private async retrieveLatestEndpoint(items: LatestDataBeforeRequest[]) {
+  private async retrieveLatestEndpoint(
+    items: LatestDataBeforeRequest[],
+    params: LatestDataParams
+  ) {
     const path = this.url('latest');
     const response = await this.httpClient.post<
       ItemsWrapper<DatapointsGetDatapoint[]>
     >(path, {
-      data: { items },
+      data: { items, ...params },
     });
     return this.addToMapAndReturn(response.data.items, response);
   }
@@ -103,4 +107,8 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     });
     return {};
   }
+}
+
+export interface LatestDataParams {
+  ignoreUnknownIds?: boolean;
 }
