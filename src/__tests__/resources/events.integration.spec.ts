@@ -32,8 +32,8 @@ describe('Events integration test', () => {
     },
   ];
   const newDescription = 'New description';
-  const newType = "Potato";
-  const newSubType = "Yukon Gold";
+  const newType = 'Potato';
+  const newSubType = 'Yukon Gold';
 
   let createdEvents: CogniteEvent[];
 
@@ -62,14 +62,14 @@ describe('Events integration test', () => {
     ]);
     expect(response[0].description).toBe(newDescription);
   });
-  
+
   test('update type and subtype', async () => {
     const response = await client.events.update([
       {
         id: createdEvents[0].id,
         update: {
-          type: {set: newType},
-          subtype: {set: newSubType}
+          type: { set: newType },
+          subtype: { set: newSubType },
         },
       },
     ]);
