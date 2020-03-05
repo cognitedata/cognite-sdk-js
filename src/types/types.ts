@@ -658,6 +658,10 @@ export interface DatapointsMultiQueryBase extends Limit {
    * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
    */
   includeOutsidePoints?: boolean;
+  /**
+   * Ignore IDs and external IDs that are not found
+   */
+  ignoreUnknownIds?: boolean;
 }
 
 export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
