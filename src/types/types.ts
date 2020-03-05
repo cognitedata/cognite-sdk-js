@@ -812,6 +812,8 @@ export interface EventPatch {
     metadata?: ObjectPatch;
     assetIds?: ArrayPatchLong;
     source?: SinglePatchString;
+    type?: SinglePatchString;
+    subtype?: SinglePatchString;
   };
 }
 
