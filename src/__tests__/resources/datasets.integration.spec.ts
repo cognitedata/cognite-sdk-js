@@ -240,7 +240,4 @@ describe('data sets integration test', () => {
       expect(updatedSequence.dataSetId).toEqual(datasets[1].id);
     });
   });
-  xtest('delete', async () => {
-    await client.datasets.delete(datasets.map(({ id }) => ({ id })));
-  });
 });

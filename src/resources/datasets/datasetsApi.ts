@@ -60,15 +60,4 @@ export class DataSetsApi extends BaseResourceAPI<DataSet> {
   public update = (changes: DataSetChange[]): Promise<DataSet[]> => {
     return super.updateEndpoint(changes);
   };
-
-  /**
-   * [Delete data sets](https://doc.cognitedata.com/api/v1/#operation/deleteDataSets)
-   *
-   * ```js
-   * await client.datasets.delete([{id: 123}, {externalId: 'abc'}]);
-   * ```
-   */
-  public delete = (ids: IdEither[]) => {
-    return super.deleteEndpoint(ids);
-  };
 }
