@@ -164,21 +164,6 @@ export type ArrayPatchLong =
   | { set: number[] }
   | { add?: number[]; remove?: number[] };
 
-export interface AssetAggregateResult {
-  /**
-   * Number of direct descendants for the asset
-   */
-  childCount?: number;
-  /**
-   * Asset path depth (number of levels below root node).
-   */
-  depth?: number;
-  /**
-   * IDs of assets on the path to the asset.
-   */
-  path?: AssetIdEither[];
-}
-
 export interface Asset
   extends ExternalAsset,
     AssetInternalId,
@@ -197,12 +182,49 @@ export interface Asset
   parentExternalId?: CogniteExternalId;
 }
 
+/**
+ * Response from asset aggregate endpoint
+ */
+export interface AssetAggregate {
+  /**
+   * Size of the aggregation group
+   */
+  count: number;
+}
+
+/**
+ * Query schema for asset aggregate endpoint
+ */
+export interface AssetAggregateQuery {
+  /**
+   * Filter on assets with strict matching.
+   */
+  filter?: AssetFilterProps;
+}
+
+export interface AssetAggregateResult {
+  /**
+   * Number of direct descendants for the asset
+   */
+  childCount?: number;
+  /**
+   * Asset path depth (number of levels below root node).
+   */
+  depth?: number;
+  /**
+   * IDs of assets on the path to the asset.
+   */
+  path?: AssetIdEither[];
+}
+
 export interface AssetAggregateResult {
   /**
    * Number of descendants in its subtree
    */
   childCount?: number;
 }
+
+export type AssetAggregatedProperty = 'childCount' | 'path' | 'depth';
 
 export type AssetChange = AssetChangeById | AssetChangeByExternalId;
 
@@ -216,6 +238,13 @@ export interface AssetChangeById extends AssetPatch, InternalId {}
 export type AssetDescription = string;
 
 export type AssetExternalId = ExternalId;
+
+/**
+ * Filter on assets with exact match
+ */
+export interface AssetFilter extends Limit {
+  filter?: AssetFilterProps;
+}
 
 export interface AssetFilterProps {
   name?: AssetName;
@@ -248,49 +277,9 @@ export interface AssetFilterProps {
   externalIdPrefix?: ExternalIdPrefix;
 }
 
-/**
- * Filter on assets with exact match
- */
-export interface AssetFilter extends Limit {
-  filter?: AssetFilterProps;
-}
-
-/**
- * Query schema for asset aggregate endpoint
- */
-export interface AssetAggregateQuery {
-  /**
-   * Filter on assets with strict matching.
-   */
-  filter?: AssetFilterProps;
-}
-
-/**
- * Response from asset aggregate endpoint
- */
-export interface AssetAggregate {
-  /**
-   * Size of the aggregation group
-   */
-  count: number;
-}
-
 export type AssetIdEither = IdEither;
 
 export type AssetInternalId = InternalId;
-
-export type AssetAggregatedProperty = 'childCount' | 'path' | 'depth';
-
-export interface AssetRetrieveParams {
-  /**
-   * Set of aggregated properties to include
-   */
-  aggregatedProperties?: AssetAggregatedProperty[];
-  /**
-   * Ignore IDs and external IDs that are not found
-   */
-  ignoreUnknownIds?: boolean;
-}
 
 export interface AssetListScope extends AssetFilter, FilterQuery {
   /**
@@ -346,6 +335,17 @@ export interface AssetPatch {
     metadata?: ObjectPatch;
     source?: SinglePatchString;
   };
+}
+
+export interface AssetRetrieveParams {
+  /**
+   * Set of aggregated properties to include
+   */
+  aggregatedProperties?: AssetAggregatedProperty[];
+  /**
+   * Ignore IDs and external IDs that are not found
+   */
+  ignoreUnknownIds?: boolean;
 }
 
 export interface AssetSearchFilter extends AssetFilter {
@@ -656,6 +656,26 @@ export type DeleteAssetMapping3D = AssetMapping3DBase;
 
 export type EXECUTE = 'EXECUTE';
 
+/**
+ * Response from event aggregate endpoint
+ */
+export interface EventAggregate {
+  /**
+   * Size of the aggregation group
+   */
+  count: number;
+}
+
+/**
+ * Query schema for asset aggregate endpoint
+ */
+export interface EventAggregateQuery {
+  /**
+   * Filter on events with strict matching.
+   */
+  filter?: EventFilter;
+}
+
 export type EventChange = EventChangeById | EventChangeByExternalId;
 
 export interface EventChangeByExternalId extends EventPatch, ExternalId {}
@@ -731,25 +751,7 @@ export interface EventSearchRequest extends Limit {
   filter?: EventFilter;
   search?: EventSearch;
 }
-/**
- * Query schema for asset aggregate endpoint
- */
-export interface EventAggregateQuery {
-  /**
-   * Filter on events with strict matching.
-   */
-  filter?: EventFilter;
-}
 
-/**
- * Response from event aggregate endpoint
- */
-export interface EventAggregate {
-  /**
-   * Size of the aggregation group
-   */
-  count: number;
-}
 /**
  * Sort by selected fields.
  * Only sorting on 1 field is currently supported.
