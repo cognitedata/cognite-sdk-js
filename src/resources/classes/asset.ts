@@ -38,7 +38,6 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
   public rootId: CogniteInternalId;
   public aggregates?: AssetAggregateResult;
   public parentExternalId?: CogniteExternalId;
-  public dataSetId?: CogniteInternalId;
 
   constructor(client: CogniteClient, props: TypeAsset) {
     super(client);
@@ -54,7 +53,6 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
     this.rootId = props.rootId;
     this.aggregates = props.aggregates;
     this.parentExternalId = props.parentExternalId;
-    this.dataSetId = props.dataSetId;
 
     Object.defineProperties(this, {
       delete: { value: this.delete.bind(this), enumerable: false },

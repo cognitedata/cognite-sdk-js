@@ -111,8 +111,6 @@ export async function runTestWithRetryWhenFailing(
 
 export const simpleCompare = (a: number, b: number) => a - b;
 
-export const testDataSetId = 7268396229058705;
-
 export function getSortedPropInArray<T extends { [key: string]: any }>(
   arr: T[],
   propName: string

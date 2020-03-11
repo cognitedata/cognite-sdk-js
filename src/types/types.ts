@@ -15,8 +15,6 @@ export type AclActionApiKeys = LIST | CREATE | DELETE;
 
 export type AclActionAssets = READ | WRITE;
 
-export type AclActionDataSets = READ | WRITE | OWNER;
-
 export type AclActionEvents = READ | WRITE;
 
 export type AclActionFiles = READ | WRITE;
@@ -41,8 +39,6 @@ export type AclApiKeys = Acl<AclActionApiKeys, AclScopeApiKeys>;
 
 export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
 
-export type AclDataSets = Acl<AclActionDataSets, AclScopeDatasets>;
-
 export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
 
 export type AclFiles = Acl<AclActionFiles, AclScopeFiles>;
@@ -63,7 +59,7 @@ export type AclScopeAnalytics = AclScopeAll;
 
 export type AclScopeApiKeys = AclScopeAll | AclScopeCurrentUser;
 
-export type AclScopeAssets = AclScopeAll | AclScopeDatasetsIds;
+export type AclScopeAssets = AclScopeAll;
 
 export interface AclScopeAssetsId {
   assetIdScope: {
@@ -71,21 +67,19 @@ export interface AclScopeAssetsId {
   };
 }
 
-export interface AclScopeCurrentUser {
-  currentuserscope: {};
-}
-
-export type AclScopeDatasets = AclScopeAll | AclScopeDatasetsIds;
-
-export interface AclScopeDatasetsIds {
-  datasetScope: {
+export interface AclScopeTimeSeriesIds {
+  idscope: {
     ids: CogniteInternalId[];
   };
 }
 
-export type AclScopeEvents = AclScopeAll | AclScopeDatasetsIds;
+export interface AclScopeCurrentUser {
+  currentuserscope: {};
+}
 
-export type AclScopeFiles = AclScopeAll | AclScopeDatasets;
+export type AclScopeEvents = AclScopeAll;
+
+export type AclScopeFiles = AclScopeAll;
 
 export type AclScopeGroups = AclScopeAll | AclScopeCurrentUser;
 
@@ -95,19 +89,12 @@ export type AclScopeRaw = AclScopeAll;
 
 export type AclScopeSecurityCategories = AclScopeAll;
 
-export type AclScopeSequences = AclScopeAll | AclScopeDatasetsIds;
-
-export interface AclScopeTimeSeriesAssetRootIds {
-  assetRootIdScope: {
-    rootIds: CogniteInternalId[];
-  };
-}
+export type AclScopeSequences = AclScopeAll;
 
 export type AclScopeTimeseries =
   | AclScopeAll
   | AclScopeAssetsId
-  | AclScopeTimeSeriesAssetRootIds
-  | AclScopeDatasetsIds;
+  | AclScopeTimeSeriesIds;
 
 export type AclScopeUsers = AclScopeAll;
 
@@ -173,6 +160,21 @@ export type ArrayPatchLong =
   | { set: number[] }
   | { add?: number[]; remove?: number[] };
 
+export interface AssetAggregateResult {
+  /**
+   * Number of direct descendants for the asset
+   */
+  childCount?: number;
+  /**
+   * Asset path depth (number of levels below root node).
+   */
+  depth?: number;
+  /**
+   * IDs of assets on the path to the asset.
+   */
+  path?: AssetIdEither[];
+}
+
 export interface Asset
   extends ExternalAsset,
     AssetInternalId,
@@ -192,41 +194,99 @@ export interface Asset
 }
 
 /**
- * Response from asset aggregate endpoint
+ * Describes a new column
  */
-export interface AssetAggregate {
-  /**
-   * Size of the aggregation group
-   */
-  count: number;
+export interface ExternalSequenceColumn
+  extends ExternalSequenceColumnBase,
+    ExternalId {}
+
+interface ExternalSequenceColumnBase {
+  name?: SequenceColumnName;
+  description?: SequenceColumnDescription;
+  valueType?: SequenceValueType;
+  metadata?: Metadata;
 }
 
 /**
- * Query schema for asset aggregate endpoint
+ * Information about a column stored in the database
  */
-export interface AssetAggregateQuery {
-  /**
-   * Filter on assets with strict matching.
-   */
-  filter?: AssetFilterProps;
+export interface SequenceColumn
+  extends ExternalSequenceColumnBase,
+    InternalId,
+    CreatedAndLastUpdatedTime {
+  valueType: SequenceValueType;
+  externalId?: CogniteExternalId;
 }
 
-export interface AssetAggregateResult {
-  /**
-   * Number of direct descendants for the asset
-   */
-  childCount?: number;
-  /**
-   * Asset path depth (number of levels below root node).
-   */
-  depth?: number;
-  /**
-   * IDs of assets on the path to the asset.
-   */
-  path?: AssetIdEither[];
+/**
+ * Information about a column stored in the database
+ */
+export interface SequenceColumnBasicInfo {
+  name?: SequenceColumnName;
+  externalId?: ExternalId;
+  valueType?: SequenceValueType;
 }
 
-export type AssetAggregatedProperty = 'childCount' | 'path' | 'depth';
+/**
+ * What type the datapoints in a column will have.
+ * DOUBLE is restricted to the range [-1E100, 1E100]
+ * @default STRING
+ */
+export type SequenceValueType = 'STRING' | 'DOUBLE' | 'LONG';
+
+export const SequenceValueType = {
+  STRING: 'STRING' as SequenceValueType,
+  DOUBLE: 'DOUBLE' as SequenceValueType,
+  LONG: 'LONG' as SequenceValueType,
+};
+
+/**
+ * Name of the sequence
+ */
+export type SequenceName = string;
+
+/**
+ *  Human readable name of the column
+ */
+export type SequenceColumnName = string;
+
+/**
+ * Description of the sequence
+ */
+export type SequenceDescription = string;
+
+/**
+ * Description of the column
+ */
+export type SequenceColumnDescription = string;
+
+interface SequenceBase {
+  name?: SequenceName;
+  description?: SequenceDescription;
+  /**
+   * Asset this sequence is associated with
+   */
+  assetId?: CogniteInternalId;
+  externalId?: CogniteExternalId;
+  metadata?: Metadata;
+}
+
+export interface ExternalSequence extends SequenceBase {
+  /**
+   * List of column definitions
+   */
+  columns: ExternalSequenceColumn[];
+}
+
+/**
+ * Information about the sequence stored in the database
+ */
+export interface Sequence
+  extends SequenceBase,
+    InternalId,
+    CreatedAndLastUpdatedTime {
+  columns: SequenceColumn[];
+}
 
 export type AssetChange = AssetChangeById | AssetChangeByExternalId;
 
@@ -241,13 +301,6 @@ export type AssetDescription = string;
 
 export type AssetExternalId = ExternalId;
 
-/**
- * Filter on assets with exact match
- */
-export interface AssetFilter extends Limit {
-  filter?: AssetFilterProps;
-}
-
 export interface AssetFilterProps {
   name?: AssetName;
   /**
@@ -259,10 +312,6 @@ export interface AssetFilterProps {
    */
   parentExternalIds?: CogniteExternalId[];
   rootIds?: IdEither[];
-  /**
-   * Only include assets that reference these specific dataSet IDs
-   */
-  dataSetIds?: IdEither[];
   /**
    * Only include assets in subtrees rooted at the specified assets.
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
@@ -279,9 +328,49 @@ export interface AssetFilterProps {
   externalIdPrefix?: ExternalIdPrefix;
 }
 
+/**
+ * Filter on assets with exact match
+ */
+export interface AssetFilter extends Limit {
+  filter?: AssetFilterProps;
+}
+
+/**
+ * Query schema for asset aggregate endpoint
+ */
+export interface AssetAggregateQuery {
+  /**
+   * Filter on assets with strict matching.
+   */
+  filter?: AssetFilterProps;
+}
+
+/**
+ * Response from asset aggregate endpoint
+ */
+export interface AssetAggregate {
+  /**
+   * Size of the aggregation group
+   */
+  count: number;
+}
+
 export type AssetIdEither = IdEither;
 
 export type AssetInternalId = InternalId;
+
+export type AssetAggregatedProperty = 'childCount' | 'path' | 'depth';
+
+export interface AssetRetrieveParams {
+  /**
+   * Set of aggregated properties to include
+   */
+  aggregatedProperties?: AssetAggregatedProperty[];
+  /**
+   * Ignore IDs and external IDs that are not found
+   */
+  ignoreUnknownIds?: boolean;
+}
 
 export interface AssetListScope extends AssetFilter, FilterQuery {
   /**
@@ -289,6 +378,26 @@ export interface AssetListScope extends AssetFilter, FilterQuery {
    */
   aggregatedProperties?: AssetAggregatedProperty[];
   partition?: Partition;
+}
+
+export interface SequenceFilter {
+  filter?: {
+    name?: SequenceName;
+    externalIdPrefix?: ExternalIdPrefix;
+    metadata?: Metadata;
+    assetIds?: CogniteInternalId[];
+    /**
+     * Only include sequences that have a related asset in a tree rooted at any of these root assetIds.
+     */
+    rootAssetIds?: CogniteInternalId[];
+    /**
+     * Only include sequences that have a related asset in a subtree rooted at any of these assetIds.
+     * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
+     */
+    assetSubtreeIds?: IdEither[];
+    createdTime?: DateRange;
+    lastUpdatedTime?: DateRange;
+  };
 }
 
 export interface AssetMapping3D extends AssetMapping3DBase {
@@ -333,21 +442,9 @@ export interface AssetPatch {
     externalId?: SinglePatchString;
     name?: SinglePatchRequiredString;
     description?: SinglePatchString;
-    dataSetId?: NullableSinglePatchLong;
     metadata?: ObjectPatch;
     source?: SinglePatchString;
   };
-}
-
-export interface AssetRetrieveParams {
-  /**
-   * Set of aggregated properties to include
-   */
-  aggregatedProperties?: AssetAggregatedProperty[];
-  /**
-   * Ignore IDs and external IDs that are not found
-   */
-  ignoreUnknownIds?: boolean;
 }
 
 export interface AssetSearchFilter extends AssetFilter {
@@ -355,6 +452,18 @@ export interface AssetSearchFilter extends AssetFilter {
     name?: AssetName;
     query?: AssetName | AssetDescription;
     description?: AssetDescription;
+  };
+}
+
+export interface SequenceSearchFilter extends SequenceFilter {
+  search?: {
+    name?: SequenceName;
+    description?: SequenceDescription;
+    /**
+     * Search on name and description using wildcard search on each of the words (separated by spaces).
+     * Retrieves results where at least one word must match. Example: '*some* *other*'
+     */
+    query?: string;
   };
 }
 
@@ -409,6 +518,16 @@ export interface CogniteEvent
     InternalId,
     CreatedAndLastUpdatedTime {}
 
+export interface CreatedAndLastUpdatedTime {
+  lastUpdatedTime: Date;
+  createdTime: Date;
+}
+
+export interface CreatedAndLastUpdatedTimeFilter {
+  lastUpdatedTime?: DateRange;
+  createdTime?: DateRange;
+}
+
 /**
  * External Id provided by client. Should be unique within the project.
  */
@@ -445,16 +564,6 @@ export interface CreateRevision3D {
   metadata?: Metadata;
 }
 
-export interface CreatedAndLastUpdatedTime {
-  lastUpdatedTime: Date;
-  createdTime: Date;
-}
-
-export interface CreatedAndLastUpdatedTimeFilter {
-  lastUpdatedTime?: DateRange;
-  createdTime?: DateRange;
-}
-
 /**
  * Cursor for paging through results
  */
@@ -471,69 +580,6 @@ export type DELETE = 'DELETE';
 export interface DataIds {
   items?: AssetIdEither[];
 }
-
-export interface DataSet
-  extends ExternalDataSet,
-    InternalId,
-    CreatedAndLastUpdatedTime {
-  writeProtected: DataSetWriteProtected;
-}
-
-/**
- * Response from dataset aggregate endpoint
- */
-export interface DataSetAggregate {
-  /**
-   * Size of the aggregation group
-   */
-  count: number;
-}
-
-/**
- * Query schema for datasets aggregate endpoint
- */
-export interface DataSetAggregateQuery {
-  /**
-   * Filter on datasets with strict matching.
-   */
-  filter?: DataSetFilter;
-}
-
-export type DataSetChange = DataSetChangeById | DataSetChangeByExternalId;
-
-export interface DataSetChangeByExternalId extends DataSetPatch, ExternalId {}
-
-export interface DataSetChangeById extends DataSetPatch, InternalId {}
-
-/**
- * Filter on data sets with exact match
- */
-export interface DataSetFilter extends CreatedAndLastUpdatedTimeFilter {
-  metadata?: Metadata;
-  externalIdPrefix?: ExternalIdPrefix;
-  writeProtected?: DataSetWriteProtected;
-}
-
-export interface DataSetFilterRequest extends FilterQuery {
-  filter?: DataSetFilter;
-}
-
-export interface DataSetPatch {
-  update: {
-    externalId?: SinglePatchString;
-    name?: SinglePatchString;
-    description?: SinglePatchString;
-    metadata?: ObjectPatch;
-    writeProtected?: SetField<boolean>;
-  };
-}
-
-/**
- * Write-protected data sets impose additional restrictions on write access to resources inside a data set which can help ensuring data integrity of the data set.
- * For write-protected data set in addition to a writing capability that has given resource data in scope, principal must be an owners of the data set.
- * Note that this does not affect any security categories set for given resource data, both security category membership and data set ownership is required in such case
- */
-export type DataSetWriteProtected = boolean;
 
 export interface DatapointsDeleteRange {
   /**
@@ -591,10 +637,6 @@ export interface DatapointsMetadata extends InternalId {
   externalId?: CogniteExternalId;
 }
 
-export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
-  items: DatapointsQuery[];
-}
-
 export interface DatapointsMultiQueryBase extends Limit {
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in a Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
@@ -620,6 +662,10 @@ export interface DatapointsMultiQueryBase extends Limit {
    * Ignore IDs and external IDs that are not found
    */
   ignoreUnknownIds?: boolean;
+}
+
+export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
+  items: DatapointsQuery[];
 }
 
 export type DatapointsPostDatapoint =
@@ -678,31 +724,24 @@ export type DeleteAssetMapping3D = AssetMapping3DBase;
 
 export type EXECUTE = 'EXECUTE';
 
-/**
- * Response from event aggregate endpoint
- */
-export interface EventAggregate {
-  /**
-   * Size of the aggregation group
-   */
-  count: number;
-}
-
-/**
- * Query schema for asset aggregate endpoint
- */
-export interface EventAggregateQuery {
-  /**
-   * Filter on events with strict matching.
-   */
-  filter?: EventFilter;
-}
-
 export type EventChange = EventChangeById | EventChangeByExternalId;
+
+export type SequenceChange = SequencePatch & IdEither;
 
 export interface EventChangeByExternalId extends EventPatch, ExternalId {}
 
 export interface EventChangeById extends EventPatch, InternalId {}
+
+export interface SequencePatch {
+  update: {
+    name?: SinglePatchString;
+    description?: SinglePatchString;
+    assetId?: NullableSinglePatchLong;
+    externalId?: SinglePatchString;
+    endTime?: SinglePatchDate;
+    metadata?: ObjectPatch;
+  };
+}
 
 export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
   startTime?: DateRange;
@@ -720,10 +759,6 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
    * Only include events that have a related asset in a tree rooted at any of these root assetIds.
    */
   rootAssetIds?: IdEither[];
-  /**
-   * Only include assets that reference these specific dataSet IDs
-   */
-  dataSetIds?: IdEither[];
   /**
    * Only include events that have a related asset in a subtree rooted at any of these assetIds.
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
@@ -744,6 +779,28 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
   externalIdPrefix?: ExternalIdPrefix;
 }
 
+/**
+ * Items can be sorted in either ascending or descending order
+ */
+export type SortOrder = 'asc' | 'desc';
+
+export const SortOrder = {
+  ASC: 'asc' as SortOrder,
+  DESC: 'desc' as SortOrder,
+};
+
+/**
+ * Sort by selected fields.
+ * Only sorting on 1 field is currently supported.
+ * Partitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.
+ */
+export interface EventSort {
+  startTime?: SortOrder;
+  endTime?: SortOrder;
+  createdTime?: SortOrder;
+  lastUpdatedTime?: SortOrder;
+}
+
 export interface EventFilterRequest extends FilterQuery {
   filter?: EventFilter;
   sort?: EventSort;
@@ -758,7 +815,6 @@ export interface EventPatch {
     description?: SinglePatchString;
     metadata?: ObjectPatch;
     assetIds?: ArrayPatchLong;
-    dataSetId?: NullableSinglePatchLong;
     source?: SinglePatchString;
     type?: SinglePatchString;
     subtype?: SinglePatchString;
@@ -775,15 +831,23 @@ export interface EventSearchRequest extends Limit {
 }
 
 /**
- * Sort by selected fields.
- * Only sorting on 1 field is currently supported.
- * Partitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.
+ * Query schema for asset aggregate endpoint
  */
-export interface EventSort {
-  startTime?: SortOrder;
-  endTime?: SortOrder;
-  createdTime?: SortOrder;
-  lastUpdatedTime?: SortOrder;
+export interface EventAggregateQuery {
+  /**
+   * Filter on events with strict matching.
+   */
+  filter?: EventFilter;
+}
+
+/**
+ * Response from event aggregate endpoint
+ */
+export interface EventAggregate {
+  /**
+   * Size of the aggregation group
+   */
+  count: number;
 }
 
 export interface ExternalAsset {
@@ -791,7 +855,6 @@ export interface ExternalAsset {
   name: AssetName;
   parentId?: CogniteInternalId;
   description?: AssetDescription;
-  dataSetId?: CogniteInternalId;
   metadata?: Metadata;
   source?: AssetSource;
 }
@@ -801,20 +864,6 @@ export interface ExternalAssetItem extends ExternalAsset {
    * External id to the parent asset
    */
   parentExternalId?: CogniteExternalId;
-}
-
-export interface ExternalDataSet {
-  externalId?: CogniteExternalId;
-  /**
-   * Name of data set
-   */
-  name?: string;
-  /**
-   * Description of data set
-   */
-  description?: string;
-  metadata?: Metadata;
-  writeProtected?: DataSetWriteProtected;
 }
 
 /**
@@ -829,7 +878,6 @@ export interface ExternalEvent {
   description?: string;
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
-  dataSetId?: CogniteInternalId;
   source?: string;
 }
 
@@ -840,39 +888,12 @@ export interface ExternalFilesMetadata {
   mimeType?: FileMimeType;
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
-  dataSetId?: CogniteInternalId;
   sourceCreatedTime?: Date;
   sourceModifiedTime?: Date;
 }
 
 export interface ExternalId {
   externalId: CogniteExternalId;
-}
-
-/**
- * Prefix filter on externalId. (case-sensitive)
- */
-export type ExternalIdPrefix = string;
-
-export interface ExternalSequence extends SequenceBase {
-  /**
-   * List of column definitions
-   */
-  columns: ExternalSequenceColumn[];
-}
-
-/**
- * Describes a new column
- */
-export interface ExternalSequenceColumn
-  extends ExternalSequenceColumnBase,
-    ExternalId {}
-
-interface ExternalSequenceColumnBase {
-  name?: SequenceColumnName;
-  description?: SequenceColumnDescription;
-  valueType?: SequenceValueType;
-  metadata?: Metadata;
 }
 
 export interface FileChange {
@@ -884,7 +905,6 @@ export interface FileChange {
     assetIds?: ArrayPatchLong;
     sourceCreatedTime?: SinglePatchDate;
     sourceModifiedTime?: SinglePatchDate;
-    dataSetId?: NullableSinglePatchLong;
   };
 }
 
@@ -911,10 +931,6 @@ export interface FileFilter extends Limit {
      * Only include files that have a related asset in a tree rooted at any of these root assetIds.
      */
     rootAssetIds?: IdEither[];
-    /**
-     * Only include items that reference these specific dataSet IDs
-     */
-    dataSetIds?: IdEither[];
     /**
      * Only include files that are related to an asset in a subtree rooted at any of these assetIds.
      * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
@@ -964,9 +980,42 @@ export interface FilesSearchFilter extends FileFilter {
   };
 }
 
-export type Filter = TimeseriesFilterProps;
+/**
+ * Prefix filter on externalId. (case-sensitive)
+ */
+export type ExternalIdPrefix = string;
 
 export interface FilterQuery extends Cursor, Limit {}
+
+interface SequenceRowsRetriveData extends Cursor, Limit {
+  /**
+   * Lowest row number included.
+   * @default 0
+   */
+  start?: number;
+  /**
+   * Get rows up to, but excluding, this row number.
+   * @default "no limit"
+   */
+  end?: number;
+  /**
+   * Columns to be included. Specified as list of column externalIds.
+   * In case this filter is not set, all available columns will be returned.
+   */
+  columns?: string[];
+}
+
+/**
+ * A request for datapoints stored
+ */
+export type SequenceRowsRetrieve = SequenceRowsRetriveData & IdEither;
+
+export interface SequenceRowsResponseData extends InternalId {
+  externalId?: ExternalId;
+  columns: SequenceColumnBasicInfo[];
+  rows: SequenceRowData[];
+  nextCursor?: string;
+}
 
 export interface GetAggregateDatapoint extends GetDatapointMetadata {
   average?: number;
@@ -993,6 +1042,26 @@ export interface GetStringDatapoint extends GetDatapointMetadata {
   value: string;
 }
 
+/**
+ * Name of time series
+ */
+export type TimeseriesName = string;
+
+/**
+ * Whether the time series is string valued or not.
+ */
+export type TimeseriesIsString = boolean;
+
+/**
+ * The physical unit of the time series.
+ */
+export type TimeseriesUnit = string;
+
+/**
+ * Whether the time series is a step series or not.
+ */
+export type TimeseriesIsStep = boolean;
+
 export interface GetTimeSeriesMetadataDTO
   extends InternalId,
     CreatedAndLastUpdatedTime {
@@ -1011,7 +1080,6 @@ export interface GetTimeSeriesMetadataDTO
    * Asset that this time series belongs to.
    */
   assetId?: CogniteInternalId;
-  dataSetId?: CogniteInternalId;
   isStep: TimeseriesIsStep;
   /**
    * Description of the time series.
@@ -1305,8 +1373,6 @@ export interface OAuth2ConfigurationDTO {
   clientSecret?: string;
 }
 
-export type OWNER = 'OWNER';
-
 export type ObjectPatch =
   | {
       /**
@@ -1331,16 +1397,6 @@ export type ObjectPatch =
 export interface OutputProjectAuthentication {
   validDomains?: ValidDomains;
 }
-
-/**
- * Splits the data set into N partitions.
- * This should NOT be used for frontend applications.
- * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
- * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
- * You need to use `autoPagingToArray(...)` on each partition in order to receive all the data.
- * @example 1/10
- */
-export type Partition = string;
 
 export interface PostDatapoint {
   timestamp: Timestamp;
@@ -1376,10 +1432,6 @@ export interface PostTimeSeriesMetadataDTO {
    * Asset that this time series belongs to.
    */
   assetId?: CogniteInternalId;
-  /**
-   * DataSet that this time series related with.
-   */
-  dataSetId?: CogniteInternalId;
   /**
    * Whether the time series is a step series or not.
    */
@@ -1452,6 +1504,65 @@ export interface RawDBRowKey {
    * Unique row key
    */
   key: string;
+}
+
+export interface SequenceListScope extends SequenceFilter, Limit, Cursor {}
+
+/**
+ * Data from a sequence
+ */
+export interface SequenceRowsInsertData {
+  /**
+   * Column external ids in the same order as the values for each row
+   */
+  columns: string[];
+  /**
+   * List of row information
+   */
+  rows: SequenceRowData[];
+}
+
+export interface SequenceRowsData extends InternalId {
+  externalId?: ExternalId;
+  /**
+   * Column external ids in the same order as the values for each row
+   */
+  columns: string[];
+  /**
+   * List of row information
+   */
+  rows: SequenceRowData[];
+}
+
+/**
+ * A single row of datapoints
+ */
+export interface SequenceRowData {
+  /**
+   * The row number for this row
+   */
+  rowNumber: number;
+  /**
+   * List of values in order defined in the columns field
+   * (Number of items must match. Null is accepted for missing values)
+   */
+  values: SequenceItem[];
+}
+
+/**
+ * Element of type corresponding to the column type. May include NULL!
+ */
+export type SequenceItem = number | string | null;
+
+export type SequenceRowsInsert = SequenceRowsInsertData & IdEither;
+
+export type SequenceRowsDelete = SequenceRowsDeleteData & IdEither;
+
+interface SequenceRowsDeleteData {
+  /**
+   * Rows to delete from a sequence
+   */
+  rows: number[];
 }
 
 export interface RawDBTable {
@@ -1599,217 +1710,6 @@ export interface SecurityCategorySpec {
   name: string;
 }
 
-/**
- * Information about the sequence stored in the database
- */
-export interface Sequence
-  extends SequenceBase,
-    InternalId,
-    CreatedAndLastUpdatedTime {
-  columns: SequenceColumn[];
-}
-
-interface SequenceBase {
-  name?: SequenceName;
-  description?: SequenceDescription;
-  /**
-   * Asset this sequence is associated with
-   */
-  assetId?: CogniteInternalId;
-  dataSetId?: CogniteInternalId;
-  externalId?: CogniteExternalId;
-  metadata?: Metadata;
-}
-
-export type SequenceChange = SequencePatch & IdEither;
-
-/**
- * Information about a column stored in the database
- */
-export interface SequenceColumn
-  extends ExternalSequenceColumnBase,
-    InternalId,
-    CreatedAndLastUpdatedTime {
-  valueType: SequenceValueType;
-  externalId?: CogniteExternalId;
-}
-
-/**
- * Information about a column stored in the database
- */
-export interface SequenceColumnBasicInfo {
-  name?: SequenceColumnName;
-  externalId?: ExternalId;
-  valueType?: SequenceValueType;
-}
-
-/**
- * Description of the column
- */
-export type SequenceColumnDescription = string;
-
-/**
- *  Human readable name of the column
- */
-export type SequenceColumnName = string;
-
-/**
- * Description of the sequence
- */
-export type SequenceDescription = string;
-
-export interface SequenceFilter {
-  filter?: {
-    name?: SequenceName;
-    externalIdPrefix?: ExternalIdPrefix;
-    metadata?: Metadata;
-    assetIds?: CogniteInternalId[];
-    /**
-     * Only include sequences that have a related asset in a tree rooted at any of these root assetIds.
-     */
-    rootAssetIds?: CogniteInternalId[];
-    dataSetIds?: IdEither[];
-    /**
-     * Only include sequences that have a related asset in a subtree rooted at any of these assetIds.
-     * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
-     */
-    assetSubtreeIds?: IdEither[];
-    createdTime?: DateRange;
-    lastUpdatedTime?: DateRange;
-  };
-}
-
-/**
- * Element of type corresponding to the column type. May include NULL!
- */
-export type SequenceItem = number | string | null;
-
-export interface SequenceListScope extends SequenceFilter, Limit, Cursor {}
-
-/**
- * Name of the sequence
- */
-export type SequenceName = string;
-
-export interface SequencePatch {
-  update: {
-    name?: SinglePatchString;
-    description?: SinglePatchString;
-    assetId?: NullableSinglePatchLong;
-    dataSetId?: NullableSinglePatchLong;
-    externalId?: SinglePatchString;
-    endTime?: SinglePatchDate;
-    metadata?: ObjectPatch;
-  };
-}
-
-/**
- * A single row of datapoints
- */
-export interface SequenceRowData {
-  /**
-   * The row number for this row
-   */
-  rowNumber: number;
-  /**
-   * List of values in order defined in the columns field
-   * (Number of items must match. Null is accepted for missing values)
-   */
-  values: SequenceItem[];
-}
-
-export interface SequenceRowsData extends InternalId {
-  externalId?: ExternalId;
-  /**
-   * Column external ids in the same order as the values for each row
-   */
-  columns: string[];
-  /**
-   * List of row information
-   */
-  rows: SequenceRowData[];
-}
-
-export type SequenceRowsDelete = SequenceRowsDeleteData & IdEither;
-
-interface SequenceRowsDeleteData {
-  /**
-   * Rows to delete from a sequence
-   */
-  rows: number[];
-}
-
-export type SequenceRowsInsert = SequenceRowsInsertData & IdEither;
-
-/**
- * Data from a sequence
- */
-export interface SequenceRowsInsertData {
-  /**
-   * Column external ids in the same order as the values for each row
-   */
-  columns: string[];
-  /**
-   * List of row information
-   */
-  rows: SequenceRowData[];
-}
-
-export interface SequenceRowsResponseData extends InternalId {
-  externalId?: ExternalId;
-  columns: SequenceColumnBasicInfo[];
-  rows: SequenceRowData[];
-  nextCursor?: string;
-}
-
-/**
- * A request for datapoints stored
- */
-export type SequenceRowsRetrieve = SequenceRowsRetriveData & IdEither;
-
-interface SequenceRowsRetriveData extends Cursor, Limit {
-  /**
-   * Lowest row number included.
-   * @default 0
-   */
-  start?: number;
-  /**
-   * Get rows up to, but excluding, this row number.
-   * @default "no limit"
-   */
-  end?: number;
-  /**
-   * Columns to be included. Specified as list of column externalIds.
-   * In case this filter is not set, all available columns will be returned.
-   */
-  columns?: string[];
-}
-
-export interface SequenceSearchFilter extends SequenceFilter {
-  search?: {
-    name?: SequenceName;
-    description?: SequenceDescription;
-    /**
-     * Search on name and description using wildcard search on each of the words (separated by spaces).
-     * Retrieves results where at least one word must match. Example: '*some* *other*'
-     */
-    query?: string;
-  };
-}
-
-export const SequenceValueType = {
-  STRING: 'STRING' as SequenceValueType,
-  DOUBLE: 'DOUBLE' as SequenceValueType,
-  LONG: 'LONG' as SequenceValueType,
-};
-
-/**
- * What type the datapoints in a column will have.
- * DOUBLE is restricted to the range [-1E100, 1E100]
- * @default STRING
- */
-export type SequenceValueType = 'STRING' | 'DOUBLE' | 'LONG';
-
 export interface ServiceAccount {
   name: ServiceAccountName;
   groups?: Groups;
@@ -1851,8 +1751,7 @@ export type SingleCogniteCapability =
   | { apikeysAcl: AclApiKeys }
   | { threedAcl: Acl3D }
   | { sequencesAcl: AclSequences }
-  | { analyticsAcl: AclAnalytics }
-  | { datasetsAcl: AclDataSets };
+  | { analyticsAcl: AclAnalytics };
 
 export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
@@ -1865,16 +1764,6 @@ export interface SinglePatchRequiredString {
 
 export type SinglePatchString = SetField<string> | RemoveField;
 
-export const SortOrder = {
-  ASC: 'asc' as SortOrder,
-  DESC: 'desc' as SortOrder,
-};
-
-/**
- * Items can be sorted in either ascending or descending order
- */
-export type SortOrder = 'asc' | 'desc';
-
 export interface TimeSeriesPatch {
   update: {
     externalId?: NullableSinglePatchString;
@@ -1882,7 +1771,6 @@ export interface TimeSeriesPatch {
     metadata?: ObjectPatch;
     unit?: NullableSinglePatchString;
     assetId?: NullableSinglePatchLong;
-    dataSetId?: NullableSinglePatchLong;
     description?: NullableSinglePatchString;
     securityCategories?: ArrayPatchLong;
   };
@@ -1903,15 +1791,6 @@ export interface TimeSeriesUpdateByExternalId
 
 export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
 
-export interface TimeseriesFilter extends TimeseriesFilterProps, FilterQuery {
-  /**
-   * Decide if the metadata field should be returned or not.
-   * This property is ignored by SDK, you can call the endpoint manually if you want to leverage it.
-   */
-  includeMetadata?: boolean;
-  partition?: Partition;
-}
-
 interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
   name?: TimeseriesName;
   unit?: TimeseriesUnit;
@@ -1931,10 +1810,6 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
    */
   rootAssetIds?: CogniteInternalId[];
   /**
-   * Only include assets that reference these specific dataSet IDs
-   */
-  dataSetIds?: IdEither[];
-  /**
    * Only include timeseries that are related to an asset in a subtree rooted at any of these assetIds.
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
@@ -1942,32 +1817,33 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
   externalIdPrefix?: ExternalIdPrefix;
 }
 
+export type Filter = TimeseriesFilterProps;
+
+/**
+ * Splits the data set into N partitions.
+ * This should NOT be used for frontend applications.
+ * Partitions are formatted as `n/m`, where `n` is the index of the parititon, and `m` is the total number or partitions.
+ * i.e. 20 partitions would have one request with `partition: 1/20`, then another `partition: 2/20` and so on.
+ * You need to use `autoPagingToArray(...)` on each partition in order to receive all the data.
+ * @example 1/10
+ */
+export type Partition = string;
+
 export interface TimeseriesFilterQuery extends FilterQuery {
   filter?: TimeseriesFilterProps;
   partition?: Partition;
 }
 
+export interface TimeseriesFilter extends TimeseriesFilterProps, FilterQuery {
+  /**
+   * Decide if the metadata field should be returned or not.
+   * This property is ignored by SDK, you can call the endpoint manually if you want to leverage it.
+   */
+  includeMetadata?: boolean;
+  partition?: Partition;
+}
+
 export type TimeseriesIdEither = InternalId | ExternalId;
-
-/**
- * Whether the time series is a step series or not.
- */
-export type TimeseriesIsStep = boolean;
-
-/**
- * Whether the time series is string valued or not.
- */
-export type TimeseriesIsString = boolean;
-
-/**
- * Name of time series
- */
-export type TimeseriesName = string;
-
-/**
- * The physical unit of the time series.
- */
-export type TimeseriesUnit = string;
 
 export type Timestamp = number | Date;
 
