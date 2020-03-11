@@ -6,6 +6,7 @@ import {
   randomInt,
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
+  testDataSetId,
 } from '../testUtils';
 
 describe('Groups integration test', () => {
@@ -23,11 +24,13 @@ describe('Groups integration test', () => {
   });
 
   let group: Group;
+  const groupsToDelete: Group[] = [];
+  const groupName = 'Group name';
 
   test('create', async () => {
     const groupsToCreate: GroupSpec[] = [
       {
-        name: 'Group name' + randomInt(),
+        name: groupName + randomInt(),
         capabilities: [
           {
             eventsAcl: { actions: ['READ'], scope: { all: {} } },
@@ -38,6 +41,7 @@ describe('Groups integration test', () => {
     const response = await client.groups.create(groupsToCreate);
     expect(response.length).toBe(1);
     [group] = response;
+    groupsToDelete.push(group);
     expect(group.name).toBe(groupsToCreate[0].name);
   });
 
@@ -72,9 +76,50 @@ describe('Groups integration test', () => {
     expect(response).toEqual({});
   });
 
+  test('create asset group with datasetScope', async () => {
+    const groupsToCreate: GroupSpec[] = [
+      {
+        name: groupName + randomInt(),
+        capabilities: [
+          {
+            assetsAcl: {
+              actions: ['READ'],
+              scope: { datasetScope: { ids: [testDataSetId] } },
+            },
+          },
+        ],
+      },
+    ];
+    const response = await client.groups.create(groupsToCreate);
+    expect(response.length).toBe(1);
+    [group] = response;
+    groupsToDelete.push(group);
+    expect(group.name).toBe(groupsToCreate[0].name);
+  });
+
+  test('create dataset group', async () => {
+    const groupsToCreate: GroupSpec[] = [
+      {
+        name: groupName + randomInt(),
+        capabilities: [
+          {
+            datasetsAcl: { actions: ['READ'], scope: { all: {} } },
+          },
+        ],
+      },
+    ];
+    const response = await client.groups.create(groupsToCreate);
+    expect(response.length).toBe(1);
+    [group] = response;
+    groupsToDelete.push(group);
+    expect(group.name).toBe(groupsToCreate[0].name);
+  });
+
   test('delete', async () => {
     await runTestWithRetryWhenFailing(async () => {
-      const response = await client.groups.delete([group.id]);
+      const response = await client.groups.delete(
+        groupsToDelete.map(g => g.id)
+      );
       expect(response).toEqual({});
     });
   });

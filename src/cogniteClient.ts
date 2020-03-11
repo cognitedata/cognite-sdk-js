@@ -16,6 +16,7 @@ import { Viewer3DAPI } from './resources/3d/viewer3DApi';
 import { ApiKeysAPI } from './resources/apiKeys/apiKeysApi';
 import { AssetsAPI } from './resources/assets/assetsApi';
 import { DataPointsAPI } from './resources/dataPoints/dataPointsApi';
+import { DataSetsApi } from './resources/datasets/datasetsApi';
 import { EventsAPI } from './resources/events/eventsApi';
 import { FilesAPI } from './resources/files/filesApi';
 import { GroupsAPI } from './resources/groups/groupsApi';
@@ -130,6 +131,9 @@ export default class CogniteClient {
   public get files3D() {
     return validateAndReturnAPI(this.files3DApi);
   }
+  public get datasets() {
+    return validateAndReturnAPI(this.datasetsApi);
+  }
   public get assetMappings3D() {
     return validateAndReturnAPI(this.assetMappings3DApi);
   }
@@ -164,6 +168,7 @@ export default class CogniteClient {
   private models3DApi?: Models3DAPI;
   private revisions3DApi?: Revisions3DAPI;
   private files3DApi?: Files3DAPI;
+  private datasetsApi?: DataSetsApi;
   private assetMappings3DApi?: AssetMappings3DAPI;
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
@@ -443,9 +448,9 @@ export default class CogniteClient {
       ) => ApiType,
       relativePath: string
     ) => {
-      return new api(projectPath + relativePath, ...defaultArgs);
+      return new api(`${projectPath}/${relativePath}`, ...defaultArgs);
     };
-    const models3DPath = '/3d/models';
+    const models3DPath = '3d/models';
 
     this.assetsApi = new AssetsAPI(
       this,
@@ -457,26 +462,24 @@ export default class CogniteClient {
       projectPath + '/timeseries',
       ...defaultArgs
     );
-    this.dataPointsApi = apiFactory(DataPointsAPI, '/timeseries/data');
-    this.sequencesApi = apiFactory(SequencesAPI, '/sequences');
-    this.eventsApi = apiFactory(EventsAPI, '/events');
-    this.filesApi = apiFactory(FilesAPI, '/files');
-    this.rawApi = apiFactory(RawAPI, '/raw/dbs');
-    this.groupsApi = apiFactory(GroupsAPI, '/groups');
+    this.dataPointsApi = apiFactory(DataPointsAPI, 'timeseries/data');
+    this.sequencesApi = apiFactory(SequencesAPI, 'sequences');
+    this.eventsApi = apiFactory(EventsAPI, 'events');
+    this.filesApi = apiFactory(FilesAPI, 'files');
+    this.datasetsApi = apiFactory(DataSetsApi, 'datasets');
+    this.rawApi = apiFactory(RawAPI, 'raw/dbs');
+    this.groupsApi = apiFactory(GroupsAPI, 'groups');
     this.securityCategoriesApi = apiFactory(
       SecurityCategoriesAPI,
-      '/securitycategories'
+      'securitycategories'
     );
-    this.serviceAccountsApi = apiFactory(
-      ServiceAccountsAPI,
-      '/serviceaccounts'
-    );
-    this.apiKeysApi = apiFactory(ApiKeysAPI, '/apikeys');
+    this.serviceAccountsApi = apiFactory(ServiceAccountsAPI, 'serviceaccounts');
+    this.apiKeysApi = apiFactory(ApiKeysAPI, 'apikeys');
     this.models3DApi = apiFactory(Models3DAPI, models3DPath);
     this.revisions3DApi = apiFactory(Revisions3DAPI, models3DPath);
-    this.files3DApi = apiFactory(Files3DAPI, '/3d/files');
+    this.files3DApi = apiFactory(Files3DAPI, '3d/files');
     this.assetMappings3DApi = apiFactory(AssetMappings3DAPI, models3DPath);
-    this.viewer3DApi = apiFactory(Viewer3DAPI, '/3d');
+    this.viewer3DApi = apiFactory(Viewer3DAPI, '3d');
     this.projectsApi = new ProjectsAPI(apiUrl(), ...defaultArgs);
     this.loginApi = new LoginAPI(...defaultArgs);
   };

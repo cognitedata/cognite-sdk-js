@@ -3,8 +3,9 @@
 import { readFileSync } from 'fs';
 import CogniteClient from '../../cogniteClient';
 import { Asset } from '../../resources/classes/asset';
-import { ExternalFilesMetadata, FilesMetadata } from '../../types/types';
+import { FilesMetadata } from '../../types/types';
 import { HttpResponseType } from '../../utils/http/basicHttpClient';
+import { getFileCreateArgs } from '../helper';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
@@ -27,17 +28,12 @@ describe('Files integration test', () => {
     await client.assets.delete([{ id: asset.id }]);
   });
 
-  const postfix = randomInt();
-  const fileContent = 'content_' + new Date();
-  const sourceCreatedTime = new Date();
-  const localFileMeta: ExternalFilesMetadata = {
-    name: 'filename_0_' + postfix,
-    mimeType: 'text/plain;charset=UTF-8',
-    metadata: {
-      key: 'value',
-    },
+  const {
+    fileContent,
+    localFileMeta,
+    postfix,
     sourceCreatedTime,
-  };
+  } = getFileCreateArgs();
 
   let file: FilesMetadata;
 
