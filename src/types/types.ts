@@ -470,6 +470,26 @@ export interface DataSet
   writeProtected: DataSetWriteProtected;
 }
 
+/**
+ * Response from dataset aggregate endpoint
+ */
+export interface DataSetAggregate {
+  /**
+   * Size of the aggregation group
+   */
+  count: number;
+}
+
+/**
+ * Query schema for datasets aggregate endpoint
+ */
+export interface DataSetAggregateQuery {
+  /**
+   * Filter on datasets with strict matching.
+   */
+  filter?: DataSetFilter;
+}
+
 export type DataSetChange = DataSetChangeById | DataSetChangeByExternalId;
 
 export interface DataSetChangeByExternalId extends DataSetPatch, ExternalId {}
@@ -487,26 +507,6 @@ export interface DataSetFilter extends CreatedAndLastUpdatedTimeFilter {
 
 export interface DataSetFilterRequest extends FilterQuery {
   filter?: DataSetFilter;
-}
-
-/**
- * Query schema for datasets aggregate endpoint
- */
-export interface DataSetAggregateQuery {
-  /**
-   * Filter on datasets with strict matching.
-   */
-  filter?: DataSetFilter;
-}
-
-/**
- * Response from dataset aggregate endpoint
- */
-export interface DataSetAggregate {
-  /**
-   * Size of the aggregation group
-   */
-  count: number;
 }
 
 export interface DataSetPatch {
