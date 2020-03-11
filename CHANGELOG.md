@@ -1,3 +1,10 @@
+# [2.24.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.23.0...v2.24.0) (2020-03-11)
+
+
+### Features
+
+* add data sets capabilities ([#354](https://github.com/cognitedata/cognite-sdk-js/issues/354)) ([e86b18f](https://github.com/cognitedata/cognite-sdk-js/commit/e86b18f0e919d6b3f40079293b4017cbbd8b8c42))
+
 # [2.23.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.22.0...v2.23.0) (2020-03-11)
 
 
