@@ -50,13 +50,15 @@ describe('data sets integration test', () => {
     await client.datasets.list(filter);
   });
   test('count aggregate', async () => {
-    const aggregates = await client.datasets.aggregate({
-      filter: {
-        metadata: { timestamp: metadataTimestamp },
-      },
+    await runTestWithRetryWhenFailing(async () => {
+      const aggregates = await client.datasets.aggregate({
+        filter: {
+          metadata: { timestamp: metadataTimestamp },
+        },
+      });
+      expect(aggregates.length).toBe(1);
+      expect(aggregates[0].count).toBeGreaterThan(0);
     });
-    expect(aggregates.length).toBe(1);
-    expect(aggregates[0].count).toBeGreaterThan(0);
   });
   test('retrieve', async () => {
     const [{ id, description }] = datasets;
