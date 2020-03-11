@@ -15,7 +15,7 @@ export type AclActionApiKeys = LIST | CREATE | DELETE;
 
 export type AclActionAssets = READ | WRITE;
 
-export type AclActionDataSets = READ | WRITE;
+export type AclActionDataSets = READ | WRITE | OWNER;
 
 export type AclActionEvents = READ | WRITE;
 
@@ -41,7 +41,7 @@ export type AclApiKeys = Acl<AclActionApiKeys, AclScopeApiKeys>;
 
 export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
 
-export type AclDataSets = Acl<AclActionDataSets, AclScopeSequences>;
+export type AclDataSets = Acl<AclActionDataSets, AclScopeDatasets>;
 
 export type AclEvents = Acl<AclActionEvents, AclScopeEvents>;
 
@@ -63,7 +63,7 @@ export type AclScopeAnalytics = AclScopeAll;
 
 export type AclScopeApiKeys = AclScopeAll | AclScopeCurrentUser;
 
-export type AclScopeAssets = AclScopeAll;
+export type AclScopeAssets = AclScopeAll | AclScopeDatasetsIds;
 
 export interface AclScopeAssetsId {
   assetIdScope: {
@@ -75,9 +75,17 @@ export interface AclScopeCurrentUser {
   currentuserscope: {};
 }
 
-export type AclScopeEvents = AclScopeAll;
+export type AclScopeDatasets = AclScopeAll | AclScopeDatasetsIds;
 
-export type AclScopeFiles = AclScopeAll;
+export interface AclScopeDatasetsIds {
+  datasetScope: {
+    ids: CogniteInternalId[];
+  };
+}
+
+export type AclScopeEvents = AclScopeAll | AclScopeDatasetsIds;
+
+export type AclScopeFiles = AclScopeAll | AclScopeDatasets;
 
 export type AclScopeGroups = AclScopeAll | AclScopeCurrentUser;
 
@@ -87,7 +95,7 @@ export type AclScopeRaw = AclScopeAll;
 
 export type AclScopeSecurityCategories = AclScopeAll;
 
-export type AclScopeSequences = AclScopeAll;
+export type AclScopeSequences = AclScopeAll | AclScopeDatasetsIds;
 
 export interface AclScopeTimeSeriesIds {
   idscope: {
@@ -98,7 +106,8 @@ export interface AclScopeTimeSeriesIds {
 export type AclScopeTimeseries =
   | AclScopeAll
   | AclScopeAssetsId
-  | AclScopeTimeSeriesIds;
+  | AclScopeTimeSeriesIds
+  | AclScopeDatasetsIds;
 
 export type AclScopeUsers = AclScopeAll;
 
@@ -1296,6 +1305,8 @@ export interface OAuth2ConfigurationDTO {
   clientSecret?: string;
 }
 
+export type OWNER = 'OWNER';
+
 export type ObjectPatch =
   | {
       /**
@@ -1786,18 +1797,18 @@ export interface SequenceSearchFilter extends SequenceFilter {
   };
 }
 
+export const SequenceValueType = {
+  STRING: 'STRING' as SequenceValueType,
+  DOUBLE: 'DOUBLE' as SequenceValueType,
+  LONG: 'LONG' as SequenceValueType,
+};
+
 /**
  * What type the datapoints in a column will have.
  * DOUBLE is restricted to the range [-1E100, 1E100]
  * @default STRING
  */
 export type SequenceValueType = 'STRING' | 'DOUBLE' | 'LONG';
-
-export const SequenceValueType = {
-  STRING: 'STRING' as SequenceValueType,
-  DOUBLE: 'DOUBLE' as SequenceValueType,
-  LONG: 'LONG' as SequenceValueType,
-};
 
 export interface ServiceAccount {
   name: ServiceAccountName;
@@ -1854,15 +1865,15 @@ export interface SinglePatchRequiredString {
 
 export type SinglePatchString = SetField<string> | RemoveField;
 
-/**
- * Items can be sorted in either ascending or descending order
- */
-export type SortOrder = 'asc' | 'desc';
-
 export const SortOrder = {
   ASC: 'asc' as SortOrder,
   DESC: 'desc' as SortOrder,
 };
+
+/**
+ * Items can be sorted in either ascending or descending order
+ */
+export type SortOrder = 'asc' | 'desc';
 
 export interface TimeSeriesPatch {
   update: {
