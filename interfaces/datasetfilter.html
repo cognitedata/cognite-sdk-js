@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AclScopeTimeSeriesIds | Cognite JavaScript SDK</title>
+	<title>DataSetFilter | Cognite JavaScript SDK</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,21 +52,33 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="aclscopetimeseriesids.html">AclScopeTimeSeriesIds</a>
+					<a href="datasetfilter.html">DataSetFilter</a>
 				</li>
 			</ul>
-			<h1>Interface AclScopeTimeSeriesIds</h1>
+			<h1>Interface DataSetFilter</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Filter on data sets with exact match</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AclScopeTimeSeriesIds</span>
+						<a href="createdandlastupdatedtimefilter.html" class="tsd-signature-type">CreatedAndLastUpdatedTimeFilter</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">DataSetFilter</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -77,7 +89,11 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="aclscopetimeseriesids.html#idscope" class="tsd-kind-icon">idscope</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="datasetfilter.html#createdtime" class="tsd-kind-icon">created<wbr>Time</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datasetfilter.html#externalidprefix" class="tsd-kind-icon">external<wbr>IdPrefix</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="datasetfilter.html#lastupdatedtime" class="tsd-kind-icon">last<wbr>Updated<wbr>Time</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datasetfilter.html#metadata" class="tsd-kind-icon">metadata</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datasetfilter.html#writeprotected" class="tsd-kind-icon">write<wbr>Protected</a></li>
 							</ul>
 						</section>
 					</div>
@@ -85,20 +101,57 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="idscope" class="tsd-anchor"></a>
-					<h3>idscope</h3>
-					<div class="tsd-signature tsd-kind-icon">idscope<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="createdtime" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> created<wbr>Time</h3>
+					<div class="tsd-signature tsd-kind-icon">created<wbr>Time<span class="tsd-signature-symbol">:</span> <a href="../index.html#daterange" class="tsd-signature-type">DateRange</a></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="createdandlastupdatedtimefilter.html">CreatedAndLastUpdatedTimeFilter</a>.<a href="createdandlastupdatedtimefilter.html#createdtime">createdTime</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/785f0c1/src/types/types.ts#L71">types/types.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3ca80f2/src/types/types.ts#L455">types/types.ts:455</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="externalidprefix" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> external<wbr>IdPrefix</h3>
+					<div class="tsd-signature tsd-kind-icon">external<wbr>IdPrefix<span class="tsd-signature-symbol">:</span> <a href="../index.html#externalidprefix" class="tsd-signature-type">ExternalIdPrefix</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3ca80f2/src/types/types.ts#L513">types/types.ts:513</a></li>
 						</ul>
-					</div>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="lastupdatedtime" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> last<wbr>Updated<wbr>Time</h3>
+					<div class="tsd-signature tsd-kind-icon">last<wbr>Updated<wbr>Time<span class="tsd-signature-symbol">:</span> <a href="../index.html#daterange" class="tsd-signature-type">DateRange</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="createdandlastupdatedtimefilter.html">CreatedAndLastUpdatedTimeFilter</a>.<a href="createdandlastupdatedtimefilter.html#lastupdatedtime">lastUpdatedTime</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3ca80f2/src/types/types.ts#L454">types/types.ts:454</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="metadata" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">metadata<span class="tsd-signature-symbol">:</span> <a href="metadata.html" class="tsd-signature-type">Metadata</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3ca80f2/src/types/types.ts#L512">types/types.ts:512</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="writeprotected" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> write<wbr>Protected</h3>
+					<div class="tsd-signature tsd-kind-icon">write<wbr>Protected<span class="tsd-signature-symbol">:</span> <a href="../index.html#datasetwriteprotected" class="tsd-signature-type">DataSetWriteProtected</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3ca80f2/src/types/types.ts#L514">types/types.ts:514</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -115,10 +168,22 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="aclscopetimeseriesids.html" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Time<wbr>Series<wbr>Ids</a>
+						<a href="datasetfilter.html" class="tsd-kind-icon">Data<wbr>Set<wbr>Filter</a>
 						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="datasetfilter.html#createdtime" class="tsd-kind-icon">created<wbr>Time</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="aclscopetimeseriesids.html#idscope" class="tsd-kind-icon">idscope</a>
+								<a href="datasetfilter.html#externalidprefix" class="tsd-kind-icon">external<wbr>IdPrefix</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="datasetfilter.html#lastupdatedtime" class="tsd-kind-icon">last<wbr>Updated<wbr>Time</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="datasetfilter.html#metadata" class="tsd-kind-icon">metadata</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="datasetfilter.html#writeprotected" class="tsd-kind-icon">write<wbr>Protected</a>
 							</li>
 						</ul>
 					</li>
