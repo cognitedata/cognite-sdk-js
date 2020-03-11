@@ -24,12 +24,13 @@ describe('Groups integration test', () => {
   });
 
   let group: Group;
-  let groupsToDelete: Group[] = [];
+  const groupsToDelete: Group[] = [];
+  const groupName = 'Group name';
 
   test('create', async () => {
     const groupsToCreate: GroupSpec[] = [
       {
-        name: 'Group name' + randomInt(),
+        name: groupName + randomInt(),
         capabilities: [
           {
             eventsAcl: { actions: ['READ'], scope: { all: {} } },
@@ -78,10 +79,13 @@ describe('Groups integration test', () => {
   test('create asset group with datasetScope', async () => {
     const groupsToCreate: GroupSpec[] = [
       {
-        name: 'Group name' + randomInt(),
+        name: groupName + randomInt(),
         capabilities: [
           {
-            assetsAcl: { actions: ['READ'], scope: { datasetScope: {ids: [testDataSetId]} } },
+            assetsAcl: {
+              actions: ['READ'],
+              scope: { datasetScope: { ids: [testDataSetId] } },
+            },
           },
         ],
       },
@@ -96,7 +100,7 @@ describe('Groups integration test', () => {
   test('create dataset group', async () => {
     const groupsToCreate: GroupSpec[] = [
       {
-        name: 'Group name' + randomInt(),
+        name: groupName + randomInt(),
         capabilities: [
           {
             datasetsAcl: { actions: ['READ'], scope: { all: {} } },
@@ -113,7 +117,9 @@ describe('Groups integration test', () => {
 
   test('delete', async () => {
     await runTestWithRetryWhenFailing(async () => {
-      const response = await client.groups.delete(groupsToDelete.map(g => g.id));
+      const response = await client.groups.delete(
+        groupsToDelete.map(g => g.id)
+      );
       expect(response).toEqual({});
     });
   });
