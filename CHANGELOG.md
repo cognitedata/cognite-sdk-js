@@ -1,3 +1,10 @@
+## [2.24.1](https://github.com/cognitedata/cognite-sdk-js/compare/v2.24.0...v2.24.1) (2020-03-11)
+
+
+### Bug Fixes
+
+* deploy pipeline ([#355](https://github.com/cognitedata/cognite-sdk-js/issues/355)) ([3ca80f2](https://github.com/cognitedata/cognite-sdk-js/commit/3ca80f2c0226ee12fb21e83944da2b7a5634528c))
+
 # [2.24.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.23.0...v2.24.0) (2020-03-11)
 
 
