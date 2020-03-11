@@ -41,7 +41,6 @@ describe('data sets integration test', () => {
     updateDataSetObject = { update: { dataSetId: { set: datasets[1].id } } };
     expect(datasets[0].id).toBeTruthy();
   });
-
   test('list', async () => {
     const filter: DataSetFilterRequest = {
       filter: {
@@ -49,6 +48,15 @@ describe('data sets integration test', () => {
       },
     };
     await client.datasets.list(filter);
+  });
+  test('count aggregate', async () => {
+    const aggregates = await client.datasets.aggregate({
+      filter: {
+        metadata: { timestamp: metadataTimestamp },
+      },
+    });
+    expect(aggregates.length).toBe(1);
+    expect(aggregates[0].count).toBeGreaterThan(0);
   });
   test('retrieve', async () => {
     const [{ id, description }] = datasets;
@@ -235,15 +243,6 @@ describe('data sets integration test', () => {
         expect(sequences.length).toBeTruthy();
         expect(sequences[0].dataSetId).toEqual(dataSetId);
       });
-    });
-    test('count aggregate', async () => {
-      const aggregates = await client.datasets.aggregate({
-        filter: {
-          metadata: { timestamp: metadataTimestamp },
-        },
-      });
-      expect(aggregates.length).toBe(1);
-      expect(aggregates[0].count).toBeGreaterThan(0);
     });
     test('update', async () => {
       const [updatedSequence] = await client.sequences.update([
