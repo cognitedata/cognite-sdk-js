@@ -97,16 +97,16 @@ export type AclScopeSecurityCategories = AclScopeAll;
 
 export type AclScopeSequences = AclScopeAll | AclScopeDatasetsIds;
 
-export interface AclScopeTimeSeriesIds {
-  idscope: {
-    ids: CogniteInternalId[];
+export interface AclScopeTimeSeriesAssetRootIds {
+  assetRootIdScope: {
+    rootIds: CogniteInternalId[];
   };
 }
 
 export type AclScopeTimeseries =
   | AclScopeAll
   | AclScopeAssetsId
-  | AclScopeTimeSeriesIds
+  | AclScopeTimeSeriesAssetRootIds
   | AclScopeDatasetsIds;
 
 export type AclScopeUsers = AclScopeAll;
