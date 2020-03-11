@@ -24,6 +24,7 @@ describe('data sets integration test', () => {
   let client: CogniteClient;
   let datasets: DataSet[];
   let updateDataSetObject: { update: { dataSetId: NullableSinglePatchLong } };
+  const metadataTimestamp = Date.now().toString();
 
   beforeAll(async () => {
     client = setupLoggedInClient();
@@ -31,7 +32,10 @@ describe('data sets integration test', () => {
 
   test('create', async () => {
     datasets = await client.datasets.create([
-      { description: 'integration-1' },
+      {
+        description: 'integration-1',
+        metadata: { timestamp: metadataTimestamp },
+      },
       { description: 'integration-2' },
     ]);
     updateDataSetObject = { update: { dataSetId: { set: datasets[1].id } } };
@@ -231,6 +235,15 @@ describe('data sets integration test', () => {
         expect(sequences.length).toBeTruthy();
         expect(sequences[0].dataSetId).toEqual(dataSetId);
       });
+    });
+    test('count aggregate', async () => {
+      const aggregates = await client.datasets.aggregate({
+        filter: {
+          metadata: { timestamp: metadataTimestamp },
+        },
+      });
+      expect(aggregates.length).toBe(1);
+      expect(aggregates[0].count).toBeGreaterThan(0);
     });
     test('update', async () => {
       const [updatedSequence] = await client.sequences.update([

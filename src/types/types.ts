@@ -217,13 +217,6 @@ export interface AssetAggregateResult {
   path?: AssetIdEither[];
 }
 
-export interface AssetAggregateResult {
-  /**
-   * Number of descendants in its subtree
-   */
-  childCount?: number;
-}
-
 export type AssetAggregatedProperty = 'childCount' | 'path' | 'depth';
 
 export type AssetChange = AssetChangeById | AssetChangeByExternalId;
@@ -494,6 +487,26 @@ export interface DataSetFilter extends CreatedAndLastUpdatedTimeFilter {
 
 export interface DataSetFilterRequest extends FilterQuery {
   filter?: DataSetFilter;
+}
+
+/**
+ * Query schema for datasets aggregate endpoint
+ */
+export interface DataSetAggregateQuery {
+  /**
+   * Filter on datasets with strict matching.
+   */
+  filter?: DataSetFilter;
+}
+
+/**
+ * Response from dataset aggregate endpoint
+ */
+export interface DataSetAggregate {
+  /**
+   * Size of the aggregation group
+   */
+  count: number;
 }
 
 export interface DataSetPatch {

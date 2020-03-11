@@ -3,6 +3,8 @@
 import { CursorAndAsyncIterator } from '../../autoPagination';
 import {
   DataSet,
+  DataSetAggregate,
+  DataSetAggregateQuery,
   DataSetChange,
   DataSetFilterRequest,
   ExternalDataSet,
@@ -37,6 +39,20 @@ export class DataSetsApi extends BaseResourceAPI<DataSet> {
     query?: DataSetFilterRequest
   ): CursorAndAsyncIterator<DataSet> => {
     return super.listEndpoint(this.callListEndpointWithPost, query);
+  };
+
+  /**
+   * [Aggregate datasets](https://docs.cognite.com/api/v1/#operation/aggregateDataSets)
+   *
+   * ```js
+   * const aggregates = await client.datasets.aggregate({ filter: { writeProtected: true } });
+   * console.log('Number of write protected datasets: ', aggregates[0].count)
+   * ```
+   */
+  public aggregate = (
+    query: DataSetAggregateQuery
+  ): Promise<DataSetAggregate[]> => {
+    return super.aggregateEndpoint(query);
   };
 
   /**
