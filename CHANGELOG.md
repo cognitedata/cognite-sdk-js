@@ -10,14 +10,8 @@
 
 ### Features
 
-* add data sets capabilities ([#354](https://github.com/cognitedata/cognite-sdk-js/issues/354)) ([e86b18f](https://github.com/cognitedata/cognite-sdk-js/commit/e86b18f0e919d6b3f40079293b4017cbbd8b8c42))
 
-# [2.23.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.22.0...v2.23.0) (2020-03-11)
-
-
-### Features
-
-* add data sets capabilities ([#352](https://github.com/cognitedata/cognite-sdk-js/issues/352)) ([ae40843](https://github.com/cognitedata/cognite-sdk-js/commit/ae408433886b69bc2e55d66a583d28389ea5207d))
+* Introduce support for Data sets. Document and track data lineage, ensure data integrity, and allow 3rd parties to write their insights securely back to your Cognite Data Fusion (CDF) project. Learn more about data sets [here.](https://docs.cognite.com/cdf/blog/data_sets.html)
 
 # [2.22.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.21.0...v2.22.0) (2020-03-05)
 
