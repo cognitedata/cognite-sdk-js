@@ -3,8 +3,10 @@
 import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
+  AggregateResponse,
   CogniteInternalId,
   ExternalFilesMetadata,
+  FileAggregateQuery,
   FileChangeUpdate,
   FileContent,
   FileLink,
@@ -14,8 +16,6 @@ import {
   IdEither,
   ItemsWrapper,
   UploadFileMetadataResponse,
-  FileAggregateQuery,
-  AggregateResponse,
 } from '../../types/types';
 import { sleepPromise } from '../../utils';
 import { HttpHeaders } from '../../utils/http/basicHttpClient';
@@ -62,7 +62,7 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
-    /**
+  /**
    * [Aggregate files](https://docs.cognite.com/api/v1/#operation/aggregateFiles)
    *
    * ```js

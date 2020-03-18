@@ -2,17 +2,17 @@
 import { CursorAndAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
+  AggregateResponse,
   ExternalSequence,
   IdEither,
   Sequence,
   SequenceChange,
+  SequenceFilter,
   SequenceListScope,
   SequenceRowsDelete,
   SequenceRowsInsert,
   SequenceRowsRetrieve,
   SequenceSearchFilter,
-  AggregateResponse,
-  SequenceFilter
 } from '../../types/types';
 import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { BaseResourceAPI } from '../baseResourceApi';
@@ -79,7 +79,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
-    /**
+  /**
    * [Aggregate sequences](https://docs.cognite.com/api/v1/#operation/aggregateSequences)
    *
    * ```js
@@ -87,9 +87,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * console.log('Number of sequences named Well: ', aggregates[0].count)
    * ```
    */
-  public aggregate = (
-    query: SequenceFilter
-  ): Promise<AggregateResponse[]> => {
+  public aggregate = (query: SequenceFilter): Promise<AggregateResponse[]> => {
     return super.aggregateEndpoint(query);
   };
 

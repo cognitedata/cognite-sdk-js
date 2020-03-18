@@ -5,15 +5,15 @@ import { MetadataMap } from '../../metadata';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import { CursorAndAsyncIterator } from '../../standardMethods';
 import {
+  AggregateResponse,
   GetTimeSeriesMetadataDTO,
   IdEither,
   PostTimeSeriesMetadataDTO,
+  TimeseriesAggregateQuery,
   TimeseriesFilter,
   TimeseriesFilterQuery,
   TimeSeriesSearchDTO,
   TimeSeriesUpdate,
-  TimeseriesAggregateQuery,
-  AggregateResponse,
 } from '../../types/types';
 import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { TimeSeries } from '../classes/timeSeries';

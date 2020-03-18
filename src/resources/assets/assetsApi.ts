@@ -9,8 +9,8 @@ import { Asset } from '../../resources/classes/asset';
 import { AssetList } from '../../resources/classes/assetList';
 import { RevertableArraySorter } from '../../revertableArraySorter';
 import {
-  Asset as TypeAsset,
   AggregateResponse,
+  Asset as TypeAsset,
   AssetAggregateQuery,
   AssetChange,
   AssetIdEither,
