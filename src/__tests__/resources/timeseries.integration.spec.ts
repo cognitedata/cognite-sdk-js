@@ -86,6 +86,16 @@ describe('Timeseries integration test', () => {
     });
   });
 
+  test('count aggregate', async () => {
+    const aggregates = await client.timeseries.aggregate({
+      filter: {
+        name: timeseries[0].name,
+      },
+    });
+    expect(aggregates.length).toBe(1);
+    expect(aggregates[0].count).toBeDefined();
+  });
+
   test('list with some more filters', async () => {
     const { isString, name, unit } = timeseries[1];
     const { items } = await client.timeseries.list({

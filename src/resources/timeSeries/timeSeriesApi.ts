@@ -12,6 +12,8 @@ import {
   TimeseriesFilterQuery,
   TimeSeriesSearchDTO,
   TimeSeriesUpdate,
+  TimeseriesAggregateQuery,
+  AggregateResponse,
 } from '../../types/types';
 import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { TimeSeries } from '../classes/timeSeries';
@@ -65,6 +67,20 @@ export class TimeSeriesAPI extends BaseResourceAPI<
       query = { filter, limit, partition, cursor };
     }
     return super.listEndpoint(this.callListEndpointWithPost, query);
+  };
+
+  /**
+   * [Aggregate timeseries](https://docs.cognite.com/api/v1/#operation/aggregateTimeSeries)
+   *
+   * ```js
+   * const aggregates = await client.timeseries.aggregate({ filter: { isString: true } });
+   * console.log('Number of string timeseries: ', aggregates[0].count)
+   * ```
+   */
+  public aggregate = (
+    query: TimeseriesAggregateQuery
+  ): Promise<AggregateResponse[]> => {
+    return super.aggregateEndpoint(query);
   };
 
   /**

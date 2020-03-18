@@ -14,6 +14,8 @@ import {
   IdEither,
   ItemsWrapper,
   UploadFileMetadataResponse,
+  FileAggregateQuery,
+  AggregateResponse,
 } from '../../types/types';
 import { sleepPromise } from '../../utils';
 import { HttpHeaders } from '../../utils/http/basicHttpClient';
@@ -58,6 +60,20 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
     scope?: FileRequestFilter
   ): CursorAndAsyncIterator<FilesMetadata> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
+  };
+
+    /**
+   * [Aggregate files](https://docs.cognite.com/api/v1/#operation/aggregateFiles)
+   *
+   * ```js
+   * const aggregates = await client.files.aggregate({ filter: { uploaded: true } });
+   * console.log('Number of uploaded files: ', aggregates[0].count)
+   * ```
+   */
+  public aggregate = (
+    query: FileAggregateQuery
+  ): Promise<AggregateResponse[]> => {
+    return super.aggregateEndpoint(query);
   };
 
   /**

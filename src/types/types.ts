@@ -194,7 +194,7 @@ export interface Asset
 /**
  * Response from asset aggregate endpoint
  */
-export interface AssetAggregate {
+export interface AggregateResponse {
   /**
    * Size of the aggregation group
    */
@@ -209,6 +209,26 @@ export interface AssetAggregateQuery {
    * Filter on assets with strict matching.
    */
   filter?: AssetFilterProps;
+}
+
+/**
+ * Query schema for files aggregate endpoint
+ */
+export interface FileAggregateQuery {
+  /**
+   * Filter on files with strict matching.
+   */
+  filter?: FileFilterProps;
+}
+
+/**
+ * Query schema for timeseries aggregate endpoint
+ */
+export interface TimeseriesAggregateQuery {
+  /**
+   * Filter on timeseries with strict matching.
+   */
+  filter?: TimeseriesFilterProps;
 }
 
 export interface AssetAggregateResult {
@@ -898,37 +918,39 @@ export interface FileChangeUpdateById extends InternalId, FileChange {}
 
 export type FileContent = ArrayBuffer | Buffer | any;
 
+export interface FileFilterProps {
+  name?: FileName;
+  mimeType?: FileMimeType;
+  metadata?: Metadata;
+  /**
+   * Only include files that reference these specific asset IDs.
+   */
+  assetIds?: CogniteInternalId[];
+  /**
+   * Only include files that have a related asset in a tree rooted at any of these root assetIds.
+   */
+  rootAssetIds?: IdEither[];
+  /**
+   * Only include items that reference these specific dataSet IDs
+   */
+  dataSetIds?: IdEither[];
+  /**
+   * Only include files that are related to an asset in a subtree rooted at any of these assetIds.
+   * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
+   */
+  assetSubtreeIds?: IdEither[];
+  source?: string;
+  createdTime?: DateRange;
+  lastUpdatedTime?: DateRange;
+  uploadedTime?: DateRange;
+  sourceCreatedTime?: DateRange;
+  sourceModifiedTime?: DateRange;
+  externalIdPrefix?: ExternalIdPrefix;
+  uploaded?: boolean;
+}
+
 export interface FileFilter extends Limit {
-  filter?: {
-    name?: FileName;
-    mimeType?: FileMimeType;
-    metadata?: Metadata;
-    /**
-     * Only include files that reference these specific asset IDs.
-     */
-    assetIds?: CogniteInternalId[];
-    /**
-     * Only include files that have a related asset in a tree rooted at any of these root assetIds.
-     */
-    rootAssetIds?: IdEither[];
-    /**
-     * Only include items that reference these specific dataSet IDs
-     */
-    dataSetIds?: IdEither[];
-    /**
-     * Only include files that are related to an asset in a subtree rooted at any of these assetIds.
-     * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
-     */
-    assetSubtreeIds?: IdEither[];
-    source?: string;
-    createdTime?: DateRange;
-    lastUpdatedTime?: DateRange;
-    uploadedTime?: DateRange;
-    sourceCreatedTime?: DateRange;
-    sourceModifiedTime?: DateRange;
-    externalIdPrefix?: ExternalIdPrefix;
-    uploaded?: boolean;
-  };
+  filter?: FileFilterProps;
 }
 
 export interface FileLink {
