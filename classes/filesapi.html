@@ -99,6 +99,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#aggregate" class="tsd-kind-icon">aggregate</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#delete" class="tsd-kind-icon">delete</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#getdownloadurls" class="tsd-kind-icon">get<wbr>Download<wbr>Urls</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="filesapi.html#list" class="tsd-kind-icon">list</a></li>
@@ -124,7 +125,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="baseresourceapi.html">BaseResourceAPI</a>.<a href="baseresourceapi.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/11207d8/src/resources/baseResourceApi.ts#L59">resources/baseResourceApi.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0aa83b9/src/resources/baseResourceApi.ts#L59">resources/baseResourceApi.ts:59</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -147,6 +148,36 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="aggregate" class="tsd-anchor"></a>
+					<h3>aggregate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">aggregate<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><a href="../interfaces/fileaggregatequery.html" class="tsd-signature-type">FileAggregateQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../index.html#fileaggregate" class="tsd-signature-type">FileAggregate</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0aa83b9/src/resources/files/filesApi.ts#L73">resources/files/filesApi.ts:73</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://docs.cognite.com/api/v1/#operation/aggregateFiles">Aggregate files</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> aggregates = <span class="hljs-keyword">await</span> client.files.aggregate({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">uploaded</span>: <span class="hljs-literal">true</span> } });
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Number of uploaded files: '</span>, aggregates[<span class="hljs-number">0</span>].count)</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>query: <a href="../interfaces/fileaggregatequery.html" class="tsd-signature-type">FileAggregateQuery</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../index.html#fileaggregate" class="tsd-signature-type">FileAggregate</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="delete" class="tsd-anchor"></a>
 					<h3>delete</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -156,7 +187,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/11207d8/src/resources/files/filesApi.ts#L116">resources/files/filesApi.ts:116</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0aa83b9/src/resources/files/filesApi.ts#L130">resources/files/filesApi.ts:130</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -185,7 +216,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/11207d8/src/resources/files/filesApi.ts#L127">resources/files/filesApi.ts:127</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0aa83b9/src/resources/files/filesApi.ts#L141">resources/files/filesApi.ts:141</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -214,7 +245,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/11207d8/src/resources/files/filesApi.ts#L57">resources/files/filesApi.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0aa83b9/src/resources/files/filesApi.ts#L59">resources/files/filesApi.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -244,7 +275,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/11207d8/src/resources/files/filesApi.ts#L71">resources/files/filesApi.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0aa83b9/src/resources/files/filesApi.ts#L85">resources/files/filesApi.ts:85</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -274,7 +305,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/11207d8/src/resources/files/filesApi.ts#L105">resources/files/filesApi.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0aa83b9/src/resources/files/filesApi.ts#L119">resources/files/filesApi.ts:119</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -310,7 +341,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/11207d8/src/resources/files/filesApi.ts#L87">resources/files/filesApi.ts:87</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0aa83b9/src/resources/files/filesApi.ts#L101">resources/files/filesApi.ts:101</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -344,7 +375,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/11207d8/src/resources/files/filesApi.ts#L35">resources/files/filesApi.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0aa83b9/src/resources/files/filesApi.ts#L37">resources/files/filesApi.ts:37</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -397,6 +428,9 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
 								<a href="filesapi.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="filesapi.html#aggregate" class="tsd-kind-icon">aggregate</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="filesapi.html#delete" class="tsd-kind-icon">delete</a>
