@@ -140,6 +140,16 @@ describe('Sequences integration test', () => {
     expect(response[0].createdTime).toBeInstanceOf(Date);
   });
 
+  test('count aggregate', async () => {
+    const aggregates = await client.sequences.aggregate({
+      filter: {
+        name: sequences[0].name,
+      },
+    });
+    expect(aggregates.length).toBe(1);
+    expect(aggregates[0].count).toBeDefined();
+  });
+
   test('update', async () => {
     const [updated] = await client.sequences.update([
       {

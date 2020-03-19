@@ -48,6 +48,16 @@ describe('Files integration test', () => {
     expect(retrievedFile.sourceCreatedTime).toEqual(sourceCreatedTime);
   });
 
+  test('count aggregate', async () => {
+    const aggregates = await client.files.aggregate({
+      filter: {
+        name: file.name,
+      },
+    });
+    expect(aggregates.length).toBe(1);
+    expect(aggregates[0].count).toBeDefined();
+  });
+
   test('download', async () => {
     const [{ downloadUrl }] = await client.files.getDownloadUrls([
       { id: file.id },
