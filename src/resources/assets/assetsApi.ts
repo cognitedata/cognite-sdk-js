@@ -9,8 +9,8 @@ import { Asset } from '../../resources/classes/asset';
 import { AssetList } from '../../resources/classes/assetList';
 import { RevertableArraySorter } from '../../revertableArraySorter';
 import {
-  AggregateResponse,
   Asset as TypeAsset,
+  AssetAggregate,
   AssetAggregateQuery,
   AssetChange,
   AssetIdEither,
@@ -75,7 +75,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    */
   public aggregate = (
     query: AssetAggregateQuery
-  ): Promise<AggregateResponse[]> => {
+  ): Promise<AssetAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
 

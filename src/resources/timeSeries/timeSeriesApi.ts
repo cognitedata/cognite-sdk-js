@@ -5,10 +5,10 @@ import { MetadataMap } from '../../metadata';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import { CursorAndAsyncIterator } from '../../standardMethods';
 import {
-  AggregateResponse,
   GetTimeSeriesMetadataDTO,
   IdEither,
   PostTimeSeriesMetadataDTO,
+  TimeseriesAggregate,
   TimeseriesAggregateQuery,
   TimeseriesFilter,
   TimeseriesFilterQuery,
@@ -79,7 +79,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    */
   public aggregate = (
     query: TimeseriesAggregateQuery
-  ): Promise<AggregateResponse[]> => {
+  ): Promise<TimeseriesAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
 

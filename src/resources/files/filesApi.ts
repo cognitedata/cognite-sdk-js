@@ -3,9 +3,9 @@
 import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
-  AggregateResponse,
   CogniteInternalId,
   ExternalFilesMetadata,
+  FileAggregate,
   FileAggregateQuery,
   FileChangeUpdate,
   FileContent,
@@ -70,9 +70,7 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * console.log('Number of uploaded files: ', aggregates[0].count)
    * ```
    */
-  public aggregate = (
-    query: FileAggregateQuery
-  ): Promise<AggregateResponse[]> => {
+  public aggregate = (query: FileAggregateQuery): Promise<FileAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
 

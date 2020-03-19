@@ -191,15 +191,37 @@ export interface Asset
   parentExternalId?: CogniteExternalId;
 }
 
-/**
- * Response from asset aggregate endpoint
- */
 export interface AggregateResponse {
   /**
    * Size of the aggregation group
    */
   count: number;
 }
+
+/**
+ * Response from asset aggregate endpoint
+ */
+export type AssetAggregate = AggregateResponse;
+
+/**
+ * Response from event aggregate endpoint
+ */
+export type EventAggregate = AggregateResponse;
+
+/**
+ * Response from file aggregate endpoint
+ */
+export type FileAggregate = AggregateResponse;
+
+/**
+ * Response from sequence aggregate endpoint
+ */
+export type SequenceAggregate = AggregateResponse;
+
+/**
+ * Response from timeseries aggregate endpoint
+ */
+export type TimeseriesAggregate = AggregateResponse;
 
 /**
  * Query schema for asset aggregate endpoint
@@ -697,16 +719,6 @@ export type DefaultGroupId = number;
 export type DeleteAssetMapping3D = AssetMapping3DBase;
 
 export type EXECUTE = 'EXECUTE';
-
-/**
- * Response from event aggregate endpoint
- */
-export interface EventAggregate {
-  /**
-   * Size of the aggregation group
-   */
-  count: number;
-}
 
 /**
  * Query schema for asset aggregate endpoint

@@ -2,10 +2,10 @@
 import { CursorAndAsyncIterator } from '../../autoPagination';
 import { MetadataMap } from '../../metadata';
 import {
-  AggregateResponse,
   ExternalSequence,
   IdEither,
   Sequence,
+  SequenceAggregate,
   SequenceChange,
   SequenceFilter,
   SequenceListScope,
@@ -87,7 +87,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * console.log('Number of sequences named Well: ', aggregates[0].count)
    * ```
    */
-  public aggregate = (query: SequenceFilter): Promise<AggregateResponse[]> => {
+  public aggregate = (query: SequenceFilter): Promise<SequenceAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
 
