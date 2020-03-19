@@ -1,3 +1,10 @@
+# [2.25.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.24.1...v2.25.0) (2020-03-19)
+
+
+### Features
+
+* **timeseries, sequences, files:** added aggregate support ([0aa83b9](https://github.com/cognitedata/cognite-sdk-js/commit/0aa83b99b31d0c6323527317447d154d2b8b5d8c))
+
 ## [2.24.1](https://github.com/cognitedata/cognite-sdk-js/compare/v2.24.0...v2.24.1) (2020-03-11)
 
 
