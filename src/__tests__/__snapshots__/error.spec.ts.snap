@@ -58,21 +58,14 @@ exports[`CogniteError extra field 1`] = `
       \\"description\\": \\"string\\",
       \\"source\\": \\"string\\"
     }
-  ]
+  ],
+  \\"extra\\": \\"Extra log information\\"
 }"
 `;
 
 exports[`handleErrorResponse extra fields 1`] = `
 "abc | code: 500 | X-Request-ID: def
 {
-  \\"missing\\": [
-    {
-      \\"id\\": 4190022127342195
-    },
-    {
-      \\"externalId\\": \\"abc\\"
-    }
-  ],
   \\"duplicated\\": [
     {
       \\"externalId\\": \\"string\\",
@@ -80,6 +73,17 @@ exports[`handleErrorResponse extra fields 1`] = `
       \\"endTime\\": 0,
       \\"description\\": \\"string\\",
       \\"source\\": \\"string\\"
+    }
+  ],
+  \\"extra\\": {
+    \\"extraErrorInformation\\": \\"test\\"
+  },
+  \\"missing\\": [
+    {
+      \\"id\\": 4190022127342195
+    },
+    {
+      \\"externalId\\": \\"abc\\"
     }
   ]
 }"

@@ -48,6 +48,7 @@ describe('CogniteError', () => {
     const error = new CogniteError(errorMessage, status, undefined, {
       missing: [internalIdObject, externalIdObject],
       duplicated: [event],
+      extra: 'Extra log information',
     });
     expect(() => {
       throw error;
@@ -83,6 +84,7 @@ describe('handleErrorResponse', () => {
       createErrorReponse(status, message, {
         missing: [internalIdObject, externalIdObject],
         duplicated: [event],
+        extra: { extraErrorInformation: 'test' },
       }),
       { [X_REQUEST_ID]: xRequestId }
     );
@@ -96,8 +98,9 @@ describe('handleErrorResponse', () => {
     } catch (e) {
       expect(e.status).toBe(status);
       expect(e.requestId).toBe(xRequestId);
-      expect(e.missing).toEqual([internalIdObject, externalIdObject]);
       expect(e.duplicated).toEqual([event]);
+      expect(e.extra.extraErrorInformation).toBe('test');
+      expect(e.missing).toEqual([internalIdObject, externalIdObject]);
     }
   });
 });
