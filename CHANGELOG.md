@@ -1,3 +1,10 @@
+# [2.26.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.25.0...v2.26.0) (2020-03-25)
+
+
+### Features
+
+* add 'extra' field to CogniteError ([#362](https://github.com/cognitedata/cognite-sdk-js/issues/362)) ([c263f6d](https://github.com/cognitedata/cognite-sdk-js/commit/c263f6de45f3b769416a34514335aceaa4179f0d))
+
 # [2.25.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.24.1...v2.25.0) (2020-03-19)
 
 
