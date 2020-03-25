@@ -8,20 +8,21 @@ export class CogniteError extends Error {
   public requestId?: string;
   public missing?: object[];
   public duplicated?: any[];
+  public extra?: any;
   /** @hidden */
   constructor(
     errorMessage: string,
     status: number,
     requestId?: string,
-    extra: any = {}
+    otherFields: any = {}
   ) {
     let message = `${errorMessage} | code: ${status}`;
     if (requestId) {
       message += ` | X-Request-ID: ${requestId}`;
     }
-    const { missing, duplicated } = extra;
+    const { missing, duplicated, extra } = otherFields;
     if (missing || duplicated) {
-      message += `\n${JSON.stringify(extra, null, 2)}`;
+      message += `\n${JSON.stringify(otherFields, null, 2)}`;
     }
     super(message);
     Object.setPrototypeOf(this, CogniteError.prototype); // https://stackoverflow.com/questions/51229574/why-instanceof-returns-false-for-a-child-object-in-javascript
@@ -30,6 +31,7 @@ export class CogniteError extends Error {
     this.requestId = requestId;
     this.missing = missing;
     this.duplicated = duplicated;
+    this.extra = extra;
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     } else {
@@ -51,6 +53,9 @@ export class CogniteError extends Error {
     if (this.duplicated) {
       jsonObject.duplicated = this.duplicated;
     }
+    if (this.extra) {
+      jsonObject.extra = this.extra;
+    }
     return jsonObject;
   }
 }
@@ -58,18 +63,24 @@ export class CogniteError extends Error {
 /** @hidden */
 export function handleErrorResponse(err: HttpError) {
   let code;
-  let message;
-  let requestId;
-  let missing;
   let duplicated;
+  let extra;
+  let message;
+  let missing;
+  let requestId;
   try {
     code = err.status;
+    duplicated = err.data.error.duplicated;
     message = err.data.error.message;
     missing = err.data.error.missing;
-    duplicated = err.data.error.duplicated;
+    extra = err.data.error.extra;
     requestId = (err.headers || {})[X_REQUEST_ID];
   } catch (_) {
     throw err;
   }
-  throw new CogniteError(message, code, requestId, { missing, duplicated });
+  throw new CogniteError(message, code, requestId, {
+    duplicated,
+    extra,
+    missing,
+  });
 }
