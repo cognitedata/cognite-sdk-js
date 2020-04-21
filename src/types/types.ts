@@ -738,7 +738,7 @@ export interface EventChangeById extends EventPatch, InternalId {}
 
 export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
   startTime?: DateRange;
-  endTime?: DateRange;
+  endTime?: DateRange | { isNull: boolean };
   metadata?: Metadata;
   /**
    * Asset IDs of related equipment that this event relates to.

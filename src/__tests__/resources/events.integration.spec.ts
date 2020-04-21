@@ -180,6 +180,18 @@ describe('Events integration test', () => {
       });
       expect(items).toEqual([]);
     });
+
+    test('ongoing events', async () => {
+      const { items } = await client.events.list({
+        filter: {
+          endTime: { isNull: true },
+        },
+        limit: 10,
+      });
+
+      expect(items.length).toBeGreaterThan(0);
+      expect(items[0].endTime).toBeUndefined();
+    });
   });
 
   test('search with rootAssetIds', async () => {
