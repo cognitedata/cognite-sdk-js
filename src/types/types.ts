@@ -738,7 +738,11 @@ export interface EventChangeById extends EventPatch, InternalId {}
 
 export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
   startTime?: DateRange;
-  endTime?: DateRange | { isNull: boolean };
+  /**
+   * Date range when event finished.
+   * To filter ongoing events {isNull: true} should be provided instead of Date range
+   */
+  endTime?: NullableProperty<DateRange>;
   metadata?: Metadata;
   /**
    * Asset IDs of related equipment that this event relates to.
@@ -753,7 +757,7 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
    */
   rootAssetIds?: IdEither[];
   /**
-   * Only include assets that reference these specific dataSet IDs
+   * Only include events that reference these specific dataSet IDs
    */
   dataSetIds?: IdEither[];
   /**
@@ -1308,6 +1312,8 @@ export interface Node3DProperties {
     [key: string]: string;
   };
 }
+
+export type NullableProperty<T> = T | { isNull: boolean };
 
 export type NullableSinglePatchLong = { set: number } | { setNull: true };
 
