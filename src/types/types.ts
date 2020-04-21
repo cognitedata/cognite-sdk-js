@@ -739,7 +739,7 @@ export interface EventChangeById extends EventPatch, InternalId {}
 export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
   startTime?: DateRange;
   /**
-   * Date range when event finished.
+   * Date range for event end time.
    * To filter ongoing events {isNull: true} should be provided instead of Date range
    */
   endTime?: NullableProperty<DateRange>;
