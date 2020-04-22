@@ -743,6 +743,11 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
    * To filter ongoing events {isNull: true} should be provided instead of Date range
    */
   endTime?: NullableProperty<DateRange>;
+  /**
+   * Event is considered active from its startTime to endTime inclusive. If startTime is null, event is never active. If endTime is null, event is active from startTime onwards. activeAtTime filter will match all events that are active at some point from min to max, from min, or to max, depending on which of min and max parameters are specified.
+   */
+  activeAtTime?: DateRange;
+
   metadata?: Metadata;
   /**
    * Asset IDs of related equipment that this event relates to.

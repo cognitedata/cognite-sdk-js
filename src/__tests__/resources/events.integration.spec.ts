@@ -192,6 +192,17 @@ describe('Events integration test', () => {
       expect(items.length).toBeGreaterThan(0);
       expect(items[0].endTime).toBeUndefined();
     });
+
+    test('activeAtTime', async () => {
+      const { items } = await client.events.list({
+        filter: {
+          activeAtTime: { min: 101 },
+        },
+        limit: 10,
+      });
+
+      expect(items.length).toBe(1);
+    });
   });
 
   test('search with rootAssetIds', async () => {
