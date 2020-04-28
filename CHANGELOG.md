@@ -1,3 +1,10 @@
+# [2.27.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.26.0...v2.27.0) (2020-04-28)
+
+
+### Features
+
+* **events:** filter for ongoing and active events ([#365](https://github.com/cognitedata/cognite-sdk-js/issues/365)) ([fb5d4e9](https://github.com/cognitedata/cognite-sdk-js/commit/fb5d4e943db17784ad5b5270a078276235416fe2))
+
 # [2.26.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.25.0...v2.26.0) (2020-03-25)
 
 
