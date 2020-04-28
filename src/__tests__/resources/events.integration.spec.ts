@@ -4,6 +4,7 @@ import CogniteClient from '../../cogniteClient';
 import { Asset, CogniteEvent, SortOrder } from '../../types/types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
+// tslint:disable-next-line:no-big-function
 describe('Events integration test', () => {
   let client: CogniteClient;
   let asset: Asset;
@@ -179,6 +180,29 @@ describe('Events integration test', () => {
         limit: 1,
       });
       expect(items).toEqual([]);
+    });
+
+    test('ongoing events', async () => {
+      const { items } = await client.events.list({
+        filter: {
+          endTime: { isNull: true },
+        },
+        limit: 10,
+      });
+
+      expect(items.length).toBeGreaterThan(0);
+      expect(items[0].endTime).toBeUndefined();
+    });
+
+    test('activeAtTime', async () => {
+      const { items } = await client.events.list({
+        filter: {
+          activeAtTime: { min: 101 },
+        },
+        limit: 10,
+      });
+
+      expect(items.length).toBeGreaterThan(0);
     });
   });
 

@@ -738,7 +738,16 @@ export interface EventChangeById extends EventPatch, InternalId {}
 
 export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
   startTime?: DateRange;
-  endTime?: DateRange;
+  /**
+   * Date range for event end time.
+   * To filter ongoing events {isNull: true} should be provided instead of Date range
+   */
+  endTime?: NullableProperty<DateRange>;
+  /**
+   * Event is considered active from its startTime to endTime inclusive. If startTime is null, event is never active. If endTime is null, event is active from startTime onwards. activeAtTime filter will match all events that are active at some point from min to max, from min, or to max, depending on which of min and max parameters are specified.
+   */
+  activeAtTime?: DateRange;
+
   metadata?: Metadata;
   /**
    * Asset IDs of related equipment that this event relates to.
@@ -753,7 +762,7 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
    */
   rootAssetIds?: IdEither[];
   /**
-   * Only include assets that reference these specific dataSet IDs
+   * Only include events that reference these specific dataSet IDs
    */
   dataSetIds?: IdEither[];
   /**
@@ -1308,6 +1317,8 @@ export interface Node3DProperties {
     [key: string]: string;
   };
 }
+
+export type NullableProperty<T> = T | { isNull: boolean };
 
 export type NullableSinglePatchLong = { set: number } | { setNull: true };
 
