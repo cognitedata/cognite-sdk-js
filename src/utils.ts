@@ -146,5 +146,5 @@ export function createInvisibleIframe(
 
 /** @hidden */
 export function isUsingSSL() {
-  return location.protocol.toLowerCase() === 'https:';
+  return isBrowser() && location.protocol.toLowerCase() === 'https:';
 }
