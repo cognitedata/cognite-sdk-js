@@ -1,3 +1,10 @@
+## [2.27.1](https://github.com/cognitedata/cognite-sdk-js/compare/v2.27.0...v2.27.1) (2020-04-29)
+
+
+### Bug Fixes
+
+* authentication with a token in node environment ([08b11b9](https://github.com/cognitedata/cognite-sdk-js/commit/08b11b97c5d2d7e90a5a74fc10f961ca46c8d796))
+
 # [2.27.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.26.0...v2.27.0) (2020-04-28)
 
 
