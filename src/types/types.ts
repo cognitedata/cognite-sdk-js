@@ -306,6 +306,10 @@ export interface AssetFilterProps {
    */
   dataSetIds?: IdEither[];
   /**
+   * Only include events that reference any/none dataSet IDs
+   */
+  dataSetId?: NullableFilter;
+  /**
    * Only include assets in subtrees rooted at the specified assets.
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
@@ -1317,6 +1321,8 @@ export interface Node3DProperties {
     [key: string]: string;
   };
 }
+
+export type NullableFilter = { isNull: boolean };
 
 export type NullableProperty<T> = T | { isNull: boolean };
 
