@@ -770,6 +770,10 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
    */
   dataSetIds?: IdEither[];
   /**
+   * Only include events that reference any/none dataSet IDs
+   */
+  dataSetId?: NullableFilter;
+  /**
    * Only include events that have a related asset in a subtree rooted at any of these assetIds.
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
