@@ -1,3 +1,10 @@
+# [2.28.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.27.1...v2.28.0) (2020-05-19)
+
+
+### Features
+
+* **retrieve:** ignoreUnknownIds for events/sequences/files/timeseries ([a905795](https://github.com/cognitedata/cognite-sdk-js/commit/a905795a7bdeef49886c1cc687c1b6d8fe8fda42))
+
 ## [2.27.1](https://github.com/cognitedata/cognite-sdk-js/compare/v2.27.0...v2.27.1) (2020-04-29)
 
 
