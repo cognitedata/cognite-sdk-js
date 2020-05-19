@@ -4,6 +4,7 @@ import { MetadataMap } from '../../metadata';
 import {
   ExternalSequence,
   IdEither,
+  IgnoreUnknownIds,
   Sequence,
   SequenceAggregate,
   SequenceChange,
@@ -98,8 +99,11 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * const [sequence1, sequence2] = await client.sequences.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve = (ids: IdEither[]): Promise<Sequence[]> => {
-    return super.retrieveEndpoint(ids);
+  public retrieve = (
+    ids: IdEither[],
+    params: SequenceRetrieveParams = {}
+  ): Promise<Sequence[]> => {
+    return super.retrieveEndpoint(ids, params);
   };
 
   /**
@@ -182,3 +186,5 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
     return this.sequenceRowsAPI.delete(query);
   };
 }
+
+export type SequenceRetrieveParams = IgnoreUnknownIds;

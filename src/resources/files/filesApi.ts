@@ -14,6 +14,7 @@ import {
   FilesMetadata,
   FilesSearchFilter,
   IdEither,
+  IgnoreUnknownIds,
   ItemsWrapper,
   UploadFileMetadataResponse,
 } from '../../types/types';
@@ -82,8 +83,11 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * const files = await client.files.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve = (ids: IdEither[]): Promise<FilesMetadata[]> => {
-    return super.retrieveEndpoint(ids);
+  public retrieve = (
+    ids: IdEither[],
+    params: FileRetrieveParams = {}
+  ): Promise<FilesMetadata[]> => {
+    return super.retrieveEndpoint(ids, params);
   };
 
   /**
@@ -213,3 +217,5 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
     return this.addToMapAndReturn(response.data.items, response);
   }
 }
+
+export type FileRetrieveParams = IgnoreUnknownIds;

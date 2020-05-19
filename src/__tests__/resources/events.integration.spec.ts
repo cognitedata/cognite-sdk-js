@@ -52,6 +52,13 @@ describe('Events integration test', () => {
     expect(singleEvent.description).toBe(events[0].description);
   });
 
+  test('retrieve with non-existent external id', async () => {
+    const res = await client.events.retrieve([{ externalId: '_n/a_' }], {
+      ignoreUnknownIds: true,
+    });
+    expect(res.length).toBe(0);
+  });
+
   test('update', async () => {
     const response = await client.events.update([
       {

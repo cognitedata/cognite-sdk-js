@@ -48,6 +48,13 @@ describe('Files integration test', () => {
     expect(retrievedFile.sourceCreatedTime).toEqual(sourceCreatedTime);
   });
 
+  test('retrieve with non-existent id', async () => {
+    const res = await client.files.retrieve([{ id: 1 }], {
+      ignoreUnknownIds: true,
+    });
+    expect(res.length).toBe(0);
+  });
+
   test('count aggregate', async () => {
     const aggregates = await client.files.aggregate({
       filter: {

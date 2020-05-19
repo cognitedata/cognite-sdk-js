@@ -51,6 +51,13 @@ describe('Timeseries integration test', () => {
     expect(single[0].name).toBe(timeseries[0].name);
   });
 
+  test('retrieve with non-existent external id', async () => {
+    const res = await client.timeseries.retrieve([{ externalId: '_n/a_' }], {
+      ignoreUnknownIds: true,
+    });
+    expect(res.length).toBe(0);
+  });
+
   test('update', async () => {
     const newName = 'new name';
     const updateResult = await client.timeseries.update([
