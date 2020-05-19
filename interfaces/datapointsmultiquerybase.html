@@ -67,6 +67,9 @@
 				<ul class="tsd-hierarchy">
 					<li>
 						<a href="limit.html" class="tsd-signature-type">Limit</a>
+					</li>
+					<li>
+						<a href="ignoreunknownids.html" class="tsd-signature-type">IgnoreUnknownIds</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">DatapointsMultiQueryBase</span>
@@ -90,7 +93,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#aggregates" class="tsd-kind-icon">aggregates</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#end" class="tsd-kind-icon">end</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#granularity" class="tsd-kind-icon">granularity</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#ignoreunknownids" class="tsd-kind-icon">ignore<wbr>Unknown<wbr>Ids</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="datapointsmultiquerybase.html#ignoreunknownids" class="tsd-kind-icon">ignore<wbr>Unknown<wbr>Ids</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#includeoutsidepoints" class="tsd-kind-icon">include<wbr>Outside<wbr>Points</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="datapointsmultiquerybase.html#limit" class="tsd-kind-icon">limit</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="datapointsmultiquerybase.html#start" class="tsd-kind-icon">start</a></li>
@@ -107,7 +110,7 @@
 					<div class="tsd-signature tsd-kind-icon">aggregates<span class="tsd-signature-symbol">:</span> <a href="../index.html#aggregate" class="tsd-signature-type">Aggregate</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/140d0a4/src/types/types.ts#L652">types/types.ts:652</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/a905795/src/types/types.ts#L648">types/types.ts:648</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -122,7 +125,7 @@
 					<div class="tsd-signature tsd-kind-icon">end<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../index.html#timestamp" class="tsd-signature-type">Timestamp</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/140d0a4/src/types/types.ts#L648">types/types.ts:648</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/a905795/src/types/types.ts#L644">types/types.ts:644</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -137,7 +140,7 @@
 					<div class="tsd-signature tsd-kind-icon">granularity<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/140d0a4/src/types/types.ts#L656">types/types.ts:656</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/a905795/src/types/types.ts#L652">types/types.ts:652</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -146,19 +149,25 @@
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="ignoreunknownids" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> ignore<wbr>Unknown<wbr>Ids</h3>
 					<div class="tsd-signature tsd-kind-icon">ignore<wbr>Unknown<wbr>Ids<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="ignoreunknownids.html">IgnoreUnknownIds</a>.<a href="ignoreunknownids.html#ignoreunknownids-1">ignoreUnknownIds</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/140d0a4/src/types/types.ts#L664">types/types.ts:664</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/a905795/src/types/types.ts#L1118">types/types.ts:1118</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Ignore IDs and external IDs that are not found</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>false</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -167,7 +176,7 @@
 					<div class="tsd-signature tsd-kind-icon">include<wbr>Outside<wbr>Points<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/140d0a4/src/types/types.ts#L660">types/types.ts:660</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/a905795/src/types/types.ts#L656">types/types.ts:656</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -183,7 +192,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="limit.html">Limit</a>.<a href="limit.html#limit-1">limit</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/140d0a4/src/types/types.ts#L1160">types/types.ts:1160</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/a905795/src/types/types.ts#L1160">types/types.ts:1160</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -193,7 +202,7 @@
 					<div class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../index.html#timestamp" class="tsd-signature-type">Timestamp</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/140d0a4/src/types/types.ts#L644">types/types.ts:644</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/a905795/src/types/types.ts#L640">types/types.ts:640</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -228,7 +237,7 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="datapointsmultiquerybase.html#granularity" class="tsd-kind-icon">granularity</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="datapointsmultiquerybase.html#ignoreunknownids" class="tsd-kind-icon">ignore<wbr>Unknown<wbr>Ids</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
