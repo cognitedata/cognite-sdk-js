@@ -140,6 +140,13 @@ describe('Sequences integration test', () => {
     expect(response[0].createdTime).toBeInstanceOf(Date);
   });
 
+  test('retrieve with non-existent external id', async () => {
+    const res = await client.sequences.retrieve([{ externalId: '_n/a_' }], {
+      ignoreUnknownIds: true,
+    });
+    expect(res.length).toBe(0);
+  });
+
   test('count aggregate', async () => {
     const aggregates = await client.sequences.aggregate({
       filter: {

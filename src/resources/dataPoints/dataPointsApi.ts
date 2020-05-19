@@ -7,6 +7,7 @@ import {
   DatapointsGetDatapoint,
   DatapointsMultiQuery,
   DatapointsPostDatapoint,
+  IgnoreUnknownIds,
   ItemsWrapper,
   LatestDataBeforeRequest,
 } from '../../types/types';
@@ -109,6 +110,4 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
   }
 }
 
-export interface LatestDataParams {
-  ignoreUnknownIds?: boolean;
-}
+export type LatestDataParams = IgnoreUnknownIds;

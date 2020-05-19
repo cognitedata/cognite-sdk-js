@@ -12,6 +12,7 @@ import {
   EventSort,
   ExternalEvent,
   IdEither,
+  IgnoreUnknownIds,
 } from '../../types/types';
 
 export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
@@ -68,8 +69,8 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * const events = await client.events.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve = (ids: IdEither[]) => {
-    return super.retrieveEndpoint(ids);
+  public retrieve = (ids: IdEither[], params: EventRetrieveParams = {}) => {
+    return super.retrieveEndpoint(ids, params);
   };
 
   /**
@@ -118,3 +119,5 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
     );
   }
 }
+
+export type EventRetrieveParams = IgnoreUnknownIds;

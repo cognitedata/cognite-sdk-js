@@ -7,6 +7,7 @@ import { CursorAndAsyncIterator } from '../../standardMethods';
 import {
   GetTimeSeriesMetadataDTO,
   IdEither,
+  IgnoreUnknownIds,
   PostTimeSeriesMetadataDTO,
   TimeseriesAggregate,
   TimeseriesAggregateQuery,
@@ -93,8 +94,11 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * ]);
    * ```
    */
-  public retrieve = (ids: IdEither[]) => {
-    return super.retrieveEndpoint(ids);
+  public retrieve = (
+    ids: IdEither[],
+    params: TimeseriesRetrieveParams = {}
+  ) => {
+    return super.retrieveEndpoint(ids, params);
   };
 
   /**
@@ -154,3 +158,5 @@ export class TimeSeriesAPI extends BaseResourceAPI<
     return new TimeSeriesList(this.client, timeseriesArray);
   }
 }
+
+export type TimeseriesRetrieveParams = IgnoreUnknownIds;

@@ -381,15 +381,11 @@ export interface AssetPatch {
   };
 }
 
-export interface AssetRetrieveParams {
+export interface AssetRetrieveParams extends IgnoreUnknownIds {
   /**
    * Set of aggregated properties to include
    */
   aggregatedProperties?: AssetAggregatedProperty[];
-  /**
-   * Ignore IDs and external IDs that are not found
-   */
-  ignoreUnknownIds?: boolean;
 }
 
 export interface AssetSearchFilter extends AssetFilter {
@@ -637,7 +633,7 @@ export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
   items: DatapointsQuery[];
 }
 
-export interface DatapointsMultiQueryBase extends Limit {
+export interface DatapointsMultiQueryBase extends Limit, IgnoreUnknownIds {
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in a Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
    */
@@ -658,10 +654,6 @@ export interface DatapointsMultiQueryBase extends Limit {
    * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
    */
   includeOutsidePoints?: boolean;
-  /**
-   * Ignore IDs and external IDs that are not found
-   */
-  ignoreUnknownIds?: boolean;
 }
 
 export type DatapointsPostDatapoint =
@@ -1117,6 +1109,14 @@ export interface GroupSpec {
 export type Groups = CogniteInternalId[];
 
 export type IdEither = InternalId | ExternalId;
+
+export interface IgnoreUnknownIds {
+  /**
+   * Ignore IDs and external IDs that are not found
+   * @default false
+   */
+  ignoreUnknownIds?: boolean;
+}
 
 /**
  * Data about how to authenticate and authorize users
