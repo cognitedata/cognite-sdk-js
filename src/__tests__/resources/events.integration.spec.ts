@@ -216,18 +216,6 @@ describe('Events integration test', () => {
       expect(items.length).toBeGreaterThan(0);
       expect(items[0].dataSetId).toBeUndefined();
     });
-
-    test('dataSetId is not null', async () => {
-      const { items } = await client.events.list({
-        filter: {
-          dataSetId: { isNull: false },
-        },
-        limit: 10,
-      });
-
-      expect(items.length).toBeGreaterThan(0);
-      expect(items[0].dataSetId).toBeGreaterThan(0);
-    });
   });
 
   test('search with rootAssetIds', async () => {
