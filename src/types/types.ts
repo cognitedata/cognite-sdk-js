@@ -1326,7 +1326,9 @@ export interface Node3DProperties {
   };
 }
 
-export interface NullableFilter { isNull: boolean; }
+export interface NullableFilter {
+  isNull: boolean;
+}
 
 export type NullableProperty<T> = T | { isNull: boolean };
 
