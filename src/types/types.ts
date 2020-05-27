@@ -1726,6 +1726,7 @@ export interface SequenceFilter {
      */
     rootAssetIds?: CogniteInternalId[];
     dataSetIds?: IdEither[];
+    dataSetId?: NullableFilter;
     /**
      * Only include sequences that have a related asset in a subtree rooted at any of these assetIds.
      * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
