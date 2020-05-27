@@ -1988,9 +1988,14 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
    */
   rootAssetIds?: CogniteInternalId[];
   /**
-   * Only include assets that reference these specific dataSet IDs
+   * Only include timeseries that reference these specific dataSet IDs
    */
   dataSetIds?: IdEither[];
+  /**
+   * Only include timeseries that reference any/none dataSet IDs
+   */
+  dataSetId?: NullableFilter;
+
   /**
    * Only include timeseries that are related to an asset in a subtree rooted at any of these assetIds.
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
