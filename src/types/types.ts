@@ -306,7 +306,7 @@ export interface AssetFilterProps {
    */
   dataSetIds?: IdEither[];
   /**
-   * Only include events that reference any/none dataSet IDs
+   * Only include assets that reference any/none dataSet IDs
    */
   dataSetId?: NullableFilter;
   /**
