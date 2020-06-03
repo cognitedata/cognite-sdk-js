@@ -15,8 +15,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitAny": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "packages",
+    "paths": {
+      "@cognite/sdk-core/*": ["core/src/*"],
+      "@cognite/sdk/*": ["stable/src/*"]
+    }
   },
-  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
