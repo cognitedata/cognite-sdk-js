@@ -6,7 +6,7 @@
     "@cognite/sdk": "2"
   },
   "scripts": {
-    "link-sdk": "cd .. && yarn link && cd ./samples && yarn link @cognite/sdk",
+    "link-sdk": "cd ../packages/stable && yarn link && cd ../../samples && yarn link @cognite/sdk",
     "install-dependencies": "cd nodejs && yarn",
     "test": "yarn test-typescript && yarn test-nodejs",
     "test-typescript": "cd typescript && yarn test",

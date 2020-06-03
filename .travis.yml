@@ -6,7 +6,7 @@ node_js:
 env:
   - COGNITE_PROJECT=cognitesdk-js
 install:
-  - yarn
+  - yarn install:all
   - npm install -g codecov
 script:
   - yarn commitlint-travis
@@ -19,13 +19,6 @@ script:
 before_deploy:
   - yarn docs
 deploy:
-  - provider: script
-    node_js: lts/*
-    on:
-      branch: v1
-      node_js: "10"
-    skip_cleanup: true
-    script: npx -p @semantic-release/changelog@4 -p @semantic-release/git@8 -p semantic-release semantic-release
   - provider: pages
     skip_cleanup: true
     github_token: $GITHUB_TOKEN
@@ -33,9 +26,9 @@ deploy:
     local_dir: docs
     on:
       branch: v1
-after_deploy:
-  - sudo add-apt-repository -y ppa:cpick/hub
-  - sudo apt-get -y update
-  - sudo apt-get install -y hub
-  - sudo apt-get install -y jq
-  - sh scripts/afterRelease.sh
+# after_deploy:
+#   - sudo add-apt-repository -y ppa:cpick/hub
+#   - sudo apt-get -y update
+#   - sudo apt-get install -y hub
+#   - sudo apt-get install -y jq
+#   - sh scripts/afterRelease.sh

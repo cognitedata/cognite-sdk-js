@@ -1,0 +1,52 @@
+{
+  "private": true,
+  "name": "@cognite/sdk",
+  "main": "dist/index.js",
+  "types": "dist/stable/src/index.d.js",
+  "version": "2.29.0",
+  "devDependencies": {
+    "@types/es6-promise": "^3.3.0",
+    "@types/nock": "^10.0.3",
+    "@types/node": "^10.12.0",
+    "@types/query-string": "^6.1.0",
+    "es-check": "^5.0.0",
+    "ls": "^0.2.1",
+    "markdown-link-check": "^3.7.2",
+    "nock": "^10.0.6",
+    "prettier": "^1.10.2",
+    "rollup": "^0.67.0",
+    "rollup-plugin-alias": "^2.2.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.17.2",
+    "swagger-parser": "^6.0.5",
+    "tslint": "^5.13.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "tslint-sonarts": "^1.9.0",
+    "typedoc": "^0.13.0",
+    "typedoc-plugin-markdown": "^1.1.19",
+    "typescript": "^3.3.3333",
+    "typescript-parser": "^2.6.1"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "prepublishOnly": "yarn build",
+    "lint": "tslint -c ../../tslint.json -p tsconfig.json",
+    "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c ../../tslint.json -p tsconfig.json --fix",
+    "build": "yarn clean && rollup -c && yarn esCheck",
+    "watch": "rollup -cw",
+    "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json",
+    "esCheck": "es-check es5 './dist/index.js'",
+    "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
+    "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
+    "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
+    "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.json && rm -rf codeSnippets/"
+  },
+  "dependencies": {
+    "@cognite/sdk-core": "0.0.0",
+    "cross-fetch": "^3.0.4",
+    "lodash": "^4.17.11",
+    "query-string": "^5.1.1",
+    "url": "^0.11.0"
+  }
+}
