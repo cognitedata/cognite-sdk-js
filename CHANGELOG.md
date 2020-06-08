@@ -1,3 +1,10 @@
+# [2.29.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.28.0...v2.29.0) (2020-06-08)
+
+
+### Features
+
+* **files:** create + update security categories ([#372](https://github.com/cognitedata/cognite-sdk-js/issues/372)) ([f7192ca](https://github.com/cognitedata/cognite-sdk-js/commit/f7192cae4d55192ae09d394718c755d025610ea4))
+
 # [2.28.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.27.1...v2.28.0) (2020-05-19)
 
 
