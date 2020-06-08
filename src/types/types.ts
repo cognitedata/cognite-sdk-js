@@ -874,6 +874,7 @@ export interface ExternalFilesMetadata {
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
   dataSetId?: CogniteInternalId;
+  securityCategories?: CogniteInternalId[];
   sourceCreatedTime?: Date;
   sourceModifiedTime?: Date;
 }
@@ -915,6 +916,7 @@ export interface FileChange {
     mimeType?: SinglePatchString;
     metadata?: ObjectPatch;
     assetIds?: ArrayPatchLong;
+    securityCategories?: ArrayPatchLong;
     sourceCreatedTime?: SinglePatchDate;
     sourceModifiedTime?: SinglePatchDate;
     dataSetId?: NullableSinglePatchLong;

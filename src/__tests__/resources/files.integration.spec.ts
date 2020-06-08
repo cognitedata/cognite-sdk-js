@@ -77,22 +77,25 @@ describe('Files integration test', () => {
   });
 
   test('update', async () => {
+    const newAssetIds = [asset.id];
+    const newSecurityCategories = [123];
     const newSource = 'def';
     const newSourceModifiedTime = new Date();
-    const newAssetIds = [asset.id];
     const updatedFiles = await client.files.update([
       {
         id: file.id,
         update: {
+          assetIds: { set: newAssetIds },
+          securityCategories: { set: newSecurityCategories },
           source: { set: newSource },
           sourceModifiedTime: { set: newSourceModifiedTime },
-          assetIds: { set: newAssetIds },
         },
       },
     ]);
+    expect(updatedFiles[0].assetIds).toEqual(newAssetIds);
+    expect(updatedFiles[0].securityCategories).toBe(newSecurityCategories);
     expect(updatedFiles[0].source).toBe(newSource);
     expect(updatedFiles[0].sourceModifiedTime).toEqual(newSourceModifiedTime);
-    expect(updatedFiles[0].assetIds).toEqual(newAssetIds);
   });
 
   test('list rootAssetIds filter', async () => {
