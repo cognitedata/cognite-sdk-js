@@ -93,7 +93,7 @@ describe('Files integration test', () => {
       },
     ]);
     expect(updatedFiles[0].assetIds).toEqual(newAssetIds);
-    expect(updatedFiles[0].securityCategories).toBe(newSecurityCategories);
+    expect(updatedFiles[0].securityCategories).toEqual(newSecurityCategories);
     expect(updatedFiles[0].source).toBe(newSource);
     expect(updatedFiles[0].sourceModifiedTime).toEqual(newSourceModifiedTime);
   });
