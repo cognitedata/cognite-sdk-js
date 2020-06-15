@@ -1600,7 +1600,7 @@ export interface Revision3DListRequest extends Limit {
   published?: boolean;
 }
 
-type Revision3DStatus = 'Queued' | 'Processing' | 'Done' | 'Failed';
+export type Revision3DStatus = 'Queued' | 'Processing' | 'Done' | 'Failed';
 
 export interface RevisionCameraProperties {
   /**
