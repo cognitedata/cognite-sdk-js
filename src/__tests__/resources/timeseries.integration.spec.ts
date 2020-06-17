@@ -155,6 +155,15 @@ describe('Timeseries integration test', () => {
     expect(result[0].name).toBe(name);
   });
 
+  test('synthetic query', async () => {
+    const [ts1] = createdTimeseries;
+    const result = await client.timeseries.syntheticQuery([
+      { expression: `24 * TS{id:${ts1.id}}`, start: 0, end: 100, limit: 100 },
+    ]);
+    expect(result.length).toBe(1);
+    expect(result[0].datapoints.length).toBeLessThanOrEqual(100);
+  });
+
   test('delete', async () => {
     await client.timeseries.delete(createdTimeseries.map(({ id }) => ({ id })));
   });

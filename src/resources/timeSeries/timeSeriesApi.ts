@@ -170,20 +170,6 @@ export class TimeSeriesAPI extends BaseResourceAPI<
     return this.querySyntheticEndpoint(items);
   };
 
-  private syntheticQueryUrl() {
-    return this.url('synthetic/query');
-  }
-
-  private async querySyntheticEndpoint(items: SyntheticQuery[]) {
-    const path = this.syntheticQueryUrl();
-    const response = await this.httpClient.post<
-      ItemsWrapper<SyntheticQueryResponse[]>
-    >(path, {
-      data: {items}
-    });
-    return this.addToMapAndReturn(response.data.items, response);
-  }
-
   protected transformToList(timeSeries: GetTimeSeriesMetadataDTO[]) {
     return timeSeries.map(timeSerie => new TimeSeries(this.client, timeSerie));
   }
@@ -191,6 +177,21 @@ export class TimeSeriesAPI extends BaseResourceAPI<
   protected transformToClass(timeSeries: GetTimeSeriesMetadataDTO[]) {
     const timeseriesArray = this.transformToList(timeSeries);
     return new TimeSeriesList(this.client, timeseriesArray);
+  }
+
+  private syntheticQueryUrl() {
+    return this.url('synthetic/query');
+  }
+
+  private async querySyntheticEndpoint(items: SyntheticQuery[]) {
+    const path = this.syntheticQueryUrl();
+
+    const response = await this.httpClient.post<
+      ItemsWrapper<SyntheticQueryResponse[]>
+    >(path, {
+      data: { items },
+    });
+    return this.addToMapAndReturn(response.data.items, response);
   }
 }
 

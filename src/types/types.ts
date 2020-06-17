@@ -1940,7 +1940,7 @@ export interface SyntheticDataValue extends SyntheticDateBase {
  * A query for a synthetic time series
  */
 export interface SyntheticQuery {
-  expression?: string;
+  expression: string;
   start?: string | Timestamp;
   end?: string | Timestamp;
   limit: number;
@@ -1951,7 +1951,7 @@ export interface SyntheticQuery {
  */
 export interface SyntheticQueryResponse {
   isString?: TimeseriesIsString;
-  datapoints?: SyntheticDataPoint[];
+  datapoints: SyntheticDataPoint[];
 }
 
 export interface TimeSeriesPatch {
