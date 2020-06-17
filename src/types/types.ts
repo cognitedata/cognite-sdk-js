@@ -1922,6 +1922,38 @@ export const SortOrder = {
  */
 export type SortOrder = 'asc' | 'desc';
 
+export interface SyntheticDateBase {
+  timestamp?: Date;
+}
+
+export interface SyntheticDataError extends SyntheticDateBase {
+  error: string;
+}
+
+export type SyntheticDataPoint = SyntheticDataValue | SyntheticDataError;
+
+export interface SyntheticDataValue extends SyntheticDateBase {
+  value: number;
+}
+
+/**
+ * A query for a synthetic time series
+ */
+export interface SyntheticQuery {
+  expression?: string;
+  start?: string | Timestamp;
+  end?: string | Timestamp;
+  limit: number;
+}
+
+/**
+ * Response of a synthetic time series query
+ */
+export interface SyntheticQueryResponse {
+  isString?: TimeseriesIsString;
+  datapoints?: SyntheticDataPoint[];
+}
+
 export interface TimeSeriesPatch {
   update: {
     externalId?: NullableSinglePatchString;
@@ -2016,6 +2048,10 @@ export type TimeseriesName = string;
  */
 export type TimeseriesUnit = string;
 
+/**
+ * A point in time, either a number or a Date object.
+ * The Date is converted to a number when api calls are made.
+ */
 export type Timestamp = number | Date;
 
 export type Tuple3<T> = T[];

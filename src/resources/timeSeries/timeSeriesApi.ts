@@ -8,7 +8,10 @@ import {
   GetTimeSeriesMetadataDTO,
   IdEither,
   IgnoreUnknownIds,
+  ItemsWrapper,
   PostTimeSeriesMetadataDTO,
+  SyntheticQuery,
+  SyntheticQueryResponse,
   TimeseriesAggregate,
   TimeseriesAggregateQuery,
   TimeseriesFilter,
@@ -148,6 +151,38 @@ export class TimeSeriesAPI extends BaseResourceAPI<
   public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
   };
+
+  /**
+   * [Synthetic Query](https://docs.cognite.com/api/v1/#operation/querySyntheticTimeseries)
+   *
+   * ```js
+   * await client.timeseries.syntheticQuery([
+   *   {
+   *     expression: "24 * TS{externalId='production/hour'}",
+   *     start: 0,
+   *     end: 0,
+   *     limit: 100
+   *   }
+   * ]);
+   * ```
+   */
+  public syntheticQuery(items: SyntheticQuery[]) {
+    return this.querySyntheticEndpoint(items);
+  };
+
+  private syntheticQueryUrl() {
+    return this.url('synthetic/query');
+  }
+
+  private async querySyntheticEndpoint(items: SyntheticQuery[]) {
+    const path = this.syntheticQueryUrl();
+    const response = await this.httpClient.post<
+      ItemsWrapper<SyntheticQueryResponse[]>
+    >(path, {
+      data: {items}
+    });
+    return this.addToMapAndReturn(response.data.items, response);
+  }
 
   protected transformToList(timeSeries: GetTimeSeriesMetadataDTO[]) {
     return timeSeries.map(timeSerie => new TimeSeries(this.client, timeSerie));
