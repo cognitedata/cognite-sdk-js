@@ -3,7 +3,7 @@ const snippetsFolder = path.join(__dirname, '../codeSnippets');
 const jsDoc = require(snippetsFolder + '/docs.json');
 const _ = require('lodash');
 const fs = require('fs');
-const tsconfig = require('../tsconfig.json');
+const tsconfig = require('../tsconfig.build.json');
 
 function stripMarkdownCodeSnippet(rawCode) {
   return rawCode
@@ -78,10 +78,5 @@ codeSnippets.forEach((snippets, operationId) => {
 tsconfig.include = ['*.ts'];
 tsconfig.compilerOptions.noUnusedLocals = false;
 
-fs.writeFileSync(
-  snippetsFolder + '/tsconfig.json',
-  JSON.stringify(tsconfig, null, 2) + '\n'
-);
-console.log(
-  `TS config for code snippets saved to: ${snippetsFolder}/tsconfig.json`
-);
+fs.writeFileSync(snippetsFolder + '/tsconfig.build.json', JSON.stringify(tsconfig, null, 2) + '\n');
+console.log(`TS config for code snippets saved to: ${snippetsFolder}/tsconfig.build.json`);

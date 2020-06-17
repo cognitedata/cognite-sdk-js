@@ -106,9 +106,7 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
    */
   public async getLatestDatapoints(option: LatestDataPropertyFilter = {}) {
     const filter: LatestDataPropertyFilter = option;
-    return this.client.datapoints.retrieveLatest([
-      { ...filter, id: this.id, before: 'now' },
-    ]);
+    return this.client.datapoints.retrieveLatest([{ ...filter, id: this.id }]);
   }
 
   public toJSON() {

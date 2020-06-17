@@ -17,10 +17,10 @@ export default {
     ],
     plugins: [
         typescript({
+            tsconfig: './tsconfig.build.json',
             typescript: require('typescript'),
             clean: true,
             exclude: '**/__tests__/**',
-            include: ['../*/src/**/*.ts']
         }),
         json({
             // All JSON files will be parsed by default,

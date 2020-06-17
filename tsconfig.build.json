@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es5",
+    "declaration": true,
+    "strict": true,
+    "alwaysStrict": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "downlevelIteration": true,
+    "lib": ["es2015", "dom", "esnext.asynciterable", "es2017.object"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+  },
+  "exclude": ["node_modules"]
+}
