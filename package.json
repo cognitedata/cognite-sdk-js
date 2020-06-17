@@ -1,6 +1,5 @@
 {
   "name": "@cognite/sdk-monorepo",
-  "version": "0.0.0",
   "description": "Javascript client library for Cognite SDK",
   "contributors": [
     "Fredrik Anfinsen <fredrik.anfinsen@cognite.com>",
@@ -59,7 +58,7 @@
     "build:core": "yarn core build",
     "build:beta": "yarn beta build",
     "build:stable": "yarn stable build",
-    "build": "yarn build:beta && yarn build:stable",
+    "build": "yarn build:core && yarn build:beta && yarn build:stable",
     "watch": "rollup -cw",
     "docs:stable": "yarn stable docs",
     "docs:beta": "yarn beta docs",
@@ -68,7 +67,7 @@
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
     "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
     "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
-    "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.json && rm -rf codeSnippets/"
+    "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json && rm -rf codeSnippets/"
   },
   "publishConfig": {
     "access": "public",

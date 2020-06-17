@@ -1,9 +1,8 @@
 // Copyright 2020 Cognite AS
-import { mockBaseUrl, randomInt } from '@cognite/sdk-core/testUtils';
 import * as nock from 'nock';
 import { Asset } from '../../api/classes/asset';
 import CogniteClient from '../../cogniteClient';
-import { setupMockableClient } from '../testUtils';
+import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
 
 describe('Asset class unit test', () => {
   let client: CogniteClient;

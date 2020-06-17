@@ -3,7 +3,7 @@ const snippetsFolder = path.join(__dirname, '../codeSnippets');
 const jsonDoc = require(snippetsFolder + '/docs.json');
 const _ = require('lodash');
 const fs = require('fs');
-const tsconfig = require('../tsconfig.json');
+const tsconfig = require('../tsconfig.build.json');
 
 const docRegEx = /https:\/\/(doc.cognitedata.com|docs.cognite.com)\/api\/v1\/#operation\/([a-zA-Z0-9]+)/g;
 const header =
@@ -45,5 +45,5 @@ console.log('JS code snippets saved to: jsSnippets.json');
 tsconfig.include = ['*.ts'];
 tsconfig.compilerOptions.noUnusedLocals = false;
 
-fs.writeFileSync(snippetsFolder + '/tsconfig.json', JSON.stringify(tsconfig, null, 2) + '\n');
-console.log(`TS config for code snippets saved to: ${snippetsFolder}/tsconfig.json`);
+fs.writeFileSync(snippetsFolder + '/tsconfig.build.json', JSON.stringify(tsconfig, null, 2) + '\n');
+console.log(`TS config for code snippets saved to: ${snippetsFolder}/tsconfig.build.json`);
