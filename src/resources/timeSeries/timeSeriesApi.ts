@@ -166,7 +166,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * ]);
    * ```
    */
-  public syntheticQuery(items: SyntheticQuery[]) {
+  public syntheticQuery = (items: SyntheticQuery[]) => {
     return this.querySyntheticEndpoint(items);
   };
 
