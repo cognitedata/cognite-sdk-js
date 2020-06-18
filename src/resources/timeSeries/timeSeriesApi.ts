@@ -22,6 +22,7 @@ import {
 import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { TimeSeries } from '../classes/timeSeries';
 import { TimeSeriesList } from '../classes/timeSeriesList';
+import { promiseAllWithData } from '../assets/assetUtils';
 
 export class TimeSeriesAPI extends BaseResourceAPI<
   GetTimeSeriesMetadataDTO,
@@ -155,10 +156,13 @@ export class TimeSeriesAPI extends BaseResourceAPI<
   /**
    * [Synthetic Query](https://docs.cognite.com/api/v1/#operation/querySyntheticTimeseries)
    *
+   * @param {SyntheticQuery[]} items - the queries made, will be chunked if over api limit
+   * Note the limit on sum of datapoints per api request, which will not be chunked automatically
+   * 
    * ```js
    * await client.timeseries.syntheticQuery([
    *   {
-   *     expression: "24 * TS{externalId='production/hour'}",
+   *     expression: "24 * TS{externalId='production/hour', aggregate='average', granularity='1d'}",
    *     start: 0,
    *     end: 0,
    *     limit: 100
@@ -185,13 +189,16 @@ export class TimeSeriesAPI extends BaseResourceAPI<
 
   private async querySyntheticEndpoint(items: SyntheticQuery[]) {
     const path = this.syntheticQueryUrl();
+    const chunkSize = 10; //The limit on amount of expressions per request
 
-    const response = await this.httpClient.post<
-      ItemsWrapper<SyntheticQueryResponse[]>
-    >(path, {
-      data: { items },
-    });
-    return this.addToMapAndReturn(response.data.items, response);
+    const responses = await promiseAllWithData(BaseResourceAPI.chunk(items, chunkSize),
+    singleChunk => this.httpClient.post<ItemsWrapper<SyntheticQueryResponse[]>>(path, {
+      data: { items: singleChunk },
+    }), false);
+
+    // Should requests be cached somehow?
+
+    return responses.reduce((acc, response) => acc.concat(response.data.items), [] as SyntheticQueryResponse[]);
   }
 }
 
