@@ -1939,11 +1939,10 @@ export interface SyntheticDataValue extends SyntheticDateBase {
 /**
  * A query for a synthetic time series
  */
-export interface SyntheticQuery {
+export interface SyntheticQuery extends Limit {
   expression: string;
   start?: string | Timestamp;
   end?: string | Timestamp;
-  limit: number;
 }
 
 /**

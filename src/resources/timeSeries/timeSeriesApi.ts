@@ -8,10 +8,8 @@ import {
   GetTimeSeriesMetadataDTO,
   IdEither,
   IgnoreUnknownIds,
-  ItemsWrapper,
   PostTimeSeriesMetadataDTO,
   SyntheticQuery,
-  SyntheticQueryResponse,
   TimeseriesAggregate,
   TimeseriesAggregateQuery,
   TimeseriesFilter,
@@ -22,13 +20,15 @@ import {
 import { CDFHttpClient } from '../../utils/http/cdfHttpClient';
 import { TimeSeries } from '../classes/timeSeries';
 import { TimeSeriesList } from '../classes/timeSeriesList';
-import { promiseAllWithData } from '../assets/assetUtils';
+import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 
 export class TimeSeriesAPI extends BaseResourceAPI<
   GetTimeSeriesMetadataDTO,
   TimeSeries,
   TimeSeriesList
 > {
+  private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
+
   /** @hidden */
   constructor(
     private client: CogniteClient,
@@ -37,6 +37,11 @@ export class TimeSeriesAPI extends BaseResourceAPI<
     map: MetadataMap
   ) {
     super(resourcePath, httpClient, map);
+    this.syntheticTimeseriesApi = new SyntheticTimeSeriesAPI(
+      this.url('synthetic'),
+      httpClient,
+      map
+    );
   }
 
   /**
@@ -158,7 +163,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    *
    * @param {SyntheticQuery[]} items - the queries made, will be chunked if over api limit
    * Note the limit on sum of datapoints per api request, which will not be chunked automatically
-   * 
+   *
    * ```js
    * await client.timeseries.syntheticQuery([
    *   {
@@ -171,7 +176,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * ```
    */
   public syntheticQuery = (items: SyntheticQuery[]) => {
-    return this.querySyntheticEndpoint(items);
+    return this.syntheticTimeseriesApi.query(items);
   };
 
   protected transformToList(timeSeries: GetTimeSeriesMetadataDTO[]) {
@@ -181,24 +186,6 @@ export class TimeSeriesAPI extends BaseResourceAPI<
   protected transformToClass(timeSeries: GetTimeSeriesMetadataDTO[]) {
     const timeseriesArray = this.transformToList(timeSeries);
     return new TimeSeriesList(this.client, timeseriesArray);
-  }
-
-  private syntheticQueryUrl() {
-    return this.url('synthetic/query');
-  }
-
-  private async querySyntheticEndpoint(items: SyntheticQuery[]) {
-    const path = this.syntheticQueryUrl();
-    const chunkSize = 10; //The limit on amount of expressions per request
-
-    const responses = await promiseAllWithData(BaseResourceAPI.chunk(items, chunkSize),
-    singleChunk => this.httpClient.post<ItemsWrapper<SyntheticQueryResponse[]>>(path, {
-      data: { items: singleChunk },
-    }), false);
-
-    // Should requests be cached somehow?
-
-    return responses.reduce((acc, response) => acc.concat(response.data.items), [] as SyntheticQueryResponse[]);
   }
 }
 
