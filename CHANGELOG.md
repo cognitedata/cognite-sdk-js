@@ -1,3 +1,10 @@
+# [2.30.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.29.0...v2.30.0) (2020-06-18)
+
+
+### Features
+
+* export Revision3DStatus type ([#374](https://github.com/cognitedata/cognite-sdk-js/issues/374)) ([54112f0](https://github.com/cognitedata/cognite-sdk-js/commit/54112f02a6dacd3afcbbdda529c762a156de25aa))
+
 # [2.29.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.28.0...v2.29.0) (2020-06-08)
 
 
