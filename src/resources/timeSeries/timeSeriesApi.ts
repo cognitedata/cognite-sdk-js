@@ -161,9 +161,6 @@ export class TimeSeriesAPI extends BaseResourceAPI<
   /**
    * [Synthetic Query](https://docs.cognite.com/api/v1/#operation/querySyntheticTimeseries)
    *
-   * @param {SyntheticQuery[]} items - the queries made, will be chunked if over api limit
-   * Note the limit on sum of datapoints per api request, which will not be chunked automatically
-   *
    * ```js
    * await client.timeseries.syntheticQuery([
    *   {
