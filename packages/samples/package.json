@@ -1,13 +1,13 @@
 {
+  "name": "sdk-samples",
+  "version": "0.0.0",
   "private": true,
   "author": "Fredrik Anfinsen",
   "license": "Apache-2.0",
   "dependencies": {
-    "@cognite/sdk": "2"
+    "@cognite/sdk": "2.29.0"
   },
   "scripts": {
-    "link-sdk": "cd ../packages/stable && yarn link && cd ../../samples && yarn link @cognite/sdk",
-    "install-dependencies": "cd nodejs && yarn",
     "test": "yarn test-typescript && yarn test-nodejs",
     "test-typescript": "cd typescript && yarn test",
     "test-nodejs": "cd nodejs && yarn test"

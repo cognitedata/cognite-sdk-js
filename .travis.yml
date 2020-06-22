@@ -32,3 +32,6 @@ deploy:
 #   - sudo apt-get install -y hub
 #   - sudo apt-get install -y jq
 #   - sh scripts/afterRelease.sh
+
+# Using lerna to update versions based on commits (and fill CHANGELOG.md in each workspace)
+# CI=true yarn lerna version --conventional-commits --yes
