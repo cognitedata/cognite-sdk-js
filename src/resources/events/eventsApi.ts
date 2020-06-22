@@ -4,8 +4,6 @@ import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteEvent,
-  EventAggregate,
-  EventAggregateQuery,
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
@@ -13,6 +11,10 @@ import {
   ExternalEvent,
   IdEither,
   IgnoreUnknownIds,
+  EventCountAggregate,
+  CountAggregateResponse,
+  UniqueValuesAggregateResponse,
+  EventUniqueValuesAggregate,
 } from '../../types/types';
 
 export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
@@ -56,9 +58,26 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * ```
    */
   public aggregate = (
-    query: EventAggregateQuery
-  ): Promise<EventAggregate[]> => {
+    query: EventCountAggregate
+  ): Promise<CountAggregateResponse[]> => {
     return super.aggregateEndpoint(query);
+  };
+
+  /**
+   * [Aggregate events](https://docs.cognite.com/api/v1/#operation/aggregateEvents)
+   *
+   * ```js
+   * const aggregates = await client.events.uniqueValuesAggregate({ filter: { assetIds: [1, 2, 3] }, fields: ['subtype'] });
+   * console.log('Unique values: ', aggregates)
+   * ```
+   */
+  public uniqueValuesAggregate = (
+    query: EventUniqueValuesAggregate
+  ): Promise<UniqueValuesAggregateResponse[]> => {
+    return super.aggregateEndpoint({
+      ...query,
+      aggregate: 'uniqueValues',
+    });
   };
 
   /**

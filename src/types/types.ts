@@ -191,11 +191,20 @@ export interface Asset
   parentExternalId?: CogniteExternalId;
 }
 
-export interface AggregateResponse {
+export type AggregateResponse = CountAggregateResponse;
+
+export interface CountAggregateResponse {
   /**
    * Size of the aggregation group
    */
   count: number;
+}
+
+export interface UniqueValuesAggregateResponse extends CountAggregateResponse {
+  /**
+   * A unique value from the requested field
+   */
+  value: string | number;
 }
 
 /**
@@ -585,8 +594,8 @@ export interface DatapointsDeleteRange {
 }
 
 export type DatapointsDeleteRequest =
-  | InternalId & DatapointsDeleteRange
-  | ExternalId & DatapointsDeleteRange;
+  | (InternalId & DatapointsDeleteRange)
+  | (ExternalId & DatapointsDeleteRange);
 
 export interface DatapointsGetAggregateDatapoint extends DatapointsMetadata {
   datapoints: GetAggregateDatapoint[];
@@ -713,13 +722,24 @@ export type DeleteAssetMapping3D = AssetMapping3DBase;
 export type EXECUTE = 'EXECUTE';
 
 /**
- * Query schema for asset aggregate endpoint
+ * Query schema for event aggregate endpoint
  */
-export interface EventAggregateQuery {
+export type EventAggregateQuery = EventCountAggregate;
+
+export interface EventBaseAggregate {
   /**
    * Filter on events with strict matching.
    */
   filter?: EventFilter;
+}
+
+export interface EventCountAggregate extends EventBaseAggregate {}
+
+export interface EventUniqueValuesAggregate extends EventBaseAggregate {
+  /**
+   * The field name(s) to apply the aggregation on. Currently limited to one field.
+   */
+  fields: ('type' | 'subtype' | 'dataSetId')[];
 }
 
 export type EventChange = EventChangeById | EventChangeByExternalId;
@@ -1148,8 +1168,8 @@ export interface ItemsWrapper<T> {
 export type LIST = 'LIST';
 
 export type LatestDataBeforeRequest =
-  | InternalId & LatestDataPropertyFilter
-  | ExternalId & LatestDataPropertyFilter;
+  | (InternalId & LatestDataPropertyFilter)
+  | (ExternalId & LatestDataPropertyFilter);
 
 export interface LatestDataPropertyFilter {
   /**
