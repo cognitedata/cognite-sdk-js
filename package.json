@@ -4,6 +4,7 @@
   "contributors": [
     "Fredrik Anfinsen <fredrik.anfinsen@cognite.com>",
     "Ivan Polomanyi <ivan.polomanyi@cognite.com>",
+    "Håvard Krogstie <havard.krogstie@cognite.com>",
     "Martin Røed <martin.roed@cognite.com>"
   ],
   "license": "Apache-2.0",
@@ -15,7 +16,25 @@
     "sdk",
     "typescript"
   ],
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "clean": "lerna run clean",
+    "prepublishOnly": "yarn build",
+    "test": "lerna run test",
+    "test-samples": "cd samples && yarn link-sdk && yarn install-dependencies && yarn test",
+    "lint": "lerna run lint",
+    "lint:fix": "lerna run lint:fix",
+    "install:all": "yarn",
+    "build": "lerna run build",
+    "watch": "lerna run watch --parallel",
+    "docs": "lerna run docs",
+    "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
+    "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
+    "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
+    "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json && rm -rf codeSnippets/"
+  },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
@@ -28,11 +47,16 @@
     "es-check": "^5.0.0",
     "husky": "^3.0.2",
     "jest": "^23.6.0",
+    "lerna": "^3.22.1",
     "ls": "^0.2.1",
     "markdown-link-check": "^3.7.2",
     "nock": "^10.0.6",
     "parse-comments": "^1.0.0",
     "prettier": "^1.10.2",
+    "rollup": "^0.67.0",
+    "rollup-plugin-alias": "^2.2.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.17.2",
     "swagger-parser": "^6.0.5",
     "ts-jest": "^23.10.4",
     "tslint": "^5.13.0",
@@ -43,35 +67,6 @@
     "typedoc-plugin-markdown": "^1.1.19",
     "typescript": "^3.3.3333",
     "typescript-parser": "^2.6.1"
-  },
-  "scripts": {
-    "clean": "rm -rf dist",
-    "prepublishOnly": "yarn build",
-    "test": "jest --config=jest.config.js",
-    "test-samples": "cd samples && yarn link-sdk && yarn install-dependencies && yarn test",
-    "lint": "yarn beta lint && yarn stable lint",
-    "lint:fix": "yarn beta lint:fix && yarn stable lint:fix",
-    "install:all": "yarn && yarn beta && yarn stable",
-    "beta": "yarn workspace @cognite/sdk-beta",
-    "core": "yarn workspace @cognite/sdk-core",
-    "stable": "yarn workspace @cognite/sdk",
-    "build:core": "yarn core build",
-    "build:beta": "yarn beta build",
-    "build:stable": "yarn stable build",
-    "build": "yarn build:core && yarn build:beta && yarn build:stable",
-    "watch": "rollup -cw",
-    "docs:stable": "yarn stable docs",
-    "docs:beta": "yarn beta docs",
-    "docs": "yarn docs:stable && yarn docs:beta",
-    "esCheck": "es-check es5 './dist/index.js'",
-    "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
-    "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
-    "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
-    "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json && rm -rf codeSnippets/"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
   },
   "husky": {
     "hooks": {
