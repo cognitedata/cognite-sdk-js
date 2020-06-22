@@ -4,6 +4,9 @@ import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
   CogniteEvent,
+  EventAggregate,
+  EventAggregateQuery,
+  EventAggregateUniqueValues,
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
@@ -11,10 +14,7 @@ import {
   ExternalEvent,
   IdEither,
   IgnoreUnknownIds,
-  EventCountAggregate,
-  CountAggregateResponse,
   UniqueValuesAggregateResponse,
-  EventUniqueValuesAggregate,
 } from '../../types/types';
 
 export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
@@ -55,29 +55,22 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * ```js
    * const aggregates = await client.events.aggregate({ filter: { assetIds: [1, 2, 3] } });
    * console.log('Number of events: ', aggregates[0].count)
-   * ```
-   */
-  public aggregate = (
-    query: EventCountAggregate
-  ): Promise<CountAggregateResponse[]> => {
-    return super.aggregateEndpoint(query);
-  };
-
-  /**
-   * [Aggregate events](https://docs.cognite.com/api/v1/#operation/aggregateEvents)
    *
-   * ```js
-   * const aggregates = await client.events.uniqueValuesAggregate({ filter: { assetIds: [1, 2, 3] }, fields: ['subtype'] });
-   * console.log('Unique values: ', aggregates)
+   * const uniqueValues = await client.events.aggregate({ filter: { assetIds: [1, 2, 3] }, fields: ['subtype'], aggregate: 'values' });
+   * console.log('Unique values: ', uniqueValues)
    * ```
    */
-  public uniqueValuesAggregate = (
-    query: EventUniqueValuesAggregate
-  ): Promise<UniqueValuesAggregateResponse[]> => {
-    return super.aggregateEndpoint({
-      ...query,
-      aggregate: 'uniqueValues',
-    });
+  public aggregate = <
+    T extends EventAggregateQuery | EventAggregateUniqueValues
+  >(
+    query: T
+  ) => {
+    return super.aggregateEndpoint<
+      T,
+      T extends EventAggregateUniqueValues
+        ? UniqueValuesAggregateResponse
+        : EventAggregate
+    >(query);
   };
 
   /**

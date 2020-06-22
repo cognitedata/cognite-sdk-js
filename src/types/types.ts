@@ -191,16 +191,14 @@ export interface Asset
   parentExternalId?: CogniteExternalId;
 }
 
-export type AggregateResponse = CountAggregateResponse;
-
-export interface CountAggregateResponse {
+export interface AggregateResponse {
   /**
    * Size of the aggregation group
    */
   count: number;
 }
 
-export interface UniqueValuesAggregateResponse extends CountAggregateResponse {
+export interface UniqueValuesAggregateResponse extends AggregateResponse {
   /**
    * A unique value from the requested field
    */
@@ -724,22 +722,19 @@ export type EXECUTE = 'EXECUTE';
 /**
  * Query schema for event aggregate endpoint
  */
-export type EventAggregateQuery = EventCountAggregate;
-
-export interface EventBaseAggregate {
+export interface EventAggregateQuery {
   /**
    * Filter on events with strict matching.
    */
   filter?: EventFilter;
 }
 
-export interface EventCountAggregate extends EventBaseAggregate {}
-
-export interface EventUniqueValuesAggregate extends EventBaseAggregate {
+export interface EventAggregateUniqueValues extends EventAggregateQuery {
   /**
    * The field name(s) to apply the aggregation on. Currently limited to one field.
    */
   fields: ('type' | 'subtype' | 'dataSetId')[];
+  aggregate: 'values';
 }
 
 export type EventChange = EventChangeById | EventChangeByExternalId;

@@ -96,11 +96,12 @@ describe('Events integration test', () => {
   });
 
   test('values aggregate', async () => {
-    const aggregates = await client.events.uniqueValuesAggregate({
+    const aggregates = await client.events.aggregate({
       filter: {
         source: 'WORKMATE',
       },
       fields: ['type'],
+      aggregate: 'values',
     });
     expect(aggregates.length).toBe(1);
     expect(aggregates[0].count).toBeDefined();
