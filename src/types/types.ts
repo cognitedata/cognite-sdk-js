@@ -310,6 +310,10 @@ export interface AssetFilterProps {
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
   assetSubtreeIds?: IdEither[];
+  /**
+   * Return only the assets matching the specified label constraints.
+   */
+  labels?: LabelFilter;
   metadata?: Metadata;
   source?: AssetSource;
   createdTime?: DateRange;
@@ -377,6 +381,7 @@ export interface AssetPatch {
     description?: SinglePatchString;
     dataSetId?: NullableSinglePatchLong;
     metadata?: ObjectPatch;
+    labels?: LabelsPatch;
     source?: SinglePatchString;
   };
 }
@@ -542,6 +547,71 @@ export type DataSetChange = DataSetChangeById | DataSetChangeByExternalId;
 export interface DataSetChangeByExternalId extends DataSetPatch, ExternalId {}
 
 export interface DataSetChangeById extends DataSetPatch, InternalId {}
+
+export type Label = ExternalId;
+
+export type LabelFilter =
+  | LabelContainsFilter
+  | LabelContainsAnyFilter
+  | LabelContainsAllFilter;
+
+export interface LabelContainsFilter {
+  contains: Label;
+}
+
+export interface LabelContainsAnyFilter {
+  containsAny: Label[];
+}
+
+export interface LabelContainsAllFilter {
+  containsAll: Label[];
+}
+
+export interface LabelsPatch {
+  /**
+   * A list of labels to add to the resource
+   */
+  add?: Label[];
+  /**
+   * A list of labels to remove to the resource
+   */
+  remove?: Label[];
+}
+
+export interface ExternalLabelDefinition extends Label {
+  /**
+   * Name of the label.
+   */
+  name: string;
+
+  /**
+   * Description of the label.
+   */
+  description?: string;
+}
+
+export interface LabelDefinition extends ExternalLabelDefinition {
+  createdTime: Date;
+}
+
+export interface LabelDefinitionFilter {
+  filter?: {
+    /**
+     * Returns the label definitions matching that name.
+     */
+    name?: string;
+
+    /**
+     * Filter external ids starting with the prefix specified
+     */
+    externalIdPrefix?: ExternalIdPrefix;
+  };
+}
+
+export interface LabelDefinitionFilterRequest
+  extends LabelDefinitionFilter,
+    Cursor,
+    Limit {}
 
 /**
  * Filter on data sets with exact match
@@ -827,6 +897,7 @@ export interface ExternalAsset {
   dataSetId?: CogniteInternalId;
   metadata?: Metadata;
   source?: AssetSource;
+  labels?: Label[];
 }
 
 export interface ExternalAssetItem extends ExternalAsset {

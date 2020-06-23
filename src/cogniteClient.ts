@@ -20,6 +20,7 @@ import { DataSetsApi } from './resources/datasets/datasetsApi';
 import { EventsAPI } from './resources/events/eventsApi';
 import { FilesAPI } from './resources/files/filesApi';
 import { GroupsAPI } from './resources/groups/groupsApi';
+import { LabelsAPI } from './resources/labels/labelsApi';
 import {
   createAuthenticateFunction,
   OnAuthenticate,
@@ -107,6 +108,9 @@ export default class CogniteClient {
   public get files() {
     return validateAndReturnAPI(this.filesApi);
   }
+  public get labels() {
+    return validateAndReturnAPI(this.labelsApi);
+  }
   public get raw() {
     return validateAndReturnAPI(this.rawApi);
   }
@@ -160,6 +164,7 @@ export default class CogniteClient {
   private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
   private filesApi?: FilesAPI;
+  private labelsApi?: LabelsAPI;
   private rawApi?: RawAPI;
   private projectsApi?: ProjectsAPI;
   private groupsApi?: GroupsAPI;
@@ -466,6 +471,7 @@ export default class CogniteClient {
     this.sequencesApi = apiFactory(SequencesAPI, 'sequences');
     this.eventsApi = apiFactory(EventsAPI, 'events');
     this.filesApi = apiFactory(FilesAPI, 'files');
+    this.labelsApi = apiFactory(LabelsAPI, 'labels');
     this.datasetsApi = apiFactory(DataSetsApi, 'datasets');
     this.rawApi = apiFactory(RawAPI, 'raw/dbs');
     this.groupsApi = apiFactory(GroupsAPI, 'groups');
