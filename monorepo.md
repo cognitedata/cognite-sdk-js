@@ -38,3 +38,4 @@ This will individually update versions of packages and references between them b
 
 ## Samples
 The `samples/` folder is also a package in the workspace, but private.
+Each sample inside is then a package in the global workspace.
