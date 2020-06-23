@@ -594,18 +594,20 @@ export interface LabelDefinition extends ExternalLabelDefinition {
   createdTime: Date;
 }
 
-export interface LabelDefinitionFilterRequest extends FilterQuery {
-  filter?: {
-    /**
-     * Returns the label definitions matching that name.
-     */
-    name?: string;
+export interface LabelDefinitionFilter {
+  /**
+   * Returns the label definitions matching that name.
+   */
+  name?: string;
 
-    /**
-     * Filter external ids starting with the prefix specified
-     */
-    externalIdPrefix?: ExternalIdPrefix;
-  };
+  /**
+   * Filter external ids starting with the prefix specified
+   */
+  externalIdPrefix?: ExternalIdPrefix;
+}
+
+export interface LabelDefinitionFilterRequest extends FilterQuery {
+  filter?: LabelDefinitionFilter;
 }
 
 /**
