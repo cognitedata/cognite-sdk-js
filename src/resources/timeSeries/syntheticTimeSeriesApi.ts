@@ -12,12 +12,8 @@ export class SyntheticTimeSeriesAPI extends BaseResourceAPI<
     return this.querySyntheticEndpoint(items);
   };
 
-  private get queryUrl() {
-    return this.url('query');
-  }
-
   private async querySyntheticEndpoint(items: SyntheticQuery[]) {
-    const path = this.queryUrl;
+    const path = this.url('query');
     return this.callEndpointWithMergeAndTransform(items, data =>
       this.postInParallelWithAutomaticChunking({
         path,

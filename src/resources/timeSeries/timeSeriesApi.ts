@@ -165,8 +165,8 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * await client.timeseries.syntheticQuery([
    *   {
    *     expression: "24 * TS{externalId='production/hour', aggregate='average', granularity='1d'}",
-   *     start: 0,
-   *     end: 0,
+   *     start: '48h-ago',
+   *     end: '0h-ago',
    *     limit: 100
    *   }
    * ]);

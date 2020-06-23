@@ -156,27 +156,18 @@ describe('Timeseries integration test', () => {
   });
 
   test('synthetic query', async () => {
-    const [ts1, ts2] = createdTimeseries;
+    const [ts1] = createdTimeseries;
     const result = await client.timeseries.syntheticQuery([
       {
         expression: `24 * TS{externalId='${
           ts1.externalId
         }', aggregate='average', granularity='1h'}`,
-        start: 0,
-        end: 100,
+        start: '48h-ago',
+        end: '0h-ago',
         limit: 100,
       },
-      {
-        expression: `map(TS{id=${ts2.id}}, ['A', 'B'], [1, 2], 0)`,
-        start: '2d-ago',
-        end: '0h-ago',
-        limit: 4,
-      },
     ]);
-    expect(result.length).toBe(2);
-    expect(result[0].datapoints.length).toBeLessThanOrEqual(100);
-    expect(result[1].datapoints.length).toBeLessThanOrEqual(4);
-    expect(result[1].isString).toBe(false);
+    expect(result.length).toBe(1);
   });
 
   test('delete', async () => {

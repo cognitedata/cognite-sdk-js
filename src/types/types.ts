@@ -1922,17 +1922,13 @@ export const SortOrder = {
  */
 export type SortOrder = 'asc' | 'desc';
 
-export interface SyntheticDateBase {
-  timestamp?: Date;
-}
-
-export interface SyntheticDataError extends SyntheticDateBase {
+export interface SyntheticDataError extends GetDatapointMetadata {
   error: string;
 }
 
-export type SyntheticDataPoint = SyntheticDataValue | SyntheticDataError;
+export type SyntheticDatapoint = SyntheticDataValue | SyntheticDataError;
 
-export interface SyntheticDataValue extends SyntheticDateBase {
+export interface SyntheticDataValue extends GetDatapointMetadata {
   value: number;
 }
 
@@ -1950,7 +1946,7 @@ export interface SyntheticQuery extends Limit {
  */
 export interface SyntheticQueryResponse {
   isString?: TimeseriesIsString;
-  datapoints: SyntheticDataPoint[];
+  datapoints: SyntheticDatapoint[];
 }
 
 export interface TimeSeriesPatch {
