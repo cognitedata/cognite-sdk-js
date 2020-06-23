@@ -166,7 +166,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    *   {
    *     expression: "24 * TS{externalId='production/hour', aggregate='average', granularity='1d'}",
    *     start: '48h-ago',
-   *     end: '0h-ago',
+   *     end: 'now',
    *     limit: 100
    *   }
    * ]);

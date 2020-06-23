@@ -163,7 +163,7 @@ describe('Timeseries integration test', () => {
           ts1.externalId
         }', aggregate='average', granularity='1h'}`,
         start: '48h-ago',
-        end: '0h-ago',
+        end: 'now',
         limit: 100,
       },
     ]);
