@@ -55,7 +55,7 @@ describeIfCondition(
       };
 
       const fileContent = readFileSync(
-        'packages/stable/src/__tests__/test3dFile.fbx'
+        'src/__tests__/test3dFile.fbx'
       );
       [[model], file, assets] = await Promise.all([
         // create 3D model

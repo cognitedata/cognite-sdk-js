@@ -6,7 +6,7 @@
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
     "react-scripts": "2.1.8",
-    "@cognite/sdk": "2"
+    "@cognite/sdk": "2.29.0"
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",
