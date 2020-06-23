@@ -1,5 +1,7 @@
 {
-  "name": "typescript-example",
+  "name": "typescript-sample",
+  "version": "0.0.0",
+  "private": true,
   "license": "Apache-2.0",
   "scripts": {
     "tsc": "tsc",

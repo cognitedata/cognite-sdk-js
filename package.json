@@ -21,19 +21,20 @@
   ],
   "scripts": {
     "clean": "lerna run clean",
-    "prepublishOnly": "yarn build",
-    "test": "lerna run test",
-    "test-samples": "cd samples && yarn link-sdk && yarn install-dependencies && yarn test",
-    "lint": "lerna run lint",
-    "lint:fix": "lerna run lint:fix",
+    "prepublishOnly": "yarn build --stream",
+    "test": "lerna run test --stream",
+    "lint": "lerna run lint --stream",
+    "lint:fix": "lerna run lint:fix --stream",
     "install:all": "yarn",
-    "build": "lerna run build",
+    "build": "lerna run build --stream",
     "watch": "lerna run watch --parallel",
     "docs": "lerna run docs",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
     "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
     "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
-    "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json && rm -rf codeSnippets/"
+    "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json && rm -rf codeSnippets/",
+    "install-samples": "yarn workspace sdk-samples install:samples",
+    "test-samples": "yarn workspace sdk-samples test:samples"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
