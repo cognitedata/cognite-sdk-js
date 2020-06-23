@@ -11,7 +11,6 @@
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c ../../tslint.json -p tsconfig.build.json --fix",
     "build": "yarn clean && yarn rollup -c && yarn esCheck",
     "watch": "rollup -cw",
-    "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json",
     "esCheck": "es-check es5 './dist/index.js'",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
     "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
