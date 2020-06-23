@@ -1,3 +1,10 @@
+# [2.31.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.30.0...v2.31.0) (2020-06-23)
+
+
+### Features
+
+* **events:** unique values aggregate ([#377](https://github.com/cognitedata/cognite-sdk-js/issues/377)) ([d47152c](https://github.com/cognitedata/cognite-sdk-js/commit/d47152c4873274648e9bf525737810ef14e9572c))
+
 # [2.30.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.29.0...v2.30.0) (2020-06-18)
 
 
