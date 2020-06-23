@@ -14,6 +14,7 @@ import {
   AssetSource,
   CogniteExternalId,
   CogniteInternalId,
+  Label,
   Metadata,
 } from '../../types/types';
 import { AssetList } from './assetList';
@@ -39,6 +40,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
   public aggregates?: AssetAggregateResult;
   public parentExternalId?: CogniteExternalId;
   public dataSetId?: CogniteInternalId;
+  public labels?: Label[];
 
   constructor(client: CogniteClient, props: TypeAsset) {
     super(client);
@@ -55,6 +57,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
     this.aggregates = props.aggregates;
     this.parentExternalId = props.parentExternalId;
     this.dataSetId = props.dataSetId;
+    this.labels = props.labels;
 
     Object.defineProperties(this, {
       delete: { value: this.delete.bind(this), enumerable: false },

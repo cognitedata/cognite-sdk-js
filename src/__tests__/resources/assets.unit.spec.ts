@@ -1,7 +1,6 @@
 // Copyright 2019 Cognite AS
 
 import * as nock from 'nock';
-import { ExternalAssetItem } from '../../';
 import CogniteClient from '../../cogniteClient';
 import { Node } from '../../graphUtils';
 import {
@@ -9,6 +8,7 @@ import {
   promiseAllAtOnce,
   promiseEachInSequence,
 } from '../../resources/assets/assetUtils';
+import { ExternalAssetItem } from '../../types/types';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 // tslint:disable-next-line:no-big-function
@@ -29,6 +29,79 @@ describe('Assets unit test', () => {
       .once()
       .reply(200, {});
     await client.assets.delete(assetIds);
+  });
+
+  describe('labels', () => {
+    const externalAssets = [
+      {
+        name: 'My pump',
+        labels: [{ externalId: 'PUMP' }],
+      },
+    ];
+
+    test('add label on create', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/assets'), {
+          items: externalAssets,
+        })
+        .once()
+        .reply(201, { items: externalAssets });
+
+      const createdAssets = await client.assets.create(externalAssets);
+      expect(JSON.parse(JSON.stringify(createdAssets))).toEqual(externalAssets);
+    });
+
+    test('filter assets by labels', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/assets/list'), {
+          filter: { labels: { containsAny: [{ externalId: 'PUMP' }] } },
+        })
+        .once()
+        .reply(200, { items: externalAssets });
+
+      const fetchedAssets = await client.assets.list({
+        filter: {
+          labels: {
+            containsAny: [{ externalId: 'PUMP' }],
+          },
+        },
+      });
+      expect(JSON.parse(JSON.stringify(fetchedAssets.items))).toEqual(
+        externalAssets
+      );
+    });
+
+    test('attach/detach labels to asset', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/assets/update'), {
+          items: [
+            {
+              id: 123,
+              update: {
+                labels: {
+                  add: [{ externalId: 'PUMP' }],
+                  remove: [{ externalId: 'VALVE' }],
+                },
+              },
+            },
+          ],
+        })
+        .once()
+        .reply(200, { items: externalAssets });
+
+      const updatedAssets = await client.assets.update([
+        {
+          id: 123,
+          update: {
+            labels: {
+              add: [{ externalId: 'PUMP' }],
+              remove: [{ externalId: 'VALVE' }],
+            },
+          },
+        },
+      ]);
+      expect(JSON.parse(JSON.stringify(updatedAssets))).toEqual(externalAssets);
+    });
   });
 
   describe('multi promise resolution', () => {

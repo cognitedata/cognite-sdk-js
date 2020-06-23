@@ -550,14 +550,7 @@ export interface DataSetChangeById extends DataSetPatch, InternalId {}
 
 export type Label = ExternalId;
 
-export type LabelFilter =
-  | LabelContainsFilter
-  | LabelContainsAnyFilter
-  | LabelContainsAllFilter;
-
-export interface LabelContainsFilter {
-  contains: Label;
-}
+export type LabelFilter = LabelContainsAnyFilter | LabelContainsAllFilter;
 
 export interface LabelContainsAnyFilter {
   containsAny: Label[];
