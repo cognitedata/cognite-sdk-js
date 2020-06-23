@@ -4,15 +4,9 @@
   "private": true,
   "author": "Fredrik Anfinsen",
   "license": "Apache-2.0",
-  "dependencies": {
-    "@cognite/sdk": "2.29.0"
-  },
   "scripts": {
-    "install:samples": "yarn install:typescript && yarn install:nodejs",
-    "install:typescript": "cd typescript && yarn",
-    "install:nodejs": "cd nodejs && yarn",
-    "test:samples": "yarn test:typescript && yarn test:nodejs",
-    "test:typescript": "cd typescript && yarn test",
-    "test:nodejs": "cd nodejs && yarn test"
+    "test": "yarn test:typescript && yarn test:nodejs",
+    "test:typescript": "yarn workspace typescript-sample test",
+    "test:nodejs": "yarn workspace nodejs-sample test"
   }
 }
