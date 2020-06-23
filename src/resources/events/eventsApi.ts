@@ -3,18 +3,18 @@
 import { CursorAndAsyncIterator } from '../../autoPagination';
 import { BaseResourceAPI } from '../../resources/baseResourceApi';
 import {
+  AggregateResponse,
   CogniteEvent,
+  EventAggregateQuery,
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
   EventSort,
+  EventUniqueValuesAggregate,
   ExternalEvent,
   IdEither,
   IgnoreUnknownIds,
-  EventCountAggregate,
-  CountAggregateResponse,
   UniqueValuesAggregateResponse,
-  EventUniqueValuesAggregate,
 } from '../../types/types';
 
 export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
@@ -58,8 +58,8 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * ```
    */
   public aggregate = (
-    query: EventCountAggregate
-  ): Promise<CountAggregateResponse[]> => {
+    query: EventAggregateQuery
+  ): Promise<AggregateResponse[]> => {
     return super.aggregateEndpoint(query);
   };
 
