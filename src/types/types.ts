@@ -594,7 +594,7 @@ export interface LabelDefinition extends ExternalLabelDefinition {
   createdTime: Date;
 }
 
-export interface LabelDefinitionFilter {
+export interface LabelDefinitionFilterRequest extends FilterQuery {
   filter?: {
     /**
      * Returns the label definitions matching that name.
@@ -607,11 +607,6 @@ export interface LabelDefinitionFilter {
     externalIdPrefix?: ExternalIdPrefix;
   };
 }
-
-export interface LabelDefinitionFilterRequest
-  extends LabelDefinitionFilter,
-    Cursor,
-    Limit {}
 
 /**
  * Filter on data sets with exact match
