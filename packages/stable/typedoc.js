@@ -5,6 +5,7 @@ module.exports = {
   target: 'ES6',
   exclude: [
     '**/__tests__/**',
+    '**/node_modules/**'
   ],
   out: './docs/',
   // theme: 'markdown',
@@ -15,5 +16,5 @@ module.exports = {
   excludePrivate: true,
   excludeProtected: true,
   includeDeclarations: true,
-  excludeExternals: false,
+  excludeExternals: false
 };

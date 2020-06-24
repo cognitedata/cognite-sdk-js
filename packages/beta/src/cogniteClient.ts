@@ -1,11 +1,12 @@
 // Copyright 2020 Cognite AS
 import {
   ClientOptions,
-  CogniteClient as StableCogniteClient,
+  CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
 import { version } from '../package.json';
 
-export default class CogniteClient extends StableCogniteClient {
+export default class CogniteClientBeta extends CogniteClientStable {
+  
   /**
    * Create a new SDK client (beta)
    *

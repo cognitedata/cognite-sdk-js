@@ -12,10 +12,9 @@
     "test": "jest --config=../../jest.config.js",
     "build": "yarn clean && rollup -c && yarn esCheck",
     "watch": "rollup -cw",
-    "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json",
+    "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
     "esCheck": "es-check es5 './dist/index.js'",
-    "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
-    "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
+    "alphabetizeTypes": "node ../../scripts/alphabetizeTypes.js -i src/types.ts -h \"// Copyright 2020 Cognite AS\"",
     "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
     "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.json && rm -rf codeSnippets/"
   },
