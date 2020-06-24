@@ -6,7 +6,7 @@ node_js:
 env:
   - COGNITE_PROJECT=cognitesdk-js
 install:
-  - yarn install:all
+  - yarn
   - npm install -g codecov
 script:
   - yarn commitlint-travis

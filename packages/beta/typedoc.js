@@ -4,7 +4,8 @@ module.exports = {
   module: 'umd',
   target: 'ES6',
   exclude: [
-    '**/__tests__/**'
+    '**/__tests__/**',
+    '**/node_modules/**'
   ],
   out: './docs/',
   // theme: 'markdown',

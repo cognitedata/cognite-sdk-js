@@ -20,7 +20,6 @@
     "packages/**"
   ],
   "scripts": {
-    "install:all": "yarn",
     "allsdk": "lerna run --ignore *-sample",
     "allsamples": "lerna run --scope *-sample",
     "clean": "lerna run clean",
@@ -30,9 +29,9 @@
     "lint:fix": "yarn allsdk lint:fix --stream",
     "build": "yarn allsdk build --stream",
     "watch": "yarn allsdk watch --parallel",
-    "docs": "yarn allsdk docs",
+    "docs": "yarn allsdk docs --stream",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
-    "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
+    "alphabetizeTypes": "yarn allsdk alphabetizeTypes --stream",
     "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
     "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json && rm -rf codeSnippets/",
     "test-samples": "yarn allsamples test --stream"
