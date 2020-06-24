@@ -15,5 +15,5 @@ module.exports = {
   excludePrivate: true,
   excludeProtected: true,
   includeDeclarations: true,
-  excludeExternals: true,
+  excludeExternals: false
 };
