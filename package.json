@@ -36,7 +36,7 @@
     "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
     "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
     "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json && rm -rf codeSnippets/",
-    "test-samples": "yarn allsamples test"
+    "test-samples": "yarn allsamples test --stream"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",

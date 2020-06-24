@@ -4,7 +4,7 @@ module.exports = {
   module: 'umd',
   target: 'ES6',
   exclude: [
-    '**/__tests__/**',
+    '**/__tests__/**'
   ],
   out: './docs/',
   // theme: 'markdown',
@@ -15,5 +15,5 @@ module.exports = {
   excludePrivate: true,
   excludeProtected: true,
   includeDeclarations: true,
-  excludeExternals: false,
+  excludeExternals: true,
 };
