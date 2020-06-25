@@ -13,10 +13,9 @@ script:
   - yarn validateDocLinks
   - yarn lint
   - yarn build
-  - yarn test --maxWorkers=1 && yarn codecov
+  - yarn test && yarn codecov
   - yarn test-samples
   - yarn test-snippets
-  - yarn lerna version --conventional-commits --yes
 before_deploy:
   - yarn bundle-docs
 deploy:
@@ -24,6 +23,7 @@ deploy:
     node_js: lts/*
     on:
       branch: v1
+      branch: refactor/lerna-with-samples
       node_js: "14"
     skip_cleanup: true
     script: yarn lerna version --conventional-commits --yes --no-push
