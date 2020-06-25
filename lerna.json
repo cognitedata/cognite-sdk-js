@@ -7,7 +7,7 @@
   "npmClient": "yarn",
   "command": {
     "version": {
-      "no-push": true
+      "ignoreChanges": ["**/__tests__/**", "**/*.unit.spec.ts"]
     }
   }
 }
