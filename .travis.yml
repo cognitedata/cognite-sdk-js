@@ -1,4 +1,5 @@
 language: node_js
+cache: yarn
 node_js:
   - "10"
   - "12"
@@ -8,6 +9,7 @@ env:
 install:
   - yarn
   - yarn global add codecov
+  - sudo apt-get install sed
 script:
   - yarn commitlint-travis
   - yarn validateDocLinks
@@ -26,7 +28,7 @@ deploy:
       branch: refactor/lerna-with-samples
       node_js: "14"
     skip_cleanup: true
-    script: git checkout $TRAVIS_BRANCH && yarn lerna version --conventional-commits --exact --yes
+    script: bash scripts/versionAndPush.sh
   - provider: pages
     skip_cleanup: true
     github_token: $GITHUB_TOKEN
