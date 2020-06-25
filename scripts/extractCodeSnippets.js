@@ -1,9 +1,8 @@
 const path = require('path');
-const snippetsFolder = path.join(__dirname, '../codeSnippets');
+const snippetsFolder = path.join(process.cwd(), './codeSnippets');
 const jsonDoc = require(snippetsFolder + '/docs.json');
 const _ = require('lodash');
 const fs = require('fs');
-const tsconfig = require('../tsconfig.build.json');
 
 const docRegEx = /https:\/\/(doc.cognitedata.com|docs.cognite.com)\/api\/v1\/#operation\/([a-zA-Z0-9]+)/g;
 const header =
@@ -39,11 +38,20 @@ _.cloneDeepWith(jsonDoc, (value, _, object) => {
   }
 });
 
-fs.writeFileSync(snippetsFolder + '/index.json', JSON.stringify(resultJson, null, 2) + '\n');
-console.log('JS code snippets saved to: jsSnippets.json');
+const jssnippetspath = path.join(snippetsFolder, './index.json');
+fs.writeFileSync(jssnippetspath, JSON.stringify(resultJson, null, 2) + '\n');
+console.log(`JS code snippets saved to: ${jssnippetspath}`);
 
+const tsconfig = {};
 tsconfig.include = ['*.ts'];
-tsconfig.compilerOptions.noUnusedLocals = false;
+tsconfig.compilerOptions = {
+  noUnusedLocals: false,
+  outDir: "dist",
+  declaration: false,
+  sourceMap: false
+};
+tsconfig.extends = '../../../tsconfig.build.json';
 
-fs.writeFileSync(snippetsFolder + '/tsconfig.build.json', JSON.stringify(tsconfig, null, 2) + '\n');
-console.log(`TS config for code snippets saved to: ${snippetsFolder}/tsconfig.build.json`);
+const tsconfigpath = path.join(snippetsFolder, './tsconfig.json');
+fs.writeFileSync(tsconfigpath, JSON.stringify(tsconfig, null, 2) + '\n');
+console.log(`TS config for code snippets saved to: ${tsconfigpath}`);

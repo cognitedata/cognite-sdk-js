@@ -16,9 +16,17 @@ script:
   - yarn test --maxWorkers=1 && codecov
   - yarn test-samples
   - yarn test-snippets
+  - yarn lerna version --conventional-commits --yes
 before_deploy:
-  - yarn docs
+  - yarn bundle-docs
 deploy:
+  - provider: script
+    node_js: lts/*
+    on:
+      branch: v1
+      node_js: "10"
+    skip_cleanup: true
+    script: yarn lerna version --conventional-commits --yes --no-push
   - provider: pages
     skip_cleanup: true
     github_token: $GITHUB_TOKEN
@@ -32,8 +40,3 @@ deploy:
 #   - sudo apt-get install -y hub
 #   - sudo apt-get install -y jq
 #   - sh scripts/afterRelease.sh
-
-
-
-# Using lerna to update versions based on commits (and fill CHANGELOG.md in each workspace)
-# CI=true yarn lerna version --conventional-commits --yes
