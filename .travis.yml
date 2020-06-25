@@ -7,7 +7,7 @@ env:
   - COGNITE_PROJECT=cognitesdk-js
 install:
   - yarn
-  - yarn add codecov
+  - yarn global add codecov
 script:
   - yarn commitlint-travis
   - yarn validateDocLinks
