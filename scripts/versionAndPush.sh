@@ -4,7 +4,7 @@ set -e
 # Don't be in detached head mode
 git checkout $TRAVIS_BRANCH
 
-if [[ "$(yarn lerna changed)" ]]; then
+if yarn lerna changed ; then
 
     # Set git identity
     git config --global user.email "travis@travis-ci.org"
