@@ -59,12 +59,10 @@ describe('utils', () => {
     test('promiseAllAtOnce: fail', async () => {
       const data = ['x', 'a', 'b', 'c'];
       await expect(
-        promiseAllAtOnce(
-          data,
-          input =>
-            input === 'x'
-              ? Promise.reject(input + 'x')
-              : Promise.resolve(input + 'r')
+        promiseAllAtOnce(data, input =>
+          input === 'x'
+            ? Promise.reject(input + 'x')
+            : Promise.resolve(input + 'r')
         )
       ).rejects.toEqual({
         failed: ['x'],
@@ -117,9 +115,8 @@ describe('utils', () => {
       });
 
       await expect(
-        promiseEachInSequence(
-          [1, 0, 2, 3],
-          input => (input ? Promise.resolve(input) : Promise.reject('x'))
+        promiseEachInSequence([1, 0, 2, 3], input =>
+          input ? Promise.resolve(input) : Promise.reject('x')
         )
       ).rejects.toEqual({
         failed: [0, 2, 3],
@@ -129,9 +126,8 @@ describe('utils', () => {
       });
 
       await expect(
-        promiseEachInSequence(
-          [1, 2, 0, 3, 0],
-          input => (input ? Promise.resolve(input + 'r') : Promise.reject('x'))
+        promiseEachInSequence([1, 2, 0, 3, 0], input =>
+          input ? Promise.resolve(input + 'r') : Promise.reject('x')
         )
       ).rejects.toEqual({
         failed: [0, 3, 0],

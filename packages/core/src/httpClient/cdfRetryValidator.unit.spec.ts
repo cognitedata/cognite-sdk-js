@@ -1,9 +1,5 @@
 // Copyright 2020 Cognite AS
-import {
-  HttpMethod,
-  HttpRequest,
-  HttpResponse,
-} from './basicHttpClient';
+import { HttpMethod, HttpRequest, HttpResponse } from './basicHttpClient';
 import { cdfRetryValidator } from './cdfRetryValidator';
 
 describe('cdfRetryValidator', () => {

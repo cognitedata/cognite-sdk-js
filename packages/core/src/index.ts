@@ -1,12 +1,12 @@
 // Copyright 2020 Cognite AS
-import * as TestUtils from './testUtils';
 import * as Constants from './constants';
 import * as GraphUtils from './graphUtils';
+import * as TestUtils from './testUtils';
 
 export { MetadataMap } from './metadata';
 export { BaseResourceAPI } from './baseResourceApi';
-export { default as BaseCogniteClient } from './baseCogniteClient'
-export * from './baseCogniteClient'
+export { default as BaseCogniteClient } from './baseCogniteClient';
+export * from './baseCogniteClient';
 export * from './types';
 export { CDFHttpClient } from './httpClient/cdfHttpClient';
 export { CogniteError } from './error';

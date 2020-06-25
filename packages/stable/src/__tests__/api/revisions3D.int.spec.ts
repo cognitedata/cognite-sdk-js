@@ -54,9 +54,7 @@ describeIfCondition(
         parentExternalId: rootAsset.externalId,
       };
 
-      const fileContent = readFileSync(
-        'src/__tests__/test3dFile.fbx'
-      );
+      const fileContent = readFileSync('src/__tests__/test3dFile.fbx');
       [[model], file, assets] = await Promise.all([
         // create 3D model
         client.models3D.create([

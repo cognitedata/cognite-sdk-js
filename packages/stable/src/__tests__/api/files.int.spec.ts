@@ -142,9 +142,7 @@ describe('Files integration test', () => {
       name: 'filename_1_' + postfix,
       mimeType: 'application/octet-stream',
     };
-    const fileContentBinary = readFileSync(
-      'src/__tests__/test3dFile.fbx'
-    );
+    const fileContentBinary = readFileSync('src/__tests__/test3dFile.fbx');
     let binaryFile: FilesMetadata;
 
     test('create', async () => {

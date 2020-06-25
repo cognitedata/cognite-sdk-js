@@ -2,4 +2,7 @@
 
 export * from '@cognite/sdk';
 export * from './types';
-export { default as CogniteClient, default as CogniteClientBeta } from './cogniteClient';
+export {
+  default as CogniteClient,
+  default as CogniteClientBeta,
+} from './cogniteClient';

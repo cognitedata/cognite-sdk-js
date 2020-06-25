@@ -10,11 +10,7 @@ import {
 } from '../constants';
 import * as Login from '../login';
 import { bearerString, sleepPromise } from '../utils';
-import {
-  apiKey,
-  authTokens,
-  project,
-} from '../testUtils';
+import { apiKey, authTokens, project } from '../testUtils';
 
 const mockBaseUrl = 'https://example.com';
 
@@ -428,5 +424,4 @@ describe('CogniteClient', () => {
       });
     });
   });
-
 });

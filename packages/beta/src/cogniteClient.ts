@@ -6,7 +6,6 @@ import {
 import { version } from '../package.json';
 
 export default class CogniteClientBeta extends CogniteClientStable {
-  
   /**
    * Create a new SDK client (beta)
    *

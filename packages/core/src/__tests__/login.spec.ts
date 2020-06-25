@@ -17,7 +17,7 @@ import {
   notLoggedInResponse,
   project,
   projectId,
-  mockBaseUrl
+  mockBaseUrl,
 } from '../testUtils';
 
 describe('Login', () => {
@@ -102,9 +102,7 @@ describe('Login', () => {
       window.history.pushState(
         {},
         '',
-        `/some/random/path?query=true&access_token=${
-          authTokens.accessToken
-        }&id_token=${authTokens.idToken}&random=123`
+        `/some/random/path?query=true&access_token=${authTokens.accessToken}&id_token=${authTokens.idToken}&random=123`
       );
       nock(mockBaseUrl, {
         reqheaders: {
