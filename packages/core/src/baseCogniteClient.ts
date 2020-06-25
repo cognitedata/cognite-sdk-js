@@ -216,8 +216,8 @@ export default class BaseCogniteClient {
       options.onAuthenticate === POPUP
         ? onAuthenticateWithPopup
         : isFunction(options.onAuthenticate)
-          ? options.onAuthenticate
-          : onAuthenticateWithRedirect;
+        ? options.onAuthenticate
+        : onAuthenticateWithRedirect;
 
     const authenticate = createAuthenticateFunction({
       project,
