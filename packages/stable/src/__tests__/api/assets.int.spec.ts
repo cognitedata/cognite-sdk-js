@@ -331,12 +331,9 @@ describe('Asset integration test', () => {
 
   test('delete', async () => {
     await client.assets.delete(
-      [
-        createdChild1,
-        createdRoot1,
-        ...createdAssets2,
-        ...assets,
-      ].map(({ id }) => ({ id }))
+      [createdChild1, createdRoot1, ...createdAssets2, ...assets].map(
+        ({ id }) => ({ id })
+      )
     );
   });
 });

@@ -1,19 +1,19 @@
 language: node_js
 node_js:
-  - "8"
-  - "9"
   - "10"
+  - "12"
+  - "14"
 env:
   - COGNITE_PROJECT=cognitesdk-js
 install:
   - yarn
-  - npm install -g codecov
+  - yarn add codecov
 script:
   - yarn commitlint-travis
   - yarn validateDocLinks
   - yarn lint
   - yarn build
-  - yarn test --maxWorkers=1 && codecov
+  - yarn test --maxWorkers=1 && yarn codecov
   - yarn test-samples
   - yarn test-snippets
   - yarn lerna version --conventional-commits --yes
@@ -24,7 +24,7 @@ deploy:
     node_js: lts/*
     on:
       branch: v1
-      node_js: "10"
+      node_js: "14"
     skip_cleanup: true
     script: yarn lerna version --conventional-commits --yes --no-push
   - provider: pages
@@ -34,6 +34,7 @@ deploy:
     local_dir: docs
     on:
       branch: v1
+      node_js: "14"
 # after_deploy:
 #   - sudo add-apt-repository -y ppa:cpick/hub
 #   - sudo apt-get -y update
