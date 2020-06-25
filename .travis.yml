@@ -26,7 +26,9 @@ deploy:
       branch: refactor/lerna-with-samples
       node_js: "14"
     skip_cleanup: true
-    script: yarn lerna version --conventional-commits --yes --no-push
+    script:
+      - git checkout $TRAVIS_BRANCH
+      - yarn lerna version --conventional-commits --exact --yes
   - provider: pages
     skip_cleanup: true
     github_token: $GITHUB_TOKEN
