@@ -11,6 +11,7 @@ export default class CogniteClientBeta extends CogniteClientStable {
    *
    * @param options Client options
    *
+   * Assuming you alias `"@cognite/sdk": "@cognite/sdk-beta"` in `package.json`
    * ```js
    * import { CogniteClient } from '@cognite/sdk';
    *
