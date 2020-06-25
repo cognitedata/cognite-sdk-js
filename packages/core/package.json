@@ -3,7 +3,7 @@
   "name": "@cognite/sdk-core",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn build",

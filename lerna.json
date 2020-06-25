@@ -7,7 +7,8 @@
   "npmClient": "yarn",
   "command": {
     "version": {
-      "ignoreChanges": ["**/__tests__/**", "**/*.unit.spec.ts"]
+      "ignoreChanges": ["**/__tests__/**", "**/*.unit.spec.ts"],
+      "message": "chore(release): publish %s"
     }
   }
 }
