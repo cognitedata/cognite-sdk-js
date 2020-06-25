@@ -28,11 +28,14 @@ export class CDFHttpClient extends RetryableHttpClient {
   private static serializeQueryParameters(
     params: HttpQueryParams = {}
   ): HttpQueryParams {
-    return Object.keys(params).reduce((serializedParams, key) => {
-      const param = params[key];
-      serializedParams[key] = isJson(param) ? JSON.stringify(param) : param;
-      return serializedParams;
-    }, {} as HttpQueryParams);
+    return Object.keys(params).reduce(
+      (serializedParams, key) => {
+        const param = params[key];
+        serializedParams[key] = isJson(param) ? JSON.stringify(param) : param;
+        return serializedParams;
+      },
+      {} as HttpQueryParams
+    );
   }
 
   private static transformDateInResponse<T>(
