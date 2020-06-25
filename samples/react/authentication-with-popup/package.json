@@ -1,12 +1,12 @@
 {
   "name": "authentication-with-popup-sample",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
+    "@cognite/sdk": "2.30.0",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
-    "react-scripts": "2.1.8",
-    "@cognite/sdk": "2.29.0"
+    "react-scripts": "2.1.8"
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",
