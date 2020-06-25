@@ -23,7 +23,7 @@
   "scripts": {
     "allsdk": "lerna run --ignore *-sample",
     "allsamples": "lerna run --scope *-sample",
-    "clean": "lerna run clean",
+    "clean": "lerna run clean && rm -rf docs/",
     "prepublishOnly": "yarn build --stream",
     "test": "yarn allsdk test --stream",
     "lint": "yarn allsdk lint --stream",
@@ -31,10 +31,9 @@
     "build": "yarn allsdk build --stream",
     "watch": "yarn allsdk watch --parallel",
     "docs": "yarn allsdk docs --stream",
+    "bundle-docs": "rm -rf docs/ && yarn docs && mkdir -p docs/ docs/beta && mv packages/stable/docs/* docs/ && mv packages/beta/docs/* docs/beta",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
-    "alphabetizeTypes": "yarn allsdk alphabetizeTypes --stream",
-    "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
-    "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json && rm -rf codeSnippets/",
+    "test-snippets": "yarn allsdk test-snippets",
     "test-samples": "yarn allsamples test --stream"
   },
   "devDependencies": {

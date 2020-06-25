@@ -1,7 +1,7 @@
 # exit when any command fails
 set -e
 
-yarn extract-snippets
+(cd packages/stable; yarn extract-snippets)
 
 packageVersion=$(jq -r ".version" package.json)
 branchName="bot/jsCodeSnippets_v$packageVersion"
@@ -11,7 +11,7 @@ git clone https://$GITHUB_TOKEN@github.com/cognitedata/service-contracts.git >/d
 cd service-contracts
 
 git checkout -b "$branchName"
-cp ../codeSnippets/index.json ./versions/v1/js-sdk-examples.json
+cp ../packages/stable/codeSnippets/index.json ./versions/v1/js-sdk-examples.json
 git add ./versions/v1/js-sdk-examples.json
 git commit -m "$message"
 git push origin "$branchName"

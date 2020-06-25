@@ -7,14 +7,12 @@
   "scripts": {
     "clean": "rm -rf dist",
     "prepublishOnly": "yarn build",
+    "test": "jest --config=../../jest.config.js --testPathPattern=/core/",
     "lint": "tslint -c ../../tslint.json -p tsconfig.build.json",
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c ../../tslint.json -p tsconfig.build.json --fix",
     "build": "yarn clean && yarn rollup -c && yarn esCheck",
     "watch": "rollup -cw",
-    "esCheck": "es-check es5 './dist/index.js'",
-    "alphabetizeTypes": "node ../../scripts/alphabetizeTypes.js -i src/types.ts -h \"// Copyright 2020 Cognite AS\"",
-    "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
-    "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.json && rm -rf codeSnippets/"
+    "esCheck": "es-check es5 './dist/index.js'"
   },
   "dependencies": {
     "cross-fetch": "^3.0.4",

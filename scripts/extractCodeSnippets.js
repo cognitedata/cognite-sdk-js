@@ -1,9 +1,8 @@
 const path = require('path');
-const snippetsFolder = path.join(__dirname, '../codeSnippets');
-const jsDoc = require(snippetsFolder + '/docs.json');
+const snippetsFolder = path.join(process.cwd(), './codeSnippets');
+const jsonDoc = require(snippetsFolder + '/docs.json');
 const _ = require('lodash');
 const fs = require('fs');
-const tsconfig = require('../tsconfig.build.json');
 
 function stripMarkdownCodeSnippet(rawCode) {
   return rawCode
@@ -74,9 +73,21 @@ codeSnippets.forEach((snippets, operationId) => {
   fs.writeFileSync(`${snippetsFolder}/${operationId}.ts`, codeToTest);
 });
 
-// write tsconfig file
-tsconfig.include = ['*.ts'];
-tsconfig.compilerOptions.noUnusedLocals = false;
+const jssnippetspath = path.join(snippetsFolder, './index.json');
+fs.writeFileSync(jssnippetspath, JSON.stringify(resultJson, null, 2) + '\n');
+console.log(`JS code snippets saved to: ${jssnippetspath}`);
 
-fs.writeFileSync(snippetsFolder + '/tsconfig.build.json', JSON.stringify(tsconfig, null, 2) + '\n');
-console.log(`TS config for code snippets saved to: ${snippetsFolder}/tsconfig.build.json`);
+// write tsconfig file
+const tsconfig = {};
+tsconfig.include = ['*.ts'];
+tsconfig.compilerOptions = {
+  noUnusedLocals: false,
+  outDir: "dist",
+  declaration: false,
+  sourceMap: false
+};
+tsconfig.extends = '../../../tsconfig.build.json';
+
+const tsconfigpath = path.join(snippetsFolder, './tsconfig.json');
+fs.writeFileSync(tsconfigpath, JSON.stringify(tsconfig, null, 2) + '\n');
+console.log(`TS config for code snippets saved to: ${tsconfigpath}`);
