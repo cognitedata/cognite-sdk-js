@@ -43,7 +43,7 @@ import { CogniteClient } from '@cognite/sdk';
 
 ### Using typescript
 
-The SDK is written in native typescript, so no extra types needs to be defined.
+The SDK is written in native typescript, so no extra types need to be defined.
 
 ## Quickstart
 
@@ -105,6 +105,11 @@ See [this guide](./guides/MIGRATION_GUIDE_1xx_2xx.md) on how to migrate from ver
 
 ## Development
 
+The sdk is implemented as a package in a monorepo, together with core logic, beta versions and samples.
+See [this](./guides/monorepo.md) file for details.
+
+### Testing
+
 There is one integration test that requires a api key. In order to run this, you need an api key for the `cognitesdk-js` tenant. Talk to any of the contributors or leave an issue and it'll get sorted. Travis will run the test and has its own api key.
 Set the environment variable `COGNITE_PROJECT` to `cognitesdk-js` and `COGNITE_CREDENTIALS` to your api-key.
 
@@ -112,6 +117,7 @@ Run all tests:
 
 ```bash
 $ yarn
+$ yarn build
 $ yarn test
 ```
 
@@ -119,15 +125,16 @@ Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revis
 
 We use `jest` to run tests, see [their documentation](https://github.com/facebook/jest) for more information.
 
-## Versioning
+### Versioning
 
 The library follow [Semantic Versioning](https://semver.org/).
+Package versions are updated automatically based on commit messages.
 
-## Contributing
+### Contributing
 
 Contributions welcome! See the [code of conduct](./CODE_OF_CONDUCT.md).
 
-## Release
+### Release
 
 Our releases are fully [automated](https://github.com/semantic-release/semantic-release).
 Only basic steps are needed:
@@ -137,6 +144,10 @@ Only basic steps are needed:
 6. Create a new pull request
 7. A new version will be published when the PR is merged
 
-## CHANGELOG
+### CHANGELOG
 
-You can find it [here](./CHANGELOG.md).
+Each package in the monorepo has its own changelog.
+- [@cognite/sdk](./packages/stable/CHANGELOG.md)
+- [@cognite/sdk-beta](./packages/beta/CHANGELOG.md)
+- [@cognite/sdk-core](./packages/core/CHANGELOG.md)
+You can find the changelog from before the monorepo [here](./CHANGELOG.md).
