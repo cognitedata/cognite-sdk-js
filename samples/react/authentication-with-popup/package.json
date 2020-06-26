@@ -1,9 +1,9 @@
 {
   "name": "authentication-with-popup-sample",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
-    "@haved/cogsdk": "2.30.0",
+    "@haved/cogsdk": "2.31.0",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
     "react-scripts": "2.1.8"

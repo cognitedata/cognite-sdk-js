@@ -1,6 +1,6 @@
 {
   "name": "typescript-sample",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
@@ -8,7 +8,7 @@
     "test": "yarn tsc && node build/quickstart.js"
   },
   "dependencies": {
-    "@haved/cogsdk": "2.30.0",
+    "@haved/cogsdk": "2.31.0",
     "typescript": "^3.3.4000"
   },
   "devDependencies": {
