@@ -8,7 +8,8 @@
   "command": {
     "version": {
       "ignoreChanges": ["**/__tests__/**", "**/*.unit.spec.ts"],
-      "message": "chore(release): %s [skip ci]"
+      "message": "chore(release): %s [skip ci]",
+      "allowBranch": "v1"
     }
   }
 }
