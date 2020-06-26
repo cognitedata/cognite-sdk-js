@@ -4,7 +4,7 @@
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
-    "@haved/cogsdk": "2.31.0"
+    "@haved/cogsdk": "^2.31.0"
   },
   "scripts": {
     "test": "node quickstart.js && yarn test-for-await",
