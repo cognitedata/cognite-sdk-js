@@ -18,7 +18,7 @@ env:
   - COGNITE_PROJECT=cognitesdk-js
 
 install: skip
-script: bash ciScript.sh
+script: bash scripts/ciScript.sh
 
 deploy:
   - provider: script
