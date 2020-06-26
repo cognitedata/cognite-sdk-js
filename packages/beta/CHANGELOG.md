@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.31.1](https://github.com/haved/cognite-sdk-js/compare/@haved/cogsdk-beta@2.31.0...@haved/cogsdk-beta@2.31.1) (2020-06-26)
+
+**Note:** Version bump only for package @haved/cogsdk-beta
+
+
+
+
+
 # 2.31.0 (2020-06-26)
 
 
