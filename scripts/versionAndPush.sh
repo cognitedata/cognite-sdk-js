@@ -13,7 +13,7 @@ if yarn lerna diff ; then
 
     GH_TOKEN="$GITHUB_TOKEN" #Used by lerna version
     # Lerna makes a commit (with [skip ci] in message) 
-    yarn lerna version --conventional-commits --exact --yes --create-release github > /dev/null 2>&1
+    yarn lerna version --conventional-commits --no-private --yes --create-release github > /dev/null 2>&1
     
     # publish to npm
     yarn lerna publish --yes
