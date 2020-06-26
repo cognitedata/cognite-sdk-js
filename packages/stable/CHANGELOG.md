@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.32.0](https://github.com/haved/cognite-sdk-js/compare/@haved/cogsdk@2.31.2...@haved/cogsdk@2.32.0) (2020-06-26)
+
+
+### Features
+
+* **api:** clean up logging ([a2524fa](https://github.com/haved/cognite-sdk-js/commit/a2524fa928f7cb18c4539ebb4ff73cf3a879720d))
+
+
+
+
+
 ## [2.31.2](https://github.com/haved/cognite-sdk-js/compare/@haved/cogsdk@2.31.0...@haved/cogsdk@2.31.2) (2020-06-26)
 
 
