@@ -1,5 +1,9 @@
 language: node_js
 
+env:
+  global:
+    - COGNITE_PROJECT=cognitesdk-js
+
 # On the latest version of node we do everything
 # This is the version that gets deployed if of branch
 # On old version of node, we only run tests
@@ -13,9 +17,6 @@ jobs:
     env: ONLY_TEST="true"
   - node_js: "14"
     env: DEPLOY_BUILD="true"
-
-env:
-  - COGNITE_PROJECT=cognitesdk-js
 
 install: skip
 script: bash scripts/ciScript.sh
@@ -37,7 +38,7 @@ deploy:
     on:
       branch: v1
       condition: $DEPLOY_BUILD = true
-      
+
 #after_deploy:
 #  - sudo add-apt-repository -y ppa:cpick/hub
 #  - sudo apt-get -y update
