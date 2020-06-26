@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
-import { Constants } from '@cognite/sdk-core';
-import { TestUtils } from '@cognite/sdk-core';
+import { Constants } from '@haved/cogsdk-core';
+import { TestUtils } from '@haved/cogsdk-core';
 import CogniteClient from '../cogniteClient';
 import { ExternalFilesMetadata } from '../types';
 

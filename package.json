@@ -1,5 +1,5 @@
 {
-  "name": "@cognite/sdk-monorepo",
+  "name": "@haved/cogsdk-monorepo",
   "description": "Javascript client library for Cognite SDK",
   "contributors": [
     "Fredrik Anfinsen <fredrik.anfinsen@cognite.com>",

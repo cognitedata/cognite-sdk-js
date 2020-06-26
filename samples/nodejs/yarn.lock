@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@cognite/sdk@2.30.0":
+"@haved/cogsdk@2.30.0":
   version "2.30.0"
-  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-2.30.0.tgz#72f7c4de8511f5ca762d3a8e261630c3ea958e43"
+  resolved "https://registry.yarnpkg.com/@haved/cogsdk/-/sdk-2.30.0.tgz#72f7c4de8511f5ca762d3a8e261630c3ea958e43"
   integrity sha512-l8ldc4z6c5zzNPjWHpE7uwUsRbzH11uWM5csvxzTDEdMZkAw7u6+JrV7ejsv4SxdFLGbOtMv+xF4Si0b/Cy5Zw==
   dependencies:
     cross-fetch "^3.0.4"

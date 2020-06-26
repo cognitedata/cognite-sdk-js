@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { Constants } from '@cognite/sdk-core';
+import { Constants } from '@haved/cogsdk-core';
 import CogniteClient from '../cogniteClient';
 
 export function setupClient(baseUrl: string = Constants.BASE_URL) {

@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "@cognite/sdk-core",
+  "name": "@haved/cogsdk-core",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
   "version": "0.1.0",

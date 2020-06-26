@@ -5,7 +5,7 @@ import {
   CDFHttpClient,
   CursorAndAsyncIterator,
   MetadataMap,
-} from '@cognite/sdk-core';
+} from '@haved/cogsdk-core';
 import CogniteClient from '../../cogniteClient';
 import {
   GetTimeSeriesMetadataDTO,

@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
+import { BaseResourceAPI, CursorAndAsyncIterator } from '@haved/cogsdk-core';
 import { CogniteInternalId, List3DNodesQuery, RevealNode3D } from '../../types';
 
 export class RevealNodes3DAPI extends BaseResourceAPI<RevealNode3D> {

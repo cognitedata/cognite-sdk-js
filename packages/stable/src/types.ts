@@ -9,9 +9,9 @@ import {
   IdEither,
   InternalId,
   Limit,
-} from '@cognite/sdk-core';
+} from '@haved/cogsdk-core';
 
-export * from '@cognite/sdk-core';
+export * from '@haved/cogsdk-core';
 
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
