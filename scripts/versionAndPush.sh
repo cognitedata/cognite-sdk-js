@@ -17,7 +17,7 @@ if true ; then
     yarn lerna version --conventional-commits --no-private --yes --create-release github > /dev/null 2>&1
     
     # publish to npm
-    yarn lerna publish --yes
+    yarn lerna publish from-package --yes
 else
     echo "No changes made to packages, no version pushed"
 fi
