@@ -2,9 +2,12 @@
 set -ex
 
 if [ "$ONLY_TEST" = true ]; then
-    yarn install --ignore-engines #lerna doesn't work on node 8
-    yarn workspaces run build
-    yarn workspaces run test
+    echo "Only doing build and test"
+    yarn
+    yarn global add lerna@3.1.4 #Supports node 8
+    lerna -v #print version
+    lerna run build --stream
+    lerna run test --stream
 else
     yarn
     yarn global add codecov
