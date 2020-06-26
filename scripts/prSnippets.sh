@@ -2,7 +2,10 @@
 # exit when any command fails
 set -e
 
-(cd packages/stable; yarn extract-snippets)
+sudo add-apt-repository -y ppa:cpick/hub
+sudo apt-get -y update
+sudo apt-get install -y hub
+sudo apt-get install -y jq
 
 packageVersion=$(jq -r ".version" package.json)
 branchName="bot/jsCodeSnippets_v$packageVersion"
@@ -13,11 +16,12 @@ cd service-contracts
 
 git checkout -b "$branchName"
 cp ../packages/stable/codeSnippets/index.json ./versions/v1/js-sdk-examples.json
-git add ./versions/v1/js-sdk-examples.json
-git commit -m "$message"
-git push origin "$branchName"
-hub pull-request -m "$message"
+if ! git diff --quiet ; then
+    git add ./versions/v1/js-sdk-examples.json
+    git commit -m "$message"
+    git push origin "$branchName"
+    hub pull-request -m "$message"
+fi
 
 cd ../
 rm -rf service-contracts
-rm -rf codeSnippets
