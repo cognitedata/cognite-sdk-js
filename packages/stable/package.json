@@ -3,7 +3,7 @@
   "name": "@haved/cogsdk",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "2.31.2",
+  "version": "2.32.0",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "prepublishOnly": "yarn build",
