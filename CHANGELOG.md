@@ -1,3 +1,11 @@
+# [2.32.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.31.0...v2.32.0) (2020-06-26)
+
+
+### Features
+
+* **labels:** new resource type, works with assets ([e275b76](https://github.com/cognitedata/cognite-sdk-js/commit/e275b766d4ce82b264e23467dad59833679d2f53))
+* **timeseries:** add synthetic timeseries query ([#375](https://github.com/cognitedata/cognite-sdk-js/issues/375)) ([72723d1](https://github.com/cognitedata/cognite-sdk-js/commit/72723d13d244c4dfb3aa556b0300f698dffcaa1e))
+
 # [2.31.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.30.0...v2.31.0) (2020-06-23)
 
 
