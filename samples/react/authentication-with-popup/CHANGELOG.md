@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/haved/cognite-sdk-js/compare/authentication-with-popup-sample@0.3.0...authentication-with-popup-sample@0.3.1) (2020-06-26)
+
+
+### Bug Fixes
+
+* have samples depend on minor version of sdk ([b0eb642](https://github.com/haved/cognite-sdk-js/commit/b0eb6426764a4d9888b07f078abea976305368a6))
+
+
+
+
+
 # 0.3.0 (2020-06-26)
 
 

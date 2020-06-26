@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/haved/cognite-sdk-js/compare/nodejs-sample@0.2.0...nodejs-sample@0.2.1) (2020-06-26)
+
+
+### Bug Fixes
+
+* have samples depend on minor version of sdk ([b0eb642](https://github.com/haved/cognite-sdk-js/commit/b0eb6426764a4d9888b07f078abea976305368a6))
+
+
+
+
+
 # 0.2.0 (2020-06-26)
 
 
