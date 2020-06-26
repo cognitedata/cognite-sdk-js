@@ -10,13 +10,13 @@ if [ "$ONLY_TEST" = true ]; then
     lerna run test --stream
 else
     yarn
-    yarn global add codecov
-    yarn commitlint-travis
+    #yarn global add codecov
+    #yarn commitlint-travis
     #yarn validateDocLinks
-    yarn lint
-    yarn build
-    yarn test && codecov
-    yarn test-samples
-    yarn test-snippets
-    yarn bundle-docs
+    #yarn lint
+    #yarn build
+    #yarn test && codecov
+    #yarn test-samples
+    #yarn test-snippets
+    #yarn bundle-docs
 fi
