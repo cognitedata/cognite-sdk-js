@@ -3,7 +3,7 @@ set -ex
 
 if [ "$ONLY_TEST" = true ]; then
     echo "Only doing build and test"
-    yarn
+    yarn --ignore-engines
     yarn global add lerna@3.1.4 #Supports node 8
     lerna -v #print version
     lerna run build --stream
