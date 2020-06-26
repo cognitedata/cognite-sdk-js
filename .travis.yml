@@ -1,5 +1,10 @@
 language: node_js
 
+# expected environment vars:
+# COGNITE_CREDENTIALS
+# GITHUB_TOKEN
+# NPM_TOKEN
+
 env:
   global:
     - COGNITE_PROJECT=cognitesdk-js
@@ -26,7 +31,6 @@ deploy:
     skip_cleanup: true
     on:
       branch: v1
-      branch: refactor/lerna-with-samples
       condition: $DEPLOY_BUILD = true
     script: bash scripts/versionAndPush.sh
 
