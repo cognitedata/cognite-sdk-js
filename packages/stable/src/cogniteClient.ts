@@ -22,6 +22,7 @@ import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
+    console.log("REMOVE ME PLZ");
     return accessApi(this.assetsApi);
   }
   public get timeseries() {
