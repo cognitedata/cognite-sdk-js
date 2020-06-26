@@ -8,8 +8,8 @@ git checkout $TRAVIS_BRANCH
 if yarn lerna changed ; then
 
     # Set git identity
-    git config --global user.email "travis@travis-ci.org"
-    git config --global user.name "Travis CI"
+    #git config --global user.email "travis@travis-ci.org"
+    #git config --global user.name "Travis CI"
 
     # Lerna makes a commit (with [skip ci] in message)
     yarn lerna version --conventional-commits --exact --yes --no-push

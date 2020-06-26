@@ -22,12 +22,13 @@ script: bash scripts/ciScript.sh
 
 deploy:
   - provider: script
+    skip_cleanup: true
     on:
       branch: v1
       branch: refactor/lerna-with-samples
       condition: $DEPLOY_BUILD = true
-    skip_cleanup: true
     script: bash scripts/versionAndPush.sh
+
   - provider: pages
     skip_cleanup: true
     github_token: $GITHUB_TOKEN
@@ -36,9 +37,10 @@ deploy:
     on:
       branch: v1
       condition: $DEPLOY_BUILD = true
-# after_deploy:
-#   - sudo add-apt-repository -y ppa:cpick/hub
-#   - sudo apt-get -y update
-#   - sudo apt-get install -y hub
-#   - sudo apt-get install -y jq
-#   - sh scripts/afterRelease.sh
+      
+#after_deploy:
+#  - sudo add-apt-repository -y ppa:cpick/hub
+#  - sudo apt-get -y update
+#  - sudo apt-get install -y hub
+#  - sudo apt-get install -y jq
+#  - sh scripts/afterRelease.sh
