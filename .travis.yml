@@ -12,7 +12,7 @@ install:
   - sudo apt-get install sed
 script:
   - yarn commitlint-travis
-  - yarn validateDocLinks
+#  - yarn validateDocLinks
   - yarn lint
   - yarn build
   - yarn test && codecov
