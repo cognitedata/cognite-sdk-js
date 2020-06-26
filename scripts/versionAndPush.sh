@@ -5,7 +5,7 @@ set -e
 # Don't be in detached head mode
 git checkout $TRAVIS_BRANCH
 
-if yarn lerna changed ; then
+if yarn lerna diff ; then
     # Find the new remote with github token, careful not to leak secrets
     OLD_REMOTE="$(git remote get-url origin)"
     REPO_PATH=$(echo $OLD_REMOTE | sed -En "s/^.*github.com:(.*)/\1/p")
