@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.31.2](https://github.com/haved/cognite-sdk-js/compare/@haved/cogsdk@2.31.0...@haved/cogsdk@2.31.2) (2020-06-26)
+
+
+### Bug Fixes
+
+* add logging to stable ([dfaa07f](https://github.com/haved/cognite-sdk-js/commit/dfaa07f256d1b12f39fdcc3ea13f7f3697e1241f))
+* make packages public/private, and fix lerna version ([8a426c2](https://github.com/haved/cognite-sdk-js/commit/8a426c218309cd3d228f1eda00cf1ae14ea39bcb))
+
+
+
+
+
 ## [2.31.1](https://github.com/haved/cognite-sdk-js/compare/@haved/cogsdk@2.31.0...@haved/cogsdk@2.31.1) (2020-06-26)
 
 
