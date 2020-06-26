@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "private": false,
   "name": "@haved/cogsdk",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
