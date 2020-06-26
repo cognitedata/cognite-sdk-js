@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 2.31.0 (2020-06-26)
+
+
+### Bug Fixes
+
+* explain alias in beta docs ([f99cb6e](https://github.com/haved/cognite-sdk-js/commit/f99cb6ef2e7fff1bb9a1138ecf2e7729648678db))
+
+
+### Features
+
+* **monorepo:** further towards monorepo ([997aa84](https://github.com/haved/cognite-sdk-js/commit/997aa845217516a2bdf20ec1b569ba911a1b2e60))
+
+
+
+
+
 # 2.30.0 (2020-06-25)
 
 
