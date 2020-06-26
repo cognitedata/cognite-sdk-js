@@ -90,7 +90,7 @@ export default class BaseCogniteClient {
    * @param options Client options
    *
    * ```js
-   * import { CogniteClient } from '@cognite/sdk';
+   * import { CogniteClient } from '@haved/cogsdk';
    *
    * const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
    *
@@ -135,7 +135,7 @@ export default class BaseCogniteClient {
    * @param options Login options
    *
    * ```js
-   * import { CogniteClient } from '@cognite/sdk';
+   * import { CogniteClient } from '@haved/cogsdk';
    *
    * const client = new CogniteClient({ appId: '[YOUR APP NAME]' });
    * client.loginWithApiKey({
@@ -175,7 +175,7 @@ export default class BaseCogniteClient {
    * <!-- [Login with redirect](https://doc.cognitedata.com/api/v1/#operation/redirectUrl) -->
    *
    * ```js
-   * import { CogniteClient, REDIRECT } from '@cognite/sdk';
+   * import { CogniteClient, REDIRECT } from '@haved/cogsdk';
    *
    * const client = new CogniteClient({ appId: '[YOUR APP NAME]' });
    *

@@ -2,7 +2,7 @@
 import {
   ClientOptions,
   CogniteClient as CogniteClientStable,
-} from '@cognite/sdk';
+} from '@haved/cogsdk';
 import { version } from '../package.json';
 
 export default class CogniteClientBeta extends CogniteClientStable {
@@ -11,9 +11,9 @@ export default class CogniteClientBeta extends CogniteClientStable {
    *
    * @param options Client options
    *
-   * Assuming you alias `"@cognite/sdk": "@cognite/sdk-beta"` in `package.json`
+   * Assuming you alias `"@haved/cogsdk": "@haved/cogsdk-beta"` in `package.json`
    * ```js
-   * import { CogniteClient } from '@cognite/sdk';
+   * import { CogniteClient } from '@haved/cogsdk';
    *
    * const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
    *
@@ -30,4 +30,4 @@ export default class CogniteClientBeta extends CogniteClientStable {
   }
 }
 
-export * from '@cognite/sdk';
+export * from '@haved/cogsdk';

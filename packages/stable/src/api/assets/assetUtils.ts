@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { GraphUtils } from '@cognite/sdk-core';
+import { GraphUtils } from '@haved/cogsdk-core';
 import { ExternalAssetItem } from '../../types';
 
 type Node<T> = GraphUtils.Node<T>;

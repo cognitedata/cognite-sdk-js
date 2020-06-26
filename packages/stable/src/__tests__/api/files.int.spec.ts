@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { HttpResponseType } from '@cognite/sdk-core';
+import { HttpResponseType } from '@haved/cogsdk-core';
 import { readFileSync } from 'fs';
 import { Asset } from '../../api/classes/asset';
 import CogniteClient from '../../cogniteClient';

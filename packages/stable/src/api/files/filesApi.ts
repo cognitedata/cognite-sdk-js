@@ -5,7 +5,7 @@ import {
   CursorAndAsyncIterator,
   HttpHeaders,
   sleepPromise,
-} from '@cognite/sdk-core';
+} from '@haved/cogsdk-core';
 import {
   CogniteInternalId,
   ExternalFilesMetadata,

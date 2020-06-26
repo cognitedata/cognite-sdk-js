@@ -4,7 +4,7 @@ import {
   BaseResourceAPI,
   CursorAndAsyncIterator,
   HttpResponse,
-} from '@cognite/sdk-core';
+} from '@haved/cogsdk-core';
 import {
   CursorResponse,
   SequenceRowsDelete,

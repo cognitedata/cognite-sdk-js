@@ -62,7 +62,7 @@ When doing authentication with redirects the currect browser window will be redi
 #### Simple example
 
 ```js
-import { CogniteClient, REDIRECT } from '@cognite/sdk';
+import { CogniteClient, REDIRECT } from '@haved/cogsdk';
 const client = new CogniteClient({ ... });
 client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
@@ -84,7 +84,7 @@ The second time `client.assets` is called the SDK will be authenticated and the 
 If you want a different redirect url back to your app after a successful / unsuccessful login you can implement this:
 
 ```js
-import { CogniteClient, REDIRECT } from '@cognite/sdk';
+import { CogniteClient, REDIRECT } from '@haved/cogsdk';
 const client = new CogniteClient({ ... });
 client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',
@@ -106,7 +106,7 @@ When doing authentication with popups the currect browser window of your applica
 #### Simple example
 
 ```js
-import { CogniteClient, POPUP, isLoginPopupWindow, loginPopupHandler } from '@cognite/sdk';
+import { CogniteClient, POPUP, isLoginPopupWindow, loginPopupHandler } from '@haved/cogsdk';
 
 if (isLoginPopupWindow()) {
   loginPopupHandler();
@@ -131,7 +131,7 @@ After a successful authentication process the SDK will automatically retry the `
 If you want a different redirect url back to your application after a successful / unsuccessful login you can do this:
 
 ```js
-import { CogniteClient, POPUP } from '@cognite/sdk';
+import { CogniteClient, POPUP } from '@haved/cogsdk';
 const client = new CogniteClient({ ... });
 client.loginWithOAuth({
   project: 'YOUR PROJECT NAME HERE',

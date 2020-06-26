@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CogniteClient, isLoginPopupWindow, loginPopupHandler, POPUP } from '@cognite/sdk';
+import { CogniteClient, isLoginPopupWindow, loginPopupHandler, POPUP } from '@haved/cogsdk';
 
 const project = 'publicdata';
 

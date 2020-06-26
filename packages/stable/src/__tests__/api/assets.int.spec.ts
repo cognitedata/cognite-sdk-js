@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { CogniteError, CogniteMultiError } from '@cognite/sdk-core';
+import { CogniteError, CogniteMultiError } from '@haved/cogsdk-core';
 import { Asset as AssetClass } from '../../api/classes/asset';
 import CogniteClient from '../../cogniteClient';
 import { Asset } from '../../types';

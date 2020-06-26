@@ -1,4 +1,4 @@
-const { CogniteClient } = require('@cognite/sdk');
+const { CogniteClient } = require('@haved/cogsdk');
 
 const project = process.env.COGNITE_PROJECT || 'publicdata';
 const apiKey = process.env.COGNITE_CREDENTIALS;

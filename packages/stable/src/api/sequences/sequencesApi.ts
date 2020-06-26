@@ -4,7 +4,7 @@ import {
   CDFHttpClient,
   CursorAndAsyncIterator,
   MetadataMap,
-} from '@cognite/sdk-core';
+} from '@haved/cogsdk-core';
 import {
   ExternalSequence,
   IdEither,

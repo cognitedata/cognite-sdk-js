@@ -5,8 +5,8 @@ import {
   CDFHttpClient,
   CursorAndAsyncIterator,
   MetadataMap,
-} from '@cognite/sdk-core';
-import { RevertableArraySorter } from '@cognite/sdk-core';
+} from '@haved/cogsdk-core';
+import { RevertableArraySorter } from '@haved/cogsdk-core';
 import { chunk } from 'lodash';
 import CogniteClient from '../../cogniteClient';
 import {

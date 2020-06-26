@@ -23,22 +23,22 @@ The SDK supports authentication through api-keys (_for server-side applications_
 
 Install the package with yarn:
 
-    $ yarn add @cognite/sdk
+    $ yarn add @haved/cogsdk
 
 or npm
 
-    $ npm install @cognite/sdk --save
+    $ npm install @haved/cogsdk --save
 
 ## Usage
 
 ```js
-const { CogniteClient } = require('@cognite/sdk');
+const { CogniteClient } = require('@haved/cogsdk');
 ```
 
 ### Using ES modules
 
 ```js
-import { CogniteClient } from '@cognite/sdk';
+import { CogniteClient } from '@haved/cogsdk';
 ```
 
 ### Using typescript
@@ -49,7 +49,7 @@ The SDK is written in native typescript, so no extra types need to be defined.
 
 ### Web
 ```js
-import { CogniteClient } from '@cognite/sdk';
+import { CogniteClient } from '@haved/cogsdk';
 
 async function quickstart() {
   const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
@@ -69,7 +69,7 @@ quickstart();
 
 ### Backend
 ```js
-const { CogniteClient } = require('@cognite/sdk');
+const { CogniteClient } = require('@haved/cogsdk');
 
 async function quickstart() {
   const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
@@ -147,7 +147,7 @@ Only basic steps are needed:
 ### CHANGELOG
 
 Each package in the monorepo has its own changelog.
-- [@cognite/sdk](./packages/stable/CHANGELOG.md)
-- [@cognite/sdk-beta](./packages/beta/CHANGELOG.md)
-- [@cognite/sdk-core](./packages/core/CHANGELOG.md)
+- [@haved/cogsdk](./packages/stable/CHANGELOG.md)
+- [@haved/cogsdk-beta](./packages/beta/CHANGELOG.md)
+- [@haved/cogsdk-core](./packages/core/CHANGELOG.md)
 You can find the changelog from before the monorepo [here](./CHANGELOG.md).

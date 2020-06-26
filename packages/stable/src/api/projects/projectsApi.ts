@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI } from '@cognite/sdk-core';
+import { BaseResourceAPI } from '@haved/cogsdk-core';
 import { ProjectResponse, ProjectUpdate } from '../../types';
 
 export class ProjectsAPI extends BaseResourceAPI<any> {

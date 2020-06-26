@@ -3,9 +3,9 @@ The sdk is implemented with several npm packages, all contained in the `packages
 We use `lerna` to run commands in all repos, and also to configure versions.
 
 ## Structure
- - `packages/stable/` - holds `@cognite/sdk`, the stable SDK
- - `packages/core/` - holds `@cognite/sdk-core`, core functionality used by the SDK
- - `packages/beta/` - holds `@cognite/sdk-beta`, the beta SDK
+ - `packages/stable/` - holds `@haved/cogsdk`, the stable SDK
+ - `packages/core/` - holds `@haved/cogsdk-core`, core functionality used by the SDK
+ - `packages/beta/` - holds `@haved/cogsdk-beta`, the beta SDK
  - `samples/` - holds several folders with sample use of the SDK
 
 ## Development
@@ -21,7 +21,7 @@ If in the root folder, the operation is run in all packages, in topological orde
 Remember to build all packages before testing, and the enviroment variables needed to run certain tests.
 
 ## Cross references
-`@cognite/sdk` is dependent on a specific version of `@cognite/sdk-core`,
+`@haved/cogsdk` is dependent on a specific version of `@haved/cogsdk-core`,
 which matches the version number in `core/package.json`.
 When building, you should always build all packages at once using `yarn build` in the root folder.
 When changes are merged, `lerna` updates the versions and makes sure the packages still reference

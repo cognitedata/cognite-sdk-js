@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { CogniteClient } from '@cognite/sdk';
+import { CogniteClient } from '@haved/cogsdk';
 
 const project: string = process.env.COGNITE_PROJECT || 'publicdata';
 const apiKey: string = process.env.COGNITE_CREDENTIALS || '';
