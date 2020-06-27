@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@haved/cogsdk-core';
+import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import { CursorResponse, ListRawTables, RawDBTable } from '../../types';
 
 export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {

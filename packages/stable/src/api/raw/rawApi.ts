@@ -5,7 +5,7 @@ import {
   CDFHttpClient,
   CursorAndAsyncIterator,
   MetadataMap,
-} from '@haved/cogsdk-core';
+} from '@cognite/sdk-core';
 import {
   ListRawDatabases,
   ListRawRows,

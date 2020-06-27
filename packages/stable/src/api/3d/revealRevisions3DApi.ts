@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI } from '@haved/cogsdk-core';
+import { BaseResourceAPI } from '@cognite/sdk-core';
 import { CogniteInternalId, RevealRevision3D } from '../../types';
 
 export class RevealRevisions3DAPI extends BaseResourceAPI<RevealRevision3D> {

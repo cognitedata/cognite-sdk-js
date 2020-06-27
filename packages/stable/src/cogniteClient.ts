@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { accessApi, apiUrl, BaseCogniteClient } from '@haved/cogsdk-core';
+import { accessApi, apiUrl, BaseCogniteClient } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';
 import { Files3DAPI } from './api/3d/files3DApi';
@@ -152,4 +152,4 @@ export {
   OAuthLoginOptions,
   Project,
   Response,
-} from '@haved/cogsdk-core';
+} from '@cognite/sdk-core';

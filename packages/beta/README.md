@@ -1,7 +1,7 @@
 Cognite Javascript SDK beta
 ===========================
 The package `@cognite/sdk-beta` provides convenient access to the beta version of the Cognite API.
-Setup is very similar to [stable](https://github.com/haved/cognite-sdk-js/blob/v1/packages/stable/README.md),
+Setup is very similar to [stable](https://github.com/cognitedata/cognite-sdk-js/blob/v1/packages/stable/README.md),
 but use the following command to install:
 ```
 $ yarn add @cognite/sdk@npm:@cognite/sdk-beta
@@ -26,8 +26,8 @@ import { CogniteClient } from '@congite/sdk';
 ## Documentation
 
 Though it looks like the normal `CogniteClient`, it's actually named `CogniteClassBeta`.
-See the typedoc [here](https://haved.github.io/cognite-sdk-js/beta/classes/cogniteclientbeta.html).
+See the typedoc [here](https://cognitedata.github.io/cognite-sdk-js/beta/classes/cogniteclientbeta.html).
 
 \[beta API reference\](TODO: link to beta api reference here)
 
-The beta API is mostly a superset of stable. See the [stable readme](https://github.com/haved/cognite-sdk-js/blob/v1/packages/stable/README.md).
+The beta API is mostly a superset of stable. See the [stable readme](https://github.com/cognitedata/cognite-sdk-js/blob/v1/packages/stable/README.md).
