@@ -80,13 +80,14 @@ quickstart();
 
 ## Documentation
 
-[API documentation](https://doc.cognitedata.com)
-[API reference documentation](https://doc.cognitedata.com/api/v1)
-[CogniteClient typedoc](https://haved.github.io/cognite-sdk-js/classes/cogniteclient.html)
+ - [API documentation](https://doc.cognitedata.com)
+ - [API reference documentation](https://doc.cognitedata.com/api/v1)
+ - [CogniteClient typedoc](https://haved.github.io/cognite-sdk-js/classes/cogniteclient.html)
 
 The API reference documentation contains snippets for each endpoint,
 giving examples of SDK use. See also the [samples section](https://github.com/haved/cognite-sdk-js#samples) in this repo.
 
 ## Guides
-[Migration guide](https://github.com/cognitedata/cognite-sdk-js/blob/v1/guides/MIGRATION_GUIDE_1xx_2xx.md)
+
+ - [Migration guide](https://github.com/cognitedata/cognite-sdk-js/blob/v1/guides/MIGRATION_GUIDE_1xx_2xx.md)
 on how to migrate from version `1.x.x` to version `2.x.x`.
