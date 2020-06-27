@@ -6,7 +6,7 @@
   "homepage": "https://github.com/haved/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "2.32.5",
+  "version": "2.32.6",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/stable/",
@@ -20,7 +20,7 @@
     "test-snippets": "yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.json"
   },
   "dependencies": {
-    "@haved/cogsdk-core": "^0.2.5",
+    "@haved/cogsdk-core": "^0.2.6",
     "cross-fetch": "^3.0.4",
     "lodash": "^4.17.11",
     "query-string": "^5.1.1",

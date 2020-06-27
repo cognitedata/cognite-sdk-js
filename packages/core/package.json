@@ -6,7 +6,7 @@
   "homepage": "https://github.com/haved/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "scripts": {
     "clean": "rm -rf dist",
     "test": "jest --config=../../jest.config.js --testPathPattern=/core/",
