@@ -3,7 +3,7 @@
   "name": "@haved/cogsdk",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "2.32.1",
+  "version": "2.32.2",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "prepublishOnly": "yarn build",
@@ -18,7 +18,7 @@
     "test-snippets": "yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.json"
   },
   "dependencies": {
-    "@haved/cogsdk-core": "^0.2.1",
+    "@haved/cogsdk-core": "^0.2.2",
     "cross-fetch": "^3.0.4",
     "lodash": "^4.17.11",
     "query-string": "^5.1.1",
