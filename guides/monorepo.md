@@ -8,11 +8,6 @@ We use `lerna` to run commands in all repos, and also to configure versions.
  - `packages/beta/` - holds `@haved/cogsdk-beta`, the beta SDK
  - `samples/` - holds several folders with sample use of the SDK
 
-## Adding new packages
-To add a new package, copy whatever is needed from another package, and give it a unique name in `package.json`.
-If it's a sample, make sure its name ends in `-sample` and that the package is private.
-Lerna will create any public packages on npm, so make sure the names are correct before committing. 
-
 ## Development
 All dependencies can be installed from the repository root:
 ```
@@ -52,9 +47,18 @@ yarn lerna version --conventional-commits --exact
 This will individually update versions of packages based on the commit messages affecting each package.
 References between packages are also updated. A list of changes are commited to `CHANGELOG.md` in each package.
 
+## Adding new packages
+To add a new package, copy whatever is needed from another package, and give it a unique name in `package.json`.
+If it's a sample, make sure its name ends in `-sample` and that the package is private.
+Lerna will create any public packages on npm, so make sure the names are correct before committing. 
+
+**Note:** Scoped packages (e.g. `@cognite/sdk`) need special confirmation that they are public the first time they are published.
+This is specified in the individual `package.json` files: `"publishConfig": { "access": "public" }`.
+
 ## Samples
 The `samples/` folder contains several samples, each sample being a private package in the workspace.
 Though tecnically in the workspace for ease of testing, they would also work as-is as stand alone dependants of the sdk.
+All samples' names end in `-sample`, to make filtering easy. `yarn test` does not test samples.
 To test the samples, first build the sdk.
 ```
 yarn build
