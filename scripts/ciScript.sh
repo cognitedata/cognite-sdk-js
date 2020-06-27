@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+# exit when any command fails, print each command
 set -ex
 
 if [ "$ONLY_TEST" = true ]; then
