@@ -15,7 +15,7 @@ export {
   OnAuthenticateLoginObject,
   POPUP,
   REDIRECT,
-} from '@haved/cogsdk-core';
+} from '@cognite/sdk-core';
 export { default as CogniteClient } from './cogniteClient';
 export * from './types';
 export { Asset as AssetClass } from './api/classes/asset';

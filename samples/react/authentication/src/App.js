@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CogniteClient } from '@haved/cogsdk';
+import { CogniteClient } from '@cognite/sdk';
 
 const project = 'publicdata';
 

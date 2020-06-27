@@ -1,6 +1,6 @@
 // This example required NodeJS version >= 10
 
-const { CogniteClient } = require('@haved/cogsdk');
+const { CogniteClient } = require('@cognite/sdk');
 
 const project = process.env.COGNITE_PROJECT || 'publicdata';
 const apiKey = process.env.COGNITE_CREDENTIALS;

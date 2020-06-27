@@ -2,7 +2,7 @@
 import {
   ClientOptions,
   CogniteClient as CogniteClientStable,
-} from '@haved/cogsdk';
+} from '@cognite/sdk';
 import { version } from '../package.json';
 
 export default class CogniteClientBeta extends CogniteClientStable {
@@ -11,10 +11,10 @@ export default class CogniteClientBeta extends CogniteClientStable {
    *
    * @param options Client options
    *
-   * To use the beta sdk, alias `"@haved/cogsdk": "@haved/cogsdk-beta@^<version>"` in `package.json`
+   * To use the beta sdk, alias `"@cognite/sdk": "@cognite/sdk-beta@^<version>"` in `package.json`
    * The beta SDK exports the client with the same name as stable, meaning you don't need to change any code.
    * ```js
-   * import { CogniteClient } from '@haved/cogsdk';
+   * import { CogniteClient } from '@cognite/sdk';
    *
    * const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
    *
@@ -31,4 +31,4 @@ export default class CogniteClientBeta extends CogniteClientStable {
   }
 }
 
-export * from '@haved/cogsdk';
+export * from '@cognite/sdk';

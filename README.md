@@ -4,8 +4,8 @@
 
 Cognite Javascript SDK
 ======================
-[![Build Status](https://travis-ci.org/haved/cognite-sdk-js.svg?branch=v1)](https://travis-ci.org/haved/cognite-sdk-js)
-[![codecov](https://codecov.io/gh/haved/cognite-sdk-js/branch/v1/graph/badge.svg)](https://codecov.io/gh/haved/cognite-sdk-js)
+[![Build Status](https://travis-ci.org/cognitedata/cognite-sdk-js.svg?branch=v1)](https://travis-ci.org/cognitedata/cognite-sdk-js)
+[![codecov](https://codecov.io/gh/cognitadata/cognite-sdk-js/branch/v1/graph/badge.svg)](https://codecov.io/gh/cognitedata/cognite-sdk-js)
 
 The Cognite js library provides convenient access to the [Cognite API](https://doc.cognitedata.com/dev/) from
 applications written in client- or server-side JavaScript.
@@ -69,8 +69,8 @@ Only basic steps are needed:
 ### CHANGELOG
 
 Each package in the monorepo has its own changelog.
-- [@haved/cogsdk](./packages/stable/CHANGELOG.md)
-- [@haved/cogsdk-beta](./packages/beta/CHANGELOG.md)
-- [@haved/cogsdk-core](./packages/core/CHANGELOG.md)
+- [@cognite/sdk](./packages/stable/CHANGELOG.md)
+- [@cognite/sdk-beta](./packages/beta/CHANGELOG.md)
+- [@cognite/sdk-core](./packages/core/CHANGELOG.md)
 
 You can find the changelog from before the monorepo [here](./CHANGELOG.md).

@@ -1,10 +1,10 @@
 {
   "name": "nodejs-sample",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
-    "@haved/cogsdk": "^2.31.1"
+    "@cognite/sdk": "^2.32.0"
   },
   "scripts": {
     "test": "node quickstart.js && yarn test-for-await",

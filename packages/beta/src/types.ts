@@ -1,3 +1,3 @@
 // Copyright 2020 Cognite AS
 
-export * from '@haved/cogsdk';
+export * from '@cognite/sdk';

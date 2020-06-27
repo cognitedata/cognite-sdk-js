@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { GraphUtils } from '@haved/cogsdk-core';
+import { GraphUtils } from '@cognite/sdk-core';
 import * as nock from 'nock';
 import { enrichAssetsWithTheirParents } from '../../api/assets/assetUtils';
 import CogniteClient from '../../cogniteClient';

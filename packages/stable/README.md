@@ -16,22 +16,22 @@ The SDK supports authentication through api-keys (_for server-side applications_
 
 Install the package with yarn:
 ```
-$ yarn add @haved/cogsdk
+$ yarn add @cognite/sdk
 ```
 or npm
 ```
-$ npm install @haved/cogsdk --save
+$ npm install @cognite/sdk --save
 ```
 ## Usage
 
 ```js
-const { CogniteClient } = require('@haved/cogsdk');
+const { CogniteClient } = require('@cognite/sdk');
 ```
 
 ### Using ES modules
 
 ```js
-import { CogniteClient } from '@haved/cogsdk';
+import { CogniteClient } from '@cognite/sdk';
 ```
 
 ### Using typescript
@@ -42,7 +42,7 @@ The SDK is written in native typescript, so no extra types need to be defined.
 
 ### Web
 ```js
-import { CogniteClient } from '@haved/cogsdk';
+import { CogniteClient } from '@cognite/sdk';
 
 async function quickstart() {
   const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
@@ -57,12 +57,12 @@ async function quickstart() {
 quickstart();
 ```
 
-> For more details about SDK authentication see this [document](https://github.com/haved/cognite-sdk-js/blob/v1/guides/authentication.md).
+> For more details about SDK authentication see this [document](https://github.com/cognitedata/cognite-sdk-js/blob/v1/guides/authentication.md).
 > Also, more comprehensive intro guide with a demo app can be found [here](https://github.com/cognitedata/javascript-getting-started/tree/master/sdk-auth-and-fetch-data)
 
 ### Backend
 ```js
-const { CogniteClient } = require('@haved/cogsdk');
+const { CogniteClient } = require('@cognite/sdk');
 
 async function quickstart() {
   const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
@@ -82,10 +82,10 @@ quickstart();
 
  - [API documentation](https://doc.cognitedata.com)
  - [API reference documentation](https://doc.cognitedata.com/api/v1)
- - [CogniteClient typedoc](https://haved.github.io/cognite-sdk-js/classes/cogniteclient.html)
+ - [CogniteClient typedoc](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)
 
 The API reference documentation contains snippets for each endpoint,
-giving examples of SDK use. See also the [samples section](https://github.com/haved/cognite-sdk-js#samples) in this repo.
+giving examples of SDK use. See also the [samples section](https://github.com/cognitedata/cognite-sdk-js#samples) in this repo.
 
 ## Guides
 
