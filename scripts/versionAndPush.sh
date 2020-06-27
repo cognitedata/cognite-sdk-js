@@ -8,8 +8,11 @@ git checkout $TRAVIS_BRANCH
 
 if true ; then
 
-    git config --user.email travis@travis-ci.org
-    git config --user.name Travis CI
+    cat ~/.config/git/config || true
+    echo ""
+
+    git config --global user.email travis@travis-ci.org
+    git config --global user.name "Travis CI"
     echo "Set git identity to Travis CI<travis@travis-ci.org>"
 
     # Find the new remote with github token, careful not to leak secrets
