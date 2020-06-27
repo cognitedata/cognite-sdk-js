@@ -11,5 +11,8 @@
       "message": "chore(release): publish new package versions [skip ci]",
       "allowBranch": "v1"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

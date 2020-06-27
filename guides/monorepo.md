@@ -8,6 +8,11 @@ We use `lerna` to run commands in all repos, and also to configure versions.
  - `packages/beta/` - holds `@haved/cogsdk-beta`, the beta SDK
  - `samples/` - holds several folders with sample use of the SDK
 
+## Adding new packages
+To add a new package, copy whatever is needed from another package, and give it a unique name in `package.json`.
+If it's a sample, make sure its name ends in `-sample` and that the package is private.
+Lerna will create any public packages on npm, so make sure the names are correct before committing. 
+
 ## Development
 All dependencies can be installed from the repository root:
 ```
