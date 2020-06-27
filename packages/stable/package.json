@@ -9,7 +9,6 @@
   "version": "2.32.5",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
-    "prepublishOnly": "yarn build",
     "test": "jest --config=../../jest.config.js --testPathPattern=/stable/",
     "lint": "tslint -c ../../tslint.json -p tsconfig.build.json",
     "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c ../../tslint.json -p tsconfig.build.json --fix",
