@@ -2,7 +2,7 @@ language: node_js
 
 # expected environment vars:
 # COGNITE_CREDENTIALS
-# GITHUB_TOKEN
+# GITHUB_TOKEN (with cognite SSO)
 # NPM_TOKEN
 
 env:
