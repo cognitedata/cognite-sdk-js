@@ -4,17 +4,17 @@ The package `@cognite/sdk-beta` provides convenient access to the beta version o
 Setup is very similar to [stable](https://github.com/haved/cognite-sdk-js/blob/v1/packages/stable/README.md),
 but use the following command to install:
 ```
-$ yarn add @cognite/sdk@@cognite/sdk-beta
+$ yarn add @cognite/sdk@npm:@cognite/sdk-beta
 ```
 or with npm
 ```
-$ npm install @cognite/sdk@@cognite/sdk-beta --save
+$ npm install @cognite/sdk@npm:@cognite/sdk-beta --save
 ```
 
 This will install the beta package as a dependency, but under the normal sdk name.
 In `package.json`, it will look like this:
 ```
-    "@cognite/sdk": "@cognite/sdk-beta^X.X.X"
+    "@cognite/sdk": "npm:@cognite/sdk-beta@^X.X.X"
 ```
 
 With the beta package installed under an alias, you don't need to modify your code
