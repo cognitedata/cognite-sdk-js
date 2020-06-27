@@ -6,6 +6,7 @@ set -ex
 echo "Checking out \$TRAVIS_BRANCH: $TRAVIS_BRANCH"
 git checkout $TRAVIS_BRANCH
 
+#Todo: lerna diff ?
 if true ; then
 
     cat ~/.config/git/config || true
@@ -18,12 +19,12 @@ if true ; then
     # Find the new remote with github token, careful not to leak secrets
     OLD_REMOTE="$(git remote get-url origin)"
     REPO_PATH=$(echo $OLD_REMOTE | sed -En "s/^.*github.com:(.*)/\1/p")
-    git remote set-url origin "https://$GITHUB_TOKEN@github.com/$REPO_PATH" --quiet > /dev/null 2>&1
+    git remote set-url origin "https://$GITHUB_TOKEN@github.com/$REPO_PATH" > /dev/null 2>&1
     echo "Set git origin with token!"
 
     GH_TOKEN="$GITHUB_TOKEN" #Used by lerna version
     # Lerna makes a commit (with [skip ci] in message) 
-    yarn lerna version --conventional-commits --no-private --yes > /dev/null 2>&1
+    yarn lerna version --conventional-commits --no-private --yes #> /dev/null 2>&1
     echo "Ran lerna version!"
 
     # publish to npm
