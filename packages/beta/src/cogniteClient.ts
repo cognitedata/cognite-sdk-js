@@ -26,7 +26,7 @@ export default class CogniteClientBeta extends CogniteClientStable {
   }
 
   protected get version() {
-    return version;
+    return `${version} (@cognite/sdk-beta)`;
   }
 }
 
