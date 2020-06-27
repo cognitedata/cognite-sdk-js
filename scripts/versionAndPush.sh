@@ -27,6 +27,9 @@ if true ; then
     yarn lerna version --conventional-commits --no-private --yes #> /dev/null 2>&1
     echo "Ran lerna version!"
 
+    echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+    echo "Added NPM_TOKEN to .npmrc"
+
     # publish to npm
     yarn lerna publish from-package --yes
     echo "Ran lerna publish!"
