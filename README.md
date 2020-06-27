@@ -150,4 +150,5 @@ Each package in the monorepo has its own changelog.
 - [@haved/cogsdk](./packages/stable/CHANGELOG.md)
 - [@haved/cogsdk-beta](./packages/beta/CHANGELOG.md)
 - [@haved/cogsdk-core](./packages/core/CHANGELOG.md)
+
 You can find the changelog from before the monorepo [here](./CHANGELOG.md).
