@@ -1,13 +1,14 @@
 #!/usr/bin/bash
 # exit when any command fails
-set -e
+set -ex
 
 sudo add-apt-repository -y ppa:cpick/hub
 sudo apt-get -y update
 sudo apt-get install -y hub
 sudo apt-get install -y jq
 
-packageVersion=$(jq -r ".version" package.json)
+stablePackage="packages/stable"
+packageVersion=$(jq -r ".version" "${stablePackages}/package.json")
 branchName="bot/jsCodeSnippets_v$packageVersion"
 message="[JS SDK]: update code snippets to v$packageVersion"
 
@@ -15,7 +16,7 @@ git clone https://$GITHUB_TOKEN@github.com/cognitedata/service-contracts.git >/d
 cd service-contracts
 
 git checkout -b "$branchName"
-cp ../packages/stable/codeSnippets/index.json ./versions/v1/js-sdk-examples.json
+cp "../${STABLE_PACKAGE}/codeSnippets/index.json" ./versions/v1/js-sdk-examples.json
 if ! git diff --quiet ; then
     echo "service contracts code snippets have changed. making pull request"
     git add ./versions/v1/js-sdk-examples.json
