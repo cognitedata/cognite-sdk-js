@@ -15,9 +15,9 @@ yarn
 ```
 To `build`, `clean`, `test`, `lint` or `lint:fix`, run the command like so:
 ```
-yarn <command>
+$ yarn <command>
 ```
-If in the root folder, the operation is run in all packages, in topological order.
+If in the root folder, the operation is run in all packages (excluding samples), in topological order.
 Remember to build all packages before testing, and the enviroment variables needed to run certain tests.
 
 ## Cross references
@@ -26,9 +26,6 @@ which matches the version number in `core/package.json`.
 When building, you should always build all packages at once using `yarn build` in the root folder.
 When changes are merged, `lerna` updates the versions and makes sure the packages still reference
 each other exactly.
-
-In theory you could use `file:../core` to reference other packages in the repo, but we want
-strong versioning.
 
 ## Typescript
 Each package has both `tsconfig.json` and `tsconfig.build.json`.
@@ -40,12 +37,10 @@ To make sure all `dist/` folder are up to date, build all packages
 by running `yarn build` in the root of the project.
 
 ## Versioning
-Commits need to follow [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines). Once they are merged, CI uses the script `scripts/versionAndPush.sh`, which effectivly does
-```
-yarn lerna version --conventional-commits --exact
-```
+Commits need to follow [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines). Once they are merged, CI uses the script `scripts/versionAndPush.sh`, which uses `lerna version`.
 This will individually update versions of packages based on the commit messages affecting each package.
 References between packages are also updated. A list of changes are commited to `CHANGELOG.md` in each package.
+After bumping versions, the new packages are uploaded to npm using `lerna release`.
 
 ## Adding new packages
 To add a new package, copy whatever is needed from another package, and give it a unique name in `package.json`.
@@ -61,10 +56,15 @@ Though tecnically in the workspace for ease of testing, they would also work as-
 All samples' names end in `-sample`, to make filtering easy. `yarn test` does not test samples.
 To test the samples, first build the sdk.
 ```
-yarn build
+$ yarn build
 ```
 
 Then you can run the samples' tests.
 ```
-yarn test-samples
+$ yarn test-samples
 ```
+
+## Documentation
+Since each package gets its own npm page, they all have `README.md` files.
+These are also used as front pages of typedoc pages.
+This means all links must be absolute.

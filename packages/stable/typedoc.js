@@ -9,7 +9,7 @@ module.exports = {
   ],
   out: './docs/',
   // theme: 'markdown',
-  readme: 'docs_index.md',
+  readme: 'README.md',
   ignoreCompilerErrors: true,
   excludeNotExported: true,
   hideGenerator: true,

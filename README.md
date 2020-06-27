@@ -3,101 +3,23 @@
 </a>
 
 Cognite Javascript SDK
-==========================
-[![Build Status](https://travis-ci.org/haved/cognite-sdk-js.svg?branch=v1)](https://travis-ci.org/cognitedata/cognite-sdk-js)
-[![codecov](https://codecov.io/gh/haved/cognite-sdk-js/branch/v1/graph/badge.svg)](https://codecov.io/gh/cognitedata/cognite-sdk-js)
+======================
+[![Build Status](https://travis-ci.org/haved/cognite-sdk-js.svg?branch=v1)](https://travis-ci.org/haved/cognite-sdk-js)
+[![codecov](https://codecov.io/gh/haved/cognite-sdk-js/branch/v1/graph/badge.svg)](https://codecov.io/gh/haved/cognite-sdk-js)
 
 The Cognite js library provides convenient access to the [Cognite API](https://doc.cognitedata.com/dev/) from
 applications written in client- or server-side JavaScript.
 
-The SDK supports authentication through api-keys (_for server-side applications_) and bearer tokens (for web applications).
+## Getting Started
 
-## Installation
+This repository contains several packages for different API versions.
+To get started with the stable API, see the README [here](./packages/stable/README.md).
 
-<p align="right">
-  <a href="https://youtu.be/29Cuv6OhBmA">
-    Video quickstart<br />
-    <img src="https://img.youtube.com/vi/29Cuv6OhBmA/3.jpg" alt="Cognite JS SDK video guide" title="Watch our video guide" align="right" />
-  </a>
-</p>
-
-Install the package with yarn:
-
-    $ yarn add @haved/cogsdk
-
-or npm
-
-    $ npm install @haved/cogsdk --save
-
-## Usage
-
-```js
-const { CogniteClient } = require('@haved/cogsdk');
-```
-
-### Using ES modules
-
-```js
-import { CogniteClient } from '@haved/cogsdk';
-```
-
-### Using typescript
-
-The SDK is written in native typescript, so no extra types need to be defined.
-
-## Quickstart
-
-### Web
-```js
-import { CogniteClient } from '@haved/cogsdk';
-
-async function quickstart() {
-  const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
-  client.loginWithOAuth({
-    project: 'publicdata',
-  });
-
-  const assets = await client.assets
-    .list()
-    .autoPagingToArray({ limit: 100 });
-}
-quickstart();
-```
-
-> For more details about SDK authentication see this [document](./guides/authentication.md).  
-> Also, more comprehensive intro guide with a demo app can be found [here](https://github.com/cognitedata/javascript-getting-started/tree/master/sdk-auth-and-fetch-data) 
-
-### Backend
-```js
-const { CogniteClient } = require('@haved/cogsdk');
-
-async function quickstart() {
-  const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
-  client.loginWithApiKey({
-    project: 'publicdata',
-    apiKey: 'YOUR_SECRET_API_KEY',
-  });
-
-  const assets = await client.assets
-    .list()
-    .autoPagingToArray({ limit: 100 });
-}
-quickstart();
-```
+There is also a [beta API](./packages/beta/README.md).
 
 ## Samples
 
 Samples are in the [samples/](./samples) directory. The samples' [README.md](./samples/README.md) has instructions for running the samples.
-
-## Documentation
-
-- [SDK documentation](https://cognitedata.github.io/cognite-sdk-js)
-- [API documentation](https://doc.cognitedata.com)
-- [API reference documentation](https://doc.cognitedata.com/api/v1)
-
-## Migration
-
-See [this guide](./guides/MIGRATION_GUIDE_1xx_2xx.md) on how to migrate from version `1.x.x` to version `2.x.x`.
 
 ## License
 
@@ -106,11 +28,11 @@ See [this guide](./guides/MIGRATION_GUIDE_1xx_2xx.md) on how to migrate from ver
 ## Development
 
 The sdk is implemented as a package in a monorepo, together with core logic, beta versions and samples.
-See [this](./guides/monorepo.md) file for details.
+See [monorepo.md](./guides/monorepo.md) for details.
 
 ### Testing
 
-There is one integration test that requires a api key. In order to run this, you need an api key for the `cognitesdk-js` tenant. Talk to any of the contributors or leave an issue and it'll get sorted. Travis will run the test and has its own api key.
+There is one integration test that requires an api key. In order to run this, you need an api key for the `cognitesdk-js` tenant. Talk to any of the contributors or leave an issue and it'll get sorted. Travis will run the test and has its own api key.
 Set the environment variable `COGNITE_PROJECT` to `cognitesdk-js` and `COGNITE_CREDENTIALS` to your api-key.
 
 Run all tests:
@@ -128,7 +50,7 @@ We use `jest` to run tests, see [their documentation](https://github.com/faceboo
 ### Versioning
 
 The library follow [Semantic Versioning](https://semver.org/).
-Package versions are updated automatically based on commit messages.
+Package versions are updated automatically and individually based on commit messages.
 
 ### Contributing
 
