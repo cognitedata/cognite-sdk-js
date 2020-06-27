@@ -8,8 +8,8 @@
     "Martin Røed <martin.roed@cognite.com>"
   ],
   "license": "Apache-2.0",
-  "repository": "cognitedata/cognite-sdk-js",
-  "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
+  "repository": "haved/cognite-sdk-js",
+  "homepage": "https://github.com/haved/cognite-sdk-js#readme",
   "private": true,
   "keywords": [
     "cognite",
@@ -23,7 +23,7 @@
   "scripts": {
     "allsdk": "lerna run --ignore *-sample",
     "allsamples": "lerna run --scope *-sample",
-    "clean": "lerna run clean && rm -rf docs/",
+    "clean": "lerna run clean && rm -rf docs/ coverage/",
     "test": "yarn allsdk test --stream",
     "test:codecov": "jest --config=jest.config.js --coverage=true && codecov",
     "lint": "yarn allsdk lint --stream",
@@ -31,7 +31,7 @@
     "build": "yarn allsdk build --stream",
     "watch": "yarn allsdk watch --parallel",
     "docs": "yarn allsdk docs --stream",
-    "docs:bundle": "rm -rf docs/ && yarn docs && mkdir -p docs/ docs/beta && mv packages/stable/docs/* docs/ && mv packages/beta/docs/* docs/beta",
+    "docs:bundle": "rm -rf docs/ && yarn docs && mkdir -p docs/ docs/beta && cp packages/stable/docs/* docs/ && cp packages/beta/docs/* docs/beta",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check",
     "test-snippets": "yarn allsdk test-snippets",
     "test-samples": "yarn allsamples test --stream"
