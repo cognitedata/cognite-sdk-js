@@ -5,12 +5,15 @@ import { readFileSync } from 'fs';
 import { Asset } from '../../api/classes/asset';
 import CogniteClient from '../../cogniteClient';
 import { FilesMetadata } from '../../types';
+import { join } from 'path';
 import {
   getFileCreateArgs,
   randomInt,
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
 } from '../testUtils';
+
+const testfile = join(__dirname, "../test3dFile.fbx");
 
 describe('Files integration test', () => {
   let client: CogniteClient;
@@ -142,7 +145,7 @@ describe('Files integration test', () => {
       name: 'filename_1_' + postfix,
       mimeType: 'application/octet-stream',
     };
-    const fileContentBinary = readFileSync('src/__tests__/test3dFile.fbx');
+    const fileContentBinary = readFileSync(testfile);
     let binaryFile: FilesMetadata;
 
     test('create', async () => {
