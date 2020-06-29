@@ -12,7 +12,7 @@ else
     yarn
     yarn global add codecov@3.7.0
     yarn commitlint-travis
-    yarn validateDocLinks
+    yarn validateDocLinks || true
     yarn lint
     yarn build
     yarn test:codecov
