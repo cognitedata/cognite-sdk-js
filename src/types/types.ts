@@ -1453,6 +1453,7 @@ export type ObjectPatch =
  */
 export interface OutputProjectAuthentication {
   validDomains?: ValidDomains;
+  applicationDomains?: ApplicationDomains;
 }
 
 /**
