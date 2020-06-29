@@ -95,6 +95,18 @@ describe('Events integration test', () => {
     expect(aggregates[0].count).toBeDefined();
   });
 
+  test('values aggregate', async () => {
+    const aggregates = await client.events.uniqueValuesAggregate({
+      filter: {
+        source: 'WORKMATE',
+      },
+      fields: ['type'],
+    });
+    expect(aggregates.length).toBe(1);
+    expect(aggregates[0].count).toBeDefined();
+    expect(aggregates[0].value).toBeDefined();
+  });
+
   test('delete', async () => {
     await client.events.delete(createdEvents.map(event => ({ id: event.id })));
   });

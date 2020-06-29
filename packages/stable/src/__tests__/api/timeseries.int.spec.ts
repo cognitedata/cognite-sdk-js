@@ -155,6 +155,21 @@ describe('Timeseries integration test', () => {
     expect(result[0].name).toBe(name);
   });
 
+  test('synthetic query', async () => {
+    const [ts1] = createdTimeseries;
+    const result = await client.timeseries.syntheticQuery([
+      {
+        expression: `24 * TS{externalId='${
+          ts1.externalId
+        }', aggregate='average', granularity='1h'}`,
+        start: '48h-ago',
+        end: 'now',
+        limit: 100,
+      },
+    ]);
+    expect(result.length).toBe(1);
+  });
+
   test('delete', async () => {
     await client.timeseries.delete(createdTimeseries.map(({ id }) => ({ id })));
   });

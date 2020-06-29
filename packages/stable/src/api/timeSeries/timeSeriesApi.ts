@@ -12,6 +12,7 @@ import {
   IdEither,
   IgnoreUnknownIds,
   PostTimeSeriesMetadataDTO,
+  SyntheticQuery,
   TimeseriesAggregate,
   TimeseriesAggregateQuery,
   TimeseriesFilter,
@@ -21,12 +22,15 @@ import {
 } from '../../types';
 import { TimeSeries } from '../classes/timeSeries';
 import { TimeSeriesList } from '../classes/timeSeriesList';
+import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 
 export class TimeSeriesAPI extends BaseResourceAPI<
   GetTimeSeriesMetadataDTO,
   TimeSeries,
   TimeSeriesList
 > {
+  private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
+
   /** @hidden */
   constructor(
     private client: CogniteClient,
@@ -35,6 +39,11 @@ export class TimeSeriesAPI extends BaseResourceAPI<
     map: MetadataMap
   ) {
     super(resourcePath, httpClient, map);
+    this.syntheticTimeseriesApi = new SyntheticTimeSeriesAPI(
+      this.url('synthetic'),
+      httpClient,
+      map
+    );
   }
 
   /**
@@ -149,6 +158,24 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    */
   public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
+  };
+
+  /**
+   * [Synthetic Query](https://docs.cognite.com/api/v1/#operation/querySyntheticTimeseries)
+   *
+   * ```js
+   * await client.timeseries.syntheticQuery([
+   *   {
+   *     expression: "24 * TS{externalId='production/hour', aggregate='average', granularity='1d'}",
+   *     start: '48h-ago',
+   *     end: 'now',
+   *     limit: 100
+   *   }
+   * ]);
+   * ```
+   */
+  public syntheticQuery = (items: SyntheticQuery[]) => {
+    return this.syntheticTimeseriesApi.query(items);
   };
 
   protected transformToList(timeSeries: GetTimeSeriesMetadataDTO[]) {

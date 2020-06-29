@@ -2,11 +2,11 @@
 
 import { GraphUtils } from '@cognite/sdk-core';
 import * as nock from 'nock';
-import { enrichAssetsWithTheirParents } from '../../api/assets/assetUtils';
 import CogniteClient from '../../cogniteClient';
+import { enrichAssetsWithTheirParents } from '../../api/assets/assetUtils';
+import { promiseAllAtOnce, promiseEachInSequence } from '@cognite/sdk-core';
 import { ExternalAssetItem } from '../../types';
-import { setupMockableClient } from '../testUtils';
-import { mockBaseUrl } from '../testUtils';
+import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 // tslint:disable-next-line:no-big-function
 describe('Assets unit test', () => {
@@ -26,6 +26,166 @@ describe('Assets unit test', () => {
       .once()
       .reply(200, {});
     await client.assets.delete(assetIds);
+  });
+
+  describe('labels', () => {
+    const externalAssets = [
+      {
+        name: 'My pump',
+        labels: [{ externalId: 'PUMP' }],
+      },
+    ];
+
+    test('add label on create', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/assets'), {
+          items: externalAssets,
+        })
+        .once()
+        .reply(201, { items: externalAssets });
+
+      const createdAssets = await client.assets.create(externalAssets);
+      expect(JSON.parse(JSON.stringify(createdAssets))).toEqual(externalAssets);
+    });
+
+    test('filter assets by labels', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/assets/list'), {
+          filter: { labels: { containsAny: [{ externalId: 'PUMP' }] } },
+        })
+        .once()
+        .reply(200, { items: externalAssets });
+
+      const fetchedAssets = await client.assets.list({
+        filter: {
+          labels: {
+            containsAny: [{ externalId: 'PUMP' }],
+          },
+        },
+      });
+      expect(JSON.parse(JSON.stringify(fetchedAssets.items))).toEqual(
+        externalAssets
+      );
+    });
+
+    test('attach/detach labels to asset', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/assets/update'), {
+          items: [
+            {
+              id: 123,
+              update: {
+                labels: {
+                  add: [{ externalId: 'PUMP' }],
+                  remove: [{ externalId: 'VALVE' }],
+                },
+              },
+            },
+          ],
+        })
+        .once()
+        .reply(200, { items: externalAssets });
+
+      const updatedAssets = await client.assets.update([
+        {
+          id: 123,
+          update: {
+            labels: {
+              add: [{ externalId: 'PUMP' }],
+              remove: [{ externalId: 'VALVE' }],
+            },
+          },
+        },
+      ]);
+      expect(JSON.parse(JSON.stringify(updatedAssets))).toEqual(externalAssets);
+    });
+  });
+
+  describe('multi promise resolution', () => {
+    test('promiseAllAtOnce: fail', async () => {
+      const data = ['x', 'a', 'b', 'c'];
+      await expect(
+        promiseAllAtOnce(
+          data,
+          input =>
+            input === 'x'
+              ? Promise.reject(input + 'x')
+              : Promise.resolve(input + 'r')
+        )
+      ).rejects.toEqual({
+        failed: ['x'],
+        succeded: ['a', 'b', 'c'],
+        errors: ['xx'],
+        responses: ['ar', 'br', 'cr'],
+      });
+    });
+
+    test('promiseAllAtOnce: one element', async () => {
+      const fail = () =>
+        new Promise(() => {
+          throw new Error('y');
+        });
+      await expect(promiseAllAtOnce(['x'], fail)).rejects.toEqual({
+        failed: ['x'],
+        succeded: [],
+        errors: [new Error('y')],
+        responses: [],
+      });
+    });
+
+    test('promiseAllAtOnce: success', async () => {
+      const data = ['a', 'b', 'c'];
+      await expect(
+        promiseAllAtOnce(data, input => Promise.resolve(input))
+      ).resolves.toEqual(['a', 'b', 'c']);
+    });
+
+    test('promiseEachInSequence', async () => {
+      expect(
+        await promiseEachInSequence([], input => Promise.resolve(input))
+      ).toEqual([]);
+
+      expect(
+        await promiseEachInSequence([1], input => Promise.resolve(input))
+      ).toEqual([1]);
+
+      expect(
+        await promiseEachInSequence([1, 2, 3], input => Promise.resolve(input))
+      ).toEqual([1, 2, 3]);
+
+      await expect(
+        promiseEachInSequence([1, 2], () => Promise.reject('reject'))
+      ).rejects.toEqual({
+        failed: [1, 2],
+        succeded: [],
+        errors: ['reject'],
+        responses: [],
+      });
+
+      await expect(
+        promiseEachInSequence(
+          [1, 0, 2, 3],
+          input => (input ? Promise.resolve(input) : Promise.reject('x'))
+        )
+      ).rejects.toEqual({
+        failed: [0, 2, 3],
+        succeded: [1],
+        errors: ['x'],
+        responses: [1],
+      });
+
+      await expect(
+        promiseEachInSequence(
+          [1, 2, 0, 3, 0],
+          input => (input ? Promise.resolve(input + 'r') : Promise.reject('x'))
+        )
+      ).rejects.toEqual({
+        failed: [0, 3, 0],
+        succeded: [1, 2],
+        errors: ['x'],
+        responses: ['1r', '2r'],
+      });
+    });
   });
 
   describe('enrichAssestsWithTheirParents(...)', () => {

@@ -1,7 +1,7 @@
 {
     "extends": "./tsconfig.build",
     "compilerOptions": {
-        "baseUrl": "packages",
+        "baseUrl": "packages/",
         "paths": {
           "@cognite/sdk-core": ["core/src"],
           "@cognite/sdk": ["stable/src"],

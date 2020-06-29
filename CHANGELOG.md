@@ -1,3 +1,32 @@
+# [2.32.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.31.0...v2.32.0) (2020-06-26)
+
+
+### Features
+
+* **labels:** new resource type, works with assets ([e275b76](https://github.com/cognitedata/cognite-sdk-js/commit/e275b766d4ce82b264e23467dad59833679d2f53))
+* **timeseries:** add synthetic timeseries query ([#375](https://github.com/cognitedata/cognite-sdk-js/issues/375)) ([72723d1](https://github.com/cognitedata/cognite-sdk-js/commit/72723d13d244c4dfb3aa556b0300f698dffcaa1e))
+
+# [2.31.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.30.0...v2.31.0) (2020-06-23)
+
+
+### Features
+
+* **events:** unique values aggregate ([#377](https://github.com/cognitedata/cognite-sdk-js/issues/377)) ([d47152c](https://github.com/cognitedata/cognite-sdk-js/commit/d47152c4873274648e9bf525737810ef14e9572c))
+
+# [2.30.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.29.0...v2.30.0) (2020-06-18)
+
+
+### Features
+
+* export Revision3DStatus type ([#374](https://github.com/cognitedata/cognite-sdk-js/issues/374)) ([54112f0](https://github.com/cognitedata/cognite-sdk-js/commit/54112f02a6dacd3afcbbdda529c762a156de25aa))
+
+# [2.29.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.28.0...v2.29.0) (2020-06-08)
+
+
+### Features
+
+* **files:** create + update security categories ([#372](https://github.com/cognitedata/cognite-sdk-js/issues/372)) ([f7192ca](https://github.com/cognitedata/cognite-sdk-js/commit/f7192cae4d55192ae09d394718c755d025610ea4))
+
 # [2.28.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.27.1...v2.28.0) (2020-05-19)
 
 

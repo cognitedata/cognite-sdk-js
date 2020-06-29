@@ -211,6 +211,13 @@ export interface AggregateResponse {
   count: number;
 }
 
+export interface UniqueValuesAggregateResponse extends AggregateResponse {
+  /**
+   * A unique value from the requested field
+   */
+  value: string | number;
+}
+
 /**
  * Response from asset aggregate endpoint
  */
@@ -323,6 +330,10 @@ export interface AssetFilterProps {
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
   assetSubtreeIds?: IdEither[];
+  /**
+   * Return only the assets matching the specified label constraints.
+   */
+  labels?: LabelFilter;
   metadata?: Metadata;
   source?: AssetSource;
   createdTime?: DateRange;
@@ -390,6 +401,7 @@ export interface AssetPatch {
     description?: SinglePatchString;
     dataSetId?: NullableSinglePatchLong;
     metadata?: ObjectPatch;
+    labels?: LabelsPatch;
     source?: SinglePatchString;
   };
 }
@@ -537,6 +549,61 @@ export type DataSetChange = DataSetChangeById | DataSetChangeByExternalId;
 export interface DataSetChangeByExternalId extends DataSetPatch, ExternalId {}
 
 export interface DataSetChangeById extends DataSetPatch, InternalId {}
+
+export type Label = ExternalId;
+
+export type LabelFilter = LabelContainsAnyFilter | LabelContainsAllFilter;
+
+export interface LabelContainsAnyFilter {
+  containsAny: Label[];
+}
+
+export interface LabelContainsAllFilter {
+  containsAll: Label[];
+}
+
+export interface LabelsPatch {
+  /**
+   * A list of labels to add to the resource
+   */
+  add?: Label[];
+  /**
+   * A list of labels to remove to the resource
+   */
+  remove?: Label[];
+}
+
+export interface ExternalLabelDefinition extends Label {
+  /**
+   * Name of the label.
+   */
+  name: string;
+
+  /**
+   * Description of the label.
+   */
+  description?: string;
+}
+
+export interface LabelDefinition extends ExternalLabelDefinition {
+  createdTime: Date;
+}
+
+export interface LabelDefinitionFilter {
+  /**
+   * Returns the label definitions matching that name.
+   */
+  name?: string;
+
+  /**
+   * Filter external ids starting with the prefix specified
+   */
+  externalIdPrefix?: ExternalIdPrefix;
+}
+
+export interface LabelDefinitionFilterRequest extends FilterQuery {
+  filter?: LabelDefinitionFilter;
+}
 
 /**
  * Filter on data sets with exact match
@@ -708,13 +775,20 @@ export type DeleteAssetMapping3D = AssetMapping3DBase;
 export type EXECUTE = 'EXECUTE';
 
 /**
- * Query schema for asset aggregate endpoint
+ * Query schema for event aggregate endpoint
  */
 export interface EventAggregateQuery {
   /**
    * Filter on events with strict matching.
    */
   filter?: EventFilter;
+}
+
+export interface EventUniqueValuesAggregate extends EventAggregateQuery {
+  /**
+   * The field name(s) to apply the aggregation on. Currently limited to one field.
+   */
+  fields: ('type' | 'subtype' | 'dataSetId')[];
 }
 
 export type EventChange = EventChangeById | EventChangeByExternalId;
@@ -822,6 +896,7 @@ export interface ExternalAsset {
   dataSetId?: CogniteInternalId;
   metadata?: Metadata;
   source?: AssetSource;
+  labels?: Label[];
 }
 
 export interface ExternalAssetItem extends ExternalAsset {
@@ -869,6 +944,7 @@ export interface ExternalFilesMetadata {
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
   dataSetId?: CogniteInternalId;
+  securityCategories?: CogniteInternalId[];
   sourceCreatedTime?: Date;
   sourceModifiedTime?: Date;
 }
@@ -906,6 +982,7 @@ export interface FileChange {
     mimeType?: SinglePatchString;
     metadata?: ObjectPatch;
     assetIds?: ArrayPatchLong;
+    securityCategories?: ArrayPatchLong;
     sourceCreatedTime?: SinglePatchDate;
     sourceModifiedTime?: SinglePatchDate;
     dataSetId?: NullableSinglePatchLong;
@@ -1553,7 +1630,7 @@ export interface Revision3DListRequest extends Limit {
   published?: boolean;
 }
 
-type Revision3DStatus = 'Queued' | 'Processing' | 'Done' | 'Failed';
+export type Revision3DStatus = 'Queued' | 'Processing' | 'Done' | 'Failed';
 
 export interface RevisionCameraProperties {
   /**
@@ -1875,6 +1952,33 @@ export const SortOrder = {
  */
 export type SortOrder = 'asc' | 'desc';
 
+export interface SyntheticDataError extends GetDatapointMetadata {
+  error: string;
+}
+
+export type SyntheticDatapoint = SyntheticDataValue | SyntheticDataError;
+
+export interface SyntheticDataValue extends GetDatapointMetadata {
+  value: number;
+}
+
+/**
+ * A query for a synthetic time series
+ */
+export interface SyntheticQuery extends Limit {
+  expression: string;
+  start?: string | Timestamp;
+  end?: string | Timestamp;
+}
+
+/**
+ * Response of a synthetic time series query
+ */
+export interface SyntheticQueryResponse {
+  isString?: TimeseriesIsString;
+  datapoints: SyntheticDatapoint[];
+}
+
 export interface TimeSeriesPatch {
   update: {
     externalId?: NullableSinglePatchString;
@@ -1969,6 +2073,10 @@ export type TimeseriesName = string;
  */
 export type TimeseriesUnit = string;
 
+/**
+ * A point in time, either a number or a Date object.
+ * The Date is converted to a number when api calls are made.
+ */
 export type Timestamp = number | Date;
 
 export type Tuple3<T> = T[];

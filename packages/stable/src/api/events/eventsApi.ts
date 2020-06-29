@@ -2,13 +2,15 @@
 
 import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
+  AggregateResponse,
   CogniteEvent,
-  EventAggregate,
   EventAggregateQuery,
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
   EventSort,
+  EventUniqueValuesAggregate,
+  UniqueValuesAggregateResponse,
   ExternalEvent,
   IdEither,
   IgnoreUnknownIds,
@@ -56,8 +58,25 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    */
   public aggregate = (
     query: EventAggregateQuery
-  ): Promise<EventAggregate[]> => {
+  ): Promise<AggregateResponse[]> => {
     return super.aggregateEndpoint(query);
+  };
+
+  /**
+   * [Aggregate events](https://docs.cognite.com/api/v1/#operation/aggregateEvents)
+   *
+   * ```js
+   * const uniqueValuesAggregates = await client.events.uniqueValuesAggregate({ filter: { assetIds: [1, 2, 3] }, fields: ['subtype'] });
+   * console.log('Unique values: ', aggregates)
+   * ```
+   */
+  public uniqueValuesAggregate = (
+    query: EventUniqueValuesAggregate
+  ): Promise<UniqueValuesAggregateResponse[]> => {
+    return super.aggregateEndpoint({
+      ...query,
+      aggregate: 'uniqueValues',
+    });
   };
 
   /**
