@@ -2177,7 +2177,7 @@ export type UrlName = string;
 export type ValidDomains = string[];
 
 /**
- * A set of domains hosting applications used with the project. If missing, a default set of domains will be used. Once application domains are set, they may be individually removed, but cannot be removed entirely in order to fall back to the default list.
+ * List of domains permitted for redirects. Redirects as part of a login flow may only target a domain (or subdomain) on this list. If this list is set to be empty, it will not be possible to use a login flow.
  */
 export type ApplicationDomains = string[];
 
