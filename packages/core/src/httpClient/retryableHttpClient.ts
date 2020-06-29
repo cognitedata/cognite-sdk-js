@@ -18,7 +18,7 @@ export class RetryableHttpClient extends BasicHttpClient {
     request: HttpRequest
   ): Promise<HttpResponse<ResponseType>> {
     let retryCount = 0;
-    do {
+    while (true) {
       const response = await super.rawRequest<ResponseType>(request);
       const shouldRetry = this.retryValidator(request, response, retryCount);
       if (!shouldRetry) {
@@ -27,7 +27,7 @@ export class RetryableHttpClient extends BasicHttpClient {
       const delayInMs = RetryableHttpClient.calculateRetryDelayInMs(retryCount);
       await sleepPromise(delayInMs);
       retryCount++;
-    } while (true);
+    }
   }
 }
 
