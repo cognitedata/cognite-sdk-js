@@ -66,8 +66,8 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * [Aggregate events](https://docs.cognite.com/api/v1/#operation/aggregateEvents)
    *
    * ```js
-   * const uniqueValuesAggregates = await client.events.uniqueValuesAggregate({ filter: { assetIds: [1, 2, 3] }, fields: ['subtype'] });
-   * console.log('Unique values: ', aggregates)
+   * const uniqueValues = await client.events.uniqueValuesAggregate({ filter: { assetIds: [1, 2, 3] }, fields: ['subtype'] });
+   * console.log('Unique values: ', uniqueValues)
    * ```
    */
   public uniqueValuesAggregate = (

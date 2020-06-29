@@ -33,8 +33,22 @@ The difference is that `tsconfig.json` uses path aliases to reference the source
 This allows IDEs to visit source code across packages when going to definition.
 The `tsconfig.build.json` files don't do any path aliasing, so when building or linting
 we use `dist/index.js` and `dist/src/**/*.d.ts` from the other packages.
-To make sure all `dist/` folder are up to date, build all packages
+To make sure all `dist/` folders are up to date, build all packages
 by running `yarn build` in the root of the project.
+
+To avoid duplicating configuration, there is a root `tsconfig.common.json` with most configuration,
+a root `tsconfig.build.json` for build-specific configuration,
+and a root `tsconfig.json` with the path aliasing.
+The latter two extend the first.
+
+Package specific configuration is mostly specifying output folder, and extending the corresponding
+file in the project root. You only need to specify output folder in build configuration,
+since your IDE will reference by source through path aliases.
+
+Note that tests are excluded in `tsconfig.build.json`, but are otherwise included
+to make vscode handle Go To Definition from inside tests.
+This convention of `tsconfig.build.json` also includes the code snippet extraction,
+so you can go to definition from a code snippet.
 
 ## Versioning
 Commits need to follow [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines). Once they are merged, CI uses the script `scripts/versionAndPush.sh`, which uses `lerna version`.
@@ -44,8 +58,8 @@ After bumping versions, the new packages are uploaded to npm using `lerna releas
 
 ## Adding new packages
 To add a new package, copy whatever is needed from another package, and give it a unique name in `package.json`.
-If it's a sample, make sure its name ends in `-sample` and that the package is private.
-Lerna will create any public packages on npm, so make sure the names are correct before committing. 
+If it's a sample in the sample folder, make sure its package name ends in `-sample` and that the package is private.
+Lerna will create any public packages on npm, so make sure the names are correct before committing.
 
 **Note:** Scoped packages (e.g. `@cognite/sdk`) need special confirmation that they are public the first time they are published.
 This is specified in the individual `package.json` files: `"publishConfig": { "access": "public" }`.
