@@ -10,8 +10,8 @@
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/beta/",
-    "lint": "tslint -c ../../tslint.json -p tsconfig.build.json",
-    "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c ../../tslint.json -p tsconfig.build.json --fix",
+    "lint": "eslint 'src/**/*.{js,ts}'",
+    "lint:fix": "yarn lint --fix",
     "build": "yarn clean && rollup -c && yarn esCheck",
     "watch": "rollup -cw",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
