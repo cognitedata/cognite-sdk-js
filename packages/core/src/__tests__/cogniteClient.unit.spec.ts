@@ -27,7 +27,6 @@ function setupMockableClient() {
   return client;
 }
 
-// tslint:disable-next-line:no-big-function
 describe('CogniteClient', () => {
   beforeEach(() => {
     nock.cleanAll();
@@ -37,7 +36,6 @@ describe('CogniteClient', () => {
     test('throw on missing parameter', () => {
       expect(() => {
         // @ts-ignore
-        // tslint:disable-next-line:no-unused-expression
         new BaseCogniteClient();
       }).toThrowErrorMatchingInlineSnapshot(
         `"\`CogniteClient\` is missing parameter \`options\`"`
@@ -47,7 +45,6 @@ describe('CogniteClient', () => {
     test('missing appId', () => {
       expect(() => {
         // @ts-ignore
-        // tslint:disable-next-line:no-unused-expression
         new BaseCogniteClient({});
       }).toThrowErrorMatchingInlineSnapshot(
         `"options.appId is required and must be of type string"`
@@ -57,7 +54,6 @@ describe('CogniteClient', () => {
     test('invalid appId', () => {
       expect(() => {
         // @ts-ignore
-        // tslint:disable-next-line:no-unused-expression
         new BaseCogniteClient({ appId: 12 });
       }).toThrowErrorMatchingInlineSnapshot(
         `"options.appId is required and must be of type string"`
@@ -188,7 +184,6 @@ describe('CogniteClient', () => {
     });
   });
 
-  // tslint:disable-next-line:no-big-function
   describe('loginWithOAuth', () => {
     test('missing parameter', async () => {
       const client = setupClient();
@@ -210,7 +205,6 @@ describe('CogniteClient', () => {
       );
     });
 
-    // tslint:disable-next-line:no-big-function
     describe('authentication', () => {
       let mockLoginSilently: jest.SpyInstance;
       let mockRedirect: jest.SpyInstance;

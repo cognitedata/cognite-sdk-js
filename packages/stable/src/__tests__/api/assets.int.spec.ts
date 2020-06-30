@@ -10,7 +10,6 @@ import {
   setupLoggedInClient,
 } from '../testUtils';
 
-// tslint:disable-next-line:no-big-function
 describe('Asset integration test', () => {
   let client: CogniteClient;
   beforeAll(async () => {

@@ -8,7 +8,6 @@ import { promiseAllAtOnce, promiseEachInSequence } from '@cognite/sdk-core';
 import { ExternalAssetItem } from '../../types';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
-// tslint:disable-next-line:no-big-function
 describe('Assets unit test', () => {
   let client: CogniteClient;
   beforeEach(() => {

@@ -118,7 +118,7 @@ export default class BaseCogniteClient {
     this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
     this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
   }
-  // tslint:disable-next-line:no-identical-functions
+
   public authenticate: () => Promise<boolean> = async () => {
     throw Error(
       'You can only call authenticate after you have called loginWithOAuth'
