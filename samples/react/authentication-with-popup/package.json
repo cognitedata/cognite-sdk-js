@@ -11,7 +11,7 @@
   "scripts": {
     "start": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --no-watch --passWithNoTests",
+    "test": "SKIP_PREFLIGHT_CHECK=true react-scripts test --no-watch --passWithNoTests",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
