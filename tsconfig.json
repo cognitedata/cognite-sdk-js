@@ -3,9 +3,8 @@
     "compilerOptions": {
         "baseUrl": "packages",
         "paths": {
-          "@cognite/sdk-core": ["core/src"],
-          "@cognite/sdk": ["stable/src"],
-          "@cognite/sdk-beta": ["beta/src"]
+          "@cognite/sdk-*": ["*/src"],
+          "@cognite/sdk": ["stable/src"]
         }
     }
 }
