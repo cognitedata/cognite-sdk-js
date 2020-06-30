@@ -34,7 +34,7 @@
     "docs:bundle": "rm -rf docs/ && yarn docs && mkdir -p docs/ docs/beta && cp -r packages/stable/docs/* docs/ && cp -r packages/beta/docs/* docs/beta",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check",
     "test-snippets": "yarn allsdk test-snippets --stream",
-    "test-samples": "yarn allsamples test --stream"
+    "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
