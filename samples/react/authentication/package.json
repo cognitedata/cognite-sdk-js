@@ -6,12 +6,12 @@
     "@cognite/sdk": "^2.32.0",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
-    "react-scripts": "2.1.8"
+    "react-scripts": "3.4.1"
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
-    "test": "SKIP_PREFLIGHT_CHECK=true react-scripts test --no-watch --passWithNoTests",
+    "test": "react-scripts test --no-watch --passWithNoTests",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
