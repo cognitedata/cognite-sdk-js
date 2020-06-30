@@ -6,12 +6,8 @@ set -e
 echo "Checking out \$TRAVIS_BRANCH: $TRAVIS_BRANCH"
 git checkout $TRAVIS_BRANCH
 
-cat ~/.config/git/config || true
-echo ""
-
-git config --global user.email travis@travis-ci.org
-git config --global user.name "Travis CI"
-echo "Set git identity to Travis CI<travis@travis-ci.org>"
+git config --global user.email "cognite-cicd@users.noreply.github.com"
+git config --global user.name "Cognite CICD"
 
 # Find the new remote with github token, careful not to leak secrets
 OLD_REMOTE="$(git remote get-url origin)"
