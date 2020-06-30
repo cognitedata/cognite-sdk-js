@@ -65,9 +65,13 @@ Lerna will create any public packages on npm, so make sure the names are correct
 This is specified in the individual `package.json` files: `"publishConfig": { "access": "public" }`.
 
 ## Samples
-The `samples/` folder contains several samples, each sample being a private package in the workspace.
+The `samples/` folder contains several samples, each top level folder being a private package in the workspace.
 Though tecnically in the workspace for ease of testing, they would also work as-is as stand alone dependants of the sdk.
 All samples' names end in `-sample`, to make filtering easy. `yarn test` does not test samples.
+
+**NOTE** The `samples/react/` folder contains samples that are not tested, because a) they don't have tests,
+and b) including the packages in the workspace would give lots of versioning conflicts with `react-scripts`.
+
 To test the samples, first build the sdk.
 ```
 $ yarn build
