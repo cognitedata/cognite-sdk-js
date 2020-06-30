@@ -30,7 +30,6 @@ const describeIfCondition =
 
 describeIfCondition(
   '3D - Revision, nodes, assetMappings integration test',
-  // tslint:disable-next-line:no-big-function
   () => {
     let client: CogniteClient;
 

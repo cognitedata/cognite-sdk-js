@@ -17,7 +17,6 @@ import {
   setupMockableClient,
 } from '../testUtils';
 
-// tslint:disable-next-line:no-big-function
 describe('Sequences integration test', () => {
   let client: CogniteClient;
   let mockedClient: CogniteClient;

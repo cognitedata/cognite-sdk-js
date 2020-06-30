@@ -22,7 +22,6 @@ const dataSetFilter = (id: number) => {
   return { filter: { dataSetIds: [{ id }] } };
 };
 
-// tslint:disable-next-line:no-big-function
 describe('data sets integration test', () => {
   let client: CogniteClient;
   let datasets: DataSet[];

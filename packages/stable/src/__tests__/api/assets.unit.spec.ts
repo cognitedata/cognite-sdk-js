@@ -8,7 +8,6 @@ import { ExternalAssetItem } from '../../types';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl } from '../testUtils';
 
-// tslint:disable-next-line:no-big-function
 describe('Assets unit test', () => {
   let client: CogniteClient;
   beforeEach(() => {

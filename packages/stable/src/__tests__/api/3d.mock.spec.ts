@@ -19,7 +19,6 @@ import {
   string2arrayBuffer,
 } from '../testUtils';
 
-// tslint:disable-next-line:no-big-function
 describe('3D mocked', () => {
   let client: CogniteClient;
   const model: Model3D = {

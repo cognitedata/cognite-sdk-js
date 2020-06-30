@@ -4,7 +4,6 @@ import CogniteClient from '../../cogniteClient';
 import { Asset, CogniteEvent, SortOrder } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
-// tslint:disable-next-line:no-big-function
 describe('Events integration test', () => {
   let client: CogniteClient;
   let asset: Asset;
