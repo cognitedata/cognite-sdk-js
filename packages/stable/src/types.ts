@@ -1263,9 +1263,9 @@ export type LatestDataBeforeRequest =
 
 export interface LatestDataPropertyFilter {
   /**
-   * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send time as a Date object.
+   * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send time as a Date object or number of milliseconds since epoch.
    */
-  before?: string | Date;
+  before?: string | Date | number;
 }
 
 export interface List3DNodesQuery extends FilterQuery {
@@ -2154,3 +2154,14 @@ export interface Versioned3DFile {
 }
 
 export type WRITE = 'WRITE';
+
+export type DatePropPath = 'items' | 'columns' | 'datapoints';
+export type DatePropName =
+  | 'createdTime'
+  | 'lastUpdatedTime'
+  | 'sourceCreatedTime'
+  | 'sourceModifiedTime'
+  | 'uploadedTime'
+  | 'deletedTime'
+  | 'timestamp';
+export type DatePropFilter = [DatePropPath[], DatePropName[]];

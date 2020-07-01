@@ -9,8 +9,17 @@ import {
   Model3DListRequest,
   UpdateModel3D,
 } from '../../types';
+import { DatePropFilter } from '../../types';
 
 export class Models3DAPI extends BaseResourceAPI<Model3D> {
+  /**
+   * Specify what fields in json responses should be parsed as Dates
+   * @hidden
+   */
+  protected getDateProps(): DatePropFilter {
+    return [['items'], ['createdTime']];
+  }
+
   /**
    * [Create 3D models](https://doc.cognitedata.com/api/v1/#operation/create3DModels)
    *
@@ -48,7 +57,7 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    */
   public retrieve = async (id: CogniteInternalId): Promise<Model3D> => {
     const path = this.url(`${id}`);
-    const response = await this.httpClient.get<Model3D>(path);
+    const response = await this.get<Model3D>(path);
     return this.addToMapAndReturn(response.data, response);
   };
 

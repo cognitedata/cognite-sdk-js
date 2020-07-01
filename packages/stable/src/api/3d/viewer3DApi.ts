@@ -13,6 +13,7 @@ import {
   RevealNode3D,
   RevealRevision3D,
   RevealSector3D,
+  DatePropFilter,
 } from '../../types';
 import { RevealNodes3DAPI } from './revealNodes3DApi';
 import { RevealRevisions3DAPI } from './revealRevisions3DApi';
@@ -49,6 +50,14 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
       httpClient,
       map
     );
+  }
+
+  /**
+   * Specify what fields in json responses should be parsed as Dates
+   * @hidden
+   */
+  protected getDateProps(): DatePropFilter {
+    return [['items'], ['createdTime']];
   }
 
   /**

@@ -32,9 +32,9 @@ export class SequenceRowsAPI extends BaseResourceAPI<
   ): CursorAndAsyncIterator<SequenceRow> {
     return super.listEndpoint(
       data =>
-        this.httpClient
-          .post<SequenceRowsResponseData>(this.listPostUrl, { data })
-          .then(this.transformRetrieveResponse),
+        this.post<SequenceRowsResponseData>(this.listPostUrl, { data }).then(
+          this.transformRetrieveResponse
+        ),
       query
     );
   }

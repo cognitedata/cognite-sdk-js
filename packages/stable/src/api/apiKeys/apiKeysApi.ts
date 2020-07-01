@@ -8,9 +8,18 @@ import {
   CogniteInternalId,
   ItemsWrapper,
   NewApiKeyResponse,
+  DatePropFilter,
 } from '../../types';
 
 export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
+  /**
+   * Specify what fields in json responses should be parsed as Dates
+   * @hidden
+   */
+  protected getDateProps(): DatePropFilter {
+    return [['items'], ['createdTime']];
+  }
+
   /**
    * [Create API keys](https://doc.cognitedata.com/api/v1/#operation/createApiKeys)
    *
@@ -31,10 +40,9 @@ export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
    */
   public list = async (scope?: ApiKeyListScope): Promise<ApiKeyObject[]> => {
     const path = this.url();
-    const response = await this.httpClient.get<ItemsWrapper<ApiKeyObject[]>>(
-      path,
-      { params: scope }
-    );
+    const response = await this.get<ItemsWrapper<ApiKeyObject[]>>(path, {
+      params: scope,
+    });
     return this.addToMapAndReturn(response.data.items, response);
   };
 

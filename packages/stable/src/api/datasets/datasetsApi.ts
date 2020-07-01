@@ -9,9 +9,18 @@ import {
   DataSetFilterRequest,
   ExternalDataSet,
   IdEither,
+  DatePropFilter,
 } from '../../types';
 
 export class DataSetsApi extends BaseResourceAPI<DataSet> {
+  /**
+   * Specify what fields in json responses should be parsed as Dates
+   * @hidden
+   */
+  protected getDateProps(): DatePropFilter {
+    return [['items'], ['createdTime', 'lastUpdatedTime']];
+  }
+
   /**
    * [Create datasets](https://docs.cognite.com/api/v1/#operation/createDataSets)
    *

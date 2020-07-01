@@ -7,6 +7,7 @@ export * from './types';
 export { MetadataMap } from './metadata';
 export { BaseResourceAPI } from './baseResourceApi';
 export { default as BaseCogniteClient } from './baseCogniteClient';
+export { default as DateParser } from './dateParser';
 export * from './baseCogniteClient';
 
 export { CDFHttpClient } from './httpClient/cdfHttpClient';
@@ -41,7 +42,6 @@ export {
 export { RevertableArraySorter } from './revertableArraySorter';
 export {
   sleepPromise,
-  transformDateInRequest,
   apiUrl,
   promiseAllAtOnce,
   promiseAllWithData,

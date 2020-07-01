@@ -21,9 +21,27 @@ import {
   IgnoreUnknownIds,
   ItemsWrapper,
   FileUploadResponse,
+  DatePropFilter,
 } from '../../types';
 
 export class FilesAPI extends BaseResourceAPI<FileInfo> {
+  /**
+   * Specify that dates should be parsed in requests and responses
+   * @hidden
+   */
+  protected getDateProps(): DatePropFilter {
+    return [
+      ['items'],
+      [
+        'createdTime',
+        'lastUpdatedTime',
+        'sourceCreatedTime',
+        'sourceModifiedTime',
+        'uploadedTime',
+      ],
+    ];
+  }
+
   /**
    * [Upload a file](https://doc.cognitedata.com/api/v1/#operation/initFileUpload)
    *
@@ -165,7 +183,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
 
     const params = { overwrite };
     const path = this.url();
-    const response = await this.httpClient.post<FileUploadResponse>(path, {
+    const response = await this.post<FileUploadResponse>(path, {
       params,
       data: fileInfo,
     });
@@ -184,7 +202,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
     const headers: HttpHeaders = {
       'Content-Type': mimeType || 'application/octet-stream',
     };
-    return this.httpClient.put(url, {
+    return this.put(url, {
       headers,
       data: fileContent,
     });
@@ -210,9 +228,10 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
 
   private async getDownloadUrlsEndpoint(items: IdEither[]) {
     const path = this.url('downloadlink');
-    const response = await this.httpClient.post<
-      ItemsWrapper<(FileLink & IdEither)[]>
-    >(path, { data: { items } });
+    const response = await this.post<ItemsWrapper<(FileLink & IdEither)[]>>(
+      path,
+      { data: { items } }
+    );
     return this.addToMapAndReturn(response.data.items, response);
   }
 }

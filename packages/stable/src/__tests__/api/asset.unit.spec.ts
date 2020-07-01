@@ -24,6 +24,7 @@ describe('Asset class unit test', () => {
         externalId: 'test-child' + randomInt() + index,
         parentExternalId: newRoot.externalId,
         name: 'child' + index,
+        createdTime: new Date().getTime(),
       });
     }
   });
@@ -50,5 +51,6 @@ describe('Asset class unit test', () => {
     expect(children.length).toBe(102);
     expect(children[0]).toBeInstanceOf(AssetImpl);
     expect(children[0].name).toEqual(childArray[0].name);
+    expect(children[0].createdTime).toBeInstanceOf(Date);
   });
 });

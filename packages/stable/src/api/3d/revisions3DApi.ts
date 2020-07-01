@@ -15,6 +15,7 @@ import {
   Revision3D,
   Revision3DListRequest,
   UpdateRevision3D,
+  DatePropFilter,
 } from '../../types';
 import { Nodes3DAPI } from './nodes3DApi';
 
@@ -27,6 +28,14 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
   ) {
     super(resourcePath, httpClient, map);
     this.nodes3DApi = new Nodes3DAPI(resourcePath, httpClient, map);
+  }
+
+  /**
+   * Specify what fields in json responses should be parsed as Dates
+   * @hidden
+   */
+  protected getDateProps(): DatePropFilter {
+    return [['items'], ['createdTime']];
   }
 
   /**
@@ -55,10 +64,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     filter?: Revision3DListRequest
   ): CursorAndAsyncIterator<Revision3D> => {
     const path = this.url(`${modelId}/revisions`);
-    return super.listEndpoint(
-      params => this.httpClient.get(path, { params }),
-      filter
-    );
+    return super.listEndpoint(params => this.get(path, { params }), filter);
   };
 
   /**
@@ -73,7 +79,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     revisionId: CogniteInternalId
   ): Promise<Revision3D> => {
     const path = this.url(`${modelId}/revisions/${revisionId}`);
-    const response = await this.httpClient.get<Revision3D>(path);
+    const response = await this.get<Revision3D>(path);
     return this.addToMapAndReturn(response.data, response);
   };
 
@@ -128,7 +134,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     fileId: CogniteInternalId
   ): Promise<{}> => {
     const path = this.url(`${modelId}/revisions/${revisionId}/thumbnail`);
-    const response = await this.httpClient.post<{}>(path, { data: { fileId } });
+    const response = await this.post<{}>(path, { data: { fileId } });
     return this.addToMapAndReturn({}, response);
   };
 

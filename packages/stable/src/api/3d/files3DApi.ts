@@ -13,7 +13,7 @@ export class Files3DAPI extends BaseResourceAPI<any> {
    */
   public retrieve = async (fileId: CogniteInternalId): Promise<ArrayBuffer> => {
     const path = this.url(`${fileId}`);
-    const response = await this.httpClient.get<ArrayBuffer>(path, {
+    const response = await this.get<ArrayBuffer>(path, {
       responseType: HttpResponseType.ArrayBuffer,
     });
     return this.addToMapAndReturn(response.data, response);

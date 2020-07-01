@@ -18,6 +18,7 @@ import {
   TimeseriesFilterQuery,
   TimeseriesSearchFilter,
   TimeSeriesUpdate,
+  DatePropFilter,
 } from '../../types';
 import { TimeseriesImpl } from '../classes/timeSeries';
 import { TimeSeriesList } from '../classes/timeSeriesList';
@@ -43,6 +44,14 @@ export class TimeSeriesAPI extends BaseResourceAPI<
       httpClient,
       map
     );
+  }
+
+  /**
+   * Specify what fields in json responses should be parsed as Dates
+   * @hidden
+   */
+  protected getDateProps(): DatePropFilter {
+    return [['items'], ['createdTime', 'lastUpdatedTime']];
   }
 
   /**

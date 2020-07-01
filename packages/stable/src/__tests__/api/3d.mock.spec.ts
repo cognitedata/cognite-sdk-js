@@ -1,6 +1,5 @@
 // Copyright 2020 Cognite AS
 
-import { transformDateInRequest } from '@cognite/sdk-core';
 import * as nock from 'nock';
 import CogniteClient from '../../cogniteClient';
 import {
@@ -18,6 +17,7 @@ import {
   setupMockableClient,
   string2arrayBuffer,
 } from '../testUtils';
+import { DateParser } from '@cognite/sdk-core';
 
 describe('3D mocked', () => {
   let client: CogniteClient;
@@ -106,7 +106,7 @@ describe('3D mocked', () => {
       nock(mockBaseUrl)
         .post(regExp, { items: revisionsToCreate })
         .reply(200, {
-          items: [transformDateInRequest(revision)],
+          items: [DateParser.parseFromDates(revision)],
         });
       const createdRevisions = await client.revisions3D.create(
         model.id,

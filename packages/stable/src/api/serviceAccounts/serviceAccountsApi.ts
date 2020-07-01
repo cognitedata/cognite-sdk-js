@@ -6,9 +6,18 @@ import {
   ItemsWrapper,
   ServiceAccount,
   ServiceAccountInput,
+  DatePropFilter,
 } from '../../types';
 
 export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
+  /**
+   * Specify what fields in json responses should be parsed as Dates
+   * @hidden
+   */
+  protected getDateProps(): DatePropFilter {
+    return [['items'], ['deletedTime']];
+  }
+
   /**
    * [Create service accounts](https://doc.cognitedata.com/api/v1/#operation/createServiceAccounts)
    *
@@ -33,9 +42,7 @@ export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
    */
   public list = async (): Promise<ServiceAccount[]> => {
     const path = this.url();
-    const response = await this.httpClient.get<ItemsWrapper<ServiceAccount[]>>(
-      path
-    );
+    const response = await this.get<ItemsWrapper<ServiceAccount[]>>(path);
     return this.addToMapAndReturn(response.data.items, response);
   };
 

@@ -47,7 +47,7 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     const path = `${this.encodeUrl(databaseName, tableName)}/rows`;
     return super.listEndpoint(
       async params =>
-        this.httpClient.get<CursorResponse<RawDBRow[]>>(path, {
+        this.get<CursorResponse<RawDBRow[]>>(path, {
           params,
         }),
       query
@@ -63,7 +63,7 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
       databaseName,
       tableName
     )}/rows/${encodeURIComponent(rowKey)}`;
-    const response = await this.httpClient.get<RawDBRow>(path);
+    const response = await this.get<RawDBRow>(path);
     return this.addToMapAndReturn(response.data, response);
   }
 

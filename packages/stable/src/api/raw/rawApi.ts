@@ -15,6 +15,7 @@ import {
   RawDBRowInsert,
   RawDBRowKey,
   RawDBTable,
+  DatePropFilter,
 } from '../../types';
 import { RawRowsAPI } from './rawRowsApi';
 import { RawTablesAPI } from './rawTablesApi';
@@ -31,6 +32,14 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     super(resourcePath, httpClient, map);
     this.rawTablesApi = new RawTablesAPI(resourcePath, httpClient, map);
     this.rawRowsApi = new RawRowsAPI(resourcePath, httpClient, map);
+  }
+
+  /**
+   * Specify what fields in json responses should be parsed as Dates
+   * @hidden
+   */
+  protected getDateProps(): DatePropFilter {
+    return [['items'], ['lastUpdatedTime']];
   }
 
   /**

@@ -10,9 +10,18 @@ import {
   ItemsWrapper,
   LatestDataBeforeRequest,
   ExternalDatapointsQuery,
+  DatePropFilter,
 } from '../../types';
 
 export class DataPointsAPI extends BaseResourceAPI<any> {
+  /**
+   * Specify what fields in json responses should be parsed as Dates
+   * @hidden
+   */
+  protected getDateProps(): DatePropFilter {
+    return [['items', 'datapoints'], ['timestamp']];
+  }
+
   /**
    * [Insert data points](https://doc.cognitedata.com/api/v1/#operation/postMultiTimeSeriesDatapoints)
    *
@@ -79,7 +88,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
 
   private async retrieveDatapointsEndpoint(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
-    const response = await this.httpClient.post<
+    const response = await this.post<
       ItemsWrapper<(DatapointAggregates | Datapoints)[]>
     >(path, {
       data: query,
@@ -92,12 +101,9 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     params: LatestDataParams
   ) {
     const path = this.url('latest');
-    const response = await this.httpClient.post<ItemsWrapper<Datapoints[]>>(
-      path,
-      {
-        data: { items, ...params },
-      }
-    );
+    const response = await this.post<ItemsWrapper<Datapoints[]>>(path, {
+      data: { items, ...params },
+    });
     return this.addToMapAndReturn(response.data.items, response);
   }
 
