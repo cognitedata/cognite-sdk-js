@@ -11,7 +11,7 @@ import { BaseResourceAPI } from '../baseResourceApi';
 
 export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
   /**
-   * [Create labels](https://docs.cognite.com/api/v1/#operation/createLabelDefinitions)
+   * [Create labels](https://docs.cognite.com/api/v1/#operation/createDefinitions)
    *
    * ```js
    * const labels = [
