@@ -118,6 +118,16 @@ import { CogniteAsyncIterator } from '@cognite/sdk'; // ✅
 let assetsApi: CogniteClient['assets']; // ✅
 ```
 
+You may leverage [eslint](https://eslint.org/docs/rules/no-restricted-imports) to free yourself from memorizing those rules:
+
+**.eslintrc.json:**
+
+```
+"rules": {
+  "no-restricted-imports": ["error", { "patterns": ["@cognite/sdk/**"] }]
+}
+```  
+
 ## Migration
 
 See [this guide](./guides/MIGRATION_GUIDE_1xx_2xx.md) on how to migrate from version `1.x.x` to version `2.x.x`.
