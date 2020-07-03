@@ -39,9 +39,9 @@ Travis will run the test and has its own api key.
 Run all tests:
 
 ```bash
-$ yarn
-$ yarn build
-$ yarn test
+yarn
+yarn build
+yarn test
 ```
 
 Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revision integration tests.
