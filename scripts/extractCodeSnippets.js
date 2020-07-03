@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const snippetsFolder = path.join(process.cwd(), './codeSnippets');
-const jsonDoc = require(snippetsFolder + '/docs.json');
+const jsDoc = require(snippetsFolder + '/docs.json');
 const _ = require('lodash');
 const fs = require('fs');
 
@@ -51,8 +52,9 @@ function writeCodeSnippetFile(codeSnippets, filepath) {
 
 const codeSnippets = findAllCodeSnippetsInJsDoc(jsDoc);
 const operationsWithHeader = ['redirectUrl'];
-writeCodeSnippetFile(codeSnippets, snippetsFolder + '/index.json');
-console.log('JS code snippets saved to: jsSnippets.json');
+const jssnippetspath = path.join(snippetsFolder, '/index.json');
+writeCodeSnippetFile(codeSnippets, jssnippetspath);
+console.log(`JS code snippets saved to: ${jssnippetspath}`);
 
 // write typescript file for syntax testing
 codeSnippets.forEach((snippets, operationId) => {
@@ -70,21 +72,16 @@ codeSnippets.forEach((snippets, operationId) => {
       ${joinSnippets(snippets)}
     })();
   `;
-  fs.writeFileSync(`${snippetsFolder}/${operationId}.ts`, codeToTest);
+  fs.writeFileSync(path.join(snippetsFolder, `${operationId}.ts`), codeToTest);
 });
 
-const jssnippetspath = path.join(snippetsFolder, './index.json');
-fs.writeFileSync(jssnippetspath, JSON.stringify(resultJson, null, 2) + '\n');
-console.log(`JS code snippets saved to: ${jssnippetspath}`);
-
-// write tsconfig file
 const tsconfig = {};
 tsconfig.include = ['*.ts'];
 tsconfig.compilerOptions = {
   noUnusedLocals: false,
-  outDir: "dist",
+  outDir: 'dist',
   declaration: false,
-  sourceMap: false
+  sourceMap: false,
 };
 
 // We make a tsconfig.build.json that extends the normal tsconfig.build.json
