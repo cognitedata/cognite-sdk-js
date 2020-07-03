@@ -22,6 +22,7 @@ import {
 } from './login';
 import { MetadataMap } from './metadata';
 import { getBaseUrl, isUsingSSL, projectUrl } from './utils';
+import { version } from '../package.json';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -355,7 +356,7 @@ export default class BaseCogniteClient {
   }
 
   protected get version() {
-    return 'unreleased';
+    return `${version}-core`;
   }
 
   protected apiFactory = <ApiType>(
