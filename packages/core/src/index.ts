@@ -2,12 +2,13 @@
 import * as Constants from './constants';
 import * as GraphUtils from './graphUtils';
 import * as TestUtils from './testUtils';
+export * from './types';
 
 export { MetadataMap } from './metadata';
 export { BaseResourceAPI } from './baseResourceApi';
 export { default as BaseCogniteClient } from './baseCogniteClient';
 export * from './baseCogniteClient';
-export * from './types';
+
 export { CDFHttpClient } from './httpClient/cdfHttpClient';
 export { CogniteError } from './error';
 export { CogniteMultiError } from './multiError';
