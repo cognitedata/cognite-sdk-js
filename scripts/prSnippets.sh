@@ -21,10 +21,9 @@ git checkout -b "$branchName"
 
 echo "Copying stable SDK's code snippets"
 cp "../${stablePackage}/codeSnippets/index.json" ./versions/v1/js-sdk-examples.json
-if ! git diff --quiet ; then
+git add ./versions/v1/js-sdk-examples.json
+if git commit -m "$message" ; then
     echo "service contracts code snippets have changed. making pull request"
-    git add ./versions/v1/js-sdk-examples.json
-    git commit -m "$message"
     git push origin "$branchName" >/dev/null 2>&1
     hub pull-request -m "$message" >/dev/null 2>&1
     echo "pull request made"
