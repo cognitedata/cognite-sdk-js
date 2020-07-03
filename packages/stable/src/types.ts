@@ -11,7 +11,7 @@ import {
   Limit,
 } from '@cognite/sdk-core';
 
-export * from '@cognite/sdk-core/dist/src/types';
+export * from '@cognite/sdk-core';
 
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
