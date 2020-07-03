@@ -18,6 +18,7 @@ export class RetryableHttpClient extends BasicHttpClient {
     request: HttpRequest
   ): Promise<HttpResponse<ResponseType>> {
     let retryCount = 0;
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const response = await super.rawRequest<ResponseType>(request);
       const shouldRetry = this.retryValidator(request, response, retryCount);

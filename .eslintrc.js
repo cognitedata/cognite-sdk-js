@@ -1,5 +1,6 @@
 module.exports = {
     root: true,
+    ignorePatterns: ['node_modules/', 'dist/'],
     extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended', //Add typescript plugin and recomended rules
@@ -28,8 +29,6 @@ module.exports = {
 
         //added manually while migrating from tslint
         "@typescript-eslint/ban-types": "off",
-        "@typescript-eslint/no-empty-function": "off",
-        "no-constant-condition": "off" //makes while(true) illegal
     },
     env: {
         browser: true,
