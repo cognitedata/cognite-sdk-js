@@ -9,10 +9,8 @@ git checkout $TRAVIS_BRANCH
 git config --global user.email "cognite-cicd@users.noreply.github.com"
 git config --global user.name "Cognite CICD"
 
-# Find the new remote with github token, careful not to leak secrets
-OLD_REMOTE="$(git remote get-url origin)"
-REPO_PATH=$(echo $OLD_REMOTE | sed -En "s/^.*github.com.(.*)/\1/p")
-git remote set-url origin "https://$GITHUB_TOKEN@github.com/$REPO_PATH" > /dev/null 2>&1
+# Setting remote with token, with hard coded repo name
+git remote set-url origin "https://$GITHUB_TOKEN@github.com/cognitedata/cognite-sdk-js.git" > /dev/null 2>&1
 echo "Set git origin with token!"
 
 GH_TOKEN="$GITHUB_TOKEN" #Used by lerna version
