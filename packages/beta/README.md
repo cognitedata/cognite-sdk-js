@@ -27,6 +27,6 @@ import { CogniteClient } from '@congite/sdk';
 ## Documentation
 
 When you import `CogniteClient` from the beta sdk, you will in reality get the subclass `CogniteClientBeta`.
-See the typedoc [here](https://cognitedata.github.io/cognite-sdk-js/beta/classes/cogniteclientbeta.html).
+See the reference doc [here](https://cognitedata.github.io/cognite-sdk-js/beta/classes/cogniteclientbeta.html).
 
 The beta API is mostly a superset of stable. See the [stable readme](https://github.com/cognitedata/cognite-sdk-js/blob/v1/packages/stable/README.md).

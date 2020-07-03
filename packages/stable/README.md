@@ -4,6 +4,7 @@ The package `@cognite/sdk` provides convenient access to the stable [Cognite API
 from applications written in client- or server-side javascript.
 
 The SDK supports authentication through api-keys (_for server-side applications_) and bearer tokens (for web applications).
+See [Authentication Guide](https://github.com/cognitedata/cognite-sdk-js/blob/v1/guides/authentication.md).
 
 ## Installation
 
@@ -80,7 +81,6 @@ quickstart();
 
 ## Documentation
 
- - [API documentation](https://doc.cognitedata.com)
  - [API reference documentation](https://doc.cognitedata.com/api/v1)
  - [CogniteClient typedoc](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)
 
