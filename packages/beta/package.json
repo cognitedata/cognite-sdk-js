@@ -21,11 +21,7 @@
   },
   "dependencies": {
     "@cognite/sdk": "2.32.0",
-    "@cognite/sdk-core": "1.0.0",
-    "cross-fetch": "^3.0.4",
-    "lodash": "^4.17.11",
-    "query-string": "^5.1.1",
-    "url": "^0.11.0"
+    "@cognite/sdk-core": "1.0.0"
   },
   "publishConfig": {
     "access": "public"
