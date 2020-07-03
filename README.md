@@ -5,7 +5,7 @@
 Cognite Javascript SDK
 ======================
 [![Build Status](https://travis-ci.org/cognitedata/cognite-sdk-js.svg?branch=v1)](https://travis-ci.org/cognitedata/cognite-sdk-js)
-[![codecov](https://codecov.io/gh/cognitadata/cognite-sdk-js/branch/v1/graph/badge.svg)](https://codecov.io/gh/cognitedata/cognite-sdk-js)
+[![codecov](https://codecov.io/gh/cognitedata/cognite-sdk-js/branch/v1/graph/badge.svg)](https://codecov.io/gh/cognitedata/cognite-sdk-js)
 
 The Cognite js library provides convenient access to the [Cognite API](https://doc.cognitedata.com/dev/) from
 applications written in client- or server-side JavaScript.
@@ -32,8 +32,9 @@ See [monorepo.md](./guides/monorepo.md) for details.
 
 ### Testing
 
-There is one integration test that requires an api key. In order to run this, you need an api key for the `cognitesdk-js` tenant. Talk to any of the contributors or leave an issue and it'll get sorted. Travis will run the test and has its own api key.
-Set the environment variable `COGNITE_PROJECT` to `cognitesdk-js` and `COGNITE_CREDENTIALS` to your api-key.
+This repo contains some integration tests that require a CDF api key for `cognitesdk-js` tenant.
+Talk to any of the contributors or leave an issue and it'll get sorted.
+Travis will run the test and has its own api key.
 
 Run all tests:
 
@@ -58,7 +59,7 @@ Contributions welcome! See the [code of conduct](./CODE_OF_CONDUCT.md).
 
 ### Release
 
-Our releases are fully [automated](https://github.com/semantic-release/semantic-release).
+Our releases are fully [automated](https://github.com/lerna/lerna/tree/master/commands/version).
 Only basic steps are needed:
 
 1. Create a new branch

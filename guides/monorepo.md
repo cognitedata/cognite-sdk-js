@@ -31,6 +31,8 @@ each other exactly.
 Each package has both `tsconfig.json` and `tsconfig.build.json`.
 The difference is that `tsconfig.json` uses path aliases to reference the source folders of other packages.
 This allows IDEs to visit source code across packages when going to definition.
+Otherwise, Ctrl-clicking types from another package would open `dist/**/*.d.ts` files.
+
 The `tsconfig.build.json` files don't do any path aliasing, so when building or linting
 we use `dist/index.js` and `dist/src/**/*.d.ts` from the other packages.
 To make sure all `dist/` folders are up to date, build all packages
@@ -45,10 +47,14 @@ Package specific configuration is mostly specifying output folder, and extending
 file in the project root. You only need to specify output folder in build configuration,
 since your IDE will reference by source through path aliases.
 
-Note that tests are excluded in `tsconfig.build.json`, but are otherwise included
-to make vscode handle Go To Definition from inside tests.
-This convention of `tsconfig.build.json` also includes the code snippet extraction,
-so you can go to definition from a code snippet.
+Tests are written in typescript, but are explicitly excluded in `tsconfig.build.json`.
+This means test are not compiled with the build, but by `jest` when tests are run.
+To make the IDE experience better, tests are not excluded in `tsconfig.json`.
+This means you can still use Go To Definition from test into source, and even into other packages.
+When running tests, however, packages' `dist/index.js` files are used, so run `yarn build` first.
+
+In the rare event you open up the generated `codeSnippets/` folder manually, you can also there
+use Go To Definition thanks to different `tsconfig.json` and `tsconfig.build.json` files.
 
 ## Versioning
 Commits need to follow [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines). Once they are merged, CI uses the script `scripts/versionAndPush.sh`, which uses `lerna version`.
