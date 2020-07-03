@@ -25,8 +25,8 @@ if ! git diff --quiet ; then
     echo "service contracts code snippets have changed. making pull request"
     git add ./versions/v1/js-sdk-examples.json
     git commit -m "$message"
-    git push origin "$branchName"
-    hub pull-request -m "$message"
+    git push origin "$branchName" >/dev/null 2>&1
+    hub pull-request -m "$message" >/dev/null 2>&1
     echo "pull request made"
 else
     echo "no changes made to code snippets, not opening service contracts pr"
