@@ -3,10 +3,7 @@ module.exports = {
   mode: 'file',
   module: 'umd',
   target: 'ES6',
-  exclude: [
-    '**/__tests__/**',
-    '**/node_modules/**'
-  ],
+  exclude: ['**/__tests__/**', '**/node_modules/**'],
   out: './docs/',
   // theme: 'markdown',
   readme: 'README.md',
@@ -16,5 +13,5 @@ module.exports = {
   excludePrivate: true,
   excludeProtected: true,
   includeDeclarations: true,
-  excludeExternals: false
+  excludeExternals: false,
 };
