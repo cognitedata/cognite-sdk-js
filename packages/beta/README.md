@@ -11,12 +11,13 @@ or with npm
 $ npm install @cognite/sdk@npm:@cognite/sdk-beta --save
 ```
 
-This will install the beta package as a dependency, but under the normal sdk name.
+This will install the package `@cognite/sdk-beta` as a dependency, but aliased as `@cognite/sdk`.
 In `package.json`, it will look like this:
 ```
     "@cognite/sdk": "npm:@cognite/sdk-beta@^X.X.X"
 ```
 
+This will dowload `@cognite/sdk-beta` and pretend it is `@cognite/sdk`.
 With the beta package installed under an alias, you don't need to modify your code
 to access beta features. Import the `CogniteClient` as you normally would:
 ```js
@@ -25,9 +26,7 @@ import { CogniteClient } from '@congite/sdk';
 
 ## Documentation
 
-Though it looks like the normal `CogniteClient`, it's actually named `CogniteClassBeta`.
+When you import `CogniteClient` from the beta sdk, you will in reality get `CogniteClientBeta`.
 See the typedoc [here](https://cognitedata.github.io/cognite-sdk-js/beta/classes/cogniteclientbeta.html).
-
-\[beta API reference\](TODO: link to beta api reference here)
 
 The beta API is mostly a superset of stable. See the [stable readme](https://github.com/cognitedata/cognite-sdk-js/blob/v1/packages/stable/README.md).
