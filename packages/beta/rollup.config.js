@@ -25,7 +25,7 @@ export default {
     json({
       // All JSON files will be parsed by default,
       // but you can also specifically include/exclude files
-      include: ['./package.json', '../stable/package.json'],
+      include: ['./package.json'],
 
       // for tree-shaking, properties will be declared as
       // variables, using either `var` or `const`
