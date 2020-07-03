@@ -9,7 +9,8 @@ module.exports = {
     ],
     plugins: [
         '@typescript-eslint',
-        'prettier'
+        'prettier',
+        'header'
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -30,6 +31,12 @@ module.exports = {
         //added manually while migrating from tslint
         "@typescript-eslint/ban-types": "off",
     },
+    overrides: [{
+        files: ['**/src/*'],
+        rules: {
+            "header/header": [2, "line", [{"pattern": "Copyright \\d{4} Cognite AS"}]]
+        }
+    }],
     env: {
         browser: true,
         node: true
