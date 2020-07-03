@@ -9,7 +9,7 @@ module.exports = {
   collectCoverage: false,
   moduleNameMapper: {
     '^lodash-es$': 'lodash',
-    '^sdk-([a-z]+)\/(.+)$': '<rootDir>/packages/$1/src/$2',
+    '^sdk-([a-z]+)/(.+)$': '<rootDir>/packages/$1/src/$2',
   },
   testURL: 'https://localhost',
 };
