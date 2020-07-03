@@ -95,6 +95,29 @@ Samples are in the [samples/](./samples) directory. The samples' [README.md](./s
 - [API documentation](https://doc.cognitedata.com)
 - [API reference documentation](https://doc.cognitedata.com/api/v1)
 
+## Best practices
+
+### No submodule imports
+
+We highly recommend avoid importing anything from internal sdk modules.
+
+All interfaces and functions should only be imported from the top level, otherwise you might face compatibility issues when our internal structure changes.  
+
+**Bad:**
+```
+import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination'; // ❌
+import { AssetsAPI } from '@cognite/sdk/dist/src/resources/assets/assetsApi'; // ❌
+
+let assetsApi: AssetsAPI; // ❌
+```
+
+**Good:**
+```
+import { CogniteAsyncIterator } from '@cognite/sdk'; // ✅
+
+let assetsApi: CogniteClient['assets']; // ✅
+```
+
 ## Migration
 
 See [this guide](./guides/MIGRATION_GUIDE_1xx_2xx.md) on how to migrate from version `1.x.x` to version `2.x.x`.
