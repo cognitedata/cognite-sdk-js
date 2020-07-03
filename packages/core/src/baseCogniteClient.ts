@@ -211,6 +211,7 @@ export default class BaseCogniteClient {
       );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const onTokens = options.onTokens || (() => {});
     const onAuthenticate =
       options.onAuthenticate === POPUP
@@ -349,7 +350,9 @@ export default class BaseCogniteClient {
     this.httpClient.addOneTimeHeader(X_CDF_SDK_HEADER, value);
   }
 
-  protected initAPIs() {}
+  protected initAPIs() {
+    // will be overritten by subclasses
+  }
 
   protected get version() {
     return 'unreleased';

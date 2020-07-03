@@ -212,12 +212,15 @@ describe('CogniteClient', () => {
 
       beforeEach(() => {
         mockLoginSilently = jest.spyOn(Login, 'loginSilently');
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         mockLoginSilently.mockImplementation(() => {});
 
         mockRedirect = jest.spyOn(Login, 'loginWithRedirect');
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         mockRedirect.mockImplementation(async () => {});
 
         mockPopup = jest.spyOn(Login, 'loginWithPopup');
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         mockPopup.mockImplementation(async () => {});
       });
 

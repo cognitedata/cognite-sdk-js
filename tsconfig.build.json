@@ -1,4 +1,4 @@
 {
   "extends": "./tsconfig.common",
-  "exclude": ["**/__tests__/**", "*.unit.spec.ts"]
+  "exclude": ["**/__tests__/**", "**/*.spec.ts", "**/*.test.ts"]
 }

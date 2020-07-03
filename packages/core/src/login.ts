@@ -89,6 +89,7 @@ export async function loginSilently(
 ): Promise<null | AuthTokens> {
   if (isAuthIFrame()) {
     // don't resolve when inside iframe (we don't want to do any logic)
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return new Promise<null>(() => {});
   }
 
