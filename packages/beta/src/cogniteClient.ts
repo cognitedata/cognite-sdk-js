@@ -9,10 +9,9 @@ export default class CogniteClientBeta extends CogniteClientStable {
   /**
    * Create a new SDK client (beta)
    *
-   * @param options Client options
-   *
-   * To use the beta sdk, alias `"@cognite/sdk": "@cognite/sdk-beta@^<version>"` in `package.json`
-   * The beta SDK exports the client with the same name as stable, meaning you don't need to change any code.
+   * For smooth transition between stable sdk and beta, you may create an alias
+   * `"@cognite/sdk": "@cognite/sdk-beta@^<version>"` in `package.json`
+   * The beta SDK exports the client with the same name as stable, meaning you don't need to change any imports.
    * ```js
    * import { CogniteClient } from '@cognite/sdk';
    *
@@ -21,13 +20,15 @@ export default class CogniteClientBeta extends CogniteClientStable {
    * // can also specify a base URL
    * const client = new CogniteClient({ ..., baseUrl: 'https://greenfield.cognitedata.com' });
    * ```
+   *
+   * @param options Client options
    */
   constructor(options: ClientOptions) {
     super(options);
   }
 
   protected get version() {
-    return `${version} (@cognite/sdk-beta)`;
+    return `${version}-beta`;
   }
 }
 
