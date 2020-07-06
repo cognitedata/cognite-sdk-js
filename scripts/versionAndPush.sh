@@ -10,7 +10,7 @@ git config --global user.email "cognite-cicd@users.noreply.github.com"
 git config --global user.name "Cognite CICD"
 
 # Setting remote with token, with hard coded repo name
-git remote set-url origin "https://$GITHUB_TOKEN@github.com/cognitedata/cognite-sdk-js.git" > /dev/null 2>&1
+git remote set-url origin "https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git" > /dev/null 2>&1
 echo "Set git origin with token!"
 
 GH_TOKEN="$GITHUB_TOKEN" #Used by lerna version
