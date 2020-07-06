@@ -21,7 +21,7 @@ describe('createClientWithApiKey - integration', () => {
     await expect(
       client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Request failed | status code: 401"`
+      `"Request failed <this is a test from haved/cognite-sdk-js> | status code: 401"`
     );
   });
 });
