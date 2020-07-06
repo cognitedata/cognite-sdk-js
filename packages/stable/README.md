@@ -82,7 +82,7 @@ quickstart();
 ## Documentation
 
  - [API reference documentation](https://doc.cognitedata.com/api/v1)
- - [CogniteClient typedoc](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)
+ - [JS SDK reference documentation](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)
 
 The API reference documentation contains snippets for each endpoint,
 giving examples of SDK use. See also the [samples section](https://github.com/cognitedata/cognite-sdk-js#samples) in this repo.
