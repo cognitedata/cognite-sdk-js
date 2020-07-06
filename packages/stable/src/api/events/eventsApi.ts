@@ -1,22 +1,31 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
-  AggregateResponse,
+  BaseResourceAPI,
+  CursorAndAsyncIterator,
+  CDFHttpClient,
+  MetadataMap,
+} from '@cognite/sdk-core';
+import {
   CogniteEvent,
-  EventAggregateQuery,
   EventChange,
   EventFilterRequest,
   EventSearchRequest,
   EventSort,
-  EventUniqueValuesAggregate,
-  UniqueValuesAggregateResponse,
   ExternalEvent,
   IdEither,
   IgnoreUnknownIds,
 } from '../../types';
+import { EventsAggregateAPI } from './eventsAggregateApi';
 
 export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
+  private aggregateAPI: EventsAggregateAPI;
+
+  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
+    super(...args);
+    this.aggregateAPI = new EventsAggregateAPI(...args);
+  }
+
   /**
    * [Create events](https://doc.cognitedata.com/api/v1/#operation/createEvents)
    *
@@ -46,37 +55,6 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
     const { sort: sortObject = {}, ...rest } = scope || {};
     const query = { sort: this.convertSortObjectToArray(sortObject), ...rest };
     return super.listEndpoint(this.callListEndpointWithPost, query);
-  };
-
-  /**
-   * [Aggregate events](https://docs.cognite.com/api/v1/#operation/aggregateEvents)
-   *
-   * ```js
-   * const aggregates = await client.events.aggregate({ filter: { assetIds: [1, 2, 3] } });
-   * console.log('Number of events: ', aggregates[0].count)
-   * ```
-   */
-  public aggregate = (
-    query: EventAggregateQuery
-  ): Promise<AggregateResponse[]> => {
-    return super.aggregateEndpoint(query);
-  };
-
-  /**
-   * [Aggregate events](https://docs.cognite.com/api/v1/#operation/aggregateEvents)
-   *
-   * ```js
-   * const uniqueValues = await client.events.uniqueValuesAggregate({ filter: { assetIds: [1, 2, 3] }, fields: ['subtype'] });
-   * console.log('Unique values: ', uniqueValues)
-   * ```
-   */
-  public uniqueValuesAggregate = (
-    query: EventUniqueValuesAggregate
-  ): Promise<UniqueValuesAggregateResponse[]> => {
-    return super.aggregateEndpoint({
-      ...query,
-      aggregate: 'uniqueValues',
-    });
   };
 
   /**
@@ -130,6 +108,16 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
   public delete = (ids: IdEither[]) => {
     return super.deleteEndpoint(ids);
   };
+
+  /**
+   * The aggregation API allows you to compute aggregated results on events like getting the count of all events
+   * in a project or checking what are all the different types and subtypes of events in your project,
+   * along with the count of events in each of those aggregations.
+   * By specifying an additional filter, you can also aggregate only among events matching the specified filter.
+   */
+  public get aggregate() {
+    return this.aggregateAPI;
+  }
 
   private convertSortObjectToArray(sortObject: EventSort) {
     return Object.entries(sortObject).map(
