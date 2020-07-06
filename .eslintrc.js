@@ -34,7 +34,12 @@ module.exports = {
     overrides: [{
         files: ['**/src/*'],
         rules: {
-            "header/header": [2, "line", [{"pattern": "Copyright \\d{4} Cognite AS"}]]
+            "header/header": [2, "line",
+                [{
+                    "pattern": " Copyright \\d{4} Cognite AS",
+                    "template": " Copyright 2020 Cognite AS"
+                }]
+            ]
         }
     }],
     env: {
