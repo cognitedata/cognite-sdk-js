@@ -10,8 +10,8 @@ env:
     - COGNITE_PROJECT=cognitesdk-js
 
 # On the latest version of node we do everything
-# This is the version that gets deployed if of branch
-# On old version of node, we only run tests
+# This is the version that gets deployed if on main branch
+# On old versions of node we only build and run tests
 jobs:
   include:
   - node_js: "8"
