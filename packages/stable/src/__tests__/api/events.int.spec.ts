@@ -85,7 +85,7 @@ describe('Events integration test', () => {
   });
 
   test('count aggregate', async () => {
-    const aggregates = await client.events.aggregate({
+    const aggregates = await client.events.aggregate.count({
       filter: {
         source: 'WORKMATE',
       },
@@ -95,7 +95,7 @@ describe('Events integration test', () => {
   });
 
   test('values aggregate', async () => {
-    const aggregates = await client.events.uniqueValuesAggregate({
+    const aggregates = await client.events.aggregate.uniqueValues({
       filter: {
         source: 'WORKMATE',
       },
