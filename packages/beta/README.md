@@ -17,7 +17,7 @@ In `package.json`, it will look like this:
     "@cognite/sdk": "npm:@cognite/sdk-beta@^X.X.X"
 ```
 
-This will dowload `@cognite/sdk-beta` and pretend it is `@cognite/sdk`.
+This will download `@cognite/sdk-beta` and pretend it is `@cognite/sdk`.
 With the beta package installed under an alias, you don't need to modify your code
 to access beta features. Import the `CogniteClient` as you normally would:
 ```js
