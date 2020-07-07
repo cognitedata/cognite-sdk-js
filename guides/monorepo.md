@@ -1,6 +1,7 @@
 # Monorepo
 The sdk is implemented with several npm packages, all contained in the `packages/` folder.
 We use `lerna` to run commands in all repos, and also to configure versions.
+This document goes into details and hacks needed to develop the repo, and is not needed by end users.
 
 ## Structure
  - `packages/stable/` - holds `@cognite/sdk`, the stable SDK
@@ -56,11 +57,32 @@ When running tests, however, packages' `dist/index.js` files are used, so run `y
 In the rare event you open up the generated `codeSnippets/` folder manually, you can also there
 use Go To Definition thanks to different `tsconfig.json` and `tsconfig.build.json` files.
 
-## Versioning
-Commits need to follow [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines). Once they are merged, CI uses the script `scripts/versionAndPush.sh`, which uses `lerna version`.
-This will individually update versions of packages based on the commit messages affecting each package.
-References between packages are also updated. A list of changes are commited to `CHANGELOG.md` in each package.
-After bumping versions, the new packages are uploaded to npm using `lerna release`.
+## Versioning and releasing
+We use semantic versioning, with version numbers bumped by CI/CD.
+Commits need to follow [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines).
+Changes are released once they are pushed to the main branch.
+CI uses the script `scripts/versionAndPush.sh`, which uses `lerna version`.
+
+### About Lerna version 
+Our setup has lerna individually update versions of packages based on the messages of commits affecting each package.
+It will also document the changes to each package's `CHANGELOG.md`.
+You can make the changelog clearer by specifying scope in commit messages, like `feat(assets):`
+
+If no changes were made in a package, or the commits only affect files ignored by `lerna version` (see lerna.json),
+the package will not be updated.
+
+ - All commits, even `docs:` or `test:` will cause a PATCH bump if they change files not ignored by lerna.
+ - Commits that start with `fix:` will bump PATCH, and will be displayed in the changelog under `Bug Fixes`.
+ - Commits that start with `feat:` will cause a bump to the MINOR version, and show as `Features`
+ - Commits with `feat!:`, `fix!:` etc. or with a `BREAKING CHANGE:` footer will cause a MAJOR version bump.
+
+**Note:** The `BREAKING CHANGE:` footer is parsed very precisely, you are encouraged to use `!` in the header. 
+
+If multiple commits are made, the most significant bump is made.
+References between packages are also updated, so even if a package has no commits,
+its PATCH can still be bumped to reference the latest versions of bumped dependecies.
+
+After bumping versions, a commit is made with updates to `package.json`-files and `CHANGELOG.md` files.
 
 ## Adding new packages
 To add a new package, copy whatever is needed from another package, and give it a unique name in `package.json`.
