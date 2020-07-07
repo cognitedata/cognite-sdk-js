@@ -11,7 +11,20 @@ import {
   Limit,
 } from '@cognite/sdk-core';
 
-export * from '@cognite/sdk-core';
+export {
+  CogniteExternalId,
+  CogniteInternalId,
+  Cursor,
+  ExternalId,
+  FilterQuery,
+  IdEither,
+  InternalId,
+  Limit,
+  LogoutUrl,
+  CursorResponse,
+  ItemsWrapper,
+  ClientOptions,
+} from '@cognite/sdk-core';
 
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
