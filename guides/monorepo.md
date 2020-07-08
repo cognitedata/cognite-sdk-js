@@ -60,10 +60,10 @@ use Go To Definition thanks to different `tsconfig.json` and `tsconfig.build.jso
 ## Versioning and releasing
 We use semantic versioning, with version numbers bumped by CI/CD.
 Commits need to follow [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines).
-Changes are released once they are pushed to the main branch.
+Changes are released once they are pushed to the release branch.
 CI uses the script `scripts/versionAndPush.sh`, which uses `lerna version`.
 
-### About Lerna version 
+### About Lerna version
 Our setup has lerna individually update versions of packages based on the messages of commits affecting each package.
 It will also document the changes to each package's `CHANGELOG.md`.
 You can make the changelog clearer by specifying scope in commit messages, like `feat(assets):`
