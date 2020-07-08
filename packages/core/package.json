@@ -12,6 +12,7 @@
     "test": "jest --config=../../jest.config.js --testPathPattern=/core/",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
+    "prepublishOnly": "yarn build",
     "build": "yarn clean && yarn rollup -c && yarn esCheck",
     "watch": "rollup -cw",
     "esCheck": "es-check es5 './dist/index.js'"

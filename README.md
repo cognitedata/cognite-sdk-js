@@ -19,7 +19,9 @@ There is also a [beta API](./packages/beta/README.md).
 
 ## Samples
 
-Samples are in the [samples/](./samples) directory. The samples' [README.md](./samples/README.md) has instructions for running the samples.
+There are small bare-bones javascript (and typescript) projects in the `samples/` directory.
+They show how to include the cognite SDK in various project setups.
+The samples' [README.md](./samples/README.md) has instructions for running the samples.
 
 ## License
 
@@ -28,7 +30,11 @@ Samples are in the [samples/](./samples) directory. The samples' [README.md](./s
 ## Development
 
 The sdk is implemented as a package in a monorepo, together with core logic, beta versions and samples.
-See [monorepo.md](./guides/monorepo.md) for details.
+
+### Contributing
+
+Contributions welcome! 
+For details about commiting changes, automated versioning and releases, see [Contributing](./CONTRIBUTING.md).
 
 ### Testing
 
@@ -50,22 +56,8 @@ We use `jest` to run tests, see [their documentation](https://github.com/faceboo
 
 ### Versioning
 
-The library follow [Semantic Versioning](https://semver.org/).
+The libraries follow [Semantic Versioning](https://semver.org/).
 Package versions are updated automatically and individually based on commit messages.
-
-### Contributing
-
-Contributions welcome! See the [code of conduct](./CODE_OF_CONDUCT.md).
-
-### Release
-
-Our releases are fully [automated](https://github.com/lerna/lerna/tree/master/commands/version).
-Only basic steps are needed:
-
-1. Create a new branch
-2. Commit changes (if any) and remember about [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)
-6. Create a new pull request
-7. A new version will be published when the PR is merged
 
 ### CHANGELOG
 

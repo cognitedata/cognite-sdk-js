@@ -12,6 +12,7 @@
     "test": "jest --config=../../jest.config.js --testPathPattern=/beta/",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
+    "prepublishOnly": "yarn build",
     "build": "yarn clean && rollup -c && yarn esCheck",
     "watch": "rollup -cw",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
