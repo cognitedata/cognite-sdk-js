@@ -43,10 +43,6 @@ to keep git tags correct.
 Documentation is also built and deployed from the release branch.
 If the code snippets have changed, a pr is made to the service contracts repo.
 
-If you really want to not release everything from main, you may have to
-merge the pull request from `release` with a merge commit (new hash),
-possibly rebase and force push to main, and maybe move release tags manually.
-
 ## Patching older major versions
 
 If you need to backport a fix to a previous MAJOR version of a package,
