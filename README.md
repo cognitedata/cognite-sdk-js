@@ -99,7 +99,7 @@ Samples are in the [samples/](./samples) directory. The samples' [README.md](./s
 
 ### No submodule imports
 
-We highly recommend avoid importing anything from internal sdk modules.
+We highly recommend avoiding importing anything from internal SDK modules.
 
 All interfaces and functions should only be imported from the top level, otherwise you might face compatibility issues when our internal structure changes.  
 
@@ -118,7 +118,7 @@ import { CogniteAsyncIterator } from '@cognite/sdk'; // ✅
 let assetsApi: CogniteClient['assets']; // ✅
 ```
 
-You may leverage [eslint](https://eslint.org/docs/rules/no-restricted-imports) to free yourself from memorizing those rules:
+We recommend the usage of [eslint](https://eslint.org/docs/rules/no-restricted-imports) to ensure this best practice is enforced without having to memorize the patterns:
 
 **.eslintrc.json:**
 
