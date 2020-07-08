@@ -41,6 +41,7 @@ It is important that the commit is pushed with the same hash,
 to keep git tags correct.
 
 Documentation is also built and deployed from the release branch.
+If the code snippets have changed, a pr is made to the service contracts repo.
 
 If you really want to not release everything from main, you may have to
 merge the pull request from `release` with a merge commit (new hash),
@@ -86,7 +87,7 @@ yarn
 yarn build
 ```
 
-Then go to `packages/core` (or whatever package you are packporting to), and run:
+Then go to `packages/core` (or whatever package you are backporting to), and run:
 ```bash
 npm version patch -m "backport fix to %s for reasons"
 npm publish
