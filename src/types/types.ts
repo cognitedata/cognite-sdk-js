@@ -1200,8 +1200,9 @@ export interface IgnoreUnknownIds {
  */
 export interface InputProjectAuthentication {
   azureADConfiguration?: AzureADConfigurationDTO;
-  validDomains?: ValidDomains;
   oAuth2Configuration?: OAuth2ConfigurationDTO;
+  validDomains?: ValidDomains;
+  applicationDomains?: ApplicationDomains;
 }
 
 /**
@@ -1452,6 +1453,7 @@ export type ObjectPatch =
  */
 export interface OutputProjectAuthentication {
   validDomains?: ValidDomains;
+  applicationDomains?: ApplicationDomains;
 }
 
 /**
@@ -2173,6 +2175,11 @@ export type UrlName = string;
  * List of valid domains. If left empty, any user registered with the OAuth2 provider will get access.
  */
 export type ValidDomains = string[];
+
+/**
+ * List of domains permitted for redirects. Redirects as part of a login flow may only target a domain (or subdomain) on this list. If this list is set to be empty, it will not be possible to use a login flow.
+ */
+export type ApplicationDomains = string[];
 
 /**
  * The file ID of the data file for this resource, with multiple versions supported.
