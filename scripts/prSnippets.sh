@@ -2,7 +2,9 @@
 # exit when any command fails (DON'T -x !!)
 set -e
 
-# reqiures jq and hub to be installed
+sudo add-apt-repository -y ppa:cpick/hub
+sudo apt-get -y update
+sudo apt-get install -y hub jq
 
 stablePackage="packages/stable"
 packageVersion=$(jq -r ".version" "${stablePackage}/package.json")

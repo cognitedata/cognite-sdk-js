@@ -2,6 +2,13 @@
 # exit upon error (DON'T -x !!)
 set -e
 
+if ! [[ $TRAVIS_COMMIT_MESSAGE =~ "[release]" ]]; then
+    echo "Not a release commit, skipping version bumping and releasing"
+    exit 0
+fi
+
+echo "A release commit!"
+
 # Don't be in detached head mode
 echo "Checking out \$TRAVIS_BRANCH: $TRAVIS_BRANCH"
 git checkout $TRAVIS_BRANCH

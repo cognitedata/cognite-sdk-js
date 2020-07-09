@@ -58,10 +58,7 @@ In the rare event you open up the generated `codeSnippets/` folder manually, you
 use Go To Definition thanks to different `tsconfig.json` and `tsconfig.build.json` files.
 
 ## Versioning and releasing
-We use semantic versioning, with version numbers bumped by CI/CD.
-Commits need to follow [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines).
-Changes are released once they are pushed to the release branch.
-CI uses the script `scripts/versionAndPush.sh`, which uses `lerna version`.
+See [Contributing](../CONTRIBUTING.md).
 
 ### About Lerna version
 Our setup has lerna individually update versions of packages based on the messages of commits affecting each package.

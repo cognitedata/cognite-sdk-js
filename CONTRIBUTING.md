@@ -24,24 +24,35 @@ only use squashing if the resulting squash commit can accuratly describe the cha
 Once the change is pushed to the main branch, it is time for a release.
 
 ## Releases & Versioning
-Releases happen from a separate branch, called `release`. This is because lerna eagarly publishes
-whenever files in a package have changed. Tests and markdown files are ignored, but all other changes will trigger
-at minimum a PATCH bumb.
+Releases are done from the main branch, so when a pull request is merged,
+CI/CD will run tests, and if successful, do deploys.
+Documentation is built and deployed, and code snippets
+are exported to the service contract repo as a pull request.
 
-**Always** push the HEAD of the main branch to `release`.
-This will trigger a deploy on travis CI.
-Here lerna will look at changes since the last release (by using git tags),
-and find out what changes have occured, and what commit messages affect each package.
-Eventual version bumps will be made to `package.json` files automatically,
-and commit descriptions will be appended to changelogs.
-The changes are then committed back to the `release` branch and tagged.
-Packages are published to npm, and a github release is made.
-A pull request is opened back to the main branch.
-It is important that the commit is pushed with the same hash,
-to keep git tags correct.
+Updating and uploading npm packages only happens if the HEAD commit of the main branch
+contains `[release]` in its description. When CI/CD sees this, it will use lerna to update
+package versions of changed packages based on commit messages, and add the 
+changes to the changelogs. The changes are comitted to the main branch
+with the new versions as git tags, and the new package versions are uploaded to npm.
 
-Documentation is also built and deployed from the release branch.
-If the code snippets have changed, a pr is made to the service contracts repo.
+We restrict new npm releases to `[release]`-tagged commits becuase lerna is
+quite agressive in its versioning. Changes to any file not ignored by lerna will
+cause a PATCH bump. Markdown files and tests are ignored, but chaning anything else,
+like a comment in a source file, will trigger a new version,
+irrespective of conventional commits.
+
+This does *not* mean you should store unfinished work on the main branch.
+Another package may be ready for release, and once anyone pushes a `[release]`
+commit, all changed packages are updated.
+
+Also keep in mind that the `[release]` commit has to be the HEAD of
+main, as versioning pushes a new commit, and no changes can happen between.
+
+If you want to manually trigger a release
+```
+git commit --allow-empty -m "chore: trigger [release]"
+git push
+```
 
 ## Patching older major versions
 
@@ -73,7 +84,7 @@ git checkout tags/@cognite/sdk-core@2.38.1 -b @cognite/sdk-core@2.x
 
 Now we have a branch for our changes, in case we later need to backport more things.
 In this branch, make your changes, and push them to GitHub.
-We are not using CI/CD for publishing, but by pushing them we can at least
+We are not using CI/CD for publishing, but by pushing changes we can at least
 see automated tests run on the branch. Make sure they pass!
 
 Once you are ready to make the new version, and have pushed everything to git,
