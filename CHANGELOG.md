@@ -3,9 +3,7 @@
 
 ### Features
 
-* added application domains to return type as well ([533c27b](https://github.com/cognitedata/cognite-sdk-js/commit/533c27be75730ebae4db87069163d2a04253d8fd))
-* added application domains to return type as well ([42fde61](https://github.com/cognitedata/cognite-sdk-js/commit/42fde615502f7f673f715db552f100bfb45b66f1))
-* added application domains to the project update object ([83c67ec](https://github.com/cognitedata/cognite-sdk-js/commit/83c67ec7c693eb4b0e7df0670299a7b27e99743e))
+* **projects:** added application domains to the update object ([83c67ec](https://github.com/cognitedata/cognite-sdk-js/commit/83c67ec7c693eb4b0e7df0670299a7b27e99743e))
 
 # [2.32.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.31.0...v2.32.0) (2020-06-26)
 
