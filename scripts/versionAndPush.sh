@@ -35,6 +35,3 @@ echo "Running lerna publish"
 # We don't have prepublish lifecycle scripts, but the packages are already built either way
 yarn lerna publish from-package --yes --no-git-reset
 echo "Ran lerna publish!"
-
-echo "Making pull request back into GitHub main branch"
-hub pull-request -m "update versions in release" >/dev/null 2>&1
