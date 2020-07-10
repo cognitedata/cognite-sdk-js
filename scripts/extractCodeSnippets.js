@@ -89,9 +89,3 @@ tsconfig.extends = '../../../tsconfig.build.json';
 const tsbuildconfigpath = path.join(snippetsFolder, './tsconfig.build.json');
 fs.writeFileSync(tsbuildconfigpath, JSON.stringify(tsconfig, null, 2) + '\n');
 console.log(`TS build config for code snippets saved to: ${tsbuildconfigpath}`);
-
-// We also make a tsconfig.json for IDEs only that includes path aliases
-tsconfig.extends = '../../../tsconfig.json';
-const tsconfigpath = path.join(snippetsFolder, './tsconfig.json');
-fs.writeFileSync(tsconfigpath, JSON.stringify(tsconfig, null, 2) + '\n');
-console.log(`TS config for code snippets saved to: ${tsconfigpath}`);
