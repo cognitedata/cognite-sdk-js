@@ -37,22 +37,18 @@ with the new versions as git tags, and the new package versions are uploaded to 
 
 We restrict new npm releases to `[release]`-tagged commits becuase lerna is
 quite agressive in its versioning. Changes to any file not ignored by lerna will
-cause a PATCH bump. Markdown files and tests are ignored, but chaning anything else,
+cause a PATCH bump. Markdown files and tests are ignored, but changing anything else,
 like a comment in a source file, will trigger a new version,
 irrespective of conventional commits.
 
 This does *not* mean you should store unfinished work on the main branch.
-Another package may be ready for release, and once anyone pushes a `[release]`
-commit, all changed packages are updated.
+Another package may be ready for release, and once a `[release]`
+commit is pushed, all changed packages are updated.
+Repository administators should be in controll of `[release]` commits.
 
 Also keep in mind that the `[release]` commit has to be the HEAD of
-main, as versioning pushes a new commit, and no changes can happen between.
-
-If you want to manually trigger a release
-```
-git commit --allow-empty -m "chore: trigger [release]"
-git push
-```
+main, and travis only runs on the HEAD. If HEAD has changed by the time
+the versiong happens, travis will fail.
 
 ## Patching older major versions
 

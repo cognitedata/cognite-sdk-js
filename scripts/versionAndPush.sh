@@ -13,6 +13,12 @@ echo "A release commit!"
 echo "Checking out \$TRAVIS_BRANCH: $TRAVIS_BRANCH"
 git checkout $TRAVIS_BRANCH
 
+# Check if anything has changed in any package
+if ! yarn lerna changed; then
+    echo "Nothing has changed"
+    exit 0
+fi
+
 git config --global user.email "cognite-cicd@users.noreply.github.com"
 git config --global user.name "Cognite CICD"
 
@@ -22,6 +28,7 @@ echo "Set git origin with token!"
 
 GH_TOKEN="$GITHUB_TOKEN" #Used by lerna version
 # Lerna makes a commit (with [skip ci] in message)
+# Will fail if upstream head has changed in the meantime
 echo "Running lerna version"
 yarn lerna version --conventional-commits --no-private --yes
 echo "Ran lerna version!"
