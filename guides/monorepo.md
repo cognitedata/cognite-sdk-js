@@ -54,9 +54,6 @@ To make the IDE experience better, tests are not excluded in `tsconfig.json`.
 This means you can still use Go To Definition from test into source, and even into other packages.
 When running tests, however, packages' `dist/index.js` files are used, so run `yarn build` first.
 
-In the rare event you open up the generated `codeSnippets/` folder manually, you can also there
-use Go To Definition thanks to different `tsconfig.json` and `tsconfig.build.json` files.
-
 ## Versioning and releasing
 See [Contributing](../CONTRIBUTING.md).
 
