@@ -18,7 +18,14 @@ export {
   HttpResponse,
   HttpHeaders,
   HttpResponseType,
+  HttpMethod,
 } from './httpClient/basicHttpClient';
+export {
+  createUniversalRetryValidator,
+  createRetryValidator,
+  EndpointList,
+  RetryValidator,
+} from './httpClient/retryValidator';
 export {
   getLogoutUrl,
   getIdInfo,
