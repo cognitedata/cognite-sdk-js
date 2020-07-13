@@ -12,18 +12,26 @@ import {
 } from '@cognite/sdk-core';
 
 export {
-  CogniteExternalId,
-  CogniteInternalId,
-  Cursor,
-  ExternalId,
+  ListResponse,
+  CursorResponse,
+  ItemsResponse,
+  ItemsWrapper,
   FilterQuery,
+  Cursor,
+  Limit,
   IdEither,
   InternalId,
-  Limit,
+  ExternalId,
+  CogniteExternalId,
+  CogniteInternalId,
   LogoutUrl,
-  CursorResponse,
-  ItemsWrapper,
-  ClientOptions,
+  LogoutUrlResponse,
+  CursorAndAsyncIterator,
+  CogniteAsyncIterator,
+  AutoPagingEachHandler,
+  AutoPagingEach,
+  AutoPagingToArrayOptions,
+  AutoPagingToArray,
 } from '@cognite/sdk-core';
 
 export interface Acl<ActionsType, ScopeType> {

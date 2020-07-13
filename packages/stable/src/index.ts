@@ -7,6 +7,7 @@ export {
   CogniteError,
   CogniteMultiError,
   CogniteLoginError,
+  ClientOptions,
   AuthTokens,
   AuthenticateParams,
   AuthorizeOptions,
