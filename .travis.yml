@@ -31,7 +31,7 @@ deploy:
     skip_cleanup: true
     on:
       branch: v1
-      condition: $DEPLOY_BUILD = true
+      condition: $DEPLOY_BUILD = true && $TRAVIS_COMMIT_MESSAGE =~ "[release]"
     script: bash scripts/versionAndPush.sh
 
   - provider: pages
@@ -41,11 +41,11 @@ deploy:
     local_dir: docs
     on:
       branch: v1
-      condition: $DEPLOY_BUILD = true
+      condition: $DEPLOY_BUILD = true && $TRAVIS_COMMIT_MESSAGE =~ "[release]"
 
   - provider: script
     skip_cleanup: true
     on:
       branch: v1
-      condition: $DEPLOY_BUILD = true
+      condition: $DEPLOY_BUILD = true && $TRAVIS_COMMIT_MESSAGE =~ "[release]"
     script: bash scripts/prSnippets.sh
