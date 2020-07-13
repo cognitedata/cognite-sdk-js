@@ -46,6 +46,14 @@ Another package may be ready for release, and once a `[release]`
 commit is pushed, all changed packages are updated.
 Repository administators should be in controll of `[release]` commits.
 
+To add a release commit to a clean working tree, use the command
+```bash
+git checkout v1
+git pull
+git commit --allow-empty -m "chore: trigger [release]"
+git push
+```
+
 Also keep in mind that the `[release]` commit has to be the HEAD of
 main, and travis only runs on the HEAD. If HEAD has changed by the time
 the versiong happens, travis will fail.
