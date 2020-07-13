@@ -32,5 +32,12 @@ export {
   OnAuthenticateLoginObject,
 } from './login';
 export { RevertableArraySorter } from './revertableArraySorter';
-export { sleepPromise, transformDateInRequest, apiUrl } from './utils';
+export {
+  sleepPromise,
+  transformDateInRequest,
+  apiUrl,
+  promiseAllAtOnce,
+  promiseAllWithData,
+  promiseEachInSequence,
+} from './utils';
 export { TestUtils, Constants, GraphUtils };

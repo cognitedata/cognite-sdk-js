@@ -13,7 +13,7 @@ import {
   setupLoggedInClient,
 } from '../testUtils';
 
-const testfile = join(__dirname, "../test3dFile.fbx");
+const testfile = join(__dirname, '../test3dFile.fbx');
 
 describe('Files integration test', () => {
   let client: CogniteClient;

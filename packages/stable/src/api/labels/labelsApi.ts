@@ -1,6 +1,6 @@
 // Copyright 2019 Cognite AS
 
-import { CursorAndAsyncIterator, BaseResourceAPI } from '@cognite/sdk';
+import { CursorAndAsyncIterator, BaseResourceAPI } from '@cognite/sdk-core';
 import {
   ExternalId,
   ExternalLabelDefinition,

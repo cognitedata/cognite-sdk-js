@@ -13,6 +13,7 @@ import { DataSetsApi } from './api/datasets/datasetsApi';
 import { EventsAPI } from './api/events/eventsApi';
 import { FilesAPI } from './api/files/filesApi';
 import { GroupsAPI } from './api/groups/groupsApi';
+import { LabelsAPI } from './api/labels/labelsApi';
 import { ProjectsAPI } from './api/projects/projectsApi';
 import { RawAPI } from './api/raw/rawApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
@@ -38,6 +39,9 @@ export default class CogniteClient extends BaseCogniteClient {
   }
   public get files() {
     return accessApi(this.filesApi);
+  }
+  public get labels() {
+    return accessApi(this.labelsApi);
   }
   public get raw() {
     return accessApi(this.rawApi);
@@ -82,6 +86,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
   private filesApi?: FilesAPI;
+  private labelsApi?: LabelsAPI;
   private rawApi?: RawAPI;
   private projectsApi?: ProjectsAPI;
   private groupsApi?: GroupsAPI;
@@ -118,6 +123,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.sequencesApi = this.apiFactory(SequencesAPI, 'sequences');
     this.eventsApi = this.apiFactory(EventsAPI, 'events');
     this.filesApi = this.apiFactory(FilesAPI, 'files');
+    this.labelsApi = this.apiFactory(LabelsAPI, 'labels');
     this.datasetsApi = this.apiFactory(DataSetsApi, 'datasets');
     this.rawApi = this.apiFactory(RawAPI, 'raw/dbs');
     this.groupsApi = this.apiFactory(GroupsAPI, 'groups');
