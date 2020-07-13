@@ -44,7 +44,7 @@ irrespective of conventional commits.
 This does *not* mean you should store unfinished work on the main branch.
 Another package may be ready for release, and once a `[release]`
 commit is pushed, all changed packages are updated.
-Repository administators should be in controll of `[release]` commits.
+Repository administrators should be in control of `[release]` commits.
 
 To add a release commit to a clean working tree, use the command
 ```bash
