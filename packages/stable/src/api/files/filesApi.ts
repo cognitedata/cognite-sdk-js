@@ -8,22 +8,22 @@ import {
 } from '@cognite/sdk-core';
 import {
   CogniteInternalId,
-  ExternalFilesMetadata,
+  ExternalFileInfo,
   FileAggregate,
   FileAggregateQuery,
   FileChangeUpdate,
   FileContent,
   FileLink,
   FileRequestFilter,
-  FilesMetadata,
+  FileInfo,
   FilesSearchFilter,
   IdEither,
   IgnoreUnknownIds,
   ItemsWrapper,
-  UploadFileMetadataResponse,
+  FileUploadResponse,
 } from '../../types';
 
-export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
+export class FilesAPI extends BaseResourceAPI<FileInfo> {
   /**
    * [Upload a file](https://doc.cognitedata.com/api/v1/#operation/initFileUpload)
    *
@@ -38,13 +38,13 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    * ```
    */
   public upload = (
-    metadata: ExternalFilesMetadata,
+    fileInfo: ExternalFileInfo,
     fileContent?: FileContent,
     overwrite: boolean = false,
     waitUntilAcknowledged: boolean = false
-  ): Promise<UploadFileMetadataResponse | FilesMetadata> => {
+  ): Promise<FileUploadResponse | FileInfo> => {
     return this.uploadEndpoint(
-      metadata,
+      fileInfo,
       fileContent,
       overwrite,
       waitUntilAcknowledged
@@ -61,7 +61,7 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
    */
   public list = (
     scope?: FileRequestFilter
-  ): CursorAndAsyncIterator<FilesMetadata> => {
+  ): CursorAndAsyncIterator<FileInfo> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
@@ -88,7 +88,7 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
   public retrieve = (
     ids: IdEither[],
     params: FileRetrieveParams = {}
-  ): Promise<FilesMetadata[]> => {
+  ): Promise<FileInfo[]> => {
     return super.retrieveEndpoint(ids, params);
   };
 
@@ -151,7 +151,7 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
   };
 
   private async uploadEndpoint(
-    metadata: ExternalFilesMetadata,
+    fileInfo: ExternalFileInfo,
     fileContent?: FileContent,
     overwrite: boolean = false,
     waitUntilAcknowledged: boolean = false
@@ -165,16 +165,13 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
 
     const params = { overwrite };
     const path = this.url();
-    const response = await this.httpClient.post<UploadFileMetadataResponse>(
-      path,
-      {
-        params,
-        data: metadata,
-      }
-    );
+    const response = await this.httpClient.post<FileUploadResponse>(path, {
+      params,
+      data: fileInfo,
+    });
     const file = response.data;
     if (fileContent != null) {
-      await this.uploadFile(file.uploadUrl, fileContent, metadata.mimeType);
+      await this.uploadFile(file.uploadUrl, fileContent, fileInfo.mimeType);
     }
     if (waitUntilAcknowledged) {
       const uploadedFile = await this.waitUntilFileIsUploaded(file.id);
@@ -196,7 +193,7 @@ export class FilesAPI extends BaseResourceAPI<FilesMetadata> {
   // TODO: refactor - similar to RetryableHttpClient.rawRequest
   private async waitUntilFileIsUploaded(
     fileId: CogniteInternalId
-  ): Promise<FilesMetadata> {
+  ): Promise<FileInfo> {
     const MAX_RETRIES = 10;
     const DELAY_IN_MS = 500;
     let retryCount = 0;

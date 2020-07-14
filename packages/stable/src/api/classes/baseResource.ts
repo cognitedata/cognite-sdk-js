@@ -4,9 +4,7 @@ import CogniteClient from '../../cogniteClient';
 
 /** @hidden */
 export abstract class BaseResource<T> {
-  protected client: CogniteClient;
-
-  constructor(client: CogniteClient) {
+  constructor(protected client: CogniteClient) {
     this.client = client;
     Object.defineProperty(this, 'client', {
       value: this.client,

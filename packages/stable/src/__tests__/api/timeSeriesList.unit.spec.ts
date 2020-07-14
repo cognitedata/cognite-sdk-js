@@ -3,17 +3,14 @@ import { uniqBy } from 'lodash';
 import * as nock from 'nock';
 import { TimeSeriesList } from '../../api/classes/timeSeriesList';
 import CogniteClient from '../../cogniteClient';
-import {
-  DatapointsPostDatapoint,
-  PostTimeSeriesMetadataDTO,
-} from '../../types';
+import { ExternalDatapoints, ExternalTimeSeries } from '../../types';
 import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
 
 describe('TimeSeriesList class unit test', async () => {
   let client: CogniteClient;
   let createdTimeSeries: TimeSeriesList;
-  let datapointArray: DatapointsPostDatapoint[] = [];
-  let timeseriesArray: PostTimeSeriesMetadataDTO[] = [];
+  let datapointArray: ExternalDatapoints[] = [];
+  let timeseriesArray: ExternalTimeSeries[] = [];
   beforeAll(async () => {
     client = setupMockableClient();
     nock.cleanAll();

@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { TimeSeries } from '../../api/classes/timeSeries';
+import { TimeSeriesImpl } from '../../api/classes/timeSeries';
 import CogniteClient from '../../cogniteClient';
 import {
   Asset,
@@ -8,7 +8,7 @@ import {
   CogniteInternalId,
   DataSet,
   DataSetFilterRequest,
-  FilesMetadata,
+  FileInfo,
   NullableSinglePatchLong,
   Sequence,
 } from '../../types';
@@ -81,7 +81,7 @@ describe('data sets integration test', () => {
   });
   describe('files data sets', () => {
     let dataSetId: CogniteInternalId;
-    let file: FilesMetadata;
+    let file: FileInfo;
 
     beforeAll(() => {
       dataSetId = datasets[0].id;
@@ -188,7 +188,7 @@ describe('data sets integration test', () => {
     });
   });
   describe('timeseries data sets', () => {
-    let timeseries: TimeSeries;
+    let timeseries: TimeSeriesImpl;
     let dataSetId: CogniteInternalId;
 
     beforeAll(() => {
@@ -206,7 +206,7 @@ describe('data sets integration test', () => {
     test('list', async () => {
       await runTestWithRetryWhenFailing(async () => {
         const filteredTimeseries = await client.timeseries
-          .list(dataSetFilter(dataSetId).filter)
+          .list(dataSetFilter(dataSetId))
           .autoPagingToArray();
 
         expect(filteredTimeseries.length).toBeTruthy();
