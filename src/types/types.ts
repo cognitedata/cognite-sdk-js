@@ -578,7 +578,12 @@ export interface LabelsPatch {
   remove?: Label[];
 }
 
-export interface ExternalLabelDefinition extends Label {
+export interface ExternalLabelDefinition {
+  /**
+   * The label's external id.
+   */
+  externalId: string;
+  
   /**
    * Name of the label.
    */
