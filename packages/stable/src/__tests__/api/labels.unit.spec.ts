@@ -1,11 +1,11 @@
 // Copyright 2019 Cognite AS
 import * as nock from 'nock';
-import { CogniteClient, ExternalLabelDefinition } from '../..';
+import { CogniteClient, ExternalLabel } from '../..';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('Labels unit test', () => {
   let client: CogniteClient;
-  const externalLabels: ExternalLabelDefinition[] = [
+  const externalLabels: ExternalLabel[] = [
     { externalId: 'PUMP', name: 'Pump' },
     {
       externalId: 'ROTATING_EQUIPMENT',

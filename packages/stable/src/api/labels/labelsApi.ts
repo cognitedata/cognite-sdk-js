@@ -3,14 +3,14 @@
 import { CursorAndAsyncIterator, BaseResourceAPI } from '@cognite/sdk-core';
 import {
   ExternalId,
-  ExternalLabelDefinition,
-  LabelDefinition,
-  LabelDefinitionFilterRequest,
+  ExternalLabel,
+  Label,
+  LabelFilterRequest,
 } from '../../types';
 
-export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
+export class LabelsAPI extends BaseResourceAPI<Label> {
   /**
-   * [Create labels](https://docs.cognite.com/api/v1/#operation/createLabelDefinitions)
+   * [Create labels](https://docs.cognite.com/api/v1/#operation/createLabels)
    *
    * ```js
    * const labels = [
@@ -20,9 +20,7 @@ export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
    * const createdLabels = await client.labels.create(labels);
    * ```
    */
-  public create = (
-    items: ExternalLabelDefinition[]
-  ): Promise<LabelDefinition[]> => {
+  public create = (items: ExternalLabel[]): Promise<Label[]> => {
     return super.createEndpoint(items);
   };
 
@@ -33,9 +31,7 @@ export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
    * const labels = await client.labels.list({ filter: { externalIdPrefix: 'Pu'}});
    * ```
    */
-  public list = (
-    query?: LabelDefinitionFilterRequest
-  ): CursorAndAsyncIterator<LabelDefinition> => {
+  public list = (query?: LabelFilterRequest): CursorAndAsyncIterator<Label> => {
     return super.listEndpoint(this.callListEndpointWithPost, query);
   };
 

@@ -354,7 +354,7 @@ export interface AssetFilterProps {
   /**
    * Return only the assets matching the specified label constraints.
    */
-  labels?: LabelFilter;
+  labels?: AttachedLabelFilter;
   metadata?: Metadata;
   source?: AssetSource;
   createdTime?: DateRange;
@@ -422,7 +422,7 @@ export interface AssetPatch {
     description?: SinglePatchString;
     dataSetId?: NullableSinglePatchLong;
     metadata?: ObjectPatch;
-    labels?: LabelsPatch;
+    labels?: AttachedLabelsPatch;
     source?: SinglePatchString;
   };
 }
@@ -571,30 +571,37 @@ export interface DataSetChangeByExternalId extends DataSetPatch, ExternalId {}
 
 export interface DataSetChangeById extends DataSetPatch, InternalId {}
 
-export type Label = ExternalId;
+export type AttachedLabel = ExternalId;
 
-export type LabelFilter = LabelContainsAnyFilter | LabelContainsAllFilter;
+export type AttachedLabelFilter =
+  | AttachedLabelContainsAnyFilter
+  | AttachedLabelContainsAllFilter;
 
-export interface LabelContainsAnyFilter {
-  containsAny: Label[];
+export interface AttachedLabelContainsAnyFilter {
+  containsAny: AttachedLabel[];
 }
 
-export interface LabelContainsAllFilter {
-  containsAll: Label[];
+export interface AttachedLabelContainsAllFilter {
+  containsAll: AttachedLabel[];
 }
 
-export interface LabelsPatch {
+export interface AttachedLabelsPatch {
   /**
    * A list of labels to add to the resource
    */
-  add?: Label[];
+  add?: AttachedLabel[];
   /**
    * A list of labels to remove to the resource
    */
-  remove?: Label[];
+  remove?: AttachedLabel[];
 }
 
-export interface ExternalLabelDefinition extends Label {
+export interface ExternalLabel {
+  /**
+   * The label's external id.
+   */
+  externalId: string;
+
   /**
    * Name of the label.
    */
@@ -606,13 +613,13 @@ export interface ExternalLabelDefinition extends Label {
   description?: string;
 }
 
-export interface LabelDefinition extends ExternalLabelDefinition {
+export interface Label extends ExternalLabel {
   createdTime: Date;
 }
 
-export interface LabelDefinitionFilter {
+export interface LabelFilter {
   /**
-   * Returns the label definitions matching that name.
+   * Returns the labels matching that name.
    */
   name?: string;
 
@@ -622,8 +629,8 @@ export interface LabelDefinitionFilter {
   externalIdPrefix?: ExternalIdPrefix;
 }
 
-export interface LabelDefinitionFilterRequest extends FilterQuery {
-  filter?: LabelDefinitionFilter;
+export interface LabelFilterRequest extends FilterQuery {
+  filter?: LabelFilter;
 }
 
 /**
@@ -917,7 +924,7 @@ export interface ExternalAsset {
   dataSetId?: CogniteInternalId;
   metadata?: Metadata;
   source?: AssetSource;
-  labels?: Label[];
+  labels?: AttachedLabel[];
 }
 
 export interface ExternalAssetItem extends ExternalAsset {

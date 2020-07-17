@@ -14,7 +14,7 @@ import {
   AssetSource,
   CogniteExternalId,
   CogniteInternalId,
-  Label,
+  AttachedLabel,
   Metadata,
 } from '../../types';
 import { AssetList } from './assetList';
@@ -40,7 +40,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
   public aggregates?: AssetAggregateResult;
   public parentExternalId?: CogniteExternalId;
   public dataSetId?: CogniteInternalId;
-  public labels?: Label[];
+  public labels?: AttachedLabel[];
 
   constructor(client: CogniteClient, props: TypeAsset) {
     super(client);
