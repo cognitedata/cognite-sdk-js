@@ -16,7 +16,7 @@ const DEFAULT_MAX_RETRY_ATTEMPTS = 5;
 
 export const createRetryValidator = (
   endpointsToRetry: EndpointList,
-  maxRetries: number
+  maxRetries: number = DEFAULT_MAX_RETRY_ATTEMPTS
 ): RetryValidator => {
   const universalRetryValidator = createUniversalRetryValidator(maxRetries);
   return (

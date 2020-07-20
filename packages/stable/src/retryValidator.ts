@@ -1,13 +1,7 @@
 // Copyright 2020 Cognite AS
 
-import {
-  createRetryValidator,
-  EndpointList,
-  RetryValidator,
-} from '@cognite/sdk-core';
+import { createRetryValidator, EndpointList } from '@cognite/sdk-core';
 import { HttpMethod } from '@cognite/sdk-core';
-
-const MAX_RETRY_ATTEMPTS = 5;
 
 const ENDPOINTS_TO_RETRY: EndpointList = {
   [HttpMethod.Post]: [
@@ -31,7 +25,4 @@ const ENDPOINTS_TO_RETRY: EndpointList = {
   ],
 };
 
-export const retryValidator: RetryValidator = createRetryValidator(
-  ENDPOINTS_TO_RETRY,
-  MAX_RETRY_ATTEMPTS
-);
+export const retryValidator = createRetryValidator(ENDPOINTS_TO_RETRY);
