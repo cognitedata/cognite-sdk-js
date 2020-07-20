@@ -5,10 +5,11 @@ es
 build
 lib
 yarn-error.log
+lerna-debug.log
 .rpt2_cache
 dist
 docs
 .firebase
 .DS_Store
 .idea
-codeSnippets/
+codeSnippets

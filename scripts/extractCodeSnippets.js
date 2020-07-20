@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const snippetsFolder = path.join(__dirname, '../codeSnippets');
+const snippetsFolder = path.join(process.cwd(), './codeSnippets');
 const jsDoc = require(snippetsFolder + '/docs.json');
 const _ = require('lodash');
 const fs = require('fs');
-const tsconfig = require('../tsconfig.json');
 
 function stripMarkdownCodeSnippet(rawCode) {
   return rawCode
@@ -52,8 +52,9 @@ function writeCodeSnippetFile(codeSnippets, filepath) {
 
 const codeSnippets = findAllCodeSnippetsInJsDoc(jsDoc);
 const operationsWithHeader = ['redirectUrl'];
-writeCodeSnippetFile(codeSnippets, snippetsFolder + '/index.json');
-console.log('JS code snippets saved to: jsSnippets.json');
+const jssnippetspath = path.join(snippetsFolder, '/index.json');
+writeCodeSnippetFile(codeSnippets, jssnippetspath);
+console.log(`JS code snippets saved to: ${jssnippetspath}`);
 
 // write typescript file for syntax testing
 codeSnippets.forEach((snippets, operationId) => {
@@ -71,17 +72,20 @@ codeSnippets.forEach((snippets, operationId) => {
       ${joinSnippets(snippets)}
     })();
   `;
-  fs.writeFileSync(`${snippetsFolder}/${operationId}.ts`, codeToTest);
+  fs.writeFileSync(path.join(snippetsFolder, `${operationId}.ts`), codeToTest);
 });
 
-// write tsconfig file
+const tsconfig = {};
 tsconfig.include = ['*.ts'];
-tsconfig.compilerOptions.noUnusedLocals = false;
+tsconfig.compilerOptions = {
+  noUnusedLocals: false,
+  outDir: 'dist',
+  declaration: false,
+  sourceMap: false,
+};
 
-fs.writeFileSync(
-  snippetsFolder + '/tsconfig.json',
-  JSON.stringify(tsconfig, null, 2) + '\n'
-);
-console.log(
-  `TS config for code snippets saved to: ${snippetsFolder}/tsconfig.json`
-);
+// We make a tsconfig.build.json that extends the normal tsconfig.build.json
+tsconfig.extends = '../../../tsconfig.build.json';
+const tsbuildconfigpath = path.join(snippetsFolder, './tsconfig.build.json');
+fs.writeFileSync(tsbuildconfigpath, JSON.stringify(tsconfig, null, 2) + '\n');
+console.log(`TS build config for code snippets saved to: ${tsbuildconfigpath}`);
