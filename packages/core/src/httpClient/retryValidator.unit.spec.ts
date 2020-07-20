@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 import { HttpMethod, HttpRequest, HttpResponse } from './basicHttpClient';
-import { cdfRetryValidator } from './cdfRetryValidator';
+import { createRetryValidator } from './retryValidator';
 
 describe('cdfRetryValidator', () => {
   const baseRequest = {
@@ -37,35 +37,40 @@ describe('cdfRetryValidator', () => {
     status: 500,
   };
 
+  const endpointList = {
+    [HttpMethod.Post]: ['/assets/list'],
+  };
+  const retryValidator = createRetryValidator(endpointList, 5);
+
   test("don't retry 2xx", () => {
-    expect(cdfRetryValidator(getRequest, response200, 0)).toBeFalsy();
+    expect(retryValidator(getRequest, response200, 0)).toBeFalsy();
   });
 
   test('only retry reasonable times', () => {
-    expect(cdfRetryValidator(getRequest, response500, 10)).toBeFalsy();
+    expect(retryValidator(getRequest, response500, 10)).toBeFalsy();
   });
 
   test('retry GET 500', () => {
-    expect(cdfRetryValidator(getRequest, response500, 0)).toBeTruthy();
+    expect(retryValidator(getRequest, response500, 0)).toBeTruthy();
   });
 
   test('retry GET 429', () => {
-    expect(cdfRetryValidator(getRequest, response429, 0)).toBeTruthy();
+    expect(retryValidator(getRequest, response429, 0)).toBeTruthy();
   });
 
   test("don't retry generic POST 500", () => {
-    expect(cdfRetryValidator(postRequest, response500, 0)).toBeFalsy();
+    expect(retryValidator(postRequest, response500, 0)).toBeFalsy();
   });
 
   test('retry POST 500 to retryable endpoint', () => {
-    expect(cdfRetryValidator(postRetryRequest, response500, 0)).toBeTruthy();
+    expect(retryValidator(postRetryRequest, response500, 0)).toBeTruthy();
   });
 
   test("don't retry POST 4xx (except 429) to retryable endpoint", () => {
-    expect(cdfRetryValidator(postRetryRequest, response415, 0)).toBeFalsy();
+    expect(retryValidator(postRetryRequest, response415, 0)).toBeFalsy();
   });
 
   test("don't retry GET 4xx (except 429)", () => {
-    expect(cdfRetryValidator(getRequest, response415, 0)).toBeFalsy();
+    expect(retryValidator(getRequest, response415, 0)).toBeFalsy();
   });
 });
