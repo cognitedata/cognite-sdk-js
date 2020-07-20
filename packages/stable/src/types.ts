@@ -1082,7 +1082,7 @@ export interface FilesSearchFilter extends FileFilter {
   };
 }
 
-export interface DatapointAggregate extends DatapointMetadata {
+export interface DatapointAggregate extends DatapointInfo {
   average?: number;
   max?: number;
   min?: number;
@@ -1095,15 +1095,15 @@ export interface DatapointAggregate extends DatapointMetadata {
   totalVariation?: number;
 }
 
-export interface DatapointMetadata {
+export interface DatapointInfo {
   timestamp: Date;
 }
 
-export interface DoubleDatapoint extends DatapointMetadata {
+export interface DoubleDatapoint extends DatapointInfo {
   value: number;
 }
 
-export interface StringDatapoint extends DatapointMetadata {
+export interface StringDatapoint extends DatapointInfo {
   value: string;
 }
 
@@ -1950,13 +1950,13 @@ export const SortOrder = {
  */
 export type SortOrder = 'asc' | 'desc';
 
-export interface SyntheticDataError extends DatapointMetadata {
+export interface SyntheticDataError extends DatapointInfo {
   error: string;
 }
 
 export type SyntheticDatapoint = SyntheticDataValue | SyntheticDataError;
 
-export interface SyntheticDataValue extends DatapointMetadata {
+export interface SyntheticDataValue extends DatapointInfo {
   value: number;
 }
 
