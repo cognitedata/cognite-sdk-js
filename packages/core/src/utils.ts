@@ -118,7 +118,6 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
 }
 
 /** @hidden */
-// TODO: refactor
 export async function promiseAllWithData<RequestType, ResponseType>(
   inputs: RequestType[],
   promiser: (input: RequestType) => Promise<ResponseType>,

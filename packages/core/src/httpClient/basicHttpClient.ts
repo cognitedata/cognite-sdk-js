@@ -142,7 +142,7 @@ export class BasicHttpClient {
 
   protected async postRequest<T>(
     response: HttpResponse<T>,
-    _: HttpRequest
+    _: HttpRequest // eslint-disable-line
   ): Promise<HttpResponse<T>> {
     const requestIsOk = BasicHttpClient.validateStatusCode(response.status);
     if (!requestIsOk) {

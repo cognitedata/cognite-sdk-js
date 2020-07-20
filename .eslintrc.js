@@ -25,7 +25,6 @@ module.exports = {
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/ban-ts-comment": "off",
         "react/prop-types": "off",
-        "@typescript-eslint/no-unused-vars": "off",
         "prettier/prettier": "error",
 
         //added manually while migrating from tslint
