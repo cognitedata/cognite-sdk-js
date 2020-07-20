@@ -2,7 +2,7 @@ Contributing
 ============
 
 Contributions are welcome, and this document details how changes can be made and submitted,
-and eventually included in a relase. We use monorepo tooling, and a git setup for CI/CD.a PATCH bump 
+and eventually included in a release. We use monorepo tooling, and a git setup for CI/CD PATCH bump 
 
 Please note we have a [code of conduct](./CODE_OF_CONDUCT.md).
 
@@ -20,7 +20,7 @@ We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
 
 ## Pull request
 Make a pull request from your branch to the main branch. When merging the pull request,
-only use squashing if the resulting squash commit can accuratly describe the change as a single conventional commit.
+only use squashing if the resulting squash commit can accurately describe the change as a single conventional commit.
 Once the change is pushed to the main branch, it is time for a release.
 
 ## Releases & Versioning
@@ -35,8 +35,8 @@ package versions of changed packages based on commit messages, and add the
 changes to the changelogs. The changes are comitted to the main branch
 with the new versions as git tags, and the new package versions are uploaded to npm.
 
-We restrict new npm releases to `[release]`-tagged commits becuase lerna is
-quite agressive in its versioning. Changes to any file not ignored by lerna will
+We restrict new npm releases to `[release]`-tagged commits because lerna is
+quite aggressive in its versioning. Changes to any file not ignored by lerna will
 cause a PATCH bump. Markdown files and tests are ignored, but changing anything else,
 like a comment in a source file, will trigger a new version,
 irrespective of conventional commits.
@@ -54,9 +54,9 @@ git commit --allow-empty -m "chore: trigger [release]"
 git push
 ```
 
-Also keep in mind that the `[release]` commit has to be the HEAD of
+Also, keep in mind that the `[release]` commit has to be the HEAD of
 main, and travis only runs on the HEAD. If HEAD has changed by the time
-the versiong happens, travis will fail.
+the versioning happens, travis will fail.
 
 ## Patching older major versions
 

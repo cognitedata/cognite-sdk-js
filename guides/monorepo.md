@@ -19,7 +19,7 @@ To `build`, `clean`, `test`, `lint` or `lint:fix`, run the command like so:
 $ yarn <command>
 ```
 If in the root folder, the operation is run in all packages (excluding samples), in topological order.
-Remember to build all packages before testing, and the enviroment variables needed to run certain tests.
+Remember to build all packages before testing, and the environment variables needed to run certain tests.
 
 ## Cross references
 `@cognite/sdk` is dependent on a specific version of `@cognite/sdk-core`,
@@ -62,7 +62,7 @@ Our setup has lerna individually update versions of packages based on the messag
 It will also document the changes to each package's `CHANGELOG.md`.
 You can make the changelog clearer by specifying scope in commit messages, like `feat(assets):`
 
-If no changes were made in a package, or the commits only affect files ignored by `lerna version` (see lerna.json),
+If no changes are made in a package, or the commits only affect files ignored by `lerna version` (see lerna.json),
 the package will not be updated.
 
  - All commits, even `docs:` or `test:` will cause a PATCH bump if they change files not ignored by lerna.
