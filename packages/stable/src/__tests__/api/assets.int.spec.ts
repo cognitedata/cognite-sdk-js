@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { CogniteError, CogniteMultiError } from '@cognite/sdk-core';
-import { Asset as AssetClass } from '../../api/classes/asset';
+import { AssetImpl } from '../../api/classes/asset';
 import CogniteClient from '../../cogniteClient';
 import { Asset } from '../../types';
 import {
@@ -205,18 +205,22 @@ describe('Asset integration test', () => {
   });
 
   test('list', async () => {
-    const response = await client.assets.list({ limit: 1 });
-    expect(response.nextCursor).toBeDefined();
-    expect(response.items).toBeDefined();
-    expect(response.items[0].id).toBeDefined();
-    expect(response.items[0]).toBeInstanceOf(AssetClass);
+    const { nextCursor, items } = await client.assets.list({
+      limit: 1,
+      partition: '1/10',
+    });
+    expect(nextCursor).toBeDefined();
+    expect(items).toBeDefined();
+    expect(items[0].id).toBeDefined();
+    expect(items[0]).toBeInstanceOf(AssetImpl);
+    expect(items.length).toBe(1);
   });
 
   test('list.next', async () => {
     const response = await client.assets.list({ limit: 1 });
     expect(response.next).toBeDefined();
     const nextPage = await response.next!();
-    expect(nextPage.items[0]).toBeInstanceOf(AssetClass);
+    expect(nextPage.items[0]).toBeInstanceOf(AssetImpl);
   });
 
   test('list with autoPaging', async () => {
@@ -320,12 +324,6 @@ describe('Asset integration test', () => {
       .list({ limit: 1 })
       .autoPagingToArray({ limit });
     expect(result.length).toBe(limit);
-  });
-
-  test('list partition', async () => {
-    const limit = 5;
-    const result = await client.assets.list({ partition: '1/10', limit });
-    expect(result.items.length).toBe(limit);
   });
 
   test('delete', async () => {

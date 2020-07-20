@@ -4,14 +4,14 @@ import {
   CogniteExternalId,
   CogniteInternalId,
   DatapointsMultiQuery,
-  GetTimeSeriesMetadataDTO,
+  Timeseries,
   LatestDataPropertyFilter,
   Metadata,
 } from '../../types';
 import { BaseResource } from './baseResource';
 
-export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
-  implements GetTimeSeriesMetadataDTO {
+export class TimeseriesImpl extends BaseResource<Timeseries>
+  implements Timeseries {
   public externalId?: CogniteExternalId;
   public name?: string;
   public isString: boolean;
@@ -26,7 +26,7 @@ export class TimeSeries extends BaseResource<GetTimeSeriesMetadataDTO>
   public lastUpdatedTime: Date;
   public id: CogniteInternalId;
 
-  constructor(client: CogniteClient, props: GetTimeSeriesMetadataDTO) {
+  constructor(client: CogniteClient, props: Timeseries) {
     super(client);
     this.externalId = props.externalId;
     this.name = props.name;

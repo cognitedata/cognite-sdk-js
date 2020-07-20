@@ -10,7 +10,7 @@ import { RevertableArraySorter } from '@cognite/sdk-core';
 import { chunk } from 'lodash';
 import CogniteClient from '../../cogniteClient';
 import {
-  Asset as TypeAsset,
+  Asset,
   AssetAggregate,
   AssetAggregateQuery,
   AssetChange,
@@ -21,11 +21,11 @@ import {
   ExternalAssetItem,
   IdEither,
 } from '../../types';
-import { Asset } from '../classes/asset';
+import { AssetImpl } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
 import { sortAssetCreateItems } from './assetUtils';
 
-export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
+export class AssetsAPI extends BaseResourceAPI<Asset, AssetImpl, AssetList> {
   /** @hidden */
   constructor(
     private client: CogniteClient,
@@ -63,7 +63,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
    */
   public list = (
     scope?: AssetListScope
-  ): CursorAndAsyncIterator<Asset, AssetList> => {
+  ): CursorAndAsyncIterator<AssetImpl, AssetList> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
@@ -146,11 +146,11 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
     return this.getAssetSubtree(rootAssetList, currentDepth, depth);
   };
 
-  protected transformToList(assets: TypeAsset[]) {
-    return assets.map(asset => new Asset(this.client, asset));
+  protected transformToList(assets: Asset[]) {
+    return assets.map(asset => new AssetImpl(this.client, asset));
   }
 
-  protected transformToClass(assets: TypeAsset[]) {
+  protected transformToClass(assets: Asset[]) {
     const assetArray = this.transformToList(assets);
     return new AssetList(this.client, assetArray);
   }
@@ -178,7 +178,7 @@ export class AssetsAPI extends BaseResourceAPI<TypeAsset, Asset, AssetList> {
   private getChildren = async (assets: AssetList) => {
     const ids = assets.map(asset => asset.id);
     const chunks = chunk(ids, 100);
-    const assetsArray: Asset[] = [];
+    const assetsArray: AssetImpl[] = [];
     for (const chunkOfAssetIds of chunks) {
       const childrenList = await this.client.assets
         .list({

@@ -1,10 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import { Asset } from '../../api/classes/asset';
+import { AssetImpl } from '../../api/classes/asset';
 import { EventsAPI } from '../../api/events/eventsApi';
 import { TimeSeriesAPI } from '../../api/timeSeries/timeSeriesApi';
 import CogniteClient from '../../cogniteClient';
-import { CogniteEvent, GetTimeSeriesMetadataDTO } from '../../types';
+import { CogniteEvent, Timeseries } from '../../types';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
@@ -37,7 +37,7 @@ describe('Asset', () => {
         parentExternalId: newRoot.externalId,
       };
       const createdAssets = await client.assets.create([newRoot, newChild]);
-      expect(await createdAssets[1].parent()).toBeInstanceOf(Asset);
+      expect(await createdAssets[1].parent()).toBeInstanceOf(AssetImpl);
       expect(await createdAssets[0].parent()).toBe(null);
       await client.assets.delete([{ id: createdAssets[0].id }], {
         recursive: true,
@@ -127,7 +127,7 @@ describe('Asset', () => {
         : { assetIds: [createdAssets[0].id] };
     const resourceList = new Array(5).fill(content);
     const resources = await api.create(resourceList);
-    let fetchedResource: (GetTimeSeriesMetadataDTO | CogniteEvent)[];
+    let fetchedResource: (Timeseries | CogniteEvent)[];
     await runTestWithRetryWhenFailing(async () => {
       if (api instanceof TimeSeriesAPI) {
         fetchedResource = await createdAssets[0].timeSeries();
