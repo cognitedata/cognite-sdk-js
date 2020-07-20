@@ -1,0 +1,47 @@
+// Copyright 2020 Cognite AS
+
+import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
+import { CursorResponse, ListRawTables, RawDBTable } from '../../types';
+
+export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
+  public async create(
+    databaseName: string,
+    items: RawDBTable[],
+    ensureParent: boolean = false
+  ): Promise<RawDBTable[]> {
+    const path = `${this.encodeUrl(databaseName)}/tables`;
+    const responses = await this.postInParallelWithAutomaticChunking({
+      queryParams: { ensureParent },
+      items,
+      path,
+    });
+    return this.mergeItemsFromItemsResponse(responses);
+  }
+
+  public list(
+    databaseName: string,
+    scope?: ListRawTables
+  ): CursorAndAsyncIterator<RawDBTable> {
+    const path = `${this.encodeUrl(databaseName)}/tables`;
+    return super.listEndpoint(
+      async params =>
+        this.httpClient.get<CursorResponse<RawDBTable[]>>(path, {
+          params,
+        }),
+      scope
+    );
+  }
+
+  public delete(databaseName: string, items: RawDBTable[]) {
+    const path = `${this.encodeUrl(databaseName)}/tables/delete`;
+    return this.deleteEndpoint(items, {}, path);
+  }
+
+  private encodeUrl(databaseName: string) {
+    return this.url(`${encodeURIComponent(databaseName)}`);
+  }
+}
+
+export interface RawDatabaseDeleteParams {
+  recursive?: boolean;
+}

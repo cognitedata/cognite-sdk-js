@@ -1,14 +1,15 @@
 module.exports = {
-  roots: ['<rootDir>/src'],
+  roots: ['<rootDir>/packages/'],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
-  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
+  testRegex: '\\.(test|spec)\\.ts$',
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
   coverageDirectory: './coverage/',
-  collectCoverage: true,
+  collectCoverage: false,
   moduleNameMapper: {
     '^lodash-es$': 'lodash',
+    '^sdk-([a-z]+)/(.+)$': '<rootDir>/packages/$1/src/$2',
   },
   testURL: 'https://localhost',
 };

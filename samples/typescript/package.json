@@ -1,11 +1,14 @@
 {
-  "name": "typescript-example",
+  "name": "typescript-sample",
+  "version": "1.0.0",
+  "private": true,
   "license": "Apache-2.0",
   "scripts": {
     "tsc": "tsc",
     "test": "yarn tsc && node build/quickstart.js"
   },
   "dependencies": {
+    "@cognite/sdk": "^2",
     "typescript": "^3.3.4000"
   },
   "devDependencies": {
