@@ -20,6 +20,6 @@ export {
 export { default as CogniteClient } from './cogniteClient';
 export * from './types';
 export { AssetImpl } from './api/classes/asset';
-export { TimeSeriesImpl } from './api/classes/timeSeries';
+export { TimeseriesImpl } from './api/classes/timeSeries';
 export { AssetList } from './api/classes/assetList';
 export { TimeSeriesList } from './api/classes/timeSeriesList';

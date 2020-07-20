@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { Asset, TimeSeries } from '../../types';
+import { Asset, Timeseries } from '../../types';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
@@ -37,7 +37,7 @@ describe('Timeseries integration test', () => {
     },
   ];
 
-  let createdTimeseries: TimeSeries[];
+  let createdTimeseries: Timeseries[];
 
   test('create', async () => {
     createdTimeseries = await client.timeseries.create(timeseries);

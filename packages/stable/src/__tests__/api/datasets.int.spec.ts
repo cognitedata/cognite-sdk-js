@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { TimeSeriesImpl } from '../../api/classes/timeSeries';
+import { TimeseriesImpl } from '../../api/classes/timeSeries';
 import CogniteClient from '../../cogniteClient';
 import {
   Asset,
@@ -188,7 +188,7 @@ describe('data sets integration test', () => {
     });
   });
   describe('timeseries data sets', () => {
-    let timeseries: TimeSeriesImpl;
+    let timeseries: TimeseriesImpl;
     let dataSetId: CogniteInternalId;
 
     beforeAll(() => {

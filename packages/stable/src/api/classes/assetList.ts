@@ -6,7 +6,7 @@ import {
   CogniteEvent,
   CogniteInternalId,
   FileInfo,
-  TimeSeries,
+  Timeseries,
 } from '../../types';
 import { EventsAPI } from '../events/eventsApi';
 import { FilesAPI } from '../files/filesApi';
@@ -37,7 +37,7 @@ export class AssetList extends Array<AssetImpl> {
   public timeSeries = async () => {
     return (await this.getResourcesFromAssets(
       this.client.timeseries
-    )) as TimeSeries[];
+    )) as Timeseries[];
   };
 
   /**
@@ -65,7 +65,7 @@ export class AssetList extends Array<AssetImpl> {
   private getResourcesFromAssets = async (
     accessedApi: TimeSeriesAPI | FilesAPI | EventsAPI
   ) => {
-    type Type = TimeSeries | FileInfo | CogniteEvent;
+    type Type = Timeseries | FileInfo | CogniteEvent;
     const chunks = this.toChunkedArrayOfIds();
     const promises: Promise<Type[]>[] = [];
     for (const idArray of chunks) {

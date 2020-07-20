@@ -4,7 +4,7 @@ import { AssetImpl } from '../../api/classes/asset';
 import { EventsAPI } from '../../api/events/eventsApi';
 import { TimeSeriesAPI } from '../../api/timeSeries/timeSeriesApi';
 import CogniteClient from '../../cogniteClient';
-import { CogniteEvent, TimeSeries } from '../../types';
+import { CogniteEvent, Timeseries } from '../../types';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
@@ -127,7 +127,7 @@ describe('Asset', () => {
         : { assetIds: [createdAssets[0].id] };
     const resourceList = new Array(5).fill(content);
     const resources = await api.create(resourceList);
-    let fetchedResource: (TimeSeries | CogniteEvent)[];
+    let fetchedResource: (Timeseries | CogniteEvent)[];
     await runTestWithRetryWhenFailing(async () => {
       if (api instanceof TimeSeriesAPI) {
         fetchedResource = await createdAssets[0].timeSeries();

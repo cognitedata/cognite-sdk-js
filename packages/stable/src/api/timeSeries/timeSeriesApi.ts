@@ -8,24 +8,24 @@ import {
 } from '@cognite/sdk-core';
 import CogniteClient from '../../cogniteClient';
 import {
-  TimeSeries,
+  Timeseries,
   IdEither,
   IgnoreUnknownIds,
-  ExternalTimeSeries,
+  ExternalTimeseries,
   SyntheticQuery,
   TimeseriesAggregate,
   TimeseriesAggregateQuery,
   TimeseriesFilterQuery,
-  TimeSeriesSearchFilter,
+  TimeseriesSearchFilter,
   TimeSeriesUpdate,
 } from '../../types';
-import { TimeSeriesImpl } from '../classes/timeSeries';
+import { TimeseriesImpl } from '../classes/timeSeries';
 import { TimeSeriesList } from '../classes/timeSeriesList';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 
 export class TimeSeriesAPI extends BaseResourceAPI<
-  TimeSeries,
-  TimeSeriesImpl,
+  Timeseries,
+  TimeseriesImpl,
   TimeSeriesList
 > {
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
@@ -56,7 +56,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    */
-  public create = (items: ExternalTimeSeries[]): Promise<TimeSeriesList> => {
+  public create = (items: ExternalTimeseries[]): Promise<TimeSeriesList> => {
     return super.createEndpoint(items);
   };
 
@@ -69,7 +69,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    */
   public list = (
     scope?: TimeseriesFilterQuery
-  ): CursorAndAsyncIterator<TimeSeriesImpl> => {
+  ): CursorAndAsyncIterator<TimeseriesImpl> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
@@ -134,7 +134,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * });
    * ```
    */
-  public search = (query: TimeSeriesSearchFilter) => {
+  public search = (query: TimeseriesSearchFilter) => {
     return super.searchEndpoint(query);
   };
 
@@ -170,13 +170,13 @@ export class TimeSeriesAPI extends BaseResourceAPI<
     return this.syntheticTimeseriesApi.query(items);
   };
 
-  protected transformToList(timeSeries: TimeSeries[]) {
+  protected transformToList(timeSeries: Timeseries[]) {
     return timeSeries.map(
-      timeSerie => new TimeSeriesImpl(this.client, timeSerie)
+      timeSerie => new TimeseriesImpl(this.client, timeSerie)
     );
   }
 
-  protected transformToClass(timeSeries: TimeSeries[]) {
+  protected transformToClass(timeSeries: Timeseries[]) {
     const timeseriesArray = this.transformToList(timeSeries);
     return new TimeSeriesList(this.client, timeseriesArray);
   }

@@ -4,14 +4,14 @@ import {
   CogniteExternalId,
   CogniteInternalId,
   DatapointsMultiQuery,
-  TimeSeries,
+  Timeseries,
   LatestDataPropertyFilter,
   Metadata,
 } from '../../types';
 import { BaseResource } from './baseResource';
 
-export class TimeSeriesImpl extends BaseResource<TimeSeries>
-  implements TimeSeries {
+export class TimeseriesImpl extends BaseResource<Timeseries>
+  implements Timeseries {
   public externalId?: CogniteExternalId;
   public name?: string;
   public isString: boolean;
@@ -26,7 +26,7 @@ export class TimeSeriesImpl extends BaseResource<TimeSeries>
   public lastUpdatedTime: Date;
   public id: CogniteInternalId;
 
-  constructor(client: CogniteClient, props: TimeSeries) {
+  constructor(client: CogniteClient, props: Timeseries) {
     super(client);
     this.externalId = props.externalId;
     this.name = props.name;

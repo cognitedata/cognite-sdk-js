@@ -3,14 +3,14 @@ import * as nock from 'nock';
 import { AssetImpl } from '../../api/classes/asset';
 import { TimeSeriesList } from '../../api/classes/timeSeriesList';
 import CogniteClient from '../../cogniteClient';
-import { ExternalDatapoints, ExternalTimeSeries } from '../../types';
+import { ExternalDatapoints, ExternalTimeseries } from '../../types';
 import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
 
 describe('TimeSeries class unit test', () => {
   let client: CogniteClient;
-  let newTimeSeries: ExternalTimeSeries;
+  let newTimeSeries: ExternalTimeseries;
   let createdTimeSeries: TimeSeriesList;
-  let timeSeriesWithAssetId: ExternalTimeSeries;
+  let timeSeriesWithAssetId: ExternalTimeseries;
   let datapointArray: ExternalDatapoints[] = [];
   beforeAll(() => {
     client = setupMockableClient();

@@ -1107,7 +1107,7 @@ export interface StringDatapoint extends DatapointMetadata {
   value: string;
 }
 
-export interface TimeSeries extends InternalId, CreatedAndLastUpdatedTime {
+export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
   /**
    * Externally supplied id of the time series
    */
@@ -1135,7 +1135,7 @@ export interface TimeSeries extends InternalId, CreatedAndLastUpdatedTime {
   securityCategories?: number[];
 }
 
-export interface ExternalTimeSeries {
+export interface ExternalTimeseries {
   /**
    * Externally provided id for the time series (optional but recommended)
    */
@@ -1990,7 +1990,7 @@ export interface TimeSeriesPatch {
   };
 }
 
-export interface TimeSeriesSearch {
+export interface TimeseriesSearch {
   /**
    * Prefix and fuzzy search on name.
    */
@@ -2005,9 +2005,9 @@ export interface TimeSeriesSearch {
   query?: string;
 }
 
-export interface TimeSeriesSearchFilter extends Limit {
+export interface TimeseriesSearchFilter extends Limit {
   filter?: TimeseriesFilter;
-  search?: TimeSeriesSearch;
+  search?: TimeseriesSearch;
 }
 
 export type TimeSeriesUpdate =
