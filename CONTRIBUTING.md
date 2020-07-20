@@ -48,7 +48,7 @@ Repository administrators should be in control of `[release]` commits.
 
 To add a release commit to a clean working tree, use the command
 ```bash
-git checkout v1
+git checkout master
 git pull
 git commit --allow-empty -m "chore: trigger [release]"
 git push

@@ -30,7 +30,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     on:
-      branch: v1
+      branch: master
       condition: $DEPLOY_BUILD = true && $TRAVIS_COMMIT_MESSAGE =~ "[release]"
     script: bash scripts/versionAndPush.sh
 
@@ -40,12 +40,12 @@ deploy:
     keep_history: true
     local_dir: docs
     on:
-      branch: v1
+      branch: master
       condition: $DEPLOY_BUILD = true && $TRAVIS_COMMIT_MESSAGE =~ "[release]"
 
   - provider: script
     skip_cleanup: true
     on:
-      branch: v1
+      branch: master
       condition: $DEPLOY_BUILD = true && $TRAVIS_COMMIT_MESSAGE =~ "[release]"
     script: bash scripts/prSnippets.sh
