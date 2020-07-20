@@ -3,7 +3,7 @@
 import { BaseResourceAPI, HttpResponseType } from '@cognite/sdk-core';
 import { CogniteInternalId } from '../../types';
 
-export class Files3DAPI extends BaseResourceAPI<any> {
+export class Files3DAPI extends BaseResourceAPI<unknown> {
   /**
    * [Retrieve a 3D file"](https://doc.cognitedata.com/api/v1/#operation/get3DFile)
    *

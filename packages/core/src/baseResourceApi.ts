@@ -78,13 +78,23 @@ export abstract class BaseResourceAPI<
   /**
    * Specifies what fields in http json responses can
    * be parsed as numbers of milliseconds since unix epoch,
-   * and be turned into Date objects.
-   *
-   * The DatePropPaths describe what objects can contain date properties (recursivly)
-   * The DatePropNames describe what names the date properties can have
+   * and be converted into Date objects.
    */
   protected getDateProps(): [string[], string[]] {
     return [[], []];
+  }
+
+  /**
+   * Helper for getDateProps(...)
+   *
+   * @param parents list of parent property names (recursively)
+   * @param props list of unix timestamp properties to be converted
+   */
+  protected pickDateProps<T = ResponseType>(
+    parents: string[],
+    props: NonNullable<KeysOfType<NoInfer<T>, Date | undefined>>[]
+  ): [string[], string[]] {
+    return [parents, props as string[]];
   }
 
   protected url(path: string = '') {
@@ -397,3 +407,7 @@ interface PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType> {
   queryParams?: ParamsType;
   chunkSize?: number;
 }
+
+type KeysOfType<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T];
+
+type NoInfer<T> = [T][T extends any ? 0 : never];

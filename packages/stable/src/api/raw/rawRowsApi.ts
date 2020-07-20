@@ -14,6 +14,13 @@ import {
 } from '../../types';
 
 export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
+  /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['lastUpdatedTime']);
+  }
+
   public async insert(
     databaseName: string,
     tableName: string,

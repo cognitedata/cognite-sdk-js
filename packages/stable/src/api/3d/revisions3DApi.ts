@@ -15,7 +15,6 @@ import {
   Revision3D,
   Revision3DListRequest,
   UpdateRevision3D,
-  DatePropFilter,
 } from '../../types';
 import { Nodes3DAPI } from './nodes3DApi';
 
@@ -31,11 +30,10 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
   }
 
   /**
-   * Specify what fields in json responses should be parsed as Dates
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [['items'], ['createdTime']];
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime']);
   }
 
   /**

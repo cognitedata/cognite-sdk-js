@@ -6,16 +6,14 @@ import {
   ItemsWrapper,
   ServiceAccount,
   ServiceAccountInput,
-  DatePropFilter,
 } from '../../types';
 
 export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
   /**
-   * Specify what fields in json responses should be parsed as Dates
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [['items'], ['deletedTime']];
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['deletedTime']);
   }
 
   /**

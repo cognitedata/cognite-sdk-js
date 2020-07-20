@@ -6,16 +6,14 @@ import {
   ExternalLabelDefinition,
   LabelDefinition,
   LabelDefinitionFilterRequest,
-  DatePropFilter,
 } from '../../types';
 
 export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
   /**
-   * Specify what fields in json responses should be parsed as Dates
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [['items'], ['createdTime']];
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime']);
   }
 
   /**

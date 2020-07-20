@@ -21,7 +21,6 @@ import {
   IgnoreUnknownIds,
   ItemsWrapper,
   FileUploadResponse,
-  DatePropFilter,
 } from '../../types';
 
 export class FilesAPI extends BaseResourceAPI<FileInfo> {
@@ -29,8 +28,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * Specify that dates should be parsed in requests and responses
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [
+  protected getDateProps() {
+    return this.pickDateProps(
       ['items'],
       [
         'createdTime',
@@ -38,8 +37,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
         'sourceCreatedTime',
         'sourceModifiedTime',
         'uploadedTime',
-      ],
-    ];
+      ]
+    );
   }
 
   /**

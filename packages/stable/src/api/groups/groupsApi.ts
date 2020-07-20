@@ -8,16 +8,14 @@ import {
   GroupSpec,
   ItemsWrapper,
   ListGroups,
-  DatePropFilter,
 } from '../../types';
 
 export class GroupsAPI extends BaseResourceAPI<Group> {
   /**
-   * Specify what fields in json responses should be parsed as Dates
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [['items'], ['deletedTime']];
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['deletedTime']);
   }
 
   /**

@@ -20,7 +20,6 @@ import {
   AssetSearchFilter,
   ExternalAssetItem,
   IdEither,
-  DatePropFilter,
 } from '../../types';
 import { AssetImpl } from '../classes/asset';
 import { AssetList } from '../classes/assetList';
@@ -38,11 +37,10 @@ export class AssetsAPI extends BaseResourceAPI<Asset, AssetImpl, AssetList> {
   }
 
   /**
-   * Specify what fields in json responses should be parsed as Dates
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [['items'], ['createdTime', 'lastUpdatedTime']];
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
   }
 
   /**

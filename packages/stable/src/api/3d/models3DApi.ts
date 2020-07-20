@@ -9,15 +9,13 @@ import {
   Model3DListRequest,
   UpdateModel3D,
 } from '../../types';
-import { DatePropFilter } from '../../types';
 
 export class Models3DAPI extends BaseResourceAPI<Model3D> {
   /**
-   * Specify what fields in json responses should be parsed as Dates
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [['items'], ['createdTime']];
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime']);
   }
 
   /**

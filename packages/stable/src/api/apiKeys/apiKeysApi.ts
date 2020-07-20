@@ -8,16 +8,14 @@ import {
   CogniteInternalId,
   ItemsWrapper,
   NewApiKeyResponse,
-  DatePropFilter,
 } from '../../types';
 
 export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
   /**
-   * Specify what fields in json responses should be parsed as Dates
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [['items'], ['createdTime']];
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime']);
   }
 
   /**

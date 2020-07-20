@@ -10,16 +10,20 @@ import {
   ItemsWrapper,
   LatestDataBeforeRequest,
   ExternalDatapointsQuery,
-  DatePropFilter,
+  DatapointInfo,
 } from '../../types';
 
-export class DataPointsAPI extends BaseResourceAPI<any> {
+export class DataPointsAPI extends BaseResourceAPI<
+  DatapointAggregates | Datapoints
+> {
   /**
-   * Specify what fields in json responses should be parsed as Dates
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [['items', 'datapoints'], ['timestamp']];
+  protected getDateProps() {
+    return this.pickDateProps<DatapointInfo>(
+      ['items', 'datapoints'],
+      ['timestamp']
+    );
   }
 
   /**

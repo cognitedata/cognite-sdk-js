@@ -2154,14 +2154,3 @@ export interface Versioned3DFile {
 }
 
 export type WRITE = 'WRITE';
-
-export type DatePropPath = 'items' | 'columns' | 'datapoints';
-export type DatePropName =
-  | 'createdTime'
-  | 'lastUpdatedTime'
-  | 'sourceCreatedTime'
-  | 'sourceModifiedTime'
-  | 'uploadedTime'
-  | 'deletedTime'
-  | 'timestamp';
-export type DatePropFilter = [DatePropPath[], DatePropName[]];

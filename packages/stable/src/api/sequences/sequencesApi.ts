@@ -18,7 +18,6 @@ import {
   SequenceRowsInsert,
   SequenceRowsRetrieve,
   SequenceSearchFilter,
-  DatePropFilter,
 } from '../../types';
 import { SequenceRow } from '../classes/sequenceRow';
 import { SequenceRowsAPI } from './sequenceRowsApi';
@@ -41,11 +40,13 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
   }
 
   /**
-   * Specify what fields in json responses should be parsed as Dates
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [['items', 'columns'], ['createdTime', 'lastUpdatedTime']];
+  protected getDateProps() {
+    return this.pickDateProps(
+      ['items', 'columns'],
+      ['createdTime', 'lastUpdatedTime']
+    );
   }
 
   /**

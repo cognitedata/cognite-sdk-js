@@ -15,7 +15,6 @@ import {
   ExternalEvent,
   IdEither,
   IgnoreUnknownIds,
-  DatePropFilter,
 } from '../../types';
 import { EventsAggregateAPI } from './eventsAggregateApi';
 
@@ -28,11 +27,10 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
   }
 
   /**
-   * Specify what fields in json responses should be parsed as Dates
    * @hidden
    */
-  protected getDateProps(): DatePropFilter {
-    return [['items'], ['createdTime', 'lastUpdatedTime']];
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
   }
 
   /**
