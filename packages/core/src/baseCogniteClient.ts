@@ -23,6 +23,10 @@ import {
 import { MetadataMap } from './metadata';
 import { getBaseUrl, isUsingSSL, projectUrl } from './utils';
 import { version } from '../package.json';
+import {
+  createUniversalRetryValidator,
+  RetryValidator,
+} from './httpClient/retryValidator';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -107,7 +111,10 @@ export default class BaseCogniteClient {
       throw Error('options.appId is required and must be of type string');
     }
     const { baseUrl } = options;
-    this.http = new CDFHttpClient(getBaseUrl(baseUrl));
+    this.http = new CDFHttpClient(
+      getBaseUrl(baseUrl),
+      this.getRetryValidator()
+    );
     this.httpClient
       .setDefaultHeader(X_CDF_APP_HEADER, options.appId)
       .setDefaultHeader(
@@ -353,6 +360,14 @@ export default class BaseCogniteClient {
 
   protected initAPIs() {
     // will be overritten by subclasses
+  }
+
+  /**
+   * Returns the retry validator to be used in the http client.
+   * Override to provide a better validator
+   */
+  protected getRetryValidator(): RetryValidator {
+    return createUniversalRetryValidator();
   }
 
   protected get version() {

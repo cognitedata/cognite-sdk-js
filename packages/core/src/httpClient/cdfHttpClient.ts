@@ -20,9 +20,9 @@ import {
   HttpRequest,
   HttpResponse,
 } from './basicHttpClient';
-import { cdfRetryValidator } from './cdfRetryValidator';
 import { HttpError } from './httpError';
 import { RetryableHttpClient } from './retryableHttpClient';
+import { RetryValidator } from './retryValidator';
 
 export class CDFHttpClient extends RetryableHttpClient {
   private static serializeQueryParameters(
@@ -77,8 +77,8 @@ export class CDFHttpClient extends RetryableHttpClient {
 
   private oneTimeHeaders: HttpHeaders = {};
 
-  constructor(baseUrl: string) {
-    super(baseUrl, cdfRetryValidator);
+  constructor(baseUrl: string, retryValidator: RetryValidator) {
+    super(baseUrl, retryValidator);
   }
 
   public addOneTimeHeader(name: string, value: string) {
