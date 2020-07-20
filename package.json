@@ -1,25 +1,41 @@
 {
-  "name": "@cognite/sdk",
-  "version": "2.33.0",
+  "name": "@cognite/sdk-monorepo",
   "description": "Javascript client library for Cognite SDK",
   "contributors": [
     "Fredrik Anfinsen <fredrik.anfinsen@cognite.com>",
     "Ivan Polomanyi <ivan.polomanyi@cognite.com>",
+    "Håvard Krogstie <havard.krogstie@cognite.com>",
     "Martin Røed <martin.roed@cognite.com>"
   ],
   "license": "Apache-2.0",
   "repository": "cognitedata/cognite-sdk-js",
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
-  "main": "dist/index.js",
-  "types": "dist/src/index.d.ts",
-  "files": [
-    "dist/"
-  ],
+  "private": true,
   "keywords": [
     "cognite",
     "sdk",
     "typescript"
   ],
+  "workspaces": [
+    "packages/**",
+    "samples/*"
+  ],
+  "scripts": {
+    "allsdk": "lerna run --ignore *-sample",
+    "allsamples": "lerna run --scope *-sample",
+    "clean": "lerna run clean && rm -rf docs/ coverage/",
+    "test": "yarn allsdk test --stream",
+    "test:codecov": "jest --config=jest.config.js --coverage=true && codecov",
+    "lint": "yarn allsdk lint --stream",
+    "lint:fix": "yarn allsdk lint:fix --stream",
+    "build": "yarn allsdk build --stream",
+    "watch": "yarn allsdk watch --parallel",
+    "docs": "yarn allsdk docs --stream",
+    "docs:bundle": "rm -rf docs/ && yarn docs && mkdir -p docs/ docs/beta && cp -r packages/stable/docs/* docs/ && cp -r packages/beta/docs/* docs/beta",
+    "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check",
+    "test-snippets": "yarn allsdk test-snippets --stream",
+    "test-samples": "yarn allsamples test --stream"
+  },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
@@ -29,79 +45,35 @@
     "@types/nock": "^10.0.3",
     "@types/node": "^10.12.0",
     "@types/query-string": "^6.1.0",
+    "@typescript-eslint/eslint-plugin": "^3.4.0",
+    "@typescript-eslint/parser": "^3.4.0",
     "es-check": "^5.0.0",
+    "eslint": "^7.3.1",
+    "eslint-plugin-header": "^3.0.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "husky": "^3.0.2",
     "jest": "^23.6.0",
+    "lerna": "^3.22.1",
     "ls": "^0.2.1",
-    "markdown-link-check": "^3.7.2",
-    "mustache": "^3.0.1",
+    "markdown-link-check": "^3.8.1",
     "nock": "^10.0.6",
     "parse-comments": "^1.0.0",
     "prettier": "^1.10.2",
     "rollup": "^0.67.0",
+    "rollup-plugin-alias": "^2.2.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-typescript2": "^0.17.2",
     "swagger-parser": "^6.0.5",
     "ts-jest": "^23.10.4",
-    "tslint": "^5.13.0",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-plugin-prettier": "^2.0.1",
-    "tslint-sonarts": "^1.9.0",
     "typedoc": "^0.13.0",
     "typedoc-plugin-markdown": "^1.1.19",
     "typescript": "^3.3.3333",
     "typescript-parser": "^2.6.1"
   },
-  "scripts": {
-    "clean": "rm -rf dist",
-    "prepublishOnly": "yarn build",
-    "test": "jest --config=jest.config.js",
-    "test-samples": "cd samples && yarn link-sdk && yarn install-dependencies && yarn test",
-    "lint": "tslint -c tslint.json -p tsconfig.json",
-    "lint:fix": "prettier \"src/**/*.ts\" --write && tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "yarn clean && rollup -c && yarn esCheck",
-    "watch": "rollup -cw",
-    "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json",
-    "esCheck": "es-check es5 './dist/index.js'",
-    "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -exec yarn markdown-link-check {} \\;",
-    "alphabetizeTypes": "node ./scripts/alphabetizeTypes.js -i src/types/types.ts -h \"// Copyright 2019 Cognite AS\"",
-    "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node scripts/extractCodeSnippets.js",
-    "test-snippets": "yarn link @cognite/sdk && yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.json && rm -rf codeSnippets/"
-  },
-  "dependencies": {
-    "cross-fetch": "^3.0.4",
-    "lodash": "^4.17.11",
-    "query-string": "^5.1.1",
-    "url": "^0.11.0"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },
-  "release": {
-    "branches": [
-      "v1"
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      "@semantic-release/npm",
-      "@semantic-release/github",
-      [
-        "@semantic-release/git",
-        {
-          "assets": [
-            "CHANGELOG.md",
-            "package.json"
-          ]
-        }
-      ]
-    ]
   }
 }

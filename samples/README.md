@@ -7,12 +7,12 @@ JS SDK Examples
 
 This folder contains examples on how to use the SDK in different frameworks.
 
-## Prerequisite
+## Prerequisites
 
 - Clone this repository locally. See guide [here](https://help.github.com/en/articles/cloning-a-repository).
 - Install NodeJS on your machine. You can download NodeJS [here](https://nodejs.org/en/download/).
-- Open this folder in your terminal.
-- Install dependencies by running `$ npm install` or with yarn `$ yarn`.
+- Open one of the sample project directories in a terminal.
+- Install dependencies by running `npm install`, or with yarn `yarn`.
 
 ## Examples
 
