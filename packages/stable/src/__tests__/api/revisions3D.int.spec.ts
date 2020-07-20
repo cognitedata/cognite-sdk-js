@@ -7,7 +7,7 @@ import {
   AssetMapping3D,
   CreateAssetMapping3D,
   CreateRevision3D,
-  FilesMetadata,
+  FileInfo,
   Model3D,
   Node3D,
   Revision3D,
@@ -34,7 +34,7 @@ describeIfCondition(
     let client: CogniteClient;
 
     let revisions: Revision3D[];
-    let file: FilesMetadata;
+    let file: FileInfo;
     let model: Model3D;
     let assets: Asset[];
     let assetMappings: AssetMapping3D[];

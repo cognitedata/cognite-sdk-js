@@ -1,20 +1,17 @@
 // Copyright 2020 Cognite AS
 import * as nock from 'nock';
-import { Asset } from '../../api/classes/asset';
+import { AssetImpl } from '../../api/classes/asset';
 import { TimeSeriesList } from '../../api/classes/timeSeriesList';
 import CogniteClient from '../../cogniteClient';
-import {
-  DatapointsPostDatapoint,
-  PostTimeSeriesMetadataDTO,
-} from '../../types';
+import { ExternalDatapoints, ExternalTimeseries } from '../../types';
 import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
 
 describe('TimeSeries class unit test', () => {
   let client: CogniteClient;
-  let newTimeSeries: PostTimeSeriesMetadataDTO;
+  let newTimeSeries: ExternalTimeseries;
   let createdTimeSeries: TimeSeriesList;
-  let timeSeriesWithAssetId: PostTimeSeriesMetadataDTO;
-  let datapointArray: DatapointsPostDatapoint[] = [];
+  let timeSeriesWithAssetId: ExternalTimeseries;
+  let datapointArray: ExternalDatapoints[] = [];
   beforeAll(() => {
     client = setupMockableClient();
     nock.cleanAll();
@@ -69,7 +66,7 @@ describe('TimeSeries class unit test', () => {
       });
     const assetFromTimeseries = await createdTimeSeries[1].getAsset();
     expect(assetFromTimeseries).not.toBe(null);
-    expect(assetFromTimeseries).toBeInstanceOf(Asset);
+    expect(assetFromTimeseries).toBeInstanceOf(AssetImpl);
   });
 
   test('delete', async () => {

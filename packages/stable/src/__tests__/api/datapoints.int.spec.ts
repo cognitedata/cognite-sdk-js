@@ -1,13 +1,13 @@
 // Copyright 2020 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { GetTimeSeriesMetadataDTO } from '../../types';
+import { Timeseries } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('Datapoints integration test', () => {
   let client: CogniteClient;
-  let timeserie: GetTimeSeriesMetadataDTO;
-  let testTimeserieWithDatapoints: GetTimeSeriesMetadataDTO;
+  let timeserie: Timeseries;
+  let testTimeserieWithDatapoints: Timeseries;
   beforeAll(async () => {
     client = setupLoggedInClient();
     [timeserie] = await client.timeseries.create([{ name: 'tmp' }]);

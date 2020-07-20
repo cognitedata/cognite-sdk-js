@@ -148,18 +148,11 @@ describe('Events integration test', () => {
               max: events[0].endTime! + 1,
             },
           },
+          partition: '1/10',
           limit: 3,
         })
         .autoPagingToArray({ limit: 5 });
       expect(response.length).toBeGreaterThan(0);
-    });
-
-    test('partitions', async () => {
-      const response = await client.events.list({
-        partition: '1/10',
-        limit: 10,
-      });
-      expect(response.items.length).toBeGreaterThan(0);
     });
 
     test('to json|string', async () => {

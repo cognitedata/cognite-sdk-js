@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import {
-  Asset as TypeAsset,
+  Asset,
   CogniteClient,
   EventFilter,
   FileFilter,
@@ -26,7 +26,7 @@ export interface SubtreeOptions {
 export interface DeleteOptions {
   recursive?: boolean;
 }
-export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
+export class AssetImpl extends BaseResource<Asset> implements Asset {
   public id: CogniteInternalId;
   public externalId?: CogniteExternalId;
   public parentId?: CogniteInternalId;
@@ -42,7 +42,7 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
   public dataSetId?: CogniteInternalId;
   public labels?: Label[];
 
-  constructor(client: CogniteClient, props: TypeAsset) {
+  constructor(client: CogniteClient, props: Asset) {
     super(client);
     this.id = props.id;
     this.externalId = props.externalId;
@@ -147,8 +147,10 @@ export class Asset extends BaseResource<TypeAsset> implements TypeAsset {
   public async timeSeries(filter: TimeseriesFilter = {}) {
     return this.client.timeseries
       .list({
-        ...filter,
-        assetIds: [this.id],
+        filter: {
+          ...filter,
+          assetIds: [this.id],
+        },
       })
       .autoPagingToArray({ limit: Infinity });
   }

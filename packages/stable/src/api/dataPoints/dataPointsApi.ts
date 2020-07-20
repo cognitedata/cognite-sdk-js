@@ -3,13 +3,13 @@
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import {
   DatapointsDeleteRequest,
-  DatapointsGetAggregateDatapoint,
-  DatapointsGetDatapoint,
+  DatapointAggregates,
+  Datapoints,
   DatapointsMultiQuery,
-  DatapointsPostDatapoint,
   IgnoreUnknownIds,
   ItemsWrapper,
   LatestDataBeforeRequest,
+  ExternalDatapointsQuery,
 } from '../../types';
 
 export class DataPointsAPI extends BaseResourceAPI<any> {
@@ -20,7 +20,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
    */
-  public insert = (items: DatapointsPostDatapoint[]): Promise<{}> => {
+  public insert = (items: ExternalDatapointsQuery[]): Promise<{}> => {
     return this.insertEndpoint(items);
   };
 
@@ -33,7 +33,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
    */
   public retrieve = (
     query: DatapointsMultiQuery
-  ): Promise<DatapointsGetAggregateDatapoint[] | DatapointsGetDatapoint[]> => {
+  ): Promise<DatapointAggregates[] | Datapoints[]> => {
     return this.retrieveDatapointsEndpoint(query);
   };
 
@@ -56,7 +56,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
   public retrieveLatest = (
     items: LatestDataBeforeRequest[],
     params: LatestDataParams = {}
-  ): Promise<DatapointsGetDatapoint[]> => {
+  ): Promise<Datapoints[]> => {
     return this.retrieveLatestEndpoint(items, params);
   };
 
@@ -71,7 +71,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     return this.deleteDatapointsEndpoint(items);
   };
 
-  private async insertEndpoint(items: DatapointsPostDatapoint[]) {
+  private async insertEndpoint(items: ExternalDatapointsQuery[]) {
     const path = this.url();
     await this.postInParallelWithAutomaticChunking({ path, items });
     return {};
@@ -80,7 +80,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
   private async retrieveDatapointsEndpoint(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
     const response = await this.httpClient.post<
-      ItemsWrapper<(DatapointsGetAggregateDatapoint | DatapointsGetDatapoint)[]>
+      ItemsWrapper<(DatapointAggregates | Datapoints)[]>
     >(path, {
       data: query,
     });
@@ -92,11 +92,12 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     params: LatestDataParams
   ) {
     const path = this.url('latest');
-    const response = await this.httpClient.post<
-      ItemsWrapper<DatapointsGetDatapoint[]>
-    >(path, {
-      data: { items, ...params },
-    });
+    const response = await this.httpClient.post<ItemsWrapper<Datapoints[]>>(
+      path,
+      {
+        data: { items, ...params },
+      }
+    );
     return this.addToMapAndReturn(response.data.items, response);
   }
 

@@ -2,13 +2,11 @@
 import { uniqBy } from 'lodash';
 import CogniteClient from '../../cogniteClient';
 import { DatapointsMultiQueryBase } from '../../types';
-import { TimeSeries } from './timeSeries';
+import { TimeseriesImpl } from './timeSeries';
 
-export class TimeSeriesList extends Array<TimeSeries> {
-  private client: CogniteClient;
-  constructor(client: CogniteClient, items: TimeSeries[]) {
+export class TimeSeriesList extends Array<TimeseriesImpl> {
+  constructor(private client: CogniteClient, items: TimeseriesImpl[]) {
     super(...items);
-    this.client = client;
   }
 
   /**
