@@ -24,7 +24,7 @@ export {
 } from '@cognite/sdk-core';
 export { default as CogniteClient } from './cogniteClient';
 export * from './types';
-export { Asset as AssetClass } from './api/classes/asset';
-export { TimeSeries as TimeSeriesClass } from './api/classes/timeSeries';
+export { AssetImpl } from './api/classes/asset';
+export { TimeseriesImpl } from './api/classes/timeSeries';
 export { AssetList } from './api/classes/assetList';
 export { TimeSeriesList } from './api/classes/timeSeriesList';

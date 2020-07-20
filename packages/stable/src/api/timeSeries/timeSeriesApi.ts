@@ -8,25 +8,24 @@ import {
 } from '@cognite/sdk-core';
 import CogniteClient from '../../cogniteClient';
 import {
-  GetTimeSeriesMetadataDTO,
+  Timeseries,
   IdEither,
   IgnoreUnknownIds,
-  PostTimeSeriesMetadataDTO,
+  ExternalTimeseries,
   SyntheticQuery,
   TimeseriesAggregate,
   TimeseriesAggregateQuery,
-  TimeseriesFilter,
   TimeseriesFilterQuery,
-  TimeSeriesSearchDTO,
+  TimeseriesSearchFilter,
   TimeSeriesUpdate,
 } from '../../types';
-import { TimeSeries } from '../classes/timeSeries';
+import { TimeseriesImpl } from '../classes/timeSeries';
 import { TimeSeriesList } from '../classes/timeSeriesList';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 
 export class TimeSeriesAPI extends BaseResourceAPI<
-  GetTimeSeriesMetadataDTO,
-  TimeSeries,
+  Timeseries,
+  TimeseriesImpl,
   TimeSeriesList
 > {
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
@@ -57,9 +56,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    */
-  public create = (
-    items: PostTimeSeriesMetadataDTO[]
-  ): Promise<TimeSeriesList> => {
+  public create = (items: ExternalTimeseries[]): Promise<TimeSeriesList> => {
     return super.createEndpoint(items);
   };
 
@@ -67,18 +64,13 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * [List time series](https://doc.cognitedata.com/api/v1/#operation/getTimeSeries)
    *
    * ```js
-   * const timeseries = await client.timeseries.list({ includeMetadata: false, assetIds: [1, 2] });
+   * const timeseries = await client.timeseries.list({ filter: { assetIds: [1, 2] }});
    * ```
    */
   public list = (
-    scope?: TimeseriesFilter
-  ): CursorAndAsyncIterator<TimeSeries> => {
-    let query: TimeseriesFilterQuery = {};
-    if (scope) {
-      const { includeMetadata, limit, cursor, partition, ...filter } = scope;
-      query = { filter, limit, partition, cursor };
-    }
-    return super.listEndpoint(this.callListEndpointWithPost, query);
+    scope?: TimeseriesFilterQuery
+  ): CursorAndAsyncIterator<TimeseriesImpl> => {
+    return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
   /**
@@ -142,7 +134,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * });
    * ```
    */
-  public search = (query: TimeSeriesSearchDTO) => {
+  public search = (query: TimeseriesSearchFilter) => {
     return super.searchEndpoint(query);
   };
 
@@ -178,11 +170,13 @@ export class TimeSeriesAPI extends BaseResourceAPI<
     return this.syntheticTimeseriesApi.query(items);
   };
 
-  protected transformToList(timeSeries: GetTimeSeriesMetadataDTO[]) {
-    return timeSeries.map(timeSerie => new TimeSeries(this.client, timeSerie));
+  protected transformToList(timeSeries: Timeseries[]) {
+    return timeSeries.map(
+      timeSerie => new TimeseriesImpl(this.client, timeSerie)
+    );
   }
 
-  protected transformToClass(timeSeries: GetTimeSeriesMetadataDTO[]) {
+  protected transformToClass(timeSeries: Timeseries[]) {
     const timeseriesArray = this.transformToList(timeSeries);
     return new TimeSeriesList(this.client, timeseriesArray);
   }

@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 import * as nock from 'nock';
-import { Asset } from '../../api/classes/asset';
+import { AssetImpl } from '../../api/classes/asset';
 import CogniteClient from '../../cogniteClient';
 import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
 
@@ -48,7 +48,7 @@ describe('Asset class unit test', () => {
     const createdAssets = await client.assets.create([newRoot, ...childArray]);
     const children = await createdAssets[0].children();
     expect(children.length).toBe(102);
-    expect(children[0]).toBeInstanceOf(Asset);
+    expect(children[0]).toBeInstanceOf(AssetImpl);
     expect(children[0].name).toEqual(childArray[0].name);
   });
 });

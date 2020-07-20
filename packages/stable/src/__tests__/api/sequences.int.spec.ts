@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import * as nock from 'nock';
-import { Asset } from '../../api/classes/asset';
+import { Asset } from '../../types';
 import CogniteClient from '../../cogniteClient';
 import {
   ExternalSequence,

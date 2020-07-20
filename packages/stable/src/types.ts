@@ -291,7 +291,7 @@ export interface TimeseriesAggregateQuery {
   /**
    * Filter on timeseries with strict matching.
    */
-  filter?: TimeseriesFilterProps;
+  filter?: TimeseriesFilter;
 }
 
 export interface AssetAggregateResult {
@@ -450,7 +450,7 @@ export type AssetSource = string;
 /**
  * Data specific to Azure AD authentication
  */
-export interface AzureADConfigurationDTO {
+export interface AzureADConfiguration {
   /**
    * Azure application ID. You get this when creating the Azure app.
    */
@@ -671,15 +671,13 @@ export type DatapointsDeleteRequest =
   | (InternalId & DatapointsDeleteRange)
   | (ExternalId & DatapointsDeleteRange);
 
-export interface DatapointsGetAggregateDatapoint extends DatapointsMetadata {
-  datapoints: GetAggregateDatapoint[];
+export interface DatapointAggregates extends DatapointsMetadata {
+  datapoints: DatapointAggregate[];
 }
 
-export type DatapointsGetDatapoint =
-  | DatapointsGetStringDatapoint
-  | DatapointsGetDoubleDatapoint;
+export type Datapoints = StringDatapoints | DoubleDatapoints;
 
-export interface DatapointsGetDoubleDatapoint extends DatapointsMetadata {
+export interface DoubleDatapoints extends DatapointsMetadata {
   /**
    * Whether the time series is string valued or not.
    */
@@ -687,10 +685,10 @@ export interface DatapointsGetDoubleDatapoint extends DatapointsMetadata {
   /**
    * The list of datapoints
    */
-  datapoints: GetDoubleDatapoint[];
+  datapoints: DoubleDatapoint[];
 }
 
-export interface DatapointsGetStringDatapoint extends DatapointsMetadata {
+export interface StringDatapoints extends DatapointsMetadata {
   /**
    * Whether the time series is string valued or not.
    */
@@ -698,11 +696,11 @@ export interface DatapointsGetStringDatapoint extends DatapointsMetadata {
   /**
    * The list of datapoints
    */
-  datapoints: GetStringDatapoint[];
+  datapoints: StringDatapoint[];
 }
 
-export interface DatapointsInsertProperties {
-  datapoints: PostDatapoint[];
+export interface ExternalDatapoints {
+  datapoints: ExternalDatapoint[];
 }
 
 export interface DatapointsMetadata extends InternalId {
@@ -739,17 +737,15 @@ export interface DatapointsMultiQueryBase extends Limit, IgnoreUnknownIds {
   includeOutsidePoints?: boolean;
 }
 
-export type DatapointsPostDatapoint =
-  | DatapointsPostDatapointId
-  | DatapointsPostDatapointExternalId;
+export type ExternalDatapointsQuery =
+  | ExternalDatapointId
+  | ExternalDatapointExternalId;
 
-export interface DatapointsPostDatapointExternalId
-  extends DatapointsInsertProperties,
+export interface ExternalDatapointExternalId
+  extends ExternalDatapoints,
     ExternalId {}
 
-export interface DatapointsPostDatapointId
-  extends DatapointsInsertProperties,
-    InternalId {}
+export interface ExternalDatapointId extends ExternalDatapoints, InternalId {}
 
 export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
 
@@ -957,7 +953,7 @@ export interface ExternalEvent {
   source?: string;
 }
 
-export interface ExternalFilesMetadata {
+export interface ExternalFileInfo {
   externalId?: CogniteExternalId;
   name: FileName;
   source?: string;
@@ -1071,9 +1067,7 @@ export type FileName = string;
 
 export interface FileRequestFilter extends FilterQuery, FileFilter {}
 
-export interface FilesMetadata
-  extends ExternalFilesMetadata,
-    CreatedAndLastUpdatedTime {
+export interface FileInfo extends ExternalFileInfo, CreatedAndLastUpdatedTime {
   id: CogniteInternalId;
   /**
    * Whether or not the actual file is uploaded
@@ -1088,9 +1082,7 @@ export interface FilesSearchFilter extends FileFilter {
   };
 }
 
-export type Filter = TimeseriesFilterProps;
-
-export interface GetAggregateDatapoint extends GetDatapointMetadata {
+export interface DatapointAggregate extends DatapointInfo {
   average?: number;
   max?: number;
   min?: number;
@@ -1103,21 +1095,19 @@ export interface GetAggregateDatapoint extends GetDatapointMetadata {
   totalVariation?: number;
 }
 
-export interface GetDatapointMetadata {
+export interface DatapointInfo {
   timestamp: Date;
 }
 
-export interface GetDoubleDatapoint extends GetDatapointMetadata {
+export interface DoubleDatapoint extends DatapointInfo {
   value: number;
 }
 
-export interface GetStringDatapoint extends GetDatapointMetadata {
+export interface StringDatapoint extends DatapointInfo {
   value: string;
 }
 
-export interface GetTimeSeriesMetadataDTO
-  extends InternalId,
-    CreatedAndLastUpdatedTime {
+export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
   /**
    * Externally supplied id of the time series
    */
@@ -1141,6 +1131,53 @@ export interface GetTimeSeriesMetadataDTO
   description: string;
   /**
    * Security categories required in order to access this time series.
+   */
+  securityCategories?: number[];
+}
+
+export interface ExternalTimeseries {
+  /**
+   * Externally provided id for the time series (optional but recommended)
+   */
+  externalId?: CogniteExternalId;
+  /**
+   * Set a value for legacyName to allow applications using API v0.3, v04, v05, and v0.6 to access this time series. The legacy name is the human-readable name for the time series and is mapped to the name field used in API versions 0.3-0.6. The legacyName field value must be unique, and setting this value to an already existing value will return an error. We recommend that you set this field to the same value as externalId.
+   */
+  legacyName?: string;
+  /**
+   * Human readable name of time series
+   */
+  name?: string;
+  /**
+   * Whether the time series is string valued or not.
+   */
+  isString?: boolean;
+  /**
+   * Additional metadata. String key -> String value.
+   */
+  metadata?: Metadata;
+  /**
+   * The physical unit of the time series.
+   */
+  unit?: string;
+  /**
+   * Asset that this time series belongs to.
+   */
+  assetId?: CogniteInternalId;
+  /**
+   * DataSet that this time series related with.
+   */
+  dataSetId?: CogniteInternalId;
+  /**
+   * Whether the time series is a step series or not.
+   */
+  isStep?: boolean;
+  /**
+   * Description of the time series.
+   */
+  description?: string;
+  /**
+   * Security categories required in order to access this time series."
    */
   securityCategories?: number[];
 }
@@ -1207,9 +1244,9 @@ export interface IgnoreUnknownIds {
  * Data about how to authenticate and authorize users
  */
 export interface InputProjectAuthentication {
-  azureADConfiguration?: AzureADConfigurationDTO;
-  oAuth2Configuration?: OAuth2ConfigurationDTO;
+  azureADConfiguration?: AzureADConfiguration;
   validDomains?: ValidDomains;
+  oAuth2Configuration?: OAuth2Configuration;
   applicationDomains?: ApplicationDomains;
 }
 
@@ -1381,7 +1418,7 @@ export type NullableSinglePatchString = { set: string } | { setNull: true };
 /**
  * Data related to generic OAuth2 authentication. Not used for Azure AD
  */
-export interface OAuth2ConfigurationDTO {
+export interface OAuth2Configuration {
   /**
    * Login URL of OAuth2 provider. E.g https://accounts.google.com/o/oauth2/v2/auth.
    */
@@ -1442,56 +1479,9 @@ export interface OutputProjectAuthentication {
  */
 export type Partition = string;
 
-export interface PostDatapoint {
+export interface ExternalDatapoint {
   timestamp: Timestamp;
   value: number | string;
-}
-
-export interface PostTimeSeriesMetadataDTO {
-  /**
-   * Externally provided id for the time series (optional but recommended)
-   */
-  externalId?: CogniteExternalId;
-  /**
-   * Set a value for legacyName to allow applications using API v0.3, v04, v05, and v0.6 to access this time series. The legacy name is the human-readable name for the time series and is mapped to the name field used in API versions 0.3-0.6. The legacyName field value must be unique, and setting this value to an already existing value will return an error. We recommend that you set this field to the same value as externalId.
-   */
-  legacyName?: string;
-  /**
-   * Human readable name of time series
-   */
-  name?: string;
-  /**
-   * Whether the time series is string valued or not.
-   */
-  isString?: boolean;
-  /**
-   * Additional metadata. String key -> String value.
-   */
-  metadata?: Metadata;
-  /**
-   * The physical unit of the time series.
-   */
-  unit?: string;
-  /**
-   * Asset that this time series belongs to.
-   */
-  assetId?: CogniteInternalId;
-  /**
-   * DataSet that this time series related with.
-   */
-  dataSetId?: CogniteInternalId;
-  /**
-   * Whether the time series is a step series or not.
-   */
-  isStep?: boolean;
-  /**
-   * Description of the time series.
-   */
-  description?: string;
-  /**
-   * Security categories required in order to access this time series."
-   */
-  securityCategories?: number[];
 }
 
 /**
@@ -1664,21 +1654,6 @@ export interface RevisionCameraProperties {
    * Initial camera position.
    */
   position?: Tuple3<number>;
-}
-
-export interface Search {
-  /**
-   * Prefix and fuzzy search on name.
-   */
-  name?: string;
-  /**
-   * Prefix and fuzzy search on description.
-   */
-  description?: string;
-  /**
-   * Search on name and description using wildcard search on each of the words (separated by spaces). Retrieves results where at least one word must match. Example: '*some* *other*'
-   */
-  query?: string;
 }
 
 export interface SecurityCategory {
@@ -1975,13 +1950,13 @@ export const SortOrder = {
  */
 export type SortOrder = 'asc' | 'desc';
 
-export interface SyntheticDataError extends GetDatapointMetadata {
+export interface SyntheticDataError extends DatapointInfo {
   error: string;
 }
 
 export type SyntheticDatapoint = SyntheticDataValue | SyntheticDataError;
 
-export interface SyntheticDataValue extends GetDatapointMetadata {
+export interface SyntheticDataValue extends DatapointInfo {
   value: number;
 }
 
@@ -2015,9 +1990,24 @@ export interface TimeSeriesPatch {
   };
 }
 
-export interface TimeSeriesSearchDTO extends Limit {
-  filter?: Filter;
-  search?: Search;
+export interface TimeseriesSearch {
+  /**
+   * Prefix and fuzzy search on name.
+   */
+  name?: string;
+  /**
+   * Prefix and fuzzy search on description.
+   */
+  description?: string;
+  /**
+   * Search on name and description using wildcard search on each of the words (separated by spaces). Retrieves results where at least one word must match. Example: '*some* *other*'
+   */
+  query?: string;
+}
+
+export interface TimeseriesSearchFilter extends Limit {
+  filter?: TimeseriesFilter;
+  search?: TimeseriesSearch;
 }
 
 export type TimeSeriesUpdate =
@@ -2030,16 +2020,7 @@ export interface TimeSeriesUpdateByExternalId
 
 export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
 
-export interface TimeseriesFilter extends TimeseriesFilterProps, FilterQuery {
-  /**
-   * Decide if the metadata field should be returned or not.
-   * This property is ignored by SDK, you can call the endpoint manually if you want to leverage it.
-   */
-  includeMetadata?: boolean;
-  partition?: Partition;
-}
-
-interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
+export interface TimeseriesFilter extends CreatedAndLastUpdatedTimeFilter {
   name?: TimeseriesName;
   unit?: TimeseriesUnit;
   isString?: TimeseriesIsString;
@@ -2070,7 +2051,7 @@ interface TimeseriesFilterProps extends CreatedAndLastUpdatedTimeFilter {
 }
 
 export interface TimeseriesFilterQuery extends FilterQuery {
-  filter?: TimeseriesFilterProps;
+  filter?: TimeseriesFilter;
   partition?: Partition;
 }
 
@@ -2137,7 +2118,7 @@ export interface UpdateRevision3D {
   };
 }
 
-export interface UploadFileMetadataResponse extends FilesMetadata {
+export interface FileUploadResponse extends FileInfo {
   uploadUrl: string;
 }
 

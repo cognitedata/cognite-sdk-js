@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { Asset, GetTimeSeriesMetadataDTO } from '../../types';
+import { Asset, Timeseries } from '../../types';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
@@ -37,7 +37,7 @@ describe('Timeseries integration test', () => {
     },
   ];
 
-  let createdTimeseries: GetTimeSeriesMetadataDTO[];
+  let createdTimeseries: Timeseries[];
 
   test('create', async () => {
     createdTimeseries = await client.timeseries.create(timeseries);
@@ -86,7 +86,7 @@ describe('Timeseries integration test', () => {
   test('list from assetIds', async () => {
     await runTestWithRetryWhenFailing(async () => {
       const result = await client.timeseries
-        .list({ assetIds: [asset.id] })
+        .list({ filter: { assetIds: [asset.id] } })
         .autoPagingToArray({ limit: Infinity });
       expect(result.length).toBe(1);
       expect(result[0].id).toBe(createdTimeseries[0].id);
@@ -107,29 +107,26 @@ describe('Timeseries integration test', () => {
     const { isString, name, unit } = timeseries[1];
     const { items } = await client.timeseries.list({
       partition: '1/2',
-      isString,
-      name,
-      unit,
+      filter: {
+        isString,
+        name,
+        unit,
+      },
     });
     expect(items.length).toBeGreaterThan(0);
   });
 
   test('list', async () => {
-    await client.timeseries
-      .list({ includeMetadata: false })
-      .autoPagingToArray({ limit: 100 });
-  });
-
-  test('list partition', async () => {
-    const items = await client.timeseries
-      .list({ includeMetadata: false, partition: '1/10' })
-      .autoPagingToArray({ limit: 100 });
+    const { items } = await client.timeseries.list({
+      limit: 1,
+      partition: '1/10',
+    });
     expect(items.length).toBeGreaterThan(0);
   });
 
   test('list with assetExternalIds', async () => {
     const { items } = await client.timeseries.list({
-      assetExternalIds: [asset.externalId!],
+      filter: { assetExternalIds: [asset.externalId!] },
       limit: 1,
     });
     expect(items[0].id).toBe(createdTimeseries[0].id);
@@ -137,7 +134,7 @@ describe('Timeseries integration test', () => {
 
   test('list with assetSubtreeIds', async () => {
     const { items } = await client.timeseries.list({
-      assetSubtreeIds: [{ id: asset.id }],
+      filter: { assetSubtreeIds: [{ id: asset.id }] },
       limit: 1,
     });
     expect(items[0].id).toBe(createdTimeseries[0].id);

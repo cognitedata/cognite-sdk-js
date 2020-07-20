@@ -5,19 +5,17 @@ import CogniteClient from '../../cogniteClient';
 import {
   CogniteEvent,
   CogniteInternalId,
-  FilesMetadata,
-  GetTimeSeriesMetadataDTO,
+  FileInfo,
+  Timeseries,
 } from '../../types';
 import { EventsAPI } from '../events/eventsApi';
 import { FilesAPI } from '../files/filesApi';
 import { TimeSeriesAPI } from '../timeSeries/timeSeriesApi';
-import { Asset } from './asset';
+import { AssetImpl } from './asset';
 
-export class AssetList extends Array<Asset> {
-  private client: CogniteClient;
-  constructor(client: CogniteClient, items: Asset[]) {
+export class AssetList extends Array<AssetImpl> {
+  constructor(private client: CogniteClient, items: AssetImpl[]) {
     super(...items);
-    this.client = client;
   }
 
   /**
@@ -39,7 +37,7 @@ export class AssetList extends Array<Asset> {
   public timeSeries = async () => {
     return (await this.getResourcesFromAssets(
       this.client.timeseries
-    )) as GetTimeSeriesMetadataDTO[];
+    )) as Timeseries[];
   };
 
   /**
@@ -49,9 +47,7 @@ export class AssetList extends Array<Asset> {
    * ```
    */
   public files = async () => {
-    return (await this.getResourcesFromAssets(
-      this.client.files
-    )) as FilesMetadata[];
+    return (await this.getResourcesFromAssets(this.client.files)) as FileInfo[];
   };
 
   /**
@@ -69,22 +65,16 @@ export class AssetList extends Array<Asset> {
   private getResourcesFromAssets = async (
     accessedApi: TimeSeriesAPI | FilesAPI | EventsAPI
   ) => {
-    type Type = GetTimeSeriesMetadataDTO | FilesMetadata | CogniteEvent;
+    type Type = Timeseries | FileInfo | CogniteEvent;
     const chunks = this.toChunkedArrayOfIds();
     const promises: Promise<Type[]>[] = [];
     for (const idArray of chunks) {
       const assetIds = { assetIds: idArray };
-      if (accessedApi instanceof TimeSeriesAPI) {
-        promises.push(
-          accessedApi.list(assetIds).autoPagingToArray({ limit: Infinity })
-        );
-      } else {
-        promises.push(
-          accessedApi
-            .list({ filter: assetIds })
-            .autoPagingToArray({ limit: Infinity })
-        );
-      }
+      promises.push(
+        accessedApi
+          .list({ filter: assetIds })
+          .autoPagingToArray({ limit: Infinity })
+      );
     }
     const results = await Promise.all(promises);
     const responses: Type[] = [];

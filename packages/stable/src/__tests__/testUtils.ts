@@ -3,7 +3,7 @@
 import { Constants } from '@cognite/sdk-core';
 import { TestUtils } from '@cognite/sdk-core';
 import CogniteClient from '../cogniteClient';
-import { ExternalFilesMetadata } from '../types';
+import { ExternalFileInfo } from '../types';
 
 export const {
   apiKey,
@@ -41,12 +41,12 @@ export function setupMockableClient() {
 }
 
 export const getFileCreateArgs = (
-  additionalFields: Partial<ExternalFilesMetadata> = {}
+  additionalFields: Partial<ExternalFileInfo> = {}
 ) => {
   const postfix = randomInt();
   const fileContent = 'content_' + new Date();
   const sourceCreatedTime = new Date();
-  const localFileMeta: ExternalFilesMetadata = {
+  const localFileMeta: ExternalFileInfo = {
     name: 'filename_0_' + postfix,
     mimeType: 'text/plain;charset=UTF-8',
     metadata: {
