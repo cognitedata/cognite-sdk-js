@@ -1,6 +1,7 @@
 // Copyright 2020 Cognite AS
 import { sleepPromise } from '../utils';
 import { BasicHttpClient, HttpRequest, HttpResponse } from './basicHttpClient';
+import { RetryValidator } from './retryValidator';
 
 export class RetryableHttpClient extends BasicHttpClient {
   private static calculateRetryDelayInMs(retryCount: number) {
@@ -31,10 +32,3 @@ export class RetryableHttpClient extends BasicHttpClient {
     }
   }
 }
-
-/** @hidden */
-export type RetryValidator = (
-  request: HttpRequest,
-  response: HttpResponse<any>,
-  retryCount: number
-) => boolean;

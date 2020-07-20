@@ -4,6 +4,7 @@ import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
 import { CogniteError } from '../error';
 import { bearerString } from '../utils';
 import { CDFHttpClient } from './cdfHttpClient';
+import { createUniversalRetryValidator } from './retryValidator';
 
 describe('CDFHttpClient', () => {
   const baseUrl = 'https://example.com';
@@ -14,7 +15,7 @@ describe('CDFHttpClient', () => {
   const error401 = { error: { code: 401, message: 'Some message' } };
   let client: CDFHttpClient;
   beforeEach(() => {
-    client = new CDFHttpClient(baseUrl);
+    client = new CDFHttpClient(baseUrl, createUniversalRetryValidator());
     nock.cleanAll();
   });
 

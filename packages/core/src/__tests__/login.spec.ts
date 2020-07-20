@@ -19,11 +19,15 @@ import {
   projectId,
   mockBaseUrl,
 } from '../testUtils';
+import { createUniversalRetryValidator } from '../httpClient/retryValidator';
 
 describe('Login', () => {
   const response401 = { error: { code: 401, message: '' } };
   const statusPath = '/login/status';
-  const httpClient = new CDFHttpClient(mockBaseUrl);
+  const httpClient = new CDFHttpClient(
+    mockBaseUrl,
+    createUniversalRetryValidator()
+  );
 
   beforeEach(() => {
     window.history.pushState({}, '', '');

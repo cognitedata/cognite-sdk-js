@@ -1,5 +1,10 @@
 // Copyright 2020 Cognite AS
-import { accessApi, apiUrl, BaseCogniteClient } from '@cognite/sdk-core';
+import {
+  accessApi,
+  apiUrl,
+  BaseCogniteClient,
+  RetryValidator,
+} from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';
 import { Files3DAPI } from './api/3d/files3DApi';
@@ -20,6 +25,7 @@ import { SecurityCategoriesAPI } from './api/securityCategories/securityCategori
 import { SequencesAPI } from './api/sequences/sequencesApi';
 import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
 import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+import { retryValidator } from './retryValidator';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
@@ -102,6 +108,10 @@ export default class CogniteClient extends BaseCogniteClient {
 
   protected get version() {
     return version;
+  }
+
+  protected getRetryValidator(): RetryValidator {
+    return retryValidator;
   }
 
   protected initAPIs() {
