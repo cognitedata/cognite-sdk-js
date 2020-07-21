@@ -17,15 +17,15 @@ More comprehensive list can be found in [changelog](../packages/stable/CHANGELOG
 - `client.events.aggregate(...)` -> `client.events.aggregate.count()`
 - `client.events.uniqueValuesAggregate(...)` -> `client.events.aggregate.uniqueValues(...)`
 
-## Timestamp-to-Date auto-convertion
+## Timestamp-to-Date auto-conversion
 
-JS SDK automatically converts response timestamp values to date objects. This caused a [bug](https://github.com/cognitedata/cognite-sdk-js/issues/333) in raw API. The fix can introduce a breaking change if you use raw API, and possibly in other places.
+The JavaScript SDK automatically converts response timestamp values to date objects. This caused a [bug](https://github.com/cognitedata/cognite-sdk-js/issues/333) in the Raw API. The fix can introduce a breaking change if you use the Raw API, and possibly in other places.
 
 ## Helper classes removed
 
 AssetClass, TimeSeriesClass, TimeSeriesList and AssetList containing some helper methods has been removed.
 
-Most of these helpers can be easily re-implemented using other sdk api calls.
+Most of these helpers can be easily re-implemented using other SDK calls.
 
 Some examples:
 
