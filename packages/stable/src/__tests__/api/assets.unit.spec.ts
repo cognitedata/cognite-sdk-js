@@ -297,15 +297,6 @@ describe('Assets unit test', () => {
       expect(() => JSON.stringify(assets[0])).not.toThrow();
     });
 
-    test('change context for asset utility methods', async () => {
-      const assets = await client.assets.list().autoPagingToArray();
-      const utilMethod = assets[0].children;
-      const result = await utilMethod();
-      const resultAfterBind = await utilMethod.call(null);
-      expect({ ...result[0] }).toEqual({ ...resultAfterBind[0] });
-      expect([{ ...result[0] }, { ...result[1] }]).toEqual(items);
-    });
-
     test('spread operator receives only object data props', async () => {
       const assets = await client.assets.list().autoPagingToArray();
       expect([{ ...assets[0] }, { ...assets[1] }]).toEqual(items);

@@ -16,11 +16,7 @@ import {
 import { applyIfApplicable, promiseAllWithData } from './utils';
 
 /** @hidden */
-export abstract class BaseResourceAPI<
-  ResponseType,
-  TransformedType = ResponseType,
-  WrapperType extends TransformedType[] = TransformedType[]
-> {
+export abstract class BaseResourceAPI<ResponseType> {
   protected get listGetUrl() {
     return this.url('');
   }
@@ -86,9 +82,9 @@ export abstract class BaseResourceAPI<
   }
 
   protected listEndpoint<QueryType extends FilterQuery>(
-    endpointCaller: ListEndpoint<QueryType, WrapperType>,
+    endpointCaller: ListEndpoint<QueryType, ResponseType[]>,
     scope?: QueryType
-  ): CursorAndAsyncIterator<TransformedType, WrapperType> {
+  ): CursorAndAsyncIterator<ResponseType> {
     const listPromise = endpointCaller(scope).then(transformedResponse =>
       this.addNextPageFunction<QueryType>(
         endpointCaller.bind(this),
@@ -144,26 +140,26 @@ export abstract class BaseResourceAPI<
 
   protected callListEndpointWithGet = async <QueryType extends FilterQuery>(
     scope?: QueryType
-  ): Promise<HttpResponse<CursorResponse<WrapperType>>> => {
+  ): Promise<HttpResponse<CursorResponse<ResponseType[]>>> => {
     const response = await this.httpClient.get<CursorResponse<ResponseType[]>>(
       this.listGetUrl,
       {
         params: scope,
       }
     );
-    return this.transformResponse(response);
+    return response;
   };
 
   protected callListEndpointWithPost = async <QueryType extends FilterQuery>(
     scope?: QueryType
-  ): Promise<HttpResponse<CursorResponse<WrapperType>>> => {
+  ): Promise<HttpResponse<CursorResponse<ResponseType[]>>> => {
     const response = await this.httpClient.post<CursorResponse<ResponseType[]>>(
       this.listPostUrl,
       {
         data: scope || {},
       }
     );
-    return this.transformResponse(response);
+    return response;
   };
 
   protected async callRetrieveEndpoint<RequestParams extends object>(
@@ -212,14 +208,6 @@ export abstract class BaseResourceAPI<
     return this.map.addAndReturn(response, metadata);
   }
 
-  protected transformAndReturn(
-    items: ResponseType[],
-    metadata: HttpResponse<ItemsWrapper<ResponseType[]>>
-  ) {
-    const transformedResponse = this.transformToClass(items);
-    return this.addToMapAndReturn(transformedResponse, metadata);
-  }
-
   protected async callEndpointWithMergeAndTransform<RequestType>(
     query: RequestType,
     requester: (
@@ -235,7 +223,7 @@ export abstract class BaseResourceAPI<
       mergedResponseItems,
       postRequestModifier
     );
-    return this.transformAndReturn(modifiedResponseItems, responses[0]);
+    return this.addToMapAndReturn(modifiedResponseItems, responses[0]);
   }
 
   protected async callEndpointWithTransform<RequestType>(
@@ -245,7 +233,7 @@ export abstract class BaseResourceAPI<
     ) => Promise<HttpResponse<ItemsWrapper<ResponseType[]>>>
   ) {
     const response = await requester.bind(this)(query);
-    return this.transformAndReturn(response.data.items, response);
+    return this.addToMapAndReturn(response.data.items, response);
   }
 
   protected mergeItemsFromItemsResponse<T>(
@@ -257,10 +245,10 @@ export abstract class BaseResourceAPI<
   }
 
   protected addNextPageFunction<QueryType extends FilterQuery>(
-    endpoint: ListEndpoint<QueryType, WrapperType>,
-    cursorResponse: CursorResponse<WrapperType>,
+    endpoint: ListEndpoint<QueryType, ResponseType[]>,
+    cursorResponse: CursorResponse<ResponseType[]>,
     query: QueryType = {} as QueryType
-  ): ListResponse<WrapperType> {
+  ): ListResponse<ResponseType[]> {
     const { nextCursor } = cursorResponse;
     const next = nextCursor
       ? () =>
@@ -272,13 +260,6 @@ export abstract class BaseResourceAPI<
       ...cursorResponse,
       next,
     };
-  }
-
-  protected transformToClass(array: ResponseType[]): WrapperType {
-    return (array as unknown) as WrapperType;
-  }
-  protected transformToList(items: ResponseType[]): TransformedType[] {
-    return (items as unknown) as TransformedType[];
   }
 
   protected postInParallelWithAutomaticChunking<
@@ -312,18 +293,6 @@ export abstract class BaseResourceAPI<
     >(path, items);
   }
 
-  private transformResponse(
-    response: HttpResponse<ItemsWrapper<ResponseType[]>>
-  ): HttpResponse<ItemsWrapper<WrapperType>> {
-    return {
-      ...response,
-      data: {
-        ...response.data,
-        items: this.transformToClass(response.data.items),
-      },
-    };
-  }
-
   private postInSequenceWithAutomaticChunking<
     RequestType,
     ParamsType extends object = {}
@@ -340,9 +309,9 @@ export abstract class BaseResourceAPI<
   }
 }
 
-type ListEndpoint<QueryType extends FilterQuery, WrapperType> = (
+type ListEndpoint<QueryType extends FilterQuery, ResponseType> = (
   query?: QueryType
-) => Promise<HttpResponse<CursorResponse<WrapperType>>>;
+) => Promise<HttpResponse<CursorResponse<ResponseType>>>;
 
 interface PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType> {
   path: string;

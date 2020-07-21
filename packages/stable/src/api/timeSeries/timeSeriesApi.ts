@@ -6,7 +6,6 @@ import {
   CursorAndAsyncIterator,
   MetadataMap,
 } from '@cognite/sdk-core';
-import CogniteClient from '../../cogniteClient';
 import {
   Timeseries,
   IdEither,
@@ -19,29 +18,17 @@ import {
   TimeseriesSearchFilter,
   TimeSeriesUpdate,
 } from '../../types';
-import { TimeseriesImpl } from '../classes/timeSeries';
-import { TimeSeriesList } from '../classes/timeSeriesList';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 
-export class TimeSeriesAPI extends BaseResourceAPI<
-  Timeseries,
-  TimeseriesImpl,
-  TimeSeriesList
-> {
+export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
 
   /** @hidden */
-  constructor(
-    private client: CogniteClient,
-    resourcePath: string,
-    httpClient: CDFHttpClient,
-    map: MetadataMap
-  ) {
-    super(resourcePath, httpClient, map);
+  constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
+    super(resourcePath, ...args);
     this.syntheticTimeseriesApi = new SyntheticTimeSeriesAPI(
       this.url('synthetic'),
-      httpClient,
-      map
+      ...args
     );
   }
 
@@ -56,7 +43,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```
    */
-  public create = (items: ExternalTimeseries[]): Promise<TimeSeriesList> => {
+  public create = (items: ExternalTimeseries[]): Promise<Timeseries[]> => {
     return super.createEndpoint(items);
   };
 
@@ -69,7 +56,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<
    */
   public list = (
     scope?: TimeseriesFilterQuery
-  ): CursorAndAsyncIterator<TimeseriesImpl> => {
+  ): CursorAndAsyncIterator<Timeseries> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
@@ -169,17 +156,6 @@ export class TimeSeriesAPI extends BaseResourceAPI<
   public syntheticQuery = (items: SyntheticQuery[]) => {
     return this.syntheticTimeseriesApi.query(items);
   };
-
-  protected transformToList(timeSeries: Timeseries[]) {
-    return timeSeries.map(
-      timeSerie => new TimeseriesImpl(this.client, timeSerie)
-    );
-  }
-
-  protected transformToClass(timeSeries: Timeseries[]) {
-    const timeseriesArray = this.transformToList(timeSeries);
-    return new TimeSeriesList(this.client, timeseriesArray);
-  }
 }
 
 export type TimeseriesRetrieveParams = IgnoreUnknownIds;
