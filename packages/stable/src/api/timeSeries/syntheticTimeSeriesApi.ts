@@ -1,11 +1,25 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import { SyntheticQuery, SyntheticQueryResponse } from '../../types';
+import {
+  SyntheticQuery,
+  SyntheticQueryResponse,
+  DatapointInfo,
+} from '../../types';
 
 export class SyntheticTimeSeriesAPI extends BaseResourceAPI<
   SyntheticQueryResponse
 > {
+  /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps<DatapointInfo>(
+      ['items', 'datapoints'],
+      ['timestamp']
+    );
+  }
+
   public query = (
     items: SyntheticQuery[]
   ): Promise<SyntheticQueryResponse[]> => {
