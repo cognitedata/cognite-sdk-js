@@ -2,7 +2,7 @@
 
 import { isString } from 'lodash';
 import { parse, stringify } from 'query-string';
-import { API_KEY_HEADER, AUTHORIZATION_HEADER } from './constants';
+import { AUTHORIZATION_HEADER } from './constants';
 import {
   HttpHeaders,
   HttpQueryParams,
@@ -61,16 +61,6 @@ export interface OnAuthenticateLoginObject {
   skip: () => void;
 }
 export type OnAuthenticate = (login: OnAuthenticateLoginObject) => void;
-
-/** @hidden */
-export function getIdInfoFromApiKey(
-  httpClient: CDFHttpClient,
-  apiKey: string
-): Promise<null | IdInfo> {
-  return getIdInfo(httpClient.get.bind(httpClient), {
-    [API_KEY_HEADER]: apiKey,
-  });
-}
 
 /** @hidden */
 export function getIdInfoFromAccessToken(
