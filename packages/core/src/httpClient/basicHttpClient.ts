@@ -254,3 +254,8 @@ export interface HttpHeaders {
 }
 
 type ResponseHandler<ResponseType> = (res: Response) => Promise<ResponseType>;
+
+export type HttpCall = <ResponseType>(
+  path: string,
+  options?: HttpRequestOptions
+) => Promise<HttpResponse<ResponseType>>;

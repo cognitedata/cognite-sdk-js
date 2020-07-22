@@ -12,6 +12,13 @@ import {
 
 export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
   /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime']);
+  }
+
+  /**
    * [Create API keys](https://doc.cognitedata.com/api/v1/#operation/createApiKeys)
    *
    * ```js
@@ -31,10 +38,9 @@ export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
    */
   public list = async (scope?: ApiKeyListScope): Promise<ApiKeyObject[]> => {
     const path = this.url();
-    const response = await this.httpClient.get<ItemsWrapper<ApiKeyObject[]>>(
-      path,
-      { params: scope }
-    );
+    const response = await this.get<ItemsWrapper<ApiKeyObject[]>>(path, {
+      params: scope,
+    });
     return this.addToMapAndReturn(response.data.items, response);
   };
 

@@ -42,6 +42,7 @@ describe('Events integration test', () => {
     expect(createdEvents[0].description).toBe(events[0].description);
     expect(createdEvents[1].type).toBe(events[1].type);
     expect(createdEvents[1].subtype).toBe(events[1].subtype);
+    expect(createdEvents[1].createdTime).toBeInstanceOf(Date);
   });
 
   test('retrieve', async () => {

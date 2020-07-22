@@ -25,7 +25,7 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
     const path = `${this.encodeUrl(databaseName)}/tables`;
     return super.listEndpoint(
       async params =>
-        this.httpClient.get<CursorResponse<RawDBTable[]>>(path, {
+        this.get<CursorResponse<RawDBTable[]>>(path, {
           params,
         }),
       scope
