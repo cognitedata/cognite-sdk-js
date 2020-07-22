@@ -10,9 +10,22 @@ import {
   ItemsWrapper,
   LatestDataBeforeRequest,
   ExternalDatapointsQuery,
+  DatapointInfo,
 } from '../../types';
 
-export class DataPointsAPI extends BaseResourceAPI<any> {
+export class DataPointsAPI extends BaseResourceAPI<
+  DatapointAggregates | Datapoints
+> {
+  /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps<DatapointInfo>(
+      ['items', 'datapoints'],
+      ['timestamp']
+    );
+  }
+
   /**
    * [Insert data points](https://doc.cognitedata.com/api/v1/#operation/postMultiTimeSeriesDatapoints)
    *
@@ -79,7 +92,7 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
 
   private async retrieveDatapointsEndpoint(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
-    const response = await this.httpClient.post<
+    const response = await this.post<
       ItemsWrapper<(DatapointAggregates | Datapoints)[]>
     >(path, {
       data: query,
@@ -92,12 +105,9 @@ export class DataPointsAPI extends BaseResourceAPI<any> {
     params: LatestDataParams
   ) {
     const path = this.url('latest');
-    const response = await this.httpClient.post<ItemsWrapper<Datapoints[]>>(
-      path,
-      {
-        data: { items, ...params },
-      }
-    );
+    const response = await this.post<ItemsWrapper<Datapoints[]>>(path, {
+      data: { items, ...params },
+    });
     return this.addToMapAndReturn(response.data.items, response);
   }
 

@@ -17,7 +17,7 @@ export class Nodes3DAPI extends BaseResourceAPI<Node3D> {
   ): CursorAndAsyncIterator<Node3D> {
     const path = this.url(`${modelId}/revisions/${revisionId}/nodes`);
     return super.listEndpoint(
-      params => this.httpClient.get<CursorResponse<Node3D[]>>(path, { params }),
+      params => this.get<CursorResponse<Node3D[]>>(path, { params }),
       scope
     );
   }
@@ -41,7 +41,7 @@ export class Nodes3DAPI extends BaseResourceAPI<Node3D> {
       `${modelId}/revisions/${revisionId}/nodes/${nodeId}/ancestors`
     );
     return super.listEndpoint(
-      params => this.httpClient.get<CursorResponse<Node3D[]>>(path, { params }),
+      params => this.get<CursorResponse<Node3D[]>>(path, { params }),
       scope
     );
   }

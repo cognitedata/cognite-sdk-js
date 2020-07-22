@@ -2,7 +2,11 @@
 
 import chunk from 'lodash/chunk';
 import { makeAutoPaginationMethods } from './autoPagination';
-import { HttpResponse } from './httpClient/basicHttpClient';
+import {
+  HttpResponse,
+  HttpRequestOptions,
+  HttpCall,
+} from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import { MetadataMap } from './metadata';
 import {
@@ -14,7 +18,7 @@ import {
   ListResponse,
 } from './types';
 import { applyIfApplicable, promiseAllWithData } from './utils';
-
+import DateParser from './dateParser';
 /** @hidden */
 export abstract class BaseResourceAPI<ResponseType> {
   protected get listGetUrl() {
@@ -52,20 +56,75 @@ export abstract class BaseResourceAPI<ResponseType> {
     return chunk(items, chunkSize);
   }
 
+  protected readonly dateParser: DateParser;
+
   /** @hidden */
   constructor(
     private readonly resourcePath: string,
-    protected readonly httpClient: CDFHttpClient,
+    private readonly httpClient: CDFHttpClient,
     private map: MetadataMap
-  ) {}
+  ) {
+    this.dateParser = new DateParser(...this.getDateProps());
+  }
 
   protected getMetadataMap() {
     return this.map;
   }
 
+  /**
+   * Specifies what fields in http json responses can
+   * be parsed as numbers of milliseconds since unix epoch,
+   * and be converted into Date objects.
+   */
+  protected getDateProps(): [string[], string[]] {
+    return [[], []];
+  }
+
+  /**
+   * Helper for getDateProps(...)
+   *
+   * @param parents list of parent property names (recursively)
+   * @param props list of unix timestamp properties to be converted
+   */
+  protected pickDateProps<T = ResponseType>(
+    parents: string[],
+    props: NonNullable<KeysOfType<NoInfer<T>, Date | undefined>>[]
+  ): [string[], string[]] {
+    return [parents, props as string[]];
+  }
+
   protected url(path: string = '') {
     return this.resourcePath + '/' + path;
   }
+
+  private requestWrapper(request: HttpCall) {
+    return async <ResponseType>(
+      path: string,
+      options?: HttpRequestOptions
+    ): Promise<HttpResponse<ResponseType>> => {
+      if (options !== undefined)
+        options = {
+          ...options,
+          params: DateParser.parseFromDates(options.params),
+          data: DateParser.parseFromDates(options.data),
+        };
+      const response = await request<ResponseType>(path, options);
+      return {
+        ...response,
+        data: this.dateParser.parseToDates(response.data),
+      };
+    };
+  }
+
+  protected get = this.requestWrapper(
+    this.httpClient.get.bind(this.httpClient)
+  );
+  protected post = this.requestWrapper(
+    this.httpClient.post.bind(this.httpClient)
+  );
+  protected put = this.requestWrapper(
+    this.httpClient.put.bind(this.httpClient)
+  );
 
   protected async createEndpoint<RequestType>(
     items: RequestType[],
@@ -141,7 +200,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   protected callListEndpointWithGet = async <QueryType extends FilterQuery>(
     scope?: QueryType
   ): Promise<HttpResponse<CursorResponse<ResponseType[]>>> => {
-    const response = await this.httpClient.get<CursorResponse<ResponseType[]>>(
+    const response = await this.get<CursorResponse<ResponseType[]>>(
       this.listGetUrl,
       {
         params: scope,
@@ -153,7 +212,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   protected callListEndpointWithPost = async <QueryType extends FilterQuery>(
     scope?: QueryType
   ): Promise<HttpResponse<CursorResponse<ResponseType[]>>> => {
-    const response = await this.httpClient.post<CursorResponse<ResponseType[]>>(
+    const response = await this.post<CursorResponse<ResponseType[]>>(
       this.listPostUrl,
       {
         data: scope || {},
@@ -178,7 +237,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   }
 
   protected async callSearchEndpoint<QueryType, Response>(query: QueryType) {
-    return this.httpClient.post<Response>(this.searchUrl, { data: query });
+    return this.post<Response>(this.searchUrl, { data: query });
   }
 
   protected callDeleteEndpoint<ParamsType extends object, T = IdEither>(
@@ -196,12 +255,9 @@ export abstract class BaseResourceAPI<ResponseType> {
   protected async callAggregateEndpoint<QueryType, AggregateResponse>(
     query: QueryType
   ) {
-    return this.httpClient.post<ItemsWrapper<AggregateResponse[]>>(
-      this.aggregateUrl,
-      {
-        data: query,
-      }
-    );
+    return this.post<ItemsWrapper<AggregateResponse[]>>(this.aggregateUrl, {
+      data: query,
+    });
   }
 
   protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>) {
@@ -275,7 +331,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, chunkSize),
       singleChunk =>
-        this.httpClient.post<ItemsWrapper<ResponseType[]>>(path, {
+        this.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { ...params, items: singleChunk },
           params: queryParams,
         }),
@@ -300,7 +356,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, 1000),
       singleChunk =>
-        this.httpClient.post<ItemsWrapper<ResponseType[]>>(path, {
+        this.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { items: singleChunk },
           params,
         }),
@@ -320,3 +376,7 @@ interface PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType> {
   queryParams?: ParamsType;
   chunkSize?: number;
 }
+
+type KeysOfType<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T];
+
+type NoInfer<T> = [T][T extends any ? 0 : never];

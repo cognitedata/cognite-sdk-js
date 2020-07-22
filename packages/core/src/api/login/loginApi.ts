@@ -20,6 +20,6 @@ export class LoginAPI extends BaseResourceAPI<any> {
    * ```
    */
   public status = (): Promise<null | IdInfo> => {
-    return getIdInfo(this.httpClient, {});
+    return getIdInfo(this.get, {});
   };
 }

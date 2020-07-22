@@ -30,6 +30,13 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
   }
 
   /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime']);
+  }
+
+  /**
    * [Create 3D revisions](https://doc.cognitedata.com/api/v1/#operation/create3DRevisions)
    *
    * ```js
@@ -55,10 +62,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     filter?: Revision3DListRequest
   ): CursorAndAsyncIterator<Revision3D> => {
     const path = this.url(`${modelId}/revisions`);
-    return super.listEndpoint(
-      params => this.httpClient.get(path, { params }),
-      filter
-    );
+    return super.listEndpoint(params => this.get(path, { params }), filter);
   };
 
   /**
@@ -73,7 +77,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     revisionId: CogniteInternalId
   ): Promise<Revision3D> => {
     const path = this.url(`${modelId}/revisions/${revisionId}`);
-    const response = await this.httpClient.get<Revision3D>(path);
+    const response = await this.get<Revision3D>(path);
     return this.addToMapAndReturn(response.data, response);
   };
 
@@ -128,7 +132,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     fileId: CogniteInternalId
   ): Promise<{}> => {
     const path = this.url(`${modelId}/revisions/${revisionId}/thumbnail`);
-    const response = await this.httpClient.post<{}>(path, { data: { fileId } });
+    const response = await this.post<{}>(path, { data: { fileId } });
     return this.addToMapAndReturn({}, response);
   };
 

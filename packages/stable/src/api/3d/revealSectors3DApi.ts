@@ -14,9 +14,6 @@ export class RevealSectors3DAPI extends BaseResourceAPI<RevealSector3D> {
     scope?: ListRevealSectors3DQuery
   ): CursorAndAsyncIterator<RevealSector3D> {
     const path = this.url(`models/${modelId}/revisions/${revisionId}/sectors`);
-    return super.listEndpoint(
-      params => this.httpClient.get(path, { params }),
-      scope
-    );
+    return super.listEndpoint(params => this.get(path, { params }), scope);
   }
 }

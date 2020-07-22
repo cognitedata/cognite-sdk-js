@@ -13,6 +13,13 @@ import {
 
 export class DataSetsApi extends BaseResourceAPI<DataSet> {
   /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
+  }
+
+  /**
    * [Create datasets](https://docs.cognite.com/api/v1/#operation/createDataSets)
    *
    * ```js

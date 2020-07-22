@@ -23,6 +23,6 @@ export class LogoutApi extends BaseResourceAPI<any> {
   public getUrl = (
     options: { redirectUrl?: string } = {}
   ): Promise<string | null> => {
-    return getLogoutUrl(this.httpClient, options);
+    return getLogoutUrl(this.get, options);
   };
 }

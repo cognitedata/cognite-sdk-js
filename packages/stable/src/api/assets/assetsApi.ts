@@ -18,6 +18,13 @@ import { sortAssetCreateItems } from './assetUtils';
 
 export class AssetsAPI extends BaseResourceAPI<Asset> {
   /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
+  }
+
+  /**
    * [Creates new assets](https://doc.cognitedata.com/api/v1/#operation/createAssets)
    *
    * ```js

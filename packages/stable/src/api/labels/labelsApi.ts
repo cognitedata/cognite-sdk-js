@@ -10,6 +10,13 @@ import {
 
 export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
   /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime']);
+  }
+
+  /**
    * [Create labels](https://docs.cognite.com/api/v1/#operation/createLabelDefinitions)
    *
    * ```js
