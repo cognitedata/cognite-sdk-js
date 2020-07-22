@@ -164,7 +164,7 @@ export default class BaseCogniteClient {
     }
     const { project, apiKey } = options;
     const keys: (keyof ApiKeyLoginOptions)[] = ['project', 'apiKey'];
-    for (let property of keys) {
+    for (const property of keys) {
       if (!isString(options[property])) {
         throw Error(
           `options.${property} is required and must be of type string`
