@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import * as nock from 'nock';
+import nock from 'nock';
 import { Asset } from '../../types';
 import CogniteClient from '../../cogniteClient';
 import {

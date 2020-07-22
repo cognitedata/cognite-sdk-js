@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import * as nock from 'nock';
+import nock from 'nock';
 import BaseCogniteClient, { POPUP, REDIRECT } from '../baseCogniteClient';
 import {
   API_KEY_HEADER,

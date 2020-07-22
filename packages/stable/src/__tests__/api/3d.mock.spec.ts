@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { transformDateInRequest } from '@cognite/sdk-core';
-import * as nock from 'nock';
+import nock from 'nock';
 import CogniteClient from '../../cogniteClient';
 import {
   Model3D,

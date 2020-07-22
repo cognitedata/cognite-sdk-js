@@ -1,6 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import { cloneDeepWith, isArray, isObject } from 'lodash';
+import cloneDeepWith from 'lodash/cloneDeepWith';
+import isObject from 'lodash/isObject';
+import isArray from 'lodash/isArray';
 import { isBuffer } from 'util';
 import { API_VERSION, BASE_URL } from './constants';
 import { CogniteError } from './error';

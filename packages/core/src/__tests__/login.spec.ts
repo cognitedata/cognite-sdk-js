@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import * as nock from 'nock';
+import nock from 'nock';
 import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
 import { CDFHttpClient } from '../httpClient/cdfHttpClient';
 import {
