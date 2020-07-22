@@ -2,8 +2,12 @@
 
 import { isString } from 'lodash';
 import { parse, stringify } from 'query-string';
-import { API_KEY_HEADER, AUTHORIZATION_HEADER } from './constants';
-import { HttpHeaders, HttpQueryParams } from './httpClient/basicHttpClient';
+import { AUTHORIZATION_HEADER } from './constants';
+import {
+  HttpHeaders,
+  HttpQueryParams,
+  HttpCall,
+} from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import * as Login from './login';
 import { CogniteLoginError } from './loginError';
@@ -59,19 +63,11 @@ export interface OnAuthenticateLoginObject {
 export type OnAuthenticate = (login: OnAuthenticateLoginObject) => void;
 
 /** @hidden */
-export function getIdInfoFromApiKey(
-  httpClient: CDFHttpClient,
-  apiKey: string
-): Promise<null | IdInfo> {
-  return getIdInfo(httpClient, { [API_KEY_HEADER]: apiKey });
-}
-
-/** @hidden */
 export function getIdInfoFromAccessToken(
   httpClient: CDFHttpClient,
   accessToken: string
 ): Promise<null | IdInfo> {
-  return getIdInfo(httpClient, {
+  return getIdInfo(httpClient.get.bind(httpClient), {
     [AUTHORIZATION_HEADER]: bearerString(accessToken),
   });
 }
@@ -123,11 +119,11 @@ export async function loginSilently(
 
 /** @hidden */
 export async function getIdInfo(
-  httpClient: CDFHttpClient,
+  get: HttpCall,
   headers: HttpHeaders
 ): Promise<null | IdInfo> {
   try {
-    const response = await httpClient.get<any>('/login/status', { headers });
+    const response = await get<any>('/login/status', { headers });
     const { loggedIn, user, project, projectId } = response.data.data;
     if (!loggedIn) {
       return null;
@@ -146,12 +142,9 @@ export async function getIdInfo(
 }
 
 /** @hidden */
-export async function getLogoutUrl(
-  httpClient: CDFHttpClient,
-  params: HttpQueryParams
-) {
+export async function getLogoutUrl(get: HttpCall, params: HttpQueryParams) {
   try {
-    const response = await httpClient.get<LogoutUrlResponse>('/logout/url', {
+    const response = await get<LogoutUrlResponse>('/logout/url', {
       params,
     });
     return response.data.data.url;

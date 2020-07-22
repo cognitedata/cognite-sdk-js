@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { cloneDeepWith, isArray, isObject } from 'lodash';
+import { isArray, isObject } from 'lodash';
 import { isBuffer } from 'util';
 import { API_VERSION, BASE_URL } from './constants';
 import { CogniteError } from './error';
@@ -171,33 +171,6 @@ export function applyIfApplicable<ArgumentType, ResultType>(
     return action(args);
   }
   return args;
-}
-
-/** @hidden */
-export function transformDateInRequest<T>(data: T): T {
-  return cloneDeepWith(data, value => {
-    if (value instanceof Date) {
-      return value.getTime();
-    }
-  });
-}
-
-/** @hidden */
-export function transformDateInResponse<T>(data: T): T {
-  const dateKeys = [
-    'createdTime',
-    'lastUpdatedTime',
-    'uploadedTime',
-    'deletedTime',
-    'timestamp',
-    'sourceCreatedTime',
-    'sourceModifiedTime',
-  ];
-  return cloneDeepWith(data, (value, key) => {
-    if (dateKeys.indexOf('' + key) !== -1) {
-      return new Date(value);
-    }
-  });
 }
 
 /** @hidden */

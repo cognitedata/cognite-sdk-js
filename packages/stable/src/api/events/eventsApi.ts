@@ -27,6 +27,13 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
   }
 
   /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
+  }
+
+  /**
    * [Create events](https://doc.cognitedata.com/api/v1/#operation/createEvents)
    *
    * ```js

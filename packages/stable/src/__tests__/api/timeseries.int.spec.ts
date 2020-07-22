@@ -29,6 +29,9 @@ describe('Timeseries integration test', () => {
     {
       name: 'timeserie1',
       externalId: 'external_' + randomInt(),
+      metadata: {
+        createdTime: 'now',
+      },
     },
     {
       name: 'timeserie2',
@@ -42,13 +45,15 @@ describe('Timeseries integration test', () => {
   test('create', async () => {
     createdTimeseries = await client.timeseries.create(timeseries);
     expect(createdTimeseries[0].id).toBeDefined();
+    expect(createdTimeseries[0].lastUpdatedTime).toBeInstanceOf(Date);
+    expect(createdTimeseries[0].metadata!.createdTime).not.toBeInstanceOf(Date);
   });
 
   test('retrieve', async () => {
-    const single = await client.timeseries.retrieve([
+    const [single] = await client.timeseries.retrieve([
       { id: createdTimeseries[0].id },
     ]);
-    expect(single[0].name).toBe(timeseries[0].name);
+    expect(single.name).toBe(timeseries[0].name);
   });
 
   test('retrieve with non-existent external id', async () => {
@@ -150,21 +155,6 @@ describe('Timeseries integration test', () => {
     expect(result.length).toBeGreaterThan(0);
     expect(result[0].id).toBeDefined();
     expect(result[0].name).toBe(name);
-  });
-
-  test('synthetic query', async () => {
-    const [ts1] = createdTimeseries;
-    const result = await client.timeseries.syntheticQuery([
-      {
-        expression: `24 * TS{externalId='${
-          ts1.externalId
-        }', aggregate='average', granularity='1h'}`,
-        start: '48h-ago',
-        end: 'now',
-        limit: 100,
-      },
-    ]);
-    expect(result.length).toBe(1);
   });
 
   test('delete', async () => {

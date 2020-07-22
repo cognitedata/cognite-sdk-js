@@ -25,8 +25,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   ): CursorAndAsyncIterator<AssetMapping3D> => {
     const path = this.encodeUrl(modelId, revisionId);
     return super.listEndpoint(
-      params =>
-        this.httpClient.get<CursorResponse<AssetMapping3D[]>>(path, { params }),
+      params => this.get<CursorResponse<AssetMapping3D[]>>(path, { params }),
       scope
     );
   };

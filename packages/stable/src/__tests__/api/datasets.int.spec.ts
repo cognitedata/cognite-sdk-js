@@ -42,6 +42,7 @@ describe('data sets integration test', () => {
     ]);
     updateDataSetObject = { update: { dataSetId: { set: datasets[1].id } } };
     expect(datasets[0].id).toBeTruthy();
+    expect(datasets[0].lastUpdatedTime).toBeInstanceOf(Date);
   });
   test('list', async () => {
     const filter: DataSetFilterRequest = {

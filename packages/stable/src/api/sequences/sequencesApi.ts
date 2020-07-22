@@ -40,6 +40,16 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
   }
 
   /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(
+      ['items', 'columns'],
+      ['createdTime', 'lastUpdatedTime']
+    );
+  }
+
+  /**
    * [Create sequences](https://docs.cognite.com/api/v1/#operation/createSequence)
    *
    * ```js

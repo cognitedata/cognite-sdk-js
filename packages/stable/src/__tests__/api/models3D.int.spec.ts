@@ -34,6 +34,7 @@ describe('Model3d integration test', () => {
   test('retrieve', async () => {
     const retrieved = await client.models3D.retrieve(models[0].id);
     expect(retrieved.name).toBe(models[0].name);
+    expect(retrieved.createdTime).toBeInstanceOf(Date);
   });
 
   test('update', async () => {

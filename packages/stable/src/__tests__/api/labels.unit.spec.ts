@@ -68,11 +68,12 @@ describe('Labels unit test', () => {
         items: labels,
         nextCursor: 'def',
       });
-    const fetchedLabels = await client.labels.list({
+    const { items, next } = await client.labels.list({
       filter: { name: labels[0].name },
     });
-    expect(fetchedLabels.items).toEqual(labels);
-    expect(fetchedLabels.next).toBeDefined();
+    expect(items).toEqual(labels);
+    expect(items[0].createdTime).toBeInstanceOf(Date);
+    expect(next).toBeDefined();
   });
 
   test('delete', async () => {

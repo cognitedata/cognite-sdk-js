@@ -10,6 +10,13 @@ import {
 
 export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
   /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['deletedTime']);
+  }
+
+  /**
    * [Create service accounts](https://doc.cognitedata.com/api/v1/#operation/createServiceAccounts)
    *
    * ```js
@@ -33,9 +40,7 @@ export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
    */
   public list = async (): Promise<ServiceAccount[]> => {
     const path = this.url();
-    const response = await this.httpClient.get<ItemsWrapper<ServiceAccount[]>>(
-      path
-    );
+    const response = await this.get<ItemsWrapper<ServiceAccount[]>>(path);
     return this.addToMapAndReturn(response.data.items, response);
   };
 

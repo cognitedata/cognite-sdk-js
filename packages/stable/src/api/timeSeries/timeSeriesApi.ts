@@ -33,6 +33,13 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
   }
 
   /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
+  }
+
+  /**
    * [Create time series](https://doc.cognitedata.com/api/v1/#operation/postTimeSeries)
    *
    * ```js
