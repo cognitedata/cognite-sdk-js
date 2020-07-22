@@ -2,9 +2,8 @@
 
 import { HttpResponseType } from '@cognite/sdk-core';
 import { readFileSync } from 'fs';
-import { AssetImpl } from '../../api/classes/asset';
 import CogniteClient from '../../cogniteClient';
-import { FileInfo } from '../../types';
+import { FileInfo, Asset } from '../../types';
 import { join } from 'path';
 import {
   getFileCreateArgs,
@@ -17,7 +16,7 @@ const testfile = join(__dirname, '../test3dFile.fbx');
 
 describe('Files integration test', () => {
   let client: CogniteClient;
-  let asset: AssetImpl;
+  let asset: Asset;
   beforeAll(async () => {
     client = setupLoggedInClient();
     [asset] = await client.assets.create([

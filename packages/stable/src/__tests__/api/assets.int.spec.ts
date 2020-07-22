@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
 import { CogniteError, CogniteMultiError } from '@cognite/sdk-core';
-import { AssetImpl } from '../../api/classes/asset';
 import CogniteClient from '../../cogniteClient';
 import { Asset } from '../../types';
 import {
@@ -212,7 +211,6 @@ describe('Asset integration test', () => {
     expect(nextCursor).toBeDefined();
     expect(items).toBeDefined();
     expect(items[0].id).toBeDefined();
-    expect(items[0]).toBeInstanceOf(AssetImpl);
     expect(items.length).toBe(1);
   });
 
@@ -220,7 +218,7 @@ describe('Asset integration test', () => {
     const response = await client.assets.list({ limit: 1 });
     expect(response.next).toBeDefined();
     const nextPage = await response.next!();
-    expect(nextPage.items[0]).toBeInstanceOf(AssetImpl);
+    expect(nextPage.items[0]).toBeTruthy();
   });
 
   test('list with autoPaging', async () => {
