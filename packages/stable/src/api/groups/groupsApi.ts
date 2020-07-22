@@ -12,6 +12,13 @@ import {
 
 export class GroupsAPI extends BaseResourceAPI<Group> {
   /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['deletedTime']);
+  }
+
+  /**
    * [Create groups](https://doc.cognitedata.com/api/v1/#operation/createGroups)
    *
    * ```js
@@ -39,7 +46,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    */
   public list = async (scope?: ListGroups): Promise<Group[]> => {
     const path = this.url();
-    const response = await this.httpClient.get<ItemsWrapper<Group[]>>(path, {
+    const response = await this.get<ItemsWrapper<Group[]>>(path, {
       params: scope,
     });
     return this.addToMapAndReturn(response.data.items, response);
@@ -67,9 +74,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
     groupId: CogniteInternalId
   ): Promise<GroupServiceAccount[]> => {
     const path = this.encodeServiceAccountUrl(groupId);
-    const response = await this.httpClient.get<
-      ItemsWrapper<GroupServiceAccount[]>
-    >(path);
+    const response = await this.get<ItemsWrapper<GroupServiceAccount[]>>(path);
     return this.addToMapAndReturn(response.data.items, response);
   };
 
@@ -85,7 +90,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
     serviceAccountIds: CogniteInternalId[]
   ): Promise<{}> => {
     const path = this.encodeServiceAccountUrl(groupId);
-    const response = await this.httpClient.post<{}>(path, {
+    const response = await this.post<{}>(path, {
       data: { items: serviceAccountIds },
     });
     return this.addToMapAndReturn({}, response);
@@ -103,7 +108,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
     serviceAccountIds: CogniteInternalId[]
   ): Promise<{}> => {
     const path = this.encodeServiceAccountUrl(groupId) + '/remove';
-    const response = await this.httpClient.post<{}>(path, {
+    const response = await this.post<{}>(path, {
       data: { items: serviceAccountIds },
     });
     return this.addToMapAndReturn({}, response);

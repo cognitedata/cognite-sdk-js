@@ -12,6 +12,8 @@ const createTable = () => ({ name: createName('Table') });
 const columns = {
   'First name': createName('firstName'),
   'Last name': createName('lastName'),
+  timestamp: Date.now(),
+  object: { a: { b: 1 } },
 };
 const createRow = () => ({
   key: createName('key'),
@@ -150,7 +152,7 @@ describe('Raw integration test', () => {
         table.name,
         rows[0].key
       );
-      expect(row.lastUpdatedTime).toBeDefined();
+      expect(row.lastUpdatedTime).toBeInstanceOf(Date);
       expect(row).toEqual({
         ...rows[0],
         lastUpdatedTime: row.lastUpdatedTime,

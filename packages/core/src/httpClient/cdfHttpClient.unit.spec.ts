@@ -9,8 +9,6 @@ import { createUniversalRetryValidator } from './retryValidator';
 describe('CDFHttpClient', () => {
   const baseUrl = 'https://example.com';
   const anotherDomain = 'https://another-domain.com';
-  const now = new Date();
-  const nowInUnixTimestamp = now.getTime();
   const error400 = { error: { code: 400, message: 'Some message' } };
   const error401 = { error: { code: 401, message: 'Some message' } };
   let client: CDFHttpClient;
@@ -82,22 +80,6 @@ describe('CDFHttpClient', () => {
         .get('/')
         .reply(200, {});
       await client.get(anotherDomain);
-    });
-
-    test('transform Date in query param to unix timestamp', async () => {
-      nock(baseUrl)
-        .get('/')
-        .query({ time: nowInUnixTimestamp })
-        .reply(200, {});
-      await client.get('/', { params: { time: now } });
-    });
-
-    test('transform unix timestamp in response to Date', async () => {
-      nock(baseUrl)
-        .get('/')
-        .reply(200, { createdTime: nowInUnixTimestamp });
-      const response = await client.get<{ createdTime: Date }>('/');
-      expect(response.data.createdTime).toEqual(now);
     });
 
     test('throw custom cognite http error', async () => {
@@ -202,15 +184,6 @@ describe('CDFHttpClient', () => {
       test('ignore errors to /login/status', checkIfThrows401('/login/status'));
 
       test('ignore errors to /logout/url', checkIfThrows401('/logout/url'));
-    });
-  });
-
-  describe('post', () => {
-    test('transform Date in body to unix timestamp', async () => {
-      nock(baseUrl)
-        .post('/', { time: nowInUnixTimestamp })
-        .reply(200, {});
-      await client.post('/', { data: { time: now } });
     });
   });
 

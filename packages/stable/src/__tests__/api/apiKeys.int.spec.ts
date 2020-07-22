@@ -30,6 +30,7 @@ describe('API keys integration test', () => {
     expect(apiKeys.length).toBe(1);
     expect(apiKeys[0].id).toBeDefined();
     expect(apiKeys[0].value).toBeDefined();
+    expect(apiKeys[0].createdTime).toBeInstanceOf(Date);
   });
 
   test('list', async () => {
@@ -39,6 +40,7 @@ describe('API keys integration test', () => {
     expect(response).toBeDefined();
     expect(response.length).toBe(1);
     expect(response[0].id).toBe(apiKeys[0].id);
+    expect(response[0].createdTime).toBeInstanceOf(Date);
   });
 
   test('delete', async () => {

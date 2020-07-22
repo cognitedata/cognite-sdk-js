@@ -58,6 +58,18 @@ describe('Datapoints integration test', () => {
       },
     ]);
     expect(response[0].datapoints.length).toBeGreaterThan(0);
-    expect(response[0].datapoints[0].timestamp).toBeDefined();
+    expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
+  });
+
+  test('synthetic query', async () => {
+    const result = await client.timeseries.syntheticQuery([
+      {
+        expression: `24 * TS{id=${testTimeserieWithDatapoints.id}}`,
+        start: '48h-ago',
+        limit: 1,
+      },
+    ]);
+    expect(result.length).toBe(1);
+    expect(result[0].datapoints[0].timestamp).toBeInstanceOf(Date);
   });
 });

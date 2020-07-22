@@ -8,12 +8,7 @@ import {
   X_CDF_SDK_HEADER,
 } from '../constants';
 import { handleErrorResponse } from '../error';
-import {
-  bearerString,
-  isJson,
-  transformDateInRequest,
-  transformDateInResponse,
-} from '../utils';
+import { bearerString, isJson } from '../utils';
 import {
   HttpHeaders,
   HttpQueryParams,
@@ -36,19 +31,6 @@ export class CDFHttpClient extends RetryableHttpClient {
       },
       {} as HttpQueryParams
     );
-  }
-
-  private static transformDateInResponse<T>(
-    response: HttpResponse<T>
-  ): HttpResponse<T> {
-    const { data } = response;
-    if (!isJson(data)) {
-      return response;
-    }
-    return {
-      ...response,
-      data: transformDateInResponse(data),
-    };
   }
 
   private static isSameOrigin(baseUrl: string, url: string) {
@@ -101,11 +83,8 @@ export class CDFHttpClient extends RetryableHttpClient {
     const headers = request.withCredentials
       ? headersWithDefaultHeaders
       : this.preventTokenLeakage(headersWithDefaultHeaders, request.path);
-    const data = transformDateInRequest(request.data);
-    const serializedQueryParams = CDFHttpClient.serializeQueryParameters(
-      request.params
-    );
-    const params = transformDateInRequest(serializedQueryParams);
+    const data = request.data;
+    const params = CDFHttpClient.serializeQueryParameters(request.params);
     return {
       ...request,
       data,
@@ -123,9 +102,8 @@ export class CDFHttpClient extends RetryableHttpClient {
     response: HttpResponse<T>,
     request: HttpRequest
   ): Promise<HttpResponse<T>> {
-    const transformedResponse = CDFHttpClient.transformDateInResponse(response);
     try {
-      return await super.postRequest(transformedResponse, request);
+      return await super.postRequest(response, request);
     } catch (err) {
       if (err.status === 401 && !this.isLoginOrLogoutApi(request.path)) {
         return new Promise((resolvePromise, rejectPromise) => {

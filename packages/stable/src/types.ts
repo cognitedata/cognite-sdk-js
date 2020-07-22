@@ -1263,9 +1263,9 @@ export type LatestDataBeforeRequest =
 
 export interface LatestDataPropertyFilter {
   /**
-   * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send time as a Date object.
+   * Get first datapoint before this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send time as a Date object or number of milliseconds since epoch.
    */
-  before?: string | Date;
+  before?: string | Date | number;
 }
 
 export interface List3DNodesQuery extends FilterQuery {
@@ -1534,7 +1534,7 @@ export interface RawDBRowInsert extends RawDBRowKey {
   /**
    * Row data stored as a JSON object.
    */
-  columns: { [key: string]: string };
+  columns: Record<string, any>;
 }
 
 export interface RawDBRowKey {

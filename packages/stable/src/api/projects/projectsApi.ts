@@ -13,7 +13,7 @@ export class ProjectsAPI extends BaseResourceAPI<any> {
    */
   public retrieve = async (projectName: string): Promise<ProjectResponse> => {
     const path = this.encodeUrl(projectName);
-    const response = await this.httpClient.get<ProjectResponse>(path);
+    const response = await this.get<ProjectResponse>(path);
     return this.addToMapAndReturn(response.data, response);
   };
 
@@ -32,7 +32,7 @@ export class ProjectsAPI extends BaseResourceAPI<any> {
     replacement: ProjectUpdate
   ): Promise<ProjectResponse> => {
     const path = this.encodeUrl(projectName);
-    const response = await this.httpClient.put<ProjectResponse>(path, {
+    const response = await this.put<ProjectResponse>(path, {
       data: replacement,
     });
     return this.addToMapAndReturn(response.data, response);

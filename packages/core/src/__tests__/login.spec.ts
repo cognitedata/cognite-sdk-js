@@ -1,17 +1,15 @@
 // Copyright 2020 Cognite AS
 
 import * as nock from 'nock';
-import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
+import { AUTHORIZATION_HEADER } from '../constants';
 import { CDFHttpClient } from '../httpClient/cdfHttpClient';
 import {
   getIdInfoFromAccessToken,
-  getIdInfoFromApiKey,
   loginSilently,
   loginWithRedirect,
 } from '../login';
 import { bearerString } from '../utils';
 import {
-  apiKey,
   authTokens,
   loggedInResponse,
   notLoggedInResponse,
@@ -137,32 +135,6 @@ describe('Login', () => {
         ...idInfo,
       },
     };
-
-    test('successful getIdInfoFromApiKey', async () => {
-      nock(mockBaseUrl, { reqheaders: { [API_KEY_HEADER]: apiKey } })
-        .get(statusPath)
-        .once()
-        .reply(200, successResponse);
-      await expect(getIdInfoFromApiKey(httpClient, apiKey)).resolves.toEqual(
-        idInfo
-      );
-    });
-
-    test('getIdInfoFromApiKey - 401', async () => {
-      nock(mockBaseUrl)
-        .get(statusPath)
-        .once()
-        .reply(401, response401);
-      await expect(getIdInfoFromApiKey(httpClient, apiKey)).resolves.toBeNull();
-    });
-
-    test('getIdInfoFromApiKey - not logged in', async () => {
-      nock(mockBaseUrl)
-        .get(statusPath)
-        .once()
-        .reply(200, notLoggedInResponse);
-      await expect(getIdInfoFromApiKey(httpClient, apiKey)).resolves.toBeNull();
-    });
 
     test('successful getIdInfoFromAccessToken', async () => {
       const token = 'abc123';
