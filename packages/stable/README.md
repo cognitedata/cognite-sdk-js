@@ -124,3 +124,4 @@ giving examples of SDK use. See also the [samples section](https://github.com/co
 
  - [Migration guide](https://github.com/cognitedata/cognite-sdk-js/blob/v1/guides/MIGRATION_GUIDE_1xx_2xx.md)
 on how to migrate from version `1.x.x` to version `2.x.x`.
+ - [Migration guide](https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/MIGRATION_GUIDE_2xx_3xx.md) from version `2.x.x` to version `3.x.x`.
