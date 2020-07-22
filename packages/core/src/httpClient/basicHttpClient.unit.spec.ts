@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import * as nock from 'nock';
+import nock from 'nock';
 import { BasicHttpClient, HttpResponseType } from './basicHttpClient';
 
 describe('BasicHttpClient', () => {

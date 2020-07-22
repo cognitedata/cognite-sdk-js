@@ -1,5 +1,8 @@
 // Copyright 2020 Cognite AS
-import { inRange, some } from 'lodash';
+
+import inRange from 'lodash/inRange';
+import some from 'lodash/some';
+
 import { HttpMethod, HttpRequest, HttpResponse } from './basicHttpClient';
 
 /** @hidden */
