@@ -58,7 +58,7 @@ describe('Datapoints integration test', () => {
       },
     ]);
     expect(response[0].datapoints.length).toBeGreaterThan(0);
-    expect(response[0].datapoints[0].timestamp).toBeDefined();
+    expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
   });
 
   test('synthetic query', async () => {

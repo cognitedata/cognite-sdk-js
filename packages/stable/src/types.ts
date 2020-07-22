@@ -1534,7 +1534,7 @@ export interface RawDBRowInsert extends RawDBRowKey {
   /**
    * Row data stored as a JSON object.
    */
-  columns: { [key: string]: string };
+  columns: Record<string, any>;
 }
 
 export interface RawDBRowKey {
