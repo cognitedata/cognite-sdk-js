@@ -58,9 +58,7 @@ export interface LogoutUrlResponse {
   data: { url: LogoutUrl };
 }
 
-export type CursorAndAsyncIterator<T, Wrapper = T[]> = Promise<
-  ListResponse<Wrapper>
-> &
+export type CursorAndAsyncIterator<T> = Promise<ListResponse<T[]>> &
   CogniteAsyncIterator<T>;
 
 export interface CogniteAsyncIterator<T> extends AsyncIterableIterator<T> {

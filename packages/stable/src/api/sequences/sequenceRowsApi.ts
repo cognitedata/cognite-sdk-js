@@ -12,12 +12,9 @@ import {
   SequenceRowsResponseData,
   SequenceRowsRetrieve,
 } from '../../types';
-import { SequenceRow } from '../classes/sequenceRow';
+import { SequenceRow } from './sequenceRow';
 
-export class SequenceRowsAPI extends BaseResourceAPI<
-  SequenceRowsResponseData,
-  SequenceRow
-> {
+export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
   public async insert(items: SequenceRowsInsert[]): Promise<{}> {
     await this.postInParallelWithAutomaticChunking({
       path: this.url(),

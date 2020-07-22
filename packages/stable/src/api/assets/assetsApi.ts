@@ -1,14 +1,7 @@
 // Copyright 2020 Cognite AS
 
-import {
-  BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
-} from '@cognite/sdk-core';
+import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import { RevertableArraySorter } from '@cognite/sdk-core';
-import { chunk } from 'lodash';
-import CogniteClient from '../../cogniteClient';
 import {
   Asset,
   AssetAggregate,
@@ -21,21 +14,9 @@ import {
   ExternalAssetItem,
   IdEither,
 } from '../../types';
-import { AssetImpl } from '../classes/asset';
-import { AssetList } from '../classes/assetList';
 import { sortAssetCreateItems } from './assetUtils';
 
-export class AssetsAPI extends BaseResourceAPI<Asset, AssetImpl, AssetList> {
-  /** @hidden */
-  constructor(
-    private client: CogniteClient,
-    resourcePath: string,
-    httpClient: CDFHttpClient,
-    map: MetadataMap
-  ) {
-    super(resourcePath, httpClient, map);
-  }
-
+export class AssetsAPI extends BaseResourceAPI<Asset> {
   /**
    * @hidden
    */
@@ -55,7 +36,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset, AssetImpl, AssetList> {
    * const createdAssets = await client.assets.create(assets);
    * ```
    */
-  public create = (items: ExternalAssetItem[]): Promise<AssetList> => {
+  public create = (items: ExternalAssetItem[]): Promise<Asset[]> => {
     const { sort, unsort } = new RevertableArraySorter(sortAssetCreateItems);
     return super.createEndpoint(items, undefined, sort, unsort);
   };
@@ -68,9 +49,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset, AssetImpl, AssetList> {
    * const assets = await client.assets.list({ filter: { name: '21PT1019' } });
    * ```
    */
-  public list = (
-    scope?: AssetListScope
-  ): CursorAndAsyncIterator<AssetImpl, AssetList> => {
+  public list = (scope?: AssetListScope): CursorAndAsyncIterator<Asset> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
@@ -99,7 +78,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset, AssetImpl, AssetList> {
   public retrieve = (
     ids: IdEither[],
     params: AssetRetrieveParams = {}
-  ): Promise<AssetList> => {
+  ): Promise<Asset[]> => {
     return super.retrieveEndpoint(ids, params);
   };
 
@@ -110,7 +89,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset, AssetImpl, AssetList> {
    * const assets = await client.assets.update([{id: 123, update: {name: {set: 'New name'}}}]);
    * ```
    */
-  public update = (changes: AssetChange[]): Promise<AssetList> => {
+  public update = (changes: AssetChange[]): Promise<Asset[]> => {
     return super.updateEndpoint(changes);
   };
 
@@ -128,7 +107,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset, AssetImpl, AssetList> {
    * });
    * ```
    */
-  public search = (query: AssetSearchFilter): Promise<AssetList> => {
+  public search = (query: AssetSearchFilter): Promise<Asset[]> => {
     return super.searchEndpoint(query);
   };
 
@@ -145,58 +124,6 @@ export class AssetsAPI extends BaseResourceAPI<Asset, AssetImpl, AssetList> {
       ignoreUnknownIds: true,
     };
     return super.deleteEndpoint(ids, paramsWithIgnoreUnknownIds);
-  };
-
-  public retrieveSubtree = async (id: IdEither, depth: number) => {
-    const currentDepth: number = 0;
-    const rootAssetList = await this.retrieve([id]);
-    return this.getAssetSubtree(rootAssetList, currentDepth, depth);
-  };
-
-  protected transformToList(assets: Asset[]) {
-    return assets.map(asset => new AssetImpl(this.client, asset));
-  }
-
-  protected transformToClass(assets: Asset[]) {
-    const assetArray = this.transformToList(assets);
-    return new AssetList(this.client, assetArray);
-  }
-
-  private async getAssetSubtree(
-    assets: AssetList,
-    currentDepth: number,
-    depth: number = Infinity
-  ): Promise<AssetList> {
-    const subtree = assets;
-    if (depth > currentDepth) {
-      const children = await this.getChildren(assets);
-      if (children.length !== 0) {
-        const subtreeOfChildren = await this.getAssetSubtree(
-          children,
-          currentDepth + 1,
-          depth
-        );
-        subtree.push(...subtreeOfChildren);
-      }
-    }
-    return subtree;
-  }
-
-  private getChildren = async (assets: AssetList) => {
-    const ids = assets.map(asset => asset.id);
-    const chunks = chunk(ids, 100);
-    const assetsArray: AssetImpl[] = [];
-    for (const chunkOfAssetIds of chunks) {
-      const childrenList = await this.client.assets
-        .list({
-          filter: {
-            parentIds: chunkOfAssetIds,
-          },
-        })
-        .autoPagingToArray({ limit: Infinity });
-      assetsArray.push(...childrenList);
-    }
-    return new AssetList(this.client, assetsArray);
   };
 }
 

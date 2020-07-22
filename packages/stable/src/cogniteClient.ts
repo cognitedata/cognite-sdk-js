@@ -117,18 +117,8 @@ export default class CogniteClient extends BaseCogniteClient {
   protected initAPIs() {
     const models3DPath = '3d/models';
 
-    this.assetsApi = new AssetsAPI(
-      this,
-      this.projectUrl + '/assets',
-      this.httpClient,
-      this.metadataMap
-    );
-    this.timeSeriesApi = new TimeSeriesAPI(
-      this,
-      this.projectUrl + '/timeseries',
-      this.httpClient,
-      this.metadataMap
-    );
+    this.assetsApi = this.apiFactory(AssetsAPI, 'assets');
+    this.timeSeriesApi = this.apiFactory(TimeSeriesAPI, 'timeseries');
     this.dataPointsApi = this.apiFactory(DataPointsAPI, 'timeseries/data');
     this.sequencesApi = this.apiFactory(SequencesAPI, 'sequences');
     this.eventsApi = this.apiFactory(EventsAPI, 'events');
