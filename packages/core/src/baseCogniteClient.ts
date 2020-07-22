@@ -163,14 +163,14 @@ export default class BaseCogniteClient {
       throw Error('`loginWithApiKey` is missing parameter `options`');
     }
     const { project, apiKey } = options;
-    ['project', 'apiKey'].forEach(property => {
-      // @ts-ignore
+    const keys: (keyof ApiKeyLoginOptions)[] = ['project', 'apiKey'];
+    for (const property of keys) {
       if (!isString(options[property])) {
         throw Error(
           `options.${property} is required and must be of type string`
         );
       }
-    });
+    }
     this.projectName = project;
     this.httpClient.setDefaultHeader(API_KEY_HEADER, apiKey);
 
