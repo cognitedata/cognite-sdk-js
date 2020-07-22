@@ -84,6 +84,39 @@ quickstart();
  - [API reference documentation](https://doc.cognitedata.com/api/v1)
  - [JS SDK reference documentation](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)
 
+## Best practices
+
+### No submodule imports
+
+We highly recommend avoiding importing anything from internal SDK modules.
+
+All interfaces and functions should only be imported from the top level, otherwise you might face compatibility issues when our internal structure changes.  
+
+**Bad:**
+```
+import { CogniteAsyncIterator } from '@cognite/sdk/dist/src/autoPagination'; // ❌
+import { AssetsAPI } from '@cognite/sdk/dist/src/resources/assets/assetsApi'; // ❌
+
+let assetsApi: AssetsAPI; // ❌
+```
+
+**Good:**
+```
+import { CogniteAsyncIterator } from '@cognite/sdk'; // ✅
+
+let assetsApi: CogniteClient['assets']; // ✅
+```
+
+We recommend the usage of [eslint](https://eslint.org/docs/rules/no-restricted-imports) to ensure this best practice is enforced without having to memorize the patterns:
+
+**.eslintrc.json:**
+
+```
+"rules": {
+  "no-restricted-imports": ["error", { "patterns": ["@cognite/sdk/**"] }]
+}
+```
+
 The API reference documentation contains snippets for each endpoint,
 giving examples of SDK use. See also the [samples section](https://github.com/cognitedata/cognite-sdk-js#samples) in this repo.
 
