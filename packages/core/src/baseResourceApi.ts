@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { chunk } from 'lodash';
+import chunk from 'lodash/chunk';
 import { makeAutoPaginationMethods } from './autoPagination';
 import {
   HttpResponse,

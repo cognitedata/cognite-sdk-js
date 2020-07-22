@@ -1,6 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import { isFunction, isObject, isString } from 'lodash';
+import isFunction from 'lodash/isFunction';
+import isObject from 'lodash/isObject';
+import isString from 'lodash/isString';
 import { LoginAPI } from './api/login/loginApi';
 import { LogoutApi } from './api/logout/logoutApi';
 import {

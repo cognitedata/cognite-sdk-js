@@ -5,7 +5,7 @@ import {
   promiseAllAtOnce,
   promiseEachInSequence,
 } from '@cognite/sdk-core';
-import * as nock from 'nock';
+import nock from 'nock';
 import { enrichAssetsWithTheirParents } from '../../api/assets/assetUtils';
 import CogniteClient from '../../cogniteClient';
 import { ExternalAssetItem } from '../../types';

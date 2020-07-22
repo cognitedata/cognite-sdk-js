@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { isString } from 'lodash';
+import isString from 'lodash/isString';
 import { parse, stringify } from 'query-string';
 import { AUTHORIZATION_HEADER } from './constants';
 import {
