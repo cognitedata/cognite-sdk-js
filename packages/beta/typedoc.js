@@ -5,7 +5,6 @@ module.exports = {
   target: 'ES6',
   exclude: ['**/__tests__/**', '**/node_modules/**'],
   out: './docs/',
-  // theme: 'markdown',
   readme: 'README.md',
   ignoreCompilerErrors: true,
   excludeNotExported: true,

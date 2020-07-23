@@ -14,8 +14,6 @@ env:
 # On old versions of node we only build and run tests
 jobs:
   include:
-  - node_js: "8"
-    env: ONLY_TEST="true"
   - node_js: "10"
     env: ONLY_TEST="true"
   - node_js: "12"
