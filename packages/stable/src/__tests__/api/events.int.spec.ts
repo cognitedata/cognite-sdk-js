@@ -120,7 +120,7 @@ describe('Events integration test', () => {
     expect(response.length).toBeDefined(); // we can't check content because of eventual consistency
   });
 
-  describe('list with sorting', async () => {
+  describe('list with sorting', () => {
     test('ascending', async () => {
       await client.events.list({ sort: { createdTime: 'asc' } });
     });

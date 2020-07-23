@@ -273,7 +273,7 @@ describe('Assets unit test', () => {
     });
   });
 
-  describe('class is not polluted with enumerable props', async () => {
+  describe('class is not polluted with enumerable props', () => {
     const items = [
       {
         id: 1,

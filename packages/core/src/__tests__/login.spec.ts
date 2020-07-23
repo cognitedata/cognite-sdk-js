@@ -171,26 +171,39 @@ describe('Login', () => {
     });
   });
 
-  test('loginWithRedirect', async done => {
-    const spiedLocationAssign = jest
-      .spyOn(window.location, 'assign')
-      .mockImplementation();
-    let isPromiseResolved = false;
-    loginWithRedirect({
-      baseUrl: 'https://example.com',
-      project: 'my-tenant',
-      redirectUrl: 'https://redirect.com',
-      errorRedirectUrl: 'https://error-redirect.com',
-    }).then(() => {
-      isPromiseResolved = true;
+  describe('loginWithRedirect', () => {
+    const { location } = window;
+
+    beforeAll(() => {
+      delete window.location;
+      window.location = { ...location, reload: jest.fn() };
     });
-    expect(spiedLocationAssign).toBeCalledTimes(1);
-    expect(spiedLocationAssign.mock.calls[0][0]).toMatchInlineSnapshot(
-      `"https://example.com/login/redirect?errorRedirectUrl=https%3A%2F%2Ferror-redirect.com&project=my-tenant&redirectUrl=https%3A%2F%2Fredirect.com"`
-    );
-    setTimeout(() => {
-      expect(isPromiseResolved).toBe(false);
-      done();
-    }, 1000);
+
+    afterAll(() => {
+      window.location = location;
+    });
+
+    test('redirects', async done => {
+      const spiedLocationAssign = jest
+        .spyOn(window.location, 'assign')
+        .mockImplementation();
+      let isPromiseResolved = false;
+      loginWithRedirect({
+        baseUrl: 'https://example.com',
+        project: 'my-tenant',
+        redirectUrl: 'https://redirect.com',
+        errorRedirectUrl: 'https://error-redirect.com',
+      }).then(() => {
+        isPromiseResolved = true;
+      });
+      expect(spiedLocationAssign).toBeCalledTimes(1);
+      expect(spiedLocationAssign.mock.calls[0][0]).toMatchInlineSnapshot(
+        `"https://example.com/login/redirect?errorRedirectUrl=https%3A%2F%2Ferror-redirect.com&project=my-tenant&redirectUrl=https%3A%2F%2Fredirect.com"`
+      );
+      setTimeout(() => {
+        expect(isPromiseResolved).toBe(false);
+        done();
+      }, 1000);
+    });
   });
 });

@@ -49,11 +49,11 @@
     "@typescript-eslint/parser": "^3.4.0",
     "es-check": "^5.0.0",
     "eslint": "^7.3.1",
-    "eslint-plugin-header": "^3.0.0",
     "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-header": "^3.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^3.0.2",
-    "jest": "^23.6.0",
+    "jest": "^26.1",
     "lerna": "^3.22.1",
     "markdown-link-check": "^3.8.1",
     "nock": "^10.0.6",
@@ -63,11 +63,10 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-typescript2": "^0.17.2",
     "swagger-parser": "^6.0.5",
-    "ts-jest": "^23.10.4",
+    "ts-jest": "^26.1",
     "typedoc": "^0.13.0",
     "typedoc-plugin-markdown": "^1.1.19",
-    "typescript": "^3.3.3333",
-    "typescript-parser": "^2.6.1"
+    "typescript": "^3.9"
   },
   "husky": {
     "hooks": {
