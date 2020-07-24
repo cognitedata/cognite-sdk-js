@@ -1,5 +1,5 @@
-A core library used by cognite Javascript SDKs, published as `@cognite/sdk-core`.
-It can be used to create custom sdks and alphas, and is used in the official stable and beta SDK.
+A core library used by Cognite Javascript SDKs, published as `@cognite/sdk-core`.
+It is used in the official stable and beta SDK and can also be used to create custom SDKs and alpha builds.
 
 See the repository README [here](https://github.com/cognitedata/cognite-sdk-js#readme).
 
