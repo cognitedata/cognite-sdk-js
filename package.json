@@ -44,7 +44,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-typescript": "^5.0.2",
     "@types/es6-promise": "^3.3.0",
-    "@types/jest": "^23.3.7",
+    "@types/jest": "^26.0.7",
     "@types/lodash": "^4.14.158",
     "@types/nock": "^10.0.3",
     "@types/node": "^14.0.24",
@@ -63,7 +63,6 @@
     "nock": "^10.0.6",
     "prettier": "^1.10.2",
     "rollup": "^2.22.2",
-    "swagger-parser": "^6.0.5",
     "ts-jest": "^26.1",
     "typedoc": "^0.17.8",
     "typescript": "^3.9"
