@@ -3,17 +3,17 @@
 set -ex
 
 yarn --frozen-lockfile
+yarn build
 
 if [ "$ONLY_TEST" = true ]; then
     echo "Only doing build and test"
-    lerna run build --stream
-    lerna run test --stream
+    yarn test
+    yarn test-samples
 else
     yarn global add codecov@3.7.0
     yarn commitlint-travis
     yarn validateDocLinks || true
     yarn lint
-    yarn build
     yarn test:codecov
     yarn test-samples
     yarn test-snippets
