@@ -42,7 +42,9 @@ describe('Login', () => {
     const spiedCreateElement = jest.spyOn(document, 'createElement');
     const spiedAppendChild = jest.spyOn(document.body, 'appendChild');
     spiedAppendChild.mockImplementation(iframe => {
+      // @ts-ignore-next-line
       iframe.onload();
+      return iframe;
     });
     const spiedRemoveChild = jest.spyOn(document.body, 'removeChild');
     beforeEach(() => {
@@ -76,7 +78,7 @@ describe('Login', () => {
             search,
           },
         },
-      };
+      } as HTMLIFrameElement;
     }
     test('silent login', async () => {
       window.history.pushState({}, '', '/abc/def');

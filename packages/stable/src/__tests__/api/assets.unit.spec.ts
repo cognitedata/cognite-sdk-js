@@ -192,14 +192,15 @@ describe('Assets unit test', () => {
   });
 
   describe('enrichAssestsWithTheirParents(...)', () => {
-    test.each([{ parentId: 123 }, { parentExternalId: 'abc' }, {}])(
-      'single asset',
-      asset => {
-        expect(enrichAssetsWithTheirParents([asset])).toEqual([
-          { data: asset },
-        ]);
-      }
-    );
+    const name = 'pump';
+    const assets: ExternalAssetItem[] = [
+      { parentId: 123, name },
+      { parentExternalId: 'abc', name },
+      { name },
+    ];
+    test.each(assets)('single asset', asset => {
+      expect(enrichAssetsWithTheirParents([asset])).toEqual([{ data: asset }]);
+    });
 
     test('straight tree', () => {
       const rootAsset = {
