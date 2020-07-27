@@ -16,14 +16,14 @@ We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
 
  - For fixes, start the commit with `fix: `. This will bump PATCH.
  - For features, start the commit with `feat: `. This will bump MINOR.
- - For changes that break backwards compatability, add a `!` before the colon: `feat!: `.
+ - For changes that break backwards compatibility, add a `!` before the colon: `feat!: `.
    
    Alternativly you may specify a footer (or both).
-   The footer must come after a blank line, and start with `BREAKING CHANGE:` (colon mandatory),
+   The footer must come after a blank line, and start with `BREAKING CHANGE: ` (colon mandatory),
    followed by a description of what breaks.
- - For extra details in the changelog, you can specify a scope, e.g. `feat(assets):`.
- - For other changes, use `refactor:`, `test:`, `docs:`, `chore:` etc.
-   Try something out, and the commit hook will tell you what's allowed.
+ - For extra details in the changelog, you can specify a scope like so: `feat(assets): `.
+ - For other changes there are types without versioning related meanings:
+  - 
 
 ## Pull request
 Make a pull request from your branch to the main branch. When merging the pull request,
