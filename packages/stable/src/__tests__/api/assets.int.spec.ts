@@ -278,14 +278,16 @@ describe('Asset integration test', () => {
   });
 
   test('filter on parent external ids', async () => {
-    const { items } = await client.assets.list({
-      limit: 1,
-      filter: {
-        parentExternalIds: [createdRoot1.externalId!],
-      },
+    await runTestWithRetryWhenFailing(async () => {
+      const { items } = await client.assets.list({
+        limit: 1,
+        filter: {
+          parentExternalIds: [createdRoot1.externalId!],
+        },
+      });
+      expect(items[0].id).toEqual(createdChild1.id);
+      expect(items.length).toBe(1);
     });
-    expect(items[0].id).toEqual(createdChild1.id);
-    expect(items.length).toBe(1);
   });
 
   test('count aggregate', async () => {
