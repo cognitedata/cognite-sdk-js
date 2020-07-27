@@ -14,9 +14,11 @@ The commit messages are used to automatically bump the versions of changed packa
 
 We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
 
- - For fixes, start the commit with `fix:`. This will bump PATCH.
- - For features, start the commit with `feat:`. This will bump MINOR.
- - For changes that break backwards compatability, add a footer to the commit description.
+ - For fixes, start the commit with `fix: `. This will bump PATCH.
+ - For features, start the commit with `feat: `. This will bump MINOR.
+ - For changes that break backwards compatability, add a `!` before the colon: `feat!: `.
+   
+   Alternativly you may specify a footer (or both).
    The footer must come after a blank line, and start with `BREAKING CHANGE:` (colon mandatory),
    followed by a description of what breaks.
  - For extra details in the changelog, you can specify a scope, e.g. `feat(assets):`.
