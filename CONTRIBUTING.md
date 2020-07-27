@@ -2,7 +2,8 @@ Contributing
 ============
 
 Contributions are welcome, and this document details how changes can be made and submitted,
-and eventually included in a release. We use monorepo tooling, and a git setup for CI/CD PATCH bump 
+and eventually included in a release. We use monorepo tooling, and a git setup for automatically releasing
+new versions based on commit messages.
 
 Please note we have a [code of conduct](./CODE_OF_CONDUCT.md).
 
@@ -10,13 +11,17 @@ Please note we have a [code of conduct](./CODE_OF_CONDUCT.md).
 Make the changes to the package(s) you want to change, and commit them to a fork or branch.
 Commits need to follow [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines).
 The commit messages are used to automatically bump the versions of changed packages, and write automatic changelogs.
+
 We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
 
  - For fixes, start the commit with `fix:`. This will bump PATCH.
  - For features, start the commit with `feat:`. This will bump MINOR.
- - For breaking changes, add an exclamation mark, e.g. `feat!:` or `fix!:`. This will bump MAJOR.
+ - For changes that break backwards compatability, add a footer to the commit description.
+   The footer must come after a blank line, and start with `BREAKING CHANGE:` (colon mandatory),
+   followed by a description of what breaks.
  - For extra details in the changelog, you can specify a scope, e.g. `feat(assets):`.
  - For other changes, use `refactor:`, `test:`, `docs:`, `chore:` etc.
+   Try something out, and the commit hook will tell you what's allowed.
 
 ## Pull request
 Make a pull request from your branch to the main branch. When merging the pull request,
