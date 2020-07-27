@@ -221,7 +221,7 @@ describe('data sets integration test', () => {
       expect(updatedTimeseries.dataSetId).toEqual(datasets[1].id);
     });
   });
-  describe('sequences data sets', async () => {
+  describe('sequences data sets', () => {
     let dataSetId: CogniteInternalId;
     let sequence: Sequence;
 

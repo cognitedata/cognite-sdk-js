@@ -1,12 +1,12 @@
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
 import pkg from './package.json';
-import json from 'rollup-plugin-json';
+import json from '@rollup/plugin-json';
 
 export default {
   input: 'src/index.ts',
   output: [
     {
-      file: pkg.main,
+      dir: 'dist',
       format: 'cjs',
       sourcemap: true,
     },
@@ -19,7 +19,6 @@ export default {
     typescript({
       tsconfig: './tsconfig.build.json',
       typescript: require('typescript'),
-      clean: true,
       exclude: '**/__tests__/**',
     }),
     json({
