@@ -1397,7 +1397,7 @@ export interface Node3D {
    *  The bounding box of the subtree with this sector as the root sector.
    *  Is null if there are no geometries in the subtree.
    */
-  boundingBox: BoundingBox3D;
+  boundingBox?: BoundingBox3D;
 }
 
 /**
