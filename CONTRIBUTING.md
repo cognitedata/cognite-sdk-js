@@ -17,13 +17,28 @@ We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
  - For fixes, start the commit with `fix: `. This will bump PATCH.
  - For features, start the commit with `feat: `. This will bump MINOR.
  - For changes that break backwards compatibility, add a `!` before the colon: `feat!: `.
+   This will bump MAJOR version.
    
-   Alternativly you may specify a footer (or both).
+   The same can be achieved by specifying a footer.
    The footer must come after a blank line, and start with `BREAKING CHANGE: ` (colon mandatory),
    followed by a description of what breaks.
  - For extra details in the changelog, you can specify a scope like so: `feat(assets): `.
- - For other changes there are types without versioning related meanings:
-  - 
+ - For other changes there are types without version bumping semantics:
+   - `docs: ` changes to documentation
+   - `build: ` changes to build scripts and config
+   - `ci: ` changes to ci scripts and pipeline
+   - `refactor: ` code moving and renaming
+   - `style: ` fixes to code style
+   - `perf: ` changes to improve performance
+   - `revert: ` changing things back 
+   - `chore: ` miscelanious changes
+
+#### Example
+```
+docs: add example of commit with subject line to CHANGELOG
+```
+
+A commit hook makes sure the syntax is followed. Automated commit messages such as `Merge pull request` are handled.
 
 ## Pull request
 Make a pull request from your branch to the main branch. When merging the pull request,
