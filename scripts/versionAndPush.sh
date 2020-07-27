@@ -23,7 +23,7 @@ GH_TOKEN="$GITHUB_TOKEN" #Used by lerna version
 # Lerna makes a commit (with [skip ci] in message)
 # Will fail if upstream head has changed in the meantime
 echo "Running lerna version"
-yarn lerna version --conventional-commits --create-release github --no-private --yes
+yarn lerna version major --conventional-commits --create-release github --no-private --yes
 echo "Ran lerna version!"
 
 echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
