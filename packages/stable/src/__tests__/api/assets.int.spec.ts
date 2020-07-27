@@ -29,33 +29,13 @@ describe('Asset integration test', () => {
     parentExternalId: rootAsset.externalId,
   };
   let assets: Asset[];
-  let [createdChild1, createdRoot1, ...createdAssets2]: Asset[] = [];
 
   beforeAll(async () => {
     client = setupLoggedInClient();
     assets = await client.assets.create([childAsset, rootAsset]);
-
-    const root1 = { name: 'root-1', externalId: 'root-1' + randomInt() };
-    const root2 = { name: 'root-2', externalId: 'root-2' + randomInt() };
-    const child1 = { name: 'child-1', parentExternalId: root1.externalId };
-    const child2 = { name: 'child-2', parentExternalId: root2.externalId };
-    [
-      createdChild1,
-      createdRoot1,
-      ...createdAssets2
-    ] = await client.assets.create([child1, root1, root2, child2]);
-  });
-
-  afterAll(async () => {
-    await client.assets.delete(
-      [createdChild1, createdRoot1, ...createdAssets2, ...assets].map(
-        ({ id }) => ({ id })
-      )
-    );
   });
 
   test('create', async () => {
-    //only tests that the assets were created during setup
     expect(assets[0].createdTime).toBeInstanceOf(Date);
     expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
   });
@@ -251,6 +231,19 @@ describe('Asset integration test', () => {
         },
       })
       .autoPagingToArray({ limit: 100 });
+  });
+
+  let [createdChild1, createdRoot1, ...createdAssets2]: Asset[] = [];
+  beforeAll(async () => {
+    const root1 = { name: 'root-1', externalId: 'root-1' + randomInt() };
+    const root2 = { name: 'root-2', externalId: 'root-2' + randomInt() };
+    const child1 = { name: 'child-1', parentExternalId: root1.externalId };
+    const child2 = { name: 'child-2', parentExternalId: root2.externalId };
+    [
+      createdChild1,
+      createdRoot1,
+      ...createdAssets2
+    ] = await client.assets.create([child1, root1, root2, child2]);
   });
 
   test('filter rootIds', async () => {
