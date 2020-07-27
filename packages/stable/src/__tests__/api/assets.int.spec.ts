@@ -11,6 +11,9 @@ import {
 
 describe('Asset integration test', () => {
   let client: CogniteClient;
+  beforeAll(async () => {
+    client = setupLoggedInClient();
+  });
   const rootAsset = {
     name: 'test-root',
     description: 'Root asset for cognitesdk-js test',
@@ -30,12 +33,8 @@ describe('Asset integration test', () => {
   };
   let assets: Asset[];
 
-  beforeAll(async () => {
-    client = setupLoggedInClient();
-    assets = await client.assets.create([childAsset, rootAsset]);
-  });
-
   test('create', async () => {
+    assets = await client.assets.create([childAsset, rootAsset]);
     expect(assets[0].createdTime).toBeInstanceOf(Date);
     expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
   });
@@ -234,7 +233,7 @@ describe('Asset integration test', () => {
   });
 
   let [createdChild1, createdRoot1, ...createdAssets2]: Asset[] = [];
-  beforeAll(async () => {
+  test('filter rootIds', async () => {
     const root1 = { name: 'root-1', externalId: 'root-1' + randomInt() };
     const root2 = { name: 'root-2', externalId: 'root-2' + randomInt() };
     const child1 = { name: 'child-1', parentExternalId: root1.externalId };
@@ -244,9 +243,7 @@ describe('Asset integration test', () => {
       createdRoot1,
       ...createdAssets2
     ] = await client.assets.create([child1, root1, root2, child2]);
-  });
 
-  test('filter rootIds', async () => {
     const nonRootAssets = await client.assets
       .list({
         filter: { root: false },
