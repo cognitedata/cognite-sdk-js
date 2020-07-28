@@ -35,7 +35,7 @@ We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
 
 #### Example
 ```
-docs: add example of commit with subject line to CHANGELOG
+docs(changelog): add example of commit with subject line
 ```
 
 A commit hook makes sure the syntax is followed. Automated commit messages such as `Merge pull request` are handled.
