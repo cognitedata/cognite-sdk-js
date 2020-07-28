@@ -93,7 +93,7 @@ export class DataPointsAPI extends BaseResourceAPI<
   private async retrieveDatapointsEndpoint(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
     const response = await this.post<
-      ItemsWrapper<(DatapointAggregates | Datapoints)[]>
+      ItemsWrapper<DatapointAggregates[] | Datapoints[]>
     >(path, {
       data: query,
     });
