@@ -29,13 +29,14 @@ We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
    - `ci: ` changes to ci scripts and pipeline
    - `refactor: ` code moving and renaming
    - `style: ` fixes to code style
+   - `test: ` changes to tests
    - `perf: ` changes to improve performance
    - `revert: ` changing things back 
    - `chore: ` miscelanious changes
 
 #### Example
 ```
-docs(changelog): add example of commit with subject line
+docs(readme): add example of commit with subject line
 ```
 
 A commit hook makes sure the syntax is followed. Automated commit messages such as `Merge pull request` are handled.
