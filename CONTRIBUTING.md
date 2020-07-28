@@ -36,7 +36,7 @@ We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
 
 #### Example
 ```
-docs(readme): add example of commit with subject line
+docs(contributing-readme): add example of commit with subject line
 ```
 
 A commit hook makes sure the syntax is followed. Automated commit messages such as `Merge pull request` are handled.
