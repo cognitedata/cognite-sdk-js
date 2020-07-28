@@ -58,6 +58,29 @@ export interface LogoutUrlResponse {
   data: { url: LogoutUrl };
 }
 
+/**
+ * A Promise to a response that can be awaited like normal,
+ * but at the risk of not getting all results due to API limits.
+ * In which case a nextCursor field is provided to request the next page.
+ * Helper methods are provided to abstract away the pagination.
+ *
+ * Example using `client.timeseries.list`:
+ * ```
+ * const response = client.timeseries.list({ filter: { assetIds: [ASSET_ID] } });
+ * ```
+ *
+ * You can iterate through all returned items like so:
+ * ```
+ * for await (const value of response) {
+ *   // do something to value
+ * }
+ * ```
+ *
+ * Or get an array of up to 1000 items like so:
+ * ```
+ * const timeseries = await response.autoPagingToArray({limit: 1000});
+ * ```
+ */
 export type CursorAndAsyncIterator<T> = Promise<ListResponse<T[]>> &
   CogniteAsyncIterator<T>;
 
