@@ -47,9 +47,8 @@ describe('Datapoints integration test', () => {
       end: new Date(),
     });
     expect(response[0].datapoints.length).toBeGreaterThan(0);
-    expect(response[0].datapoints[0].timestamp).toBeDefined();
+    expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
     expect(response[0].isString).toBe(false);
-    expect(!response[0].isString && response[0].isStep).toBeDefined();
   });
 
   test('retrieve latest', async () => {
