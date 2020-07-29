@@ -672,6 +672,9 @@ export type DatapointsDeleteRequest =
   | (ExternalId & DatapointsDeleteRange);
 
 export interface DatapointAggregates extends DatapointsMetadata {
+  /**
+   * false for aggregate time series values
+   */
   isString: false;
   /**
    * Whether the timeseries is a step series or not
@@ -683,6 +686,9 @@ export interface DatapointAggregates extends DatapointsMetadata {
 export type Datapoints = StringDatapoints | DoubleDatapoints;
 
 export interface DoubleDatapoints extends DatapointsMetadata {
+  /**
+   * false for timeseries with double values
+   */
   isString: false;
   /**
    * Whether the timeseries is a step series or not
@@ -695,6 +701,9 @@ export interface DoubleDatapoints extends DatapointsMetadata {
 }
 
 export interface StringDatapoints extends DatapointsMetadata {
+  /**
+   * true for timeseries with string values
+   */
   isString: true;
   /**
    * The list of datapoints
