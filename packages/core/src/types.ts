@@ -66,19 +66,26 @@ export interface LogoutUrlResponse {
  *
  * Example using `client.timeseries.list`:
  * ```js
- * const response = client.timeseries.list({ filter: { assetIds: [ASSET_ID] } });
+ * const response = client.timeseries.list({ filter: { assetIds: [ASSET_ID] }, limit: 1000 });
  * ```
  *
- * You can iterate through all returned items like so:
+ * You can get up to 1000 elements with normal await:
+ * ```js
+ * const items = await response;
+ * ```
+ *
+ * You can use `autoPagingToArray` to get more items than the per-request limit.
+ * E.g. an array of up to 5000 items:
+ * ```js
+ * const timeseries = await response.autoPagingToArray({ limit: 5000 });
+ * ```
+ * You may also specify `{ limit: Infinity }` to get all pages of results.
+ *
+ * You can also iterate through all items like so:
  * ```js
  * for await (const value of response) {
  *   // do something to value
  * }
- * ```
- *
- * Or get an array of up to 1000 items like so:
- * ```js
- * const timeseries = await response.autoPagingToArray({ limit: 1000 });
  * ```
  */
 export type CursorAndAsyncIterator<T> = Promise<ListResponse<T[]>> &
