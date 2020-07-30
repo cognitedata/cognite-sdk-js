@@ -61,17 +61,17 @@ export interface LogoutUrlResponse {
 /**
  * A Promise to a response that can be awaited like normal,
  * but at the risk of not getting all results due to API limits.
- * In which case a nextCursor field is provided to request the next page.
+ * In which case a nextCursor field is returned to request the next page.
  * Helper methods are provided to abstract away the pagination.
  *
- * Example using `client.timeseries.list`:
+ * Example using `client.timeseries.list` with a per-request limit of 1000:
  * ```js
  * const response = client.timeseries.list({ filter: { assetIds: [ASSET_ID] }, limit: 1000 });
  * ```
  *
  * You can get up to 1000 elements with normal await:
  * ```js
- * const items = await response;
+ * const { items, nextCursor } = await response;
  * ```
  *
  * You can use `autoPagingToArray` to get more items than the per-request limit.
@@ -79,9 +79,9 @@ export interface LogoutUrlResponse {
  * ```js
  * const timeseries = await response.autoPagingToArray({ limit: 5000 });
  * ```
- * You may also specify `{ limit: Infinity }` to get all pages of results.
+ * You may also specify `{ limit: Infinity }` to get all results.
  *
- * You can also iterate through all items like so:
+ * You can also iterate through all items (unless you break out of the loop) like so:
  * ```js
  * for await (const value of response) {
  *   // do something to value
