@@ -30,7 +30,7 @@ Most of these helpers can be easily re-implemented using other SDK calls.
 Some examples:
 
 **Asset.delete()**
-```jsx
+```ts
 public async delete(options: DeleteOptions = {}) {
   return this.client.assets.delete(
     [{ id: this.id }],
@@ -40,7 +40,7 @@ public async delete(options: DeleteOptions = {}) {
 ```
 
 **Asset.subtree()**
-```jsx
+```ts
 public async subtree() {
   const { items } = await client.assets.list({
     filter: {
@@ -51,7 +51,7 @@ public async subtree() {
 ```
 
 **TimeSeriesList.getAllDatapoints(...)**
-```jsx
+```ts
 public getAllDatapoints = async (options: DatapointsMultiQueryBase = {}) => {
   const tsIds = this.map(({ id }) => ({ id }));
   return this.client.datapoints.retrieve({
@@ -64,3 +64,18 @@ public getAllDatapoints = async (options: DatapointsMultiQueryBase = {}) => {
 ## Removed client.assets.retrieveSubtree(...) 
 
 Copies the functionality of `Asset.subtree()` (read above)
+
+## Change filter passing to client.timeseries.list
+
+The function previously took a `TimeseriesFilter` as input, but now takes a `TimeseriesFilterQuery` which
+corresponds closely to the [API spec](https://docs.cognite.com/api/v1/#operation/listTimeSeries).
+All filter related fields should now be in the `filter` object.
+
+### Example:
+```ts
+// Old way
+const timeseries = await client.timeseries.list({ assetIds: [1, 2], unit: "liter", limit: 100});
+
+//New way
+const timeseries = await client.timeseries.list({ filter: { assetIds: [1, 2], unit: "liter" }, limit: 100});
+```
