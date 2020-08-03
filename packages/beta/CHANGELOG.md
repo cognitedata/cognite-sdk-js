@@ -5,4 +5,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # 1.0.0 (2020-08-03)
 
-**Note:** Version bump only for package @cognite/sdk-beta
+ * creation of beta sdk
