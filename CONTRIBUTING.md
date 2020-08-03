@@ -77,6 +77,9 @@ git commit --allow-empty -m "chore: trigger [release]"
 git push
 ```
 
+If you want to push the empty commit to master via a pull request,
+use squash merge (not rebase and ff). Otherwise GitHub will ignore the empty PR.
+
 Also, keep in mind that the `[release]` commit has to be the HEAD of
 main, and travis only runs on the HEAD. If HEAD has changed by the time
 the versioning happens, travis will fail.
