@@ -1,3 +1,76 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# 3.0.0 (2020-08-03)
+
+
+### Bug Fixes
+
+* make Node3D.boundingBox optional ([#403](https://github.com/cognitedata/cognite-sdk-js/issues/403)) ([b6142c2](https://github.com/cognitedata/cognite-sdk-js/commit/b6142c27832079c49a86a26428d57ee18f1f85a6))
+* **core:** auto-conversion timestamp to Date ([2f06b60](https://github.com/cognitedata/cognite-sdk-js/commit/2f06b604f8c6276466d3105e60892a266eb2a4f7))
+
+
+### Features
+
+* **datapoints:** add unit property to retrieve response object ([#405](https://github.com/cognitedata/cognite-sdk-js/issues/405)) ([a569720](https://github.com/cognitedata/cognite-sdk-js/commit/a569720c188d3413f46b997f1d17b6efaf7ff65f))
+* removed AssetClass, AssetList, TimeseriesClass, TimeSeriesList ([9315a95](https://github.com/cognitedata/cognite-sdk-js/commit/9315a95360561429af2e6f050a1e13f9ac9a2979))
+* renamed interfaces ([#388](https://github.com/cognitedata/cognite-sdk-js/issues/388)) ([7f2ef5d](https://github.com/cognitedata/cognite-sdk-js/commit/7f2ef5d83869bffa932d8bc6f25a305e25a4e954))
+* **avents-aggregate:** aggregates moved to separate api ([3f7f183](https://github.com/cognitedata/cognite-sdk-js/commit/3f7f183f02f230fa3d727c6b9dfe155c526d6d2c))
+
+
+### BREAKING CHANGES
+
+* Node3D.boundingBox has always been optional in API. This commit just fixes the bug in documentation.
+* **core:** Raw API doesn't automatically convert timestamp columns to Date objects.
+
+Full list of column names affected: createdTime, lastUpdatedTime, uploadedTime, deletedTime, timestamp, sourceCreatedTime, sourceModifiedTime.
+* Helper classes has been removed:
+- AssetClass
+- AssetList
+- TimeseriesClass
+- TimeSeriesList
+
+Learn more: ./guides/MIGRATION_GUIDE_2xx_3xx.md
+* Interfaces renamed:
+- AzureADConfigurationDTO -> AzureADConfiguration
+- DatapointsGetAggregateDatapoint -> DatapointsAggregates
+- DatapointsGetDatapoint -> Datapoints
+- DatapointsGetDoubleDatapoint -> DoubleDatapoints
+- DatapointsGetStringDatapoint -> StringDatapoints
+- DatapointsInsertProperties -> ExternalDatapoints
+- DatapointsPostDatapoint -> ExternalDatapointsQuery
+- ExternalFilesMetadata -> ExternalFileInfo
+- FilesMetadata -> FileInfo
+- GetAggregateDatapoint -> DatapointAggregate
+- GetDatapointMetadata -> DatapointInfo
+- GetDoubleDatapoint -> DoubleDatapoint
+- GetStringDatapoint -> StringDatapoint
+- GetTimeSeriesMetadataDTO -> Timeseries
+- OAuth2ConfigurationDTO -> OAuth2Configuration
+- PostDatapoint -> ExternalDatapoint
+- PostTimeSeriesMetadataDTO -> ExternalTimeseries
+- TimeSeriesSearchDTO -> TimeseriesSearchFilter
+- TimeseriesFilter -> TimeseriesFilterQuery (structure changed)
+- TimeseriesFilterProps -> TimeseriesFilter
+- UploadFileMetadataResponse -> FileUploadResponse
+
+Removed interfaces:
+- Filter (use TimeseriesFilter)
+- Search (use TimeseriesSearch)
+
+Changed:
+- `timeseries.list()` signature is now consistent with other resource types
+* **avents-aggregate:** Event aggregate methods moved to a separate api.
+
+`client.events.aggregate(...)` -> `client.events.aggregate.count()`
+`client.events.uniqueValuesAggregate(...)` -> `client.events.aggregate.uniqueValues(...)`
+
+
+
+
+
 # [2.33.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.32.0...v2.33.0) (2020-07-09)
 
 
