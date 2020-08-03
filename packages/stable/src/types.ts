@@ -672,16 +672,22 @@ export type DatapointsDeleteRequest =
   | (ExternalId & DatapointsDeleteRange);
 
 export interface DatapointAggregates extends DatapointsMetadata {
+  isString: false;
+  /**
+   * Whether the timeseries is a step series or not
+   */
+  isStep: boolean;
   datapoints: DatapointAggregate[];
 }
 
 export type Datapoints = StringDatapoints | DoubleDatapoints;
 
 export interface DoubleDatapoints extends DatapointsMetadata {
-  /**
-   * Whether the time series is string valued or not.
-   */
   isString: false;
+  /**
+   * Whether the timeseries is a step series or not
+   */
+  isStep?: boolean;
   /**
    * The list of datapoints
    */
@@ -689,9 +695,6 @@ export interface DoubleDatapoints extends DatapointsMetadata {
 }
 
 export interface StringDatapoints extends DatapointsMetadata {
-  /**
-   * Whether the time series is string valued or not.
-   */
   isString: true;
   /**
    * The list of datapoints
@@ -708,6 +711,14 @@ export interface DatapointsMetadata extends InternalId {
    * External id of the timeseries the datapoints belong to.
    */
   externalId?: CogniteExternalId;
+  /**
+   * Whether or not the datapoints are string values.
+   */
+  isString: boolean;
+  /**
+   * Name of the physical unit of the time series
+   */
+  unit?: string;
 }
 
 export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
