@@ -9,13 +9,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * make Node3D.boundingBox optional ([#403](https://github.com/cognitedata/cognite-sdk-js/issues/403)) ([768b0d9](https://github.com/cognitedata/cognite-sdk-js/commit/768b0d96de43f5a58da4b894993f484dd19dc75f))
-* **core:** auto-conversion timestamp to Date ([2f06b60](https://github.com/cognitedata/cognite-sdk-js/commit/2f06b604f8c6276466d3105e60892a266eb2a4f7))
 
 
 ### Features
 
-* **datapoints:** add unit property to retrieve response [skip ci] ([5187c1c](https://github.com/cognitedata/cognite-sdk-js/commit/5187c1c2c30eaecbe7089770ad5c727735f71fd3))
-* removed AssetClass, AssetList, TimeseriesClass, TimeSeriesList ([9315a95](https://github.com/cognitedata/cognite-sdk-js/commit/9315a95360561429af2e6f050a1e13f9ac9a2979))
+* **datapoints:** add unit property to retrieve response ([5187c1c](https://github.com/cognitedata/cognite-sdk-js/commit/5187c1c2c30eaecbe7089770ad5c727735f71fd3))
+* removed `AssetClass`, `AssetList`, `TimeseriesClass`, `TimeSeriesList` ([9315a95](https://github.com/cognitedata/cognite-sdk-js/commit/9315a95360561429af2e6f050a1e13f9ac9a2979))
 * renamed interfaces ([#388](https://github.com/cognitedata/cognite-sdk-js/issues/388)) ([7f2ef5d](https://github.com/cognitedata/cognite-sdk-js/commit/7f2ef5d83869bffa932d8bc6f25a305e25a4e954))
 * **avents-aggregate:** aggregates moved to separate api ([3f7f183](https://github.com/cognitedata/cognite-sdk-js/commit/3f7f183f02f230fa3d727c6b9dfe155c526d6d2c))
 
@@ -23,45 +22,47 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### BREAKING CHANGES
 
 * Node3D.boundingBox has always been optional in API. This commit just fixes the bug in documentation.
-* **core:** Raw API doesn't automatically convert timestamp columns to Date objects.
+* **core:** Fields that can have arbitrary string names (Raw, Metadata) are no longer converted to Date objects if their names happen to be:
+`createdTime`, `lastUpdatedTime`, `uploadedTime`, `deletedTime`, `timestamp`, `sourceCreatedTime` or `sourceModifiedTime`.
 
-Full list of column names affected: createdTime, lastUpdatedTime, uploadedTime, deletedTime, timestamp, sourceCreatedTime, sourceModifiedTime.
-* Helper classes has been removed:
-- AssetClass
-- AssetList
-- TimeseriesClass
-- TimeSeriesList
+* Helper classes that have been removed:
+  - AssetClass
+  - AssetList
+  - TimeseriesClass
+  - TimeSeriesList
 
-Learn more: ./guides/MIGRATION_GUIDE_2xx_3xx.md
+For replacements, see [MIGRATION_GUIDE_2xx_3xx.md](../../guides/MIGRATION_GUIDE_2xx_3xx.md)
+
 * Interfaces renamed:
-- AzureADConfigurationDTO -> AzureADConfiguration
-- DatapointsGetAggregateDatapoint -> DatapointsAggregates
-- DatapointsGetDatapoint -> Datapoints
-- DatapointsGetDoubleDatapoint -> DoubleDatapoints
-- DatapointsGetStringDatapoint -> StringDatapoints
-- DatapointsInsertProperties -> ExternalDatapoints
-- DatapointsPostDatapoint -> ExternalDatapointsQuery
-- ExternalFilesMetadata -> ExternalFileInfo
-- FilesMetadata -> FileInfo
-- GetAggregateDatapoint -> DatapointAggregate
-- GetDatapointMetadata -> DatapointInfo
-- GetDoubleDatapoint -> DoubleDatapoint
-- GetStringDatapoint -> StringDatapoint
-- GetTimeSeriesMetadataDTO -> Timeseries
-- OAuth2ConfigurationDTO -> OAuth2Configuration
-- PostDatapoint -> ExternalDatapoint
-- PostTimeSeriesMetadataDTO -> ExternalTimeseries
-- TimeSeriesSearchDTO -> TimeseriesSearchFilter
-- TimeseriesFilter -> TimeseriesFilterQuery (structure changed)
-- TimeseriesFilterProps -> TimeseriesFilter
-- UploadFileMetadataResponse -> FileUploadResponse
+  - AzureADConfigurationDTO -> AzureADConfiguration
+  - DatapointsGetAggregateDatapoint -> DatapointsAggregates
+  - DatapointsGetDatapoint -> Datapoints
+  - DatapointsGetDoubleDatapoint -> DoubleDatapoints
+  - DatapointsGetStringDatapoint -> StringDatapoints
+  - DatapointsInsertProperties -> ExternalDatapoints
+  - DatapointsPostDatapoint -> ExternalDatapointsQuery
+  - ExternalFilesMetadata -> ExternalFileInfo
+  - FilesMetadata -> FileInfo
+  - GetAggregateDatapoint -> DatapointAggregate
+  - GetDatapointMetadata -> DatapointInfo
+  - GetDoubleDatapoint -> DoubleDatapoint
+  - GetStringDatapoint -> StringDatapoint
+  - GetTimeSeriesMetadataDTO -> Timeseries
+  - OAuth2ConfigurationDTO -> OAuth2Configuration
+  - PostDatapoint -> ExternalDatapoint
+  - PostTimeSeriesMetadataDTO -> ExternalTimeseries
+  - TimeSeriesSearchDTO -> TimeseriesSearchFilter
+  - TimeseriesFilter -> TimeseriesFilterQuery (structure changed)
+  - TimeseriesFilterProps -> TimeseriesFilter
+  - UploadFileMetadataResponse -> FileUploadResponse
 
-Removed interfaces:
-- Filter (use TimeseriesFilter)
-- Search (use TimeseriesSearch)
+* Interfaces removed:
+  - Filter (use TimeseriesFilter)
+  - Search (use TimeseriesSearch)
 
-Changed:
-- `timeseries.list()` signature is now consistent with other resource types
+
+* `timeseries.list()` signature is now consistent with other resource types
+
 * **avents-aggregate:** Event aggregate methods moved to a separate api.
 
 `client.events.aggregate(...)` -> `client.events.aggregate.count()`
