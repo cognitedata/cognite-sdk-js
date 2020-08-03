@@ -4,7 +4,7 @@ The package `@cognite/sdk` provides convenient access to the stable [Cognite API
 from applications written in client- or server-side javascript.
 
 The SDK supports authentication through api-keys (_for server-side applications_) and bearer tokens (for web applications).
-See [Authentication Guide](https://github.com/cognitedata/cognite-sdk-js/blob/v1/guides/authentication.md).
+See [Authentication Guide](https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/authentication.md).
 
 ## Installation
 
@@ -58,7 +58,7 @@ async function quickstart() {
 quickstart();
 ```
 
-> For more details about SDK authentication see this [document](https://github.com/cognitedata/cognite-sdk-js/blob/v1/guides/authentication.md).
+> For more details about SDK authentication see this [document](https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/authentication.md).
 > Also, more comprehensive intro guide with a demo app can be found [here](https://github.com/cognitedata/javascript-getting-started/tree/master/sdk-auth-and-fetch-data)
 
 ### Backend
@@ -122,6 +122,6 @@ giving examples of SDK use. See also the [samples section](https://github.com/co
 
 ## Guides
 
- - [Migration guide](https://github.com/cognitedata/cognite-sdk-js/blob/v1/guides/MIGRATION_GUIDE_1xx_2xx.md)
+ - [Migration guide](https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/MIGRATION_GUIDE_1xx_2xx.md)
 on how to migrate from version `1.x.x` to version `2.x.x`.
  - [Migration guide](https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/MIGRATION_GUIDE_2xx_3xx.md) from version `2.x.x` to version `3.x.x`.

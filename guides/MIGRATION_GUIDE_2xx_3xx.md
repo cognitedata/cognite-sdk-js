@@ -68,7 +68,7 @@ Copies the functionality of `Asset.subtree()` (read above)
 ## Change filter passing to client.timeseries.list
 
 The function previously took a `TimeseriesFilter` as input, but now takes a `TimeseriesFilterQuery` which
-corresponds closely to the [API spec](https://docs.cognite.com/api/v1/#operation/listTimeSeries).
+corresponds closely to the [API spec](https://docs.cognite.com/api/master/#operation/listTimeSeries).
 All filter related fields should now be in the `filter` object.
 
 ### Example:
