@@ -13,8 +13,7 @@ git config --global user.name "Cognite CICD"
 git remote set-url origin "https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git" > /dev/null 2>&1
 echo "Set git origin with token!"
 
-# Used by lerna version
-GH_TOKEN="${GITHUB_TOKEN}"
+export GH_TOKEN="${GITHUB_TOKEN}" # Used by lerna version
 # Lerna makes a commit (with [skip ci] in message)
 # Will fail if upstream head has changed in the meantime
 # Will do nothing and return 0 if nothing has changed
