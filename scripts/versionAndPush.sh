@@ -18,7 +18,7 @@ export GH_TOKEN="$GITHUB_TOKEN" # Used by lerna version
 # Will fail if upstream head has changed in the meantime
 # Will do nothing and return 0 if nothing has changed
 echo "Running lerna version"
-yarn lerna version major --conventional-commits --create-release github --no-private --yes
+yarn lerna version --conventional-commits --create-release github --no-private --yes
 echo "Ran lerna version!"
 
 echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
