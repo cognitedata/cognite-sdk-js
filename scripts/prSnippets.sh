@@ -11,6 +11,11 @@ packageVersion=$(jq -r ".version" "${stablePackage}/package.json")
 branchName="bot/jsCodeSnippets_v$packageVersion"
 message="[JS SDK]: update code snippets to v$packageVersion"
 
+echo "Extracting code snippets from stable"
+cd "${stablePackage}"
+yarn extract-snippets
+cd - # Go back to repo root
+
 echo "Cloning service contract repo"
 git clone https://$GITHUB_TOKEN@github.com/cognitedata/service-contracts.git >/dev/null 2>&1
 cd service-contracts
