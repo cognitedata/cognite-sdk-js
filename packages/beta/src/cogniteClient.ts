@@ -3,9 +3,25 @@ import {
   ClientOptions,
   CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
+import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
+import { TimeSeriesAPI } from './api/timeseries/timeSeriesApi';
 
-export default class CogniteClientBeta extends CogniteClientStable {
+class CogniteClientBeta extends CogniteClientStable {
+  protected timeSeriesApiBeta?: TimeSeriesAPI;
+
+  protected initAPIs() {
+    super.initAPIs();
+    this.timeSeriesApiBeta = this.apiFactory(TimeSeriesAPI, 'timeseries');
+  }
+}
+
+type CogniteClientBetaCleaned = new (options: ClientOptions) => {
+  [P in Exclude<keyof CogniteClientBeta, 'timeseries'>]: CogniteClientBeta[P]
+};
+const CogniteClientBetaCleaned: CogniteClientBetaCleaned = CogniteClientBeta;
+
+class CogniteClientBetaExport extends CogniteClientBetaCleaned {
   /**
    * Create a new SDK client (beta)
    *
@@ -30,6 +46,10 @@ export default class CogniteClientBeta extends CogniteClientStable {
   protected get version() {
     return `${version}-beta`;
   }
+
+  get timeseries(): TimeSeriesAPI {
+    return accessApi((this as any).timeSeriesApiBeta);
+  }
 }
 
-export * from '@cognite/sdk';
+export default CogniteClientBetaExport;

@@ -16,4 +16,9 @@ describe('beta integration', () => {
     const response = await client.get('/api/v1/projects/cognitesdk-js/assets');
     expect(response.data).toHaveProperty('items');
   });
+  test('overridden', async () => {
+    expect((client as any).version.endsWith('beta')).toBeTruthy();
+    const timeserieses = await client.timeseries.list().autoPagingToArray();
+    timeserieses[0].myBetaField; //It's here!
+  });
 });
