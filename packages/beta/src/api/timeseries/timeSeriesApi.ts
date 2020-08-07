@@ -7,7 +7,7 @@ import {
   MetadataMap,
 } from '@cognite/sdk-core';
 import {
-  Timeseries,
+  Timeseries as TimeseriesStable,
   IdEither,
   IgnoreUnknownIds,
   ExternalTimeseries,
@@ -19,6 +19,13 @@ import {
   TimeSeriesUpdate,
 } from '../../types';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
+
+export interface Timeseries extends TimeseriesStable {
+  /**
+   * Field added only in beta
+   */
+  myBetaField: string;
+}
 
 export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
   private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
