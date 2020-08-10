@@ -50,7 +50,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * [Create time series](https://doc.cognitedata.com/api/v1/#operation/postTimeSeries)
    *
    * This comment only appears in the beta
-   * 
+   *
    * ```js
    * const timeseries = [
    *   { name: 'Pressure sensor', assetId: 123 },

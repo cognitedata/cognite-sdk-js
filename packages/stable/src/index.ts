@@ -47,11 +47,15 @@ export { ProjectsAPI } from './api/projects/projectsApi';
 export { RawAPI } from './api/raw/rawApi';
 export { RawRowsAPI } from './api/raw/rawRowsApi';
 export { RawTablesAPI } from './api/raw/rawTablesApi';
-export { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
+export {
+  SecurityCategoriesAPI,
+} from './api/securityCategories/securityCategoriesApi';
 export { SequenceRowsAPI } from './api/sequences/sequenceRowsApi';
 export { SequencesAPI } from './api/sequences/sequencesApi';
 export { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
-export { SyntheticTimeSeriesAPI } from './api/timeSeries/syntheticTimeSeriesApi';
+export {
+  SyntheticTimeSeriesAPI,
+} from './api/timeSeries/syntheticTimeSeriesApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 
 export * from './types';
