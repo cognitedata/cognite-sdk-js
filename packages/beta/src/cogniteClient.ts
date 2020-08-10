@@ -16,10 +16,14 @@ class CogniteClientBeta extends CogniteClientStable {
   }
 }
 
-type CogniteClientBetaCleaned = new (options: ClientOptions) => {
-  [P in Exclude<keyof CogniteClientBeta, 'timeseries'>]: CogniteClientBeta[P]
+type ClientWithout<T, R extends keyof T> = new (options: ClientOptions) => {
+  [P in Exclude<keyof T, R>]: T[P]
 };
-const CogniteClientBetaCleaned: CogniteClientBetaCleaned = CogniteClientBeta;
+
+const CogniteClientBetaCleaned: ClientWithout<
+  CogniteClientBeta,
+  'timeseries'
+> = CogniteClientBeta;
 
 class CogniteClientBetaExport extends CogniteClientBetaCleaned {
   /**
@@ -47,8 +51,9 @@ class CogniteClientBetaExport extends CogniteClientBetaCleaned {
     return `${version}-beta`;
   }
 
+  protected timeSeriesApiBeta?: TimeSeriesAPI;
   get timeseries(): TimeSeriesAPI {
-    return accessApi((this as any).timeSeriesApiBeta);
+    return accessApi(this.timeSeriesApiBeta);
   }
 }
 
