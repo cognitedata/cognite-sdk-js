@@ -8,12 +8,12 @@ import { version } from '../package.json';
 import { TimeSeriesAPI } from './api/timeseries/timeSeriesApi';
 
 /** @hidden */
-class CogniteClientBeta extends CogniteClientStable {
-  //Remove type restriction on timeseries
+class CogniteClientCleaned extends CogniteClientStable {
+  // Remove type restriction on timeseries
   timeseries: any;
 }
 
-export default class CogniteClient extends CogniteClientBeta {
+export default class CogniteClient extends CogniteClientCleaned {
   /**
    * Create a new SDK client (beta)
    *

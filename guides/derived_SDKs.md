@@ -1,5 +1,12 @@
 # Derived SDKs HOW-TO
 
+This document serves as a guide for working with SDK packages.
+First there is an overview, describing the most important packages
+in the repository and how they interact
+
+ Then there are guides for creating your own packages and making changes
+ to derived packages.
+
 ## Overview of packages
 The Cognite Javascript SDK is written to allow multiple versions to co-exist and depend on each other.
 This allows us to more easily maintain SDKs for different API versions, such as betas and alphas.
@@ -17,69 +24,31 @@ A generic `BaseResourceApi<T>` base class is provided for resource endpoint impl
 
 ### The stable SDK
 The stable API is implemented as `@cognite/sdk` in `packages/stable/`. This is the package most apps will use.
-The `CogniteClient` class uses inheritance to add API accessors to the `BaseCogniteClient`.
+The `CogniteClient` class uses inheritance to add accessors to the `BaseCogniteClient`.
 Each part of the API gets its own class in `src/api/*/*.ts`, e.g. the `TimeseriesAPI` class
 which lets you create, delete, list and filter etc. timeseries.
-These classes often inherit `BaseResourceApi<T>` from core, which provides many common generic endpoints,
-as protected templated methods.
 
 See the [reference documentation](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)
 for `CogniteClient` to see all API classes provided by the API.
 
-Instances of API classes are created in `CogniteClient` in the protected method `initAPIs()`,
-where they are constructed with an HTTP client and path.
 Most types used in requests and responses are defined as interfaces and type aliases in `src/types.ts`,
-and closely mimic the structure of the REST API.
-
-The package exports the `CogniteClient`, the API classes and the types.
+and closely mimic the structure of the REST API. The package exports the `CogniteClient`, the API classes and the types.
 
 ### The beta SDK
 The beta SDK is implemented as `@cognite/sdk-beta` in `packages/beta/`.
 It depends on both stable and core, and uses inheritence to augment the stable sdk.
 The resulting class is exported as `CogniteClient`, and the rest of stable is forward-exported as well,
-which makes the beta package behave as stable by default. To understand how the beta class 
+which makes the beta package behave as stable by default. To understand how the beta class can override
+parts of stable, see the sections below.
+
+### Any other potential packages
+This is not an exhaustive list, because you can create your own packages.
+See the sections below.
 
 # Creating an SDK derived from stable
-The simplest possible beta SDK just changes the string returned from `version`.
 
-`src/cogniteclient.ts`:
-```ts
-import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
-import { version } from '../package.json';
 
-export default class CogniteClient extends CogniteClientStable {
-    protected get version() {
-        return `${version}-beta`;
-    }
-}
-```
 
-The class must be exported from the package, as well as everything exported from stable.
+# Overriding endpoints in a derived SDK
 
-`src/index.ts`:
-```ts
-// Copyright 2020 Cognite AS
-
-export * from '@cognite/sdk';
-export { default as CogniteClient } from './cogniteClient';
-```
-
-## Adding new endpoints to an SDK
-
-```ts
-import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
-import { MyNewAPI } from './api/myNew/myNewApi';
-
-export default class CogniteClient extends CogniteClientStable {
-
-    protected myNewApi:MyNewAPI;
-    protected initAPIs() {
-        super.initAPIs();
-        this.myNewApi = this.apiFactory(MyNewAPI, 'mynew');
-    }
-
-    get myNew(): MyNewAPI {
-        return accessApi(this.myNewApi);
-    }
-}
-```
+# Creating an empty CDF SDK
