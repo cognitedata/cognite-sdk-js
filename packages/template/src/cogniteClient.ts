@@ -2,15 +2,13 @@
 import {
   ClientOptions,
   CogniteClient as CogniteClientStable,
+  HttpRequestOptions,
 } from '@cognite/sdk';
 import { version } from '../package.json';
 
-//import { accessApi } from '@cognite/sdk-core';
-//import { TimeSeriesAPI } from './api/timeseries/timeSeriesApi';
-
 /** @hidden */
 class CogniteClientCleaned extends CogniteClientStable {
-  // Remove old type of timeseries
+  // Remove old type of e.g. timeseries
   //timeseries: any
 }
 
@@ -24,16 +22,21 @@ export default class CogniteClient extends CogniteClientCleaned {
   }
 
   protected get version() {
-    return `${version}`;
+    return `${version}-derived`;
   }
 
-  //protected timeSeriesApiBeta?: TimeSeriesAPI;
+  private externalApi?: {
+    openDoor(name: string): Promise<boolean>;
+  };
+
   protected initAPIs() {
     super.initAPIs();
-    //this.timeSeriesApiBeta = this.apiFactory(TimeSeriesAPI, 'timeseries');
+    this.externalApi = {
+      openDoor: async (name: string) => {
+        const options: HttpRequestOptions = { params: { name } };
+        const response = await this.httpClient.post('example.com/openDoor', options);
+        return response.status === 200 
+      }
+    };
   }
-
-  //get timeseries(): TimeSeriesAPI {
-  //  return accessApi(this.timeSeriesApiBeta);
-  //}
 }

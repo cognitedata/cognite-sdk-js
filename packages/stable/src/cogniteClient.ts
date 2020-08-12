@@ -149,13 +149,3 @@ export default class CogniteClient extends BaseCogniteClient {
   }
 }
 
-export {
-  POPUP,
-  REDIRECT,
-  ApiKeyLoginOptions,
-  BaseRequestOptions,
-  ClientOptions,
-  OAuthLoginOptions,
-  Project,
-  Response,
-} from '@cognite/sdk-core';
