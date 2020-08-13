@@ -200,15 +200,47 @@ export class TimeSeriesAPI extends TimeSeriesAPIStable {
 Then we need to use this new `TimeSeriesAPI` in the client. It's not enough to
 give it the same name. We must re-define the `timeseries` field to return an instance
 of our new class. The problem is that stable's `CogniteClient.timeseries` already has a defined return type.
-Subclasses normally can't broaden the signature of methods. We do however have a trick:
+Subclasses normally can't broaden the type of fields. We do however have a trick:
 ```ts
+import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
+import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+
 class CogniteClientCleaned extends CogniteClientStable {
-  // Remove type restriction on timeseries
-  timeseries: any;
+    // Remove type restriction on timeseries
+    timeseries: any;
 }
 
 export default class CogniteClient extends CogniteClientCleaned {
+
+    private timeSeriesApi?: TimeSeriesAPI;
+    protected initAPIs() {
+        super.initAPIs();
+        this.timeSeriesApiBeta = this.apiFactory(TimeSeriesAPI, 'timeseries');
+    }
+
+    get timeseries(): TimeSeriesAPI {
+        return accessApi(this.timeSeriesApiBeta);
+    }
+}
 ```
+
+Typescript always allows the `any` type to be used, which weakens the type of `timeseries` in `CogniteClientCleaned`.
+We can then override that class again, and specify the correct strict type.
+IDEs now understand that the `timeseries` field has the new type, and gives correct suggestions.
+
+It is now very important to export this new `TimeSeriesAPI` in `index.ts`:
+```ts
+export * from '@cognite/sdk';
+export { default as CogniteClient } from './cogniteClient';
+export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+```
+
+Because we specify by name, it will take precedence over `export * from @cognite/sdk`,
+which normally exports its own `TimeSeriesAPI`.
+
+# Changing existsing endpoints and types
+
+If you want to change the
 
 # Accessing endpoints from outside of CDF
 

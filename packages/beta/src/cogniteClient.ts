@@ -44,7 +44,7 @@ export default class CogniteClient extends CogniteClientCleaned {
     this.timeSeriesApiBeta = this.apiFactory(TimeSeriesAPI, 'timeseries');
   }
 
-  get timeseries(): TimeSeriesAPI {
+  get timeseries() {
     return accessApi(this.timeSeriesApiBeta);
   }
 }
