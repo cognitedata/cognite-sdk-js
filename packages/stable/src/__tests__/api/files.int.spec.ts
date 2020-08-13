@@ -26,16 +26,18 @@ describe('Files integration test', () => {
         name: 'asset_' + randomInt(),
       },
     ]);
-    [label] = await client.labels.create([{
-      externalId: 'test-file-lable',
-      name: 'file-label',
-      description: 'test label',
-    }]);
+    [label] = await client.labels.create([
+      {
+        externalId: 'test-file-lable',
+        name: 'file-label',
+        description: 'test label',
+      },
+    ]);
   });
 
   afterAll(async () => {
     await client.assets.delete([{ id: asset.id }]);
-    await client.labels.delete([{externalId: label.externalId}]);
+    await client.labels.delete([{ externalId: label.externalId }]);
   });
 
   const {
@@ -48,10 +50,15 @@ describe('Files integration test', () => {
   let file: FileInfo;
 
   test('create', async () => {
-    file = await client.files.upload({
-      ...localFileMeta,
-      labels: [{ externalId: label.externalId }]
-    }, fileContent, false, true);
+    file = await client.files.upload(
+      {
+        ...localFileMeta,
+        labels: [{ externalId: label.externalId }],
+      },
+      fileContent,
+      false,
+      true
+    );
   });
 
   test('retrieve', async () => {
@@ -82,9 +89,9 @@ describe('Files integration test', () => {
     const aggregates = await client.files.aggregate({
       filter: {
         labels: {
-          containsAny: [{externalId: label.externalId}]
-        }
-      }
+          containsAny: [{ externalId: label.externalId }],
+        },
+      },
     });
 
     expect(aggregates.length).toBe(1);
@@ -199,9 +206,9 @@ describe('Files integration test', () => {
     const { items } = await client.files.list({
       filter: {
         labels: {
-          containsAll: [{externalId: label.externalId}]
-        }
-      }
+          containsAll: [{ externalId: label.externalId }],
+        },
+      },
     });
 
     expect(items.length).toBe(1);
@@ -209,16 +216,18 @@ describe('Files integration test', () => {
   });
 
   test('update file by removing label', async () => {
-    const [updatedFile] = await client.files.update([{
-      id: file.id,
-      update: {
-        labels: {
-          remove: [{externalId: label.externalId}],
+    const [updatedFile] = await client.files.update([
+      {
+        id: file.id,
+        update: {
+          labels: {
+            remove: [{ externalId: label.externalId }],
+          },
         },
       },
-    }]);
+    ]);
 
-    expect(updatedFile.labels).toBe(undefined)
+    expect(updatedFile.labels).toBe(undefined);
   });
 
   test('delete', async () => {

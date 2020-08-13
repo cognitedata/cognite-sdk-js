@@ -15,15 +15,17 @@ describe('Asset integration test', () => {
 
   beforeAll(async () => {
     client = setupLoggedInClient();
-    [label] = await client.labels.create([{
-      externalId: 'test-asset-lable',
-      name: 'asset-label',
-      description: 'test label',
-    }]);
+    [label] = await client.labels.create([
+      {
+        externalId: 'test-asset-lable',
+        name: 'asset-label',
+        description: 'test label',
+      },
+    ]);
   });
 
   afterAll(async () => {
-    await client.labels.delete([{externalId: label.externalId}]);
+    await client.labels.delete([{ externalId: label.externalId }]);
   });
 
   const rootAsset = {
@@ -47,12 +49,12 @@ describe('Asset integration test', () => {
 
   test('create', async () => {
     assets = await client.assets.create([
-      {...childAsset, labels: [{externalId: label.externalId}]},
-      rootAsset
+      { ...childAsset, labels: [{ externalId: label.externalId }] },
+      rootAsset,
     ]);
     expect(assets[0].createdTime).toBeInstanceOf(Date);
     expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
-    expect(assets[0].labels?.length).toBe(1);
+    expect(assets[0].labels!.length).toBe(1);
   });
 
   test('create empty asset array', async () => {
@@ -307,12 +309,12 @@ describe('Asset integration test', () => {
   });
 
   test('filter by label', async () => {
-    const {items} = await client.assets.list({
+    const { items } = await client.assets.list({
       filter: {
         labels: {
-          containsAny: [{externalId: label.externalId}]
+          containsAny: [{ externalId: label.externalId }],
         },
-      }
+      },
     });
 
     expect(items.length).toBe(1);
@@ -333,9 +335,9 @@ describe('Asset integration test', () => {
     const aggregates = await client.assets.aggregate({
       filter: {
         labels: {
-          containsAny: [{externalId: label.externalId}],
-        }
-      }
+          containsAny: [{ externalId: label.externalId }],
+        },
+      },
     });
 
     expect(aggregates.length).toBe(1);
@@ -369,14 +371,16 @@ describe('Asset integration test', () => {
   });
 
   test('update by deleting label', async () => {
-    const [updatedAsset] = await client.assets.update([{
-      id: assets[0].id,
-      update: {
-        labels: {
-          remove: [{externalId: label.externalId}]
-        }
-      }
-    }]);
+    const [updatedAsset] = await client.assets.update([
+      {
+        id: assets[0].id,
+        update: {
+          labels: {
+            remove: [{ externalId: label.externalId }],
+          },
+        },
+      },
+    ]);
 
     expect(updatedAsset.labels).toBe(undefined);
   });

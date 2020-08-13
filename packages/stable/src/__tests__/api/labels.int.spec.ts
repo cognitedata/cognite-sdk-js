@@ -14,8 +14,6 @@ describe('Labels integration test', () => {
     client = setupLoggedInClient();
   });
 
-  afterAll(async () => {});
-
   test('create', async () => {
     const createdLabels = await client.labels.create([externalLabel]);
 
@@ -23,15 +21,19 @@ describe('Labels integration test', () => {
   });
 
   test('list', async () => {
-    const { items } = await client.labels.list({filter: { name: externalLabel.name}})
+    const { items } = await client.labels.list({
+      filter: { name: externalLabel.name },
+    });
 
     expect(items.length).toBe(1);
     expect(items[0].externalId).toBe(externalLabel.externalId);
   });
 
   test('delete', async () => {
-    const response = await client.labels.delete([{externalId: externalLabel.externalId}]);
+    const response = await client.labels.delete([
+      { externalId: externalLabel.externalId },
+    ]);
 
     expect(response).toEqual({});
   });
-})
+});
