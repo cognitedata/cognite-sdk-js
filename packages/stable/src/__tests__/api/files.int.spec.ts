@@ -3,7 +3,7 @@
 import { HttpResponseType } from '@cognite/sdk-core';
 import { readFileSync } from 'fs';
 import CogniteClient from '../../cogniteClient';
-import { FileInfo, Asset } from '../../types';
+import { FileInfo, Asset, Label } from '../../types';
 import { join } from 'path';
 import {
   getFileCreateArgs,
@@ -17,6 +17,8 @@ const testfile = join(__dirname, '../test3dFile.fbx');
 describe('Files integration test', () => {
   let client: CogniteClient;
   let asset: Asset;
+  let label: Label;
+
   beforeAll(async () => {
     client = setupLoggedInClient();
     [asset] = await client.assets.create([
@@ -24,10 +26,16 @@ describe('Files integration test', () => {
         name: 'asset_' + randomInt(),
       },
     ]);
+    [label] = await client.labels.create([{
+      externalId: 'test-file-lable',
+      name: 'file-label',
+      description: 'test label',
+    }])
   });
 
   afterAll(async () => {
     await client.assets.delete([{ id: asset.id }]);
+    await client.labels.delete([{externalId: label.externalId}]);
   });
 
   const {
@@ -40,7 +48,10 @@ describe('Files integration test', () => {
   let file: FileInfo;
 
   test('create', async () => {
-    file = await client.files.upload(localFileMeta, fileContent, false, true);
+    file = await client.files.upload({
+      ...localFileMeta,
+      labels: [{ externalId: label.externalId }]
+    }, fileContent, false, true);
   });
 
   test('retrieve', async () => {
@@ -63,6 +74,19 @@ describe('Files integration test', () => {
         name: file.name,
       },
     });
+    expect(aggregates.length).toBe(1);
+    expect(aggregates[0].count).toBeDefined();
+  });
+
+  test('count aggregate by label', async () => {
+    const aggregates = await client.files.aggregate({
+      filter: {
+        labels: {
+          containsAny: [{externalId: label.externalId}]
+        }
+      }
+    });
+
     expect(aggregates.length).toBe(1);
     expect(aggregates[0].count).toBeDefined();
   });
@@ -170,6 +194,33 @@ describe('Files integration test', () => {
       expect(response.data).toEqual(fileContentBinary.buffer);
     });
   });
+
+  test('list by label', async () => {
+    const { items } = await client.files.list({
+      filter: {
+        labels: {
+          containsAll: [{externalId: label.externalId}]
+        }
+      }
+    });
+
+    expect(items.length).toBe(1);
+    expect(items[0].id).toBe(file.id);
+  });
+
+  test('update file by removing label', async () => {
+    const [updatedFile] = await client.files.update([{
+      id: file.id,
+      update: {
+        labels: {
+          remove: [{externalId: label.externalId}],
+        },
+      },
+    }]);
+
+    expect(updatedFile.labels).toBe(undefined)
+  });
+
   test('delete', async () => {
     const response = await client.files.delete([{ id: file.id }]);
     expect(response).toEqual({});

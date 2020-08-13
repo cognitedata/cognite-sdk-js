@@ -975,6 +975,7 @@ export interface ExternalFileInfo {
   securityCategories?: CogniteInternalId[];
   sourceCreatedTime?: Date;
   sourceModifiedTime?: Date;
+  labels?: Label[];
 }
 
 /**
@@ -1014,6 +1015,7 @@ export interface FileChange {
     sourceCreatedTime?: SinglePatchDate;
     sourceModifiedTime?: SinglePatchDate;
     dataSetId?: NullableSinglePatchLong;
+    labels?: LabelsPatch;
   };
 }
 
@@ -1056,6 +1058,10 @@ export interface FileFilterProps {
   sourceModifiedTime?: DateRange;
   externalIdPrefix?: ExternalIdPrefix;
   uploaded?: boolean;
+  /**
+   * Return only the resource matching the specified label constraints.
+   */
+  labels?: LabelFilter;
 }
 
 export interface FileFilter extends Limit {
