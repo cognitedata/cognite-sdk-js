@@ -5,6 +5,7 @@ import {
   CDFHttpClient,
   CursorAndAsyncIterator,
   MetadataMap,
+  InternalId,
 } from '@cognite/sdk-core';
 import {
   Timeseries as TimeseriesStable,
@@ -172,6 +173,12 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
   public syntheticQuery = (items: SyntheticQuery[]) => {
     return this.syntheticTimeseriesApi.query(items);
   };
+
+  public flip = async (id: InternalId) => {
+    const path = this.url('flip');
+    const response = await this.post(path, { data: { id }});
+    return this.addToMapAndReturn({}, response);
+  }
 }
 
 export type TimeseriesRetrieveParams = IgnoreUnknownIds;

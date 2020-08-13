@@ -10,6 +10,8 @@ export { default as BaseCogniteClient } from './baseCogniteClient';
 export { default as DateParser } from './dateParser';
 export * from './baseCogniteClient';
 
+export { BasicHttpClient } from './httpClient/basicHttpClient';
+export { RetryableHttpClient } from './httpClient/retryableHttpClient';
 export { CDFHttpClient } from './httpClient/cdfHttpClient';
 export { CogniteError } from './error';
 export { CogniteMultiError } from './multiError';

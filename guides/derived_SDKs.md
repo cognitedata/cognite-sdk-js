@@ -81,13 +81,17 @@ export { default as CogniteClient } from './cogniteClient';
 # Adding endpoints to an SDK
 
 Endpoints are all implemented as functions on subclasses of `BaseResourceAPI<T>`, but that is not a strict
-requirement. The class simply helps with common actions on resources, and the generic parameter lets you specify
+requirement. The class simply helps with common actions on resources (when the REST API is laid out like in CDF), and the generic parameter lets you specify
 the type. For an example, see `TimeSeriesAPI` [here](../packages/stable/src/api/timeSeries/timeSeriesApi.ts).
 The class has several endpoints, most of which already have generic implementations in the superclass.
 
 Let's define a new API class in `src/api/coolThing/coolThingApi.ts`:
 ```ts
-import { BaseResourceAPI, InternalId } from '@cognite/sdk-core';
+import {
+    BaseResourceAPI,
+    InternalId,
+    CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
 
 export interface ExternalCoolThing {
     name: string;
@@ -107,25 +111,28 @@ export interface CoolThingQuery {
 export class CoolThingAPI extends BaseResource<CoolThing> {
 
     /**
-    * [Create cool thing(s)](https://doc.cognitedata.com/api/v1/#operation/postCoolThing)
+    * [Create cool things](https://doc.cognitedata.com/api/v1/#operation/postCoolThing)
     *
     * ```js
-    * const timeseries = [
-    *   { name: '', coolness: 40 },
-    *   { name: '', coolness: 80 },
+    * const coolthings = [
+    *   { name: 'Shrub', coolness: 40 },
+    *   { name: 'Cactus', coolness: 80 },
     * ];
-    * const created = await client.timeseries.create(timeseries);
+    * const created = await client.coolThing.create(coolthings);
     * ```
     */
     public create = (items: ExternalCoolThing[]): Promise<CoolThing[]> => {
         return super.createEndpoint(items);
     };
 
-    public list = (query?: CoolThingQuery)
+    /** <docstring here> */
+    public list = (query?: CoolThingQuery): CursorAndAsyncIterator<CoolThing> => {
+        return super.listEndpoints(this.callListEndpointWithPost, query);
+    }
 }
 ```
 
-The `CogniteClient` class makes instances of these classes in `initAPIs()`, which is called once credentials and project name are set. The accessor helper `accessAPI` reminds the user to set credentials before using APIs.
+The `CogniteClient` class makes instances of these classes in `initAPIs()`, which is called once credentials and project name are set. The accessor helper `accessApi()` reminds the user to set credentials before using APIs.
 
 Let's add our `CoolThingAPI` to our derived `CogniteClient`.
 ```ts
@@ -150,7 +157,7 @@ export default class CogniteClient extends CogniteClientStable {
 }
 ```
 
-The resulting CogniteClient now exports all API classes from stable, as well as our new API class.
+The resulting CogniteClient now contains all API classes from stable, as well as our new API class.
 When you create API classes, they should be exported in `index.ts`, along with any types used by
 the API class.
 ```ts
@@ -164,25 +171,54 @@ export {
 } from './api/coolThing/coolThingApi';
 ```
 
-In the stable API all type definitons are placed in `types.ts`, but for derived SDKs,
-it is often better to put the types together with the API class. Then it is easier to see what has been changed when moving features to stable.
+In the stable API all type definitons are placed in `types.ts`, and then `*` is exported from `types.ts`. If `CoolThingAPI` was in stable, the types would be there instead, and we wouldn't have to explicitly export them in `index.ts`.
 
-### TODO MOVE
-Also note what happens if out derived SDK has modified the type of `Timeseries`
+In derived SDKs, it is recommended to put the types with the API file that uses it.
+Then it is easier to see what has been changed when moving features to stable.
 
+# Adding an endpoint in a derived API class
+
+Let's say we are writing an SDK derived from stable and want to add a new endpoint in `TimeSeriesAPI`.
+To do this, we can create our own class inheriting from the stable class,
+and put our new endpoint there.
+
+In `src/api/timeseries/timeSeriesApi.ts`:
 ```ts
-export * from '@cognite/sdk'; // We /dont/ export the Timeseries type from here
-export { TimeSeriesAPI, Timeseries } from './api/timeSeries/timeSeriesApi'; // Because we export one here
+import { TimeSeriesAPI as TimeSeriesAPIStable } from '@cognite/sdk';
+import { InternalId } from '@cognite/sdk-core';
+
+export class TimeSeriesAPI extends TimeSeriesAPIStable {
+    /** <docstring> */
+    public flip = async (id: InternalId) => {
+        const path = this.url('flip');
+        const response = await this.post(path, { data: { id }});
+        return this.addToMapAndReturn({}, response);
+    }
+}
 ```
-This name overlap is also why derived SDKs use `modules` mode in 'typedoc' for their generated documentation, which makes the package and file path part of the url in the docs. This prevents overlapping, and makes it very clear what package a type is defined in.
+
+Then we need to use this new `TimeSeriesAPI` in the client. It's not enough to
+give it the same name. We must re-define the `timeseries` field to return an instance
+of our new class. The problem is that stable's `CogniteClient.timeseries` already has a defined return type.
+Subclasses normally can't broaden the signature of methods. We do however have a trick:
+```ts
+class CogniteClientCleaned extends CogniteClientStable {
+  // Remove type restriction on timeseries
+  timeseries: any;
+}
+
+export default class CogniteClient extends CogniteClientCleaned {
+```
 
 # Accessing endpoints from outside of CDF
 
 If you want to access a different domain, it is recomended to make your own
- `BasicHttpClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/beta/classes/basichttpclient.html)). You can 
-
-In a custom `CogniteClient` class:
+ `BasicHttpClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/beta/classes/basichttpclient.html)). You specify a `baseUrl` in the constructor, and relative paths in calls to `get`, `post` etc.
+ 
+Example of a custom `CogniteClient` class with an external API:
 ```ts
+import { BasicHttpClient } from '@cognite/sdk-core';
+
 export default class CogniteClient extends CogniteClientStable {
 
     private openDoor?: (name: string) => Promise<boolean>;
@@ -192,9 +228,14 @@ export default class CogniteClient extends CogniteClientStable {
 
         const doorClient = new BasicHttpClient("https://example.com");
 
+        type DoorState = {
+            open: boolean;
+        };
+
         this.openDoor = async (name: string) => {
-            const response = await doorClient.post('doors/open', { params: { name } });
-            return response.status === 200;
+            // calls https://example.com/doors/open?name=<name>
+            const response = await doorClient.post<DoorState>('doors/open', { params: { name } });
+            return response.data.open;
         }
     }
 
@@ -205,11 +246,8 @@ export default class CogniteClient extends CogniteClientStable {
     }
 }
 ```
-
-
-# Overriding endpoints in a derived SDK
-
-If you want 
+You may also provide full paths (starting in `http://` or `https://`) to `get`, `post`, etc.,
+which will cause the `baseUrl` to be ignored. 
 
 # Creating an SDK not derived from stable
 If you want to make an SDK derived from a beta or alpha, replace the dependency on `@cognite/sdk` with the correct package,
@@ -221,3 +259,32 @@ import { CogniteClient as CogniteClientStable } from '@cognite/sdk-beta';
 
 If however, you want to create an SDK not based on any existing SDK, you only need to depend on core.
 The stable SDK is such an SDK, see [stable/src/cogniteClient.ts](../packages/stable/src/cogniteClient.ts).
+
+# Using a derived SDK as a drop-in replacement
+
+If your derived SDK is backwards compatible with its parent, you can use your derived SDK under an alias to make it a drop-in replacement.
+Let's say you have a feature in `@cognite/sdk-beta@1.3.0` that
+you would like to use in an app where `@cognite/sdk` is a dependency.
+
+Assuming the beta package is published to npm, use the following line in the apps `package.json`:
+```json
+"dependencies": {
+    "@cognite/sdk": "npm:@cognite/sdk-beta@^1.3.0",
+    ...
+}
+```
+Run `yarn` or `npm install` to install the beta in place of stable, with the same name.
+All your imports will stay the same, but now reference the beta package.
+```ts
+import { CogniteClient } from '@cognite/sdk'; // Now gives the beta client
+```
+
+
+# TODO MOVE
+Also note what happens if out derived SDK has modified the type of `Timeseries`
+
+```ts
+export * from '@cognite/sdk'; // We /dont/ export the Timeseries type from here
+export { TimeSeriesAPI, Timeseries } from './api/timeSeries/timeSeriesApi'; // Because we export one here
+```
+This name overlap is also why derived SDKs use `modules` mode in 'typedoc' for their generated documentation, which makes the package and file path part of the url in the docs. This prevents overlapping, and makes it very clear what package a type is defined in.

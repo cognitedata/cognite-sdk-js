@@ -7,7 +7,6 @@ import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { TimeSeriesAPI } from './api/timeseries/timeSeriesApi';
 
-/** @hidden */
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restriction on timeseries
   timeseries: any;
