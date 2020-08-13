@@ -3,7 +3,7 @@
 import { HttpResponseType } from '@cognite/sdk-core';
 import { readFileSync } from 'fs';
 import CogniteClient from '../../cogniteClient';
-import { FileInfo, Asset, Label } from '../../types';
+import { FileInfo, Asset, LabelDefinition } from '../../types';
 import { join } from 'path';
 import {
   getFileCreateArgs,
@@ -17,7 +17,7 @@ const testfile = join(__dirname, '../test3dFile.fbx');
 describe('Files integration test', () => {
   let client: CogniteClient;
   let asset: Asset;
-  let label: Label;
+  let label: LabelDefinition;
 
   beforeAll(async () => {
     client = setupLoggedInClient();
@@ -30,7 +30,7 @@ describe('Files integration test', () => {
       externalId: 'test-file-lable',
       name: 'file-label',
       description: 'test label',
-    }])
+    }]);
   });
 
   afterAll(async () => {
