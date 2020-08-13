@@ -1,4 +1,4 @@
-//Copyright 2020 Cognite
+// Copyright 2020 Cognite AS
 
 export * from '@cognite/sdk';
 // This file is here mostly to allow apis to import { ... } from '../../types';

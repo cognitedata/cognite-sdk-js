@@ -83,12 +83,55 @@ export { default as CogniteClient } from './cogniteClient';
 Endpoints are all implemented as functions on subclasses of `BaseResourceAPI<T>`, but that is not a strict
 requirement. The class simply helps with common actions on resources, and the generic parameter lets you specify
 the type. For an example, see `TimeSeriesAPI` [here](../packages/stable/src/api/timeSeries/timeSeriesApi.ts).
-Here we have several endpoints, most of which already have generic implementations in the superclass.
-The `CogniteClient` class makes an instance in `initAPIs()`, and provides an accessor.
+The class has several endpoints, most of which already have generic implementations in the superclass.
 
+Let's define a new API class in `src/api/coolThing/coolThingApi.ts`:
+```ts
+import { BaseResourceAPI, InternalId } from '@cognite/sdk-core';
+
+export interface ExternalCoolThing {
+    name: string;
+    coolness: number;
+}
+
+export type CoolThing = ExternalCoolThing & InternalId;
+
+export interface CoolThingQuery {
+    /** Only get cool things at least this cool */
+    min?: number;
+
+    /** Only get cool things no cooler than */
+    max?: number;
+}
+
+export class CoolThingAPI extends BaseResource<CoolThing> {
+
+    /**
+    * [Create cool thing(s)](https://doc.cognitedata.com/api/v1/#operation/postCoolThing)
+    *
+    * ```js
+    * const timeseries = [
+    *   { name: '', coolness: 40 },
+    *   { name: '', coolness: 80 },
+    * ];
+    * const created = await client.timeseries.create(timeseries);
+    * ```
+    */
+    public create = (items: ExternalCoolThing[]): Promise<CoolThing[]> => {
+        return super.createEndpoint(items);
+    };
+
+    public list = (query?: CoolThingQuery)
+}
+```
+
+The `CogniteClient` class makes instances of these classes in `initAPIs()`, which is called once credentials and project name are set. The accessor helper `accessAPI` reminds the user to set credentials before using APIs.
+
+Let's add our `CoolThingAPI` to our derived `CogniteClient`.
 ```ts
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
-import { accessAPI } from '@cognite/sdk-core';
+import { CoolThingAPI } from './api/coolThing/coolThingApi';
+import { accessApi } from '@cognite/sdk-core';
 
 export default class CogniteClient extends CogniteClientStable {
 
@@ -96,39 +139,69 @@ export default class CogniteClient extends CogniteClientStable {
 
     protected initAPIs() {
         super.initAPIs();
-        // Turns into /api/$API_VERSION/projects/$PROJECT/coolthing
+
+        // Turns into $BASE_URL/api/$API_VERSION/projects/$PROJECT/coolthing
         this.coolThingApi = this.apiFactory(CoolThingAPI, 'coolthing');
     }
 
     get coolThing(): CoolThingAPI {
-        return accessApi(this.coolThing);
+        return accessApi(this.coolThingApi);
     }
 }
 ```
 
+The resulting CogniteClient now exports all API classes from stable, as well as our new API class.
 When you create API classes, they should be exported in `index.ts`, along with any types used by
-the API class. In the stable API all type definitons are placed in `types.ts`, but for derived SDKs,
+the API class.
+```ts
+export * from '@cognite/sdk';
+export { default as CogniteClient } from './cogniteClient';
+export {
+    CoolThingAPI,
+    ExternalCoolThing,
+    CoolThing,
+    CoolThingQuery,
+} from './api/coolThing/coolThingApi';
+```
+
+In the stable API all type definitons are placed in `types.ts`, but for derived SDKs,
 it is often better to put the types together with the API class. Then it is easier to see what has been changed when moving features to stable.
-Especially if the type overrides a type from stable. Any such new types must be explicitly exported in `index.ts`:
+
+### TODO MOVE
+Also note what happens if out derived SDK has modified the type of `Timeseries`
 
 ```ts
 export * from '@cognite/sdk'; // We /dont/ export the Timeseries type from here
 export { TimeSeriesAPI, Timeseries } from './api/timeSeries/timeSeriesApi'; // Because we export one here
 ```
-This name overlap is also why derived SDKs use `modules` mode in their `typedoc.js` by default, which makes the file path part of the url in the docs.
+This name overlap is also why derived SDKs use `modules` mode in 'typedoc' for their generated documentation, which makes the package and file path part of the url in the docs. This prevents overlapping, and makes it very clear what package a type is defined in.
 
-# Adding endpoints from outside of CDF
+# Accessing endpoints from outside of CDF
 
-Sometimes you might want to add endpoints from other APIs.
-In such cases you might not override `BaseResourceAPI<T>`, but you can still use the `CDFHttpClient`.
+If you want to access a different domain, it is recomended to make your own
+ `BasicHttpClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/beta/classes/basichttpclient.html)). You can 
 
 In a custom `CogniteClient` class:
 ```ts
 export default class CogniteClient extends CogniteClientStable {
-    ...
 
-    get externalApi() {
-        return accessApi()
+    private openDoor?: (name: string) => Promise<boolean>;
+
+    protected initAPIs() {
+        super.initAPIs();
+
+        const doorClient = new BasicHttpClient("https://example.com");
+
+        this.openDoor = async (name: string) => {
+            const response = await doorClient.post('doors/open', { params: { name } });
+            return response.status === 200;
+        }
+    }
+
+    get doorControl() {
+        return {
+            openDoor: accessApi(this.openDoor)
+        };
     }
 }
 ```

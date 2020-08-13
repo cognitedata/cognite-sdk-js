@@ -2,9 +2,10 @@
 import {
   ClientOptions,
   CogniteClient as CogniteClientStable,
-  HttpRequestOptions,
 } from '@cognite/sdk';
 import { version } from '../package.json';
+import { accessApi } from '@cognite/sdk-core';
+import { BasicHttpClient } from 'core/src/httpClient/basicHttpClient';
 
 /** @hidden */
 class CogniteClientCleaned extends CogniteClientStable {
@@ -25,18 +26,24 @@ export default class CogniteClient extends CogniteClientCleaned {
     return `${version}-derived`;
   }
 
-  private externalApi?: {
-    openDoor(name: string): Promise<boolean>;
-  };
+  private openDoor?: (name: string) => Promise<boolean>;
 
   protected initAPIs() {
     super.initAPIs();
-    this.externalApi = {
-      openDoor: async (name: string) => {
-        const options: HttpRequestOptions = { params: { name } };
-        const response = await this.httpClient.post('example.com/openDoor', options);
-        return response.status === 200 
-      }
+
+    const doorClient = new BasicHttpClient('https://example.com');
+
+    this.openDoor = async (name: string) => {
+      const response = await doorClient.post('doors/open', {
+        params: { name },
+      });
+      return response.status === 200;
+    };
+  }
+
+  get doorControl() {
+    return {
+      openDoor: accessApi(this.openDoor),
     };
   }
 }

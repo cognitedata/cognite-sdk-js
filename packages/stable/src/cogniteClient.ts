@@ -148,4 +148,3 @@ export default class CogniteClient extends BaseCogniteClient {
     );
   }
 }
-
