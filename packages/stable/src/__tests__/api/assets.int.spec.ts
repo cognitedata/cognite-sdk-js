@@ -318,7 +318,7 @@ describe('Asset integration test', () => {
     });
 
     expect(items.length).toBe(1);
-    expect(items[0].name).toBe(assets[0].name);
+    expect(items[0].id).toBe(assets[0].id);
   });
 
   test('count aggregate', async () => {
