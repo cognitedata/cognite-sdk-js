@@ -17,7 +17,7 @@ describe('Asset integration test', () => {
     client = setupLoggedInClient();
     [label] = await client.labels.create([
       {
-        externalId: 'test-asset-lable',
+        externalId: 'test-asset-lable-' + randomInt(),
         name: 'asset-label',
         description: 'test label',
       },

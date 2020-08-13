@@ -28,7 +28,7 @@ describe('Files integration test', () => {
     ]);
     [label] = await client.labels.create([
       {
-        externalId: 'test-file-lable',
+        externalId: 'test-file-lable-' + randomInt(),
         name: 'file-label',
         description: 'test label',
       },
