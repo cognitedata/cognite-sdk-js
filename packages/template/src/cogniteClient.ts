@@ -4,7 +4,6 @@ import {
   CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
 import { version } from '../package.json';
-import { accessApi } from '@cognite/sdk-core';
 
 export default class CogniteClient extends CogniteClientStable {
   /**
