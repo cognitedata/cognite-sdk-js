@@ -179,10 +179,10 @@ Then it is easier to see what has been changed when moving features to stable.
 # Adding an endpoint in a derived API class
 
 Let's say we are writing an SDK derived from stable and want to add a new endpoint in `TimeSeriesAPI`.
-To do this, we can create our own class inheriting from the stable class,
+To do this, we can create our own `TimeSeriesAPI` class inheriting from the stable class,
 and put our new endpoint there.
 
-In `src/api/timeseries/timeSeriesApi.ts`:
+We make our own `src/api/timeseries/timeSeriesApi.ts`:
 ```ts
 import { TimeSeriesAPI as TimeSeriesAPIStable } from '@cognite/sdk';
 import { InternalId } from '@cognite/sdk-core';
@@ -199,7 +199,7 @@ export class TimeSeriesAPI extends TimeSeriesAPIStable {
 
 Then we need to use this new `TimeSeriesAPI` in the client. It's not enough to
 give it the same name. We must re-define the `timeseries` field to return an instance
-of our new class. The problem is that stable's `CogniteClient.timeseries` already has a defined return type.
+of our new class. The problem is that stable's `CogniteClient.timeseries` already has a defined type.
 Subclasses normally can't broaden the type of fields. We do however have a trick:
 ```ts
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
@@ -230,9 +230,9 @@ IDEs now understand that the `timeseries` field has the new type, and gives corr
 
 It is now very important to export this new `TimeSeriesAPI` in `index.ts`:
 ```ts
-export * from '@cognite/sdk';
+export * from '@cognite/sdk'; // This /won't/ export TimeSeriesAPI
 export { default as CogniteClient } from './cogniteClient';
-export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi'; // Because we export it here
 ```
 
 Because we specify by name, it will take precedence over `export * from @cognite/sdk`,
@@ -240,7 +240,13 @@ which normally exports its own `TimeSeriesAPI`.
 
 # Changing existsing endpoints and types
 
-If you want to change the
+If you want to change an exisiting endpoint, such as adding a return type to 
+
+# Adding tests
+
+Each SDK has its own `src/__tests__/` folder where all `*.test.ts` and `*.spec.ts` get run.
+There are some example tests in the template, but you should add your own, in seperate files
+for separate API classes.
 
 # Accessing endpoints from outside of CDF
 
@@ -281,6 +287,26 @@ export default class CogniteClient extends CogniteClientStable {
 You may also provide full paths (starting in `http://` or `https://`) to `get`, `post`, etc.,
 which will cause the `baseUrl` to be ignored. 
 
+
+# Compiling and testing your SDK
+
+The monorepo tooling will compile and test all packages when commits are pushed to GitHub,
+but you can also (and should) do it locally.
+
+You should first make sure all packages are built, since your dependencies live in the repository.
+```sh
+yarn
+yarn build
+```
+
+After this is done, you can go into your package folder and run
+```
+yarn test
+```
+
+Whenever you make changes, remember to `yarn build`, and if other packages in the repo change,
+go back to the root and run the command there.
+
 # Creating an SDK not derived from stable
 If you want to make an SDK derived from a beta or alpha, replace the dependency on `@cognite/sdk` with the correct package,
 and yarn workspace will find it. All imports must be changed to the new package.
@@ -292,13 +318,27 @@ import { CogniteClient as CogniteClientStable } from '@cognite/sdk-beta';
 If however, you want to create an SDK not based on any existing SDK, you only need to depend on core.
 The stable SDK is such an SDK, see [stable/src/cogniteClient.ts](../packages/stable/src/cogniteClient.ts).
 
+# Publishing your SDK
+
+There are two ways of publishing your derived SDK.
+
+Any package with `"private": false` in the master branch will be published
+to npm when a `[release]` commit happens. The version number will also be automatically
+bumped based on commit messages. See [CONTRIBUTING.md](../CONTRIBUTING.md).
+
+**NOTE:** If you depend on e.g. `stable`, and `stable` changes, your PATCH version will be bumped
+to use the new version of `stable`.
+
+It's also possible to keep your package private and only relese it manually.
+In this case you need to update the version and versions of dependencies yourself.
+
 # Using a derived SDK as a drop-in replacement
 
 If your derived SDK is backwards compatible with its parent, you can use your derived SDK under an alias to make it a drop-in replacement.
 Let's say you have a feature in `@cognite/sdk-beta@1.3.0` that
 you would like to use in an app where `@cognite/sdk` is a dependency.
 
-Assuming the beta package is published to npm, use the following line in the apps `package.json`:
+Assuming the beta package is published to npm, use the following line in the app's `package.json`:
 ```json
 "dependencies": {
     "@cognite/sdk": "npm:@cognite/sdk-beta@^1.3.0",
@@ -311,12 +351,14 @@ All your imports will stay the same, but now reference the beta package.
 import { CogniteClient } from '@cognite/sdk'; // Now gives the beta client
 ```
 
+# Moving features upstream
 
-# TODO MOVE
-Also note what happens if out derived SDK has modified the type of `Timeseries`
-
-```ts
-export * from '@cognite/sdk'; // We /dont/ export the Timeseries type from here
-export { TimeSeriesAPI, Timeseries } from './api/timeSeries/timeSeriesApi'; // Because we export one here
-```
-This name overlap is also why derived SDKs use `modules` mode in 'typedoc' for their generated documentation, which makes the package and file path part of the url in the docs. This prevents overlapping, and makes it very clear what package a type is defined in.
+One of the main use cases for derived SDKs is implementing experimental features before they
+reach stable. When the features do reach stable, the SDK implementation should move as well.
+The guides above try making this move as painless as possible, and in general the following should be enough:
+ - Move the new API class file to replace the old one
+ - Move types into `types.ts` if applicable (e.g. when moving to stable)
+ - Move any tests concerning new features
+ - Remove overridden API class accessors
+ - build & test
+ - Look very hard at the diff to see that you didn't lose anything
