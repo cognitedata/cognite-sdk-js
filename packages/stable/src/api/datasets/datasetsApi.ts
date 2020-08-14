@@ -11,7 +11,7 @@ import {
   IdEither,
 } from '../../types';
 
-export class DataSetsApi extends BaseResourceAPI<DataSet> {
+export class DataSetsAPI extends BaseResourceAPI<DataSet> {
   /**
    * @hidden
    */

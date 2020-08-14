@@ -14,7 +14,7 @@ import { Viewer3DAPI } from './api/3d/viewer3DApi';
 import { ApiKeysAPI } from './api/apiKeys/apiKeysApi';
 import { AssetsAPI } from './api/assets/assetsApi';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
-import { DataSetsApi } from './api/datasets/datasetsApi';
+import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { EventsAPI } from './api/events/eventsApi';
 import { FilesAPI } from './api/files/filesApi';
 import { GroupsAPI } from './api/groups/groupsApi';
@@ -101,7 +101,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private models3DApi?: Models3DAPI;
   private revisions3DApi?: Revisions3DAPI;
   private files3DApi?: Files3DAPI;
-  private datasetsApi?: DataSetsApi;
+  private datasetsApi?: DataSetsAPI;
   private assetMappings3DApi?: AssetMappings3DAPI;
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
@@ -124,7 +124,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.eventsApi = this.apiFactory(EventsAPI, 'events');
     this.filesApi = this.apiFactory(FilesAPI, 'files');
     this.labelsApi = this.apiFactory(LabelsAPI, 'labels');
-    this.datasetsApi = this.apiFactory(DataSetsApi, 'datasets');
+    this.datasetsApi = this.apiFactory(DataSetsAPI, 'datasets');
     this.rawApi = this.apiFactory(RawAPI, 'raw/dbs');
     this.groupsApi = this.apiFactory(GroupsAPI, 'groups');
     this.securityCategoriesApi = this.apiFactory(
@@ -148,14 +148,3 @@ export default class CogniteClient extends BaseCogniteClient {
     );
   }
 }
-
-export {
-  POPUP,
-  REDIRECT,
-  ApiKeyLoginOptions,
-  BaseRequestOptions,
-  ClientOptions,
-  OAuthLoginOptions,
-  Project,
-  Response,
-} from '@cognite/sdk-core';
