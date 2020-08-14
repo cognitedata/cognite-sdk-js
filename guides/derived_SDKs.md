@@ -240,7 +240,17 @@ which normally exports its own `TimeSeriesAPI`.
 
 # Changing existsing endpoints and types
 
-If you want to change an exisiting endpoint, such as adding a return type to 
+If you want to change an exisiting endpoint, such as adding a field to Timeseries,
+the easiest way is to completely copy the `timeSeriesApi.ts` file. In here you define your
+own `Timeseries` interface, instead of importing it from `../../types`.
+You must then export this new API class and new type, just like in previous sections.
+
+The resulting `index.ts` should look something like this:
+```ts
+export * from '@cognite/sdk'; // This /won't/ export Timeseries
+export { default as CogniteClient } from './cogniteClient';
+export { TimeSeriesAPI, Timeseries } from './api/timeSeries/timeSeriesApi';
+```
 
 # Adding tests
 
