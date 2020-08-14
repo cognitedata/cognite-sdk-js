@@ -72,6 +72,19 @@ export class BasicHttpClient {
 
   private defaultHeaders: HttpHeaders = {};
 
+  /**
+   * A basic http client with the option of adding default headers,
+   * and the option of using a baseUrl.
+   * Note: If the path given starts with `https://`, the baseUrl is ignored.
+   * If the baseUrl is overridden,
+   *
+   * It handles query parameters and request body data, which gets encoded as json if
+   * needed. It
+   *
+   * See HttpRequest.
+   *
+   * @param baseUrl
+   */
   constructor(protected baseUrl: string) {}
 
   public setDefaultHeader(name: string, value: string) {
