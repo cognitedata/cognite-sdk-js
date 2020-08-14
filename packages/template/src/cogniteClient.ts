@@ -4,13 +4,9 @@ import {
   CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
 import { version } from '../package.json';
+import { accessApi } from '@cognite/sdk-core';
 
-class CogniteClientCleaned extends CogniteClientStable {
-  // Remove old type of e.g. timeseries
-  //timeseries: any
-}
-
-export default class CogniteClient extends CogniteClientCleaned {
+export default class CogniteClient extends CogniteClientStable {
   /**
    * Create a new SDK client (derived)
    * @param options Client options

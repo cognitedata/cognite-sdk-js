@@ -3,13 +3,10 @@ import {
   ClientOptions,
   CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
-import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
-import { TimeSeriesAPI } from './api/timeseries/timeSeriesApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
-  // Remove type restriction on timeseries
-  timeseries: any;
+  // Remove type restrictions
 }
 
 export default class CogniteClient extends CogniteClientCleaned {
@@ -36,15 +33,5 @@ export default class CogniteClient extends CogniteClientCleaned {
 
   protected get version() {
     return `${version}-beta`;
-  }
-
-  protected timeSeriesApiBeta?: TimeSeriesAPI;
-  protected initAPIs() {
-    super.initAPIs();
-    this.timeSeriesApiBeta = this.apiFactory(TimeSeriesAPI, 'timeseries');
-  }
-
-  get timeseries() {
-    return accessApi(this.timeSeriesApiBeta);
   }
 }
