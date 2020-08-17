@@ -10,18 +10,18 @@ make a derived SDK, and how to override APIs from the derived SDK.
 
 ### @cognite/sdk-core
 exports a `BaseCogniteClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/core/classes/basecogniteclient.html)) which supports logging in, upon which it creates
-a `CDFHttpClient` containing the API keys needed to interract with the API.
+a `CDFHttpClient` containing the API keys needed to interact with the API.
 Helper functions for logging in with browser popups and redirects also live here, and a generic `BaseResourceApi<T>` class provides protected templated methods for working with resource APIs with
 pagination and chunking.
 
 ### @cognite/sdk (stable)
-exports a `CogniteClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)) which inherits from the `BaseCogniteClient` to add accessors to all stable API endpoints. Endpoint access is grouped by resource type. Example: `TimeSeriesAPI` ([docs](https://cognitedata.github.io/cognite-sdk-js/classes/timeseriesapi.html)) lets you create, filter, count, delete etc. timeseries.
+exports a `CogniteClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/classes/cogniteclient.html)) which inherits from the `BaseCogniteClient` to add accessors to all stable API endpoints. Endpoint access is grouped by resource type. Example: `TimeSeriesAPI` ([docs](https://cognitedata.github.io/cognite-sdk-js/classes/timeseriesapi.html)) lets you create, filter, count, delete time series.
 
 Most types used in requests and responses are defined as interfaces and type aliases in `src/types.ts`,
 and closely mimic the structure of the REST API.
 
 ### @cognite/sdk-beta
-depends on both stable and core, and uses inheritence to augment the stable sdk.
+depends on both stable and core, and uses inheritance to augment the stable sdk.
 The resulting class is exported as `CogniteClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/beta/classes/cogniteclient.html)), and the rest of stable is forward-exported as well,
 which makes the beta package behave as stable by default. To understand how the beta class can override
 parts of stable, see the sections below.
@@ -171,7 +171,7 @@ export {
 } from './api/coolThing/coolThingApi';
 ```
 
-In the stable API all type definitons are placed in `types.ts`, and then `*` is exported from `types.ts`. If `CoolThingAPI` was in stable, the types would be there instead, and we wouldn't have to explicitly export them in `index.ts`.
+In the stable API all type definitions are placed in `types.ts`, and then `*` is exported from `types.ts`. If `CoolThingAPI` was in stable, the types would be there instead, and we wouldn't have to explicitly export them in `index.ts`.
 
 In derived SDKs, it is recommended to put the types with the API file that uses it.
 Then it is easier to see what has been changed when moving features to stable.
@@ -238,9 +238,9 @@ export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi'; // Because we ex
 Because we specify by name, it will take precedence over `export * from @cognite/sdk`,
 which normally exports its own `TimeSeriesAPI`.
 
-# Changing existsing endpoints and types
+# Changing existing endpoints and types
 
-If you want to change an exisiting endpoint, such as adding a field to Timeseries,
+If you want to change an existing endpoint, such as adding a field to time series,
 the easiest way is to completely copy the `timeSeriesApi.ts` file. In here you define your
 own `Timeseries` interface, instead of importing it from `../../types`.
 You must then export this new API class and new type, just like in previous sections.
@@ -255,12 +255,12 @@ export { TimeSeriesAPI, Timeseries } from './api/timeSeries/timeSeriesApi';
 # Adding tests
 
 Each SDK has its own `src/__tests__/` folder where all `*.test.ts` and `*.spec.ts` get run.
-There are some example tests in the template, but you should add your own, in seperate files
+There are some example tests in the template, but you should add your own, in separate files
 for separate API classes.
 
 # Accessing endpoints from outside of CDF
 
-If you want to access a different domain, it is recomended to make your own
+If you want to access a different domain, it is recommended to make your own
  `BasicHttpClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/beta/classes/basichttpclient.html)). You specify a `baseUrl` in the constructor, and relative paths in calls to `get`, `post` etc.
  
 Example of a custom `CogniteClient` class with an external API:
@@ -320,7 +320,7 @@ go back to the root and run the command there.
 # Creating an SDK not derived from stable
 If you want to make an SDK derived from a beta or alpha, replace the dependency on `@cognite/sdk` with the correct package,
 and yarn workspace will find it. All imports must be changed to the new package.
-In theory all SDK versions are quite similar, except for aditions and small changes, so find & replace on imports should mostly work.
+In theory all SDK versions are quite similar, except for additions and small changes, so find & replace on imports should mostly work.
 ```ts
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk-beta';
 ```
@@ -339,7 +339,7 @@ bumped based on commit messages. See [CONTRIBUTING.md](../CONTRIBUTING.md).
 **NOTE:** If you depend on e.g. `stable`, and `stable` changes, your PATCH version will be bumped
 to use the new version of `stable`.
 
-It's also possible to keep your package private and only relese it manually.
+It's also possible to keep your package private and only release it manually.
 In this case you need to update the version and versions of dependencies yourself.
 
 # Using a derived SDK as a drop-in replacement
