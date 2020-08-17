@@ -21,6 +21,7 @@ import {
   OnAuthenticate,
   OnAuthenticateLoginObject,
   OnTokens,
+  AuthTokens,
 } from './login';
 import { MetadataMap } from './metadata';
 import { getBaseUrl, isUsingSSL, projectUrl } from './utils';
@@ -48,6 +49,11 @@ export interface ApiKeyLoginOptions extends Project {
    * A Cognite issued api-key
    */
   apiKey: string;
+}
+
+export interface AccessTokenLoginOptions extends Project {
+  onAuthenticate: (onReady: () => void) => AuthTokens | undefined | Promise<AuthTokens | undefined>;
+  onTokens?: OnTokens;
 }
 
 export const REDIRECT = 'REDIRECT';
@@ -222,7 +228,7 @@ export default class BaseCogniteClient {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const onTokens = options.onTokens || (() => {});
+    const onTokens = options.onTokens || (() => { });
     const onAuthenticate =
       options.onAuthenticate === POPUP
         ? onAuthenticateWithPopup
@@ -246,6 +252,47 @@ export default class BaseCogniteClient {
     if (accessToken) {
       this.httpClient.setBearerToken(accessToken);
     }
+
+    this.initAPIs();
+    this.authenticate = authenticate;
+    this.hasBeenLoggedIn = true;
+  };
+
+  public loginWithAccessToken = (options: AccessTokenLoginOptions) => {
+    if (this.hasBeenLoggedIn) {
+      throwReLogginError();
+    }
+
+    if (!isObject(options)) {
+      throw Error('`loginWithOAuth` is missing parameter `options`');
+    }
+
+    const { project, onAuthenticate } = options;
+    if (!isString(project)) {
+      throw Error('options.project is required and must be of type string');
+    }
+
+    const onTokens = options.onTokens || (() => { });
+
+    const onAccessToken = (tokens: AuthTokens) => {
+      this.httpClient.setBearerToken(tokens.accessToken);
+      onTokens(tokens);
+    };
+
+    const authenticate = async (): Promise<boolean> => {
+      const tokens = await onAuthenticate(() => authenticate());
+      if (tokens != null) {
+        onAccessToken(tokens);
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
+      const didAuthenticate = await authenticate();
+      return didAuthenticate ? retry() : reject();
+    });
 
     this.initAPIs();
     this.authenticate = authenticate;
