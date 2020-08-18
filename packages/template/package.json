@@ -1,15 +1,15 @@
 {
-  "private": false,
-  "name": "@cognite/sdk-beta",
+  "private": true,
+  "name": "@cognite/sdk-template",
   "license": "Apache-2.0",
   "repository": "cognitedata/cognite-sdk-js",
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
-    "test": "jest --config=../../jest.config.js --testPathPattern=/beta/",
+    "test": "jest --config=../../jest.config.js --testPathPattern=/template/",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn build",
@@ -17,7 +17,6 @@
     "watch": "rollup -cw",
     "esCheck": "es-check es5 './dist/index.js'",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
-    "docs:bundle": "yarn docs && mkdir -p ../../docs/beta && cp -r docs/* ../../docs/beta/",
     "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node ../../scripts/extractCodeSnippets.js",
     "test-snippets": "yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json"
   },

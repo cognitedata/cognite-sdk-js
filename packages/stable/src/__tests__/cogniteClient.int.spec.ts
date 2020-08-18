@@ -10,13 +10,13 @@ import {
 } from './testUtils';
 
 describe('createClientWithApiKey - integration', () => {
-  test('handle non-exisiting api-key', async () => {
+  test('handle non-existing api-key', async () => {
     const client = new CogniteClient({
       appId: 'JS Integration test',
     });
     client.loginWithApiKey({
       project: 'cognitesdk-js',
-      apiKey: 'non-exisiting-api-key',
+      apiKey: 'non-existing-api-key',
     });
     await expect(
       client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })

@@ -5,7 +5,11 @@ import {
 } from '@cognite/sdk';
 import { version } from '../package.json';
 
-export default class CogniteClientBeta extends CogniteClientStable {
+class CogniteClientCleaned extends CogniteClientStable {
+  // Remove type restrictions
+}
+
+export default class CogniteClient extends CogniteClientCleaned {
   /**
    * Create a new SDK client (beta)
    *
@@ -31,5 +35,3 @@ export default class CogniteClientBeta extends CogniteClientStable {
     return `${version}-beta`;
   }
 }
-
-export * from '@cognite/sdk';

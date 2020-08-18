@@ -76,7 +76,6 @@ export function throwReLogginError() {
   );
 }
 
-/** @hidden */
 export default class BaseCogniteClient {
   public get login() {
     return this.loginApi;
