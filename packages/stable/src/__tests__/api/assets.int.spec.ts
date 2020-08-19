@@ -195,14 +195,44 @@ describe('Asset integration test', () => {
   });
 
   test('update', async () => {
-    await client.assets.update([
+    const updatedName = 'New name';
+
+    const [{ name }] = await client.assets.update([
       {
         id: assets[0].id,
         update: {
-          name: { set: 'New name' },
+          name: { set: updatedName },
         },
       },
     ]);
+    expect(name).toEqual(updatedName);
+  });
+
+  test('update - wipe metadata', async () => {
+    const key = 'some';
+    const updatedMetadata = { [key]: 'some' };
+
+    const [{ metadata }] = await client.assets.update([
+      {
+        id: assets[0].id,
+        update: {
+          metadata: { set: updatedMetadata },
+        },
+      },
+    ]);
+
+    expect(metadata![key]).toEqual(updatedMetadata[key]);
+
+    const [{ metadata: wipedMetadata }] = await client.assets.update([
+      {
+        id: assets[0].id,
+        update: {
+          metadata: { set: {} },
+        },
+      },
+    ]);
+
+    expect(wipedMetadata).toEqual({});
   });
 
   test('aggregates', async () => {
