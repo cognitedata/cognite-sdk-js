@@ -2,7 +2,7 @@
 
 import { CogniteError, CogniteMultiError } from '@cognite/sdk-core';
 import CogniteClient from '../../cogniteClient';
-import { Asset } from '../../types';
+import { Asset, LabelDefinition } from '../../types';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
@@ -11,9 +11,23 @@ import {
 
 describe('Asset integration test', () => {
   let client: CogniteClient;
+  let label: LabelDefinition;
+
   beforeAll(async () => {
     client = setupLoggedInClient();
+    [label] = await client.labels.create([
+      {
+        externalId: 'test-asset-lable-' + randomInt(),
+        name: 'asset-label',
+        description: 'test label',
+      },
+    ]);
   });
+
+  afterAll(async () => {
+    await client.labels.delete([{ externalId: label.externalId }]);
+  });
+
   const rootAsset = {
     name: 'test-root',
     description: 'Root asset for cognitesdk-js test',
@@ -34,9 +48,13 @@ describe('Asset integration test', () => {
   let assets: Asset[];
 
   test('create', async () => {
-    assets = await client.assets.create([childAsset, rootAsset]);
+    assets = await client.assets.create([
+      { ...childAsset, labels: [{ externalId: label.externalId }] },
+      rootAsset,
+    ]);
     expect(assets[0].createdTime).toBeInstanceOf(Date);
     expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
+    expect(assets[0].labels!.length).toBe(1);
   });
 
   test('create empty asset array', async () => {
@@ -290,6 +308,19 @@ describe('Asset integration test', () => {
     });
   });
 
+  test('filter by label', async () => {
+    const { items } = await client.assets.list({
+      filter: {
+        labels: {
+          containsAny: [{ externalId: label.externalId }],
+        },
+      },
+    });
+
+    expect(items.length).toBe(1);
+    expect(items[0].id).toBe(assets[0].id);
+  });
+
   test('count aggregate', async () => {
     const aggregates = await client.assets.aggregate({
       filter: {
@@ -298,6 +329,19 @@ describe('Asset integration test', () => {
     });
     expect(aggregates.length).toBe(1);
     expect(aggregates[0].count).toBeGreaterThan(0);
+  });
+
+  test('count aggregate by label', async () => {
+    const aggregates = await client.assets.aggregate({
+      filter: {
+        labels: {
+          containsAny: [{ externalId: label.externalId }],
+        },
+      },
+    });
+
+    expect(aggregates.length).toBe(1);
+    expect(aggregates[0].count).toBe(1);
   });
 
   test('search for root test asset', async () => {
@@ -324,6 +368,21 @@ describe('Asset integration test', () => {
       .list({ limit: 1 })
       .autoPagingToArray({ limit });
     expect(result.length).toBe(limit);
+  });
+
+  test('update by deleting label', async () => {
+    const [updatedAsset] = await client.assets.update([
+      {
+        id: assets[0].id,
+        update: {
+          labels: {
+            remove: [{ externalId: label.externalId }],
+          },
+        },
+      },
+    ]);
+
+    expect(updatedAsset.labels).toBe(undefined);
   });
 
   test('delete', async () => {
