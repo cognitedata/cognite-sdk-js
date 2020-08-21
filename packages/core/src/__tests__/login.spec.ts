@@ -72,8 +72,8 @@ describe('Login', () => {
         await loginSilently(httpClient, authorizeParams);
       } catch ({ message, data = {} }) {
         errorMessage = message;
-        error = data.error
-        errorDescr = data.errorDescription
+        error = data.error;
+        errorDescr = data.errorDescription;
       }
       expect(errorMessage).toBe(`Failed to parse token query parameters`);
       expect(error).toBe(`failed`);
@@ -88,28 +88,31 @@ describe('Login', () => {
       );
       spiedCreateElement.mockReturnValueOnce(iframe);
 
-      try {
-        await loginSilently(httpClient, authorizeParams, onLoginFailed);
-      } catch (_) {}
+      await loginSilently(httpClient, authorizeParams, onLoginFailed);
 
-      expect(onLoginFailed.mock.calls[0][0].data).toEqual({error: 'failed', errorDescription: 'message'});
+      expect(onLoginFailed.mock.calls[0][0].data).toEqual({
+        error: 'failed',
+        errorDescription: 'message',
+      });
     });
 
     test('trigger onLoginFailed on nullable token query', async () => {
       const onLoginFailed = jest.fn();
-      const iframeUrl = `?query=true`
+      const iframeUrl = `?query=true`;
       window.history.pushState({}, '', '/abc/def');
-      const iframe = createIframe(iframeUrl)
+      const iframe = createIframe(iframeUrl);
       spiedCreateElement.mockReturnValueOnce(iframe);
 
-      try {
-        await loginSilently(httpClient, authorizeParams, onLoginFailed);
-      } catch (_) {}
-      const {message, data : {url, params}} = onLoginFailed.mock.calls[0][0];
+      await loginSilently(httpClient, authorizeParams, onLoginFailed);
+
+      const {
+        message,
+        data: { url, params },
+      } = onLoginFailed.mock.calls[0][0];
 
       expect(message).toBe(`Failed to login due nullable tokens`);
       expect(url && params).toBeTruthy();
-    })
+    });
 
     function createIframe(search: string) {
       return {

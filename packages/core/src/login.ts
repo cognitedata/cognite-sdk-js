@@ -113,7 +113,7 @@ export async function loginSilently(
     }
   } catch (error) {
     if (onLoginFailed) {
-      onLoginFailed(error)
+      onLoginFailed(error);
     }
   }
 
@@ -243,7 +243,10 @@ function parseTokenQueryParameters(query: string): null | AuthTokens {
   } = parse(query);
   if (error !== undefined) {
     throw new CogniteLoginError(`Failed to parse token query parameters`, {
-      accessToken, idToken, error, errorDescription
+      accessToken,
+      idToken,
+      error,
+      errorDescription,
     });
   }
   if (isString(accessToken) && isString(idToken)) {
@@ -276,7 +279,10 @@ async function silentLogin(params: AuthorizeParams): Promise<AuthTokens> {
           iframe.contentWindow!.location.search
         );
         if (authTokens === null) {
-          throw new CogniteLoginError('Failed to login due nullable tokens', {params, url})
+          throw new CogniteLoginError('Failed to login due nullable tokens', {
+            params,
+            url,
+          });
         }
         resolve(authTokens);
       } catch (e) {
