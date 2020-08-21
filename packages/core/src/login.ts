@@ -81,7 +81,8 @@ export interface AuthenticateParams {
 /** @hidden */
 export async function loginSilently(
   httpClient: CDFHttpClient,
-  params: AuthenticateParams
+  params: AuthenticateParams,
+  onLoginFailed?: (error: CogniteLoginError) => void
 ): Promise<null | AuthTokens> {
   if (isAuthIFrame()) {
     // don't resolve when inside iframe (we don't want to do any logic)
@@ -110,8 +111,10 @@ export async function loginSilently(
     if (tokens !== null) {
       return tokens;
     }
-  } catch (_) {
-    // don't do anything.
+  } catch (error) {
+    if (onLoginFailed) {
+      onLoginFailed(error)
+    }
   }
 
   return null;
@@ -239,7 +242,9 @@ function parseTokenQueryParameters(query: string): null | AuthTokens {
     [ERROR_DESCRIPTION_PARAM]: errorDescription,
   } = parse(query);
   if (error !== undefined) {
-    throw Error(`${error}: ${errorDescription}`);
+    throw new CogniteLoginError(`Failed to parse token query parameters`, {
+      accessToken, idToken, error, errorDescription
+    });
   }
   if (isString(accessToken) && isString(idToken)) {
     return {
@@ -271,7 +276,7 @@ async function silentLogin(params: AuthorizeParams): Promise<AuthTokens> {
           iframe.contentWindow!.location.search
         );
         if (authTokens === null) {
-          throw Error('Failed to login');
+          throw new CogniteLoginError('Failed to login due nullable tokens', {params, url})
         }
         resolve(authTokens);
       } catch (e) {

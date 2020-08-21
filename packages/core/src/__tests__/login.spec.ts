@@ -49,6 +49,7 @@ describe('Login', () => {
     const spiedRemoveChild = jest.spyOn(document.body, 'removeChild');
     beforeEach(() => {
       spiedCreateElement.mockReset();
+      spiedAppendChild.mockClear();
       spiedRemoveChild.mockReset();
       window.history.pushState({}, '', '');
     });
@@ -64,10 +65,51 @@ describe('Login', () => {
         '',
         `/some/random/path?query=true&error=failed&error_description=message`
       );
-      await expect(
-        loginSilently(httpClient, authorizeParams)
-      ).rejects.toThrowErrorMatchingInlineSnapshot(`"failed: message"`);
+      let errorMessage: string = '';
+      let error: string = '';
+      let errorDescr: string = '';
+      try {
+        await loginSilently(httpClient, authorizeParams);
+      } catch ({ message, data = {} }) {
+        errorMessage = message;
+        error = data.error
+        errorDescr = data.errorDescription
+      }
+      expect(errorMessage).toBe(`Failed to parse token query parameters`);
+      expect(error).toBe(`failed`);
+      expect(errorDescr).toBe(`message`);
     });
+
+    test('trigger onLoginFailed callback on error in query params for the iframe', async () => {
+      const onLoginFailed = jest.fn();
+      window.history.pushState({}, '', '/abc/def');
+      const iframe = createIframe(
+        `?query=true&error=failed&error_description=message`
+      );
+      spiedCreateElement.mockReturnValueOnce(iframe);
+
+      try {
+        await loginSilently(httpClient, authorizeParams, onLoginFailed);
+      } catch (_) {}
+
+      expect(onLoginFailed.mock.calls[0][0].data).toEqual({error: 'failed', errorDescription: 'message'});
+    });
+
+    test('trigger onLoginFailed on nullable token query', async () => {
+      const onLoginFailed = jest.fn();
+      const iframeUrl = `?query=true`
+      window.history.pushState({}, '', '/abc/def');
+      const iframe = createIframe(iframeUrl)
+      spiedCreateElement.mockReturnValueOnce(iframe);
+
+      try {
+        await loginSilently(httpClient, authorizeParams, onLoginFailed);
+      } catch (_) {}
+      const {message, data : {url, params}} = onLoginFailed.mock.calls[0][0];
+
+      expect(message).toBe(`Failed to login due nullable tokens`);
+      expect(url && params).toBeTruthy();
+    })
 
     function createIframe(search: string) {
       return {
