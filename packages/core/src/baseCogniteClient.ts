@@ -16,6 +16,7 @@ import {
   HttpResponse,
 } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
+import { Logger, LoggerFunc } from './logger';
 import {
   createAuthenticateFunction,
   OnAuthenticate,
@@ -34,6 +35,7 @@ export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
   appId: string;
   baseUrl?: string;
+  debug?: boolean;
 }
 
 export interface Project {
@@ -90,6 +92,7 @@ export default class BaseCogniteClient {
   private hasBeenLoggedIn: boolean = false;
   private loginApi: LoginAPI;
   private logoutApi: LogoutApi;
+  private logger: Logger;
   /**
    * Create a new SDK client
    *
@@ -126,6 +129,7 @@ export default class BaseCogniteClient {
     this.metadata = new MetadataMap();
     this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
     this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
+    this.logger = new Logger(options.debug);
   }
 
   public authenticate: () => Promise<boolean> = async () => {
@@ -357,6 +361,14 @@ export default class BaseCogniteClient {
 
   public setOneTimeSdkHeader(value: string) {
     this.httpClient.addOneTimeHeader(X_CDF_SDK_HEADER, value);
+  }
+
+  public attachLogger(logger: LoggerFunc) {
+    this.logger.attach(logger).enable();
+  }
+
+  public detachLogger() {
+    this.logger.detach().disable();
   }
 
   protected initAPIs() {

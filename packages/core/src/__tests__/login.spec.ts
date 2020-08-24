@@ -60,37 +60,36 @@ describe('Login', () => {
     });
 
     test('exception on error query params', async () => {
-      window.history.pushState(
-        {},
-        '',
-        `/some/random/path?query=true&error=failed&error_description=message`
-      );
+      const uri = `/some/random/path`;
+      const search = `?query=true&error=failed&error_description=message`;
+      window.history.pushState({}, '', uri + search);
       let errorMessage: string = '';
       let error: string = '';
-      let errorDescr: string = '';
+      let query: string = '';
+      let errorDescription: string = '';
       try {
         await loginSilently(httpClient, authorizeParams);
       } catch ({ message, data = {} }) {
         errorMessage = message;
-        error = data.error;
-        errorDescr = data.errorDescription;
+        ({ error, query, errorDescription } = data);
       }
       expect(errorMessage).toBe(`Failed to parse token query parameters`);
       expect(error).toBe(`failed`);
-      expect(errorDescr).toBe(`message`);
+      expect(query).toBe(search);
+      expect(errorDescription).toBe(`message`);
     });
 
     test('trigger onLoginFailed callback on error in query params for the iframe', async () => {
       const onLoginFailed = jest.fn();
+      const iframeUrl = `?query=true&error=failed&error_description=message`;
       window.history.pushState({}, '', '/abc/def');
-      const iframe = createIframe(
-        `?query=true&error=failed&error_description=message`
-      );
+      const iframe = createIframe(iframeUrl);
       spiedCreateElement.mockReturnValueOnce(iframe);
 
       await loginSilently(httpClient, authorizeParams, onLoginFailed);
 
       expect(onLoginFailed.mock.calls[0][0].data).toEqual({
+        query: iframeUrl,
         error: 'failed',
         errorDescription: 'message',
       });

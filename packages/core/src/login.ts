@@ -243,6 +243,7 @@ function parseTokenQueryParameters(query: string): null | AuthTokens {
   } = parse(query);
   if (error !== undefined) {
     throw new CogniteLoginError(`Failed to parse token query parameters`, {
+      query,
       accessToken,
       idToken,
       error,
