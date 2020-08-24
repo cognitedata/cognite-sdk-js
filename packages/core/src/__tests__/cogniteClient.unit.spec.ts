@@ -14,8 +14,12 @@ import { apiKey, authTokens, project } from '../testUtils';
 
 const mockBaseUrl = 'https://example.com';
 
-function setupClient(baseUrl: string = BASE_URL) {
-  return new BaseCogniteClient({ appId: 'JS SDK integration tests', baseUrl });
+function setupClient(baseUrl: string = BASE_URL, debug: boolean = false) {
+  return new BaseCogniteClient({
+    appId: 'JS SDK integration tests',
+    baseUrl,
+    debug,
+  });
 }
 
 function setupMockableClient() {
@@ -419,6 +423,67 @@ describe('CogniteClient', () => {
           client.get('/');
         });
       });
+    });
+  });
+
+  describe('logger', () => {
+    const errorMessage = `You can only call authenticate after you have called loginWithOAuth`;
+    const loggerFunc = jest.fn();
+    const spyOnConsoleLog = jest
+      .spyOn(console, 'log')
+      .mockImplementation(() => {
+        /* ignore console.log */
+      });
+    let client: BaseCogniteClient;
+    beforeEach(() => {
+      client = setupClient();
+      loggerFunc.mockReset();
+      spyOnConsoleLog.mockReset();
+    });
+    afterAll(() => {
+      spyOnConsoleLog.mockRestore();
+    });
+    test('should be disabled by default', async () => {
+      await expect(
+        client.authenticate
+      ).rejects.toThrowErrorMatchingInlineSnapshot(`"${errorMessage}"`);
+      expect(spyOnConsoleLog).toHaveBeenCalledTimes(0);
+    });
+
+    test('should call console log if debug option has been set', async () => {
+      client = setupClient(BASE_URL, true);
+
+      await expect(
+        client.authenticate
+      ).rejects.toThrowErrorMatchingInlineSnapshot(`"${errorMessage}"`);
+      expect(spyOnConsoleLog).toHaveBeenCalledWith({ message: errorMessage });
+    });
+
+    test('should enable logging if custom logger function has been attached', async () => {
+      client.attachLogger(loggerFunc);
+
+      await expect(
+        client.authenticate
+      ).rejects.toThrowErrorMatchingInlineSnapshot(`"${errorMessage}"`);
+      expect(spyOnConsoleLog).toHaveBeenCalledTimes(0);
+      expect(loggerFunc).toHaveBeenCalledWith({ message: errorMessage });
+    });
+
+    test('should detach logger and disable logging', async () => {
+      client.attachLogger(loggerFunc);
+
+      await expect(
+        client.authenticate
+      ).rejects.toThrowErrorMatchingInlineSnapshot(`"${errorMessage}"`);
+      expect(loggerFunc).toHaveBeenCalledWith({ message: errorMessage });
+
+      client.detachLogger();
+
+      await expect(
+        client.authenticate
+      ).rejects.toThrowErrorMatchingInlineSnapshot(`"${errorMessage}"`);
+      expect(loggerFunc).toHaveBeenCalledTimes(1);
+      expect(spyOnConsoleLog).toHaveBeenCalledTimes(0);
     });
   });
 });

@@ -3,6 +3,7 @@
 import nock from 'nock';
 import { AUTHORIZATION_HEADER } from '../constants';
 import { CDFHttpClient } from '../httpClient/cdfHttpClient';
+import { Logger } from '../logger';
 import {
   getIdInfoFromAccessToken,
   loginSilently,
@@ -26,8 +27,11 @@ describe('Login', () => {
     mockBaseUrl,
     createUniversalRetryValidator()
   );
+  const loggerFunc = jest.fn();
+  const logger = new Logger(true, loggerFunc);
 
   beforeEach(() => {
+    loggerFunc.mockReset();
     window.history.pushState({}, '', '');
     nock.cleanAll();
   });
@@ -68,7 +72,7 @@ describe('Login', () => {
       let query: string = '';
       let errorDescription: string = '';
       try {
-        await loginSilently(httpClient, authorizeParams);
+        await loginSilently(httpClient, authorizeParams, logger);
       } catch ({ message, data = {} }) {
         errorMessage = message;
         ({ error, query, errorDescription } = data);
@@ -79,16 +83,15 @@ describe('Login', () => {
       expect(errorDescription).toBe(`message`);
     });
 
-    test('trigger onLoginFailed callback on error in query params for the iframe', async () => {
-      const onLoginFailed = jest.fn();
+    test('trigger logger on error in query params for the iframe', async () => {
       const iframeUrl = `?query=true&error=failed&error_description=message`;
       window.history.pushState({}, '', '/abc/def');
       const iframe = createIframe(iframeUrl);
       spiedCreateElement.mockReturnValueOnce(iframe);
 
-      await loginSilently(httpClient, authorizeParams, onLoginFailed);
+      await loginSilently(httpClient, authorizeParams, logger);
 
-      expect(onLoginFailed.mock.calls[0][0].data).toEqual({
+      expect(loggerFunc.mock.calls[0][0].data).toEqual({
         query: iframeUrl,
         error: 'failed',
         errorDescription: 'message',
@@ -96,18 +99,17 @@ describe('Login', () => {
     });
 
     test('trigger onLoginFailed on nullable token query', async () => {
-      const onLoginFailed = jest.fn();
       const iframeUrl = `?query=true`;
       window.history.pushState({}, '', '/abc/def');
       const iframe = createIframe(iframeUrl);
       spiedCreateElement.mockReturnValueOnce(iframe);
 
-      await loginSilently(httpClient, authorizeParams, onLoginFailed);
+      await loginSilently(httpClient, authorizeParams, logger);
 
       const {
         message,
         data: { url, params },
-      } = onLoginFailed.mock.calls[0][0];
+      } = loggerFunc.mock.calls[0][0];
 
       expect(message).toBe(`Failed to login due nullable tokens`);
       expect(url && params).toBeTruthy();
@@ -131,7 +133,7 @@ describe('Login', () => {
         `?access_token=${authTokens.accessToken}&id_token=${authTokens.idToken}`
       );
       spiedCreateElement.mockReturnValueOnce(iframe);
-      const tokens = await loginSilently(httpClient, authorizeParams);
+      const tokens = await loginSilently(httpClient, authorizeParams, logger);
       expect(tokens).toEqual(authTokens);
       expect(spiedCreateElement).toBeCalledTimes(1);
       expect(spiedCreateElement).toBeCalledWith('iframe');
@@ -161,7 +163,7 @@ describe('Login', () => {
       })
         .get('/login/status')
         .reply(200, loggedInResponse);
-      const tokens = await loginSilently(httpClient, authorizeParams);
+      const tokens = await loginSilently(httpClient, authorizeParams, logger);
       expect(tokens).toEqual(authTokens);
       expect(window.location.href).toMatchInlineSnapshot(
         `"https://localhost/some/random/path?query=true&random=123"`

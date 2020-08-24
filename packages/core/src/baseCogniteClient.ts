@@ -133,9 +133,10 @@ export default class BaseCogniteClient {
   }
 
   public authenticate: () => Promise<boolean> = async () => {
-    throw Error(
-      'You can only call authenticate after you have called loginWithOAuth'
-    );
+    const message = `You can only call authenticate after you have called loginWithOAuth`;
+
+    this.logger.log(message);
+    throw Error(message);
   };
 
   public get project() {
@@ -238,6 +239,7 @@ export default class BaseCogniteClient {
       httpClient: this.httpClient,
       onAuthenticate,
       onTokens,
+      logger: this.logger,
     });
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
