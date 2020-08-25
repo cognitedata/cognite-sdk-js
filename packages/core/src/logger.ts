@@ -8,7 +8,6 @@ export interface LoggerEventData {
 
 export enum LoggerEventTypes {
   Error = 'error',
-  Warning = 'warning',
 }
 
 export interface LoggerEvent {
