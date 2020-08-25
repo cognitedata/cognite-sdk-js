@@ -16,7 +16,7 @@ import {
   HttpResponse,
 } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
-import { Logger, LoggerFunc } from './logger';
+import { logger, LoggerFunc } from './logger';
 import {
   createAuthenticateFunction,
   OnAuthenticate,
@@ -92,7 +92,6 @@ export default class BaseCogniteClient {
   private hasBeenLoggedIn: boolean = false;
   private loginApi: LoginAPI;
   private logoutApi: LogoutApi;
-  private logger: Logger;
   /**
    * Create a new SDK client
    *
@@ -129,13 +128,16 @@ export default class BaseCogniteClient {
     this.metadata = new MetadataMap();
     this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
     this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
-    this.logger = new Logger(options.debug);
+    if (options.debug) {
+      logger.attach(this.projectName).enable(this.projectName);
+    }
   }
 
   public authenticate: () => Promise<boolean> = async () => {
     const message = `You can only call authenticate after you have called loginWithOAuth`;
 
-    this.logger.log(message);
+    logger.log(this.projectName, message);
+
     throw Error(message);
   };
 
@@ -239,7 +241,6 @@ export default class BaseCogniteClient {
       httpClient: this.httpClient,
       onAuthenticate,
       onTokens,
-      logger: this.logger,
     });
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
@@ -365,12 +366,12 @@ export default class BaseCogniteClient {
     this.httpClient.addOneTimeHeader(X_CDF_SDK_HEADER, value);
   }
 
-  public attachLogger(logger: LoggerFunc) {
-    this.logger.attach(logger).enable();
+  public attachLogger(loggerFunc: LoggerFunc) {
+    logger.attach(this.projectName, loggerFunc).enable(this.projectName);
   }
 
   public detachLogger() {
-    this.logger.detach().disable();
+    logger.detach(this.projectName);
   }
 
   protected initAPIs() {

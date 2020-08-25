@@ -2,7 +2,13 @@
 export type LoggerFunc = (event: LoggerEvent) => void;
 
 export interface LoggerEventData {
+  type?: LoggerEventTypes;
   [key: string]: any;
+}
+
+export enum LoggerEventTypes {
+  Error = 'error',
+  Warning = 'warning',
 }
 
 export interface LoggerEvent {
@@ -10,44 +16,64 @@ export interface LoggerEvent {
   data?: LoggerEventData;
 }
 
+interface LoggersMap {
+  [key: string]: LoggerMapInstance;
+}
+
+interface LoggerMapInstance {
+  active: boolean;
+  logger: LoggerFunc;
+}
+
 const defaultLogger = (event: LoggerEvent) => console.log(event);
 
 export class Logger {
-  private logger: LoggerFunc;
-  private active: boolean;
+  constructor(private loggers: LoggersMap = {}) {}
 
-  constructor(active = false, logger?: LoggerFunc) {
-    this.logger = logger || defaultLogger;
-    this.active = active;
-  }
-
-  public log(event: string | LoggerEvent) {
-    if (!this.active) {
+  public log(id: string, event: string | LoggerEvent) {
+    if (!this.loggers[id]) {
       return;
     }
 
     const loggedEvent = typeof event === 'string' ? { message: event } : event;
+    const { active, logger } = this.loggers[id];
 
-    this.logger(loggedEvent);
+    if (active) {
+      logger(loggedEvent);
+    }
   }
 
-  public enable() {
-    this.active = true;
+  public enable(id: string) {
+    if (this.loggers[id]) {
+      this.loggers[id].active = true;
+    }
   }
 
-  public disable() {
-    this.active = false;
+  public disable(id: string) {
+    if (this.loggers[id]) {
+      this.loggers[id].active = false;
+    }
   }
 
-  public attach(logger: LoggerFunc): Logger {
-    this.logger = logger;
+  public attach(id: string, logger: LoggerFunc = defaultLogger): Logger {
+    this.loggers[id] = {
+      active: false,
+      logger,
+    };
 
     return this;
   }
 
-  public detach(): Logger {
-    this.logger = defaultLogger;
+  public detach(id: string): Logger {
+    if (this.loggers[id]) {
+      this.loggers[id] = {
+        active: false,
+        logger: defaultLogger,
+      };
+    }
 
     return this;
   }
 }
+
+export const logger = new Logger();

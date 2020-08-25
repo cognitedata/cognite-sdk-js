@@ -9,7 +9,7 @@ import {
   HttpCall,
 } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
-import { Logger } from './logger';
+import { logger } from './logger';
 import * as Login from './login';
 import { CogniteLoginError } from './loginError';
 import { LogoutUrlResponse } from './types';
@@ -82,8 +82,7 @@ export interface AuthenticateParams {
 /** @hidden */
 export async function loginSilently(
   httpClient: CDFHttpClient,
-  params: AuthenticateParams,
-  logger: Logger
+  params: AuthenticateParams
 ): Promise<null | AuthTokens> {
   if (isAuthIFrame()) {
     // don't resolve when inside iframe (we don't want to do any logic)
@@ -113,7 +112,7 @@ export async function loginSilently(
       return tokens;
     }
   } catch (error) {
-    logger.log(error);
+    logger.log(project, error);
   }
 
   return null;
@@ -310,11 +309,10 @@ interface CreateAuthFunctionOptions {
   httpClient: CDFHttpClient;
   onTokens: OnTokens;
   onAuthenticate: OnAuthenticate;
-  logger: Logger;
 }
 /** @hidden */
 export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
-  const { project, httpClient, onTokens, onAuthenticate, logger } = options;
+  const { project, httpClient, onTokens, onAuthenticate } = options;
   const baseUrl = getBaseUrl(httpClient.getBaseUrl());
   return promiseCache(
     async (): Promise<boolean> => {
@@ -326,14 +324,10 @@ export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
       };
 
       if (isUsingSSL()) {
-        const tokens = await Login.loginSilently(
-          httpClient,
-          {
-            baseUrl,
-            project,
-          },
-          logger
-        );
+        const tokens = await Login.loginSilently(httpClient, {
+          baseUrl,
+          project,
+        });
         if (tokens) {
           handleTokens(tokens);
           return true;
