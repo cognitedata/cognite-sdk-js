@@ -3,7 +3,7 @@
 import nock from 'nock';
 import { AUTHORIZATION_HEADER } from '../constants';
 import { CDFHttpClient } from '../httpClient/cdfHttpClient';
-import { logger } from '../logger';
+import { logger, LoggerEventTypes } from '../logger';
 import {
   getIdInfoFromAccessToken,
   loginSilently,
@@ -92,6 +92,7 @@ describe('Login', () => {
       await loginSilently(httpClient, authorizeParams);
 
       expect(loggerFunc.mock.calls[0][0].data).toEqual({
+        type: LoggerEventTypes.Error,
         query: iframeUrl,
         error: 'failed',
         errorDescription: 'message',
@@ -108,11 +109,11 @@ describe('Login', () => {
 
       const {
         message,
-        data: { url, params },
+        data: { url, params, type },
       } = loggerFunc.mock.calls[0][0];
 
       expect(message).toBe(`Failed to login due nullable tokens`);
-      expect(url && params).toBeTruthy();
+      expect(url && params && type).toBeTruthy();
     });
 
     function createIframe(search: string) {
