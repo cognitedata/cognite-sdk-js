@@ -24,8 +24,10 @@ describe('relationships integration test', () => {
   let event: CogniteEvent;
 
   beforeEach(async () => {
-    await client.relationships.delete([{externalId: confidenceExternalId}], {ignoreUnknownIds: true});
-  })
+    await client.relationships.delete([{ externalId: confidenceExternalId }], {
+      ignoreUnknownIds: true,
+    });
+  });
 
   beforeAll(async () => {
     client = setupLoggedInClient();
@@ -57,18 +59,35 @@ describe('relationships integration test', () => {
       await expect(createPromise).rejects.toThrow();
     });
     test('should retrieve just created relationship', async () => {
-      const [relationship] = await client.relationships.create([{...relationshipConf, confidence: 1.0, externalId: confidenceExternalId}]);
+      const [relationship] = await client.relationships.create([
+        {
+          ...relationshipConf,
+          confidence: 1.0,
+          externalId: confidenceExternalId,
+        },
+      ]);
 
       await runTestWithRetryWhenFailing(async () => {
-        const [retrieved] = await client.relationships.retrieve([{externalId: confidenceExternalId}]);
+        const [retrieved] = await client.relationships.retrieve([
+          { externalId: confidenceExternalId },
+        ]);
 
         expect(retrieved).toEqual(relationship);
       });
     });
     test('should list just created relationship', async () => {
-      await client.relationships.create([{...relationshipConf, confidence: 1.0, externalId: confidenceExternalId}]);
+      await client.relationships.create([
+        {
+          ...relationshipConf,
+          confidence: 1.0,
+          externalId: confidenceExternalId,
+        },
+      ]);
       await runTestWithRetryWhenFailing(async () => {
-        const result = () => client.relationships.list({filter: {sourceExternalIds: [assetName]}}).autoPagingToArray();
+        const result = () =>
+          client.relationships
+            .list({ filter: { sourceExternalIds: [assetName] } })
+            .autoPagingToArray();
 
         expect(result.length).toBeGreaterThan(2);
       });
