@@ -1,6 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { Asset, CogniteEvent } from '@cognite/sdk';
+import { runTestWithRetryWhenFailing } from '@cognite/sdk/src/__tests__/testUtils';
 import CogniteClient from '../../cogniteClient';
 import { RelationshipResourceType } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
@@ -9,6 +10,7 @@ describe('relationships integration test', () => {
   const assetName = 'relationship_test_asset';
   const eventName = 'relationship_test_event';
   const relationshipId = 'test_relationship';
+  const confidenceExternalId = 'relationship_test_confidence';
   const relationshipConf = {
     externalId: relationshipId,
     sourceExternalId: assetName,
@@ -20,6 +22,10 @@ describe('relationships integration test', () => {
   let client: CogniteClient;
   let asset: Asset;
   let event: CogniteEvent;
+
+  beforeEach(async () => {
+    await client.relationships.delete([{externalId: confidenceExternalId}], {ignoreUnknownIds: true});
+  })
 
   beforeAll(async () => {
     client = setupLoggedInClient();
@@ -49,6 +55,23 @@ describe('relationships integration test', () => {
         { ...relationshipConf, confidence: 5 },
       ]);
       await expect(createPromise).rejects.toThrow();
+    });
+    test('should retrieve just created relationship', async () => {
+      const [relationship] = await client.relationships.create([{...relationshipConf, confidence: 1.0, externalId: confidenceExternalId}]);
+
+      await runTestWithRetryWhenFailing(async () => {
+        const [retrieved] = await client.relationships.retrieve([{externalId: confidenceExternalId}]);
+
+        expect(retrieved).toEqual(relationship);
+      });
+    });
+    test('should list just created relationship', async () => {
+      await client.relationships.create([{...relationshipConf, confidence: 1.0, externalId: confidenceExternalId}]);
+      await runTestWithRetryWhenFailing(async () => {
+        const result = () => client.relationships.list({filter: {sourceExternalIds: [assetName]}}).autoPagingToArray();
+
+        expect(result.length).toBeGreaterThan(2);
+      });
     });
   });
 
