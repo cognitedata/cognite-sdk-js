@@ -7,7 +7,7 @@ describe('Labels integration test', () => {
   let client: CogniteClient;
   const externalLabel: ExternalLabelDefinition = {
     externalId: 'ROTATING_EQUIPMENT' + randomInt(),
-    name: 'Pump',
+    name: 'Pump' + randomInt(),
     description: 'Asset with rotating parts',
   };
 

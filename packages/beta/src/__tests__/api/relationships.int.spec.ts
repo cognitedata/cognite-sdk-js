@@ -84,7 +84,7 @@ describe('relationships integration test', () => {
         .list({ filter: { sourceExternalIds: [assetName] } })
         .autoPagingToArray();
 
-      expect(result.length).toBeGreaterThan(1);
+      expect(result.length).toBe(2);
     });
   });
 
