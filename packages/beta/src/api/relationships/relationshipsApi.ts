@@ -17,7 +17,7 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    *
    * ```js
    * const relationships = [
-   *   { externalId: 'sensitiveData' }
+   *   { externalId: 'some_relationship' }
    * ];
    * const createdRelationships = await client.relationships.create(relationships);
    * ```
