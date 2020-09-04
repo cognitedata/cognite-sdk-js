@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
 import { Asset, CogniteEvent } from '@cognite/sdk';
-import { runTestWithRetryWhenFailing } from '@cognite/sdk/src/__tests__/testUtils';
 import CogniteClient from '../../cogniteClient';
 import { RelationshipResourceType } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
@@ -67,13 +66,11 @@ describe('relationships integration test', () => {
         },
       ]);
 
-      await runTestWithRetryWhenFailing(async () => {
-        const [retrieved] = await client.relationships.retrieve([
-          { externalId: confidenceExternalId },
-        ]);
+      const [retrieved] = await client.relationships.retrieve([
+        { externalId: confidenceExternalId },
+      ]);
 
-        expect(retrieved).toEqual(relationship);
-      });
+      expect(retrieved).toEqual(relationship);
     });
     test('should list just created relationship', async () => {
       await client.relationships.create([
@@ -83,14 +80,11 @@ describe('relationships integration test', () => {
           externalId: confidenceExternalId,
         },
       ]);
-      await runTestWithRetryWhenFailing(async () => {
-        const result = () =>
-          client.relationships
-            .list({ filter: { sourceExternalIds: [assetName] } })
-            .autoPagingToArray();
+      const result = await client.relationships
+        .list({ filter: { sourceExternalIds: [assetName] } })
+        .autoPagingToArray();
 
-        expect(result.length).toBeGreaterThan(2);
-      });
+      expect(result.length).toBeGreaterThan(1);
     });
   });
 
