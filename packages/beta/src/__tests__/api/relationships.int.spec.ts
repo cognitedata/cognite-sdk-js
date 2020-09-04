@@ -3,7 +3,6 @@
 import { Asset, CogniteEvent } from '@cognite/sdk';
 import { randomInt } from '@cognite/sdk-core/src/testUtils';
 import CogniteClient from '../../cogniteClient';
-import { RelationshipResourceType } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('relationships integration test', () => {
@@ -14,9 +13,9 @@ describe('relationships integration test', () => {
   const relationshipConf = {
     externalId: relationshipId,
     sourceExternalId: assetName,
-    sourceType: RelationshipResourceType.Asset,
+    sourceType: 'asset' as const,
     targetExternalId: eventName,
-    targetType: RelationshipResourceType.Event,
+    targetType: 'event' as const,
   };
 
   let client: CogniteClient;

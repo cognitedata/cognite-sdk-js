@@ -4,6 +4,7 @@ const snippetsFolder = path.join(process.cwd(), './codeSnippets');
 const jsDoc = require(snippetsFolder + '/docs.json');
 const _ = require('lodash');
 const fs = require('fs');
+const isBeta = !!~process.argv.indexOf('--beta');
 
 function stripMarkdownCodeSnippet(rawCode) {
   return rawCode
@@ -62,7 +63,7 @@ codeSnippets.forEach((snippets, operationId) => {
     return;
   }
   const codeToTest = `
-    import { CogniteClient, SequenceValueType } from '@cognite/sdk';
+    import { CogniteClient, SequenceValueType } from '@cognite/sdk${ isBeta ? '-beta' : '' }';
     const client = new CogniteClient({ appId: '[APP NAME]' });
     client.loginWithApiKey({
       project: '[PROJECT]',

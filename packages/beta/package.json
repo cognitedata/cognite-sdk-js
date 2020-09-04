@@ -18,7 +18,7 @@
     "esCheck": "es-check es5 './dist/index.js'",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
     "docs:bundle": "yarn docs && mkdir -p ../../docs/beta && cp -r docs/* ../../docs/beta/",
-    "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node ../../scripts/extractCodeSnippets.js",
+    "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node ../../scripts/extractCodeSnippets.js --beta",
     "test-snippets": "yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json"
   },
   "dependencies": {

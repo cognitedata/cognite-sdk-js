@@ -17,7 +17,13 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    *
    * ```js
    * const relationships = [
-   *   { externalId: 'some_relationship' }
+   *   {
+   *      externalId: 'some_relationship',
+   *      sourceExternalId: 'some_source_external_id',
+   *      sourceType: 'asset' as const,
+   *      targetExternalId: 'some_target_external_id',
+   *      targetType: 'event' as const
+   *   }
    * ];
    * const createdRelationships = await client.relationships.create(relationships);
    * ```
