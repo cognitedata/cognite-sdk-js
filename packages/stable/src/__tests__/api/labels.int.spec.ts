@@ -1,11 +1,12 @@
 import { ExternalLabelDefinition } from '@cognite/sdk';
+import { randomInt } from '@cognite/sdk-core/src/testUtils';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('Labels integration test', () => {
   let client: CogniteClient;
   const externalLabel: ExternalLabelDefinition = {
-    externalId: 'ROTATING_EQUIPMENT',
+    externalId: 'ROTATING_EQUIPMENT' + randomInt(),
     name: 'Pump',
     description: 'Asset with rotating parts',
   };
