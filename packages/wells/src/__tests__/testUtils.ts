@@ -14,8 +14,8 @@ export function setupClient(baseUrl: string = Constants.BASE_URL) {
 export function setupLoggedInClient() {
   const client = setupClient();
   client.loginWithApiKey({
-    project: process.env.COGNITE_PROJECT as string,
-    apiKey: process.env.COGNITE_CREDENTIALS as string,
+    project: process.env.COGNITE_WELLS_PROJECT as string,
+    apiKey: process.env.COGNITE_WELLS_CREDENTIALS as string,
   });
   return client;
 }
