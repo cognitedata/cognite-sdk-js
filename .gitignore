@@ -13,3 +13,5 @@ docs
 .DS_Store
 .idea
 codeSnippets
+.vscode
+.env
