@@ -1,14 +1,17 @@
 // Copyright 2020 Cognite AS
 
-import { Asset, CogniteEvent } from '@cognite/sdk';
+import { Asset, CogniteEvent, DataSet, Label } from '@cognite/sdk';
 import { randomInt } from '@cognite/sdk-core/src/testUtils';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('relationships integration test', () => {
+  const end = Date.now();
+  const start = end - 60 * 1000;
   const assetName = 'relationship_test_asset' + randomInt();
   const eventName = 'relationship_test_event' + randomInt();
   const relationshipId = 'test_relationship' + randomInt();
+  const labelId = 'test_label' + randomInt();
   const confidenceExternalId = 'relationship_test_confidence' + randomInt();
   const relationshipConf = {
     externalId: relationshipId,
@@ -16,11 +19,15 @@ describe('relationships integration test', () => {
     sourceType: 'asset' as const,
     targetExternalId: eventName,
     targetType: 'event' as const,
+    start,
+    end,
   };
 
   let client: CogniteClient;
   let asset: Asset;
   let event: CogniteEvent;
+  let dataSet: DataSet;
+  let label: Label;
 
   beforeEach(async () => {
     await client.relationships.delete([{ externalId: confidenceExternalId }], {
@@ -34,17 +41,28 @@ describe('relationships integration test', () => {
       { externalId: assetName, name: assetName },
     ]);
     [event] = await client.events.create([{ externalId: eventName }]);
+    [label] = await client.labels.create([
+      { externalId: labelId, name: labelId },
+    ]);
+    [dataSet] = await client.datasets
+      .list({ filter: { externalIdPrefix: 'integration-test-data-set' } })
+      .autoPagingToArray();
   });
 
   afterAll(async () => {
     await client.assets.delete([{ externalId: assetName }]);
     await client.events.delete([{ externalId: eventName }]);
+    await client.labels.delete([{ externalId: labelId }]);
   });
 
   describe('create', () => {
     test('should create relationship', async () => {
       const [relationship] = await client.relationships.create([
-        relationshipConf,
+        {
+          ...relationshipConf,
+          dataSetId: dataSet.id,
+          labels: [{ externalId: label.externalId }],
+        },
       ]);
 
       expect(relationship.externalId).toEqual(relationshipId);
@@ -113,8 +131,48 @@ describe('relationships integration test', () => {
         .list({ filter: { sourceExternalIds: [assetName] } })
         .autoPagingToArray({ limit: 5 });
 
+      expect(result.length).toBe(1);
+      expect(result[0].sourceExternalId).toBe(assetName);
+    });
+    test('should filter relationships by labels', async () => {
+      const result = await client.relationships
+        .list({
+          filter: {
+            labels: { containsAny: [{ externalId: label.externalId }] },
+          },
+        })
+        .autoPagingToArray({ limit: 5 });
+
       expect(result.length).toBeGreaterThan(0);
       expect(result[0].sourceExternalId).toBe(assetName);
+    });
+    test('should filter relationships by data set', async () => {
+      const result = await client.relationships
+        .list({ filter: { dataSetIds: [{ id: dataSet.id }] } })
+        .autoPagingToArray({ limit: 5 });
+
+      expect(result.length).toBeGreaterThan(0);
+    });
+    test('should filter relationships by active at', async () => {
+      const result = await client.relationships
+        .list({
+          filter: {
+            sourceExternalIds: [assetName],
+            activeAtTime: { min: start, max: end },
+          },
+        })
+        .autoPagingToArray({ limit: 5 });
+      const emptyResult = await client.relationships
+        .list({
+          filter: {
+            sourceExternalIds: [assetName],
+            activeAtTime: { min: start - 2000, max: start - 1000 },
+          },
+        })
+        .autoPagingToArray({ limit: 5 });
+
+      expect(result.length).toBe(1);
+      expect(emptyResult.length).toBe(0);
     });
   });
 
