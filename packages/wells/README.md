@@ -34,5 +34,5 @@ cd /cognite-sdk-js/packages/wells
 
 ```bash
 yarn build
-COGNITE_PROJECT=<project-tenant> COGNITE_CREDENTIALS=<your-api-key> yarn test
+COGNITE_WELLS_PROJECT=<project-tenant> COGNITE_WELLS_CREDENTIALS=<your-api-key> yarn test
 ```
