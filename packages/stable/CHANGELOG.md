@@ -31,7 +31,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
   - TimeseriesClass
   - TimeSeriesList
 
-For replacements, see [MIGRATION_GUIDE_2xx_3xx.md](../../guides/MIGRATION_GUIDE_2xx_3xx.md)
+For replacements, see [MIGRATION_GUIDE_2xx_3xx.md](https://docs.cognite.com/dev/guides/sdk/js/migration.html#upgrade-javascript-sdk-2-x-to-3-x)
 
 * Interfaces renamed:
   - AzureADConfigurationDTO -> AzureADConfiguration
