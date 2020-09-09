@@ -2,14 +2,12 @@
 
 import CogniteClient from '../cogniteClient';
 import { setupLoggedInClient } from './testUtils';
-import { isNullOrUndefined } from 'util';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
-  isNullOrUndefined(process.env.COGNITE_WELLS_PROJECT) &&
-  isNullOrUndefined(process.env.COGNITE_WELLS_CREDENTIALS)
-    ? describe.skip
-    : describe;
+  process.env.COGNITE_WELLS_PROJECT && process.env.COGNITE_WELLS_CREDENTIALS
+    ? describe
+    : describe.skip;
 
 describeIfCondition('Wells integration test', () => {
   let client: CogniteClient;
