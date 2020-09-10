@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Cognite JavaScript SDK</title>
-	<meta name="description" content="Documentation for Cognite JavaScript SDK">
+	<title>Cognite JavaScript SDK (beta)</title>
+	<meta name="description" content="Documentation for Cognite JavaScript SDK (beta)">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">Cognite JavaScript SDK</a>
+					<a href="index.html" class="title">Cognite JavaScript SDK (beta)</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -40,6 +40,8 @@
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
 							<input type="checkbox" id="tsd-filter-externals" checked />
 							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -54,7 +56,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1>Cognite JavaScript SDK</h1>
+			<h1>Cognite JavaScript SDK (beta)</h1>
 		</div>
 	</div>
 </header>
@@ -68,8 +70,8 @@
 				<p>The package <code>@cognite/sdk-beta</code> provides convenient access to the beta version of the Cognite API.
 					Setup is very similar to <a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md">stable</a>,
 				but use the following command to install:</p>
-				<pre><code><span class="hljs-variable">$ </span>yarn add <span class="hljs-variable">@cognite</span>/sdk<span class="hljs-variable">@npm</span><span class="hljs-symbol">:</span><span class="hljs-variable">@cognite</span>/sdk-beta</code></pre><p>or with npm</p>
-				<pre><code>$ <span class="hljs-built_in">npm</span> install @cognite/sdk@npm:@cognite/sdk-beta --save</code></pre><p>This will install the package <code>@cognite/sdk-beta</code> as a dependency, but aliased as <code>@cognite/sdk</code>.
+				<pre><code>yarn <span class="hljs-keyword">add</span> <span class="hljs-title">@cognite</span>/sdk<span class="hljs-title">@npm</span>:<span class="hljs-title">@cognite</span>/sdk-beta</code></pre><p>or with npm</p>
+				<pre><code><span class="hljs-built_in">npm</span> install @cognite/sdk@npm:@cognite/sdk-beta --save</code></pre><p>This will install the package <code>@cognite/sdk-beta</code> as a dependency, but aliased as <code>@cognite/sdk</code>.
 				In <code>package.json</code>, it will look like this:</p>
 				<pre><code>    <span class="hljs-string">&quot;@cognite/sdk&quot;</span>: <span class="hljs-string">&quot;npm:@cognite/sdk-beta@^X.X.X&quot;</span></code></pre><p>This will download <code>@cognite/sdk-beta</code> and pretend it is <code>@cognite/sdk</code>.
 					With the beta package installed under an alias, you don&#39;t need to modify your code
@@ -78,8 +80,7 @@
 				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
 					<h2>Documentation</h2>
 				</a>
-				<p>When you import <code>CogniteClient</code> from the beta sdk, you will in reality get the subclass <code>CogniteClientBeta</code>.
-				See the reference doc <a href="https://cognitedata.github.io/cognite-sdk-js/beta/classes/cogniteclientbeta.html">here</a>.</p>
+				<p>See the reference doc of <code>CogniteClient</code> <a href="https://cognitedata.github.io/cognite-sdk-js/beta/classes/cogniteclientbeta.html">here</a>.</p>
 				<p>The beta API is mostly a superset of stable. See the <a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md">stable readme</a>.</p>
 			</div>
 		</div>
@@ -89,1339 +90,208 @@
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
+					<li class="label tsd-is-external">
+						<span>Internals</span>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_beta_src_index_.html">&quot;beta/src/index&quot;</a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_beta_package_.html">&quot;beta/package&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_beta_src_cogniteclient_.html">&quot;beta/src/cognite<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_package_.html">&quot;core/package&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_api_login_loginapi_.html">&quot;core/src/api/login/login<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_api_logout_logoutapi_.html">&quot;core/src/api/logout/logout<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_autopagination_.html">&quot;core/src/auto<wbr>Pagination&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_basecogniteclient_.html">&quot;core/src/base<wbr>Cognite<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_baseresourceapi_.html">&quot;core/src/base<wbr>Resource<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_constants_.html">&quot;core/src/constants&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_dateparser_.html">&quot;core/src/date<wbr>Parser&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_error_.html">&quot;core/src/error&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_graphutils_.html">&quot;core/src/graph<wbr>Utils&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_httpclient_basichttpclient_.html">&quot;core/src/http<wbr>Client/basic<wbr>Http<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_httpclient_cdfhttpclient_.html">&quot;core/src/http<wbr>Client/cdf<wbr>Http<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_httpclient_httperror_.html">&quot;core/src/http<wbr>Client/http<wbr>Error&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_httpclient_retryvalidator_.html">&quot;core/src/http<wbr>Client/retry<wbr>Validator&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_httpclient_retryablehttpclient_.html">&quot;core/src/http<wbr>Client/retryable<wbr>Http<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_index_.html">&quot;core/src/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_login_.html">&quot;core/src/login&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_loginerror_.html">&quot;core/src/login<wbr>Error&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_metadata_.html">&quot;core/src/metadata&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_multierror_.html">&quot;core/src/multi<wbr>Error&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_queue_.html">&quot;core/src/queue&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_revertablearraysorter_.html">&quot;core/src/revertable<wbr>Array<wbr>Sorter&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_testutils_.html">&quot;core/src/test<wbr>Utils&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_types_.html">&quot;core/src/types&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_core_src_utils_.html">&quot;core/src/utils&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_package_.html">&quot;stable/package&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_3d_assetmappings3dapi_.html">&quot;stable/src/api/3d/asset<wbr>Mappings3DApi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_3d_files3dapi_.html">&quot;stable/src/api/3d/files3DApi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_3d_models3dapi_.html">&quot;stable/src/api/3d/models3DApi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_3d_nodes3dapi_.html">&quot;stable/src/api/3d/nodes3DApi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_3d_revealnodes3dapi_.html">&quot;stable/src/api/3d/reveal<wbr>Nodes3DApi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_3d_revealrevisions3dapi_.html">&quot;stable/src/api/3d/reveal<wbr>Revisions3DApi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_3d_revealsectors3dapi_.html">&quot;stable/src/api/3d/reveal<wbr>Sectors3DApi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_3d_revisions3dapi_.html">&quot;stable/src/api/3d/revisions3DApi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_3d_unrealrevisions3dapi_.html">&quot;stable/src/api/3d/unreal<wbr>Revisions3DApi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_3d_viewer3dapi_.html">&quot;stable/src/api/3d/viewer3DApi&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_apikeys_apikeysapi_.html">&quot;stable/src/api/api<wbr>Keys/api<wbr>Keys<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_assets_assetutils_.html">&quot;stable/src/api/assets/asset<wbr>Utils&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_assets_assetsapi_.html">&quot;stable/src/api/assets/assets<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_datapoints_datapointsapi_.html">&quot;stable/src/api/data<wbr>Points/data<wbr>Points<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_datasets_datasetsapi_.html">&quot;stable/src/api/datasets/datasets<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_events_eventsaggregateapi_.html">&quot;stable/src/api/events/events<wbr>Aggregate<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_events_eventsapi_.html">&quot;stable/src/api/events/events<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_files_filesapi_.html">&quot;stable/src/api/files/files<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_groups_groupsapi_.html">&quot;stable/src/api/groups/groups<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_labels_labelsapi_.html">&quot;stable/src/api/labels/labels<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_projects_projectsapi_.html">&quot;stable/src/api/projects/projects<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_raw_rawapi_.html">&quot;stable/src/api/raw/raw<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_raw_rawrowsapi_.html">&quot;stable/src/api/raw/raw<wbr>Rows<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_raw_rawtablesapi_.html">&quot;stable/src/api/raw/raw<wbr>Tables<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_securitycategories_securitycategoriesapi_.html">&quot;stable/src/api/security<wbr>Categories/security<wbr>Categories<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_sequences_sequencerow_.html">&quot;stable/src/api/sequences/sequence<wbr>Row&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_sequences_sequencerowsapi_.html">&quot;stable/src/api/sequences/sequence<wbr>Rows<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_sequences_sequencesapi_.html">&quot;stable/src/api/sequences/sequences<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_serviceaccounts_serviceaccountsapi_.html">&quot;stable/src/api/service<wbr>Accounts/service<wbr>Accounts<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_timeseries_synthetictimeseriesapi_.html">&quot;stable/src/api/time<wbr>Series/synthetic<wbr>Time<wbr>Series<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_api_timeseries_timeseriesapi_.html">&quot;stable/src/api/time<wbr>Series/time<wbr>Series<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_cogniteclient_.html">&quot;stable/src/cognite<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_index_.html">&quot;stable/src/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_retryvalidator_.html">&quot;stable/src/retry<wbr>Validator&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-is-external">
-						<a href="enums/httpmethod.html" class="tsd-kind-icon">Http<wbr>Method</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/apikeysapi.html" class="tsd-kind-icon">Api<wbr>KeysAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/assetmappings3dapi.html" class="tsd-kind-icon">Asset<wbr>Mappings3DAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/assetsapi.html" class="tsd-kind-icon">AssetsAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/basichttpclient.html" class="tsd-kind-icon">Basic<wbr>Http<wbr>Client</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/cdfhttpclient.html" class="tsd-kind-icon">CDFHttp<wbr>Client</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/cogniteclient.html" class="tsd-kind-icon">Cognite<wbr>Client</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/cogniteclientbeta.html" class="tsd-kind-icon">Cognite<wbr>Client<wbr>Beta</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/cogniteerror.html" class="tsd-kind-icon">Cognite<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/cogniteloginerror.html" class="tsd-kind-icon">Cognite<wbr>Login<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-external">
-						<a href="classes/cognitemultierror.html" class="tsd-kind-icon">Cognite<wbr>Multi<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/datapointsapi.html" class="tsd-kind-icon">Data<wbr>PointsAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/datasetsapi.html" class="tsd-kind-icon">Data<wbr>Sets<wbr>Api</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/dateparser.html" class="tsd-kind-icon">Date<wbr>Parser</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/eventsapi.html" class="tsd-kind-icon">EventsAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/eventsaggregateapi.html" class="tsd-kind-icon">Events<wbr>AggregateAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/files3dapi.html" class="tsd-kind-icon">Files3DAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/filesapi.html" class="tsd-kind-icon">FilesAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/groupsapi.html" class="tsd-kind-icon">GroupsAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/httperror.html" class="tsd-kind-icon">Http<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/labelsapi.html" class="tsd-kind-icon">LabelsAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/loginapi.html" class="tsd-kind-icon">LoginAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/logoutapi.html" class="tsd-kind-icon">Logout<wbr>Api</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/models3dapi.html" class="tsd-kind-icon">Models3DAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/nodes3dapi.html" class="tsd-kind-icon">Nodes3DAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/projectsapi.html" class="tsd-kind-icon">ProjectsAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/rawapi.html" class="tsd-kind-icon">RawAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/rawrowsapi.html" class="tsd-kind-icon">Raw<wbr>RowsAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/rawtablesapi.html" class="tsd-kind-icon">Raw<wbr>TablesAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/retryablehttpclient.html" class="tsd-kind-icon">Retryable<wbr>Http<wbr>Client</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/revealnodes3dapi.html" class="tsd-kind-icon">Reveal<wbr>Nodes3DAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/revealrevisions3dapi.html" class="tsd-kind-icon">Reveal<wbr>Revisions3DAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/revealsectors3dapi.html" class="tsd-kind-icon">Reveal<wbr>Sectors3DAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-external">
-						<a href="classes/revertablearraysorter.html" class="tsd-kind-icon">Revertable<wbr>Array<wbr>Sorter</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/revisions3dapi.html" class="tsd-kind-icon">Revisions3DAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/securitycategoriesapi.html" class="tsd-kind-icon">Security<wbr>CategoriesAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/sequencerow.html" class="tsd-kind-icon">Sequence<wbr>Row</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/sequencerowsapi.html" class="tsd-kind-icon">Sequence<wbr>RowsAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/sequencesapi.html" class="tsd-kind-icon">SequencesAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/serviceaccountsapi.html" class="tsd-kind-icon">Service<wbr>AccountsAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/synthetictimeseriesapi.html" class="tsd-kind-icon">Synthetic<wbr>Time<wbr>SeriesAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/timeseriesapi.html" class="tsd-kind-icon">Time<wbr>SeriesAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/unrealrevisions3dapi.html" class="tsd-kind-icon">Unreal<wbr>Revisions3DAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/viewer3dapi.html" class="tsd-kind-icon">Viewer3DAPI</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
-						<a href="interfaces/acl.html" class="tsd-kind-icon">Acl</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/aclscopeall.html" class="tsd-kind-icon">Acl<wbr>Scope<wbr>All</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/aclscopeassetsid.html" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Assets<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/aclscopecurrentuser.html" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Current<wbr>User</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/aclscopedatasetsids.html" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Datasets<wbr>Ids</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/aclscopetimeseriesassetrootids.html" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Time<wbr>Series<wbr>Asset<wbr>Root<wbr>Ids</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/aggregateresponse.html" class="tsd-kind-icon">Aggregate<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/apikeylistscope.html" class="tsd-kind-icon">Api<wbr>Key<wbr>List<wbr>Scope</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/apikeyloginoptions.html" class="tsd-kind-icon">Api<wbr>Key<wbr>Login<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/apikeyobject.html" class="tsd-kind-icon">Api<wbr>Key<wbr>Object</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/apikeyrequest.html" class="tsd-kind-icon">Api<wbr>Key<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/asset.html" class="tsd-kind-icon">Asset</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetaggregatequery.html" class="tsd-kind-icon">Asset<wbr>Aggregate<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetaggregateresult.html" class="tsd-kind-icon">Asset<wbr>Aggregate<wbr>Result</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetchangebyexternalid.html" class="tsd-kind-icon">Asset<wbr>Change<wbr>ByExternal<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetchangebyid.html" class="tsd-kind-icon">Asset<wbr>Change<wbr>ById</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetdeleteparams.html" class="tsd-kind-icon">Asset<wbr>Delete<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetfilter.html" class="tsd-kind-icon">Asset<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetfilterprops.html" class="tsd-kind-icon">Asset<wbr>Filter<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetlistscope.html" class="tsd-kind-icon">Asset<wbr>List<wbr>Scope</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetmapping3d.html" class="tsd-kind-icon">Asset<wbr>Mapping3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetmapping3dbase.html" class="tsd-kind-icon">Asset<wbr>Mapping3DBase</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetmappings3dlistfilter.html" class="tsd-kind-icon">Asset<wbr>Mappings3DList<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetpatch.html" class="tsd-kind-icon">Asset<wbr>Patch</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetretrieveparams.html" class="tsd-kind-icon">Asset<wbr>Retrieve<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/assetsearchfilter.html" class="tsd-kind-icon">Asset<wbr>Search<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/authorizeoptions.html" class="tsd-kind-icon">Authorize<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/autopagingtoarrayoptions.html" class="tsd-kind-icon">Auto<wbr>Paging<wbr>ToArray<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/azureadconfiguration.html" class="tsd-kind-icon">AzureADConfiguration</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/boundingbox3d.html" class="tsd-kind-icon">Bounding<wbr>Box3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/clientoptions.html" class="tsd-kind-icon">Client<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
-						<a href="interfaces/cogniteasynciterator.html" class="tsd-kind-icon">Cognite<wbr>Async<wbr>Iterator</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/cogniteevent.html" class="tsd-kind-icon">Cognite<wbr>Event</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/createauthfunctionoptions.html" class="tsd-kind-icon">Create<wbr>Auth<wbr>Function<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/createmodel3d.html" class="tsd-kind-icon">Create<wbr>Model3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/createrevision3d.html" class="tsd-kind-icon">Create<wbr>Revision3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/createdandlastupdatedtime.html" class="tsd-kind-icon">Created<wbr>And<wbr>Last<wbr>Updated<wbr>Time</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/createdandlastupdatedtimefilter.html" class="tsd-kind-icon">Created<wbr>And<wbr>Last<wbr>Updated<wbr>Time<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/cursor.html" class="tsd-kind-icon">Cursor</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
-						<a href="interfaces/cursorresponse.html" class="tsd-kind-icon">Cursor<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/dataids.html" class="tsd-kind-icon">Data<wbr>Ids</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/dataset.html" class="tsd-kind-icon">Data<wbr>Set</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datasetaggregate.html" class="tsd-kind-icon">Data<wbr>Set<wbr>Aggregate</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datasetaggregatequery.html" class="tsd-kind-icon">Data<wbr>Set<wbr>Aggregate<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datasetchangebyexternalid.html" class="tsd-kind-icon">Data<wbr>Set<wbr>Change<wbr>ByExternal<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datasetchangebyid.html" class="tsd-kind-icon">Data<wbr>Set<wbr>Change<wbr>ById</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datasetfilter.html" class="tsd-kind-icon">Data<wbr>Set<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datasetfilterrequest.html" class="tsd-kind-icon">Data<wbr>Set<wbr>Filter<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datasetpatch.html" class="tsd-kind-icon">Data<wbr>Set<wbr>Patch</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datapointaggregate.html" class="tsd-kind-icon">Datapoint<wbr>Aggregate</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datapointaggregates.html" class="tsd-kind-icon">Datapoint<wbr>Aggregates</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datapointinfo.html" class="tsd-kind-icon">Datapoint<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datapointsdeleterange.html" class="tsd-kind-icon">Datapoints<wbr>Delete<wbr>Range</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datapointsmetadata.html" class="tsd-kind-icon">Datapoints<wbr>Metadata</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datapointsmultiquery.html" class="tsd-kind-icon">Datapoints<wbr>Multi<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datapointsmultiquerybase.html" class="tsd-kind-icon">Datapoints<wbr>Multi<wbr>Query<wbr>Base</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datapointsqueryexternalid.html" class="tsd-kind-icon">Datapoints<wbr>Query<wbr>External<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datapointsqueryid.html" class="tsd-kind-icon">Datapoints<wbr>Query<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/datapointsqueryproperties.html" class="tsd-kind-icon">Datapoints<wbr>Query<wbr>Properties</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/doubledatapoint.html" class="tsd-kind-icon">Double<wbr>Datapoint</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/doubledatapoints.html" class="tsd-kind-icon">Double<wbr>Datapoints</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/eventaggregatequery.html" class="tsd-kind-icon">Event<wbr>Aggregate<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/eventchangebyexternalid.html" class="tsd-kind-icon">Event<wbr>Change<wbr>ByExternal<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/eventchangebyid.html" class="tsd-kind-icon">Event<wbr>Change<wbr>ById</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/eventfilter.html" class="tsd-kind-icon">Event<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/eventfilterrequest.html" class="tsd-kind-icon">Event<wbr>Filter<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/eventpatch.html" class="tsd-kind-icon">Event<wbr>Patch</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/eventsearch.html" class="tsd-kind-icon">Event<wbr>Search</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/eventsearchrequest.html" class="tsd-kind-icon">Event<wbr>Search<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/eventsort.html" class="tsd-kind-icon">Event<wbr>Sort</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/eventuniquevaluesaggregate.html" class="tsd-kind-icon">Event<wbr>Unique<wbr>Values<wbr>Aggregate</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externalasset.html" class="tsd-kind-icon">External<wbr>Asset</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externalassetitem.html" class="tsd-kind-icon">External<wbr>Asset<wbr>Item</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externaldataset.html" class="tsd-kind-icon">External<wbr>Data<wbr>Set</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externaldatapoint.html" class="tsd-kind-icon">External<wbr>Datapoint</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externaldatapointexternalid.html" class="tsd-kind-icon">External<wbr>Datapoint<wbr>External<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externaldatapointid.html" class="tsd-kind-icon">External<wbr>Datapoint<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externaldatapoints.html" class="tsd-kind-icon">External<wbr>Datapoints</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externalevent.html" class="tsd-kind-icon">External<wbr>Event</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externalfileinfo.html" class="tsd-kind-icon">External<wbr>File<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externalid.html" class="tsd-kind-icon">External<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externallabeldefinition.html" class="tsd-kind-icon">External<wbr>Label<wbr>Definition</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externalsequence.html" class="tsd-kind-icon">External<wbr>Sequence</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externalsequencecolumn.html" class="tsd-kind-icon">External<wbr>Sequence<wbr>Column</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externalsequencecolumnbase.html" class="tsd-kind-icon">External<wbr>Sequence<wbr>Column<wbr>Base</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/externaltimeseries.html" class="tsd-kind-icon">External<wbr>Timeseries</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/fileaggregatequery.html" class="tsd-kind-icon">File<wbr>Aggregate<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/filechange.html" class="tsd-kind-icon">File<wbr>Change</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/filechangeupdatebyexternalid.html" class="tsd-kind-icon">File<wbr>Change<wbr>Update<wbr>ByExternal<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/filechangeupdatebyid.html" class="tsd-kind-icon">File<wbr>Change<wbr>Update<wbr>ById</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/filefilter.html" class="tsd-kind-icon">File<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/filefilterprops.html" class="tsd-kind-icon">File<wbr>Filter<wbr>Props</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/fileinfo.html" class="tsd-kind-icon">File<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/filelink.html" class="tsd-kind-icon">File<wbr>Link</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/filerequestfilter.html" class="tsd-kind-icon">File<wbr>Request<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/fileuploadresponse.html" class="tsd-kind-icon">File<wbr>Upload<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/filessearchfilter.html" class="tsd-kind-icon">Files<wbr>Search<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/filterquery.html" class="tsd-kind-icon">Filter<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/group.html" class="tsd-kind-icon">Group</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/groupserviceaccount.html" class="tsd-kind-icon">Group<wbr>Service<wbr>Account</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/groupspec.html" class="tsd-kind-icon">Group<wbr>Spec</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/httpheaders.html" class="tsd-kind-icon">Http<wbr>Headers</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/httpqueryparams.html" class="tsd-kind-icon">Http<wbr>Query<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/httprequest.html" class="tsd-kind-icon">Http<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/httprequestoptions.html" class="tsd-kind-icon">Http<wbr>Request<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
-						<a href="interfaces/httpresponse.html" class="tsd-kind-icon">Http<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/idinfo.html" class="tsd-kind-icon">Id<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/ignoreunknownids.html" class="tsd-kind-icon">Ignore<wbr>Unknown<wbr>Ids</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/inputprojectauthentication.html" class="tsd-kind-icon">Input<wbr>Project<wbr>Authentication</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/internalid.html" class="tsd-kind-icon">Internal<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/labelcontainsallfilter.html" class="tsd-kind-icon">Label<wbr>Contains<wbr>All<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/labelcontainsanyfilter.html" class="tsd-kind-icon">Label<wbr>Contains<wbr>Any<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/labeldefinition.html" class="tsd-kind-icon">Label<wbr>Definition</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/labeldefinitionfilter.html" class="tsd-kind-icon">Label<wbr>Definition<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/labeldefinitionfilterrequest.html" class="tsd-kind-icon">Label<wbr>Definition<wbr>Filter<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/labelspatch.html" class="tsd-kind-icon">Labels<wbr>Patch</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/latestdatapropertyfilter.html" class="tsd-kind-icon">Latest<wbr>Data<wbr>Property<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/limit.html" class="tsd-kind-icon">Limit</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/list3dnodesquery.html" class="tsd-kind-icon">List3DNodes<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/listgroups.html" class="tsd-kind-icon">List<wbr>Groups</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/listrawrows.html" class="tsd-kind-icon">List<wbr>Raw<wbr>Rows</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
-						<a href="interfaces/listresponse.html" class="tsd-kind-icon">List<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/listrevealsectors3dquery.html" class="tsd-kind-icon">List<wbr>Reveal<wbr>Sectors3DQuery</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/listsecuritycategories.html" class="tsd-kind-icon">List<wbr>Security<wbr>Categories</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/logouturlresponse.html" class="tsd-kind-icon">Logout<wbr>Url<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/metadata.html" class="tsd-kind-icon">Metadata</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/model3d.html" class="tsd-kind-icon">Model3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/model3dlistrequest.html" class="tsd-kind-icon">Model3DList<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/newapikeyresponse.html" class="tsd-kind-icon">New<wbr>Api<wbr>Key<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
-						<a href="interfaces/node.html" class="tsd-kind-icon">Node</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/node3d.html" class="tsd-kind-icon">Node3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/node3dproperties.html" class="tsd-kind-icon">Node3DProperties</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/oauth2configuration.html" class="tsd-kind-icon">OAuth2<wbr>Configuration</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/oauthloginoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/onauthenticateloginobject.html" class="tsd-kind-icon">On<wbr>Authenticate<wbr>Login<wbr>Object</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/outputprojectauthentication.html" class="tsd-kind-icon">Output<wbr>Project<wbr>Authentication</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
-						<a href="interfaces/postinparallelwithautomaticchunkingparams.html" class="tsd-kind-icon">Post<wbr>InParallel<wbr>With<wbr>Automatic<wbr>Chunking<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/project.html" class="tsd-kind-icon">Project</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/projectresponse.html" class="tsd-kind-icon">Project<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/projectupdate.html" class="tsd-kind-icon">Project<wbr>Update</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
-						<a href="interfaces/range.html" class="tsd-kind-icon">Range</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/rawdb.html" class="tsd-kind-icon">RawDB</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/rawdbrow.html" class="tsd-kind-icon">RawDBRow</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/rawdbrowinsert.html" class="tsd-kind-icon">RawDBRow<wbr>Insert</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/rawdbrowkey.html" class="tsd-kind-icon">RawDBRow<wbr>Key</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/rawdbtable.html" class="tsd-kind-icon">RawDBTable</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/rawdatabasedeleteparams.html" class="tsd-kind-icon">Raw<wbr>Database<wbr>Delete<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/removefield.html" class="tsd-kind-icon">Remove<wbr>Field</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/revealnode3d.html" class="tsd-kind-icon">Reveal<wbr>Node3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/revealrevision3d.html" class="tsd-kind-icon">Reveal<wbr>Revision3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/revealsector3d.html" class="tsd-kind-icon">Reveal<wbr>Sector3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/revision3d.html" class="tsd-kind-icon">Revision3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/revision3dlistrequest.html" class="tsd-kind-icon">Revision3DList<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/revisioncameraproperties.html" class="tsd-kind-icon">Revision<wbr>Camera<wbr>Properties</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/securitycategory.html" class="tsd-kind-icon">Security<wbr>Category</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/securitycategoryspec.html" class="tsd-kind-icon">Security<wbr>Category<wbr>Spec</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequence.html" class="tsd-kind-icon">Sequence</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencebase.html" class="tsd-kind-icon">Sequence<wbr>Base</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencecolumn.html" class="tsd-kind-icon">Sequence<wbr>Column</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencecolumnbasicinfo.html" class="tsd-kind-icon">Sequence<wbr>Column<wbr>Basic<wbr>Info</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencefilter.html" class="tsd-kind-icon">Sequence<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencelistscope.html" class="tsd-kind-icon">Sequence<wbr>List<wbr>Scope</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencepatch.html" class="tsd-kind-icon">Sequence<wbr>Patch</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencerowdata.html" class="tsd-kind-icon">Sequence<wbr>Row<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencerowsdata.html" class="tsd-kind-icon">Sequence<wbr>Rows<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencerowsdeletedata.html" class="tsd-kind-icon">Sequence<wbr>Rows<wbr>Delete<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencerowsinsertdata.html" class="tsd-kind-icon">Sequence<wbr>Rows<wbr>Insert<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencerowsresponsedata.html" class="tsd-kind-icon">Sequence<wbr>Rows<wbr>Response<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencerowsretrivedata.html" class="tsd-kind-icon">Sequence<wbr>Rows<wbr>Retrive<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sequencesearchfilter.html" class="tsd-kind-icon">Sequence<wbr>Search<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/serviceaccount.html" class="tsd-kind-icon">Service<wbr>Account</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/serviceaccountinput.html" class="tsd-kind-icon">Service<wbr>Account<wbr>Input</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
-						<a href="interfaces/setfield.html" class="tsd-kind-icon">Set<wbr>Field</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/singlepatchrequiredstring.html" class="tsd-kind-icon">Single<wbr>Patch<wbr>Required<wbr>String</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/stringdatapoint.html" class="tsd-kind-icon">String<wbr>Datapoint</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/stringdatapoints.html" class="tsd-kind-icon">String<wbr>Datapoints</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/syntheticdataerror.html" class="tsd-kind-icon">Synthetic<wbr>Data<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/syntheticdatavalue.html" class="tsd-kind-icon">Synthetic<wbr>Data<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/syntheticquery.html" class="tsd-kind-icon">Synthetic<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/syntheticqueryresponse.html" class="tsd-kind-icon">Synthetic<wbr>Query<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/timeseriespatch.html" class="tsd-kind-icon">Time<wbr>Series<wbr>Patch</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/timeseriesupdatebyexternalid.html" class="tsd-kind-icon">Time<wbr>Series<wbr>Update<wbr>ByExternal<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/timeseriesupdatebyid.html" class="tsd-kind-icon">Time<wbr>Series<wbr>Update<wbr>ById</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/timeseries.html" class="tsd-kind-icon">Timeseries</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/timeseriesaggregatequery.html" class="tsd-kind-icon">Timeseries<wbr>Aggregate<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/timeseriesfilter.html" class="tsd-kind-icon">Timeseries<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/timeseriesfilterquery.html" class="tsd-kind-icon">Timeseries<wbr>Filter<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/timeseriessearch.html" class="tsd-kind-icon">Timeseries<wbr>Search</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/timeseriessearchfilter.html" class="tsd-kind-icon">Timeseries<wbr>Search<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/uniquevaluesaggregateresponse.html" class="tsd-kind-icon">Unique<wbr>Values<wbr>Aggregate<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/unrealrevision3d.html" class="tsd-kind-icon">Unreal<wbr>Revision3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/updatemodel3d.html" class="tsd-kind-icon">Update<wbr>Model3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/updatemodelnamefield.html" class="tsd-kind-icon">Update<wbr>Model<wbr>Name<wbr>Field</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/updaterevision3d.html" class="tsd-kind-icon">Update<wbr>Revision3D</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/versioned3dfile.html" class="tsd-kind-icon">Versioned3DFile</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#acl3d" class="tsd-kind-icon">Acl3D</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclaction3d" class="tsd-kind-icon">Acl<wbr>Action3D</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactionanalytics" class="tsd-kind-icon">Acl<wbr>Action<wbr>Analytics</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactionapikeys" class="tsd-kind-icon">Acl<wbr>Action<wbr>Api<wbr>Keys</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactionassets" class="tsd-kind-icon">Acl<wbr>Action<wbr>Assets</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactiondatasets" class="tsd-kind-icon">Acl<wbr>Action<wbr>Data<wbr>Sets</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactionevents" class="tsd-kind-icon">Acl<wbr>Action<wbr>Events</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactionfiles" class="tsd-kind-icon">Acl<wbr>Action<wbr>Files</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactiongroups" class="tsd-kind-icon">Acl<wbr>Action<wbr>Groups</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactionprojects" class="tsd-kind-icon">Acl<wbr>Action<wbr>Projects</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactionraw" class="tsd-kind-icon">Acl<wbr>Action<wbr>Raw</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactionsecuritycategories" class="tsd-kind-icon">Acl<wbr>Action<wbr>Security<wbr>Categories</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactionsequences" class="tsd-kind-icon">Acl<wbr>Action<wbr>Sequences</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactiontimeseries" class="tsd-kind-icon">Acl<wbr>Action<wbr>Timeseries</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclactionusers" class="tsd-kind-icon">Acl<wbr>Action<wbr>Users</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclanalytics" class="tsd-kind-icon">Acl<wbr>Analytics</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclapikeys" class="tsd-kind-icon">Acl<wbr>Api<wbr>Keys</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclassets" class="tsd-kind-icon">Acl<wbr>Assets</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#acldatasets" class="tsd-kind-icon">Acl<wbr>Data<wbr>Sets</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclevents" class="tsd-kind-icon">Acl<wbr>Events</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclfiles" class="tsd-kind-icon">Acl<wbr>Files</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclgroups" class="tsd-kind-icon">Acl<wbr>Groups</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclprojects" class="tsd-kind-icon">Acl<wbr>Projects</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclraw" class="tsd-kind-icon">Acl<wbr>Raw</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscope3d" class="tsd-kind-icon">Acl<wbr>Scope3D</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopeanalytics" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Analytics</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopeapikeys" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Api<wbr>Keys</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopeassets" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Assets</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopedatasets" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Datasets</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopeevents" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Events</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopefiles" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Files</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopegroups" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Groups</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopeprojects" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Projects</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscoperaw" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Raw</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopesecuritycategories" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Security<wbr>Categories</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopesequences" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Sequences</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopetimeseries" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Timeseries</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclscopeusers" class="tsd-kind-icon">Acl<wbr>Scope<wbr>Users</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclsecuritycategories" class="tsd-kind-icon">Acl<wbr>Security<wbr>Categories</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclsequences" class="tsd-kind-icon">Acl<wbr>Sequences</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#acltimeseries" class="tsd-kind-icon">Acl<wbr>Timeseries</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aclusers" class="tsd-kind-icon">Acl<wbr>Users</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aggregate" class="tsd-kind-icon">Aggregate</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#applicationdomains" class="tsd-kind-icon">Application<wbr>Domains</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#arraypatchlong" class="tsd-kind-icon">Array<wbr>Patch<wbr>Long</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#assetaggregate" class="tsd-kind-icon">Asset<wbr>Aggregate</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#assetaggregatedproperty" class="tsd-kind-icon">Asset<wbr>Aggregated<wbr>Property</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#assetchange" class="tsd-kind-icon">Asset<wbr>Change</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#assetdescription" class="tsd-kind-icon">Asset<wbr>Description</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#assetexternalid" class="tsd-kind-icon">Asset<wbr>External<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#assetideither" class="tsd-kind-icon">Asset<wbr>IdEither</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#assetinternalid" class="tsd-kind-icon">Asset<wbr>Internal<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#assetname" class="tsd-kind-icon">Asset<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#assetsource" class="tsd-kind-icon">Asset<wbr>Source</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#autopagingeach" class="tsd-kind-icon">Auto<wbr>Paging<wbr>Each</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#autopagingeachhandler" class="tsd-kind-icon">Auto<wbr>Paging<wbr>Each<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#autopagingtoarray" class="tsd-kind-icon">Auto<wbr>Paging<wbr>ToArray</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#baserequestoptions" class="tsd-kind-icon">Base<wbr>Request<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#create" class="tsd-kind-icon">CREATE</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#cognitecapability" class="tsd-kind-icon">Cognite<wbr>Capability</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#cogniteexternalid" class="tsd-kind-icon">Cognite<wbr>External<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#cogniteinternalid" class="tsd-kind-icon">Cognite<wbr>Internal<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#createassetmapping3d" class="tsd-kind-icon">Create<wbr>Asset<wbr>Mapping3D</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#cursorandasynciterator" class="tsd-kind-icon">Cursor<wbr>And<wbr>Async<wbr>Iterator</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#delete" class="tsd-kind-icon">DELETE</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#datasetchange" class="tsd-kind-icon">Data<wbr>Set<wbr>Change</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#datasetwriteprotected" class="tsd-kind-icon">Data<wbr>Set<wbr>Write<wbr>Protected</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#datapoints" class="tsd-kind-icon">Datapoints</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#datapointsdeleterequest" class="tsd-kind-icon">Datapoints<wbr>Delete<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#datapointsquery" class="tsd-kind-icon">Datapoints<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#daterange" class="tsd-kind-icon">Date<wbr>Range</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#defaultgroupid" class="tsd-kind-icon">Default<wbr>Group<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#deleteassetmapping3d" class="tsd-kind-icon">Delete<wbr>Asset<wbr>Mapping3D</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#execute" class="tsd-kind-icon">EXECUTE</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#eventaggregate" class="tsd-kind-icon">Event<wbr>Aggregate</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#eventchange" class="tsd-kind-icon">Event<wbr>Change</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#eventretrieveparams" class="tsd-kind-icon">Event<wbr>Retrieve<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#externaldatapointsquery" class="tsd-kind-icon">External<wbr>Datapoints<wbr>Query</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#externalidprefix" class="tsd-kind-icon">External<wbr>IdPrefix</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#fileaggregate" class="tsd-kind-icon">File<wbr>Aggregate</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#filechangeupdate" class="tsd-kind-icon">File<wbr>Change<wbr>Update</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#filecontent" class="tsd-kind-icon">File<wbr>Content</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#filemimetype" class="tsd-kind-icon">File<wbr>Mime<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#filename" class="tsd-kind-icon">File<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#fileretrieveparams" class="tsd-kind-icon">File<wbr>Retrieve<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#groupname" class="tsd-kind-icon">Group<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#groupsourceid" class="tsd-kind-icon">Group<wbr>Source<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#groups" class="tsd-kind-icon">Groups</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#httpcall" class="tsd-kind-icon">Http<wbr>Call</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#httpresponsetype" class="tsd-kind-icon">Http<wbr>Response<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#ideither" class="tsd-kind-icon">Id<wbr>Either</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#integerrange" class="tsd-kind-icon">Integer<wbr>Range</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#itemsresponse" class="tsd-kind-icon">Items<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#keysoftype" class="tsd-kind-icon">Keys<wbr>OfType</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#list" class="tsd-kind-icon">LIST</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#label" class="tsd-kind-icon">Label</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#labelfilter" class="tsd-kind-icon">Label<wbr>Filter</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#latestdatabeforerequest" class="tsd-kind-icon">Latest<wbr>Data<wbr>Before<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#latestdataparams" class="tsd-kind-icon">Latest<wbr>Data<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#listendpoint" class="tsd-kind-icon">List<wbr>Endpoint</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#listrawdatabases" class="tsd-kind-icon">List<wbr>Raw<wbr>Databases</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#listrawtables" class="tsd-kind-icon">List<wbr>Raw<wbr>Tables</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#listreveal3dnodeancestors" class="tsd-kind-icon">List<wbr>Reveal3DNode<wbr>Ancestors</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#logouturl" class="tsd-kind-icon">Logout<wbr>Url</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#memberof" class="tsd-kind-icon">MEMBEROF</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#noinfer" class="tsd-kind-icon">No<wbr>Infer</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#nullableproperty" class="tsd-kind-icon">Nullable<wbr>Property</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#nullablesinglepatchlong" class="tsd-kind-icon">Nullable<wbr>Single<wbr>Patch<wbr>Long</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#nullablesinglepatchstring" class="tsd-kind-icon">Nullable<wbr>Single<wbr>Patch<wbr>String</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#owner" class="tsd-kind-icon">OWNER</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#objectpatch" class="tsd-kind-icon">Object<wbr>Patch</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#onauthenticate" class="tsd-kind-icon">On<wbr>Authenticate</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#ontokens" class="tsd-kind-icon">On<wbr>Tokens</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#partition" class="tsd-kind-icon">Partition</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#projectname" class="tsd-kind-icon">Project<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#read" class="tsd-kind-icon">READ</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#response" class="tsd-kind-icon">Response</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#response401handler" class="tsd-kind-icon">Response401<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#responsehandler" class="tsd-kind-icon">Response<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#revision3dstatus" class="tsd-kind-icon">Revision3DStatus</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequenceaggregate" class="tsd-kind-icon">Sequence<wbr>Aggregate</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequencechange" class="tsd-kind-icon">Sequence<wbr>Change</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequencecolumndescription" class="tsd-kind-icon">Sequence<wbr>Column<wbr>Description</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequencecolumnname" class="tsd-kind-icon">Sequence<wbr>Column<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequencedescription" class="tsd-kind-icon">Sequence<wbr>Description</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequenceitem" class="tsd-kind-icon">Sequence<wbr>Item</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequencename" class="tsd-kind-icon">Sequence<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequenceretrieveparams" class="tsd-kind-icon">Sequence<wbr>Retrieve<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequencerowsdelete" class="tsd-kind-icon">Sequence<wbr>Rows<wbr>Delete</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequencerowsinsert" class="tsd-kind-icon">Sequence<wbr>Rows<wbr>Insert</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequencerowsretrieve" class="tsd-kind-icon">Sequence<wbr>Rows<wbr>Retrieve</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sequencevaluetype" class="tsd-kind-icon">Sequence<wbr>Value<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#serviceaccountname" class="tsd-kind-icon">Service<wbr>Account<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#singlecognitecapability" class="tsd-kind-icon">Single<wbr>Cognite<wbr>Capability</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#singlepatchdate" class="tsd-kind-icon">Single<wbr>Patch<wbr>Date</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#singlepatchstring" class="tsd-kind-icon">Single<wbr>Patch<wbr>String</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#sortorder" class="tsd-kind-icon">Sort<wbr>Order</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#syntheticdatapoint" class="tsd-kind-icon">Synthetic<wbr>Datapoint</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#timeseriesupdate" class="tsd-kind-icon">Time<wbr>Series<wbr>Update</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#timeseriesaggregate" class="tsd-kind-icon">Timeseries<wbr>Aggregate</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#timeseriesideither" class="tsd-kind-icon">Timeseries<wbr>IdEither</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#timeseriesisstep" class="tsd-kind-icon">Timeseries<wbr>IsStep</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#timeseriesisstring" class="tsd-kind-icon">Timeseries<wbr>IsString</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#timeseriesname" class="tsd-kind-icon">Timeseries<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#timeseriesretrieveparams" class="tsd-kind-icon">Timeseries<wbr>Retrieve<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#timeseriesunit" class="tsd-kind-icon">Timeseries<wbr>Unit</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#timestamp" class="tsd-kind-icon">Timestamp</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#tuple3" class="tsd-kind-icon">Tuple3</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#update" class="tsd-kind-icon">UPDATE</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#urlname" class="tsd-kind-icon">Url<wbr>Name</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#validdomains" class="tsd-kind-icon">Valid<wbr>Domains</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#write" class="tsd-kind-icon">WRITE</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#access_token_param" class="tsd-kind-icon">ACCESS_<wbr>TOKEN_<wbr>PARAM</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#default_max_retry_attempts" class="tsd-kind-icon">DEFAULT_<wbr>MAX_<wbr>RETRY_<wbr>ATTEMPTS</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#error_description_param" class="tsd-kind-icon">ERROR_<wbr>DESCRIPTION_<wbr>PARAM</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#error_param" class="tsd-kind-icon">ERROR_<wbr>PARAM</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#id_token_param" class="tsd-kind-icon">ID_<wbr>TOKEN_<wbr>PARAM</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#login_iframe_name" class="tsd-kind-icon">LOGIN_<wbr>IFRAME_<wbr>NAME</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#login_popup_name" class="tsd-kind-icon">LOGIN_<wbr>POPUP_<wbr>NAME</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#popup" class="tsd-kind-icon">POPUP</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#redirect" class="tsd-kind-icon">REDIRECT</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#apikey" class="tsd-kind-icon">api<wbr>Key</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#mockbaseurl" class="tsd-kind-icon">mock<wbr>Base<wbr>Url</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#project" class="tsd-kind-icon">project</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#projectid" class="tsd-kind-icon">project<wbr>Id</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#retryvalidator" class="tsd-kind-icon">retry<wbr>Validator</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#user" class="tsd-kind-icon">user</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#accessapi" class="tsd-kind-icon">access<wbr>Api</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#clearparametersfromurl" class="tsd-kind-icon">clear<wbr>Parameters<wbr>From<wbr>Url</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#createretryvalidator" class="tsd-kind-icon">create<wbr>Retry<wbr>Validator</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#createuniversalretryvalidator" class="tsd-kind-icon">create<wbr>Universal<wbr>Retry<wbr>Validator</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#extracttokensfromurl" class="tsd-kind-icon">extract<wbr>Tokens<wbr>From<wbr>Url</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#generateloginurl" class="tsd-kind-icon">generate<wbr>Login<wbr>Url</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#getchildrenmap" class="tsd-kind-icon">get<wbr>Children<wbr>Map</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#getsortedpropinarray" class="tsd-kind-icon">get<wbr>Sorted<wbr>Prop<wbr>InArray</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#isauthiframe" class="tsd-kind-icon">is<wbr>AuthIFrame</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#isloginpopupwindow" class="tsd-kind-icon">is<wbr>Login<wbr>Popup<wbr>Window</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#isvalidretrystatuscode" class="tsd-kind-icon">is<wbr>Valid<wbr>Retry<wbr>Status<wbr>Code</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#loginpopuphandler" class="tsd-kind-icon">login<wbr>Popup<wbr>Handler</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#makeautopagingeach" class="tsd-kind-icon">make<wbr>Auto<wbr>Paging<wbr>Each</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#makeautopagingtoarray" class="tsd-kind-icon">make<wbr>Auto<wbr>Paging<wbr>ToArray</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#matchpathwithendpoint" class="tsd-kind-icon">match<wbr>Path<wbr>With<wbr>Endpoint</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#matchpathwithendpoints" class="tsd-kind-icon">match<wbr>Path<wbr>With<wbr>Endpoints</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#onauthenticatewithpopup" class="tsd-kind-icon">on<wbr>Authenticate<wbr>With<wbr>Popup</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#onauthenticatewithredirect" class="tsd-kind-icon">on<wbr>Authenticate<wbr>With<wbr>Redirect</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#parsetokenqueryparameters" class="tsd-kind-icon">parse<wbr>Token<wbr>Query<wbr>Parameters</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#randomint" class="tsd-kind-icon">random<wbr>Int</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
-						<a href="globals.html#retryinseconds" class="tsd-kind-icon">retry<wbr>InSeconds</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#runtestwithretrywhenfailing" class="tsd-kind-icon">run<wbr>Test<wbr>With<wbr>Retry<wbr>When<wbr>Failing</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#serialiseerrors" class="tsd-kind-icon">serialise<wbr>Errors</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#setupclient" class="tsd-kind-icon">setup<wbr>Client</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#setuploggedinclient" class="tsd-kind-icon">setup<wbr>Logged<wbr>InClient</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#setupmockableclient" class="tsd-kind-icon">setup<wbr>Mockable<wbr>Client</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#silentlogin" class="tsd-kind-icon">silent<wbr>Login</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#simplecompare" class="tsd-kind-icon">simple<wbr>Compare</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#string2arraybuffer" class="tsd-kind-icon">string2array<wbr>Buffer</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#throwrelogginerror" class="tsd-kind-icon">throw<wbr>ReLoggin<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
-						<a href="globals.html#endpoints_to_retry" class="tsd-kind-icon">ENDPOINTS_<wbr>TO_<wbr>RETRY</a>
-					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
-						<a href="globals.html#httpresponsetype" class="tsd-kind-icon">Http<wbr>Response<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
-						<a href="globals.html#sequencevaluetype" class="tsd-kind-icon">Sequence<wbr>Value<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
-						<a href="globals.html#sortorder" class="tsd-kind-icon">Sort<wbr>Order</a>
-					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
-						<a href="globals.html#authtokens" class="tsd-kind-icon">auth<wbr>Tokens</a>
-					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
-						<a href="globals.html#loggedinresponse" class="tsd-kind-icon">logged<wbr>InResponse</a>
-					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
-						<a href="globals.html#notloggedinresponse" class="tsd-kind-icon">not<wbr>Logged<wbr>InResponse</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
