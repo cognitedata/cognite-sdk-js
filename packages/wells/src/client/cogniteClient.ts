@@ -3,7 +3,7 @@ import {
   ClientOptions,
   CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
-import { version } from '../package.json';
+import { version } from '../../package.json';
 
 export default class CogniteClient extends CogniteClientStable {
   /**
