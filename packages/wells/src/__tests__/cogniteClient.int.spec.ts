@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../cogniteClient';
+import CogniteClient from '../client/cogniteClient';
 import { setupLoggedInClient } from './testUtils';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
