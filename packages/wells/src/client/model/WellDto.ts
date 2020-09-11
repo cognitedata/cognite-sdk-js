@@ -1,4 +1,4 @@
-import {WellHeadLocationDto} from "./WellHeadLocationDto";
+import { WellHeadLocationDto } from './WellHeadLocationDto';
 
 /**
  * A well is an assets and sets the basis of the well data model hierarchy
@@ -21,5 +21,5 @@ export interface WellDto {
    * @type {{ [key: string]: string; }}
    * @memberof WellDto
    */
-  metadata?: { [key: string]: string; };
+  metadata?: { [key: string]: string };
 }
