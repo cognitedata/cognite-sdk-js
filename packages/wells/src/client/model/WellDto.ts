@@ -1,4 +1,4 @@
-import {WellHeadLocationDto} from "./wellHeadLocation-dto";
+import {WellHeadLocationDto} from "./WellHeadLocationDto";
 
 /**
  * A well is an assets and sets the basis of the well data model hierarchy.
