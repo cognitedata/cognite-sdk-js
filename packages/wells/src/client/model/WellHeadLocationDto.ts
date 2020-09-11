@@ -8,15 +8,15 @@ export interface WellHeadLocationDto {
    * @type number
    * @memberOf WellHeadLocationDto
    */
-  x: number,
+  x: number;
   /**
    * @type number
    * @memberOf WellHeadLocationDto
    */
-  y: number,
+  y: number;
   /**
    * @type string
    * @memberOf WellHeadLocationDto
    */
-  crs: string
+  crs: string;
 }
