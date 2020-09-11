@@ -1,13 +1,13 @@
 import {WellHeadLocationDto} from "./WellHeadLocationDto";
 
 /**
- * A well is an assets and sets the basis of the well data model hierarchy.
+ * A well is an assets and sets the basis of the well data model hierarchy
  * @export
  * @interface WellDto
  */
 export interface WellDto {
   /**
-   * @type {string}
+   * @type {string}git
    * @memberof WellDto
    */
   name: string;
