@@ -7,7 +7,7 @@ import { WellHeadLocationDto } from './WellHeadLocationDto';
  */
 export interface WellDto {
   /**
-   * @type {string}git
+   * @type {string}
    * @memberof WellDto
    */
   name: string;
@@ -16,6 +16,21 @@ export interface WellDto {
    * @memberOf WellDto
    */
   wellHeadLocation: WellHeadLocationDto;
+  /**
+   * @type {string}
+   * @memberof WellDto
+   */
+  datum?: string;
+  /**
+   * @type {string}
+   * @memberof WellDto
+   */
+  country?: string;
+  /**
+   * @type {string}
+   * @memberof WellDto
+   */
+  platform?: string;
   /**
    * Custom, application specific metadata. String key -> String value.
    * @type {{ [key: string]: string; }}
