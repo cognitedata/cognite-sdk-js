@@ -1,29 +1,28 @@
-import {Asset, AssetsAPI, IdEither} from '@cognite/sdk';
-import {WellDto} from "../model/WellDto";
-import {WellHeadLocationDto} from "../model/WellHeadLocationDto";
+import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
+import { WellDto } from '../model/WellDto';
+import { WellHeadLocationDto } from '../model/WellHeadLocationDto';
 
 // types
 //type SearchBy = 'name' | 'query';
 
 export class Wells extends AssetsAPI {
-
-
   static mapToWellHeadLocation = (
     asset: Asset
   ): Promise<WellHeadLocationDto> => {
     // @ts-ignore
-    return <WellHeadLocationDto> {crs: asset.metadata['crs'], x: asset.metadata['x'], y: asset.metadata['y']
-    }
+    return <WellHeadLocationDto>{
+      crs: asset.metadata['crs'],
+      x: asset.metadata['x'],
+      y: asset.metadata['y'],
+    };
   };
 
-  static mapToWell = (
-    assets: Asset[]
-  ): WellDto[] => {
+  static mapToWell = (assets: Asset[]): WellDto[] => {
     return assets.map(asset => {
-      return <WellDto><unknown>{
+      return <WellDto>(<unknown>{
         name: asset.name,
-        wellHeadLocation: Wells.mapToWellHeadLocation(asset)
-      }
+        wellHeadLocation: Wells.mapToWellHeadLocation(asset),
+      });
     });
   };
 
@@ -49,7 +48,7 @@ export class Wells extends AssetsAPI {
         ...exactSearch,
       },
       search: {
-        ...fuzzySearch
+        ...fuzzySearch,
       },
     };
     return await this.search(body);
@@ -64,10 +63,8 @@ export class Wells extends AssetsAPI {
    *
    * @param wellName
    */
-  public getWellByName = async (
-    wellName: string
-  ): Promise<WellDto[]> => {
-    var exactSearch = {name: wellName}
+  public getWellByName = async (wellName: string): Promise<WellDto[]> => {
+    const exactSearch = { name: wellName };
     return Wells.mapToWell(await this.searchForWell(exactSearch));
   };
 
@@ -80,10 +77,8 @@ export class Wells extends AssetsAPI {
    *
    * @param ids contains unions of internal ids and external ids
    */
-  public getWellsByIds = async (
-    ids: IdEither[]
-  ): Promise<WellDto[]> => {
-    return Wells.mapToWell(await this.retrieve(ids))
+  public getWellsByIds = async (ids: IdEither[]): Promise<WellDto[]> => {
+    return Wells.mapToWell(await this.retrieve(ids));
   };
 
   /**
@@ -95,9 +90,7 @@ export class Wells extends AssetsAPI {
    *
    * @param id specific internal id for a particular well
    */
-  public getWellById = async (
-    id: number
-  ): Promise<WellDto[]> => {
-    return await this.getWellsByIds([{id: id}])
+  public getWellById = async (id: number): Promise<WellDto[]> => {
+    return await this.getWellsByIds([{ id: id }]);
   };
 }
