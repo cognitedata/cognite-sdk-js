@@ -19,6 +19,13 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   test('get well by asset name', async () => {
     const response = await client.wells.getWellByName('Well A');
     console.log(response);
-    //expect(response.length).toBe(1);
+    expect(response.length).toBe(1);
+  });
+
+  // test that the client behaves as stable
+  test('get well by asset id', async () => {
+    const response = await client.wells.getWellById(2278618537691581);
+    console.log(response);
+    expect(response.length).toBe(1);
   });
 });
