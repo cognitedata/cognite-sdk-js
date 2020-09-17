@@ -9,6 +9,7 @@ import {
   sleepPromise,
   promiseEachInSequence,
   promiseAllAtOnce,
+  isJson
 } from '../utils';
 
 describe('utils', () => {
@@ -145,4 +146,8 @@ describe('utils', () => {
   test('isUsingSSL', () => {
     expect(isUsingSSL()).toBeTruthy();
   });
+
+  test('should isJson returns false in case of ArrayBuffer', () => {
+    expect(isJson(new ArrayBuffer(16))).toBeFalsy();
+  })
 });
