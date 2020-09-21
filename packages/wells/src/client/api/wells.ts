@@ -6,6 +6,7 @@ import { WellHeadLocation } from '../model/WellHeadLocation';
 //type SearchBy = 'name' | 'query';
 
 export class Wells extends AssetsAPI {
+
   static mapToWellHeadLocation = (asset: Asset): WellHeadLocation => {
     // @ts-ignore
     return <WellHeadLocation>{
