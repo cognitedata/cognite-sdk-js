@@ -2,7 +2,6 @@
 
 import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
-import { isBuffer } from 'util';
 import { API_VERSION, BASE_URL } from './constants';
 import { CogniteError } from './error';
 import { CogniteMultiError } from './multiError';
@@ -51,7 +50,8 @@ export function convertToTimestampToDateTime(timestamp: number): Date {
 export function isJson(data: any) {
   return (
     (isArray(data) || isObject(data)) &&
-    !isBuffer(data) &&
+    !Buffer.isBuffer(data) &&
+    !(data instanceof ArrayBuffer) &&
     !(data instanceof Date)
   );
 }
