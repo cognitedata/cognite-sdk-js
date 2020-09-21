@@ -1,12 +1,19 @@
 import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
 import { Well } from '../model/Well';
 import { WellHeadLocation } from '../model/WellHeadLocation';
-
-// types
-//type SearchBy = 'name' | 'query';
+import { geospatialClient, SpatialRelationshipNameDTO } from './utils';
 
 export class Wells extends AssetsAPI {
 
+  /**
+   * converts asset metadata into a wellheadlocation
+   *
+   * ```js
+   * var wells: WellHeadLocation = Wells.mapToWellHeadLocation(asset);
+   * ```
+   *
+   * @param asset
+   */
   static mapToWellHeadLocation = (asset: Asset): WellHeadLocation => {
     // @ts-ignore
     return <WellHeadLocation>{
@@ -19,6 +26,13 @@ export class Wells extends AssetsAPI {
     };
   };
 
+  /**
+   * converts an asset array into a well array
+   * ```js
+   * var wells: Well[] = Wells.mapToWell(asset);
+   * ```
+   * @param assets
+   */
   static mapToWell = (assets: Asset[]): Well[] => {
     return assets.map(asset => {
       return <Well>(<unknown>{
@@ -63,7 +77,7 @@ export class Wells extends AssetsAPI {
    * const created = await client.wells.getWellByName('name');
    * ```
    *
-   * @param wellName
+   * @param wellName the full name of the well
    */
   public getWellByName = async (wellName: string): Promise<Well[]> => {
     const exactSearch = { name: wellName };
@@ -77,7 +91,7 @@ export class Wells extends AssetsAPI {
    * const created = await client.wells.getWellsByNamePrefix(namePrefix: 'somePrefix');
    * ```
    *
-   * @param namePrefix
+   * @param namePrefix specify a prefix that the wellname should contain
    */
   public getWellsByNamePrefix = async (namePrefix: string): Promise<Well[]> => {
     const fuzzySearch = { name: namePrefix };
@@ -116,8 +130,50 @@ export class Wells extends AssetsAPI {
   };
 
   /**
-   * PS!! This method will be replaced by the Geospatial SDK once
-   * that is integrated into the
+   * Receives a geoJson polygon like in Discover and return a list of well objects
    *
+   * ```js
+   * const created = await client.wells.getWellsByPolygon(....);
+   * ```
+   *
+   * @param polygon lat and lon that make up a polygon
+   * @param source the source of spatial objects
+   * @param crs coordinate reference system of the spatial objects
+   * @param layerName the layer to which objects belong
+   * @param limit max number of objects to be returned
+   * @param offset the starting offset of objects in the results
    */
+  public getWellsByPolygon = async (
+    polygon: string,
+    source: string,
+    crs: string,
+    layerName: string,
+    limit?: number,
+    offset?: number
+  ): Promise<Well[]> => {
+    const geometryBody = {
+      wkt: polygon,
+      crs: crs,
+    };
+
+    const geometryRelBody = {
+      geometry: geometryBody,
+      relation: SpatialRelationshipNameDTO.Within,
+    };
+
+    const points = await geospatialClient.findSpatial({
+      layer: layerName,
+      source: source,
+      geometry_rel: geometryRelBody,
+      limit: limit,
+      offset: offset,
+    });
+
+    const assetIds: IdEither[] = points.map(x => {
+      // @ts-ignore
+      return { id: x.assetIds[0] };
+    });
+
+    return await this.getWellsByIds(assetIds);
+  };
 }
