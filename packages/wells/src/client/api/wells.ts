@@ -4,7 +4,6 @@ import { WellHeadLocation } from '../model/WellHeadLocation';
 import { geospatialClient, SpatialRelationshipNameDTO } from './utils';
 
 export class Wells extends AssetsAPI {
-
   /**
    * converts asset metadata into a wellheadlocation
    *
