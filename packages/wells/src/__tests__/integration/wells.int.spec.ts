@@ -15,17 +15,32 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     client = setupLoggedInClient();
   });
 
-  // test that the client behaves as stable
   test('get well by asset name', async () => {
     const response = await client.wells.getWellByName('Well A');
     console.log(response);
     expect(response.length).toBe(1);
   });
 
-  // test that the client behaves as stable
-  test('get well by asset id', async () => {
-    const response = await client.wells.getWellById(2278618537691581);
+  test('get well by asset name prefix', async () => {
+    const response = await client.wells.getWellsByNamePrefix('Well');
     console.log(response);
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well')).toBe(true);
+    });
+    expect(response.length).toBe(2);
+  });
+
+  test('get empty wells array with name suffix', async () => {
+    const response = await client.wells.getWellsByNamePrefix('A');
+    console.log(response);
+    expect(response.length).toBe(0);
+  });
+
+  test('get well by asset id', async () => {
+    const id = 2278618537691581;
+    const response = await client.wells.getWellById(id);
+    console.log(response);
+    expect(response[0]);
     expect(response.length).toBe(1);
   });
 });
