@@ -17,13 +17,13 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('get well by asset name', async () => {
     const response = await client.wells.getWellByName('Well A');
-    console.log(response);
+
     expect(response.length).toBe(1);
   });
 
   test('get well by asset name prefix', async () => {
     const response = await client.wells.getWellsByNamePrefix('Well');
-    console.log(response);
+
     response.forEach(function(well) {
       expect(well.name.startsWith('Well')).toBe(true);
     });
@@ -32,15 +32,31 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('get empty wells array with name suffix', async () => {
     const response = await client.wells.getWellsByNamePrefix('A');
-    console.log(response);
+
     expect(response.length).toBe(0);
   });
 
   test('get well by asset id', async () => {
     const id = 2278618537691581;
     const response = await client.wells.getWellById(id);
-    console.log(response);
+
     expect(response[0]);
     expect(response.length).toBe(1);
+  });
+
+  test('get well by polygon', async () => {
+    const response = await client.wells.getWellsByPolygon(
+      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))',
+      'wellmodel',
+      'epsg:4326',
+      'point',
+      1000,
+      0
+    );
+
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well')).toBe(true);
+    });
+    expect(response.length).toBe(2);
   });
 });
