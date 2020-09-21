@@ -6,6 +6,7 @@ import {
 import { version } from '../../package.json';
 import { Wells } from './api/wells';
 import { accessApi } from '@cognite/sdk-core';
+//import { CogniteGeospatialClient } from '../geospatial';
 
 export default class CogniteClient extends CogniteClientStable {
   /**

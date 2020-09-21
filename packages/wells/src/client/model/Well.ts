@@ -5,7 +5,7 @@ import { WellHeadLocation } from './WellHeadLocation';
  * @export
  * @interface Well
  */
-export interface WellDto {
+export interface Well {
   /**
    * @type {string}
    * @memberof WellDto
@@ -18,23 +18,23 @@ export interface WellDto {
   wellHeadLocation: WellHeadLocation;
   /**
    * @type {string}
-   * @memberof WellDto
+   * @memberof Well
    */
   datum?: string;
   /**
    * @type {string}
-   * @memberof WellDto
+   * @memberof Well
    */
   country?: string;
   /**
    * @type {string}
-   * @memberof WellDto
+   * @memberof Well
    */
   platform?: string;
   /**
    * Custom, application specific metadata. String key -> String value.
    * @type {{ [key: string]: string; }}
-   * @memberof WellDto
+   * @memberof Well
    */
   metadata?: { [key: string]: string };
 }

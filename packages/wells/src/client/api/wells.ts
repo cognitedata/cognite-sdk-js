@@ -1,25 +1,26 @@
 import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
-import { WellDto } from '../model/WellDto';
-import { WellHeadLocationDto } from '../model/WellHeadLocationDto';
+import { Well } from '../model/Well';
+import { WellHeadLocation } from '../model/WellHeadLocation';
 
 // types
 //type SearchBy = 'name' | 'query';
 
 export class Wells extends AssetsAPI {
-  static mapToWellHeadLocation = (
-    asset: Asset
-  ): Promise<WellHeadLocationDto> => {
+  static mapToWellHeadLocation = (asset: Asset): WellHeadLocation => {
     // @ts-ignore
-    return <WellHeadLocationDto>{
+    return <WellHeadLocation>{
+      // @ts-ignore
       crs: asset.metadata['crs'],
+      // @ts-ignore
       x: asset.metadata['x'],
+      // @ts-ignore
       y: asset.metadata['y'],
     };
   };
 
-  static mapToWell = (assets: Asset[]): WellDto[] => {
+  static mapToWell = (assets: Asset[]): Well[] => {
     return assets.map(asset => {
-      return <WellDto>(<unknown>{
+      return <Well>(<unknown>{
         name: asset.name,
         wellHeadLocation: Wells.mapToWellHeadLocation(asset),
       });
@@ -63,9 +64,28 @@ export class Wells extends AssetsAPI {
    *
    * @param wellName
    */
-  public getWellByName = async (wellName: string): Promise<WellDto[]> => {
+  public getWellByName = async (wellName: string): Promise<Well[]> => {
     const exactSearch = { name: wellName };
     return Wells.mapToWell(await this.searchForWell(exactSearch));
+  };
+
+  /**
+   * Get a list of wells that contains the specified search prefix in the name
+   *
+   * ```js
+   * const created = await client.wells.getWellsByNamePrefix(namePrefix: 'somePrefix');
+   * ```
+   *
+   * @param namePrefix
+   */
+  public getWellsByNamePrefix = async (namePrefix: string): Promise<Well[]> => {
+    const fuzzySearch = { name: namePrefix };
+    const fuzzyResults = Wells.mapToWell(
+      await this.searchForWell({}, fuzzySearch)
+    );
+    return fuzzyResults.filter(function(well) {
+      return well.name.startsWith(namePrefix);
+    });
   };
 
   /**
@@ -77,7 +97,7 @@ export class Wells extends AssetsAPI {
    *
    * @param ids contains unions of internal ids and external ids
    */
-  public getWellsByIds = async (ids: IdEither[]): Promise<WellDto[]> => {
+  public getWellsByIds = async (ids: IdEither[]): Promise<Well[]> => {
     return Wells.mapToWell(await this.retrieve(ids));
   };
 
@@ -90,7 +110,13 @@ export class Wells extends AssetsAPI {
    *
    * @param id specific internal id for a particular well
    */
-  public getWellById = async (id: number): Promise<WellDto[]> => {
+  public getWellById = async (id: number): Promise<Well[]> => {
     return await this.getWellsByIds([{ id: id }]);
   };
+
+  /**
+   * PS!! This method will be replaced by the Geospatial SDK once
+   * that is integrated into the
+   *
+   */
 }
