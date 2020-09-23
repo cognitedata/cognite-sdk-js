@@ -35,6 +35,7 @@ export class Wells extends AssetsAPI {
   static mapToWell = (assets: Asset[]): Well[] => {
     return assets.map(asset => {
       return <Well>(<unknown>{
+        id: asset.id,
         name: asset.name,
         wellHeadLocation: Wells.mapToWellHeadLocation(asset),
       });
@@ -147,8 +148,8 @@ export class Wells extends AssetsAPI {
     source: string,
     crs: string,
     layerName: string,
-    limit?: number,
-    offset?: number
+    limit: number = 1,
+    offset: number = 0
   ): Promise<Well[]> => {
     const geometryBody = {
       wkt: polygon,
@@ -160,14 +161,20 @@ export class Wells extends AssetsAPI {
       relation: SpatialRelationshipNameDTO.Within,
     };
 
-    const points = await geospatialClient.findSpatial({
-      layer: layerName,
-      source: source,
-      geometry_rel: geometryRelBody,
-      limit: limit,
-      offset: offset,
-    });
-
+    let points: any[] = [];
+    let i = 0;
+    do {
+      var page = await geospatialClient.findSpatial({
+        layer: layerName,
+        source: source,
+        geometry_rel: geometryRelBody,
+        limit: limit,
+        offset: offset,
+      });
+      points.push.apply(points, page)
+      i++
+      offset = i * limit
+    } while(page.length == limit) // if limit reached, use pagination
     const assetIds: IdEither[] = points.map(x => {
       // @ts-ignore
       return { id: x.assetIds[0] };

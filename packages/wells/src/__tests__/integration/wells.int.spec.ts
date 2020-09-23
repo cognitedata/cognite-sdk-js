@@ -50,7 +50,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       'wellmodel',
       'epsg:4326',
       'point',
-      1000,
+      1,
       0
     );
 

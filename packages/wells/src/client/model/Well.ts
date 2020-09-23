@@ -7,8 +7,13 @@ import { WellHeadLocation } from './WellHeadLocation';
  */
 export interface Well {
   /**
+   * @type {number}
+   * @memberof Well
+   */
+  id: number;
+  /**
    * @type {string}
-   * @memberof WellDto
+   * @memberof Well
    */
   name: string;
   /**
