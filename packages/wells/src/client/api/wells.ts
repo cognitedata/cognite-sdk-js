@@ -148,7 +148,7 @@ export class Wells extends AssetsAPI {
     source: string,
     crs: string,
     layerName: string,
-    limit: number = 1,
+    limit: number = 1000,
     offset: number = 0
   ): Promise<Well[]> => {
     const geometryBody = {
