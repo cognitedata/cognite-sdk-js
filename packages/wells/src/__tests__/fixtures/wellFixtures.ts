@@ -11,7 +11,7 @@ export const mockedWellResultFixture = [
       type: 'Well',
       crs: 'EPSG:23031',
       x: '1012867.51',
-      y: '6116835.33'
+      y: '6116835.33',
     },
     id: 7591554097499339,
     createdTime: new Date(1574266721666),

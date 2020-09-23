@@ -161,9 +161,10 @@ export class Wells extends AssetsAPI {
       relation: SpatialRelationshipNameDTO.Within,
     };
 
-    let points: any[] = [];
+    const points: any[] = [];
     let i = 0;
     do {
+      /*eslint-disable */
       var page = await geospatialClient.findSpatial({
         layer: layerName,
         source: source,
@@ -171,10 +172,11 @@ export class Wells extends AssetsAPI {
         limit: limit,
         offset: offset,
       });
-      points.push.apply(points, page)
-      i++
-      offset = i * limit
-    } while(page.length == limit) // if limit reached, use pagination
+      points.push.apply(points, page);
+      /*eslint-enable */
+      i++;
+      offset = i * limit;
+    } while (page.length == limit); // if limit reached, use pagination
     const assetIds: IdEither[] = points.map(x => {
       // @ts-ignore
       return { id: x.assetIds[0] };
