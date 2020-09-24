@@ -19,8 +19,8 @@ describe('relationships integration test', () => {
     sourceType: 'asset' as const,
     targetExternalId: eventName,
     targetType: 'event' as const,
-    start,
-    end,
+    startTime: start,
+    endTime: end,
   };
 
   let client: CogniteClient;
