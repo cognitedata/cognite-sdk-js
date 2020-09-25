@@ -7,7 +7,7 @@ yarn build
 
 if [ "$TRAVIS_EVENT_TYPE" = pull_request ]; then
   sudo apt-get install jq
-  PR_TITLE=$(curl https://api.github.com/repos/${TRAVIS_REPO_SLUG}/pulls/${TRAVIS_PULL_REQUEST} | jq ".title")
+  PR_TITLE=$(curl https://api.github.com/repos/${TRAVIS_REPO_SLUG}/pulls/${TRAVIS_PULL_REQUEST} | jq -r ".title")
   echo $PR_TITLE | commitlint
 fi
 
