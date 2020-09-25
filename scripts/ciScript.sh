@@ -5,7 +5,7 @@ set -ex
 yarn --frozen-lockfile
 yarn build
 
-if [ "$TRAVIS_EVENT_TYPE" = pull_reqest ]; then
+if [ "$TRAVIS_EVENT_TYPE" = pull_request ]; then
   PR_TITLE=$(curl https://github.com/${TRAVIS_REPO_SLUG}/pull/${TRAVIS_PULL_REQUEST} 2> /dev/null | grep "title" | head -1)
   echo $PR_TITLE | commitlint
 fi
