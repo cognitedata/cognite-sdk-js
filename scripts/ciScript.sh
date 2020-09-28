@@ -11,7 +11,6 @@ if [ "$TRAVIS_EVENT_TYPE" = pull_request ]; then
                   -H "application/vnd.github.v3+json" \
                   https://api.github.com/repos/${TRAVIS_REPO_SLUG}/pulls/${TRAVIS_PULL_REQUEST} | jq -r ".title")
   echo $PR_TITLE | commitlint
-  fi
 fi
 
 if [ "$ONLY_TEST" = true ]; then
