@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@1.0.2...@cognite/sdk-beta@1.1.0) (2020-09-28)
+
+
+### Features
+
+* add relationships resource api ([#423](https://github.com/cognitedata/cognite-sdk-js/issues/423)) ([f51e21c](https://github.com/cognitedata/cognite-sdk-js/commit/f51e21c18b943e408d284f9467a2296dcba8061a))
+
+
+
+
+
 ## [1.0.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@1.0.1...@cognite/sdk-beta@1.0.2) (2020-09-17)
 
 **Note:** Version bump only for package @cognite/sdk-beta
