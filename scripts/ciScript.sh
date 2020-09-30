@@ -6,6 +6,7 @@ yarn --frozen-lockfile
 yarn build
 
 if [ "$TRAVIS_EVENT_TYPE" = pull_request ]; then
+echo "Make sure PR title has a valid format"
   sudo apt-get install jq
   PR_TITLE=$(curl -H "Authorization: Bearer $GITHUB_TOKEN" \
                   -H "application/vnd.github.v3+json" \
