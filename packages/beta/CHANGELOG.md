@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@1.1.0...@cognite/sdk-beta@1.1.1) (2020-10-07)
+
+
+### Bug Fixes
+
+* beta re-export bug ([#432](https://github.com/cognitedata/cognite-sdk-js/issues/432)) ([9dbec81](https://github.com/cognitedata/cognite-sdk-js/commit/9dbec813197e450c9655d2e6df36e3b4d0cf39b2))
+
+
+
+
+
 # [1.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@1.0.2...@cognite/sdk-beta@1.1.0) (2020-09-28)
 
 

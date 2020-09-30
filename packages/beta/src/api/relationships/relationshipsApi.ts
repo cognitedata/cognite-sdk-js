@@ -5,13 +5,21 @@ import {
   CursorAndAsyncIterator,
   ExternalId,
 } from '@cognite/sdk-core';
+import { IgnoreUnknownIds } from '@cognite/sdk';
 import {
-  IgnoreUnknownIds,
+  ExternalRelationship,
   Relationship,
   RelationshipsFilterRequest,
 } from '../../types';
 
 export class RelationshipsApi extends BaseResourceAPI<Relationship> {
+  /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
+  }
+
   /**
    * [Create relationship](https://docs.cognite.com/api/v1/#operation/createRelationships)
    *
@@ -28,7 +36,7 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    * const createdRelationships = await client.relationships.create(relationships);
    * ```
    */
-  public create = (items: Relationship[]): Promise<Relationship[]> => {
+  public create = (items: ExternalRelationship[]): Promise<Relationship[]> => {
     return this.createEndpoint(items);
   };
 
