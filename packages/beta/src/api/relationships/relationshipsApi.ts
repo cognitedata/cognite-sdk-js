@@ -5,11 +5,8 @@ import {
   CursorAndAsyncIterator,
   ExternalId,
 } from '@cognite/sdk-core';
-import {
-  IgnoreUnknownIds,
-  Relationship,
-  RelationshipsFilterRequest,
-} from '../../types';
+import { IgnoreUnknownIds } from '@cognite/sdk';
+import { Relationship, RelationshipsFilterRequest } from '../../types';
 
 export class RelationshipsApi extends BaseResourceAPI<Relationship> {
   /**
