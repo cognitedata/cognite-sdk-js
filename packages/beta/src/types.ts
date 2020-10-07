@@ -11,6 +11,7 @@ import {
   Timestamp,
   Range,
   LabelFilter,
+  CreatedAndLastUpdatedTime,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -23,7 +24,7 @@ export type RelationshipResourceType =
   | 'event'
   | 'sequence';
 
-export interface Relationship {
+export interface ExternalRelationship {
   /**
    * External id of the relationship, must be unique within the project
    */
@@ -72,6 +73,10 @@ export interface Relationship {
    */
   labels?: Label[];
 }
+
+export interface Relationship
+  extends ExternalRelationship,
+    CreatedAndLastUpdatedTime {}
 
 export interface RelationshipsFilterRequest extends FilterQuery {
   /**
