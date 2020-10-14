@@ -1,7 +1,8 @@
+import { SpatialRel } from '@cognite/geospatial-sdk-js';
 import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
 import { Well } from '../model/Well';
 import { WellHeadLocation } from '../model/WellHeadLocation';
-import { geospatialClient, SpatialRelationshipNameDTO } from './utils';
+import { geospatialClient } from './utils';
 
 export class Wells extends AssetsAPI {
   /**
@@ -143,14 +144,21 @@ export class Wells extends AssetsAPI {
    * @param limit max number of objects to be returned
    * @param offset the starting offset of objects in the results
    */
-  public getWellsByPolygon = async (
-    polygon: string,
-    source: string,
-    crs: string,
-    layerName: string,
-    limit: number = 1000,
-    offset: number = 0
-  ): Promise<Well[]> => {
+  public getWellsByPolygon = async ({
+    polygon,
+    source = 'wellmodel',
+    crs = 'epsg:4326',
+    layerName = 'point',
+    limit = 1000,
+    offset = 0,
+  }: {
+    polygon: string;
+    source?: string;
+    crs?: string;
+    layerName?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<Well[]> => {
     const geometryBody = {
       wkt: polygon,
       crs: crs,
@@ -158,7 +166,7 @@ export class Wells extends AssetsAPI {
 
     const geometryRelBody = {
       geometry: geometryBody,
-      relation: SpatialRelationshipNameDTO.Within,
+      relation: SpatialRel.Within,
     };
 
     const points: any[] = [];
@@ -167,8 +175,8 @@ export class Wells extends AssetsAPI {
       /*eslint-disable */
       var page = await geospatialClient.findSpatial({
         layer: layerName,
-        source: source,
         geometry_rel: geometryRelBody,
+        source: source,
         limit: limit,
         offset: offset,
       });
