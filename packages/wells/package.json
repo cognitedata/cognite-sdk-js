@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "private": false,
   "name": "@cognite/sdk-wells",
   "license": "Apache-2.0",
   "repository": "cognitedata/cognite-sdk-js",
