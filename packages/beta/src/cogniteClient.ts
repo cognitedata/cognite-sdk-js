@@ -1,15 +1,20 @@
 // Copyright 2020 Cognite AS
+
 import {
   ClientOptions,
   CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
+import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
+import { RelationshipsApi } from './api/relationships/relationshipsApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
 }
 
 export default class CogniteClient extends CogniteClientCleaned {
+  private relationshipsApi?: RelationshipsApi;
+
   /**
    * Create a new SDK client (beta)
    *
@@ -31,7 +36,17 @@ export default class CogniteClient extends CogniteClientCleaned {
     super(options);
   }
 
+  public get relationships() {
+    return accessApi(this.relationshipsApi);
+  }
+
   protected get version() {
     return `${version}-beta`;
+  }
+
+  protected initAPIs() {
+    super.initAPIs();
+
+    this.relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
   }
 }

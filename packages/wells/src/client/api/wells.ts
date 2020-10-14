@@ -175,8 +175,8 @@ export class Wells extends AssetsAPI {
       /*eslint-disable */
       var page = await geospatialClient.findSpatial({
         layer: layerName,
-        geometry_rel: geometryRelBody,
         source: source,
+        geometry_rel: geometryRelBody,
         limit: limit,
         offset: offset,
       });
