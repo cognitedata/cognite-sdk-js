@@ -3,9 +3,8 @@
   "compilerOptions": {
     "declarationDir": "dist",
     "outDir": "dist",
-    "baseUrl": "..",
-    "typeRoots": ["./types", "./node_modules/@types"]
+    "baseUrl": ".."
   },
   "include": ["src/"],
-  "exclude": ["node_modules", "build", "typings"]
+  "exclude": ["node_modules"]
 }
