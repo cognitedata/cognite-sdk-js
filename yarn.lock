@@ -286,10 +286,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@cognite/geospatial-sdk-js@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@cognite/geospatial-sdk-js/-/geospatial-sdk-js-0.0.3.tgz#3a7946b4c86988c54cff316cdc2e7f4d4a838dbd"
-  integrity sha512-w5sBBD4OQwgn47K/fXdp7zCo100NQy9Sx474L7tOAqlP4sG1MbGgcCRIBYTReHCmZCfXlAw2L1rGM0YqtGLdAQ==
+"@cognite/geospatial-sdk-js@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@cognite/geospatial-sdk-js/-/geospatial-sdk-js-0.0.4.tgz#c870dba2627ccf671f0149b02055e69cc9460bc4"
+  integrity sha512-IZgWqzCIFWmSb3Jqc1lQ/bwF8q6wZDmrGArujFe+SfPdv0AuVEcI1eU9iYBBj2WlyZ4w0pv3GQ4mK4TAV8MeuA==
   dependencies:
     axios "^0.19.2"
 
@@ -8399,6 +8399,11 @@ winston@^2.3.1:
     eyes "0.1.x"
     isstream "0.1.x"
     stack-trace "0.0.x"
+
+wkt@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/wkt/-/wkt-0.1.1.tgz#8d3280cb0d7664343d8987a30c85806554618bf8"
+  integrity sha512-2vtzYZOqN0VZdtDTMDUgbpXpE+MXRdsFTiCpS08FZ4yktT9pPylVMZaLxcIqT9pRkBp5FIAGVQyJ/kJa9b8uGg==
 
 word-wrap@^1.2.3:
   version "1.2.3"
