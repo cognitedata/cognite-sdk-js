@@ -1,10 +1,12 @@
 /* Types */
 
-export type GEOJSONPoint = [number, number]; // DEPRECATED <- use LngLatLike instead
+export type Point2D = [number, number];
+
+export type GeoJson = Point | Polygon;
 
 /* Interfaces */
 
-export interface GeoJson {
+export interface Geometry {
   /**
    * @type {string}
    * @memberof GeoJson
@@ -24,32 +26,31 @@ export interface GeoJson {
    * @type {Geometry}
    * @memberof GeoJson
    */
-  geometry: Geometry;
+  geometry: GeoJson;
 }
 
-export interface GeometryPoint {
+export interface Point {
   /**
    * @type {string}
-   * @memberof GeometryPoint
+   * @memberof Point
    */
-  type: string;
-
+  type: 'Point';
   /**
-   * @type {GEOJSONPoint}
-   * @memberof GeometryPoint
+   * @type {Point2D}
+   * @memberof Point
    */
-  coordinates: GEOJSONPoint;
+  coordinates: Point2D;
 }
 
-export interface Geometry {
+export interface Polygon {
   /**
    * @type {string}
-   * @memberof Geometry
+   * @memberof Polygon
    */
-  type: string;
+  type: 'Polygon';
   /**
    * @type {GeometryPoint[]}
    * @memberof Geometry
    */
-  coordinates: GEOJSONPoint[];
+  coordinates: Point2D[][];
 }

@@ -3,10 +3,8 @@ import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
 import { Well } from '../model/Well';
 import { WellHeadLocation } from '../model/WellHeadLocation';
 import { geospatialClient } from './utils';
-import {
-  stringify as convertGeoJsonToWKT,
-  parse as convertWKTToGeoJson,
-} from 'wkt';
+import { stringify as convertGeoJsonToWKT } from 'wkt';
+import { GeoJson } from '../model/GeoJson';
 
 export class Wells extends AssetsAPI {
   /**
@@ -150,20 +148,23 @@ export class Wells extends AssetsAPI {
    */
 
   public getWellsByPolygon = async ({
-    polygon,
+    geometry,
     source = 'wellmodel',
     crs = 'epsg:4326',
     layerName = 'point',
     limit = 1000,
     offset = 0,
   }: {
-    polygon: string;
+    geometry: string | GeoJson;
     source?: string;
     crs?: string;
     layerName?: string;
     limit?: number;
     offset?: number;
   }): Promise<Well[]> => {
+    const polygon =
+      typeof geometry === 'string' ? geometry : convertGeoJsonToWKT(geometry);
+
     const geometryBody = {
       wkt: polygon,
       crs: crs,
@@ -198,12 +199,3 @@ export class Wells extends AssetsAPI {
     return await this.getWellsByIds(assetIds);
   };
 }
-
-const geometry = {
-  type: 'Point',
-  coordinates: [125.6, 10.1, 54.2],
-};
-
-//  See return values in output section
-const wkt = convertGeoJsonToWKT(geometry);
-convertWKTToGeoJson(wkt);
