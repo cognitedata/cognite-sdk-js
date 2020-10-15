@@ -11,11 +11,45 @@ It is recomended to install this package under the same name as `@cognite/sdk`.
 This allows you to change SDK versions without changing your imports.
 See the [beta readme](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/beta/README.md) for details.
 
-### build
+### install and build
 
 ```bash
-yarn
+yarn install
 yarn build
+```
+
+### consuming
+
+##### set your env variables (must be valid for both cdf and geospatial API)
+
+```bash
+COGNITE_WELLS_PROJECT=<project-tenant>
+COGNITE_WELLS_CREDENTIALS=<your-api-key>
+```
+
+##### setup client
+
+```bash
+let client: CogniteClient = setupLoggedInClient()
+```
+
+##### run a query
+
+```bash
+    const polygon = <GeoJson>{
+      type: 'Polygon',
+      coordinates: [
+        [
+          [-4.86423, 63.59999],
+          [19.86423, 63.59999],
+          [19.86423, 52.59999],
+          [-4.86423, 52.59999],
+          [-4.86423, 63.59999],
+        ],
+      ],
+    };
+
+    const response = await client.wells.getWellsByPolygon({geometry: polygon});
 ```
 
 ### Testing the wells package only
