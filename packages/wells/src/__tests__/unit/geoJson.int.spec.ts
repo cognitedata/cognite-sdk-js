@@ -1,8 +1,8 @@
-import { GeoJson, Polygon, Geometry } from 'wells/src/client/model/GeoJson';
 import {
   stringify as convertGeoJsonToWKT,
   parse as convertWKTToGeoJson,
 } from 'wkt';
+import { GeoJson, Polygon, Geometry } from 'wells/src/client/model/GeoJson';
 
 describe('GeoJson unit tests', () => {
   test('convert GeoJson to WKT (well-known text)', () => {
