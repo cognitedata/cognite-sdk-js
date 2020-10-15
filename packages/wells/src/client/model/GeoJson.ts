@@ -1,19 +1,3 @@
-// Type definitions for wkt
-// Project: https://github.com/benrei/wkt
-// Definitions by: Adam Tombleson rekarnar@gmail.com
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-const { stringify } = require('wkt');
-const { parse } = require('wkt');
-
-const geometry = {
-  type: 'Point',
-  coordinates: [125.6, 10.1, 54.2],
-};
-
-//  See return values in output section
-const wkt = stringify(geometry);
-parse(wkt);
-
 /* Types */
 
 export type GEOJSONPoint = [number, number]; // DEPRECATED <- use LngLatLike instead

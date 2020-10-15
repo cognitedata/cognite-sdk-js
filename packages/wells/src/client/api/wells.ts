@@ -3,6 +3,10 @@ import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
 import { Well } from '../model/Well';
 import { WellHeadLocation } from '../model/WellHeadLocation';
 import { geospatialClient } from './utils';
+import {
+  stringify as convertGeoJsonToWKT,
+  parse as convertWKTToGeoJson,
+} from 'wkt';
 
 export class Wells extends AssetsAPI {
   /**
@@ -194,3 +198,12 @@ export class Wells extends AssetsAPI {
     return await this.getWellsByIds(assetIds);
   };
 }
+
+const geometry = {
+  type: 'Point',
+  coordinates: [125.6, 10.1, 54.2],
+};
+
+//  See return values in output section
+const wkt = convertGeoJsonToWKT(geometry);
+convertWKTToGeoJson(wkt);
