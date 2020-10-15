@@ -45,9 +45,11 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('get well by polygon', async () => {
+    const polygon =
+      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
     const response = await client.wells.getWellsByPolygon({
-      polygon:
-        'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))',
+      geometry: polygon,
       limit: 1,
       offset: 0,
     });
