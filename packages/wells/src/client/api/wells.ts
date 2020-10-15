@@ -133,7 +133,7 @@ export class Wells extends AssetsAPI {
   };
 
   /**
-   * Receives a geoJson polygon like in Discover and return a list of well objects
+   * Receives a geoJson or wkt polygon like in Discover and return a list of well objects
    *
    * ```js
    * const created = await client.wells.getWellsByPolygon(....);
@@ -150,15 +150,19 @@ export class Wells extends AssetsAPI {
   public getWellsByPolygon = async ({
     geometry,
     source = 'wellmodel',
+    layer = 'point',
     crs = 'epsg:4326',
-    layerName = 'point',
+    outputCrs = 'EPSG:4326',
+    attributes = ['geometry'],
     limit = 1000,
     offset = 0,
   }: {
     geometry: string | GeoJson;
     source?: string;
+    layer?: string;
     crs?: string;
-    layerName?: string;
+    outputCrs?: string;
+    attributes?: string[];
     limit?: number;
     offset?: number;
   }): Promise<Well[]> => {
@@ -180,11 +184,13 @@ export class Wells extends AssetsAPI {
     do {
       /*eslint-disable */
       var page = await geospatialClient.findSpatial({
-        layer: layerName,
+        layer: layer,
         source: source,
+        attributes: attributes,
         geometry_rel: geometryRelBody,
         limit: limit,
         offset: offset,
+        outputCRS: outputCrs,
       });
       points.push.apply(points, page);
       /*eslint-enable */
