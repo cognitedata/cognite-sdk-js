@@ -9,22 +9,22 @@ export type GeoJson = Point | Polygon;
 export interface Geometry {
   /**
    * @type {string}
-   * @memberof GeoJson
+   * @memberof Geometry
    */
   id?: string;
   /**
    * @type {string}
-   * @memberof GeoJson
+   * @memberof Geometry
    */
   type?: string;
   /**
    * @type {any}
-   * @memberof GeoJson
+   * @memberof Geometry
    */
   properties?: any;
   /**
    * @type {Geometry}
-   * @memberof GeoJson
+   * @memberof Geometry
    */
   geometry: GeoJson;
 }
