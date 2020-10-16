@@ -52,6 +52,8 @@ let client: CogniteClient = setupLoggedInClient()
     const response = await client.wells.getWellsByPolygon({geometry: polygon});
 ```
 
+![query](figures/wells-sdk.png)
+
 ### Testing the wells package only
 
 This repo contains some integration tests that require a CDF api key for `subsurface-test` tenant.
