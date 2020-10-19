@@ -75,11 +75,41 @@
 				<p>It is recomended to install this package under the same name as <code>@cognite/sdk</code>.
 					This allows you to change SDK versions without changing your imports.
 				See the <a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/beta/README.md">beta readme</a> for details.</p>
-				<a href="#build" id="build" style="color: inherit; text-decoration: none;">
-					<h3>build</h3>
+				<a href="#install-and-build" id="install-and-build" style="color: inherit; text-decoration: none;">
+					<h3>install and build</h3>
 				</a>
-				<pre><code class="language-bash">yarn
+				<pre><code class="language-bash">yarn install
 yarn build</code></pre>
+				<a href="#consuming" id="consuming" style="color: inherit; text-decoration: none;">
+					<h3>consuming</h3>
+				</a>
+				<a href="#set-your-env-variables-must-be-valid-for-both-cdf-and-geospatial-api" id="set-your-env-variables-must-be-valid-for-both-cdf-and-geospatial-api" style="color: inherit; text-decoration: none;">
+					<h5>set your env variables (must be valid for both cdf and geospatial API)</h5>
+				</a>
+				<pre><code class="language-bash">COGNITE_WELLS_PROJECT=&lt;project-tenant&gt;
+COGNITE_WELLS_CREDENTIALS=&lt;your-api-key&gt;</code></pre>
+				<a href="#setup-client" id="setup-client" style="color: inherit; text-decoration: none;">
+					<h5>setup client</h5>
+				</a>
+				<pre><code class="language-bash"><span class="hljs-built_in">let</span> client: CogniteClient = setupLoggedInClient()</code></pre>
+				<a href="#run-a-query" id="run-a-query" style="color: inherit; text-decoration: none;">
+					<h5>run a query</h5>
+				</a>
+				<pre><code class="language-bash">    const polygon = &lt;GeoJson&gt;{
+      <span class="hljs-built_in">type</span>: <span class="hljs-string">&#x27;Polygon&#x27;</span>,
+      coordinates: [
+        [
+          [-4.86423, 63.59999],
+          [19.86423, 63.59999],
+          [19.86423, 52.59999],
+          [-4.86423, 52.59999],
+          [-4.86423, 63.59999],
+        ],
+      ],
+    };
+
+    const response = await client.wells.getWellsByPolygon({geometry: polygon});</code></pre>
+				<p><img src="figures/wells-sdk.png" alt="query"></p>
 				<a href="#testing-the-wells-package-only" id="testing-the-wells-package-only" style="color: inherit; text-decoration: none;">
 					<h3>Testing the wells package only</h3>
 				</a>
@@ -302,6 +332,9 @@ COGNITE_WELLS_PROJECT=&lt;project-tenant&gt; COGNITE_WELLS_CREDENTIALS=&lt;your-
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_cogniteclient_.html">&quot;wells/src/client/cognite<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_geojson_.html">&quot;wells/src/client/model/<wbr>Geo<wbr>Json&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_well_.html">&quot;wells/src/client/model/<wbr>Well&quot;</a>
