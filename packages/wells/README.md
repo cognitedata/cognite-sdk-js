@@ -27,29 +27,39 @@ COGNITE_WELLS_PROJECT=<project-tenant>
 COGNITE_WELLS_CREDENTIALS=<your-api-key>
 ```
 
-##### setup client
+#### setup client
 
 ```bash
-let client: CogniteClient = setupLoggedInClient()
+const { CogniteClient } = require("@cognite/sdk-wells");
+
+let client = new CogniteClient({
+  appId: `JS SDK test (${name})`,
+  baseUrl: "https://api.cognitedata.com",
+});
+
+client.loginWithApiKey({
+  project: process.env.COGNITE_WELLS_PROJECT,
+  apiKey: process.env.COGNITE_WELLS_CREDENTIALS,
+});
 ```
 
-##### run a query
+#### run a query
 
 ```bash
-    const polygon = <GeoJson>{
-      type: 'Polygon',
-      coordinates: [
-        [
-          [-4.86423, 63.59999],
-          [19.86423, 63.59999],
-          [19.86423, 52.59999],
-          [-4.86423, 52.59999],
-          [-4.86423, 63.59999],
-        ],
-      ],
-    };
+const polygon = <GeoJson>{
+    type: 'Polygon',
+    coordinates: [
+    [
+        [-4.86423, 63.59999],
+        [19.86423, 63.59999],
+        [19.86423, 52.59999],
+        [-4.86423, 52.59999],
+        [-4.86423, 63.59999],
+    ],
+    ],
+};
 
-    const response = await client.wells.getWellsByPolygon({geometry: polygon});
+const response = await client.wells.getWellsByPolygon({geometry: polygon});
 ```
 
 ![query](figures/wells-sdk.png)
