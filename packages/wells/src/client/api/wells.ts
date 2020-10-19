@@ -1,7 +1,10 @@
+import { SpatialRel } from '@cognite/geospatial-sdk-js';
 import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
 import { Well } from '../model/Well';
 import { WellHeadLocation } from '../model/WellHeadLocation';
-import { geospatialClient, SpatialRelationshipNameDTO } from './utils';
+import { geospatialClient } from './utils';
+import { stringify as convertGeoJsonToWKT } from 'wkt';
+import { GeoJson } from '../model/GeoJson';
 
 export class Wells extends AssetsAPI {
   /**
@@ -130,7 +133,7 @@ export class Wells extends AssetsAPI {
   };
 
   /**
-   * Receives a geoJson polygon like in Discover and return a list of well objects
+   * Receives a geoJson or wkt polygon like in Discover and return a list of well objects
    *
    * ```js
    * const created = await client.wells.getWellsByPolygon(....);
@@ -143,14 +146,29 @@ export class Wells extends AssetsAPI {
    * @param limit max number of objects to be returned
    * @param offset the starting offset of objects in the results
    */
-  public getWellsByPolygon = async (
-    polygon: string,
-    source: string,
-    crs: string,
-    layerName: string,
-    limit: number = 1000,
-    offset: number = 0
-  ): Promise<Well[]> => {
+
+  public getWellsByPolygon = async ({
+    geometry,
+    source = 'wellmodel',
+    layer = 'point',
+    crs = 'epsg:4326',
+    outputCrs = 'EPSG:4326',
+    attributes = ['geometry'],
+    limit = 1000,
+    offset = 0,
+  }: {
+    geometry: string | GeoJson;
+    source?: string;
+    layer?: string;
+    crs?: string;
+    outputCrs?: string;
+    attributes?: string[];
+    limit?: number;
+    offset?: number;
+  }): Promise<Well[]> => {
+    const polygon =
+      typeof geometry === 'string' ? geometry : convertGeoJsonToWKT(geometry);
+
     const geometryBody = {
       wkt: polygon,
       crs: crs,
@@ -158,7 +176,7 @@ export class Wells extends AssetsAPI {
 
     const geometryRelBody = {
       geometry: geometryBody,
-      relation: SpatialRelationshipNameDTO.Within,
+      relation: SpatialRel.Within,
     };
 
     const points: any[] = [];
@@ -166,11 +184,13 @@ export class Wells extends AssetsAPI {
     do {
       /*eslint-disable */
       var page = await geospatialClient.findSpatial({
-        layer: layerName,
+        layer: layer,
         source: source,
+        attributes: attributes,
         geometry_rel: geometryRelBody,
         limit: limit,
         offset: offset,
+        outputCRS: outputCrs,
       });
       points.push.apply(points, page);
       /*eslint-enable */
