@@ -9,7 +9,7 @@ export default {
       dir: 'dist',
       format: 'cjs',
       sourcemap: true,
-      externalLiveBindings: true,
+      externalLiveBindings: false,
     },
   ],
   external: [
