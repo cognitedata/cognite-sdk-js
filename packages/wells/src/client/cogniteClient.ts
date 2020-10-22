@@ -6,6 +6,7 @@ import {
 import { version } from '../../package.json';
 import { Wells } from './api/wells';
 import { accessApi } from '@cognite/sdk-core';
+import { Wellbores } from './api/wellbores';
 
 export default class CogniteClient extends CogniteClientStable {
   /**
@@ -17,6 +18,7 @@ export default class CogniteClient extends CogniteClientStable {
   }
 
   private wellsSDK?: Wells;
+  private wellboresSDK?: Wellbores;
 
   //private getWellsFromPolygon() => Promise<boolean>;
 
@@ -25,10 +27,15 @@ export default class CogniteClient extends CogniteClientStable {
 
     // Turns into $BASE_URL/api/$API_VERSION/projects/$PROJECT/assets
     this.wellsSDK = this.apiFactory(Wells, 'assets');
+    this.wellboresSDK = this.apiFactory(Wellbores, 'assets');
   }
 
   get wells(): Wells {
     return accessApi(this.wellsSDK);
+  }
+
+  get wellbores(): Wellbores {
+    return accessApi(this.wellboresSDK);
   }
 
   protected get version() {
