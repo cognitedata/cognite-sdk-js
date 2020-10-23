@@ -1,10 +1,8 @@
-import { SpatialRel } from '@cognite/geospatial-sdk-js';
+import { SpatialRel, GeometryRel } from '@cognite/geospatial-sdk-js';
 import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
-import { Well } from '../model/Well';
+import { Well, SearchWell } from '../model/Well';
 import { WellHeadLocation } from '../model/WellHeadLocation';
 import { geospatialClient } from './utils';
-import { SearchWell } from '../model/Well';
-import { stringify as convertGeoJsonToWKT } from 'wkt';
 import { GeoJson } from '../model/GeoJson';
 
 export class Wells extends AssetsAPI {
@@ -82,6 +80,7 @@ export class Wells extends AssetsAPI {
    * ```
    *
    * @param wellName the full name of the well
+   * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
   public getWellByName = async (
     wellName: string,
@@ -103,6 +102,7 @@ export class Wells extends AssetsAPI {
    * ```
    *
    * @param namePrefix specify a prefix that the wellname should contain
+   * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
   public getWellsByNamePrefix = async (
     namePrefix: string,
@@ -129,6 +129,7 @@ export class Wells extends AssetsAPI {
    * ```
    *
    * @param ids contains unions of internal ids and external ids
+   * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
   public getWellsByIds = async (
     ids: IdEither[],
@@ -149,6 +150,7 @@ export class Wells extends AssetsAPI {
    * ```
    *
    * @param id specific internal id for a particular well
+   * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
   public getWellById = async (
     id: number,
@@ -174,6 +176,7 @@ export class Wells extends AssetsAPI {
    * @param layerName the layer to which objects belong
    * @param limit max number of objects to be returned
    * @param offset the starting offset of objects in the results
+   * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
 
   public getWellsByPolygon = async ({
@@ -185,6 +188,7 @@ export class Wells extends AssetsAPI {
     attributes = ['geometry'],
     limit = 1000,
     offset = 0,
+    customFilter = undefined,
   }: {
     geometry: string | GeoJson;
     source?: string;
@@ -194,17 +198,15 @@ export class Wells extends AssetsAPI {
     attributes?: string[];
     limit?: number;
     offset?: number;
+    customFilter?: SearchWell;
   }): Promise<Well[]> => {
     const polygon =
-      typeof geometry === 'string' ? geometry : convertGeoJsonToWKT(geometry);
+      typeof geometry === 'string'
+        ? { wkt: geometry, crs }
+        : { geojson: geometry, crs };
 
-    const geometryBody = {
-      wkt: polygon,
-      crs: crs,
-    };
-
-    const geometryRelBody = {
-      geometry: geometryBody,
+    const geometryRelBody: GeometryRel = {
+      geometry: polygon,
       relation: SpatialRel.Within,
     };
 
@@ -230,6 +232,11 @@ export class Wells extends AssetsAPI {
       // @ts-ignore
       return { id: x.assetIds[0] };
     });
+
+    // only the calls for CDF are cutomizable, not the once for geoSpatial
+    if (customFilter) {
+      return await customFilter(assetIds);
+    }
 
     return await this.getWellsByIds(assetIds);
   };
