@@ -4,8 +4,7 @@ import { setupLoggedInClient } from '../testUtils';
 import CogniteClient from '../../client/cogniteClient';
 import { GeoJson } from 'wells/src/client/model/GeoJson';
 import { SearchWell } from 'wells/src/client/model/Well';
-//import { SearchWell, Well } from '../../client/model/Well';
-//import { Wells } from '../../client/api/wells';
+import { IdEither } from '@cognite/sdk';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -81,7 +80,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(response.length).toBe(1);
   });
 
-  test('get well by polygon wkt', async () => {
+  test('standard filter - get well by polygon wkt', async () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
@@ -97,7 +96,27 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(response.length).toBe(2);
   });
 
-  test('get well by geoJson', async () => {
+  test('standard filter - get well by polygon wkt', async () => {
+    const polygon =
+      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
+    const fn: SearchWell = async (args: IdEither[]) =>
+      await client.wells.getWellsByIds(args);
+
+    const response = await client.wells.getWellsByPolygon({
+      geometry: polygon,
+      limit: 1,
+      offset: 0,
+      customFilter: fn,
+    });
+
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well')).toBe(true);
+    });
+    expect(response.length).toBe(2);
+  });
+
+  test('standard filter - get well by geoJson', async () => {
     const polygon = <GeoJson>{
       type: 'Polygon',
       coordinates: [
@@ -115,6 +134,36 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       geometry: polygon,
       limit: 1,
       offset: 0,
+    });
+
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well')).toBe(true);
+    });
+    expect(response.length).toBe(2);
+  });
+
+  test('custom filter - get well by geoJson', async () => {
+    const polygon = <GeoJson>{
+      type: 'Polygon',
+      coordinates: [
+        [
+          [-4.86423, 63.59999],
+          [19.86423, 63.59999],
+          [19.86423, 52.59999],
+          [-4.86423, 52.59999],
+          [-4.86423, 63.59999],
+        ],
+      ],
+    };
+
+    const fn: SearchWell = async (args: IdEither[]) =>
+      await client.wells.getWellsByIds(args);
+
+    const response = await client.wells.getWellsByPolygon({
+      geometry: polygon,
+      limit: 1,
+      offset: 0,
+      customFilter: fn,
     });
 
     response.forEach(function(well) {
