@@ -1,5 +1,8 @@
 import { WellHeadLocation } from './WellHeadLocation';
 
+// Customizable function that takes in CogniteClient and args, and return a promise of a well
+export type SearchWell = (args: any) => Promise<Well[]>;
+
 /**
  * A well is an assets and sets the basis of the well data model hierarchy
  * @export

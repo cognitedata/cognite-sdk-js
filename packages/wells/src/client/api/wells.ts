@@ -3,6 +3,7 @@ import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
 import { Well } from '../model/Well';
 import { WellHeadLocation } from '../model/WellHeadLocation';
 import { geospatialClient } from './utils';
+import { SearchWell } from '../model/Well';
 import { stringify as convertGeoJsonToWKT } from 'wkt';
 import { GeoJson } from '../model/GeoJson';
 
@@ -82,7 +83,14 @@ export class Wells extends AssetsAPI {
    *
    * @param wellName the full name of the well
    */
-  public getWellByName = async (wellName: string): Promise<Well[]> => {
+  public getWellByName = async (
+    wellName: string,
+    customFilter?: SearchWell
+  ): Promise<Well[]> => {
+    if (customFilter) {
+      return await customFilter(wellName);
+    }
+
     const exactSearch = { name: wellName };
     return Wells.mapToWell(await this.searchForWell(exactSearch));
   };
@@ -96,7 +104,14 @@ export class Wells extends AssetsAPI {
    *
    * @param namePrefix specify a prefix that the wellname should contain
    */
-  public getWellsByNamePrefix = async (namePrefix: string): Promise<Well[]> => {
+  public getWellsByNamePrefix = async (
+    namePrefix: string,
+    customFilter?: SearchWell
+  ): Promise<Well[]> => {
+    if (customFilter) {
+      return await customFilter(namePrefix);
+    }
+
     const fuzzySearch = { name: namePrefix };
     const fuzzyResults = Wells.mapToWell(
       await this.searchForWell({}, fuzzySearch)
@@ -115,7 +130,14 @@ export class Wells extends AssetsAPI {
    *
    * @param ids contains unions of internal ids and external ids
    */
-  public getWellsByIds = async (ids: IdEither[]): Promise<Well[]> => {
+  public getWellsByIds = async (
+    ids: IdEither[],
+    customFilter?: SearchWell
+  ): Promise<Well[]> => {
+    if (customFilter) {
+      return await customFilter(ids);
+    }
+
     return Wells.mapToWell(await this.retrieve(ids));
   };
 
@@ -128,7 +150,14 @@ export class Wells extends AssetsAPI {
    *
    * @param id specific internal id for a particular well
    */
-  public getWellById = async (id: number): Promise<Well[]> => {
+  public getWellById = async (
+    id: number,
+    customFilter?: SearchWell
+  ): Promise<Well[]> => {
+    if (customFilter) {
+      return await customFilter(id);
+    }
+
     return await this.getWellsByIds([{ id: id }]);
   };
 

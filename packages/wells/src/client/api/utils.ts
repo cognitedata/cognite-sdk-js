@@ -1,5 +1,6 @@
 import { CogniteGeospatialClient } from '@cognite/geospatial-sdk-js';
 import { Constants } from '@cognite/sdk-core';
+//import CogniteClient from '../cogniteClient';
 
 export const geospatialClient = CogniteGeospatialClient({
   project: process.env.COGNITE_WELLS_PROJECT as string,
