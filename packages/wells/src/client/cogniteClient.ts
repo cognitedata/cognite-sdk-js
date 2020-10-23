@@ -18,10 +18,6 @@ export default class CogniteClient extends CogniteClientStable {
     return accessApi(this.wellsSDK);
   }
 
-  get instance(): CogniteClient {
-    return this;
-  }
-
   protected get version() {
     return `wells/${version}`;
   }
