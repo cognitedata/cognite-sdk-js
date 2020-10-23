@@ -3,6 +3,9 @@
 import { setupLoggedInClient } from '../testUtils';
 import CogniteClient from '../../client/cogniteClient';
 import { GeoJson } from 'wells/src/client/model/GeoJson';
+import { SearchWell } from 'wells/src/client/model/Well';
+//import { SearchWell, Well } from '../../client/model/Well';
+//import { Wells } from '../../client/api/wells';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -16,13 +19,21 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     client = setupLoggedInClient();
   });
 
-  test('get well by asset name', async () => {
+  test('standard filter - get well by asset name', async () => {
     const response = await client.wells.getWellByName('Well A');
 
     expect(response.length).toBe(1);
   });
 
-  test('get well by asset name prefix', async () => {
+  test('custom filter - get well by asset name', async () => {
+    const name = 'Well A';
+    const fn: SearchWell = async (args: string) =>
+      await client.wells.getWellByName(args);
+    const response = await client.wells.getWellByName(name, fn);
+    expect(response.length).toBe(1);
+  });
+
+  test('standard filter - get well by asset name prefix', async () => {
     const response = await client.wells.getWellsByNamePrefix('Well');
 
     response.forEach(function(well) {
@@ -31,15 +42,40 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(response.length).toBe(2);
   });
 
-  test('get empty wells array with name suffix', async () => {
+  test('custom filter - get well by asset name prefix', async () => {
+    const namePrefix = 'Well';
+
+    const fn: SearchWell = async (args: string) =>
+      await client.wells.getWellsByNamePrefix(args);
+
+    const response = await client.wells.getWellsByNamePrefix(namePrefix, fn);
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well')).toBe(true);
+    });
+    expect(response.length).toBe(2);
+  });
+
+  test('standard filter - get empty wells array with name suffix', async () => {
     const response = await client.wells.getWellsByNamePrefix('A');
 
     expect(response.length).toBe(0);
   });
 
-  test('get well by asset id', async () => {
+  test('standard filter - get well by asset id', async () => {
     const id = 2278618537691581;
     const response = await client.wells.getWellById(id);
+
+    expect(response[0]);
+    expect(response.length).toBe(1);
+  });
+
+  test('custom filter - get well by asset id', async () => {
+    const id = 2278618537691581;
+
+    const fn: SearchWell = async (args: number) =>
+      await client.wells.getWellsByIds([{ id: args }]);
+
+    const response = await client.wells.getWellById(id, fn);
 
     expect(response[0]);
     expect(response.length).toBe(1);
