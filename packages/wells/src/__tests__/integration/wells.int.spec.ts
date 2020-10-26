@@ -4,7 +4,6 @@ import { setupLoggedInClient } from '../testUtils';
 import CogniteClient from '../../client/cogniteClient';
 import { GeoJson } from 'wells/src/client/model/GeoJson';
 import { SearchWell, SearchWells, Well } from 'wells/src/client/model/Well';
-import { IdEither } from '@cognite/sdk';
 import { assert } from 'console';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
@@ -105,12 +104,16 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(response.length).toBe(2);
   });
 
-  test('standard filter - get well by polygon wkt', async () => {
+  test('custom filter - get well by polygon wkt', async () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-    const fn: SearchWells = async (args: IdEither[]) =>
-      await client.wells.getByIds(args);
+    const fn: SearchWells = async (geometry: GeoJson) =>
+      await client.wells.searchByPolygon({
+        geometry: geometry,
+        limit: 1,
+        offset: 0,
+      });
 
     const response = await client.wells.searchByPolygon({
       geometry: polygon,
@@ -165,8 +168,12 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       ],
     };
 
-    const fn: SearchWells = async (args: IdEither[]) =>
-      await client.wells.getByIds(args);
+    const fn: SearchWells = async (geometry: GeoJson) =>
+      await client.wells.searchByPolygon({
+        geometry: geometry,
+        limit: 1,
+        offset: 0,
+      });
 
     const response = await client.wells.searchByPolygon({
       geometry: polygon,

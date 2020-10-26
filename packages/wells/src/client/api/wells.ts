@@ -182,25 +182,25 @@ export class Wells extends AssetsAPI {
 
   public searchByPolygon = async ({
     geometry,
-    source = 'wellmodel',
-    layer = 'point',
     crs = 'epsg:4326',
     outputCrs = 'EPSG:4326',
-    attributes = ['geometry'],
     limit = 1000,
     offset = 0,
     customFilter = undefined,
   }: {
     geometry: string | GeoJson;
-    source?: string;
-    layer?: string;
     crs?: string;
     outputCrs?: string;
-    attributes?: string[];
     limit?: number;
     offset?: number;
     customFilter?: SearchWells;
   }): Promise<Well[]> => {
+    // custom filters does not have to rely on either CDF or Geospatial API
+    // as long as it returns a Promise<Well[]>
+    if (customFilter) {
+      return await customFilter(geometry);
+    }
+
     const polygon =
       typeof geometry === 'string'
         ? { wkt: geometry, crs }
@@ -216,9 +216,9 @@ export class Wells extends AssetsAPI {
     do {
       /*eslint-disable */
       var page = await geospatialClient.findSpatial({
-        layer: layer,
-        source: source,
-        attributes: attributes,
+        layer: 'point',
+        source: 'wellmodel',
+        attributes: ['geometry'],
         geometry_rel: geometryRelBody,
         limit: limit,
         offset: offset,
@@ -233,11 +233,6 @@ export class Wells extends AssetsAPI {
       // @ts-ignore
       return { id: x.assetIds[0] };
     });
-
-    // only the calls for CDF are cutomizable, not the once for geoSpatial
-    if (customFilter) {
-      return await customFilter(assetIds);
-    }
 
     return await this.getByIds(assetIds);
   };
