@@ -19,7 +19,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('standard filter - get well by asset name', async () => {
-    const response = await client.wells.getWellByName('Well A');
+    const response = await client.wells.listByName('Well A');
 
     expect(response.length).toBe(1);
   });
@@ -27,13 +27,13 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   test('custom filter - get well by asset name', async () => {
     const name = 'Well A';
     const fn: SearchWell = async (args: string) =>
-      await client.wells.getWellByName(args);
-    const response = await client.wells.getWellByName(name, fn);
+      await client.wells.listByName(args);
+    const response = await client.wells.listByName(name, fn);
     expect(response.length).toBe(1);
   });
 
   test('standard filter - get well by asset name prefix', async () => {
-    const response = await client.wells.getWellsByNamePrefix('Well');
+    const response = await client.wells.listByNamePrefix('Well');
 
     response.forEach(function(well) {
       expect(well.name.startsWith('Well')).toBe(true);
@@ -45,9 +45,9 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const namePrefix = 'Well';
 
     const fn: SearchWell = async (args: string) =>
-      await client.wells.getWellsByNamePrefix(args);
+      await client.wells.listByNamePrefix(args);
 
-    const response = await client.wells.getWellsByNamePrefix(namePrefix, fn);
+    const response = await client.wells.listByNamePrefix(namePrefix, fn);
     response.forEach(function(well) {
       expect(well.name.startsWith('Well')).toBe(true);
     });
@@ -55,14 +55,14 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('standard filter - get empty wells array with name suffix', async () => {
-    const response = await client.wells.getWellsByNamePrefix('A');
+    const response = await client.wells.listByNamePrefix('A');
 
     expect(response.length).toBe(0);
   });
 
   test('standard filter - get well by asset id', async () => {
     const id = 2278618537691581;
-    const response = await client.wells.getWellById(id);
+    const response = await client.wells.getById(id);
 
     expect(response[0]);
     expect(response.length).toBe(1);
@@ -72,9 +72,9 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const id = 2278618537691581;
 
     const fn: SearchWell = async (args: number) =>
-      await client.wells.getWellsByIds([{ id: args }]);
+      await client.wells.getByIds([{ id: args }]);
 
-    const response = await client.wells.getWellById(id, fn);
+    const response = await client.wells.getById(id, fn);
 
     expect(response[0]);
     expect(response.length).toBe(1);
@@ -84,7 +84,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-    const response = await client.wells.getWellsByPolygon({
+    const response = await client.wells.searchByPolygon({
       geometry: polygon,
       limit: 1,
       offset: 0,
@@ -101,9 +101,9 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
     const fn: SearchWell = async (args: IdEither[]) =>
-      await client.wells.getWellsByIds(args);
+      await client.wells.getByIds(args);
 
-    const response = await client.wells.getWellsByPolygon({
+    const response = await client.wells.searchByPolygon({
       geometry: polygon,
       limit: 1,
       offset: 0,
@@ -130,7 +130,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       ],
     };
 
-    const response = await client.wells.getWellsByPolygon({
+    const response = await client.wells.searchByPolygon({
       geometry: polygon,
       limit: 1,
       offset: 0,
@@ -157,9 +157,9 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     };
 
     const fn: SearchWell = async (args: IdEither[]) =>
-      await client.wells.getWellsByIds(args);
+      await client.wells.getByIds(args);
 
-    const response = await client.wells.getWellsByPolygon({
+    const response = await client.wells.searchByPolygon({
       geometry: polygon,
       limit: 1,
       offset: 0,

@@ -59,7 +59,7 @@ const polygon = {
     ],
 };
 
-const response = await client.wells.getWellsByPolygon({geometry: polygon});
+const response = await client.wells.searchByPolygon({geometry: polygon});
 ```
 
 #### run a polygon query by wkt
@@ -67,7 +67,7 @@ const response = await client.wells.getWellsByPolygon({geometry: polygon});
 ```bash
 const polygon = 'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-const response = await client.wells.getWellsByPolygon({geometry: polygon});
+const response = await client.wells.searchByPolygon({geometry: polygon});
 ```
 
 ![query](figures/wells-sdk.png)

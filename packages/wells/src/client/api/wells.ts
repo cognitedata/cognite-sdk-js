@@ -54,7 +54,7 @@ export class Wells extends AssetsAPI {
    * @param exactSearch Filter on assets with strict matching.
    * @param fuzzySearch Fulltext search for assets. Primarily meant for for human-centric use-cases, not for programs.
    */
-  private searchForWell = async (
+  private listAssets = async (
     exactSearch = {},
     fuzzySearch = {}
   ): Promise<Asset[]> => {
@@ -82,7 +82,7 @@ export class Wells extends AssetsAPI {
    * @param wellName the full name of the well
    * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
-  public getWellByName = async (
+  public listByName = async (
     wellName: string,
     customFilter?: SearchWell
   ): Promise<Well[]> => {
@@ -91,7 +91,7 @@ export class Wells extends AssetsAPI {
     }
 
     const exactSearch = { name: wellName };
-    return Wells.mapToWell(await this.searchForWell(exactSearch));
+    return Wells.mapToWell(await this.listAssets(exactSearch));
   };
 
   /**
@@ -104,7 +104,7 @@ export class Wells extends AssetsAPI {
    * @param namePrefix specify a prefix that the wellname should contain
    * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
-  public getWellsByNamePrefix = async (
+  public listByNamePrefix = async (
     namePrefix: string,
     customFilter?: SearchWell
   ): Promise<Well[]> => {
@@ -114,7 +114,7 @@ export class Wells extends AssetsAPI {
 
     const fuzzySearch = { name: namePrefix };
     const fuzzyResults = Wells.mapToWell(
-      await this.searchForWell({}, fuzzySearch)
+      await this.listAssets({}, fuzzySearch)
     );
     return fuzzyResults.filter(function(well) {
       return well.name.startsWith(namePrefix);
@@ -131,7 +131,7 @@ export class Wells extends AssetsAPI {
    * @param ids contains unions of internal ids and external ids
    * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
-  public getWellsByIds = async (
+  public getByIds = async (
     ids: IdEither[],
     customFilter?: SearchWell
   ): Promise<Well[]> => {
@@ -152,7 +152,7 @@ export class Wells extends AssetsAPI {
    * @param id specific internal id for a particular well
    * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
-  public getWellById = async (
+  public getById = async (
     id: number,
     customFilter?: SearchWell
   ): Promise<Well[]> => {
@@ -160,7 +160,7 @@ export class Wells extends AssetsAPI {
       return await customFilter(id);
     }
 
-    return await this.getWellsByIds([{ id: id }]);
+    return await this.getByIds([{ id: id }]);
   };
 
   /**
@@ -179,7 +179,7 @@ export class Wells extends AssetsAPI {
    * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
 
-  public getWellsByPolygon = async ({
+  public searchByPolygon = async ({
     geometry,
     source = 'wellmodel',
     layer = 'point',
@@ -238,6 +238,6 @@ export class Wells extends AssetsAPI {
       return await customFilter(assetIds);
     }
 
-    return await this.getWellsByIds(assetIds);
+    return await this.getByIds(assetIds);
   };
 }
