@@ -5,6 +5,7 @@ import CogniteClient from '../../client/cogniteClient';
 import { GeoJson } from 'wells/src/client/model/GeoJson';
 import { SearchWell, SearchWells, Well } from 'wells/src/client/model/Well';
 import { IdEither } from '@cognite/sdk';
+import { assert } from 'console';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -62,9 +63,13 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('standard filter - get well by asset id', async () => {
     const id = 2278618537691581;
-    const response: Well = await client.wells.getById(id);
+    const response = await client.wells.getById(id);
 
-    expect(response.id).toBe(id);
+    assert(typeof response != 'undefined');
+
+    if (response) {
+      expect(response.id).toBe(id);
+    }
   });
 
   test('custom filter - get well by asset id', async () => {
@@ -77,7 +82,11 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     const response = await client.wells.getById(id, fn);
 
-    expect(response.id).toBe(id);
+    assert(typeof response != 'undefined');
+
+    if (response) {
+      expect(response.id).toBe(id);
+    }
   });
 
   test('standard filter - get well by polygon wkt', async () => {
