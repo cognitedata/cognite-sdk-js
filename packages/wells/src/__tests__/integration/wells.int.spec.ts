@@ -3,7 +3,7 @@
 import { setupLoggedInClient } from '../testUtils';
 import CogniteClient from '../../client/cogniteClient';
 import { GeoJson } from 'wells/src/client/model/GeoJson';
-import { SearchWell } from 'wells/src/client/model/Well';
+import { SearchWell, SearchWells, Well } from 'wells/src/client/model/Well';
 import { IdEither } from '@cognite/sdk';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
@@ -26,7 +26,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('custom filter - get well by asset name', async () => {
     const name = 'Well A';
-    const fn: SearchWell = async (args: string) =>
+    const fn: SearchWells = async (args: string) =>
       await client.wells.listByName(args);
     const response = await client.wells.listByName(name, fn);
     expect(response.length).toBe(1);
@@ -44,7 +44,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   test('custom filter - get well by asset name prefix', async () => {
     const namePrefix = 'Well';
 
-    const fn: SearchWell = async (args: string) =>
+    const fn: SearchWells = async (args: string) =>
       await client.wells.listByNamePrefix(args);
 
     const response = await client.wells.listByNamePrefix(namePrefix, fn);
@@ -62,22 +62,22 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('standard filter - get well by asset id', async () => {
     const id = 2278618537691581;
-    const response = await client.wells.getById(id);
+    const response: Well = await client.wells.getById(id);
 
-    expect(response[0]);
-    expect(response.length).toBe(1);
+    expect(response.id).toBe(id);
   });
 
   test('custom filter - get well by asset id', async () => {
     const id = 2278618537691581;
 
-    const fn: SearchWell = async (args: number) =>
-      await client.wells.getByIds([{ id: args }]);
+    const fn: SearchWell = async (args: number) => {
+      const resp: Well[] = await client.wells.getByIds([{ id: args }]);
+      return resp[0];
+    };
 
     const response = await client.wells.getById(id, fn);
 
-    expect(response[0]);
-    expect(response.length).toBe(1);
+    expect(response.id).toBe(id);
   });
 
   test('standard filter - get well by polygon wkt', async () => {
@@ -100,7 +100,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-    const fn: SearchWell = async (args: IdEither[]) =>
+    const fn: SearchWells = async (args: IdEither[]) =>
       await client.wells.getByIds(args);
 
     const response = await client.wells.searchByPolygon({
@@ -156,7 +156,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       ],
     };
 
-    const fn: SearchWell = async (args: IdEither[]) =>
+    const fn: SearchWells = async (args: IdEither[]) =>
       await client.wells.getByIds(args);
 
     const response = await client.wells.searchByPolygon({

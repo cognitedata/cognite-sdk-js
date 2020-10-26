@@ -1,6 +1,6 @@
 import { SpatialRel, GeometryRel } from '@cognite/geospatial-sdk-js';
 import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
-import { Well, SearchWell } from '../model/Well';
+import { Well, SearchWells, SearchWell } from '../model/Well';
 import { WellHeadLocation } from '../model/WellHeadLocation';
 import { geospatialClient } from './utils';
 import { GeoJson } from '../model/GeoJson';
@@ -84,7 +84,7 @@ export class Wells extends AssetsAPI {
    */
   public listByName = async (
     wellName: string,
-    customFilter?: SearchWell
+    customFilter?: SearchWells
   ): Promise<Well[]> => {
     if (customFilter) {
       return await customFilter(wellName);
@@ -106,7 +106,7 @@ export class Wells extends AssetsAPI {
    */
   public listByNamePrefix = async (
     namePrefix: string,
-    customFilter?: SearchWell
+    customFilter?: SearchWells
   ): Promise<Well[]> => {
     if (customFilter) {
       return await customFilter(namePrefix);
@@ -133,7 +133,7 @@ export class Wells extends AssetsAPI {
    */
   public getByIds = async (
     ids: IdEither[],
-    customFilter?: SearchWell
+    customFilter?: SearchWells
   ): Promise<Well[]> => {
     if (customFilter) {
       return await customFilter(ids);
@@ -155,12 +155,13 @@ export class Wells extends AssetsAPI {
   public getById = async (
     id: number,
     customFilter?: SearchWell
-  ): Promise<Well[]> => {
+  ): Promise<Well | undefined> => {
     if (customFilter) {
       return await customFilter(id);
     }
 
-    return await this.getByIds([{ id: id }]);
+    const wells: Well[] = await this.getByIds([{ id: id }]);
+    return wells.length == 1 ? wells[0] : undefined;
   };
 
   /**
@@ -198,7 +199,7 @@ export class Wells extends AssetsAPI {
     attributes?: string[];
     limit?: number;
     offset?: number;
-    customFilter?: SearchWell;
+    customFilter?: SearchWells;
   }): Promise<Well[]> => {
     const polygon =
       typeof geometry === 'string'
