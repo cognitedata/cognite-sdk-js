@@ -1,9 +1,8 @@
-import { SpatialRel } from '@cognite/geospatial-sdk-js';
+import { SpatialRel, GeometryRel } from '@cognite/geospatial-sdk-js';
 import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
 import { Well } from '../model/Well';
 import { WellHeadLocation } from '../model/WellHeadLocation';
 import { geospatialClient } from './utils';
-import { stringify as convertGeoJsonToWKT } from 'wkt';
 import { GeoJson } from '../model/GeoJson';
 
 export class Wells extends AssetsAPI {
@@ -167,15 +166,12 @@ export class Wells extends AssetsAPI {
     offset?: number;
   }): Promise<Well[]> => {
     const polygon =
-      typeof geometry === 'string' ? geometry : convertGeoJsonToWKT(geometry);
+      typeof geometry === 'string'
+        ? { wkt: geometry, crs }
+        : { geojson: geometry, crs };
 
-    const geometryBody = {
-      wkt: polygon,
-      crs: crs,
-    };
-
-    const geometryRelBody = {
-      geometry: geometryBody,
+    const geometryRelBody: GeometryRel = {
+      geometry: polygon,
       relation: SpatialRel.Within,
     };
 

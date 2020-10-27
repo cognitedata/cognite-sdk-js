@@ -286,11 +286,12 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@cognite/geospatial-sdk-js@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@cognite/geospatial-sdk-js/-/geospatial-sdk-js-0.0.4.tgz#c870dba2627ccf671f0149b02055e69cc9460bc4"
-  integrity sha512-IZgWqzCIFWmSb3Jqc1lQ/bwF8q6wZDmrGArujFe+SfPdv0AuVEcI1eU9iYBBj2WlyZ4w0pv3GQ4mK4TAV8MeuA==
+"@cognite/geospatial-sdk-js@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@cognite/geospatial-sdk-js/-/geospatial-sdk-js-0.0.5.tgz#a18edfc3e403bf79a50d198de46acf71f3f83481"
+  integrity sha512-ktdBW402sMa01ImOJhM02XjS8ctkeHsOyVqdzabiAZE8Wzo5mA8IezkI7roT2cptFQdiBzMzvY2t5sUNHyJ5UA==
   dependencies:
+    "@types/geojson" "^7946.0.7"
     axios "^0.19.2"
 
 "@commitlint/cli@^8.1.0":
@@ -1738,6 +1739,11 @@
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
   integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
+
+"@types/geojson@^7946.0.7":
+  version "7946.0.7"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.7.tgz#c8fa532b60a0042219cdf173ca21a975ef0666ad"
+  integrity sha512-wE2v81i4C4Ol09RtsWFAqg3BUitWbHSpSlIo+bNdsCJijO9sjme+zm+73ZMCa/qMC8UEERxzGbvmr1cffo2SiQ==
 
 "@types/glob@^7.1.1":
   version "7.1.2"

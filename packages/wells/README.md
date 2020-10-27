@@ -43,10 +43,10 @@ client.loginWithApiKey({
 });
 ```
 
-#### run a query
+#### run a polygon query by GeoJson
 
 ```bash
-const polygon = <GeoJson>{
+const polygon = {
     type: 'Polygon',
     coordinates: [
     [
@@ -58,6 +58,14 @@ const polygon = <GeoJson>{
     ],
     ],
 };
+
+const response = await client.wells.getWellsByPolygon({geometry: polygon});
+```
+
+#### run a polygon query by wkt
+
+```bash
+const polygon = 'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
 const response = await client.wells.getWellsByPolygon({geometry: polygon});
 ```
