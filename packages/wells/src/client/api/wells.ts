@@ -1,6 +1,6 @@
 import { SpatialRel, GeometryRel } from '@cognite/geospatial-sdk-js';
 import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
-import { Well } from '../model/Well';
+import { Well, SearchWells, SearchWell } from '../model/Well';
 import { WellHeadLocation } from '../model/WellHeadLocation';
 import { geospatialClient } from './utils';
 import { GeoJson } from '../model/GeoJson';
@@ -54,7 +54,7 @@ export class Wells extends AssetsAPI {
    * @param exactSearch Filter on assets with strict matching.
    * @param fuzzySearch Fulltext search for assets. Primarily meant for for human-centric use-cases, not for programs.
    */
-  private searchForWell = async (
+  private listAssets = async (
     exactSearch = {},
     fuzzySearch = {}
   ): Promise<Asset[]> => {
@@ -80,10 +80,18 @@ export class Wells extends AssetsAPI {
    * ```
    *
    * @param wellName the full name of the well
+   * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
-  public getWellByName = async (wellName: string): Promise<Well[]> => {
+  public listByName = async (
+    wellName: string,
+    customFilter?: SearchWells
+  ): Promise<Well[]> => {
+    if (customFilter) {
+      return await customFilter(wellName);
+    }
+
     const exactSearch = { name: wellName };
-    return Wells.mapToWell(await this.searchForWell(exactSearch));
+    return Wells.mapToWell(await this.listAssets(exactSearch));
   };
 
   /**
@@ -94,11 +102,19 @@ export class Wells extends AssetsAPI {
    * ```
    *
    * @param namePrefix specify a prefix that the wellname should contain
+   * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
-  public getWellsByNamePrefix = async (namePrefix: string): Promise<Well[]> => {
+  public listByNamePrefix = async (
+    namePrefix: string,
+    customFilter?: SearchWells
+  ): Promise<Well[]> => {
+    if (customFilter) {
+      return await customFilter(namePrefix);
+    }
+
     const fuzzySearch = { name: namePrefix };
     const fuzzyResults = Wells.mapToWell(
-      await this.searchForWell({}, fuzzySearch)
+      await this.listAssets({}, fuzzySearch)
     );
     return fuzzyResults.filter(function(well) {
       return well.name.startsWith(namePrefix);
@@ -113,8 +129,16 @@ export class Wells extends AssetsAPI {
    * ```
    *
    * @param ids contains unions of internal ids and external ids
+   * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
-  public getWellsByIds = async (ids: IdEither[]): Promise<Well[]> => {
+  public getByIds = async (
+    ids: IdEither[],
+    customFilter?: SearchWells
+  ): Promise<Well[]> => {
+    if (customFilter) {
+      return await customFilter(ids);
+    }
+
     return Wells.mapToWell(await this.retrieve(ids));
   };
 
@@ -126,9 +150,18 @@ export class Wells extends AssetsAPI {
    * ```
    *
    * @param id specific internal id for a particular well
+   * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
-  public getWellById = async (id: number): Promise<Well[]> => {
-    return await this.getWellsByIds([{ id: id }]);
+  public getById = async (
+    id: number,
+    customFilter?: SearchWell
+  ): Promise<Well | undefined> => {
+    if (customFilter) {
+      return await customFilter(id);
+    }
+
+    const wells: Well[] = await this.getByIds([{ id: id }]);
+    return wells.length == 1 ? wells[0] : undefined;
   };
 
   /**
@@ -144,27 +177,30 @@ export class Wells extends AssetsAPI {
    * @param layerName the layer to which objects belong
    * @param limit max number of objects to be returned
    * @param offset the starting offset of objects in the results
+   * @param customFilter a custom filter you can apply, input: any -> output: Promise<Well[]>
    */
 
-  public getWellsByPolygon = async ({
+  public searchByPolygon = async ({
     geometry,
-    source = 'wellmodel',
-    layer = 'point',
     crs = 'epsg:4326',
     outputCrs = 'EPSG:4326',
-    attributes = ['geometry'],
     limit = 1000,
     offset = 0,
+    customFilter = undefined,
   }: {
     geometry: string | GeoJson;
-    source?: string;
-    layer?: string;
     crs?: string;
     outputCrs?: string;
-    attributes?: string[];
     limit?: number;
     offset?: number;
+    customFilter?: SearchWells;
   }): Promise<Well[]> => {
+    // custom filters does not have to rely on either CDF or Geospatial API
+    // as long as it returns a Promise<Well[]>
+    if (customFilter) {
+      return await customFilter(geometry);
+    }
+
     const polygon =
       typeof geometry === 'string'
         ? { wkt: geometry, crs }
@@ -180,9 +216,9 @@ export class Wells extends AssetsAPI {
     do {
       /*eslint-disable */
       var page = await geospatialClient.findSpatial({
-        layer: layer,
-        source: source,
-        attributes: attributes,
+        layer: 'point',
+        source: 'wellmodel',
+        attributes: ['geometry'],
         geometry_rel: geometryRelBody,
         limit: limit,
         offset: offset,
@@ -198,6 +234,6 @@ export class Wells extends AssetsAPI {
       return { id: x.assetIds[0] };
     });
 
-    return await this.getWellsByIds(assetIds);
+    return await this.getByIds(assetIds);
   };
 }
