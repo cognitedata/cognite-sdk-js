@@ -89,26 +89,48 @@ yarn build</code></pre>
 				<pre><code class="language-bash">COGNITE_WELLS_PROJECT=&lt;project-tenant&gt;
 COGNITE_WELLS_CREDENTIALS=&lt;your-api-key&gt;</code></pre>
 				<a href="#setup-client" id="setup-client" style="color: inherit; text-decoration: none;">
-					<h5>setup client</h5>
+					<h4>setup client</h4>
 				</a>
-				<pre><code class="language-bash"><span class="hljs-built_in">let</span> client: CogniteClient = setupLoggedInClient()</code></pre>
-				<a href="#run-a-query" id="run-a-query" style="color: inherit; text-decoration: none;">
-					<h5>run a query</h5>
-				</a>
-				<pre><code class="language-bash">    const polygon = &lt;GeoJson&gt;{
-      <span class="hljs-built_in">type</span>: <span class="hljs-string">&#x27;Polygon&#x27;</span>,
-      coordinates: [
-        [
-          [-4.86423, 63.59999],
-          [19.86423, 63.59999],
-          [19.86423, 52.59999],
-          [-4.86423, 52.59999],
-          [-4.86423, 63.59999],
-        ],
-      ],
-    };
+				<pre><code class="language-bash">const { CogniteClient } = require(<span class="hljs-string">&quot;@cognite/sdk-wells&quot;</span>);
 
-    const response = await client.wells.getWellsByPolygon({geometry: polygon});</code></pre>
+<span class="hljs-built_in">let</span> client = new CogniteClient({
+  appId: `JS SDK <span class="hljs-built_in">test</span> (<span class="hljs-variable">${name}</span>)`,
+  baseUrl: <span class="hljs-string">&quot;https://api.cognitedata.com&quot;</span>,
+});
+
+client.loginWithApiKey({
+  project: process.env.COGNITE_WELLS_PROJECT,
+  apiKey: process.env.COGNITE_WELLS_CREDENTIALS,
+});</code></pre>
+				<a href="#run-a-polygon-query-by-geojson" id="run-a-polygon-query-by-geojson" style="color: inherit; text-decoration: none;">
+					<h4>run a polygon query by GeoJson</h4>
+				</a>
+				<pre><code class="language-bash">const polygon = {
+    <span class="hljs-built_in">type</span>: <span class="hljs-string">&#x27;Polygon&#x27;</span>,
+    coordinates: [
+    [
+        [-4.86423, 63.59999],
+        [19.86423, 63.59999],
+        [19.86423, 52.59999],
+        [-4.86423, 52.59999],
+        [-4.86423, 63.59999],
+    ],
+    ],
+};
+
+const response = await client.wells.searchByPolygon({geometry: polygon});</code></pre>
+				<a href="#run-a-polygon-query-by-wkt" id="run-a-polygon-query-by-wkt" style="color: inherit; text-decoration: none;">
+					<h4>run a polygon query by wkt</h4>
+				</a>
+				<pre><code class="language-bash">const polygon = <span class="hljs-string">&#x27;POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))&#x27;</span>;
+
+const response = await client.wells.searchByPolygon({geometry: polygon});</code></pre>
+				<a href="#run-a-polygon-query-by-wkt-1" id="run-a-polygon-query-by-wkt-1" style="color: inherit; text-decoration: none;">
+					<h4>run a polygon query by wkt</h4>
+				</a>
+				<pre><code class="language-bash">const polygon = <span class="hljs-string">&#x27;POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))&#x27;</span>;
+
+const response = await client.wells.getWellsByPolygon({geometry: polygon});</code></pre>
 				<p><img src="figures/wells-sdk.png" alt="query"></p>
 				<a href="#testing-the-wells-package-only" id="testing-the-wells-package-only" style="color: inherit; text-decoration: none;">
 					<h3>Testing the wells package only</h3>
