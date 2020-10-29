@@ -2,10 +2,12 @@
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { version } from '../../package.json';
 import { Wells } from './api/wells';
+import { Wellbores } from './api/wellbores';
 import { accessApi } from '@cognite/sdk-core';
 
 export default class CogniteClient extends CogniteClientStable {
   private wellsSDK?: Wells;
+  private wellboresSDK?: Wellbores;
 
   protected initAPIs() {
     super.initAPIs();
@@ -16,6 +18,10 @@ export default class CogniteClient extends CogniteClientStable {
 
   get wells(): Wells {
     return accessApi(this.wellsSDK);
+  }
+
+  get wellbores(): Wellbores {
+    return accessApi(this.wellboresSDK);
   }
 
   protected get version() {
