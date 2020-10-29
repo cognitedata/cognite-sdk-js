@@ -36,11 +36,11 @@ export class Wells extends AssetsAPI {
    */
   static mapToWell = (assets: Asset[]): Well[] => {
     return assets.map(asset => {
-      return <Well>(<unknown>{
+      return <Well>{
         id: asset.id,
         name: asset.name,
         wellHeadLocation: Wells.mapToWellHeadLocation(asset),
-      });
+      };
     });
   };
 
