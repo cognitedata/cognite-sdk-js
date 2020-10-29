@@ -4,6 +4,10 @@
 
 # Cognite Wells JS SDK (derived from stable)
 
+The purpose of the wells-sdk is to build a layer on top of the core CDF API that allows for interpreting and querying data in the context of the Cognite well model / wells data layer. The well model / wells data layer is a representation of how well data can be described and modeled in terms of Cognite’s reusable resources (assets, sequences, geospatial, etc).
+
+The importance of such a representation is being able to concatenate data from different sources into a single contextualized representation that is independent of source and customer. This allows both apps, such as Discover, and also geoscientists running models on top of well data, to be able to find the data they need and use it without having to consider where this data came from and what is its original format.
+
 This package provides an SDK derived from `@cognite/sdk`, aka
 [stable](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md).
 
