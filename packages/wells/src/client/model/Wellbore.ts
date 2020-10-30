@@ -1,6 +1,6 @@
 // Customizable function that takes in CogniteClient and args, and return a promise of a wellbore
-export type SearchWellbores = (args: any) => Promise<Wellbore[]>;
-export type SearchWellbore = (args: any) => Promise<Wellbore>;
+export type SearchWellbores = (args?: any) => Promise<Wellbore[]>;
+export type SearchWellbore = (args?: any) => Promise<Wellbore>;
 
 /**
  * A wellbore is an asset.

@@ -14,6 +14,7 @@ export default class CogniteClient extends CogniteClientStable {
 
     // Turns into $BASE_URL/api/$API_VERSION/projects/$PROJECT/assets
     this.wellsSDK = this.apiFactory(Wells, 'assets');
+    this.wellboresSDK = this.apiFactory(Wellbores, 'assets');
   }
 
   get wells(): Wells {
