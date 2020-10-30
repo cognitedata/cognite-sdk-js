@@ -113,7 +113,7 @@ const response = await client.wellbores.listChildren(wellId);
 
 ```js
 const rootId = 4438800495523058;
-const response = await client.wellbores.listByWellI(rootId);
+const response = await client.wellbores.listByWellId(rootId);
 ```
 
 #### Custom method for listing wellbores

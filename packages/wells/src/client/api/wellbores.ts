@@ -1,9 +1,5 @@
-//import { SpatialRel, GeometryRel } from '@cognite/geospatial-sdk-js';
 import { Asset, AssetsAPI } from '@cognite/sdk';
 import { SearchWellbores, Wellbore } from '../model/Wellbore';
-//import { WellHeadLocation } from '../model/WellHeadLocation';
-//import { geospatialClient } from './utils';
-//import { GeoJson } from '../model/GeoJson';
 
 export class Wellbores extends AssetsAPI {
   /**
@@ -36,19 +32,13 @@ export class Wellbores extends AssetsAPI {
    * @param exactSearch Filter on assets with strict matching.
    * @param fuzzySearch Fulltext search for assets. Primarily meant for for human-centric use-cases, not for programs.
    */
-  private searchAssets = async (
-    exactSearch = {},
-    fuzzySearch = {}
-  ): Promise<Asset[]> => {
+  private searchAssets = async (exactSearch = {}): Promise<Asset[]> => {
     const body = {
       filter: {
         metadata: {
           type: 'Wellbore',
         },
         ...exactSearch,
-      },
-      search: {
-        ...fuzzySearch,
       },
     };
     return await this.search(body);
