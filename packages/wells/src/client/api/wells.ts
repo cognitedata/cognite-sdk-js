@@ -36,11 +36,11 @@ export class Wells extends AssetsAPI {
    */
   static mapToWell = (assets: Asset[]): Well[] => {
     return assets.map(asset => {
-      return <Well>(<unknown>{
+      return <Well>{
         id: asset.id,
         name: asset.name,
         wellHeadLocation: Wells.mapToWellHeadLocation(asset),
-      });
+      };
     });
   };
 
@@ -48,7 +48,7 @@ export class Wells extends AssetsAPI {
    * A generic template for searching wells based on strict filtering and/or fuzzy filtering
    *
    * ```js
-   * const created = await client.wells.searchForWell(exactSearch: {key: val}, fuzzySearch: {key: val});
+   * const created = await client.wells.listAssets(exactSearch: {key: val}, fuzzySearch: {key: val});
    * ```
    *
    * @param exactSearch Filter on assets with strict matching.
@@ -76,7 +76,7 @@ export class Wells extends AssetsAPI {
    * Get wells filtering and/or with fuzzy search on name
    *
    * ```js
-   * const created = await client.wells.getWellByName('name');
+   * const created = await client.wells.listByName('name');
    * ```
    *
    * @param wellName the full name of the well
@@ -98,7 +98,7 @@ export class Wells extends AssetsAPI {
    * Get a list of wells that contains the specified search prefix in the name
    *
    * ```js
-   * const created = await client.wells.getWellsByNamePrefix(namePrefix: 'somePrefix');
+   * const created = await client.wells.listByNamePrefix(namePrefix: 'somePrefix');
    * ```
    *
    * @param namePrefix specify a prefix that the wellname should contain
@@ -125,7 +125,7 @@ export class Wells extends AssetsAPI {
    * Get a multiple wells filtering and/or with fuzzy search on name
    *
    * ```js
-   * const created = await client.wells.getWellsByIds([{id: 123}, {externalId: 'abc'}]);
+   * const created = await client.wells.getByIds([{id: 123}, {externalId: 'abc'}]);
    * ```
    *
    * @param ids contains unions of internal ids and external ids
@@ -146,7 +146,7 @@ export class Wells extends AssetsAPI {
    * Get a single well filtering and/or with fuzzy search on name
    *
    * ```js
-   * const created = await client.wells.getWellById(id: 123);
+   * const created = await client.wells.getById(id: 123);
    * ```
    *
    * @param id specific internal id for a particular well
@@ -168,7 +168,7 @@ export class Wells extends AssetsAPI {
    * Receives a geoJson or wkt polygon like in Discover and return a list of well objects
    *
    * ```js
-   * const created = await client.wells.getWellsByPolygon(....);
+   * const created = await client.wells.searchByPolygon(....);
    * ```
    *
    * @param polygon lat and lon that make up a polygon
