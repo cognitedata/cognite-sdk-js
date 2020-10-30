@@ -22,7 +22,7 @@ yarn install
 yarn build
 ```
 
-### consuming
+## consuming
 
 ##### set your env variables (must be valid for both cdf and geospatial API)
 
@@ -31,14 +31,14 @@ COGNITE_WELLS_PROJECT=<project-tenant>
 COGNITE_WELLS_CREDENTIALS=<your-api-key>
 ```
 
-#### setup client
+### setup client
 
-```bash
-const { CogniteClient } = require("@cognite/sdk-wells");
+```js
+const { CogniteClient } = require('@cognite/sdk-wells');
 
 let client = new CogniteClient({
   appId: `JS SDK test (${name})`,
-  baseUrl: "https://api.cognitedata.com",
+  baseUrl: 'https://api.cognitedata.com',
 });
 
 client.loginWithApiKey({
@@ -47,42 +47,84 @@ client.loginWithApiKey({
 });
 ```
 
+### well queries
+
 #### run a polygon query by GeoJson
 
-```bash
+```js
 const polygon = {
-    type: 'Polygon',
-    coordinates: [
+  type: 'Polygon',
+  coordinates: [
     [
-        [-4.86423, 63.59999],
-        [19.86423, 63.59999],
-        [19.86423, 52.59999],
-        [-4.86423, 52.59999],
-        [-4.86423, 63.59999],
+      [-4.86423, 63.59999],
+      [19.86423, 63.59999],
+      [19.86423, 52.59999],
+      [-4.86423, 52.59999],
+      [-4.86423, 63.59999],
     ],
-    ],
+  ],
 };
 
-const response = await client.wells.searchByPolygon({geometry: polygon});
+const response = await client.wells.searchByPolygon({ geometry: polygon });
 ```
 
 #### run a polygon query by wkt
 
-```bash
-const polygon = 'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+```js
+const polygon =
+  'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-const response = await client.wells.searchByPolygon({geometry: polygon});
+const response = await client.wells.searchByPolygon({ geometry: polygon });
 ```
 
-#### run a polygon query by wkt
+#### run a custom query
 
-```bash
-const polygon = 'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+```js
+const polygon =
+  'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-const response = await client.wells.getWellsByPolygon({geometry: polygon});
+// create a custom method
+const fn: SearchWells = async (geometry: GeoJson) =>
+  await someClient.myCustomPolygonSearch({ geometry: geometry });
+
+// input that custom filter
+const response = await client.wells.searchByPolygon({
+  geometry: polygon,
+  customFilter: fn,
+});
 ```
 
-![query](figures/wells-sdk.png)
+### wellbore queries
+
+#### List all wellbores in tenant
+
+```js
+const response = await client.wellbores.listAll();
+```
+
+#### List immediate children wellbore of parentId
+
+```js
+const wellId = 2278618537691581;
+const response = await client.wellbores.listChildren(wellId);
+```
+
+#### List all wellbores (all levels of subtree) from wellId
+
+```js
+const rootId = 4438800495523058;
+const response = await client.wellbores.listByWellI(rootId);
+```
+
+#### Custom method for listing wellbores
+
+```js
+const fn: SearchWellbores = async (args: number) =>
+  await myClient.customWellboresMethod(args);
+
+const rootId = 4438800495523058;
+const response = await client.wellbores.listByWellId(rootId, fn);
+```
 
 ### Testing the wells package only
 
