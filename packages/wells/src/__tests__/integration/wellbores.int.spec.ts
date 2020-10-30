@@ -55,7 +55,7 @@ describeIfCondition(
       });
     });
 
-    test('standard filter - list all children ', async () => {
+    test('standard filter - list all children wellbores', async () => {
       const rootId = 4438800495523058;
       const response = await client.wellbores.listByWellId(rootId);
       expect(response.length).toBe(5);
@@ -64,7 +64,7 @@ describeIfCondition(
       });
     });
 
-    test('custom filter - list all children ', async () => {
+    test('custom filter - list all children wellbores', async () => {
       const fn: SearchWellbores = async (args: number) =>
         await client.wellbores.listByWellId(args);
 
