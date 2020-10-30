@@ -70,6 +70,8 @@
 				<a href="#cognite-wells-js-sdk-derived-from-stable" id="cognite-wells-js-sdk-derived-from-stable" style="color: inherit; text-decoration: none;">
 					<h1>Cognite Wells JS SDK (derived from stable)</h1>
 				</a>
+				<p>The purpose of the wells-sdk is to build a layer on top of the core CDF API that allows for interpreting and querying data in the context of the Cognite well model / wells data layer. The well model / wells data layer is a representation of how well data can be described and modeled in terms of Cognite’s reusable resources (assets, sequences, geospatial, etc).</p>
+				<p>The importance of such a representation is being able to concatenate data from different sources into a single contextualized representation that is independent of source and customer. This allows both apps, such as Discover, and also geoscientists running models on top of well data, to be able to find the data they need and use it without having to consider where this data came from and what is its original format.</p>
 				<p>This package provides an SDK derived from <code>@cognite/sdk</code>, aka
 				<a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md">stable</a>.</p>
 				<p>It is recomended to install this package under the same name as <code>@cognite/sdk</code>.
@@ -81,7 +83,7 @@
 				<pre><code class="language-bash">yarn install
 yarn build</code></pre>
 				<a href="#consuming" id="consuming" style="color: inherit; text-decoration: none;">
-					<h3>consuming</h3>
+					<h2>consuming</h2>
 				</a>
 				<a href="#set-your-env-variables-must-be-valid-for-both-cdf-and-geospatial-api" id="set-your-env-variables-must-be-valid-for-both-cdf-and-geospatial-api" style="color: inherit; text-decoration: none;">
 					<h5>set your env variables (must be valid for both cdf and geospatial API)</h5>
@@ -89,49 +91,86 @@ yarn build</code></pre>
 				<pre><code class="language-bash">COGNITE_WELLS_PROJECT=&lt;project-tenant&gt;
 COGNITE_WELLS_CREDENTIALS=&lt;your-api-key&gt;</code></pre>
 				<a href="#setup-client" id="setup-client" style="color: inherit; text-decoration: none;">
-					<h4>setup client</h4>
+					<h3>setup client</h3>
 				</a>
-				<pre><code class="language-bash">const { CogniteClient } = require(<span class="hljs-string">&quot;@cognite/sdk-wells&quot;</span>);
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> { CogniteClient } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>);
 
-<span class="hljs-built_in">let</span> client = new CogniteClient({
-  appId: `JS SDK <span class="hljs-built_in">test</span> (<span class="hljs-variable">${name}</span>)`,
-  baseUrl: <span class="hljs-string">&quot;https://api.cognitedata.com&quot;</span>,
+<span class="hljs-keyword">let</span> client = <span class="hljs-keyword">new</span> CogniteClient({
+  <span class="hljs-attr">appId</span>: <span class="hljs-string">`JS SDK test (<span class="hljs-subst">${name}</span>)`</span>,
+  <span class="hljs-attr">baseUrl</span>: <span class="hljs-string">&#x27;https://api.cognitedata.com&#x27;</span>,
 });
 
 client.loginWithApiKey({
-  project: process.env.COGNITE_WELLS_PROJECT,
-  apiKey: process.env.COGNITE_WELLS_CREDENTIALS,
+  <span class="hljs-attr">project</span>: process.env.COGNITE_WELLS_PROJECT,
+  <span class="hljs-attr">apiKey</span>: process.env.COGNITE_WELLS_CREDENTIALS,
 });</code></pre>
+				<a href="#well-queries" id="well-queries" style="color: inherit; text-decoration: none;">
+					<h3>well queries</h3>
+				</a>
 				<a href="#run-a-polygon-query-by-geojson" id="run-a-polygon-query-by-geojson" style="color: inherit; text-decoration: none;">
 					<h4>run a polygon query by GeoJson</h4>
 				</a>
-				<pre><code class="language-bash">const polygon = {
-    <span class="hljs-built_in">type</span>: <span class="hljs-string">&#x27;Polygon&#x27;</span>,
-    coordinates: [
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> polygon = {
+  <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;Polygon&#x27;</span>,
+  <span class="hljs-attr">coordinates</span>: [
     [
-        [-4.86423, 63.59999],
-        [19.86423, 63.59999],
-        [19.86423, 52.59999],
-        [-4.86423, 52.59999],
-        [-4.86423, 63.59999],
+      [<span class="hljs-number">-4.86423</span>, <span class="hljs-number">63.59999</span>],
+      [<span class="hljs-number">19.86423</span>, <span class="hljs-number">63.59999</span>],
+      [<span class="hljs-number">19.86423</span>, <span class="hljs-number">52.59999</span>],
+      [<span class="hljs-number">-4.86423</span>, <span class="hljs-number">52.59999</span>],
+      [<span class="hljs-number">-4.86423</span>, <span class="hljs-number">63.59999</span>],
     ],
-    ],
+  ],
 };
 
-const response = await client.wells.searchByPolygon({geometry: polygon});</code></pre>
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.wells.searchByPolygon({ <span class="hljs-attr">geometry</span>: polygon });</code></pre>
 				<a href="#run-a-polygon-query-by-wkt" id="run-a-polygon-query-by-wkt" style="color: inherit; text-decoration: none;">
 					<h4>run a polygon query by wkt</h4>
 				</a>
-				<pre><code class="language-bash">const polygon = <span class="hljs-string">&#x27;POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))&#x27;</span>;
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> polygon =
+  <span class="hljs-string">&#x27;POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))&#x27;</span>;
 
-const response = await client.wells.searchByPolygon({geometry: polygon});</code></pre>
-				<a href="#run-a-polygon-query-by-wkt-1" id="run-a-polygon-query-by-wkt-1" style="color: inherit; text-decoration: none;">
-					<h4>run a polygon query by wkt</h4>
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.wells.searchByPolygon({ <span class="hljs-attr">geometry</span>: polygon });</code></pre>
+				<a href="#run-a-custom-query" id="run-a-custom-query" style="color: inherit; text-decoration: none;">
+					<h4>run a custom query</h4>
 				</a>
-				<pre><code class="language-bash">const polygon = <span class="hljs-string">&#x27;POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))&#x27;</span>;
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> polygon =
+  <span class="hljs-string">&#x27;POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))&#x27;</span>;
 
-const response = await client.wells.getWellsByPolygon({geometry: polygon});</code></pre>
-				<p><img src="figures/wells-sdk.png" alt="query"></p>
+<span class="hljs-comment">// create a custom method</span>
+<span class="hljs-keyword">const</span> fn: SearchWells = <span class="hljs-keyword">async</span> (geometry: GeoJson) =&gt;
+  <span class="hljs-keyword">await</span> someClient.myCustomPolygonSearch({ <span class="hljs-attr">geometry</span>: geometry });
+
+<span class="hljs-comment">// input that custom filter</span>
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.wells.searchByPolygon({
+  <span class="hljs-attr">geometry</span>: polygon,
+  <span class="hljs-attr">customFilter</span>: fn,
+});</code></pre>
+				<a href="#wellbore-queries" id="wellbore-queries" style="color: inherit; text-decoration: none;">
+					<h3>wellbore queries</h3>
+				</a>
+				<a href="#list-all-wellbores-in-tenant" id="list-all-wellbores-in-tenant" style="color: inherit; text-decoration: none;">
+					<h4>List all wellbores in tenant</h4>
+				</a>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.wellbores.listAll();</code></pre>
+				<a href="#list-immediate-children-wellbore-of-parentid" id="list-immediate-children-wellbore-of-parentid" style="color: inherit; text-decoration: none;">
+					<h4>List immediate children wellbore of parentId</h4>
+				</a>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> wellId = <span class="hljs-number">2278618537691581</span>;
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.wellbores.listChildren(wellId);</code></pre>
+				<a href="#list-all-wellbores-all-levels-of-subtree-from-wellid" id="list-all-wellbores-all-levels-of-subtree-from-wellid" style="color: inherit; text-decoration: none;">
+					<h4>List all wellbores (all levels of subtree) from wellId</h4>
+				</a>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> rootId = <span class="hljs-number">4438800495523058</span>;
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.wellbores.listByWellId(rootId);</code></pre>
+				<a href="#custom-method-for-listing-wellbores" id="custom-method-for-listing-wellbores" style="color: inherit; text-decoration: none;">
+					<h4>Custom method for listing wellbores</h4>
+				</a>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> fn: SearchWellbores = <span class="hljs-keyword">async</span> (args: number) =&gt;
+  <span class="hljs-keyword">await</span> myClient.customWellboresMethod(args);
+
+<span class="hljs-keyword">const</span> rootId = <span class="hljs-number">4438800495523058</span>;
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.wellbores.listByWellId(rootId, fn);</code></pre>
 				<a href="#testing-the-wells-package-only" id="testing-the-wells-package-only" style="color: inherit; text-decoration: none;">
 					<h3>Testing the wells package only</h3>
 				</a>
@@ -350,6 +389,9 @@ COGNITE_WELLS_PROJECT=&lt;project-tenant&gt; COGNITE_WELLS_CREDENTIALS=&lt;your-
 						<a href="modules/_wells_src_client_api_utils_.html">&quot;wells/src/client/api/utils&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_api_wellbores_.html">&quot;wells/src/client/api/wellbores&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_api_wells_.html">&quot;wells/src/client/api/wells&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
@@ -363,6 +405,9 @@ COGNITE_WELLS_PROJECT=&lt;project-tenant&gt; COGNITE_WELLS_CREDENTIALS=&lt;your-
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_wellheadlocation_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Head<wbr>Location&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_wellbore_.html">&quot;wells/src/client/model/<wbr>Wellbore&quot;</a>
 					</li>
 				</ul>
 			</nav>
