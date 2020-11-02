@@ -1,3 +1,5 @@
+import { SequenceRow } from 'stable/src/api/sequences/sequenceRow';
+
 export interface Survey {
   /**
    * @type {number}
@@ -23,11 +25,15 @@ export interface Survey {
    * @type {string}
    * @memberof Survey
    */
-  externalId: string;
+  externalId?: string;
   /**
    * Custom, application specific metadata. String key -> String value.
    * @type {{ [key: string]: string; }}
    * @memberof Well
    */
   metadata?: { [key: string]: string };
+  /**
+   *
+   */
+  rows(): Promise<SequenceRow[]>;
 }

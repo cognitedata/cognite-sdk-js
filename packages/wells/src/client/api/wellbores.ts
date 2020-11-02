@@ -1,11 +1,13 @@
-import { Asset, AssetsAPI, Sequence } from '@cognite/sdk';
+import { Asset, AssetsAPI } from '@cognite/sdk';
 import { SearchWellbores, Wellbore } from '../model/Wellbore';
 import { Surveys } from './survey';
 import { accessApi } from '@cognite/sdk-core';
-
-//import { applyMixins } from './utils';
+import { Survey } from '../model/Survey';
 
 export class Wellbores extends AssetsAPI {
+  /**
+   * Hacky dependency injection
+   */
   public surveysSDK?: Surveys;
   private get surveys(): Surveys {
     return accessApi(this.surveysSDK);
@@ -27,7 +29,7 @@ export class Wellbores extends AssetsAPI {
         name: asset.name,
         parentId: asset.parentId,
         metadata: asset.metadata,
-        trajectories: async (): Promise<Sequence[]> => {
+        trajectories: async (): Promise<Survey[]> => {
           return await this.surveys.listTrajectories(asset.id);
         },
       };
