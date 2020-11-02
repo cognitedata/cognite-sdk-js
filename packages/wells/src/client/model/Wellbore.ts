@@ -1,4 +1,4 @@
-import { Sequence } from '@cognite/sdk';
+import { Survey } from '../model/Survey';
 
 // Customizable function that takes in CogniteClient and args, and return a promise of a wellbore
 export type SearchWellbores = (args?: any) => Promise<Wellbore[]>;
@@ -35,5 +35,5 @@ export interface Wellbore {
   metadata?: { [key: string]: string };
 
   // _trajectories?: Sequence[];
-  trajectories(): Promise<Sequence[]>;
+  trajectories(): Promise<Survey[]>;
 }

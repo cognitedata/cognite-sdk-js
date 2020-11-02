@@ -4,7 +4,7 @@ import { version } from '../../package.json';
 import { Wells } from './api/wells';
 import { Wellbores } from './api/wellbores';
 import { accessApi } from '@cognite/sdk-core';
-import { Surveys } from './api/survey';
+import { Surveys } from './api/surveys';
 
 export default class CogniteClient extends CogniteClientStable {
   private wellsSDK?: Wells;
