@@ -94,6 +94,32 @@ const response = await client.wells.searchByPolygon({
 });
 ```
 
+### _polygon search with additional filters:_
+
+```js
+const polygon =
+  'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
+const response = await client.wells.listWells(
+  {
+    wellGeometry: {
+      geometry: polygon,
+      crs: 'epsg:4326',
+      outputCrs: 'EPSG:4326',
+    },
+    filter: {
+      name: ['Well A'],
+      dataSource: ['A', 'B'],
+      operator: ['A', 'B'],
+      field: ['A', 'B'],
+      block: ['A', 'B'],
+    },
+    limit: 1000,
+  }
+  }
+)
+```
+
 ### **Wellbore queries**
 
 #### _List all wellbores in tenant:_

@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.3.0...@cognite/sdk-wells@0.4.0) (2020-11-03)
+
+
+### Features
+
+* add search and filter method to wells sdk [release] ([#442](https://github.com/cognitedata/cognite-sdk-js/issues/442)) ([2cdf198](https://github.com/cognitedata/cognite-sdk-js/commit/2cdf1984e973c306525e0f9a8d5952d248728c11))
+
+
+
+
+
+# [0.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.2.0...@cognite/sdk-wells@0.3.0) (2020-10-30)
+
+
+### Features
+
+* add wellbores search to wells sdk [release] ([#441](https://github.com/cognitedata/cognite-sdk-js/issues/441)) ([cbfb818](https://github.com/cognitedata/cognite-sdk-js/commit/cbfb818c65ca4bfc7a7a1ebe17dc5f9383d7f127))
+
+
+
+
+
 # [0.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.1.0...@cognite/sdk-wells@0.2.0) (2020-10-29)
 
 
