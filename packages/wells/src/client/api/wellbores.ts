@@ -21,15 +21,11 @@ export class Wellbores extends AssetsAPI {
     return accessApi(this.surveysSDK);
   }
   /**
-   * converts asset into a wellbore
-   *
-   * ```js
-   * var wells = Wellbores.mapToWellHeadLocation(asset);
-   * ```
+   * Converts asset into a wellbore..
+   * Contains lazy getter for trajectories
    *
    * @param asset
    */
-
   private mapToWellbore = async (assets: Asset[]): Promise<Wellbore[]> => {
     return assets.map(asset => {
       return <Wellbore>{
@@ -45,14 +41,13 @@ export class Wellbores extends AssetsAPI {
   };
 
   /**
-   * A generic template for searching wellbores based on strict filtering and/or fuzzy filtering
+   * A generic template for searching wellbores based on exact filtering
    *
    * ```js
-   * const created = await client.wellbores.searchAssets(exactSearch: {key: val}, fuzzySearch: {key: val});
+   * const created = await client.wellbores.searchAssets(exactSearch: {key: val});
    * ```
    *
    * @param exactSearch Filter on assets with strict matching.
-   * @param fuzzySearch Fulltext search for assets. Primarily meant for for human-centric use-cases, not for programs.
    */
   private searchAssets = async (exactSearch = {}): Promise<Asset[]> => {
     const body = {

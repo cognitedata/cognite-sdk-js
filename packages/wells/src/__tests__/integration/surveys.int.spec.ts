@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
 import { setupLoggedInClient } from '../testUtils';
-import { SearchWellbores } from 'wells/src/client/model/Wellbore';
 import CogniteClient from '../../client/cogniteClient';
 import { SearchSurveys } from 'wells/src/client/model/Survey';
 
@@ -44,18 +43,15 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
   });
 
   test('standard filter - Fetch wellbores, their trajectories and rows ', async () => {
-    const fn: SearchWellbores = async (args: number) =>
-      await client.wellbores.listChildren(args);
-
     const wellId = 2278618537691581;
-    const response = await client.wellbores.listChildren(wellId, fn);
-    response.forEach(async element => {
-      expect(element.parentId).toBe(wellId);
-      const trajectories = await element.trajectories();
+    const wellbores = await client.wellbores.listChildren(wellId);
+    wellbores.forEach(async wellbore => {
+      expect(wellbore.parentId).toBe(wellId);
+      const trajectories = await wellbore.trajectories();
       expect(trajectories.length).toBeGreaterThanOrEqual(0);
       if (trajectories.length != 0) {
-        trajectories.forEach(async element => {
-          const rows = await element.rows();
+        trajectories.forEach(async trajectory => {
+          const rows = await trajectory.rows();
           if (rows.length != 0) {
             expect(rows.length).toBe(6);
           }
