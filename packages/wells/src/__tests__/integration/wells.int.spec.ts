@@ -88,6 +88,118 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     }
   });
 
+  test('standard filter - search and filter name', async () => {
+    const polygon =
+      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
+    const response = await client.wells.filterPolygonSearch({
+      geometry: polygon,
+      limit: 1,
+      name: 'Well A',
+    });
+
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well A')).toBe(true);
+    });
+    expect(response.length).toBe(1);
+  });
+
+  test('standard filter - search and filter id', async () => {
+    const polygon =
+      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
+    const response = await client.wells.filterPolygonSearch({
+      geometry: polygon,
+      limit: 1,
+      id: 2278618537691581,
+    });
+
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well A')).toBe(true);
+    });
+    expect(response.length).toBe(1);
+  });
+
+  test('standard filter - search and filter data source', async () => {
+    const polygon =
+      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
+    const response = await client.wells.filterPolygonSearch({
+      geometry: polygon,
+      limit: 1,
+      data_source: ['A'],
+    });
+
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well A')).toBe(true);
+    });
+    expect(response.length).toBe(1);
+  });
+
+  test('standard filter - search and filter operator', async () => {
+    const polygon =
+      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
+    const response = await client.wells.filterPolygonSearch({
+      geometry: polygon,
+      limit: 1,
+      operator: ['A'],
+    });
+
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well A')).toBe(true);
+    });
+    expect(response.length).toBe(1);
+  });
+
+  test('standard filter - search and filter field', async () => {
+    const polygon =
+      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
+    const response = await client.wells.filterPolygonSearch({
+      geometry: polygon,
+      limit: 1,
+      field: ['A'],
+    });
+
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well A')).toBe(true);
+    });
+    expect(response.length).toBe(1);
+  });
+
+  test('standard filter - search and filter block', async () => {
+    const polygon =
+      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
+    const response = await client.wells.filterPolygonSearch({
+      geometry: polygon,
+      limit: 1,
+      block: ['A'],
+    });
+
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well A')).toBe(true);
+    });
+    expect(response.length).toBe(1);
+  });
+
+  test('standard filter - search and filter multiple blocks', async () => {
+    const polygon =
+      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
+    const response = await client.wells.filterPolygonSearch({
+      geometry: polygon,
+      limit: 1,
+      block: ['A', 'B'],
+    });
+
+    response.forEach(function(well) {
+      expect(well.name.startsWith('Well')).toBe(true);
+    });
+    expect(response.length).toBe(2);
+  });
+
   test('standard filter - get well by polygon wkt', async () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
