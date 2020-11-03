@@ -1,6 +1,13 @@
 import { SpatialRel, GeometryRel } from '@cognite/geospatial-sdk-js';
 import { Asset, AssetsAPI, IdEither, Label } from '@cognite/sdk';
-import { Well, SearchWells, SearchWell } from '../model/Well';
+import {
+  Well,
+  SearchWells,
+  SearchWell,
+  WellFilter,
+  WellGeometry,
+} from '../model/Well';
+import { OPERATOR, DATA_SOURCE, FIELD, BLOCK } from '../../constants';
 import { WellHeadLocation } from '../model/WellHeadLocation';
 import { geospatialClient } from './utils';
 import { GeoJson } from '../model/GeoJson';
@@ -40,22 +47,24 @@ export class Wells extends AssetsAPI {
         id: asset.id,
         name: asset.name,
         wellHeadLocation: Wells.mapToWellHeadLocation(asset),
-        dataSource: Wells.getLabel('DataSource', asset.labels),
-        block: Wells.getLabel('Block', asset.labels),
-        field: Wells.getLabel('Field', asset.labels),
-        operator: Wells.getLabel('Operator', asset.labels),
+        dataSource: Wells.getLabel(DATA_SOURCE, asset.labels),
+        block: Wells.getLabel(BLOCK, asset.labels),
+        field: Wells.getLabel(FIELD, asset.labels),
+        operator: Wells.getLabel(OPERATOR, asset.labels),
       };
     });
   };
 
-  static getLabel(type: string, labels: Label[] | undefined): string | void {
+  static getLabel(type: string, labels: Label[] | undefined): string[] {
+    const values = [];
     if (labels) {
       for (const element of labels) {
         if (element.externalId.startsWith(type)) {
-          return element.externalId.split(':')[1];
+          values.push(element.externalId.split(':')[1]);
         }
       }
     }
+    return values;
   }
 
   /**
@@ -251,67 +260,55 @@ export class Wells extends AssetsAPI {
     return await this.getByIds(assetIds);
   };
 
-  public filterPolygonSearch = async ({
-    geometry,
-    crs = 'epsg:4326',
-    outputCrs = 'EPSG:4326',
-    limit = 1000,
-    name,
-    id,
-    data_source,
-    operator,
-    field,
-    block,
+  public listWells = async ({
+    wellGeometry,
+    filter = {},
     customFilter = undefined,
+    limit = 1000,
   }: {
-    geometry: string | GeoJson;
-    crs?: string;
-    outputCrs?: string;
-    limit?: number;
-    name?: string;
-    id?: number;
-    data_source?: string[];
-    operator?: string[];
-    field?: string[];
-    block?: string[];
+    wellGeometry: WellGeometry;
+    filter: WellFilter;
     customFilter?: SearchWells;
+    limit?: number;
   }): Promise<Well[]> => {
     if (customFilter) {
-      return await customFilter(geometry);
+      return await customFilter(wellGeometry.geometry);
     }
 
     let polygonWells = await this.searchByPolygon({
-      geometry,
-      crs,
-      outputCrs,
-      limit,
-      offset: 0,
+      geometry: wellGeometry.geometry,
+      crs: wellGeometry.crs,
+      outputCrs: wellGeometry.outputCrs,
+      limit: limit,
     });
 
-    if (name) {
-      polygonWells = polygonWells.filter(x => x.name === name);
+    if (filter.name) {
+      polygonWells = polygonWells.filter(x => filter.name!.includes(x.name));
     }
-    if (id) {
-      polygonWells = polygonWells.filter(x => x.id === id);
-    }
-    if (data_source) {
+    if (filter.dataSource) {
       polygonWells = polygonWells.filter(
-        x => x.dataSource && data_source.includes(x.dataSource)
+        x =>
+          x.dataSource &&
+          x.dataSource.map(y => filter.dataSource!.includes(y)).includes(true)
       );
     }
-    if (operator) {
+    if (filter.operator) {
       polygonWells = polygonWells.filter(
-        x => x.operator && operator.includes(x.operator)
+        x =>
+          x.operator &&
+          x.operator.map(y => filter.operator!.includes(y)).includes(true)
       );
     }
-    if (field) {
+    if (filter.field) {
       polygonWells = polygonWells.filter(
-        x => x.field && field.includes(x.field)
+        x =>
+          x.field && x.field.map(y => filter.field!.includes(y)).includes(true)
       );
     }
-    if (block) {
+    if (filter.block) {
       polygonWells = polygonWells.filter(
-        x => x.block && block.includes(x.block)
+        x =>
+          x.block && x.block.map(y => filter.block!.includes(y)).includes(true)
       );
     }
 

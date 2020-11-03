@@ -92,26 +92,10 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-    const response = await client.wells.filterPolygonSearch({
-      geometry: polygon,
+    const response = await client.wells.listWells({
+      wellGeometry: { geometry: polygon },
+      filter: { name: ['Well A'] },
       limit: 1,
-      name: 'Well A',
-    });
-
-    response.forEach(function(well) {
-      expect(well.name.startsWith('Well A')).toBe(true);
-    });
-    expect(response.length).toBe(1);
-  });
-
-  test('standard filter - search and filter id', async () => {
-    const polygon =
-      'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
-
-    const response = await client.wells.filterPolygonSearch({
-      geometry: polygon,
-      limit: 1,
-      id: 2278618537691581,
     });
 
     response.forEach(function(well) {
@@ -124,10 +108,10 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-    const response = await client.wells.filterPolygonSearch({
-      geometry: polygon,
+    const response = await client.wells.listWells({
+      wellGeometry: { geometry: polygon },
+      filter: { dataSource: ['A'] },
       limit: 1,
-      data_source: ['A'],
     });
 
     response.forEach(function(well) {
@@ -140,10 +124,10 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-    const response = await client.wells.filterPolygonSearch({
-      geometry: polygon,
+    const response = await client.wells.listWells({
+      wellGeometry: { geometry: polygon },
+      filter: { operator: ['A'] },
       limit: 1,
-      operator: ['A'],
     });
 
     response.forEach(function(well) {
@@ -156,10 +140,10 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-    const response = await client.wells.filterPolygonSearch({
-      geometry: polygon,
+    const response = await client.wells.listWells({
+      wellGeometry: { geometry: polygon },
+      filter: { field: ['A'] },
       limit: 1,
-      field: ['A'],
     });
 
     response.forEach(function(well) {
@@ -172,10 +156,10 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-    const response = await client.wells.filterPolygonSearch({
-      geometry: polygon,
+    const response = await client.wells.listWells({
+      wellGeometry: { geometry: polygon },
+      filter: { block: ['A'] },
       limit: 1,
-      block: ['A'],
     });
 
     response.forEach(function(well) {
@@ -188,10 +172,10 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const polygon =
       'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
 
-    const response = await client.wells.filterPolygonSearch({
-      geometry: polygon,
+    const response = await client.wells.listWells({
+      wellGeometry: { geometry: polygon },
+      filter: { block: ['A', 'B'] },
       limit: 1,
-      block: ['A', 'B'],
     });
 
     response.forEach(function(well) {
