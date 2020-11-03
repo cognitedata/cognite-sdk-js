@@ -4,9 +4,18 @@ import { Survey } from '../model/Survey';
 import { Surveys } from './surveys';
 import { accessApi } from '@cognite/sdk-core';
 
-//import { applyMixins } from './utils';
-
 export class Wellbores extends AssetsAPI {
+  /**
+   * Dependecy injection
+   *
+   * public setter and private getter
+   *
+   * allows for:
+   *
+   * ```js
+   * var trajectories = this.surveys.listTrajectories(assetId)
+   * ```
+   */
   public surveysSDK?: Surveys;
   private get surveys(): Surveys {
     return accessApi(this.surveysSDK);
@@ -15,7 +24,7 @@ export class Wellbores extends AssetsAPI {
    * converts asset into a wellbore
    *
    * ```js
-   * var wells: WellHeadLocation = Wellbores.mapToWellHeadLocation(asset);
+   * var wells = Wellbores.mapToWellHeadLocation(asset);
    * ```
    *
    * @param asset

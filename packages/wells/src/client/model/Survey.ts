@@ -1,5 +1,7 @@
 import { SequenceRow } from 'stable/dist/src/api/sequences/sequenceRow';
 
+export type SearchSurveys = (args?: any) => Promise<Survey[]>;
+
 export interface Survey {
   /**
    * @type {number}
@@ -29,11 +31,12 @@ export interface Survey {
   /**
    * Custom, application specific metadata. String key -> String value.
    * @type {{ [key: string]: string; }}
-   * @memberof Well
+   * @memberof Survey
    */
   metadata?: { [key: string]: string };
   /**
-   *
+   * @type {Promise<SequenceRow[]>}
+   * @memberof Survey
    */
-  rows(): Promise<SequenceRow[]>;
+  rows(limit?: number): Promise<SequenceRow[]>;
 }

@@ -30,10 +30,12 @@ export interface Wellbore {
   /**
    * Custom, application specific metadata. String key -> String value.
    * @type {{ [key: string]: string; }}
-   * @memberof Well
+   * @memberof Wellbore
    */
   metadata?: { [key: string]: string };
-
-  // _trajectories?: Sequence[];
+  /**
+   * @type {Promise<Survey[]>}
+   * @memberof Wellbore
+   */
   trajectories(): Promise<Survey[]>;
 }

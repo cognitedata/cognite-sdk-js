@@ -1,9 +1,11 @@
 import { Sequence, SequencesAPI } from '@cognite/sdk';
 import { SequenceRow } from 'stable/dist/src/api/sequences/sequenceRow';
-import { Survey } from '../model/Survey';
+import { Survey, SearchSurveys } from '../model/Survey';
 
 export class Surveys extends SequencesAPI {
   /**
+   * Maps from sequence array to a survey array.
+   * Contains lazy getter for rows
    *
    * @param sequences
    */
@@ -16,27 +18,45 @@ export class Surveys extends SequencesAPI {
         assetId: sequence.assetId,
         externalId: sequence.externalId,
         metadata: sequence.metadata,
-        rows: async (): Promise<SequenceRow[]> => {
+        rows: async (limit: number = 100): Promise<SequenceRow[]> => {
           return this.retrieveRows({
             externalId:
               sequence.externalId != undefined ? sequence.externalId : '',
-          }).autoPagingToArray({ limit: 100 });
+          }).autoPagingToArray({ limit: limit });
         },
       };
     });
   };
 
   /**
+   * List all trajectories for a particular assetId (wellbore)
+   * and returns a list of surveys
    *
    * @param assetId
    */
-  listTrajectories = async (assetId: number): Promise<Survey[]> => {
-    const sequences = await this.search({
+  listTrajectories = async (
+    assetId: number,
+    customFilter?: SearchSurveys
+  ): Promise<Survey[]> => {
+    if (customFilter) {
+      return await customFilter(assetId);
+    }
+
+    const definiteSurveys = await this.search({
       filter: {
         assetIds: [assetId],
         metadata: { type: 'DefinitiveSurvey', PHASE: 'ACTUAL' },
       },
     });
+
+    const surveys = await this.search({
+      filter: {
+        assetIds: [assetId],
+        metadata: { type: 'Survey', PHASE: 'ACTUAL' },
+      },
+    });
+
+    const sequences = surveys.concat(definiteSurveys);
     return this.mapToSurvey(sequences);
   };
 }
