@@ -17,6 +17,7 @@ export default class CogniteClient extends CogniteClientStable {
     // Turns into $BASE_URL/api/$API_VERSION/projects/$PROJECT/assets
     this.wellsSDK = this.apiFactory(Wells, 'assets');
     this.wellboresSDK = this.apiFactory(Wellbores, 'assets');
+
     // Turns into $BASE_URL/api/$API_VERSION/projects/$PROJECT/sequences
     this.surveysSDK = this.apiFactory(Surveys, 'sequences');
 
@@ -26,7 +27,7 @@ export default class CogniteClient extends CogniteClientStable {
      a Singleton pattern with only one CogniteClient being 
      instanciated and we reuse that connection even when
      surveys endpoints are called within the wellbores class */
-    this.wellboresSDK.surveysSDK = this.surveysSDK;
+    this.wellboresSDK.surveysSdk = this.surveysSDK;
   }
 
   get wells(): Wells {

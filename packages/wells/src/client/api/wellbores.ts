@@ -16,9 +16,13 @@ export class Wellbores extends AssetsAPI {
    * var trajectories = this.surveys.listTrajectories(assetId)
    * ```
    */
-  public surveysSDK?: Surveys;
+  private _surveysSDK?: Surveys;
+
+  public set surveysSdk(sdk: Surveys) {
+    this._surveysSDK = sdk;
+  }
   private get surveys(): Surveys {
-    return accessApi(this.surveysSDK);
+    return accessApi(this._surveysSDK);
   }
   /**
    * Converts asset into a wellbore..
