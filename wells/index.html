@@ -171,6 +171,30 @@ client.loginWithApiKey({
 
 <span class="hljs-keyword">const</span> rootId = <span class="hljs-number">4438800495523058</span>;
 <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.wellbores.listByWellId(rootId, fn);</code></pre>
+				<a href="#polygon-search-with-additional-filters" id="polygon-search-with-additional-filters" style="color: inherit; text-decoration: none;">
+					<h3>polygon search with additional filters</h3>
+				</a>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> polygon =
+  <span class="hljs-string">&#x27;POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))&#x27;</span>;
+
+<span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.wells.listWells(
+  {
+    <span class="hljs-attr">wellGeometry</span>: {
+      <span class="hljs-attr">geometry</span>: polygon,
+      <span class="hljs-attr">crs</span>: <span class="hljs-string">&#x27;epsg:4326&#x27;</span>,
+      <span class="hljs-attr">outputCrs</span>: <span class="hljs-string">&#x27;EPSG:4326&#x27;</span>,
+    },
+    <span class="hljs-attr">filter</span>: {
+      <span class="hljs-attr">name</span>: [<span class="hljs-string">&#x27;Well A&#x27;</span>],
+      <span class="hljs-attr">dataSource</span>: [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>],
+      <span class="hljs-attr">operator</span>: [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>],
+      <span class="hljs-attr">field</span>: [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>],
+      <span class="hljs-attr">block</span>: [<span class="hljs-string">&#x27;A&#x27;</span>, <span class="hljs-string">&#x27;B&#x27;</span>],
+    },
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">1000</span>,
+  }
+  }
+)</code></pre>
 				<a href="#testing-the-wells-package-only" id="testing-the-wells-package-only" style="color: inherit; text-decoration: none;">
 					<h3>Testing the wells package only</h3>
 				</a>
@@ -408,6 +432,9 @@ COGNITE_WELLS_PROJECT=&lt;project-tenant&gt; COGNITE_WELLS_CREDENTIALS=&lt;your-
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_wellbore_.html">&quot;wells/src/client/model/<wbr>Wellbore&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_constants_.html">&quot;wells/src/constants&quot;</a>
 					</li>
 				</ul>
 			</nav>
