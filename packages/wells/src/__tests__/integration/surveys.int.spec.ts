@@ -17,26 +17,26 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
   });
 
   test('standard filter - list all trajectories and its rows', async () => {
-    const assetId = 4618298167286402;
-    const trajectories = await client.surveys.listTrajectories(assetId);
+    const wellboreId = 4618298167286402;
+    const trajectories = await client.surveys.listTrajectories(wellboreId);
     expect(trajectories.length).toBeGreaterThan(0);
     trajectories.forEach(async element => {
-      expect(element.assetId).toBe(assetId);
+      expect(element.assetId).toBe(wellboreId);
       const rows = await element.rows();
       expect(rows.length).toBe(6);
     });
   });
 
   test('custom filter - list all trajectories and its rows', async () => {
-    const assetId = 4618298167286402;
+    const wellboreId = 4618298167286402;
 
     const fn: SearchSurveys = async (args: number) =>
       await client.surveys.listTrajectories(args);
 
-    const trajectories = await client.surveys.listTrajectories(assetId, fn);
+    const trajectories = await client.surveys.listTrajectories(wellboreId, fn);
     expect(trajectories.length).toBeGreaterThan(0);
     trajectories.forEach(async element => {
-      expect(element.assetId).toBe(assetId);
+      expect(element.assetId).toBe(wellboreId);
       const rows = await element.rows();
       expect(rows.length).toBe(6);
     });
