@@ -41,6 +41,26 @@ export interface Well {
    */
   platform?: string;
   /**
+   * @type {string}
+   * @memberof Well
+   */
+  dataSource?: string;
+  /**
+   * @type {string}
+   * @memberof Well
+   */
+  operator: string;
+  /**
+   * @type {string}
+   * @memberof Well
+   */
+  field: string;
+  /**
+   * @type {string}
+   * @memberof Well
+   */
+  block: string;
+  /**
    * Custom, application specific metadata. String key -> String value.
    * @type {{ [key: string]: string; }}
    * @memberof Well
