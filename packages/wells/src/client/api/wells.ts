@@ -1,6 +1,13 @@
 import { SpatialRel, GeometryRel } from '@cognite/geospatial-sdk-js';
-import { Asset, AssetsAPI, IdEither } from '@cognite/sdk';
-import { Well, SearchWells, SearchWell } from '../model/Well';
+import { Asset, AssetsAPI, IdEither, Label } from '@cognite/sdk';
+import {
+  Well,
+  SearchWells,
+  SearchWell,
+  WellFilter,
+  WellGeometry,
+} from '../model/Well';
+import { OPERATOR, DATA_SOURCE, FIELD, BLOCK } from '../../constants';
 import { WellHeadLocation } from '../model/WellHeadLocation';
 import { geospatialClient } from './utils';
 import { GeoJson } from '../model/GeoJson';
@@ -40,9 +47,25 @@ export class Wells extends AssetsAPI {
         id: asset.id,
         name: asset.name,
         wellHeadLocation: Wells.mapToWellHeadLocation(asset),
+        dataSource: Wells.getLabel(DATA_SOURCE, asset.labels),
+        block: Wells.getLabel(BLOCK, asset.labels),
+        field: Wells.getLabel(FIELD, asset.labels),
+        operator: Wells.getLabel(OPERATOR, asset.labels),
       };
     });
   };
+
+  static getLabel(type: string, labels: Label[] | undefined): string[] {
+    const values = [];
+    if (labels) {
+      for (const element of labels) {
+        if (element.externalId.startsWith(type)) {
+          values.push(element.externalId.split(':')[1]);
+        }
+      }
+    }
+    return values;
+  }
 
   /**
    * A generic template for searching wells based on strict filtering and/or fuzzy filtering
@@ -235,5 +258,60 @@ export class Wells extends AssetsAPI {
     });
 
     return await this.getByIds(assetIds);
+  };
+
+  public listWells = async ({
+    wellGeometry,
+    filter = {},
+    customFilter = undefined,
+    limit = 1000,
+  }: {
+    wellGeometry: WellGeometry;
+    filter: WellFilter;
+    customFilter?: SearchWells;
+    limit?: number;
+  }): Promise<Well[]> => {
+    if (customFilter) {
+      return await customFilter(wellGeometry.geometry);
+    }
+
+    let polygonWells = await this.searchByPolygon({
+      geometry: wellGeometry.geometry,
+      crs: wellGeometry.crs,
+      outputCrs: wellGeometry.outputCrs,
+      limit: limit,
+    });
+
+    if (filter.name) {
+      polygonWells = polygonWells.filter(x => filter.name!.includes(x.name));
+    }
+    if (filter.dataSource) {
+      polygonWells = polygonWells.filter(
+        x =>
+          x.dataSource &&
+          x.dataSource.map(y => filter.dataSource!.includes(y)).includes(true)
+      );
+    }
+    if (filter.operator) {
+      polygonWells = polygonWells.filter(
+        x =>
+          x.operator &&
+          x.operator.map(y => filter.operator!.includes(y)).includes(true)
+      );
+    }
+    if (filter.field) {
+      polygonWells = polygonWells.filter(
+        x =>
+          x.field && x.field.map(y => filter.field!.includes(y)).includes(true)
+      );
+    }
+    if (filter.block) {
+      polygonWells = polygonWells.filter(
+        x =>
+          x.block && x.block.map(y => filter.block!.includes(y)).includes(true)
+      );
+    }
+
+    return polygonWells;
   };
 }

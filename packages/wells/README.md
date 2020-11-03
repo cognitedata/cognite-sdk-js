@@ -126,6 +126,32 @@ const rootId = 4438800495523058;
 const response = await client.wellbores.listByWellId(rootId, fn);
 ```
 
+### polygon search with additional filters
+
+```js
+const polygon =
+  'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+
+const response = await client.wells.listWells(
+  {
+    wellGeometry: {
+      geometry: polygon,
+      crs: 'epsg:4326',
+      outputCrs: 'EPSG:4326',
+    },
+    filter: {
+      name: ['Well A'],
+      dataSource: ['A', 'B'],
+      operator: ['A', 'B'],
+      field: ['A', 'B'],
+      block: ['A', 'B'],
+    },
+    limit: 1000,
+  }
+  }
+)
+```
+
 ### Testing the wells package only
 
 This repo contains some integration tests that require a CDF api key for `subsurface-test` tenant.
