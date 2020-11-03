@@ -20,11 +20,12 @@ export default class CogniteClient extends CogniteClientStable {
     // Turns into $BASE_URL/api/$API_VERSION/projects/$PROJECT/sequences
     this.surveysSDK = this.apiFactory(Surveys, 'sequences');
 
-    /* Allows surveys endpoints being accessed on the
+    /* We want to hide the dependency injection from the users
+     of the SDK. This allows surveys endpoints being accessed on the
      wellbores object using 'this'. This also ensures
-     a Singleton pattern with only one CogniteClient
-     being instanciated at all times, and reused across
-     all endpoints. */
+     a Singleton pattern with only one CogniteClient being 
+     instanciated and we reuse that connection even when
+     surveys endpoints are called within the wellbores class */
     this.wellboresSDK.surveysSDK = this.surveysSDK;
   }
 
