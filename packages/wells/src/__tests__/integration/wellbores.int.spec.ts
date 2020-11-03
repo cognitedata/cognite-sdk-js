@@ -52,8 +52,6 @@ describeIfCondition(
       const response = await client.wellbores.listChildren(wellId, fn);
       response.forEach(async element => {
         expect(element.parentId).toBe(wellId);
-        const traj = await element.trajectories();
-        console.log('traj: ', traj);
       });
     });
 
