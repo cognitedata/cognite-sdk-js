@@ -56,7 +56,6 @@ export class Surveys extends SequencesAPI {
       },
     });
 
-    const sequences = surveys.concat(definiteSurveys);
-    return this.mapToSurvey(sequences);
+    return this.mapToSurvey([...surveys, ...definiteSurveys]);
   };
 }

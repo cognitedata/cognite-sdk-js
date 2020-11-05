@@ -59,4 +59,21 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
       }
     });
   });
+
+  test('standard filter - synchronous for-loop ', async () => {
+    const wellId = 2278618537691581;
+    const wellbores = await client.wellbores.listChildren(wellId);
+    for (const wellbore of wellbores) {
+      const trajectories = await wellbore.trajectories();
+      expect(trajectories.length).toBeGreaterThanOrEqual(0);
+      if (trajectories.length != 0) {
+        for (const trajectory of trajectories) {
+          const rows = await trajectory.rows();
+          if (rows.length != 0) {
+            expect(rows.length).toBe(6);
+          }
+        }
+      }
+    }
+  });
 });

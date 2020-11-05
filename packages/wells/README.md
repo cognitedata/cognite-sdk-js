@@ -159,11 +159,11 @@ Trajectories are expressed as **Survey[]** and are found on the wellbore object 
 ```js
 const wellId = 2278618537691581;
 const wellbores = await client.wellbores.listChildren(wellId);
-wellbores.forEach(async wellbore => {
+for (const wellbore of wellbores) {
   const trajectories = await wellbore.trajectories();
   // wellbores exist?
   if (trajectories.length != 0) {
-    trajectories.forEach(async trajectory => {
+    for (const trajectory of trajectories) {
       const rows = await trajectory.rows();
       // rows exist?
       if (rows.length != 0) {
@@ -181,8 +181,8 @@ wellbores.forEach(async wellbore => {
 ```js
 const wellboreId = 4618298167286402;
 const trajectories = await client.surveys.listTrajectories(wellboreId);
-trajectories.forEach(async trajectory => {
-  const rows = await element.rows();
+for (const trajectory of trajectories) {
+  const rows = await trajectory.rows();
   console.log(rows);
 });
 ```
@@ -196,8 +196,8 @@ const fn: SearchSurveys = async (args: number) =>
   await client.surveys.listTrajectories(args);
 
 const trajectories = await client.surveys.listTrajectories(wellboreId, fn);
-trajectories.forEach(async trajectory => {
-  const rows = await element.rows();
+for (const trajectory of trajectories) {
+  const rows = await trajectory.rows();
   console.log(rows);
 });
 ```
