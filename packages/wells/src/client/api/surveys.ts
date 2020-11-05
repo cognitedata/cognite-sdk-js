@@ -15,8 +15,6 @@ export class Surveys extends SequencesAPI {
         id: sequence.id,
         name: sequence.name,
         description: sequence.description,
-        assetId: sequence.assetId,
-        externalId: sequence.externalId,
         metadata: sequence.metadata,
         rows: async (limit: number = 100): Promise<SequenceRow[]> => {
           return this.retrieveRows({

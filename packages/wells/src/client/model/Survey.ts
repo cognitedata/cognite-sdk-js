@@ -19,16 +19,6 @@ export interface Survey {
    */
   description: string;
   /**
-   * @type {number}
-   * @memberof Survey
-   */
-  assetId: number;
-  /**
-   * @type {string}
-   * @memberof Survey
-   */
-  externalId?: string;
-  /**
    * Custom, application specific metadata. String key -> String value.
    * @type {{ [key: string]: string; }}
    * @memberof Survey

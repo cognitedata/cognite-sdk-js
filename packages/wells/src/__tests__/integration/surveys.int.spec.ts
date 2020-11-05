@@ -21,7 +21,6 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
     const trajectories = await client.surveys.listTrajectories(wellboreId);
     expect(trajectories.length).toBeGreaterThan(0);
     trajectories.forEach(async element => {
-      expect(element.assetId).toBe(wellboreId);
       const rows = await element.rows();
       expect(rows.length).toBe(6);
     });
@@ -36,7 +35,6 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
     const trajectories = await client.surveys.listTrajectories(wellboreId, fn);
     expect(trajectories.length).toBeGreaterThan(0);
     trajectories.forEach(async element => {
-      expect(element.assetId).toBe(wellboreId);
       const rows = await element.rows();
       expect(rows.length).toBe(6);
     });
