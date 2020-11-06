@@ -161,7 +161,7 @@ const wellId = 2278618537691581;
 const wellbores = await client.wellbores.listChildren(wellId);
 for (const wellbore of wellbores) {
   const trajectories = await wellbore.trajectories();
-  // wellbores exist?
+  // trajectories exist?
   if (trajectories.length != 0) {
     for (const trajectory of trajectories) {
       const rows = await trajectory.rows();
