@@ -50,7 +50,7 @@ describeIfCondition(
 
       const wellId = 2278618537691581;
       const response = await client.wellbores.listChildren(wellId, fn);
-      response.forEach(element => {
+      response.forEach(async element => {
         expect(element.parentId).toBe(wellId);
       });
     });

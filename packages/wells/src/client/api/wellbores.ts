@@ -1,36 +1,57 @@
 import { Asset, AssetsAPI } from '@cognite/sdk';
 import { SearchWellbores, Wellbore } from '../model/Wellbore';
+import { Survey } from '../model/Survey';
+import { Surveys } from './surveys';
+import { accessApi } from '@cognite/sdk-core';
 
 export class Wellbores extends AssetsAPI {
   /**
-   * converts asset into a wellbore
+   * Dependecy injection
+   *
+   * public setter and private getter
+   *
+   * allows for:
    *
    * ```js
-   * var wells: WellHeadLocation = Wellbores.mapToWellHeadLocation(asset);
+   * var trajectories = this.surveys.listTrajectories(assetId)
    * ```
+   */
+  private _surveysSDK?: Surveys;
+
+  public set surveysSdk(sdk: Surveys) {
+    this._surveysSDK = sdk;
+  }
+  private get surveys(): Surveys {
+    return accessApi(this._surveysSDK);
+  }
+  /**
+   * Converts asset into a wellbore..
+   * Contains lazy getter for trajectories
    *
    * @param asset
    */
-  static mapToWellbore = (assets: Asset[]): Wellbore[] => {
+  private mapToWellbore = async (assets: Asset[]): Promise<Wellbore[]> => {
     return assets.map(asset => {
       return <Wellbore>{
         id: asset.id,
         name: asset.name,
         parentId: asset.parentId,
         metadata: asset.metadata,
+        trajectories: async (): Promise<Survey[]> => {
+          return await this.surveys.listTrajectories(asset.id);
+        },
       };
     });
   };
 
   /**
-   * A generic template for searching wellbores based on strict filtering and/or fuzzy filtering
+   * A generic template for searching wellbores based on exact filtering
    *
    * ```js
-   * const created = await client.wellbores.searchAssets(exactSearch: {key: val}, fuzzySearch: {key: val});
+   * const created = await client.wellbores.searchAssets(exactSearch: {key: val});
    * ```
    *
    * @param exactSearch Filter on assets with strict matching.
-   * @param fuzzySearch Fulltext search for assets. Primarily meant for for human-centric use-cases, not for programs.
    */
   private searchAssets = async (exactSearch = {}): Promise<Asset[]> => {
     const body = {
@@ -59,7 +80,7 @@ export class Wellbores extends AssetsAPI {
     if (customFilter) {
       return await customFilter();
     }
-    return Wellbores.mapToWellbore(await this.searchAssets());
+    return this.mapToWellbore(await this.searchAssets());
   };
 
   /**
@@ -81,7 +102,7 @@ export class Wellbores extends AssetsAPI {
     }
 
     const exactSearch = { parentIds: [parentId] };
-    return Wellbores.mapToWellbore(await this.searchAssets(exactSearch));
+    return this.mapToWellbore(await this.searchAssets(exactSearch));
   };
 
   /**
@@ -103,6 +124,6 @@ export class Wellbores extends AssetsAPI {
     }
 
     const exactSearch = { assetSubtreeIds: [{ id: wellId }] };
-    return Wellbores.mapToWellbore(await this.searchAssets(exactSearch));
+    return this.mapToWellbore(await this.searchAssets(exactSearch));
   };
 }

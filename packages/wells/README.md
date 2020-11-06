@@ -22,7 +22,7 @@ yarn install
 yarn build
 ```
 
-## consuming
+## **consuming**
 
 ##### set your env variables (must be valid for both cdf and geospatial API)
 
@@ -47,9 +47,9 @@ client.loginWithApiKey({
 });
 ```
 
-### well queries
+### **well queries**
 
-#### run a polygon query by GeoJson
+#### _run a polygon query by GeoJson:_
 
 ```js
 const polygon = {
@@ -68,7 +68,7 @@ const polygon = {
 const response = await client.wells.searchByPolygon({ geometry: polygon });
 ```
 
-#### run a polygon query by wkt
+#### _run a polygon query by wkt:_
 
 ```js
 const polygon =
@@ -77,7 +77,7 @@ const polygon =
 const response = await client.wells.searchByPolygon({ geometry: polygon });
 ```
 
-#### run a custom query
+#### _run a custom query:_
 
 ```js
 const polygon =
@@ -94,39 +94,7 @@ const response = await client.wells.searchByPolygon({
 });
 ```
 
-### wellbore queries
-
-#### List all wellbores in tenant
-
-```js
-const response = await client.wellbores.listAll();
-```
-
-#### List immediate children wellbore of parentId
-
-```js
-const wellId = 2278618537691581;
-const response = await client.wellbores.listChildren(wellId);
-```
-
-#### List all wellbores (all levels of subtree) from wellId
-
-```js
-const rootId = 4438800495523058;
-const response = await client.wellbores.listByWellId(rootId);
-```
-
-#### Custom method for listing wellbores
-
-```js
-const fn: SearchWellbores = async (args: number) =>
-  await myClient.customWellboresMethod(args);
-
-const rootId = 4438800495523058;
-const response = await client.wellbores.listByWellId(rootId, fn);
-```
-
-### polygon search with additional filters
+### _polygon search with additional filters:_
 
 ```js
 const polygon =
@@ -152,7 +120,89 @@ const response = await client.wells.listWells(
 )
 ```
 
-### Testing the wells package only
+### **Wellbore queries**
+
+#### _List all wellbores in tenant:_
+
+```js
+const response = await client.wellbores.listAll();
+```
+
+#### _List immediate children wellbore of parentId:_
+
+```js
+const wellId = 2278618537691581;
+const response = await client.wellbores.listChildren(wellId);
+```
+
+#### _List all wellbores (all levels of subtree) from wellId:_
+
+```js
+const rootId = 4438800495523058;
+const response = await client.wellbores.listByWellId(rootId);
+```
+
+#### _Custom method for listing wellbores:_
+
+```js
+const fn: SearchWellbores = async (args: number) =>
+  await myClient.customWellboresMethod(args);
+
+const rootId = 4438800495523058;
+const response = await client.wellbores.listByWellId(rootId, fn);
+```
+
+#### _Read wellbore trajectories and rows:_
+
+Trajectories are expressed as **Survey[]** and are found on the wellbore object using a lazy getter _wellbore.trajectory()_. All trajectory rows are found on the trajectory object (**Survey** dataclass) and can be acessed using a lazy getter _trajectory.rows(limit=1000)_.
+
+```js
+const wellId = 2278618537691581;
+const wellbores = await client.wellbores.listChildren(wellId);
+for (const wellbore of wellbores) {
+  const trajectories = await wellbore.trajectories();
+  // trajectories exist?
+  if (trajectories.length != 0) {
+    for (const trajectory of trajectories) {
+      const rows = await trajectory.rows();
+      // rows exist?
+      if (rows.length != 0) {
+        console.log(rows);
+      }
+    });
+  }
+});
+```
+
+## **Survey queries**
+
+### _List trajectories:_
+
+```js
+const wellboreId = 4618298167286402;
+const trajectories = await client.surveys.listTrajectories(wellboreId);
+for (const trajectory of trajectories) {
+  const rows = await trajectory.rows();
+  console.log(rows);
+});
+```
+
+### _List trajectories with custom filter:_
+
+```js
+const wellboreId = 4618298167286402;
+
+const fn: SearchSurveys = async (args: number) =>
+  await client.surveys.listTrajectories(args);
+
+const trajectories = await client.surveys.listTrajectories(wellboreId, fn);
+for (const trajectory of trajectories) {
+  const rows = await trajectory.rows();
+  console.log(rows);
+});
+```
+
+### **Testing the wells package locally**
 
 This repo contains some integration tests that require a CDF api key for `subsurface-test` tenant.
 Talk to any of the contributors or leave an issue and it'll get sorted.

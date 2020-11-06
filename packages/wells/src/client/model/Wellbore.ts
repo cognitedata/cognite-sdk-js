@@ -1,3 +1,5 @@
+import { Survey } from '../model/Survey';
+
 // Customizable function that takes in CogniteClient and args, and return a promise of a wellbore
 export type SearchWellbores = (args?: any) => Promise<Wellbore[]>;
 export type SearchWellbore = (args?: any) => Promise<Wellbore>;
@@ -28,7 +30,12 @@ export interface Wellbore {
   /**
    * Custom, application specific metadata. String key -> String value.
    * @type {{ [key: string]: string; }}
-   * @memberof Well
+   * @memberof Wellbore
    */
   metadata?: { [key: string]: string };
+  /**
+   * @type {Promise<Survey[]>}
+   * @memberof Wellbore
+   */
+  trajectories(): Promise<Survey[]>;
 }
