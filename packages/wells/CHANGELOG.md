@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.4.0...@cognite/sdk-wells@0.5.0) (2020-11-06)
+
+
+### Features
+
+* added wellbore trajectories [release] ([#443](https://github.com/cognitedata/cognite-sdk-js/issues/443)) ([c5f0e5a](https://github.com/cognitedata/cognite-sdk-js/commit/c5f0e5a9ff5adca192316d882ffb655711420876))
+
+
+
+
+
 # [0.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.3.0...@cognite/sdk-wells@0.4.0) (2020-11-03)
 
 
