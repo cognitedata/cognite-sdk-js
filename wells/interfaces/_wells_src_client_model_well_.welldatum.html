@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ApiKeyObject | Cognite JavaScript SDK</title>
+	<title>WellDatum | Cognite JavaScript SDK</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
+					<a href="../modules/_wells_src_client_model_well_.html">&quot;wells/src/client/model/Well&quot;</a>
 				</li>
 				<li>
-					<a href="_stable_src_types_.apikeyobject.html">ApiKeyObject</a>
+					<a href="_wells_src_client_model_well_.welldatum.html">WellDatum</a>
 				</li>
 			</ul>
-			<h1>Interface ApiKeyObject</h1>
+			<h1>Interface WellDatum</h1>
 		</div>
 	</div>
 </header>
@@ -73,12 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ApiKeyObject</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="_stable_src_types_.newapikeyresponse.html" class="tsd-signature-type">NewApiKeyResponse</a>
-							</li>
-						</ul>
+						<span class="target">WellDatum</span>
 					</li>
 				</ul>
 			</section>
@@ -89,10 +84,9 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.apikeyobject.html#createdtime" class="tsd-kind-icon">created<wbr>Time</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.apikeyobject.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.apikeyobject.html#serviceaccountid" class="tsd-kind-icon">service<wbr>Account<wbr>Id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.apikeyobject.html#status" class="tsd-kind-icon">status</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_well_.welldatum.html#elevation" class="tsd-kind-icon">elevation</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_well_.welldatum.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_well_.welldatum.html#unit" class="tsd-kind-icon">unit</a></li>
 							</ul>
 						</section>
 					</div>
@@ -101,58 +95,54 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="createdtime" class="tsd-anchor"></a>
-					<h3>created<wbr>Time</h3>
-					<div class="tsd-signature tsd-kind-icon">created<wbr>Time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Date</span></div>
+					<a name="elevation" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> elevation</h3>
+					<div class="tsd-signature tsd-kind-icon">elevation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3a4392e/packages/stable/src/types.ts#L195">packages/stable/src/types.ts:195</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="id" class="tsd-anchor"></a>
-					<h3>id</h3>
-					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <a href="../modules/_stable_src_types_.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3a4392e/packages/stable/src/types.ts#L190">packages/stable/src/types.ts:190</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3a4392e/packages/wells/src/client/model/Well.ts#L82">packages/wells/src/client/model/Well.ts:82</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Internal id for the api key</p>
-						</div>
+						<dl class="tsd-comment-tags">
+							<dt>memberof</dt>
+							<dd><p>WellDatum</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="serviceaccountid" class="tsd-anchor"></a>
-					<h3>service<wbr>Account<wbr>Id</h3>
-					<div class="tsd-signature tsd-kind-icon">service<wbr>Account<wbr>Id<span class="tsd-signature-symbol">:</span> <a href="../modules/_stable_src_types_.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></div>
+					<a name="name" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3a4392e/packages/stable/src/types.ts#L194">packages/stable/src/types.ts:194</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3a4392e/packages/wells/src/client/model/Well.ts#L77">packages/wells/src/client/model/Well.ts:77</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Id of the service account</p>
-						</div>
+						<dl class="tsd-comment-tags">
+							<dt>memberof</dt>
+							<dd><p>WellDatum</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="status" class="tsd-anchor"></a>
-					<h3>status</h3>
-					<div class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"ACTIVE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"DELETED"</span></div>
+					<a name="unit" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> unit</h3>
+					<div class="tsd-signature tsd-kind-icon">unit<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3a4392e/packages/stable/src/types.ts#L199">packages/stable/src/types.ts:199</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3a4392e/packages/wells/src/client/model/Well.ts#L87">packages/wells/src/client/model/Well.ts:87</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The status of the api key</p>
-						</div>
+						<dl class="tsd-comment-tags">
+							<dt>memberof</dt>
+							<dd><p>WellDatum</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 			</section>
@@ -164,33 +154,45 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
+						<a href="../modules/_wells_src_client_model_well_.html">&quot;wells/src/client/model/<wbr>Well&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_well_.well.html" class="tsd-kind-icon">Well</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_stable_src_types_.apikeyobject.html" class="tsd-kind-icon">Api<wbr>Key<wbr>Object</a>
+						<a href="_wells_src_client_model_well_.welldatum.html" class="tsd-kind-icon">Well<wbr>Datum</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_stable_src_types_.apikeyobject.html#createdtime" class="tsd-kind-icon">created<wbr>Time</a>
+								<a href="_wells_src_client_model_well_.welldatum.html#elevation" class="tsd-kind-icon">elevation</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_stable_src_types_.apikeyobject.html#id" class="tsd-kind-icon">id</a>
+								<a href="_wells_src_client_model_well_.welldatum.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_stable_src_types_.apikeyobject.html#serviceaccountid" class="tsd-kind-icon">service<wbr>Account<wbr>Id</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_stable_src_types_.apikeyobject.html#status" class="tsd-kind-icon">status</a>
+								<a href="_wells_src_client_model_well_.welldatum.html#unit" class="tsd-kind-icon">unit</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_well_.wellfilter.html" class="tsd-kind-icon">Well<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_well_.wellgeometry.html" class="tsd-kind-icon">Well<wbr>Geometry</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_wells_src_client_model_well_.html#searchwell" class="tsd-kind-icon">Search<wbr>Well</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_wells_src_client_model_well_.html#searchwells" class="tsd-kind-icon">Search<wbr>Wells</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
