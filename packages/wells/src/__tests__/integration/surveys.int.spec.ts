@@ -44,7 +44,8 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
     const wellId = 2278618537691581;
     const wellbores = await client.wellbores.listChildren(wellId);
     wellbores.forEach(async wellbore => {
-      expect(wellbore.parentId).toBe(wellId);
+      const parentWell = await wellbore.parentWell();
+      expect(parentWell!.id).toBe(wellId);
       const trajectories = await wellbore.trajectories();
       expect(trajectories.length).toBeGreaterThanOrEqual(0);
       if (trajectories.length != 0) {
