@@ -3,6 +3,9 @@ import { SearchWellbores, Wellbore } from '../model/Wellbore';
 import { Survey } from '../model/Survey';
 import { Surveys } from './surveys';
 import { accessApi } from '@cognite/sdk-core';
+import { Well, WellDatum } from '../model/Well';
+import { Wells } from './wells';
+import { WellHeadLocation } from '../model/WellHeadLocation';
 
 export class Wellbores extends AssetsAPI {
   /**
@@ -32,16 +35,54 @@ export class Wellbores extends AssetsAPI {
    */
   private mapToWellbore = async (assets: Asset[]): Promise<Wellbore[]> => {
     return assets.map(asset => {
-      return <Wellbore>{
+      const wellbore = <Wellbore>{
         id: asset.id,
         name: asset.name,
-        parentId: asset.parentId,
         metadata: asset.metadata,
         trajectories: async (): Promise<Survey[]> => {
           return await this.surveys.listTrajectories(asset.id);
         },
+        parentWell: async (): Promise<Well | undefined> => {
+          return await this.getParentWell(asset);
+        },
       };
+      wellbore.getDatum = async (): Promise<WellDatum | undefined> => {
+        const well = await wellbore.parentWell();
+        if (well) {
+          return well.datum;
+        }
+      };
+      wellbore.getWellHeadLocation = async (): Promise<
+        WellHeadLocation | undefined
+      > => {
+        const well = await wellbore.parentWell();
+        if (well) {
+          return well.wellHeadLocation;
+        }
+      };
+      return wellbore;
     });
+  };
+
+  /**
+   * Method for finding the parent wellbore of a given wellbore asset
+   *
+   * ```
+   * const parent = await client.wellbores.getParentWell(asset);
+   * ```
+   * @param asset
+   */
+  private getParentWell = async (asset: Asset): Promise<Well | undefined> => {
+    if (asset.parentId) {
+      let parentWell = await this.retrieve([{ id: asset.id }]);
+      while (parentWell[0].metadata && parentWell[0].metadata.type !== 'Well') {
+        if (!asset.parentId) {
+          return undefined;
+        }
+        parentWell = await this.retrieve([{ id: asset.parentId }]);
+      }
+      return Wells.mapToWell(parentWell)[0];
+    }
   };
 
   /**
