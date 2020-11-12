@@ -74,14 +74,15 @@ export class Wellbores extends AssetsAPI {
    */
   private getParentWell = async (asset: Asset): Promise<Well | undefined> => {
     if (asset.parentId) {
-      let parentWell = await this.retrieve([{ id: asset.id }]);
-      while (parentWell[0].metadata && parentWell[0].metadata.type !== 'Well') {
+      let parentWell = (await this.retrieve([{ id: asset.id }]))[0];
+      while (parentWell.metadata && parentWell.metadata.type !== 'Well') {
         if (!asset.parentId) {
           return undefined;
         }
-        parentWell = await this.retrieve([{ id: asset.parentId }]);
+        parentWell = (await this.retrieve([{ id: asset.parentId }]))[0];
       }
-      return Wells.mapToWell(parentWell)[0];
+      const well = Wells.mapToWell([parentWell])[0];
+      return well;
     }
   };
 
