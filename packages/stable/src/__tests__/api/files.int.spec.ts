@@ -3,7 +3,13 @@
 import { HttpResponseType } from '@cognite/sdk-core';
 import { readFileSync } from 'fs';
 import CogniteClient from '../../cogniteClient';
-import { FileInfo, Asset, LabelDefinition, FileGeoLocation, FileGeoLocationGeometry } from '../../types';
+import {
+  FileInfo,
+  Asset,
+  LabelDefinition,
+  FileGeoLocation,
+  FileGeoLocationGeometry,
+} from '../../types';
 import { join } from 'path';
 import {
   getFileCreateArgs,
@@ -44,11 +50,11 @@ describe('Files integration test', () => {
     type: 'Feature',
     geometry: {
       type: 'Point',
-      coordinates: [10, 20]
+      coordinates: [10, 20],
     },
     properties: {
-      test: 'testProp'
-    }
+      test: 'testProp',
+    },
   };
 
   const {
@@ -56,7 +62,7 @@ describe('Files integration test', () => {
     localFileMeta,
     postfix,
     sourceCreatedTime,
-  } = getFileCreateArgs({geoLocation});
+  } = getFileCreateArgs({ geoLocation });
 
   let file: FileInfo;
 
@@ -120,15 +126,15 @@ describe('Files integration test', () => {
           relation: 'intersects',
           shape: {
             type: 'Point',
-            coordinates: [10, 20]
-          }
-        }
-      }
+            coordinates: [10, 20],
+          },
+        },
+      },
     });
 
     expect(aggregates.length).toBe(1);
     expect(aggregates[0].count).toBeDefined();
-  })
+  });
 
   test('download', async () => {
     const [{ downloadUrl }] = await client.files.getDownloadUrls([
@@ -146,7 +152,10 @@ describe('Files integration test', () => {
     const newSecurityCategories = [123];
     const newSource = 'def';
     const newSourceModifiedTime = new Date();
-    const geometry: FileGeoLocationGeometry = {type: 'LineString', coordinates: [[10, 20], [10, 40]]};
+    const geometry: FileGeoLocationGeometry = {
+      type: 'LineString',
+      coordinates: [[10, 20], [10, 40]],
+    };
     const updatedFiles = await client.files.update([
       {
         id: file.id,
@@ -156,8 +165,8 @@ describe('Files integration test', () => {
           source: { set: newSource },
           sourceModifiedTime: { set: newSourceModifiedTime },
           geoLocation: {
-            set: {...file.geoLocation!, geometry}
-          }
+            set: { ...file.geoLocation!, geometry },
+          },
         },
       },
     ]);
@@ -165,7 +174,10 @@ describe('Files integration test', () => {
     expect(updatedFiles[0].securityCategories).toEqual(newSecurityCategories);
     expect(updatedFiles[0].source).toBe(newSource);
     expect(updatedFiles[0].sourceModifiedTime).toEqual(newSourceModifiedTime);
-    expect(updatedFiles[0].geoLocation).toEqual({...file.geoLocation!, geometry});
+    expect(updatedFiles[0].geoLocation).toEqual({
+      ...file.geoLocation!,
+      geometry,
+    });
   });
 
   test('list rootAssetIds filter', async () => {
@@ -195,18 +207,20 @@ describe('Files integration test', () => {
   });
 
   test('list geoLocation filter', async () => {
-    const items = await client.files.list({
-      filter: {
-        geoLocation: {
-          relation: 'intersects',
-          shape: {
-            type: 'LineString',
-            coordinates: [[0, 30], [20, 30]]
-          }
-        }
-      },
-      limit: 1
-    }).autoPagingToArray();
+    const items = await client.files
+      .list({
+        filter: {
+          geoLocation: {
+            relation: 'intersects',
+            shape: {
+              type: 'LineString',
+              coordinates: [[0, 30], [20, 30]],
+            },
+          },
+        },
+        limit: 1,
+      })
+      .autoPagingToArray();
 
     expect(items.length).toBe(1);
     expect(items[0].id).toBe(file.id);

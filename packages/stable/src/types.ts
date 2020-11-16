@@ -1203,7 +1203,13 @@ export interface ExternalTimeseries {
 }
 
 export type FileGeoLocationType = 'Feature';
-export type FileGeoLocationGeometryType = 'Point' | 'MultiPolygon' | 'MultiLineString' | 'MultiPoint' | 'Polygon' | 'LineString';
+export type FileGeoLocationGeometryType =
+  | 'Point'
+  | 'MultiPolygon'
+  | 'MultiLineString'
+  | 'MultiPoint'
+  | 'Polygon'
+  | 'LineString';
 export type FileGeoLocationRelation = 'intersects' | 'disjoint' | 'within';
 
 export type MultiPolygonCoordinates = PointCoordinates[][][];
@@ -1224,16 +1230,16 @@ export interface GeoLocationGeometry<T extends FileGeoLocationGeometryType, K> {
 export interface FileGeoLocation {
   type: FileGeoLocationType;
   geometry: FileGeoLocationGeometry;
-  properties?: {[key: string]: any}
+  properties?: { [key: string]: any };
 }
 
-export type FileGeoLocationGeometry = GeoLocationGeometry<'MultiPolygon', MultiPolygonCoordinates>
+export type FileGeoLocationGeometry =
+  | GeoLocationGeometry<'MultiPolygon', MultiPolygonCoordinates>
   | GeoLocationGeometry<'MultiLineString', MultiLineStringCoordinates>
   | GeoLocationGeometry<'MultiPoint', MultiPointCoordinates>
   | GeoLocationGeometry<'Polygon', PolygonCoordinates>
   | GeoLocationGeometry<'LineString', LineStringCoordinates>
   | GeoLocationGeometry<'Point', PointCoordinates>;
-
 
 export interface FileGeoLocationFilter {
   relation: FileGeoLocationRelation;
