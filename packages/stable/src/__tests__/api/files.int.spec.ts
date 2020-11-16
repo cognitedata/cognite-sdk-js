@@ -3,7 +3,7 @@
 import { HttpResponseType } from '@cognite/sdk-core';
 import { readFileSync } from 'fs';
 import CogniteClient from '../../cogniteClient';
-import { FileInfo, Asset, LabelDefinition } from '../../types';
+import { FileInfo, Asset, LabelDefinition, FileGeoLocation, FileGeoLocationGeometry } from '../../types';
 import { join } from 'path';
 import {
   getFileCreateArgs,
@@ -40,12 +40,23 @@ describe('Files integration test', () => {
     await client.labels.delete([{ externalId: label.externalId }]);
   });
 
+  const geoLocation: FileGeoLocation = {
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [10, 20]
+    },
+    properties: {
+      test: 'testProp'
+    }
+  };
+
   const {
     fileContent,
     localFileMeta,
     postfix,
     sourceCreatedTime,
-  } = getFileCreateArgs();
+  } = getFileCreateArgs({geoLocation});
 
   let file: FileInfo;
 
@@ -59,6 +70,10 @@ describe('Files integration test', () => {
       false,
       true
     );
+  });
+
+  test('geoLocation present in created file', () => {
+    expect(file.geoLocation).toEqual(localFileMeta.geoLocation);
   });
 
   test('retrieve', async () => {
@@ -98,6 +113,23 @@ describe('Files integration test', () => {
     expect(aggregates[0].count).toBeDefined();
   });
 
+  test('count aggregate by geoLocation', async () => {
+    const aggregates = await client.files.aggregate({
+      filter: {
+        geoLocation: {
+          relation: 'intersects',
+          shape: {
+            type: 'Point',
+            coordinates: [10, 20]
+          }
+        }
+      }
+    });
+
+    expect(aggregates.length).toBe(1);
+    expect(aggregates[0].count).toBeDefined();
+  })
+
   test('download', async () => {
     const [{ downloadUrl }] = await client.files.getDownloadUrls([
       { id: file.id },
@@ -114,6 +146,7 @@ describe('Files integration test', () => {
     const newSecurityCategories = [123];
     const newSource = 'def';
     const newSourceModifiedTime = new Date();
+    const geometry: FileGeoLocationGeometry = {type: 'LineString', coordinates: [[10, 20], [10, 40]]};
     const updatedFiles = await client.files.update([
       {
         id: file.id,
@@ -122,6 +155,9 @@ describe('Files integration test', () => {
           securityCategories: { set: newSecurityCategories },
           source: { set: newSource },
           sourceModifiedTime: { set: newSourceModifiedTime },
+          geoLocation: {
+            set: {...file.geoLocation!, geometry}
+          }
         },
       },
     ]);
@@ -129,6 +165,7 @@ describe('Files integration test', () => {
     expect(updatedFiles[0].securityCategories).toEqual(newSecurityCategories);
     expect(updatedFiles[0].source).toBe(newSource);
     expect(updatedFiles[0].sourceModifiedTime).toEqual(newSourceModifiedTime);
+    expect(updatedFiles[0].geoLocation).toEqual({...file.geoLocation!, geometry});
   });
 
   test('list rootAssetIds filter', async () => {
@@ -155,6 +192,24 @@ describe('Files integration test', () => {
 
   test('upload with overwrite', async () => {
     await client.files.upload(localFileMeta, fileContent, true, true);
+  });
+
+  test('list geoLocation filter', async () => {
+    const items = await client.files.list({
+      filter: {
+        geoLocation: {
+          relation: 'intersects',
+          shape: {
+            type: 'LineString',
+            coordinates: [[0, 30], [20, 30]]
+          }
+        }
+      },
+      limit: 1
+    }).autoPagingToArray();
+
+    expect(items.length).toBe(1);
+    expect(items[0].id).toBe(file.id);
   });
 
   test('list', async () => {
@@ -228,6 +283,19 @@ describe('Files integration test', () => {
     ]);
 
     expect(updatedFile.labels).toBe(undefined);
+  });
+
+  test('update file by removing geoLocation', async () => {
+    const [updatedFile] = await client.files.update([
+      {
+        id: file.id,
+        update: {
+          geoLocation: { setNull: true },
+        },
+      },
+    ]);
+
+    expect(updatedFile.geoLocation).toBe(undefined);
   });
 
   test('delete', async () => {

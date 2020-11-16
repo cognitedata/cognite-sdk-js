@@ -976,6 +976,7 @@ export interface ExternalFileInfo {
   sourceCreatedTime?: Date;
   sourceModifiedTime?: Date;
   labels?: Label[];
+  geoLocation?: FileGeoLocation;
 }
 
 /**
@@ -1016,6 +1017,7 @@ export interface FileChange {
     sourceModifiedTime?: SinglePatchDate;
     dataSetId?: NullableSinglePatchLong;
     labels?: LabelsPatch;
+    geoLocation?: FileGeoLocationPatch;
   };
 }
 
@@ -1062,6 +1064,7 @@ export interface FileFilterProps {
    * Return only the resource matching the specified label constraints.
    */
   labels?: LabelFilter;
+  geoLocation?: FileGeoLocationFilter;
 }
 
 export interface FileFilter extends Limit {
@@ -1198,6 +1201,46 @@ export interface ExternalTimeseries {
    */
   securityCategories?: number[];
 }
+
+export type FileGeoLocationType = 'Feature';
+export type FileGeoLocationGeometryType = 'Point' | 'MultiPolygon' | 'MultiLineString' | 'MultiPoint' | 'Polygon' | 'LineString';
+export type FileGeoLocationRelation = 'intersects' | 'disjoint' | 'within';
+
+export type MultiPolygonCoordinates = PointCoordinates[][][];
+export type MultiLineStringCoordinates = PointCoordinates[][];
+export type MultiPointCoordinates = PointCoordinates[];
+export type PolygonCoordinates = PointCoordinates[][];
+export type LineStringCoordinates = PointCoordinates[];
+export type PointCoordinates = Tuple2<number>;
+
+export interface GeoLocationGeometry<T extends FileGeoLocationGeometryType, K> {
+  type: T;
+  coordinates: K;
+}
+
+/**
+ * The geographic metadata of the file.
+ */
+export interface FileGeoLocation {
+  type: FileGeoLocationType;
+  geometry: FileGeoLocationGeometry;
+  properties?: {[key: string]: any}
+}
+
+export type FileGeoLocationGeometry = GeoLocationGeometry<'MultiPolygon', MultiPolygonCoordinates>
+  | GeoLocationGeometry<'MultiLineString', MultiLineStringCoordinates>
+  | GeoLocationGeometry<'MultiPoint', MultiPointCoordinates>
+  | GeoLocationGeometry<'Polygon', PolygonCoordinates>
+  | GeoLocationGeometry<'LineString', LineStringCoordinates>
+  | GeoLocationGeometry<'Point', PointCoordinates>;
+
+
+export interface FileGeoLocationFilter {
+  relation: FileGeoLocationRelation;
+  shape: FileGeoLocationGeometry;
+}
+
+export type FileGeoLocationPatch = SetField<FileGeoLocation> | RemoveField;
 
 export interface Group {
   name: GroupName;
@@ -2101,6 +2144,8 @@ export type TimeseriesUnit = string;
 export type Timestamp = number | Date;
 
 export type Tuple3<T> = T[];
+
+export type Tuple2<T> = [T, T];
 
 export type UPDATE = 'UPDATE';
 
