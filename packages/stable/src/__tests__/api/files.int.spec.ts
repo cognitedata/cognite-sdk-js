@@ -3,13 +3,7 @@
 import { HttpResponseType } from '@cognite/sdk-core';
 import { readFileSync } from 'fs';
 import CogniteClient from '../../cogniteClient';
-import {
-  FileInfo,
-  Asset,
-  LabelDefinition,
-  FileGeoLocation,
-  FileGeoLocationGeometry,
-} from '../../types';
+import { FileInfo, Asset, LabelDefinition, FileGeoLocation } from '../../types';
 import { join } from 'path';
 import {
   getFileCreateArgs,
@@ -152,9 +146,12 @@ describe('Files integration test', () => {
     const newSecurityCategories = [123];
     const newSource = 'def';
     const newSourceModifiedTime = new Date();
-    const geometry: FileGeoLocationGeometry = {
-      type: 'LineString',
-      coordinates: [[10, 20], [10, 40]],
+    const location: FileGeoLocation = {
+      ...geoLocation,
+      geometry: {
+        type: 'LineString',
+        coordinates: [[10, 20], [10, 40]],
+      },
     };
     const updatedFiles = await client.files.update([
       {
@@ -164,9 +161,7 @@ describe('Files integration test', () => {
           securityCategories: { set: newSecurityCategories },
           source: { set: newSource },
           sourceModifiedTime: { set: newSourceModifiedTime },
-          geoLocation: {
-            set: { ...file.geoLocation!, geometry },
-          },
+          geoLocation: { set: location },
         },
       },
     ]);
@@ -174,10 +169,7 @@ describe('Files integration test', () => {
     expect(updatedFiles[0].securityCategories).toEqual(newSecurityCategories);
     expect(updatedFiles[0].source).toBe(newSource);
     expect(updatedFiles[0].sourceModifiedTime).toEqual(newSourceModifiedTime);
-    expect(updatedFiles[0].geoLocation).toEqual({
-      ...file.geoLocation!,
-      geometry,
-    });
+    expect(updatedFiles[0].geoLocation).toEqual(location);
   });
 
   test('list rootAssetIds filter', async () => {
@@ -225,7 +217,7 @@ describe('Files integration test', () => {
 
       expect(items.length).toBe(1);
       expect(items[0].id).toBe(file.id);
-    })
+    });
   });
 
   test('list', async () => {
