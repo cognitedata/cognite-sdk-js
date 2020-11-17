@@ -126,7 +126,7 @@ describe('Files integration test', () => {
       },
     });
 
-    expect(aggregates.length).toBe(1);
+    expect(aggregates.length).toBeGreaterThan(0);
     expect(aggregates[0].count).toBeDefined();
   });
 
