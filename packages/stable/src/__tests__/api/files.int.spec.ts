@@ -207,23 +207,25 @@ describe('Files integration test', () => {
   });
 
   test('list geoLocation filter', async () => {
-    const items = await client.files
-      .list({
-        filter: {
-          geoLocation: {
-            relation: 'intersects',
-            shape: {
-              type: 'LineString',
-              coordinates: [[0, 30], [20, 30]],
+    runTestWithRetryWhenFailing(async () => {
+      const items = await client.files
+        .list({
+          filter: {
+            geoLocation: {
+              relation: 'intersects',
+              shape: {
+                type: 'LineString',
+                coordinates: [[0, 30], [20, 30]],
+              },
             },
           },
-        },
-        limit: 1,
-      })
-      .autoPagingToArray();
+          limit: 1,
+        })
+        .autoPagingToArray();
 
-    expect(items.length).toBe(1);
-    expect(items[0].id).toBe(file.id);
+      expect(items.length).toBe(1);
+      expect(items[0].id).toBe(file.id);
+    })
   });
 
   test('list', async () => {
