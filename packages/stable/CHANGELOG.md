@@ -9,7 +9,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Features
 
 * **files:** add geoLocation property ([#445](https://github.com/cognitedata/cognite-sdk-js/issues/445)) ([f5ff945](https://github.com/cognitedata/cognite-sdk-js/commit/f5ff945ab8548b3a811baf68e0830f1af90fd8f2))
-* add relationships resource api ([#423](https://github.com/cognitedata/cognite-sdk-js/issues/423)) ([f51e21c](https://github.com/cognitedata/cognite-sdk-js/commit/f51e21c18b943e408d284f9467a2296dcba8061a))
 
 
 
