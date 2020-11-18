@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.1.1...@cognite/sdk@3.2.0) (2020-11-18)
+
+
+### Features
+
+* **files:** add geoLocation property ([#445](https://github.com/cognitedata/cognite-sdk-js/issues/445)) ([f5ff945](https://github.com/cognitedata/cognite-sdk-js/commit/f5ff945ab8548b3a811baf68e0830f1af90fd8f2))
+* add relationships resource api ([#423](https://github.com/cognitedata/cognite-sdk-js/issues/423)) ([f51e21c](https://github.com/cognitedata/cognite-sdk-js/commit/f51e21c18b943e408d284f9467a2296dcba8061a))
+
+
+
+
+
 ## [3.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.1.0...@cognite/sdk@3.1.1) (2020-09-17)
 
 **Note:** Version bump only for package @cognite/sdk
