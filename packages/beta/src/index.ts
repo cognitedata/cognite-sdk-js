@@ -2,5 +2,4 @@
 
 export * from '@cognite/sdk';
 export { default as CogniteClient } from './cogniteClient';
-export * from './api/relationships/relationshipsApi';
-export * from './types';
+// export * from './types'; // TODO: uncomment when release beta api

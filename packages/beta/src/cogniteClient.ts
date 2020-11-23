@@ -7,14 +7,12 @@ import {
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
-import { RelationshipsApi } from './api/relationships/relationshipsApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
 }
 
 export default class CogniteClient extends CogniteClientCleaned {
-  private relationshipsApi?: RelationshipsApi;
   private entityMatchingApi?: EntityMatchingApi;
 
   /**
@@ -38,10 +36,6 @@ export default class CogniteClient extends CogniteClientCleaned {
     super(options);
   }
 
-  public get relationships() {
-    return accessApi(this.relationshipsApi);
-  }
-
   public get entityMatching() {
     return accessApi(this.entityMatchingApi);
   }
@@ -53,7 +47,6 @@ export default class CogniteClient extends CogniteClientCleaned {
   protected initAPIs() {
     super.initAPIs();
 
-    this.relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
     this.entityMatchingApi = this.apiFactory(
       EntityMatchingApi,
       'context/entitymatching'
