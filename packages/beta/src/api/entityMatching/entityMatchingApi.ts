@@ -107,7 +107,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * [Predict matches](https://docs.cognite.com/api/v1/#operation/entityMatchingPredict)
    *
    * ```js
-   * await client.entityMatching.predict({
+   * const response = await client.entityMatching.predict({
    *  externalId: 'model123',
    *  sources: [{externalId: 'asset1', name: 'asset1'}, {externalId: 'asset2', name: 'asset2'}],
    *  targets: [{externalId: 'ts1', name: 'ts1'}, {externalId: 'ts2', name: 'ts2'}],
