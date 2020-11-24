@@ -27,10 +27,10 @@ export interface Well {
    */
   wellHeadLocation: WellHeadLocation;
   /**
-   * @type {string}
+   * @type {WellDatum}
    * @memberof Well
    */
-  datum?: string;
+  datum?: WellDatum;
   /**
    * @type {string}
    * @memberof Well
@@ -67,6 +67,24 @@ export interface Well {
    * @memberof Well
    */
   metadata?: { [key: string]: string };
+}
+
+export interface WellDatum {
+  /**
+   * @type {string}
+   * @memberof WellDatum
+   */
+  name?: string;
+  /**
+   * @type {number}
+   * @memberof WellDatum
+   */
+  elevation?: number;
+  /**
+   * @type {string}
+   * @memberof WellDatum
+   */
+  unit?: string;
 }
 
 export interface WellFilter {

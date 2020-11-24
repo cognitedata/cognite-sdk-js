@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.6.1...@cognite/sdk-wells@0.6.2) (2020-11-18)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [0.6.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.6.0...@cognite/sdk-wells@0.6.1) (2020-11-18)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+# [0.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.5.0...@cognite/sdk-wells@0.6.0) (2020-11-12)
+
+
+### Features
+
+* retrieve datum and location from parent well ([#444](https://github.com/cognitedata/cognite-sdk-js/issues/444)) ([3a4392e](https://github.com/cognitedata/cognite-sdk-js/commit/3a4392ed0a3d993de1e2038d1d9b6df0856c96bf))
+
+
+
+
+
 # [0.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.4.0...@cognite/sdk-wells@0.5.0) (2020-11-06)
 
 

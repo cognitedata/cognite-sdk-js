@@ -38,9 +38,13 @@ describeIfCondition(
 
     test('standard filter - list immediate children wellbores', async () => {
       const wellId = 2278618537691581;
+      const wellX = '1012867.51';
       const response = await client.wellbores.listChildren(wellId);
-      response.forEach(element => {
-        expect(element.parentId).toBe(wellId);
+      response.forEach(async element => {
+        const parent = await element.parentWell();
+        expect(parent!.id).toBe(wellId);
+        const loc = await element.getWellHeadLocation();
+        expect(loc!.x).toBe(wellX);
       });
     });
 
@@ -51,7 +55,8 @@ describeIfCondition(
       const wellId = 2278618537691581;
       const response = await client.wellbores.listChildren(wellId, fn);
       response.forEach(async element => {
-        expect(element.parentId).toBe(wellId);
+        const parent = await element.parentWell();
+        expect(parent!.id).toBe(wellId);
       });
     });
 
