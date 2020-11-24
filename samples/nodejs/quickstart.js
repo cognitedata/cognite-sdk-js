@@ -40,7 +40,9 @@ async function quickstart() {
   });
 
   const firstPage = await client.assets.list();
-  const secondPage = await firstPage.next();
+  if (firstPage.next) {
+    const secondPage = await firstPage.next();
+  }
 
   // For NodeJS version >= 10 you could use for-await.
   // See example in for-await.js
