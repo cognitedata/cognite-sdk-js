@@ -128,7 +128,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * [Retrieve entity matcher predict result](https://docs.cognite.com/api/playground/#operation/entityMatchingPredictResults)
    *
    * ```js
-   * await client.entityMatching.predictResult(12345678);
+   * const { status, items } = await client.entityMatching.predictResult(12345678);
    * ```
    */
   public predictResult = async (
