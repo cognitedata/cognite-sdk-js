@@ -35,4 +35,19 @@ export interface Wellbore {
    * @memberof Wellbore
    */
   trajectories(): Promise<Survey[]>;
+    /**
+   * @type {Promise<Well>}
+   * @memberof Wellbore
+   */
+  parentWell(): Promise<Well | undefined>;
+  /**
+   * @type {Promise<WellDatum>}
+   * @memberof Wellbore
+   */
+  getDatum(): Promise<WellDatum | undefined>;
+  /**
+   * @type {Promise<WellHeadLocation>}
+   * @memberof Wellbore
+   */
+  getWellHeadLocation(): Promise<WellHeadLocation | undefined>;
 }
