@@ -93,6 +93,12 @@ export interface AclScopeAll {
   all: {};
 }
 
+export interface AclScopeIds {
+  idScope: {
+    ids: CogniteInternalId[];
+  };
+}
+
 export type AclScopeAnalytics = AclScopeAll;
 
 export type AclScopeApiKeys = AclScopeAll | AclScopeCurrentUser;
@@ -109,7 +115,7 @@ export interface AclScopeCurrentUser {
   currentuserscope: {};
 }
 
-export type AclScopeDatasets = AclScopeAll | AclScopeDatasetsIds;
+export type AclScopeDatasets = AclScopeAll | AclScopeIds;
 
 export interface AclScopeDatasetsIds {
   datasetScope: {
@@ -119,7 +125,7 @@ export interface AclScopeDatasetsIds {
 
 export type AclScopeEvents = AclScopeAll | AclScopeDatasetsIds;
 
-export type AclScopeFiles = AclScopeAll | AclScopeDatasets;
+export type AclScopeFiles = AclScopeAll | AclScopeDatasetsIds;
 
 export type AclScopeGroups = AclScopeAll | AclScopeCurrentUser;
 
