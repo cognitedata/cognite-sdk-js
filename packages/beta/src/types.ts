@@ -310,7 +310,6 @@ export interface EntityMatchingCreateResponse
   originalId?: CogniteInternalId;
 }
 
-
 export interface EntityMatchingModel extends EntityMatchingResponseBase {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
