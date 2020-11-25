@@ -26,6 +26,6 @@ import { CogniteClient } from '@congite/sdk';
 
 ## Documentation
 
-See the reference doc of `CogniteClient` [here](https://cognitedata.github.io/cognite-sdk-js/beta/classes/cogniteclientbeta.html).
+See the reference doc of `CogniteClient` [here](https://cognitedata.github.io/cognite-sdk-js/beta/classes/_beta_src_cogniteclient_.cogniteclient.html).
 
 The beta API is a superset of stable. See the [stable readme](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md).
