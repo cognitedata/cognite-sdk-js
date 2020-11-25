@@ -6,7 +6,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/wells/",
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@cognite/geospatial-sdk-js": "^0.0.5",
-    "@cognite/sdk": "^3.2.1",
+    "@cognite/sdk": "^3.3.0",
     "@cognite/sdk-core": "^1.0.3",
     "wkt": "^0.1.1"
   },

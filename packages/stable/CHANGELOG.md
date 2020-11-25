@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.2.1...@cognite/sdk@3.3.0) (2020-11-25)
+
+
+### Bug Fixes
+
+* datasets ID scope in datasets ACLs ([a9d7a44](https://github.com/cognitedata/cognite-sdk-js/commit/a9d7a440430c09ac8141fe8cc4799a43b7b70f9c))
+
+
+### Features
+
+* **relationships:** promote new api to stable ([526becc](https://github.com/cognitedata/cognite-sdk-js/commit/526beccaeb95371bc6504da2b434b6095415a878))
+
+
+
+
+
 ## [3.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.2.0...@cognite/sdk@3.2.1) (2020-11-18)
 
 **Note:** Version bump only for package @cognite/sdk

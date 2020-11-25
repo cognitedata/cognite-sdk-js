@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@1.2.0...@cognite/sdk-beta@1.3.0) (2020-11-25)
+
+
+### Features
+
+* **relationships:** promote new api to stable ([526becc](https://github.com/cognitedata/cognite-sdk-js/commit/526beccaeb95371bc6504da2b434b6095415a878))
+
+
+
+
+
 # [1.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@1.1.3...@cognite/sdk-beta@1.2.0) (2020-11-25)
 
 
