@@ -5,8 +5,8 @@ import {
   CursorAndAsyncIterator,
   ExternalId,
 } from '@cognite/sdk-core';
-import { IgnoreUnknownIds } from '@cognite/sdk';
 import {
+  IgnoreUnknownIds,
   ExternalRelationship,
   Relationship,
   RelationshipsFilterRequest,

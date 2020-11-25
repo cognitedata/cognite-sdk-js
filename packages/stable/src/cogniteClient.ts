@@ -21,6 +21,7 @@ import { GroupsAPI } from './api/groups/groupsApi';
 import { LabelsAPI } from './api/labels/labelsApi';
 import { ProjectsAPI } from './api/projects/projectsApi';
 import { RawAPI } from './api/raw/rawApi';
+import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
 import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
@@ -85,6 +86,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get apiKeys() {
     return accessApi(this.apiKeysApi);
   }
+  public get relationships() {
+    return accessApi(this.relationshipsApi);
+  }
 
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
@@ -99,6 +103,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private securityCategoriesApi?: SecurityCategoriesAPI;
   private serviceAccountsApi?: ServiceAccountsAPI;
   private models3DApi?: Models3DAPI;
+  private relationshipsApi?: RelationshipsApi;
   private revisions3DApi?: Revisions3DAPI;
   private files3DApi?: Files3DAPI;
   private datasetsApi?: DataSetsAPI;
@@ -137,6 +142,7 @@ export default class CogniteClient extends BaseCogniteClient {
     );
     this.apiKeysApi = this.apiFactory(ApiKeysAPI, 'apikeys');
     this.models3DApi = this.apiFactory(Models3DAPI, models3DPath);
+    this.relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
     this.revisions3DApi = this.apiFactory(Revisions3DAPI, models3DPath);
     this.files3DApi = this.apiFactory(Files3DAPI, '3d/files');
     this.assetMappings3DApi = this.apiFactory(AssetMappings3DAPI, models3DPath);
