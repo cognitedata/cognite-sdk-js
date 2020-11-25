@@ -6,6 +6,7 @@ import {
 } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
+import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { RelationshipsApi } from './api/relationships/relationshipsApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
@@ -14,6 +15,7 @@ class CogniteClientCleaned extends CogniteClientStable {
 
 export default class CogniteClient extends CogniteClientCleaned {
   private relationshipsApi?: RelationshipsApi;
+  private entityMatchingApi?: EntityMatchingApi;
 
   /**
    * Create a new SDK client (beta)
@@ -40,6 +42,10 @@ export default class CogniteClient extends CogniteClientCleaned {
     return accessApi(this.relationshipsApi);
   }
 
+  public get entityMatching() {
+    return accessApi(this.entityMatchingApi);
+  }
+
   protected get version() {
     return `${version}-beta`;
   }
@@ -48,5 +54,9 @@ export default class CogniteClient extends CogniteClientCleaned {
     super.initAPIs();
 
     this.relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
+    this.entityMatchingApi = this.apiFactory(
+      EntityMatchingApi,
+      'context/entitymatching'
+    );
   }
 }
