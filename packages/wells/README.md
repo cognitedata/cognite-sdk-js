@@ -15,7 +15,7 @@ It is recomended to install this package under the same name as `@cognite/sdk`.
 This allows you to change SDK versions without changing your imports.
 See the [beta readme](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/beta/README.md) for details.
 
-### install and build
+### install and build.
 
 ```bash
 yarn install
