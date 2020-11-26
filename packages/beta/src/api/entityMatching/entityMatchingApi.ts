@@ -53,7 +53,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
   };
 
   /**
-   * [Retrieve entity matching models](https://docs.cognite.com/api/v1/#operation/entityMatchingRetrive)
+   * [Retrieve entity matching models](https://docs.cognite.com/api/v1/#operation/entityMatchingRetrieve)
    *
    * ```js
    * const [result] = await client.entityMatching.retrieve([{ externalId: 'model123' }]);
