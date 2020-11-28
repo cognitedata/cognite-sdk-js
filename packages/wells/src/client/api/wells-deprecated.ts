@@ -55,6 +55,11 @@ export class Wells extends AssetsAPI {
     });
   };
 
+  /**
+   *
+   * @param type
+   * @param labels
+   */
   static getLabel(type: string, labels: Label[] | undefined): string[] {
     const values = [];
     if (labels) {
@@ -66,6 +71,16 @@ export class Wells extends AssetsAPI {
     }
     return values;
   }
+
+  /**
+   *
+   * @param wellId
+   */
+  public getDatum = async (wellId: number): Promise<Asset | undefined> => {
+    const filter = { parent_ids: [wellId], metadata: { type: 'Datum' } };
+    const assets = await this.search({ filter: filter });
+    return assets.length > 0 ? assets[0] : undefined;
+  };
 
   /**
    * A generic template for searching wells based on strict filtering and/or fuzzy filtering

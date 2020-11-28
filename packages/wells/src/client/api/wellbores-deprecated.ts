@@ -1,10 +1,10 @@
 import { Asset, AssetsAPI } from '@cognite/sdk';
 import { SearchWellbores, Wellbore } from '../model/Wellbore';
 import { Survey } from '../model/Survey';
-import { Surveys } from './surveys';
+import { Surveys } from './surveys-deprecated';
 import { accessApi } from '@cognite/sdk-core';
 import { Well, WellDatum } from '../model/Well';
-import { Wells } from './wells';
+import { Wells } from './wells-deprecated';
 import { WellHeadLocation } from '../model/WellHeadLocation';
 
 export class Wellbores extends AssetsAPI {
