@@ -1,4 +1,4 @@
-import { CDFHttpClient, HttpResponse } from '@cognite/sdk-core';
+import { CDFHttpClient } from '@cognite/sdk-core';
 import { Well } from '../model/Well';
 
 export class WellsAPI {
@@ -9,9 +9,9 @@ export class WellsAPI {
   }
 
   /* eslint-disable */
-  public list = async (): Promise<HttpResponse<Well[]> | undefined> => {
+  public list = async (): Promise<Well[] | undefined> => {
     const response = await this.client?.post<Well[]>("/wells")
-    return response
+    return response?.data
   };
 
 }
