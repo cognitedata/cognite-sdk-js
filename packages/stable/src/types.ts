@@ -518,7 +518,7 @@ export interface CreateRevision3D {
    * Global rotation to be applied to the entire model.
    * The rotation is expressed by Euler angles in radians and in XYZ order.
    */
-  rotation?: [boolean, boolean, boolean];
+  rotation?: Tuple3<number>;
   camera?: RevisionCameraProperties;
   /**
    * The file id to a file uploaded to Cognite's Files API.
@@ -1847,7 +1847,7 @@ export interface Revision3D {
    * Global rotation to be applied to the entire model.
    * The rotation is expressed by Euler angles in radians and in XYZ order.
    */
-  rotation?: [number, number, number];
+  rotation?: Tuple3<number>;
   camera?: RevisionCameraProperties;
   /**
    * The status of the revision.
