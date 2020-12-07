@@ -14,6 +14,7 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
   let client: CogniteWellsClient;
   beforeAll(async () => {
     client = setupLoggedInClient();
+    console.log(client);
   });
 
   test('Get trajectory for a wellbore', async () => {

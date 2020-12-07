@@ -3,9 +3,12 @@ import { SearchWellbores, Wellbore } from '../model/Wellbore';
 import { Survey } from '../model/Survey';
 import { Surveys } from './surveys-deprecated';
 import { accessApi } from '@cognite/sdk-core';
-import { Well, WellDatum } from '../model/Well';
 import { Wells } from './wells-deprecated';
-import { WellHeadLocation } from '../model/WellHeadLocation';
+import { WellHeadLocation_deprecated } from '../model/WellHeadLocation-deprecated';
+import {
+  WellDatum_deprecated,
+  Well_deprecated,
+} from '../model/Well-deprecated';
 
 export class Wellbores extends AssetsAPI {
   /**
@@ -42,18 +45,20 @@ export class Wellbores extends AssetsAPI {
         trajectories: async (): Promise<Survey[]> => {
           return await this.surveys.listTrajectories(asset.id);
         },
-        parentWell: async (): Promise<Well | undefined> => {
+        parentWell: async (): Promise<Well_deprecated | undefined> => {
           return await this.getParentWell(asset);
         },
       };
-      wellbore.getDatum = async (): Promise<WellDatum | undefined> => {
+      wellbore.getDatum = async (): Promise<
+        WellDatum_deprecated | undefined
+      > => {
         const well = await wellbore.parentWell();
         if (well) {
           return well.datum;
         }
       };
       wellbore.getWellHeadLocation = async (): Promise<
-        WellHeadLocation | undefined
+        WellHeadLocation_deprecated | undefined
       > => {
         const well = await wellbore.parentWell();
         if (well) {
@@ -72,7 +77,9 @@ export class Wellbores extends AssetsAPI {
    * ```
    * @param asset
    */
-  private getParentWell = async (asset: Asset): Promise<Well | undefined> => {
+  private getParentWell = async (
+    asset: Asset
+  ): Promise<Well_deprecated | undefined> => {
     if (!asset.metadata || asset.metadata.type !== 'Wellbore') {
       if (asset.metadata && asset.metadata!.type === 'Well') {
         return Wells.mapToWell([asset])[0];
