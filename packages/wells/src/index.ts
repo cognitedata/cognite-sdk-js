@@ -8,8 +8,8 @@ export { Surveys } from './client/api/surveys-deprecated';
 export { WellsAPI } from './client/api/wellsApi';
 
 // dataclasses and types
-export * from './client/model/Well';
+export * from './client/model/Well-deprecated';
 export * from './client/model/GeoJson';
-export * from './client/model/WellHeadLocation';
+export * from './client/model/WellHeadLocation-deprecated';
 export * from './client/model/Wellbore';
 export * from './client/model/Survey';
