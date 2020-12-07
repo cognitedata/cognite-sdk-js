@@ -22,6 +22,8 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
       .then(response => response)
       .catch(err => err);
 
+      console.log(trajectory);
+
     expect(trajectory).not.toBeUndefined();
     /* eslint-disable */
     expect(trajectory?.id).toBe(5289118434026779);
