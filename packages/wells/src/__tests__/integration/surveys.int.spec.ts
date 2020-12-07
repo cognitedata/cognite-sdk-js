@@ -14,16 +14,12 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
   let client: CogniteWellsClient;
   beforeAll(async () => {
     client = setupLoggedInClient();
-    console.log(client);
   });
+
 
   test('Get trajectory for a wellbore', async () => {
     const wellboreId: number = 8456650753594878;
-    const trajectory: Survey = await client.wellbores.getTrajectory(wellboreId)
-      .then(response => response)
-      .catch(err => err);
-
-      console.log(trajectory);
+    const trajectory: Survey | undefined = await client.wellbores.getTrajectory(wellboreId)
 
     expect(trajectory).not.toBeUndefined();
     /* eslint-disable */
@@ -35,6 +31,10 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
 
    await client.wellbores.getTrajectory(wellboreId)
       .then(response => response)
-      .catch(err => expect(err.status).toBe(404));
+      .catch(err => {
+        console.log(err)
+        expect(err.status).toBe(404);
+        expect(err.data).toBe(`${wellboreId} doesn't exist`)
+      });
   });
 });

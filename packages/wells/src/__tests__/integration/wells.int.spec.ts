@@ -13,7 +13,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   let client: WellsClient;
   beforeAll(async () => {
     client = setupLoggedInClient();
-    console.log(client);
   });
 
   test('standard filter - get well by asset name', async () => {
