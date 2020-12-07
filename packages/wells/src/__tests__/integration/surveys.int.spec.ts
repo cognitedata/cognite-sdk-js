@@ -33,6 +33,5 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
    await client.wellbores.getTrajectory(wellboreId)
       .then(response => response)
       .catch(err => expect(err.status).toBe(404));
-
   });
 });
