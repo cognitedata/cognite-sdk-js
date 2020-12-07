@@ -1,10 +1,10 @@
 // Copyright 2020 Cognite AS
 import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
 import { version } from '../../package.json';
-import { Wells } from './api/wells';
-import { Wellbores } from './api/wellbores';
+import { Wells } from './api/wells-deprecated';
+import { Wellbores } from './api/wellbores-deprecated';
 import { accessApi } from '@cognite/sdk-core';
-import { Surveys } from './api/surveys';
+import { Surveys } from './api/surveys-deprecated';
 
 export default class CogniteClient extends CogniteClientStable {
   private wellsSDK?: Wells;

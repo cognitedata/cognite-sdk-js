@@ -1,14 +1,14 @@
 import { SpatialRel, GeometryRel } from '@cognite/geospatial-sdk-js';
 import { Asset, AssetsAPI, IdEither, Label } from '@cognite/sdk';
 import {
-  Well,
+  Well_deprecated,
   SearchWells,
   SearchWell,
-  WellFilter,
+  WellFilter_deprecated,
   WellGeometry,
-} from '../model/Well';
+} from '../model/Well-deprecated';
 import { OPERATOR, DATA_SOURCE, FIELD, BLOCK } from '../../constants';
-import { WellHeadLocation } from '../model/WellHeadLocation';
+import { WellHeadLocation_deprecated } from '../model/WellHeadLocation-deprecated';
 import { geospatialClient } from './utils';
 import { GeoJson } from '../model/GeoJson';
 
@@ -22,9 +22,11 @@ export class Wells extends AssetsAPI {
    *
    * @param asset
    */
-  static mapToWellHeadLocation = (asset: Asset): WellHeadLocation => {
+  static mapToWellHeadLocation = (
+    asset: Asset
+  ): WellHeadLocation_deprecated => {
     // @ts-ignore
-    return <WellHeadLocation>{
+    return <WellHeadLocation_deprecated>{
       // @ts-ignore
       crs: asset.metadata['crs'],
       // @ts-ignore
@@ -41,9 +43,9 @@ export class Wells extends AssetsAPI {
    * ```
    * @param assets
    */
-  static mapToWell = (assets: Asset[]): Well[] => {
+  static mapToWell = (assets: Asset[]): Well_deprecated[] => {
     return assets.map(asset => {
-      return <Well>{
+      return <Well_deprecated>{
         id: asset.id,
         name: asset.name,
         wellHeadLocation: Wells.mapToWellHeadLocation(asset),
@@ -55,6 +57,11 @@ export class Wells extends AssetsAPI {
     });
   };
 
+  /**
+   *
+   * @param type
+   * @param labels
+   */
   static getLabel(type: string, labels: Label[] | undefined): string[] {
     const values = [];
     if (labels) {
@@ -66,6 +73,16 @@ export class Wells extends AssetsAPI {
     }
     return values;
   }
+
+  /**
+   *
+   * @param wellId
+   */
+  public getDatum = async (wellId: number): Promise<Asset | undefined> => {
+    const filter = { parent_ids: [wellId], metadata: { type: 'Datum' } };
+    const assets = await this.search({ filter: filter });
+    return assets.length > 0 ? assets[0] : undefined;
+  };
 
   /**
    * A generic template for searching wells based on strict filtering and/or fuzzy filtering
@@ -108,7 +125,7 @@ export class Wells extends AssetsAPI {
   public listByName = async (
     wellName: string,
     customFilter?: SearchWells
-  ): Promise<Well[]> => {
+  ): Promise<Well_deprecated[]> => {
     if (customFilter) {
       return await customFilter(wellName);
     }
@@ -130,7 +147,7 @@ export class Wells extends AssetsAPI {
   public listByNamePrefix = async (
     namePrefix: string,
     customFilter?: SearchWells
-  ): Promise<Well[]> => {
+  ): Promise<Well_deprecated[]> => {
     if (customFilter) {
       return await customFilter(namePrefix);
     }
@@ -157,7 +174,7 @@ export class Wells extends AssetsAPI {
   public getByIds = async (
     ids: IdEither[],
     customFilter?: SearchWells
-  ): Promise<Well[]> => {
+  ): Promise<Well_deprecated[]> => {
     if (customFilter) {
       return await customFilter(ids);
     }
@@ -178,12 +195,12 @@ export class Wells extends AssetsAPI {
   public getById = async (
     id: number,
     customFilter?: SearchWell
-  ): Promise<Well | undefined> => {
+  ): Promise<Well_deprecated | undefined> => {
     if (customFilter) {
       return await customFilter(id);
     }
 
-    const wells: Well[] = await this.getByIds([{ id: id }]);
+    const wells: Well_deprecated[] = await this.getByIds([{ id: id }]);
     return wells.length == 1 ? wells[0] : undefined;
   };
 
@@ -217,7 +234,7 @@ export class Wells extends AssetsAPI {
     limit?: number;
     offset?: number;
     customFilter?: SearchWells;
-  }): Promise<Well[]> => {
+  }): Promise<Well_deprecated[]> => {
     // custom filters does not have to rely on either CDF or Geospatial API
     // as long as it returns a Promise<Well[]>
     if (customFilter) {
@@ -267,10 +284,10 @@ export class Wells extends AssetsAPI {
     limit = 1000,
   }: {
     wellGeometry: WellGeometry;
-    filter: WellFilter;
+    filter: WellFilter_deprecated;
     customFilter?: SearchWells;
     limit?: number;
-  }): Promise<Well[]> => {
+  }): Promise<Well_deprecated[]> => {
     if (customFilter) {
       return await customFilter(wellGeometry.geometry);
     }

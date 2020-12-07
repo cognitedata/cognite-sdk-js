@@ -22,6 +22,25 @@ yarn install
 yarn build
 ```
 
+### **Testing the wells package locally**
+
+This repo contains some integration tests that require a CDF api key for `subsurface-test` tenant.
+Talk to any of the contributors or leave an issue and it'll get sorted.
+Travis will run the test and has its own api key.
+
+Run all tests:
+
+navigate to wells package root directory:
+
+```bash
+cd /cognite-sdk-js/packages/wells
+```
+
+```bash
+yarn build
+COGNITE_WELLS_PROJECT=<project-tenant> COGNITE_WELLS_CREDENTIALS=<your-api-key> yarn test
+```
+
 ## **consuming**
 
 ##### set your env variables (must be valid for both cdf and geospatial API)
@@ -200,23 +219,4 @@ for (const trajectory of trajectories) {
   const rows = await trajectory.rows();
   console.log(rows);
 });
-```
-
-### **Testing the wells package locally**
-
-This repo contains some integration tests that require a CDF api key for `subsurface-test` tenant.
-Talk to any of the contributors or leave an issue and it'll get sorted.
-Travis will run the test and has its own api key.
-
-Run all tests:
-
-navigate to wells package root directory:
-
-```bash
-cd /cognite-sdk-js/packages/wells
-```
-
-```bash
-yarn build
-COGNITE_WELLS_PROJECT=<project-tenant> COGNITE_WELLS_CREDENTIALS=<your-api-key> yarn test
 ```
