@@ -19,7 +19,7 @@ describeIfCondition(
     });
 
     test('standard filter - list all wellbores', async () => {
-      console.log(client);
+      expect(client).not.toBeUndefined();
     });
   }
 );
