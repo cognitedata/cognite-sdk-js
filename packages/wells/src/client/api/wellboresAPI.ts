@@ -1,4 +1,4 @@
-import { CDFHttpClient, HttpError } from '@cognite/sdk-core';
+import { CDFHttpClient} from '@cognite/sdk-core';
 import { Survey } from '../model/Survey';
 
 export class WellboresAPI {
@@ -16,17 +16,15 @@ export class WellboresAPI {
   /* eslint-disable */
   public getTrajectory = async (wellboreId: number): Promise<Survey | undefined> => {
       const path: string = `/${this.project}/wellbores/${wellboreId}/trajectory`
-      let trajectory: Survey | undefined = undefined;
-
+      let trajectory: Survey | undefined;
       await this.client?.get<Survey>(path)
       .then(response => {
-        if (response.status == 200 || response.data == undefined){
+        if (response.status == 200){
           trajectory = response.data;
         } else {
-          throw new HttpError(response.status, undefined, response.headers);
-        }
-      })
+          trajectory = undefined;
+        }})
 
-      return trajectory;
-  };
+        return trajectory;
+    };
 }
