@@ -3,12 +3,12 @@ import { SearchWellbores, Wellbore } from '../model/Wellbore';
 import { Survey } from '../model/Survey';
 import { Surveys } from './surveys-deprecated';
 import { accessApi } from '@cognite/sdk-core';
-import {
-  Well_deprecated,
-  WellDatum_deprecated,
-} from '../model/Well-deprecated';
 import { Wells } from './wells-deprecated';
 import { WellHeadLocation_deprecated } from '../model/WellHeadLocation-deprecated';
+import {
+  WellDatum_deprecated,
+  Well_deprecated,
+} from '../model/Well-deprecated';
 
 export class Wellbores extends AssetsAPI {
   /**

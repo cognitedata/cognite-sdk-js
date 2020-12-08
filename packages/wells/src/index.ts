@@ -2,10 +2,8 @@
 
 export * from '@cognite/sdk';
 export { default as CogniteClient } from './client/cogniteClient-deprecated';
-export { Wells } from './client/api/wells-deprecated';
-export { Wellbores } from './client/api/wellbores-deprecated';
-export { Surveys } from './client/api/surveys-deprecated';
 export { WellsAPI } from './client/api/wellsApi';
+export { WellboresAPI } from './client/api/wellboresAPI';
 
 // dataclasses and types
 export * from './client/model/Well-deprecated';

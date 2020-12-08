@@ -17,7 +17,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   // test that the client behaves as stable
   test('client test', async () => {
-    console.log(client);
-    expect(1).toBeGreaterThan(0);
+    expect(client).not.toBeUndefined();
   });
 });

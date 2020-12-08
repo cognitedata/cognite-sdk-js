@@ -1,14 +1,14 @@
 // Copyright 2020 Cognite AS
 
-import { Constants } from '@cognite/sdk-core';
 import { name } from '../../package.json';
+import { WELL_SERVICE_BASE_URL } from '../client/api/utils';
 import CogniteWellsClient from '../client/CogniteWellsClient';
 
 export function setupClient(
-  baseUrl: string = Constants.BASE_URL
+  baseUrl: string = WELL_SERVICE_BASE_URL
 ): CogniteWellsClient {
   return new CogniteWellsClient({
-    appId: `JS SDK integration tests (${name})`,
+    appId: `JS WELLS SDK integration tests (${name})`,
     baseUrl,
   });
 }
