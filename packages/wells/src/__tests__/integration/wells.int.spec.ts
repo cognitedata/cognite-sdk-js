@@ -35,7 +35,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     await client.wells.getId(wellId)
       .then(response => response)
       .catch(err => {
-        console.log(err)
         expect(err.status).toBe(400);
         expect(err.data).toBe(`Failed to retrieve well from CDF`)
       });
