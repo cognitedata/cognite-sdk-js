@@ -32,7 +32,6 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
    await client.wellbores.getTrajectory(wellboreId)
       .then(response => response)
       .catch(err => {
-        console.log(err)
         expect(err.status).toBe(404);
         expect(err.data).toBe(`${wellboreId} doesn't exist`)
       });

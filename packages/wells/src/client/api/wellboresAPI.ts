@@ -1,7 +1,7 @@
 import { CDFHttpClient, HttpError} from '@cognite/sdk-core';
 import { Measurements } from '../model/Measurement';
+import { MeasurementType } from '../model/MeasurementType';
 import { Survey } from '../model/Survey';
-import { MeasurementType } from '../model/WellFilter';
 
 export class WellboresAPI {
   private client?: CDFHttpClient;

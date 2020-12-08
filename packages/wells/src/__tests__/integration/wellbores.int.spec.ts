@@ -3,6 +3,8 @@
 import { setupLoggedInClient } from '../testUtils';
 
 import CogniteWellsClient from 'wells/src/client/CogniteWellsClient';
+import { MeasurementType } from 'wells/src/client/model/MeasurementType';
+import { Measurements } from 'wells/src/client/model/Measurement';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -18,8 +20,26 @@ describeIfCondition(
       client = setupLoggedInClient();
     });
 
-    test('standard filter - list all wellbores', async () => {
-      expect(client).not.toBeUndefined();
+    test('Succeed to get wellbore measurement for measurementType: GammaRay', async () => {
+      const wellboreId: number = 870793324939646;
+      const measurements:
+        | Measurements
+        | undefined = await client.wellbores.getMeasurement(
+        wellboreId,
+        MeasurementType.GammaRay
+      );
+      expect(measurements).not.toBeUndefined();
+    });
+
+    test('Fail to get wellbore measurement for measurementType: GammaRay', async () => {
+      const wellboreId: number = 870793324939640;
+
+      await client.wellbores
+        .getMeasurement(wellboreId, MeasurementType.GammaRay)
+        .then(response => response)
+        .catch(err => {
+          expect(err.status).toBe(404);
+        });
     });
   }
 );
