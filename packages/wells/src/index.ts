@@ -12,3 +12,4 @@ export * from './client/model/WellHeadLocation-deprecated';
 export * from './client/model/Wellbore';
 export * from './client/model/Survey';
 export * from './client/model/MeasurementType';
+export * from './client/model/Measurement';
