@@ -22,7 +22,7 @@ export default class CogniteWellsClient extends BaseCogniteClient {
     this.setBaseUrl(WELL_SERVICE_BASE_URL);
     this.wellsApi = this.apiFactory(WellsAPI, 'wells');
     this.wellsApi.setHttpClient = this.httpClient;
-    //this.wellsApi.setProject = this.project;
+    this.wellsApi.setProject = this.project;
 
     // wellbores
     this.setBaseUrl(WELL_SERVICE_BASE_URL);
