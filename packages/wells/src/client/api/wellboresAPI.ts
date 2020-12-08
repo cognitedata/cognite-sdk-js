@@ -27,5 +27,10 @@ export class WellboresAPI {
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
       });
-    };
+  };
+
+
+  public getMeasurement = async (wellboreId: number) => {
+    console.log(wellboreId)
+  }
 }
