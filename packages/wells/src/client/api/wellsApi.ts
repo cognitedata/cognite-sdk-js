@@ -1,4 +1,4 @@
-import { CDFHttpClient } from '@cognite/sdk-core';
+import { CDFHttpClient, HttpError } from '@cognite/sdk-core';
 import { Well } from '../model/Well';
 import { WellFilter } from '../model/WellFilter';
 
@@ -10,46 +10,36 @@ export class WellsAPI {
     this.client = httpClient;
   }
 
+  public set setProject(project: String) {
+    this.project = project;
+  }
+
   /* eslint-disable */
   public list = async (): Promise<Well[] | undefined> => {
     const path: string = `/${this.project}/wells`
-    let wells: Well[] | undefined;
-    await this.client?.get<Well[]>(path)
-      .then(response => {
-        if (response.status == 200){
-          wells = response.data;
-        } else {
-          wells = undefined;
-        }})
-
-    return wells;
-    };
+    return await this.client?.get<Well[]>(path)
+      .then(response => response.data)
+      .catch(err => {
+        throw new HttpError(err.status, err.errorMessage, {})
+    });
+  };
+  /* eslint-enable */
 
   public filter = async (filter: WellFilter): Promise<Well[] | undefined> => {
     const path: string = `/${this.project}/wells/list`
-    let wells: Well[] | undefined;
-    await this.client?.post<Well[]>(path, {'data': filter})
-      .then(response => {
-        if (response.status == 200){
-          wells = response.data;
-        } else {
-          wells = undefined;
-        }})
-
-    return wells;
+    return await this.client?.post<Well[]>(path, {'data': filter})
+      .then(response => response.data)
+      .catch(err => {
+        throw new HttpError(err.status, err.errorMessage, {})
+    });
   };
 
   public getId = async (id: number): Promise<Well | undefined> => {
     const path: string = `/${this.project}/wells/${id}`
-    let well: Well | undefined;
-    await this.client?.get<Well>(path)
-      .then(response => {
-        if (response.status == 200){
-          well = response.data;
-        } else {
-          well = undefined;
-        }})
-
-    return well;
+    return await this.client?.get<Well>(path)
+      .then(response => response.data)
+      .catch(err => {
+        throw new HttpError(err.status, err.errorMessage, {})
+    });
   };
 };

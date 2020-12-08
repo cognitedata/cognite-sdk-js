@@ -3,6 +3,7 @@
 import { setupLoggedInClient } from '../testUtils';
 import WellsClient from 'wells/src/client/CogniteWellsClient';
 import { Well } from 'wells/src/client/model/Well';
+import { WellFilter } from 'wells/src/client/model/WellFilter';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -16,26 +17,63 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     client = setupLoggedInClient();
   });
 
-  test('standard filter - get well by asset name', async () => {
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
+  test('get by id - well returned for id', async () => {
     expect(client).not.toBeUndefined();
-=======
->>>>>>> fce54e71... chore: merge
-    // console.log('client: ', client);
+    const wellId: number = 8456650753594878;
+    const well: Well | undefined = await client.wells.getId(wellId)
 
-    // console.log('wells: ', client.wells);
-    const a: Well[] | undefined = await client.wells.list();
-    console.log(a);
+    expect(well).not.toBeUndefined();
+    /* eslint-disable */
+    expect(well?.id).toBe(wellId);
+    /* eslint-enable */
   });
 
-  test('standard filter - get well from a polygon', async () => {
-    const a: Well[] | undefined = await client.wells.filter({});
-    console.log(a);
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
->>>>>>> fce54e71... chore: merge
+  test('get by id - 404 if well does not exist', async () => {
+    expect(client).not.toBeUndefined();
+    const wellId: number = 99999999999999;
+
+    await client.wells.getId(wellId)
+      .then(response => response)
+      .catch(err => {
+        console.log(err)
+        expect(err.status).toBe(400);
+        expect(err.data).toBe(`Failed to retrieve well from CDF`)
+      });
+  });
+
+  test('get list of wells', async () => {
+    expect(client).not.toBeUndefined();
+    const wells = await client.wells.list();
+      
+    expect(wells).not.toBeUndefined();
+    const WdlNames = ["well:CasingWear", "well:Deepwater W", "well:Platform W", "well:34/10-24", "well:34/10-1", "well:34/10-8"];
+    wells?.forEach(well => {
+     expect(WdlNames).toContain(well.externalId)
+    });
+  });
+
+  test('filter - gets wells in polygon', async () => {
+    expect(client).not.toBeUndefined();
+    const testPolygon = "POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))"
+    const filter: WellFilter = {'polygon': {'geometry': testPolygon, 'crs': 'epsg:4326'}}
+    const wells = await client.wells.filter(filter);
+      
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.map(well => well.externalId)
+    const WdlNames = ["well:34/10-24", "well:34/10-1", "well:34/10-8"];
+    WdlNames.forEach(name => {
+     expect(retrievedNames).toContain(name)
+    });
+  });
+
+  test('filter - get all wells with edm source', async () => {
+    expect(client).not.toBeUndefined();
+    const testPolygon = "POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))"
+    const filter: WellFilter = {'polygon': {'geometry': testPolygon, 'crs': 'epsg:4326'}, 'sources': ['edm']}
+    const wells = await client.wells.filter(filter);
+
+    wells?.forEach(well => {
+      expect(well.sources).toContain('edm');
+    });
   });
 });

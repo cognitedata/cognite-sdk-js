@@ -57,10 +57,10 @@ export interface WellFilter {
    */
   hasMeasurements?: string[];
   /**
-   * @type {string[]}
+   * @type {PolygonFilter}
    * @memberof WellFilter
    */
-  polygon?: string[];
+  polygon?: PolygonFilter;
 }
 
 export interface TrajectoryFilter {
