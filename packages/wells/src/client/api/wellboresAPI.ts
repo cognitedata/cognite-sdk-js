@@ -32,7 +32,7 @@ export class WellboresAPI {
   };
 
 
-  public getMeasurement = async (wellboreId: number, measurementType: MeasurementType) => {
+  public getMeasurement = async (wellboreId: number, measurementType: MeasurementType): Promise<Measurements | undefined> => {
     if (this.project == undefined){
       throw new HttpError(400, "The client project has not been set.", {})
     }

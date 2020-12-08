@@ -22,13 +22,13 @@ describeIfCondition(
 
     test('Succeed to get wellbore measurement for measurementType: GammaRay', async () => {
       const wellboreId: number = 870793324939646;
-      const measurements:
-        | Measurements
-        | undefined = await client.wellbores.getMeasurement(
+      const measurements: Measurements | undefined = await client.wellbores.getMeasurement(
         wellboreId,
         MeasurementType.GammaRay
       );
       expect(measurements).not.toBeUndefined();
+      /* eslint-disable */
+      expect(measurements?.items.length).toBe(2);
     });
 
     test('Fail to get wellbore measurement for measurementType: GammaRay', async () => {
