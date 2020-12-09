@@ -141,19 +141,6 @@ const response = await client.wells.listWells(
 
 ### **Wellbore queries**
 
-#### _List all wellbores in tenant:_
-
-```js
-const response = await client.wellbores.listAll();
-```
-
-#### _List immediate children wellbore of parentId:_
-
-```js
-const wellId = 2278618537691581;
-const response = await client.wellbores.listChildren(wellId);
-```
-
 #### _List all wellbores (all levels of subtree) from wellId:_
 
 ```js
