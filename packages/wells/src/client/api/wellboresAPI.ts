@@ -1,4 +1,6 @@
 import { CDFHttpClient, HttpError} from '@cognite/sdk-core';
+import { Measurements } from '../model/Measurement';
+import { MeasurementType } from '../model/MeasurementType';
 import { Survey } from '../model/Survey';
 
 export class WellboresAPI {
@@ -27,5 +29,21 @@ export class WellboresAPI {
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
       });
-    };
+  };
+
+
+  public getMeasurement = async (wellboreId: number, measurementType: MeasurementType): Promise<Measurements | undefined> => {
+    if (this.project == undefined){
+      throw new HttpError(400, "The client project has not been set.", {})
+    }
+
+    const path: string = `/${this.project}/wellbores/${wellboreId}/measurements/${measurementType}`
+
+    return await this.client?.get<Measurements>(path)
+    .then(response => response.data)
+    .catch(err => {
+      throw new HttpError(err.status, err.errorMessage, {})
+    })
+    
+  }
 }

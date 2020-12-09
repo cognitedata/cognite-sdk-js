@@ -1,19 +1,5 @@
-export enum WellType {
-  Exploration = 'Exploration',
-  Development = 'Development',
-  Any = 'Any',
-}
-
-export enum MeasurementType {
-  GammaRay = 'GammaRay',
-  Caliper = 'Caliper',
-  Resistivity = 'Resistivity',
-  Density = 'Density',
-  Neutron = 'Neutron',
-  PPFG = 'PPFG',
-  Geomechanics = 'Geomechanics',
-  Core = 'Core',
-}
+import { MeasurementType } from './MeasurementType';
+import { WellType } from './WellType';
 
 export interface WellFilter {
   /**
