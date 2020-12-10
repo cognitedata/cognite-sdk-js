@@ -15,6 +15,4 @@ export * from './client/model/WellType';
 export * from './client/model/Survey';
 export * from './client/model/MeasurementType';
 export * from './client/model/Measurement';
-export * from './client/model/Well';
-export * from './client/model/WellFilter';
-export * from './client/model/WellHead';
+export * from './constants';
