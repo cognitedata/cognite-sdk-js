@@ -1,4 +1,4 @@
-import { WellHeadLocation_deprecated } from './WellHeadLocation-deprecated';
+import { WellHead } from './WellHead';
 
 // Customizable function that takes in CogniteClient and args, and return a promise of a well
 export type SearchWells = (args: any) => Promise<Well[]>;
@@ -56,10 +56,10 @@ export interface Well {
    */
   waterDepth?: number;
   /**
-   * @type {WellHeadLocation_deprecated}
+   * @type {WellHead}
    * @memberOf Well
    */
-  wellHead?: WellHeadLocation_deprecated;
+  wellHead?: WellHead;
   /**
    * @type {WellDatum}
    * @memberof Well

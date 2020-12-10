@@ -1,6 +1,6 @@
 import { Survey } from '../model/Survey';
-import { Well_deprecated, WellDatum_deprecated } from './Well-deprecated';
-import { WellHeadLocation_deprecated } from './WellHeadLocation-deprecated';
+import { Well } from './Well';
+import { WellHead } from './WellHead';
 
 // Customizable function that takes in CogniteClient and args, and return a promise of a wellbore
 export type SearchWellbores = (args?: any) => Promise<Wellbore[]>;
@@ -36,18 +36,18 @@ export interface Wellbore {
    */
   trajectories(): Promise<Survey[]>;
   /**
-   * @type {Promise<Well_deprecated>}
+   * @type {Promise<Well>}
    * @memberof Wellbore
    */
-  parentWell(): Promise<Well_deprecated | undefined>;
+  parentWell(): Promise<Well | undefined>;
   /**
    * @type {Promise<WellDatum_deprecated>}
    * @memberof Wellbore
    */
-  getDatum(): Promise<WellDatum_deprecated | undefined>;
+  //getDatum(): Promise<WellDatum_deprecated | undefined>;
   /**
-   * @type {Promise<WellHeadLocation_deprecated>}
+   * @type {Promise<WellHead>}
    * @memberof Wellbore
    */
-  getWellHeadLocation(): Promise<WellHeadLocation_deprecated | undefined>;
+  getWellHeadLocation(): Promise<WellHead | undefined>;
 }
