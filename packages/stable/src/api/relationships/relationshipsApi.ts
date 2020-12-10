@@ -54,7 +54,7 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
   };
 
   /**
-   * [Retrieve relationships](https://docs.cognite.com/api/v1/#operation/retrieveRelationships)
+   * [Retrieve relationships](https://docs.cognite.com/api/v1/#operation/byidsRelationships)
    *
    * ```js
    * const relationships = await client.relationships.retrieve([{externalId: 'abc'}, {externalId: 'def'}]);
