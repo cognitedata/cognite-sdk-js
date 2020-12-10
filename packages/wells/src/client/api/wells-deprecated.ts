@@ -2,8 +2,8 @@ import { SpatialRel, GeometryRel } from '@cognite/geospatial-sdk-js';
 import { Asset, AssetsAPI, IdEither, Label } from '@cognite/sdk';
 import {
   Well_deprecated,
-  SearchWells,
-  SearchWell,
+  SearchWells_deprecated,
+  SearchWell_deprecated,
   WellFilter_deprecated,
   WellGeometry,
 } from '../model/Well-deprecated';
@@ -124,7 +124,7 @@ export class Wells extends AssetsAPI {
    */
   public listByName = async (
     wellName: string,
-    customFilter?: SearchWells
+    customFilter?: SearchWells_deprecated
   ): Promise<Well_deprecated[]> => {
     if (customFilter) {
       return await customFilter(wellName);
@@ -146,7 +146,7 @@ export class Wells extends AssetsAPI {
    */
   public listByNamePrefix = async (
     namePrefix: string,
-    customFilter?: SearchWells
+    customFilter?: SearchWells_deprecated
   ): Promise<Well_deprecated[]> => {
     if (customFilter) {
       return await customFilter(namePrefix);
@@ -173,7 +173,7 @@ export class Wells extends AssetsAPI {
    */
   public getByIds = async (
     ids: IdEither[],
-    customFilter?: SearchWells
+    customFilter?: SearchWells_deprecated
   ): Promise<Well_deprecated[]> => {
     if (customFilter) {
       return await customFilter(ids);
@@ -194,7 +194,7 @@ export class Wells extends AssetsAPI {
    */
   public getById = async (
     id: number,
-    customFilter?: SearchWell
+    customFilter?: SearchWell_deprecated
   ): Promise<Well_deprecated | undefined> => {
     if (customFilter) {
       return await customFilter(id);
@@ -233,7 +233,7 @@ export class Wells extends AssetsAPI {
     outputCrs?: string;
     limit?: number;
     offset?: number;
-    customFilter?: SearchWells;
+    customFilter?: SearchWells_deprecated;
   }): Promise<Well_deprecated[]> => {
     // custom filters does not have to rely on either CDF or Geospatial API
     // as long as it returns a Promise<Well[]>
@@ -285,7 +285,7 @@ export class Wells extends AssetsAPI {
   }: {
     wellGeometry: WellGeometry;
     filter: WellFilter_deprecated;
-    customFilter?: SearchWells;
+    customFilter?: SearchWells_deprecated;
     limit?: number;
   }): Promise<Well_deprecated[]> => {
     if (customFilter) {

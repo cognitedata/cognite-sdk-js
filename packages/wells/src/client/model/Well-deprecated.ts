@@ -2,8 +2,8 @@ import { GeoJson } from './GeoJson';
 import { WellHeadLocation_deprecated } from './WellHeadLocation-deprecated';
 
 // Customizable function that takes in CogniteClient and args, and return a promise of a well
-export type SearchWells = (args: any) => Promise<Well_deprecated[]>;
-export type SearchWell = (args: any) => Promise<Well_deprecated>;
+export type SearchWells_deprecated = (args: any) => Promise<Well_deprecated[]>;
+export type SearchWell_deprecated = (args: any) => Promise<Well_deprecated>;
 
 /**
  * A well is an assets and sets the basis of the well data model hierarchy
