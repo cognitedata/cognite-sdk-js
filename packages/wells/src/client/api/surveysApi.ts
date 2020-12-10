@@ -14,14 +14,19 @@ export class SurveysAPI {
   }
 
   /* eslint-disable */
-  public getData = async (surveyId: number): Promise<SurveyData | undefined> => {
+  public getData = async (surveyId: number, start?: number, end?: number, limit?: number, cursor?: string, columns?: string[]): Promise<SurveyData | undefined> => {
 
       if (this.project == undefined){
         throw new HttpError(400, "The client project has not been set.", {})
       }
 
       const request: SurveyDataRequest = {
-        id: surveyId
+        id: surveyId,
+        start: start,
+        end: end,
+        limit: limit,
+        cursor: cursor,
+        columns: columns
       }
 
       const path: string = `/${this.project}/surveys/data`

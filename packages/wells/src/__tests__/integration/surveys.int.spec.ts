@@ -2,7 +2,7 @@
 
 import { setupLoggedInClient } from '../testUtils';
 import CogniteWellsClient from 'wells/src/client/CogniteWellsClient';
-import { Survey } from 'wells/src/client/model/Survey';
+import { Survey, SurveyData } from 'wells/src/client/model/Survey';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -36,4 +36,27 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
         expect(err.data).toBe(`${wellboreId} doesn't exist`)
       });
   });
+
+  test('Get rows from a trajectory', async () => {
+    const surveyId: number = 5289118434026779;
+    const data: SurveyData | undefined = await client.surveys.getData(surveyId, undefined, undefined, 10)
+    console.log("data: ", data)
+    expect(data).not.toBeUndefined();
+    /* eslint-disable */
+    expect(data?.id).toBe(surveyId);
+    expect(data?.rows.length).toBe(6);
+    data?.rows.forEach(row => {
+        expect(row.values).toContain("m")
+    });
+  });
+
+  test('Get rows for a survey with 404 Not Found', async () => {
+    const surveyId: number = 1000000000000000;
+    await client.surveys.getData(surveyId, undefined, undefined, 10)
+      .then(response => response)
+      .catch(err => {
+        expect(err.status).toBe(400);
+      });
+  });
+
 });
