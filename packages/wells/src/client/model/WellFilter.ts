@@ -87,7 +87,7 @@ export interface MeasurementFilter {
 
 export interface PolygonFilter {
   /**
-   * @type {GeoJson | string}
+   * @type {string}
    * @memberof PolygonFilter
    */
   geometry: string;
