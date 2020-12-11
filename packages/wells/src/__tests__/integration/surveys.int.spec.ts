@@ -47,7 +47,6 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
     }
 
     const data: SurveyData | undefined = await client.surveys.getData(request)
-    console.log("data: ", data)
     expect(data).not.toBeUndefined();
     /* eslint-disable */
     expect(data?.id).toBe(surveyId);

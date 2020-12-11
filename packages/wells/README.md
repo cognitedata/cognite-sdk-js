@@ -1,19 +1,8 @@
-<a href="https://cognite.com/">
-    <img src="./cognite_logo.png" alt="Cognite logo" title="Cognite" align="right" height="80" />
-</a>
+# Cognite Wells JS SDK
 
-# Cognite Wells JS SDK (derived from stable)
+Cognite wells SDK is tool for interacting with the CDF Wells Data Layer (WDL). All queries are passed through a service API called the 'Well-Service' that handles ingestion and queries into the well data layer.
 
-The purpose of the wells-sdk is to build a layer on top of the core CDF API that allows for interpreting and querying data in the context of the Cognite well model / wells data layer. The well model / wells data layer is a representation of how well data can be described and modeled in terms of Cognite’s reusable resources (assets, sequences, geospatial, etc).
-
-The importance of such a representation is being able to concatenate data from different sources into a single contextualized representation that is independent of source and customer. This allows both apps, such as Discover, and also geoscientists running models on top of well data, to be able to find the data they need and use it without having to consider where this data came from and what is its original format.
-
-This package provides an SDK derived from `@cognite/sdk`, aka
-[stable](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md).
-
-It is recomended to install this package under the same name as `@cognite/sdk`.
-This allows you to change SDK versions without changing your imports.
-See the [beta readme](https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/beta/README.md) for details.
+The wells data layer is an abstraction on top of CDF resources able to concatenate well data from different sources into a single contextualized representation that is independent of source and customer. This allows apps, such as Discover or customer apps, and also geoscientists running advanced models on top of well data, to be able to find data in a consistent way without having to worry about the details of many different source formats.
 
 ### install and build
 
@@ -43,7 +32,7 @@ COGNITE_WELLS_PROJECT=<project-tenant> COGNITE_WELLS_CREDENTIALS=<your-api-key> 
 
 ## **consuming**
 
-##### set your env variables (must be valid for both cdf and geospatial API)
+### set your env variables (must be valid for both cdf and geospatial API)
 
 ```bash
 COGNITE_WELLS_PROJECT=<project-tenant>
@@ -55,10 +44,7 @@ COGNITE_WELLS_CREDENTIALS=<your-api-key>
 ```js
 import { CogniteWellsClient } from '@cognite/sdk-wells';
 
-let client = new CogniteWellsClient({
-  appId: `JS WELLS SDK USER TEST`,
-  baseUrl: 'https://api.cognitedata.com',
-});
+let client = new CogniteWellsClient({ appId: `JS WELLS SDK USER TEST` });
 
 client.loginWithApiKey({
   project: process.env.COGNITE_WELLS_PROJECT,
@@ -66,144 +52,93 @@ client.loginWithApiKey({
 });
 ```
 
-### **well queries**
+### **Well queries**
 
-#### _run a polygon query by GeoJson:_
+### _Get well by id:_
 
-```js
-const polygon = {
-  type: 'Polygon',
-  coordinates: [
-    [
-      [-4.86423, 63.59999],
-      [19.86423, 63.59999],
-      [19.86423, 52.59999],
-      [-4.86423, 52.59999],
-      [-4.86423, 63.59999],
-    ],
-  ],
-};
+```ts
+import { Well } from '@cognite/sdk-wells';
 
-const response = await client.wells.searchByPolygon({ geometry: polygon });
+const wellId: number = 8456650753594878;
+const well: Well | undefined = await client.wells.getId(wellId);
 ```
 
-#### _run a polygon query by wkt:_
+### _List wells:_
 
-```js
-const polygon =
-  'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+```ts
+import { WellItems } from '@cognite/sdk-wells';
 
-const response = await client.wells.searchByPolygon({ geometry: polygon });
-```
-
-#### _run a custom query:_
-
-```js
-const polygon =
-  'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
-
-// create a custom method
-const fn: SearchWells = async (geometry: GeoJson) =>
-  await someClient.myCustomPolygonSearch({ geometry: geometry });
-
-// input that custom filter
-const response = await client.wells.searchByPolygon({
-  geometry: polygon,
-  customFilter: fn,
+const wells: WellItems | undefined = await client.wells.list();
+wells?.items.forEach(well => {
+    console.log(well.externalId)
 });
 ```
 
-### _polygon search with additional filters:_
+### _Filter wells by polygon:_
 
-```js
-const polygon =
-  'POLYGON ((-4.86423 63.59999, 19.86423 63.59999, 19.86423 52.59999, -4.86423 52.59999, -4.86423 63.59999))';
+```ts
+import { WellFilter } from '@cognite/sdk-wells';
 
-const response = await client.wells.listWells(
-  {
-    wellGeometry: {
-      geometry: polygon,
-      crs: 'epsg:4326',
-      outputCrs: 'EPSG:4326',
-    },
-    filter: {
-      name: ['Well A'],
-      dataSource: ['A', 'B'],
-      operator: ['A', 'B'],
-      field: ['A', 'B'],
-      block: ['A', 'B'],
-    },
-    limit: 1000,
-  }
-  }
-)
+const polygon = 'POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))';
+const filter: WellFilter = {
+  polygon: { geometry: polygon, crs: 'epsg:4326' },
+  sources: ['edm'],
+};
+const wells = await client.wells.filter(filter);
+```
+
+### _Filter - list all labels:_
+
+```ts
+const blockLabels: String[] | undefined = await client.wells.blocks();
+const fieldLabels: String[] | undefined = await client.wells.fields();
+const operatorLabels: String[] | undefined = await client.wells.operators();
+const quadrantLabels: String[] | undefined = await client.wells.quadrants();
+const sourceLabels: String[] | undefined = await client.wells.sources();
 ```
 
 ### **Wellbore queries**
 
-#### _List all wellbores (all levels of subtree) from wellId:_
+### _Get wellbore measurement for measurementType: 'GammaRay':_
 
-```js
-const rootId = 4438800495523058;
-const response = await client.wellbores.listByWellId(rootId);
+```ts
+import { Measurements, MeasurementType } from '@cognite/sdk-wells';
+
+const wellboreId: number = 870793324939646;
+const measurements: Measurements | undefined;
+measurements = await client.wellbores.getMeasurement(
+  wellboreId,
+  MeasurementType.GammaRay
+);
 ```
 
-#### _Custom method for listing wellbores:_
+### _Get trajectory for a wellbore:_
 
-```js
-const fn: SearchWellbores = async (args: number) =>
-  await myClient.customWellboresMethod(args);
+```ts
+import { Survey } from '@cognite/sdk-wells';
 
-const rootId = 4438800495523058;
-const response = await client.wellbores.listByWellId(rootId, fn);
+const wellboreId: number = 8456650753594878;
+const trajectory: Survey | undefined;
+trajectory = await client.wellbores.getTrajectory(wellboreId);
 ```
 
-#### _Read wellbore trajectories and rows:_
+### **Survey queries**
 
-Trajectories are expressed as **Survey[]** and are found on the wellbore object using a lazy getter _wellbore.trajectory()_. All trajectory rows are found on the trajectory object (**Survey** dataclass) and can be acessed using a lazy getter _trajectory.rows(limit=1000)_.
+### _Get data from a survey:_
 
-```js
-const wellId = 2278618537691581;
-const wellbores = await client.wellbores.listChildren(wellId);
-for (const wellbore of wellbores) {
-  const trajectories = await wellbore.trajectories();
-  // trajectories exist?
-  if (trajectories.length != 0) {
-    for (const trajectory of trajectories) {
-      const rows = await trajectory.rows();
-      // rows exist?
-      if (rows.length != 0) {
-        console.log(rows);
-      }
-    });
-  }
-});
-```
+```ts
+import { SurveyDataRequest, SurveyData } from '@cognite/sdk-wells';
 
-## **Survey queries**
+const surveyId: number = 5289118434026779;
 
-### _List trajectories:_
+const request: SurveyDataRequest = {
+  id: surveyId,
+  start: undefined,
+  end: undefined,
+  limit: 100,
+  cursor: '98jgi&0%4',
+  columns: undefined,
+};
 
-```js
-const wellboreId = 4618298167286402;
-const trajectories = await client.surveys.listTrajectories(wellboreId);
-for (const trajectory of trajectories) {
-  const rows = await trajectory.rows();
-  console.log(rows);
-});
-```
-
-### _List trajectories with custom filter:_
-
-```js
-const wellboreId = 4618298167286402;
-
-const fn: SearchSurveys = async (args: number) =>
-  await client.surveys.listTrajectories(args);
-
-const trajectories = await client.surveys.listTrajectories(wellboreId, fn);
-for (const trajectory of trajectories) {
-  const rows = await trajectory.rows();
-  console.log(rows);
-});
+const data: SurveyData | undefined = await client.surveys.getData(request);
 ```
