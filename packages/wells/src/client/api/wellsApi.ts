@@ -1,11 +1,9 @@
 import { CDFHttpClient, HttpError } from '@cognite/sdk-core';
 import { Well, WellItems } from '../model/Well';
 import { WellFilter } from '../model/WellFilter';
-// import { stringify } from 'wkt'
 
 export class WellsAPI {
   private client?: CDFHttpClient;
-  // private cluster?: String;
   private project?: String;
 
   public set setHttpClient(httpClient: CDFHttpClient) {
@@ -15,10 +13,6 @@ export class WellsAPI {
   public set setProject(project: String) {
     this.project = project;
   }
-
-  // public set setCluster(project: String) {
-  //   this.cluster = project;
-  // }
 
   public getLabelPrefix = async (prefix: String): Promise<String[] | undefined> => {
     if (this.project == undefined){
