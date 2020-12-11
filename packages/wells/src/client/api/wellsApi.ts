@@ -1,9 +1,11 @@
 import { CDFHttpClient, HttpError } from '@cognite/sdk-core';
-import { Well } from '../model/Well';
+import { Well, WellItems } from '../model/Well';
 import { WellFilter } from '../model/WellFilter';
+// import { stringify } from 'wkt'
 
 export class WellsAPI {
   private client?: CDFHttpClient;
+  // private cluster?: String;
   private project?: String;
 
   public set setHttpClient(httpClient: CDFHttpClient) {
@@ -14,26 +16,53 @@ export class WellsAPI {
     this.project = project;
   }
 
-  /* eslint-disable */
-  public list = async (): Promise<Well[] | undefined> => {
+  // public set setCluster(project: String) {
+  //   this.cluster = project;
+  // }
+
+  public getLabelPrefix = async (prefix: String): Promise<String[] | undefined> => {
     if (this.project == undefined){
       throw new HttpError(400, "The client project has not been set.", {})
     }
-    const path: string = `/${this.project}/wells`
-    return await this.client?.get<Well[]>(path)
+    const path: string = `/${this.project}/wells/${prefix}`
+    // eslint-disable-next-line
+    return await this.client?.get<String[]>(path)
       .then(response => response.data)
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
     });
   };
-  /* eslint-enable */
 
-  public filter = async (filter: WellFilter): Promise<Well[] | undefined> => {
+  public blocks = async (): Promise<String[] | undefined> => this.getLabelPrefix('blocks');
+  public fields = async (): Promise<String[] | undefined> => this.getLabelPrefix('fields');
+  public operators = async (): Promise<String[] | undefined> => this.getLabelPrefix('operators');
+  public quadrants = async (): Promise<String[] | undefined> => this.getLabelPrefix('quadrants');
+  public sources = async (): Promise<String[] | undefined> => this.getLabelPrefix('sources');
+
+  public list = async (cursor?: String): Promise<WellItems | undefined> => {
     if (this.project == undefined){
       throw new HttpError(400, "The client project has not been set.", {})
     }
-    const path: string = `/${this.project}/wells/list`
-    return await this.client?.post<Well[]>(path, {'data': filter})
+    let path: string = `/${this.project}/wells`
+    if (cursor) {
+      path += `?cursor=${cursor}`
+    }
+    return await this.client?.get<WellItems>(path)
+      .then(response => response.data)
+      .catch(err => {
+        throw new HttpError(err.status, err.errorMessage, {})
+    });
+  };
+
+  public filter = async (filter: WellFilter, cursor?: String): Promise<WellItems | undefined> => {
+    if (this.project == undefined){
+      throw new HttpError(400, "The client project has not been set.", {})
+    }
+    let path: string = `/${this.project}/wells/list`
+    if (cursor) {
+      path += `?cursor=${cursor}`
+    }
+    return await this.client?.post<WellItems>(path, {'data': filter})
       .then(response => response.data)
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})

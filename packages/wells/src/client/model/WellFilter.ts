@@ -87,7 +87,7 @@ export interface MeasurementFilter {
 
 export interface PolygonFilter {
   /**
-   * @type {string}
+   * @type {GeoJson | string}
    * @memberof PolygonFilter
    */
   geometry: string;
@@ -100,6 +100,7 @@ export interface PolygonFilter {
   /**
    * @type {string}
    * @memberof PolygonFilter
+   * @default "wkt"
    */
   geometryType?: string;
 }
