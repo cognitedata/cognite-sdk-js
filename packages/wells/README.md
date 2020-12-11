@@ -53,10 +53,10 @@ COGNITE_WELLS_CREDENTIALS=<your-api-key>
 ### setup client
 
 ```js
-const { CogniteClient } = require('@cognite/sdk-wells');
+import { CogniteWellsClient } from '@cognite/sdk-wells';
 
-let client = new CogniteClient({
-  appId: `JS SDK test (${name})`,
+let client = new CogniteWellsClient({
+  appId: `JS WELLS SDK USER TEST`,
   baseUrl: 'https://api.cognitedata.com',
 });
 

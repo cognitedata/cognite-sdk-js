@@ -5,6 +5,21 @@ export type SearchWells = (args: any) => Promise<Well[]>;
 export type SearchWell = (args: any) => Promise<Well>;
 
 /**
+ * Collection of Well objects and a cursor for fetching the next collection
+ */
+export interface WellItems {
+  /**
+   * @type {Well[]}
+   * @memberof Well
+   */
+  items: Well[];
+  /**
+   * @type {string}
+   * @memberof Well
+   */
+  cursor: string;
+}
+/**
  * A well is an assets and sets the basis of the well data model hierarchy
  * @export
  * @interface Well
