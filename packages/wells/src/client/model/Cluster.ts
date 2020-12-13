@@ -1,5 +1,5 @@
 export enum Cluster {
   BP = 'bp',
-  PROD = 'prod',
+  API = 'api',
   GREENFIELD = 'greenfield',
 }

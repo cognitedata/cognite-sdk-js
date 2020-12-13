@@ -13,7 +13,7 @@ export function setupClient(
       appId: `JS WELLS SDK integration tests (${name})`,
       baseUrl,
     },
-    Cluster.PROD
+    Cluster.API
   );
 }
 
