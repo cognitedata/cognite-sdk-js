@@ -6,6 +6,7 @@ import { Survey } from '../model/Survey';
 export class WellboresAPI {
   private client?: CDFHttpClient;
   private project?: String;
+  private cluster?: String;
 
   public set setHttpClient(httpClient: CDFHttpClient) {
     this.client = httpClient;
@@ -15,15 +16,26 @@ export class WellboresAPI {
     this.project = project;
   }
 
+  public set setCluster(cluster: String) {
+    this.cluster = cluster;
+  }
+
+  private getPath(baseUrl: string): string {
+    if (this.project == undefined){
+      throw new HttpError(400, "The client project has not been set.", {})
+    }
+    if (this.cluster == undefined) {
+      throw new HttpError(400, "No cluster has been set.", {})
+    }
+    baseUrl = `/${this.project}${baseUrl}?env=${this.cluster}`
+    return baseUrl
+  }
+
   /* eslint-disable */
   public getTrajectory = async (wellboreId: number): Promise<Survey | undefined> => {
 
-      if (this.project == undefined){
-        throw new HttpError(400, "The client project has not been set.", {})
-      }
-
-      const path: string = `/${this.project}/wellbores/${wellboreId}/trajectory`
-      
+      const path: string = this.getPath(`/wellbores/${wellboreId}/trajectory`)
+  
       return await this.client?.get<Survey>(path)
       .then(response => response.data)
       .catch(err => {
@@ -33,11 +45,8 @@ export class WellboresAPI {
 
 
   public getMeasurement = async (wellboreId: number, measurementType: MeasurementType): Promise<Measurements | undefined> => {
-    if (this.project == undefined){
-      throw new HttpError(400, "The client project has not been set.", {})
-    }
 
-    const path: string = `/${this.project}/wellbores/${wellboreId}/measurements/${measurementType}`
+    const path: string = this.getPath(`/wellbores/${wellboreId}/measurements/${measurementType}`)
 
     return await this.client?.get<Measurements>(path)
     .then(response => response.data)

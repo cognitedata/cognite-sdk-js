@@ -3,14 +3,18 @@
 import { name } from '../../package.json';
 import { WELL_SERVICE_BASE_URL } from '../client/api/utils';
 import CogniteWellsClient from '../client/CogniteWellsClient';
+import { Cluster } from '../client/model/Cluster';
 
 export function setupClient(
   baseUrl: string = WELL_SERVICE_BASE_URL
 ): CogniteWellsClient {
-  return new CogniteWellsClient({
-    appId: `JS WELLS SDK integration tests (${name})`,
-    baseUrl,
-  });
+  return new CogniteWellsClient(
+    {
+      appId: `JS WELLS SDK integration tests (${name})`,
+      baseUrl,
+    },
+    Cluster.PROD
+  );
 }
 
 export function setupLoggedInClient(): CogniteWellsClient {
