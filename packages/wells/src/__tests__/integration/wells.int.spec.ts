@@ -91,11 +91,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('filter - get all block labels', async () => {
     expect(client).not.toBeUndefined();
-<<<<<<< HEAD
-    const blocks = await client.wells.blocks();
-=======
     const blocks: String[] | undefined = await client.wells.blocks();
->>>>>>> master
 
     expect(blocks).toContain("A")
     expect(blocks).toContain("B")
@@ -103,59 +99,32 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('filter - get all field labels', async () => {
     expect(client).not.toBeUndefined();
-<<<<<<< HEAD
-    const blocks = await client.wells.fields();
-
-    expect(blocks).toContain("A")
-    expect(blocks).toContain("B")
-=======
     const fields = await client.wells.fields();
 
     expect(fields).toContain("A")
     expect(fields).toContain("B")
->>>>>>> master
   });
 
   test('filter - get all operator labels', async () => {
     expect(client).not.toBeUndefined();
-<<<<<<< HEAD
-    const blocks = await client.wells.operators();
-
-    expect(blocks).toContain("A")
-    expect(blocks).toContain("B")
-=======
     const operators = await client.wells.operators();
 
     expect(operators).toContain("A")
     expect(operators).toContain("B")
->>>>>>> master
   });
 
   test('filter - get all quadrants labels', async () => {
     expect(client).not.toBeUndefined();
-<<<<<<< HEAD
-    const blocks = await client.wells.quadrants();
-
-    expect(blocks).toContain("A")
-    expect(blocks).toContain("B")
-=======
     const quadrants = await client.wells.quadrants();
 
     expect(quadrants).toContain("A")
     expect(quadrants).toContain("B")
->>>>>>> master
   });
 
   test('filter - get all source labels', async () => {
     expect(client).not.toBeUndefined();
-<<<<<<< HEAD
-    const blocks = await client.wells.sources();
-
-    expect(blocks).toContain("EDM")
-=======
     const sources = await client.wells.sources();
 
     expect(sources).toContain("EDM")
->>>>>>> master
   });
 });
