@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>WellGeometry | Cognite JavaScript SDK</title>
+	<title>MeasurementFilter | Cognite JavaScript SDK</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_wells_src_client_model_well_.html">&quot;wells/src/client/model/Well&quot;</a>
+					<a href="../modules/_wells_src_client_model_wellfilter_.html">&quot;wells/src/client/model/WellFilter&quot;</a>
 				</li>
 				<li>
-					<a href="_wells_src_client_model_well_.wellgeometry.html">WellGeometry</a>
+					<a href="_wells_src_client_model_wellfilter_.measurementfilter.html">MeasurementFilter</a>
 				</li>
 			</ul>
-			<h1>Interface WellGeometry</h1>
+			<h1>Interface MeasurementFilter</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">WellGeometry</span>
+						<span class="target">MeasurementFilter</span>
 					</li>
 				</ul>
 			</section>
@@ -84,9 +84,9 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_well_.wellgeometry.html#crs" class="tsd-kind-icon">crs</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_well_.wellgeometry.html#geometry" class="tsd-kind-icon">geometry</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_well_.wellgeometry.html#outputcrs" class="tsd-kind-icon">output<wbr>Crs</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_wellfilter_.measurementfilter.html#maxdepth" class="tsd-kind-icon">max<wbr>Depth</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_wellfilter_.measurementfilter.html#measurementtype" class="tsd-kind-icon">measurement<wbr>Type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_wellfilter_.measurementfilter.html#mindepth" class="tsd-kind-icon">min<wbr>Depth</a></li>
 							</ul>
 						</section>
 					</div>
@@ -95,58 +95,52 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="crs" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> crs</h3>
-					<div class="tsd-signature tsd-kind-icon">crs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<a name="maxdepth" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> max<wbr>Depth</h3>
+					<div class="tsd-signature tsd-kind-icon">max<wbr>Depth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/526becc/packages/wells/src/client/model/Well.ts#L129">packages/wells/src/client/model/Well.ts:129</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/27fb0fc/packages/wells/src/client/model/WellFilter.ts#L85">packages/wells/src/client/model/WellFilter.ts:85</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<dl class="tsd-comment-tags">
 							<dt>memberof</dt>
-							<dd><p>WellGeometry</p>
-							</dd>
-							<dt>default</dt>
-							<dd><p>&quot;epsg:4326&quot;</p>
+							<dd><p>TrajectoryFilter</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="geometry" class="tsd-anchor"></a>
-					<h3>geometry</h3>
-					<div class="tsd-signature tsd-kind-icon">geometry<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../modules/_wells_src_client_model_geojson_.html#geojson" class="tsd-signature-type">GeoJson</a></div>
+					<a name="measurementtype" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> measurement<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">measurement<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../enums/_wells_src_client_model_measurementtype_.measurementtype.html" class="tsd-signature-type">MeasurementType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/526becc/packages/wells/src/client/model/Well.ts#L123">packages/wells/src/client/model/Well.ts:123</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/27fb0fc/packages/wells/src/client/model/WellFilter.ts#L75">packages/wells/src/client/model/WellFilter.ts:75</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<dl class="tsd-comment-tags">
 							<dt>memberof</dt>
-							<dd><p>WellGeometry</p>
+							<dd><p>TrajectoryFilter</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="outputcrs" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> output<wbr>Crs</h3>
-					<div class="tsd-signature tsd-kind-icon">output<wbr>Crs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<a name="mindepth" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> min<wbr>Depth</h3>
+					<div class="tsd-signature tsd-kind-icon">min<wbr>Depth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/526becc/packages/wells/src/client/model/Well.ts#L135">packages/wells/src/client/model/Well.ts:135</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/27fb0fc/packages/wells/src/client/model/WellFilter.ts#L80">packages/wells/src/client/model/WellFilter.ts:80</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<dl class="tsd-comment-tags">
 							<dt>memberof</dt>
-							<dd><p>WellGeometry</p>
-							</dd>
-							<dt>default</dt>
-							<dd><p>&quot;EPSG:4326&quot;</p>
+							<dd><p>TrajectoryFilter</p>
 							</dd>
 						</dl>
 					</div>
@@ -160,44 +154,38 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/_wells_src_client_model_well_.html">&quot;wells/src/client/model/<wbr>Well&quot;</a>
+						<a href="../modules/_wells_src_client_model_wellfilter_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Filter&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_wells_src_client_model_well_.well.html" class="tsd-kind-icon">Well</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_wells_src_client_model_well_.welldatum.html" class="tsd-kind-icon">Well<wbr>Datum</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_wells_src_client_model_well_.wellfilter.html" class="tsd-kind-icon">Well<wbr>Filter</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_wells_src_client_model_well_.wellgeometry.html" class="tsd-kind-icon">Well<wbr>Geometry</a>
+						<a href="_wells_src_client_model_wellfilter_.measurementfilter.html" class="tsd-kind-icon">Measurement<wbr>Filter</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_wells_src_client_model_well_.wellgeometry.html#crs" class="tsd-kind-icon">crs</a>
+								<a href="_wells_src_client_model_wellfilter_.measurementfilter.html#maxdepth" class="tsd-kind-icon">max<wbr>Depth</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_wells_src_client_model_well_.wellgeometry.html#geometry" class="tsd-kind-icon">geometry</a>
+								<a href="_wells_src_client_model_wellfilter_.measurementfilter.html#measurementtype" class="tsd-kind-icon">measurement<wbr>Type</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_wells_src_client_model_well_.wellgeometry.html#outputcrs" class="tsd-kind-icon">output<wbr>Crs</a>
+								<a href="_wells_src_client_model_wellfilter_.measurementfilter.html#mindepth" class="tsd-kind-icon">min<wbr>Depth</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/_wells_src_client_model_well_.html#searchwell" class="tsd-kind-icon">Search<wbr>Well</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_wellfilter_.polygonfilter.html" class="tsd-kind-icon">Polygon<wbr>Filter</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/_wells_src_client_model_well_.html#searchwells" class="tsd-kind-icon">Search<wbr>Wells</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html" class="tsd-kind-icon">Trajectory<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_wellfilter_.wellfilter.html" class="tsd-kind-icon">Well<wbr>Filter</a>
 					</li>
 				</ul>
 			</nav>
