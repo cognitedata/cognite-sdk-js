@@ -34,7 +34,7 @@ export interface Wellbore {
    * @type {Promise<Survey[]>}
    * @memberof Wellbore
    */
-  trajectories(): Promise<Survey[]>;
+  trajectory(): Promise<Survey>;
   /**
    * @type {Promise<Well>}
    * @memberof Wellbore

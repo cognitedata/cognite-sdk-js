@@ -21,6 +21,16 @@ export class WellboresAPI {
     this.cluster = cluster;
   }
 
+
+  private addLazyMethods = (wellbore: Wellbore): Wellbore => {
+    return <Wellbore>{
+      id: wellbore.id,
+      name: wellbore.name,
+      metadata: wellbore.metadata,
+      trajectory: async (): Promise<Survey | undefined>  => {return await this.getTrajectory(wellbore.id).then(response => response).catch(err => err)}
+    };
+  }
+
   private getPath(baseUrl: string): string {
     if (this.project == undefined){
       throw new HttpError(400, "The client project has not been set.", {})
@@ -36,7 +46,7 @@ export class WellboresAPI {
   public getById = async (id: number): Promise<Wellbore | undefined> => {
     const path: string = this.getPath(`/wellbores/${id}`)
     return await this.client?.get<Wellbore>(path)
-      .then(response => response.data)
+      .then(response => this.addLazyMethods(response.data))
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
     });
