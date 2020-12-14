@@ -2,8 +2,8 @@
 
 export * from '@cognite/sdk';
 export { default as CogniteWellsClient } from './client/CogniteWellsClient';
-export { WellsAPI } from './client/api/wellsApi';
-export { WellboresAPI } from './client/api/wellboresAPI';
+//export { WellsAPI } from './client/api/wellsApi';
+//export { WellboresAPI } from './client/api/wellboresApi';
 
 // dataclasses and types
 export * from './client/model/GeoJson';

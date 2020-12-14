@@ -100,6 +100,7 @@ export interface PolygonFilter {
   /**
    * @type {string}
    * @memberof PolygonFilter
+   * @default "wkt"
    */
   geometryType?: string;
 }

@@ -2,7 +2,7 @@
 
 import { setupLoggedInClient } from '../testUtils';
 import WellsClient from 'wells/src/client/CogniteWellsClient';
-import { Well } from 'wells/src/client/model/Well';
+import { Well, WellItems } from 'wells/src/client/model/Well';
 import { WellFilter } from 'wells/src/client/model/WellFilter';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
@@ -42,13 +42,26 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('get list of wells', async () => {
     expect(client).not.toBeUndefined();
-    const wells = await client.wells.list();
+    const wells: WellItems | undefined = await client.wells.list();
       
     expect(wells).not.toBeUndefined();
     const WdlNames = ["well:CasingWear", "well:Deepwater W", "well:Platform W", "well:34/10-24", "well:34/10-1", "well:34/10-8"];
-    wells?.forEach(well => {
+    wells?.items.forEach(well => {
      expect(WdlNames).toContain(well.externalId)
     });
+  });
+
+  test('use cursor to get more wells', async () => {
+    expect(client).not.toBeUndefined();
+    const wells = await client.wells.list();
+    expect(wells).not.toBeUndefined();
+    const retrievedWells = wells?.items.map(x => x.id)
+    if (wells?.cursor) {
+      const newWells = await client.wells.list(wells?.cursor)
+      newWells?.items.forEach(element => {
+        expect(retrievedWells).not.toContain(element.id)
+      });
+    }
   });
 
   test('filter - gets wells in polygon', async () => {
@@ -58,7 +71,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const wells = await client.wells.filter(filter);
       
     expect(wells).not.toBeUndefined();
-    const retrievedNames = wells?.map(well => well.externalId)
+    const retrievedNames = wells?.items.map(well => well.externalId)
     const WdlNames = ["well:34/10-24", "well:34/10-1", "well:34/10-8"];
     WdlNames.forEach(name => {
      expect(retrievedNames).toContain(name)
@@ -71,8 +84,47 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const filter: WellFilter = {'polygon': {'geometry': testPolygon, 'crs': 'epsg:4326'}, 'sources': ['edm']}
     const wells = await client.wells.filter(filter);
 
-    wells?.forEach(well => {
+    wells?.items.forEach(well => {
       expect(well.sources).toContain('edm');
     });
+  });
+
+  test('filter - get all block labels', async () => {
+    expect(client).not.toBeUndefined();
+    const blocks: String[] | undefined = await client.wells.blocks();
+
+    expect(blocks).toContain("A")
+    expect(blocks).toContain("B")
+  });
+
+  test('filter - get all field labels', async () => {
+    expect(client).not.toBeUndefined();
+    const fields = await client.wells.fields();
+
+    expect(fields).toContain("A")
+    expect(fields).toContain("B")
+  });
+
+  test('filter - get all operator labels', async () => {
+    expect(client).not.toBeUndefined();
+    const operators = await client.wells.operators();
+
+    expect(operators).toContain("A")
+    expect(operators).toContain("B")
+  });
+
+  test('filter - get all quadrants labels', async () => {
+    expect(client).not.toBeUndefined();
+    const quadrants = await client.wells.quadrants();
+
+    expect(quadrants).toContain("A")
+    expect(quadrants).toContain("B")
+  });
+
+  test('filter - get all source labels', async () => {
+    expect(client).not.toBeUndefined();
+    const sources = await client.wells.sources();
+
+    expect(sources).toContain("EDM")
   });
 });
