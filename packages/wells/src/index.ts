@@ -21,6 +21,7 @@ export {
   SurveyRow,
   SurveyColumnInfo,
 } from './client/model/Survey';
-export * from './client/model/MeasurementType';
-export * from './client/model/Measurement';
+export { MeasurementType } from './client/model/MeasurementType';
+export { Measurement, Measurements } from './client/model/Measurement';
 export * from './constants';
+export * from './client/model/Cluster';

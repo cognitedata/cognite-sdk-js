@@ -1,4 +1,4 @@
-export const enum MeasurementType {
+export enum MeasurementType {
   GammaRay = 'GammaRay',
   Caliper = 'Caliper',
   Resistivity = 'Resistivity',

@@ -31,7 +31,8 @@ export class WellsAPI {
     baseUrl = `/${this.project}${baseUrl}?env=${this.cluster}`
 
     if (cursor) {
-      baseUrl += `?cursor=${cursor}`
+      baseUrl += `&cursor=${cursor}`
+
     }
     return baseUrl
   }
