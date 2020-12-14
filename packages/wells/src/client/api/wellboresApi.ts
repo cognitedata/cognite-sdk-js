@@ -35,7 +35,7 @@ export class WellboresAPI {
   public getTrajectory = async (wellboreId: number): Promise<Survey | undefined> => {
 
       const path: string = this.getPath(`/wellbores/${wellboreId}/trajectory`)
-  
+      
       return await this.client?.get<Survey>(path)
       .then(response => response.data)
       .catch(err => {

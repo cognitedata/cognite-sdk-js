@@ -4,7 +4,6 @@ import { WellsAPI } from './api/wellsApi';
 import { WellboresAPI } from './api/wellboresApi';
 import { SurveysAPI } from './api/surveysApi';
 import { version } from '../../package.json';
-import { WELL_SERVICE_BASE_URL } from './api/utils';
 import { Cluster } from './model/Cluster';
 
 export default class CogniteWellsClient extends BaseCogniteClient {
@@ -31,7 +30,7 @@ export default class CogniteWellsClient extends BaseCogniteClient {
   }
 
   protected initAPIs() {
-    this.setBaseUrl(WELL_SERVICE_BASE_URL);
+    this.setBaseUrl('https://well-service-cognitedata-development.cognite.ai');
 
     // wells
     this.wellsApi = this.apiFactory(WellsAPI, 'wells');
