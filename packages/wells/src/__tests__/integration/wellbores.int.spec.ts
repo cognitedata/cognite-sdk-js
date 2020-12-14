@@ -35,6 +35,7 @@ describeIfCondition(
       const wellboreId: number = 870793324939646;
       const wellbore: Wellbore | undefined = await client.wellbores.getById(wellboreId).then(response => response).catch(err => err);
       expect(wellbore).not.toBeUndefined();
+      /* eslint-disable */
       expect(wellbore?.id).toBe(wellboreId);
     });
 
