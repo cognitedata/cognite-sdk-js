@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.3.0...@cognite/sdk@3.3.1) (2020-12-14)
+
+
+### Bug Fixes
+
+* incorrect rotation types for 3d revision ([#452](https://github.com/cognitedata/cognite-sdk-js/issues/452)) ([4bfd3a5](https://github.com/cognitedata/cognite-sdk-js/commit/4bfd3a5efc6afcd4cd03ce6115254d24f61c483d))
+
+
+
+
+
 # [3.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.2.1...@cognite/sdk@3.3.0) (2020-11-25)
 
 
