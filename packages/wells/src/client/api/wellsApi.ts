@@ -16,6 +16,7 @@ export class WellsAPI {
     this.project = project;
   }
 
+<<<<<<< HEAD
   public set setCluster(cluster: Cluster) {
     this.cluster = cluster;
   }
@@ -38,6 +39,13 @@ export class WellsAPI {
 
   public getLabelPrefix = async (prefix: String): Promise<String[] | undefined> => {
     const path: string = this.getPath(`/wells/${prefix}`)
+=======
+  public getLabelPrefix = async (prefix: String): Promise<String[] | undefined> => {
+    if (this.project == undefined){
+      throw new HttpError(400, "The client project has not been set.", {})
+    }
+    const path: string = `/${this.project}/wells/${prefix}`
+>>>>>>> master
     // eslint-disable-next-line
     return await this.client?.get<String[]>(path)
       .then(response => response.data)
@@ -53,7 +61,17 @@ export class WellsAPI {
   public sources = async (): Promise<String[] | undefined> => this.getLabelPrefix('sources');
 
   public list = async (cursor?: String): Promise<WellItems | undefined> => {
+<<<<<<< HEAD
     const path: string = this.getPath('/wells', cursor)
+=======
+    if (this.project == undefined){
+      throw new HttpError(400, "The client project has not been set.", {})
+    }
+    let path: string = `/${this.project}/wells`
+    if (cursor) {
+      path += `?cursor=${cursor}`
+    }
+>>>>>>> master
     return await this.client?.get<WellItems>(path)
       .then(response => response.data)
       .catch(err => {
@@ -62,7 +80,17 @@ export class WellsAPI {
   };
 
   public filter = async (filter: WellFilter, cursor?: String): Promise<WellItems | undefined> => {
+<<<<<<< HEAD
     const path = this.getPath('/wells/list', cursor)
+=======
+    if (this.project == undefined){
+      throw new HttpError(400, "The client project has not been set.", {})
+    }
+    let path: string = `/${this.project}/wells/list`
+    if (cursor) {
+      path += `?cursor=${cursor}`
+    }
+>>>>>>> master
     return await this.client?.post<WellItems>(path, {'data': filter})
       .then(response => response.data)
       .catch(err => {

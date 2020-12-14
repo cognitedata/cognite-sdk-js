@@ -1,17 +1,13 @@
 // Copyright 2020 Cognite AS
 
 import { name } from '../../package.json';
-import { WELL_SERVICE_BASE_URL } from '../client/api/utils';
 import CogniteWellsClient from '../client/CogniteWellsClient';
 import { Cluster } from '../client/model/Cluster';
 
-export function setupClient(
-  baseUrl: string = WELL_SERVICE_BASE_URL
-): CogniteWellsClient {
+export function setupClient(): CogniteWellsClient {
   return new CogniteWellsClient(
     {
       appId: `JS WELLS SDK integration tests (${name})`,
-      baseUrl,
     },
     Cluster.API
   );
