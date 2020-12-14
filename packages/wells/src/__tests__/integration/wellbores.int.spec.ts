@@ -3,8 +3,19 @@
 import { setupLoggedInClient } from '../testUtils';
 
 import CogniteWellsClient from 'wells/src/client/CogniteWellsClient';
-import { MeasurementType } from 'wells/src/client/model/MeasurementType';
 import { Measurements } from 'wells/src/client/model/Measurement';
+import { Wellbore } from 'wells/src/client/model/Wellbore';
+
+enum MeasurementType {
+  GammaRay = 'GammaRay',
+  Caliper = 'Caliper',
+  Resistivity = 'Resistivity',
+  Density = 'Density',
+  Neutron = 'Neutron',
+  PPFG = 'PPFG',
+  Geomechanics = 'Geomechanics',
+  Core = 'Core',
+}
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -18,6 +29,13 @@ describeIfCondition(
     let client: CogniteWellsClient;
     beforeAll(async () => {
       client = setupLoggedInClient();
+    });
+
+    test('Succeed to get wellbore by its id', async () => {
+      const wellboreId: number = 870793324939646;
+      const wellbore: Wellbore | undefined = await client.wellbores.getById(wellboreId).then(response => response).catch(err => err);
+      expect(wellbore).not.toBeUndefined();
+      expect(wellbore?.id).toBe(wellboreId);
     });
 
     test('Succeed to get wellbore measurement for measurementType: GammaRay', async () => {

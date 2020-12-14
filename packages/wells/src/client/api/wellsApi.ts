@@ -71,7 +71,7 @@ export class WellsAPI {
     });
   };
 
-  public getId = async (id: number): Promise<Well | undefined> => {
+  public getById = async (id: number): Promise<Well | undefined> => {
     const path: string = this.getPath(`/wells/${id}`)
     return await this.client?.get<Well>(path)
       .then(response => response.data)
