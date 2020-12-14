@@ -2,11 +2,15 @@
 
 import { name } from '../../package.json';
 import CogniteWellsClient from '../client/CogniteWellsClient';
+import { Cluster } from '../client/model/Cluster';
 
 export function setupClient(): CogniteWellsClient {
-  return new CogniteWellsClient({
-    appId: `JS WELLS SDK integration tests (${name})`,
-  });
+  return new CogniteWellsClient(
+    {
+      appId: `JS WELLS SDK integration tests (${name})`,
+    },
+    Cluster.API
+  );
 }
 
 export function setupLoggedInClient(): CogniteWellsClient {
