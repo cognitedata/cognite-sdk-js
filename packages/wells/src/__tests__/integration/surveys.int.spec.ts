@@ -19,7 +19,7 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
 
   test('Get trajectory for a wellbore', async () => {
     const wellboreId: number = 8456650753594878;
-    const trajectory: Survey | undefined = await client.wellbores.getTrajectory(wellboreId)
+    const trajectory: Survey | undefined = await client.surveys.getTrajectory(wellboreId)
 
     expect(trajectory).not.toBeUndefined();
     /* eslint-disable */
@@ -29,7 +29,7 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
   test('Get trajectory for a wellbore with 404 Not Found', async () => {
     const wellboreId: number = 1000000000000;
 
-   await client.wellbores.getTrajectory(wellboreId)
+   await client.surveys.getTrajectory(wellboreId)
       .then(response => response)
       .catch(err => {
         expect(err.status).toBe(404);
