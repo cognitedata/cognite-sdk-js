@@ -47,7 +47,7 @@ export class WellsAPI {
     let polygon: PolygonFilterAPI | undefined;
     if (filter.polygon) {
       polygon = {
-        geometry: filter.polygon.wktGeometry, crs: filter.polygon.crs, geometryType: "wkt"
+        geometry: filter.polygon.wktGeometry!, crs: filter.polygon.crs, geometryType: "wkt"
       }
     } else {
       polygon = undefined;
@@ -90,7 +90,7 @@ export class WellsAPI {
     });
   };
 
-  public filter = async (userFilter: WellFilter, cursor?: String): Promise<WellItems | undefined> => {
+  public filter = async (userFilter: WellFilter, cursor?: String):     Promise<WellItems | undefined> => {
     let filter: WellFilterAPI;
     if (userFilter.polygon && userFilter.polygon.geoJsonGeometry) {
       filter = this.convertToWkt(userFilter)

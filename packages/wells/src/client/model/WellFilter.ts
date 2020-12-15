@@ -139,12 +139,12 @@ export interface PolygonFilter {
    * @type {string}
    * @memberof PolygonFilter
    */
-  wktGeometry: string;
+  wktGeometry?: string;
   /**
    * @type {string}
    * @memberof PolygonFilter
    */
-  geoJsonGeometry: GeoJson;
+  geoJsonGeometry?: GeoJson;
   /**
    * @type {string}
    * @memberof PolygonFilterAPI

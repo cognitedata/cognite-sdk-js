@@ -4,6 +4,7 @@ import { setupLoggedInClient } from '../testUtils';
 import WellsClient from 'wells/src/client/CogniteWellsClient';
 import { Well, WellItems } from 'wells/src/client/model/Well';
 import { WellFilter } from 'wells/src/client/model/WellFilter';
+import { GeoJson } from 'wells/src/client/model/GeoJson';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -64,10 +65,35 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     }
   });
 
-  test('filter - gets wells in polygon', async () => {
+  test('filter - gets wells in wkt polygon', async () => {
     expect(client).not.toBeUndefined();
     const testPolygon = "POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))"
-    const filter: WellFilter = {'polygon': {'geometry': testPolygon, 'crs': 'epsg:4326'}}
+    const filter: WellFilter = {'polygon': {'wktGeometry': testPolygon, 'crs': 'epsg:4326'}}
+    const wells = await client.wells.filter(filter);
+      
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.externalId)
+    const WdlNames = ["well:34/10-24", "well:34/10-1", "well:34/10-8"];
+    WdlNames.forEach(name => {
+     expect(retrievedNames).toContain(name)
+    });
+  });
+
+  test('filter - gets wells in geoJson polygon', async () => {
+    expect(client).not.toBeUndefined();
+    const testPolygon = <GeoJson>{
+      type: 'Polygon',
+      coordinates: [
+        [
+          [0.0, 0.0],
+          [0.0, 80.0],
+          [80.0, 80.0],
+          [80.0, 0.0],
+          [0.0, 0.0],
+        ],
+      ],
+    };
+    const filter: WellFilter = {'polygon': {'geoJsonGeometry': testPolygon, 'crs': 'epsg:4326'}}
     const wells = await client.wells.filter(filter);
       
     expect(wells).not.toBeUndefined();
@@ -81,7 +107,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   test('filter - get all wells with edm source', async () => {
     expect(client).not.toBeUndefined();
     const testPolygon = "POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))"
-    const filter: WellFilter = {'polygon': {'geometry': testPolygon, 'crs': 'epsg:4326'}, 'sources': ['edm']}
+    const filter: WellFilter = {'polygon': {'wktGeometry': testPolygon, 'crs': 'epsg:4326'}, 'sources': ['edm']}
     const wells = await client.wells.filter(filter);
 
     wells?.items.forEach(well => {
