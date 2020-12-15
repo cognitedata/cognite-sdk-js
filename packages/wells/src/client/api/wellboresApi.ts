@@ -52,11 +52,23 @@ export class WellboresAPI {
     return baseUrl
   }
 
-    /* eslint-disable */
+  /* eslint-disable */
   public getById = async (id: number): Promise<Wellbore | undefined> => {
     const path: string = this.getPath(`/wellbores/${id}`)
     return await this.client?.get<Wellbore>(path)
       .then(response => this.addLazyMethods(response.data))
+      .catch(err => {
+      throw new HttpError(err.status, err.errorMessage, {})
+    });
+  };
+
+  /* eslint-disable */
+  public getTrajectory = async (wellboreId: number): Promise<Survey | undefined> => {
+
+      const path: string = this.getPath(`/wellbores/${wellboreId}/trajectory`)
+
+      return await this.client?.get<Survey>(path)
+      .then(response => response.data)
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
     });

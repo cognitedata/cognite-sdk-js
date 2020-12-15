@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.6.3...@cognite/sdk-wells@0.7.0) (2020-12-14)
+
+
+### Bug Fixes
+
+* restructure sdk to use well service api instead of cdf api ([#455](https://github.com/cognitedata/cognite-sdk-js/issues/455)) ([87c2390](https://github.com/cognitedata/cognite-sdk-js/commit/87c23900ec8c9b21987119308d426ffe64bc4244))
+
+
+### Features
+
+* add endpoint for well filter ([#457](https://github.com/cognitedata/cognite-sdk-js/issues/457)) ([e583918](https://github.com/cognitedata/cognite-sdk-js/commit/e5839180596ae589072d9add27b6c6894f4e4d9c))
+* add method for fetching wellbore trajectory ([#456](https://github.com/cognitedata/cognite-sdk-js/issues/456)) ([05eac77](https://github.com/cognitedata/cognite-sdk-js/commit/05eac77f5fa456c6864d29e9b5c99e9bdbc9628a))
+* fetching measurements of measurement type ([#458](https://github.com/cognitedata/cognite-sdk-js/issues/458)) ([2542b39](https://github.com/cognitedata/cognite-sdk-js/commit/2542b397777bd8def1ce1c25c78f11c260cccd38))
+* fetching rows from a survey ([#461](https://github.com/cognitedata/cognite-sdk-js/issues/461)) ([77c73b6](https://github.com/cognitedata/cognite-sdk-js/commit/77c73b693e8c5d38500ac9b654d58d6a24b17c21))
+* remove deprecated files and update index ([#460](https://github.com/cognitedata/cognite-sdk-js/issues/460)) ([d8b35ba](https://github.com/cognitedata/cognite-sdk-js/commit/d8b35ba86153c9376722062b513c1d7a5b1d91a3))
+
+
+
+
+
 ## [0.6.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.6.2...@cognite/sdk-wells@0.6.3) (2020-11-25)
 
 **Note:** Version bump only for package @cognite/sdk-wells
