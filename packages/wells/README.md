@@ -109,6 +109,9 @@ const wellbore: Wellbore | undefined = await client.wellbores.getById(wellboreId
 
 // lazy method to get wellbore trajectory
 const trajectory: Survey | undefined = await wellbore?.trajectory();
+
+// lazy method to get data from trajectory
+const data: SurveyData | undefined = await trajectory?.data();
 ```
 
 #### _Get wellbore measurement for measurementType: 'GammaRay':_
