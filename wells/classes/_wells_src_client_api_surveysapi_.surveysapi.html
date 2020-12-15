@@ -84,6 +84,7 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-set-signature tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_surveysapi_.surveysapi.html#setcluster" class="tsd-kind-icon">set<wbr>Cluster</a></li>
 								<li class="tsd-kind-set-signature tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_surveysapi_.surveysapi.html#sethttpclient" class="tsd-kind-icon">set<wbr>Http<wbr>Client</a></li>
 								<li class="tsd-kind-set-signature tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_surveysapi_.surveysapi.html#setproject" class="tsd-kind-icon">set<wbr>Project</a></li>
 							</ul>
@@ -92,6 +93,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_surveysapi_.surveysapi.html#getdata" class="tsd-kind-icon">get<wbr>Data</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_surveysapi_.surveysapi.html#gettrajectory" class="tsd-kind-icon">get<wbr>Trajectory</a></li>
 							</ul>
 						</section>
 					</div>
@@ -99,6 +101,29 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-set-signature tsd-parent-kind-class tsd-is-external">
+					<a name="setcluster" class="tsd-anchor"></a>
+					<h3>set<wbr>Cluster</h3>
+					<ul class="tsd-signatures tsd-kind-set-signature tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> setCluster<span class="tsd-signature-symbol">(</span>cluster<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">String</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/05e9460/packages/wells/src/client/api/surveysApi.ts#L18">packages/wells/src/client/api/surveysApi.ts:18</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>cluster: <span class="tsd-signature-type">String</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-set-signature tsd-parent-kind-class tsd-is-external">
 					<a name="sethttpclient" class="tsd-anchor"></a>
 					<h3>set<wbr>Http<wbr>Client</h3>
@@ -109,7 +134,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/27fb0fc/packages/wells/src/client/api/surveysApi.ts#L8">packages/wells/src/client/api/surveysApi.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/05e9460/packages/wells/src/client/api/surveysApi.ts#L9">packages/wells/src/client/api/surveysApi.ts:9</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -132,7 +157,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/27fb0fc/packages/wells/src/client/api/surveysApi.ts#L12">packages/wells/src/client/api/surveysApi.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/05e9460/packages/wells/src/client/api/surveysApi.ts#L13">packages/wells/src/client/api/surveysApi.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -158,7 +183,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/27fb0fc/packages/wells/src/client/api/surveysApi.ts#L17">packages/wells/src/client/api/surveysApi.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/05e9460/packages/wells/src/client/api/surveysApi.ts#L55">packages/wells/src/client/api/surveysApi.ts:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -168,6 +193,29 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_survey_.surveydata.html" class="tsd-signature-type">SurveyData</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="gettrajectory" class="tsd-anchor"></a>
+					<h3>get<wbr>Trajectory</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Trajectory<span class="tsd-signature-symbol">(</span>wellboreId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_survey_.survey.html" class="tsd-signature-type">Survey</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/05e9460/packages/wells/src/client/api/surveysApi.ts#L43">packages/wells/src/client/api/surveysApi.ts:43</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>wellboreId: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_survey_.survey.html" class="tsd-signature-type">Survey</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -192,6 +240,9 @@
 						<a href="_wells_src_client_api_surveysapi_.surveysapi.html" class="tsd-kind-icon">SurveysAPI</a>
 						<ul>
 							<li class=" tsd-kind-set-signature tsd-parent-kind-class tsd-is-external">
+								<a href="_wells_src_client_api_surveysapi_.surveysapi.html#setcluster" class="tsd-kind-icon">set<wbr>Cluster</a>
+							</li>
+							<li class=" tsd-kind-set-signature tsd-parent-kind-class tsd-is-external">
 								<a href="_wells_src_client_api_surveysapi_.surveysapi.html#sethttpclient" class="tsd-kind-icon">set<wbr>Http<wbr>Client</a>
 							</li>
 							<li class=" tsd-kind-set-signature tsd-parent-kind-class tsd-is-external">
@@ -199,6 +250,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_wells_src_client_api_surveysapi_.surveysapi.html#getdata" class="tsd-kind-icon">get<wbr>Data</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_wells_src_client_api_surveysapi_.surveysapi.html#gettrajectory" class="tsd-kind-icon">get<wbr>Trajectory</a>
 							</li>
 						</ul>
 					</li>
