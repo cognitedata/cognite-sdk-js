@@ -1,6 +1,19 @@
 import { CogniteGeospatialClient } from '@cognite/geospatial-sdk-js';
 import { Constants } from '@cognite/sdk-core';
-//import CogniteClient from '../cogniteClient';
+import CogniteWellsClient from '../CogniteWellsClient';
+import { Cluster } from '../model/Cluster';
+
+export function createWellsClient(
+  appId: string,
+  cluster: Cluster = Cluster.API
+): CogniteWellsClient {
+  return new CogniteWellsClient(
+    {
+      appId: appId,
+    },
+    cluster
+  );
+}
 
 export const geospatialClient = CogniteGeospatialClient({
   project: process.env.COGNITE_WELLS_PROJECT as string,

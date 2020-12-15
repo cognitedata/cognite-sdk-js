@@ -20,7 +20,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   test('get by id - well returned for id', async () => {
     expect(client).not.toBeUndefined();
     const wellId: number = 8456650753594878;
-    const well: Well | undefined = await client.wells.getId(wellId)
+    const well: Well | undefined = await client.wells.getById(wellId)
 
     expect(well).not.toBeUndefined();
     /* eslint-disable */
@@ -32,7 +32,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(client).not.toBeUndefined();
     const wellId: number = 99999999999999;
 
-    await client.wells.getId(wellId)
+    await client.wells.getById(wellId)
       .then(response => response)
       .catch(err => {
         expect(err.status).toBe(400);
@@ -85,7 +85,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const wells = await client.wells.filter(filter);
 
     wells?.items.forEach(well => {
-      expect(well.sources).toContain('edm');
+      expect(well.sources).toContain('EDM');
     });
   });
 

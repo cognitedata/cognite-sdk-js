@@ -39,7 +39,7 @@ COGNITE_WELLS_PROJECT=<project-tenant>
 COGNITE_WELLS_CREDENTIALS=<your-api-key>
 ```
 
-### setup client
+### set up client
 
 ```js
 import { CogniteWellsClient } from '@cognite/sdk-wells';
@@ -54,7 +54,7 @@ client.loginWithApiKey({
 
 ### **Well queries**
 
-### _Get well by id:_
+#### _Get well by id:_
 
 ```ts
 import { Well } from '@cognite/sdk-wells';
@@ -63,7 +63,7 @@ const wellId: number = 8456650753594878;
 const well: Well | undefined = await client.wells.getId(wellId);
 ```
 
-### _List wells:_
+#### _List wells:_
 
 ```ts
 import { WellItems } from '@cognite/sdk-wells';
@@ -74,7 +74,7 @@ wells?.items.forEach(well => {
 });
 ```
 
-### _Filter wells by polygon:_
+#### _Filter wells by polygon:_
 
 ```ts
 import { WellFilter } from '@cognite/sdk-wells';
@@ -87,7 +87,7 @@ const filter: WellFilter = {
 const wells = await client.wells.filter(filter);
 ```
 
-### _Filter - list all labels:_
+#### _Filter - list all labels:_
 
 ```ts
 const blockLabels: String[] | undefined = await client.wells.blocks();
@@ -99,7 +99,7 @@ const sourceLabels: String[] | undefined = await client.wells.sources();
 
 ### **Wellbore queries**
 
-### _Get wellbore measurement for measurementType: 'GammaRay':_
+#### _Get wellbore measurement for measurementType: 'GammaRay':_
 
 ```ts
 import { Measurements, MeasurementType } from '@cognite/sdk-wells';
@@ -112,7 +112,7 @@ measurements = await client.wellbores.getMeasurement(
 );
 ```
 
-### _Get trajectory for a wellbore:_
+#### _Get trajectory for a wellbore:_
 
 ```ts
 import { Survey } from '@cognite/sdk-wells';
@@ -124,7 +124,7 @@ trajectory = await client.wellbores.getTrajectory(wellboreId);
 
 ### **Survey queries**
 
-### _Get data from a survey:_
+#### _Get data from a survey:_
 
 ```ts
 import { SurveyDataRequest, SurveyData } from '@cognite/sdk-wells';
