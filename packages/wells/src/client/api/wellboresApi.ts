@@ -1,13 +1,24 @@
-import { CDFHttpClient, HttpError} from '@cognite/sdk-core';
+import { accessApi, CDFHttpClient, HttpError} from '@cognite/sdk-core';
 import { Measurements } from '../model/Measurement';
 import { MeasurementType } from '../model/MeasurementType';
 import { Survey } from '../model/Survey';
 import { Wellbore } from '../model/Wellbore';
+import { SurveysAPI } from './surveysApi';
 
 export class WellboresAPI {
   private client?: CDFHttpClient;
   private project?: String;
   private cluster?: String;
+
+  private _surveysSDK?: SurveysAPI;
+
+  public set surveysSdk(sdk: SurveysAPI) {
+    this._surveysSDK = sdk;
+  }
+
+  private get surveys(): SurveysAPI {
+    return accessApi(this._surveysSDK);
+  }
 
   public set setHttpClient(httpClient: CDFHttpClient) {
     this.client = httpClient;
@@ -21,6 +32,15 @@ export class WellboresAPI {
     this.cluster = cluster;
   }
 
+  private addLazyMethods = (wellbore: Wellbore): Wellbore => {
+    return <Wellbore>{
+      id: wellbore.id,
+      name: wellbore.name,
+      metadata: wellbore.metadata,
+      trajectory: async (): Promise<Survey | undefined>  => {return await this.surveys.getTrajectory(wellbore.id).then(response => response).catch(err => err)}
+    };
+  }
+
   private getPath(baseUrl: string): string {
     if (this.project == undefined){
       throw new HttpError(400, "The client project has not been set.", {})
@@ -32,13 +52,13 @@ export class WellboresAPI {
     return baseUrl
   }
 
-    /* eslint-disable */
+  /* eslint-disable */
   public getById = async (id: number): Promise<Wellbore | undefined> => {
     const path: string = this.getPath(`/wellbores/${id}`)
     return await this.client?.get<Wellbore>(path)
-      .then(response => response.data)
+      .then(response => this.addLazyMethods(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {})
+      throw new HttpError(err.status, err.errorMessage, {})
     });
   };
 
@@ -51,9 +71,8 @@ export class WellboresAPI {
       .then(response => response.data)
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
-      });
+    });
   };
-
 
   public getMeasurement = async (wellboreId: number, measurementType: MeasurementType): Promise<Measurements | undefined> => {
 
