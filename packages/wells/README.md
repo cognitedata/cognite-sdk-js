@@ -41,10 +41,11 @@ COGNITE_WELLS_CREDENTIALS=<your-api-key>
 
 ### set up client
 
-```js
-import { CogniteWellsClient } from '@cognite/sdk-wells';
+```ts
+import { createWellsClient, Cluster } from '@cognite/sdk-wells';
 
-let client = new CogniteWellsClient({ appId: `JS WELLS SDK USER TEST` });
+// Cluster.API (default), Cluster.BP, Cluster.GREENFIELD
+let client = createWellsClient('app id', Cluster.API);
 
 client.loginWithApiKey({
   project: process.env.COGNITE_WELLS_PROJECT,
@@ -98,6 +99,20 @@ const sourceLabels: String[] | undefined = await client.wells.sources();
 ```
 
 ### **Wellbore queries**
+
+#### _Get wellbore by id:_
+
+```ts
+import { Wellbore, Survey } from '@cognite/sdk-wells';
+const wellboreId: number = 8456650753594878;
+const wellbore: Wellbore | undefined = await client.wellbores.getById(wellboreId).then(response => response).catch(err => err);
+
+// lazy method to get wellbore trajectory
+const trajectory: Survey | undefined = await wellbore?.trajectory();
+
+// lazy method to get data from trajectory
+const data: SurveyData | undefined = await trajectory?.data();
+```
 
 #### _Get wellbore measurement for measurementType: 'GammaRay':_
 

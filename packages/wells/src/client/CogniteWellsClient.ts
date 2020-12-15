@@ -38,16 +38,18 @@ export default class CogniteWellsClient extends BaseCogniteClient {
     this.wellsApi.setProject = this.project;
     this.wellsApi.setCluster = this.cluster;
 
+    // surveys
+    this.surveysApi = this.apiFactory(SurveysAPI, 'surveys');
+    this.surveysApi.setHttpClient = this.httpClient;
+    this.surveysApi.setProject = this.project;
+    this.surveysApi.setCluster = this.cluster;
+
     // wellbores
     this.wellboresApi = this.apiFactory(WellboresAPI, 'wellbores');
     this.wellboresApi.setHttpClient = this.httpClient;
     this.wellboresApi.setProject = this.project;
     this.wellboresApi.setCluster = this.cluster;
-
-    // wellbores
-    this.surveysApi = this.apiFactory(SurveysAPI, 'surveys');
-    this.surveysApi.setHttpClient = this.httpClient;
-    this.surveysApi.setProject = this.project;
+    this.wellboresApi.surveysSdk = this.surveysApi;
   }
 
   protected get version() {

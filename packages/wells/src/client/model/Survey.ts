@@ -1,5 +1,3 @@
-import { SequenceRow } from 'stable/dist/src/api/sequences/sequenceRow';
-
 export type SearchSurveys = (args?: any) => Promise<Survey[]>;
 
 export interface Survey {
@@ -28,7 +26,7 @@ export interface Survey {
    * @type {Promise<SequenceRow[]>}
    * @memberof Survey
    */
-  rows(limit?: number): Promise<SequenceRow[]>;
+  data(limit?: number): Promise<SurveyData>;
 }
 
 export const enum ValueType {

@@ -5,6 +5,7 @@ import { setupLoggedInClient } from '../testUtils';
 import CogniteWellsClient from 'wells/src/client/CogniteWellsClient';
 import { Measurements } from 'wells/src/client/model/Measurement';
 import { Wellbore } from 'wells/src/client/model/Wellbore';
+import { Survey, SurveyData } from 'wells/src/client/model/Survey';
 
 enum MeasurementType {
   GammaRay = 'GammaRay',
@@ -32,11 +33,15 @@ describeIfCondition(
     });
 
     test('Succeed to get wellbore by its id', async () => {
-      const wellboreId: number = 870793324939646;
+      const wellboreId: number = 8456650753594878;
       const wellbore: Wellbore | undefined = await client.wellbores.getById(wellboreId).then(response => response).catch(err => err);
       expect(wellbore).not.toBeUndefined();
       /* eslint-disable */
       expect(wellbore?.id).toBe(wellboreId);
+      const trajectory: Survey | undefined = await wellbore?.trajectory();
+      expect(trajectory).not.toBeUndefined();
+      const data: SurveyData | undefined = await trajectory?.data();
+      expect(data).not.toBeUndefined();
     });
 
     test('Succeed to get wellbore measurement for measurementType: GammaRay', async () => {

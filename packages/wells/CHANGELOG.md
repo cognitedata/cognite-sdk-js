@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.7.0...@cognite/sdk-wells@0.8.0) (2020-12-15)
+
+
+### Features
+
+* add lazy methods [release] ([#466](https://github.com/cognitedata/cognite-sdk-js/issues/466)) ([05e9460](https://github.com/cognitedata/cognite-sdk-js/commit/05e9460475c1b2cd98f3284531528a0af1a1c091))
+* add method for fetching wellbore by Id ([#465](https://github.com/cognitedata/cognite-sdk-js/issues/465)) ([3d27f5e](https://github.com/cognitedata/cognite-sdk-js/commit/3d27f5eed50a86e5c485b2bda2c2bfbb073a7d5c))
+
+
+
+
+
 # [0.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.6.3...@cognite/sdk-wells@0.7.0) (2020-12-14)
 
 
