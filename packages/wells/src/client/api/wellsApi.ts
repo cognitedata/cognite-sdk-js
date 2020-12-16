@@ -1,6 +1,7 @@
 import { CDFHttpClient, HttpError } from '@cognite/sdk-core';
 import { Well, WellItems } from '../model/Well';
-import { WellFilter } from '../model/WellFilter';
+import { WellFilter, WellFilterAPI, PolygonFilterAPI } from '../model/WellFilter';
+import { stringify as convertGeoJsonToWKT } from 'wkt';
 import { Cluster } from '../model/Cluster'
 
 export class WellsAPI {
@@ -37,6 +38,31 @@ export class WellsAPI {
     return baseUrl
   }
 
+  private convertToWkt(filter: WellFilter): WellFilterAPI {
+    filter.polygon!.wktGeometry = convertGeoJsonToWKT(filter.polygon!.geoJsonGeometry!)
+    return this.convertToApiWellFilter(filter)
+  }
+
+  private convertToApiWellFilter(filter: WellFilter): WellFilterAPI {
+    let polygon: PolygonFilterAPI | undefined = undefined;
+    if (filter.polygon) {
+      polygon = {
+        geometry: filter.polygon.wktGeometry!, crs: filter.polygon.crs, geometryType: "wkt"
+      }
+    }
+    return {
+      wellType: filter.wellType,
+      quadrants: filter.quadrants,
+      blocks: filter.blocks,
+      fields: filter.fields,
+      operators: filter.operators,
+      sources: filter.sources,
+      hasTrajectory: filter.hasTrajectory,
+      hasMeasurements: filter.hasMeasurements,
+      polygon: polygon,
+    }
+  }
+
   public getLabelPrefix = async (prefix: String): Promise<String[] | undefined> => {
     const path: string = this.getPath(`/wells/${prefix}`)
     // eslint-disable-next-line
@@ -62,7 +88,16 @@ export class WellsAPI {
     });
   };
 
-  public filter = async (filter: WellFilter, cursor?: String): Promise<WellItems | undefined> => {
+  public filter = async (userFilter: WellFilter, cursor?: String):     Promise<WellItems | undefined> => {
+    let filter: WellFilterAPI;
+    if (userFilter.polygon && userFilter.polygon.geoJsonGeometry) {
+      filter = this.convertToWkt(userFilter)
+    } else if (userFilter.polygon && userFilter.polygon.wktGeometry) {
+      filter = this.convertToApiWellFilter(userFilter)
+    } else {
+      userFilter.polygon = undefined;
+      filter = this.convertToApiWellFilter(userFilter);
+    }
     const path = this.getPath('/wells/list', cursor)
     return await this.client?.post<WellItems>(path, {'data': filter})
       .then(response => response.data)

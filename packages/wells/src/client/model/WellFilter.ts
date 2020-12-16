@@ -1,5 +1,6 @@
 import { MeasurementType } from './MeasurementType';
 import { WellType } from './WellType';
+import { GeoJson } from './GeoJson';
 
 export interface WellFilter {
   /**
@@ -49,6 +50,54 @@ export interface WellFilter {
   polygon?: PolygonFilter;
 }
 
+export interface WellFilterAPI {
+  /**
+   * @type {WellType}
+   * @memberof WellFilterAPI
+   */
+  wellType?: WellType;
+  /**
+   * @type {string[]}
+   * @memberof WellFilterAPI
+   */
+  quadrants?: string[];
+  /**
+   * @type {string[]}
+   * @memberof WellFilterAPI
+   */
+  blocks?: string[];
+  /**
+   * @type {string[]}
+   * @memberof WellFilterAPI
+   */
+  fields?: string[];
+  /**
+   * @type {string[]}
+   * @memberof WellFilterAPI
+   */
+  operators?: string[];
+  /**
+   * @type {string[]}
+   * @memberof WellFilterAPI
+   */
+  sources?: string[];
+  /**
+   * @type {string[]}
+   * @memberof WellFilterAPI
+   */
+  hasTrajectory?: string[];
+  /**
+   * @type {string[]}
+   * @memberof WellFilterAPI
+   */
+  hasMeasurements?: string[];
+  /**
+   * @type {PolygonFilterAPI}
+   * @memberof WellFilterAPI
+   */
+  polygon?: PolygonFilterAPI;
+}
+
 export interface TrajectoryFilter {
   /**
    * @type {number}
@@ -70,17 +119,17 @@ export interface TrajectoryFilter {
 export interface MeasurementFilter {
   /**
    * @type {MeasurementType}
-   * @memberof TrajectoryFilter
+   * @memberof MeasurementFilter
    */
   measurementType?: MeasurementType;
   /**
    * @type {number}
-   * @memberof TrajectoryFilter
+   * @memberof MeasurementFilter
    */
   minDepth?: number;
   /**
    * @type {number}
-   * @memberof TrajectoryFilter
+   * @memberof MeasurementFilter
    */
   maxDepth?: number;
 }
@@ -90,16 +139,35 @@ export interface PolygonFilter {
    * @type {string}
    * @memberof PolygonFilter
    */
-  geometry: string;
+  wktGeometry?: string;
   /**
    * @type {string}
    * @memberof PolygonFilter
+   */
+  geoJsonGeometry?: GeoJson;
+  /**
+   * @type {string}
+   * @memberof PolygonFilterAPI
+   * @default "epsg:4326"
+   */
+  crs: string;
+}
+
+export interface PolygonFilterAPI {
+  /**
+   * @type {string}
+   * @memberof PolygonFilterAPI
+   */
+  geometry: string;
+  /**
+   * @type {string}
+   * @memberof PolygonFilterAPI
    * @default "epsg:4326"
    */
   crs: string;
   /**
    * @type {string}
-   * @memberof PolygonFilter
+   * @memberof PolygonFilterAPI
    * @default "wkt"
    */
   geometryType?: string;

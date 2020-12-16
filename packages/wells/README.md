@@ -75,14 +75,38 @@ wells?.items.forEach(well => {
 });
 ```
 
-#### _Filter wells by polygon:_
+#### _Filter wells by wkt polygon:_
 
 ```ts
 import { WellFilter } from '@cognite/sdk-wells';
 
 const polygon = 'POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))';
 const filter: WellFilter = {
-  polygon: { geometry: polygon, crs: 'epsg:4326' },
+  polygon: { wktGeometry: polygon, crs: 'epsg:4326' },
+  sources: ['edm'],
+};
+const wells = await client.wells.filter(filter);
+```
+
+#### _Filter wells by geoJson polygon:_
+
+```ts
+import { WellFilter } from '@cognite/sdk-wells';
+
+const polygon = <GeoJson>{
+      type: 'Polygon',
+      coordinates: [
+        [
+          [0.0, 0.0],
+          [0.0, 80.0],
+          [80.0, 80.0],
+          [80.0, 0.0],
+          [0.0, 0.0],
+        ],
+      ],
+    };
+const filter: WellFilter = {
+  polygon: { geoJsonGeometry: polygon, crs: 'epsg:4326' },
   sources: ['edm'],
 };
 const wells = await client.wells.filter(filter);
