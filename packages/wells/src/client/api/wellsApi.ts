@@ -44,13 +44,11 @@ export class WellsAPI {
   }
 
   private convertToApiWellFilter(filter: WellFilter): WellFilterAPI {
-    let polygon: PolygonFilterAPI | undefined;
+    let polygon: PolygonFilterAPI | undefined = undefined;
     if (filter.polygon) {
       polygon = {
         geometry: filter.polygon.wktGeometry!, crs: filter.polygon.crs, geometryType: "wkt"
       }
-    } else {
-      polygon = undefined;
     }
     return {
       wellType: filter.wellType,
