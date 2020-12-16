@@ -53,6 +53,21 @@ describeIfCondition(
       expect(measurements).not.toBeUndefined();
       /* eslint-disable */
       expect(measurements?.length).toBe(2);
+
+      if (measurements) {
+
+      // sync
+      for (var measurement of measurements) {
+        const data: SurveyData = await measurement.data();
+        expect(data.rows.length).toBe(6);
+      }
+
+      // async
+      measurements.forEach(async measurement => {
+        const data: SurveyData = await measurement.data()
+        expect(data.rows.length).toBe(6);
+      })
+    }
     });
 
     test('Fail to get wellbore measurement for measurementType: GammaRay', async () => {
