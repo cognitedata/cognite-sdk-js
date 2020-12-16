@@ -106,7 +106,7 @@ export interface SurveyData {
    */
   id: number;
   /**
-   * @type {string[]}WellboreWellbore
+   * @type {string[]}
    * @memberof SurveyData
    */
   columns: string[];
