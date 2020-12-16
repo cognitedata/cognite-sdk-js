@@ -23,7 +23,7 @@ export interface Survey {
    */
   metadata?: { [key: string]: string };
   /**
-   * @type {Promise<SequenceRow[]>}
+   * @type {SurveyData}
    * @memberof Survey
    */
   data(limit?: number): Promise<SurveyData>;
@@ -106,7 +106,7 @@ export interface SurveyData {
    */
   id: number;
   /**
-   * @type {string[]}
+   * @type {string[]}WellboreWellbore
    * @memberof SurveyData
    */
   columns: string[];
