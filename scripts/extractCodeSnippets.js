@@ -2,6 +2,7 @@
 const path = require('path');
 const snippetsFolder = path.join(process.cwd(), './codeSnippets');
 const jsDoc = require(snippetsFolder + '/docs.json');
+// eslint-disable-next-line lodash/import-scope
 const _ = require('lodash');
 const fs = require('fs');
 
@@ -50,9 +51,10 @@ function writeCodeSnippetFile(codeSnippets, filepath) {
   fs.writeFileSync(filepath, JSON.stringify(output, null, 2) + '\n');
 }
 
-const packageName = process.argv.indexOf('--package-name') !== -1
-  ? process.argv[process.argv.indexOf('--package-name') + 1]
-  : '@cognite/sdk'
+const packageName =
+  process.argv.indexOf('--package-name') !== -1
+    ? process.argv[process.argv.indexOf('--package-name') + 1]
+    : '@cognite/sdk';
 
 const codeSnippets = findAllCodeSnippetsInJsDoc(jsDoc);
 const operationsWithHeader = ['redirectUrl'];

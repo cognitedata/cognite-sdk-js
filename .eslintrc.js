@@ -10,7 +10,8 @@ module.exports = {
     plugins: [
         '@typescript-eslint',
         'prettier',
-        'header'
+        'header',
+        'lodash'
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -26,6 +27,7 @@ module.exports = {
         "@typescript-eslint/ban-ts-comment": "off",
         "react/prop-types": "off",
         "prettier/prettier": "error",
+        "lodash/import-scope": ["error", "method"], // see PR #386
 
         //added manually while migrating from tslint
         "@typescript-eslint/ban-types": "off",
