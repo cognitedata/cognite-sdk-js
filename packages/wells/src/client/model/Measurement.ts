@@ -17,7 +17,7 @@ export interface Measurement {
    */
   name: string;
   /**
-   * @type {SyrveyData}
+   * @type {SurveyData}
    * @memberof Survey
    */
   data(limit?: number): Promise<SurveyData>;
