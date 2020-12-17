@@ -23,7 +23,7 @@ export interface Survey {
    */
   metadata?: { [key: string]: string };
   /**
-   * @type {Promise<SequenceRow[]>}
+   * @type {SurveyData}
    * @memberof Survey
    */
   data(limit?: number): Promise<SurveyData>;

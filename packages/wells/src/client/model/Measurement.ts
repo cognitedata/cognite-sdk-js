@@ -1,3 +1,5 @@
+import { SurveyData } from './Survey';
+
 export interface Measurement {
   /**
    * @type {number}
@@ -14,6 +16,11 @@ export interface Measurement {
    * @memberof Measurement
    */
   name: string;
+  /**
+   * @type {SurveyData}
+   * @memberof Survey
+   */
+  data(limit?: number): Promise<SurveyData>;
 }
 
 export interface Measurements {

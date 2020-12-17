@@ -94,17 +94,11 @@ const wells = await client.wells.filter(filter);
 import { WellFilter } from '@cognite/sdk-wells';
 
 const polygon = <GeoJson>{
-      type: 'Polygon',
-      coordinates: [
-        [
-          [0.0, 0.0],
-          [0.0, 80.0],
-          [80.0, 80.0],
-          [80.0, 0.0],
-          [0.0, 0.0],
-        ],
-      ],
-    };
+  type: 'Polygon',
+  coordinates: [
+    [[0.0, 0.0], [0.0, 80.0], [80.0, 80.0], [80.0, 0.0], [0.0, 0.0]],
+  ],
+};
 const filter: WellFilter = {
   polygon: { geoJsonGeometry: polygon, crs: 'epsg:4326' },
   sources: ['edm'],
@@ -141,14 +135,29 @@ const data: SurveyData | undefined = await trajectory?.data();
 #### _Get wellbore measurement for measurementType: 'GammaRay':_
 
 ```ts
-import { Measurements, MeasurementType } from '@cognite/sdk-wells';
+import { Measurement, MeasurementType, SurveyData } from '@cognite/sdk-wells';
 
 const wellboreId: number = 870793324939646;
-const measurements: Measurements | undefined;
+const measurements: Measurement[] | undefined;
 measurements = await client.wellbores.getMeasurement(
   wellboreId,
   MeasurementType.GammaRay
 );
+
+// lazy method to inspect data from measurement
+if (measurements) {
+  // sync
+  for (var measurement of measurements) {
+    const data: SurveyData = await measurement.data();
+    console.log(data.rows);
+  }
+
+  // async
+  measurements.forEach(async measurement => {
+    const data: SurveyData = await measurement.data();
+    console.log(data.columns);
+  });
+}
 ```
 
 #### _Get trajectory for a wellbore:_

@@ -3,7 +3,7 @@
 import { setupLoggedInClient } from '../testUtils';
 
 import CogniteWellsClient from 'wells/src/client/CogniteWellsClient';
-import { Measurements } from 'wells/src/client/model/Measurement';
+import { Measurement} from 'wells/src/client/model/Measurement';
 import { Wellbore } from 'wells/src/client/model/Wellbore';
 import { Survey, SurveyData } from 'wells/src/client/model/Survey';
 
@@ -46,13 +46,28 @@ describeIfCondition(
 
     test('Succeed to get wellbore measurement for measurementType: GammaRay', async () => {
       const wellboreId: number = 870793324939646;
-      const measurements: Measurements | undefined = await client.wellbores.getMeasurement(
+      const measurements: Measurement[] | undefined = await client.wellbores.getMeasurement(
         wellboreId,
         MeasurementType.GammaRay
       );
       expect(measurements).not.toBeUndefined();
       /* eslint-disable */
-      expect(measurements?.items.length).toBe(2);
+      expect(measurements?.length).toBe(2);
+
+      if (measurements) {
+
+      // sync
+      for (var measurement of measurements) {
+        const data: SurveyData = await measurement.data();
+        expect(data.rows.length).toBe(6);
+      }
+
+      // async
+      measurements.forEach(async measurement => {
+        const data: SurveyData = await measurement.data()
+        expect(data.rows.length).toBe(6);
+      })
+    }
     });
 
     test('Fail to get wellbore measurement for measurementType: GammaRay', async () => {

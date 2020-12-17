@@ -1,7 +1,7 @@
 import { accessApi, CDFHttpClient, HttpError} from '@cognite/sdk-core';
-import { Measurements } from '../model/Measurement';
+import { Measurement, Measurements } from '../model/Measurement';
 import { MeasurementType } from '../model/MeasurementType';
-import { Survey } from '../model/Survey';
+import { Survey, SurveyData } from '../model/Survey';
 import { Wellbore } from '../model/Wellbore';
 import { SurveysAPI } from './surveysApi';
 
@@ -32,12 +32,21 @@ export class WellboresAPI {
     this.cluster = cluster;
   }
 
-  private addLazyMethods = (wellbore: Wellbore): Wellbore => {
+  private addLazyMethodsForWellbore = (wellbore: Wellbore): Wellbore => {
     return <Wellbore>{
       id: wellbore.id,
       name: wellbore.name,
       metadata: wellbore.metadata,
       trajectory: async (): Promise<Survey | undefined>  => {return await this.surveys.getTrajectory(wellbore.id).then(response => response).catch(err => err)}
+    };
+  }
+
+  private addLazyMethodsForMeasurement = (measurement: Measurement): Measurement => {
+    return <Measurement>{
+      id: measurement.id,
+      externalId: measurement.externalId,
+      name: measurement.name,
+      data: async (): Promise<SurveyData | undefined>  => {return await this.surveys.getData({id: measurement.id}).then(response => response).catch(err => err)}
     };
   }
 
@@ -56,7 +65,7 @@ export class WellboresAPI {
   public getById = async (id: number): Promise<Wellbore | undefined> => {
     const path: string = this.getPath(`/wellbores/${id}`)
     return await this.client?.get<Wellbore>(path)
-      .then(response => this.addLazyMethods(response.data))
+      .then(response => this.addLazyMethodsForWellbore(response.data))
       .catch(err => {
       throw new HttpError(err.status, err.errorMessage, {})
     });
@@ -74,15 +83,16 @@ export class WellboresAPI {
     });
   };
 
-  public getMeasurement = async (wellboreId: number, measurementType: MeasurementType): Promise<Measurements | undefined> => {
+  public getMeasurement = async (wellboreId: number, measurementType: MeasurementType): Promise<Measurement[] | undefined> => {
 
     const path: string = this.getPath(`/wellbores/${wellboreId}/measurements/${measurementType}`)
 
-    return await this.client?.get<Measurements>(path)
+    let measurements = await this.client?.get<Measurements>(path)
     .then(response => response.data)
     .catch(err => {
       throw new HttpError(err.status, err.errorMessage, {})
     })
-    
+
+    return measurements?.items.map(measurement => this.addLazyMethodsForMeasurement(measurement)) 
   }
 }
