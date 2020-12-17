@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.8.0...@cognite/sdk-wells@0.9.0) (2020-12-17)
+
+
+### Features
+
+* add geojson support to wells sdk ([#467](https://github.com/cognitedata/cognite-sdk-js/issues/467)) ([a9a7165](https://github.com/cognitedata/cognite-sdk-js/commit/a9a716535406eb771c94b06a6d555d163432caa8))
+* lazy method for fetching measurement data [release] ([#469](https://github.com/cognitedata/cognite-sdk-js/issues/469)) ([befcc22](https://github.com/cognitedata/cognite-sdk-js/commit/befcc22f2fba8ebf40297a077261e380b424a5db))
+
+
+
+
+
 # [0.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.7.0...@cognite/sdk-wells@0.8.0) (2020-12-15)
 
 
