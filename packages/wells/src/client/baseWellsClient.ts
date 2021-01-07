@@ -7,40 +7,19 @@ import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
 import { WELL_SERVICE_BASE_URL } from '../constants';
 import { version } from '../../package.json';
-
-export interface ClientLoginOptions {
-  appId: string;
-  baseUrl?: string;
-}
-
-export interface CogniteProject {
-  /**
-   * Cognite project to login into
-   */
-  project: string;
-}
-
-export interface ApiLoginOptions extends CogniteProject {
-  /**
-   * A Cognite issued api-key
-   */
-  apiKey: string;
-}
-
-export function accessWellsApi<T>(api: T | undefined): T {
-  if (api === undefined) {
-    throw Error(
-      'Need to login with either loginWithApiKey or loginWithOAuth before you can use the Cognite Wells SDK'
-    );
-  }
-  return api;
-}
+import {
+  ClientLoginOptions,
+  ApiKeyLogin,
+  TokenLogin,
+  isUsingSSL,
+  bearerTokenString,
+} from './clientAuthUtils';
 
 export default class BaseWellsClient {
   private http: BasicHttpClient;
   private metadata: MetadataMap;
   private projectName: string = '';
-  private hasBeenLoggedIn: boolean = false;
+  public hasBeenLoggedIn: boolean = false;
 
   constructor(options: ClientLoginOptions) {
     if (!isObject(options)) {
@@ -68,7 +47,7 @@ export default class BaseWellsClient {
    * @param options Login options
    *
    */
-  public loginWithApiKey = (options: ApiLoginOptions) => {
+  public loginWithApiKey = (options: ApiKeyLogin) => {
     if (this.hasBeenLoggedIn) {
       throw Error(
         'You cannot re-login with an already logged in Cognite client instance. Try to create a new Cognite Wells client instance instead.'
@@ -79,7 +58,7 @@ export default class BaseWellsClient {
       throw Error('`loginWithApiKey` is missing parameter `options`');
     }
     const { project, apiKey } = options;
-    const keys: (keyof ApiLoginOptions)[] = ['project', 'apiKey'];
+    const keys: (keyof ApiKeyLogin)[] = ['project', 'apiKey'];
     for (const property of keys) {
       if (!isString(options[property])) {
         throw Error(
@@ -94,15 +73,46 @@ export default class BaseWellsClient {
     this.hasBeenLoggedIn = true;
   };
 
+  public loginWithToken = (options: TokenLogin) => {
+    if (this.hasBeenLoggedIn) {
+      throw Error(
+        'You cannot re-login with an already logged in Cognite client instance. Try to create a new Cognite Wells client instance instead.'
+      );
+    }
+
+    if (!isObject(options)) {
+      throw Error('`loginWithToken` is missing parameter `options`');
+    }
+    const { project } = options;
+    if (!isString(project)) {
+      throw Error('options.project is required and must be of type string');
+    }
+    this.projectName = project;
+
+    if (!isUsingSSL()) {
+      console.warn(
+        'You should use SSL (https) when you login with Token since CDF only allows redirecting back to an HTTPS site'
+      );
+    }
+
+    const { accessToken } = options;
+    if (accessToken) {
+      this.httpClient.setDefaultHeader(
+        'Authorization',
+        bearerTokenString(accessToken)
+      );
+    }
+
+    this.initAPIs();
+    this.hasBeenLoggedIn = true;
+  };
+
   /**
    * Basic HTTP method for GET
    *
    * @param path The URL path
    * @param options Request options, optional
    *
-   * ```js
-   * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
-   * ```
    */
   public get = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.get<T>(path, options);
@@ -113,9 +123,6 @@ export default class BaseWellsClient {
    * @param path The URL path
    * @param options Request options, optional
    *
-   * ```js
-   * const response = await client.put('someUrl');
-   * ```
    */
   public put = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.put<T>(path, options);
@@ -126,10 +133,6 @@ export default class BaseWellsClient {
    * @param path The URL path
    * @param options Request options, optional
    *
-   * ```js
-   * const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
-   * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
-   * ```
    */
   public post = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.post<T>(path, options);
@@ -139,9 +142,6 @@ export default class BaseWellsClient {
    *
    * @param path The URL path
    * @param options Request options, optional
-   * ```js
-   * const response = await client.delete('someUrl');
-   * ```
    */
   public delete = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.delete<T>(path, options);
@@ -151,9 +151,6 @@ export default class BaseWellsClient {
    *
    * @param path The URL path
    * @param options Request options, optional
-   * ```js
-   * const response = await client.patch('someUrl');
-   * ```
    */
   public patch = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.patch<T>(path, options);

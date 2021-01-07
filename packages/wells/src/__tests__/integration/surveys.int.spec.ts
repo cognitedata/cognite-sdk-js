@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { setupLoggedInClient } from '../testUtils';
-import CogniteWellsClient from 'wells/src/client/CogniteWellsClient';
+import CogniteWellsClient from 'wells/src/client/cogniteWellsClient';
 import { Survey, SurveyData, SurveyDataRequest } from 'wells/src/client/model/Survey';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455

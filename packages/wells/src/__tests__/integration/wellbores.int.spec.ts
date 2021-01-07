@@ -2,7 +2,7 @@
 
 import { setupLoggedInClient } from '../testUtils';
 
-import CogniteWellsClient from 'wells/src/client/CogniteWellsClient';
+import CogniteWellsClient from 'wells/src/client/cogniteWellsClient';
 import { Measurement} from 'wells/src/client/model/Measurement';
 import { Wellbore } from 'wells/src/client/model/Wellbore';
 import { Survey, SurveyData } from 'wells/src/client/model/Survey';

@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { setupLoggedInClient } from '../testUtils';
-import WellsClient from 'wells/src/client/CogniteWellsClient';
+import WellsClient from 'wells/src/client/cogniteWellsClient';
 import { Well, WellItems } from 'wells/src/client/model/Well';
 import { WellFilter } from 'wells/src/client/model/WellFilter';
 import { GeoJson } from 'wells/src/client/model/GeoJson';

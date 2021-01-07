@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 export * from '@cognite/sdk';
-export { default as CogniteWellsClient } from './client/CogniteWellsClient';
-export { createWellsClient } from './client/api/utils';
+export { default as CogniteWellsClient } from './client/cogniteWellsClient';
+export { createWellsClient } from './client/clientCreateUtils';
 
 // dataclasses and types
 export * from './client/model/Cluster';

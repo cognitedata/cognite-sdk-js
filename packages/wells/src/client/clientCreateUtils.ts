@@ -1,5 +1,5 @@
-import CogniteWellsClient from '../CogniteWellsClient';
-import { Cluster } from '../model/Cluster';
+import CogniteWellsClient from './cogniteWellsClient';
+import { Cluster } from './model/Cluster';
 
 export function createWellsClient(
   appId: string,

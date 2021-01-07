@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import CogniteWellsClient from '../client/CogniteWellsClient';
+import CogniteWellsClient from '../client/cogniteWellsClient';
 import { setupLoggedInClient } from './testUtils';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
