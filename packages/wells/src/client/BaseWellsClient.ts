@@ -158,6 +158,13 @@ export default class BaseWellsClient {
   public patch = <T = any>(path: string, options?: HttpRequestOptions) =>
     this.httpClient.patch<T>(path, options);
 
+  /**
+   * To modify the base-url at any point in time
+   */
+  public setBaseUrl = (baseUrl: string) => {
+    this.httpClient.setBaseUrl(baseUrl);
+  };
+
   protected get version() {
     return `${version}-core`;
   }

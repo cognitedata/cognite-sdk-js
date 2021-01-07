@@ -1,4 +1,4 @@
-import { accessApi, CDFHttpClient, HttpError} from '@cognite/sdk-core';
+import { accessApi, BasicHttpClient, HttpError} from '@cognite/sdk-core';
 import { Measurement, Measurements } from '../model/Measurement';
 import { MeasurementType } from '../model/MeasurementType';
 import { Survey, SurveyData } from '../model/Survey';
@@ -6,7 +6,7 @@ import { Wellbore } from '../model/Wellbore';
 import { SurveysAPI } from './surveysApi';
 
 export class WellboresAPI {
-  private client?: CDFHttpClient;
+  private client?: BasicHttpClient;
   private project?: String;
   private cluster?: String;
 
@@ -20,7 +20,7 @@ export class WellboresAPI {
     return accessApi(this._surveysSDK);
   }
 
-  public set setHttpClient(httpClient: CDFHttpClient) {
+  public set setHttpClient(httpClient: BasicHttpClient) {
     this.client = httpClient;
   }
 

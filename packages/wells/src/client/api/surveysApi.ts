@@ -1,12 +1,12 @@
-import { CDFHttpClient, HttpError} from '@cognite/sdk-core';
+import { BasicHttpClient, HttpError} from '@cognite/sdk-core';
 import { Survey, SurveyData, SurveyDataRequest } from '../model/Survey';
 
 export class SurveysAPI {
-  private client?: CDFHttpClient;
+  private client?: BasicHttpClient;
   private project?: String;
   private cluster?: String;
 
-  public set setHttpClient(httpClient: CDFHttpClient) {
+  public set setHttpClient(httpClient: BasicHttpClient) {
     this.client = httpClient;
   }
 

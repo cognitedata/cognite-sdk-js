@@ -1,12 +1,13 @@
-import { BaseCogniteClient, ClientOptions } from '@cognite/sdk-core';
+import { ClientOptions } from '@cognite/sdk-core';
 import { accessApi } from '@cognite/sdk-core';
 import { WellsAPI } from './api/wellsApi';
 import { WellboresAPI } from './api/wellboresApi';
 import { SurveysAPI } from './api/surveysApi';
 import { version } from '../../package.json';
 import { Cluster } from './model/Cluster';
+import BaseWellsClient from './BaseWellsClient';
 
-export default class CogniteWellsClient extends BaseCogniteClient {
+export default class CogniteWellsClient extends BaseWellsClient {
   public get wells() {
     return accessApi(this.wellsApi);
   }
