@@ -18,11 +18,10 @@ export interface ApiKeyLogin extends CogniteProject {
 }
 
 export interface TokenLogin extends CogniteProject {
-  withTokens?: WithTokens;
   /**
    * Provide optional cached access token to skip the authentication flow (client.authenticate will still override this).
    */
-  accessToken?: string;
+  accessToken: string;
 }
 /** @hidden */
 

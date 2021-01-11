@@ -19,7 +19,7 @@ export default class BaseWellsClient {
   private http: BasicHttpClient;
   private metadata: MetadataMap;
   private projectName: string = '';
-  public hasBeenLoggedIn: boolean = false;
+  private hasBeenLoggedIn: boolean = false;
 
   constructor(options: ClientLoginOptions) {
     if (!isObject(options)) {
@@ -161,6 +161,10 @@ export default class BaseWellsClient {
   public setBaseUrl = (baseUrl: string) => {
     this.httpClient.setBaseUrl(baseUrl);
   };
+
+  public get isLoggedIn() {
+    return this.hasBeenLoggedIn;
+  }
 
   protected get version() {
     return `${version}-core`;

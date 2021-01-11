@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
-import CogniteWellsClient from '../client/cogniteWellsClient';
-import { setupLoggedInClient } from './testUtils';
+import { createWellsClient } from '../client/clientCreateUtils';
+import { authTokens } from './testUtils';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -10,13 +10,29 @@ const describeIfCondition =
     : describe.skip;
 
 describeIfCondition('CogniteClient setup in wells - integration test', () => {
-  let client: CogniteWellsClient;
-  beforeAll(async () => {
-    client = setupLoggedInClient();
+  // test api-key login
+  test('api-key login', async () => {
+    const client = createWellsClient('WELLS TEST CLIENT');
+    expect(client.isLoggedIn).toBe(false);
+
+    client.loginWithApiKey({
+      project: process.env.COGNITE_WELLS_PROJECT as string,
+      apiKey: process.env.COGNITE_WELLS_CREDENTIALS as string,
+    });
+
+    expect(client.isLoggedIn).toBe(true);
   });
 
-  // test that the client behaves as stable
-  test('client test', async () => {
-    expect(client).not.toBeUndefined();
+  // test api-key login
+  test('bearer-token login', async () => {
+    const client = createWellsClient('WELLS TEST CLIENT');
+    expect(client.isLoggedIn).toBe(false);
+
+    client.loginWithToken({
+      project: process.env.COGNITE_WELLS_PROJECT as string,
+      accessToken: authTokens.accessToken,
+    });
+
+    expect(client.isLoggedIn).toBe(true);
   });
 });

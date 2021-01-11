@@ -11,3 +11,7 @@ export function setupLoggedInClient(): CogniteWellsClient {
 
   return client;
 }
+
+export const authTokens = {
+  accessToken: 'abc',
+};
