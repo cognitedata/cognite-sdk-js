@@ -39,7 +39,7 @@ COGNITE_WELLS_PROJECT=<project-tenant>
 COGNITE_WELLS_CREDENTIALS=<your-api-key>
 ```
 
-### set up client
+### set up client with Api-Key
 
 ```ts
 import { createWellsClient, Cluster } from '@cognite/sdk-wells';
@@ -50,6 +50,26 @@ let client = createWellsClient('app id', Cluster.API);
 client.loginWithApiKey({
   project: process.env.COGNITE_WELLS_PROJECT,
   apiKey: process.env.COGNITE_WELLS_CREDENTIALS,
+});
+```
+
+### set up client with Token
+
+```ts
+import { createWellsClient, Cluster } from '@cognite/sdk-wells';
+
+// Cluster.API (default), Cluster.BP, Cluster.GREENFIELD
+let client = createWellsClient('app id', Cluster.API);
+
+client.loginWithToken({
+  project: process.env.COGNITE_WELLS_PROJECT,
+  accessToken: '*YOUR-TOKEN-HERE*',
+});
+
+// whenever you token is updated
+client.loginWithToken({
+  project: process.env.COGNITE_WELLS_PROJECT,
+  accessToken: '*UPDATE-WITH-NEW-TOKEN-HERE*',
 });
 ```
 

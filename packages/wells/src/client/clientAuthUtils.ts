@@ -31,20 +31,20 @@ export interface Tokens {
 }
 
 export type WithTokens = (tokens: Tokens) => void;
-/** @hidden */
 
+/** @hidden */
 export function bearerTokenString(token: string) {
   return `Bearer ${token}`;
 }
-/** @hidden */
 
+/** @hidden */
 export function isUsingBrowser() {
   return (
     typeof window !== 'undefined' && typeof window.document !== 'undefined'
   );
 }
-/** @hidden */
 
+/** @hidden */
 export function isUsingSSL() {
   return isUsingBrowser() && location.protocol.toLowerCase() === 'https:';
 }

@@ -23,7 +23,7 @@ export default class BaseWellsClient {
 
   constructor(options: ClientLoginOptions) {
     if (!isObject(options)) {
-      throw Error('`CogniteClient` is missing parameter `options`');
+      throw Error('`CogniteWellsClient` is missing parameter `options`');
     }
     if (!isString(options.appId)) {
       throw Error('options.appId is required and must be of type string');
@@ -74,12 +74,6 @@ export default class BaseWellsClient {
   };
 
   public loginWithToken = (options: TokenLogin) => {
-    if (this.hasBeenLoggedIn) {
-      throw Error(
-        'You cannot re-login with an already logged in Cognite client instance. Try to create a new Cognite Wells client instance instead.'
-      );
-    }
-
     if (!isObject(options)) {
       throw Error('`loginWithToken` is missing parameter `options`');
     }
@@ -103,7 +97,10 @@ export default class BaseWellsClient {
       );
     }
 
-    this.initAPIs();
+    if (!this.hasBeenLoggedIn) {
+      this.initAPIs();
+    }
+
     this.hasBeenLoggedIn = true;
   };
 
