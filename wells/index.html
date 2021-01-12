@@ -151,6 +151,22 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
   sources: [<span class="hljs-string">&#x27;edm&#x27;</span>],
 };
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
+				<a href="#get-wellbores-for-a-well" id="get-wellbores-for-a-well" style="color: inherit; text-decoration: none;">
+					<h4><em>Get wellbores for a well:</em></h4>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well, Wellbore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">2275887128760800</span>;
+<span class="hljs-keyword">const</span> well: Well = <span class="hljs-keyword">await</span> client.wells.getById(wellId)
+<span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span>;
+wellbores = <span class="hljs-keyword">await</span> client.wellbores.getFromWell(well);</code></pre>
+				<p>or </p>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well, Wellbore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">2275887128760800</span>;
+<span class="hljs-keyword">const</span> well: Well = <span class="hljs-keyword">await</span> client.wells.getById(wellId)
+<span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span>;
+wellbores = <span class="hljs-keyword">await</span> well.wellbores();</code></pre>
 				<a href="#filter---list-all-labels" id="filter---list-all-labels" style="color: inherit; text-decoration: none;">
 					<h4><em>Filter - list all labels:</em></h4>
 				</a>
