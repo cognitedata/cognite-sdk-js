@@ -1,4 +1,5 @@
 import { WellHead } from './WellHead';
+import { Wellbore } from './Wellbore';
 
 // Customizable function that takes in CogniteClient and args, and return a promise of a well
 export type SearchWells = (args: any) => Promise<Well[]>;
@@ -85,6 +86,11 @@ export interface Well {
    * @memberof Well
    */
   sources?: string[];
+  /**
+   * @type {Promise<Wellbore[]>}
+   * @memberof Wellbore
+   */
+  wellbores(): Promise<Wellbore[]>;
 }
 
 export interface WellDatum {
