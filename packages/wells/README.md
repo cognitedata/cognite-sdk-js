@@ -136,6 +136,7 @@ const fieldLabels: String[] | undefined = await client.wells.fields();
 const operatorLabels: String[] | undefined = await client.wells.operators();
 const quadrantLabels: String[] | undefined = await client.wells.quadrants();
 const sourceLabels: String[] | undefined = await client.wells.sources();
+const measurementTypeLabels: String[] | undefined = await client.wells.measurements();
 ```
 
 ### **Wellbore queries**

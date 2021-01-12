@@ -116,6 +116,7 @@ export class WellsAPI {
   public operators = async (): Promise<String[] | undefined> => this.getLabelPrefix('operators');
   public quadrants = async (): Promise<String[] | undefined> => this.getLabelPrefix('quadrants');
   public sources = async (): Promise<String[] | undefined> => this.getLabelPrefix('sources');
+  public measurements = async (): Promise<String[] | undefined> => this.getLabelPrefix('measurements');
 
   public list = async (cursor?: String): Promise<WellItems | undefined> => {
     const path: string = this.getPath('/wells', cursor)
