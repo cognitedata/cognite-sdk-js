@@ -1,3 +1,5 @@
+//import inRange from 'lodash/inRange';
+
 export interface ClientLoginOptions {
   appId: string;
   baseUrl?: string;
@@ -57,3 +59,13 @@ export function accessWellsApi<T>(api: T | undefined): T {
   }
   return api;
 }
+
+// CDF
+
+// function isValidRetryStatusCode(status: number) {
+//   return (
+//     inRange(status, 100, 200) ||
+//     inRange(status, 429, 430) ||
+//     inRange(status, 500, 600)
+//   );
+// }

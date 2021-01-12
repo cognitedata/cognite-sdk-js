@@ -11,3 +11,5 @@ export const BLOCK = 'Block';
 /** @hidden */
 export const WELL_SERVICE_BASE_URL =
   'https://well-service-cognitedata-development.cognite.ai';
+/** @hidden */
+export const CDF_BASE_URL = 'https://api.cognitedata.com';

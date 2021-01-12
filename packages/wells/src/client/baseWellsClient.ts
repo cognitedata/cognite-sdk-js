@@ -1,11 +1,13 @@
 import {
-  BasicHttpClient,
+  CDFHttpClient,
   HttpRequestOptions,
   MetadataMap,
+  RetryableHttpClient,
+  //  OnAuthenticateLoginObject,
 } from '@cognite/sdk-core';
 import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
-import { WELL_SERVICE_BASE_URL } from '../constants';
+import { WELL_SERVICE_BASE_URL, CDF_BASE_URL } from '../constants';
 import { version } from '../../package.json';
 import {
   ClientLoginOptions,
@@ -14,9 +16,13 @@ import {
   isUsingSSL,
   bearerTokenString,
 } from './clientAuthUtils';
+import { createRetryValidator } from '@cognite/sdk-core';
+//import { createAuthenticateFunction } from 'core/src/login';
+//import { CDFHttpClient } from 'core/src/httpClient/cdfHttpClient';
 
 export default class BaseWellsClient {
-  private http: BasicHttpClient;
+  private httpWells: RetryableHttpClient;
+  private httpCDF: CDFHttpClient;
   private metadata: MetadataMap;
   private projectName: string = '';
   private hasBeenLoggedIn: boolean = false;
@@ -29,13 +35,34 @@ export default class BaseWellsClient {
       throw Error('options.appId is required and must be of type string');
     }
 
-    this.http = new BasicHttpClient(WELL_SERVICE_BASE_URL);
-    this.httpClient
+    // Init the wells httpWells client
+    this.httpWells = new RetryableHttpClient(
+      WELL_SERVICE_BASE_URL,
+      createRetryValidator({}, 5)
+    );
+    this.wellsClient
+      .setDefaultHeader('x-cdp-app', options.appId)
+      .setDefaultHeader(
+        'x-cdp-sdk',
+        `CogniteWellsJavaScriptSDK:${this.version}`
+      );
+
+    // Init the CDF httpWells clientb
+    this.httpCDF = new CDFHttpClient(CDF_BASE_URL, createRetryValidator({}, 5));
+
+    this.cdfClient
       .setDefaultHeader('x-cdp-app', options.appId)
       .setDefaultHeader('x-cdp-sdk', `CogniteJavaScriptSDK:${this.version}`);
 
     this.metadata = new MetadataMap();
   }
+
+  // For re-authenticating with CDF
+  public authenticate: () => Promise<boolean> = async () => {
+    throw Error(
+      'You can only call authenticate after you have called loginWithOAuth'
+    );
+  };
 
   public get project() {
     return this.projectName;
@@ -67,7 +94,7 @@ export default class BaseWellsClient {
       }
     }
     this.projectName = project;
-    this.httpClient.setDefaultHeader('api-key', apiKey);
+    this.wellsClient.setDefaultHeader('api-key', apiKey);
 
     this.initAPIs();
     this.hasBeenLoggedIn = true;
@@ -85,13 +112,27 @@ export default class BaseWellsClient {
 
     if (!isUsingSSL()) {
       console.warn(
-        'You should use SSL (https) when you login with Token since CDF only allows redirecting back to an HTTPS site'
+        'You should use SSL (httpWellss) when you login with Token since CDF only allows redirecting back to an HTTPS site'
       );
     }
 
+    // const onTokens = (() => { });
+    // const onAuthenticate = authenticateWithRedirect;
+    // const authenticate = createAuthenticateFunction({
+    //   project,
+    //   httpClient: this.cdfClient,
+    //   onAuthenticate,
+    //   onTokens,
+    // });
+
+    // this.wellsClient.set401ResponseHandler(async (_, retry, reject) => {
+    //   const didAuthenticate = await authenticate();
+    //   return didAuthenticate ? retry() : reject();
+    // });
+
     const { accessToken } = options;
     if (accessToken) {
-      this.httpClient.setDefaultHeader(
+      this.wellsClient.setDefaultHeader(
         'Authorization',
         bearerTokenString(accessToken)
       );
@@ -112,7 +153,7 @@ export default class BaseWellsClient {
    *
    */
   public get = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.get<T>(path, options);
+    this.wellsClient.get<T>(path, options);
 
   /**
    * Basic HTTP method for PUT
@@ -122,7 +163,7 @@ export default class BaseWellsClient {
    *
    */
   public put = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.put<T>(path, options);
+    this.wellsClient.put<T>(path, options);
 
   /**
    * Basic HTTP method for POST
@@ -132,7 +173,7 @@ export default class BaseWellsClient {
    *
    */
   public post = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.post<T>(path, options);
+    this.wellsClient.post<T>(path, options);
 
   /**
    * Basic HTTP method for DELETE
@@ -141,7 +182,7 @@ export default class BaseWellsClient {
    * @param options Request options, optional
    */
   public delete = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.delete<T>(path, options);
+    this.wellsClient.delete<T>(path, options);
 
   /**
    * Basic HTTP method for PATCH
@@ -150,13 +191,13 @@ export default class BaseWellsClient {
    * @param options Request options, optional
    */
   public patch = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.patch<T>(path, options);
+    this.wellsClient.patch<T>(path, options);
 
   /**
    * To modify the base-url at any point in time
    */
   public setBaseUrl = (baseUrl: string) => {
-    this.httpClient.setBaseUrl(baseUrl);
+    this.wellsClient.setBaseUrl(baseUrl);
   };
 
   public get isLoggedIn() {
@@ -174,14 +215,14 @@ export default class BaseWellsClient {
   protected apiFactory = <ApiType>(
     api: new (
       relativePath: string,
-      httpClient: BasicHttpClient,
+      httpWellsClient: RetryableHttpClient,
       map: MetadataMap
     ) => ApiType,
     relativePath: string
   ) => {
     return new api(
       `${WELL_SERVICE_BASE_URL}/${relativePath}`,
-      this.httpClient,
+      this.wellsClient,
       this.metadataMap
     );
   };
@@ -190,7 +231,17 @@ export default class BaseWellsClient {
     return this.metadata;
   }
 
-  protected get httpClient() {
-    return this.http;
+  protected get wellsClient() {
+    return this.httpWells;
+  }
+
+  protected get cdfClient() {
+    return this.httpCDF;
   }
 }
+
+// function authenticateWithRedirect(login: OnAuthenticateLoginObject) {
+//   login.redirect({
+//     redirectUrl: window.location.href,
+//   });
+// }
