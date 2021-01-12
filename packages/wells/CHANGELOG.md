@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.10.0...@cognite/sdk-wells@0.11.0) (2021-01-12)
+
+
+### Features
+
+* add measurement type label endpoint [release] ([#473](https://github.com/cognitedata/cognite-sdk-js/issues/473)) ([04ae49f](https://github.com/cognitedata/cognite-sdk-js/commit/04ae49fe9d104e031d79a5d3a424ebfbe505ab47))
+
+
+
+
+
 # [0.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.9.0...@cognite/sdk-wells@0.10.0) (2021-01-12)
 
 
