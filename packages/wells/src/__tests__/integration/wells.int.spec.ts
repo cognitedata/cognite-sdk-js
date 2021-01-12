@@ -171,4 +171,13 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     expect(sources).toContain("EDM")
   });
+
+  test('filter - get all measurement types', async () => {
+    expect(client).not.toBeUndefined();
+    const quadrants = await client.wells.measurements();
+
+    expect(quadrants).not.toBeUndefined()
+    expect(quadrants).toContain("GammaRay")
+    expect(quadrants).toContain("Density")
+  });
 });
