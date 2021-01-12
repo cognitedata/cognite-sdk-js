@@ -1,4 +1,5 @@
 import { accessApi, CDFHttpClient, HttpError} from '@cognite/sdk-core';
+import { Well } from '../model/Well';
 import { Measurement, Measurements } from '../model/Measurement';
 import { MeasurementType } from '../model/MeasurementType';
 import { Survey, SurveyData } from '../model/Survey';
@@ -70,6 +71,20 @@ export class WellboresAPI {
       throw new HttpError(err.status, err.errorMessage, {})
     });
   };
+
+  public getFromWell = async (well: Well): Promise<Wellbore[] | undefined> => {
+    const path: string = this.getPath(`/wells/${well.id}/wellbores`)
+    try {
+      const wellboreData = await this.client?.get<Wellbore[]>(path)
+      if (wellboreData) {
+        return wellboreData.data.map(wellbore => this.addLazyMethodsForWellbore(wellbore))
+      } else {
+        return undefined
+      }
+    } catch(err) {
+      throw new HttpError(err.status, err.errorMessage, {})
+    }
+  }
 
   /* eslint-disable */
   public getTrajectory = async (wellboreId: number): Promise<Survey | undefined> => {

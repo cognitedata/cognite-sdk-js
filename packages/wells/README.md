@@ -106,6 +106,28 @@ const filter: WellFilter = {
 const wells = await client.wells.filter(filter);
 ```
 
+#### _Get wellbores for a well:_
+
+```ts
+import { Well, Wellbore } from '@cognite/sdk-wells';
+
+const wellId: number = 2275887128760800;
+const well: Well = await client.wells.getById(wellId)
+const wellbores: Wellbore[] | undefined;
+wellbores = await client.wellbores.getFromWell(well);
+```
+
+or 
+
+```ts
+import { Well, Wellbore } from '@cognite/sdk-wells';
+
+const wellId: number = 2275887128760800;
+const well: Well = await client.wells.getById(wellId)
+const wellbores: Wellbore[] | undefined;
+wellbores = await well.wellbores();
+```
+
 #### _Filter - list all labels:_
 
 ```ts

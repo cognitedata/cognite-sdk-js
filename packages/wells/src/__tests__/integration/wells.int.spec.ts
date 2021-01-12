@@ -3,6 +3,7 @@
 import { setupLoggedInClient } from '../testUtils';
 import WellsClient from 'wells/src/client/CogniteWellsClient';
 import { Well, WellItems } from 'wells/src/client/model/Well';
+import { Wellbore } from 'wells/src/client/model/Wellbore'
 import { WellFilter } from 'wells/src/client/model/WellFilter';
 import { GeoJson } from 'wells/src/client/model/GeoJson';
 
@@ -27,6 +28,23 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     /* eslint-disable */
     expect(well?.id).toBe(wellId);
     /* eslint-enable */
+  });
+
+  test('get by id - get wellbores', async () => {
+    expect(client).not.toBeUndefined();
+    const wellId: number = 2275887128760800;
+    const well: Well | undefined = await client.wells.getById(wellId)
+
+    expect(well).not.toBeUndefined();
+    /* eslint-disable */
+    expect(well?.id).toBe(wellId);
+    /* eslint-enable */
+    const wellbores: Wellbore[] | undefined = await well?.wellbores()
+    expect(wellbores).not.toBeUndefined();
+    const wellboreIds = [870793324939646, 1072803479704457, 8456650753594878]
+    wellboreIds.forEach(id => {
+      expect(wellbores!.map(wellbore => wellbore.id)).toContain(id)
+    });
   });
 
   test('get by id - 404 if well does not exist', async () => {
