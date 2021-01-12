@@ -2,7 +2,6 @@ import {
   CDFHttpClient,
   HttpRequestOptions,
   MetadataMap,
-  RetryableHttpClient,
   //  OnAuthenticateLoginObject,
 } from '@cognite/sdk-core';
 import isObject from 'lodash/isObject';
@@ -17,11 +16,14 @@ import {
   bearerTokenString,
 } from './clientAuthUtils';
 import { createRetryValidator } from '@cognite/sdk-core';
+import { RetryableHttpClient } from '@cognite/sdk-core';
+import { BasicRetryableHttpClient } from './httpClientWithRetry';
+//import { RetryableHttpClient } from 'core/src/httpClient/retryableHttpClient';
 //import { createAuthenticateFunction } from 'core/src/login';
 //import { CDFHttpClient } from 'core/src/httpClient/cdfHttpClient';
 
 export default class BaseWellsClient {
-  private httpWells: RetryableHttpClient;
+  private httpWells: BasicRetryableHttpClient;
   private httpCDF: CDFHttpClient;
   private metadata: MetadataMap;
   private projectName: string = '';
@@ -36,7 +38,7 @@ export default class BaseWellsClient {
     }
 
     // Init the wells httpWells client
-    this.httpWells = new RetryableHttpClient(
+    this.httpWells = new BasicRetryableHttpClient(
       WELL_SERVICE_BASE_URL,
       createRetryValidator({}, 5)
     );

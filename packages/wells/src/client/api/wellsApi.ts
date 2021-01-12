@@ -1,15 +1,15 @@
-import { BasicHttpClient, HttpError } from '@cognite/sdk-core';
+import { RetryableHttpClient, HttpError } from '@cognite/sdk-core';
 import { Well, WellItems } from '../model/Well';
 import { WellFilter, WellFilterAPI, PolygonFilterAPI } from '../model/WellFilter';
 import { stringify as convertGeoJsonToWKT } from 'wkt';
 import { Cluster } from '../model/Cluster'
 
 export class WellsAPI {
-  private client?: BasicHttpClient;
+  private client?: RetryableHttpClient;
   private project?: String;
   private cluster?: Cluster;
 
-  public set setHttpClient(httpClient: BasicHttpClient) {
+  public set setHttpClient(httpClient: RetryableHttpClient) {
     this.client = httpClient;
   }
 

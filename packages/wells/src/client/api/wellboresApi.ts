@@ -1,12 +1,13 @@
-import { accessApi, BasicHttpClient, HttpError} from '@cognite/sdk-core';
+import { accessApi, HttpError} from '@cognite/sdk-core';
 import { Measurement, Measurements } from '../model/Measurement';
 import { MeasurementType } from '../model/MeasurementType';
 import { Survey, SurveyData } from '../model/Survey';
 import { Wellbore } from '../model/Wellbore';
 import { SurveysAPI } from './surveysApi';
+import { BasicRetryableHttpClient } from '../httpClientWithRetry';
 
 export class WellboresAPI {
-  private client?: BasicHttpClient;
+  private client?: BasicRetryableHttpClient;
   private project?: String;
   private cluster?: String;
 
@@ -20,7 +21,7 @@ export class WellboresAPI {
     return accessApi(this._surveysSDK);
   }
 
-  public set setHttpClient(httpClient: BasicHttpClient) {
+  public set setHttpClient(httpClient: BasicRetryableHttpClient) {
     this.client = httpClient;
   }
 

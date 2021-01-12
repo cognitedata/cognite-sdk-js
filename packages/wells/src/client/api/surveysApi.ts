@@ -1,12 +1,13 @@
-import { BasicHttpClient, HttpError} from '@cognite/sdk-core';
+import { HttpError} from '@cognite/sdk-core';
 import { Survey, SurveyData, SurveyDataRequest } from '../model/Survey';
+import { BasicRetryableHttpClient } from '../httpClientWithRetry';
 
 export class SurveysAPI {
-  private client?: BasicHttpClient;
+  private client?: BasicRetryableHttpClient;
   private project?: String;
   private cluster?: String;
 
-  public set setHttpClient(httpClient: BasicHttpClient) {
+  public set setHttpClient(httpClient: BasicRetryableHttpClient) {
     this.client = httpClient;
   }
 
