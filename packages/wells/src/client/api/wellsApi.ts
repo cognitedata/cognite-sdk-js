@@ -11,8 +11,8 @@ export class WellsAPI {
   private client?: HttpClientWithIntercept;
   private project?: String;
   private cluster?: Cluster;
-  
   private _wellboresSDK?: WellboresAPI;
+
 
   public set wellboresSDK(sdk: WellboresAPI) {
     this._wellboresSDK = sdk;
@@ -90,7 +90,7 @@ export class WellsAPI {
       wellHead: well.wellHead,
       datum: well.datum,
       sources: well.sources,
-      wellbores: async (): Promise<Wellbore[] | undefined> => { return await this.wellbores.getFromWell(well).then(response => response).catch(err => { throw err })}
+      wellbores: async (): Promise<Wellbore[] | undefined>  => {return await this.wellbores.getFromWell(well).then(response => response).catch(err => err)}
     };
   }
 
