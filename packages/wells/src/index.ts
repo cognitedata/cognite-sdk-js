@@ -2,6 +2,7 @@
 export * from '@cognite/sdk';
 export { default as CogniteWellsClient } from './client/cogniteWellsClient';
 export { createWellsClient } from './client/clientCreateUtils';
+export { RefreshToken } from './client/clientAuthUtils';
 
 // dataclasses and types
 export * from './client/model/Cluster';

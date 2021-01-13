@@ -3,6 +3,8 @@ export interface ClientLoginOptions {
   baseUrl?: string;
 }
 
+export type RefreshToken = (args?: any) => string;
+
 export interface CogniteProject {
   /**
    * Cognite project to login into
@@ -22,6 +24,11 @@ export interface TokenLogin extends CogniteProject {
    * Provide optional cached access token to skip the authentication flow (client.authenticate will still override this).
    */
   accessToken: string;
+
+  /**
+   * When the token expires, this custom method will be called to provide a new token
+   */
+  refreshToken: RefreshToken;
 }
 /** @hidden */
 

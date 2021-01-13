@@ -31,6 +31,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     client.loginWithToken({
       project: process.env.COGNITE_WELLS_PROJECT as string,
       accessToken: authTokens.accessToken,
+      refreshToken: () => 'new fresh token',
     });
 
     expect(client.isLoggedIn).toBe(true);
@@ -57,5 +58,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       .catch(err => {
         expect(err.status).toBe(403);
       });
+  
   });
 });

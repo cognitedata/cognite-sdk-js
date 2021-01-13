@@ -1,8 +1,14 @@
 import { HttpRequestOptions } from '@cognite/sdk-core';
 import { BasicHttpClient } from '@cognite/sdk-core';
+import { bearerTokenString, RefreshToken } from './clientAuthUtils';
 
 export default class HttpClientWithIntercept extends BasicHttpClient {
   private authenticatingWithToken: boolean = false;
+  private refreshToken: RefreshToken = () => '';
+
+  public set setReauthenticateMethod(method: RefreshToken) {
+    this.refreshToken = method;
+  }
 
   constructor(baseUrl: string) {
     super(baseUrl);
@@ -14,6 +20,10 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
 
   public get usesTokenLogin() {
     return this.authenticatingWithToken;
+  }
+
+  private updateHeaderWithNewToken(token: string) {
+    this.setDefaultHeader('Authorization', bearerTokenString(token));
   }
 
   /**
@@ -29,9 +39,15 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
       .catch(err => {
         // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
         if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
-          //console.log('found err in get: ', err);
+          // update with new bearer token
+          const newToken = this.refreshToken();
+          this.updateHeaderWithNewToken(newToken);
+
+          // try again
           return this.get<T>(path, options);
         }
+
+        // rethrow
         throw err;
       });
   };
@@ -49,9 +65,15 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
       .catch(err => {
         // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
         if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
-          //console.log('found err in post: ', err);
+          // update with new bearer token
+          const newToken = this.refreshToken();
+          this.updateHeaderWithNewToken(newToken);
+
+          // try again
           return this.put<T>(path, options);
         }
+
+        // rethrow
         throw err;
       });
   };
@@ -69,9 +91,15 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
       .catch(err => {
         // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
         if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
-          //console.log('found err in post: ', err);
+          // update with new bearer token
+          const newToken = this.refreshToken();
+          this.updateHeaderWithNewToken(newToken);
+
+          // try again
           return this.post<T>(path, options);
         }
+
+        // rethrow
         throw err;
       });
   };
@@ -91,9 +119,15 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
       .catch(err => {
         // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
         if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
-          //console.log('found err in post: ', err);
+          // update with new bearer token
+          const newToken = this.refreshToken();
+          this.updateHeaderWithNewToken(newToken);
+
+          // try again
           return this.delete<T>(path, options);
         }
+
+        // rethrow
         throw err;
       });
   };
@@ -110,9 +144,15 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
       .catch(err => {
         // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
         if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
-          //console.log('found err in post: ', err);
+          // update with new bearer token
+          const newToken = this.refreshToken();
+          this.updateHeaderWithNewToken(newToken);
+
+          // try again
           return this.patch<T>(path, options);
         }
+
+        // rethrow
         throw err;
       });
   };

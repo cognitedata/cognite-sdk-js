@@ -100,6 +100,7 @@ export default class BaseWellsClient {
 
     this.hasBeenLoggedIn = true;
     this.httpClient.setIfUsingLoginToken = true;
+    this.httpClient.setReauthenticateMethod = options.refreshToken;
   };
 
   /**
