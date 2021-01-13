@@ -1,4 +1,5 @@
 // Copyright 2020 Cognite AS
+import { RefreshToken } from '../client/clientAuthUtils';
 import { createWellsClient } from '../client/clientCreateUtils';
 import { WellFilter } from '../client/model/WellFilter';
 import { authTokens } from './testUtils';
@@ -28,10 +29,12 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const client = createWellsClient('WELLS TEST CLIENT');
     expect(client.isLoggedIn).toBe(false);
 
+    const functionThatReturnsANewToken: RefreshToken = () => 'new fresh token';
+
     client.loginWithToken({
       project: process.env.COGNITE_WELLS_PROJECT as string,
       accessToken: authTokens.accessToken,
-      refreshToken: () => 'new fresh token',
+      refreshToken: functionThatReturnsANewToken,
     });
 
     expect(client.isLoggedIn).toBe(true);

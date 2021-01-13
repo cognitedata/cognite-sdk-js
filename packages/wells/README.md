@@ -55,23 +55,20 @@ client.loginWithApiKey({
 
 ### set up client with Token
 
-```ts
-import { createWellsClient, Cluster } from '@cognite/sdk-wells';
+````ts
+import { createWellsClient, Cluster, RefreshToken } from '@cognite/sdk-wells';
 
 // Cluster.API (default), Cluster.BP, Cluster.GREENFIELD
 let client = createWellsClient('app id', Cluster.API);
 
-client.loginWithToken({
-  project: process.env.COGNITE_WELLS_PROJECT,
-  accessToken: '*YOUR-TOKEN-HERE*',
-});
+// this method will be called when token expires and CDF throws 401 or 403
+const functionThatReturnsANewToken: RefreshToken = () => 'new fresh token'
 
-// whenever you token is updated
 client.loginWithToken({
-  project: process.env.COGNITE_WELLS_PROJECT,
-  accessToken: '*UPDATE-WITH-NEW-TOKEN-HERE*',
+  project: process.env.COGNITE_WELLS_PROJECT as string,
+  accessToken: "*INITIAL-TOKEN*",
+  refreshToken: functionThatReturnsANewToken,
 });
-```
 
 ### **Well queries**
 
@@ -82,7 +79,7 @@ import { Well } from '@cognite/sdk-wells';
 
 const wellId: number = 8456650753594878;
 const well: Well | undefined = await client.wells.getId(wellId);
-```
+````
 
 #### _List wells:_
 
@@ -132,18 +129,18 @@ const wells = await client.wells.filter(filter);
 import { Well, Wellbore } from '@cognite/sdk-wells';
 
 const wellId: number = 2275887128760800;
-const well: Well = await client.wells.getById(wellId)
+const well: Well = await client.wells.getById(wellId);
 const wellbores: Wellbore[] | undefined;
 wellbores = await client.wellbores.getFromWell(well);
 ```
 
-or 
+or
 
 ```ts
 import { Well, Wellbore } from '@cognite/sdk-wells';
 
 const wellId: number = 2275887128760800;
-const well: Well = await client.wells.getById(wellId)
+const well: Well = await client.wells.getById(wellId);
 const wellbores: Wellbore[] | undefined;
 wellbores = await well.wellbores();
 ```
@@ -156,7 +153,9 @@ const fieldLabels: String[] | undefined = await client.wells.fields();
 const operatorLabels: String[] | undefined = await client.wells.operators();
 const quadrantLabels: String[] | undefined = await client.wells.quadrants();
 const sourceLabels: String[] | undefined = await client.wells.sources();
-const measurementTypeLabels: String[] | undefined = await client.wells.measurements();
+const measurementTypeLabels:
+  | String[]
+  | undefined = await client.wells.measurements();
 ```
 
 ### **Wellbore queries**
