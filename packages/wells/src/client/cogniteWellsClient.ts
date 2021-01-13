@@ -31,12 +31,6 @@ export default class CogniteWellsClient extends BaseWellsClient {
   }
 
   protected initAPIs() {
-    // wells
-    this.wellsApi = this.apiFactory(WellsAPI, 'wells');
-    this.wellsApi.setHttpClient = this.httpClient;
-    this.wellsApi.setProject = this.project;
-    this.wellsApi.setCluster = this.cluster;
-
     // surveys
     this.surveysApi = this.apiFactory(SurveysAPI, 'surveys');
     this.surveysApi.setHttpClient = this.httpClient;
@@ -49,6 +43,13 @@ export default class CogniteWellsClient extends BaseWellsClient {
     this.wellboresApi.setProject = this.project;
     this.wellboresApi.setCluster = this.cluster;
     this.wellboresApi.surveysSdk = this.surveysApi;
+
+    // wells
+    this.wellsApi = this.apiFactory(WellsAPI, 'wells');
+    this.wellsApi.setHttpClient = this.httpClient;
+    this.wellsApi.setProject = this.project;
+    this.wellsApi.setCluster = this.cluster;
+    this.wellsApi.wellboresSDK = this.wellboresApi;
   }
 
   protected get version() {

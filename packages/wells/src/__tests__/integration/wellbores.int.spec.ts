@@ -4,6 +4,7 @@ import { setupLoggedInClient } from '../testUtils';
 
 import CogniteWellsClient from 'wells/src/client/cogniteWellsClient';
 import { Measurement} from 'wells/src/client/model/Measurement';
+import { Well } from 'wells/src/client/model/Well';
 import { Wellbore } from 'wells/src/client/model/Wellbore';
 import { Survey, SurveyData } from 'wells/src/client/model/Survey';
 
@@ -80,5 +81,17 @@ describeIfCondition(
           expect(err.status).toBe(404);
         });
     });
+
+    test('Get wellbores for a well', async () => {
+      const well: Well | undefined = await client.wells.getById(2275887128760800);
+      expect(well).not.toBeUndefined();
+      const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWell(well!).then(response => response).catch(err => err);
+
+      expect(wellbores).not.toBeUndefined();
+      const wellboreIds = [870793324939646, 1072803479704457, 8456650753594878]
+      wellboreIds.forEach(id => {
+        expect(wellbores!.map(wellbore => wellbore.id)).toContain(id)
+      });
+    })
   }
 );

@@ -1,8 +1,4 @@
-import {
-  BasicHttpClient,
-  HttpRequestOptions,
-  MetadataMap,
-} from '@cognite/sdk-core';
+import { MetadataMap } from '@cognite/sdk-core';
 import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
 import { WELL_SERVICE_BASE_URL } from '../constants';
@@ -14,9 +10,10 @@ import {
   isUsingSSL,
   bearerTokenString,
 } from './clientAuthUtils';
+import HttpClientWithIntercept from './httpClientWithIntercept';
 
 export default class BaseWellsClient {
-  private http: BasicHttpClient;
+  private http: HttpClientWithIntercept;
   private metadata: MetadataMap;
   private projectName: string = '';
   private hasBeenLoggedIn: boolean = false;
@@ -29,7 +26,7 @@ export default class BaseWellsClient {
       throw Error('options.appId is required and must be of type string');
     }
 
-    this.http = new BasicHttpClient(WELL_SERVICE_BASE_URL);
+    this.http = new HttpClientWithIntercept(WELL_SERVICE_BASE_URL);
     this.httpClient
       .setDefaultHeader('x-cdp-app', options.appId)
       .setDefaultHeader('x-cdp-sdk', `CogniteJavaScriptSDK:${this.version}`);
@@ -102,55 +99,8 @@ export default class BaseWellsClient {
     }
 
     this.hasBeenLoggedIn = true;
+    this.httpClient.setIfUsingLoginToken = true;
   };
-
-  /**
-   * Basic HTTP method for GET
-   *
-   * @param path The URL path
-   * @param options Request options, optional
-   *
-   */
-  public get = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.get<T>(path, options);
-
-  /**
-   * Basic HTTP method for PUT
-   *
-   * @param path The URL path
-   * @param options Request options, optional
-   *
-   */
-  public put = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.put<T>(path, options);
-
-  /**
-   * Basic HTTP method for POST
-   *
-   * @param path The URL path
-   * @param options Request options, optional
-   *
-   */
-  public post = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.post<T>(path, options);
-
-  /**
-   * Basic HTTP method for DELETE
-   *
-   * @param path The URL path
-   * @param options Request options, optional
-   */
-  public delete = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.delete<T>(path, options);
-
-  /**
-   * Basic HTTP method for PATCH
-   *
-   * @param path The URL path
-   * @param options Request options, optional
-   */
-  public patch = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.patch<T>(path, options);
 
   /**
    * To modify the base-url at any point in time
@@ -174,7 +124,7 @@ export default class BaseWellsClient {
   protected apiFactory = <ApiType>(
     api: new (
       relativePath: string,
-      httpClient: BasicHttpClient,
+      httpClient: HttpClientWithIntercept,
       map: MetadataMap
     ) => ApiType,
     relativePath: string
