@@ -71,6 +71,12 @@ export default class BaseWellsClient {
   };
 
   public loginWithToken = (options: TokenLogin) => {
+    if (this.hasBeenLoggedIn) {
+      throw Error(
+        'You cannot re-login with an already logged in Cognite client instance. Try to create a new Cognite Wells client instance instead.'
+      );
+    }
+
     if (!isObject(options)) {
       throw Error('`loginWithToken` is missing parameter `options`');
     }
@@ -94,10 +100,7 @@ export default class BaseWellsClient {
       );
     }
 
-    if (!this.hasBeenLoggedIn) {
-      this.initAPIs();
-    }
-
+    this.initAPIs();
     this.hasBeenLoggedIn = true;
     this.httpClient.setIfUsingLoginToken = true;
     this.httpClient.setReauthenticateMethod = options.refreshToken;

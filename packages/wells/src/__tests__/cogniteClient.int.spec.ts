@@ -58,6 +58,5 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       .catch(err => {
         expect(err.status).toBe(403);
       });
-  
   });
 });
