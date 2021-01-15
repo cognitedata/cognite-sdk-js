@@ -1,12 +1,13 @@
-import { CDFHttpClient, HttpError} from '@cognite/sdk-core';
+import { HttpError} from '@cognite/sdk-core';
+import HttpClientWithIntercept from '../httpClientWithIntercept';
 import { Survey, SurveyData, SurveyDataRequest } from '../model/Survey';
 
 export class SurveysAPI {
-  private client?: CDFHttpClient;
+  private client?: HttpClientWithIntercept;
   private project?: String;
   private cluster?: String;
 
-  public set setHttpClient(httpClient: CDFHttpClient) {
+  public set setHttpClient(httpClient: HttpClientWithIntercept) {
     this.client = httpClient;
   }
 
@@ -44,7 +45,7 @@ export class SurveysAPI {
 
     const path: string = this.getPath(`/wellbores/${wellboreId}/trajectory`)
 
-    return await this.client?.get<Survey>(path)
+    return await this.client?.asyncGet<Survey>(path)
     .then(response => this.addLazyMethods(response.data))
     .catch(err => {
       throw new HttpError(err.status, err.errorMessage, {})
@@ -60,7 +61,7 @@ export class SurveysAPI {
 
       const path: string = `/${this.project}/surveys/data`
       
-      return await this.client?.post<SurveyData>(path, {'data': request})
+      return await this.client?.asyncPost<SurveyData>(path, {'data': request})
       .then(response => response.data)
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})

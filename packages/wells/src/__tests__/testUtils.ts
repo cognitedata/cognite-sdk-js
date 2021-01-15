@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
-import { createWellsClient } from '../client/api/utils';
-import CogniteWellsClient from '../client/CogniteWellsClient';
+import { createWellsClient } from '../client/clientCreateUtils';
+import CogniteWellsClient from '../client/cogniteWellsClient';
 
 export function setupLoggedInClient(): CogniteWellsClient {
   const client = createWellsClient('WELLS TEST CLIENT');
@@ -11,3 +11,7 @@ export function setupLoggedInClient(): CogniteWellsClient {
 
   return client;
 }
+
+export const authTokens = {
+  accessToken: 'abc',
+};

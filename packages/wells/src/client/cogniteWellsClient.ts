@@ -1,12 +1,13 @@
-import { BaseCogniteClient, ClientOptions } from '@cognite/sdk-core';
+import { ClientOptions } from '@cognite/sdk-core';
 import { accessApi } from '@cognite/sdk-core';
 import { WellsAPI } from './api/wellsApi';
 import { WellboresAPI } from './api/wellboresApi';
 import { SurveysAPI } from './api/surveysApi';
 import { version } from '../../package.json';
 import { Cluster } from './model/Cluster';
+import BaseWellsClient from './baseWellsClient';
 
-export default class CogniteWellsClient extends BaseCogniteClient {
+export default class CogniteWellsClient extends BaseWellsClient {
   public get wells() {
     return accessApi(this.wellsApi);
   }
@@ -30,8 +31,6 @@ export default class CogniteWellsClient extends BaseCogniteClient {
   }
 
   protected initAPIs() {
-    this.setBaseUrl('https://well-service-cognitedata-development.cognite.ai');
-
     // surveys
     this.surveysApi = this.apiFactory(SurveysAPI, 'surveys');
     this.surveysApi.setHttpClient = this.httpClient;

@@ -1,17 +1,18 @@
-import { accessApi, CDFHttpClient, HttpError } from '@cognite/sdk-core';
+import { accessApi, HttpError } from '@cognite/sdk-core';
 import { Well, WellItems } from '../model/Well';
 import { Wellbore } from '../model/Wellbore';
 import { WellboresAPI } from '../api/wellboresApi'
 import { WellFilter, WellFilterAPI, PolygonFilterAPI } from '../model/WellFilter';
 import { stringify as convertGeoJsonToWKT } from 'wkt';
 import { Cluster } from '../model/Cluster'
+import HttpClientWithIntercept from '../httpClientWithIntercept';
 
 export class WellsAPI {
-  private client?: CDFHttpClient;
+  private client?: HttpClientWithIntercept;
   private project?: String;
   private cluster?: Cluster;
-  
   private _wellboresSDK?: WellboresAPI;
+
 
   public set wellboresSDK(sdk: WellboresAPI) {
     this._wellboresSDK = sdk;
@@ -21,7 +22,7 @@ export class WellsAPI {
     return accessApi(this._wellboresSDK);
   }
 
-  public set setHttpClient(httpClient: CDFHttpClient) {
+  public set setHttpClient(httpClient: HttpClientWithIntercept) {
     this.client = httpClient;
   }
 
@@ -104,7 +105,7 @@ export class WellsAPI {
   public getLabelPrefix = async (prefix: String): Promise<String[] | undefined> => {
     const path: string = this.getPath(`/wells/${prefix}`)
     // eslint-disable-next-line
-    return await this.client?.get<String[]>(path)
+    return await this.client?.asyncGet<String[]>(path)
       .then(response => response.data)
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
@@ -120,7 +121,7 @@ export class WellsAPI {
 
   public list = async (cursor?: String): Promise<WellItems | undefined> => {
     const path: string = this.getPath('/wells', cursor)
-    return await this.client?.get<WellItems>(path)
+    return await this.client?.asyncGet<WellItems>(path)
       .then(response => this.addLazyToAllWellItems(response.data))
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
@@ -138,7 +139,7 @@ export class WellsAPI {
       filter = this.convertToApiWellFilter(userFilter);
     }
     const path = this.getPath('/wells/list', cursor)
-    return await this.client?.post<WellItems>(path, {'data': filter})
+    return await this.client?.asyncPost<WellItems>(path, {'data': filter})
       .then(response => this.addLazyToAllWellItems(response.data))
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
@@ -147,7 +148,7 @@ export class WellsAPI {
 
   public getById = async (id: number): Promise<Well | undefined> => {
     const path: string = this.getPath(`/wells/${id}`)
-    return await this.client?.get<Well>(path)
+    return await this.client?.asyncGet<Well>(path)
       .then(response => this.addLazyMethodsForWell(response.data))
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
