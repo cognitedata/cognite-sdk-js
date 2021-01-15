@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.11.0...@cognite/sdk-wells@0.12.0) (2021-01-15)
+
+
+### Features
+
+* refactor base wells client [release] ([#471](https://github.com/cognitedata/cognite-sdk-js/issues/471)) ([0a4ff8f](https://github.com/cognitedata/cognite-sdk-js/commit/0a4ff8fd13ebf531296a04140b716471b4f774b8))
+
+
+
+
+
 # [0.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.10.0...@cognite/sdk-wells@0.11.0) (2021-01-12)
 
 
