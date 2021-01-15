@@ -93,8 +93,8 @@ COGNITE_WELLS_PROJECT=&lt;project-tenant&gt; COGNITE_WELLS_CREDENTIALS=&lt;your-
 				</a>
 				<pre><code class="language-bash">COGNITE_WELLS_PROJECT=&lt;project-tenant&gt;
 COGNITE_WELLS_CREDENTIALS=&lt;your-api-key&gt;</code></pre>
-				<a href="#set-up-client" id="set-up-client" style="color: inherit; text-decoration: none;">
-					<h3>set up client</h3>
+				<a href="#set-up-client-with-api-key" id="set-up-client-with-api-key" style="color: inherit; text-decoration: none;">
+					<h3>set up client with Api-Key</h3>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { createWellsClient, Cluster } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
@@ -105,16 +105,32 @@ client.loginWithApiKey({
   project: process.env.COGNITE_WELLS_PROJECT,
   apiKey: process.env.COGNITE_WELLS_CREDENTIALS,
 });</code></pre>
-				<a href="#well-queries" id="well-queries" style="color: inherit; text-decoration: none;">
-					<h3><strong>Well queries</strong></h3>
+				<a href="#set-up-client-with-token" id="set-up-client-with-token" style="color: inherit; text-decoration: none;">
+					<h3>set up client with Token</h3>
 				</a>
-				<a href="#get-well-by-id" id="get-well-by-id" style="color: inherit; text-decoration: none;">
-					<h4><em>Get well by id:</em></h4>
-				</a>
-				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { createWellsClient, Cluster, RefreshToken } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-<span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">8456650753594878</span>;
-<span class="hljs-keyword">const</span> well: Well | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.getId(wellId);</code></pre>
+<span class="hljs-comment">// Cluster.API (default), Cluster.BP, Cluster.GREENFIELD</span>
+<span class="hljs-keyword">let</span> client = createWellsClient(<span class="hljs-string">&#x27;app id&#x27;</span>, Cluster.API);
+
+<span class="hljs-comment">// this method will be called when token expires and CDF throws 401 or 403</span>
+<span class="hljs-keyword">const</span> functionThatReturnsANewToken: RefreshToken = <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;new fresh token&#x27;</span>
+
+client.loginWithToken({
+  project: process.env.COGNITE_WELLS_PROJECT <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>,
+  accessToken: <span class="hljs-string">&quot;*INITIAL-TOKEN*&quot;</span>,
+  refreshToken: functionThatReturnsANewToken,
+});
+
+### **Well queries**
+
+#### _Get well by id:_
+
+<span class="hljs-string">``</span><span class="hljs-string">`ts
+import { Well } from &#x27;@cognite/sdk-wells&#x27;;
+
+const wellId: number = 8456650753594878;
+const well: Well | undefined = await client.wells.getId(wellId);</span></code></pre>
 				<a href="#list-wells" id="list-wells" style="color: inherit; text-decoration: none;">
 					<h4><em>List wells:</em></h4>
 				</a>
@@ -157,14 +173,14 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well, Wellbore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
 <span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">2275887128760800</span>;
-<span class="hljs-keyword">const</span> well: Well = <span class="hljs-keyword">await</span> client.wells.getById(wellId)
+<span class="hljs-keyword">const</span> well: Well = <span class="hljs-keyword">await</span> client.wells.getById(wellId);
 <span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span>;
 wellbores = <span class="hljs-keyword">await</span> client.wellbores.getFromWell(well);</code></pre>
-				<p>or </p>
+				<p>or</p>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well, Wellbore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
 <span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">2275887128760800</span>;
-<span class="hljs-keyword">const</span> well: Well = <span class="hljs-keyword">await</span> client.wells.getById(wellId)
+<span class="hljs-keyword">const</span> well: Well = <span class="hljs-keyword">await</span> client.wells.getById(wellId);
 <span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span>;
 wellbores = <span class="hljs-keyword">await</span> well.wellbores();</code></pre>
 				<a href="#filter---list-all-labels" id="filter---list-all-labels" style="color: inherit; text-decoration: none;">
@@ -175,7 +191,9 @@ wellbores = <span class="hljs-keyword">await</span> well.wellbores();</code></pr
 <span class="hljs-keyword">const</span> operatorLabels: <span class="hljs-built_in">String</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.operators();
 <span class="hljs-keyword">const</span> quadrantLabels: <span class="hljs-built_in">String</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.quadrants();
 <span class="hljs-keyword">const</span> sourceLabels: <span class="hljs-built_in">String</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.sources();
-<span class="hljs-keyword">const</span> measurementTypeLabels: <span class="hljs-built_in">String</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.measurements();</code></pre>
+<span class="hljs-keyword">const</span> measurementTypeLabels:
+  | <span class="hljs-built_in">String</span>[]
+  | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.measurements();</code></pre>
 				<a href="#wellbore-queries" id="wellbore-queries" style="color: inherit; text-decoration: none;">
 					<h3><strong>Wellbore queries</strong></h3>
 				</a>
@@ -452,19 +470,28 @@ trajectory = <span class="hljs-keyword">await</span> client.wellbores.getTraject
 						<a href="modules/_wells_package_.html">&quot;wells/package&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
-						<a href="modules/_wells_src_client_cognitewellsclient_.html">&quot;wells/src/client/<wbr>Cognite<wbr>Wells<wbr>Client&quot;</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_api_surveysapi_.html">&quot;wells/src/client/api/surveys<wbr>Api&quot;</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="modules/_wells_src_client_api_utils_.html">&quot;wells/src/client/api/utils&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_api_wellboresapi_.html">&quot;wells/src/client/api/wellbores<wbr>Api&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_api_wellsapi_.html">&quot;wells/src/client/api/wells<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_basewellsclient_.html">&quot;wells/src/client/base<wbr>Wells<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_clientauthutils_.html">&quot;wells/src/client/client<wbr>Auth<wbr>Utils&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_clientcreateutils_.html">&quot;wells/src/client/client<wbr>Create<wbr>Utils&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_cognitewellsclient_.html">&quot;wells/src/client/cognite<wbr>Wells<wbr>Client&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_httpclientwithintercept_.html">&quot;wells/src/client/http<wbr>Client<wbr>With<wbr>Intercept&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_cluster_.html">&quot;wells/src/client/model/<wbr>Cluster&quot;</a>
