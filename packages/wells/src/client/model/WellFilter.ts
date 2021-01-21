@@ -9,6 +9,11 @@ export interface WellFilter {
    */
   wellType?: WellType;
   /**
+   * @type {string}
+   * @memberof WellFilter
+   */
+  description?: string;
+  /**
    * @type {string[]}
    * @memberof WellFilter
    */
@@ -48,6 +53,11 @@ export interface WellFilter {
    * @memberof WellFilter
    */
   polygon?: PolygonFilter;
+  /**
+   * @type {string}
+   * @memberof WellFilter
+   */
+  outputCrs?: string;
 }
 
 export interface WellFilterAPI {
@@ -56,6 +66,11 @@ export interface WellFilterAPI {
    * @memberof WellFilterAPI
    */
   wellType?: WellType;
+  /**
+   * @type {string}
+   * @memberof WellFilter
+   */
+  description?: string;
   /**
    * @type {string[]}
    * @memberof WellFilterAPI

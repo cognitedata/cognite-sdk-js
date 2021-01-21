@@ -65,6 +65,7 @@ export class WellsAPI {
     }
     return {
       wellType: filter.wellType,
+      description: filter.description,
       quadrants: filter.quadrants,
       blocks: filter.blocks,
       fields: filter.fields,
@@ -81,6 +82,7 @@ export class WellsAPI {
       id: well.id,
       name: well.name,
       externalId: well.externalId,
+      description: well.description,
       country: well.country,
       quadrant: well.quadrant,
       block: well.block,

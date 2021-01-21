@@ -45,6 +45,11 @@ export interface Well {
    * @type {string}
    * @memberof Well
    */
+  description?: string;
+  /**
+   * @type {string}
+   * @memberof Well
+   */
   country?: string;
   /**
    * @type {string}
