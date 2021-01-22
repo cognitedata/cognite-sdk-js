@@ -55,20 +55,21 @@ client.loginWithApiKey({
 
 ### set up client with Token
 
-````ts
+```ts
 import { createWellsClient, Cluster, RefreshToken } from '@cognite/sdk-wells';
 
 // Cluster.API (default), Cluster.BP, Cluster.GREENFIELD
 let client = createWellsClient('app id', Cluster.API);
 
 // this method will be called when token expires and CDF throws 401 or 403
-const functionThatReturnsANewToken: RefreshToken = () => 'new fresh token'
+const functionThatReturnsANewToken: RefreshToken = () => 'new fresh token';
 
 client.loginWithToken({
   project: process.env.COGNITE_WELLS_PROJECT as string,
-  accessToken: "*INITIAL-TOKEN*",
+  accessToken: '*INITIAL-TOKEN*',
   refreshToken: functionThatReturnsANewToken,
 });
+```
 
 ### **Well queries**
 
@@ -79,7 +80,7 @@ import { Well } from '@cognite/sdk-wells';
 
 const wellId: number = 8456650753594878;
 const well: Well | undefined = await client.wells.getId(wellId);
-````
+```
 
 #### _List wells:_
 
