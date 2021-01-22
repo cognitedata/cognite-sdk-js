@@ -97,6 +97,63 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     });
   });
 
+  test('filter - gets wells with description filter', async () => {
+    expect(client).not.toBeUndefined();
+    const filter: WellFilter = {'description': 'WDL Asset'}
+    const wells = await client.wells.filter(filter);
+      
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.name)
+    const WdlNames = ["CasingWear", "Deepwater W"];
+    WdlNames.forEach(name => {
+     expect(retrievedNames).toContain(name)
+    });
+  });
+
+  test('filter - gets wells in polygon with description', async () => {
+    expect(client).not.toBeUndefined();
+    const testPolygon = "POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))"
+    const filter: WellFilter = {
+      'polygon': { 'wktGeometry': testPolygon, 'crs': 'epsg:4326' },
+      'description': 'Field'
+    }
+    const wells = await client.wells.filter(filter);
+      
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.name)
+    expect(retrievedNames?.length).toBe(1)
+    const WdlNames = ["34/10-24"];
+    WdlNames.forEach(name => {
+     expect(retrievedNames).toContain(name)
+    });
+  });
+
+  test('filter - gets wells in polygon with description and output crs', async () => {
+    expect(client).not.toBeUndefined();
+    const testPolygon = "POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))"
+    const filter: WellFilter = {
+      'polygon': { 'wktGeometry': testPolygon, 'crs': 'EPSG:4326' },
+      'description': 'Field',
+      'outputCrs': 'EPSG:23031' 
+    }
+    const wells = await client.wells.filter(filter);
+      
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.name)
+    expect(retrievedNames?.length).toBe(1)
+    const WdlNames = ["34/10-24"];
+    WdlNames.forEach(name => {
+      expect(retrievedNames).toContain(name)
+    });
+
+    const retrievedCrs = wells?.items.map(well => well.wellHead?.crs)
+    const outputCrs = ['EPSG:23031']
+    outputCrs.forEach(crs => {
+      expect(retrievedCrs).toContain(crs)
+    });
+      
+  });
+
   test('filter - gets wells in geoJson polygon', async () => {
     expect(client).not.toBeUndefined();
     const testPolygon = <GeoJson>{
