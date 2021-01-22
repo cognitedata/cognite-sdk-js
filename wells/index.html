@@ -114,23 +114,23 @@ client.loginWithApiKey({
 <span class="hljs-keyword">let</span> client = createWellsClient(<span class="hljs-string">&#x27;app id&#x27;</span>, Cluster.API);
 
 <span class="hljs-comment">// this method will be called when token expires and CDF throws 401 or 403</span>
-<span class="hljs-keyword">const</span> functionThatReturnsANewToken: RefreshToken = <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;new fresh token&#x27;</span>
+<span class="hljs-keyword">const</span> functionThatReturnsANewToken: RefreshToken = <span class="hljs-function">() =&gt;</span> <span class="hljs-string">&#x27;new fresh token&#x27;</span>;
 
 client.loginWithToken({
   project: process.env.COGNITE_WELLS_PROJECT <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>,
-  accessToken: <span class="hljs-string">&quot;*INITIAL-TOKEN*&quot;</span>,
+  accessToken: <span class="hljs-string">&#x27;*INITIAL-TOKEN*&#x27;</span>,
   refreshToken: functionThatReturnsANewToken,
-});
+});</code></pre>
+				<a href="#well-queries" id="well-queries" style="color: inherit; text-decoration: none;">
+					<h3><strong>Well queries</strong></h3>
+				</a>
+				<a href="#get-well-by-id" id="get-well-by-id" style="color: inherit; text-decoration: none;">
+					<h4><em>Get well by id:</em></h4>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-### **Well queries**
-
-#### _Get well by id:_
-
-<span class="hljs-string">``</span><span class="hljs-string">`ts
-import { Well } from &#x27;@cognite/sdk-wells&#x27;;
-
-const wellId: number = 8456650753594878;
-const well: Well | undefined = await client.wells.getId(wellId);</span></code></pre>
+<span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">8456650753594878</span>;
+<span class="hljs-keyword">const</span> well: Well | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.getId(wellId);</code></pre>
 				<a href="#list-wells" id="list-wells" style="color: inherit; text-decoration: none;">
 					<h4><em>List wells:</em></h4>
 				</a>
@@ -167,6 +167,21 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
   sources: [<span class="hljs-string">&#x27;edm&#x27;</span>],
 };
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
+				<a href="#filter-wells-by-wkt-polygon-description-and-specify-desired-outputcrs" id="filter-wells-by-wkt-polygon-description-and-specify-desired-outputcrs" style="color: inherit; text-decoration: none;">
+					<h3><em>Filter wells by wkt polygon, description and specify desired outputCrs</em></h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> testPolygon =
+  <span class="hljs-string">&#x27;POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))&#x27;</span>;
+<span class="hljs-keyword">const</span> filter: WellFilter = {
+  polygon: { wktGeometry: testPolygon, crs: <span class="hljs-string">&#x27;EPSG:4326&#x27;</span> },
+  description: <span class="hljs-string">&#x27;Field&#x27;</span>,
+  outputCrs: <span class="hljs-string">&#x27;EPSG:23031&#x27;</span>,
+};
+
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);
+<span class="hljs-keyword">const</span> retrievedCrs = wells?.items.map(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> well.wellHead?.crs)</code></pre>
 				<a href="#get-wellbores-for-a-well" id="get-wellbores-for-a-well" style="color: inherit; text-decoration: none;">
 					<h4><em>Get wellbores for a well:</em></h4>
 				</a>
