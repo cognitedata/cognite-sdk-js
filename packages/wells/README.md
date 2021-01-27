@@ -140,15 +140,14 @@ const wells = await client.wells.filter(filter);
 const retrievedCrs = wells?.items.map(well => well.wellHead?.crs)
 ```
 
-#### _Get wellbores for a well:_
+#### _Get wellbores for a well id:_
 
 ```ts
 import { Well, Wellbore } from '@cognite/sdk-wells';
 
 const wellId: number = 2275887128760800;
-const well: Well = await client.wells.getById(wellId);
 const wellbores: Wellbore[] | undefined;
-wellbores = await client.wellbores.getFromWell(well);
+wellbores = await client.wellbores.getFromWell(wellId);
 ```
 
 or
@@ -160,6 +159,18 @@ const wellId: number = 2275887128760800;
 const well: Well = await client.wells.getById(wellId);
 const wellbores: Wellbore[] | undefined;
 wellbores = await well.wellbores();
+```
+
+#### _Get wellbores from multiple well ids:_
+
+```ts
+import { Wellbore } from '@cognite/sdk-wells';
+
+const wellIds: number[] = [2457499785650331, 2275887128760800];
+const wellbores: Wellbore[] | undefined = await client.wellbores
+  .getFromWells(wellIds)
+  .then(response => response)
+  .catch(err => err);
 ```
 
 #### _Filter - list all labels:_
