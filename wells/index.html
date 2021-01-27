@@ -182,6 +182,22 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
 
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);
 <span class="hljs-keyword">const</span> retrievedCrs = wells?.items.map(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> well.wellHead?.crs)</code></pre>
+				<a href="#get-wells-that-have-a-trajectory" id="get-wells-that-have-a-trajectory" style="color: inherit; text-decoration: none;">
+					<h3><em>Get wells that have a trajectory</em></h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+
+<span class="hljs-keyword">const</span> filter: WellFilter = { hasTrajectory = {} };
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
+				<a href="#get-wells-that-have-a-trajectory-with-data-between-certain-depths" id="get-wells-that-have-a-trajectory-with-data-between-certain-depths" style="color: inherit; text-decoration: none;">
+					<h3><em>Get wells that have a trajectory with data between certain depths</em></h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+
+<span class="hljs-keyword">const</span> filter: WellFilter = { hasTrajectory = {minDepth: <span class="hljs-number">1300.0</span>, maxDepth: <span class="hljs-number">1700.0</span>} };
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
 				<a href="#get-wellbores-for-a-well" id="get-wellbores-for-a-well" style="color: inherit; text-decoration: none;">
 					<h4><em>Get wellbores for a well:</em></h4>
 				</a>
