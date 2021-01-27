@@ -190,6 +190,42 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     });
   });
 
+  test('filter - get all wells with trajectory', async () => {
+    expect(client).not.toBeUndefined();
+    const filter: WellFilter = {"hasTrajectory": {}}
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.externalId)
+    const WdlNames = ["well:34/10-1"];
+    WdlNames.forEach(name => {
+      expect(retrievedNames).toContain(name)
+    });
+  });
+
+  test('filter - get all wells with trajectory in range', async () => {
+    expect(client).not.toBeUndefined();
+    const filter: WellFilter = {"hasTrajectory": {minDepth: 500, maxDepth: 1000}}
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.externalId)
+    const WdlNames = ["well:34/10-1"];
+    WdlNames.forEach(name => {
+      expect(retrievedNames).toContain(name)
+    });
+  });
+
+  test('filter - get all wells with trajectory - no returned in range', async () => {
+    expect(client).not.toBeUndefined();
+    const filter: WellFilter = {"hasTrajectory": {minDepth: 1000, maxDepth: 2000}}
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.externalId)
+    expect(retrievedNames).not.toContain("well:34/10-1")
+  });
+
   test('filter - get all block labels', async () => {
     expect(client).not.toBeUndefined();
     const blocks: String[] | undefined = await client.wells.blocks();
