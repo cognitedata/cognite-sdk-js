@@ -55,20 +55,21 @@ client.loginWithApiKey({
 
 ### set up client with Token
 
-````ts
+```ts
 import { createWellsClient, Cluster, RefreshToken } from '@cognite/sdk-wells';
 
 // Cluster.API (default), Cluster.BP, Cluster.GREENFIELD
 let client = createWellsClient('app id', Cluster.API);
 
 // this method will be called when token expires and CDF throws 401 or 403
-const functionThatReturnsANewToken: RefreshToken = () => 'new fresh token'
+const functionThatReturnsANewToken: RefreshToken = () => 'new fresh token';
 
 client.loginWithToken({
   project: process.env.COGNITE_WELLS_PROJECT as string,
-  accessToken: "*INITIAL-TOKEN*",
+  accessToken: '*INITIAL-TOKEN*',
   refreshToken: functionThatReturnsANewToken,
 });
+```
 
 ### **Well queries**
 
@@ -79,7 +80,7 @@ import { Well } from '@cognite/sdk-wells';
 
 const wellId: number = 8456650753594878;
 const well: Well | undefined = await client.wells.getId(wellId);
-````
+```
 
 #### _List wells:_
 
@@ -139,6 +140,34 @@ const filter: WellFilter = {
 const wells = await client.wells.filter(filter);
 const retrievedCrs = wells?.items.map(well => well.wellHead?.crs)
 ```
+
+<<<<<<< HEAD
+
+=======
+
+### _Get wells that have a trajectory_
+
+```ts
+import { WellFilter } from '@cognite/sdk-wells';
+
+const filter: WellFilter = { hasTrajectory = {} };
+const wells = await client.wells.filter(filter);
+```
+
+### _Get wells that have a trajectory with data between certain depths_
+
+```ts
+import { WellFilter } from '@cognite/sdk-wells';
+
+const filter: WellFilter = {
+  hasTrajectory = { minDepth: 1300.0, maxDepth: 1700.0 },
+};
+const wells = await client.wells.filter(filter);
+```
+
+#### _Get wellbores for a well:_
+
+> > > > > > > 5fdf5216b4dcbcb7e7a362fbe068974eec9a7e17
 
 #### _Get wellbores for a well id:_
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.12.0...@cognite/sdk-wells@0.13.0) (2021-01-22)
+
+
+### Features
+
+* bump version [release] ([#476](https://github.com/cognitedata/cognite-sdk-js/issues/476)) ([f35c78c](https://github.com/cognitedata/cognite-sdk-js/commit/f35c78c85caca55acd39589cb41be1a78bf2880a))
+* support filter by description and output crs ([#474](https://github.com/cognitedata/cognite-sdk-js/issues/474)) ([93d97af](https://github.com/cognitedata/cognite-sdk-js/commit/93d97aff3a2e162305856b68e576223075dd5702))
+
+
+
+
+
 # [0.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.11.0...@cognite/sdk-wells@0.12.0) (2021-01-15)
 
 

@@ -42,7 +42,7 @@ export interface WellFilter {
    * @type {string[]}
    * @memberof WellFilter
    */
-  hasTrajectory?: string[];
+  hasTrajectory?: TrajectoryFilter;
   /**
    * @type {string[]}
    * @memberof WellFilter
@@ -100,7 +100,7 @@ export interface WellFilterAPI {
    * @type {string[]}
    * @memberof WellFilterAPI
    */
-  hasTrajectory?: string[];
+  hasTrajectory?: TrajectoryFilter;
   /**
    * @type {string[]}
    * @memberof WellFilterAPI
