@@ -82,13 +82,28 @@ describeIfCondition(
         });
     });
 
-    test('Get wellbores for a well', async () => {
+    test('Get wellbores for a well id', async () => {
       const well: Well | undefined = await client.wells.getById(2275887128760800);
       expect(well).not.toBeUndefined();
-      const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWell(well!).then(response => response).catch(err => err);
+      
+      const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWell(well!.id).then(response => response).catch(err => err);
 
       expect(wellbores).not.toBeUndefined();
       const wellboreIds = [870793324939646, 1072803479704457, 8456650753594878]
+      wellboreIds.forEach(id => {
+        expect(wellbores!.map(wellbore => wellbore.id)).toContain(id)
+      });
+    })
+
+
+    test('Get wellbores from multiple well ids', async () => {
+
+      const wellIds: number[] = [2457499785650331, 2275887128760800]
+      
+      const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWells(wellIds).then(response => response).catch(err => err);
+
+      expect(wellbores).not.toBeUndefined();
+      const wellboreIds = [870793324939646, 1072803479704457, 8456650753594878, 4331964628426904]
       wellboreIds.forEach(id => {
         expect(wellbores!.map(wellbore => wellbore.id)).toContain(id)
       });

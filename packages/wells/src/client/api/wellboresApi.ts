@@ -1,11 +1,11 @@
 import { accessApi, HttpError} from '@cognite/sdk-core';
-import { Well } from '../model/Well';
 import { Measurement, Measurements } from '../model/Measurement';
 import { MeasurementType } from '../model/MeasurementType';
 import { Survey, SurveyData } from '../model/Survey';
 import { Wellbore } from '../model/Wellbore';
 import { SurveysAPI } from './surveysApi';
 import HttpClientWithIntercept from '../httpClientWithIntercept';
+import { WellIds } from '../model/WellIds';
 
 export class WellboresAPI {
   private client?: HttpClientWithIntercept;
@@ -73,10 +73,25 @@ export class WellboresAPI {
     });
   };
 
-  public getFromWell = async (well: Well): Promise<Wellbore[] | undefined> => {
-    const path: string = this.getPath(`/wells/${well.id}/wellbores`)
+  public getFromWell = async (wellId: number): Promise<Wellbore[] | undefined> => {
+    const path: string = this.getPath(`/wells/${wellId}/wellbores`)
     try {
       const wellboreData = await this.client?.asyncGet<Wellbore[]>(path)
+      if (wellboreData) {
+        return wellboreData.data.map((wellbore: Wellbore) => this.addLazyMethodsForWellbore(wellbore))
+      } else {
+        return undefined
+      }
+    } catch(err) {
+      throw new HttpError(err.status, err.errorMessage, {})
+    }
+  }
+
+  public getFromWells = async (wellIds: number[]): Promise<Wellbore[] | undefined> => {
+    const path: string = this.getPath(`/wellbores/bywellids`)
+    const wellIdsToSearch: WellIds = { items: wellIds }
+    try {
+      const wellboreData = await this.client?.asyncPost<Wellbore[]>(path, {'data': wellIdsToSearch})
       if (wellboreData) {
         return wellboreData.data.map((wellbore: Wellbore) => this.addLazyMethodsForWellbore(wellbore))
       } else {
