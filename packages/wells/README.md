@@ -141,6 +141,26 @@ const wells = await client.wells.filter(filter);
 const retrievedCrs = wells?.items.map(well => well.wellHead?.crs)
 ```
 
+### _Get wells that have a trajectory_
+
+```ts
+import { WellFilter } from '@cognite/sdk-wells';
+
+
+const filter: WellFilter = { hasTrajectory = {} };
+const wells = await client.wells.filter(filter);
+```
+
+### _Get wells that have a trajectory with data between certain depths_
+
+```ts
+import { WellFilter } from '@cognite/sdk-wells';
+
+
+const filter: WellFilter = { hasTrajectory = {minDepth: 1300.0, maxDepth: 1700.0} };
+const wells = await client.wells.filter(filter);
+```
+
 #### _Get wellbores for a well:_
 
 ```ts
