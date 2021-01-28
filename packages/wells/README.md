@@ -141,10 +141,6 @@ const wells = await client.wells.filter(filter);
 const retrievedCrs = wells?.items.map(well => well.wellHead?.crs)
 ```
 
-<<<<<<< HEAD
-
-=======
-
 ### _Get wells that have a trajectory_
 
 ```ts
@@ -164,10 +160,6 @@ const filter: WellFilter = {
 };
 const wells = await client.wells.filter(filter);
 ```
-
-#### _Get wellbores for a well:_
-
-> > > > > > > 5fdf5216b4dcbcb7e7a362fbe068974eec9a7e17
 
 #### _Get wellbores for a well id:_
 
