@@ -11,6 +11,7 @@ export * from './client/model/Well';
 export * from './client/model/Wellbore';
 export * from './client/model/WellHead';
 export * from './client/model/WellFilter';
+export * from './client/model/WellIds';
 export * from './client/model/WellType';
 export * from './client/model/Survey';
 export { MeasurementType } from './client/model/MeasurementType';
