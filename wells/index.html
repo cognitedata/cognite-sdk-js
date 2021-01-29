@@ -187,7 +187,6 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-
 <span class="hljs-keyword">const</span> filter: WellFilter = { hasTrajectory = {} };
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
 				<a href="#get-wells-that-have-a-trajectory-with-data-between-certain-depths" id="get-wells-that-have-a-trajectory-with-data-between-certain-depths" style="color: inherit; text-decoration: none;">
@@ -195,18 +194,18 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-
-<span class="hljs-keyword">const</span> filter: WellFilter = { hasTrajectory = {minDepth: <span class="hljs-number">1300.0</span>, maxDepth: <span class="hljs-number">1700.0</span>} };
+<span class="hljs-keyword">const</span> filter: WellFilter = {
+  hasTrajectory = { minDepth: <span class="hljs-number">1300.0</span>, maxDepth: <span class="hljs-number">1700.0</span> },
+};
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
-				<a href="#get-wellbores-for-a-well" id="get-wellbores-for-a-well" style="color: inherit; text-decoration: none;">
-					<h4><em>Get wellbores for a well:</em></h4>
+				<a href="#get-wellbores-for-a-well-id" id="get-wellbores-for-a-well-id" style="color: inherit; text-decoration: none;">
+					<h4><em>Get wellbores for a well id:</em></h4>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well, Wellbore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
 <span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">2275887128760800</span>;
-<span class="hljs-keyword">const</span> well: Well = <span class="hljs-keyword">await</span> client.wells.getById(wellId);
 <span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span>;
-wellbores = <span class="hljs-keyword">await</span> client.wellbores.getFromWell(well);</code></pre>
+wellbores = <span class="hljs-keyword">await</span> client.wellbores.getFromWell(wellId);</code></pre>
 				<p>or</p>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well, Wellbore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
@@ -214,6 +213,16 @@ wellbores = <span class="hljs-keyword">await</span> client.wellbores.getFromWell
 <span class="hljs-keyword">const</span> well: Well = <span class="hljs-keyword">await</span> client.wells.getById(wellId);
 <span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span>;
 wellbores = <span class="hljs-keyword">await</span> well.wellbores();</code></pre>
+				<a href="#get-wellbores-from-multiple-well-ids" id="get-wellbores-from-multiple-well-ids" style="color: inherit; text-decoration: none;">
+					<h4><em>Get wellbores from multiple well ids:</em></h4>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Wellbore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> wellIds: <span class="hljs-built_in">number</span>[] = [<span class="hljs-number">2457499785650331</span>, <span class="hljs-number">2275887128760800</span>];
+<span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wellbores
+  .getFromWells(wellIds)
+  .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response)
+  .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> err);</code></pre>
 				<a href="#filter---list-all-labels" id="filter---list-all-labels" style="color: inherit; text-decoration: none;">
 					<h4><em>Filter - list all labels:</em></h4>
 				</a>
@@ -547,6 +556,9 @@ trajectory = <span class="hljs-keyword">await</span> client.wellbores.getTraject
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_wellhead_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Head&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_wellids_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Ids&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_welltype_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Type&quot;</a>

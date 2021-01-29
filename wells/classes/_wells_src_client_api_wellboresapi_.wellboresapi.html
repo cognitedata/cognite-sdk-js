@@ -95,6 +95,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getbyid" class="tsd-kind-icon">get<wbr>ById</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getfromwell" class="tsd-kind-icon">get<wbr>From<wbr>Well</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getfromwells" class="tsd-kind-icon">get<wbr>From<wbr>Wells</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getmeasurement" class="tsd-kind-icon">get<wbr>Measurement</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#gettrajectory" class="tsd-kind-icon">get<wbr>Trajectory</a></li>
 							</ul>
@@ -114,7 +115,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/5fdf521/packages/wells/src/client/api/wellboresApi.ts#L33">packages/wells/src/client/api/wellboresApi.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d2244a5/packages/wells/src/client/api/wellboresApi.ts#L33">packages/wells/src/client/api/wellboresApi.ts:33</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -137,7 +138,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/5fdf521/packages/wells/src/client/api/wellboresApi.ts#L25">packages/wells/src/client/api/wellboresApi.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d2244a5/packages/wells/src/client/api/wellboresApi.ts#L25">packages/wells/src/client/api/wellboresApi.ts:25</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -160,7 +161,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/5fdf521/packages/wells/src/client/api/wellboresApi.ts#L29">packages/wells/src/client/api/wellboresApi.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d2244a5/packages/wells/src/client/api/wellboresApi.ts#L29">packages/wells/src/client/api/wellboresApi.ts:29</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -183,7 +184,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/5fdf521/packages/wells/src/client/api/wellboresApi.ts#L17">packages/wells/src/client/api/wellboresApi.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d2244a5/packages/wells/src/client/api/wellboresApi.ts#L17">packages/wells/src/client/api/wellboresApi.ts:17</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -209,7 +210,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/5fdf521/packages/wells/src/client/api/wellboresApi.ts#L67">packages/wells/src/client/api/wellboresApi.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d2244a5/packages/wells/src/client/api/wellboresApi.ts#L67">packages/wells/src/client/api/wellboresApi.ts:67</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -226,19 +227,42 @@
 					<a name="getfromwell" class="tsd-anchor"></a>
 					<h3>get<wbr>From<wbr>Well</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>From<wbr>Well<span class="tsd-signature-symbol">(</span>well<span class="tsd-signature-symbol">: </span><a href="../interfaces/_wells_src_client_model_well_.well.html" class="tsd-signature-type">Well</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_wellbore_.wellbore.html" class="tsd-signature-type">Wellbore</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>From<wbr>Well<span class="tsd-signature-symbol">(</span>wellId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_wellbore_.wellbore.html" class="tsd-signature-type">Wellbore</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/5fdf521/packages/wells/src/client/api/wellboresApi.ts#L76">packages/wells/src/client/api/wellboresApi.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d2244a5/packages/wells/src/client/api/wellboresApi.ts#L76">packages/wells/src/client/api/wellboresApi.ts:76</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>well: <a href="../interfaces/_wells_src_client_model_well_.well.html" class="tsd-signature-type">Well</a></h5>
+									<h5>wellId: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_wellbore_.wellbore.html" class="tsd-signature-type">Wellbore</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="getfromwells" class="tsd-anchor"></a>
+					<h3>get<wbr>From<wbr>Wells</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>From<wbr>Wells<span class="tsd-signature-symbol">(</span>wellIds<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_wellbore_.wellbore.html" class="tsd-signature-type">Wellbore</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d2244a5/packages/wells/src/client/api/wellboresApi.ts#L90">packages/wells/src/client/api/wellboresApi.ts:90</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>wellIds: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_wellbore_.wellbore.html" class="tsd-signature-type">Wellbore</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -255,7 +279,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/5fdf521/packages/wells/src/client/api/wellboresApi.ts#L102">packages/wells/src/client/api/wellboresApi.ts:102</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d2244a5/packages/wells/src/client/api/wellboresApi.ts#L117">packages/wells/src/client/api/wellboresApi.ts:117</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -281,7 +305,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/5fdf521/packages/wells/src/client/api/wellboresApi.ts#L91">packages/wells/src/client/api/wellboresApi.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d2244a5/packages/wells/src/client/api/wellboresApi.ts#L106">packages/wells/src/client/api/wellboresApi.ts:106</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -331,6 +355,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getfromwell" class="tsd-kind-icon">get<wbr>From<wbr>Well</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getfromwells" class="tsd-kind-icon">get<wbr>From<wbr>Wells</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getmeasurement" class="tsd-kind-icon">get<wbr>Measurement</a>
