@@ -44,10 +44,10 @@ export interface WellFilter {
    */
   hasTrajectory?: TrajectoryFilter;
   /**
-   * @type {string[]}
+   * @type {MeasurementFilters}
    * @memberof WellFilter
    */
-  hasMeasurements?: string[];
+  hasMeasurements?: MeasurementFilters;
   /**
    * @type {PolygonFilter}
    * @memberof WellFilter
@@ -102,10 +102,10 @@ export interface WellFilterAPI {
    */
   hasTrajectory?: TrajectoryFilter;
   /**
-   * @type {string[]}
+   * @type {MeasurementFilters}
    * @memberof WellFilterAPI
    */
-  hasMeasurements?: string[];
+  hasMeasurements?: MeasurementFilters;
   /**
    * @type {PolygonFilterAPI}
    * @memberof WellFilterAPI
@@ -147,6 +147,19 @@ export interface MeasurementFilter {
    * @memberof MeasurementFilter
    */
   maxDepth?: number;
+}
+
+export interface MeasurementFilters {
+  /**
+   * @type {MeasurementFilter[]}
+   * @memberof MeasurementFilters
+   */
+  containsAll?: MeasurementFilter[];
+  /**
+   * @type {MeasurementFilter[]}
+   * @memberof MeasurementFilters
+   */
+  containsAny?: MeasurementFilter[];
 }
 
 export interface PolygonFilter {

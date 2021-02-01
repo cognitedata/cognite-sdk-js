@@ -161,6 +161,38 @@ const filter: WellFilter = {
 const wells = await client.wells.filter(filter);
 ```
 
+### _Get wells that has the right set of measurement types_
+
+```ts
+import { MeasurementFilter, MeasurementFilters } from '@cognite/sdk-wells';
+
+// create measurement type filters
+const gammaRayFilter: MeasurementFilter = {
+  measurementType: MeasurementType.GammaRay,
+};
+const densityFilter: MeasurementFilter = {
+  measurementType: MeasurementType.Density,
+};
+const geomechanicsFilter: MeasurementFilter = {
+  measurementType: MeasurementType.Geomechanics,
+};
+
+// Look for wells that match on ANY
+const measurementFilters: MeasurementFilters = {
+  containsAny: [gammaRayFilter, densityFilter, geomechanicsFilter],
+};
+
+// OR, look for wells that match on ALL
+const measurementFilters: MeasurementFilters = {
+  containsAll: [gammaRayFilter, densityFilter, geomechanicsFilter],
+};
+
+// apply filter
+const filter: WellFilter = { hasMeasurements: measurementFilters };
+
+const wells = await client.wells.filter(filter);
+```
+
 #### _Get wellbores for a well id:_
 
 ```ts

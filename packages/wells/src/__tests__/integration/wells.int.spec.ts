@@ -4,8 +4,19 @@ import { setupLoggedInClient } from '../testUtils';
 import WellsClient from 'wells/src/client/cogniteWellsClient';
 import { Well, WellItems } from 'wells/src/client/model/Well';
 import { Wellbore } from 'wells/src/client/model/Wellbore'
-import { WellFilter } from 'wells/src/client/model/WellFilter';
+import { WellFilter, MeasurementFilter, MeasurementFilters } from 'wells/src/client/model/WellFilter';
 import { GeoJson } from 'wells/src/client/model/GeoJson';
+
+enum MeasurementType {
+  GammaRay = 'GammaRay',
+  Caliper = 'Caliper',
+  Resistivity = 'Resistivity',
+  Density = 'Density',
+  Neutron = 'Neutron',
+  PPFG = 'PPFG',
+  Geomechanics = 'Geomechanics',
+  Core = 'Core',
+}
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -299,4 +310,75 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(quadrants).toContain("GammaRay")
     expect(quadrants).toContain("Density")
   });
+
+  test('filter - has gamma measurement', async () => {
+    expect(client).not.toBeUndefined();
+
+    const measurementFilter: MeasurementFilter = { "measurementType": MeasurementType.GammaRay }
+    const measurementFilters: MeasurementFilters = {"containsAll": [measurementFilter]}
+    const filter: WellFilter = { "hasMeasurements": measurementFilters }
+    
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.externalId)
+    const WdlNames = ["well:34/10-8", "well:34/10-1"];
+    WdlNames.forEach(name => {
+      expect(retrievedNames).toContain(name)
+    });
+  });
+
+  test('filter - has multiple measurements, must match on all', async () => {
+    expect(client).not.toBeUndefined();
+
+    const gammaRayFilter: MeasurementFilter = { "measurementType": MeasurementType.GammaRay }
+    const densityFilter: MeasurementFilter = { "measurementType": MeasurementType.Density }
+    const measurementFilters: MeasurementFilters = { "containsAll": [gammaRayFilter, densityFilter] }
+    const filter: WellFilter = { "hasMeasurements": measurementFilters }
+    
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.externalId)
+    const WdlNames = ["well:34/10-8", "well:34/10-1"];
+    WdlNames.forEach(name => {
+      expect(retrievedNames).toContain(name)
+    });
+  });
+
+
+  test('filter - has multiple measurements, fail to match on all', async () => {
+    expect(client).not.toBeUndefined();
+
+    const gammaRayFilter: MeasurementFilter = { "measurementType": MeasurementType.GammaRay }
+    const densityFilter: MeasurementFilter = { "measurementType": MeasurementType.Density }
+    const geomechanicsFilter: MeasurementFilter = { "measurementType": MeasurementType.Geomechanics }
+    const measurementFilters: MeasurementFilters = { "containsAll": [gammaRayFilter, densityFilter, geomechanicsFilter] }
+    const filter: WellFilter = { "hasMeasurements": measurementFilters }
+    
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+    expect(wells?.items.length).toBe(0);
+  });
+
+  test('filter - has multiple measurements, can match on any', async () => {
+    expect(client).not.toBeUndefined();
+
+    const gammaRayFilter: MeasurementFilter = { "measurementType": MeasurementType.GammaRay }
+    const densityFilter: MeasurementFilter = { "measurementType": MeasurementType.Density }
+    const geomechanicsFilter: MeasurementFilter = { "measurementType": MeasurementType.Geomechanics }
+    const measurementFilters: MeasurementFilters = { "containsAny": [gammaRayFilter, densityFilter, geomechanicsFilter] }
+    const filter: WellFilter = { "hasMeasurements": measurementFilters }
+    
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.externalId)
+    const WdlNames = ["well:34/10-8", "well:34/10-1"];
+    WdlNames.forEach(name => {
+      expect(retrievedNames).toContain(name)
+    });
+  });
+
 });
