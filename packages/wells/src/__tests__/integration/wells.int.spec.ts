@@ -97,9 +97,35 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     });
   });
 
+  test('filter - fuzzy search on name string matching 1', async () => {
+    expect(client).not.toBeUndefined();
+    const filter: WellFilter = {'stringMatching': '24'}
+    const wells = await client.wells.filter(filter);
+      
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.name)
+    const WdlNames = ["34/10-24"];
+    WdlNames.forEach(name => {
+     expect(retrievedNames).toContain(name)
+    });
+  });
+
+  test('filter - fuzzy search on name string matching 2', async () => {
+    expect(client).not.toBeUndefined();
+    const filter: WellFilter = {'stringMatching': '10'}
+    const wells = await client.wells.filter(filter);
+      
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.items.map(well => well.name)
+    const WdlNames = ["34/10-24", "34/10-8", "34/10-1"];
+    WdlNames.forEach(name => {
+     expect(retrievedNames).toContain(name)
+    });
+  });
+
   test('filter - gets wells with description filter', async () => {
     expect(client).not.toBeUndefined();
-    const filter: WellFilter = {'description': 'WDL Asset'}
+    const filter: WellFilter = {'stringMatching': 'WDL Asset'}
     const wells = await client.wells.filter(filter);
       
     expect(wells).not.toBeUndefined();
@@ -115,7 +141,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const testPolygon = "POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))"
     const filter: WellFilter = {
       'polygon': { 'wktGeometry': testPolygon, 'crs': 'epsg:4326' },
-      'description': 'Field'
+      'stringMatching': 'Field'
     }
     const wells = await client.wells.filter(filter);
       
@@ -133,7 +159,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const testPolygon = "POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))"
     const filter: WellFilter = {
       'polygon': { 'wktGeometry': testPolygon, 'crs': 'EPSG:4326' },
-      'description': 'Field',
+      'stringMatching': 'Field',
       'outputCrs': 'EPSG:23031' 
     }
     const wells = await client.wells.filter(filter);

@@ -12,7 +12,7 @@ export interface WellFilter {
    * @type {string}
    * @memberof WellFilter
    */
-  description?: string;
+  stringMatching?: string;
   /**
    * @type {string[]}
    * @memberof WellFilter
@@ -70,7 +70,7 @@ export interface WellFilterAPI {
    * @type {string}
    * @memberof WellFilter
    */
-  description?: string;
+  stringMatching?: string;
   /**
    * @type {string[]}
    * @memberof WellFilterAPI
