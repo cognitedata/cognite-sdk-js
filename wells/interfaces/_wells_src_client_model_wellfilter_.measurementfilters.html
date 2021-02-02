@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GeoLocationGeometry | Cognite JavaScript SDK</title>
+	<title>MeasurementFilters | Cognite JavaScript SDK</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,35 +56,24 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
+					<a href="../modules/_wells_src_client_model_wellfilter_.html">&quot;wells/src/client/model/WellFilter&quot;</a>
 				</li>
 				<li>
-					<a href="_stable_src_types_.geolocationgeometry.html">GeoLocationGeometry</a>
+					<a href="_wells_src_client_model_wellfilter_.measurementfilters.html">MeasurementFilters</a>
 				</li>
 			</ul>
-			<h1>Interface GeoLocationGeometry&lt;T, K&gt;</h1>
+			<h1>Interface MeasurementFilters</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>T<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#filegeolocationgeometrytype" class="tsd-signature-type">FileGeoLocationGeometryType</a></h4>
-					</li>
-					<li>
-						<h4>K</h4>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">GeoLocationGeometry</span>
+						<span class="target">MeasurementFilters</span>
 					</li>
 				</ul>
 			</section>
@@ -95,8 +84,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.geolocationgeometry.html#coordinates" class="tsd-kind-icon">coordinates</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.geolocationgeometry.html#type" class="tsd-kind-icon">type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_wellfilter_.measurementfilters.html#containsall" class="tsd-kind-icon">contains<wbr>All</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_wellfilter_.measurementfilters.html#containsany" class="tsd-kind-icon">contains<wbr>Any</a></li>
 							</ul>
 						</section>
 					</div>
@@ -105,24 +94,38 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="coordinates" class="tsd-anchor"></a>
-					<h3>coordinates</h3>
-					<div class="tsd-signature tsd-kind-icon">coordinates<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">K</span></div>
+					<a name="containsall" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> contains<wbr>All</h3>
+					<div class="tsd-signature tsd-kind-icon">contains<wbr>All<span class="tsd-signature-symbol">:</span> <a href="_wells_src_client_model_wellfilter_.measurementfilter.html" class="tsd-signature-type">MeasurementFilter</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d6cabf1/packages/stable/src/types.ts#L1230">packages/stable/src/types.ts:1230</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d6cabf1/packages/wells/src/client/model/WellFilter.ts#L157">packages/wells/src/client/model/WellFilter.ts:157</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>memberof</dt>
+							<dd><p>MeasurementFilters</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="type" class="tsd-anchor"></a>
-					<h3>type</h3>
-					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span></div>
+					<a name="containsany" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> contains<wbr>Any</h3>
+					<div class="tsd-signature tsd-kind-icon">contains<wbr>Any<span class="tsd-signature-symbol">:</span> <a href="_wells_src_client_model_wellfilter_.measurementfilter.html" class="tsd-signature-type">MeasurementFilter</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d6cabf1/packages/stable/src/types.ts#L1229">packages/stable/src/types.ts:1229</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d6cabf1/packages/wells/src/client/model/WellFilter.ts#L162">packages/wells/src/client/model/WellFilter.ts:162</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>memberof</dt>
+							<dd><p>MeasurementFilters</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -133,27 +136,45 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
+						<a href="../modules/_wells_src_client_model_wellfilter_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Filter&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_wellfilter_.measurementfilter.html" class="tsd-kind-icon">Measurement<wbr>Filter</a>
+					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-external">
-						<a href="_stable_src_types_.geolocationgeometry.html" class="tsd-kind-icon">Geo<wbr>Location<wbr>Geometry</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_wellfilter_.measurementfilters.html" class="tsd-kind-icon">Measurement<wbr>Filters</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_stable_src_types_.geolocationgeometry.html#coordinates" class="tsd-kind-icon">coordinates</a>
+								<a href="_wells_src_client_model_wellfilter_.measurementfilters.html#containsall" class="tsd-kind-icon">contains<wbr>All</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_stable_src_types_.geolocationgeometry.html#type" class="tsd-kind-icon">type</a>
+								<a href="_wells_src_client_model_wellfilter_.measurementfilters.html#containsany" class="tsd-kind-icon">contains<wbr>Any</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_wellfilter_.polygonfilter.html" class="tsd-kind-icon">Polygon<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_wellfilter_.polygonfilterapi.html" class="tsd-kind-icon">Polygon<wbr>FilterAPI</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html" class="tsd-kind-icon">Trajectory<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_wellfilter_.wellfilter.html" class="tsd-kind-icon">Well<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_wells_src_client_model_wellfilter_.wellfilterapi.html" class="tsd-kind-icon">Well<wbr>FilterAPI</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

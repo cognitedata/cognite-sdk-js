@@ -198,6 +198,36 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
   hasTrajectory = { minDepth: <span class="hljs-number">1300.0</span>, maxDepth: <span class="hljs-number">1700.0</span> },
 };
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
+				<a href="#get-wells-that-has-the-right-set-of-measurement-types" id="get-wells-that-has-the-right-set-of-measurement-types" style="color: inherit; text-decoration: none;">
+					<h3><em>Get wells that has the right set of measurement types</em></h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { MeasurementFilter, MeasurementFilters } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-comment">// create measurement type filters</span>
+<span class="hljs-keyword">const</span> gammaRayFilter: MeasurementFilter = {
+  measurementType: MeasurementType.GammaRay,
+};
+<span class="hljs-keyword">const</span> densityFilter: MeasurementFilter = {
+  measurementType: MeasurementType.Density,
+};
+<span class="hljs-keyword">const</span> geomechanicsFilter: MeasurementFilter = {
+  measurementType: MeasurementType.Geomechanics,
+};
+
+<span class="hljs-comment">// Look for wells that match on ANY</span>
+<span class="hljs-keyword">const</span> measurementFilters: MeasurementFilters = {
+  containsAny: [gammaRayFilter, densityFilter, geomechanicsFilter],
+};
+
+<span class="hljs-comment">// OR, look for wells that match on ALL</span>
+<span class="hljs-keyword">const</span> measurementFilters: MeasurementFilters = {
+  containsAll: [gammaRayFilter, densityFilter, geomechanicsFilter],
+};
+
+<span class="hljs-comment">// apply filter</span>
+<span class="hljs-keyword">const</span> filter: WellFilter = { hasMeasurements: measurementFilters };
+
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
 				<a href="#get-wellbores-for-a-well-id" id="get-wellbores-for-a-well-id" style="color: inherit; text-decoration: none;">
 					<h4><em>Get wellbores for a well id:</em></h4>
 				</a>
