@@ -124,7 +124,7 @@ const filter: WellFilter = {
 const wells = await client.wells.filter(filter);
 ```
 
-### _Filter wells by wkt polygon, description and specify desired outputCrs_
+### _Filter wells by wkt polygon, name/description and specify desired outputCrs_
 
 ```ts
 import { WellFilter } from '@cognite/sdk-wells';
@@ -133,7 +133,7 @@ const testPolygon =
   'POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))';
 const filter: WellFilter = {
   polygon: { wktGeometry: testPolygon, crs: 'EPSG:4326' },
-  description: 'Field',
+  stringMatching: 'Field',
   outputCrs: 'EPSG:23031',
 };
 
