@@ -167,8 +167,8 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
   sources: [<span class="hljs-string">&#x27;edm&#x27;</span>],
 };
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
-				<a href="#filter-wells-by-wkt-polygon-description-and-specify-desired-outputcrs" id="filter-wells-by-wkt-polygon-description-and-specify-desired-outputcrs" style="color: inherit; text-decoration: none;">
-					<h3><em>Filter wells by wkt polygon, description and specify desired outputCrs</em></h3>
+				<a href="#filter-wells-by-wkt-polygon-namedescription-and-specify-desired-outputcrs" id="filter-wells-by-wkt-polygon-namedescription-and-specify-desired-outputcrs" style="color: inherit; text-decoration: none;">
+					<h3><em>Filter wells by wkt polygon, name/description and specify desired outputCrs</em></h3>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
@@ -176,7 +176,7 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
   <span class="hljs-string">&#x27;POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))&#x27;</span>;
 <span class="hljs-keyword">const</span> filter: WellFilter = {
   polygon: { wktGeometry: testPolygon, crs: <span class="hljs-string">&#x27;EPSG:4326&#x27;</span> },
-  description: <span class="hljs-string">&#x27;Field&#x27;</span>,
+  stringMatching: <span class="hljs-string">&#x27;Field&#x27;</span>,
   outputCrs: <span class="hljs-string">&#x27;EPSG:23031&#x27;</span>,
 };
 
