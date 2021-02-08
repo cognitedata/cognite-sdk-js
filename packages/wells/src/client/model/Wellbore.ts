@@ -33,7 +33,7 @@ export interface Wellbore {
    */
   externalId?: string;
   /**
-   * Parent asset id in CDF
+   * CDF id of the well that contains this wellbore
    * @type {string}}
    * @memberof Wellbore
    */
