@@ -38,7 +38,8 @@ export class WellboresAPI {
     return <Wellbore>{
       id: wellbore.id,
       name: wellbore.name,
-      metadata: wellbore.metadata,
+      externalId: wellbore.externalId,
+      wellId: wellbore.wellId,
       trajectory: async (): Promise<Survey | undefined>  => {return await this.surveys.getTrajectory(wellbore.id).then(response => response).catch(err => err)}
     };
   }

@@ -15,21 +15,27 @@ export type SearchWellbore = (args?: any) => Promise<Wellbore>;
  */
 export interface Wellbore {
   /**
-   * @type {number}
-   * @memberof Wellbore
-   */
-  id: number;
-  /**
    * @type {string}
    * @memberof Wellbore
    */
   name: string;
   /**
-   * Custom, application specific metadata. String key -> String value.
-   * @type {{ [key: string]: string; }}
+   * @type {number}
    * @memberof Wellbore
    */
-  metadata?: { [key: string]: string };
+  id: number;
+  /**
+   * Custom, application specific metadata. String key -> String value.
+   * @type {string}}
+   * @memberof Wellbore
+   */
+  externalId?: string;
+  /**
+   * Custom, application specific metadata. String key -> String value.
+   * @type {string}}
+   * @memberof Wellbore
+   */
+  wellId?: { [key: string]: string };
   /**
    * @type {Promise<Survey[]>}
    * @memberof Wellbore
