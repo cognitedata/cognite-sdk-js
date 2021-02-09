@@ -6,6 +6,7 @@ import { Wellbore } from '../model/Wellbore';
 import { SurveysAPI } from './surveysApi';
 import HttpClientWithIntercept from '../httpClientWithIntercept';
 import { WellIds } from '../model/WellIds';
+import { Asset } from 'wells/src/types';
 
 export class WellboresAPI {
   private client?: HttpClientWithIntercept;
@@ -40,9 +41,26 @@ export class WellboresAPI {
       name: wellbore.name,
       externalId: wellbore.externalId,
       wellId: wellbore.wellId,
-      trajectory: async (): Promise<Survey | undefined>  => {return await this.surveys.getTrajectory(wellbore.id).then(response => response).catch(err => err)}
+      trajectory: async (): Promise<Survey | undefined>  => {return await this.surveys.getTrajectory(wellbore.id).then(response => response).catch(err => err)},
+      sourceAssets: async (source?:string): Promise<Asset[] | undefined>  => await this.getSources(wellbore.id, source)
     };
   }
+
+  private getSources = async (wellboreId: number, source?: string): Promise<Asset[] | undefined> => {
+    let basePath = `/wellbores/${wellboreId}/sources`
+    if (source !== undefined) {
+      basePath += "/" + source
+    }
+
+    const path: string = this.getPath(basePath);
+    // eslint-disable-next-line
+    return await this.client?.asyncGet<Asset[]>(path)
+      .then(response => response.data)
+      .catch(err => {
+        throw new HttpError(err.status, err.errorMessage, {})
+      })
+  }
+
 
   private addLazyMethodsForMeasurement = (measurement: Measurement): Measurement => {
     return <Measurement>{

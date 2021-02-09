@@ -6,6 +6,7 @@ import { WellFilter, WellFilterAPI, PolygonFilterAPI } from '../model/WellFilter
 import { stringify as convertGeoJsonToWKT } from 'wkt';
 import { Cluster } from '../model/Cluster'
 import HttpClientWithIntercept from '../httpClientWithIntercept';
+import { Asset } from 'wells/src/types';
 
 export class WellsAPI {
   private client?: HttpClientWithIntercept;
@@ -92,8 +93,24 @@ export class WellsAPI {
       wellHead: well.wellHead,
       datum: well.datum,
       sources: well.sources,
-      wellbores: async (): Promise<Wellbore[] | undefined>  => {return await this.wellbores.getFromWell(well.id).then(response => response).catch(err => err)}
+      wellbores: async (): Promise<Wellbore[] | undefined>  => {return await this.wellbores.getFromWell(well.id).then(response => response).catch(err => err)},
+      sourceAssets: async (source?:string): Promise<Asset[] | undefined>  => await this.getSources(well.id, source)
     };
+  }
+
+  private getSources = async (wellId: number, source?: string): Promise<Asset[] | undefined> => {
+    let basePath = `/wells/${wellId}/sources`
+    if (source !== undefined) {
+      basePath += "/" + source
+    }
+
+    const path: string = this.getPath(basePath);
+    // eslint-disable-next-line
+    return await this.client?.asyncGet<Asset[]>(path)
+      .then(response => response.data)
+      .catch(err => {
+        throw new HttpError(err.status, err.errorMessage, {})
+      })
   }
 
   private addLazyToAllWellItems = (wellItems: WellItems): WellItems => {
