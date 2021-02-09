@@ -7,6 +7,7 @@ import { Measurement} from 'wells/src/client/model/Measurement';
 import { Well } from 'wells/src/client/model/Well';
 import { Wellbore } from 'wells/src/client/model/Wellbore';
 import { Survey, SurveyData } from 'wells/src/client/model/Survey';
+import { Asset } from 'wells/src/types';
 
 enum MeasurementType {
   GammaRay = 'GammaRay',
@@ -43,6 +44,27 @@ describeIfCondition(
       expect(trajectory).not.toBeUndefined();
       const data: SurveyData | undefined = await trajectory?.data();
       expect(data).not.toBeUndefined();
+    });
+
+    test('get source assets for wellbore', async () => {
+      expect(client).not.toBeUndefined();
+      const wellId: number = 8269456345006483;
+      const wellbore: Wellbore | undefined = await client.wellbores.getById(wellId)
+      const sources: Asset[] | undefined = await wellbore?.sourceAssets()
+      expect(sources).not.toBeUndefined();
+      expect(sources?.length).toBe(1);
+      const source = sources![0];
+      expect(source.externalId).toBe("EDM:Wellbore:vUUnhh02Jz")
+    });
+  
+    test('get source assets for wellbore of type EDM', async() => {
+      const wellId: number = 8269456345006483;
+      const wellbore: Wellbore | undefined = await client.wellbores.getById(wellId)
+      const sources = await wellbore?.sourceAssets("EDM")
+      expect(sources).not.toBeUndefined();
+      expect(sources?.length).toBe(1);
+      const source = sources![0];
+      expect(source.externalId).toBe("EDM:Wellbore:vUUnhh02Jz")
     });
 
     test('Succeed to get wellbore measurement for measurementType: GammaRay', async () => {

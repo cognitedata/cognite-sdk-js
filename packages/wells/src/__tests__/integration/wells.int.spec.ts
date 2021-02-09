@@ -6,6 +6,7 @@ import { Well, WellItems } from 'wells/src/client/model/Well';
 import { Wellbore } from 'wells/src/client/model/Wellbore'
 import { WellFilter, MeasurementFilter, MeasurementFilters } from 'wells/src/client/model/WellFilter';
 import { GeoJson } from 'wells/src/client/model/GeoJson';
+import { Asset } from 'wells/src/types';
 
 enum MeasurementType {
   GammaRay = 'GammaRay',
@@ -39,6 +40,27 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     /* eslint-disable */
     expect(well?.id).toBe(wellId);
     /* eslint-enable */
+  });
+
+  test('get source assets for well', async () => {
+    expect(client).not.toBeUndefined();
+    const wellId: number = 5432591169464385;
+    const well: Well | undefined = await client.wells.getById(wellId)
+    const sources: Asset[] | undefined = await well?.sourceAssets()
+    expect(sources).not.toBeUndefined();
+    expect(sources?.length).toBe(1);
+    const source = sources![0];
+    expect(source.externalId).toBe("EDM:Well:Qj2k7uJdSe")
+  });
+
+  test('get source assets for well of type EDM', async() => {
+    const wellId: number = 5432591169464385;
+    const well: Well | undefined = await client.wells.getById(wellId)
+    const sources: Asset[] | undefined = await well?.sourceAssets("EDM")
+    expect(sources).not.toBeUndefined();
+    expect(sources?.length).toBe(1);
+    const source = sources![0];
+    expect(source.externalId).toBe("EDM:Well:Qj2k7uJdSe")
   });
 
   test('get by id - get wellbores', async () => {

@@ -1,3 +1,4 @@
+import { Asset } from 'wells/src/types';
 import { Survey } from '../model/Survey';
 import { Well } from './Well';
 import { WellHead } from './WellHead';
@@ -58,4 +59,11 @@ export interface Wellbore {
    * @memberof Wellbore
    */
   getWellHeadLocation(): Promise<WellHead | undefined>;
+  /**
+   * If the source parameter is set, it will only return source assets from that source system.
+   * The source parameter can for example be EDM, Diskos, Openworks, etc.
+   * @type {Promise<Asset[]>}
+   * @memberof Wellbore
+   */
+  sourceAssets(source?: string): Promise<Asset[]>;
 }

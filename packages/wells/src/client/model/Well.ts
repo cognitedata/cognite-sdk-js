@@ -1,5 +1,6 @@
 import { WellHead } from './WellHead';
 import { Wellbore } from './Wellbore';
+import { Asset } from 'wells/src/types';
 
 // Customizable function that takes in CogniteClient and args, and return a promise of a well
 export type SearchWells = (args: any) => Promise<Well[]>;
@@ -96,6 +97,13 @@ export interface Well {
    * @memberof Wellbore
    */
   wellbores(): Promise<Wellbore[]>;
+  /**
+   * If the source parameter is set, it will only return source assets from that source system.
+   * The source parameter can for example be EDM, Diskos, Openworks, etc.
+   * @type {Promise<Asset[]>}
+   * @memberof Wellbore
+   */
+  sourceAssets(source?: string): Promise<Asset[]>;
 }
 
 export interface WellDatum {
