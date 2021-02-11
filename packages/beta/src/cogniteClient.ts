@@ -7,6 +7,10 @@ import {
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
+import { TemplateGraphQlApi } from './api/templateGroups/templateGraphQlApi';
+import { TemplateGroupsApi } from './api/templateGroups/templateGroupsApi';
+import { TemplateGroupVersionsApi } from './api/templateGroups/templateGroupVersionsApi';
+import { TemplateInstancesApi } from './api/templateGroups/templateInstancesApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
@@ -14,6 +18,7 @@ class CogniteClientCleaned extends CogniteClientStable {
 
 export default class CogniteClient extends CogniteClientCleaned {
   private entityMatchingApi?: EntityMatchingApi;
+  private templateGroupsApi?: TemplateGroupsApi;
 
   /**
    * Create a new SDK client (beta)
@@ -40,6 +45,37 @@ export default class CogniteClient extends CogniteClientCleaned {
     return accessApi(this.entityMatchingApi);
   }
 
+  public get templates() {
+    return {
+      groups: accessApi(this.templateGroupsApi),
+      group: (externalId: string) => {
+        const urlsafeExternalId = CogniteClient.urlEncodeExternalId(externalId);
+        const baseVersionsUrl = `templategroups/${urlsafeExternalId}/versions`;
+        return {
+          versions: accessApi(
+            this.apiFactory(TemplateGroupVersionsApi, baseVersionsUrl)
+          ),
+          version: (version: number) => {
+            const baseGroupUrl = `${baseVersionsUrl}/${version}`;
+            const graphQlApi = this.apiFactory(
+              TemplateGraphQlApi,
+              `${baseGroupUrl}/graphql`
+            );
+            return {
+              instances: accessApi(
+                this.apiFactory(
+                  TemplateInstancesApi,
+                  `${baseGroupUrl}/instances`
+                )
+              ),
+              runQuery: (query: string) => graphQlApi.runQuery(query),
+            };
+          },
+        };
+      },
+    };
+  }
+
   protected get version() {
     return `${version}-beta`;
   }
@@ -51,5 +87,14 @@ export default class CogniteClient extends CogniteClientCleaned {
       EntityMatchingApi,
       'context/entitymatching'
     );
+
+    this.templateGroupsApi = this.apiFactory(
+      TemplateGroupsApi,
+      'templategroups'
+    );
+  }
+
+  static urlEncodeExternalId(externalId: string): string {
+    return encodeURIComponent(externalId);
   }
 }
