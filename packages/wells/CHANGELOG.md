@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.13.4...@cognite/sdk-wells@0.14.0) (2021-02-12)
+
+
+### Features
+
+* add well(bore).sourceAssets ([#483](https://github.com/cognitedata/cognite-sdk-js/issues/483)) ([6dfd1d1](https://github.com/cognitedata/cognite-sdk-js/commit/6dfd1d15b956747da97d571722f381d92aa15da4))
+
+
+
+
+
 ## [0.13.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.13.3...@cognite/sdk-wells@0.13.4) (2021-02-08)
 
 **Note:** Version bump only for package @cognite/sdk-wells

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@1.3.2...@cognite/sdk-beta@1.4.0) (2021-02-12)
+
+
+### Features
+
+* **beta:** add Template Groups API ([#477](https://github.com/cognitedata/cognite-sdk-js/issues/477)) ([1b1398b](https://github.com/cognitedata/cognite-sdk-js/commit/1b1398b57e83a4313b2ae4c215eb24540ea48683))
+
+
+
+
+
 ## [1.3.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@1.3.1...@cognite/sdk-beta@1.3.2) (2020-12-17)
 
 **Note:** Version bump only for package @cognite/sdk-beta
