@@ -23,7 +23,7 @@ export interface AzureADOptions {
 }
 export const LOGIN_POPUP = 'loginPopup';
 export const LOGIN_REDIRECT = 'loginRedirect';
-export type AzureSingInType = typeof LOGIN_POPUP | typeof LOGIN_REDIRECT;
+export type AzureADSingInType = typeof LOGIN_POPUP | typeof LOGIN_REDIRECT;
 
 const loggerCallback = (level: LogLevel, message: string, containsPi: any) => {
   if (containsPi) {
@@ -121,7 +121,7 @@ export class AzureAD {
    * Calls loginPopup or loginRedirect based on given signInType.
    * @param signInType
    */
-  async login(signInType: AzureSingInType = LOGIN_REDIRECT): Promise<void> {
+  async login(signInType: AzureADSingInType = LOGIN_REDIRECT): Promise<void> {
     if (signInType === LOGIN_POPUP) {
       try {
         const { account } = await this.msalApplication.loginPopup(
@@ -133,7 +133,7 @@ export class AzureAD {
         console.error(error);
       }
     } else {
-      this.msalApplication.loginRedirect(this.loginRedirectRequest);
+      await this.msalApplication.loginRedirect(this.loginRedirectRequest);
     }
   }
 
@@ -150,8 +150,8 @@ export class AzureAD {
     this.account = undefined;
   }
 
-  async getCDFToken(): Promise<string | void> {
-    if (!this.account) return;
+  async getCDFToken(): Promise<string | null> {
+    if (!this.account) return null;
 
     const response: AuthenticationResult = await this.msalApplication.acquireTokenSilent(
       this.silentCDFTokenRequest

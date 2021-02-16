@@ -36,7 +36,7 @@ import {
   createUniversalRetryValidator,
   RetryValidator,
 } from './httpClient/retryValidator';
-import { AzureAD } from './aad';
+import { AzureAD, AzureADSingInType } from './aad';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -75,6 +75,7 @@ export interface OAuthLoginForAADOptions {
   cluster: string;
   clientId: string;
   tenantId: string;
+  signInType?: AzureADSingInType;
 }
 
 export type OAuthLoginOptions =
@@ -297,7 +298,7 @@ export default class BaseCogniteClient {
    * const accessToken = await client.getAzureADAccessToken();
    * ```
    */
-  public getAzureADAccessToken(): Promise<string | void> {
+  public getAzureADAccessToken(): Promise<string | null> {
     if (!this.azureAdClient) {
       throw Error('Access token can be acquired only using AzureAD auth flow');
     }
@@ -446,6 +447,7 @@ export default class BaseCogniteClient {
     cluster,
     clientId,
     tenantId,
+    signInType,
   }: OAuthLoginForAADOptions) => {
     const config = {
       auth: {
@@ -463,15 +465,15 @@ export default class BaseCogniteClient {
       const account = await azureAdClient.initAuth();
       const authResult = await azureAdClient.getProfileTokenRedirect();
 
-      if (account && authResult) {
-        const cdfAccessToken = await azureAdClient.getCDFToken();
+      if (!account || !authResult) {
+        await azureAdClient.login(signInType);
+      }
 
-        if (authResult && cdfAccessToken) {
-          this.httpClient.setBearerToken(cdfAccessToken);
-          this.httpClient.setCluster(azureAdClient.getCluster());
-        }
-      } else {
-        azureAdClient.login();
+      const cdfAccessToken = await azureAdClient.getCDFToken();
+
+      if (cdfAccessToken) {
+        this.httpClient.setBearerToken(cdfAccessToken);
+        this.httpClient.setCluster(azureAdClient.getCluster());
       }
 
       return true;
