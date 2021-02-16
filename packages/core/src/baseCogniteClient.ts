@@ -3,6 +3,7 @@
 import isFunction from 'lodash/isFunction';
 import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
+import noop from 'lodash/noop';
 import { LoginAPI } from './api/login/loginApi';
 import { LogoutApi } from './api/logout/logoutApi';
 import {
@@ -23,12 +24,19 @@ import {
   OnTokens,
 } from './login';
 import { MetadataMap } from './metadata';
-import { getBaseUrl, isUsingSSL, projectUrl } from './utils';
+import {
+  getBaseUrl,
+  isOAuthWithAADOptions,
+  isOAuthWithCogniteOptions,
+  isUsingSSL,
+  projectUrl,
+} from './utils';
 import { version } from '../package.json';
 import {
   createUniversalRetryValidator,
   RetryValidator,
 } from './httpClient/retryValidator';
+import { AzureAD } from './aad';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -52,7 +60,9 @@ export interface ApiKeyLoginOptions extends Project {
 
 export const REDIRECT = 'REDIRECT';
 export const POPUP = 'POPUP';
-export interface OAuthLoginOptions extends Project {
+
+export interface OAuthLoginForCogniteOptions {
+  project: string;
   onAuthenticate?: OnAuthenticate | 'REDIRECT' | 'POPUP';
   onTokens?: OnTokens;
   /**
@@ -60,6 +70,16 @@ export interface OAuthLoginOptions extends Project {
    */
   accessToken?: string;
 }
+
+export interface OAuthLoginForAADOptions {
+  cluster: string;
+  clientId: string;
+  tenantId: string;
+}
+
+export type OAuthLoginOptions =
+  | OAuthLoginForCogniteOptions
+  | OAuthLoginForAADOptions;
 
 export function accessApi<T>(api: T | undefined): T {
   if (api === undefined) {
@@ -90,6 +110,7 @@ export default class BaseCogniteClient {
   private hasBeenLoggedIn: boolean = false;
   private loginApi: LoginAPI;
   private logoutApi: LogoutApi;
+  private azureAdClient?: AzureAD;
   /**
    * Create a new SDK client
    *
@@ -133,6 +154,10 @@ export default class BaseCogniteClient {
       'You can only call authenticate after you have called loginWithOAuth'
     );
   };
+
+  public setProject(projectName: 'string') {
+    this.projectName = projectName;
+  }
 
   public get project() {
     return this.projectName;
@@ -188,12 +213,21 @@ export default class BaseCogniteClient {
    *
    * const client = new CogniteClient({ appId: '[YOUR APP NAME]' });
    *
+   * // using Cognite authentication flow
    * client.loginWithOAuth({
    *   project: '[PROJECT]',
    *   onAuthenticate: REDIRECT // optional, REDIRECT is by default
    * });
+   *
+   * // or you can login using AzureAD authentication flow (in case your projects supports it)
+   * client.loginWithOAuth({
+   *   cluster: '[CLUSTER]',
+   *   clientId: '[CLIENT_ID]', // client id of your AzureAD application
+   *   tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant
+   * });
    * // after login you can do calls with the client
    * (async () => {
+   *   await client.authenticate();
    *   const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
    * })();
    * ```
@@ -205,46 +239,32 @@ export default class BaseCogniteClient {
       throwReLogginError();
     }
 
-    if (!isObject(options)) {
-      throw Error('`loginWithOAuth` is missing parameter `options`');
-    }
-    const { project } = options;
-    if (!isString(project)) {
-      throw Error('options.project is required and must be of type string');
-    }
-    this.projectName = project;
-
     if (!isUsingSSL()) {
       console.warn(
         'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
       );
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const onTokens = options.onTokens || (() => {});
-    const onAuthenticate =
-      options.onAuthenticate === POPUP
-        ? onAuthenticateWithPopup
-        : isFunction(options.onAuthenticate)
-          ? options.onAuthenticate
-          : onAuthenticateWithRedirect;
+    let authenticate: () => Promise<boolean>;
 
-    const authenticate = createAuthenticateFunction({
-      project,
-      httpClient: this.httpClient,
-      onAuthenticate,
-      onTokens,
-    });
+    if (isOAuthWithCogniteOptions(options)) {
+      authenticate = this.loginWithCognite(options);
+
+      const { accessToken } = options;
+
+      if (accessToken) {
+        this.httpClient.setBearerToken(accessToken);
+      }
+    } else if (isOAuthWithAADOptions(options)) {
+      authenticate = this.loginWithAAD(options);
+    } else {
+      throw Error('`loginWithOAuth` is missing parameter `options`');
+    }
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
       const didAuthenticate = await authenticate();
       return didAuthenticate ? retry() : reject();
     });
-
-    const { accessToken } = options;
-    if (accessToken) {
-      this.httpClient.setBearerToken(accessToken);
-    }
 
     this.initAPIs();
     this.authenticate = authenticate;
@@ -255,6 +275,9 @@ export default class BaseCogniteClient {
    * To modify the base-url at any point in time
    */
   public setBaseUrl = (baseUrl: string) => {
+    if (this.azureAdClient) {
+      throw Error('`setBaseUrl` does not available with Azure AD auth flow');
+    }
     this.httpClient.setBaseUrl(baseUrl);
   };
 
@@ -263,6 +286,23 @@ export default class BaseCogniteClient {
    */
   public getBaseUrl(): string {
     return this.httpClient.getBaseUrl();
+  }
+
+  /**
+   * Returns access token in case of AzureAD authentication flow usage
+   *
+   * ```js
+   * client.loginWithOAuth({cluster: 'bluefield', ...});
+   * await client.authenticate();
+   * const accessToken = await client.getAzureADAccessToken();
+   * ```
+   */
+  public getAzureADAccessToken(): Promise<string | void> {
+    if (!this.azureAdClient) {
+      throw Error('Access token can be acquired only using AzureAD auth flow');
+    }
+
+    return this.azureAdClient.getCDFToken();
   }
 
   /**
@@ -401,6 +441,66 @@ export default class BaseCogniteClient {
   protected get httpClient() {
     return this.http;
   }
+
+  protected loginWithAAD = ({
+    cluster,
+    clientId,
+    tenantId,
+  }: OAuthLoginForAADOptions) => {
+    const config = {
+      auth: {
+        clientId,
+        authority: `https://login.microsoftonline.com/${tenantId}`,
+        redirectUri: `${window.location.origin}`,
+      },
+    };
+
+    const azureAdClient = new AzureAD({ config, cluster });
+
+    this.azureAdClient = azureAdClient;
+
+    return async () => {
+      const account = await azureAdClient.initAuth();
+      const authResult = await azureAdClient.getProfileTokenRedirect();
+
+      if (account && authResult) {
+        const cdfAccessToken = await azureAdClient.getCDFToken();
+
+        if (authResult && cdfAccessToken) {
+          this.httpClient.setBearerToken(cdfAccessToken);
+          this.httpClient.setCluster(azureAdClient.getCluster());
+        }
+      } else {
+        azureAdClient.login();
+      }
+
+      return true;
+    };
+  };
+
+  protected loginWithCognite = (options: OAuthLoginForCogniteOptions) => {
+    const { project } = options;
+
+    if (!isString(project)) {
+      throw Error('options.project is required and must be of type string');
+    }
+    this.projectName = project;
+
+    const onTokens = options.onTokens || noop;
+    const onAuthenticate =
+      options.onAuthenticate === POPUP
+        ? onAuthenticateWithPopup
+        : isFunction(options.onAuthenticate)
+          ? options.onAuthenticate
+          : onAuthenticateWithRedirect;
+
+    return createAuthenticateFunction({
+      project,
+      httpClient: this.httpClient,
+      onAuthenticate,
+      onTokens,
+    });
+  };
 }
 
 function onAuthenticateWithRedirect(login: OnAuthenticateLoginObject) {

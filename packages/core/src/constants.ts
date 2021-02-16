@@ -3,7 +3,11 @@
 /** @hidden */
 export const API_VERSION: string = 'v1';
 /** @hidden */
-export const BASE_URL: string = 'https://api.cognitedata.com';
+export const DEFAULT_CLUSTER = 'api';
+/** @hidden */
+export const DEFAULT_DOMAIN = 'cognitedata.com';
+/** @hidden */
+export const BASE_URL: string = `https://${DEFAULT_CLUSTER}.${DEFAULT_DOMAIN}`;
 
 /** @hidden */
 export const AUTHORIZATION_HEADER = 'Authorization';
