@@ -82,7 +82,6 @@ export class AzureAD {
   /**
    * Calls getAllAccounts and determines the correct account to sign into,
    * currently defaults to first account found in cache.
-   * TODO: Add account chooser code
    *
    * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
    */
@@ -121,14 +120,16 @@ export class AzureAD {
    * Calls loginPopup or loginRedirect based on given signInType.
    * @param signInType
    */
-  async login(signInType: AzureADSingInType = LOGIN_REDIRECT): Promise<void> {
+  async login(
+    signInType: AzureADSingInType = LOGIN_REDIRECT
+  ): Promise<AccountInfo | void> {
     if (signInType === LOGIN_POPUP) {
       try {
         const { account } = await this.msalApplication.loginPopup(
           this.loginRequest
         );
 
-        this.handleAuthAccountResult(account);
+        return this.handleAuthAccountResult(account);
       } catch (error) {
         console.error(error);
       }
