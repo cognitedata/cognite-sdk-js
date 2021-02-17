@@ -72,7 +72,7 @@ client.loginWithOAuth({
 });
 
 // then use the SDK:
-const assets = await client.assets.retrive({ id: 23232789217132 });
+const assets = await client.assets.retrieve({ id: 23232789217132 });
 ```
 
 The first time this will run the user will get a `401`-response from CDF in the first call to `client.assets`. This will trigger the SDK to perform a redirect of the browser window to authenticate.
@@ -119,7 +119,7 @@ client.loginWithOAuth({
 });
 
 // then use the SDK:
-const assets = await client.assets.retrive({ id: 23232789217132 });
+const assets = await client.assets.retrieve({ id: 23232789217132 });
 ```
 
 The first time this will run the user will get a `401`-response from CDF in the first call to `client.assets`. This will trigger the SDK to perform authentication of the user using a popup-window. A new window will popup showing the login screen of the identity provider. After a successful login the popup-window will be redirected back to your app (the same URL as the main browser window) where `sdk.loginPopupHandler` will be executed and handle the tokens in the URL and close the window. **Therefore it is important** that `sdk.loginPopupHandler` will run when the popup window gets redirected back to your app (otherwise the authentication process will fail).
