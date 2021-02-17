@@ -14,7 +14,7 @@ jest.mock('@azure/msal-browser', () => {
         handleRedirectPromise,
         loginRedirect,
         loginPopup,
-        acquireTokenSilent
+        acquireTokenSilent,
       };
     }),
   };
