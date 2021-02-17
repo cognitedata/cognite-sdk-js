@@ -273,7 +273,6 @@ export default class BaseCogniteClient {
       return didAuthenticate ? retry() : reject();
     });
 
-    this.initAPIs();
     this.authenticate = authenticate;
     this.hasBeenLoggedIn = true;
   };
