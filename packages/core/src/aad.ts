@@ -151,6 +151,9 @@ export class AzureAD {
     this.account = undefined;
   }
 
+  /**
+   * Returns already acquired access token
+   */
   async getCDFToken(): Promise<string | null> {
     if (!this.account) return null;
 
@@ -195,7 +198,6 @@ export class AzureAD {
     return {
       account: this.account,
       scopes: this.userScopes,
-      // forceRefresh: true,
     };
   }
 
@@ -203,7 +205,6 @@ export class AzureAD {
     return {
       account: this.account,
       scopes: this.getCDFScopes(),
-      // forceRefresh: true,
     };
   }
 

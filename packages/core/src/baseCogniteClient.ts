@@ -157,8 +157,9 @@ export default class BaseCogniteClient {
     );
   };
 
-  public setProject(projectName: 'string') {
+  public setProject(projectName: string) {
     this.projectName = projectName;
+    this.initAPIs();
   }
 
   public get project() {
@@ -199,10 +200,9 @@ export default class BaseCogniteClient {
         );
       }
     }
-    this.projectName = project;
     this.httpClient.setDefaultHeader(API_KEY_HEADER, apiKey);
 
-    this.initAPIs();
+    this.setProject(project);
     this.hasBeenLoggedIn = true;
   };
 
@@ -261,6 +261,7 @@ export default class BaseCogniteClient {
       if (accessToken) {
         this.httpClient.setBearerToken(accessToken);
       }
+      this.setProject(options.project);
     } else if (isOAuthWithAADOptions(options)) {
       authenticate = this.loginWithAAD(options);
     } else {
