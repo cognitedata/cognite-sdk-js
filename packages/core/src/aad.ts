@@ -62,8 +62,8 @@ export class AzureAD {
     };
   }
 
-  constructor({ cluster, config }: AzureADOptions) {
-    const msalDefaultConfig = AzureAD.getDefaultMSALConfig(true);
+  constructor({ cluster, config, debug }: AzureADOptions) {
+    const msalDefaultConfig = AzureAD.getDefaultMSALConfig(debug);
     this.msalApplication = new PublicClientApplication({
       ...msalDefaultConfig,
       ...config,

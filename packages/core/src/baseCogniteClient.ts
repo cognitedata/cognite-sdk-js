@@ -76,6 +76,7 @@ export interface OAuthLoginForAADOptions {
   clientId: string;
   tenantId: string;
   signInType?: AzureADSingInType;
+  debug?: boolean;
 }
 
 export type OAuthLoginOptions =
@@ -240,6 +241,10 @@ export default class BaseCogniteClient {
       throwReLogginError();
     }
 
+    if (!options) {
+      throw Error('`loginWithOAuth` is missing parameter `options`');
+    }
+
     if (!isUsingSSL()) {
       console.warn(
         'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
@@ -259,7 +264,7 @@ export default class BaseCogniteClient {
     } else if (isOAuthWithAADOptions(options)) {
       authenticate = this.loginWithAAD(options);
     } else {
-      throw Error('`loginWithOAuth` is missing parameter `options`');
+      throw Error('`loginWithOAuth` is missing correct `options` structure');
     }
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
@@ -448,6 +453,7 @@ export default class BaseCogniteClient {
     clientId,
     tenantId,
     signInType,
+    debug,
   }: OAuthLoginForAADOptions) => {
     const config = {
       auth: {
@@ -457,7 +463,7 @@ export default class BaseCogniteClient {
       },
     };
 
-    const azureAdClient = new AzureAD({ config, cluster });
+    const azureAdClient = new AzureAD({ config, cluster, debug });
 
     this.azureAdClient = azureAdClient;
 
@@ -474,9 +480,11 @@ export default class BaseCogniteClient {
       if (cdfAccessToken) {
         this.httpClient.setBearerToken(cdfAccessToken);
         this.httpClient.setCluster(azureAdClient.getCluster());
+
+        return true;
       }
 
-      return true;
+      return false;
     };
   };
 

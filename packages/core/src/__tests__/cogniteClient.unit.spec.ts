@@ -12,6 +12,26 @@ import * as Login from '../login';
 import { bearerString, sleepPromise } from '../utils';
 import { apiKey, authTokens, project } from '../testUtils';
 
+const initAuth = jest.fn();
+const getProfileTokenRedirect = jest.fn();
+const login = jest.fn();
+const getCDFToken = jest.fn();
+const getCluster = jest.fn();
+
+jest.mock('../aad', () => {
+  return {
+    AzureAD: jest.fn().mockImplementation(() => {
+      return {
+        initAuth,
+        getProfileTokenRedirect,
+        login,
+        getCDFToken,
+        getCluster,
+      };
+    }),
+  };
+});
+
 const mockBaseUrl = 'https://example.com';
 
 function setupClient(baseUrl: string = BASE_URL) {
@@ -201,11 +221,11 @@ describe('CogniteClient', () => {
         // @ts-ignore
         () => client.loginWithOAuth({})
       ).toThrowErrorMatchingInlineSnapshot(
-        `"options.project is required and must be of type string"`
+        `"\`loginWithOAuth\` is missing correct \`options\` structure"`
       );
     });
 
-    describe('authentication', () => {
+    describe('authentication with cognite', () => {
       let mockLoginSilently: jest.SpyInstance;
       let mockRedirect: jest.SpyInstance;
       let mockPopup: jest.SpyInstance;
@@ -418,6 +438,98 @@ describe('CogniteClient', () => {
             .reply(401, {});
           client.get('/');
         });
+      });
+    });
+
+    describe('authentication with azure ad', () => {
+      const clientId = 'clientId';
+      const tenantId = 'tenantId';
+      const cluster = 'test-cluster';
+      let client: BaseCogniteClient;
+
+      beforeEach(() => {
+        client = new BaseCogniteClient({ appId: 'test-app' });
+      });
+      afterEach(() => {
+        jest.clearAllMocks();
+      });
+
+      test('should auth with azure ad', async () => {
+        getCDFToken.mockResolvedValueOnce('access_token');
+        getCluster.mockReturnValueOnce(cluster);
+
+        client.loginWithOAuth({ clientId, tenantId, cluster });
+        const result = await client.authenticate();
+
+        expect(login).toHaveBeenCalledTimes(1);
+        expect(result).toEqual(true);
+      });
+      test('should auth with azure ad via popup window', async () => {
+        getCDFToken.mockResolvedValueOnce('access_token');
+        getCluster.mockReturnValueOnce(cluster);
+        client.loginWithOAuth({
+          clientId,
+          tenantId,
+          cluster,
+          signInType: 'loginPopup',
+        });
+
+        const result = await client.authenticate();
+
+        expect(login).toHaveBeenCalledWith('loginPopup');
+        expect(result).toEqual(true);
+      });
+      test('should return authenticate false in case missed cdf token', async () => {
+        getCDFToken.mockResolvedValueOnce(undefined);
+        getCluster.mockReturnValueOnce(cluster);
+
+        client.loginWithOAuth({ clientId, tenantId, cluster });
+
+        const result = await client.authenticate();
+
+        expect(result).toEqual(false);
+      });
+      test('should return access token in case azure ad auth flow', async () => {
+        getCDFToken.mockResolvedValue('access_token');
+        getCluster.mockReturnValueOnce(cluster);
+
+        client.loginWithOAuth({ clientId, tenantId, cluster });
+
+        const result = await client.authenticate();
+        const token = await client.getAzureADAccessToken();
+
+        expect(result).toEqual(true);
+        expect(token).toEqual('access_token');
+      });
+      test('should throw error on attempt to get access token with cognite auth flow', async () => {
+        const createAuthenticateFunction = jest.spyOn(
+          Login,
+          'createAuthenticateFunction'
+        );
+        createAuthenticateFunction.mockReturnValueOnce(() =>
+          Promise.resolve(true)
+        );
+        client.loginWithOAuth({ project });
+        await expect(
+          async () => await client.getAzureADAccessToken()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          `"Access token can be acquired only using AzureAD auth flow"`
+        );
+      });
+      test('should throw error on attempt to call setBaseUrl after azure ad auth', async () => {
+        getCDFToken.mockResolvedValue('access_token');
+        getCluster.mockReturnValueOnce(cluster);
+
+        client.loginWithOAuth({ clientId, tenantId, cluster });
+
+        const result = await client.authenticate();
+
+        expect(result).toBeTruthy();
+        expect(() =>
+          client.setBaseUrl('https://someurl.com')
+        ).toThrowErrorMatchingInlineSnapshot(
+          `"\`setBaseUrl\` does not available with Azure AD auth flow"`
+        );
       });
     });
   });
