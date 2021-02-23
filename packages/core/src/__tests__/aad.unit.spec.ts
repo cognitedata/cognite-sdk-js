@@ -1,6 +1,6 @@
 import { AzureAD } from '../aad';
 
-const getAllAccounts = jest.fn();
+const getAccountByLocalId = jest.fn();
 const handleRedirectPromise = jest.fn();
 const loginRedirect = jest.fn();
 const loginPopup = jest.fn();
@@ -10,7 +10,7 @@ jest.mock('@azure/msal-browser', () => {
   return {
     PublicClientApplication: jest.fn().mockImplementation(() => {
       return {
-        getAllAccounts,
+        getAccountByLocalId,
         handleRedirectPromise,
         loginRedirect,
         loginPopup,
@@ -37,35 +37,48 @@ const account = {
 };
 
 let azureAdClient: AzureAD;
+const originalLocalStorage = localStorage;
+const localStorageGetItem = jest.fn();
+const localStorageSetItem = jest.fn();
 
 describe('Azure AD auth module', () => {
+  beforeAll(() => {
+    Object.defineProperty(window, 'localStorage', {
+      value: {
+        getItem: localStorageGetItem,
+        setItem: localStorageSetItem,
+      },
+      writable: true,
+    });
+  });
   beforeEach(() => {
     azureAdClient = new AzureAD({ cluster, config });
   });
   afterEach(() => {
     jest.clearAllMocks();
   });
+  afterAll(() => {
+    Object.defineProperty(window, 'localStorage', {
+      value: originalLocalStorage,
+    });
+  });
   test('should set cluster from config', () => {
     expect(azureAdClient.getCluster()).toEqual(cluster);
-  });
-  test('should change cluster', () => {
-    const newClusterName = 'test';
-
-    azureAdClient.setCluster(newClusterName);
-
-    expect(azureAdClient.getCluster()).toEqual(newClusterName);
   });
 
   describe('Get accounts', () => {
     test('should return `null` in case any accounts in localstorage', () => {
-      getAllAccounts.mockReturnValueOnce([]);
-
       expect(azureAdClient.getAccount()).toEqual(null);
+      expect(getAccountByLocalId).toHaveBeenCalledTimes(0);
     });
-    test('should return first account from the localstorage', () => {
-      getAllAccounts.mockReturnValueOnce(['dude 1', 'dude 2']);
+    test('should request for stored local account id', () => {
+      const localAccountId = 'some-local-account-id';
 
-      expect(azureAdClient.getAccount()).toEqual('dude 1');
+      localStorageGetItem.mockReturnValueOnce(localAccountId);
+      getAccountByLocalId.mockReturnValueOnce(account);
+
+      expect(azureAdClient.getAccount()).toEqual(account);
+      expect(getAccountByLocalId).toHaveBeenCalledWith(localAccountId);
     });
   });
   describe('Init authentication', () => {
@@ -76,16 +89,19 @@ describe('Azure AD auth module', () => {
       expect(accountInfo).toEqual(account);
     });
     test('should get account from localstorage as a fallback if its possible', async () => {
+      const localAccountId = 'some-local-account-id';
+
       handleRedirectPromise.mockReturnValueOnce(null);
-      getAllAccounts.mockReturnValueOnce([account]);
+      localStorageGetItem.mockReturnValueOnce(localAccountId);
+      getAccountByLocalId.mockReturnValueOnce(account);
 
       const accountInfo = await azureAdClient.initAuth();
 
       expect(accountInfo).toEqual(account);
+      expect(getAccountByLocalId).toHaveBeenCalledWith(localAccountId);
     });
     test('should return `null` in case if it is impossible to get account data', async () => {
       handleRedirectPromise.mockReturnValueOnce(null);
-      getAllAccounts.mockReturnValueOnce([]);
 
       const accountInfo = await azureAdClient.initAuth();
 

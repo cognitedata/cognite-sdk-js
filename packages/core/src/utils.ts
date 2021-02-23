@@ -226,5 +226,5 @@ export function isOAuthWithCogniteOptions(
 export function isOAuthWithAADOptions(
   options: OAuthLoginOptions
 ): options is OAuthLoginForAADOptions {
-  return ['clientId', 'tenantId', 'cluster'].every(key => key in options);
+  return ['clientId', 'cluster'].every(key => key in options);
 }

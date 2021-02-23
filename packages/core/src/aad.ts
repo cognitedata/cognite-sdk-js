@@ -6,7 +6,6 @@ import {
   AuthenticationResult,
   Configuration,
   AccountInfo,
-  InteractionRequiredAuthError,
   EndSessionRequest,
   RedirectRequest,
   PopupRequest,
@@ -14,7 +13,6 @@ import {
   BrowserSystemOptions,
   CacheOptions,
 } from '@azure/msal-browser';
-import noop from 'lodash/noop';
 
 export interface AzureADOptions {
   cluster: string;
@@ -43,6 +41,7 @@ const loggerCallback = (level: LogLevel, message: string, containsPi: any) => {
       console.warn(message);
   }
 };
+const accountLocalStorageKey = '@cognite/sdk:accountLocalId';
 
 export class AzureAD {
   private msalApplication: PublicClientApplication;
@@ -68,11 +67,7 @@ export class AzureAD {
       ...msalDefaultConfig,
       ...config,
     });
-    this.setCluster(cluster);
-  }
-
-  setCluster(clusterName: string): void {
-    this.cluster = clusterName;
+    this.cluster = cluster;
   }
 
   getCluster(): string {
@@ -86,22 +81,11 @@ export class AzureAD {
    * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
    */
   getAccount(): AccountInfo | null {
-    const currentAccounts = this.msalApplication.getAllAccounts();
-    if (currentAccounts && currentAccounts.length >= 1) {
-      return currentAccounts[0];
-    }
+    const localAccountId = this.getLocalAccountIdFromLocalStorage();
 
-    return null;
-  }
-
-  /**
-   * Gets the token to read user profile data silently, or falls back to interactive redirect.
-   */
-  async getProfileTokenRedirect(): Promise<void | AuthenticationResult> {
-    return this.getTokenRedirect(
-      this.silentProfileRequest,
-      this.profileRedirectRequest
-    );
+    return localAccountId
+      ? this.msalApplication.getAccountByLocalId(localAccountId)
+      : null;
   }
 
   /**
@@ -126,7 +110,7 @@ export class AzureAD {
     if (signInType === LOGIN_POPUP) {
       try {
         const { account } = await this.msalApplication.loginPopup(
-          this.loginRequest
+          this.loginPopupRequest
         );
 
         return this.handleAuthAccountResult(account);
@@ -148,20 +132,40 @@ export class AzureAD {
 
     await this.msalApplication.logout(logOutRequest);
 
+    this.setLocalAccountIdToLocalStorage();
+
     this.account = undefined;
   }
 
   /**
-   * Returns already acquired access token
+   * Returns already acquired CDF access token
    */
   async getCDFToken(): Promise<string | null> {
     if (!this.account) return null;
 
-    const response: AuthenticationResult = await this.msalApplication.acquireTokenSilent(
+    const {
+      accessToken,
+    }: AuthenticationResult = await this.msalApplication.acquireTokenSilent(
       this.silentCDFTokenRequest
     );
 
-    return response.accessToken;
+    return accessToken;
+  }
+
+  /**
+   * Returns azure account access token.
+   * Can be used for getting user details via Microsoft Graph API
+   */
+  async getAccountToken(): Promise<string | null> {
+    if (this.account) return null;
+
+    const {
+      accessToken,
+    }: AuthenticationResult = await this.msalApplication.acquireTokenSilent(
+      this.silentAccountTokenRequest
+    );
+
+    return accessToken;
   }
 
   private getCDFScopes(): string[] {
@@ -171,7 +175,7 @@ export class AzureAD {
     ];
   }
 
-  private get loginRequest(): PopupRequest {
+  private get loginPopupRequest(): PopupRequest {
     return {
       scopes: this.userScopes,
       extraScopesToConsent: this.getCDFScopes(),
@@ -182,22 +186,7 @@ export class AzureAD {
     return {
       scopes: this.userScopes,
       extraScopesToConsent: this.getCDFScopes(),
-      redirectStartPage: window.location.origin,
-    };
-  }
-
-  private get profileRedirectRequest(): RedirectRequest {
-    return {
-      scopes: this.userScopes,
-      extraScopesToConsent: this.getCDFScopes(),
       redirectStartPage: window.location.href,
-    };
-  }
-
-  private get silentProfileRequest(): SilentRequest {
-    return {
-      account: this.account,
-      scopes: this.userScopes,
     };
   }
 
@@ -208,6 +197,13 @@ export class AzureAD {
     };
   }
 
+  private get silentAccountTokenRequest(): SilentRequest {
+    return {
+      account: this.account,
+      scopes: this.userScopes,
+    };
+  }
+
   private handleAuthAccountResult(
     authAccount: AccountInfo | null
   ): AccountInfo | void {
@@ -215,6 +211,7 @@ export class AzureAD {
 
     if (account) {
       this.account = account;
+      this.setLocalAccountIdToLocalStorage(account.localAccountId);
 
       return account;
     }
@@ -233,21 +230,15 @@ export class AzureAD {
       : null;
   }
 
-  /**
-   * Gets a token silently, or falls back to interactive redirect.
-   */
-  private async getTokenRedirect(
-    silentRequest: SilentRequest,
-    interactiveRequest: RedirectRequest
-  ): Promise<AuthenticationResult | void> {
-    try {
-      return await this.msalApplication.acquireTokenSilent(silentRequest);
-    } catch (e) {
-      if (e instanceof InteractionRequiredAuthError) {
-        return this.msalApplication
-          .acquireTokenRedirect(interactiveRequest)
-          .catch(noop);
-      }
+  private setLocalAccountIdToLocalStorage(localId?: string): void {
+    if (!localId) {
+      localStorage.removeItem(accountLocalStorageKey);
+    } else {
+      localStorage.setItem(accountLocalStorageKey, localId);
     }
+  }
+
+  private getLocalAccountIdFromLocalStorage(): string | null {
+    return localStorage.getItem(accountLocalStorageKey);
   }
 }

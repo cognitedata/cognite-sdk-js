@@ -74,7 +74,7 @@ export interface OAuthLoginForCogniteOptions {
 export interface OAuthLoginForAADOptions {
   cluster: string;
   clientId: string;
-  tenantId: string;
+  tenantId?: string;
   signInType?: AzureADSingInType;
   debug?: boolean;
 }
@@ -225,11 +225,12 @@ export default class BaseCogniteClient {
    * client.loginWithOAuth({
    *   cluster: '[CLUSTER]',
    *   clientId: '[CLIENT_ID]', // client id of your AzureAD application
-   *   tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant
+   *   tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
    * });
    * // after login you can do calls with the client
    * (async () => {
    *   await client.authenticate();
+   *   client.setProject('project-name');
    *   const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
    * })();
    * ```
@@ -295,20 +296,31 @@ export default class BaseCogniteClient {
   }
 
   /**
-   * Returns access token in case of AzureAD authentication flow usage
+   * Returns CDF token in case of AzureAD authentication flow usage.
+   * This token can be used to CDF endpoints
    *
    * ```js
    * client.loginWithOAuth({cluster: 'bluefield', ...});
    * await client.authenticate();
-   * const accessToken = await client.getAzureADAccessToken();
+   * const accessToken = await client.getCDFToken();
    * ```
    */
-  public getAzureADAccessToken(): Promise<string | null> {
+  public getCDFToken(): Promise<string | null> {
     if (!this.azureAdClient) {
-      throw Error('Access token can be acquired only using AzureAD auth flow');
+      throw Error('CDF token can be acquired only using AzureAD auth flow');
     }
 
     return this.azureAdClient.getCDFToken();
+  }
+
+  public getAzureADAccessToken(): Promise<string | null> {
+    if (!this.azureAdClient) {
+      throw Error(
+        'Azure AD access token can be acquired only using AzureAD auth flow'
+      );
+    }
+
+    return this.azureAdClient.getAccountToken();
   }
 
   /**
@@ -458,8 +470,9 @@ export default class BaseCogniteClient {
     const config = {
       auth: {
         clientId,
-        authority: `https://login.microsoftonline.com/${tenantId}`,
+        authority: `https://login.microsoftonline.com/${tenantId || 'common'}`,
         redirectUri: `${window.location.origin}`,
+        navigateToLoginRequestUrl: true,
       },
     };
 
@@ -469,9 +482,8 @@ export default class BaseCogniteClient {
 
     return async () => {
       const account = await azureAdClient.initAuth();
-      const authResult = await azureAdClient.getProfileTokenRedirect();
 
-      if (!account || !authResult) {
+      if (!account) {
         await azureAdClient.login(signInType);
       }
 

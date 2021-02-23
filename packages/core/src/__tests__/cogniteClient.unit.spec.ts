@@ -13,7 +13,6 @@ import { bearerString, sleepPromise } from '../utils';
 import { apiKey, authTokens, project } from '../testUtils';
 
 const initAuth = jest.fn();
-const getProfileTokenRedirect = jest.fn();
 const login = jest.fn();
 const getCDFToken = jest.fn();
 const getCluster = jest.fn();
@@ -23,7 +22,6 @@ jest.mock('../aad', () => {
     AzureAD: jest.fn().mockImplementation(() => {
       return {
         initAuth,
-        getProfileTokenRedirect,
         login,
         getCDFToken,
         getCluster,
@@ -496,12 +494,27 @@ describe('CogniteClient', () => {
         client.loginWithOAuth({ clientId, tenantId, cluster });
 
         const result = await client.authenticate();
-        const token = await client.getAzureADAccessToken();
+        const token = await client.getCDFToken();
 
         expect(result).toEqual(true);
         expect(token).toEqual('access_token');
       });
-      test('should throw error on attempt to get access token with cognite auth flow', async () => {
+      test('should throw error on attempt to get CDF token with cognite auth flow', async () => {
+        const createAuthenticateFunction = jest.spyOn(
+          Login,
+          'createAuthenticateFunction'
+        );
+        createAuthenticateFunction.mockReturnValueOnce(() =>
+          Promise.resolve(true)
+        );
+        client.loginWithOAuth({ project });
+        await expect(
+          async () => await client.getCDFToken()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          `"CDF token can be acquired only using AzureAD auth flow"`
+        );
+      });
+      test('should throw error on attempt to get Azure AD access token with cognite auth flow', async () => {
         const createAuthenticateFunction = jest.spyOn(
           Login,
           'createAuthenticateFunction'
@@ -513,7 +526,7 @@ describe('CogniteClient', () => {
         await expect(
           async () => await client.getAzureADAccessToken()
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"Access token can be acquired only using AzureAD auth flow"`
+          `"Azure AD access token can be acquired only using AzureAD auth flow"`
         );
       });
       test('should throw error on attempt to call setBaseUrl after azure ad auth', async () => {
