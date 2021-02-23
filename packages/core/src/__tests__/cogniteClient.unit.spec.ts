@@ -31,6 +31,7 @@ jest.mock('../aad', () => {
 });
 
 const mockBaseUrl = 'https://example.com';
+const cdfToken = 'azure-ad-CDF-token';
 
 function setupClient(baseUrl: string = BASE_URL) {
   return new BaseCogniteClient({ appId: 'JS SDK integration tests', baseUrl });
@@ -453,7 +454,7 @@ describe('CogniteClient', () => {
       });
 
       test('should auth with azure ad', async () => {
-        getCDFToken.mockResolvedValueOnce('access_token');
+        getCDFToken.mockResolvedValueOnce(cdfToken);
         getCluster.mockReturnValueOnce(cluster);
 
         client.loginWithOAuth({ clientId, tenantId, cluster });
@@ -463,7 +464,7 @@ describe('CogniteClient', () => {
         expect(result).toEqual(true);
       });
       test('should auth with azure ad via popup window', async () => {
-        getCDFToken.mockResolvedValueOnce('access_token');
+        getCDFToken.mockResolvedValueOnce(cdfToken);
         getCluster.mockReturnValueOnce(cluster);
         client.loginWithOAuth({
           clientId,
@@ -487,8 +488,8 @@ describe('CogniteClient', () => {
 
         expect(result).toEqual(false);
       });
-      test('should return access token in case azure ad auth flow', async () => {
-        getCDFToken.mockResolvedValue('access_token');
+      test('should return CDF token in case azure ad auth flow', async () => {
+        getCDFToken.mockResolvedValue(cdfToken);
         getCluster.mockReturnValueOnce(cluster);
 
         client.loginWithOAuth({ clientId, tenantId, cluster });
@@ -497,7 +498,31 @@ describe('CogniteClient', () => {
         const token = await client.getCDFToken();
 
         expect(result).toEqual(true);
-        expect(token).toEqual('access_token');
+        expect(token).toEqual(cdfToken);
+      });
+      test('should login silently in case valid account from local storage', async () => {
+        initAuth.mockResolvedValueOnce('account');
+        getCDFToken.mockResolvedValue(cdfToken);
+
+        client.loginWithOAuth({ clientId, cluster });
+
+        const result = await client.authenticate();
+
+        expect(result).toEqual(true);
+        expect(login).toHaveBeenCalledTimes(0);
+      });
+      test('should try to login again in case of failure to get CDF token with cached account data', async () => {
+        initAuth.mockResolvedValueOnce('wrong-cached–account');
+        getCDFToken.mockRejectedValueOnce('wrong account used');
+        getCDFToken.mockResolvedValueOnce(cdfToken);
+
+        client.loginWithOAuth({ clientId, cluster });
+
+        const result = await client.authenticate();
+
+        expect(result).toEqual(true);
+        expect(login).toHaveBeenCalledTimes(1);
+        expect(getCDFToken).toHaveBeenCalledTimes(2);
       });
       test('should throw error on attempt to get CDF token with cognite auth flow', async () => {
         const createAuthenticateFunction = jest.spyOn(

@@ -481,13 +481,22 @@ export default class BaseCogniteClient {
     this.azureAdClient = azureAdClient;
 
     return async () => {
+      let cdfAccessToken;
+
       const account = await azureAdClient.initAuth();
 
       if (!account) {
         await azureAdClient.login(signInType);
       }
 
-      const cdfAccessToken = await azureAdClient.getCDFToken();
+      try {
+        // could be the case if account that has been cached
+        // not valid to get CDF token
+        cdfAccessToken = await azureAdClient.getCDFToken();
+      } catch {
+        await azureAdClient.login(signInType);
+        cdfAccessToken = await azureAdClient.getCDFToken();
+      }
 
       if (cdfAccessToken) {
         this.httpClient.setBearerToken(cdfAccessToken);
