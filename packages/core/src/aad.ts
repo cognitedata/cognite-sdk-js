@@ -19,9 +19,11 @@ export interface AzureADOptions {
   config: Configuration;
   debug?: boolean;
 }
-export const LOGIN_POPUP = 'loginPopup';
-export const LOGIN_REDIRECT = 'loginRedirect';
-export type AzureADSingInType = typeof LOGIN_POPUP | typeof LOGIN_REDIRECT;
+export const AZURE_AUTH_POPUP = 'loginPopup';
+export const AZURE_AUTH_REDIRECT = 'loginRedirect';
+export type AzureADSingInType =
+  | typeof AZURE_AUTH_POPUP
+  | typeof AZURE_AUTH_REDIRECT;
 
 const loggerCallback = (level: LogLevel, message: string, containsPi: any) => {
   if (containsPi) {
@@ -102,9 +104,9 @@ export class AzureAD {
    * @param signInType
    */
   async login(
-    signInType: AzureADSingInType = LOGIN_REDIRECT
+    signInType: AzureADSingInType = AZURE_AUTH_REDIRECT
   ): Promise<AccountInfo | void> {
-    if (signInType === LOGIN_POPUP) {
+    if (signInType === AZURE_AUTH_POPUP) {
       try {
         const { account } = await this.msalApplication.loginPopup(
           this.loginPopupRequest
