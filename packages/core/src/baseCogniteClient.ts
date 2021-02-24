@@ -60,6 +60,9 @@ export interface ApiKeyLoginOptions extends Project {
 
 export const REDIRECT = 'REDIRECT';
 export const POPUP = 'POPUP';
+export const AAD_OAUTH = 'AAD_OAUTH';
+export const CDF_OAUTH = 'CDF_OAUTH';
+export type AuthFlowType = typeof AAD_OAUTH | typeof CDF_OAUTH;
 
 export interface OAuthLoginForCogniteOptions {
   project: string;
@@ -110,6 +113,7 @@ export default class BaseCogniteClient {
   private metadata: MetadataMap;
   private projectName: string = '';
   private hasBeenLoggedIn: boolean = false;
+  private oAuthHasBeenUsed: boolean = false;
   private loginApi: LoginAPI;
   private logoutApi: LogoutApi;
   private azureAdClient?: AzureAD;
@@ -276,6 +280,7 @@ export default class BaseCogniteClient {
 
     this.authenticate = authenticate;
     this.hasBeenLoggedIn = true;
+    this.oAuthHasBeenUsed = true;
   };
 
   /**
@@ -296,13 +301,24 @@ export default class BaseCogniteClient {
   }
 
   /**
+   * Provides information about which OAuth flow has been used
+   */
+  public getOAuthFlowType(): AuthFlowType | undefined {
+    return this.oAuthHasBeenUsed
+      ? this.azureAdClient
+        ? AAD_OAUTH
+        : CDF_OAUTH
+      : undefined;
+  }
+
+  /**
    * Returns CDF token in case of AzureAD authentication flow usage.
    * This token can be used to CDF endpoints
    *
    * ```js
    * client.loginWithOAuth({cluster: 'bluefield', ...});
    * await client.authenticate();
-   * const accessToken = await client.getCDFToken();
+   * const cdfToken = await client.getCDFToken();
    * ```
    */
   public getCDFToken(): Promise<string | null> {
@@ -313,6 +329,16 @@ export default class BaseCogniteClient {
     return this.azureAdClient.getCDFToken();
   }
 
+  /**
+   * Returns Azure AD access token in case of AzureAD authentication flow usage.
+   * Can be used for getting user details via Microsoft Graph API
+   *
+   * ```js
+   * client.loginWithOAuth({cluster: 'bluefield', ...});
+   * await client.authenticate();
+   * const accessToken = await client.getAzureADAccessToken();
+   * ```
+   */
   public getAzureADAccessToken(): Promise<string | null> {
     if (!this.azureAdClient) {
       throw Error(

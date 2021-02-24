@@ -1,7 +1,12 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import BaseCogniteClient, { POPUP, REDIRECT } from '../baseCogniteClient';
+import BaseCogniteClient, {
+  AAD_OAUTH,
+  CDF_OAUTH,
+  POPUP,
+  REDIRECT,
+} from '../baseCogniteClient';
 import {
   API_KEY_HEADER,
   AUTHORIZATION_HEADER,
@@ -138,6 +143,14 @@ describe('CogniteClient', () => {
       });
       expect(client.project).toBe(project);
     });
+    test('fails to return oauth flow type', () => {
+      const client = setupClient();
+      client.loginWithApiKey({
+        project,
+        apiKey,
+      });
+      expect(client.getOAuthFlowType()).toEqual(undefined);
+    });
   });
 
   test('getDefaultRequestHeaders() returns clone', () => {
@@ -255,6 +268,20 @@ describe('CogniteClient', () => {
           done();
         });
         client.authenticate();
+      });
+
+      test('should return cdf oauth flow type in case cdf oauth usage', async () => {
+        const client = setupClient();
+        client.loginWithOAuth({
+          project,
+          onAuthenticate: POPUP,
+        });
+        mockPopup.mockImplementationOnce(async () => {
+          return {};
+        });
+        await client.authenticate();
+
+        expect(client.getOAuthFlowType()).toEqual(CDF_OAUTH);
       });
 
       test('onAuthenticate: REDIRECT', async done => {
@@ -523,6 +550,16 @@ describe('CogniteClient', () => {
         expect(result).toEqual(true);
         expect(login).toHaveBeenCalledTimes(1);
         expect(getCDFToken).toHaveBeenCalledTimes(2);
+      });
+      test('should return aad oauth flow type in case of aad flow', async () => {
+        initAuth.mockResolvedValueOnce('account');
+        getCDFToken.mockResolvedValue(cdfToken);
+
+        client.loginWithOAuth({ clientId, cluster });
+
+        const result = await client.authenticate();
+        expect(result).toEqual(true);
+        expect(client.getOAuthFlowType()).toEqual(AAD_OAUTH);
       });
       test('should throw error on attempt to get CDF token with cognite auth flow', async () => {
         const createAuthenticateFunction = jest.spyOn(
