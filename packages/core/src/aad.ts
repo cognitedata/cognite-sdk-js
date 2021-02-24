@@ -75,10 +75,7 @@ export class AzureAD {
   }
 
   /**
-   * Calls getAllAccounts and determines the correct account to sign into,
-   * currently defaults to first account found in cache.
-   *
-   * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
+   * Returns account which has been saved in local storage by localAccountId
    */
   getAccount(): AccountInfo | null {
     const localAccountId = this.getLocalAccountIdFromLocalStorage();
