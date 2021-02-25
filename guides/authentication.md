@@ -15,7 +15,7 @@ To utilize authentication in browsers using the SDK you need to use the `client.
     - [Authentication with redirects](#authentication-with-redirects)
       - [Simple example](#simple-example)
       - [Customize redirect URL](#customize-redirect-url)
-    - [Authentication with popups](#authentication-with-popups)
+    - [Authentication with pop-up](#authentication-with-pop-up)
       - [Simple example](#simple-example-1)
       - [Customize redirect URL](#customize-redirect-url-1)
   - [Advance](#advance)
@@ -48,7 +48,7 @@ The access token will expire after some time and result in the user get `401` fr
 
 ## How to authenticate with the SDK?
 
-SDK supports few authentication flows:
+SDK supports the following authentication flows:
  - [CDF auth flow](#cdf-auth-flow)
  - [Azure AD auth flow](#azure-ad-auth-flow)
 
@@ -57,12 +57,12 @@ SDK supports few authentication flows:
 There are two ways to authenticate using the CDF auth flow:
 
 - [With redirect](#authentication-with-redirects)
-- [With popups](#authentication-with-popups)
+- [With pop-up](#authentication-with-pop-up)
 
 ### Authentication with redirects
 
-When doing authentication with redirects the current browser window will be redirected to the identity provider for the user to log in.
-After the login, the same browser window will be redirected back to your application.
+When doing authentication with redirects the browser window will be redirected to the identity provider for the user to sign in.
+After signing in, the browser window will be redirected back to your application.
 
 > You can find a running example application using redirects [here](../samples/react/authentication/src/App.js).
 
@@ -104,11 +104,13 @@ client.loginWithOAuth({
 });
 ```
 
-### Authentication with popups
+### Authentication with pop-up
 
-When doing authentication with popups the currect browser window of your application will remain the same but a new window will pop-up asking the user to login into the identity provider. After a sucessful login the popup-window will automatically close itself.
+When doing authentication with pop-up the current browser window of your application will remain the same,
+but a new pop-up window will ask the user to login into the identity provider.
+After a successful login, the pop-up window will automatically close itself.
 
-> You can find a running example application using popups [here](../samples/react/authentication-with-popup/src/App.js).
+> You can find a running example application using pop-up [here](../samples/react/authentication-with-popup/src/App.js).
 
 #### Simple example
 
@@ -129,7 +131,11 @@ client.loginWithOAuth({
 const assets = await client.assets.retrieve({ id: 23232789217132 });
 ```
 
-The first time this will run the user will get a `401`-response from CDF in the first call to `client.assets`. This will trigger the SDK to perform authentication of the user using a popup-window. A new window will popup showing the login screen of the identity provider. After a successful login the popup-window will be redirected back to your app (the same URL as the main browser window) where `sdk.loginPopupHandler` will be executed and handle the tokens in the URL and close the window. **Therefore it is important** that `sdk.loginPopupHandler` will run when the popup window gets redirected back to your app (otherwise the authentication process will fail).
+The first time this will run the user will get a `401`-response from CDF in the first call to `client.assets`.
+This will trigger the SDK to perform authentication of the user using a pop-up window. A new pop-up window will show the login screen of the identity provider.
+After a successful login the pop-up window will be redirected back to your app (the same URL as the main browser window) where `sdk.loginPopupHandler`
+will be executed and handle the tokens in the URL and close the window. **Therefore it is important** that `sdk.loginPopupHandler` will run when the pop-up window gets redirected back to your app
+(otherwise the authentication process will fail).
 
 After a successful authentication process the SDK will automatically retry the `client.assets` request and will eventually resolve and return the correct result.
 
@@ -151,7 +157,7 @@ client.loginWithOAuth({
 });
 ```
 
-This only affect the popup-window.
+This only affect the pop-up window.
 
 ## Advance
 
@@ -190,7 +196,8 @@ client.loginWithOAuth({
 
 ### Combine different authentication methods
 
-If you want to use redirect-method in the initialization of your app and use the popup-method later (to not lose the state of your app) you can implement something like this:
+If you want to use redirect method in the initialization of your app and use the pop-up method later (to not lose the state of your app)
+you can implement something like this:
 
 ```js
 client.loginWithOAuth({
@@ -221,40 +228,48 @@ client.loginWithOAuth({
 
 ### More
 
-Here is an article describing more in detail about the authentication process:
+Read more about the authentication process:
 https://doc.cognitedata.com/dev/guides/iam/external-application.html#tokens
 
 ## Azure AD auth flow
 
-Azure AD auth flow can be used via the same `loginWithOAuth` method of `CogniteClient`,
-but different `options` structure has to be passed. You'll find what options structure has to be provided in examples below.
-Besides, here list of pre-requirements, that need to be in place to use Azure AD authentication flow:
+Azure AD auth flow can be used via the `loginWithOAuth` method of `CogniteClient`.
 
- - CDF project, which you're trying to log in, has to be configured to accept tokens issued by Azure AD (to be related to the cluster, that accepts Azure AD tokens, `bluefield` for instance)
- - You should have the `clientId` of your Azure AD application token will be issued for
- - Cluster your CDF project related to (`bluefield` for instance)
+### Requirements
 
-Azure AD authentication flow supports two login types:
+Here is a list of requirements, that must be in place to use Azure AD authentication flow:
+
+ - The CDF project, you're trying to sign in to, must be configured to accept tokens issued by Azure AD (or to be related to the cluster, that accepts Azure AD tokens, `bluefield` for instance)
+ - You should have the `clientId` of your Azure AD application. It is used to provide Azure AD auth flow for your application.
+
+Azure `tenantId` is also something, that should be defined to authenticate to Azure application which supports
+single tenant authentication only. In case of multi tenant application, you can skip `tenantId` parameter to use
+microsoft `https://login.microsoftonline.com/common` endpoint instead `https://login.microsoftonline.com/:tenantId`.
+You can find more information about single/multi tenant Azure AD application [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-convert-app-to-be-multi-tenant#update-your-code-to-send-requests-to-common)
+
+### Login types
+
+Azure AD authentication flow supports these sign in methods:
 
  - [With redirect](#authentication-via-redirect)
- - [With popup](#authentication-via-popup)
+ - [With pop-up](#authentication-via-pop-up)
 
 ### Authentication via redirect
 
-When you authenticate using redirect, auth flow remains quite similar that we have in CDF auth flow.
-But the IdP in this is Azure where user has to log in to prove identity.
+When doing authentication with redirects the browser window will be redirected to the identity provider for the user to sign in.
+After signing in, the browser window will be redirected back to your application.
 
 > You might find useful example application using redirect Azure AD auth flow [here](../samples/react/authentication-aad/src/App.js).
-> And don't forget to provde required environment variables via `.env` file.
+> Remember to provide the required environment variables in the `.env` file.
  
-#### Redirect sign in type example
+#### Redirect login type example
 
 ```js
 import { CogniteClient } from '@cognite/sdk';
 const client = new CogniteClient({ ... });
 
-// tenantId can be also undefined,
-// microsoft /common endpoint will be used to define tenant instead
+// tenantId parameter can be skipped in order to use,
+// https://login.microsoftonline.com/common endpoint to authenticate user
 client.loginWithOAuth({
   cluster: 'cdf-cluster-name',
   clientId: 'azure-application-client-id',
@@ -271,22 +286,29 @@ client.setProject('cdf-project-name');
 const assets = await client.assets.retrive({ id: 23232789217132 });
 ```
 
-With the call `await client.authenticate()` you'll be redirected to the IdP for log in.
+With the call `await client.authenticate()` you'll be redirected to the IdP to sign in.
 After a successful login, you'll be redirected back and `await client.authenticate()` call
-will return you `true` as a result of the successful login. An important thing here is
+will return you `true` as a result of the successful login. It is important
 to set project for the `CogniteClient` instance via `client.setProject('project-name')` 
 
-### Authentication via popup
+### Authentication via pop-up
 
-Popup can be also used to provide user ability to log in Azure.
+You can also provide a pop-up window for the user to sign in to Azure.
+When doing authentication with pop-up the current browser window of your application will remain the same,
+but a new window will pop-up asking the user to login into the identity provider. After a successful login, the popup-window will automatically close itself
+
+#### Pop-up login type example
 
 ```js
 import { CogniteClient, AZURE_AUTH_POPUP } from '@cognite/sdk';
 const client = new CogniteClient({ ... });
 
+// tenantId parameter can be skipped in order to use,
+// https://login.microsoftonline.com/common endpoint to authenticate user
 client.loginWithOAuth({
   cluster: 'cdf-cluster-name',
   clientId: 'azure-application-client-id',
+  tenantId: 'azure-tenant-id',
   signInType: AZURE_AUTH_POPUP,
 });
 
@@ -300,9 +322,9 @@ client.setProject('cdf-project-name');
 const assets = await client.assets.retrive({ id: 23232789217132 });
 ```
 
-After `client.authenticate()` call application waits for the message from the just popped up window about
-successful or unsuccessful log in inside it. In case of `client.authenticate()` returns `true`
-you good to set cdf project name and make requests.
+After `client.authenticate()` call application waits for the message from the pop-up window about
+successful or unsuccessful sign in inside it. In case of `client.authenticate()` returns `true`
+you good to set CDF project name and make requests.
 
 ### Get cdf token
 
