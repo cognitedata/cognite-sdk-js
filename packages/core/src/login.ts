@@ -19,6 +19,7 @@ import {
   getBaseUrl,
   isSameProject,
   isUsingSSL,
+  isLocalhost,
   promiseCache,
   removeQueryParameterFromUrl,
 } from './utils';
@@ -313,7 +314,7 @@ export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
         }
       };
 
-      if (isUsingSSL()) {
+      if (isUsingSSL() || isLocalhost()) {
         const tokens = await Login.loginSilently(httpClient, {
           baseUrl,
           project,
