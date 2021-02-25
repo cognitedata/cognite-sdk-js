@@ -211,7 +211,7 @@ export default class BaseCogniteClient {
   };
 
   /**
-   * Login client with OAuth login flow
+   * Sign in client with OAuth login flow
    * <!-- [Login with redirect](https://doc.cognitedata.com/api/v1/#operation/redirectUrl) -->
    *
    * ```js
@@ -225,13 +225,13 @@ export default class BaseCogniteClient {
    *   onAuthenticate: REDIRECT // optional, REDIRECT is by default
    * });
    *
-   * // or you can login using AzureAD authentication flow (in case your projects supports it)
+   * // or you can sign in using AzureAD authentication flow (in case your projects supports it)
    * client.loginWithOAuth({
    *   cluster: '[CLUSTER]',
    *   clientId: '[CLIENT_ID]', // client id of your AzureAD application
    *   tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
    * });
-   * // after login you can do calls with the client
+   * // after sign in you can do calls with the client
    * (async () => {
    *   await client.authenticate();
    *   client.setProject('project-name');
