@@ -291,7 +291,7 @@ await client.authenticate();
 client.setProject('cdf-project-name');
 
 // then use the SDK:
-const assets = await client.assets.retrive({ id: 23232789217132 });
+const assets = await client.assets.retrieve({ id: 23232789217132 });
 ```
 
 With the call `await client.authenticate()` you'll be redirected to the IdP to sign in.
@@ -327,7 +327,7 @@ await client.authenticate();
 client.setProject('cdf-project-name');
 
 // then use the SDK:
-const assets = await client.assets.retrive({ id: 23232789217132 });
+const assets = await client.assets.retrieve({ id: 23232789217132 });
 ```
 
 After `client.authenticate()` call application waits for the message from the pop-up window about
