@@ -204,3 +204,8 @@ export function createInvisibleIframe(
 export function isUsingSSL() {
   return isBrowser() && location.protocol.toLowerCase() === 'https:';
 }
+
+/** @hidden */
+export function isLocalhost() {
+  return isBrowser() && location.hostname === 'localhost';
+}
