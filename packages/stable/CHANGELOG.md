@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.3.2...@cognite/sdk@3.3.4) (2021-03-01)
+
+
+### Bug Fixes
+
+* **timeseries:** synthetic/query is a retryable endpoint ([#475](https://github.com/cognitedata/cognite-sdk-js/issues/475)) ([7e03ae2](https://github.com/cognitedata/cognite-sdk-js/commit/7e03ae2f06d5c998c81d9e5ab743831f8cda9ead))
+
+
+
+
+
 ## [3.3.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.3.2...@cognite/sdk@3.3.3) (2021-02-26)
 
 **Note:** Version bump only for package @cognite/sdk
