@@ -4,6 +4,7 @@ import fetch, { Response } from 'cross-fetch';
 import { stringify } from 'query-string';
 import { isJson } from '../utils';
 import { HttpError } from './httpError';
+import { DEFAULT_DOMAIN } from '../constants';
 
 export class BasicHttpClient {
   private static validateStatusCode(status: number) {
@@ -101,6 +102,10 @@ export class BasicHttpClient {
 
   public getBaseUrl() {
     return this.baseUrl;
+  }
+
+  public setCluster(cluster: string) {
+    this.baseUrl = `https://${cluster}.${DEFAULT_DOMAIN}`;
   }
 
   public get<ResponseType>(path: string, options: HttpRequestOptions = {}) {

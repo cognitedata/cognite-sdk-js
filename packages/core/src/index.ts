@@ -51,4 +51,9 @@ export {
   promiseAllWithData,
   promiseEachInSequence,
 } from './utils';
+export {
+  AZURE_AUTH_POPUP,
+  AZURE_AUTH_REDIRECT,
+  AzureADSingInType,
+} from './aad';
 export { TestUtils, Constants, GraphUtils };

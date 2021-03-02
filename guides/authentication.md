@@ -12,19 +12,27 @@ To utilize authentication in browsers using the SDK you need to use the `client.
   - [Access tokens](#access-tokens)
   - [Authentication flow](#authentication-flow)
   - [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
-    - [Authentication with redirects](#authentication-with-redirects)
-      - [Simple example](#simple-example)
-      - [Customize redirect URL](#customize-redirect-url)
-    - [Authentication with popups](#authentication-with-popups)
-      - [Simple example](#simple-example-1)
-      - [Customize redirect URL](#customize-redirect-url-1)
-  - [Advance](#advance)
-    - [Manually trigger authentication](#manually-trigger-authentication)
-    - [Cache access tokens](#cache-access-tokens)
-    - [Skip authentication](#skip-authentication)
-    - [Combine different authentication methods](#combine-different-authentication-methods)
-    - [Tokens](#tokens)
-  - [More](#more)
+    - [CDF auth flow](#cdf-auth-flow)
+      - [Authentication with redirects](#authentication-with-redirects)
+        - [Simple example](#simple-example)
+        - [Customize redirect URL](#customize-redirect-url)
+      - [Authentication with pop-up](#authentication-with-pop-up)
+        - [Simple example](#simple-example-1)
+        - [Customize redirect URL](#customize-redirect-url-1)
+      - [Advance](#advance)
+        - [Manually trigger authentication](#manually-trigger-authentication)
+        - [Cache access tokens](#cache-access-tokens)
+        - [Skip authentication](#skip-authentication)
+        - [Combine different authentication methods](#combine-different-authentication-methods)
+        - [Tokens](#tokens)
+      - [More](#more)
+    - [Azure AD auth flow](#azure-ad-auth-flow)
+      - [Requirenments](#requirements)
+      - [Authentication via redirect](#authentication-via-redirect)
+        - [Redirect sign in type example](#redirect-sign-in-type-example)
+      - [Authentication via pop-up](#authentication-via-pop-up)
+        - [Pop-up sign in type example](#pop-up-sign-in-type-example)
+      - [Get cdf token](#get-cdf-token)
 
 ## Why not using api keys?
 
@@ -32,7 +40,7 @@ It is **strongly recommended** to not use api keys in web applications since the
 
 ## Access tokens
 
-The solution to avoid using api keys is to use access tokens. This is short living tokens which grants the user access to CDF. The application get an access token by asking the user to login to the identity provider (Google, Active Directory etc) of a CDF project.
+The solution to avoid using api keys is to use access tokens. This is short living tokens which grants the user access to CDF. The application get an access token by asking the user to sign in to the identity provider (Google, Active Directory etc) of a CDF project.
 
 ## Authentication flow
 
@@ -48,14 +56,21 @@ The access token will expire after some time and result in the user get `401` fr
 
 ## How to authenticate with the SDK?
 
-There are two ways to authenticate using the SDK:
+SDK supports the following authentication flows:
+ - [CDF auth flow](#cdf-auth-flow)
+ - [Azure AD auth flow](#azure-ad-auth-flow)
+
+## CDF auth flow
+
+There are two ways to authenticate using the CDF auth flow:
 
 - [With redirect](#authentication-with-redirects)
-- [With popups](#authentication-with-popups)
+- [With pop-up](#authentication-with-pop-up)
 
 ### Authentication with redirects
 
-When doing authentication with redirects the currect browser window will be redirected to the identity provider for the user to log in. After login the same browser window will be redirect back to your application.
+When doing authentication with redirects the browser window will be redirected to the identity provider for the user to sign in.
+After signing in, the browser window will be redirected back to your application.
 
 > You can find a running example application using redirects [here](../samples/react/authentication/src/App.js).
 
@@ -81,7 +96,7 @@ The second time `client.assets` is called the SDK will be authenticated and the 
 
 #### Customize redirect URL
 
-If you want a different redirect url back to your app after a successful / unsuccessful login you can implement this:
+If you want a different redirect url back to your app after a successful / unsuccessful sign in you can implement this:
 
 ```js
 import { CogniteClient, REDIRECT } from '@cognite/sdk';
@@ -97,11 +112,13 @@ client.loginWithOAuth({
 });
 ```
 
-### Authentication with popups
+### Authentication with pop-up
 
-When doing authentication with popups the currect browser window of your application will remain the same but a new window will pop-up asking the user to login into the identity provider. After a sucessful login the popup-window will automatically close itself.
+When doing authentication with pop-up the current browser window of your application will remain the same,
+but a new pop-up window will ask the user to sign in into the identity provider.
+After a successful sign in, the pop-up window will automatically close itself.
 
-> You can find a running example application using popups [here](../samples/react/authentication-with-popup/src/App.js).
+> You can find a running example application using pop-up [here](../samples/react/authentication-with-popup/src/App.js).
 
 #### Simple example
 
@@ -122,13 +139,17 @@ client.loginWithOAuth({
 const assets = await client.assets.retrieve({ id: 23232789217132 });
 ```
 
-The first time this will run the user will get a `401`-response from CDF in the first call to `client.assets`. This will trigger the SDK to perform authentication of the user using a popup-window. A new window will popup showing the login screen of the identity provider. After a successful login the popup-window will be redirected back to your app (the same URL as the main browser window) where `sdk.loginPopupHandler` will be executed and handle the tokens in the URL and close the window. **Therefore it is important** that `sdk.loginPopupHandler` will run when the popup window gets redirected back to your app (otherwise the authentication process will fail).
+The first time this will run the user will get a `401`-response from CDF in the first call to `client.assets`.
+This will trigger the SDK to perform authentication of the user using a pop-up window. A new pop-up window will show the sign in screen of the identity provider.
+After a successful sign in the pop-up window will be redirected back to your app (the same URL as the main browser window) where `sdk.loginPopupHandler`
+will be executed and handle the tokens in the URL and close the window. **Therefore it is important** that `sdk.loginPopupHandler` will run when the pop-up window gets redirected back to your app
+(otherwise the authentication process will fail).
 
 After a successful authentication process the SDK will automatically retry the `client.assets` request and will eventually resolve and return the correct result.
 
 #### Customize redirect URL
 
-If you want a different redirect url back to your application after a successful / unsuccessful login you can do this:
+If you want a different redirect url back to your application after a successful / unsuccessful sign in you can do this:
 
 ```js
 import { CogniteClient, POPUP } from '@cognite/sdk';
@@ -144,11 +165,11 @@ client.loginWithOAuth({
 });
 ```
 
-This only affect the popup-window.
+This only affect the pop-up window.
 
-## Advance
+### Advance
 
-### Manually trigger authentication
+#### Manually trigger authentication
 
 To avoid waiting for the first `401`-response to occur you can trigger the authentication flow manually like this:
 ```js
@@ -158,7 +179,7 @@ client.loginWithOAuth({
 await client.authenticate(); // this will also return a boolean based on if the user successfully authenticated or not.
 ```
 
-### Cache access tokens
+#### Cache access tokens
 
 If you already have a access token you can use it to skip the authentication flow (see this [section](#tokens) on how to get hold of the token). If the token is invalid or timed out the SDK will trigger a standard auth-flow on the first 401-response from CDF.
 ```js
@@ -169,7 +190,7 @@ client.loginWithOAuth({
 ```
 > `client.authenticate()` will still override this and trigger a new authentication flow.
 
-### Skip authentication
+#### Skip authentication
 
 It is possible to skip the authentication like this:
 ```js
@@ -181,9 +202,10 @@ client.loginWithOAuth({
 });
 ```
 
-### Combine different authentication methods
+#### Combine different authentication methods
 
-If you want to use redirect-method in the initialization of your app and use the popup-method later (to not lose the state of your app) you can implement something like this:
+If you want to use redirect method in the initialization of your app and use the pop-up method later (to not lose the state of your app)
+you can implement something like this:
 
 ```js
 client.loginWithOAuth({
@@ -199,7 +221,7 @@ client.loginWithOAuth({
 });
 ```
 
-### Tokens
+#### Tokens
 
 If you need access to the tokens (access token, id token) from the login flow you can add a callback like this:
 
@@ -212,7 +234,128 @@ client.loginWithOAuth({
 });
 ```
 
-## More
+### More
 
-Here is an article describing more in detail about the authentication process:
+Read more about the authentication process:
 https://doc.cognitedata.com/dev/guides/iam/external-application.html#tokens
+
+## Azure AD auth flow
+
+Azure AD auth flow can be used via the `loginWithOAuth` method of `CogniteClient`.
+
+### Requirements
+
+Here is a list of requirements, that must be in place to use Azure AD authentication flow:
+
+ - The CDF project, you're trying to sign in to, must be configured to accept tokens issued by Azure AD (or to be related to the cluster, that accepts Azure AD tokens, `bluefield` for instance)
+ - You should have the `clientId` of your Azure AD application. It is used to provide Azure AD auth flow for your application.
+
+Azure `tenantId` is also something, that should be defined to authenticate to Azure application which supports
+single tenant authentication only. In case of multi tenant application, you can skip `tenantId` parameter to use
+microsoft `https://login.microsoftonline.com/common` endpoint instead `https://login.microsoftonline.com/:tenantId`.
+You can find more information about single/multi tenant Azure AD application [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-convert-app-to-be-multi-tenant#update-your-code-to-send-requests-to-common)
+
+### Sign in types
+
+Azure AD authentication flow supports these sign in methods:
+
+ - [With redirect](#authentication-via-redirect)
+ - [With pop-up](#authentication-via-pop-up)
+
+### Authentication via redirect
+
+When doing authentication with redirects the browser window will be redirected to the identity provider for the user to sign in.
+After signing in, the browser window will be redirected back to your application.
+
+> You might find useful example application using redirect Azure AD auth flow [here](../samples/react/authentication-aad/src/App.js).
+> Remember to provide the required environment variables in the `.env` file.
+ 
+#### Redirect sign in type example
+
+```js
+import { CogniteClient } from '@cognite/sdk';
+const client = new CogniteClient({ ... });
+
+// tenantId parameter can be skipped in order to use,
+// https://login.microsoftonline.com/common endpoint to authenticate user
+client.loginWithOAuth({
+  cluster: 'cdf-cluster-name',
+  clientId: 'azure-application-client-id',
+  tenantId: 'azure-tenant-id'
+});
+
+// authenticate to the provided cluster
+await client.authenticate();
+
+// set project name to make requsts to
+client.setProject('cdf-project-name');
+
+// then use the SDK:
+const assets = await client.assets.retrieve({ id: 23232789217132 });
+```
+
+With the call `await client.authenticate()` you'll be redirected to the IdP to sign in.
+After you have signed in, you'll be redirected back and `await client.authenticate()` call
+will return you `true` as a result of the successful login. It is important
+to set project for the `CogniteClient` instance via `client.setProject('project-name')` 
+
+### Authentication via pop-up
+
+You can also provide a pop-up window for the user to sign in to Azure.
+When doing authentication with pop-up the current browser window of your application will remain the same,
+but a new window will pop-up asking the user to sign in into the identity provider. After a successful sign in, the pop-up window will automatically close itself
+
+#### Pop-up sign in type example
+
+```js
+import { CogniteClient, AZURE_AUTH_POPUP } from '@cognite/sdk';
+const client = new CogniteClient({ ... });
+
+// tenantId parameter can be skipped in order to use,
+// https://login.microsoftonline.com/common endpoint to authenticate user
+client.loginWithOAuth({
+  cluster: 'cdf-cluster-name',
+  clientId: 'azure-application-client-id',
+  tenantId: 'azure-tenant-id',
+  signInType: AZURE_AUTH_POPUP,
+});
+
+// authenticate to the provided cluster
+await client.authenticate();
+
+// set project name to make requsts to
+client.setProject('cdf-project-name');
+
+// then use the SDK:
+const assets = await client.assets.retrieve({ id: 23232789217132 });
+```
+
+After `client.authenticate()` call application waits for the message from the pop-up window about
+successful or unsuccessful sign in inside it. In case of `client.authenticate()` returns `true`
+you good to set CDF project name and make requests.
+
+### Get cdf token
+
+After the user has been authenticated, you can acquire the CDF token via `await client.getCDFToken()`.
+This method works only for Azure AD authentication flow. You can also check which flow has been used with `loginWithOAuth`:
+
+```js
+import { CogniteClient, AZURE_AUTH_POPUP, AAD_OAUTH } from '@cognite/sdk';
+const client = new CogniteClient({ ... });
+
+client.loginWithOAuth({
+  cluster: 'cdf-cluster-name',
+  clientId: 'azure-application-client-id',
+  signInType: AZURE_AUTH_POPUP,
+});
+
+// authenticate to the provided cluster
+await client.authenticate();
+
+// set project name to make requsts to
+client.setProject('cdf-project-name');
+
+if (client.getOAuthFlowType() === AAD_OAUTH) {
+  const cdfToken = await client.getCDFToken()
+}
+```

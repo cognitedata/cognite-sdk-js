@@ -6,6 +6,11 @@ import isBuffer from 'is-buffer';
 import { API_VERSION, BASE_URL } from './constants';
 import { CogniteError } from './error';
 import { CogniteMultiError } from './multiError';
+import {
+  OAuthLoginForAADOptions,
+  OAuthLoginForCogniteOptions,
+  OAuthLoginOptions,
+} from './baseCogniteClient';
 
 /** @hidden */
 export function getBaseUrl(baseUrl?: string) {
@@ -208,4 +213,18 @@ export function isUsingSSL() {
 /** @hidden */
 export function isLocalhost() {
   return isBrowser() && location.hostname === 'localhost';
+}
+
+/** @hidden */
+export function isOAuthWithCogniteOptions(
+  options: OAuthLoginOptions
+): options is OAuthLoginForCogniteOptions {
+  return 'project' in options;
+}
+
+/** @hidden */
+export function isOAuthWithAADOptions(
+  options: OAuthLoginOptions
+): options is OAuthLoginForAADOptions {
+  return ['clientId', 'cluster'].every(key => key in options);
 }
