@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>OAuthLoginOptions | Cognite JavaScript SDK</title>
-	<meta name="description" content="Documentation for Cognite JavaScript SDK">
+	<title>OAuthLoginForAADOptions | Cognite JavaScript SDK (beta)</title>
+	<meta name="description" content="Documentation for Cognite JavaScript SDK (beta)">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">Cognite JavaScript SDK</a>
+					<a href="../index.html" class="title">Cognite JavaScript SDK (beta)</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -59,10 +59,10 @@
 					<a href="../modules/_core_src_basecogniteclient_.html">&quot;core/src/baseCogniteClient&quot;</a>
 				</li>
 				<li>
-					<a href="_core_src_basecogniteclient_.oauthloginoptions.html">OAuthLoginOptions</a>
+					<a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html">OAuthLoginForAADOptions</a>
 				</li>
 			</ul>
-			<h1>Interface OAuthLoginOptions</h1>
+			<h1>Interface OAuthLoginForAADOptions</h1>
 		</div>
 	</div>
 </header>
@@ -73,12 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="_core_src_basecogniteclient_.project.html" class="tsd-signature-type">Project</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">OAuthLoginOptions</span>
-							</li>
-						</ul>
+						<span class="target">OAuthLoginForAADOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -89,10 +84,11 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginoptions.html#accesstoken" class="tsd-kind-icon">access<wbr>Token</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginoptions.html#onauthenticate" class="tsd-kind-icon">on<wbr>Authenticate</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginoptions.html#ontokens" class="tsd-kind-icon">on<wbr>Tokens</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginoptions.html#project" class="tsd-kind-icon">project</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html#clientid" class="tsd-kind-icon">client<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html#cluster" class="tsd-kind-icon">cluster</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html#debug" class="tsd-kind-icon">debug</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html#signintype" class="tsd-kind-icon">sign<wbr>InType</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html#tenantid" class="tsd-kind-icon">tenant<wbr>Id</a></li>
 							</ul>
 						</section>
 					</div>
@@ -101,55 +97,54 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="accesstoken" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> access<wbr>Token</h3>
-					<div class="tsd-signature tsd-kind-icon">access<wbr>Token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<a name="clientid" class="tsd-anchor"></a>
+					<h3>client<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">client<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b0d8cba/packages/core/src/baseCogniteClient.ts#L61">packages/core/src/baseCogniteClient.ts:61</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Provide optional cached access token to skip the authentication flow (client.authenticate will still override this).</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="onauthenticate" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Authenticate</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Authenticate<span class="tsd-signature-symbol">:</span> <a href="../modules/_core_src_login_.html#onauthenticate" class="tsd-signature-type">OnAuthenticate</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"REDIRECT"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"POPUP"</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b0d8cba/packages/core/src/baseCogniteClient.ts#L56">packages/core/src/baseCogniteClient.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/4cbadf1/packages/core/src/baseCogniteClient.ts#L79">packages/core/src/baseCogniteClient.ts:79</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="ontokens" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Tokens</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Tokens<span class="tsd-signature-symbol">:</span> <a href="../modules/_core_src_login_.html#ontokens" class="tsd-signature-type">OnTokens</a></div>
+					<a name="cluster" class="tsd-anchor"></a>
+					<h3>cluster</h3>
+					<div class="tsd-signature tsd-kind-icon">cluster<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b0d8cba/packages/core/src/baseCogniteClient.ts#L57">packages/core/src/baseCogniteClient.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/4cbadf1/packages/core/src/baseCogniteClient.ts#L78">packages/core/src/baseCogniteClient.ts:78</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-					<a name="project" class="tsd-anchor"></a>
-					<h3>project</h3>
-					<div class="tsd-signature tsd-kind-icon">project<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="debug" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> debug</h3>
+					<div class="tsd-signature tsd-kind-icon">debug<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="_core_src_basecogniteclient_.project.html">Project</a>.<a href="_core_src_basecogniteclient_.project.html#project">project</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b0d8cba/packages/core/src/baseCogniteClient.ts#L43">packages/core/src/baseCogniteClient.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/4cbadf1/packages/core/src/baseCogniteClient.ts#L82">packages/core/src/baseCogniteClient.ts:82</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Cognite project to login into</p>
-						</div>
-					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="signintype" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> sign<wbr>InType</h3>
+					<div class="tsd-signature tsd-kind-icon">sign<wbr>InType<span class="tsd-signature-symbol">:</span> <a href="../modules/_core_src_aad_.html#azureadsingintype" class="tsd-signature-type">AzureADSingInType</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/4cbadf1/packages/core/src/baseCogniteClient.ts#L81">packages/core/src/baseCogniteClient.ts:81</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="tenantid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tenant<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">tenant<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/4cbadf1/packages/core/src/baseCogniteClient.ts#L80">packages/core/src/baseCogniteClient.ts:80</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -178,32 +173,50 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_core_src_basecogniteclient_.oauthloginoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Options</a>
+						<a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>ForAADOptions</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_core_src_basecogniteclient_.oauthloginoptions.html#accesstoken" class="tsd-kind-icon">access<wbr>Token</a>
+								<a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html#clientid" class="tsd-kind-icon">client<wbr>Id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_core_src_basecogniteclient_.oauthloginoptions.html#onauthenticate" class="tsd-kind-icon">on<wbr>Authenticate</a>
+								<a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html#cluster" class="tsd-kind-icon">cluster</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_core_src_basecogniteclient_.oauthloginoptions.html#ontokens" class="tsd-kind-icon">on<wbr>Tokens</a>
+								<a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html#debug" class="tsd-kind-icon">debug</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="_core_src_basecogniteclient_.oauthloginoptions.html#project" class="tsd-kind-icon">project</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html#signintype" class="tsd-kind-icon">sign<wbr>InType</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_core_src_basecogniteclient_.oauthloginforaadoptions.html#tenantid" class="tsd-kind-icon">tenant<wbr>Id</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_core_src_basecogniteclient_.oauthloginforcogniteoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>For<wbr>Cognite<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="_core_src_basecogniteclient_.project.html" class="tsd-kind-icon">Project</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_core_src_basecogniteclient_.html#authflowtype" class="tsd-kind-icon">Auth<wbr>Flow<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/_core_src_basecogniteclient_.html#baserequestoptions" class="tsd-kind-icon">Base<wbr>Request<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_core_src_basecogniteclient_.html#oauthloginoptions" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/_core_src_basecogniteclient_.html#response" class="tsd-kind-icon">Response</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_core_src_basecogniteclient_.html#aad_oauth" class="tsd-kind-icon">AAD_<wbr>OAUTH</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_core_src_basecogniteclient_.html#cdf_oauth" class="tsd-kind-icon">CDF_<wbr>OAUTH</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/_core_src_basecogniteclient_.html#popup" class="tsd-kind-icon">POPUP</a>

@@ -196,6 +196,9 @@ quickstart();</code></pre>
 						<a href="classes/assetsapi.html" class="tsd-kind-icon">AssetsAPI</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/azuread.html" class="tsd-kind-icon">AzureAD</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/basecogniteclient.html" class="tsd-kind-icon">Base<wbr>Cognite<wbr>Client</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
@@ -407,6 +410,9 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/azureadconfiguration.html" class="tsd-kind-icon">AzureADConfiguration</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/azureadoptions.html" class="tsd-kind-icon">AzureADOptions</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/boundingbox3d.html" class="tsd-kind-icon">Bounding<wbr>Box3D</a>
@@ -733,7 +739,10 @@ quickstart();</code></pre>
 						<a href="interfaces/oauth2configuration.html" class="tsd-kind-icon">OAuth2<wbr>Configuration</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/oauthloginoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Options</a>
+						<a href="interfaces/oauthloginforaadoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>ForAADOptions</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/oauthloginforcogniteoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>For<wbr>Cognite<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/onauthenticateloginobject.html" class="tsd-kind-icon">On<wbr>Authenticate<wbr>Login<wbr>Object</a>
@@ -1089,6 +1098,9 @@ quickstart();</code></pre>
 					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#assetsource" class="tsd-kind-icon">Asset<wbr>Source</a>
 					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#authflowtype" class="tsd-kind-icon">Auth<wbr>Flow<wbr>Type</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
 						<a href="globals.html#autopagingeach" class="tsd-kind-icon">Auto<wbr>Paging<wbr>Each</a>
 					</li>
@@ -1097,6 +1109,9 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
 						<a href="globals.html#autopagingtoarray" class="tsd-kind-icon">Auto<wbr>Paging<wbr>ToArray</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#azureadsingintype" class="tsd-kind-icon">AzureADSing<wbr>InType</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#baserequestoptions" class="tsd-kind-icon">Base<wbr>Request<wbr>Options</a>
@@ -1282,6 +1297,9 @@ quickstart();</code></pre>
 						<a href="globals.html#nullablesinglepatchstring" class="tsd-kind-icon">Nullable<wbr>Single<wbr>Patch<wbr>String</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#oauthloginoptions" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#owner" class="tsd-kind-icon">OWNER</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
@@ -1429,7 +1447,19 @@ quickstart();</code></pre>
 						<a href="globals.html#write" class="tsd-kind-icon">WRITE</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#aad_oauth" class="tsd-kind-icon">AAD_<wbr>OAUTH</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#access_token_param" class="tsd-kind-icon">ACCESS_<wbr>TOKEN_<wbr>PARAM</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#azure_auth_popup" class="tsd-kind-icon">AZURE_<wbr>AUTH_<wbr>POPUP</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#azure_auth_redirect" class="tsd-kind-icon">AZURE_<wbr>AUTH_<wbr>REDIRECT</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#cdf_oauth" class="tsd-kind-icon">CDF_<wbr>OAUTH</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#default_max_retry_attempts" class="tsd-kind-icon">DEFAULT_<wbr>MAX_<wbr>RETRY_<wbr>ATTEMPTS</a>
@@ -1454,6 +1484,9 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#redirect" class="tsd-kind-icon">REDIRECT</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#accountlocalstoragekey" class="tsd-kind-icon">account<wbr>Local<wbr>Storage<wbr>Key</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#apikey" class="tsd-kind-icon">api<wbr>Key</a>
@@ -1505,6 +1538,9 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#isvalidretrystatuscode" class="tsd-kind-icon">is<wbr>Valid<wbr>Retry<wbr>Status<wbr>Code</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#loggercallback" class="tsd-kind-icon">logger<wbr>Callback</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#loginpopuphandler" class="tsd-kind-icon">login<wbr>Popup<wbr>Handler</a>
