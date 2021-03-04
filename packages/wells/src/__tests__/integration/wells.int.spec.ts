@@ -33,7 +33,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('get by id - well returned for id', async () => {
     expect(client).not.toBeUndefined();
-    const wellId: number = 8456650753594878;
+    const wellId: number = 5432591169464385;
     const well: Well | undefined = await client.wells.getById(wellId)
 
     expect(well).not.toBeUndefined();
