@@ -10,4 +10,4 @@ export const OPERATOR = 'Operator';
 export const BLOCK = 'Block';
 /** @hidden */
 export const WELL_SERVICE_BASE_URL =
-  'http://0.0.0.0:8080';
+  'https://well-service-cognitedata-development.cognite.ai';
