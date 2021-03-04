@@ -18,8 +18,6 @@ import {
   generatePopupWindow,
   getBaseUrl,
   isSameProject,
-  isUsingSSL,
-  isLocalhost,
   promiseCache,
   removeQueryParameterFromUrl,
 } from './utils';
@@ -303,7 +301,7 @@ interface CreateAuthFunctionOptions {
 }
 /** @hidden */
 export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
-  const { project, httpClient, onTokens, onAuthenticate } = options;
+  const { project, httpClient, onAuthenticate, onTokens } = options;
   const baseUrl = getBaseUrl(httpClient.getBaseUrl());
   return promiseCache(
     async (): Promise<boolean> => {
@@ -313,17 +311,17 @@ export function createAuthenticateFunction(options: CreateAuthFunctionOptions) {
           onTokens(tokens);
         }
       };
-
-      if (isUsingSSL() || isLocalhost()) {
-        const tokens = await Login.loginSilently(httpClient, {
-          baseUrl,
-          project,
-        });
-        if (tokens) {
-          handleTokens(tokens);
-          return true;
-        }
-      }
+      //
+      // if (isUsingSSL() || isLocalhost()) {
+      //   const tokens = await Login.loginSilently(httpClient, {
+      //     baseUrl,
+      //     project,
+      //   });
+      //   if (tokens) {
+      //     handleTokens(tokens);
+      //     return true;
+      //   }
+      // }
 
       return new Promise<boolean>((resolve, reject) => {
         const login: OnAuthenticateLoginObject = {
