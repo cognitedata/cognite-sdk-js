@@ -1,6 +1,7 @@
 import { WellHead } from './WellHead';
 import { Wellbore } from './Wellbore';
 import { Asset } from 'wells/src/types';
+import { DoubleWithUnit } from './DoubleWithUnit';
 
 // Customizable function that takes in CogniteClient and args, and return a promise of a well
 export type SearchWells = (args: any) => Promise<Well[]>;
@@ -76,7 +77,7 @@ export interface Well {
    * @type {number}
    * @memberof Well
    */
-  waterDepth?: number;
+  waterDepth?: DoubleWithUnit;
   /**
    * @type {WellHead}
    * @memberOf Well
