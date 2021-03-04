@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.14.3...@cognite/sdk-wells@0.15.0) (2021-03-04)
+
+
+### Features
+
+* add units to measurements in well object [release] ([#490](https://github.com/cognitedata/cognite-sdk-js/issues/490)) ([de558e1](https://github.com/cognitedata/cognite-sdk-js/commit/de558e14ce774777da52ccfbf94d28bb693831e7))
+
+
+
+
+
 ## [0.14.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@0.14.2...@cognite/sdk-wells@0.14.3) (2021-03-02)
 
 **Note:** Version bump only for package @cognite/sdk-wells
