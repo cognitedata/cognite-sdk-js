@@ -6,22 +6,22 @@
 export interface Wellhead {
   /**
    * @type number
-   * @memberOf WellHeadLocation
+   * @memberOf WellHead
    */
   x: number;
   /**
    * @type number
-   * @memberOf WellheadLocation
+   * @memberOf Wellhead
    */
   y: number;
   /**
    * @type string
-   * @memberOf WellheadLocation
+   * @memberOf Wellhead
    */
   crs: string;
   /**
    * @type number
-   * @memberOf WellheadLocation
+   * @memberOf Wellhead
    */
   id: number;
 }
