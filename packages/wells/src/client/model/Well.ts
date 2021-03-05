@@ -1,4 +1,4 @@
-import { WellHead } from './WellHead';
+import { Wellhead } from './wellhead';
 import { Wellbore } from './Wellbore';
 import { Asset } from 'wells/src/types';
 import { DoubleWithUnit } from './DoubleWithUnit';
@@ -79,10 +79,10 @@ export interface Well {
    */
   waterDepth?: DoubleWithUnit;
   /**
-   * @type {WellHead}
+   * @type {Wellhead}
    * @memberOf Well
    */
-  wellHead?: WellHead;
+  wellHead?: Wellhead;
   /**
    * @type {WellDatum}
    * @memberof Well

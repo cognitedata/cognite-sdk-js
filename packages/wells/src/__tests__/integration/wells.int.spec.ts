@@ -33,26 +33,13 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('get by id - well returned for id', async () => {
     expect(client).not.toBeUndefined();
-    const wellId: number = 5432591169464385;
+    const wellId: number = 8456650753594878;
     const well: Well | undefined = await client.wells.getById(wellId)
 
     expect(well).not.toBeUndefined();
     /* eslint-disable */
     expect(well?.id).toBe(wellId);
     /* eslint-enable */
-  });
-
-  test('get by id - test water depth is fetched', async () => {
-    expect(client).not.toBeUndefined();
-    const wellId: number = 5432591169464385;
-    const well: Well | undefined = await client.wells.getById(wellId)
-
-    expect(well).not.toBeUndefined();
-    /* eslint-disable */
-    expect(well?.id).toBe(wellId);
-    /* eslint-enable */
-    expect(well?.waterDepth?.unit).toBe("m")
-    expect(well?.waterDepth?.value).toBe(100.0)
   });
 
   test('get source assets for well', async () => {
@@ -72,6 +59,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const sources: Asset[] | undefined = await well?.sourceAssets("EDM")
     expect(sources).not.toBeUndefined();
     expect(sources?.length).toBe(1);
+
     const source = sources![0];
     expect(source.externalId).toBe("EDM:Well:Qj2k7uJdSe")
   });

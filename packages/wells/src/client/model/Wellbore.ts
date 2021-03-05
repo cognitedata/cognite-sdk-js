@@ -1,7 +1,7 @@
 import { Asset } from 'wells/src/types';
 import { Survey } from '../model/Survey';
 import { Well } from './Well';
-import { WellHead } from './WellHead';
+import { Wellhead } from './wellhead';
 
 // Customizable function that takes in CogniteClient and args, and return a promise of a wellbore
 export type SearchWellbores = (args?: any) => Promise<Wellbore[]>;
@@ -55,10 +55,10 @@ export interface Wellbore {
    */
   //getDatum(): Promise<WellDatum_deprecated | undefined>;
   /**
-   * @type {Promise<WellHead>}
+   * @type {Promise<Wellhead>}
    * @memberof Wellbore
    */
-  getWellHeadLocation(): Promise<WellHead | undefined>;
+  getWellHeadLocation(): Promise<Wellhead | undefined>;
   /**
    * If the source parameter is set, it will only return source assets from that source system.
    * The source parameter can for example be EDM, Diskos, Openworks, etc.
