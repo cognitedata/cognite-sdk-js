@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@1.1.0...@cognite/sdk-core@1.2.0) (2021-03-05)
+
+
+### Features
+
+* **aad:** use LS state as source of truth ([#493](https://github.com/cognitedata/cognite-sdk-js/issues/493)) ([a03404c](https://github.com/cognitedata/cognite-sdk-js/commit/a03404c084d73c55ab22aeb29cd6724772c079a5))
+
+
+
+
+
 # [1.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@1.0.6...@cognite/sdk-core@1.1.0) (2021-03-02)
 
 
