@@ -68,7 +68,7 @@ describe('Azure AD auth module', () => {
 
   describe('Get accounts', () => {
     test('should return `null` in case any accounts in localstorage', () => {
-      expect(azureAdClient.getAccount()).toEqual(null);
+      expect(azureAdClient.getAccount()).toEqual(undefined);
       expect(getAccountByLocalId).toHaveBeenCalledTimes(0);
     });
     test('should request for stored local account id', () => {
@@ -88,7 +88,7 @@ describe('Azure AD auth module', () => {
 
       expect(accountInfo).toEqual(account);
     });
-    test('should get account from localstorage as a fallback if its possible', async () => {
+    test('should get account from localstorage', async () => {
       const localAccountId = 'some-local-account-id';
 
       handleRedirectPromise.mockReturnValueOnce(null);
@@ -131,6 +131,9 @@ describe('Azure AD auth module', () => {
     test('should return token if available', async () => {
       loginPopup.mockResolvedValueOnce({ account });
       acquireTokenSilent.mockResolvedValueOnce({ accessToken: 'access_token' });
+
+      localStorageGetItem.mockReturnValueOnce(account.localAccountId);
+      getAccountByLocalId.mockReturnValueOnce(account);
 
       await azureAdClient.login('loginPopup');
       const token = await azureAdClient.getCDFToken();

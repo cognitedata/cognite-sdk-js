@@ -47,7 +47,6 @@ const accountLocalStorageKey = '@cognite/sdk:accountLocalId';
 
 export class AzureAD {
   private msalApplication: PublicClientApplication;
-  private account?: AccountInfo;
   private userScopes = ['User.Read'];
   private cluster: string = '';
 
@@ -79,12 +78,12 @@ export class AzureAD {
   /**
    * Returns account which has been saved in local storage by localAccountId
    */
-  getAccount(): AccountInfo | null {
+  getAccount(): AccountInfo | undefined {
     const localAccountId = this.getLocalAccountIdFromLocalStorage();
 
     return localAccountId
-      ? this.msalApplication.getAccountByLocalId(localAccountId)
-      : null;
+      ? this.msalApplication.getAccountByLocalId(localAccountId) || undefined
+      : undefined;
   }
 
   /**
@@ -126,21 +125,19 @@ export class AzureAD {
    */
   async logout(): Promise<void> {
     const logOutRequest: EndSessionRequest = {
-      account: this.account || undefined,
+      account: this.getAccount(),
     };
 
     await this.msalApplication.logout(logOutRequest);
 
     this.setLocalAccountIdToLocalStorage();
-
-    this.account = undefined;
   }
 
   /**
    * Returns already acquired CDF access token
    */
   async getCDFToken(): Promise<string | null> {
-    if (!this.account) return null;
+    if (!this.getAccount()) return null;
 
     const {
       accessToken,
@@ -156,7 +153,7 @@ export class AzureAD {
    * Can be used for getting user details via Microsoft Graph API
    */
   async getAccountToken(): Promise<string | null> {
-    if (this.account) return null;
+    if (!this.getAccount()) return null;
 
     const {
       accessToken,
@@ -191,14 +188,14 @@ export class AzureAD {
 
   private get silentCDFTokenRequest(): SilentRequest {
     return {
-      account: this.account,
+      account: this.getAccount(),
       scopes: this.getCDFScopes(),
     };
   }
 
   private get silentAccountTokenRequest(): SilentRequest {
     return {
-      account: this.account,
+      account: this.getAccount(),
       scopes: this.userScopes,
     };
   }
@@ -209,7 +206,6 @@ export class AzureAD {
     const account = authAccount || this.getAccount();
 
     if (account) {
-      this.account = account;
       this.setLocalAccountIdToLocalStorage(account.localAccountId);
 
       return account;
