@@ -47,6 +47,7 @@ export { ProjectsAPI } from './api/projects/projectsApi';
 export { RawAPI } from './api/raw/rawApi';
 export { RawRowsAPI } from './api/raw/rawRowsApi';
 export { RawTablesAPI } from './api/raw/rawTablesApi';
+export { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 export { RelationshipsApi } from './api/relationships/relationshipsApi';
 export {
   SecurityCategoriesAPI,

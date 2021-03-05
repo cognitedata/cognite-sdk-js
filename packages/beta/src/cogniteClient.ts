@@ -6,7 +6,6 @@ import {
 } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
-import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { TemplateGraphQlApi } from './api/templateGroups/templateGraphQlApi';
 import { TemplateGroupsApi } from './api/templateGroups/templateGroupsApi';
 import { TemplateGroupVersionsApi } from './api/templateGroups/templateGroupVersionsApi';
@@ -17,7 +16,6 @@ class CogniteClientCleaned extends CogniteClientStable {
 }
 
 export default class CogniteClient extends CogniteClientCleaned {
-  private entityMatchingApi?: EntityMatchingApi;
   private templateGroupsApi?: TemplateGroupsApi;
 
   /**
@@ -39,10 +37,6 @@ export default class CogniteClient extends CogniteClientCleaned {
    */
   constructor(options: ClientOptions) {
     super(options);
-  }
-
-  public get entityMatching() {
-    return accessApi(this.entityMatchingApi);
   }
 
   public get templates() {
@@ -83,17 +77,11 @@ export default class CogniteClient extends CogniteClientCleaned {
   protected initAPIs() {
     super.initAPIs();
 
-    this.entityMatchingApi = this.apiFactory(
-      EntityMatchingApi,
-      'context/entitymatching'
-    );
-
     this.templateGroupsApi = this.apiFactory(
       TemplateGroupsApi,
       'templategroups'
     );
   }
-
   static urlEncodeExternalId(externalId: string): string {
     return encodeURIComponent(externalId);
   }
