@@ -1,27 +1,27 @@
 /**
  * Explains the position of the wellhead
  * @export
- * @interface WellHead
+ * @interface Wellhead
  */
-export interface WellHead {
+export interface Wellhead {
   /**
    * @type number
-   * @memberOf WellHeadLocation
+   * @memberOf Wellhead
    */
   x: number;
   /**
    * @type number
-   * @memberOf WellHeadLocation
+   * @memberOf Wellhead
    */
   y: number;
   /**
    * @type string
-   * @memberOf WellHeadLocation
+   * @memberOf Wellhead
    */
   crs: string;
   /**
    * @type number
-   * @memberOf WellHeadLocation
+   * @memberOf Wellhead
    */
   id: number;
 }

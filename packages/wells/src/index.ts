@@ -9,7 +9,7 @@ export * from './client/model/Cluster';
 export * from './client/model/GeoJson';
 export * from './client/model/Well';
 export * from './client/model/Wellbore';
-export * from './client/model/WellHead';
+export * from './client/model/wellhead';
 export * from './client/model/WellFilter';
 export * from './client/model/WellIds';
 export * from './client/model/WellType';
