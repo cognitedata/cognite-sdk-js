@@ -181,7 +181,7 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
 };
 
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);
-<span class="hljs-keyword">const</span> retrievedCrs = wells?.items.map(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> well.wellHead?.crs)</code></pre>
+<span class="hljs-keyword">const</span> retrievedCrs = wells?.items.map(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> well.wellhead?.crs)</code></pre>
 				<a href="#get-wells-that-have-a-trajectory" id="get-wells-that-have-a-trajectory" style="color: inherit; text-decoration: none;">
 					<h3><em>Get wells that have a trajectory</em></h3>
 				</a>
@@ -591,9 +591,6 @@ trajectory = <span class="hljs-keyword">await</span> client.wellbores.getTraject
 						<a href="modules/_wells_src_client_model_wellfilter_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Filter&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
-						<a href="modules/_wells_src_client_model_wellhead_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Head&quot;</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_wellids_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Ids&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
@@ -601,6 +598,9 @@ trajectory = <span class="hljs-keyword">await</span> client.wellbores.getTraject
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_wellbore_.html">&quot;wells/src/client/model/<wbr>Wellbore&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_wellhead_.html">&quot;wells/src/client/model/wellhead&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_constants_.html">&quot;wells/src/constants&quot;</a>
