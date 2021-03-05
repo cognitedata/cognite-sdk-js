@@ -6,7 +6,7 @@
 export interface Wellhead {
   /**
    * @type number
-   * @memberOf WellHead
+   * @memberOf Wellhead
    */
   x: number;
   /**

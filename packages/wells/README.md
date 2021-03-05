@@ -138,7 +138,7 @@ const filter: WellFilter = {
 };
 
 const wells = await client.wells.filter(filter);
-const retrievedCrs = wells?.items.map(well => well.wellHead?.crs)
+const retrievedCrs = wells?.items.map(well => well.wellhead?.crs)
 ```
 
 ### _Get wells that have a trajectory_

@@ -58,7 +58,7 @@ export interface Wellbore {
    * @type {Promise<Wellhead>}
    * @memberof Wellbore
    */
-  getWellHeadLocation(): Promise<Wellhead | undefined>;
+  getWellhead(): Promise<Wellhead | undefined>;
   /**
    * If the source parameter is set, it will only return source assets from that source system.
    * The source parameter can for example be EDM, Diskos, Openworks, etc.

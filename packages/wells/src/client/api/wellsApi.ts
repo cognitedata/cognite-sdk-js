@@ -90,7 +90,7 @@ export class WellsAPI {
       field: well.field,
       operator: well.operator,
       waterDepth: well.waterDepth,
-      wellHead: well.wellHead,
+      wellhead: well.wellhead,
       datum: well.datum,
       sources: well.sources,
       wellbores: async (): Promise<Wellbore[] | undefined>  => {return await this.wellbores.getFromWell(well.id).then(response => response).catch(err => err)},

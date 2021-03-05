@@ -82,7 +82,7 @@ export interface Well {
    * @type {Wellhead}
    * @memberOf Well
    */
-  wellHead?: Wellhead;
+  wellhead?: Wellhead;
   /**
    * @type {WellDatum}
    * @memberof Well

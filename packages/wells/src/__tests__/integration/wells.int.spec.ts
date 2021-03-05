@@ -218,7 +218,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       expect(retrievedNames).toContain(name)
     });
 
-    const retrievedCrs = wells?.items.map(well => well.wellHead?.crs)
+    const retrievedCrs = wells?.items.map(well => well.wellhead?.crs)
     const outputCrs = ['EPSG:23031']
     outputCrs.forEach(crs => {
       expect(retrievedCrs).toContain(crs)
