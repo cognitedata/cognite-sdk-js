@@ -1401,6 +1401,14 @@ export interface List3DNodesQuery extends FilterQuery {
    * Filter for node properties. Only nodes that match all the given properties exactly will be listed. The filter must be a JSON object with the same format as the properties field.
    */
   properties?: Node3DProperties;
+  /**
+   * Partition specifier of the form "n/m". It will return the n'th (1-indexed) part of the result divided into m parts
+   */
+  partition?: Partition;
+  /**
+   * Enables sorting on node ID as opposed to tree index. This may result in faster response times for certain requests.
+   */
+  sortByNodeId?: Boolean;
 }
 
 export interface ListGroups {
