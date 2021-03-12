@@ -33,9 +33,6 @@ export {
 } from './httpClient/retryValidator';
 export {
   getLogoutUrl,
-  getIdInfo,
-  isLoginPopupWindow,
-  loginPopupHandler,
   AuthTokens,
   AuthenticateParams,
   AuthorizeOptions,
@@ -43,6 +40,7 @@ export {
   IdInfo,
   OnAuthenticateLoginObject,
 } from './login';
+export { POPUP, REDIRECT, isLoginPopupWindow, loginPopupHandler } from './auth';
 export { RevertableArraySorter } from './revertableArraySorter';
 export {
   sleepPromise,

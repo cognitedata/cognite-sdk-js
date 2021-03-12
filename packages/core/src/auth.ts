@@ -2,8 +2,8 @@
 
 import noop from 'lodash/noop';
 import isString from 'lodash/isString';
-import { parse, stringify } from 'query-string';
 import isFunction from 'lodash/isFunction';
+import { parse, stringify } from 'query-string';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import {
   AuthorizeParams,
@@ -22,7 +22,6 @@ import {
   isUsingSSL,
   removeQueryParameterFromUrl,
 } from './utils';
-import { POPUP } from './baseCogniteClient';
 import { CogniteLoginError } from './loginError';
 import { AUTHORIZATION_HEADER } from './constants';
 
@@ -32,6 +31,9 @@ const ERROR_PARAM = 'error';
 const ERROR_DESCRIPTION_PARAM = 'error_description';
 const LOGIN_IFRAME_NAME = 'cognite-js-sdk-auth-iframe';
 const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
+
+export const REDIRECT = 'REDIRECT';
+export const POPUP = 'POPUP';
 
 export interface AuthOptions {
   project: string;

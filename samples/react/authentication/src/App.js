@@ -7,18 +7,22 @@ class App extends Component {
   state = {
     client: null,
     assets: null,
+    inited: false,
+    authenticated: false,
   };
 
   async componentDidMount() {
     const client = new CogniteClient({ appId: 'Cognite SDK samples' });
-    client.loginWithOAuth({
+    const result = await client.loginWithOAuth({
       project,
       onAuthenticate: 'REDIRECT',
     });
-    this.setState({ client });
+    this.setState({ client, inited: true });
     // Login will be triggered on first API call with "client"
     // You can manually trigger the login flow by calling:
-    client.authenticate();
+    if (!result) {
+      client.authenticate();
+    }
   }
 
   fetchRootAssets = async () => {
@@ -51,10 +55,11 @@ class App extends Component {
   }
 
   render() {
-    const { assets } = this.state;
+    const { assets, authenticated, inited } = this.state;
     return (
       <div className="App">
-        <button onClick={this.fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
+        <button disabled={!inited || authenticated} onClick={this.authenticate}><h1>Authenticate</h1></button>
+        <button disabled={!inited || !authenticated} onClick={this.fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
         {assets && this.renderAssetsInTable(assets)}
       </div>
     );

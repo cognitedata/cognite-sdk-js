@@ -9,6 +9,7 @@ const tenantId = process.env.REACT_APP_TENANT_ID;
 function App() {
   const [client, setClient] = useState(null);
   const [assets, setAssets] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const fetchRootAssets = async () => {
     if (client === null) return;
@@ -38,28 +39,42 @@ function App() {
     );
   }
 
-  const authenticate = async (client) => {
+  const authenticate = async () => {
+    if (client === null) return;
+
     const result = await client.authenticate();
 
     if (result) {
       client.setProject(project);
-      setClient(client);
+      setIsAuthenticated(true);
+    }
+  }
+
+  const login = async (client) => {
+    const result = await client.loginWithOAuth({
+      cluster,
+      clientId,
+      tenantId,
+    });
+
+    setClient(client);
+
+    if (result) {
+      client.setProject(project);
+      setIsAuthenticated(true);
     }
   }
 
   useEffect(() => {
     const client = new CogniteClient({appId: 'sample-app-id'});
-    client.loginWithOAuth({
-      cluster,
-      clientId,
-      tenantId,
-    });
-    authenticate(client);
+
+    login(client);
   }, []);
 
   return (
     <div>
-      <button onClick={fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
+      <button onClick={authenticate}><h1>Click here to authenticate</h1></button>
+      <button disabled={!isAuthenticated} onClick={fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
       {assets && renderAssetsInTable(assets)}
     </div>
   );
