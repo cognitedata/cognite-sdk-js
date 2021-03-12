@@ -1408,7 +1408,7 @@ export interface List3DNodesQuery extends FilterQuery {
   /**
    * Enables sorting on node ID as opposed to tree index. This may result in faster response times for certain requests.
    */
-  sortByNodeId?: Boolean;
+  sortByNodeId?: boolean;
 }
 
 export interface ListGroups {
