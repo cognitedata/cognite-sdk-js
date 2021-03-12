@@ -1,6 +1,5 @@
 // Copyright 2020 Cognite AS
 
-import noop from 'lodash/noop';
 import isString from 'lodash/isString';
 import isFunction from 'lodash/isFunction';
 import { parse, stringify } from 'query-string';
@@ -14,9 +13,7 @@ import {
 } from './login';
 import {
   bearerString,
-  createInvisibleIframe,
   generatePopupWindow,
-  getBaseUrl,
   isLocalhost,
   isSameProject,
   isUsingSSL,
@@ -29,7 +26,6 @@ const ACCESS_TOKEN_PARAM = 'access_token';
 const ID_TOKEN_PARAM = 'id_token';
 const ERROR_PARAM = 'error';
 const ERROR_DESCRIPTION_PARAM = 'error_description';
-const LOGIN_IFRAME_NAME = 'cognite-js-sdk-auth-iframe';
 const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
 
 export const REDIRECT = 'REDIRECT';
@@ -191,36 +187,16 @@ export class CogniteAuthentication {
       }
     }
 
-    const tokens = await this.acquireTokens(httpClient);
-
-    return tokens ? tokens.accessToken : null;
+    return null;
   }
 
-  public async acquireTokens(
+  public async handleLoginRedirect(
     httpClient: CDFHttpClient
   ): Promise<AuthTokens | null> {
     if (!isUsingSSL() && !isLocalhost()) {
       return null;
     }
 
-    let tokens = (await this.handleLoginRedirect(httpClient)) || null;
-
-    if (!tokens) {
-      tokens = await this.acquireTokensSilently(httpClient);
-    }
-
-    if (tokens) {
-      this.setTokens(tokens);
-
-      return tokens;
-    }
-
-    return null;
-  }
-
-  private async handleLoginRedirect(
-    httpClient: CDFHttpClient
-  ): Promise<AuthTokens | void> {
     const tokens = extractTokensFromUrl();
 
     if (
@@ -231,32 +207,6 @@ export class CogniteAuthentication {
 
       return tokens;
     }
-  }
-
-  private async acquireTokensSilently(
-    httpClient: CDFHttpClient
-  ): Promise<AuthTokens | null> {
-    if (isAuthIFrame()) {
-      // don't resolve when inside iframe (we don't want to do any logic)
-      return new Promise<null>(noop);
-    }
-
-    const baseUrl = getBaseUrl(httpClient.getBaseUrl());
-
-    try {
-      const href = window.location.href;
-      const tokens = await silentLoginViaIFrame({
-        baseUrl,
-        project: this.project,
-        redirectUrl: href,
-        errorRedirectUrl: href,
-      });
-      if (tokens !== null) {
-        return tokens;
-      }
-    } catch (_) {
-      // don't do anything.
-    }
 
     return null;
   }
@@ -265,34 +215,6 @@ export class CogniteAuthentication {
     this.accessToken = accessToken;
     this.idToken = idToken;
   }
-}
-
-function silentLoginViaIFrame(params: AuthorizeParams): Promise<AuthTokens> {
-  return new Promise<AuthTokens>((resolve, reject) => {
-    const url = `${generateLoginUrl(params)}&prompt=none`;
-    const iframe = createInvisibleIframe(url, LOGIN_IFRAME_NAME);
-    iframe.onload = () => {
-      try {
-        const authTokens = parseTokenQueryParameters(
-          iframe.contentWindow!.location.search
-        );
-        console.log(iframe.contentWindow!.location.search);
-        if (authTokens === null) {
-          throw Error('Failed to login');
-        }
-        resolve(authTokens);
-      } catch (e) {
-        reject(e);
-      } finally {
-        document.body.removeChild(iframe);
-      }
-    };
-    document.body.appendChild(iframe);
-  });
-}
-
-function isAuthIFrame(): boolean {
-  return window.name === LOGIN_IFRAME_NAME;
 }
 
 function extractTokensFromUrl() {
