@@ -104,13 +104,12 @@ export default class BaseCogniteClient {
     return this.logoutApi;
   }
 
-  private http: CDFHttpClient;
-  private metadata: MetadataMap;
+  private readonly http: CDFHttpClient;
+  private readonly metadata: MetadataMap;
+  private readonly loginApi: LoginAPI;
+  private readonly logoutApi: LogoutApi;
   private projectName: string = '';
   private hasBeenLoggedIn: boolean = false;
-  private oAuthHasBeenUsed: boolean = false;
-  private loginApi: LoginAPI;
-  private logoutApi: LogoutApi;
   private azureAdClient?: AzureAD;
   private cogniteAuthClient?: CogniteAuthentication;
   /**
@@ -277,7 +276,6 @@ export default class BaseCogniteClient {
 
     this.authenticate = authenticate;
     this.hasBeenLoggedIn = true;
-    this.oAuthHasBeenUsed = true;
 
     return token !== null;
   };
@@ -303,11 +301,11 @@ export default class BaseCogniteClient {
    * Provides information about which OAuth flow has been used
    */
   public getOAuthFlowType(): AuthFlowType | undefined {
-    return this.oAuthHasBeenUsed
-      ? this.azureAdClient
-        ? AAD_OAUTH
-        : CDF_OAUTH
-      : undefined;
+    return this.azureAdClient
+      ? AAD_OAUTH
+      : this.cogniteAuthClient
+        ? CDF_OAUTH
+        : undefined;
   }
 
   /**
@@ -552,7 +550,9 @@ export default class BaseCogniteClient {
     }
 
     const cogniteAuthClient = new CogniteAuthentication({ project });
-    const authTokens = await cogniteAuthClient.acquireTokens(this.httpClient);
+    const authTokens = await cogniteAuthClient.handleLoginRedirect(
+      this.httpClient
+    );
 
     if (authTokens) {
       token = authTokens.accessToken;
@@ -565,16 +565,14 @@ export default class BaseCogniteClient {
     this.setProject(project);
 
     const authenticate = async () => {
-      let authTokens = await cogniteAuthClient.acquireTokens(this.httpClient);
+      const baseUrl = getBaseUrl(this.httpClient.getBaseUrl());
+      const authTokens = await cogniteAuthClient.login({
+        baseUrl,
+        onAuthenticate,
+      });
 
       if (!authTokens) {
-        const baseUrl = getBaseUrl(this.httpClient.getBaseUrl());
-
-        authTokens = await cogniteAuthClient.login({ baseUrl, onAuthenticate });
-
-        if (!authTokens) {
-          return false;
-        }
+        return false;
       }
 
       this.httpClient.setBearerToken(authTokens.accessToken);
