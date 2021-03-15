@@ -1,19 +1,15 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import BaseCogniteClient, {
-  AAD_OAUTH,
-  CDF_OAUTH,
-  POPUP,
-  REDIRECT,
-} from '../baseCogniteClient';
+import BaseCogniteClient, { AAD_OAUTH, CDF_OAUTH } from '../baseCogniteClient';
+import { POPUP, REDIRECT } from '../auth';
 import {
   API_KEY_HEADER,
   AUTHORIZATION_HEADER,
   X_CDF_SDK_HEADER,
   BASE_URL,
 } from '../constants';
-import * as Login from '../login';
+import * as CogniteAuth from '../auth';
 import { bearerString, sleepPromise } from '../utils';
 import { apiKey, authTokens, project } from '../testUtils';
 
@@ -243,15 +239,11 @@ describe('CogniteClient', () => {
       let mockPopup: jest.SpyInstance;
 
       beforeEach(() => {
-        mockLoginSilently = jest.spyOn(Login, 'loginSilently');
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        mockLoginSilently.mockImplementation(() => {});
-
-        mockRedirect = jest.spyOn(Login, 'loginWithRedirect');
+        mockRedirect = jest.spyOn(CogniteAuth, 'loginWithRedirect');
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         mockRedirect.mockImplementation(async () => {});
 
-        mockPopup = jest.spyOn(Login, 'loginWithPopup');
+        mockPopup = jest.spyOn(CogniteAuth, 'loginWithPopup');
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         mockPopup.mockImplementation(async () => {});
       });
@@ -562,13 +554,7 @@ describe('CogniteClient', () => {
         expect(client.getOAuthFlowType()).toEqual(AAD_OAUTH);
       });
       test('should throw error on attempt to get CDF token with cognite auth flow', async () => {
-        const createAuthenticateFunction = jest.spyOn(
-          Login,
-          'createAuthenticateFunction'
-        );
-        createAuthenticateFunction.mockReturnValueOnce(() =>
-          Promise.resolve(true)
-        );
+        // todo: token can be acquired if it isn't expired
         client.loginWithOAuth({ project });
         await expect(
           async () => await client.getCDFToken()
@@ -577,13 +563,6 @@ describe('CogniteClient', () => {
         );
       });
       test('should throw error on attempt to get Azure AD access token with cognite auth flow', async () => {
-        const createAuthenticateFunction = jest.spyOn(
-          Login,
-          'createAuthenticateFunction'
-        );
-        createAuthenticateFunction.mockReturnValueOnce(() =>
-          Promise.resolve(true)
-        );
         client.loginWithOAuth({ project });
         await expect(
           async () => await client.getAzureADAccessToken()

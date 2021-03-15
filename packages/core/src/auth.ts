@@ -5,13 +5,6 @@ import isFunction from 'lodash/isFunction';
 import { parse, stringify } from 'query-string';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import {
-  AuthorizeParams,
-  AuthTokens,
-  getIdInfo,
-  IdInfo,
-  OnAuthenticateLoginObject,
-} from './login';
-import {
   bearerString,
   generatePopupWindow,
   isLocalhost,
@@ -21,6 +14,12 @@ import {
 } from './utils';
 import { CogniteLoginError } from './loginError';
 import { AUTHORIZATION_HEADER } from './constants';
+import {
+  HttpCall,
+  HttpHeaders,
+  HttpQueryParams,
+} from './httpClient/basicHttpClient';
+import { LogoutUrlResponse } from './types';
 
 const ACCESS_TOKEN_PARAM = 'access_token';
 const ID_TOKEN_PARAM = 'id_token';
@@ -31,6 +30,9 @@ const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
 export const REDIRECT = 'REDIRECT';
 export const POPUP = 'POPUP';
 
+export type OnTokens = (tokens: AuthTokens) => void;
+export type OnAuthenticate = (login: OnAuthenticateLoginObject) => void;
+
 export interface AuthOptions {
   project: string;
 }
@@ -40,7 +42,40 @@ export interface LoginParams {
   onAuthenticate?: OnAuthenticate | 'REDIRECT' | 'POPUP';
 }
 
-export type OnAuthenticate = (login: OnAuthenticateLoginObject) => void;
+export interface IdInfo {
+  projectId: number;
+  project: string;
+  user: string;
+}
+
+export interface AuthorizeOptions {
+  redirectUrl: string;
+  errorRedirectUrl?: string;
+}
+
+export interface OnAuthenticateLoginObject {
+  redirect: (options: AuthorizeOptions) => void;
+  popup: (options: AuthorizeOptions) => void;
+  skip: () => void;
+}
+
+/** @hidden */
+export interface AuthenticateParams {
+  project: string;
+}
+
+/** @hidden */
+export interface AuthorizeParams extends AuthorizeOptions {
+  baseUrl: string;
+  project: string;
+  accessToken?: string;
+}
+
+/** @hidden */
+export interface AuthTokens {
+  accessToken: string;
+  idToken: string;
+}
 
 /** @hidden */
 export async function isTokensValid(
@@ -112,6 +147,45 @@ export function loginPopupHandler() {
     window.opener.postMessage({ error: err.message });
   } finally {
     window.close();
+  }
+}
+
+/** @hidden */
+export async function getIdInfo(
+  get: HttpCall,
+  headers: HttpHeaders
+): Promise<null | IdInfo> {
+  try {
+    const response = await get<any>('/login/status', { headers });
+    const { loggedIn, user, project, projectId } = response.data.data;
+    if (!loggedIn) {
+      return null;
+    }
+    return {
+      user,
+      project,
+      projectId,
+    };
+  } catch (err) {
+    if (err.status === 401) {
+      return null;
+    }
+    throw err;
+  }
+}
+
+/** @hidden */
+export async function getLogoutUrl(get: HttpCall, params: HttpQueryParams) {
+  try {
+    const response = await get<LogoutUrlResponse>('/logout/url', {
+      params,
+    });
+    return response.data.data.url;
+  } catch (err) {
+    if (err.status === 401) {
+      return null;
+    }
+    throw err;
   }
 }
 
