@@ -39,7 +39,7 @@ export {
   AuthorizeParams,
   IdInfo,
   OnAuthenticateLoginObject,
-} from './login';
+} from './auth';
 export { POPUP, REDIRECT, isLoginPopupWindow, loginPopupHandler } from './auth';
 export { RevertableArraySorter } from './revertableArraySorter';
 export {

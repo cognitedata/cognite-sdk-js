@@ -16,7 +16,6 @@ import {
   HttpResponse,
 } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
-import { OnAuthenticate, OnTokens } from './login';
 import { MetadataMap } from './metadata';
 import {
   getBaseUrl,
@@ -31,7 +30,7 @@ import {
   RetryValidator,
 } from './httpClient/retryValidator';
 import { AzureAD, AzureADSingInType } from './aad';
-import { CogniteAuthentication } from './auth';
+import { CogniteAuthentication, OnAuthenticate, OnTokens } from './auth';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
