@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>EntityMatchingField | Cognite JavaScript SDK (beta)</title>
+	<title>EntityMatchingPredictedItem | Cognite JavaScript SDK (beta)</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK (beta)">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_beta_src_types_.html">&quot;beta/src/types&quot;</a>
+					<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
 				</li>
 				<li>
-					<a href="_beta_src_types_.entitymatchingfield.html">EntityMatchingField</a>
+					<a href="_stable_src_types_.entitymatchingpredicteditem.html">EntityMatchingPredictedItem</a>
 				</li>
 			</ul>
-			<h1>Interface EntityMatchingField</h1>
+			<h1>Interface EntityMatchingPredictedItem</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">EntityMatchingField</span>
+						<span class="target">EntityMatchingPredictedItem</span>
 					</li>
 				</ul>
 			</section>
@@ -84,8 +84,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_beta_src_types_.entitymatchingfield.html#from" class="tsd-kind-icon">from</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_beta_src_types_.entitymatchingfield.html#to" class="tsd-kind-icon">to</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.entitymatchingpredicteditem.html#matchto" class="tsd-kind-icon">match<wbr>To</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.entitymatchingpredicteditem.html#score" class="tsd-kind-icon">score</a></li>
 							</ul>
 						</section>
 					</div>
@@ -94,24 +94,34 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="from" class="tsd-anchor"></a>
-					<h3>from</h3>
-					<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="matchto" class="tsd-anchor"></a>
+					<h3>match<wbr>To</h3>
+					<div class="tsd-signature tsd-kind-icon">match<wbr>To<span class="tsd-signature-symbol">:</span> <a href="_stable_src_types_.externalentitytomatch.html" class="tsd-signature-type">ExternalEntityToMatch</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c04ac7e/packages/beta/src/types.ts#L84">packages/beta/src/types.ts:84</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3376ec4/packages/stable/src/types.ts#L2721">packages/stable/src/types.ts:2721</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The matchTo item given to predict.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="to" class="tsd-anchor"></a>
-					<h3>to</h3>
-					<div class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="score" class="tsd-anchor"></a>
+					<h3>score</h3>
+					<div class="tsd-signature tsd-kind-icon">score<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c04ac7e/packages/beta/src/types.ts#L85">packages/beta/src/types.ts:85</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3376ec4/packages/stable/src/types.ts#L2725">packages/stable/src/types.ts:2725</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The model&#39;s confidence in the match.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -122,7 +132,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/_beta_src_types_.html">&quot;beta/src/types&quot;</a>
+						<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -131,13 +141,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_beta_src_types_.entitymatchingfield.html" class="tsd-kind-icon">Entity<wbr>Matching<wbr>Field</a>
+						<a href="_stable_src_types_.entitymatchingpredicteditem.html" class="tsd-kind-icon">Entity<wbr>Matching<wbr>Predicted<wbr>Item</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_beta_src_types_.entitymatchingfield.html#from" class="tsd-kind-icon">from</a>
+								<a href="_stable_src_types_.entitymatchingpredicteditem.html#matchto" class="tsd-kind-icon">match<wbr>To</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_beta_src_types_.entitymatchingfield.html#to" class="tsd-kind-icon">to</a>
+								<a href="_stable_src_types_.entitymatchingpredicteditem.html#score" class="tsd-kind-icon">score</a>
 							</li>
 						</ul>
 					</li>

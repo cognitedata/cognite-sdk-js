@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>EntityMatchingPatch | Cognite JavaScript SDK (beta)</title>
+	<title>EntityMatchingField | Cognite JavaScript SDK (beta)</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK (beta)">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_beta_src_types_.html">&quot;beta/src/types&quot;</a>
+					<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
 				</li>
 				<li>
-					<a href="_beta_src_types_.entitymatchingpatch.html">EntityMatchingPatch</a>
+					<a href="_stable_src_types_.entitymatchingfield.html">EntityMatchingField</a>
 				</li>
 			</ul>
-			<h1>Interface EntityMatchingPatch</h1>
+			<h1>Interface EntityMatchingField</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">EntityMatchingPatch</span>
+						<span class="target">EntityMatchingField</span>
 					</li>
 				</ul>
 			</section>
@@ -84,7 +84,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_beta_src_types_.entitymatchingpatch.html#update" class="tsd-kind-icon">update</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.entitymatchingfield.html#from" class="tsd-kind-icon">from</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.entitymatchingfield.html#to" class="tsd-kind-icon">to</a></li>
 							</ul>
 						</section>
 					</div>
@@ -93,35 +94,24 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="update" class="tsd-anchor"></a>
-					<h3>update</h3>
-					<div class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>description<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#singlepatchstring" class="tsd-signature-type">SinglePatchString</a><span class="tsd-signature-symbol">; </span>name<span class="tsd-signature-symbol">?: </span><a href="../modules/_stable_src_types_.html#singlepatchstring" class="tsd-signature-type">SinglePatchString</a><span class="tsd-signature-symbol"> }</span></div>
+					<a name="from" class="tsd-anchor"></a>
+					<h3>from</h3>
+					<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c04ac7e/packages/beta/src/types.ts#L214">packages/beta/src/types.ts:214</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3376ec4/packages/stable/src/types.ts#L2474">packages/stable/src/types.ts:2474</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter">
-								<h5>description<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#singlepatchstring" class="tsd-signature-type">SinglePatchString</a></h5>
-								<div class="tsd-comment tsd-typography">
-									<div class="lead">
-										<p>Set a new value for the model description.</p>
-									</div>
-								</div>
-							</li>
-							<li class="tsd-parameter">
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> name<span class="tsd-signature-symbol">?: </span><a href="../modules/_stable_src_types_.html#singlepatchstring" class="tsd-signature-type">SinglePatchString</a></h5>
-								<div class="tsd-comment tsd-typography">
-									<div class="lead">
-										<p>Set a new value for the model name.</p>
-									</div>
-								</div>
-							</li>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="to" class="tsd-anchor"></a>
+					<h3>to</h3>
+					<div class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3376ec4/packages/stable/src/types.ts#L2475">packages/stable/src/types.ts:2475</a></li>
 						</ul>
-					</div>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -132,7 +122,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/_beta_src_types_.html">&quot;beta/src/types&quot;</a>
+						<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -141,10 +131,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_beta_src_types_.entitymatchingpatch.html" class="tsd-kind-icon">Entity<wbr>Matching<wbr>Patch</a>
+						<a href="_stable_src_types_.entitymatchingfield.html" class="tsd-kind-icon">Entity<wbr>Matching<wbr>Field</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_beta_src_types_.entitymatchingpatch.html#update" class="tsd-kind-icon">update</a>
+								<a href="_stable_src_types_.entitymatchingfield.html#from" class="tsd-kind-icon">from</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_stable_src_types_.entitymatchingfield.html#to" class="tsd-kind-icon">to</a>
 							</li>
 						</ul>
 					</li>

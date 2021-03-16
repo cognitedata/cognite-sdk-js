@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>EntityMatchingPredictRequestBase | Cognite JavaScript SDK (beta)</title>
+	<title>EntityMatchingRefitRequestBase | Cognite JavaScript SDK (beta)</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK (beta)">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_beta_src_types_.html">&quot;beta/src/types&quot;</a>
+					<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
 				</li>
 				<li>
-					<a href="_beta_src_types_.entitymatchingpredictrequestbase.html">EntityMatchingPredictRequestBase</a>
+					<a href="_stable_src_types_.entitymatchingrefitrequestbase.html">EntityMatchingRefitRequestBase</a>
 				</li>
 			</ul>
-			<h1>Interface EntityMatchingPredictRequestBase</h1>
+			<h1>Interface EntityMatchingRefitRequestBase</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">EntityMatchingPredictRequestBase</span>
+						<span class="target">EntityMatchingRefitRequestBase</span>
 					</li>
 				</ul>
 			</section>
@@ -84,10 +84,10 @@
 						<section class="tsd-index-section tsd-is-external tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="_beta_src_types_.entitymatchingpredictrequestbase.html#nummatches" class="tsd-kind-icon">num<wbr>Matches</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="_beta_src_types_.entitymatchingpredictrequestbase.html#scorethreshold" class="tsd-kind-icon">score<wbr>Threshold</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="_beta_src_types_.entitymatchingpredictrequestbase.html#sources" class="tsd-kind-icon">sources</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="_beta_src_types_.entitymatchingpredictrequestbase.html#targets" class="tsd-kind-icon">targets</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="_stable_src_types_.entitymatchingrefitrequestbase.html#newexternalid" class="tsd-kind-icon">new<wbr>External<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="_stable_src_types_.entitymatchingrefitrequestbase.html#sources" class="tsd-kind-icon">sources</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="_stable_src_types_.entitymatchingrefitrequestbase.html#targets" class="tsd-kind-icon">targets</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported"><a href="_stable_src_types_.entitymatchingrefitrequestbase.html#truematches" class="tsd-kind-icon">true<wbr>Matches</a></li>
 							</ul>
 						</section>
 					</div>
@@ -96,62 +96,62 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external tsd-is-not-exported">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
-					<a name="nummatches" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> num<wbr>Matches</h3>
-					<div class="tsd-signature tsd-kind-icon">num<wbr>Matches<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<a name="newexternalid" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> new<wbr>External<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">new<wbr>External<wbr>Id<span class="tsd-signature-symbol">:</span> <a href="../modules/_stable_src_types_.html#cogniteexternalid" class="tsd-signature-type">CogniteExternalId</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c04ac7e/packages/beta/src/types.ts#L241">packages/beta/src/types.ts:241</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3376ec4/packages/stable/src/types.ts#L2653">packages/stable/src/types.ts:2653</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The maximum number of results to return for each matchFrom.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
-					<a name="scorethreshold" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> score<wbr>Threshold</h3>
-					<div class="tsd-signature tsd-kind-icon">score<wbr>Threshold<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c04ac7e/packages/beta/src/types.ts#L245">packages/beta/src/types.ts:245</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Only return matches with score above this threshold.</p>
+							<p>External ID for the new refitted model provided by client. Should be unique within the project.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
 					<a name="sources" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> sources</h3>
-					<div class="tsd-signature tsd-kind-icon">sources<span class="tsd-signature-symbol">:</span> <a href="_beta_src_types_.externalentitytomatch.html" class="tsd-signature-type">ExternalEntityToMatch</a><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">sources<span class="tsd-signature-symbol">:</span> <a href="_stable_src_types_.externalentitytomatch.html" class="tsd-signature-type">ExternalEntityToMatch</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c04ac7e/packages/beta/src/types.ts#L233">packages/beta/src/types.ts:233</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3376ec4/packages/stable/src/types.ts#L2661">packages/stable/src/types.ts:2661</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>List of source entities to predict matches for, for example, time series. If omitted, will use data source fit.</p>
+							<p>List of source entities, for example, time series. If omitted, will use data from fit.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
 					<a name="targets" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> targets</h3>
-					<div class="tsd-signature tsd-kind-icon">targets<span class="tsd-signature-symbol">:</span> <a href="_beta_src_types_.externalentitytomatch.html" class="tsd-signature-type">ExternalEntityToMatch</a><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">targets<span class="tsd-signature-symbol">:</span> <a href="_stable_src_types_.externalentitytomatch.html" class="tsd-signature-type">ExternalEntityToMatch</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c04ac7e/packages/beta/src/types.ts#L237">packages/beta/src/types.ts:237</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3376ec4/packages/stable/src/types.ts#L2665">packages/stable/src/types.ts:2665</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>LList of potential target entities to match to one or more of the source entities, for example, assets. If omitted, will use data from fit.</p>
+							<p>List of target entities, for example, assets. If omitted, will use data from fit.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
+					<a name="truematches" class="tsd-anchor"></a>
+					<h3>true<wbr>Matches</h3>
+					<div class="tsd-signature tsd-kind-icon">true<wbr>Matches<span class="tsd-signature-symbol">:</span> <a href="../modules/_stable_src_types_.html#externalentitytruematch" class="tsd-signature-type">ExternalEntityTrueMatch</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3376ec4/packages/stable/src/types.ts#L2657">packages/stable/src/types.ts:2657</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>List of additional confirmed matches used to train the model. The new model uses a combination of this and trueMatches from the orginal model. If there are identical match-from ids, the pair from the original model is dropped.</p>
 						</div>
 					</div>
 				</section>
@@ -164,7 +164,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/_beta_src_types_.html">&quot;beta/src/types&quot;</a>
+						<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -173,19 +173,19 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
-						<a href="_beta_src_types_.entitymatchingpredictrequestbase.html" class="tsd-kind-icon">Entity<wbr>Matching<wbr>Predict<wbr>Request<wbr>Base</a>
+						<a href="_stable_src_types_.entitymatchingrefitrequestbase.html" class="tsd-kind-icon">Entity<wbr>Matching<wbr>Refit<wbr>Request<wbr>Base</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
-								<a href="_beta_src_types_.entitymatchingpredictrequestbase.html#nummatches" class="tsd-kind-icon">num<wbr>Matches</a>
+								<a href="_stable_src_types_.entitymatchingrefitrequestbase.html#newexternalid" class="tsd-kind-icon">new<wbr>External<wbr>Id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
-								<a href="_beta_src_types_.entitymatchingpredictrequestbase.html#scorethreshold" class="tsd-kind-icon">score<wbr>Threshold</a>
+								<a href="_stable_src_types_.entitymatchingrefitrequestbase.html#sources" class="tsd-kind-icon">sources</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
-								<a href="_beta_src_types_.entitymatchingpredictrequestbase.html#sources" class="tsd-kind-icon">sources</a>
+								<a href="_stable_src_types_.entitymatchingrefitrequestbase.html#targets" class="tsd-kind-icon">targets</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external tsd-is-not-exported">
-								<a href="_beta_src_types_.entitymatchingpredictrequestbase.html#targets" class="tsd-kind-icon">targets</a>
+								<a href="_stable_src_types_.entitymatchingrefitrequestbase.html#truematches" class="tsd-kind-icon">true<wbr>Matches</a>
 							</li>
 						</ul>
 					</li>

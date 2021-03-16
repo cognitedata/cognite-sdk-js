@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>EntityMatchingPredictedItem | Cognite JavaScript SDK (beta)</title>
-	<meta name="description" content="Documentation for Cognite JavaScript SDK (beta)">
+	<title>EntityMatchingPrediction | Cognite JavaScript SDK</title>
+	<meta name="description" content="Documentation for Cognite JavaScript SDK">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">Cognite JavaScript SDK (beta)</a>
+					<a href="../index.html" class="title">Cognite JavaScript SDK</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_beta_src_types_.html">&quot;beta/src/types&quot;</a>
+					<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
 				</li>
 				<li>
-					<a href="_beta_src_types_.entitymatchingpredicteditem.html">EntityMatchingPredictedItem</a>
+					<a href="_stable_src_types_.entitymatchingprediction.html">EntityMatchingPrediction</a>
 				</li>
 			</ul>
-			<h1>Interface EntityMatchingPredictedItem</h1>
+			<h1>Interface EntityMatchingPrediction</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">EntityMatchingPredictedItem</span>
+						<span class="target">EntityMatchingPrediction</span>
 					</li>
 				</ul>
 			</section>
@@ -84,8 +84,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_beta_src_types_.entitymatchingpredicteditem.html#matchto" class="tsd-kind-icon">match<wbr>To</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_beta_src_types_.entitymatchingpredicteditem.html#score" class="tsd-kind-icon">score</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.entitymatchingprediction.html#matchfrom" class="tsd-kind-icon">match<wbr>From</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.entitymatchingprediction.html#matches" class="tsd-kind-icon">matches</a></li>
 							</ul>
 						</section>
 					</div>
@@ -94,32 +94,32 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="matchto" class="tsd-anchor"></a>
-					<h3>match<wbr>To</h3>
-					<div class="tsd-signature tsd-kind-icon">match<wbr>To<span class="tsd-signature-symbol">:</span> <a href="_beta_src_types_.externalentitytomatch.html" class="tsd-signature-type">ExternalEntityToMatch</a></div>
+					<a name="matchfrom" class="tsd-anchor"></a>
+					<h3>match<wbr>From</h3>
+					<div class="tsd-signature tsd-kind-icon">match<wbr>From<span class="tsd-signature-symbol">:</span> <a href="_stable_src_types_.externalentitytomatch.html" class="tsd-signature-type">ExternalEntityToMatch</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c04ac7e/packages/beta/src/types.ts#L331">packages/beta/src/types.ts:331</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3376ec4/packages/stable/src/types.ts#L2710">packages/stable/src/types.ts:2710</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The matchTo item given to predict.</p>
+							<p>The matchFrom item given to predict.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="score" class="tsd-anchor"></a>
-					<h3>score</h3>
-					<div class="tsd-signature tsd-kind-icon">score<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="matches" class="tsd-anchor"></a>
+					<h3>matches</h3>
+					<div class="tsd-signature tsd-kind-icon">matches<span class="tsd-signature-symbol">:</span> <a href="_stable_src_types_.entitymatchingpredicteditem.html" class="tsd-signature-type">EntityMatchingPredictedItem</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c04ac7e/packages/beta/src/types.ts#L335">packages/beta/src/types.ts:335</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3376ec4/packages/stable/src/types.ts#L2714">packages/stable/src/types.ts:2714</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The model&#39;s confidence in the match.</p>
+							<p>Matched items, sorted from highest score to lowest. May be empty.</p>
 						</div>
 					</div>
 				</section>
@@ -132,7 +132,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/_beta_src_types_.html">&quot;beta/src/types&quot;</a>
+						<a href="../modules/_stable_src_types_.html">&quot;stable/src/types&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -141,13 +141,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_beta_src_types_.entitymatchingpredicteditem.html" class="tsd-kind-icon">Entity<wbr>Matching<wbr>Predicted<wbr>Item</a>
+						<a href="_stable_src_types_.entitymatchingprediction.html" class="tsd-kind-icon">Entity<wbr>Matching<wbr>Prediction</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_beta_src_types_.entitymatchingpredicteditem.html#matchto" class="tsd-kind-icon">match<wbr>To</a>
+								<a href="_stable_src_types_.entitymatchingprediction.html#matchfrom" class="tsd-kind-icon">match<wbr>From</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_beta_src_types_.entitymatchingpredicteditem.html#score" class="tsd-kind-icon">score</a>
+								<a href="_stable_src_types_.entitymatchingprediction.html#matches" class="tsd-kind-icon">matches</a>
 							</li>
 						</ul>
 					</li>
