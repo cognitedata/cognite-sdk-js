@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.3.6...@cognite/sdk@3.4.0) (2021-03-16)
+
+
+### Bug Fixes
+
+* 3d node sortByNodeId correct type ([#497](https://github.com/cognitedata/cognite-sdk-js/issues/497)) ([c53f92f](https://github.com/cognitedata/cognite-sdk-js/commit/c53f92fc9ece522f77cdea5b8440328c0027152f))
+
+
+### Features
+
+* add List 3D Nodes query parameters ([#494](https://github.com/cognitedata/cognite-sdk-js/issues/494)) ([11141c5](https://github.com/cognitedata/cognite-sdk-js/commit/11141c5ef43e99d966776534933941aaec095282))
+* **entitymatching:** new stable api ([#491](https://github.com/cognitedata/cognite-sdk-js/issues/491)) ([e91e707](https://github.com/cognitedata/cognite-sdk-js/commit/e91e707d5a348537c24e3e27510580072e2acf71))
+
+
+
+
+
 ## [3.3.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.3.5...@cognite/sdk@3.3.6) (2021-03-05)
 
 **Note:** Version bump only for package @cognite/sdk

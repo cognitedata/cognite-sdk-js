@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@1.4.4...@cognite/sdk-beta@1.5.0) (2021-03-16)
+
+
+### Features
+
+* **entitymatching:** new stable api ([#491](https://github.com/cognitedata/cognite-sdk-js/issues/491)) ([e91e707](https://github.com/cognitedata/cognite-sdk-js/commit/e91e707d5a348537c24e3e27510580072e2acf71))
+
+
+
+
+
 ## [1.4.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@1.4.3...@cognite/sdk-beta@1.4.4) (2021-03-05)
 
 **Note:** Version bump only for package @cognite/sdk-beta
