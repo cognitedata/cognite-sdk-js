@@ -196,7 +196,7 @@ export function isUsingSSL() {
 }
 
 /** @hidden */
-export function isLocalhost() {
+export function isLocalhost(): boolean {
   return isBrowser() && location.hostname === 'localhost';
 }
 

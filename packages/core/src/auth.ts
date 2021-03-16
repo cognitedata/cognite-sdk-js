@@ -2,11 +2,9 @@
 
 import isString from 'lodash/isString';
 import isFunction from 'lodash/isFunction';
-import { parse, stringify } from 'query-string';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import {
   bearerString,
-  generatePopupWindow,
   isLocalhost,
   isSameProject,
   isUsingSSL,
@@ -14,18 +12,17 @@ import {
 } from './utils';
 import { CogniteLoginError } from './loginError';
 import { AUTHORIZATION_HEADER } from './constants';
+import { HttpCall, HttpHeaders } from './httpClient/basicHttpClient';
+import * as LoginUtils from './loginUtils';
 import {
-  HttpCall,
-  HttpHeaders,
-  HttpQueryParams,
-} from './httpClient/basicHttpClient';
-import { LogoutUrlResponse } from './types';
-
-const ACCESS_TOKEN_PARAM = 'access_token';
-const ID_TOKEN_PARAM = 'id_token';
-const ERROR_PARAM = 'error';
-const ERROR_DESCRIPTION_PARAM = 'error_description';
-const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
+  ACCESS_TOKEN_PARAM,
+  AuthorizeOptions,
+  AuthTokens,
+  ERROR_DESCRIPTION_PARAM,
+  ERROR_PARAM,
+  ID_TOKEN_PARAM,
+  parseTokenQueryParameters,
+} from './loginUtils';
 
 export const REDIRECT = 'REDIRECT';
 export const POPUP = 'POPUP';
@@ -48,11 +45,6 @@ export interface IdInfo {
   user: string;
 }
 
-export interface AuthorizeOptions {
-  redirectUrl: string;
-  errorRedirectUrl?: string;
-}
-
 export interface OnAuthenticateLoginObject {
   redirect: (options: AuthorizeOptions) => void;
   popup: (options: AuthorizeOptions) => void;
@@ -62,92 +54,6 @@ export interface OnAuthenticateLoginObject {
 /** @hidden */
 export interface AuthenticateParams {
   project: string;
-}
-
-/** @hidden */
-export interface AuthorizeParams extends AuthorizeOptions {
-  baseUrl: string;
-  project: string;
-  accessToken?: string;
-}
-
-/** @hidden */
-export interface AuthTokens {
-  accessToken: string;
-  idToken: string;
-}
-
-/** @hidden */
-export async function isTokensValid(
-  httpClient: CDFHttpClient,
-  project: string,
-  tokens: AuthTokens
-) {
-  const idInfo = await getIdInfoFromAccessToken(httpClient, tokens.accessToken);
-  return idInfo !== null && isSameProject(idInfo.project, project);
-}
-
-/** @hidden */
-export function getIdInfoFromAccessToken(
-  httpClient: CDFHttpClient,
-  accessToken: string
-): Promise<null | IdInfo> {
-  return getIdInfo(httpClient.get.bind(httpClient), {
-    [AUTHORIZATION_HEADER]: bearerString(accessToken),
-  });
-}
-
-/** @hidden */
-export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
-  // @ts-ignore we want to return a promise which never gets resolved (window will redirect)
-  return new Promise<void>(() => {
-    const url = generateLoginUrl(params);
-    window.location.assign(url);
-  });
-}
-
-/** @hidden */
-export function loginWithPopup(
-  params: AuthorizeParams
-): Promise<null | AuthTokens> {
-  return new Promise((resolve, reject) => {
-    const url = generateLoginUrl(params);
-    const loginPopup = generatePopupWindow(url, LOGIN_POPUP_NAME);
-    if (loginPopup === null) {
-      reject(new CogniteLoginError('Failed to create login popup window'));
-      return;
-    }
-    const tokenListener = (message: MessageEvent) => {
-      if (message.source !== loginPopup) {
-        return;
-      }
-      if (!message.data || message.data.error) {
-        reject(new CogniteLoginError());
-        return;
-      }
-      window.removeEventListener('message', tokenListener);
-      resolve(message.data);
-    };
-    window.addEventListener('message', tokenListener, false);
-  });
-}
-
-export function isLoginPopupWindow(): boolean {
-  return window.name === LOGIN_POPUP_NAME;
-}
-
-export function loginPopupHandler() {
-  if (!isLoginPopupWindow()) {
-    return;
-  }
-  try {
-    const tokens = parseTokenQueryParameters(window.location.search);
-    window.opener.postMessage(tokens);
-  } catch (err) {
-    window.opener.postMessage({ error: err.message });
-  } finally {
-    window.close();
-  }
 }
 
 /** @hidden */
@@ -166,21 +72,6 @@ export async function getIdInfo(
       project,
       projectId,
     };
-  } catch (err) {
-    if (err.status === 401) {
-      return null;
-    }
-    throw err;
-  }
-}
-
-/** @hidden */
-export async function getLogoutUrl(get: HttpCall, params: HttpQueryParams) {
-  try {
-    const response = await get<LogoutUrlResponse>('/logout/url', {
-      params,
-    });
-    return response.data.data.url;
   } catch (err) {
     if (err.status === 401) {
       return null;
@@ -223,7 +114,7 @@ export class CogniteAuthentication {
             project: this.project,
             ...params,
           };
-          loginWithRedirect(authorizeParams).catch(reject);
+          LoginUtils.loginWithRedirect(authorizeParams).catch(reject);
         },
         popup: async params => {
           const authorizeParams = {
@@ -232,7 +123,7 @@ export class CogniteAuthentication {
             ...params,
           };
           try {
-            const tokens = await loginWithPopup(authorizeParams);
+            const tokens = await LoginUtils.loginWithPopup(authorizeParams);
 
             if (tokens) {
               this.setTokens(tokens);
@@ -279,6 +170,8 @@ export class CogniteAuthentication {
     ) {
       clearParametersFromUrl(ACCESS_TOKEN_PARAM, ID_TOKEN_PARAM);
 
+      this.setTokens(tokens);
+
       return tokens;
     }
 
@@ -302,41 +195,12 @@ function extractTokensFromUrl() {
   }
 }
 
-function parseTokenQueryParameters(query: string): null | AuthTokens {
-  const {
-    [ACCESS_TOKEN_PARAM]: accessToken,
-    [ID_TOKEN_PARAM]: idToken,
-    [ERROR_PARAM]: error,
-    [ERROR_DESCRIPTION_PARAM]: errorDescription,
-  } = parse(query);
-  if (error !== undefined) {
-    throw Error(`${error}: ${errorDescription}`);
-  }
-  if (isString(accessToken) && isString(idToken)) {
-    return {
-      accessToken,
-      idToken,
-    };
-  }
-  return null;
-}
-
 function clearParametersFromUrl(...params: string[]): void {
   let url = window.location.href;
   params.forEach(param => {
     url = removeQueryParameterFromUrl(url, param);
   });
   window.history.replaceState(null, '', url);
-}
-
-function generateLoginUrl(params: AuthorizeParams): string {
-  const { project, baseUrl, redirectUrl, errorRedirectUrl } = params;
-  const queryParams = {
-    project,
-    redirectUrl,
-    errorRedirectUrl: errorRedirectUrl || redirectUrl,
-  };
-  return `${baseUrl}/login/redirect?${stringify(queryParams)}`;
 }
 
 function onAuthenticateWithRedirect(login: OnAuthenticateLoginObject) {
@@ -348,5 +212,23 @@ function onAuthenticateWithRedirect(login: OnAuthenticateLoginObject) {
 function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
   login.popup({
     redirectUrl: window.location.href,
+  });
+}
+
+async function isTokensValid(
+  httpClient: CDFHttpClient,
+  project: string,
+  tokens: AuthTokens
+) {
+  const idInfo = await getIdInfoFromAccessToken(httpClient, tokens.accessToken);
+  return idInfo !== null && isSameProject(idInfo.project, project);
+}
+
+function getIdInfoFromAccessToken(
+  httpClient: CDFHttpClient,
+  accessToken: string
+): Promise<null | IdInfo> {
+  return getIdInfo(httpClient.get.bind(httpClient), {
+    [AUTHORIZATION_HEADER]: bearerString(accessToken),
   });
 }
