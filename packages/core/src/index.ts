@@ -32,15 +32,21 @@ export {
   RetryValidator,
 } from './httpClient/retryValidator';
 export {
-  getLogoutUrl,
-  AuthTokens,
+  POPUP,
+  REDIRECT,
+  getIdInfo,
   AuthenticateParams,
-  AuthorizeOptions,
-  AuthorizeParams,
   IdInfo,
   OnAuthenticateLoginObject,
 } from './auth';
-export { POPUP, REDIRECT, isLoginPopupWindow, loginPopupHandler } from './auth';
+export {
+  AuthorizeOptions,
+  AuthorizeParams,
+  AuthTokens,
+  loginPopupHandler,
+  getLogoutUrl,
+  isLoginPopupWindow,
+} from './loginUtils';
 export { RevertableArraySorter } from './revertableArraySorter';
 export {
   sleepPromise,
