@@ -277,7 +277,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('filter - get all wells with trajectory in range', async () => {
     expect(client).not.toBeUndefined();
-    const filter: WellFilter = {"hasTrajectory": {minDepth: 500, maxDepth: 1000}}
+    const filter: WellFilter = {"hasTrajectory": {minDepth: 1.0, maxDepth: 1.0}}
     const wells = await client.wells.filter(filter);
 
     expect(wells).not.toBeUndefined();
