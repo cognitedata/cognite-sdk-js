@@ -23,7 +23,12 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
 
     expect(trajectory).not.toBeUndefined();
     /* eslint-disable */
-    expect(trajectory?.id).toBe(5289118434026779);
+    expect(trajectory?.id).toBe(70908367571432);
+    let metadata = trajectory?.metadata;
+    expect(metadata).not.toBeUndefined();
+    if (metadata) {    
+      expect(metadata["depthUnit"]).toBe("meters")
+    }
   });
 
   test('Get trajectory for a wellbore with 404 Not Found', async () => {
@@ -38,21 +43,25 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
   });
 
   test('Get rows from a trajectory', async () => {
-    const surveyId: number = 5289118434026779;
+    const wellboreId: number = 8456650753594878;
+
+    const trajectory: Survey | undefined = await client.surveys.getTrajectory(wellboreId)
+
+    expect(trajectory).not.toBeUndefined();
 
     const request: SurveyDataRequest = {
-      id: surveyId,
+      id: trajectory!.id,
       start: undefined,
       end: undefined,
     }
-
     const data: SurveyData | undefined = await client.surveys.getData(request)
+
     expect(data).not.toBeUndefined();
     /* eslint-disable */
-    expect(data?.id).toBe(surveyId);
-    expect(data?.rows.length).toBe(6);
+    expect(data?.id).toBe(trajectory!.id);
+    expect(data?.rows.length).toBe(3);
     data?.rows.forEach(row => {
-        expect(row.values).toContain("m")
+        expect(row.values.length).toBeGreaterThan(5)
     });
   });
 

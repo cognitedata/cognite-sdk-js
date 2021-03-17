@@ -63,7 +63,7 @@ export class SurveysAPI {
       
       return await this.client?.asyncPost<SurveyData>(path, {'data': request})
       .then(response => response.data)
-      .catch(err => {
+        .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {})
       });
   };
