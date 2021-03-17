@@ -317,11 +317,13 @@ export default class BaseCogniteClient {
    * const cdfToken = await client.getCDFToken();
    * ```
    */
-  public getCDFToken(): Promise<string | null> {
+  public async getCDFToken(): Promise<string | null> {
     if (this.azureAdClient) {
       return this.azureAdClient.getCDFToken();
     } else if (this.cogniteAuthClient) {
-      return this.cogniteAuthClient.getCDFToken(this.httpClient);
+      const tokens = await this.cogniteAuthClient.getCDFToken(this.httpClient);
+
+      return tokens ? tokens.accessToken : null;
     } else {
       throw Error('CDF token can be acquired only using loginWithOAuth flow');
     }
@@ -511,10 +513,12 @@ export default class BaseCogniteClient {
       try {
         cdfAccessToken = await azureAdClient.getCDFToken();
       } catch {
-        await azureAdClient.login(signInType);
+        noop();
       }
 
       if (!cdfAccessToken) {
+        await azureAdClient.login(signInType);
+
         cdfAccessToken = await azureAdClient.getCDFToken();
 
         if (!cdfAccessToken) {
@@ -564,11 +568,16 @@ export default class BaseCogniteClient {
     this.setProject(project);
 
     const authenticate = async () => {
-      const baseUrl = getBaseUrl(this.httpClient.getBaseUrl());
-      const authTokens = await cogniteAuthClient.login({
-        baseUrl,
-        onAuthenticate,
-      });
+      let authTokens = await cogniteAuthClient.getCDFToken(this.httpClient);
+
+      if (!authTokens) {
+        const baseUrl = getBaseUrl(this.httpClient.getBaseUrl());
+
+        authTokens = await cogniteAuthClient.login({
+          baseUrl,
+          onAuthenticate,
+        });
+      }
 
       if (!authTokens) {
         return false;
