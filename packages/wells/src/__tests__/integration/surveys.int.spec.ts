@@ -23,8 +23,7 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
 
     expect(trajectory).not.toBeUndefined();
     /* eslint-disable */
-    expect(trajectory?.id).toBe(70908367571432);
-    let metadata = trajectory?.metadata;
+    const metadata = trajectory?.metadata;
     expect(metadata).not.toBeUndefined();
     if (metadata) {    
       expect(metadata["depthUnit"]).toBe("meters")
