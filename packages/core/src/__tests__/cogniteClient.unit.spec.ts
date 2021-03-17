@@ -381,16 +381,20 @@ describe('CogniteClient', () => {
       });
 
       test('handle error query params', async () => {
+        const onHandleRedirectError = jest.fn();
         window.history.pushState(
           {},
           '',
           `/some/random/path?query=true&error=failed&error_description=message`
         );
         const client = setupClient(mockBaseUrl);
+        const result = await client.loginWithOAuth({
+          project,
+          onHandleRedirectError,
+        });
 
-        await expect(client.loginWithOAuth({ project })).rejects.toThrowError(
-          'failed: message'
-        );
+        expect(result).toEqual(false);
+        expect(onHandleRedirectError).toHaveBeenCalledWith('failed: message');
       });
 
       test('retry request after silent login', async () => {
