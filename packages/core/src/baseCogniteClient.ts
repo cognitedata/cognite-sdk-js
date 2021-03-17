@@ -31,6 +31,7 @@ import {
 } from './httpClient/retryValidator';
 import { AzureAD, AzureADSingInType } from './aad';
 import { CogniteAuthentication, OnAuthenticate, OnTokens } from './auth';
+import { AuthTokens } from './loginUtils';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -64,6 +65,7 @@ export interface OAuthLoginForCogniteOptions {
    * Provide optional cached access token to skip the authentication flow (client.authenticate will still override this).
    */
   accessToken?: string;
+  onHandleRedirectError?: (error: string) => void;
 }
 
 export interface OAuthLoginForAADOptions {
@@ -541,6 +543,7 @@ export default class BaseCogniteClient {
     accessToken,
     onTokens = noop,
     onAuthenticate,
+    onHandleRedirectError,
   }: OAuthLoginForCogniteOptions): Promise<OAuthLoginResult> => {
     let token: string | null = null;
 
@@ -553,9 +556,15 @@ export default class BaseCogniteClient {
     }
 
     const cogniteAuthClient = new CogniteAuthentication({ project });
-    const authTokens = await cogniteAuthClient.handleLoginRedirect(
-      this.httpClient
-    );
+    let authTokens: AuthTokens | null = null;
+
+    try {
+      authTokens = await cogniteAuthClient.handleLoginRedirect(this.httpClient);
+    } catch (error) {
+      if (onHandleRedirectError) {
+        onHandleRedirectError(error.message);
+      }
+    }
 
     if (authTokens) {
       token = authTokens.accessToken;
