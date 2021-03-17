@@ -82,8 +82,7 @@ export async function getIdInfo(
 
 export class CogniteAuthentication {
   private readonly project: string;
-  private accessToken?: string;
-  private idToken?: string;
+  private authTokens?: AuthTokens;
 
   constructor({ project }: AuthOptions) {
     if (!isString(project)) {
@@ -140,15 +139,18 @@ export class CogniteAuthentication {
     });
   }
 
-  public async getCDFToken(httpClient: CDFHttpClient): Promise<string | null> {
-    if (this.accessToken) {
+  public async getCDFToken(
+    httpClient: CDFHttpClient
+  ): Promise<AuthTokens | null> {
+    if (this.authTokens) {
+      const { accessToken, idToken } = this.authTokens;
       const isValid = await isTokensValid(httpClient, this.project, {
-        accessToken: this.accessToken || '',
-        idToken: this.idToken || '',
+        accessToken,
+        idToken,
       });
 
       if (isValid) {
-        return this.accessToken!;
+        return { accessToken, idToken };
       }
     }
 
@@ -179,8 +181,7 @@ export class CogniteAuthentication {
   }
 
   private setTokens({ accessToken, idToken }: AuthTokens) {
-    this.accessToken = accessToken;
-    this.idToken = idToken;
+    this.authTokens = { accessToken, idToken };
   }
 }
 

@@ -168,7 +168,7 @@ describe('Cognite Auth', () => {
           `"https://localhost/some/random/path?query=true&random=123"`
         );
         await expect(authClient.getCDFToken(httpClient)).resolves.toEqual(
-          authTokens.accessToken
+          authTokens
         );
       });
     });
