@@ -145,4 +145,6 @@ export class WellboresAPI {
 
     return measurements?.items.map((measurement: Measurement) => this.addLazyMethodsForMeasurement(measurement)) 
   }
+
+  
 }

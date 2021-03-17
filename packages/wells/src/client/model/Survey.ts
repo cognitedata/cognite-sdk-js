@@ -1,3 +1,5 @@
+import { ValueType } from './ValueType';
+
 export type SearchSurveys = (args?: any) => Promise<Survey[]>;
 
 export interface Survey {
@@ -27,12 +29,6 @@ export interface Survey {
    * @memberof Survey
    */
   data(limit?: number): Promise<SurveyData>;
-}
-
-export const enum ValueType {
-  string = 'STRING',
-  double = 'DOUBLE',
-  long = 'LONG',
 }
 
 export interface SurveyDataRequest {
