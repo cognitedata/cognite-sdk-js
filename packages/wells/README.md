@@ -293,6 +293,31 @@ const trajectory: Survey | undefined;
 trajectory = await client.wellbores.getTrajectory(wellboreId);
 ```
 
+### **Casing queries**
+
+#### _Get casing from well or wellbore id:_
+
+```ts
+import { Sequence } from '@cognite/sdk-wells';
+
+const wellOrWellboreId: number = 5432591169464385;
+
+const casings: Sequence[] | undefined = await client.wellbores.getCasings(
+  wellOrWellboreId
+);
+
+// then get the casing data
+casings?.forEach(async casing => {
+  const data: SequenceData | undefined = await client.wellbores.getCasingsData(
+    casing.id, // cdf sequence id (number)
+    undefined, // start (number)
+    undefined, // end (number)
+    undefined, // columns (string[])
+    '98jgi&0%4'// cursor (string)
+    100        // limit (number)
+  );
+```
+
 ### **Survey queries**
 
 #### _Get data from a survey:_

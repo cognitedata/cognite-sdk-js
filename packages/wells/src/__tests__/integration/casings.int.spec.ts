@@ -58,10 +58,16 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
         undefined,
         undefined,
         undefined,
+        undefined,
         100
       );
 
       expect(data).not.toBeUndefined();
+
+      expect(data!.externalId).toBe(casingExtId);
+
+      expect(data?.columns.length).toBe(7)
+      expect(data?.rows.length).toBe(3)
     })
   });
 

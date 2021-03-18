@@ -162,6 +162,7 @@ export class WellboresAPI {
     start?: number,
     end?: number,
     columns?: string[],
+    cursor?: string,
     limit?: number
   ): Promise<SequenceData | undefined> => {
     const path: string = this.getPath(`/wells/casings/data`)
@@ -171,6 +172,7 @@ export class WellboresAPI {
       start: start,
       end: end,
       columns: columns,
+      cursor: cursor,
       limit: limit
     }
 
