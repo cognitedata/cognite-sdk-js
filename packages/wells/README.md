@@ -293,6 +293,58 @@ const trajectory: Survey | undefined;
 trajectory = await client.wellbores.getTrajectory(wellboreId);
 ```
 
+### **Casing queries**
+
+#### _Get casing from well or wellbore id:_
+
+```ts
+import { Sequence } from '@cognite/sdk-wells';
+
+const wellOrWellboreId: number = 5432591169464385;
+
+const casings: Sequence[] | undefined = await client.wellbores.getCasings(
+  wellOrWellboreId
+);
+
+// then get the casing data
+casings?.forEach(async casing => {
+  const data: SequenceData | undefined = await client.wellbores.getCasingsData(
+    casing.id, // cdf sequence id (number)
+    undefined, // start (number)
+    undefined, // end (number)
+    undefined, // columns (string[])
+    '98jgi&0%4'// cursor (string)
+    100        // limit (number)
+  );
+```
+
+#### _Get Casing data (functional approach)_
+
+```ts
+import { Wellbore, Sequence } from '@cognite/sdk-wells';
+const wellId: number = 5432591169464385;
+
+// get all wellbores related to a well
+const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWell(wellId)
+
+wellbores?.forEach(async wellbore => {
+
+  // get all casings related to the wellbore
+  const casings: Sequence[] | undefined = await wellbore?.casings();
+
+  // get all the data (with filters) on each casing
+  casings?.forEach(async casing => {
+    const casingData: SequenceData | undefined = await casing.data(
+    undefined, // start (number)
+    undefined, // end (number)
+    undefined, // columns (string[])
+    '98jgi&0%4'// cursor (string)
+    100        // limit (number)
+    );
+  })
+})
+```
+
 ### **Survey queries**
 
 #### _Get data from a survey:_

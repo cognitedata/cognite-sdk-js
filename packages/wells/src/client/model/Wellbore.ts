@@ -1,5 +1,6 @@
 import { Asset } from 'wells/src/types';
 import { Survey } from '../model/Survey';
+import { Sequence } from './Sequence';
 import { Well } from './Well';
 import { Wellhead } from './wellhead';
 
@@ -40,10 +41,15 @@ export interface Wellbore {
    */
   wellId?: { [key: string]: string };
   /**
-   * @type {Promise<Survey[]>}
+   * @type {Promise<Survey>}
    * @memberof Wellbore
    */
   trajectory(): Promise<Survey>;
+  /**
+   * @type {Promise<Sequence[]>}
+   * @memberof Wellbore
+   */
+  casings(): Promise<Sequence[]>;
   /**
    * @type {Promise<Well>}
    * @memberof Wellbore
