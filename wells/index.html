@@ -313,6 +313,55 @@ measurements = <span class="hljs-keyword">await</span> client.wellbores.getMeasu
 <span class="hljs-keyword">const</span> wellboreId: <span class="hljs-built_in">number</span> = <span class="hljs-number">8456650753594878</span>;
 <span class="hljs-keyword">const</span> trajectory: Survey | <span class="hljs-literal">undefined</span>;
 trajectory = <span class="hljs-keyword">await</span> client.wellbores.getTrajectory(wellboreId);</code></pre>
+				<a href="#casing-queries" id="casing-queries" style="color: inherit; text-decoration: none;">
+					<h3><strong>Casing queries</strong></h3>
+				</a>
+				<a href="#get-casing-from-well-or-wellbore-id" id="get-casing-from-well-or-wellbore-id" style="color: inherit; text-decoration: none;">
+					<h4><em>Get casing from well or wellbore id:</em></h4>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Sequence } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> wellOrWellboreId: <span class="hljs-built_in">number</span> = <span class="hljs-number">5432591169464385</span>;
+
+<span class="hljs-keyword">const</span> casings: Sequence[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wellbores.getCasings(
+  wellOrWellboreId
+);
+
+<span class="hljs-comment">// then get the casing data</span>
+casings?.forEach(<span class="hljs-keyword">async</span> casing =&gt; {
+  <span class="hljs-keyword">const</span> data: SequenceData | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wellbores.getCasingsData(
+    casing.id, <span class="hljs-comment">// cdf sequence id (number)</span>
+    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// start (number)</span>
+    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// end (number)</span>
+    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// columns (string[])</span>
+    <span class="hljs-string">&#x27;98jgi&amp;0%4&#x27;</span><span class="hljs-comment">// cursor (string)</span>
+    <span class="hljs-number">100</span>        <span class="hljs-comment">// limit (number)</span>
+  );</code></pre>
+				<a href="#get-casing-data-functional-approach" id="get-casing-data-functional-approach" style="color: inherit; text-decoration: none;">
+					<h4><em>Get Casing data (functional approach)</em></h4>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Wellbore, Sequence } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+<span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">5432591169464385</span>;
+
+<span class="hljs-comment">// get all wellbores related to a well</span>
+<span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wellbores.getFromWell(wellId)
+
+wellbores?.forEach(<span class="hljs-keyword">async</span> wellbore =&gt; {
+
+  <span class="hljs-comment">// get all casings related to the wellbore</span>
+  <span class="hljs-keyword">const</span> casings: Sequence[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> wellbore?.casings();
+
+  <span class="hljs-comment">// get all the data (with filters) on each casing</span>
+  casings?.forEach(<span class="hljs-keyword">async</span> casing =&gt; {
+    <span class="hljs-keyword">const</span> casingData: SequenceData | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> casing.data(
+    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// start (number)</span>
+    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// end (number)</span>
+    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// columns (string[])</span>
+    <span class="hljs-string">&#x27;98jgi&amp;0%4&#x27;</span><span class="hljs-comment">// cursor (string)</span>
+    <span class="hljs-number">100</span>        <span class="hljs-comment">// limit (number)</span>
+    );
+  })
+})</code></pre>
 				<a href="#survey-queries" id="survey-queries" style="color: inherit; text-decoration: none;">
 					<h3><strong>Survey queries</strong></h3>
 				</a>
@@ -585,7 +634,13 @@ trajectory = <span class="hljs-keyword">await</span> client.wellbores.getTraject
 						<a href="modules/_wells_src_client_model_measurementtype_.html">&quot;wells/src/client/model/<wbr>Measurement<wbr>Type&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_sequence_.html">&quot;wells/src/client/model/<wbr>Sequence&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_survey_.html">&quot;wells/src/client/model/<wbr>Survey&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_valuetype_.html">&quot;wells/src/client/model/<wbr>Value<wbr>Type&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_well_.html">&quot;wells/src/client/model/<wbr>Well&quot;</a>

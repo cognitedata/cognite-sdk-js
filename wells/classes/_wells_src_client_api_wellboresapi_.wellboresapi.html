@@ -94,6 +94,8 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getbyid" class="tsd-kind-icon">get<wbr>ById</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getcasings" class="tsd-kind-icon">get<wbr>Casings</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getcasingsdata" class="tsd-kind-icon">get<wbr>Casings<wbr>Data</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getfromwell" class="tsd-kind-icon">get<wbr>From<wbr>Well</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getfromwells" class="tsd-kind-icon">get<wbr>From<wbr>Wells</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getmeasurement" class="tsd-kind-icon">get<wbr>Measurement</a></li>
@@ -115,7 +117,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/87edb23/packages/wells/src/client/api/wellboresApi.ts#L34">packages/wells/src/client/api/wellboresApi.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L35">packages/wells/src/client/api/wellboresApi.ts:35</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -138,7 +140,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/87edb23/packages/wells/src/client/api/wellboresApi.ts#L26">packages/wells/src/client/api/wellboresApi.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L27">packages/wells/src/client/api/wellboresApi.ts:27</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -161,7 +163,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/87edb23/packages/wells/src/client/api/wellboresApi.ts#L30">packages/wells/src/client/api/wellboresApi.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L31">packages/wells/src/client/api/wellboresApi.ts:31</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -184,7 +186,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/87edb23/packages/wells/src/client/api/wellboresApi.ts#L18">packages/wells/src/client/api/wellboresApi.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L19">packages/wells/src/client/api/wellboresApi.ts:19</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -210,7 +212,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/87edb23/packages/wells/src/client/api/wellboresApi.ts#L86">packages/wells/src/client/api/wellboresApi.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L113">packages/wells/src/client/api/wellboresApi.ts:113</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -224,6 +226,67 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="getcasings" class="tsd-anchor"></a>
+					<h3>get<wbr>Casings</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Casings<span class="tsd-signature-symbol">(</span>wellOrWellboreId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_sequence_.sequence.html" class="tsd-signature-type">Sequence</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L176">packages/wells/src/client/api/wellboresApi.ts:176</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>wellOrWellboreId: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_sequence_.sequence.html" class="tsd-signature-type">Sequence</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="getcasingsdata" class="tsd-anchor"></a>
+					<h3>get<wbr>Casings<wbr>Data</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Casings<wbr>Data<span class="tsd-signature-symbol">(</span>casingId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, start<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, end<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span>, columns<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, cursor<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, limit<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_sequence_.sequencedata.html" class="tsd-signature-type">SequenceData</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L191">packages/wells/src/client/api/wellboresApi.ts:191</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>casingId: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> start: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> end: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> columns: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> cursor: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> limit: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_wells_src_client_model_sequence_.sequencedata.html" class="tsd-signature-type">SequenceData</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="getfromwell" class="tsd-anchor"></a>
 					<h3>get<wbr>From<wbr>Well</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
@@ -233,7 +296,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/87edb23/packages/wells/src/client/api/wellboresApi.ts#L95">packages/wells/src/client/api/wellboresApi.ts:95</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L122">packages/wells/src/client/api/wellboresApi.ts:122</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -256,7 +319,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/87edb23/packages/wells/src/client/api/wellboresApi.ts#L109">packages/wells/src/client/api/wellboresApi.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L136">packages/wells/src/client/api/wellboresApi.ts:136</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -279,7 +342,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/87edb23/packages/wells/src/client/api/wellboresApi.ts#L136">packages/wells/src/client/api/wellboresApi.ts:136</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L163">packages/wells/src/client/api/wellboresApi.ts:163</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -305,7 +368,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/87edb23/packages/wells/src/client/api/wellboresApi.ts#L125">packages/wells/src/client/api/wellboresApi.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/927e202/packages/wells/src/client/api/wellboresApi.ts#L152">packages/wells/src/client/api/wellboresApi.ts:152</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -352,6 +415,12 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getbyid" class="tsd-kind-icon">get<wbr>ById</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getcasings" class="tsd-kind-icon">get<wbr>Casings</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getcasingsdata" class="tsd-kind-icon">get<wbr>Casings<wbr>Data</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_wells_src_client_api_wellboresapi_.wellboresapi.html#getfromwell" class="tsd-kind-icon">get<wbr>From<wbr>Well</a>
