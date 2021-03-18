@@ -6,10 +6,31 @@ const cluster = process.env.REACT_APP_CLUSTER;
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const tenantId = process.env.REACT_APP_TENANT_ID;
 
+const renderAssetsInTable = (assets) => {
+  return (
+    <table>
+      <tbody>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+      {assets.map(asset => (
+        <tr key={asset.id}>
+          <td>{asset.name}</td>
+          <td>{asset.description}</td>
+        </tr>
+      ))}
+      </tbody>
+    </table>
+  );
+}
+
+const client = new CogniteClient({appId: 'sample-app-id'});
+
 function App() {
-  const [client, setClient] = useState(null);
   const [assets, setAssets] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isInit, setIsInit] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   const fetchRootAssets = async () => {
     if (client === null) return;
@@ -20,25 +41,6 @@ function App() {
     setAssets(assets);
   };
 
-  const renderAssetsInTable = (assets) => {
-    return (
-      <table>
-        <tbody>
-        <tr>
-          <th>Name</th>
-          <th>Description</th>
-        </tr>
-        {assets.map(asset => (
-          <tr key={asset.id}>
-            <td>{asset.name}</td>
-            <td>{asset.description}</td>
-          </tr>
-        ))}
-        </tbody>
-      </table>
-    );
-  }
-
   const authenticate = async () => {
     if (client === null) return;
 
@@ -46,35 +48,31 @@ function App() {
 
     if (result) {
       client.setProject(project);
-      setIsAuthenticated(true);
-    }
-  }
-
-  const login = async (client) => {
-    const result = await client.loginWithOAuth({
-      cluster,
-      clientId,
-      tenantId,
-    });
-
-    setClient(client);
-
-    if (result) {
-      client.setProject(project);
-      setIsAuthenticated(true);
+      setIsSignedIn(true);
     }
   }
 
   useEffect(() => {
-    const client = new CogniteClient({appId: 'sample-app-id'});
+    const login = async (client) => {
+      const result = await client.loginWithOAuth({
+        cluster,
+        clientId,
+        tenantId,
+      });
+
+      client.setProject(project);
+
+      setIsInit(true);
+      setIsSignedIn(result);
+    }
 
     login(client);
   }, []);
 
   return (
     <div>
-      <button onClick={authenticate}><h1>Click here to authenticate</h1></button>
-      <button disabled={!isAuthenticated} onClick={fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
+      <button disabled={!isInit || isSignedIn} onClick={authenticate}><h1>Authenticate</h1></button>
+      <button disabled={!isInit || !isSignedIn} onClick={fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
       {assets && renderAssetsInTable(assets)}
     </div>
   );

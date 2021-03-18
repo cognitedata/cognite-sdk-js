@@ -23,7 +23,7 @@ const renderAssetsInTable = (assets) => {
 }
 
 const App = () => {
-  const [assets, setAssets] = useState();
+  const [assets, setAssets] = useState([]);
   const [isInit, setIsInit] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
 
