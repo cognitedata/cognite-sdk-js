@@ -7,6 +7,7 @@ import { SurveysAPI } from './surveysApi';
 import HttpClientWithIntercept from '../httpClientWithIntercept';
 import { WellIds } from '../model/WellIds';
 import { Asset } from 'wells/src/types';
+import { Sequence, SequenceData, SequenceDataRequest } from '../model/Sequence';
 
 export class WellboresAPI {
   private client?: HttpClientWithIntercept;
@@ -146,5 +147,37 @@ export class WellboresAPI {
     return measurements?.items.map((measurement: Measurement) => this.addLazyMethodsForMeasurement(measurement)) 
   }
 
-  
+  public getCasings = async (wellOrWellboreId: number): Promise<Sequence[] | undefined> => {
+    const path: string = this.getPath(`/wells/${wellOrWellboreId}/casings`)
+
+    return await this.client?.asyncGet<Sequence[]>(path)
+    .then(response => response.data)
+    .catch(err => {
+      throw new HttpError(err.status, err.errorMessage, {})
+    })
+  }
+
+  public getCasingsData = async (
+    casingId: number,
+    start?: number,
+    end?: number,
+    columns?: string[],
+    limit?: number
+  ): Promise<SequenceData | undefined> => {
+    const path: string = this.getPath(`/wells/casings/data`)
+
+    const request: SequenceDataRequest = {
+      id: casingId,
+      start: start,
+      end: end,
+      columns: columns,
+      limit: limit
+    }
+
+    return await this.client?.asyncPost<SequenceData>(path, {'data': request})
+    .then(response => response.data)
+    .catch(err => {
+      throw new HttpError(err.status, err.errorMessage, {})
+    })
+  }
 }

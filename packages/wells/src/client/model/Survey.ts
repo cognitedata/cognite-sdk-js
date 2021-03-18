@@ -85,12 +85,12 @@ export interface SurveyColumnInfo {
 export interface SurveyRow {
   /**
    * @type {number}
-   * @memberof SurveyDataRequest
+   * @memberof SurveyRow
    */
   rowNumber: number;
   /**
    * @type {any[]}
-   * @memberof SurveyDataRequest
+   * @memberof SurveyRow
    */
   values: any[];
 }

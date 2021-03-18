@@ -154,3 +154,44 @@ export interface SequenceDataRequest {
    */
   columns?: string[];
 }
+
+export interface SequenceRow {
+  /**
+   * @type {number}
+   * @memberof SequenceRow
+   */
+  rowNumber: number;
+  /**
+   * @type {any[]}
+   * @memberof SequenceRow
+   */
+  values: any[];
+}
+
+export interface SequenceData {
+  /**
+   * @type {number}
+   * @memberof SequenceData
+   */
+  id: number;
+  /**
+   * @type {string[]}
+   * @memberof SequenceData
+   */
+  columns: string[];
+  /**
+   * @type {SequenceRow[]}
+   * @memberof SequenceData
+   */
+  rows: SequenceRow[];
+  /**
+   * @type {string}
+   * @memberof SequenceData
+   */
+  externalId?: string;
+  /**
+   * @type {number}
+   * @memberof SequenceData
+   */
+  nextCursor?: string;
+}
