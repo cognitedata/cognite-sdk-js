@@ -318,6 +318,33 @@ casings?.forEach(async casing => {
   );
 ```
 
+#### _Get Casing data (functional approach)_
+
+```ts
+import { Wellbore, Sequence } from '@cognite/sdk-wells';
+const wellId: number = 5432591169464385;
+
+// get all wellbores related to a well
+const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWell(wellId)
+
+wellbores?.forEach(async wellbore => {
+
+  // get all casings related to the wellbore
+  const casings: Sequence[] | undefined = await wellbore?.casings();
+
+  // get all the data (with filters) on each casing
+  casings?.forEach(async casing => {
+    const casingData: SequenceData | undefined = await casing.data(
+    undefined, // start (number)
+    undefined, // end (number)
+    undefined, // columns (string[])
+    '98jgi&0%4'// cursor (string)
+    100        // limit (number)
+    );
+  })
+})
+```
+
 ### **Survey queries**
 
 #### _Get data from a survey:_

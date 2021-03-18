@@ -42,7 +42,8 @@ export class WellboresAPI {
       name: wellbore.name,
       externalId: wellbore.externalId,
       wellId: wellbore.wellId,
-      trajectory: async (): Promise<Survey | undefined>  => {return await this.surveys.getTrajectory(wellbore.id).then(response => response).catch(err => err)},
+      trajectory: async (): Promise<Survey | undefined> => { return await this.surveys.getTrajectory(wellbore.id).then(response => response).catch(err => err) },
+      casings: async (): Promise<Sequence[] | undefined>  => {return await this.getCasings(wellbore.id).then(response => response).catch(err => err)},
       sourceAssets: async (source?:string): Promise<Asset[] | undefined>  => await this.getSources(wellbore.id, source)
     };
   }
@@ -69,6 +70,31 @@ export class WellboresAPI {
       externalId: measurement.externalId,
       name: measurement.name,
       data: async (): Promise<SurveyData | undefined>  => {return await this.surveys.getData({id: measurement.id}).then(response => response).catch(err => err)}
+    };
+  }
+
+  
+  private addLazyMethodsForCasing = (casing: Sequence): Sequence => {
+    return <Sequence>{
+      id: casing.id,
+      columns: casing.columns,
+      createdTime: casing.createdTime,
+      lastUpdatedTime: casing.lastUpdatedTime,
+      name: casing.name,
+      description: casing.description,
+      assetId: casing.assetId,
+      externalId: casing.externalId,
+      metadata: casing.metadata,
+      dataSetId: casing.dataSetId,
+      data: async (
+        start?: number,
+        end?: number,
+        columns?: string[],
+        cursor?: string,
+        limit?: number
+      ): Promise<SequenceData | undefined> => {
+        return await this.getCasingsData(casing.id, start, end, columns, cursor, limit).then(response => response).catch(err => err)
+      }
     };
   }
 
@@ -150,11 +176,16 @@ export class WellboresAPI {
   public getCasings = async (wellOrWellboreId: number): Promise<Sequence[] | undefined> => {
     const path: string = this.getPath(`/wells/${wellOrWellboreId}/casings`)
 
-    return await this.client?.asyncGet<Sequence[]>(path)
-    .then(response => response.data)
-    .catch(err => {
+    try {
+      const casings = await this.client?.asyncGet<Sequence[]>(path)
+      if (casings) {
+        return casings.data.map((casing: Sequence) => this.addLazyMethodsForCasing(casing))
+      } else {
+        return undefined
+      }
+    } catch(err) {
       throw new HttpError(err.status, err.errorMessage, {})
-    })
+    } 
   }
 
   public getCasingsData = async (

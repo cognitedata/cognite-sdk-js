@@ -114,6 +114,17 @@ export interface Sequence {
    *
    */
   dataSetId: number;
+  /**
+   * @type {fn}
+   * @memberof SequenceData
+   */
+  data(
+    start?: number,
+    end?: number,
+    columns?: string[],
+    cursor?: string,
+    limit?: number
+  ): Promise<SequenceData>;
 }
 
 export interface SequenceDataRequest {

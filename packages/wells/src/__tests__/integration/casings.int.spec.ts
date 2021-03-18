@@ -1,6 +1,7 @@
 import { setupLoggedInClient } from '../testUtils';
 import CogniteWellsClient from 'wells/src/client/cogniteWellsClient';
 import { Sequence, SequenceData } from 'wells/src/client/model/Sequence';
+import { Wellbore } from 'wells/src/client/model/Wellbore';
 //import { Well } from 'wells/src/client/model/Well';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
@@ -61,6 +62,46 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
         undefined,
         100
       );
+
+      expect(data).not.toBeUndefined();
+
+      expect(data!.externalId).toBe(casingExtId);
+
+      expect(data?.columns.length).toBe(7)
+      expect(data?.rows.length).toBe(3)
+    })
+  });
+
+  test('Get casings on the wellbore object', async () => {
+    const wellId: number = 5432591169464385;
+
+    const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWell(wellId)
+    expect(wellbores).not.toBeUndefined();
+    
+    wellbores?.forEach(async wellbore => {
+      const casings: Sequence[] | undefined = await wellbore?.casings();
+      expect(casings?.length).toBeGreaterThan(0);
+      casings?.forEach(async casing => {
+      expect(casing.columns?.length).toBe(7)
+    })
+    })
+  });
+
+
+  test('Get casing data on casing object', async () => {
+    const casingExtId = "casing:CasingWear";
+
+    const wellboreId: number = 8269456345006483;
+
+    const casings: Sequence[] | undefined = await client.wellbores.getCasings(wellboreId)
+
+    expect(casings?.length).toBeGreaterThan(0);
+    casings?.forEach(async casing => {
+      expect(casing.externalId).toBe(casingExtId)
+      expect(casing.columns?.length).toBe(7)
+
+
+      const data: SequenceData | undefined = await casing.data();
 
       expect(data).not.toBeUndefined();
 
