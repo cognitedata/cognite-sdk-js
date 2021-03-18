@@ -26,7 +26,7 @@ const renderAssetsInTable = (assets) => {
 const App = () => {
   const [isInit, setIsInit] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [assets, setAssets] = useState(false);
+  const [assets, setAssets] = useState([]);
   const [signInError, setSignInError] = useState();
 
   const fetchRootAssets = async () => {
