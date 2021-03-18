@@ -27,6 +27,7 @@ const App = () => {
   const [isInit, setIsInit] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [assets, setAssets] = useState(false);
+  const [signInError, setSignInError] = useState();
 
   const fetchRootAssets = async () => {
     const assets = await client.assets
@@ -36,23 +37,29 @@ const App = () => {
     setAssets(assets);
   }
 
-  const init = async () => {
-    const result = await client.loginWithOAuth({
-      project,
-      onAuthenticate: 'REDIRECT',
-    });
-
-    setIsInit(true);
-    setIsSignedIn(result);
+  const onHandleRedirectError = (error) => {
+    setSignInError(error);
   }
 
   const authenticate = async () => {
     const result = await client.authenticate();
 
+    setSignInError('');
     setIsSignedIn(result);
   }
 
   useEffect(() => {
+    const init = async () => {
+      const result = await client.loginWithOAuth({
+        project,
+        onAuthenticate: 'REDIRECT',
+        onHandleRedirectError
+      });
+
+      setIsInit(true);
+      setIsSignedIn(result);
+    }
+
     init();
   }, []);
 
@@ -60,6 +67,7 @@ const App = () => {
     <div className="App">
       <button disabled={!isInit || isSignedIn} onClick={authenticate}><h1>Authenticate</h1></button>
       <button disabled={!isInit || !isSignedIn} onClick={fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
+      {signInError && <p>Error during sign in. {signInError}</p>}
       {assets && renderAssetsInTable(assets)}
     </div>
   );
