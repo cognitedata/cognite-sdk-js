@@ -566,12 +566,12 @@ describe('CogniteClient', () => {
           clientId,
           tenantId,
           cluster,
-          signInType: 'loginPopup',
+          signInType: { type: 'loginPopup' },
         });
 
         const result = await client.authenticate();
 
-        expect(login).toHaveBeenCalledWith('loginPopup');
+        expect(login).toHaveBeenCalledWith({ type: 'loginPopup' });
         expect(result).toEqual(true);
       });
       test('should return authenticate false in case missed cdf token', async () => {
