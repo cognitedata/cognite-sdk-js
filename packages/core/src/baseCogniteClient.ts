@@ -29,7 +29,7 @@ import {
   createUniversalRetryValidator,
   RetryValidator,
 } from './httpClient/retryValidator';
-import { AzureAD, AzureADSingInType } from './aad';
+import { AzureAD, AzureADSignInType, AzureADSignInRequestParams } from './aad';
 import { CogniteAuthentication, OnAuthenticate, OnTokens } from './auth';
 import { AuthTokens } from './loginUtils';
 
@@ -72,7 +72,8 @@ export interface OAuthLoginForAADOptions {
   cluster: string;
   clientId: string;
   tenantId?: string;
-  signInType?: AzureADSingInType;
+  signInType?: AzureADSignInType;
+  signInParams?: AzureADSignInRequestParams;
   debug?: boolean;
 }
 

@@ -58,6 +58,8 @@ export {
 export {
   AZURE_AUTH_POPUP,
   AZURE_AUTH_REDIRECT,
-  AzureADSingInType,
+  AzureADSignInType,
+  AzureADSingInFlow,
+  AzureADSignInRequestParams,
 } from './aad';
 export { TestUtils, Constants, GraphUtils };
