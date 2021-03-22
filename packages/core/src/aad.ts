@@ -133,7 +133,9 @@ export class AzureAD {
         console.error(error);
       }
     } else {
-      await this.msalApplication.loginRedirect(this.getLoginRedirectRequest());
+      await this.msalApplication.loginRedirect(
+        this.getLoginRedirectRequest(requestParams)
+      );
     }
   }
 

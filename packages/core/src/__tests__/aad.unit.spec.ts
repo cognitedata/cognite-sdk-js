@@ -161,14 +161,20 @@ describe('Azure AD auth module', () => {
     });
     test('should not pass unsupported login request params', async () => {
       loginRedirect.mockResolvedValueOnce(true);
+      const prompt = 'select_account';
 
       await azureAdClient.login({
         type: 'loginRedirect',
-        // @ts-ignore – check that unsupported params will be filtered
-        requestParams: { someRandomParam: 'someRandomValue', scope: ['Wrong'] },
+        requestParams: {
+          // @ts-ignore – check that unsupported params will be filtered
+          someRandomParam: 'someRandomValue',
+          scope: ['Wrong'],
+          prompt,
+        },
       });
 
       expect(loginRedirect).toHaveBeenCalledWith({
+        prompt,
         redirectStartPage: 'https://localhost/',
         scopes: ['User.Read'],
         extraScopesToConsent: [
