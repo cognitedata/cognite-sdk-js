@@ -204,8 +204,10 @@ export class AzureAD {
   private getLoginRedirectRequest(
     requestParams: AzureADSignInRequestParams = {}
   ): RedirectRequest {
+    const { prompt } = requestParams;
+
     return {
-      ...requestParams,
+      prompt,
       scopes: this.userScopes,
       extraScopesToConsent: this.getCDFScopes(),
       redirectStartPage: window.location.href,
