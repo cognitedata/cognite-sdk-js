@@ -51,6 +51,9 @@ function App() {
       setIsSignedIn(true);
     }
   }
+  const onNoProjectAvailable = () => {
+    console.log('dude, your token has no access to any project in selected cluster');
+  }
 
   useEffect(() => {
     const login = async (client) => {
@@ -58,6 +61,8 @@ function App() {
         cluster,
         clientId,
         tenantId,
+        signInType: { type: 'loginPopup' },
+        onNoProjectAvailable
       });
 
       client.setProject(project);

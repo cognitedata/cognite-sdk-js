@@ -7,6 +7,7 @@ import { LoginAPI } from './api/login/loginApi';
 import { LogoutApi } from './api/logout/logoutApi';
 import {
   API_KEY_HEADER,
+  AUTHORIZATION_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
 } from './constants';
@@ -18,6 +19,7 @@ import {
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import { MetadataMap } from './metadata';
 import {
+  bearerString,
   getBaseUrl,
   isOAuthWithAADOptions,
   isOAuthWithCogniteOptions,
@@ -73,6 +75,7 @@ export interface OAuthLoginForAADOptions {
   clientId: string;
   tenantId?: string;
   signInType?: AzureADSignInType;
+  onNoProjectAvailable?: () => void;
   debug?: boolean;
 }
 
@@ -321,7 +324,13 @@ export default class BaseCogniteClient {
    */
   public async getCDFToken(): Promise<string | null> {
     if (this.azureAdClient) {
-      return this.azureAdClient.getCDFToken();
+      const token = await this.azureAdClient.getCDFToken();
+
+      if (token && !(await this.validateAzureADAccessToken(token))) {
+        return null;
+      }
+
+      return token;
     } else if (this.cogniteAuthClient) {
       const tokens = await this.cogniteAuthClient.getCDFToken(this.httpClient);
 
@@ -493,6 +502,7 @@ export default class BaseCogniteClient {
     clientId,
     tenantId,
     signInType,
+    onNoProjectAvailable = noop,
     debug,
   }: OAuthLoginForAADOptions): Promise<OAuthLoginResult> => {
     const config = {
@@ -508,7 +518,18 @@ export default class BaseCogniteClient {
 
     this.httpClient.setCluster(azureAdClient.getCluster());
 
-    const token = await this.handleAzureADLoginRedirect(azureAdClient);
+    let token = await this.handleAzureADLoginRedirect(azureAdClient);
+
+    if (token) {
+      const isTokenValid = await this.validateAzureADAccessToken(token);
+
+      if (!isTokenValid) {
+        token = null;
+
+        onNoProjectAvailable();
+      }
+    }
+
     const authenticate = async () => {
       let cdfAccessToken;
 
@@ -526,6 +547,12 @@ export default class BaseCogniteClient {
         if (!cdfAccessToken) {
           return false;
         }
+      }
+
+      if (!(await this.validateAzureADAccessToken(cdfAccessToken))) {
+        onNoProjectAvailable();
+
+        return false;
       }
 
       this.httpClient.setBearerToken(cdfAccessToken);
@@ -621,6 +648,24 @@ export default class BaseCogniteClient {
     }
 
     return token;
+  }
+
+  protected async validateAzureADAccessToken(token: string): Promise<boolean> {
+    try {
+      const response = await this.httpClient.get<any>('/api/v1/token/inspect', {
+        headers: { [AUTHORIZATION_HEADER]: bearerString(token) },
+      });
+
+      const { projects } = response.data;
+
+      return !!projects.length;
+    } catch (err) {
+      if (err.status === 401) {
+        return false;
+      }
+
+      throw err;
+    }
   }
 }
 

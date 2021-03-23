@@ -534,6 +534,7 @@ describe('CogniteClient', () => {
       const clientId = 'clientId';
       const tenantId = 'tenantId';
       const cluster = 'test-cluster';
+      const mockClusterUrl = `https://${cluster}.cognitedata.com`;
       let client: BaseCogniteClient;
 
       beforeEach(() => {
@@ -544,6 +545,10 @@ describe('CogniteClient', () => {
       });
 
       test('should auth with azure ad silently if account is cached', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
         initAuth.mockResolvedValueOnce('account');
         getCDFToken.mockResolvedValueOnce(cdfToken);
         getCluster.mockReturnValueOnce(cluster);
@@ -558,6 +563,10 @@ describe('CogniteClient', () => {
         expect(result).toEqual(true);
       });
       test('should auth with azure ad via popup window', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
         getCDFToken.mockResolvedValueOnce(null);
         getCDFToken.mockResolvedValueOnce(cdfToken);
         getCluster.mockReturnValueOnce(cluster);
@@ -575,6 +584,10 @@ describe('CogniteClient', () => {
         expect(result).toEqual(true);
       });
       test('should return authenticate false in case missed cdf token', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
         getCDFToken.mockResolvedValueOnce(undefined);
         getCluster.mockReturnValueOnce(cluster);
 
@@ -589,6 +602,10 @@ describe('CogniteClient', () => {
         expect(authResult).toEqual(false);
       });
       test('should return CDF token in case azure ad auth flow', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .twice()
+          .reply(200, { projects: ['project1', 'project2'] });
         getCDFToken.mockResolvedValue(cdfToken);
         getCluster.mockReturnValueOnce(cluster);
 
@@ -606,8 +623,13 @@ describe('CogniteClient', () => {
         expect(token).toEqual(cdfToken);
       });
       test('should login silently in case valid account from local storage', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .twice()
+          .reply(200, { projects: ['project1', 'project2'] });
         initAuth.mockResolvedValueOnce('account');
         getCDFToken.mockResolvedValue(cdfToken);
+        getCluster.mockReturnValueOnce(cluster);
 
         const oAuthResult = await client.loginWithOAuth({ clientId, cluster });
 
@@ -618,6 +640,10 @@ describe('CogniteClient', () => {
         expect(login).toHaveBeenCalledTimes(0);
       });
       test('should try to login again in case of failure to get CDF token with cached account data', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
         initAuth.mockResolvedValueOnce('wrong-cached–account');
         getCDFToken.mockRejectedValueOnce(
           'wrong account used in attempt to login silently'
@@ -626,6 +652,7 @@ describe('CogniteClient', () => {
           'wrong account used in attempt to get tokes by authenticate method'
         );
         getCDFToken.mockResolvedValueOnce(cdfToken);
+        getCluster.mockReturnValueOnce(cluster);
 
         const oAuthResult = await client.loginWithOAuth({ clientId, cluster });
         const authResult = await client.authenticate();
@@ -636,8 +663,13 @@ describe('CogniteClient', () => {
         expect(getCDFToken).toHaveBeenCalledTimes(3);
       });
       test('should return aad oauth flow type in case of aad flow', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .twice()
+          .reply(200, { projects: ['project1', 'project2'] });
         initAuth.mockResolvedValueOnce('account');
         getCDFToken.mockResolvedValue(cdfToken);
+        getCluster.mockReturnValueOnce(cluster);
 
         await client.loginWithOAuth({ clientId, cluster });
 
@@ -654,6 +686,10 @@ describe('CogniteClient', () => {
         );
       });
       test('should throw error on attempt to call setBaseUrl after azure ad auth', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
         getCDFToken.mockResolvedValue('access_token');
         getCluster.mockReturnValueOnce(cluster);
 
