@@ -7,6 +7,8 @@ import {
   MetadataMap,
 } from '@cognite/sdk-core';
 import {
+  RawDBName,
+  RawDBTableName,
   ListRawDatabases,
   ListRawRows,
   ListRawTables,
@@ -40,7 +42,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * const databases = await client.raw.createDatabases([{ name: 'My company' }]);
    * ```
    */
-  public createDatabases = (items: RawDB[]): Promise<RawDB[]> => {
+  public createDatabases = (items: RawDBName[]): Promise<RawDB[]> => {
     return super.createEndpoint(items);
   };
 
@@ -65,10 +67,13 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    * ```
    */
   public deleteDatabases = (
-    items: RawDB[],
+    items: RawDBName[],
     params?: RawDatabaseDeleteParams
   ) => {
-    return super.deleteEndpoint<RawDatabaseDeleteParams, RawDB>(items, params);
+    return super.deleteEndpoint<RawDatabaseDeleteParams, RawDBName>(
+      items,
+      params
+    );
   };
 
   /**
@@ -80,7 +85,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    */
   public createTables = (
     databaseName: string,
-    items: RawDBTable[],
+    items: RawDBTableName[],
     ensureParent: boolean = false
   ): Promise<RawDBTable[]> => {
     return this.rawTablesApi.create(databaseName, items, ensureParent);
@@ -109,7 +114,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
    */
   public deleteTables = (
     databaseName: string,
-    items: RawDBTable[]
+    items: RawDBTableName[]
   ): Promise<{}> => {
     return this.rawTablesApi.delete(databaseName, items);
   };
