@@ -8,6 +8,8 @@ let index = 0;
 const createName = (prefix: string) => `${prefix}_${index++}_${randomInt()}`;
 const createDb = () => ({ name: createName('Database') });
 const createTable = () => ({ name: createName('Table') });
+const getNamesOnly = (dbs: (RawDB | RawDBTable)[]) =>
+  dbs.map(({ name }) => ({ name }));
 
 const columns = {
   'First name': createName('firstName'),
@@ -31,7 +33,8 @@ describe('Raw integration test', () => {
     test('create', async () => {
       const databasesToCreate = [createDb(), createDb()];
       databases = await client.raw.createDatabases(databasesToCreate);
-      expect(databases).toEqual(databasesToCreate);
+      expect(getNamesOnly(databases)).toEqual(databasesToCreate);
+      expect(databases[0].createdTime).toBeDefined();
     });
 
     test('list', async () => {
@@ -60,7 +63,8 @@ describe('Raw integration test', () => {
     test('create', async () => {
       const tablesToCreate = [createTable(), createTable()];
       tables = await client.raw.createTables(database.name, tablesToCreate);
-      expect(tables).toEqual(tablesToCreate);
+      expect(getNamesOnly(tables)).toEqual(tablesToCreate);
+      expect(tables[0].createdTime).toBeDefined();
     });
 
     test('list', async () => {

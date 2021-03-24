@@ -1641,14 +1641,18 @@ export interface Range<T> {
   max?: T;
 }
 
-/**
- * A NoSQL database to store customer data.
- */
-export interface RawDB {
+export interface RawDBName {
   /**
    * Unique name of a database.
    */
   name: string;
+}
+
+/**
+ * A NoSQL database to store customer data.
+ */
+export interface RawDB extends RawDBName {
+  createdTime: Date;
 }
 
 export interface RawDBRow extends RawDBRowInsert {
@@ -1672,11 +1676,15 @@ export interface RawDBRowKey {
   key: string;
 }
 
-export interface RawDBTable {
+export interface RawDBTableName {
   /**
    * Unique name of the table
    */
   name: string;
+}
+
+export interface RawDBTable extends RawDBTableName {
+  createdTime: Date;
 }
 
 export interface RemoveField {
