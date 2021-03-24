@@ -704,6 +704,51 @@ describe('CogniteClient', () => {
           `"\`setBaseUrl\` does not available with Azure AD auth flow"`
         );
       });
+      test('should call onNoProjectAvailable when acquired token is not valid', async () => {
+        const onNoProjectAvailable = jest.fn();
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(401, {});
+        initAuth.mockResolvedValueOnce('account');
+        getCDFToken.mockResolvedValue('access_token');
+        getCluster.mockReturnValueOnce(cluster);
+
+        const result = await client.loginWithOAuth({
+          clientId,
+          tenantId,
+          cluster,
+          onNoProjectAvailable,
+        });
+
+        expect(result).toBe(false);
+        expect(onNoProjectAvailable).toHaveBeenCalledTimes(1);
+      });
+      test('should call onNoProjectAvailable when acquired token during authenticate is not valid', async () => {
+        const onNoProjectAvailable = jest.fn();
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(401, {});
+        getCluster.mockReturnValueOnce(cluster);
+        getCDFToken.mockRejectedValue('failed');
+        login.mockResolvedValue(true);
+        getCDFToken.mockResolvedValue('access_token');
+
+        const silentLogin = await client.loginWithOAuth({
+          clientId,
+          tenantId,
+          cluster,
+          signInType: { type: 'loginPopup' },
+          onNoProjectAvailable,
+        });
+
+        const authenticated = await client.authenticate();
+
+        expect(silentLogin).toBe(false);
+        expect(authenticated).toBe(false);
+        expect(onNoProjectAvailable).toHaveBeenCalledTimes(1);
+      });
     });
   });
 });
