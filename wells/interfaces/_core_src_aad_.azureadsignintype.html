@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AuthorizeOptions | Cognite JavaScript SDK</title>
+	<title>AzureADSignInType | Cognite JavaScript SDK</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="authorizeoptions.html">AuthorizeOptions</a>
+					<a href="../modules/_core_src_aad_.html">&quot;core/src/aad&quot;</a>
+				</li>
+				<li>
+					<a href="_core_src_aad_.azureadsignintype.html">AzureADSignInType</a>
 				</li>
 			</ul>
-			<h1>Interface AuthorizeOptions</h1>
+			<h1>Interface AzureADSignInType</h1>
 		</div>
 	</div>
 </header>
@@ -70,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AuthorizeOptions</span>
+						<span class="target">AzureADSignInType</span>
 					</li>
 				</ul>
 			</section>
@@ -81,8 +84,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="authorizeoptions.html#errorredirecturl" class="tsd-kind-icon">error<wbr>Redirect<wbr>Url</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="authorizeoptions.html#redirecturl" class="tsd-kind-icon">redirect<wbr>Url</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_aad_.azureadsignintype.html#requestparams" class="tsd-kind-icon">request<wbr>Params</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_aad_.azureadsignintype.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
 					</div>
@@ -91,22 +94,22 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="errorredirecturl" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> error<wbr>Redirect<wbr>Url</h3>
-					<div class="tsd-signature tsd-kind-icon">error<wbr>Redirect<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<a name="requestparams" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> request<wbr>Params</h3>
+					<div class="tsd-signature tsd-kind-icon">request<wbr>Params<span class="tsd-signature-symbol">:</span> <a href="_core_src_aad_.azureadsigninrequestparams.html" class="tsd-signature-type">AzureADSignInRequestParams</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e1f8020/packages/core/src/login.ts#L42">packages/core/src/login.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3c511bf/packages/core/src/aad.ts#L25">packages/core/src/aad.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="redirecturl" class="tsd-anchor"></a>
-					<h3>redirect<wbr>Url</h3>
-					<div class="tsd-signature tsd-kind-icon">redirect<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="type" class="tsd-anchor"></a>
+					<h3>type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../modules/_core_src_aad_.html#azureadsinginflow" class="tsd-signature-type">AzureADSingInFlow</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e1f8020/packages/core/src/login.ts#L41">packages/core/src/login.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3c511bf/packages/core/src/aad.ts#L24">packages/core/src/aad.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -118,25 +121,55 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class="current tsd-kind-module tsd-is-external">
+						<a href="../modules/_core_src_aad_.html">&quot;core/src/aad&quot;</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
+						<a href="../classes/_core_src_aad_.azuread.html" class="tsd-kind-icon">AzureAD</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_core_src_aad_.azureadoptions.html" class="tsd-kind-icon">AzureADOptions</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_core_src_aad_.azureadsigninrequestparams.html" class="tsd-kind-icon">AzureADSign<wbr>InRequest<wbr>Params</a>
+					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-is-external">
-						<a href="authorizeoptions.html" class="tsd-kind-icon">Authorize<wbr>Options</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_core_src_aad_.azureadsignintype.html" class="tsd-kind-icon">AzureADSign<wbr>InType</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="authorizeoptions.html#errorredirecturl" class="tsd-kind-icon">error<wbr>Redirect<wbr>Url</a>
+								<a href="_core_src_aad_.azureadsignintype.html#requestparams" class="tsd-kind-icon">request<wbr>Params</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="authorizeoptions.html#redirecturl" class="tsd-kind-icon">redirect<wbr>Url</a>
+								<a href="_core_src_aad_.azureadsignintype.html#type" class="tsd-kind-icon">type</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_core_src_aad_.html#azureadsigninprompt" class="tsd-kind-icon">AzureADSign<wbr>InPrompt</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_core_src_aad_.html#azureadsinginflow" class="tsd-kind-icon">AzureADSing<wbr>InFlow</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_core_src_aad_.html#azure_auth_popup" class="tsd-kind-icon">AZURE_<wbr>AUTH_<wbr>POPUP</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_core_src_aad_.html#azure_auth_redirect" class="tsd-kind-icon">AZURE_<wbr>AUTH_<wbr>REDIRECT</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_aad_.html#accountlocalstoragekey" class="tsd-kind-icon">account<wbr>Local<wbr>Storage<wbr>Key</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_aad_.html#loggercallback" class="tsd-kind-icon">logger<wbr>Callback</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

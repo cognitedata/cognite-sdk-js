@@ -97,6 +97,9 @@
 						<a href="classes/cdfhttpclient.html" class="tsd-kind-icon">CDFHttp<wbr>Client</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/cogniteauthentication.html" class="tsd-kind-icon">Cognite<wbr>Authentication</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/cogniteerror.html" class="tsd-kind-icon">Cognite<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
@@ -127,7 +130,7 @@
 						<a href="interfaces/apikeyloginoptions.html" class="tsd-kind-icon">Api<wbr>Key<wbr>Login<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/authorizeoptions.html" class="tsd-kind-icon">Authorize<wbr>Options</a>
+						<a href="interfaces/authoptions.html" class="tsd-kind-icon">Auth<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/autopagingtoarrayoptions.html" class="tsd-kind-icon">Auto<wbr>Paging<wbr>ToArray<wbr>Options</a>
@@ -136,13 +139,16 @@
 						<a href="interfaces/azureadoptions.html" class="tsd-kind-icon">AzureADOptions</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/azureadsigninrequestparams.html" class="tsd-kind-icon">AzureADSign<wbr>InRequest<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/azureadsignintype.html" class="tsd-kind-icon">AzureADSign<wbr>InType</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/clientoptions.html" class="tsd-kind-icon">Client<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
 						<a href="interfaces/cogniteasynciterator.html" class="tsd-kind-icon">Cognite<wbr>Async<wbr>Iterator</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/createauthfunctionoptions.html" class="tsd-kind-icon">Create<wbr>Auth<wbr>Function<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/cursor.html" class="tsd-kind-icon">Cursor</a>
@@ -184,6 +190,9 @@
 						<a href="interfaces/listresponse.html" class="tsd-kind-icon">List<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/loginparams.html" class="tsd-kind-icon">Login<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/logouturlresponse.html" class="tsd-kind-icon">Logout<wbr>Url<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
@@ -220,7 +229,10 @@
 						<a href="globals.html#autopagingtoarray" class="tsd-kind-icon">Auto<wbr>Paging<wbr>ToArray</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#azureadsingintype" class="tsd-kind-icon">AzureADSing<wbr>InType</a>
+						<a href="globals.html#azureadsigninprompt" class="tsd-kind-icon">AzureADSign<wbr>InPrompt</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#azureadsinginflow" class="tsd-kind-icon">AzureADSing<wbr>InFlow</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#baserequestoptions" class="tsd-kind-icon">Base<wbr>Request<wbr>Options</a>
@@ -260,6 +272,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#oauthloginoptions" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#oauthloginresult" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Result</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#onauthenticate" class="tsd-kind-icon">On<wbr>Authenticate</a>
@@ -302,9 +317,6 @@
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#id_token_param" class="tsd-kind-icon">ID_<wbr>TOKEN_<wbr>PARAM</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#login_iframe_name" class="tsd-kind-icon">LOGIN_<wbr>IFRAME_<wbr>NAME</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#login_popup_name" class="tsd-kind-icon">LOGIN_<wbr>POPUP_<wbr>NAME</a>
@@ -354,14 +366,17 @@
 					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
 						<a href="globals.html#getchildrenmap" class="tsd-kind-icon">get<wbr>Children<wbr>Map</a>
 					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#getidinfofromaccesstoken" class="tsd-kind-icon">get<wbr>IdInfo<wbr>From<wbr>Access<wbr>Token</a>
+					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
 						<a href="globals.html#getsortedpropinarray" class="tsd-kind-icon">get<wbr>Sorted<wbr>Prop<wbr>InArray</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#isauthiframe" class="tsd-kind-icon">is<wbr>AuthIFrame</a>
+						<a href="globals.html#isloginpopupwindow" class="tsd-kind-icon">is<wbr>Login<wbr>Popup<wbr>Window</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#isloginpopupwindow" class="tsd-kind-icon">is<wbr>Login<wbr>Popup<wbr>Window</a>
+						<a href="globals.html#istokensvalid" class="tsd-kind-icon">is<wbr>Tokens<wbr>Valid</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#isvalidretrystatuscode" class="tsd-kind-icon">is<wbr>Valid<wbr>Retry<wbr>Status<wbr>Code</a>
@@ -391,9 +406,6 @@
 						<a href="globals.html#onauthenticatewithredirect" class="tsd-kind-icon">on<wbr>Authenticate<wbr>With<wbr>Redirect</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#parsetokenqueryparameters" class="tsd-kind-icon">parse<wbr>Token<wbr>Query<wbr>Parameters</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#randomint" class="tsd-kind-icon">random<wbr>Int</a>
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
@@ -413,9 +425,6 @@
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#setupmockableclient" class="tsd-kind-icon">setup<wbr>Mockable<wbr>Client</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#silentlogin" class="tsd-kind-icon">silent<wbr>Login</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#simplecompare" class="tsd-kind-icon">simple<wbr>Compare</a>
