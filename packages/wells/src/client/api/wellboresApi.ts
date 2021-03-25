@@ -4,16 +4,12 @@ import { MeasurementType } from '../model/MeasurementType';
 import { Survey, SurveyData } from '../model/Survey';
 import { Wellbore } from '../model/Wellbore';
 import { SurveysAPI } from './surveysApi';
-import HttpClientWithIntercept from '../httpClientWithIntercept';
 import { WellIds } from '../model/WellIds';
 import { Asset } from 'wells/src/types';
 import { Sequence, SequenceData, SequenceDataRequest } from '../model/Sequence';
+import { ConfigureAPI } from '../baseWellsClient';
 
-export class WellboresAPI {
-  private client?: HttpClientWithIntercept;
-  private project?: String;
-  private cluster?: String;
-
+export class WellboresAPI extends ConfigureAPI {
   private _surveysSDK?: SurveysAPI;
 
   public set surveysSdk(sdk: SurveysAPI) {
@@ -22,18 +18,6 @@ export class WellboresAPI {
 
   private get surveys(): SurveysAPI {
     return accessApi(this._surveysSDK);
-  }
-
-  public set setHttpClient(httpClient: HttpClientWithIntercept) {
-    this.client = httpClient;
-  }
-
-  public set setProject(project: String) {
-    this.project = project;
-  }
-
-  public set setCluster(cluster: String) {
-    this.cluster = cluster;
   }
 
   private addLazyMethodsForWellbore = (wellbore: Wellbore): Wellbore => {
@@ -96,17 +80,6 @@ export class WellboresAPI {
         return await this.getCasingsData(casing.id, start, end, columns, cursor, limit).then(response => response).catch(err => err)
       }
     };
-  }
-
-  private getPath(baseUrl: string): string {
-    if (this.project == undefined){
-      throw new HttpError(400, "The client project has not been set.", {})
-    }
-    if (this.cluster == undefined) {
-      throw new HttpError(400, "No cluster has been set.", {})
-    }
-    baseUrl = `/${this.project}${baseUrl}?env=${this.cluster}`
-    return baseUrl
   }
 
   /* eslint-disable */

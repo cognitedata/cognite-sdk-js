@@ -1,6 +1,7 @@
 // Copyright 2020 Cognite AS
 import { RefreshToken } from '../client/clientAuthUtils';
 import { createWellsClient } from '../client/clientCreateUtils';
+import { Cluster } from '../client/model/Cluster';
 import { WellFilter } from '../client/model/WellFilter';
 import { authTokens } from './testUtils';
 
@@ -19,6 +20,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     client.loginWithApiKey({
       project: process.env.COGNITE_WELLS_PROJECT as string,
       apiKey: process.env.COGNITE_WELLS_CREDENTIALS as string,
+      cluster: Cluster.API,
     });
 
     expect(client.isLoggedIn).toBe(true);
@@ -33,6 +35,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     client.loginWithToken({
       project: process.env.COGNITE_WELLS_PROJECT as string,
+      cluster: Cluster.API,
       accessToken: authTokens.accessToken,
       refreshToken: functionThatReturnsANewToken,
     });
@@ -44,7 +47,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       .getById(3109548670)
       .then(response => response)
       .catch(err => {
-        expect(err.status).toBe(403);
+        expect(err.status).toBeGreaterThanOrEqual(400);
       });
 
     // get 403 due to invalid token
@@ -59,7 +62,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       .filter(filter)
       .then(response => response)
       .catch(err => {
-        expect(err.status).toBe(403);
+        expect(err.status).toBeGreaterThanOrEqual(400);
       });
   });
 });
