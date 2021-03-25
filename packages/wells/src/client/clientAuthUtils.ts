@@ -19,7 +19,7 @@ export interface CogniteProject {
    * Cognite project to login into
    */
   project: string;
-  cluster: Cluster;
+  //cluster: Cluster;
 }
 
 export interface ApiKeyLogin extends CogniteProject {

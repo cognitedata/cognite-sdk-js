@@ -14,13 +14,12 @@ const describeIfCondition =
 describeIfCondition('CogniteClient setup in wells - integration test', () => {
   // test api-key login
   test('api-key login', async () => {
-    const client = createWellsClient('WELLS TEST CLIENT');
+    const client = createWellsClient('WELLS TEST CLIENT', Cluster.API);
     expect(client.isLoggedIn).toBe(false);
 
     client.loginWithApiKey({
       project: process.env.COGNITE_WELLS_PROJECT as string,
       apiKey: process.env.COGNITE_WELLS_CREDENTIALS as string,
-      cluster: Cluster.API,
     });
 
     expect(client.isLoggedIn).toBe(true);
@@ -35,7 +34,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     client.loginWithToken({
       project: process.env.COGNITE_WELLS_PROJECT as string,
-      cluster: Cluster.API,
       accessToken: authTokens.accessToken,
       refreshToken: functionThatReturnsANewToken,
     });
