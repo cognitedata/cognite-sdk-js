@@ -1,5 +1,6 @@
 // Copyright 2020 Cognite AS
 
+import isFunction from 'lodash/isFunction';
 import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
 import noop from 'lodash/noop';
@@ -7,7 +8,6 @@ import { LoginAPI } from './api/login/loginApi';
 import { LogoutApi } from './api/logout/logoutApi';
 import {
   API_KEY_HEADER,
-  AUTHORIZATION_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
 } from './constants';
@@ -17,9 +17,14 @@ import {
   HttpResponse,
 } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
+import {
+  createAuthenticateFunction,
+  OnAuthenticate,
+  OnAuthenticateLoginObject,
+  OnTokens,
+} from './login';
 import { MetadataMap } from './metadata';
 import {
-  bearerString,
   getBaseUrl,
   isOAuthWithAADOptions,
   isOAuthWithCogniteOptions,
@@ -31,9 +36,7 @@ import {
   createUniversalRetryValidator,
   RetryValidator,
 } from './httpClient/retryValidator';
-import { AzureAD, AzureADSignInType } from './aad';
-import { CogniteAuthentication, OnAuthenticate, OnTokens } from './auth';
-import { AuthTokens } from './loginUtils';
+import { AzureAD, AzureADSingInType } from './aad';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -55,6 +58,8 @@ export interface ApiKeyLoginOptions extends Project {
   apiKey: string;
 }
 
+export const REDIRECT = 'REDIRECT';
+export const POPUP = 'POPUP';
 export const AAD_OAUTH = 'AAD_OAUTH';
 export const CDF_OAUTH = 'CDF_OAUTH';
 export type AuthFlowType = typeof AAD_OAUTH | typeof CDF_OAUTH;
@@ -67,15 +72,13 @@ export interface OAuthLoginForCogniteOptions {
    * Provide optional cached access token to skip the authentication flow (client.authenticate will still override this).
    */
   accessToken?: string;
-  onHandleRedirectError?: (error: string) => void;
 }
 
 export interface OAuthLoginForAADOptions {
   cluster: string;
   clientId: string;
   tenantId?: string;
-  signInType?: AzureADSignInType;
-  onNoProjectAvailable?: () => void;
+  signInType?: AzureADSingInType;
   debug?: boolean;
 }
 
@@ -98,8 +101,6 @@ export function throwReLogginError() {
   );
 }
 
-type OAuthLoginResult = [() => Promise<boolean>, (string | null)];
-
 export default class BaseCogniteClient {
   public get login() {
     return this.loginApi;
@@ -108,14 +109,14 @@ export default class BaseCogniteClient {
     return this.logoutApi;
   }
 
-  private readonly http: CDFHttpClient;
-  private readonly metadata: MetadataMap;
-  private readonly loginApi: LoginAPI;
-  private readonly logoutApi: LogoutApi;
+  private http: CDFHttpClient;
+  private metadata: MetadataMap;
   private projectName: string = '';
   private hasBeenLoggedIn: boolean = false;
+  private oAuthHasBeenUsed: boolean = false;
+  private loginApi: LoginAPI;
+  private logoutApi: LogoutApi;
   private azureAdClient?: AzureAD;
-  private cogniteAuthClient?: CogniteAuthentication;
   /**
    * Create a new SDK client
    *
@@ -240,11 +241,7 @@ export default class BaseCogniteClient {
    *
    * @param options Login options
    */
-  public loginWithOAuth = async (
-    options: OAuthLoginOptions
-  ): Promise<boolean> => {
-    let token = null;
-
+  public loginWithOAuth = (options: OAuthLoginOptions) => {
     if (this.hasBeenLoggedIn) {
       throwReLogginError();
     }
@@ -262,9 +259,16 @@ export default class BaseCogniteClient {
     let authenticate: () => Promise<boolean>;
 
     if (isOAuthWithCogniteOptions(options)) {
-      [authenticate, token] = await this.loginWithCognite(options);
+      authenticate = this.loginWithCognite(options);
+
+      const { accessToken } = options;
+
+      if (accessToken) {
+        this.httpClient.setBearerToken(accessToken);
+      }
+      this.setProject(options.project);
     } else if (isOAuthWithAADOptions(options)) {
-      [authenticate, token] = await this.loginWithAAD(options);
+      authenticate = this.loginWithAAD(options);
     } else {
       throw Error('`loginWithOAuth` is missing correct `options` structure');
     }
@@ -274,14 +278,9 @@ export default class BaseCogniteClient {
       return didAuthenticate ? retry() : reject();
     });
 
-    if (token) {
-      this.httpClient.setBearerToken(token);
-    }
-
     this.authenticate = authenticate;
     this.hasBeenLoggedIn = true;
-
-    return token !== null;
+    this.oAuthHasBeenUsed = true;
   };
 
   /**
@@ -305,11 +304,11 @@ export default class BaseCogniteClient {
    * Provides information about which OAuth flow has been used
    */
   public getOAuthFlowType(): AuthFlowType | undefined {
-    return this.azureAdClient
-      ? AAD_OAUTH
-      : this.cogniteAuthClient
-        ? CDF_OAUTH
-        : undefined;
+    return this.oAuthHasBeenUsed
+      ? this.azureAdClient
+        ? AAD_OAUTH
+        : CDF_OAUTH
+      : undefined;
   }
 
   /**
@@ -322,22 +321,12 @@ export default class BaseCogniteClient {
    * const cdfToken = await client.getCDFToken();
    * ```
    */
-  public async getCDFToken(): Promise<string | null> {
-    if (this.azureAdClient) {
-      const token = await this.azureAdClient.getCDFToken();
-
-      if (token && !(await this.validateAzureADAccessToken(token))) {
-        return null;
-      }
-
-      return token;
-    } else if (this.cogniteAuthClient) {
-      const tokens = await this.cogniteAuthClient.getCDFToken(this.httpClient);
-
-      return tokens ? tokens.accessToken : null;
-    } else {
-      throw Error('CDF token can be acquired only using loginWithOAuth flow');
+  public getCDFToken(): Promise<string | null> {
+    if (!this.azureAdClient) {
+      throw Error('CDF token can be acquired only using AzureAD auth flow');
     }
+
+    return this.azureAdClient.getCDFToken();
   }
 
   /**
@@ -497,14 +486,13 @@ export default class BaseCogniteClient {
     return this.http;
   }
 
-  protected loginWithAAD = async ({
+  protected loginWithAAD = ({
     cluster,
     clientId,
     tenantId,
     signInType,
-    onNoProjectAvailable = noop,
     debug,
-  }: OAuthLoginForAADOptions): Promise<OAuthLoginResult> => {
+  }: OAuthLoginForAADOptions) => {
     const config = {
       auth: {
         clientId,
@@ -516,157 +504,72 @@ export default class BaseCogniteClient {
 
     const azureAdClient = new AzureAD({ config, cluster, debug });
 
-    this.httpClient.setCluster(azureAdClient.getCluster());
-
-    let token = await this.handleAzureADLoginRedirect(azureAdClient);
-
-    if (token) {
-      const isTokenValid = await this.validateAzureADAccessToken(token);
-
-      if (!isTokenValid) {
-        token = null;
-
-        onNoProjectAvailable();
-      }
-    }
-
-    const authenticate = async () => {
-      let cdfAccessToken;
-
-      try {
-        cdfAccessToken = await azureAdClient.getCDFToken();
-      } catch {
-        noop();
-      }
-
-      if (!cdfAccessToken) {
-        await azureAdClient.login(signInType);
-
-        cdfAccessToken = await azureAdClient.getCDFToken();
-
-        if (!cdfAccessToken) {
-          return false;
-        }
-      }
-
-      if (!(await this.validateAzureADAccessToken(cdfAccessToken))) {
-        onNoProjectAvailable();
-
-        return false;
-      }
-
-      this.httpClient.setBearerToken(cdfAccessToken);
-
-      return true;
-    };
-
     this.azureAdClient = azureAdClient;
 
-    return [authenticate, token];
+    return async () => {
+      let cdfAccessToken;
+
+      const account = await azureAdClient.initAuth();
+
+      if (!account) {
+        await azureAdClient.login(signInType);
+      }
+
+      try {
+        // could be the case if account that has been cached
+        // not valid to get CDF token
+        cdfAccessToken = await azureAdClient.getCDFToken();
+      } catch {
+        await azureAdClient.login(signInType);
+        cdfAccessToken = await azureAdClient.getCDFToken();
+      }
+
+      if (cdfAccessToken) {
+        this.httpClient.setBearerToken(cdfAccessToken);
+        this.httpClient.setCluster(azureAdClient.getCluster());
+
+        return true;
+      }
+
+      return false;
+    };
   };
 
-  protected loginWithCognite = async ({
-    project,
-    accessToken,
-    onTokens = noop,
-    onAuthenticate,
-    onHandleRedirectError,
-  }: OAuthLoginForCogniteOptions): Promise<OAuthLoginResult> => {
-    let token: string | null = null;
+  protected loginWithCognite = (options: OAuthLoginForCogniteOptions) => {
+    const { project } = options;
 
     if (!isString(project)) {
       throw Error('options.project is required and must be of type string');
     }
+    this.projectName = project;
 
-    if (accessToken) {
-      this.httpClient.setBearerToken(accessToken);
-    }
+    const onTokens = options.onTokens || noop;
+    const onAuthenticate =
+      options.onAuthenticate === POPUP
+        ? onAuthenticateWithPopup
+        : isFunction(options.onAuthenticate)
+          ? options.onAuthenticate
+          : onAuthenticateWithRedirect;
 
-    const cogniteAuthClient = new CogniteAuthentication({ project });
-    let authTokens: AuthTokens | null = null;
-
-    try {
-      authTokens = await cogniteAuthClient.handleLoginRedirect(this.httpClient);
-    } catch (error) {
-      if (onHandleRedirectError) {
-        onHandleRedirectError(error.message);
-      }
-    }
-
-    if (authTokens) {
-      token = authTokens.accessToken;
-    }
-
-    if (authTokens && onTokens) {
-      onTokens(authTokens);
-    }
-
-    this.setProject(project);
-
-    const authenticate = async () => {
-      let authTokens = await cogniteAuthClient.getCDFToken(this.httpClient);
-
-      if (!authTokens) {
-        const baseUrl = getBaseUrl(this.httpClient.getBaseUrl());
-
-        authTokens = await cogniteAuthClient.login({
-          baseUrl,
-          onAuthenticate,
-        });
-      }
-
-      if (!authTokens) {
-        return false;
-      }
-
-      this.httpClient.setBearerToken(authTokens.accessToken);
-
-      if (onTokens) {
-        onTokens(authTokens);
-      }
-
-      return true;
-    };
-
-    this.cogniteAuthClient = cogniteAuthClient;
-
-    return [authenticate, token];
+    return createAuthenticateFunction({
+      project,
+      httpClient: this.httpClient,
+      onAuthenticate,
+      onTokens,
+    });
   };
+}
 
-  protected async handleAzureADLoginRedirect(
-    azureAdClient: AzureAD
-  ): Promise<string | null> {
-    const account = await azureAdClient.initAuth();
-    let token: string | null = null;
+function onAuthenticateWithRedirect(login: OnAuthenticateLoginObject) {
+  login.redirect({
+    redirectUrl: window.location.href,
+  });
+}
 
-    if (!account) return null;
-
-    try {
-      token = await azureAdClient.getCDFToken();
-    } catch {
-      noop();
-    }
-
-    return token;
-  }
-
-  protected async validateAzureADAccessToken(token: string): Promise<boolean> {
-    try {
-      const response = await this.httpClient.get<any>('/api/v1/token/inspect', {
-        headers: { [AUTHORIZATION_HEADER]: bearerString(token) },
-      });
-
-      const { projects } = response.data;
-
-      return !!projects.length;
-    } catch (err) {
-      if (err.status === 401) {
-        return false;
-      }
-
-      throw err;
-    }
-  }
+function onAuthenticateWithPopup(login: OnAuthenticateLoginObject) {
+  login.popup({
+    redirectUrl: window.location.href,
+  });
 }
 
 export type BaseRequestOptions = HttpRequestOptions;

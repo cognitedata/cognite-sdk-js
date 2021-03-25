@@ -6,31 +6,9 @@ const cluster = process.env.REACT_APP_CLUSTER;
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const tenantId = process.env.REACT_APP_TENANT_ID;
 
-const renderAssetsInTable = (assets) => {
-  return (
-    <table>
-      <tbody>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-      {assets.map(asset => (
-        <tr key={asset.id}>
-          <td>{asset.name}</td>
-          <td>{asset.description}</td>
-        </tr>
-      ))}
-      </tbody>
-    </table>
-  );
-}
-
-const client = new CogniteClient({appId: 'sample-app-id'});
-
 function App() {
+  const [client, setClient] = useState(null);
   const [assets, setAssets] = useState([]);
-  const [isInit, setIsInit] = useState(false);
-  const [isSignedIn, setIsSignedIn] = useState(false);
 
   const fetchRootAssets = async () => {
     if (client === null) return;
@@ -41,43 +19,47 @@ function App() {
     setAssets(assets);
   };
 
-  const authenticate = async () => {
-    if (client === null) return;
+  const renderAssetsInTable = (assets) => {
+    return (
+      <table>
+        <tbody>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+        {assets.map(asset => (
+          <tr key={asset.id}>
+            <td>{asset.name}</td>
+            <td>{asset.description}</td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+    );
+  }
 
+  const authenticate = async (client) => {
     const result = await client.authenticate();
 
     if (result) {
       client.setProject(project);
-      setIsSignedIn(true);
+      setClient(client);
     }
-  }
-  const onNoProjectAvailable = () => {
-    console.log('Unfortunately, your token has no access to any project in the selected cluster');
   }
 
   useEffect(() => {
-    const login = async (client) => {
-      const result = await client.loginWithOAuth({
-        cluster,
-        clientId,
-        tenantId,
-        signInType: { type: 'loginPopup' },
-        onNoProjectAvailable
-      });
-
-      client.setProject(project);
-
-      setIsInit(true);
-      setIsSignedIn(result);
-    }
-
-    login(client);
+    const client = new CogniteClient({appId: 'sample-app-id'});
+    client.loginWithOAuth({
+      cluster,
+      clientId,
+      tenantId,
+    });
+    authenticate(client);
   }, []);
 
   return (
     <div>
-      <button disabled={!isInit || isSignedIn} onClick={authenticate}><h1>Authenticate</h1></button>
-      <button disabled={!isInit || !isSignedIn} onClick={fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
+      <button onClick={fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
       {assets && renderAssetsInTable(assets)}
     </div>
   );

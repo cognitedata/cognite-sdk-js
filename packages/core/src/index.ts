@@ -32,21 +32,17 @@ export {
   RetryValidator,
 } from './httpClient/retryValidator';
 export {
-  POPUP,
-  REDIRECT,
+  getLogoutUrl,
   getIdInfo,
+  isLoginPopupWindow,
+  loginPopupHandler,
+  AuthTokens,
   AuthenticateParams,
-  IdInfo,
-  OnAuthenticateLoginObject,
-} from './auth';
-export {
   AuthorizeOptions,
   AuthorizeParams,
-  AuthTokens,
-  loginPopupHandler,
-  getLogoutUrl,
-  isLoginPopupWindow,
-} from './loginUtils';
+  IdInfo,
+  OnAuthenticateLoginObject,
+} from './login';
 export { RevertableArraySorter } from './revertableArraySorter';
 export {
   sleepPromise,
@@ -58,8 +54,6 @@ export {
 export {
   AZURE_AUTH_POPUP,
   AZURE_AUTH_REDIRECT,
-  AzureADSignInType,
-  AzureADSingInFlow,
-  AzureADSignInRequestParams,
+  AzureADSingInType,
 } from './aad';
 export { TestUtils, Constants, GraphUtils };
