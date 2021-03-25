@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@1.2.2...@cognite/sdk-core@2.0.0) (2021-03-25)
+
+
+### Features
+
+* breaking changes to login with OAuth [release] ([#504](https://github.com/cognitedata/cognite-sdk-js/issues/504)) ([383d7f6](https://github.com/cognitedata/cognite-sdk-js/commit/383d7f6d0888a8acb8121af6cf39d1adbf724882))
+
+
+
+
+
+## [1.2.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@1.2.1...@cognite/sdk-core@1.2.2) (2021-03-25)
+
+
+### Bug Fixes
+
+* revert breaking changes being published as patch ([#503](https://github.com/cognitedata/cognite-sdk-js/issues/503)) ([3b7afd9](https://github.com/cognitedata/cognite-sdk-js/commit/3b7afd94030c75b2122a8e8323678455bcef0a29))
+
+
+
+
+
+## [1.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@1.2.0...@cognite/sdk-core@1.2.1) (2021-03-25)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
 # [1.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@1.1.0...@cognite/sdk-core@1.2.0) (2021-03-05)
 
 

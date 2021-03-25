@@ -1,21 +1,17 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import BaseCogniteClient, {
-  AAD_OAUTH,
-  CDF_OAUTH,
-  POPUP,
-  REDIRECT,
-} from '../baseCogniteClient';
+import BaseCogniteClient, { AAD_OAUTH, CDF_OAUTH } from '../baseCogniteClient';
+import { POPUP, REDIRECT } from '../auth';
 import {
   API_KEY_HEADER,
   AUTHORIZATION_HEADER,
   X_CDF_SDK_HEADER,
   BASE_URL,
 } from '../constants';
-import * as Login from '../login';
+import * as LoginUtils from '../loginUtils';
 import { bearerString, sleepPromise } from '../utils';
-import { apiKey, authTokens, project } from '../testUtils';
+import { apiKey, authTokens, loggedInResponse, project } from '../testUtils';
 
 const initAuth = jest.fn();
 const login = jest.fn();
@@ -219,51 +215,45 @@ describe('CogniteClient', () => {
   describe('loginWithOAuth', () => {
     test('missing parameter', async () => {
       const client = setupClient();
-      expect(
+      await expect(
         // @ts-ignore
-        () => client.loginWithOAuth()
-      ).toThrowErrorMatchingInlineSnapshot(
+        async () => await client.loginWithOAuth()
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"\`loginWithOAuth\` is missing parameter \`options\`"`
       );
     });
 
     test('missing project name', async () => {
       const client = setupClient();
-      expect(
+      await expect(
         // @ts-ignore
-        () => client.loginWithOAuth({})
-      ).toThrowErrorMatchingInlineSnapshot(
+        async () => await client.loginWithOAuth({})
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"\`loginWithOAuth\` is missing correct \`options\` structure"`
       );
     });
 
     describe('authentication with cognite', () => {
-      let mockLoginSilently: jest.SpyInstance;
       let mockRedirect: jest.SpyInstance;
       let mockPopup: jest.SpyInstance;
 
       beforeEach(() => {
-        mockLoginSilently = jest.spyOn(Login, 'loginSilently');
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        mockLoginSilently.mockImplementation(() => {});
-
-        mockRedirect = jest.spyOn(Login, 'loginWithRedirect');
+        mockRedirect = jest.spyOn(LoginUtils, 'loginWithRedirect');
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         mockRedirect.mockImplementation(async () => {});
 
-        mockPopup = jest.spyOn(Login, 'loginWithPopup');
+        mockPopup = jest.spyOn(LoginUtils, 'loginWithPopup');
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         mockPopup.mockImplementation(async () => {});
       });
 
       afterEach(() => {
-        mockLoginSilently.mockRestore();
         mockRedirect.mockRestore();
       });
 
       test('default onAuthenticate function should be redirect', async done => {
         const client = setupClient();
-        client.loginWithOAuth({ project });
+        await client.loginWithOAuth({ project });
         mockRedirect.mockImplementationOnce(async () => {
           done();
         });
@@ -272,7 +262,7 @@ describe('CogniteClient', () => {
 
       test('should return cdf oauth flow type in case cdf oauth usage', async () => {
         const client = setupClient();
-        client.loginWithOAuth({
+        await client.loginWithOAuth({
           project,
           onAuthenticate: POPUP,
         });
@@ -286,7 +276,7 @@ describe('CogniteClient', () => {
 
       test('onAuthenticate: REDIRECT', async done => {
         const client = setupClient();
-        client.loginWithOAuth({
+        await client.loginWithOAuth({
           project,
           onAuthenticate: REDIRECT,
         });
@@ -298,7 +288,7 @@ describe('CogniteClient', () => {
 
       test('onAuthenticate: POPUP', async done => {
         const client = setupClient();
-        client.loginWithOAuth({
+        await client.loginWithOAuth({
           project,
           onAuthenticate: POPUP,
         });
@@ -312,7 +302,7 @@ describe('CogniteClient', () => {
       test('should call onAuthenticate on 401', async () => {
         const onAuthenticate = jest.fn();
         const client = setupClient(mockBaseUrl);
-        client.loginWithOAuth({
+        await client.loginWithOAuth({
           project,
           onAuthenticate,
         });
@@ -328,23 +318,42 @@ describe('CogniteClient', () => {
         ).rejects.toThrowErrorMatchingInlineSnapshot(
           `"Request failed | status code: 401"`
         );
-        expect(mockLoginSilently).toHaveBeenCalledTimes(1);
+        expect(onAuthenticate).toHaveBeenCalledTimes(1);
       });
 
       test('should send one-time header again after silent login', async () => {
+        window.history.pushState(
+          {},
+          '',
+          `/some/random/path?query=true&access_token=${
+            authTokens.accessToken
+          }&id_token=${authTokens.idToken}&random=123`
+        );
+
         const disposableSdkHeader = 'something';
         const onAuthenticate = jest.fn();
         const client = setupClient(mockBaseUrl);
-        client.loginWithOAuth({ project, onAuthenticate });
+
+        nock(mockBaseUrl, {
+          reqheaders: {
+            [AUTHORIZATION_HEADER]: bearerString(authTokens.accessToken),
+          },
+        })
+          .get('/login/status')
+          .once()
+          .reply(200, loggedInResponse);
+
+        const isAuthenticated = await client.loginWithOAuth({
+          project,
+          onAuthenticate,
+        });
+
         client.setOneTimeSdkHeader(disposableSdkHeader);
-        mockLoginSilently.mockReturnValueOnce(authTokens);
+
         const reqheaders = { [X_CDF_SDK_HEADER]: disposableSdkHeader };
         const normalReqheaders = { [X_CDF_SDK_HEADER]: /CogniteJavaScriptSDK/ };
 
         nock(mockBaseUrl, { reqheaders })
-          .get('/')
-          .once()
-          .reply(401, {})
           .get('/')
           .once()
           .reply(200, {});
@@ -355,6 +364,8 @@ describe('CogniteClient', () => {
 
         await client.get('/');
         await client.get('/');
+
+        expect(isAuthenticated).toEqual(true);
       });
 
       test('manually trigger authentication', async () => {
@@ -362,36 +373,39 @@ describe('CogniteClient', () => {
           login.skip();
         });
         const client = setupClient(mockBaseUrl);
-        client.loginWithOAuth({
+        await client.loginWithOAuth({
           project,
           onAuthenticate,
         });
         await expect(client.authenticate()).resolves.toBe(false);
-        expect(mockLoginSilently).toHaveBeenCalledTimes(1);
       });
 
       test('handle error query params', async () => {
-        const onAuthenticate = jest.fn();
+        const onHandleRedirectError = jest.fn();
+        window.history.pushState(
+          {},
+          '',
+          `/some/random/path?query=true&error=failed&error_description=message`
+        );
         const client = setupClient(mockBaseUrl);
-        client.loginWithOAuth({
+        const result = await client.loginWithOAuth({
           project,
-          onAuthenticate,
+          onHandleRedirectError,
         });
-        const errorMessage = 'Failed login';
-        mockLoginSilently.mockImplementationOnce(() => {
-          throw Error(errorMessage);
-        });
-        await expect(client.authenticate()).rejects.toThrowError(errorMessage);
+
+        expect(result).toEqual(false);
+        expect(onHandleRedirectError).toHaveBeenCalledWith('failed: message');
       });
 
       test('retry request after silent login', async () => {
-        const onAuthenticate = jest.fn();
+        const spiedLoginWithPopUp = jest
+          .spyOn(LoginUtils, 'loginWithPopup')
+          .mockResolvedValueOnce(authTokens);
         const client = setupClient(mockBaseUrl);
-        client.loginWithOAuth({
+        await client.loginWithOAuth({
           project,
-          onAuthenticate,
+          onAuthenticate: POPUP,
         });
-        mockLoginSilently.mockReturnValueOnce(authTokens);
         nock(mockBaseUrl, { badheaders: [AUTHORIZATION_HEADER] })
           .get('/')
           .once()
@@ -405,16 +419,19 @@ describe('CogniteClient', () => {
           .once()
           .reply(200, []);
         const response = await client.get('/');
+
         expect(response.data).toEqual([]);
+
+        spiedLoginWithPopUp.mockReset();
       });
 
-      test('dont call onAuthenticate twice when first call hasnt returned yet', async () => {
+      test("don't call onAuthenticate twice when first call hasn't returned yet", async () => {
         const client = setupClient(mockBaseUrl);
         const onAuthenticate = jest.fn().mockImplementationOnce(async login => {
           await sleepPromise(100);
           login.skip();
         });
-        client.loginWithOAuth({
+        await client.loginWithOAuth({
           project,
           onAuthenticate,
         });
@@ -436,7 +453,7 @@ describe('CogniteClient', () => {
       describe('cached access token', () => {
         test('should be able to provide an access token', async () => {
           const client = setupClient(mockBaseUrl);
-          client.loginWithOAuth({
+          await client.loginWithOAuth({
             project,
             accessToken: authTokens.accessToken,
           });
@@ -453,7 +470,7 @@ describe('CogniteClient', () => {
 
         test('re-authenticate on 401', async done => {
           const client = setupClient(mockBaseUrl);
-          client.loginWithOAuth({
+          await client.loginWithOAuth({
             project,
             accessToken: authTokens.accessToken,
             onAuthenticate: () => done(),
@@ -464,6 +481,52 @@ describe('CogniteClient', () => {
             .reply(401, {});
           client.get('/');
         });
+
+        test('get cdf token with cognite auth flow', async () => {
+          const client = setupClient(mockBaseUrl);
+          await client.loginWithOAuth({
+            project,
+            onAuthenticate: POPUP,
+          });
+
+          mockPopup.mockImplementationOnce(async () => {
+            return { ...authTokens };
+          });
+          nock(mockBaseUrl)
+            .get('/login/status')
+            .once()
+            .reply(200, loggedInResponse);
+
+          const result = await client.authenticate();
+          const tokens = await client.getCDFToken();
+
+          expect(result).toEqual(true);
+          expect(tokens).toEqual(authTokens.accessToken);
+        });
+
+        test("get cdf token as null if it's outdated with cognite auth flow", async () => {
+          const client = setupClient(mockBaseUrl);
+          await client.loginWithOAuth({
+            project,
+            onAuthenticate: POPUP,
+          });
+
+          mockPopup.mockImplementationOnce(async () => {
+            return { ...authTokens };
+          });
+
+          // assuming that tokens outdated
+          nock(mockBaseUrl)
+            .get('/login/status')
+            .once()
+            .reply(401, {});
+
+          const result = await client.authenticate();
+          const tokens = await client.getCDFToken();
+
+          expect(result).toEqual(true);
+          expect(tokens).toEqual(null);
+        });
       });
     });
 
@@ -471,6 +534,7 @@ describe('CogniteClient', () => {
       const clientId = 'clientId';
       const tenantId = 'tenantId';
       const cluster = 'test-cluster';
+      const mockClusterUrl = `https://${cluster}.cognitedata.com`;
       let client: BaseCogniteClient;
 
       beforeEach(() => {
@@ -480,111 +544,141 @@ describe('CogniteClient', () => {
         jest.clearAllMocks();
       });
 
-      test('should auth with azure ad', async () => {
+      test('should auth with azure ad silently if account is cached', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
+        initAuth.mockResolvedValueOnce('account');
         getCDFToken.mockResolvedValueOnce(cdfToken);
         getCluster.mockReturnValueOnce(cluster);
 
-        client.loginWithOAuth({ clientId, tenantId, cluster });
-        const result = await client.authenticate();
-
-        expect(login).toHaveBeenCalledTimes(1);
-        expect(result).toEqual(true);
-      });
-      test('should auth with azure ad via popup window', async () => {
-        getCDFToken.mockResolvedValueOnce(cdfToken);
-        getCluster.mockReturnValueOnce(cluster);
-        client.loginWithOAuth({
+        const result = await client.loginWithOAuth({
           clientId,
           tenantId,
           cluster,
-          signInType: 'loginPopup',
+        });
+
+        expect(login).toHaveBeenCalledTimes(0);
+        expect(result).toEqual(true);
+      });
+      test('should auth with azure ad via popup window', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
+        getCDFToken.mockResolvedValueOnce(null);
+        getCDFToken.mockResolvedValueOnce(cdfToken);
+        getCluster.mockReturnValueOnce(cluster);
+
+        await client.loginWithOAuth({
+          clientId,
+          tenantId,
+          cluster,
+          signInType: { type: 'loginPopup' },
         });
 
         const result = await client.authenticate();
 
-        expect(login).toHaveBeenCalledWith('loginPopup');
+        expect(login).toHaveBeenCalledWith({ type: 'loginPopup' });
         expect(result).toEqual(true);
       });
       test('should return authenticate false in case missed cdf token', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
         getCDFToken.mockResolvedValueOnce(undefined);
         getCluster.mockReturnValueOnce(cluster);
 
-        client.loginWithOAuth({ clientId, tenantId, cluster });
+        const oAuthResult = await client.loginWithOAuth({
+          clientId,
+          tenantId,
+          cluster,
+        });
+        const authResult = await client.authenticate();
 
-        const result = await client.authenticate();
-
-        expect(result).toEqual(false);
+        expect(oAuthResult).toEqual(false);
+        expect(authResult).toEqual(false);
       });
       test('should return CDF token in case azure ad auth flow', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .twice()
+          .reply(200, { projects: ['project1', 'project2'] });
         getCDFToken.mockResolvedValue(cdfToken);
         getCluster.mockReturnValueOnce(cluster);
 
-        client.loginWithOAuth({ clientId, tenantId, cluster });
+        const oAuthResult = await client.loginWithOAuth({
+          clientId,
+          tenantId,
+          cluster,
+        });
 
-        const result = await client.authenticate();
+        const authResult = await client.authenticate();
         const token = await client.getCDFToken();
 
-        expect(result).toEqual(true);
+        expect(oAuthResult).toEqual(false);
+        expect(authResult).toEqual(true);
         expect(token).toEqual(cdfToken);
       });
       test('should login silently in case valid account from local storage', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .twice()
+          .reply(200, { projects: ['project1', 'project2'] });
         initAuth.mockResolvedValueOnce('account');
         getCDFToken.mockResolvedValue(cdfToken);
+        getCluster.mockReturnValueOnce(cluster);
 
-        client.loginWithOAuth({ clientId, cluster });
+        const oAuthResult = await client.loginWithOAuth({ clientId, cluster });
 
-        const result = await client.authenticate();
+        const authResult = await client.authenticate();
 
-        expect(result).toEqual(true);
+        expect(oAuthResult).toEqual(true);
+        expect(authResult).toEqual(true);
         expect(login).toHaveBeenCalledTimes(0);
       });
       test('should try to login again in case of failure to get CDF token with cached account data', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
         initAuth.mockResolvedValueOnce('wrong-cached–account');
-        getCDFToken.mockRejectedValueOnce('wrong account used');
+        getCDFToken.mockRejectedValueOnce(
+          'wrong account used in attempt to login silently'
+        );
+        getCDFToken.mockRejectedValueOnce(
+          'wrong account used in attempt to get tokes by authenticate method'
+        );
         getCDFToken.mockResolvedValueOnce(cdfToken);
+        getCluster.mockReturnValueOnce(cluster);
 
-        client.loginWithOAuth({ clientId, cluster });
+        const oAuthResult = await client.loginWithOAuth({ clientId, cluster });
+        const authResult = await client.authenticate();
 
-        const result = await client.authenticate();
-
-        expect(result).toEqual(true);
+        expect(oAuthResult).toEqual(false);
+        expect(authResult).toEqual(true);
         expect(login).toHaveBeenCalledTimes(1);
-        expect(getCDFToken).toHaveBeenCalledTimes(2);
+        expect(getCDFToken).toHaveBeenCalledTimes(3);
       });
       test('should return aad oauth flow type in case of aad flow', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .twice()
+          .reply(200, { projects: ['project1', 'project2'] });
         initAuth.mockResolvedValueOnce('account');
         getCDFToken.mockResolvedValue(cdfToken);
+        getCluster.mockReturnValueOnce(cluster);
 
-        client.loginWithOAuth({ clientId, cluster });
+        await client.loginWithOAuth({ clientId, cluster });
 
         const result = await client.authenticate();
         expect(result).toEqual(true);
         expect(client.getOAuthFlowType()).toEqual(AAD_OAUTH);
       });
-      test('should throw error on attempt to get CDF token with cognite auth flow', async () => {
-        const createAuthenticateFunction = jest.spyOn(
-          Login,
-          'createAuthenticateFunction'
-        );
-        createAuthenticateFunction.mockReturnValueOnce(() =>
-          Promise.resolve(true)
-        );
-        client.loginWithOAuth({ project });
-        await expect(
-          async () => await client.getCDFToken()
-        ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"CDF token can be acquired only using AzureAD auth flow"`
-        );
-      });
       test('should throw error on attempt to get Azure AD access token with cognite auth flow', async () => {
-        const createAuthenticateFunction = jest.spyOn(
-          Login,
-          'createAuthenticateFunction'
-        );
-        createAuthenticateFunction.mockReturnValueOnce(() =>
-          Promise.resolve(true)
-        );
-        client.loginWithOAuth({ project });
+        await client.loginWithOAuth({ project });
         await expect(
           async () => await client.getAzureADAccessToken()
         ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -592,10 +686,14 @@ describe('CogniteClient', () => {
         );
       });
       test('should throw error on attempt to call setBaseUrl after azure ad auth', async () => {
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
         getCDFToken.mockResolvedValue('access_token');
         getCluster.mockReturnValueOnce(cluster);
 
-        client.loginWithOAuth({ clientId, tenantId, cluster });
+        await client.loginWithOAuth({ clientId, tenantId, cluster });
 
         const result = await client.authenticate();
 
@@ -605,6 +703,51 @@ describe('CogniteClient', () => {
         ).toThrowErrorMatchingInlineSnapshot(
           `"\`setBaseUrl\` does not available with Azure AD auth flow"`
         );
+      });
+      test('should call onNoProjectAvailable when acquired token is not valid', async () => {
+        const onNoProjectAvailable = jest.fn();
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(401, {});
+        initAuth.mockResolvedValueOnce('account');
+        getCDFToken.mockResolvedValue('access_token');
+        getCluster.mockReturnValueOnce(cluster);
+
+        const result = await client.loginWithOAuth({
+          clientId,
+          tenantId,
+          cluster,
+          onNoProjectAvailable,
+        });
+
+        expect(result).toBe(false);
+        expect(onNoProjectAvailable).toHaveBeenCalledTimes(1);
+      });
+      test('should call onNoProjectAvailable when acquired token during authenticate is not valid', async () => {
+        const onNoProjectAvailable = jest.fn();
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(401, {});
+        getCluster.mockReturnValueOnce(cluster);
+        getCDFToken.mockRejectedValue('failed');
+        login.mockResolvedValue(true);
+        getCDFToken.mockResolvedValue('access_token');
+
+        const silentLogin = await client.loginWithOAuth({
+          clientId,
+          tenantId,
+          cluster,
+          signInType: { type: 'loginPopup' },
+          onNoProjectAvailable,
+        });
+
+        const authenticated = await client.authenticate();
+
+        expect(silentLogin).toBe(false);
+        expect(authenticated).toBe(false);
+        expect(onNoProjectAvailable).toHaveBeenCalledTimes(1);
       });
     });
   });

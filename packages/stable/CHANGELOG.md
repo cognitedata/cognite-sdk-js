@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.5.2...@cognite/sdk@4.0.0) (2021-03-25)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [3.5.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.5.1...@cognite/sdk@3.5.2) (2021-03-25)
+
+
+### Bug Fixes
+
+* revert breaking changes being published as patch ([#503](https://github.com/cognitedata/cognite-sdk-js/issues/503)) ([3b7afd9](https://github.com/cognitedata/cognite-sdk-js/commit/3b7afd94030c75b2122a8e8323678455bcef0a29))
+
+
+
+
+
+## [3.5.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.5.0...@cognite/sdk@3.5.1) (2021-03-25)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [3.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.4.0...@cognite/sdk@3.5.0) (2021-03-24)
+
+
+### Features
+
+* extend RawDB and RawDBTable interfaces ([#502](https://github.com/cognitedata/cognite-sdk-js/issues/502)) ([e1f8020](https://github.com/cognitedata/cognite-sdk-js/commit/e1f80200f189f9913619834c46546c3cdeb8f900))
+
+
+
+
+
 # [3.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@3.3.6...@cognite/sdk@3.4.0) (2021-03-16)
 
 

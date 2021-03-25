@@ -7,29 +7,27 @@ import { setupLoggedInClient } from '../testUtils';
 describe('Datapoints integration test', () => {
   let client: CogniteClient;
   let timeserie: Timeseries;
-  let testTimeserieWithDatapoints: Timeseries;
+
+  const timestampFrom = Date.now() - 60 * 60 * 48 * 1000;
+  const timestampTill = Date.now() - 60 * 60 * 24 * 1000;
+  const datapoints = [
+    {
+      timestamp: new Date(timestampTill),
+      value: 10,
+    },
+    {
+      timestamp: new Date(timestampFrom),
+      value: 100,
+    },
+  ];
+
   beforeAll(async () => {
     client = setupLoggedInClient();
     [timeserie] = await client.timeseries.create([{ name: 'tmp' }]);
-    [testTimeserieWithDatapoints] = await client.timeseries.search({
-      // this timeseries comes from https://github.com/cognitedata/test-data-populator
-      search: { name: 'test__constant_' },
-    });
   });
   afterAll(async () => {
     await client.timeseries.delete([{ id: timeserie.id }]);
   });
-
-  const datapoints = [
-    {
-      timestamp: new Date('1 may 2017'),
-      value: 10,
-    },
-    {
-      timestamp: new Date('2 may 2017'),
-      value: 100,
-    },
-  ];
 
   test('insert', async () => {
     await client.datapoints.insert([
@@ -42,7 +40,7 @@ describe('Datapoints integration test', () => {
 
   test('retrieve', async () => {
     const response = await client.datapoints.retrieve({
-      items: [{ id: testTimeserieWithDatapoints.id }],
+      items: [{ id: timeserie.id }],
       start: '2d-ago',
       end: new Date(),
     });
@@ -55,7 +53,7 @@ describe('Datapoints integration test', () => {
     const response = await client.datapoints.retrieveLatest([
       {
         before: '1d-ago',
-        id: testTimeserieWithDatapoints.id,
+        id: timeserie.id,
       },
     ]);
     expect(response[0].datapoints.length).toBeGreaterThan(0);
@@ -65,7 +63,7 @@ describe('Datapoints integration test', () => {
   test('synthetic query', async () => {
     const result = await client.timeseries.syntheticQuery([
       {
-        expression: `24 * TS{id=${testTimeserieWithDatapoints.id}}`,
+        expression: `24 * TS{id=${timeserie.id}}`,
         start: '48h-ago',
         limit: 1,
       },

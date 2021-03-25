@@ -1,64 +1,76 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CogniteClient } from '@cognite/sdk';
 
 const project = 'publicdata';
+const client = new CogniteClient({ appId: 'Cognite SDK samples' });
 
-class App extends Component {
-  state = {
-    client: null,
-    assets: null,
-  };
+const renderAssetsInTable = (assets) => {
+  return (
+    <table>
+      <tbody>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+      {assets.map(asset => (
+        <tr key={asset.id}>
+          <td>{asset.name}</td>
+          <td>{asset.description}</td>
+        </tr>
+      ))}
+      </tbody>
+    </table>
+  );
+}
 
-  async componentDidMount() {
-    const client = new CogniteClient({ appId: 'Cognite SDK samples' });
-    client.loginWithOAuth({
-      project,
-      onAuthenticate: 'REDIRECT',
-    });
-    this.setState({ client });
-    // Login will be triggered on first API call with "client"
-    // You can manually trigger the login flow by calling:
-    client.authenticate();
-  }
+const App = () => {
+  const [isInit, setIsInit] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [assets, setAssets] = useState([]);
+  const [signInError, setSignInError] = useState();
 
-  fetchRootAssets = async () => {
-    const { client } = this.state;
-    if (client === null) return;
-    // fetch the first 10 (maximum) assets
+  const fetchRootAssets = async () => {
     const assets = await client.assets
       .list()
       .autoPagingToArray({ limit: 10 });
-    this.setState({ assets });
-  };
 
-  renderAssetsInTable = (assets) => {
-    return (
-      <table>
-        <tbody>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-          </tr>
-          {assets.map(asset => (
-            <tr key={asset.id}>
-              <td>{asset.name}</td>
-              <td>{asset.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    );
+    setAssets(assets);
   }
 
-  render() {
-    const { assets } = this.state;
-    return (
-      <div className="App">
-        <button onClick={this.fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
-        {assets && this.renderAssetsInTable(assets)}
-      </div>
-    );
+  const onHandleRedirectError = (error) => {
+    setSignInError(error);
   }
+
+  const authenticate = async () => {
+    const result = await client.authenticate();
+
+    setSignInError('');
+    setIsSignedIn(result);
+  }
+
+  useEffect(() => {
+    const init = async () => {
+      const result = await client.loginWithOAuth({
+        project,
+        onAuthenticate: 'REDIRECT',
+        onHandleRedirectError
+      });
+
+      setIsInit(true);
+      setIsSignedIn(result);
+    }
+
+    init();
+  }, []);
+
+  return (
+    <div className="App">
+      <button disabled={!isInit || isSignedIn} onClick={authenticate}><h1>Authenticate</h1></button>
+      <button disabled={!isInit || !isSignedIn} onClick={fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
+      {signInError && <p>Error during sign in. {signInError}</p>}
+      {assets && renderAssetsInTable(assets)}
+    </div>
+  );
 }
 
 export default App;
