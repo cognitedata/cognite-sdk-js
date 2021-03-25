@@ -52,7 +52,7 @@ function App() {
     }
   }
   const onNoProjectAvailable = () => {
-    console.log('dude, your token has no access to any project in selected cluster');
+    console.log('Unfortunately, your token has no access to any project in the selected cluster');
   }
 
   useEffect(() => {
