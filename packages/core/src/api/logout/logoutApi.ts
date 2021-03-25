@@ -2,7 +2,7 @@
 
 import { BaseResourceAPI } from '../../baseResourceApi';
 import { CDFHttpClient } from '../../httpClient/cdfHttpClient';
-import { getLogoutUrl } from '../../login';
+import { getLogoutUrl } from '../../loginUtils';
 import { MetadataMap } from '../../metadata';
 
 export class LogoutApi extends BaseResourceAPI<any> {
