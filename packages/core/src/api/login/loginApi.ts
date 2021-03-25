@@ -2,7 +2,7 @@
 
 import { BaseResourceAPI } from '../../baseResourceApi';
 import { CDFHttpClient } from '../../httpClient/cdfHttpClient';
-import { getIdInfo, IdInfo } from '../../login';
+import { getIdInfo, IdInfo } from '../../auth';
 import { MetadataMap } from '../../metadata';
 
 export class LoginAPI extends BaseResourceAPI<any> {

@@ -191,27 +191,12 @@ export function generatePopupWindow(url: string, name: string) {
 }
 
 /** @hidden */
-export function createInvisibleIframe(
-  url: string,
-  name: string
-): HTMLIFrameElement {
-  const iframe = document.createElement('iframe');
-  iframe.name = name;
-  iframe.style.width = '0';
-  iframe.style.height = '0';
-  iframe.style.border = '0';
-  iframe.style.border = 'none';
-  iframe.src = url;
-  return iframe;
-}
-
-/** @hidden */
 export function isUsingSSL() {
   return isBrowser() && location.protocol.toLowerCase() === 'https:';
 }
 
 /** @hidden */
-export function isLocalhost() {
+export function isLocalhost(): boolean {
   return isBrowser() && location.hostname === 'localhost';
 }
 

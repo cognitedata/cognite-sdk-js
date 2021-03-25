@@ -117,7 +117,7 @@ describe('Azure AD auth module', () => {
     test('should return account in case of success popup login', async () => {
       loginPopup.mockResolvedValueOnce({ account });
 
-      const accountInfo = await azureAdClient.login('loginPopup');
+      const accountInfo = await azureAdClient.login({ type: 'loginPopup' });
 
       expect(accountInfo).toEqual(account);
     });
@@ -135,10 +135,53 @@ describe('Azure AD auth module', () => {
       localStorageGetItem.mockReturnValueOnce(account.localAccountId);
       getAccountByLocalId.mockReturnValueOnce(account);
 
-      await azureAdClient.login('loginPopup');
+      await azureAdClient.login({ type: 'loginPopup' });
       const token = await azureAdClient.getCDFToken();
 
       expect(token).toEqual('access_token');
+    });
+    test('should be possible to define request params', async () => {
+      const prompt = 'select_account';
+
+      loginPopup.mockResolvedValueOnce({ account });
+
+      await azureAdClient.login({
+        type: 'loginPopup',
+        requestParams: { prompt },
+      });
+
+      expect(loginPopup).toHaveBeenCalledWith({
+        prompt,
+        scopes: ['User.Read'],
+        extraScopesToConsent: [
+          `https://${cluster}.cognitedata.com/user_impersonation`,
+          `https://${cluster}.cognitedata.com/IDENTITY`,
+        ],
+      });
+    });
+    test('should not pass unsupported login request params', async () => {
+      loginRedirect.mockResolvedValueOnce(true);
+      const prompt = 'select_account';
+
+      await azureAdClient.login({
+        type: 'loginRedirect',
+        requestParams: {
+          // @ts-ignore – check that unsupported params will be filtered
+          someRandomParam: 'someRandomValue',
+          scope: ['Wrong'],
+          prompt,
+        },
+      });
+
+      expect(loginRedirect).toHaveBeenCalledWith({
+        prompt,
+        redirectStartPage: 'https://localhost/',
+        scopes: ['User.Read'],
+        extraScopesToConsent: [
+          `https://${cluster}.cognitedata.com/user_impersonation`,
+          `https://${cluster}.cognitedata.com/IDENTITY`,
+        ],
+      });
     });
   });
 });
