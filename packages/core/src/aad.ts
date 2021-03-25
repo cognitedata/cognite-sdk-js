@@ -19,27 +19,11 @@ export interface AzureADOptions {
   config: Configuration;
   debug?: boolean;
 }
-
-export interface AzureADSignInType {
-  type: AzureADSingInFlow;
-  requestParams?: AzureADSignInRequestParams;
-}
-
-export interface AzureADSignInRequestParams {
-  prompt?: AzureADSignInPrompt;
-}
-
 export const AZURE_AUTH_POPUP = 'loginPopup';
 export const AZURE_AUTH_REDIRECT = 'loginRedirect';
-
-export type AzureADSingInFlow =
+export type AzureADSingInType =
   | typeof AZURE_AUTH_POPUP
   | typeof AZURE_AUTH_REDIRECT;
-export type AzureADSignInPrompt =
-  | 'login'
-  | 'none'
-  | 'consent'
-  | 'select_account';
 
 const loggerCallback = (level: LogLevel, message: string, containsPi: any) => {
   if (containsPi) {
@@ -119,13 +103,12 @@ export class AzureAD {
    * @param signInType
    */
   async login(
-    signInType: AzureADSignInType = { type: AZURE_AUTH_REDIRECT }
+    signInType: AzureADSingInType = AZURE_AUTH_REDIRECT
   ): Promise<AccountInfo | void> {
-    const { type, requestParams } = signInType;
-    if (type === AZURE_AUTH_POPUP) {
+    if (signInType === AZURE_AUTH_POPUP) {
       try {
         const { account } = await this.msalApplication.loginPopup(
-          this.getLoginPopupRequest(requestParams)
+          this.loginPopupRequest
         );
 
         return this.handleAuthAccountResult(account);
@@ -133,9 +116,7 @@ export class AzureAD {
         console.error(error);
       }
     } else {
-      await this.msalApplication.loginRedirect(
-        this.getLoginRedirectRequest(requestParams)
-      );
+      await this.msalApplication.loginRedirect(this.loginRedirectRequest);
     }
   }
 
@@ -190,24 +171,15 @@ export class AzureAD {
     ];
   }
 
-  private getLoginPopupRequest(
-    requestParams: AzureADSignInRequestParams = {}
-  ): PopupRequest {
-    const { prompt } = requestParams;
+  private get loginPopupRequest(): PopupRequest {
     return {
-      prompt,
       scopes: this.userScopes,
       extraScopesToConsent: this.getCDFScopes(),
     };
   }
 
-  private getLoginRedirectRequest(
-    requestParams: AzureADSignInRequestParams = {}
-  ): RedirectRequest {
-    const { prompt } = requestParams;
-
+  private get loginRedirectRequest(): RedirectRequest {
     return {
-      prompt,
       scopes: this.userScopes,
       extraScopesToConsent: this.getCDFScopes(),
       redirectStartPage: window.location.href,
