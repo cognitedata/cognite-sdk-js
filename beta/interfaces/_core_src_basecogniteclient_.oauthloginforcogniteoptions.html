@@ -86,6 +86,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginforcogniteoptions.html#accesstoken" class="tsd-kind-icon">access<wbr>Token</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginforcogniteoptions.html#onauthenticate" class="tsd-kind-icon">on<wbr>Authenticate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginforcogniteoptions.html#onhandleredirecterror" class="tsd-kind-icon">on<wbr>Handle<wbr>Redirect<wbr>Error</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginforcogniteoptions.html#ontokens" class="tsd-kind-icon">on<wbr>Tokens</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_basecogniteclient_.oauthloginforcogniteoptions.html#project" class="tsd-kind-icon">project</a></li>
 							</ul>
@@ -101,7 +102,7 @@
 					<div class="tsd-signature tsd-kind-icon">access<wbr>Token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/baseCogniteClient.ts#L74">packages/core/src/baseCogniteClient.ts:74</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/core/src/baseCogniteClient.ts#L69">packages/core/src/baseCogniteClient.ts:69</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -113,20 +114,30 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="onauthenticate" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Authenticate</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Authenticate<span class="tsd-signature-symbol">:</span> <a href="../modules/_core_src_login_.html#onauthenticate" class="tsd-signature-type">OnAuthenticate</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"REDIRECT"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"POPUP"</span></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Authenticate<span class="tsd-signature-symbol">:</span> <a href="../modules/_core_src_auth_.html#onauthenticate" class="tsd-signature-type">OnAuthenticate</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"REDIRECT"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"POPUP"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/baseCogniteClient.ts#L69">packages/core/src/baseCogniteClient.ts:69</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/core/src/baseCogniteClient.ts#L64">packages/core/src/baseCogniteClient.ts:64</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="onhandleredirecterror" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Handle<wbr>Redirect<wbr>Error</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Handle<wbr>Redirect<wbr>Error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>error<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/core/src/baseCogniteClient.ts#L70">packages/core/src/baseCogniteClient.ts:70</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="ontokens" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Tokens</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Tokens<span class="tsd-signature-symbol">:</span> <a href="../modules/_core_src_login_.html#ontokens" class="tsd-signature-type">OnTokens</a></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Tokens<span class="tsd-signature-symbol">:</span> <a href="../modules/_core_src_auth_.html#ontokens" class="tsd-signature-type">OnTokens</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/baseCogniteClient.ts#L70">packages/core/src/baseCogniteClient.ts:70</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/core/src/baseCogniteClient.ts#L65">packages/core/src/baseCogniteClient.ts:65</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -136,7 +147,7 @@
 					<div class="tsd-signature tsd-kind-icon">project<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/baseCogniteClient.ts#L68">packages/core/src/baseCogniteClient.ts:68</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/core/src/baseCogniteClient.ts#L63">packages/core/src/baseCogniteClient.ts:63</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -179,6 +190,9 @@
 								<a href="_core_src_basecogniteclient_.oauthloginforcogniteoptions.html#onauthenticate" class="tsd-kind-icon">on<wbr>Authenticate</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_core_src_basecogniteclient_.oauthloginforcogniteoptions.html#onhandleredirecterror" class="tsd-kind-icon">on<wbr>Handle<wbr>Redirect<wbr>Error</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_core_src_basecogniteclient_.oauthloginforcogniteoptions.html#ontokens" class="tsd-kind-icon">on<wbr>Tokens</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
@@ -200,6 +214,9 @@
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/_core_src_basecogniteclient_.html#oauthloginoptions" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Options</a>
 					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_basecogniteclient_.html#oauthloginresult" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Result</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/_core_src_basecogniteclient_.html#response" class="tsd-kind-icon">Response</a>
 					</li>
@@ -209,20 +226,8 @@
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/_core_src_basecogniteclient_.html#cdf_oauth" class="tsd-kind-icon">CDF_<wbr>OAUTH</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/_core_src_basecogniteclient_.html#popup" class="tsd-kind-icon">POPUP</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/_core_src_basecogniteclient_.html#redirect" class="tsd-kind-icon">REDIRECT</a>
-					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter tsd-is-external">
 						<a href="../modules/_core_src_basecogniteclient_.html#accessapi" class="tsd-kind-icon">access<wbr>Api</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_core_src_basecogniteclient_.html#onauthenticatewithpopup" class="tsd-kind-icon">on<wbr>Authenticate<wbr>With<wbr>Popup</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_core_src_basecogniteclient_.html#onauthenticatewithredirect" class="tsd-kind-icon">on<wbr>Authenticate<wbr>With<wbr>Redirect</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/_core_src_basecogniteclient_.html#throwrelogginerror" class="tsd-kind-icon">throw<wbr>ReLoggin<wbr>Error</a>
