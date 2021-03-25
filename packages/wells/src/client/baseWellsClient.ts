@@ -32,13 +32,9 @@ export default class BaseWellsClient {
       throw Error('options.appId is required and must be of type string');
     }
 
-    const base_url = this.baseUrl(options.cluster);
+    const baseUrl = this.baseUrl(options.cluster);
 
-    this.http = new HttpClientWithIntercept(base_url);
-    this.httpClient
-      .setDefaultHeader('x-cdp-app', options.appId)
-      .setDefaultHeader('x-cdp-sdk', `CogniteJavaScriptSDK:${this.version}`);
-
+    this.http = new HttpClientWithIntercept(baseUrl);
     this.metadata = new MetadataMap();
   }
 
@@ -127,12 +123,9 @@ export default class BaseWellsClient {
     this.httpClient.setReauthenticateMethod = options.refreshToken;
   };
 
-  /**
-   * To modify the base-url at any point in time
-   */
-  public setBaseUrl = (baseUrl: string) => {
-    this.httpClient.setBaseUrl(baseUrl);
-  };
+  public get getBaseUrl() {
+    return this.httpClient.getBaseUrl();
+  }
 
   public get isLoggedIn() {
     return this.hasBeenLoggedIn;

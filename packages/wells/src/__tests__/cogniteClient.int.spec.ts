@@ -3,6 +3,11 @@ import { RefreshToken } from '../client/clientAuthUtils';
 import { createWellsClient } from '../client/clientCreateUtils';
 import { Cluster } from '../client/model/Cluster';
 import { WellFilter } from '../client/model/WellFilter';
+import {
+  BLUEFIELD_BASE_URL,
+  BP_NORTHEUROPE_DEV_BASE_URL,
+  COGDEV_BASE_URL,
+} from '../constants';
 import { authTokens } from './testUtils';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
@@ -25,7 +30,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(client.isLoggedIn).toBe(true);
   });
 
-  // test api-key login
   test('bearer-token login', async () => {
     const client = createWellsClient('WELLS TEST CLIENT');
     expect(client.isLoggedIn).toBe(false);
@@ -62,5 +66,30 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       .catch(err => {
         expect(err.status).toBeGreaterThanOrEqual(400);
       });
+  });
+
+  // test api-key login
+  test('configure base url', async () => {
+    let client = createWellsClient('WELLS TEST CLIENT');
+    expect(client.isLoggedIn).toBe(false);
+
+    const functionThatReturnsANewToken: RefreshToken = () => 'new fresh token';
+
+    client.loginWithToken({
+      project: process.env.COGNITE_WELLS_PROJECT as string,
+      accessToken: authTokens.accessToken,
+      refreshToken: functionThatReturnsANewToken,
+    });
+
+    expect(client.isLoggedIn).toBe(true);
+    expect(client.getBaseUrl).toBe(COGDEV_BASE_URL);
+
+    client = createWellsClient('WELLS TEST CLIENT', Cluster.BLUEFIELD);
+    expect(client.isLoggedIn).toBe(false);
+    expect(client.getBaseUrl).toBe(BLUEFIELD_BASE_URL);
+
+    client = createWellsClient('WELLS TEST CLIENT', Cluster.BP_NORTHEUROPE);
+    expect(client.isLoggedIn).toBe(false);
+    expect(client.getBaseUrl).toBe(BP_NORTHEUROPE_DEV_BASE_URL);
   });
 });
