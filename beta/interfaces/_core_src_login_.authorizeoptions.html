@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IdInfo | Cognite JavaScript SDK (beta)</title>
+	<title>AuthorizeOptions | Cognite JavaScript SDK (beta)</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK (beta)">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_core_src_auth_.html">&quot;core/src/auth&quot;</a>
+					<a href="../modules/_core_src_login_.html">&quot;core/src/login&quot;</a>
 				</li>
 				<li>
-					<a href="_core_src_auth_.idinfo.html">IdInfo</a>
+					<a href="_core_src_login_.authorizeoptions.html">AuthorizeOptions</a>
 				</li>
 			</ul>
-			<h1>Interface IdInfo</h1>
+			<h1>Interface AuthorizeOptions</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IdInfo</span>
+						<span class="target">AuthorizeOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -84,9 +84,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_auth_.idinfo.html#project" class="tsd-kind-icon">project</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_auth_.idinfo.html#projectid" class="tsd-kind-icon">project<wbr>Id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_auth_.idinfo.html#user" class="tsd-kind-icon">user</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_login_.authorizeoptions.html#errorredirecturl" class="tsd-kind-icon">error<wbr>Redirect<wbr>Url</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_core_src_login_.authorizeoptions.html#redirecturl" class="tsd-kind-icon">redirect<wbr>Url</a></li>
 							</ul>
 						</section>
 					</div>
@@ -95,32 +94,22 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="project" class="tsd-anchor"></a>
-					<h3>project</h3>
-					<div class="tsd-signature tsd-kind-icon">project<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="errorredirecturl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> error<wbr>Redirect<wbr>Url</h3>
+					<div class="tsd-signature tsd-kind-icon">error<wbr>Redirect<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3c511bf/packages/core/src/auth.ts#L44">packages/core/src/auth.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/login.ts#L42">packages/core/src/login.ts:42</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="projectid" class="tsd-anchor"></a>
-					<h3>project<wbr>Id</h3>
-					<div class="tsd-signature tsd-kind-icon">project<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="redirecturl" class="tsd-anchor"></a>
+					<h3>redirect<wbr>Url</h3>
+					<div class="tsd-signature tsd-kind-icon">redirect<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3c511bf/packages/core/src/auth.ts#L43">packages/core/src/auth.ts:43</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="user" class="tsd-anchor"></a>
-					<h3>user</h3>
-					<div class="tsd-signature tsd-kind-icon">user<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3c511bf/packages/core/src/auth.ts#L45">packages/core/src/auth.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/login.ts#L41">packages/core/src/login.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -133,71 +122,83 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/_core_src_auth_.html">&quot;core/src/auth&quot;</a>
+						<a href="../modules/_core_src_login_.html">&quot;core/src/login&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module tsd-is-external">
-						<a href="../classes/_core_src_auth_.cogniteauthentication.html" class="tsd-kind-icon">Cognite<wbr>Authentication</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_core_src_auth_.authoptions.html" class="tsd-kind-icon">Auth<wbr>Options</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_core_src_auth_.idinfo.html" class="tsd-kind-icon">Id<wbr>Info</a>
+						<a href="_core_src_login_.authorizeoptions.html" class="tsd-kind-icon">Authorize<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_core_src_auth_.idinfo.html#project" class="tsd-kind-icon">project</a>
+								<a href="_core_src_login_.authorizeoptions.html#errorredirecturl" class="tsd-kind-icon">error<wbr>Redirect<wbr>Url</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_core_src_auth_.idinfo.html#projectid" class="tsd-kind-icon">project<wbr>Id</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_core_src_auth_.idinfo.html#user" class="tsd-kind-icon">user</a>
+								<a href="_core_src_login_.authorizeoptions.html#redirecturl" class="tsd-kind-icon">redirect<wbr>Url</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_core_src_auth_.loginparams.html" class="tsd-kind-icon">Login<wbr>Params</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="_core_src_login_.createauthfunctionoptions.html" class="tsd-kind-icon">Create<wbr>Auth<wbr>Function<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_core_src_auth_.onauthenticateloginobject.html" class="tsd-kind-icon">On<wbr>Authenticate<wbr>Login<wbr>Object</a>
+						<a href="_core_src_login_.idinfo.html" class="tsd-kind-icon">Id<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_core_src_login_.onauthenticateloginobject.html" class="tsd-kind-icon">On<wbr>Authenticate<wbr>Login<wbr>Object</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/_core_src_auth_.html#onauthenticate" class="tsd-kind-icon">On<wbr>Authenticate</a>
+						<a href="../modules/_core_src_login_.html#onauthenticate" class="tsd-kind-icon">On<wbr>Authenticate</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/_core_src_auth_.html#ontokens" class="tsd-kind-icon">On<wbr>Tokens</a>
+						<a href="../modules/_core_src_login_.html#ontokens" class="tsd-kind-icon">On<wbr>Tokens</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/_core_src_auth_.html#popup" class="tsd-kind-icon">POPUP</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#access_token_param" class="tsd-kind-icon">ACCESS_<wbr>TOKEN_<wbr>PARAM</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/_core_src_auth_.html#redirect" class="tsd-kind-icon">REDIRECT</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#error_description_param" class="tsd-kind-icon">ERROR_<wbr>DESCRIPTION_<wbr>PARAM</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_core_src_auth_.html#clearparametersfromurl" class="tsd-kind-icon">clear<wbr>Parameters<wbr>From<wbr>Url</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#error_param" class="tsd-kind-icon">ERROR_<wbr>PARAM</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_core_src_auth_.html#extracttokensfromurl" class="tsd-kind-icon">extract<wbr>Tokens<wbr>From<wbr>Url</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#id_token_param" class="tsd-kind-icon">ID_<wbr>TOKEN_<wbr>PARAM</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_core_src_auth_.html#getidinfofromaccesstoken" class="tsd-kind-icon">get<wbr>IdInfo<wbr>From<wbr>Access<wbr>Token</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#login_iframe_name" class="tsd-kind-icon">LOGIN_<wbr>IFRAME_<wbr>NAME</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_core_src_auth_.html#istokensvalid" class="tsd-kind-icon">is<wbr>Tokens<wbr>Valid</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_core_src_auth_.html#onauthenticatewithpopup" class="tsd-kind-icon">on<wbr>Authenticate<wbr>With<wbr>Popup</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#login_popup_name" class="tsd-kind-icon">LOGIN_<wbr>POPUP_<wbr>NAME</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
-						<a href="../modules/_core_src_auth_.html#onauthenticatewithredirect" class="tsd-kind-icon">on<wbr>Authenticate<wbr>With<wbr>Redirect</a>
+						<a href="../modules/_core_src_login_.html#clearparametersfromurl" class="tsd-kind-icon">clear<wbr>Parameters<wbr>From<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#extracttokensfromurl" class="tsd-kind-icon">extract<wbr>Tokens<wbr>From<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#generateloginurl" class="tsd-kind-icon">generate<wbr>Login<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#isauthiframe" class="tsd-kind-icon">is<wbr>AuthIFrame</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_core_src_login_.html#isloginpopupwindow" class="tsd-kind-icon">is<wbr>Login<wbr>Popup<wbr>Window</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external">
+						<a href="../modules/_core_src_login_.html#loginpopuphandler" class="tsd-kind-icon">login<wbr>Popup<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#parsetokenqueryparameters" class="tsd-kind-icon">parse<wbr>Token<wbr>Query<wbr>Parameters</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_src_login_.html#silentlogin" class="tsd-kind-icon">silent<wbr>Login</a>
 					</li>
 				</ul>
 			</nav>

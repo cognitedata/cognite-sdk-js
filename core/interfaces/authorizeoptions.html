@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AzureADSignInRequestParams | Cognite JavaScript SDK core</title>
+	<title>AuthorizeOptions | Cognite JavaScript SDK core</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK core">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="azureadsigninrequestparams.html">AzureADSignInRequestParams</a>
+					<a href="authorizeoptions.html">AuthorizeOptions</a>
 				</li>
 			</ul>
-			<h1>Interface AzureADSignInRequestParams</h1>
+			<h1>Interface AuthorizeOptions</h1>
 		</div>
 	</div>
 </header>
@@ -70,7 +70,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AzureADSignInRequestParams</span>
+						<span class="target">AuthorizeOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -81,7 +81,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="azureadsigninrequestparams.html#prompt" class="tsd-kind-icon">prompt</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="authorizeoptions.html#errorredirecturl" class="tsd-kind-icon">error<wbr>Redirect<wbr>Url</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="authorizeoptions.html#redirecturl" class="tsd-kind-icon">redirect<wbr>Url</a></li>
 							</ul>
 						</section>
 					</div>
@@ -90,12 +91,22 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="prompt" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> prompt</h3>
-					<div class="tsd-signature tsd-kind-icon">prompt<span class="tsd-signature-symbol">:</span> <a href="../globals.html#azureadsigninprompt" class="tsd-signature-type">AzureADSignInPrompt</a></div>
+					<a name="errorredirecturl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> error<wbr>Redirect<wbr>Url</h3>
+					<div class="tsd-signature tsd-kind-icon">error<wbr>Redirect<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3c511bf/packages/core/src/aad.ts#L29">packages/core/src/aad.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/login.ts#L42">packages/core/src/login.ts:42</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="redirecturl" class="tsd-anchor"></a>
+					<h3>redirect<wbr>Url</h3>
+					<div class="tsd-signature tsd-kind-icon">redirect<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/login.ts#L41">packages/core/src/login.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -114,10 +125,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-is-external">
-						<a href="azureadsigninrequestparams.html" class="tsd-kind-icon">AzureADSign<wbr>InRequest<wbr>Params</a>
+						<a href="authorizeoptions.html" class="tsd-kind-icon">Authorize<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="azureadsigninrequestparams.html#prompt" class="tsd-kind-icon">prompt</a>
+								<a href="authorizeoptions.html#errorredirecturl" class="tsd-kind-icon">error<wbr>Redirect<wbr>Url</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="authorizeoptions.html#redirecturl" class="tsd-kind-icon">redirect<wbr>Url</a>
 							</li>
 						</ul>
 					</li>

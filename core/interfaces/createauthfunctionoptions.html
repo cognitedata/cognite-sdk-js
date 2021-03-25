@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AzureADSignInType | Cognite JavaScript SDK</title>
-	<meta name="description" content="Documentation for Cognite JavaScript SDK">
+	<title>CreateAuthFunctionOptions | Cognite JavaScript SDK core</title>
+	<meta name="description" content="Documentation for Cognite JavaScript SDK core">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">Cognite JavaScript SDK</a>
+					<a href="../index.html" class="title">Cognite JavaScript SDK core</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="azureadsignintype.html">AzureADSignInType</a>
+					<a href="createauthfunctionoptions.html">CreateAuthFunctionOptions</a>
 				</li>
 			</ul>
-			<h1>Interface AzureADSignInType</h1>
+			<h1>Interface CreateAuthFunctionOptions</h1>
 		</div>
 	</div>
 </header>
@@ -70,7 +70,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AzureADSignInType</span>
+						<span class="target">CreateAuthFunctionOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -81,8 +81,10 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="azureadsignintype.html#requestparams" class="tsd-kind-icon">request<wbr>Params</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="azureadsignintype.html#type" class="tsd-kind-icon">type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="createauthfunctionoptions.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="createauthfunctionoptions.html#onauthenticate" class="tsd-kind-icon">on<wbr>Authenticate</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="createauthfunctionoptions.html#ontokens" class="tsd-kind-icon">on<wbr>Tokens</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="createauthfunctionoptions.html#project" class="tsd-kind-icon">project</a></li>
 							</ul>
 						</section>
 					</div>
@@ -91,22 +93,42 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="requestparams" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> request<wbr>Params</h3>
-					<div class="tsd-signature tsd-kind-icon">request<wbr>Params<span class="tsd-signature-symbol">:</span> <a href="azureadsigninrequestparams.html" class="tsd-signature-type">AzureADSignInRequestParams</a></div>
+					<a name="httpclient" class="tsd-anchor"></a>
+					<h3>http<wbr>Client</h3>
+					<div class="tsd-signature tsd-kind-icon">http<wbr>Client<span class="tsd-signature-symbol">:</span> <a href="../classes/cdfhttpclient.html" class="tsd-signature-type">CDFHttpClient</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3c511bf/packages/core/src/aad.ts#L25">packages/core/src/aad.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/login.ts#L300">packages/core/src/login.ts:300</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="type" class="tsd-anchor"></a>
-					<h3>type</h3>
-					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../globals.html#azureadsinginflow" class="tsd-signature-type">AzureADSingInFlow</a></div>
+					<a name="onauthenticate" class="tsd-anchor"></a>
+					<h3>on<wbr>Authenticate</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Authenticate<span class="tsd-signature-symbol">:</span> <a href="../globals.html#onauthenticate" class="tsd-signature-type">OnAuthenticate</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3c511bf/packages/core/src/aad.ts#L24">packages/core/src/aad.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/login.ts#L302">packages/core/src/login.ts:302</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="ontokens" class="tsd-anchor"></a>
+					<h3>on<wbr>Tokens</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Tokens<span class="tsd-signature-symbol">:</span> <a href="../globals.html#ontokens" class="tsd-signature-type">OnTokens</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/login.ts#L301">packages/core/src/login.ts:301</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="project" class="tsd-anchor"></a>
+					<h3>project</h3>
+					<div class="tsd-signature tsd-kind-icon">project<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3b7afd9/packages/core/src/login.ts#L299">packages/core/src/login.ts:299</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -125,13 +147,19 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-is-external">
-						<a href="azureadsignintype.html" class="tsd-kind-icon">AzureADSign<wbr>InType</a>
+						<a href="createauthfunctionoptions.html" class="tsd-kind-icon">Create<wbr>Auth<wbr>Function<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="azureadsignintype.html#requestparams" class="tsd-kind-icon">request<wbr>Params</a>
+								<a href="createauthfunctionoptions.html#httpclient" class="tsd-kind-icon">http<wbr>Client</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="azureadsignintype.html#type" class="tsd-kind-icon">type</a>
+								<a href="createauthfunctionoptions.html#onauthenticate" class="tsd-kind-icon">on<wbr>Authenticate</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="createauthfunctionoptions.html#ontokens" class="tsd-kind-icon">on<wbr>Tokens</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="createauthfunctionoptions.html#project" class="tsd-kind-icon">project</a>
 							</li>
 						</ul>
 					</li>
