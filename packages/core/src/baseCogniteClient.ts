@@ -22,6 +22,7 @@ import {
   bearerString,
   getBaseUrl,
   isOAuthWithAADOptions,
+  isOAuthWithADFSOptions,
   isOAuthWithCogniteOptions,
   isUsingSSL,
   projectUrl,
@@ -34,6 +35,7 @@ import {
 import { AzureAD, AzureADSignInType } from './aad';
 import { CogniteAuthentication, OnAuthenticate, OnTokens } from './auth';
 import { AuthTokens } from './loginUtils';
+import ADFS, { ADFSRequestParams } from './adfs';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -57,7 +59,11 @@ export interface ApiKeyLoginOptions extends Project {
 
 export const AAD_OAUTH = 'AAD_OAUTH';
 export const CDF_OAUTH = 'CDF_OAUTH';
-export type AuthFlowType = typeof AAD_OAUTH | typeof CDF_OAUTH;
+export const ADFS_OAUTH = 'ADFS_OAUTH';
+export type AuthFlowType =
+  | typeof AAD_OAUTH
+  | typeof CDF_OAUTH
+  | typeof ADFS_OAUTH;
 
 export interface OAuthLoginForCogniteOptions {
   project: string;
@@ -79,9 +85,16 @@ export interface OAuthLoginForAADOptions {
   debug?: boolean;
 }
 
+export interface OAuthLoginForADFSOptions {
+  authority: string;
+  requestParams: ADFSRequestParams;
+  onNoProjectAvailable?: () => void;
+}
+
 export type OAuthLoginOptions =
   | OAuthLoginForCogniteOptions
-  | OAuthLoginForAADOptions;
+  | OAuthLoginForAADOptions
+  | OAuthLoginForADFSOptions;
 
 export function accessApi<T>(api: T | undefined): T {
   if (api === undefined) {
@@ -115,6 +128,7 @@ export default class BaseCogniteClient {
   private projectName: string = '';
   private hasBeenLoggedIn: boolean = false;
   private azureAdClient?: AzureAD;
+  private adfsClient?: ADFS;
   private cogniteAuthClient?: CogniteAuthentication;
   /**
    * Create a new SDK client
@@ -265,6 +279,8 @@ export default class BaseCogniteClient {
       [authenticate, token] = await this.loginWithCognite(options);
     } else if (isOAuthWithAADOptions(options)) {
       [authenticate, token] = await this.loginWithAAD(options);
+    } else if (isOAuthWithADFSOptions(options)) {
+      [authenticate, token] = await this.loginWithADFS(options);
     } else {
       throw Error('`loginWithOAuth` is missing correct `options` structure');
     }
@@ -309,7 +325,9 @@ export default class BaseCogniteClient {
       ? AAD_OAUTH
       : this.cogniteAuthClient
         ? CDF_OAUTH
-        : undefined;
+        : this.adfsClient
+          ? ADFS_OAUTH
+          : undefined;
   }
 
   /**
@@ -335,6 +353,14 @@ export default class BaseCogniteClient {
       const tokens = await this.cogniteAuthClient.getCDFToken(this.httpClient);
 
       return tokens ? tokens.accessToken : null;
+    } else if (this.adfsClient) {
+      const token = this.adfsClient.getCDFToken();
+
+      if (token && !(await this.validateAzureADAccessToken(token))) {
+        return null;
+      }
+
+      return token;
     } else {
       throw Error('CDF token can be acquired only using loginWithOAuth flow');
     }
@@ -565,6 +591,59 @@ export default class BaseCogniteClient {
     return [authenticate, token];
   };
 
+  protected loginWithADFS = async ({
+    authority,
+    requestParams,
+    onNoProjectAvailable = noop,
+  }: OAuthLoginForADFSOptions): Promise<OAuthLoginResult> => {
+    const { cluster } = requestParams;
+    const adfsClient = new ADFS({
+      authority,
+      requestParams: { ...requestParams },
+    });
+
+    this.httpClient.setCluster(cluster);
+
+    let token = await this.handleADFSLoginRedirect(adfsClient);
+
+    if (token) {
+      const isTokenValid = await this.validateAzureADAccessToken(token);
+
+      if (!isTokenValid) {
+        token = null;
+
+        onNoProjectAvailable();
+      }
+    }
+
+    const authenticate = async () => {
+      const cdfAccessToken = adfsClient.getCDFToken();
+
+      if (!cdfAccessToken) {
+        try {
+          await adfsClient.login();
+          return true;
+        } catch {
+          return false;
+        }
+      } else {
+        if (!(await this.validateAzureADAccessToken(cdfAccessToken))) {
+          onNoProjectAvailable();
+
+          return false;
+        }
+
+        this.httpClient.setBearerToken(cdfAccessToken);
+
+        return true;
+      }
+    };
+
+    this.adfsClient = adfsClient;
+
+    return [authenticate, token];
+  };
+
   protected loginWithCognite = async ({
     project,
     accessToken,
@@ -648,6 +727,20 @@ export default class BaseCogniteClient {
     }
 
     return token;
+  }
+
+  protected async handleADFSLoginRedirect(
+    adfsClient: ADFS
+  ): Promise<string | null> {
+    const token = await adfsClient.handleLoginRedirect();
+
+    if (token) {
+      return token.accessToken;
+    } else {
+      const cdfToken = adfsClient.getCDFToken();
+
+      return cdfToken || null;
+    }
   }
 
   protected async validateAzureADAccessToken(token: string): Promise<boolean> {

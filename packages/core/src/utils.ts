@@ -8,6 +8,7 @@ import { CogniteError } from './error';
 import { CogniteMultiError } from './multiError';
 import {
   OAuthLoginForAADOptions,
+  OAuthLoginForADFSOptions,
   OAuthLoginForCogniteOptions,
   OAuthLoginOptions,
 } from './baseCogniteClient';
@@ -220,4 +221,11 @@ export function isOAuthWithAADOptions(
   options: OAuthLoginOptions
 ): options is OAuthLoginForAADOptions {
   return ['clientId', 'cluster'].every(key => key in options);
+}
+
+/** @hidden **/
+export function isOAuthWithADFSOptions(
+  options: OAuthLoginOptions
+): options is OAuthLoginForADFSOptions {
+  return ['authority', 'requestParams'].every(key => key in options);
 }

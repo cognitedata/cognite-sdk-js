@@ -88,12 +88,12 @@ class ADFS {
     return null;
   }
 
-  public getAccessToken() {
-    return this.token && this.token.accessToken;
+  public getCDFToken(): string | null {
+    return this.token ? this.token.accessToken : null;
   }
 
-  public getIdToken() {
-    return this.token && this.token.idToken;
+  public getIdToken(): string | null {
+    return this.token ? this.token.idToken : null;
   }
 
   private getADFSQueryParams({
