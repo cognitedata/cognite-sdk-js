@@ -5,10 +5,10 @@ import isFunction from 'lodash/isFunction';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import {
   bearerString,
+  clearParametersFromUrl,
   isLocalhost,
   isSameProject,
   isUsingSSL,
-  removeQueryParameterFromUrl,
 } from './utils';
 import { CogniteLoginError } from './loginError';
 import { AUTHORIZATION_HEADER } from './constants';
@@ -194,14 +194,6 @@ function extractTokensFromUrl() {
     clearParametersFromUrl(ERROR_PARAM, ERROR_DESCRIPTION_PARAM);
     throw err;
   }
-}
-
-function clearParametersFromUrl(...params: string[]): void {
-  let url = window.location.href;
-  params.forEach(param => {
-    url = removeQueryParameterFromUrl(url, param);
-  });
-  window.history.replaceState(null, '', url);
 }
 
 function onAuthenticateWithRedirect(login: OnAuthenticateLoginObject) {

@@ -37,6 +37,14 @@ export function isBrowser() {
   );
 }
 
+export function clearParametersFromUrl(...params: string[]): void {
+  let url = window.location.href;
+  params.forEach(param => {
+    url = removeQueryParameterFromUrl(url, param);
+  });
+  window.history.replaceState(null, '', url);
+}
+
 /** @hidden */
 export function removeQueryParameterFromUrl(
   url: string,
