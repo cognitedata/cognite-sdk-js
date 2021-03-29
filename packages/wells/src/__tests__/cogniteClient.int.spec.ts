@@ -1,6 +1,7 @@
 // Copyright 2020 Cognite AS
 import { RefreshToken } from '../client/clientAuthUtils';
 import { createWellsClient } from '../client/clientCreateUtils';
+import CogniteWellsClient from '../client/cogniteWellsClient';
 import { Cluster } from '../client/model/Cluster';
 import { WellFilter } from '../client/model/WellFilter';
 import {
@@ -84,11 +85,23 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(client.isLoggedIn).toBe(true);
     expect(client.getBaseUrl).toBe(COGDEV_BASE_URL);
 
+    client = createWellsClient('WELLS TEST CLIENT', Cluster.BP);
+    expect(client.isLoggedIn).toBe(false);
+    expect(client.getBaseUrl).toBe(COGDEV_BASE_URL);
+
     client = createWellsClient('WELLS TEST CLIENT', Cluster.BLUEFIELD);
     expect(client.isLoggedIn).toBe(false);
     expect(client.getBaseUrl).toBe(BLUEFIELD_BASE_URL);
 
     client = createWellsClient('WELLS TEST CLIENT', Cluster.BP_NORTHEUROPE);
+    expect(client.isLoggedIn).toBe(false);
+    expect(client.getBaseUrl).toBe(BP_NORTHEUROPE_DEV_BASE_URL);
+
+    client = new CogniteWellsClient({
+      appId: 'WELLS TEST CLIENT',
+      cluster: Cluster.BP_NORTHEUROPE,
+    });
+
     expect(client.isLoggedIn).toBe(false);
     expect(client.getBaseUrl).toBe(BP_NORTHEUROPE_DEV_BASE_URL);
   });

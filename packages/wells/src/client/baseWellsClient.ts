@@ -187,13 +187,18 @@ export class ConfigureAPI {
     if (this.cluster == undefined) {
       throw new HttpError(400, 'No cluster has been set.', {});
     }
+
     let path =
-      this.cluster == Cluster.BLUEFIELD
-        ? `/${this.project}${baseUrl}`
-        : `/${this.project}${baseUrl}?env=${this.cluster}`;
+      baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API
+        ? `/${this.project}${baseUrl}?env=${this.cluster}`
+        : `/${this.project}${baseUrl}`;
 
     if (cursor) {
-      path += `&cursor=${cursor}`;
+      if (path.includes('?env')) {
+        path += `&cursor=${cursor}`;
+      } else {
+        path += `?cursor=${cursor}`;
+      }
     }
     return path;
   }
