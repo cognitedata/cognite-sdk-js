@@ -1,5 +1,14 @@
+import { Cluster } from './model/Cluster';
+
 export interface ClientLoginOptions {
   appId: string;
+  cluster: Cluster;
+  baseUrl?: string;
+}
+
+export interface ClientOptions {
+  appId: string;
+  cluster: Cluster;
   baseUrl?: string;
 }
 
@@ -10,6 +19,7 @@ export interface CogniteProject {
    * Cognite project to login into
    */
   project: string;
+  //cluster: Cluster;
 }
 
 export interface ApiKeyLogin extends CogniteProject {

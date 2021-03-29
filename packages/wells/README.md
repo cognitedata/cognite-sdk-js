@@ -45,6 +45,7 @@ COGNITE_WELLS_CREDENTIALS=<your-api-key>
 import { createWellsClient, Cluster } from '@cognite/sdk-wells';
 
 // Cluster.API (default), Cluster.BP, Cluster.GREENFIELD
+// Cluster.BP, Cluster.BP_NORTHEUROPE, Cluster.AZURE_DEV
 let client = createWellsClient('app id', Cluster.API);
 
 client.loginWithApiKey({

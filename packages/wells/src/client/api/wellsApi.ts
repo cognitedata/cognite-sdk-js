@@ -4,14 +4,10 @@ import { Wellbore } from '../model/Wellbore';
 import { WellboresAPI } from '../api/wellboresApi'
 import { WellFilter, WellFilterAPI, PolygonFilterAPI } from '../model/WellFilter';
 import { stringify as convertGeoJsonToWKT } from 'wkt';
-import { Cluster } from '../model/Cluster'
-import HttpClientWithIntercept from '../httpClientWithIntercept';
 import { Asset } from 'wells/src/types';
+import { ConfigureAPI } from '../baseWellsClient';
 
-export class WellsAPI {
-  private client?: HttpClientWithIntercept;
-  private project?: String;
-  private cluster?: Cluster;
+export class WellsAPI extends ConfigureAPI {
   private _wellboresSDK?: WellboresAPI;
 
 
@@ -21,35 +17,6 @@ export class WellsAPI {
 
   private get wellbores(): WellboresAPI {
     return accessApi(this._wellboresSDK);
-  }
-
-  public set setHttpClient(httpClient: HttpClientWithIntercept) {
-    this.client = httpClient;
-  }
-
-  public set setProject(project: String) {
-    this.project = project;
-  }
-
-  public set setCluster(cluster: Cluster) {
-    this.cluster = cluster;
-  }
-
-  private getPath(baseUrl: string, cursor?: String): string {
-    if (this.project == undefined){
-      throw new HttpError(400, "The client project has not been set.", {})
-    }
-    if (this.cluster == undefined){
-      throw new HttpError(400, "No cluster has been set.", {})
-    }
-    
-    baseUrl = `/${this.project}${baseUrl}?env=${this.cluster}`
-
-    if (cursor) {
-      baseUrl += `&cursor=${cursor}`
-
-    }
-    return baseUrl
   }
 
   private convertToWkt(filter: WellFilter): WellFilterAPI {
@@ -138,7 +105,7 @@ export class WellsAPI {
   public sources = async (): Promise<String[] | undefined> => this.getLabelPrefix('sources');
   public measurements = async (): Promise<String[] | undefined> => this.getLabelPrefix('measurements');
 
-  public list = async (cursor?: String): Promise<WellItems | undefined> => {
+  public list = async (cursor?: string): Promise<WellItems | undefined> => {
     const path: string = this.getPath('/wells', cursor)
     return await this.client?.asyncGet<WellItems>(path)
       .then(response => this.addLazyToAllWellItems(response.data))
@@ -147,7 +114,7 @@ export class WellsAPI {
     });
   };
 
-  public filter = async (userFilter: WellFilter, cursor?: String): Promise<WellItems | undefined> => {
+  public filter = async (userFilter: WellFilter, cursor?: string): Promise<WellItems | undefined> => {
     let filter: WellFilterAPI;
     if (userFilter.polygon && userFilter.polygon.geoJsonGeometry) {
       filter = this.convertToWkt(userFilter)

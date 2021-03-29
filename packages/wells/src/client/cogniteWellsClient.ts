@@ -1,11 +1,11 @@
-import { ClientOptions } from '@cognite/sdk-core';
 import { accessApi } from '@cognite/sdk-core';
 import { WellsAPI } from './api/wellsApi';
 import { WellboresAPI } from './api/wellboresApi';
 import { SurveysAPI } from './api/surveysApi';
 import { version } from '../../package.json';
-import { Cluster } from './model/Cluster';
 import BaseWellsClient from './baseWellsClient';
+import { ClientOptions } from './clientAuthUtils';
+import { Cluster } from './model/Cluster';
 
 export default class CogniteWellsClient extends BaseWellsClient {
   public get wells() {
@@ -25,9 +25,9 @@ export default class CogniteWellsClient extends BaseWellsClient {
   private surveysApi?: SurveysAPI;
   private cluster: Cluster;
 
-  constructor(options: ClientOptions, cluster: Cluster) {
+  constructor(options: ClientOptions) {
     super(options);
-    this.cluster = cluster;
+    this.cluster = options.cluster;
   }
 
   protected initAPIs() {

@@ -1,7 +1,12 @@
-import { MetadataMap } from '@cognite/sdk-core';
+import { MetadataMap, HttpError } from '@cognite/sdk-core';
 import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
-import { WELL_SERVICE_BASE_URL } from '../constants';
+import {
+  AZURE_DEV_BASE_URL,
+  BLUEFIELD_BASE_URL,
+  BP_NORTHEUROPE_DEV_BASE_URL,
+  COGDEV_BASE_URL,
+} from '../constants';
 import { version } from '../../package.json';
 import {
   ClientLoginOptions,
@@ -11,6 +16,7 @@ import {
   bearerTokenString,
 } from './clientAuthUtils';
 import HttpClientWithIntercept from './httpClientWithIntercept';
+import { Cluster } from './model/Cluster';
 
 export default class BaseWellsClient {
   private http: HttpClientWithIntercept;
@@ -26,16 +32,26 @@ export default class BaseWellsClient {
       throw Error('options.appId is required and must be of type string');
     }
 
-    this.http = new HttpClientWithIntercept(WELL_SERVICE_BASE_URL);
-    this.httpClient
-      .setDefaultHeader('x-cdp-app', options.appId)
-      .setDefaultHeader('x-cdp-sdk', `CogniteJavaScriptSDK:${this.version}`);
+    const baseUrl = this.baseUrl(options.cluster);
 
+    this.http = new HttpClientWithIntercept(baseUrl);
     this.metadata = new MetadataMap();
   }
 
   public get project() {
     return this.projectName;
+  }
+
+  private baseUrl(cluster: Cluster) {
+    if (cluster == Cluster.BLUEFIELD) {
+      return BLUEFIELD_BASE_URL;
+    } else if (cluster == Cluster.AZURE_DEV) {
+      return AZURE_DEV_BASE_URL;
+    } else if (cluster == Cluster.BP_NORTHEUROPE) {
+      return BP_NORTHEUROPE_DEV_BASE_URL;
+    } else {
+      return COGDEV_BASE_URL;
+    }
   }
 
   /**
@@ -63,6 +79,7 @@ export default class BaseWellsClient {
         );
       }
     }
+
     this.projectName = project;
     this.httpClient.setDefaultHeader('api-key', apiKey);
 
@@ -106,12 +123,9 @@ export default class BaseWellsClient {
     this.httpClient.setReauthenticateMethod = options.refreshToken;
   };
 
-  /**
-   * To modify the base-url at any point in time
-   */
-  public setBaseUrl = (baseUrl: string) => {
-    this.httpClient.setBaseUrl(baseUrl);
-  };
+  public get getBaseUrl() {
+    return this.httpClient.getBaseUrl();
+  }
 
   public get isLoggedIn() {
     return this.hasBeenLoggedIn;
@@ -134,7 +148,7 @@ export default class BaseWellsClient {
     relativePath: string
   ) => {
     return new api(
-      `${WELL_SERVICE_BASE_URL}/${relativePath}`,
+      `${COGDEV_BASE_URL}/${relativePath}`,
       this.httpClient,
       this.metadataMap
     );
@@ -146,5 +160,46 @@ export default class BaseWellsClient {
 
   protected get httpClient() {
     return this.http;
+  }
+}
+
+export class ConfigureAPI {
+  protected client?: HttpClientWithIntercept;
+  protected project?: String;
+  protected cluster?: String;
+
+  public set setHttpClient(httpClient: HttpClientWithIntercept) {
+    this.client = httpClient;
+  }
+
+  public set setProject(project: String) {
+    this.project = project;
+  }
+
+  public set setCluster(cluster: String) {
+    this.cluster = cluster;
+  }
+
+  protected getPath(baseUrl: string, cursor?: string): string {
+    if (this.project == undefined) {
+      throw new HttpError(400, 'The client project has not been set.', {});
+    }
+    if (this.cluster == undefined) {
+      throw new HttpError(400, 'No cluster has been set.', {});
+    }
+
+    let path =
+      baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API
+        ? `/${this.project}${baseUrl}?env=${this.cluster}`
+        : `/${this.project}${baseUrl}`;
+
+    if (cursor) {
+      if (path.includes('?env')) {
+        path += `&cursor=${cursor}`;
+      } else {
+        path += `?cursor=${cursor}`;
+      }
+    }
+    return path;
   }
 }
