@@ -99,6 +99,7 @@ COGNITE_WELLS_CREDENTIALS=&lt;your-api-key&gt;</code></pre>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { createWellsClient, Cluster } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
 <span class="hljs-comment">// Cluster.API (default), Cluster.BP, Cluster.GREENFIELD</span>
+<span class="hljs-comment">// Cluster.BP, Cluster.BP_NORTHEUROPE, Cluster.AZURE_DEV</span>
 <span class="hljs-keyword">let</span> client = createWellsClient(<span class="hljs-string">&#x27;app id&#x27;</span>, Cluster.API);
 
 client.loginWithApiKey({

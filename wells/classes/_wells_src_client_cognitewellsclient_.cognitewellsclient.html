@@ -95,6 +95,7 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#getbaseurl" class="tsd-kind-icon">get<wbr>Base<wbr>Url</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#isloggedin" class="tsd-kind-icon">is<wbr>Logged<wbr>In</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#project" class="tsd-kind-icon">project</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#surveys" class="tsd-kind-icon">surveys</a></li>
@@ -107,7 +108,6 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#loginwithapikey" class="tsd-kind-icon">login<wbr>With<wbr>Api<wbr>Key</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#loginwithtoken" class="tsd-kind-icon">login<wbr>With<wbr>Token</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#setbaseurl" class="tsd-kind-icon">set<wbr>Base<wbr>Url</a></li>
 							</ul>
 						</section>
 					</div>
@@ -119,23 +119,20 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Cognite<wbr>Wells<wbr>Client<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_core_src_basecogniteclient_.clientoptions.html" class="tsd-signature-type">ClientOptions</a>, cluster<span class="tsd-signature-symbol">: </span><a href="../enums/_wells_src_client_model_cluster_.cluster.html" class="tsd-signature-type">Cluster</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html" class="tsd-signature-type">CogniteWellsClient</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Cognite<wbr>Wells<wbr>Client<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_wells_src_client_clientauthutils_.clientoptions.html" class="tsd-signature-type">ClientOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html" class="tsd-signature-type">CogniteWellsClient</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_wells_src_client_basewellsclient_.basewellsclient.html">BaseWellsClient</a>.<a href="_wells_src_client_basewellsclient_.basewellsclient.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/wells/src/client/cogniteWellsClient.ts#L26">packages/wells/src/client/cogniteWellsClient.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/be9444c/packages/wells/src/client/cogniteWellsClient.ts#L26">packages/wells/src/client/cogniteWellsClient.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../interfaces/_core_src_basecogniteclient_.clientoptions.html" class="tsd-signature-type">ClientOptions</a></h5>
-								</li>
-								<li>
-									<h5>cluster: <a href="../enums/_wells_src_client_model_cluster_.cluster.html" class="tsd-signature-type">Cluster</a></h5>
+									<h5>options: <a href="../interfaces/_wells_src_client_clientauthutils_.clientoptions.html" class="tsd-signature-type">ClientOptions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html" class="tsd-signature-type">CogniteWellsClient</a></h4>
@@ -145,6 +142,24 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+					<a name="getbaseurl" class="tsd-anchor"></a>
+					<h3>get<wbr>Base<wbr>Url</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> getBaseUrl<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="_wells_src_client_basewellsclient_.basewellsclient.html">BaseWellsClient</a>.<a href="_wells_src_client_basewellsclient_.basewellsclient.html#getbaseurl">getBaseUrl</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/be9444c/packages/wells/src/client/baseWellsClient.ts#L126">packages/wells/src/client/baseWellsClient.ts:126</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 					<a name="isloggedin" class="tsd-anchor"></a>
 					<h3>is<wbr>Logged<wbr>In</h3>
@@ -156,7 +171,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_wells_src_client_basewellsclient_.basewellsclient.html">BaseWellsClient</a>.<a href="_wells_src_client_basewellsclient_.basewellsclient.html#isloggedin">isLoggedIn</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/wells/src/client/baseWellsClient.ts#L116">packages/wells/src/client/baseWellsClient.ts:116</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/be9444c/packages/wells/src/client/baseWellsClient.ts#L130">packages/wells/src/client/baseWellsClient.ts:130</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -174,7 +189,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_wells_src_client_basewellsclient_.basewellsclient.html">BaseWellsClient</a>.<a href="_wells_src_client_basewellsclient_.basewellsclient.html#project">project</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/wells/src/client/baseWellsClient.ts#L37">packages/wells/src/client/baseWellsClient.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/be9444c/packages/wells/src/client/baseWellsClient.ts#L41">packages/wells/src/client/baseWellsClient.ts:41</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -191,7 +206,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/wells/src/client/cogniteWellsClient.ts#L19">packages/wells/src/client/cogniteWellsClient.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/be9444c/packages/wells/src/client/cogniteWellsClient.ts#L19">packages/wells/src/client/cogniteWellsClient.ts:19</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_wells_src_client_api_surveysapi_.surveysapi.html" class="tsd-signature-type">SurveysAPI</a></h4>
@@ -208,7 +223,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/wells/src/client/cogniteWellsClient.ts#L15">packages/wells/src/client/cogniteWellsClient.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/be9444c/packages/wells/src/client/cogniteWellsClient.ts#L15">packages/wells/src/client/cogniteWellsClient.ts:15</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_wells_src_client_api_wellboresapi_.wellboresapi.html" class="tsd-signature-type">WellboresAPI</a></h4>
@@ -225,7 +240,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/wells/src/client/cogniteWellsClient.ts#L11">packages/wells/src/client/cogniteWellsClient.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/be9444c/packages/wells/src/client/cogniteWellsClient.ts#L11">packages/wells/src/client/cogniteWellsClient.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_wells_src_client_api_wellsapi_.wellsapi.html" class="tsd-signature-type">WellsAPI</a></h4>
@@ -246,7 +261,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_wells_src_client_basewellsclient_.basewellsclient.html">BaseWellsClient</a>.<a href="_wells_src_client_basewellsclient_.basewellsclient.html#loginwithapikey">loginWithApiKey</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/wells/src/client/baseWellsClient.ts#L47">packages/wells/src/client/baseWellsClient.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/be9444c/packages/wells/src/client/baseWellsClient.ts#L63">packages/wells/src/client/baseWellsClient.ts:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -280,42 +295,13 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_wells_src_client_basewellsclient_.basewellsclient.html">BaseWellsClient</a>.<a href="_wells_src_client_basewellsclient_.basewellsclient.html#loginwithtoken">loginWithToken</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/wells/src/client/baseWellsClient.ts#L73">packages/wells/src/client/baseWellsClient.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/be9444c/packages/wells/src/client/baseWellsClient.ts#L90">packages/wells/src/client/baseWellsClient.ts:90</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>options: <a href="../interfaces/_wells_src_client_clientauthutils_.tokenlogin.html" class="tsd-signature-type">TokenLogin</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-					<a name="setbaseurl" class="tsd-anchor"></a>
-					<h3>set<wbr>Base<wbr>Url</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Base<wbr>Url<span class="tsd-signature-symbol">(</span>baseUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from <a href="_wells_src_client_basewellsclient_.basewellsclient.html">BaseWellsClient</a>.<a href="_wells_src_client_basewellsclient_.basewellsclient.html#setbaseurl">setBaseUrl</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/383d7f6/packages/wells/src/client/baseWellsClient.ts#L112">packages/wells/src/client/baseWellsClient.ts:112</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>To modify the base-url at any point in time</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>baseUrl: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -346,6 +332,9 @@
 								<a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
+								<a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#getbaseurl" class="tsd-kind-icon">get<wbr>Base<wbr>Url</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#isloggedin" class="tsd-kind-icon">is<wbr>Logged<wbr>In</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-external">
@@ -365,9 +354,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#loginwithtoken" class="tsd-kind-icon">login<wbr>With<wbr>Token</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
-								<a href="_wells_src_client_cognitewellsclient_.cognitewellsclient.html#setbaseurl" class="tsd-kind-icon">set<wbr>Base<wbr>Url</a>
 							</li>
 						</ul>
 					</li>
