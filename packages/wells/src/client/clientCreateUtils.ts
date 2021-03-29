@@ -5,10 +5,8 @@ export function createWellsClient(
   appId: string,
   cluster: Cluster = Cluster.API
 ): CogniteWellsClient {
-  return new CogniteWellsClient(
-    {
-      appId: appId,
-    },
-    cluster
-  );
+  return new CogniteWellsClient({
+    appId: appId,
+    cluster: cluster,
+  });
 }

@@ -1,35 +1,8 @@
 import { HttpError} from '@cognite/sdk-core';
-import HttpClientWithIntercept from '../httpClientWithIntercept';
+import { ConfigureAPI } from '../baseWellsClient';
 import { Survey, SurveyData, SurveyDataRequest } from '../model/Survey';
 
-export class SurveysAPI {
-  private client?: HttpClientWithIntercept;
-  private project?: String;
-  private cluster?: String;
-
-  public set setHttpClient(httpClient: HttpClientWithIntercept) {
-    this.client = httpClient;
-  }
-
-  public set setProject(project: String) {
-    this.project = project;
-  }
-
-
-  public set setCluster(cluster: String) {
-    this.cluster = cluster;
-  }
-
-  private getPath(baseUrl: string): string {
-    if (this.project == undefined){
-      throw new HttpError(400, "The client project has not been set.", {})
-    }
-    if (this.cluster == undefined) {
-      throw new HttpError(400, "No cluster has been set.", {})
-    }
-    baseUrl = `/${this.project}${baseUrl}?env=${this.cluster}`
-    return baseUrl
-  }
+export class SurveysAPI extends ConfigureAPI {
 
   private addLazyMethods = (survey: Survey): Survey => {
     return <Survey>{
