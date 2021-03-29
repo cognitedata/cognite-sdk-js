@@ -52,8 +52,8 @@ export function removeQueryParameterFromUrl(
   parameter: string
 ): string {
   return url
-    .replace(new RegExp('[?&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
-    .replace(new RegExp('([?&])' + parameter + '=[^&]*&'), '$1');
+    .replace(new RegExp('[?#&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
+    .replace(new RegExp('([?#&])' + parameter + '=[^&]*&'), '$1');
 }
 
 /** @hidden */

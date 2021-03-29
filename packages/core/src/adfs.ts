@@ -48,9 +48,11 @@ const adfsRequestParamsMapping: ADFSRequestParamsMapping = {
   resource: 'resource',
 };
 
-const ACCESS_TOKEN = 'accessToken';
-const ID_TOKEN = 'idToken';
-const EXPIRES_IN = 'expiresIn';
+const ACCESS_TOKEN = 'access_token';
+const ID_TOKEN = 'id_token';
+const EXPIRES_IN = 'expires_in';
+const TOKEN_TYPE = 'token_type';
+const SCOPE = 'scope';
 const ERROR = 'error';
 
 class ADFS {
@@ -71,12 +73,25 @@ class ADFS {
     window.location.href = url;
   }
 
-  // todo: validate token
   public handleLoginRedirect(): ADFSToken | null {
     try {
-      const token = extractADFSToken(window.location.search);
+      const url = window.location.href;
 
-      clearParametersFromUrl(ACCESS_TOKEN, ID_TOKEN, EXPIRES_IN);
+      const index = url.indexOf('#');
+
+      if (index === -1 || url.length <= index + 1) {
+        return null;
+      }
+
+      const token = extractADFSToken(url.substring(index + 1, url.length));
+
+      clearParametersFromUrl(
+        ACCESS_TOKEN,
+        ID_TOKEN,
+        EXPIRES_IN,
+        SCOPE,
+        TOKEN_TYPE
+      );
       this.token = token;
 
       return token;
@@ -88,6 +103,7 @@ class ADFS {
     return null;
   }
 
+  // todo: validate token
   public getCDFToken(): string | null {
     return this.token ? this.token.accessToken : null;
   }
@@ -128,8 +144,8 @@ class ADFS {
 
   private getADFSQueryParamString(params: ADFSQueryParams): string {
     return Object.entries(params).reduce((result, [key, value]) => {
-      return `?${result}${result.length ? '&' : ''}${key}=${value}`;
-    }, '');
+      return `${result}${result.length > 1 ? '&' : ''}${key}=${value}`;
+    }, '?');
   }
 }
 
