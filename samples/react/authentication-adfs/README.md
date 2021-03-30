@@ -17,8 +17,8 @@ or with yarn:
 ```
 REACT_APP_PROJECT=projectName
 REACT_APP_CLUSTER=clusterName
-REACT_APP_CLIENT_ID=azureAdApplicationID
-REACT_APP_TENANT_ID=azureAdTenatID
+REACT_APP_CLIENT_ID=adfsApplicationID
+REACT_APP_AUTHORITY=adfsURL
 ```
 
 ## Start example

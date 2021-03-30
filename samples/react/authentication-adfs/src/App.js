@@ -5,7 +5,6 @@ const project = process.env.REACT_APP_PROJECT;
 const cluster = process.env.REACT_APP_CLUSTER;
 const clientId = process.env.REACT_APP_CLIENT_ID;
 const authority = process.env.REACT_APP_AUTHORITY;
-const scope = process.env.REACT_APP_SCOPE;
 
 const renderAssetsInTable = (assets) => {
   return (
@@ -63,7 +62,6 @@ function App() {
         requestParams: {
           cluster,
           clientId,
-          scope
         },
         onNoProjectAvailable
       });

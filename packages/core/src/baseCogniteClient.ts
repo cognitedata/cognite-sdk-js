@@ -344,7 +344,7 @@ export default class BaseCogniteClient {
     if (this.azureAdClient) {
       const token = await this.azureAdClient.getCDFToken();
 
-      if (token && !(await this.validateAzureADAccessToken(token))) {
+      if (token && !(await this.validateAccessToken(token))) {
         return null;
       }
 
@@ -356,7 +356,7 @@ export default class BaseCogniteClient {
     } else if (this.adfsClient) {
       const token = this.adfsClient.getCDFToken();
 
-      if (token && !(await this.validateAzureADAccessToken(token))) {
+      if (token && !(await this.validateAccessToken(token))) {
         return null;
       }
 
@@ -547,7 +547,7 @@ export default class BaseCogniteClient {
     let token = await this.handleAzureADLoginRedirect(azureAdClient);
 
     if (token) {
-      const isTokenValid = await this.validateAzureADAccessToken(token);
+      const isTokenValid = await this.validateAccessToken(token);
 
       if (!isTokenValid) {
         token = null;
@@ -575,7 +575,7 @@ export default class BaseCogniteClient {
         }
       }
 
-      if (!(await this.validateAzureADAccessToken(cdfAccessToken))) {
+      if (!(await this.validateAccessToken(cdfAccessToken))) {
         onNoProjectAvailable();
 
         return false;
@@ -607,7 +607,7 @@ export default class BaseCogniteClient {
     let token = await this.handleADFSLoginRedirect(adfsClient);
 
     if (token) {
-      const isTokenValid = await this.validateAzureADAccessToken(token);
+      const isTokenValid = await this.validateAccessToken(token);
 
       if (!isTokenValid) {
         token = null;
@@ -627,7 +627,7 @@ export default class BaseCogniteClient {
           return false;
         }
       } else {
-        if (!(await this.validateAzureADAccessToken(cdfAccessToken))) {
+        if (!(await this.validateAccessToken(cdfAccessToken))) {
           onNoProjectAvailable();
 
           return false;
@@ -743,7 +743,7 @@ export default class BaseCogniteClient {
     }
   }
 
-  protected async validateAzureADAccessToken(token: string): Promise<boolean> {
+  protected async validateAccessToken(token: string): Promise<boolean> {
     try {
       const response = await this.httpClient.get<any>('/api/v1/token/inspect', {
         headers: { [AUTHORIZATION_HEADER]: bearerString(token) },
