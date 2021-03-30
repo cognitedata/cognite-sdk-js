@@ -52,11 +52,10 @@ const ID_TOKEN = 'id_token';
 const EXPIRES_IN = 'expires_in';
 const TOKEN_TYPE = 'token_type';
 const SCOPE = 'scope';
-const ERROR = 'error';
 
 class ADFS {
-  private authority: string;
-  private queryParams: ADFSQueryParams;
+  private readonly authority: string;
+  private readonly queryParams: ADFSQueryParams;
   private token: ADFSToken | null = null;
 
   constructor({ authority, requestParams }: ADFSConfig) {
@@ -95,14 +94,12 @@ class ADFS {
 
       return token;
     } catch (e) {
-      clearParametersFromUrl(ERROR);
       console.error(e);
     }
 
     return null;
   }
 
-  // todo: validate token
   public getCDFToken(): string | null {
     return this.token ? this.token.accessToken : null;
   }
@@ -153,12 +150,7 @@ export function extractADFSToken(query: string): ADFSToken | null {
     [ACCESS_TOKEN]: accessToken,
     [ID_TOKEN]: idToken,
     [EXPIRES_IN]: expiresIn,
-    [ERROR]: error,
   } = parse(query);
-
-  if (error) {
-    throw error;
-  }
 
   if (isString(accessToken) && isString(idToken)) {
     return {
