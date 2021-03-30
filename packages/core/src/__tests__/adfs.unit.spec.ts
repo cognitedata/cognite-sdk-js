@@ -1,5 +1,6 @@
 import nock from 'nock';
-import ADFS from '../adfs';
+import { ADFS } from '../adfs';
+import * as loginUtils from '../loginUtils';
 
 describe('ADFS', () => {
   const cluster = 'test-cluster';
@@ -22,8 +23,8 @@ describe('ADFS', () => {
   });
 
   describe('login', () => {
-    let adfsClient: ADFS;
     const { location } = window;
+    let adfsClient: ADFS;
 
     beforeAll(() => {
       delete window.location;
@@ -38,16 +39,31 @@ describe('ADFS', () => {
       adfsClient = new ADFS({ authority, requestParams });
     });
 
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
     afterAll(() => {
       window.location = location;
     });
 
-    test('should redirect to specific url', () => {
-      adfsClient.login();
+    test('should redirect to specific url', done => {
+      const silentLogin = jest
+        .spyOn(loginUtils, 'silentLoginViaIframe')
+        .mockRejectedValueOnce('Can not login silently');
+      let promiseResolved = false;
 
-      expect(window.location.href).toMatchInlineSnapshot(
-        `"https://adfs.test.com/adfs?client_id=adfsClientId&scope=user_impersonation IDENTITY&response_mode=fragment&response_type=id_token token&resource=${mockBaseUrl}&redirect_uri=https://localhost"`
-      );
+      adfsClient.login().then(() => (promiseResolved = true));
+
+      setTimeout(() => {
+        expect(promiseResolved).toBe(false);
+        expect(silentLogin).toHaveBeenCalledTimes(1);
+        expect(window.location.href).toMatchInlineSnapshot(
+          `"https://adfs.test.com/adfs?client_id=adfsClientId&scope=user_impersonation IDENTITY&response_mode=fragment&response_type=id_token token&resource=${mockBaseUrl}&redirect_uri=https://localhost"`
+        );
+
+        done();
+      }, 1000);
     });
   });
   describe('handle redirect', () => {
@@ -67,7 +83,9 @@ describe('ADFS', () => {
       );
       const token = adfsClient.handleLoginRedirect();
 
-      expect(token).toEqual({ ...authTokens, expiresIn: Number(expiresIn) });
+      expect(token).toBeTruthy();
+      expect(token!.accessToken).toEqual(accessToken);
+      expect(token!.idToken).toEqual(idToken);
       expect(window.location.href).toMatchInlineSnapshot(
         `"https://localhost/some/random/path#random=123"`
       );

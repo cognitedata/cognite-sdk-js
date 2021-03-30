@@ -2,7 +2,9 @@
 
 import { parse } from 'query-string';
 import isString from 'lodash/isString';
+import noop from 'lodash/noop';
 import { clearParametersFromUrl } from './utils';
+import { silentLoginViaIframe } from './loginUtils';
 
 export interface ADFSConfig {
   authority: string;
@@ -52,8 +54,9 @@ const ID_TOKEN = 'id_token';
 const EXPIRES_IN = 'expires_in';
 const TOKEN_TYPE = 'token_type';
 const SCOPE = 'scope';
+const LOGIN_IFRAME_NAME = 'adfsSilentLoginIframe';
 
-class ADFS {
+export class ADFS {
   private readonly authority: string;
   private readonly queryParams: ADFSQueryParams;
   private token: ADFSToken | null = null;
@@ -63,25 +66,31 @@ class ADFS {
     this.queryParams = this.getADFSQueryParams(requestParams);
   }
 
-  public async login(): Promise<void> {
-    const url = `${this.authority}${this.getADFSQueryParamString(
-      this.queryParams
-    )}`;
+  public async login(): Promise<string | void> {
+    const token = await this.acquireTokenSilently();
 
-    window.location.href = url;
+    return new Promise(resolve => {
+      if (token) {
+        resolve(token.accessToken);
+      }
+
+      const url = `${this.authority}${this.getADFSQueryParamString(
+        this.queryParams
+      )}`;
+
+      window.location.href = url;
+    });
   }
 
   public handleLoginRedirect(): ADFSToken | null {
     try {
-      const url = window.location.href;
+      const queryParams = window.location.hash;
 
-      const index = url.indexOf('#');
-
-      if (index === -1 || url.length <= index + 1) {
+      if (!queryParams) {
         return null;
       }
 
-      const token = extractADFSToken(url.substring(index + 1, url.length));
+      const token = extractADFSToken(queryParams);
 
       clearParametersFromUrl(
         ACCESS_TOKEN,
@@ -100,12 +109,50 @@ class ADFS {
     return null;
   }
 
-  public getCDFToken(): string | null {
-    return this.token ? this.token.accessToken : null;
+  public async getCDFToken(): Promise<string | null> {
+    const token = await this.acquireTokenSilently();
+
+    return token
+      ? token.accessToken
+      : this.token
+        ? this.token.accessToken
+        : null;
   }
 
-  public getIdToken(): string | null {
-    return this.token ? this.token.idToken : null;
+  public async getIdToken(): Promise<string | null> {
+    const token = await this.acquireTokenSilently();
+
+    return token ? token.idToken : this.token ? this.token.idToken : null;
+  }
+
+  /**
+   * This method going to work only if 'X-Frame-Options' header
+   * set to 'allow-from https://www.example.com' on the ADFS server.
+   * And this is the only way to acquire token with ADFS silently
+   * (using implicit grant flow)
+   */
+  private async acquireTokenSilently(): Promise<ADFSToken | null> {
+    const url = `${this.authority}${this.getADFSQueryParamString(
+      this.queryParams
+    )}&prompt=none`;
+
+    let token: ADFSToken | null = null;
+
+    try {
+      token = await silentLoginViaIframe(
+        `${url}&prompt=none`,
+        extractADFSToken,
+        LOGIN_IFRAME_NAME
+      );
+    } catch (e) {
+      noop();
+    }
+
+    if (token) {
+      this.token = token;
+    }
+
+    return token;
   }
 
   private getADFSQueryParams({
@@ -156,11 +203,9 @@ export function extractADFSToken(query: string): ADFSToken | null {
     return {
       accessToken,
       idToken,
-      expiresIn: Number(expiresIn),
+      expiresIn: Date.now() + Number(expiresIn),
     };
   }
 
   return null;
 }
-
-export default ADFS;

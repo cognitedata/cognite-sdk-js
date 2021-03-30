@@ -35,7 +35,7 @@ import {
 import { AzureAD, AzureADSignInType } from './aad';
 import { CogniteAuthentication, OnAuthenticate, OnTokens } from './auth';
 import { AuthTokens } from './loginUtils';
-import ADFS, { ADFSRequestParams } from './adfs';
+import { ADFS, ADFSRequestParams } from './adfs';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -354,7 +354,7 @@ export default class BaseCogniteClient {
 
       return tokens ? tokens.accessToken : null;
     } else if (this.adfsClient) {
-      const token = this.adfsClient.getCDFToken();
+      const token = await this.adfsClient.getCDFToken();
 
       if (token && !(await this.validateAccessToken(token))) {
         return null;
@@ -617,26 +617,21 @@ export default class BaseCogniteClient {
     }
 
     const authenticate = async () => {
-      const cdfAccessToken = adfsClient.getCDFToken();
+      let cdfAccessToken: null | string = await adfsClient.getCDFToken();
 
       if (!cdfAccessToken) {
-        try {
-          await adfsClient.login();
-          return true;
-        } catch {
-          return false;
-        }
-      } else {
-        if (!(await this.validateAccessToken(cdfAccessToken))) {
-          onNoProjectAvailable();
-
-          return false;
-        }
-
-        this.httpClient.setBearerToken(cdfAccessToken);
-
-        return true;
+        cdfAccessToken = (await adfsClient.login()) as string;
       }
+
+      if (!(await this.validateAccessToken(cdfAccessToken))) {
+        onNoProjectAvailable();
+
+        return false;
+      }
+
+      this.httpClient.setBearerToken(cdfAccessToken);
+
+      return true;
     };
 
     this.adfsClient = adfsClient;
@@ -737,7 +732,7 @@ export default class BaseCogniteClient {
     if (token) {
       return token.accessToken;
     } else {
-      const cdfToken = adfsClient.getCDFToken();
+      const cdfToken = await adfsClient.getCDFToken();
 
       return cdfToken || null;
     }

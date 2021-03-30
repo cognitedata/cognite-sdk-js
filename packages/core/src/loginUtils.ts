@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { generatePopupWindow } from './utils';
+import { createInvisibleIframe, generatePopupWindow } from './utils';
 import { CogniteLoginError } from './loginError';
 import { parse, stringify } from 'query-string';
 import { HttpCall, HttpQueryParams } from './httpClient/basicHttpClient';
@@ -8,6 +8,7 @@ import { LogoutUrlResponse } from './types';
 import isString from 'lodash/isString';
 
 const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
+const LOGIN_IFRAME_NAME = 'silentLoginIframe';
 
 export const ACCESS_TOKEN_PARAM = 'access_token';
 export const ID_TOKEN_PARAM = 'id_token';
@@ -117,6 +118,32 @@ export function loginWithPopup(
       resolve(message.data);
     };
     window.addEventListener('message', tokenListener, false);
+  });
+}
+
+/** @hidden **/
+export async function silentLoginViaIframe<TokenType>(
+  url: string,
+  extractor: (query: string) => TokenType,
+  iframeName: string = LOGIN_IFRAME_NAME
+): Promise<TokenType> {
+  return new Promise<TokenType>((resolve, reject) => {
+    const iframe = createInvisibleIframe(url, iframeName);
+
+    iframe.onload = () => {
+      try {
+        const authTokens = extractor(iframe.contentWindow!.location.hash);
+        if (authTokens === null) {
+          throw Error('Failed to login silently');
+        }
+        resolve(authTokens);
+      } catch (e) {
+        reject(e);
+      } finally {
+        document.body.removeChild(iframe);
+      }
+    };
+    document.body.appendChild(iframe);
   });
 }
 
