@@ -77,6 +77,11 @@ export interface Well {
    * @type {number}
    * @memberof Well
    */
+  spudDate?: Date;
+  /**
+   * @type {Date}
+   * @memberof Well
+   */
   waterDepth?: DoubleWithUnit;
   /**
    * @type {Wellhead}
