@@ -139,7 +139,7 @@ export class ADFS {
     let token: ADFSToken | null = null;
 
     try {
-      token = await silentLoginViaIframe(
+      token = await silentLoginViaIframe<ADFSToken | null>(
         `${url}&prompt=none`,
         extractADFSToken,
         LOGIN_IFRAME_NAME

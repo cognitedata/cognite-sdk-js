@@ -65,6 +65,65 @@ describe('ADFS', () => {
         done();
       }, 1000);
     });
+    test('should login silently', async () => {
+      const { accessToken, idToken } = authTokens;
+      const silentLogin = jest
+        .spyOn(loginUtils, 'silentLoginViaIframe')
+        .mockResolvedValueOnce({
+          accessToken,
+          idToken,
+          expiredIn: Date.now() + 3600 * 1000,
+        });
+
+      const cdfToken = await adfsClient.login();
+
+      expect(silentLogin).toHaveBeenCalledTimes(1);
+      expect(cdfToken).toEqual(accessToken);
+    });
+    test('should return updated token on getCdfToken', async () => {
+      const updatedAccessToken = 'updatedAccessToken';
+      const updatedIdToken = 'updatedIdToken';
+      const { accessToken, idToken } = authTokens;
+      const silentLogin = jest
+        .spyOn(loginUtils, 'silentLoginViaIframe')
+        .mockResolvedValueOnce({
+          accessToken,
+          idToken,
+          expiredIn: Date.now() + 3600 * 1000,
+        })
+        .mockResolvedValueOnce({
+          accessToken: updatedAccessToken,
+          idToken: updatedIdToken,
+          expiredIn: Date.now() + 3600 * 1000,
+        });
+
+      const cdfTokenAfterLogin = await adfsClient.login();
+      const updatedCdfToken = await adfsClient.getCDFToken();
+
+      expect(silentLogin).toHaveBeenCalledTimes(2);
+      expect(cdfTokenAfterLogin).toEqual(accessToken);
+      expect(updatedCdfToken).toEqual(updatedCdfToken);
+    });
+    test('should return cached cdfToken if failed to get updated', async () => {
+      const { accessToken, idToken } = authTokens;
+      const silentLogin = jest
+        .spyOn(loginUtils, 'silentLoginViaIframe')
+        .mockResolvedValueOnce({
+          accessToken,
+          idToken,
+          expiredIn: Date.now() + 3600 * 1000,
+        })
+        .mockRejectedValueOnce(
+          'Failed to acquire token silently due X-Frame-Options header deny'
+        );
+
+      const cdfTokenAfterLogin = await adfsClient.login();
+      const updatedCdfToken = await adfsClient.getCDFToken();
+
+      expect(silentLogin).toHaveBeenCalledTimes(2);
+      expect(cdfTokenAfterLogin).toEqual(accessToken);
+      expect(updatedCdfToken).toEqual(accessToken);
+    });
   });
   describe('handle redirect', () => {
     let adfsClient: ADFS;
