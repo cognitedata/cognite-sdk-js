@@ -62,4 +62,5 @@ export {
   AzureADSingInFlow,
   AzureADSignInRequestParams,
 } from './aad';
+export { ADFSRequestParams } from './adfs';
 export { TestUtils, Constants, GraphUtils };
