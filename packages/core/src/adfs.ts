@@ -74,7 +74,7 @@ export class ADFS {
         resolve(token.accessToken);
       }
 
-      const url = `${this.authority}${this.getADFSQueryParamString(
+      const url = `${this.authority}?${this.getADFSQueryParamString(
         this.queryParams
       )}`;
 
@@ -132,15 +132,15 @@ export class ADFS {
    * (using implicit grant flow)
    */
   private async acquireTokenSilently(): Promise<ADFSToken | null> {
-    const url = `${this.authority}${this.getADFSQueryParamString(
+    const url = `${this.authority}?prompt=none&${this.getADFSQueryParamString(
       this.queryParams
-    )}&prompt=none`;
+    )}`;
 
     let token: ADFSToken | null = null;
 
     try {
       token = await silentLoginViaIframe<ADFSToken | null>(
-        `${url}&prompt=none`,
+        url,
         extractADFSToken,
         LOGIN_IFRAME_NAME
       );
@@ -188,7 +188,7 @@ export class ADFS {
   private getADFSQueryParamString(params: ADFSQueryParams): string {
     return Object.entries(params).reduce((result, [key, value]) => {
       return `${result}${result.length > 1 ? '&' : ''}${key}=${value}`;
-    }, '?');
+    }, '');
   }
 }
 

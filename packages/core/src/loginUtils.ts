@@ -125,14 +125,17 @@ export function loginWithPopup(
 export async function silentLoginViaIframe<TokenType>(
   url: string,
   extractor: (query: string) => TokenType,
-  iframeName: string = LOGIN_IFRAME_NAME
+  iframeName: string = LOGIN_IFRAME_NAME,
+  locationPart: 'hash' | 'search' = 'hash'
 ): Promise<TokenType> {
   return new Promise<TokenType>((resolve, reject) => {
     const iframe = createInvisibleIframe(url, iframeName);
 
     iframe.onload = () => {
       try {
-        const authTokens = extractor(iframe.contentWindow!.location.hash);
+        const authTokens = extractor(
+          iframe.contentWindow!.location[locationPart]
+        );
         if (authTokens === null) {
           throw Error('Failed to login silently');
         }

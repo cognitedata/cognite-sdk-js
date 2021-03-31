@@ -1,4 +1,5 @@
 import nock from 'nock';
+import noop from 'lodash/noop';
 import { ADFS } from '../adfs';
 import * as loginUtils from '../loginUtils';
 
@@ -26,7 +27,8 @@ describe('ADFS', () => {
     const { location } = window;
     let adfsClient: ADFS;
 
-    beforeAll(() => {
+    beforeEach(() => {
+      adfsClient = new ADFS({ authority, requestParams });
       delete window.location;
       window.location = {
         ...location,
@@ -35,15 +37,8 @@ describe('ADFS', () => {
       };
     });
 
-    beforeEach(() => {
-      adfsClient = new ADFS({ authority, requestParams });
-    });
-
     afterEach(() => {
       jest.clearAllMocks();
-    });
-
-    afterAll(() => {
       window.location = location;
     });
 
@@ -59,25 +54,55 @@ describe('ADFS', () => {
         expect(promiseResolved).toBe(false);
         expect(silentLogin).toHaveBeenCalledTimes(1);
         expect(window.location.href).toMatchInlineSnapshot(
-          `"https://adfs.test.com/adfs?client_id=adfsClientId&scope=user_impersonation IDENTITY&response_mode=fragment&response_type=id_token token&resource=${mockBaseUrl}&redirect_uri=https://localhost"`
+          `"https://adfs.test.com/adfs?client_id=adfsClientId&scope=user_impersonation IDENTITY&response_mode=fragment&response_type=id_token token&resource=${mockBaseUrl}&redirect_uri=https://localhost/"`
         );
 
         done();
       }, 1000);
     });
     test('should login silently', async () => {
-      const { accessToken, idToken } = authTokens;
-      const silentLogin = jest
-        .spyOn(loginUtils, 'silentLoginViaIframe')
-        .mockResolvedValueOnce({
-          accessToken,
-          idToken,
-          expiredIn: Date.now() + 3600 * 1000,
+      const { accessToken, idToken, expiresIn } = authTokens;
+      function createIframe(hash: string) {
+        return {
+          src: '',
+          style: {},
+          contentWindow: {
+            location: {
+              hash,
+            },
+          },
+          setAttribute: noop,
+        } as HTMLIFrameElement;
+      }
+      const iframe = createIframe(
+        `#access_token=${accessToken}&id_token=${idToken}&expires_in=${expiresIn}`
+      );
+      const spiedCreateElement = jest
+        .spyOn(document, 'createElement')
+        .mockReturnValueOnce(iframe);
+      const spiedAppendChild = jest
+        .spyOn(document.body, 'appendChild')
+        .mockImplementation(iframe => {
+          // @ts-ignore
+          iframe.onload();
+          return iframe;
         });
+      const spiedRemoveChild = jest.spyOn(document.body, 'removeChild');
+      const silentLogin = jest.spyOn(loginUtils, 'silentLoginViaIframe');
 
       const cdfToken = await adfsClient.login();
 
       expect(silentLogin).toHaveBeenCalledTimes(1);
+      expect(spiedCreateElement).toBeCalledTimes(1);
+      expect(spiedCreateElement).toBeCalledWith('iframe');
+      expect(spiedAppendChild).toBeCalledWith(iframe);
+      expect(spiedAppendChild).toBeCalledTimes(1);
+      expect(spiedAppendChild).toBeCalledWith(iframe);
+      expect(spiedRemoveChild).toBeCalledTimes(1);
+      expect(spiedRemoveChild).toBeCalledWith(iframe);
+      expect(iframe.src).toMatchInlineSnapshot(
+        `"https://adfs.test.com/adfs?prompt=none&client_id=adfsClientId&scope=user_impersonation IDENTITY&response_mode=fragment&response_type=id_token token&resource=${mockBaseUrl}&redirect_uri=https://localhost/"`
+      );
       expect(cdfToken).toEqual(accessToken);
     });
     test('should return updated token on getCdfToken', async () => {
