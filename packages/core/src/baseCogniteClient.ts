@@ -244,6 +244,16 @@ export default class BaseCogniteClient {
    *   clientId: '[CLIENT_ID]', // client id of your AzureAD application
    *   tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
    * });
+   *
+   * // you also have ability to sign in using ADFS
+   * client.loginWithOAuth({
+   *   authority: https://example.com/adfs/oauth2/authorize,
+   *   requestParams: {
+   *     cluster: 'cluster-name',
+   *     clientId: 'adfs-client-id',
+   *   },
+   * });
+   *
    * // after sign in you can do calls with the client
    * (async () => {
    *   await client.authenticate();
