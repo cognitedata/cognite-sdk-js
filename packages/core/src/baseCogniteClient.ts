@@ -556,14 +556,10 @@ export default class BaseCogniteClient {
 
     let token = await this.handleAzureADLoginRedirect(azureAdClient);
 
-    if (token) {
-      const isTokenValid = await this.validateAccessToken(token);
+    if (token && !(await this.validateAccessToken(token))) {
+      token = null;
 
-      if (!isTokenValid) {
-        token = null;
-
-        onNoProjectAvailable();
-      }
+      onNoProjectAvailable();
     }
 
     const authenticate = async () => {
@@ -616,14 +612,10 @@ export default class BaseCogniteClient {
 
     let token = await this.handleADFSLoginRedirect(adfsClient);
 
-    if (token) {
-      const isTokenValid = await this.validateAccessToken(token);
+    if (token && !(await this.validateAccessToken(token))) {
+      token = null;
 
-      if (!isTokenValid) {
-        token = null;
-
-        onNoProjectAvailable();
-      }
+      onNoProjectAvailable();
     }
 
     const authenticate = async () => {
