@@ -416,4 +416,14 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     });
   });
 
+  test('get spudDate on well', async () => {
+    
+    const well = await client.wells.getById(8091617722352417);
+    const date = new Date('2017-05-17')
+
+
+    expect(well!.spudDate).toBeInstanceOf(Date)
+    expect(well!.spudDate?.toLocaleDateString()).toBe(date.toLocaleDateString())
+  })
+
 });

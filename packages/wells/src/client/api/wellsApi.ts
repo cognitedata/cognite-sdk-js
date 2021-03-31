@@ -56,6 +56,7 @@ export class WellsAPI extends ConfigureAPI {
       block: well.block,
       field: well.field,
       operator: well.operator,
+      spudDate: well.spudDate != undefined ? new Date(well.spudDate) : null,
       waterDepth: well.waterDepth,
       wellhead: well.wellhead,
       datum: well.datum,
