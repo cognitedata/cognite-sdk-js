@@ -54,7 +54,7 @@ client.loginWithApiKey({
 });
 ```
 
-### set up client with Token
+### set up client with Native Token
 
 ```ts
 import { createWellsClient, Cluster, RefreshToken } from '@cognite/sdk-wells';
