@@ -10,6 +10,7 @@ import {
   BASE_URL,
 } from '../constants';
 import * as LoginUtils from '../loginUtils';
+import { ADFS } from '../adfs';
 import { bearerString, sleepPromise } from '../utils';
 import { apiKey, authTokens, loggedInResponse, project } from '../testUtils';
 
@@ -747,6 +748,162 @@ describe('CogniteClient', () => {
 
         expect(silentLogin).toBe(false);
         expect(authenticated).toBe(false);
+        expect(onNoProjectAvailable).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('authentication with adfs', () => {
+      let client: BaseCogniteClient;
+      const cluster = 'test-cluster';
+      const mockClusterUrl = `https://${cluster}.cognitedata.com`;
+      const authority = 'https://example.com/adfs/oauth2/authorize';
+      const clientId = 'adfsClientId';
+      const requestParams = {
+        cluster,
+        clientId,
+      };
+      const authTokens = {
+        idToken: 'idToken',
+        accessToken: 'accessToken',
+        expiresIn: '3600',
+      };
+
+      beforeEach(() => {
+        client = new BaseCogniteClient({ appId: 'test-app' });
+      });
+      afterEach(() => {
+        jest.clearAllMocks();
+      });
+
+      test('should handle redirect url', async () => {
+        const silentADFSLogin = jest
+          .spyOn(LoginUtils, 'silentLoginViaIframe')
+          .mockRejectedValueOnce('X-Frame-Options header deny');
+        window.history.pushState(
+          {},
+          '',
+          `/some/random/path#access_token=${authTokens.accessToken}&id_token=${
+            authTokens.idToken
+          }&expires_in=${authTokens.expiresIn}&random=123`
+        );
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .twice()
+          .reply(200, { projects: ['project1', 'project2'] });
+
+        const result = await client.loginWithOAuth({
+          authority,
+          requestParams,
+        });
+        const cdfToken = await client.getCDFToken();
+
+        expect(result).toEqual(true);
+        expect(silentADFSLogin).toHaveBeenCalledTimes(1);
+        expect(window.location.href).toEqual(
+          `https://localhost/some/random/path#random=123`
+        );
+        expect(cdfToken).toEqual(authTokens.accessToken);
+      });
+      test('should login silently if possible', async () => {
+        const silentADFSLogin = jest
+          .spyOn(LoginUtils, 'silentLoginViaIframe')
+          .mockRejectedValueOnce('X-Frame-Options header deny')
+          .mockResolvedValueOnce(authTokens);
+        const spyADFSLoginMethod = jest.spyOn(ADFS.prototype, 'login');
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(200, { projects: ['project1', 'project2'] });
+
+        const result = await client.loginWithOAuth({
+          authority,
+          requestParams,
+        });
+
+        const authenticated = await client.authenticate();
+
+        expect(result).toEqual(false);
+        expect(authenticated).toEqual(true);
+        expect(silentADFSLogin).toHaveBeenCalledTimes(2);
+        expect(spyADFSLoginMethod).toHaveBeenCalledTimes(0);
+      });
+      test('should login via redirect when silent login is not possible', async done => {
+        const { location } = window;
+        delete window.location;
+        window.location = {
+          ...location,
+          hostname: 'localhost',
+          href: 'https://localhost',
+        };
+
+        const silentADFSLogin = jest
+          .spyOn(LoginUtils, 'silentLoginViaIframe')
+          .mockRejectedValue('X-Frame-Options header deny');
+        const spyADFSLoginMethod = jest.spyOn(ADFS.prototype, 'login');
+
+        const result = await client.loginWithOAuth({
+          authority,
+          requestParams,
+        });
+
+        client.authenticate();
+
+        setTimeout(() => {
+          expect(result).toEqual(false);
+          // 3 attempts to silent login – handling redirect,
+          // as part of authenticate and as part of adfsClient.login()
+          expect(silentADFSLogin).toHaveBeenCalledTimes(3);
+          expect(spyADFSLoginMethod).toHaveBeenCalledTimes(1);
+          expect(window.location.href).toMatchInlineSnapshot(
+            `"https://example.com/adfs/oauth2/authorize?client_id=${clientId}&scope=user_impersonation IDENTITY&response_mode=fragment&response_type=id_token token&resource=${mockClusterUrl}&redirect_uri=https://localhost"`
+          );
+
+          window.location = location;
+
+          done();
+        }, 1000);
+      });
+      test('should call onNoProjectAvailable during loginWithOAuth if needed', async () => {
+        const silentADFSLogin = jest
+          .spyOn(LoginUtils, 'silentLoginViaIframe')
+          .mockResolvedValueOnce(authTokens);
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(401, {});
+        const onNoProjectAvailable = jest.fn();
+
+        const result = await client.loginWithOAuth({
+          authority,
+          requestParams,
+          onNoProjectAvailable,
+        });
+
+        expect(result).toEqual(false);
+        expect(silentADFSLogin).toHaveBeenCalledTimes(1);
+        expect(onNoProjectAvailable).toHaveBeenCalledTimes(1);
+      });
+      test('should call onNoProjectAvailable during authenticate if needed', async () => {
+        const silentADFSLogin = jest
+          .spyOn(LoginUtils, 'silentLoginViaIframe')
+          .mockRejectedValueOnce('X-Frame-Options header deny')
+          .mockResolvedValueOnce(authTokens);
+        nock(mockClusterUrl)
+          .get('/api/v1/token/inspect')
+          .once()
+          .reply(401, {});
+        const onNoProjectAvailable = jest.fn();
+
+        const result = await client.loginWithOAuth({
+          authority,
+          requestParams,
+          onNoProjectAvailable,
+        });
+        const authenticated = await client.authenticate();
+
+        expect(result).toEqual(false);
+        expect(authenticated).toEqual(false);
+        expect(silentADFSLogin).toHaveBeenCalledTimes(2);
         expect(onNoProjectAvailable).toHaveBeenCalledTimes(1);
       });
     });

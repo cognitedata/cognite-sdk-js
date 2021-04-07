@@ -8,6 +8,7 @@ import { CogniteError } from './error';
 import { CogniteMultiError } from './multiError';
 import {
   OAuthLoginForAADOptions,
+  OAuthLoginForADFSOptions,
   OAuthLoginForCogniteOptions,
   OAuthLoginOptions,
 } from './baseCogniteClient';
@@ -37,14 +38,22 @@ export function isBrowser() {
   );
 }
 
+export function clearParametersFromUrl(...params: string[]): void {
+  let url = window.location.href;
+  params.forEach(param => {
+    url = removeQueryParameterFromUrl(url, param);
+  });
+  window.history.replaceState(null, '', url);
+}
+
 /** @hidden */
 export function removeQueryParameterFromUrl(
   url: string,
   parameter: string
 ): string {
   return url
-    .replace(new RegExp('[?&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
-    .replace(new RegExp('([?&])' + parameter + '=[^&]*&'), '$1');
+    .replace(new RegExp('[?#&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
+    .replace(new RegExp('([?#&])' + parameter + '=[^&]*&'), '$1');
 }
 
 /** @hidden */
@@ -191,6 +200,26 @@ export function generatePopupWindow(url: string, name: string) {
 }
 
 /** @hidden */
+export function createInvisibleIframe(
+  url: string,
+  name: string
+): HTMLIFrameElement {
+  const iframe = document.createElement('iframe');
+  iframe.name = name;
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = '0';
+  iframe.style.border = 'none';
+  iframe.style.visibility = 'hidden';
+
+  iframe.setAttribute('id', name);
+  iframe.setAttribute('aria-hidden', 'true');
+
+  iframe.src = url;
+  return iframe;
+}
+
+/** @hidden */
 export function isUsingSSL() {
   return isBrowser() && location.protocol.toLowerCase() === 'https:';
 }
@@ -212,4 +241,11 @@ export function isOAuthWithAADOptions(
   options: OAuthLoginOptions
 ): options is OAuthLoginForAADOptions {
   return ['clientId', 'cluster'].every(key => key in options);
+}
+
+/** @hidden **/
+export function isOAuthWithADFSOptions(
+  options: OAuthLoginOptions
+): options is OAuthLoginForADFSOptions {
+  return ['authority', 'requestParams'].every(key => key in options);
 }
