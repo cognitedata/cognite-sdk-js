@@ -1,7 +1,9 @@
 // Copyright 2020 Cognite AS
+import { ConfigureAPI } from '../client/baseWellsClient';
 import { RefreshToken } from '../client/clientAuthUtils';
 import { createWellsClient } from '../client/clientCreateUtils';
 import CogniteWellsClient from '../client/cogniteWellsClient';
+import HttpClientWithIntercept from '../client/httpClientWithIntercept';
 import { Cluster } from '../client/model/Cluster';
 import { WellFilter } from '../client/model/WellFilter';
 import {
@@ -104,5 +106,51 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     expect(client.isLoggedIn).toBe(false);
     expect(client.getBaseUrl).toBe(BP_NORTHEUROPE_DEV_BASE_URL);
+  });
+
+  // test api-key login
+  test('test get path function', async () => {
+    class TestAPI extends ConfigureAPI {
+      constructor() {
+        super();
+        this.client = new HttpClientWithIntercept(COGDEV_BASE_URL);
+        this.cluster = Cluster.BP;
+        this.project = 'owa-test';
+
+        expect(this.client.getBaseUrl()).toBe(COGDEV_BASE_URL);
+
+        let path = this.getPath('/test/route', 'testCursor');
+
+        expect(path).not.toBeNull;
+        expect(path).toContain('cursor');
+        expect(path).toContain('env');
+
+        this.client = new HttpClientWithIntercept(BP_NORTHEUROPE_DEV_BASE_URL);
+        this.cluster = Cluster.BP_NORTHEUROPE;
+        this.project = 'np-northeurope';
+
+        expect(this.client.getBaseUrl()).toBe(BP_NORTHEUROPE_DEV_BASE_URL);
+
+        path = this.getPath('/test/route', undefined);
+
+        expect(path).not.toBeNull;
+        expect(path).not.toContain('cursor');
+        expect(path).not.toContain('env');
+
+        this.client = new HttpClientWithIntercept(COGDEV_BASE_URL);
+        this.cluster = Cluster.API;
+        this.project = 'subsurface-test';
+        expect(this.client.getBaseUrl()).toBe(COGDEV_BASE_URL);
+
+        path = this.getPath('/test/route', undefined);
+
+        expect(path).not.toBeNull;
+        expect(path).not.toContain('cursor');
+        expect(path).not.toContain('env');
+      }
+    }
+
+    // run test
+    new TestAPI();
   });
 });

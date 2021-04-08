@@ -188,6 +188,7 @@ export class ConfigureAPI {
       throw new HttpError(400, 'No cluster has been set.', {});
     }
 
+    /* eslint-disable */
     const baseUrl = this.client?.getBaseUrl()
 
     let path = baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API
