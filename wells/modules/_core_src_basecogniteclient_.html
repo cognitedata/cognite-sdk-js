@@ -82,6 +82,7 @@
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-external"><a href="../interfaces/_core_src_basecogniteclient_.apikeyloginoptions.html" class="tsd-kind-icon">Api<wbr>Key<wbr>Login<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-external"><a href="../interfaces/_core_src_basecogniteclient_.clientoptions.html" class="tsd-kind-icon">Client<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-external"><a href="../interfaces/_core_src_basecogniteclient_.oauthloginforaadoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>ForAADOptions</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-external"><a href="../interfaces/_core_src_basecogniteclient_.oauthloginforadfsoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>ForADFSOptions</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-external"><a href="../interfaces/_core_src_basecogniteclient_.oauthloginforcogniteoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>For<wbr>Cognite<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-external"><a href="../interfaces/_core_src_basecogniteclient_.project.html" class="tsd-kind-icon">Project</a></li>
 							</ul>
@@ -100,6 +101,7 @@
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-external"><a href="_core_src_basecogniteclient_.html#aad_oauth" class="tsd-kind-icon">AAD_<wbr>OAUTH</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-external"><a href="_core_src_basecogniteclient_.html#adfs_oauth" class="tsd-kind-icon">ADFS_<wbr>OAUTH</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module tsd-is-external"><a href="_core_src_basecogniteclient_.html#cdf_oauth" class="tsd-kind-icon">CDF_<wbr>OAUTH</a></li>
 							</ul>
 						</section>
@@ -118,10 +120,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
 					<a name="authflowtype" class="tsd-anchor"></a>
 					<h3>Auth<wbr>Flow<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">Auth<wbr>Flow<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><a href="_core_src_basecogniteclient_.html#aad_oauth" class="tsd-signature-type">AAD_OAUTH</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><a href="_core_src_basecogniteclient_.html#cdf_oauth" class="tsd-signature-type">CDF_OAUTH</a></div>
+					<div class="tsd-signature tsd-kind-icon">Auth<wbr>Flow<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><a href="_core_src_basecogniteclient_.html#aad_oauth" class="tsd-signature-type">AAD_OAUTH</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><a href="_core_src_basecogniteclient_.html#cdf_oauth" class="tsd-signature-type">CDF_OAUTH</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><a href="_core_src_basecogniteclient_.html#adfs_oauth" class="tsd-signature-type">ADFS_OAUTH</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/00b6376/packages/core/src/baseCogniteClient.ts#L60">packages/core/src/baseCogniteClient.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fc400af/packages/core/src/baseCogniteClient.ts#L63">packages/core/src/baseCogniteClient.ts:63</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -131,17 +133,17 @@
 					<div class="tsd-signature tsd-kind-icon">Base<wbr>Request<wbr>Options<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_core_src_httpclient_basichttpclient_.httprequestoptions.html" class="tsd-signature-type">HttpRequestOptions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/00b6376/packages/core/src/baseCogniteClient.ts#L672">packages/core/src/baseCogniteClient.ts:672</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fc400af/packages/core/src/baseCogniteClient.ts#L762">packages/core/src/baseCogniteClient.ts:762</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
 					<a name="oauthloginoptions" class="tsd-anchor"></a>
 					<h3>OAuth<wbr>Login<wbr>Options</h3>
-					<div class="tsd-signature tsd-kind-icon">OAuth<wbr>Login<wbr>Options<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_core_src_basecogniteclient_.oauthloginforcogniteoptions.html" class="tsd-signature-type">OAuthLoginForCogniteOptions</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_core_src_basecogniteclient_.oauthloginforaadoptions.html" class="tsd-signature-type">OAuthLoginForAADOptions</a></div>
+					<div class="tsd-signature tsd-kind-icon">OAuth<wbr>Login<wbr>Options<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_core_src_basecogniteclient_.oauthloginforcogniteoptions.html" class="tsd-signature-type">OAuthLoginForCogniteOptions</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_core_src_basecogniteclient_.oauthloginforaadoptions.html" class="tsd-signature-type">OAuthLoginForAADOptions</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_core_src_basecogniteclient_.oauthloginforadfsoptions.html" class="tsd-signature-type">OAuthLoginForADFSOptions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/00b6376/packages/core/src/baseCogniteClient.ts#L82">packages/core/src/baseCogniteClient.ts:82</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fc400af/packages/core/src/baseCogniteClient.ts#L94">packages/core/src/baseCogniteClient.ts:94</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -151,7 +153,7 @@
 					<div class="tsd-signature tsd-kind-icon">OAuth<wbr>Login<wbr>Result<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/00b6376/packages/core/src/baseCogniteClient.ts#L101">packages/core/src/baseCogniteClient.ts:101</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fc400af/packages/core/src/baseCogniteClient.ts#L114">packages/core/src/baseCogniteClient.ts:114</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -161,7 +163,7 @@
 					<div class="tsd-signature tsd-kind-icon">Response<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_core_src_httpclient_basichttpclient_.httpresponse.html" class="tsd-signature-type">HttpResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/00b6376/packages/core/src/baseCogniteClient.ts#L673">packages/core/src/baseCogniteClient.ts:673</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fc400af/packages/core/src/baseCogniteClient.ts#L763">packages/core/src/baseCogniteClient.ts:763</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -174,7 +176,17 @@
 					<div class="tsd-signature tsd-kind-icon">AAD_<wbr>OAUTH<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"AAD_OAUTH"</span><span class="tsd-signature-symbol"> = &quot;AAD_OAUTH&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/00b6376/packages/core/src/baseCogniteClient.ts#L58">packages/core/src/baseCogniteClient.ts:58</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fc400af/packages/core/src/baseCogniteClient.ts#L60">packages/core/src/baseCogniteClient.ts:60</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module tsd-is-external">
+					<a name="adfs_oauth" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> ADFS_<wbr>OAUTH</h3>
+					<div class="tsd-signature tsd-kind-icon">ADFS_<wbr>OAUTH<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"ADFS_OAUTH"</span><span class="tsd-signature-symbol"> = &quot;ADFS_OAUTH&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fc400af/packages/core/src/baseCogniteClient.ts#L62">packages/core/src/baseCogniteClient.ts:62</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -184,7 +196,7 @@
 					<div class="tsd-signature tsd-kind-icon">CDF_<wbr>OAUTH<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"CDF_OAUTH"</span><span class="tsd-signature-symbol"> = &quot;CDF_OAUTH&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/00b6376/packages/core/src/baseCogniteClient.ts#L59">packages/core/src/baseCogniteClient.ts:59</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fc400af/packages/core/src/baseCogniteClient.ts#L61">packages/core/src/baseCogniteClient.ts:61</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -201,7 +213,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/00b6376/packages/core/src/baseCogniteClient.ts#L86">packages/core/src/baseCogniteClient.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fc400af/packages/core/src/baseCogniteClient.ts#L99">packages/core/src/baseCogniteClient.ts:99</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -230,7 +242,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/00b6376/packages/core/src/baseCogniteClient.ts#L95">packages/core/src/baseCogniteClient.ts:95</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fc400af/packages/core/src/baseCogniteClient.ts#L108">packages/core/src/baseCogniteClient.ts:108</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -265,6 +277,9 @@
 						<a href="../interfaces/_core_src_basecogniteclient_.oauthloginforaadoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>ForAADOptions</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="../interfaces/_core_src_basecogniteclient_.oauthloginforadfsoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>ForADFSOptions</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="../interfaces/_core_src_basecogniteclient_.oauthloginforcogniteoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>For<wbr>Cognite<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
@@ -287,6 +302,9 @@
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
 						<a href="_core_src_basecogniteclient_.html#aad_oauth" class="tsd-kind-icon">AAD_<wbr>OAUTH</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
+						<a href="_core_src_basecogniteclient_.html#adfs_oauth" class="tsd-kind-icon">ADFS_<wbr>OAUTH</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-external">
 						<a href="_core_src_basecogniteclient_.html#cdf_oauth" class="tsd-kind-icon">CDF_<wbr>OAUTH</a>
