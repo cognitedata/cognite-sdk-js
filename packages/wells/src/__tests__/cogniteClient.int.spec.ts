@@ -122,20 +122,18 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
         let path = this.getPath('/test/route', 'testCursor');
 
         expect(path).not.toBeNull;
-        expect(path).toContain('cursor');
-        expect(path).toContain('env');
+        expect(path).toContain('/owa-test/test/route?env=bp&cursor=testCursor');
 
         this.client = new HttpClientWithIntercept(BP_NORTHEUROPE_DEV_BASE_URL);
         this.cluster = Cluster.BP_NORTHEUROPE;
-        this.project = 'np-northeurope';
+        this.project = 'bp-northeurope';
 
         expect(this.client.getBaseUrl()).toBe(BP_NORTHEUROPE_DEV_BASE_URL);
 
         path = this.getPath('/test/route', undefined);
 
         expect(path).not.toBeNull;
-        expect(path).not.toContain('cursor');
-        expect(path).not.toContain('env');
+        expect(path).toBe('/bp-northeurope/test/route');
 
         this.client = new HttpClientWithIntercept(COGDEV_BASE_URL);
         this.cluster = Cluster.API;
@@ -145,8 +143,16 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
         path = this.getPath('/test/route', undefined);
 
         expect(path).not.toBeNull;
-        expect(path).not.toContain('cursor');
-        expect(path).not.toContain('env');
+        expect(path).toBe('/subsurface-test/test/route');
+
+        this.client = new HttpClientWithIntercept(COGDEV_BASE_URL);
+        this.cluster = Cluster.API;
+        this.project = 'subsurface-test';
+
+        path = this.getPath('/test/route', 'testCursor');
+
+        expect(path).not.toBeNull;
+        expect(path).toBe('/subsurface-test/test/route?cursor=testCursor');
       }
     }
 
