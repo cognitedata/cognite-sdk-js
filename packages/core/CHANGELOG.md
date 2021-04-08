@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@2.0.0...@cognite/sdk-core@2.1.0) (2021-04-08)
+
+
+### Features
+
+* **adfs:** add auth flow for adfs ([#508](https://github.com/cognitedata/cognite-sdk-js/issues/508)) ([1130f8d](https://github.com/cognitedata/cognite-sdk-js/commit/1130f8d0d463144dff67480fdb960c531e9816ee))
+
+
+
+
+
 # [2.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@1.2.2...@cognite/sdk-core@2.0.0) (2021-03-25)
 
 
