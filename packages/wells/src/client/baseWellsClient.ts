@@ -180,7 +180,7 @@ export class ConfigureAPI {
     this.cluster = cluster;
   }
 
-  protected getPath(baseUrl: string, cursor?: string): string {
+  protected getPath(targetRoute: string, cursor?: string): string {
     if (this.project == undefined) {
       throw new HttpError(400, 'The client project has not been set.', {});
     }
@@ -188,10 +188,11 @@ export class ConfigureAPI {
       throw new HttpError(400, 'No cluster has been set.', {});
     }
 
-    let path =
-      baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API
-        ? `/${this.project}${baseUrl}?env=${this.cluster}`
-        : `/${this.project}${baseUrl}`;
+    const baseUrl = this.client?.getBaseUrl()
+
+    let path = baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API
+        ? `/${this.project}${targetRoute}?env=${this.cluster}`
+        : `/${this.project}${targetRoute}`;
 
     if (cursor) {
       if (path.includes('?env')) {
@@ -200,6 +201,7 @@ export class ConfigureAPI {
         path += `?cursor=${cursor}`;
       }
     }
+
     return path;
   }
 }
