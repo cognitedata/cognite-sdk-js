@@ -1,4 +1,4 @@
-# Cognite Wells JS SDK
+# Cognite Wells nodejs SDK
 
 Cognite wells SDK is tool for interacting with the CDF Wells Data Layer (WDL). All queries are passed through a service API called the 'Well-Service' that handles ingestion and queries into the well data layer.
 

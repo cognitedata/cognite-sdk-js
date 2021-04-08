@@ -91,6 +91,7 @@ export class WellsAPI extends ConfigureAPI {
 
   public getLabelPrefix = async (prefix: String): Promise<String[] | undefined> => {
     const path: string = this.getPath(`/wells/${prefix}`)
+
     // eslint-disable-next-line
     return await this.client?.asyncGet<String[]>(path)
       .then(response => response.data)
