@@ -211,18 +211,18 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
 <span class="hljs-keyword">const</span> densityFilter: MeasurementFilter = {
   measurementType: MeasurementType.Density,
 };
-<span class="hljs-keyword">const</span> geomechanicsFilter: MeasurementFilter = {
-  measurementType: MeasurementType.Geomechanics,
+<span class="hljs-keyword">const</span> lotFilter: MeasurementFilter = {
+  measurementType: MeasurementType.LOT,
 };
 
 <span class="hljs-comment">// Look for wells that match on ANY</span>
 <span class="hljs-keyword">const</span> measurementFilters: MeasurementFilters = {
-  containsAny: [gammaRayFilter, densityFilter, geomechanicsFilter],
+  containsAny: [gammaRayFilter, densityFilter, lotFilter],
 };
 
 <span class="hljs-comment">// OR, look for wells that match on ALL</span>
 <span class="hljs-keyword">const</span> measurementFilters: MeasurementFilters = {
-  containsAll: [gammaRayFilter, densityFilter, geomechanicsFilter],
+  containsAll: [gammaRayFilter, densityFilter, lotFilter],
 };
 
 <span class="hljs-comment">// apply filter</span>
@@ -289,7 +289,7 @@ wellbores = <span class="hljs-keyword">await</span> well.wellbores();</code></pr
 <span class="hljs-keyword">const</span> measurements: Measurement[] | <span class="hljs-literal">undefined</span>;
 measurements = <span class="hljs-keyword">await</span> client.wellbores.getMeasurement(
   wellboreId,
-  MeasurementType.GammaRay
+  MeasurementType.GammaRay,
 );
 
 <span class="hljs-comment">// lazy method to inspect data from measurement</span>
