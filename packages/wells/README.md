@@ -174,18 +174,18 @@ const gammaRayFilter: MeasurementFilter = {
 const densityFilter: MeasurementFilter = {
   measurementType: MeasurementType.Density,
 };
-const geomechanicsFilter: MeasurementFilter = {
-  measurementType: MeasurementType.Geomechanics,
+const lotFilter: MeasurementFilter = {
+  measurementType: MeasurementType.LOT,
 };
 
 // Look for wells that match on ANY
 const measurementFilters: MeasurementFilters = {
-  containsAny: [gammaRayFilter, densityFilter, geomechanicsFilter],
+  containsAny: [gammaRayFilter, densityFilter, lotFilter],
 };
 
 // OR, look for wells that match on ALL
 const measurementFilters: MeasurementFilters = {
-  containsAll: [gammaRayFilter, densityFilter, geomechanicsFilter],
+  containsAll: [gammaRayFilter, densityFilter, lotFilter],
 };
 
 // apply filter
@@ -265,7 +265,7 @@ const wellboreId: number = 870793324939646;
 const measurements: Measurement[] | undefined;
 measurements = await client.wellbores.getMeasurement(
   wellboreId,
-  MeasurementType.GammaRay
+  MeasurementType.GammaRay,
 );
 
 // lazy method to inspect data from measurement

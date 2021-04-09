@@ -1,10 +1,12 @@
 export enum MeasurementType {
   GammaRay = 'GammaRay',
   Caliper = 'Caliper',
-  Resistivity = 'Resistivity',
+  ResistivityDeep = 'ResistivityDeep',
+  ResistivityMedium = 'ResistivityMedium',
   Density = 'Density',
   Neutron = 'Neutron',
   PPFG = 'PPFG',
   Geomechanics = 'Geomechanics',
-  Core = 'Core',
+  FIT = 'FIT',
+  LOT = 'LOT',
 }

@@ -12,12 +12,14 @@ import { Asset } from 'wells/src/types';
 enum MeasurementType {
   GammaRay = 'GammaRay',
   Caliper = 'Caliper',
-  Resistivity = 'Resistivity',
+  ResistivityDeep = 'ResistivityDeep',
+  ResistivityMedium = 'ResistivityMedium',
   Density = 'Density',
   Neutron = 'Neutron',
   PPFG = 'PPFG',
   Geomechanics = 'Geomechanics',
-  Core = 'Core',
+  FIT = 'FIT',
+  LOT = 'LOT',
 }
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455

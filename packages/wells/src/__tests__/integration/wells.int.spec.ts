@@ -11,12 +11,14 @@ import { Asset } from 'wells/src/types';
 enum MeasurementType {
   GammaRay = 'GammaRay',
   Caliper = 'Caliper',
-  Resistivity = 'Resistivity',
+  ResistivityDeep = 'ResistivityDeep',
+  ResistivityMedium = 'ResistivityMedium',
   Density = 'Density',
   Neutron = 'Neutron',
   PPFG = 'PPFG',
   Geomechanics = 'Geomechanics',
-  Core = 'Core',
+  FIT = 'FIT',
+  LOT = 'LOT',
 }
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
@@ -269,7 +271,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     expect(wells).not.toBeUndefined();
     const retrievedNames = wells?.items.map(well => well.externalId)
-    const WdlNames = ["well:34/10-1"];
+    const WdlNames = ["well:34/10-8"];
     WdlNames.forEach(name => {
       expect(retrievedNames).toContain(name)
     });
@@ -282,7 +284,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     expect(wells).not.toBeUndefined();
     const retrievedNames = wells?.items.map(well => well.externalId)
-    const WdlNames = ["well:34/10-1"];
+    const WdlNames = ["well:34/10-8"];
     WdlNames.forEach(name => {
       expect(retrievedNames).toContain(name)
     });
