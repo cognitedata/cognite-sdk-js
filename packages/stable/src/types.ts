@@ -416,6 +416,23 @@ export interface AssetMappings3DListFilter extends FilterQuery {
   intersectsBoundingBox?: BoundingBox3D;
 }
 
+export interface AssetMappings3DFilters extends FilterQuery {
+  filter: {
+    /**
+     * If given, returns asset mappings associated with the nodes corresponding to the given IDs and their ancestors.
+     */
+    nodeIds?: CogniteInternalId[];
+    /**
+     * If given, returns asset mappings associated with the nodes corresponding to the given tree indexes and their ancestors.
+     */
+    treeIndexes?: number[];
+    /**
+     * If given, returns assets mappings associated with the assets corresponding to the given asset IDs.
+     */
+    assetIds?: CogniteInternalId[];
+  };
+}
+
 /**
  * Name of asset. Often referred to as tag.
  */

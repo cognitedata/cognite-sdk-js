@@ -1,8 +1,9 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
+import { BaseResourceAPI, CursorAndAsyncIterator, ListResponse } from '@cognite/sdk-core';
 import {
   AssetMapping3D,
+  AssetMappings3DFilters,
   AssetMappings3DListFilter,
   CogniteInternalId,
   CreateAssetMapping3D,
@@ -84,6 +85,31 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   ): Promise<{}> => {
     const path = this.encodeUrl(modelId, revisionId) + '/delete';
     return super.deleteEndpoint(ids, undefined, path);
+  };
+
+  /**
+   * [Filter 3D asset mappings](https://doc.cognitedata.com/api/v1/#operation/filter3DAssetMappings)
+   *
+   * ```js
+   * const query = {
+   *   filter: {
+   *     nodeIds: [8252999965991682, 9034285498543958]
+   *   },
+   *   limit: 5,
+   *   cursor: 'loremipsum'
+   * };
+   * const mappings3D = await client.assetMappings3D.list(3244265346345, 32423454353545, query);
+   * ```
+   */
+   public filter = (
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId,
+    scope: AssetMappings3DFilters
+  ): Promise<ListResponse<AssetMapping3D[]>> => {
+    const path = this.encodeUrl(modelId, revisionId) + '/list';
+    const res = this.post<ListResponse<AssetMapping3D[]>>(path, { data: scope || {} })
+      .then((httpResponse) => { return httpResponse.data; });
+    return res;
   };
 
   private encodeUrl(modelId: CogniteInternalId, revisionId: CogniteInternalId) {
