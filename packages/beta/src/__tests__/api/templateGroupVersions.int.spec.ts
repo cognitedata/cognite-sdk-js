@@ -35,7 +35,7 @@ describe('template group versions test', () => {
     await cleanup();
   });
 
-  it('should create template group version', async () => {
+  it.skip('should create template group version', async () => {
     const result = await client.templates
       .group(externalId)
       .versions.upsert(expectedVersion);
@@ -45,7 +45,7 @@ describe('template group versions test', () => {
     });
   });
 
-  it(
+  it.skip(
     'should list template group versions with filter',
     async () => {
       const expectedVersions = [];
@@ -76,7 +76,7 @@ describe('template group versions test', () => {
     10000
   );
 
-  it('should delete template group version', async () => {
+  it.skip('should delete template group version', async () => {
     await client.templates.group(externalId).versions.delete(1);
     const result = await client.templates
       .group(externalId)
