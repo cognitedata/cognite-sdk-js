@@ -14,7 +14,7 @@ import {
 
 const testfile = join(__dirname, '../test3dFile.fbx');
 
-describe('Files integration test', () => {
+describe.skip('Files integration test', () => {
   let client: CogniteClient;
   let asset: Asset;
   let label: LabelDefinition;
@@ -60,7 +60,7 @@ describe('Files integration test', () => {
 
   let file: FileInfo;
 
-  test('create', async () => {
+  test.skip('create', async () => {
     file = await client.files.upload(
       {
         ...localFileMeta,
@@ -72,7 +72,7 @@ describe('Files integration test', () => {
     );
   });
 
-  test('geoLocation present in created file', () => {
+  test.skip('geoLocation present in created file', () => {
     expect(file.geoLocation).toEqual(localFileMeta.geoLocation);
   });
 
@@ -244,7 +244,7 @@ describe('Files integration test', () => {
     const fileContentBinary = readFileSync(testfile);
     let binaryFile: FileInfo;
 
-    test('create', async () => {
+    test.skip('create', async () => {
       binaryFile = await client.files.upload(
         binaryFileMeta,
         fileContentBinary,
