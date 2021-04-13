@@ -759,7 +759,7 @@ describe('CogniteClient', () => {
       const authority = 'https://example.com/adfs/oauth2/authorize';
       const clientId = 'adfsClientId';
       const requestParams = {
-        cluster,
+        resource: mockClusterUrl,
         clientId,
       };
       const authTokens = {

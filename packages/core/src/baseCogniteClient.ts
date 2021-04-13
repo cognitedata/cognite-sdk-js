@@ -602,13 +602,13 @@ export default class BaseCogniteClient {
     requestParams,
     onNoProjectAvailable = noop,
   }: OAuthLoginForADFSOptions): Promise<OAuthLoginResult> => {
-    const { cluster } = requestParams;
+    const { resource } = requestParams;
     const adfsClient = new ADFS({
       authority,
       requestParams: { ...requestParams },
     });
 
-    this.httpClient.setCluster(cluster);
+    this.httpClient.setBaseUrl(resource);
 
     let token = await this.handleADFSLoginRedirect(adfsClient);
 
