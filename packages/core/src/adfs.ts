@@ -11,7 +11,7 @@ export interface ADFSConfig {
   requestParams: ADFSRequestParams;
 }
 export interface ADFSRequestParams {
-  cluster: string;
+  resource: string;
   clientId: string;
 }
 export interface ADFSQueryParams {
@@ -156,12 +156,11 @@ export class ADFS {
   }
 
   private getADFSQueryParams({
-    cluster,
+    resource,
     clientId,
   }: ADFSRequestParams): ADFSQueryParams {
     const responseMode = 'fragment';
     const responseType = 'id_token token';
-    const resource = `https://${cluster}.cognitedata.com`;
     const scope = `user_impersonation IDENTITY`;
     const redirectUri = window.location.href;
     const params = {

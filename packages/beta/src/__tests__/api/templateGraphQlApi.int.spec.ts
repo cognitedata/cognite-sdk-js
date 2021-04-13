@@ -5,7 +5,7 @@ import { randomInt } from '@cognite/sdk-core/src/testUtils';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-describe('template group test', () => {
+describe.skip('template group test', () => {
   let client: CogniteClient;
 
   const externalId = `GraphQlTest ${randomInt()}`;
