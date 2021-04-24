@@ -1,13 +1,14 @@
 import { MeasurementType } from './MeasurementType';
-import { WellType } from './WellType';
 import { GeoJson } from './GeoJson';
+import { LengthRange } from './LengthRange';
+import { DateRange } from '@cognite/sdk-stable';
 
 export interface WellFilter {
   /**
-   * @type {WellType}
+   * @type {string[]}
    * @memberof WellFilter
    */
-  wellType?: WellType;
+  wellType?: string[];
   /**
    * @type {string}
    * @memberof WellFilter
@@ -58,14 +59,29 @@ export interface WellFilter {
    * @memberof WellFilter
    */
   outputCrs?: string;
+  /**
+   * @type {string[]}
+   * @memberof WellFilter
+   */
+   licenses?: string[];
+   /**
+   * @type {LengthRange}
+   * @memberof WellFilter
+   */
+   waterDepth?: LengthRange;
+    /**
+   * @type {DateRange}
+   * @memberof WellFilter
+   */
+   spudDate?: DateRange;
 }
 
 export interface WellFilterAPI {
   /**
-   * @type {WellType}
+   * @type {string[]}
    * @memberof WellFilterAPI
    */
-  wellType?: WellType;
+  wellType?: string[];
   /**
    * @type {string}
    * @memberof WellFilter
@@ -111,6 +127,21 @@ export interface WellFilterAPI {
    * @memberof WellFilterAPI
    */
   polygon?: PolygonFilterAPI;
+  /**
+   * @type {string[]}
+   * @memberof WellFilter
+   */
+   licenses?: string[];
+   /**
+   * @type {LengthRange}
+   * @memberof WellFilter
+   */
+   waterDepth?: LengthRange;
+    /**
+   * @type {DateRange}
+   * @memberof WellFilter
+   */
+   spudDate?: DateRange;
 }
 
 export interface TrajectoryFilter {

@@ -107,15 +107,15 @@ describeIfCondition(
     });
 
     test('Get wellbores for a well id', async () => {
-      const well: Well | undefined = await client.wells.getById(2275887128760800);
+      const well: Well | undefined = await client.wells.getById(8091617722352417);
       expect(well).not.toBeUndefined();
       
       const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWell(well!.id).then(response => response).catch(err => err);
 
       expect(wellbores).not.toBeUndefined();
-      const wellboreIds = [870793324939646, 1072803479704457, 8456650753594878]
+      const wellboreIds = ['WDL:Wellbore:dummy102', 'wellbore:Platform WB 12.25 in OH', 'wellbore:Platform WB 8.5 in OH']
       wellboreIds.forEach(id => {
-        expect(wellbores!.map(wellbore => wellbore.id)).toContain(id)
+        expect(wellbores!.map(wellbore => wellbore.externalId)).toContain(id)
       });
     })
 
