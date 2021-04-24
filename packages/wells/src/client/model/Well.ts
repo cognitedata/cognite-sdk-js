@@ -79,6 +79,16 @@ export interface Well {
    */
   spudDate?: Date;
   /**
+   * @type {string}
+   * @memberof Well
+   */
+  wellType?: string;
+  /**
+   * @type {string}
+   * @memberof Well
+   */
+  license?: string;
+  /**
    * @type {Date}
    * @memberof Well
    */

@@ -42,6 +42,9 @@ export class WellsAPI extends ConfigureAPI {
       hasTrajectory: filter.hasTrajectory,
       hasMeasurements: filter.hasMeasurements,
       polygon: polygon,
+      licenses: filter.licenses,
+      waterDepth: filter.waterDepth,
+      spudDate: filter.spudDate,
     }
   }
 
@@ -57,6 +60,8 @@ export class WellsAPI extends ConfigureAPI {
       field: well.field,
       operator: well.operator,
       spudDate: well.spudDate != undefined ? new Date(well.spudDate) : null,
+      wellType: well.wellType,
+      license: well.license,
       waterDepth: well.waterDepth,
       wellhead: well.wellhead,
       datum: well.datum,
