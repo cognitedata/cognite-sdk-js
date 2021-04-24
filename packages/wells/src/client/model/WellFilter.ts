@@ -1,7 +1,7 @@
 import { MeasurementType } from './MeasurementType';
 import { GeoJson } from './GeoJson';
 import { LengthRange } from './LengthRange';
-import { DateRange } from '@cognite/sdk-stable';
+import { DateRange } from './DateRange';
 
 export interface WellFilter {
   /**
