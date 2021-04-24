@@ -1,4 +1,4 @@
-import { LengthUnitEnum } from "./LengthUnitEnum";
+import { LengthUnitEnum } from './LengthUnitEnum';
 
 export interface LengthRange {
   /**

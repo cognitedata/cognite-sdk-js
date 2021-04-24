@@ -63,17 +63,17 @@ export interface WellFilter {
    * @type {string[]}
    * @memberof WellFilter
    */
-   licenses?: string[];
-   /**
+  licenses?: string[];
+  /**
    * @type {LengthRange}
    * @memberof WellFilter
    */
-   waterDepth?: LengthRange;
-    /**
+  waterDepth?: LengthRange;
+  /**
    * @type {DateRange}
    * @memberof WellFilter
    */
-   spudDate?: DateRange;
+  spudDate?: DateRange;
 }
 
 export interface WellFilterAPI {
@@ -131,17 +131,17 @@ export interface WellFilterAPI {
    * @type {string[]}
    * @memberof WellFilter
    */
-   licenses?: string[];
-   /**
+  licenses?: string[];
+  /**
    * @type {LengthRange}
    * @memberof WellFilter
    */
-   waterDepth?: LengthRange;
-    /**
+  waterDepth?: LengthRange;
+  /**
    * @type {DateRange}
    * @memberof WellFilter
    */
-   spudDate?: DateRange;
+  spudDate?: DateRange;
 }
 
 export interface TrajectoryFilter {
