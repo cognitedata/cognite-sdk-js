@@ -9,7 +9,7 @@ describe('ADFS', () => {
   const authority = 'https://adfs.test.com/adfs';
   const clientId = 'adfsClientId';
   const requestParams = {
-    cluster,
+    resource: mockBaseUrl,
     clientId,
   };
   const authTokens = {

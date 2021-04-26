@@ -12,12 +12,14 @@ import { Asset } from 'wells/src/types';
 enum MeasurementType {
   GammaRay = 'GammaRay',
   Caliper = 'Caliper',
-  Resistivity = 'Resistivity',
+  ResistivityDeep = 'ResistivityDeep',
+  ResistivityMedium = 'ResistivityMedium',
   Density = 'Density',
   Neutron = 'Neutron',
   PPFG = 'PPFG',
   Geomechanics = 'Geomechanics',
-  Core = 'Core',
+  FIT = 'FIT',
+  LOT = 'LOT',
 }
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
@@ -111,7 +113,7 @@ describeIfCondition(
       const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWell(well!.id).then(response => response).catch(err => err);
 
       expect(wellbores).not.toBeUndefined();
-      const wellboreIds = ["WDL:Wellbore:dummy102", "wellbore:Platform WB 12.25 in OH", "wellbore:Platform WB 8.5 in OH"]
+      const wellboreIds = ['WDL:Wellbore:dummy102', 'wellbore:Platform WB 12.25 in OH', 'wellbore:Platform WB 8.5 in OH']
       wellboreIds.forEach(id => {
         expect(wellbores!.map(wellbore => wellbore.externalId)).toContain(id)
       });

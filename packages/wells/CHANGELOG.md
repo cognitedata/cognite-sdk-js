@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.0.6...@cognite/sdk-wells@1.1.0) (2021-04-24)
+
+
+### Features
+
+* new filters for well retrieval [release] ([#525](https://github.com/cognitedata/cognite-sdk-js/issues/525)) ([0da7d94](https://github.com/cognitedata/cognite-sdk-js/commit/0da7d94bb716404e2efebd72f2631130c92c41d0))
+
+
+
+
+
+## [1.0.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.0.5...@cognite/sdk-wells@1.0.6) (2021-04-13)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [1.0.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.0.4...@cognite/sdk-wells@1.0.5) (2021-04-09)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [1.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.0.3...@cognite/sdk-wells@1.0.4) (2021-04-08)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
 ## [1.0.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.0.2...@cognite/sdk-wells@1.0.3) (2021-04-08)
 
 **Note:** Version bump only for package @cognite/sdk-wells

@@ -42,6 +42,9 @@ export class WellsAPI extends ConfigureAPI {
       hasTrajectory: filter.hasTrajectory,
       hasMeasurements: filter.hasMeasurements,
       polygon: polygon,
+      licenses: filter.licenses,
+      waterDepth: filter.waterDepth,
+      spudDate: filter.spudDate,
     }
   }
 
@@ -57,6 +60,8 @@ export class WellsAPI extends ConfigureAPI {
       field: well.field,
       operator: well.operator,
       spudDate: well.spudDate != undefined ? new Date(well.spudDate) : null,
+      wellType: well.wellType,
+      license: well.license,
       waterDepth: well.waterDepth,
       wellhead: well.wellhead,
       datum: well.datum,
@@ -84,13 +89,14 @@ export class WellsAPI extends ConfigureAPI {
   private addLazyToAllWellItems = (wellItems: WellItems): WellItems => {
     return <WellItems> {
       items: wellItems.items.map(well => this.addLazyMethodsForWell(well)),
-      cursor: wellItems.cursor
+      nextCursor: wellItems.nextCursor
     }
   }
 
 
   public getLabelPrefix = async (prefix: String): Promise<String[] | undefined> => {
     const path: string = this.getPath(`/wells/${prefix}`)
+
     // eslint-disable-next-line
     return await this.client?.asyncGet<String[]>(path)
       .then(response => response.data)
@@ -143,7 +149,7 @@ export class WellsAPI extends ConfigureAPI {
     let wells: Well[] = []
     let cursor = undefined
     const filter: WellFilterAPI = this.wrapFilter(userFilter);
-      do {
+    do {
         const wellsChunk: WellItems | undefined = await this.sendFilterRequest(filter, cursor);
         if (wellsChunk == undefined) {
           break
@@ -152,14 +158,10 @@ export class WellsAPI extends ConfigureAPI {
         if (wellsChunk.items.length > 0) {
           wells = wells.concat(wellsChunk.items)
         }
-
-        if (wellsChunk.cursor != undefined) {
-          break
-        }
         
-        // update cursor and go again
-        cursor = wellsChunk.cursor
-
+      // update cursor and go again
+      cursor = wellsChunk.nextCursor
+      
       } while (cursor != undefined);
     return wells;
   }

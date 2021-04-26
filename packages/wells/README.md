@@ -1,4 +1,4 @@
-# Cognite Wells JS SDK
+# Cognite Wells nodejs SDK
 
 Cognite wells SDK is tool for interacting with the CDF Wells Data Layer (WDL). All queries are passed through a service API called the 'Well-Service' that handles ingestion and queries into the well data layer.
 
@@ -174,18 +174,18 @@ const gammaRayFilter: MeasurementFilter = {
 const densityFilter: MeasurementFilter = {
   measurementType: MeasurementType.Density,
 };
-const geomechanicsFilter: MeasurementFilter = {
-  measurementType: MeasurementType.Geomechanics,
+const lotFilter: MeasurementFilter = {
+  measurementType: MeasurementType.LOT,
 };
 
 // Look for wells that match on ANY
 const measurementFilters: MeasurementFilters = {
-  containsAny: [gammaRayFilter, densityFilter, geomechanicsFilter],
+  containsAny: [gammaRayFilter, densityFilter, lotFilter],
 };
 
 // OR, look for wells that match on ALL
 const measurementFilters: MeasurementFilters = {
-  containsAll: [gammaRayFilter, densityFilter, geomechanicsFilter],
+  containsAll: [gammaRayFilter, densityFilter, lotFilter],
 };
 
 // apply filter
@@ -265,7 +265,7 @@ const wellboreId: number = 870793324939646;
 const measurements: Measurement[] | undefined;
 measurements = await client.wellbores.getMeasurement(
   wellboreId,
-  MeasurementType.GammaRay
+  MeasurementType.GammaRay,
 );
 
 // lazy method to inspect data from measurement

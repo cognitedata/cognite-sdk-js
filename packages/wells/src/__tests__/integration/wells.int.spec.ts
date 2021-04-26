@@ -4,19 +4,30 @@ import { setupLoggedInClient } from '../testUtils';
 import WellsClient from 'wells/src/client/cogniteWellsClient';
 import { Well, WellItems } from 'wells/src/client/model/Well';
 import { Wellbore } from 'wells/src/client/model/Wellbore'
+import { LengthRange } from 'wells/src/client/model/LengthRange';
 import { WellFilter, MeasurementFilter, MeasurementFilters } from 'wells/src/client/model/WellFilter';
 import { GeoJson } from 'wells/src/client/model/GeoJson';
 import { Asset } from 'wells/src/types';
+import { DateRange } from 'wells/src/client/model/DateRange';
+
+enum LengthUnitEnum {
+  METER = 'meter',
+  FOOT = 'foot',
+  INCH = 'inch',
+  YARD = 'yard',
+}
 
 enum MeasurementType {
   GammaRay = 'GammaRay',
   Caliper = 'Caliper',
-  Resistivity = 'Resistivity',
+  ResistivityDeep = 'ResistivityDeep',
+  ResistivityMedium = 'ResistivityMedium',
   Density = 'Density',
   Neutron = 'Neutron',
   PPFG = 'PPFG',
   Geomechanics = 'Geomechanics',
-  Core = 'Core',
+  FIT = 'FIT',
+  LOT = 'LOT',
 }
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
@@ -79,7 +90,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   test('get by id - get wellbores', async () => {
     expect(client).not.toBeUndefined();
     const wellId: number = 8091617722352417;
-
     const well: Well | undefined = await client.wells.getById(wellId)
 
     expect(well).not.toBeUndefined();
@@ -89,6 +99,10 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const wellbores: Wellbore[] | undefined = await well?.wellbores()
     expect(wellbores).not.toBeUndefined();
     expect(wellbores?.length).toBeGreaterThan(0)
+    const wellboreIds = ['WDL:Wellbore:dummy102', 'wellbore:Platform WB 12.25 in OH', 'wellbore:Platform WB 8.5 in OH']
+      wellboreIds.forEach(id => {
+        expect(wellbores!.map(wellbore => wellbore.externalId)).toContain(id)
+      });
   });
 
   test('get by id - 404 if well does not exist', async () => {
@@ -167,7 +181,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     });
   });
 
-  test('filter with slow feature set to true', async () => {
+  test('filter wells slow', async () => {
     expect(client).not.toBeUndefined();
     const filter: WellFilter = {'stringMatching': '10'}
     const wells: Well[] | undefined = await client.wells.filterSlow(filter);
@@ -178,6 +192,13 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     WdlNames.forEach(name => {
      expect(retrievedNames).toContain(name)
     });
+  });
+
+  test('filter with slow with empty filter', async () => {
+    const filter: WellFilter = {}
+    const wells: Well[] | undefined = await client.wells.filterSlow(filter);
+      
+    expect(wells).not.toBeUndefined();
   });
 
   test('filter - gets wells with description filter', async () => {
@@ -280,7 +301,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     expect(wells).not.toBeUndefined();
     const retrievedNames = wells?.items.map(well => well.externalId)
-    const WdlNames = ["well:34/10-1"];
+    const WdlNames = ["well:34/10-8"];
     WdlNames.forEach(name => {
       expect(retrievedNames).toContain(name)
     });
@@ -437,4 +458,75 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(well!.spudDate?.toLocaleDateString()).toBe(date.toLocaleDateString())
   })
 
+  test('filter wells on water depth', async () => {
+    const waterDepthFilter: LengthRange = {"unit": LengthUnitEnum.METER, "min": 125.0, "max": 250.0}
+    const filter: WellFilter = {"waterDepth": waterDepthFilter}
+
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+
+    const externalIds = wells?.items.map(well => well.externalId)
+    expect(externalIds).toContain("well:CasingWear")
+  })
+
+  test('filter wells on water depth in feet', async () => {
+    const waterDepthFilter: LengthRange = {"unit": LengthUnitEnum.FOOT, "min": 30.0, "max": 40.0}
+    const filter: WellFilter = {"waterDepth": waterDepthFilter}
+
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+
+    const externalIds = wells?.items.map(well => well.externalId)
+    expect(externalIds).toContain("well:34/10-8")
+  })
+
+  test('partial well filter', async () => {
+    const waterDepthFilter: LengthRange = {"unit": LengthUnitEnum.METER, "max": 500.0}
+    const filter: WellFilter = {"waterDepth": waterDepthFilter}
+
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+
+    const externalIds = wells?.items.map(well => well.externalId)
+    expect(externalIds).toContain("well:34/10-8")
+  })
+
+  test('filter on spud date', async () => {
+    const dateFilter: DateRange = {"min": new Date(2017, 0, 1), "max": new Date(2018, 0, 1)}
+    const filter: WellFilter = {"spudDate": dateFilter}
+
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+
+    const externalIds = wells?.items.map(well => well.externalId)
+    expect(externalIds).toContain("well:34/10-8")
+  })
+
+  test('filter on well type', async () => {
+    const wellTypeFilter: string[] = ["production"]
+    const filter: WellFilter = {"wellType": wellTypeFilter}
+
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+
+    const externalIds = wells?.items.map(well => well.externalId)
+    expect(externalIds).toContain("well:CasingWear")
+  })
+
+  test('filter on license', async () => {
+    const wellLicenseFilter: string[] = ["well license"]
+    const filter: WellFilter = {"licenses": wellLicenseFilter}
+
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+
+    const externalIds = wells?.items.map(well => well.externalId)
+    expect(externalIds).toContain("well:34/10-8")
+  })
 });

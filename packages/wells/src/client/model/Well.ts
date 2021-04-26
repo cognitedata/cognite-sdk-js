@@ -20,7 +20,7 @@ export interface WellItems {
    * @type {string}
    * @memberof Well
    */
-  cursor: string;
+  nextCursor?: string;
 }
 /**
  * A well is an assets and sets the basis of the well data model hierarchy
@@ -78,6 +78,16 @@ export interface Well {
    * @memberof Well
    */
   spudDate?: Date;
+  /**
+   * @type {string}
+   * @memberof Well
+   */
+  wellType?: string;
+  /**
+   * @type {string}
+   * @memberof Well
+   */
+  license?: string;
   /**
    * @type {Date}
    * @memberof Well
