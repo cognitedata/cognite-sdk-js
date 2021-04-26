@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@2.1.1...@cognite/sdk-core@2.1.2) (2021-04-26)
+
+
+### Bug Fixes
+
+* **core:** don't check if its https if its not a browser [release] ([#524](https://github.com/cognitedata/cognite-sdk-js/issues/524)) ([4ed1528](https://github.com/cognitedata/cognite-sdk-js/commit/4ed15281a21047b8230d9022b3cb9ab23768a3cc))
+
+
+
+
+
 ## [2.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@2.1.0...@cognite/sdk-core@2.1.1) (2021-04-13)
 
 **Note:** Version bump only for package @cognite/sdk-core
