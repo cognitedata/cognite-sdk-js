@@ -1,7 +1,7 @@
 import { HttpError} from '@cognite/sdk-core';
-import { ConfigureAPI } from "../baseWellsClient";
-import { NPT } from "../model/NPT";
-import { NPTFilter } from "../model/NPTFilter";
+import { ConfigureAPI } from '../baseWellsClient';
+import { NPT } from '../model/NPT';
+import { NPTFilter } from '../model/NPTFilter';
 
 export class EventsAPI extends ConfigureAPI {
 

@@ -1,4 +1,4 @@
-import { DoubleWithUnit } from "./DoubleWithUnit";
+import { DoubleWithUnit } from './DoubleWithUnit';
 
 export interface NPT {
   /**
