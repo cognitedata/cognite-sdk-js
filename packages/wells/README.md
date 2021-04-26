@@ -109,6 +109,8 @@ const wells = await client.wells.filter(filter);
 
 #### _Filter wells without cursor (get ALL results sequentially):_
 
+Get wells from the well-service until `nextCursor` is empty. Due to performance issue in the well-service, this can take a long time. We don't recommend using this in a user interface where the user expects to see the results as fast as possible. Consider implementation your own pagination so that you can show part of the response as it arrives.
+
 ```ts
 import { WellFilter } from '@cognite/sdk-wells';
 

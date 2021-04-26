@@ -155,13 +155,10 @@ export class WellsAPI extends ConfigureAPI {
           break
         }
 
-        if (wellsChunk.items.length > 0) {
-          wells = wells.concat(wellsChunk.items)
-        }
+        wells = wells.concat(wellsChunk.items)
         
-      // update cursor and go again
-      cursor = wellsChunk.nextCursor
-      
+        // update cursor and go again
+        cursor = wellsChunk.nextCursor
       } while (cursor != undefined);
     return wells;
   }

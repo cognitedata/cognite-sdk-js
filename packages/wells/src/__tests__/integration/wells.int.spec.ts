@@ -133,8 +133,8 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const wells = await client.wells.list();
     expect(wells).not.toBeUndefined();
     const retrievedWells = wells?.items.map(x => x.id)
-    if (wells?.cursor) {
-      const newWells = await client.wells.list(wells?.cursor)
+    if (wells?.nextCursor) {
+      const newWells = await client.wells.list(wells?.nextCursor)
       newWells?.items.forEach(element => {
         expect(retrievedWells).not.toContain(element.id)
       });
