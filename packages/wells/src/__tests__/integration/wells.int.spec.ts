@@ -51,7 +51,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     /* eslint-disable */
     expect(well?.id).toBe(wellId);
     /* eslint-enable */
-    expect(well?.waterDepth?.unit).toBe("m")
+    expect(well?.waterDepth?.unit).toBe("meter")
     expect(well?.waterDepth?.value).toBe(100.0)
   });
 
@@ -78,7 +78,8 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('get by id - get wellbores', async () => {
     expect(client).not.toBeUndefined();
-    const wellId: number = 2275887128760800;
+    const wellId: number = 8091617722352417;
+
     const well: Well | undefined = await client.wells.getById(wellId)
 
     expect(well).not.toBeUndefined();
@@ -87,10 +88,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     /* eslint-enable */
     const wellbores: Wellbore[] | undefined = await well?.wellbores()
     expect(wellbores).not.toBeUndefined();
-    const wellboreIds = [870793324939646, 1072803479704457, 8456650753594878]
-    wellboreIds.forEach(id => {
-      expect(wellbores!.map(wellbore => wellbore.id)).toContain(id)
-    });
+    expect(wellbores?.length).toBeGreaterThan(0)
   });
 
   test('get by id - 404 if well does not exist', async () => {
@@ -163,6 +161,19 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       
     expect(wells).not.toBeUndefined();
     const retrievedNames = wells?.items.map(well => well.name)
+    const WdlNames = ["34/10-24", "34/10-8", "34/10-1"];
+    WdlNames.forEach(name => {
+     expect(retrievedNames).toContain(name)
+    });
+  });
+
+  test('filter with slow feature set to true', async () => {
+    expect(client).not.toBeUndefined();
+    const filter: WellFilter = {'stringMatching': '10'}
+    const wells: Well[] | undefined = await client.wells.filterSlow(filter);
+      
+    expect(wells).not.toBeUndefined();
+    const retrievedNames = wells?.map(well => well.name)
     const WdlNames = ["34/10-24", "34/10-8", "34/10-1"];
     WdlNames.forEach(name => {
      expect(retrievedNames).toContain(name)
@@ -282,7 +293,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     expect(wells).not.toBeUndefined();
     const retrievedNames = wells?.items.map(well => well.externalId)
-    const WdlNames = ["well:34/10-1"];
+    const WdlNames = ["well:34/10-8"];
     WdlNames.forEach(name => {
       expect(retrievedNames).toContain(name)
     });
@@ -326,7 +337,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(client).not.toBeUndefined();
     const quadrants = await client.wells.quadrants();
 
-    expect(quadrants).toContain("A")
+    expect(quadrants).toContain("8");
     expect(quadrants).toContain("B")
   });
 
