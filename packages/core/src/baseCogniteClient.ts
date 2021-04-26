@@ -26,6 +26,7 @@ import {
   isOAuthWithCogniteOptions,
   isUsingSSL,
   projectUrl,
+  isBrowser,
 } from './utils';
 import { version } from '../package.json';
 import {
@@ -277,7 +278,7 @@ export default class BaseCogniteClient {
       throw Error('`loginWithOAuth` is missing parameter `options`');
     }
 
-    if (!isUsingSSL()) {
+    if (isBrowser() && !isUsingSSL()) {
       console.warn(
         'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
       );
