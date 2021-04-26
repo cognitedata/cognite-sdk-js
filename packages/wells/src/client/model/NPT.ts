@@ -1,4 +1,4 @@
-import { DoubleWithUnit } from "wells/dist/src/client/model/DoubleWithUnit";
+import { DoubleWithUnit } from "./DoubleWithUnit";
 
 export interface NPT {
   /**
