@@ -107,6 +107,21 @@ const filter: WellFilter = {
 const wells = await client.wells.filter(filter);
 ```
 
+#### _Filter wells without cursor (get ALL results sequentially):_
+
+Get wells from the well-service until `nextCursor` is empty. Due to performance issue in the well-service, this can take a long time. We don't recommend using this in a user interface where the user expects to see the results as fast as possible. Consider implementation your own pagination so that you can show part of the response as it arrives.
+
+```ts
+import { WellFilter } from '@cognite/sdk-wells';
+
+const polygon = 'POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))';
+const filter: WellFilter = {
+  polygon: { wktGeometry: polygon, crs: 'epsg:4326' },
+  sources: ['edm'],
+};
+const wells = await client.wells.filterSlow(filter);
+```
+
 #### _Filter wells by geoJson polygon:_
 
 ```ts
@@ -265,7 +280,7 @@ const wellboreId: number = 870793324939646;
 const measurements: Measurement[] | undefined;
 measurements = await client.wellbores.getMeasurement(
   wellboreId,
-  MeasurementType.GammaRay,
+  MeasurementType.GammaRay
 );
 
 // lazy method to inspect data from measurement

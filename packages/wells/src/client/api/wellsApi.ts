@@ -89,7 +89,7 @@ export class WellsAPI extends ConfigureAPI {
   private addLazyToAllWellItems = (wellItems: WellItems): WellItems => {
     return <WellItems> {
       items: wellItems.items.map(well => this.addLazyMethodsForWell(well)),
-      cursor: wellItems.cursor
+      nextCursor: wellItems.nextCursor
     }
   }
 
@@ -121,7 +121,18 @@ export class WellsAPI extends ConfigureAPI {
     });
   };
 
-  public filter = async (userFilter: WellFilter, cursor?: string): Promise<WellItems | undefined> => {
+  private sendFilterRequest = async (filter: WellFilterAPI, cursor?: string): Promise<WellItems | undefined> => {
+      const path = this.getPath('/wells/list', cursor)
+      return await this.client?.asyncPost<WellItems>(path, {'data': filter})
+        .then(response => 
+          this.addLazyToAllWellItems(response.data)
+        )
+        .catch(err => {
+          throw new HttpError(err.status, err.errorMessage, {})
+        });
+  }
+
+  private wrapFilter = (userFilter: WellFilter): WellFilterAPI => {
     let filter: WellFilterAPI;
     if (userFilter.polygon && userFilter.polygon.geoJsonGeometry) {
       filter = this.convertToWkt(userFilter)
@@ -131,12 +142,30 @@ export class WellsAPI extends ConfigureAPI {
       userFilter.polygon = undefined;
       filter = this.convertToApiWellFilter(userFilter);
     }
-    const path = this.getPath('/wells/list', cursor)
-    return await this.client?.asyncPost<WellItems>(path, {'data': filter})
-      .then(response => this.addLazyToAllWellItems(response.data))
-      .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {})
-    });
+    return filter
+  }
+
+  public filterSlow = async (userFilter: WellFilter): Promise<Well[] | undefined> => {
+    let wells: Well[] = []
+    let cursor = undefined
+    const filter: WellFilterAPI = this.wrapFilter(userFilter);
+    do {
+        const wellsChunk: WellItems | undefined = await this.sendFilterRequest(filter, cursor);
+        if (wellsChunk == undefined) {
+          break
+        }
+
+        wells = wells.concat(wellsChunk.items)
+        
+        // update cursor and go again
+        cursor = wellsChunk.nextCursor
+      } while (cursor != undefined);
+    return wells;
+  }
+
+  public filter = async (userFilter: WellFilter, cursor?: string): Promise<WellItems | undefined> => {
+    const filter: WellFilterAPI = this.wrapFilter(userFilter);
+    return await this.sendFilterRequest(filter, cursor)
   };
 
   public getById = async (id: number): Promise<Well | undefined> => {
