@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.1.1...@cognite/sdk-wells@1.2.0) (2021-04-27)
+
+
+### Features
+
+* add npt support to wells sdk [release] ([#529](https://github.com/cognitedata/cognite-sdk-js/issues/529)) ([a924fe4](https://github.com/cognitedata/cognite-sdk-js/commit/a924fe4f157ddb3387b41246af0f10a9832a999d))
+
+
+
+
+
 ## [1.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.1.0...@cognite/sdk-wells@1.1.1) (2021-04-26)
 
 **Note:** Version bump only for package @cognite/sdk-wells
