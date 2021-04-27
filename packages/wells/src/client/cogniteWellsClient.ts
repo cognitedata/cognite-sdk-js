@@ -2,6 +2,7 @@ import { accessApi } from '@cognite/sdk-core';
 import { WellsAPI } from './api/wellsApi';
 import { WellboresAPI } from './api/wellboresApi';
 import { SurveysAPI } from './api/surveysApi';
+import { EventsAPI } from './api/eventsApi';
 import { version } from '../../package.json';
 import BaseWellsClient from './baseWellsClient';
 import { ClientOptions } from './clientAuthUtils';
@@ -20,9 +21,14 @@ export default class CogniteWellsClient extends BaseWellsClient {
     return accessApi(this.surveysApi);
   }
 
+  public get events() {
+    return accessApi(this.eventsApi);
+  }
+
   private wellsApi?: WellsAPI;
   private wellboresApi?: WellboresAPI;
   private surveysApi?: SurveysAPI;
+  private eventsApi?: EventsAPI;
   private cluster: Cluster;
 
   constructor(options: ClientOptions) {
@@ -36,6 +42,12 @@ export default class CogniteWellsClient extends BaseWellsClient {
     this.surveysApi.setHttpClient = this.httpClient;
     this.surveysApi.setProject = this.project;
     this.surveysApi.setCluster = this.cluster;
+
+    // events
+    this.eventsApi = this.apiFactory(EventsAPI, 'events');
+    this.eventsApi.setHttpClient = this.httpClient;
+    this.eventsApi.setProject = this.project;
+    this.eventsApi.setCluster = this.cluster;
 
     // wellbores
     this.wellboresApi = this.apiFactory(WellboresAPI, 'wellbores');
