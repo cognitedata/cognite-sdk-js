@@ -384,7 +384,7 @@ const data: SurveyData | undefined = await client.surveys.getData(request);
 
 ### **Event queries**
 
-#### _Filter on NPT events_
+#### _Filter NPT events_
 
 ```ts
 import { NPT, NPTFilter } from '@cognite/sdk-wells';
