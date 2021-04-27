@@ -381,3 +381,30 @@ const request: SurveyDataRequest = {
 
 const data: SurveyData | undefined = await client.surveys.getData(request);
 ```
+
+### **Event queries**
+
+#### _Filter on NPT events_
+
+```ts
+import { NPT, NPTFilter } from '@cognite/sdk-wells';
+const filter: NPTFilter = {
+  duration: { min: 21.0, max: 23.0 },
+  nptCode: 'some-code',
+  nptCodeDetail: 'some-detail',
+};
+
+const nptEvents: NPT[] | undefined = await client.events.listEvents(filter);
+```
+
+#### _List all npt codes_
+
+```ts
+const nptCodes: string[] | undefined = await client.events.nptCodes();
+```
+
+#### _List all npt code details_
+
+```ts
+const nptCodes: string[] | undefined = await client.events.nptDetailCodes();
+```
