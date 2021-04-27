@@ -152,6 +152,18 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
   sources: [<span class="hljs-string">&#x27;edm&#x27;</span>],
 };
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
+				<a href="#filter-wells-without-cursor-get-all-results-sequentially" id="filter-wells-without-cursor-get-all-results-sequentially" style="color: inherit; text-decoration: none;">
+					<h4><em>Filter wells without cursor (get ALL results sequentially):</em></h4>
+				</a>
+				<p>Get wells from the well-service until <code>nextCursor</code> is empty. Due to performance issue in the well-service, this can take a long time. <code>We don&#39;t recommend</code> using this in a user interface where the user expects to see the results as fast as possible. Consider implementation your own pagination so that you can show part of the response as it arrives.</p>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> polygon = <span class="hljs-string">&#x27;POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))&#x27;</span>;
+<span class="hljs-keyword">const</span> filter: WellFilter = {
+  polygon: { wktGeometry: polygon, crs: <span class="hljs-string">&#x27;epsg:4326&#x27;</span> },
+  sources: [<span class="hljs-string">&#x27;edm&#x27;</span>],
+};
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filterSlow(filter);</code></pre>
 				<a href="#filter-wells-by-geojson-polygon" id="filter-wells-by-geojson-polygon" style="color: inherit; text-decoration: none;">
 					<h4><em>Filter wells by geoJson polygon:</em></h4>
 				</a>
@@ -289,7 +301,7 @@ wellbores = <span class="hljs-keyword">await</span> well.wellbores();</code></pr
 <span class="hljs-keyword">const</span> measurements: Measurement[] | <span class="hljs-literal">undefined</span>;
 measurements = <span class="hljs-keyword">await</span> client.wellbores.getMeasurement(
   wellboreId,
-  MeasurementType.GammaRay,
+  MeasurementType.GammaRay
 );
 
 <span class="hljs-comment">// lazy method to inspect data from measurement</span>
@@ -629,10 +641,19 @@ wellbores?.forEach(<span class="hljs-keyword">async</span> wellbore =&gt; {
 						<a href="modules/_wells_src_client_model_cluster_.html">&quot;wells/src/client/model/<wbr>Cluster&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_daterange_.html">&quot;wells/src/client/model/<wbr>Date<wbr>Range&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_doublewithunit_.html">&quot;wells/src/client/model/<wbr>Double<wbr>With<wbr>Unit&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_geojson_.html">&quot;wells/src/client/model/<wbr>Geo<wbr>Json&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_lengthrange_.html">&quot;wells/src/client/model/<wbr>Length<wbr>Range&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_lengthunitenum_.html">&quot;wells/src/client/model/<wbr>Length<wbr>Unit<wbr>Enum&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_measurement_.html">&quot;wells/src/client/model/<wbr>Measurement&quot;</a>
