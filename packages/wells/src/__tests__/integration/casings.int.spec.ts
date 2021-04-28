@@ -43,33 +43,25 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
 
   test('Get casings data from wellbore id', async () => {
     const casingExtId = "casing:CasingWear";
-
     const wellboreId: number = 8269456345006483;
-
     const casings: Sequence[] | undefined = await client.wellbores.getCasings(wellboreId)
 
     expect(casings?.length).toBeGreaterThan(0);
-    casings?.forEach(async casing => {
-      expect(casing.externalId).toBe(casingExtId)
-      expect(casing.columns?.length).toBe(7)
+    let casing = casings?.find(casing => casing.externalId === casingExtId)
+    expect(casing).not.toBeNull()
+  });
 
+  test('Get casings data from wellbore ids', async () => {
+    const casingExtId = "casing:CasingWear";
 
-      const data: SequenceData | undefined = await client.wellbores.getCasingsData(
-        casing.id,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        100
-      );
+    const wellboreId: number = 8269456345006483;
 
-      expect(data).not.toBeUndefined();
-
-      expect(data!.externalId).toBe(casingExtId);
-
-      expect(data?.columns.length).toBe(7)
-      expect(data?.rows.length).toBe(3)
-    })
+    const casings = await client.casings.getByWellboreIds([wellboreId])
+    expect(casings.length).toBeGreaterThan(0);
+    let casing = casings?.find(casing => casing.externalId === casingExtId) as Sequence
+    expect(casing).not.toBeNull()
+    let data = await casing?.data()
+    expect(data.id).toBe(casing.id)
   });
 
   test('Get casings on the wellbore object', async () => {
@@ -82,11 +74,10 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
       const casings: Sequence[] | undefined = await wellbore?.casings();
       expect(casings?.length).toBeGreaterThan(0);
       casings?.forEach(async casing => {
-      expect(casing.columns?.length).toBe(7)
-    })
+        expect(casing.columns?.length).toBe(7)
+      })
     })
   });
-
 
   test('Get casing data on casing object', async () => {
     const casingExtId = "casing:CasingWear";
@@ -100,7 +91,6 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
       expect(casing.externalId).toBe(casingExtId)
       expect(casing.columns?.length).toBe(7)
 
-
       const data: SequenceData | undefined = await casing.data();
 
       expect(data).not.toBeUndefined();
@@ -111,5 +101,4 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
       expect(data?.rows.length).toBe(3)
     })
   });
-
 });
