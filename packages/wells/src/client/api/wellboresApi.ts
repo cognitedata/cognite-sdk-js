@@ -5,12 +5,14 @@ import { Survey, SurveyData } from '../model/Survey';
 import { Wellbore } from '../model/Wellbore';
 import { SurveysAPI } from './surveysApi';
 import { WellIds } from '../model/WellIds';
-import { Sequence, SequenceData, SequenceDataRequest } from '../model/Sequence';
+import { Sequence, SequenceData } from '../model/Sequence';
 import { ConfigureAPI } from '../baseWellsClient';
 import { Asset } from '@cognite/sdk';
+import { CasingsAPI } from './casingsApi';
 
 export class WellboresAPI extends ConfigureAPI {
   private _surveysSDK?: SurveysAPI;
+  private _casings?: CasingsAPI
 
   public set surveysSdk(sdk: SurveysAPI) {
     this._surveysSDK = sdk;
@@ -18,6 +20,17 @@ export class WellboresAPI extends ConfigureAPI {
 
   private get surveys(): SurveysAPI {
     return accessApi(this._surveysSDK);
+  }
+
+  public set casingsSdk(api: CasingsAPI) {
+    this._casings = api
+  }
+
+  private get casings(): CasingsAPI {
+    if (this._casings === undefined) {
+      throw new Error("Casings is undefined")
+    }
+    return this._casings
   }
 
   private addLazyMethodsForWellbore = (wellbore: Wellbore): Wellbore => {
@@ -53,37 +66,15 @@ export class WellboresAPI extends ConfigureAPI {
       id: measurement.id,
       externalId: measurement.externalId,
       name: measurement.name,
-      data: async (): Promise<SurveyData | undefined>  => {return await this.surveys.getData({id: measurement.id}).then(response => response).catch(err => err)}
-    };
-  }
-
-  
-  private addLazyMethodsForCasing = (casing: Sequence): Sequence => {
-    return <Sequence>{
-      id: casing.id,
-      columns: casing.columns,
-      createdTime: casing.createdTime,
-      lastUpdatedTime: casing.lastUpdatedTime,
-      name: casing.name,
-      description: casing.description,
-      assetId: casing.assetId,
-      externalId: casing.externalId,
-      metadata: casing.metadata,
-      dataSetId: casing.dataSetId,
-      data: async (
-        start?: number,
-        end?: number,
-        columns?: string[],
-        cursor?: string,
-        limit?: number
-      ): Promise<SequenceData | undefined> => {
-        return await this.getCasingsData(casing.id, start, end, columns, cursor, limit).then(response => response).catch(err => err)
-      }
+      data: async (): Promise<SurveyData>  => {
+          return await this.surveys.getData({id: measurement.id
+        })
+        .catch(err => err)}
     };
   }
 
   /* eslint-disable */
-  public getById = async (id: number): Promise<Wellbore | undefined> => {
+  public getById = async (id: number): Promise<Wellbore> => {
     const path: string = this.getPath(`/wellbores/${id}`)
     return await this.client?.asyncGet<Wellbore>(path)
       .then(response => this.addLazyMethodsForWellbore(response.data))
@@ -92,15 +83,11 @@ export class WellboresAPI extends ConfigureAPI {
     });
   };
 
-  public getFromWell = async (wellId: number): Promise<Wellbore[] | undefined> => {
+  public getFromWell = async (wellId: number): Promise<Wellbore[]> => {
     const path: string = this.getPath(`/wells/${wellId}/wellbores`)
     try {
       const wellboreData = await this.client?.asyncGet<Wellbore[]>(path)
-      if (wellboreData) {
-        return wellboreData.data.map((wellbore: Wellbore) => this.addLazyMethodsForWellbore(wellbore))
-      } else {
-        return undefined
-      }
+      return wellboreData.data.map((wellbore: Wellbore) => this.addLazyMethodsForWellbore(wellbore))
     } catch(err) {
       throw new HttpError(err.status, err.errorMessage, {})
     }
@@ -111,11 +98,7 @@ export class WellboresAPI extends ConfigureAPI {
     const wellIdsToSearch: WellIds = { items: wellIds }
     try {
       const wellboreData = await this.client?.asyncPost<Wellbore[]>(path, {'data': wellIdsToSearch})
-      if (wellboreData) {
-        return wellboreData.data.map((wellbore: Wellbore) => this.addLazyMethodsForWellbore(wellbore))
-      } else {
-        return undefined
-      }
+      return wellboreData.data.map((wellbore: Wellbore) => this.addLazyMethodsForWellbore(wellbore))
     } catch(err) {
       throw new HttpError(err.status, err.errorMessage, {})
     }
@@ -137,7 +120,7 @@ export class WellboresAPI extends ConfigureAPI {
 
     const path: string = this.getPath(`/wellbores/${wellboreId}/measurements/${measurementType}`)
 
-    let measurements = await this.client?.asyncGet<Measurements>(path)
+    let measurements = await this.client.asyncGet<Measurements>(path)
     .then(response => response.data)
     .catch(err => {
       throw new HttpError(err.status, err.errorMessage, {})
@@ -147,18 +130,7 @@ export class WellboresAPI extends ConfigureAPI {
   }
 
   public getCasings = async (wellOrWellboreId: number): Promise<Sequence[] | undefined> => {
-    const path: string = this.getPath(`/wells/${wellOrWellboreId}/casings`)
-
-    try {
-      const casings = await this.client?.asyncGet<Sequence[]>(path)
-      if (casings) {
-        return casings.data.map((casing: Sequence) => this.addLazyMethodsForCasing(casing))
-      } else {
-        return undefined
-      }
-    } catch(err) {
-      throw new HttpError(err.status, err.errorMessage, {})
-    } 
+    return this.casings.getByWellOrWellboreId(wellOrWellboreId)
   }
 
   public getCasingsData = async (
@@ -169,21 +141,12 @@ export class WellboresAPI extends ConfigureAPI {
     cursor?: string,
     limit?: number
   ): Promise<SequenceData | undefined> => {
-    const path: string = this.getPath(`/wells/casings/data`)
-
-    const request: SequenceDataRequest = {
-      id: casingId,
-      start: start,
-      end: end,
-      columns: columns,
-      cursor: cursor,
-      limit: limit
-    }
-
-    return await this.client?.asyncPost<SequenceData>(path, {'data': request})
-    .then(response => response.data)
-    .catch(err => {
-      throw new HttpError(err.status, err.errorMessage, {})
-    })
+    return this.casings.getData(
+      casingId=casingId,
+      start=start,
+      end=end,
+      columns=columns,
+      cursor=cursor,
+      limit=limit)
   }
 }

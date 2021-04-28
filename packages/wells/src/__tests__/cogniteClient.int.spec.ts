@@ -113,7 +113,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     class TestAPI extends ConfigureAPI {
       constructor() {
         super();
-        this.client = new HttpClientWithIntercept(COGDEV_BASE_URL);
+        this.setHttpClient = new HttpClientWithIntercept(COGDEV_BASE_URL);
         this.cluster = Cluster.BP;
         this.project = 'owa-test';
 
@@ -124,7 +124,9 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
         expect(path).not.toBeNull;
         expect(path).toContain('/owa-test/test/route?env=bp&cursor=testCursor');
 
-        this.client = new HttpClientWithIntercept(BP_NORTHEUROPE_DEV_BASE_URL);
+        this.setHttpClient = new HttpClientWithIntercept(
+          BP_NORTHEUROPE_DEV_BASE_URL
+        );
         this.cluster = Cluster.BP_NORTHEUROPE;
         this.project = 'bp-northeurope';
 
@@ -135,7 +137,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
         expect(path).not.toBeNull;
         expect(path).toBe('/bp-northeurope/test/route');
 
-        this.client = new HttpClientWithIntercept(COGDEV_BASE_URL);
+        this.setHttpClient = new HttpClientWithIntercept(COGDEV_BASE_URL);
         this.cluster = Cluster.API;
         this.project = 'subsurface-test';
         expect(this.client.getBaseUrl()).toBe(COGDEV_BASE_URL);
@@ -145,7 +147,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
         expect(path).not.toBeNull;
         expect(path).toBe('/subsurface-test/test/route');
 
-        this.client = new HttpClientWithIntercept(COGDEV_BASE_URL);
+        this.setHttpClient = new HttpClientWithIntercept(COGDEV_BASE_URL);
         this.cluster = Cluster.API;
         this.project = 'subsurface-test';
 

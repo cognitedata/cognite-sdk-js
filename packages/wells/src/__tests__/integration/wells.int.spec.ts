@@ -515,7 +515,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(wells).not.toBeUndefined();
 
     const externalIds = wells?.items.map(well => well.externalId)
-    expect(externalIds).toContain("well:34/10-8")
+    expect(externalIds).toContain('well:34/10-8');
   })
 
   test('filter on license', async () => {
