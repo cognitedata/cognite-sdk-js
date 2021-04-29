@@ -48,12 +48,9 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(client.isLoggedIn).toBe(true);
 
     // get 403 due to invalid token
-    client.wells
-      .getById(3109548670)
-      .then(response => response)
-      .catch(err => {
-        expect(err.status).toBeGreaterThanOrEqual(400);
-      });
+    client.wells.getById(3109548670).catch(err => {
+      expect(err.status).toBeGreaterThanOrEqual(400);
+    });
 
     // get 403 due to invalid token
     const testPolygon =
@@ -63,12 +60,9 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
       sources: ['edm'],
     };
 
-    client.wells
-      .filter(filter)
-      .then(response => response)
-      .catch(err => {
-        expect(err.status).toBeGreaterThanOrEqual(400);
-      });
+    client.wells.filter(filter).catch(err => {
+      expect(err.status).toBeGreaterThanOrEqual(400);
+    });
   });
 
   // test api-key login

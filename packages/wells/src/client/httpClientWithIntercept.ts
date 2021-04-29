@@ -34,22 +34,20 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
    *
    */
   public asyncGet = <T = any>(path: string, options?: HttpRequestOptions) => {
-    return this.get<T>(path, options)
-      .then(response => response)
-      .catch(err => {
-        // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
-        if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
-          // update with new bearer token
-          const newToken = this.refreshToken();
-          this.updateHeaderWithNewToken(newToken);
+    return this.get<T>(path, options).catch(err => {
+      // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
+      if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
+        // update with new bearer token
+        const newToken = this.refreshToken();
+        this.updateHeaderWithNewToken(newToken);
 
-          // try again
-          return this.get<T>(path, options);
-        }
+        // try again
+        return this.get<T>(path, options);
+      }
 
-        // rethrow
-        throw err;
-      });
+      // rethrow
+      throw err;
+    });
   };
 
   /**
@@ -60,22 +58,20 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
    *
    */
   public asyncPut = <T = any>(path: string, options?: HttpRequestOptions) => {
-    return this.put<T>(path, options)
-      .then(response => response)
-      .catch(err => {
-        // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
-        if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
-          // update with new bearer token
-          const newToken = this.refreshToken();
-          this.updateHeaderWithNewToken(newToken);
+    return this.put<T>(path, options).catch(err => {
+      // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
+      if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
+        // update with new bearer token
+        const newToken = this.refreshToken();
+        this.updateHeaderWithNewToken(newToken);
 
-          // try again
-          return this.put<T>(path, options);
-        }
+        // try again
+        return this.put<T>(path, options);
+      }
 
-        // rethrow
-        throw err;
-      });
+      // rethrow
+      throw err;
+    });
   };
 
   /**
@@ -86,22 +82,20 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
    *
    */
   public asyncPost = <T = any>(path: string, options?: HttpRequestOptions) => {
-    return this.post<T>(path, options)
-      .then(response => response)
-      .catch(err => {
-        // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
-        if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
-          // update with new bearer token
-          const newToken = this.refreshToken();
-          this.updateHeaderWithNewToken(newToken);
+    return this.post<T>(path, options).catch(err => {
+      // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
+      if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
+        // update with new bearer token
+        const newToken = this.refreshToken();
+        this.updateHeaderWithNewToken(newToken);
 
-          // try again
-          return this.post<T>(path, options);
-        }
+        // try again
+        return this.post<T>(path, options);
+      }
 
-        // rethrow
-        throw err;
-      });
+      // rethrow
+      throw err;
+    });
   };
 
   /**
@@ -114,22 +108,20 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
     path: string,
     options?: HttpRequestOptions
   ) => {
-    return this.delete<T>(path, options)
-      .then(response => response)
-      .catch(err => {
-        // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
-        if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
-          // update with new bearer token
-          const newToken = this.refreshToken();
-          this.updateHeaderWithNewToken(newToken);
+    return this.delete<T>(path, options).catch(err => {
+      // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
+      if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
+        // update with new bearer token
+        const newToken = this.refreshToken();
+        this.updateHeaderWithNewToken(newToken);
 
-          // try again
-          return this.delete<T>(path, options);
-        }
+        // try again
+        return this.delete<T>(path, options);
+      }
 
-        // rethrow
-        throw err;
-      });
+      // rethrow
+      throw err;
+    });
   };
 
   /**
@@ -139,21 +131,19 @@ export default class HttpClientWithIntercept extends BasicHttpClient {
    * @param options Request options, optional
    */
   public asyncPatch = <T = any>(path: string, options?: HttpRequestOptions) => {
-    return this.patch<T>(path, options)
-      .then(response => response)
-      .catch(err => {
-        // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
-        if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
-          // update with new bearer token
-          const newToken = this.refreshToken();
-          this.updateHeaderWithNewToken(newToken);
+    return this.patch<T>(path, options).catch(err => {
+      // if unauthorized unathorized 401 or forbbiden 403 occurs, try again with a new header
+      if ((err.status === 401 || err.status === 403) && this.usesTokenLogin) {
+        // update with new bearer token
+        const newToken = this.refreshToken();
+        this.updateHeaderWithNewToken(newToken);
 
-          // try again
-          return this.patch<T>(path, options);
-        }
+        // try again
+        return this.patch<T>(path, options);
+      }
 
-        // rethrow
-        throw err;
-      });
+      // rethrow
+      throw err;
+    });
   };
 }
