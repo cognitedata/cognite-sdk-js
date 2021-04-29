@@ -66,12 +66,12 @@ export class WellsAPI extends ConfigureAPI {
       wellhead: well.wellhead,
       datum: well.datum,
       sources: well.sources,
-      wellbores: async (): Promise<Wellbore[] | undefined>  => {return await this.wellbores.getFromWell(well.id).then(response => response).catch(err => err)},
-      sourceAssets: async (source?:string): Promise<Asset[] | undefined>  => await this.getSources(well.id, source)
+      wellbores: async (): Promise<Wellbore[]>  => {return await this.wellbores.getFromWell(well.id)},
+      sourceAssets: async (source?:string): Promise<Asset[]>  => await this.getSources(well.id, source)
     };
   }
 
-  private getSources = async (wellId: number, source?: string): Promise<Asset[] | undefined> => {
+  private getSources = async (wellId: number, source?: string): Promise<Asset[]> => {
     let basePath = `/wells/${wellId}/sources`
     if (source !== undefined) {
       basePath += "/" + source
@@ -94,7 +94,7 @@ export class WellsAPI extends ConfigureAPI {
   }
 
 
-  public getLabelPrefix = async (prefix: String): Promise<String[] | undefined> => {
+  public getLabelPrefix = async (prefix: String): Promise<String[]> => {
     const path: string = this.getPath(`/wells/${prefix}`)
 
     // eslint-disable-next-line
@@ -105,14 +105,14 @@ export class WellsAPI extends ConfigureAPI {
     });
   };
 
-  public blocks = async (): Promise<String[] | undefined> => this.getLabelPrefix('blocks');
-  public fields = async (): Promise<String[] | undefined> => this.getLabelPrefix('fields');
-  public operators = async (): Promise<String[] | undefined> => this.getLabelPrefix('operators');
-  public quadrants = async (): Promise<String[] | undefined> => this.getLabelPrefix('quadrants');
-  public sources = async (): Promise<String[] | undefined> => this.getLabelPrefix('sources');
-  public measurements = async (): Promise<String[] | undefined> => this.getLabelPrefix('measurements');
+  public blocks = async (): Promise<String[]> => this.getLabelPrefix('blocks');
+  public fields = async (): Promise<String[]> => this.getLabelPrefix('fields');
+  public operators = async (): Promise<String[]> => this.getLabelPrefix('operators');
+  public quadrants = async (): Promise<String[]> => this.getLabelPrefix('quadrants');
+  public sources = async (): Promise<String[]> => this.getLabelPrefix('sources');
+  public measurements = async (): Promise<String[]> => this.getLabelPrefix('measurements');
 
-  public list = async (cursor?: string): Promise<WellItems | undefined> => {
+  public list = async (cursor?: string): Promise<WellItems> => {
     const path: string = this.getPath('/wells', cursor)
     return await this.client?.asyncGet<WellItems>(path)
       .then(response => this.addLazyToAllWellItems(response.data))
@@ -121,7 +121,7 @@ export class WellsAPI extends ConfigureAPI {
     });
   };
 
-  private sendFilterRequest = async (filter: WellFilterAPI, cursor?: string): Promise<WellItems | undefined> => {
+  private sendFilterRequest = async (filter: WellFilterAPI, cursor?: string): Promise<WellItems> => {
       const path = this.getPath('/wells/list', cursor)
       return await this.client?.asyncPost<WellItems>(path, {'data': filter})
         .then(response => 
@@ -145,12 +145,12 @@ export class WellsAPI extends ConfigureAPI {
     return filter
   }
 
-  public filterSlow = async (userFilter: WellFilter): Promise<Well[] | undefined> => {
+  public filterSlow = async (userFilter: WellFilter): Promise<Well[]> => {
     let wells: Well[] = []
     let cursor = undefined
     const filter: WellFilterAPI = this.wrapFilter(userFilter);
     do {
-        const wellsChunk: WellItems | undefined = await this.sendFilterRequest(filter, cursor);
+        const wellsChunk: WellItems = await this.sendFilterRequest(filter, cursor);
         if (wellsChunk == undefined) {
           break
         }
@@ -163,12 +163,12 @@ export class WellsAPI extends ConfigureAPI {
     return wells;
   }
 
-  public filter = async (userFilter: WellFilter, cursor?: string): Promise<WellItems | undefined> => {
+  public filter = async (userFilter: WellFilter, cursor?: string): Promise<WellItems> => {
     const filter: WellFilterAPI = this.wrapFilter(userFilter);
     return await this.sendFilterRequest(filter, cursor)
   };
 
-  public getById = async (id: number): Promise<Well | undefined> => {
+  public getById = async (id: number): Promise<Well> => {
     const path: string = this.getPath(`/wells/${id}`)
     return await this.client?.asyncGet<Well>(path)
       .then(response => this.addLazyMethodsForWell(response.data))

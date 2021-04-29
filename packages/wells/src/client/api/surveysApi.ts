@@ -9,12 +9,12 @@ export class SurveysAPI extends ConfigureAPI {
       id: survey.id,
       name: survey.name,
       metadata: survey.metadata,
-      data: async (): Promise<SurveyData | undefined>  => {return await this.getData({id: survey.id}).then(response => response).catch(err => err)}
+      data: async (): Promise<SurveyData>  => {return await this.getData({id: survey.id})}
     };
   }
 
   /* eslint-disable */
-  public getTrajectory = async (wellboreId: number): Promise<Survey | undefined> => {
+  public getTrajectory = async (wellboreId: number): Promise<Survey> => {
 
     const path: string = this.getPath(`/wellbores/${wellboreId}/trajectory`)
 
@@ -26,7 +26,7 @@ export class SurveysAPI extends ConfigureAPI {
   };
 
   /* eslint-disable */
-  public getData = async (request: SurveyDataRequest): Promise<SurveyData | undefined> => {
+  public getData = async (request: SurveyDataRequest): Promise<SurveyData> => {
 
       if (this.project == undefined){
         throw new HttpError(400, "The client project has not been set.", {})

@@ -39,13 +39,13 @@ export class WellboresAPI extends ConfigureAPI {
       name: wellbore.name,
       externalId: wellbore.externalId,
       wellId: wellbore.wellId,
-      trajectory: async (): Promise<Survey | undefined> => { return await this.surveys.getTrajectory(wellbore.id).then(response => response).catch(err => err) },
-      casings: async (): Promise<Sequence[] | undefined>  => {return await this.getCasings(wellbore.id).then(response => response).catch(err => err)},
-      sourceAssets: async (source?:string): Promise<Asset[] | undefined>  => await this.getSources(wellbore.id, source)
+      trajectory: async (): Promise<Survey> => { return await this.surveys.getTrajectory(wellbore.id) },
+      casings: async (): Promise<Sequence[]>  => {return await this.getCasings(wellbore.id)},
+      sourceAssets: async (source?:string): Promise<Asset[]>  => await this.getSources(wellbore.id, source)
     };
   }
 
-  private getSources = async (wellboreId: number, source?: string): Promise<Asset[] | undefined> => {
+  private getSources = async (wellboreId: number, source?: string): Promise<Asset[]> => {
     let basePath = `/wellbores/${wellboreId}/sources`
     if (source !== undefined) {
       basePath += "/" + source
@@ -93,7 +93,7 @@ export class WellboresAPI extends ConfigureAPI {
     }
   }
 
-  public getFromWells = async (wellIds: number[]): Promise<Wellbore[] | undefined> => {
+  public getFromWells = async (wellIds: number[]): Promise<Wellbore[]> => {
     const path: string = this.getPath(`/wellbores/bywellids`)
     const wellIdsToSearch: WellIds = { items: wellIds }
     try {
@@ -105,7 +105,7 @@ export class WellboresAPI extends ConfigureAPI {
   }
 
   /* eslint-disable */
-  public getTrajectory = async (wellboreId: number): Promise<Survey | undefined> => {
+  public getTrajectory = async (wellboreId: number): Promise<Survey> => {
 
     const path: string = this.getPath(`/wellbores/${wellboreId}/trajectory`)
     
@@ -116,7 +116,7 @@ export class WellboresAPI extends ConfigureAPI {
     });
   };
 
-  public getMeasurement = async (wellboreId: number, measurementType: MeasurementType): Promise<Measurement[] | undefined> => {
+  public getMeasurement = async (wellboreId: number, measurementType: MeasurementType): Promise<Measurement[]> => {
 
     const path: string = this.getPath(`/wellbores/${wellboreId}/measurements/${measurementType}`)
 
@@ -129,7 +129,7 @@ export class WellboresAPI extends ConfigureAPI {
     return measurements?.items.map((measurement: Measurement) => this.addLazyMethodsForMeasurement(measurement)) 
   }
 
-  public getCasings = async (wellOrWellboreId: number): Promise<Sequence[] | undefined> => {
+  public getCasings = async (wellOrWellboreId: number): Promise<Sequence[]> => {
     return this.casings.getByWellOrWellboreId(wellOrWellboreId)
   }
 
@@ -140,7 +140,7 @@ export class WellboresAPI extends ConfigureAPI {
     columns?: string[],
     cursor?: string,
     limit?: number
-  ): Promise<SequenceData | undefined> => {
+  ): Promise<SequenceData> => {
     return this.casings.getData(
       casingId=casingId,
       start=start,

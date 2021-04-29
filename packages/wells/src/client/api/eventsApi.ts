@@ -6,7 +6,7 @@ import { NPTFilter } from '../model/NPTFilter';
 export class EventsAPI extends ConfigureAPI {
 
   /* eslint-disable */
-  public listEvents = async (filter: NPTFilter): Promise<NPT[] | undefined> => {
+  public listEvents = async (filter: NPTFilter): Promise<NPT[]> => {
 
     const path: string = this.getPath(`/events/list`)
 
@@ -18,7 +18,7 @@ export class EventsAPI extends ConfigureAPI {
   };
 
   /* eslint-disable */
-  public nptCodes = async (): Promise<string[] | undefined> => {
+  public nptCodes = async (): Promise<string[]> => {
 
     if (this.project == undefined){
       throw new HttpError(400, "The client project has not been set.", {})
@@ -34,7 +34,7 @@ export class EventsAPI extends ConfigureAPI {
   };
 
   /* eslint-disable */
-  public nptDetailCodes = async (): Promise<string[] | undefined> => {
+  public nptDetailCodes = async (): Promise<string[]> => {
 
     if (this.project == undefined){
       throw new HttpError(400, "The client project has not been set.", {})
