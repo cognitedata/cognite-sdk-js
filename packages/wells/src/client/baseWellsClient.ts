@@ -164,12 +164,19 @@ export default class BaseWellsClient {
 }
 
 export class ConfigureAPI {
-  protected client?: HttpClientWithIntercept;
+  private _client?: HttpClientWithIntercept;
   protected project?: String;
   protected cluster?: String;
 
   public set setHttpClient(httpClient: HttpClientWithIntercept) {
-    this.client = httpClient;
+    this._client = httpClient;
+  }
+
+  protected get client(): HttpClientWithIntercept {
+    if (this._client === undefined) {
+      throw new Error('Client is not defined');
+    }
+    return this._client;
   }
 
   public set setProject(project: String) {
@@ -188,10 +195,10 @@ export class ConfigureAPI {
       throw new HttpError(400, 'No cluster has been set.', {});
     }
 
-    /* eslint-disable */
-    const baseUrl = this.client?.getBaseUrl()
+    const baseUrl = this.client.getBaseUrl();
 
-    let path = baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API
+    let path =
+      baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API
         ? `/${this.project}${targetRoute}?env=${this.cluster}`
         : `/${this.project}${targetRoute}`;
 
