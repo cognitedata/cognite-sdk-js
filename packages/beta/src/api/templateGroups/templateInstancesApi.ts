@@ -138,7 +138,10 @@ class TemplateInstanceCodec {
   ): { [K in string]: FieldResolver } {
     const mappedResolvers = toPairs(fieldResolvers).map(
       ([name, fieldResolver]) => {
-        if (!this.isFieldResolver(fieldResolver)) {
+        if (
+          fieldResolver !== undefined &&
+          !this.isFieldResolver(fieldResolver)
+        ) {
           // Auto-wrap objects, numbers etc. as ConstantResolver.
           return [name, new ConstantResolver(fieldResolver)];
         } else {
