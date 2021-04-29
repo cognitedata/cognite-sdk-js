@@ -7,7 +7,7 @@ import { Measurement} from 'wells/src/client/model/Measurement';
 import { Well } from 'wells/src/client/model/Well';
 import { Wellbore } from 'wells/src/client/model/Wellbore';
 import { Survey, SurveyData } from 'wells/src/client/model/Survey';
-import { Asset } from 'wells/src/types';
+import { Asset } from '@cognite/sdk';
 
 enum MeasurementType {
   GammaRay = 'GammaRay',
