@@ -7,7 +7,8 @@ import { Wellbore } from 'wells/src/client/model/Wellbore'
 import { LengthRange } from 'wells/src/client/model/LengthRange';
 import { WellFilter, MeasurementFilter, MeasurementFilters } from 'wells/src/client/model/WellFilter';
 import { GeoJson } from 'wells/src/client/model/GeoJson';
-import { Asset } from 'wells/src/types';
+// import { Asset } from 'wells/src/types';
+import { Asset } from '@cognite/sdk';
 import { DateRange } from 'wells/src/client/model/DateRange';
 
 enum LengthUnitEnum {
