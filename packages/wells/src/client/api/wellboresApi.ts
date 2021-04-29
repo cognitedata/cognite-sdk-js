@@ -141,7 +141,7 @@ export class WellboresAPI extends ConfigureAPI {
     cursor?: string,
     limit?: number
   ): Promise<SequenceData | undefined> => {
-    return this.casings.getCasingsData(
+    return this.casings.getData(
       casingId=casingId,
       start=start,
       end=end,

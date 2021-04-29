@@ -54,7 +54,7 @@ export class CasingsAPI extends ConfigureAPI {
         cursor?: string,
         limit?: number
       ): Promise<SequenceData> => {
-        return await this.getCasingsData(
+        return await this.getData(
           casing.id,
           start,
           end,
@@ -66,7 +66,7 @@ export class CasingsAPI extends ConfigureAPI {
     };
   };
 
-  public getCasingsData = async (
+  public getData = async (
     casingId: number,
     start?: number,
     end?: number,
