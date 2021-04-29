@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.3...@cognite/sdk-beta@2.0.4) (2021-04-29)
+
+
+### Bug Fixes
+
+* setting a field resolver to undefined [release] ([#486](https://github.com/cognitedata/cognite-sdk-js/issues/486)) ([75c43eb](https://github.com/cognitedata/cognite-sdk-js/commit/75c43eb2163991485efb6afcade5919d66bbe80f))
+
+
+
+
+
 ## [2.0.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.2...@cognite/sdk-beta@2.0.3) (2021-04-26)
 
 **Note:** Version bump only for package @cognite/sdk-beta
