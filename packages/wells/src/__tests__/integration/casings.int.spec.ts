@@ -2,7 +2,6 @@ import { setupLoggedInClient } from '../testUtils';
 import CogniteWellsClient from 'wells/src/client/cogniteWellsClient';
 import { Sequence, SequenceData } from 'wells/src/client/model/Sequence';
 import { Wellbore } from 'wells/src/client/model/Wellbore';
-//import { Well } from 'wells/src/client/model/Well';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =

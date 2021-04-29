@@ -1,4 +1,4 @@
-import { Asset } from 'wells/src/types';
+import { Asset } from '@cognite/sdk';
 import { Survey } from '../model/Survey';
 import { Sequence } from './Sequence';
 import { Well } from './Well';

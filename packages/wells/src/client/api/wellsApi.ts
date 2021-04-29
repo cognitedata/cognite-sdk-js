@@ -4,8 +4,8 @@ import { Wellbore } from '../model/Wellbore';
 import { WellboresAPI } from '../api/wellboresApi'
 import { WellFilter, WellFilterAPI, PolygonFilterAPI } from '../model/WellFilter';
 import { stringify as convertGeoJsonToWKT } from 'wkt';
-import { Asset } from 'wells/src/types';
 import { ConfigureAPI } from '../baseWellsClient';
+import { Asset } from '@cognite/sdk';
 
 export class WellsAPI extends ConfigureAPI {
   private _wellboresSDK?: WellboresAPI;
