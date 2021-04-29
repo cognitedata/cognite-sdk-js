@@ -1,6 +1,7 @@
 import { Wellhead } from './wellhead';
 import { Wellbore } from './Wellbore';
-import { Asset } from 'wells/src/types';
+// import { Asset } from 'wells/src/types';
+import { Asset } from '@cognite/sdk';
 import { DoubleWithUnit } from './DoubleWithUnit';
 
 // Customizable function that takes in CogniteClient and args, and return a promise of a well

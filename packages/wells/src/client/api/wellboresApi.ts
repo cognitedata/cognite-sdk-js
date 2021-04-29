@@ -5,9 +5,10 @@ import { Survey, SurveyData } from '../model/Survey';
 import { Wellbore } from '../model/Wellbore';
 import { SurveysAPI } from './surveysApi';
 import { WellIds } from '../model/WellIds';
-import { Asset } from 'wells/src/types';
+// import { Asset } from 'wells/src/types';
 import { Sequence, SequenceData, SequenceDataRequest } from '../model/Sequence';
 import { ConfigureAPI } from '../baseWellsClient';
+import { Asset } from '@cognite/sdk';
 
 export class WellboresAPI extends ConfigureAPI {
   private _surveysSDK?: SurveysAPI;
