@@ -33,7 +33,7 @@ export class WellsAPI extends ConfigureAPI {
       }
     }
     return {
-      wellType: filter.wellType,
+      wellTypes: filter.wellTypes,
       stringMatching: filter.stringMatching,
       quadrants: filter.quadrants,
       blocks: filter.blocks,
