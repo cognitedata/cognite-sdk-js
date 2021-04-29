@@ -8,7 +8,7 @@ export interface WellFilter {
    * @type {string[]}
    * @memberof WellFilter
    */
-  wellType?: string[];
+  wellTypes?: string[];
   /**
    * @type {string}
    * @memberof WellFilter
@@ -81,7 +81,7 @@ export interface WellFilterAPI {
    * @type {string[]}
    * @memberof WellFilterAPI
    */
-  wellType?: string[];
+  wellTypes?: string[];
   /**
    * @type {string}
    * @memberof WellFilter
