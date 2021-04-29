@@ -508,7 +508,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('filter on well type', async () => {
     const wellTypeFilter: string[] = ["production"]
-    const filter: WellFilter = {"wellType": wellTypeFilter}
+    const filter: WellFilter = {"wellTypes": wellTypeFilter}
 
     const wells = await client.wells.filter(filter);
 
