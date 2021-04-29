@@ -34,11 +34,11 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
   test('Get casing from well id with 404', async () => {
     const wellId: number = 10000000000000;
 
-      await client.wellbores.getCasings(wellId)
-        .then(response => response)
-        .catch(err => {
-        expect(err.status).toBe(404);
-      });
+    await client.wellbores.getCasings(wellId)
+      .then(response => response)
+      .catch(err => {
+      expect(err.status).toBe(404);
+    });
   });
 
   test('Get casings data from wellbore id', async () => {

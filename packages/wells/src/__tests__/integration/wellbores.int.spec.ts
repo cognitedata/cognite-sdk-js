@@ -38,21 +38,21 @@ describeIfCondition(
 
     test('Succeed to get wellbore by its id', async () => {
       const wellboreId: number = 8456650753594878;
-      const wellbore: Wellbore | undefined = await client.wellbores.getById(wellboreId).then(response => response).catch(err => err);
+      const wellbore: Wellbore = await client.wellbores.getById(wellboreId);
       expect(wellbore).not.toBeUndefined();
       /* eslint-disable */
       expect(wellbore?.id).toBe(wellboreId);
-      const trajectory: Survey | undefined = await wellbore?.trajectory();
+      const trajectory: Survey = await wellbore?.trajectory();
       expect(trajectory).not.toBeUndefined();
-      const data: SurveyData | undefined = await trajectory?.data();
+      const data: SurveyData = await trajectory?.data();
       expect(data).not.toBeUndefined();
     });
 
     test('get source assets for wellbore', async () => {
       expect(client).not.toBeUndefined();
       const wellId: number = 8269456345006483;
-      const wellbore: Wellbore | undefined = await client.wellbores.getById(wellId)
-      const sources: Asset[] | undefined = await wellbore?.sourceAssets()
+      const wellbore: Wellbore = await client.wellbores.getById(wellId)
+      const sources: Asset[] = await wellbore?.sourceAssets()
       expect(sources).not.toBeUndefined();
       expect(sources?.length).toBe(1);
       const source = sources![0];
@@ -61,7 +61,7 @@ describeIfCondition(
   
     test('get source assets for wellbore of type EDM', async() => {
       const wellId: number = 8269456345006483;
-      const wellbore: Wellbore | undefined = await client.wellbores.getById(wellId)
+      const wellbore: Wellbore = await client.wellbores.getById(wellId)
       const sources = await wellbore?.sourceAssets("EDM")
       expect(sources).not.toBeUndefined();
       expect(sources?.length).toBe(1);
@@ -71,7 +71,7 @@ describeIfCondition(
 
     test('Succeed to get wellbore measurement for measurementType: GammaRay', async () => {
       const wellboreId: number = 870793324939646;
-      const measurements: Measurement[] | undefined = await client.wellbores.getMeasurement(
+      const measurements: Measurement[] = await client.wellbores.getMeasurement(
         wellboreId,
         MeasurementType.GammaRay
       );
@@ -107,10 +107,10 @@ describeIfCondition(
     });
 
     test('Get wellbores for a well id', async () => {
-      const well: Well | undefined = await client.wells.getById(8091617722352417);
+      const well: Well = await client.wells.getById(8091617722352417);
       expect(well).not.toBeUndefined();
       
-      const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWell(well!.id).then(response => response).catch(err => err);
+      const wellbores: Wellbore[] = await client.wellbores.getFromWell(well!.id);
 
       expect(wellbores).not.toBeUndefined();
       const wellboreIds = ['WDL:Wellbore:dummy102', 'wellbore:Platform WB 12.25 in OH', 'wellbore:Platform WB 8.5 in OH']
@@ -124,7 +124,7 @@ describeIfCondition(
 
       const wellIds: number[] = [2457499785650331, 2275887128760800]
       
-      const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWells(wellIds).then(response => response).catch(err => err);
+      const wellbores: Wellbore[] = await client.wellbores.getFromWells(wellIds);
 
       expect(wellbores).not.toBeUndefined();
       const wellboreIds = [870793324939646, 1072803479704457, 8456650753594878, 4331964628426904]

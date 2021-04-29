@@ -80,7 +80,7 @@ client.loginWithToken({
 import { Well } from '@cognite/sdk-wells';
 
 const wellId: number = 8456650753594878;
-const well: Well | undefined = await client.wells.getId(wellId);
+const well: Well = await client.wells.getId(wellId);
 ```
 
 #### _List wells:_
@@ -88,7 +88,7 @@ const well: Well | undefined = await client.wells.getId(wellId);
 ```ts
 import { WellItems } from '@cognite/sdk-wells';
 
-const wells: WellItems | undefined = await client.wells.list();
+const wells: WellItems = await client.wells.list();
 wells?.items.forEach(well => {
     console.log(well.externalId)
 });
@@ -215,7 +215,7 @@ const wells = await client.wells.filter(filter);
 import { Well, Wellbore } from '@cognite/sdk-wells';
 
 const wellId: number = 2275887128760800;
-const wellbores: Wellbore[] | undefined;
+const wellbores: Wellbore[];
 wellbores = await client.wellbores.getFromWell(wellId);
 ```
 
@@ -226,7 +226,7 @@ import { Well, Wellbore } from '@cognite/sdk-wells';
 
 const wellId: number = 2275887128760800;
 const well: Well = await client.wells.getById(wellId);
-const wellbores: Wellbore[] | undefined;
+const wellbores: Wellbore[];
 wellbores = await well.wellbores();
 ```
 
@@ -236,23 +236,20 @@ wellbores = await well.wellbores();
 import { Wellbore } from '@cognite/sdk-wells';
 
 const wellIds: number[] = [2457499785650331, 2275887128760800];
-const wellbores: Wellbore[] | undefined = await client.wellbores
-  .getFromWells(wellIds)
-  .then(response => response)
-  .catch(err => err);
+const wellbores: Wellbore[] = await client.wellbores.getFromWells(wellIds);
 ```
 
 #### _Filter - list all labels:_
 
 ```ts
-const blockLabels: String[] | undefined = await client.wells.blocks();
-const fieldLabels: String[] | undefined = await client.wells.fields();
-const operatorLabels: String[] | undefined = await client.wells.operators();
-const quadrantLabels: String[] | undefined = await client.wells.quadrants();
-const sourceLabels: String[] | undefined = await client.wells.sources();
+const blockLabels: String[] = await client.wells.blocks();
+const fieldLabels: String[] = await client.wells.fields();
+const operatorLabels: String[] = await client.wells.operators();
+const quadrantLabels: String[] = await client.wells.quadrants();
+const sourceLabels: String[] = await client.wells.sources();
 const measurementTypeLabels:
   | String[]
-  | undefined = await client.wells.measurements();
+  = await client.wells.measurements();
 ```
 
 ### **Wellbore queries**
@@ -261,14 +258,14 @@ const measurementTypeLabels:
 
 ```ts
 import { Wellbore, Survey } from '@cognite/sdk-wells';
-const wellboreId: number = 8456650753594878;
-const wellbore: Wellbore | undefined = await client.wellbores.getById(wellboreId).then(response => response).catch(err => err);
+const wellboreId = 8456650753594878;
+const wellbore: Wellbore = await client.wellbores.getById(wellboreId);
 
 // lazy method to get wellbore trajectory
-const trajectory: Survey | undefined = await wellbore?.trajectory();
+const trajectory: Survey = await wellbore.trajectory();
 
 // lazy method to get data from trajectory
-const data: SurveyData | undefined = await trajectory?.data();
+const data: SurveyData = await trajectory.data();
 ```
 
 #### _Get wellbore measurement for measurementType: 'GammaRay':_
@@ -276,26 +273,15 @@ const data: SurveyData | undefined = await trajectory?.data();
 ```ts
 import { Measurement, MeasurementType, SurveyData } from '@cognite/sdk-wells';
 
-const wellboreId: number = 870793324939646;
-const measurements: Measurement[] | undefined;
-measurements = await client.wellbores.getMeasurement(
+const wellboreId = 870793324939646;
+const measurements: Measurement[] = await client.wellbores.getMeasurement(
   wellboreId,
   MeasurementType.GammaRay
 );
 
-// lazy method to inspect data from measurement
-if (measurements) {
-  // sync
-  for (var measurement of measurements) {
-    const data: SurveyData = await measurement.data();
-    console.log(data.rows);
-  }
-
-  // async
-  measurements.forEach(async measurement => {
-    const data: SurveyData = await measurement.data();
-    console.log(data.columns);
-  });
+for (var measurement of measurements) {
+  const data: SurveyData = await measurement.data();
+  console.log(data.rows);
 }
 ```
 
@@ -304,9 +290,8 @@ if (measurements) {
 ```ts
 import { Survey } from '@cognite/sdk-wells';
 
-const wellboreId: number = 8456650753594878;
-const trajectory: Survey | undefined;
-trajectory = await client.wellbores.getTrajectory(wellboreId);
+const wellboreId = 8456650753594878;
+const trajectory: Survey = await client.wellbores.getTrajectory(wellboreId);
 ```
 
 ### **Casing queries**
@@ -316,49 +301,44 @@ trajectory = await client.wellbores.getTrajectory(wellboreId);
 ```ts
 import { Sequence } from '@cognite/sdk-wells';
 
-const wellOrWellboreId: number = 5432591169464385;
+const wellOrWellboreId = 5432591169464385;
 
-const casings: Sequence[] | undefined = await client.wellbores.getCasings(
-  wellOrWellboreId
-);
+const casings: Sequence[] = await client.wellbores.getCasings(wellOrWellboreId);
 
 // then get the casing data
-casings?.forEach(async casing => {
-  const data: SequenceData | undefined = await client.wellbores.getCasingsData(
-    casing.id, // cdf sequence id (number)
-    undefined, // start (number)
-    undefined, // end (number)
-    undefined, // columns (string[])
-    '98jgi&0%4'// cursor (string)
-    100        // limit (number)
+for (var casing of casings) {
+  const data: SequenceData = await client.casings.getData(
+    casing.id,   // cdf sequence id (number)
+    undefined,   // start (number)
+    undefined,   // end (number)
+    undefined,   // columns (string[])
+    '98jgi&0%4', // cursor (string)
+    100          // limit (number)
   );
+}
 ```
 
 #### _Get Casing data (functional approach)_
 
 ```ts
 import { Wellbore, Sequence } from '@cognite/sdk-wells';
-const wellId: number = 5432591169464385;
+const wellId = 5432591169464385;
 
 // get all wellbores related to a well
-const wellbores: Wellbore[] | undefined = await client.wellbores.getFromWell(wellId)
+const wellbores: Wellbore[] = await client.wellbores.getFromWell(wellId)
 
-wellbores?.forEach(async wellbore => {
+const casings: Sequence[] = await client.casings.getByWellboreIds(wellbores.map(wb => wb.id))
 
-  // get all casings related to the wellbore
-  const casings: Sequence[] | undefined = await wellbore?.casings();
-
+for (var casing of casings) {
   // get all the data (with filters) on each casing
-  casings?.forEach(async casing => {
-    const casingData: SequenceData | undefined = await casing.data(
+  const casingData: SequenceData = await casing.data(
     undefined, // start (number)
     undefined, // end (number)
     undefined, // columns (string[])
     '98jgi&0%4'// cursor (string)
     100        // limit (number)
-    );
-  })
-})
+  );
+}
 ```
 
 ### **Survey queries**
@@ -368,7 +348,7 @@ wellbores?.forEach(async wellbore => {
 ```ts
 import { SurveyDataRequest, SurveyData } from '@cognite/sdk-wells';
 
-const surveyId: number = 5289118434026779;
+const surveyId = 5289118434026779;
 
 const request: SurveyDataRequest = {
   id: surveyId,
@@ -379,7 +359,7 @@ const request: SurveyDataRequest = {
   columns: undefined,
 };
 
-const data: SurveyData | undefined = await client.surveys.getData(request);
+const data: SurveyData = await client.surveys.getData(request);
 ```
 
 ### **Event queries**
@@ -394,17 +374,17 @@ const filter: NPTFilter = {
   nptCodeDetail: 'some-detail',
 };
 
-const nptEvents: NPT[] | undefined = await client.events.listEvents(filter);
+const nptEvents: NPT[] = await client.events.listEvents(filter);
 ```
 
 #### _List all npt codes_
 
 ```ts
-const nptCodes: string[] | undefined = await client.events.nptCodes();
+const nptCodes: string[] = await client.events.nptCodes();
 ```
 
 #### _List all npt code details_
 
 ```ts
-const nptCodes: string[] | undefined = await client.events.nptDetailCodes();
+const nptCodes: string[] = await client.events.nptDetailCodes();
 ```
