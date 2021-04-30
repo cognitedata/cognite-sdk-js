@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.2.2...@cognite/sdk-wells@1.3.0) (2021-04-30)
+
+
+### Features
+
+* **wells:** add casings api and clean up [release] ([#533](https://github.com/cognitedata/cognite-sdk-js/issues/533)) ([a58386f](https://github.com/cognitedata/cognite-sdk-js/commit/a58386ffecbdf74f8badbd0d6d407ef8369fb175))
+
+
+
+
+
 ## [1.2.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.2.1...@cognite/sdk-wells@1.2.2) (2021-04-29)
 
 
