@@ -131,14 +131,14 @@ client.loginWithToken({
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
 <span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">8456650753594878</span>;
-<span class="hljs-keyword">const</span> well: Well | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.getId(wellId);</code></pre>
+<span class="hljs-keyword">const</span> well: Well = <span class="hljs-keyword">await</span> client.wells.getId(wellId);</code></pre>
 				<a href="#list-wells" id="list-wells" style="color: inherit; text-decoration: none;">
 					<h4><em>List wells:</em></h4>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellItems } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-<span class="hljs-keyword">const</span> wells: WellItems | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.list();
-wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> {
+<span class="hljs-keyword">const</span> wells: WellItems = <span class="hljs-keyword">await</span> client.wells.list();
+wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> {
     <span class="hljs-built_in">console</span>.log(well.externalId)
 });</code></pre>
 				<a href="#filter-wells-by-wkt-polygon" id="filter-wells-by-wkt-polygon" style="color: inherit; text-decoration: none;">
@@ -194,7 +194,7 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
 };
 
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);
-<span class="hljs-keyword">const</span> retrievedCrs = wells?.items.map(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> well.wellhead?.crs)</code></pre>
+<span class="hljs-keyword">const</span> retrievedCrs = wells.items.map(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> well.wellhead?.crs)</code></pre>
 				<a href="#get-wells-that-have-a-trajectory" id="get-wells-that-have-a-trajectory" style="color: inherit; text-decoration: none;">
 					<h3><em>Get wells that have a trajectory</em></h3>
 				</a>
@@ -246,37 +246,30 @@ wells?.items.forEach(<span class="hljs-function"><span class="hljs-params">well<
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well, Wellbore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-<span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">2275887128760800</span>;
-<span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span>;
-wellbores = <span class="hljs-keyword">await</span> client.wellbores.getFromWell(wellId);</code></pre>
+<span class="hljs-keyword">const</span> wellId = <span class="hljs-number">2275887128760800</span>;
+<span class="hljs-keyword">const</span> wellbores: Wellbore[] = <span class="hljs-keyword">await</span> client.wellbores.getFromWell(wellId);</code></pre>
 				<p>or</p>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Well, Wellbore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-<span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">2275887128760800</span>;
+<span class="hljs-keyword">const</span> wellId = <span class="hljs-number">2275887128760800</span>;
 <span class="hljs-keyword">const</span> well: Well = <span class="hljs-keyword">await</span> client.wells.getById(wellId);
-<span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span>;
-wellbores = <span class="hljs-keyword">await</span> well.wellbores();</code></pre>
+<span class="hljs-keyword">const</span> wellbores: Wellbore[] = <span class="hljs-keyword">await</span> well.wellbores();</code></pre>
 				<a href="#get-wellbores-from-multiple-well-ids" id="get-wellbores-from-multiple-well-ids" style="color: inherit; text-decoration: none;">
 					<h4><em>Get wellbores from multiple well ids:</em></h4>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Wellbore } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-<span class="hljs-keyword">const</span> wellIds: <span class="hljs-built_in">number</span>[] = [<span class="hljs-number">2457499785650331</span>, <span class="hljs-number">2275887128760800</span>];
-<span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wellbores
-  .getFromWells(wellIds)
-  .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response)
-  .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> err);</code></pre>
+<span class="hljs-keyword">const</span> wellIds = [<span class="hljs-number">2457499785650331</span>, <span class="hljs-number">2275887128760800</span>];
+<span class="hljs-keyword">const</span> wellbores: Wellbore[] = <span class="hljs-keyword">await</span> client.wellbores.getFromWells(wellIds);</code></pre>
 				<a href="#filter---list-all-labels" id="filter---list-all-labels" style="color: inherit; text-decoration: none;">
 					<h4><em>Filter - list all labels:</em></h4>
 				</a>
-				<pre><code class="language-ts"><span class="hljs-keyword">const</span> blockLabels: <span class="hljs-built_in">String</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.blocks();
-<span class="hljs-keyword">const</span> fieldLabels: <span class="hljs-built_in">String</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.fields();
-<span class="hljs-keyword">const</span> operatorLabels: <span class="hljs-built_in">String</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.operators();
-<span class="hljs-keyword">const</span> quadrantLabels: <span class="hljs-built_in">String</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.quadrants();
-<span class="hljs-keyword">const</span> sourceLabels: <span class="hljs-built_in">String</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.sources();
-<span class="hljs-keyword">const</span> measurementTypeLabels:
-  | <span class="hljs-built_in">String</span>[]
-  | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wells.measurements();</code></pre>
+				<pre><code class="language-ts"><span class="hljs-keyword">const</span> blockLabels: <span class="hljs-built_in">String</span>[] = <span class="hljs-keyword">await</span> client.wells.blocks();
+<span class="hljs-keyword">const</span> fieldLabels: <span class="hljs-built_in">String</span>[] = <span class="hljs-keyword">await</span> client.wells.fields();
+<span class="hljs-keyword">const</span> operatorLabels: <span class="hljs-built_in">String</span>[] = <span class="hljs-keyword">await</span> client.wells.operators();
+<span class="hljs-keyword">const</span> quadrantLabels: <span class="hljs-built_in">String</span>[] = <span class="hljs-keyword">await</span> client.wells.quadrants();
+<span class="hljs-keyword">const</span> sourceLabels: <span class="hljs-built_in">String</span>[] = <span class="hljs-keyword">await</span> client.wells.sources();
+<span class="hljs-keyword">const</span> measurementTypeLabels: <span class="hljs-built_in">String</span>[] = <span class="hljs-keyword">await</span> client.wells.measurements();</code></pre>
 				<a href="#wellbore-queries" id="wellbore-queries" style="color: inherit; text-decoration: none;">
 					<h3><strong>Wellbore queries</strong></h3>
 				</a>
@@ -284,48 +277,36 @@ wellbores = <span class="hljs-keyword">await</span> well.wellbores();</code></pr
 					<h4><em>Get wellbore by id:</em></h4>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Wellbore, Survey } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
-<span class="hljs-keyword">const</span> wellboreId: <span class="hljs-built_in">number</span> = <span class="hljs-number">8456650753594878</span>;
-<span class="hljs-keyword">const</span> wellbore: Wellbore | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wellbores.getById(wellboreId).then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response).catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> err);
+<span class="hljs-keyword">const</span> wellboreId = <span class="hljs-number">8456650753594878</span>;
+<span class="hljs-keyword">const</span> wellbore: Wellbore = <span class="hljs-keyword">await</span> client.wellbores.getById(wellboreId);
 
 <span class="hljs-comment">// lazy method to get wellbore trajectory</span>
-<span class="hljs-keyword">const</span> trajectory: Survey | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> wellbore?.trajectory();
+<span class="hljs-keyword">const</span> trajectory: Survey = <span class="hljs-keyword">await</span> wellbore.trajectory();
 
 <span class="hljs-comment">// lazy method to get data from trajectory</span>
-<span class="hljs-keyword">const</span> data: SurveyData | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> trajectory?.data();</code></pre>
+<span class="hljs-keyword">const</span> data: SurveyData = <span class="hljs-keyword">await</span> trajectory.data();</code></pre>
 				<a href="#get-wellbore-measurement-for-measurementtype-39gammaray39" id="get-wellbore-measurement-for-measurementtype-39gammaray39" style="color: inherit; text-decoration: none;">
 					<h4><em>Get wellbore measurement for measurementType: &#39;GammaRay&#39;:</em></h4>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Measurement, MeasurementType, SurveyData } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-<span class="hljs-keyword">const</span> wellboreId: <span class="hljs-built_in">number</span> = <span class="hljs-number">870793324939646</span>;
-<span class="hljs-keyword">const</span> measurements: Measurement[] | <span class="hljs-literal">undefined</span>;
-measurements = <span class="hljs-keyword">await</span> client.wellbores.getMeasurement(
+<span class="hljs-keyword">const</span> wellboreId = <span class="hljs-number">870793324939646</span>;
+<span class="hljs-keyword">const</span> measurements: Measurement[] = <span class="hljs-keyword">await</span> client.wellbores.getMeasurement(
   wellboreId,
   MeasurementType.GammaRay
 );
 
-<span class="hljs-comment">// lazy method to inspect data from measurement</span>
-<span class="hljs-keyword">if</span> (measurements) {
-  <span class="hljs-comment">// sync</span>
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> measurement <span class="hljs-keyword">of</span> measurements) {
-    <span class="hljs-keyword">const</span> data: SurveyData = <span class="hljs-keyword">await</span> measurement.data();
-    <span class="hljs-built_in">console</span>.log(data.rows);
-  }
-
-  <span class="hljs-comment">// async</span>
-  measurements.forEach(<span class="hljs-keyword">async</span> measurement =&gt; {
-    <span class="hljs-keyword">const</span> data: SurveyData = <span class="hljs-keyword">await</span> measurement.data();
-    <span class="hljs-built_in">console</span>.log(data.columns);
-  });
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> measurement <span class="hljs-keyword">of</span> measurements) {
+  <span class="hljs-keyword">const</span> data: SurveyData = <span class="hljs-keyword">await</span> measurement.data();
+  <span class="hljs-built_in">console</span>.log(data.rows);
 }</code></pre>
 				<a href="#get-trajectory-for-a-wellbore" id="get-trajectory-for-a-wellbore" style="color: inherit; text-decoration: none;">
 					<h4><em>Get trajectory for a wellbore:</em></h4>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Survey } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-<span class="hljs-keyword">const</span> wellboreId: <span class="hljs-built_in">number</span> = <span class="hljs-number">8456650753594878</span>;
-<span class="hljs-keyword">const</span> trajectory: Survey | <span class="hljs-literal">undefined</span>;
-trajectory = <span class="hljs-keyword">await</span> client.wellbores.getTrajectory(wellboreId);</code></pre>
+<span class="hljs-keyword">const</span> wellboreId = <span class="hljs-number">8456650753594878</span>;
+<span class="hljs-keyword">const</span> trajectory: Survey = <span class="hljs-keyword">await</span> client.wellbores.getTrajectory(wellboreId);</code></pre>
 				<a href="#casing-queries" id="casing-queries" style="color: inherit; text-decoration: none;">
 					<h3><strong>Casing queries</strong></h3>
 				</a>
@@ -334,47 +315,42 @@ trajectory = <span class="hljs-keyword">await</span> client.wellbores.getTraject
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Sequence } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-<span class="hljs-keyword">const</span> wellOrWellboreId: <span class="hljs-built_in">number</span> = <span class="hljs-number">5432591169464385</span>;
+<span class="hljs-keyword">const</span> wellOrWellboreId = <span class="hljs-number">5432591169464385</span>;
 
-<span class="hljs-keyword">const</span> casings: Sequence[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wellbores.getCasings(
-  wellOrWellboreId
-);
+<span class="hljs-keyword">const</span> casings: Sequence[] = <span class="hljs-keyword">await</span> client.wellbores.getCasings(wellOrWellboreId);
 
 <span class="hljs-comment">// then get the casing data</span>
-casings?.forEach(<span class="hljs-keyword">async</span> casing =&gt; {
-  <span class="hljs-keyword">const</span> data: SequenceData | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wellbores.getCasingsData(
-    casing.id, <span class="hljs-comment">// cdf sequence id (number)</span>
-    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// start (number)</span>
-    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// end (number)</span>
-    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// columns (string[])</span>
-    <span class="hljs-string">&#x27;98jgi&amp;0%4&#x27;</span><span class="hljs-comment">// cursor (string)</span>
-    <span class="hljs-number">100</span>        <span class="hljs-comment">// limit (number)</span>
-  );</code></pre>
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> casing <span class="hljs-keyword">of</span> casings) {
+  <span class="hljs-keyword">const</span> data: SequenceData = <span class="hljs-keyword">await</span> client.casings.getData(
+    casing.id,   <span class="hljs-comment">// cdf sequence id (number)</span>
+    <span class="hljs-literal">undefined</span>,   <span class="hljs-comment">// start (number)</span>
+    <span class="hljs-literal">undefined</span>,   <span class="hljs-comment">// end (number)</span>
+    <span class="hljs-literal">undefined</span>,   <span class="hljs-comment">// columns (string[])</span>
+    <span class="hljs-string">&#x27;98jgi&amp;0%4&#x27;</span>, <span class="hljs-comment">// cursor (string)</span>
+    <span class="hljs-number">100</span>          <span class="hljs-comment">// limit (number)</span>
+  );
+}</code></pre>
 				<a href="#get-casing-data-functional-approach" id="get-casing-data-functional-approach" style="color: inherit; text-decoration: none;">
 					<h4><em>Get Casing data (functional approach)</em></h4>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Wellbore, Sequence } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
-<span class="hljs-keyword">const</span> wellId: <span class="hljs-built_in">number</span> = <span class="hljs-number">5432591169464385</span>;
+<span class="hljs-keyword">const</span> wellId = <span class="hljs-number">5432591169464385</span>;
 
 <span class="hljs-comment">// get all wellbores related to a well</span>
-<span class="hljs-keyword">const</span> wellbores: Wellbore[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.wellbores.getFromWell(wellId)
+<span class="hljs-keyword">const</span> wellbores: Wellbore[] = <span class="hljs-keyword">await</span> client.wellbores.getFromWell(wellId)
 
-wellbores?.forEach(<span class="hljs-keyword">async</span> wellbore =&gt; {
+<span class="hljs-keyword">const</span> casings: Sequence[] = <span class="hljs-keyword">await</span> client.casings.getByWellboreIds(wellbores.map(<span class="hljs-function"><span class="hljs-params">wb</span> =&gt;</span> wb.id))
 
-  <span class="hljs-comment">// get all casings related to the wellbore</span>
-  <span class="hljs-keyword">const</span> casings: Sequence[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> wellbore?.casings();
-
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> casing <span class="hljs-keyword">of</span> casings) {
   <span class="hljs-comment">// get all the data (with filters) on each casing</span>
-  casings?.forEach(<span class="hljs-keyword">async</span> casing =&gt; {
-    <span class="hljs-keyword">const</span> casingData: SequenceData | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> casing.data(
+  <span class="hljs-keyword">const</span> casingData: SequenceData = <span class="hljs-keyword">await</span> casing.data(
     <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// start (number)</span>
     <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// end (number)</span>
     <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// columns (string[])</span>
     <span class="hljs-string">&#x27;98jgi&amp;0%4&#x27;</span><span class="hljs-comment">// cursor (string)</span>
     <span class="hljs-number">100</span>        <span class="hljs-comment">// limit (number)</span>
-    );
-  })
-})</code></pre>
+  );
+}</code></pre>
 				<a href="#survey-queries" id="survey-queries" style="color: inherit; text-decoration: none;">
 					<h3><strong>Survey queries</strong></h3>
 				</a>
@@ -383,7 +359,7 @@ wellbores?.forEach(<span class="hljs-keyword">async</span> wellbore =&gt; {
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { SurveyDataRequest, SurveyData } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-<span class="hljs-keyword">const</span> surveyId: <span class="hljs-built_in">number</span> = <span class="hljs-number">5289118434026779</span>;
+<span class="hljs-keyword">const</span> surveyId = <span class="hljs-number">5289118434026779</span>;
 
 <span class="hljs-keyword">const</span> request: SurveyDataRequest = {
   id: surveyId,
@@ -394,7 +370,7 @@ wellbores?.forEach(<span class="hljs-keyword">async</span> wellbore =&gt; {
   columns: <span class="hljs-literal">undefined</span>,
 };
 
-<span class="hljs-keyword">const</span> data: SurveyData | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.surveys.getData(request);</code></pre>
+<span class="hljs-keyword">const</span> data: SurveyData = <span class="hljs-keyword">await</span> client.surveys.getData(request);</code></pre>
 				<a href="#event-queries" id="event-queries" style="color: inherit; text-decoration: none;">
 					<h3><strong>Event queries</strong></h3>
 				</a>
@@ -408,15 +384,15 @@ wellbores?.forEach(<span class="hljs-keyword">async</span> wellbore =&gt; {
   nptCodeDetail: <span class="hljs-string">&#x27;some-detail&#x27;</span>,
 };
 
-<span class="hljs-keyword">const</span> nptEvents: NPT[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.events.listEvents(filter);</code></pre>
+<span class="hljs-keyword">const</span> nptEvents: NPT[] = <span class="hljs-keyword">await</span> client.events.listEvents(filter);</code></pre>
 				<a href="#list-all-npt-codes" id="list-all-npt-codes" style="color: inherit; text-decoration: none;">
 					<h4><em>List all npt codes</em></h4>
 				</a>
-				<pre><code class="language-ts"><span class="hljs-keyword">const</span> nptCodes: <span class="hljs-built_in">string</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.events.nptCodes();</code></pre>
+				<pre><code class="language-ts"><span class="hljs-keyword">const</span> nptCodes: <span class="hljs-built_in">string</span>[] = <span class="hljs-keyword">await</span> client.events.nptCodes();</code></pre>
 				<a href="#list-all-npt-code-details" id="list-all-npt-code-details" style="color: inherit; text-decoration: none;">
 					<h4><em>List all npt code details</em></h4>
 				</a>
-				<pre><code class="language-ts"><span class="hljs-keyword">const</span> nptCodes: <span class="hljs-built_in">string</span>[] | <span class="hljs-literal">undefined</span> = <span class="hljs-keyword">await</span> client.events.nptDetailCodes();</code></pre>
+				<pre><code class="language-ts"><span class="hljs-keyword">const</span> nptCodes: <span class="hljs-built_in">string</span>[] = <span class="hljs-keyword">await</span> client.events.nptDetailCodes();</code></pre>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -636,6 +612,9 @@ wellbores?.forEach(<span class="hljs-keyword">async</span> wellbore =&gt; {
 						<a href="modules/_wells_package_.html">&quot;wells/package&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_api_casingsapi_.html">&quot;wells/src/client/api/casings<wbr>Api&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_api_eventsapi_.html">&quot;wells/src/client/api/events<wbr>Api&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
@@ -721,9 +700,6 @@ wellbores?.forEach(<span class="hljs-keyword">async</span> wellbore =&gt; {
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_constants_.html">&quot;wells/src/constants&quot;</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="modules/_wells_src_types_.html">&quot;wells/src/types&quot;</a>
 					</li>
 				</ul>
 			</nav>
