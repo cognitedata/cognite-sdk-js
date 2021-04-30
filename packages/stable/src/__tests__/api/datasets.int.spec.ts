@@ -80,7 +80,7 @@ describe('data sets integration test', () => {
 
     expect(description).toEqual(updatedDescription);
   });
-  describe('files data sets', () => {
+  describe.skip('files data sets', () => {
     let dataSetId: CogniteInternalId;
     let file: FileInfo;
 
