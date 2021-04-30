@@ -1477,7 +1477,7 @@ export interface Model3D {
   metadata?: Metadata;
 }
 
-export interface Model3DListRequest extends Limit {
+export interface Model3DListRequest extends FilterQuery {
   /**
    * Filter based on whether or not it has published revisions.
    */
