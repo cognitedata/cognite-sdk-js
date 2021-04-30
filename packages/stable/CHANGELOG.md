@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.0.3...@cognite/sdk@4.0.4) (2021-04-30)
+
+
+### Bug Fixes
+
+* add cursor to Model3DListRequest ([#537](https://github.com/cognitedata/cognite-sdk-js/issues/537)) ([9a76843](https://github.com/cognitedata/cognite-sdk-js/commit/9a768438631c36707b2ec6a268f2eec602f127d2))
+
+
+
+
+
 ## [4.0.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.0.2...@cognite/sdk@4.0.3) (2021-04-26)
 
 **Note:** Version bump only for package @cognite/sdk

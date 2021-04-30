@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.3.0...@cognite/sdk-wells@1.3.1) (2021-04-30)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
 # [1.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.2.2...@cognite/sdk-wells@1.3.0) (2021-04-30)
 
 
