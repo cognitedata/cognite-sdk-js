@@ -2,7 +2,7 @@
 
 import { setupLoggedInClient } from '../testUtils';
 import CogniteWellsClient from 'wells/src/client/cogniteWellsClient';
-import { NPT } from 'wells/src/client/model/NPT';
+import { NPTItems } from 'wells/src/client/model/NPT';
 import { NPTFilter } from 'wells/src/client/model/NPTFilter';
 
 enum LengthUnitEnum {
@@ -24,8 +24,8 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
   });
 
   test('List all NPT events', async () => {
-    const nptEvents: NPT[] = await client.events.listEvents({});
-
+    const nptItems: NPTItems = await client.events.listEvents({});
+    const nptEvents = nptItems.items;
     expect(nptEvents).not.toBeUndefined();
 
     expect(nptEvents.length).toBeGreaterThanOrEqual(2);
@@ -41,8 +41,8 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
       measuredDepth: { min: 2000.0, max: 3000.0, unit: LengthUnitEnum.METER },
     };
 
-    const nptEvents: NPT[] = await client.events.listEvents(filter);
-
+    const nptItems: NPTItems = await client.events.listEvents(filter);
+    const nptEvents = nptItems.items;
     expect(nptEvents).not.toBeUndefined();
 
     const sourceEventExternalIds = nptEvents.map(
@@ -56,8 +56,8 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
       measuredDepth: { min: 9000.0, max: 10000.0, unit: LengthUnitEnum.FOOT },
     };
 
-    const nptEvents: NPT[] = await client.events.listEvents(filter);
-
+    const nptItems: NPTItems = await client.events.listEvents(filter);
+    const nptEvents = nptItems.items;
     expect(nptEvents).not.toBeUndefined();
 
     nptEvents.forEach(event => {
@@ -80,7 +80,8 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
       nptCodeDetail: 'some-detail',
     };
 
-    const nptEvents: NPT[] = await client.events.listEvents(filter);
+    const nptItems: NPTItems = await client.events.listEvents(filter);
+    const nptEvents = nptItems.items;
     expect(nptEvents).not.toBeUndefined();
     expect(nptEvents.length).toBe(0);
   });

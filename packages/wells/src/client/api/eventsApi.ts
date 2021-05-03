@@ -1,14 +1,17 @@
 import { HttpError } from '@cognite/sdk-core';
 import { ConfigureAPI } from '../baseWellsClient';
-import { NPT } from '../model/NPT';
+import { NPTItems } from '../model/NPT';
 import { NPTFilter } from '../model/NPTFilter';
 
 export class EventsAPI extends ConfigureAPI {
-  public listEvents = async (filter: NPTFilter): Promise<NPT[]> => {
-    const path: string = this.getPath(`/events/list`);
+  public listEvents = async (
+    filter: NPTFilter,
+    cursor?: string
+  ): Promise<NPTItems> => {
+    const path: string = this.getPath(`/events/list`, cursor);
 
     return await this.client
-      .asyncPost<NPT[]>(path, { data: filter })
+      .asyncPost<NPTItems>(path, { data: filter })
       .then(response => response.data)
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {});

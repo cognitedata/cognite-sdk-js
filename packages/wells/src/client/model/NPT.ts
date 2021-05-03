@@ -1,5 +1,21 @@
 import { DoubleWithUnit } from './DoubleWithUnit';
 
+/**
+ * Collection of Well objects and a cursor for fetching the next collection
+ */
+export interface NPTItems {
+  /**
+   * @type {NPT[]}
+   * @memberof NPT
+   */
+  items: NPT[];
+  /**
+   * @type {string}
+   * @memberof NPT
+   */
+  nextCursor?: string;
+}
+
 export interface NPT {
   /**
    * @type {string}
