@@ -113,7 +113,7 @@ export class WellsAPI extends ConfigureAPI {
       .asyncGet<String[]>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -128,26 +128,27 @@ export class WellsAPI extends ConfigureAPI {
   public measurements = async (): Promise<String[]> =>
     this.getLabelPrefix('measurements');
 
-  public list = async (cursor?: string): Promise<WellItems> => {
-    const path: string = this.getPath('/wells', cursor);
+  public list = async (cursor?: string, limit?: number): Promise<WellItems> => {
+    const path: string = this.getPath('/wells', cursor, limit);
     return await this.client
       .asyncGet<WellItems>(path)
       .then(response => this.addLazyToAllWellItems(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
   private sendFilterRequest = async (
     filter: WellFilterAPI,
-    cursor?: string
+    cursor?: string,
+    limit?: number
   ): Promise<WellItems> => {
-    const path = this.getPath('/wells/list', cursor);
+    const path = this.getPath('/wells/list', cursor, limit);
     return await this.client
       .asyncPost<WellItems>(path, { data: filter })
       .then(response => this.addLazyToAllWellItems(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -187,10 +188,11 @@ export class WellsAPI extends ConfigureAPI {
 
   public filter = async (
     userFilter: WellFilter,
-    cursor?: string
+    cursor?: string,
+    limit?: number
   ): Promise<WellItems> => {
     const filter: WellFilterAPI = this.wrapFilter(userFilter);
-    return await this.sendFilterRequest(filter, cursor);
+    return await this.sendFilterRequest(filter, cursor, limit);
   };
 
   public getById = async (id: number): Promise<Well> => {
@@ -199,7 +201,7 @@ export class WellsAPI extends ConfigureAPI {
       .asyncGet<Well>(path)
       .then(response => this.addLazyMethodsForWell(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 }

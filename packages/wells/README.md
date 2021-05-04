@@ -88,9 +88,11 @@ const well: Well = await client.wells.getId(wellId);
 ```ts
 import { WellItems } from '@cognite/sdk-wells';
 
-const wells: WellItems = await client.wells.list();
+const cursor = 'some-cursor';
+const limit = 100;
+const wells: WellItems = await client.wells.list(cursor, limit);
 wells.items.forEach(well => {
-    console.log(well.externalId)
+  console.log(well.externalId);
 });
 ```
 
@@ -104,7 +106,10 @@ const filter: WellFilter = {
   polygon: { wktGeometry: polygon, crs: 'epsg:4326' },
   sources: ['edm'],
 };
-const wells = await client.wells.filter(filter);
+
+const cursor = 'some-cursor';
+const limit = 100;
+const wells = await client.wells.filter(filter, cursor, limit);
 ```
 
 #### _Filter wells without cursor (get ALL results sequentially):_
@@ -304,12 +309,12 @@ const casings: Sequence[] = await client.wellbores.getCasings(wellOrWellboreId);
 // then get the casing data
 for (var casing of casings) {
   const data: SequenceData = await client.casings.getData(
-    casing.id,   // cdf sequence id (number)
-    undefined,   // start (number)
-    undefined,   // end (number)
-    undefined,   // columns (string[])
+    casing.id, // cdf sequence id (number)
+    undefined, // start (number)
+    undefined, // end (number)
+    undefined, // columns (string[])
     '98jgi&0%4', // cursor (string)
-    100          // limit (number)
+    100 // limit (number)
   );
 }
 ```
@@ -370,7 +375,7 @@ const filter: NPTFilter = {
   nptCodeDetail: 'some-detail',
 };
 
-const nptEvents: NPT[] = await client.events.listEvents(filter);
+const nptEvents: NPT[] = await client.events.listNPT(filter);
 ```
 
 #### _List all npt codes_
