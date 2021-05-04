@@ -201,7 +201,7 @@ export class ConfigureAPI {
 
     const baseUrl = this.client.getBaseUrl();
 
-    // URL constructor throw error if base url not included
+    // URL constructor throws error if base url not included
     const path = new URL(`${baseUrl}/${this.project}${targetRoute}`);
 
     if (baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API) {
