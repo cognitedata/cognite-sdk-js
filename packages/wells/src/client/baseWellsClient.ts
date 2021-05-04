@@ -201,27 +201,22 @@ export class ConfigureAPI {
 
     const baseUrl = this.client.getBaseUrl();
 
-    let path =
-      baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API
-        ? `/${this.project}${targetRoute}?env=${this.cluster}`
-        : `/${this.project}${targetRoute}`;
+    // URL constructor throw error if base url not included
+    const path = new URL(`${baseUrl}/${this.project}${targetRoute}`);
+
+    if (baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API) {
+      path.searchParams.append(`env`, `${this.cluster}`);
+    }
 
     if (cursor) {
-      if (path.includes('?env')) {
-        path += `&cursor=${cursor}`;
-      } else {
-        path += `?cursor=${cursor}`;
-      }
+      path.searchParams.append(`cursor`, `${cursor}`);
     }
 
     if (limit) {
-      if (path.includes('?env') || path.includes('?cursor')) {
-        path += `&limit=${limit}`;
-      } else {
-        path += `?limit=${limit}`;
-      }
+      path.searchParams.append(`limit`, `${limit}`);
     }
-    // console.log('path: ', baseUrl + path);
-    return path;
+
+    // we only need the route and params
+    return path.toString().substring(baseUrl.length);
   }
 }
