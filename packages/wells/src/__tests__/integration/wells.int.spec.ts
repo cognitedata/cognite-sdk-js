@@ -358,7 +358,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(client).not.toBeUndefined();
     const blocks: String[] = await client.wells.blocks();
 
-    expect(blocks).toContain('A');
+    expect(blocks).toContain('34/10');
     expect(blocks).toContain('B');
   });
 
@@ -374,8 +374,8 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(client).not.toBeUndefined();
     const operators = await client.wells.operators();
 
-    expect(operators).toContain('A');
     expect(operators).toContain('B');
+    expect(operators).toContain('Op1');
   });
 
   test('filter - get all quadrants labels', async () => {
@@ -383,7 +383,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const quadrants = await client.wells.quadrants();
 
     expect(quadrants).toContain('8');
-    expect(quadrants).toContain('B');
   });
 
   test('filter - get all source labels', async () => {
