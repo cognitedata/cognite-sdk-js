@@ -137,9 +137,11 @@ client.loginWithToken({
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellItems } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
-<span class="hljs-keyword">const</span> wells: WellItems = <span class="hljs-keyword">await</span> client.wells.list();
+<span class="hljs-keyword">const</span> cursor = <span class="hljs-string">&#x27;some-cursor&#x27;</span>;
+<span class="hljs-keyword">const</span> limit = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">const</span> wells: WellItems = <span class="hljs-keyword">await</span> client.wells.list(cursor, limit);
 wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(well.externalId)
+  <span class="hljs-built_in">console</span>.log(well.externalId);
 });</code></pre>
 				<a href="#filter-wells-by-wkt-polygon" id="filter-wells-by-wkt-polygon" style="color: inherit; text-decoration: none;">
 					<h4><em>Filter wells by wkt polygon:</em></h4>
@@ -151,7 +153,10 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
   polygon: { wktGeometry: polygon, crs: <span class="hljs-string">&#x27;epsg:4326&#x27;</span> },
   sources: [<span class="hljs-string">&#x27;edm&#x27;</span>],
 };
-<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
+
+<span class="hljs-keyword">const</span> cursor = <span class="hljs-string">&#x27;some-cursor&#x27;</span>;
+<span class="hljs-keyword">const</span> limit = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter, cursor, limit);</code></pre>
 				<a href="#filter-wells-without-cursor-get-all-results-sequentially" id="filter-wells-without-cursor-get-all-results-sequentially" style="color: inherit; text-decoration: none;">
 					<h4><em>Filter wells without cursor (get ALL results sequentially):</em></h4>
 				</a>
@@ -322,12 +327,12 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 <span class="hljs-comment">// then get the casing data</span>
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> casing <span class="hljs-keyword">of</span> casings) {
   <span class="hljs-keyword">const</span> data: SequenceData = <span class="hljs-keyword">await</span> client.casings.getData(
-    casing.id,   <span class="hljs-comment">// cdf sequence id (number)</span>
-    <span class="hljs-literal">undefined</span>,   <span class="hljs-comment">// start (number)</span>
-    <span class="hljs-literal">undefined</span>,   <span class="hljs-comment">// end (number)</span>
-    <span class="hljs-literal">undefined</span>,   <span class="hljs-comment">// columns (string[])</span>
+    casing.id, <span class="hljs-comment">// cdf sequence id (number)</span>
+    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// start (number)</span>
+    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// end (number)</span>
+    <span class="hljs-literal">undefined</span>, <span class="hljs-comment">// columns (string[])</span>
     <span class="hljs-string">&#x27;98jgi&amp;0%4&#x27;</span>, <span class="hljs-comment">// cursor (string)</span>
-    <span class="hljs-number">100</span>          <span class="hljs-comment">// limit (number)</span>
+    <span class="hljs-number">100</span> <span class="hljs-comment">// limit (number)</span>
   );
 }</code></pre>
 				<a href="#get-casing-data-functional-approach" id="get-casing-data-functional-approach" style="color: inherit; text-decoration: none;">
@@ -384,7 +389,7 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
   nptCodeDetail: <span class="hljs-string">&#x27;some-detail&#x27;</span>,
 };
 
-<span class="hljs-keyword">const</span> nptEvents: NPT[] = <span class="hljs-keyword">await</span> client.events.listEvents(filter);</code></pre>
+<span class="hljs-keyword">const</span> nptEvents: NPT[] = <span class="hljs-keyword">await</span> client.events.listNPT(filter);</code></pre>
 				<a href="#list-all-npt-codes" id="list-all-npt-codes" style="color: inherit; text-decoration: none;">
 					<h4><em>List all npt codes</em></h4>
 				</a>
