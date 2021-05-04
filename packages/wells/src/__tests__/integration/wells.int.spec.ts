@@ -150,6 +150,17 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(wellsWithCursor.items.length).toBe(2);
   });
 
+  test('filter with limit, then cursor and limit', async () => {
+    const filter: WellFilter = { };
+    const wellsWithLimit: WellItems = await client.wells.filter(filter, undefined, 3);
+    expect(wellsWithLimit).not.toBeUndefined();
+    expect(wellsWithLimit.items.length).toBe(3);
+
+    const wellsWithCursor: WellItems = await client.wells.filter(filter, wellsWithLimit.nextCursor, 2);
+    expect(wellsWithCursor).not.toBeUndefined();
+    expect(wellsWithCursor.items.length).toBe(2);
+  });
+
   test('use cursor to get more wells', async () => {
     const wells = await client.wells.list();
     expect(wells).not.toBeUndefined();
@@ -541,7 +552,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     };
     const filter: WellFilter = { spudDate: dateFilter };
 
-    const wells = await client.wells.filter(filter);
+    const wells = await client.wells.filter(filter, undefined, 1);
 
     expect(wells).not.toBeUndefined();
 
