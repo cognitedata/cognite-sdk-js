@@ -4,7 +4,7 @@ import { NPTItems } from '../model/NPT';
 import { NPTFilter } from '../model/NPTFilter';
 
 export class EventsAPI extends ConfigureAPI {
-  public listEvents = async (
+  public listNPT = async (
     filter: NPTFilter,
     cursor?: string,
     limit?: number

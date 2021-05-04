@@ -140,6 +140,16 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     });
   });
 
+  test('list with limit, then cursor and limit', async () => {
+    const wellsWithLimit: WellItems = await client.wells.list(undefined, 3);
+    expect(wellsWithLimit).not.toBeUndefined();
+    expect(wellsWithLimit.items.length).toBe(3);
+
+    const wellsWithCursor: WellItems = await client.wells.list(wellsWithLimit.nextCursor, 2);
+    expect(wellsWithCursor).not.toBeUndefined();
+    expect(wellsWithCursor.items.length).toBe(2);
+  });
+
   test('use cursor to get more wells', async () => {
     expect(client).not.toBeUndefined();
     const wells = await client.wells.list();
