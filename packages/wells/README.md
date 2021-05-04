@@ -295,6 +295,15 @@ const wellboreId = 8456650753594878;
 const trajectory: Survey = await client.wellbores.getTrajectory(wellboreId);
 ```
 
+#### _Get trajectories from multiple wellbore:_
+
+```ts
+import { Survey } from '@cognite/sdk-wells';
+
+const wellboreIds = [8456650753594878, 8173864198348132];
+const trajectory: Survey = await client.wellbores.getTrajectories(wellboreIds);
+```
+
 ### **Casing queries**
 
 #### _Get casing from well or wellbore id:_
