@@ -48,7 +48,6 @@ describeIfCondition(
     });
 
     test('get source assets for wellbore', async () => {
-      expect(client).not.toBeUndefined();
       const wellId: number = 8269456345006483;
       const wellbore: Wellbore = await client.wellbores.getById(wellId);
       const sources: Asset[] = await wellbore.sourceAssets();

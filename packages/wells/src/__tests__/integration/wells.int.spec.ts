@@ -151,7 +151,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('use cursor to get more wells', async () => {
-    expect(client).not.toBeUndefined();
     const wells = await client.wells.list();
     expect(wells).not.toBeUndefined();
     const retrievedWells = wells.items.map(x => x.id);
@@ -164,7 +163,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - gets wells in wkt polygon', async () => {
-    expect(client).not.toBeUndefined();
     const testPolygon =
       'POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))';
     const filter: WellFilter = {
@@ -181,7 +179,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - fuzzy search on name string matching 1', async () => {
-    expect(client).not.toBeUndefined();
     const filter: WellFilter = { stringMatching: '24' };
     const wells = await client.wells.filter(filter);
 
@@ -194,7 +191,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - fuzzy search on name string matching 2', async () => {
-    expect(client).not.toBeUndefined();
     const filter: WellFilter = { stringMatching: '10' };
     const wells = await client.wells.filter(filter);
 
@@ -207,7 +203,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter wells slow', async () => {
-    expect(client).not.toBeUndefined();
     const filter: WellFilter = { stringMatching: '10' };
     const wells: Well[] = await client.wells.filterSlow(filter);
 
@@ -227,7 +222,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - gets wells with description filter', async () => {
-    expect(client).not.toBeUndefined();
     const filter: WellFilter = { stringMatching: 'WDL Asset' };
     const wells = await client.wells.filter(filter);
 
@@ -240,7 +234,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - gets wells in polygon with description', async () => {
-    expect(client).not.toBeUndefined();
     const testPolygon =
       'POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))';
     const filter: WellFilter = {
@@ -259,7 +252,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - gets wells in polygon with description and output crs', async () => {
-    expect(client).not.toBeUndefined();
     const testPolygon =
       'POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))';
     const filter: WellFilter = {
@@ -285,7 +277,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - gets wells in geoJson polygon', async () => {
-    expect(client).not.toBeUndefined();
     const testPolygon = <GeoJson>{
       type: 'Polygon',
       coordinates: [
@@ -312,7 +303,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - get all wells with edm source', async () => {
-    expect(client).not.toBeUndefined();
     const testPolygon =
       'POLYGON ((0.0 0.0, 0.0 80.0, 80.0 80.0, 80.0 0.0, 0.0 0.0))';
     const filter: WellFilter = {
@@ -327,7 +317,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - get all wells with trajectory', async () => {
-    expect(client).not.toBeUndefined();
     const filter: WellFilter = { hasTrajectory: {} };
     const wells = await client.wells.filter(filter);
 
@@ -340,7 +329,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - get all wells with trajectory in range', async () => {
-    expect(client).not.toBeUndefined();
     const filter: WellFilter = {
       hasTrajectory: { minDepth: 1.0, maxDepth: 1.0 },
     };
@@ -355,7 +343,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - get all wells with trajectory - no returned in range', async () => {
-    expect(client).not.toBeUndefined();
     const filter: WellFilter = { hasTrajectory: { minDepth: 0, maxDepth: 0 } };
     const wells = await client.wells.filter(filter);
 
@@ -365,7 +352,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - get all block labels', async () => {
-    expect(client).not.toBeUndefined();
     const blocks: String[] = await client.wells.blocks();
 
     expect(blocks).toContain('34/10');
@@ -373,7 +359,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - get all field labels', async () => {
-    expect(client).not.toBeUndefined();
     const fields = await client.wells.fields();
 
     expect(fields).toContain('A');
@@ -381,7 +366,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - get all operator labels', async () => {
-    expect(client).not.toBeUndefined();
     const operators = await client.wells.operators();
 
     expect(operators).toContain('B');
@@ -389,21 +373,18 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - get all quadrants labels', async () => {
-    expect(client).not.toBeUndefined();
     const quadrants = await client.wells.quadrants();
 
     expect(quadrants).toContain('8');
   });
 
   test('filter - get all source labels', async () => {
-    expect(client).not.toBeUndefined();
     const sources = await client.wells.sources();
 
     expect(sources).toContain('EDM');
   });
 
   test('filter - get all measurement types', async () => {
-    expect(client).not.toBeUndefined();
     const quadrants = await client.wells.measurements();
 
     expect(quadrants).not.toBeUndefined();
@@ -412,8 +393,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - has gamma measurement', async () => {
-    expect(client).not.toBeUndefined();
-
     const measurementFilter: MeasurementFilter = {
       measurementType: MeasurementType.GammaRay,
     };
@@ -433,8 +412,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - has multiple measurements, must match on all', async () => {
-    expect(client).not.toBeUndefined();
-
     const gammaRayFilter: MeasurementFilter = {
       measurementType: MeasurementType.GammaRay,
     };
@@ -457,8 +434,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - has multiple measurements, fail to match on all', async () => {
-    expect(client).not.toBeUndefined();
-
     const gammaRayFilter: MeasurementFilter = {
       measurementType: MeasurementType.GammaRay,
     };
@@ -480,8 +455,6 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter - has multiple measurements, can match on any', async () => {
-    expect(client).not.toBeUndefined();
-
     const gammaRayFilter: MeasurementFilter = {
       measurementType: MeasurementType.GammaRay,
     };
