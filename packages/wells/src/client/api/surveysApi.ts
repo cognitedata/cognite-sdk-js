@@ -14,12 +14,27 @@ export class SurveysAPI extends ConfigureAPI {
     };
   };
 
+  private addLazyMethodsToAll = (surveys: Survey[]): Survey[] => {
+    return surveys.map(survey => this.addLazyMethods(survey));
+  };
+
   public getTrajectory = async (wellboreId: number): Promise<Survey> => {
     const path: string = this.getPath(`/wellbores/${wellboreId}/trajectory`);
 
     return await this.client
       .asyncGet<Survey>(path)
       .then(response => this.addLazyMethods(response.data))
+      .catch(err => {
+        throw new HttpError(err.status, err.errorMessage, {});
+      });
+  };
+
+  public getTrajectories = async (wellboreIds: number[]): Promise<Survey[]> => {
+    const path: string = this.getPath(`/wellbores/trajectories`);
+
+    return await this.client
+      .asyncPost<Survey[]>(path, { data: { items: wellboreIds } })
+      .then(response => this.addLazyMethodsToAll(response.data))
       .catch(err => {
         throw new HttpError(err.status, err.errorMessage, {});
       });
