@@ -15,7 +15,7 @@ export class CasingsAPI extends ConfigureAPI {
         )
       )
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -31,7 +31,7 @@ export class CasingsAPI extends ConfigureAPI {
         )
       )
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -89,7 +89,7 @@ export class CasingsAPI extends ConfigureAPI {
       .asyncPost<SequenceData>(path, { data: request })
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 }

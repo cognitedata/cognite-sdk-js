@@ -187,7 +187,11 @@ export class ConfigureAPI {
     this.cluster = cluster;
   }
 
-  protected getPath(targetRoute: string, cursor?: string): string {
+  protected getPath(
+    targetRoute: string,
+    cursor?: string,
+    limit?: number
+  ): string {
     if (this.project == undefined) {
       throw new HttpError(400, 'The client project has not been set.', {});
     }
@@ -210,6 +214,14 @@ export class ConfigureAPI {
       }
     }
 
+    if (limit) {
+      if (path.includes('?env') || path.includes('?cursor')) {
+        path += `&limit=${limit}`;
+      } else {
+        path += `?limit=${limit}`;
+      }
+    }
+    // console.log('path: ', baseUrl + path);
     return path;
   }
 }

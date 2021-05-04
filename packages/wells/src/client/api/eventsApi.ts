@@ -6,15 +6,16 @@ import { NPTFilter } from '../model/NPTFilter';
 export class EventsAPI extends ConfigureAPI {
   public listEvents = async (
     filter: NPTFilter,
-    cursor?: string
+    cursor?: string,
+    limit?: number
   ): Promise<NPTItems> => {
-    const path: string = this.getPath(`/events/list`, cursor);
+    const path: string = this.getPath(`/events/list`, cursor, limit);
 
     return await this.client
       .asyncPost<NPTItems>(path, { data: filter })
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -29,7 +30,7 @@ export class EventsAPI extends ConfigureAPI {
       .asyncPost<string[]>(path, {})
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -44,7 +45,7 @@ export class EventsAPI extends ConfigureAPI {
       .asyncPost<string[]>(path, {})
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 }

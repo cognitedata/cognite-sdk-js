@@ -65,7 +65,7 @@ export class WellboresAPI extends ConfigureAPI {
       .asyncGet<Asset[]>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -87,7 +87,7 @@ export class WellboresAPI extends ConfigureAPI {
       .asyncGet<Wellbore>(path)
       .then(response => this.addLazyMethodsForWellbore(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -99,7 +99,7 @@ export class WellboresAPI extends ConfigureAPI {
         this.addLazyMethodsForWellbore(wellbore)
       );
     } catch (err) {
-      throw new HttpError(err.status, err.errorMessage, {});
+      throw new HttpError(err.status, err.data.error.message, {});
     }
   };
 
@@ -114,7 +114,7 @@ export class WellboresAPI extends ConfigureAPI {
         this.addLazyMethodsForWellbore(wellbore)
       );
     } catch (err) {
-      throw new HttpError(err.status, err.errorMessage, {});
+      throw new HttpError(err.status, err.data.error.message, {});
     }
   };
 
@@ -125,7 +125,7 @@ export class WellboresAPI extends ConfigureAPI {
       .asyncGet<Survey>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -141,7 +141,7 @@ export class WellboresAPI extends ConfigureAPI {
       .asyncGet<Measurements>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
 
     return measurements.items.map((measurement: Measurement) =>

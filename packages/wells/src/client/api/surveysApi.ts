@@ -36,7 +36,7 @@ export class SurveysAPI extends ConfigureAPI {
       .asyncPost<SurveyData>(path, { data: request })
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 }
