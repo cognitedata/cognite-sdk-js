@@ -36,7 +36,7 @@ export class SurveysAPI extends ConfigureAPI {
       .asyncPost<Survey[]>(path, { data: { items: wellboreIds } })
       .then(response => this.addLazyMethodsToAll(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
