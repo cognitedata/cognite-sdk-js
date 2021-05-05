@@ -113,17 +113,6 @@ export class WellboresAPI extends ConfigureAPI {
     }
   };
 
-  public getTrajectory = async (wellboreId: number): Promise<Survey> => {
-    const path: string = this.getPath(`/wellbores/${wellboreId}/trajectory`);
-
-    return await this.client
-      .asyncGet<Survey>(path)
-      .then(response => response.data)
-      .catch(err => {
-        throw new HttpError(err.status, err.data.error.message, {});
-      });
-  };
-
   public getMeasurement = async (
     wellboreId: number,
     measurementType: MeasurementType
