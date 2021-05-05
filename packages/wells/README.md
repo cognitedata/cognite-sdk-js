@@ -315,7 +315,7 @@ const wellOrWellboreId = 5432591169464385;
 
 const casings: Sequence[] = await client.wellbores.getCasings(wellOrWellboreId);
 
-// then get the casing data
+// get the casing data
 for (var casing of casings) {
   const data: SequenceData = await client.casings.getData(
     casing.id, // cdf sequence id (number)
