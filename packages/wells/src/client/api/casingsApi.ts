@@ -37,16 +37,7 @@ export class CasingsAPI extends ConfigureAPI {
 
   private addLazyMethodsForCasing = (casing: Sequence): Sequence => {
     return <Sequence>{
-      id: casing.id,
-      columns: casing.columns,
-      createdTime: casing.createdTime,
-      lastUpdatedTime: casing.lastUpdatedTime,
-      name: casing.name,
-      description: casing.description,
-      assetId: casing.assetId,
-      externalId: casing.externalId,
-      metadata: casing.metadata,
-      dataSetId: casing.dataSetId,
+      ...casing,
       data: async (
         start?: number,
         end?: number,

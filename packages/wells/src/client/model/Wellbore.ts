@@ -9,6 +9,26 @@ export type SearchWellbores = (args?: any) => Promise<Wellbore[]>;
 export type SearchWellbore = (args?: any) => Promise<Wellbore>;
 
 /**
+ * Information about a source asset that a wellbore is based on.
+ */
+export interface WellboreSourceAsset {
+  /**
+   * Asset id in CDF
+   */
+  id: number;
+
+  /**
+   * Asset external id in CDF
+   */
+  externalId: string;
+
+  /**
+   * Source system for this source asset.
+   */
+  source: string;
+}
+
+/**
  * A wellbore is an asset.
  * Each wellbore is part of a well hierarchy
  * with either a well or another wellbore as it’s parent.
@@ -40,6 +60,11 @@ export interface Wellbore {
    * @memberof Wellbore
    */
   wellId?: { [key: string]: string };
+
+  /**
+   * List of all the source assets for this wellbore
+   */
+  sourceWellbores: WellboreSourceAsset[];
   /**
    * @type {Promise<Survey>}
    * @memberof Wellbore
