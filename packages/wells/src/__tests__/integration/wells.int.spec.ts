@@ -2,7 +2,7 @@
 
 import { setupLoggedInClient } from '../testUtils';
 import WellsClient from 'wells/src/client/cogniteWellsClient';
-import { Well, WellItems } from 'wells/src/client/model/Well';
+import { Well, WellItems, WellsLimits } from 'wells/src/client/model/Well';
 import { Wellbore } from 'wells/src/client/model/Wellbore';
 import { LengthRange } from 'wells/src/client/model/LengthRange';
 import {
@@ -68,6 +68,16 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(well.waterDepth?.unit).toBe('meter');
     expect(well.waterDepth?.value).toBe(100.0);
     /* eslint-enable */
+  });
+
+  test('get wells limits', async() => {
+    expect(client).not.toBeUndefined();
+    const limits: WellsLimits = await client.wells.limits()
+    expect(limits.spudDate).not.toBeUndefined()
+    expect(limits.waterDepth).not.toBeUndefined()
+    expect(limits.spudDate.max).toBeInstanceOf(Date)
+    expect(limits.spudDate.min).toBeInstanceOf(Date)
+    expect(limits.waterDepth.max.value).toBeGreaterThanOrEqual(limits.waterDepth.min.value)
   });
 
   test('get source assets for well', async () => {
