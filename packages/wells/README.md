@@ -292,7 +292,7 @@ for (var measurement of measurements) {
 import { Survey } from '@cognite/sdk-wells';
 
 const wellboreId = 8456650753594878;
-const trajectory: Survey = await client.wellbores.getTrajectory(wellboreId);
+const trajectory: Survey = await client.surveys.getTrajectory(wellboreId);
 ```
 
 #### _Get trajectories from multiple wellbore:_
@@ -301,7 +301,7 @@ const trajectory: Survey = await client.wellbores.getTrajectory(wellboreId);
 import { Survey } from '@cognite/sdk-wells';
 
 const wellboreIds = [8456650753594878, 8173864198348132];
-const trajectory: Survey = await client.wellbores.getTrajectories(wellboreIds);
+const trajectory: Survey = await client.surveys.getTrajectories(wellboreIds);
 ```
 
 ### **Casing queries**
