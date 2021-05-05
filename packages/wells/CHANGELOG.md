@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.4.0...@cognite/sdk-wells@1.5.0) (2021-05-05)
+
+
+### Bug Fixes
+
+* readme and remove dead code ([#543](https://github.com/cognitedata/cognite-sdk-js/issues/543)) ([2544d4b](https://github.com/cognitedata/cognite-sdk-js/commit/2544d4b1d97cd2fb7922d1f466e409019d7f0bf4))
+
+
+### Features
+
+* **wells:** add sourcewellbores to to wellbore type ([#542](https://github.com/cognitedata/cognite-sdk-js/issues/542)) ([dc9bf45](https://github.com/cognitedata/cognite-sdk-js/commit/dc9bf45c51ec8b994824e005d7e95158aa384d2f))
+
+
+
+
+
 # [1.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.3.2...@cognite/sdk-wells@1.4.0) (2021-05-05)
 
 
