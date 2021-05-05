@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.3.2...@cognite/sdk-wells@1.4.0) (2021-05-05)
+
+
+### Features
+
+* fetch trajectories for multiple wellbores [release] ([#540](https://github.com/cognitedata/cognite-sdk-js/issues/540)) ([72b1c48](https://github.com/cognitedata/cognite-sdk-js/commit/72b1c48de0cc4804cd32b3839b1375994bb20aa2))
+
+
+
+
+
 ## [1.3.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.3.1...@cognite/sdk-wells@1.3.2) (2021-05-04)
 
 **Note:** Version bump only for package @cognite/sdk-wells
