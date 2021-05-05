@@ -22,6 +22,8 @@ enum MeasurementType {
   LOT = 'LOT',
 }
 
+const casingWearWellboreId = 8269456345006483;
+
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
   process.env.COGNITE_WELLS_PROJECT && process.env.COGNITE_WELLS_CREDENTIALS
@@ -48,17 +50,34 @@ describeIfCondition(
     });
 
     test('get source assets for wellbore', async () => {
-      const wellId: number = 8269456345006483;
+      const wellId: number = casingWearWellboreId;
       const wellbore: Wellbore = await client.wellbores.getById(wellId);
       const sources: Asset[] = await wellbore.sourceAssets();
       expect(sources).not.toBeUndefined();
       expect(sources.length).toBe(1);
       const source = sources![0];
       expect(source.externalId).toBe('EDM:Wellbore:vUUnhh02Jz');
+
+      const sourceWellbores = wellbore.sourceWellbores;
+      expect(sourceWellbores.length).toBeGreaterThanOrEqual(1);
+      const sourceWellbore = sourceWellbores[0];
+      expect(sourceWellbore.externalId).toBeTruthy();
+      expect(sourceWellbore.id).toBeTruthy();
+      expect(sourceWellbore.source).toBeTruthy();
+    });
+
+    test('get sourceWellbores for wellbore', async () => {
+      const wellbore = await client.wellbores.getById(casingWearWellboreId);
+      const sourceWellbores = wellbore.sourceWellbores;
+      expect(sourceWellbores.length).toBeGreaterThanOrEqual(1);
+      const sourceWellbore = sourceWellbores[0];
+      expect(sourceWellbore.externalId).toBeTruthy();
+      expect(sourceWellbore.id).toBeTruthy();
+      expect(sourceWellbore.source).toBeTruthy();
     });
 
     test('get source assets for wellbore of type EDM', async () => {
-      const wellId: number = 8269456345006483;
+      const wellId: number = casingWearWellboreId;
       const wellbore: Wellbore = await client.wellbores.getById(wellId);
       const sources = await wellbore.sourceAssets('EDM');
       expect(sources).not.toBeUndefined();

@@ -35,10 +35,7 @@ export class WellboresAPI extends ConfigureAPI {
 
   private addLazyMethodsForWellbore = (wellbore: Wellbore): Wellbore => {
     return <Wellbore>{
-      id: wellbore.id,
-      name: wellbore.name,
-      externalId: wellbore.externalId,
-      wellId: wellbore.wellId,
+      ...wellbore,
       trajectory: async (): Promise<Survey> => {
         return await this.surveys.getTrajectory(wellbore.id);
       },
@@ -73,9 +70,7 @@ export class WellboresAPI extends ConfigureAPI {
     measurement: Measurement
   ): Measurement => {
     return <Measurement>{
-      id: measurement.id,
-      externalId: measurement.externalId,
-      name: measurement.name,
+      ...measurement,
       data: async (): Promise<SurveyData> =>
         await this.surveys.getData({ id: measurement.id }),
     };

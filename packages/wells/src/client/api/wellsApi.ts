@@ -57,22 +57,8 @@ export class WellsAPI extends ConfigureAPI {
 
   private addLazyMethodsForWell = (well: Well): Well => {
     return <Well>{
-      id: well.id,
-      name: well.name,
-      externalId: well.externalId,
-      description: well.description,
-      country: well.country,
-      quadrant: well.quadrant,
-      block: well.block,
-      field: well.field,
-      operator: well.operator,
+      ...well,
       spudDate: well.spudDate != undefined ? new Date(well.spudDate) : null,
-      wellType: well.wellType,
-      license: well.license,
-      waterDepth: well.waterDepth,
-      wellhead: well.wellhead,
-      datum: well.datum,
-      sources: well.sources,
       wellbores: async (): Promise<Wellbore[]> => {
         return await this.wellbores.getFromWell(well.id);
       },
