@@ -33,6 +33,16 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
     }
   });
 
+  test('Get trajectories for multiple wellbores', async () => {
+    const wellboreIds: number[] = [8456650753594878, 8620912644845543];
+    const trajectories: Survey[] = await client.surveys.getTrajectories(
+      wellboreIds
+    );
+
+    expect(trajectories).not.toBeUndefined();
+    expect(trajectories.length).toBe(2);
+  });
+
   test('Get trajectory for a wellbore with 404 Not Found', async () => {
     const wellboreId = 1000000000000;
 

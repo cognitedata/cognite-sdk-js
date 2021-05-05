@@ -95,7 +95,7 @@ export class WellsAPI extends ConfigureAPI {
       .asyncGet<Asset[]>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
