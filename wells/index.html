@@ -311,14 +311,14 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Survey } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
 <span class="hljs-keyword">const</span> wellboreId = <span class="hljs-number">8456650753594878</span>;
-<span class="hljs-keyword">const</span> trajectory: Survey = <span class="hljs-keyword">await</span> client.wellbores.getTrajectory(wellboreId);</code></pre>
+<span class="hljs-keyword">const</span> trajectory: Survey = <span class="hljs-keyword">await</span> client.surveys.getTrajectory(wellboreId);</code></pre>
 				<a href="#get-trajectories-from-multiple-wellbore" id="get-trajectories-from-multiple-wellbore" style="color: inherit; text-decoration: none;">
 					<h4><em>Get trajectories from multiple wellbore:</em></h4>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { Survey } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
 <span class="hljs-keyword">const</span> wellboreIds = [<span class="hljs-number">8456650753594878</span>, <span class="hljs-number">8173864198348132</span>];
-<span class="hljs-keyword">const</span> trajectory: Survey = <span class="hljs-keyword">await</span> client.wellbores.getTrajectories(wellboreIds);</code></pre>
+<span class="hljs-keyword">const</span> trajectory: Survey = <span class="hljs-keyword">await</span> client.surveys.getTrajectories(wellboreIds);</code></pre>
 				<a href="#casing-queries" id="casing-queries" style="color: inherit; text-decoration: none;">
 					<h3><strong>Casing queries</strong></h3>
 				</a>
@@ -331,7 +331,7 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 
 <span class="hljs-keyword">const</span> casings: Sequence[] = <span class="hljs-keyword">await</span> client.wellbores.getCasings(wellOrWellboreId);
 
-<span class="hljs-comment">// then get the casing data</span>
+<span class="hljs-comment">// get the casing data</span>
 <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> casing <span class="hljs-keyword">of</span> casings) {
   <span class="hljs-keyword">const</span> data: SequenceData = <span class="hljs-keyword">await</span> client.casings.getData(
     casing.id, <span class="hljs-comment">// cdf sequence id (number)</span>
