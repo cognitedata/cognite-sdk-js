@@ -41,11 +41,7 @@ export class SurveysAPI extends ConfigureAPI {
   };
 
   public getData = async (request: SurveyDataRequest): Promise<SurveyData> => {
-    if (this.project == undefined) {
-      throw new HttpError(400, 'The client project has not been set.', {});
-    }
-
-    const path: string = `/${this.project}/surveys/data`;
+    const path: string = this.getPath(`/surveys/data`);
 
     return await this.client
       .asyncPost<SurveyData>(path, { data: request })
