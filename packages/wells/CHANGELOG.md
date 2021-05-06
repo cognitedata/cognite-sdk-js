@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.5.0...@cognite/sdk-wells@1.6.0) (2021-05-06)
+
+
+### Features
+
+* add support for wells limits endpoint [release] ([#545](https://github.com/cognitedata/cognite-sdk-js/issues/545)) ([53ce0a6](https://github.com/cognitedata/cognite-sdk-js/commit/53ce0a6f9a4adce39fdb4d74393b23eab81aabca))
+
+
+
+
+
 # [1.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.4.0...@cognite/sdk-wells@1.5.0) (2021-05-05)
 
 
