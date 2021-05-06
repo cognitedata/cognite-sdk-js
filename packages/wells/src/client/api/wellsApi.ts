@@ -68,15 +68,15 @@ export class WellsAPI extends ConfigureAPI {
   };
 
   private addLazyMethodsForWellsLimits = (limits: WellsLimits): WellsLimits => {
-    const dateifiedSpudDate:SpudDateLimits = {
+    const dateifiedSpudDate: SpudDateLimits = {
       min: new Date(limits.spudDate.min),
-      max: new Date(limits.spudDate.max)
-    }
+      max: new Date(limits.spudDate.max),
+    };
     return <WellsLimits>{
       ...limits,
-      spudDate: dateifiedSpudDate
-    }
-  }
+      spudDate: dateifiedSpudDate,
+    };
+  };
 
   private getSources = async (
     wellId: number,
@@ -135,7 +135,7 @@ export class WellsAPI extends ConfigureAPI {
       });
   };
 
-  public limits = async(): Promise<WellsLimits> => {
+  public limits = async (): Promise<WellsLimits> => {
     const path: string = this.getPath('/wells/limits');
     return await this.client
       .asyncGet<WellsLimits>(path)

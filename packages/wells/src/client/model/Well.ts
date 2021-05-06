@@ -150,12 +150,12 @@ export interface WellsLimits {
    * @type {SpudDateLimits}
    * @memberof WellsLimits
    */
-    spudDate: SpudDateLimits;
+  spudDate: SpudDateLimits;
   /**
    * @type {WaterDepthLimits}
    * @memberof WellsLimits
    */
-    waterDepth: WaterDepthLimits;
+  waterDepth: WaterDepthLimits;
 }
 
 export interface WaterDepthLimits {
