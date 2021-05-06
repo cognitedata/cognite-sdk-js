@@ -1,5 +1,5 @@
 import { accessApi, HttpError } from '@cognite/sdk-core';
-import { Well, WellItems } from '../model/Well';
+import { Well, WellItems, WellsLimits, SpudDateLimits } from '../model/Well';
 import { Wellbore } from '../model/Wellbore';
 import { WellboresAPI } from '../api/wellboresApi';
 import {
@@ -67,6 +67,17 @@ export class WellsAPI extends ConfigureAPI {
     };
   };
 
+  private addLazyMethodsForWellsLimits = (limits: WellsLimits): WellsLimits => {
+    const dateifiedSpudDate: SpudDateLimits = {
+      min: new Date(limits.spudDate.min),
+      max: new Date(limits.spudDate.max),
+    };
+    return <WellsLimits>{
+      ...limits,
+      spudDate: dateifiedSpudDate,
+    };
+  };
+
   private getSources = async (
     wellId: number,
     source?: string
@@ -119,6 +130,16 @@ export class WellsAPI extends ConfigureAPI {
     return await this.client
       .asyncGet<WellItems>(path)
       .then(response => this.addLazyToAllWellItems(response.data))
+      .catch(err => {
+        throw new HttpError(err.status, err.data.error.message, {});
+      });
+  };
+
+  public limits = async (): Promise<WellsLimits> => {
+    const path: string = this.getPath('/wells/limits');
+    return await this.client
+      .asyncGet<WellsLimits>(path)
+      .then(response => this.addLazyMethodsForWellsLimits(response.data))
       .catch(err => {
         throw new HttpError(err.status, err.data.error.message, {});
       });
