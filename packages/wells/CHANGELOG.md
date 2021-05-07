@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.6.0...@cognite/sdk-wells@1.6.1) (2021-05-07)
+
+
+### Bug Fixes
+
+* **wells:** prefer cogprod url for well-service on gcp [release] ([#546](https://github.com/cognitedata/cognite-sdk-js/issues/546)) ([8041375](https://github.com/cognitedata/cognite-sdk-js/commit/8041375e13dafde9d3e0641eec9547238be1be3f))
+
+
+
+
+
 # [1.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.5.0...@cognite/sdk-wells@1.6.0) (2021-05-06)
 
 
