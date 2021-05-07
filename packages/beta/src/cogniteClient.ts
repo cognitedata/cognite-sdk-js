@@ -11,6 +11,7 @@ import { TemplateGroupsApi } from './api/templateGroups/templateGroupsApi';
 import { TemplateGroupVersionsApi } from './api/templateGroups/templateGroupVersionsApi';
 import { TemplateInstancesApi } from './api/templateGroups/templateInstancesApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
+import { ViewsApi } from './api/templateGroups/viewsApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
@@ -65,6 +66,9 @@ export default class CogniteClient extends CogniteClientCleaned {
                 )
               ),
               runQuery: (query: string) => graphQlApi.runQuery(query),
+              views: accessApi(
+                this.apiFactory(ViewsApi, `${baseGroupUrl}/views`)
+              ),
             };
           },
         };
