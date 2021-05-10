@@ -620,4 +620,15 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     const externalIds = wells.items.map(well => well.externalId);
     expect(externalIds).toContain('well:34/10-8');
   });
+
+  test('filter well on npt depth', async () => {
+    const filter: WellFilter = {
+      hasEvents: {
+        measuredDepth: { min: 500000.0, unit: LengthUnitEnum.METER }
+      },
+    };
+
+    const wells = await client.wells.filter(filter);
+    expect(wells).not.toBeUndefined();
+  });
 });
