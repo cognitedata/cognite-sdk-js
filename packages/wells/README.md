@@ -162,6 +162,23 @@ const wells = await client.wells.filter(filter);
 const retrievedCrs = wells.items.map(well => well.wellhead?.crs)
 ```
 
+### _Filter wells by npt events_
+
+```ts
+import { WellFilter } from '@cognite/sdk-wells';
+
+const filter: WellFilter = {
+  hasEvents: {
+    duration: { max: 30.0 },
+    measuredDepth: { max: 3000.0, unit: LengthUnitEnum.METER },
+    nptCode: 'some-npt-code',
+    nptCodeDetail: 'some-details',
+  },
+};
+
+const wells = await client.wells.filter(filter);
+```
+
 ### _Get wells that have a trajectory_
 
 ```ts
