@@ -200,6 +200,21 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);
 <span class="hljs-keyword">const</span> retrievedCrs = wells.items.map(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> well.wellhead?.crs)</code></pre>
+				<a href="#filter-wells-by-npt-events" id="filter-wells-by-npt-events" style="color: inherit; text-decoration: none;">
+					<h3><em>Filter wells by npt events</em></h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> filter: WellFilter = {
+  hasEvents: {
+    duration: { max: <span class="hljs-number">30.0</span> },
+    measuredDepth: { max: <span class="hljs-number">3000.0</span>, unit: LengthUnitEnum.METER },
+    nptCode: <span class="hljs-string">&#x27;some-npt-code&#x27;</span>,
+    nptCodeDetail: <span class="hljs-string">&#x27;some-details&#x27;</span>,
+  },
+};
+
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
 				<a href="#get-wells-that-have-a-trajectory" id="get-wells-that-have-a-trajectory" style="color: inherit; text-decoration: none;">
 					<h3><em>Get wells that have a trajectory</em></h3>
 				</a>
