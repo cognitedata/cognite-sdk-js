@@ -48,6 +48,7 @@ export class WellsAPI extends ConfigureAPI {
       sources: filter.sources,
       hasTrajectory: filter.hasTrajectory,
       hasMeasurements: filter.hasMeasurements,
+      hasEvents: filter.hasEvents,
       polygon: polygon,
       licenses: filter.licenses,
       waterDepth: filter.waterDepth,
