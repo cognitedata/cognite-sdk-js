@@ -13,13 +13,6 @@ import {
 
 export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   /**
-   * @override
-   */
-  protected get searchUrl() {
-    return this.url('filter');
-  }
-
-  /**
    * [List 3D asset mappings](https://doc.cognitedata.com/api/v1/#operation/get3DMappings)
    *
    * ```js
