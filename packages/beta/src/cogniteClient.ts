@@ -10,6 +10,7 @@ import { TemplateGraphQlApi } from './api/templateGroups/templateGraphQlApi';
 import { TemplateGroupsApi } from './api/templateGroups/templateGroupsApi';
 import { TemplateGroupVersionsApi } from './api/templateGroups/templateGroupVersionsApi';
 import { TemplateInstancesApi } from './api/templateGroups/templateInstancesApi';
+import { DocumentsAPI } from './api/documents/documentsApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
@@ -17,6 +18,7 @@ class CogniteClientCleaned extends CogniteClientStable {
 
 export default class CogniteClient extends CogniteClientCleaned {
   private templateGroupsApi?: TemplateGroupsApi;
+  private documentsApi?: DocumentsAPI;
 
   /**
    * Create a new SDK client (beta)
@@ -69,6 +71,9 @@ export default class CogniteClient extends CogniteClientCleaned {
       },
     };
   }
+  public get documents() {
+    return accessApi(this.documentsApi);
+  }
 
   protected get version() {
     return `${version}-beta`;
@@ -81,6 +86,7 @@ export default class CogniteClient extends CogniteClientCleaned {
       TemplateGroupsApi,
       'templategroups'
     );
+    this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
   }
   static urlEncodeExternalId(externalId: string): string {
     return encodeURIComponent(externalId);
