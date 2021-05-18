@@ -8,6 +8,7 @@ import {
   CreateAssetMapping3D,
   CursorResponse,
   DeleteAssetMapping3D,
+  Filter3DAssetMappingsQuery,
 } from '../../types';
 
 export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
@@ -27,6 +28,30 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
     return super.listEndpoint(
       params => this.get<CursorResponse<AssetMapping3D[]>>(path, { params }),
       scope
+    );
+  };
+
+  /**
+   * [Filter 3D asset mappings](https://docs.cognite.com/api/v1/#operation/filter3DAssetMappings)
+   *
+   * ```js
+   * const mappings3D = await client.assetMappings3D.filter(3244265346345, 32423454353545, {
+   *   filter: {
+   *     treeIndexes: [1000, 1001, 1002]
+   *   }
+   * });
+   * ```
+   */
+  public filter = (
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId,
+    query: Filter3DAssetMappingsQuery
+  ): CursorAndAsyncIterator<AssetMapping3D> => {
+    const path = `${this.encodeUrl(modelId, revisionId)}/list`;
+    return super.listEndpoint(
+      params =>
+        this.post<CursorResponse<AssetMapping3D[]>>(path, { data: params }),
+      query
     );
   };
 
