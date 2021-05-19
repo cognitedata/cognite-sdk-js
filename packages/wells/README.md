@@ -102,6 +102,8 @@ Will return the min and max limits for spud date,
 water depth and npt durations to be used for range
 filters.
 
+NOTE! npt duration is in **hours**
+
 ```ts
 import { WellItems } from '@cognite/sdk-wells';
 
@@ -119,7 +121,7 @@ limits:  {
     min: { value: 10, unit: 'meter' },
     max: { value: 1524, unit: 'meter' }
   },
-  nptDuration: { min: 1.38, max: 24.52 }
+  nptDuration: { min: 1.38, max: 24.52 } // in hours
 }
 ```
 
