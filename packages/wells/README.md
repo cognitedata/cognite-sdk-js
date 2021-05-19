@@ -447,7 +447,10 @@ const filter: NPTFilter = {
   nptCodeDetails: ['SLSN', 'OLSF'], // filter on npt events that match on any of the code details
 };
 
-const nptItems: NPTItems = await client.events.listNPT(filter);
+const cursor = 'some-cursor'; // optional
+const limit = 100; // optional
+
+const nptItems: NPTItems = await client.events.listNPT(filter, cursor, limit);
 ```
 
 #### _List all npt codes_
