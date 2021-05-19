@@ -88,8 +88,8 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
   test('Filter NPT events with no results', async () => {
     const filter: NPTFilter = {
       duration: { min: 21.0, max: 23.0 },
-      nptCode: 'some-code',
-      nptCodeDetail: 'some-detail',
+      nptCodes: ['some-code'],
+      nptCodeDetails: ['some-detail'],
     };
 
     const nptItems: NPTItems = await client.events.listNPT(filter);

@@ -7,6 +7,8 @@ export { RefreshToken } from './client/clientAuthUtils';
 export * from './client/model/Cluster';
 export * from './client/model/GeoJson';
 export * from './client/model/Well';
+export * from './client/model/WellNPTFilter';
+export * from './client/model/ContainsAllOrAny';
 export * from './client/model/Wellbore';
 export * from './client/model/wellhead';
 export * from './client/model/WellFilter';

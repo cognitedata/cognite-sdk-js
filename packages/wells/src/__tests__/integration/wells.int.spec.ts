@@ -596,7 +596,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('filter well on npt depth and duration', async () => {
     const filter: WellFilter = {
-      hasEvents: {
+      npt: {
         duration: {max: 30.0},
         measuredDepth: { max: 3000.0, unit: LengthUnitEnum.METER }
       },
@@ -608,11 +608,13 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   });
 
   test('filter well on npt depth', async () => {
+
     const filter: WellFilter = {
-      hasEvents: {
-      duration: { min: 21.0, max: 23.0 },
-      nptCode: '',
-      nptCodeDetail: '',
+      npt: {
+      duration: { min: 1.0, max: 3000.0 },
+      measuredDepth: { min: 1800, max: 3000.0, unit: LengthUnitEnum.METER },
+      nptCodes: { containsAll: ["FJSB", "GSLB"]},
+      nptCodeDetails: { containsAll: ["SLSN", "OLSF"]},
       },
     };
 
@@ -623,7 +625,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('filter well on npt depth', async () => {
     const filter: WellFilter = {
-      hasEvents: {
+      npt: {
         measuredDepth: { min: 500000.0, unit: LengthUnitEnum.METER }
       },
     };

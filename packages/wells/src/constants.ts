@@ -9,8 +9,7 @@ export const OPERATOR = 'Operator';
 /** @hidden */
 export const BLOCK = 'Block';
 /** @hidden */
-export const COGDEV_BASE_URL =
-  'https://well-service.cognitedata-production.cognite.ai';
+export const COGDEV_BASE_URL = 'http://localhost:8080';
 /** @hidden */
 export const BLUEFIELD_BASE_URL = 'https://well-service.bluefield.cognite.ai';
 /** @hidden */
