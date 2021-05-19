@@ -143,6 +143,27 @@ client.loginWithToken({
 wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</span> =&gt;</span> {
   <span class="hljs-built_in">console</span>.log(well.externalId);
 });</code></pre>
+				<a href="#get-filter-limits" id="get-filter-limits" style="color: inherit; text-decoration: none;">
+					<h4><em>Get filter limits</em></h4>
+				</a>
+				<p>Will return the min and max limits for spud date,
+					water depth and npt durations to be used for range
+				filters.</p>
+				<p>NOTE! npt duration is in <strong>hours</strong></p>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellItems } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> limits: WellsLimits = <span class="hljs-keyword">await</span> client.wells.limits();
+
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;limits&#x27;</span>, limits);</code></pre>
+				<p>// output</p>
+				<pre><code class="language-sh">limits:  {
+  spudDate: { min: 2017-05-17T00:00:00.000Z, max: 2017-05-17T00:00:00.000Z },
+  waterDepth: {
+    min: { value: 10, unit: <span class="hljs-string">&#x27;meter&#x27;</span> },
+    max: { value: 1524, unit: <span class="hljs-string">&#x27;meter&#x27;</span> }
+  },
+  nptDuration: { min: 1.38, max: 24.52 } // <span class="hljs-keyword">in</span> hours
+}</code></pre>
 				<a href="#filter-wells-by-wkt-polygon" id="filter-wells-by-wkt-polygon" style="color: inherit; text-decoration: none;">
 					<h4><em>Filter wells by wkt polygon:</em></h4>
 				</a>
