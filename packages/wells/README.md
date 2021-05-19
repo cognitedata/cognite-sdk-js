@@ -164,15 +164,55 @@ const retrievedCrs = wells.items.map(well => well.wellhead?.crs)
 
 ### _Filter wells by npt events_
 
+This allows you to filter wells on associated npt events.
+
+**duration**: how long did the event last in **hours**.
+
+**measuredDepth**: at what depth the event occured.
+
+**nptCodes**: what npt codes are associated to the event.
+
+**nptCodeDetails**: what npt code details are associated to the event
+
 ```ts
-import { WellFilter } from '@cognite/sdk-wells';
+import { WellFilter, LengthUnitEnum } from '@cognite/sdk-wells';
 
 const filter: WellFilter = {
-  hasEvents: {
-    duration: { max: 30.0 },
-    measuredDepth: { max: 3000.0, unit: LengthUnitEnum.METER },
-    nptCode: 'some-npt-code',
-    nptCodeDetail: 'some-details',
+  npt: {
+    duration: { min: 1.0, max: 3000.0 }, // duration in hours
+    measuredDepth: { min: 1800, max: 3000.0, unit: LengthUnitEnum.METER },
+    nptCodes: { containsAny: ['FJSB', 'GSLB', 'XSLC'] },
+    nptCodeDetails: { containsAny: ['SLSN', 'OLSF', 'ZJST'] },
+  },
+};
+
+const wells = await client.wells.filter(filter);
+```
+
+### _Filter wells that match on **all** associated npt codes / code details_
+
+```ts
+import { WellFilter, LengthUnitEnum } from '@cognite/sdk-wells';
+
+const filter: WellFilter = {
+  npt: {
+    nptCodes: { containsAll: ['FJSB', 'GSLB', 'XSLC'] },
+    nptCodeDetails: { containsAll: ['SLSN', 'OLSF', 'ZJST'] },
+  },
+};
+
+const wells = await client.wells.filter(filter);
+```
+
+### _Filter wells that match on **any** associated npt codes/ code details_
+
+```ts
+import { WellFilter, LengthUnitEnum } from '@cognite/sdk-wells';
+
+const filter: WellFilter = {
+  npt: {
+    nptCodes: { containsAny: ['FJSB', 'GSLB', 'XSLC'] },
+    nptCodeDetails: { containsAny: ['SLSN', 'OLSF', 'ZJST'] },
   },
 };
 
@@ -393,15 +433,24 @@ const data: SurveyData = await client.surveys.getData(request);
 
 #### _Filter NPT events_
 
+duration: how long did the event last in **hours**
+measuredDepth: add what depth the event occur
+nptCodes: what npt codes are associated to the event
+nptCodeDetail: what npt code details are associated to the event
+
 ```ts
-import { NPT, NPTFilter } from '@cognite/sdk-wells';
+import { NPT, NPTFilter, LengthUnitEnum } from '@cognite/sdk-wells';
 const filter: NPTFilter = {
-  duration: { min: 21.0, max: 23.0 },
-  nptCode: 'some-code',
-  nptCodeDetail: 'some-detail',
+  duration: { min: 1.0, max: 30.0 }, // filter on npt event duration range in hours
+  measuredDepth: { min: 1800.0, max: 3000.0, unit: LengthUnitEnum.METER }, // filter on measured depth range that npt events took place
+  nptCodes: ['FJSB', 'GSLB'], // filter on npt events that match on any of the codes
+  nptCodeDetails: ['SLSN', 'OLSF'], // filter on npt events that match on any of the code details
 };
 
-const nptEvents: NPT[] = await client.events.listNPT(filter);
+const cursor = 'some-cursor'; // optional
+const limit = 100; // optional
+
+const nptItems: NPTItems = await client.events.listNPT(filter, cursor, limit);
 ```
 
 #### _List all npt codes_

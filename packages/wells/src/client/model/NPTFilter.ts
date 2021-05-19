@@ -12,13 +12,13 @@ export interface NPTFilter {
    */
   duration?: DoubleRange;
   /**
-   * @type {string}
+   * @type {string[]}
    * @memberof NPTFilter
    */
-  nptCode?: string;
+  nptCodes?: string[];
   /**
-   * @type {string}
+   * @type {string[]}
    * @memberof NPTFilter
    */
-  nptCodeDetail?: string;
+  nptCodeDetails?: string[];
 }

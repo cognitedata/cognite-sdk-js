@@ -88,14 +88,32 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
   test('Filter NPT events with no results', async () => {
     const filter: NPTFilter = {
       duration: { min: 21.0, max: 23.0 },
-      nptCode: 'some-code',
-      nptCodeDetail: 'some-detail',
+      nptCodes: ['some-code'],
+      nptCodeDetails: ['some-detail'],
     };
 
     const nptItems: NPTItems = await client.events.listNPT(filter);
     const nptEvents = nptItems.items;
     expect(nptEvents).not.toBeUndefined();
     expect(nptEvents.length).toBe(0);
+  });
+
+  test('Filter NPT events with match', async () => {
+    const filter: NPTFilter = {
+      duration: { min: 1.0, max: 30.0 },
+      measuredDepth: { min: 1800.0, max: 3000.0, unit: LengthUnitEnum.METER },
+      nptCodes: ['FJSB', 'GSLB'],
+      nptCodeDetails: ['SLSN', 'OLSF'],
+    };
+
+    const nptItems: NPTItems = await client.events.listNPT(filter);
+    const externalIds = nptItems.items.map(npt => npt.sourceEventExternalId);
+
+    const actual = new Set(externalIds);
+    const expected = new Set(['h2rmk', 'YTX8R'])
+    const intersection = [...actual].filter(x => expected.has(x!));
+
+    expect(intersection.length).toBe(expected.size);
   });
 
   test('List all NPT codes', async () => {

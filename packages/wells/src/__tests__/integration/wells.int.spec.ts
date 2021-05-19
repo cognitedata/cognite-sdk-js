@@ -596,7 +596,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
   test('filter well on npt depth and duration', async () => {
     const filter: WellFilter = {
-      hasEvents: {
+      npt: {
         duration: {max: 30.0},
         measuredDepth: { max: 3000.0, unit: LengthUnitEnum.METER }
       },
@@ -607,12 +607,14 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(externalIds).toContain('well:34/10-8');
   });
 
-  test('filter well on npt depth', async () => {
+  test('filter well on npt criterias matching on all', async () => {
+
     const filter: WellFilter = {
-      hasEvents: {
-      duration: { min: 21.0, max: 23.0 },
-      nptCode: '',
-      nptCodeDetail: '',
+      npt: {
+      duration: { min: 1.0, max: 3000.0 },
+      measuredDepth: { min: 1800, max: 3000.0, unit: LengthUnitEnum.METER },
+      nptCodes: { containsAll: ["FJSB", "GSLB"]},
+      nptCodeDetails: { containsAll: ["SLSN", "OLSF"]},
       },
     };
 
@@ -621,9 +623,30 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(externalIds).toContain('well:34/10-8');
   });
 
+  test('filter well on npt criterias matching on any', async () => {
+
+    const filter: WellFilter = {
+      npt: {
+      duration: { min: 1.0, max: 3000.0 },
+      measuredDepth: { min: 1800, max: 3000.0, unit: LengthUnitEnum.METER },
+      nptCodes: { containsAny: ["FJSB", "GSLB", "XSLC"]},
+      nptCodeDetails: { containsAny: ["SLSN", "OLSF", "ZJST"]},
+      },
+    };
+
+    const wells = await client.wells.filter(filter);
+    const externalIds = wells.items.map(well => well.externalId);
+
+    const actual = new Set(externalIds);
+    const expected = new Set(['well:34/10-24', 'well:34/10-8'])
+    const intersection = [...actual].filter(x => expected.has(x!));
+
+    expect(intersection.length).toBe(expected.size);
+  });
+
   test('filter well on npt depth', async () => {
     const filter: WellFilter = {
-      hasEvents: {
+      npt: {
         measuredDepth: { min: 500000.0, unit: LengthUnitEnum.METER }
       },
     };
