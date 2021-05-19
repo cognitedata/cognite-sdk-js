@@ -156,6 +156,11 @@ export interface WellsLimits {
    * @memberof WellsLimits
    */
   waterDepth: WaterDepthLimits;
+  /**
+   * @type {DoubleRange}
+   * @memberof WellsLimits
+   */
+  nptDuration: DoubleRange;
 }
 
 export interface WaterDepthLimits {

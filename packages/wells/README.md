@@ -96,6 +96,35 @@ wells.items.forEach(well => {
 });
 ```
 
+#### _Get filter limits_
+
+Will return the min and max limits for spud date,
+water depth and npt durations to be used for range
+filters.
+
+NOTE! npt duration is in **hours**
+
+```ts
+import { WellItems } from '@cognite/sdk-wells';
+
+const limits: WellsLimits = await client.wells.limits();
+
+console.log('limits', limits);
+```
+
+// output
+
+```sh
+limits:  {
+  spudDate: { min: 2017-05-17T00:00:00.000Z, max: 2017-05-17T00:00:00.000Z },
+  waterDepth: {
+    min: { value: 10, unit: 'meter' },
+    max: { value: 1524, unit: 'meter' }
+  },
+  nptDuration: { min: 1.38, max: 24.52 } // in hours
+}
+```
+
 #### _Filter wells by wkt polygon:_
 
 ```ts
