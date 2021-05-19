@@ -78,6 +78,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(limits.spudDate.max).toBeInstanceOf(Date)
     expect(limits.spudDate.min).toBeInstanceOf(Date)
     expect(limits.waterDepth.max.value).toBeGreaterThanOrEqual(limits.waterDepth.min.value)
+    expect(limits.nptDuration.max!).toBeGreaterThanOrEqual(limits.nptDuration.min!)
   });
 
   test('get source assets for well', async () => {
