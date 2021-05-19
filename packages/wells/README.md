@@ -166,20 +166,20 @@ const retrievedCrs = wells.items.map(well => well.wellhead?.crs)
 
 This allows you to filter wells on associated npt events.
 
-**duration**: how long did the event last.
+**duration**: how long did the event last in **hours**.
 
 **measuredDepth**: at what depth the event occured.
 
 **nptCodes**: what npt codes are associated to the event.
 
-**nptCodeDetail**: what nptCodeDetails are associated to the event
+**nptCodeDetails**: what nptCodeDetails are associated to the event
 
 ```ts
 import { WellFilter, LengthUnitEnum } from '@cognite/sdk-wells';
 
 const filter: WellFilter = {
   npt: {
-    duration: { min: 1.0, max: 3000.0 },
+    duration: { min: 1.0, max: 3000.0 }, // duration in hours
     measuredDepth: { min: 1800, max: 3000.0, unit: LengthUnitEnum.METER },
     nptCodes: { containsAny: ['FJSB', 'GSLB', 'XSLC'] },
     nptCodeDetails: { containsAny: ['SLSN', 'OLSF', 'ZJST'] },
@@ -433,7 +433,7 @@ const data: SurveyData = await client.surveys.getData(request);
 
 #### _Filter NPT events_
 
-duration: how long did the event last
+duration: how long did the event last in **hours**
 measuredDepth: add what depth the event occur
 nptCodes: what npt codes are associated to the event
 nptCodeDetail: what nptCodeDetails are associated to the event

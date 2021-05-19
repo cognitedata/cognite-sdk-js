@@ -16,6 +16,8 @@ export * from './client/model/WellIds';
 export * from './client/model/WellType';
 export * from './client/model/Survey';
 export * from './client/model/Sequence';
+export * from './client/model/DateRange';
+export * from './client/model/LengthRange';
 export { MeasurementType } from './client/model/MeasurementType';
 export { Measurement, Measurements } from './client/model/Measurement';
 export * from './constants';
