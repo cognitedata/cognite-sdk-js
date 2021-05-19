@@ -172,7 +172,7 @@ This allows you to filter wells on associated npt events.
 
 **nptCodes**: what npt codes are associated to the event.
 
-**nptCodeDetails**: what nptCodeDetails are associated to the event
+**nptCodeDetails**: what npt code details are associated to the event
 
 ```ts
 import { WellFilter, LengthUnitEnum } from '@cognite/sdk-wells';
@@ -436,7 +436,7 @@ const data: SurveyData = await client.surveys.getData(request);
 duration: how long did the event last in **hours**
 measuredDepth: add what depth the event occur
 nptCodes: what npt codes are associated to the event
-nptCodeDetail: what nptCodeDetails are associated to the event
+nptCodeDetail: what npt code details are associated to the event
 
 ```ts
 import { NPT, NPTFilter, LengthUnitEnum } from '@cognite/sdk-wells';
