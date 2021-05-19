@@ -203,14 +203,45 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 				<a href="#filter-wells-by-npt-events" id="filter-wells-by-npt-events" style="color: inherit; text-decoration: none;">
 					<h3><em>Filter wells by npt events</em></h3>
 				</a>
-				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+				<p>This allows you to filter wells on associated npt events.</p>
+				<p><strong>duration</strong>: how long did the event last in <strong>hours</strong>.</p>
+				<p><strong>measuredDepth</strong>: at what depth the event occured.</p>
+				<p><strong>nptCodes</strong>: what npt codes are associated to the event.</p>
+				<p><strong>nptCodeDetails</strong>: what npt code details are associated to the event</p>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter, LengthUnitEnum } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 
 <span class="hljs-keyword">const</span> filter: WellFilter = {
-  hasEvents: {
-    duration: { max: <span class="hljs-number">30.0</span> },
-    measuredDepth: { max: <span class="hljs-number">3000.0</span>, unit: LengthUnitEnum.METER },
-    nptCode: <span class="hljs-string">&#x27;some-npt-code&#x27;</span>,
-    nptCodeDetail: <span class="hljs-string">&#x27;some-details&#x27;</span>,
+  npt: {
+    duration: { min: <span class="hljs-number">1.0</span>, max: <span class="hljs-number">3000.0</span> }, <span class="hljs-comment">// duration in hours</span>
+    measuredDepth: { min: <span class="hljs-number">1800</span>, max: <span class="hljs-number">3000.0</span>, unit: LengthUnitEnum.METER },
+    nptCodes: { containsAny: [<span class="hljs-string">&#x27;FJSB&#x27;</span>, <span class="hljs-string">&#x27;GSLB&#x27;</span>, <span class="hljs-string">&#x27;XSLC&#x27;</span>] },
+    nptCodeDetails: { containsAny: [<span class="hljs-string">&#x27;SLSN&#x27;</span>, <span class="hljs-string">&#x27;OLSF&#x27;</span>, <span class="hljs-string">&#x27;ZJST&#x27;</span>] },
+  },
+};
+
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
+				<a href="#filter-wells-that-match-on-all-associated-npt-codes--code-details" id="filter-wells-that-match-on-all-associated-npt-codes--code-details" style="color: inherit; text-decoration: none;">
+					<h3><em>Filter wells that match on <strong>all</strong> associated npt codes / code details</em></h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter, LengthUnitEnum } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> filter: WellFilter = {
+  npt: {
+    nptCodes: { containsAll: [<span class="hljs-string">&#x27;FJSB&#x27;</span>, <span class="hljs-string">&#x27;GSLB&#x27;</span>, <span class="hljs-string">&#x27;XSLC&#x27;</span>] },
+    nptCodeDetails: { containsAll: [<span class="hljs-string">&#x27;SLSN&#x27;</span>, <span class="hljs-string">&#x27;OLSF&#x27;</span>, <span class="hljs-string">&#x27;ZJST&#x27;</span>] },
+  },
+};
+
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
+				<a href="#filter-wells-that-match-on-any-associated-npt-codes-code-details" id="filter-wells-that-match-on-any-associated-npt-codes-code-details" style="color: inherit; text-decoration: none;">
+					<h3><em>Filter wells that match on <strong>any</strong> associated npt codes/ code details</em></h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter, LengthUnitEnum } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> filter: WellFilter = {
+  npt: {
+    nptCodes: { containsAny: [<span class="hljs-string">&#x27;FJSB&#x27;</span>, <span class="hljs-string">&#x27;GSLB&#x27;</span>, <span class="hljs-string">&#x27;XSLC&#x27;</span>] },
+    nptCodeDetails: { containsAny: [<span class="hljs-string">&#x27;SLSN&#x27;</span>, <span class="hljs-string">&#x27;OLSF&#x27;</span>, <span class="hljs-string">&#x27;ZJST&#x27;</span>] },
   },
 };
 
@@ -404,14 +435,22 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 				<a href="#filter-npt-events" id="filter-npt-events" style="color: inherit; text-decoration: none;">
 					<h4><em>Filter NPT events</em></h4>
 				</a>
-				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { NPT, NPTFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+				<p>duration: how long did the event last in <strong>hours</strong>
+					measuredDepth: add what depth the event occur
+					nptCodes: what npt codes are associated to the event
+				nptCodeDetail: what npt code details are associated to the event</p>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { NPT, NPTFilter, LengthUnitEnum } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 <span class="hljs-keyword">const</span> filter: NPTFilter = {
-  duration: { min: <span class="hljs-number">21.0</span>, max: <span class="hljs-number">23.0</span> },
-  nptCode: <span class="hljs-string">&#x27;some-code&#x27;</span>,
-  nptCodeDetail: <span class="hljs-string">&#x27;some-detail&#x27;</span>,
+  duration: { min: <span class="hljs-number">1.0</span>, max: <span class="hljs-number">30.0</span> }, <span class="hljs-comment">// filter on npt event duration range in hours</span>
+  measuredDepth: { min: <span class="hljs-number">1800.0</span>, max: <span class="hljs-number">3000.0</span>, unit: LengthUnitEnum.METER }, <span class="hljs-comment">// filter on measured depth range that npt events took place</span>
+  nptCodes: [<span class="hljs-string">&#x27;FJSB&#x27;</span>, <span class="hljs-string">&#x27;GSLB&#x27;</span>], <span class="hljs-comment">// filter on npt events that match on any of the codes</span>
+  nptCodeDetails: [<span class="hljs-string">&#x27;SLSN&#x27;</span>, <span class="hljs-string">&#x27;OLSF&#x27;</span>], <span class="hljs-comment">// filter on npt events that match on any of the code details</span>
 };
 
-<span class="hljs-keyword">const</span> nptEvents: NPT[] = <span class="hljs-keyword">await</span> client.events.listNPT(filter);</code></pre>
+<span class="hljs-keyword">const</span> cursor = <span class="hljs-string">&#x27;some-cursor&#x27;</span>; <span class="hljs-comment">// optional</span>
+<span class="hljs-keyword">const</span> limit = <span class="hljs-number">100</span>; <span class="hljs-comment">// optional</span>
+
+<span class="hljs-keyword">const</span> nptItems: NPTItems = <span class="hljs-keyword">await</span> client.events.listNPT(filter, cursor, limit);</code></pre>
 				<a href="#list-all-npt-codes" id="list-all-npt-codes" style="color: inherit; text-decoration: none;">
 					<h4><em>List all npt codes</em></h4>
 				</a>
@@ -672,6 +711,9 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 						<a href="modules/_wells_src_client_model_cluster_.html">&quot;wells/src/client/model/<wbr>Cluster&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_containsallorany_.html">&quot;wells/src/client/model/<wbr>Contains<wbr>All<wbr>OrAny&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_daterange_.html">&quot;wells/src/client/model/<wbr>Date<wbr>Range&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
@@ -715,6 +757,9 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_wellids_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Ids&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_wellnptfilter_.html">&quot;wells/src/client/model/<wbr>WellNPTFilter&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_welltype_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Type&quot;</a>
