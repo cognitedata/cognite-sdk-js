@@ -116,15 +116,28 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
     expect(intersection.length).toBe(expected.size);
   });
 
+  test('List all NPT by wellbore ids', async () => {
+    const filter: NPTFilter = {wellboreIds: [8620912644845543, 8269456345006483]};
+    const nptEvents: NPTItems = await client.events.listNPT(filter)
+    const actual = new Set(nptEvents.items.map(npt => npt.sourceEventExternalId));
+    const expected = new Set(['m2rmk', 'h2rmk', 'YTX8R'])
+    const intersection = [...actual].filter(x => expected.has(x!));
+    expect(intersection.length).toBe(expected.size);
+  });
+
   test('List all NPT codes', async () => {
     const nptCodes: string[] = await client.events.nptCodes();
-    expect(nptCodes).not.toBeUndefined();
-    expect(nptCodes).toContain('ABCD');
+    const actual = new Set(nptCodes);
+    const expected = new Set(['FJSB', 'GSLB', 'XSLC'])
+    const intersection = [...actual].filter(x => expected.has(x!));
+    expect(intersection.length).toBe(expected.size);
   });
 
   test('List all NPT Detail codes', async () => {
-    const nptCodes: string[] = await client.events.nptDetailCodes();
-    expect(nptCodes).not.toBeUndefined();
-    expect(nptCodes).toContain('EFG');
+    const nptDetailCodes: string[] = await client.events.nptDetailCodes();
+    const actual = new Set(nptDetailCodes);
+    const expected = new Set(["OLSF", "SLSN", "ZJST"])
+    const intersection = [...actual].filter(x => expected.has(x!));
+    expect(intersection.length).toBe(expected.size);
   });
 });

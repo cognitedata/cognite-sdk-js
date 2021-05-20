@@ -21,4 +21,9 @@ export interface NPTFilter {
    * @memberof NPTFilter
    */
   nptCodeDetails?: string[];
+  /**
+   * @type {number[]}
+   * @memberof NPTFilter
+   */
+  wellboreIds?: number[];
 }

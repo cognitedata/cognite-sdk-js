@@ -27,7 +27,7 @@ export class EventsAPI extends ConfigureAPI {
     const path: string = `/${this.project}/events/nptcodes`;
 
     return await this.client
-      .asyncPost<string[]>(path, {})
+      .asyncGet<string[]>(path)
       .then(response => response.data)
       .catch(err => {
         throw new HttpError(err.status, err.data.error.message, {});
@@ -42,7 +42,7 @@ export class EventsAPI extends ConfigureAPI {
     const path: string = `/${this.project}/events/nptdetailcodes`;
 
     return await this.client
-      .asyncPost<string[]>(path, {})
+      .asyncGet<string[]>(path)
       .then(response => response.data)
       .catch(err => {
         throw new HttpError(err.status, err.data.error.message, {});
