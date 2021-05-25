@@ -459,13 +459,15 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 				<p>duration: how long did the event last in <strong>hours</strong>
 					measuredDepth: add what depth the event occur
 					nptCodes: what npt codes are associated to the event
-				nptCodeDetail: what npt code details are associated to the event</p>
+					nptCodeDetail: what npt code details are associated to the event
+				wellboreIds: what wellbore ids are associated to the event</p>
 				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { NPT, NPTFilter, LengthUnitEnum } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
 <span class="hljs-keyword">const</span> filter: NPTFilter = {
   duration: { min: <span class="hljs-number">1.0</span>, max: <span class="hljs-number">30.0</span> }, <span class="hljs-comment">// filter on npt event duration range in hours</span>
   measuredDepth: { min: <span class="hljs-number">1800.0</span>, max: <span class="hljs-number">3000.0</span>, unit: LengthUnitEnum.METER }, <span class="hljs-comment">// filter on measured depth range that npt events took place</span>
   nptCodes: [<span class="hljs-string">&#x27;FJSB&#x27;</span>, <span class="hljs-string">&#x27;GSLB&#x27;</span>], <span class="hljs-comment">// filter on npt events that match on any of the codes</span>
   nptCodeDetails: [<span class="hljs-string">&#x27;SLSN&#x27;</span>, <span class="hljs-string">&#x27;OLSF&#x27;</span>], <span class="hljs-comment">// filter on npt events that match on any of the code details</span>
+  wellboreIds: [<span class="hljs-number">9241931069132</span>, <span class="hljs-number">304913581314133</span>], <span class="hljs-comment">// filter on npt events that are associated to wellbore ids</span>
 };
 
 <span class="hljs-keyword">const</span> cursor = <span class="hljs-string">&#x27;some-cursor&#x27;</span>; <span class="hljs-comment">// optional</span>
