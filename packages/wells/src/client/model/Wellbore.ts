@@ -43,20 +43,26 @@ export interface Wellbore {
    */
   name: string;
   /**
-   * Asset id in CDF
+   * Wellbore id
    * @type {number}
    * @memberof Wellbore
    */
   id: number;
   /**
+   * Wellbore description
+   * @type {string}
+   * @memberof Wellbore
+   */
+  description?: string;
+  /**
    * External Id for the wellbore
-   * @type {string}}
+   * @type {string}
    * @memberof Wellbore
    */
   externalId?: string;
   /**
    * CDF id of the well that contains this wellbore
-   * @type {string}}
+   * @type {string}
    * @memberof Wellbore
    */
   wellId?: { [key: string]: string };

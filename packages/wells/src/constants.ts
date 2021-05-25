@@ -10,7 +10,7 @@ export const OPERATOR = 'Operator';
 export const BLOCK = 'Block';
 /** @hidden */
 export const COGDEV_BASE_URL =
-  'http://well-service.cognitedata-production.cognite.ai';
+  'https://well-service.cognitedata-production.cognite.ai';
 /** @hidden */
 export const BLUEFIELD_BASE_URL = 'https://well-service.bluefield.cognite.ai';
 /** @hidden */
