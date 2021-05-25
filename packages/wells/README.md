@@ -466,6 +466,7 @@ duration: how long did the event last in **hours**
 measuredDepth: add what depth the event occur
 nptCodes: what npt codes are associated to the event
 nptCodeDetail: what npt code details are associated to the event
+wellboreIds: what wellbore ids are associated to the event
 
 ```ts
 import { NPT, NPTFilter, LengthUnitEnum } from '@cognite/sdk-wells';
@@ -474,6 +475,7 @@ const filter: NPTFilter = {
   measuredDepth: { min: 1800.0, max: 3000.0, unit: LengthUnitEnum.METER }, // filter on measured depth range that npt events took place
   nptCodes: ['FJSB', 'GSLB'], // filter on npt events that match on any of the codes
   nptCodeDetails: ['SLSN', 'OLSF'], // filter on npt events that match on any of the code details
+  wellboreIds: [9241931069132, 304913581314133], // filter on npt events that are associated to wellbore ids
 };
 
 const cursor = 'some-cursor'; // optional
