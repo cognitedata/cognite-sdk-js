@@ -384,10 +384,6 @@ export interface DocumentFeedbackAggregateResponse {
 
 export type DocumentId = CogniteInternalId;
 
-export interface DocumentFeedbackCreateRequest {
-  item: DocumentFeedbackCreateItem;
-}
-
 export interface DocumentFeedbackCreateItem {
   documentId: DocumentId;
   label: FeedbackLabel;
@@ -424,8 +420,4 @@ export interface DocumentFeedback {
 
 export interface DocumentFeedbackId {
   id: FeedbackId;
-}
-
-export interface ItemWrapper<T> {
-  item: T;
 }

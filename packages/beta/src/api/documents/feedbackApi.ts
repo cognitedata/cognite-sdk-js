@@ -12,11 +12,9 @@ import {
   DocumentFeedbackAggregateRequest,
   DocumentFeedbackAggregateResponse,
   DocumentFeedbackCreateItem,
-  DocumentFeedbackCreateRequest,
   DocumentFeedbackId,
   FeedbackQueryParameters,
   FeedbackStatus,
-  ItemWrapper,
 } from '../../types';
 
 export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
@@ -28,11 +26,9 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   };
 
   public create = (
-    content: DocumentFeedbackCreateItem
-  ): Promise<ItemWrapper<DocumentFeedback>> => {
-    return this.createFeedback<ItemWrapper<DocumentFeedback>>({
-      item: content,
-    });
+    feedbacks: DocumentFeedbackCreateItem[]
+  ): Promise<DocumentFeedback[]> => {
+    return this.createEndpoint<DocumentFeedbackCreateItem>(feedbacks);
   };
 
   public list = (
@@ -63,15 +59,6 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
       data: content,
     });
     return this.addToMapAndReturn(response.data.items, response);
-  }
-
-  private async createFeedback<ResponseType>(
-    request: DocumentFeedbackCreateRequest
-  ): Promise<ResponseType> {
-    const response = await this.post<ResponseType>(this.url(), {
-      data: request,
-    });
-    return response.data;
   }
 
   private async aggregateFeedbacks<ResponseType>(
