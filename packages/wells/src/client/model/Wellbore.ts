@@ -49,6 +49,12 @@ export interface Wellbore {
    */
   id: number;
   /**
+   * Wellbore description
+   * @type {string}
+   * @memberof Wellbore
+   */
+  description?: string;
+  /**
    * External Id for the wellbore
    * @type {string}
    * @memberof Wellbore
