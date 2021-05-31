@@ -49,12 +49,6 @@ export interface Wellbore {
    */
   id: number;
   /**
-   * Wellbore description
-   * @type {string}
-   * @memberof Wellbore
-   */
-  description?: string;
-  /**
    * External Id for the wellbore
    * @type {string}
    * @memberof Wellbore
@@ -62,10 +56,10 @@ export interface Wellbore {
   externalId?: string;
   /**
    * CDF id of the well that contains this wellbore
-   * @type {string}
+   * @type {number}
    * @memberof Wellbore
    */
-  wellId?: { [key: string]: string };
+  wellId?: number;
 
   /**
    * List of all the source assets for this wellbore
