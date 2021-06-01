@@ -88,10 +88,41 @@ const well: Well = await client.wells.getId(wellId);
 ```ts
 import { WellItems } from '@cognite/sdk-wells';
 
-const wells: WellItems = await client.wells.list();
+const cursor = 'some-cursor';
+const limit = 100;
+const wells: WellItems = await client.wells.list(cursor, limit);
 wells.items.forEach(well => {
-    console.log(well.externalId)
+  console.log(well.externalId);
 });
+```
+
+#### _Get filter limits_
+
+Will return the min and max limits for spud date,
+water depth and npt durations to be used for range
+filters.
+
+NOTE! npt duration is in **hours**
+
+```ts
+import { WellItems } from '@cognite/sdk-wells';
+
+const limits: WellsLimits = await client.wells.limits();
+
+console.log('limits', limits);
+```
+
+// output
+
+```sh
+limits:  {
+  spudDate: { min: 2017-05-17T00:00:00.000Z, max: 2017-05-17T00:00:00.000Z },
+  waterDepth: {
+    min: { value: 10, unit: 'meter' },
+    max: { value: 1524, unit: 'meter' }
+  },
+  nptDuration: { min: 1.38, max: 24.52 } // in hours
+}
 ```
 
 #### _Filter wells by wkt polygon:_
@@ -104,7 +135,10 @@ const filter: WellFilter = {
   polygon: { wktGeometry: polygon, crs: 'epsg:4326' },
   sources: ['edm'],
 };
-const wells = await client.wells.filter(filter);
+
+const cursor = 'some-cursor';
+const limit = 100;
+const wells = await client.wells.filter(filter, cursor, limit);
 ```
 
 #### _Filter wells without cursor (get ALL results sequentially):_
@@ -155,6 +189,63 @@ const filter: WellFilter = {
 
 const wells = await client.wells.filter(filter);
 const retrievedCrs = wells.items.map(well => well.wellhead?.crs)
+```
+
+### _Filter wells by npt events_
+
+This allows you to filter wells on associated npt events.
+
+**duration**: how long did the event last in **hours**.
+
+**measuredDepth**: at what depth the event occured.
+
+**nptCodes**: what npt codes are associated to the event.
+
+**nptCodeDetails**: what npt code details are associated to the event
+
+```ts
+import { WellFilter, LengthUnitEnum } from '@cognite/sdk-wells';
+
+const filter: WellFilter = {
+  npt: {
+    duration: { min: 1.0, max: 3000.0 }, // duration in hours
+    measuredDepth: { min: 1800, max: 3000.0, unit: LengthUnitEnum.METER },
+    nptCodes: { containsAny: ['FJSB', 'GSLB', 'XSLC'] },
+    nptCodeDetails: { containsAny: ['SLSN', 'OLSF', 'ZJST'] },
+  },
+};
+
+const wells = await client.wells.filter(filter);
+```
+
+### _Filter wells that match on **all** associated npt codes / code details_
+
+```ts
+import { WellFilter, LengthUnitEnum } from '@cognite/sdk-wells';
+
+const filter: WellFilter = {
+  npt: {
+    nptCodes: { containsAll: ['FJSB', 'GSLB', 'XSLC'] },
+    nptCodeDetails: { containsAll: ['SLSN', 'OLSF', 'ZJST'] },
+  },
+};
+
+const wells = await client.wells.filter(filter);
+```
+
+### _Filter wells that match on **any** associated npt codes/ code details_
+
+```ts
+import { WellFilter, LengthUnitEnum } from '@cognite/sdk-wells';
+
+const filter: WellFilter = {
+  npt: {
+    nptCodes: { containsAny: ['FJSB', 'GSLB', 'XSLC'] },
+    nptCodeDetails: { containsAny: ['SLSN', 'OLSF', 'ZJST'] },
+  },
+};
+
+const wells = await client.wells.filter(filter);
 ```
 
 ### _Get wells that have a trajectory_
@@ -287,7 +378,16 @@ for (var measurement of measurements) {
 import { Survey } from '@cognite/sdk-wells';
 
 const wellboreId = 8456650753594878;
-const trajectory: Survey = await client.wellbores.getTrajectory(wellboreId);
+const trajectory: Survey = await client.surveys.getTrajectory(wellboreId);
+```
+
+#### _Get trajectories from multiple wellbore:_
+
+```ts
+import { Survey } from '@cognite/sdk-wells';
+
+const wellboreIds = [8456650753594878, 8173864198348132];
+const trajectory: Survey = await client.surveys.getTrajectories(wellboreIds);
 ```
 
 ### **Casing queries**
@@ -301,15 +401,15 @@ const wellOrWellboreId = 5432591169464385;
 
 const casings: Sequence[] = await client.wellbores.getCasings(wellOrWellboreId);
 
-// then get the casing data
+// get the casing data
 for (var casing of casings) {
   const data: SequenceData = await client.casings.getData(
-    casing.id,   // cdf sequence id (number)
-    undefined,   // start (number)
-    undefined,   // end (number)
-    undefined,   // columns (string[])
+    casing.id, // cdf sequence id (number)
+    undefined, // start (number)
+    undefined, // end (number)
+    undefined, // columns (string[])
     '98jgi&0%4', // cursor (string)
-    100          // limit (number)
+    100 // limit (number)
   );
 }
 ```
@@ -362,15 +462,26 @@ const data: SurveyData = await client.surveys.getData(request);
 
 #### _Filter NPT events_
 
+duration: how long did the event last in **hours**
+measuredDepth: add what depth the event occur
+nptCodes: what npt codes are associated to the event
+nptCodeDetail: what npt code details are associated to the event
+wellboreIds: what wellbore ids are associated to the event
+
 ```ts
-import { NPT, NPTFilter } from '@cognite/sdk-wells';
+import { NPT, NPTFilter, LengthUnitEnum } from '@cognite/sdk-wells';
 const filter: NPTFilter = {
-  duration: { min: 21.0, max: 23.0 },
-  nptCode: 'some-code',
-  nptCodeDetail: 'some-detail',
+  duration: { min: 1.0, max: 30.0 }, // filter on npt event duration range in hours
+  measuredDepth: { min: 1800.0, max: 3000.0, unit: LengthUnitEnum.METER }, // filter on measured depth range that npt events took place
+  nptCodes: ['FJSB', 'GSLB'], // filter on npt events that match on any of the codes
+  nptCodeDetails: ['SLSN', 'OLSF'], // filter on npt events that match on any of the code details
+  wellboreIds: [9241931069132, 304913581314133], // filter on npt events that are associated to wellbore ids
 };
 
-const nptEvents: NPT[] = await client.events.listEvents(filter);
+const cursor = 'some-cursor'; // optional
+const limit = 100; // optional
+
+const nptItems: NPTItems = await client.events.listNPT(filter, cursor, limit);
 ```
 
 #### _List all npt codes_

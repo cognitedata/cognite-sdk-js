@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.0.4...@cognite/sdk@4.1.0) (2021-05-19)
+
+
+### Features
+
+* accessor for filtering 3D Asset Mappings [BND3D-676] ([#470](https://github.com/cognitedata/cognite-sdk-js/issues/470)) ([5e4de40](https://github.com/cognitedata/cognite-sdk-js/commit/5e4de403d2a7d088af1dbf451828ccdd56402756))
+
+
+
+
+
 ## [4.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.0.3...@cognite/sdk@4.0.4) (2021-04-30)
 
 

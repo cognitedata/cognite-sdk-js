@@ -1,17 +1,21 @@
 import { HttpError } from '@cognite/sdk-core';
 import { ConfigureAPI } from '../baseWellsClient';
-import { NPT } from '../model/NPT';
+import { NPTItems } from '../model/NPT';
 import { NPTFilter } from '../model/NPTFilter';
 
 export class EventsAPI extends ConfigureAPI {
-  public listEvents = async (filter: NPTFilter): Promise<NPT[]> => {
-    const path: string = this.getPath(`/events/list`);
+  public listNPT = async (
+    filter: NPTFilter,
+    cursor?: string,
+    limit?: number
+  ): Promise<NPTItems> => {
+    const path: string = this.getPath(`/events/list`, cursor, limit);
 
     return await this.client
-      .asyncPost<NPT[]>(path, { data: filter })
+      .asyncPost<NPTItems>(path, { data: filter })
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -23,10 +27,10 @@ export class EventsAPI extends ConfigureAPI {
     const path: string = `/${this.project}/events/nptcodes`;
 
     return await this.client
-      .asyncPost<string[]>(path, {})
+      .asyncGet<string[]>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -38,10 +42,10 @@ export class EventsAPI extends ConfigureAPI {
     const path: string = `/${this.project}/events/nptdetailcodes`;
 
     return await this.client
-      .asyncPost<string[]>(path, {})
+      .asyncGet<string[]>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 }

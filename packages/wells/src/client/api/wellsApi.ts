@@ -1,5 +1,5 @@
 import { accessApi, HttpError } from '@cognite/sdk-core';
-import { Well, WellItems } from '../model/Well';
+import { Well, WellItems, WellsLimits, SpudDateLimits } from '../model/Well';
 import { Wellbore } from '../model/Wellbore';
 import { WellboresAPI } from '../api/wellboresApi';
 import {
@@ -48,6 +48,7 @@ export class WellsAPI extends ConfigureAPI {
       sources: filter.sources,
       hasTrajectory: filter.hasTrajectory,
       hasMeasurements: filter.hasMeasurements,
+      npt: filter.npt,
       polygon: polygon,
       licenses: filter.licenses,
       waterDepth: filter.waterDepth,
@@ -57,27 +58,24 @@ export class WellsAPI extends ConfigureAPI {
 
   private addLazyMethodsForWell = (well: Well): Well => {
     return <Well>{
-      id: well.id,
-      name: well.name,
-      externalId: well.externalId,
-      description: well.description,
-      country: well.country,
-      quadrant: well.quadrant,
-      block: well.block,
-      field: well.field,
-      operator: well.operator,
+      ...well,
       spudDate: well.spudDate != undefined ? new Date(well.spudDate) : null,
-      wellType: well.wellType,
-      license: well.license,
-      waterDepth: well.waterDepth,
-      wellhead: well.wellhead,
-      datum: well.datum,
-      sources: well.sources,
       wellbores: async (): Promise<Wellbore[]> => {
         return await this.wellbores.getFromWell(well.id);
       },
       sourceAssets: async (source?: string): Promise<Asset[]> =>
         await this.getSources(well.id, source),
+    };
+  };
+
+  private addLazyMethodsForWellsLimits = (limits: WellsLimits): WellsLimits => {
+    const dateifiedSpudDate: SpudDateLimits = {
+      min: new Date(limits.spudDate.min),
+      max: new Date(limits.spudDate.max),
+    };
+    return <WellsLimits>{
+      ...limits,
+      spudDate: dateifiedSpudDate,
     };
   };
 
@@ -95,7 +93,7 @@ export class WellsAPI extends ConfigureAPI {
       .asyncGet<Asset[]>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -113,7 +111,7 @@ export class WellsAPI extends ConfigureAPI {
       .asyncGet<String[]>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -128,26 +126,37 @@ export class WellsAPI extends ConfigureAPI {
   public measurements = async (): Promise<String[]> =>
     this.getLabelPrefix('measurements');
 
-  public list = async (cursor?: string): Promise<WellItems> => {
-    const path: string = this.getPath('/wells', cursor);
+  public list = async (cursor?: string, limit?: number): Promise<WellItems> => {
+    const path: string = this.getPath('/wells', cursor, limit);
     return await this.client
       .asyncGet<WellItems>(path)
       .then(response => this.addLazyToAllWellItems(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
+      });
+  };
+
+  public limits = async (): Promise<WellsLimits> => {
+    const path: string = this.getPath('/wells/limits');
+    return await this.client
+      .asyncGet<WellsLimits>(path)
+      .then(response => this.addLazyMethodsForWellsLimits(response.data))
+      .catch(err => {
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
   private sendFilterRequest = async (
     filter: WellFilterAPI,
-    cursor?: string
+    cursor?: string,
+    limit?: number
   ): Promise<WellItems> => {
-    const path = this.getPath('/wells/list', cursor);
+    const path = this.getPath('/wells/list', cursor, limit);
     return await this.client
       .asyncPost<WellItems>(path, { data: filter })
       .then(response => this.addLazyToAllWellItems(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -187,10 +196,11 @@ export class WellsAPI extends ConfigureAPI {
 
   public filter = async (
     userFilter: WellFilter,
-    cursor?: string
+    cursor?: string,
+    limit?: number
   ): Promise<WellItems> => {
     const filter: WellFilterAPI = this.wrapFilter(userFilter);
-    return await this.sendFilterRequest(filter, cursor);
+    return await this.sendFilterRequest(filter, cursor, limit);
   };
 
   public getById = async (id: number): Promise<Well> => {
@@ -199,7 +209,7 @@ export class WellsAPI extends ConfigureAPI {
       .asyncGet<Well>(path)
       .then(response => this.addLazyMethodsForWell(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 }

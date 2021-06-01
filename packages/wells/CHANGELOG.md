@@ -3,6 +3,117 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.7.0...@cognite/sdk-wells@1.7.1) (2021-05-31)
+
+
+### Bug Fixes
+
+* wellbore class [release] ([#556](https://github.com/cognitedata/cognite-sdk-js/issues/556)) ([e2b0b77](https://github.com/cognitedata/cognite-sdk-js/commit/e2b0b77b279fd4b0cb748ba1a3d652edd316b8f8))
+
+
+
+
+
+# [1.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.6.5...@cognite/sdk-wells@1.7.0) (2021-05-25)
+
+
+### Features
+
+* **wells:** add wellbore description ([#554](https://github.com/cognitedata/cognite-sdk-js/issues/554)) [release] ([a4f3bcc](https://github.com/cognitedata/cognite-sdk-js/commit/a4f3bcc6d5fe7a3d188f757ece29342f22fd9721))
+
+
+
+
+
+## [1.6.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.6.4...@cognite/sdk-wells@1.6.5) (2021-05-25)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [1.6.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.6.3...@cognite/sdk-wells@1.6.4) (2021-05-19)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [1.6.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.6.2...@cognite/sdk-wells@1.6.3) (2021-05-19)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [1.6.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.6.1...@cognite/sdk-wells@1.6.2) (2021-05-11)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [1.6.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.6.0...@cognite/sdk-wells@1.6.1) (2021-05-07)
+
+
+### Bug Fixes
+
+* **wells:** prefer cogprod url for well-service on gcp [release] ([#546](https://github.com/cognitedata/cognite-sdk-js/issues/546)) ([8041375](https://github.com/cognitedata/cognite-sdk-js/commit/8041375e13dafde9d3e0641eec9547238be1be3f))
+
+
+
+
+
+# [1.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.5.0...@cognite/sdk-wells@1.6.0) (2021-05-06)
+
+
+### Features
+
+* add support for wells limits endpoint [release] ([#545](https://github.com/cognitedata/cognite-sdk-js/issues/545)) ([53ce0a6](https://github.com/cognitedata/cognite-sdk-js/commit/53ce0a6f9a4adce39fdb4d74393b23eab81aabca))
+
+
+
+
+
+# [1.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.4.0...@cognite/sdk-wells@1.5.0) (2021-05-05)
+
+
+### Bug Fixes
+
+* readme and remove dead code ([#543](https://github.com/cognitedata/cognite-sdk-js/issues/543)) ([2544d4b](https://github.com/cognitedata/cognite-sdk-js/commit/2544d4b1d97cd2fb7922d1f466e409019d7f0bf4))
+
+
+### Features
+
+* **wells:** add sourcewellbores to to wellbore type ([#542](https://github.com/cognitedata/cognite-sdk-js/issues/542)) ([dc9bf45](https://github.com/cognitedata/cognite-sdk-js/commit/dc9bf45c51ec8b994824e005d7e95158aa384d2f))
+
+
+
+
+
+# [1.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.3.2...@cognite/sdk-wells@1.4.0) (2021-05-05)
+
+
+### Features
+
+* fetch trajectories for multiple wellbores [release] ([#540](https://github.com/cognitedata/cognite-sdk-js/issues/540)) ([72b1c48](https://github.com/cognitedata/cognite-sdk-js/commit/72b1c48de0cc4804cd32b3839b1375994bb20aa2))
+
+
+
+
+
+## [1.3.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.3.1...@cognite/sdk-wells@1.3.2) (2021-05-04)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
 ## [1.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.3.0...@cognite/sdk-wells@1.3.1) (2021-04-30)
 
 **Note:** Version bump only for package @cognite/sdk-wells

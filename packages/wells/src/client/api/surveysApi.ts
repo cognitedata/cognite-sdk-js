@@ -14,6 +14,10 @@ export class SurveysAPI extends ConfigureAPI {
     };
   };
 
+  private addLazyMethodsToAll = (surveys: Survey[]): Survey[] => {
+    return surveys.map(survey => this.addLazyMethods(survey));
+  };
+
   public getTrajectory = async (wellboreId: number): Promise<Survey> => {
     const path: string = this.getPath(`/wellbores/${wellboreId}/trajectory`);
 
@@ -25,18 +29,25 @@ export class SurveysAPI extends ConfigureAPI {
       });
   };
 
-  public getData = async (request: SurveyDataRequest): Promise<SurveyData> => {
-    if (this.project == undefined) {
-      throw new HttpError(400, 'The client project has not been set.', {});
-    }
+  public getTrajectories = async (wellboreIds: number[]): Promise<Survey[]> => {
+    const path: string = this.getPath(`/wellbores/trajectories`);
 
-    const path: string = `/${this.project}/surveys/data`;
+    return await this.client
+      .asyncPost<Survey[]>(path, { data: { items: wellboreIds } })
+      .then(response => this.addLazyMethodsToAll(response.data))
+      .catch(err => {
+        throw new HttpError(err.status, err.data.error.message, {});
+      });
+  };
+
+  public getData = async (request: SurveyDataRequest): Promise<SurveyData> => {
+    const path: string = this.getPath(`/surveys/data`);
 
     return await this.client
       .asyncPost<SurveyData>(path, { data: request })
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 }

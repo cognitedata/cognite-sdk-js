@@ -35,10 +35,7 @@ export class WellboresAPI extends ConfigureAPI {
 
   private addLazyMethodsForWellbore = (wellbore: Wellbore): Wellbore => {
     return <Wellbore>{
-      id: wellbore.id,
-      name: wellbore.name,
-      externalId: wellbore.externalId,
-      wellId: wellbore.wellId,
+      ...wellbore,
       trajectory: async (): Promise<Survey> => {
         return await this.surveys.getTrajectory(wellbore.id);
       },
@@ -65,7 +62,7 @@ export class WellboresAPI extends ConfigureAPI {
       .asyncGet<Asset[]>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -73,9 +70,7 @@ export class WellboresAPI extends ConfigureAPI {
     measurement: Measurement
   ): Measurement => {
     return <Measurement>{
-      id: measurement.id,
-      externalId: measurement.externalId,
-      name: measurement.name,
+      ...measurement,
       data: async (): Promise<SurveyData> =>
         await this.surveys.getData({ id: measurement.id }),
     };
@@ -87,7 +82,7 @@ export class WellboresAPI extends ConfigureAPI {
       .asyncGet<Wellbore>(path)
       .then(response => this.addLazyMethodsForWellbore(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
   };
 
@@ -99,7 +94,7 @@ export class WellboresAPI extends ConfigureAPI {
         this.addLazyMethodsForWellbore(wellbore)
       );
     } catch (err) {
-      throw new HttpError(err.status, err.errorMessage, {});
+      throw new HttpError(err.status, err.data.error.message, {});
     }
   };
 
@@ -114,19 +109,8 @@ export class WellboresAPI extends ConfigureAPI {
         this.addLazyMethodsForWellbore(wellbore)
       );
     } catch (err) {
-      throw new HttpError(err.status, err.errorMessage, {});
+      throw new HttpError(err.status, err.data.error.message, {});
     }
-  };
-
-  public getTrajectory = async (wellboreId: number): Promise<Survey> => {
-    const path: string = this.getPath(`/wellbores/${wellboreId}/trajectory`);
-
-    return await this.client
-      .asyncGet<Survey>(path)
-      .then(response => response.data)
-      .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
-      });
   };
 
   public getMeasurement = async (
@@ -141,7 +125,7 @@ export class WellboresAPI extends ConfigureAPI {
       .asyncGet<Measurements>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {});
+        throw new HttpError(err.status, err.data.error.message, {});
       });
 
     return measurements.items.map((measurement: Measurement) =>

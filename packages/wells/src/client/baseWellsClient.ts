@@ -187,7 +187,11 @@ export class ConfigureAPI {
     this.cluster = cluster;
   }
 
-  protected getPath(targetRoute: string, cursor?: string): string {
+  protected getPath(
+    targetRoute: string,
+    cursor?: string,
+    limit?: number
+  ): string {
     if (this.project == undefined) {
       throw new HttpError(400, 'The client project has not been set.', {});
     }
@@ -197,19 +201,22 @@ export class ConfigureAPI {
 
     const baseUrl = this.client.getBaseUrl();
 
-    let path =
-      baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API
-        ? `/${this.project}${targetRoute}?env=${this.cluster}`
-        : `/${this.project}${targetRoute}`;
+    // URL constructor throws error if base url not included
+    const path = new URL(`${baseUrl}/${this.project}${targetRoute}`);
 
-    if (cursor) {
-      if (path.includes('?env')) {
-        path += `&cursor=${cursor}`;
-      } else {
-        path += `?cursor=${cursor}`;
-      }
+    if (baseUrl == COGDEV_BASE_URL && this.cluster != Cluster.API) {
+      path.searchParams.append(`env`, `${this.cluster}`);
     }
 
-    return path;
+    if (cursor) {
+      path.searchParams.append(`cursor`, `${cursor}`);
+    }
+
+    if (limit) {
+      path.searchParams.append(`limit`, `${limit}`);
+    }
+
+    // we only need the route and params
+    return path.toString().substring(baseUrl.length);
   }
 }

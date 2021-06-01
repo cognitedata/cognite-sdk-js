@@ -144,3 +144,47 @@ export interface WellDatum {
    */
   reference?: string;
 }
+
+export interface WellsLimits {
+  /**
+   * @type {SpudDateLimits}
+   * @memberof WellsLimits
+   */
+  spudDate: SpudDateLimits;
+  /**
+   * @type {WaterDepthLimits}
+   * @memberof WellsLimits
+   */
+  waterDepth: WaterDepthLimits;
+  /**
+   * @type {DoubleRange}
+   * @memberof WellsLimits
+   */
+  nptDuration: DoubleRange;
+}
+
+export interface WaterDepthLimits {
+  /**
+   * @type {DoubleWithUnit}
+   * @memberof WaterDepthLimits
+   */
+  min: DoubleWithUnit;
+  /**
+   * @type {DoubleWithUnit}
+   * @memberof WaterDepthLimits
+   */
+  max: DoubleWithUnit;
+}
+
+export interface SpudDateLimits {
+  /**
+   * @type {Date}
+   * @memberof SpudDateLimits
+   */
+  min: Date;
+  /**
+   * @type {Date}
+   * @memberof SpudDateLimits
+   */
+  max: Date;
+}
