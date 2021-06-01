@@ -159,20 +159,23 @@ describe('Documents unit test', () => {
   test('create feedback on document', async () => {
     nock(mockBaseUrl)
       .post(new RegExp('/documents/feedback'), {
-      items: [{
+        items: [
+          {
             documentId: 1,
             label: { externalId: '2' },
             action: 'ATTACH',
           },
-        }]
+        ],
       })
       .once()
       .reply(200, {});
-    await client.documents.feedback.create([{
-      documentId: 1,
-      label: { externalId: '2' },
-      action: 'ATTACH',
-    }]);
+    await client.documents.feedback.create([
+      {
+        documentId: 1,
+        label: { externalId: '2' },
+        action: 'ATTACH',
+      },
+    ]);
   });
 
   test('list feedback', async () => {
