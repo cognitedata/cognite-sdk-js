@@ -406,19 +406,13 @@ export interface FeedbackQueryParameters extends FilterQuery {
   status: FeedbackStatus;
 }
 
-export type FeedbackId = IdEither;
-
 export interface DocumentFeedback {
   documentId: DocumentId;
   label: FeedbackLabel;
   action: FeedbackAction;
-  feedbackId: FeedbackId;
+  feedbackId: IdEither;
   reporterInfo?: ReporterInfo;
   createdAt: string;
   reviewedAt?: string | null;
   status: FeedbackStatus;
-}
-
-export interface DocumentFeedbackId {
-  id: FeedbackId;
 }
