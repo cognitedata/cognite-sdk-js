@@ -168,7 +168,7 @@ describe('Documents unit test', () => {
         ],
       })
       .once()
-      .reply(200, {});
+      .reply(200, { items: [] });
     await client.documents.feedback.create([
       {
         documentId: 1,
