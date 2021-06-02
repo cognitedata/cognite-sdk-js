@@ -8,6 +8,7 @@ import {
   GeoLocationGeometry,
   LabelFilter,
   PointCoordinates,
+  IdEither,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -405,7 +406,7 @@ export interface FeedbackQueryParameters extends FilterQuery {
   status: FeedbackStatus;
 }
 
-export type FeedbackId = number;
+export type FeedbackId = IdEither;
 
 export interface DocumentFeedback {
   documentId: DocumentId;

@@ -4,7 +4,6 @@ import {
   BaseResourceAPI,
   CursorAndAsyncIterator,
   ItemsWrapper,
-  IdEither,
 } from '@cognite/sdk-core';
 
 import {
@@ -48,13 +47,10 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   };
 
   private async postAcceptRejectFeedback(
-    ids: IdEither[],
+    ids: DocumentFeedbackId[],
     endpoint: acceptRejectEndpoint
   ) {
-    const wrappedIds = ids.map(id => {
-      return <DocumentFeedbackId>{ id: id };
-    });
-    const content: ItemsWrapper<DocumentFeedbackId[]> = { items: wrappedIds };
+    const content: ItemsWrapper<DocumentFeedbackId[]> = { items: ids };
     const path = this.url(endpoint);
     const response = await this.post<ItemsWrapper<(DocumentFeedback)[]>>(path, {
       data: content,
