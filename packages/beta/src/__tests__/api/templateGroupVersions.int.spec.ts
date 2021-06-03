@@ -15,7 +15,7 @@ describe('template group versions test', () => {
     {
       externalId,
       description: 'Models a Well system',
-      owners: ['user.name@example.com'],
+      owners: [],
     },
   ];
 

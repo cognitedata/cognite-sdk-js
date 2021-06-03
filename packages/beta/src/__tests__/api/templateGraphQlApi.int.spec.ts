@@ -24,7 +24,7 @@ describe.skip('template group test', () => {
     {
       externalId,
       description: 'Models a Well system',
-      owners: ['user.name@example.com'],
+      owners: [],
     },
   ];
 
