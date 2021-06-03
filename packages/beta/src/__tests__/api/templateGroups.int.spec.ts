@@ -7,21 +7,21 @@ import { setupLoggedInClient } from '../testUtils';
 
 describe('template group test', () => {
   let client: CogniteClient;
-  let username: string;
-  let expectedTemplateGroups: TemplateGroup[];
 
   const templateGroups = [
     {
       externalId: `Wells ${randomInt()}`,
       description: 'Models a Well system',
-      owners: ['user.name@example.com'],
+      owners: [],
     },
     {
       externalId: `FooBar ${randomInt()}`,
       description: 'Models a FooBar system',
-      owners: ['user.name@example.com'],
+      owners: [],
     },
   ];
+
+  const expectedTemplateGroups = templateGroups;
 
   const cleanup = async () => {
     await client.templates.groups.delete(templateGroups, {
@@ -31,13 +31,6 @@ describe('template group test', () => {
 
   beforeAll(async () => {
     client = setupLoggedInClient();
-    const status = await client.login.status();
-    // eslint-disable-next-line prettier/prettier
-    username = status?.user || 'unknown';
-    expectedTemplateGroups = templateGroups.map(tg => ({
-      ...tg,
-      owners: [...tg.owners, username],
-    }));
     await cleanup();
   });
 
