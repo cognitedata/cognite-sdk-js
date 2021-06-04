@@ -1,5 +1,3 @@
-import { ContainsAllOrAny } from './ContainsAllOrAny';
-
 export interface WellNDSFilter {
   /**
    * @type {string[]}
