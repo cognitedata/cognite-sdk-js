@@ -267,6 +267,39 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 };
 
 <span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
+				<a href="#filter-wells-by-npt-events-1" id="filter-wells-by-npt-events-1" style="color: inherit; text-decoration: none;">
+					<h3><em>Filter wells by npt events</em></h3>
+				</a>
+				<p>This allows you to filter wells on associated npt events.</p>
+				<p><strong>severities</strong>: severity of the risk, value from 0-4.</p>
+				<p><strong>probabilities</strong>: probability of the risk, value from 0-5.</p>
+				<p><strong>riskTypes</strong>: what risk type is associated to the event.</p>
+				<a href="#filter-wells-that-match-on-any-associated-nds-risk-type" id="filter-wells-that-match-on-any-associated-nds-risk-type" style="color: inherit; text-decoration: none;">
+					<h3><em>Filter wells that match on <strong>any</strong> associated nds risk type</em></h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> filter: WellFilter = {
+  nds: {
+    severities: [<span class="hljs-number">1</span>, <span class="hljs-number">4</span>],
+    probabilities: [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+    ndsRiskTypes: [<span class="hljs-string">&#x27;Mechanical&#x27;</span>, <span class="hljs-string">&#x27;Hydraulics&#x27;</span>]
+  },
+};
+
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
+				<a href="#filter-wells-that-match-on-any-associated-nds-risk-type-1" id="filter-wells-that-match-on-any-associated-nds-risk-type-1" style="color: inherit; text-decoration: none;">
+					<h3><em>Filter wells that match on <strong>any</strong> associated nds risk type</em></h3>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">import</span> { WellFilter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk-wells&#x27;</span>;
+
+<span class="hljs-keyword">const</span> filter: WellFilter = {
+  nds: {
+    ndsRiskTypes: [<span class="hljs-string">&#x27;Mechanical&#x27;</span>, <span class="hljs-string">&#x27;Hydraulics&#x27;</span>]
+  },
+};
+
+<span class="hljs-keyword">const</span> wells = <span class="hljs-keyword">await</span> client.wells.filter(filter);</code></pre>
 				<a href="#get-wells-that-have-a-trajectory" id="get-wells-that-have-a-trajectory" style="color: inherit; text-decoration: none;">
 					<h3><em>Get wells that have a trajectory</em></h3>
 				</a>
@@ -482,6 +515,10 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 					<h4><em>List all npt code details</em></h4>
 				</a>
 				<pre><code class="language-ts"><span class="hljs-keyword">const</span> nptCodes: <span class="hljs-built_in">string</span>[] = <span class="hljs-keyword">await</span> client.events.nptDetailCodes();</code></pre>
+				<a href="#list-all-nds-risk-types" id="list-all-nds-risk-types" style="color: inherit; text-decoration: none;">
+					<h4><em>List all nds risk types</em></h4>
+				</a>
+				<pre><code class="language-ts"><span class="hljs-keyword">const</span> ndsRiskTypes: <span class="hljs-built_in">string</span>[] = <span class="hljs-keyword">await</span> client.events.ndsRiskTypes();</code></pre>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -780,6 +817,9 @@ wells.items.forEach(<span class="hljs-function"><span class="hljs-params">well</
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_wellids_.html">&quot;wells/src/client/model/<wbr>Well<wbr>Ids&quot;</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/_wells_src_client_model_wellndsfilter_.html">&quot;wells/src/client/model/<wbr>WellNDSFilter&quot;</a>
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/_wells_src_client_model_wellnptfilter_.html">&quot;wells/src/client/model/<wbr>WellNPTFilter&quot;</a>
