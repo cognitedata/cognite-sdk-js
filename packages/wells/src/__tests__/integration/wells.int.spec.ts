@@ -659,8 +659,8 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   test('filter well on nds probability and severity', async () => {
     const filter: WellFilter = {
       nds: {
-        severities: ["1"],
-        probabilities: ["1"]
+        severities: [1],
+        probabilities: [1]
       },
     };
 
@@ -688,7 +688,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
   test('filter well on risk types and multiple severities', async () => {
     const filter: WellFilter = {
       nds: {
-        severities: ["1", "3"],
+        severities: [1, 3],
         riskTypes: ["Wellbore stability"]
       },
     };

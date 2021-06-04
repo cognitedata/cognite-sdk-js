@@ -3,12 +3,12 @@ export interface WellNDSFilter {
    * @type {string[]}
    * @memberof WellNDSFilter
    */
-  probabilities?: string[];
+  probabilities?: number[];
   /**
    * @type {string[]}
    * @memberof WellNDSFilter
    */
-  severities?: string[];
+  severities?: number[];
   /**
    * @type {string[]}
    * @memberof WellNDSFilter
