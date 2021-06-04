@@ -248,6 +248,46 @@ const filter: WellFilter = {
 const wells = await client.wells.filter(filter);
 ```
 
+### _Filter wells by npt events_
+
+This allows you to filter wells on associated npt events.
+
+**severities**: severity of the risk, value from 0-4.
+
+**probabilities**: probability of the risk, value from 0-5.
+
+**riskTypes**: what risk type is associated to the event.
+
+### _Filter wells that match on **any** associated nds risk type_
+
+```ts
+import { WellFilter } from '@cognite/sdk-wells';
+
+const filter: WellFilter = {
+  nds: {
+    severities: [1, 4],
+    probabilities: [2, 3]
+    ndsRiskTypes: ['Mechanical', 'Hydraulics']
+  },
+};
+
+const wells = await client.wells.filter(filter);
+```
+
+### _Filter wells that match on **any** associated nds risk type_
+
+```ts
+import { WellFilter } from '@cognite/sdk-wells';
+
+const filter: WellFilter = {
+  nds: {
+    ndsRiskTypes: ['Mechanical', 'Hydraulics']
+  },
+};
+
+const wells = await client.wells.filter(filter);
+```
+
 ### _Get wells that have a trajectory_
 
 ```ts
@@ -494,4 +534,10 @@ const nptCodes: string[] = await client.events.nptCodes();
 
 ```ts
 const nptCodes: string[] = await client.events.nptDetailCodes();
+```
+
+#### _List all nds risk types_
+
+```ts
+const ndsRiskTypes: string[] = await client.events.ndsRiskTypes();
 ```
