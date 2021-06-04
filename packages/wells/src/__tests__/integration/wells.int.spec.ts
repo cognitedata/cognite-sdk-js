@@ -114,7 +114,7 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
     expect(wellbores).not.toBeUndefined();
     expect(wellbores.length).toBeGreaterThan(0);
     const wellboreIds = [
-      'WDL:Wellbore:dummy102',
+      'wellbore:Wellbore WDL 102',
       'wellbore:Platform WB 12.25 in OH',
       'wellbore:Platform WB 8.5 in OH',
     ];
@@ -654,5 +654,50 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     const wells = await client.wells.filter(filter);
     expect(wells).not.toBeUndefined();
+  });
+
+  test('filter well on nds probability and severity', async () => {
+    const filter: WellFilter = {
+      nds: {
+        severities: ["1"],
+        probabilities: ["1"]
+      },
+    };
+
+    const wells = await client.wells.filter(filter);
+    expect(wells).not.toBeUndefined();
+    const wellNames = wells.items.map(well => well.externalId)
+    expect(wellNames).toContain("well:34/10-24")
+  });
+
+  test('filter well on risk types', async () => {
+    const filter: WellFilter = {
+      nds: {
+        riskTypes: ["Hydraulics", "Wellbore stability"]
+      },
+    };
+
+    const wells = await client.wells.filter(filter);
+    expect(wells).not.toBeUndefined();
+    const wellNames = wells.items.map(well => well.externalId)
+    expect(wellNames).not.toContain("well:35/10-24")
+    expect(wellNames).toContain("well:34/10-1")
+    expect(wellNames).toContain("well:34/10-8")
+  });
+
+  test('filter well on risk types and multiple severities', async () => {
+    const filter: WellFilter = {
+      nds: {
+        severities: ["1", "3"],
+        riskTypes: ["Wellbore stability"]
+      },
+    };
+
+    const wells = await client.wells.filter(filter);
+    expect(wells).not.toBeUndefined();
+    const wellNames = wells.items.map(well => well.externalId)
+    expect(wellNames).not.toContain("well:35/10-24")
+    expect(wellNames).not.toContain("well:34/10-1")
+    expect(wellNames).toContain("well:34/10-8")
   });
 });

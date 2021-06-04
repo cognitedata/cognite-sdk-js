@@ -120,7 +120,7 @@ describeIfCondition(
 
       expect(wellbores).not.toBeUndefined();
       const wellboreIds = [
-        'WDL:Wellbore:dummy102',
+        'wellbore:Wellbore WDL 102',
         'wellbore:Platform WB 12.25 in OH',
         'wellbore:Platform WB 8.5 in OH',
       ];
