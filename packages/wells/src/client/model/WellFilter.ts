@@ -3,6 +3,7 @@ import { GeoJson } from './GeoJson';
 import { LengthRange } from './LengthRange';
 import { DateRange } from './DateRange';
 import { WellNPTFilter } from './WellNPTFilter';
+import { WellNDSFilter } from './WellNDSFilter';
 
 export interface WellFilter {
   /**
@@ -51,10 +52,15 @@ export interface WellFilter {
    */
   hasMeasurements?: MeasurementFilters;
   /**
-   * @type {NPTFilter}
+   * @type {WellNPTFilter}
    * @memberof WellFilter
    */
   npt?: WellNPTFilter;
+  /**
+   * @type {WellNDSFilter}
+   * @memberof WellFilter
+   */
+  nds?: WellNDSFilter;
   /**
    * @type {PolygonFilterAPI}
    * @memberof WellFilter
@@ -133,6 +139,11 @@ export interface WellFilterAPI {
    * @memberof WellFilterAPI
    */
   npt?: WellNPTFilter;
+  /**
+   * @type {WellNDSFilter}
+   * @memberof WellFilter
+   */
+  nds?: WellNDSFilter;
   /**
    * @type {PolygonFilterAPI}
    * @memberof WellFilterAPI

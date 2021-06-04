@@ -140,4 +140,11 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
     const intersection = actual.filter(x => expected.has(x!));
     expect(intersection.length).toBe(expected.size);
   });
+
+  test('List all NDS Risk Types', async () => {
+    const ndsRiskTypes: string[] = await client.events.ndsRiskTypes();
+    ["Mechanical", "Equipment failure", "Wellbore stability", "Hydraulics"].forEach ( type =>
+      expect(ndsRiskTypes).toContain(type)
+    )
+  });
 });
