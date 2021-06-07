@@ -229,6 +229,7 @@ export interface DocumentsSourceFileFilter {
   labels?: LabelFilter;
   geoLocation?: GeoLocationFilter;
   datasetId?: IntIn | IntEquals;
+  assetSubtreeIds?: AssetIdsFilter;
 }
 
 export interface ExternalDocumentsSearch {
