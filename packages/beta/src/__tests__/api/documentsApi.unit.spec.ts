@@ -24,6 +24,27 @@ describe('Documents unit test', () => {
     await client.documents.search({ search: { query: 'test' } });
   });
 
+  test('search with size range', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/search'), {
+        search: {
+          query: 'test',
+        },
+        filter: {
+          size: {
+            min: 1,
+            max: 10,
+          },
+        },
+      })
+      .once()
+      .reply(200, {});
+    await client.documents.search({
+      search: { query: 'test' },
+      filter: { size: { min: 1, max: 10 } },
+    });
+  });
+
   test('search with filter', async () => {
     nock(mockBaseUrl)
       .post(new RegExp('/documents/search'), {

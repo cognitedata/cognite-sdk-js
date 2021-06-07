@@ -253,6 +253,12 @@ export interface DocumentsFilter {
   labels?: LabelFilter;
   geoLocation?: GeoLocationFilter;
   sourceFile?: DocumentsSourceFileFilter;
+  size?: NumberRange;
+}
+
+export interface NumberRange {
+  max?: number;
+  min?: number;
 }
 
 export interface DocumentsSearch {
@@ -289,6 +295,7 @@ export interface Document {
   sourceSystem?: string;
   sourceFile: any;
   geoLocation: GeoLocation;
+  size: number;
 }
 
 export type GeoLocationTypeEnum = 'Feature';
