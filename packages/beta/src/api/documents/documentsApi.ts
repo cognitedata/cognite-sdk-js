@@ -16,7 +16,6 @@ import {
 } from '../../types';
 import { FeedbackAPI } from './feedbackApi';
 import { PipelinesAPI } from './pipelinesApi';
-import { PreviewAPI } from './previewApi';
 
 export interface DocumentsAggregatesResponse<T> extends ItemsWrapper<T> {
   aggregates?: DocumentsAggregate[];
@@ -25,7 +24,6 @@ export interface DocumentsAggregatesResponse<T> extends ItemsWrapper<T> {
 export class DocumentsAPI extends BaseResourceAPI<Document> {
   private readonly feedbackAPI: FeedbackAPI;
   private readonly pipelinesAPI: PipelinesAPI;
-  private readonly previewAPI: PreviewAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
@@ -36,7 +34,6 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
       args[1],
       args[2]
     );
-    this.previewAPI = new PreviewAPI(args[0] + '/preview', args[1], args[2]);
   }
 
   public search = (
@@ -57,10 +54,6 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
   public get feedback() {
     return this.feedbackAPI;
-  }
-
-  public get preview() {
-    return this.previewAPI;
   }
 
   private async searchDocuments<ResponseType>(

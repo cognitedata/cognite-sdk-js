@@ -216,24 +216,4 @@ describe('Documents unit test', () => {
       .reply(200, { items: [] });
     await client.documents.feedback.reject([{ id: 1 }]);
   });
-
-  test('document preview', async () => {
-    nock(mockBaseUrl)
-      .get(new RegExp('/documents/preview'))
-      .query({ documentId: 1, page: 0 })
-      .once()
-      .reply(200);
-    await client.documents.preview.document(1);
-  });
-
-  test('document preview temporary link', async () => {
-    const link = 'just-testing';
-    nock(mockBaseUrl)
-      .get(new RegExp('/documents/preview/temporaryLink'))
-      .query({ documentId: 1 })
-      .once()
-      .reply(200, { temporaryLink: link });
-    const resp = await client.documents.preview.temporaryLink(1);
-    expect(resp.temporaryLink).toEqual(link);
-  });
 });
