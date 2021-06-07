@@ -416,3 +416,7 @@ export interface DocumentFeedback {
   reviewedAt?: string | null;
   status: FeedbackStatus;
 }
+
+export interface DocumentPreviewTemporaryLink {
+  temporaryLink: string;
+}
