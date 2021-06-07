@@ -1,0 +1,48 @@
+name: Node.js CI lint/codecov/commit check
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: wagoid/commitlint-github-action@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧
+        run: yarn install --frozen-lockfile
+
+      - name: validateDocLinks
+        run: yarn validateDocLinks
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Test/Codecov
+        run: yarn test:codecov
+
+      - name: Codecov
+        uses: codecov/codecov-action@v1.0.11
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Test snippets
+        run: yarn test-snippets
+
+      - name: Test/Codecov
+        run: yarn test-samples
