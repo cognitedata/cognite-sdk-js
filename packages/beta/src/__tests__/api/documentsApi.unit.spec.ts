@@ -219,21 +219,21 @@ describe('Documents unit test', () => {
 
   test('document preview', async () => {
     nock(mockBaseUrl)
-      .get('/documents/preview').query({"documentId": 1, "page": 0})
+      .get(new RegExp('/documents/preview'))
+      .query({ documentId: 1, page: 0 })
       .once()
       .reply(200);
     await client.documents.preview.document(1);
   });
 
   test('document preview temporary link', async () => {
-    let link = "just-testing"
+    const link = 'just-testing';
     nock(mockBaseUrl)
-      .get('/documents/preview/temporaryLink').query({"documentId": 1})
+      .get(new RegExp('/documents/preview/temporaryLink'))
+      .query({ documentId: 1 })
       .once()
-      .reply(200, {"temporaryLink": link});
-    let t = nock.pendingMocks()
-    t.pop()
-    let resp = await client.documents.preview.temporaryLink(1);
-    expect(resp.temporaryLink).toEqual(link)
+      .reply(200, { temporaryLink: link });
+    const resp = await client.documents.preview.temporaryLink(1);
+    expect(resp.temporaryLink).toEqual(link);
   });
 });

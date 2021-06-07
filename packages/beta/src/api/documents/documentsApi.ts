@@ -16,7 +16,7 @@ import {
 } from '../../types';
 import { FeedbackAPI } from './feedbackApi';
 import { PipelinesAPI } from './pipelinesApi';
-import {PreviewAPI} from "./previewApi";
+import { PreviewAPI } from './previewApi';
 
 export interface DocumentsAggregatesResponse<T> extends ItemsWrapper<T> {
   aggregates?: DocumentsAggregate[];
