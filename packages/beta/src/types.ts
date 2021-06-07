@@ -253,6 +253,7 @@ export interface DocumentsFilter {
   labels?: LabelFilter;
   geoLocation?: GeoLocationFilter;
   sourceFile?: DocumentsSourceFileFilter;
+  assetSubtreeIds?: AssetIdsFilter;
 }
 
 export interface DocumentsSearch {
