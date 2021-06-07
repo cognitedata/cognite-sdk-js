@@ -24,7 +24,7 @@ export class EventsAPI extends ConfigureAPI {
       throw new HttpError(400, 'The client project has not been set.', {});
     }
 
-    const path: string = `/${this.project}/events/nptcodes`;
+    const path: string = this.getPath(`/events/nptcodes`);
 
     return await this.client
       .asyncGet<string[]>(path)
@@ -39,7 +39,7 @@ export class EventsAPI extends ConfigureAPI {
       throw new HttpError(400, 'The client project has not been set.', {});
     }
 
-    const path: string = `/${this.project}/events/nptdetailcodes`;
+    const path: string = this.getPath(`/events/nptdetailcodes`);
 
     return await this.client
       .asyncGet<string[]>(path)
@@ -54,7 +54,7 @@ export class EventsAPI extends ConfigureAPI {
       throw new HttpError(400, 'The client project has not been set.', {});
     }
 
-    const path: string = `/${this.project}/events/ndsrisktypes`;
+    const path: string = this.getPath(`/events/ndsrisktypes`);
 
     return await this.client
       .asyncGet<string[]>(path)
