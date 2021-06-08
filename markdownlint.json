@@ -1,0 +1,15 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^https:\/\/github.com\/cognitedata\/.+\/issues\/.+"
+    },
+    {
+      "pattern": "^https:\/\/github.com\/cognitedata\/.+\/compare\/.+"
+    },
+    {
+      "pattern": "^https:\/\/github.com\/cognitedata\/.+\/commit\/.+"
+    }
+
+  ],
+  "retryOn429": true
+}
