@@ -1,8 +1,10 @@
 name: Node.js CI build/test
 
 on:
-  push:
-    branches: [ master ]
+ pull_request:
+    branches:
+      - master
+      - release-*
 
 jobs:
   build:
