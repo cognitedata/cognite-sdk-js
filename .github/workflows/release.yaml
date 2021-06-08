@@ -1,0 +1,78 @@
+name: CD
+
+on:
+  push:
+    branches: [master, release-*]
+
+jobs:
+
+  build:
+
+    if: ! contains(github.event.push.head_commit.message "[release]")
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧 # Installs dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+  publish:
+    if: contains(github.event.push.head_commit.message "[release]")
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧 # Installs dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lerna env config
+        run: |
+          git config --global user.email "cognite-cicd@users.noreply.github.com"
+          git config --global user.name "Cognite CICD"
+          git remote set-url origin "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" > /dev/null 2>&1
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
+          npm whoami
+        env:
+          NPM_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
+
+
+      - name: Build
+        run: yarn build
+
+      - name: Build doc
+        run: yarn docs:bundle
+
+      - name: Publish documentation
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs
+
+      - name: Lerna version
+        run: yarn lerna version --conventional-commits --create-release github --no-private --yes
+
+      - name: Lerna Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: yarn lerna publish from-package --yes --no-git-reset
