@@ -55,5 +55,5 @@ jobs:
       - name: Test snippets
         run: yarn test-snippets
 
-      - name: Test/Codecov
+      - name: Test samples
         run: yarn test-samples
