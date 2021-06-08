@@ -33,7 +33,7 @@
     "watch": "yarn allsdk watch --parallel",
     "docs": "yarn allsdk docs --stream",
     "docs:bundle": "rm -rf docs/ && yarn allsdk docs:bundle --stream && touch docs/.nojekyll",
-    "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check",
+    "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check -c ./markdownlint.json",
     "test-snippets": "yarn allsdk test-snippets --stream",
     "test-samples": "yarn allsamples test --stream"
   },

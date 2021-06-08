@@ -41,6 +41,9 @@ jobs:
       - name: Lint
         run: yarn lint
 
+      - name: Build
+        run: yarn build
+
       - name: Test/Codecov
         run: yarn test:codecov
 
