@@ -1,4 +1,4 @@
-name: Node.js CI lint/codecov/commit check
+name: Lint/codecov/commit check
 
 on:
  pull_request:
@@ -11,8 +11,14 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: wagoid/commitlint-github-action@v3
       - name: Use Node.js
         uses: actions/setup-node@v1
