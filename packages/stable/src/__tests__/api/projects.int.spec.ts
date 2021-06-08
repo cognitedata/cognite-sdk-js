@@ -16,7 +16,17 @@ describe('Projects integration test', () => {
     expect(projectInfo.urlName).toBe(client.project);
   });
 
-  test('update', () => {
+  test('deprecated update', () => {
     // no tests because endpoint is overriding config
+  });
+
+  test('update', async () => {
+    // no expected change because endpoint is overriding config
+    const projectInfo = await client.projects.updateProject(client.project, {
+      update: {},
+    });
+    expect(projectInfo.name).toBeDefined();
+    expect(projectInfo.name.length).toBeGreaterThan(0);
+    expect(projectInfo.urlName).toBe(client.project);
   });
 });
