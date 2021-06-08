@@ -2,13 +2,13 @@ name: CD
 
 on:
   push:
-    branches: [master, release-*]
+    branches:
+      - master
+      - 'release-*'
 
 jobs:
 
   build:
-
-    if: ! contains(github.event.push.head_commit.message "[release]")
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +27,7 @@ jobs:
         run: yarn build
 
   publish:
-    if: contains(github.event.push.head_commit.message "[release]")
+    if: ${{ contains(github.event.push.head_commit.message, '[release]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -53,7 +53,6 @@ jobs:
           npm whoami
         env:
           NPM_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
-
 
       - name: Build
         run: yarn build
