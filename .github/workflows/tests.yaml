@@ -40,4 +40,5 @@ jobs:
         run: yarn build
 
       - name: Test
-        run: yarn test
+        # bash hack to rerun test suite, because of flaky integration tests
+        run: for i in {1..5}; do yarn test && break || sleep 5; done
