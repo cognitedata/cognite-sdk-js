@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.6...@cognite/sdk-beta@2.1.0) (2021-06-08)
+
+
+### Bug Fixes
+
+* template tests ([#557](https://github.com/cognitedata/cognite-sdk-js/issues/557)) ([3099c37](https://github.com/cognitedata/cognite-sdk-js/commit/3099c37d01356de94efee3c9ddda7850af5d2225))
+
+
+### Features
+
+* **documents:** [SBS-3442, SBS-3648] Endpoints for documents ([#541](https://github.com/cognitedata/cognite-sdk-js/issues/541)) ([0e69be5](https://github.com/cognitedata/cognite-sdk-js/commit/0e69be5d8a221494e47bbd5522b9f020e496ceae))
+
+
+
+
+
 ## [2.0.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.5...@cognite/sdk-beta@2.0.6) (2021-05-19)
 
 **Note:** Version bump only for package @cognite/sdk-beta
