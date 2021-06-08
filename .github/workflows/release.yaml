@@ -1,29 +1,17 @@
-# This is a basic workflow to help you get started with Actions
+name: CD
 
-name: Master Pushes
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [master, release-*]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build-master"
-  build-master:
-    # The type of runner that the job will run on
+
+  build:
+
+    if: ! contains(github.event.push.head_commit.message "[release]")
     runs-on: ubuntu-latest
-    env:
-      COMMIT_MESSAGE: ${{ github.event.commits[0].message }}
-
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - name: Cache node_modules
         id: cache-modules
@@ -38,12 +26,25 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Build storybook 🔧 # Builds storybook
-        run: yarn docs:bundle
+  publish:
+    if: contains(github.event.push.head_commit.message "[release]")
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧 # Installs dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Lerna env config
-        if: contains(github.event.push.head_commit.message "[release]")
         run: |
           git config --global user.email "cognite-cicd@users.noreply.github.com"
           git config --global user.name "Cognite CICD"
@@ -53,22 +54,24 @@ jobs:
         env:
           NPM_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
 
+
+      - name: Build
+        run: yarn build
+
+      - name: Build doc
+        run: yarn docs:bundle
+
       - name: Publish documentation
-        if: contains(github.event.push.head_commit.message "[release]")
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
           FOLDER: docs
 
-
       - name: Lerna version
-        if: contains(github.event.push.head_commit.message "[release]")
         run: yarn lerna version --conventional-commits --create-release github --no-private --yes
 
-
       - name: Lerna Publish
-        if: contains(github.event.push.head_commit.message "[release]")
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
