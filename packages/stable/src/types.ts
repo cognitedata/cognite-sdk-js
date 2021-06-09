@@ -210,8 +210,8 @@ export interface ApiKeyRequest {
 }
 
 export type ArrayPatchString =
-  | { set: Set<string> }
-  | { add?: Set<string>; remove?: Set<string> };
+  | { set: string[] }
+  | { add?: string[]; remove?: string[] };
 
 export type ArrayPatchLong =
   | { set: number[] }
