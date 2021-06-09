@@ -20,13 +20,7 @@ describe('Projects integration test', () => {
     // no tests because endpoint is overriding config
   });
 
-  test('update', async () => {
-    // no expected change because endpoint is overriding config
-    const projectInfo = await client.projects.updateProject(client.project, {
-      update: {},
-    });
-    expect(projectInfo.name).toBeDefined();
-    expect(projectInfo.name.length).toBeGreaterThan(0);
-    expect(projectInfo.urlName).toBe(client.project);
+  test('update', () => {
+    // no tests because endpoint is overriding config
   });
 });
