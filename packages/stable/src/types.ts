@@ -214,12 +214,12 @@ export type ArrayPatchString =
   | { add?: Set<string>; remove?: Set<string> };
 
 export type ArrayPatchLong =
-  | { set: Array<number> }
-  | { add?: Array<number>; remove?: Array<number> };
+  | { set: number[] }
+  | { add?: number[]; remove?: number[] };
 
 export type ArrayPatchClaimNames =
-  | { set: Array<ClaimName> }
-  | { add?: Array<ClaimName>; remove?: Array<ClaimName> };
+  | { set: ClaimName[] }
+  | { add?: ClaimName[]; remove?: ClaimName[] };
 
 export interface Asset
   extends ExternalAsset,
