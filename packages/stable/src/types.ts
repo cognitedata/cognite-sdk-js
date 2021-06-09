@@ -1706,9 +1706,9 @@ export interface OidcConfiguration {
   issuer: string;
   audience: string;
   skewMs?: number;
-  accessClaims: Array<ClaimName>;
-  scopeClaims: Array<ClaimName>;
-  logClaims: Array<ClaimName>;
+  accessClaims: ClaimName[];
+  scopeClaims: ClaimName[];
+  logClaims: ClaimName[];
 }
 
 export type READ = 'READ';
