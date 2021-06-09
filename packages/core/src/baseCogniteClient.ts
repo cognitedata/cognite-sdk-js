@@ -127,6 +127,7 @@ export default class BaseCogniteClient {
   private readonly loginApi: LoginAPI;
   private readonly logoutApi: LogoutApi;
   private projectName: string = '';
+
   private hasBeenLoggedIn: boolean = false;
   private azureAdClient?: AzureAD;
   private adfsClient?: ADFS;
@@ -194,8 +195,8 @@ export default class BaseCogniteClient {
    *
    * const client = new CogniteClient({ appId: '[YOUR APP NAME]' });
    * client.loginWithApiKey({
-   *   apiKey: '[API KEY]',
-   *   project: '[PROJECT]',
+   * apiKey: '[API KEY]',
+   * project: '[PROJECT]',
    * });
    * // after login you can do calls with the client
    * const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
@@ -235,31 +236,31 @@ export default class BaseCogniteClient {
    *
    * // using Cognite authentication flow
    * client.loginWithOAuth({
-   *   project: '[PROJECT]',
-   *   onAuthenticate: REDIRECT // optional, REDIRECT is by default
+   * project: '[PROJECT]',
+   * onAuthenticate: REDIRECT // optional, REDIRECT is by default
    * });
    *
    * // or you can sign in using AzureAD authentication flow (in case your projects supports it)
    * client.loginWithOAuth({
-   *   cluster: '[CLUSTER]',
-   *   clientId: '[CLIENT_ID]', // client id of your AzureAD application
-   *   tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
+   * cluster: '[CLUSTER]',
+   * clientId: '[CLIENT_ID]', // client id of your AzureAD application
+   * tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
    * });
    *
    * // you also have ability to sign in using ADFS
    * client.loginWithOAuth({
-   *   authority: https://example.com/adfs/oauth2/authorize,
-   *   requestParams: {
-   *     cluster: 'cluster-name',
-   *     clientId: 'adfs-client-id',
-   *   },
+   * authority: https://example.com/adfs/oauth2/authorize,
+   * requestParams: {
+   * cluster: 'cluster-name',
+   * clientId: 'adfs-client-id',
+   * },
    * });
    *
    * // after sign in you can do calls with the client
    * (async () => {
-   *   await client.authenticate();
-   *   client.setProject('project-name');
-   *   const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
+   * await client.authenticate();
+   * client.setProject('project-name');
+   * const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
    * })();
    * ```
    *
