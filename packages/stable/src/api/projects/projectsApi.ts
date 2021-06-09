@@ -46,10 +46,10 @@ export class ProjectsAPI extends BaseResourceAPI<any> {
    * [Partial update a project](https://docs.cognite.com/api/v1/#operation/updateProject)
    *
    * ```js
-   * await client.projects.update('new-project-name', {
+   * await client.projects.updateProject('new-project-name', {
    *   update: {
    *     name: {
-   *       set: 'New project display name'
+   *       set: 'New project display name',
    *     }
    *   }
    * })
