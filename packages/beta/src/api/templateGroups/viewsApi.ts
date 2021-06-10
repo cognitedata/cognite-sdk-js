@@ -2,7 +2,6 @@ import {
   BaseResourceAPI,
   CursorAndAsyncIterator,
   CursorResponse,
-  ExternalId,
 } from '@cognite/sdk-core';
 import {
   View,
@@ -18,13 +17,6 @@ export class ViewsApi extends BaseResourceAPI<View> {
 
   public upsert = (items: ExternalView[]): Promise<View[]> => {
     return this.createEndpoint(items, this.url('upsert'));
-  };
-
-  public retrieve = (
-    ids: ExternalId[],
-    options?: { ignoreUnknownIds: boolean }
-  ): Promise<View[]> => {
-    return this.retrieveEndpoint(ids, options || { ignoreUnknownIds: false });
   };
 
   public list = (query?: ViewFilterQuery): CursorAndAsyncIterator<View> => {
