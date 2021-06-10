@@ -480,12 +480,6 @@ export type FilesSource = {
   mappings?: { [K in string]: string };
 };
 
-export type InputDeclaration = {
-  name: string;
-  type: string;
-  description?: string;
-};
-
 export type ExternalView = {
   externalId: string;
   source: Source;
