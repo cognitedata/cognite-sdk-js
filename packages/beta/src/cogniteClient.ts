@@ -82,6 +82,8 @@ export default class CogniteClient extends CogniteClientCleaned {
   protected initAPIs() {
     super.initAPIs();
 
+    // Lock version to the following date
+    this.httpClient.setDefaultHeader('cdf-version', 'V20210406');
     this.templateGroupsApi = this.apiFactory(
       TemplateGroupsApi,
       'templategroups'
