@@ -7,20 +7,15 @@ import { DocumentId, DocumentPreviewTemporaryLink } from '../../types';
 import Any = jasmine.Any;
 
 export class PreviewAPI extends BaseResourceAPI<Any> {
-  public document = (
+  public documentAsPdf = (id: DocumentId): Promise<ArrayBuffer> => {
+    return this.previewEndpoint<ArrayBuffer>(id, 'application/pdf');
+  };
+
+  public documentAsImage = (
     id: DocumentId,
-    accepts: acceptsType = 'image/png',
-    page: number = 0
+    page: number
   ): Promise<ArrayBuffer> => {
-    return this.previewEndpoint<ArrayBuffer>(id, accepts, page);
-  };
-
-  public documentAsPdf = (id: DocumentId): Promise<Any> => {
-    return this.previewEndpoint<Any>(id, 'application/pdf');
-  };
-
-  public documentAsImage = (id: DocumentId, page: number = 0): Promise<Any> => {
-    return this.previewEndpoint<Any>(id, 'image/png', page);
+    return this.previewEndpoint<ArrayBuffer>(id, 'image/png', page);
   };
 
   public temporaryLink = (

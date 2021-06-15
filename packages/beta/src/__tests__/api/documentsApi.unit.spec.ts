@@ -273,7 +273,7 @@ describe('Documents unit test', () => {
       .query({ documentId: 1, page: 0 })
       .once()
       .reply(200);
-    await client.documents.preview.documentAsImage(1);
+    await client.documents.preview.documentAsImage(1, 0);
   });
 
   test('document preview temporary link', async () => {

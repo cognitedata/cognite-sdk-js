@@ -43,7 +43,6 @@ describe.skip('documents api', () => {
     expect(documents.items.length).toEqual(1);
     const document = documents.items[0];
 
-    await client.documents.preview.document(document.id, mediaTypePDF);
     await client.documents.preview.documentAsPdf(document.id);
     await client.documents.preview.documentAsImage(document.id, 0);
   });
