@@ -26,7 +26,7 @@ export class PreviewAPI extends BaseResourceAPI<Any> {
 
   public buildPreviewURI = (
     id: DocumentId,
-    accepts: acceptsType = 'image/png',
+    accepts: acceptsType,
     page: number = 0
   ): string => {
     let uri = `${this.url()}?documentId=${id.toString()}`;
@@ -39,7 +39,7 @@ export class PreviewAPI extends BaseResourceAPI<Any> {
 
   private async previewEndpoint<ResponseType>(
     id: DocumentId,
-    accepts: acceptsType = 'image/png',
+    accepts: acceptsType,
     page: number = 0
   ): Promise<ResponseType> {
     const uri = this.buildPreviewURI(id, accepts, page);

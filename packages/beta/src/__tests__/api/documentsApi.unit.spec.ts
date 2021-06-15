@@ -244,7 +244,7 @@ describe('Documents unit test', () => {
     };
 
     const prev = client.documents.preview;
-    expect(prev.buildPreviewURI(1)).toEqual(
+    expect(prev.buildPreviewURI(1, 'image/png')).toEqual(
       base('/preview/?documentId=1&page=0')
     );
     expect(prev.buildPreviewURI(4, 'application/pdf')).toEqual(
