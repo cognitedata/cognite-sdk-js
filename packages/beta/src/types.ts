@@ -1,14 +1,20 @@
 // Copyright 2020 Cognite AS
 
 import {
-  CogniteExternalId,
   CogniteInternalId,
   ExternalId,
-  FilterQuery,
   GeoLocationGeometry,
   LabelFilter,
   PointCoordinates,
   IdEither,
+  AssetFilterProps,
+  CogniteExternalId,
+  EventFilter,
+  FileFilter,
+  FilterQuery,
+  SequenceFilter,
+  TimeseriesFilter,
+  Timestamp,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -149,6 +155,17 @@ export class SyntheticTimeSeriesResolver implements FieldResolver {
   }
 }
 
+export class ViewResolver implements FieldResolver {
+  type = 'view';
+  externalId: string;
+  input: { [K in string]: any };
+
+  constructor(externalId: string, input: { [K in string]: any }) {
+    this.externalId = externalId;
+    this.input = input;
+  }
+}
+
 export interface TemplateInstanceFilter {
   dataSetIds?: number[];
   templateNames?: string[];
@@ -253,6 +270,12 @@ export interface DocumentsFilter {
   labels?: LabelFilter;
   geoLocation?: GeoLocationFilter;
   sourceFile?: DocumentsSourceFileFilter;
+  size?: NumberRange;
+}
+
+export interface NumberRange {
+  max?: number;
+  min?: number;
 }
 
 export interface DocumentsSearch {
@@ -289,6 +312,7 @@ export interface Document {
   sourceSystem?: string;
   sourceFile: any;
   geoLocation: GeoLocation;
+  size: number;
 }
 
 export type GeoLocationTypeEnum = 'Feature';
@@ -416,3 +440,64 @@ export interface DocumentFeedback {
   reviewedAt?: string | null;
   status: FeedbackStatus;
 }
+
+export interface DocumentPreviewTemporaryLink {
+  temporaryLink: string;
+}
+
+export type Source =
+  | EventsSource
+  | AssetsSource
+  | SequencesSource
+  | TimeSeriesSource
+  | FilesSource;
+
+type ObjectOrString<T> = { [K in keyof T]: ObjectOrString<T[K]> | string };
+
+export type EventsSource = {
+  type: 'events';
+  filter?: ObjectOrString<EventFilter>;
+  mappings?: { [K in string]: string };
+};
+
+export type AssetsSource = {
+  type: 'assets';
+  filter?: ObjectOrString<AssetFilterProps>;
+  mappings?: { [K in string]: string };
+};
+
+export type SequencesSource = {
+  type: 'sequences';
+  filter?: ObjectOrString<SequenceFilter>;
+  mappings?: { [K in string]: string };
+};
+
+export type TimeSeriesSource = {
+  type: 'timeSeries';
+  filter?: ObjectOrString<TimeseriesFilter>;
+  mappings?: { [K in string]: string };
+};
+
+export type FilesSource = {
+  type: 'files';
+  filter?: ObjectOrString<FileFilter>;
+  mappings?: { [K in string]: string };
+};
+
+export type ExternalView = {
+  externalId: string;
+  source: Source;
+};
+
+export type View = ExternalView & {
+  createdTime: Timestamp;
+  lastUpdatedTime: Timestamp;
+};
+
+export type ViewFilterQuery = FilterQuery;
+
+export interface ViewResolveRequest extends FilterQuery {
+  externalId: string;
+  input?: { [K in string]: any };
+  cursor?: string;
+  limit?: number;

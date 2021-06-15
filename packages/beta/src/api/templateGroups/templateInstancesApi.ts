@@ -13,6 +13,7 @@ import {
   SyntheticTimeSeriesResolver,
   TemplateInstance,
   TemplateInstanceFilterQuery,
+  ViewResolver,
 } from '../../types';
 import fromPairs from 'lodash/fromPairs';
 import toPairs from 'lodash/toPairs';
@@ -204,6 +205,8 @@ class TemplateInstanceCodec {
           fieldResolver.isString,
           fieldResolver.unit
         );
+      case 'view':
+        return new ViewResolver(fieldResolver.externalId, fieldResolver.input);
       default:
         throw new Error('Unknown field resolver type');
     }
@@ -213,7 +216,8 @@ class TemplateInstanceCodec {
     return (
       fieldResolver instanceof ConstantResolver ||
       fieldResolver instanceof RawResolver ||
-      fieldResolver instanceof SyntheticTimeSeriesResolver
+      fieldResolver instanceof SyntheticTimeSeriesResolver ||
+      fieldResolver instanceof ViewResolver
     );
   }
 }

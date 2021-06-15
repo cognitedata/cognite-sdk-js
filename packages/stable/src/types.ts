@@ -209,9 +209,17 @@ export interface ApiKeyRequest {
   serviceAccountId: CogniteInternalId;
 }
 
+export type ArrayPatchString =
+  | { set: string[] }
+  | { add?: string[]; remove?: string[] };
+
 export type ArrayPatchLong =
   | { set: number[] }
   | { add?: number[]; remove?: number[] };
+
+export type ArrayPatchClaimNames =
+  | { set: ClaimName[] }
+  | { add?: ClaimName[]; remove?: ClaimName[] };
 
 export interface Asset
   extends ExternalAsset,
@@ -1656,6 +1664,53 @@ export interface ProjectUpdate {
   authentication?: InputProjectAuthentication;
 }
 
+export interface OidcConfigurationUpdate {
+  modify?: OidcConfigurationUpdateModify;
+  set?: OidcConfiguration;
+  setNull?: boolean;
+}
+
+export interface ClaimName {
+  claimName: string;
+}
+
+export interface OidcConfigurationUpdateModify {
+  jwksUrl?: SetField<string>;
+  tokenUrl?: SinglePatchString;
+  issuer?: SetField<string>;
+  audience?: SetField<string>;
+  skewMs?: SinglePatch<number>;
+  accessClaims?: ArrayPatchClaimNames;
+  scopeClaims?: ArrayPatchClaimNames;
+  logClaims: ArrayPatchClaimNames;
+}
+
+export interface PartialProjectUpdate {
+  update: ProjectUpdateObject;
+}
+
+export interface ProjectUpdateObject {
+  name?: SinglePatchRequiredString;
+  defaultGroupId?: NullableSinglePatchLong;
+  validDomains?: ArrayPatchString;
+  applicationDomains?: ArrayPatchString;
+  authenticationProtocol?: SinglePatchRequiredString;
+  azureADConfiguration?: SinglePatch<AzureADConfiguration>;
+  oAuth2Configuration?: SinglePatch<OAuth2Configuration>;
+  oidcConfiguration?: OidcConfigurationUpdate;
+}
+
+export interface OidcConfiguration {
+  jwksUrl: string;
+  tokenUrl?: string;
+  issuer: string;
+  audience: string;
+  skewMs?: number;
+  accessClaims: ClaimName[];
+  scopeClaims: ClaimName[];
+  logClaims: ClaimName[];
+}
+
 export type READ = 'READ';
 
 export interface Range<T> {
@@ -2204,11 +2259,10 @@ export type SingleCogniteCapability =
   | { analyticsAcl: AclAnalytics }
   | { datasetsAcl: AclDataSets };
 
+export type SinglePatch<T> = { set: T } | { setNull: boolean };
+
 export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
-/**
- * Non removable string change.
- */
 export interface SinglePatchRequiredString {
   set: string;
 }

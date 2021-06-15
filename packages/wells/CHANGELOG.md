@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.8.0...@cognite/sdk-wells@1.8.1) (2021-06-08)
+
+
+### Bug Fixes
+
+* bug in events ([#561](https://github.com/cognitedata/cognite-sdk-js/issues/561)) ([2ea4fa2](https://github.com/cognitedata/cognite-sdk-js/commit/2ea4fa2990671f46b32b98cc972dd387f7590fe7))
+
+
+
+
+
 # [1.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.7.1...@cognite/sdk-wells@1.8.0) (2021-06-04)
 
 
