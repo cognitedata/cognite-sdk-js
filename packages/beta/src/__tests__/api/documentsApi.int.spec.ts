@@ -34,4 +34,17 @@ describe.skip('documents api', () => {
     const response = await client.documents.pipelines.list();
     expect(response.items.length).toBeGreaterThan(0);
   });
+  test('fetch preview', async () => {
+    const mediaTypePDF = 'application/pdf';
+    const documents = await client.documents.list({
+      limit: 1,
+      filter: { mimeType: { equals: mediaTypePDF } },
+    });
+    expect(documents.items.length).toEqual(1);
+    const document = documents.items[0];
+
+    await client.documents.preview.document(document.id, mediaTypePDF);
+    await client.documents.preview.documentAsPdf(document.id);
+    await client.documents.preview.documentAsImage(document.id, 0);
+  });
 });
