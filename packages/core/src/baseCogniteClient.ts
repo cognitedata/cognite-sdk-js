@@ -33,10 +33,14 @@ import {
   createUniversalRetryValidator,
   RetryValidator,
 } from './httpClient/retryValidator';
-import { AzureAD, AzureADSignInType } from './aad';
-import { CogniteAuthentication, OnAuthenticate, OnTokens } from './auth';
+import { AzureAD, AzureADSignInType } from './authFlows/aad';
+import {
+  CogniteAuthentication,
+  OnAuthenticate,
+  OnTokens,
+} from './authFlows/legacy';
+import { ADFS, ADFSRequestParams } from './authFlows/adfs';
 import { AuthTokens } from './loginUtils';
-import { ADFS, ADFSRequestParams } from './adfs';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -66,6 +70,9 @@ export type AuthFlowType =
   | typeof CDF_OAUTH
   | typeof ADFS_OAUTH;
 
+/**
+ * @deprecated
+ */
 export interface OAuthLoginForCogniteOptions {
   project: string;
   onAuthenticate?: OnAuthenticate | 'REDIRECT' | 'POPUP';

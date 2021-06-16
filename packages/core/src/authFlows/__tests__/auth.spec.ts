@@ -1,13 +1,13 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import { AUTHORIZATION_HEADER } from '../constants';
-import { CDFHttpClient } from '../httpClient/cdfHttpClient';
-import { CogniteAuthentication, getIdInfo, POPUP, REDIRECT } from '../auth';
-import * as LoginUtils from '../loginUtils';
-import { getLogoutUrl, loginWithRedirect } from '../loginUtils';
-import * as Utils from '../utils';
-import { bearerString } from '../utils';
+import { AUTHORIZATION_HEADER } from '../../constants';
+import { CDFHttpClient } from '../../httpClient/cdfHttpClient';
+import { CogniteAuthentication, getIdInfo, POPUP, REDIRECT } from '../legacy';
+import * as LoginUtils from '../../loginUtils';
+import { getLogoutUrl, loginWithRedirect } from '../../loginUtils';
+import * as Utils from '../../utils';
+import { bearerString } from '../../utils';
 import {
   authTokens,
   loggedInResponse,
@@ -15,8 +15,8 @@ import {
   project,
   projectId,
   mockBaseUrl,
-} from '../testUtils';
-import { createUniversalRetryValidator } from '../httpClient/retryValidator';
+} from '../../testUtils';
+import { createUniversalRetryValidator } from '../../httpClient/retryValidator';
 
 describe('Cognite Auth', () => {
   const response401 = { error: { code: 401, message: '' } };

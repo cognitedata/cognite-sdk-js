@@ -2,7 +2,7 @@
 
 import nock from 'nock';
 import BaseCogniteClient, { AAD_OAUTH, CDF_OAUTH } from '../baseCogniteClient';
-import { POPUP, REDIRECT } from '../auth';
+import { POPUP, REDIRECT } from '../authFlows/legacy';
 import {
   API_KEY_HEADER,
   AUTHORIZATION_HEADER,
@@ -10,7 +10,7 @@ import {
   BASE_URL,
 } from '../constants';
 import * as LoginUtils from '../loginUtils';
-import { ADFS } from '../adfs';
+import { ADFS } from '../authFlows/adfs';
 import { bearerString, sleepPromise } from '../utils';
 import { apiKey, authTokens, loggedInResponse, project } from '../testUtils';
 
@@ -19,7 +19,7 @@ const login = jest.fn();
 const getCDFToken = jest.fn();
 const getCluster = jest.fn();
 
-jest.mock('../aad', () => {
+jest.mock('../authFlows/aad', () => {
   return {
     AzureAD: jest.fn().mockImplementation(() => {
       return {
