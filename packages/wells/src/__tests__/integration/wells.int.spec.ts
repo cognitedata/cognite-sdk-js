@@ -344,33 +344,38 @@ describeIfCondition('CogniteClient setup in wells - integration test', () => {
 
     expect(wells).not.toBeUndefined();
     const retrievedNames = wells.items.map(well => well.externalId);
-    const WdlNames = ['well:34/10-8'];
-    WdlNames.forEach(name => {
-      expect(retrievedNames).toContain(name);
-    });
+    expect(retrievedNames).toContain('well:34/10-8')
   });
 
   test('filter - get all wells with trajectory in range', async () => {
     const filter: WellFilter = {
-      hasTrajectory: { minDepth: 1.0, maxDepth: 1.0 },
+      hasTrajectory: { maxMeasuredDepth: {unit: LengthUnitEnum.METER, min: 1.0, max: 10000.0} },
     };
     const wells = await client.wells.filter(filter);
 
     expect(wells).not.toBeUndefined();
     const retrievedNames = wells.items.map(well => well.externalId);
-    const WdlNames = ['well:34/10-8'];
-    WdlNames.forEach(name => {
-      expect(retrievedNames).toContain(name);
-    });
+    expect(retrievedNames).toContain('well:34/10-8')
   });
 
-  test('filter - get all wells with trajectory - no returned in range', async () => {
-    const filter: WellFilter = { hasTrajectory: { minDepth: 0, maxDepth: 0 } };
+  test('filter - get wells with max md - no returned in range', async () => {
+    const filter: WellFilter = {
+      hasTrajectory: { maxMeasuredDepth: {unit: LengthUnitEnum.METER, min: 1.0, max: 1.0} },
+    };
     const wells = await client.wells.filter(filter);
 
     expect(wells).not.toBeUndefined();
-    const retrievedNames = wells.items.map(well => well.externalId);
-    expect(retrievedNames).not.toContain('well:34/10-1');
+    expect(wells.items.length).toBe(0);
+  });
+
+  test('filter - get wells with max inclination - no returned in range', async () => {
+    const filter: WellFilter = {
+      hasTrajectory: { maxInclination: {min: 1.0, max: 1.0} },
+    };
+    const wells = await client.wells.filter(filter);
+
+    expect(wells).not.toBeUndefined();
+    expect(wells.items.length).toBe(0);
   });
 
   test('filter - get all block labels', async () => {
