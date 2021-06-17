@@ -243,17 +243,17 @@ describe('Documents unit test', () => {
       return `/api/v1/projects/${project}/documents${path}`;
     };
 
-    const prev = client.documents.preview;
-    expect(prev.buildPreviewURI(1, 'image/png')).toEqual(
+    const preview = client.documents.preview;
+    expect(preview.buildPreviewURI(1, 'image/png')).toEqual(
       base('/preview/?documentId=1&page=0')
     );
-    expect(prev.buildPreviewURI(4, 'application/pdf')).toEqual(
+    expect(preview.buildPreviewURI(4, 'application/pdf')).toEqual(
       base('/preview/?documentId=4')
     );
-    expect(prev.buildPreviewURI(4, 'image/png')).toEqual(
+    expect(preview.buildPreviewURI(4, 'image/png')).toEqual(
       base('/preview/?documentId=4&page=0')
     );
-    expect(prev.buildPreviewURI(4, 'image/png', 2)).toEqual(
+    expect(preview.buildPreviewURI(4, 'image/png', 2)).toEqual(
       base('/preview/?documentId=4&page=2')
     );
   });
