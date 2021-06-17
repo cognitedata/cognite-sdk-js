@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-
+import { LOCAL_STORAGE_PREFIX } from '../constants';
 import {
   PublicClientApplication,
   SilentRequest,
@@ -59,7 +59,7 @@ const loggerCallback = (level: LogLevel, message: string, containsPi: any) => {
       console.warn(message);
   }
 };
-const accountLocalStorageKey = '@cognite/sdk:accountLocalId';
+const accountLocalStorageKey = `${LOCAL_STORAGE_PREFIX}accountLocalId`;
 
 export class AzureAD {
   private msalApplication: PublicClientApplication;
