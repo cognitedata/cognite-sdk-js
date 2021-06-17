@@ -240,7 +240,9 @@ export function isOAuthWithCogniteOptions(
 export function isOAuthWithAADOptions(
   options: OAuthLoginOptions
 ): options is OAuthLoginForAADOptions {
-  return ['clientId', 'cluster'].every(key => key in options);
+  return ['clientId', 'cluster'].every(key => key in options) &&
+    // @ts-ignore
+    !options.flow;
 }
 
 /** @hidden **/
@@ -248,4 +250,17 @@ export function isOAuthWithADFSOptions(
   options: OAuthLoginOptions
 ): options is OAuthLoginForADFSOptions {
   return ['authority', 'requestParams'].every(key => key in options);
+}
+
+/** @hidden **/
+export function isOAuthWithOIDCAuthCodeOptions(
+  options: OAuthLoginOptions
+): options is OAuthLoginForADFSOptions {
+  return (
+    ['openIdConfigurationUrl', 'clientId', 'cluster', 'flow', 'responseMode'].every(
+      key => key in options
+    ) &&
+    // @ts-ignore
+    options.flow === 'authorization-flow'
+  );
 }
