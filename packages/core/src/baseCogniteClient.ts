@@ -129,6 +129,8 @@ export default class BaseCogniteClient {
     return this.logoutApi;
   }
 
+  private flow?: AuthFlowType;
+
   private readonly http: CDFHttpClient;
   private readonly metadata: MetadataMap;
   private readonly loginApi: LoginAPI;
@@ -322,7 +324,10 @@ export default class BaseCogniteClient {
    * To modify the base-url at any point in time
    */
   public setBaseUrl = (baseUrl: string) => {
-    if (this.azureAdClient) {
+    if (
+      this.flow === 'AAD_OAUTH' ||
+      this.flow === 'OIDC_AUTHORIZATION_CODE_FLOW'
+    ) {
       throw Error('`setBaseUrl` does not available with Azure AD auth flow');
     }
     this.httpClient.setBaseUrl(baseUrl);
@@ -339,13 +344,7 @@ export default class BaseCogniteClient {
    * Provides information about which OAuth flow has been used
    */
   public getOAuthFlowType(): AuthFlowType | undefined {
-    return this.azureAdClient
-      ? AAD_OAUTH
-      : this.cogniteAuthClient
-        ? CDF_OAUTH
-        : this.adfsClient
-          ? ADFS_OAUTH
-          : undefined;
+    return this.flow;
   }
 
   /**
@@ -359,28 +358,30 @@ export default class BaseCogniteClient {
    * ```
    */
   public async getCDFToken(): Promise<string | null> {
-    if (this.azureAdClient) {
-      const token = await this.azureAdClient.getCDFToken();
-
-      if (token && !(await this.validateAccessToken(token))) {
-        return null;
+    switch (this.flow) {
+      case 'CDF_OAUTH': {
+        const tokens =
+          (await this.cogniteAuthClient!.getCDFToken(this.httpClient)) || null;
+        return tokens ? tokens.accessToken : null;
       }
+      case 'AAD_OAUTH': {
+        const token = await this.azureAdClient!.getCDFToken();
 
-      return token;
-    } else if (this.cogniteAuthClient) {
-      const tokens = await this.cogniteAuthClient.getCDFToken(this.httpClient);
-
-      return tokens ? tokens.accessToken : null;
-    } else if (this.adfsClient) {
-      const token = await this.adfsClient.getCDFToken();
-
-      if (token && !(await this.validateAccessToken(token))) {
-        return null;
+        if (token && !(await this.validateAccessToken(token))) {
+          return null;
+        }
+        return token;
       }
-
-      return token;
-    } else {
-      throw Error('CDF token can be acquired only using loginWithOAuth flow');
+      case 'ADFS_OAUTH': {
+        const token = await this.adfsClient!.getCDFToken();
+        if (token && !(await this.validateAccessToken(token))) {
+          return null;
+        }
+        return token;
+      }
+      default: {
+        throw Error('CDF token can be acquired only using loginWithOAuth flow');
+      }
     }
   }
 
@@ -601,6 +602,7 @@ export default class BaseCogniteClient {
     };
 
     this.azureAdClient = azureAdClient;
+    this.flow = 'AAD_OAUTH';
 
     return [authenticate, token];
   };
@@ -645,6 +647,7 @@ export default class BaseCogniteClient {
     };
 
     this.adfsClient = adfsClient;
+    this.flow = 'ADFS_OAUTH';
 
     return [authenticate, token];
   };
@@ -713,6 +716,7 @@ export default class BaseCogniteClient {
     };
 
     this.cogniteAuthClient = cogniteAuthClient;
+    this.flow = 'CDF_OAUTH';
 
     return [authenticate, token];
   };
