@@ -27,7 +27,7 @@ jobs:
         run: yarn build
 
   publish:
-    if: ${{ contains(github.event.push.head_commit.message, '[release]') }}
+    if: ${{ contains(github.event.head_commit.message, '[release]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
