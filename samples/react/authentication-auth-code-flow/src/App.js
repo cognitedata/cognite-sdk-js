@@ -39,12 +39,12 @@ function App() {
   const client = useMemo(() => new CogniteClient({ appId: 'sample-app-id' }), []);
 
   useEffect(() => {
-    client.loginWithOAuth('OIDC_AUTHORIZATION_CODE_FLOW', {
-      flow: 'authorization-flow',
-
-      ...AAD_CONFIG,
-
-      onNoProjectAvailable: () => console.log('Unfortunately, your token has no access to any project in the selected cluster')
+    client.loginWithOAuth({
+      type: 'OIDC_AUTHORIZATION_CODE_FLOW',
+      options: {
+        ...AAD_CONFIG,
+        onNoProjectAvailable: () => console.log('Unfortunately, your token has no access to any project in the selected cluster')
+      }
     }).then(signedIn => setIsSignedIn(signedIn))
       .catch(e => setError(e.message))
   }, [client]);
