@@ -1656,6 +1656,7 @@ export interface ProjectResponse {
   urlName: UrlName;
   defaultGroupId?: DefaultGroupId;
   authentication?: OutputProjectAuthentication;
+  oidcConfiguration?: OidcConfiguration;
 }
 
 export interface ProjectUpdate {
