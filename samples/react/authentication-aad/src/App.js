@@ -62,12 +62,14 @@ function App() {
   useEffect(() => {
     const login = async (client) => {
       const result = await client.loginWithOAuth({
+        type: 'AAD_OAUTH',
+        options: {
         cluster,
         clientId,
         tenantId,
         signInType: { type: 'loginPopup' },
         onNoProjectAvailable
-      });
+        }});
 
       client.setProject(project);
 

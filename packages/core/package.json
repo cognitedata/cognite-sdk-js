@@ -10,6 +10,7 @@
   "scripts": {
     "clean": "rm -rf dist/ docs/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/core/",
+    "test:debug": "node --inspect-brk ../../node_modules/.bin/jest --config=../../jest.config.js --testPathPattern=/core/ --runInBand" ,
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn build",

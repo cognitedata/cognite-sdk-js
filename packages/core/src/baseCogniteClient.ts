@@ -21,13 +21,9 @@ import { MetadataMap } from './metadata';
 import {
   bearerString,
   getBaseUrl,
-  isOAuthWithAADOptions,
-  isOAuthWithADFSOptions,
-  isOAuthWithCogniteOptions,
   isUsingSSL,
   projectUrl,
   isBrowser,
-  isOAuthWithOIDCAuthCodeOptions,
 } from './utils';
 import { version } from '../package.json';
 import {
@@ -43,7 +39,7 @@ import {
 import { ADFS, ADFSRequestParams } from './authFlows/adfs';
 import {
   OidcAuthCode,
-  OAuthLoginForOIDCAuthFlowOptions,
+  OIDCAuthFlowOptions,
 } from './authFlows/oidc_auth_code_flow';
 import { AuthTokens } from './loginUtils';
 import { User } from 'oidc-client';
@@ -68,15 +64,28 @@ export interface ApiKeyLoginOptions extends Project {
   apiKey: string;
 }
 
-export const AAD_OAUTH = 'AAD_OAUTH';
-export const CDF_OAUTH = 'CDF_OAUTH';
-export const ADFS_OAUTH = 'ADFS_OAUTH';
-export const OIDC_AUTHORIZATION_CODE_FLOW = 'OIDC_AUTHORIZATION_CODE_FLOW';
+export type AAD_OAUTH = {
+  type: 'AAD_OAUTH';
+  options: OAuthLoginForAADOptions;
+};
+export type CDF_OAUTH = {
+  type: 'CDF_OAUTH';
+  options: OAuthLoginForCogniteOptions;
+};
+export type ADFS_OAUTH = {
+  type: 'ADFS_OAUTH';
+  options: OAuthLoginForADFSOptions;
+};
+export type OIDC_AUTHORIZATION_CODE_FLOW = {
+  type: 'OIDC_AUTHORIZATION_CODE_FLOW';
+  options: OAuthLoginForOIDCAuthFlowOptions;
+};
+
 export type AuthFlowType =
-  | typeof AAD_OAUTH
-  | typeof CDF_OAUTH
-  | typeof ADFS_OAUTH
-  | typeof OIDC_AUTHORIZATION_CODE_FLOW;
+  | AAD_OAUTH
+  | CDF_OAUTH
+  | ADFS_OAUTH
+  | OIDC_AUTHORIZATION_CODE_FLOW;
 
 /**
  * @deprecated
@@ -107,11 +116,10 @@ export interface OAuthLoginForADFSOptions {
   onNoProjectAvailable?: () => void;
 }
 
-export type OAuthLoginOptions =
-  | OAuthLoginForCogniteOptions
-  | OAuthLoginForAADOptions
-  | OAuthLoginForADFSOptions
-  | OAuthLoginForOIDCAuthFlowOptions;
+export interface OAuthLoginForOIDCAuthFlowOptions extends OIDCAuthFlowOptions {
+  cluster: string;
+  onNoProjectAvailable?: () => void;
+}
 
 export function accessApi<T>(api: T | undefined): T {
   if (api === undefined) {
@@ -150,6 +158,7 @@ export default class BaseCogniteClient {
   private adfsClient?: ADFS;
   private cogniteAuthClient?: CogniteAuthentication;
   private authCodeFlowManager?: OidcAuthCode;
+
   /**
    * Create a new SDK client
    *
@@ -254,24 +263,33 @@ export default class BaseCogniteClient {
    *
    * // using Cognite authentication flow
    * client.loginWithOAuth({
-   *   project: '[PROJECT]',
-   *   onAuthenticate: REDIRECT // optional, REDIRECT is by default
+   *   type: 'CDF_OAUTH',
+   *   options: {
+   *     project: '[PROJECT]',
+   *     onAuthenticate: REDIRECT // optional, REDIRECT is by default
+   *   }
    * });
    *
    * // or you can sign in using AzureAD authentication flow (in case your projects supports it)
    * client.loginWithOAuth({
-   *   cluster: '[CLUSTER]',
-   *   clientId: '[CLIENT_ID]', // client id of your AzureAD application
-   *   tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
+   *   type: 'AAD_OAUTH',
+   *   options: {
+   *     cluster: '[CLUSTER]',
+   *     clientId: '[CLIENT_ID]', // client id of your AzureAD application
+   *     tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
+   * }
    * });
    *
    * // you also have ability to sign in using ADFS
    * client.loginWithOAuth({
-   *   authority: https://example.com/adfs/oauth2/authorize,
-   *   requestParams: {
-   *     cluster: 'cluster-name',
-   *     clientId: 'adfs-client-id',
-   *   },
+   *   type: 'ADFS_OAUTH',
+   *   options: {
+   *     authority: https://example.com/adfs/oauth2/authorize,
+   *     requestParams: {
+   *       cluster: 'cluster-name',
+   *       clientId: 'adfs-client-id',
+   *     },
+   *   }
    * });
    *
    * // after sign in you can do calls with the client
@@ -284,16 +302,17 @@ export default class BaseCogniteClient {
    *
    * @param options Login options
    */
-  public loginWithOAuth = async (
-    options: OAuthLoginOptions
-  ): Promise<boolean> => {
+  public loginWithOAuth = async (flow: AuthFlowType): Promise<boolean> => {
     let token = null;
 
     if (this.hasBeenLoggedIn) {
       throwReLogginError();
     }
 
-    if (!options) {
+    if (!flow || !flow.type) {
+      throw Error('`loginWithOAuth` is missing parameter `flow`');
+    }
+    if (!flow.options) {
       throw Error('`loginWithOAuth` is missing parameter `options`');
     }
 
@@ -303,18 +322,30 @@ export default class BaseCogniteClient {
       );
     }
 
+    this.flow = flow;
+
     let authenticate: () => Promise<boolean>;
 
-    if (isOAuthWithCogniteOptions(options)) {
-      [authenticate, token] = await this.loginWithCognite(options);
-    } else if (isOAuthWithAADOptions(options)) {
-      [authenticate, token] = await this.loginWithAAD(options);
-    } else if (isOAuthWithADFSOptions(options)) {
-      [authenticate, token] = await this.loginWithADFS(options);
-    } else if (isOAuthWithOIDCAuthCodeOptions(options)) {
-      [authenticate, token] = await this.loginWithAuthCodeFlow(options);
-    } else {
-      throw Error('`loginWithOAuth` is missing correct `options` structure');
+    switch (flow.type) {
+      case 'CDF_OAUTH': {
+        [authenticate, token] = await this.loginWithCognite(flow.options);
+        break;
+      }
+      case 'AAD_OAUTH': {
+        [authenticate, token] = await this.loginWithAAD(flow.options);
+        break;
+      }
+      case 'ADFS_OAUTH': {
+        [authenticate, token] = await this.loginWithADFS(flow.options);
+        break;
+      }
+      case 'OIDC_AUTHORIZATION_CODE_FLOW': {
+        [authenticate, token] = await this.loginWithAuthCodeFlow(flow.options);
+        break;
+      }
+      default: {
+        throw Error('`loginWithOAuth` was called with an unknown `flow`');
+      }
     }
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
@@ -337,8 +368,9 @@ export default class BaseCogniteClient {
    */
   public setBaseUrl = (baseUrl: string) => {
     if (
-      this.flow === 'AAD_OAUTH' ||
-      this.flow === 'OIDC_AUTHORIZATION_CODE_FLOW'
+      this.flow &&
+      (this.flow.type === 'AAD_OAUTH' ||
+        this.flow.type === 'OIDC_AUTHORIZATION_CODE_FLOW')
     ) {
       throw Error('`setBaseUrl` does not available with Azure AD auth flow');
     }
@@ -355,8 +387,8 @@ export default class BaseCogniteClient {
   /**
    * Provides information about which OAuth flow has been used
    */
-  public getOAuthFlowType(): AuthFlowType | undefined {
-    return this.flow;
+  public getOAuthFlowType(): AuthFlowType['type'] | undefined {
+    return this.flow && this.flow.type;
   }
 
   /**
@@ -370,7 +402,7 @@ export default class BaseCogniteClient {
    * ```
    */
   public async getCDFToken(): Promise<string | null> {
-    switch (this.flow) {
+    switch (this.flow!.type) {
       case 'CDF_OAUTH': {
         const tokens =
           (await this.cogniteAuthClient!.getCDFToken(this.httpClient)) || null;
@@ -589,7 +621,7 @@ export default class BaseCogniteClient {
         user = null;
       }
 
-      if (!user || !user.access_token) {
+      if (!user || user.access_token) {
         user = await authCodeFlowManager.login();
 
         if (!user || !user.access_token) {
@@ -611,7 +643,6 @@ export default class BaseCogniteClient {
     };
 
     this.authCodeFlowManager = authCodeFlowManager;
-    this.flow = 'OIDC_AUTHORIZATION_CODE_FLOW';
 
     const token = user ? user.access_token : null;
     return [authenticate, token];
@@ -677,7 +708,6 @@ export default class BaseCogniteClient {
     };
 
     this.azureAdClient = azureAdClient;
-    this.flow = 'AAD_OAUTH';
 
     return [authenticate, token];
   };
@@ -722,7 +752,6 @@ export default class BaseCogniteClient {
     };
 
     this.adfsClient = adfsClient;
-    this.flow = 'ADFS_OAUTH';
 
     return [authenticate, token];
   };
@@ -791,7 +820,6 @@ export default class BaseCogniteClient {
     };
 
     this.cogniteAuthClient = cogniteAuthClient;
-    this.flow = 'CDF_OAUTH';
 
     return [authenticate, token];
   };
