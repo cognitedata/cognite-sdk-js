@@ -263,6 +263,7 @@ export interface DocumentsFilter {
   author?: StringIn | StringEquals;
   createdTime?: EpochTimestampRange;
   mimeType?: StringIn | StringEquals;
+  pageCount?: NumberRange;
   type?: StringIn | StringEquals;
   language?: StringIn | StringEquals;
   assetIds?: ContainsAllIds | ContainsAnyIds;
@@ -304,6 +305,7 @@ export interface Document {
   createdTime?: number;
   lastIndexedTime?: number;
   mimeType?: string;
+  pageCount?: number;
   type?: string;
   language?: string;
   truncatedContent?: string;

@@ -83,6 +83,25 @@ describe('Documents unit test', () => {
     });
   });
 
+  test('filter documents by page count', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/list'), {
+        filter: {
+          pageCount: {
+            min: 3,
+            max: 10
+          },
+        },
+        limit: 5,
+      })
+      .once()
+      .reply(200, {});
+    await client.documents.list({
+      filter: { pageCount: { min: 3, max: 10 } },
+      limit: 5,
+    });
+  });
+
   test('create pipeline configuration', async () => {
     nock(mockBaseUrl)
       .post(new RegExp('/documents/pipelines'), {
