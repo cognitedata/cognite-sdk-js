@@ -88,6 +88,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="projectsapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="projectsapi.html#update" class="tsd-kind-icon">update</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="projectsapi.html#updateproject" class="tsd-kind-icon">update<wbr>Project</a></li>
 							</ul>
 						</section>
 					</div>
@@ -105,7 +106,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d693f84/packages/stable/src/api/projects/projectsApi.ts#L14">packages/stable/src/api/projects/projectsApi.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/bbd1eb582/packages/stable/src/api/projects/projectsApi.ts#L18">packages/stable/src/api/projects/projectsApi.ts:18</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -134,7 +135,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d693f84/packages/stable/src/api/projects/projectsApi.ts#L30">packages/stable/src/api/projects/projectsApi.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/bbd1eb582/packages/stable/src/api/projects/projectsApi.ts#L34">packages/stable/src/api/projects/projectsApi.ts:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -153,6 +154,44 @@
 								</li>
 								<li>
 									<h5>replacement: <a href="../interfaces/projectupdate.html" class="tsd-signature-type">ProjectUpdate</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/projectresponse.html" class="tsd-signature-type">ProjectResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="updateproject" class="tsd-anchor"></a>
+					<h3>update<wbr>Project</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Project<span class="tsd-signature-symbol">(</span>projectName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, replacement<span class="tsd-signature-symbol">: </span><a href="../interfaces/partialprojectupdate.html" class="tsd-signature-type">PartialProjectUpdate</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/projectresponse.html" class="tsd-signature-type">ProjectResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/bbd1eb582/packages/stable/src/api/projects/projectsApi.ts#L58">packages/stable/src/api/projects/projectsApi.ts:58</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://docs.cognite.com/api/v1/#operation/updateProject">Partial update a project</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.projects.updateProject(<span class="hljs-string">&#x27;new-project-name&#x27;</span>, {
+  <span class="hljs-attr">update</span>: {
+    <span class="hljs-attr">name</span>: {
+      <span class="hljs-attr">set</span>: <span class="hljs-string">&#x27;New project display name&#x27;</span>,
+    }
+  }
+})</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>projectName: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>replacement: <a href="../interfaces/partialprojectupdate.html" class="tsd-signature-type">PartialProjectUpdate</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/projectresponse.html" class="tsd-signature-type">ProjectResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -181,6 +220,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="projectsapi.html#update" class="tsd-kind-icon">update</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="projectsapi.html#updateproject" class="tsd-kind-icon">update<wbr>Project</a>
 							</li>
 						</ul>
 					</li>

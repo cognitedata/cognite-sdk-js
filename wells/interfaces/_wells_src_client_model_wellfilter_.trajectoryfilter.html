@@ -84,9 +84,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html#crossesformations" class="tsd-kind-icon">crosses<wbr>Formations</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html#maxdepth" class="tsd-kind-icon">max<wbr>Depth</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html#mindepth" class="tsd-kind-icon">min<wbr>Depth</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html#maxinclination" class="tsd-kind-icon">max<wbr>Inclination</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html#maxmeasureddepth" class="tsd-kind-icon">max<wbr>Measured<wbr>Depth</a></li>
 							</ul>
 						</section>
 					</div>
@@ -95,12 +94,12 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="crossesformations" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> crosses<wbr>Formations</h3>
-					<div class="tsd-signature tsd-kind-icon">crosses<wbr>Formations<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<a name="maxinclination" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> max<wbr>Inclination</h3>
+					<div class="tsd-signature tsd-kind-icon">max<wbr>Inclination<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DoubleRange</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d693f84/packages/wells/src/client/model/WellFilter.ts#L184">packages/wells/src/client/model/WellFilter.ts:184</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/bbd1eb582/packages/wells/src/client/model/WellFilter.ts#L179">packages/wells/src/client/model/WellFilter.ts:179</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -112,29 +111,12 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="maxdepth" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> max<wbr>Depth</h3>
-					<div class="tsd-signature tsd-kind-icon">max<wbr>Depth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<a name="maxmeasureddepth" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> max<wbr>Measured<wbr>Depth</h3>
+					<div class="tsd-signature tsd-kind-icon">max<wbr>Measured<wbr>Depth<span class="tsd-signature-symbol">:</span> <a href="_wells_src_client_model_lengthrange_.lengthrange.html" class="tsd-signature-type">LengthRange</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d693f84/packages/wells/src/client/model/WellFilter.ts#L179">packages/wells/src/client/model/WellFilter.ts:179</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<dl class="tsd-comment-tags">
-							<dt>memberof</dt>
-							<dd><p>TrajectoryFilter</p>
-							</dd>
-						</dl>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="mindepth" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> min<wbr>Depth</h3>
-					<div class="tsd-signature tsd-kind-icon">min<wbr>Depth<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d693f84/packages/wells/src/client/model/WellFilter.ts#L174">packages/wells/src/client/model/WellFilter.ts:174</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/bbd1eb582/packages/wells/src/client/model/WellFilter.ts#L174">packages/wells/src/client/model/WellFilter.ts:174</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -178,13 +160,10 @@
 						<a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html" class="tsd-kind-icon">Trajectory<wbr>Filter</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html#crossesformations" class="tsd-kind-icon">crosses<wbr>Formations</a>
+								<a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html#maxinclination" class="tsd-kind-icon">max<wbr>Inclination</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html#maxdepth" class="tsd-kind-icon">max<wbr>Depth</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html#mindepth" class="tsd-kind-icon">min<wbr>Depth</a>
+								<a href="_wells_src_client_model_wellfilter_.trajectoryfilter.html#maxmeasureddepth" class="tsd-kind-icon">max<wbr>Measured<wbr>Depth</a>
 							</li>
 						</ul>
 					</li>
