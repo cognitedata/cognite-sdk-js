@@ -1005,6 +1005,7 @@ export interface ExternalFileInfo {
   name: FileName;
   source?: string;
   mimeType?: FileMimeType;
+  directory?: string;
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
   dataSetId?: CogniteInternalId;
