@@ -77,8 +77,10 @@ describe.skip('Files integration test', () => {
   });
 
   test('validate directoryPrefix format against CDF', async () => {
-    await client.files.list({ filter: {
-      directoryPrefix: "/test" },
+    await client.files.list({
+      filter: {
+        directoryPrefix: '/test',
+      },
     });
   });
 
