@@ -1088,6 +1088,7 @@ export interface FileFilterProps {
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
   assetSubtreeIds?: IdEither[];
+  directoryPrefix?: string;
   source?: string;
   createdTime?: DateRange;
   lastUpdatedTime?: DateRange;
