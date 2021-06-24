@@ -8,23 +8,23 @@ export class TemplateGraphQlApi extends BaseResourceAPI<any> {
    * [Run a GraphQL query](https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroupsExternalidVersionsVersionGraphql)
    *
    * ```js
-   * client.templates.group("myGroup").versions(1).runQuery(`
+   * client.templates.group("myGroup").versions(1).runQuery({ query: `
    *   wellList {
    *     name
    *   }
-   * `);
+   * `});
    * ```
    */
-  runQuery = async <TVariables extends Record<string, unknown>>(
-    query: string,
-    variables?: TVariables,
-    operationName?: string
-  ): Promise<GraphQlResponse> => {
+  runQuery = async <TVariables extends Record<string, unknown>>(graphQlParams: {
+    query: string;
+    variables?: TVariables;
+    operationName?: string;
+  }): Promise<GraphQlResponse> => {
     const res = await this.post(this.url(), {
       data: {
-        query,
-        variables: JSON.stringify(variables),
-        operationName,
+        query: graphQlParams.query,
+        variables: JSON.stringify(graphQlParams.variables),
+        operationName: graphQlParams.operationName,
       },
     });
     return res.data as GraphQlResponse;
