@@ -15,16 +15,20 @@ export class TemplateGraphQlApi extends BaseResourceAPI<any> {
    * `});
    * ```
    */
-  runQuery = async <TVariables extends Record<string, unknown>>(graphQlParams: {
+  runQuery = async <TVariables extends Record<string, unknown>>({
+    query,
+    variables,
+    operationName,
+  }: {
     query: string;
     variables?: TVariables;
     operationName?: string;
   }): Promise<GraphQlResponse> => {
     const res = await this.post(this.url(), {
       data: {
-        query: graphQlParams.query,
-        variables: graphQlParams.variables,
-        operationName: graphQlParams.operationName,
+        query,
+        variables,
+        operationName,
       },
     });
     return res.data as GraphQlResponse;
