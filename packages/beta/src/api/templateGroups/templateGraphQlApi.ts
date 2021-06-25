@@ -23,7 +23,7 @@ export class TemplateGraphQlApi extends BaseResourceAPI<any> {
     const res = await this.post(this.url(), {
       data: {
         query: graphQlParams.query,
-        variables: JSON.stringify(graphQlParams.variables),
+        variables: graphQlParams.variables,
         operationName: graphQlParams.operationName,
       },
     });
