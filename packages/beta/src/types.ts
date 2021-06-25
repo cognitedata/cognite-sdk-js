@@ -441,6 +441,10 @@ export interface DocumentFeedback {
   status: FeedbackStatus;
 }
 
+export interface DocumentPreviewTemporaryLink {
+  temporaryLink: string;
+}
+
 export type Source =
   | EventsSource
   | AssetsSource
