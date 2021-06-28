@@ -16,7 +16,7 @@ describe('Files unit test', () => {
     nock(mockBaseUrl)
       .post(new RegExp('/files/filter'), {
         filter: {
-          directoryPrefix: '/test'
+          directoryPrefix: '/test',
         },
       })
       .once()
@@ -24,13 +24,13 @@ describe('Files unit test', () => {
         items: [
           {
             id: 928734,
-            name: "some_name",
+            name: 'some_name',
             uploaded: false,
             createdTime: 93795847835,
             lastUpdatedTime: 93795847835,
-            directory: '/test/functional'
-          }
-        ]
+            directory: '/test/functional',
+          },
+        ],
       });
 
     const resp = await client.files.list({
@@ -38,7 +38,7 @@ describe('Files unit test', () => {
         directoryPrefix: '/test',
       },
     });
-    expect(resp[0].directory).toContain('/test')
-  });
 
+    expect(resp.items[0].directory).toContain('/test');
+  });
 });
