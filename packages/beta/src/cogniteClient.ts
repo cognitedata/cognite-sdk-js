@@ -65,7 +65,13 @@ export default class CogniteClient extends CogniteClientCleaned {
                   `${baseGroupUrl}/instances`
                 )
               ),
-              runQuery: (query: string) => graphQlApi.runQuery(query),
+              runQuery: async <
+                TVariables extends Record<string, unknown>
+              >(graphQlParams: {
+                query: string;
+                variables?: TVariables;
+                operationName?: string;
+              }) => graphQlApi.runQuery(graphQlParams),
               views: accessApi(
                 this.apiFactory(ViewsApi, `${baseGroupUrl}/views`)
               ),
