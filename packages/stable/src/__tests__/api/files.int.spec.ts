@@ -89,6 +89,7 @@ describe.skip('Files integration test', () => {
     expect(retrievedFile.mimeType).toBe(localFileMeta.mimeType);
     expect(retrievedFile.uploaded).toBeTruthy();
     expect(retrievedFile.sourceCreatedTime).toEqual(sourceCreatedTime);
+    expect(retrievedFile.directory).toEqual('/test/testing');
   });
 
   test('retrieve with non-existent id', async () => {
