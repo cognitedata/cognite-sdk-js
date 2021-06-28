@@ -1,2 +1,3 @@
 * @cognitedata/cdf-user-experience @cognitedata/devx-externals
+/packages/beta/ @cognitedata/grep
 /packages/wells/ @cognitedata/subsurface-data
