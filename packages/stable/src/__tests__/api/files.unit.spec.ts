@@ -14,7 +14,7 @@ describe('Files unit test', () => {
 
   test('filter with directoryPrefix', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/files/filter'), {
+      .post(new RegExp('/files/list'), {
         filter: {
           directoryPrefix: '/test',
         },
@@ -39,6 +39,7 @@ describe('Files unit test', () => {
       },
     });
 
+    expect(resp.items.length).toEqual(1);
     expect(resp.items[0].directory).toContain('/test');
   });
 });
