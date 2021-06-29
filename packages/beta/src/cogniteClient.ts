@@ -81,9 +81,10 @@ export default class CogniteClient extends CogniteClientCleaned {
       },
     };
   }
-  public get documents() {
-    return accessApi(this.documentsApi);
-  }
+  // TODO: uncomment when playground is supported
+  // public get documents() {
+  //   return accessApi(this.documentsApi);
+  // }
 
   protected get version() {
     return `${version}-beta`;
