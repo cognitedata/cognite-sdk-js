@@ -73,6 +73,7 @@ jobs:
       - name: Lerna version
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
+          GITHUB_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
         run: yarn lerna version --conventional-commits --create-release github --no-private --yes
 
       - name: Lerna Publish
