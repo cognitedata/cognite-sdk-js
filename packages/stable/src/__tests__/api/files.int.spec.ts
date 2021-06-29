@@ -76,11 +76,20 @@ describe.skip('Files integration test', () => {
     expect(file.geoLocation).toEqual(localFileMeta.geoLocation);
   });
 
+  test('validate directoryPrefix format against CDF', async () => {
+    await client.files.list({
+      filter: {
+        directoryPrefix: '/test',
+      },
+    });
+  });
+
   test('retrieve', async () => {
     const [retrievedFile] = await client.files.retrieve([{ id: file.id }]);
     expect(retrievedFile.mimeType).toBe(localFileMeta.mimeType);
     expect(retrievedFile.uploaded).toBeTruthy();
     expect(retrievedFile.sourceCreatedTime).toEqual(sourceCreatedTime);
+    expect(retrievedFile.directory).toEqual('/test/testing');
   });
 
   test('retrieve with non-existent id', async () => {

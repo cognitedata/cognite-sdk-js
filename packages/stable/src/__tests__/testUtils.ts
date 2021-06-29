@@ -49,6 +49,7 @@ export const getFileCreateArgs = (
   const localFileMeta: ExternalFileInfo = {
     name: 'filename_0_' + postfix,
     mimeType: 'text/plain;charset=UTF-8',
+    directory: '/test/testing',
     metadata: {
       key: 'value',
     },
