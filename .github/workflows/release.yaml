@@ -26,12 +26,13 @@ jobs:
         run: yarn build
 
   publish:
-    if: ${{ contains(github.event.commits[0].message, '[release]') }}
+    if: ${{ contains(github.event.commits[0].message, '[release]') && !contains(github.event.commits[0].message, '[skip-ci]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Cache node_modules
         id: cache-modules
@@ -70,6 +71,8 @@ jobs:
         run: git checkout "${GITHUB_REF:11}"
 
       - name: Lerna version
+        env:
+          GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
         run: yarn lerna version --conventional-commits --create-release github --no-private --yes
 
       - name: Lerna Publish
