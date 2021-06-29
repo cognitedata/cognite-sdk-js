@@ -3,7 +3,7 @@
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-describe.skip('documents api', () => {
+describe('documents api', () => {
   let client: CogniteClient;
 
   beforeAll(async () => {
