@@ -60,16 +60,6 @@ jobs:
       - name: Build doc
         run: yarn docs:bundle
 
-      - name: Publish documentation
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: docs
-
-      - name: Reattach HEAD after doc publish
-        run: git checkout "${GITHUB_REF:11}"
-
       - name: Lerna version
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
@@ -81,3 +71,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: yarn lerna publish from-package --yes --no-git-reset
+
+      - name: Publish documentation
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs
