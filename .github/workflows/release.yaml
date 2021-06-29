@@ -66,8 +66,8 @@ jobs:
           BRANCH: gh-pages # The branch the action should deploy to.
           FOLDER: docs
 
-      - name: Fetch HEAD after doc publish
-        run: git checkout HEAD^
+      - name: Reattach HEAD after doc publish
+        run: git checkout "${GITHUB_REF:11}"
 
       - name: Lerna version
         run: yarn lerna version --conventional-commits --create-release github --no-private --yes
