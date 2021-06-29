@@ -26,12 +26,13 @@ jobs:
         run: yarn build
 
   publish:
-    if: ${{ contains(github.event.commits[0].message, '[release]') }}
+    if: ${{ contains(github.event.commits[0].message, '[release]') && !contains(github.event.commits[0].message, '[skip-ci]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Cache node_modules
         id: cache-modules
