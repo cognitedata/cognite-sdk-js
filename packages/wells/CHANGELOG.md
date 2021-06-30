@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.8.1...@cognite/sdk-wells@1.10.0) (2021-06-30)
+
+
+### Features
+
+* **wells:** filter trajectory max md and inclination [release] ([#582](https://github.com/cognitedata/cognite-sdk-js/issues/582)) ([c9186a7](https://github.com/cognitedata/cognite-sdk-js/commit/c9186a782e9d9108d5b77b33bb5ed5af8cab86f5))
+
+
+
+
+
 ## [1.8.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.8.0...@cognite/sdk-wells@1.8.1) (2021-06-08)
 
 

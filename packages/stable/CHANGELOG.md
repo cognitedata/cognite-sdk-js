@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.1.0...@cognite/sdk@4.2.0) (2021-06-30)
+
+
+### Features
+
+* appended oidc configuration to project response ([#576](https://github.com/cognitedata/cognite-sdk-js/issues/576)) ([2fd5fa4](https://github.com/cognitedata/cognite-sdk-js/commit/2fd5fa42d41d97623c2fba350a3846efef71ad2d))
+* directoryPrefix filter for files [release] ([#590](https://github.com/cognitedata/cognite-sdk-js/issues/590)) ([ae59982](https://github.com/cognitedata/cognite-sdk-js/commit/ae599825f90c7fa1222f26c86fd4f79d9915f746))
+* **project:** partial project update ([#573](https://github.com/cognitedata/cognite-sdk-js/issues/573)) ([230c23e](https://github.com/cognitedata/cognite-sdk-js/commit/230c23ef45028b025b85a3f020d31ee4e3a67a97))
+
+
+
+
+
 # [4.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.0.4...@cognite/sdk@4.1.0) (2021-05-19)
 
 

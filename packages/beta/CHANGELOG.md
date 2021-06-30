@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.1.0...@cognite/sdk-beta@3.0.0) (2021-06-30)
+
+
+### Features
+
+* [SBS-3722] search by size range ([#567](https://github.com/cognitedata/cognite-sdk-js/issues/567)) ([1b35d6c](https://github.com/cognitedata/cognite-sdk-js/commit/1b35d6ce73ded7f36be725e2b8c802fa7f8dac88))
+* add template views ([#577](https://github.com/cognitedata/cognite-sdk-js/issues/577)) ([0195c40](https://github.com/cognitedata/cognite-sdk-js/commit/0195c4022b58bfda1641cd10ab439e2e25095598))
+* added support for variables and operationName for templates [release] ([#591](https://github.com/cognitedata/cognite-sdk-js/issues/591)) ([19514b0](https://github.com/cognitedata/cognite-sdk-js/commit/19514b08945cc3f1d16b34bcbb1f4d63bb25f8da))
+* document preview endpoints [release] ([#579](https://github.com/cognitedata/cognite-sdk-js/issues/579)) ([1e8283b](https://github.com/cognitedata/cognite-sdk-js/commit/1e8283b5d5286536faa059bc46c42f24a1980d73))
+
+
+### BREAKING CHANGES
+
+* The templates runQuery function in beta has changed signature, now accepts an object with query, variables and operationName
+
+
+
+
+
 # [2.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.6...@cognite/sdk-beta@2.1.0) (2021-06-08)
 
 
