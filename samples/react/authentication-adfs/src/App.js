@@ -57,7 +57,7 @@ function App() {
 
   useEffect(() => {
     const login = async (client) => {
-      const result = await client.loginWithOAuth('ADFS_OAUTH', {
+      const result = await client.loginWithOAuth({
         authority,
         requestParams: {
           cluster,

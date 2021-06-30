@@ -47,9 +47,9 @@ import { CogniteClient } from '@cognite/sdk';
 
 async function quickstart() {
   const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
-  client.loginWithOAuth({ type: 'CDF_OAUTH', options: {
+  client.loginWithOAuth({
     project: 'publicdata',
-  }});
+  });
 
   const assets = await client.assets
     .list()

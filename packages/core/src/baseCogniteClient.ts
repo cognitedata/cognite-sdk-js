@@ -21,6 +21,9 @@ import { MetadataMap } from './metadata';
 import {
   bearerString,
   getBaseUrl,
+  isOAuthWithAADOptions,
+  isOAuthWithADFSOptions,
+  isOAuthWithCogniteOptions,
   isUsingSSL,
   projectUrl,
   isBrowser,
@@ -30,19 +33,10 @@ import {
   createUniversalRetryValidator,
   RetryValidator,
 } from './httpClient/retryValidator';
-import { AzureAD, AzureADSignInType } from './authFlows/aad';
-import {
-  CogniteAuthentication,
-  OnAuthenticate,
-  OnTokens,
-} from './authFlows/legacy';
-import { ADFS, ADFSRequestParams } from './authFlows/adfs';
+import { AzureAD, AzureADSignInType } from './aad';
+import { CogniteAuthentication, OnAuthenticate, OnTokens } from './auth';
 import { AuthTokens } from './loginUtils';
-import {
-  OidcClientCredentials,
-  OIDCClientCredentialsFlowOptions,
-} from './authFlows/oidc_client_credentials_flow';
-import { FlowCallbacks, OAuthLoginResult } from './types';
+import { ADFS, ADFSRequestParams } from './adfs';
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -64,31 +58,14 @@ export interface ApiKeyLoginOptions extends Project {
   apiKey: string;
 }
 
-export type AAD_OAUTH = {
-  type: 'AAD_OAUTH';
-  options: OAuthLoginForAADOptions;
-};
-export type CDF_OAUTH = {
-  type: 'CDF_OAUTH';
-  options: OAuthLoginForCogniteOptions;
-};
-export type ADFS_OAUTH = {
-  type: 'ADFS_OAUTH';
-  options: OAuthLoginForADFSOptions;
-};
-export type OIDC_CLIENT_CREDENTIALS_FLOW = {
-  type: 'OIDC_CLIENT_CREDENTIALS_FLOW';
-  options: OAuthLoginForOIDCVendorGenericFlowOptions;
-};
+export const AAD_OAUTH = 'AAD_OAUTH';
+export const CDF_OAUTH = 'CDF_OAUTH';
+export const ADFS_OAUTH = 'ADFS_OAUTH';
 export type AuthFlowType =
-  | AAD_OAUTH
-  | CDF_OAUTH
-  | ADFS_OAUTH
-  | OIDC_CLIENT_CREDENTIALS_FLOW;
+  | typeof AAD_OAUTH
+  | typeof CDF_OAUTH
+  | typeof ADFS_OAUTH;
 
-/**
- * @deprecated
- */
 export interface OAuthLoginForCogniteOptions {
   project: string;
   onAuthenticate?: OnAuthenticate | 'REDIRECT' | 'POPUP';
@@ -115,7 +92,10 @@ export interface OAuthLoginForADFSOptions {
   onNoProjectAvailable?: () => void;
 }
 
-export type OAuthLoginForOIDCVendorGenericFlowOptions = OIDCClientCredentialsFlowOptions;
+export type OAuthLoginOptions =
+  | OAuthLoginForCogniteOptions
+  | OAuthLoginForAADOptions
+  | OAuthLoginForADFSOptions;
 
 export function accessApi<T>(api: T | undefined): T {
   if (api === undefined) {
@@ -132,6 +112,8 @@ export function throwReLogginError() {
   );
 }
 
+type OAuthLoginResult = [() => Promise<boolean>, (string | null)];
+
 export default class BaseCogniteClient {
   public get login() {
     return this.loginApi;
@@ -139,8 +121,6 @@ export default class BaseCogniteClient {
   public get logout() {
     return this.logoutApi;
   }
-
-  private flow?: AuthFlowType;
 
   private readonly http: CDFHttpClient;
   private readonly metadata: MetadataMap;
@@ -151,8 +131,6 @@ export default class BaseCogniteClient {
   private azureAdClient?: AzureAD;
   private adfsClient?: ADFS;
   private cogniteAuthClient?: CogniteAuthentication;
-  private vendorGenericFlowManager?: OidcClientCredentials;
-
   /**
    * Create a new SDK client
    *
@@ -257,43 +235,24 @@ export default class BaseCogniteClient {
    *
    * // using Cognite authentication flow
    * client.loginWithOAuth({
-   *   type: 'CDF_OAUTH',
-   *   options: {
-   *     project: '[PROJECT]',
-   *     onAuthenticate: REDIRECT // optional, REDIRECT is by default
-   *   }
+   *   project: '[PROJECT]',
+   *   onAuthenticate: REDIRECT // optional, REDIRECT is by default
    * });
    *
    * // or you can sign in using AzureAD authentication flow (in case your projects supports it)
    * client.loginWithOAuth({
-   *   type: 'AAD_OAUTH',
-   *   options: {
-   *     cluster: '[CLUSTER]',
-   *     clientId: '[CLIENT_ID]', // client id of your AzureAD application
-   *     tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
-   *   }
+   *   cluster: '[CLUSTER]',
+   *   clientId: '[CLIENT_ID]', // client id of your AzureAD application
+   *   tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
    * });
    *
    * // you also have ability to sign in using ADFS
    * client.loginWithOAuth({
-   *   type: 'ADFS_OAUTH',
-   *   options: {
-   *     authority: https://example.com/adfs/oauth2/authorize,
-   *     requestParams: {
-   *       cluster: 'cluster-name',
-   *       clientId: 'adfs-client-id',
-   *     },
-   *   }
-   * });
-   *
-   * // or with client credentials
-   * client.loginWithOAuth({
-   *   type: 'OIDC_CLIENT_CREDENTIALS_FLOW',
-   *   options: {
-   *     clientId: '[CLIENT_ID]',
-   *     clientSecret: '[CLIENT_SECRET]',
-   *     openIdConfigurationUrl:  https://login.microsoftonline.com/[AZURE_TENANT_ID]/v2.0/.well-known/openid-configuration,
-   *   }
+   *   authority: https://example.com/adfs/oauth2/authorize,
+   *   requestParams: {
+   *     cluster: 'cluster-name',
+   *     clientId: 'adfs-client-id',
+   *   },
    * });
    *
    * // after sign in you can do calls with the client
@@ -306,17 +265,16 @@ export default class BaseCogniteClient {
    *
    * @param options Login options
    */
-  public loginWithOAuth = async (flow: AuthFlowType): Promise<boolean> => {
+  public loginWithOAuth = async (
+    options: OAuthLoginOptions
+  ): Promise<boolean> => {
     let token = null;
 
     if (this.hasBeenLoggedIn) {
       throwReLogginError();
     }
 
-    if (!flow || !flow.type) {
-      throw Error('`loginWithOAuth` is missing parameter `flow`');
-    }
-    if (!flow.options) {
+    if (!options) {
       throw Error('`loginWithOAuth` is missing parameter `options`');
     }
 
@@ -326,42 +284,16 @@ export default class BaseCogniteClient {
       );
     }
 
-    this.flow = flow;
-
     let authenticate: () => Promise<boolean>;
 
-    const callbacks: FlowCallbacks = {
-      setCluster: this.httpClient.setCluster,
-      setBearerToken: this.httpClient.setBearerToken,
-      validateAccessToken: this.validateAccessToken,
-    };
-
-    switch (flow.type) {
-      case 'CDF_OAUTH': {
-        [authenticate, token] = await this.loginWithCognite(flow.options);
-        break;
-      }
-      case 'AAD_OAUTH': {
-        [authenticate, token] = await this.loginWithAAD(flow.options);
-        break;
-      }
-      case 'ADFS_OAUTH': {
-        [authenticate, token] = await this.loginWithADFS(flow.options);
-        break;
-      }
-      case 'OIDC_CLIENT_CREDENTIALS_FLOW': {
-        [
-          authenticate,
-          token,
-        ] = await (this.vendorGenericFlowManager = new OidcClientCredentials(
-          flow.options,
-          callbacks
-        )).init();
-        break;
-      }
-      default: {
-        throw Error('`loginWithOAuth` is missing correct `options` structure');
-      }
+    if (isOAuthWithCogniteOptions(options)) {
+      [authenticate, token] = await this.loginWithCognite(options);
+    } else if (isOAuthWithAADOptions(options)) {
+      [authenticate, token] = await this.loginWithAAD(options);
+    } else if (isOAuthWithADFSOptions(options)) {
+      [authenticate, token] = await this.loginWithADFS(options);
+    } else {
+      throw Error('`loginWithOAuth` is missing correct `options` structure');
     }
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
@@ -383,11 +315,7 @@ export default class BaseCogniteClient {
    * To modify the base-url at any point in time
    */
   public setBaseUrl = (baseUrl: string) => {
-    if (
-      this.flow &&
-      (this.flow.type === 'AAD_OAUTH' ||
-        this.flow.type === 'OIDC_CLIENT_CREDENTIALS_FLOW')
-    ) {
+    if (this.azureAdClient) {
       throw Error('`setBaseUrl` does not available with Azure AD auth flow');
     }
     this.httpClient.setBaseUrl(baseUrl);
@@ -403,8 +331,14 @@ export default class BaseCogniteClient {
   /**
    * Provides information about which OAuth flow has been used
    */
-  public getOAuthFlowType(): AuthFlowType['type'] | undefined {
-    return this.flow && this.flow.type;
+  public getOAuthFlowType(): AuthFlowType | undefined {
+    return this.azureAdClient
+      ? AAD_OAUTH
+      : this.cogniteAuthClient
+        ? CDF_OAUTH
+        : this.adfsClient
+          ? ADFS_OAUTH
+          : undefined;
   }
 
   /**
@@ -412,39 +346,34 @@ export default class BaseCogniteClient {
    * This token can be used to CDF endpoints
    *
    * ```js
-   * client.loginWithOAuth({ type: 'AAD_OAUTH', options: {cluster: 'bluefield', ...}});
+   * client.loginWithOAuth({cluster: 'bluefield', ...});
    * await client.authenticate();
    * const cdfToken = await client.getCDFToken();
    * ```
    */
   public async getCDFToken(): Promise<string | null> {
-    switch (this.flow!.type) {
-      case 'CDF_OAUTH': {
-        const tokens =
-          (await this.cogniteAuthClient!.getCDFToken(this.httpClient)) || null;
-        return tokens ? tokens.accessToken : null;
-      }
-      case 'AAD_OAUTH': {
-        const token = await this.azureAdClient!.getCDFToken();
+    if (this.azureAdClient) {
+      const token = await this.azureAdClient.getCDFToken();
 
-        if (token && !(await this.validateAccessToken(token))) {
-          return null;
-        }
-        return token;
+      if (token && !(await this.validateAccessToken(token))) {
+        return null;
       }
-      case 'ADFS_OAUTH': {
-        const token = await this.adfsClient!.getCDFToken();
-        if (token && !(await this.validateAccessToken(token))) {
-          return null;
-        }
-        return token;
+
+      return token;
+    } else if (this.cogniteAuthClient) {
+      const tokens = await this.cogniteAuthClient.getCDFToken(this.httpClient);
+
+      return tokens ? tokens.accessToken : null;
+    } else if (this.adfsClient) {
+      const token = await this.adfsClient.getCDFToken();
+
+      if (token && !(await this.validateAccessToken(token))) {
+        return null;
       }
-      case 'OIDC_CLIENT_CREDENTIALS_FLOW': {
-        return this.vendorGenericFlowManager!.getCdfToken() || null;
-      }
-      default: {
-        throw Error('CDF token can be acquired only using loginWithOAuth flow');
-      }
+
+      return token;
+    } else {
+      throw Error('CDF token can be acquired only using loginWithOAuth flow');
     }
   }
 
@@ -453,7 +382,7 @@ export default class BaseCogniteClient {
    * Can be used for getting user details via Microsoft Graph API
    *
    * ```js
-   * client.loginWithOAuth({ type: 'AAD_OAUTH', options: {cluster: 'bluefield', ...});
+   * client.loginWithOAuth({cluster: 'bluefield', ...});
    * await client.authenticate();
    * const accessToken = await client.getAzureADAccessToken();
    * ```
@@ -812,7 +741,7 @@ export default class BaseCogniteClient {
     }
   }
 
-  protected validateAccessToken = async (token: string): Promise<boolean> => {
+  protected async validateAccessToken(token: string): Promise<boolean> {
     try {
       const response = await this.httpClient.get<any>('/api/v1/token/inspect', {
         headers: { [AUTHORIZATION_HEADER]: bearerString(token) },
@@ -828,7 +757,7 @@ export default class BaseCogniteClient {
 
       throw err;
     }
-  };
+  }
 }
 
 export type BaseRequestOptions = HttpRequestOptions;

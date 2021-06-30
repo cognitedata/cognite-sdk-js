@@ -1,4 +1,4 @@
-import { AzureAD } from '../authFlows/aad';
+import { AzureAD } from '../aad';
 
 const getAccountByLocalId = jest.fn();
 const handleRedirectPromise = jest.fn();

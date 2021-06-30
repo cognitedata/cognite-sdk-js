@@ -31,7 +31,6 @@ function App() {
   const [assets, setAssets] = useState([]);
   const [isInit, setIsInit] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [error, setError] = useState(undefined);
 
   const fetchRootAssets = async () => {
     if (client === null) return;
@@ -45,10 +44,7 @@ function App() {
   const authenticate = async () => {
     if (client === null) return;
 
-    const result = await client.authenticate().catch(e => {
-      setError(e.message);
-      throw e;
-    });
+    const result = await client.authenticate();
 
     if (result) {
       client.setProject(project);
@@ -61,7 +57,7 @@ function App() {
 
   useEffect(() => {
     const login = async (client) => {
-      const result = await client.loginWithOAuth('AAD_OAUTH', {
+      const result = await client.loginWithOAuth({
         cluster,
         clientId,
         tenantId,
@@ -83,12 +79,6 @@ function App() {
       <button disabled={!isInit || isSignedIn} onClick={authenticate}><h1>Authenticate</h1></button>
       <button disabled={!isInit || !isSignedIn} onClick={fetchRootAssets}><h1>Click here to fetch assets from Cognite</h1></button>
       {assets && renderAssetsInTable(assets)}
-    {error && (
-        <>
-        <h3>Error</h3>
-        <pre>{error}</pre>
-      </>
-    )}
     </div>
   );
 }

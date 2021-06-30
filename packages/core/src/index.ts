@@ -38,7 +38,7 @@ export {
   AuthenticateParams,
   IdInfo,
   OnAuthenticateLoginObject,
-} from './authFlows/legacy';
+} from './auth';
 export {
   AuthorizeOptions,
   AuthorizeParams,
@@ -61,6 +61,6 @@ export {
   AzureADSignInType,
   AzureADSingInFlow,
   AzureADSignInRequestParams,
-} from './authFlows/aad';
-export { ADFSRequestParams } from './authFlows/adfs';
+} from './aad';
+export { ADFSRequestParams } from './adfs';
 export { TestUtils, Constants, GraphUtils };
