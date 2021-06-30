@@ -61,7 +61,7 @@ jobs:
         run: yarn docs:bundle
 
       - name: Configure git
-        run: git config --global user.name "GitHub Actions" && git config --global user.email github-actions@github.com
+        run: git config --global user.name "GitHub Actions" && git config --global user.email github-actions@cognite.com
 
       - name: Lerna version
         env:
