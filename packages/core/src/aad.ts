@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { LOCAL_STORAGE_PREFIX } from '../constants';
+
 import {
   PublicClientApplication,
   SilentRequest,
@@ -59,7 +59,7 @@ const loggerCallback = (level: LogLevel, message: string, containsPi: any) => {
       console.warn(message);
   }
 };
-const accountLocalStorageKey = `${LOCAL_STORAGE_PREFIX}accountLocalId`;
+const accountLocalStorageKey = '@cognite/sdk:accountLocalId';
 
 export class AzureAD {
   private msalApplication: PublicClientApplication;
@@ -123,11 +123,15 @@ export class AzureAD {
   ): Promise<AccountInfo | void> {
     const { type, requestParams } = signInType;
     if (type === AZURE_AUTH_POPUP) {
-      const { account } = await this.msalApplication.loginPopup(
-        this.getLoginPopupRequest(requestParams)
-      );
+      try {
+        const { account } = await this.msalApplication.loginPopup(
+          this.getLoginPopupRequest(requestParams)
+        );
 
-      return this.handleAuthAccountResult(account);
+        return this.handleAuthAccountResult(account);
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       await this.msalApplication.loginRedirect(
         this.getLoginRedirectRequest(requestParams)
@@ -237,7 +241,12 @@ export class AzureAD {
   }
 
   private async handleAuthRedirect(): Promise<AccountInfo | null> {
-    const redirectResult = await this.msalApplication.handleRedirectPromise();
+    let redirectResult;
+    try {
+      redirectResult = await this.msalApplication.handleRedirectPromise();
+    } catch (e) {
+      console.error('Error while handling auth redirect', e);
+    }
 
     return redirectResult && redirectResult.account
       ? redirectResult.account

@@ -21,9 +21,9 @@ client.loginWithApiKey({ project, apiKey });
 With OAuth:
 
 ```js
-client.loginWithOAuth({ type: 'CDF_OAUTH', options: {
+client.loginWithOAuth({
   project: 'publicdata',
-}});
+});
 ```
 
 For more info about OAuth-authentication look [here](./authentication.md).

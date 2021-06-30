@@ -1,6 +1,6 @@
 import nock from 'nock';
 import noop from 'lodash/noop';
-import { ADFS } from '../authFlows/adfs';
+import { ADFS } from '../adfs';
 import * as loginUtils from '../loginUtils';
 
 describe('ADFS', () => {
