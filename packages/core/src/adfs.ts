@@ -78,6 +78,8 @@ export class ADFS {
         this.queryParams
       )}`;
 
+      console.log('url', url);
+
       window.location.href = url;
     });
   }
@@ -91,6 +93,8 @@ export class ADFS {
       }
 
       const token = extractADFSToken(queryParams);
+
+      console.log('token2', queryParams, token);
 
       clearParametersFromUrl(
         ACCESS_TOKEN,
@@ -160,8 +164,8 @@ export class ADFS {
     clientId,
   }: ADFSRequestParams): ADFSQueryParams {
     const responseMode = 'fragment';
-    const responseType = 'id_token token';
-    const scope = `user_impersonation IDENTITY`;
+    const responseType = 'token';
+    const scope = `openid profile email`;
     const redirectUri = window.location.href;
     const params = {
       clientId,

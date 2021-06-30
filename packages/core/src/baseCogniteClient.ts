@@ -732,6 +732,8 @@ export default class BaseCogniteClient {
   ): Promise<string | null> {
     const token = await adfsClient.handleLoginRedirect();
 
+    console.log('token', token);
+
     if (token) {
       return token.accessToken;
     } else {
