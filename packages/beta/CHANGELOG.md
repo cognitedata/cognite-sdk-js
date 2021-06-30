@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@3.0.0...@cognite/sdk-beta@3.0.1) (2021-06-30)
+
+
+### Bug Fixes
+
+* remove documents-api [release] ([#599](https://github.com/cognitedata/cognite-sdk-js/issues/599)) ([473dfea](https://github.com/cognitedata/cognite-sdk-js/commit/473dfea3768bd9533d0b935aafe5111ed2558f40))
+
+
+
+
+
 # [3.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.1.0...@cognite/sdk-beta@3.0.0) (2021-06-30)
 
 
