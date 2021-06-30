@@ -10,7 +10,7 @@ import {
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-describe('AssetMappings3D integration test', () => {
+describe.skip('AssetMappings3D integration test', () => {
   let client: CogniteClient;
   let model: Model3D;
   let revision: Revision3D;
