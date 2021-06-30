@@ -10,7 +10,6 @@ import { TemplateGraphQlApi } from './api/templateGroups/templateGraphQlApi';
 import { TemplateGroupsApi } from './api/templateGroups/templateGroupsApi';
 import { TemplateGroupVersionsApi } from './api/templateGroups/templateGroupVersionsApi';
 import { TemplateInstancesApi } from './api/templateGroups/templateInstancesApi';
-import { DocumentsAPI } from './api/documents/documentsApi';
 import { ViewsApi } from './api/templateGroups/viewsApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
@@ -19,7 +18,6 @@ class CogniteClientCleaned extends CogniteClientStable {
 
 export default class CogniteClient extends CogniteClientCleaned {
   private templateGroupsApi?: TemplateGroupsApi;
-  private documentsApi?: DocumentsAPI;
 
   /**
    * Create a new SDK client (beta)
@@ -65,7 +63,13 @@ export default class CogniteClient extends CogniteClientCleaned {
                   `${baseGroupUrl}/instances`
                 )
               ),
-              runQuery: (query: string) => graphQlApi.runQuery(query),
+              runQuery: async <
+                TVariables extends Record<string, unknown>
+              >(graphQlParams: {
+                query: string;
+                variables?: TVariables;
+                operationName?: string;
+              }) => graphQlApi.runQuery(graphQlParams),
               views: accessApi(
                 this.apiFactory(ViewsApi, `${baseGroupUrl}/views`)
               ),
@@ -74,9 +78,6 @@ export default class CogniteClient extends CogniteClientCleaned {
         };
       },
     };
-  }
-  public get documents() {
-    return accessApi(this.documentsApi);
   }
 
   protected get version() {
@@ -92,7 +93,6 @@ export default class CogniteClient extends CogniteClientCleaned {
       TemplateGroupsApi,
       'templategroups'
     );
-    this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
   }
   static urlEncodeExternalId(externalId: string): string {
     return encodeURIComponent(externalId);

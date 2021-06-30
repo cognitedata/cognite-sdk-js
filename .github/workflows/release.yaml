@@ -7,7 +7,6 @@ on:
       - 'release-*'
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -27,12 +26,13 @@ jobs:
         run: yarn build
 
   publish:
-    if: ${{ contains(github.event.commits[0].message, '[release]') }}
+    if: ${{ contains(github.event.commits[0].message, '[release]') && !contains(github.event.commits[0].message, '[skip-ci]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Cache node_modules
         id: cache-modules
@@ -53,6 +53,7 @@ jobs:
           npm whoami
         env:
           NPM_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GH_LERNA_TOKEN}} # Temporary fix to make lerna able to push the new versions commit to master
 
       - name: Build
         run: yarn build
@@ -60,14 +61,10 @@ jobs:
       - name: Build doc
         run: yarn docs:bundle
 
-      - name: Publish documentation
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: docs
-
       - name: Lerna version
+        env:
+          GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
+          GITHUB_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
         run: yarn lerna version --conventional-commits --create-release github --no-private --yes
 
       - name: Lerna Publish
@@ -75,3 +72,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: yarn lerna publish from-package --yes --no-git-reset
+
+      - name: Publish documentation
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs

@@ -1005,6 +1005,7 @@ export interface ExternalFileInfo {
   name: FileName;
   source?: string;
   mimeType?: FileMimeType;
+  directory?: string;
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
   dataSetId?: CogniteInternalId;
@@ -1088,6 +1089,7 @@ export interface FileFilterProps {
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
   assetSubtreeIds?: IdEither[];
+  directoryPrefix?: string;
   source?: string;
   createdTime?: DateRange;
   lastUpdatedTime?: DateRange;
