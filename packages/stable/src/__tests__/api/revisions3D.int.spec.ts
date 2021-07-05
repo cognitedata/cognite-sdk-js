@@ -208,6 +208,23 @@ describeIfCondition(
     );
 
     test(
+      'filter 3d nodes on properties',
+      async done => {
+        const propertiesFilter: Filter3DNodesQuery = {
+          filter: {
+            properties: { CogniteClient: { InheritType: ['1'] } },
+          },
+        };
+        nodes3D = await client.revisions3D
+          .filter3DNodes(model.id, revisions[0].id, propertiesFilter)
+          .autoPagingToArray();
+        expect(nodes3D.length).toBeGreaterThan(0);
+        done();
+      },
+      5 * 60 * 1000
+    );
+
+    test(
       'filter 3d nodes (non-existent properties)',
       async done => {
         const propertiesFilter: Filter3DNodesQuery = {
