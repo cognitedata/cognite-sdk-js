@@ -1451,7 +1451,7 @@ export interface Filter3DNodesQuery extends FilterQuery {
     /**
      * Property filters. Nodes satisfy the filter if, for each property in the nested map(s), they have a value corresponding to that property that is contained within the list associated with that property in the map.
      */
-    properties: { [key:string]: { [key:string]: string[] } } ;
+    properties: { [key: string]: { [key: string]: string[] } };
   };
   /**
    * Partition specifier of the form "n/m". It will return the n'th (1-indexed) part of the result divided into m parts.
