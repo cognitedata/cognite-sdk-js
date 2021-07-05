@@ -212,8 +212,8 @@ describeIfCondition(
       async done => {
         const propertiesFilter: Filter3DNodesQuery = {
           filter: {
-            properties: { "Item": { "Type": [ "something weird" ] } }
-          }
+            properties: { Item: { Type: ['something weird'] } },
+          },
         };
         nodes3D = await client.revisions3D
           .filter3DNodes(model.id, revisions[0].id, propertiesFilter)
