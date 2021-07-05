@@ -1443,6 +1443,22 @@ export interface List3DNodesQuery extends FilterQuery {
   sortByNodeId?: boolean;
 }
 
+export interface Filter3DNodesQuery extends FilterQuery {
+  /**
+   * List filter
+   */
+  filter: {
+    /**
+     * Property filters. Nodes satisfy the filter if, for each property in the nested map(s), they have a value corresponding to that property that is contained within the list associated with that property in the map.
+     */
+    properties: { [key:string]: { [key:string]: string[] } } ;
+  };
+  /**
+   * Partition specifier of the form "n/m". It will return the n'th (1-indexed) part of the result divided into m parts.
+   */
+  partition?: Partition;
+}
+
 export interface ListGroups {
   /**
    * Whether to get all groups, only available with the groups:list acl.

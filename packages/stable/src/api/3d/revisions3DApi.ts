@@ -9,6 +9,7 @@ import {
 import {
   CogniteInternalId,
   CreateRevision3D,
+  Filter3DNodesQuery,
   InternalId,
   List3DNodesQuery,
   Node3D,
@@ -149,6 +150,23 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     query?: List3DNodesQuery
   ): CursorAndAsyncIterator<Node3D> => {
     return this.nodes3DApi.list(modelId, revisionId, query);
+  };
+
+  /**
+   * [Filter 3D nodes](https://docs.cognite.com/api/v1/#operation/filter3DNodes)
+   *
+   * ```js
+   * const propertyFilter: Map<string, Map<string, string[]>> = new Map([ ["Item", new Map([ ["Type", ["Pipe"] ] ]) ] ] );
+   * const query: Filter3DNodesQuery = { properties: propertyFilter, partition: "1/10" };
+   * const nodes3d = await this.nodes3DApi.filter(modelId, revisionId, query);
+   * ```
+   */
+  public filter3DNodes = (
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId,
+    query?: Filter3DNodesQuery
+  ): CursorAndAsyncIterator<Node3D> => {
+    return this.nodes3DApi.filter(modelId, revisionId, query);
   };
 
   /**
