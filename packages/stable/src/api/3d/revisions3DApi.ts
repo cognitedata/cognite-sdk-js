@@ -159,14 +159,14 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * const query = {
    *  filter: {
    *    properties: {
-   *      "Items": {
-   *        "Type": ["Cylinder"]
+   *      Items: {
+   *        Type: ["Cylinder"]
    *      }
    *    }
    *  },
    *  partition: "1/10"
    * };
-   * const nodes3d = await this.nodes3DApi.filter(8252999965991682, 4190022127342195, query);
+   * const nodes3d = await client.revisions3D.filter3DNodes(8252999965991682, 4190022127342195, query);
    * ```
    */
   public filter3DNodes = (
