@@ -156,9 +156,8 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    * [Filter 3D nodes](https://docs.cognite.com/api/v1/#operation/filter3DNodes)
    *
    * ```js
-   * const propertyFilter: Map<string, Map<string, string[]>> = new Map([ ["Item", new Map([ ["Type", ["Pipe"] ] ]) ] ] );
-   * const query: Filter3DNodesQuery = { properties: propertyFilter, partition: "1/10" };
-   * const nodes3d = await this.nodes3DApi.filter(modelId, revisionId, query);
+   * const query = { filter: { properties: { "Items": { "Type": ["Cylinder"] } }, partition: "1/10" } };
+   * const nodes3d = await this.nodes3DApi.filter(8252999965991682, 4190022127342195, query);
    * ```
    */
   public filter3DNodes = (
