@@ -2005,22 +2005,24 @@ export interface RevisionCameraProperties {
   position?: Tuple3<number>;
 }
 
-export type RevisionMetadataUpdate = RevisionMetadataUpdateSet | RevisionMetadataUpdateAddRemove;
+export type RevisionMetadataUpdate =
+  | RevisionMetadataUpdateSet
+  | RevisionMetadataUpdateAddRemove;
 
 export interface RevisionMetadataUpdateSet {
-  set: { [key : string] : string };
-};
+  set: { [key: string]: string };
+}
 
 export interface RevisionMetadataUpdateAddRemove {
   /**
    * Key/value pairs to add
    */
-  add?: { [key : string] : string };
+  add?: { [key: string]: string };
   /**
    * Keys to remove
    */
   remove?: string[];
-};
+}
 
 export interface SecurityCategory {
   /**
