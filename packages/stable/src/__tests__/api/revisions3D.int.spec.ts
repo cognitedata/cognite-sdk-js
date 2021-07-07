@@ -125,6 +125,7 @@ describeIfCondition(
       const newRotation: Tuple3<number> = [3, 14, 15];
       const newCameraTarget: Tuple3<number> = [1, 2, 3];
       const newCameraPosition: Tuple3<number> = [3, 2, 1];
+      const newMetadata: { [key : string ] : string } = { "property0": "value0", "property1": "value1" };
       const revisionsToUpdate: UpdateRevision3D[] = revisions.map(revision => ({
         id: revision.id,
         update: {
@@ -136,6 +137,9 @@ describeIfCondition(
               target: newCameraTarget,
               position: newCameraPosition,
             },
+          },
+          metadata: {
+            set: newMetadata
           },
         },
       }));
@@ -155,6 +159,14 @@ describeIfCondition(
         expect(revision.camera && revision.camera.position).toEqual(
           newCameraPosition
         )
+      );
+      updatedRevisions.forEach(revision =>
+        {
+          expect(revision.metadata).toBeDefined();
+          for (const property in revision.metadata) {
+            expect(revision.metadata[property]).toEqual(newMetadata[property]);
+          }
+        }
       );
     });
 
