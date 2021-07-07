@@ -16,6 +16,7 @@ export interface ADFSRequestParams {
 }
 export interface ADFSQueryParams {
   client_id: string;
+  audience: string;
   scope: string;
   redirect_uri: string;
   response_mode: string;
@@ -29,6 +30,7 @@ export interface ADFSToken {
 }
 interface ADFSRequestParamsWithDefaults {
   clientId: string;
+  audience: string;
   scope: string;
   redirectUri: string;
   responseMode: string;
@@ -42,6 +44,7 @@ type ADFSRequestParamsMapping = {
 
 const adfsRequestParamsMapping: ADFSRequestParamsMapping = {
   clientId: 'client_id',
+  audience: 'audience',
   scope: 'scope',
   redirectUri: 'redirect_uri',
   responseMode: 'response_mode',
@@ -160,20 +163,22 @@ export class ADFS {
   }
 
   private getADFSQueryParams({
-    resource,
+    // resource,
     clientId,
   }: ADFSRequestParams): ADFSQueryParams {
-    const responseMode = 'fragment';
-    const responseType = 'token';
-    const scope = `openid profile email`;
+    const responseMode = 'query';
+    const responseType = 'code';
+    const scope = `openid profile`;
     const redirectUri = window.location.href;
+    const audience = 'https://twindata.io/az-test/T101014843';
     const params = {
       clientId,
       scope,
       responseMode,
       responseType,
-      resource,
+      // resource,
       redirectUri,
+      audience,
     };
     return Object.entries(params).reduce<ADFSQueryParams>(
       (result, [key, value]) => {
