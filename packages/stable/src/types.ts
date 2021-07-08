@@ -2005,6 +2005,27 @@ export interface RevisionCameraProperties {
   position?: Tuple3<number>;
 }
 
+export type RevisionMetadata = { [key: string]: string };
+
+export type RevisionMetadataUpdate =
+  | RevisionMetadataUpdateSet
+  | RevisionMetadataUpdateAddRemove;
+
+export interface RevisionMetadataUpdateSet {
+  set: RevisionMetadata;
+}
+
+export interface RevisionMetadataUpdateAddRemove {
+  /**
+   * Key/value pairs to add
+   */
+  add?: RevisionMetadata;
+  /**
+   * Keys to remove
+   */
+  remove?: string[];
+}
+
 export interface SecurityCategory {
   /**
    * Name of the security category
@@ -2465,6 +2486,10 @@ export interface UpdateRevision3D {
      * Initial camera target.
      */
     camera?: SetField<RevisionCameraProperties>;
+    /**
+     * Revision metadata.
+     */
+    metadata?: RevisionMetadataUpdate;
   };
 }
 
