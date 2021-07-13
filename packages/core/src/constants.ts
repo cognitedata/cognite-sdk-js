@@ -1,9 +1,11 @@
 // Copyright 2020 Cognite AS
 
 /** @hidden */
-export const API_VERSION: string = 'v1';
-/** @hidden */
 export const DEFAULT_CLUSTER = 'api';
+/** @hidden */
+export const GREENFIELD_CLUSTER = 'greenfield';
+/** @hidden */
+export const BLUEFIELD_CLUSTER = 'bluefield';
 /** @hidden */
 export const DEFAULT_DOMAIN = 'cognitedata.com';
 /** @hidden */

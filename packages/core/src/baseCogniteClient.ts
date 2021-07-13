@@ -27,6 +27,7 @@ import {
   isUsingSSL,
   projectUrl,
   isBrowser,
+  CogniteAPIVersion,
 } from './utils';
 import { version } from '../package.json';
 import {
@@ -131,6 +132,7 @@ export default class BaseCogniteClient {
   private azureAdClient?: AzureAD;
   private adfsClient?: ADFS;
   private cogniteAuthClient?: CogniteAuthentication;
+  private apiVersion: CogniteAPIVersion = 'v1';
   /**
    * Create a new SDK client
    *
@@ -174,6 +176,10 @@ export default class BaseCogniteClient {
       'You can only call authenticate after you have called loginWithOAuth'
     );
   };
+
+  protected setVersion(version: CogniteAPIVersion) {
+    this.apiVersion = version;
+  }
 
   public setProject(projectName: string) {
     this.projectName = projectName;
@@ -523,7 +529,7 @@ export default class BaseCogniteClient {
   };
 
   protected get projectUrl() {
-    return projectUrl(this.project);
+    return projectUrl(this.project, this.apiVersion);
   }
 
   protected get metadataMap() {

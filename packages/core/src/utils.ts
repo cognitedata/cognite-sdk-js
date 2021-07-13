@@ -3,7 +3,7 @@
 import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
 import isBuffer from 'is-buffer';
-import { API_VERSION, BASE_URL } from './constants';
+import { BASE_URL } from './constants';
 import { CogniteError } from './error';
 import { CogniteMultiError } from './multiError';
 import {
@@ -13,17 +13,20 @@ import {
   OAuthLoginOptions,
 } from './baseCogniteClient';
 
+/** @hidden **/
+export type CogniteAPIVersion = 'v1' | 'playground';
+
 /** @hidden */
 export function getBaseUrl(baseUrl?: string) {
   return baseUrl || BASE_URL;
 }
 
 /** @hidden */
-export const apiUrl = () => `/api/${API_VERSION}`;
+export const apiUrl = (version: CogniteAPIVersion) => `/api/${version}`;
 
 /** @hidden */
-export function projectUrl(project: string) {
-  return `${apiUrl()}/projects/${encodeURIComponent(project)}`;
+export function projectUrl(project: string, version: CogniteAPIVersion) {
+  return `${apiUrl(version)}/projects/${encodeURIComponent(project)}`;
 }
 
 /** @hidden */
