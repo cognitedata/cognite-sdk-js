@@ -8,20 +8,34 @@ new versions based on commit messages.
 Please note we have a [code of conduct](./CODE_OF_CONDUCT.md).
 
 ## Making changes
-Make the changes to the package(s) you want to change, and commit them to a fork or branch.
-Commits need to follow [proper commit messages](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines).
-The commit messages are used to automatically bump the versions of changed packages, and write automatic changelogs.
+Make the changes to the package(s) you want to change, and commit them to a fork or branch. Commits
+need to follow [proper commit
+messages](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
+The commit messages are used to automatically bump the versions of changed packages, and write
+automatic changelogs. See the [Releases & Versioning](#releases--versioning) section below about
+releasing changes.
 
 We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
 
- - For fixes, start the commit with `fix: `. This will bump PATCH.
- - For features, start the commit with `feat: `. This will bump MINOR.
- - For changes that break backwards compatibility, add a `!` before the colon: `feat!: `.
+ - For fixes, start the commit with `fix: msg` or `fix(topic): msg`. This will bump PATCH.
+ - For features, start the commit with `feat: msg` or `feat(topic): msg`. This will bump MINOR.
+ - For changes that break backwards compatibility, add `BREAKING CHANGE: description` to the footer.
    This will bump MAJOR version.
-   
-   The same can be achieved by specifying a footer.
-   The footer must come after a blank line, and start with `BREAKING CHANGE: ` (colon mandatory),
-   followed by a description of what breaks.
+
+Note that using `<type>!: msg` **is not supported**, it will actually break the semantics of some
+types. `feat!: msg` will result in a _patch_ release, not major. `<type>!: msg` [is a
+thing](https://www.conventionalcommits.org/en/v1.0.0/) but that is _not_ supported by the
+implementation used in this repo.
+
+Also note that a major version upgrades are _not_ propagated up the dependency tree. If you do a
+breaking change in `@cognite/sdk-core` it will get a major version bump, if you use the `BREAKING
+CHANGE: desc` footer. However, packages that depends on `@cognite/sdk-core` will only get a patch
+upgrade. So if you do a breaking change to a non-top level package and also want to get major
+version bump of the upstream packages you have to ensure that manually. This can be done in two
+ways, run `lerna version major` or do a inconsequential change to the top level packages. If you do
+_any_ change to the top packages (including the smallest white space cleanup), it will all be
+covered by the `BREAKING CHANGE: msg` commit, leading them to all get a major version bump.
+
  - For extra details in the changelog, you can specify a scope like so: `feat(assets): `.
  - For other changes there are types without version bumping semantics:
    - `docs: ` changes to documentation
@@ -31,7 +45,7 @@ We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
    - `style: ` fixes to code style
    - `test: ` changes to tests
    - `perf: ` changes to improve performance
-   - `revert: ` changing things back 
+   - `revert: ` changing things back
    - `chore: ` miscelanious changes
 
 #### Example
@@ -54,7 +68,7 @@ are exported to the service contract repo as a pull request.
 
 Updating and uploading npm packages only happens if the HEAD commit of the main branch
 contains `[release]` in its description. When CI/CD sees this, it will use lerna to update
-package versions of changed packages based on commit messages, and add the 
+package versions of changed packages based on commit messages, and add the
 changes to the changelogs. The changes are comitted to the main branch
 with the new versions as git tags, and the new package versions are uploaded to npm.
 

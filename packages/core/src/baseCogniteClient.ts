@@ -24,6 +24,7 @@ import {
   isUsingSSL,
   projectUrl,
   isBrowser,
+  CogniteAPIVersion,
 } from './utils';
 import { version } from '../package.json';
 import {
@@ -147,7 +148,7 @@ export default class BaseCogniteClient {
   }
 
   private flow?: AuthFlowType;
-
+  private readonly apiVersion: CogniteAPIVersion;
   private readonly http: CDFHttpClient;
   private readonly metadata: MetadataMap;
   private readonly loginApi: LoginAPI;
@@ -173,7 +174,7 @@ export default class BaseCogniteClient {
    * const client = new CogniteClient({ ..., baseUrl: 'https://greenfield.cognitedata.com' });
    * ```
    */
-  constructor(options: ClientOptions) {
+  constructor(options: ClientOptions, apiVersion: CogniteAPIVersion = 'v1') {
     if (!isObject(options)) {
       throw Error('`CogniteClient` is missing parameter `options`');
     }
@@ -195,6 +196,7 @@ export default class BaseCogniteClient {
     this.metadata = new MetadataMap();
     this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
     this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
+    this.apiVersion = apiVersion;
   }
 
   public authenticate: () => Promise<boolean> = async () => {
@@ -585,7 +587,7 @@ export default class BaseCogniteClient {
   };
 
   protected get projectUrl() {
-    return projectUrl(this.project);
+    return projectUrl(this.project, this.apiVersion);
   }
 
   protected get metadataMap() {
@@ -857,9 +859,12 @@ export default class BaseCogniteClient {
 
   protected async validateAccessToken(token: string): Promise<boolean> {
     try {
-      const response = await this.httpClient.get<any>('/api/v1/token/inspect', {
-        headers: { [AUTHORIZATION_HEADER]: bearerString(token) },
-      });
+      const response = await this.httpClient.get<any>(
+        `/api/${this.apiVersion}/token/inspect`,
+        {
+          headers: { [AUTHORIZATION_HEADER]: bearerString(token) },
+        }
+      );
 
       const { projects } = response.data;
 

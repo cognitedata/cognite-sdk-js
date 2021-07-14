@@ -39,8 +39,8 @@ function setupClient(baseUrl: string = BASE_URL) {
   return new BaseCogniteClient({ appId: 'JS SDK integration tests', baseUrl });
 }
 
-function setupMockableClient() {
-  const client = setupClient(mockBaseUrl);
+function setupMockableClient(base?: BaseCogniteClient) {
+  const client = base || setupClient(mockBaseUrl);
   client.loginWithApiKey({
     project,
     apiKey,
@@ -835,6 +835,43 @@ describe('CogniteClient', () => {
         expect(silentLogin).toBe(false);
         expect(authenticated).toBe(false);
         expect(onNoProjectAvailable).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('api version', () => {
+      test('default', async () => {
+        const version = 'v1';
+        const client = setupMockableClient();
+
+        // @ts-ignore
+        const projectUrl = client.projectUrl;
+        expect(projectUrl).toEqual(`/api/${version}/projects/TEST_PROJECT`);
+      });
+
+      test('v1', async () => {
+        const version = 'v1';
+        const base = new BaseCogniteClient(
+          { appId: 'JS SDK unit tests', baseUrl: BASE_URL },
+          version
+        );
+        const v1Client = setupMockableClient(base);
+
+        // @ts-ignore
+        const projectUrl = v1Client.projectUrl;
+        expect(projectUrl).toEqual(`/api/${version}/projects/TEST_PROJECT`);
+      });
+
+      test('playground', async () => {
+        const version = 'playground';
+        const base = new BaseCogniteClient(
+          { appId: 'JS SDK unit tests', baseUrl: BASE_URL },
+          version
+        );
+        const playgroundClient = setupMockableClient(base);
+
+        // @ts-ignore
+        const projectUrl = playgroundClient.projectUrl;
+        expect(projectUrl).toEqual(`/api/${version}/projects/TEST_PROJECT`);
       });
     });
 
