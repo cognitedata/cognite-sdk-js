@@ -9,7 +9,6 @@ import {
   LabelFilter,
   PointCoordinates,
   IdEither,
-  ExternalFileInfo,
   Label,
   Range,
   FileName,
