@@ -11,6 +11,7 @@ import {
   IdEither,
   ExternalFileInfo,
   Label,
+  Range,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -93,6 +94,7 @@ export interface DocumentsFilter {
   author?: StringIn | StringEquals;
   createdTime?: EpochTimestampRange;
   mimeType?: StringIn | StringEquals;
+  pageCount?: Range<number>;
   type?: StringIn | StringEquals;
   language?: StringIn | StringEquals;
   assetIds?: ContainsAllIds | ContainsAnyIds;
@@ -128,6 +130,7 @@ export interface Document {
   createdTime?: number;
   lastIndexedTime?: number;
   mimeType?: string;
+  pageCount?: number;
   type?: string;
   language?: string;
   truncatedContent?: string;
