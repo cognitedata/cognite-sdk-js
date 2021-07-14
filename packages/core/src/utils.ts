@@ -13,7 +13,7 @@ import {
   OAuthLoginOptions,
 } from './baseCogniteClient';
 
-/** @hidden **/
+/** @hidden */
 export type CogniteAPIVersion = 'v1' | 'playground';
 
 /** @hidden */
