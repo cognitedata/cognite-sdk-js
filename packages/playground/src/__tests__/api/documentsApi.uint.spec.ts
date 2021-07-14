@@ -122,7 +122,7 @@ describe('Documents unit test', () => {
 
   test('document preview uri', async () => {
     const base = (path: string): string => {
-      return `/api/v1/projects/${project}/documents${path}`;
+      return `/api/playground/projects/${project}/documents${path}`;
     };
 
     const preview = client.documents.preview;

@@ -29,7 +29,7 @@ describe('documents api', () => {
     });
     expect(response.items.length).toEqual(1);
   });
-  test('fetch preview', async () => {
+  test('fetch image preview', async () => {
     const mediaTypePDF = 'application/pdf';
     const documents = await client.documents.list({
       limit: 1,
@@ -41,6 +41,18 @@ describe('documents api', () => {
     const document = documents.items[0];
 
     await client.documents.preview.documentAsImage(document.id, 0);
+  });
+  test('fetch pdf preview', async () => {
+    const mediaTypePDF = 'application/pdf';
+    const documents = await client.documents.list({
+      limit: 1,
+      filter: { mimeType: { equals: mediaTypePDF } },
+    });
+    if (documents.items.length == 0) {
+      return;
+    }
+    const document = documents.items[0];
+
     const resp = await client.documents.preview.documentAsPdf(document.id);
 
     expect(resp.byteLength).toBeGreaterThan(5); // %PDF-
