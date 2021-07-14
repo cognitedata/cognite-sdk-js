@@ -92,4 +92,25 @@ describe('Documents unit test', () => {
       limit: 5,
     });
   });
+
+  test('search with size range', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/search'), {
+        search: {
+          query: 'test',
+        },
+        filter: {
+          size: {
+            min: 1,
+            max: 10,
+          },
+        },
+      })
+      .once()
+      .reply(200, {});
+    await client.documents.search({
+      search: { query: 'test' },
+      filter: { size: { min: 1, max: 10 } },
+    });
+  });
 });

@@ -102,6 +102,7 @@ export interface DocumentsFilter {
   labels?: Label[];
   geoLocation?: GeoLocationFilter;
   sourceFile?: DocumentsSourceFileFilter;
+  size?: Range<number>;
 }
 
 export interface DocumentsSearch {
@@ -139,6 +140,7 @@ export interface Document {
   sourceSystem?: string;
   sourceFile: ExternalFileInfo;
   geoLocation: GeoLocation;
+  size: number;
 }
 
 export type GeoLocationTypeEnum = 'Feature';

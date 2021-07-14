@@ -18,4 +18,11 @@ describe('documents api', () => {
     const response = await client.documents.list({ limit: 1 });
     expect(response.items.length).toEqual(1);
   });
+  test('list documents, by size', async () => {
+    const response = await client.documents.list({
+      filter: { size: { min: 10, max: 900533317 } },
+      limit: 1,
+    });
+    expect(response.items.length).toEqual(1);
+  });
 });
