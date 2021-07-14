@@ -100,9 +100,11 @@ describe('Documents unit test', () => {
           query: 'test',
         },
         filter: {
-          size: {
-            min: 1,
-            max: 10,
+          sourceFile: {
+            size: {
+              min: 1,
+              max: 10,
+            },
           },
         },
       })
@@ -110,7 +112,11 @@ describe('Documents unit test', () => {
       .reply(200, {});
     await client.documents.search({
       search: { query: 'test' },
-      filter: { size: { min: 1, max: 10 } },
+      filter: {
+        sourceFile: {
+          size: { min: 1, max: 10 },
+        },
+      },
     });
   });
 

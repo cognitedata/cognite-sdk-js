@@ -9,9 +9,12 @@ import {
   LabelFilter,
   PointCoordinates,
   IdEither,
-  ExternalFileInfo,
   Label,
   Range,
+  FileName,
+  FileMimeType,
+  Metadata,
+  FileGeoLocation,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -77,6 +80,7 @@ export interface DocumentsSourceFileFilter {
   labels?: LabelFilter;
   geoLocation?: GeoLocationFilter;
   datasetId?: IntIn | IntEquals;
+  size?: Range<number>;
 }
 
 export interface ExternalDocumentsSearch {
@@ -102,7 +106,6 @@ export interface DocumentsFilter {
   labels?: Label[];
   geoLocation?: GeoLocationFilter;
   sourceFile?: DocumentsSourceFileFilter;
-  size?: Range<number>;
 }
 
 export interface DocumentsSearch {
@@ -138,9 +141,28 @@ export interface Document {
   assetIds?: number[];
   labels?: LabelList[];
   sourceSystem?: string;
-  sourceFile: ExternalFileInfo;
+  sourceFile: DocumentSourceFile;
   geoLocation: GeoLocation;
-  size: number;
+}
+
+export interface DocumentSourceFile {
+  name: FileName;
+  source?: string;
+  mimeType?: FileMimeType;
+  directory?: string;
+  metadata?: Metadata;
+  assetIds?: CogniteInternalId[];
+  datasetId?: CogniteInternalId;
+  securityCategories?: CogniteInternalId[];
+  sourceCreatedTime?: Date;
+  sourceModifiedTime?: Date;
+  uploadedTime?: Date;
+  lastUpdatedTime?: Date;
+  lastIndexedTime?: Date;
+  createdTime?: Date;
+  labels?: Label[];
+  geoLocation?: FileGeoLocation;
+  size?: number;
 }
 
 export type GeoLocationTypeEnum = 'Feature';
