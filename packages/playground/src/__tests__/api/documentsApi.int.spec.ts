@@ -12,7 +12,6 @@ describe('documents api', () => {
 
   test('list documents', async () => {
     const response = await client.documents.list();
-    console.log(response.items);
     expect(response.items.length).toBeGreaterThan(0);
   });
   test('list documents, limit to 1', async () => {
