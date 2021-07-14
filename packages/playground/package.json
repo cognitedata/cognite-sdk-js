@@ -8,7 +8,7 @@
   "types": "dist/src/index.d.ts",
   "version": "3.0.2",
   "scripts": {
-    "clean": "rm -rf dist/ docs/ codeSnippets/",
+    "clean": "rm -rf dist/ docs/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/playground/",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
@@ -18,8 +18,8 @@
     "esCheck": "es-check es5 './dist/index.js'",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
     "docs:bundle": "yarn docs && mkdir -p ../../docs/playground && cp -r docs/* ../../docs/playground/",
-    "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node ../../scripts/extractCodeSnippets.js --package-name @cognite/sdk-playground",
-    "test-snippets": "yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json"
+    "extract-snippets": "",
+    "test-snippets": ""
   },
   "dependencies": {
     "@cognite/sdk": "^4.3.0",
