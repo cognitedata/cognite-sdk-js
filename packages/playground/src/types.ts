@@ -9,6 +9,8 @@ import {
   LabelFilter,
   PointCoordinates,
   IdEither,
+  ExternalFileInfo,
+  Label,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -95,7 +97,7 @@ export interface DocumentsFilter {
   language?: StringIn | StringEquals;
   assetIds?: ContainsAllIds | ContainsAnyIds;
   sourceSystem?: StringIn | StringEquals;
-  labels?: LabelFilter;
+  labels?: Label[];
   geoLocation?: GeoLocationFilter;
   sourceFile?: DocumentsSourceFileFilter;
 }
@@ -132,7 +134,7 @@ export interface Document {
   assetIds?: number[];
   labels?: LabelList[];
   sourceSystem?: string;
-  sourceFile: any;
+  sourceFile: ExternalFileInfo;
   geoLocation: GeoLocation;
 }
 
