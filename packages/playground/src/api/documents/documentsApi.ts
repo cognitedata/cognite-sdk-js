@@ -7,6 +7,7 @@ import {
   ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
+import { PreviewAPI } from './previewApi';
 
 import {
   Document,
@@ -20,8 +21,11 @@ export interface DocumentsAggregatesResponse<T> extends ItemsWrapper<T> {
 }
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
+  private readonly previewAPI: PreviewAPI;
+
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
+    this.previewAPI = new PreviewAPI(args[0] + '/preview', args[1], args[2]);
   }
 
   public search = (
@@ -35,6 +39,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   ): CursorAndAsyncIterator<Document> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
+
+  public get preview() {
+    return this.previewAPI;
+  }
 
   private async searchDocuments<ResponseType>(
     query: ExternalDocumentsSearch
