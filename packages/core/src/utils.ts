@@ -22,11 +22,15 @@ export function getBaseUrl(baseUrl?: string) {
 }
 
 /** @hidden */
-export const apiUrl = (version: CogniteAPIVersion) => `/api/${version}`;
+export const apiUrl = (apiVersion: CogniteAPIVersion = 'v1') =>
+  `/api/${apiVersion}`;
 
 /** @hidden */
-export function projectUrl(project: string, version: CogniteAPIVersion) {
-  return `${apiUrl(version)}/projects/${encodeURIComponent(project)}`;
+export function projectUrl(
+  project: string,
+  apiVersion: CogniteAPIVersion = 'v1'
+) {
+  return `${apiUrl(apiVersion)}/projects/${encodeURIComponent(project)}`;
 }
 
 /** @hidden */

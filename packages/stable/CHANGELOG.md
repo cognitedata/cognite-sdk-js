@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.3.0...@cognite/sdk@4.3.1) (2021-07-14)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [4.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.2.2...@cognite/sdk@4.3.0) (2021-07-08)
+
+
+### Features
+
+* **revisions3d:** parameter to update metadata property [release] ([#609](https://github.com/cognitedata/cognite-sdk-js/issues/609)) ([920ee0b](https://github.com/cognitedata/cognite-sdk-js/commit/920ee0b6992fb7ede4421983d59546864fb791b7))
+* add accessor to filter 3d nodes endpoint ([#608](https://github.com/cognitedata/cognite-sdk-js/issues/608)) ([b64e39f](https://github.com/cognitedata/cognite-sdk-js/commit/b64e39f7397ecbc460d2844192bf569f780ed9cb))
+
+
+
+
+
 ## [4.2.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.2.1...@cognite/sdk@4.2.2) (2021-06-30)
 
 
