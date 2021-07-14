@@ -20,5 +20,4 @@ import { CogniteClientPlayground } from '@congite/sdk-playground';
 
 ## Documentation
 
- - See the reference doc of `CogniteClientPlayground` [here](https://cognitedata.github.io/cognite-sdk-js/playground/classes/_beta_src_cogniteclient_.cogniteclient.html).
  - [playground resources](https://docs.cognite.com/api/playground/).
