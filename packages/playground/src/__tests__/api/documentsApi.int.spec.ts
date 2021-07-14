@@ -8,7 +8,6 @@ describe('documents api', () => {
 
   beforeAll(async () => {
     client = setupLoggedInClient();
-    console.log(client);
   });
 
   test('list documents', async () => {

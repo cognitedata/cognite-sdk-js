@@ -2,10 +2,7 @@
 
 import { accessApi, ClientOptions, BaseCogniteClient } from '@cognite/sdk-core';
 import { version } from '../package.json';
-import { CogniteAPIVersion } from '@cognite/sdk-core/src/utils';
 import { DocumentsAPI } from './api/documents/documentsApi';
-
-const API_VERSION: CogniteAPIVersion = 'playground';
 
 export default class CogniteClientPlayground extends BaseCogniteClient {
   private documentsApi?: DocumentsAPI;
@@ -26,7 +23,7 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
    * @param options Client options
    */
   constructor(options: ClientOptions) {
-    super(options, API_VERSION);
+    super(options, 'playground');
   }
 
   public get documents() {
