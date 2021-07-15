@@ -14,10 +14,12 @@ describe('documents api', () => {
     const response = await client.documents.list();
     expect(response.items.length).toBeGreaterThan(0);
   });
+  
   test('list documents, limit to 1', async () => {
     const response = await client.documents.list({ limit: 1 });
     expect(response.items.length).toEqual(1);
   });
+
   test('list documents, by size', async () => {
     const response = await client.documents.list({
       filter: {
@@ -28,5 +30,10 @@ describe('documents api', () => {
       limit: 1,
     });
     expect(response.items.length).toEqual(1);
+  });
+
+  test('list documents feedback', async () => {
+    const response = await client.documents.feedback.list('CREATED');
+    expect(response.items.length).toBeGreaterThan(0);
   });
 });
