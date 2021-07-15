@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.10.4...@cognite/sdk-wells@2.0.0) (2021-07-15)
+
+
+### Features
+
+* **core:** add oidc auth code flow [release] ([#587](https://github.com/cognitedata/cognite-sdk-js/issues/587)) ([0cc44aa](https://github.com/cognitedata/cognite-sdk-js/commit/0cc44aa82b7d7461e8629fe2e712f743bf6c7138))
+
+
+### BREAKING CHANGES
+
+* **core:** stop silencing errors from aad
+
+* feat!: change loginWithOAuth API signature
+
+BREAKING CHANGE!: stop guessing which flow to use based on content of options.
+
+* feat: proforma changes to trigger major version bump
+
+Co-authored-by: Vegard Økland <vegard.okland@cognite.com>
+
+
+
+
+
 ## [1.10.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.10.3...@cognite/sdk-wells@1.10.4) (2021-07-14)
 
 **Note:** Version bump only for package @cognite/sdk-wells
