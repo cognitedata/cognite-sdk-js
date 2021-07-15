@@ -15,16 +15,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * **core:** stop silencing errors from aad
 
-* feat!: change loginWithOAuth API signature
-
-BREAKING CHANGE!: stop guessing which flow to use based on content of options.
-
-* feat: proforma changes to trigger major version bump
-
-Co-authored-by: Vegard Økland <vegard.okland@cognite.com>
-
-
-
+* **core:** change loginWithOAuth API signature
 
 
 ## [1.10.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.10.3...@cognite/sdk-wells@1.10.4) (2021-07-14)
