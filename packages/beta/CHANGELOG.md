@@ -15,15 +15,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * **core:** stop silencing errors from aad
 
-* feat!: change loginWithOAuth API signature
-
-BREAKING CHANGE!: stop guessing which flow to use based on content of options.
-
-* feat: proforma changes to trigger major version bump
-
-Co-authored-by: Vegard Økland <vegard.okland@cognite.com>
-
-
+* **core:** change loginWithOAuth API signature
 
 
 
