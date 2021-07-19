@@ -442,6 +442,45 @@ export default class BaseCogniteClient {
   }
 
   /**
+   * Returns IDP id token
+   *
+   * ```js
+   * client.loginWithOAuth({ cluster: 'bluefield', ... });
+   * await client.authenticate();
+   * const idToken = await client.getIdToken();
+   * ```
+   */
+  public async getIdToken(): Promise<string | null> {
+    switch (this.flow!.type) {
+      case 'AAD_OAUTH': {
+        if (this.azureAdClient) {
+          return this.azureAdClient.getAccountToken();
+        } else {
+          return Promise.resolve(null);
+        }
+      }
+      case 'ADFS_OAUTH': {
+        if (this.adfsClient) {
+          return this.adfsClient.getIdToken();
+        } else {
+          return Promise.resolve(null);
+        }
+      }
+      case 'OIDC_AUTHORIZATION_CODE_FLOW': {
+        if (this.authCodeFlowManager) {
+          const user = await this.authCodeFlowManager.getUser();
+          return Promise.resolve(user.id_token);
+        } else {
+          return Promise.resolve(null);
+        }
+      }
+      default: {
+        throw Error('CDF token can be acquired only using loginWithOAuth flow');
+      }
+    }
+  }
+
+  /**
    * Returns Azure AD access token in case of AzureAD authentication flow usage.
    * Can be used for getting user details via Microsoft Graph API
    *
@@ -450,6 +489,8 @@ export default class BaseCogniteClient {
    * await client.authenticate();
    * const accessToken = await client.getAzureADAccessToken();
    * ```
+   *
+   * @deprecated Replaced by `getIdToken`
    */
   public getAzureADAccessToken(): Promise<string | null> {
     if (!this.azureAdClient) {
