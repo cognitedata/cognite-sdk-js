@@ -495,23 +495,26 @@ export default class BaseCogniteClient {
         if (this.azureAdClient) {
           return this.azureAdClient.getAccountToken();
         } else {
-          return Promise.resolve(null);
+          return null;
         }
       }
       case 'ADFS_OAUTH': {
         if (this.adfsClient) {
           return this.adfsClient.getIdToken();
         } else {
-          return Promise.resolve(null);
+          return null;
         }
       }
       case 'OIDC_AUTHORIZATION_CODE_FLOW': {
         if (this.authCodeFlowManager) {
           const user = await this.authCodeFlowManager.getUser();
-          return Promise.resolve(user.id_token);
+          return user.id_token;
         } else {
-          return Promise.resolve(null);
+          return null;
         }
+      }
+      case 'OIDC_CLIENT_CREDENTIALS_FLOW': {
+        return null;
       }
       default: {
         throw Error('CDF token can be acquired only using loginWithOAuth flow');
