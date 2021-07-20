@@ -101,6 +101,7 @@ export class OidcAuthCode {
             title: window.document.title,
           })
         );
+        // eslint-disable-next-line prettier/prettier
         if (this.options.loginParams?.prompt === 'none')
           await this.userManager.signinSilent(this.options.loginParams);
         else await this.userManager.signinRedirect(this.options.loginParams);
