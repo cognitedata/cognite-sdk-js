@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.0.0...@cognite/sdk@5.1.0) (2021-07-20)
+
+
+### Features
+
+* client credentials flow [release] ([#607](https://github.com/cognitedata/cognite-sdk-js/issues/607)) ([28ed890](https://github.com/cognitedata/cognite-sdk-js/commit/28ed890ebf15da151e05cf0c487bca4b91b8ea96))
+
+
+
+
+
 # [5.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.3.1...@cognite/sdk@5.0.0) (2021-07-15)
 
 
