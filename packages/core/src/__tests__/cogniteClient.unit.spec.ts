@@ -13,6 +13,7 @@ import * as LoginUtils from '../loginUtils';
 import { ADFS } from '../authFlows/adfs';
 import { bearerString, sleepPromise } from '../utils';
 import { apiKey, authTokens, loggedInResponse, project } from '../testUtils';
+import { TokenSet } from 'openid-client';
 
 const initAuth = jest.fn();
 const login = jest.fn();
@@ -27,6 +28,22 @@ jest.mock('../authFlows/aad', () => {
         login,
         getCDFToken,
         getCluster,
+      };
+    }),
+  };
+});
+
+const openidInit = jest.fn();
+const openidGetCDFToken = jest.fn();
+const openidGetAuthTokens = jest.fn();
+
+jest.mock('../authFlows/oidc_client_credentials_flow', () => {
+  return {
+    OidcClientCredentials: jest.fn().mockImplementation(() => {
+      return {
+        init: openidInit,
+        getCDFToken: openidGetCDFToken,
+        getAuthTokens: openidGetAuthTokens,
       };
     }),
   };
@@ -230,7 +247,7 @@ describe('CogniteClient', () => {
       );
     });
 
-    test('missing project name', async () => {
+    test('invalid flow type', async () => {
       const client = setupClient();
       await expect(
         async () =>
@@ -575,6 +592,48 @@ describe('CogniteClient', () => {
           expect(result).toEqual(true);
           expect(tokens).toEqual(null);
         });
+      });
+    });
+
+    describe('authentication with client credentials', () => {
+      const clientId = 'clientId';
+      const clientSecret = 'clientSecret';
+      const openIdConfigurationUrl = `https://login.microsoftonline.com/<TEST>/v2.0/.well-known/openid-configuration`;
+      const cluster = 'test-cluster';
+      const scope = 'https://bluefield.cognitedata.com/.default';
+      const authenticate = jest.fn();
+
+      let client: BaseCogniteClient;
+
+      beforeEach(() => {
+        client = new BaseCogniteClient({ appId: 'test-app' });
+      });
+      afterEach(() => {
+        jest.clearAllMocks();
+      });
+
+      test('should return true when authenticated', async () => {
+        openidInit.mockResolvedValueOnce([authenticate, null]);
+        authenticate.mockResolvedValueOnce(true);
+        openidGetAuthTokens.mockResolvedValueOnce({
+          access_token: cdfToken,
+        } as TokenSet);
+
+        const result = await client.loginWithOAuth({
+          type: 'OIDC_CLIENT_CREDENTIALS_FLOW',
+          options: {
+            clientId,
+            clientSecret,
+            cluster,
+            openIdConfigurationUrl,
+            scope,
+          },
+        });
+
+        expect(openidInit).toHaveBeenCalledTimes(1);
+        expect(result).toEqual(false);
+        const authenticateResult = await client.authenticate();
+        expect(authenticateResult).toEqual(true);
       });
     });
 
