@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.1.1...@cognite/sdk-core@3.1.2) (2021-07-21)
+
+
+### Bug Fixes
+
+* silentlogin added for oidc ([#619](https://github.com/cognitedata/cognite-sdk-js/issues/619)) ([b7977eb](https://github.com/cognitedata/cognite-sdk-js/commit/b7977eba255cda3b11d792b2934933854556c67c))
+
+
+
+
+
 ## [3.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.1.0...@cognite/sdk-core@3.1.1) (2021-07-21)
 
 
