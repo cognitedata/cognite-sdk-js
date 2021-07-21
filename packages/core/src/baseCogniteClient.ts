@@ -81,12 +81,17 @@ export type OIDC_AUTHORIZATION_CODE_FLOW = {
   type: 'OIDC_AUTHORIZATION_CODE_FLOW';
   options: OAuthLoginForOIDCAuthFlowOptions;
 };
+export type CUSTOM = {
+  type: 'CUSTOM';
+  options: unknown;
+};
 
 export type AuthFlowType =
   | AAD_OAUTH
   | CDF_OAUTH
   | ADFS_OAUTH
-  | OIDC_AUTHORIZATION_CODE_FLOW;
+  | OIDC_AUTHORIZATION_CODE_FLOW
+  | CUSTOM;
 
 /**
  * @deprecated
@@ -364,6 +369,42 @@ export default class BaseCogniteClient {
 
     return token !== null;
   };
+
+  public async loginWithCustom(
+    fn: (
+      callbacks: {
+        setCluster: (s: string) => void;
+        setBearerToken: (s: string) => void;
+        validateAccessToken: (s: string) => Promise<boolean>;
+      }
+    ) => Promise<OAuthLoginResult>
+  ): Promise<boolean> {
+    if (this.hasBeenLoggedIn) {
+      throwReLogginError();
+    }
+
+    this.flow = { type: 'CUSTOM', options: {} };
+
+    const [authenticate, token] = await fn({
+      setCluster: this.httpClient.setCluster,
+      setBearerToken: this.httpClient.setBearerToken,
+      validateAccessToken: this.validateAccessToken,
+    });
+
+    this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
+      const didAuthenticate = await authenticate();
+      return didAuthenticate ? retry() : reject();
+    });
+
+    if (token) {
+      this.httpClient.setBearerToken(token);
+    }
+
+    this.authenticate = authenticate;
+    this.hasBeenLoggedIn = true;
+
+    return token !== null;
+  }
 
   /**
    * To modify the base-url at any point in time
@@ -898,7 +939,7 @@ export default class BaseCogniteClient {
     }
   }
 
-  protected async validateAccessToken(token: string): Promise<boolean> {
+  protected validateAccessToken = async (token: string): Promise<boolean> => {
     try {
       const response = await this.httpClient.get<any>(
         `/api/${this.apiVersion}/token/inspect`,
@@ -917,7 +958,7 @@ export default class BaseCogniteClient {
 
       throw err;
     }
-  }
+  };
 }
 
 export type BaseRequestOptions = HttpRequestOptions;
