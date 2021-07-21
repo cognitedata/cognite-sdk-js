@@ -102,10 +102,8 @@ export class OidcAuthCode {
           })
         );
 
-        const prompt = this.options.loginParams
-          ? this.options.loginParams.prompt
-          : '';
-
+        const prompt =
+          this.options.loginParams && this.options.loginParams.prompt;
         if (prompt === 'none')
           await this.userManager.signinSilent(this.options.loginParams);
         else await this.userManager.signinRedirect(this.options.loginParams);
