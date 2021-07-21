@@ -105,9 +105,9 @@
 
 <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">quickstart</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> CogniteClient({ <span class="hljs-attr">appId</span>: <span class="hljs-string">&#x27;YOUR APPLICATION NAME&#x27;</span> });
-  client.loginWithOAuth({ <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;CDF_OAUTH&#x27;</span>, <span class="hljs-attr">options</span>: {
+  client.loginWithOAuth({
     <span class="hljs-attr">project</span>: <span class="hljs-string">&#x27;publicdata&#x27;</span>,
-  }});
+  });
 
   <span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets
     .list()
@@ -272,9 +272,6 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/oidcauthcode.html" class="tsd-kind-icon">Oidc<wbr>Auth<wbr>Code</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/oidcclientcredentials.html" class="tsd-kind-icon">Oidc<wbr>Client<wbr>Credentials</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/projectsapi.html" class="tsd-kind-icon">ProjectsAPI</a>
@@ -729,9 +726,6 @@ quickstart();</code></pre>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/filterquery.html" class="tsd-kind-icon">Filter<wbr>Query</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/flowcallbacks.html" class="tsd-kind-icon">Flow<wbr>Callbacks</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
 						<a href="interfaces/geolocationgeometry.html" class="tsd-kind-icon">Geo<wbr>Location<wbr>Geometry</a>
 					</li>
@@ -857,9 +851,6 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/oidcauthflowoptions.html" class="tsd-kind-icon">OIDCAuth<wbr>Flow<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/oidcclientcredentialsflowoptions.html" class="tsd-kind-icon">OIDCClient<wbr>Credentials<wbr>Flow<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/oidcconfiguration.html" class="tsd-kind-icon">Oidc<wbr>Configuration</a>
@@ -1492,16 +1483,10 @@ quickstart();</code></pre>
 						<a href="globals.html#nullablesinglepatchstring" class="tsd-kind-icon">Nullable<wbr>Single<wbr>Patch<wbr>String</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#oauthloginforoidcvendorgenericflowoptions" class="tsd-kind-icon">OAuth<wbr>Login<wbr>ForOIDCVendor<wbr>Generic<wbr>Flow<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#oauthloginresult" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Result</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#oidc_authorization_code_flow" class="tsd-kind-icon">OIDC_<wbr>AUTHORIZATION_<wbr>CODE_<wbr>FLOW</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#oidc_client_credentials_flow" class="tsd-kind-icon">OIDC_<wbr>CLIENT_<wbr>CREDENTIALS_<wbr>FLOW</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#owner" class="tsd-kind-icon">OWNER</a>
