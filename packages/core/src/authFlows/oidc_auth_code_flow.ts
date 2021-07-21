@@ -101,7 +101,12 @@ export class OidcAuthCode {
             title: window.document.title,
           })
         );
-        await this.userManager.signinRedirect(this.options.loginParams);
+
+        const prompt =
+          this.options.loginParams && this.options.loginParams.prompt;
+        if (prompt === 'none')
+          await this.userManager.signinSilent(this.options.loginParams);
+        else await this.userManager.signinRedirect(this.options.loginParams);
         return Promise.resolve(null);
       }
       case 'POPUP': {
