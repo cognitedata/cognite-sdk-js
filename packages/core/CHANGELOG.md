@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.1.2...@cognite/sdk-core@3.2.0) (2021-07-21)
+
+
+### Features
+
+* add custom login flow method [release] ([#620](https://github.com/cognitedata/cognite-sdk-js/issues/620)) ([d99a2aa](https://github.com/cognitedata/cognite-sdk-js/commit/d99a2aa25aa6a271c09c4cfc944e825047dec72a))
+
+
+
+
+
 ## [3.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.1.1...@cognite/sdk-core@3.1.2) (2021-07-21)
 
 
