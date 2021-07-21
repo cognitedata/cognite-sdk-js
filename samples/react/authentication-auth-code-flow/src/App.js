@@ -28,6 +28,7 @@ const AUTH0_CONFIG = {
   },
 };
 
+
 function App() {
   const [token, setToken] = useState();
   const [inspect, setInspect] = useState();
