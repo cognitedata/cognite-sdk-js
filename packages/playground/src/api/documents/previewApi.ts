@@ -46,7 +46,7 @@ export class PreviewAPI extends BaseResourceAPI<Any> {
     const response = await this.get<ResponseType>(uri, {
       responseType: HttpResponseType.ArrayBuffer,
       headers: {
-        accepts: accepts,
+        Accepts: accepts,
       },
     });
 
