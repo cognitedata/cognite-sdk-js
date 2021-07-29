@@ -26,11 +26,11 @@ export class PreviewAPI extends BaseResourceAPI<Any> {
 
   public buildPreviewURI = (
     id: DocumentId,
-    accepts: AcceptsType,
+    accept: AcceptType,
     page: number = 0
   ): string => {
     let uri = `${this.url()}?documentId=${id.toString()}`;
-    if (accepts == 'image/png') {
+    if (accept == 'image/png') {
       uri += `&page=${page.toString()}`;
     }
 
@@ -39,14 +39,14 @@ export class PreviewAPI extends BaseResourceAPI<Any> {
 
   private async previewEndpoint<ResponseType>(
     id: DocumentId,
-    accepts: AcceptsType,
+    accept: AcceptType,
     page: number = 0
   ): Promise<ResponseType> {
-    const uri = this.buildPreviewURI(id, accepts, page);
+    const uri = this.buildPreviewURI(id, accept, page);
     const response = await this.get<ResponseType>(uri, {
       responseType: HttpResponseType.ArrayBuffer,
       headers: {
-        Accepts: accepts,
+        Accept: accept,
       },
     });
 
@@ -65,4 +65,4 @@ export class PreviewAPI extends BaseResourceAPI<Any> {
   }
 }
 
-export type AcceptsType = 'application/pdf' | 'image/png';
+export type AcceptType = 'application/pdf' | 'image/png';
