@@ -37,8 +37,6 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
   protected initAPIs() {
     super.initAPIs();
 
-    // Lock version to the following date
-    this.httpClient.setDefaultHeader('cdf-version', 'V20210406');
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
   }
 }
