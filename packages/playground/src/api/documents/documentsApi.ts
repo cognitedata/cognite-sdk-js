@@ -25,7 +25,9 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
-    this.previewAPI = new PreviewAPI(args[0] + '/preview', args[1], args[2]);
+
+    const [baseUrl, httpClient, map] = args;
+    this.previewAPI = new PreviewAPI(baseUrl + '/preview', httpClient, map);
   }
 
   public search = (
