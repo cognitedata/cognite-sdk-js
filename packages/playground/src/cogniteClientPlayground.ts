@@ -41,7 +41,4 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
     this.httpClient.setDefaultHeader('cdf-version', 'V20210406');
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
   }
-  static urlEncodeExternalId(externalId: string): string {
-    return encodeURIComponent(externalId);
-  }
 }
