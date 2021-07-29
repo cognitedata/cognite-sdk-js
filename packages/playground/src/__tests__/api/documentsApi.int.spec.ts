@@ -2,6 +2,16 @@
 
 import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupLoggedInClient } from '../testUtils';
+import exp from 'constants';
+
+expect.extend({
+  toEqual(received, expected) {
+    return {
+      message: () => `Got ${received}, wanted ${expected}`,
+      pass: false,
+    };
+  },
+});
 
 describe('documents api', () => {
   let client: CogniteClientPlayground;
@@ -58,7 +68,10 @@ describe('documents api', () => {
 
     expect(resp.byteLength).toBeGreaterThan(5); // %PDF-
     const frontSlice = resp.slice(0, 4);
-    expect(frontSlice).toEqual([0x25, 0x50, 0x44, 0x46, 0x2d]);
+    const pdfPrefix = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
+    expect(frontSlice.toString().length).toEqual(pdfPrefix.toString().length);
+    const match = Buffer.from(frontSlice, 0).equals(Buffer.from(pdfPrefix, 0));
+    expect(match).toBe(true);
   });
   test('fetch temporary link', async () => {
     const mediaTypePDF = 'application/pdf';
