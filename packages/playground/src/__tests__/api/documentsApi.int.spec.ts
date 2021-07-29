@@ -14,7 +14,7 @@ describe('documents api', () => {
     const response = await client.documents.list();
     expect(response.items.length).toBeGreaterThan(0);
   });
-  
+
   test('list documents, limit to 1', async () => {
     const response = await client.documents.list({ limit: 1 });
     expect(response.items.length).toEqual(1);

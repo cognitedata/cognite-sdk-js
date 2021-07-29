@@ -6,12 +6,6 @@ import isBuffer from 'is-buffer';
 import { BASE_URL } from './constants';
 import { CogniteError } from './error';
 import { CogniteMultiError } from './multiError';
-import {
-  OAuthLoginForAADOptions,
-  OAuthLoginForADFSOptions,
-  OAuthLoginForCogniteOptions,
-  OAuthLoginOptions,
-} from './baseCogniteClient';
 
 /** @hidden */
 export type CogniteAPIVersion = 'v1' | 'playground';
@@ -234,25 +228,4 @@ export function isUsingSSL() {
 /** @hidden */
 export function isLocalhost(): boolean {
   return isBrowser() && location.hostname === 'localhost';
-}
-
-/** @hidden */
-export function isOAuthWithCogniteOptions(
-  options: OAuthLoginOptions
-): options is OAuthLoginForCogniteOptions {
-  return 'project' in options;
-}
-
-/** @hidden */
-export function isOAuthWithAADOptions(
-  options: OAuthLoginOptions
-): options is OAuthLoginForAADOptions {
-  return ['clientId', 'cluster'].every(key => key in options);
-}
-
-/** @hidden **/
-export function isOAuthWithADFSOptions(
-  options: OAuthLoginOptions
-): options is OAuthLoginForADFSOptions {
-  return ['authority', 'requestParams'].every(key => key in options);
 }
