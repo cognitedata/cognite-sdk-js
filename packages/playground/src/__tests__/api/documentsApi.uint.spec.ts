@@ -1,12 +1,12 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import CogniteClient from '../../cogniteClientPlayground';
+import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl } from '@cognite/sdk-core/src/testUtils';
 
 describe('Documents unit test', () => {
-  let client: CogniteClient;
+  let client: CogniteClientPlayground;
   beforeEach(() => {
     client = setupMockableClient();
     nock.cleanAll();
