@@ -1,4 +1,5 @@
 module.exports = {
+
   name: 'Cognite JavaScript SDK',
   mode: 'file',
   module: 'umd',

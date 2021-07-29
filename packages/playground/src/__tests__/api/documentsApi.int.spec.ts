@@ -29,6 +29,7 @@ describe('documents api', () => {
     });
     expect(response.items.length).toEqual(1);
   });
+
   test('fetch image preview', async () => {
     const mediaTypePDF = 'application/pdf';
     const documents = await client.documents.list({

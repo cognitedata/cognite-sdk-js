@@ -3,6 +3,60 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.1.2...@cognite/sdk@5.1.3) (2021-07-21)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [5.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.1.1...@cognite/sdk@5.1.2) (2021-07-21)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [5.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.1.0...@cognite/sdk@5.1.1) (2021-07-21)
+
+
+### Bug Fixes
+
+* revert client credentials [release] ([#618](https://github.com/cognitedata/cognite-sdk-js/issues/618)) ([08a0d8c](https://github.com/cognitedata/cognite-sdk-js/commit/08a0d8cf01105aa326e73d93c703c7fc0ee6f68d))
+
+
+
+
+
+# [5.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.0.0...@cognite/sdk@5.1.0) (2021-07-20)
+
+
+### Features
+
+* client credentials flow [release] ([#607](https://github.com/cognitedata/cognite-sdk-js/issues/607)) ([28ed890](https://github.com/cognitedata/cognite-sdk-js/commit/28ed890ebf15da151e05cf0c487bca4b91b8ea96))
+
+
+
+
+
+# [5.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.3.1...@cognite/sdk@5.0.0) (2021-07-15)
+
+
+### Features
+
+* **core:** add oidc auth code flow [release] ([#587](https://github.com/cognitedata/cognite-sdk-js/issues/587)) ([0cc44aa](https://github.com/cognitedata/cognite-sdk-js/commit/0cc44aa82b7d7461e8629fe2e712f743bf6c7138))
+
+
+### BREAKING CHANGES
+
+* **core:** stop silencing errors from aad
+
+* **core:** change loginWithOAuth API signature
+
+
+
 ## [4.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.3.0...@cognite/sdk@4.3.1) (2021-07-14)
 
 **Note:** Version bump only for package @cognite/sdk
