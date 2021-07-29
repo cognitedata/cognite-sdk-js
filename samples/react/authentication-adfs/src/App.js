@@ -58,13 +58,15 @@ function App() {
   useEffect(() => {
     const login = async (client) => {
       const result = await client.loginWithOAuth({
-        authority,
-        requestParams: {
-          cluster,
-          clientId,
-        },
-        onNoProjectAvailable
-      });
+        type: 'ADFS_OAUTH',
+        options: {
+          authority,
+          requestParams: {
+            cluster,
+            clientId,
+          },
+          onNoProjectAvailable
+        }});
 
       client.setProject(project);
 
