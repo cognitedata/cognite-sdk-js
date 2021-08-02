@@ -143,6 +143,7 @@ describe('Documents unit test', () => {
   test('document preview pdf', async () => {
     nock(mockBaseUrl)
       .get(new RegExp('/documents/preview'))
+      .matchHeader('Accept', 'application/pdf')
       .query({ documentId: 1 })
       .once()
       .reply(200);
@@ -152,6 +153,7 @@ describe('Documents unit test', () => {
   test('document preview image', async () => {
     nock(mockBaseUrl)
       .get(new RegExp('/documents/preview'))
+      .matchHeader('Accept', 'image/png')
       .query({ documentId: 1, page: 0 })
       .once()
       .reply(200);

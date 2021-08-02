@@ -2,7 +2,6 @@
 
 import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupLoggedInClient } from '../testUtils';
-import exp from 'constants';
 
 expect.extend({
   toEqual(received, expected) {
@@ -26,7 +25,7 @@ describe('documents api', () => {
   });
   test('list documents, limit to 1', async () => {
     const response = await client.documents.list({ limit: 1 });
-    expect(response.items.length).toEqual(1);
+    expect(response.items).toHaveLength(1);
   });
   test('list documents, by size', async () => {
     const response = await client.documents.list({
@@ -37,7 +36,7 @@ describe('documents api', () => {
       },
       limit: 1,
     });
-    expect(response.items.length).toEqual(1);
+    expect(response.items).toHaveLength(1);
   });
 
   test('fetch image preview', async () => {
@@ -66,10 +65,10 @@ describe('documents api', () => {
 
     const resp = await client.documents.preview.documentAsPdf(document.id);
 
-    expect(resp.byteLength).toBeGreaterThan(5); // %PDF-
-    const frontSlice = resp.slice(0, 4);
     const pdfPrefix = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
-    expect(frontSlice.toString().length).toEqual(pdfPrefix.toString().length);
+    expect(resp.byteLength).toBeGreaterThan(pdfPrefix.length);
+    const frontSlice = resp.slice(0, pdfPrefix.length);
+    expect(frontSlice.byteLength).toStrictEqual(pdfPrefix.length);
     const match = Buffer.from(frontSlice, 0).equals(Buffer.from(pdfPrefix, 0));
     expect(match).toBe(true);
   });
