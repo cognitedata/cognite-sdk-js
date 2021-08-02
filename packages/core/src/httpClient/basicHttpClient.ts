@@ -179,10 +179,11 @@ export class BasicHttpClient {
     request: HttpRequest
   ): Promise<HttpResponse<ResponseType>> {
     const url = this.constructUrl(request.path, request.params);
-    const headers: HttpHeaders = {
-      Accept: 'application/json',
-      ...request.headers,
-    };
+    const headers = headersWithDefaultField(
+      request.headers,
+      'Accept',
+      'application/json'
+    );
     let body = request.data;
     if (isJson(body)) {
       body = BasicHttpClient.transformRequestBody(body);
@@ -222,6 +223,27 @@ export class BasicHttpClient {
     }
     return BasicHttpClient.resolveUrl(this.baseUrl, url);
   }
+}
+
+function lowercaseHeaders(headers: HttpHeaders): HttpHeaders {
+  const lowercaseHeaders: HttpHeaders = {};
+  for (const key in headers) {
+    lowercaseHeaders[key.toLowerCase()] = headers[key];
+  }
+  return lowercaseHeaders;
+}
+
+export function headersWithDefaultField(
+  headers: HttpHeaders = {},
+  fieldName: string,
+  fieldValue: string
+): HttpHeaders {
+  const lowerCaseFieldName = fieldName.toLowerCase();
+  const updatedHeaders = { ...lowercaseHeaders(headers) };
+  if (!(lowerCaseFieldName in updatedHeaders)) {
+    updatedHeaders[lowerCaseFieldName] = fieldValue;
+  }
+  return updatedHeaders;
 }
 
 export interface HttpRequest extends HttpRequestOptions {

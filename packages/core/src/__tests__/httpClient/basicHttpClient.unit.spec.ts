@@ -1,0 +1,58 @@
+// Copyright 2020 Cognite AS
+
+// @ts-ignore
+import {
+  headersWithDefaultField,
+  HttpHeaders,
+} from '../../httpClient/basicHttpClient';
+
+function lengthOfHttpHeaders(headers?: HttpHeaders): number {
+  let counter = 0;
+  for (const _ in headers) {
+    counter += 1;
+  }
+  return counter;
+}
+
+describe('basicHttpClient', () => {
+  describe('headersWithDefaultField', () => {
+    test('add missing', () => {
+      const emptyHeaders: HttpHeaders = {};
+      const alteredEmptyHeaders = headersWithDefaultField(
+        emptyHeaders,
+        'Accept',
+        'application/json'
+      );
+      expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
+      expect('accept' in alteredEmptyHeaders).toBeTruthy();
+    });
+    test('not overwrite existing', () => {
+      const mediaType = 'image/png';
+      const emptyHeaders: HttpHeaders = {
+        Accept: mediaType,
+      };
+      const alteredEmptyHeaders = headersWithDefaultField(
+        emptyHeaders,
+        'Accept',
+        'application/json'
+      );
+      expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
+      expect('accept' in alteredEmptyHeaders).toBeTruthy();
+      expect(alteredEmptyHeaders['accept']).toEqual(mediaType);
+    });
+    test('to be case insensitive', () => {
+      const mediaType = 'image/png';
+      const emptyHeaders: HttpHeaders = {
+        accept: mediaType,
+      };
+      const alteredEmptyHeaders = headersWithDefaultField(
+        emptyHeaders,
+        'Accept',
+        'application/json'
+      );
+      expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
+      expect('accept' in alteredEmptyHeaders).toBeTruthy();
+      expect(alteredEmptyHeaders['accept']).toEqual(mediaType);
+    });
+  });
+});
