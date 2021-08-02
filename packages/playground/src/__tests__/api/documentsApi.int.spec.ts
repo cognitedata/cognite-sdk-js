@@ -32,7 +32,7 @@ describe('documents api', () => {
     expect(response.items).toHaveLength(1);
   });
 
-  describe('documents preview', () => {
+  describe('document preview', () => {
     let documents: ListResponse<Document[]>;
 
     beforeAll(async () => {
