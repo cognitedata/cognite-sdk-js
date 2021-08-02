@@ -2,6 +2,8 @@
 
 import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupLoggedInClient } from '../testUtils';
+import { ListResponse } from '@cognite/sdk-core';
+import { Document } from '@cognite/sdk-playground';
 
 describe('documents api', () => {
   let client: CogniteClientPlayground;
@@ -30,51 +32,50 @@ describe('documents api', () => {
     expect(response.items).toHaveLength(1);
   });
 
-  test('fetch image preview', async () => {
-    const mediaTypePDF = 'application/pdf';
-    const documents = await client.documents.list({
-      limit: 1,
-      filter: { mimeType: { equals: mediaTypePDF } },
+  describe('documents preview', () => {
+    let documents: ListResponse<Document[]>;
+
+    beforeAll(async () => {
+      const mediaTypePDF = 'application/pdf';
+      documents = await client.documents.list({
+        limit: 1,
+        filter: { mimeType: { equals: mediaTypePDF } },
+      });
     });
-    if (documents.items.length == 0) {
-      return;
-    }
-    const document = documents.items[0];
 
-    await client.documents.preview.documentAsImage(document.id, 0);
-  });
-  test('fetch pdf preview', async () => {
-    const mediaTypePDF = 'application/pdf';
-    const documents = await client.documents.list({
-      limit: 1,
-      filter: { mimeType: { equals: mediaTypePDF } },
+    test('fetch image preview', async () => {
+      if (documents.items.length == 0) {
+        return;
+      }
+      const document = documents.items[0];
+
+      await client.documents.preview.documentAsImage(document.id, 0);
     });
-    if (documents.items.length == 0) {
-      return;
-    }
-    const document = documents.items[0];
+    test('fetch pdf preview', async () => {
+      if (documents.items.length == 0) {
+        return;
+      }
+      const document = documents.items[0];
 
-    const resp = await client.documents.preview.documentAsPdf(document.id);
+      const resp = await client.documents.preview.documentAsPdf(document.id);
 
-    const pdfPrefix = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
-    expect(resp.byteLength).toBeGreaterThan(pdfPrefix.length);
-    const frontSlice = resp.slice(0, pdfPrefix.length);
-    expect(frontSlice.byteLength).toStrictEqual(pdfPrefix.length);
-    const match = Buffer.from(frontSlice, 0).equals(Buffer.from(pdfPrefix, 0));
-    expect(match).toBe(true);
-  });
-  test('fetch temporary link', async () => {
-    const mediaTypePDF = 'application/pdf';
-    const documents = await client.documents.list({
-      limit: 1,
-      filter: { mimeType: { equals: mediaTypePDF } },
+      const pdfPrefix = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
+      expect(resp.byteLength).toBeGreaterThan(pdfPrefix.length);
+      const frontSlice = resp.slice(0, pdfPrefix.length);
+      expect(frontSlice.byteLength).toStrictEqual(pdfPrefix.length);
+      const match = Buffer.from(frontSlice, 0).equals(
+        Buffer.from(pdfPrefix, 0)
+      );
+      expect(match).toBe(true);
     });
-    if (documents.items.length == 0) {
-      return;
-    }
-    const document = documents.items[0];
+    test('fetch temporary link', async () => {
+      if (documents.items.length == 0) {
+        return;
+      }
+      const document = documents.items[0];
 
-    const resp = await client.documents.preview.temporaryLink(document.id);
-    expect(resp.temporaryLink).toBeDefined();
+      const resp = await client.documents.preview.temporaryLink(document.id);
+      expect(resp.temporaryLink).toBeDefined();
+    });
   });
 });
