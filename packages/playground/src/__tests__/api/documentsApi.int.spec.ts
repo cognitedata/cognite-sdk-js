@@ -3,15 +3,6 @@
 import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupLoggedInClient } from '../testUtils';
 
-expect.extend({
-  toEqual(received, expected) {
-    return {
-      message: () => `Got ${received}, wanted ${expected}`,
-      pass: false,
-    };
-  },
-});
-
 describe('documents api', () => {
   let client: CogniteClientPlayground;
 
