@@ -39,7 +39,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   public list = (
     scope?: DocumentsRequestFilter
   ): CursorAndAsyncIterator<Document> => {
-    return super.listEndpoint(this.callListEndpointWithPost, scope);
+    return this.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
   public get preview() {
