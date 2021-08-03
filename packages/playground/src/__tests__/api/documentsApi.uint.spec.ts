@@ -180,7 +180,7 @@ describe('Documents unit test', () => {
       .reply(200, { items: [] });
     await client.documents.feedback.reject([{ id: 1 }]);
   });
-  
+
   test('document preview uri', async () => {
     const base = (path: string): string => {
       return `/api/playground/projects/${project}/documents${path}`;

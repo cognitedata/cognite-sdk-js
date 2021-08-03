@@ -30,7 +30,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
     const [baseUrl, httpClient, map] = args;
     this.previewAPI = new PreviewAPI(baseUrl + '/preview', httpClient, map);
-    this.feedbackAPI = new PreviewAPI(baseUrl + '/feedback', httpClient, map);
+    this.feedbackAPI = new FeedbackAPI(baseUrl + '/feedback', httpClient, map);
   }
 
   public search = (
