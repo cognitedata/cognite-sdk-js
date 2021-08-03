@@ -191,4 +191,22 @@ describe('BasicHttpClient', () => {
       await customClient.get('/abc');
     });
   });
+
+  describe('resolveUrl', () => {
+    test('should remove path trailing slashes', async () => {
+      // @ts-ignore
+      const path = BasicHttpClient.resolveUrl('', '/test///');
+      expect(path).toEqual('/test');
+    });
+    test('should add uri slash prefix', async () => {
+      // @ts-ignore
+      const path = BasicHttpClient.resolveUrl('', 'test');
+      expect(path).toEqual('/test');
+    });
+    test('should do nothing with valid uri', async () => {
+      // @ts-ignore
+      const path = BasicHttpClient.resolveUrl('', '/test');
+      expect(path).toEqual('/test');
+    });
+  });
 });
