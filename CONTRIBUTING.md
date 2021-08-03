@@ -67,7 +67,8 @@ Documentation is built and deployed, and code snippets
 are exported to the service contract repo as a pull request.
 
 Updating and uploading npm packages only happens if the HEAD commit of the main branch
-contains `[release]` in its description or the PR title / commit message starts with `feat` or `fix`. When CI/CD sees this, it will use lerna to update
+contains `[release]` in its description or the PR title starts with `feat` or `fix`. 
+When CI/CD sees this, it will use lerna to update
 package versions of changed packages based on commit messages, and add the
 changes to the changelogs. The changes are comitted to the main branch
 with the new versions as git tags, and the new package versions are uploaded to npm.
