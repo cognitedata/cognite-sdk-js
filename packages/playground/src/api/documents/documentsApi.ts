@@ -7,6 +7,7 @@ import {
   ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
+import { PreviewAPI } from './previewApi';
 
 import {
   Document,
@@ -22,10 +23,14 @@ export interface DocumentsAggregatesResponse<T> extends ItemsWrapper<T> {
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
   private readonly feedbackAPI: FeedbackAPI;
+  private readonly previewAPI: PreviewAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
-    this.feedbackAPI = new FeedbackAPI(args[0] + '/feedback', args[1], args[2]);
+
+    const [baseUrl, httpClient, map] = args;
+    this.previewAPI = new PreviewAPI(baseUrl + '/preview', httpClient, map);
+    this.feedbackAPI = new PreviewAPI(baseUrl + '/feedback', httpClient, map);
   }
 
   public search = (
@@ -37,11 +42,15 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   public list = (
     scope?: DocumentsRequestFilter
   ): CursorAndAsyncIterator<Document> => {
-    return super.listEndpoint(this.callListEndpointWithPost, scope);
+    return this.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
   public get feedback() {
     return this.feedbackAPI;
+  }
+
+  public get preview() {
+    return this.previewAPI;
   }
 
   private async searchDocuments<ResponseType>(

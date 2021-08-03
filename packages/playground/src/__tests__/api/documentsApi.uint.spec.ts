@@ -3,7 +3,7 @@
 import nock from 'nock';
 import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupMockableClient } from '../testUtils';
-import { mockBaseUrl } from '@cognite/sdk-core/src/testUtils';
+import { mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
 
 describe('Documents unit test', () => {
   let client: CogniteClientPlayground;
@@ -179,5 +179,56 @@ describe('Documents unit test', () => {
       .once()
       .reply(200, { items: [] });
     await client.documents.feedback.reject([{ id: 1 }]);
+  });
+  
+  test('document preview uri', async () => {
+    const base = (path: string): string => {
+      return `/api/playground/projects/${project}/documents${path}`;
+    };
+
+    const preview = client.documents.preview;
+    expect(preview.buildPreviewURI(1, 'image/png')).toEqual(
+      base('/preview/?documentId=1&page=0')
+    );
+    expect(preview.buildPreviewURI(4, 'application/pdf')).toEqual(
+      base('/preview/?documentId=4')
+    );
+    expect(preview.buildPreviewURI(4, 'image/png')).toEqual(
+      base('/preview/?documentId=4&page=0')
+    );
+    expect(preview.buildPreviewURI(4, 'image/png', 2)).toEqual(
+      base('/preview/?documentId=4&page=2')
+    );
+  });
+
+  test('document preview pdf', async () => {
+    nock(mockBaseUrl)
+      .get(new RegExp('/documents/preview'))
+      .matchHeader('Accept', 'application/pdf')
+      .query({ documentId: 1 })
+      .once()
+      .reply(200);
+    await client.documents.preview.documentAsPdf(1);
+  });
+
+  test('document preview image', async () => {
+    nock(mockBaseUrl)
+      .get(new RegExp('/documents/preview'))
+      .matchHeader('Accept', 'image/png')
+      .query({ documentId: 1, page: 0 })
+      .once()
+      .reply(200);
+    await client.documents.preview.documentAsImage(1, 0);
+  });
+
+  test('document preview temporary link', async () => {
+    const link = 'just-testing';
+    nock(mockBaseUrl)
+      .get(new RegExp('/documents/preview/temporaryLink'))
+      .query({ documentId: 1 })
+      .once()
+      .reply(200, { temporaryLink: link });
+    const resp = await client.documents.preview.temporaryLink(1);
+    expect(resp.temporaryLink).toEqual(link);
   });
 });
