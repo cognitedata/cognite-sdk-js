@@ -65,6 +65,13 @@ export interface ApiKeyLoginOptions extends Project {
   apiKey: string;
 }
 
+export interface AccessTokenLoginOptions extends Project {
+  /**
+   * A Cognite access token
+   */
+  accessToken: string;
+}
+
 export type AAD_OAUTH = {
   type: 'AAD_OAUTH';
   options: OAuthLoginForAADOptions;
@@ -255,6 +262,50 @@ export default class BaseCogniteClient {
     }
     this.httpClient.setDefaultHeader(API_KEY_HEADER, apiKey);
 
+    this.setProject(project);
+    this.hasBeenLoggedIn = true;
+  };
+
+  /**
+   * Login client with access token. Generally useful when re-using already authenticated sessions.
+   *
+   * @param options Login options
+   *
+   * ```js
+   * import { CogniteClient } from '@cognite/sdk';
+   *
+   * const client = new CogniteClient({ appId: '[YOUR APP NAME]' });
+   * client.loginWithAccessToken({
+   *   accessToken: '[ACCESS TOKEN]',
+   *   project: '[PROJECT]',
+   * });
+   * // after login you can do calls with the client
+   * const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
+   * ```
+   */
+  public loginWithAccessToken = (options: AccessTokenLoginOptions) => {
+    if (this.hasBeenLoggedIn) {
+      throwReLogginError();
+    }
+
+    if (isBrowser() && !isUsingSSL()) {
+      console.warn(
+        'You should use SSL (https) when you login with Access Token since CDF only allows redirecting back to an HTTPS site'
+      );
+    }
+
+    if (!isObject(options)) {
+      throw Error('`loginWithAccessToken` is missing parameter `options`');
+    }
+    if (!options.accessToken) {
+      throw Error('`loginWithAccessToken` is missing parameter `accessToken`');
+    }
+    if (!options.project) {
+      throw Error('`loginWithAccessToken` is missing parameter `project`');
+    }
+
+    const { project, accessToken } = options;
+    this.httpClient.setBearerToken(accessToken);
     this.setProject(project);
     this.hasBeenLoggedIn = true;
   };
