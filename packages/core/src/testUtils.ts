@@ -5,6 +5,7 @@ import { BASE_URL } from './constants';
 import { sleepPromise } from './utils';
 
 export const apiKey = 'TEST_KEY';
+export const accessToken = 'TEST_ACCESS_TOKEN';
 export const project = 'TEST_PROJECT';
 export const projectId = 123;
 export const user = 'user@example.com';

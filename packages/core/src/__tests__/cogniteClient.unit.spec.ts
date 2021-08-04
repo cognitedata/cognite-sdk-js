@@ -12,7 +12,13 @@ import {
 import * as LoginUtils from '../loginUtils';
 import { ADFS } from '../authFlows/adfs';
 import { bearerString, sleepPromise } from '../utils';
-import { apiKey, authTokens, loggedInResponse, project } from '../testUtils';
+import {
+  accessToken,
+  apiKey,
+  authTokens,
+  loggedInResponse,
+  project,
+} from '../testUtils';
 
 const initAuth = jest.fn();
 const login = jest.fn();
@@ -44,6 +50,15 @@ function setupMockableClient(base?: BaseCogniteClient) {
   client.loginWithApiKey({
     project,
     apiKey,
+  });
+  return client;
+}
+
+function setupMockableAccessTokenClient(base?: BaseCogniteClient) {
+  const client = base || setupClient(mockBaseUrl);
+  client.loginWithAccessToken({
+    project,
+    accessToken,
   });
   return client;
 }
@@ -137,6 +152,76 @@ describe('CogniteClient', () => {
       client.loginWithApiKey({
         project,
         apiKey,
+      });
+      expect(client.project).toBe(project);
+    });
+    test('fails to return oauth flow type', () => {
+      const client = setupClient();
+      client.loginWithApiKey({
+        project,
+        apiKey,
+      });
+      expect(client.getOAuthFlowType()).toEqual(undefined);
+    });
+  });
+
+  describe('loginWithAccessToken', () => {
+    test('missing parameter', async () => {
+      const client = setupClient();
+      expect(
+        // @ts-ignore
+        () => client.loginWithAccessToken()
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"\`loginWithAccessToken\` is missing parameter \`options\`"`
+      );
+    });
+
+    test('missing project', async () => {
+      const client = setupClient();
+      expect(
+        // @ts-ignore
+        () => client.loginWithAccessToken({})
+      ).toThrowErrorMatchingInlineSnapshot(
+        '`loginWithAccessToken` is missing parameter `project`'
+      );
+    });
+
+    test('missing access token', async () => {
+      const client = setupClient();
+      expect(
+        // @ts-ignore
+        () => client.loginWithAccessToken({ project })
+      ).toThrowErrorMatchingInlineSnapshot(
+        '`loginWithAccessToken` is missing parameter `accessToken`'
+      );
+    });
+
+    test('create client with invalid access token/project', async () => {
+      const client = setupClient();
+      client.loginWithAccessToken({
+        project,
+        accessToken,
+      });
+    });
+
+    test('set correct access token', async () => {
+      const client = setupMockableAccessTokenClient();
+      nock(mockBaseUrl)
+        .get('/test')
+        .reply(200, {});
+      await client.get('/test');
+      expect(client.getDefaultRequestHeaders()).toMatchObject({
+        [AUTHORIZATION_HEADER]: bearerString(accessToken),
+      });
+      // @ts-ignore
+      expect(client.hasBeenLoggedIn).toBeTruthy();
+    });
+
+    test('set correct project', async () => {
+      const client = setupClient();
+      client.loginWithAccessToken({
+        project,
+        accessToken,
       });
       expect(client.project).toBe(project);
     });
