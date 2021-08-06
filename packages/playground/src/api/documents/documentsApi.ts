@@ -12,7 +12,8 @@ import { PreviewAPI } from './previewApi';
 import {
   Document,
   DocumentsAggregate,
-  DocumentsRequestFilter, DocumentsSearchWrapper,
+  DocumentsRequestFilter,
+  DocumentsSearchWrapper,
   ExternalDocumentsSearch,
 } from '../../types';
 
@@ -33,7 +34,9 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   public search = (
     query: ExternalDocumentsSearch
   ): Promise<DocumentsAggregatesResponse<DocumentsSearchWrapper[]>> => {
-    return this.searchDocuments<DocumentsAggregatesResponse<DocumentsSearchWrapper[]>>(query);
+    return this.searchDocuments<
+      DocumentsAggregatesResponse<DocumentsSearchWrapper[]>
+    >(query);
   };
 
   public list = (
