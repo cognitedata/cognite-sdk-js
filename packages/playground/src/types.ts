@@ -14,7 +14,7 @@ import {
   FileName,
   FileMimeType,
   Metadata,
-  FileGeoLocation,
+  FileGeoLocation, ItemsWrapper,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -187,6 +187,10 @@ export interface DocumentsAggregate {
   name: string;
   groups: DocumentsAggregateGroup[];
   total: number;
+}
+
+export interface DocumentsAggregatesResponse<T> extends ItemsWrapper<T> {
+  aggregates?: DocumentsAggregate[];
 }
 
 export interface LabelDefinitionExternalId {
