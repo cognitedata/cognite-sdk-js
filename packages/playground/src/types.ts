@@ -113,6 +113,16 @@ export interface DocumentsSearch {
   highlight?: boolean;
 }
 
+export interface DocumentsSearchWrapper {
+  item: Document;
+  highlight?: Highlight;
+}
+
+export interface Highlight {
+  name?: string[];
+  content?: string[];
+}
+
 export interface DocumentsCountAggregate {
   name: string;
   aggregate: string;
