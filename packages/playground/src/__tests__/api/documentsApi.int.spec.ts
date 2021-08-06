@@ -3,7 +3,7 @@
 import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupLoggedInClient } from '../testUtils';
 import { ListResponse } from '@cognite/sdk-core';
-import { Document } from '@cognite/sdk-playground';
+import {Document} from '@cognite/sdk-playground';
 
 describe('documents api', () => {
   let client: CogniteClientPlayground;
@@ -30,6 +30,18 @@ describe('documents api', () => {
       limit: 1,
     });
     expect(response.items).toHaveLength(1);
+  });
+  test('list documents, limit to 2', async () => {
+    const response = await client.documents.list({ limit: 2 });
+    expect(response.items).toHaveLength(2);
+  });
+  test('search documents, limit to 1', async () => {
+    const response = await client.documents.search({
+      limit: 1,
+    });
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0].item).toBeDefined();
+    expect(response.items[0].item.id).toBeDefined();
   });
 
   describe('document preview', () => {
