@@ -113,6 +113,16 @@ export interface DocumentsSearch {
   highlight?: boolean;
 }
 
+export interface DocumentsSearchWrapper {
+  item: Document;
+  highlight?: Highlight;
+}
+
+export interface Highlight {
+  name?: string[];
+  content?: string[];
+}
+
 export interface DocumentsCountAggregate {
   name: string;
   aggregate: string;
@@ -289,4 +299,8 @@ export interface DocumentFeedback {
   createdAt: string;
   reviewedAt?: string | null;
   status: FeedbackStatus;
+}
+
+export interface DocumentPreviewTemporaryLink {
+  temporaryLink: string;
 }
