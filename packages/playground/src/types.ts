@@ -14,7 +14,8 @@ import {
   FileName,
   FileMimeType,
   Metadata,
-  FileGeoLocation, ItemsWrapper,
+  FileGeoLocation,
+  ItemsWrapper,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';

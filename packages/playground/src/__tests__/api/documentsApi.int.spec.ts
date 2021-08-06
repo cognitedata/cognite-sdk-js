@@ -3,7 +3,7 @@
 import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupLoggedInClient } from '../testUtils';
 import { ListResponse } from '@cognite/sdk-core';
-import {Document} from '@cognite/sdk-playground';
+import { Document } from '@cognite/sdk-playground';
 
 describe('documents api', () => {
   let client: CogniteClientPlayground;
