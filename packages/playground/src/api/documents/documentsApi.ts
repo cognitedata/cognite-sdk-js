@@ -4,23 +4,18 @@ import {
   BaseResourceAPI,
   CDFHttpClient,
   CursorAndAsyncIterator,
-  ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
 import { PreviewAPI } from './previewApi';
 
 import {
   Document,
-  DocumentsAggregate,
+  DocumentsAggregatesResponse,
   DocumentsRequestFilter,
   DocumentsSearchWrapper,
   ExternalDocumentsSearch,
 } from '../../types';
 import { FeedbackAPI } from './feedbackApi';
-
-export interface DocumentsAggregatesResponse<T> extends ItemsWrapper<T> {
-  aggregates?: DocumentsAggregate[];
-}
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
   private readonly feedbackAPI: FeedbackAPI;
