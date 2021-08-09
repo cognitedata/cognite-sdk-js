@@ -1,8 +1,6 @@
 // Copyright 2020 Cognite AS
 
 /** @hidden */
-export const API_VERSION: string = 'v1';
-/** @hidden */
 export const DEFAULT_CLUSTER = 'api';
 /** @hidden */
 export const DEFAULT_DOMAIN = 'cognitedata.com';
@@ -19,3 +17,6 @@ export const X_CDF_APP_HEADER = 'x-cdp-app';
 export const X_CDF_SDK_HEADER = 'x-cdp-sdk';
 /** @hidden */
 export const X_REQUEST_ID = 'X-Request-Id';
+
+/** @hidden */
+export const LOCAL_STORAGE_PREFIX = '@cognite/sdk:';

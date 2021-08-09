@@ -1005,6 +1005,7 @@ export interface ExternalFileInfo {
   name: FileName;
   source?: string;
   mimeType?: FileMimeType;
+  directory?: string;
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
   dataSetId?: CogniteInternalId;
@@ -1088,6 +1089,7 @@ export interface FileFilterProps {
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
   assetSubtreeIds?: IdEither[];
+  directoryPrefix?: string;
   source?: string;
   createdTime?: DateRange;
   lastUpdatedTime?: DateRange;
@@ -1441,6 +1443,22 @@ export interface List3DNodesQuery extends FilterQuery {
   sortByNodeId?: boolean;
 }
 
+export interface Filter3DNodesQuery extends FilterQuery {
+  /**
+   * List filter
+   */
+  filter: {
+    /**
+     * Property filters. Nodes satisfy the filter if, for each property in the nested map(s), they have a value corresponding to that property that is contained within the list associated with that property in the map.
+     */
+    properties: { [key: string]: { [key: string]: string[] } };
+  };
+  /**
+   * Partition specifier of the form "n/m". It will return the n'th (1-indexed) part of the result divided into m parts.
+   */
+  partition?: Partition;
+}
+
 export interface ListGroups {
   /**
    * Whether to get all groups, only available with the groups:list acl.
@@ -1656,6 +1674,7 @@ export interface ProjectResponse {
   urlName: UrlName;
   defaultGroupId?: DefaultGroupId;
   authentication?: OutputProjectAuthentication;
+  oidcConfiguration?: OidcConfiguration;
 }
 
 export interface ProjectUpdate {
@@ -1984,6 +2003,27 @@ export interface RevisionCameraProperties {
    * Initial camera position.
    */
   position?: Tuple3<number>;
+}
+
+export type RevisionMetadata = { [key: string]: string };
+
+export type RevisionMetadataUpdate =
+  | RevisionMetadataUpdateSet
+  | RevisionMetadataUpdateAddRemove;
+
+export interface RevisionMetadataUpdateSet {
+  set: RevisionMetadata;
+}
+
+export interface RevisionMetadataUpdateAddRemove {
+  /**
+   * Key/value pairs to add
+   */
+  add?: RevisionMetadata;
+  /**
+   * Keys to remove
+   */
+  remove?: string[];
 }
 
 export interface SecurityCategory {
@@ -2446,6 +2486,10 @@ export interface UpdateRevision3D {
      * Initial camera target.
      */
     camera?: SetField<RevisionCameraProperties>;
+    /**
+     * Revision metadata.
+     */
+    metadata?: RevisionMetadataUpdate;
   };
 }
 

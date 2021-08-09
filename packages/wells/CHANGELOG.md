@@ -3,6 +3,96 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@2.0.3...@cognite/sdk-wells@2.0.4) (2021-07-21)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [2.0.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@2.0.2...@cognite/sdk-wells@2.0.3) (2021-07-21)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [2.0.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@2.0.1...@cognite/sdk-wells@2.0.2) (2021-07-21)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [2.0.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@2.0.0...@cognite/sdk-wells@2.0.1) (2021-07-20)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+# [2.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.10.4...@cognite/sdk-wells@2.0.0) (2021-07-15)
+
+
+### Features
+
+* **core:** add oidc auth code flow [release] ([#587](https://github.com/cognitedata/cognite-sdk-js/issues/587)) ([0cc44aa](https://github.com/cognitedata/cognite-sdk-js/commit/0cc44aa82b7d7461e8629fe2e712f743bf6c7138))
+
+
+### BREAKING CHANGES
+
+* **core:** stop silencing errors from aad
+
+* **core:** change loginWithOAuth API signature
+
+
+## [1.10.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.10.3...@cognite/sdk-wells@1.10.4) (2021-07-14)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [1.10.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.10.2...@cognite/sdk-wells@1.10.3) (2021-07-08)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [1.10.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.10.1...@cognite/sdk-wells@1.10.2) (2021-06-30)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+## [1.10.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.10.0...@cognite/sdk-wells@1.10.1) (2021-06-30)
+
+**Note:** Version bump only for package @cognite/sdk-wells
+
+
+
+
+
+# [1.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.8.1...@cognite/sdk-wells@1.10.0) (2021-06-30)
+
+
+### Features
+
+* **wells:** filter trajectory max md and inclination [release] ([#582](https://github.com/cognitedata/cognite-sdk-js/issues/582)) ([c9186a7](https://github.com/cognitedata/cognite-sdk-js/commit/c9186a782e9d9108d5b77b33bb5ed5af8cab86f5))
+
+
+
+
+
 ## [1.8.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-wells@1.8.0...@cognite/sdk-wells@1.8.1) (2021-06-08)
 
 
