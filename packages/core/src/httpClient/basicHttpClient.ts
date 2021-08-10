@@ -68,7 +68,7 @@ export class BasicHttpClient {
   private static resolveUrl(baseUrl: string, path: string) {
     const trimmedBaseUrl = baseUrl.replace(/\/$/, '');
     const pathWithPrefix = (path[0] === '/' ? '' : '/') + path;
-    return trimmedBaseUrl + pathWithPrefix;
+    return trimmedBaseUrl + pathWithPrefix.replace(/\/+$/, '');
   }
 
   private defaultHeaders: HttpHeaders = {};

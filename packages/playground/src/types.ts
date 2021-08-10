@@ -15,6 +15,7 @@ import {
   FileMimeType,
   Metadata,
   FileGeoLocation,
+  ItemsWrapper,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -113,6 +114,16 @@ export interface DocumentsSearch {
   highlight?: boolean;
 }
 
+export interface DocumentsSearchWrapper {
+  item: Document;
+  highlight?: Highlight;
+}
+
+export interface Highlight {
+  name?: string[];
+  content?: string[];
+}
+
 export interface DocumentsCountAggregate {
   name: string;
   aggregate: string;
@@ -177,6 +188,10 @@ export interface DocumentsAggregate {
   name: string;
   groups: DocumentsAggregateGroup[];
   total: number;
+}
+
+export interface DocumentsAggregatesResponse<T> extends ItemsWrapper<T> {
+  aggregates?: DocumentsAggregate[];
 }
 
 export interface LabelDefinitionExternalId {
@@ -289,4 +304,8 @@ export interface DocumentFeedback {
   createdAt: string;
   reviewedAt?: string | null;
   status: FeedbackStatus;
+}
+
+export interface DocumentPreviewTemporaryLink {
+  temporaryLink: string;
 }
