@@ -168,7 +168,7 @@ describe('Documents unit test', () => {
       })
       .once()
       .reply(200, { items: [] });
-    await client.documents.feedback.accept([{ id: 1 }, { id: 3 }]);
+    await client.documents.feedback.accept([1, 3]);
   });
 
   test('reject feedbacks', async () => {
@@ -178,7 +178,7 @@ describe('Documents unit test', () => {
       })
       .once()
       .reply(200, { items: [] });
-    await client.documents.feedback.reject([{ id: 1 }]);
+    await client.documents.feedback.reject([1]);
   });
 
   test('document preview uri', async () => {
