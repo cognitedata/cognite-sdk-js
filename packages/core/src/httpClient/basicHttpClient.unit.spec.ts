@@ -203,6 +203,11 @@ describe('BasicHttpClient', () => {
       const path = BasicHttpClient.resolveUrl('', 'test');
       expect(path).toEqual('/test');
     });
+    test('should support multiple segments', async () => {
+      // @ts-ignore
+      const path = BasicHttpClient.resolveUrl('', 'test/te/st///');
+      expect(path).toEqual('/test/te/st');
+    });
     test('should do nothing with valid uri', async () => {
       // @ts-ignore
       const path = BasicHttpClient.resolveUrl('', '/test');
