@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.2.0...@cognite/sdk-core@3.2.1) (2021-08-10)
+
+
+### Bug Fixes
+
+* **core:** remove slash suffix from uris [release] ([#628](https://github.com/cognitedata/cognite-sdk-js/issues/628)) ([fe65d57](https://github.com/cognitedata/cognite-sdk-js/commit/fe65d57a4ce9f6fc37ce37ad2d295ef8006c603c))
+
+
+
+
+
 # [3.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.1.2...@cognite/sdk-core@3.2.0) (2021-07-21)
 
 
