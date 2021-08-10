@@ -120,6 +120,146 @@ describe('Documents unit test', () => {
     });
   });
 
+  test('create feedback on document', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/feedback'), {
+        items: [
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test-2',
+            },
+            action: 'ATTACH',
+          },
+        ],
+      })
+      .once()
+      .reply(200, {
+        items: [
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test-2',
+            },
+            action: 'ATTACH',
+            feedbackId: 2,
+            createdAt: '2021-08-10T17:54:27.932608',
+            status: 'CREATED',
+          },
+        ],
+      });
+    const response = await client.documents.feedback.create([
+      {
+        documentId: 1731129751740,
+        label: {
+          externalId: 'cognitesdk-js-documents-feedback-test-2',
+        },
+        action: 'ATTACH',
+      },
+    ]);
+    expect(response[0].status).toEqual('CREATED');
+  });
+
+  test('list feedback', async () => {
+    nock(mockBaseUrl)
+      .get(new RegExp('/documents/feedback'))
+      .query({ status: 'CREATED' })
+      .once()
+      .reply(200, {
+        items: [
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test',
+            },
+            action: 'ATTACH',
+            feedbackId: 1,
+            createdAt: '2021-08-10T17:54:27.932608',
+            reviewedAt: '2021-08-10T17:59:57.804811',
+            status: 'CREATED',
+          },
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test-2',
+            },
+            action: 'ATTACH',
+            feedbackId: 2,
+            createdAt: '2021-08-10T17:54:27.932608',
+            reviewedAt: '2021-08-10T17:59:57.804811',
+            status: 'ACCEPTED',
+          },
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test-3',
+            },
+            action: 'ATTACH',
+            feedbackId: 3,
+            createdAt: '2021-08-10T17:54:27.932608',
+            reviewedAt: '2021-08-10T17:59:57.804811',
+            status: 'REJECTED',
+          },
+        ],
+      });
+    await client.documents.feedback.list('CREATED');
+  });
+
+  test('aggregate feedbacks by field', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/feedback/aggregates'), {
+        field: 'action',
+      })
+      .once()
+      .reply(200, {});
+    await client.documents.feedback.aggregates('action');
+  });
+
+  test('accept feedbacks', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/feedback/accept'), {
+        items: [{ id: 1 }, { id: 3 }],
+      })
+      .once()
+      .reply(200, {
+        items: [
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test',
+            },
+            action: 'ATTACH',
+            feedbackId: 1,
+            createdAt: '2021-08-10T17:54:27.932608',
+            reviewedAt: '2021-08-10T17:59:57.804811',
+            status: 'ACCEPTED',
+          },
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test-2',
+            },
+            action: 'ATTACH',
+            feedbackId: 3,
+            createdAt: '2021-08-10T17:54:27.932608',
+            reviewedAt: '2021-08-10T17:59:57.804811',
+            status: 'ACCEPTED',
+          },
+        ],
+      });
+    await client.documents.feedback.accept([1, 3]);
+  });
+
+  test('reject feedbacks', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/feedback/reject'), {
+        items: [{ id: 1 }],
+      })
+      .once()
+      .reply(200, { items: [] });
+    await client.documents.feedback.reject([1]);
+  });
+
   test('document preview uri', async () => {
     const base = (path: string): string => {
       return `/api/playground/projects/${project}/documents${path}`;

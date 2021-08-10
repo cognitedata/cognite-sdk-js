@@ -15,8 +15,10 @@ import {
   DocumentsSearchWrapper,
   ExternalDocumentsSearch,
 } from '../../types';
+import { FeedbackAPI } from './feedbackApi';
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
+  private readonly feedbackAPI: FeedbackAPI;
   private readonly previewAPI: PreviewAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
@@ -24,6 +26,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
     const [baseUrl, httpClient, map] = args;
     this.previewAPI = new PreviewAPI(baseUrl + '/preview', httpClient, map);
+    this.feedbackAPI = new FeedbackAPI(baseUrl + '/feedback', httpClient, map);
   }
 
   public search = (
@@ -39,6 +42,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   ): CursorAndAsyncIterator<Document> => {
     return this.listEndpoint(this.callListEndpointWithPost, scope);
   };
+
+  public get feedback() {
+    return this.feedbackAPI;
+  }
 
   public get preview() {
     return this.previewAPI;
