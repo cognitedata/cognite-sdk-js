@@ -24,7 +24,7 @@ describe('basicHttpClient', () => {
         'application/json'
       );
       expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
-      expect('accept' in alteredEmptyHeaders).toBeTruthy();
+      expect('Accept' in alteredEmptyHeaders).toBeTruthy();
     });
     test('not overwrite existing', () => {
       const mediaType = 'image/png';
@@ -51,8 +51,8 @@ describe('basicHttpClient', () => {
         'application/json'
       );
       expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
-      expect('accept' in alteredEmptyHeaders).toBeTruthy();
-      expect(alteredEmptyHeaders['accept']).toEqual(mediaType);
+      expect('Accept' in alteredEmptyHeaders).toBeTruthy();
+      expect(alteredEmptyHeaders['Accept']).toEqual(mediaType);
     });
   });
 });

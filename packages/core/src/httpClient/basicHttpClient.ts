@@ -225,12 +225,12 @@ export class BasicHttpClient {
   }
 }
 
-function lowercaseHeaders(headers: HttpHeaders): HttpHeaders {
-  const lowercaseHeaders: HttpHeaders = {};
+function lowercaseHeadersKeys(headers: HttpHeaders): string[] {
+  const keys: string[] = [];
   for (const key in headers) {
-    lowercaseHeaders[key.toLowerCase()] = headers[key];
+    keys.push(key.toLowerCase());
   }
-  return lowercaseHeaders;
+  return keys;
 }
 
 export function headersWithDefaultField(
@@ -238,12 +238,10 @@ export function headersWithDefaultField(
   fieldName: string,
   fieldValue: string
 ): HttpHeaders {
-  const lowerCaseFieldName = fieldName.toLowerCase();
-  const updatedHeaders = { ...lowercaseHeaders(headers) };
-  if (!(lowerCaseFieldName in updatedHeaders)) {
-    updatedHeaders[lowerCaseFieldName] = fieldValue;
+  if (!(fieldName.toLowerCase() in lowercaseHeadersKeys(headers))) {
+    headers[fieldName] = fieldValue;
   }
-  return updatedHeaders;
+  return headers;
 }
 
 export interface HttpRequest extends HttpRequestOptions {
