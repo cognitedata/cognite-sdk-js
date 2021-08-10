@@ -3,7 +3,6 @@
 import {
   BaseResourceAPI,
   CursorAndAsyncIterator,
-  IdEither,
   ItemsWrapper,
 } from '@cognite/sdk-core';
 
@@ -13,6 +12,7 @@ import {
   DocumentFeedbackAggregateRequest,
   DocumentFeedbackAggregateResponse,
   DocumentFeedbackCreateItem,
+  FeedbackId,
   FeedbackQueryParameters,
   FeedbackStatus,
 } from '../../types';
@@ -32,25 +32,26 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   };
 
   public list = (
-    status: FeedbackStatus
+    status?: FeedbackStatus
   ): CursorAndAsyncIterator<DocumentFeedback> => {
     const parameter: FeedbackQueryParameters = { status: status };
     return this.listEndpoint(this.callListEndpointWithGet, parameter);
   };
 
-  public accept = (ids: IdEither[]) => {
+  public accept = (ids: number[]) => {
     return this.postAcceptRejectFeedback(ids, 'accept');
   };
 
-  public reject = (ids: IdEither[]) => {
+  public reject = (ids: number[]) => {
     return this.postAcceptRejectFeedback(ids, 'reject');
   };
 
   private async postAcceptRejectFeedback(
-    ids: IdEither[],
+    ids: number[],
     endpoint: acceptRejectEndpoint
   ) {
-    const content: ItemsWrapper<IdEither[]> = { items: ids };
+    const feedbackIds = ids.map(id => <FeedbackId>{ id: id });
+    const content: ItemsWrapper<FeedbackId[]> = { items: feedbackIds };
     const path = this.url(endpoint);
     const response = await this.post<ItemsWrapper<(DocumentFeedback)[]>>(path, {
       data: content,
