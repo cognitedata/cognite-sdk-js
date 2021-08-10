@@ -125,21 +125,39 @@ describe('Documents unit test', () => {
       .post(new RegExp('/documents/feedback'), {
         items: [
           {
-            documentId: 1,
-            label: { externalId: '2' },
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test-2',
+            },
             action: 'ATTACH',
           },
         ],
       })
       .once()
-      .reply(200, { items: [] });
-    await client.documents.feedback.create([
+      .reply(200, {
+        items: [
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test-2',
+            },
+            action: 'ATTACH',
+            feedbackId: 2,
+            createdAt: '2021-08-10T17:54:27.932608',
+            status: 'CREATED',
+          },
+        ],
+      });
+    const response = await client.documents.feedback.create([
       {
-        documentId: 1,
-        label: { externalId: '2' },
+        documentId: 1731129751740,
+        label: {
+          externalId: 'cognitesdk-js-documents-feedback-test-2',
+        },
         action: 'ATTACH',
       },
     ]);
+    expect(response[0].status).toEqual('CREATED');
   });
 
   test('list feedback', async () => {
@@ -147,7 +165,43 @@ describe('Documents unit test', () => {
       .get(new RegExp('/documents/feedback'))
       .query({ status: 'CREATED' })
       .once()
-      .reply(200, {});
+      .reply(200, {
+        items: [
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test',
+            },
+            action: 'ATTACH',
+            feedbackId: 1,
+            createdAt: '2021-08-10T17:54:27.932608',
+            reviewedAt: '2021-08-10T17:59:57.804811',
+            status: 'CREATED',
+          },
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test-2',
+            },
+            action: 'ATTACH',
+            feedbackId: 2,
+            createdAt: '2021-08-10T17:54:27.932608',
+            reviewedAt: '2021-08-10T17:59:57.804811',
+            status: 'ACCEPTED',
+          },
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test-3',
+            },
+            action: 'ATTACH',
+            feedbackId: 3,
+            createdAt: '2021-08-10T17:54:27.932608',
+            reviewedAt: '2021-08-10T17:59:57.804811',
+            status: 'REJECTED',
+          },
+        ],
+      });
     await client.documents.feedback.list('CREATED');
   });
 
@@ -167,7 +221,32 @@ describe('Documents unit test', () => {
         items: [{ id: 1 }, { id: 3 }],
       })
       .once()
-      .reply(200, { items: [] });
+      .reply(200, {
+        items: [
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test',
+            },
+            action: 'ATTACH',
+            feedbackId: 1,
+            createdAt: '2021-08-10T17:54:27.932608',
+            reviewedAt: '2021-08-10T17:59:57.804811',
+            status: 'ACCEPTED',
+          },
+          {
+            documentId: 1731129751740,
+            label: {
+              externalId: 'cognitesdk-js-documents-feedback-test-2',
+            },
+            action: 'ATTACH',
+            feedbackId: 3,
+            createdAt: '2021-08-10T17:54:27.932608',
+            reviewedAt: '2021-08-10T17:59:57.804811',
+            status: 'ACCEPTED',
+          },
+        ],
+      });
     await client.documents.feedback.accept([1, 3]);
   });
 
