@@ -51,8 +51,8 @@ describe('basicHttpClient', () => {
         'application/json'
       );
       expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
-      expect('Accept' in alteredEmptyHeaders).toBeTruthy();
-      expect(alteredEmptyHeaders['Accept']).toEqual(mediaType);
+      expect('accept' in alteredEmptyHeaders).toBeTruthy();
+      expect(alteredEmptyHeaders['accept']).toEqual(mediaType);
     });
   });
 });
