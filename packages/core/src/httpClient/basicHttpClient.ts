@@ -238,7 +238,9 @@ export function headersWithDefaultField(
   fieldName: string,
   fieldValue: string
 ): HttpHeaders {
-  if (!(fieldName.toLowerCase() in lowercaseHeadersKeys(headers))) {
+  const lowercaseHeaders = lowercaseHeadersKeys(headers);
+  const lowercaseKey = fieldName.toLowerCase();
+  if (!lowercaseHeaders.includes(lowercaseKey)) {
     headers[fieldName] = fieldValue;
   }
   return headers;

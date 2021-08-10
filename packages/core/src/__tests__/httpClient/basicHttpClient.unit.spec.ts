@@ -37,8 +37,8 @@ describe('basicHttpClient', () => {
         'application/json'
       );
       expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
-      expect('accept' in alteredEmptyHeaders).toBeTruthy();
-      expect(alteredEmptyHeaders['accept']).toEqual(mediaType);
+      expect('Accept' in alteredEmptyHeaders).toBeTruthy();
+      expect(alteredEmptyHeaders['Accept']).toEqual(mediaType);
     });
     test('to be case insensitive', () => {
       const mediaType = 'image/png';
