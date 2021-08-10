@@ -53,7 +53,7 @@ jobs:
         run: yarn build
 
       - name: Test/Codecov
-        run: yarn test:codecov --findRelatedTests
+        run: yarn test:codecov
 
       - name: Codecov
         uses: codecov/codecov-action@v1.0.11
