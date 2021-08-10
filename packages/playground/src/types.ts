@@ -13,7 +13,6 @@ import {
   FileName,
   FileMimeType,
   Metadata,
-  FileGeoLocation,
   ItemsWrapper,
 } from '@cognite/sdk';
 
