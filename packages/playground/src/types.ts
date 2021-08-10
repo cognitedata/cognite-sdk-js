@@ -8,7 +8,6 @@ import {
   GeoLocationGeometry,
   LabelFilter,
   PointCoordinates,
-  IdEither,
   Label,
   Range,
   FileName,
@@ -292,18 +291,22 @@ export type ReporterInfo = string;
 export type FeedbackStatus = 'CREATED' | 'ACCEPTED' | 'REJECTED' | 'STALE';
 
 export interface FeedbackQueryParameters extends FilterQuery {
-  status: FeedbackStatus;
+  status?: FeedbackStatus;
 }
 
 export interface DocumentFeedback {
   documentId: DocumentId;
   label: FeedbackLabel;
   action: FeedbackAction;
-  feedbackId: IdEither;
+  feedbackId: number;
   reporterInfo?: ReporterInfo;
   createdAt: string;
   reviewedAt?: string | null;
   status: FeedbackStatus;
+}
+
+export interface FeedbackId {
+  id: number;
 }
 
 export interface DocumentPreviewTemporaryLink {
