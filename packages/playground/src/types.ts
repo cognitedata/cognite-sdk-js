@@ -166,6 +166,9 @@ export interface DocumentSourceFile {
   size?: number;
 }
 
+export type DocumentsGeoLocationRootType =
+  | 'GeometryCollection'
+  | DocumentsGeoLocationType;
 export type DocumentsGeoLocationType =
   | 'Point'
   | 'MultiPolygon'
@@ -188,7 +191,7 @@ export interface GeoCoordinates {
 }
 
 export interface GeoLocation {
-  type: DocumentsGeoLocationType;
+  type: DocumentsGeoLocationRootType;
   coordinates?: GeoLocationCoordinates;
   geometries?: GeoCoordinates[];
 }

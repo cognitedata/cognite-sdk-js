@@ -49,7 +49,7 @@ describe('Documents unit test', () => {
               item: {
                 geoLocation: {
                   type: 'Point',
-                  coordinates: [2.324, 234.1],
+                  coordinates: [2.324, 23.1],
                 },
               },
             },
@@ -62,7 +62,7 @@ describe('Documents unit test', () => {
       // @ts-ignore
       expect(geoLocation.coordinates[0]).toEqual(2.324);
       // @ts-ignore
-      expect(geoLocation.coordinates[1]).toEqual(234.1);
+      expect(geoLocation.coordinates[1]).toEqual(23.1);
     });
 
     test('MultiPoint / LineString', async () => {
@@ -75,7 +75,7 @@ describe('Documents unit test', () => {
               item: {
                 geoLocation: {
                   type: 'MultiPoint',
-                  coordinates: [[2.324, 234.1], [2, 7]],
+                  coordinates: [[2.324, 23.1], [2, 7]],
                 },
               },
             },
@@ -86,7 +86,7 @@ describe('Documents unit test', () => {
       expect(geoLocation.type).toEqual('MultiPoint');
       expect(geoLocation.coordinates).toBeDefined();
       // @ts-ignore
-      expect(geoLocation.coordinates[0]).toEqual([2.324, 234.1]);
+      expect(geoLocation.coordinates[0]).toEqual([2.324, 23.1]);
       // @ts-ignore
       expect(geoLocation.coordinates[1]).toEqual([2, 7]);
     });
@@ -101,7 +101,7 @@ describe('Documents unit test', () => {
               item: {
                 geoLocation: {
                   type: 'MultiLineString',
-                  coordinates: [[[2.324, 234.1], [2, 7]], [[3, 4], [2, 1]]],
+                  coordinates: [[[2.324, 23.1], [2, 7]], [[3, 4], [2, 1]]],
                 },
               },
             },
@@ -112,9 +112,54 @@ describe('Documents unit test', () => {
       expect(geoLocation.type).toEqual('MultiLineString');
       expect(geoLocation.coordinates).toBeDefined();
       // @ts-ignore
-      expect(geoLocation.coordinates[0]).toEqual([[2.324, 234.1], [2, 7]]);
+      expect(geoLocation.coordinates[0]).toEqual([[2.324, 23.1], [2, 7]]);
       // @ts-ignore
       expect(geoLocation.coordinates[1]).toEqual([[3, 4], [2, 1]]);
+    });
+
+    describe('geometry collections', () => {
+      test('Point & LineString', async () => {
+        nock(mockBaseUrl)
+          .post(new RegExp('/documents/search'), {})
+          .once()
+          .reply(200, {
+            items: [
+              {
+                item: {
+                  geoLocation: {
+                    type: 'GeometryCollection',
+                    geometries: [
+                      {
+                        type: 'LineString',
+                        coordinates: [[2.324, 23.1], [2, 7]],
+                      },
+                      {
+                        type: 'Point',
+                        coordinates: [2.324, 23.1],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          });
+        const response = await client.documents.search({});
+        const geoLocation = response.items[0].item.geoLocation;
+        expect(geoLocation.type).toEqual('GeometryCollection');
+        expect(geoLocation.coordinates).toBeUndefined();
+        expect(geoLocation.geometries).toBeDefined();
+
+        // @ts-ignore
+        const first = geoLocation.geometries[0];
+        // @ts-ignore
+        const second = geoLocation.geometries[1];
+
+        expect(first.type).toEqual('LineString');
+        expect(first.coordinates).toEqual([[2.324, 23.1], [2, 7]]);
+
+        expect(second.type).toEqual('Point');
+        expect(second.coordinates).toEqual([2.324, 23.1]);
+      });
     });
   });
 
