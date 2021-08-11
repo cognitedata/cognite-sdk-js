@@ -32,26 +32,90 @@ describe('Documents unit test', () => {
         },
       })
       .once()
-      .reply(200, {
-        items: [
-          {
-            item: {
-              geoLocation: {
-                type: 'Point',
-                coordinates: [2.324, 234.1],
-              },
-            },
-          },
-        ],
-      });
-    const response = await client.documents.search({
+      .reply(200, {});
+    await client.documents.search({
       search: { query: 'test' },
     });
-    const geoLocation = response.items[0].item.geoLocation;
-    expect(geoLocation.type).toEqual('Point');
-    expect(geoLocation.coordinates).toBeDefined();
-    // @ts-ignore
-    expect(geoLocation.coordinates[0]).toEqual(2.324);
+  });
+
+  describe('geo location', () => {
+    test('point', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/search'), {})
+        .once()
+        .reply(200, {
+          items: [
+            {
+              item: {
+                geoLocation: {
+                  type: 'Point',
+                  coordinates: [2.324, 234.1],
+                },
+              },
+            },
+          ],
+        });
+      const response = await client.documents.search({});
+      const geoLocation = response.items[0].item.geoLocation;
+      expect(geoLocation.type).toEqual('Point');
+      expect(geoLocation.coordinates).toBeDefined();
+      // @ts-ignore
+      expect(geoLocation.coordinates[0]).toEqual(2.324);
+      // @ts-ignore
+      expect(geoLocation.coordinates[1]).toEqual(234.1);
+    });
+
+    test('MultiPoint / LineString', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/search'), {})
+        .once()
+        .reply(200, {
+          items: [
+            {
+              item: {
+                geoLocation: {
+                  type: 'MultiPoint',
+                  coordinates: [[2.324, 234.1], [2, 7]],
+                },
+              },
+            },
+          ],
+        });
+      const response = await client.documents.search({});
+      const geoLocation = response.items[0].item.geoLocation;
+      expect(geoLocation.type).toEqual('MultiPoint');
+      expect(geoLocation.coordinates).toBeDefined();
+      // @ts-ignore
+      expect(geoLocation.coordinates[0]).toEqual([2.324, 234.1]);
+      // @ts-ignore
+      expect(geoLocation.coordinates[1]).toEqual([2, 7]);
+    });
+
+    test('MultiLineString', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/search'), {})
+        .once()
+        .reply(200, {
+          items: [
+            {
+              item: {
+                geoLocation: {
+                  type: 'MultiLineString',
+                  coordinates: [[[2.324, 234.1], [2, 7]], [[3, 4], [2, 1]]],
+                },
+              },
+            },
+          ],
+        });
+      const response = await client.documents.search({});
+      const geoLocation = response.items[0].item.geoLocation;
+      expect(geoLocation.type).toEqual('MultiLineString');
+      expect(geoLocation.coordinates).toBeDefined();
+      // @ts-ignore
+      expect(geoLocation.coordinates[0]).toEqual([[2.324, 234.1], [2, 7]]);
+      // @ts-ignore
+      expect(geoLocation.coordinates[1]).toEqual([[3, 4], [2, 1]]);
+    });
   });
 
   test('search with filter', async () => {

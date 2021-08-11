@@ -48,14 +48,6 @@ export interface ContainsAnyIds {
   containsAny: CogniteInternalId[];
 }
 
-export type DocumentsGeoLocationType =
-  | 'Point'
-  | 'MultiPolygon'
-  | 'MultiLineString'
-  | 'MultiPoint'
-  | 'Polygon'
-  | 'LineString';
-
 export type DocumentsGeoLocationRelation = 'INTERSECTS' | 'DISJOINT' | 'WITHIN';
 
 export interface GeoLocationFilter {
@@ -174,12 +166,31 @@ export interface DocumentSourceFile {
   size?: number;
 }
 
-export type GeoLocationTypeEnum = 'Feature';
+export type DocumentsGeoLocationType =
+  | 'Point'
+  | 'MultiPolygon'
+  | 'MultiLineString'
+  | 'MultiPoint'
+  | 'Polygon'
+  | 'LineString';
+
+// https://datatracker.ietf.org/doc/html/rfc7946#section-3.1.2
+// when the type is Point | (MultiPoint | LineString) | MultiLineString respectively
+// these containers should also allow Polygon, MultiPolygon to be correctly populated
+export type GeoLocationCoordinates =
+  | PointCoordinates
+  | PointCoordinates[]
+  | PointCoordinates[][];
+
+export interface GeoCoordinates {
+  type: DocumentsGeoLocationType;
+  coordinates?: GeoLocationCoordinates;
+}
 
 export interface GeoLocation {
-  type: GeoLocationTypeEnum;
-  coordinates?: PointCoordinates;
-  geometries?: PointCoordinates[];
+  type: DocumentsGeoLocationType;
+  coordinates?: GeoLocationCoordinates;
+  geometries?: GeoCoordinates[];
 }
 
 export interface DocumentsAggregate {
