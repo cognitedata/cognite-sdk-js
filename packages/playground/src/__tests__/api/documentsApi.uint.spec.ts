@@ -117,6 +117,56 @@ describe('Documents unit test', () => {
       expect(geoLocation.coordinates[1]).toEqual([[3, 4], [2, 1]]);
     });
 
+    test('MultiPolygon', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/search'), {})
+        .once()
+        .reply(200, {
+          items: [
+            {
+              item: {
+                geoLocation: {
+                  type: 'MultiPolygon',
+                  coordinates: [
+                    [[[40.0, 40.0], [20.0, 45.0], [45.0, 30.0], [40.0, 40.0]]],
+                    [
+                      [
+                        [20.0, 35.0],
+                        [10.0, 30.0],
+                        [10.0, 10.0],
+                        [30.0, 5.0],
+                        [45.0, 20.0],
+                        [20.0, 35.0],
+                      ],
+                      [[30.0, 20.0], [20.0, 15.0], [20.0, 25.0], [30.0, 20.0]],
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+        });
+      const response = await client.documents.search({});
+      const geoLocation = response.items[0].item.geoLocation;
+      expect(geoLocation.type).toEqual('MultiPolygon');
+      expect(geoLocation.coordinates).toBeDefined();
+      // @ts-ignore
+      const polygon1 = geoLocation.coordinates[0];
+      // @ts-ignore
+      const polygon2 = geoLocation.coordinates[1];
+      // @ts-ignore
+      expect(polygon1[0][0][0]).toEqual(40.0);
+      // @ts-ignore
+      expect(polygon2[0][0][0]).toEqual(20.0);
+      // @ts-ignore
+      expect(polygon2[1]).toEqual([
+        [30.0, 20.0],
+        [20.0, 15.0],
+        [20.0, 25.0],
+        [30.0, 20.0],
+      ]);
+    });
+
     describe('geometry collections', () => {
       test('Point & LineString', async () => {
         nock(mockBaseUrl)
