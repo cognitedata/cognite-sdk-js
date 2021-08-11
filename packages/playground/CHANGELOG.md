@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.0.1...@cognite/sdk-playground@2.1.0) (2021-08-11)
+
+
+### Bug Fixes
+
+* **playground:** incorrect GeoLocation definition [release] ([#640](https://github.com/cognitedata/cognite-sdk-js/issues/640)) ([fdad0c7](https://github.com/cognitedata/cognite-sdk-js/commit/fdad0c7fda58a07d364f2fdf097993b51d5b6011))
+
+
+### Features
+
+* **playground:** add document feedback [release] ([#614](https://github.com/cognitedata/cognite-sdk-js/issues/614)) ([d6a7e59](https://github.com/cognitedata/cognite-sdk-js/commit/d6a7e5929b657c6bd7fc800b252167e3809f8b22))
+
+
+
+
+
 ## [2.0.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.0.0...@cognite/sdk-playground@2.0.1) (2021-08-10)
 
 **Note:** Version bump only for package @cognite/sdk-playground
