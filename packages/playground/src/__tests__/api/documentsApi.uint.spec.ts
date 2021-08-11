@@ -32,8 +32,26 @@ describe('Documents unit test', () => {
         },
       })
       .once()
-      .reply(200, {});
-    await client.documents.search({ search: { query: 'test' } });
+      .reply(200, {
+        items: [
+          {
+            item: {
+              geoLocation: {
+                type: 'Point',
+                coordinates: [2.324, 234.1],
+              },
+            },
+          },
+        ],
+      });
+    const response = await client.documents.search({
+      search: { query: 'test' },
+    });
+    const geoLocation = response.items[0].item.geoLocation;
+    expect(geoLocation.type).toEqual('Point');
+    expect(geoLocation.coordinates).toBeDefined();
+    // @ts-ignore
+    expect(geoLocation.coordinates[0]).toEqual(2.324);
   });
 
   test('search with filter', async () => {
