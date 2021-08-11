@@ -13,7 +13,6 @@ import {
   FileName,
   FileMimeType,
   Metadata,
-  FileGeoLocation,
   ItemsWrapper,
 } from '@cognite/sdk';
 
@@ -171,7 +170,7 @@ export interface DocumentSourceFile {
   lastIndexedTime?: Date;
   createdTime?: Date;
   labels?: Label[];
-  geoLocation?: FileGeoLocation;
+  geoLocation?: GeoLocation;
   size?: number;
 }
 
@@ -179,8 +178,8 @@ export type GeoLocationTypeEnum = 'Feature';
 
 export interface GeoLocation {
   type: GeoLocationTypeEnum;
-  geometry: GeoLocationGeometry<DocumentsGeoLocationType, PointCoordinates[]>;
-  properties?: StringToAnyMap;
+  coordinates?: PointCoordinates;
+  geometries?: PointCoordinates[];
 }
 
 export interface DocumentsAggregate {
