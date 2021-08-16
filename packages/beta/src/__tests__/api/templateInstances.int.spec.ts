@@ -91,6 +91,78 @@ describe('template instances test', () => {
     expect(result.map(toExternalTemplateInstance)).toEqual(expectedInstances);
   });
 
+  it('should update template instances with add', async () => {
+    const result = await client.templates
+      .group(externalId)
+      .version(1)
+      .instances.update([
+        {
+          externalId: expectedInstances[0].externalId,
+          update: {
+            fieldResolvers: {
+              add: {
+                a: 20,
+              },
+              remove: [],
+            },
+          },
+        },
+      ]);
+    expect(result.map(toExternalTemplateInstance)).toEqual([
+      {
+        ...expectedInstances[0],
+        fieldResolvers: { a: 20, b: 'test' },
+      },
+    ]);
+  });
+
+  it('should update template instances with remove', async () => {
+    const result = await client.templates
+      .group(externalId)
+      .version(1)
+      .instances.update([
+        {
+          externalId: expectedInstances[0].externalId,
+          update: {
+            fieldResolvers: {
+              add: {},
+              remove: ['a'],
+            },
+          },
+        },
+      ]);
+    expect(result.map(toExternalTemplateInstance)).toEqual([
+      {
+        ...expectedInstances[0],
+        fieldResolvers: { b: 'test' },
+      },
+    ]);
+  });
+
+  it('should update template instances with set', async () => {
+    const result = await client.templates
+      .group(externalId)
+      .version(1)
+      .instances.update([
+        {
+          externalId: expectedInstances[0].externalId,
+          update: {
+            fieldResolvers: {
+              set: {
+                a: 20,
+              },
+            },
+          },
+        },
+      ]);
+    expect(result.map(toExternalTemplateInstance)).toEqual([
+      {
+        ...expectedInstances[0],
+        fieldResolvers: { a: 20 },
+      },
+    ]);
+  });
+
   it.skip('should delete template instances', async () => {
     await client.templates
       .group(externalId)
