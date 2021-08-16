@@ -11,6 +11,7 @@ import {
   SequenceFilter,
   TimeseriesFilter,
   Timestamp,
+  ObjectPatch,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -118,6 +119,12 @@ export type TemplateInstance = ExternalTemplateInstance & {
    */
   lastUpdatedTime: Timestamp;
 };
+
+export interface TemplateInstancePatch extends ExternalId {
+  update: {
+    fieldResolvers: ObjectPatch<FieldResolver | {}>;
+  };
+}
 
 export interface FieldResolver {
   type: string;
