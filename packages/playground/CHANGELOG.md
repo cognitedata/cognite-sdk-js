@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.1.1...@cognite/sdk-playground@2.1.2) (2021-08-18)
+
+
+### Bug Fixes
+
+* **playground:** wrong geo location relation enums [release] ([#645](https://github.com/cognitedata/cognite-sdk-js/issues/645)) ([218b8b6](https://github.com/cognitedata/cognite-sdk-js/commit/218b8b63814702b2426d6483c7e614d79fe90d86))
+
+
+
+
+
 ## [2.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.1.0...@cognite/sdk-playground@2.1.1) (2021-08-11)
 
 
