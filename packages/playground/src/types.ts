@@ -48,7 +48,7 @@ export interface ContainsAnyIds {
   containsAny: CogniteInternalId[];
 }
 
-export type DocumentsGeoLocationRelation = 'INTERSECTS' | 'DISJOINT' | 'WITHIN';
+export type DocumentsGeoLocationRelation = 'intersects' | 'disjoint' | 'within';
 
 export interface GeoLocationFilter {
   relation: DocumentsGeoLocationRelation;
