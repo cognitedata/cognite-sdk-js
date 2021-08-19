@@ -50,7 +50,7 @@ describe('documents api', () => {
     const response = await client.documents.list({ limit: 1 });
     const doc = response.items[0];
 
-    const resp = await client.documents.nontruncatedContent([{id: doc.id}]);
+    const resp = await client.documents.nontruncatedContent([{ id: doc.id }]);
     expect(resp.items).toBeDefined();
     expect(resp.items).toHaveLength(1);
 

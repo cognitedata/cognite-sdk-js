@@ -3,13 +3,16 @@
 import {
   BaseResourceAPI,
   CDFHttpClient,
-  CursorAndAsyncIterator, InternalId, ItemsWrapper,
+  CursorAndAsyncIterator,
+  InternalId,
+  ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
 import { PreviewAPI } from './previewApi';
 
 import {
-  Document, DocumentContent,
+  Document,
+  DocumentContent,
   DocumentsAggregatesResponse,
   DocumentsRequestFilter,
   DocumentsSearchWrapper,
@@ -71,12 +74,9 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   private async listContent<ResponseType>(
     documentIds: InternalId[]
   ): Promise<ResponseType> {
-    const response = await this.post<ResponseType>(
-      this.url(),
-      {
-        data: { items: documentIds },
-      }
-    );
+    const response = await this.post<ResponseType>(this.url(), {
+      data: { items: documentIds },
+    });
     return response.data;
-  };
+  }
 }
