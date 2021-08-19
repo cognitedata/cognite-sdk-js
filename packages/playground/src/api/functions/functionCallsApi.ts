@@ -45,7 +45,7 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
     cursor?: string
   ) => {
     const path = this.url(`${functionId}/calls/list`);
-    return super.listEndpoint(
+    return this.listEndpoint(
       async params =>
         this.post<CursorResponse<FunctionCall[]>>(path, { data: params }),
       { filter, limit, cursor }

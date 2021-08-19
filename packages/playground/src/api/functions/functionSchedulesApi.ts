@@ -10,7 +10,7 @@ import {
 
 export class FunctionSchedules extends BaseResourceAPI<FunctionSchedule> {
   public retrieve = (ids: CogniteInternalId[], ignoreUnknownIds?: boolean) =>
-    super.retrieveEndpoint(ids.map(id => ({ id })), {
+    this.retrieveEndpoint(ids.map(id => ({ id })), {
       params: ignoreUnknownIds,
     });
 
@@ -25,10 +25,10 @@ export class FunctionSchedules extends BaseResourceAPI<FunctionSchedule> {
   };
 
   public create = async (items: FunctionScheduleCreate[]) =>
-    super.createEndpoint(items);
+    this.createEndpoint(items);
 
   public delete = async (ids: CogniteInternalId[]) =>
-    super.deleteEndpoint(ids.map(id => ({ id })));
+    this.deleteEndpoint(ids.map(id => ({ id })));
 
   public retrieveInputData = async (id: CogniteInternalId) => {
     const response = await this.post<{ id: CogniteInternalId; data: object }>(

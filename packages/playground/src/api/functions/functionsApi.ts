@@ -28,7 +28,7 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
     return this.functionSchedulesApi;
   }
 
-  public create = (items: FunctionCreate[]) => super.createEndpoint(items);
+  public create = (items: FunctionCreate[]) => this.createEndpoint(items);
 
   public list = async (filter?: FunctionFilter, limit?: number) => {
     const response = await this.post<ItemsResponse<Function>>(
@@ -40,9 +40,9 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
     return response.data;
   };
 
-  public retrieve = (ids: IdEither[]) => super.retrieveEndpoint(ids);
+  public retrieve = (ids: IdEither[]) => this.retrieveEndpoint(ids);
 
   public delete = async (ids: IdEither[]) => {
-    return super.deleteEndpoint(ids);
+    return this.deleteEndpoint(ids);
   };
 }
