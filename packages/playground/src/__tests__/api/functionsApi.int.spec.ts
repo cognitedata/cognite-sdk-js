@@ -28,8 +28,16 @@ describe('functions api', () => {
       .then(res => res.items[0]);
   });
 
+  test.skip('upload file', async () => {
+    await uploadFile(cdfClient, 'testFunction');
+  });
+
   test('create -> list -> delete functions', async () => {
-    const fileId = await uploadFile(cdfClient, 'testFunction');
+    const fileId = await cdfClient.files
+      .list({
+        filter: { name: 'testFunction.zip' },
+      })
+      .then(res => res.items[0].id);
     const createResponse = await client.functions.create([
       {
         name: functionName,
