@@ -46,6 +46,19 @@ describe('documents api', () => {
     expect(response.items[0].item.id).toBeDefined();
   });
 
+  test('nontruncated content', async () => {
+    const response = await client.documents.list({ limit: 1 });
+    const doc = response.items[0];
+
+    const resp = await client.documents.nontruncatedContent([{id: doc.id}]);
+    expect(resp.items).toBeDefined();
+    expect(resp.items).toHaveLength(1);
+
+    const documentContent = resp.items[0];
+    expect(documentContent.id).toEqual(doc.id);
+    expect(documentContent.content).toContainEqual(doc.truncatedContent);
+  });
+
   describe('document preview', () => {
     let documents: ListResponse<Document[]>;
 
