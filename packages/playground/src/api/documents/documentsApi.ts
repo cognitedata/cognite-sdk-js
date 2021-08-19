@@ -16,10 +16,12 @@ import {
   ExternalDocumentsSearch,
 } from '../../types';
 import { FeedbackAPI } from './feedbackApi';
+import { PipelinesAPI } from './pipelinesApi';
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
   private readonly feedbackAPI: FeedbackAPI;
   private readonly previewAPI: PreviewAPI;
+  private readonly pipelinesAPI: PipelinesAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
@@ -27,6 +29,11 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     const [baseUrl, httpClient, map] = args;
     this.previewAPI = new PreviewAPI(baseUrl + '/preview', httpClient, map);
     this.feedbackAPI = new FeedbackAPI(baseUrl + '/feedback', httpClient, map);
+    this.pipelinesAPI = new PipelinesAPI(
+      baseUrl + '/pipelines',
+      httpClient,
+      map
+    );
   }
 
   public search = (
@@ -49,6 +56,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
   public get preview() {
     return this.previewAPI;
+  }
+
+  public get pipelines() {
+    return this.pipelinesAPI;
   }
 
   private async searchDocuments<ResponseType>(

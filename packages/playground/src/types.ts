@@ -74,6 +74,14 @@ export interface DocumentsSourceFileFilter {
   size?: Range<number>;
 }
 
+export interface DocumentsPipeline {
+  externalId: string;
+  sensitivityMatcher?: SensitivityMatcher;
+  classifier?: {
+    trainingLabels: LabelList[];
+  };
+}
+
 export interface ExternalDocumentsSearch {
   filter?: DocumentsFilter;
   search?: DocumentsSearch;

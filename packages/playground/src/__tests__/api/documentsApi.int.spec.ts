@@ -45,6 +45,10 @@ describe('documents api', () => {
     expect(response.items[0].item).toBeDefined();
     expect(response.items[0].item.id).toBeDefined();
   });
+  test('list pipeline configurations', async () => {
+    const response = await client.documents.pipelines.list();
+    expect(response.items.length).toBeGreaterThan(0);
+  });
 
   describe('document preview', () => {
     let documents: ListResponse<Document[]>;
