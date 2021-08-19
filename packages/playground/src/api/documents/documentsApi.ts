@@ -46,8 +46,8 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   // https://docs.cognite.com/api/playground/#operation/documentsContent
   public nontruncatedContent = (
     documentIds: InternalId[]
-  ): Promise<ItemsWrapper<DocumentContent>> => {
-    return this.listContent<ItemsWrapper<DocumentContent>>(documentIds);
+  ): Promise<ItemsWrapper<DocumentContent[]>> => {
+    return this.listContent<ItemsWrapper<DocumentContent[]>>(documentIds);
   };
 
   public get feedback() {
