@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.2.0...@cognite/sdk-beta@4.2.1) (2021-08-20)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+# [4.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.1.0...@cognite/sdk-beta@4.2.0) (2021-08-18)
+
+
+### Features
+
+* add update support template instances ([#634](https://github.com/cognitedata/cognite-sdk-js/issues/634)) ([15ca576](https://github.com/cognitedata/cognite-sdk-js/commit/15ca5762a8163fba8dd87d6a69124c4cf2c5dc38))
+
+
+
+
+
+# [4.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.0.5...@cognite/sdk-beta@4.1.0) (2021-08-11)
+
+
+### Features
+
+* **templates:** add lastCreatedTime and lastUpdatedTime ([#581](https://github.com/cognitedata/cognite-sdk-js/issues/581)) ([829af6c](https://github.com/cognitedata/cognite-sdk-js/commit/829af6c2f617052fffbe0bbf4e9b6d70c9cdf6f1))
+* add delete support to template views ([#580](https://github.com/cognitedata/cognite-sdk-js/issues/580)) ([2e16a17](https://github.com/cognitedata/cognite-sdk-js/commit/2e16a1746e4959a0a660a4a4f8d496706fe766d4))
+
+
+
+
+
 ## [4.0.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.0.4...@cognite/sdk-beta@4.0.5) (2021-08-10)
 
 **Note:** Version bump only for package @cognite/sdk-beta
