@@ -4,23 +4,21 @@ import {
   BaseResourceAPI,
   CDFHttpClient,
   CursorAndAsyncIterator,
-  ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
 import { PreviewAPI } from './previewApi';
 
 import {
   Document,
-  DocumentsAggregate,
+  DocumentsAggregatesResponse,
   DocumentsRequestFilter,
+  DocumentsSearchWrapper,
   ExternalDocumentsSearch,
 } from '../../types';
-
-export interface DocumentsAggregatesResponse<T> extends ItemsWrapper<T> {
-  aggregates?: DocumentsAggregate[];
-}
+import { FeedbackAPI } from './feedbackApi';
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
+  private readonly feedbackAPI: FeedbackAPI;
   private readonly previewAPI: PreviewAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
@@ -28,12 +26,15 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
     const [baseUrl, httpClient, map] = args;
     this.previewAPI = new PreviewAPI(baseUrl + '/preview', httpClient, map);
+    this.feedbackAPI = new FeedbackAPI(baseUrl + '/feedback', httpClient, map);
   }
 
   public search = (
     query: ExternalDocumentsSearch
-  ): Promise<DocumentsAggregatesResponse<Document>> => {
-    return this.searchDocuments<DocumentsAggregatesResponse<Document>>(query);
+  ): Promise<DocumentsAggregatesResponse<DocumentsSearchWrapper[]>> => {
+    return this.searchDocuments<
+      DocumentsAggregatesResponse<DocumentsSearchWrapper[]>
+    >(query);
   };
 
   public list = (
@@ -41,6 +42,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   ): CursorAndAsyncIterator<Document> => {
     return this.listEndpoint(this.callListEndpointWithPost, scope);
   };
+
+  public get feedback() {
+    return this.feedbackAPI;
+  }
 
   public get preview() {
     return this.previewAPI;

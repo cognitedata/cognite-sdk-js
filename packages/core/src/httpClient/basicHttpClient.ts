@@ -68,7 +68,7 @@ export class BasicHttpClient {
   private static resolveUrl(baseUrl: string, path: string) {
     const trimmedBaseUrl = baseUrl.replace(/\/$/, '');
     const pathWithPrefix = (path[0] === '/' ? '' : '/') + path;
-    return trimmedBaseUrl + pathWithPrefix;
+    return trimmedBaseUrl + pathWithPrefix.replace(/\/+$/, '');
   }
 
   private defaultHeaders: HttpHeaders = {};
@@ -179,10 +179,11 @@ export class BasicHttpClient {
     request: HttpRequest
   ): Promise<HttpResponse<ResponseType>> {
     const url = this.constructUrl(request.path, request.params);
-    const headers: HttpHeaders = {
-      Accept: 'application/json',
-      ...request.headers,
-    };
+    const headers = headersWithDefaultField(
+      request.headers,
+      'Accept',
+      'application/json'
+    );
     let body = request.data;
     if (isJson(body)) {
       body = BasicHttpClient.transformRequestBody(body);
@@ -222,6 +223,27 @@ export class BasicHttpClient {
     }
     return BasicHttpClient.resolveUrl(this.baseUrl, url);
   }
+}
+
+function lowercaseHeadersKeys(headers: HttpHeaders): string[] {
+  const keys: string[] = [];
+  for (const key in headers) {
+    keys.push(key.toLowerCase());
+  }
+  return keys;
+}
+
+export function headersWithDefaultField(
+  headers: HttpHeaders = {},
+  fieldName: string,
+  fieldValue: string
+): HttpHeaders {
+  const lowercaseHeaders = lowercaseHeadersKeys(headers);
+  const lowercaseKey = fieldName.toLowerCase();
+  if (!lowercaseHeaders.includes(lowercaseKey)) {
+    headers[fieldName] = fieldValue;
+  }
+  return headers;
 }
 
 export interface HttpRequest extends HttpRequestOptions {

@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.2.2...@cognite/sdk-core@3.2.3) (2021-08-20)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
+## [3.2.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.2.1...@cognite/sdk-core@3.2.2) (2021-08-11)
+
+
+### Bug Fixes
+
+* **core:** headers set by the sdk must respect case insensitive keys ([#627](https://github.com/cognitedata/cognite-sdk-js/issues/627)) ([02703c5](https://github.com/cognitedata/cognite-sdk-js/commit/02703c53fc7e8779a8f01cc2da403d32208d9acb))
+
+
+
+
+
+## [3.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.2.0...@cognite/sdk-core@3.2.1) (2021-08-10)
+
+
+### Bug Fixes
+
+* **core:** remove slash suffix from uris [release] ([#628](https://github.com/cognitedata/cognite-sdk-js/issues/628)) ([fe65d57](https://github.com/cognitedata/cognite-sdk-js/commit/fe65d57a4ce9f6fc37ce37ad2d295ef8006c603c))
+
+
+
+
+
 # [3.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.1.2...@cognite/sdk-core@3.2.0) (2021-07-21)
 
 

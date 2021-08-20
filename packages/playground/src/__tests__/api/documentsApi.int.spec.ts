@@ -3,7 +3,7 @@
 import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupLoggedInClient } from '../testUtils';
 import { ListResponse } from '@cognite/sdk-core';
-import { Document } from '@cognite/sdk-playground';
+import { Document, DocumentFeedback } from '@cognite/sdk-playground';
 
 describe('documents api', () => {
   let client: CogniteClientPlayground;
@@ -16,10 +16,12 @@ describe('documents api', () => {
     const response = await client.documents.list();
     expect(response.items.length).toBeGreaterThan(0);
   });
+
   test('list documents, limit to 1', async () => {
     const response = await client.documents.list({ limit: 1 });
     expect(response.items).toHaveLength(1);
   });
+
   test('list documents, by size', async () => {
     const response = await client.documents.list({
       filter: {
@@ -30,6 +32,18 @@ describe('documents api', () => {
       limit: 1,
     });
     expect(response.items).toHaveLength(1);
+  });
+  test('list documents, limit to 2', async () => {
+    const response = await client.documents.list({ limit: 2 });
+    expect(response.items).toHaveLength(2);
+  });
+  test('search documents, limit to 1', async () => {
+    const response = await client.documents.search({
+      limit: 1,
+    });
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0].item).toBeDefined();
+    expect(response.items[0].item.id).toBeDefined();
   });
 
   describe('document preview', () => {
@@ -76,6 +90,52 @@ describe('documents api', () => {
 
       const resp = await client.documents.preview.temporaryLink(document.id);
       expect(resp.temporaryLink).toBeDefined();
+    });
+  });
+
+  describe('document feedback', () => {
+    const firstFeedback: DocumentFeedback = {
+      documentId: 1731129751740,
+      label: {
+        externalId: 'cognitesdk-js-documents-feedback-test',
+      },
+      action: 'ATTACH',
+      feedbackId: 1,
+      createdAt: '2021-08-10T17:47:14.022449',
+      status: 'CREATED',
+    };
+    const secondFeedback: DocumentFeedback = {
+      documentId: 1731129751740,
+      label: {
+        externalId: 'cognitesdk-js-documents-feedback-test-2',
+      },
+      action: 'ATTACH',
+      feedbackId: 2,
+      createdAt: '2021-08-10T17:54:27.932608',
+      reviewedAt: '2021-08-10T17:59:57.804811',
+      status: 'ACCEPTED',
+    };
+
+    test('should list two feedbacks', async () => {
+      const response = await client.documents.feedback.list();
+      expect(response.items.length).toEqual(2);
+      expect(response.items[0].feedbackId).toEqual(firstFeedback.feedbackId);
+      expect(response.items[1].feedbackId).toEqual(secondFeedback.feedbackId);
+    });
+
+    test('should list one feedback when filtering by CREATED', async () => {
+      const response = await client.documents.feedback.list('CREATED');
+      expect(response.items.length).toEqual(1);
+    });
+
+    test('should list no feedback when filtering by REJECTED', async () => {
+      const response = await client.documents.feedback.list('REJECTED');
+      expect(response.items.length).toEqual(0);
+    });
+
+    test('should list one feedback when filtering by ACCEPTED', async () => {
+      const response = await client.documents.feedback.list('ACCEPTED');
+      expect(response.items.length).toEqual(1);
     });
   });
 });

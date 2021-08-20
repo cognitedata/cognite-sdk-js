@@ -11,6 +11,7 @@ import {
   SequenceFilter,
   TimeseriesFilter,
   Timestamp,
+  ObjectPatch,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -38,6 +39,16 @@ export type TemplateGroup = ExternalTemplateGroup & {
    * The owners of a Template Group
    */
   owners: string[];
+
+  /**
+   * When resource was created
+   */
+  createdTime: Timestamp;
+
+  /**
+   * When resource was last updated
+   */
+  lastUpdatedTime: Timestamp;
 };
 
 export interface TemplateGroupFilter {
@@ -54,6 +65,16 @@ export interface TemplateGroupFilterQuery extends FilterQuery {
 export interface TemplateGroupVersion {
   version: number;
   schema: string;
+
+  /**
+   * When resource was created
+   */
+  createdTime: Timestamp;
+
+  /**
+   * When resource was last updated
+   */
+  lastUpdatedTime: Timestamp;
 }
 
 export enum ConflictMode {
@@ -81,13 +102,29 @@ export interface TemplateGroupVersionFilterQuery extends FilterQuery {
   filter?: TemplateGroupVersionFilter;
 }
 
-export interface TemplateInstance extends ExternalId {
+export interface ExternalTemplateInstance extends ExternalId {
   templateName: string;
   dataSetId?: number;
   fieldResolvers: { [K in string]: FieldResolver | {} };
 }
 
-export type ExternalTemplateInstance = TemplateInstance;
+export type TemplateInstance = ExternalTemplateInstance & {
+  /**
+   * When resource was created
+   */
+  createdTime: Timestamp;
+
+  /**
+   * When resource was last updated
+   */
+  lastUpdatedTime: Timestamp;
+};
+
+export interface TemplateInstancePatch extends ExternalId {
+  update: {
+    fieldResolvers: ObjectPatch<FieldResolver | {}>;
+  };
+}
 
 export interface FieldResolver {
   type: string;

@@ -268,39 +268,39 @@ export default class BaseCogniteClient {
    *
    * const client = new CogniteClient({ appId: '[YOUR APP NAME]' });
    *
-   * // using Cognite authentication flow
-   * client.loginWithOAuth({
-   *   type: 'CDF_OAUTH',
-   *   options: {
-   *     project: '[PROJECT]',
-   *     onAuthenticate: REDIRECT // optional, REDIRECT is by default
-   *   }
-   * });
-   *
-   * // or you can sign in using AzureAD authentication flow (in case your projects supports it)
-   * client.loginWithOAuth({
-   *   type: 'AAD_OAUTH',
-   *   options: {
-   *     cluster: '[CLUSTER]',
-   *     clientId: '[CLIENT_ID]', // client id of your AzureAD application
-   *     tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
-   * }
-   * });
-   *
-   * // you also have ability to sign in using ADFS
-   * client.loginWithOAuth({
-   *   type: 'ADFS_OAUTH',
-   *   options: {
-   *     authority: https://example.com/adfs/oauth2/authorize,
-   *     requestParams: {
-   *       cluster: 'cluster-name',
-   *       clientId: 'adfs-client-id',
-   *     },
-   *   }
-   * });
-   *
-   * // after sign in you can do calls with the client
    * (async () => {
+   *   // using Cognite authentication flow
+   *   await client.loginWithOAuth({
+   *     type: 'CDF_OAUTH',
+   *     options: {
+   *       project: '[PROJECT]',
+   *       onAuthenticate: REDIRECT // optional, REDIRECT is by default
+   *     }
+   *   });
+   *
+   *   // or you can sign in using AzureAD authentication flow (in case your projects supports it)
+   *   await client.loginWithOAuth({
+   *     type: 'AAD_OAUTH',
+   *     options: {
+   *       cluster: '[CLUSTER]',
+   *       clientId: '[CLIENT_ID]', // client id of your AzureAD application
+   *       tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided
+   *   }
+   *   });
+   *
+   *   // you also have ability to sign in using ADFS
+   *   await client.loginWithOAuth({
+   *     type: 'ADFS_OAUTH',
+   *     options: {
+   *       authority: https://example.com/adfs/oauth2/authorize,
+   *       requestParams: {
+   *         cluster: 'cluster-name',
+   *         clientId: 'adfs-client-id',
+   *       },
+   *     }
+   *   });
+   *
+   *   // after sign in you can do calls with the client
    *   await client.authenticate();
    *   client.setProject('project-name');
    *   const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
@@ -439,7 +439,7 @@ export default class BaseCogniteClient {
    * This token can be used to CDF endpoints
    *
    * ```js
-   * client.loginWithOAuth({cluster: 'bluefield', ...});
+   * await client.loginWithOAuth({cluster: 'bluefield', ...});
    * await client.authenticate();
    * const cdfToken = await client.getCDFToken();
    * ```
@@ -486,7 +486,7 @@ export default class BaseCogniteClient {
    * Returns IDP id token
    *
    * ```js
-   * client.loginWithOAuth({ cluster: 'bluefield', ... });
+   * await client.loginWithOAuth({ cluster: 'bluefield', ... });
    * await client.authenticate();
    * const idToken = await client.getIdToken();
    * ```
@@ -526,7 +526,7 @@ export default class BaseCogniteClient {
    * Can be used for getting user details via Microsoft Graph API
    *
    * ```js
-   * client.loginWithOAuth({cluster: 'bluefield', ...});
+   * await client.loginWithOAuth({cluster: 'bluefield', ...});
    * await client.authenticate();
    * const accessToken = await client.getAzureADAccessToken();
    * ```
