@@ -26,7 +26,17 @@ jobs:
         run: yarn build
 
   publish:
-    if: ${{ contains(github.event.commits[0].message, '[release]') && !contains(github.event.commits[0].message, '[skip-ci]') }}
+    if: |-
+      ${{ 
+        !contains(github.event.commits[0].message, '[skip-ci]') && 
+        (
+          startsWith(github.event.commits[0].message, 'fix:') ||
+          startsWith(github.event.commits[0].message, 'fix(') || 
+          startsWith(github.event.commits[0].message, 'feat:') ||
+          startsWith(github.event.commits[0].message, 'feat(') || 
+          contains(github.event.commits[0].message, '[release]')
+        )
+      }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
