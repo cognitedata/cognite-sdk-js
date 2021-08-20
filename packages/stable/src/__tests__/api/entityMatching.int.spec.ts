@@ -67,6 +67,10 @@ describe('context integration test', () => {
     });
 
     test('retrieve model', async () => {
+      // this test seem to be a bit unpredictable.
+      // I hope this delay may give the service some time
+      // to train the model before we try to retrieve it.
+      await new Promise(f => setTimeout(f, 60 * 1000)); // 1 minute
       await runTestWithRetryWhenFailing(async () => {
         const [result] = await client.entityMatching.retrieve([
           { externalId: modelExternalId },
