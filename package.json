@@ -65,7 +65,7 @@
     "nock": "^10.0.6",
     "prettier": "^1.10.2",
     "rollup": "^2.22.2",
-    "ts-jest": "^27.0.0",
+    "ts-jest": "^27.0.5",
     "typedoc": "^0.17.8",
     "typescript": "^3.9"
   },
