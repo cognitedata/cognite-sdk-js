@@ -8,9 +8,7 @@ import { ExternalEntityToMatch } from '../../types';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-jest.retryTimes(5);
-jest.setTimeout(20000); // 20 seconds
-describe('context integration test', () => {
+describe.skip('context integration test', () => {
   const assetNameA = `entity_match_test_asset_a ${randomInt()}`;
   const assetNameB = `entity_match_test_asset_b ${randomInt()}`;
   const tsNameA = `TS_${assetNameA}`;
