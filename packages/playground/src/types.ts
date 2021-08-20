@@ -63,6 +63,7 @@ export interface DocumentsSourceFileFilter {
   source?: StringIn | StringEquals;
   mimeType?: StringIn | StringEquals;
   assetIds?: AssetIdsFilter;
+  assetSubtreeIds?: ContainsAnyIds | ValueMissing;
   uploadedTime?: EpochTimestampRange;
   createdTime?: EpochTimestampRange;
   sourceCreatedTime?: EpochTimestampRange;
