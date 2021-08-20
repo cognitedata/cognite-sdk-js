@@ -921,7 +921,7 @@ export default class BaseCogniteClient {
   protected async handleAzureADLoginRedirect(
     azureAdClient: AzureAD
   ): Promise<string | null> {
-    const account = this.validateAccount(azureAdClient);
+    const account = await this.validateAccount(azureAdClient);
 
     if (!account) return null;
 
