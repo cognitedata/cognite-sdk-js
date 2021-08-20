@@ -51,6 +51,15 @@ yarn build
 yarn test
 ```
 
+Run tests for updated package only:
+> for changes to the core package, it might be required to run tests for all packages to verify integrity.
+
+```bash
+yarn
+yarn build
+yarn test --since master
+```
+
 Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revision integration tests.
 
 We use `jest` to run tests, see [their documentation](https://github.com/facebook/jest) for more information.
