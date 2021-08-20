@@ -135,6 +135,14 @@ export class AzureAD {
     }
   }
 
+  async azureLoginRedirect(): Promise<AccountInfo | void> {
+    await this.msalApplication.loginRedirect({
+      scopes: this.userScopes,
+      extraScopesToConsent: this.getAzureScopes(),
+      redirectStartPage: window.location.href,
+    });
+  }
+
   /**
    * Logs out of current account.
    */
@@ -163,6 +171,19 @@ export class AzureAD {
     return accessToken;
   }
 
+  async getAzureToken(): Promise<string | null> {
+    if (!this.getAccount()) return null;
+
+    const {
+      accessToken,
+    }: AuthenticationResult = await this.msalApplication.acquireTokenSilent({
+      account: this.getAccount(),
+      scopes: this.getAzureScopes(),
+    });
+
+    return accessToken;
+  }
+
   /**
    * Returns azure account access token.
    * Can be used for getting user details via Microsoft Graph API
@@ -184,6 +205,10 @@ export class AzureAD {
       `https://${this.cluster}.cognitedata.com/user_impersonation`,
       `https://${this.cluster}.cognitedata.com/IDENTITY`,
     ];
+  }
+
+  private getAzureScopes(): string[] {
+    return ['https://management.azure.com/user_impersonation'];
   }
 
   private getLoginPopupRequest(

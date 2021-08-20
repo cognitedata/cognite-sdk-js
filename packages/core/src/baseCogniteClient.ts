@@ -127,6 +127,16 @@ export interface OAuthLoginForOIDCAuthFlowOptions extends OIDCAuthFlowOptions {
   onNoProjectAvailable?: () => void;
 }
 
+export interface AzureTenantInfo {
+  id: string;
+  defaultDomain: string;
+  displayName: string;
+  domains: string[];
+  tenantCategory: string;
+  tenantId: string;
+  tenantType: string;
+}
+
 export function accessApi<T>(api: T | undefined): T {
   if (api === undefined) {
     throw Error(
@@ -911,18 +921,72 @@ export default class BaseCogniteClient {
   protected async handleAzureADLoginRedirect(
     azureAdClient: AzureAD
   ): Promise<string | null> {
-    const account = await azureAdClient.initAuth();
-    let token: string | null = null;
+    const account = this.validateAccount(azureAdClient);
 
     if (!account) return null;
 
     try {
-      token = await azureAdClient.getCDFToken();
+      const token = await azureAdClient.getCDFToken();
+
+      return token;
     } catch {
       noop();
     }
 
-    return token;
+    return null;
+  }
+
+  /**
+   * Disclaimer: This only works with AAD.
+   *
+   * Fetches the current users tenant list (https://docs.microsoft.com/en-us/rest/api/resources/tenants/list#code-try-0)
+   * @param clientId
+   * @param debug
+   */
+  public async getTenantList(
+    clientId: string,
+    debug = false
+  ): Promise<AzureTenantInfo[]> {
+    const config = {
+      auth: {
+        clientId,
+        authority: `https://login.microsoftonline.com/common`,
+        redirectUri: `${window.location.origin}`,
+        navigateToLoginRequestUrl: true,
+      },
+    };
+    const azureAdClient = new AzureAD({ config, cluster: '', debug });
+
+    let accessToken = null;
+
+    const account = this.validateAccount(azureAdClient);
+    if (account) {
+      accessToken = await azureAdClient.getAzureToken();
+    }
+
+    if (!accessToken) {
+      await azureAdClient.azureLoginRedirect();
+
+      accessToken = await azureAdClient.getAzureToken();
+    }
+
+    if (!accessToken) {
+      return [];
+    }
+
+    const http = new CDFHttpClient(
+      'https://management.azure.com/tenants?api-version=2020-01-01',
+      this.getRetryValidator()
+    );
+
+    return http
+      .get<{ value: AzureTenantInfo[] }>('/', {
+        headers: { [AUTHORIZATION_HEADER]: bearerString(accessToken) },
+      })
+      .then(response => {
+        return response.data.value;
+      })
+      .catch(() => []);
   }
 
   protected async handleADFSLoginRedirect(
@@ -959,6 +1023,11 @@ export default class BaseCogniteClient {
       throw err;
     }
   };
+
+  protected async validateAccount(azureAdClient: AzureAD): Promise<boolean> {
+    const account = await azureAdClient.initAuth();
+    return !!account;
+  }
 }
 
 export type BaseRequestOptions = HttpRequestOptions;
