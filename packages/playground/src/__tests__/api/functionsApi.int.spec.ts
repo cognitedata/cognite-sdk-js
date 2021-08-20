@@ -64,6 +64,7 @@ describe('functions api', () => {
     expect(response[0]).toStrictEqual(testFunction);
   });
 
+  jest.retryTimes(5);
   test('call function', async () => {
     const callResponse = await client.functions.calls.callFunction(
       testFunction.id,
