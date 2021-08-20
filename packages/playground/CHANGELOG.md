@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.2.0...@cognite/sdk-playground@2.3.0) (2021-08-20)
+
+
+### Features
+
+* **playground:** filter based on asset subtree [release] ([#650](https://github.com/cognitedata/cognite-sdk-js/issues/650)) ([83de68f](https://github.com/cognitedata/cognite-sdk-js/commit/83de68f10b9b897a9337d7366610b7ac93b1c77b))
+
+
+
+
+
+# [2.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.1.2...@cognite/sdk-playground@2.2.0) (2021-08-20)
+
+
+### Features
+
+* **functions:** add functions for SDK ([#646](https://github.com/cognitedata/cognite-sdk-js/issues/646)) ([2fd54b3](https://github.com/cognitedata/cognite-sdk-js/commit/2fd54b3a7980759c760d9e8307b0d08f3c7208b6))
+
+
+
+
+
 ## [2.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.1.1...@cognite/sdk-playground@2.1.2) (2021-08-18)
 
 

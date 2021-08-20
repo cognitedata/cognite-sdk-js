@@ -297,6 +297,32 @@ describe('Documents unit test', () => {
     });
   });
 
+  test('search with asset subtree filter', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/search'), {
+        search: {
+          query: 'test',
+        },
+        filter: {
+          sourceFile: {
+            assetSubtreeIds: { containsAny: [3, 5, 1] },
+          },
+          assetSubtreeIds: { containsAny: [3, 5, 1] },
+        },
+      })
+      .once()
+      .reply(200, {});
+    await client.documents.search({
+      search: { query: 'test' },
+      filter: {
+        sourceFile: {
+          assetSubtreeIds: { containsAny: [3, 5, 1] },
+        },
+        assetSubtreeIds: { containsAny: [3, 5, 1] },
+      },
+    });
+  });
+
   test('create feedback on document', async () => {
     nock(mockBaseUrl)
       .post(new RegExp('/documents/feedback'), {
