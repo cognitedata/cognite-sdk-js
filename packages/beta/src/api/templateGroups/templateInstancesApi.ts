@@ -13,6 +13,7 @@ import {
   SyntheticTimeSeriesResolver,
   TemplateInstance,
   TemplateInstanceFilterQuery,
+  TemplateInstancePatch,
   ViewResolver,
 } from '../../types';
 import fromPairs from 'lodash/fromPairs';
@@ -57,6 +58,25 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
         TemplateInstanceCodec.encodeTemplateInstances(items),
         this.url('upsert')
       )
+      .then(TemplateInstanceCodec.decodeTemplateInstances);
+  };
+
+  /**
+   * [Update Template Instances](https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroupsExternalidVersionsVersionInstancesUpdate)
+   *
+   * ```js
+   * const instances = await client.templates.group("myGroup").version(1).update( [{ update: {
+   *   fieldResolvers: {
+   *     set: {
+   *       myStringField: "My Field"
+   *     }
+   *   }
+   * }, externalId: 'someExtId' }] );
+   * ```
+   */
+  public update = (changes: TemplateInstancePatch[]) => {
+    return super
+      .updateEndpoint(changes.map(TemplateInstanceCodec.encodePatch))
       .then(TemplateInstanceCodec.decodeTemplateInstances);
   };
 
@@ -130,6 +150,32 @@ class TemplateInstanceCodec {
         ),
       };
     });
+  }
+
+  static encodePatch(patch: TemplateInstancePatch): TemplateInstancePatch {
+    return {
+      ...patch,
+      update: {
+        fieldResolvers: {
+          add:
+            'add' in patch.update.fieldResolvers
+              ? TemplateInstanceCodec.encodeFieldResolvers(
+                  patch.update.fieldResolvers.add
+                )
+              : undefined!,
+          remove:
+            'remove' in patch.update.fieldResolvers
+              ? patch.update.fieldResolvers.remove
+              : undefined!,
+          set:
+            'set' in patch.update.fieldResolvers
+              ? TemplateInstanceCodec.encodeFieldResolvers(
+                  patch.update.fieldResolvers.set
+                )
+              : undefined!,
+        },
+      },
+    };
   }
 
   static encodeFieldResolvers(

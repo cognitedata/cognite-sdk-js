@@ -457,7 +457,7 @@ export interface AssetPatch {
     name?: SinglePatchRequiredString;
     description?: SinglePatchString;
     dataSetId?: NullableSinglePatchLong;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     labels?: LabelsPatch;
     source?: SinglePatchString;
   };
@@ -680,7 +680,7 @@ export interface DataSetPatch {
     externalId?: SinglePatchString;
     name?: SinglePatchString;
     description?: SinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     writeProtected?: SetField<boolean>;
   };
 }
@@ -922,7 +922,7 @@ export interface EventPatch {
     startTime?: SinglePatchDate;
     endTime?: SinglePatchDate;
     description?: SinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     assetIds?: ArrayPatchLong;
     dataSetId?: NullableSinglePatchLong;
     source?: SinglePatchString;
@@ -1047,7 +1047,7 @@ export interface FileChange {
     externalId?: SinglePatchString;
     source?: SinglePatchString;
     mimeType?: SinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     assetIds?: ArrayPatchLong;
     securityCategories?: ArrayPatchLong;
     sourceCreatedTime?: SinglePatchDate;
@@ -1619,23 +1619,25 @@ export interface OAuth2Configuration {
 
 export type OWNER = 'OWNER';
 
-export type ObjectPatch =
+export type ObjectPatch<T> =
   | {
       /**
        * Set the key-value pairs. All existing key-value pairs will be removed.
        */
-      set: { [key: string]: string };
+      set: { [key: string]: T };
     }
   | {
       /**
        * Add the key-value pairs. Values for existing keys will be overwritten.
        */
-      add: { [key: string]: string };
+      add: { [key: string]: T };
       /**
        * Remove the key-value pairs with given keys.
        */
       remove: string[];
     };
+
+export type MetadataPatch = ObjectPatch<string>;
 
 /**
  * Data about how to authenticate and authorize users. The authentication configuration is hidden.
@@ -2144,7 +2146,7 @@ export interface SequencePatch {
     dataSetId?: NullableSinglePatchLong;
     externalId?: SinglePatchString;
     endTime?: SinglePatchDate;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
   };
 }
 
@@ -2350,7 +2352,7 @@ export interface TimeSeriesPatch {
   update: {
     externalId?: NullableSinglePatchString;
     name?: NullableSinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     unit?: NullableSinglePatchString;
     assetId?: NullableSinglePatchLong;
     dataSetId?: NullableSinglePatchLong;
