@@ -63,6 +63,7 @@ export interface DocumentsSourceFileFilter {
   source?: StringIn | StringEquals;
   mimeType?: StringIn | StringEquals;
   assetIds?: AssetIdsFilter;
+  assetSubtreeIds?: ContainsAnyIds | ValueMissing;
   uploadedTime?: EpochTimestampRange;
   createdTime?: EpochTimestampRange;
   sourceCreatedTime?: EpochTimestampRange;
@@ -82,6 +83,10 @@ export interface ExternalDocumentsSearch {
   limit?: number;
 }
 
+export interface ValueMissing {
+  missing?: boolean;
+}
+
 export interface DocumentsFilter {
   id?: IntIn | IntEquals;
   externalIdPrefix?: StringIn | StringEquals;
@@ -93,6 +98,7 @@ export interface DocumentsFilter {
   type?: StringIn | StringEquals;
   language?: StringIn | StringEquals;
   assetIds?: ContainsAllIds | ContainsAnyIds;
+  assetSubtreeIds?: ContainsAnyIds | ValueMissing;
   sourceSystem?: StringIn | StringEquals;
   labels?: Label[];
   geoLocation?: GeoLocationFilter;
