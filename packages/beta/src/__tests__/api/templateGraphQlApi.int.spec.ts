@@ -24,7 +24,7 @@ describe.skip('template group test', () => {
     {
       externalId,
       description: 'Models a Well system',
-      owners: ['user.name@example.com'],
+      owners: [],
     },
   ];
 
@@ -57,14 +57,18 @@ describe.skip('template group test', () => {
   });
 
   it('should run a GraphQL query', async () => {
-    const result = await client.templates.group(externalId).version(1)
-      .runQuery(`
+    const result = await client.templates
+      .group(externalId)
+      .version(1)
+      .runQuery({
+        query: `
       {
         testList {
           a
           b
         }
-      }`);
+      }`,
+      });
     expect(result.data.testList).toEqual([{ a: 10, b: 'test' }]);
   });
 });

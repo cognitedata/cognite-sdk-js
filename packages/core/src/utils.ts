@@ -3,15 +3,12 @@
 import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
 import isBuffer from 'is-buffer';
-import { API_VERSION, BASE_URL } from './constants';
+import { BASE_URL } from './constants';
 import { CogniteError } from './error';
 import { CogniteMultiError } from './multiError';
-import {
-  OAuthLoginForAADOptions,
-  OAuthLoginForADFSOptions,
-  OAuthLoginForCogniteOptions,
-  OAuthLoginOptions,
-} from './baseCogniteClient';
+
+/** @hidden */
+export type CogniteAPIVersion = 'v1' | 'playground';
 
 /** @hidden */
 export function getBaseUrl(baseUrl?: string) {
@@ -19,11 +16,15 @@ export function getBaseUrl(baseUrl?: string) {
 }
 
 /** @hidden */
-export const apiUrl = () => `/api/${API_VERSION}`;
+export const apiUrl = (apiVersion: CogniteAPIVersion = 'v1') =>
+  `/api/${apiVersion}`;
 
 /** @hidden */
-export function projectUrl(project: string) {
-  return `${apiUrl()}/projects/${encodeURIComponent(project)}`;
+export function projectUrl(
+  project: string,
+  apiVersion: CogniteAPIVersion = 'v1'
+) {
+  return `${apiUrl(apiVersion)}/projects/${encodeURIComponent(project)}`;
 }
 
 /** @hidden */
@@ -227,25 +228,4 @@ export function isUsingSSL() {
 /** @hidden */
 export function isLocalhost(): boolean {
   return isBrowser() && location.hostname === 'localhost';
-}
-
-/** @hidden */
-export function isOAuthWithCogniteOptions(
-  options: OAuthLoginOptions
-): options is OAuthLoginForCogniteOptions {
-  return 'project' in options;
-}
-
-/** @hidden */
-export function isOAuthWithAADOptions(
-  options: OAuthLoginOptions
-): options is OAuthLoginForAADOptions {
-  return ['clientId', 'cluster'].every(key => key in options);
-}
-
-/** @hidden **/
-export function isOAuthWithADFSOptions(
-  options: OAuthLoginOptions
-): options is OAuthLoginForADFSOptions {
-  return ['authority', 'requestParams'].every(key => key in options);
 }

@@ -10,6 +10,8 @@ import {
   promiseEachInSequence,
   promiseAllAtOnce,
   isJson,
+  CogniteAPIVersion,
+  apiUrl,
 } from '../utils';
 
 describe('utils', () => {
@@ -21,6 +23,14 @@ describe('utils', () => {
     expect(projectUrl('my-special-tenønt')).toMatchInlineSnapshot(
       `"/api/v1/projects/my-special-ten%C3%B8nt"`
     );
+  });
+
+  test('api version constraints', () => {
+    const v1: CogniteAPIVersion = 'v1';
+    const playground: CogniteAPIVersion = 'playground';
+
+    expect(apiUrl(v1)).toEqual(`/api/${v1}`);
+    expect(apiUrl(playground)).toEqual(`/api/${playground}`);
   });
 
   test('convertToTimestampToDateTime', () => {

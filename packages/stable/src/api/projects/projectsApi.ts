@@ -1,7 +1,11 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import { ProjectResponse, ProjectUpdate } from '../../types';
+import {
+  ProjectResponse,
+  ProjectUpdate,
+  PartialProjectUpdate,
+} from '../../types';
 
 export class ProjectsAPI extends BaseResourceAPI<any> {
   /**
@@ -33,6 +37,30 @@ export class ProjectsAPI extends BaseResourceAPI<any> {
   ): Promise<ProjectResponse> => {
     const path = this.encodeUrl(projectName);
     const response = await this.put<ProjectResponse>(path, {
+      data: replacement,
+    });
+    return this.addToMapAndReturn(response.data, response);
+  };
+
+  /**
+   * [Partial update a project](https://docs.cognite.com/api/v1/#operation/updateProject)
+   *
+   * ```js
+   * await client.projects.updateProject('new-project-name', {
+   *   update: {
+   *     name: {
+   *       set: 'New project display name',
+   *     }
+   *   }
+   * })
+   * ```
+   */
+  public updateProject = async (
+    projectName: string,
+    replacement: PartialProjectUpdate
+  ): Promise<ProjectResponse> => {
+    const path = this.encodeUrl(projectName) + '/update';
+    const response = await this.post<ProjectResponse>(path, {
       data: replacement,
     });
     return this.addToMapAndReturn(response.data, response);

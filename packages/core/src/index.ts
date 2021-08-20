@@ -2,6 +2,7 @@
 import * as Constants from './constants';
 import * as GraphUtils from './graphUtils';
 import * as TestUtils from './testUtils';
+
 export * from './types';
 
 export { MetadataMap } from './metadata';
@@ -38,7 +39,7 @@ export {
   AuthenticateParams,
   IdInfo,
   OnAuthenticateLoginObject,
-} from './auth';
+} from './authFlows/legacy';
 export {
   AuthorizeOptions,
   AuthorizeParams,
@@ -61,6 +62,6 @@ export {
   AzureADSignInType,
   AzureADSingInFlow,
   AzureADSignInRequestParams,
-} from './aad';
-export { ADFSRequestParams } from './adfs';
+} from './authFlows/aad';
+export { ADFSRequestParams } from './authFlows/adfs';
 export { TestUtils, Constants, GraphUtils };

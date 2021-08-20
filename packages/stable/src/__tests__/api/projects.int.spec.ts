@@ -16,6 +16,10 @@ describe('Projects integration test', () => {
     expect(projectInfo.urlName).toBe(client.project);
   });
 
+  test('deprecated update', () => {
+    // no tests because endpoint is overriding config
+  });
+
   test('update', () => {
     // no tests because endpoint is overriding config
   });

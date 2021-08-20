@@ -22,7 +22,7 @@ and closely mimic the structure of the REST API.
 
 ### @cognite/sdk-beta
 depends on both stable and core, and uses inheritance to augment the stable sdk.
-The resulting class is exported as `CogniteClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/beta/classes/cogniteclient.html)), and the rest of stable is forward-exported as well,
+The resulting class is exported as `CogniteClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/beta/classes/_beta_src_cogniteclient_.cogniteclient.html)), and the rest of stable is forward-exported as well,
 which makes the beta package behave as stable by default. To understand how the beta class can override
 parts of stable, see the sections below.
 
@@ -49,7 +49,7 @@ You should also update the `"test"` script to run the tests inside your newly cr
 Finally, if you want docs from this SDK to appear as a subfolder on the reference docs,
 add the following script, which will run when docs are built for deployment:
 ```json
-        "docs:bundle": "yarn docs && mkdir -p ../../docs/<subfolder> && cp -r docs/* ../../docs/<subfolder>/" 
+        "docs:bundle": "yarn docs && mkdir -p ../../docs/<subfolder> && cp -r docs/* ../../docs/<subfolder>/"
 ```
 
 The `README.md` file will appear on npm if published, so write something about the package.
@@ -260,9 +260,10 @@ for separate API classes.
 
 # Accessing endpoints from outside of CDF
 
-If you want to access a different domain, it is recommended to make your own
- `BasicHttpClient` ([docs](https://cognitedata.github.io/cognite-sdk-js/beta/classes/basichttpclient.html)). You specify a `baseUrl` in the constructor, and relative paths in calls to `get`, `post` etc.
- 
+If you want to access a different domain, it is recommended to make your own `BasicHttpClient`
+ ([docs](https://cognitedata.github.io/cognite-sdk-js/beta/classes/_core_src_httpclient_basichttpclient_.basichttpclient.html)).
+ You specify a `baseUrl` in the constructor, and relative paths in calls to `get`, `post` etc.
+
 Example of a custom `CogniteClient` class with an external API:
 ```ts
 import { BasicHttpClient } from '@cognite/sdk-core';
@@ -295,7 +296,7 @@ export default class CogniteClient extends CogniteClientStable {
 }
 ```
 You may also provide full paths (starting in `http://` or `https://`) to `get`, `post`, etc.,
-which will cause the `baseUrl` to be ignored. 
+which will cause the `baseUrl` to be ignored.
 
 
 # Compiling and testing your SDK

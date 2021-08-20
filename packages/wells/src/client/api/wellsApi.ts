@@ -1,15 +1,18 @@
 import { accessApi, HttpError } from '@cognite/sdk-core';
-import { Well, WellItems } from '../model/Well';
+import { Well, WellItems, WellsLimits, SpudDateLimits } from '../model/Well';
 import { Wellbore } from '../model/Wellbore';
-import { WellboresAPI } from '../api/wellboresApi'
-import { WellFilter, WellFilterAPI, PolygonFilterAPI } from '../model/WellFilter';
+import { WellboresAPI } from '../api/wellboresApi';
+import {
+  WellFilter,
+  WellFilterAPI,
+  PolygonFilterAPI,
+} from '../model/WellFilter';
 import { stringify as convertGeoJsonToWKT } from 'wkt';
-import { Asset } from 'wells/src/types';
 import { ConfigureAPI } from '../baseWellsClient';
+import { Asset } from '@cognite/sdk';
 
 export class WellsAPI extends ConfigureAPI {
   private _wellboresSDK?: WellboresAPI;
-
 
   public set wellboresSDK(sdk: WellboresAPI) {
     this._wellboresSDK = sdk;
@@ -20,19 +23,23 @@ export class WellsAPI extends ConfigureAPI {
   }
 
   private convertToWkt(filter: WellFilter): WellFilterAPI {
-    filter.polygon!.wktGeometry = convertGeoJsonToWKT(filter.polygon!.geoJsonGeometry!)
-    return this.convertToApiWellFilter(filter)
+    filter.polygon!.wktGeometry = convertGeoJsonToWKT(
+      filter.polygon!.geoJsonGeometry!
+    );
+    return this.convertToApiWellFilter(filter);
   }
 
   private convertToApiWellFilter(filter: WellFilter): WellFilterAPI {
     let polygon: PolygonFilterAPI | undefined = undefined;
     if (filter.polygon) {
       polygon = {
-        geometry: filter.polygon.wktGeometry!, crs: filter.polygon.crs, geometryType: "wkt"
-      }
+        geometry: filter.polygon.wktGeometry!,
+        crs: filter.polygon.crs,
+        geometryType: 'wkt',
+      };
     }
     return {
-      wellType: filter.wellType,
+      wellTypes: filter.wellTypes,
       stringMatching: filter.stringMatching,
       quadrants: filter.quadrants,
       blocks: filter.blocks,
@@ -41,105 +48,169 @@ export class WellsAPI extends ConfigureAPI {
       sources: filter.sources,
       hasTrajectory: filter.hasTrajectory,
       hasMeasurements: filter.hasMeasurements,
+      npt: filter.npt,
+      nds: filter.nds,
       polygon: polygon,
-    }
+      licenses: filter.licenses,
+      waterDepth: filter.waterDepth,
+      spudDate: filter.spudDate,
+    };
   }
 
   private addLazyMethodsForWell = (well: Well): Well => {
     return <Well>{
-      id: well.id,
-      name: well.name,
-      externalId: well.externalId,
-      description: well.description,
-      country: well.country,
-      quadrant: well.quadrant,
-      block: well.block,
-      field: well.field,
-      operator: well.operator,
+      ...well,
       spudDate: well.spudDate != undefined ? new Date(well.spudDate) : null,
-      waterDepth: well.waterDepth,
-      wellhead: well.wellhead,
-      datum: well.datum,
-      sources: well.sources,
-      wellbores: async (): Promise<Wellbore[] | undefined>  => {return await this.wellbores.getFromWell(well.id).then(response => response).catch(err => err)},
-      sourceAssets: async (source?:string): Promise<Asset[] | undefined>  => await this.getSources(well.id, source)
+      wellbores: async (): Promise<Wellbore[]> => {
+        return await this.wellbores.getFromWell(well.id);
+      },
+      sourceAssets: async (source?: string): Promise<Asset[]> =>
+        await this.getSources(well.id, source),
     };
-  }
+  };
 
-  private getSources = async (wellId: number, source?: string): Promise<Asset[] | undefined> => {
-    let basePath = `/wells/${wellId}/sources`
+  private addLazyMethodsForWellsLimits = (limits: WellsLimits): WellsLimits => {
+    const dateifiedSpudDate: SpudDateLimits = {
+      min: new Date(limits.spudDate.min),
+      max: new Date(limits.spudDate.max),
+    };
+    return <WellsLimits>{
+      ...limits,
+      spudDate: dateifiedSpudDate,
+    };
+  };
+
+  private getSources = async (
+    wellId: number,
+    source?: string
+  ): Promise<Asset[]> => {
+    let basePath = `/wells/${wellId}/sources`;
     if (source !== undefined) {
-      basePath += "/" + source
+      basePath += '/' + source;
     }
 
     const path: string = this.getPath(basePath);
-    // eslint-disable-next-line
-    return await this.client?.asyncGet<Asset[]>(path)
+    return await this.client
+      .asyncGet<Asset[]>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {})
-      })
-  }
+        throw new HttpError(err.status, err.data.error.message, {});
+      });
+  };
 
   private addLazyToAllWellItems = (wellItems: WellItems): WellItems => {
-    return <WellItems> {
+    return <WellItems>{
       items: wellItems.items.map(well => this.addLazyMethodsForWell(well)),
-      cursor: wellItems.cursor
-    }
-  }
+      nextCursor: wellItems.nextCursor,
+    };
+  };
 
+  public getLabelPrefix = async (prefix: String): Promise<String[]> => {
+    const path: string = this.getPath(`/wells/${prefix}`);
 
-  public getLabelPrefix = async (prefix: String): Promise<String[] | undefined> => {
-    const path: string = this.getPath(`/wells/${prefix}`)
-
-    // eslint-disable-next-line
-    return await this.client?.asyncGet<String[]>(path)
+    return await this.client
+      .asyncGet<String[]>(path)
       .then(response => response.data)
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {})
-    });
+        throw new HttpError(err.status, err.data.error.message, {});
+      });
   };
 
-  public blocks = async (): Promise<String[] | undefined> => this.getLabelPrefix('blocks');
-  public fields = async (): Promise<String[] | undefined> => this.getLabelPrefix('fields');
-  public operators = async (): Promise<String[] | undefined> => this.getLabelPrefix('operators');
-  public quadrants = async (): Promise<String[] | undefined> => this.getLabelPrefix('quadrants');
-  public sources = async (): Promise<String[] | undefined> => this.getLabelPrefix('sources');
-  public measurements = async (): Promise<String[] | undefined> => this.getLabelPrefix('measurements');
+  public blocks = async (): Promise<String[]> => this.getLabelPrefix('blocks');
+  public fields = async (): Promise<String[]> => this.getLabelPrefix('fields');
+  public operators = async (): Promise<String[]> =>
+    this.getLabelPrefix('operators');
+  public quadrants = async (): Promise<String[]> =>
+    this.getLabelPrefix('quadrants');
+  public sources = async (): Promise<String[]> =>
+    this.getLabelPrefix('sources');
+  public measurements = async (): Promise<String[]> =>
+    this.getLabelPrefix('measurements');
 
-  public list = async (cursor?: string): Promise<WellItems | undefined> => {
-    const path: string = this.getPath('/wells', cursor)
-    return await this.client?.asyncGet<WellItems>(path)
+  public list = async (cursor?: string, limit?: number): Promise<WellItems> => {
+    const path: string = this.getPath('/wells', cursor, limit);
+    return await this.client
+      .asyncGet<WellItems>(path)
       .then(response => this.addLazyToAllWellItems(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {})
-    });
+        throw new HttpError(err.status, err.data.error.message, {});
+      });
   };
 
-  public filter = async (userFilter: WellFilter, cursor?: string): Promise<WellItems | undefined> => {
+  public limits = async (): Promise<WellsLimits> => {
+    const path: string = this.getPath('/wells/limits');
+    return await this.client
+      .asyncGet<WellsLimits>(path)
+      .then(response => this.addLazyMethodsForWellsLimits(response.data))
+      .catch(err => {
+        throw new HttpError(err.status, err.data.error.message, {});
+      });
+  };
+
+  private sendFilterRequest = async (
+    filter: WellFilterAPI,
+    cursor?: string,
+    limit?: number
+  ): Promise<WellItems> => {
+    const path = this.getPath('/wells/list', cursor, limit);
+    return await this.client
+      .asyncPost<WellItems>(path, { data: filter })
+      .then(response => this.addLazyToAllWellItems(response.data))
+      .catch(err => {
+        throw new HttpError(err.status, err.data.error.message, {});
+      });
+  };
+
+  private wrapFilter = (userFilter: WellFilter): WellFilterAPI => {
     let filter: WellFilterAPI;
     if (userFilter.polygon && userFilter.polygon.geoJsonGeometry) {
-      filter = this.convertToWkt(userFilter)
+      filter = this.convertToWkt(userFilter);
     } else if (userFilter.polygon && userFilter.polygon.wktGeometry) {
-      filter = this.convertToApiWellFilter(userFilter)
+      filter = this.convertToApiWellFilter(userFilter);
     } else {
       userFilter.polygon = undefined;
       filter = this.convertToApiWellFilter(userFilter);
     }
-    const path = this.getPath('/wells/list', cursor)
-    return await this.client?.asyncPost<WellItems>(path, {'data': filter})
-      .then(response => this.addLazyToAllWellItems(response.data))
-      .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {})
-    });
+    return filter;
   };
 
-  public getById = async (id: number): Promise<Well | undefined> => {
-    const path: string = this.getPath(`/wells/${id}`)
-    return await this.client?.asyncGet<Well>(path)
+  public filterSlow = async (userFilter: WellFilter): Promise<Well[]> => {
+    let wells: Well[] = [];
+    let cursor = undefined;
+    const filter: WellFilterAPI = this.wrapFilter(userFilter);
+    do {
+      const wellsChunk: WellItems = await this.sendFilterRequest(
+        filter,
+        cursor
+      );
+      if (wellsChunk == undefined) {
+        break;
+      }
+
+      wells = wells.concat(wellsChunk.items);
+
+      // update cursor and go again
+      cursor = wellsChunk.nextCursor;
+    } while (cursor != undefined);
+    return wells;
+  };
+
+  public filter = async (
+    userFilter: WellFilter,
+    cursor?: string,
+    limit?: number
+  ): Promise<WellItems> => {
+    const filter: WellFilterAPI = this.wrapFilter(userFilter);
+    return await this.sendFilterRequest(filter, cursor, limit);
+  };
+
+  public getById = async (id: number): Promise<Well> => {
+    const path: string = this.getPath(`/wells/${id}`);
+    return await this.client
+      .asyncGet<Well>(path)
       .then(response => this.addLazyMethodsForWell(response.data))
       .catch(err => {
-        throw new HttpError(err.status, err.errorMessage, {})
-    });
+        throw new HttpError(err.status, err.data.error.message, {});
+      });
   };
-};
+}

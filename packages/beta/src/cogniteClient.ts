@@ -10,6 +10,7 @@ import { TemplateGraphQlApi } from './api/templateGroups/templateGraphQlApi';
 import { TemplateGroupsApi } from './api/templateGroups/templateGroupsApi';
 import { TemplateGroupVersionsApi } from './api/templateGroups/templateGroupVersionsApi';
 import { TemplateInstancesApi } from './api/templateGroups/templateInstancesApi';
+import { ViewsApi } from './api/templateGroups/viewsApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
@@ -62,7 +63,16 @@ export default class CogniteClient extends CogniteClientCleaned {
                   `${baseGroupUrl}/instances`
                 )
               ),
-              runQuery: (query: string) => graphQlApi.runQuery(query),
+              runQuery: async <
+                TVariables extends Record<string, unknown>
+              >(graphQlParams: {
+                query: string;
+                variables?: TVariables;
+                operationName?: string;
+              }) => graphQlApi.runQuery(graphQlParams),
+              views: accessApi(
+                this.apiFactory(ViewsApi, `${baseGroupUrl}/views`)
+              ),
             };
           },
         };
@@ -77,6 +87,8 @@ export default class CogniteClient extends CogniteClientCleaned {
   protected initAPIs() {
     super.initAPIs();
 
+    // Lock version to the following date
+    this.httpClient.setDefaultHeader('cdf-version', 'V20210406');
     this.templateGroupsApi = this.apiFactory(
       TemplateGroupsApi,
       'templategroups'

@@ -3,6 +3,198 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.2.0...@cognite/sdk-beta@4.2.1) (2021-08-20)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+# [4.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.1.0...@cognite/sdk-beta@4.2.0) (2021-08-18)
+
+
+### Features
+
+* add update support template instances ([#634](https://github.com/cognitedata/cognite-sdk-js/issues/634)) ([15ca576](https://github.com/cognitedata/cognite-sdk-js/commit/15ca5762a8163fba8dd87d6a69124c4cf2c5dc38))
+
+
+
+
+
+# [4.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.0.5...@cognite/sdk-beta@4.1.0) (2021-08-11)
+
+
+### Features
+
+* **templates:** add lastCreatedTime and lastUpdatedTime ([#581](https://github.com/cognitedata/cognite-sdk-js/issues/581)) ([829af6c](https://github.com/cognitedata/cognite-sdk-js/commit/829af6c2f617052fffbe0bbf4e9b6d70c9cdf6f1))
+* add delete support to template views ([#580](https://github.com/cognitedata/cognite-sdk-js/issues/580)) ([2e16a17](https://github.com/cognitedata/cognite-sdk-js/commit/2e16a1746e4959a0a660a4a4f8d496706fe766d4))
+
+
+
+
+
+## [4.0.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.0.4...@cognite/sdk-beta@4.0.5) (2021-08-10)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [4.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.0.3...@cognite/sdk-beta@4.0.4) (2021-07-21)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [4.0.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.0.2...@cognite/sdk-beta@4.0.3) (2021-07-21)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [4.0.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.0.1...@cognite/sdk-beta@4.0.2) (2021-07-21)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [4.0.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@4.0.0...@cognite/sdk-beta@4.0.1) (2021-07-20)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+# [4.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@3.0.4...@cognite/sdk-beta@4.0.0) (2021-07-15)
+
+
+### Features
+
+* **core:** add oidc auth code flow [release] ([#587](https://github.com/cognitedata/cognite-sdk-js/issues/587)) ([0cc44aa](https://github.com/cognitedata/cognite-sdk-js/commit/0cc44aa82b7d7461e8629fe2e712f743bf6c7138))
+
+
+### BREAKING CHANGES
+
+* **core:** stop silencing errors from aad
+
+* **core:** change loginWithOAuth API signature
+
+
+
+## [3.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@3.0.3...@cognite/sdk-beta@3.0.4) (2021-07-14)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [3.0.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@3.0.2...@cognite/sdk-beta@3.0.3) (2021-07-08)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [3.0.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@3.0.1...@cognite/sdk-beta@3.0.2) (2021-06-30)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [3.0.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@3.0.0...@cognite/sdk-beta@3.0.1) (2021-06-30)
+
+
+### Bug Fixes
+
+* remove documents-api [release] ([#599](https://github.com/cognitedata/cognite-sdk-js/issues/599)) ([473dfea](https://github.com/cognitedata/cognite-sdk-js/commit/473dfea3768bd9533d0b935aafe5111ed2558f40))
+
+
+
+
+
+# [3.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.1.0...@cognite/sdk-beta@3.0.0) (2021-06-30)
+
+
+### Features
+
+* [SBS-3722] search by size range ([#567](https://github.com/cognitedata/cognite-sdk-js/issues/567)) ([1b35d6c](https://github.com/cognitedata/cognite-sdk-js/commit/1b35d6ce73ded7f36be725e2b8c802fa7f8dac88))
+* add template views ([#577](https://github.com/cognitedata/cognite-sdk-js/issues/577)) ([0195c40](https://github.com/cognitedata/cognite-sdk-js/commit/0195c4022b58bfda1641cd10ab439e2e25095598))
+* added support for variables and operationName for templates [release] ([#591](https://github.com/cognitedata/cognite-sdk-js/issues/591)) ([19514b0](https://github.com/cognitedata/cognite-sdk-js/commit/19514b08945cc3f1d16b34bcbb1f4d63bb25f8da))
+* document preview endpoints [release] ([#579](https://github.com/cognitedata/cognite-sdk-js/issues/579)) ([1e8283b](https://github.com/cognitedata/cognite-sdk-js/commit/1e8283b5d5286536faa059bc46c42f24a1980d73))
+
+
+### BREAKING CHANGES
+
+* The templates runQuery function in beta has changed signature, now accepts an object with query, variables and operationName
+
+
+
+
+
+# [2.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.6...@cognite/sdk-beta@2.1.0) (2021-06-08)
+
+
+### Bug Fixes
+
+* template tests ([#557](https://github.com/cognitedata/cognite-sdk-js/issues/557)) ([3099c37](https://github.com/cognitedata/cognite-sdk-js/commit/3099c37d01356de94efee3c9ddda7850af5d2225))
+
+
+### Features
+
+* **documents:** [SBS-3442, SBS-3648] Endpoints for documents ([#541](https://github.com/cognitedata/cognite-sdk-js/issues/541)) ([0e69be5](https://github.com/cognitedata/cognite-sdk-js/commit/0e69be5d8a221494e47bbd5522b9f020e496ceae))
+
+
+
+
+
+## [2.0.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.5...@cognite/sdk-beta@2.0.6) (2021-05-19)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [2.0.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.4...@cognite/sdk-beta@2.0.5) (2021-04-30)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [2.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.3...@cognite/sdk-beta@2.0.4) (2021-04-29)
+
+
+### Bug Fixes
+
+* setting a field resolver to undefined [release] ([#486](https://github.com/cognitedata/cognite-sdk-js/issues/486)) ([75c43eb](https://github.com/cognitedata/cognite-sdk-js/commit/75c43eb2163991485efb6afcade5919d66bbe80f))
+
+
+
+
+
+## [2.0.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.2...@cognite/sdk-beta@2.0.3) (2021-04-26)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
 ## [2.0.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@2.0.1...@cognite/sdk-beta@2.0.2) (2021-04-13)
 
 **Note:** Version bump only for package @cognite/sdk-beta

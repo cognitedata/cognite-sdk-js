@@ -13,6 +13,8 @@ import {
   SyntheticTimeSeriesResolver,
   TemplateInstance,
   TemplateInstanceFilterQuery,
+  TemplateInstancePatch,
+  ViewResolver,
 } from '../../types';
 import fromPairs from 'lodash/fromPairs';
 import toPairs from 'lodash/toPairs';
@@ -56,6 +58,25 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
         TemplateInstanceCodec.encodeTemplateInstances(items),
         this.url('upsert')
       )
+      .then(TemplateInstanceCodec.decodeTemplateInstances);
+  };
+
+  /**
+   * [Update Template Instances](https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroupsExternalidVersionsVersionInstancesUpdate)
+   *
+   * ```js
+   * const instances = await client.templates.group("myGroup").version(1).update( [{ update: {
+   *   fieldResolvers: {
+   *     set: {
+   *       myStringField: "My Field"
+   *     }
+   *   }
+   * }, externalId: 'someExtId' }] );
+   * ```
+   */
+  public update = (changes: TemplateInstancePatch[]) => {
+    return super
+      .updateEndpoint(changes.map(TemplateInstanceCodec.encodePatch))
       .then(TemplateInstanceCodec.decodeTemplateInstances);
   };
 
@@ -123,9 +144,7 @@ class TemplateInstanceCodec {
   ): ExternalTemplateInstance[] {
     return templateInstances.map(item => {
       return {
-        externalId: item.externalId,
-        templateName: item.templateName,
-        dataSetId: item.dataSetId,
+        ...item,
         fieldResolvers: TemplateInstanceCodec.encodeFieldResolvers(
           item.fieldResolvers
         ),
@@ -133,12 +152,41 @@ class TemplateInstanceCodec {
     });
   }
 
+  static encodePatch(patch: TemplateInstancePatch): TemplateInstancePatch {
+    return {
+      ...patch,
+      update: {
+        fieldResolvers: {
+          add:
+            'add' in patch.update.fieldResolvers
+              ? TemplateInstanceCodec.encodeFieldResolvers(
+                  patch.update.fieldResolvers.add
+                )
+              : undefined!,
+          remove:
+            'remove' in patch.update.fieldResolvers
+              ? patch.update.fieldResolvers.remove
+              : undefined!,
+          set:
+            'set' in patch.update.fieldResolvers
+              ? TemplateInstanceCodec.encodeFieldResolvers(
+                  patch.update.fieldResolvers.set
+                )
+              : undefined!,
+        },
+      },
+    };
+  }
+
   static encodeFieldResolvers(
     fieldResolvers: { [K in string]: FieldResolver | {} }
   ): { [K in string]: FieldResolver } {
     const mappedResolvers = toPairs(fieldResolvers).map(
       ([name, fieldResolver]) => {
-        if (!this.isFieldResolver(fieldResolver)) {
+        if (
+          fieldResolver !== undefined &&
+          !this.isFieldResolver(fieldResolver)
+        ) {
           // Auto-wrap objects, numbers etc. as ConstantResolver.
           return [name, new ConstantResolver(fieldResolver)];
         } else {
@@ -155,9 +203,7 @@ class TemplateInstanceCodec {
   ): TemplateInstance[] {
     return templateInstances.map(item => {
       return {
-        externalId: item.externalId,
-        templateName: item.templateName,
-        dataSetId: item.dataSetId,
+        ...item,
         fieldResolvers: TemplateInstanceCodec.decodeFieldResolvers(
           item.fieldResolvers
         ),
@@ -201,6 +247,8 @@ class TemplateInstanceCodec {
           fieldResolver.isString,
           fieldResolver.unit
         );
+      case 'view':
+        return new ViewResolver(fieldResolver.externalId, fieldResolver.input);
       default:
         throw new Error('Unknown field resolver type');
     }
@@ -210,7 +258,8 @@ class TemplateInstanceCodec {
     return (
       fieldResolver instanceof ConstantResolver ||
       fieldResolver instanceof RawResolver ||
-      fieldResolver instanceof SyntheticTimeSeriesResolver
+      fieldResolver instanceof SyntheticTimeSeriesResolver ||
+      fieldResolver instanceof ViewResolver
     );
   }
 }

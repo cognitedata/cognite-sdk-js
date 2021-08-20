@@ -8,6 +8,7 @@ import {
   CreateAssetMapping3D,
   CreateRevision3D,
   FileInfo,
+  Filter3DNodesQuery,
   Model3D,
   Node3D,
   Revision3D,
@@ -124,6 +125,10 @@ describeIfCondition(
       const newRotation: Tuple3<number> = [3, 14, 15];
       const newCameraTarget: Tuple3<number> = [1, 2, 3];
       const newCameraPosition: Tuple3<number> = [3, 2, 1];
+      const newMetadata: { [key: string]: string } = {
+        property0: 'value0',
+        property1: 'value1',
+      };
       const revisionsToUpdate: UpdateRevision3D[] = revisions.map(revision => ({
         id: revision.id,
         update: {
@@ -135,6 +140,9 @@ describeIfCondition(
               target: newCameraTarget,
               position: newCameraPosition,
             },
+          },
+          metadata: {
+            set: newMetadata,
           },
         },
       }));
@@ -155,6 +163,12 @@ describeIfCondition(
           newCameraPosition
         )
       );
+      updatedRevisions.forEach(revision => {
+        expect(revision.metadata).toBeDefined();
+        for (const property in revision.metadata) {
+          expect(revision.metadata[property]).toEqual(newMetadata[property]);
+        }
+      });
     });
 
     test('list', async () => {
@@ -190,6 +204,52 @@ describeIfCondition(
         expect(nodes.length).toBe(2);
         expect(nodes[0]).toEqual(nodes3D[0]);
         expect(nodes[1]).toEqual(nodes3D[1]);
+      },
+      5 * 60 * 1000
+    );
+
+    test(
+      'filter 3d nodes (empty query)',
+      async done => {
+        nodes3D = await client.revisions3D
+          .filter3DNodes(model.id, revisions[0].id)
+          .autoPagingToArray();
+        expect(nodes3D.map(n => n.name)).toContain('RootNode');
+        done();
+      },
+      5 * 60 * 1000
+    );
+
+    test(
+      'filter 3d nodes on properties',
+      async done => {
+        const propertiesFilter: Filter3DNodesQuery = {
+          filter: {
+            properties: { CogniteClient: { InheritType: ['1'] } },
+          },
+        };
+        nodes3D = await client.revisions3D
+          .filter3DNodes(model.id, revisions[0].id, propertiesFilter)
+          .autoPagingToArray();
+        expect(nodes3D.length).toBeGreaterThan(0);
+        done();
+      },
+      5 * 60 * 1000
+    );
+
+    test(
+      'filter 3d nodes (non-existent properties)',
+      async done => {
+        const propertiesFilter: Filter3DNodesQuery = {
+          filter: {
+            properties: { Item: { Type: ['something weird'] } },
+          },
+        };
+        nodes3D = await client.revisions3D
+          .filter3DNodes(model.id, revisions[0].id, propertiesFilter)
+          .autoPagingToArray();
+        expect(nodes3D).toHaveLength(0);
+        done();
       },
       5 * 60 * 1000
     );

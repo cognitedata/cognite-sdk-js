@@ -1,6 +1,6 @@
 import { Wellhead } from './wellhead';
 import { Wellbore } from './Wellbore';
-import { Asset } from 'wells/src/types';
+import { Asset } from '@cognite/sdk';
 import { DoubleWithUnit } from './DoubleWithUnit';
 
 // Customizable function that takes in CogniteClient and args, and return a promise of a well
@@ -20,7 +20,7 @@ export interface WellItems {
    * @type {string}
    * @memberof Well
    */
-  cursor: string;
+  nextCursor?: string;
 }
 /**
  * A well is an assets and sets the basis of the well data model hierarchy
@@ -79,6 +79,16 @@ export interface Well {
    */
   spudDate?: Date;
   /**
+   * @type {string}
+   * @memberof Well
+   */
+  wellType?: string;
+  /**
+   * @type {string}
+   * @memberof Well
+   */
+  license?: string;
+  /**
    * @type {Date}
    * @memberof Well
    */
@@ -133,4 +143,48 @@ export interface WellDatum {
    * @memberof WellDatum
    */
   reference?: string;
+}
+
+export interface WellsLimits {
+  /**
+   * @type {SpudDateLimits}
+   * @memberof WellsLimits
+   */
+  spudDate: SpudDateLimits;
+  /**
+   * @type {WaterDepthLimits}
+   * @memberof WellsLimits
+   */
+  waterDepth: WaterDepthLimits;
+  /**
+   * @type {DoubleRange}
+   * @memberof WellsLimits
+   */
+  nptDuration: DoubleRange;
+}
+
+export interface WaterDepthLimits {
+  /**
+   * @type {DoubleWithUnit}
+   * @memberof WaterDepthLimits
+   */
+  min: DoubleWithUnit;
+  /**
+   * @type {DoubleWithUnit}
+   * @memberof WaterDepthLimits
+   */
+  max: DoubleWithUnit;
+}
+
+export interface SpudDateLimits {
+  /**
+   * @type {Date}
+   * @memberof SpudDateLimits
+   */
+  min: Date;
+  /**
+   * @type {Date}
+   * @memberof SpudDateLimits
+   */
+  max: Date;
 }

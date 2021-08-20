@@ -1,4 +1,4 @@
-import { Asset } from 'wells/src/types';
+import { Asset } from '@cognite/sdk';
 import { Survey } from '../model/Survey';
 import { Sequence } from './Sequence';
 import { Well } from './Well';
@@ -7,6 +7,26 @@ import { Wellhead } from './wellhead';
 // Customizable function that takes in CogniteClient and args, and return a promise of a wellbore
 export type SearchWellbores = (args?: any) => Promise<Wellbore[]>;
 export type SearchWellbore = (args?: any) => Promise<Wellbore>;
+
+/**
+ * Information about a source asset that a wellbore is based on.
+ */
+export interface WellboreSourceAsset {
+  /**
+   * Asset id in CDF
+   */
+  id: number;
+
+  /**
+   * Asset external id in CDF
+   */
+  externalId: string;
+
+  /**
+   * Source system for this source asset.
+   */
+  source: string;
+}
 
 /**
  * A wellbore is an asset.
@@ -23,23 +43,34 @@ export interface Wellbore {
    */
   name: string;
   /**
-   * Asset id in CDF
+   * Wellbore id
    * @type {number}
    * @memberof Wellbore
    */
   id: number;
   /**
+   * Wellbore description
+   * @type {string}
+   * @memberof Wellbore
+   */
+  description?: string;
+  /**
    * External Id for the wellbore
-   * @type {string}}
+   * @type {string}
    * @memberof Wellbore
    */
   externalId?: string;
   /**
    * CDF id of the well that contains this wellbore
-   * @type {string}}
+   * @type {number}
    * @memberof Wellbore
    */
-  wellId?: { [key: string]: string };
+  wellId?: number;
+
+  /**
+   * List of all the source assets for this wellbore
+   */
+  sourceWellbores: WellboreSourceAsset[];
   /**
    * @type {Promise<Survey>}
    * @memberof Wellbore

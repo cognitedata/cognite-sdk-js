@@ -2,7 +2,11 @@
 
 import { setupLoggedInClient } from '../testUtils';
 import CogniteWellsClient from 'wells/src/client/cogniteWellsClient';
-import { Survey, SurveyData, SurveyDataRequest } from 'wells/src/client/model/Survey';
+import {
+  Survey,
+  SurveyData,
+  SurveyDataRequest,
+} from 'wells/src/client/model/Survey';
 
 // suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
@@ -16,35 +20,42 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
     client = setupLoggedInClient();
   });
 
-
   test('Get trajectory for a wellbore', async () => {
     const wellboreId: number = 8456650753594878;
-    const trajectory: Survey | undefined = await client.surveys.getTrajectory(wellboreId)
+    const trajectory: Survey = await client.surveys.getTrajectory(wellboreId);
 
     expect(trajectory).not.toBeUndefined();
-    /* eslint-disable */
-    const metadata = trajectory?.metadata;
+
+    const metadata = trajectory.metadata;
     expect(metadata).not.toBeUndefined();
-    if (metadata) {    
-      expect(metadata["depthUnit"]).toBe("meters")
+    if (metadata) {
+      expect(metadata['depthUnit']).toBe('meters');
     }
   });
 
-  test('Get trajectory for a wellbore with 404 Not Found', async () => {
-    const wellboreId: number = 1000000000000;
+  test('Get trajectories for multiple wellbores', async () => {
+    const wellboreIds: number[] = [8456650753594878, 8620912644845543];
+    const trajectories: Survey[] = await client.surveys.getTrajectories(
+      wellboreIds
+    );
 
-   await client.surveys.getTrajectory(wellboreId)
-      .then(response => response)
-      .catch(err => {
-        expect(err.status).toBe(404);
-        //expect(err.data).toBe(`${wellboreId} doesn't exist`)
-      });
+    expect(trajectories).not.toBeUndefined();
+    expect(trajectories.length).toBe(2);
+  });
+
+  test('Get trajectory for a wellbore with 404 Not Found', async () => {
+    const wellboreId = 1000000000000;
+
+    await client.surveys.getTrajectory(wellboreId).catch(err => {
+      expect(err.status).toBe(404);
+      //expect(err.data).toBe(`${wellboreId} doesn't exist`)
+    });
   });
 
   test('Get rows from a trajectory', async () => {
     const wellboreId: number = 8456650753594878;
 
-    const trajectory: Survey | undefined = await client.surveys.getTrajectory(wellboreId)
+    const trajectory: Survey = await client.surveys.getTrajectory(wellboreId);
 
     expect(trajectory).not.toBeUndefined();
 
@@ -52,15 +63,15 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
       id: trajectory!.id,
       start: undefined,
       end: undefined,
-    }
-    const data: SurveyData | undefined = await client.surveys.getData(request)
+    };
+    const data: SurveyData = await client.surveys.getData(request);
 
     expect(data).not.toBeUndefined();
-    /* eslint-disable */
-    expect(data?.id).toBe(trajectory!.id);
-    expect(data?.rows.length).toBe(3);
-    data?.rows.forEach(row => {
-        expect(row.values.length).toBeGreaterThan(5)
+
+    expect(data.id).toBe(trajectory!.id);
+    expect(data.rows.length).toBe(3);
+    data.rows.forEach(row => {
+      expect(row.values.length).toBeGreaterThan(5);
     });
   });
 
@@ -71,13 +82,10 @@ describeIfCondition('CogniteClient setup in surveys - integration test', () => {
       id: surveyId,
       start: undefined,
       end: undefined,
-    }
+    };
 
-    await client.surveys.getData(request)
-      .then(response => response)
-      .catch(err => {
-        expect(err.status).toBe(400);
-      });
+    await client.surveys.getData(request).catch(err => {
+      expect(err.status).toBe(400);
+    });
   });
-
 });

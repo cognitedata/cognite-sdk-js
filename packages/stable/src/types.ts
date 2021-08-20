@@ -209,9 +209,17 @@ export interface ApiKeyRequest {
   serviceAccountId: CogniteInternalId;
 }
 
+export type ArrayPatchString =
+  | { set: string[] }
+  | { add?: string[]; remove?: string[] };
+
 export type ArrayPatchLong =
   | { set: number[] }
   | { add?: number[]; remove?: number[] };
+
+export type ArrayPatchClaimNames =
+  | { set: ClaimName[] }
+  | { add?: ClaimName[]; remove?: ClaimName[] };
 
 export interface Asset
   extends ExternalAsset,
@@ -416,6 +424,28 @@ export interface AssetMappings3DListFilter extends FilterQuery {
   intersectsBoundingBox?: BoundingBox3D;
 }
 
+export interface AssetMappings3DAssetFilter {
+  assetIds: CogniteInternalId[];
+}
+
+export interface AssetMappings3DNodeFilter {
+  nodeIds: CogniteInternalId[];
+}
+
+export interface AssetMappings3DTreeIndexFilter {
+  treeIndexes: CogniteInternalId[];
+}
+
+export interface Filter3DAssetMappingsQuery extends FilterQuery {
+  /**
+   * A filter for either `assetIds`, `nodeIds` or `treeIndices`.
+   */
+  filter?:
+    | AssetMappings3DAssetFilter
+    | AssetMappings3DNodeFilter
+    | AssetMappings3DTreeIndexFilter;
+}
+
 /**
  * Name of asset. Often referred to as tag.
  */
@@ -427,7 +457,7 @@ export interface AssetPatch {
     name?: SinglePatchRequiredString;
     description?: SinglePatchString;
     dataSetId?: NullableSinglePatchLong;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     labels?: LabelsPatch;
     source?: SinglePatchString;
   };
@@ -650,7 +680,7 @@ export interface DataSetPatch {
     externalId?: SinglePatchString;
     name?: SinglePatchString;
     description?: SinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     writeProtected?: SetField<boolean>;
   };
 }
@@ -892,7 +922,7 @@ export interface EventPatch {
     startTime?: SinglePatchDate;
     endTime?: SinglePatchDate;
     description?: SinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     assetIds?: ArrayPatchLong;
     dataSetId?: NullableSinglePatchLong;
     source?: SinglePatchString;
@@ -975,6 +1005,7 @@ export interface ExternalFileInfo {
   name: FileName;
   source?: string;
   mimeType?: FileMimeType;
+  directory?: string;
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
   dataSetId?: CogniteInternalId;
@@ -1016,7 +1047,7 @@ export interface FileChange {
     externalId?: SinglePatchString;
     source?: SinglePatchString;
     mimeType?: SinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     assetIds?: ArrayPatchLong;
     securityCategories?: ArrayPatchLong;
     sourceCreatedTime?: SinglePatchDate;
@@ -1058,6 +1089,7 @@ export interface FileFilterProps {
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
   assetSubtreeIds?: IdEither[];
+  directoryPrefix?: string;
   source?: string;
   createdTime?: DateRange;
   lastUpdatedTime?: DateRange;
@@ -1411,6 +1443,22 @@ export interface List3DNodesQuery extends FilterQuery {
   sortByNodeId?: boolean;
 }
 
+export interface Filter3DNodesQuery extends FilterQuery {
+  /**
+   * List filter
+   */
+  filter: {
+    /**
+     * Property filters. Nodes satisfy the filter if, for each property in the nested map(s), they have a value corresponding to that property that is contained within the list associated with that property in the map.
+     */
+    properties: { [key: string]: { [key: string]: string[] } };
+  };
+  /**
+   * Partition specifier of the form "n/m". It will return the n'th (1-indexed) part of the result divided into m parts.
+   */
+  partition?: Partition;
+}
+
 export interface ListGroups {
   /**
    * Whether to get all groups, only available with the groups:list acl.
@@ -1477,7 +1525,7 @@ export interface Model3D {
   metadata?: Metadata;
 }
 
-export interface Model3DListRequest extends Limit {
+export interface Model3DListRequest extends FilterQuery {
   /**
    * Filter based on whether or not it has published revisions.
    */
@@ -1571,23 +1619,25 @@ export interface OAuth2Configuration {
 
 export type OWNER = 'OWNER';
 
-export type ObjectPatch =
+export type ObjectPatch<T> =
   | {
       /**
        * Set the key-value pairs. All existing key-value pairs will be removed.
        */
-      set: { [key: string]: string };
+      set: { [key: string]: T };
     }
   | {
       /**
        * Add the key-value pairs. Values for existing keys will be overwritten.
        */
-      add: { [key: string]: string };
+      add: { [key: string]: T };
       /**
        * Remove the key-value pairs with given keys.
        */
       remove: string[];
     };
+
+export type MetadataPatch = ObjectPatch<string>;
 
 /**
  * Data about how to authenticate and authorize users. The authentication configuration is hidden.
@@ -1626,12 +1676,60 @@ export interface ProjectResponse {
   urlName: UrlName;
   defaultGroupId?: DefaultGroupId;
   authentication?: OutputProjectAuthentication;
+  oidcConfiguration?: OidcConfiguration;
 }
 
 export interface ProjectUpdate {
   name?: ProjectName;
   defaultGroupId?: DefaultGroupId;
   authentication?: InputProjectAuthentication;
+}
+
+export interface OidcConfigurationUpdate {
+  modify?: OidcConfigurationUpdateModify;
+  set?: OidcConfiguration;
+  setNull?: boolean;
+}
+
+export interface ClaimName {
+  claimName: string;
+}
+
+export interface OidcConfigurationUpdateModify {
+  jwksUrl?: SetField<string>;
+  tokenUrl?: SinglePatchString;
+  issuer?: SetField<string>;
+  audience?: SetField<string>;
+  skewMs?: SinglePatch<number>;
+  accessClaims?: ArrayPatchClaimNames;
+  scopeClaims?: ArrayPatchClaimNames;
+  logClaims: ArrayPatchClaimNames;
+}
+
+export interface PartialProjectUpdate {
+  update: ProjectUpdateObject;
+}
+
+export interface ProjectUpdateObject {
+  name?: SinglePatchRequiredString;
+  defaultGroupId?: NullableSinglePatchLong;
+  validDomains?: ArrayPatchString;
+  applicationDomains?: ArrayPatchString;
+  authenticationProtocol?: SinglePatchRequiredString;
+  azureADConfiguration?: SinglePatch<AzureADConfiguration>;
+  oAuth2Configuration?: SinglePatch<OAuth2Configuration>;
+  oidcConfiguration?: OidcConfigurationUpdate;
+}
+
+export interface OidcConfiguration {
+  jwksUrl: string;
+  tokenUrl?: string;
+  issuer: string;
+  audience: string;
+  skewMs?: number;
+  accessClaims: ClaimName[];
+  scopeClaims: ClaimName[];
+  logClaims: ClaimName[];
 }
 
 export type READ = 'READ';
@@ -1909,6 +2007,27 @@ export interface RevisionCameraProperties {
   position?: Tuple3<number>;
 }
 
+export type RevisionMetadata = { [key: string]: string };
+
+export type RevisionMetadataUpdate =
+  | RevisionMetadataUpdateSet
+  | RevisionMetadataUpdateAddRemove;
+
+export interface RevisionMetadataUpdateSet {
+  set: RevisionMetadata;
+}
+
+export interface RevisionMetadataUpdateAddRemove {
+  /**
+   * Key/value pairs to add
+   */
+  add?: RevisionMetadata;
+  /**
+   * Keys to remove
+   */
+  remove?: string[];
+}
+
 export interface SecurityCategory {
   /**
    * Name of the security category
@@ -2027,7 +2146,7 @@ export interface SequencePatch {
     dataSetId?: NullableSinglePatchLong;
     externalId?: SinglePatchString;
     endTime?: SinglePatchDate;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
   };
 }
 
@@ -2182,11 +2301,10 @@ export type SingleCogniteCapability =
   | { analyticsAcl: AclAnalytics }
   | { datasetsAcl: AclDataSets };
 
+export type SinglePatch<T> = { set: T } | { setNull: boolean };
+
 export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
-/**
- * Non removable string change.
- */
 export interface SinglePatchRequiredString {
   set: string;
 }
@@ -2234,7 +2352,7 @@ export interface TimeSeriesPatch {
   update: {
     externalId?: NullableSinglePatchString;
     name?: NullableSinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     unit?: NullableSinglePatchString;
     assetId?: NullableSinglePatchLong;
     dataSetId?: NullableSinglePatchLong;
@@ -2370,6 +2488,10 @@ export interface UpdateRevision3D {
      * Initial camera target.
      */
     camera?: SetField<RevisionCameraProperties>;
+    /**
+     * Revision metadata.
+     */
+    metadata?: RevisionMetadataUpdate;
   };
 }
 
