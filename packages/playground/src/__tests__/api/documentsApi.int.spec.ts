@@ -46,6 +46,18 @@ describe('documents api', () => {
     expect(response.items[0].item.id).toBeDefined();
   });
 
+  test('list with geo location filter', async () => {
+    const response = await client.documents.list({
+      filter: {
+        geoLocation: {
+          missing: true,
+        },
+      },
+      limit: 1,
+    });
+    expect(response.items).toHaveLength(1);
+  });
+
   describe('document preview', () => {
     let documents: ListResponse<Document[]>;
 
