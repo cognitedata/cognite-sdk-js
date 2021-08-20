@@ -10,7 +10,9 @@ import {
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-describe.skip('AssetMappings3D integration test', () => {
+jest.retryTimes(5);
+jest.setTimeout(20000); // 20 seconds
+describe('AssetMappings3D integration test', () => {
   let client: CogniteClient;
   let model: Model3D;
   let revision: Revision3D;
