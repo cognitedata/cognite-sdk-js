@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.3.0...@cognite/sdk-playground@2.3.1) (2021-08-21)
+
+
+### Bug Fixes
+
+* **func-test:** make function more reliable ([#657](https://github.com/cognitedata/cognite-sdk-js/issues/657)) ([019e05e](https://github.com/cognitedata/cognite-sdk-js/commit/019e05e8de23d96622eabed02ff7c28aa1e719e3))
+* **playground:** geo location filter ([#648](https://github.com/cognitedata/cognite-sdk-js/issues/648)) ([be15744](https://github.com/cognitedata/cognite-sdk-js/commit/be15744e7472d9bbe3a7c1730cd582f6aab44bbd))
+
+
+
+
+
 # [2.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.2.0...@cognite/sdk-playground@2.3.0) (2021-08-20)
 
 
