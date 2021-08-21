@@ -5,7 +5,6 @@ import {
   CogniteInternalId,
   ExternalId,
   FilterQuery,
-  GeoLocationGeometry,
   LabelFilter,
   PointCoordinates,
   Label,
@@ -51,8 +50,9 @@ export interface ContainsAnyIds {
 export type DocumentsGeoLocationRelation = 'intersects' | 'disjoint' | 'within';
 
 export interface GeoLocationFilter {
-  relation: DocumentsGeoLocationRelation;
-  shape: GeoLocationGeometry<DocumentsGeoLocationType, PointCoordinates[]>;
+  shape?: GeoLocation;
+  relation?: DocumentsGeoLocationRelation;
+  missing?: boolean;
 }
 
 export type AssetIdsFilter = ContainsAllIds | ContainsAnyIds;
