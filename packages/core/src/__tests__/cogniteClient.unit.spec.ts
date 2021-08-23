@@ -16,7 +16,9 @@ import { apiKey, authTokens, loggedInResponse, project } from '../testUtils';
 
 const initAuth = jest.fn();
 const login = jest.fn();
+const azureLoginRedirect = jest.fn();
 const getCDFToken = jest.fn();
+const getAzureToken = jest.fn();
 const getCluster = jest.fn();
 
 jest.mock('../authFlows/aad', () => {
@@ -25,7 +27,9 @@ jest.mock('../authFlows/aad', () => {
       return {
         initAuth,
         login,
+        azureLoginRedirect,
         getCDFToken,
+        getAzureToken,
         getCluster,
       };
     }),
@@ -835,6 +839,78 @@ describe('CogniteClient', () => {
         expect(silentLogin).toBe(false);
         expect(authenticated).toBe(false);
         expect(onNoProjectAvailable).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('azure tenant list', () => {
+      const clientId = 'clientId';
+      const mockClusterUrl = `https://management.azure.com/tenants?api-version=2020-01-01`;
+      let client: BaseCogniteClient;
+
+      beforeEach(() => {
+        client = new BaseCogniteClient({ appId: 'test-app' });
+      });
+      afterEach(() => {
+        jest.clearAllMocks();
+      });
+
+      const fixtureTenantList = [
+        {
+          id: '/tenants/123123123-3600-4917-a9dc-3020723360b3',
+          tenantId: '123123123-3600-4917-a9dc-3020723360b3',
+          countryCode: 'NO',
+          displayName: 'Test AS',
+          domains: ['test.com', 'test.onmicrosoft.com', 'test.com'],
+          tenantCategory: 'Home',
+          defaultDomain: 'test.com',
+          tenantType: 'AAD',
+        },
+      ];
+
+      test('fails when the access token is not defined & account succeed', async () => {
+        nock(mockClusterUrl)
+          .get('?api-version=2020-01-01')
+          .once()
+          .reply(200, {
+            value: fixtureTenantList,
+          });
+
+        const result = await client.getAzureTenantList(clientId);
+        expect(getAzureToken).toBeCalledTimes(1);
+        expect(result).toMatchObject([]);
+      });
+
+      test('fails when access token is not defined & account fails', async () => {
+        nock(mockClusterUrl)
+          .get('?api-version=2020-01-01')
+          .once()
+          .reply(200, {
+            value: fixtureTenantList,
+          });
+        initAuth.mockReturnValueOnce(false);
+        azureLoginRedirect.mockResolvedValue(true);
+
+        const result = await client.getAzureTenantList(clientId);
+
+        expect(initAuth).toHaveReturnedWith(false);
+        expect(getAzureToken).toBeCalledTimes(1);
+
+        expect(result).toMatchObject([]);
+      });
+
+      test('fetch all the azure tenants', async () => {
+        nock(mockClusterUrl)
+          .get('?api-version=2020-01-01')
+          .once()
+          .reply(200, {
+            value: fixtureTenantList,
+          });
+        getAzureToken.mockResolvedValue('access_token');
+        azureLoginRedirect.mockResolvedValue(true);
+
+        const result = await client.getAzureTenantList(clientId);
+
+        expect(result.length).toBeGreaterThan(0);
       });
     });
 

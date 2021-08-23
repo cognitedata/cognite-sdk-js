@@ -959,7 +959,7 @@ export default class BaseCogniteClient {
 
     let accessToken = null;
 
-    const account = this.validateAccount(azureAdClient);
+    const account = await this.validateAccount(azureAdClient);
     if (account) {
       accessToken = await azureAdClient.getAzureToken();
     }
