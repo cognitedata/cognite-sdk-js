@@ -943,7 +943,7 @@ export default class BaseCogniteClient {
    * @param clientId
    * @param debug
    */
-  public async getTenantList(
+  public async getAzureTenantList(
     clientId: string,
     debug = false
   ): Promise<AzureTenantInfo[]> {
