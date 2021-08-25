@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.3.1...@cognite/sdk-playground@2.4.0) (2021-08-25)
+
+
+### Features
+
+* **playground:** /documents/content endpoint ([#647](https://github.com/cognitedata/cognite-sdk-js/issues/647)) ([b7a4a61](https://github.com/cognitedata/cognite-sdk-js/commit/b7a4a61de65b7098357138df230b43446f7afc20))
+
+
+
+
+
 ## [2.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.3.0...@cognite/sdk-playground@2.3.1) (2021-08-21)
 
 
