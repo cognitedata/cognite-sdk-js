@@ -58,7 +58,7 @@ describe('documents api', () => {
     expect(documentContent.id).toEqual(doc.id);
     expect(documentContent.content).toContainEqual(doc.truncatedContent);
   });
-  
+
   test('list with geo location filter', async () => {
     const response = await client.documents.list({
       filter: {
