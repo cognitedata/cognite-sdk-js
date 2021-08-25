@@ -47,10 +47,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   };
 
   // https://docs.cognite.com/api/playground/#operation/documentsContent
-  public nontruncatedContent = (
+  public documentContent = (
     documentIds: InternalId[]
   ): Promise<ItemsWrapper<DocumentContent[]>> => {
-    return this.listContent<ItemsWrapper<DocumentContent[]>>(documentIds);
+    return this.documentContent<ItemsWrapper<DocumentContent[]>>(documentIds);
   };
 
   public get feedback() {
@@ -71,10 +71,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return response.data;
   }
 
-  private async listContent<ResponseType>(
+  private async documentContent<ResponseType>(
     documentIds: InternalId[]
   ): Promise<ResponseType> {
-    const response = await this.post<ResponseType>(this.url(), {
+    const response = await this.post<ResponseType>(this.url() + '/content', {
       data: { items: documentIds },
     });
     return response.data;
