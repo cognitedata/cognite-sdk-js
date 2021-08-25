@@ -46,7 +46,7 @@ describe('documents api', () => {
     expect(response.items[0].item.id).toBeDefined();
   });
 
-  test('nontruncated content', async () => {
+  test('document content', async () => {
     const response = await client.documents.list({ limit: 1 });
     const doc = response.items[0];
 
@@ -57,6 +57,18 @@ describe('documents api', () => {
     const documentContent = resp.items[0];
     expect(documentContent.id).toEqual(doc.id);
     expect(documentContent.content).toContainEqual(doc.truncatedContent);
+  });
+  
+  test('list with geo location filter', async () => {
+    const response = await client.documents.list({
+      filter: {
+        geoLocation: {
+          missing: true,
+        },
+      },
+      limit: 1,
+    });
+    expect(response.items).toHaveLength(1);
   });
 
   describe('document preview', () => {
