@@ -38,9 +38,9 @@ describe('Documents unit test', () => {
     });
   });
 
-  test('non-truncated content', async () => {
+  test('document content', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/search'), {
+      .post(new RegExp('/documents/content'), {
         items: [{ id: 1 }, { id: 2 }, { id: 7 }],
       })
       .once()
