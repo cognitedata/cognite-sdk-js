@@ -46,6 +46,27 @@ describe('documents api', () => {
     expect(response.items[0].item.id).toBeDefined();
   });
 
+  test('document content', async () => {
+    const response = await client.documents.list({
+      filter: {
+        id: {
+          equals: 8814046572029990,
+        },
+      },
+      limit: 1,
+    });
+    expect(response.items[0]).toBeDefined();
+    const doc = response.items[0];
+
+    const resp = await client.documents.content([doc.id]);
+    expect(resp.items).toBeDefined();
+    expect(resp.items).toHaveLength(1);
+
+    const documentContent = resp.items[0];
+    expect(documentContent.id).toEqual(doc.id);
+    expect(documentContent.content).toContain(doc.truncatedContent);
+  });
+
   test('list with geo location filter', async () => {
     const response = await client.documents.list({
       filter: {

@@ -133,6 +133,11 @@ export interface DocumentsDateHistogramAggregate {
   interval: string;
 }
 
+export interface DocumentContent {
+  id: number;
+  content: string;
+}
+
 export interface Document {
   id: number;
   externalId?: CogniteExternalId;

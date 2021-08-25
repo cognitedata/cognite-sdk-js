@@ -38,6 +38,26 @@ describe('Documents unit test', () => {
     });
   });
 
+  test('document content', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/content'), {
+        items: [{ id: 1 }, { id: 2 }, { id: 7 }],
+      })
+      .once()
+      .reply(200, {
+        items: [
+          { id: 1, content: 'lorem ipsum' },
+          { id: 2, content: 'lorem ipsum ted' },
+          { id: 7, content: 'lorem ipsum vismysa antom' },
+        ],
+      });
+    const resp = await client.documents.content([1, 2, 7]);
+
+    expect(resp.items).toHaveLength(3);
+    expect(resp.items[0].id).toEqual(1);
+    expect(resp.items[0].content).toEqual('lorem ipsum');
+  });
+
   describe('geo location', () => {
     test('point', async () => {
       nock(mockBaseUrl)
