@@ -51,11 +51,7 @@ describe('Documents unit test', () => {
           { id: 7, content: 'lorem ipsum vismysa antom' },
         ],
       });
-    const resp = await client.documents.nontruncatedContent([
-      { id: 1 },
-      { id: 2 },
-      { id: 3 },
-    ]);
+    const resp = await client.documents.content([1, 2, 7]);
 
     expect(resp.items).toHaveLength(3);
     expect(resp.items[0].id).toEqual(1);
