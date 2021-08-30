@@ -537,6 +537,7 @@ export interface CreateModel3D {
    */
   name: string;
   metadata?: Metadata;
+  dataSetId?: number;
 }
 
 export interface CreateRevision3D {
@@ -1523,6 +1524,7 @@ export interface Model3D {
   id: CogniteInternalId;
   createdTime: Date;
   metadata?: Metadata;
+  dataSetId?: number;
 }
 
 export interface Model3DListRequest extends FilterQuery {
