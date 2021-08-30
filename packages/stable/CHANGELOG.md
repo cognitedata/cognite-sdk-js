@@ -3,6 +3,169 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.3.0...@cognite/sdk@5.3.1) (2021-08-30)
+
+
+### Bug Fixes
+
+* **stable:** external id format for fetching rows ([#664](https://github.com/cognitedata/cognite-sdk-js/issues/664)) ([a637814](https://github.com/cognitedata/cognite-sdk-js/commit/a63781461544c6fefa9e9a0db54210e6544d7600))
+
+
+
+
+
+# [5.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.2.1...@cognite/sdk@5.3.0) (2021-08-30)
+
+
+### Features
+
+* promote templates to stable ([#661](https://github.com/cognitedata/cognite-sdk-js/issues/661)) ([def00b6](https://github.com/cognitedata/cognite-sdk-js/commit/def00b654ad0696ef2be8dcd47a94fcd099f7277))
+
+
+
+
+
+## [5.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.2.0...@cognite/sdk@5.2.1) (2021-08-20)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [5.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.1.5...@cognite/sdk@5.2.0) (2021-08-18)
+
+
+### Features
+
+* add update support template instances ([#634](https://github.com/cognitedata/cognite-sdk-js/issues/634)) ([15ca576](https://github.com/cognitedata/cognite-sdk-js/commit/15ca5762a8163fba8dd87d6a69124c4cf2c5dc38))
+
+
+
+
+
+## [5.1.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.1.4...@cognite/sdk@5.1.5) (2021-08-11)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [5.1.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.1.3...@cognite/sdk@5.1.4) (2021-08-10)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [5.1.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.1.2...@cognite/sdk@5.1.3) (2021-07-21)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [5.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.1.1...@cognite/sdk@5.1.2) (2021-07-21)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [5.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.1.0...@cognite/sdk@5.1.1) (2021-07-21)
+
+
+### Bug Fixes
+
+* revert client credentials [release] ([#618](https://github.com/cognitedata/cognite-sdk-js/issues/618)) ([08a0d8c](https://github.com/cognitedata/cognite-sdk-js/commit/08a0d8cf01105aa326e73d93c703c7fc0ee6f68d))
+
+
+
+
+
+# [5.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.0.0...@cognite/sdk@5.1.0) (2021-07-20)
+
+
+### Features
+
+* client credentials flow [release] ([#607](https://github.com/cognitedata/cognite-sdk-js/issues/607)) ([28ed890](https://github.com/cognitedata/cognite-sdk-js/commit/28ed890ebf15da151e05cf0c487bca4b91b8ea96))
+
+
+
+
+
+# [5.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.3.1...@cognite/sdk@5.0.0) (2021-07-15)
+
+
+### Features
+
+* **core:** add oidc auth code flow [release] ([#587](https://github.com/cognitedata/cognite-sdk-js/issues/587)) ([0cc44aa](https://github.com/cognitedata/cognite-sdk-js/commit/0cc44aa82b7d7461e8629fe2e712f743bf6c7138))
+
+
+### BREAKING CHANGES
+
+* **core:** stop silencing errors from aad
+
+* **core:** change loginWithOAuth API signature
+
+
+
+## [4.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.3.0...@cognite/sdk@4.3.1) (2021-07-14)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [4.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.2.2...@cognite/sdk@4.3.0) (2021-07-08)
+
+
+### Features
+
+* **revisions3d:** parameter to update metadata property [release] ([#609](https://github.com/cognitedata/cognite-sdk-js/issues/609)) ([920ee0b](https://github.com/cognitedata/cognite-sdk-js/commit/920ee0b6992fb7ede4421983d59546864fb791b7))
+* add accessor to filter 3d nodes endpoint ([#608](https://github.com/cognitedata/cognite-sdk-js/issues/608)) ([b64e39f](https://github.com/cognitedata/cognite-sdk-js/commit/b64e39f7397ecbc460d2844192bf569f780ed9cb))
+
+
+
+
+
+## [4.2.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.2.1...@cognite/sdk@4.2.2) (2021-06-30)
+
+
+### Reverts
+
+* Revert "feat!: add client credentials flow (#589)" (#604) ([12d65a4](https://github.com/cognitedata/cognite-sdk-js/commit/12d65a41e919409582d76a3a59798737808cefac)), closes [#589](https://github.com/cognitedata/cognite-sdk-js/issues/589) [#604](https://github.com/cognitedata/cognite-sdk-js/issues/604)
+
+
+
+
+
+## [4.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.2.0...@cognite/sdk@4.2.1) (2021-06-30)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [4.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.1.0...@cognite/sdk@4.2.0) (2021-06-30)
+
+
+### Features
+
+* appended oidc configuration to project response ([#576](https://github.com/cognitedata/cognite-sdk-js/issues/576)) ([2fd5fa4](https://github.com/cognitedata/cognite-sdk-js/commit/2fd5fa42d41d97623c2fba350a3846efef71ad2d))
+* directoryPrefix filter for files [release] ([#590](https://github.com/cognitedata/cognite-sdk-js/issues/590)) ([ae59982](https://github.com/cognitedata/cognite-sdk-js/commit/ae599825f90c7fa1222f26c86fd4f79d9915f746))
+* **project:** partial project update ([#573](https://github.com/cognitedata/cognite-sdk-js/issues/573)) ([230c23e](https://github.com/cognitedata/cognite-sdk-js/commit/230c23ef45028b025b85a3f020d31ee4e3a67a97))
+
+
+
+
+
 # [4.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@4.0.4...@cognite/sdk@4.1.0) (2021-05-19)
 
 
@@ -370,7 +533,7 @@ For replacements, see [MIGRATION_GUIDE_2xx_3xx.md](https://docs.cognite.com/dev/
 ### Features
 
 
-* Introduce support for Data sets. Document and track data lineage, ensure data integrity, and allow 3rd parties to write their insights securely back to your Cognite Data Fusion (CDF) project. Learn more about data sets [here.](https://docs.cognite.com/cdf/blog/data_sets.html)
+* Introduce support for Data sets. Document and track data lineage, ensure data integrity, and allow 3rd parties to write their insights securely back to your Cognite Data Fusion (CDF) project. Learn more about data sets [here.](https://docs.cognite.com/blog/2020/03/01/data-sets/)
 
 # [2.22.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.21.0...v2.22.0) (2020-03-05)
 

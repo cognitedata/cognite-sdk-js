@@ -6,6 +6,7 @@ import {
   CursorResponse,
   InternalId,
   List3DNodesQuery,
+  Filter3DNodesQuery,
   Node3D,
 } from '../../types';
 
@@ -18,6 +19,18 @@ export class Nodes3DAPI extends BaseResourceAPI<Node3D> {
     const path = this.url(`${modelId}/revisions/${revisionId}/nodes`);
     return super.listEndpoint(
       params => this.get<CursorResponse<Node3D[]>>(path, { params }),
+      scope
+    );
+  }
+
+  public filter(
+    modelId: CogniteInternalId,
+    revisionId: CogniteInternalId,
+    scope?: Filter3DNodesQuery
+  ): CursorAndAsyncIterator<Node3D> {
+    const path = this.url(`${modelId}/revisions/${revisionId}/nodes/list`);
+    return super.listEndpoint(
+      params => this.post<CursorResponse<Node3D[]>>(path, { data: params }),
       scope
     );
   }

@@ -168,20 +168,15 @@ export interface WellFilterAPI {
 
 export interface TrajectoryFilter {
   /**
-   * @type {number}
+   * @type {LengthRange}
    * @memberof TrajectoryFilter
    */
-  minDepth?: number;
+  maxMeasuredDepth?: LengthRange;
   /**
-   * @type {number}
+   * @type {DoubleRange}
    * @memberof TrajectoryFilter
    */
-  maxDepth?: number;
-  /**
-   * @type {string[]}
-   * @memberof TrajectoryFilter
-   */
-  crossesFormations?: string[];
+  maxInclination?: DoubleRange;
 }
 
 export interface MeasurementFilter {

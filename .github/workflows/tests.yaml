@@ -1,0 +1,104 @@
+name: CI
+
+on:
+ pull_request:
+    branches:
+      - master
+      - release-*
+
+jobs:
+  lint:
+
+    runs-on: ubuntu-latest
+
+    env:
+      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧
+        run: yarn install --frozen-lockfile
+
+        # tests pushed git commits
+      - uses: wagoid/commitlint-github-action@v3
+
+      - name: Commit lint PR
+        run: echo $PR_MESSAGE | npx commitlint
+        env:
+          PR_MESSAGE: ${{github.event.pull_request.title}}
+
+      - name: validateDocLinks
+        run: yarn validateDocLinks
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Build
+        run: yarn build
+
+      - name: Test/Codecov
+        run: yarn test:codecov
+
+      - name: Codecov
+        uses: codecov/codecov-action@v1.0.11
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Test snippets
+        run: yarn test-snippets
+
+      - name: Test samples
+        run: yarn test-samples
+
+  tests:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
+
+    env:
+      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Test
+        run: yarn test --since origin/master

@@ -4,22 +4,13 @@ import {
   ClientOptions,
   CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
-import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
-import { TemplateGraphQlApi } from './api/templateGroups/templateGraphQlApi';
-import { TemplateGroupsApi } from './api/templateGroups/templateGroupsApi';
-import { TemplateGroupVersionsApi } from './api/templateGroups/templateGroupVersionsApi';
-import { TemplateInstancesApi } from './api/templateGroups/templateInstancesApi';
-import { DocumentsAPI } from './api/documents/documentsApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
 }
 
 export default class CogniteClient extends CogniteClientCleaned {
-  private templateGroupsApi?: TemplateGroupsApi;
-  private documentsApi?: DocumentsAPI;
-
   /**
    * Create a new SDK client (beta)
    *
@@ -41,54 +32,11 @@ export default class CogniteClient extends CogniteClientCleaned {
     super(options);
   }
 
-  public get templates() {
-    return {
-      groups: accessApi(this.templateGroupsApi),
-      group: (externalId: string) => {
-        const urlsafeExternalId = CogniteClient.urlEncodeExternalId(externalId);
-        const baseVersionsUrl = `templategroups/${urlsafeExternalId}/versions`;
-        return {
-          versions: accessApi(
-            this.apiFactory(TemplateGroupVersionsApi, baseVersionsUrl)
-          ),
-          version: (version: number) => {
-            const baseGroupUrl = `${baseVersionsUrl}/${version}`;
-            const graphQlApi = this.apiFactory(
-              TemplateGraphQlApi,
-              `${baseGroupUrl}/graphql`
-            );
-            return {
-              instances: accessApi(
-                this.apiFactory(
-                  TemplateInstancesApi,
-                  `${baseGroupUrl}/instances`
-                )
-              ),
-              runQuery: (query: string) => graphQlApi.runQuery(query),
-            };
-          },
-        };
-      },
-    };
-  }
-  public get documents() {
-    return accessApi(this.documentsApi);
-  }
-
   protected get version() {
     return `${version}-beta`;
   }
 
   protected initAPIs() {
     super.initAPIs();
-
-    this.templateGroupsApi = this.apiFactory(
-      TemplateGroupsApi,
-      'templategroups'
-    );
-    this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
-  }
-  static urlEncodeExternalId(externalId: string): string {
-    return encodeURIComponent(externalId);
   }
 }

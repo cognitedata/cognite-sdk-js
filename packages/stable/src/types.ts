@@ -209,9 +209,17 @@ export interface ApiKeyRequest {
   serviceAccountId: CogniteInternalId;
 }
 
+export type ArrayPatchString =
+  | { set: string[] }
+  | { add?: string[]; remove?: string[] };
+
 export type ArrayPatchLong =
   | { set: number[] }
   | { add?: number[]; remove?: number[] };
+
+export type ArrayPatchClaimNames =
+  | { set: ClaimName[] }
+  | { add?: ClaimName[]; remove?: ClaimName[] };
 
 export interface Asset
   extends ExternalAsset,
@@ -449,7 +457,7 @@ export interface AssetPatch {
     name?: SinglePatchRequiredString;
     description?: SinglePatchString;
     dataSetId?: NullableSinglePatchLong;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     labels?: LabelsPatch;
     source?: SinglePatchString;
   };
@@ -672,7 +680,7 @@ export interface DataSetPatch {
     externalId?: SinglePatchString;
     name?: SinglePatchString;
     description?: SinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     writeProtected?: SetField<boolean>;
   };
 }
@@ -914,7 +922,7 @@ export interface EventPatch {
     startTime?: SinglePatchDate;
     endTime?: SinglePatchDate;
     description?: SinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     assetIds?: ArrayPatchLong;
     dataSetId?: NullableSinglePatchLong;
     source?: SinglePatchString;
@@ -997,6 +1005,7 @@ export interface ExternalFileInfo {
   name: FileName;
   source?: string;
   mimeType?: FileMimeType;
+  directory?: string;
   metadata?: Metadata;
   assetIds?: CogniteInternalId[];
   dataSetId?: CogniteInternalId;
@@ -1038,7 +1047,7 @@ export interface FileChange {
     externalId?: SinglePatchString;
     source?: SinglePatchString;
     mimeType?: SinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     assetIds?: ArrayPatchLong;
     securityCategories?: ArrayPatchLong;
     sourceCreatedTime?: SinglePatchDate;
@@ -1080,6 +1089,7 @@ export interface FileFilterProps {
    * If the total size of the given subtrees exceeds 100,000 assets, an error will be returned.
    */
   assetSubtreeIds?: IdEither[];
+  directoryPrefix?: string;
   source?: string;
   createdTime?: DateRange;
   lastUpdatedTime?: DateRange;
@@ -1433,6 +1443,22 @@ export interface List3DNodesQuery extends FilterQuery {
   sortByNodeId?: boolean;
 }
 
+export interface Filter3DNodesQuery extends FilterQuery {
+  /**
+   * List filter
+   */
+  filter: {
+    /**
+     * Property filters. Nodes satisfy the filter if, for each property in the nested map(s), they have a value corresponding to that property that is contained within the list associated with that property in the map.
+     */
+    properties: { [key: string]: { [key: string]: string[] } };
+  };
+  /**
+   * Partition specifier of the form "n/m". It will return the n'th (1-indexed) part of the result divided into m parts.
+   */
+  partition?: Partition;
+}
+
 export interface ListGroups {
   /**
    * Whether to get all groups, only available with the groups:list acl.
@@ -1593,23 +1619,25 @@ export interface OAuth2Configuration {
 
 export type OWNER = 'OWNER';
 
-export type ObjectPatch =
+export type ObjectPatch<T> =
   | {
       /**
        * Set the key-value pairs. All existing key-value pairs will be removed.
        */
-      set: { [key: string]: string };
+      set: { [key: string]: T };
     }
   | {
       /**
        * Add the key-value pairs. Values for existing keys will be overwritten.
        */
-      add: { [key: string]: string };
+      add: { [key: string]: T };
       /**
        * Remove the key-value pairs with given keys.
        */
       remove: string[];
     };
+
+export type MetadataPatch = ObjectPatch<string>;
 
 /**
  * Data about how to authenticate and authorize users. The authentication configuration is hidden.
@@ -1648,12 +1676,60 @@ export interface ProjectResponse {
   urlName: UrlName;
   defaultGroupId?: DefaultGroupId;
   authentication?: OutputProjectAuthentication;
+  oidcConfiguration?: OidcConfiguration;
 }
 
 export interface ProjectUpdate {
   name?: ProjectName;
   defaultGroupId?: DefaultGroupId;
   authentication?: InputProjectAuthentication;
+}
+
+export interface OidcConfigurationUpdate {
+  modify?: OidcConfigurationUpdateModify;
+  set?: OidcConfiguration;
+  setNull?: boolean;
+}
+
+export interface ClaimName {
+  claimName: string;
+}
+
+export interface OidcConfigurationUpdateModify {
+  jwksUrl?: SetField<string>;
+  tokenUrl?: SinglePatchString;
+  issuer?: SetField<string>;
+  audience?: SetField<string>;
+  skewMs?: SinglePatch<number>;
+  accessClaims?: ArrayPatchClaimNames;
+  scopeClaims?: ArrayPatchClaimNames;
+  logClaims: ArrayPatchClaimNames;
+}
+
+export interface PartialProjectUpdate {
+  update: ProjectUpdateObject;
+}
+
+export interface ProjectUpdateObject {
+  name?: SinglePatchRequiredString;
+  defaultGroupId?: NullableSinglePatchLong;
+  validDomains?: ArrayPatchString;
+  applicationDomains?: ArrayPatchString;
+  authenticationProtocol?: SinglePatchRequiredString;
+  azureADConfiguration?: SinglePatch<AzureADConfiguration>;
+  oAuth2Configuration?: SinglePatch<OAuth2Configuration>;
+  oidcConfiguration?: OidcConfigurationUpdate;
+}
+
+export interface OidcConfiguration {
+  jwksUrl: string;
+  tokenUrl?: string;
+  issuer: string;
+  audience: string;
+  skewMs?: number;
+  accessClaims: ClaimName[];
+  scopeClaims: ClaimName[];
+  logClaims: ClaimName[];
 }
 
 export type READ = 'READ';
@@ -1931,6 +2007,27 @@ export interface RevisionCameraProperties {
   position?: Tuple3<number>;
 }
 
+export type RevisionMetadata = { [key: string]: string };
+
+export type RevisionMetadataUpdate =
+  | RevisionMetadataUpdateSet
+  | RevisionMetadataUpdateAddRemove;
+
+export interface RevisionMetadataUpdateSet {
+  set: RevisionMetadata;
+}
+
+export interface RevisionMetadataUpdateAddRemove {
+  /**
+   * Key/value pairs to add
+   */
+  add?: RevisionMetadata;
+  /**
+   * Keys to remove
+   */
+  remove?: string[];
+}
+
 export interface SecurityCategory {
   /**
    * Name of the security category
@@ -1989,7 +2086,7 @@ export interface SequenceColumn
  */
 export interface SequenceColumnBasicInfo {
   name?: SequenceColumnName;
-  externalId?: ExternalId;
+  externalId?: CogniteExternalId;
   valueType?: SequenceValueType;
 }
 
@@ -2049,7 +2146,7 @@ export interface SequencePatch {
     dataSetId?: NullableSinglePatchLong;
     externalId?: SinglePatchString;
     endTime?: SinglePatchDate;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
   };
 }
 
@@ -2204,11 +2301,10 @@ export type SingleCogniteCapability =
   | { analyticsAcl: AclAnalytics }
   | { datasetsAcl: AclDataSets };
 
+export type SinglePatch<T> = { set: T } | { setNull: boolean };
+
 export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
-/**
- * Non removable string change.
- */
 export interface SinglePatchRequiredString {
   set: string;
 }
@@ -2256,7 +2352,7 @@ export interface TimeSeriesPatch {
   update: {
     externalId?: NullableSinglePatchString;
     name?: NullableSinglePatchString;
-    metadata?: ObjectPatch;
+    metadata?: MetadataPatch;
     unit?: NullableSinglePatchString;
     assetId?: NullableSinglePatchLong;
     dataSetId?: NullableSinglePatchLong;
@@ -2392,6 +2488,10 @@ export interface UpdateRevision3D {
      * Initial camera target.
      */
     camera?: SetField<RevisionCameraProperties>;
+    /**
+     * Revision metadata.
+     */
+    metadata?: RevisionMetadataUpdate;
   };
 }
 
@@ -2785,3 +2885,263 @@ export interface EntityMatchingFilter {
 export interface EntityMatchingFilterRequest extends FilterQuery {
   filter?: EntityMatchingFilter;
 }
+
+export type Source =
+  | EventsSource
+  | AssetsSource
+  | SequencesSource
+  | TimeSeriesSource
+  | FilesSource;
+
+type ObjectOrString<T> = { [K in keyof T]: ObjectOrString<T[K]> | string };
+
+export type EventsSource = {
+  type: 'events';
+  filter?: ObjectOrString<EventFilter>;
+  mappings?: { [K in string]: string };
+};
+
+export type AssetsSource = {
+  type: 'assets';
+  filter?: ObjectOrString<AssetFilterProps>;
+  mappings?: { [K in string]: string };
+};
+
+export type SequencesSource = {
+  type: 'sequences';
+  filter?: ObjectOrString<SequenceFilter>;
+  mappings?: { [K in string]: string };
+};
+
+export type TimeSeriesSource = {
+  type: 'timeSeries';
+  filter?: ObjectOrString<TimeseriesFilter>;
+  mappings?: { [K in string]: string };
+};
+
+export type FilesSource = {
+  type: 'files';
+  filter?: ObjectOrString<FileFilter>;
+  mappings?: { [K in string]: string };
+};
+
+export type ExternalView = {
+  externalId: string;
+  source: Source;
+};
+
+export type View = ExternalView & {
+  createdTime: Timestamp;
+  lastUpdatedTime: Timestamp;
+};
+
+export type ViewFilterQuery = FilterQuery;
+
+export interface ViewResolveRequest extends FilterQuery {
+  externalId: string;
+  input?: { [K in string]: any };
+  cursor?: string;
+  limit?: number;
+}
+
+export interface ExternalTemplateGroup extends ExternalId {
+  /**
+   * The externalId of a Template Group
+   */
+  externalId: CogniteExternalId;
+
+  /**
+   * The description of a Template Group
+   */
+  description?: string;
+
+  /**
+   * The owners of a Template Group
+   */
+  owners?: string[];
+}
+
+export type TemplateGroup = ExternalTemplateGroup & {
+  /**
+   * The owners of a Template Group
+   */
+  owners: string[];
+
+  /**
+   * When resource was created
+   */
+  createdTime: Timestamp;
+
+  /**
+   * When resource was last updated
+   */
+  lastUpdatedTime: Timestamp;
+};
+
+export interface TemplateGroupFilter {
+  /**
+   * Filter on owners.
+   */
+  owners?: string[];
+}
+
+export interface TemplateGroupFilterQuery extends FilterQuery {
+  filter?: TemplateGroupFilter;
+}
+
+export interface TemplateGroupVersion {
+  version: number;
+  schema: string;
+
+  /**
+   * When resource was created
+   */
+  createdTime: Timestamp;
+
+  /**
+   * When resource was last updated
+   */
+  lastUpdatedTime: Timestamp;
+}
+
+export enum ConflictMode {
+  /** Patch the existing version, but will fail if there are breaking changes. */
+  Patch = 'Patch',
+  /** Update the Template Group by bumping the version. */
+  Update = 'Update',
+  /** Force update the existing version even if there are breaking changes. Note, this can break consumers of that version. */
+  Force = 'Force',
+}
+
+export interface ExternalTemplateGroupVersion {
+  schema: string;
+  /** Specifies the conflict mode to use. By default the mode is 'ConflictMode.Patch'.*/
+  conflictMode?: ConflictMode;
+  version?: number;
+}
+
+export interface TemplateGroupVersionFilter extends FilterQuery {
+  minVersion?: number;
+  maxVersion?: number;
+}
+
+export interface TemplateGroupVersionFilterQuery extends FilterQuery {
+  filter?: TemplateGroupVersionFilter;
+}
+
+export interface ExternalTemplateInstance extends ExternalId {
+  templateName: string;
+  dataSetId?: number;
+  fieldResolvers: { [K in string]: FieldResolver | {} };
+}
+
+export type TemplateInstance = ExternalTemplateInstance & {
+  /**
+   * When resource was created
+   */
+  createdTime: Timestamp;
+
+  /**
+   * When resource was last updated
+   */
+  lastUpdatedTime: Timestamp;
+};
+
+export interface TemplateInstancePatch extends ExternalId {
+  update: {
+    fieldResolvers: ObjectPatch<FieldResolver | {}>;
+  };
+}
+
+export interface FieldResolver {
+  type: string;
+}
+
+export class ConstantResolver implements FieldResolver {
+  type = 'constant';
+  value: {};
+
+  constructor(value: {}) {
+    this.value = value;
+  }
+}
+
+export class RawResolver implements FieldResolver {
+  type = 'raw';
+  dbName: string;
+  tableName: string;
+  rowKey?: string;
+  columnName?: string;
+
+  constructor(
+    dbName: string,
+    tableName: string,
+    rowKey?: string,
+    columnName?: string
+  ) {
+    this.dbName = dbName;
+    this.tableName = tableName;
+    this.rowKey = rowKey;
+    this.columnName = columnName;
+  }
+}
+
+export class SyntheticTimeSeriesResolver implements FieldResolver {
+  type = 'syntheticTimeSeries';
+  expression: string;
+  name?: string;
+  metadata?: { [K in string]: string };
+  description?: string;
+  isStep?: boolean;
+  isString?: boolean;
+  unit?: string;
+
+  constructor(
+    expression: string,
+    name?: string,
+    metadata?: { [K in string]: string },
+    description?: string,
+    isStep?: boolean,
+    isString?: boolean,
+    unit?: string
+  ) {
+    this.expression = expression;
+    this.name = name;
+    this.metadata = metadata;
+    this.description = description;
+    this.isStep = isStep;
+    this.isString = isString;
+    this.unit = unit;
+  }
+}
+
+export class ViewResolver implements FieldResolver {
+  type = 'view';
+  externalId: string;
+  input: { [K in string]: any };
+
+  constructor(externalId: string, input: { [K in string]: any }) {
+    this.externalId = externalId;
+    this.input = input;
+  }
+}
+
+export interface TemplateInstanceFilter {
+  dataSetIds?: number[];
+  templateNames?: string[];
+}
+
+export interface TemplateInstanceFilterQuery extends FilterQuery {
+  filter?: TemplateInstanceFilter;
+}
+
+export type GraphQlResponse = {
+  data: any;
+  errors: GraphQlError[];
+};
+
+export type GraphQlError = {
+  message: string;
+  path: string[];
+  locations: { line: number; column: number }[];
+};

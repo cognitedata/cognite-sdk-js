@@ -13,6 +13,7 @@ applications written in client- or server-side JavaScript.
 ## Getting Started
 
 This repository contains several packages for different API versions.
+
 To get started with the stable API, see the README [here](./packages/stable/README.md).
 
 There is also a [beta API](./packages/beta/README.md).
@@ -48,6 +49,15 @@ Run all tests:
 yarn
 yarn build
 yarn test
+```
+
+Run tests for updated package only:
+> for changes to the core package, it might be required to run tests for all packages to verify integrity.
+
+```bash
+yarn
+yarn build
+yarn test --since master
 ```
 
 Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revision integration tests.
