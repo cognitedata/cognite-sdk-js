@@ -171,37 +171,52 @@ describe('Sequences integration test', () => {
     });
   });
 
-  test('insert rows', async () => {
-    const rowsData: SequenceRowsInsert[] = [
-      {
-        externalId: testExternalId,
-        rows: testRows,
-        columns: sequences[1].columns.map(({ externalId }) => externalId!),
-      },
-      {
-        id: sequences[0].id,
-        rows: [
-          {
-            rowNumber: 1,
-            values: ['1'],
-          },
-        ],
-        columns: ['column'],
-      },
-    ];
-    const result = await client.sequences.insertRows(rowsData);
-    expect(result).toEqual({});
-  });
-
-  test('delete rows', async () => {
-    await runTestWithRetryWhenFailing(async () => {
-      const result = await client.sequences.deleteRows([
+  describe('rows', () => {
+    test('insert', async () => {
+      const rowsData: SequenceRowsInsert[] = [
         {
-          id: sequences[1].id,
-          rows: [0, 2],
+          externalId: testExternalId,
+          rows: testRows,
+          columns: sequences[1].columns.map(({ externalId }) => externalId!),
         },
-      ]);
+        {
+          id: sequences[0].id,
+          rows: [
+            {
+              rowNumber: 1,
+              values: ['1'],
+            },
+          ],
+          columns: ['column'],
+        },
+      ];
+      const result = await client.sequences.insertRows(rowsData);
       expect(result).toEqual({});
+    });
+
+    test('retrieve', async () => {
+      await runTestWithRetryWhenFailing(async () => {
+        const result = await client.sequences.retrieveRows({
+          externalId: testExternalId,
+        });
+
+        expect(result.items).toHaveLength(testRows.length);
+        expect(result.items[0].columns[0].externalId).toEqual(
+          sequencesToCreate[1].columns[0].externalId
+        );
+      });
+    });
+
+    test('delete', async () => {
+      await runTestWithRetryWhenFailing(async () => {
+        const result = await client.sequences.deleteRows([
+          {
+            id: sequences[1].id,
+            rows: [0, 2],
+          },
+        ]);
+        expect(result).toEqual({});
+      });
     });
   });
 

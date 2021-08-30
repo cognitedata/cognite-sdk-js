@@ -2086,7 +2086,7 @@ export interface SequenceColumn
  */
 export interface SequenceColumnBasicInfo {
   name?: SequenceColumnName;
-  externalId?: ExternalId;
+  externalId?: CogniteExternalId;
   valueType?: SequenceValueType;
 }
 
