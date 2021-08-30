@@ -26,6 +26,13 @@ import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
 import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
+import {
+  TemplateGraphQlApi,
+  TemplateGroupsApi,
+  TemplateGroupVersionsApi,
+  TemplateInstancesApi,
+  ViewsApi,
+} from './api/templates';
 import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 import { retryValidator } from './retryValidator';
 
@@ -93,6 +100,45 @@ export default class CogniteClient extends BaseCogniteClient {
   public get entityMatching() {
     return accessApi(this.entityMatchingApi);
   }
+  public get templates() {
+    return {
+      groups: accessApi(this.apiFactory(TemplateGroupsApi, 'templategroups')),
+      group: (externalId: string) => {
+        const urlsafeExternalId = CogniteClient.urlEncodeExternalId(externalId);
+        const baseVersionsUrl = `templategroups/${urlsafeExternalId}/versions`;
+        return {
+          versions: accessApi(
+            this.apiFactory(TemplateGroupVersionsApi, baseVersionsUrl)
+          ),
+          version: (version: number) => {
+            const baseGroupUrl = `${baseVersionsUrl}/${version}`;
+            const graphQlApi = this.apiFactory(
+              TemplateGraphQlApi,
+              `${baseGroupUrl}/graphql`
+            );
+            return {
+              instances: accessApi(
+                this.apiFactory(
+                  TemplateInstancesApi,
+                  `${baseGroupUrl}/instances`
+                )
+              ),
+              runQuery: async <
+                TVariables extends Record<string, unknown>
+              >(graphQlParams: {
+                query: string;
+                variables?: TVariables;
+                operationName?: string;
+              }) => graphQlApi.runQuery(graphQlParams),
+              views: accessApi(
+                this.apiFactory(ViewsApi, `${baseGroupUrl}/views`)
+              ),
+            };
+          },
+        };
+      },
+    };
+  }
 
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
@@ -126,6 +172,9 @@ export default class CogniteClient extends BaseCogniteClient {
 
   protected initAPIs() {
     const models3DPath = '3d/models';
+
+    // Lock version to the following date
+    this.httpClient.setDefaultHeader('cdf-version', 'V20210406');
 
     this.assetsApi = this.apiFactory(AssetsAPI, 'assets');
     this.timeSeriesApi = this.apiFactory(TimeSeriesAPI, 'timeseries');
@@ -161,5 +210,9 @@ export default class CogniteClient extends BaseCogniteClient {
       this.httpClient,
       this.metadataMap
     );
+  }
+
+  static urlEncodeExternalId(externalId: string): string {
+    return encodeURIComponent(externalId);
   }
 }
