@@ -10,16 +10,13 @@ import {
   SequenceValueType,
 } from '../../types';
 import {
-  mockBaseUrl,
   randomInt,
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
-  setupMockableClient,
 } from '../testUtils';
 
 describe('Sequences integration test', () => {
   let client: CogniteClient;
-  let mockedClient: CogniteClient;
   let sequences: Sequence[];
   const testValues = [1, 1.5, 'two'];
   const testExternalId = 'sequence' + randomInt();
@@ -56,16 +53,9 @@ describe('Sequences integration test', () => {
     rowNumber: i,
     values: testValues,
   }));
-  const mockedResponse = {
-    nextCursor: 1,
-    externalId: sequencesToCreate[1].externalId,
-    columns: sequencesToCreate[1].columns,
-    rows: testRows,
-  };
   let asset: Asset;
   beforeAll(async () => {
     client = setupLoggedInClient();
-    mockedClient = setupMockableClient();
     nock.cleanAll();
     [asset] = await client.assets.create([
       {
@@ -201,30 +191,6 @@ describe('Sequences integration test', () => {
     ];
     const result = await client.sequences.insertRows(rowsData);
     expect(result).toEqual({});
-  });
-
-  test('retrieve rows (mocked)', async () => {
-    nock(mockBaseUrl)
-      .post(new RegExp('/sequences/data/list'), {
-        externalId: testExternalId,
-      })
-      .once()
-      .reply(200, {
-        ...mockedResponse,
-        id: sequences[1].id,
-      });
-
-    const { items, next } = await mockedClient.sequences.retrieveRows({
-      externalId: testExternalId,
-    });
-
-    expect(items.length).toBe(3);
-    items.forEach((row, index) => {
-      expect([...row]).toEqual(testValues);
-      expect(row.columns.length).toEqual(3);
-      expect(row.rowNumber).toEqual(index);
-    });
-    expect(typeof next).toBe('function');
   });
 
   test('delete rows', async () => {
