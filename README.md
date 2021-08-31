@@ -43,16 +43,7 @@ This repo contains some integration tests that require a CDF api key for `cognit
 Talk to any of the contributors or leave an issue and it'll get sorted.
 Travis will run the test and has its own api key.
 
-Run all tests:
-
-```bash
-yarn
-yarn build
-yarn test
-```
-
-Run tests for updated package only:
-> for changes to the core package, it might be required to run tests for all packages to verify integrity.
+Run tests:
 
 ```bash
 yarn
