@@ -7,8 +7,51 @@ on:
       - release-*
 
 jobs:
-  lint:
+  codecov:
+    runs-on: ubuntu-latest
 
+    env:
+      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Test/Codecov
+        run: yarn test:codecov
+
+      - name: Codecov
+        uses: codecov/codecov-action@v1.0.11
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Test snippets
+        run: yarn test-snippets
+
+      - name: Test samples
+        run: yarn test-samples
+ 
+  lint:
     runs-on: ubuntu-latest
 
     env:
@@ -51,20 +94,6 @@ jobs:
 
       - name: Build
         run: yarn build
-
-      - name: Test/Codecov
-        run: yarn test:codecov
-
-      - name: Codecov
-        uses: codecov/codecov-action@v1.0.11
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Test snippets
-        run: yarn test-snippets
-
-      - name: Test samples
-        run: yarn test-samples
 
   tests:
 
