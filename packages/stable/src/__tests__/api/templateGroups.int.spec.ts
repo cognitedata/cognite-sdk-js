@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { TemplateGroup, ExternalTemplateGroup } from 'beta/src/types';
+import { TemplateGroup, ExternalTemplateGroup } from '../../types';
 import { randomInt } from '@cognite/sdk-core/src/testUtils';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';

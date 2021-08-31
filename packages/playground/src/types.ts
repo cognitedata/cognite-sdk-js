@@ -5,7 +5,6 @@ import {
   CogniteInternalId,
   ExternalId,
   FilterQuery,
-  GeoLocationGeometry,
   LabelFilter,
   PointCoordinates,
   Label,
@@ -51,8 +50,9 @@ export interface ContainsAnyIds {
 export type DocumentsGeoLocationRelation = 'intersects' | 'disjoint' | 'within';
 
 export interface GeoLocationFilter {
-  relation: DocumentsGeoLocationRelation;
-  shape: GeoLocationGeometry<DocumentsGeoLocationType, PointCoordinates[]>;
+  shape?: GeoLocation;
+  relation?: DocumentsGeoLocationRelation;
+  missing?: boolean;
 }
 
 export type AssetIdsFilter = ContainsAllIds | ContainsAnyIds;
@@ -63,6 +63,7 @@ export interface DocumentsSourceFileFilter {
   source?: StringIn | StringEquals;
   mimeType?: StringIn | StringEquals;
   assetIds?: AssetIdsFilter;
+  assetSubtreeIds?: ContainsAnyIds | ValueMissing;
   uploadedTime?: EpochTimestampRange;
   createdTime?: EpochTimestampRange;
   sourceCreatedTime?: EpochTimestampRange;
@@ -90,6 +91,10 @@ export interface ExternalDocumentsSearch {
   limit?: number;
 }
 
+export interface ValueMissing {
+  missing?: boolean;
+}
+
 export interface DocumentsFilter {
   id?: IntIn | IntEquals;
   externalIdPrefix?: StringIn | StringEquals;
@@ -101,6 +106,7 @@ export interface DocumentsFilter {
   type?: StringIn | StringEquals;
   language?: StringIn | StringEquals;
   assetIds?: ContainsAllIds | ContainsAnyIds;
+  assetSubtreeIds?: ContainsAnyIds | ValueMissing;
   sourceSystem?: StringIn | StringEquals;
   labels?: Label[];
   geoLocation?: GeoLocationFilter;
@@ -133,6 +139,11 @@ export interface DocumentsDateHistogramAggregate {
   aggregate: string;
   field: string;
   interval: string;
+}
+
+export interface DocumentContent {
+  id: number;
+  content: string;
 }
 
 export interface Document {

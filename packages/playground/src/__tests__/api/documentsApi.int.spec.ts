@@ -50,6 +50,39 @@ describe('documents api', () => {
     expect(response.items.length).toBeGreaterThan(0);
   });
 
+  test('document content', async () => {
+    const response = await client.documents.list({
+      filter: {
+        id: {
+          equals: 8814046572029990,
+        },
+      },
+      limit: 1,
+    });
+    expect(response.items[0]).toBeDefined();
+    const doc = response.items[0];
+
+    const resp = await client.documents.content([doc.id]);
+    expect(resp.items).toBeDefined();
+    expect(resp.items).toHaveLength(1);
+
+    const documentContent = resp.items[0];
+    expect(documentContent.id).toEqual(doc.id);
+    expect(documentContent.content).toContain(doc.truncatedContent);
+  });
+
+  test('list with geo location filter', async () => {
+    const response = await client.documents.list({
+      filter: {
+        geoLocation: {
+          missing: true,
+        },
+      },
+      limit: 1,
+    });
+    expect(response.items).toHaveLength(1);
+  });
+
   describe('document preview', () => {
     let documents: ListResponse<Document[]>;
 

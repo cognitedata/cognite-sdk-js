@@ -133,6 +133,25 @@ describe('Documents unit test', () => {
       await client.documents.pipelines.delete([{ externalId: 'test' }]);
     });
   });
+  test('document content', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/content'), {
+        items: [{ id: 1 }, { id: 2 }, { id: 7 }],
+      })
+      .once()
+      .reply(200, {
+        items: [
+          { id: 1, content: 'lorem ipsum' },
+          { id: 2, content: 'lorem ipsum ted' },
+          { id: 7, content: 'lorem ipsum vismysa antom' },
+        ],
+      });
+    const resp = await client.documents.content([1, 2, 7]);
+
+    expect(resp.items).toHaveLength(3);
+    expect(resp.items[0].id).toEqual(1);
+    expect(resp.items[0].content).toEqual('lorem ipsum');
+  });
 
   describe('geo location', () => {
     test('point', async () => {
@@ -389,6 +408,32 @@ describe('Documents unit test', () => {
         sourceFile: {
           size: { min: 1, max: 10 },
         },
+      },
+    });
+  });
+
+  test('search with asset subtree filter', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/search'), {
+        search: {
+          query: 'test',
+        },
+        filter: {
+          sourceFile: {
+            assetSubtreeIds: { containsAny: [3, 5, 1] },
+          },
+          assetSubtreeIds: { containsAny: [3, 5, 1] },
+        },
+      })
+      .once()
+      .reply(200, {});
+    await client.documents.search({
+      search: { query: 'test' },
+      filter: {
+        sourceFile: {
+          assetSubtreeIds: { containsAny: [3, 5, 1] },
+        },
+        assetSubtreeIds: { containsAny: [3, 5, 1] },
       },
     });
   });

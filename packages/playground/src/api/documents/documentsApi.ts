@@ -4,12 +4,15 @@ import {
   BaseResourceAPI,
   CDFHttpClient,
   CursorAndAsyncIterator,
+  ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
 import { PreviewAPI } from './previewApi';
 
 import {
   Document,
+  DocumentContent,
+  DocumentId,
   DocumentsAggregatesResponse,
   DocumentsRequestFilter,
   DocumentsSearchWrapper,
@@ -50,6 +53,13 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
+  // https://docs.cognite.com/api/playground/#operation/documentsContent
+  public content = (
+    ids: DocumentId[]
+  ): Promise<ItemsWrapper<DocumentContent[]>> => {
+    return this.documentContent<ItemsWrapper<DocumentContent[]>>(ids);
+  };
+
   public get feedback() {
     return this.feedbackAPI;
   }
@@ -69,6 +79,16 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
       data: query,
     });
 
+    return response.data;
+  }
+
+  private async documentContent<ResponseType>(
+    ids: DocumentId[]
+  ): Promise<ResponseType> {
+    const documentIds = ids.map(id => ({ id }));
+    const response = await this.post<ResponseType>(this.url('content'), {
+      data: { items: documentIds },
+    });
     return response.data;
   }
 }

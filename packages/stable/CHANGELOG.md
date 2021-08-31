@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.3.0...@cognite/sdk@5.3.1) (2021-08-30)
+
+
+### Bug Fixes
+
+* **stable:** external id format for fetching rows ([#664](https://github.com/cognitedata/cognite-sdk-js/issues/664)) ([a637814](https://github.com/cognitedata/cognite-sdk-js/commit/a63781461544c6fefa9e9a0db54210e6544d7600))
+
+
+
+
+
+# [5.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.2.1...@cognite/sdk@5.3.0) (2021-08-30)
+
+
+### Features
+
+* promote templates to stable ([#661](https://github.com/cognitedata/cognite-sdk-js/issues/661)) ([def00b6](https://github.com/cognitedata/cognite-sdk-js/commit/def00b654ad0696ef2be8dcd47a94fcd099f7277))
+
+
+
+
+
+## [5.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.2.0...@cognite/sdk@5.2.1) (2021-08-20)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
 # [5.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.1.5...@cognite/sdk@5.2.0) (2021-08-18)
 
 

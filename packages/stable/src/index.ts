@@ -59,5 +59,6 @@ export {
   SyntheticTimeSeriesAPI,
 } from './api/timeSeries/syntheticTimeSeriesApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+export * from './api/templates';
 
 export * from './types';
