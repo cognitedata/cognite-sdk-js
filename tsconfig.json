@@ -6,9 +6,12 @@
           "@cognite/sdk-*": ["*/src"],
           "@cognite/sdk": ["stable/src"]
         },
-        "strict": true,
+        "alwaysStrict": true,
         "noFallthroughCasesInSwitch": true,
         "noImplicitReturns": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowUnreachableCode": false
     }
 }
