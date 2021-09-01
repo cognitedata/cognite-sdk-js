@@ -5,6 +5,10 @@
         "paths": {
           "@cognite/sdk-*": ["*/src"],
           "@cognite/sdk": ["stable/src"]
-        }
+        },
+        "strict": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "forceConsistentCasingInFileNames": true
     }
 }
