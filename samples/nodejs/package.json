@@ -4,7 +4,7 @@
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
-    "@cognite/sdk": "^3"
+    "@cognite/sdk": "^5"
   },
   "scripts": {
     "test": "node quickstart.js && yarn test-for-await",
