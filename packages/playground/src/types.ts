@@ -76,7 +76,7 @@ export interface DocumentsSourceFileFilter {
 }
 
 export interface DocumentsPipeline {
-  externalId: string;
+  externalId: CogniteExternalId;
   sensitivityMatcher?: SensitivityMatcher;
   classifier?: {
     trainingLabels: LabelList[];

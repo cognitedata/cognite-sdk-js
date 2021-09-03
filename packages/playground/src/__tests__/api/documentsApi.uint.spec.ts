@@ -38,7 +38,7 @@ describe('Documents unit test', () => {
     });
   });
 
-  describe('pipeline', async () => {
+  describe('pipeline', () => {
     test('create pipeline configuration', async () => {
       nock(mockBaseUrl)
         .post(new RegExp('/documents/pipelines'), {
@@ -99,6 +99,39 @@ describe('Documents unit test', () => {
           },
         },
       ]);
+    });
+    test('create pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/pipelines'), {
+          items: [{ externalId: 'cognitesdk-js-test' }],
+        })
+        .once()
+        .reply(200, {
+          items: [
+            {
+              externalId: 'cognitesdk-js-test',
+              sensitivityMatcher: {
+                matchLists: {},
+                fieldMappings: {
+                  sourceFile: {},
+                },
+                restrictToSources: [],
+                filterPasswords: true,
+              },
+              classifier: {
+                trainingLabels: [],
+              },
+            },
+          ],
+        });
+      const resp = await client.documents.pipelines.create([
+        {
+          externalId: 'cognitesdk-js-test',
+        },
+      ]);
+
+      expect(resp).toHaveLength(1);
+      expect(resp[0].externalId).toEqual('cognitesdk-js-test');
     });
 
     test('get pipeline configuration', async () => {
