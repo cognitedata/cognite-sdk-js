@@ -24,6 +24,9 @@
     "@cognite/sdk": "^4.0.0",
     "@cognite/sdk-core": "^2.0.0"
   },
+  "files": [
+    "dist"
+  ],
   "publishConfig": {
     "access": "public"
   }
