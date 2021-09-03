@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.4.4...@cognite/sdk-playground@2.5.0) (2021-09-03)
+
+
+### Features
+
+* **playground:** documents pipelines ([#649](https://github.com/cognitedata/cognite-sdk-js/issues/649)) ([ee25e86](https://github.com/cognitedata/cognite-sdk-js/commit/ee25e8610009dca128b3874c54f8d40b87206e48))
+
+
+
+
+
 ## [2.4.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.4.3...@cognite/sdk-playground@2.4.4) (2021-09-03)
 
 
