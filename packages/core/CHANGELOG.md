@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.2.3...@cognite/sdk-core@3.2.4) (2021-09-03)
+
+
+### Bug Fixes
+
+* remove test files in published packages ([#673](https://github.com/cognitedata/cognite-sdk-js/issues/673)) ([cf6deae](https://github.com/cognitedata/cognite-sdk-js/commit/cf6deae6d80d0bfb3b2b3e8a8db6c30a1bb1ec0a))
+
+
+
+
+
 ## [3.2.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.2.2...@cognite/sdk-core@3.2.3) (2021-08-20)
 
 **Note:** Version bump only for package @cognite/sdk-core
