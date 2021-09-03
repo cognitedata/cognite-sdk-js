@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.4.3...@cognite/sdk-playground@2.4.4) (2021-09-03)
+
+
+### Bug Fixes
+
+* replace jasmine.Any with any ([#674](https://github.com/cognitedata/cognite-sdk-js/issues/674)) ([48f6445](https://github.com/cognitedata/cognite-sdk-js/commit/48f6445266a191c8d220e7a360a3bab5ead46a16))
+
+
+
+
+
 ## [2.4.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.4.2...@cognite/sdk-playground@2.4.3) (2021-09-03)
 
 
