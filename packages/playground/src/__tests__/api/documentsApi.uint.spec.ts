@@ -38,6 +38,134 @@ describe('Documents unit test', () => {
     });
   });
 
+  describe('pipeline', () => {
+    test('create pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/pipelines'), {
+          items: [
+            {
+              externalId: 'default',
+              sensitivityMatcher: {
+                matchLists: {
+                  DIRECTORIES: ['secret'],
+                  TYPES: ['contracts', 'emails'],
+                  TERMS: ['secret', 'confidential', 'sensitive'],
+                },
+                fieldMappings: {
+                  title: 'TERMS',
+                  sourceFile: {
+                    name: 'TERMS',
+                    content: 'TERMS',
+                    directory: 'DIRECTORIES',
+                  },
+                },
+                sensitiveSecurityCategory: 345341343656745,
+                restrictToSources: ['my source'],
+              },
+              classifier: {
+                trainingLabels: [
+                  {
+                    externalId: 'string',
+                  },
+                ],
+              },
+            },
+          ],
+        })
+        .once()
+        .reply(200, { items: [] });
+      await client.documents.pipelines.create([
+        {
+          externalId: 'default',
+          sensitivityMatcher: {
+            matchLists: {
+              DIRECTORIES: ['secret'],
+              TYPES: ['contracts', 'emails'],
+              TERMS: ['secret', 'confidential', 'sensitive'],
+            },
+            fieldMappings: {
+              title: 'TERMS',
+              sourceFile: {
+                name: 'TERMS',
+                content: 'TERMS',
+                directory: 'DIRECTORIES',
+              },
+            },
+            sensitiveSecurityCategory: 345341343656745,
+            restrictToSources: ['my source'],
+          },
+          classifier: {
+            trainingLabels: [{ externalId: 'string' }],
+          },
+        },
+      ]);
+    });
+    test('create pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/pipelines'), {
+          items: [{ externalId: 'cognitesdk-js-test' }],
+        })
+        .once()
+        .reply(200, {
+          items: [
+            {
+              externalId: 'cognitesdk-js-test',
+              sensitivityMatcher: {
+                matchLists: {},
+                fieldMappings: {
+                  sourceFile: {},
+                },
+                restrictToSources: [],
+                filterPasswords: true,
+              },
+              classifier: {
+                trainingLabels: [],
+              },
+            },
+          ],
+        });
+      const resp = await client.documents.pipelines.create([
+        {
+          externalId: 'cognitesdk-js-test',
+        },
+      ]);
+
+      expect(resp).toHaveLength(1);
+      expect(resp[0].externalId).toEqual('cognitesdk-js-test');
+    });
+
+    test('get pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .get(new RegExp('/documents/pipelines'))
+        .once()
+        .reply(200, {});
+      await client.documents.pipelines.list();
+    });
+
+    test('update pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/pipelines'), {
+          items: [{ externalId: 'test' }],
+        })
+        .once()
+        .reply(200, { items: [] });
+      await client.documents.pipelines.update([
+        {
+          externalId: 'test',
+        },
+      ]);
+    });
+
+    test('delete pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/pipelines/delete'), {
+          items: [{ externalId: 'test' }],
+        })
+        .once()
+        .reply(200, {});
+      await client.documents.pipelines.delete([{ externalId: 'test' }]);
+    });
+  });
   test('document content', async () => {
     nock(mockBaseUrl)
       .post(new RegExp('/documents/content'), {
