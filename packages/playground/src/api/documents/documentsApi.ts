@@ -4,6 +4,7 @@ import {
   BaseResourceAPI,
   CDFHttpClient,
   CursorAndAsyncIterator,
+  InternalId,
   ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
@@ -56,7 +57,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   // https://docs.cognite.com/api/playground/#operation/documentsContent
   public content = (
     ids: DocumentId[],
-    ignoreUnknownIds: Boolean = false
+    ignoreUnknownIds?: boolean
   ): Promise<ItemsWrapper<DocumentContent[]>> => {
     return this.documentContent<ItemsWrapper<DocumentContent[]>>(
       ids,
@@ -88,14 +89,20 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
   private async documentContent<ResponseType>(
     ids: DocumentId[],
-    ignoreUnknownIds: Boolean = false
+    ignoreUnknownIds?: boolean
   ): Promise<ResponseType> {
+    interface request {
+      items: InternalId[];
+      ignoreUnknownIds?: boolean;
+    }
+
     const documentIds = ids.map(id => ({ id }));
+    const data: request = {
+      items: documentIds,
+      ignoreUnknownIds,
+    };
     const response = await this.post<ResponseType>(this.url('content'), {
-      data: {
-        items: documentIds,
-        ignoreUnknownIds: ignoreUnknownIds,
-      },
+      data: data,
     });
     return response.data;
   }
