@@ -91,12 +91,11 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     ignoreUnknownIds?: boolean
   ): Promise<ResponseType> {
     const documentIds = ids.map(id => ({ id }));
-    const data = {
-      items: documentIds,
-      ignoreUnknownIds,
-    };
     const response = await this.post<ResponseType>(this.url('content'), {
-      data: data,
+      data: {
+        items: documentIds,
+        ignoreUnknownIds,
+      },
     });
     return response.data;
   }
