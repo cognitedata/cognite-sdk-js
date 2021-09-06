@@ -193,8 +193,7 @@ describe('Documents unit test', () => {
       })
       .once()
       .reply(200, {
-        items: [{ id: 1, content: 'lorem ipsum' }],
-        ignoreUnknownIds: true,
+        items: [{ id: 1, content: 'lorem ipsum' }]
       });
     const resp = await client.documents.content([1, 2, 7], true);
 
