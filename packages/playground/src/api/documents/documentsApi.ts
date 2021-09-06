@@ -55,9 +55,13 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
   // https://docs.cognite.com/api/playground/#operation/documentsContent
   public content = (
-    ids: DocumentId[]
+    ids: DocumentId[],
+    ignoreUnknownIds: Boolean = false
   ): Promise<ItemsWrapper<DocumentContent[]>> => {
-    return this.documentContent<ItemsWrapper<DocumentContent[]>>(ids);
+    return this.documentContent<ItemsWrapper<DocumentContent[]>>(
+      ids,
+      ignoreUnknownIds
+    );
   };
 
   public get feedback() {
@@ -83,11 +87,15 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   }
 
   private async documentContent<ResponseType>(
-    ids: DocumentId[]
+    ids: DocumentId[],
+    ignoreUnknownIds: Boolean = false
   ): Promise<ResponseType> {
     const documentIds = ids.map(id => ({ id }));
     const response = await this.post<ResponseType>(this.url('content'), {
-      data: { items: documentIds },
+      data: {
+        items: documentIds,
+        ignoreUnknownIds: ignoreUnknownIds,
+      },
     });
     return response.data;
   }
