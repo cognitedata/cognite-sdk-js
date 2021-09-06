@@ -4,7 +4,6 @@ import {
   BaseResourceAPI,
   CDFHttpClient,
   CursorAndAsyncIterator,
-  InternalId,
   ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
@@ -91,13 +90,8 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     ids: DocumentId[],
     ignoreUnknownIds?: boolean
   ): Promise<ResponseType> {
-    interface request {
-      items: InternalId[];
-      ignoreUnknownIds?: boolean;
-    }
-
     const documentIds = ids.map(id => ({ id }));
-    const data: request = {
+    const data = {
       items: documentIds,
       ignoreUnknownIds,
     };
