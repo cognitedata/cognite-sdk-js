@@ -185,6 +185,22 @@ describe('Documents unit test', () => {
     expect(resp.items[0].id).toEqual(1);
     expect(resp.items[0].content).toEqual('lorem ipsum');
   });
+  test('document content, with unknown ids', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/content'), {
+        items: [{ id: 1 }, { id: 2 }, { id: 7 }],
+        ignoreUnknownIds: true,
+      })
+      .once()
+      .reply(200, {
+        items: [{ id: 1, content: 'lorem ipsum' }],
+      });
+    const resp = await client.documents.content([1, 2, 7], true);
+
+    expect(resp.items).toHaveLength(1);
+    expect(resp.items[0].id).toEqual(1);
+    expect(resp.items[0].content).toEqual('lorem ipsum');
+  });
 
   describe('geo location', () => {
     test('point', async () => {
