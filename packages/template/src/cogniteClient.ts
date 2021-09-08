@@ -14,7 +14,7 @@ export default class CogniteClient extends CogniteClientStable {
     super(options);
   }
 
-  protected get version() {
+  protected get version(): string {
     return `${version}-derived`;
   }
 }
