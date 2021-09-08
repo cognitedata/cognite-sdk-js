@@ -44,15 +44,6 @@ module.exports = {
             "Number": {
               "message": "Use ts primitive 'number' instead",
               "fixWith": "number"
-            },
-            "symbol": {
-              "message": "Use ts primitive 'symbol' instead",
-              "fixWith": "symbol"
-            },
-
-            "{}": {
-              "message": "Use object instead",
-              "fixWith": "object"
             }
           }
         }
