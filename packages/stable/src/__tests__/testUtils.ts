@@ -17,11 +17,11 @@ export const {
   simpleCompare,
 } = TestUtils;
 
-export function setupClient(baseUrl: string = Constants.BASE_URL) {
+export function setupClient(baseUrl: string = Constants.BASE_URL): CogniteClient {
   return new CogniteClient({ appId: 'JS SDK integration tests', baseUrl });
 }
 
-export function setupLoggedInClient() {
+export function setupLoggedInClient(): CogniteClient {
   jest.setTimeout(60 * 1000);
   const client = setupClient();
   client.loginWithApiKey({
@@ -31,7 +31,7 @@ export function setupLoggedInClient() {
   return client;
 }
 
-export function setupMockableClient() {
+export function setupMockableClient(): CogniteClient {
   const client = setupClient(mockBaseUrl);
   client.loginWithApiKey({
     project,
@@ -42,7 +42,7 @@ export function setupMockableClient() {
 
 export const getFileCreateArgs = (
   additionalFields: Partial<ExternalFileInfo> = {}
-) => {
+): { postfix: number; sourceCreatedTime: Date; localFileMeta: ExternalFileInfo; fileContent: string } => {
   const postfix = randomInt();
   const fileContent = 'content_' + new Date();
   const sourceCreatedTime = new Date();
