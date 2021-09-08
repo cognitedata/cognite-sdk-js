@@ -29,8 +29,34 @@ module.exports = {
         "prettier/prettier": "error",
         "lodash/import-scope": ["error", "method"], // see PR #386
 
-        //added manually while migrating from tslint
-        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/ban-types": [
+        "error",
+        {
+          "types": {
+            "String": {
+              "message": "Use ts primitive 'string' instead",
+              "fixWith": "string"
+            },
+            "Boolean": {
+              "message": "Use ts primitive 'boolean' instead",
+              "fixWith": "boolean"
+            },
+            "Number": {
+              "message": "Use ts primitive 'number' instead",
+              "fixWith": "number"
+            },
+            "symbol": {
+              "message": "Use ts primitive 'symbol' instead",
+              "fixWith": "symbol"
+            },
+
+            "{}": {
+              "message": "Use object instead",
+              "fixWith": "object"
+            }
+          }
+        }
+      ]
     },
     overrides: [{
         files: ['**/src/*'],
