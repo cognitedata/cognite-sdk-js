@@ -20,10 +20,6 @@ module.exports = {
         sourceType: "module"
     },
     rules: {
-        "@typescript-eslint/explicit-module-boundary-types": "off",
-        "@typescript-eslint/no-inferrable-types": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/ban-ts-comment": "off",
         "react/prop-types": "off",
         "prettier/prettier": "error",
