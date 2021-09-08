@@ -7,7 +7,7 @@ export class RevertableArraySorter<InputType> {
 
   constructor(private sortFunction: (array: InputType[]) => InputType[]) {}
 
-  public sort = (array: InputType[]) => {
+  public sort = (array: InputType[]): InputType[] => {
     this.originalIndexMap = new Map();
     this.originalArray = array;
     array.forEach((item, index) => {
@@ -17,7 +17,7 @@ export class RevertableArraySorter<InputType> {
     return this.sortedArray;
   };
 
-  public unsort = <OutputType>(arrayToUnsort: OutputType[]) => {
+  public unsort = <OutputType>(arrayToUnsort: OutputType[]): OutputType[] => {
     if (!this.originalArray || !this.sortedArray) {
       throw Error('Impossible to unsort. Call sort(...) first.');
     }

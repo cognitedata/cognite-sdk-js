@@ -49,7 +49,7 @@ export class BasicHttpClient {
     }
   }
 
-  private static convertFetchHeaders(fetchHeaders: Headers) {
+  private static convertFetchHeaders(fetchHeaders: Headers): HttpHeaders {
     const headers: HttpHeaders = {};
     fetchHeaders.forEach((value, key) => {
       headers[key] = value;
@@ -65,7 +65,7 @@ export class BasicHttpClient {
     return data;
   }
 
-  private static resolveUrl(baseUrl: string, path: string) {
+  private static resolveUrl(baseUrl: string, path: string): string {
     const trimmedBaseUrl = baseUrl.replace(/\/$/, '');
     const pathWithPrefix = (path[0] === '/' ? '' : '/') + path;
     return trimmedBaseUrl + pathWithPrefix.replace(/\/+$/, '');
@@ -87,7 +87,7 @@ export class BasicHttpClient {
    */
   constructor(protected baseUrl: string) {}
 
-  public setDefaultHeader(name: string, value: string) {
+  public setDefaultHeader(name: string, value: string): BasicHttpClient {
     this.defaultHeaders[name] = value;
     return this;
   }
@@ -96,19 +96,22 @@ export class BasicHttpClient {
     return { ...this.defaultHeaders };
   }
 
-  public setBaseUrl(baseUrl: string) {
+  public setBaseUrl(baseUrl: string): void {
     this.baseUrl = baseUrl;
   }
 
-  public getBaseUrl() {
+  public getBaseUrl(): string {
     return this.baseUrl;
   }
 
-  public setCluster = (cluster: string) => {
+  public setCluster = (cluster: string): void => {
     this.baseUrl = `https://${cluster}.${DEFAULT_DOMAIN}`;
   };
 
-  public get<ResponseType>(path: string, options: HttpRequestOptions = {}) {
+  public get<ResponseType>(
+    path: string,
+    options: HttpRequestOptions = {}
+  ): Promise<HttpResponse<ResponseType>> {
     return this.request<ResponseType>({
       ...options,
       path,
@@ -117,7 +120,10 @@ export class BasicHttpClient {
   }
 
   // TODO: responseType -> factory pattern
-  public post<ResponseType>(path: string, options: HttpRequestOptions = {}) {
+  public post<ResponseType>(
+    path: string,
+    options: HttpRequestOptions = {}
+  ): Promise<HttpResponse<ResponseType>> {
     return this.request<ResponseType>({
       ...options,
       path,
@@ -125,7 +131,10 @@ export class BasicHttpClient {
     });
   }
 
-  public put<ResponseType>(path: string, options: HttpRequestOptions = {}) {
+  public put<ResponseType>(
+    path: string,
+    options: HttpRequestOptions = {}
+  ): Promise<HttpResponse<ResponseType>> {
     return this.request<ResponseType>({
       ...options,
       path,
@@ -133,7 +142,10 @@ export class BasicHttpClient {
     });
   }
 
-  public delete<ResponseType>(path: string, options: HttpRequestOptions = {}) {
+  public delete<ResponseType>(
+    path: string,
+    options: HttpRequestOptions = {}
+  ): Promise<HttpResponse<ResponseType>> {
     return this.request<ResponseType>({
       ...options,
       path,
@@ -141,7 +153,10 @@ export class BasicHttpClient {
     });
   }
 
-  public patch<ResponseType>(path: string, options: HttpRequestOptions = {}) {
+  public patch<ResponseType>(
+    path: string,
+    options: HttpRequestOptions = {}
+  ): Promise<HttpResponse<ResponseType>> {
     return this.request<ResponseType>({
       ...options,
       path,
@@ -168,7 +183,7 @@ export class BasicHttpClient {
     return response;
   }
 
-  protected populateDefaultHeaders(headers: HttpHeaders = {}) {
+  protected populateDefaultHeaders(headers: HttpHeaders = {}): HttpHeaders {
     return {
       ...this.defaultHeaders,
       ...headers,
@@ -205,7 +220,9 @@ export class BasicHttpClient {
     };
   }
 
-  protected async request<ResponseType>(request: HttpRequest) {
+  protected async request<ResponseType>(
+    request: HttpRequest
+  ): Promise<HttpResponse<ResponseType>> {
     const mutatedRequest = await this.preRequest(request);
     const rawResponse = await this.rawRequest<ResponseType>(mutatedRequest);
     return this.postRequest(rawResponse, request);

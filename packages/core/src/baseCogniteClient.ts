@@ -136,7 +136,7 @@ export function accessApi<T>(api: T | undefined): T {
   return api;
 }
 
-export function throwReLogginError() {
+export function throwReLogginError(): void {
   throw Error(
     'You cannot re-login with an already logged in Cognite client instance. Try to create a new Cognite client instance instead.'
   );
@@ -145,10 +145,10 @@ export function throwReLogginError() {
 type OAuthLoginResult = [() => Promise<boolean>, (string | null)];
 
 export default class BaseCogniteClient {
-  public get login() {
+  public get login(): LoginAPI {
     return this.loginApi;
   }
-  public get logout() {
+  public get logout(): LogoutApi {
     return this.logoutApi;
   }
 
@@ -158,8 +158,8 @@ export default class BaseCogniteClient {
   private readonly metadata: MetadataMap;
   private readonly loginApi: LoginAPI;
   private readonly logoutApi: LogoutApi;
-  private projectName: string = '';
-  private hasBeenLoggedIn: boolean = false;
+  private projectName = '';
+  private hasBeenLoggedIn = false;
   private azureAdClient?: AzureAD;
   private adfsClient?: ADFS;
   private cogniteAuthClient?: CogniteAuthentication;
@@ -210,12 +210,12 @@ export default class BaseCogniteClient {
     );
   };
 
-  public setProject(projectName: string) {
+  public setProject(projectName: string): void {
     this.projectName = projectName;
     this.initAPIs();
   }
 
-  public get project() {
+  public get project(): string {
     return this.projectName;
   }
 
@@ -236,7 +236,7 @@ export default class BaseCogniteClient {
    * const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
    * ```
    */
-  public loginWithApiKey = (options: ApiKeyLoginOptions) => {
+  public loginWithApiKey = (options: ApiKeyLoginOptions): void => {
     if (this.hasBeenLoggedIn) {
       throwReLogginError();
     }
@@ -409,7 +409,7 @@ export default class BaseCogniteClient {
   /**
    * To modify the base-url at any point in time
    */
-  public setBaseUrl = (baseUrl: string) => {
+  public setBaseUrl = (baseUrl: string): void => {
     if (
       this.flow &&
       (this.flow.type === 'AAD_OAUTH' ||
@@ -445,14 +445,24 @@ export default class BaseCogniteClient {
    * ```
    */
   public async getCDFToken(): Promise<string | null> {
-    switch (this.flow!.type) {
+    if (this.flow === undefined) {
+      throw Error('loginWithOAuth flow was not defined');
+    }
+
+    switch (this.flow.type) {
       case 'CDF_OAUTH': {
+        if (this.cogniteAuthClient === undefined) {
+          throw Error('cognite auth client was not defined');
+        }
         const tokens =
-          (await this.cogniteAuthClient!.getCDFToken(this.httpClient)) || null;
+          (await this.cogniteAuthClient.getCDFToken(this.httpClient)) || null;
         return tokens ? tokens.accessToken : null;
       }
       case 'AAD_OAUTH': {
-        const token = await this.azureAdClient!.getCDFToken();
+        if (this.azureAdClient === undefined) {
+          throw Error('azure ad client was not defined');
+        }
+        const token = await this.azureAdClient.getCDFToken();
 
         if (token && !(await this.validateAccessToken(token))) {
           return null;
@@ -460,17 +470,23 @@ export default class BaseCogniteClient {
         return token;
       }
       case 'ADFS_OAUTH': {
-        const token = await this.adfsClient!.getCDFToken();
+        if (this.adfsClient === undefined) {
+          throw Error('adfs client was not defined');
+        }
+        const token = await this.adfsClient.getCDFToken();
         if (token && !(await this.validateAccessToken(token))) {
           return null;
         }
         return token;
       }
       case 'OIDC_AUTHORIZATION_CODE_FLOW': {
+        if (this.authCodeFlowManager === undefined) {
+          throw Error('code flow manager was not defined');
+        }
         const user =
-          (await this.authCodeFlowManager!.getUser(true).catch(() =>
-            Promise.resolve(null)
-          )) || null;
+          (await this.authCodeFlowManager
+            .getUser(true)
+            .catch(() => Promise.resolve(null))) || null;
         if (user && !(await this.validateAccessToken(user.access_token))) {
           return null;
         }
@@ -567,7 +583,7 @@ export default class BaseCogniteClient {
    * const metadata = client.getMetadata(createdAsset);
    * ```
    */
-  public getMetadata = (value: any) => this.metadataMap.get(value);
+  public getMetadata = (value: any): any => this.metadataMap.get(value);
 
   /**
    * Basic HTTP method for GET
@@ -579,8 +595,10 @@ export default class BaseCogniteClient {
    * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
    * ```
    */
-  public get = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.get<T>(path, options);
+  public get = <T = any>(
+    path: string,
+    options?: HttpRequestOptions
+  ): Promise<HttpResponse<T>> => this.httpClient.get<T>(path, options);
 
   /**
    * Basic HTTP method for PUT
@@ -592,8 +610,10 @@ export default class BaseCogniteClient {
    * const response = await client.put('someUrl');
    * ```
    */
-  public put = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.put<T>(path, options);
+  public put = <T = any>(
+    path: string,
+    options?: HttpRequestOptions
+  ): Promise<HttpResponse<T>> => this.httpClient.put<T>(path, options);
 
   /**
    * Basic HTTP method for POST
@@ -606,8 +626,10 @@ export default class BaseCogniteClient {
    * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
    * ```
    */
-  public post = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.post<T>(path, options);
+  public post = <T = any>(
+    path: string,
+    options?: HttpRequestOptions
+  ): Promise<HttpResponse<T>> => this.httpClient.post<T>(path, options);
 
   /**
    * Basic HTTP method for DELETE
@@ -618,8 +640,10 @@ export default class BaseCogniteClient {
    * const response = await client.delete('someUrl');
    * ```
    */
-  public delete = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.delete<T>(path, options);
+  public delete = <T = any>(
+    path: string,
+    options?: HttpRequestOptions
+  ): Promise<HttpResponse<T>> => this.httpClient.delete<T>(path, options);
 
   /**
    * Basic HTTP method for PATCH
@@ -630,14 +654,16 @@ export default class BaseCogniteClient {
    * const response = await client.patch('someUrl');
    * ```
    */
-  public patch = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.patch<T>(path, options);
+  public patch = <T = any>(
+    path: string,
+    options?: HttpRequestOptions
+  ): Promise<HttpResponse<T>> => this.httpClient.patch<T>(path, options);
 
   public setOneTimeSdkHeader(value: string) {
     this.httpClient.addOneTimeHeader(X_CDF_SDK_HEADER, value);
   }
 
-  protected initAPIs() {
+  protected initAPIs(): void {
     // will be overritten by subclasses
   }
 
@@ -649,7 +675,7 @@ export default class BaseCogniteClient {
     return createUniversalRetryValidator();
   }
 
-  protected get version() {
+  protected get version(): string {
     return `${version}-core`;
   }
 
@@ -660,7 +686,7 @@ export default class BaseCogniteClient {
       map: MetadataMap
     ) => ApiType,
     relativePath: string
-  ) => {
+  ): ApiType => {
     return new api(
       `${this.projectUrl}/${relativePath}`,
       this.httpClient,
@@ -668,15 +694,15 @@ export default class BaseCogniteClient {
     );
   };
 
-  protected get projectUrl() {
+  protected get projectUrl(): string {
     return projectUrl(this.project, this.apiVersion);
   }
 
-  protected get metadataMap() {
+  protected get metadataMap(): MetadataMap {
     return this.metadata;
   }
 
-  protected get httpClient() {
+  protected get httpClient(): CDFHttpClient {
     return this.http;
   }
 

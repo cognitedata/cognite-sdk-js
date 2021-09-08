@@ -11,29 +11,29 @@ import { CogniteMultiError } from './multiError';
 export type CogniteAPIVersion = 'v1' | 'playground';
 
 /** @hidden */
-export function getBaseUrl(baseUrl?: string) {
+export function getBaseUrl(baseUrl?: string): string {
   return baseUrl || BASE_URL;
 }
 
 /** @hidden */
-export const apiUrl = (apiVersion: CogniteAPIVersion = 'v1') =>
+export const apiUrl = (apiVersion: CogniteAPIVersion = 'v1'): string =>
   `/api/${apiVersion}`;
 
 /** @hidden */
 export function projectUrl(
   project: string,
   apiVersion: CogniteAPIVersion = 'v1'
-) {
+): string {
   return `${apiUrl(apiVersion)}/projects/${encodeURIComponent(project)}`;
 }
 
 /** @hidden */
-export function bearerString(token: string) {
+export function bearerString(token: string): string {
   return `Bearer ${token}`;
 }
 
 /** @hidden */
-export function isBrowser() {
+export function isBrowser(): boolean {
   return (
     typeof window !== 'undefined' && typeof window.document !== 'undefined'
   );
@@ -63,7 +63,7 @@ export function convertToTimestampToDateTime(timestamp: number): Date {
 }
 
 /** @hidden */
-export function isJson(data: any) {
+export function isJson(data: any): boolean {
   return (
     (isArray(data) || isObject(data)) &&
     !isBuffer(data) &&
@@ -73,7 +73,7 @@ export function isJson(data: any) {
 }
 
 /** @hidden */
-export function sleepPromise(durationInMs: number) {
+export function sleepPromise(durationInMs: number): Promise<void> {
   return new Promise(resolve => {
     setTimeout(resolve, durationInMs);
   });
@@ -183,7 +183,7 @@ export function isSameProject(project1: string, project2: string): boolean {
 export function applyIfApplicable<ArgumentType, ResultType>(
   args: ArgumentType,
   action?: (input: ArgumentType) => ResultType
-) {
+): ArgumentType | ResultType {
   if (action) {
     return action(args);
   }
@@ -191,7 +191,7 @@ export function applyIfApplicable<ArgumentType, ResultType>(
 }
 
 /** @hidden */
-export function generatePopupWindow(url: string, name: string) {
+export function generatePopupWindow(url: string, name: string): Window | null {
   return window.open(
     url,
     name,
@@ -221,7 +221,7 @@ export function createInvisibleIframe(
 }
 
 /** @hidden */
-export function isUsingSSL() {
+export function isUsingSSL(): boolean {
   return isBrowser() && location.protocol.toLowerCase() === 'https:';
 }
 

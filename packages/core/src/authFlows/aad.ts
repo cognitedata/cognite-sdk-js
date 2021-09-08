@@ -64,10 +64,10 @@ const accountLocalStorageKey = `${LOCAL_STORAGE_PREFIX}accountLocalId`;
 export class AzureAD {
   private msalApplication: PublicClientApplication;
   private userScopes = ['User.Read'];
-  private cluster: string = '';
+  private cluster = '';
 
   static getDefaultMSALConfig(
-    debug: boolean = false
+    debug = false
   ): { cache: CacheOptions; system?: BrowserSystemOptions } {
     return {
       cache: {

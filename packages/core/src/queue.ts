@@ -7,23 +7,23 @@ export class Queue<T> {
     this.data = [];
   }
 
-  public add = (item: T) => {
+  public add = (item: T): void => {
     this.data.unshift(item);
   };
 
-  public remove = () => {
+  public remove = (): void => {
     this.data.pop();
   };
 
-  public first = () => {
+  public first = (): T => {
     return this.data[0];
   };
 
-  public last = () => {
+  public last = (): T => {
     return this.data[this.data.length - 1];
   };
 
-  public size = () => {
+  public size = (): number => {
     return this.data.length;
   };
 }

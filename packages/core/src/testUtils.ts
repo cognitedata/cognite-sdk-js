@@ -47,7 +47,7 @@ export async function retryInSeconds<ResponseType>(
   func: () => Promise<ResponseType>,
   secondsBetweenRetries = 3,
   statusCodeToRetry = 404,
-  finishAfterSeconds: number = 300
+  finishAfterSeconds = 300
 ): Promise<ResponseType> {
   const timeStart = Date.now();
   while (Date.now() - timeStart < finishAfterSeconds * 1000) {

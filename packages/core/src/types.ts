@@ -110,3 +110,5 @@ export interface AutoPagingToArrayOptions {
 export type AutoPagingToArray<T> = (
   options?: AutoPagingToArrayOptions
 ) => Promise<T[]>;
+
+export const EmptyResponse: Record<symbol, unknown> = {};

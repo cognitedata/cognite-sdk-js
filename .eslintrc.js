@@ -23,6 +23,7 @@ module.exports = {
         "@typescript-eslint/ban-ts-comment": "off",
         "react/prop-types": "off",
         "prettier/prettier": "error",
+        "@typescript-eslint/no-explicit-any": "off",
         "lodash/import-scope": ["error", "method"], // see PR #386
 
         "@typescript-eslint/ban-types": [

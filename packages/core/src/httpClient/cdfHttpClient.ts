@@ -63,16 +63,16 @@ export class CDFHttpClient extends RetryableHttpClient {
     super(baseUrl, retryValidator);
   }
 
-  public addOneTimeHeader(name: string, value: string) {
+  public addOneTimeHeader(name: string, value: string): CDFHttpClient {
     this.oneTimeHeaders[name] = value;
     return this;
   }
 
-  public setBearerToken = (token: string) => {
+  public setBearerToken = (token: string): void => {
     this.setDefaultHeader(AUTHORIZATION_HEADER, bearerString(token));
   };
 
-  public set401ResponseHandler(handler: Response401Handler) {
+  public set401ResponseHandler(handler: Response401Handler): void {
     this.response401Handler = handler;
   }
 
@@ -93,7 +93,9 @@ export class CDFHttpClient extends RetryableHttpClient {
     };
   }
 
-  protected async request<ResponseType>(request: HttpRequest) {
+  protected async request<ResponseType>(
+    request: HttpRequest
+  ): Promise<HttpResponse<ResponseType>> {
     request.headers = this.enrichWithOneTimeHeaders(request.headers);
     return super.request<ResponseType>(request);
   }

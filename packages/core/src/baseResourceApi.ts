@@ -12,6 +12,7 @@ import { MetadataMap } from './metadata';
 import {
   CursorAndAsyncIterator,
   CursorResponse,
+  EmptyResponse,
   FilterQuery,
   IdEither,
   ItemsWrapper,
@@ -21,31 +22,31 @@ import { applyIfApplicable, promiseAllWithData } from './utils';
 import DateParser from './dateParser';
 /** @hidden */
 export abstract class BaseResourceAPI<ResponseType> {
-  protected get listGetUrl() {
+  protected get listGetUrl(): string {
     return this.url('');
   }
 
-  protected get listPostUrl() {
+  protected get listPostUrl(): string {
     return this.url('list');
   }
 
-  protected get byIdsUrl() {
+  protected get byIdsUrl(): string {
     return this.url('byids');
   }
 
-  protected get updateUrl() {
+  protected get updateUrl(): string {
     return this.url('update');
   }
 
-  protected get searchUrl() {
+  protected get searchUrl(): string {
     return this.url('search');
   }
 
-  protected get deleteUrl() {
+  protected get deleteUrl(): string {
     return this.url('delete');
   }
 
-  protected get aggregateUrl() {
+  protected get aggregateUrl(): string {
     return this.url('aggregate');
   }
 
@@ -67,7 +68,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     this.dateParser = new DateParser(...this.getDateProps());
   }
 
-  protected getMetadataMap() {
+  protected getMetadataMap(): MetadataMap {
     return this.map;
   }
 
@@ -93,7 +94,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     return [parents, props as string[]];
   }
 
-  protected url(path: string = '') {
+  protected url(path = ''): string {
     return this.resourcePath + '/' + path;
   }
 
@@ -184,7 +185,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     path?: string
   ) {
     const responses = await this.callDeleteEndpoint(ids, params, path);
-    return this.addToMapAndReturn({}, responses[0]);
+    return this.addToMapAndReturn(EmptyResponse, responses[0]);
   }
 
   protected async aggregateEndpoint<QueryType, AggregateResponse>(
@@ -260,7 +261,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     });
   }
 
-  protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>) {
+  protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>): T {
     return this.map.addAndReturn(response, metadata);
   }
 
@@ -271,7 +272,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     ) => Promise<HttpResponse<ItemsWrapper<ResponseType[]>>[]>,
     preRequestModifier?: (items: RequestType) => RequestType,
     postRequestModifier?: (items: ResponseType[]) => ResponseType[]
-  ) {
+  ): Promise<ResponseType[]> {
     const modifiedQuery = applyIfApplicable(query, preRequestModifier);
     const responses = await requester.bind(this)(modifiedQuery);
     const mergedResponseItems = this.mergeItemsFromItemsResponse(responses);
@@ -287,7 +288,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     requester: (
       request: RequestType
     ) => Promise<HttpResponse<ItemsWrapper<ResponseType[]>>>
-  ) {
+  ): Promise<ResponseType[]> {
     const response = await requester.bind(this)(query);
     return this.addToMapAndReturn(response.data.items, response);
   }
