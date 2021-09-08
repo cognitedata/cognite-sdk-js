@@ -32,11 +32,11 @@ export default class CogniteClient extends CogniteClientCleaned {
     super(options);
   }
 
-  protected get version() {
+  protected get version(): string {
     return `${version}-beta`;
   }
 
-  protected initAPIs() {
+  protected initAPIs(): void {
     super.initAPIs();
   }
 }
