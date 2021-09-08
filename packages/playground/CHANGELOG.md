@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.5.0...@cognite/sdk-playground@2.6.0) (2021-09-07)
+
+
+### Features
+
+* **documents:** ignore unknown ids ([#677](https://github.com/cognitedata/cognite-sdk-js/issues/677)) ([7251365](https://github.com/cognitedata/cognite-sdk-js/commit/7251365df41ae5bc60849ca457c47100bac98f7f))
+
+
+
+
+
 # [2.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.4.4...@cognite/sdk-playground@2.5.0) (2021-09-03)
 
 
