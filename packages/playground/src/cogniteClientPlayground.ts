@@ -4,12 +4,10 @@ import { accessApi, ClientOptions, BaseCogniteClient } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { DocumentsAPI } from './api/documents/documentsApi';
 import { FunctionsAPI } from './api/functions/functionsApi';
-import { SpatialAPI } from './api/spatial/spatialAPI';
 
 export default class CogniteClientPlayground extends BaseCogniteClient {
   private documentsApi?: DocumentsAPI;
   private functionsApi?: FunctionsAPI;
-  private spatialApi?: SpatialAPI;
 
   /**
    * Create a new SDK client (playground)
@@ -38,10 +36,6 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
     return accessApi(this.functionsApi);
   }
 
-  public get spatial() {
-    return accessApi(this.spatialApi);
-  }
-
   protected get version() {
     return `${version}-playground`;
   }
@@ -51,6 +45,5 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
 
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
     this.functionsApi = this.apiFactory(FunctionsAPI, 'functions');
-    this.spatialApi = this.apiFactory(SpatialAPI, 'spatial');
   }
 }
