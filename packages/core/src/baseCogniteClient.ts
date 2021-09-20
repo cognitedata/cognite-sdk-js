@@ -316,8 +316,11 @@ export default class BaseCogniteClient {
       throwReLogginError();
     }
 
-    if (!flow || !flow.type) {
+    if (!flow) {
       throw Error('`loginWithOAuth` is missing parameter `flow`');
+    }
+    if (!flow.type) {
+      throw Error('`loginWithOAuth` is missing parameter `flow.type`');
     }
     if (!flow.options) {
       throw Error('`loginWithOAuth` is missing parameter `options`');
