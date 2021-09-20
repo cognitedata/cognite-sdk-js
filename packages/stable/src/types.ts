@@ -2311,7 +2311,9 @@ export type SingleCogniteCapability =
   | { threedAcl: Acl3D }
   | { sequencesAcl: AclSequences }
   | { analyticsAcl: AclAnalytics }
-  | { datasetsAcl: AclDataSets };
+  | { datasetsAcl: AclDataSets }
+  | { templateGroupsAcl: AclTemplateGroups }
+  | { templateInstancesAcl: AclTemplateInstances };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };
 
