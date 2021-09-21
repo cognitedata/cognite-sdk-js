@@ -14,13 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14.x'
+      - name: Install Dependencies
+        run: npm install @commitlint/config-conventional
 
-      - name: Validate PR title
-        uses: wagoid/commitlint-github-action@v3
-        run: echo $PR_TITLE | npx commitlint
-        env:
-          PR_TITLE: ${{github.event.pull_request.title}}
+      - uses: JulienKode/pull-request-name-linter-action@v0.4.0
