@@ -44,7 +44,7 @@ jobs:
         uses: codecov/codecov-action@v1.0.11
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
- 
+
   snippets:
     runs-on: ubuntu-latest
 
@@ -77,7 +77,7 @@ jobs:
 
       - name: Test snippets
         run: yarn test-snippets
- 
+
   samples:
     runs-on: ubuntu-latest
 
@@ -110,7 +110,7 @@ jobs:
 
       - name: Test samples
         run: yarn test-samples
-        
+
   lint:
     runs-on: ubuntu-latest
 
@@ -141,11 +141,6 @@ jobs:
         # tests pushed git commits
       - uses: wagoid/commitlint-github-action@v3
 
-      - name: Commit lint PR
-        run: echo $PR_MESSAGE | npx commitlint
-        env:
-          PR_MESSAGE: ${{github.event.pull_request.title}}
-
       - name: validateDocLinks
         run: yarn validateDocLinks
 
@@ -170,7 +165,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
