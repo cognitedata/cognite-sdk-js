@@ -1,0 +1,26 @@
+name: PR title
+
+on:
+ pull_request:
+    branches:
+      - master
+      - release-*
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Validate PR title
+        uses: wagoid/commitlint-github-action@v3
+        run: echo $PR_MESSAGE | npx commitlint
+        env:
+          PR_MESSAGE: ${{github.event.pull_request.title}}
