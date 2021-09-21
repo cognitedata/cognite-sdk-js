@@ -1,4 +1,4 @@
-name: PR title
+name: CI
 
 on:
  pull_request:
@@ -8,7 +8,7 @@ on:
     types: [opened, edited, synchronize, reopened]
 
 jobs:
-  validation:
+  pr-title:
     runs-on: ubuntu-latest
 
     steps:
