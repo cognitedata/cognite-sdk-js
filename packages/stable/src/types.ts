@@ -93,9 +93,15 @@ export type AclRaw = Acl<AclActionRaw, AclScopeRaw>;
 
 export type AclScope3D = AclScopeAll;
 
-export type AclTemplateGroups = Acl<AclActionTemplateGroups, AclScopeTemplateGroups>;
+export type AclTemplateGroups = Acl<
+  AclActionTemplateGroups,
+  AclScopeTemplateGroups
+>;
 
-export type AclTemplateInstances = Acl<AclActionTemplateInstances, AclScopeTemplateInstances>;
+export type AclTemplateInstances = Acl<
+  AclActionTemplateInstances,
+  AclScopeTemplateInstances
+>;
 
 export interface AclScopeAll {
   all: {};
