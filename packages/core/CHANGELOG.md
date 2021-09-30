@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.2.4...@cognite/sdk-core@3.2.5) (2021-09-20)
+
+
+### Bug Fixes
+
+* better error message for flow param ([#681](https://github.com/cognitedata/cognite-sdk-js/issues/681)) ([31bb98b](https://github.com/cognitedata/cognite-sdk-js/commit/31bb98b8078ce1f30799fcc499bed23b2891c2d1))
+
+
+
+
+
 ## [3.2.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.2.3...@cognite/sdk-core@3.2.4) (2021-09-03)
 
 

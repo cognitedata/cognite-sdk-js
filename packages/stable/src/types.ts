@@ -65,6 +65,10 @@ export type AclActionSecurityCategories = MEMBEROF | LIST | CREATE | DELETE;
 
 export type AclActionSequences = READ | WRITE;
 
+export type AclActionTemplateGroups = READ | WRITE;
+
+export type AclActionTemplateInstances = READ | WRITE;
+
 export type AclActionTimeseries = READ | WRITE;
 
 export type AclActionUsers = LIST | CREATE | DELETE;
@@ -88,6 +92,16 @@ export type AclProjects = Acl<AclActionProjects, AclScopeProjects>;
 export type AclRaw = Acl<AclActionRaw, AclScopeRaw>;
 
 export type AclScope3D = AclScopeAll;
+
+export type AclTemplateGroups = Acl<
+  AclActionTemplateGroups,
+  AclScopeTemplateGroups
+>;
+
+export type AclTemplateInstances = Acl<
+  AclActionTemplateInstances,
+  AclScopeTemplateInstances
+>;
 
 export interface AclScopeAll {
   all: {};
@@ -136,6 +150,10 @@ export type AclScopeRaw = AclScopeAll;
 export type AclScopeSecurityCategories = AclScopeAll;
 
 export type AclScopeSequences = AclScopeAll | AclScopeDatasetsIds;
+
+export type AclScopeTemplateGroups = AclScopeAll | AclScopeDatasetsIds;
+
+export type AclScopeTemplateInstances = AclScopeAll | AclScopeDatasetsIds;
 
 export interface AclScopeTimeSeriesAssetRootIds {
   assetRootIdScope: {
@@ -2299,7 +2317,9 @@ export type SingleCogniteCapability =
   | { threedAcl: Acl3D }
   | { sequencesAcl: AclSequences }
   | { analyticsAcl: AclAnalytics }
-  | { datasetsAcl: AclDataSets };
+  | { datasetsAcl: AclDataSets }
+  | { templateGroupsAcl: AclTemplateGroups }
+  | { templateInstancesAcl: AclTemplateInstances };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };
 

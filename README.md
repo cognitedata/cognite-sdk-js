@@ -24,6 +24,18 @@ There are small bare-bones javascript (and typescript) projects in the `samples/
 They show how to include the cognite SDK in various project setups.
 The samples' [README.md](./samples/README.md) has instructions for running the samples.
 
+## Response header & http status
+
+Methods are design to only return the response body. For fetching the http response status and/or header you must utilize client.getMetadata:
+
+```ts
+const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
+const metadata = client.getMetadata(createdAsset);
+
+console.log(metadata.header["Access-Control-Allow-Origin"]);
+console.log(metadata.status);
+```
+
 ## License
 
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)

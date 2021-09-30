@@ -1,0 +1,20 @@
+name: CI
+
+on:
+ pull_request:
+    branches:
+      - master
+      - release-*
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  pr-title:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install @commitlint/config-conventional
+
+      - uses: JulienKode/pull-request-name-linter-action@v0.4.0

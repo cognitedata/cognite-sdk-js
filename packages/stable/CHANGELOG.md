@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.3.3...@cognite/sdk@5.4.0) (2021-09-22)
+
+
+### Features
+
+* add types for template capabilities ([#679](https://github.com/cognitedata/cognite-sdk-js/issues/679)) ([1be2218](https://github.com/cognitedata/cognite-sdk-js/commit/1be2218ce6817f289d4541f18bd2df125f14343c))
+
+
+
+
+
+## [5.3.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.3.2...@cognite/sdk@5.3.3) (2021-09-20)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
 ## [5.3.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.3.1...@cognite/sdk@5.3.2) (2021-09-03)
 
 
