@@ -4,7 +4,12 @@ import {
   IdEither,
   ExternalId,
 } from '@cognite/sdk-core';
-import { Features, FeaturesCreateItem, FeatureSearchFilter } from './types';
+import {
+  Features,
+  FeaturesCreateItem,
+  FeatureSearchFilter,
+  GeometryType,
+} from './types';
 
 export class FeaturesAPI extends BaseResourceAPI<Features> {
   public create = (
@@ -20,7 +25,7 @@ export class FeaturesAPI extends BaseResourceAPI<Features> {
   public retrieve = (
     featureTypeExternalId: CogniteExternalId,
     ids: IdEither[],
-    queryParams?: { outputGeometryFormat: 'wkt' | 'geojson' }
+    queryParams?: { outputGeometryFormat: GeometryType }
   ): Promise<Features[]> => {
     return this.callEndpointWithMergeAndTransform(ids, request =>
       this.postInParallelWithAutomaticChunking({
@@ -55,7 +60,7 @@ export class FeaturesAPI extends BaseResourceAPI<Features> {
   public search = (
     featureTypeExternalId: CogniteExternalId,
     query: FeatureSearchFilter,
-    queryParams?: { outputGeometryFormat: 'wkt' | 'geojson' }
+    queryParams?: { outputGeometryFormat: GeometryType }
   ): Promise<Features[]> => {
     return this.searchEndpoint(
       query,

@@ -1,5 +1,7 @@
 import { CogniteExternalId, CogniteInternalId, Limit } from '@cognite/sdk-core';
 
+export type GeometryType = 'wkt' | 'geojson';
+
 export type AttributeType =
   | 'STRING'
   | 'LONG'
