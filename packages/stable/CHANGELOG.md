@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.4.0...@cognite/sdk@5.5.0) (2021-10-07)
+
+
+### Features
+
+* **spatial:** adds spatial API to playground ([#680](https://github.com/cognitedata/cognite-sdk-js/issues/680)) ([e0b2d1d](https://github.com/cognitedata/cognite-sdk-js/commit/e0b2d1dd6ac85eb6fd8a6d6fce61e26cc909c5e7))
+
+
+
+
+
 # [5.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.3.3...@cognite/sdk@5.4.0) (2021-09-22)
 
 
