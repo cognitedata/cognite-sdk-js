@@ -34,6 +34,8 @@ export {
   AutoPagingToArray,
 } from '@cognite/sdk-core';
 
+export * from './api/spatial/types';
+
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
   scope: ScopeType;

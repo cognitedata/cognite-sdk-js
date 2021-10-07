@@ -6,6 +6,7 @@ import {
   HttpResponse,
   HttpRequestOptions,
   HttpCall,
+  HttpQueryParams,
 } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import { MetadataMap } from './metadata';
@@ -174,8 +175,14 @@ export abstract class BaseResourceAPI<ResponseType> {
     );
   }
 
-  protected async searchEndpoint<FilterType>(query: FilterType) {
-    return this.callEndpointWithTransform(query, this.callSearchEndpoint);
+  protected async searchEndpoint<FilterType>(
+    query: FilterType,
+    path?: string,
+    queryParams?: HttpQueryParams
+  ) {
+    return this.callEndpointWithTransform(query, data =>
+      this.callSearchEndpoint(data, path, queryParams)
+    );
   }
 
   protected async deleteEndpoint<RequestParams extends object, T = IdEither>(
@@ -236,8 +243,12 @@ export abstract class BaseResourceAPI<ResponseType> {
     return this.postInParallelWithAutomaticChunking({ path, items: changes });
   }
 
-  protected async callSearchEndpoint<QueryType, Response>(query: QueryType) {
-    return this.post<Response>(this.searchUrl, { data: query });
+  protected async callSearchEndpoint<QueryType, Response>(
+    query: QueryType,
+    path: string = this.searchUrl,
+    queryParams?: HttpQueryParams
+  ) {
+    return this.post<Response>(path, { data: query, params: queryParams });
   }
 
   protected callDeleteEndpoint<ParamsType extends object, T = IdEither>(
