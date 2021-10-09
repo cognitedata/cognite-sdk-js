@@ -75,14 +75,6 @@ export interface DocumentsSourceFileFilter {
   size?: Range<number>;
 }
 
-export interface DocumentsPipeline {
-  externalId: CogniteExternalId;
-  sensitivityMatcher?: SensitivityMatcher;
-  classifier?: {
-    trainingLabels: LabelList[];
-  };
-}
-
 export interface ExternalDocumentsSearch {
   filter?: DocumentsFilter;
   search?: DocumentsSearch;
@@ -243,9 +235,12 @@ export interface DocumentsRequestFilter {
 export interface DocumentsPipeline {
   externalId: string;
   sensitivityMatcher?: SensitivityMatcher;
-  classifier?: {
-    trainingLabels: LabelList[];
-  };
+  classifier?: DocumentsPipelineClassifier;
+}
+
+export interface DocumentsPipelineClassifier {
+  trainingLabels: LabelList[];
+  activeClassifierId?: number;
 }
 
 export type LabelList = ExternalId;
@@ -255,23 +250,23 @@ export interface SensitivityMatcher {
   fieldMappings?: DocumentsFieldMappings;
   sensitiveSecurityCategory?: number;
   restrictToSources?: string[];
-}
-
-export interface DocumentsFieldMappings {
-  title?: string;
-  author?: string;
-  mimeType?: string;
-  type?: string;
-  labelsExternalIds?: string[];
-  sourceFile?: DocumentsSourceFile;
   filterPasswords?: boolean;
 }
 
+export interface DocumentsFieldMappings {
+  title?: string[];
+  author?: string[];
+  mimeType?: string[];
+  type?: string[];
+  labelsExternalIds?: string[];
+  sourceFile?: DocumentsSourceFile;
+}
+
 export interface DocumentsSourceFile {
-  name?: string;
-  directory?: string;
-  content?: string;
-  metadata?: StringToStringMap;
+  name?: string[];
+  directory?: string[];
+  content?: string[];
+  metadata?: StringToStringArrayMap;
 }
 
 export type StringToStringArrayMap = {
