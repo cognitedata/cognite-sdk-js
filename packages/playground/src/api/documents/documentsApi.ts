@@ -20,11 +20,13 @@ import {
 } from '../../types';
 import { FeedbackAPI } from './feedbackApi';
 import { PipelinesAPI } from './pipelinesApi';
+import { ClassifiersAPI } from './classifiersApi';
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
   private readonly feedbackAPI: FeedbackAPI;
   private readonly previewAPI: PreviewAPI;
   private readonly pipelinesAPI: PipelinesAPI;
+  private readonly classifiersAPI: ClassifiersAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
@@ -34,6 +36,11 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     this.feedbackAPI = new FeedbackAPI(baseUrl + '/feedback', httpClient, map);
     this.pipelinesAPI = new PipelinesAPI(
       baseUrl + '/pipelines',
+      httpClient,
+      map
+    );
+    this.classifiersAPI = new ClassifiersAPI(
+      baseUrl + '/classifiers',
       httpClient,
       map
     );
@@ -74,6 +81,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
   public get pipelines() {
     return this.pipelinesAPI;
+  }
+
+  public get classifiers() {
+    return this.classifiersAPI;
   }
 
   private async searchDocuments<ResponseType>(

@@ -83,6 +83,24 @@ export interface DocumentsPipeline {
   };
 }
 
+export interface Classifier {
+  id: CogniteInternalId;
+  projectId?: number;
+  name?: string;
+  createdAt?: number;
+  status?: string;
+  active?: boolean;
+  metrics: ClassifierMetrics;
+}
+
+export interface ClassifierMetrics {
+  precision?: number;
+  recall?: number;
+  f1Score?: number;
+  confusionMatrix: number[][];
+  labels: string[];
+}
+
 export interface ExternalDocumentsSearch {
   filter?: DocumentsFilter;
   search?: DocumentsSearch;
