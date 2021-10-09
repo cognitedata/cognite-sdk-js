@@ -44,6 +44,6 @@ export class ClassifiersAPI extends BaseResourceAPI<Classifier> {
         ignoreUnknownIds,
       },
     });
-    return response.data;
+    return this.addToMapAndReturn(response.data, response);
   }
 }
