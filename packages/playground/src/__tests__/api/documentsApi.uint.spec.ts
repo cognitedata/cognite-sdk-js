@@ -677,4 +677,50 @@ describe('Documents unit test', () => {
     const resp = await client.documents.preview.temporaryLink(1);
     expect(resp.temporaryLink).toEqual(link);
   });
+
+  describe('classifiers', () => {
+    test('create', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/classifiers'), {
+          items: [{ name: 'test' }],
+        })
+        .once()
+        .reply(200, {
+          items: [{ name: 'test' }],
+        });
+      const resp = await client.documents.classifiers.create([
+        { name: 'test' },
+      ]);
+      expect(resp[0].name).toEqual('test');
+    });
+    test('list by ids', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/classifiers'), {
+          items: [{ id: 1 }, { id: 2 }, { id: 3 }],
+          ignoreUnknownIds: false,
+        })
+        .once()
+        .reply(200, {
+          items: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        });
+      const resp = await client.documents.classifiers.listByIds([1, 2, 3]);
+      expect(resp.items[0].id).toEqual(1);
+    });
+    test('list by ids, ignore unknown', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/classifiers'), {
+          items: [{ id: 1 }, { id: 2 }, { id: 3 }],
+          ignoreUnknownIds: true,
+        })
+        .once()
+        .reply(200, {
+          items: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        });
+      const resp = await client.documents.classifiers.listByIds(
+        [1, 2, 3],
+        true
+      );
+      expect(resp.items[0].id).toEqual(1);
+    });
+  });
 });

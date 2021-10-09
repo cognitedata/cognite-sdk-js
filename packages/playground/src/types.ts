@@ -83,10 +83,13 @@ export interface DocumentsPipeline {
   };
 }
 
-export interface Classifier {
+export interface ClassifierName {
+  name?: string;
+}
+
+export interface Classifier extends ClassifierName {
   id: CogniteInternalId;
   projectId?: number;
-  name?: string;
   createdAt?: number;
   status?: string;
   active?: boolean;

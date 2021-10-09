@@ -2,14 +2,15 @@
 
 import {
   BaseResourceAPI,
+  CogniteInternalId,
   CursorAndAsyncIterator,
   InternalId,
   ItemsWrapper,
 } from '@cognite/sdk-core';
-import { Classifier } from '../../types';
+import { Classifier, ClassifierName } from '../../types';
 
 export class ClassifiersAPI extends BaseResourceAPI<Classifier> {
-  public create = (classifiers: Classifier[]): Promise<Classifier[]> => {
+  public create = (classifiers: ClassifierName[]): Promise<Classifier[]> => {
     return this.createEndpoint(classifiers);
   };
 
@@ -18,7 +19,7 @@ export class ClassifiersAPI extends BaseResourceAPI<Classifier> {
   };
 
   public listByIds = (
-    ids: InternalId[],
+    ids: CogniteInternalId[],
     ignoreUnknownIds: boolean = false
   ): Promise<ItemsWrapper<Classifier[]>> => {
     return this.classifiersListByIds<ItemsWrapper<Classifier[]>>(
@@ -34,13 +35,13 @@ export class ClassifiersAPI extends BaseResourceAPI<Classifier> {
   };
 
   private async classifiersListByIds<ResponseType>(
-    ids: InternalId[],
+    ids: CogniteInternalId[],
     ignoreUnknownIds?: boolean
   ): Promise<ResponseType> {
-    const documentIds = ids.map(id => ({ id }));
+    const internalIds = ids.map(id => ({ id }));
     const response = await this.post<ResponseType>(this.url(), {
       data: {
-        items: documentIds,
+        items: internalIds,
         ignoreUnknownIds,
       },
     });
