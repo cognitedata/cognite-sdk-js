@@ -7,7 +7,6 @@ import {
   ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
-import { PreviewAPI } from './previewApi';
 
 import {
   Document,
@@ -18,6 +17,8 @@ import {
   DocumentsSearchWrapper,
   ExternalDocumentsSearch,
 } from '../../types';
+
+import { PreviewAPI } from './previewApi';
 import { FeedbackAPI } from './feedbackApi';
 import { PipelinesAPI } from './pipelinesApi';
 import { ClassifiersAPI } from './classifiersApi';
