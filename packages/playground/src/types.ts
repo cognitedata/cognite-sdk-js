@@ -254,19 +254,19 @@ export interface SensitivityMatcher {
 }
 
 export interface DocumentsFieldMappings {
-  title?: string | string[];
-  author?: string | string[];
-  mimeType?: string | string[];
-  type?: string | string[];
+  title?: string[];
+  author?: string[];
+  mimeType?: string[];
+  type?: string[];
   labelsExternalIds?: string[];
   sourceFile?: DocumentsSourceFile;
 }
 
 export interface DocumentsSourceFile {
-  name?: string | string[];
-  directory?: string | string[];
-  content?: string | string[];
-  metadata?: StringToStringMap | StringToStringArrayMap;
+  name?: string[];
+  directory?: string[];
+  content?: string[];
+  metadata?: StringToStringArrayMap;
 }
 
 export type StringToStringArrayMap = {
