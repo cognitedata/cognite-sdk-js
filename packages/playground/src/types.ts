@@ -233,19 +233,28 @@ export interface DocumentsRequestFilter {
 }
 
 export interface Adder<T> {
-  add?: T;
+  add: T;
+  set?: never;
+  remove?: never;
 }
 
 export interface Remover<T> {
-  remove?: T;
+  remove: T;
+  set?: never;
+  add?: never;
 }
 
 export interface Setter<T> {
-  set?: T;
+  set: T;
+  remove?: never;
+  add?: never;
 }
 
 export interface NullSetter {
-  setNull?: boolean;
+  setNull: boolean;
+  set?: never;
+  remove?: never;
+  add?: never;
 }
 
 export interface UpdateDocumentsPipeline {

@@ -103,7 +103,20 @@ describe('Documents unit test', () => {
     test('create pipeline configuration', async () => {
       nock(mockBaseUrl)
         .post(new RegExp('/documents/pipelines'), {
-          items: [{ externalId: 'cognitesdk-js-test' }],
+          items: [{
+            externalId: 'cognitesdk-js-test',
+            sensitivityMatcher: {
+              matchLists: {},
+              fieldMappings: {
+                sourceFile: {},
+              },
+              restrictToSources: [],
+              filterPasswords: true,
+            },
+            classifier: {
+              trainingLabels: [],
+            },
+          }],
         })
         .once()
         .reply(200, {
@@ -127,6 +140,13 @@ describe('Documents unit test', () => {
       const resp = await client.documents.pipelines.create([
         {
           externalId: 'cognitesdk-js-test',
+          sensitivityMatcher: {
+            matchLists: {},
+            fieldMappings: {}
+          },
+          classifier: {
+            trainingLabels: []
+          }
         },
       ]);
 
@@ -145,13 +165,62 @@ describe('Documents unit test', () => {
     test('update pipeline configuration', async () => {
       nock(mockBaseUrl)
         .post(new RegExp('/documents/pipelines'), {
-          items: [{ externalId: 'test' }],
+          items: [
+            {
+              externalId: 'cognitesdk-js-test',
+              sensitivityMatcher: {
+                matchLists: {
+                  set: {
+                    restrictToSources: [],
+                  }
+                },
+                fieldMappings: {
+                  set: {
+                    title: "dsfsdf",
+                  },
+                },
+                filterPasswords: {
+                  set: true,
+                },
+              },
+              classifier: {
+                trainingLabels: {
+                  remove: [{externalId: "wrong-id"}],
+                },
+                activeClassifierId: {
+                  setNull: true,
+                }
+              },
+            }],
         })
         .once()
         .reply(200, { items: [] });
       await client.documents.pipelines.update([
         {
-          externalId: 'test',
+          externalId: 'cognitesdk-js-test',
+          sensitivityMatcher: {
+            matchLists: {
+              set: {
+                restrictToSources: [],
+              }
+            },
+            fieldMappings: {
+              set: {
+                title: "dsfsdf",
+              },
+            },
+            filterPasswords: {
+              set: true,
+            },
+          },
+          classifier: {
+            trainingLabels: {
+              remove: [{externalId: "wrong-id"}],
+            },
+            activeClassifierId: {
+              setNull: true,
+            }
+          },
         },
       ]);
     });
