@@ -235,9 +235,12 @@ export interface DocumentsRequestFilter {
 export interface DocumentsPipeline {
   externalId: string;
   sensitivityMatcher?: SensitivityMatcher;
-  classifier?: {
-    trainingLabels: LabelList[];
-  };
+  classifier?: DocumentsPipelineClassifier
+}
+
+export interface DocumentsPipelineClassifier {
+  trainingLabels: LabelList[];
+  activeClassifierId: number;
 }
 
 export type LabelList = ExternalId;
