@@ -6,7 +6,7 @@ import {
   ExternalId,
 } from '@cognite/sdk-core';
 
-import {DocumentsPipeline, UpdateDocumentsPipeline} from '../../types';
+import { DocumentsPipeline, UpdateDocumentsPipeline } from '../../types';
 
 export class PipelinesAPI extends BaseResourceAPI<DocumentsPipeline> {
   public create = (

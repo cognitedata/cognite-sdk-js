@@ -103,20 +103,22 @@ describe('Documents unit test', () => {
     test('create pipeline configuration', async () => {
       nock(mockBaseUrl)
         .post(new RegExp('/documents/pipelines'), {
-          items: [{
-            externalId: 'cognitesdk-js-test',
-            sensitivityMatcher: {
-              matchLists: {},
-              fieldMappings: {
-                sourceFile: {},
+          items: [
+            {
+              externalId: 'cognitesdk-js-test',
+              sensitivityMatcher: {
+                matchLists: {},
+                fieldMappings: {
+                  sourceFile: {},
+                },
+                restrictToSources: [],
+                filterPasswords: true,
               },
-              restrictToSources: [],
-              filterPasswords: true,
+              classifier: {
+                trainingLabels: [],
+              },
             },
-            classifier: {
-              trainingLabels: [],
-            },
-          }],
+          ],
         })
         .once()
         .reply(200, {
@@ -142,11 +144,11 @@ describe('Documents unit test', () => {
           externalId: 'cognitesdk-js-test',
           sensitivityMatcher: {
             matchLists: {},
-            fieldMappings: {}
+            fieldMappings: {},
           },
           classifier: {
-            trainingLabels: []
-          }
+            trainingLabels: [],
+          },
         },
       ]);
 
@@ -172,11 +174,11 @@ describe('Documents unit test', () => {
                 matchLists: {
                   set: {
                     restrictToSources: [],
-                  }
+                  },
                 },
                 fieldMappings: {
                   set: {
-                    title: "dsfsdf",
+                    title: 'dsfsdf',
                   },
                 },
                 filterPasswords: {
@@ -185,13 +187,14 @@ describe('Documents unit test', () => {
               },
               classifier: {
                 trainingLabels: {
-                  remove: [{externalId: "wrong-id"}],
+                  remove: [{ externalId: 'wrong-id' }],
                 },
                 activeClassifierId: {
                   setNull: true,
-                }
+                },
               },
-            }],
+            },
+          ],
         })
         .once()
         .reply(200, { items: [] });
@@ -202,11 +205,11 @@ describe('Documents unit test', () => {
             matchLists: {
               set: {
                 restrictToSources: [],
-              }
+              },
             },
             fieldMappings: {
               set: {
-                title: "dsfsdf",
+                title: 'dsfsdf',
               },
             },
             filterPasswords: {
@@ -215,11 +218,11 @@ describe('Documents unit test', () => {
           },
           classifier: {
             trainingLabels: {
-              remove: [{externalId: "wrong-id"}],
+              remove: [{ externalId: 'wrong-id' }],
             },
             activeClassifierId: {
               setNull: true,
-            }
+            },
           },
         },
       ]);
