@@ -75,14 +75,6 @@ export interface DocumentsSourceFileFilter {
   size?: Range<number>;
 }
 
-export interface DocumentsPipeline {
-  externalId: CogniteExternalId;
-  sensitivityMatcher?: SensitivityMatcher;
-  classifier?: {
-    trainingLabels: LabelList[];
-  };
-}
-
 export interface ExternalDocumentsSearch {
   filter?: DocumentsFilter;
   search?: DocumentsSearch;
@@ -240,19 +232,73 @@ export interface DocumentsRequestFilter {
   cursor?: string;
 }
 
+export interface Adder<T> {
+  add: T;
+  set?: never;
+  remove?: never;
+}
+
+export interface Remover<T> {
+  remove: T;
+  set?: never;
+  add?: never;
+}
+
+export interface Setter<T> {
+  set: T;
+  remove?: never;
+  add?: never;
+}
+
+export interface NullSetter {
+  setNull: boolean;
+  set?: never;
+  remove?: never;
+  add?: never;
+}
+
+export interface UpdateDocumentsPipeline {
+  externalId: string;
+  sensitivityMatcher?: UpdateDocumentsPipelineSensitivityMatcher;
+  classifier?: UpdateDocumentsPipelineClassifier;
+}
+
+export interface UpdateDocumentsPipelineSensitivityMatcher {
+  matchLists?:
+    | Adder<StringToStringArrayMap>
+    | Setter<StringToStringArrayMap>
+    | Remover<string[]>;
+  fieldMappings?: Setter<DocumentsFieldMappings>;
+  filterPasswords?: Setter<boolean>;
+  sensitiveSecurityCategory?: Setter<boolean> | NullSetter;
+  restrictToSources?: Adder<string[]> | Remover<string[]> | Setter<string[]>;
+}
+
+export interface UpdateDocumentsPipelineClassifier {
+  trainingLabels:
+    | Adder<LabelList[]>
+    | Remover<LabelList[]>
+    | Setter<LabelList[]>;
+  activeClassifierId: Setter<number> | NullSetter;
+}
+
 export interface DocumentsPipeline {
   externalId: string;
-  sensitivityMatcher?: SensitivityMatcher;
-  classifier?: {
-    trainingLabels: LabelList[];
-  };
+  sensitivityMatcher: SensitivityMatcher;
+  classifier: DocumentsPipelineClassifier;
+}
+
+export interface DocumentsPipelineClassifier {
+  trainingLabels: LabelList[];
+  activeClassifierId?: number;
 }
 
 export type LabelList = ExternalId;
 
 export interface SensitivityMatcher {
-  matchLists?: StringToStringArrayMap;
-  fieldMappings?: DocumentsFieldMappings;
+  matchLists: StringToStringArrayMap;
+  fieldMappings: DocumentsFieldMappings;
+  filterPasswords?: boolean;
   sensitiveSecurityCategory?: number;
   restrictToSources?: string[];
 }
