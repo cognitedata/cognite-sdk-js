@@ -18,7 +18,6 @@ This folder contains examples on how to use the SDK in different frameworks.
 
 - [NodeJS](./nodejs)
 - React
-  - [Authentication](./react/authentication)
-  - [Authentication with popup](./react/authentication-with-popup)
+  - [Legacy Authentication](./react/legacy-auth)
+  - [Azure Active Directory Authentication ](./react/msal-browser-react)
 - [Typescript](./typescript)
-

@@ -9,6 +9,7 @@ import {
   isLocalhost,
   isSameProject,
   isUsingSSL,
+  getBaseUrl,
 } from '../utils';
 import { CogniteLoginError } from '../loginError';
 import { AUTHORIZATION_HEADER } from '../constants';
@@ -23,6 +24,7 @@ import {
   ID_TOKEN_PARAM,
   parseTokenQueryParameters,
 } from '../loginUtils';
+import { createUniversalRetryValidator } from '../httpClient/retryValidator';
 
 export const REDIRECT = 'REDIRECT';
 export const POPUP = 'POPUP';
@@ -32,10 +34,10 @@ export type OnAuthenticate = (login: OnAuthenticateLoginObject) => void;
 
 export interface AuthOptions {
   project: string;
+  baseUrl?: string;
 }
 
 export interface LoginParams {
-  baseUrl: string;
   onAuthenticate?: OnAuthenticate | 'REDIRECT' | 'POPUP';
 }
 
@@ -83,18 +85,24 @@ export async function getIdInfo(
 export class CogniteAuthentication {
   private readonly project: string;
   private authTokens?: AuthTokens;
+  private httpClient: CDFHttpClient;
+  private baseUrl: string;
 
-  constructor({ project }: AuthOptions) {
+  constructor({ project, baseUrl }: AuthOptions) {
     if (!isString(project)) {
       throw Error('options.project is required and must be of type string');
     }
+    this.baseUrl = baseUrl || getBaseUrl(baseUrl);
+    this.httpClient = new CDFHttpClient(
+      this.baseUrl,
+      createUniversalRetryValidator()
+    );
 
     this.project = project;
   }
 
   public login({
     onAuthenticate: onAuthMethod,
-    baseUrl,
   }: LoginParams): Promise<AuthTokens | null> {
     const onAuthenticate =
       onAuthMethod === POPUP
@@ -109,7 +117,7 @@ export class CogniteAuthentication {
         },
         redirect: params => {
           const authorizeParams = {
-            baseUrl,
+            baseUrl: this.baseUrl,
             project: this.project,
             ...params,
           };
@@ -117,7 +125,7 @@ export class CogniteAuthentication {
         },
         popup: async params => {
           const authorizeParams = {
-            baseUrl,
+            baseUrl: this.baseUrl,
             project: this.project,
             ...params,
           };
@@ -139,12 +147,10 @@ export class CogniteAuthentication {
     });
   }
 
-  public async getCDFToken(
-    httpClient: CDFHttpClient
-  ): Promise<AuthTokens | null> {
+  public async getCDFToken(): Promise<AuthTokens | null> {
     if (this.authTokens) {
       const { accessToken, idToken } = this.authTokens;
-      const isValid = await isTokensValid(httpClient, this.project, {
+      const isValid = await isTokensValid(this.httpClient, this.project, {
         accessToken,
         idToken,
       });
@@ -157,9 +163,7 @@ export class CogniteAuthentication {
     return null;
   }
 
-  public async handleLoginRedirect(
-    httpClient: CDFHttpClient
-  ): Promise<AuthTokens | null> {
+  public async handleLoginRedirect(): Promise<AuthTokens | null> {
     if (!isUsingSSL() && !isLocalhost()) {
       return null;
     }
@@ -168,7 +172,7 @@ export class CogniteAuthentication {
 
     if (
       tokens !== null &&
-      (await isTokensValid(httpClient, this.project, tokens))
+      (await isTokensValid(this.httpClient, this.project, tokens))
     ) {
       clearParametersFromUrl(ACCESS_TOKEN_PARAM, ID_TOKEN_PARAM);
 

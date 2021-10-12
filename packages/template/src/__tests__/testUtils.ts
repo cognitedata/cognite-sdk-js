@@ -6,16 +6,19 @@ import { name } from '../../package.json';
 
 export function setupClient(baseUrl: string = Constants.BASE_URL) {
   return new CogniteClient({
+    project: 'unknown',
+    getToken: () => Promise.reject(new Error('SDK not logged in')),
     appId: `JS SDK integration tests (${name})`,
     baseUrl,
   });
 }
 
 export function setupLoggedInClient() {
-  const client = setupClient();
-  client.loginWithApiKey({
+  return new CogniteClient({
     project: process.env.COGNITE_PROJECT as string,
-    apiKey: process.env.COGNITE_CREDENTIALS as string,
+    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
+    apiKeyMode: true,
+    appId: `JS SDK integration tests (${name})`,
+    baseUrl: Constants.BASE_URL,
   });
-  return client;
 }

@@ -21,25 +21,23 @@ export const authTokens = {
 };
 
 export function setupClient(baseUrl: string = BASE_URL) {
-  return new BaseCogniteClient({ appId: 'JS SDK integration tests', baseUrl });
+  return new BaseCogniteClient({
+    appId: 'JS SDK integration tests',
+    project: process.env.COGNITE_PROJECT as string,
+    apiKeyMode: true,
+    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
+    baseUrl,
+  });
 }
 
 export function setupLoggedInClient() {
   jest.setTimeout(60 * 1000);
   const client = setupClient();
-  client.loginWithApiKey({
-    project: process.env.COGNITE_PROJECT as string,
-    apiKey: process.env.COGNITE_CREDENTIALS as string,
-  });
   return client;
 }
 
 export function setupMockableClient() {
   const client = setupClient(mockBaseUrl);
-  client.loginWithApiKey({
-    project,
-    apiKey,
-  });
   return client;
 }
 
