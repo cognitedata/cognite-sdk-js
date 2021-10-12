@@ -1422,7 +1422,7 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@cognite/sdk-core@^3.2.5", "@cognite/sdk-core@^3.3.0", "@cognite/sdk-core@^3.4.1":
+"@cognite/sdk-core@^3.2.5":
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/@cognite/sdk-core/-/sdk-core-3.4.1.tgz#1a7552f1babe441bd26f48993584bbbc7b98a8d1"
   integrity sha512-E5/Xm5+yClLUzrK6RiVZ5E9YsGbG4pAmDSel7MuoCJB9L8q0lcQN65ESBFsmrRJrqKzu7ak7fh/xVzkGfrO9Iw==
@@ -1441,14 +1441,6 @@
   integrity sha512-EgfpQzxJKv83wn5hWxQr04cqI9hp33Z1oeedhZiqJRJzsracHa+jeRtR3nOTHyfYfAt2BKu3yw1A9hFnZ3Q2tA==
   dependencies:
     "@cognite/sdk-core" "^3.2.5"
-    lodash "^4.17.11"
-
-"@cognite/sdk@^5.5.0":
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-5.6.1.tgz#eeec9d6c26646c4b10c58d2b03d5405a9e542195"
-  integrity sha512-GIHQ47WD6GqUPWQRf/bXR4fy9n2eAQpS7/A91M1pBmbbtaoMvzqDQX2YCFO/+KkbydwV9WDbl0bHlLH6rcCGKg==
-  dependencies:
-    "@cognite/sdk-core" "^3.4.1"
     lodash "^4.17.11"
 
 "@commitlint/cli@^8.1.0":
