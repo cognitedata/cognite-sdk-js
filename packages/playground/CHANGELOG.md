@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@3.0.0...@cognite/sdk-playground@3.1.0) (2021-10-12)
+
+
+### Features
+
+* **documents:** support string array ([#702](https://github.com/cognitedata/cognite-sdk-js/issues/702)) ([cb7b5e3](https://github.com/cognitedata/cognite-sdk-js/commit/cb7b5e3c304ee5dbe7753f6d271c6f3ed05fcc2e))
+
+
+
+
+
 # [3.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.7.1...@cognite/sdk-playground@3.0.0) (2021-10-12)
 
 
