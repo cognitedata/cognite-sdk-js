@@ -13,8 +13,7 @@ describe('beta integration', () => {
     expect(response.items.length).toBeGreaterThan(0);
   });
   test('raw get assets', async () => {
-    const project = process.env.COGNITE_PROJECT as string;
-    const response = await client.get(`/api/v1/projects/${project}/assets`);
+    const response = await client.get('/api/v1/projects/cognitesdk-js/assets');
     expect(response.data).toHaveProperty('items');
   });
 });

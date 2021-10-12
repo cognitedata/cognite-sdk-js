@@ -15,21 +15,18 @@ if (!apiKey) {
 
 async function quickstart() {
   // create a SDK client
-  const client = new CogniteClient({
-    appId: 'Cognite SDK samples',
+  const client = new CogniteClient({ appId: 'Cognite SDK samples' });
+  client.loginWithApiKey({
     project,
-    apiKeyMode: true,
-    getToken: () => Promise.resolve(apiKey)
+    apiKey,
   });
-
   console.log(
     `\nThe SDK client is now configured to talk with Cognite project "${
-      project
+      client.project
     }"\n`
   );
 
   // get maximum 5 root assets
-  await client.assets.create([{name: 'new asset'}]);
   const rootAssets = await client.assets
     .list({ filter: { root: true } })
     .autoPagingToArray({ limit: 5 });

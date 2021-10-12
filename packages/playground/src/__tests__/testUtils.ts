@@ -7,28 +7,24 @@ import { apiKey, mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
 export function setupClient(baseUrl: string = Constants.BASE_URL) {
   return new CogniteClientPlayground({
     appId: 'JS SDK integration tests (playground)',
-    getToken: () => Promise.reject(new Error('not logged in')),
-    project,
     baseUrl,
   });
 }
 
-export function setupLoggedInClient(baseUrl: string = Constants.BASE_URL) {
-  return new CogniteClientPlayground({
-    appId: 'JS SDK integration tests (playground)',
-    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
+export function setupLoggedInClient() {
+  const client = setupClient();
+  client.loginWithApiKey({
     project: process.env.COGNITE_PROJECT as string,
-    baseUrl,
-    apiKeyMode: true,
+    apiKey: process.env.COGNITE_CREDENTIALS as string,
   });
+  return client;
 }
 
-export function setupMockableClient(baseUrl: string = mockBaseUrl) {
-  return new CogniteClientPlayground({
-    appId: 'JS SDK integration tests (playground)',
-    getToken: () => Promise.resolve(apiKey),
+export function setupMockableClient() {
+  const client = setupClient(mockBaseUrl);
+  client.loginWithApiKey({
     project,
-    baseUrl,
-    apiKeyMode: true,
+    apiKey,
   });
+  return client;
 }

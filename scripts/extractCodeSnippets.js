@@ -69,11 +69,10 @@ codeSnippets.forEach((snippets, operationId) => {
   }
   const codeToTest = `
     import { CogniteClient, SequenceValueType } from '${packageName}';
-    const client = new CogniteClient({
-      appId: '[APP NAME]',
+    const client = new CogniteClient({ appId: '[APP NAME]' });
+    client.loginWithApiKey({
       project: '[PROJECT]',
-      apiKeyMode: true,
-      getToken: () => Promise.resolve('[API_KEY]'),
+      apiKey: '[API_KEY]'
     });
     (async () => {
       ${joinSnippets(snippets)}

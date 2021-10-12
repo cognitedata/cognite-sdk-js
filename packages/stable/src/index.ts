@@ -21,7 +21,6 @@ export {
   OnAuthenticateLoginObject,
   POPUP,
   REDIRECT,
-  CogniteAuthentication,
 } from '@cognite/sdk-core';
 export { default as CogniteClient } from './cogniteClient';
 

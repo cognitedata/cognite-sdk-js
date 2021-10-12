@@ -5,8 +5,6 @@ import * as TestUtils from './testUtils';
 
 export * from './types';
 
-export { CogniteAuthentication } from './authFlows/legacy';
-
 export { MetadataMap } from './metadata';
 export { BaseResourceAPI } from './baseResourceApi';
 export { default as BaseCogniteClient } from './baseCogniteClient';
@@ -58,5 +56,12 @@ export {
   promiseAllWithData,
   promiseEachInSequence,
 } from './utils';
-
+export {
+  AZURE_AUTH_POPUP,
+  AZURE_AUTH_REDIRECT,
+  AzureADSignInType,
+  AzureADSingInFlow,
+  AzureADSignInRequestParams,
+} from './authFlows/aad';
+export { ADFSRequestParams } from './authFlows/adfs';
 export { TestUtils, Constants, GraphUtils };

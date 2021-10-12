@@ -43,33 +43,12 @@ The SDK is written in native typescript, so no extra types need to be defined.
 
 ### Web
 ```js
-import { CogniteClient, CogniteAuthentication } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 
 async function quickstart() {
-
-const project = "publicdata";
-const legacyInstance = new CogniteAuthentication({
-  project,
-});
-
-const getToken = async () => {
-  await legacyInstance.handleLoginRedirect();
-  let token = await legacyInstance.getCDFToken();
-  if (token) {
-    return token.accessToken;
-  }
-  token = await legacyInstance.login({ onAuthenticate: "REDIRECT" });
-  if (token) {
-    return token.accessToken;
-  }
-  throw new Error("error");
-};
-
-
-  const client = new CogniteClient({
-    appId: 'YOUR APPLICATION NAME',
-    project,
-    getToken
+  const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
+  client.loginWithOAuth({
+    project: 'publicdata',
   });
 
   const assets = await client.assets
@@ -87,10 +66,10 @@ quickstart();
 const { CogniteClient } = require('@cognite/sdk');
 
 async function quickstart() {
-  const client = new CogniteClient({
-    appId: 'YOUR APPLICATION NAME',
-    apiKeyMode: true,
-    getToken: () => Promise.resolve('YOUR_SECRET_API_KEY')
+  const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
+  client.loginWithApiKey({
+    project: 'publicdata',
+    apiKey: 'YOUR_SECRET_API_KEY',
   });
 
   const assets = await client.assets
@@ -111,7 +90,7 @@ quickstart();
 
 We highly recommend avoiding importing anything from internal SDK modules.
 
-All interfaces and functions should only be imported from the top level, otherwise you might face compatibility issues when our internal structure changes.
+All interfaces and functions should only be imported from the top level, otherwise you might face compatibility issues when our internal structure changes.  
 
 **Bad:**
 ```

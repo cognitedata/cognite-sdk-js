@@ -18,32 +18,26 @@ export const {
 } = TestUtils;
 
 export function setupClient(baseUrl: string = Constants.BASE_URL) {
-  return new CogniteClient({
-    appId: 'JS SDK integration tests',
-    project: 'unit-test',
-    getToken: () => Promise.reject(new Error('not logged in')),
-    baseUrl,
-  });
+  return new CogniteClient({ appId: 'JS SDK integration tests', baseUrl });
 }
 
 export function setupLoggedInClient() {
-  return new CogniteClient({
-    appId: 'JS SDK integration tests',
+  jest.setTimeout(60 * 1000);
+  const client = setupClient();
+  client.loginWithApiKey({
     project: process.env.COGNITE_PROJECT as string,
-    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
-    apiKeyMode: true,
-    baseUrl: Constants.BASE_URL,
+    apiKey: process.env.COGNITE_CREDENTIALS as string,
   });
+  return client;
 }
 
 export function setupMockableClient() {
-  return new CogniteClient({
-    appId: 'JS SDK integration tests',
-    project: process.env.COGNITE_PROJECT as string,
-    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
-    apiKeyMode: true,
-    baseUrl: mockBaseUrl,
+  const client = setupClient(mockBaseUrl);
+  client.loginWithApiKey({
+    project,
+    apiKey,
   });
+  return client;
 }
 
 export const getFileCreateArgs = (
