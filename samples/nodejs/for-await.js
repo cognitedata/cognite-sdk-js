@@ -12,10 +12,11 @@ if (!apiKey) {
 // Read more about async/await: https://javascript.info/async-await
 
 async function quickstart() {
-  const client = new CogniteClient({ appId: 'Cognite SDK samples' });
-  client.loginWithApiKey({
+  const client = new CogniteClient({
+    appId: 'Cognite SDK samples',
     project,
-    apiKey,
+    apiKeyMode: true,
+    getToken: () => Promise.resolve(apiKey)
   });
 
   console.log('\nIterate over assets: ');
@@ -27,5 +28,5 @@ async function quickstart() {
 }
 
 quickstart()
-  .then(()  => { process.exit(0); })
+  .then(() => { process.exit(0); })
   .catch((err) => { console.error(err); process.exit(1); });
