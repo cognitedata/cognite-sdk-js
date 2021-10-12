@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.0.0...@cognite/sdk@6.1.0) (2021-10-12)
+
+
+### Features
+
+* add dataSetId support to template groups ([#662](https://github.com/cognitedata/cognite-sdk-js/issues/662)) ([98827bc](https://github.com/cognitedata/cognite-sdk-js/commit/98827bcdb397484508ac36923b7006c4f140a43e))
+
+
+
+
+
 # [6.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.6.1...@cognite/sdk@6.0.0) (2021-10-12)
 
 
