@@ -118,7 +118,7 @@ describe('Cognite Auth', () => {
     let authClient: CogniteAuthentication;
 
     beforeEach(() => {
-      authClient = new CogniteAuthentication({ project });
+      authClient = new CogniteAuthentication({ project, baseUrl: mockBaseUrl });
     });
 
     describe('handle login redirect', () => {
@@ -142,7 +142,7 @@ describe('Cognite Auth', () => {
           `/some/random/path?query=true&error=failed&error_description=message`
         );
         await expect(
-          authClient.handleLoginRedirect(httpClient)
+          authClient.handleLoginRedirect()
         ).rejects.toThrowErrorMatchingInlineSnapshot(`"failed: message"`);
       });
 
@@ -162,14 +162,12 @@ describe('Cognite Auth', () => {
           .get('/login/status')
           .times(2)
           .reply(200, loggedInResponse);
-        const tokens = await authClient.handleLoginRedirect(httpClient);
+        const tokens = await authClient.handleLoginRedirect();
         expect(tokens).toEqual(authTokens);
         expect(window.location.href).toMatchInlineSnapshot(
           `"https://localhost/some/random/path?query=true&random=123"`
         );
-        await expect(authClient.getCDFToken(httpClient)).resolves.toEqual(
-          authTokens
-        );
+        await expect(authClient.getCDFToken()).resolves.toEqual(authTokens);
       });
     });
     describe('login', () => {
@@ -196,7 +194,7 @@ describe('Cognite Auth', () => {
           .spyOn(LoginUtils, 'loginWithRedirect')
           .mockResolvedValueOnce();
 
-        authClient.login({ onAuthenticate, baseUrl });
+        authClient.login({ onAuthenticate });
 
         expect(spiedLoginWithRedirect).toHaveBeenCalledTimes(1);
         expect(spiedLoginWithRedirect).toHaveBeenCalledWith({
@@ -211,7 +209,7 @@ describe('Cognite Auth', () => {
         const spiedLoginWithPopUp = jest
           .spyOn(LoginUtils, 'loginWithPopup')
           .mockResolvedValueOnce(authTokens);
-        const tokens = await authClient.login({ onAuthenticate, baseUrl });
+        const tokens = await authClient.login({ onAuthenticate });
 
         expect(spiedLoginWithPopUp).toHaveBeenCalledWith({
           baseUrl,
@@ -224,9 +222,7 @@ describe('Cognite Auth', () => {
         const onAuthenticate = jest
           .fn()
           .mockImplementation(({ skip }) => skip());
-        const baseUrl = httpClient.getBaseUrl();
-
-        const tokens = await authClient.login({ onAuthenticate, baseUrl });
+        const tokens = await authClient.login({ onAuthenticate });
 
         expect(onAuthenticate).toHaveBeenCalledTimes(1);
         expect(tokens).toEqual(null);

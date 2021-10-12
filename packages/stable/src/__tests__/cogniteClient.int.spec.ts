@@ -13,10 +13,9 @@ describe('createClientWithApiKey - integration', () => {
   test('handle non-existing api-key', async () => {
     const client = new CogniteClient({
       appId: 'JS Integration test',
-    });
-    client.loginWithApiKey({
-      project: 'cognitesdk-js',
-      apiKey: 'non-existing-api-key',
+      project: process.env.COGNITE_PROJECT as string,
+      apiKeyMode: true,
+      getToken: () => Promise.resolve('non-existing-api-key'),
     });
     await expect(
       client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
@@ -28,19 +27,21 @@ describe('createClientWithApiKey - integration', () => {
 
 describe('http methods - integration', () => {
   let client: CogniteClient;
+  const project = process.env.COGNITE_PROJECT as string;
   beforeAll(async () => {
     client = setupLoggedInClient();
+    await client.authenticate();
   });
   test('post method', async () => {
     const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
     const response = await client.post<ItemsWrapper<Asset[]>>(
-      '/api/v1/projects/cognitesdk-js/assets',
+      `/api/v1/projects/${project}/assets`,
       { data: { items: assets } }
     );
     expect(response.data.items).toHaveLength(2);
   });
   test('get method', async () => {
-    const response = await client.get('/api/v1/projects/cognitesdk-js/assets');
+    const response = await client.get(`/api/v1/projects/${project}/assets`);
     expect(response.data).toHaveProperty('items');
   });
 });

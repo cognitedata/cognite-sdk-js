@@ -13,10 +13,11 @@ if (!apiKey) {
 
 async function quickstart() {
   // create a SDK client
-  const client = new CogniteClient({ appId: 'Cognite SDK samples' });
-  client.loginWithApiKey({
+  const client = new CogniteClient({
+    appId: 'Cognite SDK samples',
     project,
-    apiKey,
+    getToken: () => Promise.resolve(apiKey),
+    apiKeyMode: true
   });
 
   console.log(
