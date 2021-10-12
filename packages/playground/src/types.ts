@@ -232,22 +232,64 @@ export interface DocumentsRequestFilter {
   cursor?: string;
 }
 
+export interface Adder<T> {
+  add?: T;
+}
+
+export interface Remover<T> {
+  remove?: T;
+}
+
+export interface Setter<T> {
+  set?: T;
+}
+
+export interface NullSetter {
+  setNull?: boolean;
+}
+
+export interface UpdateDocumentsPipeline {
+  externalId: string;
+  sensitivityMatcher?: UpdateDocumentsPipelineSensitivityMatcher;
+  classifier?: UpdateDocumentsPipelineClassifier;
+}
+
+export interface UpdateDocumentsPipelineSensitivityMatcher {
+  matchLists?:
+    | Adder<StringToStringArrayMap>
+    | Setter<StringToStringArrayMap>
+    | Remover<string[]>;
+  fieldMappings?: Setter<DocumentsFieldMappings>;
+  filterPasswords?: Setter<boolean>;
+  sensitiveSecurityCategory?: Setter<boolean> | NullSetter;
+  restrictToSources?: Adder<string[]> | Remover<string[]> | Setter<string[]>;
+}
+
+export interface UpdateDocumentsPipelineClassifier {
+  trainingLabels:
+    | Adder<LabelList[]>
+    | Remover<LabelList[]>
+    | Setter<LabelList[]>;
+  activeClassifierId: Setter<number> | NullSetter;
+}
+
 export interface DocumentsPipeline {
   externalId: string;
-  sensitivityMatcher?: SensitivityMatcher;
-  classifier?: DocumentsPipelineClassifier
+  sensitivityMatcher: SensitivityMatcher;
+  classifier: DocumentsPipelineClassifier;
 }
 
 export interface DocumentsPipelineClassifier {
   trainingLabels: LabelList[];
-  activeClassifierId: number;
+  activeClassifierId?: number;
 }
 
 export type LabelList = ExternalId;
 
 export interface SensitivityMatcher {
-  matchLists?: StringToStringArrayMap;
-  fieldMappings?: DocumentsFieldMappings;
+  matchLists: StringToStringArrayMap;
+  fieldMappings: DocumentsFieldMappings;
+  filterPasswords?: boolean;
   sensitiveSecurityCategory?: number;
   restrictToSources?: string[];
 }
@@ -259,7 +301,6 @@ export interface DocumentsFieldMappings {
   type?: string;
   labelsExternalIds?: string[];
   sourceFile?: DocumentsSourceFile;
-  filterPasswords?: boolean;
 }
 
 export interface DocumentsSourceFile {
