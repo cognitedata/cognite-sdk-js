@@ -8,6 +8,9 @@
     },
     {
       "pattern": "^https:\/\/github.com\/cognitedata\/.+\/commit\/.+"
+    },
+    {
+      "pattern": "^mailto:.+"
     }
 
   ],
