@@ -108,11 +108,7 @@ describe('Documents unit test', () => {
               externalId: 'cognitesdk-js-test',
               sensitivityMatcher: {
                 matchLists: {},
-                fieldMappings: {
-                  sourceFile: {},
-                },
-                restrictToSources: [],
-                filterPasswords: true,
+                fieldMappings: {},
               },
               classifier: {
                 trainingLabels: [],
