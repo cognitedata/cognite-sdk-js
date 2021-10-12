@@ -101,12 +101,33 @@
 				<a href="#web" id="web" style="color: inherit; text-decoration: none;">
 					<h3>Web</h3>
 				</a>
-				<pre><code class="language-js"><span class="hljs-keyword">import</span> { CogniteClient } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>;
+				<pre><code class="language-js"><span class="hljs-keyword">import</span> { CogniteClient, CogniteAuthentication } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>;
 
 <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">quickstart</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> CogniteClient({ <span class="hljs-attr">appId</span>: <span class="hljs-string">&#x27;YOUR APPLICATION NAME&#x27;</span> });
-  client.loginWithOAuth({
-    <span class="hljs-attr">project</span>: <span class="hljs-string">&#x27;publicdata&#x27;</span>,
+
+<span class="hljs-keyword">const</span> project = <span class="hljs-string">&quot;publicdata&quot;</span>;
+<span class="hljs-keyword">const</span> legacyInstance = <span class="hljs-keyword">new</span> CogniteAuthentication({
+  project,
+});
+
+<span class="hljs-keyword">const</span> getToken = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">await</span> legacyInstance.handleLoginRedirect();
+  <span class="hljs-keyword">let</span> token = <span class="hljs-keyword">await</span> legacyInstance.getCDFToken();
+  <span class="hljs-keyword">if</span> (token) {
+    <span class="hljs-keyword">return</span> token.accessToken;
+  }
+  token = <span class="hljs-keyword">await</span> legacyInstance.login({ <span class="hljs-attr">onAuthenticate</span>: <span class="hljs-string">&quot;REDIRECT&quot;</span> });
+  <span class="hljs-keyword">if</span> (token) {
+    <span class="hljs-keyword">return</span> token.accessToken;
+  }
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;error&quot;</span>);
+};
+
+
+  <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> CogniteClient({
+    <span class="hljs-attr">appId</span>: <span class="hljs-string">&#x27;YOUR APPLICATION NAME&#x27;</span>,
+    project,
+    getToken
   });
 
   <span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets
@@ -124,10 +145,10 @@ quickstart();</code></pre>
 				<pre><code class="language-js"><span class="hljs-keyword">const</span> { CogniteClient } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>);
 
 <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">quickstart</span>(<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> CogniteClient({ <span class="hljs-attr">appId</span>: <span class="hljs-string">&#x27;YOUR APPLICATION NAME&#x27;</span> });
-  client.loginWithApiKey({
-    <span class="hljs-attr">project</span>: <span class="hljs-string">&#x27;publicdata&#x27;</span>,
-    <span class="hljs-attr">apiKey</span>: <span class="hljs-string">&#x27;YOUR_SECRET_API_KEY&#x27;</span>,
+  <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> CogniteClient({
+    <span class="hljs-attr">appId</span>: <span class="hljs-string">&#x27;YOUR APPLICATION NAME&#x27;</span>,
+    <span class="hljs-attr">apiKeyMode</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">getToken</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">Promise</span>.resolve(<span class="hljs-string">&#x27;YOUR_SECRET_API_KEY&#x27;</span>)
   });
 
   <span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets
@@ -149,7 +170,7 @@ quickstart();</code></pre>
 					<h3>No submodule imports</h3>
 				</a>
 				<p>We highly recommend avoiding importing anything from internal SDK modules.</p>
-				<p>All interfaces and functions should only be imported from the top level, otherwise you might face compatibility issues when our internal structure changes.  </p>
+				<p>All interfaces and functions should only be imported from the top level, otherwise you might face compatibility issues when our internal structure changes.</p>
 				<p><strong>Bad:</strong></p>
 				<pre><code><span class="hljs-keyword">import</span> { CogniteAsyncIterator } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk/dist/src/autoPagination&#x27;</span>; <span class="hljs-comment">// ❌</span>
 <span class="hljs-keyword">import</span> { AssetsAPI } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk/dist/src/resources/assets/assetsApi&#x27;</span>; <span class="hljs-comment">// ❌</span>
@@ -190,9 +211,6 @@ quickstart();</code></pre>
 						<a href="enums/httpmethod.html" class="tsd-kind-icon">Http<wbr>Method</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/adfs.html" class="tsd-kind-icon">ADFS</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/apikeysapi.html" class="tsd-kind-icon">Api<wbr>KeysAPI</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
@@ -200,9 +218,6 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/assetsapi.html" class="tsd-kind-icon">AssetsAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/azuread.html" class="tsd-kind-icon">AzureAD</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/basecogniteclient.html" class="tsd-kind-icon">Base<wbr>Cognite<wbr>Client</a>
@@ -281,9 +296,6 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/nodes3dapi.html" class="tsd-kind-icon">Nodes3DAPI</a>
-					</li>
-					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/oidcauthcode.html" class="tsd-kind-icon">Oidc<wbr>Auth<wbr>Code</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/projectsapi.html" class="tsd-kind-icon">ProjectsAPI</a>
@@ -375,21 +387,6 @@ quickstart();</code></pre>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/viewsapi.html" class="tsd-kind-icon">Views<wbr>Api</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/adfsconfig.html" class="tsd-kind-icon">ADFSConfig</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/adfsqueryparams.html" class="tsd-kind-icon">ADFSQuery<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/adfsrequestparams.html" class="tsd-kind-icon">ADFSRequest<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/adfsrequestparamswithdefaults.html" class="tsd-kind-icon">ADFSRequest<wbr>Params<wbr>With<wbr>Defaults</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/adfstoken.html" class="tsd-kind-icon">ADFSToken</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
 						<a href="interfaces/acl.html" class="tsd-kind-icon">Acl</a>
 					</li>
@@ -422,9 +419,6 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/apikeylistscope.html" class="tsd-kind-icon">Api<wbr>Key<wbr>List<wbr>Scope</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/apikeyloginoptions.html" class="tsd-kind-icon">Api<wbr>Key<wbr>Login<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/apikeyobject.html" class="tsd-kind-icon">Api<wbr>Key<wbr>Object</a>
@@ -500,15 +494,6 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/azureadconfiguration.html" class="tsd-kind-icon">AzureADConfiguration</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/azureadoptions.html" class="tsd-kind-icon">AzureADOptions</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/azureadsigninrequestparams.html" class="tsd-kind-icon">AzureADSign<wbr>InRequest<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/azureadsignintype.html" class="tsd-kind-icon">AzureADSign<wbr>InType</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/boundingbox3d.html" class="tsd-kind-icon">Bounding<wbr>Box3D</a>
@@ -931,21 +916,6 @@ quickstart();</code></pre>
 						<a href="interfaces/oauth2configuration.html" class="tsd-kind-icon">OAuth2<wbr>Configuration</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/oauthloginforaadoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>ForAADOptions</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/oauthloginforadfsoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>ForADFSOptions</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/oauthloginforcogniteoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>For<wbr>Cognite<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/oauthloginforoidcauthflowoptions.html" class="tsd-kind-icon">OAuth<wbr>Login<wbr>ForOIDCAuth<wbr>Flow<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/oidcauthflowoptions.html" class="tsd-kind-icon">OIDCAuth<wbr>Flow<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/oidcconfiguration.html" class="tsd-kind-icon">Oidc<wbr>Configuration</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
@@ -968,9 +938,6 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
 						<a href="interfaces/postinparallelwithautomaticchunkingparams.html" class="tsd-kind-icon">Post<wbr>InParallel<wbr>With<wbr>Automatic<wbr>Chunking<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/project.html" class="tsd-kind-icon">Project</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/projectresponse.html" class="tsd-kind-icon">Project<wbr>Response</a>
@@ -1207,15 +1174,6 @@ quickstart();</code></pre>
 						<a href="interfaces/withinfilter.html" class="tsd-kind-icon">Within<wbr>Filter</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#aad_oauth" class="tsd-kind-icon">AAD_<wbr>OAUTH</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#adfsrequestparamsmapping" class="tsd-kind-icon">ADFSRequest<wbr>Params<wbr>Mapping</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#adfs_oauth" class="tsd-kind-icon">ADFS_<wbr>OAUTH</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#acl3d" class="tsd-kind-icon">Acl3D</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
@@ -1407,9 +1365,6 @@ quickstart();</code></pre>
 					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#attributetype" class="tsd-kind-icon">Attribute<wbr>Type</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#authflowtype" class="tsd-kind-icon">Auth<wbr>Flow<wbr>Type</a>
-					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
 						<a href="globals.html#autopagingeach" class="tsd-kind-icon">Auto<wbr>Paging<wbr>Each</a>
 					</li>
@@ -1420,22 +1375,10 @@ quickstart();</code></pre>
 						<a href="globals.html#autopagingtoarray" class="tsd-kind-icon">Auto<wbr>Paging<wbr>ToArray</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#azureadsigninprompt" class="tsd-kind-icon">AzureADSign<wbr>InPrompt</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#azureadsinginflow" class="tsd-kind-icon">AzureADSing<wbr>InFlow</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#baserequestoptions" class="tsd-kind-icon">Base<wbr>Request<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#cdf_oauth" class="tsd-kind-icon">CDF_<wbr>OAUTH</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#create" class="tsd-kind-icon">CREATE</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#custom" class="tsd-kind-icon">CUSTOM</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#cognitecapability" class="tsd-kind-icon">Cognite<wbr>Capability</a>
@@ -1666,12 +1609,6 @@ quickstart();</code></pre>
 						<a href="globals.html#nullablesinglepatchstring" class="tsd-kind-icon">Nullable<wbr>Single<wbr>Patch<wbr>String</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#oauthloginresult" class="tsd-kind-icon">OAuth<wbr>Login<wbr>Result</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
-						<a href="globals.html#oidc_authorization_code_flow" class="tsd-kind-icon">OIDC_<wbr>AUTHORIZATION_<wbr>CODE_<wbr>FLOW</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-is-external">
 						<a href="globals.html#owner" class="tsd-kind-icon">OWNER</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
@@ -1852,16 +1789,7 @@ quickstart();</code></pre>
 						<a href="globals.html#write" class="tsd-kind-icon">WRITE</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#access_token" class="tsd-kind-icon">ACCESS_<wbr>TOKEN</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#access_token_param" class="tsd-kind-icon">ACCESS_<wbr>TOKEN_<wbr>PARAM</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#azure_auth_popup" class="tsd-kind-icon">AZURE_<wbr>AUTH_<wbr>POPUP</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#azure_auth_redirect" class="tsd-kind-icon">AZURE_<wbr>AUTH_<wbr>REDIRECT</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#default_max_retry_attempts" class="tsd-kind-icon">DEFAULT_<wbr>MAX_<wbr>RETRY_<wbr>ATTEMPTS</a>
@@ -1871,12 +1799,6 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#error_param" class="tsd-kind-icon">ERROR_<wbr>PARAM</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#expires_in" class="tsd-kind-icon">EXPIRES_<wbr>IN</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#id_token" class="tsd-kind-icon">ID_<wbr>TOKEN</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#id_token_param" class="tsd-kind-icon">ID_<wbr>TOKEN_<wbr>PARAM</a>
@@ -1894,19 +1816,7 @@ quickstart();</code></pre>
 						<a href="globals.html#redirect" class="tsd-kind-icon">REDIRECT</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#scope" class="tsd-kind-icon">SCOPE</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#token_type" class="tsd-kind-icon">TOKEN_<wbr>TYPE</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#accountlocalstoragekey" class="tsd-kind-icon">account<wbr>Local<wbr>Storage<wbr>Key</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#apikey" class="tsd-kind-icon">api<wbr>Key</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-external">
-						<a href="globals.html#localstoragekey" class="tsd-kind-icon">local<wbr>Storage<wbr>Key</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-is-external">
 						<a href="globals.html#mockbaseurl" class="tsd-kind-icon">mock<wbr>Base<wbr>Url</a>
@@ -1936,9 +1846,6 @@ quickstart();</code></pre>
 						<a href="globals.html#createuniversalretryvalidator" class="tsd-kind-icon">create<wbr>Universal<wbr>Retry<wbr>Validator</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#extractadfstoken" class="tsd-kind-icon">extractADFSToken</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#extracttokensfromurl" class="tsd-kind-icon">extract<wbr>Tokens<wbr>From<wbr>Url</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
@@ -1964,9 +1871,6 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#isvalidretrystatuscode" class="tsd-kind-icon">is<wbr>Valid<wbr>Retry<wbr>Status<wbr>Code</a>
-					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#loggercallback" class="tsd-kind-icon">logger<wbr>Callback</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#loginpopuphandler" class="tsd-kind-icon">login<wbr>Popup<wbr>Handler</a>
@@ -2019,9 +1923,6 @@ quickstart();</code></pre>
 					<li class=" tsd-kind-function tsd-is-external">
 						<a href="globals.html#string2arraybuffer" class="tsd-kind-icon">string2array<wbr>Buffer</a>
 					</li>
-					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#throwrelogginerror" class="tsd-kind-icon">throw<wbr>ReLoggin<wbr>Error</a>
-					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
 						<a href="globals.html#contextjobstatus" class="tsd-kind-icon">Context<wbr>Job<wbr>Status</a>
 					</li>
@@ -2042,9 +1943,6 @@ quickstart();</code></pre>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
 						<a href="globals.html#sortorder" class="tsd-kind-icon">Sort<wbr>Order</a>
-					</li>
-					<li class=" tsd-kind-object-literal tsd-is-external">
-						<a href="globals.html#adfsrequestparamsmapping" class="tsd-kind-icon">adfs<wbr>Request<wbr>Params<wbr>Mapping</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
 						<a href="globals.html#authtokens" class="tsd-kind-icon">auth<wbr>Tokens</a>
