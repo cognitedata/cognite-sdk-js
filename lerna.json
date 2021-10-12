@@ -1,8 +1,5 @@
 {
-  "packages": [
-    "packages/**",
-    "samples/*"
-  ],
+  "useWorkspaces": true,
   "version": "independent",
   "npmClient": "yarn",
   "command": {
