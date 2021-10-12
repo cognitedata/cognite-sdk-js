@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.6.3...@cognite/sdk-playground@2.7.0) (2021-10-12)
+
+
+### Features
+
+* **core:** move authentication out of CogniteClient ([#687](https://github.com/cognitedata/cognite-sdk-js/issues/687)) ([879ed31](https://github.com/cognitedata/cognite-sdk-js/commit/879ed31d05dd6d6f4b691b99eaca5fa7363e96e6))
+
+
+
+
+
 ## [2.6.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@2.6.2...@cognite/sdk-playground@2.6.3) (2021-10-07)
 
 **Note:** Version bump only for package @cognite/sdk-playground
