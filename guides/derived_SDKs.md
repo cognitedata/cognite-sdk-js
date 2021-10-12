@@ -132,8 +132,7 @@ export class CoolThingAPI extends BaseResource<CoolThing> {
 }
 ```
 
-The `CogniteClient` class makes instances of these classes in `initAPIs()`, which in the class
-constructor.
+The `CogniteClient` class makes instances of these classes in `initAPIs()`.
 
 Let's add our `CoolThingAPI` to our derived `CogniteClient`.
 ```ts
