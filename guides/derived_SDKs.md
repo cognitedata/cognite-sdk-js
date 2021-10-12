@@ -132,7 +132,7 @@ export class CoolThingAPI extends BaseResource<CoolThing> {
 }
 ```
 
-The `CogniteClient` class makes instances of these classes in `initAPIs()`.
+The `CogniteClient` class makes instances of these classes in `initAPIs()`, which is called once credentials and project name are set. The accessor helper `accessApi()` reminds the user to set credentials before using APIs.
 
 Let's add our `CoolThingAPI` to our derived `CogniteClient`.
 ```ts

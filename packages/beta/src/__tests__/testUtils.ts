@@ -7,24 +7,24 @@ import { apiKey, mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
 export function setupClient(baseUrl: string = Constants.BASE_URL) {
   return new CogniteClient({
     appId: 'JS SDK integration tests (beta)',
-    project: process.env.COGNITE_PROJECT || (project as string),
-    apiKeyMode: true,
-    getToken: () => Promise.resolve(apiKey as string),
     baseUrl,
   });
 }
 
-export function setupLoggedInClient(baseUrl: string = Constants.BASE_URL) {
-  return new CogniteClient({
-    appId: 'JS SDK integration tests (beta)',
+export function setupLoggedInClient() {
+  const client = setupClient();
+  client.loginWithApiKey({
     project: process.env.COGNITE_PROJECT as string,
-    apiKeyMode: true,
-    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
-    baseUrl,
+    apiKey: process.env.COGNITE_CREDENTIALS as string,
   });
+  return client;
 }
 
 export function setupMockableClient() {
   const client = setupClient(mockBaseUrl);
+  client.loginWithApiKey({
+    project,
+    apiKey,
+  });
   return client;
 }

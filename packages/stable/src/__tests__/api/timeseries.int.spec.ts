@@ -38,56 +38,6 @@ describe('Timeseries integration test', () => {
       unit: 'bar',
       isString: true,
     },
-    {
-      name: 'timeserie3',
-      unit: 'bar',
-      isString: true,
-    },
-    {
-      name: 'timeserie3',
-      unit: 'bar',
-      isString: true,
-    },
-    {
-      name: 'timeserie4',
-      unit: 'bar',
-      isString: true,
-    },
-    {
-      name: 'timeserie4',
-      unit: 'bar',
-      isString: true,
-    },
-    {
-      name: 'timeserie5',
-      unit: 'bar',
-      isString: true,
-    },
-    {
-      name: 'timeserie6',
-      unit: 'bar',
-      isString: true,
-    },
-    {
-      name: 'timeserie7',
-      unit: 'bar',
-      isString: true,
-    },
-    {
-      name: 'timeserie8',
-      unit: 'bar',
-      isString: true,
-    },
-    {
-      name: 'timeserie9',
-      unit: 'bar',
-      isString: true,
-    },
-    {
-      name: 'timeserie10',
-      unit: 'bar',
-      isString: true,
-    },
   ];
 
   let createdTimeseries: Timeseries[];
