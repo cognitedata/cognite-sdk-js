@@ -261,38 +261,91 @@ export interface DocumentsRequestFilter {
   cursor?: string;
 }
 
+export interface Adder<T> {
+  add: T;
+  set?: never;
+  remove?: never;
+}
+
+export interface Remover<T> {
+  remove: T;
+  set?: never;
+  add?: never;
+}
+
+export interface Setter<T> {
+  set: T;
+  remove?: never;
+  add?: never;
+}
+
+export interface NullSetter {
+  setNull: boolean;
+  set?: never;
+  remove?: never;
+  add?: never;
+}
+
+export interface UpdateDocumentsPipeline {
+  externalId: string;
+  sensitivityMatcher?: UpdateDocumentsPipelineSensitivityMatcher;
+  classifier?: UpdateDocumentsPipelineClassifier;
+}
+
+export interface UpdateDocumentsPipelineSensitivityMatcher {
+  matchLists?:
+    | Adder<StringToStringArrayMap>
+    | Setter<StringToStringArrayMap>
+    | Remover<string[]>;
+  fieldMappings?: Setter<DocumentsFieldMappings>;
+  filterPasswords?: Setter<boolean>;
+  sensitiveSecurityCategory?: Setter<boolean> | NullSetter;
+  restrictToSources?: Adder<string[]> | Remover<string[]> | Setter<string[]>;
+}
+
+export interface UpdateDocumentsPipelineClassifier {
+  trainingLabels:
+    | Adder<LabelList[]>
+    | Remover<LabelList[]>
+    | Setter<LabelList[]>;
+  activeClassifierId: Setter<number> | NullSetter;
+}
+
 export interface DocumentsPipeline {
   externalId: string;
-  sensitivityMatcher?: SensitivityMatcher;
-  classifier?: {
-    trainingLabels: LabelList[];
-  };
+  sensitivityMatcher: SensitivityMatcher;
+  classifier: DocumentsPipelineClassifier;
+}
+
+export interface DocumentsPipelineClassifier {
+  trainingLabels: LabelList[];
+  activeClassifierId?: number;
 }
 
 export type LabelList = ExternalId;
 
 export interface SensitivityMatcher {
-  matchLists?: StringToStringArrayMap;
-  fieldMappings?: DocumentsFieldMappings;
+  matchLists: StringToStringArrayMap;
+  fieldMappings: DocumentsFieldMappings;
+  filterPasswords?: boolean;
   sensitiveSecurityCategory?: number;
   restrictToSources?: string[];
 }
 
 export interface DocumentsFieldMappings {
-  title?: string;
-  author?: string;
-  mimeType?: string;
-  type?: string;
+  title?: string | string[];
+  author?: string | string[];
+  mimeType?: string | string[];
+  type?: string | string[];
   labelsExternalIds?: string[];
   sourceFile?: DocumentsSourceFile;
-  filterPasswords?: boolean;
 }
 
 export interface DocumentsSourceFile {
-  name?: string;
-  directory?: string;
-  content?: string;
-  metadata?: StringToStringMap;
+  name?: string | string[];
+  directory?: string | string[];
+  content?: string | string[];
+  metadata?: StringToStringArrayMap;
 }
 
 export type StringToStringArrayMap = {

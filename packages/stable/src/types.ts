@@ -2981,6 +2981,11 @@ export interface ExternalTemplateGroup extends ExternalId {
    * The owners of a Template Group
    */
   owners?: string[];
+
+  /**
+   * The dataSetId of the template group
+   */
+  dataSetId?: number;
 }
 
 export type TemplateGroup = ExternalTemplateGroup & {
@@ -3005,6 +3010,11 @@ export interface TemplateGroupFilter {
    * Filter on owners.
    */
   owners?: string[];
+
+  /**
+   * Filter on dataSetIds
+   */
+  dataSetIds?: number[];
 }
 
 export interface TemplateGroupFilterQuery extends FilterQuery {

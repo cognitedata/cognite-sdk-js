@@ -13,6 +13,7 @@ describe('logout-api integration test', () => {
 
   describe('logout url', () => {
     test('logged in', async () => {
+      await loggedInClient.authenticate();
       const url = await loggedInClient.logout.getUrl();
       expect(typeof url).toBe('string');
     });
@@ -23,10 +24,6 @@ describe('logout-api integration test', () => {
     });
 
     test('invalid credentials', async () => {
-      anonymClient.loginWithApiKey({
-        project: 'abc',
-        apiKey: '123',
-      });
       const url = await anonymClient.logout.getUrl();
       expect(url).toBeNull();
     });

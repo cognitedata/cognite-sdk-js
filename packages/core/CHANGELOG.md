@@ -3,6 +3,51 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.4.1...@cognite/sdk-core@4.0.0) (2021-10-12)
+
+
+### Features
+
+* **auth:** re-release auth patch ([#700](https://github.com/cognitedata/cognite-sdk-js/issues/700)) ([a53c40d](https://github.com/cognitedata/cognite-sdk-js/commit/a53c40ddd7eca5d2dee9149f5df0b2e533d19575))
+
+
+### BREAKING CHANGES
+
+* **auth:** release v6
+
+re-release (revert reversion) of "feat(core): move authentication out of CogniteClient"
+https://github.com/cognitedata/cognite-sdk-js/pull/687
+
+This reverts commit 72e1ecb61603e0ac3926124c26f4e009df88f020.
+
+Co-authored-by: Vegard Økland <vegard.okland@cognite.com>
+
+
+
+
+
+## [3.4.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.4.0...@cognite/sdk-core@3.4.1) (2021-10-12)
+
+
+### Bug Fixes
+
+* **release:** undo major version release without major version bump ([#697](https://github.com/cognitedata/cognite-sdk-js/issues/697)) ([72e1ecb](https://github.com/cognitedata/cognite-sdk-js/commit/72e1ecb61603e0ac3926124c26f4e009df88f020)), closes [#687](https://github.com/cognitedata/cognite-sdk-js/issues/687)
+
+
+
+
+
+# [3.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.3.0...@cognite/sdk-core@3.4.0) (2021-10-12)
+
+
+### Features
+
+* **core:** move authentication out of CogniteClient ([#687](https://github.com/cognitedata/cognite-sdk-js/issues/687)) ([879ed31](https://github.com/cognitedata/cognite-sdk-js/commit/879ed31d05dd6d6f4b691b99eaca5fa7363e96e6))
+
+
+
+
+
 # [3.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.2.5...@cognite/sdk-core@3.3.0) (2021-10-07)
 
 

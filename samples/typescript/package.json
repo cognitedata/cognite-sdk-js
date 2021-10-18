@@ -8,10 +8,10 @@
     "test": "yarn tsc && node build/quickstart.js"
   },
   "dependencies": {
-    "@cognite/sdk": "^5"
+    "@cognite/sdk": "^6"
   },
   "devDependencies": {
-    "typescript": "^4.4",
-    "@types/node": "^16.7"
+    "@types/node": "^16.7",
+    "typescript": "^4.4"
   }
 }
