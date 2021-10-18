@@ -42,10 +42,10 @@ export class BasicHttpClient {
     switch (responseType) {
       case HttpResponseType.ArrayBuffer:
         return BasicHttpClient.arrayBufferResponseHandler;
-      case HttpResponseType.Text:
-        return BasicHttpClient.textResponseHandler;
-      default:
+      case HttpResponseType.Json:
         return BasicHttpClient.jsonResponseHandler;
+      default:
+        return BasicHttpClient.textResponseHandler;
     }
   }
 
