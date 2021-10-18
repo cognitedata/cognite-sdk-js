@@ -75,7 +75,7 @@ export default class BaseCogniteClient {
    */
   private previousToken: string | undefined;
   private readonly getToken: () => Promise<string>;
-  private readonly project: string;
+  readonly project: string;
 
   /**
    * Create a new SDK client
