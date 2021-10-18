@@ -17,7 +17,10 @@ export class BasicHttpClient {
   private static jsonResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
-    return res.json() as Promise<ResponseType>;
+    return res
+      .clone()
+      .json()
+      .catch(() => res.text()) as Promise<ResponseType>;
   }
 
   private static textResponseHandler<ResponseType>(
@@ -42,10 +45,10 @@ export class BasicHttpClient {
     switch (responseType) {
       case HttpResponseType.ArrayBuffer:
         return BasicHttpClient.arrayBufferResponseHandler;
-      case HttpResponseType.Json:
-        return BasicHttpClient.jsonResponseHandler;
-      default:
+      case HttpResponseType.Text:
         return BasicHttpClient.textResponseHandler;
+      default:
+        return BasicHttpClient.jsonResponseHandler;
     }
   }
 
