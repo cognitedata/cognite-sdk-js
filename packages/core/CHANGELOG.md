@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.0.0...@cognite/sdk-core@4.0.1) (2021-10-19)
+
+
+### Bug Fixes
+
+* **core:** re-export project name from sdk ([#706](https://github.com/cognitedata/cognite-sdk-js/issues/706)) ([34341f0](https://github.com/cognitedata/cognite-sdk-js/commit/34341f09222c0bb35578fa02f76aecf4aefbf01f))
+
+
+
+
+
 # [4.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@3.4.1...@cognite/sdk-core@4.0.0) (2021-10-12)
 
 
