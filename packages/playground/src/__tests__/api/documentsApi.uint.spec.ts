@@ -84,11 +84,11 @@ describe('Documents unit test', () => {
               TERMS: ['secret', 'confidential', 'sensitive'],
             },
             fieldMappings: {
-              title: 'TERMS',
+              title: ['TERMS'],
               sourceFile: {
-                name: 'TERMS',
-                content: 'TERMS',
-                directory: 'DIRECTORIES',
+                name: ['TERMS'],
+                content: ['TERMS'],
+                directory: ['DIRECTORIES'],
               },
             },
             sensitiveSecurityCategory: 345341343656745,
@@ -205,7 +205,7 @@ describe('Documents unit test', () => {
             },
             fieldMappings: {
               set: {
-                title: 'dsfsdf',
+                title: ['dsfsdf'],
               },
             },
             filterPasswords: {
