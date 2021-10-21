@@ -16,8 +16,11 @@ This folder contains examples on how to use the SDK in different frameworks.
 
 ## Examples
 
-- [NodeJS](./nodejs)
+- NodeJS
+  - [NodeJS using API keys ](./nodejs/legacy-auth-js)
+  - [Typescript using API keys ](./nodejs/legacy-auth-typescript)
+  - [Typescript using client credentials ](./nodejs/oidc-typescript)
 - React
-  - [Legacy Authentication](./react/legacy-auth)
+  - [Legacy Authentication](./react/legacy-auth-redirect)
+  - [Legacy Authentication w pop up](./react/legacy-auth-popup)
   - [Azure Active Directory Authentication ](./react/msal-browser-react)
-- [Typescript](./typescript)
