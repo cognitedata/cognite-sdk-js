@@ -35,6 +35,7 @@ import {
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
   appId: string;
+  /** URL to Cognite cluster, e.g 'https://greenfield.cognitedata.com' **/
   baseUrl?: string;
   project: string;
   getToken: () => Promise<string>;
