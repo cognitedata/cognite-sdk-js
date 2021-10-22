@@ -5,7 +5,7 @@ import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
 
-const baseURL = mockBaseUrl + '/api/playground';
+const baseURL = mockBaseUrl + `/api/playground/projects/${project}`;
 
 describe('Documents unit test', () => {
   let client: CogniteClientPlayground;
