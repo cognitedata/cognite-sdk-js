@@ -5,6 +5,8 @@ import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
 
+const baseURL = mockBaseUrl + '/api/playground';
+
 describe('Documents unit test', () => {
   let client: CogniteClientPlayground;
   beforeEach(() => {
@@ -748,8 +750,8 @@ describe('Documents unit test', () => {
 
   describe('classifiers', () => {
     test('create', async () => {
-      nock(mockBaseUrl)
-        .post(new RegExp('.+/documents/classifiers', "i"), {
+      nock(baseURL)
+        .post('/documents/classifiers', {
           items: [{ name: 'test' }],
         })
         .once()
@@ -762,8 +764,8 @@ describe('Documents unit test', () => {
       expect(resp[0].name).toEqual('test');
     });
     test('list by ids', async () => {
-      nock(mockBaseUrl)
-        .post(new RegExp('.+/documents/classifiers/byids', "i"), {
+      nock(baseURL)
+        .post('/documents/classifiers/byids', {
           items: [{ id: 1 }, { id: 2 }, { id: 3 }],
           ignoreUnknownIds: false,
         })
@@ -775,8 +777,8 @@ describe('Documents unit test', () => {
       expect(resp.items[0].id).toEqual(1);
     });
     test('list by ids, ignore unknown', async () => {
-      nock(mockBaseUrl)
-        .post(new RegExp('.+/documents/classifiers', "i"), {
+      nock(baseURL)
+        .post('/documents/classifiers', {
           items: [{ id: 1 }, { id: 2 }, { id: 3 }],
           ignoreUnknownIds: true,
         })
