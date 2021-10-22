@@ -763,7 +763,7 @@ describe('Documents unit test', () => {
     });
     test('list by ids', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('.+/documents/classifiers', "i"), {
+        .post(new RegExp('.+/documents/classifiers/byids', "i"), {
           items: [{ id: 1 }, { id: 2 }, { id: 3 }],
           ignoreUnknownIds: false,
         })
