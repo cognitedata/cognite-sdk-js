@@ -85,15 +85,15 @@ export interface Classifier extends ClassifierName {
   createdAt?: number;
   status?: string;
   active?: boolean;
-  metrics: ClassifierMetrics;
+  metrics?: ClassifierMetrics;
 }
 
 export interface ClassifierMetrics {
   precision?: number;
   recall?: number;
   f1Score?: number;
-  confusionMatrix: number[][];
-  labels: string[];
+  confusionMatrix?: number[][];
+  labels?: string[];
 }
 
 export interface ExternalDocumentsSearch {
