@@ -778,7 +778,7 @@ describe('Documents unit test', () => {
     });
     test('list by ids, ignore unknown', async () => {
       nock(baseURL)
-        .post('/documents/classifiers', {
+        .post('/documents/classifiers/byids', {
           items: [{ id: 1 }, { id: 2 }, { id: 3 }],
           ignoreUnknownIds: true,
         })
