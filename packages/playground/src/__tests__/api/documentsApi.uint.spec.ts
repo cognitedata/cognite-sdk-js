@@ -749,7 +749,7 @@ describe('Documents unit test', () => {
   describe('classifiers', () => {
     test('create', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/classifiers'), {
+        .post(new RegExp('.+/documents/classifiers', "i"), {
           items: [{ name: 'test' }],
         })
         .once()
@@ -763,7 +763,7 @@ describe('Documents unit test', () => {
     });
     test('list by ids', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/classifiers'), {
+        .post(new RegExp('.+/documents/classifiers', "i"), {
           items: [{ id: 1 }, { id: 2 }, { id: 3 }],
           ignoreUnknownIds: false,
         })
@@ -776,7 +776,7 @@ describe('Documents unit test', () => {
     });
     test('list by ids, ignore unknown', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/classifiers'), {
+        .post(new RegExp('.+/documents/classifiers', "i"), {
           items: [{ id: 1 }, { id: 2 }, { id: 3 }],
           ignoreUnknownIds: true,
         })
