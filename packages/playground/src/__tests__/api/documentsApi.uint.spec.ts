@@ -5,7 +5,7 @@ import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
 
-const baseURL = mockBaseUrl + `/api/playground/projects/${project}`;
+const baseUrl = mockBaseUrl + `/api/playground/projects/${project}`;
 
 describe('Documents unit test', () => {
   let client: CogniteClientPlayground;
@@ -750,7 +750,7 @@ describe('Documents unit test', () => {
 
   describe('classifiers', () => {
     test('create', async () => {
-      nock(baseURL)
+      nock(baseUrl)
         .post('/documents/classifiers', {
           items: [{ name: 'test' }],
         })
@@ -764,7 +764,7 @@ describe('Documents unit test', () => {
       expect(resp[0].name).toEqual('test');
     });
     test('list by ids', async () => {
-      nock(baseURL)
+      nock(baseUrl)
         .post('/documents/classifiers/byids', {
           items: [{ id: 1 }, { id: 2 }, { id: 3 }],
           ignoreUnknownIds: false,
@@ -777,7 +777,7 @@ describe('Documents unit test', () => {
       expect(resp.items[0].id).toEqual(1);
     });
     test('list by ids, ignore unknown', async () => {
-      nock(baseURL)
+      nock(baseUrl)
         .post('/documents/classifiers/byids', {
           items: [{ id: 1 }, { id: 2 }, { id: 3 }],
           ignoreUnknownIds: true,
