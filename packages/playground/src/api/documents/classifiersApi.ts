@@ -39,7 +39,7 @@ export class ClassifiersAPI extends BaseResourceAPI<Classifier> {
     ignoreUnknownIds?: boolean
   ): Promise<ResponseType> {
     const internalIds = ids.map(id => ({ id }));
-    const response = await this.post<ResponseType>(this.url('/byids'), {
+    const response = await this.post<ResponseType>(this.url('byids'), {
       data: {
         items: internalIds,
         ignoreUnknownIds,
