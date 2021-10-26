@@ -1,9 +1,6 @@
 import { Configuration, PublicClientApplication } from "@azure/msal-browser";
 
-const clientId = process.env.REACT_APP_AZURE_APP_ID!;
-const tenantId = process.env.REACT_APP_AZURE_TENANT_ID!;
-const cluster = process.env.REACT_APP_CLUSTER || "api";
-export const baseUrl = `https://${cluster}.cognitedata.com`;
+export const baseUrl = "https://greenfield.cognitedata.com";
 export const scopes = [
   `${baseUrl}/DATA.VIEW`,
   `${baseUrl}/DATA.CHANGE`,
@@ -11,18 +8,13 @@ export const scopes = [
 ];
 
 // MSAL configuration
+
 const configuration: Configuration = {
   auth: {
-    clientId,
-    authority: `https://login.microsoftonline.com/${tenantId}`,
+    clientId: `${process.env.REACT_APP_AZURE_APP_ID}`,
+    authority: `https://login.microsoftonline.com/${process.env.REACT_APP_AZURE_TENANT_ID}`,
   },
 };
-
-if (!clientId || !tenantId) {
-  throw new Error(
-    "specify REACT_APP_AZURE_APP_ID and REACT_APP_AZURE_TENANT_ID in your environment"
-  );
-}
 
 export const pca = new PublicClientApplication(configuration);
 export const getToken = async () => {
@@ -34,10 +26,11 @@ export const getToken = async () => {
   if (!account) {
     throw new Error("no user found");
   }
-  console.log("active account", account.username);
+
   const token = await pca.acquireTokenSilent({
     account,
     scopes,
   });
+  console.log({ token });
   return token.accessToken;
 };

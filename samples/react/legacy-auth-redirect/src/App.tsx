@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { CogniteClient, CogniteAuthentication } from "@cognite/sdk";
+import { CogniteClient, REDIRECT, CogniteAuthentication } from "@cognite/sdk";
 import {
   QueryClientProvider,
   QueryClient,
   useQuery,
   useMutation,
 } from "react-query";
-
 
 const project = "vegardok-dev";
 const legacyInstance = new CogniteAuthentication({
@@ -19,13 +18,12 @@ const getToken = async () => {
   if (token) {
     return token.accessToken;
   }
-  token = await legacyInstance.login({ onAuthenticate: "REDIRECT" });
+  token = await legacyInstance.login({ onAuthenticate: REDIRECT });
   if (token) {
     return token.accessToken;
   }
   throw new Error("error");
 };
-
 
 const client = new QueryClient({
   defaultOptions: {
@@ -36,14 +34,30 @@ const client = new QueryClient({
 });
 
 // Component
-const AppProvider = () => (
-  <QueryClientProvider client={client}>
-    <App />
-  </QueryClientProvider>
-);
+const AppProvider = () => {
+  if (!process.env.REACT_APP_CDF_PROJECT) {
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>
+          This sample application expects to be passed a Cognite project from
+          the command line. Start the app in the following way:
+        </p>
+        <pre>REACT_APP_CDF_PROJECT=project yarn start</pre>
+      </div>
+    );
+  }
+  return (
+    <QueryClientProvider client={client}>
+      <h1>Sample app: Cognite legacy authentication using redirects</h1>
+      <App />
+    </QueryClientProvider>
+  );
+};
 export default AppProvider;
 
 function App() {
+  const [loggedIn, setLoggedin] = useState(false);
   const [sdk] = useState(
     new CogniteClient({
       appId: "masl-demo",
@@ -56,7 +70,7 @@ function App() {
     isFetched,
     error,
     refetch,
-  } = useQuery("assets", () => sdk.assets.list());
+  } = useQuery("assets", () => sdk.assets.list(), { enabled: loggedIn });
   const { mutate } = useMutation(
     () => sdk.assets.create([{ name: "new asset" }]),
     {
@@ -65,6 +79,10 @@ function App() {
       },
     }
   );
+
+  if (!loggedIn) {
+    return <button onClick={() => setLoggedin(true)}>Log in</button>;
+  }
 
   if (error) {
     return (

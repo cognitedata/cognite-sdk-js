@@ -4,30 +4,34 @@ import { useMsal } from "@azure/msal-react";
 import { useQuery, useMutation } from "react-query";
 import { getToken, baseUrl } from "./auth";
 
-const project = process.env.REACT_APP_CDF_PROJECT!;
-
 export default function ListAssets() {
   const masl = useMsal();
 
   const [sdk] = useState(
     new CogniteClient({
-      project,
+      project: "vegardok-dev",
       appId: "masl-demo",
-      baseUrl,
+      baseUrl: baseUrl.replace("https://", ""),
       getToken,
     })
   );
-
-  sdk.get("/api/v1/token/inspect");
 
   const {
     data: assets,
     isFetched,
     error,
     refetch,
-  } = useQuery("assets", () => sdk.assets.list());
+  } = useQuery("assets", async () => {
+    const assets = await sdk.assets
+      .list()
+      .catch((e) => console.log("sdk error", e));
+    return assets?.items.sort(
+      (a, b) => b.createdTime.getTime() - a.createdTime.getTime()
+    );
+  });
+
   const { mutate } = useMutation(
-    () => sdk.assets.create([{ name: "new asset" }]),
+    () => sdk.assets.create([{ name: `Asset - ${assets?.length || 0}` }]),
     {
       onSuccess() {
         refetch();
@@ -48,12 +52,12 @@ export default function ListAssets() {
   }
 
   return (
-    <>
+    <div>
       <>Assets</>
       <button onClick={() => mutate()}>Create asset</button>
       <pre>{JSON.stringify(assets, null, 2)}</pre>
       <h1>Accounts</h1>
       <pre>{JSON.stringify(masl.accounts, null, 2)}</pre>
-    </>
+    </div>
   );
 }
