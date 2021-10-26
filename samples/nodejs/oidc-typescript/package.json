@@ -1,11 +1,11 @@
 {
-  "name": "oidc-client-credentials-example",
+  "name": "oidc-client-credentials-sample",
   "version": "1.0.0",
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
     "tsc": "tsc",
-    "test": "yarn tsc && node build/quickstart.js"
+    "start": "yarn tsc && node build/quickstart.js"
   },
   "dependencies": {
     "@cognite/sdk": "^6",

@@ -1,11 +1,11 @@
 {
-  "name": "oidc-public-client-on-behalf-of-user-example",
+  "name": "oidc-public-client-on-behalf-of-user-sample",
   "version": "1.0.0",
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
     "tsc": "tsc",
-    "test": "yarn tsc && node build/quickstart.js"
+    "start": "yarn tsc && node build/quickstart.js"
   },
   "dependencies": {
     "open": "^8.3.0",
