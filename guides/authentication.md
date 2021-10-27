@@ -1,49 +1,34 @@
 Authentication in browsers
 ==========================
 
-# Table of Contents
-- [Table of Contents](#table-of-contents)
-  - [Why not using API keys?](#why-not-using-api-keys)
-  - [Access tokens](#access-tokens)
+  - [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
   - [Accessing different clusters](#accessing-different-clusters)
   - [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
-  - [OIDC](#oidc)
+  - [OpenID Connect (OIDC)](#openid-connect-oidc)
     - [OIDC authentication using code authorization w pkce.](#oidc-authentication-using-code-authorization-w-pkce)
     - [OIDC authentication using client credentials](#oidc-authentication-using-client-credentials)
   - [CDF auth flow](#cdf-auth-flow)
-    - [Legacy Authentication with redirects](#legacy-authentication-with-redirects)
-    - [Legacy Authentication with pop-up](#legacy-authentication-with-pop-up)
-  - [API Keys](#api-keys)
+    - [Legacy authentication with redirects](#legacy-authentication-with-redirects)
+    - [Legacy authentication with pop-up](#legacy-authentication-with-pop-up)
+  - [API keys](#api-keys)
   - [Manually trigger authentication](#manually-trigger-authentication)
   - [Cache access tokens](#cache-access-tokens)
 
+## Use access tokens instead of API keys
 
-## Why not using API keys?
+We **strongly recommend** that you don't use API keys in web applications since the API key is easily readable by everyone with access to the application. Another restriction is that all users of your app share the same API key. All users will have the same access level, you lose tracing/auditing per user, keys are not time-limited, etc.
 
-It is **strongly recommended** to not use API keys in web applications since the API key is easily
-readable by everyone that have access to the application. Another restriction is that all users of
-your app share the same API-key. This means that all users have the same access level, you lose
-tracing/auditing per user, keys are not time limited etc.
+Instead of API keys, use **access tokens**. These are short-lived tokens that grant the user access to CDF. The application gets an access token by asking the user (or client credential) to sign in to a CDF project's identity provider (Google, Active Directory, etc.).
 
-## Access tokens
-
-The solution to avoid using API keys is to use access tokens. This is short living tokens which
-grants the user access to CDF. The application get an access token by asking the user (or client
-credential) to sign in to the identity provider (Google, Active Directory etc) of a CDF project.
-
-The access token will expire after some time and result in the user get `401` from CDF again. A new
-authentication process will be triggered by the SDK.
+The access token expires after a time, and as a result, the user will get `401` from CDF again, and the SDK triggers a new authentication process.
 
 ## Accessing different clusters
 
-Cognite operates multiple different clusters. The default one is `api.cognitedata.com` and will be
-used if you do not override it. If you are accessing projects on a different cluster you have to
-specify that with the
-[baseUrl](https://cognitedata.github.io/cognite-sdk-js/interfaces/clientoptions.html#baseurl)
-parameter in the SDK constructor.
+Cognite operates multiple clusters. The default cluster `api.cognitedata.com` will be
+used unless you override it. To access projects on a different cluster, use the [baseUrl](https://cognitedata.github.io/cognite-sdk-js/interfaces/clientoptions.html#baseurl) parameter in the SDK constructor.
 
 ```js
-// Specify the cluster `bluefueld`
+// Specify the cluster `bluefield`
 const client = new CogniteClient({
   appId: 'sample-app',
   baseUrl: 'https://bluefield.cognitedata.com',
@@ -54,25 +39,23 @@ const client = new CogniteClient({
 
 ## How to authenticate with the SDK?
 
-Shortly summarized, the application pass a `getToken` callback to the SDK and this will be used to
-get and renew tokens as they are needed. The SDK comes with an implementation of the Cognite legacy
-authentication flow, _but it does not come with an implementation for all IDPs_!. If you need to
-integrate your application and the SDK with e.g Azure Active Directory, use the appropriate library
+Quickly summarized, the application passes a `getToken` callback to the SDK and uses it to
+get and renew tokens as needed. **Note** that the SDK comes with an implementation of the Cognite legacy
+authentication flow, **but it does not come with an implementation for all IDPs**. If you need to
+integrate your application and the SDK with, for example, Azure Active Directory, use the appropriate library
 from Microsoft. If you need to integrate with Auth0, use their libraries and integrate with the SDK
 via `getToken`.
 
 ## OpenID Connect (OIDC)
 
 See
-[this](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc.html#design-principles-openid-connect-and-cdf)
+[this article](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc.html#design-principles-openid-connect-and-cdf)
 for details about OIDC and Cognite.
 
-### OIDC authentication using code authorization w pkce.
+### OIDC authentication using code authorization w pkce
 
-This examples shows how to use the Microsoft library
-[msal](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-browser)
-to get a token from Azure Active directory on behalf of a user using [authorization code
-flow](https://oauth.net/2/grant-types/authorization-code/) with [pkce](https://oauth.net/2/pkce/);
+This example shows how to use the Microsoft [msal](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-browser) library to get a token from Azure Active directory on behalf of a user using the [authorization code
+flow](https://oauth.net/2/grant-types/authorization-code/) with [pkce](https://oauth.net/2/pkce/):
 
 ```js
 import { Configuration, PublicClientApplication } from "@azure/msal-browser";
@@ -119,15 +102,15 @@ const client = new CogniteClient({
 
 ```
 
-A full sample application can be found [here](../samples/react/msal-browser-react/) and
+You can find a full sample application [here](../samples/react/msal-browser-react/) and
 [here](../samples/react/msal-advanced-browser-react).
 
 ### OIDC authentication using client credentials
 
-This flow is to get a token on behalf of a [client
+This flow gets a token on behalf of a [client
 credential](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow).
-This is typically a non-human entity with some access to a system and are the appropriate choice for
-background operations like extractors. Client credentials have a similar use case as API keys for
+This is typically a non-human entity with some access to a system and is appropriate for
+background operations like extractors. Client credentials have a similar use case as API keys have for
 legacy authenticated projects.
 
 #### Example
@@ -175,26 +158,27 @@ quickstart()
 
 ## CDF auth flow
 
-CDF auth flow, also called _legacy auth flow_ is a deprecated method of getting access to
-CDF-projects. It is the predecessor of _OIDC_, OpenId Connect.
+CDF auth flow, also called _legacy auth flow_, is a deprecated method of getting access to
+CDF projects. It is the predecessor of _OIDC_, OpenId Connect.
 
-This describes the legacy flow for the user using your application:
-1. The user is using your app on this URL: `https://my-app.com/some/path?someQuery=someValue`
-2. The SDK redirect the user to the project's identity provider
-3. After a successful log in the browser will redirect the user back to the URL `https://my-app.com/some/path?someQuery=someValue&access_token=someToken&id_token=someToken`
-4. The app will initialize again and `createClientWithOAuth` will be called again
-5. The SDK now sees the query parameters `access_token` and `id_token` in the URL. It will parse them and remove them from the URL
-6. The SDK is now authenticated (using the access token from the URL)
+The legacy flow for the user using your application:
+
+1. The user uses your app on this URL: `https://my-app.com/some/path?someQuery=someValue`
+2. The SDK redirects the user to the project's identity provider.
+3. After a successful login, the browser redirects the user to the URL: `https://my-app.com/some/path?someQuery=someValue&access_token=someToken&id_token=someToken`
+4. The app initializes again and calls `createClientWithOAuth` again
+5. The SDK sees the query parameters `access_token` and `id_token` in the URL. It parses them and removes them from the URL
+6. The SDK is authenticated (using the access token from the URL)
 
 There are two ways to authenticate using the CDF auth flow:
 
 - [With redirect](#legacy-authentication-with-redirects)
 - [With pop-up](#legacy-authentication-with-pop-up)
 
-### Legacy Authentication with redirects
+### Legacy authentication with redirects
 
-When doing authentication with redirects the browser window will be redirected to the identity
-provider for the user to sign in. After signing in, the browser window will be redirected back to
+When authenticating with redirects, the browser window is redirected to the identity
+provider for the user to sign in. After signing in, the browser window redirects back to
 your application.
 
 #### Example
@@ -232,32 +216,17 @@ const client = new CogniteClient({
 const assets = await client.assets.retrieve([{ id: 23232789217132 }]);
 ```
 
-A full example of an application can be found [here](../samples/react/legacy-auth-redirect/src/App.tsx).
+You can find a complete example application [here](../samples/react/legacy-auth-redirect/src/App.tsx).
 
-The first time this will run the user will get a `401`-response from CDF in the first call to
-`client.assets`. This will trigger the SDK to perform a redirect of the browser window to
+The first time this is run, the user getd a `401` response from CDF in the first call to
+`client.assets`. This triggers the SDK to perform a redirect of the browser window to
 authenticate.
 
-The second time `client.assets` is called the SDK will be authenticated and the call will succeed.
+The second time `client.assets` is called, the SDK is authenticated and the call succeeds.
 
+### Legacy authentication with pop-up
 
-The first time this will run the user will get a `401`-response from CDF in the first call to
-`client.assets`. This will trigger the SDK to perform authentication of the user using a pop-up
-window. A new pop-up window will show the sign in screen of the identity provider. After a
-successful sign in the pop-up window will be redirected back to your app (the same URL as the main
-browser window) where `sdk.loginPopupHandler` will be executed and handle the tokens in the URL and
-close the window. **Therefore it is important** that `sdk.loginPopupHandler` will run when the
-pop-up window gets redirected back to your app (otherwise the authentication process will fail).
-
-After a successful authentication process the SDK will automatically retry the `client.assets`
-request and will eventually resolve and return the correct result.
-
-
-### Legacy Authentication with pop-up
-
-When doing authentication with redirects the browser window will be redirected to the identity
-provider for the user to sign in. After signing in, the browser window will be redirected back to
-your application.
+When authenticating with popups, the current browser window of your application remains the same, but a new window will pop-up asking the user to sign in to the identity provider. After a successful sign-in, the popup window automatically closes.
 
 #### Example
 
@@ -303,12 +272,23 @@ const client = new CogniteClient({
 
 const assets = await client.assets.retrieve([{ id: 23232789217132 }]);
 ```
+You can find an example application using popups [here](../samples/react/legacy-auth-popup/src/App.tsx).
 
-A full example of an application can be found [here](../samples/react/legacy-auth-popup/src/App.tsx).
+The first time this runs, the user get a `401`-response from CDF in the first call to
+`client.assets`. This triggers the SDK to perform authentication of the user using a pop-up
+window. A new pop-up window shows the sign-in screen of the identity provider. 
 
-## API Keys
+After a successful sign-in, the pop-up window redirects back to your app (the same URL as the main
+browser window) where `sdk.loginPopupHandler` is executed and handles the tokens in the URL and
+closes the window. **It is important** that `sdk.loginPopupHandler` runs when the
+pop-up window is redirected back to your app (otherwise the authentication process will fail).
 
-API keys use the same API in the SDK, `getToken`, but needs an additional flag `apiKeyMode` set to
+After a successful authentication process, the SDK automatically retries the `client.assets`
+request and eventually resolves and returns the correct result.
+
+## API keys
+
+API keys use the same API in the SDK, `getToken`, but you need to set the additional flag `apiKeyMode` to
 true to handle headers appropriately.
 
 ```js
@@ -322,16 +302,20 @@ const client = new CogniteClient({
 
 ## Manually trigger authentication
 
-To avoid waiting for the first `401`-response to occur you can trigger the authentication flow manually like this:
+Instead of waiting for the first `401` response,  you can trigger the authentication flow manually like this:
+
 ```js
 
 const client = new CogniteClient({ ... });
-await client.authenticate(); // this will also return the token received
+await client.authenticate(); // this also returns the token received
 ```
 
 ## Cache access tokens
 
-If you already have a access token you can use it to skip the authentication flow (see this [section](#tokens) on how to get hold of the token). If the token is invalid or timed out the SDK will trigger a standard auth-flow on the first 401-response from CDF.
+If you already have an access token, you can use it to skip the authentication flow.
+<!-- (See this [section](#tokens) on how to get hold of the token). -->
+If the token is invalid or timed out, the SDK triggers a standard auth-flow on the first 401-response from CDF.
+
 ```js
 const client  = new CogniteClient({
   project: 'YOUR PROJECT NAME HERE',
@@ -342,5 +326,4 @@ const client  = new CogniteClient({
 
 ## More
 
-Read more about the authentication process:
-https://doc.cognitedata.com/dev/guides/iam/external-application.html#tokens
+Read more about the [authentication process](https://doc.cognitedata.com/dev/guides/iam/external-application.html#tokens).
