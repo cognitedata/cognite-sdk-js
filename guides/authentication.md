@@ -296,7 +296,7 @@ const client = new CogniteClient({
   appId: 'api-key-app',
   project: 'demo-project',
   apiKeyMode: true,
-  getToken: Promise.resolve('API_KEY_HERE')
+  getToken: () => Promise.resolve('API_KEY_HERE')
 });
 ```
 
@@ -319,7 +319,7 @@ If the token is invalid or timed out, the SDK triggers a standard auth-flow on t
 ```js
 const client  = new CogniteClient({
   project: 'YOUR PROJECT NAME HERE',
-  getToken: Promise.resolve('ACCESS TOKEN FOR THE PROJECT HERE')
+  getToken: () => Promise.resolve('ACCESS TOKEN FOR THE PROJECT HERE')
 });
 
 ```
