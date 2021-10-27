@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@4.0.0...@cognite/sdk-playground@4.1.0) (2021-10-22)
+
+
+### Features
+
+* **documents:** add classifier endpoints ([#689](https://github.com/cognitedata/cognite-sdk-js/issues/689)) ([befdb7a](https://github.com/cognitedata/cognite-sdk-js/commit/befdb7a3c67ddd1b4b46c8381a3f4d49aa63ea89))
+
+
+
+
+
+# [4.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@3.1.3...@cognite/sdk-playground@4.0.0) (2021-10-21)
+
+
+### Features
+
+* **documents pipeline update:** remove deprecated str support ([#707](https://github.com/cognitedata/cognite-sdk-js/issues/707)) ([7acf680](https://github.com/cognitedata/cognite-sdk-js/commit/7acf68032df97939a27ed2577eda7bed349a305e))
+
+
+### BREAKING CHANGES
+
+* **documents pipeline update:** removes support for str values in certain fields when updating pipeline
+
+
+
+
+
+## [3.1.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@3.1.2...@cognite/sdk-playground@3.1.3) (2021-10-19)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
 ## [3.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@3.1.1...@cognite/sdk-playground@3.1.2) (2021-10-12)
 
 **Note:** Version bump only for package @cognite/sdk-playground

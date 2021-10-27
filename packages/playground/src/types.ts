@@ -75,6 +75,27 @@ export interface DocumentsSourceFileFilter {
   size?: Range<number>;
 }
 
+export interface ClassifierName {
+  name?: string;
+}
+
+export interface Classifier extends ClassifierName {
+  id: CogniteInternalId;
+  projectId?: number;
+  createdAt?: number;
+  status?: string;
+  active?: boolean;
+  metrics?: ClassifierMetrics;
+}
+
+export interface ClassifierMetrics {
+  precision?: number;
+  recall?: number;
+  f1Score?: number;
+  confusionMatrix?: number[][];
+  labels?: string[];
+}
+
 export interface ExternalDocumentsSearch {
   filter?: DocumentsFilter;
   search?: DocumentsSearch;
@@ -304,18 +325,18 @@ export interface SensitivityMatcher {
 }
 
 export interface DocumentsFieldMappings {
-  title?: string | string[];
-  author?: string | string[];
-  mimeType?: string | string[];
-  type?: string | string[];
+  title?: string[];
+  author?: string[];
+  mimeType?: string[];
+  type?: string[];
   labelsExternalIds?: string[];
   sourceFile?: DocumentsSourceFile;
 }
 
 export interface DocumentsSourceFile {
-  name?: string | string[];
-  directory?: string | string[];
-  content?: string | string[];
+  name?: string[];
+  directory?: string[];
+  content?: string[];
   metadata?: StringToStringArrayMap;
 }
 

@@ -9,7 +9,7 @@ import {
   setupLoggedInClient,
 } from '../testUtils';
 
-describe('Asset integration test', () => {
+describe.skip('Asset integration test', () => {
   let client: CogniteClient;
   let label: LabelDefinition;
 

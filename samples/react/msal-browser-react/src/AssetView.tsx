@@ -2,20 +2,23 @@ import React, { useState } from "react";
 import { CogniteClient } from "@cognite/sdk";
 import { useMsal } from "@azure/msal-react";
 import { useQuery, useMutation } from "react-query";
-import { getToken } from "./auth";
+import { getToken, baseUrl } from "./auth";
 
-export const scopes = ["https://api.cognitedata.com/DATA.CHANGE"];
+const project = process.env.REACT_APP_CDF_PROJECT!;
 
 export default function ListAssets() {
   const masl = useMsal();
 
   const [sdk] = useState(
     new CogniteClient({
-      project: "vegardok-oidc-dev",
+      project,
       appId: "masl-demo",
+      baseUrl,
       getToken,
     })
   );
+
+  sdk.get("/api/v1/token/inspect");
 
   const {
     data: assets,

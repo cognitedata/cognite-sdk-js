@@ -1,6 +1,6 @@
 ## Prerequisite
 
-Make sure you have read the [prerequisite-guide](../README.md#prerequisite) before continuing.
+Make sure you have read the [prerequisite-guide](../../README.md#prerequisite) before continuing.
 
 ## Install
 
