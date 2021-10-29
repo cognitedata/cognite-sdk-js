@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@4.1.0...@cognite/sdk-playground@4.2.0) (2021-10-29)
+
+
+### Features
+
+* **documents:** classifier name ([#711](https://github.com/cognitedata/cognite-sdk-js/issues/711)) ([25b0a4c](https://github.com/cognitedata/cognite-sdk-js/commit/25b0a4c3d72b7964e2f7395f373ce2622fb5ca77))
+
+
+
+
+
 # [4.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@4.0.0...@cognite/sdk-playground@4.1.0) (2021-10-22)
 
 
