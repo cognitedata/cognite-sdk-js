@@ -65,6 +65,7 @@ describe('Documents unit test', () => {
                 restrictToSources: ['my source'],
               },
               classifier: {
+                name: 'DOCTYPE',
                 trainingLabels: [
                   {
                     externalId: 'string',
@@ -97,6 +98,7 @@ describe('Documents unit test', () => {
             restrictToSources: ['my source'],
           },
           classifier: {
+            name: 'DOCTYPE',
             trainingLabels: [{ externalId: 'string' }],
           },
         },
@@ -184,6 +186,9 @@ describe('Documents unit test', () => {
                 },
               },
               classifier: {
+                name: {
+                  set: 'UPDATED',
+                },
                 trainingLabels: {
                   remove: [{ externalId: 'wrong-id' }],
                 },
@@ -215,6 +220,9 @@ describe('Documents unit test', () => {
             },
           },
           classifier: {
+            name: {
+              set: 'UPDATED',
+            },
             trainingLabels: {
               remove: [{ externalId: 'wrong-id' }],
             },

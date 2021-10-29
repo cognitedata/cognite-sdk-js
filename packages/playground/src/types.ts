@@ -296,6 +296,7 @@ export interface UpdateDocumentsPipelineSensitivityMatcher {
 }
 
 export interface UpdateDocumentsPipelineClassifier {
+  name?: Setter<string>;
   trainingLabels:
     | Adder<LabelList[]>
     | Remover<LabelList[]>
@@ -310,6 +311,7 @@ export interface DocumentsPipeline {
 }
 
 export interface DocumentsPipelineClassifier {
+  name?: string;
   trainingLabels: LabelList[];
   activeClassifierId?: number;
 }
