@@ -163,7 +163,8 @@ jobs:
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
 
     steps:
-      - if: "!contains(matrix.node-version, '.x')"
+      - if: "contains(matrix.node-version, '.x')"
+        run: exit 0
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
