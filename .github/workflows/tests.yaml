@@ -176,7 +176,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.OS }}-build-version-${{ hashFiles('package.json') }}
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
 
       - name: Install 🔧
         run: yarn install --frozen-lockfile
