@@ -156,15 +156,13 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ["10.x", "12.x", "14.x", "12", "14"]
+        node-version: [12, 14]
 
     env:
       COGNITE_PROJECT: cognitesdk-js
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
 
     steps:
-      - if: "contains(matrix.node-version, '.x')"
-        run: exit 0
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
