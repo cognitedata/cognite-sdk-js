@@ -4,14 +4,17 @@ import { useMsal } from "@azure/msal-react";
 import { useQuery, useMutation } from "react-query";
 import { getToken, baseUrl } from "./auth";
 
+const project = process.env.REACT_APP_CDF_PROJECT!;
+const appId = process.env.REACT_APP_AZURE_APP_ID!;
+
 export default function ListAssets() {
-  const masl = useMsal();
+  const msal = useMsal();
 
   const [sdk] = useState(
     new CogniteClient({
-      project: "vegardok-dev",
-      appId: "masl-demo",
-      baseUrl: baseUrl.replace("https://", ""),
+      project: project,
+      appId: appId,
+      baseUrl,
       getToken,
     })
   );
@@ -57,7 +60,7 @@ export default function ListAssets() {
       <button onClick={() => mutate()}>Create asset</button>
       <pre>{JSON.stringify(assets, null, 2)}</pre>
       <h1>Accounts</h1>
-      <pre>{JSON.stringify(masl.accounts, null, 2)}</pre>
+      <pre>{JSON.stringify(msal.accounts, null, 2)}</pre>
     </div>
   );
 }
