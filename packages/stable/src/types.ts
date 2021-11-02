@@ -2950,6 +2950,7 @@ export type FilesSource = {
 export type ExternalView = {
   externalId: string;
   source: Source;
+  dataSetId?: number;
 };
 
 export type View = ExternalView & {
