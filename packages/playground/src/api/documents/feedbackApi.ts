@@ -15,7 +15,7 @@ import {
   FeedbackId,
   FeedbackQueryParameters,
   FeedbackStatus,
-} from '../../types';
+} from './feedbackTypes';
 
 export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   public aggregates = (
