@@ -1,13 +1,35 @@
 import {
   Adder,
-  DocumentsFieldMappings,
-  LabelList,
   NullSetter,
   Remover,
-  SensitivityMatcher,
   Setter,
   StringToStringArrayMap,
 } from './shared';
+import { Label } from '@cognite/sdk';
+
+export interface SensitivityMatcher {
+  matchLists: StringToStringArrayMap;
+  fieldMappings: DocumentsFieldMappings;
+  filterPasswords?: boolean;
+  sensitiveSecurityCategory?: number;
+  restrictToSources?: string[];
+}
+
+export interface DocumentsFieldMappings {
+  title?: string[];
+  author?: string[];
+  mimeType?: string[];
+  type?: string[];
+  labelsExternalIds?: string[];
+  sourceFile?: DocumentsSourceFile;
+}
+
+export interface DocumentsSourceFile {
+  name?: string[];
+  directory?: string[];
+  content?: string[];
+  metadata?: StringToStringArrayMap;
+}
 
 export interface UpdateDocumentsPipeline {
   externalId: string;
@@ -28,10 +50,7 @@ export interface UpdateDocumentsPipelineSensitivityMatcher {
 
 export interface UpdateDocumentsPipelineClassifier {
   name?: Setter<string>;
-  trainingLabels:
-    | Adder<LabelList[]>
-    | Remover<LabelList[]>
-    | Setter<LabelList[]>;
+  trainingLabels: Adder<Label[]> | Remover<Label[]> | Setter<Label[]>;
   activeClassifierId: Setter<number> | NullSetter;
 }
 
@@ -43,6 +62,6 @@ export interface DocumentsPipeline {
 
 export interface DocumentsPipelineClassifier {
   name?: string;
-  trainingLabels: LabelList[];
+  trainingLabels: Label[];
   activeClassifierId?: number;
 }

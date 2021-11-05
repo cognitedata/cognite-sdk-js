@@ -8,15 +8,16 @@ import {
   MetadataMap,
 } from '@cognite/sdk-core';
 
+import { DocumentId } from './shared';
+
 import {
   Document,
   DocumentContent,
-  DocumentId,
   DocumentsAggregatesResponse,
   DocumentsRequestFilter,
   DocumentsSearchWrapper,
   ExternalDocumentsSearch,
-} from '../../types';
+} from './documentsTypes';
 
 import { PreviewAPI } from './previewApi';
 import { FeedbackAPI } from './feedbackApi';
