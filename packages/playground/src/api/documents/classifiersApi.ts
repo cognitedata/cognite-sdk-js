@@ -7,7 +7,7 @@ import {
   InternalId,
   ItemsWrapper,
 } from '@cognite/sdk-core';
-import { Classifier, ClassifierName } from '../../types';
+import { Classifier, ClassifierName } from './classifierTypes';
 
 export class ClassifiersAPI extends BaseResourceAPI<Classifier> {
   public create = (classifiers: ClassifierName[]): Promise<Classifier[]> => {
