@@ -1,5 +1,4 @@
-import { CogniteInternalId } from "@cognite/sdk-core";
-
+import { CogniteInternalId } from '@cognite/sdk-core';
 
 export interface ClassifierName {
   name?: string;
