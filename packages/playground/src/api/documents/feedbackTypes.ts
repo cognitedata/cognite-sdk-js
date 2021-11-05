@@ -1,8 +1,5 @@
-import {
-  CogniteExternalId,
-  CogniteInternalId,
-  FilterQuery,
-} from '@cognite/sdk-core';
+import { CogniteExternalId, FilterQuery } from '@cognite/sdk-core';
+import { DocumentId } from './shared';
 
 export interface DocumentFeedbackAggregateRequest {
   field: AggregateField;
@@ -20,8 +17,6 @@ export interface DocumentFeedbackAggregateResponse {
   groups: AggregateGroup[];
   total: number;
 }
-
-export type DocumentId = CogniteInternalId;
 
 export interface DocumentFeedbackCreateItem {
   documentId: DocumentId;

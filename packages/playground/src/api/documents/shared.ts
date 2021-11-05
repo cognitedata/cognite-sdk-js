@@ -330,6 +330,4 @@ export type StringToAnyMap = {
   [key: string]: string;
 };
 
-export interface DocumentPreviewTemporaryLink {
-  temporaryLink: string;
-}
+export type DocumentId = CogniteInternalId;

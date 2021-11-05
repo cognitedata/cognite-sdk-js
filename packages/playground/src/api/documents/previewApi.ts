@@ -3,7 +3,8 @@
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import { HttpResponseType } from '@cognite/sdk-core';
 
-import { DocumentId, DocumentPreviewTemporaryLink } from '../../types';
+import { DocumentId } from './shared';
+import { DocumentPreviewTemporaryLink } from './previewTypes';
 
 export class PreviewAPI extends BaseResourceAPI<any> {
   public documentAsPdf = (id: DocumentId): Promise<ArrayBuffer> => {
