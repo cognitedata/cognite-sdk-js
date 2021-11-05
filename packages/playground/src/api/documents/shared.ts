@@ -25,12 +25,12 @@ export interface EpochTimestampRange {
 
 export interface ContainsAll<T> {
   containsAll: T[];
-  containsAny: never;
+  containsAny?: never;
 }
 
 export interface ContainsAny<T> {
   containsAny: T[];
-  containsAll: never;
+  containsAll?: never;
 }
 
 export interface Adder<T> {
