@@ -1,10 +1,4 @@
-import {
-  Adder,
-  NullSetter,
-  Remover,
-  Setter,
-  Map,
-} from "./shared";
+import { Adder, NullSetter, Remover, Setter, Map } from './shared';
 import { Label } from '@cognite/sdk';
 
 export interface SensitivityMatcher {
