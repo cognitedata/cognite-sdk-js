@@ -191,6 +191,7 @@ describe('Documents unit test', () => {
                 },
                 trainingLabels: {
                   remove: [{ externalId: 'wrong-id' }],
+                  add: [{ externalId: 'wrong-id-test' }],
                 },
                 activeClassifierId: {
                   setNull: true,
@@ -225,6 +226,7 @@ describe('Documents unit test', () => {
             },
             trainingLabels: {
               remove: [{ externalId: 'wrong-id' }],
+              add: [{ externalId: 'wrong-id-test' }],
             },
             activeClassifierId: {
               setNull: true,

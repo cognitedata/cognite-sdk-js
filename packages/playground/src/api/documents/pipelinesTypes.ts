@@ -40,8 +40,8 @@ export interface UpdateDocumentsPipeline {
 export interface UpdateDocumentsPipelineSensitivityMatcher {
   matchLists?:
     | Adder<StringToStringArrayMap>
-    | Setter<StringToStringArrayMap>
-    | Remover<string[]>;
+    | Remover<string[]>
+    | Setter<StringToStringArrayMap>;
   fieldMappings?: Setter<DocumentsFieldMappings>;
   filterPasswords?: Setter<boolean>;
   sensitiveSecurityCategory?: Setter<boolean> | NullSetter;

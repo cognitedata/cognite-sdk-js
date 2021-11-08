@@ -36,7 +36,6 @@ export interface ContainsAny<T> {
 export interface Adder<T> {
   add: T;
   set?: never;
-  remove?: never;
   modify?: never;
   setNull?: never;
 }
@@ -44,7 +43,6 @@ export interface Adder<T> {
 export interface Remover<T> {
   remove: T;
   set?: never;
-  add?: never;
   modify?: never;
   setNull?: never;
 }
