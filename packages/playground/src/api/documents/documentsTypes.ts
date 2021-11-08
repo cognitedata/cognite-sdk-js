@@ -194,12 +194,8 @@ export interface DocumentsAggregatesResponse<T> extends ItemsWrapper<T> {
   aggregates?: DocumentsAggregate[];
 }
 
-export interface LabelDefinitionExternalId {
-  externalId: CogniteExternalId;
-}
-
 export interface DocumentsAggregateGroup {
-  group: any[] | LabelDefinitionExternalId[];
+  group: any[] | Label[];
   value: number;
 }
 
