@@ -3,12 +3,12 @@ import {
   NullSetter,
   Remover,
   Setter,
-  StringToStringArrayMap,
-} from './shared';
+  Map,
+} from "./shared";
 import { Label } from '@cognite/sdk';
 
 export interface SensitivityMatcher {
-  matchLists: StringToStringArrayMap;
+  matchLists: Map<string[]>;
   fieldMappings: DocumentsFieldMappings;
   filterPasswords?: boolean;
   sensitiveSecurityCategory?: number;
@@ -28,7 +28,7 @@ export interface DocumentsSourceFile {
   name?: string[];
   directory?: string[];
   content?: string[];
-  metadata?: StringToStringArrayMap;
+  metadata?: Map<string[]>;
 }
 
 export interface UpdateDocumentsPipeline {
@@ -38,10 +38,7 @@ export interface UpdateDocumentsPipeline {
 }
 
 export interface UpdateDocumentsPipelineSensitivityMatcher {
-  matchLists?:
-    | Adder<StringToStringArrayMap>
-    | Remover<string[]>
-    | Setter<StringToStringArrayMap>;
+  matchLists?: Adder<Map<string[]>> | Remover<string[]> | Setter<Map<string[]>>;
   fieldMappings?: Setter<DocumentsFieldMappings>;
   filterPasswords?: Setter<boolean>;
   sensitiveSecurityCategory?: Setter<boolean> | NullSetter;

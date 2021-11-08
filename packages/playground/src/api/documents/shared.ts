@@ -71,16 +71,8 @@ export interface NullSetter {
   modify?: never;
 }
 
-export type StringToStringArrayMap = {
-  [key: string]: string[];
-};
-
-export type StringToStringMap = {
-  [key: string]: string;
-};
-
-export type StringToAnyMap = {
-  [key: string]: string;
+export type Map<V> = {
+  [key: string]: V;
 };
 
 export type DocumentId = CogniteInternalId;
