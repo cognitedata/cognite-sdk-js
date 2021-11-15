@@ -10,16 +10,13 @@ import {
   SequenceValueType,
 } from '../../types';
 import {
-  mockBaseUrl,
   randomInt,
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
-  setupMockableClient,
 } from '../testUtils';
 
 describe('Sequences integration test', () => {
   let client: CogniteClient;
-  let mockedClient: CogniteClient;
   let sequences: Sequence[];
   const testValues = [1, 1.5, 'two'];
   const testExternalId = 'sequence' + randomInt();
@@ -56,16 +53,9 @@ describe('Sequences integration test', () => {
     rowNumber: i,
     values: testValues,
   }));
-  const mockedResponse = {
-    nextCursor: 1,
-    externalId: sequencesToCreate[1].externalId,
-    columns: sequencesToCreate[1].columns,
-    rows: testRows,
-  };
   let asset: Asset;
   beforeAll(async () => {
     client = setupLoggedInClient();
-    mockedClient = setupMockableClient();
     nock.cleanAll();
     [asset] = await client.assets.create([
       {
@@ -181,61 +171,52 @@ describe('Sequences integration test', () => {
     });
   });
 
-  test('insert rows', async () => {
-    const rowsData: SequenceRowsInsert[] = [
-      {
-        externalId: testExternalId,
-        rows: testRows,
-        columns: sequences[1].columns.map(({ externalId }) => externalId!),
-      },
-      {
-        id: sequences[0].id,
-        rows: [
-          {
-            rowNumber: 1,
-            values: ['1'],
-          },
-        ],
-        columns: ['column'],
-      },
-    ];
-    const result = await client.sequences.insertRows(rowsData);
-    expect(result).toEqual({});
-  });
-
-  test('retrieve rows (mocked)', async () => {
-    nock(mockBaseUrl)
-      .post(new RegExp('/sequences/data/list'), {
-        externalId: testExternalId,
-      })
-      .once()
-      .reply(200, {
-        ...mockedResponse,
-        id: sequences[1].id,
-      });
-
-    const { items, next } = await mockedClient.sequences.retrieveRows({
-      externalId: testExternalId,
-    });
-
-    expect(items.length).toBe(3);
-    items.forEach((row, index) => {
-      expect([...row]).toEqual(testValues);
-      expect(row.columns.length).toEqual(3);
-      expect(row.rowNumber).toEqual(index);
-    });
-    expect(typeof next).toBe('function');
-  });
-
-  test('delete rows', async () => {
-    await runTestWithRetryWhenFailing(async () => {
-      const result = await client.sequences.deleteRows([
+  describe('rows', () => {
+    test('insert', async () => {
+      const rowsData: SequenceRowsInsert[] = [
         {
-          id: sequences[1].id,
-          rows: [0, 2],
+          externalId: testExternalId,
+          rows: testRows,
+          columns: sequences[1].columns.map(({ externalId }) => externalId!),
         },
-      ]);
+        {
+          id: sequences[0].id,
+          rows: [
+            {
+              rowNumber: 1,
+              values: ['1'],
+            },
+          ],
+          columns: ['column'],
+        },
+      ];
+      const result = await client.sequences.insertRows(rowsData);
       expect(result).toEqual({});
+    });
+
+    test('retrieve', async () => {
+      await runTestWithRetryWhenFailing(async () => {
+        const result = await client.sequences.retrieveRows({
+          externalId: testExternalId,
+        });
+
+        expect(result.items).toHaveLength(testRows.length);
+        expect(result.items[0].columns[0].externalId).toEqual(
+          sequencesToCreate[1].columns[0].externalId
+        );
+      });
+    });
+
+    test('delete', async () => {
+      await runTestWithRetryWhenFailing(async () => {
+        const result = await client.sequences.deleteRows([
+          {
+            id: sequences[1].id,
+            rows: [0, 2],
+          },
+        ]);
+        expect(result).toEqual({});
+      });
     });
   });
 

@@ -24,6 +24,18 @@ There are small bare-bones javascript (and typescript) projects in the `samples/
 They show how to include the cognite SDK in various project setups.
 The samples' [README.md](./samples/README.md) has instructions for running the samples.
 
+## Response header & http status
+
+Methods are design to only return the response body. For fetching the http response status and/or header you must utilize client.getMetadata:
+
+```ts
+const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
+const metadata = client.getMetadata(createdAsset);
+
+console.log(metadata.header["Access-Control-Allow-Origin"]);
+console.log(metadata.status);
+```
+
 ## License
 
 [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
@@ -43,16 +55,7 @@ This repo contains some integration tests that require a CDF api key for `cognit
 Talk to any of the contributors or leave an issue and it'll get sorted.
 Travis will run the test and has its own api key.
 
-Run all tests:
-
-```bash
-yarn
-yarn build
-yarn test
-```
-
-Run tests for updated package only:
-> for changes to the core package, it might be required to run tests for all packages to verify integrity.
+Run tests:
 
 ```bash
 yarn
@@ -75,3 +78,4 @@ Each package in the monorepo has its own changelog.
 - [@cognite/sdk](./packages/stable/CHANGELOG.md)
 - [@cognite/sdk-beta](./packages/beta/CHANGELOG.md)
 - [@cognite/sdk-core](./packages/core/CHANGELOG.md)
+- [@cognite/sdk-playground](./packages/playground/CHANGELOG.md)

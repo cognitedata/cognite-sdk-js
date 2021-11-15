@@ -11,6 +11,7 @@ describe('Login-api integration test', () => {
 
   describe('status', () => {
     test('logged in', async () => {
+      await client.authenticate();
       const status = await client.login.status();
       expect(status).toBeDefined();
       expect(status!.project).toBeDefined();
@@ -20,16 +21,13 @@ describe('Login-api integration test', () => {
 
     test('not logged in', async () => {
       const anotherClient = setupClient();
+      await anotherClient.authenticate();
       const status = await anotherClient.login.status();
       expect(status).toBeNull();
     });
 
     test('invalid credentials', async () => {
       const anotherClient = setupClient();
-      anotherClient.loginWithApiKey({
-        project: 'abc',
-        apiKey: '123',
-      });
       const status = await anotherClient.login.status();
       expect(status).toBeNull();
     });

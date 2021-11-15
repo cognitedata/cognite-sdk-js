@@ -7,8 +7,7 @@ on:
       - release-*
 
 jobs:
-  lint:
-
+  codecov:
     runs-on: ubuntu-latest
 
     env:
@@ -21,33 +20,19 @@ jobs:
           fetch-depth: 0
 
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '14.x'
+          node-version: '16'
 
       - name: Cache node_modules
         id: cache-modules
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
 
       - name: Install 🔧
         run: yarn install --frozen-lockfile
-
-        # tests pushed git commits
-      - uses: wagoid/commitlint-github-action@v3
-
-      - name: Commit lint PR
-        run: echo $PR_MESSAGE | npx commitlint
-        env:
-          PR_MESSAGE: ${{github.event.pull_request.title}}
-
-      - name: validateDocLinks
-        run: yarn validateDocLinks
-
-      - name: Lint
-        run: yarn lint
 
       - name: Build
         run: yarn build
@@ -60,19 +45,8 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Test snippets
-        run: yarn test-snippets
-
-      - name: Test samples
-        run: yarn test-samples
-
-  tests:
-
+  snippets:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x]
 
     env:
       COGNITE_PROJECT: cognitesdk-js
@@ -81,15 +55,125 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Test snippets
+        run: yarn test-snippets
+
+  samples:
+    runs-on: ubuntu-latest
+
+    env:
+      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Test samples
+        run: yarn test-samples
+
+  lint:
+    runs-on: ubuntu-latest
+
+    env:
+      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧
+        run: yarn install --frozen-lockfile
+
+        # tests pushed git commits
+      - uses: wagoid/commitlint-github-action@v3
+
+      - name: validateDocLinks
+        run: yarn validateDocLinks
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Build
+        run: yarn build
+
+  tests:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12, 14]
+
+    env:
+      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Cache node_modules
         id: cache-modules
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}

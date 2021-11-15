@@ -4,9 +4,8 @@ import { BaseResourceAPI } from '@cognite/sdk-core';
 import { HttpResponseType } from '@cognite/sdk-core';
 
 import { DocumentId, DocumentPreviewTemporaryLink } from '../../types';
-import Any = jasmine.Any;
 
-export class PreviewAPI extends BaseResourceAPI<Any> {
+export class PreviewAPI extends BaseResourceAPI<any> {
   public documentAsPdf = (id: DocumentId): Promise<ArrayBuffer> => {
     return this.previewEndpoint<ArrayBuffer>(id, 'application/pdf');
   };

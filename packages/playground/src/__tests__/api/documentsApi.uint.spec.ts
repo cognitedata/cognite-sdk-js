@@ -5,6 +5,8 @@ import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
 
+const baseUrl = mockBaseUrl + `/api/playground/projects/${project}`;
+
 describe('Documents unit test', () => {
   let client: CogniteClientPlayground;
   beforeEach(() => {
@@ -38,6 +40,210 @@ describe('Documents unit test', () => {
     });
   });
 
+  describe('pipeline', () => {
+    test('create pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/pipelines'), {
+          items: [
+            {
+              externalId: 'default',
+              sensitivityMatcher: {
+                matchLists: {
+                  DIRECTORIES: ['secret'],
+                  TYPES: ['contracts', 'emails'],
+                  TERMS: ['secret', 'confidential', 'sensitive'],
+                },
+                fieldMappings: {
+                  title: ['TERMS'],
+                  sourceFile: {
+                    name: ['TERMS'],
+                    content: ['TERMS'],
+                    directory: ['DIRECTORIES'],
+                  },
+                },
+                sensitiveSecurityCategory: 345341343656745,
+                restrictToSources: ['my source'],
+              },
+              classifier: {
+                name: 'DOCTYPE',
+                trainingLabels: [
+                  {
+                    externalId: 'string',
+                  },
+                ],
+              },
+            },
+          ],
+        })
+        .once()
+        .reply(200, { items: [] });
+      await client.documents.pipelines.create([
+        {
+          externalId: 'default',
+          sensitivityMatcher: {
+            matchLists: {
+              DIRECTORIES: ['secret'],
+              TYPES: ['contracts', 'emails'],
+              TERMS: ['secret', 'confidential', 'sensitive'],
+            },
+            fieldMappings: {
+              title: ['TERMS'],
+              sourceFile: {
+                name: ['TERMS'],
+                content: ['TERMS'],
+                directory: ['DIRECTORIES'],
+              },
+            },
+            sensitiveSecurityCategory: 345341343656745,
+            restrictToSources: ['my source'],
+          },
+          classifier: {
+            name: 'DOCTYPE',
+            trainingLabels: [{ externalId: 'string' }],
+          },
+        },
+      ]);
+    });
+    test('create pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/pipelines'), {
+          items: [
+            {
+              externalId: 'cognitesdk-js-test',
+              sensitivityMatcher: {
+                matchLists: {},
+                fieldMappings: {},
+              },
+              classifier: {
+                trainingLabels: [],
+              },
+            },
+          ],
+        })
+        .once()
+        .reply(200, {
+          items: [
+            {
+              externalId: 'cognitesdk-js-test',
+              sensitivityMatcher: {
+                matchLists: {},
+                fieldMappings: {
+                  sourceFile: {},
+                },
+                restrictToSources: [],
+                filterPasswords: true,
+              },
+              classifier: {
+                trainingLabels: [],
+              },
+            },
+          ],
+        });
+      const resp = await client.documents.pipelines.create([
+        {
+          externalId: 'cognitesdk-js-test',
+          sensitivityMatcher: {
+            matchLists: {},
+            fieldMappings: {},
+          },
+          classifier: {
+            trainingLabels: [],
+          },
+        },
+      ]);
+
+      expect(resp).toHaveLength(1);
+      expect(resp[0].externalId).toEqual('cognitesdk-js-test');
+    });
+
+    test('get pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .get(new RegExp('/documents/pipelines'))
+        .once()
+        .reply(200, {});
+      await client.documents.pipelines.list();
+    });
+
+    test('update pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/pipelines'), {
+          items: [
+            {
+              externalId: 'cognitesdk-js-test',
+              sensitivityMatcher: {
+                matchLists: {
+                  set: {
+                    restrictToSources: [],
+                  },
+                },
+                fieldMappings: {
+                  set: {
+                    title: ['dsfsdf'],
+                  },
+                },
+                filterPasswords: {
+                  set: true,
+                },
+              },
+              classifier: {
+                name: {
+                  set: 'UPDATED',
+                },
+                trainingLabels: {
+                  remove: [{ externalId: 'wrong-id' }],
+                },
+                activeClassifierId: {
+                  setNull: true,
+                },
+              },
+            },
+          ],
+        })
+        .once()
+        .reply(200, { items: [] });
+      await client.documents.pipelines.update([
+        {
+          externalId: 'cognitesdk-js-test',
+          sensitivityMatcher: {
+            matchLists: {
+              set: {
+                restrictToSources: [],
+              },
+            },
+            fieldMappings: {
+              set: {
+                title: ['dsfsdf'],
+              },
+            },
+            filterPasswords: {
+              set: true,
+            },
+          },
+          classifier: {
+            name: {
+              set: 'UPDATED',
+            },
+            trainingLabels: {
+              remove: [{ externalId: 'wrong-id' }],
+            },
+            activeClassifierId: {
+              setNull: true,
+            },
+          },
+        },
+      ]);
+    });
+
+    test('delete pipeline configuration', async () => {
+      nock(mockBaseUrl)
+        .post(new RegExp('/documents/pipelines/delete'), {
+          items: [{ externalId: 'test' }],
+        })
+        .once()
+        .reply(200, {});
+      await client.documents.pipelines.delete([{ externalId: 'test' }]);
+    });
+  });
   test('document content', async () => {
     nock(mockBaseUrl)
       .post(new RegExp('/documents/content'), {
@@ -54,6 +260,22 @@ describe('Documents unit test', () => {
     const resp = await client.documents.content([1, 2, 7]);
 
     expect(resp.items).toHaveLength(3);
+    expect(resp.items[0].id).toEqual(1);
+    expect(resp.items[0].content).toEqual('lorem ipsum');
+  });
+  test('document content, with unknown ids', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/content'), {
+        items: [{ id: 1 }, { id: 2 }, { id: 7 }],
+        ignoreUnknownIds: true,
+      })
+      .once()
+      .reply(200, {
+        items: [{ id: 1, content: 'lorem ipsum' }],
+      });
+    const resp = await client.documents.content([1, 2, 7], true);
+
+    expect(resp.items).toHaveLength(1);
     expect(resp.items[0].id).toEqual(1);
     expect(resp.items[0].content).toEqual('lorem ipsum');
   });
@@ -532,5 +754,51 @@ describe('Documents unit test', () => {
       .reply(200, { temporaryLink: link });
     const resp = await client.documents.preview.temporaryLink(1);
     expect(resp.temporaryLink).toEqual(link);
+  });
+
+  describe('classifiers', () => {
+    test('create', async () => {
+      nock(baseUrl)
+        .post('/documents/classifiers', {
+          items: [{ name: 'test' }],
+        })
+        .once()
+        .reply(200, {
+          items: [{ name: 'test' }],
+        });
+      const resp = await client.documents.classifiers.create([
+        { name: 'test' },
+      ]);
+      expect(resp[0].name).toEqual('test');
+    });
+    test('list by ids', async () => {
+      nock(baseUrl)
+        .post('/documents/classifiers/byids', {
+          items: [{ id: 1 }, { id: 2 }, { id: 3 }],
+          ignoreUnknownIds: false,
+        })
+        .once()
+        .reply(200, {
+          items: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        });
+      const resp = await client.documents.classifiers.listByIds([1, 2, 3]);
+      expect(resp.items[0].id).toEqual(1);
+    });
+    test('list by ids, ignore unknown', async () => {
+      nock(baseUrl)
+        .post('/documents/classifiers/byids', {
+          items: [{ id: 1 }, { id: 2 }, { id: 3 }],
+          ignoreUnknownIds: true,
+        })
+        .once()
+        .reply(200, {
+          items: [{ id: 1 }, { id: 2 }, { id: 3 }],
+        });
+      const resp = await client.documents.classifiers.listByIds(
+        [1, 2, 3],
+        true
+      );
+      expect(resp.items[0].id).toEqual(1);
+    });
   });
 });

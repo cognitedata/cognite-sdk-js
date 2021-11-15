@@ -3,6 +3,138 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.1.2...@cognite/sdk@6.1.3) (2021-11-04)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [6.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.1.1...@cognite/sdk@6.1.2) (2021-10-29)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [6.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.1.0...@cognite/sdk@6.1.1) (2021-10-19)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [6.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.0.0...@cognite/sdk@6.1.0) (2021-10-12)
+
+
+### Features
+
+* add dataSetId support to template groups ([#662](https://github.com/cognitedata/cognite-sdk-js/issues/662)) ([98827bc](https://github.com/cognitedata/cognite-sdk-js/commit/98827bcdb397484508ac36923b7006c4f140a43e))
+
+
+
+
+
+# [6.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.6.1...@cognite/sdk@6.0.0) (2021-10-12)
+
+
+### Features
+
+* **auth:** re-release auth patch ([#700](https://github.com/cognitedata/cognite-sdk-js/issues/700)) ([a53c40d](https://github.com/cognitedata/cognite-sdk-js/commit/a53c40ddd7eca5d2dee9149f5df0b2e533d19575))
+
+
+### BREAKING CHANGES
+
+* **auth:** release v6
+
+re-release (revert reversion) of "feat(core): move authentication out of CogniteClient"
+https://github.com/cognitedata/cognite-sdk-js/pull/687
+
+This reverts commit 72e1ecb61603e0ac3926124c26f4e009df88f020.
+
+Co-authored-by: Vegard Økland <vegard.okland@cognite.com>
+
+
+
+
+
+## [5.6.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.6.0...@cognite/sdk@5.6.1) (2021-10-12)
+
+
+### Bug Fixes
+
+* **release:** undo major version release without major version bump ([#697](https://github.com/cognitedata/cognite-sdk-js/issues/697)) ([72e1ecb](https://github.com/cognitedata/cognite-sdk-js/commit/72e1ecb61603e0ac3926124c26f4e009df88f020)), closes [#687](https://github.com/cognitedata/cognite-sdk-js/issues/687)
+
+
+
+
+
+# [5.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.5.0...@cognite/sdk@5.6.0) (2021-10-12)
+
+
+### Features
+
+* **core:** move authentication out of CogniteClient ([#687](https://github.com/cognitedata/cognite-sdk-js/issues/687)) ([879ed31](https://github.com/cognitedata/cognite-sdk-js/commit/879ed31d05dd6d6f4b691b99eaca5fa7363e96e6))
+
+
+
+
+
+# [5.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.4.0...@cognite/sdk@5.5.0) (2021-10-07)
+
+
+### Features
+
+* **spatial:** adds spatial API to playground ([#680](https://github.com/cognitedata/cognite-sdk-js/issues/680)) ([e0b2d1d](https://github.com/cognitedata/cognite-sdk-js/commit/e0b2d1dd6ac85eb6fd8a6d6fce61e26cc909c5e7))
+
+
+
+
+
+# [5.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.3.3...@cognite/sdk@5.4.0) (2021-09-22)
+
+
+### Features
+
+* add types for template capabilities ([#679](https://github.com/cognitedata/cognite-sdk-js/issues/679)) ([1be2218](https://github.com/cognitedata/cognite-sdk-js/commit/1be2218ce6817f289d4541f18bd2df125f14343c))
+
+
+
+
+
+## [5.3.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.3.2...@cognite/sdk@5.3.3) (2021-09-20)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [5.3.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.3.1...@cognite/sdk@5.3.2) (2021-09-03)
+
+
+### Bug Fixes
+
+* remove test files in published packages ([#673](https://github.com/cognitedata/cognite-sdk-js/issues/673)) ([cf6deae](https://github.com/cognitedata/cognite-sdk-js/commit/cf6deae6d80d0bfb3b2b3e8a8db6c30a1bb1ec0a))
+
+
+
+
+
+## [5.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.3.0...@cognite/sdk@5.3.1) (2021-08-30)
+
+
+### Bug Fixes
+
+* **stable:** external id format for fetching rows ([#664](https://github.com/cognitedata/cognite-sdk-js/issues/664)) ([a637814](https://github.com/cognitedata/cognite-sdk-js/commit/a63781461544c6fefa9e9a0db54210e6544d7600))
+
+
+
+
+
 # [5.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@5.2.1...@cognite/sdk@5.3.0) (2021-08-30)
 
 

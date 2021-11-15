@@ -34,6 +34,8 @@ export {
   AutoPagingToArray,
 } from '@cognite/sdk-core';
 
+export * from './api/spatial/types';
+
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
   scope: ScopeType;
@@ -65,6 +67,10 @@ export type AclActionSecurityCategories = MEMBEROF | LIST | CREATE | DELETE;
 
 export type AclActionSequences = READ | WRITE;
 
+export type AclActionTemplateGroups = READ | WRITE;
+
+export type AclActionTemplateInstances = READ | WRITE;
+
 export type AclActionTimeseries = READ | WRITE;
 
 export type AclActionUsers = LIST | CREATE | DELETE;
@@ -88,6 +94,16 @@ export type AclProjects = Acl<AclActionProjects, AclScopeProjects>;
 export type AclRaw = Acl<AclActionRaw, AclScopeRaw>;
 
 export type AclScope3D = AclScopeAll;
+
+export type AclTemplateGroups = Acl<
+  AclActionTemplateGroups,
+  AclScopeTemplateGroups
+>;
+
+export type AclTemplateInstances = Acl<
+  AclActionTemplateInstances,
+  AclScopeTemplateInstances
+>;
 
 export interface AclScopeAll {
   all: {};
@@ -136,6 +152,10 @@ export type AclScopeRaw = AclScopeAll;
 export type AclScopeSecurityCategories = AclScopeAll;
 
 export type AclScopeSequences = AclScopeAll | AclScopeDatasetsIds;
+
+export type AclScopeTemplateGroups = AclScopeAll | AclScopeDatasetsIds;
+
+export type AclScopeTemplateInstances = AclScopeAll | AclScopeDatasetsIds;
 
 export interface AclScopeTimeSeriesAssetRootIds {
   assetRootIdScope: {
@@ -2088,7 +2108,7 @@ export interface SequenceColumn
  */
 export interface SequenceColumnBasicInfo {
   name?: SequenceColumnName;
-  externalId?: ExternalId;
+  externalId?: CogniteExternalId;
   valueType?: SequenceValueType;
 }
 
@@ -2301,7 +2321,9 @@ export type SingleCogniteCapability =
   | { threedAcl: Acl3D }
   | { sequencesAcl: AclSequences }
   | { analyticsAcl: AclAnalytics }
-  | { datasetsAcl: AclDataSets };
+  | { datasetsAcl: AclDataSets }
+  | { templateGroupsAcl: AclTemplateGroups }
+  | { templateInstancesAcl: AclTemplateInstances };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };
 
@@ -2930,6 +2952,7 @@ export type FilesSource = {
 export type ExternalView = {
   externalId: string;
   source: Source;
+  dataSetId?: number;
 };
 
 export type View = ExternalView & {
@@ -2961,6 +2984,11 @@ export interface ExternalTemplateGroup extends ExternalId {
    * The owners of a Template Group
    */
   owners?: string[];
+
+  /**
+   * The dataSetId of the template group
+   */
+  dataSetId?: number;
 }
 
 export type TemplateGroup = ExternalTemplateGroup & {
@@ -2985,6 +3013,11 @@ export interface TemplateGroupFilter {
    * Filter on owners.
    */
   owners?: string[];
+
+  /**
+   * Filter on dataSetIds
+   */
+  dataSetIds?: number[];
 }
 
 export interface TemplateGroupFilterQuery extends FilterQuery {
