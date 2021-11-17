@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.1.3...@cognite/sdk@6.2.0) (2021-11-17)
+
+
+### Features
+
+* add dataSetId support to 3dModel ([#665](https://github.com/cognitedata/cognite-sdk-js/issues/665)) ([cdea5a3](https://github.com/cognitedata/cognite-sdk-js/commit/cdea5a30cc3232af75f054c6322692801bcd8e87))
+
+
+
+
+
 ## [6.1.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.1.2...@cognite/sdk@6.1.3) (2021-11-04)
 
 **Note:** Version bump only for package @cognite/sdk
