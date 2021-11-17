@@ -17,10 +17,15 @@ export class BasicHttpClient {
   private static jsonResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
-    return res
-      .clone()
-      .json()
-      .catch(() => res.text()) as Promise<ResponseType>;
+    // node-fetch < 3.0 will hang on clone() for large responses https://github.com/node-fetch/node-fetch#custom-highwatermark
+    // Cloning to fallback on text response if response is not a json response since we are defaulting to json responsehandler.
+    const resClone = res.clone();
+    return Promise.all([
+      res.json().catch(() => undefined),
+      resClone.text(),
+    ]).then(([jsonResult, textResult]) => {
+      return (jsonResult || textResult) as Promise<ResponseType>;
+    });
   }
 
   private static textResponseHandler<ResponseType>(
