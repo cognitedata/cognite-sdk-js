@@ -2488,11 +2488,13 @@ export interface UnrealRevision3D extends Revision3D {
   sceneThreedFiles: Versioned3DFile[];
 }
 
-export interface UpdateModel3D extends UpdateModelNameField, InternalId {}
+export interface UpdateModel3D extends UpdateModel3DField, InternalId {}
 
-export interface UpdateModelNameField {
+export interface UpdateModel3DField {
   update: {
-    name: SetField<string>;
+    name?: SetField<string>;
+    dataSetId?: NullableSinglePatchLong;
+    metadata?: MetadataPatch;
   };
 }
 
