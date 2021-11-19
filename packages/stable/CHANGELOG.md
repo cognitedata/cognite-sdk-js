@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.2.0...@cognite/sdk@6.3.0) (2021-11-19)
+
+
+### Features
+
+* add missing properties to update model ([#718](https://github.com/cognitedata/cognite-sdk-js/issues/718)) ([516fb20](https://github.com/cognitedata/cognite-sdk-js/commit/516fb20ea4d43949edb47244c7f9040e6d127dc9))
+
+
+
+
+
 # [6.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.1.3...@cognite/sdk@6.2.0) (2021-11-17)
 
 
