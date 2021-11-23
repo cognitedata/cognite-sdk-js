@@ -205,11 +205,17 @@ export class BasicHttpClient {
     const responseHandler = BasicHttpClient.getResponseHandler<ResponseType>(
       request.responseType
     );
-    const data = await responseHandler(res);
+    // Cloning to fallback on text response if response is failing the responsehandler.
+    // node-fetch < 3.0 will hang on clone() for large responses, that is why the parallel promises https://github.com/node-fetch/node-fetch#custom-highwatermark
+    const resClone = res.clone();
+    const [data, textFallback] = await Promise.all([
+      responseHandler(res).catch(() => undefined),
+      (resClone.text() as unknown) as Promise<ResponseType>,
+    ]);
     return {
       headers: BasicHttpClient.convertFetchHeaders(res.headers),
       status: res.status,
-      data,
+      data: data || textFallback,
     };
   }
 
