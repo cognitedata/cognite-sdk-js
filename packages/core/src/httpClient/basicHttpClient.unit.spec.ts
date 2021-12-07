@@ -81,6 +81,14 @@ describe('BasicHttpClient', () => {
       expect(response.data).toEqual(buffer);
     });
 
+    test('handle json errors and fallback to text response', async () => {
+      nock(baseUrl)
+        .get('/')
+        .reply(200, '');
+      const response = await client.get<any>('/');
+      expect(response.data).toEqual('');
+    });
+
     test('handle query params', async () => {
       nock(baseUrl)
         .get('/')
