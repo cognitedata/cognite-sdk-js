@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.0.2...@cognite/sdk-core@4.0.3) (2021-12-07)
+
+
+### Bug Fixes
+
+* retry 429 responses, and fallback to text() if responseHandler fails [BEST-902] ([#705](https://github.com/cognitedata/cognite-sdk-js/issues/705)) ([f02946f](https://github.com/cognitedata/cognite-sdk-js/commit/f02946ff51382bec2a291f5f746dbf87a3bcbec1))
+
+
+
+
+
 ## [4.0.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.0.1...@cognite/sdk-core@4.0.2) (2021-10-29)
 
 **Note:** Version bump only for package @cognite/sdk-core
