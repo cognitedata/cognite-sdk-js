@@ -215,7 +215,7 @@ export default class CogniteClient extends BaseCogniteClient {
       this.httpClient,
       this.metadataMap
     );
-    this.spatialApi = this.apiFactory(SpatialAPI, 'spatial');
+    this.spatialApi = this.apiFactory(SpatialAPI, 'geospatial');
   }
 
   static urlEncodeExternalId(externalId: string): string {
