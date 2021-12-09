@@ -1,7 +1,6 @@
 import {
   BaseResourceAPI,
   CogniteExternalId,
-  IdEither,
   ExternalId,
 } from '@cognite/sdk-core';
 import {
@@ -24,7 +23,7 @@ export class FeatureAPI extends BaseResourceAPI<Feature> {
 
   public retrieve = (
     featureTypeExternalId: CogniteExternalId,
-    externalIds: IdEither[],
+    externalIds: ExternalId[],
     queryParams?: { outputGeometryFormat: GeometryType }
   ): Promise<Feature[]> => {
     return this.callEndpointWithMergeAndTransform(externalIds, request =>

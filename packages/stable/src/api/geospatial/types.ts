@@ -1,4 +1,4 @@
-import { CogniteExternalId, CogniteInternalId, Limit } from '@cognite/sdk-core';
+import { InternalId, Limit, ExternalId } from '@cognite/sdk-core';
 
 export type GeometryType = 'wkt' | 'geojson';
 
@@ -38,8 +38,7 @@ export interface Spatial {
   [id: string]: unknown;
 }
 
-export interface FeatureCreateItem {
-  externalId: CogniteExternalId;
+export interface FeatureCreateItem extends ExternalId {
   [attribute: string]:
     | string
     | number
@@ -54,16 +53,14 @@ export interface Feature extends FeatureCreateItem {
   lastUpdatedTime: Date;
 }
 
-export interface FeatureType {
-  id: CogniteInternalId;
-  externalId: CogniteExternalId;
+export interface FeatureType extends ExternalId, InternalId {
   attributes: Attributes & {
     _created_at: { type: 'LONG' };
     _updated_at: { type: 'LONG' };
     _external_id: { type: 'STRING'; size: 32 };
   };
   searchSpec?: {
-    [searchName: string]: {
+    [indexName: string]: {
       attributes:
         | Array<keyof FeatureTypeCreateItem['attributes']>
         | ['_created_at']
@@ -73,14 +70,25 @@ export interface FeatureType {
   };
 }
 
-export interface FeatureTypeCreateItem {
-  externalId: CogniteExternalId;
+export interface FeatureTypeCreateItem extends ExternalId {
   attributes: Attributes;
   searchSpec?: {
-    [searchName: string]: {
+    [indexName: string]: {
       attributes: Array<keyof FeatureTypeCreateItem['attributes']>;
     };
   };
+}
+
+export interface FeatureTypePatch extends ExternalId {
+  update:
+    | {
+        attributes: { add: Attributes };
+      }
+    | {
+        searchSpec: {
+          add: { [indexName: string]: { attributes: Array<keyof Attributes> } };
+        };
+      };
 }
 
 export interface FeatureSearchFilter extends Limit {
