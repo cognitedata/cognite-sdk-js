@@ -5,18 +5,18 @@ import {
   ExternalId,
 } from '@cognite/sdk-core';
 import {
-  Features,
-  FeaturesCreateItem,
+  Feature,
+  FeatureCreateItem,
   FeatureSearchFilter,
   GeometryType,
 } from './types';
 
-export class FeaturesAPI extends BaseResourceAPI<Features> {
+export class FeatureAPI extends BaseResourceAPI<Feature> {
   public create = (
     featureTypeExternalId: CogniteExternalId,
-    features: FeaturesCreateItem[]
-  ): Promise<Features[]> => {
-    return this.createEndpoint<FeaturesCreateItem>(
+    features: FeatureCreateItem[]
+  ): Promise<Feature[]> => {
+    return this.createEndpoint<FeatureCreateItem>(
       features,
       this.url(`${featureTypeExternalId}/features`)
     );
@@ -24,10 +24,10 @@ export class FeaturesAPI extends BaseResourceAPI<Features> {
 
   public retrieve = (
     featureTypeExternalId: CogniteExternalId,
-    ids: IdEither[],
+    externalIds: IdEither[],
     queryParams?: { outputGeometryFormat: GeometryType }
-  ): Promise<Features[]> => {
-    return this.callEndpointWithMergeAndTransform(ids, request =>
+  ): Promise<Feature[]> => {
+    return this.callEndpointWithMergeAndTransform(externalIds, request =>
       this.postInParallelWithAutomaticChunking({
         path: this.url(`${featureTypeExternalId}/features/byids`),
         items: request,
@@ -38,8 +38,8 @@ export class FeaturesAPI extends BaseResourceAPI<Features> {
 
   public update = (
     featureTypeExternalId: CogniteExternalId,
-    changes: FeaturesCreateItem[]
-  ): Promise<Features[]> => {
+    changes: FeatureCreateItem[]
+  ): Promise<Feature[]> => {
     return this.updateEndpoint(
       changes,
       this.url(`${featureTypeExternalId}/features/update`)
@@ -48,10 +48,10 @@ export class FeaturesAPI extends BaseResourceAPI<Features> {
 
   public delete = (
     featureTypeExternalId: CogniteExternalId,
-    ids: ExternalId[]
+    externalIds: ExternalId[]
   ) => {
     return this.deleteEndpoint(
-      ids,
+      externalIds,
       {},
       this.url(`${featureTypeExternalId}/features/delete`)
     );
@@ -61,7 +61,7 @@ export class FeaturesAPI extends BaseResourceAPI<Features> {
     featureTypeExternalId: CogniteExternalId,
     query: FeatureSearchFilter,
     queryParams?: { outputGeometryFormat: GeometryType }
-  ): Promise<Features[]> => {
+  ): Promise<Feature[]> => {
     return this.searchEndpoint(
       query,
       this.url(`${featureTypeExternalId}/features/search`),

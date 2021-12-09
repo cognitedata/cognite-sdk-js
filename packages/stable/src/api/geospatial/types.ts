@@ -38,7 +38,7 @@ export interface Spatial {
   [id: string]: unknown;
 }
 
-export interface FeaturesCreateItem {
+export interface FeatureCreateItem {
   externalId: CogniteExternalId;
   [attribute: string]:
     | string
@@ -49,12 +49,12 @@ export interface FeaturesCreateItem {
     | { geojson: object };
 }
 
-export interface Features extends FeaturesCreateItem {
+export interface Feature extends FeatureCreateItem {
   createdTime: Date;
   lastUpdatedTime: Date;
 }
 
-export interface FeatureTypes {
+export interface FeatureType {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
   attributes: Attributes & {
@@ -65,7 +65,7 @@ export interface FeatureTypes {
   searchSpec?: {
     [searchName: string]: {
       attributes:
-        | Array<keyof FeatureTypesCreateItem['attributes']>
+        | Array<keyof FeatureTypeCreateItem['attributes']>
         | ['_created_at']
         | ['_updated_at']
         | ['_external_id'];
@@ -73,12 +73,12 @@ export interface FeatureTypes {
   };
 }
 
-export interface FeatureTypesCreateItem {
+export interface FeatureTypeCreateItem {
   externalId: CogniteExternalId;
   attributes: Attributes;
   searchSpec?: {
     [searchName: string]: {
-      attributes: Array<keyof FeatureTypesCreateItem['attributes']>;
+      attributes: Array<keyof FeatureTypeCreateItem['attributes']>;
     };
   };
 }
