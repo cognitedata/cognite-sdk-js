@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@4.2.3...@cognite/sdk-playground@4.2.4) (2021-12-07)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
+## [4.2.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@4.2.2...@cognite/sdk-playground@4.2.3) (2021-11-19)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
+## [4.2.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@4.2.1...@cognite/sdk-playground@4.2.2) (2021-11-17)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
+## [4.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@4.2.0...@cognite/sdk-playground@4.2.1) (2021-11-04)
+
+
+### Bug Fixes
+
+* document label filter ([#715](https://github.com/cognitedata/cognite-sdk-js/issues/715)) ([bce1722](https://github.com/cognitedata/cognite-sdk-js/commit/bce1722db7c8a9c96010d10726594c7dfa9a1129))
+
+
+
+
+
 # [4.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@4.1.0...@cognite/sdk-playground@4.2.0) (2021-10-29)
 
 

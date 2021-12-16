@@ -121,7 +121,7 @@ export interface DocumentsFilter {
   assetIds?: ContainsAllIds | ContainsAnyIds;
   assetSubtreeIds?: ContainsAnyIds | ValueMissing;
   sourceSystem?: StringIn | StringEquals;
-  labels?: Label[];
+  labels?: LabelFilter;
   geoLocation?: GeoLocationFilter;
   sourceFile?: DocumentsSourceFileFilter;
 }
