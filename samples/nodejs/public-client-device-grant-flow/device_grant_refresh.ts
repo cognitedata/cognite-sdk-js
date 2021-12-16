@@ -1,10 +1,9 @@
 // Copyright 2020 Cognite AS
 import { CogniteClient } from '@cognite/sdk';
 import { PublicClientApplication } from '@azure/msal-node';
-import open from 'open';
 import fs from 'fs';
 import path from 'path';
-import {cachePlugin} from './cache';
+import {readFromCache, cachePlugin} from './cache';
 
 const project: string = process.env.COGNITE_PROJECT!;
 const clientId: string = process.env.CLIENT_ID!;
@@ -16,33 +15,32 @@ if (!project || !clientId || !azureTenant) {
   );
 }
 
+const account = JSON.parse(fs.readFileSync(path.resolve('./account.json'), {encoding:'utf8'}));
+
 async function deviceCodeGrantExample() {
   const pca = new PublicClientApplication({
     auth: {
       clientId,
       authority: `https://login.microsoftonline.com/${azureTenant}`,
     },
-    cache: { cachePlugin }
+    cache:{ cachePlugin }
   });
 
+  // MUST DO!
+  readFromCache(pca.getTokenCache());
 
   const client = new CogniteClient({
     appId: 'Cognite SDK samples',
     project,
-    baseUrl: "https://greenfield.cognitedata.com/",
+    baseUrl:"https://greenfield.cognitedata.com/",
     getToken: () =>
-      pca
-        .acquireTokenByDeviceCode({
-          deviceCodeCallback: ({ message, userCode, verificationUri }) => {
-            open(verificationUri)
-              .then(() => console.log(`Enter ${userCode}`))
-              .catch(() => console.log(message));
-          },
-          scopes: ['https://greenfield.cognitedata.com/.default', 'offline_access'],
-        })
+    pca.acquireTokenSilent({
+      forceRefresh:true,
+      account: account!,
+      scopes: ['https://greenfield.cognitedata.com/.default', 'offline_access']
+    })
         .then((response) => {
-          // console.log(response?.accessToken)
-          fs.writeFileSync(path.resolve('./account.json'), JSON.stringify(response?.account));
+          console.log(response)
           return response?.accessToken!
         }).catch((e)=>{
           console.log(e);
@@ -56,6 +54,7 @@ async function deviceCodeGrantExample() {
 
   console.log('tokenInfo', JSON.stringify(info, null, 2));
 
+  
   try {
     const assets = await client.assets.list();
     console.log(assets);
