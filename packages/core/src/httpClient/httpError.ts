@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { HttpHeaders } from './basicHttpClient';
+import { HttpHeaders } from './httpHeaders';
 
 export class HttpError extends Error {
   /** @hidden */

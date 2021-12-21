@@ -9,12 +9,8 @@ import {
 } from '../constants';
 import { handleErrorResponse } from '../error';
 import { bearerString, isJson } from '../utils';
-import {
-  HttpHeaders,
-  HttpQueryParams,
-  HttpRequest,
-  HttpResponse,
-} from './basicHttpClient';
+import { HttpQueryParams, HttpRequest, HttpResponse } from './basicHttpClient';
+import { HttpHeaders } from './httpHeaders';
 import { HttpError } from './httpError';
 import { RetryableHttpClient } from './retryableHttpClient';
 import { RetryValidator } from './retryValidator';
