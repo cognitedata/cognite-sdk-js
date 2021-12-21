@@ -1,6 +1,7 @@
 // Copyright 2020 Cognite AS
 import { X_REQUEST_ID } from './constants';
 import { HttpError } from './httpClient/httpError';
+import { getHeaderField } from './httpClient/httpHeaders';
 
 export class CogniteError extends Error {
   public status: number;
@@ -74,7 +75,7 @@ export function handleErrorResponse(err: HttpError) {
     message = err.data.error.message;
     missing = err.data.error.missing;
     extra = err.data.error.extra;
-    requestId = (err.headers || {})[X_REQUEST_ID];
+    requestId = getHeaderField(err.headers || {}, X_REQUEST_ID);
   } catch (_) {
     throw err;
   }
