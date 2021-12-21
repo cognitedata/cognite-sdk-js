@@ -16,7 +16,7 @@ export const X_CDF_APP_HEADER = 'x-cdp-app';
 /** @hidden */
 export const X_CDF_SDK_HEADER = 'x-cdp-sdk';
 /** @hidden */
-export const X_REQUEST_ID = 'X-Request-Id';
+export const X_REQUEST_ID = 'x-request-id';
 
 /** @hidden */
 export const LOCAL_STORAGE_PREFIX = '@cognite/sdk:';
