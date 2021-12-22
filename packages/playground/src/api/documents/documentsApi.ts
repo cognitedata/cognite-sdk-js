@@ -11,11 +11,11 @@ import {
 import {
   Document,
   DocumentContent,
+  DocumentContentResponse,
   DocumentId,
-  DocumentsAggregatesResponse,
-  DocumentsRequestFilter,
-  DocumentsSearchWrapper,
-  ExternalDocumentsSearch,
+  DocumentsSearchResponse,
+  DocumentsFilterRequest,
+  DocumentsSearchRequest,
 } from '../../types';
 
 import { PreviewAPI } from './previewApi';
@@ -48,15 +48,13 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   }
 
   public search = (
-    query: ExternalDocumentsSearch
-  ): Promise<DocumentsAggregatesResponse<DocumentsSearchWrapper[]>> => {
-    return this.searchDocuments<
-      DocumentsAggregatesResponse<DocumentsSearchWrapper[]>
-    >(query);
+    query: DocumentsSearchRequest
+  ): Promise<DocumentsSearchResponse> => {
+    return this.searchDocuments<DocumentsSearchResponse>(query);
   };
 
   public list = (
-    scope?: DocumentsRequestFilter
+    scope?: DocumentsFilterRequest
   ): CursorAndAsyncIterator<Document> => {
     return this.listEndpoint(this.callListEndpointWithPost, scope);
   };
@@ -65,11 +63,8 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   public content = (
     ids: DocumentId[],
     ignoreUnknownIds?: boolean
-  ): Promise<ItemsWrapper<DocumentContent[]>> => {
-    return this.documentContent<ItemsWrapper<DocumentContent[]>>(
-      ids,
-      ignoreUnknownIds
-    );
+  ): Promise<DocumentContentResponse> => {
+    return this.documentContent<DocumentContentResponse>(ids, ignoreUnknownIds);
   };
 
   public get feedback() {
@@ -89,7 +84,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   }
 
   private async searchDocuments<ResponseType>(
-    query: ExternalDocumentsSearch
+    query: DocumentsSearchRequest
   ): Promise<ResponseType> {
     const response = await this.post<ResponseType>(this.searchUrl, {
       data: query,
