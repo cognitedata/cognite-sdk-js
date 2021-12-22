@@ -5,24 +5,30 @@ import {
   CogniteInternalId,
   CursorAndAsyncIterator,
   InternalId,
-  ItemsWrapper,
 } from '@cognite/sdk-core';
-import { Classifier, ClassifierName } from '../../types';
+import {
+  DocumentsClassifier,
+  DocumentsClassifierListByIdsRequest,
+  DocumentsClassifiersResponse,
+} from '../../types';
 
-export class ClassifiersAPI extends BaseResourceAPI<Classifier> {
-  public create = (classifiers: ClassifierName[]): Promise<Classifier[]> => {
-    return this.createEndpoint(classifiers);
+export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
+  public create = (
+    classifierNames: string[]
+  ): Promise<DocumentsClassifier[]> => {
+    const names = classifierNames.map(name => ({ name }));
+    return this.createEndpoint(names);
   };
 
-  public list = (): CursorAndAsyncIterator<Classifier> => {
+  public list = (): CursorAndAsyncIterator<DocumentsClassifier> => {
     return this.listEndpoint(this.callListEndpointWithGet, {});
   };
 
   public listByIds = (
     ids: CogniteInternalId[],
     ignoreUnknownIds: boolean = false
-  ): Promise<ItemsWrapper<Classifier[]>> => {
-    return this.classifiersListByIds<ItemsWrapper<Classifier[]>>(
+  ): Promise<DocumentsClassifiersResponse> => {
+    return this.classifiersListByIds<DocumentsClassifiersResponse>(
       ids,
       ignoreUnknownIds
     );
@@ -38,12 +44,12 @@ export class ClassifiersAPI extends BaseResourceAPI<Classifier> {
     ids: CogniteInternalId[],
     ignoreUnknownIds: boolean
   ): Promise<ResponseType> {
-    const internalIds = ids.map(id => ({ id }));
+    const request: DocumentsClassifierListByIdsRequest = {
+      items: ids.map(id => ({ id })),
+      ignoreUnknownIds,
+    };
     const response = await this.post<ResponseType>(this.url('byids'), {
-      data: {
-        items: internalIds,
-        ignoreUnknownIds,
-      },
+      data: request,
     });
     return this.addToMapAndReturn(response.data, response);
   }
