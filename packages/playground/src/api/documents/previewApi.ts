@@ -3,7 +3,7 @@
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import { HttpResponseType } from '@cognite/sdk-core';
 
-import { DocumentId, DocumentPreviewTemporaryLink } from '../../types';
+import { DocumentId, DocumentsTemporaryPreviewLinkResponse } from '../../types';
 
 export class PreviewAPI extends BaseResourceAPI<any> {
   public documentAsPdf = (id: DocumentId): Promise<ArrayBuffer> => {
@@ -19,8 +19,8 @@ export class PreviewAPI extends BaseResourceAPI<any> {
 
   public temporaryLink = (
     documentId: DocumentId
-  ): Promise<DocumentPreviewTemporaryLink> => {
-    return this.temporaryLinkEndpoint<DocumentPreviewTemporaryLink>(documentId);
+  ): Promise<DocumentsTemporaryPreviewLinkResponse> => {
+    return this.temporaryLinkEndpoint<DocumentsTemporaryPreviewLinkResponse>(documentId);
   };
 
   public buildPreviewURI = (
