@@ -4,9 +4,12 @@ export type DocumentsSearchRequest = DocumentsFilterOption &
   DocumentsSort &
   DocumentsSearchLimit;
 
-export type DocumentsFilterRequest = DocumentsFilterOption & DocumentsLimit & Cursor;
+export type DocumentsFilterRequest = DocumentsFilterOption &
+  DocumentsLimit &
+  Cursor;
 
-export type DocumentContentRequest = DocumentContentRequestItems & IgnoreUnknownIdsField;
+export type DocumentContentRequest = DocumentContentRequestItems &
+  IgnoreUnknownIdsField;
 
 /**
  * A list of pipeline configuration objects.
@@ -61,9 +64,11 @@ export interface DocumentsClassifierCreateItems {
   items: DocumentsClassifierCreate[];
 }
 
-export type DocumentsClassifierListByIdsRequest = DocumentsClassifierListByIdsItems & IgnoreUnknownIdsField;
+export type DocumentsClassifierListByIdsRequest = DocumentsClassifierListByIdsItems &
+  IgnoreUnknownIdsField;
 
-export type DocumentsClassifierDeleteRequest = DocumentsClassifierDeleteItems & IgnoreUnknownIdsField;
+export type DocumentsClassifierDeleteRequest = DocumentsClassifierDeleteItems &
+  IgnoreUnknownIdsField;
 
 /**
  * Filter with exact match
@@ -269,20 +274,33 @@ export interface DocumentsPipeline {
       mimeType?: string[];
       type?: string[];
       labelsExternalIds?: CogniteExternalId[];
-      sourceFile?: { name?: string[]; directory?: string[]; content?: string[]; metadata?: Record<string, string[]> };
+      sourceFile?: {
+        name?: string[];
+        directory?: string[];
+        content?: string[];
+        metadata?: Record<string, string[]>;
+      };
     };
     filterPasswords?: boolean;
     sensitiveSecurityCategory?: number;
     restrictToSources?: string[];
   };
-  classifier?: { name?: string; trainingLabels?: LabelList; activeClassifierId?: CogniteInternalId };
+  classifier?: {
+    name?: string;
+    trainingLabels?: LabelList;
+    activeClassifierId?: CogniteInternalId;
+  };
 }
 
 export interface DocumentsPipelineUpdate {
   /** External Id provided by client. Should be unique within a given project/resource combination. */
   externalId: CogniteExternalId;
   sensitivityMatcher?: {
-    matchLists?: { add?: Record<string, string[]>; remove?: string[]; set?: Record<string, string[]> };
+    matchLists?: {
+      add?: Record<string, string[]>;
+      remove?: string[];
+      set?: Record<string, string[]>;
+    };
     fieldMappings?: {
       set?: {
         title?: string[];
@@ -290,7 +308,12 @@ export interface DocumentsPipelineUpdate {
         mimeType?: string[];
         type?: string[];
         labelsExternalIds?: CogniteExternalId[];
-        sourceFile?: { name?: string[]; directory?: string[]; content?: string[]; metadata?: Record<string, string[]> };
+        sourceFile?: {
+          name?: string[];
+          directory?: string[];
+          content?: string[];
+          metadata?: Record<string, string[]>;
+        };
       };
     };
     filterPasswords?: { set?: boolean };
@@ -340,8 +363,8 @@ export type FeedbackLabel = LabelDefinitionExternalId;
  * What to do with the label on the file
  */
 export enum FeedbackAction {
-  ATTACH = "ATTACH",
-  DETACH = "DETACH",
+  ATTACH = 'ATTACH',
+  DETACH = 'DETACH',
 }
 
 /**
@@ -377,10 +400,10 @@ export type ReporterInfo = string | null;
 * @example ACCEPTED
 */
 export enum FeedbackStatus {
-  CREATED = "CREATED",
-  ACCEPTED = "ACCEPTED",
-  REJECTED = "REJECTED",
-  STALE = "STALE",
+  CREATED = 'CREATED',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
+  STALE = 'STALE',
 }
 
 /**
@@ -448,8 +471,8 @@ You can find extensive description of the available fields in the
 * @example action
 */
 export enum AggregateField {
-  Action = "action",
-  Status = "status",
+  Action = 'action',
+  Status = 'status',
 }
 
 /**
@@ -717,7 +740,9 @@ export interface DocumentGeoLocation {
   geometries?: GeometryCollection[];
 }
 
-export type DocumentContentItem = { id?: DocumentId } | { externalId?: CogniteExternalId };
+export type DocumentContentItem =
+  | { id?: DocumentId }
+  | { externalId?: CogniteExternalId };
 
 export interface DocumentsClassifier {
   /** Project id */
@@ -740,7 +765,13 @@ export interface DocumentsClassifier {
 
   /** Classifier id */
   id: CogniteInternalId;
-  metrics?: { precision?: number; recall?: number; f1Score?: number; confusionMatrix?: number[][]; labels?: string[] };
+  metrics?: {
+    precision?: number;
+    recall?: number;
+    f1Score?: number;
+    confusionMatrix?: number[][];
+    labels?: string[];
+  };
 
   /**
    * The number of documents used for training the classifier
@@ -782,7 +813,9 @@ export type AssetIdsFilter = ContainsAllIds | ContainsAnyId | ValueMissing;
 /**
  * Only include files that reference these specific asset externalIds.
  */
-export type AssetExternalIdsFilter = ContainsAllExternalIds | ContainsAnyExternalIds;
+export type AssetExternalIdsFilter =
+  | ContainsAllExternalIds
+  | ContainsAnyExternalIds;
 
 /**
  * Only include documents with a related asset in a subtree rooted at any of these asset IDs, including the roots given. Returns an error if the total size of the given subtrees exceeds 10,000 assets. Usage of this field requires `["assetsAcl:READ"]` capability.
@@ -797,7 +830,9 @@ export type LabelFilter = LabelContainsAnyFilter | LabelContainsAllFilter;
 /**
  * Filter on files which have the specified spatial relation with the specified geometry shape.
  */
-export type DocumentGeoLocationFilter = { shape: DocumentGeoLocation; relation?: Relation } | { missing: boolean };
+export type DocumentGeoLocationFilter =
+  | { shape: DocumentGeoLocation; relation?: Relation }
+  | { missing: boolean };
 
 export interface DocumentsSourceFileFilter {
   /** Name of the file */
@@ -975,7 +1010,10 @@ export interface DocumentsSearchResponse {
   items?: { highlight?: Highlight; item?: Document }[];
   aggregates?: {
     name: string;
-    groups: { group?: (object | LabelDefinitionExternalId)[]; value?: number }[];
+    groups: {
+      group?: (object | LabelDefinitionExternalId)[];
+      value?: number;
+    }[];
     total: number;
   }[];
 }

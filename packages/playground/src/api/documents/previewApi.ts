@@ -20,7 +20,9 @@ export class PreviewAPI extends BaseResourceAPI<any> {
   public temporaryLink = (
     documentId: DocumentId
   ): Promise<DocumentsTemporaryPreviewLinkResponse> => {
-    return this.temporaryLinkEndpoint<DocumentsTemporaryPreviewLinkResponse>(documentId);
+    return this.temporaryLinkEndpoint<DocumentsTemporaryPreviewLinkResponse>(
+      documentId
+    );
   };
 
   public buildPreviewURI = (
