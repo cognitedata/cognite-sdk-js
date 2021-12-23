@@ -4,7 +4,6 @@ import nock from 'nock';
 import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
-import { AggregateField, FeedbackStatus } from '../../types';
 
 const baseUrl = mockBaseUrl + `/api/playground/projects/${project}`;
 
@@ -648,7 +647,7 @@ describe('Documents unit test', () => {
           },
         ],
       });
-    await client.documents.feedback.list(FeedbackStatus.CREATED);
+    await client.documents.feedback.list('CREATED');
   });
 
   test('aggregate feedbacks by field', async () => {
@@ -658,7 +657,7 @@ describe('Documents unit test', () => {
       })
       .once()
       .reply(200, {});
-    await client.documents.feedback.aggregates(AggregateField.Action);
+    await client.documents.feedback.aggregates('action');
   });
 
   test('accept feedbacks', async () => {

@@ -362,10 +362,7 @@ export type FeedbackLabel = LabelDefinitionExternalId;
 /**
  * What to do with the label on the file
  */
-export enum FeedbackAction {
-  ATTACH = 'ATTACH',
-  DETACH = 'DETACH',
-}
+export type FeedbackAction = 'ATTACH' | 'DETACH';
 
 /**
  * Server-generated identifier for the feedback object
@@ -399,12 +396,7 @@ export type ReporterInfo = string | null;
 - If the action was `DETACH`, and the label is not attached to the file anymore.
 * @example ACCEPTED
 */
-export enum FeedbackStatus {
-  CREATED = 'CREATED',
-  ACCEPTED = 'ACCEPTED',
-  REJECTED = 'REJECTED',
-  STALE = 'STALE',
-}
+export type FeedbackStatus = 'CREATED' | 'ACCEPTED' | 'REJECTED' | 'STALE';
 
 /**
  * A feedback object
@@ -470,10 +462,7 @@ You can find extensive description of the available fields in the
 [List Feedback](#operation/documentsListFeedback) endpoint response.
 * @example action
 */
-export enum AggregateField {
-  Action = 'action',
-  Status = 'status',
-}
+export type AggregateField = 'action' | 'status';
 
 /**
  * A value/count aggregation object

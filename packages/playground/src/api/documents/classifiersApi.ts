@@ -10,14 +10,14 @@ import {
   DocumentsClassifier,
   DocumentsClassifierListByIdsRequest,
   DocumentsClassifiersResponse,
+  DocumentsClassifierCreate,
 } from '../../types';
 
 export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
   public create = (
-    classifierNames: string[]
+    classifierConfigurations: DocumentsClassifierCreate[]
   ): Promise<DocumentsClassifier[]> => {
-    const names = classifierNames.map(name => ({ name }));
-    return this.createEndpoint(names);
+    return this.createEndpoint(classifierConfigurations);
   };
 
   public list = (): CursorAndAsyncIterator<DocumentsClassifier> => {

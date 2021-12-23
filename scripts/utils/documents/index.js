@@ -21,6 +21,7 @@ function generateTypesFromSource(input, output) {
     generateResponses: false,
     extractRequestParams: false,
     extractRequestBody: false,
+    generateUnionEnums: true,
     prettier: {
       printWidth: 120,
       tabWidth: 2,
