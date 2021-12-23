@@ -54,7 +54,7 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
     ids: number[],
     endpoint: acceptRejectEndpoint
   ) {
-    const feedbackIds: DocumentFeedbackAcceptRejectItem[] = ids.map(id => ({
+    const feedbackIds: DocumentFeedbackAcceptRejectItem[] = ids.map((id) => ({
       id,
     }));
     const request: DocumentFeedbackAcceptRejectRequest = {

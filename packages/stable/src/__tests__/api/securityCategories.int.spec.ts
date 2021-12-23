@@ -35,7 +35,7 @@ describe('Security categories integration test', () => {
 
   test('delete', async () => {
     const response = await client.securityCategories.delete(
-      securityCategories.map(category => category.id)
+      securityCategories.map((category) => category.id)
     );
     expect(response).toEqual({});
   });

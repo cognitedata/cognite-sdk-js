@@ -64,8 +64,8 @@ export interface DocumentsClassifierCreateItems {
   items: DocumentsClassifierCreate[];
 }
 
-export type DocumentsClassifierListByIdsRequest = DocumentsClassifierListByIdsItems &
-  IgnoreUnknownIdsField;
+export type DocumentsClassifierListByIdsRequest =
+  DocumentsClassifierListByIdsItems & IgnoreUnknownIdsField;
 
 export type DocumentsClassifierDeleteRequest = DocumentsClassifierDeleteItems &
   IgnoreUnknownIdsField;

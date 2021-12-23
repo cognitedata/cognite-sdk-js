@@ -13,7 +13,7 @@ describe('Labels unit test', () => {
       description: 'Asset with rotating parts',
     },
   ];
-  const labels = externalLabels.map(label => {
+  const labels = externalLabels.map((label) => {
     return {
       ...label,
       createdTime: new Date(),
@@ -77,7 +77,7 @@ describe('Labels unit test', () => {
   });
 
   test('delete', async () => {
-    const externalIds = labels.map(label => {
+    const externalIds = labels.map((label) => {
       return { externalId: label.externalId };
     });
     nock(mockBaseUrl)

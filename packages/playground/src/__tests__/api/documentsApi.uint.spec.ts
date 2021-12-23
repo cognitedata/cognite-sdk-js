@@ -317,7 +317,10 @@ describe('Documents unit test', () => {
               item: {
                 geoLocation: {
                   type: 'MultiPoint',
-                  coordinates: [[2.324, 23.1], [2, 7]],
+                  coordinates: [
+                    [2.324, 23.1],
+                    [2, 7],
+                  ],
                 },
               },
             },
@@ -343,7 +346,16 @@ describe('Documents unit test', () => {
               item: {
                 geoLocation: {
                   type: 'MultiLineString',
-                  coordinates: [[[2.324, 23.1], [2, 7]], [[3, 4], [2, 1]]],
+                  coordinates: [
+                    [
+                      [2.324, 23.1],
+                      [2, 7],
+                    ],
+                    [
+                      [3, 4],
+                      [2, 1],
+                    ],
+                  ],
                 },
               },
             },
@@ -354,9 +366,15 @@ describe('Documents unit test', () => {
       expect(geoLocation?.type).toEqual('MultiLineString');
       expect(geoLocation?.coordinates).toBeDefined();
       // @ts-ignore
-      expect(geoLocation?.coordinates[0]).toEqual([[2.324, 23.1], [2, 7]]);
+      expect(geoLocation?.coordinates[0]).toEqual([
+        [2.324, 23.1],
+        [2, 7],
+      ]);
       // @ts-ignore
-      expect(geoLocation?.coordinates[1]).toEqual([[3, 4], [2, 1]]);
+      expect(geoLocation?.coordinates[1]).toEqual([
+        [3, 4],
+        [2, 1],
+      ]);
     });
 
     test('MultiPolygon', async () => {
@@ -370,7 +388,14 @@ describe('Documents unit test', () => {
                 geoLocation: {
                   type: 'MultiPolygon',
                   coordinates: [
-                    [[[40.0, 40.0], [20.0, 45.0], [45.0, 30.0], [40.0, 40.0]]],
+                    [
+                      [
+                        [40.0, 40.0],
+                        [20.0, 45.0],
+                        [45.0, 30.0],
+                        [40.0, 40.0],
+                      ],
+                    ],
                     [
                       [
                         [20.0, 35.0],
@@ -380,7 +405,12 @@ describe('Documents unit test', () => {
                         [45.0, 20.0],
                         [20.0, 35.0],
                       ],
-                      [[30.0, 20.0], [20.0, 15.0], [20.0, 25.0], [30.0, 20.0]],
+                      [
+                        [30.0, 20.0],
+                        [20.0, 15.0],
+                        [20.0, 25.0],
+                        [30.0, 20.0],
+                      ],
                     ],
                   ],
                 },
@@ -423,7 +453,10 @@ describe('Documents unit test', () => {
                     geometries: [
                       {
                         type: 'LineString',
-                        coordinates: [[2.324, 23.1], [2, 7]],
+                        coordinates: [
+                          [2.324, 23.1],
+                          [2, 7],
+                        ],
                       },
                       {
                         type: 'Point',
@@ -447,7 +480,10 @@ describe('Documents unit test', () => {
         const second = geoLocation?.geometries[1];
 
         expect(first?.type).toEqual('LineString');
-        expect(first?.coordinates).toEqual([[2.324, 23.1], [2, 7]]);
+        expect(first?.coordinates).toEqual([
+          [2.324, 23.1],
+          [2, 7],
+        ]);
 
         expect(second?.type).toEqual('Point');
         expect(second?.coordinates).toEqual([2.324, 23.1]);

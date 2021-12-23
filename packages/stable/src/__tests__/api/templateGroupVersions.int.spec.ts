@@ -45,36 +45,32 @@ describe('template group versions test', () => {
     });
   });
 
-  it.skip(
-    'should list template group versions with filter',
-    async () => {
-      const expectedVersions = [];
-      for (let i = 0; i < 10; ++i) {
-        expectedVersions.push({
-          ...expectedVersion,
-          version: i,
-        });
-        await client.templates.group(externalId).versions.upsert({
-          ...expectedVersion,
-          conflictMode: ConflictMode.Update,
-        });
-      }
-      const result = await client.templates
-        .group(externalId)
-        .versions.list({
-          filter: {
-            minVersion: 2,
-            maxVersion: 5,
-          },
-        })
-        .autoPagingToArray({ limit: -1 });
+  it.skip('should list template group versions with filter', async () => {
+    const expectedVersions = [];
+    for (let i = 0; i < 10; ++i) {
+      expectedVersions.push({
+        ...expectedVersion,
+        version: i,
+      });
+      await client.templates.group(externalId).versions.upsert({
+        ...expectedVersion,
+        conflictMode: ConflictMode.Update,
+      });
+    }
+    const result = await client.templates
+      .group(externalId)
+      .versions.list({
+        filter: {
+          minVersion: 2,
+          maxVersion: 5,
+        },
+      })
+      .autoPagingToArray({ limit: -1 });
 
-      expect(result).toEqual(
-        expectedVersions.slice(2, 6).sort((a, b) => b.version - a.version)
-      );
-    },
-    10000
-  );
+    expect(result).toEqual(
+      expectedVersions.slice(2, 6).sort((a, b) => b.version - a.version)
+    );
+  }, 10000);
 
   it.skip('should delete template group version', async () => {
     await client.templates.group(externalId).versions.delete(1);

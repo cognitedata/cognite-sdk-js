@@ -82,7 +82,7 @@ describeIfCondition(
         // delete uploaded file
         client.files.delete([{ id: file.id }]),
         // deleted created assets
-        client.assets.delete(assets.map(item => ({ id: item.id }))),
+        client.assets.delete(assets.map((item) => ({ id: item.id }))),
       ]);
     });
 
@@ -129,41 +129,43 @@ describeIfCondition(
         property0: 'value0',
         property1: 'value1',
       };
-      const revisionsToUpdate: UpdateRevision3D[] = revisions.map(revision => ({
-        id: revision.id,
-        update: {
-          rotation: {
-            set: newRotation,
-          },
-          camera: {
-            set: {
-              target: newCameraTarget,
-              position: newCameraPosition,
+      const revisionsToUpdate: UpdateRevision3D[] = revisions.map(
+        (revision) => ({
+          id: revision.id,
+          update: {
+            rotation: {
+              set: newRotation,
+            },
+            camera: {
+              set: {
+                target: newCameraTarget,
+                position: newCameraPosition,
+              },
+            },
+            metadata: {
+              set: newMetadata,
             },
           },
-          metadata: {
-            set: newMetadata,
-          },
-        },
-      }));
+        })
+      );
       const updatedRevisions = await client.revisions3D.update(
         model.id,
         revisionsToUpdate
       );
-      updatedRevisions.forEach(revision =>
+      updatedRevisions.forEach((revision) =>
         expect(revision.rotation).toEqual(newRotation)
       );
-      updatedRevisions.forEach(revision =>
+      updatedRevisions.forEach((revision) =>
         expect(revision.camera && revision.camera.target).toEqual(
           newCameraTarget
         )
       );
-      updatedRevisions.forEach(revision =>
+      updatedRevisions.forEach((revision) =>
         expect(revision.camera && revision.camera.position).toEqual(
           newCameraPosition
         )
       );
-      updatedRevisions.forEach(revision => {
+      updatedRevisions.forEach((revision) => {
         expect(revision.metadata).toBeDefined();
         for (const property in revision.metadata) {
           expect(revision.metadata[property]).toEqual(newMetadata[property]);
@@ -173,18 +175,18 @@ describeIfCondition(
 
     test('list', async () => {
       const list = await client.revisions3D.list(model.id).autoPagingToArray();
-      expect(revisions.map(r => r.id).sort(simpleCompare)).toEqual(
-        list.map(r => r.id).sort(simpleCompare)
+      expect(revisions.map((r) => r.id).sort(simpleCompare)).toEqual(
+        list.map((r) => r.id).sort(simpleCompare)
       );
     });
 
     test(
       'list 3d nodes',
-      async done => {
+      async (done) => {
         nodes3D = await client.revisions3D
           .list3DNodes(model.id, revisions[0].id)
           .autoPagingToArray();
-        expect(nodes3D.map(n => n.name)).toContain('RootNode');
+        expect(nodes3D.map((n) => n.name)).toContain('RootNode');
         done();
       },
       5 * 60 * 1000
@@ -199,7 +201,7 @@ describeIfCondition(
         const nodes = await client.revisions3D.retrieve3DNodes(
           model.id,
           revisions[0].id,
-          nodes3D.map(node => ({ id: node.id }))
+          nodes3D.map((node) => ({ id: node.id }))
         );
         expect(nodes.length).toBe(2);
         expect(nodes[0]).toEqual(nodes3D[0]);
@@ -210,11 +212,11 @@ describeIfCondition(
 
     test(
       'filter 3d nodes (empty query)',
-      async done => {
+      async (done) => {
         nodes3D = await client.revisions3D
           .filter3DNodes(model.id, revisions[0].id)
           .autoPagingToArray();
-        expect(nodes3D.map(n => n.name)).toContain('RootNode');
+        expect(nodes3D.map((n) => n.name)).toContain('RootNode');
         done();
       },
       5 * 60 * 1000
@@ -222,7 +224,7 @@ describeIfCondition(
 
     test(
       'filter 3d nodes on properties',
-      async done => {
+      async (done) => {
         const propertiesFilter: Filter3DNodesQuery = {
           filter: {
             properties: { CogniteClient: { InheritType: ['1'] } },
@@ -239,7 +241,7 @@ describeIfCondition(
 
     test(
       'filter 3d nodes (non-existent properties)',
-      async done => {
+      async (done) => {
         const propertiesFilter: Filter3DNodesQuery = {
           filter: {
             properties: { Item: { Type: ['something weird'] } },
@@ -336,7 +338,7 @@ describeIfCondition(
     test('delete revisions', async () => {
       const deleted = await client.revisions3D.delete(
         model.id,
-        revisions.map(r => ({ id: r.id }))
+        revisions.map((r) => ({ id: r.id }))
       );
       expect(deleted).toEqual({});
     });

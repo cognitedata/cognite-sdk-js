@@ -2606,7 +2606,8 @@ export type EntityMatchingFeatureType =
 export const EntityMatchingFeatureType = {
   SIMPLE: 'simple' as EntityMatchingFeatureType,
   BIGRAM: 'bigram' as EntityMatchingFeatureType,
-  FREQUENCY_WEIGHTED_BIGRAM: 'frequencyweightedbigram' as EntityMatchingFeatureType,
+  FREQUENCY_WEIGHTED_BIGRAM:
+    'frequencyweightedbigram' as EntityMatchingFeatureType,
   BIGRAM_EXTRA_TOKENIZERS: 'bigramextratokenizers' as EntityMatchingFeatureType,
   BIGRAM_COMBO: 'bigramcombo' as EntityMatchingFeatureType,
 };
@@ -2622,7 +2623,8 @@ export const EntityMatchingClassifier = {
   RANDOM_FOREST: 'randomforest' as EntityMatchingClassifier,
   DECISION_TREE: 'decisiontree' as EntityMatchingClassifier,
   LOGISTIC_REGRESSION: 'logisticregression' as EntityMatchingClassifier,
-  AUGMENTED_LOGISTIC_REGRESSION: 'augmentedlogisticregression' as EntityMatchingClassifier,
+  AUGMENTED_LOGISTIC_REGRESSION:
+    'augmentedlogisticregression' as EntityMatchingClassifier,
   AUGMENTED_RANDOM_FOREST: 'augmentedrandomforest' as EntityMatchingClassifier,
 };
 

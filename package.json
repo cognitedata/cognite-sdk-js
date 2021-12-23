@@ -37,11 +37,9 @@
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check -c ./markdownlint.json",
     "test-snippets": "yarn allsdk test-snippets --stream",
     "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream",
-
     "generate-types:playground:documents": "sh scripts/utils/documents/build-types.sh"
   },
   "devDependencies": {
-    "swagger-typescript-api": "^9.3.1",
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@commitlint/travis-cli": "^8.2.0",
@@ -67,8 +65,9 @@
     "lerna": "^3.22.1",
     "markdown-link-check": "^3.8.1",
     "nock": "^10.0.6",
-    "prettier": "^1.10.2",
+    "prettier": "^2.5.1",
     "rollup": "^2.22.2",
+    "swagger-typescript-api": "^9.3.1",
     "ts-jest": "^26.1",
     "typedoc": "^0.17.8",
     "typescript": "^3.9"

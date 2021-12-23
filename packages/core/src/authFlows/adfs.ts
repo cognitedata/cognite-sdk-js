@@ -37,7 +37,7 @@ interface ADFSRequestParamsWithDefaults {
 }
 
 type ADFSRequestParamsMapping = {
-  [key in keyof ADFSRequestParamsWithDefaults]: keyof ADFSQueryParams
+  [key in keyof ADFSRequestParamsWithDefaults]: keyof ADFSQueryParams;
 };
 
 const adfsRequestParamsMapping: ADFSRequestParamsMapping = {
@@ -69,7 +69,7 @@ export class ADFS {
   public async login(): Promise<string | void> {
     const token = await this.acquireTokenSilently();
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (token) {
         resolve(token.accessToken);
       }
@@ -115,8 +115,8 @@ export class ADFS {
     return token
       ? token.accessToken
       : this.token
-        ? this.token.accessToken
-        : null;
+      ? this.token.accessToken
+      : null;
   }
 
   public async getIdToken(): Promise<string | null> {

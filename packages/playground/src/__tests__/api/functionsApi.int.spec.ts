@@ -9,7 +9,7 @@ import fs from 'fs';
 import util from 'util';
 
 const readFile = util.promisify(fs.readFile);
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('functions api', () => {
   let client: CogniteClientPlayground;
@@ -25,7 +25,7 @@ describe('functions api', () => {
 
     testFunction = await client.functions
       .list({ name: testFunctionName })
-      .then(res => res.items[0]);
+      .then((res) => res.items[0]);
   });
 
   test.skip('upload file', async () => {
@@ -37,7 +37,7 @@ describe('functions api', () => {
       .list({
         filter: { name: 'testFunction.zip' },
       })
-      .then(res => res.items[0].id);
+      .then((res) => res.items[0].id);
     const createResponse = await client.functions.create([
       {
         name: functionName,
@@ -77,16 +77,16 @@ describe('functions api', () => {
     );
     let functionCall = await client.functions.calls
       .retrieve(testFunction.id, [callResponse.id])
-      .then(calls => calls[0]);
+      .then((calls) => calls[0]);
     const functionListCall = await client.functions.calls
       .list(testFunction.id)
-      .then(res => res.items[0]);
+      .then((res) => res.items[0]);
 
     while (functionCall.status !== 'Completed') {
       await sleep(500);
       functionCall = await client.functions.calls
         .retrieve(testFunction.id, [callResponse.id])
-        .then(calls => calls[0]);
+        .then((calls) => calls[0]);
     }
 
     const logs = await client.functions.calls.retrieveLogs(
@@ -113,7 +113,7 @@ describe('functions api', () => {
           functionId: testFunction.id,
         },
       ])
-      .then(res => res[0]);
+      .then((res) => res[0]);
     const schedules = await client.functions.schedules.list({
       name: schedule.name,
     });

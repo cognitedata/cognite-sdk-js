@@ -45,7 +45,7 @@ export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
     ignoreUnknownIds: boolean
   ): Promise<ResponseType> {
     const request: DocumentsClassifierListByIdsRequest = {
-      items: ids.map(id => ({ id })),
+      items: ids.map((id) => ({ id })),
       ignoreUnknownIds,
     };
     const response = await this.post<ResponseType>(this.url('byids'), {

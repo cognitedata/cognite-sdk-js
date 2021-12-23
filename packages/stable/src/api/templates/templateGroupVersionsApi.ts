@@ -7,9 +7,7 @@ import {
   TemplateGroupVersionFilterQuery,
 } from '../../types';
 
-export class TemplateGroupVersionsApi extends BaseResourceAPI<
-  TemplateGroupVersion
-> {
+export class TemplateGroupVersionsApi extends BaseResourceAPI<TemplateGroupVersion> {
   /**
    * [Upsert a Template Group version](https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroupsExternalidVersionsUpsert)
 Create or update a Template Group version.
@@ -24,7 +22,7 @@ Create or update a Template Group version.
   ): Promise<TemplateGroupVersion> => {
     return this.post(this.url('upsert'), {
       data: item,
-    }).then(res => res.data as TemplateGroupVersion);
+    }).then((res) => res.data as TemplateGroupVersion);
   };
 
   /**

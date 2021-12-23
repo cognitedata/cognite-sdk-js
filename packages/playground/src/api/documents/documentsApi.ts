@@ -95,7 +95,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     ids: DocumentId[],
     ignoreUnknownIds?: boolean
   ): Promise<ResponseType> {
-    const documentIds = ids.map(id => ({ id }));
+    const documentIds = ids.map((id) => ({ id }));
     const response = await this.post<ResponseType>(this.url('content'), {
       data: {
         items: documentIds,

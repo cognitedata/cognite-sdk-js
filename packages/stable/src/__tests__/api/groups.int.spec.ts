@@ -59,14 +59,14 @@ describe('Groups integration test', () => {
     await runTestWithRetryWhenFailing(async () => {
       const response = await client.groups.list({ all: true });
       expect(response.length).toBeGreaterThan(0);
-      expect(response.map(item => item.name)).toContain(group.name);
+      expect(response.map((item) => item.name)).toContain(group.name);
     });
   });
 
   test('list service account', async () => {
     await runTestWithRetryWhenFailing(async () => {
       const response = await client.groups.listServiceAccounts(group.id);
-      expect(response.map(item => item.id)).toContain(serviceAccount.id);
+      expect(response.map((item) => item.id)).toContain(serviceAccount.id);
     });
   });
 
@@ -119,7 +119,7 @@ describe('Groups integration test', () => {
   test('delete', async () => {
     await runTestWithRetryWhenFailing(async () => {
       const response = await client.groups.delete(
-        groupsToDelete.map(g => g.id)
+        groupsToDelete.map((g) => g.id)
       );
       expect(response).toEqual({});
     });

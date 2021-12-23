@@ -10,9 +10,12 @@ import {
 
 export class FunctionSchedules extends BaseResourceAPI<FunctionSchedule> {
   public retrieve = (ids: CogniteInternalId[], ignoreUnknownIds?: boolean) => {
-    return this.retrieveEndpoint(ids.map(id => ({ id })), {
-      params: ignoreUnknownIds,
-    });
+    return this.retrieveEndpoint(
+      ids.map((id) => ({ id })),
+      {
+        params: ignoreUnknownIds,
+      }
+    );
   };
 
   public list = async (filter?: FunctionSchedulesFilter, limit?: number) => {
@@ -30,7 +33,7 @@ export class FunctionSchedules extends BaseResourceAPI<FunctionSchedule> {
   };
 
   public delete = async (ids: CogniteInternalId[]) => {
-    return this.deleteEndpoint(ids.map(id => ({ id })));
+    return this.deleteEndpoint(ids.map((id) => ({ id })));
   };
 
   public retrieveInputData = async (id: CogniteInternalId) => {
