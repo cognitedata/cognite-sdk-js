@@ -13,7 +13,8 @@ import {
 } from '../utils';
 import { CogniteLoginError } from '../loginError';
 import { AUTHORIZATION_HEADER } from '../constants';
-import { HttpCall, HttpHeaders } from '../httpClient/basicHttpClient';
+import { HttpCall } from '../httpClient/basicHttpClient';
+import { HttpHeaders } from '../httpClient/httpHeaders';
 import * as LoginUtils from '../loginUtils';
 import {
   ACCESS_TOKEN_PARAM,

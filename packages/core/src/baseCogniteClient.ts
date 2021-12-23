@@ -11,11 +11,8 @@ import {
   X_CDF_SDK_HEADER,
   API_KEY_HEADER,
 } from './constants';
-import {
-  HttpHeaders,
-  HttpRequestOptions,
-  HttpResponse,
-} from './httpClient/basicHttpClient';
+import { HttpRequestOptions, HttpResponse } from './httpClient/basicHttpClient';
+import { HttpHeaders } from './httpClient/httpHeaders';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import { MetadataMap } from './metadata';
 import {

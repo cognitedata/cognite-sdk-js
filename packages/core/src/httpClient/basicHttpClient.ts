@@ -5,6 +5,7 @@ import { stringify } from 'query-string';
 import { isJson } from '../utils';
 import { HttpError } from './httpError';
 import { DEFAULT_DOMAIN } from '../constants';
+import { HttpHeaders } from './httpHeaders';
 
 export class BasicHttpClient {
   private static validateStatusCode(status: number) {
@@ -292,10 +293,6 @@ export const HttpResponseType = {
 
 export interface HttpQueryParams {
   [key: string]: any;
-}
-
-export interface HttpHeaders {
-  [key: string]: string;
 }
 
 type ResponseHandler<ResponseType> = (res: Response) => Promise<ResponseType>;
