@@ -195,12 +195,13 @@ export abstract class BaseResourceAPI<ResponseType> {
   }
 
   protected async aggregateEndpoint<QueryType, AggregateResponse>(
-    query: QueryType
+    query: QueryType,
+    path?: string
   ) {
     const response = await this.callAggregateEndpoint<
       QueryType,
       AggregateResponse
-    >(query);
+    >(query, path);
     return this.addToMapAndReturn(response.data.items, response);
   }
 
@@ -264,9 +265,10 @@ export abstract class BaseResourceAPI<ResponseType> {
   }
 
   protected async callAggregateEndpoint<QueryType, AggregateResponse>(
-    query: QueryType
+    query: QueryType,
+    path: string = this.aggregateUrl
   ) {
-    return this.post<ItemsWrapper<AggregateResponse[]>>(this.aggregateUrl, {
+    return this.post<ItemsWrapper<AggregateResponse[]>>(path, {
       data: query,
     });
   }

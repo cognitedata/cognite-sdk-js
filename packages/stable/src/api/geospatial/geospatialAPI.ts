@@ -2,9 +2,9 @@ import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
 
 import { FeatureAPI } from './featureAPI';
 import { FeatureTypeAPI } from './featureTypeAPI';
-import { Spatial } from './types';
+import { Geospatial } from './types';
 
-export class GeospatialAPI extends BaseResourceAPI<Spatial> {
+export class GeospatialAPI extends BaseResourceAPI<Geospatial> {
   private readonly featureTypeAPI: FeatureTypeAPI;
   private readonly featureAPI: FeatureAPI;
 

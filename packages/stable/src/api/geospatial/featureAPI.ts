@@ -5,9 +5,11 @@ import {
 } from '@cognite/sdk-core';
 import {
   Feature,
+  FeatureAggregateParams,
   FeatureCreateItem,
+  FeatureOutputParams,
   FeatureSearchFilter,
-  GeometryType,
+  FeatureSearchStreamFilter,
 } from './types';
 
 export class FeatureAPI extends BaseResourceAPI<Feature> {
@@ -24,13 +26,13 @@ export class FeatureAPI extends BaseResourceAPI<Feature> {
   public retrieve = (
     featureTypeExternalId: CogniteExternalId,
     externalIds: ExternalId[],
-    queryParams?: { outputGeometryFormat: GeometryType }
+    params?: FeatureOutputParams
   ): Promise<Feature[]> => {
     return this.callEndpointWithMergeAndTransform(externalIds, request =>
       this.postInParallelWithAutomaticChunking({
         path: this.url(`${featureTypeExternalId}/features/byids`),
         items: request,
-        queryParams,
+        params,
       })
     );
   };
@@ -47,24 +49,43 @@ export class FeatureAPI extends BaseResourceAPI<Feature> {
 
   public delete = (
     featureTypeExternalId: CogniteExternalId,
-    externalIds: ExternalId[]
+    externalIds: ExternalId[],
+    params: FeatureOutputParams = {}
   ) => {
     return this.deleteEndpoint(
       externalIds,
-      {},
+      params,
       this.url(`${featureTypeExternalId}/features/delete`)
     );
   };
 
   public search = (
     featureTypeExternalId: CogniteExternalId,
-    query: FeatureSearchFilter,
-    queryParams?: { outputGeometryFormat: GeometryType }
+    params: FeatureSearchFilter = {}
   ): Promise<Feature[]> => {
     return this.searchEndpoint(
-      query,
-      this.url(`${featureTypeExternalId}/features/search`),
-      queryParams
+      params,
+      this.url(`${featureTypeExternalId}/features/search`)
+    );
+  };
+
+  public searchStream = (
+    featureTypeExternalId: CogniteExternalId,
+    params: FeatureSearchStreamFilter = {}
+  ): Promise<Feature[]> => {
+    return this.searchEndpoint(
+      params,
+      this.url(`${featureTypeExternalId}/features/search-streaming`)
+    );
+  };
+
+  public aggregate = (
+    featureTypeExternalId: CogniteExternalId,
+    params?: FeatureAggregateParams
+  ) => {
+    return this.aggregateEndpoint(
+      params,
+      this.url(`${featureTypeExternalId}/features/aggregate`)
     );
   };
 }

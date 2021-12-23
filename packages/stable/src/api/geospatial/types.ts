@@ -1,13 +1,12 @@
 import { InternalId, Limit, ExternalId } from '@cognite/sdk-core';
 
-export type GeometryType = 'wkt' | 'geojson';
+import { Geometry } from 'geojson';
 
-export type AttributeType =
-  | 'STRING'
-  | 'LONG'
-  | 'DOUBLE'
-  | 'BOOLEAN'
-  | 'TIMESTAMP'
+export * from 'geojson';
+
+export type GeometryType = 'WKT' | 'GEOJSON';
+
+type GeometryPropertyType =
   | 'GEOMETRY'
   | 'POINT'
   | 'LINESTRING'
@@ -15,6 +14,7 @@ export type AttributeType =
   | 'MULTIPOINT'
   | 'MULTILINESTRING'
   | 'MULTIPOLYGON'
+  | 'GEOMETRYCOLLECTION'
   | 'GEOMETRYZ'
   | 'POINTZ'
   | 'LINESTRINGZ'
@@ -22,30 +22,66 @@ export type AttributeType =
   | 'MULTIPOINTZ'
   | 'MULTILINESTRINGZ'
   | 'MULTIPOLYGONZ'
-  | 'GEOMETRYCOLLECTION';
+  | 'GEOMETRYM'
+  | 'POINTM'
+  | 'LINESTRINGM'
+  | 'POLYGONM'
+  | 'MULTIPOINTM'
+  | 'MULTILINESTRINGM'
+  | 'MULTIPOLYGONM'
+  | 'GEOMETRYCOLLECTIONM'
+  | 'GEOMETRYZM'
+  | 'POINTZM'
+  | 'LINESTRINGZM'
+  | 'POLYGONZM'
+  | 'MULTIPOINTZM'
+  | 'MULTILINESTRINGZM'
+  | 'MULTIPOLYGONZM'
+  | 'GEOMETRYCOLLECTIONZM';
 
-export interface Attributes {
-  [attribute: string]: {
-    type: AttributeType;
-    description?: string;
-    srid?: number;
-    size?: number;
-    optional?: boolean;
-  };
+export type PropertyType =
+  | 'STRING'
+  | 'LONG'
+  | 'DOUBLE'
+  | 'BOOLEAN'
+  | 'TIMESTAMP'
+  | GeometryPropertyType;
+
+export type Property =
+  | {
+      type: GeometryPropertyType;
+      srid?: number;
+      description?: string;
+      optional?: boolean;
+    }
+  | {
+      type: Exclude<PropertyType, GeometryPropertyType | 'STRING'>;
+      description?: string;
+      optional?: boolean;
+    }
+  | {
+      type: 'STRING';
+      size: number;
+      description?: string;
+      optional?: boolean;
+    };
+
+export interface Properties {
+  [property: string]: Property;
 }
 
-export interface Spatial {
+export interface Geospatial {
   [id: string]: unknown;
 }
 
 export interface FeatureCreateItem extends ExternalId {
-  [attribute: string]:
+  [property: string]:
     | string
     | number
     | boolean
     | Date
     | { wkt: string }
-    | { geojson: object };
+    | Geometry;
 }
 
 export interface Feature extends FeatureCreateItem {
@@ -54,15 +90,15 @@ export interface Feature extends FeatureCreateItem {
 }
 
 export interface FeatureType extends ExternalId, InternalId {
-  attributes: Attributes & {
+  properties: Properties & {
     _created_at: { type: 'LONG' };
     _updated_at: { type: 'LONG' };
     _external_id: { type: 'STRING'; size: 32 };
   };
   searchSpec?: {
     [indexName: string]: {
-      attributes:
-        | Array<keyof FeatureTypeCreateItem['attributes']>
+      properties:
+        | Array<keyof Properties>
         | ['_created_at']
         | ['_updated_at']
         | ['_external_id'];
@@ -71,10 +107,10 @@ export interface FeatureType extends ExternalId, InternalId {
 }
 
 export interface FeatureTypeCreateItem extends ExternalId {
-  attributes: Attributes;
+  properties: Properties;
   searchSpec?: {
     [indexName: string]: {
-      attributes: Array<keyof FeatureTypeCreateItem['attributes']>;
+      properties: Array<keyof Properties>;
     };
   };
 }
@@ -82,68 +118,150 @@ export interface FeatureTypeCreateItem extends ExternalId {
 export interface FeatureTypePatch extends ExternalId {
   update:
     | {
-        attributes: { add: Attributes };
+        properties: { add: Properties };
       }
     | {
         searchSpec: {
-          add: { [indexName: string]: { attributes: Array<keyof Attributes> } };
+          add: { [indexName: string]: { properties: Array<keyof Properties> } };
         };
       };
 }
 
-export interface FeatureSearchFilter extends Limit {
-  filter: OrFilter & AndFilter & NotFilter & AllFilters;
+export interface FeatureTypeDeleteParams {
+  recursive?: boolean;
+}
+
+export interface FeatureOutputParams {
+  output?:
+    | {
+        geometryFormat: GeometryType;
+      }
+    | {
+        properties: Record<string, unknown>;
+      };
 }
 
 interface AttributeValue {
-  attribute: string;
+  property: string;
   value: unknown;
 }
 
-interface AllFilters
-  extends EqualsFilter,
-    WithinFilter,
-    IntersectsFilter,
-    CompletelyWithinFilter,
-    WithinDistanceFilter,
-    RangeFilter {}
-
 interface EqualsFilter {
-  equals?: AttributeValue;
+  equals: AttributeValue;
 }
 
 interface WithinFilter {
-  within?: AttributeValue;
+  within: AttributeValue;
 }
 
 interface IntersectsFilter {
-  intersects?: AttributeValue;
+  intersects: AttributeValue;
 }
 
 interface CompletelyWithinFilter {
-  completelyWithin?: AttributeValue;
+  completelyWithin: AttributeValue;
 }
 
 interface WithinDistanceFilter {
-  withinDistance?: AttributeValue & { distance: number };
+  withinDistance: AttributeValue & { distance: number };
 }
 
 interface RangeFilter {
-  range?:
-    | { attribute: string; gt: unknown }
-    | { attribute: string; lt: unknown }
-    | { attribute: string; ge: unknown }
-    | { attribute: string; le: string };
+  range:
+    | { property: string; gt: string | number }
+    | { property: string; lt: string | number }
+    | { property: string; gte: string | number }
+    | { property: string; lte: string | number };
+}
+
+interface MissingFilter {
+  missing: { property: string };
+}
+
+interface LikeFilter {
+  like: { property: string; pattern: string };
+}
+
+interface RegexFilter {
+  regex: { property: string; pattern: string | RegExp };
 }
 
 interface OrFilter {
-  or: AllFilters[];
+  or?: NonRecursiveFilters[];
 }
 
 interface AndFilter {
-  and: AllFilters[];
+  and?: NonRecursiveFilters[];
 }
 
 interface NotFilter {
-  not: AllFilters;
+  not?: NonRecursiveFilters;
+}
+
+interface SortFilter {
+  sort?: string[];
+}
+
+interface AllowCrsTransformationFilter {
+  allowCrsTransformation?: boolean;
+}
+
+interface RecursiveFilters extends OrFilter, AndFilter, NotFilter {}
+
+type NonRecursiveFilters =
+  | EqualsFilter
+  | MissingFilter
+  | LikeFilter
+  | RegexFilter
+  | RangeFilter
+  | WithinFilter
+  | IntersectsFilter
+  | CompletelyWithinFilter
+  | WithinDistanceFilter;
+
+type FilterParams = {
+  filter?: RecursiveFilters | NonRecursiveFilters;
+};
+
+export interface FeatureSearchFilter
+  extends AllowCrsTransformationFilter,
+    FilterParams,
+    Limit,
+    FeatureOutputParams,
+    SortFilter {}
+
+export interface FeatureSearchStreamFilter
+  extends AllowCrsTransformationFilter,
+    FilterParams,
+    Limit {
+  output?:
+    | FeatureOutputParams['output']
+    | {
+        jsonStreamFormat:
+          | 'LENGTH_PREFIXED'
+          | 'NEW_LINE_DELIMITED'
+          | 'CONCATENATED'
+          | 'RECORD_SEPARATOR_DELIMITED';
+      };
+}
+
+type Aggregates =
+  | 'areaOfUnion'
+  | 'avg'
+  | 'centroid'
+  | 'collect'
+  | 'convexHull'
+  | 'count'
+  | 'intersection'
+  | 'max'
+  | 'min'
+  | 'sum'
+  | 'union'
+  | 'variance';
+
+export interface FeatureAggregateParams extends FilterParams {
+  aggregates: Aggregates[];
+  property: keyof Properties;
+  outputSrid?: number;
+  groupBy?: Array<keyof Properties>;
 }

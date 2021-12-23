@@ -3,7 +3,12 @@ import {
   CursorAndAsyncIterator,
   ExternalId,
 } from '@cognite/sdk-core';
-import { FeatureType, FeatureTypeCreateItem, FeatureTypePatch } from './types';
+import {
+  FeatureType,
+  FeatureTypeCreateItem,
+  FeatureTypePatch,
+  FeatureTypeDeleteParams,
+} from './types';
 
 export class FeatureTypeAPI extends BaseResourceAPI<FeatureType> {
   public create = (
@@ -20,8 +25,11 @@ export class FeatureTypeAPI extends BaseResourceAPI<FeatureType> {
     return this.listEndpoint(this.callListEndpointWithPost);
   };
 
-  public delete = (externalIds: ExternalId[]) => {
-    return this.deleteEndpoint(externalIds);
+  public delete = (
+    externalIds: ExternalId[],
+    params: FeatureTypeDeleteParams = {}
+  ) => {
+    return this.deleteEndpoint(externalIds, params);
   };
 
   public update = (changes: FeatureTypePatch[]) => {
