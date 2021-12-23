@@ -1007,7 +1007,7 @@ export interface ObjectPatchAddRemove {
 }
 
 export interface DocumentsSearchResponse {
-  items?: { highlight?: Highlight; item?: Document }[];
+  items: { highlight?: Highlight; item: Document }[];
   aggregates?: {
     name: string;
     groups: {
@@ -1026,7 +1026,7 @@ export interface DocumentsFilterResponse {
 }
 
 export interface DocumentContentResponse {
-  items?: DocumentContent[];
+  items: DocumentContent[];
 }
 
 export type DocumentsPipelinesResponse = DocumentsPipelineItems;
@@ -1070,3 +1070,21 @@ export interface DocumentsTemporaryPreviewLinkResponse {
 }
 
 export type DocumentsClassifiersResponse = DocumentsClassifierItems;
+
+export interface FeedbackStatusQueryParameter {
+  /**
+   * Status of the feedback, complying with the lifecycle described below.
+   *
+   * ## Feedback lifecycle
+   * - It is initially `CREATED`.
+   * - If the administrator accepts the feedback, it moves to `ACCEPTED`.
+   *   Once in this state, it cannot move to another state.
+   * - If the administrator rejects the feedback, it moves to `REJECTED`.
+   * - If the feedback object has become _invalid_, it moves to `STALE`.
+   * ## Definition of feedback _invalidity_
+   * - If the action was `ATTACH`, and the label to attach does not exist anymore.
+   * - If the action was `ATTACH`, and the label is already attached to the file.
+   * - If the action was `DETACH`, and the label is not attached to the file anymore.
+   */
+  status?: FeedbackStatus;
+}
