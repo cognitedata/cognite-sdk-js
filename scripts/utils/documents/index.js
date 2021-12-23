@@ -206,6 +206,22 @@ function generate() {
     spec.components.schemas[name] = schema;
   }
 
+  // some refs are query parameters, and we must fetch out the schema
+  // TODO: one query parameters object per endpoint 
+  for (const [name, parameterDefinition] of Object.entries(spec.components.parameters)) {
+    if (parameterDefinition.in != "query") {
+      continue;
+    }
+
+    const schema = {
+      type: "object",
+      properties: {},
+    };
+    schema.properties[parameterDefinition.name] = parameterDefinition.schema
+
+    spec.components.schemas[name + "QueryParameter"] = schema;
+  }
+
   // remove common types
   delete spec.components.schemas["Error"]
   delete spec.components.schemas["EmptyResponse"]
