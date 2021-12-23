@@ -26,7 +26,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   ): CursorAndAsyncIterator<AssetMapping3D> => {
     const path = this.encodeUrl(modelId, revisionId);
     return super.listEndpoint(
-      params => this.get<CursorResponse<AssetMapping3D[]>>(path, { params }),
+      (params) => this.get<CursorResponse<AssetMapping3D[]>>(path, { params }),
       scope
     );
   };
@@ -49,7 +49,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   ): CursorAndAsyncIterator<AssetMapping3D> => {
     const path = `${this.encodeUrl(modelId, revisionId)}/list`;
     return super.listEndpoint(
-      params =>
+      (params) =>
         this.post<CursorResponse<AssetMapping3D[]>>(path, { data: params }),
       query
     );

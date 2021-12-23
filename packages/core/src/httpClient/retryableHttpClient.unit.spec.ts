@@ -14,13 +14,8 @@ describe('RetryableHttpClient', () => {
   });
 
   test('should retry', async () => {
-    const scope = nock(baseUrl)
-      .get('/')
-      .times(2)
-      .reply(500, {});
-    nock(baseUrl)
-      .get('/')
-      .reply(200, { a: 42 });
+    const scope = nock(baseUrl).get('/').times(2).reply(500, {});
+    nock(baseUrl).get('/').reply(200, { a: 42 });
     const res = await client.get('/');
     expect(scope.isDone()).toBeTruthy();
     expect(res.status).toBe(200);
@@ -28,9 +23,7 @@ describe('RetryableHttpClient', () => {
   });
 
   test("shouldn't retry", async () => {
-    nock(baseUrl)
-      .get('/')
-      .reply(200, { a: 42 });
+    nock(baseUrl).get('/').reply(200, { a: 42 });
     const res = await client.get('/');
     expect(res.status).toBe(200);
     expect(res.data).toEqual({ a: 42 });
@@ -38,13 +31,8 @@ describe('RetryableHttpClient', () => {
 
   test('throw on 400 after retry', async () => {
     expect.assertions(1);
-    nock(baseUrl)
-      .get('/')
-      .times(2)
-      .reply(500, {});
-    nock(baseUrl)
-      .get('/')
-      .reply(400, { a: 42 });
+    nock(baseUrl).get('/').times(2).reply(500, {});
+    nock(baseUrl).get('/').reply(400, { a: 42 });
     try {
       await client.get('/');
     } catch (err) {

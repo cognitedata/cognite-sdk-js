@@ -42,7 +42,7 @@ export default class DateParser {
    * @param data
    */
   static parseFromDates<T>(data: T): T {
-    return cloneDeepWith(data, value => {
+    return cloneDeepWith(data, (value) => {
       if (value instanceof Date) {
         return value.getTime();
       }

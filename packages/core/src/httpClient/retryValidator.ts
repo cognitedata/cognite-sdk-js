@@ -44,24 +44,24 @@ export const createRetryValidator = (
   };
 };
 
-export const createUniversalRetryValidator = (
-  maxRetries: number = DEFAULT_MAX_RETRY_ATTEMPTS
-): RetryValidator => (request, response, retryCount) => {
-  if (retryCount >= maxRetries) {
-    return false;
-  }
-  // Always retry http 429 too many requests
-  if (response.status === 429) {
-    return true;
-  }
-  const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT'];
-  const isRetryableHttpMethod =
-    httpMethodsToRetry.indexOf(request.method.toUpperCase()) !== -1;
-  if (!isRetryableHttpMethod) {
-    return false;
-  }
-  return isValidRetryStatusCode(response.status);
-};
+export const createUniversalRetryValidator =
+  (maxRetries: number = DEFAULT_MAX_RETRY_ATTEMPTS): RetryValidator =>
+  (request, response, retryCount) => {
+    if (retryCount >= maxRetries) {
+      return false;
+    }
+    // Always retry http 429 too many requests
+    if (response.status === 429) {
+      return true;
+    }
+    const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT'];
+    const isRetryableHttpMethod =
+      httpMethodsToRetry.indexOf(request.method.toUpperCase()) !== -1;
+    if (!isRetryableHttpMethod) {
+      return false;
+    }
+    return isValidRetryStatusCode(response.status);
+  };
 
 function isValidRetryStatusCode(status: number) {
   return (
@@ -72,7 +72,7 @@ function isValidRetryStatusCode(status: number) {
 }
 
 function matchPathWithEndpoints(path: string, endpoints: string[]) {
-  return some(endpoints, endpoint => matchPathWithEndpoint(path, endpoint));
+  return some(endpoints, (endpoint) => matchPathWithEndpoint(path, endpoint));
 }
 
 function matchPathWithEndpoint(path: string, endpoint: string) {

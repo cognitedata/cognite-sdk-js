@@ -12,7 +12,7 @@ export interface MultiErrorRawSummary<RequestType, ResponseType> {
 }
 
 function serialiseErrors(errors: (Error | CogniteError)[]) {
-  return errors.map(err => {
+  return errors.map((err) => {
     if (err instanceof CogniteError) {
       return err;
     }
@@ -54,7 +54,7 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
     );
     Object.setPrototypeOf(this, CogniteMultiError.prototype); // https://stackoverflow.com/questions/51229574/why-instanceof-returns-false-for-a-child-object-in-javascript
 
-    this.responses = responses.map(response => response.data);
+    this.responses = responses.map((response) => response.data);
     this.errors = errors;
     this.succeded = succeded.reduce((all, current) => all.concat(current), []);
     this.failed = failed.reduce((all, current) => all.concat(current), []);

@@ -38,7 +38,7 @@ export class ClassifiersAPI extends BaseResourceAPI<Classifier> {
     ids: CogniteInternalId[],
     ignoreUnknownIds: boolean
   ): Promise<ResponseType> {
-    const internalIds = ids.map(id => ({ id }));
+    const internalIds = ids.map((id) => ({ id }));
     const response = await this.post<ResponseType>(this.url('byids'), {
       data: {
         items: internalIds,

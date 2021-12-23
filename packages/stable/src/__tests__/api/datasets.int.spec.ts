@@ -65,9 +65,8 @@ describe('data sets integration test', () => {
   });
   test('retrieve', async () => {
     const [{ id, description }] = datasets;
-    const [
-      { description: retrievedDescription },
-    ] = await client.datasets.retrieve([{ id }]);
+    const [{ description: retrievedDescription }] =
+      await client.datasets.retrieve([{ id }]);
 
     expect(retrievedDescription).toEqual(description);
   });

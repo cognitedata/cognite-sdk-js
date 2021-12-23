@@ -24,17 +24,17 @@ export class BasicHttpClient {
   private static textResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
-    return (res.text() as unknown) as Promise<ResponseType>;
+    return res.text() as unknown as Promise<ResponseType>;
   }
 
   private static arrayBufferResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
-    return (res
+    return res
       .blob()
-      .then(blob => new Response(blob).arrayBuffer()) as unknown) as Promise<
-      ResponseType
-    >;
+      .then((blob) =>
+        new Response(blob).arrayBuffer()
+      ) as unknown as Promise<ResponseType>;
   }
 
   private static getResponseHandler<ResponseType>(
@@ -203,7 +203,7 @@ export class BasicHttpClient {
     const resClone = res.clone();
     const [data, textFallback] = await Promise.all([
       responseHandler(res).catch(() => undefined),
-      (resClone.text() as unknown) as Promise<ResponseType>,
+      resClone.text() as unknown as Promise<ResponseType>,
     ]);
     return {
       headers: BasicHttpClient.convertFetchHeaders(res.headers),

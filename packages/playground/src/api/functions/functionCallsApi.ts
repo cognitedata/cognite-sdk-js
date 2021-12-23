@@ -19,8 +19,8 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
   ) => {
     const path = this.url(`${functionId}/calls/byids`);
     return this.callEndpointWithMergeAndTransform(
-      ids.map(id => ({ id })),
-      request => this.callRetrieveEndpoint(request, path)
+      ids.map((id) => ({ id })),
+      (request) => this.callRetrieveEndpoint(request, path)
     );
   };
 
@@ -46,7 +46,7 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
   ) => {
     const path = this.url(`${functionId}/calls/list`);
     return this.listEndpoint(
-      async params =>
+      async (params) =>
         this.post<CursorResponse<FunctionCall[]>>(path, { data: params }),
       { filter, limit, cursor }
     );

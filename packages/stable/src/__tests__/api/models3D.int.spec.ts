@@ -38,7 +38,7 @@ describe('Model3d integration test', () => {
   });
 
   test('update', async () => {
-    const modelsToUpdate = models.map(model => ({
+    const modelsToUpdate = models.map((model) => ({
       id: model.id,
       update: {
         name: {
@@ -47,12 +47,12 @@ describe('Model3d integration test', () => {
       },
     }));
     const updatedModels = await client.models3D.update(modelsToUpdate);
-    updatedModels.forEach(model => expect(model.name).toContain('updated'));
+    updatedModels.forEach((model) => expect(model.name).toContain('updated'));
   });
 
   test('delete', async () => {
     const deleted = await client.models3D.delete(
-      models.map(model => ({ id: model.id }))
+      models.map((model) => ({ id: model.id }))
     );
     expect(deleted).toEqual({});
   });

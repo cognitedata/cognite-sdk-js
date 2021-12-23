@@ -50,10 +50,10 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
     ids: number[],
     endpoint: acceptRejectEndpoint
   ) {
-    const feedbackIds = ids.map(id => <FeedbackId>{ id: id });
+    const feedbackIds = ids.map((id) => <FeedbackId>{ id: id });
     const content: ItemsWrapper<FeedbackId[]> = { items: feedbackIds };
     const path = this.url(endpoint);
-    const response = await this.post<ItemsWrapper<(DocumentFeedback)[]>>(path, {
+    const response = await this.post<ItemsWrapper<DocumentFeedback[]>>(path, {
       data: content,
     });
     return this.addToMapAndReturn(response.data.items, response);

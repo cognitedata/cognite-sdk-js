@@ -77,9 +77,7 @@ describe('CogniteClient', () => {
       test('call getToken on 401', async () => {
         const getToken = jest.fn().mockResolvedValue('401-test-token');
 
-        nock(mockBaseUrl)
-          .get('/test')
-          .reply(401, {});
+        nock(mockBaseUrl).get('/test').reply(401, {});
         nock(mockBaseUrl, {
           reqheaders: {
             [AUTHORIZATION_HEADER]: 'Bearer 401-test-token',
@@ -105,10 +103,7 @@ describe('CogniteClient', () => {
       test('401 handler should reject if the same token is returned', async () => {
         const getToken = jest.fn().mockResolvedValue('401-test-token');
 
-        const scope = nock(mockBaseUrl)
-          .get('/test')
-          .twice()
-          .reply(401, {});
+        const scope = nock(mockBaseUrl).get('/test').twice().reply(401, {});
 
         const client = new BaseCogniteClient({
           project,
@@ -154,9 +149,7 @@ describe('CogniteClient', () => {
     test('apiKeyMode should change request header and token preable', async () => {
       const getToken = jest.fn().mockResolvedValue('test-api-key');
 
-      nock(mockBaseUrl)
-        .get('/test')
-        .reply(401, {});
+      nock(mockBaseUrl).get('/test').reply(401, {});
       nock(mockBaseUrl, {
         reqheaders: {
           [API_KEY_HEADER]: 'test-api-key',
@@ -194,9 +187,7 @@ describe('CogniteClient', () => {
     const headers = client.getDefaultRequestHeaders();
     headers[API_KEY_HEADER] = 'overriden';
     const expectedHeaders = { [API_KEY_HEADER]: apiKey };
-    nock(mockBaseUrl, { reqheaders: expectedHeaders })
-      .get('/')
-      .reply(200, {});
+    nock(mockBaseUrl, { reqheaders: expectedHeaders }).get('/').reply(200, {});
   });
 
   describe('http requests', () => {
@@ -207,28 +198,19 @@ describe('CogniteClient', () => {
     });
 
     test('get method', async () => {
-      nock(mockBaseUrl)
-        .get('/')
-        .once()
-        .reply(200, []);
+      nock(mockBaseUrl).get('/').once().reply(200, []);
       const response = await client.get('/');
       expect(response.data).toEqual([]);
     });
 
     test('post method', async () => {
-      nock(mockBaseUrl)
-        .post('/')
-        .once()
-        .reply(200, []);
+      nock(mockBaseUrl).post('/').once().reply(200, []);
       const response = await client.post('/');
       expect(response.data).toEqual([]);
     });
 
     test('put method', async () => {
-      nock(mockBaseUrl)
-        .put('/')
-        .once()
-        .reply(200, []);
+      nock(mockBaseUrl).put('/').once().reply(200, []);
       const response = await client.put('/', {
         responseType: 'json',
       });
@@ -236,10 +218,7 @@ describe('CogniteClient', () => {
     });
 
     test('delete method', async () => {
-      nock(mockBaseUrl)
-        .delete('/')
-        .once()
-        .reply(200, 'abc');
+      nock(mockBaseUrl).delete('/').once().reply(200, 'abc');
       const response = await client.delete('/', { responseType: 'text' });
       expect(response.data).toBe('abc');
     });

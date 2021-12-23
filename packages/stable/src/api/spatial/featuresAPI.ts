@@ -27,7 +27,7 @@ export class FeaturesAPI extends BaseResourceAPI<Features> {
     ids: IdEither[],
     queryParams?: { outputGeometryFormat: GeometryType }
   ): Promise<Features[]> => {
-    return this.callEndpointWithMergeAndTransform(ids, request =>
+    return this.callEndpointWithMergeAndTransform(ids, (request) =>
       this.postInParallelWithAutomaticChunking({
         path: this.url(`${featureTypeExternalId}/features/byids`),
         items: request,
