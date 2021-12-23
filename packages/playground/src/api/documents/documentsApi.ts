@@ -4,13 +4,11 @@ import {
   BaseResourceAPI,
   CDFHttpClient,
   CursorAndAsyncIterator,
-  ItemsWrapper,
   MetadataMap,
 } from '@cognite/sdk-core';
 
 import {
   Document,
-  DocumentContent,
   DocumentContentResponse,
   DocumentId,
   DocumentsSearchResponse,

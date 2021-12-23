@@ -1,6 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
+import {
+  BaseResourceAPI,
+  CursorAndAsyncIterator,
+  FilterQuery,
+} from '@cognite/sdk-core';
 
 import {
   AggregateField,
@@ -9,10 +13,8 @@ import {
   DocumentFeedbackAggregateRequest,
   DocumentFeedbackAggregateResponse,
   DocumentFeedbackListResponse,
-  DocumentFeedbackCreateRequest,
   DocumentFeedbackAcceptRejectItem,
-  FeedbackId,
-  FeedbackQueryParameters,
+  FeedbackStatusQueryParameter,
   FeedbackStatus,
 } from '../../types';
 import { DocumentFeedbackCreateItem } from './types.gen';
@@ -34,7 +36,9 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   public list = (
     status?: FeedbackStatus
   ): CursorAndAsyncIterator<DocumentFeedback> => {
-    const parameter: FeedbackQueryParameters = { status: status };
+    const parameter: FeedbackStatusQueryParameter & FilterQuery = {
+      status: status,
+    };
     return this.listEndpoint(this.callListEndpointWithGet, parameter);
   };
 
