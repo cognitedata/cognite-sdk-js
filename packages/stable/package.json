@@ -26,6 +26,9 @@
     "@cognite/sdk-core": "^4.0.3",
     "lodash": "^4.17.11"
   },
+  "devDependencies": {
+    "@types/geojson": "^7946.0.8"
+  },
   "files": [
     "dist"
   ],
