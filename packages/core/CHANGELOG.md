@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.0.3...@cognite/sdk-core@4.0.4) (2021-12-21)
+
+
+### Bug Fixes
+
+* use case-insensitive lookup for http header ([#724](https://github.com/cognitedata/cognite-sdk-js/issues/724)) ([e0f803f](https://github.com/cognitedata/cognite-sdk-js/commit/e0f803f79ae3bae2e6282bd8bfacab40bbf38050))
+
+
+
+
+
 ## [4.0.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.0.2...@cognite/sdk-core@4.0.3) (2021-12-07)
 
 

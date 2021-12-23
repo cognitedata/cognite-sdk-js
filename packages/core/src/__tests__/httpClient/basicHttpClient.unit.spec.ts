@@ -1,10 +1,8 @@
 // Copyright 2020 Cognite AS
 
 // @ts-ignore
-import {
-  headersWithDefaultField,
-  HttpHeaders,
-} from '../../httpClient/basicHttpClient';
+import { headersWithDefaultField } from '../../httpClient/basicHttpClient';
+import { HttpHeaders } from '../../httpClient/httpHeaders';
 
 function lengthOfHttpHeaders(headers?: HttpHeaders): number {
   let counter = 0;

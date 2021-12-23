@@ -22,12 +22,12 @@ export { CogniteLoginError } from './loginError';
 export { HttpError } from './httpClient/httpError';
 export {
   HttpResponse,
-  HttpHeaders,
   HttpResponseType,
   HttpQueryParams,
   HttpRequestOptions,
   HttpMethod,
 } from './httpClient/basicHttpClient';
+export { HttpHeaders } from './httpClient/httpHeaders';
 export {
   createUniversalRetryValidator,
   createRetryValidator,
