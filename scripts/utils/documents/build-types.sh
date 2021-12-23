@@ -3,7 +3,7 @@ set -e
 
 FOLDER="./tmp/service-contracts"
 # rm -rf ./tmp
-mkdir ./tmp
+mkdir -p ./tmp
 
 git -C ${FOLDER} pull || git clone git@github.com:cognitedata/service-contracts.git ${FOLDER}
 cd ${FOLDER}
