@@ -53,7 +53,7 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
 
     const path = `${this.encodeUrl(databaseName, tableName)}/rows`;
     return super.listEndpoint(
-      async params =>
+      async (params) =>
         this.get<CursorResponse<RawDBRow[]>>(path, {
           params,
         }),

@@ -51,12 +51,8 @@ describe.skip('Files integration test', () => {
     },
   };
 
-  const {
-    fileContent,
-    localFileMeta,
-    postfix,
-    sourceCreatedTime,
-  } = getFileCreateArgs({ geoLocation });
+  const { fileContent, localFileMeta, postfix, sourceCreatedTime } =
+    getFileCreateArgs({ geoLocation });
 
   let file: FileInfo;
 
@@ -159,7 +155,10 @@ describe.skip('Files integration test', () => {
       ...geoLocation,
       geometry: {
         type: 'LineString',
-        coordinates: [[10, 20], [10, 40]],
+        coordinates: [
+          [10, 20],
+          [10, 40],
+        ],
       },
     };
     const updatedFiles = await client.files.update([
@@ -216,7 +215,10 @@ describe.skip('Files integration test', () => {
               relation: 'intersects',
               shape: {
                 type: 'LineString',
-                coordinates: [[0, 30], [20, 30]],
+                coordinates: [
+                  [0, 30],
+                  [20, 30],
+                ],
               },
             },
           },

@@ -50,7 +50,7 @@ describe('utils', () => {
   });
 
   test('promiseCache', async () => {
-    const promise = new Promise(resolve => {
+    const promise = new Promise((resolve) => {
       sleepPromise(100).then(() => resolve(123));
     });
     const cachedPromise = promiseCache(() => promise);
@@ -70,12 +70,10 @@ describe('utils', () => {
     test('promiseAllAtOnce: fail', async () => {
       const data = ['x', 'a', 'b', 'c'];
       await expect(
-        promiseAllAtOnce(
-          data,
-          input =>
-            input === 'x'
-              ? Promise.reject(input + 'x')
-              : Promise.resolve(input + 'r')
+        promiseAllAtOnce(data, (input) =>
+          input === 'x'
+            ? Promise.reject(input + 'x')
+            : Promise.resolve(input + 'r')
         )
       ).rejects.toEqual({
         failed: ['x'],
@@ -101,21 +99,23 @@ describe('utils', () => {
     test('promiseAllAtOnce: success', async () => {
       const data = ['a', 'b', 'c'];
       await expect(
-        promiseAllAtOnce(data, input => Promise.resolve(input))
+        promiseAllAtOnce(data, (input) => Promise.resolve(input))
       ).resolves.toEqual(['a', 'b', 'c']);
     });
 
     test('promiseEachInSequence', async () => {
       expect(
-        await promiseEachInSequence([], input => Promise.resolve(input))
+        await promiseEachInSequence([], (input) => Promise.resolve(input))
       ).toEqual([]);
 
       expect(
-        await promiseEachInSequence([1], input => Promise.resolve(input))
+        await promiseEachInSequence([1], (input) => Promise.resolve(input))
       ).toEqual([1]);
 
       expect(
-        await promiseEachInSequence([1, 2, 3], input => Promise.resolve(input))
+        await promiseEachInSequence([1, 2, 3], (input) =>
+          Promise.resolve(input)
+        )
       ).toEqual([1, 2, 3]);
 
       await expect(
@@ -128,9 +128,8 @@ describe('utils', () => {
       });
 
       await expect(
-        promiseEachInSequence(
-          [1, 0, 2, 3],
-          input => (input ? Promise.resolve(input) : Promise.reject('x'))
+        promiseEachInSequence([1, 0, 2, 3], (input) =>
+          input ? Promise.resolve(input) : Promise.reject('x')
         )
       ).rejects.toEqual({
         failed: [0, 2, 3],
@@ -140,9 +139,8 @@ describe('utils', () => {
       });
 
       await expect(
-        promiseEachInSequence(
-          [1, 2, 0, 3, 0],
-          input => (input ? Promise.resolve(input + 'r') : Promise.reject('x'))
+        promiseEachInSequence([1, 2, 0, 3, 0], (input) =>
+          input ? Promise.resolve(input + 'r') : Promise.reject('x')
         )
       ).rejects.toEqual({
         failed: [0, 3, 0],

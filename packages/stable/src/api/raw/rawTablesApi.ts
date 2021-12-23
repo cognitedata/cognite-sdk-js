@@ -29,7 +29,7 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
   ): CursorAndAsyncIterator<RawDBTable> {
     const path = `${this.encodeUrl(databaseName)}/tables`;
     return super.listEndpoint(
-      async params =>
+      async (params) =>
         this.get<CursorResponse<RawDBTable[]>>(path, {
           params,
         }),

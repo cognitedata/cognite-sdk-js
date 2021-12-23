@@ -108,12 +108,10 @@ describe('Assets unit test', () => {
     test('promiseAllAtOnce: fail', async () => {
       const data = ['x', 'a', 'b', 'c'];
       await expect(
-        promiseAllAtOnce(
-          data,
-          input =>
-            input === 'x'
-              ? Promise.reject(input + 'x')
-              : Promise.resolve(input + 'r')
+        promiseAllAtOnce(data, (input) =>
+          input === 'x'
+            ? Promise.reject(input + 'x')
+            : Promise.resolve(input + 'r')
         )
       ).rejects.toEqual({
         failed: ['x'],
@@ -139,21 +137,23 @@ describe('Assets unit test', () => {
     test('promiseAllAtOnce: success', async () => {
       const data = ['a', 'b', 'c'];
       await expect(
-        promiseAllAtOnce(data, input => Promise.resolve(input))
+        promiseAllAtOnce(data, (input) => Promise.resolve(input))
       ).resolves.toEqual(['a', 'b', 'c']);
     });
 
     test('promiseEachInSequence', async () => {
       expect(
-        await promiseEachInSequence([], input => Promise.resolve(input))
+        await promiseEachInSequence([], (input) => Promise.resolve(input))
       ).toEqual([]);
 
       expect(
-        await promiseEachInSequence([1], input => Promise.resolve(input))
+        await promiseEachInSequence([1], (input) => Promise.resolve(input))
       ).toEqual([1]);
 
       expect(
-        await promiseEachInSequence([1, 2, 3], input => Promise.resolve(input))
+        await promiseEachInSequence([1, 2, 3], (input) =>
+          Promise.resolve(input)
+        )
       ).toEqual([1, 2, 3]);
 
       await expect(
@@ -166,9 +166,8 @@ describe('Assets unit test', () => {
       });
 
       await expect(
-        promiseEachInSequence(
-          [1, 0, 2, 3],
-          input => (input ? Promise.resolve(input) : Promise.reject('x'))
+        promiseEachInSequence([1, 0, 2, 3], (input) =>
+          input ? Promise.resolve(input) : Promise.reject('x')
         )
       ).rejects.toEqual({
         failed: [0, 2, 3],
@@ -178,9 +177,8 @@ describe('Assets unit test', () => {
       });
 
       await expect(
-        promiseEachInSequence(
-          [1, 2, 0, 3, 0],
-          input => (input ? Promise.resolve(input + 'r') : Promise.reject('x'))
+        promiseEachInSequence([1, 2, 0, 3, 0], (input) =>
+          input ? Promise.resolve(input + 'r') : Promise.reject('x')
         )
       ).rejects.toEqual({
         failed: [0, 3, 0],
@@ -198,7 +196,7 @@ describe('Assets unit test', () => {
       { parentExternalId: 'abc', name },
       { name },
     ];
-    test.each(assets)('single asset', asset => {
+    test.each(assets)('single asset', (asset) => {
       expect(enrichAssetsWithTheirParents([asset])).toEqual([{ data: asset }]);
     });
 
@@ -218,10 +216,12 @@ describe('Assets unit test', () => {
         name: 'grandchild',
       };
       const assets = [childAsset, rootAsset, grandChildAsset];
-      const nodes: GraphUtils.Node<ExternalAssetItem>[] = assets.map(asset => ({
-        data: asset,
-        parentNode: undefined,
-      }));
+      const nodes: GraphUtils.Node<ExternalAssetItem>[] = assets.map(
+        (asset) => ({
+          data: asset,
+          parentNode: undefined,
+        })
+      );
       nodes[0].parentNode = nodes[1];
       nodes[2].parentNode = nodes[0];
       expect(enrichAssetsWithTheirParents(assets)).toEqual(nodes);
@@ -264,7 +264,7 @@ describe('Assets unit test', () => {
 
       const visitedAssets = new Set();
 
-      nodes.forEach(node => {
+      nodes.forEach((node) => {
         const dependency = dependencies.get(node);
         if (dependency) {
           expect(visitedAssets.has(dependency)).toBeTruthy();

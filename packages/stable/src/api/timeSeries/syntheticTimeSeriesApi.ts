@@ -7,9 +7,7 @@ import {
   DatapointInfo,
 } from '../../types';
 
-export class SyntheticTimeSeriesAPI extends BaseResourceAPI<
-  SyntheticQueryResponse
-> {
+export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryResponse> {
   /**
    * @hidden
    */
@@ -28,7 +26,7 @@ export class SyntheticTimeSeriesAPI extends BaseResourceAPI<
 
   private async querySyntheticEndpoint(items: SyntheticQuery[]) {
     const path = this.url('query');
-    return this.callEndpointWithMergeAndTransform(items, data =>
+    return this.callEndpointWithMergeAndTransform(items, (data) =>
       this.postInParallelWithAutomaticChunking({
         path,
         items: data,
