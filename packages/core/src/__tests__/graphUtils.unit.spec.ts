@@ -27,7 +27,7 @@ describe('Graph utils', () => {
       const inputOrder = [nodeAB, nodeAAA, nodeA, nodeAAB, nodeAA];
       const outputOrder = topologicalSort(inputOrder);
       const visitedNodes = new Set();
-      outputOrder.forEach(node => {
+      outputOrder.forEach((node) => {
         const { parentNode } = node;
         if (parentNode) {
           expect(visitedNodes.has(parentNode)).toBeTruthy();

@@ -33,7 +33,7 @@ describe('Service accounts integration test', () => {
 
   test('delete', async () => {
     const response = await client.serviceAccounts.delete(
-      serviceAccounts.map(account => account.id)
+      serviceAccounts.map((account) => account.id)
     );
     expect(response).toEqual({});
   });

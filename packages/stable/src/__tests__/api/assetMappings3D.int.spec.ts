@@ -40,15 +40,12 @@ describe.skip('AssetMappings3D integration test', () => {
       fail('Could not find any assets in the test dataset');
     }
 
-    [node] = (await client.revisions3D.list3DNodes(
-      model.id,
-      revision.id
-    )).items;
+    [node] = (
+      await client.revisions3D.list3DNodes(model.id, revision.id)
+    ).items;
     if (node === undefined) {
       fail(
-        `Could not find any nodes for 3D model ${model.id}/${
-          revision.id
-        } in the test data`
+        `Could not find any nodes for 3D model ${model.id}/${revision.id} in the test data`
       );
     }
 
@@ -61,9 +58,11 @@ describe.skip('AssetMappings3D integration test', () => {
     ]);
     // Retrieve asset mapping (bug in create causes it not to return treeIndex which we need, see
     // https://cognitedata.atlassian.net/browse/BND3D-677)
-    [assetMapping] = (await client.assetMappings3D.list(model.id, revision.id, {
-      assetId: asset.id,
-    })).items;
+    [assetMapping] = (
+      await client.assetMappings3D.list(model.id, revision.id, {
+        assetId: asset.id,
+      })
+    ).items;
 
     if (assetMapping === undefined) {
       fail('Was not able to fetch asset mapping from test data');

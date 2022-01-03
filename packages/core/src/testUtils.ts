@@ -90,7 +90,7 @@ export function getSortedPropInArray<T extends { [key: string]: any }>(
   arr: T[],
   propName: string
 ) {
-  return arr.map(elem => elem[propName]).sort(simpleCompare);
+  return arr.map((elem) => elem[propName]).sort(simpleCompare);
 }
 
 export function string2arrayBuffer(str: string) {

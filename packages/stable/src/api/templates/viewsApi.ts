@@ -36,10 +36,10 @@ export class ViewsApi extends BaseResourceAPI<View> {
       );
       return response;
     };
-    return (this.listEndpoint(
+    return this.listEndpoint(
       resolveFetch as any,
       resolveRequest
-    ) as unknown) as CursorAndAsyncIterator<T>;
+    ) as unknown as CursorAndAsyncIterator<T>;
   };
 
   public delete = (

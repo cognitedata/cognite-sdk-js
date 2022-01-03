@@ -108,7 +108,9 @@ describe('Events integration test', () => {
   });
 
   test('delete', async () => {
-    await client.events.delete(createdEvents.map(event => ({ id: event.id })));
+    await client.events.delete(
+      createdEvents.map((event) => ({ id: event.id }))
+    );
   });
 
   test('search', async () => {

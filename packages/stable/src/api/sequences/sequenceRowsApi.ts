@@ -28,7 +28,7 @@ export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
     query: SequenceRowsRetrieve
   ): CursorAndAsyncIterator<SequenceRow> {
     return super.listEndpoint(
-      data =>
+      (data) =>
         this.post<SequenceRowsResponseData>(this.listPostUrl, { data }).then(
           this.transformRetrieveResponse
         ),

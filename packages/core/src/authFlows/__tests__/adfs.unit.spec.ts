@@ -42,7 +42,7 @@ describe('ADFS', () => {
       window.location = location;
     });
 
-    test('should redirect to specific url', done => {
+    test('should redirect to specific url', (done) => {
       const silentLogin = jest
         .spyOn(loginUtils, 'silentLoginViaIframe')
         .mockRejectedValueOnce('Can not login silently');
@@ -82,7 +82,7 @@ describe('ADFS', () => {
         .mockReturnValueOnce(iframe);
       const spiedAppendChild = jest
         .spyOn(document.body, 'appendChild')
-        .mockImplementation(iframe => {
+        .mockImplementation((iframe) => {
           // @ts-ignore
           iframe.onload();
           return iframe;

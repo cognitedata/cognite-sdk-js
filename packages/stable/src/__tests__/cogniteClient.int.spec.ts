@@ -53,18 +53,9 @@ describe('api endpoints smoke test', () => {
     nock.cleanAll();
     client = setupMockableClient();
     const emptyResponse = { items: [] };
-    nock(mockBaseUrl)
-      .post(/.*/)
-      .times(Infinity)
-      .reply(200, emptyResponse);
-    nock(mockBaseUrl)
-      .get(/.*/)
-      .times(Infinity)
-      .reply(200, emptyResponse);
-    nock(mockBaseUrl)
-      .put(/.*/)
-      .once()
-      .reply(200, emptyResponse);
+    nock(mockBaseUrl).post(/.*/).times(Infinity).reply(200, emptyResponse);
+    nock(mockBaseUrl).get(/.*/).times(Infinity).reply(200, emptyResponse);
+    nock(mockBaseUrl).put(/.*/).once().reply(200, emptyResponse);
   });
 
   test('call (some) endpoints with a null context', async () => {
@@ -83,9 +74,7 @@ describe('api endpoints smoke test', () => {
     async function callEndpoint(endpoint: (a: any[]) => any, param: any) {
       if (endpoint) {
         const mockFn = jest.fn();
-        await endpoint
-          .bind(null)(param)
-          .catch(mockFn);
+        await endpoint.bind(null)(param).catch(mockFn);
         expect(mockFn).not.toBeCalled();
       }
     }

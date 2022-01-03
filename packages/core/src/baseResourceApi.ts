@@ -135,7 +135,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   ) {
     return this.callEndpointWithMergeAndTransform(
       items,
-      data => this.callCreateEndpoint(data, path),
+      (data) => this.callCreateEndpoint(data, path),
       preRequestModifier,
       postRequestModifier
     );
@@ -145,7 +145,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     endpointCaller: ListEndpoint<QueryType, ResponseType[]>,
     scope?: QueryType
   ): CursorAndAsyncIterator<ResponseType> {
-    const listPromise = endpointCaller(scope).then(transformedResponse =>
+    const listPromise = endpointCaller(scope).then((transformedResponse) =>
       this.addNextPageFunction<QueryType>(
         endpointCaller.bind(this),
         transformedResponse.data,
@@ -161,7 +161,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     params?: RequestParams,
     path?: string
   ) {
-    return this.callEndpointWithMergeAndTransform(ids, request =>
+    return this.callEndpointWithMergeAndTransform(ids, (request) =>
       this.callRetrieveEndpoint(request, path, params)
     );
   }
@@ -170,7 +170,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     changes: ChangeType[],
     path?: string
   ) {
-    return this.callEndpointWithMergeAndTransform(changes, data =>
+    return this.callEndpointWithMergeAndTransform(changes, (data) =>
       this.callUpdateEndpoint(data, path)
     );
   }
@@ -180,7 +180,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     path?: string,
     queryParams?: HttpQueryParams
   ) {
-    return this.callEndpointWithTransform(query, data =>
+    return this.callEndpointWithTransform(query, (data) =>
       this.callSearchEndpoint(data, path, queryParams)
     );
   }
@@ -309,7 +309,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     responses: HttpResponse<ItemsWrapper<T[]>>[]
   ): T[] {
     return responses
-      .map(response => response.data.items)
+      .map((response) => response.data.items)
       .reduce((a, b) => [...a, ...b], []);
   }
 
@@ -321,7 +321,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     const { nextCursor } = cursorResponse;
     const next = nextCursor
       ? () =>
-          endpoint({ ...query, cursor: nextCursor }).then(response =>
+          endpoint({ ...query, cursor: nextCursor }).then((response) =>
             this.addNextPageFunction(endpoint, response.data, query)
           )
       : undefined;
@@ -343,7 +343,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   }: PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType>) {
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, chunkSize),
-      singleChunk =>
+      (singleChunk) =>
         this.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { ...params, items: singleChunk },
           params: queryParams,
@@ -368,7 +368,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   >(path: string, items: RequestType[], params?: ParamsType) {
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, 1000),
-      singleChunk =>
+      (singleChunk) =>
         this.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { items: singleChunk },
           params,
