@@ -69,8 +69,8 @@ export type GeospatialFeatureTypeProperty =
 type Properties = Record<string, GeospatialFeatureTypeProperty>;
 
 export interface Geospatial {
-  featureTypeAPI: unknown;
-  featureAPI: unknown;
+  featureType: unknown;
+  feature: unknown;
 }
 
 export interface GeospatialFeature extends ExternalId {
@@ -158,13 +158,16 @@ interface GeospatialAllowCrsTransformation {
   allowCrsTransformation?: boolean;
 }
 
-interface RecursiveFilters {
-  or?: NonRecursiveFilters[];
-  and?: NonRecursiveFilters[];
-  not?: NonRecursiveFilters;
-}
-
-type NonRecursiveFilters =
+type GeospatialFeatureFilter =
+  | {
+      or: GeospatialFeatureFilter[];
+    }
+  | {
+      and: GeospatialFeatureFilter[];
+    }
+  | {
+      not: GeospatialFeatureFilter;
+    }
   | {
       equals: GeospatialPropertyAndValue;
     }
@@ -191,28 +194,24 @@ type NonRecursiveFilters =
       stIntersects: GeospatialPropertyAndValue;
     }
   | {
-      completelyWithin: GeospatialPropertyAndValue;
+      stContainsProperly: GeospatialPropertyAndValue;
     }
   | {
       stWithinDistance: GeospatialPropertyAndValue & { distance: number };
     };
 
-type GeospatialFeatureFilter = {
-  filter?: RecursiveFilters | NonRecursiveFilters;
-};
-
 export interface GeospatialFeatureSearchFilter
   extends GeospatialAllowCrsTransformation,
-    GeospatialFeatureFilter,
     Limit,
     GeospatialOutput {
+  filter?: GeospatialFeatureFilter;
   sort?: string[];
 }
 
 export interface GeospatialFeatureSearchStreamFilter
   extends GeospatialAllowCrsTransformation,
-    GeospatialFeatureFilter,
     Limit {
+  filter?: GeospatialFeatureFilter;
   output?:
     | GeospatialOutput['output']
     | {
@@ -224,7 +223,8 @@ export interface GeospatialFeatureSearchStreamFilter
       };
 }
 
-export interface FeatureAggregateParams extends GeospatialFeatureFilter {
+export interface FeatureAggregateParams {
+  filter?: GeospatialFeatureFilter;
   aggregates: Aggregates[];
   property: string;
   outputSrid?: number;
