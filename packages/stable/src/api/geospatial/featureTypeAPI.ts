@@ -5,16 +5,16 @@ import {
 } from '@cognite/sdk-core';
 import {
   FeatureType,
-  FeatureTypeCreateItem,
-  FeatureTypePatch,
-  FeatureTypeDeleteParams,
+  GeospatialCreateFeatureType,
+  GeospatialUpdateFeatureType,
+  GeospatialRecursiveDelete,
 } from './types';
 
 export class FeatureTypeAPI extends BaseResourceAPI<FeatureType> {
   public create = (
-    featureTypes: FeatureTypeCreateItem[]
+    featureTypes: GeospatialCreateFeatureType[]
   ): Promise<FeatureType[]> => {
-    return this.createEndpoint<FeatureTypeCreateItem>(featureTypes);
+    return this.createEndpoint<GeospatialCreateFeatureType>(featureTypes);
   };
 
   public retrieve = (externalIds: ExternalId[]): Promise<FeatureType[]> => {
@@ -27,12 +27,12 @@ export class FeatureTypeAPI extends BaseResourceAPI<FeatureType> {
 
   public delete = (
     externalIds: ExternalId[],
-    params: FeatureTypeDeleteParams = {}
+    params: GeospatialRecursiveDelete = {}
   ) => {
     return this.deleteEndpoint(externalIds, params);
   };
 
-  public update = (changes: FeatureTypePatch[]) => {
-    return this.updateEndpoint<FeatureTypePatch>(changes);
+  public update = (changes: GeospatialUpdateFeatureType[]) => {
+    return this.updateEndpoint<GeospatialUpdateFeatureType>(changes);
   };
 }

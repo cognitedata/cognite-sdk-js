@@ -4,20 +4,20 @@ import {
   ExternalId,
 } from '@cognite/sdk-core';
 import {
-  Feature,
+  GeospatialFeatureResponse,
   FeatureAggregateParams,
-  FeatureCreateItem,
-  FeatureOutputParams,
-  FeatureSearchFilter,
-  FeatureSearchStreamFilter,
+  GeospatialFeature,
+  GeospatialOutput,
+  GeospatialFeatureSearchFilter,
+  GeospatialFeatureSearchStreamFilter,
 } from './types';
 
-export class FeatureAPI extends BaseResourceAPI<Feature> {
+export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
   public create = (
     featureTypeExternalId: CogniteExternalId,
-    features: FeatureCreateItem[]
-  ): Promise<Feature[]> => {
-    return this.createEndpoint<FeatureCreateItem>(
+    features: GeospatialFeature[]
+  ): Promise<GeospatialFeatureResponse[]> => {
+    return this.createEndpoint<GeospatialFeature>(
       features,
       this.url(`${featureTypeExternalId}/features`)
     );
@@ -26,9 +26,9 @@ export class FeatureAPI extends BaseResourceAPI<Feature> {
   public retrieve = (
     featureTypeExternalId: CogniteExternalId,
     externalIds: ExternalId[],
-    params?: FeatureOutputParams
-  ): Promise<Feature[]> => {
-    return this.callEndpointWithMergeAndTransform(externalIds, request =>
+    params?: GeospatialOutput
+  ): Promise<GeospatialFeatureResponse[]> => {
+    return this.callEndpointWithMergeAndTransform(externalIds, (request) =>
       this.postInParallelWithAutomaticChunking({
         path: this.url(`${featureTypeExternalId}/features/byids`),
         items: request,
@@ -39,8 +39,8 @@ export class FeatureAPI extends BaseResourceAPI<Feature> {
 
   public update = (
     featureTypeExternalId: CogniteExternalId,
-    changes: FeatureCreateItem[]
-  ): Promise<Feature[]> => {
+    changes: GeospatialFeature[]
+  ): Promise<GeospatialFeatureResponse[]> => {
     return this.updateEndpoint(
       changes,
       this.url(`${featureTypeExternalId}/features/update`)
@@ -50,7 +50,7 @@ export class FeatureAPI extends BaseResourceAPI<Feature> {
   public delete = (
     featureTypeExternalId: CogniteExternalId,
     externalIds: ExternalId[],
-    params: FeatureOutputParams = {}
+    params: GeospatialOutput = {}
   ) => {
     return this.deleteEndpoint(
       externalIds,
@@ -61,8 +61,8 @@ export class FeatureAPI extends BaseResourceAPI<Feature> {
 
   public search = (
     featureTypeExternalId: CogniteExternalId,
-    params: FeatureSearchFilter = {}
-  ): Promise<Feature[]> => {
+    params: GeospatialFeatureSearchFilter = {}
+  ): Promise<GeospatialFeatureResponse[]> => {
     return this.searchEndpoint(
       params,
       this.url(`${featureTypeExternalId}/features/search`)
@@ -71,8 +71,8 @@ export class FeatureAPI extends BaseResourceAPI<Feature> {
 
   public searchStream = (
     featureTypeExternalId: CogniteExternalId,
-    params: FeatureSearchStreamFilter = {}
-  ): Promise<Feature[]> => {
+    params: GeospatialFeatureSearchStreamFilter = {}
+  ): Promise<GeospatialFeatureResponse[]> => {
     return this.searchEndpoint(
       params,
       this.url(`${featureTypeExternalId}/features/search-streaming`)

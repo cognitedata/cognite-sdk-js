@@ -1,8 +1,8 @@
 import { InternalId, Limit, ExternalId } from '@cognite/sdk-core';
 
-import { Geometry } from 'geojson';
+import { Geometry, GeoJSON } from 'geojson';
 
-export * from 'geojson';
+export { GeoJSON };
 
 export type GeometryType = 'WKT' | 'GEOJSON';
 
@@ -39,7 +39,7 @@ type GeometryPropertyType =
   | 'MULTIPOLYGONZM'
   | 'GEOMETRYCOLLECTIONZM';
 
-export type PropertyType =
+export type GeospatialPropertyType =
   | 'STRING'
   | 'LONG'
   | 'DOUBLE'
@@ -47,15 +47,15 @@ export type PropertyType =
   | 'TIMESTAMP'
   | GeometryPropertyType;
 
-export type Property =
+export type GeospatialFeatureTypeProperty =
   | {
-      type: GeometryPropertyType;
-      srid?: number;
+      type: Exclude<GeospatialPropertyType, GeometryPropertyType | 'STRING'>;
       description?: string;
       optional?: boolean;
     }
   | {
-      type: Exclude<PropertyType, GeometryPropertyType | 'STRING'>;
+      type: GeometryPropertyType;
+      srid?: number;
       description?: string;
       optional?: boolean;
     }
@@ -66,15 +66,13 @@ export type Property =
       optional?: boolean;
     };
 
-export interface Properties {
-  [property: string]: Property;
-}
+type Properties = Record<string, GeospatialFeatureTypeProperty>;
 
 export interface Geospatial {
   [id: string]: unknown;
 }
 
-export interface FeatureCreateItem extends ExternalId {
+export interface GeospatialFeature extends ExternalId {
   [property: string]:
     | string
     | number
@@ -84,7 +82,7 @@ export interface FeatureCreateItem extends ExternalId {
     | Geometry;
 }
 
-export interface Feature extends FeatureCreateItem {
+export interface GeospatialFeatureResponse extends GeospatialFeature {
   createdTime: Date;
   lastUpdatedTime: Date;
 }
@@ -98,7 +96,7 @@ export interface FeatureType extends ExternalId, InternalId {
   searchSpec?: {
     [indexName: string]: {
       properties:
-        | Array<keyof Properties>
+        | string[]
         | ['_created_at']
         | ['_updated_at']
         | ['_external_id'];
@@ -106,32 +104,36 @@ export interface FeatureType extends ExternalId, InternalId {
   };
 }
 
-export interface FeatureTypeCreateItem extends ExternalId {
+type GeospatialIndexSpec = {
+  properties: string[];
+};
+
+export interface GeospatialCreateFeatureType extends ExternalId {
   properties: Properties;
   searchSpec?: {
-    [indexName: string]: {
-      properties: Array<keyof Properties>;
-    };
+    [indexName: string]: GeospatialIndexSpec;
   };
 }
 
-export interface FeatureTypePatch extends ExternalId {
+export interface GeospatialUpdateFeatureType extends ExternalId {
   update:
     | {
-        properties: { add: Properties };
+        properties: { add: Properties } | { remove: string[] };
       }
     | {
-        searchSpec: {
-          add: { [indexName: string]: { properties: Array<keyof Properties> } };
-        };
+        searchSpec:
+          | {
+              add: { [indexName: string]: { properties: string[] } };
+            }
+          | { remove: string[] };
       };
 }
 
-export interface FeatureTypeDeleteParams {
+export interface GeospatialRecursiveDelete {
   recursive?: boolean;
 }
 
-export interface FeatureOutputParams {
+export interface GeospatialOutput {
   output?:
     | {
         geometryFormat: GeometryType;
@@ -141,101 +143,77 @@ export interface FeatureOutputParams {
       };
 }
 
-interface AttributeValue {
+interface GeospatialPropertyAndValue {
   property: string;
   value: unknown;
 }
 
-interface EqualsFilter {
-  equals: AttributeValue;
+interface GeospatialPropertyAndPattern {
+  property: string;
+  pattern: string;
 }
 
-interface WithinFilter {
-  within: AttributeValue;
-}
-
-interface IntersectsFilter {
-  intersects: AttributeValue;
-}
-
-interface CompletelyWithinFilter {
-  completelyWithin: AttributeValue;
-}
-
-interface WithinDistanceFilter {
-  withinDistance: AttributeValue & { distance: number };
-}
-
-interface RangeFilter {
-  range:
-    | { property: string; gt: string | number }
-    | { property: string; lt: string | number }
-    | { property: string; gte: string | number }
-    | { property: string; lte: string | number };
-}
-
-interface MissingFilter {
-  missing: { property: string };
-}
-
-interface LikeFilter {
-  like: { property: string; pattern: string };
-}
-
-interface RegexFilter {
-  regex: { property: string; pattern: string | RegExp };
-}
-
-interface OrFilter {
-  or?: NonRecursiveFilters[];
-}
-
-interface AndFilter {
-  and?: NonRecursiveFilters[];
-}
-
-interface NotFilter {
-  not?: NonRecursiveFilters;
-}
-
-interface SortFilter {
-  sort?: string[];
-}
-
-interface AllowCrsTransformationFilter {
+interface GeospatialAllowCrsTransformation {
   allowCrsTransformation?: boolean;
 }
 
-interface RecursiveFilters extends OrFilter, AndFilter, NotFilter {}
+interface RecursiveFilters {
+  or?: NonRecursiveFilters[];
+  and?: NonRecursiveFilters[];
+  not?: NonRecursiveFilters;
+}
 
 type NonRecursiveFilters =
-  | EqualsFilter
-  | MissingFilter
-  | LikeFilter
-  | RegexFilter
-  | RangeFilter
-  | WithinFilter
-  | IntersectsFilter
-  | CompletelyWithinFilter
-  | WithinDistanceFilter;
+  | {
+      equals: GeospatialPropertyAndValue;
+    }
+  | {
+      missing: { property: string };
+    }
+  | {
+      like: GeospatialPropertyAndPattern;
+    }
+  | {
+      regex: GeospatialPropertyAndPattern;
+    }
+  | {
+      range:
+        | { property: string; gt: string | number }
+        | { property: string; lt: string | number }
+        | { property: string; gte: string | number }
+        | { property: string; lte: string | number };
+    }
+  | {
+      stWithin: GeospatialPropertyAndValue;
+    }
+  | {
+      stIntersects: GeospatialPropertyAndValue;
+    }
+  | {
+      completelyWithin: GeospatialPropertyAndValue;
+    }
+  | {
+      stWithinDistance: GeospatialPropertyAndValue & { distance: number };
+    };
 
-type FilterParams = {
+type GeospatialFeatureFilter = {
   filter?: RecursiveFilters | NonRecursiveFilters;
 };
 
-export interface FeatureSearchFilter
-  extends AllowCrsTransformationFilter,
-    FilterParams,
+export interface GeospatialFeatureSearchFilter
+  extends GeospatialAllowCrsTransformation,
+    GeospatialFeatureFilter,
     Limit,
-    FeatureOutputParams,
-    SortFilter {}
+    GeospatialOutput {
+  sort?: string[];
+}
 
-export interface FeatureSearchStreamFilter
-  extends AllowCrsTransformationFilter,
-    FilterParams,
+export interface GeospatialFeatureSearchStreamFilter
+  extends GeospatialAllowCrsTransformation,
+    GeospatialFeatureFilter,
     Limit {
   output?:
-    | FeatureOutputParams['output']
+    | GeospatialOutput['output']
     | {
         jsonStreamFormat:
           | 'LENGTH_PREFIXED'
@@ -245,23 +223,22 @@ export interface FeatureSearchStreamFilter
       };
 }
 
+export interface FeatureAggregateParams extends GeospatialFeatureFilter {
+  aggregates: Aggregates[];
+  property: string;
+  outputSrid?: number;
+  groupBy?: string[];
+}
+
 type Aggregates =
-  | 'areaOfUnion'
   | 'avg'
-  | 'centroid'
-  | 'collect'
-  | 'convexHull'
   | 'count'
-  | 'intersection'
   | 'max'
   | 'min'
+  | 'stCentroid'
+  | 'stCollect'
+  | 'stConvexHull'
+  | 'stIntersection'
+  | 'stUnion'
   | 'sum'
-  | 'union'
   | 'variance';
-
-export interface FeatureAggregateParams extends FilterParams {
-  aggregates: Aggregates[];
-  property: keyof Properties;
-  outputSrid?: number;
-  groupBy?: Array<keyof Properties>;
-}
