@@ -69,7 +69,8 @@ export type GeospatialFeatureTypeProperty =
 type Properties = Record<string, GeospatialFeatureTypeProperty>;
 
 export interface Geospatial {
-  [id: string]: unknown;
+  featureTypeAPI: unknown;
+  featureAPI: unknown;
 }
 
 export interface GeospatialFeature extends ExternalId {
