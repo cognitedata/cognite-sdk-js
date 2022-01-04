@@ -90,17 +90,20 @@ export interface GeospatialFeatureResponse extends GeospatialFeature {
 
 export interface FeatureType extends ExternalId, InternalId {
   properties: Properties & {
-    _created_at: { type: 'LONG' };
-    _updated_at: { type: 'LONG' };
-    _external_id: { type: 'STRING'; size: 32 };
+    createdTime: { type: 'LONG' };
+    lastUpdatedTime: { type: 'LONG' };
+    externalId: { type: 'STRING'; size: 32 };
   };
   searchSpec?: {
-    [indexName: string]: {
-      properties:
-        | string[]
-        | ['_created_at']
-        | ['_updated_at']
-        | ['_external_id'];
+    [indexName: string]: GeospatialIndexSpec;
+    createdTimeIdx: {
+      properties: ['createdTime'];
+    };
+    lastUpdatedTimeIdx: {
+      properties: ['lastUpdatedTime'];
+    };
+    externalIdIdx: {
+      properties: ['externalId'];
     };
   };
 }
