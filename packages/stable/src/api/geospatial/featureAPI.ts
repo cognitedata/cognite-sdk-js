@@ -95,12 +95,11 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    */
   public delete = (
     featureTypeExternalId: CogniteExternalId,
-    externalIds: ExternalId[],
-    params: GeospatialOutput = {}
+    externalIds: ExternalId[]
   ) => {
     return this.deleteEndpoint(
       externalIds,
-      params,
+      {},
       this.url(`${featureTypeExternalId}/features/delete`)
     );
   };
