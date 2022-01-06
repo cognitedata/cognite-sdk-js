@@ -71,21 +71,16 @@ type Properties = Record<string, GeospatialFeatureTypeProperty>;
 export interface Geospatial {
   featureType: unknown;
   feature: unknown;
+  crs: unknown;
 }
 
 export interface GeospatialFeature extends ExternalId {
-  [property: string]:
-    | string
-    | number
-    | boolean
-    | Date
-    | { wkt: string }
-    | Geometry;
+  [property: string]: string | number | boolean | { wkt: string } | Geometry;
 }
 
 export interface GeospatialFeatureResponse extends GeospatialFeature {
-  createdTime: Date;
-  lastUpdatedTime: Date;
+  createdTime: number;
+  lastUpdatedTime: number;
 }
 
 export interface FeatureType extends ExternalId, InternalId {
@@ -246,3 +241,15 @@ type Aggregates =
   | 'stUnion'
   | 'sum'
   | 'variance';
+
+export interface GeospatialCoordinateReferenceSystem {
+  srid: number;
+  wkt: string;
+  projString: string;
+}
+
+export interface GeospatialCRSResponse
+  extends GeospatialCoordinateReferenceSystem {
+  createdTime: number;
+  lastUpdatedTime: number;
+}
