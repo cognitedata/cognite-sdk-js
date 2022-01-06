@@ -49,10 +49,10 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
   public list = (params?: {
     filterOnlyCustom?: boolean;
   }): CursorAndAsyncIterator<GeospatialCRSResponse> => {
-    return this.listEndpoint(() => {
-      // talk with geospatial team to either make call post or use listGetUrl for get call
-      return this.get(this.listPostUrl, { params });
-    });
+    return this.listEndpoint<{
+      filterOnlyCustom?: boolean;
+      limit?: number; // just to match underlying QueryType, crs doesn't have limit
+    }>(this.callListEndpointWithGet, params);
   };
 
   /**
