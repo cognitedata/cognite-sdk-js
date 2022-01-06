@@ -156,13 +156,13 @@ export abstract class BaseResourceAPI<ResponseType> {
     return Object.assign(listPromise, autoPaginationMethods);
   }
 
-  protected async retrieveEndpoint<RequestParams extends object>(
-    ids: IdEither[],
+  protected async retrieveEndpoint<RequestParams extends object, T = IdEither>(
+    ids: T[],
     params?: RequestParams,
     path?: string
   ) {
     return this.callEndpointWithMergeAndTransform(ids, (request) =>
-      this.callRetrieveEndpoint(request, path, params)
+      this.callRetrieveEndpoint<RequestParams, T>(request, path, params)
     );
   }
 
@@ -229,11 +229,10 @@ export abstract class BaseResourceAPI<ResponseType> {
     return response;
   };
 
-  protected async callRetrieveEndpoint<RequestParams extends object>(
-    items: IdEither[],
-    path: string = this.byIdsUrl,
-    params?: RequestParams
-  ) {
+  protected async callRetrieveEndpoint<
+    RequestParams extends object,
+    T = IdEither
+  >(items: T[], path: string = this.byIdsUrl, params?: RequestParams) {
     return this.postInParallelWithAutomaticChunking({ params, path, items });
   }
 

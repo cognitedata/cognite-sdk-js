@@ -2,6 +2,7 @@ import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
   GeospatialCRSResponse,
   GeospatialCoordinateReferenceSystem,
+  GeospatialSridId,
 } from './types';
 
 export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
@@ -32,10 +33,10 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * ```
    */
   public retrieve = (
-    srids: Array<{ srid: number }>
+    srids: GeospatialSridId[]
   ): Promise<GeospatialCRSResponse[]> => {
     // @ts-ignore geospatial team should accept ids probably to be in synergy with sdk
-    return this.retrieveEndpoint(srids);
+    return this.retrieveEndpoint<object, GeospatialSridId>(srids);
   };
 
   /**
@@ -61,7 +62,7 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * await client.geospatial.crs.delete([{ srid: 4326}]);
    * ```
    */
-  public delete = (srids: Array<{ srid: number }>) => {
-    return this.deleteEndpoint(srids);
+  public delete = (srids: GeospatialSridId[]) => {
+    return this.deleteEndpoint<object, GeospatialSridId>(srids);
   };
 }

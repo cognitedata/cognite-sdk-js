@@ -253,3 +253,7 @@ export interface GeospatialCRSResponse
   createdTime: number;
   lastUpdatedTime: number;
 }
+
+export interface GeospatialSridId {
+  srid: number;
+}
