@@ -39,11 +39,10 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [Retrieve features](https://docs.cognite.com/api/v1/#operation/getFeaturesByIds)
    *
    * ```js
-   * const featureTypeExternalId = 'ocean_temperature';
    * const featuresToRetrieve = [{ externalId: 'measurement_point_765' }, { externalId: 'measurement_point_765' }];
-   * const outputParams = { geometryFormat: 'GEOJSON' };
+   * const outputParams = { output: { geometryFormat: 'GEOJSON' } };
    *
-   * const retrievedFeatures = await client.geospatial.feature.retrieve(featureTypeExternalId, featuresToRetrieve, outputParams);
+   * const retrievedFeatures = await client.geospatial.feature.retrieve('ocean_temperature', featuresToRetrieve, outputParams);
    * ```
    */
   public retrieve = (
@@ -64,13 +63,12 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [Update features](https://docs.cognite.com/api/v1/#operation/updateFeatures)
    *
    * ```js
-   * const featureTypeExternalId = 'ocean_temperature';
    * const featuresToUpdate = [
    * { externalId: 'measurement_point_765', temperature: 5.65, location: { wkt: 'POINT(60.547602 -5.423433)' } },
    * { externalId: 'measurement_point_863', temperature: 5.03, location: { wkt: 'POINT(60.585858 -6.474416)' } }
    * ];
    *
-   * const updatedFeatures = await client.geospatial.feature.update(featureTypeExternalId, featuresToUpdate);
+   * const updatedFeatures = await client.geospatial.feature.update('ocean_temperature', featuresToUpdate);
    * ```
    */
   public update = (
@@ -87,10 +85,9 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [Update features](https://docs.cognite.com/api/v1/#operation/updateFeatures)
    *
    * ```js
-   * const featureTypeExternalId = 'ocean_temperature';
    * const featuresToDelete = [{ externalId: 'measurement_point_765' }, { externalId: 'measurement_point_765' }];
    *
-   * await client.geospatial.feature.delete(featureTypeExternalId, featuresToDelete);
+   * await client.geospatial.feature.delete('ocean_temperature', featuresToDelete);
    * ```
    */
   public delete = (
@@ -108,7 +105,6 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [Search features](https://docs.cognite.com/api/v1/#operation/searchFeatures)
    *
    * ```js
-   * const featureTypeExternalId = 'ocean_temperature';
    * const searchParams = {
    *  filter: {
    *    and: [
@@ -120,7 +116,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *  sort: [ 'temperature:ASC','location']
    * };
    *
-   * const searchedFeatures = await client.geospatial.feature.search(featureTypeExternalId, searchParams);
+   * const searchedFeatures = await client.geospatial.feature.search('ocean_temperature', searchParams);
    * ```
    */
   public search = (
@@ -137,7 +133,6 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [Search and stream features](https://docs.cognite.com/api/v1/#operation/searchFeaturesStreaming)
    *
    * ```js
-   * const featureTypeExternalId = 'ocean_temperature';
    * const searchParams = {
    *  filter: {
    *    and: [
@@ -149,7 +144,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *  output: { jsonStreamFormat: 'NEW_LINE_DELIMITED' }
    * };
    *
-   * const featureStream = await client.geospatial.feature.searchStream(featureTypeExternalId, searchParams);
+   * const featureStream = await client.geospatial.feature.searchStream('ocean_temperature', searchParams);
    * ```
    */
   public searchStream = (
@@ -166,7 +161,6 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [Aggregate features](https://docs.cognite.com/api/v1/#operation/aggregateFeatures)
    *
    * ```js
-   * const featureTypeExternalId = 'ocean_temperature';
    * const aggregateParams = {
    *  filter: {
    *    and: [
@@ -179,7 +173,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *  groupBy: ['category']
    * };
    *
-   * const featureStream = await client.geospatial.feature.searchStream(featureTypeExternalId, aggregateParams);
+   * const featureStream = await client.geospatial.feature.searchStream('ocean_temperature', aggregateParams);
    * ```
    */
   public aggregate = (

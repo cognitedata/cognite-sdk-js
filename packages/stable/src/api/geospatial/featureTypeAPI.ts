@@ -75,7 +75,7 @@ export class FeatureTypeAPI extends BaseResourceAPI<FeatureType> {
    *  {
    *    externalId: 'ocean_temperature',
    *    update: {
-   *        properties: { add: { depth: { type: 'DOUBLE} }, remove: ['temperature'] },
+   *        properties: { add: { depth: { type: 'DOUBLE'} }, remove: ['temperature'] },
    *        searchSpec: { add: { depth_idx: { properties: ['depth'] } } }
    *    }
    *  }
