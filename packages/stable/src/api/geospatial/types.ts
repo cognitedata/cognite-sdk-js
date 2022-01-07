@@ -189,10 +189,16 @@ type GeospatialFeatureFilter =
       stWithin: GeospatialPropertyAndValue;
     }
   | {
+      stContains: GeospatialPropertyAndValue;
+    }
+  | {
       stIntersects: GeospatialPropertyAndValue;
     }
   | {
       stContainsProperly: GeospatialPropertyAndValue;
+    }
+  | {
+      stWithinProperly: GeospatialPropertyAndValue;
     }
   | {
       stWithinDistance: GeospatialPropertyAndValue & { distance: number };
