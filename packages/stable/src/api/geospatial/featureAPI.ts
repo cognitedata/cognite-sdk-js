@@ -40,7 +40,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *
    * ```js
    * const featuresToRetrieve = [{ externalId: 'measurement_point_765' }, { externalId: 'measurement_point_765' }];
-   * const outputParams = { output: { geometryFormat: 'GEOJSON' } };
+   * const outputParams = { output: { geometryFormat: 'GEOJSON' as const } };
    *
    * const retrievedFeatures = await client.geospatial.feature.retrieve('ocean_temperature', featuresToRetrieve, outputParams);
    * ```
@@ -141,7 +141,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *   ]
    *  },
    *  limit: 100,
-   *  output: { jsonStreamFormat: 'NEW_LINE_DELIMITED' }
+   *  output: { jsonStreamFormat: 'NEW_LINE_DELIMITED' as const }
    * };
    *
    * const featureStream = await client.geospatial.feature.searchStream('ocean_temperature', searchParams);

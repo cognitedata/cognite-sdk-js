@@ -18,7 +18,7 @@ export class FeatureTypeAPI extends BaseResourceAPI<FeatureType> {
    * const featureTypes = [
    *   {
    *      externalId: 'ocean_temperature',
-   *      properties: { temperature: { type: 'DOUBLE' }, location: { type: 'POINT', srid: 4326 } } ,
+   *      properties: { temperature: { type: 'DOUBLE' as const }, location: { type: 'POINT' as const, srid: 4326 } } ,
    *      searchSpec: { location_idx: { properties : ['location'] } }
    *   }
    * ];
