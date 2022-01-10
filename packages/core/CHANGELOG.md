@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.0.4...@cognite/sdk-core@4.1.0) (2022-01-10)
+
+
+### Features
+
+* **core:** add generic for id, path to aggregate ([#726](https://github.com/cognitedata/cognite-sdk-js/issues/726)) ([b927e24](https://github.com/cognitedata/cognite-sdk-js/commit/b927e24c044eb934bbc0fd74975b64660f8b599f))
+
+
+
+
+
 ## [4.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.0.3...@cognite/sdk-core@4.0.4) (2021-12-21)
 
 
