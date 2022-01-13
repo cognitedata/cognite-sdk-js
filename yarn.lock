@@ -1432,6 +1432,14 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@cognite/sdk@^6", "@cognite/sdk@^6.0.0":
+  version "6.3.3"
+  resolved "https://registry.yarnpkg.com/@cognite/sdk/-/sdk-6.3.3.tgz#fea669560c75514880f46be510fe28a13acec009"
+  integrity sha512-4qUOx/vw41dZ2suBxyYTaWfICms3RsdjOMthu5OgSVe7FuCLpn8I7dZOl/afZJs3JM+/BAtNYFmrWRQEWqi47w==
+  dependencies:
+    "@cognite/sdk-core" "^4.1.0"
+    lodash "^4.17.11"
+
 "@commitlint/cli@^8.1.0":
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-8.1.0.tgz#a3d4236c0ac961d7026a53d728b179c696d6a045"
