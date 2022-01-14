@@ -46,7 +46,7 @@ npm install @cognite/sdk@6.1.1
 3. Import all things that you'll need to use.
 
 ```ts
-import React, { useState, useEffect } from ‘react’;
+import React, { useState, useEffect } from "react";
 import {
   CogniteClient,
   POPUP,
@@ -138,4 +138,10 @@ function App() {
         ...
     );
 }
+```
+
+9. Now, you can run your code.
+
+```sh
+sudo PORT=80 yarn start
 ```

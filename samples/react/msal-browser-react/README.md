@@ -115,7 +115,7 @@ export const getToken = async () => {
 8. Inside your `App.tsx` file Import some methods/components from msal library and React.
 
 ```ts
-import React from 'react';
+import React from "react";
 import {
   MsalProvider,
   AuthenticatedTemplate,
@@ -178,4 +178,10 @@ instance
         	sessionStorage.setItem("account", r.account?.localAccountId);
         }
 });
+```
+
+12. Now, you can run your code.
+
+```sh
+sudo PORT=80 yarn start
 ```
