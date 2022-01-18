@@ -4,9 +4,12 @@ export type DocumentsSearchRequest = DocumentsFilterOption &
   DocumentsSort &
   DocumentsSearchLimit;
 
-export type DocumentsFilterRequest = DocumentsFilterOption & DocumentsLimit & Cursor;
+export type DocumentsFilterRequest = DocumentsFilterOption &
+  DocumentsLimit &
+  Cursor;
 
-export type DocumentContentRequest = DocumentContentRequestItems & IgnoreUnknownIdsField;
+export type DocumentContentRequest = DocumentContentRequestItems &
+  IgnoreUnknownIdsField;
 
 /**
  * A list of pipeline configuration objects.
@@ -61,9 +64,11 @@ export interface DocumentsClassifierCreateItems {
   items: DocumentsClassifierCreate[];
 }
 
-export type DocumentsClassifierListByIdsRequest = DocumentsClassifierListByIdsItems & IgnoreUnknownIdsField;
+export type DocumentsClassifierListByIdsRequest =
+  DocumentsClassifierListByIdsItems & IgnoreUnknownIdsField;
 
-export type DocumentsClassifierDeleteRequest = DocumentsClassifierDeleteItems & IgnoreUnknownIdsField;
+export type DocumentsClassifierDeleteRequest = DocumentsClassifierDeleteItems &
+  IgnoreUnknownIdsField;
 
 /**
  * Filter with exact match
@@ -309,7 +314,7 @@ export type FeedbackLabel = LabelDefinitionExternalId;
 /**
  * What to do with the label on the file
  */
-export type FeedbackAction = "ATTACH" | "DETACH";
+export type FeedbackAction = 'ATTACH' | 'DETACH';
 
 /**
  * Server-generated identifier for the feedback object
@@ -343,7 +348,7 @@ export type ReporterInfo = string | null;
 - If the action was `DETACH`, and the label is not attached to the file anymore.
 * @example ACCEPTED
 */
-export type FeedbackStatus = "CREATED" | "ACCEPTED" | "REJECTED" | "STALE";
+export type FeedbackStatus = 'CREATED' | 'ACCEPTED' | 'REJECTED' | 'STALE';
 
 /**
  * A feedback object
@@ -409,7 +414,7 @@ You can find extensive description of the available fields in the
 [List Feedback](#operation/documentsListFeedback) endpoint response.
 * @example action
 */
-export type AggregateField = "action" | "status";
+export type AggregateField = 'action' | 'status';
 
 /**
  * A value/count aggregation object
@@ -676,7 +681,9 @@ export interface DocumentGeoLocation {
   geometries?: GeometryCollection[];
 }
 
-export type DocumentContentItem = { id?: DocumentId } | { externalId?: CogniteExternalId };
+export type DocumentContentItem =
+  | { id?: DocumentId }
+  | { externalId?: CogniteExternalId };
 
 export interface DocumentsPipelineSensitivityMatcher {
   /**
@@ -722,10 +729,14 @@ export type DocumentsPipelineSensitivityMatcherUpdate =
   | {
       modify: {
         fieldMappings?: SensitivityMatcherFieldMappingsUpdate;
-        matchLists?: { set: Record<string, string[]> } | { add?: Record<string, string[]>; remove?: string[] };
+        matchLists?:
+          | { set: Record<string, string[]> }
+          | { add?: Record<string, string[]>; remove?: string[] };
         filterPasswords?: { set: boolean };
         sensitiveSecurityCategory?: { set: number } | { setNull: boolean };
-        restrictToSources?: { set: string[] } | { add?: string[]; remove?: string[] };
+        restrictToSources?:
+          | { set: string[] }
+          | { add?: string[]; remove?: string[] };
       };
     };
 
@@ -802,7 +813,9 @@ export type AssetIdsFilter = ContainsAllIds | ContainsAnyId | ValueMissing;
 /**
  * Only include files that reference these specific asset externalIds.
  */
-export type AssetExternalIdsFilter = ContainsAllExternalIds | ContainsAnyExternalIds;
+export type AssetExternalIdsFilter =
+  | ContainsAllExternalIds
+  | ContainsAnyExternalIds;
 
 /**
  * Only include documents with a related asset in a subtree rooted at any of these asset IDs, including the roots given. Returns an error if the total size of the given subtrees exceeds 10,000 assets. Usage of this field requires `["assetsAcl:READ"]` capability.
@@ -817,7 +830,9 @@ export type LabelFilter = LabelContainsAnyFilter | LabelContainsAllFilter;
 /**
  * Filter on files which have the specified spatial relation with the specified geometry shape.
  */
-export type DocumentGeoLocationFilter = ValueMissing | { shape: DocumentGeoLocation; relation?: Relation };
+export type DocumentGeoLocationFilter =
+  | ValueMissing
+  | { shape: DocumentGeoLocation; relation?: Relation };
 
 export interface DocumentsSourceFileFilter {
   /** Name of the file */
@@ -929,7 +944,9 @@ export type SensitivityMatcherFieldMappingsUpdate =
       };
     };
 
-export type LabelListUpdate = { set: LabelList } | { add?: LabelList; remove?: LabelList };
+export type LabelListUpdate =
+  | { set: LabelList }
+  | { add?: LabelList; remove?: LabelList };
 
 export interface DocumentsClassifierMetrics {
   /** @format float */
@@ -1022,11 +1039,17 @@ export interface DocumentsPipelineSourceFile {
 
 export type DocumentsPipelineArrayOf1To10StringsUpdate =
   | { set: DocumentsPipelineArrayOf1To10Strings }
-  | { add?: DocumentsPipelineArrayOf1To10Strings; remove?: DocumentsPipelineArrayOf1To10Strings };
+  | {
+      add?: DocumentsPipelineArrayOf1To10Strings;
+      remove?: DocumentsPipelineArrayOf1To10Strings;
+    };
 
 export type DocumentsPipelineArrayOf1To10ExternalIdsUpdate =
   | { set: DocumentsPipelineArrayOf1To10ExternalIds }
-  | { add?: DocumentsPipelineArrayOf1To10ExternalIds; remove?: DocumentsPipelineArrayOf1To10ExternalIds };
+  | {
+      add?: DocumentsPipelineArrayOf1To10ExternalIds;
+      remove?: DocumentsPipelineArrayOf1To10ExternalIds;
+    };
 
 export type DocumentsPipelineSourceFileUpdate =
   | { set: DocumentsPipelineSourceFile }
@@ -1035,7 +1058,9 @@ export type DocumentsPipelineSourceFileUpdate =
         name?: DocumentsPipelineArrayOf1To10StringsUpdate;
         directory?: DocumentsPipelineArrayOf1To10StringsUpdate;
         content?: DocumentsPipelineArrayOf1To10StringsUpdate;
-        metadata?: { set: Record<string, string[]> } | { add?: Record<string, string[]>; remove?: string[] };
+        metadata?:
+          | { set: Record<string, string[]> }
+          | { add?: Record<string, string[]>; remove?: string[] };
       };
     };
 
@@ -1065,7 +1090,10 @@ export interface DocumentsSearchResponse {
   items: { highlight?: Highlight; item: Document }[];
   aggregates?: {
     name: string;
-    groups: { group?: (object | LabelDefinitionExternalId)[]; value?: number }[];
+    groups: {
+      group?: (object | LabelDefinitionExternalId)[];
+      value?: number;
+    }[];
     total: number;
   }[];
 }
