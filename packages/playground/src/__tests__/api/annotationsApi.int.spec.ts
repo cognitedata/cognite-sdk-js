@@ -7,6 +7,7 @@ import { setupLoggedInClient as stableApiClientSetup } from '../../../../stable/
 import {
   AnnotationChangeById,
   AnnotationCreate,
+  AnnotationFilterProps,
 } from '@cognite/sdk-playground';
 
 const ANNOTATED_FILE_EXTERNAL_ID =
@@ -42,6 +43,10 @@ const ANNOTATIONS: AnnotationCreate[] = [
     },
   },
 ];
+const FILE_FILTER: AnnotationFilterProps = {
+  annotatedResourceType: 'file',
+  annotatedResourceIds: [{ externalId: ANNOTATED_FILE_EXTERNAL_ID }],
+};
 
 describe('Annotations API', () => {
   let client: CogniteClientPlayground;
@@ -101,6 +106,36 @@ describe('Annotations API', () => {
   test('retrieve annotations', async () => {
     const response = await client.annotations.retrieve(createdAnnotationIds);
     expect(response).toHaveLength(createdAnnotationIds.length);
+  });
+
+  test('list annotations, limit to 1', async () => {
+    const limitOne = await client.annotations.list({
+      limit: 1,
+      filter: FILE_FILTER,
+    });
+    expect(limitOne.items).toHaveLength(1);
+  });
+
+  test('list annotations, pagination works', async () => {
+    const first = await client.annotations.list({
+      limit: 1,
+      filter: FILE_FILTER,
+    });
+    expect(first.nextCursor).not.toBeNull();
+
+    const second = await client.annotations.list({
+      limit: 1,
+      filter: FILE_FILTER,
+      cursor: first.nextCursor,
+    });
+    expect(second.nextCursor).toBeNull();
+  });
+
+  test('list annotations', async () => {
+    const items = await client.annotations
+      .list({ filter: FILE_FILTER })
+      .autoPagingToArray();
+    expect(items).toHaveLength(createdAnnotationIds.length);
   });
 
   test('update annotation', async () => {

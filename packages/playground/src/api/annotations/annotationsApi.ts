@@ -38,6 +38,9 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
     return this.retrieveEndpoint(ids);
   };
 
+  /**
+   * [Advanced list of annotations](https://docs.cognite.com/api/playground/#operation/annotationsFilter)
+   */
   public list = (
     filter: AnnotationFilterRequest
   ): CursorAndAsyncIterator<AnnotationModel> => {
