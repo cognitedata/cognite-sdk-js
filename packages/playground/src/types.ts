@@ -4,19 +4,21 @@ import {
   CogniteExternalId,
   CogniteInternalId,
   ExternalId,
-  FilterQuery,
-  LabelFilter,
-  PointCoordinates,
-  Label,
-  Range,
-  FileName,
   FileMimeType,
-  Metadata,
+  FileName,
+  FilterQuery,
   ItemsWrapper,
+  Label,
+  LabelFilter,
+  Metadata,
+  PointCoordinates,
+  Range,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
 // Overriding types should probably be done in their respective API endpoint files, where possible
+
+export * from './api/annotations/types';
 
 export interface IntIn {
   in: number[];
