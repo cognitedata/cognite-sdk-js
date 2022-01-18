@@ -2,4 +2,3 @@
 
 export { default as CogniteClientPlayground } from './cogniteClientPlayground';
 export * from './types';
-export * from './api/annotations/types';
