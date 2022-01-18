@@ -141,6 +141,7 @@ We recommend the usage of [eslint](https://eslint.org/docs/rules/no-restricted-i
 The API reference documentation contains snippets for each endpoint,
 giving examples of SDK use. See also the [samples section](https://github.com/cognitedata/cognite-sdk-js#samples) in this repo.
 
+
 ## Guides
 
  - [Migration guide](https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/MIGRATION_GUIDE_1xx_2xx.md)

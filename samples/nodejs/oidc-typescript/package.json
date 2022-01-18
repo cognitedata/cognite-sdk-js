@@ -8,7 +8,7 @@
     "start": "yarn tsc && node build/quickstart.js"
   },
   "dependencies": {
-    "@cognite/sdk": "^6",
+    "@cognite/sdk": "^7",
     "@azure/msal-node": "^1.3.2"
   },
   "devDependencies": {

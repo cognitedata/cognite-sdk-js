@@ -3,6 +3,92 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.3.3...@cognite/sdk@7.0.0) (2022-01-10)
+
+
+### chore
+
+* **geospatial:** updates spatial to geospatial & type name changes ([#720](https://github.com/cognitedata/cognite-sdk-js/issues/720)) ([2e93d8b](https://github.com/cognitedata/cognite-sdk-js/commit/2e93d8b23de443e845eef1aa8dc9200483d27e76))
+
+
+### Features
+
+* **geospatial:** updates spatial to geospatial & type name ([#727](https://github.com/cognitedata/cognite-sdk-js/issues/727)) ([ad05a88](https://github.com/cognitedata/cognite-sdk-js/commit/ad05a885b6a16bd2ae5636fd2cbed2649dad5023))
+
+
+### BREAKING CHANGES
+
+* **geospatial:** updates spatial to geospatial & type name
+
+* chore(geospatial): updates spatial to geospatial & types updated
+
+* feat(geospatial): adds update api to featureType
+
+* feat(geospatial): refactor feature APIs, filter types ,aggregateEndpoint
+
+* chore(geospatial): place geojson type in stable package
+
+* chore(geospatial): update types for breaking API changes
+
+* chore(geospatial): updates Geospatial type
+
+* chore(geospatial): remove filter bifurcation
+
+* chore(geospatial): updates searchSpec
+
+* chore(geospatial): adds crs & js code examples
+
+* chore(geospatial): change generic id type for retrieve
+
+* chore(geospatial): remove output params from delete feature
+
+* chore(geospatial): change crs endpoint
+
+* chore(geospatial): add more filters
+
+* chore(geospatial): fix examples
+* **geospatial:** changes api name from spatial to geospatial, features to feature & featureTypes to featureType
+
+* feat(geospatial): adds update api to featureType
+
+* feat(geospatial): refactor feature APIs, filter types ,aggregateEndpoint
+
+* chore(geospatial): place geojson type in stable package
+
+* chore(geospatial): update types for breaking API changes
+
+* chore(geospatial): updates Geospatial type
+
+* chore(geospatial): remove filter bifurcation
+
+* chore(geospatial): updates searchSpec
+
+* chore(geospatial): adds crs & js code examples
+
+* chore(geospatial): change generic id type for retrieve
+
+* chore(geospatial): remove output params from delete feature
+
+* chore(geospatial): change crs endpoint
+
+* chore(geospatial): add more filters
+
+* chore(geospatial): fix example
+
+* chore(geospatial): fix examples
+
+
+
+
+
+## [6.3.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.3.2...@cognite/sdk@6.3.3) (2022-01-10)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
 ## [6.3.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.3.1...@cognite/sdk@6.3.2) (2021-12-21)
 
 **Note:** Version bump only for package @cognite/sdk
