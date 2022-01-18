@@ -36,8 +36,7 @@
     "docs:bundle": "rm -rf docs/ && yarn allsdk docs:bundle --stream && touch docs/.nojekyll",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check -c ./markdownlint.json",
     "test-snippets": "yarn allsdk test-snippets --stream",
-    "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream",
-    "generate-types:playground:documents": "sh scripts/utils/documents/build-types.sh"
+    "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
@@ -67,7 +66,6 @@
     "nock": "^10.0.6",
     "prettier": "^2.5.1",
     "rollup": "^2.22.2",
-    "swagger-typescript-api": "^9.3.1",
     "ts-jest": "^26.1",
     "typedoc": "^0.17.8",
     "typescript": "^3.9"
