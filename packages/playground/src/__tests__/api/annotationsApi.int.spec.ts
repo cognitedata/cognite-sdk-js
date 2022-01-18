@@ -97,7 +97,18 @@ describe('Annotations API', () => {
     const annotation = created[0];
 
     expect(annotation).toHaveProperty('id');
-    expect(annotation.createdTime).toEqual(annotation.lastUpdatedTime);
+    expect(annotation).toHaveProperty('createdTime');
+    expect(annotation).toHaveProperty('lastUpdatedTime');
+    expect(annotation.annotatedResourceType).toEqual(
+      partial.annotatedResourceType
+    );
+    expect(annotation.annotatedResourceExternalId).toEqual(
+      partial.annotatedResourceExternalId
+    );
+    expect(annotation.annotationType).toEqual(partial.annotationType);
+    expect(annotation.creatingApp).toEqual(partial.creatingApp);
+    expect(annotation.creatingAppVersion).toEqual(partial.creatingAppVersion);
+    expect(annotation.status).toEqual(partial.status);
     expect(annotation.data).toEqual(partial.data);
 
     await client.annotations.delete([{ id: annotation.id }]);
