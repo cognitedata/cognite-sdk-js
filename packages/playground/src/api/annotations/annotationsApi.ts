@@ -11,7 +11,7 @@ import {
   AnnotationCreate,
   AnnotationFilterRequest,
   AnnotationModel,
-} from '../../types';
+} from './types';
 
 export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**

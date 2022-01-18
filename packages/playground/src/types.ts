@@ -4,21 +4,15 @@ import {
   CogniteExternalId,
   CogniteInternalId,
   ExternalId,
-  FilterQuery,
-  LabelFilter,
-  PointCoordinates,
-  Label,
-  Range,
-  FileName,
   FileMimeType,
-  Metadata,
+  FileName,
+  FilterQuery,
   ItemsWrapper,
-  SetField,
-  SinglePatchString,
-  SinglePatchRequiredString,
-  SinglePatch,
-  IdEither,
-  InternalId,
+  Label,
+  LabelFilter,
+  Metadata,
+  PointCoordinates,
+  Range,
 } from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
@@ -542,69 +536,4 @@ export interface FunctionSchedulesFilter {
   FunctionExternalId?: string;
   createdTime?: Date;
   cronExpression?: string;
-}
-
-/* ************************
-   Annotations API types
-************************ */
-
-export type AnnotatedResourceType = 'file';
-export type AnnotationType =
-  | 'diagrams.AssetLink'
-  | 'diagrams.FileLink'
-  | 'diagrams.PipeSymbol'
-  | 'documents.ExtractedText';
-export type LinkedResourceType = 'file' | 'asset';
-export type AnnotationStatus = 'suggested' | 'approved' | 'rejected';
-
-export interface AnnotationModel extends AnnotationCreate {
-  id: CogniteInternalId;
-  createdTime: Date;
-  lastUpdatedTime: Date;
-}
-
-export interface AnnotationCreate {
-  annotatedResourceType: AnnotatedResourceType;
-  annotatedResourceId?: CogniteInternalId;
-  annotatedResourceExternalId?: CogniteExternalId;
-  annotationType: AnnotationType;
-  creatingApp: string;
-  creatingAppVersion: string;
-  creatingUser: string | null;
-  data: object;
-  linkedResourceType?: LinkedResourceType;
-  linkedResourceId?: CogniteInternalId;
-  linkedResourceExternalId?: CogniteExternalId;
-  status: AnnotationStatus;
-}
-
-export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
-
-export interface AnnotationUpdate {
-  update: {
-    annotationType?: SinglePatchRequiredString;
-    data?: SetField<object>;
-    linkedResourceType?: SinglePatchString;
-    linkedResourceId?: SinglePatch<CogniteInternalId>;
-    linkedResourceExternalId?: SinglePatch<CogniteExternalId>;
-  };
-}
-
-export interface AnnotationFilterRequest
-  extends AnnotationFilter,
-    FilterQuery {}
-
-export interface AnnotationFilter {
-  filter: AnnotationFilterProps;
-}
-
-export interface AnnotationFilterProps {
-  annotatedResourceType: AnnotatedResourceType;
-  annotatedResourceIds: IdEither[];
-  annotationType?: AnnotationType;
-  creatingApp?: string;
-  creatingUser?: string | null;
-  linkedResourceType?: LinkedResourceType;
-  linkedResourceIds?: IdEither[];
-  status?: AnnotationStatus;
 }
