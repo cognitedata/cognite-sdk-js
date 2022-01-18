@@ -8,8 +8,6 @@ import {
   InternalId,
   SetField,
   SinglePatch,
-  SinglePatchRequiredString,
-  SinglePatchString,
 } from '@cognite/sdk';
 
 export type AnnotatedResourceType = 'file';
@@ -45,11 +43,12 @@ export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
 
 export interface AnnotationUpdate {
   update: {
-    annotationType?: SinglePatchRequiredString;
+    annotationType?: SetField<AnnotationPayload>;
     data?: SetField<AnnotationPayload>;
-    linkedResourceType?: SinglePatchString;
+    linkedResourceType?: SinglePatch<LinkedResourceType>;
     linkedResourceId?: SinglePatch<CogniteInternalId>;
     linkedResourceExternalId?: SinglePatch<CogniteExternalId>;
+    status?: SetField<AnnotationStatus>;
   };
 }
 
