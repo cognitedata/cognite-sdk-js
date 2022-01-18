@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@4.2.7...@cognite/sdk-playground@4.3.0) (2022-01-18)
+
+
+### Features
+
+* **annotations:** add sdk for annotations api ([#729](https://github.com/cognitedata/cognite-sdk-js/issues/729)) ([ad31fa0](https://github.com/cognitedata/cognite-sdk-js/commit/ad31fa0f7c18e5c14751faf430bc7343b4f32a89))
+
+
+
+
+
 ## [4.2.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@4.2.6...@cognite/sdk-playground@4.2.7) (2022-01-10)
 
 **Note:** Version bump only for package @cognite/sdk-playground
