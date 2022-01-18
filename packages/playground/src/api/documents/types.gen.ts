@@ -4,24 +4,21 @@ export type DocumentsSearchRequest = DocumentsFilterOption &
   DocumentsSort &
   DocumentsSearchLimit;
 
-export type DocumentsFilterRequest = DocumentsFilterOption &
-  DocumentsLimit &
-  Cursor;
+export type DocumentsFilterRequest = DocumentsFilterOption & DocumentsLimit & Cursor;
 
-export type DocumentContentRequest = DocumentContentRequestItems &
-  IgnoreUnknownIdsField;
+export type DocumentContentRequest = DocumentContentRequestItems & IgnoreUnknownIdsField;
 
 /**
  * A list of pipeline configuration objects.
  */
 export interface DocumentsPipelineItems {
-  items: DocumentsPipeline[];
+  items?: DocumentsPipeline[];
 }
 
 /**
  * A list of update pipeline configuration objects.
  */
-export interface DocumentsUpdatePipelineItems {
+export interface DocumentsPipelineItemsUpdate {
   items: DocumentsPipelineUpdate[];
 }
 
@@ -64,11 +61,9 @@ export interface DocumentsClassifierCreateItems {
   items: DocumentsClassifierCreate[];
 }
 
-export type DocumentsClassifierListByIdsRequest =
-  DocumentsClassifierListByIdsItems & IgnoreUnknownIdsField;
+export type DocumentsClassifierListByIdsRequest = DocumentsClassifierListByIdsItems & IgnoreUnknownIdsField;
 
-export type DocumentsClassifierDeleteRequest = DocumentsClassifierDeleteItems &
-  IgnoreUnknownIdsField;
+export type DocumentsClassifierDeleteRequest = DocumentsClassifierDeleteItems & IgnoreUnknownIdsField;
 
 /**
  * Filter with exact match
@@ -266,64 +261,16 @@ export interface DocumentContent {
 export interface DocumentsPipeline {
   /** External Id provided by client. Should be unique within a given project/resource combination. */
   externalId?: CogniteExternalId;
-  sensitivityMatcher?: {
-    matchLists?: Record<string, string[]>;
-    fieldMappings?: {
-      title?: string[];
-      author?: string[];
-      mimeType?: string[];
-      type?: string[];
-      labelsExternalIds?: CogniteExternalId[];
-      sourceFile?: {
-        name?: string[];
-        directory?: string[];
-        content?: string[];
-        metadata?: Record<string, string[]>;
-      };
-    };
-    filterPasswords?: boolean;
-    sensitiveSecurityCategory?: number;
-    restrictToSources?: string[];
-  };
-  classifier?: {
-    name?: string;
-    trainingLabels?: LabelList;
-    activeClassifierId?: CogniteInternalId;
-  };
+  sensitivityMatcher?: DocumentsPipelineSensitivityMatcher;
+  classifier?: DocumentsPipelineClassifier;
 }
 
 export interface DocumentsPipelineUpdate {
   /** External Id provided by client. Should be unique within a given project/resource combination. */
   externalId: CogniteExternalId;
-  sensitivityMatcher?: {
-    matchLists?: {
-      add?: Record<string, string[]>;
-      remove?: string[];
-      set?: Record<string, string[]>;
-    };
-    fieldMappings?: {
-      set?: {
-        title?: string[];
-        author?: string[];
-        mimeType?: string[];
-        type?: string[];
-        labelsExternalIds?: CogniteExternalId[];
-        sourceFile?: {
-          name?: string[];
-          directory?: string[];
-          content?: string[];
-          metadata?: Record<string, string[]>;
-        };
-      };
-    };
-    filterPasswords?: { set?: boolean };
-    sensitiveSecurityCategory?: { set?: number; setNull?: boolean };
-    restrictToSources?: { add?: string[]; remove?: string[]; set?: string[] };
-  };
-  classifier?: {
-    name?: { set?: string };
-    trainingLabels?: { add?: LabelList; remove?: LabelList; set?: LabelList };
-    activeClassifierId?: { set?: CogniteInternalId; setNull?: boolean };
+  update: {
+    sensitivityMatcher?: DocumentsPipelineSensitivityMatcherUpdate;
+    classifier?: DocumentsPipelineClassifierUpdate;
   };
 }
 
@@ -362,7 +309,7 @@ export type FeedbackLabel = LabelDefinitionExternalId;
 /**
  * What to do with the label on the file
  */
-export type FeedbackAction = 'ATTACH' | 'DETACH';
+export type FeedbackAction = "ATTACH" | "DETACH";
 
 /**
  * Server-generated identifier for the feedback object
@@ -396,7 +343,7 @@ export type ReporterInfo = string | null;
 - If the action was `DETACH`, and the label is not attached to the file anymore.
 * @example ACCEPTED
 */
-export type FeedbackStatus = 'CREATED' | 'ACCEPTED' | 'REJECTED' | 'STALE';
+export type FeedbackStatus = "CREATED" | "ACCEPTED" | "REJECTED" | "STALE";
 
 /**
  * A feedback object
@@ -462,7 +409,7 @@ You can find extensive description of the available fields in the
 [List Feedback](#operation/documentsListFeedback) endpoint response.
 * @example action
 */
-export type AggregateField = 'action' | 'status';
+export type AggregateField = "action" | "status";
 
 /**
  * A value/count aggregation object
@@ -729,9 +676,68 @@ export interface DocumentGeoLocation {
   geometries?: GeometryCollection[];
 }
 
-export type DocumentContentItem =
-  | { id?: DocumentId }
-  | { externalId?: CogniteExternalId };
+export type DocumentContentItem = { id?: DocumentId } | { externalId?: CogniteExternalId };
+
+export interface DocumentsPipelineSensitivityMatcher {
+  /**
+   * Dictionary object. Name of match lists as keys, lists of matching words as values.
+   * @example {"DIRECTORIES":["secret"],"TYPES":["contracts","emails"],"TERMS":["secret","confidential","sensitive"]}
+   */
+  matchLists?: Record<string, string[]>;
+  fieldMappings?: DocumentsPipelineFieldMappings;
+
+  /** Whether or not a file is marked sensitive if it contains text that looks like a password. */
+  filterPasswords?: boolean;
+
+  /**
+   * The security category id to attach to sensitive documents.
+   * @format int64
+   * @example 345341343656745
+   */
+  sensitiveSecurityCategory?: number;
+
+  /** Only documents from these sources will be evaluated if they are sensitive. If the field is empty, all documents will be evaluated. */
+  restrictToSources?: string[];
+}
+
+export interface DocumentsPipelineClassifier {
+  /** A descriptive name of the classifier. */
+  name?: string;
+
+  /** A list of the labels associated with this resource item. */
+  trainingLabels?: LabelList;
+
+  /** A server-generated ID for the object. */
+  activeClassifierId?: CogniteInternalId;
+
+  /**
+   * Timestamp when the classifier was last trained
+   * @format int64
+   */
+  lastTrainedAt?: number;
+}
+
+export type DocumentsPipelineSensitivityMatcherUpdate =
+  | { set: DocumentsPipelineSensitivityMatcher }
+  | {
+      modify: {
+        fieldMappings?: SensitivityMatcherFieldMappingsUpdate;
+        matchLists?: { set: Record<string, string[]> } | { add?: Record<string, string[]>; remove?: string[] };
+        filterPasswords?: { set: boolean };
+        sensitiveSecurityCategory?: { set: number } | { setNull: boolean };
+        restrictToSources?: { set: string[] } | { add?: string[]; remove?: string[] };
+      };
+    };
+
+export type DocumentsPipelineClassifierUpdate =
+  | { set: DocumentsPipelineClassifier }
+  | {
+      modify: {
+        name?: { set: string };
+        trainingLabels?: any;
+        activeClassifierId?: { set: CogniteInternalId } | { setNull: boolean };
+      };
+    };
 
 export interface DocumentsClassifier {
   /** Project id */
@@ -754,13 +760,7 @@ export interface DocumentsClassifier {
 
   /** Classifier id */
   id: CogniteInternalId;
-  metrics?: {
-    precision?: number;
-    recall?: number;
-    f1Score?: number;
-    confusionMatrix?: number[][];
-    labels?: string[];
-  };
+  metrics?: DocumentsClassifierMetrics;
 
   /**
    * The number of documents used for training the classifier
@@ -802,9 +802,7 @@ export type AssetIdsFilter = ContainsAllIds | ContainsAnyId | ValueMissing;
 /**
  * Only include files that reference these specific asset externalIds.
  */
-export type AssetExternalIdsFilter =
-  | ContainsAllExternalIds
-  | ContainsAnyExternalIds;
+export type AssetExternalIdsFilter = ContainsAllExternalIds | ContainsAnyExternalIds;
 
 /**
  * Only include documents with a related asset in a subtree rooted at any of these asset IDs, including the roots given. Returns an error if the total size of the given subtrees exceeds 10,000 assets. Usage of this field requires `["assetsAcl:READ"]` capability.
@@ -819,9 +817,7 @@ export type LabelFilter = LabelContainsAnyFilter | LabelContainsAllFilter;
 /**
  * Filter on files which have the specified spatial relation with the specified geometry shape.
  */
-export type DocumentGeoLocationFilter =
-  | { shape: DocumentGeoLocation; relation?: Relation }
-  | { missing: boolean };
+export type DocumentGeoLocationFilter = ValueMissing | { shape: DocumentGeoLocation; relation?: Relation };
 
 export interface DocumentsSourceFileFilter {
   /** Name of the file */
@@ -908,29 +904,69 @@ export interface GeometryCollection {
   coordinates?: ShapeCoordinates;
 }
 
+/**
+ * @example {"title":["TERMS"],"author":["TERMS"],"type":["TERMS","TYPES"],"sourceFile":{"name":["TERMS"],"content":["TERMS","TYPES"],"directory":["DIRECTORIES"]}}
+ */
+export interface DocumentsPipelineFieldMappings {
+  title?: DocumentsPipelineArrayOf1To10Strings;
+  author?: DocumentsPipelineArrayOf1To10Strings;
+  mimeType?: DocumentsPipelineArrayOf1To10Strings;
+  type?: DocumentsPipelineArrayOf1To10Strings;
+  labelsExternalIds?: DocumentsPipelineArrayOf1To10ExternalIds;
+  sourceFile?: DocumentsPipelineSourceFile;
+}
+
+export type SensitivityMatcherFieldMappingsUpdate =
+  | { set: DocumentsPipelineFieldMappings }
+  | {
+      modify: {
+        title?: DocumentsPipelineArrayOf1To10StringsUpdate;
+        author?: DocumentsPipelineArrayOf1To10StringsUpdate;
+        mimeType?: DocumentsPipelineArrayOf1To10StringsUpdate;
+        type?: DocumentsPipelineArrayOf1To10StringsUpdate;
+        labelsExternalIds?: DocumentsPipelineArrayOf1To10ExternalIdsUpdate;
+        sourceFile?: DocumentsPipelineSourceFileUpdate;
+      };
+    };
+
+export type LabelListUpdate = { set: LabelList } | { add?: LabelList; remove?: LabelList };
+
+export interface DocumentsClassifierMetrics {
+  /** @format float */
+  precision?: number;
+
+  /** @format float */
+  recall?: number;
+
+  /** @format float */
+  f1Score?: number;
+  confusionMatrix?: number[][];
+  labels?: string[];
+}
+
 export interface IntIn {
   /** Int value must be a value in this array */
-  in?: number[];
+  in: number[];
 }
 
 export interface IntEquals {
   /** Int value must match this value */
-  equals?: number;
+  equals: number;
 }
 
 export interface ValueMissing {
   /** Value for the field is missing */
-  missing?: boolean;
+  missing: boolean;
 }
 
 export interface StringIn {
   /** String value must be a value in this array */
-  in?: string[];
+  in: string[];
 }
 
 export interface StringEquals {
   /** String value must match this value */
-  equals?: string;
+  equals: string;
 }
 
 export interface ContainsAllIds {
@@ -973,6 +1009,36 @@ export type Relation = string;
  */
 export type ObjectPatch = ObjectPatchSet | ObjectPatchAddRemove;
 
+export type DocumentsPipelineArrayOf1To10Strings = string[];
+
+export type DocumentsPipelineArrayOf1To10ExternalIds = CogniteExternalId[];
+
+export interface DocumentsPipelineSourceFile {
+  name?: DocumentsPipelineArrayOf1To10Strings;
+  directory?: DocumentsPipelineArrayOf1To10Strings;
+  content?: DocumentsPipelineArrayOf1To10Strings;
+  metadata?: Record<string, DocumentsPipelineArrayOf1To10Strings>;
+}
+
+export type DocumentsPipelineArrayOf1To10StringsUpdate =
+  | { set: DocumentsPipelineArrayOf1To10Strings }
+  | { add?: DocumentsPipelineArrayOf1To10Strings; remove?: DocumentsPipelineArrayOf1To10Strings };
+
+export type DocumentsPipelineArrayOf1To10ExternalIdsUpdate =
+  | { set: DocumentsPipelineArrayOf1To10ExternalIds }
+  | { add?: DocumentsPipelineArrayOf1To10ExternalIds; remove?: DocumentsPipelineArrayOf1To10ExternalIds };
+
+export type DocumentsPipelineSourceFileUpdate =
+  | { set: DocumentsPipelineSourceFile }
+  | {
+      modify: {
+        name?: DocumentsPipelineArrayOf1To10StringsUpdate;
+        directory?: DocumentsPipelineArrayOf1To10StringsUpdate;
+        content?: DocumentsPipelineArrayOf1To10StringsUpdate;
+        metadata?: { set: Record<string, string[]> } | { add?: Record<string, string[]>; remove?: string[] };
+      };
+    };
+
 export interface ObjectPatchSet {
   /**
    * Set the key-value pairs. All existing key-value pairs will be removed.
@@ -999,10 +1065,7 @@ export interface DocumentsSearchResponse {
   items: { highlight?: Highlight; item: Document }[];
   aggregates?: {
     name: string;
-    groups: {
-      group?: (object | LabelDefinitionExternalId)[];
-      value?: number;
-    }[];
+    groups: { group?: (object | LabelDefinitionExternalId)[]; value?: number }[];
     total: number;
   }[];
 }

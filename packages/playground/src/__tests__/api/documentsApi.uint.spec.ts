@@ -170,7 +170,49 @@ describe('Documents unit test', () => {
           items: [
             {
               externalId: 'cognitesdk-js-test',
-              sensitivityMatcher: {
+              update: {
+                sensitivityMatcher: {
+                  modify: {
+                    matchLists: {
+                      set: {
+                        restrictToSources: [],
+                      },
+                    },
+                    fieldMappings: {
+                      set: {
+                        title: ['dsfsdf'],
+                      },
+                    },
+                    filterPasswords: {
+                      set: true,
+                    },
+                  },
+                },
+                classifier: {
+                  modify: {
+                    name: {
+                      set: 'UPDATED',
+                    },
+                    trainingLabels: {
+                      remove: [{ externalId: 'wrong-id' }],
+                    },
+                    activeClassifierId: {
+                      setNull: true,
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        })
+        .once()
+        .reply(200, { items: [] });
+      await client.documents.pipelines.update([
+        {
+          externalId: 'cognitesdk-js-test',
+          update: {
+            sensitivityMatcher: {
+              modify: {
                 matchLists: {
                   set: {
                     restrictToSources: [],
@@ -185,7 +227,9 @@ describe('Documents unit test', () => {
                   set: true,
                 },
               },
-              classifier: {
+            },
+            classifier: {
+              modify: {
                 name: {
                   set: 'UPDATED',
                 },
@@ -196,38 +240,6 @@ describe('Documents unit test', () => {
                   setNull: true,
                 },
               },
-            },
-          ],
-        })
-        .once()
-        .reply(200, { items: [] });
-      await client.documents.pipelines.update([
-        {
-          externalId: 'cognitesdk-js-test',
-          sensitivityMatcher: {
-            matchLists: {
-              set: {
-                restrictToSources: [],
-              },
-            },
-            fieldMappings: {
-              set: {
-                title: ['dsfsdf'],
-              },
-            },
-            filterPasswords: {
-              set: true,
-            },
-          },
-          classifier: {
-            name: {
-              set: 'UPDATED',
-            },
-            trainingLabels: {
-              remove: [{ externalId: 'wrong-id' }],
-            },
-            activeClassifierId: {
-              setNull: true,
             },
           },
         },
