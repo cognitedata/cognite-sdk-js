@@ -114,6 +114,28 @@ describe('Annotations API', () => {
     await client.annotations.delete([{ id: annotation.id }]);
   });
 
+  test('create annotation, service is creating', async () => {
+    const partial: AnnotationCreate = {
+      annotatedResourceType: 'file',
+      annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
+      annotationType: 'documents.ExtractedText',
+      creatingApp: 'integration-tests',
+      creatingAppVersion: '0.0.1',
+      creatingUser: null,
+      status: 'suggested',
+      data: {
+        pageNumber: 7,
+        textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
+        extractedText: 'i am your father',
+      },
+    };
+    const created = await client.annotations.create([partial]);
+    const annotation = created[0];
+    expect(annotation.creatingUser).toBeNull();
+
+    await client.annotations.delete([{ id: annotation.id }]);
+  });
+
   test('retrieve annotations', async () => {
     const response = await client.annotations.retrieve(createdAnnotationIds);
     expect(response).toHaveLength(createdAnnotationIds.length);
