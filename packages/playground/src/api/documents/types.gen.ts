@@ -605,7 +605,7 @@ export interface DocumentSourceFile {
    * @format int64
    * @example 1000
    */
-  size?: object;
+  size?: number;
 
   /**
    * The ids of the assets related to this file
@@ -666,7 +666,7 @@ export interface DocumentSourceFile {
    * @example []
    */
   securityCategories?: number[];
-  metadata?: object;
+  metadata?: Record<string, string>;
 }
 
 /**
@@ -890,7 +890,7 @@ export interface DocumentsSourceFileFilter {
   datasetId?: IntPredicate;
 
   /** Custom, application specific metadata. String key -> String value. Limits: Maximum length of key is 32 bytes, value 512 bytes, up to 16 key-value pairs. */
-  metadata?: ObjectPatch;
+  metadata?: Record<string, string>;
 }
 
 /**
@@ -1021,11 +1021,6 @@ export interface LabelContainsAllFilter {
  */
 export type Relation = string;
 
-/**
- * Custom, application specific metadata. String key -> String value.
- */
-export type ObjectPatch = ObjectPatchSet | ObjectPatchAddRemove;
-
 export type DocumentsPipelineArrayOf1To10Strings = string[];
 
 export type DocumentsPipelineArrayOf1To10ExternalIds = CogniteExternalId[];
@@ -1063,28 +1058,6 @@ export type DocumentsPipelineSourceFileUpdate =
           | { add?: Record<string, string[]>; remove?: string[] };
       };
     };
-
-export interface ObjectPatchSet {
-  /**
-   * Set the key-value pairs. All existing key-value pairs will be removed.
-   * @example {"key1":"value1","key2":"value2"}
-   */
-  set: Record<string, string>;
-}
-
-export interface ObjectPatchAddRemove {
-  /**
-   * Add the key-value pairs. Values for existing keys will be overwritten.
-   * @example {"key1":"value1","key2":"value2"}
-   */
-  add?: Record<string, string>;
-
-  /**
-   * Remove the key-value pairs with the specified keys.
-   * @example ["value1","value2"]
-   */
-  remove?: string[];
-}
 
 export interface DocumentsSearchResponse {
   items: { highlight?: Highlight; item: Document }[];
