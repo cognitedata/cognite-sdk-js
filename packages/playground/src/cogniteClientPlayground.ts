@@ -4,10 +4,12 @@ import { accessApi, ClientOptions, BaseCogniteClient } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { DocumentsAPI } from './api/documents/documentsApi';
 import { FunctionsAPI } from './api/functions/functionsApi';
+import { AnnotationsAPI } from './api/annotations/annotationsApi';
 
 export default class CogniteClientPlayground extends BaseCogniteClient {
   private documentsApi?: DocumentsAPI;
   private functionsApi?: FunctionsAPI;
+  private annotationsApi?: AnnotationsAPI;
 
   /**
    * Create a new SDK client (playground)
@@ -36,6 +38,10 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
     return accessApi(this.functionsApi);
   }
 
+  public get annotations() {
+    return accessApi(this.annotationsApi);
+  }
+
   protected get version() {
     return `${version}-playground`;
   }
@@ -45,5 +51,6 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
 
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
     this.functionsApi = this.apiFactory(FunctionsAPI, 'functions');
+    this.annotationsApi = this.apiFactory(AnnotationsAPI, 'annotations');
   }
 }
