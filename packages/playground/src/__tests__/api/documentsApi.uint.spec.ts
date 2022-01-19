@@ -170,7 +170,49 @@ describe('Documents unit test', () => {
           items: [
             {
               externalId: 'cognitesdk-js-test',
-              sensitivityMatcher: {
+              update: {
+                sensitivityMatcher: {
+                  modify: {
+                    matchLists: {
+                      set: {
+                        restrictToSources: [],
+                      },
+                    },
+                    fieldMappings: {
+                      set: {
+                        title: ['dsfsdf'],
+                      },
+                    },
+                    filterPasswords: {
+                      set: true,
+                    },
+                  },
+                },
+                classifier: {
+                  modify: {
+                    name: {
+                      set: 'UPDATED',
+                    },
+                    trainingLabels: {
+                      remove: [{ externalId: 'wrong-id' }],
+                    },
+                    activeClassifierId: {
+                      setNull: true,
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        })
+        .once()
+        .reply(200, { items: [] });
+      await client.documents.pipelines.update([
+        {
+          externalId: 'cognitesdk-js-test',
+          update: {
+            sensitivityMatcher: {
+              modify: {
                 matchLists: {
                   set: {
                     restrictToSources: [],
@@ -185,7 +227,9 @@ describe('Documents unit test', () => {
                   set: true,
                 },
               },
-              classifier: {
+            },
+            classifier: {
+              modify: {
                 name: {
                   set: 'UPDATED',
                 },
@@ -196,38 +240,6 @@ describe('Documents unit test', () => {
                   setNull: true,
                 },
               },
-            },
-          ],
-        })
-        .once()
-        .reply(200, { items: [] });
-      await client.documents.pipelines.update([
-        {
-          externalId: 'cognitesdk-js-test',
-          sensitivityMatcher: {
-            matchLists: {
-              set: {
-                restrictToSources: [],
-              },
-            },
-            fieldMappings: {
-              set: {
-                title: ['dsfsdf'],
-              },
-            },
-            filterPasswords: {
-              set: true,
-            },
-          },
-          classifier: {
-            name: {
-              set: 'UPDATED',
-            },
-            trainingLabels: {
-              remove: [{ externalId: 'wrong-id' }],
-            },
-            activeClassifierId: {
-              setNull: true,
             },
           },
         },
@@ -299,12 +311,12 @@ describe('Documents unit test', () => {
         });
       const response = await client.documents.search({});
       const geoLocation = response.items[0].item.geoLocation;
-      expect(geoLocation.type).toEqual('Point');
-      expect(geoLocation.coordinates).toBeDefined();
+      expect(geoLocation?.type).toEqual('Point');
+      expect(geoLocation?.coordinates).toBeDefined();
       // @ts-ignore
-      expect(geoLocation.coordinates[0]).toEqual(2.324);
+      expect(geoLocation?.coordinates[0]).toEqual(2.324);
       // @ts-ignore
-      expect(geoLocation.coordinates[1]).toEqual(23.1);
+      expect(geoLocation?.coordinates[1]).toEqual(23.1);
     });
 
     test('MultiPoint / LineString', async () => {
@@ -328,12 +340,12 @@ describe('Documents unit test', () => {
         });
       const response = await client.documents.search({});
       const geoLocation = response.items[0].item.geoLocation;
-      expect(geoLocation.type).toEqual('MultiPoint');
-      expect(geoLocation.coordinates).toBeDefined();
+      expect(geoLocation?.type).toEqual('MultiPoint');
+      expect(geoLocation?.coordinates).toBeDefined();
       // @ts-ignore
-      expect(geoLocation.coordinates[0]).toEqual([2.324, 23.1]);
+      expect(geoLocation?.coordinates[0]).toEqual([2.324, 23.1]);
       // @ts-ignore
-      expect(geoLocation.coordinates[1]).toEqual([2, 7]);
+      expect(geoLocation?.coordinates[1]).toEqual([2, 7]);
     });
 
     test('MultiLineString', async () => {
@@ -363,15 +375,15 @@ describe('Documents unit test', () => {
         });
       const response = await client.documents.search({});
       const geoLocation = response.items[0].item.geoLocation;
-      expect(geoLocation.type).toEqual('MultiLineString');
-      expect(geoLocation.coordinates).toBeDefined();
+      expect(geoLocation?.type).toEqual('MultiLineString');
+      expect(geoLocation?.coordinates).toBeDefined();
       // @ts-ignore
-      expect(geoLocation.coordinates[0]).toEqual([
+      expect(geoLocation?.coordinates[0]).toEqual([
         [2.324, 23.1],
         [2, 7],
       ]);
       // @ts-ignore
-      expect(geoLocation.coordinates[1]).toEqual([
+      expect(geoLocation?.coordinates[1]).toEqual([
         [3, 4],
         [2, 1],
       ]);
@@ -420,12 +432,12 @@ describe('Documents unit test', () => {
         });
       const response = await client.documents.search({});
       const geoLocation = response.items[0].item.geoLocation;
-      expect(geoLocation.type).toEqual('MultiPolygon');
-      expect(geoLocation.coordinates).toBeDefined();
+      expect(geoLocation?.type).toEqual('MultiPolygon');
+      expect(geoLocation?.coordinates).toBeDefined();
       // @ts-ignore
-      const polygon1 = geoLocation.coordinates[0];
+      const polygon1 = geoLocation?.coordinates[0];
       // @ts-ignore
-      const polygon2 = geoLocation.coordinates[1];
+      const polygon2 = geoLocation?.coordinates[1];
       // @ts-ignore
       expect(polygon1[0][0][0]).toEqual(40.0);
       // @ts-ignore
@@ -470,23 +482,23 @@ describe('Documents unit test', () => {
           });
         const response = await client.documents.search({});
         const geoLocation = response.items[0].item.geoLocation;
-        expect(geoLocation.type).toEqual('GeometryCollection');
-        expect(geoLocation.coordinates).toBeUndefined();
-        expect(geoLocation.geometries).toBeDefined();
+        expect(geoLocation?.type).toEqual('GeometryCollection');
+        expect(geoLocation?.coordinates).toBeUndefined();
+        expect(geoLocation?.geometries).toBeDefined();
 
         // @ts-ignore
-        const first = geoLocation.geometries[0];
+        const first = geoLocation?.geometries[0];
         // @ts-ignore
-        const second = geoLocation.geometries[1];
+        const second = geoLocation?.geometries[1];
 
-        expect(first.type).toEqual('LineString');
-        expect(first.coordinates).toEqual([
+        expect(first?.type).toEqual('LineString');
+        expect(first?.coordinates).toEqual([
           [2.324, 23.1],
           [2, 7],
         ]);
 
-        expect(second.type).toEqual('Point');
-        expect(second.coordinates).toEqual([2.324, 23.1]);
+        expect(second?.type).toEqual('Point');
+        expect(second?.coordinates).toEqual([2.324, 23.1]);
       });
     });
   });

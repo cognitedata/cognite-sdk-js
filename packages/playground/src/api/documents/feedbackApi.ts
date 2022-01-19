@@ -3,19 +3,21 @@
 import {
   BaseResourceAPI,
   CursorAndAsyncIterator,
-  ItemsWrapper,
+  FilterQuery,
 } from '@cognite/sdk-core';
 
 import {
   AggregateField,
   DocumentFeedback,
+  DocumentFeedbackAcceptRejectRequest,
   DocumentFeedbackAggregateRequest,
   DocumentFeedbackAggregateResponse,
-  DocumentFeedbackCreateItem,
-  FeedbackId,
-  FeedbackQueryParameters,
+  DocumentFeedbackListResponse,
+  DocumentFeedbackAcceptRejectItem,
+  FeedbackStatusQueryParameter,
   FeedbackStatus,
 } from '../../types';
+import { DocumentFeedbackCreateItem } from './types.gen';
 
 export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   public aggregates = (
@@ -34,7 +36,9 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   public list = (
     status?: FeedbackStatus
   ): CursorAndAsyncIterator<DocumentFeedback> => {
-    const parameter: FeedbackQueryParameters = { status: status };
+    const parameter: FeedbackStatusQueryParameter & FilterQuery = {
+      status: status,
+    };
     return this.listEndpoint(this.callListEndpointWithGet, parameter);
   };
 
@@ -50,11 +54,15 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
     ids: number[],
     endpoint: acceptRejectEndpoint
   ) {
-    const feedbackIds = ids.map((id) => <FeedbackId>{ id: id });
-    const content: ItemsWrapper<FeedbackId[]> = { items: feedbackIds };
+    const feedbackIds: DocumentFeedbackAcceptRejectItem[] = ids.map((id) => ({
+      id,
+    }));
+    const request: DocumentFeedbackAcceptRejectRequest = {
+      items: feedbackIds,
+    };
     const path = this.url(endpoint);
-    const response = await this.post<ItemsWrapper<DocumentFeedback[]>>(path, {
-      data: content,
+    const response = await this.post<DocumentFeedbackListResponse>(path, {
+      data: request,
     });
     return this.addToMapAndReturn(response.data.items, response);
   }
