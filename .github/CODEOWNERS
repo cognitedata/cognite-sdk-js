@@ -1,4 +1,4 @@
 * @omarakabbal @cognite-ornellas @digaomilleniun @devbarba @harish0489-cognite
-/packages/core/ @cognitedata/grep
-/packages/playground/ @cognitedata/grep
-/packages/wells/ @cognitedata/subsurface-data
+
+/packages/playground/src/api/documents @cognitedata/grep
+

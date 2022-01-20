@@ -6,7 +6,7 @@ import {
   ExternalId,
 } from '@cognite/sdk-core';
 
-import { DocumentsPipeline, UpdateDocumentsPipeline } from '../../types';
+import { DocumentsPipeline, DocumentsPipelineUpdate } from '../../types';
 
 export class PipelinesAPI extends BaseResourceAPI<DocumentsPipeline> {
   public create = (
@@ -20,9 +20,9 @@ export class PipelinesAPI extends BaseResourceAPI<DocumentsPipeline> {
   };
 
   public update = (
-    changes: UpdateDocumentsPipeline[]
+    changes: DocumentsPipelineUpdate[]
   ): Promise<DocumentsPipeline[]> => {
-    return this.updateEndpoint<UpdateDocumentsPipeline>(changes);
+    return this.updateEndpoint<DocumentsPipelineUpdate>(changes);
   };
 
   public delete = (ids: ExternalId[]) => {
