@@ -1,4 +1,3 @@
-* @peternic @jarlah @bdimitrijoski @andersfylling @ebrattli
-/packages/core/ @cognitedata/grep
-/packages/playground/ @cognitedata/grep
-/packages/wells/ @cognitedata/subsurface-data
+* @cognitedata/developer-tooling
+
+/packages/playground/src/api/documents @cognitedata/grep
