@@ -164,6 +164,12 @@ export interface Document {
   mimeType?: string;
 
   /**
+   * Extension of the file (always in lowercase)
+   * @example pdf
+   */
+  extension?: string;
+
+  /**
    * Number of pages for multi-page documents
    * @format int32
    * @example 2
@@ -482,6 +488,12 @@ export interface DocumentsFilter {
   /** Derived MIME type of the file */
   mimeType?: StringPredicate;
 
+  /**
+   * Extension of the file (case-insensitive)
+   * @example pdf
+   */
+  extension?: StringPredicate;
+
   /** Number of pages for multi-page documents. */
   pageCount?: { max?: number; min?: number };
 
@@ -575,12 +587,6 @@ export interface DocumentSourceFile {
    * @example hamlet.txt
    */
   name: string;
-
-  /**
-   * Extension of the file (case-insensitive)
-   * @example pdf
-   */
-  extension?: string;
 
   /**
    * The directory the file can be found in
@@ -837,12 +843,6 @@ export type DocumentGeoLocationFilter =
 export interface DocumentsSourceFileFilter {
   /** Name of the file */
   name?: StringPredicate;
-
-  /**
-   * Extension of the file (always in lowercase)
-   * @example pdf
-   */
-  extension?: StringPredicate;
 
   /** The name of the directory holding the file */
   directoryPrefix?: StringPredicate;
