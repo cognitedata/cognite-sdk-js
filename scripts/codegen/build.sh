@@ -14,6 +14,7 @@ cd ../..
 
 yarn install
 node scripts/codegen/index.js
+
 yarn build --since master
 yarn lint:fix --since master
 
