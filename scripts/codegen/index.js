@@ -168,6 +168,10 @@ function getChild(root, path) {
   return node;
 }
 
+// generate types for a given api version and service.
+// Note the functionality for generating types from responses is bugged as of writing this
+// and to compensate we extract the json schema from each related response definition
+// and store them in the components spec.
 function generate(version, service) {
   const config = version === "playground" ? configPlayground : configV1;
   const spec = JSON.parse(JSON.stringify(config));
@@ -225,10 +229,16 @@ function generate(version, service) {
     spec.components.schemas[name + "QueryParameter"] = schema;
   }
 
-  // remove common types
-  // specialized for documents
+  // remove the common json error structure as it is not needed here.
+  // this is the `{"error": {"message": "hello", "code": 400, ...}}`
   delete spec.components.schemas["Error"]
+  
+  // remove EmptyResponse as this is will never directly be used by the sdk
+  // it's just used in openapi to state we return an empty json `{}`.
   delete spec.components.schemas["EmptyResponse"]
+
+  // Remove all references to error responses, as the sdk instead just throws an except
+  // no custom type per api version is utilized so these are redundant.
   errorResponses = []
   for (const [key, _] of Object.entries(spec.components.schemas)) {
     if (key.endsWith("ErrorResponse")) {
@@ -239,6 +249,7 @@ function generate(version, service) {
     delete spec.components.schemas[response]
   }
 
+  // save the updated spec so we can autogenerate the types from swagger
   const str = JSON.stringify(spec);
   const path = `./tmp/${version}.json`;
   fs.writeFileSync(path, str, err => {
