@@ -79,7 +79,7 @@ const configuration: Configuration = {
 
 const pca = new PublicClientApplication(configuration);
 const getToken = async () => {
-  const accountId = "some-id";
+  const accountId = sessionStorage.getItem("account");
   const account = pca.getAccountByLocalId(accountId)!;
   const token = await pca.acquireTokenSilent({
     account,
