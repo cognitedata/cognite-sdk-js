@@ -102,8 +102,8 @@ const client = new CogniteClient({
 
 ```
 
-You can find a full sample application [here](../samples/react/msal-browser-react/) and
-[here](../samples/react/msal-advanced-browser-react).
+You can find a full sample application [here](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/react/msal-browser-react/) and
+[here](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/react/msal-advanced-browser-react).
 
 ### OIDC authentication using client credentials
 
@@ -153,7 +153,7 @@ async function quickstart() {
 
 quickstart()
 ```
-[Demo project](../samples/nodejs/oidc-typescript/)
+[Demo project](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/nodejs/oidc-typescript)
 
 
 ## CDF auth flow
@@ -216,7 +216,7 @@ const client = new CogniteClient({
 const assets = await client.assets.retrieve([{ id: 23232789217132 }]);
 ```
 
-You can find a complete example application [here](../samples/react/legacy-auth-redirect/src/App.tsx).
+You can find a complete example application [here](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/react/legacy-auth-redirect).
 
 The first time this is run, the user getd a `401` response from CDF in the first call to
 `client.assets`. This triggers the SDK to perform a redirect of the browser window to
@@ -272,7 +272,7 @@ const client = new CogniteClient({
 
 const assets = await client.assets.retrieve([{ id: 23232789217132 }]);
 ```
-You can find an example application using popups [here](../samples/react/legacy-auth-popup/src/App.tsx).
+You can find an example application using popups [here](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/react/legacy-auth-popup).
 
 The first time this runs, the user get a `401`-response from CDF in the first call to
 `client.assets`. This triggers the SDK to perform authentication of the user using a pop-up
