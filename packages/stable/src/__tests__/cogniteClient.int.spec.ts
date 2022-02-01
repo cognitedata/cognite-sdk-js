@@ -7,13 +7,30 @@ import {
   mockBaseUrl,
   setupLoggedInClient,
   setupMockableClient,
+  setupLoggedInClientWithOidc,
 } from './testUtils';
+
+describe('createClientWithOidc - integration', () => {
+  let client: CogniteClient;
+  beforeAll(async () => {
+    client = setupLoggedInClientWithOidc();
+    await client.authenticate();
+  });
+
+  test('handle login with existing OIDC credentials', async () => {
+    const response = (await client.get('/api/v1/token/inspect')).data;
+
+    expect(JSON.stringify(response)).toHaveProperty('subject');
+    expect(JSON.stringify(response)).toHaveProperty('projects');
+    expect(JSON.stringify(response)).toHaveProperty('capabilities');
+  });
+});
 
 describe('createClientWithApiKey - integration', () => {
   test('handle non-existing api-key', async () => {
     const client = new CogniteClient({
       appId: 'JS Integration test',
-      project: process.env.COGNITE_PROJECT as string,
+      project: 'publicdata',
       apiKeyMode: true,
       getToken: () => Promise.resolve('non-existing-api-key'),
     });
@@ -27,7 +44,7 @@ describe('createClientWithApiKey - integration', () => {
 
 describe('http methods - integration', () => {
   let client: CogniteClient;
-  const project = process.env.COGNITE_PROJECT as string;
+  const project = 'publicdata';
   beforeAll(async () => {
     client = setupLoggedInClient();
     await client.authenticate();
