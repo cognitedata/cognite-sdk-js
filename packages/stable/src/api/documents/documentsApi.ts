@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import { BaseResourceAPI } from '@cognite/sdk-core';
 
 import {
   Document,
@@ -9,10 +9,6 @@ import {
 } from '../../types';
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   /**
    * [Search for documents](https://docs.cognite.com/api/v1/#operation/documentsSearch)
    *
@@ -44,6 +40,6 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
       data: query,
     });
 
-    return response.data;
+    return this.addToMapAndReturn(response.data, response);
   }
 }
