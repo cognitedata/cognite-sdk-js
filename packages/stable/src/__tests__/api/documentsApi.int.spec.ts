@@ -19,6 +19,23 @@ describe('Documents integration test', () => {
     expect(response.items[0].item.id).toBeDefined();
   });
 
+  test('search with sorting', async () => {
+    const response = await client.documents.search({
+      sort: [
+        {
+          property: ['id'],
+          order: 'asc',
+        },
+      ],
+      limit: 5,
+    });
+    expect(response.items).toHaveLength(5);
+    expect(response.items[0].item.id).toBeLessThan(response.items[1].item.id);
+    expect(response.items[1].item.id).toBeLessThan(response.items[2].item.id);
+    expect(response.items[2].item.id).toBeLessThan(response.items[3].item.id);
+    expect(response.items[3].item.id).toBeLessThan(response.items[4].item.id);
+  });
+
   test('search with query', async () => {
     const response = await client.documents.search({
       search: {
