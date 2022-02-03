@@ -25,14 +25,14 @@ export interface DocumentSort {
 export type DocumentSortOrder = 'asc' | 'desc';
 
 export type DocumentSortItem = DocumentFilterProperty & {
-  order: DocumentSortOrder;
+  order?: DocumentSortOrder;
 };
 
 export interface DocumentSearchLimit {
   limit?: number;
 }
 
-export interface Highlight {
+export interface DocumentHighlight {
   name?: string[];
   content?: string[];
 }
@@ -42,7 +42,7 @@ export interface Document {
   externalId?: CogniteExternalId;
   title?: string;
   author?: string;
-  createdTime?: DocumentTimestamp;
+  createdTime: DocumentTimestamp;
   modifiedTime?: DocumentTimestamp;
   lastIndexedTime?: DocumentTimestamp;
   mimeType?: string;
@@ -158,7 +158,7 @@ export interface DocumentSourceFile {
 }
 
 export interface DocumentGeoJsonGeometry {
-  type?: DocumentShapeType;
+  type: DocumentShapeType;
   coordinates?: DocumentShapeCoordinates;
   geometries?: GeometryCollection[];
 }
@@ -177,7 +177,7 @@ export interface GeometryCollection {
 }
 
 export interface DocumentSearchResponse {
-  items: { highlight?: Highlight; item: Document }[];
+  items: { highlight?: DocumentHighlight; item: Document }[];
   aggregates?: {
     name: string;
     groups: {
