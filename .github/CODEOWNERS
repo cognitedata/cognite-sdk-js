@@ -1,3 +1,4 @@
 * @cognitedata/developer-tooling
 
+/packages/playground/src/__tests__/api/documents @cognitedata/grep
 /packages/playground/src/api/documents @cognitedata/grep
