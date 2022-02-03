@@ -13,6 +13,11 @@ jobs:
     env:
       COGNITE_PROJECT: cognitesdk-js
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+      COGNITE_OIDC_PROJECT: ${{secrets.COGNITE_OIDC_PROJECT}}
+      COGNITE_CLUSTER: ${{secrets.COGNITE_CLUSTER}}
+      COGNITE_CLIENT_ID: ${{secrets.COGNITE_CLIENT_ID}}
+      COGNITE_CLIENT_SECRET: ${{secrets.COGNITE_CLIENT_SECRET}}
+      COGNITE_AZURE_TENANT_ID: ${{secrets.COGNITE_AZURE_TENANT_ID}}
 
     steps:
       - uses: actions/checkout@v2
@@ -51,6 +56,11 @@ jobs:
     env:
       COGNITE_PROJECT: cognitesdk-js
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+      COGNITE_OIDC_PROJECT: ${{secrets.COGNITE_OIDC_PROJECT}}
+      COGNITE_CLUSTER: ${{secrets.COGNITE_CLUSTER}}
+      COGNITE_CLIENT_ID: ${{secrets.COGNITE_CLIENT_ID}}
+      COGNITE_CLIENT_SECRET: ${{secrets.COGNITE_CLIENT_SECRET}}
+      COGNITE_AZURE_TENANT_ID: ${{secrets.COGNITE_AZURE_TENANT_ID}}
 
     steps:
       - uses: actions/checkout@v2
@@ -84,6 +94,11 @@ jobs:
     env:
       COGNITE_PROJECT: cognitesdk-js
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+      COGNITE_OIDC_PROJECT: ${{secrets.COGNITE_OIDC_PROJECT}}
+      COGNITE_CLUSTER: ${{secrets.COGNITE_CLUSTER}}
+      COGNITE_CLIENT_ID: ${{secrets.COGNITE_CLIENT_ID}}
+      COGNITE_CLIENT_SECRET: ${{secrets.COGNITE_CLIENT_SECRET}}
+      COGNITE_AZURE_TENANT_ID: ${{secrets.COGNITE_AZURE_TENANT_ID}}
 
     steps:
       - uses: actions/checkout@v2
@@ -117,6 +132,11 @@ jobs:
     env:
       COGNITE_PROJECT: cognitesdk-js
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+      COGNITE_OIDC_PROJECT: ${{secrets.COGNITE_OIDC_PROJECT}}
+      COGNITE_CLUSTER: ${{secrets.COGNITE_CLUSTER}}
+      COGNITE_CLIENT_ID: ${{secrets.COGNITE_CLIENT_ID}}
+      COGNITE_CLIENT_SECRET: ${{secrets.COGNITE_CLIENT_SECRET}}
+      COGNITE_AZURE_TENANT_ID: ${{secrets.COGNITE_AZURE_TENANT_ID}}
 
     steps:
       - uses: actions/checkout@v2
@@ -161,6 +181,11 @@ jobs:
     env:
       COGNITE_PROJECT: cognitesdk-js
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+      COGNITE_OIDC_PROJECT: ${{secrets.COGNITE_OIDC_PROJECT}}
+      COGNITE_CLUSTER: ${{secrets.COGNITE_CLUSTER}}
+      COGNITE_CLIENT_ID: ${{secrets.COGNITE_CLIENT_ID}}
+      COGNITE_CLIENT_SECRET: ${{secrets.COGNITE_CLIENT_SECRET}}
+      COGNITE_AZURE_TENANT_ID: ${{secrets.COGNITE_AZURE_TENANT_ID}}
 
     steps:
       - uses: actions/checkout@v2

@@ -1,9 +1,10 @@
 // Copyright 2020 Cognite AS
 
 import { Constants, TestUtils } from '@cognite/sdk-core';
-import { ConfidentialClientApplication } from '@azure/msal-node';
+import Msal, { ConfidentialClientApplication } from '@azure/msal-node';
 import CogniteClient from '../cogniteClient';
 import { ExternalFileInfo } from '../types';
+import { sendGetRequestAsync, sendPostRequestAsync } from './proxyClient';
 
 export const {
   apiKey,
@@ -30,15 +31,19 @@ export function setupLoggedInClientWithOidc() {
   const cluster = process.env.COGNITE_CLUSTER as string;
   const baseUrl = `https://${cluster}.cognitedata.com`;
 
-  const pca = new ConfidentialClientApplication({
-    auth: {
-      clientId: process.env.COGNITE_CLIENT_ID as string,
-      clientSecret: process.env.COGNITE_CLIENT_SECRET as string,
-      authority: `https://login.microsoftonline.com/${
-        process.env.COGNITE_AZURE_TENANT_ID as string
-      }`,
-    },
-  });
+  const pca: Msal.ConfidentialClientApplication =
+    new ConfidentialClientApplication({
+      auth: {
+        clientId: process.env.COGNITE_CLIENT_ID as string,
+        clientSecret: process.env.COGNITE_CLIENT_SECRET as string,
+        authority: `https://login.microsoftonline.com/${
+          process.env.COGNITE_AZURE_TENANT_ID as string
+        }`,
+      },
+      system: {
+        networkClient: { sendGetRequestAsync, sendPostRequestAsync },
+      },
+    });
 
   return new CogniteClient({
     appId: 'JS SDK integration tests',
@@ -50,7 +55,7 @@ export function setupLoggedInClientWithOidc() {
           scopes: [`${baseUrl}/.default`],
           skipCache: true,
         })
-        .then((response: any) => response?.accessToken as string),
+        .then((response) => response?.accessToken as string),
   });
 }
 

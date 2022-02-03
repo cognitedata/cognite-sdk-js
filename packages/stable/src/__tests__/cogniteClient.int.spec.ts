@@ -20,9 +20,10 @@ describe('createClientWithOidc - integration', () => {
   test('handle login with existing OIDC credentials', async () => {
     const response = (await client.get('/api/v1/token/inspect')).data;
 
-    expect(JSON.stringify(response)).toHaveProperty('subject');
-    expect(JSON.stringify(response)).toHaveProperty('projects');
-    expect(JSON.stringify(response)).toHaveProperty('capabilities');
+    expect(response).toHaveProperty('subject');
+    expect(response).toHaveProperty('projects');
+    expect(response).toHaveProperty('capabilities');
+    expect(response).toMatchSnapshot();
   });
 });
 
