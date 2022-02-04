@@ -44,7 +44,7 @@ describe('createClientWithApiKey - integration', () => {
 
 describe('http methods - integration', () => {
   let client: CogniteClient;
-  const project = 'publicdata';
+  const project = process.env.COGNITE_PROJECT as string;
   beforeAll(async () => {
     client = setupLoggedInClient();
     await client.authenticate();
