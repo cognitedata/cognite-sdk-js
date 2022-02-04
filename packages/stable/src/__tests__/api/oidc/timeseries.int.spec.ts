@@ -175,7 +175,6 @@ describe('Timeseries integration test', () => {
   test('list', async () => {
     const { items } = await client.timeseries.list({
       limit: 1,
-      partition: '1/10',
     });
     expect(items.length).toBeGreaterThan(0);
   });
