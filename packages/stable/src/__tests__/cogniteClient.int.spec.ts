@@ -37,9 +37,7 @@ describe('createClientWithApiKey - integration', () => {
   test('handle non-existing api-key', async () => {
     await expect(
       client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Request failed | status code: 401"`
-    );
+    ).rejects.toThrowError('Request failed | status code: 401');
   });
 });
 
