@@ -46,9 +46,8 @@ describe('createClientWithApiKey - integration', () => {
 describe('http methods - integration', () => {
   let client: CogniteClient;
   const project = process.env.COGNITE_PROJECT as string;
-  beforeAll(async () => {
+  beforeAll(() => {
     client = setupLoggedInClient();
-    await client.authenticate();
   });
 
   test('post method', async () => {
@@ -57,9 +56,10 @@ describe('http methods - integration', () => {
       { name: 'Second Asset', externalId: 'root-2' + randomInt() },
     ];
     const response = await client.post<ItemsWrapper<Asset[]>>(
-      `/api/v1/projects/${project}/assets`,
+      `api/v1/projects/${project}/assets`,
       { data: { items: assets } }
     );
+    expect(response.status).toEqual(201);
     expect(response.data.items).toHaveLength(2);
   });
 
