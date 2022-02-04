@@ -32,7 +32,6 @@ describe('createClientWithApiKey - integration', () => {
   let client: CogniteClient;
   beforeAll(async () => {
     client = setupClientWithNonExistingApiKey();
-    await client.authenticate();
   });
   test('handle non-existing api-key', async () => {
     await expect(
