@@ -108,12 +108,6 @@ describe('Events integration test', () => {
     expect(aggregates[0].value).toBeDefined();
   });
 
-  test('delete', async () => {
-    await client.events.delete(
-      createdEvents.map((event) => ({ id: event.id }))
-    );
-  });
-
   test('search', async () => {
     const response = await client.events.search({
       search: {
@@ -149,10 +143,8 @@ describe('Events integration test', () => {
           filter: {
             startTime: {
               min: events[0].startTime - 1,
-              max: events[0].endTime! + 1,
             },
           },
-          partition: '1/10',
           limit: 3,
         })
         .autoPagingToArray({ limit: 5 });
@@ -229,5 +221,11 @@ describe('Events integration test', () => {
       limit: 1,
     });
     expect(response).toEqual([]);
+  });
+
+  test('delete', async () => {
+    await client.events.delete(
+      createdEvents.map((event) => ({ id: event.id }))
+    );
   });
 });

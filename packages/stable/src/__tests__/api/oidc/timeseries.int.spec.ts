@@ -163,7 +163,6 @@ describe('Timeseries integration test', () => {
   test('list with some more filters', async () => {
     const { isString, name, unit } = timeseries[1];
     const { items } = await client.timeseries.list({
-      partition: '1/2',
       filter: {
         isString,
         name,
@@ -198,7 +197,7 @@ describe('Timeseries integration test', () => {
   });
 
   test('search', async () => {
-    const name = 'test__constant_0_with_noise';
+    const name = 'new name';
     const result = await client.timeseries.search({
       search: {
         name,

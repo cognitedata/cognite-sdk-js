@@ -3,7 +3,7 @@
 import CogniteClient from '../../../cogniteClient';
 import { setupClient, setupLoggedInClientWithOidc } from '../../testUtils';
 
-describe('Login-api integration test', () => {
+describe.skip('Login-api integration test', () => {
   let client: CogniteClient;
   beforeAll(async () => {
     client = setupLoggedInClientWithOidc();

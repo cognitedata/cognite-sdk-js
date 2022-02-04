@@ -5,7 +5,7 @@ import { setupLoggedInClientWithOidc } from '../../testUtils';
 
 describe('Projects integration test', () => {
   let client: CogniteClient;
-  const project = process.env.COGNITE_PROJECT as string;
+  const project = process.env.COGNITE_OIDC_PROJECT as string;
   beforeAll(async () => {
     client = setupLoggedInClientWithOidc();
     await client.authenticate();

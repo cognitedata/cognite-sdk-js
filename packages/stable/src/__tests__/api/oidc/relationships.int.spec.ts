@@ -46,9 +46,7 @@ describe('relationships integration test', () => {
     [label] = await client.labels.create([
       { externalId: labelId, name: labelId },
     ]);
-    [dataSet] = await client.datasets
-      .list({ filter: { externalIdPrefix: 'integration-test-data-set' } })
-      .autoPagingToArray();
+    [dataSet] = await client.datasets.list().autoPagingToArray();
   });
 
   afterAll(async () => {
@@ -180,10 +178,10 @@ describe('relationships integration test', () => {
 
   describe('delete', () => {
     test('should delete relationship', async () => {
-      const result = await client.relationships.delete([
-        { externalId: relationshipId },
-      ]);
-
+      const result = await client.relationships.delete(
+        [{ externalId: relationshipId }],
+        { ignoreUnknownIds: true }
+      );
       expect(result).toEqual({});
     });
   });

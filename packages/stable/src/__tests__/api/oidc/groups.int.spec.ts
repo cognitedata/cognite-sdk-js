@@ -8,7 +8,7 @@ import {
   setupLoggedInClientWithOidc,
 } from '../../testUtils';
 
-const testDataSetId = 7268396229058705;
+const testDataSetId = 739942640066639;
 
 describe('Groups integration test', () => {
   let client: CogniteClient;
@@ -79,16 +79,13 @@ describe('Groups integration test', () => {
     expect(response).toEqual({});
   });
 
-  test('create asset group with datasetScope', async () => {
+  test('create dataset group', async () => {
     const groupsToCreate: GroupSpec[] = [
       {
         name: groupName + randomInt(),
         capabilities: [
           {
-            assetsAcl: {
-              actions: ['READ'],
-              scope: { datasetScope: { ids: [testDataSetId] } },
-            },
+            datasetsAcl: { actions: ['READ'], scope: { all: {} } },
           },
         ],
       },
@@ -100,13 +97,16 @@ describe('Groups integration test', () => {
     expect(group.name).toBe(groupsToCreate[0].name);
   });
 
-  test('create dataset group', async () => {
+  test('create asset group with datasetScope', async () => {
     const groupsToCreate: GroupSpec[] = [
       {
         name: groupName + randomInt(),
         capabilities: [
           {
-            datasetsAcl: { actions: ['READ'], scope: { all: {} } },
+            assetsAcl: {
+              actions: ['READ'],
+              scope: { datasetScope: { ids: [testDataSetId] } },
+            },
           },
         ],
       },
