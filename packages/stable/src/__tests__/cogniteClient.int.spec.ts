@@ -23,7 +23,6 @@ describe('createClientWithOidc - integration', () => {
     expect(response).toHaveProperty('subject');
     expect(response).toHaveProperty('projects');
     expect(response).toHaveProperty('capabilities');
-    expect(response).toMatchSnapshot();
   });
 });
 
