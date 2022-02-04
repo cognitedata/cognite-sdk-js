@@ -8,6 +8,8 @@ import {
   setupLoggedInClient,
   setupMockableClient,
   setupLoggedInClientWithOidc,
+  setupClientWithNonExistingApiKey,
+  randomInt,
 } from './testUtils';
 
 describe('createClientWithOidc - integration', () => {
@@ -27,13 +29,12 @@ describe('createClientWithOidc - integration', () => {
 });
 
 describe('createClientWithApiKey - integration', () => {
+  let client: CogniteClient;
+  beforeAll(async () => {
+    client = setupClientWithNonExistingApiKey();
+    await client.authenticate();
+  });
   test('handle non-existing api-key', async () => {
-    const client = new CogniteClient({
-      appId: 'JS Integration test',
-      project: 'publicdata',
-      apiKeyMode: true,
-      getToken: () => Promise.resolve('non-existing-api-key'),
-    });
     await expect(
       client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -49,14 +50,19 @@ describe('http methods - integration', () => {
     client = setupLoggedInClient();
     await client.authenticate();
   });
+
   test('post method', async () => {
-    const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
+    const assets = [
+      { name: 'First Asset', externalId: 'root-1' + randomInt() },
+      { name: 'Second Asset', externalId: 'root-2' + randomInt() },
+    ];
     const response = await client.post<ItemsWrapper<Asset[]>>(
       `/api/v1/projects/${project}/assets`,
       { data: { items: assets } }
     );
     expect(response.data.items).toHaveLength(2);
   });
+
   test('get method', async () => {
     const response = await client.get(`/api/v1/projects/${project}/assets`);
     expect(response.data).toHaveProperty('items');

@@ -27,6 +27,18 @@ export function setupClient(baseUrl: string = Constants.BASE_URL) {
   });
 }
 
+export function setupClientWithNonExistingApiKey(
+  baseUrl: string = Constants.BASE_URL
+) {
+  return new CogniteClient({
+    appId: 'JS Integration test',
+    project: 'publicdata',
+    apiKeyMode: true,
+    baseUrl,
+    getToken: () => Promise.resolve('non-existing-api-key'),
+  });
+}
+
 export function setupLoggedInClientWithOidc() {
   const cluster = process.env.COGNITE_CLUSTER as string;
   const baseUrl = `https://${cluster}.cognitedata.com`;
