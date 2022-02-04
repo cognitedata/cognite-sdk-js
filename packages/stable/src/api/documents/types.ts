@@ -33,8 +33,8 @@ export interface DocumentSearchLimit {
 }
 
 export interface DocumentHighlight {
-  name?: string[];
-  content?: string[];
+  name: string[];
+  content: string[];
 }
 
 export interface Document {
