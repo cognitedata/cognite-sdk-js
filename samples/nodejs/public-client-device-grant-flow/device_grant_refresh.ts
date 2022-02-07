@@ -48,7 +48,7 @@ async function deviceCodeGrantExample() {
         }),
   });
 
-  await client.authenticate();
+  console.log(await client.authenticate());
 
   const info = (await client.get('/api/v1/token/inspect')).data;
 

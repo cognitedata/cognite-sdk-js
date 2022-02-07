@@ -38,7 +38,7 @@ const scopes = [
 const handleResponse = async (
   response: AuthenticationResult | null
 ): Promise<string> => {
-  // console.log(response?.accessToken)
+  console.log(response);
   if (response && response.account) {
     fs.writeFileSync(ACCOUNT_JSON_PATH, JSON.stringify(response.account));
   }

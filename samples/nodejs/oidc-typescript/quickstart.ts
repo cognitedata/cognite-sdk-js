@@ -24,14 +24,21 @@ async function quickstart() {
 
   const client = new CogniteClient({
     appId: 'Cognite SDK samples',
+    baseUrl: "https://greenfield.cognitedata.com/",
     project,
     getToken: () =>
       pca
         .acquireTokenByClientCredential({
-          scopes: ['https://api.cognitedata.com/.default'],
+          scopes: ['https://greenfield.cognitedata.com/.default', 'offline_access'],
           skipCache: true,
         })
-        .then((response) => response?.accessToken! as string),
+        .then((response) => { 
+          console.log(response);
+          return response?.accessToken! as string
+        }).catch((e) => {
+          console.log(e);
+          return ''
+        }),
   });
 
   await client.authenticate();
