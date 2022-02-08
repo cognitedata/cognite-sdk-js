@@ -41,7 +41,7 @@
     "test-snippets": "yarn allsdk test-snippets --stream",
     "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream",
 
-    "generate-types:playground:documents": "sh scripts/codegen/build.sh"
+    "generate-types": "sh scripts/codegen/build.sh"
   },
   "devDependencies": {
     "swagger-typescript-api": "^9.3.1",
