@@ -3,10 +3,12 @@ const { generateApi } = require('swagger-typescript-api');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const fs = require('fs');
+const fs = require('fs').promises;
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const configPlayground = require('/tmp/oas/playground.json');
-const configV1 = require('/tmp/oas/v1.json');
+const fsSync = require('fs');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const https = require('https');
+const download = require('download');
 
 
 function panic(message) {
@@ -63,7 +65,7 @@ function generateTypesFromSource(input, output, imports, command) {
   })
     .then(({ files, configuration }) => {
       files.forEach(({ content, name }) => {
-        fs.writeFileSync(path.resolve(process.cwd(), output, name), codegenComment + importsDecleration + content);
+        fsSync.writeFileSync(path.resolve(process.cwd(), output, name), codegenComment + importsDecleration + content);
       });
     })
     .catch(e => console.error(e));
@@ -241,7 +243,7 @@ function extractQueryParameterSchemas(spec) {
 
 const fileContainsType = (filePath) => {
   let cache = {};
-  let fileData = fs.readFileSync(filePath).toString();
+  let fileData = fsSync.readFileSync(filePath).toString();
 
   return (typeName) => {
     if (typeName in cache) {
@@ -266,10 +268,7 @@ const fileContainsType = (filePath) => {
 // Note the functionality for generating types from responses is bugged as of writing this
 // and to compensate we extract the json schema from each related response definition
 // and store them in the components spec.
-function generate(package, service) {
-  const version = package === "playground" ? "playground" : "v1";
-  const config = version === "playground" ? configPlayground : configV1;
-  const spec = JSON.parse(JSON.stringify(config));
+function generate(package, service, version, spec) {
 
   spec.paths = filterPathsByPrefix(spec.paths, `/api/${version}/projects/{project}/${service}`);
   const refs = extractAllOpenApiRefTags(spec);
@@ -346,8 +345,8 @@ function generate(package, service) {
 
   // save the updated spec so we can autogenerate the types from swagger
   const str = JSON.stringify(spec);
-  const path = `./tmp/${version}.json`;
-  fs.writeFileSync(path, str, err => {
+  const path = `./tmp/types.json`;
+  fsSync.writeFileSync(path, str, err => {
     console.error(err);
   });
 
@@ -362,10 +361,53 @@ function generate(package, service) {
   generateTypesFromSource(path, outputDir, imports, `${package}:${service}`);
 }
 
-function main() {
+const createLockfileName = (stage) => `.${stage}.types.lockfile`;
+
+const createLockfilePath = (package, service, stage) => {
+  return `${createLockfileDirPath(package, service)}/${createLockfileName(stage)}`;
+}
+
+const createLockfileDirPath = (package, service) => {
+  return `./packages/${package}/src/api/${service}`;
+};
+
+const createCurrentLockfilePath = (package, service) => createLockfilePath(package, service, "current");
+const createCurrentLockfileName = () => createLockfileName("current");
+const createIncomingLockfilePath = (package, service) => createLockfilePath(package, service, "incoming");
+const createIncomingLockfileName = () => createLockfileName("current");
+
+const isUpdatedLockfile = (lockfilePath) => {
+  return lockfilePath.endsWith(".incoming.types.lockfile")
+}
+
+const updateLockfile = async (package, service, version) => {
+  console.log("updating lock file");
+  const dir = createLockfileDirPath(package, service);
+  const filename = createIncomingLockfileName();
+  const openApiUrl = `https://storage.googleapis.com/cognitedata-api-docs/dist/${version}.json`;
+  return download(openApiUrl, dir, {filename: filename})
+    .then(data => JSON.parse(data))
+    .then(_ => `${dir}/${filename}`);
+}
+
+const lockfile = (package, service, version) => {
+  return new Promise((resolve, reject) => {
+    const path = createCurrentLockfilePath(package, service);
+    return fs.access(path)
+      .then(_ => resolve(path))
+      .catch(_ => {
+        // first time generating code for service, setup a lockfile
+        return updateLockfile(package, service, version)
+          .then(newPath => resolve(newPath))
+          .catch(err => reject(err));
+      })
+  })
+}
+
+const main = async () => {
   const args = process.argv.slice(2);
-  if (args.length != 1) {
-    panic("expects exactly one argument in the form of `version:service`. eg. `stable:documents`");
+  if (args.length < 1) {
+    panic("expects at least one argument in the form of `version:service`. eg. `stable:documents`");
   }
   if (!args[0].includes(":")) {
     panic("must specify the version and service seperated by a `:`");
@@ -374,19 +416,44 @@ function main() {
   const [package, service] = args[0].split(":");
 
   const packagePath = `./packages/${package}`;
-  if (!fs.existsSync(packagePath)) {
-    panic(`package ${package} does not yet exist`);
-  }
+  await fs.access(packagePath).catch(err => panic(err));
 
   const servicePath = `${packagePath}/src/api/${service}`;
-  if (!fs.existsSync(servicePath)) {
-    console.log(`creating path for service: ${servicePath}`);
-    fs.mkdirSync(servicePath, {recursive: true});
-  }
+  await fs.access(servicePath)
+    .catch(_ => {
+      return fs.mkdir(servicePath, {recursive: true});
+    })
+    .catch(err => panic(err))
+  
+  const mustUpdateLockfile = args.length > 1 && args[1] === "update-lockfile";
+  const version = package === "playground" ? "playground" : "v1";
 
-
-  console.log(`generating code for ${service} service. Package: ${package}`)
-  generate(package, service);
+  await lockfile(package, service, version)
+    .then(lockfilePath => {
+      if (!isUpdatedLockfile(lockfilePath) && mustUpdateLockfile) {
+        console.log("updating lockfile to latest");
+        return updateLockfile(package, service, version);
+      } else {
+        return lockfilePath;
+      }
+    })
+    .then(lockfilePath => {
+      return fs.readFile(lockfilePath).then(data => {
+        console.log(`generating code for ${service} service. Package: ${package}`)
+        const jsonData = JSON.parse(data.toString('utf8'));
+        generate(package, service, version, jsonData);
+        return lockfilePath;
+      })
+    })
+    .then(lockfilePath => {
+      console.log("cleaning up");
+      if (isUpdatedLockfile(lockfilePath)) {
+        const currentLockfilePath = createCurrentLockfilePath(package, service);
+        return fs.copyFile(lockfilePath, currentLockfilePath).then(() => {
+          return fs.rm(lockfilePath);
+        });
+      }
+    })
+    .catch(err => panic(err));
 }
 main();
-

@@ -74,7 +74,8 @@
     "rollup": "^2.22.2",
     "ts-jest": "^26.1",
     "typedoc": "^0.17.8",
-    "typescript": "^3.9"
+    "typescript": "^3.9",
+    "download": "^8.0.0"
   },
   "husky": {
     "hooks": {
