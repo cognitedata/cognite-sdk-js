@@ -385,9 +385,11 @@ const updateLockfile = async (package, service, version) => {
   const dir = createLockfileDirPath(package, service);
   const filename = createIncomingLockfileName();
   const openApiUrl = `https://storage.googleapis.com/cognitedata-api-docs/dist/${version}.json`;
+  const path = `${dir}/${filename}`;
   return download(openApiUrl, dir, {filename: filename})
-    .then(data => JSON.parse(data))
-    .then(_ => `${dir}/${filename}`);
+    .then(data => JSON.stringify(JSON.parse(data)))
+    .then(data => fs.writeFile(path, data))
+    .then(_ => path);
 }
 
 const lockfile = (package, service, version) => {
