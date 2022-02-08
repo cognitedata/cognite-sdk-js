@@ -3,8 +3,9 @@
 // Instead update the code generation logic or the service contracts.
 
 import { CogniteInternalId, CogniteExternalId } from '@cognite/sdk-core';
+
 export type DocumentSearchRequest = DocumentSearch &
-  DocumentFilter &
+  DocumentSearchFilter &
   DocumentAggregates &
   DocumentSort &
   DocumentSearchLimit &
@@ -17,12 +18,12 @@ export interface DocumentSearch {
 /**
  * Filter with exact match
  */
-export interface DocumentFilter {
+export interface DocumentSearchFilter {
   /**
    * A JSON based filtering language. See detailed documentation above.
    *
    */
-  filter?: DocumentFilterBool | DocumentFilterLeaf;
+  filter?: DocumentFilter;
 }
 
 export interface DocumentAggregates {
@@ -173,28 +174,9 @@ export type DocumentFilterProperty = string[];
 export type DocumentFilterValue = string | number | boolean | Label;
 
 /**
-* A query that matches items matching boolean combinations of other queries.
-It is built using one or more boolean clauses, which can be of types: `and`, `or` or `not`
-*/
-export type DocumentFilterBool =
-  | { and: DocumentFilter[] }
-  | { or: DocumentFilter[] }
-  | { not: DocumentFilter };
-
-/**
- * Leaf filter
+ * A JSON based filtering language. See detailed documentation above.
  */
-export type DocumentFilterLeaf =
-  | DocumentFilterEquals
-  | DocumentFilterIn
-  | DocumentFilterContainsAny
-  | DocumentFilterContainsAll
-  | DocumentFilterRange
-  | DocumentFilterPrefix
-  | DocumentFilterExists
-  | DocumentFilterGeoJsonIntersects
-  | DocumentFilterGeoJsonDisjoint
-  | DocumentFilterGeoJsonWithin;
+export type DocumentFilter = DocumentFilterBool | DocumentFilterLeaf;
 
 /**
  * @example {"name":"countOfTypes","aggregate":"count","groupBy":[{"property":["type"]}]}
@@ -322,6 +304,30 @@ export interface Label {
   /** An external ID to a predefined label definition. */
   externalId: CogniteExternalId;
 }
+
+/**
+* A query that matches items matching boolean combinations of other queries.
+It is built using one or more boolean clauses, which can be of types: `and`, `or` or `not`
+*/
+export type DocumentFilterBool =
+  | { and: DocumentFilter[] }
+  | { or: DocumentFilter[] }
+  | { not: DocumentFilter };
+
+/**
+ * Leaf filter
+ */
+export type DocumentFilterLeaf =
+  | DocumentFilterEquals
+  | DocumentFilterIn
+  | DocumentFilterContainsAny
+  | DocumentFilterContainsAll
+  | DocumentFilterRange
+  | DocumentFilterPrefix
+  | DocumentFilterExists
+  | DocumentFilterGeoJsonIntersects
+  | DocumentFilterGeoJsonDisjoint
+  | DocumentFilterGeoJsonWithin;
 
 export interface DocumentFilterEquals {
   /**
