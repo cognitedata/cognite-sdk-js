@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.0.0...@cognite/sdk@7.1.0) (2022-02-09)
+
+
+### Features
+
+* **documents:** add document search API to stable ([#749](https://github.com/cognitedata/cognite-sdk-js/issues/749)) ([28c0a08](https://github.com/cognitedata/cognite-sdk-js/commit/28c0a0860e5d8ff1c8c1e6f48936eb4dec14341a)), closes [#753](https://github.com/cognitedata/cognite-sdk-js/issues/753) [#754](https://github.com/cognitedata/cognite-sdk-js/issues/754)
+
+
+
+
+
 # [7.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.3.3...@cognite/sdk@7.0.0) (2022-01-10)
 
 
