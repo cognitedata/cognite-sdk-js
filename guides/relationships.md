@@ -2,7 +2,7 @@
 
 <!--What are Relationships?  Generic overview information-->
 
-The **Relationships** resource type represents connections between resource objects in Cognite Data Fusion (CDF). Each relationship is between a source and a target object and is defined by a **relationship type** and the **external IDs** and **resource types** of the source and target objects. Optionally, a relationship can be time-constrained with a start and end time.
+The [**Relationships**](../../../concepts/resource_types/relationships.md) resource type represents connections between resource objects in Cognite Data Fusion (CDF). Each relationship is between a source and a target object and is defined by a **relationship type** and the **external IDs** and **resource types** of the source and target objects. Optionally, a relationship can be time-constrained with a start and end time.
 
 
 ::: warning NOTE
@@ -11,15 +11,14 @@ The **Relationships** resource type represents connections between resource obje
 
 **In this article:**
 
-  - [Retrieve a relationship by id](#retrieve-a-relationship-by-id)
-  - [Retrieve multiple relationships by id](#retrieve-multiple-relationships-by-id)
+  - [Retrieve relationships by id](#retrieve-relationships-by-id)
   - [List relationships](#list-relationships)
-  - [Create relationship](#create-relationships)
+  - [Create a relationship](#create-a-relationship)
   - [Delete relationships](#delete-relationships)
 
-## Retrieve a relationship by id
+## Retrieve relationships by id
 
-Retrieve a single relationship by external id.
+Retrieve single or multiple relationships by external id.
 
 ***Parameters***
 | Properties | Definition |
@@ -34,7 +33,7 @@ Retrieve a single relationship by external id.
 
 ***Examples***
 
-Get relationship by external id:
+Get a single relationship by external id:
 
 ```ts
 const externalIds = [
@@ -44,24 +43,7 @@ const externalIds = [
 const createdRelationships = await client.relationships.retrieve(externalIds);
 ```
 
-## Retrieve multiple relationships by id
-
-Retrieve multiple relationships by external id.
-
-***Parameters***
-| Properties | Definition |
-| ---------- | ---------- |
-| **ids** ([ExternalId[]](https://cognitedata.github.io/cognite-sdk-js/interfaces/externalid.html)) | External ID's array. |
-| **params** ([RelationshipsRetrieveParams](https://cognitedata.github.io/cognite-sdk-js/globals.html#relationshipsretrieveparams)) | *(Optional)*. Ignore IDs and external IDs that are not found |
-
-***Returns***
-| Return | Type |
-| ------- | ---- |
-| List of requested relationships |  Promise<[Relationship[]](https://cognitedata.github.io/cognite-sdk-js/interfaces/relationship.html)> |
-
-***Examples***
-
-Get relationships by external id:
+Get multiple relationships by external id:
 
 ```ts
 const externalIds = [
@@ -111,7 +93,7 @@ List relationships without filters:
 const createdRelationships = await client.relationships.list();
 ```
 
-## Create relationship
+## Create a relationship
 
 Create one or more relationships.
 
