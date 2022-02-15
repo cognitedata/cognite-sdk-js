@@ -24,7 +24,7 @@ Retrieve single or multiple relationships by external id.
 | Properties | Definition |
 | ---------- | ---------- |
 | **ids** ([ExternalId[]](https://cognitedata.github.io/cognite-sdk-js/interfaces/externalid.html)) | External ID's array. |
-| **params** ([RelationshipsRetrieveParams](https://cognitedata.github.io/cognite-sdk-js/globals.html#relationshipsretrieveparams)) | *(Optional)*. Ignore IDs and external IDs that are not found |
+| **params** ([RelationshipsRetrieveParams](https://cognitedata.github.io/cognite-sdk-js/globals.html#relationshipsretrieveparams)) | *(Optional)*. Ignore IDs and external IDs that are not found. |
 
 ***Returns***
 | Return | Type |
@@ -36,18 +36,16 @@ Retrieve single or multiple relationships by external id.
 Get a single relationship by external id:
 
 ```ts
-const externalIds = [
-	{ externalId: "relationship_1" }
-];
+const externalId = [{ externalId: "relationship_1" }];
 
-const createdRelationships = await client.relationships.retrieve(externalIds);
+const createdRelationships = await client.relationships.retrieve(externalId);
 ```
 
 Get multiple relationships by external id:
 
 ```ts
 const externalIds = [
-	{ externalId: "relationship_1" },
+    { externalId: "relationship_1" },
     { externalId: "relationship_2" },
     { externalId: "relationship_3" },
     { externalId: "relationship_4" }
@@ -76,11 +74,8 @@ List relationships with filters:
 
 ```ts
 const filters = {
-	filter: {
-    	createdTime: {
-        	min: new Date('1 jan 2018'),
-            max: new Date('1 jan 2019')
-        }
+	  filter: {
+        createdTime: { min: new Date('1 jan 2018'), max: new Date('1 jan 2019') }
     }
 };
 
@@ -114,11 +109,11 @@ Create a relationship between two assets:
 ```ts
 const relationships = [
     {
-      externalId: 'relationship_1',
-      sourceExternalId: 'asset_1',
-      sourceType: 'asset' as const,
-      targetExternalId: 'asset_2',
-      targetType: 'asset' as const,
+        externalId: 'relationship_1',
+        sourceExternalId: 'asset_1',
+        sourceType: 'asset' as const,
+        targetExternalId: 'asset_2',
+        targetType: 'asset' as const,
     }
 ];
 
@@ -130,11 +125,11 @@ Create a relationship between a file and an asset:
 ```ts
 const relationships = [
     {
-      externalId: 'relationship_1',
-      sourceExternalId: 'file_1',
-      sourceType: 'file' as const,
-      targetExternalId: 'asset_1',
-      targetType: 'asset' as const,
+        externalId: 'relationship_1',
+        sourceExternalId: 'file_1',
+        sourceType: 'file' as const,
+        targetExternalId: 'asset_1',
+        targetType: 'asset' as const,
     }
 ];
 
@@ -149,7 +144,7 @@ Delete one or more relationships.
 | Properties | Definition |
 | ---------- | ---------- |
 | **ids** ([ExternalId[]](https://cognitedata.github.io/cognite-sdk-js/interfaces/externalid.html)) | External ID's array. |
-| **params** ([RelationshipsDeleteParams](https://cognitedata.github.io/cognite-sdk-js/globals.html#relationshipsdeleteparams)) | *(Optional)*. Ignore IDs and external IDs that are not found |
+| **params** ([RelationshipsDeleteParams](https://cognitedata.github.io/cognite-sdk-js/globals.html#relationshipsdeleteparams)) | *(Optional)*. Ignore IDs and external IDs that are not found. |
 
 ***Returns***
 | Return | Type |
