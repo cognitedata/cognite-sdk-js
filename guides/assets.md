@@ -5,7 +5,7 @@
 In Cognite Data Fusion, the [asset](https://docs.cognite.com/dev/concepts/resource_types/assets) **resource type** stores the **digital representations** of objects or groups of **objects from the physical world**. Water pumps, heart rate monitors, machine rooms, and production lines are examples for those assets.
 
 :::info NOTE
-**Note** A note to make is, all steps below you will need to be authenticated with one of our methods, [legacy](./authentication.md#cdf-auth-flow) or [OIDC](../authentication.md#openid-connect-oidc)(*preferable*).
+**Note** A note to make is, all steps below you will need to be authenticated with one of our methods, [legacy](./authentication.md#cdf-auth-flow) or [OIDC](./authentication.md#openid-connect-oidc)(*preferable*).
 :::
 
 **In this article:**

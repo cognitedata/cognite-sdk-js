@@ -5,7 +5,7 @@
 In Cognite Data Fusion, a [sequence](https://docs.cognite.com/dev/concepts/resource_types/sequences) is a generic **resource type** for indexing a series of **rows** by **row number**. Each **row** contains one or more **columns** with either string or numeric data. Examples of sequences are performance curves and various types of logs.
 
 :::info NOTE
-**Note** A note to make is, all steps below you will need to be authenticated with one of our methods, [legacy](./authentication.md#cdf-auth-flow) or [OIDC](../authentication.md#openid-connect-oidc)(*preferable*).
+**Note** A note to make is, all steps below you will need to be authenticated with one of our methods, [legacy](./authentication.md#cdf-auth-flow) or [OIDC](./authentication.md#openid-connect-oidc)(*preferable*).
 :::
 
 **In this article:**

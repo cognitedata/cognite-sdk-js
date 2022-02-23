@@ -5,7 +5,7 @@
 In Cognite Data Fusion, the [file](https://docs.cognite.com/dev/concepts/resource_types/files) **resource type** stores **files** and **documents** that are related to one or more assets. For example, a file can contain a piping and instrumentation diagram (P&ID) that shows how multiple assets are connected.
 
 :::info NOTE
-**Note** A note to make is, all steps below you will need to be authenticated with one of our methods, [legacy](./authentication.md#cdf-auth-flow) or [OIDC](../authentication.md#openid-connect-oidc)(*preferable*).
+**Note** A note to make is, all steps below you will need to be authenticated with one of our methods, [legacy](./authentication.md#cdf-auth-flow) or [OIDC](./authentication.md#openid-connect-oidc)(*preferable*).
 :::
 
 **In this article:**
