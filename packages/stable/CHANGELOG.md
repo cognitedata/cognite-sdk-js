@@ -789,7 +789,7 @@ For replacements, see [MIGRATION_GUIDE_2xx_3xx.md](https://docs.cognite.com/dev/
 ### Features
 
 
-* Introduce support for Data sets. Document and track data lineage, ensure data integrity, and allow 3rd parties to write their insights securely back to your Cognite Data Fusion (CDF) project. Learn more about data sets [here.](https://docs.cognite.com/blog/2020/03/01/data-sets/)
+* Introduce support for Data sets. Document and track data lineage, ensure data integrity, and allow 3rd parties to write their insights securely back to your Cognite Data Fusion (CDF) project. Learn more about data sets [here.](https://hub.cognite.com/product-updates/cognite-data-fusion-introducing-data-sets-369)
 
 # [2.22.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.21.0...v2.22.0) (2020-03-05)
 
