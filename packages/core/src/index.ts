@@ -6,6 +6,7 @@ import * as TestUtils from './testUtils';
 export * from './types';
 
 export { CogniteAuthentication } from './authFlows/legacy';
+export { ADFS } from './authFlows/adfs';
 
 export { MetadataMap } from './metadata';
 export { BaseResourceAPI } from './baseResourceApi';
