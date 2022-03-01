@@ -1,18 +1,17 @@
-Authentication in browsers
-==========================
+# Authentication in browsers
 
-  - [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
-  - [Accessing different clusters](#accessing-different-clusters)
-  - [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
-  - [OpenID Connect (OIDC)](#openid-connect-oidc)
-    - [OIDC authentication using code authorization w pkce.](#oidc-authentication-using-code-authorization-w-pkce)
-    - [OIDC authentication using client credentials](#oidc-authentication-using-client-credentials)
-  - [CDF auth flow](#cdf-auth-flow)
-    - [Legacy authentication with redirects](#legacy-authentication-with-redirects)
-    - [Legacy authentication with pop-up](#legacy-authentication-with-pop-up)
-  - [API keys](#api-keys)
-  - [Manually trigger authentication](#manually-trigger-authentication)
-  - [Cache access tokens](#cache-access-tokens)
+- [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
+- [Accessing different clusters](#accessing-different-clusters)
+- [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
+- [OpenID Connect (OIDC)](#openid-connect-oidc)
+  - [OIDC authentication using code authorization w pkce.](#oidc-authentication-using-code-authorization-w-pkce)
+  - [OIDC authentication using client credentials](#oidc-authentication-using-client-credentials)
+- [CDF auth flow](#cdf-auth-flow)
+  - [Legacy authentication with redirects](#legacy-authentication-with-redirects)
+  - [Legacy authentication with pop-up](#legacy-authentication-with-pop-up)
+- [API keys](#api-keys)
+- [Manually trigger authentication](#manually-trigger-authentication)
+- [Cache access tokens](#cache-access-tokens)
 
 ## Use access tokens instead of API keys
 
@@ -79,7 +78,7 @@ const configuration: Configuration = {
 
 const pca = new PublicClientApplication(configuration);
 const getToken = async () => {
-  const accountId = "some-id";
+  const accountId = sessionStorage.getItem("account");
   const account = pca.getAccountByLocalId(accountId)!;
   const token = await pca.acquireTokenSilent({
     account,
@@ -114,6 +113,7 @@ background operations like extractors. Client credentials have a similar use cas
 legacy authenticated projects.
 
 #### Example
+
 ```js
 async function quickstart() {
   const pca = new ConfidentialClientApplication({
@@ -153,8 +153,8 @@ async function quickstart() {
 
 quickstart()
 ```
-[Demo project](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/nodejs/oidc-typescript)
 
+[Demo project](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/nodejs/oidc-typescript)
 
 ## CDF auth flow
 
@@ -237,14 +237,14 @@ import {
   CogniteAuthentication,
   loginPopupHandler,
   isLoginPopupWindow,
-} from "@cognite/sdk";
+} from '@cognite/sdk';
 
-const project = "some-project";
-const baseUrl = "https://greenfield.cognitedata.com";
+const project = 'some-project';
+const baseUrl = 'https://greenfield.cognitedata.com';
 
 const legacyInstance = new CogniteAuthentication({
   project,
-  baseUrl
+  baseUrl,
 });
 
 if (isLoginPopupWindow()) {
@@ -261,22 +261,23 @@ const getToken = async () => {
   if (token) {
     return token.accessToken;
   }
-  throw new Error("error");
+  throw new Error('error');
 };
 
 const client = new CogniteClient({
-  appId: "masl-demo",
+  appId: 'masl-demo',
   project,
   getToken,
 });
 
 const assets = await client.assets.retrieve([{ id: 23232789217132 }]);
 ```
+
 You can find an example application using popups [here](https://github.com/cognitedata/cognite-sdk-js/tree/master/samples/react/legacy-auth-popup).
 
 The first time this runs, the user get a `401`-response from CDF in the first call to
 `client.assets`. This triggers the SDK to perform authentication of the user using a pop-up
-window. A new pop-up window shows the sign-in screen of the identity provider. 
+window. A new pop-up window shows the sign-in screen of the identity provider.
 
 After a successful sign-in, the pop-up window redirects back to your app (the same URL as the main
 browser window) where `sdk.loginPopupHandler` is executed and handles the tokens in the URL and
@@ -296,13 +297,13 @@ const client = new CogniteClient({
   appId: 'api-key-app',
   project: 'demo-project',
   apiKeyMode: true,
-  getToken: () => Promise.resolve('API_KEY_HERE')
+  getToken: () => Promise.resolve('API_KEY_HERE'),
 });
 ```
 
 ## Manually trigger authentication
 
-Instead of waiting for the first `401` response,  you can trigger the authentication flow manually like this:
+Instead of waiting for the first `401` response, you can trigger the authentication flow manually like this:
 
 ```js
 
@@ -313,15 +314,16 @@ await client.authenticate(); // this also returns the token received
 ## Cache access tokens
 
 If you already have an access token, you can use it to skip the authentication flow.
+
 <!-- (See this [section](#tokens) on how to get hold of the token). -->
+
 If the token is invalid or timed out, the SDK triggers a standard auth-flow on the first 401-response from CDF.
 
 ```js
-const client  = new CogniteClient({
+const client = new CogniteClient({
   project: 'YOUR PROJECT NAME HERE',
-  getToken: () => Promise.resolve('ACCESS TOKEN FOR THE PROJECT HERE')
+  getToken: () => Promise.resolve('ACCESS TOKEN FOR THE PROJECT HERE'),
 });
-
 ```
 
 ## More
