@@ -48,10 +48,8 @@ const FILE_FILTER: AnnotationFilterProps = {
   annotatedResourceIds: [{ externalId: ANNOTATED_FILE_EXTERNAL_ID }],
 };
 
-/**
- * Annotations API tests are temporarily skipped due to the tests failing, which blocks non-related releases.
- * The Annotation endpoint has changed behavior, leading these tests to produce 400 errors.
- */
+// Annotations API tests are temporarily skipped due to the tests failing, which blocks non-related releases.
+// The Annotation endpoint has changed behavior, leading these tests to produce 400 errors.
 describe.skip('Annotations API', () => {
   let client: CogniteClientPlayground;
   let stableClient: CogniteClient;
