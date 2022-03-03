@@ -48,7 +48,7 @@ const FILE_FILTER: AnnotationFilterProps = {
   annotatedResourceIds: [{ externalId: ANNOTATED_FILE_EXTERNAL_ID }],
 };
 
-describe('Annotations API', () => {
+describe.skip('Annotations API', () => {
   let client: CogniteClientPlayground;
   let stableClient: CogniteClient;
   const createdAnnotationIds: InternalId[] = [];
