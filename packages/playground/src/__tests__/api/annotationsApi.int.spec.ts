@@ -203,7 +203,7 @@ describe('Annotations API', () => {
     expect(updated).toHaveProperty('data');
     const updated_data: any = updated.data;
     expect(updated_data.pageNumber).toEqual(data.pageNumber);
-    expect(updated_data.fileRef).toEqual(data.fileRef);
+    expect(updated_data.fileRef.externalId).toEqual(data.fileRef.externalId);
     expect(updated_data.textRegion.xMin).toEqual(data.textRegion.xMin);
     expect(updated_data.textRegion.xMax).toEqual(data.textRegion.xMax);
     expect(updated_data.textRegion.yMin).toEqual(data.textRegion.yMin);
