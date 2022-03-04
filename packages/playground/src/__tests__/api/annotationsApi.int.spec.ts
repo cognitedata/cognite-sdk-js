@@ -38,8 +38,6 @@ const ANNOTATIONS: AnnotationCreate[] = [
     data: {
       pageNumber: 42,
       assetRef: { externalId: 'def' },
-      symbolRegion: { xMax: 0.1, xMin: 0, yMax: 0.1, yMin: 0 },
-      symbol: "pump",
       textRegion: { xMax: 0.15, xMin: 0.1, yMax: 0.15, yMin: 0.1 },
     },
   },
@@ -78,6 +76,11 @@ describe('Annotations API', () => {
   });
 
   test('create annotation', async () => {
+    const data = {
+      pageNumber: 7,
+      textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
+      extractedText: 'i am your father',
+    };
     const partial: AnnotationCreate = {
       annotatedResourceType: 'file',
       annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
@@ -86,11 +89,7 @@ describe('Annotations API', () => {
       creatingAppVersion: '0.0.1',
       creatingUser: 'integration-tests',
       status: 'suggested',
-      data: {
-        pageNumber: 7,
-        textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
-        extractedText: 'i am your father',
-      },
+      data,
     };
     const created = await client.annotations.create([partial]);
 
@@ -110,7 +109,14 @@ describe('Annotations API', () => {
     expect(annotation.creatingApp).toEqual(partial.creatingApp);
     expect(annotation.creatingAppVersion).toEqual(partial.creatingAppVersion);
     expect(annotation.status).toEqual(partial.status);
-    expect(annotation.data).toEqual(partial.data);
+    expect(annotation).toHaveProperty('data');
+    const annotation_data: any = annotation.data;
+    expect(annotation_data.pageNumber).toEqual(data.pageNumber);
+    expect(annotation_data.textRegion.xMin).toEqual(data.textRegion.xMin);
+    expect(annotation_data.textRegion.xMax).toEqual(data.textRegion.xMax);
+    expect(annotation_data.textRegion.yMin).toEqual(data.textRegion.yMin);
+    expect(annotation_data.textRegion.yMax).toEqual(data.textRegion.yMax);
+    expect(annotation_data.extractedText).toEqual(data.extractedText);
 
     await client.annotations.delete([{ id: annotation.id }]);
   });
@@ -177,26 +183,30 @@ describe('Annotations API', () => {
       createdAnnotationIds[0],
     ]);
     const annotation = listResponse[0];
+    const data = {
+      pageNumber: 8,
+      fileRef: { externalId: 'def_file_changed' },
+      textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
+    };
     const changes: AnnotationChangeById[] = [
       {
         id: annotation.id,
         update: {
           data: {
-            set: {
-              pageNumber: 8,
-              fileRef: { externalId: 'def_file_changed' },
-              textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
-            },
+            set: data,
           },
         },
       },
     ];
     const updatedResp = await client.annotations.update(changes);
     const updated = updatedResp[0];
-    expect(updated.data).toEqual({
-      pageNumber: 8,
-      fileRef: { externalId: 'def_file_changed', id: null },
-      textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
-    });
+    expect(updated).toHaveProperty('data');
+    const updated_data: any = updated.data;
+    expect(updated_data.pageNumber).toEqual(data.pageNumber);
+    expect(updated_data.fileRef).toEqual(data.fileRef);
+    expect(updated_data.textRegion.xMin).toEqual(data.textRegion.xMin);
+    expect(updated_data.textRegion.xMax).toEqual(data.textRegion.xMax);
+    expect(updated_data.textRegion.yMin).toEqual(data.textRegion.yMin);
+    expect(updated_data.textRegion.yMax).toEqual(data.textRegion.yMax);
   });
 });
