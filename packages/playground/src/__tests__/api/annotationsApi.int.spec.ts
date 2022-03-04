@@ -39,6 +39,7 @@ const ANNOTATIONS: AnnotationCreate[] = [
       pageNumber: 42,
       assetRef: { externalId: 'def' },
       symbolRegion: { xMax: 0.1, xMin: 0, yMax: 0.1, yMin: 0 },
+      symbol: "pump",
       textRegion: { xMax: 0.15, xMin: 0.1, yMax: 0.15, yMin: 0.1 },
     },
   },
