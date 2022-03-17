@@ -79,3 +79,5 @@ Each package in the monorepo has its own changelog.
 - [@cognite/sdk-beta](./packages/beta/CHANGELOG.md)
 - [@cognite/sdk-core](./packages/core/CHANGELOG.md)
 - [@cognite/sdk-playground](./packages/playground/CHANGELOG.md)
+
+Dummy change
