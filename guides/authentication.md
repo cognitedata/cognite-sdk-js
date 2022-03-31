@@ -115,6 +115,8 @@ legacy authenticated projects.
 #### Example
 
 ```js
+import { ConfidentialClientApplication } from "@azure/msal-node";
+
 async function quickstart() {
   const pca = new ConfidentialClientApplication({
     auth: {
