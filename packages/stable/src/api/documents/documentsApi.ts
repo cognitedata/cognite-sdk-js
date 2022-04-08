@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
 
-import { BaseResourceAPI } from '@cognite/sdk-core';
+import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
 
 import {
   Document,
@@ -8,7 +8,22 @@ import {
   DocumentSearchRequest,
 } from '../../types';
 
+import { PreviewAPI } from './previewApi';
+
 export class DocumentsAPI extends BaseResourceAPI<Document> {
+  private readonly previewAPI: PreviewAPI;
+
+  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
+    super(...args);
+
+    const [baseUrl, httpClient, map] = args;
+    this.previewAPI = new PreviewAPI(baseUrl, httpClient, map);
+  }
+
+  public get preview() {
+    return this.previewAPI;
+  }
+
   /**
    * [Search for documents](https://docs.cognite.com/api/v1/#operation/documentsSearch)
    *
