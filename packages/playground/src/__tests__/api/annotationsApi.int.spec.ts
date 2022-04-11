@@ -38,7 +38,6 @@ const ANNOTATIONS: AnnotationCreate[] = [
     data: {
       pageNumber: 42,
       assetRef: { externalId: 'def' },
-      symbolRegion: { xMax: 0.1, xMin: 0, yMax: 0.1, yMin: 0 },
       textRegion: { xMax: 0.15, xMin: 0.1, yMax: 0.15, yMin: 0.1 },
     },
   },
@@ -48,9 +47,7 @@ const FILE_FILTER: AnnotationFilterProps = {
   annotatedResourceIds: [{ externalId: ANNOTATED_FILE_EXTERNAL_ID }],
 };
 
-// Annotations API tests are temporarily skipped due to the tests failing, which blocks non-related releases.
-// The Annotation endpoint has changed behavior, leading these tests to produce 400 errors.
-describe.skip('Annotations API', () => {
+describe('Annotations API', () => {
   let client: CogniteClientPlayground;
   let stableClient: CogniteClient;
   const createdAnnotationIds: InternalId[] = [];
@@ -79,6 +76,11 @@ describe.skip('Annotations API', () => {
   });
 
   test('create annotation', async () => {
+    const data = {
+      pageNumber: 7,
+      textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
+      extractedText: 'i am your father',
+    };
     const partial: AnnotationCreate = {
       annotatedResourceType: 'file',
       annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
@@ -87,11 +89,7 @@ describe.skip('Annotations API', () => {
       creatingAppVersion: '0.0.1',
       creatingUser: 'integration-tests',
       status: 'suggested',
-      data: {
-        pageNumber: 7,
-        textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
-        extractedText: 'i am your father',
-      },
+      data,
     };
     const created = await client.annotations.create([partial]);
 
@@ -111,7 +109,14 @@ describe.skip('Annotations API', () => {
     expect(annotation.creatingApp).toEqual(partial.creatingApp);
     expect(annotation.creatingAppVersion).toEqual(partial.creatingAppVersion);
     expect(annotation.status).toEqual(partial.status);
-    expect(annotation.data).toEqual(partial.data);
+    expect(annotation).toHaveProperty('data');
+    const annotationData: any = annotation.data;
+    expect(annotationData.pageNumber).toEqual(data.pageNumber);
+    expect(annotationData.textRegion.xMin).toEqual(data.textRegion.xMin);
+    expect(annotationData.textRegion.xMax).toEqual(data.textRegion.xMax);
+    expect(annotationData.textRegion.yMin).toEqual(data.textRegion.yMin);
+    expect(annotationData.textRegion.yMax).toEqual(data.textRegion.yMax);
+    expect(annotationData.extractedText).toEqual(data.extractedText);
 
     await client.annotations.delete([{ id: annotation.id }]);
   });
@@ -178,26 +183,30 @@ describe.skip('Annotations API', () => {
       createdAnnotationIds[0],
     ]);
     const annotation = listResponse[0];
+    const data = {
+      pageNumber: 8,
+      fileRef: { externalId: 'def_file_changed' },
+      textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
+    };
     const changes: AnnotationChangeById[] = [
       {
         id: annotation.id,
         update: {
           data: {
-            set: {
-              pageNumber: 8,
-              fileRef: { externalId: 'def_file_changed' },
-              textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
-            },
+            set: data,
           },
         },
       },
     ];
     const updatedResp = await client.annotations.update(changes);
     const updated = updatedResp[0];
-    expect(updated.data).toEqual({
-      pageNumber: 8,
-      fileRef: { externalId: 'def_file_changed', id: null },
-      textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
-    });
+    expect(updated).toHaveProperty('data');
+    const updatedData: any = updated.data;
+    expect(updatedData.pageNumber).toEqual(data.pageNumber);
+    expect(updatedData.fileRef.externalId).toEqual(data.fileRef.externalId);
+    expect(updatedData.textRegion.xMin).toEqual(data.textRegion.xMin);
+    expect(updatedData.textRegion.xMax).toEqual(data.textRegion.xMax);
+    expect(updatedData.textRegion.yMin).toEqual(data.textRegion.yMin);
+    expect(updatedData.textRegion.yMax).toEqual(data.textRegion.yMax);
   });
 });
