@@ -277,4 +277,72 @@ describe('Documents unit test', () => {
       },
     });
   });
+
+  test('document pdf preview uri', async () => {
+    const base = (path: string): string => {
+      return `/api/v1/projects/${client.project}/documents${path}`;
+    };
+
+    const preview = client.documents.preview;
+    expect(preview.pdfBuildPreviewURI(1)).toEqual(base('/1/preview/pdf'));
+    expect(preview.pdfBuildPreviewURI(4)).toEqual(base('/4/preview/pdf'));
+  });
+
+  test('document image preview uri', async () => {
+    const base = (path: string): string => {
+      return `/api/v1/projects/${client.project}/documents${path}`;
+    };
+
+    const preview = client.documents.preview;
+    expect(preview.imageBuildPreviewURI(1)).toEqual(
+      base('/1/preview/image/pages/1')
+    );
+    expect(preview.imageBuildPreviewURI(1, 4)).toEqual(
+      base('/1/preview/image/pages/4')
+    );
+  });
+
+  test('document pdf temporary link uri', async () => {
+    const base = (path: string): string => {
+      return `/api/v1/projects/${client.project}/documents${path}`;
+    };
+
+    const preview = client.documents.preview;
+    expect(preview.pdfBuildTemporaryLinkURI(1)).toEqual(
+      base('/1/preview/pdf/temporarylink')
+    );
+    expect(preview.pdfBuildTemporaryLinkURI(4)).toEqual(
+      base('/4/preview/pdf/temporarylink')
+    );
+  });
+
+  test('document preview pdf', async () => {
+    nock(mockBaseUrl)
+      .get(new RegExp('/documents/1/preview/pdf'))
+      .matchHeader('Accept', 'application/pdf')
+      .once()
+      .reply(200);
+    await client.documents.preview.documentAsPdf(1);
+  });
+
+  test('document preview image', async () => {
+    nock(mockBaseUrl)
+      .get(new RegExp('/documents/1/preview/image/pages/1'))
+      .matchHeader('Accept', 'image/png')
+      .once()
+      .reply(200);
+    await client.documents.preview.documentAsImage(1, 1);
+  });
+
+  test('document preview pdf temporary link', async () => {
+    const link = 'just-testing';
+    const expirationTime = 1519862400000;
+    nock(mockBaseUrl)
+      .get(new RegExp('/documents/1/preview/pdf/temporarylink'))
+      .once()
+      .reply(200, { temporaryLink: link, expirationTime: expirationTime });
+    const resp = await client.documents.preview.pdfTemporaryLink(1);
+    expect(resp.temporaryLink).toEqual(link);
+    expect(resp.expirationTime).toEqual(expirationTime);
+  });
 });
