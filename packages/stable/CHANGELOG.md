@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.0...@cognite/sdk@7.2.2) (2022-04-12)
+
+
+### Bug Fixes
+
+* adding geojson to fix import problems ([#779](https://github.com/cognitedata/cognite-sdk-js/issues/779)) ([14d437a](https://github.com/cognitedata/cognite-sdk-js/commit/14d437af5e027ec7ef69b87442f1c0552fec7ee6))
+
+
+
+
+
 # [7.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.1.1...@cognite/sdk@7.2.0) (2022-04-08)
 
 
