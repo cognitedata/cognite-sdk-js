@@ -453,3 +453,13 @@ export interface DocumentSearchResponse {
   /** The cursor to get the next page of results (if available). The search endpoint only gives a limited number of results. A missing nextCursor does not imply there are no more results for the provided search. */
   nextCursor?: string;
 }
+
+/**
+ * A temporary link to download a preview of the document.
+ * The link is reachable without additional authentication details
+ * for a limited time.
+ */
+export interface DocumentsTemporaryPreviewLinkResponse {
+  temporaryLink?: string;
+  expirationTime?: number;
+}
