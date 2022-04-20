@@ -1,8 +1,13 @@
 // Copyright 2020 Cognite AS
 
+import {
+  ClientCredentialsAuth,
+  DeviceAuth,
+  ImplicitAuth,
+  PkceAuth,
+} from '@cognitedata/auth-wrapper';
 import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
 import { LoginAPI } from './api/login/loginApi';
 import { LogoutApi } from './api/logout/logoutApi';
 import {
@@ -35,8 +40,16 @@ export interface ClientOptions {
   /** URL to Cognite cluster, e.g 'https://greenfield.cognitedata.com' **/
   baseUrl?: string;
   project: string;
-  getToken: () => Promise<string>;
-  apiKeyMode?: boolean;
+  credentials: {
+    method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
+    apiKey?: string;
+    authority?: string;
+    client_id?: string;
+    client_secret?: string;
+    response_type?: string;
+    grant_type?: string;
+    scope?: string;
+  };
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -65,14 +78,22 @@ export default class BaseCogniteClient {
   private readonly metadata: MetadataMap;
   private readonly loginApi: LoginAPI;
   private readonly logoutApi: LogoutApi;
-  private readonly apiKeyMode: boolean;
   /**
    * On 401 it might be possible to get a new token, but if `getToken` returns the same over and
    * over (e.g api-keys) there isn't a point retrying. previousToken is used to keep track of that,
    * comparing new tokens to one tried the last time.
    */
   private previousToken: string | undefined;
-  private readonly getToken: () => Promise<string>;
+  private credentials: {
+    method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
+    apiKey?: string;
+    authority?: string;
+    client_id?: string;
+    client_secret?: string;
+    response_type?: string;
+    grant_type?: string;
+    scope?: string;
+  };
   readonly project: string;
 
   /**
@@ -99,9 +120,174 @@ export default class BaseCogniteClient {
     if (!isString(options.project)) {
       throw Error('options.project is required and must be of type string');
     }
-    if (!isFunction(options.getToken)) {
+    if (!options.credentials) {
+      throw Error('options.credentials is required');
+    }
+    if (!options.credentials.method) {
       throw Error(
-        'options.getToken is required and must be of type () => Promise<string>'
+        'options.credentials.method is required and must be of type string with one of this values: api, client_credentials, device, implicit, pkce'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'api' &&
+      !options.credentials.apiKey
+    ) {
+      throw Error(
+        'options.credentials.apiKey is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'client_credentials' &&
+      !options.credentials.authority
+    ) {
+      throw Error(
+        'options.credentials.authority is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'client_credentials' &&
+      !options.credentials.client_id
+    ) {
+      throw Error(
+        'options.credentials.client_id is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'client_credentials' &&
+      !options.credentials.client_secret
+    ) {
+      throw Error(
+        'options.credentials.client_secret is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'client_credentials' &&
+      !options.credentials.scope
+    ) {
+      throw Error(
+        'options.credentials.scope is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'client_credentials' &&
+      !options.credentials.grant_type
+    ) {
+      throw Error(
+        'options.credentials.grant_type is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'device' &&
+      !options.credentials.authority
+    ) {
+      throw Error(
+        'options.credentials.authority is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'device' &&
+      !options.credentials.client_id
+    ) {
+      throw Error(
+        'options.credentials.client_id is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'device' &&
+      !options.credentials.client_secret
+    ) {
+      throw Error(
+        'options.credentials.client_secret is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'device' &&
+      !options.credentials.scope
+    ) {
+      throw Error(
+        'options.credentials.scope is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'implicit' &&
+      !options.credentials.authority
+    ) {
+      throw Error(
+        'options.credentials.authority is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'implicit' &&
+      !options.credentials.client_id
+    ) {
+      throw Error(
+        'options.credentials.client_id is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'implicit' &&
+      !options.credentials.client_secret
+    ) {
+      throw Error(
+        'options.credentials.client_secret is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'implicit' &&
+      !options.credentials.scope
+    ) {
+      throw Error(
+        'options.credentials.scope is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'implicit' &&
+      !options.credentials.grant_type
+    ) {
+      throw Error(
+        'options.credentials.grant_type is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'pkce' &&
+      !options.credentials.authority
+    ) {
+      throw Error(
+        'options.credentials.authority is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'pkce' &&
+      !options.credentials.client_id
+    ) {
+      throw Error(
+        'options.credentials.client_id is required and must be of type string'
+      );
+    }
+    if (
+      options.credentials.method &&
+      options.credentials.method === 'pkce' &&
+      !options.credentials.scope
+    ) {
+      throw Error(
+        'options.credentials.scope is required and must be of type string'
       );
     }
     if (isBrowser() && !isUsingSSL()) {
@@ -127,10 +313,7 @@ export default class BaseCogniteClient {
     this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
     this.apiVersion = apiVersion;
     this.project = options.project;
-    this.apiKeyMode = !!options.apiKeyMode;
-    this.getToken = async () => {
-      return options.getToken();
-    };
+    this.credentials = options.credentials;
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
       try {
@@ -151,16 +334,56 @@ export default class BaseCogniteClient {
 
   public authenticate: () => Promise<string | undefined> = async () => {
     try {
-      const token = await this.getToken();
-      if (this.apiKeyMode) {
-        this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
-      } else {
-        this.httpClient.setDefaultHeader(
-          AUTHORIZATION_HEADER,
-          bearerString(token)
-        );
+      let token: string;
+
+      if (this.credentials.method === 'api') {
+        token = this.credentials.apiKey!;
+        this.httpClient.setDefaultHeader(API_KEY_HEADER, token!);
       }
-      return token;
+      if (this.credentials.method === 'client_credentials') {
+        token = await ClientCredentialsAuth.load({
+          authority: this.credentials.authority!,
+          client_id: this.credentials.client_id!,
+          grant_type: this.credentials.grant_type!,
+          client_secret: this.credentials.client_secret!,
+          scope: this.credentials.scope!,
+          // @ts-ignore
+        }).login().access_token;
+      }
+      if (this.credentials.method === 'device') {
+        token = await DeviceAuth.load({
+          authority: this.credentials.authority!,
+          client_id: this.credentials.client_id!,
+          client_secret: this.credentials.client_secret!,
+          scope: this.credentials.scope!,
+          // @ts-ignore
+        }).login().access_token;
+      }
+      if (this.credentials.method === 'implicit') {
+        token = await ImplicitAuth.load({
+          authority: this.credentials.authority!,
+          client_id: this.credentials.client_id!,
+          client_secret: this.credentials.client_secret!,
+          grant_type: this.credentials.grant_type!,
+          scope: this.credentials.scope!,
+          // @ts-ignore
+        }).login().access_token;
+      }
+      if (this.credentials.method === 'pkce') {
+        token = await PkceAuth.load({
+          authority: this.credentials.authority!,
+          client_id: this.credentials.client_id!,
+          scope: this.credentials.scope!,
+          // @ts-ignore
+        }).login().access_token;
+      }
+
+      this.httpClient.setDefaultHeader(
+        AUTHORIZATION_HEADER,
+        bearerString(token!)
+      );
+
+      return token!;
     } catch {
       return;
     }
