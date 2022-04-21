@@ -18,7 +18,7 @@ function fileFilter(annotatedResourceId: number): AnnotationFilterProps {
     annotatedResourceType: 'file',
     annotatedResourceIds: [{ id: annotatedResourceId }],
   };
-};
+}
 
 function baseAnnotations(annotatedResourceId: number): AnnotationCreate[] {
   return [
@@ -51,7 +51,7 @@ function baseAnnotations(annotatedResourceId: number): AnnotationCreate[] {
       },
     },
   ];
-};
+}
 
 describe('Annotations API', () => {
   let client: CogniteClientPlayground;
@@ -67,8 +67,8 @@ describe('Annotations API', () => {
       externalId: ANNOTATED_FILE_EXTERNAL_ID,
       name: ANNOTATED_FILE_EXTERNAL_ID,
     });
-    annotatedFileId = fileInfo.id
-    const annotations = baseAnnotations(annotatedFileId)
+    annotatedFileId = fileInfo.id;
+    const annotations = baseAnnotations(annotatedFileId);
     const created = await client.annotations.create(annotations);
     created.forEach((annotation) =>
       createdAnnotationIds.push({ id: annotation.id })
@@ -111,9 +111,7 @@ describe('Annotations API', () => {
     expect(annotation.annotatedResourceType).toEqual(
       partial.annotatedResourceType
     );
-    expect(annotation.annotatedResourceId).toEqual(
-      partial.annotatedResourceId
-    );
+    expect(annotation.annotatedResourceId).toEqual(partial.annotatedResourceId);
     expect(annotation.annotationType).toEqual(partial.annotationType);
     expect(annotation.creatingApp).toEqual(partial.creatingApp);
     expect(annotation.creatingAppVersion).toEqual(partial.creatingAppVersion);
@@ -182,7 +180,7 @@ describe('Annotations API', () => {
 
   test('list annotations', async () => {
     const items = await client.annotations
-      .list({ filter: fileFilter(annotatedFileId), })
+      .list({ filter: fileFilter(annotatedFileId) })
       .autoPagingToArray();
     expect(items).toHaveLength(createdAnnotationIds.length);
   });
