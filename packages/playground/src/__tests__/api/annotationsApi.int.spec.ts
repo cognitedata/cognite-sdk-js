@@ -10,10 +10,42 @@ import {
   AnnotationFilterProps,
 } from '@cognite/sdk-playground';
 
-// Variables to be used in the tests
-let ANNOTATED_FILE_ID: number;
-let ANNOTATIONS: AnnotationCreate[];
-let FILE_FILTER: AnnotationFilterProps;
+const ANNOTATED_FILE_EXTERNAL_ID =
+  'sdk-integration-tests-file-' + new Date().toISOString();
+const ANNOTATIONS: AnnotationCreate[] = [
+  {
+    annotatedResourceType: 'file',
+    annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
+    annotationType: 'diagrams.FileLink',
+    creatingApp: 'integration-tests',
+    creatingAppVersion: '0.0.1',
+    creatingUser: 'integration-tests',
+    status: 'suggested',
+    data: {
+      pageNumber: 7,
+      fileRef: { externalId: 'abc' },
+      textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
+    },
+  },
+  {
+    annotatedResourceType: 'file',
+    annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
+    annotationType: 'diagrams.AssetLink',
+    creatingApp: 'integration-tests',
+    creatingAppVersion: '0.0.1',
+    creatingUser: 'integration-tests',
+    status: 'suggested',
+    data: {
+      pageNumber: 42,
+      assetRef: { externalId: 'def' },
+      textRegion: { xMax: 0.15, xMin: 0.1, yMax: 0.15, yMin: 0.1 },
+    },
+  },
+];
+const FILE_FILTER: AnnotationFilterProps = {
+  annotatedResourceType: 'file',
+  annotatedResourceIds: [{ externalId: ANNOTATED_FILE_EXTERNAL_ID }],
+};
 
 describe('Annotations API', () => {
   let client: CogniteClientPlayground;
@@ -24,47 +56,10 @@ describe('Annotations API', () => {
     client = setupLoggedInClient();
     stableClient = stableApiClientSetup();
 
-    const fileInfo = await stableClient.files.upload({
-      name: 'testfile.bin',
+    await stableClient.files.upload({
+      externalId: ANNOTATED_FILE_EXTERNAL_ID,
+      name: ANNOTATED_FILE_EXTERNAL_ID,
     });
-
-    // Set global variables
-    ANNOTATED_FILE_ID = fileInfo.id;
-    FILE_FILTER = {
-      annotatedResourceType: 'file',
-      annotatedResourceIds: [{ id: ANNOTATED_FILE_ID }],
-    };
-    ANNOTATIONS = [
-      {
-        annotatedResourceType: 'file',
-        annotatedResourceId: ANNOTATED_FILE_ID,
-        annotationType: 'diagrams.FileLink',
-        creatingApp: 'integration-tests',
-        creatingAppVersion: '0.0.1',
-        creatingUser: 'integration-tests',
-        status: 'suggested',
-        data: {
-          pageNumber: 7,
-          fileRef: { externalId: 'abc' },
-          textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
-        },
-      },
-      {
-        annotatedResourceType: 'file',
-        annotatedResourceId: ANNOTATED_FILE_ID,
-        annotationType: 'diagrams.AssetLink',
-        creatingApp: 'integration-tests',
-        creatingAppVersion: '0.0.1',
-        creatingUser: 'integration-tests',
-        status: 'suggested',
-        data: {
-          pageNumber: 42,
-          assetRef: { externalId: 'def' },
-          textRegion: { xMax: 0.15, xMin: 0.1, yMax: 0.15, yMin: 0.1 },
-        },
-      },
-    ];
-
     const created = await client.annotations.create(ANNOTATIONS);
     created.forEach((annotation) =>
       createdAnnotationIds.push({ id: annotation.id })
@@ -75,7 +70,7 @@ describe('Annotations API', () => {
     await client.annotations.delete(createdAnnotationIds);
     await stableClient.files.delete([
       {
-        id: ANNOTATED_FILE_ID,
+        externalId: ANNOTATED_FILE_EXTERNAL_ID,
       },
     ]);
   });
@@ -88,7 +83,7 @@ describe('Annotations API', () => {
     };
     const partial: AnnotationCreate = {
       annotatedResourceType: 'file',
-      annotatedResourceId: ANNOTATED_FILE_ID,
+      annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
       annotationType: 'documents.ExtractedText',
       creatingApp: 'integration-tests',
       creatingAppVersion: '0.0.1',
@@ -129,7 +124,7 @@ describe('Annotations API', () => {
   test('create annotation, service is creating', async () => {
     const partial: AnnotationCreate = {
       annotatedResourceType: 'file',
-      annotatedResourceId: ANNOTATED_FILE_ID,
+      annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
       annotationType: 'documents.ExtractedText',
       creatingApp: 'integration-tests',
       creatingAppVersion: '0.0.1',
