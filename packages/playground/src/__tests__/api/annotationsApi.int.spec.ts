@@ -185,6 +185,20 @@ describe('Annotations API', () => {
     expect(items).toHaveLength(createdAnnotationIds.length);
   });
 
+  test('list annotations with data filter', async () => {
+    const items = await client.annotations
+      .list({
+        filter: {
+          ...fileFilter(annotatedFileId),
+          data: {
+            assetRef: { externalId: 'def' },
+          },
+        },
+      })
+      .autoPagingToArray();
+    expect(items).toHaveLength(1);
+  });
+
   test('update annotation', async () => {
     const listResponse = await client.annotations.retrieve([
       createdAnnotationIds[0],
