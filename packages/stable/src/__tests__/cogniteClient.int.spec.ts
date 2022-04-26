@@ -5,18 +5,14 @@ import CogniteClient from '../cogniteClient';
 import { Asset, ItemsWrapper } from '../types';
 import {
   mockBaseUrl,
+  setupClientWithNonExistingApiKey,
   setupLoggedInClient,
   setupMockableClient,
 } from './testUtils';
 
 describe('createClientWithApiKey - integration', () => {
   test('handle non-existing api-key', async () => {
-    const client = new CogniteClient({
-      appId: 'JS Integration test',
-      project: process.env.COGNITE_PROJECT as string,
-      apiKeyMode: true,
-      getToken: () => Promise.resolve('non-existing-api-key'),
-    });
+    const client = setupClientWithNonExistingApiKey();
     await expect(
       client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -27,10 +23,10 @@ describe('createClientWithApiKey - integration', () => {
 
 describe('http methods - integration', () => {
   let client: CogniteClient;
+  // const project = 'sdkcognite';
   const project = process.env.COGNITE_PROJECT as string;
   beforeAll(async () => {
     client = setupLoggedInClient();
-    await client.authenticate();
   });
   test('post method', async () => {
     const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
@@ -41,6 +37,7 @@ describe('http methods - integration', () => {
     expect(response.data.items).toHaveLength(2);
   });
   test('get method', async () => {
+    console.log(client.getDefaultRequestHeaders());
     const response = await client.get(`/api/v1/projects/${project}/assets`);
     expect(response.data).toHaveProperty('items');
   });

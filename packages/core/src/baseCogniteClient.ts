@@ -34,22 +34,23 @@ import {
   RetryValidator,
 } from './httpClient/retryValidator';
 
+export interface ClientCredentials {
+  method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
+  apiKey?: string;
+  authority?: string;
+  client_id?: string;
+  client_secret?: string;
+  response_type?: string;
+  grant_type?: string;
+  scope?: string;
+}
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
   appId: string;
   /** URL to Cognite cluster, e.g 'https://greenfield.cognitedata.com' **/
   baseUrl?: string;
   project: string;
-  credentials: {
-    method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
-    apiKey?: string;
-    authority?: string;
-    client_id?: string;
-    client_secret?: string;
-    response_type?: string;
-    grant_type?: string;
-    scope?: string;
-  };
+  credentials: ClientCredentials;
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -84,16 +85,7 @@ export default class BaseCogniteClient {
    * comparing new tokens to one tried the last time.
    */
   private previousToken: string | undefined;
-  private credentials: {
-    method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
-    apiKey?: string;
-    authority?: string;
-    client_id?: string;
-    client_secret?: string;
-    response_type?: string;
-    grant_type?: string;
-    scope?: string;
-  };
+  private credentials: ClientCredentials;
   readonly project: string;
 
   /**
@@ -297,6 +289,7 @@ export default class BaseCogniteClient {
     }
 
     const { baseUrl } = options;
+
     this.http = new CDFHttpClient(
       getBaseUrl(baseUrl),
       this.getRetryValidator()
@@ -334,57 +327,46 @@ export default class BaseCogniteClient {
 
   public authenticate: () => Promise<string | undefined> = async () => {
     try {
-      let token: string;
+      if (!this.credentials) return;
+
+      let token: any;
 
       if (this.credentials.method === 'api') {
         token = this.credentials.apiKey!;
-        this.httpClient.setDefaultHeader(API_KEY_HEADER, token!);
-      }
-      if (this.credentials.method === 'client_credentials') {
-        token = await ClientCredentialsAuth.load({
-          authority: this.credentials.authority!,
-          client_id: this.credentials.client_id!,
-          grant_type: this.credentials.grant_type!,
-          client_secret: this.credentials.client_secret!,
-          scope: this.credentials.scope!,
-          // @ts-ignore
-        }).login().access_token;
-      }
-      if (this.credentials.method === 'device') {
-        token = await DeviceAuth.load({
-          authority: this.credentials.authority!,
-          client_id: this.credentials.client_id!,
-          client_secret: this.credentials.client_secret!,
-          scope: this.credentials.scope!,
-          // @ts-ignore
-        }).login().access_token;
-      }
-      if (this.credentials.method === 'implicit') {
-        token = await ImplicitAuth.load({
-          authority: this.credentials.authority!,
-          client_id: this.credentials.client_id!,
-          client_secret: this.credentials.client_secret!,
-          grant_type: this.credentials.grant_type!,
-          scope: this.credentials.scope!,
-          // @ts-ignore
-        }).login().access_token;
-      }
-      if (this.credentials.method === 'pkce') {
-        token = await PkceAuth.load({
-          authority: this.credentials.authority!,
-          client_id: this.credentials.client_id!,
-          scope: this.credentials.scope!,
-          // @ts-ignore
-        }).login().access_token;
+        this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
       }
 
-      this.httpClient.setDefaultHeader(
-        AUTHORIZATION_HEADER,
-        bearerString(token!)
-      );
+      if (this.credentials.method === 'client_credentials') {
+        // @ts-ignore
+        token = await ClientCredentialsAuth.load(this.credentials).login();
+        // @ts-ignore
+        token = token.access_token;
+      }
+
+      if (this.credentials.method === 'device') {
+        // @ts-ignore
+        token = await DeviceAuth.load(this.credentials).login().access_token;
+      }
+
+      if (this.credentials.method === 'implicit') {
+        // @ts-ignore
+        token = await ImplicitAuth.load(this.credentials).login().access_token;
+      }
+
+      if (this.credentials.method === 'pkce') {
+        // @ts-ignore
+        token = await PkceAuth.load(this.credentials).login().access_token;
+      }
+
+      if (token && this.credentials.method !== 'api') {
+        this.httpClient.setDefaultHeader(
+          AUTHORIZATION_HEADER,
+          bearerString(token!)
+        );
+      }
 
       return token!;
-    } catch {
+    } catch (e) {
       return;
     }
   };
