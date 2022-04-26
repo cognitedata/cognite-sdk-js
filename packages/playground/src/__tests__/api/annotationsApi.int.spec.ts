@@ -12,55 +12,64 @@ import {
 
 const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();
-const ANNOTATIONS: AnnotationCreate[] = [
-  {
+
+function fileFilter(annotatedResourceId: number): AnnotationFilterProps {
+  return {
     annotatedResourceType: 'file',
-    annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
-    annotationType: 'diagrams.FileLink',
-    creatingApp: 'integration-tests',
-    creatingAppVersion: '0.0.1',
-    creatingUser: 'integration-tests',
-    status: 'suggested',
-    data: {
-      pageNumber: 7,
-      fileRef: { externalId: 'abc' },
-      textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
+    annotatedResourceIds: [{ id: annotatedResourceId }],
+  };
+}
+
+function baseAnnotations(annotatedResourceId: number): AnnotationCreate[] {
+  return [
+    {
+      annotatedResourceType: 'file',
+      annotationType: 'diagrams.FileLink',
+      annotatedResourceId,
+      creatingApp: 'integration-tests',
+      creatingAppVersion: '0.0.1',
+      creatingUser: 'integration-tests',
+      status: 'suggested',
+      data: {
+        pageNumber: 7,
+        fileRef: { externalId: 'abc' },
+        textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
+      },
     },
-  },
-  {
-    annotatedResourceType: 'file',
-    annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
-    annotationType: 'diagrams.AssetLink',
-    creatingApp: 'integration-tests',
-    creatingAppVersion: '0.0.1',
-    creatingUser: 'integration-tests',
-    status: 'suggested',
-    data: {
-      pageNumber: 42,
-      assetRef: { externalId: 'def' },
-      textRegion: { xMax: 0.15, xMin: 0.1, yMax: 0.15, yMin: 0.1 },
+    {
+      annotatedResourceType: 'file',
+      annotationType: 'diagrams.AssetLink',
+      annotatedResourceId,
+      creatingApp: 'integration-tests',
+      creatingAppVersion: '0.0.1',
+      creatingUser: 'integration-tests',
+      status: 'suggested',
+      data: {
+        pageNumber: 42,
+        assetRef: { externalId: 'def' },
+        textRegion: { xMax: 0.15, xMin: 0.1, yMax: 0.15, yMin: 0.1 },
+      },
     },
-  },
-];
-const FILE_FILTER: AnnotationFilterProps = {
-  annotatedResourceType: 'file',
-  annotatedResourceIds: [{ externalId: ANNOTATED_FILE_EXTERNAL_ID }],
-};
+  ];
+}
 
 describe('Annotations API', () => {
   let client: CogniteClientPlayground;
   let stableClient: CogniteClient;
   const createdAnnotationIds: InternalId[] = [];
+  let annotatedFileId: number;
 
   beforeAll(async () => {
     client = setupLoggedInClient();
     stableClient = stableApiClientSetup();
 
-    await stableClient.files.upload({
+    const fileInfo = await stableClient.files.upload({
       externalId: ANNOTATED_FILE_EXTERNAL_ID,
       name: ANNOTATED_FILE_EXTERNAL_ID,
     });
-    const created = await client.annotations.create(ANNOTATIONS);
+    annotatedFileId = fileInfo.id;
+    const annotations = baseAnnotations(annotatedFileId);
+    const created = await client.annotations.create(annotations);
     created.forEach((annotation) =>
       createdAnnotationIds.push({ id: annotation.id })
     );
@@ -83,7 +92,7 @@ describe('Annotations API', () => {
     };
     const partial: AnnotationCreate = {
       annotatedResourceType: 'file',
-      annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
+      annotatedResourceId: annotatedFileId,
       annotationType: 'documents.ExtractedText',
       creatingApp: 'integration-tests',
       creatingAppVersion: '0.0.1',
@@ -102,9 +111,7 @@ describe('Annotations API', () => {
     expect(annotation.annotatedResourceType).toEqual(
       partial.annotatedResourceType
     );
-    expect(annotation.annotatedResourceExternalId).toEqual(
-      partial.annotatedResourceExternalId
-    );
+    expect(annotation.annotatedResourceId).toEqual(partial.annotatedResourceId);
     expect(annotation.annotationType).toEqual(partial.annotationType);
     expect(annotation.creatingApp).toEqual(partial.creatingApp);
     expect(annotation.creatingAppVersion).toEqual(partial.creatingAppVersion);
@@ -124,7 +131,7 @@ describe('Annotations API', () => {
   test('create annotation, service is creating', async () => {
     const partial: AnnotationCreate = {
       annotatedResourceType: 'file',
-      annotatedResourceExternalId: ANNOTATED_FILE_EXTERNAL_ID,
+      annotatedResourceId: annotatedFileId,
       annotationType: 'documents.ExtractedText',
       creatingApp: 'integration-tests',
       creatingAppVersion: '0.0.1',
@@ -151,7 +158,7 @@ describe('Annotations API', () => {
   test('list annotations, limit to 1', async () => {
     const limitOne = await client.annotations.list({
       limit: 1,
-      filter: FILE_FILTER,
+      filter: fileFilter(annotatedFileId),
     });
     expect(limitOne.items).toHaveLength(1);
   });
@@ -159,13 +166,13 @@ describe('Annotations API', () => {
   test('list annotations, pagination works', async () => {
     const first = await client.annotations.list({
       limit: 1,
-      filter: FILE_FILTER,
+      filter: fileFilter(annotatedFileId),
     });
     expect(first.nextCursor).not.toBeNull();
 
     const second = await client.annotations.list({
       limit: 1,
-      filter: FILE_FILTER,
+      filter: fileFilter(annotatedFileId),
       cursor: first.nextCursor,
     });
     expect(second.nextCursor).toBeNull();
@@ -173,9 +180,23 @@ describe('Annotations API', () => {
 
   test('list annotations', async () => {
     const items = await client.annotations
-      .list({ filter: FILE_FILTER })
+      .list({ filter: fileFilter(annotatedFileId) })
       .autoPagingToArray();
     expect(items).toHaveLength(createdAnnotationIds.length);
+  });
+
+  test('list annotations with data filter', async () => {
+    const items = await client.annotations
+      .list({
+        filter: {
+          ...fileFilter(annotatedFileId),
+          data: {
+            assetRef: { externalId: 'def' },
+          },
+        },
+      })
+      .autoPagingToArray();
+    expect(items).toHaveLength(1);
   });
 
   test('update annotation', async () => {
