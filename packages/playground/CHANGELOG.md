@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.0.6...@cognite/sdk-playground@5.1.0) (2022-04-26)
+
+
+### Bug Fixes
+
+* **annotation tests:** updated to not use file external id ([#781](https://github.com/cognitedata/cognite-sdk-js/issues/781)) ([c29c56c](https://github.com/cognitedata/cognite-sdk-js/commit/c29c56caa5536bdd7227167f7e5fce172cd41b74))
+
+
+### Features
+
+* **annotations:** add filter for annotation data ([#783](https://github.com/cognitedata/cognite-sdk-js/issues/783)) ([6427c79](https://github.com/cognitedata/cognite-sdk-js/commit/6427c79261952218d365b89b3c22bf8b275121ea))
+
+
+
+
+
 ## [5.0.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.0.5...@cognite/sdk-playground@5.0.6) (2022-04-12)
 
 
