@@ -35,7 +35,7 @@ export interface ClientOptions {
   /** URL to Cognite cluster, e.g 'https://greenfield.cognitedata.com' **/
   baseUrl?: string;
   project: string;
-  getToken: () => Promise<string>;
+  getToken: () => string;
   apiKeyMode?: boolean;
 }
 
@@ -72,7 +72,7 @@ export default class BaseCogniteClient {
    * comparing new tokens to one tried the last time.
    */
   private previousToken: string | undefined;
-  private readonly getToken: () => Promise<string>;
+  private readonly getToken: string;
   readonly project: string;
 
   /**
@@ -101,7 +101,7 @@ export default class BaseCogniteClient {
     }
     if (!isFunction(options.getToken)) {
       throw Error(
-        'options.getToken is required and must be of type () => Promise<string>'
+        'options.getToken is required and must be of type () => string'
       );
     }
     if (isBrowser() && !isUsingSSL()) {
@@ -128,9 +128,7 @@ export default class BaseCogniteClient {
     this.apiVersion = apiVersion;
     this.project = options.project;
     this.apiKeyMode = !!options.apiKeyMode;
-    this.getToken = async () => {
-      return options.getToken();
-    };
+    this.getToken = options.getToken().toString();
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
       try {
@@ -147,11 +145,18 @@ export default class BaseCogniteClient {
     });
 
     this.initAPIs();
+
+    if (options.apiKeyMode) {
+      this.httpClient.setDefaultHeader(
+        API_KEY_HEADER,
+        options.getToken().toString()
+      );
+    }
   }
 
   public authenticate: () => Promise<string | undefined> = async () => {
     try {
-      const token = await this.getToken();
+      const token = this.getToken;
       if (this.apiKeyMode) {
         this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
       } else {
