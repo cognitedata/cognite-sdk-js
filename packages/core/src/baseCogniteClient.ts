@@ -276,7 +276,7 @@ export default class BaseCogniteClient {
   }
 
   protected get version() {
-    return `${version}-core`;
+    return version
   }
 
   protected apiFactory = <ApiType>(
