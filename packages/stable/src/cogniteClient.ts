@@ -3,9 +3,11 @@ import {
   accessApi,
   apiUrl,
   BaseCogniteClient,
+  ClientOptions,
   RetryValidator,
 } from '@cognite/sdk-core';
-import { version } from '../package.json';
+import { CogniteAPIVersion } from '@cognite/sdk-core/src/utils';
+import { version, dependencies } from '../package.json';
 import { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';
 import { Files3DAPI } from './api/3d/files3DApi';
 import { Models3DAPI } from './api/3d/models3DApi';
@@ -172,12 +174,31 @@ export default class CogniteClient extends BaseCogniteClient {
   private geospatialApi?: GeospatialAPI;
   private documentsApi?: DocumentsAPI;
 
+  constructor(options: ClientOptions, apiVersion: CogniteAPIVersion = 'v1') {
+    super(options, apiVersion);
+    this.checkCoreVersionMatch();
+  }
+
   protected get version() {
     return version;
   }
 
+  protected get coreVersion() {
+    // @ts-ignore linter is complaining even though version is protected and can be accessed
+    return super.version;
+  }
+
   protected getRetryValidator(): RetryValidator {
     return retryValidator;
+  }
+
+  private checkCoreVersionMatch() {
+    // check if sdk-core version matches with the one in the dependencies
+    if (!dependencies['@cognite/sdk-core'].includes(this.coreVersion)) {
+      console.warn(
+        `VERSION MISMATCH! \n The resolved @cognite/sdk-core version ${this.coreVersion} doesn't match the required version ${dependencies['@cognite/sdk-core']} from @cognite/sdk. This might lead to unexpected behavior and bugs.`
+      );
+    }
   }
 
   protected initAPIs() {
