@@ -71,8 +71,7 @@ export default class BaseCogniteClient {
    * over (e.g api-keys) there isn't a point retrying. previousToken is used to keep track of that,
    * comparing new tokens to one tried the last time.
    */
-  private previousToken: string | undefined;
-  public getToken: () => Promise<string>;
+  private readonly getToken: () => Promise<string>;
   readonly project: string;
 
   /**

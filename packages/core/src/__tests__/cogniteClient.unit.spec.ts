@@ -12,7 +12,7 @@ function setupClient(baseUrl: string = BASE_URL) {
   return new BaseCogniteClient({
     appId: 'JS SDK integration tests',
     project: 'test-project',
-    getToken: () => apiKey,
+    getToken: () => Promise.resolve(apiKey),
     apiKeyMode: true,
     baseUrl,
   });
