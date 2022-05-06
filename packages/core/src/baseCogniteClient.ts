@@ -35,7 +35,7 @@ export interface ClientOptions {
   /** URL to Cognite cluster, e.g 'https://greenfield.cognitedata.com' **/
   baseUrl?: string;
   project: string;
-  getToken: () => string;
+  getToken: () => Promise<string>;
   apiKeyMode?: boolean;
 }
 
@@ -72,7 +72,7 @@ export default class BaseCogniteClient {
    * comparing new tokens to one tried the last time.
    */
   private previousToken: string | undefined;
-  private readonly getToken: string;
+  public getToken: () => Promise<string>;
   readonly project: string;
 
   /**
@@ -101,7 +101,7 @@ export default class BaseCogniteClient {
     }
     if (!isFunction(options.getToken)) {
       throw Error(
-        'options.getToken is required and must be of type () => string'
+        'options.getToken is required and must be of type () => Promise<string>'
       );
     }
     if (isBrowser() && !isUsingSSL()) {
@@ -128,13 +128,14 @@ export default class BaseCogniteClient {
     this.apiVersion = apiVersion;
     this.project = options.project;
     this.apiKeyMode = !!options.apiKeyMode;
-    this.getToken = options.getToken().toString();
+    this.getToken = async () => {
+      return options.getToken();
+    };
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
       try {
         const newToken = await this.authenticate();
-        if (newToken && newToken !== this.previousToken) {
-          this.previousToken = newToken;
+        if (newToken && newToken !== _.headers['api-key']) {
           retry();
         } else {
           reject();
@@ -145,18 +146,11 @@ export default class BaseCogniteClient {
     });
 
     this.initAPIs();
-
-    if (options.apiKeyMode) {
-      this.httpClient.setDefaultHeader(
-        API_KEY_HEADER,
-        options.getToken().toString()
-      );
-    }
   }
 
   public authenticate: () => Promise<string | undefined> = async () => {
     try {
-      const token = this.getToken;
+      const token = await this.getToken();
       if (this.apiKeyMode) {
         this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
       } else {
