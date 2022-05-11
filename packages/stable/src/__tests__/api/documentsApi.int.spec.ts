@@ -2,6 +2,7 @@
 
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
+import { DocumentSearchResponse } from '@cognite/sdk-stable/dist';
 
 describe('Documents integration test', () => {
   let client: CogniteClient;
@@ -96,5 +97,55 @@ describe('Documents integration test', () => {
     expect(response.aggregates![0].groups[0].group[0].property).toStrictEqual([
       'labels',
     ]);
+  });
+
+  describe('document preview', () => {
+    let documents: DocumentSearchResponse;
+
+    beforeAll(async () => {
+      documents = await client.documents.search({
+        limit: 1,
+        filter: {
+          equals: { property: ['mimeType'], value: 'application/pdf' },
+        },
+      });
+    });
+
+    test('fetch image preview', async () => {
+      if (documents.items.length == 0) {
+        return;
+      }
+      const document = documents.items[0].item;
+
+      await client.documents.preview.documentAsImage(document.id, 1);
+    });
+
+    test('fetch pdf preview', async () => {
+      if (documents.items.length == 0) {
+        return;
+      }
+      const document = documents.items[0].item;
+
+      const resp = await client.documents.preview.documentAsPdf(document.id);
+
+      const pdfPrefix = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
+      expect(resp.byteLength).toBeGreaterThan(pdfPrefix.length);
+      const frontSlice = resp.slice(0, pdfPrefix.length);
+      expect(frontSlice.byteLength).toStrictEqual(pdfPrefix.length);
+      const match = Buffer.from(frontSlice, 0).equals(
+        Buffer.from(pdfPrefix, 0)
+      );
+      expect(match).toBe(true);
+    });
+
+    test('fetch temporary link', async () => {
+      if (documents.items.length == 0) {
+        return;
+      }
+      const document = documents.items[0].item;
+
+      const resp = await client.documents.preview.pdfTemporaryLink(document.id);
+      expect(resp.temporaryLink).toBeDefined();
+    });
   });
 });
