@@ -4,7 +4,7 @@
 
 export type DocumentSearchRequest = DocumentSearch &
   DocumentSearchFilter &
-  DocumentAggregates &
+  DocumentSearchAggregates &
   DocumentSort &
   DocumentSearchLimit &
   DocumentCursor;
@@ -28,9 +28,9 @@ export interface DocumentSearchFilter {
   filter?: DocumentFilter;
 }
 
-export interface DocumentAggregates {
+export interface DocumentSearchAggregates {
   /** @example [{"name":"countOfTypes","aggregate":"count","groupBy":[{"property":["type"]}]}] */
-  aggregates?: DocumentCountAggregate[];
+  aggregates?: DocumentSearchCountAggregate[];
 }
 
 export interface DocumentSort {
@@ -61,10 +61,10 @@ export interface DocumentSearchItem {
   item: Document;
 }
 
-export interface DocumentAggregate {
+export interface DocumentSearchAggregate {
   /** User defined name for this aggregate */
   name: string;
-  groups: DocumentAggregateGroup[];
+  groups: DocumentSearchAggregateGroup[];
 
   /**
    * Total number of results for this aggregate
@@ -213,7 +213,7 @@ export type DocumentFilter = DocumentFilterBool | DocumentFilterLeaf;
 /**
  * @example {"name":"countOfTypes","aggregate":"count","groupBy":[{"property":["type"]}]}
  */
-export interface DocumentCountAggregate {
+export interface DocumentSearchCountAggregate {
   /** User defined name for this aggregate */
   name: string;
 
@@ -224,7 +224,7 @@ export interface DocumentCountAggregate {
   aggregate: 'count';
 
   /** List of properties to group the count by. It is currently only possible to group by 0 or 1 properties. If grouping by 0 properties, the aggregate value is the total count of all documents. */
-  groupBy?: DocumentCountAggregatesGroup[];
+  groupBy?: DocumentSearchCountAggregatesGroup[];
 }
 
 export interface DocumentSortItem {
@@ -250,8 +250,8 @@ export interface DocumentHighlight {
   content: string[];
 }
 
-export interface DocumentAggregateGroup {
-  group: DocumentAggregateGroupIdentifier[];
+export interface DocumentSearchAggregateGroup {
+  group: DocumentSearchAggregateGroupIdentifier[];
 
   /**
    * The number of documents in this group.
@@ -378,7 +378,7 @@ export type DocumentFilterLeaf =
   | DocumentFilterGeoJsonDisjoint
   | DocumentFilterGeoJsonWithin;
 
-export interface DocumentCountAggregatesGroup {
+export interface DocumentSearchCountAggregatesGroup {
   /**
    * A property to group by.
    * @example ["type"]
@@ -393,7 +393,7 @@ For example, If you have the object `{"foo": {"../bar": "baz"}, "bar": 123}`, yo
 */
 export type DocumentFilterProperty = string[];
 
-export interface DocumentAggregateGroupIdentifier {
+export interface DocumentSearchAggregateGroupIdentifier {
   /** The property that is being aggregated on. */
   property: DocumentFilterProperty;
 
@@ -530,7 +530,7 @@ export type DocumentFilterRangeValue = number;
 
 export interface DocumentSearchResponse {
   items: DocumentSearchItem[];
-  aggregates?: DocumentAggregate[];
+  aggregates?: DocumentSearchAggregate[];
 
   /** The cursor to get the next page of results (if available). The search endpoint only gives a limited number of results. A missing nextCursor does not imply there are no more results for the provided search. */
   nextCursor?: string;
