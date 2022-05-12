@@ -458,4 +458,9 @@ const main = async () => {
     })
     .catch(err => panic(err));
 }
+
+
+if (process.versions.node.split(".")[0] < 16) {
+  panic("nodejs version must be v16 or higher");
+}
 main();
