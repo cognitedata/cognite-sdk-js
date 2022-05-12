@@ -48,6 +48,14 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.searchDocuments<DocumentSearchResponse>(query);
   };
 
+  public list = (request: DocumentListRequest): Promise<DocumentListRequest> => {
+    return this.listEndpoint(this.callListEndpointWithPost, request);
+  };
+
+  public content = (id: DocumentId): Promise<string> => {
+    return this.documentContent<string>(id);
+  };
+
   private async searchDocuments<ResponseType>(
     query: DocumentSearchRequest
   ): Promise<ResponseType> {
@@ -56,5 +64,14 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     });
 
     return this.addToMapAndReturn(response.data, response);
+  }
+
+  private async documentContent<ResponseType>(id: DocumentId): Promise<ResponseType> {
+    const response = await this.get<ResponseType>(this.url(`${id}/content`), {
+      headers: {
+        "accept": "text/plain",
+      },
+    });
+    return response.data;
   }
 }
