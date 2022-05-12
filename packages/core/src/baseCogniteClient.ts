@@ -84,7 +84,6 @@ export default class BaseCogniteClient {
    * over (e.g api-keys) there isn't a point retrying. previousToken is used to keep track of that,
    * comparing new tokens to one tried the last time.
    */
-  private previousToken: string | undefined;
   private credentials: ClientCredentials;
   readonly project: string;
 
@@ -311,8 +310,7 @@ export default class BaseCogniteClient {
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
       try {
         const newToken = await this.authenticate();
-        if (newToken && newToken !== this.previousToken) {
-          this.previousToken = newToken;
+        if (newToken && newToken !== _.headers[API_KEY_HEADER]) {
           retry();
         } else {
           reject();
