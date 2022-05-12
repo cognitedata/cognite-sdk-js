@@ -1,6 +1,11 @@
 // Copyright 2022 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap, CogniteInternalId } from '@cognite/sdk-core';
+import {
+  BaseResourceAPI,
+  CDFHttpClient,
+  MetadataMap,
+  CogniteInternalId,
+} from '@cognite/sdk-core';
 
 import {
   Document,
@@ -50,7 +55,9 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.searchDocuments<DocumentSearchResponse>(query);
   };
 
-  public list = (request: DocumentListRequest): Promise<DocumentListResponse> => {
+  public list = (
+    request: DocumentListRequest
+  ): Promise<DocumentListResponse> => {
     return this.listEndpoint(this.callListEndpointWithPost, request);
   };
 
@@ -68,10 +75,12 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.addToMapAndReturn(response.data, response);
   }
 
-  private async documentContent<ResponseType>(id: CogniteInternalId): Promise<ResponseType> {
+  private async documentContent<ResponseType>(
+    id: CogniteInternalId
+  ): Promise<ResponseType> {
     const response = await this.get<ResponseType>(this.url(`${id}/content`), {
       headers: {
-        "accept": "text/plain",
+        accept: 'text/plain',
       },
     });
     return response.data;

@@ -3,12 +3,34 @@
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 import { DocumentSearchResponse } from '@cognite/sdk-stable/dist';
+import { TextEncoder } from 'util';
 
 describe('Documents integration test', () => {
   let client: CogniteClient;
+  let fileId: number;
 
   beforeAll(async () => {
     client = setupLoggedInClient();
+
+    // ensure we have a file for testing
+    try {
+      const resp = await client.documents.list({
+        limit: 1,
+      });
+      fileId = resp.items[0].id;
+    } catch (error) {
+      const fileContent = new TextEncoder().encode('test data');
+      const file = await client.files.upload(
+        {
+          name: 'test.txt',
+          mimeType: 'text/plain',
+        },
+        fileContent,
+        false,
+        true
+      );
+      fileId = file.id;
+    }
   });
 
   test('search with limit 1', async () => {
@@ -147,5 +169,19 @@ describe('Documents integration test', () => {
       const resp = await client.documents.preview.pdfTemporaryLink(document.id);
       expect(resp.temporaryLink).toBeDefined();
     });
+  });
+
+  test('list', async () => {
+    const response = await client.documents.list({
+      limit: 1,
+    });
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0]).toBeDefined();
+    expect(response.items[0].id).toBeDefined();
+  });
+
+  test('content', async () => {
+    const response = await client.documents.content(fileId);
+    expect(response).toBeDefined();
   });
 });

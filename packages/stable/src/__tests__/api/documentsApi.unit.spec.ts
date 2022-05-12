@@ -349,12 +349,12 @@ describe('Documents unit test', () => {
   test('document content', async () => {
     nock(mockBaseUrl)
       .get(new RegExp('/documents/5/content'))
-      .matchHeader("accept", "text/plain")
+      .matchHeader('accept', 'text/plain')
       .once()
-      .reply(200, "lorem ipsum");
-      
-    let content = await client.documents.content(5);
-    expect(content).toEqual("lorem ipsum");
+      .reply(200, 'lorem ipsum');
+
+    const content = await client.documents.content(5);
+    expect(content).toEqual('lorem ipsum');
   });
 
   test('document list', async () => {
@@ -370,12 +370,10 @@ describe('Documents unit test', () => {
       })
       .once()
       .reply(200, {
-        items: [
-          {id: 3456},
-        ]
+        items: [{ id: 3456 }],
       });
-      
-    let resp = await client.documents.list({
+
+    const resp = await client.documents.list({
       limit: 5,
       filter: {
         equals: {
@@ -384,7 +382,7 @@ describe('Documents unit test', () => {
         },
       },
     });
-    expect(resp).toHaveLength(1);
-    expect(resp[0]).toHaveAttribute("id");
+    expect(resp.items).toHaveLength(1);
+    expect(resp.items[0]).toEqual({ id: 3456 });
   });
 });
