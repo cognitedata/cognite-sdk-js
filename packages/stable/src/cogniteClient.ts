@@ -15,6 +15,7 @@ import { ApiKeysAPI } from './api/apiKeys/apiKeysApi';
 import { AssetsAPI } from './api/assets/assetsApi';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
+import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
 import { FilesAPI } from './api/files/filesApi';
@@ -104,6 +105,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get geospatial() {
     return accessApi(this.geospatialApi);
   }
+  public get documents() {
+    return accessApi(this.documentsApi);
+  }
   public get templates() {
     return {
       groups: accessApi(this.apiFactory(TemplateGroupsApi, 'templategroups')),
@@ -166,6 +170,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
   private geospatialApi?: GeospatialAPI;
+  private documentsApi?: DocumentsAPI;
 
   protected get version() {
     return version;
@@ -216,6 +221,7 @@ export default class CogniteClient extends BaseCogniteClient {
       this.metadataMap
     );
     this.geospatialApi = this.apiFactory(GeospatialAPI, 'geospatial');
+    this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
   }
 
   static urlEncodeExternalId(externalId: string): string {
