@@ -6,6 +6,7 @@ import {
   ClientOptions,
   RetryValidator,
 } from '@cognite/sdk-core';
+import { satisfies } from 'semver';
 import { CogniteAPIVersion } from '@cognite/sdk-core/src/utils';
 import { version, dependencies } from '../package.json';
 import { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';
@@ -194,7 +195,7 @@ export default class CogniteClient extends BaseCogniteClient {
 
   private checkCoreVersionMatch() {
     // check if sdk-core version matches with the one in the dependencies
-    if (!dependencies['@cognite/sdk-core'].includes(this.coreVersion)) {
+    if (!satisfies(this.coreVersion, dependencies['@cognite/sdk-core'])) {
       console.warn(
         `VERSION MISMATCH! \n The resolved @cognite/sdk-core version ${this.coreVersion} doesn't match the required version ${dependencies['@cognite/sdk-core']} from @cognite/sdk. This might lead to unexpected behavior and bugs.`
       );
