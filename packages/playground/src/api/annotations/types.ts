@@ -69,4 +69,5 @@ export interface AnnotationFilterProps {
   linkedResourceType?: LinkedResourceType;
   linkedResourceIds?: IdEither[];
   status?: AnnotationStatus;
+  data?: AnnotationPayload;
 }
