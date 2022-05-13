@@ -44,6 +44,22 @@ export interface ClientCredentials {
   grant_type?: string;
   scope?: string;
 }
+
+export interface TokenCredentials {
+  token_type: string;
+  expires_in: string;
+  ext_expires_in: string;
+  expires_on?: string;
+  not_before?: string;
+  resource?: string;
+  access_token: string;
+  refresh_token?: string;
+  id_token?: string;
+  scope?: string;
+  expires_at?: number;
+  session_state?: string;
+}
+
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
   appId: string;
@@ -85,6 +101,7 @@ export default class BaseCogniteClient {
    * comparing new tokens to one tried the last time.
    */
   private credentials: ClientCredentials;
+  private tokenCredentials: TokenCredentials = {} as TokenCredentials;
   readonly project: string;
 
   /**
@@ -327,43 +344,59 @@ export default class BaseCogniteClient {
     try {
       if (!this.credentials) return;
 
-      let token: any;
-
       if (this.credentials.method === 'api') {
-        token = this.credentials.apiKey!;
+        const token: string = this.credentials.apiKey!;
         this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
+
+        return token;
+      }
+
+      if (this.tokenCredentials.refresh_token) {
+        this.tokenCredentials.access_token = '';
       }
 
       if (this.credentials.method === 'client_credentials') {
         // @ts-ignore
-        token = await ClientCredentialsAuth.load(this.credentials).login();
-        // @ts-ignore
-        token = token.access_token;
+        this.tokenCredentials = await ClientCredentialsAuth.load(
+          // @ts-ignore
+          this.credentials
+        ).login();
       }
 
       if (this.credentials.method === 'device') {
         // @ts-ignore
-        token = await DeviceAuth.load(this.credentials).login().access_token;
+        this.tokenCredentials = await DeviceAuth.load(this.credentials).login(
+          this.tokenCredentials.refresh_token
+        );
       }
 
       if (this.credentials.method === 'implicit') {
         // @ts-ignore
-        token = await ImplicitAuth.load(this.credentials).login().access_token;
+        this.tokenCredentials = await ImplicitAuth.load(
+          // @ts-ignore
+          this.credentials
+        ).login();
       }
 
       if (this.credentials.method === 'pkce') {
         // @ts-ignore
-        token = await PkceAuth.load(this.credentials).login().access_token;
-      }
-
-      if (token && this.credentials.method !== 'api') {
-        this.httpClient.setDefaultHeader(
-          AUTHORIZATION_HEADER,
-          bearerString(token!)
+        this.tokenCredentials = await PkceAuth.load(this.credentials).login(
+          this.tokenCredentials.refresh_token
         );
       }
 
-      return token!;
+      if (
+        this.tokenCredentials.access_token !== undefined &&
+        this.tokenCredentials.access_token !== ''
+      ) {
+        this.httpClient.setDefaultHeader(
+          AUTHORIZATION_HEADER,
+          bearerString(this.tokenCredentials.access_token)
+        );
+      }
+
+      console.log('mmmmm', this.tokenCredentials);
+      return this.tokenCredentials.access_token!;
     } catch (e) {
       return;
     }
