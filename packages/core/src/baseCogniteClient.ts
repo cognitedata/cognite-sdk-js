@@ -37,6 +37,7 @@ import {
 export interface ClientCredentials {
   method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
   apiKey?: string;
+  implicitToken?: string;
   authority?: string;
   client_id?: string;
   client_secret?: string;
@@ -229,46 +230,10 @@ export default class BaseCogniteClient {
     if (
       options.credentials.method &&
       options.credentials.method === 'implicit' &&
-      !options.credentials.authority
+      !options.credentials.implicitToken
     ) {
       throw Error(
-        'options.credentials.authority is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'implicit' &&
-      !options.credentials.client_id
-    ) {
-      throw Error(
-        'options.credentials.client_id is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'implicit' &&
-      !options.credentials.client_secret
-    ) {
-      throw Error(
-        'options.credentials.client_secret is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'implicit' &&
-      !options.credentials.scope
-    ) {
-      throw Error(
-        'options.credentials.scope is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'implicit' &&
-      !options.credentials.grant_type
-    ) {
-      throw Error(
-        'options.credentials.grant_type is required and must be of type string'
+        'options.credentials.implicitToken is required and must be of type string'
       );
     }
     if (
@@ -326,8 +291,10 @@ export default class BaseCogniteClient {
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
       try {
+        const previousToken = this.retrieveTokenValueFromHeader();
+
         const newToken = await this.authenticate();
-        if (newToken && newToken !== _.headers[API_KEY_HEADER]) {
+        if (newToken && newToken !== previousToken) {
           retry();
         } else {
           reject();
@@ -370,14 +337,6 @@ export default class BaseCogniteClient {
         );
       }
 
-      if (this.credentials.method === 'implicit') {
-        // @ts-ignore
-        this.tokenCredentials = await ImplicitAuth.load(
-          // @ts-ignore
-          this.credentials
-        ).login();
-      }
-
       if (this.credentials.method === 'pkce') {
         // @ts-ignore
         this.tokenCredentials = await PkceAuth.load(this.credentials).login(
@@ -389,18 +348,35 @@ export default class BaseCogniteClient {
         this.tokenCredentials.access_token !== undefined &&
         this.tokenCredentials.access_token !== ''
       ) {
+        const token =
+          this.credentials.method === 'implicit'
+            ? this.credentials.implicitToken
+            : this.tokenCredentials.access_token;
+
         this.httpClient.setDefaultHeader(
           AUTHORIZATION_HEADER,
-          bearerString(this.tokenCredentials.access_token)
+          bearerString(token!)
         );
       }
 
-      console.log('mmmmm', this.tokenCredentials);
       return this.tokenCredentials.access_token!;
     } catch (e) {
       return;
     }
   };
+
+  private retrieveTokenValueFromHeader(): string {
+    let previousToken;
+
+    const defaultRequestHeaders = this.getDefaultRequestHeaders();
+
+    if (this.credentials.method === 'api') {
+      previousToken = defaultRequestHeaders[API_KEY_HEADER];
+    } else {
+      previousToken = defaultRequestHeaders[AUTHORIZATION_HEADER];
+    }
+    return previousToken;
+  }
 
   /**
    * Returns the base-url used for all requests.
