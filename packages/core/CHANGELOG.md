@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.1.2...@cognite/sdk-core@4.1.3) (2022-05-16)
+
+
+### Bug Fixes
+
+* fixing missing token when call sdk methods using Promises ([#789](https://github.com/cognitedata/cognite-sdk-js/issues/789)) ([6a6d62a](https://github.com/cognitedata/cognite-sdk-js/commit/6a6d62a6744f94bef46e8fe1b397d07e8f9de873))
+
+
+
+
+
 ## [4.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.1.1...@cognite/sdk-core@4.1.2) (2022-05-13)
 
 
