@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.3.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.3.3...@cognite/sdk@7.2.5) (2022-05-16)
+
+**Note:** Pointing to the new version of @cognite/sdk-core:4.1.3 which fix some bugs assynchronous parallel calls to API
+
+
+
+
 ## [6.3.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.3.2...@cognite/sdk@6.3.3) (2022-01-10)
 
 **Note:** Version bump only for package @cognite/sdk
