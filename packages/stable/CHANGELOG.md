@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.3...@cognite/sdk@7.2.4) (2022-05-16)
+
+
+### Bug Fixes
+
+* use `type` field instead of instanceOf ([#761](https://github.com/cognitedata/cognite-sdk-js/issues/761)) ([45c5ca8](https://github.com/cognitedata/cognite-sdk-js/commit/45c5ca8a26f8dc6cbbd0efd9172d0fb1d7a842de))
+
+
+
+
+
+## [7.2.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.2...@cognite/sdk@7.2.3) (2022-05-13)
+
+
+### Bug Fixes
+
+* adding @types/geojson to core package ([#780](https://github.com/cognitedata/cognite-sdk-js/issues/780)) ([b8b5715](https://github.com/cognitedata/cognite-sdk-js/commit/b8b57155f1e40df33743a61bad8fce63fe2d247f))
+
+
+
+
+
 ## [7.2.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.0...@cognite/sdk@7.2.2) (2022-04-12)
 
 
