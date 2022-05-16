@@ -5,8 +5,6 @@ import {
   DeviceAuth,
   PkceAuth,
 } from '@cognite/auth-wrapper';
-import isObject from 'lodash/isObject';
-import isString from 'lodash/isString';
 import { LoginAPI } from './api/login/loginApi';
 import { LogoutApi } from './api/logout/logoutApi';
 import {
