@@ -32,6 +32,10 @@ import {
   createUniversalRetryValidator,
   RetryValidator,
 } from './httpClient/retryValidator';
+import {
+  verifyCredentialsRequiredFields,
+  verifyOptionsRequiredFields,
+} from './loginUtils';
 
 export interface ClientCredentials {
   method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
@@ -119,149 +123,9 @@ export default class BaseCogniteClient {
    * ```
    */
   constructor(options: ClientOptions, apiVersion: CogniteAPIVersion = 'v1') {
-    if (!isObject(options)) {
-      throw Error('`CogniteClient` is missing parameter `options`');
-    }
-    if (!isString(options.appId)) {
-      throw Error('options.appId is required and must be of type string');
-    }
-    if (!isString(options.project)) {
-      throw Error('options.project is required and must be of type string');
-    }
-    if (!options.credentials) {
-      throw Error('options.credentials is required');
-    }
-    if (!options.credentials.method) {
-      throw Error(
-        'options.credentials.method is required and must be of type string with one of this values: api, client_credentials, device, implicit, pkce'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'api' &&
-      !options.credentials.apiKey
-    ) {
-      throw Error(
-        'options.credentials.apiKey is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'client_credentials' &&
-      !options.credentials.authority
-    ) {
-      throw Error(
-        'options.credentials.authority is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'client_credentials' &&
-      !options.credentials.client_id
-    ) {
-      throw Error(
-        'options.credentials.client_id is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'client_credentials' &&
-      !options.credentials.client_secret
-    ) {
-      throw Error(
-        'options.credentials.client_secret is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'client_credentials' &&
-      !options.credentials.scope
-    ) {
-      throw Error(
-        'options.credentials.scope is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'client_credentials' &&
-      !options.credentials.grant_type
-    ) {
-      throw Error(
-        'options.credentials.grant_type is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'device' &&
-      !options.credentials.authority
-    ) {
-      throw Error(
-        'options.credentials.authority is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'device' &&
-      !options.credentials.client_id
-    ) {
-      throw Error(
-        'options.credentials.client_id is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'device' &&
-      !options.credentials.client_secret
-    ) {
-      throw Error(
-        'options.credentials.client_secret is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'device' &&
-      !options.credentials.scope
-    ) {
-      throw Error(
-        'options.credentials.scope is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'implicit' &&
-      !options.credentials.implicitToken
-    ) {
-      throw Error(
-        'options.credentials.implicitToken is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'pkce' &&
-      !options.credentials.authority
-    ) {
-      throw Error(
-        'options.credentials.authority is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'pkce' &&
-      !options.credentials.client_id
-    ) {
-      throw Error(
-        'options.credentials.client_id is required and must be of type string'
-      );
-    }
-    if (
-      options.credentials.method &&
-      options.credentials.method === 'pkce' &&
-      !options.credentials.scope
-    ) {
-      throw Error(
-        'options.credentials.scope is required and must be of type string'
-      );
-    }
+    verifyOptionsRequiredFields(options);
+    verifyCredentialsRequiredFields(options.credentials);
+
     if (isBrowser() && !isUsingSSL()) {
       console.warn(
         'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
@@ -343,11 +207,12 @@ export default class BaseCogniteClient {
         );
       }
 
+      let token;
       if (
         this.tokenCredentials.access_token !== undefined &&
         this.tokenCredentials.access_token !== ''
       ) {
-        const token =
+        token =
           this.credentials.method === 'implicit'
             ? this.credentials.implicitToken
             : this.tokenCredentials.access_token;
@@ -358,12 +223,16 @@ export default class BaseCogniteClient {
         );
       }
 
-      return this.tokenCredentials.access_token!;
+      return token;
     } catch (e) {
       return;
     }
   };
 
+  /**
+   * It retrieves the previous token from header
+   * @returns string
+   */
   private retrieveTokenValueFromHeader(): string {
     let previousToken;
 
