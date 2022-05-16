@@ -4,8 +4,7 @@ import {
   apiUrl,
   BaseCogniteClient,
   RetryValidator,
-} from '../../core/src';
-// } from '@cognite/sdk-core';
+} from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';
 import { Files3DAPI } from './api/3d/files3DApi';
