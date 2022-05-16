@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.1.2...@cognite/sdk-core@4.1.3) (2022-05-16)
+
+
+### Bug Fixes
+
+* fixing missing token when call sdk methods using Promises ([#789](https://github.com/cognitedata/cognite-sdk-js/issues/789)) ([6a6d62a](https://github.com/cognitedata/cognite-sdk-js/commit/6a6d62a6744f94bef46e8fe1b397d07e8f9de873))
+
+
+
+
+
+## [4.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.1.1...@cognite/sdk-core@4.1.2) (2022-05-13)
+
+
+### Bug Fixes
+
+* adding @types/geojson to core package ([#780](https://github.com/cognitedata/cognite-sdk-js/issues/780)) ([b8b5715](https://github.com/cognitedata/cognite-sdk-js/commit/b8b57155f1e40df33743a61bad8fce63fe2d247f))
+
+
+
+
+
+## [4.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.1.0...@cognite/sdk-core@4.1.1) (2022-03-01)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+
+
+
+
 # [4.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.0.4...@cognite/sdk-core@4.1.0) (2022-01-10)
 
 

@@ -254,12 +254,12 @@ class TemplateInstanceCodec {
     }
   }
 
-  static isFieldResolver(fieldResolver: FieldResolver | {}) {
+  static isFieldResolver(fieldResolver: any) {
     return (
-      fieldResolver instanceof ConstantResolver ||
-      fieldResolver instanceof RawResolver ||
-      fieldResolver instanceof SyntheticTimeSeriesResolver ||
-      fieldResolver instanceof ViewResolver
+      fieldResolver.type === 'constant' ||
+      fieldResolver.type === 'raw' ||
+      fieldResolver.type === 'syntheticTimeSeries' ||
+      fieldResolver.type === 'view'
     );
   }
 }
