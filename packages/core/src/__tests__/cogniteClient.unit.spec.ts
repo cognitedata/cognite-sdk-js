@@ -78,11 +78,8 @@ describe('CogniteClient', () => {
       });
       test('call credentials on 401', async () => {
         nock(mockBaseUrl).get('/test').reply(401, {});
-        nock(mockBaseUrl, {
-          reqheaders: {
-            [AUTHORIZATION_HEADER]: 'Bearer 401-test-token',
-          },
-        })
+        const scopeOk = nock(mockBaseUrl)
+          .persist()
           .get('/test')
           .reply(200, { body: 'request ok' });
 
@@ -100,6 +97,8 @@ describe('CogniteClient', () => {
 
         expect(result.status).toEqual(200);
         expect(result.data).toEqual({ body: 'request ok' });
+
+        scopeOk.done();
       });
 
       test('401 handler should reject if the same token is returned', async () => {

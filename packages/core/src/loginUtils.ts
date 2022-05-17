@@ -211,10 +211,10 @@ export function verifyCredentialsRequiredFields(
       credentials.method &&
       credentials.method === field.method &&
       // @ts-ignore
-      !credentials[field.method]
+      !credentials[field.field]
     ) {
       throw Error(
-        `options.credentials.${field} is required and must be of type string`
+        `options.credentials.${field.field} is required and must be of type string`
       );
     }
   }
