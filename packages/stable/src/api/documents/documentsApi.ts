@@ -62,7 +62,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   };
 
   public content = (id: CogniteInternalId): Promise<string> => {
-    return this.documentContent<string>(id);
+    return this.documentContent(id);
   };
 
   private async searchDocuments<ResponseType>(
@@ -75,14 +75,14 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.addToMapAndReturn(response.data, response);
   }
 
-  private async documentContent<ResponseType>(
+  private async documentContent(
     id: CogniteInternalId
-  ): Promise<ResponseType> {
-    const response = await this.get<ResponseType>(this.url(`${id}/content`), {
+  ): Promise<string> {
+    const response = await this.get<string>(this.url(`${id}/content`), {
       headers: {
         accept: 'text/plain',
       },
     });
-    return response.data;
+    return this.addToMapAndReturn(response.data, response);
   }
 }
