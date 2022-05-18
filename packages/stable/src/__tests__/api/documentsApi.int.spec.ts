@@ -5,32 +5,53 @@ import { setupLoggedInClient } from '../testUtils';
 import { DocumentSearchResponse } from '@cognite/sdk-stable/dist';
 import { TextEncoder } from 'util';
 
+const getFileId = async (
+  client: CogniteClient,
+  deadline: number = 15000
+): Promise<number> => {
+  try {
+    const resp = await client.documents.list({
+      limit: 1,
+    });
+    return resp.items[0].id;
+  } catch (error) {
+    const fileContent = new TextEncoder().encode('test data');
+    await client.files.upload(
+      {
+        name: 'test.txt',
+        mimeType: 'text/plain',
+      },
+      fileContent,
+      false,
+      true
+    );
+  }
+
+  while (deadline > 0) {
+    try {
+      const resp = await client.documents.list({
+        limit: 1,
+      });
+      return resp.items[0].id;
+    } catch (error) {
+      const timeout = 3000;
+      await new Promise((resolve) => setTimeout(resolve, deadline));
+      deadline -= timeout;
+    }
+  }
+
+  throw new Error(
+    'unable to ingest a file into the documents service within time'
+  );
+};
+
 describe('Documents integration test', () => {
   let client: CogniteClient;
   let fileId: number;
 
   beforeAll(async () => {
     client = setupLoggedInClient();
-
-    // ensure we have a file for testing
-    try {
-      const resp = await client.documents.list({
-        limit: 1,
-      });
-      fileId = resp.items[0].id;
-    } catch (error) {
-      const fileContent = new TextEncoder().encode('test data');
-      const file = await client.files.upload(
-        {
-          name: 'test.txt',
-          mimeType: 'text/plain',
-        },
-        fileContent,
-        false,
-        true
-      );
-      fileId = file.id;
-    }
+    fileId = getFileId(client);
   });
 
   test('search with limit 1', async () => {
