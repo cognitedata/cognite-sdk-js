@@ -81,6 +81,6 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
         accept: 'text/plain',
       },
     });
-    return this.addToMapAndReturn(response.data, response);
+    return response.data;
   }
 }
