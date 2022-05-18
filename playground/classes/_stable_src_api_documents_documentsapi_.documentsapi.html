@@ -101,6 +101,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_stable_src_api_documents_documentsapi_.documentsapi.html#content" class="tsd-kind-icon">content</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_stable_src_api_documents_documentsapi_.documentsapi.html#list" class="tsd-kind-icon">list</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_stable_src_api_documents_documentsapi_.documentsapi.html#search" class="tsd-kind-icon">search</a></li>
 							</ul>
 						</section>
@@ -120,7 +122,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides BaseResourceAPI.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/41f3199dd/packages/stable/src/api/documents/documentsApi.ts#L14">packages/stable/src/api/documents/documentsApi.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e906571f0/packages/stable/src/api/documents/documentsApi.ts#L21">packages/stable/src/api/documents/documentsApi.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -146,7 +148,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/41f3199dd/packages/stable/src/api/documents/documentsApi.ts#L23">packages/stable/src/api/documents/documentsApi.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e906571f0/packages/stable/src/api/documents/documentsApi.ts#L30">packages/stable/src/api/documents/documentsApi.ts:30</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_stable_src_api_documents_previewapi_.previewapi.html" class="tsd-signature-type">PreviewAPI</a></h4>
@@ -157,6 +159,52 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="content" class="tsd-anchor"></a>
+					<h3>content</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">content<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><a href="../modules/_core_src_types_.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e906571f0/packages/stable/src/api/documents/documentsApi.ts#L64">packages/stable/src/api/documents/documentsApi.ts:64</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <a href="../modules/_core_src_types_.html#cogniteinternalid" class="tsd-signature-type">CogniteInternalId</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="list" class="tsd-anchor"></a>
+					<h3>list</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_api_documents_types_gen_.html#documentlistrequest" class="tsd-signature-type">DocumentListRequest</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html" class="tsd-signature-type">DocumentListResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e906571f0/packages/stable/src/api/documents/documentsApi.ts#L58">packages/stable/src/api/documents/documentsApi.ts:58</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>request: <a href="../modules/_stable_src_api_documents_types_gen_.html#documentlistrequest" class="tsd-signature-type">DocumentListRequest</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html" class="tsd-signature-type">DocumentListResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="search" class="tsd-anchor"></a>
 					<h3>search</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
@@ -166,7 +214,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/41f3199dd/packages/stable/src/api/documents/documentsApi.ts#L45">packages/stable/src/api/documents/documentsApi.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e906571f0/packages/stable/src/api/documents/documentsApi.ts#L52">packages/stable/src/api/documents/documentsApi.ts:52</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -221,6 +269,12 @@
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
 								<a href="_stable_src_api_documents_documentsapi_.documentsapi.html#preview" class="tsd-kind-icon">preview</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_stable_src_api_documents_documentsapi_.documentsapi.html#content" class="tsd-kind-icon">content</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_stable_src_api_documents_documentsapi_.documentsapi.html#list" class="tsd-kind-icon">list</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_stable_src_api_documents_documentsapi_.documentsapi.html#search" class="tsd-kind-icon">search</a>
