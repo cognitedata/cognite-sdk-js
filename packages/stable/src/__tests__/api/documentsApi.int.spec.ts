@@ -9,34 +9,44 @@ const getFileId = async (
   client: CogniteClient,
   deadline: number = 15000
 ): Promise<number> => {
-  try {
+  // Use a previous uploaded file/document if available,
+  // otherwise ingest a new file.
+
+  async function lookup() {
     const resp = await client.documents.list({
       limit: 1,
     });
-    return resp.items[0].id;
-  } catch (error) {
-    const fileContent = new TextEncoder().encode('test data');
-    await client.files.upload(
-      {
-        name: 'test.txt',
-        mimeType: 'text/plain',
-      },
-      fileContent,
-      false,
-      true
-    );
+    return resp.items.length > 0 ? resp.items[0].id : undefined;
   }
 
-  while (deadline > 0) {
-    try {
-      const resp = await client.documents.list({
-        limit: 1,
-      });
-      return resp.items[0].id;
-    } catch (error) {
-      const timeout = 3000;
-      await new Promise((resolve) => setTimeout(resolve, deadline));
-      deadline -= timeout;
+  const found = await lookup();
+  if (found) {
+    return found;
+  }
+
+  const fileContent = new TextEncoder().encode('test data');
+  await client.files.upload(
+    {
+      name: 'test.txt',
+      mimeType: 'text/plain',
+    },
+    fileContent,
+    false,
+    true
+  );
+
+  // It takes some time for a uploaded file to become available
+  // in the documents API.
+
+  let timeLeft = deadline;
+  while (timeLeft > 0) {
+    const timeout = Math.min(timeLeft, 3000);
+    await new Promise((resolve) => setTimeout(resolve, timeout));
+    timeLeft -= timeout;
+
+    const foundOnRetry = await lookup();
+    if (foundOnRetry) {
+      return foundOnRetry;
     }
   }
 
