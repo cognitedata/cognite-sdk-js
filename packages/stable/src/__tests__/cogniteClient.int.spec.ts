@@ -37,7 +37,6 @@ describe('http methods - integration', () => {
     expect(response.data.items).toHaveLength(2);
   });
   test('get method', async () => {
-    console.log(client.getDefaultRequestHeaders());
     const response = await client.get(`/api/v1/projects/${project}/assets`);
     expect(response.data).toHaveProperty('items');
   });

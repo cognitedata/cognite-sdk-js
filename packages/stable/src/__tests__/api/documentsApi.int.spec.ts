@@ -2,7 +2,7 @@
 
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-import { DocumentSearchResponse } from '@cognite/sdk-stable/dist';
+import { DocumentSearchResponse } from '@cognite/sdk-stable';
 
 describe('Documents integration test', () => {
   let client: CogniteClient;
