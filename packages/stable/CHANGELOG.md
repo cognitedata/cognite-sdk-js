@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.5...@cognite/sdk@7.3.0) (2022-05-18)
+
+
+### Features
+
+* **documents:** content and list endpoints + stricter types ([#792](https://github.com/cognitedata/cognite-sdk-js/issues/792)) ([e906571](https://github.com/cognitedata/cognite-sdk-js/commit/e906571f0501312315b4a20909fb302ebc8a8827))
+
+
+
+
+
 ## [7.2.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.4...@cognite/sdk@7.2.5) (2022-05-16)
 
 **Note:** Version bump only for package @cognite/sdk
