@@ -71,7 +71,6 @@ export default class BaseCogniteClient {
    * over (e.g api-keys) there isn't a point retrying. previousToken is used to keep track of that,
    * comparing new tokens to one tried the last time.
    */
-  private previousToken: string | undefined;
   private readonly getToken: () => Promise<string>;
   readonly project: string;
 
@@ -134,9 +133,11 @@ export default class BaseCogniteClient {
 
     this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
       try {
+        const previousToken = this.retrieveTokenValueFromHeader();
+
         const newToken = await this.authenticate();
-        if (newToken && newToken !== this.previousToken) {
-          this.previousToken = newToken;
+
+        if (newToken && newToken !== previousToken) {
           retry();
         } else {
           reject();
@@ -154,17 +155,29 @@ export default class BaseCogniteClient {
       const token = await this.getToken();
       if (this.apiKeyMode) {
         this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
+        return token;
       } else {
-        this.httpClient.setDefaultHeader(
-          AUTHORIZATION_HEADER,
-          bearerString(token)
-        );
+        const bearer = bearerString(token);
+        this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
+        return bearer;
       }
-      return token;
     } catch {
       return;
     }
   };
+
+  private retrieveTokenValueFromHeader(): string {
+    let previousToken;
+
+    const defaultRequestHeaders = this.getDefaultRequestHeaders();
+
+    if (this.apiKeyMode) {
+      previousToken = defaultRequestHeaders[API_KEY_HEADER];
+    } else {
+      previousToken = defaultRequestHeaders[AUTHORIZATION_HEADER];
+    }
+    return previousToken;
+  }
 
   /**
    * Returns the base-url used for all requests.
