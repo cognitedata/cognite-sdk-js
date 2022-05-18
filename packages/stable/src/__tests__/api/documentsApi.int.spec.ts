@@ -51,7 +51,7 @@ describe('Documents integration test', () => {
 
   beforeAll(async () => {
     client = setupLoggedInClient();
-    fileId = getFileId(client);
+    fileId = await getFileId(client);
   });
 
   test('search with limit 1', async () => {
