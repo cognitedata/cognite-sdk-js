@@ -7,9 +7,13 @@ import { CogniteInternalId, CogniteExternalId } from '@cognite/sdk-core';
 
 export type DocumentSearchRequest = DocumentSearch &
   DocumentSearchFilter &
-  DocumentAggregates &
+  DocumentSearchAggregates &
   DocumentSort &
   DocumentSearchLimit &
+  DocumentCursor;
+
+export type DocumentListRequest = DocumentListFilter &
+  DocumentListLimit &
   DocumentCursor;
 
 export interface DocumentSearch {
@@ -27,9 +31,9 @@ export interface DocumentSearchFilter {
   filter?: DocumentFilter;
 }
 
-export interface DocumentAggregates {
+export interface DocumentSearchAggregates {
   /** @example [{"name":"countOfTypes","aggregate":"count","groupBy":[{"property":["type"]}]}] */
-  aggregates?: DocumentCountAggregate[];
+  aggregates?: DocumentSearchCountAggregate[];
 }
 
 export interface DocumentSort {
@@ -39,7 +43,7 @@ export interface DocumentSort {
 
 export interface DocumentSearchLimit {
   /**
-   * Maximum number of items.
+   * Maximum number of items. When using highlights the maximum value is reduced to 20.
    * @format int32
    * @min 0
    * @max 1000
@@ -52,16 +56,45 @@ export interface DocumentCursor {
   cursor?: string;
 }
 
-/**
- * Highlighted snippets from name and content fields which show where the query matches are. The matched terms will be placed inside <em> tags
- * @example {"name":["amet elit <em>non diam</em> aliquam suscipit"],"content":["Nunc <em>vulputate erat</em> ipsum, at aliquet ligula vestibulum at","<em>Quisque</em> lectus ex, fringilla aliquet <em>eleifend</em> nec, laoreet a velit.\n\nPhasellus <em>faucibus</em> risus arcu"]}
- */
-export interface DocumentHighlight {
-  /** Matches in name. */
-  name: string[];
+export interface DocumentSearchItem {
+  /** Highlighted snippets from name and content fields which show where the query matches are. The matched terms will be placed inside <em> tags */
+  highlight?: DocumentHighlight;
 
-  /** Matches in content. */
-  content: string[];
+  /** A document */
+  item: Document;
+}
+
+export interface DocumentSearchAggregate {
+  /** User defined name for this aggregate */
+  name: string;
+  groups: DocumentSearchAggregateGroup[];
+
+  /**
+   * Total number of results for this aggregate
+   * @format int32
+   */
+  total: number;
+}
+
+/**
+ * Filter with exact match
+ */
+export interface DocumentListFilter {
+  /**
+   * A JSON based filtering language. See detailed documentation above.
+   *
+   */
+  filter?: DocumentFilter;
+}
+
+export interface DocumentListLimit {
+  /**
+   * Maximum number of items per page. Use the cursor to get more pages.
+   * @format int32
+   * @min 1
+   * @max 1000
+   */
+  limit?: number;
 }
 
 /**
@@ -151,9 +184,7 @@ export interface Document {
    * @example [42,101]
    */
   assetIds?: CogniteInternalId[];
-
-  /** A list of labels derived by this pipeline's document classifier. */
-  labels?: { externalId: CogniteExternalId }[] & LabelList;
+  labels?: LabelList & LabelDefinitionExternalIdList;
 
   /** The source file that this document is derived from. */
   sourceFile: DocumentSourceFile;
@@ -163,16 +194,11 @@ export interface Document {
 }
 
 /**
-* Property you wish to filter. It's a list of strings to allow specifying nested properties.
-For example, If you have the object `{"foo": {"../bar": "baz"}, "bar": 123}`, you can refer to the nested property as `["foo", "../bar"]` and the un-nested one as `["bar"]`.
-* @example ["sourceFile","name"]
-*/
-export type DocumentFilterProperty = string[];
-
-/**
- * Value you wish to find in the provided property.
+ * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+ * @format int64
+ * @min 0
  */
-export type DocumentFilterValue = string | number | boolean | Label;
+export type EpochTimestamp = number;
 
 /**
  * A JSON based filtering language. See detailed documentation above.
@@ -182,7 +208,7 @@ export type DocumentFilter = DocumentFilterBool | DocumentFilterLeaf;
 /**
  * @example {"name":"countOfTypes","aggregate":"count","groupBy":[{"property":["type"]}]}
  */
-export interface DocumentCountAggregate {
+export interface DocumentSearchCountAggregate {
   /** User defined name for this aggregate */
   name: string;
 
@@ -193,7 +219,7 @@ export interface DocumentCountAggregate {
   aggregate: 'count';
 
   /** List of properties to group the count by. It is currently only possible to group by 0 or 1 properties. If grouping by 0 properties, the aggregate value is the total count of all documents. */
-  groupBy?: { property: DocumentFilterProperty }[];
+  groupBy?: DocumentSearchCountAggregatesGroup[];
 }
 
 export interface DocumentSortItem {
@@ -208,16 +234,35 @@ export interface DocumentSortItem {
 }
 
 /**
- * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
- * @format int64
- * @min 0
+ * Highlighted snippets from name and content fields which show where the query matches are. The matched terms will be placed inside <em> tags
+ * @example {"name":["amet elit <em>non diam</em> aliquam suscipit"],"content":["Nunc <em>vulputate erat</em> ipsum, at aliquet ligula vestibulum at","<em>Quisque</em> lectus ex, fringilla aliquet <em>eleifend</em> nec, laoreet a velit.\n\nPhasellus <em>faucibus</em> risus arcu"]}
  */
-export type EpochTimestamp = number;
+export interface DocumentHighlight {
+  /** Matches in name. */
+  name: string[];
+
+  /** Matches in content. */
+  content: string[];
+}
+
+export interface DocumentSearchAggregateGroup {
+  group: DocumentSearchAggregateGroupIdentifier[];
+
+  /**
+   * The number of documents in this group.
+   * @format int32
+   */
+  count: number;
+}
 
 /**
  * A list of the labels associated with this resource item.
  */
 export type LabelList = Label[];
+
+export interface LabelDefinitionExternalIdList {
+  items: LabelDefinitionExternalId[];
+}
 
 /**
  * The source file that this document is derived from.
@@ -299,14 +344,6 @@ export interface DocumentGeoJsonGeometry {
 }
 
 /**
- * A label assigned to a resource.
- */
-export interface Label {
-  /** An external ID to a predefined label definition. */
-  externalId: CogniteExternalId;
-}
-
-/**
 * A query that matches items matching boolean combinations of other queries.
 It is built using one or more boolean clauses, which can be of types: `and`, `or` or `not`
 */
@@ -329,6 +366,42 @@ export type DocumentFilterLeaf =
   | DocumentFilterGeoJsonIntersects
   | DocumentFilterGeoJsonDisjoint
   | DocumentFilterGeoJsonWithin;
+
+export interface DocumentSearchCountAggregatesGroup {
+  /**
+   * A property to group by.
+   * @example ["type"]
+   */
+  property: DocumentFilterProperty;
+}
+
+/**
+* Property you wish to filter. It's a list of strings to allow specifying nested properties.
+For example, If you have the object `{"foo": {"../bar": "baz"}, "bar": 123}`, you can refer to the nested property as `["foo", "../bar"]` and the un-nested one as `["bar"]`.
+* @example ["sourceFile","name"]
+*/
+export type DocumentFilterProperty = string[];
+
+export interface DocumentSearchAggregateGroupIdentifier {
+  /** The property that is being aggregated on. */
+  property: DocumentFilterProperty;
+
+  /** The value of the property for this group. */
+  value: DocumentFilterValue;
+}
+
+/**
+ * A label assigned to a resource.
+ */
+export interface Label {
+  /** An external ID to a predefined label definition. */
+  externalId: CogniteExternalId;
+}
+
+export interface LabelDefinitionExternalId {
+  /** The external ID provided by the client. Must be unique for the resource type. */
+  externalId: CogniteExternalId;
+}
 
 export interface DocumentFilterEquals {
   /**
@@ -430,6 +503,11 @@ export interface DocumentFilterGeoJsonWithin {
 }
 
 /**
+ * Value you wish to find in the provided property.
+ */
+export type DocumentFilterValue = string | number | boolean | Label;
+
+/**
  * One or more values you wish to find in the provided property.
  */
 export type DocumentFilterValueList = DocumentFilterValue[];
@@ -440,26 +518,26 @@ export type DocumentFilterValueList = DocumentFilterValue[];
 export type DocumentFilterRangeValue = number;
 
 export interface DocumentSearchResponse {
-  items: { highlight?: DocumentHighlight; item: Document }[];
-  aggregates?: {
-    name: string;
-    groups: {
-      group: { property: DocumentFilterProperty; value: DocumentFilterValue }[];
-      count: number;
-    }[];
-    total: number;
-  }[];
+  items: DocumentSearchItem[];
+  aggregates?: DocumentSearchAggregate[];
 
   /** The cursor to get the next page of results (if available). The search endpoint only gives a limited number of results. A missing nextCursor does not imply there are no more results for the provided search. */
   nextCursor?: string;
 }
 
+export interface DocumentListResponse {
+  items: Document[];
+
+  /** The cursor to get the next page of results (if available). */
+  nextCursor?: string;
+}
+
 /**
- * A temporary link to download a preview of the document.
- * The link is reachable without additional authentication details
- * for a limited time.
+ * A temporary link to download a preview of the document. The link is reachable without additional authentication details for a limited time.
  */
-export interface DocumentsTemporaryPreviewLinkResponse {
+export interface DocumentsPreviewTemporaryLinkResponse {
   temporaryLink?: string;
-  expirationTime?: number;
+
+  /** @example 1519862400000 */
+  expirationTime?: EpochTimestamp;
 }
