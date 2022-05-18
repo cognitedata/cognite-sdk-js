@@ -5,7 +5,7 @@ import { HttpResponseType } from '@cognite/sdk-core';
 
 import {
   CogniteInternalId,
-  DocumentsTemporaryPreviewLinkResponse,
+  DocumentsPreviewTemporaryLinkResponse,
 } from '../../types';
 
 export class PreviewAPI extends BaseResourceAPI<any> {
@@ -22,8 +22,8 @@ export class PreviewAPI extends BaseResourceAPI<any> {
 
   public pdfTemporaryLink = (
     id: CogniteInternalId
-  ): Promise<DocumentsTemporaryPreviewLinkResponse> => {
-    return this.pdfTemporaryLinkEndpoint<DocumentsTemporaryPreviewLinkResponse>(
+  ): Promise<DocumentsPreviewTemporaryLinkResponse> => {
+    return this.pdfTemporaryLinkEndpoint<DocumentsPreviewTemporaryLinkResponse>(
       id
     );
   };

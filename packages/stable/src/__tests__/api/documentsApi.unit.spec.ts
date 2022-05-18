@@ -345,4 +345,44 @@ describe('Documents unit test', () => {
     expect(resp.temporaryLink).toEqual(link);
     expect(resp.expirationTime).toEqual(expirationTime);
   });
+
+  test('document content', async () => {
+    nock(mockBaseUrl)
+      .get(new RegExp('/documents/5/content'))
+      .matchHeader('accept', 'text/plain')
+      .once()
+      .reply(200, 'lorem ipsum');
+
+    const content = await client.documents.content(5);
+    expect(content).toEqual('lorem ipsum');
+  });
+
+  test('document list', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/list'), {
+        limit: 5,
+        filter: {
+          equals: {
+            property: ['type'],
+            value: 'PDF',
+          },
+        },
+      })
+      .once()
+      .reply(200, {
+        items: [{ id: 3456 }],
+      });
+
+    const resp = await client.documents.list({
+      limit: 5,
+      filter: {
+        equals: {
+          property: ['type'],
+          value: 'PDF',
+        },
+      },
+    });
+    expect(resp.items).toHaveLength(1);
+    expect(resp.items[0]).toEqual({ id: 3456 });
+  });
 });
