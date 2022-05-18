@@ -75,9 +75,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.addToMapAndReturn(response.data, response);
   }
 
-  private async documentContent(
-    id: CogniteInternalId
-  ): Promise<string> {
+  private async documentContent(id: CogniteInternalId): Promise<string> {
     const response = await this.get<string>(this.url(`${id}/content`), {
       headers: {
         accept: 'text/plain',
