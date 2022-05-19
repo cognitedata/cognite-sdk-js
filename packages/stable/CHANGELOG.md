@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.0...@cognite/sdk@7.3.1) (2022-05-19)
+
+
+### Bug Fixes
+
+* fixing 401 problem ([#800](https://github.com/cognitedata/cognite-sdk-js/issues/800)) ([b5789b1](https://github.com/cognitedata/cognite-sdk-js/commit/b5789b1a15ed9fb574c636c5515c85a2868b60a2))
+
+
+
+
+
 # [7.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.5...@cognite/sdk@7.3.0) (2022-05-18)
 
 
