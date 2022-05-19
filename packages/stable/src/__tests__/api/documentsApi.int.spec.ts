@@ -2,7 +2,7 @@
 
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-import { DocumentSearchResponse } from '@cognite/sdk-stable';
+import { DocumentSearchResponse } from '@cognite/sdk-stable/dist';
 import { TextEncoder } from 'util';
 
 const getFileId = async (
