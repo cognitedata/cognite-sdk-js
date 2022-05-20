@@ -24,7 +24,11 @@ export interface AnnotationModel extends AnnotationCreate {
   lastUpdatedTime: Date;
 }
 
-export interface AnnotationCreate {
+export interface AnnotationCreate extends AnnotationSuggest {
+  status: AnnotationStatus;
+}
+
+export interface AnnotationSuggest {
   annotatedResourceType: AnnotatedResourceType;
   annotatedResourceId?: CogniteInternalId;
   annotatedResourceExternalId?: CogniteExternalId;
@@ -36,7 +40,6 @@ export interface AnnotationCreate {
   linkedResourceType?: LinkedResourceType;
   linkedResourceId?: CogniteInternalId;
   linkedResourceExternalId?: CogniteExternalId;
-  status: AnnotationStatus;
 }
 
 export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}

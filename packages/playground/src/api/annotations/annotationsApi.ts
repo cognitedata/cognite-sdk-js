@@ -9,6 +9,7 @@ import {
 import {
   AnnotationChangeById,
   AnnotationCreate,
+  AnnotationSuggest,
   AnnotationFilterRequest,
   AnnotationModel,
 } from './types';
@@ -22,11 +23,22 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
     return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
   }
 
+  protected get suggestUrl() {
+    return this.url('suggest');
+  }
+
   /**
    * [Create annotations](https://docs.cognite.com/api/playground/#operation/annotationsCreate)
    */
   public create = (items: AnnotationCreate[]) => {
     return this.createEndpoint(items);
+  };
+
+  /**
+   * [Suggest annotations](https://docs.cognite.com/api/playground/#operation/annotationsSuggest)
+   */
+  public suggest = (items: AnnotationSuggest[]) => {
+    return this.createEndpoint(items, this.suggestUrl);
   };
 
   /**
