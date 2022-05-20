@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.1.4...@cognite/sdk-core@4.1.5) (2022-05-20)
+
+
+### Reverts
+
+* Revert "fix: fixing 401 problem (#800)" (#802) ([341b68d](https://github.com/cognitedata/cognite-sdk-js/commit/341b68dd271b7781489343637c861921d647b483)), closes [#800](https://github.com/cognitedata/cognite-sdk-js/issues/800) [#802](https://github.com/cognitedata/cognite-sdk-js/issues/802)
+
+
+
+
+
 ## [4.1.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.1.3...@cognite/sdk-core@4.1.4) (2022-05-19)
 
 
