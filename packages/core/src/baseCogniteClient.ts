@@ -131,9 +131,9 @@ export default class BaseCogniteClient {
       return options.getToken();
     };
 
-    this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
+    this.httpClient.set401ResponseHandler(async (error, retry, reject) => {
       try {
-        const previousToken = this.retrieveTokenValueFromHeader(_.headers);
+        const previousToken = this.retrieveTokenValueFromHeader(error.headers);
 
         const newToken = await this.authenticate();
         if (newToken && newToken !== previousToken) {
