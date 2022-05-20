@@ -227,6 +227,12 @@ export interface GeospatialFeatureSearchStreamFilter
       };
 }
 
+/**
+ * Search stream returns a string of delimited json of features (GeospatialFeatureResponse[]).
+ * jsonStreamFormat in the filter decides what the delimiter will be.
+ */
+export type GeospatialFeatureSearchStreamResponse = string;
+
 export interface FeatureAggregateParams {
   filter?: GeospatialFeatureFilter;
   aggregates: Aggregates[];
