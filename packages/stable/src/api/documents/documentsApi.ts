@@ -13,6 +13,7 @@ import {
   DocumentSearchRequest,
   DocumentListRequest,
   DocumentListResponse,
+  DocumentsAggregateRequest,
   DocumentsAggregateResponse,
 } from '../../types';
 
@@ -67,9 +68,9 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   };
 
   public aggregate = (
-    request: DocumentAggregateRequest
+    request: DocumentsAggregateRequest
   ): Promise<DocumentsAggregateResponse> => {
-    return null;
+    return this.documentsAggregate(request);
   };
 
   private async searchDocuments<ResponseType>(
@@ -89,5 +90,17 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
       },
     });
     return response.data;
+  }
+
+  private async documentsAggregate(
+    request: DocumentsAggregateRequest
+  ): Promise<DocumentsAggregateResponse> {
+    const response = await this.post<DocumentsAggregateResponse>(
+      this.url(`aggregate`),
+      {
+        data: request,
+      }
+    );
+    return this.addToMapAndReturn(response.data, response);
   }
 }
