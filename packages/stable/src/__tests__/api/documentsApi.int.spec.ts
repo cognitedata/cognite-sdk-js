@@ -238,7 +238,7 @@ describe('Documents integration test', () => {
     const resp =
       await client.documents.aggregate<DocumentsAggregateUniqueValuesResponse>({
         aggregate: 'uniqueValues',
-        properties: [{ property: ['extension'] }],
+        properties: [{ property: ['mimeType'] }],
       });
     expect(resp.items).toHaveLength(1);
     expect(resp.items[0].values).toBeDefined();
