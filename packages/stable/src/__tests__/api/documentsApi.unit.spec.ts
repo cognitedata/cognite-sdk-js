@@ -402,7 +402,7 @@ describe('Documents unit test', () => {
         items: [{ count: 3456 }],
       });
 
-    const resp = await client.documents.aggregate({
+    const resp = await client.documents.aggregateCount({
       filter: {
         equals: {
           property: ['sourceFile', 'name'],
@@ -415,7 +415,7 @@ describe('Documents unit test', () => {
     expect(resp.items[0]).toEqual({ count: 3456 });
   });
 
-  test('document aggregate unique', async () => {
+  test('document aggregate uniqueValues', async () => {
     nock(mockBaseUrl)
       .post(new RegExp('/documents/aggregate'), {
         aggregate: 'uniqueValues',
@@ -426,7 +426,7 @@ describe('Documents unit test', () => {
         items: [{ values: ['txt'] }],
       });
 
-    const resp = await client.documents.aggregate({
+    const resp = await client.documents.aggregateUniqueValues({
       aggregate: 'uniqueValues',
       properties: [{ property: ['extension'] }],
     });

@@ -15,6 +15,11 @@ import {
   DocumentListResponse,
   DocumentsAggregateRequest,
   DocumentsAggregateResponse,
+  DocumentsAggregateCountRequest,
+  DocumentsAggregateCountResponse,
+  DocumentsAggregateUniqueValuesResponse,
+  DocumentsAggregateAllUniqueValuesResponse,
+  DocumentsAggregateAllUniqueValuesRequest,
 } from '../../types';
 
 import { PreviewAPI } from './previewApi';
@@ -67,25 +72,31 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.documentContent(id);
   };
 
-  /**
-   * []()
-   *
-   * ```js
-   * const resp = await client.documents.aggregate<DocumentsAggregateUniqueValuesResponse>({
-   *   aggregate: 'uniqueValues',
-   *   properties: [{ property: ['extension'] }],
-   * });
-   *
-   * console.log(resp.items[0].values);
-   * ```
-   *
-   * @param request
-   * @returns
-   */
-  public aggregate = <Response extends DocumentsAggregateResponse>(
+  public aggregateCount = (
+    request: DocumentsAggregateCountRequest
+  ): Promise<DocumentsAggregateCountResponse> => {
+    return this.aggregate<
+      DocumentsAggregateCountRequest,
+      DocumentsAggregateCountResponse
+    >(request);
+  };
+
+  public aggregateUniqueValues = (
     request: DocumentsAggregateRequest
-  ): Promise<Response> => {
-    return this.documentsAggregate<Response>(request);
+  ): Promise<DocumentsAggregateUniqueValuesResponse> => {
+    return this.aggregate<
+      DocumentsAggregateRequest,
+      DocumentsAggregateUniqueValuesResponse
+    >(request);
+  };
+
+  public aggregateAllUniqueValues = (
+    request: DocumentsAggregateAllUniqueValuesRequest
+  ): Promise<DocumentsAggregateAllUniqueValuesResponse> => {
+    return this.aggregate<
+      DocumentsAggregateAllUniqueValuesRequest,
+      DocumentsAggregateAllUniqueValuesResponse
+    >(request);
   };
 
   private async searchDocuments<ResponseType>(
@@ -107,9 +118,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return response.data;
   }
 
-  private async documentsAggregate<Response>(
-    request: DocumentsAggregateRequest
-  ): Promise<Response> {
+  private async aggregate<
+    Request extends DocumentsAggregateRequest,
+    Response extends DocumentsAggregateResponse
+  >(request: Request): Promise<Response> {
     const response = await this.post<Response>(this.url(`aggregate`), {
       data: request,
     });

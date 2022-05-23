@@ -220,7 +220,7 @@ describe('Documents integration test', () => {
   });
 
   test('document aggregate count', async () => {
-    const resp = await client.documents.aggregate({
+    const resp = await client.documents.aggregateCount({
       filter: {
         equals: {
           property: ['type'],
@@ -229,18 +229,17 @@ describe('Documents integration test', () => {
       },
       aggregate: 'count',
     });
-    expect(resp.items).toBeGreaterThanOrEqual(1);
+    expect(resp.items).toHaveLength(1);
     expect(resp.items[0].count).toBeDefined();
     expect(resp.items[0].count).toBeGreaterThanOrEqual(1);
   });
 
-  test('document aggregate unique', async () => {
-    const resp =
-      await client.documents.aggregate<DocumentsAggregateUniqueValuesResponse>({
-        aggregate: 'uniqueValues',
-        properties: [{ property: ['mimeType'] }],
-      });
-    expect(resp.items).toBeGreaterThanOrEqual(0);
+  test('document aggregate uniqueValues', async () => {
+    const resp = await client.documents.aggregateUniqueValues({
+      aggregate: 'uniqueValues',
+      properties: [{ property: ['mimeType'] }],
+    });
+    expect(resp.items.length).toBeGreaterThanOrEqual(1);
     expect(resp.items[0].values).toBeDefined();
     expect(resp.items[0].values.length).toBeGreaterThanOrEqual(1);
   });
