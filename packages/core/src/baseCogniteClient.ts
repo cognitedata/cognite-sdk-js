@@ -154,12 +154,11 @@ export default class BaseCogniteClient {
       const token = await this.getToken();
       if (this.apiKeyMode) {
         this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
-        return token;
       } else {
         const bearer = bearerString(token);
         this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
-        return bearer;
       }
+      return token;
     } catch {
       return;
     }
