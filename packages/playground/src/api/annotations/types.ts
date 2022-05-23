@@ -46,7 +46,7 @@ export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
 
 export interface AnnotationUpdate {
   update: {
-    annotationType?: SetField<AnnotationPayload>;
+    annotationType?: SetField<AnnotationType>;
     data?: SetField<AnnotationPayload>;
     linkedResourceType?: SinglePatch<LinkedResourceType>;
     linkedResourceId?: SinglePatch<CogniteInternalId>;
