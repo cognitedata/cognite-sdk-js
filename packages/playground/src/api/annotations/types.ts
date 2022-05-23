@@ -68,6 +68,7 @@ export interface AnnotationFilterProps {
   annotatedResourceIds: IdEither[];
   annotationType?: AnnotationType;
   creatingApp?: string;
+  creatingAppVersion?: string;
   creatingUser?: string | null;
   linkedResourceType?: LinkedResourceType;
   linkedResourceIds?: IdEither[];
