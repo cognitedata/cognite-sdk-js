@@ -30,8 +30,7 @@ export interface AnnotationCreate extends AnnotationSuggest {
 
 export interface AnnotationSuggest {
   annotatedResourceType: AnnotatedResourceType;
-  annotatedResourceId?: CogniteInternalId;
-  annotatedResourceExternalId?: CogniteExternalId;
+  annotatedResourceId: CogniteInternalId;
   annotationType: AnnotationType;
   creatingApp: string;
   creatingAppVersion: string;
