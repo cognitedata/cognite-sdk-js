@@ -617,6 +617,11 @@ export type DocumentFilterValueList = DocumentFilterValue[];
  */
 export type DocumentFilterRangeValue = number;
 
+export type DocumentsAggregateRequest =
+  | DocumentsAggregateCountRequest
+  | DocumentsAggregateUniqueValuesRequest
+  | DocumentsAggregateAllUniqueValuesRequest;
+
 export interface DocumentSearchResponse {
   items: DocumentSearchItem[];
   aggregates?: DocumentSearchAggregate[];

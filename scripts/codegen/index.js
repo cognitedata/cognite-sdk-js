@@ -161,18 +161,69 @@ function isComponentReference(ref) {
   return true;
 }
 
+function endpointHasInlinedResponseSchema(endpoint) {
+  for (const [httpMethod, definition] of Object.entries(endpoint)) {
+    for (const [httpStatus, definitions] of Object.entries(definition.responses || {})) {
+      const schema = definitions.content?.['application/json']?.schema;
+      if (typeof schema === "undefined") {
+        continue;
+      }
+      if ("$ref" in schema) {
+        continue;
+      }
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function extractInlineRequestSchemas(paths) {
+  // some endpoint define inline schemas, these must be extracted in order to generate a type.
+  //
+  let schemas = {};
+  for (const [path, endpointDefinitions] of Object.entries(paths)) {
+    const haveMultipleRequestTypes = endpointDefinitions.length > 1;
+    for (const [httpMethod, definition] of Object.entries(endpointDefinitions)) {
+      const schema = definition.requestBody?.content?.["application/json"]?.schema;
+      if (typeof schema === "undefined") {
+        continue;
+      }
+      if ("$ref" in schema) {
+        continue;
+      }
+
+      if (haveMultipleRequestTypes) {
+        panic(path + ": endpoints with multiple requests are not currently supported");
+      }
+
+      // schema name
+      if (typeof definition.operationId === "undefined" || definition.operationId.trim() === "") {
+        panic(path + ": inlined requests must have a operationId specified to automatically name the request type");
+      }
+      const operationId = definition.operationId.trim();
+      let schemaName = operationId.charAt(0).toUpperCase() + (operationId.length > 1 ? operationId.slice(1) : "");
+      if (!schemaName.toLowerCase().endsWith("request")){
+        schemaName += "Request";
+      }
+
+      schemas[schemaName] = schema;
+    }
+  }
+
+  return Object.entries(schemas);
+}
+
 function extractInlineResponseSchemas(paths) {
   // some endpoint define inline schemas, these must be extracted in order to generate a type.
-  // 
+  //
   let schemas = {};
   for (const [path, endpointDefinitions] of Object.entries(paths)) {
     for (const [httpMethod, definition] of Object.entries(endpointDefinitions)) {
-      if (!hasPath(definition, ["content", "application/json", "schema"])) {
-        continue;
+      if (endpointHasInlinedResponseSchema(endpointDefinitions)) {
+        panic(path + ": inline responses are not currently supported")
       }
-  
-  
-      panic("inline responses are not currently supported")
     }
   }
 
@@ -291,7 +342,17 @@ function generate(package, service, version, spec) {
   delete spec.componentsOld;
 
   for (const [name, schema] of extractInlineResponseSchemas(spec.paths)) {
-    spec.components.schema[name] = schema;
+    if (name in spec.components.schemas) {
+      panic(`extracted response schema "${name}" is already defined`)
+    }
+    spec.components.schemas[name] = schema;
+  }
+
+  for (const [name, schema] of extractInlineRequestSchemas(spec.paths)) {
+    if (name in spec.components.schemas) {
+      panic(`extracted request schema "${name}" is already defined`)
+    }
+    spec.components.schemas[name] = schema;
   }
 
   // some refs are responses, and we must fetch out the schema for any json responses
@@ -308,7 +369,7 @@ function generate(package, service, version, spec) {
   }
 
   // some refs are query parameters, and we must fetch out the schema
-  // TODO: one query parameters object per endpoint 
+  // TODO: one query parameters object per endpoint
   const extractedParameters = extractQueryParameterSchemas(spec);
   for (const [name, schema] of Object.entries(extractedParameters)) {
     spec.components.schemas[name + "QueryParameter"] = schema;
@@ -317,7 +378,7 @@ function generate(package, service, version, spec) {
   // remove the common json error structure as it is not needed here.
   // this is the `{"error": {"message": "hello", "code": 400, ...}}`
   delete spec.components.schemas["Error"]
-  
+
   // remove EmptyResponse as this is will never directly be used by the sdk
   // it's just used in openapi to state we return an empty json `{}`.
   delete spec.components.schemas["EmptyResponse"]
@@ -426,7 +487,7 @@ const main = async () => {
       return fs.mkdir(servicePath, {recursive: true});
     })
     .catch(err => panic(err))
-  
+
   const mustUpdateLockfile = args.length > 1 && args[1] === "update-lockfile";
   const version = package === "playground" ? "playground" : "v1";
 
