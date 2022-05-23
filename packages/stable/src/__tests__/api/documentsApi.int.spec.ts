@@ -7,7 +7,6 @@ import {
   DocumentSearchResponse,
 } from '@cognite/sdk-stable';
 import { TextEncoder } from 'util';
-import { DocumentsAggregateUniqueValuesRequest } from '@cognite/sdk-stable/dist';
 
 const getFileId = async (
   client: CogniteClient,
