@@ -7,6 +7,7 @@ import { setupLoggedInClient as stableApiClientSetup } from '../../../../stable/
 import {
   AnnotationChangeById,
   AnnotationCreate,
+  AnnotationSuggest,
   AnnotationFilterProps,
 } from '@cognite/sdk-playground';
 
@@ -124,6 +125,30 @@ describe('Annotations API', () => {
     expect(annotationData.textRegion.yMin).toEqual(data.textRegion.yMin);
     expect(annotationData.textRegion.yMax).toEqual(data.textRegion.yMax);
     expect(annotationData.extractedText).toEqual(data.extractedText);
+
+    await client.annotations.delete([{ id: annotation.id }]);
+  });
+
+  test('suggest annotation', async () => {
+    const data = {
+      pageNumber: 7,
+      textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
+      extractedText: 'i am your father',
+    };
+    const partial: AnnotationSuggest = {
+      annotatedResourceType: 'file',
+      annotatedResourceId: annotatedFileId,
+      annotationType: 'documents.ExtractedText',
+      creatingApp: 'integration-tests',
+      creatingAppVersion: '0.0.1',
+      creatingUser: 'integration-tests',
+      data,
+    };
+    const created = await client.annotations.suggest([partial]);
+
+    expect(created).toHaveLength(1);
+    const annotation = created[0];
+    expect(annotation.status).toEqual('suggested');
 
     await client.annotations.delete([{ id: annotation.id }]);
   });
