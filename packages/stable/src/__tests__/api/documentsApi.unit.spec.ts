@@ -385,4 +385,56 @@ describe('Documents unit test', () => {
     expect(resp.items).toHaveLength(1);
     expect(resp.items[0]).toEqual({ id: 3456 });
   });
+
+  test('document aggregate count', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/aggregate'), {
+        filter: {
+            equals: {
+                property: ["sourceFile", "name"],
+                value: "PDF"
+            }
+        },
+        aggregate: "count",
+      })
+      .once()
+      .reply(200, {
+        items: [{ count: 3456 }],
+      });
+
+    const resp = await client.documents.aggregate({
+      filter: {
+          equals: {
+              property: ["sourceFile", "name"],
+              value: "PDF"
+          }
+      },
+      aggregate: "count",
+    });
+    expect(resp.items).toHaveLength(1);
+    expect(resp.items[0]).toEqual({ count: 3456 });
+  });
+
+  test('document aggregate unique', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/aggregate'), {
+        aggregate: "uniqueValues", 
+        properties: [
+          { property: ["extension"] },
+        ],
+      })
+      .once()
+      .reply(200, {
+        items: [{ values: ["txt"] }],
+      });
+
+    const resp = await client.documents.aggregate({
+      aggregate: "uniqueValues", 
+      properties: [
+        { property: ["extension"] },
+      ],
+    });
+    expect(resp.items).toHaveLength(1);
+    expect(resp.items[0]).toEqual({ values: ["txt"] });
+  });
 });

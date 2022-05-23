@@ -13,6 +13,7 @@ import {
   DocumentSearchRequest,
   DocumentListRequest,
   DocumentListResponse,
+  DocumentsAggregateResponse,
 } from '../../types';
 
 import { PreviewAPI } from './previewApi';
@@ -63,6 +64,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
   public content = (id: CogniteInternalId): Promise<string> => {
     return this.documentContent(id);
+  };
+
+  public aggregate = (request: DocumentAggregateRequest): Promise<DocumentsAggregateResponse> => {
+    return null;
   };
 
   private async searchDocuments<ResponseType>(
