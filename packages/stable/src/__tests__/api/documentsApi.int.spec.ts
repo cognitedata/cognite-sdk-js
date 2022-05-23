@@ -2,8 +2,12 @@
 
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-import { DocumentSearchResponse } from '@cognite/sdk-stable';
+import {
+  DocumentsAggregateUniqueValuesResponse,
+  DocumentSearchResponse,
+} from '@cognite/sdk-stable';
 import { TextEncoder } from 'util';
+import { DocumentsAggregateUniqueValuesRequest } from '@cognite/sdk-stable/dist';
 
 const getFileId = async (
   client: CogniteClient,
@@ -232,10 +236,11 @@ describe('Documents integration test', () => {
   });
 
   test('document aggregate unique', async () => {
-    const resp = await client.documents.aggregate({
-      aggregate: 'uniqueValues',
-      properties: [{ property: ['extension'] }],
-    });
+    const resp =
+      await client.documents.aggregate<DocumentsAggregateUniqueValuesResponse>({
+        aggregate: 'uniqueValues',
+        properties: [{ property: ['extension'] }],
+      });
     expect(resp.items).toHaveLength(1);
     expect(resp.items[0].values).toBeDefined();
     expect(resp.items[0].values.length).toBeGreaterThanOrEqual(1);

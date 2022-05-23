@@ -67,10 +67,25 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.documentContent(id);
   };
 
-  public aggregate = (
+  /**
+   * []()
+   *
+   * ```js
+   * const resp = await client.documents.aggregate<DocumentsAggregateUniqueValuesResponse>({
+   *   aggregate: 'uniqueValues',
+   *   properties: [{ property: ['extension'] }],
+   * });
+   *
+   * console.log(resp.items[0].values);
+   * ```
+   *
+   * @param request
+   * @returns
+   */
+  public aggregate = <Response extends DocumentsAggregateResponse>(
     request: DocumentsAggregateRequest
-  ): Promise<DocumentsAggregateResponse> => {
-    return this.documentsAggregate(request);
+  ): Promise<Response> => {
+    return this.documentsAggregate<Response>(request);
   };
 
   private async searchDocuments<ResponseType>(
@@ -92,15 +107,12 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return response.data;
   }
 
-  private async documentsAggregate(
+  private async documentsAggregate<Response>(
     request: DocumentsAggregateRequest
-  ): Promise<DocumentsAggregateResponse> {
-    const response = await this.post<DocumentsAggregateResponse>(
-      this.url(`aggregate`),
-      {
-        data: request,
-      }
-    );
+  ): Promise<Response> {
+    const response = await this.post<Response>(this.url(`aggregate`), {
+      data: request,
+    });
     return this.addToMapAndReturn(response.data, response);
   }
 }
