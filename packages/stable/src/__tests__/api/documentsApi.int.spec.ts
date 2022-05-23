@@ -219,12 +219,12 @@ describe('Documents integration test', () => {
   test('document aggregate count', async () => {
     const resp = await client.documents.aggregate({
       filter: {
-          equals: {
-              property: ["type"],
-              value: "PDF"
-          }
+        equals: {
+          property: ['type'],
+          value: 'PDF',
+        },
       },
-      aggregate: "count",
+      aggregate: 'count',
     });
     expect(resp.items).toHaveLength(1);
     expect(resp.items[0].count).toBeDefined();
@@ -233,10 +233,8 @@ describe('Documents integration test', () => {
 
   test('document aggregate unique', async () => {
     const resp = await client.documents.aggregate({
-      aggregate: "uniqueValues", 
-      properties: [
-        { property: ["extension"] },
-      ],
+      aggregate: 'uniqueValues',
+      properties: [{ property: ['extension'] }],
     });
     expect(resp.items).toHaveLength(1);
     expect(resp.items[0].values).toBeDefined();

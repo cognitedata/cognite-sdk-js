@@ -66,7 +66,9 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.documentContent(id);
   };
 
-  public aggregate = (request: DocumentAggregateRequest): Promise<DocumentsAggregateResponse> => {
+  public aggregate = (
+    request: DocumentAggregateRequest
+  ): Promise<DocumentsAggregateResponse> => {
     return null;
   };
 

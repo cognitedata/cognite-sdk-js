@@ -390,12 +390,12 @@ describe('Documents unit test', () => {
     nock(mockBaseUrl)
       .post(new RegExp('/documents/aggregate'), {
         filter: {
-            equals: {
-                property: ["sourceFile", "name"],
-                value: "PDF"
-            }
+          equals: {
+            property: ['sourceFile', 'name'],
+            value: 'PDF',
+          },
         },
-        aggregate: "count",
+        aggregate: 'count',
       })
       .once()
       .reply(200, {
@@ -404,12 +404,12 @@ describe('Documents unit test', () => {
 
     const resp = await client.documents.aggregate({
       filter: {
-          equals: {
-              property: ["sourceFile", "name"],
-              value: "PDF"
-          }
+        equals: {
+          property: ['sourceFile', 'name'],
+          value: 'PDF',
+        },
       },
-      aggregate: "count",
+      aggregate: 'count',
     });
     expect(resp.items).toHaveLength(1);
     expect(resp.items[0]).toEqual({ count: 3456 });
@@ -418,23 +418,19 @@ describe('Documents unit test', () => {
   test('document aggregate unique', async () => {
     nock(mockBaseUrl)
       .post(new RegExp('/documents/aggregate'), {
-        aggregate: "uniqueValues", 
-        properties: [
-          { property: ["extension"] },
-        ],
+        aggregate: 'uniqueValues',
+        properties: [{ property: ['extension'] }],
       })
       .once()
       .reply(200, {
-        items: [{ values: ["txt"] }],
+        items: [{ values: ['txt'] }],
       });
 
     const resp = await client.documents.aggregate({
-      aggregate: "uniqueValues", 
-      properties: [
-        { property: ["extension"] },
-      ],
+      aggregate: 'uniqueValues',
+      properties: [{ property: ['extension'] }],
     });
     expect(resp.items).toHaveLength(1);
-    expect(resp.items[0]).toEqual({ values: ["txt"] });
+    expect(resp.items[0]).toEqual({ values: ['txt'] });
   });
 });
