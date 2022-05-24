@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.1.8...@cognite/sdk-playground@5.2.0) (2022-05-23)
+
+
+### Features
+
+* **annotations:** support for suggest endpoint ([#806](https://github.com/cognitedata/cognite-sdk-js/issues/806)) ([c5a2609](https://github.com/cognitedata/cognite-sdk-js/commit/c5a2609c441d9591437a456353a61e450debe0f8))
+
+
+
+
+
+## [5.1.8](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.1.7...@cognite/sdk-playground@5.1.8) (2022-05-23)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
 ## [5.1.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.1.6...@cognite/sdk-playground@5.1.7) (2022-05-20)
 
 **Note:** Version bump only for package @cognite/sdk-playground
