@@ -24,10 +24,13 @@ export interface AnnotationModel extends AnnotationCreate {
   lastUpdatedTime: Date;
 }
 
-export interface AnnotationCreate {
+export interface AnnotationCreate extends AnnotationSuggest {
+  status: AnnotationStatus;
+}
+
+export interface AnnotationSuggest {
   annotatedResourceType: AnnotatedResourceType;
-  annotatedResourceId?: CogniteInternalId;
-  annotatedResourceExternalId?: CogniteExternalId;
+  annotatedResourceId: CogniteInternalId;
   annotationType: AnnotationType;
   creatingApp: string;
   creatingAppVersion: string;
@@ -36,14 +39,13 @@ export interface AnnotationCreate {
   linkedResourceType?: LinkedResourceType;
   linkedResourceId?: CogniteInternalId;
   linkedResourceExternalId?: CogniteExternalId;
-  status: AnnotationStatus;
 }
 
 export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
 
 export interface AnnotationUpdate {
   update: {
-    annotationType?: SetField<AnnotationPayload>;
+    annotationType?: SetField<AnnotationType>;
     data?: SetField<AnnotationPayload>;
     linkedResourceType?: SinglePatch<LinkedResourceType>;
     linkedResourceId?: SinglePatch<CogniteInternalId>;
@@ -65,6 +67,7 @@ export interface AnnotationFilterProps {
   annotatedResourceIds: IdEither[];
   annotationType?: AnnotationType;
   creatingApp?: string;
+  creatingAppVersion?: string;
   creatingUser?: string | null;
   linkedResourceType?: LinkedResourceType;
   linkedResourceIds?: IdEither[];
