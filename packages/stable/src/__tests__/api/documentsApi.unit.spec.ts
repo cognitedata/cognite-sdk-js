@@ -433,4 +433,31 @@ describe('Documents unit test', () => {
     expect(resp.items).toHaveLength(1);
     expect(resp.items[0]).toEqual({ values: ['txt'] });
   });
+
+  test('document aggregate allUniqueValues', async () => {
+    const cursor = 'sljghfkghdfkhgdfkg';
+
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/aggregate'), {
+        aggregate: 'allUniqueValues',
+        properties: [{ property: ['extension'] }],
+        limit: 67,
+        cursor: 'abc',
+      })
+      .once()
+      .reply(200, {
+        items: [{ values: ['txt'] }],
+        nextCursor: cursor,
+      });
+
+    const resp = await client.documents.aggregateAllUniqueValues({
+      aggregate: 'allUniqueValues',
+      properties: [{ property: ['extension'] }],
+      limit: 67,
+      cursor: 'abc',
+    });
+    expect(resp.items).toHaveLength(1);
+    expect(resp.items[0]).toEqual({ values: ['txt'] });
+    expect(resp.nextCursor).toEqual(cursor);
+  });
 });
