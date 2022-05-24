@@ -429,7 +429,7 @@ describe('Documents unit test', () => {
     const resp = await client.documents.aggregate.uniqueValues({
       properties: [{ property: ['extension'] }],
     });
-    expect(resp).toBe([
+    expect(resp).toStrictEqual([
       { count: 12, values: ['txt'] },
       { count: 55, values: ['pdf'] },
     ]);
@@ -490,12 +490,12 @@ describe('Documents unit test', () => {
 
     const resp = client.documents.aggregate.allUniqueValues({
       properties: [{ property: ['extension'] }],
-      limit: 67,
+      limit: 1,
     });
 
     const items = await resp.autoPagingToArray();
 
-    expect(items).toEqual([
+    expect(items).toStrictEqual([
       { count: 12, values: ['txt'] },
       { count: 44, values: ['pdf'] },
     ]);
