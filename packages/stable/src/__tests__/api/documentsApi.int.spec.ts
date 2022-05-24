@@ -217,7 +217,7 @@ describe('Documents integration test', () => {
   });
 
   test('document aggregate count', async () => {
-    const resp = await client.documents.aggregateCount({
+    const resp = await client.documents.aggregate.count({
       filter: {
         equals: {
           property: ['type'],
@@ -232,7 +232,7 @@ describe('Documents integration test', () => {
   });
 
   test('document aggregate uniqueValues', async () => {
-    const resp = await client.documents.aggregateUniqueValues({
+    const resp = await client.documents.aggregate.uniqueValues({
       aggregate: 'uniqueValues',
       properties: [{ property: ['mimeType'] }],
     });

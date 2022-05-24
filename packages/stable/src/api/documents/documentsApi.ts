@@ -13,29 +13,33 @@ import {
   DocumentSearchRequest,
   DocumentListRequest,
   DocumentListResponse,
-  DocumentsAggregateRequest,
-  DocumentsAggregateResponse,
-  DocumentsAggregateCountRequest,
-  DocumentsAggregateCountResponse,
-  DocumentsAggregateUniqueValuesResponse,
-  DocumentsAggregateAllUniqueValuesResponse,
-  DocumentsAggregateAllUniqueValuesRequest,
 } from '../../types';
 
 import { PreviewAPI } from './previewApi';
+import { AggregateAPI } from './aggregateApi';
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
   private readonly previewAPI: PreviewAPI;
+  private readonly aggregateAPI: AggregateAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
 
     const [baseUrl, httpClient, map] = args;
     this.previewAPI = new PreviewAPI(baseUrl, httpClient, map);
+    this.aggregateAPI = new AggregateAPI(
+      baseUrl + '/aggregate',
+      httpClient,
+      map
+    );
   }
 
   public get preview() {
     return this.previewAPI;
+  }
+
+  public get aggregate() {
+    return this.aggregateAPI;
   }
 
   /**
@@ -72,33 +76,6 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.documentContent(id);
   };
 
-  public aggregateCount = (
-    request: DocumentsAggregateCountRequest
-  ): Promise<DocumentsAggregateCountResponse> => {
-    return this.aggregate<
-      DocumentsAggregateCountRequest,
-      DocumentsAggregateCountResponse
-    >(request);
-  };
-
-  public aggregateUniqueValues = (
-    request: DocumentsAggregateRequest
-  ): Promise<DocumentsAggregateUniqueValuesResponse> => {
-    return this.aggregate<
-      DocumentsAggregateRequest,
-      DocumentsAggregateUniqueValuesResponse
-    >(request);
-  };
-
-  public aggregateAllUniqueValues = (
-    request: DocumentsAggregateAllUniqueValuesRequest
-  ): Promise<DocumentsAggregateAllUniqueValuesResponse> => {
-    return this.aggregate<
-      DocumentsAggregateAllUniqueValuesRequest,
-      DocumentsAggregateAllUniqueValuesResponse
-    >(request);
-  };
-
   private async searchDocuments<ResponseType>(
     query: DocumentSearchRequest
   ): Promise<ResponseType> {
@@ -116,15 +93,5 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
       },
     });
     return response.data;
-  }
-
-  private async aggregate<
-    Request extends DocumentsAggregateRequest,
-    Response extends DocumentsAggregateResponse
-  >(request: Request): Promise<Response> {
-    const response = await this.post<Response>(this.url(`aggregate`), {
-      data: request,
-    });
-    return this.addToMapAndReturn(response.data, response);
   }
 }

@@ -402,7 +402,7 @@ describe('Documents unit test', () => {
         items: [{ count: 3456 }],
       });
 
-    const resp = await client.documents.aggregateCount({
+    const resp = await client.documents.aggregate.count({
       filter: {
         equals: {
           property: ['sourceFile', 'name'],
@@ -426,7 +426,7 @@ describe('Documents unit test', () => {
         items: [{ values: ['txt'] }],
       });
 
-    const resp = await client.documents.aggregateUniqueValues({
+    const resp = await client.documents.aggregate.uniqueValues({
       aggregate: 'uniqueValues',
       properties: [{ property: ['extension'] }],
     });
@@ -450,7 +450,7 @@ describe('Documents unit test', () => {
         nextCursor: cursor,
       });
 
-    const resp = await client.documents.aggregateAllUniqueValues({
+    const resp = await client.documents.aggregate.allUniqueValues({
       aggregate: 'allUniqueValues',
       properties: [{ property: ['extension'] }],
       limit: 67,
