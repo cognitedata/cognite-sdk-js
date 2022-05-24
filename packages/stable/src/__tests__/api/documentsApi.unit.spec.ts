@@ -2,8 +2,7 @@
 
 import nock from 'nock';
 import CogniteClient from '../../cogniteClient';
-import { setupMockableClient } from '../testUtils';
-import { mockBaseUrl } from '../testUtils';
+import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('Documents unit test', () => {
   let client: CogniteClient;
@@ -409,10 +408,8 @@ describe('Documents unit test', () => {
           value: 'PDF',
         },
       },
-      aggregate: 'count',
     });
-    expect(resp.items).toHaveLength(1);
-    expect(resp.items[0]).toEqual({ count: 3456 });
+    expect(resp).toBe(3456);
   });
 
   test('document aggregate uniqueValues', async () => {
@@ -423,41 +420,84 @@ describe('Documents unit test', () => {
       })
       .once()
       .reply(200, {
-        items: [{ values: ['txt'] }],
+        items: [
+          { count: 12, values: ['txt'] },
+          { count: 55, values: ['pdf'] },
+        ],
       });
 
     const resp = await client.documents.aggregate.uniqueValues({
-      aggregate: 'uniqueValues',
       properties: [{ property: ['extension'] }],
     });
-    expect(resp.items).toHaveLength(1);
-    expect(resp.items[0]).toEqual({ values: ['txt'] });
+    expect(resp).toBe([
+      { count: 12, values: ['txt'] },
+      { count: 55, values: ['pdf'] },
+    ]);
   });
 
-  test('document aggregate allUniqueValues', async () => {
-    const cursor = 'sljghfkghdfkhgdfkg';
+  test('document aggregate allUniqueValues one page', async () => {
+    const nextCursor = 'next-cursor-value';
 
     nock(mockBaseUrl)
       .post(new RegExp('/documents/aggregate'), {
         aggregate: 'allUniqueValues',
         properties: [{ property: ['extension'] }],
         limit: 67,
-        cursor: 'abc',
       })
       .once()
       .reply(200, {
-        items: [{ values: ['txt'] }],
-        nextCursor: cursor,
+        items: [{ count: 12, values: ['txt'] }],
+        nextCursor,
       });
 
     const resp = await client.documents.aggregate.allUniqueValues({
-      aggregate: 'allUniqueValues',
       properties: [{ property: ['extension'] }],
       limit: 67,
-      cursor: 'abc',
     });
-    expect(resp.items).toHaveLength(1);
-    expect(resp.items[0]).toEqual({ values: ['txt'] });
-    expect(resp.nextCursor).toEqual(cursor);
+    expect(resp).toEqual({
+      items: [{ count: 12, values: ['txt'] }],
+      next: expect.any(Function),
+      nextCursor,
+    });
+  });
+
+  test('document aggregate allUniqueValues all pages', async () => {
+    const firstCursor = 'first-cursor-value';
+
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/aggregate'), {
+        aggregate: 'allUniqueValues',
+        properties: [{ property: ['extension'] }],
+        limit: 1,
+      })
+      .once()
+      .reply(200, {
+        items: [{ count: 12, values: ['txt'] }],
+        nextCursor: firstCursor,
+      });
+
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/aggregate'), {
+        aggregate: 'allUniqueValues',
+        properties: [{ property: ['extension'] }],
+        limit: 1,
+        cursor: firstCursor,
+      })
+      .once()
+      .reply(200, {
+        items: [{ count: 44, values: ['pdf'] }],
+      });
+
+    const resp = client.documents.aggregate.allUniqueValues({
+      properties: [{ property: ['extension'] }],
+      limit: 67,
+    });
+
+    const items = await resp.autoPagingToArray();
+
+    expect(items).toEqual([
+      { count: 12, values: ['txt'] },
+      { count: 44, values: ['pdf'] },
+    ]);
   });
 });

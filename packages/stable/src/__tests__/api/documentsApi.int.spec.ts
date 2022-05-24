@@ -224,20 +224,25 @@ describe('Documents integration test', () => {
           value: 'PDF',
         },
       },
-      aggregate: 'count',
     });
-    expect(resp.items).toHaveLength(1);
-    expect(resp.items[0].count).toBeDefined();
-    expect(resp.items[0].count).toBeGreaterThanOrEqual(1);
+    expect(resp).toEqual(expect.any(Number));
   });
 
   test('document aggregate uniqueValues', async () => {
     const resp = await client.documents.aggregate.uniqueValues({
-      aggregate: 'uniqueValues',
+      properties: [{ property: ['mimeType'] }],
+    });
+    expect(resp.length).toBeGreaterThanOrEqual(1);
+    expect(resp[0].count).toBeGreaterThan(0);
+    expect(resp[0].values).toHaveLength(1);
+  });
+
+  test('document aggregate allUniqueValues', async () => {
+    const resp = await client.documents.aggregate.allUniqueValues({
       properties: [{ property: ['mimeType'] }],
     });
     expect(resp.items.length).toBeGreaterThanOrEqual(1);
-    expect(resp.items[0].values).toBeDefined();
-    expect(resp.items[0].values.length).toBeGreaterThanOrEqual(1);
+    expect(resp.items[0].count).toBeGreaterThan(0);
+    expect(resp.items[0].values).toHaveLength(1);
   });
 });
