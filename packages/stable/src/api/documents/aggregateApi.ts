@@ -55,7 +55,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
     });
   };
 
-  protected callAggregateCursorEndpointWithPost = async <
+  private callAggregateCursorEndpointWithPost = async <
     QueryType extends FilterQuery,
     Item
   >(
