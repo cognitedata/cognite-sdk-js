@@ -90,6 +90,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_stable_src_types_.relationshipsfilterrequest.html#cursor" class="tsd-kind-icon">cursor</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.relationshipsfilterrequest.html#fetchresources" class="tsd-kind-icon">fetch<wbr>Resources</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.relationshipsfilterrequest.html#filter" class="tsd-kind-icon">filter</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_stable_src_types_.relationshipsfilterrequest.html#limit" class="tsd-kind-icon">limit</a></li>
 							</ul>
@@ -106,9 +107,26 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_src_types_.filterquery.html">FilterQuery</a>.<a href="_core_src_types_.filterquery.html#cursor">cursor</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c5a2609c4/packages/core/src/types.ts#L24">packages/core/src/types.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b37fdd230/packages/core/src/types.ts#L24">packages/core/src/types.ts:24</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="fetchresources" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> fetch<wbr>Resources</h3>
+					<div class="tsd-signature tsd-kind-icon">fetch<wbr>Resources<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b37fdd230/packages/stable/src/types.ts#L1891">packages/stable/src/types.ts:1891</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If true, will try to fetch the resources referred to in the relationship,
+								based on the users access rights. Will silently fail to attatch the resources
+							if the user lacks access to some of them.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="filter" class="tsd-anchor"></a>
@@ -116,7 +134,7 @@
 					<div class="tsd-signature tsd-kind-icon">filter<span class="tsd-signature-symbol">:</span> <a href="_stable_src_types_.relationshipsfilter.html" class="tsd-signature-type">RelationshipsFilter</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c5a2609c4/packages/stable/src/types.ts#L1884">packages/stable/src/types.ts:1884</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b37fdd230/packages/stable/src/types.ts#L1884">packages/stable/src/types.ts:1884</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -136,7 +154,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_src_types_.filterquery.html">FilterQuery</a>.<a href="_core_src_types_.filterquery.html#limit">limit</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c5a2609c4/packages/core/src/types.ts#L28">packages/core/src/types.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b37fdd230/packages/core/src/types.ts#L28">packages/core/src/types.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -162,6 +180,9 @@
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
 								<a href="_stable_src_types_.relationshipsfilterrequest.html#cursor" class="tsd-kind-icon">cursor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_stable_src_types_.relationshipsfilterrequest.html#fetchresources" class="tsd-kind-icon">fetch<wbr>Resources</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_stable_src_types_.relationshipsfilterrequest.html#filter" class="tsd-kind-icon">filter</a>
