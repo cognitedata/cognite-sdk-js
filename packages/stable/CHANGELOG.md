@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.4...@cognite/sdk@7.4.0) (2022-05-25)
+
+
+### Features
+
+* add fetchResources to relationships api ([#808](https://github.com/cognitedata/cognite-sdk-js/issues/808)) ([b37fdd2](https://github.com/cognitedata/cognite-sdk-js/commit/b37fdd230043c8c24af1e1fe6df339064d722636))
+
+
+
+
+
 ## [7.3.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.3...@cognite/sdk@7.3.4) (2022-05-23)
 
 **Note:** Version bump only for package @cognite/sdk
