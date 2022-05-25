@@ -10,6 +10,7 @@ import {
   ExternalRelationship,
   Relationship,
   RelationshipsFilterRequest,
+  RelationshipsRetrieveParams,
 } from '../../types';
 
 export class RelationshipsApi extends BaseResourceAPI<Relationship> {
@@ -82,5 +83,4 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
   };
 }
 
-export type RelationshipsRetrieveParams = IgnoreUnknownIds;
 export type RelationshipsDeleteParams = IgnoreUnknownIds;
