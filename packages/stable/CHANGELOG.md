@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.4.0...@cognite/sdk@7.5.0) (2022-05-27)
+
+
+### Features
+
+* **documents:** aggregate api ([#793](https://github.com/cognitedata/cognite-sdk-js/issues/793)) ([445c39f](https://github.com/cognitedata/cognite-sdk-js/commit/445c39ff90822a357e20e624828bcd6e2ee36369))
+
+
+
+
+
 # [7.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.4...@cognite/sdk@7.4.0) (2022-05-25)
 
 
