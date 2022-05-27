@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.5.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.5.0...@cognite/sdk@7.5.1) (2022-05-27)
+
+
+### Bug Fixes
+
+* **documents:** label type in documents ([#809](https://github.com/cognitedata/cognite-sdk-js/issues/809)) ([fd5dcf6](https://github.com/cognitedata/cognite-sdk-js/commit/fd5dcf6ba6401eade7ad4e9c1f970494223a8b4a))
+
+
+
+
+
 # [7.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.4.0...@cognite/sdk@7.5.0) (2022-05-27)
 
 
