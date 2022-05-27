@@ -250,7 +250,7 @@ export interface Document {
    * @example [42,101]
    */
   assetIds?: CogniteInternalId[];
-  labels?: LabelList & LabelDefinitionExternalIdList;
+  labels?: LabelList;
 
   /** The source file that this document is derived from. */
   sourceFile: DocumentSourceFile;
@@ -355,10 +355,6 @@ export interface DocumentsAggregateAllUniqueValuesItem {
  * A list of the labels associated with this resource item.
  */
 export type LabelList = Label[];
-
-export interface LabelDefinitionExternalIdList {
-  items: LabelDefinitionExternalId[];
-}
 
 /**
  * The source file that this document is derived from.
@@ -489,11 +485,6 @@ export type DocumentFilterValue = string | number | boolean | Label;
  */
 export interface Label {
   /** An external ID to a predefined label definition. */
-  externalId: CogniteExternalId;
-}
-
-export interface LabelDefinitionExternalId {
-  /** The external ID provided by the client. Must be unique for the resource type. */
   externalId: CogniteExternalId;
 }
 
