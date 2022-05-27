@@ -141,12 +141,12 @@ export abstract class BaseResourceAPI<ResponseType> {
     );
   }
 
-  protected listEndpoint<QueryType extends FilterQuery>(
-    endpointCaller: ListEndpoint<QueryType, ResponseType[]>,
+  protected cursorBasedEndpoint<QueryType extends FilterQuery, Item>(
+    endpointCaller: ListEndpoint<QueryType, Item[]>,
     scope?: QueryType
-  ): CursorAndAsyncIterator<ResponseType> {
+  ): CursorAndAsyncIterator<Item> {
     const listPromise = endpointCaller(scope).then((transformedResponse) =>
-      this.addNextPageFunction<QueryType>(
+      this.addNextPageFunction<QueryType, Item>(
         endpointCaller.bind(this),
         transformedResponse.data,
         scope
@@ -154,6 +154,16 @@ export abstract class BaseResourceAPI<ResponseType> {
     );
     const autoPaginationMethods = makeAutoPaginationMethods(listPromise);
     return Object.assign(listPromise, autoPaginationMethods);
+  }
+
+  protected listEndpoint<QueryType extends FilterQuery>(
+    endpointCaller: ListEndpoint<QueryType, ResponseType[]>,
+    scope?: QueryType
+  ): CursorAndAsyncIterator<ResponseType> {
+    return this.cursorBasedEndpoint<QueryType, ResponseType>(
+      endpointCaller,
+      scope
+    );
   }
 
   protected async retrieveEndpoint<RequestParams extends object, T = IdEither>(
@@ -312,11 +322,11 @@ export abstract class BaseResourceAPI<ResponseType> {
       .reduce((a, b) => [...a, ...b], []);
   }
 
-  protected addNextPageFunction<QueryType extends FilterQuery>(
-    endpoint: ListEndpoint<QueryType, ResponseType[]>,
-    cursorResponse: CursorResponse<ResponseType[]>,
+  protected addNextPageFunction<QueryType extends FilterQuery, Item>(
+    endpoint: ListEndpoint<QueryType, Item[]>,
+    cursorResponse: CursorResponse<Item[]>,
     query: QueryType = {} as QueryType
-  ): ListResponse<ResponseType[]> {
+  ): ListResponse<Item[]> {
     const { nextCursor } = cursorResponse;
     const next = nextCursor
       ? () =>
