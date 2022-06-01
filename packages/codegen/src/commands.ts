@@ -155,8 +155,9 @@ export class CodeGenCommand {
     const fileContent = Object.keys(results)
       .map((service) => {
         const types = results[service];
-        this.createExportStatementForService(service, types, blacklist);
+        const statement = this.createExportStatementForService(service, types, blacklist);
         blacklist.push(...types);
+        return statement;
       })
       .join('\n');
 
@@ -177,7 +178,7 @@ export class CodeGenCommand {
     const blackListedTypes = types
       .filter((t) => blacklist.includes(t))
       .join(', ');
-    const typesFormat = types.filter((t) => !blacklist.includes(t)).join(', ');
+    const typesFormat = types.filter(t => !blacklist.includes(t)).join(', ');
     console.info(`skipped exporting types: [${blackListedTypes}]`);
     return `export { ${typesFormat} } from './api/${service}';`;
   };
@@ -238,9 +239,10 @@ export class ConfigureCommand {
     };
 
     try {
+      await config.delete();
       await config.write(defaultConfig);
     } catch (error) {
-      throw new Error('Config file does not exist - did nothing');
+      throw new Error('Config file does not exist - did nothing: ' + error);
     }
   };
 
