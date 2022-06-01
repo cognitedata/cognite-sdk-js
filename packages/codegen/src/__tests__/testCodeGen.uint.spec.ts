@@ -10,6 +10,7 @@ describe('code generation', () => {
   // const testdata = path.resolve(testFolder, 'testdata');
   let basicVersionFile: OpenApiDocument;
   let basicTypesServiceBGenFile: string;
+  let cyclicReferencesGenFile: string;
 
   beforeAll(async () => {
     const vfm = new VersionFileManager({
@@ -23,6 +24,10 @@ describe('code generation', () => {
 
     basicTypesServiceBGenFile = (
       await fs.readFile(testFolder + '/testdata/8-serviceB-types.gen.ts')
+    ).toString();
+
+    cyclicReferencesGenFile = (
+      await fs.readFile(testFolder + '/testdata/cyclic-references-types.gen.ts')
     ).toString();
   });
 
@@ -121,6 +126,51 @@ describe('code generation', () => {
         await fs.readFile(CodeGen.outputFileName)
       ).toString();
       expect(generatedFile).toEqual(basicTypesServiceBGenFile);
+    });
+
+    test('skip unused schemas', async () => {
+      const gen = new CodeGen(basicVersionFile, {
+        version: 'playground',
+        service: 'serviceB',
+        autoNameInlinedRequest: false,
+        outputDir: process.cwd(),
+        scope: 'local',
+        filter: {
+          path: PassThroughFilter,
+        },
+      });
+
+      const typeNames = await gen.generateTypes();
+      expect(typeNames.includes('SomeUnusedOpenApiSchema')).toBeFalsy();
+    });
+
+    test('cyclic references', async () => {
+      const vfm = new VersionFileManager({ directory: '.' });
+      const versionFile = await vfm.downloadFromPath({
+        path: testFolder + '/testdata',
+        filename: 'cyclic-references.json',
+      });
+
+      const gen = new CodeGen(versionFile, {
+        version: 'custom',
+        service: 'cyclicService',
+        autoNameInlinedRequest: false,
+        outputDir: process.cwd(),
+        scope: 'local',
+        filter: {
+          path: PassThroughFilter,
+        },
+      });
+
+      const wants = ['CyclicResponse', 'Filter', 'FilterOption'];
+
+      const typeNames = await gen.generateTypes();
+      expect(typeNames).toEqual(wants);
+
+      const generatedFile = (
+        await fs.readFile(CodeGen.outputFileName)
+      ).toString();
+      expect(generatedFile).toEqual(cyclicReferencesGenFile);
     });
   });
 });

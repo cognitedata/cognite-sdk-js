@@ -60,6 +60,7 @@ export class CodeGen {
     const result = await generateApi({
       name: 'types.gen.ts',
       input: file.path,
+      silent: true,
       generateClient: false,
       toJS: false,
       generateResponses: false,

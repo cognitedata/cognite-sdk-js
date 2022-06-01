@@ -491,6 +491,16 @@
           }
         }
       },
+      "SomeUnusedOpenApiSchema": {
+        "type": "object",
+        "properties": {
+          "ignoreUnknownIds": {
+            "description": "Ignore IDs that are not found",
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
       "FunctionBuildError": {
         "type": "object",
         "required": [
