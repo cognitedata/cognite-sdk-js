@@ -1,0 +1,9 @@
+{
+    "version": "v1",
+    "service": "documents",
+    "scope": "global",
+    "autoNameInlinedRequest": true,
+    "filter": {
+        "serviceName": "documents"
+    }
+}

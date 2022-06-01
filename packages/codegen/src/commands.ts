@@ -138,28 +138,29 @@ export class CodeGenCommand {
 
   private generateForAllServices = async (options: PackageOption) => {
     const directory = await versionFileDirectoryPath(options);
-    const results: Record<string, string[]> = {};
 
+    const blacklist: string[] = [];
+    const exportStatements: string[] = [];
     const services = await this.listConfiguredServices(directory);
     for (const service of services) {
-      results[service] = await this.generateForSingleService({
+      const types = await this.generateForSingleService({
         ...options,
         service: service,
       });
       console.info(`generated types for ${service}`);
+
+      const [statement, skipped] = this.createExportStatementForService(
+        service,
+        types,
+        blacklist
+      );
+      exportStatements.push(statement);
+      blacklist.push(...types);
+      console.info(`\t-> skipped exporting: [${skipped.join(', ')}]`);
     }
 
     const exportFilePath = path.resolve(directory, CodeGen.outputFileName);
-
-    const blacklist: string[] = [];
-    const fileContent = Object.keys(results)
-      .map((service) => {
-        const types = results[service];
-        const statement = this.createExportStatementForService(service, types, blacklist);
-        blacklist.push(...types);
-        return statement;
-      })
-      .join('\n');
+    const fileContent = exportStatements.join('\n');
 
     try {
       await fs.writeFile(exportFilePath, fileContent);
@@ -174,13 +175,16 @@ export class CodeGenCommand {
     service: string,
     types: string[],
     blacklist: string[]
-  ): string => {
-    const blackListedTypes = types
-      .filter((t) => blacklist.includes(t))
-      .join(', ');
-    const typesFormat = types.filter(t => !blacklist.includes(t)).join(', ');
-    console.info(`skipped exporting types: [${blackListedTypes}]`);
-    return `export { ${typesFormat} } from './api/${service}';`;
+  ): [string, string[]] => {
+    const blackListedTypes = types.filter((t) => blacklist.includes(t));
+    const typesFormat = types
+      .filter((t) => !blacklist.includes(t))
+      .join(',\n  ');
+    const moduleName = path.parse(CodeGen.outputFileName).name;
+    return [
+      `export {\n  ${typesFormat}\n} from './api/${service}/${moduleName}';`,
+      blackListedTypes,
+    ];
   };
 
   private listConfiguredServices = async (
@@ -219,7 +223,7 @@ export class ConfigureCommand {
       );
     }
 
-    await this.update(options);
+    await config.write(this.defaultConfig(options));
   };
 
   public update = async (options: ConfigFileUpdateOptions) => {
@@ -228,7 +232,18 @@ export class ConfigureCommand {
       directory: directory,
     });
 
-    const defaultConfig: ConfigurationOptions = {
+    try {
+      await config.delete();
+      await config.write(this.defaultConfig(options));
+    } catch (error) {
+      throw new Error('Config file does not exist - did nothing: ' + error);
+    }
+  };
+
+  private defaultConfig = (
+    options: ConfigFileUpdateOptions
+  ): ConfigurationOptions => {
+    return {
       version: options.version,
       service: options.service,
       scope: typeof options.scope === 'undefined' ? 'local' : options.scope,
@@ -237,13 +252,6 @@ export class ConfigureCommand {
         serviceName: options.service,
       },
     };
-
-    try {
-      await config.delete();
-      await config.write(defaultConfig);
-    } catch (error) {
-      throw new Error('Config file does not exist - did nothing: ' + error);
-    }
   };
 
   public delete = async (options: ConfigFileOptions) => {
