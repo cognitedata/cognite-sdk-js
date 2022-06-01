@@ -34,7 +34,7 @@
     "lint": "yarn allsdk lint --stream",
     "lint:fix": "yarn allsdk lint:fix --stream",
     "commit": "yarn lint:fix --since master && yarn test --since master && git commit -a && git push",
-    "build": "yarn allsdk build --stream --ignore *-codegen",
+    "build": "yarn allsdk build --stream",
     "watch": "yarn allsdk watch --parallel",
     "docs": "yarn allsdk docs --stream",
     "docs:bundle": "rm -rf docs/ && yarn allsdk docs:bundle --stream && touch docs/.nojekyll",

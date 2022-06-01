@@ -12,14 +12,10 @@
     "test:debug": "node --inspect-brk ../../node_modules/.bin/jest --config=../../jest.config.js --testPathPattern=/codegen/ --runInBand",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "yarn lint --fix",
-    "prepublishOnly": "yarn build",
-    "build": "yarn clean && rollup -c && yarn esCheck",
     "watch": "rollup -cw",
     "esCheck": "es-check es5 './dist/index.js'",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
-    "docs:bundle": "yarn docs && mkdir -p ../../docs && cp -r docs/* ../../docs/",
-    "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node ../../scripts/extractCodeSnippets.js",
-    "test-snippets": "yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json"
+    "docs:bundle": "yarn docs && mkdir -p ../../docs && cp -r docs/* ../../docs/"
   },
   "dependencies": {},
   "devDependencies": {
