@@ -47,7 +47,7 @@ The sdk is implemented as a package in a monorepo, together with core logic, bet
 ### Contributing
 
 Contributions welcome!
-For details about commiting changes, automated versioning and releases, see [Contributing](./CONTRIBUTING.md).
+For details about commiting changes, type generation, automated versioning and releases, see [Contributing](./CONTRIBUTING.md).
 
 ### Testing
 
