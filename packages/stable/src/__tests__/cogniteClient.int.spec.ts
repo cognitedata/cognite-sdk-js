@@ -13,18 +13,17 @@ import {
 describe('createClientWithApiKey - integration', () => {
   test('handle non-existing api-key', async () => {
     const client = setupClientWithNonExistingApiKey();
-    await expect(
-      client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
+    expect(
+      async () =>
+        await client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `"Request failed | status code: 401"`
     );
   });
 });
 
-
 describe('http methods - integration', () => {
   let client: CogniteClient;
-  // const project = 'sdkcognite';
   const project = process.env.COGNITE_PROJECT as string;
   beforeAll(async () => {
     client = setupLoggedInClient();
