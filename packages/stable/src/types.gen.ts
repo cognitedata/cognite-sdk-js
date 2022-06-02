@@ -1,61 +1,16 @@
 // Copyright 2020 Cognite AS
-export {
-  DocumentSearchRequest,
-  DocumentsAggregateCountRequest,
-  DocumentsAggregateUniqueValuesRequest,
-  DocumentsAggregateAllUniqueValuesRequest,
-  DocumentListRequest,
-  EpochTimestamp,
-  CogniteInternalId,
-  Document,
-  CogniteExternalId,
-  LabelList,
-  DocumentSourceFile,
-  DocumentGeoJsonGeometry,
-  Label,
-  DocumentListFilter,
-  DocumentListLimit,
-  DocumentCursor,
-  DocumentFilter,
-  DocumentFilterBool,
-  DocumentFilterLeaf,
-  DocumentFilterEquals,
-  DocumentFilterIn,
-  DocumentFilterContainsAny,
-  DocumentFilterContainsAll,
-  DocumentFilterRange,
-  DocumentFilterPrefix,
-  DocumentFilterExists,
-  DocumentFilterGeoJsonIntersects,
-  DocumentFilterGeoJsonDisjoint,
-  DocumentFilterGeoJsonWithin,
-  DocumentFilterProperty,
-  DocumentFilterValue,
-  DocumentFilterRangeValue,
-  DocumentFilterValueList,
-  DocumentsAggregateCountResponse,
-  DocumentsAggregateUniqueValuesResponse,
-  DocumentsAggregateAllUniqueValuesResponse,
-  DocumentsAggregateAllUniqueValuesItem,
-  DocumentsAggregateUniqueValuesItem,
-  DocumentsAggregateCountItem,
-  DocumentSearchFilter,
-  DocumentSearchItem,
-  DocumentSearchAggregate,
-  DocumentSearchAggregateGroup,
-  DocumentSearchAggregateGroupIdentifier,
-  DocumentHighlight,
-  DocumentSearch,
-  DocumentSearchAggregates,
-  DocumentSort,
-  DocumentSearchLimit,
-  DocumentSortItem,
-  DocumentSearchCountAggregate,
-  DocumentSearchCountAggregatesGroup,
-  DocumentSearchResponse,
-  ErrorResponse,
-  DocumentsAggregateResponse,
-  DocumentListResponse,
-  DocumentsPreviewTemporaryLinkResponse,
-  DocumentsAggregateRequest,
-} from './api/documents/types.gen';
+export type EpochTimestamp = number;
+
+/**
+ * A server-generated ID for the object.
+ * @format int64
+ * @min 1
+ * @max 9007199254740991
+ */
+export type CogniteInternalId = number;
+
+/**
+ * The external ID provided by the client. Must be unique for the resource type.
+ * @example my.known.id
+ */
+export type CogniteExternalId = string;

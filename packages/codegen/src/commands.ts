@@ -138,17 +138,33 @@ export class CodeGenCommand {
 
   private generateForAllServices = async (options: PackageOption) => {
     const directory = await versionFileDirectoryPath(options);
+    const serviceTypesRecord: Record<string, string[]> = {};
 
-    const blacklist: string[] = [];
-    const exportStatements: string[] = [];
     const services = await this.listConfiguredServices(directory);
     for (const service of services) {
-      const types = await this.generateForSingleService({
+      serviceTypesRecord[service] = await this.generateForSingleService({
         ...options,
         service: service,
       });
       console.info(`generated types for ${service}`);
+    }
 
+    // identify shared resources and use the global versionfile to generate them
+    // this aviods that a local outdated versionfile may enforce outdated shared types
+    const sharedTypes = await this.generateSharedTypes(
+      serviceTypesRecord,
+      directory
+    );
+    const [sharedTypesExportStatement] = this.createExportStatementForPackage(
+      sharedTypes,
+      []
+    );
+    const blacklist = [...sharedTypes];
+    const exportStatements: string[] = [sharedTypesExportStatement];
+    console.info(`generated ${sharedTypes.length} shared types for package`);
+
+    for (const service of services) {
+      const types = serviceTypesRecord[service];
       const [statement, skipped] = this.createExportStatementForService(
         service,
         types,
@@ -156,10 +172,10 @@ export class CodeGenCommand {
       );
       exportStatements.push(statement);
       blacklist.push(...types);
-      console.info(`\t-> skipped exporting: [${skipped.join(', ')}]`);
+      console.info(`${service}: skipped exporting [${skipped.join(', ')}]`);
     }
 
-    const exportFilePath = path.resolve(directory, CodeGen.outputFileName);
+    const exportFilePath = path.resolve(directory, 'exports.gen.ts');
     const fileContent = exportStatements.join('\n');
 
     try {
@@ -171,8 +187,46 @@ export class CodeGenCommand {
     }
   };
 
-  private createExportStatementForService = (
-    service: string,
+  private generateSharedTypes = async (
+    serviceTypesRecord: Record<string, string[]>,
+    packageDirectory: string
+  ): Promise<string[]> => {
+    const types = Object.values(serviceTypesRecord).reduce(
+      (acc, v) => acc.concat(v),
+      []
+    );
+
+    const sharedTypes: string[] = [];
+    for (let i = 0; i < types.length - 1; i++) {
+      const remain = types.slice(i + 1);
+      const t = types[i];
+      if (remain.includes(t)) {
+        sharedTypes.push(t);
+      }
+    }
+
+    const vfm = new VersionFileManager({ directory: packageDirectory });
+    const gen = new CodeGen(await vfm.read(), {
+      outputDir: packageDirectory,
+      autoNameInlinedRequest: false,
+
+      // rest is irrelevant - TODO: update types
+      service: '?',
+      version: '?',
+      scope: 'local',
+      filter: {
+        path: PassThroughFilter,
+      },
+    });
+
+    const generatedTypeNames = await gen.generateTypesFromSchemas(
+      (schemaName) => sharedTypes.includes(schemaName)
+    );
+    return generatedTypeNames;
+  };
+
+  private createExportStatement = (
+    fromDirectory: string,
     types: string[],
     blacklist: string[]
   ): [string, string[]] => {
@@ -182,9 +236,24 @@ export class CodeGenCommand {
       .join(',\n  ');
     const moduleName = path.parse(CodeGen.outputFileName).name;
     return [
-      `export {\n  ${typesFormat}\n} from './api/${service}/${moduleName}';`,
+      `export {\n  ${typesFormat}\n} from '${fromDirectory}/${moduleName}';`,
       blackListedTypes,
     ];
+  };
+
+  private createExportStatementForService = (
+    service: string,
+    types: string[],
+    blacklist: string[]
+  ): [string, string[]] => {
+    return this.createExportStatement(`./api/${service}`, types, blacklist);
+  };
+
+  private createExportStatementForPackage = (
+    types: string[],
+    blacklist: string[]
+  ): [string, string[]] => {
+    return this.createExportStatement(`.`, types, blacklist);
   };
 
   private listConfiguredServices = async (

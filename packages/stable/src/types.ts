@@ -34,7 +34,7 @@ export {
   AutoPagingToArray,
 } from '@cognite/sdk-core';
 
-export * from './types.gen';
+export * from './exports.gen';
 
 export * from './api/geospatial/types';
 

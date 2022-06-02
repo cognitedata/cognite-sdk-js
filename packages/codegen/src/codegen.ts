@@ -19,18 +19,19 @@ import { ConfigurationOptions } from './configuration';
 /**
  * PathFilter creates a new set of openapi paths that pass the filter implementation.
  */
-export type PathFilter = (path: string) => boolean;
+export type StringFilter = (str: string) => boolean;
 
-export const PassThroughFilter: PathFilter = (): boolean => true;
+export const PassThroughFilter: StringFilter = (): boolean => true;
 
-export const ServiceNameFilter = (service: string): PathFilter => {
+export const ServiceNameFilter = (service: string): StringFilter => {
   const r = new RegExp('^/api/.+/projects/{project}/' + service);
   return (path: string): boolean => r.test(path);
 };
 
 export type CodeGenOptions = {
   filter: {
-    path: PathFilter;
+    path: StringFilter;
+    schema?: StringFilter;
   };
   outputDir: string;
 } & Omit<ConfigurationOptions, 'filter'>;
@@ -281,6 +282,30 @@ export class CodeGen {
     }
   };
 
+  public generateTypesFromSchemas = async (
+    schemaFilter?: StringFilter
+  ): Promise<string[]> => {
+    if (typeof this.versionFile.components?.schemas === 'undefined') {
+      throw new Error('components.schema is undefined');
+    }
+
+    if (typeof schemaFilter !== 'undefined') {
+      const schemas = this.versionFile.components!.schemas!;
+      this.versionFile.components!.schemas = Object.keys(schemas)
+        .filter(schemaFilter)
+        .reduce(
+          (acc, schemaName) =>
+            Object.assign(acc, { [schemaName]: schemas[schemaName] }),
+          {}
+        );
+    }
+
+    const typeNames = Object.keys(this.versionFile.components?.schemas || {});
+    await this.runSwaggerGenerator();
+
+    return typeNames;
+  };
+
   /**
    * generateTypes
    *
@@ -322,21 +347,6 @@ export class CodeGen {
     // it's just used in openapi to state we return an empty json `{}`.
     delete this.versionFile.components!.schemas!['EmptyResponse'];
 
-    const typeNames = Object.keys(this.versionFile.components?.schemas || {});
-    await this.runSwaggerGenerator();
-
-    return typeNames;
-
-    //  5. recursively explore root types to identify all relevant types, discard the rest
-    //  3. copy responses over to schemas (normalise: add "Response" suffix)
-    //  4. process query parameter, add name and add to schemas (little magic)
-    //  1. name inline responses and add to schemas (magic) (normalise: add "Response" suffix)
-    //  2. name inline requests and add to schemas (magic) (normalise: add "Request" suffix)
-    //  6. discard error types (error responses as these aren't needed)
-    //  7. make sure everything is in order (sorted, maybe use prettier?)
-    //  8. run swagger code gen on the filtered open api spec
-    //  9. use swagger's onCreateComponent hook to remove types to be imported from core
-    // 10. update file comment and imports
-    // 11. write to file
+    return this.generateTypesFromSchemas();
   };
 }
