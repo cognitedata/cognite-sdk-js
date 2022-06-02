@@ -6,6 +6,9 @@ import { parse, stringify } from 'query-string';
 import { HttpCall, HttpQueryParams } from './httpClient/basicHttpClient';
 import { LogoutUrlResponse } from './types';
 import isString from 'lodash/isString';
+import { ClientCredentials, ClientOptions } from './baseCogniteClient';
+// eslint-disable-next-line lodash/import-scope
+import { isObject } from 'lodash';
 
 const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
 const LOGIN_IFRAME_NAME = 'silentLoginIframe';
@@ -14,6 +17,30 @@ export const ACCESS_TOKEN_PARAM = 'access_token';
 export const ID_TOKEN_PARAM = 'id_token';
 export const ERROR_PARAM = 'error';
 export const ERROR_DESCRIPTION_PARAM = 'error_description';
+
+interface CredentialsVerification {
+  method: string;
+  field: string;
+}
+
+const OPTIONS_REQUIRED_FIELDS: string[] = ['appId', 'project'];
+
+const CREDENTIALS_REQUIRED_FIELDS: CredentialsVerification[] = [
+  { method: 'api', field: 'apiKey' },
+  { method: 'client_credentials', field: 'authority' },
+  { method: 'client_credentials', field: 'client_id' },
+  { method: 'client_credentials', field: 'client_secret' },
+  { method: 'client_credentials', field: 'scope' },
+  { method: 'client_credentials', field: 'grant_type' },
+  { method: 'device', field: 'authority' },
+  { method: 'device', field: 'client_id' },
+  { method: 'device', field: 'client_secret' },
+  { method: 'device', field: 'scope' },
+  { method: 'implicit', field: 'implicitToken' },
+  { method: 'pkce', field: 'authority' },
+  { method: 'pkce', field: 'client_id' },
+  { method: 'pkce', field: 'scope' },
+];
 
 /** @hidden */
 export interface AuthTokens {
@@ -158,4 +185,58 @@ function generateLoginUrl(params: AuthorizeParams): string {
     errorRedirectUrl: errorRedirectUrl || redirectUrl,
   };
   return `${baseUrl}/login/redirect?${stringify(queryParams)}`;
+}
+
+/**
+ * It verify if credentials contain require fields depending each method.
+ * @param credentials ClientCredentials
+ */
+export function verifyCredentialsRequiredFields(
+  credentials: ClientCredentials
+): Error | void {
+  if (!isObject(credentials)) {
+    throw Error('options.credentials is required');
+  }
+
+  if (!credentials.method) {
+    throw Error(
+      'options.credentials.method is required and must be of type string with one of this values: api, client_credentials, device, implicit, pkce'
+    );
+  }
+
+  for (let index = 0; index < CREDENTIALS_REQUIRED_FIELDS.length; index++) {
+    const field = CREDENTIALS_REQUIRED_FIELDS[index];
+
+    if (
+      credentials.method &&
+      credentials.method === field.method &&
+      // @ts-ignore
+      !credentials[field.field]
+    ) {
+      throw Error(
+        `options.credentials.${field.field} is required and must be of type string`
+      );
+    }
+  }
+}
+
+/**
+ * It verify if options contain require fields .
+ * @param credentials ClientCredentials
+ */
+export function verifyOptionsRequiredFields(
+  options: ClientOptions
+): Error | void {
+  if (!isObject(options)) {
+    throw Error('`CogniteClient` is missing parameter `options`');
+  }
+
+  for (let index = 0; index < OPTIONS_REQUIRED_FIELDS.length; index++) {
+    const field = OPTIONS_REQUIRED_FIELDS[index];
+
+    // @ts-ignore
+    if (!isString(options[field])) {
+      throw Error(`options.${field} is required and must be of type string`);
+    }
+  }
 }
