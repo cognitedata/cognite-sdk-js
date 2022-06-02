@@ -297,7 +297,9 @@ export default class BaseCogniteClient {
       previousToken = headers[AUTHORIZATION_HEADER];
     }
 
-    return previousToken.replace('Bearer ', '');
+    return previousToken !== undefined
+      ? previousToken.replace('Bearer ', '')
+      : previousToken;
   }
 
   /**
