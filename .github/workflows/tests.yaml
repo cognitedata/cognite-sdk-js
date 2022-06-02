@@ -8,8 +8,8 @@ on:
 
 jobs:
   codecov:
+    needs: [tests]
     runs-on: ubuntu-latest
-
     env:
       COGNITE_PROJECT: cognitesdk-js
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
