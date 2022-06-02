@@ -168,7 +168,7 @@ describe('Timeseries integration test', () => {
         unit,
       },
     });
-    expect(items.length).toBeGreaterThanOrEqual(0);
+    expect(items.length).toBeGreaterThan(0);
   });
 
   test('list', async () => {
