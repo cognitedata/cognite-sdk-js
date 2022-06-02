@@ -2,9 +2,7 @@ import { OpenApiDocument, ReferenceWalker } from '../openapi';
 import { VersionFileManager } from '../versionfile';
 
 describe('open api', () => {
-  // __dirname produces weird and unexpected results.
   const testFolder = __dirname;
-  // const testdata = path.resolve(testFolder, 'testdata');
   let basicVersionFile: OpenApiDocument;
 
   beforeAll(async () => {

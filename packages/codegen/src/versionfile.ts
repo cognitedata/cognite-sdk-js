@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2022 Cognite AS
 import { promises as fs } from 'fs';
 import fetch from 'cross-fetch';
 import { OpenApiDocument } from './openapi';
@@ -20,7 +20,6 @@ export type LocalVersionFileOptions = {
  * VersionFileManager handles creating and updating a version file.
  *
  * A version file is a copy of the open api json spec at a specific point in time.
- * To keep the version file "small", the irrelvant paths are filtered out before saving.
  */
 export class VersionFileManager {
   public static readonly filename = '.cognite-api-version';

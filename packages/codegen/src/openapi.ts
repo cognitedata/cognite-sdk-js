@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2022 Cognite AS
 import { OpenAPIV3 } from 'openapi-types';
 
 export type OpenApiDocument = OpenAPIV3.Document;

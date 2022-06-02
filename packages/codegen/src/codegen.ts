@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2022 Cognite AS
 import { promises as fs } from 'fs';
 import * as tmp from 'tmp-promise';
 import * as pathUtil from 'path';
@@ -16,15 +16,12 @@ import {
 } from './openapi';
 import { ConfigurationOptions } from './configuration';
 
-/**
- * PathFilter creates a new set of openapi paths that pass the filter implementation.
- */
 export type StringFilter = (str: string) => boolean;
 
 export const PassThroughFilter: StringFilter = (): boolean => true;
 
 export const ServiceNameFilter = (service: string): StringFilter => {
-  const r = new RegExp('^/api/.+/projects/{project}/' + service);
+  const r = new RegExp(`^/api/.+/projects/{project}/${service}/?`);
   return (path: string): boolean => r.test(path);
 };
 
@@ -83,37 +80,6 @@ export class CodeGen {
     await file.cleanup();
   };
 
-  // private operationResponseWithoutRef = (operation: OpenApiOperationObject): boolean => {
-  //   for (const response of Object.values(operation.responses)) {
-  //     if (isReferenceObject(response)) {
-  //       continue;
-  //     }
-
-  //     const schema = response.content?.['application/json']?.schema || {};
-  //     if (!("$ref" in schema)) {
-  //       return true;
-  //     }
-  //   }
-
-  //   return false;
-  // }
-
-  // private extractInlineResponseSchemas = (paths: OpenApiPathsObject) => {
-  //   // some endpoint define inline schemas, these must be extracted in order to generate a type.
-  //   //
-  //   let schemas = {};
-  //   for (const [path, item] of Object.entries(filterPaths(paths))) {
-  //     for (const operation of operationsInPath(item)) {
-  //       if (this.operationResponseWithoutRef(operation)) {
-  //         console.error(path + ": inline responses are not currently supported");
-  //         process.exit(1);
-  //       }
-  //     }
-  //   }
-
-  //   return Object.entries(schemas);
-  // }
-
   private operationsWithInlinedRequest = (
     paths: OpenApiPathsObject
   ): [string, OpenApiOperationObject][] => {
@@ -137,8 +103,6 @@ export class CodeGen {
 
   private autoNameInlinedResponses = (): [string, OpenApiSchema][] => {
     return [];
-    // console.error('inline responses are not currently supported');
-    // process.exit(1);
   };
 
   private autoNameInlinedRequests = (): [string, OpenApiSchema][] => {

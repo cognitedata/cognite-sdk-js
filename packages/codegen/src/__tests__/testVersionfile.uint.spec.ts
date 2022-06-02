@@ -2,7 +2,6 @@ import path from 'path';
 import { VersionFileManager } from '../versionfile';
 
 describe('version file manager', () => {
-  // __dirname produces weird and unexpected results.
   const testFolder = __dirname;
   const testdata = path.resolve(testFolder, 'testdata');
 

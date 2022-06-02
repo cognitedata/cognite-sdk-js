@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2022 Cognite AS
 import { promises as fs } from 'fs';
 
 export type ConfigurationOptions = {
@@ -44,7 +44,7 @@ export class ConfigurationManager {
     config: ConfigurationOptions
   ): Promise<ConfigurationOptions> => {
     this.validate(config);
-    const json = JSON.stringify(config, null, 4);
+    const json = JSON.stringify(config, null, 2);
 
     await fs.writeFile(this.path, json, { flag: 'wx' });
     return config;

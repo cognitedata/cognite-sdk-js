@@ -7,20 +7,10 @@
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
   "scripts": {
-    "clean": "rm -rf dist/ docs/ codeSnippets/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/codegen/",
     "test:debug": "node --inspect-brk ../../node_modules/.bin/jest --config=../../jest.config.js --testPathPattern=/codegen/ --runInBand",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "yarn lint --fix",
-    "watch": "rollup -cw",
-    "esCheck": "es-check es5 './dist/index.js'",
-    "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
-    "docs:bundle": "yarn docs && mkdir -p ../../docs && cp -r docs/* ../../docs/"
-  },
-  "dependencies": {},
-  "devDependencies": {
-  },
-  "files": [
-    "dist"
-  ]
+    "esCheck": "es-check es5 './dist/index.js'"
+  }
 }

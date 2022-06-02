@@ -5,9 +5,7 @@ import { VersionFileManager } from '../versionfile';
 import { promises as fs } from 'fs';
 
 describe('code generation', () => {
-  // __dirname produces weird and unexpected results.
   const testFolder = __dirname;
-  // const testdata = path.resolve(testFolder, 'testdata');
   let basicVersionFile: OpenApiDocument;
   let basicTypesServiceBGenFile: string;
   let cyclicReferencesGenFile: string;

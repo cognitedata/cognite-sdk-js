@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2022 Cognite AS
 import path from 'path';
 import { promises as fs } from 'fs';
 
