@@ -100,17 +100,16 @@ describe('CogniteClient', () => {
         // scopeOk.done();
       });
 
-      test('401 handler should reject if the same token is returned', async () => {
-        const scope = nock(mockBaseUrl).get('/test').reply(401, {});
+      test('getToken rejection should reject sdk requests', async () => {
+        const getToken = jest.fn().mockRejectedValue(new Error('auth error'));
+
+        nock(mockBaseUrl).get('/test').reply(401, {});
 
         const client = new BaseCogniteClient({
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          credentials: {
-            method: 'api',
-            apiKey: '401-test-token',
-          },
+          getToken,
         });
 
         await expect(
@@ -119,27 +118,7 @@ describe('CogniteClient', () => {
           `"Request failed | status code: 401"`
         );
 
-        scope.done();
-      });
-
-      test('credentials rejection should reject sdk requests', async () => {
-        nock(mockBaseUrl).get('/test').twice().reply(401, {});
-
-        const client = new BaseCogniteClient({
-          project,
-          appId: 'unit-test',
-          baseUrl: mockBaseUrl,
-          credentials: {
-            method: 'api',
-            apiKey: '401-test-token',
-          },
-        });
-
-        await expect(
-          async () => await client.get('/test')
-        ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"Request failed | status code: 401"`
-        );
+        expect(getToken).toHaveBeenCalledTimes(1);
       });
     });
 
