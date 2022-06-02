@@ -167,9 +167,11 @@ export default class BaseCogniteClient {
       return options.getToken ? options.getToken() : undefined;
     };
 
-    this.httpClient.set401ResponseHandler(async (_, retry, reject) => {
+    this.httpClient.set401ResponseHandler(async (httpError, retry, reject) => {
       try {
-        const previousToken = this.retrieveTokenValueFromHeader();
+        const previousToken = this.retrieveTokenValueFromHeader(
+          httpError.headers
+        );
 
         const newToken = await this.authenticate();
         if (newToken && newToken !== previousToken) {
@@ -187,11 +189,11 @@ export default class BaseCogniteClient {
 
   public authenticate: () => Promise<string | undefined> = async () => {
     try {
-      let token = this.authenticateGetToken();
+      let token = await this.authenticateGetToken();
 
       if (token !== undefined) return token;
 
-      token = this.authenticateCredentials();
+      token = await this.authenticateCredentials();
 
       return token;
     } catch (e) {
@@ -283,20 +285,19 @@ export default class BaseCogniteClient {
    * It retrieves the previous token from header
    * @returns string
    */
-  private retrieveTokenValueFromHeader(): string {
+  private retrieveTokenValueFromHeader(headers: HttpHeaders): string {
     let previousToken;
-
-    const defaultRequestHeaders = this.getDefaultRequestHeaders();
 
     if (
       (this.credentials && this.credentials.method === 'api') ||
       this.apiKeyMode
     ) {
-      previousToken = defaultRequestHeaders[API_KEY_HEADER];
+      previousToken = headers[API_KEY_HEADER];
     } else {
-      previousToken = defaultRequestHeaders[AUTHORIZATION_HEADER];
+      previousToken = headers[AUTHORIZATION_HEADER];
     }
-    return previousToken;
+
+    return previousToken.replace('Bearer ', '');
   }
 
   /**
