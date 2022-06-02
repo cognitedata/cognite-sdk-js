@@ -1,0 +1,78 @@
+// Copyright 2022 Cognite AS
+
+import {
+  BaseResourceAPI,
+  CursorAndAsyncIterator,
+  CursorResponse,
+  FilterQuery,
+  HttpResponse,
+  ItemsWrapper,
+} from '@cognite/sdk-core';
+import {
+  DocumentsAggregateAllUniqueValuesItem,
+  DocumentsAggregateAllUniqueValuesRequest,
+  DocumentsAggregateCountItem,
+  DocumentsAggregateCountRequest,
+  DocumentsAggregateRequest,
+  DocumentsAggregateUniqueValuesItem,
+  DocumentsAggregateUniqueValuesRequest,
+} from '../../types';
+
+/**
+ * Documents aggregate API.
+ *
+ * Note that only "allUniqueValues" requires pagination, and we therefore
+ * configure the BaseResourceAPI to work for only that feature.
+ */
+export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
+  public count = (
+    request: Omit<DocumentsAggregateCountRequest, 'aggregate'>
+  ): Promise<number> => {
+    return this.aggregate<DocumentsAggregateCountItem>({
+      ...request,
+      aggregate: 'count',
+    }).then((response) => response[0].count);
+  };
+
+  public uniqueValues = (
+    request: Omit<DocumentsAggregateUniqueValuesRequest, 'aggregate'>
+  ): Promise<DocumentsAggregateUniqueValuesItem[]> => {
+    return this.aggregate<DocumentsAggregateUniqueValuesItem>({
+      ...request,
+      aggregate: 'uniqueValues',
+    });
+  };
+
+  public allUniqueValues = (
+    request: Omit<DocumentsAggregateAllUniqueValuesRequest, 'aggregate'>
+  ): CursorAndAsyncIterator<DocumentsAggregateAllUniqueValuesItem> => {
+    return this.cursorBasedEndpoint<
+      DocumentsAggregateAllUniqueValuesRequest,
+      DocumentsAggregateAllUniqueValuesItem
+    >(this.callAggregateCursorEndpointWithPost, {
+      ...request,
+      aggregate: 'allUniqueValues',
+    });
+  };
+
+  private callAggregateCursorEndpointWithPost = async <
+    QueryType extends FilterQuery,
+    Item
+  >(
+    scope?: QueryType
+  ): Promise<HttpResponse<CursorResponse<Item[]>>> => {
+    const response = await this.post<CursorResponse<Item[]>>(this.url(), {
+      data: scope,
+    });
+    return response;
+  };
+
+  private async aggregate<Item>(
+    request: DocumentsAggregateRequest
+  ): Promise<Item[]> {
+    const response = await this.post<ItemsWrapper<Item[]>>(this.url(), {
+      data: request,
+    });
+    return this.addToMapAndReturn(response.data.items, response);
+  }
+}

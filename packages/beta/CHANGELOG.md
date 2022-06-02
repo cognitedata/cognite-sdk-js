@@ -3,6 +3,62 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.25](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.0.24...@cognite/sdk-beta@5.0.25) (2022-05-27)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [5.0.24](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.0.23...@cognite/sdk-beta@5.0.24) (2022-05-27)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [5.0.23](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.0.22...@cognite/sdk-beta@5.0.23) (2022-05-25)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [5.0.22](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.0.21...@cognite/sdk-beta@5.0.22) (2022-05-23)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [5.0.21](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.0.20...@cognite/sdk-beta@5.0.21) (2022-05-20)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [5.0.20](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.0.19...@cognite/sdk-beta@5.0.20) (2022-05-20)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [5.0.19](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.0.18...@cognite/sdk-beta@5.0.19) (2022-05-19)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
 ## [5.0.18](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.0.17...@cognite/sdk-beta@5.0.18) (2022-05-18)
 
 **Note:** Version bump only for package @cognite/sdk-beta

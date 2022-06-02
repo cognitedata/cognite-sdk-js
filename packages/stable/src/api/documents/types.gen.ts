@@ -12,6 +12,38 @@ export type DocumentSearchRequest = DocumentSearch &
   DocumentSearchLimit &
   DocumentCursor;
 
+/**
+ * Count of documents.
+ */
+export type DocumentsAggregateCountRequest = {
+  search?: { query: string };
+} & DocumentSearchFilter & {
+    aggregate?: 'count';
+  };
+
+/**
+ * Top unique values for given properties.
+ */
+export type DocumentsAggregateUniqueValuesRequest = {
+  search?: { query: string };
+} & DocumentSearchFilter & {
+    aggregate?: 'uniqueValues';
+    properties?: { property: DocumentFilterProperty }[];
+    limit?: number;
+  };
+
+/**
+ * Paginated list of all unique values for given properties.
+ */
+export type DocumentsAggregateAllUniqueValuesRequest = {
+  search?: { query: string };
+} & DocumentSearchFilter & {
+    aggregate?: 'allUniqueValues';
+    properties?: { property: DocumentFilterProperty }[];
+    limit?: number;
+    cursor?: string;
+  };
+
 export type DocumentListRequest = DocumentListFilter &
   DocumentListLimit &
   DocumentCursor;
@@ -74,6 +106,40 @@ export interface DocumentSearchAggregate {
    * @format int32
    */
   total: number;
+}
+
+/**
+* Property you wish to filter. It's a list of strings to allow specifying nested properties.
+For example, If you have the object `{"foo": {"../bar": "baz"}, "bar": 123}`, you can refer to the nested property as `["foo", "../bar"]` and the un-nested one as `["bar"]`.
+* @example ["sourceFile","name"]
+*/
+export type DocumentFilterProperty = string[];
+
+/**
+ * Response for count aggregate.
+ * @example {"items":[{"count":10}]}
+ */
+export interface DocumentsAggregateCountResponse {
+  items: DocumentsAggregateCountItem[];
+}
+
+/**
+ * Response for uniqueValues aggregate.
+ * @example {"items":[{"count":4,"values":["hello"]},{"count":33,"values":["world"]}]}
+ */
+export interface DocumentsAggregateUniqueValuesResponse {
+  items: DocumentsAggregateUniqueValuesItem[];
+}
+
+/**
+ * Response for allUniqueValues aggregate.
+ * @example {"items":[{"count":4,"values":["hello"]},{"count":33,"values":["world"]}]}
+ */
+export interface DocumentsAggregateAllUniqueValuesResponse {
+  items: DocumentsAggregateAllUniqueValuesItem[];
+
+  /** The cursor to get the next page of results (if available). */
+  nextCursor?: string;
 }
 
 /**
@@ -184,7 +250,7 @@ export interface Document {
    * @example [42,101]
    */
   assetIds?: CogniteInternalId[];
-  labels?: LabelList & LabelDefinitionExternalIdList;
+  labels?: LabelList;
 
   /** The source file that this document is derived from. */
   sourceFile: DocumentSourceFile;
@@ -255,14 +321,40 @@ export interface DocumentSearchAggregateGroup {
   count: number;
 }
 
+export interface DocumentsAggregateCountItem {
+  /**
+   * Number of items in this aggregation group.
+   * @format int64
+   */
+  count: number;
+}
+
+export interface DocumentsAggregateUniqueValuesItem {
+  /**
+   * Number of items in this aggregation group.
+   * @format int64
+   */
+  count: number;
+
+  /** A unique value found in the specified properties. Each item is a value for the specified property with same index. */
+  values: DocumentFilterValue[];
+}
+
+export interface DocumentsAggregateAllUniqueValuesItem {
+  /**
+   * Number of items in this aggregation group.
+   * @format int64
+   */
+  count: number;
+
+  /** A unique value found in the specified properties. Each item is a value for the specified property with same index. */
+  values: DocumentFilterValue[];
+}
+
 /**
  * A list of the labels associated with this resource item.
  */
 export type LabelList = Label[];
-
-export interface LabelDefinitionExternalIdList {
-  items: LabelDefinitionExternalId[];
-}
 
 /**
  * The source file that this document is derived from.
@@ -375,13 +467,6 @@ export interface DocumentSearchCountAggregatesGroup {
   property: DocumentFilterProperty;
 }
 
-/**
-* Property you wish to filter. It's a list of strings to allow specifying nested properties.
-For example, If you have the object `{"foo": {"../bar": "baz"}, "bar": 123}`, you can refer to the nested property as `["foo", "../bar"]` and the un-nested one as `["bar"]`.
-* @example ["sourceFile","name"]
-*/
-export type DocumentFilterProperty = string[];
-
 export interface DocumentSearchAggregateGroupIdentifier {
   /** The property that is being aggregated on. */
   property: DocumentFilterProperty;
@@ -391,15 +476,15 @@ export interface DocumentSearchAggregateGroupIdentifier {
 }
 
 /**
+ * Value you wish to find in the provided property.
+ */
+export type DocumentFilterValue = string | number | boolean | Label;
+
+/**
  * A label assigned to a resource.
  */
 export interface Label {
   /** An external ID to a predefined label definition. */
-  externalId: CogniteExternalId;
-}
-
-export interface LabelDefinitionExternalId {
-  /** The external ID provided by the client. Must be unique for the resource type. */
   externalId: CogniteExternalId;
 }
 
@@ -503,11 +588,6 @@ export interface DocumentFilterGeoJsonWithin {
 }
 
 /**
- * Value you wish to find in the provided property.
- */
-export type DocumentFilterValue = string | number | boolean | Label;
-
-/**
  * One or more values you wish to find in the provided property.
  */
 export type DocumentFilterValueList = DocumentFilterValue[];
@@ -517,6 +597,11 @@ export type DocumentFilterValueList = DocumentFilterValue[];
  */
 export type DocumentFilterRangeValue = number;
 
+export type DocumentsAggregateRequest =
+  | DocumentsAggregateCountRequest
+  | DocumentsAggregateUniqueValuesRequest
+  | DocumentsAggregateAllUniqueValuesRequest;
+
 export interface DocumentSearchResponse {
   items: DocumentSearchItem[];
   aggregates?: DocumentSearchAggregate[];
@@ -524,6 +609,11 @@ export interface DocumentSearchResponse {
   /** The cursor to get the next page of results (if available). The search endpoint only gives a limited number of results. A missing nextCursor does not imply there are no more results for the provided search. */
   nextCursor?: string;
 }
+
+export type DocumentsAggregateResponse =
+  | DocumentsAggregateCountResponse
+  | DocumentsAggregateUniqueValuesResponse
+  | DocumentsAggregateAllUniqueValuesResponse;
 
 export interface DocumentListResponse {
   items: Document[];
