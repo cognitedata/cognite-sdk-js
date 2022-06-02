@@ -21,6 +21,7 @@ describe('createClientWithApiKey - integration', () => {
   });
 });
 
+
 describe('http methods - integration', () => {
   let client: CogniteClient;
   // const project = 'sdkcognite';

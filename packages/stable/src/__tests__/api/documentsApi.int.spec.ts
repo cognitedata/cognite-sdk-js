@@ -215,4 +215,34 @@ describe('Documents integration test', () => {
     const response = await client.documents.content(fileId);
     expect(response).toBeDefined();
   });
+
+  test('document aggregate count', async () => {
+    const resp = await client.documents.aggregate.count({
+      filter: {
+        equals: {
+          property: ['type'],
+          value: 'PDF',
+        },
+      },
+    });
+    expect(resp).toEqual(expect.any(Number));
+  });
+
+  test('document aggregate uniqueValues', async () => {
+    const resp = await client.documents.aggregate.uniqueValues({
+      properties: [{ property: ['mimeType'] }],
+    });
+    expect(resp.length).toBeGreaterThanOrEqual(1);
+    expect(resp[0].count).toBeGreaterThan(0);
+    expect(resp[0].values).toHaveLength(1);
+  });
+
+  test('document aggregate allUniqueValues', async () => {
+    const resp = await client.documents.aggregate.allUniqueValues({
+      properties: [{ property: ['mimeType'] }],
+    });
+    expect(resp.items.length).toBeGreaterThanOrEqual(1);
+    expect(resp.items[0].count).toBeGreaterThan(0);
+    expect(resp.items[0].values).toHaveLength(1);
+  });
 });

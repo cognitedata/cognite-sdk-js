@@ -10,6 +10,7 @@ import {
   GeospatialOutput,
   GeospatialFeatureSearchFilter,
   GeospatialFeatureSearchStreamFilter,
+  GeospatialFeatureSearchStreamResponse,
 } from './types';
 
 export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
@@ -144,17 +145,21 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *  output: { jsonStreamFormat: 'NEW_LINE_DELIMITED' as const }
    * };
    *
-   * const featureStream = await client.geospatial.feature.searchStream('ocean_temperature', searchParams);
+   * const featureStreamString = await client.geospatial.feature.searchStream('ocean_temperature', searchParams);
    * ```
    */
   public searchStream = (
     featureTypeExternalId: CogniteExternalId,
     params: GeospatialFeatureSearchStreamFilter = {}
-  ): Promise<GeospatialFeatureResponse[]> => {
-    return this.searchEndpoint(
+  ): Promise<GeospatialFeatureSearchStreamResponse> => {
+    return this.callSearchEndpoint<
+      GeospatialFeatureSearchStreamFilter,
+      GeospatialFeatureSearchStreamResponse
+    >(
       params,
       this.url(`${featureTypeExternalId}/features/search-streaming`)
-    );
+      // not using addToMapAndReturn in then as WeakMap does not accept primitive values as key and we've string as our response
+    ).then((response) => response.data);
   };
 
   /**
