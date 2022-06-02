@@ -3,7 +3,7 @@
 import nock from 'nock';
 import BaseCogniteClient from '../baseCogniteClient';
 
-import { API_KEY_HEADER, BASE_URL } from '../constants';
+import { API_KEY_HEADER, AUTHORIZATION_HEADER, BASE_URL } from '../constants';
 import { apiKey, project } from '../testUtils';
 
 const mockBaseUrl = 'https://example.com';
@@ -12,11 +12,9 @@ function setupClient(baseUrl: string = BASE_URL) {
   return new BaseCogniteClient({
     appId: 'JS SDK integration tests',
     project: 'test-project',
+    getToken: () => Promise.resolve(apiKey),
+    apiKeyMode: true,
     baseUrl,
-    credentials: {
-      method: 'api',
-      apiKey,
-    },
   });
 }
 
@@ -67,18 +65,24 @@ describe('CogniteClient', () => {
       );
     });
 
-    describe('credentials', () => {
-      test('missing credentials', () => {
+    describe('getToken', () => {
+      test('missing getToken', () => {
         expect(() => {
           // @ts-ignore
           new BaseCogniteClient({ appId: 'unit-test', project: 'unit-test' });
         }).toThrowErrorMatchingInlineSnapshot(
-          `"options.credentials is required or options.getToken is request and must be of type () => Promise<string>"`
+          `"options.getToken is required and must be of type () => Promise<string>"`
         );
       });
-      test('call credentials on 401', async () => {
-        nock(mockBaseUrl)
-          .persist()
+      test('call getToken on 401', async () => {
+        const getToken = jest.fn().mockResolvedValue('401-test-token');
+
+        nock(mockBaseUrl).get('/test').reply(401, {});
+        nock(mockBaseUrl, {
+          reqheaders: {
+            [AUTHORIZATION_HEADER]: 'Bearer 401-test-token',
+          },
+        })
           .get('/test')
           .reply(200, { body: 'request ok' });
 
@@ -86,24 +90,23 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          credentials: {
-            method: 'api',
-            apiKey: '401-test-token',
-          },
+          getToken,
         });
 
         const result = await client.get('/test');
 
+        expect(getToken).toHaveBeenCalledTimes(1);
         expect(result.status).toEqual(200);
         expect(result.data).toEqual({ body: 'request ok' });
-
-        // scopeOk.done();
       });
 
       test('getToken rejection should reject sdk requests', async () => {
         const getToken = jest.fn().mockRejectedValue(new Error('auth error'));
 
-        nock(mockBaseUrl).get('/test').reply(401, {});
+        nock(mockBaseUrl)
+          .get('/test')
+
+          .reply(401, {});
 
         const client = new BaseCogniteClient({
           project,
@@ -123,20 +126,36 @@ describe('CogniteClient', () => {
     });
 
     test('apiKeyMode should change request header and token preable', async () => {
-      nock(mockBaseUrl).get('/test').reply(200, { body: 'api key request ok' });
+      const getToken = jest.fn().mockResolvedValue('test-api-key');
+
+      nock(mockBaseUrl).get('/test').reply(401, {});
+      nock(mockBaseUrl, {
+        reqheaders: {
+          [API_KEY_HEADER]: 'test-api-key',
+        },
+      })
+        .get('/test')
+        .reply(200, { body: 'api key request ok' });
+
+      nock(mockBaseUrl, {
+        reqheaders: {
+          [AUTHORIZATION_HEADER]: 'Bearer 401-test-token',
+        },
+      })
+        .get('/test')
+        .reply(200, { body: 'normal token request ok' });
 
       const client = new BaseCogniteClient({
         project,
         appId: 'unit-test',
         baseUrl: mockBaseUrl,
-        credentials: {
-          method: 'api',
-          apiKey: 'test-api-key',
-        },
+        getToken,
+        apiKeyMode: true,
       });
 
       const result = await client.get('/test');
 
+      expect(getToken).toHaveBeenCalledTimes(1);
       expect(result.status).toEqual(200);
       expect(result.data).toEqual({ body: 'api key request ok' });
     });
