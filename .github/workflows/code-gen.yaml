@@ -1,0 +1,41 @@
+name: Code Generation
+
+on:
+ pull_request:
+    branches:
+      - master
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  stable:
+    strategy:
+      matrix:
+        package: ["stable"]
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: configure node js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Run code generation for ${{ matrix.package }} package
+        run: yarn codegen --package=${{ matrix.package }} generate
+      
+      - name: Fix lint issues
+        run: yarn lint:fix --since=master
+      
+      - name: Identify changed files
+        id: changed_files
+        run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
+      
+      - name: Files related to code generation was altered
+        if: steps.changed_files.outputs.changed != 0
+        run: echo "fix this by running 'yarn codegen --package=${{ matrix.package }} generate'" && exit 1
