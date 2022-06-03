@@ -1,7 +1,7 @@
 # Authentication
 ​
 - [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
-- [Accessing different clusters](#accessing-different-clusters)
+- [Access different clusters](#access-different-clusters)
 - [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
 - [OpenID Connect (OIDC) w getToken](#openid-connect-oidc-w-gettoken)
   - [Client Credentials Flow](#oidc-authentication-using-gettoken-w-client-credentials-flow)
@@ -21,16 +21,15 @@
 ​
 ## Use access tokens instead of API keys
 ​
-We **strongly recommend** that you don't use API keys in web applications since the API key is easily readable by everyone with access to the application. Another restriction is that all users of your app share the same API key. All users will have the same access level, you lose tracing/auditing per user, keys are not time-limited, etc.
-​
-Instead of API keys, use **access tokens**. These are short-lived tokens that grant the user access to CDF. The application gets an access token by asking the user (or client credential) to sign in to a CDF project's identity provider (Google, Active Directory, etc.).
-​
+Instead of API keys, we strongly recommend you use **access tokens**. These are short-lived tokens that grant the user access to CDF. The application gets an access token by asking the user (or client credential) to sign in to a CDF project's identity provider (Google, Active Directory, etc.).
+
 The access token expires after a time, and as a result, the user will get `401` from CDF again, and the SDK triggers a new authentication process.
+
+We do not recommend the use API keys of in web applications since the API key is easily readable by everyone with access to the application. Another restriction is that all app users share the same API key. All users will have the same access level, and you lose tracing/auditing per user, keys are not time-limited, etc.
+
+## Access different clusters
 ​
-## Accessing different clusters
-​
-Cognite operates multiple clusters. The default cluster `api.cognitedata.com` will be
-used unless you override it. To access projects on a different cluster, use the [baseUrl](https://cognitedata.github.io/cognite-sdk-js/interfaces/clientoptions.html#baseurl) parameter in the SDK constructor.
+The default cluster for Cognite is `api.cognitedata.com`. To override this cluster and to access projects on a different cluster, use the [baseUrl](https://cognitedata.github.io/cognite-sdk-js/interfaces/clientoptions.html#baseurl) parameter in the SDK constructor.
 ​
 ```js
 // Specify the cluster `bluefield`
@@ -44,20 +43,20 @@ const client = new CogniteClient({
 ​
 ## How to authenticate with the SDK?
 ​
-Actually we have two ways to authenticate.
+There are two ways to authenticate with the SDK.
 ​
-1. Usign `getToken` method as parameter on CogniteClient that will be a calback to the SDK and uses it to get and renew tokens as needed. Can be used to authenticate with api keys directly or with OIDC making use of some IdP's like azure Active Directory, Auth0, etc. use the appropriate library [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper). 
+1. Using the `getToken` method: You can use the `getToken` method as a parameter on CogniteClient. This will act as a callback to the SDK and uses it to retrieve and renew tokens whenever required. `getToken` method can be used to authenticate with api keys or OIDC directly by making use of identity providers like Azure Active Directory, Auth0, etc. 
+You can use the appropriate library [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper). 
 ​
-> **_NOTE:_**  the SDK comes with an implementation of the Cognite legacy
-authentication flow, **but it does not come with an implementation for all IDPs** and this method will be deprecated soon.
+> NOTE: The SDK comes with an implementation of the Cognite legacy authentication flow, _but it does not come with an implementation for all IDPs_. This method will be deprecated soon.
 ​
-2. The sdk does use [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) internally to manage the authentication life cycle since the beginning until the token refresh, for this you need to use `credentials` field as parameter.
+2. Using the `credentials` field: You can use the `credentials` field as a parameter since the SDK uses [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) internally to manage the authentication life cycle from the beginning until token refresh.
 ​
 ## OpenID Connect (OIDC) w `getToken`
 ​
 ### OIDC authentication using getToken w Client Credentials Flow
 ​
-This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active directory on behalf of a user using the [client credentials flow](https://oauth.net/2/grant-types/client-credentials/):
+The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active Directory on behalf of a user using the [Client credentials flow](https://oauth.net/2/grant-types/client-credentials/):
 ​
 ```js
 import { ISettings, ClientCredentialsAuth } from "@cognite/auth-wrapper";
@@ -83,7 +82,7 @@ You can find a full sample application [here]()
 ​
 ### OIDC authentication using getToken w Device Code Flow
 ​
-This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active directory on behalf of a user using the [device code flow](https://oauth.net/2/grant-types/device-code/):
+The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active Directory on behalf of a user using the [Device code flow](https://oauth.net/2/grant-types/device-code/):
 ​
 ```js
 import { ISettings, DeviceAuth } from "@cognite/auth-wrapper";
@@ -109,7 +108,7 @@ You can find a full sample application [here]()
 ​
 ### OIDC authentication using getToken w Device Code Flow w Refresh Token
 ​
-This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active directory on behalf of a user using the [device code flow](https://oauth.net/2/grant-types/device-code/):
+The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active Directory on behalf of a user using the [Device code flow](https://oauth.net/2/grant-types/device-code/):
 ​
 ```js
 import { ISettings, DeviceAuth } from "@cognite/auth-wrapper";
@@ -139,8 +138,7 @@ You can find a full sample application [here]()
 ​
 ### OIDC authentication using getToken w Implicit Flow
 ​
-This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active directory on behalf of a user using the [implicit
-flow](https://oauth.net/2/grant-types/implicit/):
+The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active Directory on behalf of a user using the [Implicit flow](https://oauth.net/2/grant-types/implicit/):
 ​
 ```js
 import { ISettings, ImplicitAuth } from "@cognite/auth-wrapper";
@@ -166,8 +164,7 @@ You can find a full sample application [here]()
 ​
 ### OIDC authentication using getToken w PKCE Flow
 ​
-This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active directory on behalf of a user using the [authorization code
-flow](https://oauth.net/2/grant-types/authorization-code/) with [pkce](https://oauth.net/2/pkce/):
+The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active Directory on behalf of a user using the [Authorization code flow](https://oauth.net/2/grant-types/authorization-code/) with [PKCE](https://oauth.net/2/pkce/):
 ​
 ```js
 import { ISettings, PkceAuth } from "@cognite/auth-wrapper";
@@ -192,8 +189,7 @@ You can find a full sample application [here]()
 ​
 ### OIDC authentication using getToken w PKCE Flow w Refresh Token
 ​
-This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active directory on behalf of a user using the [authorization code
-flow](https://oauth.net/2/grant-types/authorization-code/) with [pkce](https://oauth.net/2/pkce/):
+The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active Directory on behalf of a user using the [Authorization code flow](https://oauth.net/2/grant-types/authorization-code/) with [PKCE](https://oauth.net/2/pkce/):
 ​
 ```js
 import { ISettings, PkceAuth } from "@cognite/auth-wrapper";
@@ -227,7 +223,7 @@ You can find a full sample application [here]()
 ​
 ### OIDC authentication using `credentials` w Client Credentials Flow
 ​
-This example shows how to use only SDK to get a token from Azure Active directory on behalf of a user using the [client credentials flow](https://oauth.net/2/grant-types/client-credentials/):
+The example below shows how to use only an SDK to get a token from Azure Active Directory on behalf of a user using the [Client credentials flow](https://oauth.net/2/grant-types/client-credentials/):
 ​
 ```js
 import { CogniteClient } from "@cognite/sdk";
@@ -250,7 +246,7 @@ You can find a full sample application [here]()
 ​
 ### OIDC authentication using `credentials` w Device Code Flow
 ​
-This example shows how to use only SDK to get a token from Azure Active directory on behalf of a user using the [device code flow](https://oauth.net/2/grant-types/device-code/):
+The example below shows how to use only an SDK to get a token from Azure Active Directory on behalf of a user using the [Device code flow](https://oauth.net/2/grant-types/device-code/):
 ​
 ```js
 import { CogniteClient } from "@cognite/sdk";
@@ -272,7 +268,7 @@ You can find a full sample application [here]()
 ​
 ### OIDC authentication using `credentials` w PKCE Flow
 ​
-This example shows how to use only SDK to get a token from Azure Active directory on behalf of a user using the [pkce flow](https://oauth.net/2/pkce/):
+The example below shows how to use only an SDK to get a token from Azure Active Directory on behalf of a user using the [PKCE flow](https://oauth.net/2/pkce/):
 ​
 ```js
 import { CogniteClient } from "@cognite/sdk";
@@ -309,7 +305,7 @@ const client = new CogniteClient({
 });
 ```
 ​
-> **_NOTE:_**  This method will be deprecated soon.
+> NOTE: This method will be deprecated soon.
 ​
 ### credentials metod
 ​
@@ -338,4 +334,4 @@ await client.authenticate(); // this also returns the token received
 ​
 ## More
 ​
-Read more about the [authentication process](https://doc.cognitedata.com/dev/guides/iam/external-application.html#tokens).
+To read more about the authentication, see [authentication process](https://doc.cognitedata.com/dev/guides/iam/external-application.html#tokens).
