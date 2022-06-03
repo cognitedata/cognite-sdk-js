@@ -24,6 +24,10 @@ There are small bare-bones javascript (and typescript) projects in the `samples/
 They show how to include the cognite SDK in various project setups.
 The samples' [README.md](./samples/README.md) has instructions for running the samples.
 
+## Authentication
+
+We offer two ways to get logged on our sdk, the first and most recommended is using [@cognite/auth-wrapper](./guides/auth-wrapper.md)
+and the second is using [Microsoft MSAL Library](./guides/auth-wrapper.md)
 ## Response header & http status
 
 Methods are design to only return the response body. For fetching the http response status and/or header you must utilize client.getMetadata:
