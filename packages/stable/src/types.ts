@@ -1882,6 +1882,13 @@ export interface RelationshipsFilterRequest extends FilterQuery {
    * If the filter is not specified it default to an empty filter.
    */
   filter?: RelationshipsFilter;
+
+  /**
+   * If true, will try to fetch the resources referred to in the relationship,
+   * based on the users access rights. Will silently fail to attatch the resources
+   * if the user lacks access to some of them.
+   */
+  fetchResources?: boolean;
 }
 
 export interface RelationshipsFilter extends CreatedAndLastUpdatedTimeFilter {
@@ -3185,3 +3192,12 @@ export type GraphQlError = {
   path: string[];
   locations: { line: number; column: number }[];
 };
+
+export interface RelationshipsRetrieveParams extends IgnoreUnknownIds {
+  /**
+   * If true, will try to fetch the resources referred to in the relationship,
+   * based on the users access rights. Will silently fail to attatch the resources
+   * if the user lacks access to some of them.
+   */
+  fetchResources?: boolean;
+}

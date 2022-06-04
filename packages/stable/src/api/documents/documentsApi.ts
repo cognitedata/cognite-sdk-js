@@ -16,19 +16,30 @@ import {
 } from '../../types';
 
 import { PreviewAPI } from './previewApi';
+import { DocumentsAggregateAPI } from './aggregateApi';
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
   private readonly previewAPI: PreviewAPI;
+  private readonly aggregateAPI: DocumentsAggregateAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
 
     const [baseUrl, httpClient, map] = args;
     this.previewAPI = new PreviewAPI(baseUrl, httpClient, map);
+    this.aggregateAPI = new DocumentsAggregateAPI(
+      baseUrl + '/aggregate',
+      httpClient,
+      map
+    );
   }
 
   public get preview() {
     return this.previewAPI;
+  }
+
+  public get aggregate() {
+    return this.aggregateAPI;
   }
 
   /**

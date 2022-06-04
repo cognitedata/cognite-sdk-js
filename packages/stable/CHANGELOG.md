@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.5.1...@cognite/sdk@7.6.0) (2022-06-02)
+
+
+### Features
+
+* automatic token management with @cognite/auth-wrapper  ([#796](https://github.com/cognitedata/cognite-sdk-js/issues/796)) ([d13c53f](https://github.com/cognitedata/cognite-sdk-js/commit/d13c53f9d5a5e65d6e2fc7d1a0e2efe2d36e678c))
+* automatic token management with @cognite/auth-wrapper  ([#814](https://github.com/cognitedata/cognite-sdk-js/issues/814)) ([d2c3a30](https://github.com/cognitedata/cognite-sdk-js/commit/d2c3a3083746e234f5dfc3e290188414d9ea17a6))
+
+
+### Reverts
+
+* Revert "feat: automatic token management with @cognite/auth-wrapper  (#796)" (#813) ([0a8a61c](https://github.com/cognitedata/cognite-sdk-js/commit/0a8a61c2b2c3d992f80b40f6282b20595537edac)), closes [#796](https://github.com/cognitedata/cognite-sdk-js/issues/796) [#813](https://github.com/cognitedata/cognite-sdk-js/issues/813)
+
+
+
+
+
+## [7.5.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.5.0...@cognite/sdk@7.5.1) (2022-05-27)
+
+
+### Bug Fixes
+
+* **documents:** label type in documents ([#809](https://github.com/cognitedata/cognite-sdk-js/issues/809)) ([fd5dcf6](https://github.com/cognitedata/cognite-sdk-js/commit/fd5dcf6ba6401eade7ad4e9c1f970494223a8b4a))
+
+
+
+
+
+# [7.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.4.0...@cognite/sdk@7.5.0) (2022-05-27)
+
+
+### Features
+
+* **documents:** aggregate api ([#793](https://github.com/cognitedata/cognite-sdk-js/issues/793)) ([445c39f](https://github.com/cognitedata/cognite-sdk-js/commit/445c39ff90822a357e20e624828bcd6e2ee36369))
+
+
+
+
+
+# [7.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.4...@cognite/sdk@7.4.0) (2022-05-25)
+
+
+### Features
+
+* add fetchResources to relationships api ([#808](https://github.com/cognitedata/cognite-sdk-js/issues/808)) ([b37fdd2](https://github.com/cognitedata/cognite-sdk-js/commit/b37fdd230043c8c24af1e1fe6df339064d722636))
+
+
+
+
+
 ## [7.3.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.3...@cognite/sdk@7.3.4) (2022-05-23)
 
 **Note:** Version bump only for package @cognite/sdk
