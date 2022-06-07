@@ -1,5 +1,5 @@
 import { OpenApiDocument, ReferenceWalker } from '../openapi';
-import { OpenApiSnapshotManager } from '../versionfile';
+import { OpenApiSnapshotManager } from '../snapshot';
 
 describe('open api', () => {
   const testFolder = __dirname;

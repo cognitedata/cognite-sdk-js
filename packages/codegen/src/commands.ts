@@ -1,8 +1,7 @@
 // Copyright 2022 Cognite AS
 import path from 'path';
 import { promises as fs } from 'fs';
-import { OpenApiDocument } from './openapi';
-import { OpenApiSnapshotManager } from './versionfile';
+import { OpenApiSnapshotManager } from './snapshot';
 import {
   FromPathOption,
   PackageOption,
@@ -11,7 +10,7 @@ import {
   versionFileDirectoryPath,
   VersionOption,
 } from './utils';
-import { CodeGen, PassThroughFilter, ServiceNameFilter } from './codegen';
+import { CodeGen, passThroughFilter, createServiceNameFilter } from './codegen';
 import { ConfigManager, ConfigOptions } from './configuration';
 
 type VersionFileOptions = PackageOption & Partial<ServiceOption>;
@@ -78,14 +77,9 @@ export class VersionFileCommand {
     vfm: OpenApiSnapshotManager,
     options: Partial<FromPathOption>
   ): Promise<void> => {
-    const download = async (): Promise<OpenApiDocument> => {
-      if (typeof options['from-path'] !== 'undefined') {
-        return await vfm.downloadFromPath({ path: options['from-path'] });
-      }
-      return await vfm.downloadFromURL();
-    };
-
-    const document = await download();
+    const document = typeof options['from-path'] !== 'undefined'
+      ? await vfm.downloadFromPath({ path: options['from-path'] })
+      : await vfm.downloadFromURL();
     await vfm.write(document);
   };
 }
@@ -120,8 +114,8 @@ export class CodeGenCommand {
 
     const pathFilter =
       typeof configFile.filter?.serviceName !== 'undefined'
-        ? ServiceNameFilter(configFile.filter.serviceName)
-        : PassThroughFilter;
+        ? createServiceNameFilter(configFile.filter.serviceName)
+        : passThroughFilter;
     const gen = new CodeGen({
       ...configFile,
       outputDir: directory,
@@ -158,22 +152,22 @@ export class CodeGenCommand {
       serviceTypesRecord,
       directory
     );
-    const [sharedTypesExportStatement] = this.createExportStatementForPackage(
+    const {code} = this.createExportStatementForPackage(
       sharedTypes,
       []
     );
     const blacklist = [...sharedTypes];
-    const exportStatements: string[] = [sharedTypesExportStatement];
+    const exportStatements: string[] = [code];
     console.info(`generated ${sharedTypes.length} shared types for package`);
 
     for (const service of services) {
       const types = serviceTypesRecord[service];
-      const [statement, skipped] = this.createExportStatementForService(
+      const {code, skipped} = this.createExportStatementForService(
         service,
         types,
         blacklist
       );
-      exportStatements.push(statement);
+      exportStatements.push(code);
       blacklist.push(...types);
       console.info(`${service}: skipped exporting [${skipped.join(', ')}]`);
     }
@@ -213,12 +207,13 @@ export class CodeGenCommand {
       outputDir: packageDirectory,
       autoNameInlinedRequest: false,
       filter: {
-        path: PassThroughFilter,
+        path: passThroughFilter,
       },
     });
 
     const spec = await vfm.read();
     const generatedTypeNames = await gen.generateTypesFromSchemas(
+      spec.openapi,
       spec.components?.schemas,
       (schemaName) => sharedTypes.includes(schemaName)
     );
@@ -229,30 +224,30 @@ export class CodeGenCommand {
     fromDirectory: string,
     types: string[],
     blacklist: string[]
-  ): [string, string[]] => {
-    const blackListedTypes = types.filter((t) => blacklist.includes(t));
+  ): { code: string, skipped: string[] } => {
+    const skipped = types.filter((t) => blacklist.includes(t));
     const typesFormat = types
       .filter((t) => !blacklist.includes(t))
       .join(',\n  ');
     const moduleName = path.parse(CodeGen.outputFileName).name;
-    return [
-      `export {\n  ${typesFormat}\n} from '${fromDirectory}/${moduleName}';`,
-      blackListedTypes,
-    ];
+    return {
+      code: `export {\n  ${typesFormat}\n} from '${fromDirectory}/${moduleName}';`,
+      skipped: skipped,
+    };
   };
 
   private createExportStatementForService = (
     service: string,
     types: string[],
     blacklist: string[]
-  ): [string, string[]] => {
+  ): { code: string, skipped: string[] } => {
     return this.createExportStatement(`./api/${service}`, types, blacklist);
   };
 
   private createExportStatementForPackage = (
     types: string[],
     blacklist: string[]
-  ): [string, string[]] => {
+  ): { code: string, skipped: string[] } => {
     return this.createExportStatement(`.`, types, blacklist);
   };
 

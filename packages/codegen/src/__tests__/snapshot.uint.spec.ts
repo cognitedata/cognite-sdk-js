@@ -1,5 +1,5 @@
 import path from 'path';
-import { OpenApiSnapshotManager } from '../versionfile';
+import { OpenApiSnapshotManager } from '../snapshot';
 
 describe('version file manager', () => {
   const testFolder = __dirname;

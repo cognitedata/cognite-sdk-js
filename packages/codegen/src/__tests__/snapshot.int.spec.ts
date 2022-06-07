@@ -1,4 +1,4 @@
-import { OpenApiSnapshotManager } from '../versionfile';
+import { OpenApiSnapshotManager } from '../snapshot';
 
 describe('version file manager', () => {
   test('load json spec from url', async () => {

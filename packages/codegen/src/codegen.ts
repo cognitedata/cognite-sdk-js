@@ -22,9 +22,9 @@ import { AutoNameInlinedRequestOption } from './utils';
 
 export type StringFilter = (str: string) => boolean;
 
-export const PassThroughFilter: StringFilter = (): boolean => true;
+export const passThroughFilter: StringFilter = (): boolean => true;
 
-export const ServiceNameFilter = (service: string): StringFilter => {
+export const createServiceNameFilter = (service: string): StringFilter => {
   const r = new RegExp(`^/api/.+/projects/{project}/${service}($|/)`);
   return (path: string): boolean => r.test(path);
 };
@@ -157,13 +157,12 @@ export class CodeGen {
       .reduce((acc, v) => acc.concat(v), []);
 
     const references = walker.walk(referencesInOperations);
-    const locations = references.map(walker.splitReference);
-
-    // TODO: don't remove paths
-    const filteredSpec: any = locations.reduce((acc, location) => {
-      this.copyDefinitionsByLocation(acc, spec, location);
-      return acc;
-    }, {});
+    const filteredSpec: any = references
+      .map(walker.splitReference)
+      .reduce((acc, location) => {
+        this.copyDefinitionsByLocation(acc, spec, location);
+        return acc;
+      }, {});
 
     return {
       ...spec,
@@ -247,6 +246,14 @@ export class CodeGen {
     return Object.entries(schemas);
   };
 
+  /**
+   * generateTypesFromSchemas
+   * 
+   * @param version open api version (3.0.1, 3.1.0, etc.)
+   * @param schemas open api schemas, object where key will be the type name.
+   * @param schemaFilter Filter out specific type names
+   * @returns names of generated types
+   */
   public generateTypesFromSchemas = async (
     version: string,
     schemas: OpenApiSchemas,
@@ -285,7 +292,10 @@ export class CodeGen {
   /**
    * generateTypes
    *
-   * generate all types with a given versionfile and configuration. Returns name of all generated types afterwards.
+   * Derives relevant schemas from responses and other locations before generating types from schemas.
+   * 
+   * @param openApiSpec open api specification to generate types from
+   * @returns names of generated types
    */
   public generateTypes = async (
     openApiSpec: OpenApiDocument
@@ -330,17 +340,20 @@ export class CodeGen {
       openApiSpec.components!.schemas![typeName] = schema;
     }
 
-    // remove the common json error structure as it is not needed here.
-    // this is the `{"error": {"message": "hello", "code": 400, ...}}`
-    delete openApiSpec.components!.schemas!['Error'];
+    const skipTypes = [
+      // remove the common json error structure as it is not needed here.
+      // this is the `{"error": {"message": "hello", "code": 400, ...}}`
+      'Error',
 
-    // remove EmptyResponse as this is will never directly be used by the sdk
-    // it's just used in openapi to state we return an empty json `{}`.
-    delete openApiSpec.components!.schemas!['EmptyResponse'];
+      // remove EmptyResponse as this is will never directly be used by the sdk
+      // it's just used in openapi to state we return an empty json `{}`.
+      'EmptyResponse'
+    ];
 
     return this.generateTypesFromSchemas(
       openApiSpec.openapi,
-      openApiSpec.components?.schemas
+      openApiSpec.components?.schemas,
+      (name: string) => !skipTypes.includes(name)
     );
   };
 }

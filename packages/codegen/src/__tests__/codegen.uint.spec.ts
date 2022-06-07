@@ -1,7 +1,6 @@
-// import path from 'path';
-import { CodeGen, PassThroughFilter, ServiceNameFilter } from '../codegen';
+import { CodeGen, passThroughFilter, createServiceNameFilter } from '../codegen';
 import { OpenApiDocument } from '../openapi';
-import { OpenApiSnapshotManager } from '../versionfile';
+import { OpenApiSnapshotManager } from '../snapshot';
 import { promises as fs } from 'fs';
 
 describe('code generation', () => {
@@ -41,7 +40,7 @@ describe('code generation', () => {
       autoNameInlinedRequest: false,
       outputDir: '',
       filter: {
-        path: PassThroughFilter,
+        path: passThroughFilter,
       },
     });
     expect(gen).toBeDefined();
@@ -53,7 +52,7 @@ describe('code generation', () => {
         autoNameInlinedRequest: false,
         outputDir: '',
         filter: {
-          path: PassThroughFilter,
+          path: passThroughFilter,
         },
       });
 
@@ -67,7 +66,7 @@ describe('code generation', () => {
         autoNameInlinedRequest: false,
         outputDir: '',
         filter: {
-          path: ServiceNameFilter('serviceC'),
+          path: createServiceNameFilter('serviceC'),
         },
       });
 
@@ -83,7 +82,7 @@ describe('code generation', () => {
         autoNameInlinedRequest: false,
         outputDir: process.cwd(),
         filter: {
-          path: ServiceNameFilter('serviceB'),
+          path: createServiceNameFilter('serviceB'),
         },
       });
 
@@ -119,7 +118,7 @@ describe('code generation', () => {
         autoNameInlinedRequest: false,
         outputDir: process.cwd(),
         filter: {
-          path: PassThroughFilter,
+          path: passThroughFilter,
         },
       });
 
@@ -138,7 +137,7 @@ describe('code generation', () => {
         autoNameInlinedRequest: false,
         outputDir: process.cwd(),
         filter: {
-          path: PassThroughFilter,
+          path: passThroughFilter,
         },
       });
 
