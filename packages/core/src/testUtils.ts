@@ -24,10 +24,8 @@ export function setupClient(baseUrl: string = BASE_URL) {
   return new BaseCogniteClient({
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
-    credentials: {
-      method: 'api',
-      apiKey: process.env.COGNITE_CREDENTIALS as string,
-    },
+    apiKeyMode: true,
+    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
     baseUrl,
   });
 }
