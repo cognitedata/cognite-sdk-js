@@ -1,19 +1,19 @@
 import path from 'path';
-import { VersionFileManager } from '../versionfile';
+import { OpenApiSnapshotManager } from '../versionfile';
 
 describe('version file manager', () => {
   const testFolder = __dirname;
   const testdata = path.resolve(testFolder, 'testdata');
 
   test('constructor', async () => {
-    const v = new VersionFileManager({
+    const v = new OpenApiSnapshotManager({
       directory: testFolder,
     });
     expect(v).toBeDefined();
   });
 
   test('load from local json spec', async () => {
-    const vfm = new VersionFileManager({
+    const vfm = new OpenApiSnapshotManager({
       directory: testFolder,
     });
 
@@ -23,7 +23,7 @@ describe('version file manager', () => {
   });
 
   test('load from local json spec without filter', async () => {
-    const vfm = new VersionFileManager({
+    const vfm = new OpenApiSnapshotManager({
       directory: testFolder,
     });
 
@@ -36,7 +36,7 @@ describe('version file manager', () => {
   });
 
   test('load existing versionfile', async () => {
-    const vfm = new VersionFileManager({
+    const vfm = new OpenApiSnapshotManager({
       version: 'v1',
       directory: testFolder,
     });

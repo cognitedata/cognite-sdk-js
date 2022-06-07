@@ -3,9 +3,19 @@ import { OpenAPIV3 } from 'openapi-types';
 
 export type OpenApiDocument = OpenAPIV3.Document;
 export type OpenApiSchema = OpenAPIV3.SchemaObject;
+export type OpenApiReference = OpenAPIV3.ReferenceObject;
 export type OpenApiPathItem = OpenAPIV3.PathItemObject;
 export type OpenApiOperationObject = OpenAPIV3.OperationObject;
 export type OpenApiPathsObject = OpenAPIV3.PathsObject;
+export type OpenApiSchemas = OpenAPIV3.ComponentsObject['schemas'];
+export type OpenApiResponses = NonNullable<
+  OpenAPIV3.ComponentsObject['responses']
+>;
+export type OpenApiParameters = NonNullable<
+  OpenAPIV3.ComponentsObject['parameters']
+>;
+export type OpenApiParameter = OpenAPIV3.ParameterObject;
+export type OpenApiComponents = OpenAPIV3.ComponentsObject;
 
 export interface FilteredPathsObject {
   [pattern: string]: OpenApiPathItem;
@@ -73,8 +83,7 @@ export class ReferenceWalker {
   public schema = (reference: string): any => {
     const segments = this.splitReference(reference);
     if (segments[0] !== 'components') {
-      console.error("expected first segment of ref tag to be 'components'");
-      process.exit(1);
+      throw new Error("expected first segment of ref tag to be 'components'");
     }
 
     const componentCategory = segments[1] as keyof OpenAPIV3.ComponentsObject;
@@ -86,8 +95,9 @@ export class ReferenceWalker {
   public splitReference = (ref: string): string[] => {
     const a = ref.split('#').filter((str) => str.length > 0);
     if (a.length > 1) {
-      console.error('unexpected ref tag: ' + ref);
-      process.exit(1);
+      throw new Error(
+        `A open api reference ($ref) is expected to only contain one hashtag, found ${a.length}.`
+      );
     }
 
     const segments = a[0].split('/').filter((str) => str.length > 0);
@@ -95,10 +105,6 @@ export class ReferenceWalker {
   };
 
   public walk = (references: string[]) => {
-    if (references.length === 0) {
-      return [];
-    }
-
     const history = [...references];
     const unexplored = [...references];
     while (unexplored.length > 0) {

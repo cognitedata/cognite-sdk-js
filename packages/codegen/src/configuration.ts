@@ -1,28 +1,30 @@
 // Copyright 2022 Cognite AS
 import { promises as fs } from 'fs';
+import {
+  AutoNameInlinedRequestOption,
+  DirectoryOption,
+  ServiceOption,
+  SnapshotScopeOption,
+  VersionOption,
+} from './utils';
 
-export type ConfigurationOptions = {
-  version: string;
-  service: string;
-  autoNameInlinedRequest: boolean;
-  scope: string;
-  filter?: {
-    serviceName: string;
+export type ConfigOptions = VersionOption &
+  ServiceOption &
+  SnapshotScopeOption &
+  AutoNameInlinedRequestOption & {
+    filter?: {
+      serviceName: string;
+    };
   };
-};
 
-export type ConfigurationManagerOptions = {
-  directory: string;
-};
+export type ConfigManagerOptions = DirectoryOption;
 
-export type ConfigScopeOption = { scope: string };
-
-export class ConfigurationManager {
-  public static readonly filename = '.codegen.json';
+export class ConfigManager {
+  public static readonly filename = 'codegen.json';
   private path: string;
 
-  constructor(readonly options: ConfigurationManagerOptions) {
-    this.path = `${options.directory}/${ConfigurationManager.filename}`;
+  constructor(readonly options: ConfigManagerOptions) {
+    this.path = `${options.directory}/${ConfigManager.filename}`;
   }
 
   public exists = async (): Promise<boolean> => {
@@ -34,25 +36,23 @@ export class ConfigurationManager {
     }
   };
 
-  public validate = (config: ConfigurationOptions): void => {
-    if (!['local', 'global'].includes(config.scope)) {
+  public validate = (config: ConfigOptions): void => {
+    if (!['service', 'package'].includes(config.scope)) {
       throw new Error('unknown scope specified');
     }
   };
 
-  public write = async (
-    config: ConfigurationOptions
-  ): Promise<ConfigurationOptions> => {
+  public write = async (config: ConfigOptions): Promise<ConfigOptions> => {
     this.validate(config);
     const json = JSON.stringify(config, null, 2);
 
-    await fs.writeFile(this.path, json, { flag: 'wx' });
+    await fs.writeFile(this.path, json);
     return config;
   };
 
-  public read = async (): Promise<ConfigurationOptions> => {
+  public read = async (): Promise<ConfigOptions> => {
     const data = await fs.readFile(this.path, 'utf-8');
-    const config = JSON.parse(data) as ConfigurationOptions;
+    const config = JSON.parse(data) as ConfigOptions;
     this.validate(config);
 
     return config;

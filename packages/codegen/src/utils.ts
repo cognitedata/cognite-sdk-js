@@ -18,6 +18,18 @@ export type VersionOption = {
   version: string;
 };
 
+export type SnapshotScopeOption = {
+  scope: 'service' | 'package';
+};
+
+export type DirectoryOption = {
+  directory: string;
+};
+
+export type AutoNameInlinedRequestOption = {
+  autoNameInlinedRequest: boolean;
+};
+
 const createPath = (
   options: PackageOption & Partial<ServiceOption>
 ): string => {

@@ -1,8 +1,8 @@
-import { VersionFileManager } from '../versionfile';
+import { OpenApiSnapshotManager } from '../versionfile';
 
 describe('version file manager', () => {
   test('load json spec from url', async () => {
-    const vfm = new VersionFileManager({
+    const vfm = new OpenApiSnapshotManager({
       directory: '.',
     });
 
@@ -13,7 +13,7 @@ describe('version file manager', () => {
     expect(spec.info.title).toEqual('Cognite playground APIs');
   });
   test('load json spec from default url', async () => {
-    const vfm = new VersionFileManager({
+    const vfm = new OpenApiSnapshotManager({
       version: 'playground',
       directory: '.',
     });

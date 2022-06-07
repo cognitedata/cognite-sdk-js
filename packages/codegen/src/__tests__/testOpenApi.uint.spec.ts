@@ -1,12 +1,12 @@
 import { OpenApiDocument, ReferenceWalker } from '../openapi';
-import { VersionFileManager } from '../versionfile';
+import { OpenApiSnapshotManager } from '../versionfile';
 
 describe('open api', () => {
   const testFolder = __dirname;
   let basicVersionFile: OpenApiDocument;
 
   beforeAll(async () => {
-    const vfm = new VersionFileManager({
+    const vfm = new OpenApiSnapshotManager({
       directory: '.',
     });
 

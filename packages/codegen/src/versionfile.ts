@@ -7,32 +7,30 @@ import { VersionOption } from './utils';
 /**
  * VersionFileManagerOptions options for configure the version file.
  */
-export type VersionFileManagerOptions = {
+export type OpenApiSnapshotManagerOptions = {
   directory: string;
 } & Partial<VersionOption>;
 
-export type LocalVersionFileOptions = {
+export type ServiceOpenApiOptions = {
   path: string;
   filename?: string;
 };
 
 /**
- * VersionFileManager handles creating and updating a version file.
- *
- * A version file is a copy of the open api json spec at a specific point in time.
+ * OpenApiSnapshotManager handles creating and updating a service or package snapshot.
  */
-export class VersionFileManager {
-  public static readonly filename = '.cognite-api-version';
+export class OpenApiSnapshotManager {
+  public static readonly filename = '.cognite-api-snapshot';
   private path: string;
 
-  constructor(readonly options: VersionFileManagerOptions) {
-    this.path = `${options.directory}/${VersionFileManager.filename}`;
+  constructor(readonly options: OpenApiSnapshotManagerOptions) {
+    this.path = `${options.directory}/${OpenApiSnapshotManager.filename}`;
   }
 
   public downloadFromPath = async (
-    options: LocalVersionFileOptions
+    options: ServiceOpenApiOptions
   ): Promise<OpenApiDocument> => {
-    const filename = options.filename || VersionFileManager.filename;
+    const filename = options.filename || OpenApiSnapshotManager.filename;
     const path = `${options.path}/${filename}`.replace('//', '/');
 
     const localSpec = await fs.readFile(path, 'utf-8');
@@ -66,7 +64,7 @@ export class VersionFileManager {
   public write = async (openapi: OpenApiDocument): Promise<OpenApiDocument> => {
     const json = JSON.stringify(openapi);
 
-    await fs.writeFile(this.path, json, { flag: 'wx' });
+    await fs.writeFile(this.path, json);
     return openapi;
   };
 

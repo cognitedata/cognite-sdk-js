@@ -58,37 +58,7 @@ A commit hook makes sure the syntax is followed. Automated commit messages such 
 ## Type generation
 This SDK support generating typescript types from the Cognite open api specification. The idea is to use openapi as a source of truth. Any incorrect or missing types should be fixed/added in the openapi spec instead of manually adjusting the generated types. This also helps to keep documentation up to date.
 
-The scripts prefix `codegen` are reserved for type generation. The core logic is found in `packages/codegen` with a deeper explenation.
-
-To quickly setup type generation for your service you may run the generate command with `--auto`:
-> Note: using `--auto` will setup a local versionfile and not the package global versionfile. You can later switch to the global versionfile once you have confirmed type generation works correctly for your service (you may also have to update your openapi spec).
-
-```sh
-yarn codegen --package=stable --version=v1 --service=documents --auto generate
-```
-
-A service must have a versionfile (essentially just a copy of the openapi spec) and a configuration (which openapi paths to parse). After
-a versionfile and configuration have been created, a user may update their versionfile, delete it (eg. type generation doesn't work for yuor service), switch between local and global versionfiles, etc. before generating types.
-
-### Versionfile
-> Newly configured defaults to a local versionfile scope.
-
-A versionfile has two scopes; local (service specific) or global (package specific). Services that links to a package global versionfile are all updated at the same time. If you require to update types for your service only, independently from other services in the package, it's recommended to use a local versionfile.
-```sh
-# configure your service to have a local versionfile
-> yarn codegen:configure --package=stable --service=documents --versionfile-scope=local update
-
-# create a versionfile from a file, instead of the public Cognite url
-# useful when writing/udpating the openapi spec and you want to see how it is compiled into typescript.
-> yarn codegen:versionfile --service=documents --package=stable --from-path=/tmp/v1.json create
-
-# if you already have a versionfile, you can update directly (otherwise delete the versionfile before running create)
-> yarn codegen:versionfile --service=documents --package=stable --from-path=/tmp/v1.json update
-
-# you can also switch back to the global versionfile at any time
-> yarn codegen:versionfile --service=documents --package=stable delete
-> yarn codegen:configure --package=stable --service=documents --versionfile-scope=global update
-```
+Use the command `yarn codegen` for more information.
 
 ## Pull request
 Make a pull request from your branch to the main branch. When merging the pull request,

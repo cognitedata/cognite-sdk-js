@@ -1,7 +1,7 @@
 // import path from 'path';
 import { CodeGen, PassThroughFilter, ServiceNameFilter } from '../codegen';
 import { OpenApiDocument } from '../openapi';
-import { VersionFileManager } from '../versionfile';
+import { OpenApiSnapshotManager } from '../versionfile';
 import { promises as fs } from 'fs';
 
 describe('code generation', () => {
@@ -11,7 +11,7 @@ describe('code generation', () => {
   let cyclicReferencesGenFile: string;
 
   beforeAll(async () => {
-    const vfm = new VersionFileManager({
+    const vfm = new OpenApiSnapshotManager({
       directory: '.',
     });
 
@@ -37,12 +37,9 @@ describe('code generation', () => {
   });
 
   test('constructor', async () => {
-    const gen = new CodeGen(basicVersionFile, {
-      version: 'playground',
-      service: 'documents',
+    const gen = new CodeGen({
       autoNameInlinedRequest: false,
       outputDir: '',
-      scope: 'local',
       filter: {
         path: PassThroughFilter,
       },
@@ -52,48 +49,39 @@ describe('code generation', () => {
 
   describe('filter paths', () => {
     test('pass through', async () => {
-      const gen = new CodeGen(basicVersionFile, {
-        version: 'playground',
-        service: 'documents',
+      const gen = new CodeGen({
         autoNameInlinedRequest: false,
         outputDir: '',
-        scope: 'local',
         filter: {
           path: PassThroughFilter,
         },
       });
 
-      const beforeFiltering = Object.keys(gen.versionFile.paths).length;
-      gen['filterPaths']();
-      expect(Object.keys(gen.versionFile.paths)).toHaveLength(beforeFiltering);
+      const beforeFiltering = Object.keys(basicVersionFile.paths).length;
+      const paths = gen['filterPaths'](basicVersionFile.paths);
+      expect(Object.keys(paths)).toHaveLength(beforeFiltering);
     });
 
     test('service filter', async () => {
-      const gen = new CodeGen(basicVersionFile, {
-        version: 'playground',
-        service: 'documents',
+      const gen = new CodeGen({
         autoNameInlinedRequest: false,
         outputDir: '',
-        scope: 'local',
         filter: {
           path: ServiceNameFilter('serviceC'),
         },
       });
 
-      expect(Object.keys(gen.versionFile.paths).length).toBeGreaterThan(4);
-      gen['filterPaths']();
-      expect(Object.keys(gen.versionFile.paths)).toHaveLength(4);
+      expect(Object.keys(basicVersionFile.paths).length).toBeGreaterThan(4);
+      const paths = gen['filterPaths'](basicVersionFile.paths);
+      expect(Object.keys(paths)).toHaveLength(4);
     });
   });
 
   describe('generate types', () => {
     test('serviceB', async () => {
-      const gen = new CodeGen(basicVersionFile, {
-        version: 'playground',
-        service: 'serviceB',
+      const gen = new CodeGen({
         autoNameInlinedRequest: false,
         outputDir: process.cwd(),
-        scope: 'local',
         filter: {
           path: ServiceNameFilter('serviceB'),
         },
@@ -117,7 +105,7 @@ describe('code generation', () => {
         'FunctionErrorResponse',
       ];
 
-      const typeNames = await gen.generateTypes();
+      const typeNames = await gen.generateTypes(basicVersionFile);
       expect(typeNames).toEqual(wants);
 
       const generatedFile = (
@@ -127,34 +115,28 @@ describe('code generation', () => {
     });
 
     test('skip unused schemas', async () => {
-      const gen = new CodeGen(basicVersionFile, {
-        version: 'playground',
-        service: 'serviceB',
+      const gen = new CodeGen({
         autoNameInlinedRequest: false,
         outputDir: process.cwd(),
-        scope: 'local',
         filter: {
           path: PassThroughFilter,
         },
       });
 
-      const typeNames = await gen.generateTypes();
+      const typeNames = await gen.generateTypes(basicVersionFile);
       expect(typeNames.includes('SomeUnusedOpenApiSchema')).toBeFalsy();
     });
 
     test('cyclic references', async () => {
-      const vfm = new VersionFileManager({ directory: '.' });
+      const vfm = new OpenApiSnapshotManager({ directory: '.' });
       const versionFile = await vfm.downloadFromPath({
         path: testFolder + '/testdata',
         filename: 'cyclic-references.json',
       });
 
-      const gen = new CodeGen(versionFile, {
-        version: 'custom',
-        service: 'cyclicService',
+      const gen = new CodeGen({
         autoNameInlinedRequest: false,
         outputDir: process.cwd(),
-        scope: 'local',
         filter: {
           path: PassThroughFilter,
         },
@@ -162,7 +144,7 @@ describe('code generation', () => {
 
       const wants = ['CyclicResponse', 'Filter', 'FilterOption'];
 
-      const typeNames = await gen.generateTypes();
+      const typeNames = await gen.generateTypes(versionFile);
       expect(typeNames).toEqual(wants);
 
       const generatedFile = (

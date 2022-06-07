@@ -2,27 +2,24 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 import { OpenApiDocument } from './openapi';
-import { VersionFileManager } from './versionfile';
+import { OpenApiSnapshotManager } from './versionfile';
 import {
   FromPathOption,
   PackageOption,
   ServiceOption,
+  SnapshotScopeOption,
   versionFileDirectoryPath,
   VersionOption,
 } from './utils';
 import { CodeGen, PassThroughFilter, ServiceNameFilter } from './codegen';
-import {
-  ConfigScopeOption,
-  ConfigurationManager,
-  ConfigurationOptions,
-} from './configuration';
+import { ConfigManager, ConfigOptions } from './configuration';
 
 type VersionFileOptions = PackageOption & Partial<ServiceOption>;
 type ConfigFileOptions = PackageOption & ServiceOption;
 type ConfigFileUpdateOptions = PackageOption &
   ServiceOption &
   VersionOption &
-  Partial<ConfigScopeOption>;
+  Partial<SnapshotScopeOption>;
 
 export class VersionFileCommand {
   public create = async (
@@ -31,7 +28,10 @@ export class VersionFileCommand {
       Partial<FromPathOption>
   ) => {
     const directory = await versionFileDirectoryPath(options);
-    const vfm = new VersionFileManager({ directory: directory, ...options });
+    const vfm = new OpenApiSnapshotManager({
+      directory: directory,
+      ...options,
+    });
     const versionfileExists = await vfm.exists();
     if (versionfileExists) {
       throw new Error(
@@ -48,7 +48,10 @@ export class VersionFileCommand {
       Partial<FromPathOption>
   ) => {
     const directory = await versionFileDirectoryPath(options);
-    const vfm = new VersionFileManager({ directory: directory, ...options });
+    const vfm = new OpenApiSnapshotManager({
+      directory: directory,
+      ...options,
+    });
     const versionfileExists = await vfm.exists();
     if (!versionfileExists) {
       throw new Error(
@@ -62,7 +65,7 @@ export class VersionFileCommand {
 
   public delete = async (options: VersionFileOptions) => {
     const directory = await versionFileDirectoryPath(options);
-    const vfm = new VersionFileManager({ directory: directory });
+    const vfm = new OpenApiSnapshotManager({ directory: directory });
     const versionfileExists = await vfm.exists();
     if (!versionfileExists) {
       throw new Error(`Versionfile does not exist`);
@@ -72,7 +75,7 @@ export class VersionFileCommand {
   };
 
   private updateFile = async (
-    vfm: VersionFileManager,
+    vfm: OpenApiSnapshotManager,
     options: Partial<FromPathOption>
   ): Promise<void> => {
     const download = async (): Promise<OpenApiDocument> => {
@@ -103,7 +106,7 @@ export class CodeGenCommand {
     options: PackageOption & ServiceOption
   ): Promise<string[]> => {
     const directory = await versionFileDirectoryPath(options);
-    const config = new ConfigurationManager({
+    const config = new ConfigManager({
       directory: directory,
     });
     const configFile = await config.read();
@@ -111,16 +114,15 @@ export class CodeGenCommand {
     const packageDirectory = await versionFileDirectoryPath({
       package: options.package,
     });
-    const vfm = new VersionFileManager({
-      directory: configFile.scope == 'local' ? directory : packageDirectory,
+    const vfm = new OpenApiSnapshotManager({
+      directory: configFile.scope == 'service' ? directory : packageDirectory,
     });
 
-    const versionFile = await vfm.read();
     const pathFilter =
       typeof configFile.filter?.serviceName !== 'undefined'
         ? ServiceNameFilter(configFile.filter.serviceName)
         : PassThroughFilter;
-    const gen = new CodeGen(versionFile, {
+    const gen = new CodeGen({
       ...configFile,
       outputDir: directory,
       filter: {
@@ -129,7 +131,8 @@ export class CodeGenCommand {
     });
 
     try {
-      const generatedTypeNames = await gen.generateTypes();
+      const snapshot = await vfm.read();
+      const generatedTypeNames = await gen.generateTypes(snapshot);
       return generatedTypeNames;
     } catch (error) {
       throw new Error('Unable to generate types: ' + error);
@@ -205,21 +208,18 @@ export class CodeGenCommand {
       }
     }
 
-    const vfm = new VersionFileManager({ directory: packageDirectory });
-    const gen = new CodeGen(await vfm.read(), {
+    const vfm = new OpenApiSnapshotManager({ directory: packageDirectory });
+    const gen = new CodeGen({
       outputDir: packageDirectory,
       autoNameInlinedRequest: false,
-
-      // rest is irrelevant - TODO: update types
-      service: '?',
-      version: '?',
-      scope: 'local',
       filter: {
         path: PassThroughFilter,
       },
     });
 
+    const spec = await vfm.read();
     const generatedTypeNames = await gen.generateTypesFromSchemas(
+      spec.components?.schemas,
       (schemaName) => sharedTypes.includes(schemaName)
     );
     return generatedTypeNames;
@@ -267,7 +267,7 @@ export class CodeGenCommand {
       const configFilePath = path.resolve(
         apiDirectory,
         service,
-        ConfigurationManager.filename
+        ConfigManager.filename
       );
       try {
         await fs.stat(configFilePath);
@@ -283,7 +283,7 @@ export class CodeGenCommand {
 export class ConfigureCommand {
   public create = async (options: ConfigFileUpdateOptions) => {
     const directory = await versionFileDirectoryPath(options);
-    const config = new ConfigurationManager({
+    const config = new ConfigManager({
       directory: directory,
     });
     if (await config.exists()) {
@@ -297,25 +297,22 @@ export class ConfigureCommand {
 
   public update = async (options: ConfigFileUpdateOptions) => {
     const directory = await versionFileDirectoryPath(options);
-    const config = new ConfigurationManager({
+    const config = new ConfigManager({
       directory: directory,
     });
 
     try {
-      await config.delete();
       await config.write(this.defaultConfig(options));
     } catch (error) {
       throw new Error('Config file does not exist - did nothing: ' + error);
     }
   };
 
-  private defaultConfig = (
-    options: ConfigFileUpdateOptions
-  ): ConfigurationOptions => {
+  private defaultConfig = (options: ConfigFileUpdateOptions): ConfigOptions => {
     return {
       version: options.version,
       service: options.service,
-      scope: typeof options.scope === 'undefined' ? 'local' : options.scope,
+      scope: typeof options.scope === 'undefined' ? 'service' : options.scope,
       autoNameInlinedRequest: true,
       filter: {
         serviceName: options.service,
@@ -325,7 +322,7 @@ export class ConfigureCommand {
 
   public delete = async (options: ConfigFileOptions) => {
     const directory = await versionFileDirectoryPath(options);
-    const config = new ConfigurationManager({
+    const config = new ConfigManager({
       directory: directory,
     });
 
