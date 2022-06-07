@@ -77,9 +77,10 @@ export class VersionFileCommand {
     vfm: OpenApiSnapshotManager,
     options: Partial<FromPathOption>
   ): Promise<void> => {
-    const document = typeof options['from-path'] !== 'undefined'
-      ? await vfm.downloadFromPath({ path: options['from-path'] })
-      : await vfm.downloadFromURL();
+    const document =
+      typeof options['from-path'] !== 'undefined'
+        ? await vfm.downloadFromPath({ path: options['from-path'] })
+        : await vfm.downloadFromURL();
     await vfm.write(document);
   };
 }
@@ -152,17 +153,14 @@ export class CodeGenCommand {
       serviceTypesRecord,
       directory
     );
-    const {code} = this.createExportStatementForPackage(
-      sharedTypes,
-      []
-    );
+    const { code } = this.createExportStatementForPackage(sharedTypes, []);
     const blacklist = [...sharedTypes];
     const exportStatements: string[] = [code];
     console.info(`generated ${sharedTypes.length} shared types for package`);
 
     for (const service of services) {
       const types = serviceTypesRecord[service];
-      const {code, skipped} = this.createExportStatementForService(
+      const { code, skipped } = this.createExportStatementForService(
         service,
         types,
         blacklist
@@ -224,7 +222,7 @@ export class CodeGenCommand {
     fromDirectory: string,
     types: string[],
     blacklist: string[]
-  ): { code: string, skipped: string[] } => {
+  ): { code: string; skipped: string[] } => {
     const skipped = types.filter((t) => blacklist.includes(t));
     const typesFormat = types
       .filter((t) => !blacklist.includes(t))
@@ -240,14 +238,14 @@ export class CodeGenCommand {
     service: string,
     types: string[],
     blacklist: string[]
-  ): { code: string, skipped: string[] } => {
+  ): { code: string; skipped: string[] } => {
     return this.createExportStatement(`./api/${service}`, types, blacklist);
   };
 
   private createExportStatementForPackage = (
     types: string[],
     blacklist: string[]
-  ): { code: string, skipped: string[] } => {
+  ): { code: string; skipped: string[] } => {
     return this.createExportStatement(`.`, types, blacklist);
   };
 

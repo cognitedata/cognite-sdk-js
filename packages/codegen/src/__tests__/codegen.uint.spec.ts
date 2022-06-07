@@ -1,4 +1,8 @@
-import { CodeGen, passThroughFilter, createServiceNameFilter } from '../codegen';
+import {
+  CodeGen,
+  passThroughFilter,
+  createServiceNameFilter,
+} from '../codegen';
 import { OpenApiDocument } from '../openapi';
 import { OpenApiSnapshotManager } from '../snapshot';
 import { promises as fs } from 'fs';

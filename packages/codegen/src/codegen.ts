@@ -248,7 +248,7 @@ export class CodeGen {
 
   /**
    * generateTypesFromSchemas
-   * 
+   *
    * @param version open api version (3.0.1, 3.1.0, etc.)
    * @param schemas open api schemas, object where key will be the type name.
    * @param schemaFilter Filter out specific type names
@@ -293,7 +293,7 @@ export class CodeGen {
    * generateTypes
    *
    * Derives relevant schemas from responses and other locations before generating types from schemas.
-   * 
+   *
    * @param openApiSpec open api specification to generate types from
    * @returns names of generated types
    */
@@ -347,7 +347,7 @@ export class CodeGen {
 
       // remove EmptyResponse as this is will never directly be used by the sdk
       // it's just used in openapi to state we return an empty json `{}`.
-      'EmptyResponse'
+      'EmptyResponse',
     ];
 
     return this.generateTypesFromSchemas(
