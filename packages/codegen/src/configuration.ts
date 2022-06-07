@@ -38,7 +38,7 @@ export class ConfigManager {
 
   public validate = (config: ConfigOptions): void => {
     if (!['service', 'package'].includes(config.scope)) {
-      throw new Error('unknown scope specified');
+      throw new Error(`unknown scope specified: "${config.scope}"`);
     }
   };
 

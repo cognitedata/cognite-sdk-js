@@ -348,6 +348,7 @@ export class CodeGen {
       // remove EmptyResponse as this is will never directly be used by the sdk
       // it's just used in openapi to state we return an empty json `{}`.
       'EmptyResponse',
+      'ErrorResponse',
     ];
 
     return this.generateTypesFromSchemas(

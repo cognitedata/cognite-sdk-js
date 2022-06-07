@@ -1,7 +1,7 @@
 {
     "version": "v1",
     "service": "documents",
-    "scope": "global",
+    "scope": "package",
     "autoNameInlinedRequest": true,
     "filter": {
         "serviceName": "documents"

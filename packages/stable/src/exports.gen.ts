@@ -54,7 +54,6 @@ export {
   DocumentSearchCountAggregate,
   DocumentSearchCountAggregatesGroup,
   DocumentSearchResponse,
-  ErrorResponse,
   DocumentsAggregateResponse,
   DocumentListResponse,
   DocumentsPreviewTemporaryLinkResponse,
