@@ -29,6 +29,7 @@ import {
   verifyCredentialsRequiredFields,
   verifyOptionsRequiredFields,
 } from './loginUtils';
+// eslint-disable-next-line lodash/import-scope
 import { isFunction } from 'lodash';
 
 export interface ClientCredentials {
