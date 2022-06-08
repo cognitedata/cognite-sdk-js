@@ -2,14 +2,15 @@
 import { promises as fs } from 'fs';
 import fetch from 'cross-fetch';
 import { OpenApiDocument } from './openapi';
-import { VersionOption } from './utils';
+import { PathOption, VersionOption } from './utils';
 
 /**
  * VersionFileManagerOptions options for configure the version file.
  */
-export type OpenApiSnapshotManagerOptions = {
-  directory: string;
-} & Partial<VersionOption>;
+export type OpenApiSnapshotManagerOptions = Partial<VersionOption> &
+  Partial<PathOption> & {
+    directory?: string;
+  };
 
 export type ServiceOpenApiOptions = {
   path: string;
@@ -24,7 +25,19 @@ export class OpenApiSnapshotManager {
   private path: string;
 
   constructor(readonly options: OpenApiSnapshotManagerOptions) {
-    this.path = `${options.directory}/${OpenApiSnapshotManager.filename}`;
+    if (
+      typeof options.directory === 'undefined' &&
+      typeof options.path === 'undefined'
+    ) {
+      throw new Error(
+        'SnapshotManager must have either a "path" or "directory" specified'
+      );
+    }
+
+    this.path =
+      typeof options.path !== 'undefined'
+        ? options.path
+        : `${options.directory}/${OpenApiSnapshotManager.filename}`;
   }
 
   public downloadFromPath = async (
@@ -47,9 +60,13 @@ export class OpenApiSnapshotManager {
   public downloadFromURL = async (url?: string): Promise<OpenApiDocument> => {
     url = url || this.createUrl();
 
-    const response = await fetch(url);
-    const json = await response.json();
-    return json as OpenApiDocument;
+    try {
+      const response = await fetch(url);
+      const json = await response.json();
+      return json as OpenApiDocument;
+    } catch (error) {
+      throw new Error(`Unable to download open api contract: ${error}`);
+    }
   };
 
   public exists = async (): Promise<boolean> => {
@@ -64,16 +81,28 @@ export class OpenApiSnapshotManager {
   public write = async (openapi: OpenApiDocument): Promise<OpenApiDocument> => {
     const json = JSON.stringify(openapi);
 
-    await fs.writeFile(this.path, json);
-    return openapi;
+    try {
+      await fs.writeFile(this.path, json);
+      return openapi;
+    } catch (error) {
+      throw new Error(`Unable to save snapshot: ${error}`);
+    }
   };
 
   public read = async (): Promise<OpenApiDocument> => {
-    const data = await fs.readFile(this.path, 'utf-8');
-    return JSON.parse(data) as OpenApiDocument;
+    try {
+      const data = await fs.readFile(this.path, 'utf-8');
+      return JSON.parse(data) as OpenApiDocument;
+    } catch (error) {
+      throw new Error(`Unable to load snapshot: ${error}`);
+    }
   };
 
   public delete = async (): Promise<void> => {
-    await fs.unlink(this.path);
+    try {
+      await fs.unlink(this.path);
+    } catch (error) {
+      throw new Error(`Unable to delete snapshot: ${error}`);
+    }
   };
 }

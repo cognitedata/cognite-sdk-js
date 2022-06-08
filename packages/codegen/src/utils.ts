@@ -22,8 +22,8 @@ export type SnapshotScopeOption = {
   scope: 'service' | 'package' | 'path';
 };
 
-export type SnapshotPathOption = {
-  'snapshot-path': string;
+export type PathOption = {
+  path: string;
 };
 
 export type DirectoryOption = {

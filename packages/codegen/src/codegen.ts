@@ -19,6 +19,7 @@ import {
   OpenApiReference,
 } from './openapi';
 import { AutoNameInlinedRequestOption } from './utils';
+import { ServiceConfig } from './configuration';
 
 export type StringFilter = (str: string) => boolean;
 
@@ -27,6 +28,12 @@ export const passThroughFilter: StringFilter = (): boolean => true;
 export const createServiceNameFilter = (service: string): StringFilter => {
   const r = new RegExp(`^/api/.+/projects/{project}/${service}($|/)`);
   return (path: string): boolean => r.test(path);
+};
+
+export const pathFilterFromConfig = (config: ServiceConfig): StringFilter => {
+  return typeof config.filter.serviceName === 'undefined'
+    ? passThroughFilter
+    : createServiceNameFilter(config.filter.serviceName);
 };
 
 export type CodeGenOptions = AutoNameInlinedRequestOption & {

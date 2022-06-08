@@ -1,10 +1,9 @@
 {
-  "version": "v1",
   "service": "documents",
-  "scope": "package",
-  "autoNameInlinedRequest": false,
   "filter": {
     "serviceName": "documents"
   },
-  "package": "stable"
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
 }

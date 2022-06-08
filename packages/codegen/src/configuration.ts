@@ -1,21 +1,46 @@
 // Copyright 2022 Cognite AS
 import { promises as fs } from 'fs';
-import {
-  AutoNameInlinedRequestOption,
-  DirectoryOption,
-  ServiceOption,
-  SnapshotScopeOption,
-  VersionOption,
-} from './utils';
+import { DirectoryOption } from './utils';
 
-export type ConfigOptions = VersionOption &
-  ServiceOption &
-  SnapshotScopeOption &
-  AutoNameInlinedRequestOption & {
-    filter?: {
-      serviceName: string;
-    };
+/**
+ * SnapshotLocal allows you to work on a snapshot locally. Useful when you want to
+ * see how changes to open api affects the generated code without adjusting the official open api spec.
+ */
+export interface SnapshotLocal {
+  // path define a local open api contact to use.
+  path: string;
+  version: never;
+}
+
+/**
+ * SnapshotOnline is used in production when generating code. It uses the public cognite url for
+ * fetching the latest snapshot.
+ */
+export interface SnapshotOnline {
+  // version specify a open api version such as "v1", "playground", etc.
+  // used whenever a new snapshot should be downloaded.
+  version: string;
+  path: never;
+}
+
+export interface PackageConfig {
+  snapshot: SnapshotOnline | SnapshotLocal;
+}
+
+export interface ServiceConfig {
+  snapshot?: SnapshotLocal;
+  service: string;
+  inlinedSchemas: {
+    autoNameRequest: boolean;
   };
+  filter: {
+    serviceName?: string;
+  };
+}
+
+const isServiceConfig = (config: any): config is ServiceConfig => {
+  return 'service' in config;
+};
 
 export type ConfigManagerOptions = DirectoryOption;
 
@@ -36,29 +61,106 @@ export class ConfigManager {
     }
   };
 
-  public validate = (config: ConfigOptions): void => {
-    if (!['service', 'package'].includes(config.scope)) {
-      throw new Error(`unknown scope specified: "${config.scope}"`);
+  private validateSnapshot = async (
+    snapshot: any,
+    legalKeys: string[],
+    source: string
+  ): Promise<void> => {
+    const snapshotKeys = Object.keys(snapshot);
+    if (snapshotKeys.length != 1) {
+      throw new Error('snapshot configuration must have exactly one setting');
+    }
+
+    if (!legalKeys.includes(snapshotKeys[0])) {
+      const encapsulatedKeys = legalKeys.map((key) => `"${key}"`);
+      throw new Error(
+        `A ${source} config can only define ${encapsulatedKeys.join(
+          ' or '
+        )} within "snapshot". Got "${snapshotKeys[0]}" instead`
+      );
+    }
+
+    if (snapshotKeys[0] == 'path') {
+      try {
+        await fs.stat(snapshot.path);
+      } catch (error) {
+        throw new Error(`invalid snapshot path: ${error}`);
+      }
     }
   };
 
-  public write = async (config: ConfigOptions): Promise<ConfigOptions> => {
-    this.validate(config);
-    const json = JSON.stringify(config, null, 2);
+  public validatePackage = async (
+    config: PackageConfig
+  ): Promise<PackageConfig> => {
+    await this.validateSnapshot(
+      config.snapshot,
+      ['version', 'path'],
+      'package'
+    );
 
-    await fs.writeFile(this.path, json);
     return config;
   };
 
-  public read = async (): Promise<ConfigOptions> => {
-    const data = await fs.readFile(this.path, 'utf-8');
-    const config = JSON.parse(data) as ConfigOptions;
-    this.validate(config);
+  public validateService = async (
+    config: ServiceConfig
+  ): Promise<ServiceConfig> => {
+    if (typeof config.service === 'undefined') {
+      throw new Error('A service config must have "service" defined');
+    }
+    if (typeof config.snapshot !== 'undefined') {
+      await this.validateSnapshot(config.snapshot, ['path'], 'service');
+    }
 
+    return config;
+  };
+
+  public validate = async (
+    json: string
+  ): Promise<PackageConfig | ServiceConfig> => {
+    const config = JSON.parse(json);
+
+    try {
+      if (isServiceConfig(config)) {
+        return await this.validateService(config);
+      } else {
+        return await this.validatePackage(config);
+      }
+    } catch (error) {
+      throw new Error(`invalid config: ${error}`);
+    }
+  };
+
+  public write = async (
+    config: PackageConfig | ServiceConfig
+  ): Promise<string> => {
+    const json = JSON.stringify(config, null, 2);
+    await this.validate(json);
+
+    try {
+      await fs.writeFile(this.path, json);
+    } catch (error) {
+      throw new Error(`unable to save config: ${error}`);
+    }
+    return json;
+  };
+
+  public read = async (): Promise<PackageConfig | ServiceConfig> => {
+    let json: string;
+    try {
+      json = await fs.readFile(this.path, 'utf-8');
+    } catch (error) {
+      throw new Error(`unable to load config: ${error}`);
+    }
+
+    const config = await this.validate(json);
     return config;
   };
 
   public delete = async (): Promise<void> => {
-    await fs.unlink(this.path);
+    try {
+      await fs.unlink(this.path);
+    } catch (error) {
+      throw new Error(`unable to delete config: ${error}`);
+    }
   };
 }

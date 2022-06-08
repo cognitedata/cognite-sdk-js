@@ -10,16 +10,10 @@ const parser = yargsBase().options({
     const nodeVersion = process.versions.node.split(".");
     const majorVersion = parseInt(nodeVersion[0]);
     if (majorVersion < 16) {
-        console.error("NodeJS version must be v16 or higher");
-        process.exit(1);
+        throw new Error("NodeJS version must be v16 or higher");
     }
 
-    try {
-        await cmd.generate({...argv});
-        console.log("ok");
-    } catch (error) {
-        console.error("ERROR: unable to generate types: " + error);
-    }
+    await cmd.generate({...argv});
 });
 
 
