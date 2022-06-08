@@ -42,7 +42,7 @@
     "test-snippets": "yarn allsdk test-snippets --stream",
     "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream",
     "codegen": "ts-node scripts/codegen/codegen.ts",
-    "codegen:versionfile": "ts-node scripts/codegen/versionfile.ts",
+    "codegen:snapshot": "ts-node scripts/codegen/snapshot.ts",
     "codegen:configure": "ts-node scripts/codegen/configure.ts"
   },
   "devDependencies": {

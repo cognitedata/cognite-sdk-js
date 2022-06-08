@@ -19,7 +19,11 @@ export type VersionOption = {
 };
 
 export type SnapshotScopeOption = {
-  scope: 'service' | 'package';
+  scope: 'service' | 'package' | 'path';
+};
+
+export type SnapshotPathOption = {
+  'snapshot-path': string;
 };
 
 export type DirectoryOption = {

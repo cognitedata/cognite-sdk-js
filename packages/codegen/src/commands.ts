@@ -6,6 +6,7 @@ import {
   FromPathOption,
   PackageOption,
   ServiceOption,
+  SnapshotPathOption,
   SnapshotScopeOption,
   versionFileDirectoryPath,
   VersionOption,
@@ -15,10 +16,11 @@ import { ConfigManager, ConfigOptions } from './configuration';
 
 type VersionFileOptions = PackageOption & Partial<ServiceOption>;
 type ConfigFileOptions = PackageOption & ServiceOption;
-type ConfigFileUpdateOptions = PackageOption &
+export type ConfigFileUpdateOptions = PackageOption &
   ServiceOption &
   VersionOption &
-  Partial<SnapshotScopeOption>;
+  Partial<SnapshotScopeOption> &
+  Partial<SnapshotPathOption>;
 
 export class VersionFileCommand {
   public create = async (
@@ -295,7 +297,12 @@ export class ConfigureCommand {
     });
 
     try {
-      await config.write(this.defaultConfig(options));
+      const currentConfig = await config.read();
+      const updatedConfig = {
+        ...currentConfig,
+        ...options,
+      };
+      await config.write(updatedConfig);
     } catch (error) {
       throw new Error('Config file does not exist - did nothing: ' + error);
     }
