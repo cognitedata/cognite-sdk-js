@@ -309,6 +309,6 @@ export class CodeGenCommand {
         // skip projects without a config file
       }
     }
-    return results;
+    return results.sort();
   };
 }

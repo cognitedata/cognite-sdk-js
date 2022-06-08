@@ -56,3 +56,19 @@ export const versionFileDirectoryPath = async (
     throw new Error(`Path "${directory}" does not exist: ${error}`);
   }
 };
+
+const sortJsonKeys = (json: any): any => {
+  return Object.keys(json)
+    .sort()
+    .reduce((acc, key) => {
+      const value =
+        typeof json[key] === 'object' ? sortJsonKeys(json[key]) : json[key];
+      return Object.assign(acc, { [key]: value });
+    }, {});
+};
+
+export const sortOpenApiJson = (json: string): string => {
+  const spec = JSON.parse(json);
+  const sorted = sortJsonKeys(spec);
+  return JSON.stringify(sorted);
+};
