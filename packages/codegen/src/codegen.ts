@@ -376,7 +376,7 @@ export class CodeGen {
       'ErrorResponse',
     ];
 
-    return this.generateTypesFromSchemas(
+    return await this.generateTypesFromSchemas(
       openApiSpec.openapi,
       openApiSpec.components?.schemas,
       (name: string) => !skipTypes.includes(name)
