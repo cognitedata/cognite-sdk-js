@@ -91,21 +91,21 @@ describe('code generation', () => {
       });
 
       const wants = [
-        'FunctionListScope',
-        'FunctionFilter',
-        'LimitList',
-        'FunctionName',
-        'FunctionOwner',
-        'FunctionFileId',
-        'FunctionStatus',
         'CogniteExternalId',
-        'EpochTimestamp',
         'CogniteInternalId',
-        'FunctionErrorBasic',
+        'EpochTimestamp',
         'Function',
         'FunctionBuildError',
-        'FunctionListResponse',
+        'FunctionErrorBasic',
         'FunctionErrorResponse',
+        'FunctionFileId',
+        'FunctionFilter',
+        'FunctionListResponse',
+        'FunctionListScope',
+        'FunctionName',
+        'FunctionOwner',
+        'FunctionStatus',
+        'LimitList',
       ];
 
       const typeNames = await gen.generateTypes(basicVersionFile);
