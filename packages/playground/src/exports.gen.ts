@@ -106,6 +106,6 @@ export {
   UnprocessableEntityErrorResponse,
   DocumentsTemporaryPreviewLinkResponse,
   DocumentsClassifiersResponse,
-  feedbackStatusQueryParameter,
+  FeedbackStatusQueryParameter,
   DocumentsDeletePipelinesRequest,
 } from './api/documents/types.gen';

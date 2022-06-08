@@ -141,9 +141,7 @@ export class CodeGen {
         );
       }
       const operationId = operation.operationId.trim();
-      let schemaName =
-        operationId.charAt(0).toUpperCase() +
-        (operationId.length > 1 ? operationId.slice(1) : '');
+      let schemaName = this.capitalizeFirstLetter(operationId);
       if (!schemaName.toLowerCase().endsWith('request')) {
         schemaName += 'Request';
       }
@@ -253,6 +251,12 @@ export class CodeGen {
     return Object.entries(schemas);
   };
 
+  private capitalizeFirstLetter = (str: string): string => {
+    const capitalized = str.charAt(0).toUpperCase();
+    const remain = str.length > 1 ? str.slice(1) : '';
+    return capitalized + remain;
+  };
+
   /**
    * generateTypesFromSchemas
    *
@@ -289,6 +293,17 @@ export class CodeGen {
           {}
         );
     }
+
+    // swagger generator capitalized the first letter
+    spec.components!.schemas = Object.keys(spec.components!.schemas!).reduce(
+      (acc, name) => {
+        const formattedName = this.capitalizeFirstLetter(name);
+        return Object.assign(acc, {
+          [formattedName]: spec.components!.schemas![name],
+        });
+      },
+      {} as OpenApiSchemas
+    );
 
     const typeNames = Object.keys(spec.components!.schemas!);
     await this.runSwaggerGenerator(spec);
