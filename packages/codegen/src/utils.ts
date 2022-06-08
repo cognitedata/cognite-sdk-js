@@ -62,7 +62,9 @@ const sortJsonKeys = (json: any): any => {
     .sort()
     .reduce((acc, key) => {
       const value =
-        typeof json[key] === 'object' ? sortJsonKeys(json[key]) : json[key];
+        typeof json[key] === 'object' && !json[key]
+          ? sortJsonKeys(json[key])
+          : json[key];
       return Object.assign(acc, { [key]: value });
     }, {});
 };

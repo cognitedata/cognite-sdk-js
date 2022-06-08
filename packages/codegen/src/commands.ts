@@ -154,7 +154,9 @@ export class CodeGenCommand {
       const generatedTypeNames = await gen.generateTypes(snapshot);
       return generatedTypeNames;
     } catch (error) {
-      throw new Error('Unable to generate types: ' + error);
+      throw new Error(
+        `unable to generate types for service "${options.service}": ${error}`
+      );
     }
   };
 
@@ -164,17 +166,11 @@ export class CodeGenCommand {
 
     const services = await this.listConfiguredServices(directory);
     for (const service of services) {
-      try {
-        serviceTypesRecord[service] = await this.generateForSingleService({
-          ...options,
-          service: service,
-        });
-        console.info(`generated types for ${service}`);
-      } catch (error) {
-        throw new Error(
-          `unable to generate types for service "${service}": ${error}`
-        );
-      }
+      serviceTypesRecord[service] = await this.generateForSingleService({
+        ...options,
+        service: service,
+      });
+      console.info(`generated types for ${service}`);
     }
 
     // identify shared resources and use the global versionfile to generate them
