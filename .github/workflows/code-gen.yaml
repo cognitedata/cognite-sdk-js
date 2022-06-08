@@ -10,7 +10,7 @@ jobs:
   stable:
     strategy:
       matrix:
-        package: ["stable"]
+        package: ["stable", "playground"]
         os: [ubuntu-latest]
 
     steps:
