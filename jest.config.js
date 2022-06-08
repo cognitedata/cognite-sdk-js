@@ -1,6 +1,6 @@
 module.exports = {
   testEnvironment: 'jsdom',
-  testTimeout: 10000,
+  testTimeout: 35000,
   roots: ['<rootDir>/packages/'],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
