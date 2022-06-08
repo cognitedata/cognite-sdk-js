@@ -187,13 +187,67 @@ export default class BaseCogniteClient {
     this.initAPIs();
   }
 
-  public authenticate: () => Promise<string | undefined> = async () => {
+  public authenticate = async (): Promise<string | undefined> => {
     try {
-      let token = await this.authenticateGetToken();
+      const token = await this.authenticateGetToken();
+      return token === undefined ? await this.authenticateCredentials() : token;
+    } catch (e) {
+      return;
+    }
+  };
 
-      if (token !== undefined) return token;
+  public authenticateCredentials = async (): Promise<string | undefined> => {
+    try {
+      if (!this.credentials) return;
 
-      token = await this.authenticateCredentials();
+      if (this.credentials.method === 'api') {
+        const token: string = this.credentials.apiKey!;
+        this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
+
+        return token;
+      }
+
+      if (this.tokenCredentials.refresh_token) {
+        this.tokenCredentials.access_token = '';
+      }
+
+      if (this.credentials.method === 'client_credentials') {
+        // @ts-ignore
+        this.tokenCredentials = await ClientCredentialsAuth.load(
+          // @ts-ignore
+          this.credentials
+        ).login();
+      }
+
+      if (this.credentials.method === 'device') {
+        // @ts-ignore
+        this.tokenCredentials = await DeviceAuth.load(this.credentials).login(
+          this.tokenCredentials.refresh_token
+        );
+      }
+
+      if (this.credentials.method === 'pkce') {
+        // @ts-ignore
+        this.tokenCredentials = await PkceAuth.load(this.credentials).login(
+          this.tokenCredentials.refresh_token
+        );
+      }
+
+      let token;
+      if (
+        this.tokenCredentials.access_token !== undefined &&
+        this.tokenCredentials.access_token !== ''
+      ) {
+        token =
+          this.credentials.method === 'implicit'
+            ? this.credentials.implicitToken
+            : this.tokenCredentials.access_token;
+
+        this.httpClient.setDefaultHeader(
+          AUTHORIZATION_HEADER,
+          bearerString(token!)
+        );
+      }
 
       return token;
     } catch (e) {
@@ -201,85 +255,25 @@ export default class BaseCogniteClient {
     }
   };
 
-  public authenticateCredentials: () => Promise<string | undefined> =
-    async () => {
-      try {
-        if (!this.credentials) return;
-
-        if (this.credentials.method === 'api') {
-          const token: string = this.credentials.apiKey!;
-          this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
-
-          return token;
-        }
-
-        if (this.tokenCredentials.refresh_token) {
-          this.tokenCredentials.access_token = '';
-        }
-
-        if (this.credentials.method === 'client_credentials') {
-          // @ts-ignore
-          this.tokenCredentials = await ClientCredentialsAuth.load(
-            // @ts-ignore
-            this.credentials
-          ).login();
-        }
-
-        if (this.credentials.method === 'device') {
-          // @ts-ignore
-          this.tokenCredentials = await DeviceAuth.load(this.credentials).login(
-            this.tokenCredentials.refresh_token
-          );
-        }
-
-        if (this.credentials.method === 'pkce') {
-          // @ts-ignore
-          this.tokenCredentials = await PkceAuth.load(this.credentials).login(
-            this.tokenCredentials.refresh_token
-          );
-        }
-
-        let token;
-        if (
-          this.tokenCredentials.access_token !== undefined &&
-          this.tokenCredentials.access_token !== ''
-        ) {
-          token =
-            this.credentials.method === 'implicit'
-              ? this.credentials.implicitToken
-              : this.tokenCredentials.access_token;
-
-          this.httpClient.setDefaultHeader(
-            AUTHORIZATION_HEADER,
-            bearerString(token!)
-          );
-        }
-
+  private authenticateGetToken = async (): Promise<string | undefined> => {
+    try {
+      const token = await this.getToken();
+      if (token === undefined) {
         return token;
-      } catch (e) {
-        return;
       }
-    };
 
-  private authenticateGetToken: () => Promise<string | undefined> =
-    async () => {
-      try {
-        const token = await this.getToken();
-
-        if (token === undefined) return token;
-
-        if (this.apiKeyMode) {
-          this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
-          return token;
-        } else {
-          const bearer = bearerString(token);
-          this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
-          return bearer;
-        }
-      } catch {
-        return;
+      if (this.apiKeyMode) {
+        this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
+        return token;
+      } else {
+        const bearer = bearerString(token);
+        this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
+        return bearer;
       }
-    };
+    } catch {
+      return;
+    }
+  };
 
   /**
    * It retrieves the previous token from header

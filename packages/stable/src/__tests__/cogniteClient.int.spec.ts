@@ -14,8 +14,7 @@ describe('createClientWithApiKey - integration', () => {
   test('handle non-existing api-key', async () => {
     const client = setupClientWithNonExistingApiKey();
     expect(
-      async () =>
-        await client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
+      await client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `"Request failed | status code: 401"`
     );
@@ -27,6 +26,7 @@ describe('http methods - integration', () => {
   const project = process.env.COGNITE_PROJECT as string;
   beforeAll(async () => {
     client = setupLoggedInClient();
+    await client.authenticate();
   });
   test('post method', async () => {
     const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
