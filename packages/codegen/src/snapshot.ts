@@ -27,7 +27,7 @@ interface ServiceOpenApiOptions extends PathOption {
  * OpenApiSnapshotManager handles creating and updating a service or package snapshot.
  */
 export class OpenApiSnapshotManager {
-  public static readonly filename = '.cognite-api-snapshot';
+  public static readonly filename = 'cognite-openapi-snapshot.json';
   private path: string;
 
   constructor(readonly options: OpenApiSnapshotManagerOptions) {

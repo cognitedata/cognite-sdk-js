@@ -12,7 +12,7 @@ file is processed, and will generate types for its given configuration.
 ## OpenAPI document snapshot
 
 In order to have build reproducability we keep a copy of the OpenAPI document
-in this repository (named `.cognite-api-snapshot`). To generate new types
+in this repository (named `cognite-openapi-snapshot.json`). To generate new types
 it will need to be updated to the latest available. E.g.:
 
 ```bash
