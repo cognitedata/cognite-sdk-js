@@ -23,11 +23,12 @@ interface ServiceOpenApiOptions extends PathOption {
   filename?: string;
 }
 
+const defaultFilename = 'cognite-openapi-snapshot.json';
+
 /**
  * OpenApiSnapshotManager handles creating and updating a service or package snapshot.
  */
 export class OpenApiSnapshotManager {
-  public static readonly filename = 'cognite-openapi-snapshot.json';
   private path: string;
 
   constructor(readonly options: OpenApiSnapshotManagerOptions) {
@@ -40,13 +41,13 @@ export class OpenApiSnapshotManager {
     this.path =
       options.path != null
         ? options.path
-        : `${options.directory}/${OpenApiSnapshotManager.filename}`;
+        : `${options.directory}/${defaultFilename}`;
   }
 
   public downloadFromPath = async (
     options: ServiceOpenApiOptions
   ): Promise<OpenApiDocument> => {
-    const filename = options.filename || OpenApiSnapshotManager.filename;
+    const filename = options.filename || defaultFilename;
     const path = `${options.path}/${filename}`.replace('//', '/');
 
     const doc = await fs.readFile(path, 'utf-8');
@@ -82,7 +83,7 @@ export class OpenApiSnapshotManager {
   };
 
   public write = async (openapi: OpenApiDocument): Promise<OpenApiDocument> => {
-    const json = JSON.stringify(openapi);
+    const json = JSON.stringify(openapi, undefined, '  ');
 
     try {
       await fs.writeFile(this.path, json);
