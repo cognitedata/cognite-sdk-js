@@ -26,7 +26,7 @@ export class SnapshotCommand {
       version: configFile.snapshot.version,
     });
 
-    if (typeof configFile.snapshot.version === 'undefined') {
+    if (configFile.snapshot.version === undefined) {
       throw new Error('Can`t download snapshot when "version" was not defined');
     }
 
@@ -86,7 +86,7 @@ export class ConfigureCommand {
   private defaultConfig = (
     options: PackageOption & Partial<ServiceOption> & Partial<VersionOption>
   ): ServiceConfig | PackageConfig => {
-    if (typeof options.service !== 'undefined') {
+    if (options.service !== undefined) {
       return {
         service: options.service,
         filter: {
@@ -97,7 +97,7 @@ export class ConfigureCommand {
         },
       } as ServiceConfig;
     } else {
-      if (typeof options.version === 'undefined') {
+      if (options.version === undefined) {
         throw new Error(
           '"version" must be defined when creating a package config'
         );
@@ -113,7 +113,7 @@ export class ConfigureCommand {
 
 export class CodeGenCommand {
   public generate = async (options: PackageOption & Partial<ServiceOption>) => {
-    if (typeof options.service !== 'undefined') {
+    if (options.service !== undefined) {
       await this.generateForSingleService({
         ...options,
         service: options.service,

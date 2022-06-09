@@ -26,8 +26,8 @@ export class OpenApiSnapshotManager {
 
   constructor(readonly options: OpenApiSnapshotManagerOptions) {
     if (
-      typeof options.directory === 'undefined' &&
-      typeof options.path === 'undefined'
+      options.directory === undefined &&
+      options.path === undefined
     ) {
       throw new Error(
         'SnapshotManager must have either a "path" or "directory" specified'
@@ -35,7 +35,7 @@ export class OpenApiSnapshotManager {
     }
 
     this.path =
-      typeof options.path !== 'undefined'
+      options.path !== undefined
         ? options.path
         : `${options.directory}/${OpenApiSnapshotManager.filename}`;
   }
@@ -51,7 +51,7 @@ export class OpenApiSnapshotManager {
   };
 
   private createUrl = (): string => {
-    if (typeof this.options.version === 'undefined') {
+    if (this.options.version === undefined) {
       throw new Error('Cognite API version was not configured');
     }
     return `https://storage.googleapis.com/cognitedata-api-docs/dist/${this.options.version}.json`;

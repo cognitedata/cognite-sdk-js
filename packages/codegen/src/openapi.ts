@@ -29,7 +29,7 @@ export function isReferenceObject(
 
 export function filterPaths(paths: OpenApiPathsObject): FilteredPathsObject {
   return Object.keys(paths)
-    .filter((k) => typeof paths[k] !== 'undefined')
+    .filter((k) => paths[k] !== undefined)
     .reduce((acc, key) => {
       return Object.assign(acc, { [key]: paths[key] });
     }, {} as FilteredPathsObject);

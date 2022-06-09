@@ -31,7 +31,7 @@ export const createServiceNameFilter = (service: string): StringFilter => {
 };
 
 export const pathFilterFromConfig = (config: ServiceConfig): StringFilter => {
-  return typeof config.filter.serviceName === 'undefined'
+  return config.filter.serviceName === undefined
     ? passThroughFilter
     : createServiceNameFilter(config.filter.serviceName);
 };
@@ -98,7 +98,7 @@ export class CodeGen {
       for (const operation of operationsInPath(item)) {
         const requestBody = operation.requestBody;
         if (
-          typeof requestBody === 'undefined' ||
+          requestBody === undefined ||
           isReferenceObject(requestBody)
         ) {
           continue;
@@ -122,7 +122,7 @@ export class CodeGen {
     for (const [path, operation] of this.operationsWithInlinedRequest(paths)) {
       const requestBody = operation.requestBody;
       if (
-        typeof requestBody === 'undefined' ||
+        requestBody === undefined ||
         isReferenceObject(requestBody)
       ) {
         continue;
@@ -135,7 +135,7 @@ export class CodeGen {
 
       // schema name
       if (
-        typeof operation.operationId === 'undefined' ||
+        operation.operationId === undefined ||
         operation.operationId.trim() === ''
       ) {
         throw new Error(
@@ -215,7 +215,7 @@ export class CodeGen {
       }
 
       const schema = response.content?.['application/json']?.schema;
-      if (typeof schema === 'undefined') {
+      if (schema === undefined) {
         continue;
       }
 
@@ -236,7 +236,7 @@ export class CodeGen {
         continue;
       }
 
-      if (parameter.in != 'query' || typeof parameter.schema === 'undefined') {
+      if (parameter.in != 'query' || parameter.schema === undefined) {
         continue;
       }
 
@@ -273,7 +273,7 @@ export class CodeGen {
     schemas: OpenApiSchemas,
     schemaFilter?: StringFilter
   ): Promise<string[]> => {
-    if (typeof schemas === 'undefined') {
+    if (schemas === undefined) {
       throw new Error('No schemas to generate types for defined');
     }
 
@@ -285,7 +285,7 @@ export class CodeGen {
       JSON.stringify(strippedOpenApiSpec)
     ) as OpenApiDocument;
 
-    if (typeof schemaFilter !== 'undefined') {
+    if (schemaFilter !== undefined) {
       spec.components!.schemas = Object.keys(spec.components!.schemas!)
         .filter(schemaFilter)
         .reduce(
