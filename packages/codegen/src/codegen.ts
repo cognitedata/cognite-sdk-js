@@ -275,6 +275,8 @@ export class CodeGen {
       openapi: version,
       components: { schemas: schemas },
     };
+
+    // deep copy
     const spec = JSON.parse(
       JSON.stringify(strippedOpenApiSpec)
     ) as OpenApiDocument;
@@ -319,6 +321,7 @@ export class CodeGen {
   public generateTypes = async (
     openApiSpec: OpenApiDocument
   ): Promise<string[]> => {
+    // deep copy
     openApiSpec = JSON.parse(JSON.stringify(openApiSpec)) as OpenApiDocument;
     openApiSpec.paths = this.filterPaths(openApiSpec.paths);
     openApiSpec = this.removeUnusedDefinitions(openApiSpec);

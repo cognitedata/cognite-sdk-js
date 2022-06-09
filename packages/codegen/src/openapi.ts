@@ -60,6 +60,7 @@ export function operationsInPath(
 export class ReferenceWalker {
   readonly document: OpenApiDocument;
   constructor(document: OpenApiDocument) {
+    // deep copy
     this.document = JSON.parse(JSON.stringify(document)) as OpenApiDocument;
   }
 

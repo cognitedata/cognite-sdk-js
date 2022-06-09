@@ -219,12 +219,13 @@ export class CodeGenCommand {
       []
     );
 
-    const sharedTypes: string[] = [];
+    // find shared types across services
+    const sharedTypes: Set<string> = new Set();
     for (let i = 0; i < types.length - 1; i++) {
       const remain = types.slice(i + 1);
       const t = types[i];
       if (remain.includes(t)) {
-        sharedTypes.push(t);
+        sharedTypes.add(t);
       }
     }
 
@@ -250,7 +251,7 @@ export class CodeGenCommand {
     const generatedTypeNames = await gen.generateTypesFromSchemas(
       spec.openapi,
       spec.components?.schemas,
-      (schemaName) => sharedTypes.includes(schemaName)
+      (schemaName) => sharedTypes.has(schemaName)
     );
     return generatedTypeNames;
   };
