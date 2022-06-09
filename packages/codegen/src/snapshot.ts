@@ -2,20 +2,19 @@
 import { promises as fs } from 'fs';
 import fetch from 'cross-fetch';
 import { OpenApiDocument } from './openapi';
-import { PathOption, VersionOption } from './utils';
+import { DirectoryOption, PathOption, VersionOption } from './utils';
 
 /**
  * OpenApiSnapshotManagerOptions options for the snapshot.
  */
-export type OpenApiSnapshotManagerOptions = Partial<VersionOption> &
-  Partial<PathOption> & {
-    directory?: string;
-  };
+interface OpenApiSnapshotManagerOptions
+  extends Partial<PathOption>,
+    Partial<DirectoryOption>,
+    Partial<VersionOption> {}
 
-export type ServiceOpenApiOptions = {
-  path: string;
+interface ServiceOpenApiOptions extends PathOption {
   filename?: string;
-};
+}
 
 /**
  * OpenApiSnapshotManager handles creating and updating a service or package snapshot.
@@ -92,14 +91,6 @@ export class OpenApiSnapshotManager {
       return JSON.parse(data) as OpenApiDocument;
     } catch (error) {
       throw new Error(`Unable to load snapshot: ${error}`);
-    }
-  };
-
-  public delete = async (): Promise<void> => {
-    try {
-      await fs.unlink(this.path);
-    } catch (error) {
-      throw new Error(`Unable to delete snapshot: ${error}`);
     }
   };
 }

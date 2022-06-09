@@ -2,41 +2,35 @@
 import path from 'path';
 import { promises as fs } from 'fs';
 
-export type FromPathOption = {
-  'from-path': string;
-};
-
-export type PackageOption = {
+export interface PackageOption {
   package: string;
-};
+}
 
-export type ServiceOption = {
+export interface ServiceOption {
   service: string;
-};
+}
 
-export type VersionOption = {
+export interface VersionOption {
   version: string;
-};
+}
 
-export type SnapshotScopeOption = {
-  scope: 'service' | 'package' | 'path';
-};
-
-export type PathOption = {
+export interface PathOption {
   path: string;
-};
+}
 
-export type DirectoryOption = {
+export interface DirectoryOption {
   directory: string;
-};
+}
 
-export type AutoNameInlinedRequestOption = {
+export interface AutoNameInlinedRequestOption {
   autoNameInlinedRequest: boolean;
-};
+}
 
-const createPath = (
-  options: PackageOption & Partial<ServiceOption>
-): string => {
+export interface PackageServiceOptions
+  extends PackageOption,
+    Partial<ServiceOption> {}
+
+const createPath = (options: PackageServiceOptions): string => {
   const packagePath = path.resolve('./packages', options.package, 'src');
 
   if (options.service != null) {
@@ -46,7 +40,7 @@ const createPath = (
 };
 
 export const closestConfigDirectoryPath = async (
-  options: PackageOption & Partial<ServiceOption>
+  options: PackageServiceOptions
 ): Promise<string> => {
   const directory = createPath(options);
   try {

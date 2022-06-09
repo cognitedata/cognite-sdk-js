@@ -13,8 +13,10 @@ import { ConfigManager, PackageConfig, ServiceConfig } from './configuration';
 
 export type ConfigFileUpdateOptions = PackageOption & Partial<ServiceOption>;
 
+type UpdateSnapshotOptions = PackageOption;
+
 export class SnapshotCommand {
-  public update = async (options: PackageOption) => {
+  public update = async (options: UpdateSnapshotOptions) => {
     const directory = await closestConfigDirectoryPath(options);
     const config = new ConfigManager({
       directory: directory,
@@ -35,10 +37,13 @@ export class SnapshotCommand {
   };
 }
 
+interface CreateConfigOptions
+  extends PackageOption,
+    Partial<ServiceOption>,
+    Partial<VersionOption> {}
+
 export class ConfigureCommand {
-  public create = async (
-    options: PackageOption & Partial<ServiceOption> & Partial<VersionOption>
-  ) => {
+  public create = async (options: CreateConfigOptions) => {
     const directory = await closestConfigDirectoryPath(options);
     const mngr = new ConfigManager({
       directory: directory,
@@ -49,15 +54,6 @@ export class ConfigureCommand {
 
     const config = this.defaultConfig(options);
     await mngr.write(config);
-  };
-
-  public validate = async (options: PackageOption & Partial<ServiceOption>) => {
-    const directory = await closestConfigDirectoryPath(options);
-    const mngr = new ConfigManager({
-      directory: directory,
-    });
-
-    await mngr.read();
   };
 
   private defaultConfig = (
@@ -88,16 +84,11 @@ export class ConfigureCommand {
   };
 }
 
+type GenerateOptions = PackageOption;
+
 export class CodeGenCommand {
-  public generate = async (options: PackageOption & Partial<ServiceOption>) => {
-    if (options.service != null) {
-      await this.generateServiceTypes({
-        ...options,
-        service: options.service,
-      });
-    } else {
-      await this.generateForAllServices(options);
-    }
+  public generate = async (options: GenerateOptions) => {
+    await this.generateForAllServices(options);
   };
 
   private generateServiceTypes = async (

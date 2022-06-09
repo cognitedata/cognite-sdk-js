@@ -1,24 +1,20 @@
 // Copyright 2022 Cognite AS
 import { promises as fs } from 'fs';
-import { DirectoryOption } from './utils';
+import { DirectoryOption, PathOption, VersionOption } from './utils';
 
 /**
  * SnapshotLocal allows you to work on a snapshot locally. Useful when you want to
  * see how changes to open api affects the generated code without adjusting the official open api document.
  */
-export interface SnapshotLocal {
-  // path define a local open api contact to use.
-  path: string;
+export interface SnapshotLocal extends PathOption {
   version: never;
 }
 
 /**
- * SnapshotVersion is used in production when generating code. Specify a open api version to use
- * when downloading and creating a open api snapshot.
+ * SnapshotVersion is used in production when generating code. Specify a open api version (v1, playground, etc.)
+ * to use when downloading and creating a open api snapshot.
  */
-export interface SnapshotVersion {
-  // version open api version such as "v1", "playground", etc.
-  version: string;
+export interface SnapshotVersion extends VersionOption {
   path: never;
 }
 
@@ -41,7 +37,7 @@ const isServiceConfig = (config: any): config is ServiceConfig => {
   return 'service' in config;
 };
 
-export type ConfigManagerOptions = DirectoryOption;
+type ConfigManagerOptions = DirectoryOption;
 
 export class ConfigManager {
   public static readonly filename = 'codegen.json';
@@ -153,13 +149,5 @@ export class ConfigManager {
 
     const config = await this.validate(json);
     return config;
-  };
-
-  public delete = async (): Promise<void> => {
-    try {
-      await fs.unlink(this.path);
-    } catch (error) {
-      throw new Error(`Unable to delete config: ${error}`);
-    }
   };
 }

@@ -35,15 +35,6 @@ export function filterPaths(paths: OpenApiPathsObject): FilteredPathsObject {
     }, {} as FilteredPathsObject);
 }
 
-export function operationsInPaths(
-  paths: OpenApiPathsObject
-): OpenApiOperationObject[] {
-  const filtered = filterPaths(paths);
-  return Object.values(filtered)
-    .map(operationsInPath)
-    .reduce((acc, v) => acc.concat(v), []);
-}
-
 export function operationsInPath(
   pathItem: OpenApiPathItem
 ): OpenApiOperationObject[] {

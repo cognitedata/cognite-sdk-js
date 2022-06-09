@@ -36,13 +36,13 @@ export const pathFilterFromConfig = (config: ServiceConfig): StringFilter => {
     : createServiceNameFilter(config.filter.serviceName);
 };
 
-export type CodeGenOptions = AutoNameInlinedRequestOption & {
+export interface CodeGenOptions extends AutoNameInlinedRequestOption {
   filter: {
     path: StringFilter;
     schema?: StringFilter;
   };
   outputDir: string;
-};
+}
 
 export class CodeGen {
   static outputFileName = 'types.gen.ts';
