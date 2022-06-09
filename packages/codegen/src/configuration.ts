@@ -13,18 +13,17 @@ export interface SnapshotLocal {
 }
 
 /**
- * SnapshotOnline is used in production when generating code. It uses the public cognite url for
- * fetching the latest snapshot.
+ * SnapshotVersion is used in production when generating code. Specify a open api version to use
+ * when downloading and creating a open api snapshot.
  */
-export interface SnapshotOnline {
-  // version specify a open api version such as "v1", "playground", etc.
-  // used whenever a new snapshot should be downloaded.
+export interface SnapshotVersion {
+  // version open api version such as "v1", "playground", etc.
   version: string;
   path: never;
 }
 
 export interface PackageConfig {
-  snapshot: SnapshotOnline | SnapshotLocal;
+  snapshot: SnapshotVersion | SnapshotLocal;
 }
 
 export interface ServiceConfig {
