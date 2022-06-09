@@ -31,7 +31,7 @@ export const createServiceNameFilter = (service: string): StringFilter => {
 };
 
 export const pathFilterFromConfig = (config: ServiceConfig): StringFilter => {
-  return config.filter.serviceName === undefined
+  return config.filter.serviceName == null
     ? passThroughFilter
     : createServiceNameFilter(config.filter.serviceName);
 };
@@ -98,7 +98,7 @@ export class CodeGen {
       for (const operation of operationsInPath(item)) {
         const requestBody = operation.requestBody;
         if (
-          requestBody === undefined ||
+          requestBody == null ||
           isReferenceObject(requestBody)
         ) {
           continue;
@@ -122,7 +122,7 @@ export class CodeGen {
     for (const [path, operation] of this.operationsWithInlinedRequest(paths)) {
       const requestBody = operation.requestBody;
       if (
-        requestBody === undefined ||
+        requestBody == null ||
         isReferenceObject(requestBody)
       ) {
         continue;
@@ -135,7 +135,7 @@ export class CodeGen {
 
       // schema name
       if (
-        operation.operationId === undefined ||
+        operation.operationId == null ||
         operation.operationId.trim() === ''
       ) {
         throw new Error(
@@ -215,7 +215,7 @@ export class CodeGen {
       }
 
       const schema = response.content?.['application/json']?.schema;
-      if (schema === undefined) {
+      if (schema == null) {
         continue;
       }
 
@@ -236,7 +236,7 @@ export class CodeGen {
         continue;
       }
 
-      if (parameter.in != 'query' || parameter.schema === undefined) {
+      if (parameter.in != 'query' || parameter.schema == null) {
         continue;
       }
 
@@ -273,7 +273,7 @@ export class CodeGen {
     schemas: OpenApiSchemas,
     schemaFilter?: StringFilter
   ): Promise<string[]> => {
-    if (schemas === undefined) {
+    if (schemas == null) {
       throw new Error('No schemas to generate types for defined');
     }
 
@@ -285,7 +285,7 @@ export class CodeGen {
       JSON.stringify(strippedOpenApiSpec)
     ) as OpenApiDocument;
 
-    if (schemaFilter !== undefined) {
+    if (schemaFilter != null) {
       spec.components!.schemas = Object.keys(spec.components!.schemas!)
         .filter(schemaFilter)
         .reduce(

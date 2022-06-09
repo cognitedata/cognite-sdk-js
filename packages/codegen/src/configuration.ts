@@ -104,10 +104,10 @@ export class ConfigManager {
   public validateService = async (
     config: ServiceConfig
   ): Promise<ServiceConfig> => {
-    if (config.service === undefined) {
+    if (config.service == null) {
       throw new Error('A service config must have "service" defined');
     }
-    if (config.snapshot !== undefined) {
+    if (config.snapshot != null) {
       await this.validateSnapshot(config.snapshot, ['path'], 'service');
     }
 

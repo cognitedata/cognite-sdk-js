@@ -39,7 +39,7 @@ const createPath = (
 ): string => {
   const packagePath = path.resolve('./packages', options.package, 'src');
 
-  if (options.service !== undefined) {
+  if (options.service != null) {
     return path.resolve(packagePath, 'api', options.service);
   }
   return packagePath;
