@@ -22,7 +22,6 @@
     "docs:bundle": "yarn docs && mkdir -p ../../docs/core && cp -r docs/* ../../docs/core/"
   },
   "dependencies": {
-    "@cognite/auth-wrapper": "^1.0.0",
     "cross-fetch": "^3.0.4",
     "is-buffer": "^2.0.5",
     "lodash": "^4.17.11",

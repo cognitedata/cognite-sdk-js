@@ -13,10 +13,8 @@ function setupClient(baseUrl: string = BASE_URL) {
     appId: 'JS SDK integration tests',
     project: 'test-project',
     baseUrl,
-    credentials: {
-      method: 'api',
-      apiKey,
-    },
+    apiKeyMode: true,
+    getToken: () => Promise.resolve(apiKey),
   });
 }
 
@@ -73,7 +71,7 @@ describe('CogniteClient', () => {
           // @ts-ignore
           new BaseCogniteClient({ appId: 'unit-test', project: 'unit-test' });
         }).toThrowErrorMatchingInlineSnapshot(
-          `"options.credentials is required or options.getToken is request and must be of type () => Promise<string>"`
+          `"options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>"`
         );
       });
       test('call credentials on 401', async () => {
@@ -86,10 +84,8 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          credentials: {
-            method: 'api',
-            apiKey: '401-test-token',
-          },
+          apiKeyMode: true,
+          getToken: () => Promise.resolve('401-test-token'),
         });
 
         const result = await client.get('/test');
@@ -109,6 +105,7 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
+          apiKeyMode: true,
           getToken,
         });
 
@@ -129,10 +126,8 @@ describe('CogniteClient', () => {
         project,
         appId: 'unit-test',
         baseUrl: mockBaseUrl,
-        credentials: {
-          method: 'api',
-          apiKey: 'test-api-key',
-        },
+        apiKeyMode: true,
+        getToken: () => Promise.resolve('test-api-key'),
       });
 
       const result = await client.get('/test');
