@@ -104,24 +104,24 @@ export class OpenApiSnapshotManager {
 
 type UpdateSnapshotOptions = PackageOption;
 
-export class SnapshotCommand {
-  public update = async (options: UpdateSnapshotOptions) => {
-    const directory = await closestConfigDirectoryPath(options);
-    const config = new ConfigManager({
-      directory: directory,
-    });
-    const configFile = (await config.read()) as PackageConfig;
+export async function updateSnapshot(
+  options: UpdateSnapshotOptions
+): Promise<void> {
+  const directory = await closestConfigDirectoryPath(options);
+  const config = new ConfigManager({
+    directory: directory,
+  });
+  const configFile = (await config.read()) as PackageConfig;
 
-    const snapshot = new OpenApiSnapshotManager({
-      directory: directory,
-      version: configFile.snapshot.version,
-    });
+  const snapshot = new OpenApiSnapshotManager({
+    directory: directory,
+    version: configFile.snapshot.version,
+  });
 
-    if (configFile.snapshot.version == null) {
-      throw new Error('Can`t download snapshot when "version" was not defined');
-    }
+  if (configFile.snapshot.version == null) {
+    throw new Error('Can`t download snapshot when "version" was not defined');
+  }
 
-    const document = await snapshot.downloadFromUrl();
-    await snapshot.write(document);
-  };
+  const document = await snapshot.downloadFromUrl();
+  await snapshot.write(document);
 }

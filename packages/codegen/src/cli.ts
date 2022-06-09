@@ -1,12 +1,8 @@
 // Copyright 2022 Cognite AS
 import yargs, { CommandModule, Options } from 'yargs';
-import { ConfigureCommand } from './configuration';
-import { CodeGenCommand } from './generate';
-import { SnapshotCommand } from './snapshot';
-
-const snapshot = new SnapshotCommand();
-const codegen = new CodeGenCommand();
-const configure = new ConfigureCommand();
+import { createConfiguration } from './configuration';
+import { generateTypes } from './generate';
+import { updateSnapshot } from './snapshot';
 
 const packageOptions: Options = {
   required: true,
@@ -20,7 +16,7 @@ const fetchLatestCommand: CommandModule = {
     'Fetch latest published Cognite OpenAPI document. Note that you will also need to run the command to generate types afterwards',
   builder: (yargs) => yargs.option('package', packageOptions),
   handler: async (argv) => {
-    await snapshot.update({
+    await updateSnapshot({
       package: argv.package as string,
     });
   },
@@ -37,7 +33,7 @@ const generateTypesCommand: CommandModule = {
       throw new Error('NodeJS version must be v16 or higher');
     }
 
-    await codegen.generate({
+    await generateTypes({
       package: argv.package as string,
     });
   },
@@ -58,7 +54,7 @@ const configureCommand: CommandModule = {
         type: 'string',
       }),
   handler: async (argv) => {
-    await configure.create({
+    await createConfiguration({
       package: argv.package as string,
       service: argv.service as string | undefined,
       version: argv.version as string | undefined,
