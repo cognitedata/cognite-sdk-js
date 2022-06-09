@@ -120,7 +120,7 @@ export async function updateSnapshot(
   });
 
   if (configFile.snapshot.version == null) {
-    throw new Error('Can`t download snapshot when "version" was not defined');
+    throw new Error('Can\'t download snapshot when "version" was not defined');
   }
 
   const document = await snapshot.downloadFromUrl();
