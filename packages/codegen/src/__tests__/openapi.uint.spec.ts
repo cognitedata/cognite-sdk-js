@@ -1,7 +1,7 @@
 import { OpenApiDocument, ReferenceWalker } from '../openapi';
 import { OpenApiSnapshotManager } from '../snapshot';
 
-describe('open api', () => {
+describe('openapi', () => {
   const testFolder = __dirname;
   let basicbasicSnapshot: OpenApiDocument;
 

@@ -11,15 +11,15 @@ import {
 
 /**
  * SnapshotLocal allows you to work on a snapshot locally. Useful when you want to
- * see how changes to open api affects the generated code without adjusting the official open api document.
+ * see how changes to OpenAPI document affects the generated code without adjusting the official OpenAPI document.
  */
 export interface SnapshotLocal extends PathOption {
   version: never;
 }
 
 /**
- * SnapshotVersion is used in production when generating code. Specify a open api version (v1, playground, etc.)
- * to use when downloading and creating a open api snapshot.
+ * SnapshotVersion is used in production when generating code. Specify a API version (v1, playground, etc.)
+ * to use when downloading and creating a OpenAPI document snapshot.
  */
 export interface SnapshotVersion extends VersionOption {
   path: never;

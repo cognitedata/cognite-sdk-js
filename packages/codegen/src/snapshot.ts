@@ -69,7 +69,7 @@ export class OpenApiSnapshotManager {
       const json = await response.json();
       return json as OpenApiDocument;
     } catch (error) {
-      throw new Error(`Unable to download open api contract: ${error}`);
+      throw new Error(`Unable to download OpenAPI document: ${error}`);
     }
   };
 
