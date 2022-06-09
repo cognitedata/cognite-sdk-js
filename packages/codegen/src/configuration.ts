@@ -1,6 +1,13 @@
 // Copyright 2022 Cognite AS
 import { promises as fs } from 'fs';
-import { DirectoryOption, PathOption, VersionOption } from './utils';
+import {
+  closestConfigDirectoryPath,
+  DirectoryOption,
+  PackageOption,
+  PathOption,
+  ServiceOption,
+  VersionOption,
+} from './utils';
 
 /**
  * SnapshotLocal allows you to work on a snapshot locally. Useful when you want to
@@ -149,5 +156,52 @@ export class ConfigManager {
 
     const config = await this.validate(json);
     return config;
+  };
+}
+
+interface CreateConfigOptions
+  extends PackageOption,
+    Partial<ServiceOption>,
+    Partial<VersionOption> {}
+
+export class ConfigureCommand {
+  public create = async (options: CreateConfigOptions) => {
+    const directory = await closestConfigDirectoryPath(options);
+    const mngr = new ConfigManager({
+      directory: directory,
+    });
+    if (await mngr.exists()) {
+      throw new Error(`Config already exists - did nothing`);
+    }
+
+    const config = this.defaultConfig(options);
+    await mngr.write(config);
+  };
+
+  private defaultConfig = (
+    options: PackageOption & Partial<ServiceOption> & Partial<VersionOption>
+  ): ServiceConfig | PackageConfig => {
+    if (options.service != null) {
+      return {
+        service: options.service,
+        filter: {
+          serviceName: options.service,
+        },
+        inlinedSchemas: {
+          autoNameRequest: true,
+        },
+      } as ServiceConfig;
+    } else {
+      if (options.version == null) {
+        throw new Error(
+          '"Version" must be defined when creating a package config'
+        );
+      }
+      return {
+        snapshot: {
+          version: options.version,
+        },
+      } as PackageConfig;
+    }
   };
 }
