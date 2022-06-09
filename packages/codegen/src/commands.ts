@@ -197,7 +197,9 @@ export class CodeGenCommand {
     }
 
     const exportFilePath = path.resolve(directory, 'exports.gen.ts');
-    const fileContent = exportStatements.join('\n');
+    const fileContent = `// Copyright 2022 Cognite AS\n${exportStatements.join(
+      '\n'
+    )}`;
 
     try {
       await fs.writeFile(exportFilePath, fileContent);

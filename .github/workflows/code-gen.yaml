@@ -29,9 +29,6 @@ jobs:
       - name: Run code generation for ${{ matrix.package }} package
         run: yarn codegen --package=${{ matrix.package }} generate
       
-      - name: Fix lint issues
-        run: yarn lint:fix --since=master
-      
       - name: Identify changed files
         id: changed_files
         run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"

@@ -1,4 +1,5 @@
 // Copyright 2022 Cognite AS
+
 export {
   CogniteExternalId,
   CogniteInternalId,
@@ -56,5 +57,5 @@ export {
   DocumentsPreviewTemporaryLinkResponse,
   EpochTimestamp,
   Label,
-  LabelList,
+  LabelList
 } from './api/documents/types.gen';
