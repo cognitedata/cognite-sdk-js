@@ -2,7 +2,14 @@
 import { promises as fs } from 'fs';
 import fetch from 'cross-fetch';
 import { OpenApiDocument } from './openapi';
-import { DirectoryOption, PathOption, VersionOption } from './utils';
+import {
+  closestConfigDirectoryPath,
+  DirectoryOption,
+  PackageOption,
+  PathOption,
+  VersionOption,
+} from './utils';
+import { ConfigManager, PackageConfig } from './configuration';
 
 /**
  * OpenApiSnapshotManagerOptions options for the snapshot.
@@ -92,5 +99,29 @@ export class OpenApiSnapshotManager {
     } catch (error) {
       throw new Error(`Unable to load snapshot: ${error}`);
     }
+  };
+}
+
+type UpdateSnapshotOptions = PackageOption;
+
+export class SnapshotCommand {
+  public update = async (options: UpdateSnapshotOptions) => {
+    const directory = await closestConfigDirectoryPath(options);
+    const config = new ConfigManager({
+      directory: directory,
+    });
+    const configFile = (await config.read()) as PackageConfig;
+
+    const snapshot = new OpenApiSnapshotManager({
+      directory: directory,
+      version: configFile.snapshot.version,
+    });
+
+    if (configFile.snapshot.version == null) {
+      throw new Error('Can`t download snapshot when "version" was not defined');
+    }
+
+    const document = await snapshot.downloadFromUrl();
+    await snapshot.write(document);
   };
 }

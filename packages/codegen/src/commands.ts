@@ -11,32 +11,6 @@ import {
 import { CodeGen, passThroughFilter, pathFilterFromConfig } from './codegen';
 import { ConfigManager, PackageConfig, ServiceConfig } from './configuration';
 
-export type ConfigFileUpdateOptions = PackageOption & Partial<ServiceOption>;
-
-type UpdateSnapshotOptions = PackageOption;
-
-export class SnapshotCommand {
-  public update = async (options: UpdateSnapshotOptions) => {
-    const directory = await closestConfigDirectoryPath(options);
-    const config = new ConfigManager({
-      directory: directory,
-    });
-    const configFile = (await config.read()) as PackageConfig;
-
-    const snapshot = new OpenApiSnapshotManager({
-      directory: directory,
-      version: configFile.snapshot.version,
-    });
-
-    if (configFile.snapshot.version == null) {
-      throw new Error('Can`t download snapshot when "version" was not defined');
-    }
-
-    const document = await snapshot.downloadFromUrl();
-    await snapshot.write(document);
-  };
-}
-
 interface CreateConfigOptions
   extends PackageOption,
     Partial<ServiceOption>,
