@@ -1,28 +1,63 @@
-# Codegen
+# Code generation
 
-Generate typescript types/interfaces from the Cognite open api contract. Only json files supported.
+> Generate TypeScript types from the Cognite OpenAPI document.
 
-The current version aims to generate the simplest representations. Endpoints and tests may require some unique or opinionated logic and are therefore not currently covered.
+The current version aims to focus only on types, and does not generate
+any SDK code for endpoints or tests.
 
-## Flow
+Types are written to `types.gen.ts` for each service (e.g. `documents`)
+and automatically exported. Only services configured via a `codegen.json`
+file is processed, and will generate types for its given configuration.
 
-To run code generation for a package the script behaves as follows:
+## OpenAPI document snapshot
 
- 1. Identify any services with a config file.
- 2. Evaluate the relevant open api snapshot for identified services.
- 3. Generate relevant types/interfaces.
- 4. Write types to a `types.gen.ts` file.
- 5. Create an export statement for each service, that avoids exporting existing types.
- 6. Write export statements to a `types.gen.ts` file at the package level.
+In order to have build reproducability we keep a copy of the OpenAPI document
+in this repository (named `.cognite-api-snapshot`). To generate new types
+it will need to be updated to the latest available. E.g.:
 
-## Concepts
+```bash
+yarn codegen fetch-latest --package=stable
+```
 
-### Snapshot
+In the future this can be automated so changes to the OpenAPI document is
+frequently made automatically available via SDK updates.
 
-A open api snapshot (named `.cognite-api-snapshot`) holds a copy of the open api contract. Given Cognite api contracts do not have versioning, we need to store a copy to understand what version was used at a specific point in time - hence snapshot. As the open api contracts frequently change, it's important to "lock" our generated definition to a open api version to have reproducable builds. This also helps debugging faulty code generating behavior, as the source version can be shared.
+## Generate updated types
 
-A service may specify their own snapshot if the package snapshot causes troubles.
+After updating the OpenAPI document snapshot types must be updated. E.g:
 
-### Config file `codegen.json`
+```bash
+yarn codegen generate-types --package=stable
+```
 
-The `codegen.json` file is the configuration file. Each service has their own which is read before generating types for the respective services. Any feature toggles can be added here to give users some extra costumization and flexibility if they have issues generating types.
+## Overriding the OpenAPI document
+
+It is possible to override the OpenAPI document used to generate
+types by specifying a path to the document instead of the API version.
+
+The `codegen.json` file must be changed to contain:
+
+```json
+{
+  "snapshot": {
+    "path": "path/to/openapi-doc.json"
+  }
+}
+```
+
+This can be used to test changes to the OpenAPI document while working
+on evolving it, or to lock a service to an older OpenAPI document should
+it block other updates.
+
+## Configuring type generation for a service
+
+```bash
+yarn codegen configure --package stable --service my-service
+```
+
+This will generate a `codegen.json` file for the given service
+so types will be created on next run.
+
+The types extracted are based on the paths in the OpenAPI document
+that matches the name of the service. It is currently not possible
+to select individually paths other than this.
