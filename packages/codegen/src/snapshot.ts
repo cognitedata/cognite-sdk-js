@@ -25,10 +25,7 @@ export class OpenApiSnapshotManager {
   private path: string;
 
   constructor(readonly options: OpenApiSnapshotManagerOptions) {
-    if (
-      options.directory == null &&
-      options.path == null
-    ) {
+    if (options.directory == null && options.path == null) {
       throw new Error(
         'SnapshotManager must have either a "path" or "directory" specified'
       );

@@ -83,7 +83,7 @@ export class ReferenceWalker {
   public schema = (reference: string): any => {
     const segments = this.splitReference(reference);
     if (segments[0] !== 'components') {
-      throw new Error("expected first segment of ref tag to be 'components'");
+      throw new Error("Expected first segment of ref tag to be 'components'");
     }
 
     const componentCategory = segments[1] as keyof OpenAPIV3.ComponentsObject;

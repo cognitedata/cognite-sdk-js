@@ -97,10 +97,7 @@ export class CodeGen {
     for (const [path, item] of Object.entries(filterPaths(paths))) {
       for (const operation of operationsInPath(item)) {
         const requestBody = operation.requestBody;
-        if (
-          requestBody == null ||
-          isReferenceObject(requestBody)
-        ) {
+        if (requestBody == null || isReferenceObject(requestBody)) {
           continue;
         }
 
@@ -121,10 +118,7 @@ export class CodeGen {
     const inlined: [string, OpenApiSchema][] = [];
     for (const [path, operation] of this.operationsWithInlinedRequest(paths)) {
       const requestBody = operation.requestBody;
-      if (
-        requestBody == null ||
-        isReferenceObject(requestBody)
-      ) {
+      if (requestBody == null || isReferenceObject(requestBody)) {
         continue;
       }
 
@@ -334,7 +328,7 @@ export class CodeGen {
     )) {
       if (typeName in openApiSpec.components!.schemas!) {
         throw new Error(
-          `unable to transform response to schema. Schema "${typeName}" already exists`
+          `Unable to transform response to schema. Schema "${typeName}" already exists`
         );
       }
 
@@ -346,7 +340,7 @@ export class CodeGen {
     )) {
       if (typeName in openApiSpec.components!.schemas!) {
         throw new Error(
-          `unable to transform parameter to schema. Schema "${typeName}" already exists`
+          `Unable to transform parameter to schema. Schema "${typeName}" already exists`
         );
       }
 
@@ -358,7 +352,7 @@ export class CodeGen {
     )) {
       if (typeName in openApiSpec.components!.schemas!) {
         throw new Error(
-          `unable to use automatic name for inlined request type. "${typeName}" already exists in the component schemas`
+          `Unable to use automatic name for inlined request type. "${typeName}" already exists in the component schemas`
         );
       }
 

@@ -68,7 +68,7 @@ export class ConfigManager {
   ): Promise<void> => {
     const snapshotKeys = Object.keys(snapshot);
     if (snapshotKeys.length != 1) {
-      throw new Error('snapshot configuration must have exactly one setting');
+      throw new Error('Snapshot configuration must have exactly one setting');
     }
 
     if (!legalKeys.includes(snapshotKeys[0])) {
@@ -84,7 +84,7 @@ export class ConfigManager {
       try {
         await fs.stat(snapshot.path);
       } catch (error) {
-        throw new Error(`invalid snapshot path: ${error}`);
+        throw new Error(`Invalid snapshot path: ${error}`);
       }
     }
   };
@@ -126,7 +126,7 @@ export class ConfigManager {
         return await this.validatePackage(config);
       }
     } catch (error) {
-      throw new Error(`invalid config: ${error}`);
+      throw new Error(`Invalid config: ${error}`);
     }
   };
 
@@ -139,7 +139,7 @@ export class ConfigManager {
     try {
       await fs.writeFile(this.path, json);
     } catch (error) {
-      throw new Error(`unable to save config: ${error}`);
+      throw new Error(`Unable to save config: ${error}`);
     }
     return json;
   };
@@ -149,7 +149,7 @@ export class ConfigManager {
     try {
       json = await fs.readFile(this.path, 'utf-8');
     } catch (error) {
-      throw new Error(`unable to load config: ${error}`);
+      throw new Error(`Unable to load config: ${error}`);
     }
 
     const config = await this.validate(json);
@@ -160,7 +160,7 @@ export class ConfigManager {
     try {
       await fs.unlink(this.path);
     } catch (error) {
-      throw new Error(`unable to delete config: ${error}`);
+      throw new Error(`Unable to delete config: ${error}`);
     }
   };
 }

@@ -42,7 +42,7 @@ export class SnapshotCommand {
     });
     const versionfileExists = await vfm.exists();
     if (!versionfileExists) {
-      throw new Error(`snapshot does not exist`);
+      throw new Error('Snapshot does not exist');
     }
 
     await vfm.delete();
@@ -99,7 +99,7 @@ export class ConfigureCommand {
     } else {
       if (options.version == null) {
         throw new Error(
-          '"version" must be defined when creating a package config'
+          '"Version" must be defined when creating a package config'
         );
       }
       return {
@@ -155,7 +155,7 @@ export class CodeGenCommand {
       return generatedTypeNames;
     } catch (error) {
       throw new Error(
-        `unable to generate types for service "${options.service}": ${error}`
+        `Unable to generate types for service "${options.service}": ${error}`
       );
     }
   };
@@ -205,7 +205,7 @@ export class CodeGenCommand {
       await fs.writeFile(exportFilePath, fileContent);
     } catch (error) {
       throw new Error(
-        'unable to update import file for generated types: ' + error
+        `Unable to update import file for generated types: ${error}`
       );
     }
   };
