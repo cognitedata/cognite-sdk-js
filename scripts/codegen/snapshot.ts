@@ -8,8 +8,6 @@ const parser = yargsBase().options({
     service: { type: 'string', demand: false, describe: "REST service to generate types for" },
 }).command("update", "update a snapshot", (y) => y, async (argv) => {
     await cmd.update({...argv});
-}).command("delete", "delete a snapshot", (y) => y, async (argv) => {
-    await cmd.delete({...argv});
 });
 
 

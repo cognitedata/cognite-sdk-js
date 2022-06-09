@@ -9,10 +9,6 @@ const parser = yargsBase().options({
     version: { type: 'string', demand: false, describe: "Cognite api version (v1, playground, etc.)" },
 }).command("create", "create a configuration", (y) => y, async (argv) => {
     await cmd.create(argv);
-}).command("validate", "validate configuration", (y) => y, async (argv) => {
-    await cmd.validate(argv);
-}).command("delete", "delete a configuration", (y) => y, async (argv) => {
-    await cmd.delete({...argv});
 });
 
 
