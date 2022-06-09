@@ -1,28 +1,28 @@
 import { OpenApiSnapshotManager } from '../snapshot';
 
 describe('version file manager', () => {
-  test('load json spec from url', async () => {
-    const vfm = new OpenApiSnapshotManager({
+  test('load json doc from url', async () => {
+    const snapshotMngr = new OpenApiSnapshotManager({
       directory: '.',
     });
 
-    const spec = await vfm.downloadFromURL(
+    const doc = await snapshotMngr.downloadFromUrl(
       'https://storage.googleapis.com/cognitedata-api-docs/dist/playground.json'
     );
-    expect(spec).toBeDefined();
-    expect(spec.info.title).toEqual('Cognite playground APIs');
+    expect(doc).toBeDefined();
+    expect(doc.info.title).toEqual('Cognite playground APIs');
   });
-  test('load json spec from default url', async () => {
-    const vfm = new OpenApiSnapshotManager({
+  test('load json doc from default url', async () => {
+    const snapshotMngr = new OpenApiSnapshotManager({
       version: 'playground',
       directory: '.',
     });
 
-    const wants = await vfm.downloadFromURL(
+    const wants = await snapshotMngr.downloadFromUrl(
       'https://storage.googleapis.com/cognitedata-api-docs/dist/playground.json'
     );
 
-    const got = await vfm.downloadFromURL();
+    const got = await snapshotMngr.downloadFromUrl();
 
     expect(got).toEqual(wants);
   });

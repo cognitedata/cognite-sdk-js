@@ -4,7 +4,7 @@ import { DirectoryOption } from './utils';
 
 /**
  * SnapshotLocal allows you to work on a snapshot locally. Useful when you want to
- * see how changes to open api affects the generated code without adjusting the official open api spec.
+ * see how changes to open api affects the generated code without adjusting the official open api document.
  */
 export interface SnapshotLocal {
   // path define a local open api contact to use.

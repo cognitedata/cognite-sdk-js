@@ -1,51 +1,51 @@
 import path from 'path';
 import { OpenApiSnapshotManager } from '../snapshot';
 
-describe('version file manager', () => {
+describe('snapshot manager', () => {
   const testFolder = __dirname;
   const testdata = path.resolve(testFolder, 'testdata');
 
   test('constructor', async () => {
-    const v = new OpenApiSnapshotManager({
+    const snapshotMngr = new OpenApiSnapshotManager({
       directory: testFolder,
     });
-    expect(v).toBeDefined();
+    expect(snapshotMngr).toBeDefined();
   });
 
-  test('load from local json spec', async () => {
-    const vfm = new OpenApiSnapshotManager({
+  test('load from local json snapshot', async () => {
+    const snapshotMngr = new OpenApiSnapshotManager({
       directory: testFolder,
     });
 
-    const spec = await vfm.downloadFromPath({ path: testFolder });
-    expect(spec).toBeDefined();
-    expect(spec.info.title).toEqual('Cognite playground APIs');
+    const snapshot = await snapshotMngr.downloadFromPath({ path: testFolder });
+    expect(snapshot).toBeDefined();
+    expect(snapshot.info.title).toEqual('Cognite playground APIs');
   });
 
-  test('load from local json spec without filter', async () => {
-    const vfm = new OpenApiSnapshotManager({
+  test('load from local json snapshot without filter', async () => {
+    const snapshotMngr = new OpenApiSnapshotManager({
       directory: testFolder,
     });
 
-    const spec = await vfm.downloadFromPath({
+    const snapshot = await snapshotMngr.downloadFromPath({
       path: testdata,
       filename: '8-paths.json',
     });
-    expect(spec).toBeDefined();
-    expect(Object.entries(spec.paths)).toHaveLength(8);
+    expect(snapshot).toBeDefined();
+    expect(Object.entries(snapshot.paths)).toHaveLength(8);
   });
 
-  test('load existing versionfile', async () => {
-    const vfm = new OpenApiSnapshotManager({
+  test('load existing snapshot', async () => {
+    const snapshotMngr = new OpenApiSnapshotManager({
       version: 'v1',
       directory: testFolder,
     });
 
-    const spec = await vfm.downloadFromPath({
+    const snapshot = await snapshotMngr.downloadFromPath({
       path: testdata,
       filename: '8-paths.json',
     });
-    expect(spec).toBeDefined();
-    expect(Object.entries(spec.paths)).toHaveLength(8);
+    expect(snapshot).toBeDefined();
+    expect(Object.entries(snapshot.paths)).toHaveLength(8);
   });
 });

@@ -3,28 +3,28 @@ import { OpenApiSnapshotManager } from '../snapshot';
 
 describe('open api', () => {
   const testFolder = __dirname;
-  let basicVersionFile: OpenApiDocument;
+  let basicbasicSnapshot: OpenApiDocument;
 
   beforeAll(async () => {
-    const vfm = new OpenApiSnapshotManager({
+    const snapshotMngr = new OpenApiSnapshotManager({
       directory: '.',
     });
 
-    basicVersionFile = await vfm.downloadFromPath({
+    basicbasicSnapshot = await snapshotMngr.downloadFromPath({
       path: testFolder + '/testdata',
       filename: '8-paths.json',
     });
   });
 
   test('constructor', async () => {
-    const walker = new ReferenceWalker(basicVersionFile);
+    const walker = new ReferenceWalker(basicbasicSnapshot);
     expect(walker).toBeDefined();
     expect(walker.document).toBeDefined();
   });
 
   describe('$ref walker', () => {
     test('serviceB', async () => {
-      const walker = new ReferenceWalker(basicVersionFile);
+      const walker = new ReferenceWalker(basicbasicSnapshot);
 
       const wants = [
         '#/components/responses/FunctionList',

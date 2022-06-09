@@ -45,7 +45,7 @@ const createPath = (
   return packagePath;
 };
 
-export const versionFileDirectoryPath = async (
+export const closestConfigDirectoryPath = async (
   options: PackageOption & Partial<ServiceOption>
 ): Promise<string> => {
   const directory = createPath(options);
@@ -70,7 +70,7 @@ const sortJsonKeys = (json: any): any => {
 };
 
 export const sortOpenApiJson = (json: string): string => {
-  const spec = JSON.parse(json);
-  const sorted = sortJsonKeys(spec);
+  const doc = JSON.parse(json);
+  const sorted = sortJsonKeys(doc);
   return JSON.stringify(sorted);
 };

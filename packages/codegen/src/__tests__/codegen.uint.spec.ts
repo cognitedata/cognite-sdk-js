@@ -9,16 +9,16 @@ import { promises as fs } from 'fs';
 
 describe('code generation', () => {
   const testFolder = __dirname;
-  let basicVersionFile: OpenApiDocument;
+  let basicSnapshot: OpenApiDocument;
   let basicTypesServiceBGenFile: string;
   let cyclicReferencesGenFile: string;
 
   beforeAll(async () => {
-    const vfm = new OpenApiSnapshotManager({
+    const snapshotMngr = new OpenApiSnapshotManager({
       directory: '.',
     });
 
-    basicVersionFile = await vfm.downloadFromPath({
+    basicSnapshot = await snapshotMngr.downloadFromPath({
       path: testFolder + '/testdata',
       filename: '8-paths.json',
     });
@@ -60,8 +60,8 @@ describe('code generation', () => {
         },
       });
 
-      const beforeFiltering = Object.keys(basicVersionFile.paths).length;
-      const paths = gen['filterPaths'](basicVersionFile.paths);
+      const beforeFiltering = Object.keys(basicSnapshot.paths).length;
+      const paths = gen['filterPaths'](basicSnapshot.paths);
       expect(Object.keys(paths)).toHaveLength(beforeFiltering);
     });
 
@@ -74,8 +74,8 @@ describe('code generation', () => {
         },
       });
 
-      expect(Object.keys(basicVersionFile.paths).length).toBeGreaterThan(4);
-      const paths = gen['filterPaths'](basicVersionFile.paths);
+      expect(Object.keys(basicSnapshot.paths).length).toBeGreaterThan(4);
+      const paths = gen['filterPaths'](basicSnapshot.paths);
       expect(Object.keys(paths)).toHaveLength(4);
     });
   });
@@ -108,7 +108,7 @@ describe('code generation', () => {
         'LimitList',
       ];
 
-      const typeNames = await gen.generateTypes(basicVersionFile);
+      const typeNames = await gen.generateTypes(basicSnapshot);
       expect(typeNames).toEqual(wants);
 
       const generatedFile = (
@@ -126,13 +126,13 @@ describe('code generation', () => {
         },
       });
 
-      const typeNames = await gen.generateTypes(basicVersionFile);
+      const typeNames = await gen.generateTypes(basicSnapshot);
       expect(typeNames.includes('SomeUnusedOpenApiSchema')).toBeFalsy();
     });
 
     test('cyclic references', async () => {
-      const vfm = new OpenApiSnapshotManager({ directory: '.' });
-      const versionFile = await vfm.downloadFromPath({
+      const snapshotMngr = new OpenApiSnapshotManager({ directory: '.' });
+      const snapshot = await snapshotMngr.downloadFromPath({
         path: testFolder + '/testdata',
         filename: 'cyclic-references.json',
       });
@@ -147,7 +147,7 @@ describe('code generation', () => {
 
       const wants = ['CyclicResponse', 'Filter', 'FilterOption'];
 
-      const typeNames = await gen.generateTypes(versionFile);
+      const typeNames = await gen.generateTypes(snapshot);
       expect(typeNames).toEqual(wants);
 
       const generatedFile = (

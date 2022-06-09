@@ -5,7 +5,7 @@ import { OpenApiDocument } from './openapi';
 import { PathOption, VersionOption } from './utils';
 
 /**
- * VersionFileManagerOptions options for configure the version file.
+ * OpenApiSnapshotManagerOptions options for the snapshot.
  */
 export type OpenApiSnapshotManagerOptions = Partial<VersionOption> &
   Partial<PathOption> & {
@@ -43,8 +43,8 @@ export class OpenApiSnapshotManager {
     const filename = options.filename || OpenApiSnapshotManager.filename;
     const path = `${options.path}/${filename}`.replace('//', '/');
 
-    const localSpec = await fs.readFile(path, 'utf-8');
-    return JSON.parse(localSpec) as OpenApiDocument;
+    const doc = await fs.readFile(path, 'utf-8');
+    return JSON.parse(doc) as OpenApiDocument;
   };
 
   private createUrl = (): string => {
@@ -54,7 +54,7 @@ export class OpenApiSnapshotManager {
     return `https://storage.googleapis.com/cognitedata-api-docs/dist/${this.options.version}.json`;
   };
 
-  public downloadFromURL = async (url?: string): Promise<OpenApiDocument> => {
+  public downloadFromUrl = async (url?: string): Promise<OpenApiDocument> => {
     url = url || this.createUrl();
 
     try {

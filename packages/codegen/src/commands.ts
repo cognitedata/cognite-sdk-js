@@ -5,7 +5,7 @@ import { OpenApiSnapshotManager } from './snapshot';
 import {
   PackageOption,
   ServiceOption,
-  versionFileDirectoryPath,
+  closestConfigDirectoryPath,
   VersionOption,
 } from './utils';
 import { CodeGen, passThroughFilter, pathFilterFromConfig } from './codegen';
@@ -15,7 +15,7 @@ export type ConfigFileUpdateOptions = PackageOption & Partial<ServiceOption>;
 
 export class SnapshotCommand {
   public update = async (options: PackageOption) => {
-    const directory = await versionFileDirectoryPath(options);
+    const directory = await closestConfigDirectoryPath(options);
     const config = new ConfigManager({
       directory: directory,
     });
@@ -30,22 +30,8 @@ export class SnapshotCommand {
       throw new Error('Can`t download snapshot when "version" was not defined');
     }
 
-    const document = await snapshot.downloadFromURL();
+    const document = await snapshot.downloadFromUrl();
     await snapshot.write(document);
-  };
-
-  public delete = async (options: PackageOption & Partial<ServiceOption>) => {
-    const directory = await versionFileDirectoryPath(options);
-    const vfm = new OpenApiSnapshotManager({
-      directory: directory,
-      version: '?',
-    });
-    const versionfileExists = await vfm.exists();
-    if (!versionfileExists) {
-      throw new Error('Snapshot does not exist');
-    }
-
-    await vfm.delete();
   };
 }
 
@@ -53,7 +39,7 @@ export class ConfigureCommand {
   public create = async (
     options: PackageOption & Partial<ServiceOption> & Partial<VersionOption>
   ) => {
-    const directory = await versionFileDirectoryPath(options);
+    const directory = await closestConfigDirectoryPath(options);
     const mngr = new ConfigManager({
       directory: directory,
     });
@@ -66,21 +52,12 @@ export class ConfigureCommand {
   };
 
   public validate = async (options: PackageOption & Partial<ServiceOption>) => {
-    const directory = await versionFileDirectoryPath(options);
+    const directory = await closestConfigDirectoryPath(options);
     const mngr = new ConfigManager({
       directory: directory,
     });
 
     await mngr.read();
-  };
-
-  public delete = async (options: PackageOption & Partial<ServiceOption>) => {
-    const directory = await versionFileDirectoryPath(options);
-    const config = new ConfigManager({
-      directory: directory,
-    });
-
-    await config.delete();
   };
 
   private defaultConfig = (
@@ -114,7 +91,7 @@ export class ConfigureCommand {
 export class CodeGenCommand {
   public generate = async (options: PackageOption & Partial<ServiceOption>) => {
     if (options.service != null) {
-      await this.generateForSingleService({
+      await this.generateServiceTypes({
         ...options,
         service: options.service,
       });
@@ -123,20 +100,20 @@ export class CodeGenCommand {
     }
   };
 
-  private generateForSingleService = async (
+  private generateServiceTypes = async (
     options: PackageOption & ServiceOption
   ): Promise<string[]> => {
-    const directory = await versionFileDirectoryPath(options);
+    const directory = await closestConfigDirectoryPath(options);
     const config = new ConfigManager({
       directory: directory,
     });
     const configFile = (await config.read()) as ServiceConfig;
 
-    const packageDirectory = await versionFileDirectoryPath({
+    const packageDirectory = await closestConfigDirectoryPath({
       package: options.package,
     });
 
-    const vfm = new OpenApiSnapshotManager({
+    const snapshotMngr = new OpenApiSnapshotManager({
       directory: packageDirectory,
       path: configFile.snapshot?.path,
     });
@@ -150,7 +127,7 @@ export class CodeGenCommand {
     });
 
     try {
-      const snapshot = await vfm.read();
+      const snapshot = await snapshotMngr.read();
       const generatedTypeNames = await gen.generateTypes(snapshot);
       return generatedTypeNames;
     } catch (error) {
@@ -161,20 +138,20 @@ export class CodeGenCommand {
   };
 
   private generateForAllServices = async (options: PackageOption) => {
-    const directory = await versionFileDirectoryPath(options);
+    const directory = await closestConfigDirectoryPath(options);
     const serviceTypesRecord: Record<string, string[]> = {};
 
     const services = await this.listConfiguredServices(directory);
     for (const service of services) {
-      serviceTypesRecord[service] = await this.generateForSingleService({
+      serviceTypesRecord[service] = await this.generateServiceTypes({
         ...options,
         service: service,
       });
       console.info(`generated types for ${service}`);
     }
 
-    // identify shared resources and use the global versionfile to generate them
-    // this aviods that a local outdated versionfile may enforce outdated shared types
+    // identify shared resources and use the package snapshot to generate them
+    // this avoids that a local outdated snapshot may enforce outdated shared types
     const sharedTypes = await this.generateSharedTypes(
       serviceTypesRecord,
       directory
@@ -234,11 +211,11 @@ export class CodeGenCommand {
     });
     const configFile = (await config.read()) as PackageConfig;
 
-    const vfm = new OpenApiSnapshotManager({
+    const snapshotMngr = new OpenApiSnapshotManager({
       directory: packageDirectory,
       path: configFile.snapshot?.path,
     });
-    const spec = await vfm.read();
+    const snapshot = await snapshotMngr.read();
 
     const gen = new CodeGen({
       outputDir: packageDirectory,
@@ -249,8 +226,8 @@ export class CodeGenCommand {
     });
 
     const generatedTypeNames = await gen.generateTypesFromSchemas(
-      spec.openapi,
-      spec.components?.schemas,
+      snapshot.openapi,
+      snapshot.components?.schemas,
       (schemaName) => sharedTypes.has(schemaName)
     );
     return generatedTypeNames;
