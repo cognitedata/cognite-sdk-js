@@ -41,9 +41,7 @@
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check -c ./markdownlint.json",
     "test-snippets": "yarn allsdk test-snippets --stream",
     "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream",
-    "codegen": "ts-node scripts/codegen/codegen.ts",
-    "codegen:snapshot": "ts-node scripts/codegen/snapshot.ts",
-    "codegen:configure": "ts-node scripts/codegen/configure.ts"
+    "codegen": "ts-node packages/codegen/src/cli.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
