@@ -27,12 +27,6 @@ const generateTypesCommand: CommandModule = {
   describe: 'Generate types for configured services',
   builder: (yargs) => yargs.option('package', packageOptions),
   handler: async (argv) => {
-    const nodeVersion = process.versions.node.split('.');
-    const majorVersion = parseInt(nodeVersion[0]);
-    if (majorVersion < 16) {
-      throw new Error('NodeJS version must be v16 or higher');
-    }
-
     await generateTypes({
       package: argv.package as string,
     });
