@@ -35,7 +35,7 @@ const generateTypesCommand: CommandModule = {
 
 const configureCommand: CommandModule = {
   command: 'configure',
-  describe: 'Create configuration file to enable type generation for a service',
+  describe: 'Create configuration file to enable type generation for a package or service',
   builder: (yargs) =>
     yargs
       .option('package', packageOptions)
