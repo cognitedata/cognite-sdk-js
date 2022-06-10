@@ -1,6 +1,5 @@
 // Copyright 2022 Cognite AS
 import yargs, { CommandModule, Options } from 'yargs';
-import { createConfiguration } from './configuration';
 import { generateTypes } from './generate';
 import { updateSnapshot } from './snapshot';
 
@@ -33,29 +32,6 @@ const generateTypesCommand: CommandModule = {
   },
 };
 
-const configureCommand: CommandModule = {
-  command: 'configure',
-  describe: 'Create configuration file to enable type generation for a service',
-  builder: (yargs) =>
-    yargs
-      .option('package', packageOptions)
-      .option('service', {
-        describe: 'REST service to configure types for',
-        type: 'string',
-      })
-      .option('version', {
-        describe: 'Cognite API version (v1, playground)',
-        type: 'string',
-      }),
-  handler: async (argv) => {
-    await createConfiguration({
-      package: argv.package as string,
-      service: argv.service as string | undefined,
-      version: argv.version as string | undefined,
-    });
-  },
-};
-
 async function main(): Promise<void> {
   await yargs(process.argv.slice(2))
     .version(false)
@@ -64,7 +40,6 @@ async function main(): Promise<void> {
     .recommendCommands()
     .command(fetchLatestCommand)
     .command(generateTypesCommand)
-    .command(configureCommand)
     .demandCommand()
     .strict()
     .parse();

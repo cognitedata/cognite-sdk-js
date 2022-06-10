@@ -51,13 +51,30 @@ it block other updates.
 
 ## Configuring type generation for a service
 
-```bash
-yarn codegen configure --package stable --service my-service
+Create a `codegen.json` file in the service directory (e.g.
+`packages/stable/src/api/documents/codegen.json`) using this
+template:
+
+```json
+{
+  "service": "SERVICE-NAME",
+  "filter": {
+    "serviceName": "SERVICE-NAME"
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}
 ```
 
-This will generate a `codegen.json` file for the given service
-so types will be created on next run.
+Replace `SERVICE-NAME` with the approriate value, such as `documents`.
 
 The types extracted are based on the paths in the OpenAPI document
 that matches the name of the service. It is currently not possible
 to select individually paths other than this.
+
+Now you can generate types which should include types for your service. E.g:
+
+```bash
+yarn codegen generate-types --package stable
+```

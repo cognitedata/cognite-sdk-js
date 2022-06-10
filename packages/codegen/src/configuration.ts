@@ -1,13 +1,6 @@
 // Copyright 2022 Cognite AS
 import { promises as fs } from 'fs';
-import {
-  closestConfigDirectoryPath,
-  DirectoryOption,
-  PackageOption,
-  PathOption,
-  ServiceOption,
-  VersionOption,
-} from './utils';
+import { DirectoryOption, PathOption, VersionOption } from './utils';
 
 /**
  * SnapshotPath allows you to work on a snapshot locally. Useful when you want to
@@ -91,17 +84,6 @@ class ConfigManager<T> {
     return config;
   };
 
-  public write = async (config: T): Promise<void> => {
-    await this.validate(config);
-    const json = JSON.stringify(config, null, 2);
-
-    try {
-      await fs.writeFile(this.path, json);
-    } catch (error) {
-      throw new Error(`Unable to save config: ${error}`);
-    }
-  };
-
   public read = async (): Promise<T> => {
     const json = await this.readFromJsonFile();
     const config = JSON.parse(json) as T;
@@ -120,11 +102,6 @@ class ConfigManager<T> {
 }
 
 export class PackageConfigManager extends ConfigManager<PackageConfig> {
-  public writeDefaultConfig = async (options: any): Promise<void> => {
-    const config = this.defaultConfig(options);
-    await this.write(config);
-  };
-
   protected validate = async (
     config: PackageConfig
   ): Promise<PackageConfig> => {
@@ -136,30 +113,9 @@ export class PackageConfigManager extends ConfigManager<PackageConfig> {
 
     return config;
   };
-
-  public defaultConfig = (
-    options: PackageOption & VersionOption
-  ): PackageConfig => {
-    if (options.version == null) {
-      throw new Error(
-        '"Version" must be defined when creating a package config'
-      );
-    }
-
-    return {
-      snapshot: {
-        version: options.version,
-      },
-    };
-  };
 }
 
 export class ServiceConfigManager extends ConfigManager<ServiceConfig> {
-  public writeDefaultConfig = async (options: any): Promise<void> => {
-    const config = this.defaultConfig(options);
-    await this.write(config);
-  };
-
   protected validate = async (
     config: ServiceConfig
   ): Promise<ServiceConfig> => {
@@ -172,37 +128,4 @@ export class ServiceConfigManager extends ConfigManager<ServiceConfig> {
 
     return config;
   };
-
-  private defaultConfig = (
-    options: PackageOption & ServiceOption
-  ): ServiceConfig => {
-    return {
-      service: options.service,
-      filter: {
-        serviceName: options.service,
-      },
-      inlinedSchemas: {
-        autoNameRequest: true,
-      },
-    };
-  };
-}
-
-interface CreateConfigOptions
-  extends PackageOption,
-    Partial<ServiceOption>,
-    Partial<VersionOption> {}
-
-export async function createConfiguration(options: CreateConfigOptions) {
-  const directory = await closestConfigDirectoryPath(options);
-  const option = { directory: directory };
-  const mngr =
-    options.service == null
-      ? new PackageConfigManager(option)
-      : new ServiceConfigManager(option);
-  if (await mngr.exists()) {
-    throw new Error(`Config already exists - did nothing`);
-  }
-
-  await mngr.writeDefaultConfig(options);
 }
