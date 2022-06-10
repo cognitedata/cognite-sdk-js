@@ -10,11 +10,11 @@ import {
 } from './utils';
 
 /**
- * SnapshotLocal allows you to work on a snapshot locally. Useful when you want to
+ * SnapshotPath allows you to work on a snapshot locally. Useful when you want to
  * see how changes to open api affects the generated code without adjusting the official open api document.
  */
-export interface SnapshotLocal extends PathOption {
-  version: never;
+export interface SnapshotPath extends PathOption {
+  version?: never;
 }
 
 /**
@@ -22,15 +22,15 @@ export interface SnapshotLocal extends PathOption {
  * to use when downloading and creating a open api snapshot.
  */
 export interface SnapshotVersion extends VersionOption {
-  path: never;
+  path?: never;
 }
 
 export interface PackageConfig {
-  snapshot: SnapshotVersion | SnapshotLocal;
+  snapshot: SnapshotVersion | SnapshotPath;
 }
 
 export interface ServiceConfig {
-  snapshot?: SnapshotLocal;
+  snapshot?: SnapshotPath;
   service: string;
   inlinedSchemas: {
     autoNameRequest: boolean;
@@ -40,13 +40,9 @@ export interface ServiceConfig {
   };
 }
 
-const isServiceConfig = (config: any): config is ServiceConfig => {
-  return 'service' in config;
-};
-
 type ConfigManagerOptions = DirectoryOption;
 
-export class ConfigManager {
+class ConfigManager<T> {
   public static readonly filename = 'codegen.json';
   private path: string;
 
@@ -56,14 +52,14 @@ export class ConfigManager {
 
   public exists = async (): Promise<boolean> => {
     try {
-      await fs.access(this.path);
+      await fs.stat(this.path);
       return true;
     } catch (error) {
       return false;
     }
   };
 
-  private validateSnapshot = async (
+  protected validateSnapshot = async (
     snapshot: any,
     legalKeys: string[],
     source: string
@@ -91,7 +87,45 @@ export class ConfigManager {
     }
   };
 
-  public validatePackage = async (
+  protected validate = async (config: T): Promise<T> => {
+    return config;
+  };
+
+  public write = async (config: T): Promise<void> => {
+    await this.validate(config);
+    const json = JSON.stringify(config, null, 2);
+
+    try {
+      await fs.writeFile(this.path, json);
+    } catch (error) {
+      throw new Error(`Unable to save config: ${error}`);
+    }
+  };
+
+  public read = async (): Promise<T> => {
+    const json = await this.readFromJsonFile();
+    const config = JSON.parse(json) as T;
+    await this.validate(config);
+    return config;
+  };
+
+  protected readFromJsonFile = async (): Promise<string> => {
+    try {
+      const json = await fs.readFile(this.path, 'utf-8');
+      return json;
+    } catch (error) {
+      throw new Error(`Unable to load config: ${error}`);
+    }
+  };
+}
+
+export class PackageConfigManager extends ConfigManager<PackageConfig> {
+  public writeDefaultConfig = async (options: any): Promise<void> => {
+    const config = this.defaultConfig(options);
+    await this.write(config);
+  };
+
+  protected validate = async (
     config: PackageConfig
   ): Promise<PackageConfig> => {
     await this.validateSnapshot(
@@ -103,7 +137,30 @@ export class ConfigManager {
     return config;
   };
 
-  public validateService = async (
+  public defaultConfig = (
+    options: PackageOption & VersionOption
+  ): PackageConfig => {
+    if (options.version == null) {
+      throw new Error(
+        '"Version" must be defined when creating a package config'
+      );
+    }
+
+    return {
+      snapshot: {
+        version: options.version,
+      },
+    };
+  };
+}
+
+export class ServiceConfigManager extends ConfigManager<ServiceConfig> {
+  public writeDefaultConfig = async (options: any): Promise<void> => {
+    const config = this.defaultConfig(options);
+    await this.write(config);
+  };
+
+  protected validate = async (
     config: ServiceConfig
   ): Promise<ServiceConfig> => {
     if (config.service == null) {
@@ -116,46 +173,18 @@ export class ConfigManager {
     return config;
   };
 
-  public validate = async (
-    json: string
-  ): Promise<PackageConfig | ServiceConfig> => {
-    const config = JSON.parse(json);
-
-    try {
-      if (isServiceConfig(config)) {
-        return await this.validateService(config);
-      } else {
-        return await this.validatePackage(config);
-      }
-    } catch (error) {
-      throw new Error(`Invalid config: ${error}`);
-    }
-  };
-
-  public write = async (
-    config: PackageConfig | ServiceConfig
-  ): Promise<string> => {
-    const json = JSON.stringify(config, null, 2);
-    await this.validate(json);
-
-    try {
-      await fs.writeFile(this.path, json);
-    } catch (error) {
-      throw new Error(`Unable to save config: ${error}`);
-    }
-    return json;
-  };
-
-  public read = async (): Promise<PackageConfig | ServiceConfig> => {
-    let json: string;
-    try {
-      json = await fs.readFile(this.path, 'utf-8');
-    } catch (error) {
-      throw new Error(`Unable to load config: ${error}`);
-    }
-
-    const config = await this.validate(json);
-    return config;
+  private defaultConfig = (
+    options: PackageOption & ServiceOption
+  ): ServiceConfig => {
+    return {
+      service: options.service,
+      filter: {
+        serviceName: options.service,
+      },
+      inlinedSchemas: {
+        autoNameRequest: true,
+      },
+    };
   };
 }
 
@@ -167,41 +196,15 @@ interface CreateConfigOptions
 export class ConfigureCommand {
   public create = async (options: CreateConfigOptions) => {
     const directory = await closestConfigDirectoryPath(options);
-    const mngr = new ConfigManager({
-      directory: directory,
-    });
+    const option = { directory: directory };
+    const mngr =
+      options.service == null
+        ? new PackageConfigManager(option)
+        : new ServiceConfigManager(option);
     if (await mngr.exists()) {
       throw new Error(`Config already exists - did nothing`);
     }
 
-    const config = this.defaultConfig(options);
-    await mngr.write(config);
-  };
-
-  private defaultConfig = (
-    options: PackageOption & Partial<ServiceOption> & Partial<VersionOption>
-  ): ServiceConfig | PackageConfig => {
-    if (options.service != null) {
-      return {
-        service: options.service,
-        filter: {
-          serviceName: options.service,
-        },
-        inlinedSchemas: {
-          autoNameRequest: true,
-        },
-      } as ServiceConfig;
-    } else {
-      if (options.version == null) {
-        throw new Error(
-          '"Version" must be defined when creating a package config'
-        );
-      }
-      return {
-        snapshot: {
-          version: options.version,
-        },
-      } as PackageConfig;
-    }
+    await mngr.writeDefaultConfig(options);
   };
 }

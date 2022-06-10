@@ -8,7 +8,11 @@ const parser = yargsBase().options({
     service: { type: 'string', demand: false, describe: "REST service to generate types for" },
     version: { type: 'string', demand: false, describe: "Cognite api version (v1, playground, etc.)" },
 }).command("create", "create a configuration", (y) => y, async (argv) => {
-    await cmd.create(argv);
+    await cmd.create({
+        package: argv.package,
+        service: argv.service,
+        version: argv.version,
+    });
 });
 
 

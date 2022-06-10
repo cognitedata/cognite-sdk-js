@@ -5,9 +5,10 @@ const cmd = new SnapshotCommand();
 
 const parser = yargsBase().options({
     package: { type: 'string', demand: true,  describe: "Js sdk package (stable, beta, etc.)" },
-    service: { type: 'string', demand: false, describe: "REST service to generate types for" },
 }).command("update", "update a snapshot", (y) => y, async (argv) => {
-    await cmd.update({...argv});
+    await cmd.update({
+        package: argv.package,
+    });
 });
 
 

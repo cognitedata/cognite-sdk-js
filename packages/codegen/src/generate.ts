@@ -7,10 +7,11 @@ import {
   ServiceOption,
   closestConfigDirectoryPath,
 } from './utils';
-import { CodeGen, passThroughFilter, pathFilterFromConfig } from './codegen';
-import { ConfigManager, PackageConfig, ServiceConfig } from './configuration';
+import { CodeGen, createServiceNameFilter, passThroughFilter } from './codegen';
+import { PackageConfigManager, ServiceConfigManager } from './configuration';
 
 type GenerateOptions = PackageOption;
+interface GenerateServiceOptions extends PackageOption, ServiceOption {}
 
 export class CodeGenCommand {
   public generate = async (options: GenerateOptions) => {
@@ -18,13 +19,13 @@ export class CodeGenCommand {
   };
 
   private generateServiceTypes = async (
-    options: PackageOption & ServiceOption
+    options: GenerateServiceOptions
   ): Promise<string[]> => {
     const directory = await closestConfigDirectoryPath(options);
-    const config = new ConfigManager({
+    const config = new ServiceConfigManager({
       directory: directory,
     });
-    const configFile = (await config.read()) as ServiceConfig;
+    const configFile = await config.read();
 
     const packageDirectory = await closestConfigDirectoryPath({
       package: options.package,
@@ -35,11 +36,15 @@ export class CodeGenCommand {
       path: configFile.snapshot?.path,
     });
 
+    const predicate =
+      configFile.filter.serviceName == null
+        ? passThroughFilter
+        : createServiceNameFilter(configFile.filter.serviceName);
     const gen = new CodeGen({
       autoNameInlinedRequest: configFile.inlinedSchemas.autoNameRequest,
       outputDir: directory,
       filter: {
-        path: pathFilterFromConfig(configFile),
+        path: predicate,
       },
     });
 
@@ -54,7 +59,7 @@ export class CodeGenCommand {
     }
   };
 
-  private generateForAllServices = async (options: PackageOption) => {
+  private generateForAllServices = async (options: GenerateOptions) => {
     const directory = await closestConfigDirectoryPath(options);
     const serviceTypesRecord: Record<string, string[]> = {};
 
@@ -95,13 +100,7 @@ export class CodeGenCommand {
       '\n'
     )}`;
 
-    try {
-      await fs.writeFile(exportFilePath, fileContent);
-    } catch (error) {
-      throw new Error(
-        `Unable to update import file for generated types: ${error}`
-      );
-    }
+    await fs.writeFile(exportFilePath, fileContent);
   };
 
   private generateSharedTypes = async (
@@ -123,10 +122,10 @@ export class CodeGenCommand {
       }
     }
 
-    const config = new ConfigManager({
+    const config = new PackageConfigManager({
       directory: packageDirectory,
     });
-    const configFile = (await config.read()) as PackageConfig;
+    const configFile = await config.read();
 
     const snapshotMngr = new OpenApiSnapshotManager({
       directory: packageDirectory,
@@ -193,7 +192,7 @@ export class CodeGenCommand {
       const configFilePath = path.resolve(
         apiDirectory,
         service,
-        ConfigManager.filename
+        ServiceConfigManager.filename
       );
       try {
         await fs.stat(configFilePath);

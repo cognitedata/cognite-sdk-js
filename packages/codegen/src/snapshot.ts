@@ -9,7 +9,7 @@ import {
   PathOption,
   VersionOption,
 } from './utils';
-import { ConfigManager, PackageConfig } from './configuration';
+import { PackageConfigManager } from './configuration';
 
 /**
  * OpenApiSnapshotManagerOptions options for the snapshot.
@@ -72,15 +72,6 @@ export class OpenApiSnapshotManager {
     }
   };
 
-  public exists = async (): Promise<boolean> => {
-    try {
-      await fs.access(this.path);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
-
   public write = async (openapi: OpenApiDocument): Promise<OpenApiDocument> => {
     const json = JSON.stringify(openapi);
 
@@ -107,21 +98,19 @@ type UpdateSnapshotOptions = PackageOption;
 export class SnapshotCommand {
   public update = async (options: UpdateSnapshotOptions) => {
     const directory = await closestConfigDirectoryPath(options);
-    const config = new ConfigManager({
-      directory: directory,
-    });
-    const configFile = (await config.read()) as PackageConfig;
-
-    const snapshot = new OpenApiSnapshotManager({
-      directory: directory,
-      version: configFile.snapshot.version,
-    });
+    const config = new PackageConfigManager({ directory: directory });
+    const configFile = await config.read();
 
     if (configFile.snapshot.version == null) {
       throw new Error('Can`t download snapshot when "version" was not defined');
     }
 
-    const document = await snapshot.downloadFromUrl();
-    await snapshot.write(document);
+    const manager = new OpenApiSnapshotManager({
+      directory: directory,
+      version: configFile.snapshot.version,
+    });
+
+    const snapshot = await manager.downloadFromUrl();
+    await manager.write(snapshot);
   };
 }
