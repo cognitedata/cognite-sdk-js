@@ -23,7 +23,7 @@ interface ServiceOpenApiOptions extends PathOption {
   filename?: string;
 }
 
-const defaultFilename = 'cognite-openapi-snapshot.json';
+const defaultFilename = '.cognite-openapi-snapshot.json';
 
 /**
  * OpenApiSnapshotManager handles creating and updating a service or package snapshot.
