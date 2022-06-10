@@ -55,10 +55,16 @@ docs(contributing-readme): add example of commit with subject line
 
 A commit hook makes sure the syntax is followed. Automated commit messages such as `Merge pull request` are handled.
 
-## Type generation
-This SDK support generating typescript types from the Cognite open api specification. The idea is to use openapi as a source of truth. Any incorrect or missing types should be fixed/added in the openapi spec instead of manually adjusting the generated types. This also helps to keep documentation up to date.
+## Code generation
+This SDK support generating TypeScript types from the Cognite OpenAPI document.
+The idea is to use the OpenAPI document as a source of truth and to automate
+part of the process. Any incorrect or missing types should be fixed/added
+in the OpenAPI document instead of manually adjusting the generated types.
+This also helps to keep documentation up to date.
 
-Use the command `yarn codegen` for more information.
+Use the command `yarn codegen` for available commands.
+
+More details are documented in the [codegen README](packages/codegen/README.md).
 
 ## Pull request
 Make a pull request from your branch to the main branch. When merging the pull request,

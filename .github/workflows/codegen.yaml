@@ -27,12 +27,12 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Run code generation for ${{ matrix.package }} package
-        run: yarn codegen --package=${{ matrix.package }} generate
-      
+        run: yarn codegen --package=${{ matrix.package }} generate-types
+
       - name: Identify changed files
         id: changed_files
         run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
-      
+
       - name: Files related to code generation was altered
         if: steps.changed_files.outputs.changed != 0
-        run: echo "fix this by running 'yarn codegen --package=${{ matrix.package }} generate'" && exit 1
+        run: echo "fix this by running 'yarn codegen --package=${{ matrix.package }} generate-types'" && exit 1

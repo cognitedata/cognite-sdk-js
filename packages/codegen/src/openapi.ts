@@ -88,7 +88,7 @@ export class ReferenceWalker {
     const a = ref.split('#').filter((str) => str.length > 0);
     if (a.length > 1) {
       throw new Error(
-        `A open api reference ($ref) is expected to only contain one hashtag, found ${a.length}.`
+        `A OpenAPI reference ($ref) is expected to only contain one hashtag, found ${a.length}.`
       );
     }
 

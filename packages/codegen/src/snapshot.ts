@@ -23,11 +23,12 @@ interface ServiceOpenApiOptions extends PathOption {
   filename?: string;
 }
 
+const defaultFilename = '.cognite-openapi-snapshot.json';
+
 /**
  * OpenApiSnapshotManager handles creating and updating a service or package snapshot.
  */
 export class OpenApiSnapshotManager {
-  public static readonly filename = '.cognite-api-snapshot';
   private path: string;
 
   constructor(readonly options: OpenApiSnapshotManagerOptions) {
@@ -40,13 +41,13 @@ export class OpenApiSnapshotManager {
     this.path =
       options.path != null
         ? options.path
-        : `${options.directory}/${OpenApiSnapshotManager.filename}`;
+        : `${options.directory}/${defaultFilename}`;
   }
 
   public downloadFromPath = async (
     options: ServiceOpenApiOptions
   ): Promise<OpenApiDocument> => {
-    const filename = options.filename || OpenApiSnapshotManager.filename;
+    const filename = options.filename || defaultFilename;
     const path = `${options.path}/${filename}`.replace('//', '/');
 
     const doc = await fs.readFile(path, 'utf-8');
@@ -68,12 +69,12 @@ export class OpenApiSnapshotManager {
       const json = await response.json();
       return json as OpenApiDocument;
     } catch (error) {
-      throw new Error(`Unable to download open api contract: ${error}`);
+      throw new Error(`Unable to download OpenAPI contract: ${error}`);
     }
   };
 
   public write = async (openapi: OpenApiDocument): Promise<OpenApiDocument> => {
-    const json = JSON.stringify(openapi);
+    const json = JSON.stringify(openapi, undefined, '  ');
 
     try {
       await fs.writeFile(this.path, json);
@@ -95,22 +96,20 @@ export class OpenApiSnapshotManager {
 
 type UpdateSnapshotOptions = PackageOption;
 
-export class SnapshotCommand {
-  public update = async (options: UpdateSnapshotOptions) => {
-    const directory = await closestConfigDirectoryPath(options);
-    const config = new PackageConfigManager({ directory: directory });
-    const configFile = await config.read();
+export async function updateSnapshot(options: UpdateSnapshotOptions) {
+  const directory = await closestConfigDirectoryPath(options);
+  const config = new PackageConfigManager({ directory: directory });
+  const configFile = await config.read();
 
-    if (configFile.snapshot.version == null) {
-      throw new Error('Can`t download snapshot when "version" was not defined');
-    }
+  if (configFile.snapshot.version == null) {
+    throw new Error('Can`t download snapshot when "version" was not defined');
+  }
 
-    const manager = new OpenApiSnapshotManager({
-      directory: directory,
-      version: configFile.snapshot.version,
-    });
+  const manager = new OpenApiSnapshotManager({
+    directory: directory,
+    version: configFile.snapshot.version,
+  });
 
-    const snapshot = await manager.downloadFromUrl();
-    await manager.write(snapshot);
-  };
+  const snapshot = await manager.downloadFromUrl();
+  await manager.write(snapshot);
 }
