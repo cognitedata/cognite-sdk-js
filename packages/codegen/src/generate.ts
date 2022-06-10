@@ -7,23 +7,24 @@ import {
   ServiceOption,
   closestConfigDirectoryPath,
 } from './utils';
-import { CodeGen, passThroughFilter, pathFilterFromConfig } from './codegen';
-import { ConfigManager, PackageConfig, ServiceConfig } from './configuration';
+import { CodeGen, createServiceNameFilter, passThroughFilter } from './codegen';
+import { PackageConfigManager, ServiceConfigManager } from './configuration';
 
 type GenerateOptions = PackageOption;
+interface GenerateServiceOptions extends PackageOption, ServiceOption {}
 
-export async function generateTypes(options: GenerateOptions): Promise<void> {
+export async function generateTypes(options: GenerateOptions) {
   await generateForAllServices(options);
 }
 
 async function generateServiceTypes(
-  options: PackageOption & ServiceOption
+  options: GenerateServiceOptions
 ): Promise<string[]> {
   const directory = await closestConfigDirectoryPath(options);
-  const config = new ConfigManager({
+  const config = new ServiceConfigManager({
     directory: directory,
   });
-  const configFile = (await config.read()) as ServiceConfig;
+  const configFile = await config.read();
 
   const packageDirectory = await closestConfigDirectoryPath({
     package: options.package,
@@ -34,11 +35,15 @@ async function generateServiceTypes(
     path: configFile.snapshot?.path,
   });
 
+  const predicate =
+    configFile.filter.serviceName == null
+      ? passThroughFilter
+      : createServiceNameFilter(configFile.filter.serviceName);
   const gen = new CodeGen({
     autoNameInlinedRequest: configFile.inlinedSchemas.autoNameRequest,
     outputDir: directory,
     filter: {
-      path: pathFilterFromConfig(configFile),
+      path: predicate,
     },
   });
 
@@ -53,7 +58,7 @@ async function generateServiceTypes(
   }
 }
 
-async function generateForAllServices(options: PackageOption) {
+async function generateForAllServices(options: GenerateOptions) {
   const directory = await closestConfigDirectoryPath(options);
   const serviceTypesRecord: Record<string, string[]> = {};
 
@@ -91,13 +96,7 @@ async function generateForAllServices(options: PackageOption) {
     '\n'
   )}`;
 
-  try {
-    await fs.writeFile(exportFilePath, fileContent);
-  } catch (error) {
-    throw new Error(
-      `Unable to update import file for generated types: ${error}`
-    );
-  }
+  await fs.writeFile(exportFilePath, fileContent);
 }
 
 async function generateSharedTypes(
@@ -119,10 +118,10 @@ async function generateSharedTypes(
     }
   }
 
-  const config = new ConfigManager({
+  const config = new PackageConfigManager({
     directory: packageDirectory,
   });
-  const configFile = (await config.read()) as PackageConfig;
+  const configFile = await config.read();
 
   const snapshotMngr = new OpenApiSnapshotManager({
     directory: packageDirectory,
@@ -185,7 +184,7 @@ async function listConfiguredServices(directory: string): Promise<string[]> {
     const configFilePath = path.resolve(
       apiDirectory,
       service,
-      ConfigManager.filename
+      ServiceConfigManager.filename
     );
     try {
       await fs.stat(configFilePath);

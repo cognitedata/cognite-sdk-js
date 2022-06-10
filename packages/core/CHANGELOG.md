@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.3.0...@cognite/sdk-core@4.4.0) (2022-06-09)
+
+
+### Features
+
+* auth wrapper as a provider ([#816](https://github.com/cognitedata/cognite-sdk-js/issues/816)) ([4c2fc03](https://github.com/cognitedata/cognite-sdk-js/commit/4c2fc0367e1aba347c6d8ab0a3b1e5f3a15a7a2d))
+
+
+
+
+
 # [4.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.2.0...@cognite/sdk-core@4.3.0) (2022-06-02)
 
 

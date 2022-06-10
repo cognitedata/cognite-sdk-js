@@ -19,7 +19,6 @@ import {
   OpenApiReference,
 } from './openapi';
 import { AutoNameInlinedRequestOption, sortOpenApiJson } from './utils';
-import { ServiceConfig } from './configuration';
 
 export type StringFilter = (str: string) => boolean;
 
@@ -28,12 +27,6 @@ export const passThroughFilter: StringFilter = (): boolean => true;
 export const createServiceNameFilter = (service: string): StringFilter => {
   const r = new RegExp(`^/api/.+/projects/{project}/${service}($|/)`);
   return (path: string): boolean => r.test(path);
-};
-
-export const pathFilterFromConfig = (config: ServiceConfig): StringFilter => {
-  return config.filter.serviceName == null
-    ? passThroughFilter
-    : createServiceNameFilter(config.filter.serviceName);
 };
 
 export interface CodeGenOptions extends AutoNameInlinedRequestOption {
