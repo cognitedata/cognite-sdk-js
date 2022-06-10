@@ -1,4 +1,5 @@
 // Copyright 2022 Cognite AS
+
 export {
   AggregateField,
   AggregateGroup,
@@ -107,5 +108,5 @@ export {
   StringIn,
   StringPredicate,
   UnprocessableEntityErrorResponse,
-  ValueMissing,
+  ValueMissing
 } from './api/documents/types.gen';
