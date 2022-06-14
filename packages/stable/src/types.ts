@@ -36,6 +36,7 @@ export {
 
 export * from './api/documents/types.gen';
 export * from './api/geospatial/types';
+export * from './api/annotations/types';
 
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];

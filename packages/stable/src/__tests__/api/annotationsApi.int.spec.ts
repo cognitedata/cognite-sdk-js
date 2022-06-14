@@ -7,8 +7,8 @@ import {
   AnnotationCreate,
   AnnotationSuggest,
   AnnotationFilterProps,
-} from '../../api/annotations/types';
-import { InternalId } from '../../types';
+  InternalId,
+} from '../../types';
 
 const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();
