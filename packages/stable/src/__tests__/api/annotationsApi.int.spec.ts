@@ -1,9 +1,9 @@
 // Copyright 2022 Cognite AS
 
-import CogniteClientPlayground from '../../cogniteClientPlayground';
+import CogniteClientPlayground from '../../../../playground/src/cogniteClientPlayground';
 import { CogniteClient, InternalId } from '@cognite/sdk';
-import { setupLoggedInClient } from '../testUtils';
-import { setupLoggedInClient as stableApiClientSetup } from '../../../../stable/src/__tests__/testUtils';
+import { setupLoggedInClient } from '../../../../playground/src/__tests__/testUtils';
+import { setupLoggedInClient as stableApiClientSetup } from '../testUtils';
 import {
   AnnotationChangeById,
   AnnotationCreate,
