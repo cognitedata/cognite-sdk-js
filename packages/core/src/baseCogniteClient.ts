@@ -113,7 +113,7 @@ export default class BaseCogniteClient {
    */
   private readonly getToken: () => Promise<string | undefined>;
   private readonly apiKeyMode: boolean;
-  private readonly oauthMode: boolean;
+  private readonly oauthMode?: boolean;
   private readonly credentials?: ClientCredentials;
   private authProvider?: any;
   private readonly tokenCredentials: TokenCredentials = {} as TokenCredentials;
