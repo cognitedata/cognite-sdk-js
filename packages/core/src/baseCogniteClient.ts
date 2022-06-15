@@ -69,6 +69,8 @@ export interface ClientOptions {
   getToken?: () => Promise<string>;
   /** Retrieve data with apiKey passed at getToken method */
   apiKeyMode?: boolean;
+  /** Retrieve data with oauthCredentials method */
+  oauthMode?: boolean;
   /** OIDC/API auth */
   authentication?: {
     /** Provider to do the auth job, recommended: @cognite/auth-wrapper */
@@ -111,6 +113,7 @@ export default class BaseCogniteClient {
    */
   private readonly getToken: () => Promise<string | undefined>;
   private readonly apiKeyMode: boolean;
+  private readonly oauthMode: boolean;
   private readonly credentials?: ClientCredentials;
   private authProvider?: any;
   private readonly tokenCredentials: TokenCredentials = {} as TokenCredentials;
@@ -202,6 +205,7 @@ export default class BaseCogniteClient {
     this.apiVersion = apiVersion;
     this.project = options.project;
     this.apiKeyMode = !!options.apiKeyMode;
+    this.oauthMode =  !!options.oauthMode;
     this.getToken = async () => {
       return options.getToken ? options.getToken() : undefined;
     };
@@ -292,8 +296,12 @@ export default class BaseCogniteClient {
         if (token === undefined) return token;
 
         if (this.apiKeyMode) {
-          this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
-          return token;
+          if(this.oauthMode) {
+            return
+          } else {
+            this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
+            return token;
+        }
         } else {
           const bearer = bearerString(token);
           this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
