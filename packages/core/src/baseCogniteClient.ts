@@ -136,7 +136,12 @@ export default class BaseCogniteClient {
   constructor(options: ClientOptions, apiVersion: CogniteAPIVersion = 'v1') {
     verifyOptionsRequiredFields(options);
 
-    if (options && !options.authentication?.credentials && !options.getToken) {
+    if (
+      options &&
+      !options.authentication?.credentials &&
+      !options.getToken &&
+      !options.noAuthMode
+    ) {
       throw Error(
         'options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>'
       );
