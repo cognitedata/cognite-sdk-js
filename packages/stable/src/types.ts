@@ -3241,11 +3241,7 @@ export interface AnnotationUpdate {
 
 export interface AnnotationFilterRequest
   extends AnnotationFilter,
-    FilterQuery {
-      cursor?: string;
-      limit?: number;
-    }
-
+    FilterQuery {}
 export interface AnnotationFilter {
   filter: AnnotationFilterProps;
 }
@@ -3260,4 +3256,3 @@ export interface AnnotationFilterProps {
   status?: AnnotationStatus;
   data?: AnnotationPayload;
 }
-

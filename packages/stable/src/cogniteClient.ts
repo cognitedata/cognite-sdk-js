@@ -110,7 +110,7 @@ export default class CogniteClient extends BaseCogniteClient {
     return accessApi(this.documentsApi);
   }
   public get annotations() {
-    return accessApi(this.annotationsApi)
+    return accessApi(this.annotationsApi);
   }
   public get templates() {
     return {

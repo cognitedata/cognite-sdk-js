@@ -1,5 +1,4 @@
 // Copyright 2022 Cognite AS
-
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 import {
