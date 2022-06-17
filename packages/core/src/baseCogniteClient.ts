@@ -271,7 +271,7 @@ export default class BaseCogniteClient {
           .login(
             (this.credentials.method === 'device' ||
               this.credentials.method === 'pkce') &&
-            this.tokenCredentials.refresh_token
+              this.tokenCredentials.refresh_token
           );
 
         let token;
