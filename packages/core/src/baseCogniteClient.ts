@@ -69,6 +69,8 @@ export interface ClientOptions {
   getToken?: () => Promise<string>;
   /** Retrieve data with apiKey passed at getToken method */
   apiKeyMode?: boolean;
+  /** Retrieve data without any authentication headers */
+  noAuthMode?: boolean;
   /** OIDC/API auth */
   authentication?: {
     /** Provider to do the auth job, recommended: @cognite/auth-wrapper */
@@ -111,6 +113,7 @@ export default class BaseCogniteClient {
    */
   private readonly getToken: () => Promise<string | undefined>;
   private readonly apiKeyMode: boolean;
+  private readonly noAuthMode?: boolean;
   private readonly credentials?: ClientCredentials;
   private authProvider?: any;
   private readonly tokenCredentials: TokenCredentials = {} as TokenCredentials;
@@ -133,7 +136,12 @@ export default class BaseCogniteClient {
   constructor(options: ClientOptions, apiVersion: CogniteAPIVersion = 'v1') {
     verifyOptionsRequiredFields(options);
 
-    if (options && !options.authentication?.credentials && !options.getToken) {
+    if (
+      options &&
+      !options.authentication?.credentials &&
+      !options.getToken &&
+      !options.noAuthMode
+    ) {
       throw Error(
         'options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>'
       );
@@ -202,6 +210,7 @@ export default class BaseCogniteClient {
     this.apiVersion = apiVersion;
     this.project = options.project;
     this.apiKeyMode = !!options.apiKeyMode;
+    this.noAuthMode = !!options.noAuthMode;
     this.getToken = async () => {
       return options.getToken ? options.getToken() : undefined;
     };
@@ -291,7 +300,9 @@ export default class BaseCogniteClient {
 
         if (token === undefined) return token;
 
-        if (this.apiKeyMode) {
+        if (this.noAuthMode) {
+          return token;
+        } else if (this.apiKeyMode) {
           this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
           return token;
         } else {
