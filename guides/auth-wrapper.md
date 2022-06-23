@@ -60,7 +60,7 @@ authentication flow, **but it does not come with an implementation for all IDPs*
 This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active directory on behalf of a user using the [client credentials flow](https://oauth.net/2/grant-types/client-credentials/):
 ​
 ```js
-import { ISettings, ClientCredentialsAuth } from "@cognite/auth-wrapper";
+import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
 ​
 const settings: ISettings = {
@@ -74,7 +74,7 @@ const settings: ISettings = {
 const client = new CogniteClient({
   project: "my-project",
   appId: "demo-sample",
-  getToken: () => Promise.resolve(await ClientCredentialsAuth.load(settings).login()),
+  getToken: () => Promise.resolve(await CogniteAuthWrapper.load('client_credentials', settings).login()),
 });
 ​
 ```
@@ -86,7 +86,7 @@ You can find a full sample application [here]()
 This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active directory on behalf of a user using the [device code flow](https://oauth.net/2/grant-types/device-code/):
 ​
 ```js
-import { ISettings, DeviceAuth } from "@cognite/auth-wrapper";
+import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
 ​
 const settings: ISettings = {
@@ -100,7 +100,7 @@ const settings: ISettings = {
 const client = new CogniteClient({
   project: "my-project",
   appId: "demo-sample",
-  getToken: () => Promise.resolve(await DeviceAuth.load(settings).login()),
+  getToken: () => Promise.resolve(await CogniteAuthWrapper.load('device', settings).login()),
 });
 ​
 ```
@@ -112,7 +112,7 @@ You can find a full sample application [here]()
 This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure Active directory on behalf of a user using the [device code flow](https://oauth.net/2/grant-types/device-code/):
 ​
 ```js
-import { ISettings, DeviceAuth } from "@cognite/auth-wrapper";
+import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
 ​
 const settings: ISettings = {
@@ -123,12 +123,13 @@ const settings: ISettings = {
 };
 ​
 // Retrieving access_token.
-const tokenResponse = await DeviceAuth.load(this.settings).login();
+const tokenResponse = await CogniteAuthWrapper.load('device', settings).login();
 ​
 const client = new CogniteClient({
   project: "my-project",
   appId: "demo-sample",
-  getToken: () => Promise.resolve(await DeviceAuth.load(
+  getToken: () => Promise.resolve(await CogniteAuthWrapper.load(
+    'device',
     settings
   ).login(tokenResponse?.refresh_token)),
 });
@@ -143,7 +144,7 @@ This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.np
 flow](https://oauth.net/2/grant-types/implicit/):
 ​
 ```js
-import { ISettings, ImplicitAuth } from "@cognite/auth-wrapper";
+import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
 ​
 const settings: ISettings = {
@@ -157,7 +158,7 @@ const settings: ISettings = {
 const client = new CogniteClient({
   project: "my-project",
   appId: "demo-sample",
-  getToken: () => Promise.resolve(await ImplicitAuth.load(settings).login()),
+  getToken: () => Promise.resolve(await CogniteAuthWrapper.load('implicit', settings).login()),
 });
 ​
 ```
@@ -170,7 +171,7 @@ This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.np
 flow](https://oauth.net/2/grant-types/authorization-code/) with [pkce](https://oauth.net/2/pkce/):
 ​
 ```js
-import { ISettings, PkceAuth } from "@cognite/auth-wrapper";
+import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
 ​
 const settings: ISettings = {
@@ -183,7 +184,7 @@ const settings: ISettings = {
 const client = new CogniteClient({
   project: "my-project",
   appId: "demo-sample",
-  getToken: () => Promise.resolve(await PkceAuth.load(settings).login()),
+  getToken: () => Promise.resolve(await CogniteAuthWrapper.load('pkce', settings).login()),
 });
 ​
 ```
@@ -196,7 +197,7 @@ This example shows how to use the Cognite [@cognite/auth-wrapper](https://www.np
 flow](https://oauth.net/2/grant-types/authorization-code/) with [pkce](https://oauth.net/2/pkce/):
 ​
 ```js
-import { ISettings, PkceAuth } from "@cognite/auth-wrapper";
+import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
 ​
 const settings: ISettings = {
@@ -207,15 +208,16 @@ const settings: ISettings = {
 };
 ​
 // Retrieving access_token.
-const tokenResponse: AuthResponse = await PkceAuth.load(
-   settings
+const tokenResponse: AuthResponse = await CogniteAuthWrapper.load(
+  'pkce',
+  settings
 ).login();
 ​
 ​
 const client = new CogniteClient({
   project: "my-project",
   appId: "demo-sample",
-  getToken: () => Promise.resolve(await PkceAuth.load(settings)
+  getToken: () => Promise.resolve(await CogniteAuthWrapper.load('pkce', settings)
     .login(tokenResponse?.refresh_token)),
 });
 ​
@@ -230,18 +232,23 @@ You can find a full sample application [here]()
 This example shows how to use only SDK to get a token from Azure Active directory on behalf of a user using the [client credentials flow](https://oauth.net/2/grant-types/client-credentials/):
 ​
 ```js
+import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
 ​
 const client = new CogniteClient({
   project: "my-project",
   appId: "demo-sample",
-  credentials: {
-  	method: 'client_credentials',
-    authority: 'your_authority',
-    client_id: 'your_client_id',
-    grant_type: 'your_grant_type',
-    client_secret: 'your_client_secret',
-    scope: 'your_scope'
+  authentication: {
+    provider: CogniteAuthWrapper,
+    credentials: {
+      method: 'client_credentials',
+      authority: 'your_authority',
+      client_id: 'your_client_id',
+      grant_type: 'your_grant_type',
+      client_secret: 'your_client_secret',
+      scope: 'your_scope'
+    }
+  }
 });
 ​
 ```
@@ -253,17 +260,22 @@ You can find a full sample application [here]()
 This example shows how to use only SDK to get a token from Azure Active directory on behalf of a user using the [device code flow](https://oauth.net/2/grant-types/device-code/):
 ​
 ```js
+import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
 ​
 const client = new CogniteClient({
   project: "my-project",
   appId: "demo-sample",
-  credentials: {
-  	method: 'device',
-    authority: 'your_authority',
-    client_id: 'your_client_id',
-    client_secret: 'your_client_secret',
-    scope: 'your_scope'
+  authentication: {
+    provider: CogniteAuthWrapper,
+    credentials: {
+      method: 'device',
+      authority: 'your_authority',
+      client_id: 'your_client_id',
+      client_secret: 'your_client_secret',
+      scope: 'your_scope'
+    }
+  }
 });
 ​
 ```
@@ -275,18 +287,23 @@ You can find a full sample application [here]()
 This example shows how to use only SDK to get a token from Azure Active directory on behalf of a user using the [pkce flow](https://oauth.net/2/pkce/):
 ​
 ```js
+import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
 ​
 const client = new CogniteClient({
   project: "my-project",
   appId: "demo-sample",
-  credentials: {
-  	method: 'pkce',
-    authority: 'your_authority',
-    client_id: 'your_client_id',
-    client_id: 'your_client_id',
-    client_secret: 'your_client_secret',
-    scope: 'your_scope'
+  authentication: {
+    provider: CogniteAuthWrapper,
+    credentials: {
+      method: 'pkce',
+      authority: 'your_authority',
+      client_id: 'your_client_id',
+      client_id: 'your_client_id',
+      client_secret: 'your_client_secret',
+      scope: 'your_scope'
+    }
+  }
 });
 ​
 ```
@@ -319,9 +336,11 @@ API keys use the same API in the SDK, using `credentials` you will need to set t
 const client = new CogniteClient({
   appId: 'api-key-app',
   project: 'demo-project',
-  credentials: {
-  	method: 'api',
-    apiKey: 'API_KEY_HERE'
+  authentication: {
+    credentials: {
+      method: 'api',
+      apiKey: 'API_KEY_HERE'
+    }
   },
 });
 ```
