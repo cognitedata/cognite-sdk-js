@@ -1,8 +1,8 @@
 * @cognitedata/developer-tooling
 
-/packages/codegen* @cognitedata/developer-tooling andersfylling
-/packages/playground* @cognitedata/developer-tooling andersfylling
-/packages/stable* @cognitedata/developer-tooling andersfylling
+/packages/codegen* @cognitedata/developer-tooling @andersfylling
+/packages/playground* @cognitedata/developer-tooling @andersfylling
+/packages/stable* @cognitedata/developer-tooling @andersfylling
 
 /packages/playground/src/api/documents @cognitedata/grep
 /packages/playground/src/__tests__/api/documents* @cognitedata/grep
