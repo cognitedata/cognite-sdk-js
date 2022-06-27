@@ -1,5 +1,13 @@
+---
+pagination_next: null
+pagination_prev: null
+title: Auth-wrapper
+---
+<!-- Add intro and description here: 1. What is an auth wrapper 2. Purpose of an auth wrapper -->
+
 # Authentication
-​
+
+- [Get started with Auth wrapper](#get-started-with-auth-wrapper)
 - [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
 - [Access different clusters](#access-different-clusters)
 - [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
@@ -18,7 +26,56 @@
   - [getToken method](#gettoken-method)
   - [credentials method](#credentials-method)
 - [Manually trigger authentication](#manually-trigger-authentication)
-​
+
+## Get started with Auth wrapper​
+
+<!--More info will be added here-->
+
+```js
+import { CogniteAuthWrapper } from "@cognite/auth-wrapper";
+import { CogniteClient } from "@cognite/sdk";
+
+class MyProjectTest {
+    protected client: CogniteClient;
+
+    constructor() {
+        this.client = new CogniteClient({
+            appId: 'testing-app',
+            project: 'your_cdf_project',
+            baseUrl: 'your_baseurl',
+            authentication: {
+                provider: CogniteAuthWrapper,
+                credentials: {
+                    method: 'your_method',
+                    authority: 'your_authority',
+                    client_id: 'your_client_id',
+                    client_secret: 'your_client_secret',
+                    grant_type: 'your_grant_type',
+                    scope: 'your_scope'
+                }
+            }
+        });
+    }
+
+    async run () {
+        console.log(await this.client.assets.list())
+    }
+}
+
+export default new MyProjectTest().run();
+```
+
+```bash
+  npm run build
+```
+Once the build is successful, enter the command:
+
+```bash
+  npm run start
+```
+
+You will be able to view the list of assests in the terminal window.
+
 ## Use access tokens instead of API keys
 ​
 Instead of API keys, we strongly recommend you use **access tokens**. These are short-lived tokens that grant the user access to CDF. The application gets an access token by requesting the user (or client credential) to sign in to a CDF project's identity provider (Google, Azure Active Directory, etc.).
