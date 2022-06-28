@@ -7,7 +7,7 @@ title: Auth-wrapper
 
 # Authentication
 
-- [Get started with Auth wrapper](#get-started-with-auth-wrapper)
+- [Get started with Auth wrapper](#get-started-with-auth-wrapper​)
 - [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
 - [Access different clusters](#access-different-clusters)
 - [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
@@ -27,9 +27,35 @@ title: Auth-wrapper
   - [credentials method](#credentials-method)
 - [Manually trigger authentication](#manually-trigger-authentication)
 
+
 ## Get started with Auth wrapper​
 
-<!--More info will be added here-->
+The instance of the auth wrapper is passed to the Cognite SDK. Open a terminal of your choice to install the dependencies to get started.
+
+### Install Auth wrapper dependencies
+
+1. Install the Cognite Auth wrapper package:
+
+```bash
+npm install @cognite/auth-wrapper
+```
+
+2. Install the Cognite SDK:
+
+```bash
+npm install @cognite/sdk
+```
+
+:::info Prerequisites
+1. You need to have a basic knowledge of NPM, Typescript and Vanilla JS.
+2. Install the developer dependencies:
+  - @types/node
+  - typescript
+:::
+
+### Build and Run auth wrapper
+
+1. Create a file `quickstart.ts` in the editor of your choice and enter the below code:
 
 ```js
 import { CogniteAuthWrapper } from "@cognite/auth-wrapper";
@@ -65,6 +91,14 @@ class MyProjectTest {
 export default new MyProjectTest().run();
 ```
 
+2. Enter the values for `appId`, `project`, and `baseUrl` as per your CDF project.
+
+3. Replace the credentials with values for , `method`, `authority`, `client_id`, `client_secret`, `grant_type`, and `scope` inside the CogniteClient.
+
+4. Inside the `aysnc` function, let's log the assets list as output to ensure that the assets are getting logged to the console.
+
+5. Build and run the code.
+
 ```bash
   npm run build
 ```
@@ -74,7 +108,7 @@ Once the build is successful, enter the command:
   npm run start
 ```
 
-You will be able to view the list of assests in the terminal window.
+You will be able to view the list of assests in the console.
 
 ## Use access tokens instead of API keys
 ​
