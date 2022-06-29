@@ -46,12 +46,21 @@ npm install @cognite/auth-wrapper
 npm install @cognite/sdk
 ```
 
-:::info Prerequisites
+### Prerequisites
 1. You need to have a basic knowledge of NPM, Typescript and Vanilla JS.
-2. Install the developer dependencies:
+2. Install the bellow packages as a developer depencies:
   - @types/node
   - typescript
-:::
+3. Add these two entries in the `scripts` object at package.json:
+  ```bash
+  ...
+  "scripts": {
+    ...
+    "build": "tsc",
+    "start": "node quickstart.js"
+  },
+  ...
+  ```
 
 ### Build and Run auth wrapper
 
