@@ -204,6 +204,9 @@ export default class BaseCogniteClient {
         `CogniteJavaScriptSDK:${this.version}`
       );
 
+    if (typeof this.getToken === 'function') {
+      this.getToken().then(token=>this.httpClient.setDefaultHeader('Authroization', `Bearer ${token}`))
+    }
     this.metadata = new MetadataMap();
     this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
     this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
