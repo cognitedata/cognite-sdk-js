@@ -46,12 +46,21 @@ npm install @cognite/auth-wrapper
 npm install @cognite/sdk
 ```
 
-:::info Prerequisites
+### Prerequisites
 1. You need to have a basic knowledge of NPM, Typescript and Vanilla JS.
-2. Install the developer dependencies:
+2. Install the bellow packages as a developer depencies:
   - @types/node
   - typescript
-:::
+3. Add these two entries in the `scripts` object at package.json:
+  ```bash
+  ...
+  "scripts": {
+    ...
+    "build": "tsc",
+    "start": "node quickstart.js"
+  },
+  ...
+  ```
 
 ### Build and Run auth wrapper
 
@@ -169,8 +178,6 @@ const client = new CogniteClient({
 ​
 ```
 ​
-You can find a full sample application [here]().
-​
 ### OIDC using getToken with Device code flow
 ​
 The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure AD on behalf of a user using the [Device code flow](https://oauth.net/2/grant-types/device-code/):
@@ -194,8 +201,6 @@ const client = new CogniteClient({
 });
 ​
 ```
-​
-You can find a full sample application [here]().
 ​
 ### OIDC using getToken with Device code flow with refresh token
 ​
@@ -226,8 +231,6 @@ const client = new CogniteClient({
 ​
 ```
 ​
-You can find a full sample application [here]().
-​
 ### OIDC using getToken with Implicit flow
 ​
 The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure AD on behalf of a user using the [Implicit flow](https://oauth.net/2/grant-types/implicit/):
@@ -252,8 +255,6 @@ const client = new CogniteClient({
 ​
 ```
 ​
-You can find a full sample application [here]().
-​
 ### OIDC using getToken with PKCE flow
 ​
 The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure AD on behalf of a user using the [Authorization code flow](https://oauth.net/2/grant-types/authorization-code/) with [PKCE](https://oauth.net/2/pkce/):
@@ -276,8 +277,6 @@ const client = new CogniteClient({
 });
 ​
 ```
-​
-You can find a full sample application [here]().
 ​
 ### OIDC using getToken with PKCE flow with refresh token
 ​
@@ -310,8 +309,6 @@ const client = new CogniteClient({
 ​
 ```
 ​
-You can find a full sample application [here]().
-​
 ## OpenID Connect (OIDC) with `credentials`
 ​
 ### OIDC using credentials with Client credentials flow
@@ -340,7 +337,7 @@ const client = new CogniteClient({
 ​
 ```
 ​
-You can find a full sample application [here]().
+You can find a full sample application [here](https://github.com/cognitedata/cognite-sdk-js/blob/feat/auth-wrapper-samples/samples/nodejs/auth-wrapper/quickstart.ts).
 ​
 ### OIDC using credentials with Device code flow
 ​
@@ -367,8 +364,6 @@ const client = new CogniteClient({
 ​
 ```
 ​
-You can find a full sample application [here]().
-​
 ### OIDC using credentials with PKCE flow
 ​
 The example below shows how to use only an SDK to get a token from Azure Active Directory on behalf of a user using the [PKCE flow](https://oauth.net/2/pkce/):
@@ -394,9 +389,7 @@ const client = new CogniteClient({
 });
 ​
 ```
-​
-You can find a full sample application [here]().
-​
+​​
 ## API keys
 ​
 ### getToken method
