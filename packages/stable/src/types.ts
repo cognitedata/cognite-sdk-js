@@ -3211,7 +3211,7 @@ export interface RelationshipsRetrieveParams extends IgnoreUnknownIds {
   fetchResources?: boolean;
 }
 
-export type AnnotatedResourceType = 'file';
+export type AnnotatedResourceType = 'file' | 'threedmodel';
 export type AnnotationStatus = 'suggested' | 'approved' | 'rejected';
 
 // TODO [CXT-463] Use annotation-types package definitions
