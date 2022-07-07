@@ -308,7 +308,7 @@ export default class BaseCogniteClient {
         } else {
           const bearer = bearerString(token);
           this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
-          return bearer;
+          return token;
         }
       } catch {
         return;
