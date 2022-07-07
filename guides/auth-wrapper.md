@@ -399,8 +399,10 @@ const client = new CogniteClient({
 ​
 ### getToken method
 ​
-API keys use the same API in the SDK, using `getToken` you will need to set the additional flag `apiKeyMode` to
-true to handle headers appropriately.
+The getToken method is an option that will enable you to write your own logic in how the SDK should
+obtain the token. The classic usage is an implementation that returns a static value but you can, as
+an example, create a logic that will test your token and change it for another one if anything goes
+wrong. Note that if you want to explicitly use an API Key you must to set the additional flag `apiKeyMode` to true to so the SDK can the right headers properly.
 ​
 ```js
 const client = new CogniteClient({
@@ -415,7 +417,7 @@ const client = new CogniteClient({
 ​
 ### credentials method
 ​
-API keys use the same API in the SDK, using `credentials` you will need to set the following object to handle headers appropriately.
+The credentials method is an alternative way to get authenticated in the SDK. It's the recomended way to go if you don't need to implement specific logics for obtaining the token. To use API `credentials` you will need to set the credentials method property to 'api' so the SDK can set the headers properly.
 ​
 ```js
 const client = new CogniteClient({
