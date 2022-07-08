@@ -16,7 +16,7 @@
   - [PKCE Flow](#oidc-authentication-using-credentials-w-pkce-flow)
 - [API keys](#api-keys)
   - [getToken metod](#gettoken-metod)
-  - [credentials method](#credentials-method)
+  <!-- - [credentials method](#credentials-method) -->
 - [Manually trigger authentication](#manually-trigger-authentication)
 ​
 ## Use access tokens instead of API keys
