@@ -6,7 +6,7 @@ title: Auth wrapper
 
 The **@cognite/auth-wrapper** is an OpenID Connect/OAuth 2.0 wrapper library written in JavaScript that provides a convenient way to retrieve access tokens from any IdP that meets the OpenID pattern. You can use it on the client-side or server-side with JavaScript applications.
 
-Cognite's **auth wrapper** enables you to authenticate any solution with minimal code using any of authentication flows - `Device flow with refresh tokens`, `Client credentials`, `PKCE with refresh token` and `Implicit flow`.
+Cognite's **auth wrapper** enables you to authenticate a solution with minimal code using any of the authentication flows - `Device flow with refresh tokens`, `Client credentials`, `PKCE with refresh token` and `Implicit flow`.
 
 # Authentication
 
