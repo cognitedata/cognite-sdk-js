@@ -7,7 +7,8 @@
     "Håvard Krogstie <havard.krogstie@cognite.com>",
     "Martin Røed <martin.roed@cognite.com>",
     "Emil Sandstø <emil.sandsto@cognite.com>",
-    "Anders Øen Fylling <anders.fylling@cognite.com>"
+    "Anders Øen Fylling <anders.fylling@cognite.com>",
+    "Harish Krishnan <harish.krishnan@cognite.com"
   ],
   "license": "Apache-2.0",
   "repository": "cognitedata/cognite-sdk-js",
