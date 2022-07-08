@@ -1,8 +1,5 @@
 // Copyright 2020 Cognite AS
 
-import isObject from 'lodash/isObject';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
 import { LoginAPI } from './api/login/loginApi';
 import { LogoutApi } from './api/logout/logoutApi';
 import {
@@ -28,15 +25,59 @@ import {
   createUniversalRetryValidator,
   RetryValidator,
 } from './httpClient/retryValidator';
+import {
+  verifyCredentialsRequiredFields,
+  verifyOptionsRequiredFields,
+} from './loginUtils';
+// eslint-disable-next-line lodash/import-scope
+import { isFunction } from 'lodash';
+
+export interface ClientCredentials {
+  method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
+  apiKey?: string;
+  authority?: string;
+  client_id?: string;
+  client_secret?: string;
+  response_type?: string;
+  grant_type?: string;
+  scope?: string;
+}
+
+export interface TokenCredentials {
+  token_type: string;
+  expires_in: string;
+  ext_expires_in: string;
+  expires_on?: string;
+  not_before?: string;
+  resource?: string;
+  access_token: string;
+  refresh_token?: string;
+  id_token?: string;
+  scope?: string;
+  expires_at?: number;
+  session_state?: string;
+}
 
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
   appId: string;
   /** URL to Cognite cluster, e.g 'https://greenfield.cognitedata.com' **/
   baseUrl?: string;
+  /** Project name */
   project: string;
-  getToken: () => Promise<string>;
+  /** Can be used with @cognite/auth-wrapper, passing an api key or with MSAL Library */
+  getToken?: () => Promise<string>;
+  /** Retrieve data with apiKey passed at getToken method */
   apiKeyMode?: boolean;
+  /** Retrieve data without any authentication headers */
+  noAuthMode?: boolean;
+  /** OIDC/API auth */
+  authentication?: {
+    /** Provider to do the auth job, recommended: @cognite/auth-wrapper */
+    provider?: any;
+    /** IdP Credentials */
+    credentials?: ClientCredentials;
+  };
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -65,13 +106,17 @@ export default class BaseCogniteClient {
   private readonly metadata: MetadataMap;
   private readonly loginApi: LoginAPI;
   private readonly logoutApi: LogoutApi;
-  private readonly apiKeyMode: boolean;
   /**
    * On 401 it might be possible to get a new token, but if `getToken` returns the same over and
    * over (e.g api-keys) there isn't a point retrying. previousToken is used to keep track of that,
    * comparing new tokens to one tried the last time.
    */
-  private readonly getToken: () => Promise<string>;
+  private readonly getToken: () => Promise<string | undefined>;
+  private readonly apiKeyMode: boolean;
+  private readonly noAuthMode?: boolean;
+  private readonly credentials?: ClientCredentials;
+  private authProvider?: any;
+  private readonly tokenCredentials: TokenCredentials = {} as TokenCredentials;
   readonly project: string;
 
   /**
@@ -89,20 +134,57 @@ export default class BaseCogniteClient {
    * ```
    */
   constructor(options: ClientOptions, apiVersion: CogniteAPIVersion = 'v1') {
-    if (!isObject(options)) {
-      throw Error('`CogniteClient` is missing parameter `options`');
-    }
-    if (!isString(options.appId)) {
-      throw Error('options.appId is required and must be of type string');
-    }
-    if (!isString(options.project)) {
-      throw Error('options.project is required and must be of type string');
-    }
-    if (!isFunction(options.getToken)) {
+    verifyOptionsRequiredFields(options);
+
+    if (
+      options &&
+      !options.authentication?.credentials &&
+      !options.getToken &&
+      !options.noAuthMode
+    ) {
       throw Error(
-        'options.getToken is required and must be of type () => Promise<string>'
+        'options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>'
       );
     }
+
+    if (options && options.authentication) {
+      const { credentials, provider } = options.authentication;
+
+      if (credentials) {
+        this.credentials = credentials;
+        verifyCredentialsRequiredFields(credentials);
+
+        if (this.credentials?.method !== 'api' && !provider) {
+          throw Error(
+            'options.authentication.provider is required and must be a class that implements a static load method and can call a login method.'
+          );
+        }
+      }
+
+      if (provider && !isFunction(provider.load)) {
+        throw Error('The provider needs to have a load method.');
+      }
+
+      if (provider && !isFunction(provider.load().login)) {
+        throw Error(
+          'The provider load method needs to can call a login method.'
+        );
+      }
+
+      if (provider !== undefined) {
+        if (
+          !provider.load(true, true).method &&
+          !provider.load(true, true).settings
+        ) {
+          throw Error(
+            'Please, use the recommended provider: @cognite/auth-wrapper'
+          );
+        }
+
+        this.authProvider = provider;
+      }
+    }
+
     if (isBrowser() && !isUsingSSL()) {
       console.warn(
         'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
@@ -110,6 +192,7 @@ export default class BaseCogniteClient {
     }
 
     const { baseUrl } = options;
+
     this.http = new CDFHttpClient(
       getBaseUrl(baseUrl),
       this.getRetryValidator()
@@ -127,13 +210,16 @@ export default class BaseCogniteClient {
     this.apiVersion = apiVersion;
     this.project = options.project;
     this.apiKeyMode = !!options.apiKeyMode;
+    this.noAuthMode = !!options.noAuthMode;
     this.getToken = async () => {
-      return options.getToken();
+      return options.getToken ? options.getToken() : undefined;
     };
 
-    this.httpClient.set401ResponseHandler(async (error, retry, reject) => {
+    this.httpClient.set401ResponseHandler(async (httpError, retry, reject) => {
       try {
-        const previousToken = this.retrieveTokenValueFromHeader(error.headers);
+        const previousToken = this.retrieveTokenValueFromHeader(
+          httpError.headers
+        );
 
         const newToken = await this.authenticate();
         if (newToken && newToken !== previousToken) {
@@ -151,28 +237,103 @@ export default class BaseCogniteClient {
 
   public authenticate: () => Promise<string | undefined> = async () => {
     try {
-      const token = await this.getToken();
-      if (this.apiKeyMode) {
-        this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
-      } else {
-        const bearer = bearerString(token);
-        this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
-      }
+      let token = await this.authenticateGetToken();
+
+      if (token !== undefined) return token;
+
+      token = await this.authenticateCredentials();
+
       return token;
-    } catch {
+    } catch (e) {
       return;
     }
   };
 
+  public authenticateCredentials: () => Promise<string | undefined> =
+    async () => {
+      try {
+        if (!this.credentials) return;
+
+        if (this.credentials.method === 'api') {
+          const token: string = this.credentials.apiKey!;
+          this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
+
+          return token;
+        }
+
+        if (this.tokenCredentials.refresh_token) {
+          this.tokenCredentials.access_token = '';
+        }
+
+        // @ts-ignore
+        this.tokenCredentials = await this.authProvider
+          .load(this.credentials.method, this.credentials)
+          .login(
+            (this.credentials.method === 'device' ||
+              this.credentials.method === 'pkce') &&
+              this.tokenCredentials.refresh_token
+          );
+
+        let token;
+        if (
+          this.tokenCredentials.access_token !== undefined &&
+          this.tokenCredentials.access_token !== ''
+        ) {
+          token = this.tokenCredentials.access_token;
+
+          this.httpClient.setDefaultHeader(
+            AUTHORIZATION_HEADER,
+            bearerString(token!)
+          );
+        }
+
+        return token;
+      } catch (e) {
+        return;
+      }
+    };
+
+  private authenticateGetToken: () => Promise<string | undefined> =
+    async () => {
+      try {
+        const token = await this.getToken();
+
+        if (token === undefined) return token;
+
+        if (this.noAuthMode) {
+          return token;
+        } else if (this.apiKeyMode) {
+          this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
+          return token;
+        } else {
+          const bearer = bearerString(token);
+          this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
+          return token;
+        }
+      } catch {
+        return;
+      }
+    };
+
+  /**
+   * It retrieves the previous token from header
+   * @returns string
+   */
   private retrieveTokenValueFromHeader(headers: HttpHeaders): string {
     let previousToken;
 
-    if (this.apiKeyMode) {
+    if (
+      (this.credentials && this.credentials.method === 'api') ||
+      this.apiKeyMode
+    ) {
       previousToken = headers[API_KEY_HEADER];
     } else {
       previousToken = headers[AUTHORIZATION_HEADER];
     }
-    return previousToken;
+
+    return previousToken !== undefined
+      ? previousToken.replace('Bearer ', '')
+      : previousToken;
   }
 
   /**

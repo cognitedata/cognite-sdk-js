@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.1.3...@cognite/sdk-beta@5.1.4) (2022-07-07)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [5.1.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.1.2...@cognite/sdk-beta@5.1.3) (2022-06-20)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [5.1.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.1.1...@cognite/sdk-beta@5.1.2) (2022-06-17)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+## [5.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.1.0...@cognite/sdk-beta@5.1.1) (2022-06-09)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+
+
+
+
+# [5.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.0.25...@cognite/sdk-beta@5.1.0) (2022-06-02)
+
+
+### Features
+
+* automatic token management with @cognite/auth-wrapper  ([#796](https://github.com/cognitedata/cognite-sdk-js/issues/796)) ([d13c53f](https://github.com/cognitedata/cognite-sdk-js/commit/d13c53f9d5a5e65d6e2fc7d1a0e2efe2d36e678c))
+
+
+### Reverts
+
+* Revert "feat: automatic token management with @cognite/auth-wrapper  (#796)" (#813) ([0a8a61c](https://github.com/cognitedata/cognite-sdk-js/commit/0a8a61c2b2c3d992f80b40f6282b20595537edac)), closes [#796](https://github.com/cognitedata/cognite-sdk-js/issues/796) [#813](https://github.com/cognitedata/cognite-sdk-js/issues/813)
+
+
+
+
+
 ## [5.0.25](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.0.24...@cognite/sdk-beta@5.0.25) (2022-05-27)
 
 **Note:** Version bump only for package @cognite/sdk-beta

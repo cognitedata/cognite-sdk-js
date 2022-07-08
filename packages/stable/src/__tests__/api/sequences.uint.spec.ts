@@ -73,7 +73,7 @@ describe('Sequences unit test', () => {
 
     expect(items.length).toBe(3);
     items.forEach((row, index) => {
-      expect([...row]).toEqual(testValues);
+      expect(row.values).toEqual(testValues);
       expect(row.columns.length).toEqual(3);
       expect(row.rowNumber).toEqual(index);
     });
