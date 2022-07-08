@@ -68,7 +68,7 @@ const scopes = [
   `${baseUrl}/IDENTITY`
 ];
 
-// MSAL configuration
+// MSAL configurations
 const configuration: Configuration = {
   auth: {
     clientId: "$AZURE_APP_ID",
