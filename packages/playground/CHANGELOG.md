@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.5.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.5.0...@cognite/sdk-playground@5.5.1) (2022-07-07)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
+# [5.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.4.1...@cognite/sdk-playground@5.5.0) (2022-06-20)
+
+
+### Features
+
+* **annotations:** move annotations to stable ([#823](https://github.com/cognitedata/cognite-sdk-js/issues/823)) ([b453685](https://github.com/cognitedata/cognite-sdk-js/commit/b4536855ad62e9888af11419b89af1621a50a7ff))
+
+
+
+
+
+## [5.4.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.4.0...@cognite/sdk-playground@5.4.1) (2022-06-17)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
+# [5.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.3.1...@cognite/sdk-playground@5.4.0) (2022-06-13)
+
+
+### Features
+
+* **annotations:** remove linked resource fields ([#822](https://github.com/cognitedata/cognite-sdk-js/issues/822)) ([248d2a0](https://github.com/cognitedata/cognite-sdk-js/commit/248d2a0ba3ecbd3625e20e26bb7cd051f276febe))
+
+
+
+
+
+## [5.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.3.0...@cognite/sdk-playground@5.3.1) (2022-06-09)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
 # [5.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.2.3...@cognite/sdk-playground@5.3.0) (2022-06-02)
 
 

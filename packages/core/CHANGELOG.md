@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.5.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.5.0...@cognite/sdk-core@4.5.1) (2022-07-07)
+
+
+### Bug Fixes
+
+* return token instead of bearertoken ([#834](https://github.com/cognitedata/cognite-sdk-js/issues/834)) ([2829149](https://github.com/cognitedata/cognite-sdk-js/commit/2829149c906b1ecd2c1f28808738ddc28f8f798c))
+
+
+
+
+
+# [4.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.4.0...@cognite/sdk-core@4.5.0) (2022-06-17)
+
+
+### Features
+
+* noAuthMode support ([#824](https://github.com/cognitedata/cognite-sdk-js/issues/824)) ([69a33ce](https://github.com/cognitedata/cognite-sdk-js/commit/69a33ce1f352706a9e36b119a99be9132e9e3c9c))
+
+
+
+
+
+# [4.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.3.0...@cognite/sdk-core@4.4.0) (2022-06-09)
+
+
+### Features
+
+* auth wrapper as a provider ([#816](https://github.com/cognitedata/cognite-sdk-js/issues/816)) ([4c2fc03](https://github.com/cognitedata/cognite-sdk-js/commit/4c2fc0367e1aba347c6d8ab0a3b1e5f3a15a7a2d))
+
+
+
+
+
 # [4.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.2.0...@cognite/sdk-core@4.3.0) (2022-06-02)
 
 

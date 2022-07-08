@@ -13,10 +13,17 @@ function setupClient(baseUrl: string = BASE_URL) {
     appId: 'JS SDK integration tests',
     project: 'test-project',
     baseUrl,
-    credentials: {
-      method: 'api',
-      apiKey,
-    },
+    apiKeyMode: true,
+    getToken: () => Promise.resolve(apiKey),
+  });
+}
+
+function setupNoAuthClient(noAuthMode = true) {
+  return new BaseCogniteClient({
+    appId: 'JS SDK integration tests',
+    project: 'test-project',
+    baseUrl: mockBaseUrl,
+    noAuthMode: noAuthMode,
   });
 }
 
@@ -67,13 +74,20 @@ describe('CogniteClient', () => {
       );
     });
 
+    test('not throw errors when running in noAuthMode', () => {
+      expect(() => {
+        // @ts-ignore
+        setupNoAuthClient(true);
+      }).not.toThrow();
+    });
+
     describe('credentials', () => {
       test('missing credentials', () => {
         expect(() => {
           // @ts-ignore
           new BaseCogniteClient({ appId: 'unit-test', project: 'unit-test' });
         }).toThrowErrorMatchingInlineSnapshot(
-          `"options.credentials is required or options.getToken is request and must be of type () => Promise<string>"`
+          `"options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>"`
         );
       });
       test('call credentials on 401', async () => {
@@ -86,10 +100,8 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          credentials: {
-            method: 'api',
-            apiKey: '401-test-token',
-          },
+          apiKeyMode: true,
+          getToken: () => Promise.resolve('401-test-token'),
         });
 
         const result = await client.get('/test');
@@ -109,6 +121,7 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
+          apiKeyMode: true,
           getToken,
         });
 
@@ -129,10 +142,8 @@ describe('CogniteClient', () => {
         project,
         appId: 'unit-test',
         baseUrl: mockBaseUrl,
-        credentials: {
-          method: 'api',
-          apiKey: 'test-api-key',
-        },
+        apiKeyMode: true,
+        getToken: () => Promise.resolve('test-api-key'),
       });
 
       const result = await client.get('/test');
@@ -150,11 +161,45 @@ describe('CogniteClient', () => {
     nock(mockBaseUrl, { reqheaders: expectedHeaders }).get('/').reply(200, {});
   });
 
-  describe('http requests', () => {
+  describe('authenticated http requests', () => {
     let client: BaseCogniteClient;
 
     beforeAll(async () => {
       client = setupMockableClient();
+    });
+
+    test('get method', async () => {
+      nock(mockBaseUrl).get('/').once().reply(200, []);
+      const response = await client.get('/');
+      expect(response.data).toEqual([]);
+    });
+
+    test('post method', async () => {
+      nock(mockBaseUrl).post('/').once().reply(200, []);
+      const response = await client.post('/');
+      expect(response.data).toEqual([]);
+    });
+
+    test('put method', async () => {
+      nock(mockBaseUrl).put('/').once().reply(200, []);
+      const response = await client.put('/', {
+        responseType: 'json',
+      });
+      expect(response.data).toEqual([]);
+    });
+
+    test('delete method', async () => {
+      nock(mockBaseUrl).delete('/').once().reply(200, 'abc');
+      const response = await client.delete('/', { responseType: 'text' });
+      expect(response.data).toBe('abc');
+    });
+  });
+
+  describe('noAuthMode http requests', () => {
+    let client: BaseCogniteClient;
+
+    beforeAll(async () => {
+      client = setupNoAuthClient();
     });
 
     test('get method', async () => {

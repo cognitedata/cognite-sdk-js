@@ -6,8 +6,10 @@ import {
   FilterQuery,
 } from '@cognite/sdk';
 
+
 export * from './exports.gen';
-export * from './api/annotations/types';
+export * from './api/documents/types.gen';
+
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
 // Overriding types should probably be done in their respective API endpoint files, where possible
