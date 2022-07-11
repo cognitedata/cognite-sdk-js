@@ -8,10 +8,10 @@ on:
 
 jobs:
   stable:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         package: ["stable", "playground"]
-        os: [ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v2
