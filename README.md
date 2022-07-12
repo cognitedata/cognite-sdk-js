@@ -26,7 +26,7 @@ The samples' [README.md](./samples/README.md) has instructions for running the s
 
 ## Authentication
 
-We offer two ways to get logged on our sdk, the first and most recommended is using [@cognite/auth-wrapper](./guides/auth-wrapper.md)
+We offer two ways to sign in to our SDK. The first and recommended approach is using [@cognite/auth-wrapper](./guides/auth-wrapper.md)
 and the second is using [Microsoft MSAL Library](./guides/auth-wrapper.md)
 ## Response header & http status
 
