@@ -5,6 +5,9 @@
   "license": "Apache-2.0",
   "repository": "cognitedata/cognite-sdk-js",
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
     "test": "jest --config=../../jest.config.js --testPathPattern=/codegen/",
     "test:debug": "node --inspect-brk ../../node_modules/.bin/jest --config=../../jest.config.js --testPathPattern=/codegen/ --runInBand",
