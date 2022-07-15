@@ -150,7 +150,13 @@ export interface Document {
   /** The source file that this document is derived from. */
   sourceFile: DocumentSourceFile;
 
-  /** GeoJSON Geometry. */
+  /**
+   * Geolocation derived for this document. Represented using a GeoJSON Geometry.
+   *
+   * The derived geolocation also includes geolocation information from a matched
+   * asset (see assetIds property). For matched assets without geolocation information
+   * the parent chain is followed until it finds an asset with geolocation information.
+   */
   geoLocation?: DocumentGeoJsonGeometry;
 }
 

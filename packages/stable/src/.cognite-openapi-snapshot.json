@@ -569,7 +569,7 @@
           "Assets"
         ],
         "summary": "Delete assets",
-        "description": "Delete assets. To delete all descendants, set recursive to true. The limit of the request does not include the number of descendants that are deleted.",
+        "description": "Delete assets. By default, `recursive=false` and the request would fail if attempting to delete assets that are referenced as parent by other assets.  To delete such assets and all its descendants, set recursive to true. The limit of the request does not include the number of descendants that are deleted.",
         "operationId": "deleteAssets",
         "parameters": [
           {
@@ -754,16 +754,6 @@
             "example": "[\"externalId1\", \"externalId2\", \"externalId3\"]",
             "schema": {
               "$ref": "#/components/schemas/JsonArrayString"
-            }
-          },
-          {
-            "in": "query",
-            "name": "rootAssetIds",
-            "description": "This parameter is deprecated. Use assetSubtreeIds instead. Only include events that have a related asset in a tree rooted at any of these root assetIds.",
-            "deprecated": true,
-            "example": "[363848954441724, 793045462540095, 1261042166839739]",
-            "schema": {
-              "$ref": "#/components/schemas/JsonArrayInt64"
             }
           },
           {
@@ -9750,6 +9740,59 @@
         }
       }
     },
+    "/api/v1/projects/{project}/sessions/revoke": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        }
+      ],
+      "post": {
+        "x-capability": "sessionsAcl:DELETE",
+        "tags": [
+          "Sessions"
+        ],
+        "operationId": "revokeSessions",
+        "summary": "Revoke sessions",
+        "description": "Revoke access to a session.\nRevocation of a session may in some cases take up to 1 hour to take effect.\n",
+        "requestBody": {
+          "description": "A request containing the information needed to revoke sessions.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeSessionRequestList"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "List of revoked sessions.\nIf the user does not have the `sessionsAcl:LIST` capability, then only the session IDs will be present in the response.\n",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionList"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "id": 0,
+                      "type": "CLIENT_CREDENTIALS",
+                      "status": "REVOKED",
+                      "creationTime": 1638795554528,
+                      "expirationTime": 1638795554528,
+                      "clientId": 0
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
     "/api/v1/projects/{project}/extpipes": {
       "get": {
         "tags": [
@@ -13836,6 +13879,200 @@
         },
         "x-capability": "transformationsAcl:READ"
       }
+    },
+    "/api/v1/projects/{project}/annotations": {
+      "post": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "Create annotations",
+        "description": "Creates the given annotations.\n\n### Identifiers\nAn annotation _must_ reference an **annotated resource**.\n\nThe reference can be made by providing the internal ID of the annotated resource.\n\n### Status\nThe annotation _must_ have the `status` field set to either \"suggested\", \"rejected\", or \"approved\"\n\n### Access control\nThe caller _must_ have read-access on all the **annotated resources**, otherwise the call will fail.\n\n### Annotation types and Data\nThe annotation **type** property _must_ be set to one of the globally available annotation types.\nSee the documentation of the `annotationType` and `data` attributes for details.\n\nThe annotation **data** _must_ conform to the schema provided by the annotation type.\n\n### Creating Application and User\nThe creating application and its version _must_ be provided. The creating user _must_ be provided, but if the\nannotation is being created by a service, this _can_ be set to `null`.",
+        "operationId": "annotationsCreate",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AnnotationsV2CreateRequestSchema"
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/AnnotationsV2CreateResponseSchema"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "annotationsAcl:WRITE"
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/annotations/suggest": {
+      "post": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "Suggest annotations",
+        "description": "Suggests the given annotations, i.e. creates them with `status` set to \"suggested\"\n\n### Identifiers\nAn annotation _must_ reference an **annotated resource**.\n\nThe reference can be made by providing the internal ID of the annotated resource.\n\n### Access control\nThe caller _must_ have read-access on all the **annotated resources**, otherwise the call will fail.\n\n### Annotation types and Data\nThe annotation **type** property _must_ be set to one of the globally available annotation types.\nSee the documentation of the `annotationType` and `data` attributes for details.\n\nThe annotation **data** _must_ conform to the schema provided by the annotation type.\n\n### Creating Application and User\nThe creating application and its version _must_ be provided. The creating user _must_ be provided, but if the\nannotation is being created by a service, this _can_ be set to `null`.",
+        "operationId": "annotationsSuggest",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AnnotationsV2SuggestRequestSchema"
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/AnnotationsV2CreateResponseSchema"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "annotationsAcl:SUGGEST"
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/annotations/{annotationId}": {
+      "get": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "Get an annotation",
+        "description": "Retrieves the referenced annotation.\n\nThe caller _must_ have read-access on the **annotated resource**, otherwise the call will fail.",
+        "operationId": "annotationsGet",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/AnnotationId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AnnotationsV2ResponseSchema"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project}/annotations/list": {
+      "post": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "Filter annotations",
+        "description": "Lists the annotations the caller has access to, based on a filter.\n\nThe caller _must_ have read-access on the **annotated resources** listed in the filter, otherwise the call will\nfail.",
+        "operationId": "annotationsFilter",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AnnotationsV2ListRequestSchema"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AnnotationsV2CursoredListResponseSchema"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project}/annotations/byids": {
+      "post": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "Retrieve annotations",
+        "description": "Retrieves the referenced annotations.\n\nThe caller _must_ have read-access on all the **annotated resources**, otherwise the call will fail.",
+        "operationId": "annotationsByids",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AnnotationsV2ByIdsRequestSchema"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AnnotationsV2ListResponseSchema"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project}/annotations/delete": {
+      "post": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "Delete annotations",
+        "description": "Deletes the referenced annotations completely.\n\nThe caller _must_ have read-access on all the **annotated resources**, otherwise the call will fail.",
+        "operationId": "annotationsDelete",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AnnotationsV2ByIdsRequestSchema"
+        },
+        "responses": {
+          "200": {
+            "description": "Successful deletion"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "annotationsAcl:WRITE"
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/annotations/update": {
+      "post": {
+        "tags": [
+          "Annotations"
+        ],
+        "summary": "Update annotations",
+        "description": "Updates the referenced annotations.\n\nThe caller _must_ have read-access on all the **annotated resources**, otherwise the call will fail.",
+        "operationId": "annotationsUpdate",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AnnotationsV2UpdateRequestSchema"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AnnotationsV2UpdateResponseSchema"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "annotationsAcl:WRITE"
+        ]
+      }
     }
   },
   "components": {
@@ -15013,7 +15250,7 @@
         }
       },
       "GeoLocation": {
-        "description": "The geographic metadata of the file.",
+        "description": "Geographic metadata.",
         "required": [
           "type",
           "geometry"
@@ -15774,6 +16011,9 @@
           },
           "labels": {
             "$ref": "#/components/schemas/LabelList"
+          },
+          "geoLocation": {
+            "$ref": "#/components/schemas/GeoLocation"
           }
         },
         "description": "A representation of a physical asset, for example a factory or a piece of equipment."
@@ -16062,6 +16302,9 @@
               },
               "labels": {
                 "$ref": "#/components/schemas/LabelFilter"
+              },
+              "geoLocation": {
+                "$ref": "#/components/schemas/GeoLocationFilter"
               }
             }
           }
@@ -16236,6 +16479,9 @@
               },
               "labels": {
                 "$ref": "#/components/schemas/LabelsPatch"
+              },
+              "geoLocation": {
+                "$ref": "#/components/schemas/SinglePatchGeoLocation"
               }
             }
           }
@@ -16919,17 +17165,6 @@
             "description": "Asset External IDs of equipment that this event relates to.",
             "items": {
               "$ref": "#/components/schemas/CogniteExternalId"
-            }
-          },
-          "rootAssetIds": {
-            "type": "array",
-            "uniqueItems": true,
-            "minItems": 1,
-            "maxItems": 100,
-            "description": "This parameter is deprecated. Use assetSubtreeIds instead. Only include events that have a related asset in a tree rooted at any of these root assetIds.",
-            "deprecated": true,
-            "items": {
-              "$ref": "#/components/schemas/AssetIdEither"
             }
           },
           "assetSubtreeIds": {
@@ -27329,7 +27564,14 @@
             "$ref": "#/components/schemas/DocumentSourceFile"
           },
           "geoLocation": {
-            "$ref": "#/components/schemas/DocumentGeoJsonGeometry"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DocumentGeoJsonGeometry"
+              },
+              {
+                "description": "Geolocation derived for this document. Represented using a GeoJSON Geometry.\n\nThe derived geolocation also includes geolocation information from a matched\nasset (see assetIds property). For matched assets without geolocation information\nthe parent chain is followed until it finds an asset with geolocation information.\n"
+              }
+            ]
           }
         }
       },
@@ -29513,6 +29755,31 @@
           "clientId": {
             "description": "Client ID in identity provider. Returned only if the session was created using client credentials",
             "type": "string"
+          }
+        }
+      },
+      "RevokeSessionRequestList": {
+        "description": "",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RevokeSessionRequest"
+            }
+          }
+        }
+      },
+      "RevokeSessionRequest": {
+        "description": "",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "description": "ID of the session",
+            "type": "number"
           }
         }
       },
@@ -31787,6 +32054,1366 @@
             "$ref": "#/components/schemas/UpdateItemWithId_TransformationUpdate"
           }
         ]
+      },
+      "AnnotationsV2SuggestSchema": {
+        "type": "object",
+        "required": [
+          "annotatedResourceType",
+          "annotatedResourceId",
+          "annotationType",
+          "creatingApp",
+          "creatingAppVersion",
+          "creatingUser",
+          "data"
+        ],
+        "properties": {
+          "annotatedResourceType": {
+            "$ref": "#/components/schemas/AnnotatedResourceType"
+          },
+          "annotatedResourceId": {
+            "$ref": "#/components/schemas/AnnotatedResourceId"
+          },
+          "annotationType": {
+            "$ref": "#/components/schemas/AnnotationType"
+          },
+          "creatingApp": {
+            "$ref": "#/components/schemas/Application"
+          },
+          "creatingAppVersion": {
+            "$ref": "#/components/schemas/SemanticVersion"
+          },
+          "creatingUser": {
+            "$ref": "#/components/schemas/User"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AnnotationData"
+          }
+        }
+      },
+      "AnnotationsV2CreateSchema": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AnnotationsV2SuggestSchema"
+          },
+          {
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "$ref": "#/components/schemas/Status"
+              }
+            }
+          }
+        ]
+      },
+      "AnnotationsV2ListResponseSchema": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "A list of annotations",
+            "items": {
+              "$ref": "#/components/schemas/AnnotationsV2ResponseSchema"
+            }
+          }
+        }
+      },
+      "AnnotationsV2ResponseSchema": {
+        "type": "object",
+        "required": [
+          "id",
+          "createdTime",
+          "lastUpdatedTime",
+          "annotatedResourceType",
+          "annotationType",
+          "creatingApp",
+          "creatingAppVersion",
+          "creatingUser",
+          "data",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/AnnotationId"
+          },
+          "createdTime": {
+            "$ref": "#/components/schemas/EpochTimestamp"
+          },
+          "lastUpdatedTime": {
+            "$ref": "#/components/schemas/EpochTimestamp"
+          },
+          "annotatedResourceType": {
+            "$ref": "#/components/schemas/AnnotatedResourceType"
+          },
+          "annotatedResourceId": {
+            "$ref": "#/components/schemas/AnnotatedResourceId"
+          },
+          "annotationType": {
+            "$ref": "#/components/schemas/AnnotationType"
+          },
+          "creatingApp": {
+            "$ref": "#/components/schemas/Application"
+          },
+          "creatingAppVersion": {
+            "$ref": "#/components/schemas/SemanticVersion"
+          },
+          "creatingUser": {
+            "$ref": "#/components/schemas/User"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AnnotationData"
+          },
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          }
+        }
+      },
+      "AnnotationsV2ReferenceSchema": {
+        "type": "object",
+        "description": "A reference to an existing annotation",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/AnnotationId"
+          }
+        }
+      },
+      "AnnotationsV2FilterSchema": {
+        "type": "object",
+        "description": "A filter to apply on annotations",
+        "required": [
+          "annotatedResourceType",
+          "annotatedResourceIds"
+        ],
+        "properties": {
+          "annotatedResourceType": {
+            "$ref": "#/components/schemas/AnnotatedResourceType"
+          },
+          "annotatedResourceIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResourceReference"
+            },
+            "minItems": 1,
+            "maxItems": 1000
+          },
+          "annotationType": {
+            "$ref": "#/components/schemas/AnnotationType"
+          },
+          "creatingApp": {
+            "$ref": "#/components/schemas/Application"
+          },
+          "creatingAppVersion": {
+            "$ref": "#/components/schemas/SemanticVersion"
+          },
+          "creatingUser": {
+            "$ref": "#/components/schemas/User"
+          },
+          "status": {
+            "$ref": "#/components/schemas/Status"
+          },
+          "data": {
+            "description": "Filter annotations by their data keys and values (case-sensitive). Concretely, by providing this field, we check for all annotations that contains the data filter as a subset.\nIf `annotationType` is not specified, the data filter will applied across all annotation types.",
+            "example": {
+              "label": "cat",
+              "fileRef": {
+                "externalId": "abc"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "example": {
+          "annotatedResourceType": "file",
+          "annotatedResourceIds": [
+            {
+              "id": 1066
+            },
+            {
+              "id": 1067
+            }
+          ],
+          "status": "approved",
+          "data": {
+            "label": "cat"
+          }
+        }
+      },
+      "AnnotationsV2CursoredListResponseSchema": {
+        "type": "object",
+        "description": "A cursored list of existing annotations",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnnotationsV2ResponseSchema"
+            }
+          },
+          "nextCursor": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StrCursor"
+              }
+            ],
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "AnnotationsV2UpdateItemSchema": {
+        "type": "object",
+        "description": "An update object to apply to an annotation",
+        "required": [
+          "id",
+          "update"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/AnnotationId"
+          },
+          "update": {
+            "$ref": "#/components/schemas/AnnotationsV2UpdateDataSchema"
+          }
+        }
+      },
+      "AnnotationsV2UpdateDataSchema": {
+        "type": "object",
+        "description": "Each fields represent a \"delta\" that will be applied onto the corresponding field of the original\nannotation.\n\n\n### Updating Annotation Type or Data\nEnsure that the new annotation data conforms to the new annotation type, otherwise the call will fail.",
+        "properties": {
+          "annotationType": {
+            "type": "object",
+            "required": [
+              "set"
+            ],
+            "properties": {
+              "set": {
+                "$ref": "#/components/schemas/AnnotationType"
+              }
+            }
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "set"
+            ],
+            "properties": {
+              "set": {
+                "$ref": "#/components/schemas/AnnotationData"
+              }
+            }
+          },
+          "status": {
+            "type": "object",
+            "required": [
+              "set"
+            ],
+            "properties": {
+              "set": {
+                "$ref": "#/components/schemas/Status"
+              }
+            }
+          }
+        },
+        "example": {
+          "data": {
+            "set": {
+              "assetRef": {
+                "externalId": "abc"
+              },
+              "symbolRegion": {
+                "xMin": 0.1,
+                "xMax": 0.2,
+                "yMin": 0.1,
+                "yMax": 0.2
+              },
+              "textRegion": {
+                "xMin": 0.4,
+                "xMax": 0.5,
+                "yMin": 0.4,
+                "yMax": 0.5
+              },
+              "pageNumber": 43
+            }
+          }
+        }
+      },
+      "AnnotatedResourceType": {
+        "type": "string",
+        "description": "The annotated CDF resource. Files are supported.",
+        "enum": [
+          "file"
+        ],
+        "example": "file"
+      },
+      "AnnotatedResourceId": {
+        "description": "The internal ID of the annotated resource.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CogniteInternalId"
+          }
+        ],
+        "example": 1337
+      },
+      "Application": {
+        "type": "string",
+        "description": "The application name or identifier. This is neither checked nor enforced.",
+        "example": "cognite-vision",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "User": {
+        "type": "string",
+        "description": "A username, or email, or name. This is not checked nor enforced. If the value is null, it means the\nannotation was created by a service.",
+        "nullable": true,
+        "example": "john.doe@cognite.com",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "SemanticVersion": {
+        "type": "string",
+        "description": "A version number in the SemVer sense. See [semver.org](https://semver.org/) for the specification.",
+        "example": "1.2.1",
+        "minLength": 1,
+        "maxLength": 255
+      },
+      "AnnotationId": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CogniteInternalId"
+          }
+        ],
+        "description": "Server-generated identifier for the annotation",
+        "example": 4096
+      },
+      "AnnotationType": {
+        "type": "string",
+        "description": "The type of the annotation. This uniquely decides what the structure of the `data` block will be.",
+        "enum": [
+          "images.ObjectDetection",
+          "images.Classification",
+          "images.KeypointCollection",
+          "images.AssetLink",
+          "images.TextRegion",
+          "diagrams.AssetLink",
+          "diagrams.FileLink",
+          "diagrams.UnhandledTextObject",
+          "diagrams.UnhandledSymbolObject",
+          "documents.ExtractedText",
+          "diagrams.Line",
+          "diagrams.Junction",
+          "forms.Detection"
+        ],
+        "example": "images.ObjectDetection"
+      },
+      "AnnotationData": {
+        "description": "The annotation information. The format of this object is decided by and validated against the `annotationType`\nattribute.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/Annotations.ObjectDetection"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.Classification"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.KeypointCollection"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.cognite__annotation_types__images__AssetLink"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.TextRegion"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.cognite__annotation_types__diagrams__AssetLink"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.FileLink"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.UnhandledTextObject"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.UnhandledSymbolObject"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.ExtractedText"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.Line"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.Junction"
+          },
+          {
+            "$ref": "#/components/schemas/Annotations.Detection"
+          }
+        ],
+        "example": {
+          "assetRef": {
+            "externalId": "abc"
+          },
+          "symbolRegion": {
+            "xMin": 0.1,
+            "xMax": 0.2,
+            "yMin": 0.1,
+            "yMax": 0.2
+          },
+          "textRegion": {
+            "xMin": 0.2,
+            "xMax": 0.3,
+            "yMin": 0.2,
+            "yMax": 0.3
+          },
+          "pageNumber": 43
+        }
+      },
+      "ResourceReference": {
+        "type": "object",
+        "description": "A reference to another CDF resource. _Either_ the internal _or_ the external ID _must_ be provided (not both).",
+        "properties": {
+          "id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CogniteInternalId"
+              }
+            ],
+            "example": null
+          },
+          "externalId": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CogniteExternalId"
+              }
+            ],
+            "example": "abc-1066"
+          }
+        }
+      },
+      "Status": {
+        "type": "string",
+        "description": "The status of the annotation",
+        "enum": [
+          "suggested",
+          "approved",
+          "rejected"
+        ],
+        "example": "approved"
+      },
+      "StrCursor": {
+        "type": "string",
+        "description": "A cursor pointing to another page of results",
+        "minLength": 1,
+        "maxLength": 255,
+        "example": "MzE1NjAwMDcxNzQ0ODI5"
+      },
+      "Annotations.Point": {
+        "title": "primitives.geometry2d.Point",
+        "description": "Point in a 2D-Cartesian coordinate system with origin at the top-left corner of the page",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "x": {
+            "description": "The abscissa of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "y": {
+            "description": "The ordinate of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Boolean": {
+        "title": "primitives.attributes.Boolean",
+        "description": "The boolean value of something",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "The description of a primitive",
+            "maxLength": 500,
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "boolean"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "The boolean value",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Numerical": {
+        "title": "primitives.attributes.Numerical",
+        "description": "The numerical value of something",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "The description of a primitive",
+            "maxLength": 500,
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "numerical"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "The numerical value",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Keypoint": {
+        "title": "primitives.geometry2d.Keypoint",
+        "description": "A point attached with additional information such as a confidence value and\nvarious attribute(s).",
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "description": "Additional attributes data for a compound.",
+            "type": "object",
+            "additionalProperties": {
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "boolean": "#/components/schemas/Boolean",
+                  "numerical": "#/components/schemas/Numerical"
+                }
+              },
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Annotations.Boolean"
+                },
+                {
+                  "$ref": "#/components/schemas/Annotations.Numerical"
+                }
+              ]
+            }
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "point": {
+            "description": "The position of the keypoint",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.Point"
+              }
+            ]
+          }
+        },
+        "required": [
+          "point"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.BoundingBox": {
+        "title": "primitives.geometry2d.BoundingBox",
+        "description": "A plain rectangle",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "xMin": {
+            "description": "Minimum abscissa of the bounding box (left edge). Must be strictly less than x_max.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "xMax": {
+            "description": "Maximum abscissa of the bounding box (right edge). Must be strictly more than x_min.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "yMin": {
+            "description": "Minimum ordinate of the bounding box (bottom edge). Must be strictly less than y_max.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "yMax": {
+            "description": "Maximum ordinate of the bounding box (top edge). Must be strictly more than y_min.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "xMin",
+          "xMax",
+          "yMin",
+          "yMax"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Polygon": {
+        "title": "primitives.geometry2d.Polygon",
+        "description": "A _closed_ polygon represented by _n_ vertices. In other words, we assume\nthat the first and last vertex are connected.",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "vertices": {
+            "minItems": 3,
+            "maxItems": 1000,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.Point"
+            }
+          }
+        },
+        "required": [
+          "vertices"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.PolyLine": {
+        "title": "primitives.geometry2d.PolyLine",
+        "description": "A polygonal chain consisting of _n_ vertices",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "vertices": {
+            "minItems": 2,
+            "maxItems": 1000,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.Point"
+            }
+          }
+        },
+        "required": [
+          "vertices"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Box": {
+        "title": "primitives.geometry3d.Box",
+        "description": "A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates and\ntranslates a unit box centered at the origin to it's location and orientation in 3D space.",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "matrix": {
+            "description": "The homogeneous transformation matrix",
+            "minItems": 16,
+            "maxItems": 16,
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "required": [
+          "matrix"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Cylinder": {
+        "title": "primitives.geometry3d.Cylinder",
+        "description": "A cylinder in 3D space, defined by the centers of two sides and the radius.",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "centerA": {
+            "description": "The center of the first cap.",
+            "minItems": 3,
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "centerB": {
+            "description": "The center of the second cap.",
+            "minItems": 3,
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "radius": {
+            "description": "The radius of the cylinder.",
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "centerA",
+          "centerB",
+          "radius"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Geometry": {
+        "title": "primitives.geometry3d.Geometry",
+        "description": "A 3D geometry model represented by exactly *one of* `cylinder` and `box`.",
+        "type": "object",
+        "properties": {
+          "cylinder": {
+            "$ref": "#/components/schemas/Annotations.Cylinder"
+          },
+          "box": {
+            "$ref": "#/components/schemas/Annotations.Box"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Annotations.AssetRef": {
+        "title": "primitives.references.AssetRef",
+        "description": "A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The internal ID of the referenced resource",
+            "type": "integer"
+          },
+          "externalId": {
+            "description": "The external ID of the referenced resource",
+            "maxLength": 256,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "required": [
+              "id"
+            ]
+          },
+          {
+            "required": [
+              "externalId"
+            ]
+          }
+        ]
+      },
+      "Annotations.FileRef": {
+        "title": "primitives.references.FileRef",
+        "description": "A reference to a file. Either the internal ID or the external ID must be provided (exactly one).",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The internal ID of the referenced resource",
+            "type": "integer"
+          },
+          "externalId": {
+            "description": "The external ID of the referenced resource",
+            "maxLength": 256,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "required": [
+              "id"
+            ]
+          },
+          {
+            "required": [
+              "externalId"
+            ]
+          }
+        ]
+      },
+      "Annotations.ObjectDetection": {
+        "title": "images.ObjectDetection",
+        "description": "Models an image object detection represented by a label, a geometry, and\noptionally a confidence value.",
+        "type": "object",
+        "properties": {
+          "boundingBox": {
+            "$ref": "#/components/schemas/Annotations.BoundingBox"
+          },
+          "polygon": {
+            "$ref": "#/components/schemas/Annotations.Polygon"
+          },
+          "polyline": {
+            "$ref": "#/components/schemas/Annotations.PolyLine"
+          },
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Classification": {
+        "title": "images.Classification",
+        "description": "Models an image classification represented by a label, and optionally a\nconfidence value.",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.KeypointCollection": {
+        "title": "images.KeypointCollection",
+        "description": "Models a collection of keypoints represented by a label, a dictionary of\nkeypoints (mapping from a (unique) label name to a keypoint), and\noptionally a confidence value and an attributes dictionary.",
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "description": "Additional attributes data for a compound.",
+            "type": "object",
+            "additionalProperties": {
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "boolean": "primitives.yml#/components/schemas/Boolean",
+                  "numerical": "primitives.yml#/components/schemas/Numerical"
+                }
+              },
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Annotations.Boolean"
+                },
+                {
+                  "$ref": "#/components/schemas/Annotations.Numerical"
+                }
+              ]
+            }
+          },
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "keypoints": {
+            "description": "The detected keypoints",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Annotations.Keypoint"
+            }
+          }
+        },
+        "required": [
+          "label",
+          "keypoints"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.cognite__annotation_types__images__AssetLink": {
+        "title": "images.AssetLink",
+        "description": "Models a link to a CDF Asset referenced in an image",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "assetRef": {
+            "description": "The asset this annotation is pointing to",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.AssetRef"
+              }
+            ]
+          },
+          "text": {
+            "description": "The extracted text",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "textRegion": {
+            "description": "The location of the text mentioning the asset",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          }
+        },
+        "required": [
+          "assetRef",
+          "text",
+          "textRegion"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.TextRegion": {
+        "title": "images.TextRegion",
+        "description": "Models an extracted text region in an image",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "text": {
+            "description": "The extracted text",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "textRegion": {
+            "description": "The location of the extracted text",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          }
+        },
+        "required": [
+          "text",
+          "textRegion"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.cognite__annotation_types__diagrams__AssetLink": {
+        "title": "diagrams.AssetLink",
+        "description": "Models a link to a CDF Asset referenced in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "assetRef": {
+            "description": "The asset this annotation is pointing to",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.AssetRef"
+              }
+            ]
+          },
+          "symbolRegion": {
+            "description": "The location of the symbol representing the asset",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "textRegion": {
+            "description": "The location of the text mentioning the asset",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "text": {
+            "description": "The extracted text",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "symbol": {
+            "description": "The symbol representing the asset",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "assetRef",
+          "textRegion"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.FileLink": {
+        "title": "diagrams.FileLink",
+        "description": "Models a link to a CDF File referenced in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "fileRef": {
+            "description": "The file this annotation is pointing to",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.FileRef"
+              }
+            ]
+          },
+          "symbolRegion": {
+            "description": "The location of the symbol representing the file",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "textRegion": {
+            "description": "The location of the text mentioning the file",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "text": {
+            "description": "The extracted text",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "symbol": {
+            "description": "The symbol found in the file",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "fileRef",
+          "textRegion"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.UnhandledTextObject": {
+        "title": "diagrams.UnhandledTextObject",
+        "description": "Models an extracted text region in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "textRegion": {
+            "description": "The location of the text",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "text": {
+            "description": "The extracted text",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "textRegion",
+          "text"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.UnhandledSymbolObject": {
+        "title": "diagrams.UnhandledSymbolObject",
+        "description": "Models an extracted symbol region in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "symbolRegion": {
+            "description": "The location of the symbol",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "symbol": {
+            "description": "The symbol found in the file",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbolRegion",
+          "symbol"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.ExtractedText": {
+        "title": "documents.ExtractedText",
+        "description": "Represents text extracted from a document. Annotations of this type are low-level and not specific to any domain.",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "textRegion": {
+            "description": "The location of the extracted text",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "extractedText": {
+            "description": "The extracted text",
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "textRegion",
+          "extractedText"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Line": {
+        "title": "diagrams.Line",
+        "description": "Models a line in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "polyline": {
+            "description": "The polyline representing the line",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.PolyLine"
+              }
+            ]
+          }
+        },
+        "required": [
+          "label",
+          "polyline"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Junction": {
+        "title": "diagrams.Junction",
+        "description": "Models a junction between lines in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "position": {
+            "description": "The point representing the junction",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.Point"
+              }
+            ]
+          }
+        },
+        "required": [
+          "position"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Detection": {
+        "title": "forms.Detection",
+        "description": "Represents a detection of a field value in a form.\nA field is identified by a field_name, optionally component_name and component_type if the field belongs to a subcomponent.\nThe bounding_box indicates the position of the detection. The content of the field is given by the value, and optionally\nan unnormalized_value and the unit.",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "boundingBox": {
+            "description": "Bounding box of the detection area",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "componentType": {
+            "description": "Type of subcomponent that the detection belongs to",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "componentName": {
+            "description": "Name of subcomponent that the detection belongs to",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "fieldName": {
+            "description": "Name of field that has been detected",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "value": {
+            "description": "The value that has been detected",
+            "maxLength": 128,
+            "type": "string"
+          },
+          "valueUnnormalized": {
+            "description": "The value that has been detected, before normalization. Optional.",
+            "maxLength": 128,
+            "type": "string"
+          },
+          "unit": {
+            "description": "The unit of the value field. Optional.",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "boundingBox",
+          "fieldName",
+          "value"
+        ],
+        "additionalProperties": false
       }
     },
     "parameters": {
@@ -31921,6 +33548,15 @@
           "example": "ocean_measures"
         },
         "description": "External Id of the feature type provided by client. Must be unique among all feature type external ids within a CDF project."
+      },
+      "AnnotationId": {
+        "name": "annotationId",
+        "in": "path",
+        "required": true,
+        "description": "The internal ID of the annotation",
+        "schema": {
+          "$ref": "#/components/schemas/AnnotationId"
+        }
       }
     },
     "responses": {
@@ -32636,6 +34272,56 @@
             }
           }
         }
+      },
+      "AnnotationsV2CreateResponseSchema": {
+        "description": "Successful creation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AnnotationsV2ListResponseSchema"
+            }
+          }
+        }
+      },
+      "AnnotationsV2ListResponseSchema": {
+        "description": "Successful retrieval",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AnnotationsV2ListResponseSchema"
+            }
+          }
+        }
+      },
+      "AnnotationsV2ResponseSchema": {
+        "description": "Successful retrieval",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AnnotationsV2ResponseSchema"
+            }
+          }
+        }
+      },
+      "AnnotationsV2CursoredListResponseSchema": {
+        "description": "Successful retrieval",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AnnotationsV2CursoredListResponseSchema"
+            }
+          }
+        }
+      },
+      "AnnotationsV2UpdateResponseSchema": {
+        "description": "Successful update",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AnnotationsV2ListResponseSchema"
+            }
+          }
+        }
       }
     },
     "requestBodies": {
@@ -32690,6 +34376,138 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/updateRelationshipWrapper"
+            }
+          }
+        }
+      },
+      "AnnotationsV2SuggestRequestSchema": {
+        "description": "A request for suggesting annotations, i.e., creating them with the \"suggested\" `status`",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items"
+              ],
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "description": "A list of annotations to suggest",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "items": {
+                    "$ref": "#/components/schemas/AnnotationsV2SuggestSchema"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "AnnotationsV2CreateRequestSchema": {
+        "description": "A request for creating annotations",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items"
+              ],
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "description": "A list of annotations to create",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "items": {
+                    "$ref": "#/components/schemas/AnnotationsV2CreateSchema"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "AnnotationsV2ByIdsRequestSchema": {
+        "description": "A request referencing existing annotations",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items"
+              ],
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "description": "A list of existing annotation references",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "items": {
+                    "$ref": "#/components/schemas/AnnotationsV2ReferenceSchema"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "AnnotationsV2ListRequestSchema": {
+        "description": "A request specifying the annotation listing behavior",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "filter"
+              ],
+              "properties": {
+                "cursor": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/StrCursor"
+                    }
+                  ],
+                  "nullable": true
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "default": 25,
+                  "maximum": 1000
+                },
+                "filter": {
+                  "$ref": "#/components/schemas/AnnotationsV2FilterSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AnnotationsV2UpdateRequestSchema": {
+        "description": "A request for updating existing annotations",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items"
+              ],
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "items": {
+                    "$ref": "#/components/schemas/AnnotationsV2UpdateItemSchema"
+                  }
+                }
+              }
             }
           }
         }
@@ -33079,7 +34897,8 @@
       "tags": [
         "Data sets",
         "Labels",
-        "Relationships"
+        "Relationships",
+        "Annotations"
       ]
     },
     {
@@ -33222,6 +35041,10 @@
     {
       "name": "Schema",
       "description": "Schema provides the expected schema for CDF resources."
+    },
+    {
+      "name": "Annotations",
+      "description": "Annotations reflect contextual information in base CDF resource types, such as Files and Time series, that are not\npresent on the object itself. The benefits of the annotations concept are threefold:\n\n- The annotations concept is a good fit for enriching the base resources themselves, so that the overall data\n  quality is higher in a given project.\n- It is also a good fit for building reference datasets for data problems uniformly across customer projects.\n  Product teams can then use those reference datasets to train machine learning models or validate the\n  performance of their algorithms on actual customer data.\n- Given a uniform way of labelling similar concepts across projects, it becomes easy for apps to agree on a consistent\n  visual representation of those concepts."
     }
   ]
 }

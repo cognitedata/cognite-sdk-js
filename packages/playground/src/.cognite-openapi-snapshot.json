@@ -17,7 +17,7 @@
           "Functions"
         ],
         "summary": "List functions",
-        "operationId": "get-function",
+        "operationId": "getFunctions",
         "parameters": [
           {
             "$ref": "#/components/parameters/project"
@@ -31,16 +31,24 @@
             "$ref": "#/components/responses/FunctionList"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
+        "description": "List functions.",
         "x-capability": [
           "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "functions = client.functions.list(limit=5)"
+          }
         ]
       },
       "post": {
         "summary": "Create functions",
-        "operationId": "post-api-playground-projects-project-functions",
+        "operationId": "postFunctions",
         "parameters": [
           {
             "$ref": "#/components/parameters/project"
@@ -120,11 +128,25 @@
                         "owner": "anders.hafreager@cognite.com",
                         "fileId": 5467347282343,
                         "externalId": "my-function",
-                        "apiKey": "MYKEY12345",
+                        "metadata": {
+                          "key1": "value1",
+                          "key2": "value2"
+                        },
                         "secrets": {
                           "key1": "secret1",
                           "key2": "secret2"
-                        }
+                        },
+                        "functionPath": "myfunction/handler.py",
+                        "envVars": {
+                          "ENV_VAR": "value"
+                        },
+                        "cpu": 0.2,
+                        "memory": 0.4,
+                        "runtime": "py38",
+                        "indexUrl": "https://pypi.org",
+                        "extraIndexUrls": [
+                          "https://user:password@some.index.org"
+                        ]
                       }
                     ]
                   }
@@ -134,16 +156,18 @@
           },
           "description": ""
         },
-        "security": [
-          {
-            "api-key": []
-          }
-        ],
         "tags": [
           "Functions"
         ],
         "x-capability": [
           "functionsAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Create function from folder\nfunction = client.functions.create(name=\"my-function\", folder=\"/path/to/code\")\n\n# Create function with function_handle\n def handle():\n    print(\"Hello World\")\n    return True\n\nfunction = client.functions.create(name=\"my-function\", function_handle=handle)"
+          }
         ]
       }
     },
@@ -154,7 +178,7 @@
         ],
         "summary": "Functions limits",
         "description": "Service limits for the associated project.",
-        "operationId": "get-functions-limits",
+        "operationId": "functionsLimits",
         "parameters": [
           {
             "$ref": "#/components/parameters/project"
@@ -165,11 +189,18 @@
             "$ref": "#/components/responses/FunctionsLimits"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
         "x-capability": [
           "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "limits = client.functions.limits()"
+          }
         ]
       }
     },
@@ -187,7 +218,7 @@
             "$ref": "#/components/responses/FunctionList"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
         "description": "Use advanced filtering options to find functions.",
@@ -201,7 +232,11 @@
                 "Filter by status": {
                   "value": {
                     "filter": {
-                      "status": "Queued"
+                      "status": "Queued",
+                      "createdTime": {
+                        "min": 10,
+                        "max": 199
+                      }
                     }
                   }
                 }
@@ -211,6 +246,13 @@
         },
         "tags": [
           "Functions"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "functions = client.functions.list(limit=5, status=\"Ready\")"
+          }
         ]
       }
     },
@@ -222,7 +264,7 @@
       ],
       "post": {
         "summary": "Delete functions",
-        "operationId": "post-api-playground-projects-project-functions-delete",
+        "operationId": "deleteFunctions",
         "responses": {
           "200": {
             "$ref": "#/components/responses/EmptyResponse"
@@ -246,6 +288,13 @@
         ],
         "x-capability": [
           "functionsAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.functions.delete(id=[1,2,3], external_id=\"function3\")"
+          }
         ]
       }
     },
@@ -266,13 +315,13 @@
           "functionsAcl:WRITE"
         ],
         "summary": "Call a function asynchronously",
-        "operationId": "post-api-playground-projects-project-functions-function_name-call",
+        "operationId": "postFunctionsCall",
         "responses": {
           "201": {
             "$ref": "#/components/responses/FunctionCalled"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
         "description": "Perform a function call. To provide input data to the function, add the data in an object called `data` in the request body. It will be available as the `data` argument into the function. Info about the function call at runtime can be obtained through the `function_call_info` argument if added in the function handle. **WARNING:** Secrets or other confidential information should not be passed via the `data` object. There is a dedicated `secrets` object in the request body to \"Create functions\" for this purpose.",
@@ -284,7 +333,14 @@
               }
             }
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Call a function by id:\ncall = client.functions.call(id=1)\n\n# Call a function directly on the Function object:\nfunction = client.functions.retrieve(id=1)\ncall = function.call()"
+          }
+        ]
       }
     },
     "/api/playground/projects/{project}/functions/{functionId}/calls": {
@@ -309,16 +365,23 @@
             "$ref": "#/components/responses/FunctionCallListWithCursor"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
-        "operationId": "get-api-playground-projects-project-functions-function_name-calls",
-        "description": "List all function calls.",
+        "operationId": "getFunctionCalls",
+        "description": "List function calls.",
         "tags": [
           "Function calls"
         ],
         "x-capability": [
           "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# List function calls by function id:\ncalls = client.functions.calls.list(function_id=1)\n\n# List function calls directly on a function object\nfunction = client.functions.retrieve(id=1)\ncalls = function.list_calls()"
+          }
         ]
       }
     },
@@ -359,13 +422,20 @@
             "$ref": "#/components/responses/ErrorResponse"
           }
         },
-        "operationId": "byidsFunctionCalls",
+        "operationId": "byIdsFunctionCalls",
         "description": "Retrieve function calls by call ids.",
         "tags": [
           "Function calls"
         ],
         "x-capability": [
           "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Retrieve single function call by id:\ncall = client.functions.calls.retrieve(call_id=2, function_id=1)\n\n# Retrieve function call directly on a function object:\nfunction = client.functions.retrieve(id=1)\ncall = function.retrieve_call(id=2)"
+          }
         ]
       }
     },
@@ -382,7 +452,7 @@
         }
       ],
       "get": {
-        "operationId": "get-api-playground-projects-project-functions-function_name-calls-call_id",
+        "operationId": "getFunctionCall",
         "description": "Retrieve function calls.",
         "tags": [
           "Function calls"
@@ -403,9 +473,16 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Retrieve single function call by id:\ncall = client.functions.calls.retrieve(call_id=2, function_id=1)\n\n# Retrieve function call directly on a function object:\nfunction = client.functions.retrieve(id=1)\ncall = function.retrieve_call(id=2)"
+          }
+        ]
       }
     },
     "/api/playground/projects/{project}/functions/{functionId}/calls/{callId}/logs": {
@@ -433,11 +510,18 @@
             "$ref": "#/components/responses/FunctionCallLog"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
-        "operationId": "get-api-playground-projects-project-functions-function_name-calls-call_id-logs",
-        "description": "Get logs from a function call."
+        "operationId": "getFunctionCallLogs",
+        "description": "Get logs from a function call.",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Retrieve function call logs by call id:\nlogs = client.functions.calls.get_logs(call_id=2, function_id=1)\n\n# Retrieve function call logs directly on a call object:\ncall = client.functions.calls.retrieve(call_id=2, function_id=1)\nlogs = call.get_logs()"
+          }
+        ]
       }
     },
     "/api/playground/projects/{project}/functions/{functionId}": {
@@ -450,7 +534,7 @@
         }
       ],
       "get": {
-        "operationId": "get-api-playground-projects-project-functions-function_name",
+        "operationId": "getFunction",
         "description": "Retrieve a function by its id. If you want to retrieve functions by names, use Retrieve functions instead.",
         "x-capability": [
           "functionsAcl:READ"
@@ -471,9 +555,16 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "function = client.functions.retrieve(id=1)"
+          }
+        ]
       }
     },
     "/api/playground/projects/{project}/functions/byids": {
@@ -491,7 +582,7 @@
         ],
         "description": "Retrieve functions by ids.",
         "summary": "Retrieve functions",
-        "operationId": "post-api-playground-projects-project-context-functions-byids",
+        "operationId": "byIdsFunctions",
         "responses": {
           "200": {
             "$ref": "#/components/responses/FunctionList"
@@ -508,7 +599,14 @@
               }
             }
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "functions = client.functions.retrieve_multiple(ids=[1, 2, 3])"
+          }
+        ]
       }
     },
     "/api/playground/projects/{project}/functions/status": {
@@ -522,6 +620,9 @@
         "responses": {
           "202": {
             "$ref": "#/components/responses/FunctionsActivation"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
         "operationId": "postFunctionsStatus",
@@ -538,6 +639,9 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/FunctionsActivation"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
         "operationId": "getFunctionsStatus",
@@ -562,7 +666,7 @@
             "$ref": "#/components/parameters/LimitQuery"
           }
         ],
-        "operationId": "get-api-playground-projects-project-functions-schedules",
+        "operationId": "getFunctionSchedules",
         "description": "List function schedules in project.",
         "tags": [
           "Function schedules"
@@ -576,9 +680,16 @@
             "$ref": "#/components/responses/FunctionScheduleList"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# List funtion schedules:\nschedules = client.functions.schedules.list()\n\n# List schedules directly on a function object to get only schedules associated with this particular function:\nfunction = client.functions.retrieve(id=1)\nschedules = function.list_schedules()"
+          }
+        ]
       },
       "post": {
         "description": "Create function schedules. Function schedules trigger asynchronous calls with specific input data, based on a cron expression that determines when these triggers should be fired. Use e.g. http://www.cronmaker.com to be guided on how to generate a cron expression. One of `FunctionId` or `FunctionExternalId` (deprecated) must be set (but not both). When creating a schedule with a session, i.e. with a `nonce`, `FunctionId` must be used. The `nonce` will be used to bind the session before function execution, and the session will be kept alive for the lifetime of the schedule. **WARNING:** Secrets or other confidential information should not be passed via the `data` object. There is a dedicated `secrets` object in the request body to \"Create functions\" for this purpose.",
@@ -589,23 +700,15 @@
           "functionsAcl:WRITE"
         ],
         "summary": "Create schedules",
-        "operationId": "post-api-playground-projects-project-functions-schedules",
+        "operationId": "postFunctionSchedules",
         "responses": {
           "201": {
             "$ref": "#/components/responses/FunctionScheduleCreated"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
-        "security": [
-          {
-            "api-key": []
-          },
-          {
-            "token": []
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -626,7 +729,14 @@
             }
           },
           "description": ""
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "schedule = client.functions.create(name=\"My Schedule\", function_id=1, cron_expression=\"0 0 * * *\", client_credentials={\"client_id\": \"...\", \"client_secret\": \"...\", description=\"Some description.\")"
+          }
+        ]
       }
     },
     "/api/playground/projects/{project}/functions/schedules/list": {
@@ -643,7 +753,7 @@
             "$ref": "#/components/responses/FunctionScheduleList"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
         "description": "Use advanced filtering options to find function schedules.  At most one of `FunctionId` or `FunctionExternalId` can be specified.",
@@ -657,7 +767,8 @@
                 "Filter by status": {
                   "value": {
                     "filter": {
-                      "name": "MySchedule"
+                      "name": "MySchedule",
+                      "cronExpression": "5 4 * * *"
                     }
                   }
                 }
@@ -667,6 +778,13 @@
         },
         "tags": [
           "Function schedules"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# List funtion schedules:\nschedules = client.functions.schedules.list()\n\n# List schedules directly on a function object to get only schedules associated with this particular function:\nfunction = client.functions.retrieve(id=1)\nschedules = function.list_schedules()"
+          }
         ]
       }
     },
@@ -703,7 +821,14 @@
           "400": {
             "$ref": "#/components/responses/ErrorResponse"
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Get function schedule by id:\nschedule = client.functions.schedules.retrieve(id=1)"
+          }
+        ]
       }
     },
     "/api/playground/projects/{project}/functions/schedules/byids": {
@@ -740,13 +865,20 @@
             "$ref": "#/components/responses/ErrorResponse"
           }
         },
-        "operationId": "byidsFunctionSchedules",
+        "operationId": "byIdsFunctionSchedules",
         "description": "Retrieve function schedules by schedule ids.",
         "tags": [
           "Function schedules"
         ],
         "x-capability": [
           "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Get function schedule by id:\nschedule = client.functions.schedules.retrieve(id=1)"
+          }
         ]
       }
     },
@@ -764,7 +896,7 @@
           "functionsAcl:WRITE"
         ],
         "summary": "Delete schedules",
-        "operationId": "post-api-playground-projects-project-functions-schedules-delete",
+        "operationId": "deleteFunctionSchedules",
         "responses": {
           "200": {
             "$ref": "#/components/responses/EmptyResponse"
@@ -782,7 +914,14 @@
               }
             }
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.functions.schedules.delete(id=1)"
+          }
+        ]
       }
     },
     "/api/playground/projects/{project}/functions/schedules/{scheduleId}/input_data": {
@@ -811,7 +950,14 @@
           "400": {
             "$ref": "#/components/responses/ErrorResponse"
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "data = client.functions.schedules.get_input_data(id=1)"
+          }
+        ]
       }
     },
     "/api/playground/projects/{project}/functions/{functionId}/calls/{callId}/response": {
@@ -836,14 +982,21 @@
             "$ref": "#/components/responses/FunctionCallResponse"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
-        "operationId": "get-api-playground-projects-project-functions-functionId-calls-callId-response",
+        "operationId": "getFunctionCallResponse",
         "parameters": [],
         "description": "Retrieve response from a function call.",
         "x-capability": [
           "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Retrieve function call response by call id:\nresponse = client.functions.calls.get_response(call_id=2, function_id=1)\n\n# Retrieve function call response directly on a call object:\ncall = client.functions.calls.retrieve(call_id=2, function_id=1)\nresponse = call.get_response()"
+          }
         ]
       }
     },
@@ -858,13 +1011,13 @@
       ],
       "post": {
         "summary": "Filter function calls",
-        "operationId": "get-api-playground-projects-project-functions-functionId-calls-list",
+        "operationId": "listFunctionCalls",
         "responses": {
           "200": {
             "$ref": "#/components/responses/FunctionCallListWithCursor"
           },
           "400": {
-            "$ref": "#/components/responses/FunctionErrorResponse"
+            "$ref": "#/components/responses/ErrorResponse"
           }
         },
         "description": "Use advanced filtering options to find function calls.",
@@ -878,8 +1031,14 @@
                 "Filter by status": {
                   "value": {
                     "filter": {
-                      "status": "Running"
-                    }
+                      "status": "Running",
+                      "scheduleId": 123,
+                      "startTime": {
+                        "min": 1234,
+                        "max": 5678
+                      }
+                    },
+                    "limit": 10
                   }
                 }
               }
@@ -888,6 +1047,13 @@
         },
         "tags": [
           "Function calls"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# List function calls by function id:\ncalls = client.functions.calls.list(function_id=1)\n\n# List function calls directly on a function object\nfunction = client.functions.retrieve(id=1)\ncalls = function.list_calls()"
+          }
         ]
       }
     },
@@ -5667,200 +5833,6 @@
         ]
       }
     },
-    "/api/playground/projects/{project}/annotations": {
-      "post": {
-        "tags": [
-          "Annotations"
-        ],
-        "summary": "Create annotations",
-        "description": "Creates the given annotations.\n\n### Identifiers\nAn annotation _must_ reference an **annotated resource**.\n\nThe reference can be made by providing the internal ID of the annotated resource.\n\n### Status\nThe annotation _must_ have the `status` field set to either \"suggested\", \"rejected\", or \"approved\"\n\n### Access control\nThe caller _must_ have read-access on all the **annotated resources**, otherwise the call will fail.\n\n### Annotation types and Data\nThe annotation **type** property _must_ be set to one of the globally available annotation types.\nSee the documentation of the `annotationType` and `data` attributes for details.\n\nThe annotation **data** _must_ conform to the schema provided by the annotation type.\n\n### Creating Application and User\nThe creating application and its version _must_ be provided. The creating user _must_ be provided, but if the\nannotation is being created by a service, this _can_ be set to `null`.",
-        "operationId": "annotationsCreate",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/AnnotationsV2CreateRequestSchema"
-        },
-        "responses": {
-          "201": {
-            "$ref": "#/components/responses/AnnotationsV2CreateResponseSchema"
-          },
-          "400": {
-            "$ref": "#/components/responses/ErrorResponse"
-          }
-        },
-        "x-capability": [
-          "annotationsAcl:WRITE"
-        ]
-      }
-    },
-    "/api/playground/projects/{project}/annotations/suggest": {
-      "post": {
-        "tags": [
-          "Annotations"
-        ],
-        "summary": "Suggest annotations",
-        "description": "Suggests the given annotations, i.e. creates them with `status` set to \"suggested\"\n\n### Identifiers\nAn annotation _must_ reference an **annotated resource**.\n\nThe reference can be made by providing the internal ID of the annotated resource.\n\n### Access control\nThe caller _must_ have read-access on all the **annotated resources**, otherwise the call will fail.\n\n### Annotation types and Data\nThe annotation **type** property _must_ be set to one of the globally available annotation types.\nSee the documentation of the `annotationType` and `data` attributes for details.\n\nThe annotation **data** _must_ conform to the schema provided by the annotation type.\n\n### Creating Application and User\nThe creating application and its version _must_ be provided. The creating user _must_ be provided, but if the\nannotation is being created by a service, this _can_ be set to `null`.",
-        "operationId": "annotationsSuggest",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/AnnotationsV2SuggestRequestSchema"
-        },
-        "responses": {
-          "201": {
-            "$ref": "#/components/responses/AnnotationsV2CreateResponseSchema"
-          },
-          "400": {
-            "$ref": "#/components/responses/ErrorResponse"
-          }
-        },
-        "x-capability": [
-          "annotationsAcl:SUGGEST"
-        ]
-      }
-    },
-    "/api/playground/projects/{project}/annotations/{annotationId}": {
-      "get": {
-        "tags": [
-          "Annotations"
-        ],
-        "summary": "Get an annotation",
-        "description": "Retrieves the referenced annotation.\n\nThe caller _must_ have read-access on the **annotated resource**, otherwise the call will fail.",
-        "operationId": "annotationsGet",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          },
-          {
-            "$ref": "#/components/parameters/AnnotationId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/AnnotationsV2ResponseSchema"
-          },
-          "400": {
-            "$ref": "#/components/responses/ErrorResponse"
-          }
-        }
-      }
-    },
-    "/api/playground/projects/{project}/annotations/list": {
-      "post": {
-        "tags": [
-          "Annotations"
-        ],
-        "summary": "Filter annotations",
-        "description": "Lists the annotations the caller has access to, based on a filter.\n\nThe caller _must_ have read-access on the **annotated resources** listed in the filter, otherwise the call will\nfail.",
-        "operationId": "annotationsFilter",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/AnnotationsV2ListRequestSchema"
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/AnnotationsV2CursoredListResponseSchema"
-          },
-          "400": {
-            "$ref": "#/components/responses/ErrorResponse"
-          }
-        }
-      }
-    },
-    "/api/playground/projects/{project}/annotations/byids": {
-      "post": {
-        "tags": [
-          "Annotations"
-        ],
-        "summary": "Retrieve annotations",
-        "description": "Retrieves the referenced annotations.\n\nThe caller _must_ have read-access on all the **annotated resources**, otherwise the call will fail.",
-        "operationId": "annotationsByids",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/AnnotationsV2ByIdsRequestSchema"
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/AnnotationsV2ListResponseSchema"
-          },
-          "400": {
-            "$ref": "#/components/responses/ErrorResponse"
-          }
-        }
-      }
-    },
-    "/api/playground/projects/{project}/annotations/delete": {
-      "post": {
-        "tags": [
-          "Annotations"
-        ],
-        "summary": "Delete annotations",
-        "description": "Deletes the referenced annotations completely.\n\nThe caller _must_ have read-access on all the **annotated resources**, otherwise the call will fail.",
-        "operationId": "annotationsDelete",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/AnnotationsV2ByIdsRequestSchema"
-        },
-        "responses": {
-          "200": {
-            "description": "Successful deletion"
-          },
-          "400": {
-            "$ref": "#/components/responses/ErrorResponse"
-          }
-        },
-        "x-capability": [
-          "annotationsAcl:WRITE"
-        ]
-      }
-    },
-    "/api/playground/projects/{project}/annotations/update": {
-      "post": {
-        "tags": [
-          "Annotations"
-        ],
-        "summary": "Update annotations",
-        "description": "Updates the referenced annotations.\n\nThe caller _must_ have read-access on all the **annotated resources**, otherwise the call will fail.",
-        "operationId": "annotationsUpdate",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/AnnotationsV2UpdateRequestSchema"
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/AnnotationsV2UpdateResponseSchema"
-          },
-          "400": {
-            "$ref": "#/components/responses/ErrorResponse"
-          }
-        },
-        "x-capability": [
-          "annotationsAcl:WRITE"
-        ]
-      }
-    },
     "/api/playground/projects/{project}/sessions/revoke": {
       "parameters": [
         {
@@ -6439,15 +6411,15 @@
         "name": "api-key",
         "in": "header"
       },
-      "token": {
-        "type": "http",
-        "description": "Human users log in via an OpenId/OAuth flow. Use the /login/redirect flow to obtain a bearer access token. Use a header key of 'Authorization' with a value of 'Bearer: $accesstoken'",
-        "scheme": "bearer"
-      },
       "oidc-token": {
         "type": "http",
         "description": "Access token issued by the CDF project's configured identity provider. Access token must be an OpenID Connect token, and the project must be configured to accept OpenID Connect tokens. Use a header key of 'Authorization' with a value of 'Bearer $accesstoken'",
         "scheme": "bearer"
+      },
+      "token": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Human users log in via an OpenId/OAuth flow. Use the /login/redirect flow to obtain a bearer access token. Use a header key of 'Authorization' with a value of 'Bearer $accesstoken'"
       }
     },
     "schemas": {
@@ -6593,6 +6565,15 @@
         "example": "My schedule",
         "minLength": 1,
         "maxLength": 140
+      },
+      "FunctionScheduleWhen": {
+        "type": "string",
+        "description": "When the schedule will trigger, in human readable text.",
+        "example": "Every hour"
+      },
+      "SessionId": {
+        "description": "Id of the session.",
+        "type": "string"
       },
       "FunctionName": {
         "type": "string",
@@ -6785,7 +6766,10 @@
                 "$ref": "#/components/schemas/CogniteExternalId"
               },
               "createdTime": {
-                "$ref": "#/components/schemas/EpochTimestamp"
+                "$ref": "#/components/schemas/EpochTimestampRange"
+              },
+              "metadata": {
+                "$ref": "#/components/schemas/MetaData"
               }
             }
           }
@@ -6805,10 +6789,10 @@
                 "$ref": "#/components/schemas/FunctionCallStatus"
               },
               "startTime": {
-                "$ref": "#/components/schemas/EpochTimestamp"
+                "$ref": "#/components/schemas/EpochTimestampRange"
               },
               "endTime": {
-                "$ref": "#/components/schemas/EpochTimestamp"
+                "$ref": "#/components/schemas/EpochTimestampRange"
               }
             },
             "description": ""
@@ -6845,7 +6829,7 @@
                 "$ref": "#/components/schemas/CogniteExternalId"
               },
               "createdTime": {
-                "$ref": "#/components/schemas/EpochTimestamp"
+                "$ref": "#/components/schemas/EpochTimestampRange"
               },
               "cronExpression": {
                 "$ref": "#/components/schemas/FunctionScheduleCronExpression"
@@ -6892,6 +6876,8 @@
             "properties": {
               "items": {
                 "type": "array",
+                "maxItems": 10,
+                "minItems": 1,
                 "items": {
                   "$ref": "#/components/schemas/FunctionIdEither"
                 }
@@ -6935,11 +6921,17 @@
               "cronExpression": {
                 "$ref": "#/components/schemas/FunctionScheduleCronExpression"
               },
+              "when": {
+                "$ref": "#/components/schemas/FunctionScheduleWhen"
+              },
               "functionId": {
                 "$ref": "#/components/schemas/CogniteInternalId"
               },
               "functionExternalId": {
                 "$ref": "#/components/schemas/CogniteExternalId"
+              },
+              "sessionId": {
+                "$ref": "#/components/schemas/SessionId"
               },
               "data": {
                 "allOf": [
@@ -6959,7 +6951,9 @@
           "id",
           "name",
           "createdTime",
-          "cronExpression"
+          "cronExpression",
+          "when",
+          "sessionId"
         ]
       },
       "FunctionCallLogEntry": {
@@ -7046,18 +7040,26 @@
       },
       "FunctionDeleteRequest": {
         "type": "object",
-        "properties": {
-          "items": {
-            "type": "array",
-            "maxItems": 10,
-            "minItems": 1,
-            "items": {
-              "$ref": "#/components/schemas/FunctionIdEither"
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "maxItems": 10,
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/components/schemas/FunctionIdEither"
+                }
+              }
             }
+          },
+          {
+            "$ref": "#/components/schemas/IgnoreUnknownIdsField"
           }
-        },
-        "required": [
-          "items"
         ]
       },
       "FunctionCallRequest": {
@@ -7072,12 +7074,16 @@
         }
       },
       "FunctionFileId": {
-        "description": "The file ID to a file uploaded to Cognite's Files API. This file must be a zip file and contain a file called `handler.py` (unless otherwise specified through the `functionPath` argument). This file must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets` and `function_call_info`, which are passed into the function. The zip file can contain other files as well (model binary data, libraries etc).\n\nCustom packages can be pip installed by providing a requirements.txt file in the root of the zip file. The latest version of the Cognite Python SDK is automatically installed. If a specific version is needed, please specify this in the requirements.txt file.",
+        "description": "The file ID to a file uploaded to Cognite's Files API. This file must be a zip file and contain a file called `handler.py` in the root folder (unless otherwise specified in the `functionPath` argument). This file must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets` and `function_call_info`, which are passed into the function. The zip file can contain other files as well (model binary data, libraries etc).\n\nCustom packages can be pip installed by providing a requirements.txt file in the root of the zip file. The latest version of the Cognite Python SDK is automatically installed. If a specific version is needed, please specify this in the requirements.txt file.",
         "allOf": [
           {
             "$ref": "#/components/schemas/CogniteInternalId"
           }
         ]
+      },
+      "MetaData": {
+        "type": "object",
+        "description": "Custom, application specific metadata. String key -> String value. Limits: Maximum length of key is 32, value 512 characters, up to 16 key-value pairs. Maximum size of entire metadata is 4096 bytes."
       },
       "Function": {
         "type": "object",
@@ -7133,11 +7139,7 @@
             "description": "Description of the function."
           },
           "metadata": {
-            "type": "object",
-            "description": "Custom, application specific metadata. String key -> String value. Limits: Maximum length of key is 32, value 512 characters, up to 16 key-value pairs. Maximum size of entire metadata is 4096 bytes.",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "$ref": "#/components/schemas/MetaData"
           },
           "apiKey": {
             "type": "string",
@@ -7170,11 +7172,13 @@
           "cpu": {
             "type": "number",
             "format": "float",
+            "example": 0.25,
             "description": "Number of CPU cores per function (not available in Azure). Defaults to 0.25. Allowed values are in the range [0.1, 0.6]."
           },
           "memory": {
             "type": "number",
             "format": "float",
+            "example": 1,
             "description": "Memory per function measured in GB (not available in Azure). Defaults to 1. Allowed values are in the range [0.1, 2.5]."
           },
           "runtime": {
@@ -9451,7 +9455,7 @@
         }
       },
       "GeoLocation": {
-        "description": "The geographic metadata of the file.",
+        "description": "Geographic metadata.",
         "required": [
           "type",
           "geometry"
@@ -15053,7 +15057,14 @@
             "$ref": "#/components/schemas/DocumentSourceFile"
           },
           "geoLocation": {
-            "$ref": "#/components/schemas/DocumentGeoLocation"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DocumentGeoLocation"
+              },
+              {
+                "description": "Geolocation derived for this document. Represented using a GeoJSON Geometry.\n\nThe derived geolocation also includes geolocation information from a matched\nasset (see assetIds property). For matched assets without geolocation information\nthe parent chain is followed until it finds an asset with geolocation information.\n"
+              }
+            ]
           }
         }
       },
@@ -16530,1384 +16541,6 @@
           }
         }
       },
-      "AnnotationsV2SuggestSchema": {
-        "type": "object",
-        "required": [
-          "annotatedResourceType",
-          "annotatedResourceId",
-          "annotationType",
-          "creatingApp",
-          "creatingAppVersion",
-          "creatingUser",
-          "data"
-        ],
-        "properties": {
-          "annotatedResourceType": {
-            "$ref": "#/components/schemas/AnnotatedResourceType"
-          },
-          "annotatedResourceId": {
-            "$ref": "#/components/schemas/AnnotatedResourceId"
-          },
-          "annotationType": {
-            "$ref": "#/components/schemas/AnnotationType"
-          },
-          "creatingApp": {
-            "$ref": "#/components/schemas/Application"
-          },
-          "creatingAppVersion": {
-            "$ref": "#/components/schemas/SemanticVersion"
-          },
-          "creatingUser": {
-            "$ref": "#/components/schemas/User"
-          },
-          "data": {
-            "$ref": "#/components/schemas/AnnotationData"
-          }
-        }
-      },
-      "AnnotationsV2CreateSchema": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/AnnotationsV2SuggestSchema"
-          },
-          {
-            "type": "object",
-            "required": [
-              "status"
-            ],
-            "properties": {
-              "status": {
-                "$ref": "#/components/schemas/Status"
-              }
-            }
-          }
-        ]
-      },
-      "AnnotationsV2ListResponseSchema": {
-        "type": "object",
-        "required": [
-          "items"
-        ],
-        "properties": {
-          "items": {
-            "type": "array",
-            "description": "A list of annotations",
-            "items": {
-              "$ref": "#/components/schemas/AnnotationsV2ResponseSchema"
-            }
-          }
-        }
-      },
-      "AnnotationsV2ResponseSchema": {
-        "type": "object",
-        "required": [
-          "id",
-          "createdTime",
-          "lastUpdatedTime",
-          "annotatedResourceType",
-          "annotationType",
-          "creatingApp",
-          "creatingAppVersion",
-          "creatingUser",
-          "data",
-          "status"
-        ],
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/AnnotationId"
-          },
-          "createdTime": {
-            "$ref": "#/components/schemas/EpochTimestamp"
-          },
-          "lastUpdatedTime": {
-            "$ref": "#/components/schemas/EpochTimestamp"
-          },
-          "annotatedResourceType": {
-            "$ref": "#/components/schemas/AnnotatedResourceType"
-          },
-          "annotatedResourceId": {
-            "$ref": "#/components/schemas/AnnotatedResourceId"
-          },
-          "annotationType": {
-            "$ref": "#/components/schemas/AnnotationType"
-          },
-          "creatingApp": {
-            "$ref": "#/components/schemas/Application"
-          },
-          "creatingAppVersion": {
-            "$ref": "#/components/schemas/SemanticVersion"
-          },
-          "creatingUser": {
-            "$ref": "#/components/schemas/User"
-          },
-          "data": {
-            "$ref": "#/components/schemas/AnnotationData"
-          },
-          "status": {
-            "$ref": "#/components/schemas/Status"
-          }
-        }
-      },
-      "AnnotationsV2ReferenceSchema": {
-        "type": "object",
-        "description": "A reference to an existing annotation",
-        "required": [
-          "id"
-        ],
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/AnnotationId"
-          }
-        }
-      },
-      "AnnotationsV2FilterSchema": {
-        "type": "object",
-        "description": "A filter to apply on annotations",
-        "required": [
-          "annotatedResourceType",
-          "annotatedResourceIds"
-        ],
-        "properties": {
-          "annotatedResourceType": {
-            "$ref": "#/components/schemas/AnnotatedResourceType"
-          },
-          "annotatedResourceIds": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ResourceReference"
-            },
-            "minItems": 1,
-            "maxItems": 1000
-          },
-          "annotationType": {
-            "$ref": "#/components/schemas/AnnotationType"
-          },
-          "creatingApp": {
-            "$ref": "#/components/schemas/Application"
-          },
-          "creatingAppVersion": {
-            "$ref": "#/components/schemas/SemanticVersion"
-          },
-          "creatingUser": {
-            "$ref": "#/components/schemas/User"
-          },
-          "status": {
-            "$ref": "#/components/schemas/Status"
-          },
-          "data": {
-            "description": "Filter annotations by their data keys and values (case-sensitive). Concretely, by providing this field, we check for all annotations that contains the data filter as a subset.\nIf `annotationType` is not specified, the data filter will applied across all annotation types.",
-            "example": {
-              "label": "cat",
-              "fileRef": {
-                "externalId": "abc"
-              }
-            },
-            "type": "object"
-          }
-        },
-        "example": {
-          "annotatedResourceType": "file",
-          "annotatedResourceIds": [
-            "abc-1066"
-          ],
-          "status": "approved",
-          "data": {
-            "label": "cat"
-          }
-        }
-      },
-      "AnnotationsV2CursoredListResponseSchema": {
-        "type": "object",
-        "description": "A cursored list of existing annotations",
-        "required": [
-          "items"
-        ],
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AnnotationsV2ResponseSchema"
-            }
-          },
-          "nextCursor": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Cursor"
-              }
-            ],
-            "nullable": true,
-            "example": null
-          }
-        }
-      },
-      "AnnotationsV2UpdateItemSchema": {
-        "type": "object",
-        "description": "An update object to apply to an annotation",
-        "required": [
-          "id",
-          "update"
-        ],
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/AnnotationId"
-          },
-          "update": {
-            "$ref": "#/components/schemas/AnnotationsV2UpdateDataSchema"
-          }
-        }
-      },
-      "AnnotationsV2UpdateDataSchema": {
-        "type": "object",
-        "description": "Each fields represent a \"delta\" that will be applied onto the corresponding field of the original\nannotation.\n\n\n### Updating Annotation Type or Data\nEnsure that the new annotation data conforms to the new annotation type, otherwise the call will fail.",
-        "properties": {
-          "annotationType": {
-            "type": "object",
-            "required": [
-              "set"
-            ],
-            "properties": {
-              "set": {
-                "$ref": "#/components/schemas/AnnotationType"
-              }
-            }
-          },
-          "data": {
-            "type": "object",
-            "required": [
-              "set"
-            ],
-            "properties": {
-              "set": {
-                "$ref": "#/components/schemas/AnnotationData"
-              }
-            }
-          },
-          "status": {
-            "type": "object",
-            "required": [
-              "set"
-            ],
-            "properties": {
-              "set": {
-                "$ref": "#/components/schemas/Status"
-              }
-            }
-          }
-        },
-        "example": {
-          "data": {
-            "set": {
-              "assetRef": {
-                "externalId": "abc"
-              },
-              "symbolRegion": {
-                "xMin": 0.1,
-                "xMax": 0.2,
-                "yMin": 0.1,
-                "yMax": 0.2
-              },
-              "textRegion": {
-                "xMin": 0.4,
-                "xMax": 0.5,
-                "yMin": 0.4,
-                "yMax": 0.5
-              },
-              "pageNumber": 43
-            }
-          }
-        }
-      },
-      "AnnotatedResourceType": {
-        "type": "string",
-        "description": "The annotated CDF resource. Files are supported.",
-        "enum": [
-          "file"
-        ],
-        "example": "file"
-      },
-      "AnnotatedResourceId": {
-        "description": "The internal ID of the annotated resource.",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CogniteInternalId"
-          }
-        ],
-        "example": 1337
-      },
-      "Application": {
-        "type": "string",
-        "description": "The application name or identifier. This is neither checked nor enforced.",
-        "example": "cognite-vision",
-        "minLength": 1,
-        "maxLength": 255
-      },
-      "User": {
-        "type": "string",
-        "description": "A username, or email, or name. This is not checked nor enforced. If the value is null, it means the\nannotation was created by a service.",
-        "nullable": true,
-        "example": "john.doe@cognite.com",
-        "minLength": 1,
-        "maxLength": 255
-      },
-      "SemanticVersion": {
-        "type": "string",
-        "description": "A version number in the SemVer sense. See [semver.org](https://semver.org/) for the specification.",
-        "example": "1.2.1",
-        "minLength": 1,
-        "maxLength": 255
-      },
-      "AnnotationId": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CogniteInternalId"
-          }
-        ],
-        "description": "Server-generated identifier for the annotation",
-        "example": 4096
-      },
-      "AnnotationType": {
-        "type": "string",
-        "description": "The type of the annotation. This uniquely decides what the structure of the `data` block will be.",
-        "enum": [
-          "images.ObjectDetection",
-          "images.Classification",
-          "images.KeypointCollection",
-          "images.AssetLink",
-          "images.TextRegion",
-          "diagrams.AssetLink",
-          "diagrams.FileLink",
-          "diagrams.UnhandledTextObject",
-          "diagrams.UnhandledSymbolObject",
-          "diagrams.PipeSymbol",
-          "documents.ExtractedText",
-          "diagrams.Line",
-          "diagrams.Junction",
-          "forms.Detection"
-        ],
-        "example": "images.ObjectDetection"
-      },
-      "AnnotationData": {
-        "description": "The annotation information. The format of this object is decided by and validated against the `annotationType`\nattribute.",
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/Annotations.ObjectDetection"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.Classification"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.KeypointCollection"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.cognite__annotation_types__images__AssetLink"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.TextRegion"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.cognite__annotation_types__diagrams__AssetLink"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.FileLink"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.UnhandledTextObject"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.UnhandledSymbolObject"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.PipeSymbol"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.ExtractedText"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.Line"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.Junction"
-          },
-          {
-            "$ref": "#/components/schemas/Annotations.Detection"
-          }
-        ],
-        "example": {
-          "assetRef": {
-            "externalId": "abc"
-          },
-          "symbolRegion": {
-            "xMin": 0.1,
-            "xMax": 0.2,
-            "yMin": 0.1,
-            "yMax": 0.2
-          },
-          "textRegion": {
-            "xMin": 0.2,
-            "xMax": 0.3,
-            "yMin": 0.2,
-            "yMax": 0.3
-          },
-          "pageNumber": 43
-        }
-      },
-      "ResourceReference": {
-        "type": "object",
-        "description": "A reference to another CDF resource. _Either_ the internal _or_ the external ID _must_ be provided (not both).",
-        "properties": {
-          "id": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CogniteInternalId"
-              }
-            ],
-            "example": null
-          },
-          "externalId": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/CogniteExternalId"
-              }
-            ],
-            "example": "abc-1066"
-          }
-        }
-      },
-      "Status": {
-        "type": "string",
-        "description": "The status of the annotation",
-        "enum": [
-          "suggested",
-          "approved",
-          "rejected"
-        ],
-        "example": "approved"
-      },
-      "Annotations.Point": {
-        "title": "primitives.geometry2d.Point",
-        "description": "Point in a 2D-Cartesian coordinate system with origin at the top-left corner of the page",
-        "type": "object",
-        "properties": {
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "x": {
-            "description": "The abscissa of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "y": {
-            "description": "The ordinate of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          }
-        },
-        "required": [
-          "x",
-          "y"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Boolean": {
-        "title": "primitives.attributes.Boolean",
-        "description": "The boolean value of something",
-        "type": "object",
-        "properties": {
-          "description": {
-            "description": "The description of a primitive",
-            "maxLength": 500,
-            "type": "string"
-          },
-          "type": {
-            "enum": [
-              "boolean"
-            ],
-            "type": "string"
-          },
-          "value": {
-            "description": "The boolean value",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "type",
-          "value"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Numerical": {
-        "title": "primitives.attributes.Numerical",
-        "description": "The numerical value of something",
-        "type": "object",
-        "properties": {
-          "description": {
-            "description": "The description of a primitive",
-            "maxLength": 500,
-            "type": "string"
-          },
-          "type": {
-            "enum": [
-              "numerical"
-            ],
-            "type": "string"
-          },
-          "value": {
-            "description": "The numerical value",
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "number"
-              }
-            ]
-          }
-        },
-        "required": [
-          "type",
-          "value"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Keypoint": {
-        "title": "primitives.geometry2d.Keypoint",
-        "description": "A point attached with additional information such as a confidence value and\nvarious attribute(s).",
-        "type": "object",
-        "properties": {
-          "attributes": {
-            "description": "Additional attributes data for a compound.",
-            "type": "object",
-            "additionalProperties": {
-              "discriminator": {
-                "propertyName": "type",
-                "mapping": {
-                  "boolean": "#/components/schemas/Boolean",
-                  "numerical": "#/components/schemas/Numerical"
-                }
-              },
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/Annotations.Boolean"
-                },
-                {
-                  "$ref": "#/components/schemas/Annotations.Numerical"
-                }
-              ]
-            }
-          },
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "point": {
-            "description": "The position of the keypoint",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.Point"
-              }
-            ]
-          }
-        },
-        "required": [
-          "point"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.BoundingBox": {
-        "title": "primitives.geometry2d.BoundingBox",
-        "description": "A plain rectangle",
-        "type": "object",
-        "properties": {
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "xMin": {
-            "description": "Minimum abscissa of the bounding box (left edge). Must be strictly less than x_max.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "xMax": {
-            "description": "Maximum abscissa of the bounding box (right edge). Must be strictly more than x_min.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "yMin": {
-            "description": "Minimum ordinate of the bounding box (bottom edge). Must be strictly less than y_max.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "yMax": {
-            "description": "Maximum ordinate of the bounding box (top edge). Must be strictly more than y_min.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          }
-        },
-        "required": [
-          "xMin",
-          "xMax",
-          "yMin",
-          "yMax"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Polygon": {
-        "title": "primitives.geometry2d.Polygon",
-        "description": "A _closed_ polygon represented by _n_ vertices. In other words, we assume\nthat the first and last vertex are connected.",
-        "type": "object",
-        "properties": {
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "vertices": {
-            "minItems": 3,
-            "maxItems": 1000,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Annotations.Point"
-            }
-          }
-        },
-        "required": [
-          "vertices"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.PolyLine": {
-        "title": "primitives.geometry2d.PolyLine",
-        "description": "A polygonal chain consisting of _n_ vertices",
-        "type": "object",
-        "properties": {
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "vertices": {
-            "minItems": 2,
-            "maxItems": 1000,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Annotations.Point"
-            }
-          }
-        },
-        "required": [
-          "vertices"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Box": {
-        "title": "primitives.geometry3d.Box",
-        "description": "A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates and\ntranslates a unit box centered at the origin to it's location and orientation in 3D space.",
-        "type": "object",
-        "properties": {
-          "label": {
-            "description": "The label describing what type of object it is",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "matrix": {
-            "description": "The homogeneous transformation matrix",
-            "minItems": 16,
-            "maxItems": 16,
-            "type": "array",
-            "items": {
-              "type": "number"
-            }
-          }
-        },
-        "required": [
-          "matrix"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Cylinder": {
-        "title": "primitives.geometry3d.Cylinder",
-        "description": "A cylinder in 3D space, defined by the centers of two sides and the radius.",
-        "type": "object",
-        "properties": {
-          "label": {
-            "description": "The label describing what type of object it is",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "centerA": {
-            "description": "The center of the first cap.",
-            "minItems": 3,
-            "maxItems": 3,
-            "type": "array",
-            "items": {
-              "type": "number"
-            }
-          },
-          "centerB": {
-            "description": "The center of the second cap.",
-            "minItems": 3,
-            "maxItems": 3,
-            "type": "array",
-            "items": {
-              "type": "number"
-            }
-          },
-          "radius": {
-            "description": "The radius of the cylinder.",
-            "minimum": 0,
-            "type": "number"
-          }
-        },
-        "required": [
-          "centerA",
-          "centerB",
-          "radius"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Geometry": {
-        "title": "primitives.geometry3d.Geometry",
-        "description": "A 3D geometry model represented by exactly *one of* `cylinder` and `box`.",
-        "type": "object",
-        "properties": {
-          "cylinder": {
-            "$ref": "#/components/schemas/Annotations.Cylinder"
-          },
-          "box": {
-            "$ref": "#/components/schemas/Annotations.Box"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Annotations.AssetRef": {
-        "title": "primitives.references.AssetRef",
-        "description": "A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).",
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "The internal ID of the referenced resource",
-            "type": "integer"
-          },
-          "externalId": {
-            "description": "The external ID of the referenced resource",
-            "maxLength": 256,
-            "type": "string"
-          }
-        },
-        "additionalProperties": false,
-        "oneOf": [
-          {
-            "required": [
-              "id"
-            ]
-          },
-          {
-            "required": [
-              "externalId"
-            ]
-          }
-        ]
-      },
-      "Annotations.FileRef": {
-        "title": "primitives.references.FileRef",
-        "description": "A reference to a file. Either the internal ID or the external ID must be provided (exactly one).",
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "The internal ID of the referenced resource",
-            "type": "integer"
-          },
-          "externalId": {
-            "description": "The external ID of the referenced resource",
-            "maxLength": 256,
-            "type": "string"
-          }
-        },
-        "additionalProperties": false,
-        "oneOf": [
-          {
-            "required": [
-              "id"
-            ]
-          },
-          {
-            "required": [
-              "externalId"
-            ]
-          }
-        ]
-      },
-      "Annotations.ObjectDetection": {
-        "title": "images.ObjectDetection",
-        "description": "Models an image object detection represented by a label, a geometry, and\noptionally a confidence value.",
-        "type": "object",
-        "properties": {
-          "boundingBox": {
-            "$ref": "#/components/schemas/Annotations.BoundingBox"
-          },
-          "polygon": {
-            "$ref": "#/components/schemas/Annotations.Polygon"
-          },
-          "polyline": {
-            "$ref": "#/components/schemas/Annotations.PolyLine"
-          },
-          "label": {
-            "description": "The label describing what type of object it is",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          }
-        },
-        "required": [
-          "label"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Classification": {
-        "title": "images.Classification",
-        "description": "Models an image classification represented by a label, and optionally a\nconfidence value.",
-        "type": "object",
-        "properties": {
-          "label": {
-            "description": "The label describing what type of object it is",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          }
-        },
-        "required": [
-          "label"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.KeypointCollection": {
-        "title": "images.KeypointCollection",
-        "description": "Models a collection of keypoints represented by a label, a dictionary of\nkeypoints (mapping from a (unique) label name to a keypoint), and\noptionally a confidence value and an attributes dictionary.",
-        "type": "object",
-        "properties": {
-          "attributes": {
-            "description": "Additional attributes data for a compound.",
-            "type": "object",
-            "additionalProperties": {
-              "discriminator": {
-                "propertyName": "type",
-                "mapping": {
-                  "boolean": "primitives.yml#/components/schemas/Boolean",
-                  "numerical": "primitives.yml#/components/schemas/Numerical"
-                }
-              },
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/Annotations.Boolean"
-                },
-                {
-                  "$ref": "#/components/schemas/Annotations.Numerical"
-                }
-              ]
-            }
-          },
-          "label": {
-            "description": "The label describing what type of object it is",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "keypoints": {
-            "description": "The detected keypoints",
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/Annotations.Keypoint"
-            }
-          }
-        },
-        "required": [
-          "label",
-          "keypoints"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.cognite__annotation_types__images__AssetLink": {
-        "title": "images.AssetLink",
-        "description": "Models a link to a CDF Asset referenced in an image",
-        "type": "object",
-        "properties": {
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "assetRef": {
-            "description": "The asset this annotation is pointing to",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.AssetRef"
-              }
-            ]
-          },
-          "text": {
-            "description": "The extracted text",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "textRegion": {
-            "description": "The location of the text mentioning the asset",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.BoundingBox"
-              }
-            ]
-          }
-        },
-        "required": [
-          "assetRef",
-          "text",
-          "textRegion"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.TextRegion": {
-        "title": "images.TextRegion",
-        "description": "Models an extracted text region in an image",
-        "type": "object",
-        "properties": {
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "text": {
-            "description": "The extracted text",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "textRegion": {
-            "description": "The location of the extracted text",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.BoundingBox"
-              }
-            ]
-          }
-        },
-        "required": [
-          "text",
-          "textRegion"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.cognite__annotation_types__diagrams__AssetLink": {
-        "title": "diagrams.AssetLink",
-        "description": "Models a link to a CDF Asset referenced in an engineering diagram",
-        "type": "object",
-        "properties": {
-          "pageNumber": {
-            "description": "The number of the page on which this annotation is located. The first page has number 1.",
-            "default": 1,
-            "minimum": 1,
-            "maximum": 2048,
-            "type": "integer"
-          },
-          "assetRef": {
-            "description": "The asset this annotation is pointing to",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.AssetRef"
-              }
-            ]
-          },
-          "symbolRegion": {
-            "description": "The location of the symbol representing the asset",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.BoundingBox"
-              }
-            ]
-          },
-          "textRegion": {
-            "description": "The location of the text mentioning the asset",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.BoundingBox"
-              }
-            ]
-          },
-          "text": {
-            "description": "The extracted text",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "symbol": {
-            "description": "The symbol representing the asset",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "required": [
-          "assetRef",
-          "textRegion"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.FileLink": {
-        "title": "diagrams.FileLink",
-        "description": "Models a link to a CDF File referenced in an engineering diagram",
-        "type": "object",
-        "properties": {
-          "pageNumber": {
-            "description": "The number of the page on which this annotation is located. The first page has number 1.",
-            "default": 1,
-            "minimum": 1,
-            "maximum": 2048,
-            "type": "integer"
-          },
-          "fileRef": {
-            "description": "The file this annotation is pointing to",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.FileRef"
-              }
-            ]
-          },
-          "symbolRegion": {
-            "description": "The location of the symbol representing the file",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.BoundingBox"
-              }
-            ]
-          },
-          "textRegion": {
-            "description": "The location of the text mentioning the file",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.BoundingBox"
-              }
-            ]
-          },
-          "text": {
-            "description": "The extracted text",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "symbol": {
-            "description": "The symbol found in the file",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "required": [
-          "fileRef",
-          "textRegion"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.UnhandledTextObject": {
-        "title": "diagrams.UnhandledTextObject",
-        "description": "Models an extracted text region in an engineering diagram",
-        "type": "object",
-        "properties": {
-          "pageNumber": {
-            "description": "The number of the page on which this annotation is located. The first page has number 1.",
-            "default": 1,
-            "minimum": 1,
-            "maximum": 2048,
-            "type": "integer"
-          },
-          "textRegion": {
-            "description": "The location of the text",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.BoundingBox"
-              }
-            ]
-          },
-          "text": {
-            "description": "The extracted text",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "required": [
-          "textRegion",
-          "text"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.UnhandledSymbolObject": {
-        "title": "diagrams.UnhandledSymbolObject",
-        "description": "Models an extracted symbol region in an engineering diagram",
-        "type": "object",
-        "properties": {
-          "pageNumber": {
-            "description": "The number of the page on which this annotation is located. The first page has number 1.",
-            "default": 1,
-            "minimum": 1,
-            "maximum": 2048,
-            "type": "integer"
-          },
-          "symbolRegion": {
-            "description": "The location of the symbol",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.BoundingBox"
-              }
-            ]
-          },
-          "symbol": {
-            "description": "The symbol found in the file",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "required": [
-          "symbolRegion",
-          "symbol"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.PipeSymbol": {
-        "title": "diagrams.PipeSymbol",
-        "description": "Models a pipe in an engineering diagram",
-        "type": "object",
-        "properties": {
-          "pageNumber": {
-            "description": "The number of the page on which this annotation is located. The first page has number 1.",
-            "default": 1,
-            "minimum": 1,
-            "maximum": 2048,
-            "type": "integer"
-          },
-          "polyline": {
-            "description": "The polyline representing the pipe",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.PolyLine"
-              }
-            ]
-          }
-        },
-        "required": [
-          "polyline"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.ExtractedText": {
-        "title": "documents.ExtractedText",
-        "description": "Represents text extracted from a document. Annotations of this type are low-level and not specific to any domain.",
-        "type": "object",
-        "properties": {
-          "pageNumber": {
-            "description": "The number of the page on which this annotation is located. The first page has number 1.",
-            "default": 1,
-            "minimum": 1,
-            "maximum": 2048,
-            "type": "integer"
-          },
-          "textRegion": {
-            "description": "The location of the extracted text",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.BoundingBox"
-              }
-            ]
-          },
-          "extractedText": {
-            "description": "The extracted text",
-            "maxLength": 1024,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "required": [
-          "textRegion",
-          "extractedText"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Line": {
-        "title": "diagrams.Line",
-        "description": "Models a line in an engineering diagram",
-        "type": "object",
-        "properties": {
-          "label": {
-            "description": "The label describing what type of object it is",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "pageNumber": {
-            "description": "The number of the page on which this annotation is located. The first page has number 1.",
-            "default": 1,
-            "minimum": 1,
-            "maximum": 2048,
-            "type": "integer"
-          },
-          "polyline": {
-            "description": "The polyline representing the line",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.PolyLine"
-              }
-            ]
-          }
-        },
-        "required": [
-          "label",
-          "polyline"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Junction": {
-        "title": "diagrams.Junction",
-        "description": "Models a junction between lines in an engineering diagram",
-        "type": "object",
-        "properties": {
-          "pageNumber": {
-            "description": "The number of the page on which this annotation is located. The first page has number 1.",
-            "default": 1,
-            "minimum": 1,
-            "maximum": 2048,
-            "type": "integer"
-          },
-          "position": {
-            "description": "The point representing the junction",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.Point"
-              }
-            ]
-          }
-        },
-        "required": [
-          "position"
-        ],
-        "additionalProperties": false
-      },
-      "Annotations.Detection": {
-        "title": "forms.Detection",
-        "description": "Represents a detection of a field value in a form.\nA field is identified by a field_name, optionally component_name and component_type if the field belongs to a subcomponent.\nThe bounding_box indicates the position of the detection. The content of the field is given by the value, and optionally\nan unnormalized_value and the unit.",
-        "type": "object",
-        "properties": {
-          "confidence": {
-            "description": "The confidence score for the primitive. It should be between 0 and 1.",
-            "minimum": 0,
-            "maximum": 1,
-            "type": "number"
-          },
-          "pageNumber": {
-            "description": "The number of the page on which this annotation is located. The first page has number 1.",
-            "default": 1,
-            "minimum": 1,
-            "maximum": 2048,
-            "type": "integer"
-          },
-          "boundingBox": {
-            "description": "Bounding box of the detection area",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Annotations.BoundingBox"
-              }
-            ]
-          },
-          "componentType": {
-            "description": "Type of subcomponent that the detection belongs to",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "componentName": {
-            "description": "Name of subcomponent that the detection belongs to",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "fieldName": {
-            "description": "Name of field that has been detected",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "value": {
-            "description": "The value that has been detected",
-            "maxLength": 128,
-            "type": "string"
-          },
-          "valueUnnormalized": {
-            "description": "The value that has been detected, before normalization. Optional.",
-            "maxLength": 128,
-            "type": "string"
-          },
-          "unit": {
-            "description": "The unit of the value field. Optional.",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "required": [
-          "boundingBox",
-          "fieldName",
-          "value"
-        ],
-        "additionalProperties": false
-      },
       "RevokeSessionRequestList": {
         "description": "",
         "type": "object",
@@ -19017,15 +17650,6 @@
           "$ref": "#/components/schemas/FeedbackStatus"
         }
       },
-      "AnnotationId": {
-        "name": "annotationId",
-        "in": "path",
-        "required": true,
-        "description": "The internal ID of the annotation",
-        "schema": {
-          "$ref": "#/components/schemas/AnnotationId"
-        }
-      },
       "seismicId": {
         "in": "path",
         "name": "seismic_id",
@@ -19053,24 +17677,6 @@
                 },
                 "data": {
                   "$ref": "#/components/schemas/data"
-                }
-              }
-            }
-          }
-        }
-      },
-      "FunctionErrorResponse": {
-        "description": "The response for a failed request.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "error"
-              ],
-              "properties": {
-                "error": {
-                  "$ref": "#/components/schemas/FunctionErrorBasic"
                 }
               }
             }
@@ -19273,7 +17879,7 @@
                 },
                 "runtimes": {
                   "type": "array",
-                  "description": "Available runtimes. Runtime \"py3x\" translates to the latest version of the Python 3.x.y series.",
+                  "description": "Available runtimes. For example, runtime \"py38\" translates to the latest version of the Python 3.8 series.",
                   "items": {
                     "type": "string",
                     "example": [
@@ -19300,22 +17906,17 @@
             "schema": {
               "type": "object",
               "required": [
-                "project",
-                "requested",
-                "activated"
+                "status"
               ],
               "properties": {
-                "project": {
+                "status": {
                   "type": "string",
-                  "description": "The project subject to the activation status."
-                },
-                "requested": {
-                  "type": "boolean",
-                  "description": "Signifies whether or not Cognite Functions has been requested."
-                },
-                "activated": {
-                  "type": "boolean",
-                  "description": "Signifies whether or not Cognite Functions has been activated."
+                  "description": "Signifies whether Cognite Functions have been requested or activated for the project. Set to inactive by default.",
+                  "enum": [
+                    "inactive",
+                    "requested",
+                    "activated"
+                  ]
                 }
               }
             }
@@ -19780,194 +18381,10 @@
           }
         }
       },
-      "AnnotationsV2CreateResponseSchema": {
-        "description": "Successful creation",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/AnnotationsV2ListResponseSchema"
-            }
-          }
-        }
-      },
-      "AnnotationsV2ListResponseSchema": {
-        "description": "Successful retrieval",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/AnnotationsV2ListResponseSchema"
-            }
-          }
-        }
-      },
-      "AnnotationsV2ResponseSchema": {
-        "description": "Successful retrieval",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/AnnotationsV2ResponseSchema"
-            }
-          }
-        }
-      },
-      "AnnotationsV2CursoredListResponseSchema": {
-        "description": "Successful retrieval",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/AnnotationsV2CursoredListResponseSchema"
-            }
-          }
-        }
-      },
-      "AnnotationsV2UpdateResponseSchema": {
-        "description": "Successful update",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/AnnotationsV2ListResponseSchema"
-            }
-          }
-        }
-      },
       "DownloadSeismicResponse": {
         "description": "The generated SEG-Y file",
         "content": {
           "application/octet-stream": {}
-        }
-      }
-    },
-    "requestBodies": {
-      "AnnotationsV2SuggestRequestSchema": {
-        "description": "A request for suggesting annotations, i.e., creating them with the \"suggested\" `status`",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "items"
-              ],
-              "properties": {
-                "items": {
-                  "type": "array",
-                  "description": "A list of annotations to suggest",
-                  "minimum": 1,
-                  "maximum": 1000,
-                  "items": {
-                    "$ref": "#/components/schemas/AnnotationsV2SuggestSchema"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "AnnotationsV2CreateRequestSchema": {
-        "description": "A request for creating annotations",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "items"
-              ],
-              "properties": {
-                "items": {
-                  "type": "array",
-                  "description": "A list of annotations to create",
-                  "minimum": 1,
-                  "maximum": 1000,
-                  "items": {
-                    "$ref": "#/components/schemas/AnnotationsV2CreateSchema"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "AnnotationsV2ByIdsRequestSchema": {
-        "description": "A request referencing existing annotations",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "items"
-              ],
-              "properties": {
-                "items": {
-                  "type": "array",
-                  "description": "A list of existing annotation references",
-                  "minimum": 1,
-                  "maximum": 1000,
-                  "items": {
-                    "$ref": "#/components/schemas/AnnotationsV2ReferenceSchema"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "AnnotationsV2ListRequestSchema": {
-        "description": "A request specifying the annotation listing behavior",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "filter"
-              ],
-              "properties": {
-                "cursor": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/Cursor"
-                    }
-                  ],
-                  "nullable": true
-                },
-                "limit": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "default": 25,
-                  "maximum": 1000
-                },
-                "filter": {
-                  "$ref": "#/components/schemas/AnnotationsV2FilterSchema"
-                }
-              }
-            }
-          }
-        }
-      },
-      "AnnotationsV2UpdateRequestSchema": {
-        "description": "A request for updating existing annotations",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "items"
-              ],
-              "properties": {
-                "items": {
-                  "type": "array",
-                  "minimum": 1,
-                  "maximum": 1000,
-                  "items": {
-                    "$ref": "#/components/schemas/AnnotationsV2UpdateItemSchema"
-                  }
-                }
-              }
-            }
-          }
         }
       }
     }
@@ -19975,9 +18392,6 @@
   "security": [
     {
       "api-key": []
-    },
-    {
-      "token": []
     },
     {
       "oidc-token": []
@@ -20032,12 +18446,6 @@
       ]
     },
     {
-      "name": "Data organization",
-      "tags": [
-        "Annotations"
-      ]
-    },
-    {
       "name": "Documents",
       "tags": [
         "Documents",
@@ -20065,7 +18473,7 @@
   "tags": [
     {
       "name": "Functions",
-      "description": "Functions enables Python code to be hosted and executed in the cloud, on demand or by using a schedule. The Python runtime version is 3.8.3. Execution, status and logs are available through the API. A function is uploaded to the Files API as a zip file with at least a Python file called `handler.py` (unless specified otherwise through the `functionPath`-argument) that must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets`, or 'function_call_info', which are passed into the function. \nThe latest version of Cognite SDK's are available, and additional python packages and version specifications can be defined in a `requirements.txt` in the root of the zip."
+      "description": "Functions enables Python code to be hosted and executed in the cloud, on demand or by using a schedule. Execution, status and logs are available through the API. A function is uploaded to the Files API as a zip file with at least a Python file called `handler.py` (unless specified otherwise through the `functionPath`-argument) that must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets`, or 'function_call_info', which are passed into the function. \nThe latest version of Cognite SDK's are available, and additional python packages and version specifications can be defined in a `requirements.txt` in the root of the zip."
     },
     {
       "name": "Function calls",
@@ -20123,10 +18531,6 @@
       "name": "Document feedback",
       "x-displayName": "Feedback",
       "description": "The document feedback mechanism lets you continuously improve the correctness of the document labels."
-    },
-    {
-      "name": "Annotations",
-      "description": "Annotations reflect contextual information in base CDF resource types, such as Files and Time series, that are not\npresent on the object itself. The benefits of the annotations concept are threefold:\n\n- The annotations concept is a good fit for enriching the base resources themselves, so that the overall data\n  quality is higher in a given project.\n- It is also a good fit for building reference datasets for data problems uniformly across customer projects.\n  Product teams can then use those reference datasets to train machine learning models or validate the\n  performance of their algorithms on actual customer data.\n- Given a uniform way of labelling similar concepts across projects, it becomes easy for apps to agree on a consistent\n  visual representation of those concepts."
     },
     {
       "name": "Sessions",
