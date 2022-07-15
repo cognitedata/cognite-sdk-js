@@ -15,7 +15,7 @@ In order to have build reproducability we keep a copy of the OpenAPI document
 in this repository (named `.cognite-openapi-snapshot.json`). To generate new types
 it will need to be updated to the latest available. E.g.:
 
-```bash
+```console
 yarn codegen fetch-latest --package=stable
 ```
 
@@ -26,7 +26,7 @@ frequently made automatically available via SDK updates.
 
 After updating the OpenAPI document snapshot types must be updated. E.g:
 
-```bash
+```console
 yarn codegen generate-types --package=stable
 ```
 
@@ -45,13 +45,15 @@ The `codegen.json` file must be changed to contain:
 }
 ```
 
-This can be used to test changes to the OpenAPI document while working
-on evolving it, or to lock a service to an older OpenAPI document should
-it block other updates.
+This can be used to test local changes to the OpenAPI document, or to 
+lock a service to an older OpenAPI document should the latest version
+cause issues.
 
-## Configuring type generation for a service
+## Configure/enable a service for type generation
 
-```bash
+> Code generation must first be enable for a package
+
+```console
 yarn codegen configure --package stable --service my-service
 ```
 
@@ -61,3 +63,5 @@ so types will be created on next run.
 The types extracted are based on the paths in the OpenAPI document
 that matches the name of the service. It is currently not possible
 to select individually paths other than this.
+
+You may have to remove existing types to avoid conflicts.
