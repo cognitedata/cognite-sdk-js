@@ -11,7 +11,6 @@ import {
 } from '../../types';
 
 export class Nodes3DAPI extends BaseResourceAPI<Node3D> {
-
   /**
    * [List 3D nodes](https://doc.cognitedata.com/api/v1/#operation/get3DNodes)
    *

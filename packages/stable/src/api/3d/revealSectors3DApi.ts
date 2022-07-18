@@ -8,7 +8,6 @@ import {
 } from '../../types';
 
 export class RevealSectors3DAPI extends BaseResourceAPI<RevealSector3D> {
-
   /**
    * [List 3D sectors (Reveal)](https://doc.cognitedata.com/api/v1/#operation/revealGet3DSectors)
    *

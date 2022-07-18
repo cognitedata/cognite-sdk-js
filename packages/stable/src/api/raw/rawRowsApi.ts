@@ -22,18 +22,18 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
   }
 
   /**
-   * 
+   *
    * [Insert rows into a table](https://docs.cognite.com/api/v1/#tag/Raw/operation/postRows)
-   * 
+   *
    * ```js
    * await client.rawRowsApi.insert('My company', 'Customers', [{ key: 'customer1', columns: { 'First name': 'Steve', 'Last name': 'Jobs' } }]);
    * ```
-   * 
-   * @param databaseName 
-   * @param tableName 
-   * @param items 
-   * @param ensureParent 
-   * @returns 
+   *
+   * @param databaseName
+   * @param tableName
+   * @param items
+   * @param ensureParent
+   * @returns
    */
   public async insert(
     databaseName: string,
@@ -53,15 +53,15 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
 
   /**
    * [Retrieve rows from a table](https://docs.cognite.com/api/v1/#tag/Raw/operation/getRows)
-   * 
+   *
    * ```js
    * await client.rawRowsApi.list(databaseName, tableName);
    * ```
-   * 
-   * @param databaseName 
-   * @param tableName 
-   * @param scope 
-   * @returns 
+   *
+   * @param databaseName
+   * @param tableName
+   * @param scope
+   * @returns
    */
   public list(
     databaseName: string,
