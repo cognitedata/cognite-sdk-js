@@ -13,6 +13,17 @@ export class PreviewAPI extends BaseResourceAPI<any> {
     return this.pdfPreviewEndpoint<ArrayBuffer>(id);
   };
 
+  /**
+   * [Retrieve a image preview of a page from a document](https://docs.cognite.com/api/v1/#tag/Document-preview/operation/documentsPreviewImagePage)
+   * 
+   * ```js
+   * await client.documents.preview.documentAsImage(1, 1);
+   * ```
+   * 
+   * @param id 
+   * @param page 
+   * @returns 
+   */
   public documentAsImage = (
     id: CogniteInternalId,
     page: number
@@ -20,6 +31,16 @@ export class PreviewAPI extends BaseResourceAPI<any> {
     return this.imagePreviewEndpoint<ArrayBuffer>(id, page);
   };
 
+  /**
+   * [Retrieve a temporary link to a PDF preview of a document](https://docs.cognite.com/api/v1/#tag/Document-preview/operation/documentsPreviewPdfTemporaryLink)
+   * 
+   * ```js
+   * await client.documents.preview.pdfTemporaryLink(1);
+   * ```
+   * 
+   * @param id 
+   * @returns 
+   */
   public pdfTemporaryLink = (
     id: CogniteInternalId
   ): Promise<DocumentsPreviewTemporaryLinkResponse> => {
