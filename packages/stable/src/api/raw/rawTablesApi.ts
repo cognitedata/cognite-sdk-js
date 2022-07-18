@@ -9,7 +9,6 @@ import {
 } from '../../types';
 
 export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
-
   /**
    * [Create tables in a database](https://doc.cognitedata.com/api/v1/#operation/createTables)
    *

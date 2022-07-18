@@ -15,7 +15,6 @@ import {
 } from '../../types';
 
 export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
-
   /**
    * [Insert rows](https://docs.cognite.com/api/v1/#operation/postSequenceData)
    *

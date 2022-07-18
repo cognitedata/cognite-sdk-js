@@ -4,7 +4,6 @@ import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import { CogniteInternalId, List3DNodesQuery, RevealNode3D } from '../../types';
 
 export class RevealNodes3DAPI extends BaseResourceAPI<RevealNode3D> {
-
   /**
    * [List 3D nodes (Reveal)](https://doc.cognitedata.com/api/v1/#operation/revealGet3DNodes)
    *
