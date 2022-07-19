@@ -27,5 +27,5 @@ echo "Added NPM_TOKEN to .npmrc"
 # publish to npm (if any packages have new versions)
 echo "Running lerna publish"
 # Don't remove builds and snippet info etc after publish
-yarn lerna publish from-package --yes --no-git-reset
+yarn lerna publish from-package --yes --no-git-reset --no-private
 echo "Ran lerna publish!"
