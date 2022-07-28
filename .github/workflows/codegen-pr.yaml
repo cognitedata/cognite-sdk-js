@@ -1,0 +1,48 @@
+name: Update Types
+on:
+  schedule:
+    - cron:  '15 * * * *'
+jobs:
+  update-types:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ["stable", "playground"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧
+        run: yarn install --frozen-lockfile
+
+      - name: Update snapshot
+        run: |
+          yarn codegen --package=${{ matrix.package }} fetch-latest
+      - name: Update types
+        run: |
+          yarn codegen --package=${{ matrix.package }} generate-types
+      - name: Identify changed files
+        id: changed_files
+        run: echo "::set-output name=changed::$(git status --porcelain | wc -l)"
+
+      - name: Create Pull Request
+        if: steps.changed_files.outputs.changed != 0
+        uses: peter-evans/create-pull-request@v4
+        with:
+            token: ${{ secrets.PAT }}
+            commit-message: chore: update types
+            title: Update dependencies
+            body: |
+              - update snapshot
+              - update ts types
+            branch: codegen/auto-update-snapshot-and-types 
