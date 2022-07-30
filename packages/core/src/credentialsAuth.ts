@@ -51,12 +51,10 @@ export class CredentialsAuth {
     console.log(`** initializing CredentialsAuth`);
     if (this.credentials) {
       if (this.authProvider && isFunction(this.authProvider.requires)) {
-        console.log(`processing credentials - requires: ${this.credentials}`);
+        console.log(`processing credentials - requires`);
         this.authProvider.requires(this.credentials);
       } else {
-        console.log(
-          `processing credentials - verifyCredentialsRequiredFields: ${this.credentials}`
-        );
+        console.log(`processing credentials - verifyCredentialsRequiredFields`);
         verifyCredentialsRequiredFields(this.credentials);
       }
 
@@ -129,15 +127,12 @@ export class CredentialsAuth {
           .login(this.credentials.method, this.credentials.authContext);
       }
 
-      console.log(`tokenCredentials=${JSON.stringify(this.tokenCredentials)}`);
-
       let token;
       if (
         this.tokenCredentials.access_token !== undefined &&
         this.tokenCredentials.access_token !== ''
       ) {
         token = this.tokenCredentials.access_token;
-        console.log(`token=${JSON.stringify(token)}`);
 
         this.httpClient.setDefaultHeader(
           AUTHORIZATION_HEADER,
@@ -147,6 +142,7 @@ export class CredentialsAuth {
 
       return token;
     } catch (e) {
+      console.log(`An error ocurred while attempting to authenticate`, e);
       return;
     }
   };

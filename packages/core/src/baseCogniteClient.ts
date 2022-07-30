@@ -116,6 +116,10 @@ export default class BaseCogniteClient {
       );
     }
 
+    const { baseUrl } = options;
+
+    this.http = this.initializeCDFHttpClient(baseUrl, options);
+
     if (options && options.authentication) {
       const { credentials, provider } = options.authentication;
 
@@ -134,19 +138,6 @@ export default class BaseCogniteClient {
       );
     }
 
-    const { baseUrl } = options;
-
-    this.http = new CDFHttpClient(
-      getBaseUrl(baseUrl),
-      this.getRetryValidator()
-    );
-    this.httpClient
-      .setDefaultHeader(X_CDF_APP_HEADER, options.appId)
-      .setDefaultHeader(
-        X_CDF_SDK_HEADER,
-        `CogniteJavaScriptSDK:${this.version}`
-      );
-
     this.metadata = new MetadataMap();
     this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
     this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
@@ -157,23 +148,6 @@ export default class BaseCogniteClient {
     this.getToken = async () => {
       return options.getToken ? options.getToken() : undefined;
     };
-
-    this.httpClient.set401ResponseHandler(async (httpError, retry, reject) => {
-      try {
-        const previousToken = this.retrieveTokenValueFromHeader(
-          httpError.headers
-        );
-
-        const newToken = await this.authenticate();
-        if (newToken && newToken !== previousToken) {
-          retry();
-        } else {
-          reject();
-        }
-      } catch {
-        reject();
-      }
-    });
 
     this.initAPIs();
   }
@@ -213,6 +187,42 @@ export default class BaseCogniteClient {
         return;
       }
     };
+
+  private initializeCDFHttpClient(
+    baseUrl: string | undefined,
+    options: ClientOptions
+  ) {
+    const httpClient = new CDFHttpClient(
+      getBaseUrl(baseUrl),
+      this.getRetryValidator()
+    );
+
+    httpClient
+      .setDefaultHeader(X_CDF_APP_HEADER, options.appId)
+      .setDefaultHeader(
+        X_CDF_SDK_HEADER,
+        `CogniteJavaScriptSDK:${this.version}`
+      );
+
+    httpClient.set401ResponseHandler(async (httpError, retry, reject) => {
+      try {
+        const previousToken = this.retrieveTokenValueFromHeader(
+          httpError.headers
+        );
+
+        const newToken = await this.authenticate();
+        if (newToken && newToken !== previousToken) {
+          retry();
+        } else {
+          reject();
+        }
+      } catch {
+        reject();
+      }
+    });
+
+    return httpClient;
+  }
 
   /**
    * It retrieves the previous token from header
