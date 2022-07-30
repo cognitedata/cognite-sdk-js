@@ -43,7 +43,7 @@ function Home() {
   return (
     <>
       <div style={cogHome}>
-        <Button type="primary"  onClick={() => void auth.signinSilent()}>
+        <Button type="primary"  onClick={() => void auth.signinRedirect()}>
             Log in
         </Button>
       </div>
