@@ -38,7 +38,7 @@ export interface ClientCredentials {
 }
 
 export class CredentialsAuth {
-  private readonly tokenCredentials: TokenCredentials = {} as TokenCredentials;
+  private tokenCredentials: TokenCredentials = {} as TokenCredentials;
 
   constructor(
     private httpClient: BasicHttpClient,
