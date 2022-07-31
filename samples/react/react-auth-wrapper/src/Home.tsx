@@ -1,5 +1,3 @@
-import { Button } from '@cognite/cogs.js';
-import React from 'react';
 import { useAuth } from 'react-oidc-context';
 import './App.css';
 import Callback from './Callback';
@@ -43,9 +41,9 @@ function Home() {
   return (
     <>
       <div style={cogHome}>
-        <Button type="primary"  onClick={() => void auth.signinRedirect()}>
+        <button type="button"  onClick={() => void auth.signinRedirect()}>
             Log in
-        </Button>
+        </button>
       </div>
     </>
   );

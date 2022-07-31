@@ -34,6 +34,7 @@ export interface ClientCredentials {
   response_type?: string;
   grant_type?: string;
   scope?: string;
+  authContext?: string;
 }
 
 export class CredentialsAuth {

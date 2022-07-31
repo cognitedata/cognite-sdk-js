@@ -5,7 +5,7 @@ import { AuthContextProps } from "react-oidc-context";
 import { AuthMethod } from "../authentication/auth-types";
 import PkceAuth from "../authentication/pkce";
 
-export default class ReactCogniteAuthWrapper {
+export default class ReactCogniteAuthProvider {
 
   private constructor(public method: AuthMethod
     , public authContext: AuthContextProps) {

@@ -1,8 +1,7 @@
-import { TopBar } from '@cognite/cogs.js';
 import { Asset, CogniteClient } from '@cognite/sdk';
 import React, { useState } from 'react';
 import { AuthContextProps, useAuth } from 'react-oidc-context';
-import ReactCogniteAuthWrapper from './wrapper/react-cog-auth-wrapper';
+import ReactCogniteAuthProvider from './provider/react-cog-auth-provider';
 
 function Callback() {
   const authContext: AuthContextProps = useAuth();
@@ -15,7 +14,7 @@ function Callback() {
       project: "sdkcognite",
       baseUrl: "https://greenfield.cognitedata.com",
       authentication: {
-        provider: ReactCogniteAuthWrapper,
+        provider: ReactCogniteAuthProvider,
         credentials: {
           method: 'pkce',
           authContext: authContext,
@@ -39,15 +38,6 @@ function Callback() {
 
   return (
     <>
-      <TopBar>
-        <TopBar.Left>
-          <TopBar.Action text="Home" onClick={() => console.log("clicked")} />
-          <TopBar.Action icon="Configure" />
-        </TopBar.Left>
-      </TopBar>
-      {/* Hello {data } {token} {auth.user?.profile.sub}{" "} */}
-      {/* <button onClick={() => void auth.removeUser()}>Log out</button> */}
-
       <div className="App">
         {posts.map((post, index) => {
           return <li key={index}>Assets here {post.name}</li>;
