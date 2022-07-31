@@ -16,9 +16,9 @@ export default class ReactCogniteAuthProvider {
     return new this(authMethod, authContext);
   }
 
-  async login() {
+  async login(refresh_token?: string) {
     if (this.method === 'pkce') {
-      return await PkceAuth.load(this.authContext).login();
+      return await PkceAuth.load(this.authContext).login(refresh_token);
     }
   }
 

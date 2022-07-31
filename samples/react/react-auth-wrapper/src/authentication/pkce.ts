@@ -1,6 +1,5 @@
 // Copyright 2022 Cognite AS
 import { AuthResponse } from './auth-types';
-import { ISettings } from './common';
 import AbstractAuth from './abstract-auth';
 import { AuthContextProps } from 'react-oidc-context';
 import { User } from 'oidc-client-ts';
@@ -30,8 +29,10 @@ class PkceAuth extends AbstractAuth {
         let user;
 
         if (!refresh_token) {
+          console.log(`token is being obtained`)
           user = await this.authContext.user;
         } else {
+          console.log(`token is being refreshed`)
           user = await this.authContext.signinSilent();
         }
 

@@ -116,16 +116,12 @@ export class CredentialsAuth {
         // @ts-ignore
         this.tokenCredentials = await this.authProvider
           .load(this.credentials.method, this.credentials)
-          .login(
-            (this.credentials.method === 'device' ||
-              this.credentials.method === 'pkce') &&
-              this.tokenCredentials.refresh_token
-          );
+          .login(this.isRefreshToken());
       } else {
         // @ts-ignore
         this.tokenCredentials = await this.authProvider
           .load(this.credentials.method, this.credentials.authContext)
-          .login(this.credentials.method, this.credentials.authContext);
+          .login(this.isRefreshToken());
       }
 
       let token;
@@ -147,6 +143,14 @@ export class CredentialsAuth {
       return;
     }
   };
+
+  private isRefreshToken(): any {
+    return (
+      (this.credentials.method === 'device' ||
+        this.credentials.method === 'pkce') &&
+      this.tokenCredentials.refresh_token
+    );
+  }
 
   public isApiKeyMode(): boolean {
     return this.credentials.method === 'api';
