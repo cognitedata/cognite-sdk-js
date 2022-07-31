@@ -23,14 +23,11 @@ export default class ReactCogniteAuthProvider {
   }
 
   public static requires(credentials: any) {
-    console.log(`Checking if credentials is a valid object`)
     if (!isObject(credentials)) {
       console.log(`Credentials is not an object`);
 
       throw Error('credentials is required');
     }
-
-    console.log(`Checking if credentials has a method property`);
 
     if (!credentials.method) {
       console.log(`Credentials does not have a method property`);
