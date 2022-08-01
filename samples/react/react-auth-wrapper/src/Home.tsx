@@ -1,5 +1,5 @@
-import { useAuth } from 'react-oidc-context';
 import './App.css';
+import { useCogAuth } from './authentication/useCogAuth';
 import Callback from './Callback';
 
 const cogHome = {
@@ -13,7 +13,7 @@ const cogButton = {
 };
 
 function Home() {
-  const auth = useAuth();
+  const auth = useCogAuth();
 
   switch (auth.activeNavigator) {
     case "signinSilent":

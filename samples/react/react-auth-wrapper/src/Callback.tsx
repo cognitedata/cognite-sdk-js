@@ -1,10 +1,10 @@
 import { Asset, CogniteClient } from '@cognite/sdk';
 import React, { useState } from 'react';
-import { AuthContextProps, useAuth } from 'react-oidc-context';
+import { useCogAuth } from './authentication/useCogAuth';
 import ReactCogniteAuthProvider from './provider/react-cog-auth-provider';
 
 function Callback() {
-  const authContext: AuthContextProps = useAuth();
+  const authContext: any = useCogAuth();
 
   const [posts, setPosts] = useState<Asset[]>([]);
 
