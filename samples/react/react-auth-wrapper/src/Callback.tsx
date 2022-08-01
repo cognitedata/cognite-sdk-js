@@ -1,7 +1,7 @@
 import { Asset, CogniteClient } from '@cognite/sdk';
 import React, { useState } from 'react';
-import { useCogAuth } from './authentication/useCogAuth';
-import ReactCogniteAuthProvider from './provider/react-cog-auth-provider';
+import { useCogAuth } from './core/authentication/useCogAuth';
+import ReactCogniteAuthWrapper from './core/authentication/wrapper/ReactCogniteAuthWrapper';
 
 function Callback() {
   const authContext: any = useCogAuth();
@@ -14,7 +14,7 @@ function Callback() {
       project: "sdkcognite",
       baseUrl: "https://greenfield.cognitedata.com",
       authentication: {
-        provider: ReactCogniteAuthProvider,
+        provider: ReactCogniteAuthWrapper,
         credentials: {
           method: 'pkce',
           authContext: authContext,

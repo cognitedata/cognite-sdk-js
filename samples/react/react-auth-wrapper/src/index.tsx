@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { AuthProvider } from 'react-oidc-context';
+import { ReactCogniteAuthProvider } from './ui/provider/ReactCogAuthProvider';
 
 const oidcConfig = {
   authority: "https://login.microsoftonline.com/b7484399-37aa-4c28-9a37-a32f24c0621f",
@@ -19,9 +19,9 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-    <AuthProvider {...oidcConfig}>
+    <ReactCogniteAuthProvider {...oidcConfig}>
       <App />
-    </AuthProvider>
+    </ReactCogniteAuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

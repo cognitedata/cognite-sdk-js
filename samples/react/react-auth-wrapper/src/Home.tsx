@@ -1,5 +1,5 @@
 import './App.css';
-import { useCogAuth } from './authentication/useCogAuth';
+import { useCogAuth } from './core/authentication/useCogAuth';
 import Callback from './Callback';
 
 const cogHome = {

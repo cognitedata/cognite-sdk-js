@@ -2,7 +2,7 @@
 import { Express } from 'express';
 import { Server } from 'http';
 
-import ErrorHandler from '../core/errors/handler';
+import ErrorHandler from '../errors/handler';
 
 interface ISettings {
     authority: string;

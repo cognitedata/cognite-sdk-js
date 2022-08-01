@@ -2,10 +2,10 @@
 
 import { isObject } from "lodash";
 import { AuthContextProps } from "react-oidc-context";
-import { AuthMethod } from "../authentication/auth-types";
-import PkceAuth from "../authentication/pkce";
+import { AuthMethod } from "../auth-types";
+import PkceAuth from "../pkce";
 
-export default class ReactCogniteAuthProvider {
+export default class ReactCogniteAuthWrapper {
 
   private constructor(public method: AuthMethod
     , public authContext: AuthContextProps) {
