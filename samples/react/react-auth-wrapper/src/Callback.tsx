@@ -1,7 +1,7 @@
 import { Asset, CogniteClient } from '@cognite/sdk';
 import React, { useState } from 'react';
-import { useCogAuth } from './core/authentication/useCogAuth';
-import ReactAuthWrapperProvider from './core/authentication/wrapper/provider/ReactAuthWrapperProvider';
+import { useCogAuth } from '@cognite/react-auth-wrapper';
+import { ReactAuthWrapperProvider } from '@cognite/react-auth-wrapper';
 
 function Callback() {
   const authContext: any = useCogAuth();

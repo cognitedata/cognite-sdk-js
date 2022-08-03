@@ -1,5 +1,6 @@
+import React from 'react';
 import './App.css';
-import { useCogAuth } from './core/authentication/useCogAuth';
+import { useCogAuth } from '@cognite/react-auth-wrapper';
 import Callback from './Callback';
 
 const cogHome = {
@@ -8,12 +9,9 @@ const cogHome = {
   alignItems : "center",
   height : "100vh"
 }
-const cogButton = {
-
-};
 
 function Home() {
-  const auth = useCogAuth();
+  const auth: any = useCogAuth();
 
   switch (auth.activeNavigator) {
     case "signinSilent":
