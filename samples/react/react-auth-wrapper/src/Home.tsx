@@ -8,19 +8,10 @@ const cogHome = {
   alignItems : "center",
   height : "100vh"
 }
-const cogButton = {
-
-};
 
 function Home() {
   const auth = useCogAuth();
 
-  switch (auth.activeNavigator) {
-    case "signinSilent":
-      return <div>Signing you in...</div>;
-    case "signoutRedirect":
-      return <div>Signing you out...</div>;
-  }
 
   if (auth.isLoading) {
     return <div>Loading...</div>;
@@ -38,10 +29,15 @@ function Home() {
     );
   }
 
+  
+  // "signinPopup",
+  // "signinSilent",
+  // "signinRedirect",
+
   return (
     <>
       <div style={cogHome}>
-        <button type="button"  onClick={() => void auth.signinRedirect()}>
+        <button type="button"  onClick={() => void auth.signinSilent()}>
             Log in
         </button>
       </div>
