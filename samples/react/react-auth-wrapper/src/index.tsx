@@ -1,8 +1,9 @@
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ReactCogniteAuthProvider } from './ui/provider/ReactCogAuthProvider';
+import { ReactCogniteAuthProvider } from '@cognite/react-auth-wrapper';
 
 const oidcConfig = {
   authority: "https://login.microsoftonline.com/b7484399-37aa-4c28-9a37-a32f24c0621f",
