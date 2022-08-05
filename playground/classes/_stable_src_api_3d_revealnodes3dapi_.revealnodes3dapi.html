@@ -108,9 +108,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/879ea99f5/packages/stable/src/api/3d/revealNodes3DApi.ts#L7">packages/stable/src/api/3d/revealNodes3DApi.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3166687af/packages/stable/src/api/3d/revealNodes3DApi.ts#L16">packages/stable/src/api/3d/revealNodes3DApi.ts:16</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/revealGet3DNodes">List 3D nodes (Reveal)</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> nodes3dReveal = <span class="hljs-keyword">await</span> client.revealNodes3DAPI
+ .list(<span class="hljs-number">8252999965991682</span>, <span class="hljs-number">4190022127342195</span>)
+ .autoPagingToArray();</code></pre>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -137,9 +145,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/879ea99f5/packages/stable/src/api/3d/revealNodes3DApi.ts#L16">packages/stable/src/api/3d/revealNodes3DApi.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3166687af/packages/stable/src/api/3d/revealNodes3DApi.ts#L34">packages/stable/src/api/3d/revealNodes3DApi.ts:34</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://doc.cognitedata.com/api/v1/#operation/revealGet3DNodeAncestors">List 3D ancestor nodes (Reveal)</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> ancestorsReveal = <span class="hljs-keyword">await</span> client.revealNodes3DAPI
+ .listAncestors(<span class="hljs-number">8252999965991682</span>, <span class="hljs-number">4190022127342195</span>, <span class="hljs-number">120982398890213</span>)
+ .autoPagingToArray();</code></pre>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>

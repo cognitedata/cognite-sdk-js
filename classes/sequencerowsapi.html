@@ -106,9 +106,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/879ea99f5/packages/stable/src/api/sequences/sequenceRowsApi.ts#L39">packages/stable/src/api/sequences/sequenceRowsApi.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3166687af/packages/stable/src/api/sequences/sequenceRowsApi.ts#L65">packages/stable/src/api/sequences/sequenceRowsApi.ts:65</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://docs.cognite.com/api/v1/#operation/deleteSequenceData">Delete rows</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.sequenceRowsAPI.delete([{ <span class="hljs-attr">id</span>: <span class="hljs-number">32423849</span>, <span class="hljs-attr">rows</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>] }]);</code></pre>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -129,9 +135,20 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/879ea99f5/packages/stable/src/api/sequences/sequenceRowsApi.ts#L18">packages/stable/src/api/sequences/sequenceRowsApi.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3166687af/packages/stable/src/api/sequences/sequenceRowsApi.ts#L30">packages/stable/src/api/sequences/sequenceRowsApi.ts:30</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://docs.cognite.com/api/v1/#operation/postSequenceData">Insert rows</a></p>
+								</div>
+								<pre><code class="language-js">
+<span class="hljs-keyword">const</span> rows = [
+ { <span class="hljs-attr">rowNumber</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">values</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2.2</span>, <span class="hljs-string">&#x27;three&#x27;</span>] },
+ { <span class="hljs-attr">rowNumber</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">values</span>: [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;six&#x27;</span>] }
+];
+<span class="hljs-keyword">await</span> client.sequenceRowsAPI.insert([{ <span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, rows, <span class="hljs-attr">columns</span>: [<span class="hljs-string">&#x27;one&#x27;</span>, <span class="hljs-string">&#x27;two&#x27;</span>, <span class="hljs-string">&#x27;three&#x27;</span>] }]);</code></pre>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -152,9 +169,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/879ea99f5/packages/stable/src/api/sequences/sequenceRowsApi.ts#L27">packages/stable/src/api/sequences/sequenceRowsApi.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3166687af/packages/stable/src/api/sequences/sequenceRowsApi.ts#L46">packages/stable/src/api/sequences/sequenceRowsApi.ts:46</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://docs.cognite.com/api/v1/#operation/getSequenceData">Retrieve rows</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> rows = <span class="hljs-keyword">await</span> client.sequenceRowsAPI.retrieve({ <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;sequence1&#x27;</span> }).autoPagingToArray({ <span class="hljs-attr">limit</span>: <span class="hljs-number">100</span> });</code></pre>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
