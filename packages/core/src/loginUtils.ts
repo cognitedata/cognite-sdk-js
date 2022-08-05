@@ -6,9 +6,10 @@ import { parse, stringify } from 'query-string';
 import { HttpCall, HttpQueryParams } from './httpClient/basicHttpClient';
 import { LogoutUrlResponse } from './types';
 import isString from 'lodash/isString';
-import { ClientCredentials, ClientOptions } from './baseCogniteClient';
+import { ClientOptions } from './baseCogniteClient';
 // eslint-disable-next-line lodash/import-scope
 import { isObject } from 'lodash';
+import { ClientCredentials } from './credentialsAuth';
 
 const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
 const LOGIN_IFRAME_NAME = 'silentLoginIframe';
