@@ -25,39 +25,9 @@ import {
   createUniversalRetryValidator,
   RetryValidator,
 } from './httpClient/retryValidator';
-import {
-  verifyCredentialsRequiredFields,
-  verifyOptionsRequiredFields,
-} from './loginUtils';
+import { verifyOptionsRequiredFields } from './loginUtils';
 // eslint-disable-next-line lodash/import-scope
-import { isFunction } from 'lodash';
-
-export interface ClientCredentials {
-  method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
-  apiKey?: string;
-  authority?: string;
-  client_id?: string;
-  client_secret?: string;
-  response_type?: string;
-  grant_type?: string;
-  scope?: string;
-}
-
-export interface TokenCredentials {
-  token_type: string;
-  expires_in: string;
-  ext_expires_in: string;
-  expires_on?: string;
-  not_before?: string;
-  resource?: string;
-  access_token: string;
-  refresh_token?: string;
-  id_token?: string;
-  scope?: string;
-  expires_at?: number;
-  session_state?: string;
-}
-
+import { CredentialsAuth, ClientCredentials } from './credentialsAuth';
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
   appId: string;
@@ -114,10 +84,9 @@ export default class BaseCogniteClient {
   private readonly getToken: () => Promise<string | undefined>;
   private readonly apiKeyMode: boolean;
   private readonly noAuthMode?: boolean;
-  private readonly credentials?: ClientCredentials;
-  private authProvider?: any;
-  private readonly tokenCredentials: TokenCredentials = {} as TokenCredentials;
   readonly project: string;
+
+  private readonly credentialsAuth?: CredentialsAuth;
 
   /**
    * Create a new SDK client
@@ -147,42 +116,20 @@ export default class BaseCogniteClient {
       );
     }
 
+    const { baseUrl } = options;
+
+    this.http = this.initializeCDFHttpClient(baseUrl, options);
+
     if (options && options.authentication) {
       const { credentials, provider } = options.authentication;
 
-      if (credentials) {
-        this.credentials = credentials;
-        verifyCredentialsRequiredFields(credentials);
-
-        if (this.credentials?.method !== 'api' && !provider) {
-          throw Error(
-            'options.authentication.provider is required and must be a class that implements a static load method and can call a login method.'
-          );
-        }
-      }
-
-      if (provider && !isFunction(provider.load)) {
-        throw Error('The provider needs to have a load method.');
-      }
-
-      if (provider && !isFunction(provider.load().login)) {
-        throw Error(
-          'The provider load method needs to can call a login method.'
-        );
-      }
-
-      if (provider !== undefined) {
-        if (
-          !provider.load(true, true).method &&
-          !provider.load(true, true).settings
-        ) {
-          throw Error(
-            'Please, use the recommended provider: @cognite/auth-wrapper'
-          );
-        }
-
-        this.authProvider = provider;
-      }
+      this.credentialsAuth = new CredentialsAuth(
+        this.httpClient,
+        credentials,
+        provider
+      );
+    } else {
+      console.log(`** initializing default auth`);
     }
 
     if (isBrowser() && !isUsingSSL()) {
@@ -190,19 +137,6 @@ export default class BaseCogniteClient {
         'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
       );
     }
-
-    const { baseUrl } = options;
-
-    this.http = new CDFHttpClient(
-      getBaseUrl(baseUrl),
-      this.getRetryValidator()
-    );
-    this.httpClient
-      .setDefaultHeader(X_CDF_APP_HEADER, options.appId)
-      .setDefaultHeader(
-        X_CDF_SDK_HEADER,
-        `CogniteJavaScriptSDK:${this.version}`
-      );
 
     this.metadata = new MetadataMap();
     this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
@@ -215,23 +149,6 @@ export default class BaseCogniteClient {
       return options.getToken ? options.getToken() : undefined;
     };
 
-    this.httpClient.set401ResponseHandler(async (httpError, retry, reject) => {
-      try {
-        const previousToken = this.retrieveTokenValueFromHeader(
-          httpError.headers
-        );
-
-        const newToken = await this.authenticate();
-        if (newToken && newToken !== previousToken) {
-          retry();
-        } else {
-          reject();
-        }
-      } catch {
-        reject();
-      }
-    });
-
     this.initAPIs();
   }
 
@@ -241,57 +158,13 @@ export default class BaseCogniteClient {
 
       if (token !== undefined) return token;
 
-      token = await this.authenticateCredentials();
+      token = await this.credentialsAuth?.authenticate();
 
       return token;
     } catch (e) {
       return;
     }
   };
-
-  public authenticateCredentials: () => Promise<string | undefined> =
-    async () => {
-      try {
-        if (!this.credentials) return;
-
-        if (this.credentials.method === 'api') {
-          const token: string = this.credentials.apiKey!;
-          this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
-
-          return token;
-        }
-
-        if (this.tokenCredentials.refresh_token) {
-          this.tokenCredentials.access_token = '';
-        }
-
-        // @ts-ignore
-        this.tokenCredentials = await this.authProvider
-          .load(this.credentials.method, this.credentials)
-          .login(
-            (this.credentials.method === 'device' ||
-              this.credentials.method === 'pkce') &&
-              this.tokenCredentials.refresh_token
-          );
-
-        let token;
-        if (
-          this.tokenCredentials.access_token !== undefined &&
-          this.tokenCredentials.access_token !== ''
-        ) {
-          token = this.tokenCredentials.access_token;
-
-          this.httpClient.setDefaultHeader(
-            AUTHORIZATION_HEADER,
-            bearerString(token!)
-          );
-        }
-
-        return token;
-      } catch (e) {
-        return;
-      }
-    };
 
   private authenticateGetToken: () => Promise<string | undefined> =
     async () => {
@@ -315,6 +188,42 @@ export default class BaseCogniteClient {
       }
     };
 
+  private initializeCDFHttpClient(
+    baseUrl: string | undefined,
+    options: ClientOptions
+  ) {
+    const httpClient = new CDFHttpClient(
+      getBaseUrl(baseUrl),
+      this.getRetryValidator()
+    );
+
+    httpClient
+      .setDefaultHeader(X_CDF_APP_HEADER, options.appId)
+      .setDefaultHeader(
+        X_CDF_SDK_HEADER,
+        `CogniteJavaScriptSDK:${this.version}`
+      );
+
+    httpClient.set401ResponseHandler(async (httpError, retry, reject) => {
+      try {
+        const previousToken = this.retrieveTokenValueFromHeader(
+          httpError.headers
+        );
+
+        const newToken = await this.authenticate();
+        if (newToken && newToken !== previousToken) {
+          retry();
+        } else {
+          reject();
+        }
+      } catch {
+        reject();
+      }
+    });
+
+    return httpClient;
+  }
+
   /**
    * It retrieves the previous token from header
    * @returns string
@@ -322,10 +231,7 @@ export default class BaseCogniteClient {
   private retrieveTokenValueFromHeader(headers: HttpHeaders): string {
     let previousToken;
 
-    if (
-      (this.credentials && this.credentials.method === 'api') ||
-      this.apiKeyMode
-    ) {
+    if (this.credentialsAuth?.isApiKeyMode() || this.apiKeyMode) {
       previousToken = headers[API_KEY_HEADER];
     } else {
       previousToken = headers[AUTHORIZATION_HEADER];
