@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.5.1...@cognite/sdk-core@4.6.0) (2022-08-05)
+
+
+### Features
+
+* add react-auth-wrapper support ([#849](https://github.com/cognitedata/cognite-sdk-js/issues/849)) ([3166687](https://github.com/cognitedata/cognite-sdk-js/commit/3166687af62446cbb5dba4085ef47c1964a70e19))
+
+
+
+
+
 ## [4.5.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.5.0...@cognite/sdk-core@4.5.1) (2022-07-07)
 
 
