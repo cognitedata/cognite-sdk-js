@@ -1,7 +1,7 @@
 {
   "service": "vision",
   "filter": {
-    "serviceName": "context/vision/annotate"
+    "serviceName": "context/vision/extract"
   },
   "inlinedSchemas": {
     "autoNameRequest": true
