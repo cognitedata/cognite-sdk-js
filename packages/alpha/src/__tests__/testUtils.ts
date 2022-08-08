@@ -9,7 +9,7 @@ const clientSecret = process.env.COGNITE_CLIENT_SECRET_ALERTS_API!;
 const azureTenant = process.env.COGNITE_TENANT_ID_ALERTS_API!;
 
 export function setupLoggedInClient() {
-  if(project && clientId && clientSecret && azureTenant) {
+  if (project && clientId && clientSecret && azureTenant) {
     const pca = new ConfidentialClientApplication({
       auth: {
         clientId,
@@ -17,10 +17,10 @@ export function setupLoggedInClient() {
         authority: `https://login.microsoftonline.com/${azureTenant}`,
       },
     });
-  
+
     const client = new CogniteClient({
       project,
-      baseUrl: "https://azure-dev.cognitedata.com",
+      baseUrl: 'https://azure-dev.cognitedata.com',
       appId: `JS SDK integration tests (${name})`,
       getToken: () =>
         pca
@@ -28,11 +28,11 @@ export function setupLoggedInClient() {
             scopes: ['https://azure-dev.cognitedata.com/.default'],
             skipCache: true,
           })
-          .then((response) => response?.accessToken! as string),
+          .then((response) => response?.accessToken as string),
     });
-  
-    return client
+
+    return client;
   } else {
-    return null 
+    return null;
   }
 }

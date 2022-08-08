@@ -21,12 +21,12 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   public get alerts() {
     return accessApi(this.alertingApi);
   }
-  
+
   protected initAPIs() {
     super.initAPIs();
 
     this.httpClient.setDefaultHeader('cdf-version', 'alpha');
-    
+
     this.alertingApi = this.apiFactory(AlertingAPI, 'alerts');
   }
 

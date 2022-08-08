@@ -1,6 +1,11 @@
 import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
 import { IdEither } from '@cognite/sdk';
-import { Channel, ChannelChange, ChannelCreate, ChannelFilter } from '../../types';
+import {
+  Channel,
+  ChannelChange,
+  ChannelCreate,
+  ChannelFilter,
+} from '../../types';
 
 export class ChannelsAPI extends BaseResourceAPI<Channel> {
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
@@ -8,11 +13,14 @@ export class ChannelsAPI extends BaseResourceAPI<Channel> {
   }
 
   public create = async (items: ChannelCreate[]) => {
-    return this.createEndpoint(items)
+    return this.createEndpoint(items);
   };
 
   public list = async (filter?: ChannelFilter) => {
-    return this.listEndpoint<ChannelFilter>(this.callListEndpointWithPost, filter);
+    return this.listEndpoint<ChannelFilter>(
+      this.callListEndpointWithPost,
+      filter
+    );
   };
 
   public update = async (changes: ChannelChange[]) => {

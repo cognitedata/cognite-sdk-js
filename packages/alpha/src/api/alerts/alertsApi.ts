@@ -3,7 +3,6 @@ import { IdEither } from '@cognite/sdk';
 import { Alert, AlertCreate, AlertFilter } from '../../types';
 
 export class AlertsAPI extends BaseResourceAPI<Alert> {
-
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
   }
@@ -13,15 +12,18 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
   };
 
   public list = async (filter?: AlertFilter) => {
-    return this.listEndpoint<AlertFilter>(this.callListEndpointWithPost, filter);
+    return this.listEndpoint<AlertFilter>(
+      this.callListEndpointWithPost,
+      filter
+    );
   };
 
   public close = async (items: IdEither[]) => {
     const res = await this.post<{}>(this.url('close'), {
       data: {
-        items
-      }
-    })
-    return this.addToMapAndReturn(res.data, res)
+        items,
+      },
+    });
+    return this.addToMapAndReturn(res.data, res);
   };
 }

@@ -7,7 +7,6 @@ export class SubscribersAPI extends BaseResourceAPI<Subscriber> {
   }
 
   public create = async (items: SubscriberCreate[]) => {
-    return this.createEndpoint(items)
+    return this.createEndpoint(items);
   };
-
 }
