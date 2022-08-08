@@ -216,7 +216,7 @@ jobs:
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
 
       - name: remove codegen package
-        run: rm -rf packages/codegen
+        run: rm -rf packages/codegen samples/react/react-auth-wrapper/
 
       - name: Install 🔧
         run: yarn install --frozen-lockfile
