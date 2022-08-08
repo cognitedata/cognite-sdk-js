@@ -1,0 +1,9 @@
+{
+  "service": "vision",
+  "filter": {
+    "serviceName": "context/vision/annotate"
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}
