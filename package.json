@@ -30,7 +30,7 @@
     "allsamples": "lerna run --scope *-sample",
     "clean": "lerna run clean && rm -rf docs/ coverage/",
     "test": "yarn allsdk test --stream",
-    "test:codecov": "jest --config=jest.config.js --coverage=true",
+    "test:codecov": "jest --detectOpenHandles --config=jest.config.js --coverage=true",
     "lint": "yarn allsdk lint --stream",
     "lint:fix": "yarn allsdk lint:fix --stream",
     "commit": "yarn lint:fix --since master && yarn test --since master && git commit -a && git push",
