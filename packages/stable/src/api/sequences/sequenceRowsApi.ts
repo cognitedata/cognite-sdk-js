@@ -15,18 +15,6 @@ import {
 } from '../../types';
 
 export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
-  /**
-   * [Insert rows](https://docs.cognite.com/api/v1/#operation/postSequenceData)
-   *
-   * ```js
-   *
-   * const rows = [
-   *  { rowNumber: 0, values: [1, 2.2, 'three'] },
-   *  { rowNumber: 1, values: [4, 5, 'six'] }
-   * ];
-   * await client.sequenceRowsAPI.insert([{ id: 123, rows, columns: ['one', 'two', 'three'] }]);
-   * ```
-   */
   public async insert(items: SequenceRowsInsert[]): Promise<{}> {
     await this.postInParallelWithAutomaticChunking({
       path: this.url(),
@@ -36,13 +24,6 @@ export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
     return {};
   }
 
-  /**
-   * [Retrieve rows](https://docs.cognite.com/api/v1/#operation/getSequenceData)
-   *
-   * ```js
-   * const rows = await client.sequenceRowsAPI.retrieve({ externalId: 'sequence1' }).autoPagingToArray({ limit: 100 });
-   * ```
-   */
   public retrieve(
     query: SequenceRowsRetrieve
   ): CursorAndAsyncIterator<SequenceRow> {
@@ -55,13 +36,6 @@ export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
     );
   }
 
-  /**
-   * [Delete rows](https://docs.cognite.com/api/v1/#operation/deleteSequenceData)
-   *
-   * ```js
-   * await client.sequenceRowsAPI.delete([{ id: 32423849, rows: [1,2,3] }]);
-   * ```
-   */
   public delete(items: SequenceRowsDelete[]): Promise<{}> {
     return this.deleteEndpoint(items);
   }
