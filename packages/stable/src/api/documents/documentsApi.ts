@@ -66,18 +66,6 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.searchDocuments<DocumentSearchResponse>(query);
   };
 
-  /**
-   * [List for documents](https://docs.cognite.com/api/v1/#tag/Documents/operation/documentsList)
-   *
-   * ```js
-   * const resp = await client.documents.list({
-   *   limit: 1,
-   * });
-   * ```
-   *
-   * @param request
-   * @returns
-   */
   public list = (
     request: DocumentListRequest
   ): Promise<DocumentListResponse> => {
