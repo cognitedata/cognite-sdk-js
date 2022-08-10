@@ -1,6 +1,6 @@
-# Getting Started with Cognite React Auth-wrapper
+# Getting Started with Create React App
 
-This project is an example of use of the package @
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
