@@ -1,4 +1,18 @@
-import { CogniteExternalId, CogniteInternalId, ContextJobId } from "@cognite/sdk-stable";
+import {
+  CogniteExternalId,
+  CogniteInternalId,
+  ContextJobId,
+} from '@cognite/sdk';
+
+export type FileIdEither = FileInternalId | FileExternalId;
+
+export interface FileInternalId {
+  fileId: CogniteInternalId;
+}
+
+export interface FileExternalId {
+  fileExternalId: CogniteExternalId;
+}
 
 export interface StatusSchema {
   /** The status of the job. */
@@ -29,7 +43,7 @@ export interface ExtractItem {
 export interface FailedItem {
   errorMessage: string;
   items: FileRef[];
-};
+}
 
 /**
  * Feature-specific parameters. New feature extractor parameters may appear.
@@ -337,14 +351,14 @@ export type EpochTimestamp = number;
  * The type of detections to perform. New feature extractors may appear.
  * @example ["TextDetection","AssetTagDetection","PeopleDetection"]
  */
-export type Feature = 
+export type Feature =
   | 'TextDetection'
   | 'AssetTagDetection'
   | 'PeopleDetection'
   | 'IndustrialObjectDetection'
   | 'PersonalProtectiveEquipmentDetection';
 
-export type ExtractBaseResponseSchema = {
+export type ExtractBaseResponseSchema = StatusSchema & {
   jobId: ContextJobId;
   features: Feature[];
   parameters?: FeatureParameters;
