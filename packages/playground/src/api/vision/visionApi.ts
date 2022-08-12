@@ -78,6 +78,6 @@ export class VisionAPI extends BaseResourceAPI<ExtractGetResponse> {
       await sleepPromise(pollingTimeMs);
       retryCount++;
     } while (retryCount < maxRetries);
-    throw Error(`Timed out while waiting for vision job to complete.`);
+    throw new Error(`Timed out while waiting for vision job to complete.`);
   }
 }
