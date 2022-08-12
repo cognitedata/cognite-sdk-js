@@ -11,6 +11,9 @@
     },
     {
       "pattern": "^mailto:.+"
+    },
+    {
+      "pattern": "http://localhost.+"
     }
 
   ],
