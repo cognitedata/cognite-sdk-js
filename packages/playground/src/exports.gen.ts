@@ -113,6 +113,14 @@ export {
 } from './api/documents/types.gen';
 export {
   AllOfFileId,
+  AnnotationsAssetRef,
+  AnnotationsBoundingBox,
+  AnnotationsCogniteAnnotationTypesImagesAssetLink,
+  AnnotationsObjectDetection,
+  AnnotationsPoint,
+  AnnotationsPolyLine,
+  AnnotationsPolygon,
+  AnnotationsTextRegion,
   AssetTagDetection,
   AssetTagDetectionParameters,
   ContextFileExternalId,
