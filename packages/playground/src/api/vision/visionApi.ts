@@ -3,16 +3,16 @@
 import { BaseResourceAPI, sleepPromise } from '@cognite/sdk-core';
 import { ContextJobId } from '@cognite/sdk';
 import {
-  ExtractGetResponse,
-  ExtractPostResponse,
-  Feature,
-  FileIdEither,
+  VisionExtractGetResponse,
+  VisionExtractPostResponse,
+  VisionExtractFeature,
+  FileReference,
   JobStatus,
-} from './types';
+} from '../../types';
 
 const JOB_COMPLETE_STATES: JobStatus[] = ['Completed', 'Failed'];
 
-export class VisionAPI extends BaseResourceAPI<ExtractGetResponse> {
+export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
   /**
    * [Extract features from image](https://docs.cognite.com/api/playground/#tag/Vision/operation/postVisionExtract)
    *
@@ -21,11 +21,11 @@ export class VisionAPI extends BaseResourceAPI<ExtractGetResponse> {
    * ```
    */
   public extract = async (
-    features: Feature[],
-    ids: FileIdEither[]
-  ): Promise<ExtractPostResponse> => {
+    features: VisionExtractFeature[],
+    ids: FileReference[]
+  ): Promise<VisionExtractPostResponse> => {
     const path = this.url('extract');
-    const response = await this.post<ExtractPostResponse>(path, {
+    const response = await this.post<VisionExtractPostResponse>(path, {
       data: { features: features, items: ids },
     });
     return this.addToMapAndReturn(response.data, response);
@@ -43,13 +43,13 @@ export class VisionAPI extends BaseResourceAPI<ExtractGetResponse> {
     waitForCompletion: boolean = true,
     pollingTimeMs: number = 1000,
     maxRetries: number = 600
-  ): Promise<ExtractGetResponse> => {
+  ): Promise<VisionExtractGetResponse> => {
     const path = this.url(`extract/${jobId}`);
     const getJobResult = async () => {
-      const response = await this.get<ExtractGetResponse>(path);
+      const response = await this.get<VisionExtractGetResponse>(path);
       return this.addToMapAndReturn(response.data, response);
     };
-    const isJobCompleted = (result: ExtractGetResponse) => {
+    const isJobCompleted = (result: VisionExtractGetResponse) => {
       return JOB_COMPLETE_STATES.includes(result.status);
     };
     return waitForCompletion

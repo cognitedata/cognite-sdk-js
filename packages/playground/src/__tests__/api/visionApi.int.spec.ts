@@ -1,20 +1,20 @@
 // Copyright 2020 Cognite AS
 
-import { ExtractPostResponse } from 'playground/dist/src/api/vision/types';
+import { VisionExtractPostResponse } from '@cognite/sdk-playground';
 import CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupLoggedInClient as setupLoggedinPlaygroundClient } from '../testUtils';
 
 describe('Vision API', () => {
-  const TEST_IMAGE_ID = 3779952822789602;
+  const TEST_IMAGE_ID = 4745168244986665;
   let playgroundClient: CogniteClientPlayground;
-  let extractJob: ExtractPostResponse;
+  let extractJob: VisionExtractPostResponse;
 
   beforeAll(async () => {
     jest.setTimeout(2 * 60 * 1000); // timeout after 2 minutes
     playgroundClient = setupLoggedinPlaygroundClient();
 
     extractJob = await playgroundClient.vision.extract(
-      ['PeopleDetection'],
+      ['TextDetection'],
       [{ fileId: TEST_IMAGE_ID }]
     );
   });
@@ -24,7 +24,7 @@ describe('Vision API', () => {
     expect(extractJob.jobId).toBeGreaterThan(0);
     expect(extractJob.createdTime).toBeGreaterThan(0);
     expect(extractJob.statusTime).toBeGreaterThan(0);
-    expect(extractJob.features).toEqual(['PeopleDetection']);
+    expect(extractJob.features).toEqual(['TextDetection']);
     expect(extractJob.items).toEqual([
       { fileId: TEST_IMAGE_ID, fileExternalId: 'vision_extract_test_image' },
     ]);
@@ -36,7 +36,9 @@ describe('Vision API', () => {
         extractJob.jobId,
         false
       );
-      expect(result.status).toEqual(extractJob.status);
+      expect(result.status == 'Queued' || result.status == 'Running').toBe(
+        true
+      );
       expect(result.jobId).toEqual(extractJob.jobId);
       expect(result.createdTime).toEqual(extractJob.createdTime);
       expect(result.statusTime).toBeGreaterThanOrEqual(extractJob.statusTime);
@@ -63,26 +65,24 @@ describe('Vision API', () => {
       // we care in the following checks is that the *data structure* is
       // correctly filled.
       expect(result.parameters).toBeDefined();
-      expect(result.parameters!.peopleDetectionParameters).toBeDefined();
+      expect(result.parameters!.textDetectionParameters).toBeDefined();
 
       expect(result.items?.length).toBeGreaterThan(0);
       const resultItem = result.items![0];
       expect(resultItem.fileId).toEqual(TEST_IMAGE_ID);
 
-      // Check if people prediction exist
-      expect(resultItem.predictions.peoplePredictions?.length).toBeGreaterThan(
-        0
-      );
-      const peoplePrediction = resultItem.predictions.peoplePredictions![0];
+      // Check if text prediction exist
+      expect(resultItem.predictions.textPredictions?.length).toBeGreaterThan(0);
+      const textPrediction = resultItem.predictions.textPredictions![0];
       // Check that its values are defined. D
-      expect(peoplePrediction.confidence).toBeGreaterThanOrEqual(0.0);
-      expect(peoplePrediction.label).toEqual('person');
-      expect(peoplePrediction.boundingBox).toBeDefined();
-      const boundingBox = peoplePrediction.boundingBox!;
-      expect(boundingBox.xMin).toBeGreaterThanOrEqual(0.0);
-      expect(boundingBox.xMax).toBeGreaterThanOrEqual(0.0);
-      expect(boundingBox.yMin).toBeGreaterThanOrEqual(0.0);
-      expect(boundingBox.yMax).toBeGreaterThanOrEqual(0.0);
+      expect(textPrediction.confidence).toBeGreaterThanOrEqual(0.0);
+      expect(textPrediction.text).toEqual('TEST');
+      expect(textPrediction.textRegion).toBeDefined();
+      const textRegion = textPrediction.textRegion!;
+      expect(textRegion.xMin).toBeGreaterThanOrEqual(0.0);
+      expect(textRegion.xMax).toBeGreaterThanOrEqual(0.0);
+      expect(textRegion.yMin).toBeGreaterThanOrEqual(0.0);
+      expect(textRegion.yMax).toBeGreaterThanOrEqual(0.0);
     });
   });
 });
