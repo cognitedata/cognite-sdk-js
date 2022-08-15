@@ -10,6 +10,12 @@
       "pattern": "^https:\/\/github.com\/cognitedata\/.+\/commit\/.+"
     },
     {
+      "pattern": "^http:\/\/localhost.+"
+    },
+    {
+      "pattern": "^https:\/\/localhost.+"
+    },
+    {
       "pattern": "^mailto:.+"
     },
     {
