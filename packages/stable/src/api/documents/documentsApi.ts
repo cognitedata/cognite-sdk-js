@@ -70,9 +70,9 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
    * ```js
    * const resp = await client.documents.list({limit: 1,});
    * ```
-   * 
-   * @param request 
-   * @returns 
+   *
+   * @param request
+   * @returns
    */
   public list = (
     request: DocumentListRequest

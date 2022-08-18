@@ -36,7 +36,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
 
   /**
    * [Suggest annotations](https://docs.cognite.com/api/playground/#operation/annotationsSuggest)
-   * 
+   *
    * const created = await client.annotationsApi.create(annotations);
    */
   public suggest = (items: AnnotationSuggest[]) => {
@@ -47,7 +47,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * [Retrieve](https://docs.cognite.com/api/playground/#operation/annotationsByids)
    * or [Get an](https://docs.cognite.com/api/playground/#operation/annotationsGet)
    * annotation
-   * 
+   *
    * const response = await client.annotationsApi.retrieve(createdAnnotationIds);
    */
   public retrieve = (ids: InternalId[]) => {
@@ -56,12 +56,12 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
 
   /**
    * [Advanced list of annotations](https://docs.cognite.com/api/playground/#operation/annotationsFilter)
-   * 
+   *
    * const limitOne = await client.annotationsApi.list({
    *   limit: 1,
    *   filter: fileFilter(annotatedFileId),
    * });
-   * 
+   *
    */
   public list = (
     filter: AnnotationFilterRequest
@@ -71,7 +71,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
 
   /**
    * [Delete annotations](https://docs.cognite.com/api/playground/#operation/annotationsDelete)
-   * 
+   *
    * await client.annotationsApi.delete(createdAnnotationIds);
    */
   public delete = (ids: InternalId[]) => {
@@ -80,7 +80,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
 
   /**
    * [Update annotations](https://docs.cognite.com/api/playground/#operation/annotationsUpdate)
-   * 
+   *
    * const updatedResp = await client.annotationsApi.update(changes);
    */
   public update = (changes: AnnotationChangeById[]) => {
