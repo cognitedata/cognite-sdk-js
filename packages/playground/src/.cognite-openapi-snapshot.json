@@ -13,6 +13,7 @@
   "paths": {
     "/api/playground/projects/{project}/functions": {
       "get": {
+        "deprecated": true,
         "tags": [
           "Functions"
         ],
@@ -47,6 +48,7 @@
         ]
       },
       "post": {
+        "deprecated": true,
         "summary": "Create functions",
         "operationId": "postFunctions",
         "parameters": [
@@ -125,7 +127,7 @@
                       {
                         "name": "My awesome function",
                         "description": "This function does some things",
-                        "owner": "anders.hafreager@cognite.com",
+                        "owner": "user@cognite.com",
                         "fileId": 5467347282343,
                         "externalId": "my-function",
                         "metadata": {
@@ -173,6 +175,7 @@
     },
     "/api/playground/projects/{project}/functions/limits": {
       "get": {
+        "deprecated": true,
         "tags": [
           "Functions"
         ],
@@ -211,6 +214,7 @@
         }
       ],
       "post": {
+        "deprecated": true,
         "summary": "Filter functions",
         "operationId": "listFunctions",
         "responses": {
@@ -263,6 +267,7 @@
         }
       ],
       "post": {
+        "deprecated": true,
         "summary": "Delete functions",
         "operationId": "deleteFunctions",
         "responses": {
@@ -308,6 +313,7 @@
         }
       ],
       "post": {
+        "deprecated": true,
         "tags": [
           "Function calls"
         ],
@@ -359,6 +365,7 @@
         }
       ],
       "get": {
+        "deprecated": true,
         "summary": "List function calls",
         "responses": {
           "200": {
@@ -395,6 +402,7 @@
         }
       ],
       "post": {
+        "deprecated": true,
         "summary": "Retrieve calls",
         "requestBody": {
           "description": "List of IDs of calls to retrieve. Must be up to a maximum of 10000 items and all of them must be unique.",
@@ -452,6 +460,7 @@
         }
       ],
       "get": {
+        "deprecated": true,
         "operationId": "getFunctionCall",
         "description": "Retrieve function calls.",
         "tags": [
@@ -498,6 +507,7 @@
         }
       ],
       "get": {
+        "deprecated": true,
         "tags": [
           "Function calls"
         ],
@@ -534,6 +544,7 @@
         }
       ],
       "get": {
+        "deprecated": true,
         "operationId": "getFunction",
         "description": "Retrieve a function by its id. If you want to retrieve functions by names, use Retrieve functions instead.",
         "x-capability": [
@@ -574,6 +585,7 @@
         }
       ],
       "post": {
+        "deprecated": true,
         "tags": [
           "Functions"
         ],
@@ -616,6 +628,7 @@
         }
       ],
       "post": {
+        "deprecated": true,
         "summary": "Activate Functions",
         "responses": {
           "202": {
@@ -635,6 +648,7 @@
         ]
       },
       "get": {
+        "deprecated": true,
         "summary": "Get activation status",
         "responses": {
           "200": {
@@ -661,6 +675,7 @@
         }
       ],
       "get": {
+        "deprecated": true,
         "parameters": [
           {
             "$ref": "#/components/parameters/LimitQuery"
@@ -692,6 +707,7 @@
         ]
       },
       "post": {
+        "deprecated": true,
         "description": "Create function schedules. Function schedules trigger asynchronous calls with specific input data, based on a cron expression that determines when these triggers should be fired. Use e.g. http://www.cronmaker.com to be guided on how to generate a cron expression. One of `FunctionId` or `FunctionExternalId` (deprecated) must be set (but not both). When creating a schedule with a session, i.e. with a `nonce`, `FunctionId` must be used. The `nonce` will be used to bind the session before function execution, and the session will be kept alive for the lifetime of the schedule. **WARNING:** Secrets or other confidential information should not be passed via the `data` object. There is a dedicated `secrets` object in the request body to \"Create functions\" for this purpose.",
         "tags": [
           "Function schedules"
@@ -746,6 +762,7 @@
         }
       ],
       "post": {
+        "deprecated": true,
         "summary": "Filter function schedules",
         "operationId": "listFunctionSchedules",
         "responses": {
@@ -798,6 +815,7 @@
         }
       ],
       "get": {
+        "deprecated": true,
         "operationId": "getFunctionSchedule",
         "description": "Retrieve a function schedule by its id.",
         "tags": [
@@ -838,6 +856,7 @@
         }
       ],
       "post": {
+        "deprecated": true,
         "summary": "Retrieve schedules",
         "requestBody": {
           "description": "List of IDs of schedules to retrieve. Must be up to a maximum of 10000 items and all of them must be unique.",
@@ -889,6 +908,7 @@
         }
       ],
       "post": {
+        "deprecated": true,
         "tags": [
           "Function schedules"
         ],
@@ -934,6 +954,7 @@
         }
       ],
       "get": {
+        "deprecated": true,
         "operationId": "getFunctionScheduleInputData",
         "description": "Retrieve the input data to the associated function.",
         "summary": "Retrieve function input data",
@@ -973,6 +994,7 @@
         }
       ],
       "get": {
+        "deprecated": true,
         "summary": "Retrieve response for function call",
         "tags": [
           "Function calls"
@@ -1010,6 +1032,7 @@
         }
       ],
       "post": {
+        "deprecated": true,
         "summary": "Filter function calls",
         "operationId": "listFunctionCalls",
         "responses": {
@@ -3892,8 +3915,81 @@
         }
       }
     },
+    "/api/playground/projects/{project}/context/vision/extract": {
+      "post": {
+        "tags": [
+          "Vision"
+        ],
+        "summary": "Extract features from images",
+        "description": "Start an asynchronous prediction job for extracting features such as text, asset tags or industrial objects from images.\nThe response of the POST request contains a job ID, which can be used to make subsequent (GET) calls \nto check the status and retrieve the results of the job \n(see [Retrieve results from a feature extraction job](#operation/getVisionExtract)).\n\nIt is possible to have up to 20 concurrent jobs per CDF project.\n\nThe files referenced by `items` in the request body must fulfill the following requirements:\n\n* Must have file extension: `.jpeg`, `.jpg` or `.png`\n* Must have `image/png` or `image/jpeg` as `mimeType`\n\nNew feature extractors will be continuously added. \n",
+        "operationId": "postVisionExtract",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/VisionExtractPostRequestSchema"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/VisionExtractPostResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "filesAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "from cognite.experimental.data_classes.vision import Feature\n\nextract_job = client.vision.extract(features=Feature.ASSET_TAG_DETECTION, file_ids=[1])"
+          }
+        ]
+      }
+    },
+    "/api/playground/projects/{project}/context/vision/extract/{jobId}": {
+      "get": {
+        "tags": [
+          "Vision"
+        ],
+        "summary": "Retrieve results from a feature extraction job on images",
+        "description": "Retrieve results from a feature extraction job on images.\n\nNote that since files are split up into batches and processed independently of each other, the items in successfully completed batches will be returned even if files in other batches are still being processed. The job status will be `Running` until all batches have been processed. If one of the items in a batch fails, the results from items in other completed batches will still be returned. The corresponding items and error message(s) of failed batches will be populated in `failedItems`.\nAdditionally, the status of the job is set to `Completed` if at least one batch is successfully completed, otherwise the status is set to `Failed`.\n",
+        "operationId": "getVisionExtract",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/jobId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/VisionExtractGetResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "filesAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Get an existing job, wait for completion and then get the parsed results\nextract_job = client.vision.get_extract_job(job_id=1)\nextract_job.wait_for_completion()\nfor item in extract_job.items:\n    predictions = item.predictions\n    # do something with the predictions"
+          }
+        ]
+      }
+    },
     "/api/playground/projects/{project}/context/vision/ocr": {
       "post": {
+        "deprecated": true,
         "tags": [
           "Vision"
         ],
@@ -3918,7 +4014,7 @@
                     "type": "array",
                     "maxItems": 1000,
                     "items": {
-                      "$ref": "#/components/schemas/OneOfFileId"
+                      "$ref": "#/components/schemas/FileReference"
                     }
                   },
                   "useCache": {
@@ -3977,6 +4073,7 @@
     },
     "/api/playground/projects/{project}/context/vision/ocr/{jobId}": {
       "get": {
+        "deprecated": true,
         "tags": [
           "Vision"
         ],
@@ -4032,10 +4129,10 @@
                                 }
                               },
                               "fileId": {
-                                "$ref": "#/components/schemas/FileId"
+                                "$ref": "#/components/schemas/ContextFileId"
                               },
                               "fileExternalId": {
-                                "$ref": "#/components/schemas/FileExternalId"
+                                "$ref": "#/components/schemas/ContextFileExternalId"
                               },
                               "width": {
                                 "type": "number",
@@ -4051,7 +4148,10 @@
                           }
                         },
                         "failedItems": {
-                          "$ref": "#/components/schemas/FailedBatchSchema"
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/FailedBatch"
+                          }
                         }
                       }
                     }
@@ -4068,6 +4168,7 @@
     },
     "/api/playground/projects/{project}/context/vision/tagdetection": {
       "post": {
+        "deprecated": true,
         "tags": [
           "Vision"
         ],
@@ -4092,7 +4193,7 @@
                     "type": "array",
                     "maxItems": 1000,
                     "items": {
-                      "$ref": "#/components/schemas/OneOfFileId"
+                      "$ref": "#/components/schemas/FileReference"
                     }
                   },
                   "useCache": {
@@ -4183,6 +4284,7 @@
     },
     "/api/playground/projects/{project}/context/vision/tagdetection/{jobId}": {
       "get": {
+        "deprecated": true,
         "tags": [
           "Vision"
         ],
@@ -4254,10 +4356,10 @@
                                 }
                               },
                               "fileId": {
-                                "$ref": "#/components/schemas/FileId"
+                                "$ref": "#/components/schemas/ContextFileId"
                               },
                               "fileExternalId": {
-                                "$ref": "#/components/schemas/FileExternalId"
+                                "$ref": "#/components/schemas/ContextFileExternalId"
                               },
                               "width": {
                                 "type": "number",
@@ -4273,7 +4375,10 @@
                           }
                         },
                         "failedItems": {
-                          "$ref": "#/components/schemas/FailedBatchSchema"
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/FailedBatch"
+                          }
                         }
                       }
                     }
@@ -4311,7 +4416,7 @@
                     "type": "array",
                     "maxItems": 1000,
                     "items": {
-                      "$ref": "#/components/schemas/OneOfFileId"
+                      "$ref": "#/components/schemas/FileReference"
                     }
                   },
                   "gaugeType": {
@@ -4437,10 +4542,10 @@
                                 }
                               },
                               "fileId": {
-                                "$ref": "#/components/schemas/FileId"
+                                "$ref": "#/components/schemas/ContextFileId"
                               },
                               "fileExternalId": {
-                                "$ref": "#/components/schemas/FileExternalId"
+                                "$ref": "#/components/schemas/ContextFileExternalId"
                               },
                               "width": {
                                 "type": "number",
@@ -4491,7 +4596,7 @@
                     "type": "array",
                     "maxItems": 1000,
                     "items": {
-                      "$ref": "#/components/schemas/OneOfFileId"
+                      "$ref": "#/components/schemas/FileReference"
                     }
                   }
                 }
@@ -4592,10 +4697,10 @@
                                 }
                               },
                               "fileId": {
-                                "$ref": "#/components/schemas/FileId"
+                                "$ref": "#/components/schemas/ContextFileId"
                               },
                               "fileExternalId": {
-                                "$ref": "#/components/schemas/FileExternalId"
+                                "$ref": "#/components/schemas/ContextFileExternalId"
                               },
                               "width": {
                                 "type": "number",
@@ -4651,7 +4756,7 @@
                     "type": "array",
                     "maxItems": 7500,
                     "items": {
-                      "$ref": "#/components/schemas/OneOfFileId"
+                      "$ref": "#/components/schemas/FileReference"
                     }
                   },
                   "modelType": {
@@ -4962,7 +5067,7 @@
                     "type": "array",
                     "maxItems": 1000,
                     "items": {
-                      "$ref": "#/components/schemas/OneOfFileId"
+                      "$ref": "#/components/schemas/FileReference"
                     }
                   },
                   "modelJobId": {
@@ -5087,10 +5192,10 @@
                                 }
                               },
                               "fileId": {
-                                "$ref": "#/components/schemas/FileId"
+                                "$ref": "#/components/schemas/ContextFileId"
                               },
                               "fileExternalId": {
-                                "$ref": "#/components/schemas/FileExternalId"
+                                "$ref": "#/components/schemas/ContextFileExternalId"
                               },
                               "width": {
                                 "type": "number",
@@ -5116,7 +5221,10 @@
                           "description": "Only return suggestions rated above this threshold."
                         },
                         "failedItems": {
-                          "$ref": "#/components/schemas/FailedBatchSchema"
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/FailedBatch"
+                          }
                         }
                       }
                     }
@@ -6584,7 +6692,7 @@
       },
       "FunctionOwner": {
         "type": "string",
-        "example": "anders.hafreager@cognite.com",
+        "example": "user@cognite.com",
         "maxLength": 128,
         "description": "Owner of this function. Typically used to know who created it."
       },
@@ -9599,7 +9707,7 @@
             "$ref": "#/components/schemas/RemoveField"
           }
         ],
-        "description": "Set a new value for the string, or remove the value."
+        "description": "Set a new value for the long, or remove the value."
       },
       "ModifyPatchInteger": {
         "title": "modify",
@@ -14242,22 +14350,51 @@
           ]
         }
       },
-      "FailedBatchSchema": {
-        "description": "List of the items and the corresponding error message(s) per failed batch.",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "errorMessage": {
-              "type": "string",
-              "description": "The error message(s) of the failed batch."
-            },
-            "items": {
-              "type": "array",
-              "description": "List of the items in the failed batch.",
-              "items": {
-                "$ref": "#/components/schemas/AllOfFileId"
+      "FileReference": {
+        "type": "object",
+        "required": [
+          "fileId",
+          "fileExternalId"
+        ],
+        "description": "An object containing file (external) id.",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "fileId"
+            ],
+            "properties": {
+              "fileId": {
+                "$ref": "#/components/schemas/ContextFileId"
               }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "fileExternalId"
+            ],
+            "properties": {
+              "fileExternalId": {
+                "$ref": "#/components/schemas/ContextFileExternalId"
+              }
+            }
+          }
+        ]
+      },
+      "FailedBatch": {
+        "description": "List of the items and the corresponding error message(s) per failed batch.",
+        "type": "object",
+        "properties": {
+          "errorMessage": {
+            "type": "string",
+            "description": "The error message(s) of the failed batch."
+          },
+          "items": {
+            "type": "array",
+            "description": "List of the items in the failed batch.",
+            "items": {
+              "$ref": "#/components/schemas/AllOfFileId"
             }
           }
         }
@@ -14389,6 +14526,211 @@
           }
         }
       },
+      "ThresholdParameter": {
+        "title": "Threshold",
+        "description": "The confidence threshold returns predictions as positive if their confidence score is the selected value or higher. \nA higher confidence threshold increases precision but lowers recall, and vice versa.\n",
+        "type": "number",
+        "example": 0.8,
+        "minimum": 0,
+        "maximum": 1
+      },
+      "TextDetection": {
+        "title": "TextDetection",
+        "description": "Detect text in images.",
+        "type": "string",
+        "enum": [
+          "TextDetection"
+        ]
+      },
+      "AssetTagDetection": {
+        "title": "AssetTagDetection",
+        "description": "Detect external ID or name of assets (from your CDF projects) in images. Usage of this feature requires `[\"assetsAcl:READ\"]` capability.",
+        "type": "string",
+        "enum": [
+          "AssetTagDetection"
+        ]
+      },
+      "PeopleDetection": {
+        "title": "PeopleDetection",
+        "description": "Detect people in images.",
+        "type": "string",
+        "enum": [
+          "PeopleDetection"
+        ]
+      },
+      "IndustrialObjectDetection": {
+        "title": "IndustrialObjectDetection",
+        "description": "Detect industrial objects such as gauges and valves in images.",
+        "type": "string",
+        "enum": [
+          "IndustrialObjectDetection"
+        ]
+      },
+      "PersonalProtectiveEquipmentDetection": {
+        "title": "PersonalProtectiveEquipmentDetection",
+        "description": "Detect personal protective equipment, such as helmet, protective eyewear, and mask in images.",
+        "type": "string",
+        "enum": [
+          "PersonalProtectiveEquipmentDetection"
+        ]
+      },
+      "VisionExtractFeature": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/TextDetection"
+          },
+          {
+            "$ref": "#/components/schemas/AssetTagDetection"
+          },
+          {
+            "$ref": "#/components/schemas/PeopleDetection"
+          },
+          {
+            "$ref": "#/components/schemas/IndustrialObjectDetection"
+          },
+          {
+            "$ref": "#/components/schemas/PersonalProtectiveEquipmentDetection"
+          }
+        ]
+      },
+      "TextDetectionParameters": {
+        "description": "Parameters for text detection",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "AssetTagDetectionParameters": {
+        "description": "Parameters for asset tag detection.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          },
+          "partialMatch": {
+            "description": "Allow partial (fuzzy) matching of detected external IDs in the file. \nWill only match when it is possible to do so unambiguously.\n",
+            "type": "boolean",
+            "default": false,
+            "example": true
+          },
+          "assetSubtreeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Search for external ID or name of assets that are in a subtree rooted at one of \nthe assetSubtreeIds (including the roots given).\n",
+            "example": [
+              1,
+              2
+            ]
+          }
+        }
+      },
+      "PeopleDetectionParameters": {
+        "description": "Parameters for people detection.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "IndustrialObjectDetectionParameters": {
+        "description": "Parameters for industrial object detection.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "PersonalProtectiveEquipmentDetectionParameters": {
+        "description": "Parameters for industrial personal protective equipment detection.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "FeatureParameters": {
+        "description": "Feature-specific parameters. New feature extractor parameters may appear.",
+        "type": "object",
+        "properties": {
+          "textDetectionParameters": {
+            "$ref": "#/components/schemas/TextDetectionParameters"
+          },
+          "assetTagDetectionParameters": {
+            "$ref": "#/components/schemas/AssetTagDetectionParameters"
+          },
+          "peopleDetectionParameters": {
+            "$ref": "#/components/schemas/PeopleDetectionParameters"
+          },
+          "industrialObjectDetectionParameters": {
+            "$ref": "#/components/schemas/IndustrialObjectDetectionParameters"
+          },
+          "personalProtectiveEquipmentDetectionParameters": {
+            "$ref": "#/components/schemas/PersonalProtectiveEquipmentDetectionParameters"
+          }
+        }
+      },
+      "VisionExtractPredictions": {
+        "title": "Predictions",
+        "description": "Detected features in images. New fields may appear in case new feature extractors are add.",
+        "type": "object",
+        "properties": {
+          "textPredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.TextRegion"
+            }
+          },
+          "assetTagPredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.cognite__annotation_types__images__AssetLink"
+            }
+          },
+          "industrialObjectPredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.ObjectDetection"
+            }
+          },
+          "peoplePredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.ObjectDetection"
+            }
+          },
+          "personalProtectiveEquipmentPredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.ObjectDetection"
+            }
+          }
+        }
+      },
+      "VisionExtractItem": {
+        "type": "object",
+        "required": [
+          "fileId",
+          "predictions"
+        ],
+        "properties": {
+          "fileId": {
+            "$ref": "#/components/schemas/ContextFileId"
+          },
+          "fileExternalId": {
+            "$ref": "#/components/schemas/ContextFileExternalId"
+          },
+          "predictions": {
+            "$ref": "#/components/schemas/VisionExtractPredictions"
+          }
+        }
+      },
       "ConfidenceThresholdMetricSchema": {
         "type": "object",
         "properties": {
@@ -14451,6 +14793,905 @@
             }
           }
         }
+      },
+      "Annotations.Point": {
+        "title": "primitives.geometry2d.Point",
+        "description": "Point in a 2D-Cartesian coordinate system with origin at the top-left corner of the page",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "x": {
+            "description": "The abscissa of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "y": {
+            "description": "The ordinate of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Boolean": {
+        "title": "primitives.attributes.Boolean",
+        "description": "The boolean value of something",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "The description of a primitive",
+            "maxLength": 500,
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "boolean"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "The boolean value",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Numerical": {
+        "title": "primitives.attributes.Numerical",
+        "description": "The numerical value of something",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "The description of a primitive",
+            "maxLength": 500,
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "numerical"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "The numerical value",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Keypoint": {
+        "title": "primitives.geometry2d.Keypoint",
+        "description": "A point attached with additional information such as a confidence value and\nvarious attribute(s).",
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "description": "Additional attributes data for a compound.",
+            "type": "object",
+            "additionalProperties": {
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "boolean": "#/components/schemas/Boolean",
+                  "numerical": "#/components/schemas/Numerical"
+                }
+              },
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Annotations.Boolean"
+                },
+                {
+                  "$ref": "#/components/schemas/Annotations.Numerical"
+                }
+              ]
+            }
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "point": {
+            "description": "The position of the keypoint",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.Point"
+              }
+            ]
+          }
+        },
+        "required": [
+          "point"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.BoundingBox": {
+        "title": "primitives.geometry2d.BoundingBox",
+        "description": "A plain rectangle",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "xMin": {
+            "description": "Minimum abscissa of the bounding box (left edge). Must be strictly less than x_max.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "xMax": {
+            "description": "Maximum abscissa of the bounding box (right edge). Must be strictly more than x_min.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "yMin": {
+            "description": "Minimum ordinate of the bounding box (bottom edge). Must be strictly less than y_max.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "yMax": {
+            "description": "Maximum ordinate of the bounding box (top edge). Must be strictly more than y_min.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "xMin",
+          "xMax",
+          "yMin",
+          "yMax"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Polygon": {
+        "title": "primitives.geometry2d.Polygon",
+        "description": "A _closed_ polygon represented by _n_ vertices. In other words, we assume\nthat the first and last vertex are connected.",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "vertices": {
+            "minItems": 3,
+            "maxItems": 1000,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.Point"
+            }
+          }
+        },
+        "required": [
+          "vertices"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.PolyLine": {
+        "title": "primitives.geometry2d.PolyLine",
+        "description": "A polygonal chain consisting of _n_ vertices",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "vertices": {
+            "minItems": 2,
+            "maxItems": 1000,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.Point"
+            }
+          }
+        },
+        "required": [
+          "vertices"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Box": {
+        "title": "primitives.geometry3d.Box",
+        "description": "A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates and\ntranslates a unit box centered at the origin to it's location and orientation in 3D space.",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "matrix": {
+            "description": "The homogeneous transformation matrix",
+            "minItems": 16,
+            "maxItems": 16,
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "required": [
+          "matrix"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Cylinder": {
+        "title": "primitives.geometry3d.Cylinder",
+        "description": "A cylinder in 3D space, defined by the centers of two sides and the radius.",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "centerA": {
+            "description": "The center of the first cap.",
+            "minItems": 3,
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "centerB": {
+            "description": "The center of the second cap.",
+            "minItems": 3,
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "radius": {
+            "description": "The radius of the cylinder.",
+            "minimum": 0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "centerA",
+          "centerB",
+          "radius"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Geometry": {
+        "title": "primitives.geometry3d.Geometry",
+        "description": "A 3D geometry model represented by exactly *one of* `cylinder` and `box`.",
+        "type": "object",
+        "properties": {
+          "cylinder": {
+            "$ref": "#/components/schemas/Annotations.Cylinder"
+          },
+          "box": {
+            "$ref": "#/components/schemas/Annotations.Box"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Annotations.AssetRef": {
+        "title": "primitives.references.AssetRef",
+        "description": "A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The internal ID of the referenced resource",
+            "type": "integer"
+          },
+          "externalId": {
+            "description": "The external ID of the referenced resource",
+            "maxLength": 256,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "required": [
+              "id"
+            ]
+          },
+          {
+            "required": [
+              "externalId"
+            ]
+          }
+        ]
+      },
+      "Annotations.FileRef": {
+        "title": "primitives.references.FileRef",
+        "description": "A reference to a file. Either the internal ID or the external ID must be provided (exactly one).",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The internal ID of the referenced resource",
+            "type": "integer"
+          },
+          "externalId": {
+            "description": "The external ID of the referenced resource",
+            "maxLength": 256,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "required": [
+              "id"
+            ]
+          },
+          {
+            "required": [
+              "externalId"
+            ]
+          }
+        ]
+      },
+      "Annotations.ObjectDetection": {
+        "title": "images.ObjectDetection",
+        "description": "Models an image object detection represented by a label, a geometry, and\noptionally a confidence value.",
+        "type": "object",
+        "properties": {
+          "boundingBox": {
+            "$ref": "#/components/schemas/Annotations.BoundingBox"
+          },
+          "polygon": {
+            "$ref": "#/components/schemas/Annotations.Polygon"
+          },
+          "polyline": {
+            "$ref": "#/components/schemas/Annotations.PolyLine"
+          },
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Classification": {
+        "title": "images.Classification",
+        "description": "Models an image classification represented by a label, and optionally a\nconfidence value.",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          }
+        },
+        "required": [
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.KeypointCollection": {
+        "title": "images.KeypointCollection",
+        "description": "Models a collection of keypoints represented by a label, a dictionary of\nkeypoints (mapping from a (unique) label name to a keypoint), and\noptionally a confidence value and an attributes dictionary.",
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "description": "Additional attributes data for a compound.",
+            "type": "object",
+            "additionalProperties": {
+              "discriminator": {
+                "propertyName": "type",
+                "mapping": {
+                  "boolean": "primitives.yml#/components/schemas/Boolean",
+                  "numerical": "primitives.yml#/components/schemas/Numerical"
+                }
+              },
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Annotations.Boolean"
+                },
+                {
+                  "$ref": "#/components/schemas/Annotations.Numerical"
+                }
+              ]
+            }
+          },
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "keypoints": {
+            "description": "The detected keypoints",
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Annotations.Keypoint"
+            }
+          }
+        },
+        "required": [
+          "label",
+          "keypoints"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.cognite__annotation_types__images__AssetLink": {
+        "title": "images.AssetLink",
+        "description": "Models a link to a CDF Asset referenced in an image",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "assetRef": {
+            "description": "The asset this annotation is pointing to",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.AssetRef"
+              }
+            ]
+          },
+          "text": {
+            "description": "The extracted text",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "textRegion": {
+            "description": "The location of the text mentioning the asset",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          }
+        },
+        "required": [
+          "assetRef",
+          "text",
+          "textRegion"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.TextRegion": {
+        "title": "images.TextRegion",
+        "description": "Models an extracted text region in an image",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "text": {
+            "description": "The extracted text",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "textRegion": {
+            "description": "The location of the extracted text",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          }
+        },
+        "required": [
+          "text",
+          "textRegion"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.cognite__annotation_types__diagrams__AssetLink": {
+        "title": "diagrams.AssetLink",
+        "description": "Models a link to a CDF Asset referenced in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "assetRef": {
+            "description": "The asset this annotation is pointing to",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.AssetRef"
+              }
+            ]
+          },
+          "symbolRegion": {
+            "description": "The location of the symbol representing the asset",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "textRegion": {
+            "description": "The location of the text mentioning the asset",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "text": {
+            "description": "The extracted text",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "symbol": {
+            "description": "The symbol representing the asset",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "assetRef",
+          "textRegion"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.FileLink": {
+        "title": "diagrams.FileLink",
+        "description": "Models a link to a CDF File referenced in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "fileRef": {
+            "description": "The file this annotation is pointing to",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.FileRef"
+              }
+            ]
+          },
+          "symbolRegion": {
+            "description": "The location of the symbol representing the file",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "textRegion": {
+            "description": "The location of the text mentioning the file",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "text": {
+            "description": "The extracted text",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "symbol": {
+            "description": "The symbol found in the file",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "fileRef",
+          "textRegion"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.UnhandledTextObject": {
+        "title": "diagrams.UnhandledTextObject",
+        "description": "Models an extracted text region in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "textRegion": {
+            "description": "The location of the text",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "text": {
+            "description": "The extracted text",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "textRegion",
+          "text"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.UnhandledSymbolObject": {
+        "title": "diagrams.UnhandledSymbolObject",
+        "description": "Models an extracted symbol region in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "symbolRegion": {
+            "description": "The location of the symbol",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "symbol": {
+            "description": "The symbol found in the file",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "symbolRegion",
+          "symbol"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.ExtractedText": {
+        "title": "documents.ExtractedText",
+        "description": "Represents text extracted from a document. Annotations of this type are low-level and not specific to any domain.",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "textRegion": {
+            "description": "The location of the extracted text",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "extractedText": {
+            "description": "The extracted text",
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "textRegion",
+          "extractedText"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Line": {
+        "title": "diagrams.Line",
+        "description": "Models a line in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "polyline": {
+            "description": "The polyline representing the line",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.PolyLine"
+              }
+            ]
+          }
+        },
+        "required": [
+          "label",
+          "polyline"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Junction": {
+        "title": "diagrams.Junction",
+        "description": "Models a junction between lines in an engineering diagram",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "position": {
+            "description": "The point representing the junction",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.Point"
+              }
+            ]
+          }
+        },
+        "required": [
+          "position"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.Detection": {
+        "title": "forms.Detection",
+        "description": "Represents a detection of a field value in a form.\nA field is identified by a field_name, optionally component_name and component_type if the field belongs to a subcomponent.\nThe bounding_box indicates the position of the detection. The content of the field is given by the value, and optionally\nan unnormalized_value and the unit.",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          },
+          "boundingBox": {
+            "description": "Bounding box of the detection area",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.BoundingBox"
+              }
+            ]
+          },
+          "componentType": {
+            "description": "Type of subcomponent that the detection belongs to",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "componentName": {
+            "description": "Name of subcomponent that the detection belongs to",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "fieldName": {
+            "description": "Name of field that has been detected",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "value": {
+            "description": "The value that has been detected",
+            "maxLength": 128,
+            "type": "string"
+          },
+          "valueUnnormalized": {
+            "description": "The value that has been detected, before normalization. Optional.",
+            "maxLength": 128,
+            "type": "string"
+          },
+          "unit": {
+            "description": "The unit of the value field. Optional.",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "boundingBox",
+          "fieldName",
+          "value"
+        ],
+        "additionalProperties": false
       },
       "DocumentsSearchRequest": {
         "allOf": [
@@ -18092,6 +19333,103 @@
           }
         }
       },
+      "VisionExtractPostResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/StatusSchema"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "jobId",
+                    "items",
+                    "features"
+                  ],
+                  "properties": {
+                    "jobId": {
+                      "$ref": "#/components/schemas/JobId"
+                    },
+                    "items": {
+                      "description": "List of files to be analyzed by the feature extractors.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AllOfFileId"
+                      }
+                    },
+                    "features": {
+                      "type": "array",
+                      "description": "The type of detections to perform. New feature extractors may appear.",
+                      "uniqueItems": true,
+                      "items": {
+                        "$ref": "#/components/schemas/VisionExtractFeature"
+                      },
+                      "example": [
+                        "TextDetection",
+                        "AssetTagDetection",
+                        "IndustrialObjectDetection",
+                        "PeopleDetection",
+                        "PersonalProtectiveEquipmentDetection"
+                      ]
+                    },
+                    "parameters": {
+                      "$ref": "#/components/schemas/FeatureParameters"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "VisionExtractGetResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/StatusSchema"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "jobId",
+                    "items"
+                  ],
+                  "properties": {
+                    "jobId": {
+                      "$ref": "#/components/schemas/JobId"
+                    },
+                    "items": {
+                      "type": "array",
+                      "description": "List of file IDs and their corresponding predictions.",
+                      "items": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/VisionExtractItem"
+                      }
+                    },
+                    "failedItems": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FailedBatch"
+                      }
+                    },
+                    "parameters": {
+                      "$ref": "#/components/schemas/FeatureParameters"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
       "DocumentsClassifiersResponse": {
         "description": "The response for a successful classifier create/list/update operation.",
         "content": {
@@ -18385,6 +19723,52 @@
         "description": "The generated SEG-Y file",
         "content": {
           "application/octet-stream": {}
+        }
+      }
+    },
+    "requestBodies": {
+      "VisionExtractPostRequestSchema": {
+        "description": "A request for running an extract job.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items",
+                "features"
+              ],
+              "properties": {
+                "items": {
+                  "description": "List of image files to be analyzed by the feature extractors.",
+                  "type": "array",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "items": {
+                    "$ref": "#/components/schemas/FileReference"
+                  }
+                },
+                "features": {
+                  "type": "array",
+                  "description": "The type of detections to perform. New feature extractors may appear.",
+                  "uniqueItems": true,
+                  "items": {
+                    "$ref": "#/components/schemas/VisionExtractFeature"
+                  },
+                  "example": [
+                    "TextDetection",
+                    "AssetTagDetection",
+                    "IndustrialObjectDetection",
+                    "PeopleDetection",
+                    "PersonalProtectiveEquipmentDetection"
+                  ]
+                },
+                "parameters": {
+                  "$ref": "#/components/schemas/FeatureParameters"
+                }
+              }
+            }
+          }
         }
       }
     }
