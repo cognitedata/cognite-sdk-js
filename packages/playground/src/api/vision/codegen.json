@@ -4,6 +4,6 @@
     "serviceName": "context/vision/extract"
   },
   "inlinedSchemas": {
-    "autoNameRequest": true
+    "autoNameRequest": false
   }
 }

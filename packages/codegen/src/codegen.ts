@@ -2,6 +2,9 @@
 import { promises as fs } from 'fs';
 import * as pathUtil from 'path';
 
+import { CursorAndAsyncIteratorProcessor } from './ast/cursor_and_async_iterator';
+import * as ts from 'typescript';
+
 import {
   OpenApiDocument,
   OpenApiSchema,
@@ -19,6 +22,7 @@ import {
 import { sortOpenApiJson } from './utils';
 import { AutoNameInlinedRequestOption } from './utils';
 import { TypeGenerator, TypeGeneratorResult } from './generator/generator';
+import { AstPostProcessor } from './ast/processor';
 
 export type StringFilter = (str: string) => boolean;
 
@@ -40,6 +44,8 @@ export interface CodeGenOptions extends AutoNameInlinedRequestOption {
 export class CodeGen {
   static outputFileName = 'types.gen.ts';
 
+  astPostProcessors: AstPostProcessor[] = [new CursorAndAsyncIteratorProcessor()]
+
   constructor(
     readonly generator: TypeGenerator,
     readonly options: CodeGenOptions
@@ -57,6 +63,10 @@ export class CodeGen {
 
     await fs.writeFile(
       pathUtil.resolve(this.options.outputDir, CodeGen.outputFileName),
+      fileComment + result.code
+    );
+    await fs.writeFile(
+      pathUtil.resolve(this.options.outputDir, "ast-" + CodeGen.outputFileName),
       fileComment + result.code
     );
   };
@@ -277,9 +287,20 @@ export class CodeGen {
     const sortedJson = sortOpenApiJson(docJson);
 
     const result = await this.generator.generateTypes(sortedJson);
+    result.astProcessedCode = this.astPostProcessing(result.code)
 
     return result;
   };
+
+  private astPostProcessing = (code: string): string => {
+    let src = ts.createSourceFile("generated.ts", code, ts.ScriptTarget.ES2015, false, ts.ScriptKind.TS);
+    for (const processor of this.astPostProcessors) {
+      src = processor.process(src);
+    }
+
+    const printer = ts.createPrinter();
+    return printer.printFile(src);
+  }
 
   /**
    * generateTypes
