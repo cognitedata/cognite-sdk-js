@@ -9,6 +9,7 @@ import {
 } from './utils';
 import { CodeGen, createServiceNameFilter, passThroughFilter } from './codegen';
 import { PackageConfigManager, ServiceConfigManager } from './configuration';
+import { AcacodeOpenApiGenerator } from './generator/acacode';
 
 type GenerateOptions = PackageOption;
 interface GenerateServiceOptions extends PackageOption, ServiceOption {}
@@ -39,7 +40,7 @@ async function generateServiceTypes(
     configFile.filter.serviceName == null
       ? passThroughFilter
       : createServiceNameFilter(configFile.filter.serviceName);
-  const gen = new CodeGen({
+  const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
     autoNameInlinedRequest: configFile.inlinedSchemas.autoNameRequest,
     outputDir: directory,
     filter: {
@@ -129,7 +130,7 @@ async function generateSharedTypes(
   });
   const snapshot = await snapshotMngr.read();
 
-  const gen = new CodeGen({
+  const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
     outputDir: packageDirectory,
     autoNameInlinedRequest: false,
     filter: {
@@ -137,12 +138,12 @@ async function generateSharedTypes(
     },
   });
 
-  const generatedTypeNames = await gen.generateTypesFromSchemas(
+  const generated = await gen.generateTypesFromSchemas(
     snapshot.openapi,
     snapshot.components?.schemas,
     (schemaName) => sharedTypes.has(schemaName)
   );
-  return generatedTypeNames;
+  return generated.typeNames;
 }
 
 function createExportStatement(
