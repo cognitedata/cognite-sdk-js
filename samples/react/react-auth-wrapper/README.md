@@ -1,46 +1,168 @@
-# Getting Started with Create React App
+# react-auth-wrapper
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This example was built using a react auth-wrapper which can be found [here](https://npm.im/@cognite/react-auth-wrapper).
 
-## Available Scripts
+The next sections will cover exactly what was done in the current example. It will also be based in authentication using Azure AD, which is the cognite's standard, tough you can you any OIDC based identity provider.
 
-In the project directory, you can run:
+## Installation
 
-### `yarn start`
+Before moving on, you'll need to install the react auth-wrapper as the examble bellow:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Using [npm](https://npmjs.org/)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+npm install @cognite/react-auth-wrapper --save
+```
 
-### `yarn test`
+## Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Configure the library by wrapping your application in `ReactCogniteAuthProvider`:
 
-### `yarn build`
+```jsx
+// src/index.jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { ReactCogniteAuthProvider } from "@cognite/react-auth-wrapper";
+import App from "./App";
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+const oidcConfig = {
+  authority: "<your authority>",
+  client_id: "<your client id>",
+  redirect_uri: "<your redirect uri",
+  scope: "<your token scopes>",
+  /*
+    we are using metadata because the default token and authorization endpoints in azure ad
+    contains '/oauth2/v2.0/' wich differs from default '/oauth2/token'
+   */
+  metadata: {
+      'token_endpoint': "https://login.microsoftonline.com/<your tenant>/oauth2/v2.0/token",
+      'authorization_endpoint': "https://login.microsoftonline.com/<your tenant/oauth2/v2.0/authorize",
+  }
+};
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+ReactDOM.render(
+  <ReactCogniteAuthProvider {...oidcConfig}>
+    <App />
+  </ReactCogniteAuthProvider>,
+  document.getElementById("app")
+);
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Use the `useAuth` hook in your components to access authentication state
+(`isLoading`, `isAuthenticated` and `user`) and authentication methods
+(`signinRedirect`, `removeUser` and `signOutRedirect`).
 
-### `yarn eject`
+In the example bellow, note that we are redirecting to ListAssets page where
+we're going to connect to CDF and render some Assets.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```jsx
+// src/App.jsx
+import React from "react";
+import { useCogAuth } from "@cognite/react-auth-wrapper";
+import ListAssets from './ListAssets';
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+function App() {
+  const auth = useCogAuth();
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  switch (auth.activeNavigator) {
+    case "signinSilent":
+      return <div>Signing you in...</div>;
+    case "signoutRedirect":
+      return <div>Signing you out...</div>;
+  }
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  if (auth.isLoading) {
+    return <div>Loading...</div>;
+  }
 
-## Learn More
+  if (auth.error) {
+    return <div>Oops... {auth.error.message}</div>;
+  }
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  if (auth.isAuthenticated) {
+    return (
+      <div>
+       <ListAssets/>
+      </div>
+    );
+  }
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  return <button onClick={() => void auth.signinPopup()}>Log in</button>;
+}
+
+export default App;
+```
+
+You **must** provide an implementation of `onSigninCallback` to `oidcConfig` to remove the payload from the URL upon successful login. Otherwise if you refresh the page and the payload is still there, `signinSilent` - which handles renewing your token - won't work.
+
+### Making a call using CogniteClient
+
+As a child of `CogniteAuthProvider` with a user containing an access token, we can create
+an instance of CogniteClient passing the credentials and make a call to CDF API:
+
+```jsx
+import { Asset, CogniteClient } from '@cognite/sdk';
+import React, { useState } from 'react';
+import { useCogAuth } from '@cognite/react-auth-wrapper';
+import { ReactAuthWrapperProvider, CogniteProjectService } from '@cognite/react-auth-wrapper';
+
+const { REACT_APP_COGNITE_BASE_URL } = process.env;
+
+function ListAssets() {
+  const authContext: any = useCogAuth();
+
+  const [assets, setAssets] = useState<Asset[]>([]);
+
+  React.useEffect(() => {
+    const cogniteProjectService = new CogniteProjectService();
+
+    (async () => {
+      try {
+        /*
+          we are using CogniteProjectService (from react-auth-wrapper package)
+          to extract the projects the user can access using it's credentials
+        */
+        const projects = await cogniteProjectService.loadFromAuthContext(authContext);
+
+        const cogniteClient = new CogniteClient({
+          appId: "Authwrapper SDK samples",
+          project: projects[0].projectUrlName,
+          baseUrl: <your cognite base url>,
+          authentication: {
+            provider: ReactAuthWrapperProvider,
+            credentials: {
+              method: 'pkce',
+              authContext: authContext,
+            }
+          }
+        });
+
+        const response = await cogniteClient.assets.list();
+        setAssets(response.items);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, [authContext]);
+
+  if (!assets) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <>
+      <div className="App">
+        {assets.map((asset, index) => {
+          return <li key={index}>Assets here {asset.name}</li>;
+        })}
+      </div>
+    </>
+  );
+}
+
+export default ListAssets;
+```
+
+### More...
+
+For more information about the use of react-auth-wrapper, please refer to [react-auth-wrapper] npm package (https://npm.im/@cognite/react-auth-wrapper)
