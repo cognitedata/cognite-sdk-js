@@ -8,6 +8,7 @@ import {
   VisionExtractFeature,
   FileReference,
   JobStatus,
+  FeatureParameters,
 } from '../../types';
 
 const JOB_COMPLETE_STATES: JobStatus[] = ['Completed', 'Failed'];
@@ -17,16 +18,17 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    * [Extract features from image](https://docs.cognite.com/api/playground/#tag/Vision/operation/postVisionExtract)
    *
    * ```js
-   * const response = await client.vision.extract(["TextDetection"], [{id: 1234}]);
+   * const response = await client.vision.extract(["TextDetection"], [{id: 1234}], {textDetectionParameters: {threshold: 0.4}});
    * ```
    */
   public extract = async (
     features: VisionExtractFeature[],
-    ids: FileReference[]
+    ids: FileReference[],
+    parameters?: FeatureParameters
   ): Promise<VisionExtractPostResponse> => {
     const path = this.url('extract');
     const response = await this.post<VisionExtractPostResponse>(path, {
-      data: { features: features, items: ids },
+      data: { features: features, items: ids, parameters: parameters },
     });
     return this.addToMapAndReturn(response.data, response);
   };
