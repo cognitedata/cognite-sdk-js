@@ -102,20 +102,20 @@
 					<a name="extract" class="tsd-anchor"></a>
 					<h3>extract</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">extract<span class="tsd-signature-symbol">(</span>features<span class="tsd-signature-symbol">: </span><a href="../modules/_playground_src_api_vision_types_gen_.html#visionextractfeature" class="tsd-signature-type">VisionExtractFeature</a><span class="tsd-signature-symbol">[]</span>, ids<span class="tsd-signature-symbol">: </span><a href="../modules/_playground_src_api_vision_types_gen_.html#filereference" class="tsd-signature-type">FileReference</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_playground_src_api_vision_types_gen_.html#visionextractpostresponse" class="tsd-signature-type">VisionExtractPostResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">extract<span class="tsd-signature-symbol">(</span>features<span class="tsd-signature-symbol">: </span><a href="../modules/_playground_src_api_vision_types_gen_.html#visionextractfeature" class="tsd-signature-type">VisionExtractFeature</a><span class="tsd-signature-symbol">[]</span>, ids<span class="tsd-signature-symbol">: </span><a href="../modules/_playground_src_api_vision_types_gen_.html#filereference" class="tsd-signature-type">FileReference</a><span class="tsd-signature-symbol">[]</span>, parameters<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_playground_src_api_vision_types_gen_.featureparameters.html" class="tsd-signature-type">FeatureParameters</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_playground_src_api_vision_types_gen_.html#visionextractpostresponse" class="tsd-signature-type">VisionExtractPostResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/1d9116ed5/packages/playground/src/api/vision/visionApi.ts#L23">packages/playground/src/api/vision/visionApi.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/6d58704ef/packages/playground/src/api/vision/visionApi.ts#L24">packages/playground/src/api/vision/visionApi.ts:24</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/playground/#tag/Vision/operation/postVisionExtract">Extract features from image</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.vision.extract([<span class="hljs-string">&quot;TextDetection&quot;</span>], [{<span class="hljs-attr">id</span>: <span class="hljs-number">1234</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.vision.extract([<span class="hljs-string">&quot;TextDetection&quot;</span>], [{<span class="hljs-attr">id</span>: <span class="hljs-number">1234</span>}], {<span class="hljs-attr">textDetectionParameters</span>: {<span class="hljs-attr">threshold</span>: <span class="hljs-number">0.4</span>}});</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -124,6 +124,9 @@
 								</li>
 								<li>
 									<h5>ids: <a href="../modules/_playground_src_api_vision_types_gen_.html#filereference" class="tsd-signature-type">FileReference</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parameters: <a href="../interfaces/_playground_src_api_vision_types_gen_.featureparameters.html" class="tsd-signature-type">FeatureParameters</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_playground_src_api_vision_types_gen_.html#visionextractpostresponse" class="tsd-signature-type">VisionExtractPostResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -140,7 +143,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/1d9116ed5/packages/playground/src/api/vision/visionApi.ts#L41">packages/playground/src/api/vision/visionApi.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/6d58704ef/packages/playground/src/api/vision/visionApi.ts#L43">packages/playground/src/api/vision/visionApi.ts:43</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
