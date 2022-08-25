@@ -37,7 +37,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Suggest annotations](https://docs.cognite.com/api/playground/#operation/annotationsSuggest)
    * 
-   * const created = await client.annotationsApi.create(annotations);
+   * const created = await client.annotations.create(annotations);
    */
   public suggest = (items: AnnotationSuggest[]) => {
     return this.createEndpoint(items, this.suggestUrl);
@@ -48,7 +48,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * or [Get an](https://docs.cognite.com/api/playground/#operation/annotationsGet)
    * annotation
    * 
-   * const response = await client.annotationsApi.retrieve(createdAnnotationIds);
+   * const response = await client.annotations.retrieve(createdAnnotationIds);
    */
   public retrieve = (ids: InternalId[]) => {
     return this.retrieveEndpoint(ids);
@@ -57,7 +57,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Advanced list of annotations](https://docs.cognite.com/api/playground/#operation/annotationsFilter)
    * 
-   * const limitOne = await client.annotationsApi.list({
+   * const limitOne = await client.annotations.list({
    *   limit: 1,
    *   filter: fileFilter(annotatedFileId),
    * });
@@ -72,7 +72,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Delete annotations](https://docs.cognite.com/api/playground/#operation/annotationsDelete)
    * 
-   * await client.annotationsApi.delete(createdAnnotationIds);
+   * await client.annotations.delete(createdAnnotationIds);
    */
   public delete = (ids: InternalId[]) => {
     return this.deleteEndpoint(ids);
@@ -81,7 +81,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Update annotations](https://docs.cognite.com/api/playground/#operation/annotationsUpdate)
    * 
-   * const updatedResp = await client.annotationsApi.update(changes);
+   * const updatedResp = await client.annotations.update(changes);
    */
   public update = (changes: AnnotationChangeById[]) => {
     return this.updateEndpoint(changes);
