@@ -5,14 +5,20 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ReactCogniteAuthProvider } from '@cognite/react-auth-wrapper';
 
+const { REACT_APP_AUTHORITY } = process.env;
+const { REACT_APP_CLIENT_ID } = process.env;
+const { REACT_APP_REDIRECT_URL } = process.env;
+const { REACT_APP_SCOPE } = process.env;
+const { REACT_APP_TENANT } = process.env;
+
 const oidcConfig = {
-  authority: "https://login.microsoftonline.com/b7484399-37aa-4c28-9a37-a32f24c0621f",
-  client_id: "acde2561-3209-4e26-a7c4-66bb84c77047",
-  redirect_uri: "http://localhost:3001/callback",
-  scope: "https://greenfield.cognitedata.com/.default",
+  authority: REACT_APP_AUTHORITY!,
+  client_id: REACT_APP_CLIENT_ID!,
+  redirect_uri: REACT_APP_REDIRECT_URL!,
+  scope: REACT_APP_SCOPE!,
   metadata: {
-      'token_endpoint': "https://login.microsoftonline.com/b7484399-37aa-4c28-9a37-a32f24c0621f/oauth2/v2.0/token",
-      'authorization_endpoint': "https://login.microsoftonline.com/b7484399-37aa-4c28-9a37-a32f24c0621f/oauth2/v2.0/authorize",
+      token_endpoint: `https://login.microsoftonline.com/${REACT_APP_TENANT!}/oauth2/v2.0/token`,
+      authorization_endpoint: `https://login.microsoftonline.com/${REACT_APP_TENANT!}/oauth2/v2.0/authorize`,
   }
 };
 

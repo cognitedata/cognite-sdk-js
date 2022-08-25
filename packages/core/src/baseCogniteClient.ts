@@ -128,8 +128,6 @@ export default class BaseCogniteClient {
         credentials,
         provider
       );
-    } else {
-      console.log(`** initializing default auth`);
     }
 
     if (isBrowser() && !isUsingSSL()) {
