@@ -61,7 +61,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    *   limit: 1,
    *   filter: fileFilter(annotatedFileId),
    * });
-   * 
+   *
    */
   public list = (
     filter: AnnotationFilterRequest
