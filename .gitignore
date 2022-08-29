@@ -8,7 +8,13 @@ yarn-error.log
 lerna-debug.log
 .rpt2_cache
 dist
-docs
+docs/build
+packages/alpha/docs/
+packages/beta/docs/
+packages/core/docs/
+packages/playground/docs/
+packages/stable/docs/
+packages/template/docs/
 .firebase
 .DS_Store
 .idea
