@@ -238,7 +238,7 @@ export function extractADFSToken(query: string): ADFSToken | null {
     return {
       accessToken,
       idToken,
-      expiresIn: Date.now() + Number(expiresIn),
+      expiresIn: Date.now() + Number(expiresIn) * 1000,
     };
   }
 
