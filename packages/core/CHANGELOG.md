@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.1...@cognite/sdk-core@4.6.2) (2022-08-31)
+
+
+### Bug Fixes
+
+* adfs login when iframe doesn't work by storing tokens ([#864](https://github.com/cognitedata/cognite-sdk-js/issues/864)) ([c9e1860](https://github.com/cognitedata/cognite-sdk-js/commit/c9e1860a598dd8f4a8f91ef538306f03e9a3f709))
+
+
+
+
+
 ## [4.6.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.0...@cognite/sdk-core@4.6.1) (2022-08-21)
 
 **Note:** Version bump only for package @cognite/sdk-core
