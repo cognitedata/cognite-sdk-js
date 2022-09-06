@@ -38,6 +38,7 @@ import {
 } from './api/templates';
 import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 import { retryValidator } from './retryValidator';
+import { VisionAPI } from './api/vision/visionApi';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
@@ -112,6 +113,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get annotations() {
     return accessApi(this.annotationsApi);
   }
+  public get vision() {
+    return accessApi(this.visionAPI);
+  }
   public get templates() {
     return {
       groups: accessApi(this.apiFactory(TemplateGroupsApi, 'templategroups')),
@@ -176,6 +180,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private geospatialApi?: GeospatialAPI;
   private documentsApi?: DocumentsAPI;
   private annotationsApi?: AnnotationsAPI;
+  private visionAPI?: VisionAPI;
 
   protected get version() {
     return version;
@@ -228,6 +233,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.geospatialApi = this.apiFactory(GeospatialAPI, 'geospatial');
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
     this.annotationsApi = this.apiFactory(AnnotationsAPI, 'annotations');
+    this.visionAPI = this.apiFactory(VisionAPI, 'vision');
   }
 
   static urlEncodeExternalId(externalId: string): string {
