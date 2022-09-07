@@ -22,9 +22,6 @@
     "packages/**",
     "samples/**"
   ],
-  "jest": {
-    "testTimeout": 15000
-  },
   "scripts": {
     "allsdk": "lerna run --ignore *-sample",
     "allsamples": "lerna run --scope *-sample",

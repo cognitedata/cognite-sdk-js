@@ -20,7 +20,7 @@ function setupClientWithNonExistingApiKey() {
     appId: 'JS Integration test',
     project: process.env.COGNITE_PROJECT as string,
     apiKeyMode: true,
-    getToken: () => Promise.resolve('non-existing-api-key'),
+    getToken: () => Promise.reject('non-existing-api-key'),
   });
 }
 
