@@ -40,7 +40,7 @@ export class CredentialsAuth {
 
   constructor(
     private httpClient: BasicHttpClient,
-    private credentials: any,
+    private credentials: ClientCredentials | undefined,
     private authProvider: any
   ) {
     this.process();
@@ -71,7 +71,9 @@ export class CredentialsAuth {
       );
     }
 
-    if (this.authProvider !== undefined) {
+    if (this.authProvider === undefined) return;
+
+    if (this.credentials) {
       if (
         !this.credentials.authContext &&
         !this.authProvider.load(true, true).method &&
@@ -139,13 +141,13 @@ export class CredentialsAuth {
 
   private isRefreshToken(): any {
     return (
-      (this.credentials.method === 'device' ||
-        this.credentials.method === 'pkce') &&
+      (this.credentials?.method === 'device' ||
+        this.credentials?.method === 'pkce') &&
       this.tokenCredentials.refresh_token
     );
   }
 
   public isApiKeyMode(): boolean {
-    return this.credentials.method === 'api';
+    return this.credentials?.method === 'api';
   }
 }

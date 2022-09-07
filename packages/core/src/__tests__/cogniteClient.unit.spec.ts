@@ -14,12 +14,7 @@ function setupClient(baseUrl: string = BASE_URL) {
     project: 'test-project',
     baseUrl,
     apiKeyMode: true,
-    authentication: {
-      credentials: {
-        method: 'api',
-        apiKey,
-      },
-    },
+    getToken: () => Promise.resolve(apiKey),
   });
 }
 
@@ -138,52 +133,27 @@ describe('CogniteClient', () => {
       });
     });
 
-    test('api-key: 401 and getToken resolving to the same api-key should fail request', async () => {
-      nock(mockBaseUrl).get('/test').reply(401, {});
-
-      const client = new BaseCogniteClient({
-        project,
-        appId: 'unit-test',
-        baseUrl: mockBaseUrl,
-        apiKeyMode: true,
-        authentication: {
-          credentials: {
-            method: 'api',
-            apiKey,
-          },
-        },
-      });
-
+    test('api-key: send api-key on first request', async () => {
+      nock(mockBaseUrl, { reqheaders: { 'api-key': apiKey } })
+        .get('/test')
+        .reply(200);
+      const client = setupClient(mockBaseUrl);
       await client.authenticate();
-
-      await expect(
-        client.get('/test')
-      ).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"Request failed | status code: 401"`
+      await expect(client.get('/test').then((r) => r.status)).resolves.toBe(
+        200
       );
     });
 
-    test('getToken: 401 and getToken resolving to the same api-key should fail request', async () => {
-      const getToken = jest.fn().mockResolvedValue(apiKey);
+    test('api-key: 401 and getToken resolving to the same api-key should fail request', async () => {
+      nock(mockBaseUrl).get('/test').twice().reply(401, {});
 
-      nock(mockBaseUrl).get('/test').reply(401, {});
-
-      const client = new BaseCogniteClient({
-        project,
-        appId: 'unit-test',
-        baseUrl: mockBaseUrl,
-        apiKeyMode: true,
-        getToken,
-      });
-      await client.authenticate();
+      const client = setupClient(mockBaseUrl);
 
       await expect(
         client.get('/test')
       ).rejects.toThrowErrorMatchingInlineSnapshot(
         `"Request failed | status code: 401"`
       );
-
-      expect(getToken).toHaveBeenCalledTimes(2);
     });
 
     test('apiKeyMode should change request header and token preable', async () => {

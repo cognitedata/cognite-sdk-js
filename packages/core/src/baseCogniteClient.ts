@@ -120,7 +120,7 @@ export default class BaseCogniteClient {
 
     this.http = this.initializeCDFHttpClient(baseUrl, options);
 
-    if (options && options.authentication) {
+    if (options.authentication) {
       const { credentials, provider } = options.authentication;
 
       this.credentialsAuth = new CredentialsAuth(
@@ -155,12 +155,10 @@ export default class BaseCogniteClient {
       let token = await this.authenticateGetToken();
 
       if (token !== undefined) {
-        this.previousToken = token;
         return token;
       }
 
       token = await this.credentialsAuth?.authenticate();
-      this.previousToken = token;
       return token;
     } catch (e) {
       return;
@@ -209,11 +207,11 @@ export default class BaseCogniteClient {
       try {
         const newToken = await this.authenticate();
         if (newToken && newToken !== this.previousToken) {
+          this.previousToken = newToken;
           retry();
         } else {
           reject();
         }
-        this.previousToken = newToken;
       } catch {
         reject();
       }
