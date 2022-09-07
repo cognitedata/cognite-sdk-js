@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.2...@cognite/sdk-core@4.6.3) (2022-09-06)
+
+
+### Bug Fixes
+
+* removing messages from authentication ([#866](https://github.com/cognitedata/cognite-sdk-js/issues/866)) ([cc61fce](https://github.com/cognitedata/cognite-sdk-js/commit/cc61fce8557039e8fb4e0cf3fe57deacdb3b0402))
+
+
+
+
+
 ## [4.6.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.1...@cognite/sdk-core@4.6.2) (2022-08-31)
 
 
