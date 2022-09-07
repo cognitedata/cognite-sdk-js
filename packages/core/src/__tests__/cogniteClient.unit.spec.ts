@@ -108,8 +108,6 @@ describe('CogniteClient', () => {
 
         expect(result.status).toEqual(200);
         expect(result.data).toEqual({ body: 'request ok' });
-
-        // scopeOk.done();
       });
 
       test('getToken rejection should reject sdk requests', async () => {
@@ -126,13 +124,36 @@ describe('CogniteClient', () => {
         });
 
         await expect(
-          async () => await client.get('/test')
+          client.get('/test')
         ).rejects.toThrowErrorMatchingInlineSnapshot(
           `"Request failed | status code: 401"`
         );
 
         expect(getToken).toHaveBeenCalledTimes(1);
       });
+    });
+
+    test('api-key: send api-key on first request', async () => {
+      nock(mockBaseUrl, { reqheaders: { 'api-key': apiKey } })
+        .get('/test')
+        .reply(200);
+      const client = setupClient(mockBaseUrl);
+      await client.authenticate();
+      await expect(client.get('/test').then((r) => r.status)).resolves.toBe(
+        200
+      );
+    });
+
+    test('api-key: 401 and getToken resolving to the same api-key should fail request', async () => {
+      nock(mockBaseUrl).get('/test').twice().reply(401, {});
+
+      const client = setupClient(mockBaseUrl);
+
+      await expect(
+        client.get('/test')
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `"Request failed | status code: 401"`
+      );
     });
 
     test('apiKeyMode should change request header and token preable', async () => {
