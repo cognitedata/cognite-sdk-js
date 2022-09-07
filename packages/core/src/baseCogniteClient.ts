@@ -26,7 +26,6 @@ import {
   RetryValidator,
 } from './httpClient/retryValidator';
 import { verifyOptionsRequiredFields } from './loginUtils';
-// eslint-disable-next-line lodash/import-scope
 import { CredentialsAuth, ClientCredentials } from './credentialsAuth';
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */

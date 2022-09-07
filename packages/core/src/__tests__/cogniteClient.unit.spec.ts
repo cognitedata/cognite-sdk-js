@@ -108,8 +108,6 @@ describe('CogniteClient', () => {
 
         expect(result.status).toEqual(200);
         expect(result.data).toEqual({ body: 'request ok' });
-
-        // scopeOk.done();
       });
 
       test('getToken rejection should reject sdk requests', async () => {
@@ -126,7 +124,7 @@ describe('CogniteClient', () => {
         });
 
         await expect(
-          async () => await client.get('/test')
+          client.get('/test')
         ).rejects.toThrowErrorMatchingInlineSnapshot(
           `"Request failed | status code: 401"`
         );
