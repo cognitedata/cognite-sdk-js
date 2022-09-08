@@ -29,12 +29,10 @@ async function quickstart() {
   );
 
   // get maximum 5 root assets
-  await client.assets.create([{name: 'new asset'}]);
-  const rootAssets = await client.assets
-    .list({ filter: { root: true } })
-    .autoPagingToArray({ limit: 5 });
+  const rootAssets = await client.relationships.list({ fetchResources: true });
   console.log('List of the first 5 (maximum) root assets:\n');
   console.log(rootAssets);
+  // console.dir(rootAssets, { depth: null });
 }
 
 quickstart()
