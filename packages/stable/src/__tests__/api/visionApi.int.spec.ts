@@ -1,19 +1,19 @@
 // Copyright 2020 Cognite AS
 
-import { VisionExtractPostResponse } from '@cognite/sdk-playground';
-import CogniteClientPlayground from '../../cogniteClientPlayground';
-import { setupLoggedInClient as setupLoggedinPlaygroundClient } from '../testUtils';
+import { VisionExtractPostResponse } from '@cognite/sdk';
+import CogniteClient from '../../cogniteClient';
+import { setupLoggedInClient } from '../testUtils';
 
 describe('Vision API', () => {
   const TEST_IMAGE_ID = 4745168244986665;
-  let playgroundClient: CogniteClientPlayground;
+  let client: CogniteClient;
   let extractJob: VisionExtractPostResponse;
 
   beforeAll(async () => {
     jest.setTimeout(2 * 60 * 1000); // timeout after 2 minutes
-    playgroundClient = setupLoggedinPlaygroundClient();
+    client = setupLoggedInClient();
 
-    extractJob = await playgroundClient.vision.extract(
+    extractJob = await client.vision.extract(
       ['TextDetection'],
       [{ fileId: TEST_IMAGE_ID }],
       { textDetectionParameters: { threshold: 0.4 } }
@@ -37,7 +37,7 @@ describe('Vision API', () => {
 
   describe('retrieve extract job', () => {
     test('waitForCompletion=false', async () => {
-      const result = await playgroundClient.vision.getExtractJob(
+      const result = await client.vision.getExtractJob(
         extractJob.jobId,
         false
       );
@@ -50,13 +50,13 @@ describe('Vision API', () => {
     });
     test('waitForCompletion=true, should timeout', async () => {
       await expect(
-        playgroundClient.vision.getExtractJob(extractJob.jobId, true, 1000, 0)
+        client.vision.getExtractJob(extractJob.jobId, true, 1000, 0)
       ).rejects.toThrowError(
         `Timed out while waiting for vision job to complete.`
       );
     });
     test('waitForCompletion=true', async () => {
-      const result = await playgroundClient.vision.getExtractJob(
+      const result = await client.vision.getExtractJob(
         extractJob.jobId,
         true
       );
