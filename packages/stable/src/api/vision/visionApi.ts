@@ -1,13 +1,13 @@
 // Copyright 2022 Cognite AS
 
 import { BaseResourceAPI, sleepPromise } from '@cognite/sdk-core';
-import { ContextJobId } from '@cognite/sdk';
 import {
   VisionExtractGetResponse,
   VisionExtractPostResponse,
   VisionExtractFeature,
   FileReference,
   JobStatus,
+  JobId,
   FeatureParameters,
 } from '../../types';
 
@@ -41,7 +41,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    * ```
    */
   public getExtractJob = async (
-    jobId: ContextJobId,
+    jobId: JobId,
     waitForCompletion: boolean = true,
     pollingTimeMs: number = 1000,
     maxRetries: number = 600

@@ -37,10 +37,7 @@ describe('Vision API', () => {
 
   describe('retrieve extract job', () => {
     test('waitForCompletion=false', async () => {
-      const result = await client.vision.getExtractJob(
-        extractJob.jobId,
-        false
-      );
+      const result = await client.vision.getExtractJob(extractJob.jobId, false);
       expect(result.status == 'Queued' || result.status == 'Running').toBe(
         true
       );
@@ -56,10 +53,7 @@ describe('Vision API', () => {
       );
     });
     test('waitForCompletion=true', async () => {
-      const result = await client.vision.getExtractJob(
-        extractJob.jobId,
-        true
-      );
+      const result = await client.vision.getExtractJob(extractJob.jobId, true);
       expect(result.status).toEqual('Completed');
       expect(result.jobId).toEqual(extractJob.jobId);
       expect(result.createdTime).toEqual(extractJob.createdTime);
