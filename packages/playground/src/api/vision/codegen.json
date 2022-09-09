@@ -1,9 +1,0 @@
-{
-  "service": "vision",
-  "filter": {
-    "serviceName": "context/vision/extract"
-  },
-  "inlinedSchemas": {
-    "autoNameRequest": true
-  }
-}
