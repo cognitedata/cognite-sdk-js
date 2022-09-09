@@ -251,7 +251,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "from cognite.client.data_classes import Asset\nassets = [Asset(name=\"asset1\"), Asset(name=\"asset2\")]\nres = client.assets.create(assets)\n\nfrom cognite.client.data_classes import Asset, Label\nasset = Asset(name=\"my_pump\", labels=[Label(external_id=\"PUMP\")])\nres = client.assets.create(assets)\n"
+            "source": "from cognite.client.data_classes import Asset\nassets = [Asset(name=\"asset1\"), Asset(name=\"asset2\")]\nres = client.assets.create(assets)\n\nfrom cognite.client.data_classes import Asset, Label\nasset = Asset(name=\"my_pump\", labels=[Label(external_id=\"PUMP\")])\nres = client.assets.create(asset)\n"
           },
           {
             "lang": "Java",
@@ -504,7 +504,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "from cognite.client.data_classes import AssetUpdate\nmy_update = AssetUpdate(id=1).description.set(\"New description\").metadata.add({\"key\": \"value\"})\nres1 = client.assets.update(my_update)\nanother_update = AssetUpdate(id=1).description.set(None)\nres2 = client.assets.update(another_update)\n\nfrom cognite.client.data_classes import AssetUpdate\nmy_update = AssetUpdate(id=1).metadata.add({\"key\": \"value\"})\nres1 = client.assets.update(my_update)\nanother_update = AssetUpdate(id=1).metadata.set(None)\nanother_update2 = AssetUpdate(id=1).metadata.set({})\nres2 = client.assets.update(another_update)\n\nfrom cognite.client.data_classes import AssetUpdate\nmy_update = AssetUpdate(id=1).labels.add([\"PUMP\", \"VERIFIED\"])\nres = client.assets.update(my_update)\n\nfrom cognite.client.data_classes import AssetUpdate\nmy_update = AssetUpdate(id=1).labels.remove(\"PUMP\")\nres = client.assets.update(my_update)\n"
+            "source": "from cognite.client.data_classes import AssetUpdate\nmy_update = AssetUpdate(id=1).description.set(\"New description\").metadata.add({\"key\": \"value\"})\nres1 = client.assets.update(my_update)\nanother_update = AssetUpdate(id=1).description.set(None)\nres2 = client.assets.update(another_update)\n\nfrom cognite.client.data_classes import AssetUpdate\nmy_update = AssetUpdate(id=1).metadata.add({\"key\": \"value\"})\nres1 = client.assets.update(my_update)\nanother_update = AssetUpdate(id=1).metadata.set(None)\nanother_update2 = AssetUpdate(id=1).metadata.set({})\nres2 = client.assets.update(another_update)\n\nfrom cognite.client.data_classes import AssetUpdate\nmy_update = AssetUpdate(id=1).labels.add([\"PUMP\", \"VERIFIED\"])\nres = client.assets.update(my_update)\n\nfrom cognite.client.data_classes import AssetUpdate\nmy_update = AssetUpdate(id=1).labels.remove(\"PUMP\")\nres = client.assets.update(my_update)\n\nfrom cognite.client.data_classes import AssetUpdate\nmy_update = AssetUpdate(id=1).labels.set(\"PUMP\")\nres = client.assets.update(my_update)\n"
           },
           {
             "lang": "Java",
@@ -1997,6 +1997,1012 @@
         ]
       }
     },
+    "/api/v1/projects/{project}/functions": {
+      "get": {
+        "tags": [
+          "Functions"
+        ],
+        "summary": "List functions",
+        "operationId": "getFunctions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/LimitQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionList"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "description": "List functions.",
+        "x-capability": [
+          "functionsAcl:READ"
+        ]
+      },
+      "post": {
+        "summary": "Create functions",
+        "operationId": "postFunctions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/FunctionList"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "description": "You can only create one function per request.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "description": "Array of functions to create.",
+                    "maxItems": 1,
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/components/schemas/Function"
+                    }
+                  }
+                },
+                "required": [
+                  "items"
+                ]
+              },
+              "examples": {
+                "Minimal function": {
+                  "value": {
+                    "items": [
+                      {
+                        "name": "My awesome function",
+                        "fileId": 5467347282343
+                      }
+                    ]
+                  }
+                },
+                "With API key": {
+                  "value": {
+                    "items": [
+                      {
+                        "name": "My awesome function",
+                        "fileId": 5467347282343,
+                        "apiKey": "ABCMYKEY"
+                      }
+                    ]
+                  }
+                },
+                "With secrets": {
+                  "value": {
+                    "items": [
+                      {
+                        "name": "My awesome function",
+                        "fileId": 5467347282343,
+                        "secrets": {
+                          "key1": "secret1",
+                          "key2": "secret2"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "Full example": {
+                  "value": {
+                    "items": [
+                      {
+                        "name": "My awesome function",
+                        "description": "This function does some things",
+                        "owner": "user@cognite.com",
+                        "fileId": 5467347282343,
+                        "externalId": "my-function",
+                        "metadata": {
+                          "key1": "value1",
+                          "key2": "value2"
+                        },
+                        "secrets": {
+                          "key1": "secret1",
+                          "key2": "secret2"
+                        },
+                        "functionPath": "myfunction/handler.py",
+                        "envVars": {
+                          "ENV_VAR": "value"
+                        },
+                        "cpu": 0.2,
+                        "memory": 0.4,
+                        "runtime": "py38",
+                        "indexUrl": "https://pypi.org",
+                        "extraIndexUrls": [
+                          "https://user:password@some.index.org"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        },
+        "tags": [
+          "Functions"
+        ],
+        "x-capability": [
+          "functionsAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "function = client.functions.create(name=\"myfunction\", folder=\"path/to/code\", function_path=\"path/to/function.py\")\n\nfunction = client.functions.create(name=\"myfunction\", file_id=123, function_path=\"path/to/function.py\")\n\nfunction = client.functions.create(name=\"myfunction\", function_handle=handle)\n\ndef handle(client, data):\n    \"\"\"\n    [requirements]\n    numpy\n    [/requirements]\n    \"\"\"\n    ...\nfunction = client.functions.create(name=\"myfunction\", function_handle=handle)\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/limits": {
+      "get": {
+        "tags": [
+          "Functions"
+        ],
+        "summary": "Functions limits",
+        "description": "Service limits for the associated project.",
+        "operationId": "functionsLimits",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionsLimits"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "limits = client.functions.limits()\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/list": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        }
+      ],
+      "post": {
+        "summary": "Filter functions",
+        "operationId": "listFunctions",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionList"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "description": "Use advanced filtering options to find functions.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctionListScope"
+              },
+              "examples": {
+                "Filter by status": {
+                  "value": {
+                    "filter": {
+                      "status": "Queued",
+                      "createdTime": {
+                        "min": 10,
+                        "max": 199
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Functions"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "functions_list = client.functions.list()\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/delete": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        }
+      ],
+      "post": {
+        "summary": "Delete functions",
+        "operationId": "deleteFunctions",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/EmptyResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "description": "Delete functions. You can delete a maximum of 10 functions per request. Function source files stored in the Files API must be deleted separately.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctionDeleteRequest"
+              }
+            }
+          }
+        },
+        "tags": [
+          "Functions"
+        ],
+        "x-capability": [
+          "functionsAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.functions.delete(id=[1,2,3], external_id=\"function3\")\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/{functionId}/call": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        },
+        {
+          "$ref": "#/components/parameters/functionId"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Function calls"
+        ],
+        "x-capability": [
+          "functionsAcl:WRITE"
+        ],
+        "summary": "Call a function asynchronously",
+        "operationId": "postFunctionsCall",
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/FunctionCalled"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "description": "Perform a function call. To provide input data to the function, add the data in an object called `data` in the request body. It will be available as the `data` argument into the function. Info about the function call at runtime can be obtained through the `function_call_info` argument if added in the function handle. **WARNING:** Secrets or other confidential information should not be passed via the `data` object. There is a dedicated `secrets` object in the request body to \"Create functions\" for this purpose.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctionCallRequest"
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.ll = client.functions.call(id=1)\n\nfunc = client.functions.retrieve(id=1)\nclient.ll = func.call()\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/{functionId}/calls": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        },
+        {
+          "$ref": "#/components/parameters/functionId"
+        },
+        {
+          "$ref": "#/components/parameters/LimitQuery"
+        },
+        {
+          "$ref": "#/components/parameters/Cursor"
+        }
+      ],
+      "get": {
+        "summary": "List function calls",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionCallListWithCursor"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "operationId": "getFunctionCalls",
+        "description": "List function calls.",
+        "tags": [
+          "Function calls"
+        ],
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "logs = client.functions.calls.get_logs(call_id=2, function_id=1)\n\nclient.ll = client.functions.calls.retrieve(call_id=2, function_id=1)\nlogs = client.ll.get_logs()\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/{functionId}/calls/byids": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        },
+        {
+          "$ref": "#/components/parameters/functionId"
+        }
+      ],
+      "post": {
+        "summary": "Retrieve calls",
+        "requestBody": {
+          "description": "List of IDs of calls to retrieve. Must be up to a maximum of 10000 items and all of them must be unique.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/FunctionCallIds"
+                  },
+                  {
+                    "$ref": "#/components/schemas/IgnoreUnknownIdsField"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionCallList"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "operationId": "byIdsFunctionCalls",
+        "description": "Retrieve function calls by call ids.",
+        "tags": [
+          "Function calls"
+        ],
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.ll = client.functions.calls.retrieve(call_id=2, function_id=1)\n\nfunc = client.functions.retrieve(id=1)\nclient.ll = func.retrieve_call(id=2)\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/{functionId}/calls/{callId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        },
+        {
+          "$ref": "#/components/parameters/callId"
+        },
+        {
+          "$ref": "#/components/parameters/functionId"
+        }
+      ],
+      "get": {
+        "operationId": "getFunctionCall",
+        "description": "Retrieve function calls.",
+        "tags": [
+          "Function calls"
+        ],
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "summary": "Retrieve a function call by its id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionCall"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project}/functions/{functionId}/calls/{callId}/logs": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        },
+        {
+          "$ref": "#/components/parameters/callId"
+        },
+        {
+          "$ref": "#/components/parameters/functionId"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Function calls"
+        ],
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "summary": "Retrieve logs for function call",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionCallLog"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "operationId": "getFunctionCallLogs",
+        "description": "Get logs from a function call."
+      }
+    },
+    "/api/v1/projects/{project}/functions/{functionId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        },
+        {
+          "$ref": "#/components/parameters/functionId"
+        }
+      ],
+      "get": {
+        "operationId": "getFunction",
+        "description": "Retrieve a function by its id. If you want to retrieve functions by names, use Retrieve functions instead.",
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "summary": "Retrieve a function by its id",
+        "tags": [
+          "Functions"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Function"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project}/functions/byids": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Functions"
+        ],
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "description": "Retrieve functions by ids.",
+        "summary": "Retrieve functions",
+        "operationId": "byIdsFunctions",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionList"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctionIdEitherList"
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.functions.retrieve(id=1)\n\nres = client.functions.retrieve(external_id=\"1\")\nres = client.functions.retrieve_multiple(ids=[1, 2, 3])\n\nres = client.functions.retrieve_multiple(external_ids=[\"func1\", \"func2\"])\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/status": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        }
+      ],
+      "post": {
+        "summary": "Activate Functions",
+        "responses": {
+          "202": {
+            "$ref": "#/components/responses/FunctionsActivation"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "operationId": "postFunctionsStatus",
+        "description": "Activate Cognite Functions. This will create the necessary backend infrastructure for Cognite Functions.",
+        "tags": [
+          "Functions"
+        ],
+        "x-capability": [
+          "functionsAcl:WRITE"
+        ]
+      },
+      "get": {
+        "summary": "Get activation status",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionsActivation"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "operationId": "getFunctionsStatus",
+        "description": "Get activation status",
+        "tags": [
+          "Functions"
+        ],
+        "x-capability": [
+          "functionsAcl:READ"
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/schedules": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        }
+      ],
+      "get": {
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LimitQuery"
+          }
+        ],
+        "operationId": "getFunctionSchedules",
+        "description": "List function schedules in project.",
+        "tags": [
+          "Function schedules"
+        ],
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "summary": "List schedules",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionScheduleList"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      },
+      "post": {
+        "description": "Create function schedules. Function schedules trigger asynchronous calls with specific input data, based on a cron expression that determines when these triggers should be fired. Use e.g. http://www.cronmaker.com to be guided on how to generate a cron expression. One of `FunctionId` or `FunctionExternalId` (deprecated) must be set (but not both). When creating a schedule with a session, i.e. with a `nonce`, `FunctionId` must be used. The `nonce` will be used to bind the session before function execution, and the session will be kept alive for the lifetime of the schedule. **WARNING:** Secrets or other confidential information should not be passed via the `data` object. There is a dedicated `secrets` object in the request body to \"Create functions\" for this purpose.",
+        "tags": [
+          "Function schedules"
+        ],
+        "x-capability": [
+          "functionsAcl:WRITE"
+        ],
+        "summary": "Create schedules",
+        "operationId": "postFunctionSchedules",
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/FunctionScheduleCreated"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "items"
+                ],
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "maxItems": 1,
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/components/schemas/FunctionSchedule"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "schedule = client.functions.schedules.create(\n    name= \"My schedule\",\n    function_id=123,\n    cron_expression=\"*/5 * * * *\",\n    client_credentials={\"client_id\": \"...\", \"client_secret\": \"...\"},\n    description=\"This schedule does magic stuff.\"\n)\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/schedules/list": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        }
+      ],
+      "post": {
+        "summary": "Filter function schedules",
+        "operationId": "listFunctionSchedules",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionScheduleList"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "description": "Use advanced filtering options to find function schedules.  At most one of `FunctionId` or `FunctionExternalId` can be specified.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctionScheduleScope"
+              },
+              "examples": {
+                "Filter by status": {
+                  "value": {
+                    "filter": {
+                      "name": "MySchedule",
+                      "cronExpression": "5 4 * * *"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Function schedules"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "schedules = client.functions.schedules.list()\n\nfunc = client.functions.retrieve(id=1)\nschedules = func.list_schedules(limit=None)\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/schedules/{scheduleId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        },
+        {
+          "$ref": "#/components/parameters/scheduleId"
+        }
+      ],
+      "get": {
+        "operationId": "getFunctionSchedule",
+        "description": "Retrieve a function schedule by its id.",
+        "tags": [
+          "Function schedules"
+        ],
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "summary": "Retrieve a function schedule by its id",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionSchedule"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project}/functions/schedules/byids": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        }
+      ],
+      "post": {
+        "summary": "Retrieve schedules",
+        "requestBody": {
+          "description": "List of IDs of schedules to retrieve. Must be up to a maximum of 10000 items and all of them must be unique.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/FunctionScheduleIds"
+                  },
+                  {
+                    "$ref": "#/components/schemas/IgnoreUnknownIdsField"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionScheduleList"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "operationId": "byIdsFunctionSchedules",
+        "description": "Retrieve function schedules by schedule ids.",
+        "tags": [
+          "Function schedules"
+        ],
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.functions.schedules.retrieve(id=1)\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/schedules/delete": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        }
+      ],
+      "post": {
+        "tags": [
+          "Function schedules"
+        ],
+        "x-capability": [
+          "functionsAcl:WRITE"
+        ],
+        "summary": "Delete schedules",
+        "operationId": "deleteFunctionSchedules",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/EmptyResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "description": "Delete function schedules.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctionScheduleIdArray"
+              }
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.functions.schedules.delete(id = 123)\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/schedules/{scheduleId}/input_data": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        },
+        {
+          "$ref": "#/components/parameters/scheduleId"
+        }
+      ],
+      "get": {
+        "operationId": "getFunctionScheduleInputData",
+        "description": "Retrieve the input data to the associated function.",
+        "summary": "Retrieve function input data",
+        "tags": [
+          "Function schedules"
+        ],
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionScheduleDataResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.functions.schedules.get_input_data(id = 123)\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/{functionId}/calls/{callId}/response": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        },
+        {
+          "$ref": "#/components/parameters/callId"
+        },
+        {
+          "$ref": "#/components/parameters/functionId"
+        }
+      ],
+      "get": {
+        "summary": "Retrieve response for function call",
+        "tags": [
+          "Function calls"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionCallResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "operationId": "getFunctionCallResponse",
+        "parameters": [],
+        "description": "Retrieve response from a function call.",
+        "x-capability": [
+          "functionsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "response = client.functions.calls.get_response(call_id=2, function_id=1)\n\nclient.ll = client.functions.calls.retrieve(call_id=2, function_id=1)\nresponse = client.ll.get_response()\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/functions/{functionId}/calls/list": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/project"
+        },
+        {
+          "$ref": "#/components/parameters/functionId"
+        }
+      ],
+      "post": {
+        "summary": "Filter function calls",
+        "operationId": "listFunctionCalls",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/FunctionCallListWithCursor"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "description": "Use advanced filtering options to find function calls.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FunctionCallListScope"
+              },
+              "examples": {
+                "Filter by status": {
+                  "value": {
+                    "filter": {
+                      "status": "Running",
+                      "scheduleId": 123,
+                      "startTime": {
+                        "min": 1234,
+                        "max": 5678
+                      }
+                    },
+                    "limit": 10
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Function calls"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.lls = client.functions.calls.list(function_id=1)\n\nfunc = client.functions.retrieve(id=1)\nclient.lls = func.list_calls()\n"
+          }
+        ]
+      }
+    },
     "/api/v1/projects/{project}/3d/files/{threedFileId}": {
       "get": {
         "tags": [
@@ -2831,7 +3837,7 @@
           {
             "name": "format",
             "in": "query",
-            "description": "Format identifier, e.g. 'ept-pointcloud' (point cloud). Well known formats are: \n'ept-pointcloud' (point cloud data), 'reveal-directory' (output supported by Reveal), \n'nodes-json' (a JSON dump of all nodes in the file) and 'preview-glb' (a GLTF preview\nof the 3D model). In addition, 'all-outputs' can be provided to return all outputs. Note\nthat many of the outputs are internal, where the format might change without any warning.\n",
+            "description": "Format identifier, e.g. 'ept-pointcloud' (point cloud). Well known formats are: \n'ept-pointcloud' (point cloud data) or 'reveal-directory' (output supported by Reveal). \n'all-outputs' can be used to retrieve all outputs for a 3D revision. Note that some of \nthe outputs are internal, where the format and availability might change without warning.\n",
             "schema": {
               "type": "string"
             }
@@ -3003,6 +4009,11 @@
           "threedAcl:READ"
         ],
         "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.three_d.revisions.filter_nodes(model_id=1, revision_id=1, properties={ \"PDMS\": { \"Area\": [\"AB76\", \"AB77\", \"AB78\"], \"Type\": [\"PIPE\", \"BEND\", \"PIPESUP\"] } }, limit=10)\n"
+          },
           {
             "lang": "Java",
             "label": "Java SDK",
@@ -4093,7 +5104,7 @@
           "Time series"
         ],
         "summary": "Retrieve data points",
-        "description": "Retrieves a list of data points from multiple time series in a project. This operation supports aggregation, but not pagination. A detailed description of how aggregates work can be found at [our concept guide for aggregation](<https://docs.cognite.com/dev/concepts/aggregation/>).",
+        "description": "Retrieves a list of data points from multiple time series in a project.\nThis operation supports aggregation, but not pagination.\nA detailed description of how aggregates work can be found at [our concept guide for aggregation](<https://docs.cognite.com/dev/concepts/aggregation/>).\n\nNote: when the 'start' is not specified neither in top level and for individual item it will default to epoch 0 which is Jan 1st, 1970 thus,\nexcluding potential existent datapoints before 1970. 'start' needs to be specified to get datapoints before 1970.",
         "operationId": "getMultiTimeSeriesDatapoints",
         "parameters": [
           {
@@ -5011,7 +6022,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "rows = {\"r1\": {\"col1\": \"val1\", \"col2\": \"val1\"}, \"r2\": {\"col1\": \"val2\", \"col2\": \"val2\"}}\nres = client.raw.rows.insert(\"db1\", \"table1\", rows)\nimport pandas as pd\ndf = pd.DataFrame(data={\"a\": 1, \"b\": 2}, index=[\"r1\", \"r2\", \"r3\"])\nres = client.raw.rows.insert_dataframe(\"db1\", \"table1\", df)\n"
+            "source": "rows = {\"r1\": {\"col1\": \"val1\", \"col2\": \"val1\"}, \"r2\": {\"col1\": \"val2\", \"col2\": \"val2\"}}\nclient.raw.rows.insert(\"db1\", \"table1\", rows)\nimport pandas as pd\ndf = pd.DataFrame(data={\"a\": 1, \"b\": 2}, index=[\"r1\", \"r2\", \"r3\"])\nres = client.raw.rows.insert_dataframe(\"db1\", \"table1\", df)\n"
           },
           {
             "lang": "Java",
@@ -6942,7 +7953,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "res = client.sequences.retrieve(id=1)\nres.description = \"New description\"\nres = client.sequences.update(res)\n\nfrom cognite.client.data_classes import SequenceUpdate\nmy_update = SequenceUpdate(id=1).description.set(\"New description\").metadata.add({\"key\": \"value\"})\nres = client.sequences.update(my_update)\n"
+            "source": "res = client.sequences.retrieve(id=1)\nres.description = \"New description\"\nres = client.sequences.update(res)\n\nfrom cognite.client.data_classes import SequenceUpdate\nmy_update = SequenceUpdate(id=1).description.set(\"New description\").metadata.add({\"key\": \"value\"})\nres = client.sequences.update(my_update)\n\nfrom cognite.client.data_classes import SequenceUpdate\nmy_update = SequenceUpdate(id=1).columns.add({\"valueType\":\"STRING\",\"externalId\":\"user\",\"description\":\"some description\"})\nres = client.sequences.update(my_update)\n\nfrom cognite.client.data_classes import SequenceUpdate\nclient.lumn_def = [{\"valueType\":\"STRING\",\"externalId\":\"user\",\"description\":\"some description\"}, {\"valueType\":\"DOUBLE\",\"externalId\":\"amount\"}]\nmy_update = SequenceUpdate(id=1).columns.add(column_def)\nres = client.sequences.update(my_update)\n\nfrom cognite.client.data_classes import SequenceUpdate\nmy_update = SequenceUpdate(id=1).columns.remove(\"col_external_id1\")\nres = client.sequences.update(my_update)\n\nfrom cognite.client.data_classes import SequenceUpdate\nmy_update = SequenceUpdate(id=1).columns.remove([\"col_external_id1\",\"col_external_id2\"])\nres = client.sequences.update(my_update)\n\nfrom cognite.client.data_classes import SequenceUpdate, SequenceColumnUpdate\nclient.lumn_updates = [                      SequenceColumnUpdate(external_id=\"col_external_id_1\").external_id.set(\"new_col_external_id\"),                      SequenceColumnUpdate(external_id=\"col_external_id_2\").description.set(\"my new description\"),                    ]\nmy_update = SequenceUpdate(id=1).columns.modify(column_updates)\nres = client.sequences.update(my_update)\n"
           },
           {
             "lang": "Java",
@@ -8659,6 +9670,94 @@
         ]
       }
     },
+    "/api/playground/projects/{project}/context/vision/extract": {
+      "post": {
+        "tags": [
+          "Vision"
+        ],
+        "summary": "Extract features from images",
+        "description": "Start an asynchronous prediction job for extracting features such as text, asset tags or industrial objects from images.\nThe response of the POST request contains a job ID, which can be used to make subsequent (GET) calls \nto check the status and retrieve the results of the job \n(see [Retrieve results from a feature extraction job](#operation/getVisionExtract)).\n\nIt is possible to have up to 20 concurrent jobs per CDF project.\n\nThe files referenced by `items` in the request body must fulfill the following requirements:\n\n* Must have file extension: `.jpeg`, `.jpg` or `.png`\n* Must have `image/png` or `image/jpeg` as `mimeType`\n\nNew feature extractors may be added in the future.\n",
+        "operationId": "postVisionExtract",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/cdfversionheader"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/VisionExtractPostRequestSchema"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/VisionExtractPostResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "filesAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const job = await client.vision.extract(['PeopleDetection'], [{ fileId: 123 }]);"
+          },
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "from cognite.experimental.data_classes.vision import Feature\n\nextract_job = client.vision.extract(features=Feature.ASSET_TAG_DETECTION, file_ids=[1])"
+          }
+        ]
+      }
+    },
+    "/api/playground/projects/{project}/context/vision/extract/{jobId}": {
+      "get": {
+        "tags": [
+          "Vision"
+        ],
+        "summary": "Retrieve results from a feature extraction job on images",
+        "description": "Retrieve results from a feature extraction job on images.\n\nNote that since files are split up into batches and processed independently of each other, the items in successfully completed batches will be returned even if files in other batches are still being processed. The job status will be `Running` until all batches have been processed. If one of the items in a batch fails, the results from items in other completed batches will still be returned. The corresponding items and error message(s) of failed batches will be populated in `failedItems`.\nAdditionally, the status of the job is set to `Completed` if at least one batch is successfully completed, otherwise the status is set to `Failed`.\n",
+        "operationId": "getVisionExtract",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/cdfversionheader"
+          },
+          {
+            "$ref": "#/components/parameters/jobId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/VisionExtractGetResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "filesAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "// get an existing job, wait for it to complete, and get the results\nconst { items } = await client.vision.getExtractJob(1, true);\nitems.forEach((item) => {\n  const predictions = item.predictions;\n  // do something with the predictions\n})"
+          },
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Get an existing job, wait for completion and then get the parsed results\nextract_job = client.vision.get_extract_job(job_id=1)\nextract_job.wait_for_completion()\nfor item in extract_job.items:\n    predictions = item.predictions\n    # do something with the predictions"
+          }
+        ]
+      }
+    },
     "/api/v1/projects/{project}/documents/search": {
       "post": {
         "tags": [
@@ -8922,6 +10021,9 @@
             "$ref": "#/components/parameters/project"
           },
           {
+            "$ref": "#/components/parameters/cdfversionheader"
+          },
+          {
             "in": "path",
             "name": "documentId",
             "schema": {
@@ -8973,6 +10075,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/cdfversionheader"
           },
           {
             "in": "path",
@@ -9387,6 +10492,101 @@
         },
         "x-capability": [
           "geospatialAcl:WRITE"
+        ]
+      },
+      "get": {
+        "tags": [
+          "Geospatial"
+        ],
+        "summary": "Get features",
+        "description": "Get features with paging support",
+        "operationId": "getFeatures",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/geospatialFeatureTypeExternalId"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "$ref": "#/components/schemas/SearchLimit"
+            }
+          },
+          {
+            "in": "query",
+            "name": "allowCrsTransformation",
+            "schema": {
+              "$ref": "#/components/schemas/GeospatialAllowCrsTransformation"
+            }
+          },
+          {
+            "in": "query",
+            "name": "allowDimensionalityMismatch",
+            "schema": {
+              "$ref": "#/components/schemas/GeospatialAllowDimensionalityMismatch"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GeospatialFeaturesWithCursorResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/GeospatialErrorResponse"
+          }
+        },
+        "x-capability": [
+          "geospatialAcl:READ"
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/geospatial/featuretypes/{featureTypeExternalId}/features/list": {
+      "post": {
+        "tags": [
+          "Geospatial"
+        ],
+        "summary": "Filter all features",
+        "description": "List features based on the feature property filter passed in the body of the  request. This operation supports pagination by cursor.",
+        "operationId": "listFeatures",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/geospatialFeatureTypeExternalId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeospatialFeatureListRequest"
+              },
+              "examples": {
+                "GeospatialFeatureExternalIdsExample": {
+                  "$ref": "#/components/examples/GeospatialListExample"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GeospatialFeaturesWithCursorResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/GeospatialErrorResponse"
+          }
+        },
+        "x-capability": [
+          "geospatialAcl:READ"
         ]
       }
     },
@@ -9831,7 +11031,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "res = client.extraction_pipelines.list()\n"
+            "source": "ep_list = client.extraction_pipelines.list(limit=5)\n"
           }
         ]
       },
@@ -9886,7 +11086,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "from cognite.client.data_classes import ExtractionPipeline\nep = ExtractionPipeline(external_id=\"py test id\", name=\"py test\", description=\"python generated\", data_set_id=1,\n schedule=\"\", contacts=[{\"name\": \"Name\", \"email\": \"name@test.no\", \"sendNotification\": True}])\nres = client.extraction_pipelines.create(ep)\n"
+            "source": "from cognite.client.data_classes import ExtractionPipeline\nextpipes = [ExtractionPipeline(name=\"extPipe1\",...), ExtractionPipeline(name=\"extPipe2\",...)]\nres = client.extraction_pipelines.create(extpipes)\n"
           },
           {
             "lang": "Java",
@@ -9941,7 +11141,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "client.extraction_pipelines.delete(id=100)\nclient.extraction_pipelines.delete(external_id=[\"a132421\", \"b12321\"])\n"
+            "source": "client.extraction_pipelines.delete(id=[1,2,3], external_id=\"3\")\n"
           },
           {
             "lang": "Java",
@@ -10003,7 +11203,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "res = client.extraction_pipelines.retrieve(id=100)\nres.description = \"New description\"\nres = client.extraction_pipelines.update(res)\n\nOR\n\nfrom cognite.client.data_classes import ExtractionPipelineUpdate\t\nup = ExtractionPipelineUpdate(id=res.id)\nup.description.set(\"Another new entity\")\nup.raw_tables.add([{\"dbName\": \"name\", \"tableName\": \"name\"}])\nup.raw_tables.remove([{\"dbName\": \"old_name\", \"tableName\": \"old_name\"}])\nres = client.extraction_pipelines.update(up)"
+            "source": "update = ExtractionPipelineUpdate(id=1)\nupdate.description.set(\"Another new extpipe\")\nres = client.extraction_pipelines.update(update)\n"
           },
           {
             "lang": "Java",
@@ -10058,7 +11258,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "res = client.extraction_pipelines.retrieve(id=100)\n"
+            "source": "res = client.extraction_pipelines.retrieve(id=1)\n\nres = client.extraction_pipelines.retrieve(external_id=\"1\")\n"
           }
         ]
       }
@@ -10115,7 +11315,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "res = client.extraction_pipelines.retrieve_multiple(ids=[23,24,25, 120], external_ids=['test_id'])\n"
+            "source": "res = client.extraction_pipelines.retrieve_multiple(ids=[1, 2, 3])\n\nres = client.extraction_pipelines.retrieve_multiple(external_ids=[\"abc\", \"def\"], ignore_unknown_ids=True)\n"
           },
           {
             "lang": "Java",
@@ -10175,11 +11375,6 @@
         ],
         "x-code-samples": [
           {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "res = client.extraction_pipelines.list()\n"
-          },
-          {
             "lang": "Java",
             "label": "Java SDK",
             "source": "List<ExtractionPipeline> listPipelinesResults = new ArrayList<>(); \nclient.extractionPipelines() \n          .list(Request.create() \n               .withFilterParameter(\"source\", \"source\")) \n          .forEachRemaining(events -> listPipelinesResults.addAll(events)); \n\n"
@@ -10228,13 +11423,6 @@
         },
         "x-capability": [
           "extractionrunsAcl:READ"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "res = client.extraction_pipeline_runs.list(external_id=\"a132421\")\n"
-          }
         ]
       },
       "post": {
@@ -10288,7 +11476,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "from cognite.client.data_classes import ExtractionPipelineRun\t\nnewRun = client.extraction_pipeline_runs.create(ExtractionPipelineRun(external_id=res1.external_id, status=\"success\"))\nnewFailureRun = client.extraction_pipeline_runs.create(ExtractionPipelineRun(external_id=res1.external_id, status=\"failure\", message=\"Error message\"))\n"
+            "source": "from cognite.client.data_classes import ExtractionPipelineRun\nres = client.extraction_pipeline_runs.create(ExtractionPipelineRun(status=\"success\", external_id=\"extId\"))\n"
           },
           {
             "lang": "Java",
@@ -10350,7 +11538,7 @@
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "res = client.extraction_pipeline_runs.list(external_id=\"external_id\", statuses=['success'])\n"
+            "source": "runsList = client.extraction_pipeline_runs.list(external_id=\"test ext id\", limit=5)\n\nrunsList = client.extraction_pipeline_runs.list(external_id=\"test ext id\", statuses=[\"seen\"], statuslimit=5)\n"
           },
           {
             "lang": "Java",
@@ -10521,7 +11709,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "transformations_list = client.transformations.list()\n"
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -10701,7 +11896,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:WRITE"
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "from cognite.client.data_classes import Transformation, TransformationDestination\ntransformations = [\n    Transformation(\n        name=\"transformation1\",\n        destination=TransformationDestination.assets()\n    ),\n    Transformation(\n        name=\"transformation2\",\n        destination=TransformationDestination.raw(\"myDatabase\", \"myTable\"),\n    ),\n]\nres = client.transformations.create(transformations)\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/byids": {
@@ -10883,7 +12085,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.transformations.retrieve(id=1)\n\nres = client.transformations.retrieve(external_id=\"1\")\nres = client.transformations.retrieve_multiple(ids=[1,2,3], external_ids=['transform-1','transform-2'])\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/filter": {
@@ -11201,7 +12410,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:WRITE"
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.transformations.delete(id=[1,2,3], external_id=\"function3\")\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/update": {
@@ -11383,7 +12599,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:WRITE"
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "transformation = client.transformations.retrieve(id=1)\ntransformation.query = \"SELECT * FROM _cdf.assets\"\nres = client.transformations.update(transformation)\n\nfrom cognite.client.data_classes import TransformationUpdate\nmy_update = TransformationUpdate(id=1).query.set(\"SELECT * FROM _cdf.assets\").is_public.set(False)\nres = client.transformations.update(my_update)\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/run": {
@@ -11518,7 +12741,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:WRITE"
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.transformations.run(transformation_id = 1)\n\nres = client.transformations.run(transformation_id = 1, wait = False)\nimport asyncio\nasync def run_transformation():\n    res = await c.transformations.run_async(id = 1)\nloop = asyncio.get_event_loop()\nloop.run_until_complete(run_transformation())\nloop.close()\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/jobs": {
@@ -11681,7 +12911,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "transformation_jobs_list = client.transformations.jobs.list()\n\ntransformation_jobs_list = client.transformations.jobs.list(transformation_id = 1)\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/jobs/byids": {
@@ -11863,7 +13100,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.transformations.jobs.retrieve(id=1)\nres = client.transformations.jobs.retrieve_multiple(ids=[1, 2, 3])\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/jobs/{id}/metrics": {
@@ -11997,7 +13241,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.transformations.jobs.list_metrics(id=1)\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/cancel": {
@@ -12333,7 +13584,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "schedules_list = client.transformations.schedules.list()\n"
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -12514,7 +13772,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:WRITE"
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "from cognite.client.data_classes import TransformationSchedule\nschedules = [TransformationSchedule(id = 1, interval = \"0 * * * *\"), TransformationSchedule(external_id=\"transformation2\", interval = \"5 * * * *\"))]\nres = client.transformations.schedules.create(schedules)\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/schedules/byids": {
@@ -12697,7 +13962,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.transformations.schedules.retrieve(id=1)\n\nres = client.transformations.schedules.retrieve(external_id=\"1\")\nres = client.transformations.schedules.retrieve_multiple(ids=[1, 2, 3])\n\nres = client.transformations.schedules.retrieve_multiple(external_ids=[\"t1\", \"t2\"])\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/schedules/delete": {
@@ -12880,7 +14152,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:WRITE"
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.transformations.schedules.delete(id=[1,2,3], external_id=\"3\")\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/schedules/update": {
@@ -13062,7 +14341,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:WRITE"
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "transformation_schedule = client.transformations.schedules.retrieve(id=1)\ntransformation_schedule.is_paused = True\nres = client.transformations.update(transformation)\n\nfrom cognite.client.data_classes import TransformationScheduleUpdate\nmy_update = TransformationScheduleUpdate(id=1).interval.set(\"0 * * * *\").is_paused.set(False)\nres = client.transformations.schedules.update(my_update)\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/notifications": {
@@ -13234,7 +14520,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "notifications_list = client.transformations.notifications.list()\n\nnotifications_list = client.transformations.notifications.list(transformation_id = 1)\n"
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -13415,7 +14708,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:WRITE"
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "from cognite.client.data_classes import TransformationNotification\nnotifications = [TransformationNotification(transformation_id = 1, destination=\"my@email.com\"), TransformationNotification(transformation_external_id=\"transformation2\", destination=\"other@email.com\"))]\nres = client.transformations.notifications.create(notifications)\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/notifications/delete": {
@@ -13598,7 +14898,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:WRITE"
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "client.transformations.notifications.delete(id=[1,2,3])\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/schema/{schemaType}": {
@@ -13741,7 +15048,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "from cognite.client.data_classes import TransformationDestination\nclient.lumns = client.transformations.schema.retrieve(destination = TransformationDestination.assets())\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/query/run": {
@@ -13877,7 +15191,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "query_result = client.transformations.preview(query=\"select * from _cdf.assets\")\n\ndf = client.transformations.preview(query=\"select * from _cdf.assets\").to_pandas()\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/annotations": {
@@ -15394,7 +16715,7 @@
             "$ref": "#/components/schemas/RemoveField"
           }
         ],
-        "description": "Set a new value for the string, or remove the value."
+        "description": "Set a new value for the long, or remove the value."
       },
       "ModifyPatchInteger": {
         "title": "modify",
@@ -17930,6 +19251,822 @@
           }
         }
       },
+      "CPURange": {
+        "type": "object",
+        "description": "The number of CPU cores per function exectuion (i.e. function call).",
+        "required": [
+          "min",
+          "max",
+          "default"
+        ],
+        "properties": {
+          "min": {
+            "type": "number",
+            "example": 0.1,
+            "description": "The minimum value you can request when creating a function."
+          },
+          "max": {
+            "type": "number",
+            "example": 0.6,
+            "description": "The maximum value you can request when creating a function."
+          },
+          "default": {
+            "type": "number",
+            "example": 0.25,
+            "description": "The default value when creating a function."
+          }
+        }
+      },
+      "MemoryRange": {
+        "type": "object",
+        "description": "The amount of available memory in GB per function execution (i.e. function call).",
+        "required": [
+          "min",
+          "max",
+          "default"
+        ],
+        "properties": {
+          "min": {
+            "type": "number",
+            "example": 0.1,
+            "description": "The minimum value you can request when creating a function."
+          },
+          "max": {
+            "type": "number",
+            "example": 2.5,
+            "description": "The maximum value you can request when creating a function."
+          },
+          "default": {
+            "type": "number",
+            "example": 1,
+            "description": "The default value when creating a function."
+          }
+        }
+      },
+      "FunctionBuildError": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "description": "Cognite Function API error.",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "HTTP status code.",
+            "format": "int32",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message.",
+            "example": "Could not build function."
+          }
+        }
+      },
+      "FunctionErrorBasic": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "description": "Cognite Function API error.",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "HTTP status code.",
+            "format": "int32",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message.",
+            "example": "Could not authenticate."
+          }
+        }
+      },
+      "FunctionCallError": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "description": "Error occuring due to user's function code.",
+        "properties": {
+          "trace": {
+            "type": "string",
+            "description": "Stack trace of exception, useful for debugging.",
+            "example": "Cannot assign foo to bar."
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message.",
+            "example": "Could not authenticate."
+          }
+        }
+      },
+      "FunctionScheduleCronExpression": {
+        "type": "string",
+        "example": "* * * * *",
+        "maxLength": 1024,
+        "description": "Cron expression describes when the function should be called. Use http://www.cronmaker.com to create a cron expression."
+      },
+      "FunctionScheduleDescription": {
+        "type": "string",
+        "example": "This is a nice schedule",
+        "maxLength": 500,
+        "description": "Description of function schedule."
+      },
+      "FunctionScheduleName": {
+        "type": "string",
+        "description": "Name of function schedule.",
+        "example": "My schedule",
+        "minLength": 1,
+        "maxLength": 140
+      },
+      "FunctionScheduleWhen": {
+        "type": "string",
+        "description": "When the schedule will trigger, in human readable text.",
+        "example": "Every hour"
+      },
+      "SessionId": {
+        "description": "Id of the session.",
+        "type": "string"
+      },
+      "FunctionName": {
+        "type": "string",
+        "description": "The name of the function.",
+        "example": "myfunction",
+        "minLength": 1,
+        "maxLength": 140
+      },
+      "FunctionOwner": {
+        "type": "string",
+        "example": "user@cognite.com",
+        "maxLength": 128,
+        "description": "Owner of this function. Typically used to know who created it."
+      },
+      "FunctionId": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/CogniteInternalId"
+          }
+        },
+        "description": "The ID of the function."
+      },
+      "FunctionExternalId": {
+        "type": "object",
+        "required": [
+          "externalId"
+        ],
+        "properties": {
+          "externalId": {
+            "$ref": "#/components/schemas/CogniteExternalId"
+          }
+        },
+        "description": "The external ID of the function. Should be unique for the project."
+      },
+      "FunctionCallId": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/CogniteInternalId"
+          }
+        }
+      },
+      "FunctionCallIds": {
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FunctionCallId"
+                },
+                "maxItems": 10000,
+                "minItems": 1
+              }
+            }
+          }
+        ]
+      },
+      "FunctionScheduleId": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/CogniteInternalId"
+          }
+        },
+        "description": "The ID of the function schedule."
+      },
+      "FunctionIdEither": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/FunctionId"
+          },
+          {
+            "$ref": "#/components/schemas/FunctionExternalId"
+          }
+        ]
+      },
+      "FunctionScheduleIds": {
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/CogniteInternalId"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "maxItems": 10000,
+                "minItems": 1
+              }
+            }
+          }
+        ]
+      },
+      "FunctionCallStatus": {
+        "type": "string",
+        "description": "Status of the function call.",
+        "enum": [
+          "Running",
+          "Completed",
+          "Failed",
+          "Timeout"
+        ],
+        "example": "Running"
+      },
+      "FunctionStatus": {
+        "type": "string",
+        "enum": [
+          "Queued",
+          "Deploying",
+          "Ready",
+          "Failed"
+        ],
+        "example": "Queued",
+        "description": "Status of the function. It starts in a Queued state, is then Deploying before it is either Ready or Failed. If the function is Ready, it can be called."
+      },
+      "FunctionListScope": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FunctionFilter"
+          },
+          {
+            "$ref": "#/components/schemas/LimitList"
+          }
+        ]
+      },
+      "LimitList": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Limits the number of results to be returned.",
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1,
+            "default": 100
+          }
+        }
+      },
+      "FunctionFilter": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "title": "FunctionFilter",
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/FunctionName"
+              },
+              "owner": {
+                "$ref": "#/components/schemas/FunctionOwner"
+              },
+              "fileId": {
+                "$ref": "#/components/schemas/FunctionFileId"
+              },
+              "status": {
+                "$ref": "#/components/schemas/FunctionStatus"
+              },
+              "externalIdPrefix": {
+                "$ref": "#/components/schemas/CogniteExternalId"
+              },
+              "createdTime": {
+                "$ref": "#/components/schemas/EpochTimestampRange"
+              },
+              "metadata": {
+                "$ref": "#/components/schemas/MetaData"
+              }
+            }
+          }
+        }
+      },
+      "FunctionCallFilter": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "title": "FunctionCallFilter",
+            "type": "object",
+            "properties": {
+              "scheduleId": {
+                "$ref": "#/components/schemas/CogniteInternalId"
+              },
+              "status": {
+                "$ref": "#/components/schemas/FunctionCallStatus"
+              },
+              "startTime": {
+                "$ref": "#/components/schemas/EpochTimestampRange"
+              },
+              "endTime": {
+                "$ref": "#/components/schemas/EpochTimestampRange"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "FunctionCallListScope": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FunctionCallFilter"
+          },
+          {
+            "$ref": "#/components/schemas/LimitList"
+          },
+          {
+            "$ref": "#/components/schemas/Cursor"
+          }
+        ]
+      },
+      "FunctionScheduleFilter": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "title": "FunctionScheduleFilter",
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/FunctionScheduleName"
+              },
+              "FunctionId": {
+                "$ref": "#/components/schemas/CogniteInternalId"
+              },
+              "FunctionExternalId": {
+                "$ref": "#/components/schemas/CogniteExternalId"
+              },
+              "createdTime": {
+                "$ref": "#/components/schemas/EpochTimestampRange"
+              },
+              "cronExpression": {
+                "$ref": "#/components/schemas/FunctionScheduleCronExpression"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "FunctionScheduleScope": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FunctionScheduleFilter"
+          },
+          {
+            "$ref": "#/components/schemas/LimitList"
+          }
+        ]
+      },
+      "FunctionScheduleIdArray": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "maxItems": 10000,
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/FunctionScheduleId"
+            }
+          }
+        }
+      },
+      "FunctionIdEitherList": {
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "maxItems": 10,
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/components/schemas/FunctionIdEither"
+                }
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/IgnoreUnknownIdsField"
+          }
+        ]
+      },
+      "FunctionSchedule": {
+        "allOf": [
+          {
+            "title": "Funtion Schedule",
+            "type": "object",
+            "description": "",
+            "properties": {
+              "id": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/CogniteInternalId"
+                  }
+                ],
+                "readOnly": true
+              },
+              "name": {
+                "$ref": "#/components/schemas/FunctionScheduleName"
+              },
+              "createdTime": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EpochTimestamp"
+                  }
+                ],
+                "readOnly": true
+              },
+              "description": {
+                "$ref": "#/components/schemas/FunctionScheduleDescription"
+              },
+              "cronExpression": {
+                "$ref": "#/components/schemas/FunctionScheduleCronExpression"
+              },
+              "when": {
+                "$ref": "#/components/schemas/FunctionScheduleWhen"
+              },
+              "functionId": {
+                "$ref": "#/components/schemas/CogniteInternalId"
+              },
+              "functionExternalId": {
+                "$ref": "#/components/schemas/CogniteExternalId"
+              },
+              "sessionId": {
+                "$ref": "#/components/schemas/SessionId"
+              },
+              "data": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/data"
+                  }
+                ],
+                "writeOnly": true
+              },
+              "nonce": {
+                "$ref": "#/components/schemas/nonce"
+              }
+            }
+          }
+        ],
+        "required": [
+          "id",
+          "name",
+          "createdTime",
+          "cronExpression",
+          "when",
+          "sessionId"
+        ]
+      },
+      "FunctionCallLogEntry": {
+        "title": "FunctionCallLogEntry",
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "$ref": "#/components/schemas/EpochTimestamp"
+          },
+          "message": {
+            "type": "string",
+            "description": "Single line from stdout / stderr.",
+            "example": "Did something great"
+          }
+        }
+      },
+      "FunctionCall": {
+        "title": "FunctionCall",
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "startTime",
+          "functionId"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/CogniteInternalId"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FunctionCallStatus"
+          },
+          "startTime": {
+            "$ref": "#/components/schemas/EpochTimestamp"
+          },
+          "endTime": {
+            "$ref": "#/components/schemas/EpochTimestamp"
+          },
+          "error": {
+            "$ref": "#/components/schemas/FunctionCallError"
+          },
+          "scheduleId": {
+            "$ref": "#/components/schemas/CogniteInternalId"
+          },
+          "functionId": {
+            "$ref": "#/components/schemas/CogniteInternalId"
+          },
+          "scheduledTime": {
+            "$ref": "#/components/schemas/EpochTimestamp"
+          }
+        }
+      },
+      "FunctionCalls": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FunctionCall"
+            }
+          }
+        }
+      },
+      "FunctionCallsWithCursor": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FunctionCall"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "description": "Cursor to get the next page of results (if available)."
+          }
+        }
+      },
+      "FunctionDeleteRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "maxItems": 10,
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/components/schemas/FunctionIdEither"
+                }
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/IgnoreUnknownIdsField"
+          }
+        ]
+      },
+      "FunctionCallRequest": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/data"
+          },
+          "nonce": {
+            "$ref": "#/components/schemas/nonce"
+          }
+        }
+      },
+      "FunctionFileId": {
+        "description": "The file ID to a file uploaded to Cognite's Files API. This file must be a zip file and contain a file called `handler.py` in the root folder (unless otherwise specified in the `functionPath` argument). This file must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets` and `function_call_info`, which are passed into the function. The zip file can contain other files as well (model binary data, libraries etc).\n\nCustom packages can be pip installed by providing a requirements.txt file in the root of the zip file. The latest version of the Cognite Python SDK is automatically installed. If a specific version is needed, please specify this in the requirements.txt file.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CogniteInternalId"
+          }
+        ]
+      },
+      "MetaData": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        },
+        "description": "Custom, application specific metadata. String key -> String value. Limits: Maximum length of key is 32, value 512 characters, up to 16 key-value pairs. Maximum size of entire metadata is 4096 bytes."
+      },
+      "Function": {
+        "type": "object",
+        "required": [
+          "id",
+          "createdTime",
+          "status",
+          "name",
+          "fileId"
+        ],
+        "properties": {
+          "id": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CogniteInternalId"
+              }
+            ],
+            "readOnly": true
+          },
+          "createdTime": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EpochTimestamp"
+              }
+            ],
+            "readOnly": true,
+            "example": 123455234
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FunctionStatus"
+              }
+            ],
+            "readOnly": true
+          },
+          "name": {
+            "$ref": "#/components/schemas/FunctionName"
+          },
+          "externalId": {
+            "$ref": "#/components/schemas/CogniteExternalId"
+          },
+          "fileId": {
+            "$ref": "#/components/schemas/FunctionFileId"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/FunctionOwner"
+          },
+          "description": {
+            "type": "string",
+            "example": "My fantastic function with advanced ML",
+            "maxLength": 500,
+            "description": "Description of the function."
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/MetaData"
+          },
+          "apiKey": {
+            "type": "string",
+            "description": "(Deprecated) API key that can be used inside the function to access data in CDF. This is deprecated and will be replaced by OIDC tokens. With OIDC tokens, a session is created on behalf of the user/service principal at the point when either (1) the function is called directly, or (2) when a schedule is created for the function. The api-key is returned scrambled if set.",
+            "maxLength": 50,
+            "example": "***"
+          },
+          "secrets": {
+            "type": "object",
+            "description": "Object with additional secrets as key/value pairs. These can e.g. password to simulators or other data sources. Keys must be lowercase characters, numbers or dashes (-) and at most 15 characters. You can create at most 30 secrets, all keys must be unique, and cannot be `apikey`, `indexUrl` or `extraIndexUrls`. The secrets are returned scrambled if set.",
+            "maxProperties": 30,
+            "additionalProperties": {
+              "type": "string"
+            },
+            "example": {
+              "MySecret": "***"
+            }
+          },
+          "functionPath": {
+            "type": "string",
+            "example": "myfunction/handler.py",
+            "maxLength": 500,
+            "description": "Relative path from the root folder to the file containing the `handle` function. Defaults to `handler.py`. Must be on POSIX path format."
+          },
+          "envVars": {
+            "type": "object",
+            "description": "Object with environment variables as key/value pairs. Keys can contain only letters, numbers or the underscore character. You can create at most 100 environment variables.",
+            "maxProperties": 100,
+            "additionalProperties": {
+              "type": "string"
+            },
+            "example": {
+              "MyKey": "MyValue"
+            }
+          },
+          "cpu": {
+            "type": "number",
+            "format": "float",
+            "example": 0.25,
+            "description": "Number of CPU cores per function (not available in Azure). Defaults to 0.25. Allowed values are in the range [0.1, 0.6]."
+          },
+          "memory": {
+            "type": "number",
+            "format": "float",
+            "example": 1,
+            "description": "Memory per function measured in GB (not available in Azure). Defaults to 1. Allowed values are in the range [0.1, 2.5]."
+          },
+          "runtime": {
+            "type": "string",
+            "example": "py38",
+            "default": "py38",
+            "enum": [
+              "py37",
+              "py38",
+              "py39"
+            ],
+            "description": "The runtime of the function. For exmple, runtime \"py38\" translates to the latest version of the Python 3.8 series."
+          },
+          "runtimeVersion": {
+            "type": "string",
+            "example": "Python 3.8.13",
+            "readOnly": true,
+            "description": "The complete specification of the function runtime with major, minor and patch version numbers."
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FunctionBuildError"
+              }
+            ],
+            "readOnly": true
+          },
+          "indexUrl": {
+            "description": "Specify a different python package index, allowing for packages published in private repositories.\nSupports basic HTTP authentication as described in [pip basic authentication](https://pip.pypa.io/en/stable/topics/authentication/#basic-http-authentication).\nSee the\n[documentation](https://docs.cognite.com/cdf/functions/#additional-arguments)\nfor additional information related to the security risks of using this\noption. ",
+            "example": "https://username:password@pypi.company.com/simple",
+            "type": "string",
+            "writeOnly": true
+          },
+          "extraIndexUrls": {
+            "description": "Extra package index URLs to use when building the function, allowing for packages published in private repositories.\nSupports basic HTTP authentication as described in [pip basic\nauthentication](https://pip.pypa.io/en/stable/topics/authentication/#basic-http-authentication).\nSee the\n[documentation](https://docs.cognite.com/cdf/functions/#additional-arguments)\nfor additional information related to the security risks of using this\noption. ",
+            "example": [
+              "https://username:password@pypi.company.com/simple",
+              "https://token@pypi.company.com/simple",
+              "https://pypi.company.com/simple"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "writeOnly": true
+          }
+        }
+      },
+      "data": {
+        "type": "object",
+        "description": "Input data to the function. This data is passed deserialized into the function through one of the arguments called `data`. **WARNING:** Secrets or other confidential information should not be passed via the `data` object. There is a dedicated `secrets` object in the request body to \"Create functions\" for this purpose.'",
+        "example": {
+          "timeSeriesId1": 13435351,
+          "maxValue": 4
+        }
+      },
+      "nonce": {
+        "type": "string",
+        "description": "Nonce retrieved from sessions API when creating a session. This will be used to bind the session before executing the function. The corresponding access token will be passed to the function and used to instantiate the client of the handle() function. You can create a session via the [Sessions API](#operation/createSessions). When using the Python SDK, the session will be created behind the scenes when creating the schedule.",
+        "writeOnly": true
+      },
       "NextCursor": {
         "type": "string",
         "description": "Cursor to get the next page of results (if available)."
@@ -18959,7 +21096,7 @@
               },
               "includeOutsidePoints": {
                 "type": "boolean",
-                "description": "Whether to include the last datapoint before the requested time period, and the first one after. This option is useful for interpolating data. It is not available for aggregates.",
+                "description": "Whether to include the last datapoint before the requested time period, and the first one after. This option can be useful for interpolating data. It is not available for aggregates. Note: If there are more than `limit` datapoints in the time period, we will omit the excess datapoints, and then append the first datapoint after the time period, thus causing a gap with omitted datapoints. When this is the case, we always return `limit+2` datapoints. Paging should be done from the second to last datapoint. That is, from the last datapoint in the requested time period.\n",
                 "default": false
               }
             }
@@ -19041,7 +21178,7 @@
           },
           "includeOutsidePoints": {
             "type": "boolean",
-            "description": "Whether to include the last datapoint before the requested time period,and the first one after. This option can be useful for interpolating data. It is not available for aggregates.",
+            "description": "Whether to include the last datapoint before the requested time period, and the first one after. This option can be useful for interpolating data. It is not available for aggregates. Note: If there are more than `limit` datapoints in the time period, we will omit the excess datapoints, and then append the first datapoint after the time period, thus causing a gap with omitted datapoints. When this is the case, we always return `limit+2` datapoints. Paging should be done from the second to last datapoint. That is, from the last datapoint in the requested time period.\n",
             "default": false
           }
         }
@@ -19187,10 +21324,10 @@
         ],
         "properties": {
           "inclusiveBegin": {
-            "$ref": "#/components/schemas/EpochTimestamp"
+            "$ref": "#/components/schemas/TimeseriesEpochTimestamp"
           },
           "exclusiveEnd": {
-            "$ref": "#/components/schemas/EpochTimestamp"
+            "$ref": "#/components/schemas/TimeseriesEpochTimestamp"
           }
         }
       },
@@ -19402,9 +21539,9 @@
             "type": "object",
             "properties": {
               "timestamp": {
-                "minimum": 31536000000,
+                "minimum": -2208988800000,
                 "maximum": 2556144000000,
-                "description": "The timestamp in milliseconds since the epoch (Jan 1, 1970). Must be between 1971 and 2050, inclusive"
+                "description": "The timestamp in milliseconds since the epoch (Jan 1, 1970). Must be between 1900 and 2050, inclusive"
               },
               "value": {
                 "type": "number",
@@ -19421,9 +21558,9 @@
             "title": "StringDatapoint",
             "properties": {
               "timestamp": {
-                "minimum": 31536000000,
+                "minimum": -2208988800000,
                 "maximum": 2556140400000,
-                "description": "The timestamp in milliseconds since the epoch (Jan 1, 1970). Must be between 1971 and 2050, inclusive"
+                "description": "The timestamp in milliseconds since the epoch (Jan 1, 1970). Must be between 1900 and 2050, inclusive"
               },
               "value": {
                 "maxLength": 255,
@@ -20308,6 +22445,13 @@
             }
           }
         }
+      },
+      "TimeseriesEpochTimestamp": {
+        "description": "The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. Can be negative to define dates before 1970, up to 1900.",
+        "type": "integer",
+        "minimum": -2208988800000,
+        "format": "int64",
+        "example": 1638795554528
       },
       "SyntheticMultiQuery": {
         "type": "object",
@@ -23230,7 +25374,7 @@
       },
       "AzureADConfigurationDTO": {
         "type": "object",
-        "description": "Configuration of Azure AD as the identity provider for the project.\nFor details about how to set up a project with Azure AD as the identity\nprovider, see [this guide](https://docs.cognite.com/cdf/access/guides/configure_cdf_azure.html).\n",
+        "description": "Configuration of Azure AD as the identity provider for the project.\n",
         "required": [
           "appId",
           "appSecret",
@@ -23258,7 +25402,7 @@
       },
       "OAuth2ConfigurationDTO": {
         "type": "object",
-        "description": "Configuration of general OAuth identity providers for the project.\nFor details about how to set up a project with Google as the identity provider, see\n[this guide](https://docs.cognite.com/cdf/access/guides/configure_cdf_google.html).\n",
+        "description": "Configuration of general OAuth identity providers for the project.\n",
         "required": [
           "loginUrl",
           "logoutUrl",
@@ -24670,7 +26814,7 @@
           },
           "rows": {
             "type": "array",
-            "description": "List of row information",
+            "description": "List of rows. The number of rows per request is limited to 10000. The total number of values, including nulls, in a single request is limited to 100000.",
             "items": {
               "$ref": "#/components/schemas/SequenceRowDTO"
             },
@@ -24886,13 +27030,13 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Return only sequences with this *exact* name."
+            "description": "Return only sequences with this name."
           },
           "externalIdPrefix": {
             "$ref": "#/components/schemas/CogniteExternalIdPrefix"
           },
           "metadata": {
-            "description": "Filter the sequences by metadata fields and values (case-sensitive). Format is {\"key1\":\"value1\",\"key2\":\"value2\"}.",
+            "description": "Filter the sequences by metadata fields and values. Format is {\"key1\":\"value1\",\"key2\":\"value2\"}.",
             "example": {
               "key1": "value1",
               "key2": "value2"
@@ -27047,6 +29191,287 @@
           "Timeout"
         ]
       },
+      "VisionFileId": {
+        "type": "integer",
+        "example": 1234,
+        "description": "The ID of a file in CDF.",
+        "format": "int64"
+      },
+      "VisionFileExternalId": {
+        "type": "string",
+        "example": "1234",
+        "description": "The external ID of a file in CDF."
+      },
+      "FileReference": {
+        "type": "object",
+        "required": [
+          "fileId",
+          "fileExternalId"
+        ],
+        "description": "An object containing file (external) id.",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "fileId"
+            ],
+            "properties": {
+              "fileId": {
+                "$ref": "#/components/schemas/VisionFileId"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "fileExternalId"
+            ],
+            "properties": {
+              "fileExternalId": {
+                "$ref": "#/components/schemas/VisionFileExternalId"
+              }
+            }
+          }
+        ]
+      },
+      "VisionAllOfFileId": {
+        "type": "object",
+        "required": [
+          "fileId"
+        ],
+        "properties": {
+          "fileId": {
+            "$ref": "#/components/schemas/VisionFileId"
+          },
+          "fileExternalId": {
+            "$ref": "#/components/schemas/VisionFileExternalId"
+          }
+        }
+      },
+      "FailedBatch": {
+        "description": "List of the items and the corresponding error message(s) per failed batch.",
+        "type": "object",
+        "properties": {
+          "errorMessage": {
+            "type": "string",
+            "description": "The error message(s) of the failed batch."
+          },
+          "items": {
+            "type": "array",
+            "description": "List of the items in the failed batch.",
+            "items": {
+              "$ref": "#/components/schemas/VisionAllOfFileId"
+            }
+          }
+        }
+      },
+      "ThresholdParameter": {
+        "title": "Threshold",
+        "description": "The confidence threshold returns predictions as positive if their confidence score is the selected value or higher. \nA higher confidence threshold increases precision but lowers recall, and vice versa.\n",
+        "type": "number",
+        "example": 0.8,
+        "minimum": 0,
+        "maximum": 1
+      },
+      "TextDetection": {
+        "title": "TextDetection",
+        "description": "Detect text in images.",
+        "type": "string",
+        "enum": [
+          "TextDetection"
+        ]
+      },
+      "AssetTagDetection": {
+        "title": "AssetTagDetection",
+        "description": "Detect external ID or name of assets (from your CDF projects) in images. Usage of this feature requires `[\"assetsAcl:READ\"]` capability.",
+        "type": "string",
+        "enum": [
+          "AssetTagDetection"
+        ]
+      },
+      "PeopleDetection": {
+        "title": "PeopleDetection",
+        "description": "Detect people in images.",
+        "type": "string",
+        "enum": [
+          "PeopleDetection"
+        ]
+      },
+      "IndustrialObjectDetection": {
+        "title": "IndustrialObjectDetection",
+        "description": "Detect industrial objects such as gauges and valves in images. In beta. Available only when the `cdf-version: beta` header is provided.",
+        "type": "string",
+        "enum": [
+          "IndustrialObjectDetection"
+        ]
+      },
+      "PersonalProtectiveEquipmentDetection": {
+        "title": "PersonalProtectiveEquipmentDetection",
+        "description": "Detect personal protective equipment, such as helmet, protective eyewear, and mask in images. In beta. Available only when the `cdf-version: beta` header is provided.",
+        "type": "string",
+        "enum": [
+          "PersonalProtectiveEquipmentDetection"
+        ]
+      },
+      "VisionExtractFeature": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/TextDetection"
+          },
+          {
+            "$ref": "#/components/schemas/AssetTagDetection"
+          },
+          {
+            "$ref": "#/components/schemas/PeopleDetection"
+          },
+          {
+            "$ref": "#/components/schemas/IndustrialObjectDetection"
+          },
+          {
+            "$ref": "#/components/schemas/PersonalProtectiveEquipmentDetection"
+          }
+        ]
+      },
+      "TextDetectionParameters": {
+        "description": "Parameters for text detection",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "AssetTagDetectionParameters": {
+        "description": "Parameters for asset tag detection.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          },
+          "partialMatch": {
+            "description": "Allow partial (fuzzy) matching of detected external IDs in the file. \nWill only match when it is possible to do so unambiguously.\n",
+            "type": "boolean",
+            "default": false,
+            "example": true
+          },
+          "assetSubtreeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Search for external ID or name of assets that are in a subtree rooted at one of \nthe assetSubtreeIds (including the roots given).\n",
+            "example": [
+              1,
+              2
+            ]
+          }
+        }
+      },
+      "PeopleDetectionParameters": {
+        "description": "Parameters for people detection.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "IndustrialObjectDetectionParameters": {
+        "description": "Parameters for industrial object detection. In beta. Available only when the `cdf-version: beta` header is provided.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "PersonalProtectiveEquipmentDetectionParameters": {
+        "description": "Parameters for industrial personal protective equipment detection. In beta. Available only when the `cdf-version: beta` header is provided.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "FeatureParameters": {
+        "description": "Feature-specific parameters. New feature extractor parameters may appear.",
+        "type": "object",
+        "properties": {
+          "textDetectionParameters": {
+            "$ref": "#/components/schemas/TextDetectionParameters"
+          },
+          "assetTagDetectionParameters": {
+            "$ref": "#/components/schemas/AssetTagDetectionParameters"
+          },
+          "peopleDetectionParameters": {
+            "$ref": "#/components/schemas/PeopleDetectionParameters"
+          },
+          "industrialObjectDetectionParameters": {
+            "$ref": "#/components/schemas/IndustrialObjectDetectionParameters"
+          },
+          "personalProtectiveEquipmentDetectionParameters": {
+            "$ref": "#/components/schemas/PersonalProtectiveEquipmentDetectionParameters"
+          }
+        }
+      },
+      "VisionExtractPredictions": {
+        "title": "Predictions",
+        "description": "Detected features in images. New fields may appear in case new feature extractors are add.",
+        "type": "object",
+        "properties": {
+          "textPredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.TextRegion"
+            }
+          },
+          "assetTagPredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.cognite__annotation_types__images__AssetLink"
+            }
+          },
+          "peoplePredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.ObjectDetection"
+            }
+          },
+          "industrialObjectPredictions": {
+            "type": "array",
+            "description": "In beta. Available only when the `cdf-version: beta` header is provided.",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.ObjectDetection"
+            }
+          },
+          "personalProtectiveEquipmentPredictions": {
+            "type": "array",
+            "description": "In beta. Available only when the `cdf-version: beta` header is provided.",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.ObjectDetection"
+            }
+          }
+        }
+      },
+      "VisionExtractItem": {
+        "type": "object",
+        "required": [
+          "fileId",
+          "predictions"
+        ],
+        "properties": {
+          "fileId": {
+            "$ref": "#/components/schemas/VisionFileId"
+          },
+          "fileExternalId": {
+            "$ref": "#/components/schemas/VisionFileExternalId"
+          },
+          "predictions": {
+            "$ref": "#/components/schemas/VisionExtractPredictions"
+          }
+        }
+      },
       "DocumentSearchRequest": {
         "allOf": [
           {
@@ -28660,6 +31085,9 @@
           "externalId": {
             "$ref": "#/components/schemas/GeospatialFeatureTypeExternalId"
           },
+          "dataSetId": {
+            "$ref": "#/components/schemas/DataSetId"
+          },
           "properties": {
             "type": "object",
             "description": "Each property name has to match the following regexp pattern `/^[A-Za-z][A-Za-z0-9_]{0,31}$/`.   The number of properties is limited to 200 per feature type.",
@@ -28711,6 +31139,9 @@
           "update": {
             "type": "object",
             "properties": {
+              "dataSetId": {
+                "$ref": "#/components/schemas/SinglePatchLong"
+              },
               "properties": {
                 "type": "object",
                 "description": "List of properties to be added, deleted or modified in an existing feature type. Each property name has to match the following regexp pattern `/^[A-Za-z][A-Za-z0-9_]{0,31}$/`.   The total number of properties is limited to 100 per feature type. There must not be any property name overlap in `add`, `remove` and `modify` fields.",
@@ -28927,6 +31358,31 @@
           }
         ]
       },
+      "GeospatialFeaturesWithCursor": {
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1000,
+                "items": {
+                  "$ref": "#/components/schemas/GeospatialFeature"
+                }
+              },
+              "nextCursor": {
+                "type": "string",
+                "description": "Cursor to get the next page of results (if available)."
+              }
+            }
+          }
+        ],
+        "description": "A list of objects along with possible cursors to get the next page of results"
+      },
       "GeospatialFeatureIds": {
         "type": "object",
         "required": [
@@ -29048,6 +31504,7 @@
         }
       },
       "GeospatialFeatureProperties": {
+        "type": "object",
         "additionalProperties": {
           "oneOf": [
             {
@@ -29061,6 +31518,12 @@
             },
             {
               "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
             }
           ]
         }
@@ -29078,6 +31541,7 @@
           "DOUBLE",
           "BOOLEAN",
           "TIMESTAMP",
+          "TIMESTAMPTZ",
           "GEOMETRY",
           "POINT",
           "LINESTRING",
@@ -29109,7 +31573,8 @@
           "MULTILINESTRINGZM",
           "MULTIPOLYGONZM",
           "GEOMETRYCOLLECTIONZM",
-          "JSON"
+          "JSON",
+          "LONGARRAY"
         ]
       },
       "GeospatialFeatureSearchResult": {
@@ -29242,6 +31707,33 @@
           "value": {}
         }
       },
+      "GeospatialPropertyAndValues": {
+        "type": "object",
+        "properties": {
+          "property": {
+            "$ref": "#/components/schemas/GeospatialPropertyReference"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            }
+          }
+        }
+      },
       "GeospatialPropertyValueAndDistance": {
         "type": "object",
         "properties": {
@@ -29257,124 +31749,238 @@
       "GeospatialFeatureFilter": {
         "anyOf": [
           {
+            "$ref": "#/components/schemas/GeospatialFeatureNotFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureAndFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureOrFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureEqualsFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureMissingFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureLikeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureRegexFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureRangeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureContainsAnyFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureInFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureStIntersectsFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureStIntersects3dFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureStWithinFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureStWithinProperlyFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureStContainsFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureStContainsProperlyFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureStWithinDistanceFilter"
+          },
+          {
+            "$ref": "#/components/schemas/GeospatialFeatureStWithinDistance3dFilter"
+          }
+        ]
+      },
+      "GeospatialFeatureNotFilter": {
+        "type": "object",
+        "properties": {
+          "not": {
+            "$ref": "#/components/schemas/GeospatialFeatureFilter"
+          }
+        }
+      },
+      "GeospatialFeatureAndFilter": {
+        "type": "object",
+        "properties": {
+          "and": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GeospatialFeatureFilter"
+            }
+          }
+        }
+      },
+      "GeospatialFeatureOrFilter": {
+        "type": "object",
+        "properties": {
+          "or": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GeospatialFeatureFilter"
+            }
+          }
+        }
+      },
+      "GeospatialFeatureEqualsFilter": {
+        "type": "object",
+        "properties": {
+          "equals": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndValue"
+          }
+        }
+      },
+      "GeospatialFeatureMissingFilter": {
+        "type": "object",
+        "properties": {
+          "missing": {
+            "$ref": "#/components/schemas/GeospatialPropertyReference"
+          }
+        }
+      },
+      "GeospatialFeatureLikeFilter": {
+        "type": "object",
+        "description": "Simple pattern maching. Use `_` for single character and `%` for string of any length. Backslash `\\` is an escape character.",
+        "properties": {
+          "like": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndPattern"
+          }
+        }
+      },
+      "GeospatialFeatureRegexFilter": {
+        "type": "object",
+        "description": "Regular expression pattern matching.",
+        "properties": {
+          "regex": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndPattern"
+          }
+        }
+      },
+      "GeospatialFeatureRangeFilter": {
+        "type": "object",
+        "properties": {
+          "range": {
+            "$ref": "#/components/schemas/GeospatialRange"
+          }
+        }
+      },
+      "GeospatialFeatureContainsAnyFilter": {
+        "type": "object",
+        "properties": {
+          "containsAny": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndValues"
+          }
+        }
+      },
+      "GeospatialFeatureInFilter": {
+        "type": "object",
+        "properties": {
+          "in": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndValues"
+          }
+        }
+      },
+      "GeospatialFeatureStWithinFilter": {
+        "type": "object",
+        "properties": {
+          "stWithin": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndValue"
+          }
+        }
+      },
+      "GeospatialFeatureStIntersectsFilter": {
+        "type": "object",
+        "properties": {
+          "stIntersects": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndValue"
+          }
+        }
+      },
+      "GeospatialFeatureStIntersects3dFilter": {
+        "type": "object",
+        "properties": {
+          "stIntersects3d": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndValue"
+          }
+        }
+      },
+      "GeospatialFeatureStWithinProperlyFilter": {
+        "type": "object",
+        "properties": {
+          "stWithinProperly": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndValue"
+          }
+        }
+      },
+      "GeospatialFeatureStContainsFilter": {
+        "type": "object",
+        "properties": {
+          "stContains": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndValue"
+          }
+        }
+      },
+      "GeospatialFeatureStContainsProperlyFilter": {
+        "type": "object",
+        "properties": {
+          "stContainsProperly": {
+            "$ref": "#/components/schemas/GeospatialPropertyAndValue"
+          }
+        }
+      },
+      "GeospatialFeatureStWithinDistanceFilter": {
+        "type": "object",
+        "properties": {
+          "stWithinDistance": {
+            "$ref": "#/components/schemas/GeospatialPropertyValueAndDistance"
+          }
+        }
+      },
+      "GeospatialFeatureStWithinDistance3dFilter": {
+        "type": "object",
+        "properties": {
+          "stWithinDistance3d": {
+            "$ref": "#/components/schemas/GeospatialPropertyValueAndDistance"
+          }
+        }
+      },
+      "GeospatialFeatureListRequest": {
+        "description": "Feature List Request",
+        "allOf": [
+          {
             "type": "object",
             "properties": {
-              "not": {
+              "allowCrsTransformation": {
+                "$ref": "#/components/schemas/GeospatialAllowCrsTransformation"
+              },
+              "allowDimensionalityMismatch": {
+                "$ref": "#/components/schemas/GeospatialAllowDimensionalityMismatch"
+              },
+              "filter": {
                 "$ref": "#/components/schemas/GeospatialFeatureFilter"
+              },
+              "limit": {
+                "$ref": "#/components/schemas/SearchLimit"
+              },
+              "output": {
+                "$ref": "#/components/schemas/GeospatialOutput"
               }
             }
           },
           {
-            "type": "object",
-            "properties": {
-              "and": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/GeospatialFeatureFilter"
-                }
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "or": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/GeospatialFeatureFilter"
-                }
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "equals": {
-                "$ref": "#/components/schemas/GeospatialPropertyAndValue"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "missing": {
-                "$ref": "#/components/schemas/GeospatialPropertyReference"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "description": "Simple pattern maching. Use `_` for single character and `%` for string of any length. Backslash `\\` is an escape character.",
-            "properties": {
-              "like": {
-                "$ref": "#/components/schemas/GeospatialPropertyAndPattern"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "description": "Regular expression pattern matching.",
-            "properties": {
-              "regex": {
-                "$ref": "#/components/schemas/GeospatialPropertyAndPattern"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "range": {
-                "$ref": "#/components/schemas/GeospatialRange"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "stWithin": {
-                "$ref": "#/components/schemas/GeospatialPropertyAndValue"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "stIntersects": {
-                "$ref": "#/components/schemas/GeospatialPropertyAndValue"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "stWithinProperly": {
-                "$ref": "#/components/schemas/GeospatialPropertyAndValue"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "stContains": {
-                "$ref": "#/components/schemas/GeospatialPropertyAndValue"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "stContainsProperly": {
-                "$ref": "#/components/schemas/GeospatialPropertyAndValue"
-              }
-            }
-          },
-          {
-            "type": "object",
-            "properties": {
-              "stWithinDistance": {
-                "$ref": "#/components/schemas/GeospatialPropertyValueAndDistance"
-              }
-            }
+            "$ref": "#/components/schemas/Cursor"
           }
         ]
       },
@@ -29385,11 +31991,14 @@
           "allowCrsTransformation": {
             "$ref": "#/components/schemas/GeospatialAllowCrsTransformation"
           },
+          "allowDimensionalityMismatch": {
+            "$ref": "#/components/schemas/GeospatialAllowDimensionalityMismatch"
+          },
           "filter": {
             "$ref": "#/components/schemas/GeospatialFeatureFilter"
           },
           "limit": {
-            "type": "number"
+            "$ref": "#/components/schemas/SearchLimit"
           },
           "output": {
             "$ref": "#/components/schemas/GeospatialOutput"
@@ -29410,6 +32019,9 @@
           "allowCrsTransformation": {
             "$ref": "#/components/schemas/GeospatialAllowCrsTransformation"
           },
+          "allowDimensionalityMismatch": {
+            "$ref": "#/components/schemas/GeospatialAllowDimensionalityMismatch"
+          },
           "filter": {
             "$ref": "#/components/schemas/GeospatialFeatureFilter"
           },
@@ -29429,6 +32041,9 @@
           "aggregates"
         ],
         "properties": {
+          "allowDimensionalityMismatch": {
+            "$ref": "#/components/schemas/GeospatialAllowDimensionalityMismatch"
+          },
           "filter": {
             "$ref": "#/components/schemas/GeospatialFeatureFilter"
           },
@@ -29462,6 +32077,13 @@
           "groupBy": {
             "type": "array",
             "description": "names of properties to be used for grouping by",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sort": {
+            "type": "array",
+            "description": "Sort result by the selected fields (properties or aggregates). Default sort order is ascending if not specified. Available sort direction: ASC, DESC, ASC_NULLS_FIRST, DESC_NULLS_FIRST, ASC_NULLS_LAST, DESC_NULLS_LAST.",
             "items": {
               "type": "string"
             }
@@ -29639,6 +32261,18 @@
         "type": "boolean",
         "example": true,
         "description": "Optional parameter indicating if input geometry properties should be transformed into the respective Coordinate Reference Systems defined in the feature type specification. If the parameter is true, then input geometries will be transformed when the input and output Coordinate Reference Systems differ. When it is false, then requests with geometries in Coordinate Reference System different from the ones defined in the feature type will result in bad request response code. Transformations apply to property geometries in case of create and update feature, as well as to geometries in spatial filters in search endpoints."
+      },
+      "GeospatialAllowDimensionalityMismatch": {
+        "type": "boolean",
+        "example": true,
+        "description": "Optional parameter indicating if the spatial filter operators allow input geometries with a different dimensionality than the properties they are applied to. For instance, when set to true, if a feature type has a property of type POLYGONZM (4D), its features can be filtered using the `stContains` operator and a POLYGON (2D) value. This option defaults to false if not specified."
+      },
+      "SearchLimit": {
+        "description": "Limits the number of results to be returned.",
+        "type": "integer",
+        "default": 1000,
+        "minimum": 1,
+        "maximum": 1000
       },
       "CreateSessionRequestList": {
         "description": "",
@@ -31287,6 +33921,29 @@
         },
         "description": "Range between two timestamps (inclusive)."
       },
+      "NonceCredentials": {
+        "required": [
+          "sessionId",
+          "nonce",
+          "cdfProjectName"
+        ],
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nonce": {
+            "type": "string"
+          },
+          "cdfProjectName": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          }
+        }
+      },
       "NotificationCreate": {
         "oneOf": [
           {
@@ -31560,6 +34217,25 @@
           }
         }
       },
+      "SessionInfo": {
+        "type": "object",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Idp client ID"
+          },
+          "sessionId": {
+            "type": "integer",
+            "description": "CDF session ID",
+            "format": "int64"
+          },
+          "projectName": {
+            "type": "string",
+            "description": "CDF project name"
+          }
+        },
+        "description": "Details for the session used to read from the source project."
+      },
       "SetNull_FlatOidcCredentialsUpdate": {
         "required": [
           "setNull"
@@ -31572,6 +34248,17 @@
         }
       },
       "SetNull_Long": {
+        "required": [
+          "setNull"
+        ],
+        "type": "object",
+        "properties": {
+          "setNull": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SetNull_NonceCredentials": {
         "required": [
           "setNull"
         ],
@@ -31640,6 +34327,17 @@
           }
         }
       },
+      "SetValue_NonceCredentials": {
+        "required": [
+          "set"
+        ],
+        "type": "object",
+        "properties": {
+          "set": {
+            "$ref": "#/components/schemas/NonceCredentials"
+          }
+        }
+      },
       "SetValue_String": {
         "required": [
           "set"
@@ -31671,6 +34369,17 @@
           },
           {
             "$ref": "#/components/schemas/SetValue_Long"
+          }
+        ]
+      },
+      "Setter_NonceCredentials": {
+        "description": "Bind to a new source CDF session, or remove it",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/SetNull_NonceCredentials"
+          },
+          {
+            "$ref": "#/components/schemas/SetValue_NonceCredentials"
           }
         ]
       },
@@ -31757,6 +34466,12 @@
           },
           "destinationOidcCredentials": {
             "$ref": "#/components/schemas/FlatOidcCredentials"
+          },
+          "sourceNonce": {
+            "$ref": "#/components/schemas/NonceCredentials"
+          },
+          "destinationNonce": {
+            "$ref": "#/components/schemas/NonceCredentials"
           },
           "externalId": {
             "type": "string",
@@ -31906,6 +34621,12 @@
             "type": "boolean",
             "description": "Indicates if the transformation is configured with a destination oidc credentials set."
           },
+          "sourceSession": {
+            "$ref": "#/components/schemas/SessionInfo"
+          },
+          "destinationSession": {
+            "$ref": "#/components/schemas/SessionInfo"
+          },
           "lastFinishedJob": {
             "$ref": "#/components/schemas/JobRead"
           },
@@ -31953,6 +34674,12 @@
           },
           "destinationOidcCredentials": {
             "$ref": "#/components/schemas/Setter_FlatOidcCredentialsUpdate"
+          },
+          "sourceNonce": {
+            "$ref": "#/components/schemas/Setter_NonceCredentials"
+          },
+          "destinationNonce": {
+            "$ref": "#/components/schemas/Setter_NonceCredentials"
           },
           "sourceApiKey": {
             "$ref": "#/components/schemas/Setter_String"
@@ -32619,8 +35346,8 @@
               "discriminator": {
                 "propertyName": "type",
                 "mapping": {
-                  "boolean": "#/components/schemas/Boolean",
-                  "numerical": "#/components/schemas/Numerical"
+                  "boolean": "#/components/schemas/Annotations.Boolean",
+                  "numerical": "#/components/schemas/Annotations.Numerical"
                 }
               },
               "anyOf": [
@@ -32966,8 +35693,8 @@
               "discriminator": {
                 "propertyName": "type",
                 "mapping": {
-                  "boolean": "primitives.yml#/components/schemas/Boolean",
-                  "numerical": "primitives.yml#/components/schemas/Numerical"
+                  "boolean": "#/components/schemas/Annotations.Boolean",
+                  "numerical": "#/components/schemas/Annotations.Numerical"
                 }
               },
               "anyOf": [
@@ -33417,6 +36144,15 @@
       }
     },
     "parameters": {
+      "cdfversionheader": {
+        "in": "header",
+        "name": "cdf-version",
+        "description": "cdf version header. Use this to specify the requested CDF release.",
+        "schema": {
+          "type": "string",
+          "example": "alpha"
+        }
+      },
       "project": {
         "in": "path",
         "name": "project",
@@ -33490,6 +36226,43 @@
         "in": "query",
         "schema": {
           "$ref": "#/components/schemas/FileName"
+        }
+      },
+      "callId": {
+        "schema": {
+          "type": "integer"
+        },
+        "name": "callId",
+        "in": "path",
+        "required": true,
+        "description": "The function call id."
+      },
+      "functionId": {
+        "schema": {
+          "type": "integer"
+        },
+        "name": "functionId",
+        "in": "path",
+        "required": true,
+        "description": "The function id."
+      },
+      "scheduleId": {
+        "schema": {
+          "type": "integer"
+        },
+        "name": "scheduleId",
+        "in": "path",
+        "required": true,
+        "description": "The function schedule id."
+      },
+      "LimitQuery": {
+        "name": "limit",
+        "description": "Limits the number of results to be returned.",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "default": 100,
+          "minimum": 1
         }
       },
       "ModelId": {
@@ -33806,6 +36579,266 @@
           }
         }
       },
+      "FunctionScheduleDataResponse": {
+        "description": "Input data to the associated function.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "data"
+              ],
+              "properties": {
+                "id": {
+                  "$ref": "#/components/schemas/CogniteInternalId"
+                },
+                "data": {
+                  "$ref": "#/components/schemas/data"
+                }
+              }
+            }
+          }
+        }
+      },
+      "FunctionCallResponse": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "response",
+                "functionId",
+                "callId"
+              ],
+              "description": "The function response.",
+              "properties": {
+                "response": {
+                  "type": "object"
+                },
+                "functionId": {
+                  "$ref": "#/components/schemas/CogniteInternalId"
+                },
+                "callId": {
+                  "$ref": "#/components/schemas/CogniteInternalId"
+                }
+              }
+            },
+            "examples": {
+              "Function response example": {
+                "value": {
+                  "response": {
+                    "numAssets": 1234,
+                    "someCalculation": 3.14
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "FunctionScheduleCreated": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items"
+              ],
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FunctionSchedule"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "FunctionScheduleList": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items"
+              ],
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FunctionSchedule"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "FunctionCalled": {
+        "description": "Created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FunctionCall"
+            }
+          }
+        }
+      },
+      "FunctionCallLog": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items"
+              ],
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FunctionCallLogEntry"
+                  }
+                }
+              }
+            },
+            "examples": {
+              "Example response": {
+                "value": {
+                  "items": [
+                    {
+                      "timestamp": 1585350274000,
+                      "message": "Did do fancy thing"
+                    },
+                    {
+                      "timestamp": 1585350276000,
+                      "message": "Did do another fancy thing"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "FunctionCallList": {
+        "description": "List of function calls.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FunctionCalls"
+            }
+          }
+        }
+      },
+      "FunctionCallListWithCursor": {
+        "description": "Paged response with list of function calls.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FunctionCallsWithCursor"
+            }
+          }
+        }
+      },
+      "FunctionList": {
+        "description": "List of functions.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items"
+              ],
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Function"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "FunctionsLimits": {
+        "description": "Limits",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "timeoutMinutes",
+                "cpuCores",
+                "memoryGb",
+                "runtimes",
+                "responseSizeMb"
+              ],
+              "properties": {
+                "timeoutMinutes": {
+                  "type": "integer",
+                  "description": "Timeout of each function call.",
+                  "example": 15
+                },
+                "cpuCores": {
+                  "$ref": "#/components/schemas/CPURange"
+                },
+                "memoryGb": {
+                  "$ref": "#/components/schemas/MemoryRange"
+                },
+                "runtimes": {
+                  "type": "array",
+                  "description": "Available runtimes. For example, runtime \"py38\" translates to the latest version of the Python 3.8 series.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "py37",
+                    "py38",
+                    "py39"
+                  ]
+                },
+                "responseSizeMb": {
+                  "type": "integer",
+                  "description": "Maximum response size of function calls.",
+                  "example": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "FunctionsActivation": {
+        "description": "Functions activation status",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status"
+              ],
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "description": "Signifies whether Cognite Functions have been requested or activated for the project. Set to inactive by default.",
+                  "enum": [
+                    "inactive",
+                    "requested",
+                    "activated"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
       "LoginStatusResponse": {
         "description": "Information about the current logged in entity",
         "content": {
@@ -34048,6 +37081,102 @@
           }
         }
       },
+      "VisionExtractPostResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/StatusSchema"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "jobId",
+                    "items",
+                    "features"
+                  ],
+                  "properties": {
+                    "jobId": {
+                      "$ref": "#/components/schemas/JobId"
+                    },
+                    "items": {
+                      "description": "List of files to be analyzed by the feature extractors.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VisionAllOfFileId"
+                      }
+                    },
+                    "features": {
+                      "type": "array",
+                      "description": "The type of detections to perform. New feature extractors may appear.",
+                      "uniqueItems": true,
+                      "items": {
+                        "$ref": "#/components/schemas/VisionExtractFeature"
+                      },
+                      "example": [
+                        "TextDetection",
+                        "AssetTagDetection",
+                        "IndustrialObjectDetection",
+                        "PeopleDetection",
+                        "PersonalProtectiveEquipmentDetection"
+                      ]
+                    },
+                    "parameters": {
+                      "$ref": "#/components/schemas/FeatureParameters"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "VisionExtractGetResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/StatusSchema"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "jobId",
+                    "items"
+                  ],
+                  "properties": {
+                    "jobId": {
+                      "$ref": "#/components/schemas/JobId"
+                    },
+                    "items": {
+                      "type": "array",
+                      "description": "List of file IDs and their corresponding predictions.",
+                      "items": {
+                        "$ref": "#/components/schemas/VisionExtractItem"
+                      }
+                    },
+                    "failedItems": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FailedBatch"
+                      }
+                    },
+                    "parameters": {
+                      "$ref": "#/components/schemas/FeatureParameters"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
       "DocumentSearchResponse": {
         "description": "The results of a search.",
         "content": {
@@ -34192,6 +37321,21 @@
             "examples": {
               "GeospatialFeaturesResponseExample": {
                 "$ref": "#/components/examples/GeospatialFeaturesResponseExample"
+              }
+            }
+          }
+        }
+      },
+      "GeospatialFeaturesWithCursorResponse": {
+        "description": "Feature list response.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GeospatialFeaturesWithCursor"
+            },
+            "examples": {
+              "GeospatialFeaturesResponseExample": {
+                "$ref": "#/components/examples/GeospatialFeaturesWithCursorResponseExample"
               }
             }
           }
@@ -34376,6 +37520,50 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/updateRelationshipWrapper"
+            }
+          }
+        }
+      },
+      "VisionExtractPostRequestSchema": {
+        "description": "A request for running an extract job.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items",
+                "features"
+              ],
+              "properties": {
+                "items": {
+                  "description": "List of image files to be analyzed by the feature extractors.",
+                  "type": "array",
+                  "minimum": 1,
+                  "maximum": 100,
+                  "items": {
+                    "$ref": "#/components/schemas/FileReference"
+                  }
+                },
+                "features": {
+                  "type": "array",
+                  "description": "The type of detections to perform. New feature extractors may appear.",
+                  "uniqueItems": true,
+                  "items": {
+                    "$ref": "#/components/schemas/VisionExtractFeature"
+                  },
+                  "example": [
+                    "TextDetection",
+                    "AssetTagDetection",
+                    "IndustrialObjectDetection",
+                    "PeopleDetection",
+                    "PersonalProtectiveEquipmentDetection"
+                  ]
+                },
+                "parameters": {
+                  "$ref": "#/components/schemas/FeatureParameters"
+                }
+              }
             }
           }
         }
@@ -34570,8 +37758,8 @@
         "value": {
           "items": [
             {
-              "id": 73567,
               "externalId": "ocean_temperature",
+              "dataSetId": 1278028,
               "createdTime": 1629784673505,
               "lastUpdatedTime": 1629784673505,
               "properties": {
@@ -34672,6 +37860,31 @@
           ]
         }
       },
+      "GeospatialFeaturesWithCursorResponseExample": {
+        "value": {
+          "items": [
+            {
+              "externalId": "measurement_point_765",
+              "temperature": 5.65,
+              "location": {
+                "wkt": "POINT(60.547602 -5.423433)"
+              },
+              "createdTime": 1629784673505,
+              "lastUpdatedTime": 1629784673505
+            },
+            {
+              "externalId": "measurement_point_863",
+              "temperature": 5.03,
+              "location": {
+                "wkt": "POINT(60.585858 -6.474416)"
+              },
+              "createdTime": 1629784673505,
+              "lastUpdatedTime": 1629784673505
+            }
+          ],
+          "nextCursor": "pwGTFXeL-JiWO8CZpgP23g"
+        }
+      },
       "GeospatialFeatureAggregateResponseExample": {
         "value": {
           "items": [
@@ -34700,6 +37913,30 @@
               "externalId": "measurement_point_863"
             }
           ]
+        }
+      },
+      "GeospatialListExample": {
+        "value": {
+          "filter": {
+            "and": [
+              {
+                "range": {
+                  "property": "temperature",
+                  "gt": 4.54
+                }
+              },
+              {
+                "stWithin": {
+                  "property": "location",
+                  "value": {
+                    "wkt": "POLYGON((60.547602 -5.423433, 60.547602 -6.474416, 60.585858 -6.474416, 60.585858 -5.423433, 60.547602 -5.423433))"
+                  }
+                }
+              }
+            ]
+          },
+          "limit": 100,
+          "cursor": "4zj0Vy2fo0NtNMb229mI9r1V3YG5NBL752kQz1cKtwo"
         }
       },
       "GeospatialSearchExample": {
@@ -34783,6 +38020,10 @@
           ],
           "groupBy": [
             "category"
+          ],
+          "sort": [
+            "average:ASC",
+            "category:DESC"
           ]
         }
       },
@@ -34874,7 +38115,8 @@
       "name": "Contextualization",
       "tags": [
         "Entity matching",
-        "Engineering diagrams"
+        "Engineering diagrams",
+        "Vision"
       ]
     },
     {
@@ -34911,6 +38153,14 @@
         "Query",
         "Schema"
       ]
+    },
+    {
+      "name": "Functions",
+      "tags": [
+        "Functions",
+        "Function calls",
+        "Function schedules"
+      ]
     }
   ],
   "tags": [
@@ -34931,12 +38181,24 @@
       "description": "A file stores a sequence of bytes connected to one or more assets. For\nexample, a file can contain a piping and instrumentation diagram (P&IDs)\nshowing how multiple assets are connected.\n\nEach file is identified by the 'id' field, which is generated internally \nfor each new file. Each file's 'id' field is unique within a project.\n\nThe 'externalId' field is optional, but can also be used to identify a file. \nThe 'externalId' (if used) must be unique within a project.\n\nFiles are created in two steps; First the metadata is stored in a file\nobject, and then the file contents are uploaded. This means that files can\nexist in a non-uploaded state. The upload state is reflected in the 'uploaded' \nfield in responses.\n\nAsset references obtained from a file - through asset ids - may be\ninvalid, simply by the non-transactional nature of HTTP.\nThey are maintained in an eventual consistent manner."
     },
     {
+      "name": "Functions",
+      "description": "Functions enables Python code to be hosted and executed in the cloud, on demand or by using a schedule. Execution, status and logs are available through the API. A function is uploaded to the Files API as a zip file with at least a Python file called `handler.py` (unless specified otherwise through the `functionPath`-argument) that must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets`, or 'function_call_info', which are passed into the function. \nThe latest version of Cognite SDK's are available, and additional python packages and version specifications can be defined in a `requirements.txt` in the root of the zip."
+    },
+    {
+      "name": "Function calls",
+      "description": "Function calls let you execute functions asynchronously with a timeout of 15 minutes."
+    },
+    {
+      "name": "Function schedules",
+      "description": "Function schedules allow you to run functions with a specific input at intervals defined by a cron expression. These function calls will be asynchronous and show up in the function call list. Visit http://www.cronmaker.com to generate a cron expression with a UI."
+    },
+    {
       "name": "3D",
       "description": "We organize 3D data into models and revisions. A model is just a placeholder for a set of revisions. Revisions contains the actual 3D data. For example you can have a model named Compressor and you can upload a revision under that model. When you create a revision you need to attach a 3D file. For every new version of the 3D model you upload a new revision under the placeholder model. You can then easily track the history of a model by browsing the different revisions.\n\nWhen you upload a new revision Cognite need to process the 3D data to optimize it for rendering. This can take some time and we therefore give you a status string back in the revision object. You can then follow the process while you wait.\n\nA 3D model is typically built up by a hierarchical structure. This looks very similar to how we organize our internal asset hierarchy. We support endpoints to extract the 3D node hierarchy and endpoints to make mappings from the 3D nodes to nodes in Cognite's asset hierarchy. We assign a random ID, nodeId, to each node in the 3D hierarchy. This is the ID representing the object in the viewer. When a user click on a object in the viewer it returns the ID for the object that was clicked. You can then use that ID to look up which node in the hierarchy the user clicked on.\n\nWe also deliver a [web based 3D viewer](https://www.npmjs.com/package/@cognite/3d-viewer) to embed the 3D model in your own web page."
     },
     {
       "name": "Time series",
-      "description": "A time series consists of a sequence of data points connected to a single asset. \n\nFor example: A water pump asset can have a temperature time series that records a data point in units of °C every second. \n\nA single asset can have several time series. The water pump could have additional time series measuring pressure within the pump, rpm, flow volume, power consumption, and more.\n\nTime series store data points as either number or strings. This is controlled by the is_string flag on the time series object. Numerical data points can be aggregated before they are returned from a query (e.g., to find the average temperature for a day). String data points, on the other hand, cannot be aggregated by CDF, but can store arbitrary information like states (e.g. “open”/”closed”) or more complex information (JSON).\n\nCognite stores discrete data points, but the underlying process measured by the data points can vary continuously. When interpolating between data points, we can either assume that each value stays the same until the next measurement, or that it linearly changes between the two measurements. This is controlled by the is_step flag on the time series object. For example, if we estimate the average over a time containing two data points, the average will either be close to the first (is step) or close to the mean of the two (not is step).\n\nA data point stores a single piece of information, a number or a string, associated with a specific time. Data points are identified by their timestamps, measured in milliseconds since the unix epoch -- 00:00, January 1st, 1970. Milliseconds is the finest time resolution supported by CDF i.e. fractional milliseconds are not supported. Leap seconds are not counted.\n\nNumerical data points can be aggregated before they are retrieved from CDF. This allows for faster queries by reducing the amount of data transferred. You can aggregate data points by specifying one or more aggregates (e.g. average, minimum, maximum) as well as the time granularity over which the aggregates should be applied (e.g. “1h” for one hour).\n\nAggregates are aligned to the start time modulo the granularity unit. For example, if you ask for daily average temperatures since Monday afternoon last week, the first aggregated data point will contain averages for Monday, the second for Tuesday, etc. Determining aggregate alignment without considering data point timestamps allows CDF to pre-calculate aggregates (e.g. to quickly return daily average temperatures for a year). As a consequence, aggregating over 60 minutes can return a different result that aggregating over 1 hour because the two queries will be aligned differently. \n\nAsset references obtained from a time series - through its asset id - may be invalid, simply by the non-transactional nature of HTTP. They are maintained in an eventual consistent manner."
+      "description": "A time series consists of a sequence of data points connected to a single asset. \n\nFor example: A water pump asset can have a temperature time series that records a data point in units of °C every second. \n\nA single asset can have several time series. The water pump could have additional time series measuring pressure within the pump, rpm, flow volume, power consumption, and more.\n\nTime series store data points as either number or strings. This is controlled by the is_string flag on the time series object. Numerical data points can be aggregated before they are returned from a query (e.g., to find the average temperature for a day). String data points, on the other hand, cannot be aggregated by CDF, but can store arbitrary information like states (e.g. “open”/”closed”) or more complex information (JSON).\n\nCognite stores discrete data points, but the underlying process measured by the data points can vary continuously. When interpolating between data points, we can either assume that each value stays the same until the next measurement, or that it linearly changes between the two measurements. This is controlled by the is_step flag on the time series object. For example, if we estimate the average over a time containing two data points, the average will either be close to the first (is step) or close to the mean of the two (not is step).\n\nA data point stores a single piece of information, a number or a string, associated with a specific time. Data points are identified by their timestamps, measured in milliseconds since the unix epoch -- 00:00, January 1st, 1970. Timestamps are in the range from 00:00, January 1st, 1900 to 23:59, December 31st, 2050. Negative timestamps are used to define dates before 1970. Milliseconds is the finest time resolution supported by CDF i.e. fractional milliseconds are not supported. Leap seconds are not counted.\n\nNumerical data points can be aggregated before they are retrieved from CDF. This allows for faster queries by reducing the amount of data transferred. You can aggregate data points by specifying one or more aggregates (e.g. average, minimum, maximum) as well as the time granularity over which the aggregates should be applied (e.g. “1h” for one hour).\n\nAggregates are aligned to the start time modulo the granularity unit. For example, if you ask for daily average temperatures since Monday afternoon last week, the first aggregated data point will contain averages for Monday, the second for Tuesday, etc. Determining aggregate alignment without considering data point timestamps allows CDF to pre-calculate aggregates (e.g. to quickly return daily average temperatures for a year). As a consequence, aggregating over 60 minutes can return a different result that aggregating over 1 hour because the two queries will be aligned differently. \n\nAsset references obtained from a time series - through its asset id - may be invalid, simply by the non-transactional nature of HTTP. They are maintained in an eventual consistent manner."
     },
     {
       "name": "Synthetic Time Series",
@@ -34994,13 +38256,17 @@
       "description": "The entity matching contextualization endpoints lets you match CDF resources.  For example, you can match time series to assets. The model uses similarity between string-fields from the source and the target to find potential matches, for instance the source name and the target name. The exact algorithm may change over time."
     },
     {
+      "name": "Vision",
+      "description": "The Vision contextualization endpoints enable extraction of information from imagery data based on their visual content. For example, you can detect external ID or name of assets, detect and read value of gauges or identify common industrial objects in images. \n\nThis service has support for batch processing which enables processing of multiple image files via an asynchronous prediction request. A new contextualization job is triggered by sending a POST request to the service. The response of the POST request contains a job ID, which can then be used to make subsequent calls to check the status and retrieve the results of the job once it is completed. "
+    },
+    {
       "name": "Documents",
-      "description": "A document is a file that has been indexed by the document search engine.\nEvery time a file is uploaded, updated or deleted in the Files API, it will also\nbe scheduled for processing by the document search engine. After some processing,\nit will be possible to search for the file in the document search API.\n\nThe document search engine is able to extract content from a variety of document\ntypes, and perform classification, contextualization and other operations on the\nfile. This extracted and derived information is made available in the form of a\n`Document` object.\n\nThe document structure consists of a selection of derived fields, such as the\n`title`, `author` and `language` of the document, plus some of the original fields\nfrom the raw file. The fields from the raw file can be found in the\n`sourceFile` structure.\n\n### File type support\nDocuments can be created from the following types of files:\n- PDF files\n- Spreadsheets, documents, and presentations from the Microsoft, Open Office and macOS office suites\n- Plain text files\n- Images"
+      "description": "A document is a file that has been indexed by the document search engine.\nEvery time a file is uploaded, updated or deleted in the Files API, it will also\nbe scheduled for processing by the document search engine. After some processing,\nit will be possible to search for the file in the document search API.\n\nThe document search engine is able to extract content from a variety of document\ntypes, and perform classification, contextualization and other operations on the\nfile. This extracted and derived information is made available in the form of a\n`Document` object.\n\nThe document structure consists of a selection of derived fields, such as the\n`title`, `author` and `language` of the document, plus some of the original fields\nfrom the raw file. The fields from the raw file can be found in the\n`sourceFile` structure.\n\n### File type support\nDocuments can be created from the following types of files:\n- PDF files\n- Spreadsheets, documents, and presentations from the Microsoft, Libre Office and macOS office suites\n- Plain text files\n- Images"
     },
     {
       "name": "Document preview",
       "x-displayName": "Preview",
-      "description": "The document preview service is a utility API that can render most document types as an image or PDF.\nThis can be very helpful if you want to display a preview of a file in a frontend, or for other\ntasks that require one of these formats.\n\nFor both rendered formats there is a concept of a page. The actual meaning of a page depends on\nthe source document. E.g. an image will always have exactly one page, while a spreadsheet\nwill typically have one page representing each individual sheet.\n\nThe document preview service can only generate preview for document sizes that do not\nexceed 150 MiB. Trying to preview a larger document will give an error."
+      "description": "The document preview service is a utility API that can render most document types as an image or PDF.\nThis can be very helpful if you want to display a preview of a file in a frontend, or for other\ntasks that require one of these formats.\n\nFor both rendered formats there is a concept of a page. The actual meaning of a page depends on\nthe source document. E.g. an image will always have exactly one page, while a spreadsheet\nwill typically have one page representing each individual sheet.\n\nThe document preview service can only generate preview for document sizes that do not\nexceed 150 MiB. Trying to preview a larger document will give an error.\n\n### File type support\nPreviews can be created for the following types of files:\n- PDF files\n- Spreadsheets, documents and presentations from the Microsoft and Libre Office office suites\n- Images\n- CAD files (In beta. Available only when the `cdf-version: beta` header is provided.)"
     },
     {
       "name": "Geospatial",
