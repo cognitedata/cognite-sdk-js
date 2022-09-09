@@ -35,8 +35,7 @@ const generateTypesCommand: CommandModule = {
 
 const enableCommand: CommandModule = {
   command: 'enable',
-  describe:
-    'Enable a package or service for type generation',
+  describe: 'Enable a package or service for type generation',
   builder: (yargs) =>
     yargs
       .option('package', packageOptions)
@@ -59,15 +58,12 @@ const enableCommand: CommandModule = {
 
 const disableCommand: CommandModule = {
   command: 'disable',
-  describe:
-    'Disable type generation for a service',
+  describe: 'Disable type generation for a service',
   builder: (yargs) =>
-    yargs
-      .option('package', packageOptions)
-      .option('service', {
-        describe: 'REST service to disable type generation for',
-        type: 'string',
-      }),
+    yargs.option('package', packageOptions).option('service', {
+      describe: 'REST service to disable type generation for',
+      type: 'string',
+    }),
   handler: async (argv) => {
     await cleanupService({
       package: argv.package as string,
