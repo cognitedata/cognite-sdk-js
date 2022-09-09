@@ -15,7 +15,7 @@ const JOB_COMPLETE_STATES: JobStatus[] = ['Completed', 'Failed'];
 
 export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
   /**
-   * [Extract features from image](https://docs.cognite.com/api/playground/#tag/Vision/operation/postVisionExtract)
+   * [Extract features from image](https://docs.cognite.com/api/v1/#tag/Vision/operation/postVisionExtract)
    *
    * ```js
    * const response = await client.vision.extract(["TextDetection"], [{id: 1234}], {textDetectionParameters: {threshold: 0.4}});
@@ -34,7 +34,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
   };
 
   /**
-   * [Retrieve extract job](https://docs.cognite.com/api/playground/#tag/Vision/operation/getVisionExtract)
+   * [Retrieve extract job](https://docs.cognite.com/api/v1/#tag/Vision/operation/getVisionExtract)
    *
    * ```js
    * const job = await client.vision.getExtractJob(12345678);
