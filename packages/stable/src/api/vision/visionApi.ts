@@ -12,6 +12,11 @@ import {
 } from '../../types';
 
 const JOB_COMPLETE_STATES: JobStatus[] = ['Completed', 'Failed'];
+/** @hidden */
+export const BETA_FEATURES: VisionExtractFeature[] = [
+  'IndustrialObjectDetection',
+  'PersonalProtectiveEquipmentDetection',
+];
 
 export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
   /**
@@ -27,8 +32,19 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
     parameters?: FeatureParameters
   ): Promise<VisionExtractPostResponse> => {
     const path = this.url('extract');
+
+    let headers = {};
+    const betaFeatures = features.filter((f) => BETA_FEATURES.includes(f));
+    if (betaFeatures.length > 0) {
+      console.warn(
+        `Features '${betaFeatures}' are in beta and are still in development`
+      );
+      headers = { ...headers, 'cdf-version': 'beta' };
+    }
+
     const response = await this.post<VisionExtractPostResponse>(path, {
       data: { features: features, items: ids, parameters: parameters },
+      headers: headers,
     });
     return this.addToMapAndReturn(response.data, response);
   };

@@ -2,12 +2,14 @@
 
 import { VisionExtractPostResponse } from '@cognite/sdk';
 import CogniteClient from '../../cogniteClient';
+import { BETA_FEATURES } from '../../api/vision/visionApi';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('Vision API', () => {
   const TEST_IMAGE_ID = 4745168244986665;
   let client: CogniteClient;
   let extractJob: VisionExtractPostResponse;
+  let extractBetaJob: VisionExtractPostResponse;
 
   beforeAll(async () => {
     jest.setTimeout(2 * 60 * 1000); // timeout after 2 minutes
@@ -17,6 +19,10 @@ describe('Vision API', () => {
       ['TextDetection'],
       [{ fileId: TEST_IMAGE_ID }],
       { textDetectionParameters: { threshold: 0.4 } }
+    );
+    extractBetaJob = await client.vision.extract(
+      BETA_FEATURES,
+      [{ fileId: TEST_IMAGE_ID }]
     );
   });
 
@@ -33,6 +39,22 @@ describe('Vision API', () => {
     expect(extractJob.parameters!.textDetectionParameters).toEqual({
       threshold: 0.4,
     });
+  });
+
+  test('extract using beta feature', async () => {
+    // Check that the beta flag is correctly used.
+    // Unfortunately, 'cdf-version' is not listed in
+    // access-control-allow-headers, which means we cannot explicitly check for
+    // that the 'cdf-version' entry is set to 'beta'. However, what we instead
+    // can do is to check that the API does not return 400 when a beta feature
+    // is sent.
+    const metadata = client.getMetadata(extractBetaJob);
+    expect(metadata).toBeDefined();
+    expect(metadata?.status).toEqual(200);
+    // Only care that the job is queued with the correct feature. The other
+    // properties are checked for in the test above.
+    expect(extractBetaJob.status).toEqual('Queued');
+    expect(extractBetaJob.features).toEqual(BETA_FEATURES);
   });
 
   describe('retrieve extract job', () => {
