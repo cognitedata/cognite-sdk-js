@@ -20,10 +20,9 @@ describe('Vision API', () => {
       [{ fileId: TEST_IMAGE_ID }],
       { textDetectionParameters: { threshold: 0.4 } }
     );
-    extractBetaJob = await client.vision.extract(
-      BETA_FEATURES,
-      [{ fileId: TEST_IMAGE_ID }]
-    );
+    extractBetaJob = await client.vision.extract(BETA_FEATURES, [
+      { fileId: TEST_IMAGE_ID },
+    ]);
   });
 
   test('extract', async () => {
