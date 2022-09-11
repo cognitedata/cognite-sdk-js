@@ -8,11 +8,13 @@ import { setupLoggedInClient } from '../testUtils';
 describe('Vision API', () => {
   const TEST_IMAGE_ID = 4745168244986665;
   let client: CogniteClient;
+  let consoleSpy: jest.SpyInstance;
   let extractJob: VisionExtractPostResponse;
   let extractBetaJob: VisionExtractPostResponse;
 
   beforeAll(async () => {
     jest.setTimeout(2 * 60 * 1000); // timeout after 2 minutes
+    consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
     client = setupLoggedInClient();
 
     extractJob = await client.vision.extract(
@@ -50,6 +52,9 @@ describe('Vision API', () => {
     const metadata = client.getMetadata(extractBetaJob);
     expect(metadata).toBeDefined();
     expect(metadata?.status).toEqual(200);
+    expect(consoleSpy).toBeCalledWith(
+      `Features '${BETA_FEATURES}' are in beta and are still in development`
+    );
     // Only care that the job is queued with the correct feature. The other
     // properties are checked for in the test above.
     expect(extractBetaJob.status).toEqual('Queued');
