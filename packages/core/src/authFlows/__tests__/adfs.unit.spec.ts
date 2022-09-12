@@ -139,10 +139,7 @@ describe('ADFS', () => {
           accessToken,
           idToken,
           expiresIn: Date.now() + 3600 * 1000,
-        })
-        .mockRejectedValueOnce(
-          'Failed to acquire token silently due X-Frame-Options header deny'
-        );
+        });
 
       const cdfTokenAfterLogin = await adfsClient.login();
       const anotherAdfsClient = new ADFS({ authority, requestParams });
@@ -152,7 +149,22 @@ describe('ADFS', () => {
       expect(cdfTokenAfterLogin).toEqual(accessToken);
       expect(updatedCdfToken).toEqual(accessToken);
     });
+
+    test('should clear token and redirect when calling logout', async () => {
+      const { accessToken, idToken } = authTokens;
+      jest.spyOn(loginUtils, 'silentLoginViaIframe').mockResolvedValueOnce({
+        accessToken,
+        idToken,
+        expiresIn: Date.now() + 3600 * 1000,
+      });
+
+      await adfsClient.login();
+      adfsClient.logout();
+      expect(sessionStorage.length).toBe(0);
+      expect(window.location.href).toBe(`${authority}/logout`);
+    });
   });
+
   describe('handle redirect', () => {
     let adfsClient: ADFS;
 

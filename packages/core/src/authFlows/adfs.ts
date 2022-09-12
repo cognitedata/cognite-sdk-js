@@ -127,6 +127,11 @@ export class ADFS {
     return token ? token.idToken : this.token ? this.token.idToken : null;
   }
 
+  public logout(): void {
+    this.setToken(null);
+    window.location.href = `${this.authority}/logout`;
+  }
+
   /**
    * This method going to work only if 'X-Frame-Options' header
    * set to 'allow-from https://www.example.com' on the ADFS server.
@@ -195,7 +200,7 @@ export class ADFS {
     }, '');
   }
 
-  private setToken(token: ADFSToken | null) {
+  private setToken(token: ADFSToken | null): void {
     this.token = token;
     if (token) {
       sessionStorage.setItem(this.sessionKey, JSON.stringify(token));
