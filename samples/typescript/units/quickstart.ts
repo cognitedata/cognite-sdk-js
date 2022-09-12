@@ -42,14 +42,14 @@ async function quickstart() {
   //   scale: 6,
   // });
 
-  // const converter = new Converter(new UnitDictionariesProcessorImpl());
+  const converter = new Converter(new UnitDictionariesProcessorImpl());
 
-  // const input_unit = 'US_bbl_oil/s';
-  // const output_unit = 'US_gallon/s';
+  const input_unit = 'US_bbl_oil/s';
+  const output_unit = 'US_gallon/s';
 
-  // const res = converter.unitConvert(1, input_unit, output_unit).toPrecision(6);
+  const res = converter.unitConvert(1, input_unit, output_unit).toPrecision(6);
 
-  console.log(res);
+  console.log(`res=${res}`);
 
   // const info = (await client.get('/api/v1/token/inspect')).data;
 
