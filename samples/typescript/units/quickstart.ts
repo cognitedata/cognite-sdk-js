@@ -36,12 +36,18 @@ async function quickstart() {
 
   await client.authenticate();
 
-  const converter = new Converter(new UnitDictionariesProcessorImpl());
+  // const timeseries = client.timeseries.list({
+  //   from: 'US_bbl_oil/s',
+  //   to: 'US_gallon/s',
+  //   scale: 6,
+  // });
 
-  const input_unit = 'US_bbl_oil/s';
-  const output_unit = 'US_gallon/s';
+  // const converter = new Converter(new UnitDictionariesProcessorImpl());
 
-  const res = converter.unitConvert(1, input_unit, output_unit).toPrecision(6);
+  // const input_unit = 'US_bbl_oil/s';
+  // const output_unit = 'US_gallon/s';
+
+  // const res = converter.unitConvert(1, input_unit, output_unit).toPrecision(6);
 
   console.log(res);
 
