@@ -7,8 +7,7 @@ import { HttpCall, HttpQueryParams } from './httpClient/basicHttpClient';
 import { LogoutUrlResponse } from './types';
 import isString from 'lodash/isString';
 import { ClientOptions } from './baseCogniteClient';
-// eslint-disable-next-line lodash/import-scope
-import { isObject } from 'lodash';
+import isObject from 'lodash/isObject';
 import { ClientCredentials } from './credentialsAuth';
 
 const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
@@ -117,7 +116,7 @@ export function parseTokenQueryParameters(query: string): null | AuthTokens {
 
 /** @hidden */
 export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
-  // @ts-ignore we want to return a promise which never gets resolved (window will redirect)
+  // we want to return a promise which never gets resolved (window will redirect)
   return new Promise<void>(() => {
     const url = generateLoginUrl(params);
     window.location.assign(url);
