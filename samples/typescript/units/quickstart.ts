@@ -47,7 +47,7 @@ async function quickstart() {
   const input_unit = 'US_bbl_oil/s';
   const output_unit = 'US_gallon/s';
 
-  const res = converter.unitConvert(2, input_unit, output_unit).toPrecision(6);
+  const res = converter.unitConvert(1, input_unit, output_unit).toPrecision(6);
 
   console.log(`res=${res}`);
 
