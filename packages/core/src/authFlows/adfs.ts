@@ -211,7 +211,7 @@ export class ADFS {
     }
     try {
       const token = JSON.parse(value) as ADFSToken;
-      if (token.expiresIn <= Date.now()) {
+      if (token.expiresIn >= Date.now()) {
         throw new Error(`token expired ${token.expiresIn}`);
       }
       return token;
