@@ -3,17 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [4.6.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.4...@cognite/sdk-core@4.6.5) (2022-09-07)
-
-
-### Bug Fixes
-
-* make sure sessionKey for adfs is consistent across class instances ([#865](https://github.com/cognitedata/cognite-sdk-js/issues/865)) ([31e0d1e](https://github.com/cognitedata/cognite-sdk-js/commit/31e0d1ec961b49a4f3cf06e07f6b2642dc1f81f6))
-
-
-
-
-
 ## [4.6.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.3...@cognite/sdk-core@4.6.4) (2022-09-07)
 
 
