@@ -131,6 +131,70 @@ describe('CogniteClient', () => {
 
         expect(getToken).toHaveBeenCalledTimes(1);
       });
+
+      test('getToken should be called once for parallel 401s', async () => {
+        nock(mockBaseUrl).get('/test').thrice().reply(401);
+        nock(mockBaseUrl).get('/test').thrice().reply(200);
+
+        const mockGetToken = jest.fn(
+          () =>
+            new Promise<string>((resolve) => {
+              setTimeout(() => {
+                resolve('test-token');
+              }, 1000);
+            })
+        );
+
+        const client = new BaseCogniteClient({
+          project,
+          appId: 'unit-test',
+          baseUrl: mockBaseUrl,
+          apiKeyMode: true,
+          getToken: mockGetToken,
+        });
+
+        await Promise.all([
+          client.get('/test'),
+          client.get('/test'),
+          client.get('/test'),
+        ]);
+
+        expect(mockGetToken).toBeCalledTimes(1);
+      });
+
+      test('getToken should be called more than once for sequential 401s', async () => {
+        nock(mockBaseUrl).get('/test').thrice().reply(401);
+        nock(mockBaseUrl).get('/test').thrice().reply(200);
+        nock(mockBaseUrl).get('/test').reply(401);
+        nock(mockBaseUrl).get('/test').reply(200);
+
+        const mockGetToken = jest.fn(
+          () =>
+            new Promise<string>((resolve) => {
+              setTimeout(() => {
+                resolve(`test-token-${Math.floor(Math.random() * 1000)}`);
+              }, 1000);
+            })
+        );
+
+        const client = new BaseCogniteClient({
+          project,
+          appId: 'unit-test',
+          baseUrl: mockBaseUrl,
+          apiKeyMode: true,
+          getToken: mockGetToken,
+        });
+
+        await Promise.all([
+          client.get('/test'),
+          client.get('/test'),
+          client.get('/test'),
+        ]);
+
+        await client.get('/test');
+
+        expect(mockGetToken).toBeCalledTimes(2);
+      });
     });
 
     test('api-key: send api-key on first request', async () => {
