@@ -22,6 +22,9 @@
     "packages/**",
     "samples/**"
   ],
+  "jest": {
+    "testTimeout": 15000
+  },
   "scripts": {
     "allsdk": "lerna run --ignore *-sample",
     "allsamples": "lerna run --scope *-sample",
@@ -43,6 +46,7 @@
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
+    "@commitlint/travis-cli": "^8.2.0",
     "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-typescript": "^5.0.2",
