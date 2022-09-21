@@ -3,17 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [4.6.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.3...@cognite/sdk-core@4.6.4) (2022-09-07)
-
-
-### Bug Fixes
-
-* don't retry 401 requests ([#868](https://github.com/cognitedata/cognite-sdk-js/issues/868)) ([4d17461](https://github.com/cognitedata/cognite-sdk-js/commit/4d174616ccf8ddfafed8a45b64d99e5ceaa06ce7))
-
-
-
-
-
 ## [4.6.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.2...@cognite/sdk-core@4.6.3) (2022-09-06)
 
 
