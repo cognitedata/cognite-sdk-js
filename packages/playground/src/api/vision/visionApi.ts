@@ -1,26 +1,21 @@
 // Copyright 2022 Cognite AS
 
 import { BaseResourceAPI, sleepPromise } from '@cognite/sdk-core';
+import { ContextJobId } from '@cognite/sdk';
 import {
   VisionExtractGetResponse,
   VisionExtractPostResponse,
   VisionExtractFeature,
   FileReference,
   JobStatus,
-  JobId,
   FeatureParameters,
 } from '../../types';
 
 const JOB_COMPLETE_STATES: JobStatus[] = ['Completed', 'Failed'];
-/** @hidden */
-export const BETA_FEATURES: VisionExtractFeature[] = [
-  'IndustrialObjectDetection',
-  'PersonalProtectiveEquipmentDetection',
-];
 
 export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
   /**
-   * [Extract features from image](https://docs.cognite.com/api/v1/#tag/Vision/operation/postVisionExtract)
+   * [Extract features from image](https://docs.cognite.com/api/playground/#tag/Vision/operation/postVisionExtract)
    *
    * ```js
    * const response = await client.vision.extract(["TextDetection"], [{id: 1234}], {textDetectionParameters: {threshold: 0.4}});
@@ -32,32 +27,21 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
     parameters?: FeatureParameters
   ): Promise<VisionExtractPostResponse> => {
     const path = this.url('extract');
-
-    let headers = {};
-    const betaFeatures = features.filter((f) => BETA_FEATURES.includes(f));
-    if (betaFeatures.length > 0) {
-      console.warn(
-        `Features '${betaFeatures}' are in beta and are still in development`
-      );
-      headers = { ...headers, 'cdf-version': 'beta' };
-    }
-
     const response = await this.post<VisionExtractPostResponse>(path, {
       data: { features: features, items: ids, parameters: parameters },
-      headers: headers,
     });
     return this.addToMapAndReturn(response.data, response);
   };
 
   /**
-   * [Retrieve extract job](https://docs.cognite.com/api/v1/#tag/Vision/operation/getVisionExtract)
+   * [Retrieve extract job](https://docs.cognite.com/api/playground/#tag/Vision/operation/getVisionExtract)
    *
    * ```js
    * const job = await client.vision.getExtractJob(12345678);
    * ```
    */
   public getExtractJob = async (
-    jobId: JobId,
+    jobId: ContextJobId,
     waitForCompletion: boolean = true,
     pollingTimeMs: number = 1000,
     maxRetries: number = 600

@@ -3915,6 +3915,78 @@
         }
       }
     },
+    "/api/playground/projects/{project}/context/vision/extract": {
+      "post": {
+        "tags": [
+          "Vision"
+        ],
+        "summary": "Extract features from images",
+        "description": "Start an asynchronous prediction job for extracting features such as text, asset tags or industrial objects from images.\nThe response of the POST request contains a job ID, which can be used to make subsequent (GET) calls \nto check the status and retrieve the results of the job \n(see [Retrieve results from a feature extraction job](#operation/getVisionExtract)).\n\nIt is possible to have up to 20 concurrent jobs per CDF project.\n\nThe files referenced by `items` in the request body must fulfill the following requirements:\n\n* Must have file extension: `.jpeg`, `.jpg` or `.png`\n* Must have `image/png` or `image/jpeg` as `mimeType`\n\nNew feature extractors will be continuously added. \n",
+        "operationId": "postVisionExtract",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/VisionExtractPostRequestSchema"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/VisionExtractPostResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "filesAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "from cognite.experimental.data_classes.vision import Feature\n\nextract_job = client.vision.extract(features=Feature.ASSET_TAG_DETECTION, file_ids=[1])"
+          }
+        ]
+      }
+    },
+    "/api/playground/projects/{project}/context/vision/extract/{jobId}": {
+      "get": {
+        "tags": [
+          "Vision"
+        ],
+        "summary": "Retrieve results from a feature extraction job on images",
+        "description": "Retrieve results from a feature extraction job on images.\n\nNote that since files are split up into batches and processed independently of each other, the items in successfully completed batches will be returned even if files in other batches are still being processed. The job status will be `Running` until all batches have been processed. If one of the items in a batch fails, the results from items in other completed batches will still be returned. The corresponding items and error message(s) of failed batches will be populated in `failedItems`.\nAdditionally, the status of the job is set to `Completed` if at least one batch is successfully completed, otherwise the status is set to `Failed`.\n",
+        "operationId": "getVisionExtract",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/jobId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/VisionExtractGetResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "filesAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "# Get an existing job, wait for completion and then get the parsed results\nextract_job = client.vision.get_extract_job(job_id=1)\nextract_job.wait_for_completion()\nfor item in extract_job.items:\n    predictions = item.predictions\n    # do something with the predictions"
+          }
+        ]
+      }
+    },
     "/api/playground/projects/{project}/context/vision/ocr": {
       "post": {
         "deprecated": true,
@@ -14454,6 +14526,211 @@
           }
         }
       },
+      "ThresholdParameter": {
+        "title": "Threshold",
+        "description": "The confidence threshold returns predictions as positive if their confidence score is the selected value or higher. \nA higher confidence threshold increases precision but lowers recall, and vice versa.\n",
+        "type": "number",
+        "example": 0.8,
+        "minimum": 0,
+        "maximum": 1
+      },
+      "TextDetection": {
+        "title": "TextDetection",
+        "description": "Detect text in images.",
+        "type": "string",
+        "enum": [
+          "TextDetection"
+        ]
+      },
+      "AssetTagDetection": {
+        "title": "AssetTagDetection",
+        "description": "Detect external ID or name of assets (from your CDF projects) in images. Usage of this feature requires `[\"assetsAcl:READ\"]` capability.",
+        "type": "string",
+        "enum": [
+          "AssetTagDetection"
+        ]
+      },
+      "PeopleDetection": {
+        "title": "PeopleDetection",
+        "description": "Detect people in images.",
+        "type": "string",
+        "enum": [
+          "PeopleDetection"
+        ]
+      },
+      "IndustrialObjectDetection": {
+        "title": "IndustrialObjectDetection",
+        "description": "Detect industrial objects such as gauges and valves in images.",
+        "type": "string",
+        "enum": [
+          "IndustrialObjectDetection"
+        ]
+      },
+      "PersonalProtectiveEquipmentDetection": {
+        "title": "PersonalProtectiveEquipmentDetection",
+        "description": "Detect personal protective equipment, such as helmet, protective eyewear, and mask in images.",
+        "type": "string",
+        "enum": [
+          "PersonalProtectiveEquipmentDetection"
+        ]
+      },
+      "VisionExtractFeature": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/TextDetection"
+          },
+          {
+            "$ref": "#/components/schemas/AssetTagDetection"
+          },
+          {
+            "$ref": "#/components/schemas/PeopleDetection"
+          },
+          {
+            "$ref": "#/components/schemas/IndustrialObjectDetection"
+          },
+          {
+            "$ref": "#/components/schemas/PersonalProtectiveEquipmentDetection"
+          }
+        ]
+      },
+      "TextDetectionParameters": {
+        "description": "Parameters for text detection",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "AssetTagDetectionParameters": {
+        "description": "Parameters for asset tag detection.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          },
+          "partialMatch": {
+            "description": "Allow partial (fuzzy) matching of detected external IDs in the file. \nWill only match when it is possible to do so unambiguously.\n",
+            "type": "boolean",
+            "default": false,
+            "example": true
+          },
+          "assetSubtreeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Search for external ID or name of assets that are in a subtree rooted at one of \nthe assetSubtreeIds (including the roots given).\n",
+            "example": [
+              1,
+              2
+            ]
+          }
+        }
+      },
+      "PeopleDetectionParameters": {
+        "description": "Parameters for people detection.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "IndustrialObjectDetectionParameters": {
+        "description": "Parameters for industrial object detection.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "PersonalProtectiveEquipmentDetectionParameters": {
+        "description": "Parameters for industrial personal protective equipment detection.",
+        "type": "object",
+        "properties": {
+          "threshold": {
+            "$ref": "#/components/schemas/ThresholdParameter"
+          }
+        }
+      },
+      "FeatureParameters": {
+        "description": "Feature-specific parameters. New feature extractor parameters may appear.",
+        "type": "object",
+        "properties": {
+          "textDetectionParameters": {
+            "$ref": "#/components/schemas/TextDetectionParameters"
+          },
+          "assetTagDetectionParameters": {
+            "$ref": "#/components/schemas/AssetTagDetectionParameters"
+          },
+          "peopleDetectionParameters": {
+            "$ref": "#/components/schemas/PeopleDetectionParameters"
+          },
+          "industrialObjectDetectionParameters": {
+            "$ref": "#/components/schemas/IndustrialObjectDetectionParameters"
+          },
+          "personalProtectiveEquipmentDetectionParameters": {
+            "$ref": "#/components/schemas/PersonalProtectiveEquipmentDetectionParameters"
+          }
+        }
+      },
+      "VisionExtractPredictions": {
+        "title": "Predictions",
+        "description": "Detected features in images. New fields may appear in case new feature extractors are add.",
+        "type": "object",
+        "properties": {
+          "textPredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.TextRegion"
+            }
+          },
+          "assetTagPredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.cognite__annotation_types__images__AssetLink"
+            }
+          },
+          "industrialObjectPredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.ObjectDetection"
+            }
+          },
+          "peoplePredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.ObjectDetection"
+            }
+          },
+          "personalProtectiveEquipmentPredictions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.ObjectDetection"
+            }
+          }
+        }
+      },
+      "VisionExtractItem": {
+        "type": "object",
+        "required": [
+          "fileId",
+          "predictions"
+        ],
+        "properties": {
+          "fileId": {
+            "$ref": "#/components/schemas/ContextFileId"
+          },
+          "fileExternalId": {
+            "$ref": "#/components/schemas/ContextFileExternalId"
+          },
+          "predictions": {
+            "$ref": "#/components/schemas/VisionExtractPredictions"
+          }
+        }
+      },
       "ConfidenceThresholdMetricSchema": {
         "type": "object",
         "properties": {
@@ -14620,8 +14897,8 @@
               "discriminator": {
                 "propertyName": "type",
                 "mapping": {
-                  "boolean": "#/components/schemas/Annotations.Boolean",
-                  "numerical": "#/components/schemas/Annotations.Numerical"
+                  "boolean": "#/components/schemas/Boolean",
+                  "numerical": "#/components/schemas/Numerical"
                 }
               },
               "anyOf": [
@@ -14967,8 +15244,8 @@
               "discriminator": {
                 "propertyName": "type",
                 "mapping": {
-                  "boolean": "#/components/schemas/Annotations.Boolean",
-                  "numerical": "#/components/schemas/Annotations.Numerical"
+                  "boolean": "primitives.yml#/components/schemas/Boolean",
+                  "numerical": "primitives.yml#/components/schemas/Numerical"
                 }
               },
               "anyOf": [
@@ -18587,15 +18864,6 @@
           "default": true
         }
       },
-      "cdfversionheader": {
-        "in": "header",
-        "name": "cdf-version",
-        "description": "cdf version header. Use this to specify the requested CDF release.",
-        "schema": {
-          "type": "string",
-          "example": "alpha"
-        }
-      },
       "Offset": {
         "name": "offset",
         "description": "Offset from the first result. Sum of limit and offset must not exceed 1000.",
@@ -19065,6 +19333,103 @@
           }
         }
       },
+      "VisionExtractPostResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/StatusSchema"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "jobId",
+                    "items",
+                    "features"
+                  ],
+                  "properties": {
+                    "jobId": {
+                      "$ref": "#/components/schemas/JobId"
+                    },
+                    "items": {
+                      "description": "List of files to be analyzed by the feature extractors.",
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AllOfFileId"
+                      }
+                    },
+                    "features": {
+                      "type": "array",
+                      "description": "The type of detections to perform. New feature extractors may appear.",
+                      "uniqueItems": true,
+                      "items": {
+                        "$ref": "#/components/schemas/VisionExtractFeature"
+                      },
+                      "example": [
+                        "TextDetection",
+                        "AssetTagDetection",
+                        "IndustrialObjectDetection",
+                        "PeopleDetection",
+                        "PersonalProtectiveEquipmentDetection"
+                      ]
+                    },
+                    "parameters": {
+                      "$ref": "#/components/schemas/FeatureParameters"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "VisionExtractGetResponse": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/StatusSchema"
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "jobId",
+                    "items"
+                  ],
+                  "properties": {
+                    "jobId": {
+                      "$ref": "#/components/schemas/JobId"
+                    },
+                    "items": {
+                      "type": "array",
+                      "description": "List of file IDs and their corresponding predictions.",
+                      "items": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/VisionExtractItem"
+                      }
+                    },
+                    "failedItems": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FailedBatch"
+                      }
+                    },
+                    "parameters": {
+                      "$ref": "#/components/schemas/FeatureParameters"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
       "DocumentsClassifiersResponse": {
         "description": "The response for a successful classifier create/list/update operation.",
         "content": {
@@ -19358,6 +19723,52 @@
         "description": "The generated SEG-Y file",
         "content": {
           "application/octet-stream": {}
+        }
+      }
+    },
+    "requestBodies": {
+      "VisionExtractPostRequestSchema": {
+        "description": "A request for running an extract job.",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "items",
+                "features"
+              ],
+              "properties": {
+                "items": {
+                  "description": "List of image files to be analyzed by the feature extractors.",
+                  "type": "array",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "items": {
+                    "$ref": "#/components/schemas/FileReference"
+                  }
+                },
+                "features": {
+                  "type": "array",
+                  "description": "The type of detections to perform. New feature extractors may appear.",
+                  "uniqueItems": true,
+                  "items": {
+                    "$ref": "#/components/schemas/VisionExtractFeature"
+                  },
+                  "example": [
+                    "TextDetection",
+                    "AssetTagDetection",
+                    "IndustrialObjectDetection",
+                    "PeopleDetection",
+                    "PersonalProtectiveEquipmentDetection"
+                  ]
+                },
+                "parameters": {
+                  "$ref": "#/components/schemas/FeatureParameters"
+                }
+              }
+            }
+          }
         }
       }
     }
