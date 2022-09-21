@@ -7,14 +7,16 @@ const _ = require('lodash');
 const fs = require('fs');
 
 function stripMarkdownCodeSnippet(rawCode) {
-  return rawCode.replace('```js', '').replace('```', '').trim();
+  return rawCode
+    .replace('```js', '')
+    .replace('```', '')
+    .trim();
 }
 
 function findAllCodeSnippetsInJsDoc(jsDoc) {
   const codeSnippets = new Map(); // string => string[]
   _.cloneDeepWith(jsDoc, (value, _, object) => {
-    const docRegEx =
-      /https:\/\/(doc.cognitedata.com|docs.cognite.com)\/api\/v1\/#operation\/([a-zA-Z0-9]+)/g;
+    const docRegEx = /https:\/\/(doc.cognitedata.com|docs.cognite.com)\/api\/v1\/#operation\/([a-zA-Z0-9]+)/g;
     let matches;
     while ((matches = docRegEx.exec(value))) {
       const operationId = matches[2];
