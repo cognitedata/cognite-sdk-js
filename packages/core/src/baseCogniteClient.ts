@@ -89,6 +89,14 @@ export default class BaseCogniteClient {
   private readonly credentialsAuth?: CredentialsAuth;
 
   /**
+   * To prevent calling `getToken` method multiple times in parallel, we set
+   * the promise that `getToken` returns to a variable and check its existence
+   * on function calls for `authenticate`.
+   */
+  private tokenPromise?: Promise<string | undefined>;
+  private isTokenPromiseFulfilled?: boolean;
+
+  /**
    * Create a new SDK client
    *
    * @param options Client options
@@ -168,7 +176,12 @@ export default class BaseCogniteClient {
   private authenticateGetToken: () => Promise<string | undefined> =
     async () => {
       try {
-        const token = await this.getToken();
+        if (!this.tokenPromise || this.isTokenPromiseFulfilled) {
+          this.isTokenPromiseFulfilled = false;
+          this.tokenPromise = this.getToken();
+        }
+        const token = await this.tokenPromise;
+        this.isTokenPromiseFulfilled = true;
 
         if (token === undefined) return token;
 
