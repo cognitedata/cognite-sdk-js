@@ -47,6 +47,7 @@ export class CredentialsAuth {
   }
 
   public process() {
+    //intentionally added
     if (this.credentials) {
       if (this.authProvider && isFunction(this.authProvider.requires)) {
         this.authProvider.requires(this.credentials);
