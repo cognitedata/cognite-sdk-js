@@ -106,7 +106,7 @@ export class CDFHttpClient extends RetryableHttpClient {
         return new Promise((resolvePromise, rejectPromise) => {
           const retry = () => resolvePromise(this.request(request));
           const reject = () => rejectPromise(err);
-          this.response401Handler(err, retry, reject);
+          this.response401Handler(err, request, retry, reject);
         });
       }
       throw handleErrorResponse(err);
@@ -122,7 +122,8 @@ export class CDFHttpClient extends RetryableHttpClient {
     };
   }
 
-  private response401Handler: Response401Handler = (_, __, reject) => reject();
+  private response401Handler: Response401Handler = (_, __, ___, reject) =>
+    reject();
 
   private preventTokenLeakage(headers: HttpHeaders, path: string) {
     if (CDFHttpClient.isSameOrigin(this.baseUrl, path)) {
@@ -152,6 +153,7 @@ export class CDFHttpClient extends RetryableHttpClient {
 
 type Response401Handler = (
   err: HttpError,
+  request: HttpRequest,
   retry: () => void,
   reject: () => void
 ) => void;
