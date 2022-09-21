@@ -2,9 +2,9 @@
     <img src="./cognite_logo.png" alt="Cognite logo" title="Cognite" align="right" height="80" />
 </a>
 
-# Cognite Javascript SDK
-
-[![CD status](https://github.com/cognitedata/cognite-sdk-js/actions/workflows/release.yaml/badge.svg)](https://github.com/cognitedata/cognite-sdk-js/actions/workflows/release.yaml)
+Cognite Javascript SDK
+======================
+[![Build Status](https://travis-ci.org/cognitedata/cognite-sdk-js.svg?branch=master)](https://travis-ci.org/cognitedata/cognite-sdk-js)
 [![codecov](https://codecov.io/gh/cognitedata/cognite-sdk-js/branch/master/graph/badge.svg)](https://codecov.io/gh/cognitedata/cognite-sdk-js)
 
 The Cognite js library provides convenient access to the [Cognite API](https://doc.cognitedata.com/dev/) from
@@ -28,7 +28,6 @@ The samples' [README.md](./samples/README.md) has instructions for running the s
 
 We offer two ways to sign in to our SDK. The first and recommended approach is using [@cognite/auth-wrapper](./guides/auth-wrapper.md)
 and the second is using [Microsoft MSAL Library](./guides/auth-wrapper.md)
-
 ## Response header & http status
 
 Methods are design to only return the response body. For fetching the http response status and/or header you must utilize client.getMetadata:
@@ -37,7 +36,7 @@ Methods are design to only return the response body. For fetching the http respo
 const createdAsset = await client.assets.create([{ name: 'My first asset' }]);
 const metadata = client.getMetadata(createdAsset);
 
-console.log(metadata.header['Access-Control-Allow-Origin']);
+console.log(metadata.header["Access-Control-Allow-Origin"]);
 console.log(metadata.status);
 ```
 
@@ -47,7 +46,7 @@ console.log(metadata.status);
 
 ## Development
 
-The SDK is implemented as a package in a monorepo, together with core logic, beta versions and samples.
+The sdk is implemented as a package in a monorepo, together with core logic, beta versions and samples.
 
 ### Contributing
 
@@ -56,9 +55,9 @@ For details about commiting changes, type generation, automated versioning and r
 
 ### Testing
 
-This repo contains some integration tests that require a CDF API key for [cognitesdk-js](https://cognite.fusion.cognite.com/cognitesdk-js/) project.
+This repo contains some integration tests that require a CDF api key for `cognitesdk-js` tenant.
 Talk to any of the contributors or leave an issue and it'll get sorted.
-GitHub Action will run the test and has its own API key.
+Travis will run the test and has its own api key.
 
 Run tests:
 
@@ -67,11 +66,6 @@ yarn
 yarn build
 yarn test --since master
 ```
-
-To run integration tests, you would have to pass the following environment variables:
-
-- **COGNITE_PROJECT**: the CDF project to test against, typically [cognitesdk-js](https://cognite.fusion.cognite.com/cognitesdk-js/).
-- **COGNITE_CREDENTIALS**: an API key for the CDF project.
 
 Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revision integration tests.
 
@@ -85,7 +79,6 @@ Package versions are updated automatically and individually based on commit mess
 ### CHANGELOG
 
 Each package in the monorepo has its own changelog.
-
 - [@cognite/sdk](./packages/stable/CHANGELOG.md)
 - [@cognite/sdk-beta](./packages/beta/CHANGELOG.md)
 - [@cognite/sdk-core](./packages/core/CHANGELOG.md)

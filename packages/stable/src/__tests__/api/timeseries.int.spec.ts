@@ -196,7 +196,7 @@ describe('Timeseries integration test', () => {
   });
 
   test('search', async () => {
-    const name = 'timeserie6';
+    const name = 'test__constant_0_with_noise';
     const result = await client.timeseries.search({
       search: {
         name,
