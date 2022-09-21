@@ -145,10 +145,10 @@ describe('ADFS', () => {
         );
 
       const cdfTokenAfterLogin = await adfsClient.login();
-      const anotherAdfsClient = new ADFS({ authority, requestParams });
-      const updatedCdfToken = await anotherAdfsClient.getCDFToken();
+      sessionStorage.clear();
+      const updatedCdfToken = await adfsClient.getCDFToken();
 
-      expect(silentLogin).toHaveBeenCalledTimes(1);
+      expect(silentLogin).toHaveBeenCalledTimes(2);
       expect(cdfTokenAfterLogin).toEqual(accessToken);
       expect(updatedCdfToken).toEqual(accessToken);
     });
