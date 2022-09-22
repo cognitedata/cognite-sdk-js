@@ -3,14 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [5.8.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.8.3...@cognite/sdk-playground@5.8.4) (2022-09-07)
-
-**Note:** Version bump only for package @cognite/sdk-playground
-
-
-
-
-
 ## [5.8.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.8.2...@cognite/sdk-playground@5.8.3) (2022-09-07)
 
 
