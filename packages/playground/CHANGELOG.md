@@ -3,22 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [5.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.2.3...@cognite/sdk-playground@5.3.0) (2022-06-02)
-
-
-### Features
-
-* automatic token management with @cognite/auth-wrapper  ([#796](https://github.com/cognitedata/cognite-sdk-js/issues/796)) ([d13c53f](https://github.com/cognitedata/cognite-sdk-js/commit/d13c53f9d5a5e65d6e2fc7d1a0e2efe2d36e678c))
-
-
-### Reverts
-
-* Revert "feat: automatic token management with @cognite/auth-wrapper  (#796)" (#813) ([0a8a61c](https://github.com/cognitedata/cognite-sdk-js/commit/0a8a61c2b2c3d992f80b40f6282b20595537edac)), closes [#796](https://github.com/cognitedata/cognite-sdk-js/issues/796) [#813](https://github.com/cognitedata/cognite-sdk-js/issues/813)
-
-
-
-
-
 ## [5.2.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.2.2...@cognite/sdk-playground@5.2.3) (2022-05-27)
 
 **Note:** Version bump only for package @cognite/sdk-playground
