@@ -28,7 +28,6 @@ import { SecurityCategoriesAPI } from './api/securityCategories/securityCategori
 import { SequencesAPI } from './api/sequences/sequencesApi';
 import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
 import { GeospatialAPI } from './api/geospatial/geospatialAPI';
-import { AnnotationsAPI } from './api/annotations/annotationsApi';
 import {
   TemplateGraphQlApi,
   TemplateGroupsApi,
@@ -109,9 +108,6 @@ export default class CogniteClient extends BaseCogniteClient {
   public get documents() {
     return accessApi(this.documentsApi);
   }
-  public get annotations() {
-    return accessApi(this.annotationsApi);
-  }
   public get templates() {
     return {
       groups: accessApi(this.apiFactory(TemplateGroupsApi, 'templategroups')),
@@ -175,7 +171,6 @@ export default class CogniteClient extends BaseCogniteClient {
   private apiKeysApi?: ApiKeysAPI;
   private geospatialApi?: GeospatialAPI;
   private documentsApi?: DocumentsAPI;
-  private annotationsApi?: AnnotationsAPI;
 
   protected get version() {
     return version;
@@ -227,7 +222,6 @@ export default class CogniteClient extends BaseCogniteClient {
     );
     this.geospatialApi = this.apiFactory(GeospatialAPI, 'geospatial');
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
-    this.annotationsApi = this.apiFactory(AnnotationsAPI, 'annotations');
   }
 
   static urlEncodeExternalId(externalId: string): string {

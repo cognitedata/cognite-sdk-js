@@ -1,13 +1,15 @@
 // Copyright 2022 Cognite AS
-import CogniteClient from '../../cogniteClient';
+
+import CogniteClientPlayground from '../../cogniteClientPlayground';
+import { CogniteClient, InternalId } from '@cognite/sdk';
 import { setupLoggedInClient } from '../testUtils';
+import { setupLoggedInClient as stableApiClientSetup } from '../../../../stable/src/__tests__/testUtils';
 import {
   AnnotationChangeById,
   AnnotationCreate,
   AnnotationSuggest,
   AnnotationFilterProps,
-  InternalId,
-} from '../../types';
+} from '@cognite/sdk-playground';
 
 const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();
@@ -53,14 +55,16 @@ function baseAnnotations(annotatedResourceId: number): AnnotationCreate[] {
 }
 
 describe('Annotations API', () => {
-  let client: CogniteClient;
+  let client: CogniteClientPlayground;
+  let stableClient: CogniteClient;
   const createdAnnotationIds: InternalId[] = [];
   let annotatedFileId: number;
 
   beforeAll(async () => {
     client = setupLoggedInClient();
+    stableClient = stableApiClientSetup();
 
-    const fileInfo = await client.files.upload({
+    const fileInfo = await stableClient.files.upload({
       externalId: ANNOTATED_FILE_EXTERNAL_ID,
       name: ANNOTATED_FILE_EXTERNAL_ID,
     });
@@ -74,7 +78,7 @@ describe('Annotations API', () => {
 
   afterAll(async () => {
     await client.annotations.delete(createdAnnotationIds);
-    await client.files.delete([
+    await stableClient.files.delete([
       {
         externalId: ANNOTATED_FILE_EXTERNAL_ID,
       },
