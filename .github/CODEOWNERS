@@ -8,4 +8,3 @@
 /packages/playground/src/__tests__/api/documents* @cognitedata/grep
 /packages/stable/src/api/documents @cognitedata/grep
 /packages/stable/src/__tests__/api/documents* @cognitedata/grep
-/packages/playground/src/api/vision @cognitedata/vision-team
