@@ -1,5 +1,10 @@
 // Copyright 2020 Cognite AS
 
+import {
+  ClientCredentialsAuth,
+  DeviceAuth,
+  PkceAuth,
+} from '@cognite/auth-wrapper';
 import { LoginAPI } from './api/login/loginApi';
 import { LogoutApi } from './api/logout/logoutApi';
 import {
@@ -29,12 +34,11 @@ import {
   verifyCredentialsRequiredFields,
   verifyOptionsRequiredFields,
 } from './loginUtils';
-// eslint-disable-next-line lodash/import-scope
-import { isFunction } from 'lodash';
 
 export interface ClientCredentials {
   method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
   apiKey?: string;
+  implicitToken?: string;
   authority?: string;
   client_id?: string;
   client_secret?: string;
@@ -63,19 +67,10 @@ export interface ClientOptions {
   appId: string;
   /** URL to Cognite cluster, e.g 'https://greenfield.cognitedata.com' **/
   baseUrl?: string;
-  /** Project name */
   project: string;
-  /** Can be used with @cognite/auth-wrapper, passing an api key or with MSAL Library */
   getToken?: () => Promise<string>;
-  /** Retrieve data with apiKey passed at getToken method */
   apiKeyMode?: boolean;
-  /** OIDC/API auth */
-  authentication?: {
-    /** Provider to do the auth job, recommended: @cognite/auth-wrapper */
-    provider?: any;
-    /** IdP Credentials */
-    credentials?: ClientCredentials;
-  };
+  credentials?: ClientCredentials;
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -112,7 +107,6 @@ export default class BaseCogniteClient {
   private readonly getToken: () => Promise<string | undefined>;
   private readonly apiKeyMode: boolean;
   private readonly credentials?: ClientCredentials;
-  private authProvider?: any;
   private readonly tokenCredentials: TokenCredentials = {} as TokenCredentials;
   readonly project: string;
 
@@ -133,48 +127,15 @@ export default class BaseCogniteClient {
   constructor(options: ClientOptions, apiVersion: CogniteAPIVersion = 'v1') {
     verifyOptionsRequiredFields(options);
 
-    if (options && !options.authentication?.credentials && !options.getToken) {
+    if (options && !options.credentials && !options.getToken) {
       throw Error(
-        'options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>'
+        'options.credentials is required or options.getToken is request and must be of type () => Promise<string>'
       );
     }
 
-    if (options && options.authentication) {
-      const { credentials, provider } = options.authentication;
-
-      if (credentials) {
-        this.credentials = credentials;
-        verifyCredentialsRequiredFields(credentials);
-
-        if (this.credentials?.method !== 'api' && !provider) {
-          throw Error(
-            'options.authentication.provider is required and must be a class that implements a static load method and can call a login method.'
-          );
-        }
-      }
-
-      if (provider && !isFunction(provider.load)) {
-        throw Error('The provider needs to have a load method.');
-      }
-
-      if (provider && !isFunction(provider.load().login)) {
-        throw Error(
-          'The provider load method needs to can call a login method.'
-        );
-      }
-
-      if (provider !== undefined) {
-        if (
-          !provider.load(true, true).method &&
-          !provider.load(true, true).settings
-        ) {
-          throw Error(
-            'Please, use the recommended provider: @cognite/auth-wrapper'
-          );
-        }
-
-        this.authProvider = provider;
-      }
+    if (options && options.credentials) {
+      this.credentials = options.credentials;
+      verifyCredentialsRequiredFields(options.credentials);
     }
 
     if (isBrowser() && !isUsingSSL()) {
@@ -256,21 +217,37 @@ export default class BaseCogniteClient {
           this.tokenCredentials.access_token = '';
         }
 
-        // @ts-ignore
-        this.tokenCredentials = await this.authProvider
-          .load(this.credentials.method, this.credentials)
-          .login(
-            (this.credentials.method === 'device' ||
-              this.credentials.method === 'pkce') &&
-              this.tokenCredentials.refresh_token
+        if (this.credentials.method === 'client_credentials') {
+          // @ts-ignore
+          this.tokenCredentials = await ClientCredentialsAuth.load(
+            // @ts-ignore
+            this.credentials
+          ).login();
+        }
+
+        if (this.credentials.method === 'device') {
+          // @ts-ignore
+          this.tokenCredentials = await DeviceAuth.load(this.credentials).login(
+            this.tokenCredentials.refresh_token
           );
+        }
+
+        if (this.credentials.method === 'pkce') {
+          // @ts-ignore
+          this.tokenCredentials = await PkceAuth.load(this.credentials).login(
+            this.tokenCredentials.refresh_token
+          );
+        }
 
         let token;
         if (
           this.tokenCredentials.access_token !== undefined &&
           this.tokenCredentials.access_token !== ''
         ) {
-          token = this.tokenCredentials.access_token;
+          token =
+            this.credentials.method === 'implicit'
+              ? this.credentials.implicitToken
+              : this.tokenCredentials.access_token;
 
           this.httpClient.setDefaultHeader(
             AUTHORIZATION_HEADER,
