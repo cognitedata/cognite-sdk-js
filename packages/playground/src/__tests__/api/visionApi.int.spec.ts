@@ -15,8 +15,7 @@ describe('Vision API', () => {
 
     extractJob = await playgroundClient.vision.extract(
       ['TextDetection'],
-      [{ fileId: TEST_IMAGE_ID }],
-      { textDetectionParameters: { threshold: 0.4 } }
+      [{ fileId: TEST_IMAGE_ID }]
     );
   });
 
@@ -29,10 +28,6 @@ describe('Vision API', () => {
     expect(extractJob.items).toEqual([
       { fileId: TEST_IMAGE_ID, fileExternalId: 'vision_extract_test_image' },
     ]);
-    expect(extractJob.parameters).toBeDefined();
-    expect(extractJob.parameters!.textDetectionParameters).toEqual({
-      threshold: 0.4,
-    });
   });
 
   describe('retrieve extract job', () => {
@@ -70,9 +65,7 @@ describe('Vision API', () => {
       // we care in the following checks is that the *data structure* is
       // correctly filled.
       expect(result.parameters).toBeDefined();
-      expect(result.parameters!.textDetectionParameters).toEqual({
-        threshold: 0.4,
-      });
+      expect(result.parameters!.textDetectionParameters).toBeDefined();
 
       expect(result.items?.length).toBeGreaterThan(0);
       const resultItem = result.items![0];
