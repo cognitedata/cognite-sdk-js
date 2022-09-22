@@ -1,14 +1,17 @@
 // Copyright 2022 Cognite AS
 
 import {
+  CogniteExternalId,
   CogniteInternalId,
   FilterQuery,
   IdEither,
   InternalId,
   SetField,
+  SinglePatch,
 } from '@cognite/sdk';
 
 export type AnnotatedResourceType = 'file';
+export type LinkedResourceType = 'file' | 'asset';
 export type AnnotationStatus = 'suggested' | 'approved' | 'rejected';
 
 // TODO [CXT-463] Use annotation-types package definitions
@@ -33,6 +36,9 @@ export interface AnnotationSuggest {
   creatingAppVersion: string;
   creatingUser: string | null;
   data: AnnotationPayload;
+  linkedResourceType?: LinkedResourceType;
+  linkedResourceId?: CogniteInternalId;
+  linkedResourceExternalId?: CogniteExternalId;
 }
 
 export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
@@ -41,6 +47,9 @@ export interface AnnotationUpdate {
   update: {
     annotationType?: SetField<AnnotationType>;
     data?: SetField<AnnotationPayload>;
+    linkedResourceType?: SinglePatch<LinkedResourceType>;
+    linkedResourceId?: SinglePatch<CogniteInternalId>;
+    linkedResourceExternalId?: SinglePatch<CogniteExternalId>;
     status?: SetField<AnnotationStatus>;
   };
 }
@@ -60,6 +69,8 @@ export interface AnnotationFilterProps {
   creatingApp?: string;
   creatingAppVersion?: string;
   creatingUser?: string | null;
+  linkedResourceType?: LinkedResourceType;
+  linkedResourceIds?: IdEither[];
   status?: AnnotationStatus;
   data?: AnnotationPayload;
 }
