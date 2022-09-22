@@ -125,6 +125,7 @@ export default class BaseCogniteClient {
    * ```
    */
   constructor(options: ClientOptions, apiVersion: CogniteAPIVersion = 'v1') {
+    //forcing update
     verifyOptionsRequiredFields(options);
 
     if (options && !options.credentials && !options.getToken) {
