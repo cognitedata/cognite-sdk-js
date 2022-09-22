@@ -3,17 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [5.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.7.0...@cognite/sdk-playground@5.8.0) (2022-08-24)
-
-
-### Features
-
-* add parameter support in vision extract ([#863](https://github.com/cognitedata/cognite-sdk-js/issues/863)) ([6d58704](https://github.com/cognitedata/cognite-sdk-js/commit/6d58704efa4521d50362b3bbdfabeba333db8582))
-
-
-
-
-
 # [5.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.6.2...@cognite/sdk-playground@5.7.0) (2022-08-21)
 
 
