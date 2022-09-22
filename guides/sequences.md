@@ -503,7 +503,7 @@ Retrieve rows.
 
 | Return | Type |
 | ------- | ---- |
-| List of requested sequence rows |  [CursorAndAsyncIterator](https://cognitedata.github.io/cognite-sdk-js/globals.html#cursorandasynciterator)<[SequenceRow](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequencerow.html)> |
+| List of requested sequence rows |  [CursorAndAsyncIterator](https://cognitedata.github.io/cognite-sdk-js/globals.html#cursorandasynciterator)<[SequenceRow](https://cognitedata.github.io/cognite-sdk-js/classes/sequencerow.html)> |
 
 ***Examples***
 

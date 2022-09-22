@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig.build",
-  "compilerOptions": {
-    "declarationDir": "dist",
-    "outDir": "dist",
-    "baseUrl": ".."
-  },
-  "include": ["src/"]
-}
