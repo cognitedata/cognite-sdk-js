@@ -3,17 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [5.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.5.1...@cognite/sdk-playground@5.6.0) (2022-07-25)
-
-
-### Features
-
-* code generation for types based on openapi doc ([#801](https://github.com/cognitedata/cognite-sdk-js/issues/801)) ([07eb308](https://github.com/cognitedata/cognite-sdk-js/commit/07eb3087705c550758fcc9e1b12ea43428ecf79d)), closes [#820](https://github.com/cognitedata/cognite-sdk-js/issues/820)
-
-
-
-
-
 ## [5.5.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.5.0...@cognite/sdk-playground@5.5.1) (2022-07-07)
 
 **Note:** Version bump only for package @cognite/sdk-playground
