@@ -59,13 +59,11 @@ const LOGIN_IFRAME_NAME = 'adfsSilentLoginIframe';
 export class ADFS {
   private readonly authority: string;
   private readonly queryParams: ADFSQueryParams;
-  private readonly sessionKey: string;
   private token: ADFSToken | null = null;
 
   constructor({ authority, requestParams }: ADFSConfig) {
     this.authority = authority;
     this.queryParams = this.getADFSQueryParams(requestParams);
-    this.sessionKey = `${authority}_${requestParams.clientId}_${requestParams.resource}`;
   }
 
   public async login(): Promise<string | void> {
@@ -195,17 +193,23 @@ export class ADFS {
     }, '');
   }
 
+  private getSessionKey(): string {
+    return this.authority + JSON.stringify(this.queryParams);
+  }
+
   private setToken(token: ADFSToken | null) {
     this.token = token;
+    const sessionKey = this.getSessionKey();
     if (token) {
-      sessionStorage.setItem(this.sessionKey, JSON.stringify(token));
+      sessionStorage.setItem(sessionKey, JSON.stringify(token));
     } else {
-      sessionStorage.removeItem(this.sessionKey);
+      sessionStorage.removeItem(sessionKey);
     }
   }
 
   private getToken(): ADFSToken | null {
-    const value = sessionStorage.getItem(this.sessionKey);
+    const sessionKey = this.getSessionKey();
+    const value = sessionStorage.getItem(sessionKey);
     if (!value) {
       return null;
     }
@@ -217,7 +221,7 @@ export class ADFS {
       return token;
     } catch (err) {
       console.error(err);
-      sessionStorage.removeItem(this.sessionKey);
+      sessionStorage.removeItem(sessionKey);
       return null;
     }
   }
