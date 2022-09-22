@@ -9,6 +9,13 @@ import {
 } from '../../types';
 
 export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
+  /**
+   * [Create tables in a database](https://doc.cognitedata.com/api/v1/#operation/createTables)
+   *
+   * ```js
+   * const tables = await client.rawTablesApi.create('My company', [{ name: 'Customers' }]);
+   * ```
+   */
   public async create(
     databaseName: string,
     items: RawDBTableName[],
@@ -23,6 +30,13 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
     return this.mergeItemsFromItemsResponse(responses);
   }
 
+  /**
+   * [List tables in database](https://doc.cognitedata.com/api/v1/#operation/getTables)
+   *
+   * ```js
+   * const tables = await client.rawTablesApi.list('My company');
+   * ```
+   */
   public list(
     databaseName: string,
     scope?: ListRawTables
@@ -37,6 +51,13 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
     );
   }
 
+  /**
+   * [Delete tables in a database](https://doc.cognitedata.com/api/v1/#operation/deleteTables)
+   *
+   * ```js
+   * await client.rawTablesApi.delete('My company', [{ name: 'Customers' }]);
+   * ```
+   */
   public delete(databaseName: string, items: RawDBTableName[]) {
     const path = `${this.encodeUrl(databaseName)}/tables/delete`;
     return this.deleteEndpoint(items, {}, path);

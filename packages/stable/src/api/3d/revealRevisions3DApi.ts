@@ -11,6 +11,13 @@ export class RevealRevisions3DAPI extends BaseResourceAPI<RevealRevision3D> {
     return this.pickDateProps(['items'], ['createdTime']);
   }
 
+  /**
+   * [Retrieve a 3D revision (Reveal)](https://doc.cognitedata.com/api/v1/#operation/getReveal3DRevision)
+   *
+   * ```js
+   * const revisionReveal = await client.revealRevisions3DAPI.retrieve(294879032167592, 3247239473298342)
+   * ```
+   */
   public async retrieve(
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId
