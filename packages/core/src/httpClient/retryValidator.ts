@@ -3,11 +3,12 @@
 import inRange from 'lodash/inRange';
 import some from 'lodash/some';
 
-import { HttpMethod, HttpRequest, HttpResponse } from './basicHttpClient';
+import { HttpMethod, HttpResponse } from './basicHttpClient';
+import { RetryableHttpRequest } from './retryableHttpClient';
 
 /** @hidden */
 export type RetryValidator = (
-  request: HttpRequest,
+  request: RetryableHttpRequest,
   response: HttpResponse<any>,
   retryCount: number
 ) => boolean;
@@ -23,7 +24,7 @@ export const createRetryValidator = (
 ): RetryValidator => {
   const universalRetryValidator = createUniversalRetryValidator(maxRetries);
   return (
-    request: HttpRequest,
+    request: RetryableHttpRequest,
     response: HttpResponse<any>,
     retryCount: number
   ) => {

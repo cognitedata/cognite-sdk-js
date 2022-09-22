@@ -8,7 +8,7 @@ import {
   X_CDF_SDK_HEADER,
   API_KEY_HEADER,
 } from './constants';
-import { HttpRequestOptions, HttpResponse } from './httpClient/basicHttpClient';
+import { HttpResponse } from './httpClient/basicHttpClient';
 import { HttpHeaders } from './httpClient/httpHeaders';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import { MetadataMap } from './metadata';
@@ -27,6 +27,7 @@ import {
 } from './httpClient/retryValidator';
 import { verifyOptionsRequiredFields } from './loginUtils';
 import { CredentialsAuth, ClientCredentials } from './credentialsAuth';
+import { RetryableHttpRequestOptions } from './httpClient/retryableHttpClient';
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
   appId: string;
@@ -293,7 +294,7 @@ export default class BaseCogniteClient {
    * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
    * ```
    */
-  public get = <T = any>(path: string, options?: HttpRequestOptions) =>
+  public get = <T = any>(path: string, options?: RetryableHttpRequestOptions) =>
     this.httpClient.get<T>(path, options);
 
   /**
@@ -306,7 +307,7 @@ export default class BaseCogniteClient {
    * const response = await client.put('someUrl');
    * ```
    */
-  public put = <T = any>(path: string, options?: HttpRequestOptions) =>
+  public put = <T = any>(path: string, options?: RetryableHttpRequestOptions) =>
     this.httpClient.put<T>(path, options);
 
   /**
@@ -320,8 +321,10 @@ export default class BaseCogniteClient {
    * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
    * ```
    */
-  public post = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.post<T>(path, options);
+  public post = <T = any>(
+    path: string,
+    options?: RetryableHttpRequestOptions
+  ) => this.httpClient.post<T>(path, options);
 
   /**
    * Basic HTTP method for DELETE
@@ -332,8 +335,10 @@ export default class BaseCogniteClient {
    * const response = await client.delete('someUrl');
    * ```
    */
-  public delete = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.delete<T>(path, options);
+  public delete = <T = any>(
+    path: string,
+    options?: RetryableHttpRequestOptions
+  ) => this.httpClient.delete<T>(path, options);
 
   /**
    * Basic HTTP method for PATCH
@@ -344,8 +349,10 @@ export default class BaseCogniteClient {
    * const response = await client.patch('someUrl');
    * ```
    */
-  public patch = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.patch<T>(path, options);
+  public patch = <T = any>(
+    path: string,
+    options?: RetryableHttpRequestOptions
+  ) => this.httpClient.patch<T>(path, options);
 
   protected initAPIs() {
     // will be overritten by subclasses
@@ -391,5 +398,5 @@ export default class BaseCogniteClient {
   }
 }
 
-export type BaseRequestOptions = HttpRequestOptions;
+export type BaseRequestOptions = RetryableHttpRequestOptions;
 export type Response = HttpResponse<any>;
