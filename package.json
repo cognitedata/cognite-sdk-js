@@ -6,8 +6,7 @@
     "Ivan Polomanyi <ivan.polomanyi@cognite.com>",
     "Håvard Krogstie <havard.krogstie@cognite.com>",
     "Martin Røed <martin.roed@cognite.com>",
-    "Emil Sandstø <emil.sandsto@cognite.com>",
-    "Anders Øen Fylling <anders.fylling@cognite.com>"
+    "Emil Sandstø <emil.sandsto@cognite.com>"
   ],
   "license": "Apache-2.0",
   "repository": "cognitedata/cognite-sdk-js",
@@ -40,8 +39,7 @@
     "docs:bundle": "rm -rf docs/ && yarn allsdk docs:bundle --stream && touch docs/.nojekyll",
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check -c ./markdownlint.json",
     "test-snippets": "yarn allsdk test-snippets --stream",
-    "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream",
-    "codegen": "ts-node packages/codegen/src/cli.ts"
+    "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
@@ -56,7 +54,6 @@
     "@types/nock": "^10.0.3",
     "@types/node": "^14.0.24",
     "@types/query-string": "^6.1.0",
-    "@types/yargs": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
     "es-check": "^5.0.0",
@@ -70,16 +67,11 @@
     "lerna": "^3.22.1",
     "markdown-link-check": "^3.8.1",
     "nock": "^10.0.6",
-    "openapi-types": "^11.0.1",
     "prettier": "^2.5.1",
     "rollup": "^2.22.2",
-    "swagger-typescript-api-nextgen": "^10.0.1",
-    "tmp-promise": "^3.0.3",
     "ts-jest": "^26.1",
-    "ts-node": "^10.8.0",
     "typedoc": "^0.17.8",
-    "typescript": "^3.9",
-    "yargs": "^17.5.1"
+    "typescript": "^3.9"
   },
   "husky": {
     "hooks": {
