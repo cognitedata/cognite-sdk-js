@@ -17,7 +17,6 @@
     "watch": "rollup -cw",
     "esCheck": "es-check es5 './dist/index.js'",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
-    "docs:bundle": "yarn docs && mkdir -p ../../docs/alpha && cp -r docs/* ../../docs/alpha/",
     "extract-snippets": "",
     "test-snippets": ""
   },
