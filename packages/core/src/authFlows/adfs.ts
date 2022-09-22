@@ -99,7 +99,7 @@ export class ADFS {
         SCOPE,
         TOKEN_TYPE
       );
-      this.setToken(token);
+      this.token = token;
 
       return token;
     } catch (e) {
@@ -132,14 +132,11 @@ export class ADFS {
    * (using implicit grant flow)
    */
   private async acquireTokenSilently(): Promise<ADFSToken | null> {
-    let token = this.getToken();
-    if (token) {
-      return token;
-    }
-
     const url = `${this.authority}?prompt=none&${this.getADFSQueryParamString(
       this.queryParams
     )}`;
+
+    let token: ADFSToken | null = null;
 
     try {
       token = await silentLoginViaIframe<ADFSToken | null>(
@@ -152,7 +149,7 @@ export class ADFS {
     }
 
     if (token) {
-      this.setToken(token);
+      this.token = token;
     }
 
     return token;
@@ -192,39 +189,6 @@ export class ADFS {
       return `${result}${result.length > 1 ? '&' : ''}${key}=${value}`;
     }, '');
   }
-
-  private getSessionKey(): string {
-    return this.authority + JSON.stringify(this.queryParams);
-  }
-
-  private setToken(token: ADFSToken | null) {
-    this.token = token;
-    const sessionKey = this.getSessionKey();
-    if (token) {
-      sessionStorage.setItem(sessionKey, JSON.stringify(token));
-    } else {
-      sessionStorage.removeItem(sessionKey);
-    }
-  }
-
-  private getToken(): ADFSToken | null {
-    const sessionKey = this.getSessionKey();
-    const value = sessionStorage.getItem(sessionKey);
-    if (!value) {
-      return null;
-    }
-    try {
-      const token = JSON.parse(value) as ADFSToken;
-      if (token.expiresIn >= Date.now()) {
-        throw new Error(`token expired ${token.expiresIn}`);
-      }
-      return token;
-    } catch (err) {
-      console.error(err);
-      sessionStorage.removeItem(sessionKey);
-      return null;
-    }
-  }
 }
 
 export function extractADFSToken(query: string): ADFSToken | null {
@@ -238,7 +202,7 @@ export function extractADFSToken(query: string): ADFSToken | null {
     return {
       accessToken,
       idToken,
-      expiresIn: Date.now() + Number(expiresIn) * 1000,
+      expiresIn: Date.now() + Number(expiresIn),
     };
   }
 

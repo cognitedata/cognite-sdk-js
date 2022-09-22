@@ -21,7 +21,6 @@ describe('ADFS', () => {
   beforeEach(() => {
     window.history.pushState({}, '', '');
     nock.cleanAll();
-    sessionStorage.clear();
   });
 
   describe('login', () => {
@@ -124,7 +123,6 @@ describe('ADFS', () => {
         });
 
       const cdfTokenAfterLogin = await adfsClient.login();
-      sessionStorage.clear(); // force silent login
       const updatedCdfToken = await adfsClient.getCDFToken();
 
       expect(silentLogin).toHaveBeenCalledTimes(2);
@@ -145,7 +143,6 @@ describe('ADFS', () => {
         );
 
       const cdfTokenAfterLogin = await adfsClient.login();
-      sessionStorage.clear();
       const updatedCdfToken = await adfsClient.getCDFToken();
 
       expect(silentLogin).toHaveBeenCalledTimes(2);
