@@ -2086,15 +2086,6 @@ export interface Sequence
   columns: SequenceColumn[];
 }
 
-/**
- * A sequence row values with row number and columns information
- */
-export interface SequenceRow {
-  rowNumber: number;
-  values: SequenceItem[];
-  columns: SequenceColumnBasicInfo[];
-}
-
 interface SequenceBase {
   name?: SequenceName;
   description?: SequenceDescription;

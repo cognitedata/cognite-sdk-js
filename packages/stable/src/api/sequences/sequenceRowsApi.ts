@@ -11,8 +11,8 @@ import {
   SequenceRowsInsert,
   SequenceRowsResponseData,
   SequenceRowsRetrieve,
-  SequenceRow,
 } from '../../types';
+import { SequenceRow } from './sequenceRow';
 
 export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
   public async insert(items: SequenceRowsInsert[]): Promise<{}> {
@@ -44,15 +44,9 @@ export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
     response: HttpResponse<SequenceRowsResponseData>
   ): HttpResponse<CursorResponse<SequenceRow[]>> {
     const { rows, nextCursor, columns } = response.data;
-
-    const items = rows.map(({ rowNumber, values }) => {
-      return {
-        columns,
-        rowNumber,
-        values,
-      };
-    });
-
+    const items = rows.map(
+      ({ rowNumber, values }) => new SequenceRow(rowNumber, values, columns)
+    );
     return {
       ...response,
       data: {

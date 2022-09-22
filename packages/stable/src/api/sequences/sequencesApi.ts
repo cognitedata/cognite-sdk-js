@@ -18,8 +18,8 @@ import {
   SequenceRowsInsert,
   SequenceRowsRetrieve,
   SequenceSearchFilter,
-  SequenceRow,
 } from '../../types';
+import { SequenceRow } from './sequenceRow';
 import { SequenceRowsAPI } from './sequenceRowsApi';
 
 export class SequencesAPI extends BaseResourceAPI<Sequence> {
