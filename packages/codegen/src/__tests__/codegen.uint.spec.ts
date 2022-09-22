@@ -7,8 +7,6 @@ import { OpenApiDocument } from '../openapi';
 import { OpenApiSnapshotManager } from '../snapshot';
 import { promises as fs } from 'fs';
 
-import { AcacodeOpenApiGenerator } from '../generator/acacode';
-
 describe('code generation', () => {
   const testFolder = __dirname;
   let basicSnapshot: OpenApiDocument;
@@ -42,7 +40,7 @@ describe('code generation', () => {
   });
 
   test('constructor', async () => {
-    const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
+    const gen = new CodeGen({
       autoNameInlinedRequest: false,
       outputDir: '',
       filter: {
@@ -54,7 +52,7 @@ describe('code generation', () => {
 
   describe('filter paths', () => {
     test('pass through', async () => {
-      const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
+      const gen = new CodeGen({
         autoNameInlinedRequest: false,
         outputDir: '',
         filter: {
@@ -68,7 +66,7 @@ describe('code generation', () => {
     });
 
     test('service filter', async () => {
-      const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
+      const gen = new CodeGen({
         autoNameInlinedRequest: false,
         outputDir: '',
         filter: {
@@ -84,7 +82,7 @@ describe('code generation', () => {
 
   describe('generate types', () => {
     test('serviceB', async () => {
-      const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
+      const gen = new CodeGen({
         autoNameInlinedRequest: false,
         outputDir: process.cwd(),
         filter: {
@@ -120,7 +118,7 @@ describe('code generation', () => {
     });
 
     test('skip unused schemas', async () => {
-      const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
+      const gen = new CodeGen({
         autoNameInlinedRequest: false,
         outputDir: process.cwd(),
         filter: {
@@ -139,7 +137,7 @@ describe('code generation', () => {
         filename: 'cyclic-references.json',
       });
 
-      const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
+      const gen = new CodeGen({
         autoNameInlinedRequest: false,
         outputDir: process.cwd(),
         filter: {
