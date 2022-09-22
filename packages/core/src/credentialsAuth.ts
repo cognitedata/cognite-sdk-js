@@ -49,10 +49,13 @@ export class CredentialsAuth {
   }
 
   public process() {
+    console.log(`** initializing CredentialsAuth`);
     if (this.credentials) {
       if (this.authProvider && isFunction(this.authProvider.requires)) {
+        console.log(`processing credentials - requires`);
         this.authProvider.requires(this.credentials);
       } else {
+        console.log(`processing credentials - verifyCredentialsRequiredFields`);
         verifyCredentialsRequiredFields(this.credentials);
       }
 
