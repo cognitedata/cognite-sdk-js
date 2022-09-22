@@ -115,12 +115,12 @@ describe('ADFS', () => {
         .mockResolvedValueOnce({
           accessToken,
           idToken,
-          expiredIn: Date.now() + 3600 * 1000,
+          expiresIn: Date.now() + 3600 * 1000,
         })
         .mockResolvedValueOnce({
           accessToken: updatedAccessToken,
           idToken: updatedIdToken,
-          expiredIn: Date.now() + 3600 * 1000,
+          expiresIn: Date.now() + 3600 * 1000,
         });
 
       const cdfTokenAfterLogin = await adfsClient.login();
@@ -138,7 +138,7 @@ describe('ADFS', () => {
         .mockResolvedValueOnce({
           accessToken,
           idToken,
-          expiredIn: Date.now() + 3600 * 1000,
+          expiresIn: Date.now() + 3600 * 1000,
         })
         .mockRejectedValueOnce(
           'Failed to acquire token silently due X-Frame-Options header deny'

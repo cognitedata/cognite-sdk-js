@@ -8,6 +8,8 @@ export interface StatusSchema {
 
   /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
   createdTime: EpochTimestamp;
+
+  /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
   startTime: EpochTimestamp;
 
   /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
@@ -23,10 +25,10 @@ export type JobId = number;
 
 export interface VisionExtractItem {
   /** The ID of a file in CDF. */
-  fileId: ContextFileId;
+  fileId: VisionFileId;
 
   /** The external ID of a file in CDF. */
-  fileExternalId?: ContextFileExternalId;
+  fileExternalId?: VisionFileExternalId;
 
   /** Detected features in images. New fields may appear in case new feature extractors are add. */
   predictions: VisionExtractPredictions;
@@ -40,7 +42,7 @@ export interface FailedBatch {
   errorMessage?: string;
 
   /** List of the items in the failed batch. */
-  items?: AllOfFileId[];
+  items?: VisionAllOfFileId[];
 }
 
 /**
@@ -56,10 +58,10 @@ export interface FeatureParameters {
   /** Parameters for people detection. */
   peopleDetectionParameters?: PeopleDetectionParameters;
 
-  /** Parameters for industrial object detection. */
+  /** Parameters for industrial object detection. In beta. Available only when the `cdf-version: beta` header is provided. */
   industrialObjectDetectionParameters?: IndustrialObjectDetectionParameters;
 
-  /** Parameters for industrial personal protective equipment detection. */
+  /** Parameters for industrial personal protective equipment detection. In beta. Available only when the `cdf-version: beta` header is provided. */
   personalProtectiveEquipmentDetectionParameters?: PersonalProtectiveEquipmentDetectionParameters;
 }
 
@@ -116,7 +118,7 @@ export interface PeopleDetectionParameters {
 }
 
 /**
- * Parameters for industrial object detection.
+ * Parameters for industrial object detection. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export interface IndustrialObjectDetectionParameters {
   /**
@@ -128,7 +130,7 @@ export interface IndustrialObjectDetectionParameters {
 }
 
 /**
- * Parameters for industrial personal protective equipment detection.
+ * Parameters for industrial personal protective equipment detection. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export interface PersonalProtectiveEquipmentDetectionParameters {
   /**
@@ -148,12 +150,12 @@ A higher confidence threshold increases precision but lowers recall, and vice ve
 */
 export type ThresholdParameter = number;
 
-export interface AllOfFileId {
+export interface VisionAllOfFileId {
   /** The ID of a file in CDF. */
-  fileId: ContextFileId;
+  fileId: VisionFileId;
 
   /** The external ID of a file in CDF. */
-  fileExternalId?: ContextFileExternalId;
+  fileExternalId?: VisionFileExternalId;
 }
 
 /**
@@ -161,13 +163,13 @@ export interface AllOfFileId {
  * @format int64
  * @example 1234
  */
-export type ContextFileId = number;
+export type VisionFileId = number;
 
 /**
  * The external ID of a file in CDF.
  * @example 1234
  */
-export type ContextFileExternalId = string;
+export type VisionFileExternalId = string;
 
 /**
  * Detected features in images. New fields may appear in case new feature extractors are add.
@@ -175,8 +177,12 @@ export type ContextFileExternalId = string;
 export interface VisionExtractPredictions {
   textPredictions?: AnnotationsTextRegion[];
   assetTagPredictions?: AnnotationsCogniteAnnotationTypesImagesAssetLink[];
-  industrialObjectPredictions?: AnnotationsObjectDetection[];
   peoplePredictions?: AnnotationsObjectDetection[];
+
+  /** In beta. Available only when the `cdf-version: beta` header is provided. */
+  industrialObjectPredictions?: AnnotationsObjectDetection[];
+
+  /** In beta. Available only when the `cdf-version: beta` header is provided. */
   personalProtectiveEquipmentPredictions?: AnnotationsObjectDetection[];
 }
 
@@ -354,7 +360,6 @@ export type JobStatus = 'Queued' | 'Running' | 'Completed' | 'Failed';
  * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
  * @format int64
  * @min 0
- * @example 1638795554528
  */
 export type EpochTimestamp = number;
 
@@ -381,12 +386,12 @@ export type AssetTagDetection = 'AssetTagDetection';
 export type PeopleDetection = 'PeopleDetection';
 
 /**
- * Detect industrial objects such as gauges and valves in images.
+ * Detect industrial objects such as gauges and valves in images. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export type IndustrialObjectDetection = 'IndustrialObjectDetection';
 
 /**
- * Detect personal protective equipment, such as helmet, protective eyewear, and mask in images.
+ * Detect personal protective equipment, such as helmet, protective eyewear, and mask in images. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export type PersonalProtectiveEquipmentDetection =
   'PersonalProtectiveEquipmentDetection';
@@ -395,12 +400,12 @@ export type PersonalProtectiveEquipmentDetection =
  * An object containing file (external) id.
  */
 export type FileReference =
-  | { fileId: ContextFileId }
-  | { fileExternalId: ContextFileExternalId };
+  | { fileId: VisionFileId }
+  | { fileExternalId: VisionFileExternalId };
 
 export type VisionExtractPostResponse = StatusSchema & {
   jobId: JobId;
-  items: AllOfFileId[];
+  items: VisionAllOfFileId[];
   features: VisionExtractFeature[];
   parameters?: FeatureParameters;
 };

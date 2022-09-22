@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.5...@cognite/sdk-core@4.6.6) (2022-09-12)
+
+
+### Bug Fixes
+
+* expired token check for adfs ([#874](https://github.com/cognitedata/cognite-sdk-js/issues/874)) ([af03c73](https://github.com/cognitedata/cognite-sdk-js/commit/af03c73fd9d69671dc7bd1c3169eee9ae17e61fe))
+
+
+
+
+
 ## [4.6.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.4...@cognite/sdk-core@4.6.5) (2022-09-07)
 
 

@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.9.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.0...@cognite/sdk@7.9.1) (2022-09-12)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [7.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.7...@cognite/sdk@7.9.0) (2022-09-12)
+
+
+### Features
+
+*  move vision extract api to v1 ([#872](https://github.com/cognitedata/cognite-sdk-js/issues/872)) ([23d0218](https://github.com/cognitedata/cognite-sdk-js/commit/23d021863020bc3e8caf2ad94caafefe1d1e405a)), closes [#873](https://github.com/cognitedata/cognite-sdk-js/issues/873)
+
+
+
+
+
 ## [7.8.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.6...@cognite/sdk@7.8.7) (2022-09-07)
 
 **Note:** Version bump only for package @cognite/sdk
