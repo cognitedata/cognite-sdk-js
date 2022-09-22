@@ -1,30 +1,23 @@
 // Copyright 2020 Cognite AS
 
-import { VisionExtractPostResponse } from '@cognite/sdk';
-import CogniteClient from '../../cogniteClient';
-import { BETA_FEATURES } from '../../api/vision/visionApi';
-import { setupLoggedInClient } from '../testUtils';
+import { VisionExtractPostResponse } from '@cognite/sdk-playground';
+import CogniteClientPlayground from '../../cogniteClientPlayground';
+import { setupLoggedInClient as setupLoggedinPlaygroundClient } from '../testUtils';
 
 describe('Vision API', () => {
   const TEST_IMAGE_ID = 4745168244986665;
-  let client: CogniteClient;
-  let consoleSpy: jest.SpyInstance;
+  let playgroundClient: CogniteClientPlayground;
   let extractJob: VisionExtractPostResponse;
-  let extractBetaJob: VisionExtractPostResponse;
 
   beforeAll(async () => {
     jest.setTimeout(2 * 60 * 1000); // timeout after 2 minutes
-    consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
-    client = setupLoggedInClient();
+    playgroundClient = setupLoggedinPlaygroundClient();
 
-    extractJob = await client.vision.extract(
+    extractJob = await playgroundClient.vision.extract(
       ['TextDetection'],
       [{ fileId: TEST_IMAGE_ID }],
       { textDetectionParameters: { threshold: 0.4 } }
     );
-    extractBetaJob = await client.vision.extract(BETA_FEATURES, [
-      { fileId: TEST_IMAGE_ID },
-    ]);
   });
 
   test('extract', async () => {
@@ -42,28 +35,12 @@ describe('Vision API', () => {
     });
   });
 
-  test('extract using beta feature', async () => {
-    // Check that the beta flag is correctly used.
-    // Unfortunately, 'cdf-version' is not listed in
-    // access-control-allow-headers, which means we cannot explicitly check for
-    // that the 'cdf-version' entry is set to 'beta'. However, what we instead
-    // can do is to check that the API does not return 400 when a beta feature
-    // is sent.
-    const metadata = client.getMetadata(extractBetaJob);
-    expect(metadata).toBeDefined();
-    expect(metadata?.status).toEqual(200);
-    expect(consoleSpy).toBeCalledWith(
-      `Features '${BETA_FEATURES}' are in beta and are still in development`
-    );
-    // Only care that the job is queued with the correct feature. The other
-    // properties are checked for in the test above.
-    expect(extractBetaJob.status).toEqual('Queued');
-    expect(extractBetaJob.features).toEqual(BETA_FEATURES);
-  });
-
   describe('retrieve extract job', () => {
     test('waitForCompletion=false', async () => {
-      const result = await client.vision.getExtractJob(extractJob.jobId, false);
+      const result = await playgroundClient.vision.getExtractJob(
+        extractJob.jobId,
+        false
+      );
       expect(result.status == 'Queued' || result.status == 'Running').toBe(
         true
       );
@@ -73,13 +50,16 @@ describe('Vision API', () => {
     });
     test('waitForCompletion=true, should timeout', async () => {
       await expect(
-        client.vision.getExtractJob(extractJob.jobId, true, 1000, 0)
+        playgroundClient.vision.getExtractJob(extractJob.jobId, true, 1000, 0)
       ).rejects.toThrowError(
         `Timed out while waiting for vision job to complete.`
       );
     });
     test('waitForCompletion=true', async () => {
-      const result = await client.vision.getExtractJob(extractJob.jobId, true);
+      const result = await playgroundClient.vision.getExtractJob(
+        extractJob.jobId,
+        true
+      );
       expect(result.status).toEqual('Completed');
       expect(result.jobId).toEqual(extractJob.jobId);
       expect(result.createdTime).toEqual(extractJob.createdTime);

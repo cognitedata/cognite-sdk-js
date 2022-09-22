@@ -1,5 +1,7 @@
 // Copyright 2022 Cognite AS
-
+export {
+  EpochTimestamp
+} from './types.gen';
 export {
   AggregateField,
   AggregateGroup,
@@ -79,7 +81,6 @@ export {
   DocumentsSort,
   DocumentsSourceFileFilter,
   DocumentsTemporaryPreviewLinkResponse,
-  EpochTimestamp,
   EpochTimestampRange,
   FeedbackAction,
   FeedbackId,
@@ -110,3 +111,38 @@ export {
   UnprocessableEntityErrorResponse,
   ValueMissing
 } from './api/documents/types.gen';
+export {
+  AllOfFileId,
+  AnnotationsAssetRef,
+  AnnotationsBoundingBox,
+  AnnotationsCogniteAnnotationTypesImagesAssetLink,
+  AnnotationsObjectDetection,
+  AnnotationsPoint,
+  AnnotationsPolyLine,
+  AnnotationsPolygon,
+  AnnotationsTextRegion,
+  AssetTagDetection,
+  AssetTagDetectionParameters,
+  ContextFileExternalId,
+  ContextFileId,
+  FailedBatch,
+  FeatureParameters,
+  FileReference,
+  IndustrialObjectDetection,
+  IndustrialObjectDetectionParameters,
+  JobId,
+  JobStatus,
+  PeopleDetection,
+  PeopleDetectionParameters,
+  PersonalProtectiveEquipmentDetection,
+  PersonalProtectiveEquipmentDetectionParameters,
+  StatusSchema,
+  TextDetection,
+  TextDetectionParameters,
+  ThresholdParameter,
+  VisionExtractFeature,
+  VisionExtractGetResponse,
+  VisionExtractItem,
+  VisionExtractPostResponse,
+  VisionExtractPredictions
+} from './api/vision/types.gen';
