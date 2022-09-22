@@ -906,6 +906,10 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
    */
   assetExternalIds?: CogniteExternalId[];
   /**
+   * Only include events that have a related asset in a tree rooted at any of these root assetIds.
+   */
+  rootAssetIds?: IdEither[];
+  /**
    * Only include events that reference these specific dataSet IDs
    */
   dataSetIds?: IdEither[];

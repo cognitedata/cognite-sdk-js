@@ -163,6 +163,19 @@ describe('Events integration test', () => {
       expect(typeof JSON.stringify(response.items)).toBe('string');
     });
 
+    /**
+     * No events attached to the asset, will return zero in each case
+     */
+    test('rootAssetIds', async () => {
+      const { items } = await client.events.list({
+        filter: {
+          rootAssetIds: [{ id: asset.id }],
+        },
+        limit: 1,
+      });
+      expect(items).toEqual([]);
+    });
+
     test('assetSubtreeIds', async () => {
       const { items } = await client.events.list({
         filter: {
@@ -205,5 +218,15 @@ describe('Events integration test', () => {
 
       expect(items.length).toBeGreaterThan(0);
     });
+  });
+
+  test('search with rootAssetIds', async () => {
+    const response = await client.events.search({
+      filter: {
+        rootAssetIds: [{ id: asset.id }],
+      },
+      limit: 1,
+    });
+    expect(response).toEqual([]);
   });
 });
