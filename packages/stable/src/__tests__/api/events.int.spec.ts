@@ -129,15 +129,16 @@ describe('Events integration test', () => {
     test('descending', async () => {
       await client.events.list({ sort: { endTime: SortOrder.DESC } });
     });
-    test('multiple props not supported', async () => {
+    test('multiple props supported', async () => {
       await expect(
         client.events.list({
+          limit: 1,
           sort: {
             startTime: 'asc',
             lastUpdatedTime: 'desc',
           },
         })
-      ).rejects.toThrowError();
+      ).resolves.toBeDefined();
     });
   });
 
