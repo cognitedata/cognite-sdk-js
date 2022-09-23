@@ -158,7 +158,7 @@ export class CDFHttpClient extends RetryableHttpClient {
 
 type Response401Handler = (
   err: HttpError,
-  request: HttpRequest,
+  request: RetryableHttpRequest,
   retry: () => void,
   reject: () => void
 ) => void;
