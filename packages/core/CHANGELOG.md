@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.6...@cognite/sdk-core@4.6.7) (2022-09-23)
+
+
+### Bug Fixes
+
+* ensure response ordering matches request when chunking a request ([#893](https://github.com/cognitedata/cognite-sdk-js/issues/893)) ([77eb797](https://github.com/cognitedata/cognite-sdk-js/commit/77eb7976abb21029c22a16c0ceeb22d577d1ce68))
+
+
+
+
+
 ## [4.6.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.5...@cognite/sdk-core@4.6.6) (2022-09-12)
 
 
