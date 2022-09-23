@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.7.0...@cognite/sdk-core@4.8.0) (2022-09-23)
+
+
+### Features
+
+* allow overriding retry validator at request level ([#876](https://github.com/cognitedata/cognite-sdk-js/issues/876)) ([39807e9](https://github.com/cognitedata/cognite-sdk-js/commit/39807e9e2b2380fcc8d842e8634f13d10f181e25))
+
+
+
+
+
 # [4.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.7...@cognite/sdk-core@4.7.0) (2022-09-23)
 
 
