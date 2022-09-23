@@ -5,6 +5,7 @@ import BaseCogniteClient from '../baseCogniteClient';
 
 import { API_KEY_HEADER, BASE_URL } from '../constants';
 import { apiKey, project } from '../testUtils';
+import { sleepPromise } from '../utils';
 
 const mockBaseUrl = 'https://example.com';
 
@@ -136,14 +137,10 @@ describe('CogniteClient', () => {
         nock(mockBaseUrl).get('/test').thrice().reply(401);
         nock(mockBaseUrl).get('/test').thrice().reply(200);
 
-        const mockGetToken = jest.fn(
-          () =>
-            new Promise<string>((resolve) => {
-              setTimeout(() => {
-                resolve('test-token');
-              }, 100);
-            })
-        );
+        const mockGetToken = jest.fn(async () => {
+          await sleepPromise(100);
+          return 'test-token';
+        });
 
         const client = new BaseCogniteClient({
           project,
@@ -168,14 +165,10 @@ describe('CogniteClient', () => {
         nock(mockBaseUrl).get('/test').twice().reply(200);
         nock(mockBaseUrl).get('/test-with-delay').reply(200);
 
-        const mockGetToken = jest.fn(
-          () =>
-            new Promise<string>((resolve) => {
-              setTimeout(() => {
-                resolve('test-token');
-              }, 100);
-            })
-        );
+        const mockGetToken = jest.fn(async () => {
+          await sleepPromise(100);
+          return 'test-token';
+        });
 
         const client = new BaseCogniteClient({
           project,
@@ -200,14 +193,11 @@ describe('CogniteClient', () => {
         nock(mockBaseUrl).get('/test').reply(401);
         nock(mockBaseUrl).get('/test').reply(200);
 
-        const mockGetToken = jest.fn(
-          () =>
-            new Promise<string>((resolve) => {
-              setTimeout(() => {
-                resolve(`test-token-${Math.floor(Math.random() * 1000)}`);
-              }, 100);
-            })
-        );
+        let tokenCount = 0;
+        const mockGetToken = jest.fn(async () => {
+          await sleepPromise(100);
+          return `test-token${tokenCount++}`;
+        });
 
         const client = new BaseCogniteClient({
           project,
