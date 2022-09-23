@@ -49,12 +49,12 @@ This can be used to test local changes to the OpenAPI document, or to
 lock a service to an older OpenAPI document should the latest version
 cause issues.
 
-## Configure/enable a service for type generation
+## Enable a service for type generation
 
 > Code generation must first be enable for a package
 
 ```console
-yarn codegen configure --package stable --service my-service
+yarn codegen enable --package stable --service my-service
 ```
 
 This will generate a `codegen.json` file for the given service
@@ -65,3 +65,12 @@ that matches the name of the service. It is currently not possible
 to select individually paths other than this.
 
 You may have to remove existing types to avoid conflicts.
+
+## Disable a service for type generation
+
+```console
+yarn codegen disable --package stable --service my-service
+```
+
+This will will cleanup files within the service folder. Note that you
+must re-generate types afterwards to cleanup export statements.
