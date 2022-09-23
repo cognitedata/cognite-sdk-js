@@ -7,6 +7,7 @@ import {
   HttpResponse,
 } from './basicHttpClient';
 import { MAX_RETRY_ATTEMPTS, RetryValidator } from './retryValidator';
+import isFunction from 'lodash/isFunction';
 
 export class RetryableHttpClient extends BasicHttpClient {
   private static calculateRetryDelayInMs(retryCount: number) {
@@ -76,10 +77,9 @@ export class RetryableHttpClient extends BasicHttpClient {
     while (true) {
       const response = await super.rawRequest<ResponseType>(request);
 
-      const retryValidator =
-        typeof request.retryValidator === 'function'
-          ? request.retryValidator
-          : this.retryValidator;
+      const retryValidator = isFunction(request.retryValidator)
+        ? request.retryValidator
+        : this.retryValidator;
 
       const shouldRetry =
         retryCount < MAX_RETRY_ATTEMPTS &&
