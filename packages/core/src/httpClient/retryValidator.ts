@@ -16,11 +16,11 @@ export type RetryValidator = (
 /** @hidden */
 export type EndpointList = { [key in HttpMethod]?: string[] };
 
-export const DEFAULT_MAX_RETRY_ATTEMPTS = 5;
+export const MAX_RETRY_ATTEMPTS = 5;
 
 export const createRetryValidator = (
   endpointsToRetry: EndpointList,
-  maxRetries: number = DEFAULT_MAX_RETRY_ATTEMPTS
+  maxRetries: number = MAX_RETRY_ATTEMPTS
 ): RetryValidator => {
   const universalRetryValidator = createUniversalRetryValidator(maxRetries);
   return (
@@ -46,7 +46,7 @@ export const createRetryValidator = (
 };
 
 export const createUniversalRetryValidator =
-  (maxRetries: number = DEFAULT_MAX_RETRY_ATTEMPTS): RetryValidator =>
+  (maxRetries: number = MAX_RETRY_ATTEMPTS): RetryValidator =>
   (request, response, retryCount) => {
     if (retryCount >= maxRetries) {
       return false;

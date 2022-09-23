@@ -6,7 +6,7 @@ import {
   HttpRequestOptions,
   HttpResponse,
 } from './basicHttpClient';
-import { DEFAULT_MAX_RETRY_ATTEMPTS, RetryValidator } from './retryValidator';
+import { MAX_RETRY_ATTEMPTS, RetryValidator } from './retryValidator';
 
 export class RetryableHttpClient extends BasicHttpClient {
   private static calculateRetryDelayInMs(retryCount: number) {
@@ -82,7 +82,7 @@ export class RetryableHttpClient extends BasicHttpClient {
           : this.retryValidator;
 
       const shouldRetry =
-        retryCount < DEFAULT_MAX_RETRY_ATTEMPTS &&
+        retryCount < MAX_RETRY_ATTEMPTS &&
         request.retryValidator !== false &&
         retryValidator(request, response, retryCount);
       if (!shouldRetry) {
