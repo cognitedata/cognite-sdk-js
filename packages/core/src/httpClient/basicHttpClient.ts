@@ -215,7 +215,7 @@ export class BasicHttpClient {
   protected async request<ResponseType>(request: HttpRequest) {
     const mutatedRequest = await this.preRequest(request);
     const rawResponse = await this.rawRequest<ResponseType>(mutatedRequest);
-    return this.postRequest(rawResponse, request);
+    return this.postRequest(rawResponse, mutatedRequest);
   }
 
   private constructUrl(path: string, params: HttpQueryParams = {}) {

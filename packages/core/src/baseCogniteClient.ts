@@ -75,18 +75,20 @@ export default class BaseCogniteClient {
   private readonly metadata: MetadataMap;
   private readonly loginApi: LoginAPI;
   private readonly logoutApi: LogoutApi;
-  /**
-   * On 401 it might be possible to get a new token, but if `getToken` returns the same over and
-   * over (e.g api-keys) there isn't a point retrying. previousToken is used to keep track of that,
-   * comparing new tokens to one tried the last time.
-   */
-  private previousToken: string | undefined;
   private readonly getToken: () => Promise<string | undefined>;
   private readonly apiKeyMode: boolean;
   private readonly noAuthMode?: boolean;
   readonly project: string;
 
   private readonly credentialsAuth?: CredentialsAuth;
+
+  /**
+   * To prevent calling `getToken` method multiple times in parallel, we set
+   * the promise that `getToken` returns to a variable and check its existence
+   * on function calls for `authenticate`.
+   */
+  private tokenPromise?: Promise<string | undefined>;
+  private isTokenPromiseFulfilled?: boolean;
 
   /**
    * Create a new SDK client
@@ -168,7 +170,12 @@ export default class BaseCogniteClient {
   private authenticateGetToken: () => Promise<string | undefined> =
     async () => {
       try {
-        const token = await this.getToken();
+        if (!this.tokenPromise || this.isTokenPromiseFulfilled) {
+          this.isTokenPromiseFulfilled = false;
+          this.tokenPromise = this.getToken();
+        }
+        const token = await this.tokenPromise;
+        this.isTokenPromiseFulfilled = true;
 
         if (token === undefined) return token;
 
@@ -203,11 +210,16 @@ export default class BaseCogniteClient {
         `CogniteJavaScriptSDK:${this.version}`
       );
 
-    httpClient.set401ResponseHandler(async (_, retry, reject) => {
+    httpClient.set401ResponseHandler(async (_, request, retry, reject) => {
       try {
-        const newToken = await this.authenticate();
-        if (newToken && newToken !== this.previousToken) {
-          this.previousToken = newToken;
+        const requestToken = this.retrieveTokenValueFromHeader(request.headers);
+        const currentToken = await this.tokenPromise;
+        const newToken =
+          currentToken !== requestToken
+            ? currentToken
+            : await this.authenticate();
+
+        if (newToken && newToken !== requestToken) {
           retry();
         } else {
           reject();
@@ -218,6 +230,24 @@ export default class BaseCogniteClient {
     });
 
     return httpClient;
+  }
+
+  /**
+   * It retrieves the previous token from header
+   * @returns string
+   */
+  private retrieveTokenValueFromHeader(
+    headers?: HttpHeaders
+  ): string | undefined {
+    let token;
+
+    if (this.apiKeyMode) {
+      token = headers?.[API_KEY_HEADER];
+    } else {
+      token = headers?.[AUTHORIZATION_HEADER];
+    }
+
+    return token !== undefined ? token.replace('Bearer ', '') : token;
   }
 
   /**
