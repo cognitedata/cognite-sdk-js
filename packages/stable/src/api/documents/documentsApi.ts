@@ -66,14 +66,6 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.searchDocuments<DocumentSearchResponse>(query);
   };
 
-  /**
-   * ```js
-   * const resp = await client.documents.list({limit: 1,});
-   * ```
-   *
-   * @param request
-   * @returns
-   */
   public list = (
     request: DocumentListRequest
   ): Promise<DocumentListResponse> => {
