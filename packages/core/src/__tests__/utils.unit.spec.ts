@@ -103,6 +103,15 @@ describe('utils', () => {
       ).resolves.toEqual(['a', 'b', 'c']);
     });
 
+    test('promiseAllAtOnce: keep ordering', async () => {
+      const data = [100, 50, 10];
+      const promiser = async (sleepInMs: number) => {
+        await sleepPromise(sleepInMs);
+        return sleepInMs;
+      };
+      await expect(promiseAllAtOnce(data, promiser)).resolves.toEqual(data);
+    });
+
     test('promiseEachInSequence', async () => {
       expect(
         await promiseEachInSequence([], (input) => Promise.resolve(input))
