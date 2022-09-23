@@ -63,9 +63,9 @@ export class RetryableHttpClient extends BasicHttpClient {
 
   protected async postRequest<T>(
     response: HttpResponse<T>,
-    _: RetryableHttpRequest // eslint-disable-line
+    request: RetryableHttpRequest
   ): Promise<HttpResponse<T>> {
-    return super.postRequest<T>(response, _);
+    return super.postRequest<T>(response, request);
   }
 
   protected async rawRequest<ResponseType>(
