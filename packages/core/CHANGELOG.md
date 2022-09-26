@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.8.0...@cognite/sdk-core@4.8.1) (2022-09-26)
+
+
+### Bug Fixes
+
+* override auth header while retrying ([#896](https://github.com/cognitedata/cognite-sdk-js/issues/896)) ([25592fe](https://github.com/cognitedata/cognite-sdk-js/commit/25592fe990e315bb2aa976f428b2cba88448a580))
+
+
+
+
+
 # [4.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.7.0...@cognite/sdk-core@4.8.0) (2022-09-23)
 
 
