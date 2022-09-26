@@ -98,10 +98,11 @@ export class CDFHttpClient extends RetryableHttpClient {
 
   protected async postRequest<T>(
     response: HttpResponse<T>,
-    request: RetryableHttpRequest
+    request: RetryableHttpRequest,
+    mutatedRequest: RetryableHttpRequest
   ): Promise<HttpResponse<T>> {
     try {
-      return await super.postRequest(response, request);
+      return await super.postRequest(response, request, mutatedRequest);
     } catch (err) {
       if (
         err.status === 401 &&
@@ -111,7 +112,7 @@ export class CDFHttpClient extends RetryableHttpClient {
         return new Promise((resolvePromise, rejectPromise) => {
           const retry = () => resolvePromise(this.request(request));
           const reject = () => rejectPromise(err);
-          this.response401Handler(err, request, retry, reject);
+          this.response401Handler(err, mutatedRequest, retry, reject);
         });
       }
       throw handleErrorResponse(err);
