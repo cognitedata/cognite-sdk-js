@@ -239,10 +239,7 @@ describe('CogniteClient', () => {
           });
 
         let tokenCount = 0;
-        const mockGetToken = jest.fn(async () => {
-          await sleepPromise(100);
-          return `test-token${tokenCount++}`;
-        });
+        const mockGetToken = jest.fn(async () => `test-token${tokenCount++}`);
 
         const client = new BaseCogniteClient({
           project,
