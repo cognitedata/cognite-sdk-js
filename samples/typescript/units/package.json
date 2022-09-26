@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@cognite/sdk": "^7",
-    "@cognite/auth-wrapper": "^1"
+    "@cognite/auth-wrapper": "^1",
+    "@cognite-ornellas/units": "^1"
   },
   "devDependencies": {
     "@types/node": "^16.7",
