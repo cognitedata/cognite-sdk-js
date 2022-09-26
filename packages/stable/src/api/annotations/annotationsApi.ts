@@ -45,7 +45,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    *   status: 'suggested',
    *   data,
    * };
-   *
+   * 
    * const created = await client.annotations.create([partial]);
    *
    */
