@@ -217,6 +217,46 @@ describe('CogniteClient', () => {
 
         expect(mockGetToken).toBeCalledTimes(2);
       });
+
+      test('new token should be used on retry for 401s', async () => {
+        nock(mockBaseUrl)
+          .get('/test')
+          .reply(function () {
+            expect(this.req.headers['api-key']).toStrictEqual(['test-token0']);
+            return [401];
+          });
+        nock(mockBaseUrl)
+          .get('/test')
+          .reply(function () {
+            expect(this.req.headers['api-key']).toStrictEqual(['test-token1']);
+            return [401];
+          });
+        nock(mockBaseUrl)
+          .get('/test')
+          .reply(function () {
+            expect(this.req.headers['api-key']).toStrictEqual(['test-token2']);
+            return [200];
+          });
+
+        let tokenCount = 0;
+        const mockGetToken = jest.fn(async () => {
+          await sleepPromise(100);
+          return `test-token${tokenCount++}`;
+        });
+
+        const client = new BaseCogniteClient({
+          project,
+          appId: 'unit-test',
+          baseUrl: mockBaseUrl,
+          apiKeyMode: true,
+          getToken: mockGetToken,
+        });
+
+        await client.authenticate();
+        await client.get('/test');
+
+        expect(mockGetToken).toBeCalledTimes(3);
+      });
     });
 
     test('api-key: send api-key on first request', async () => {

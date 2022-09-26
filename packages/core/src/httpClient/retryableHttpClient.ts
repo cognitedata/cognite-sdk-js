@@ -64,9 +64,10 @@ export class RetryableHttpClient extends BasicHttpClient {
 
   protected async postRequest<T>(
     response: HttpResponse<T>,
-    request: RetryableHttpRequest
+    request: RetryableHttpRequest,
+    mutatedRequest: RetryableHttpRequest
   ): Promise<HttpResponse<T>> {
-    return super.postRequest<T>(response, request);
+    return super.postRequest<T>(response, request, mutatedRequest);
   }
 
   protected async rawRequest<ResponseType>(
