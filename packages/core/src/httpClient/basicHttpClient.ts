@@ -160,7 +160,8 @@ export class BasicHttpClient {
 
   protected async postRequest<T>(
     response: HttpResponse<T>,
-    _: HttpRequest // eslint-disable-line
+    _: HttpRequest, // eslint-disable-line
+    __: HttpRequest // eslint-disable-line
   ): Promise<HttpResponse<T>> {
     const requestIsOk = BasicHttpClient.validateStatusCode(response.status);
     if (!requestIsOk) {
@@ -215,7 +216,7 @@ export class BasicHttpClient {
   protected async request<ResponseType>(request: HttpRequest) {
     const mutatedRequest = await this.preRequest(request);
     const rawResponse = await this.rawRequest<ResponseType>(mutatedRequest);
-    return this.postRequest(rawResponse, mutatedRequest);
+    return this.postRequest(rawResponse, request, mutatedRequest);
   }
 
   private constructUrl(path: string, params: HttpQueryParams = {}) {
