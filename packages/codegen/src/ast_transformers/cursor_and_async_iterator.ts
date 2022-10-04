@@ -77,16 +77,22 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
           types,
         ]);
         const existingHeritageClauses = node.heritageClauses || [];
-        const transformed = ts.updateInterfaceDeclaration(
+        const transformedNode = ts.visitEachChild(
           node,
-          node.decorators,
-          node.modifiers,
-          node.name,
-          node.typeParameters,
-          [hc, ...existingHeritageClauses],
-          node.members
+          removeTargetMembers,
+          context
         );
-        return ts.visitEachChild(transformed, removeTargetMembers, context);
+        const newNode = ts.updateInterfaceDeclaration(
+          transformedNode,
+          transformedNode.decorators,
+          transformedNode.modifiers,
+          transformedNode.name,
+          transformedNode.typeParameters,
+          [hc, ...existingHeritageClauses],
+          transformedNode.members
+        );
+
+        return newNode;
       }
 
       return ts.visitEachChild(node, visitor, context);
@@ -119,11 +125,14 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
       ts.createLiteral('@cognite/sdk-core')
     );
 
-    const imports = containsCursorAndAsyncIteratorDeclaration()
-      ? [cursorAndAsyncIteratorImport, ...sourceFile.statements]
-      : sourceFile.statements;
+    const additionalImports = containsCursorAndAsyncIteratorDeclaration()
+      ? [cursorAndAsyncIteratorImport]
+      : [];
     const transformedSourceFile = ts.visitNode(sourceFile, visitor);
-    return ts.updateSourceFileNode(transformedSourceFile, imports);
+    return ts.updateSourceFileNode(transformedSourceFile, [
+      ...additionalImports,
+      ...transformedSourceFile.statements,
+    ]);
   };
 };
 

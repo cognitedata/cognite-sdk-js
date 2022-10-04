@@ -918,10 +918,7 @@ export interface DocumentsSearchResponse {
         total: number;
     }[];
 }
-export interface DocumentsFilterResponse {
-    items: Document[];
-    /** The cursor to get the next page of results (if available). */
-    nextCursor?: string;
+export interface DocumentsFilterResponse extends CursorAndAsyncIterator<Document> {
 }
 export interface DocumentContentResponse {
     items: DocumentContent[];
