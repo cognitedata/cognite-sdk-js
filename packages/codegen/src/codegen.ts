@@ -1,7 +1,6 @@
 // Copyright 2022 Cognite AS
 import { promises as fs } from 'fs';
 import * as pathUtil from 'path';
-import prettier from 'prettier';
 
 import cursorAndAsyncIteratorTransformer from './ast_transformers/cursor_and_async_iterator';
 import * as ts from 'typescript';
