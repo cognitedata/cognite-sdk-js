@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.9.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.5...@cognite/sdk@7.9.6) (2022-10-04)
+
+
+### Bug Fixes
+
+* move `@types/geojson` to depedencies ([#897](https://github.com/cognitedata/cognite-sdk-js/issues/897)) ([66b3bb0](https://github.com/cognitedata/cognite-sdk-js/commit/66b3bb0b8d37d814d5bb0dcc35b576fe924abce3))
+
+
+
+
+
 ## [7.9.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.4...@cognite/sdk@7.9.5) (2022-09-26)
 
 **Note:** Version bump only for package @cognite/sdk
