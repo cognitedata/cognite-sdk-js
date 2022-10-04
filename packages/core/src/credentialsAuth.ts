@@ -1,9 +1,7 @@
 // Copyright 2022 Cognite AS
 
 import { verifyCredentialsRequiredFields } from './loginUtils';
-
-// eslint-disable-next-line lodash/import-scope
-import { isFunction } from 'lodash';
+import isFunction from 'lodash/isFunction';
 import { BasicHttpClient } from './httpClient/basicHttpClient';
 
 import { AUTHORIZATION_HEADER, API_KEY_HEADER } from './constants';
@@ -42,20 +40,17 @@ export class CredentialsAuth {
 
   constructor(
     private httpClient: BasicHttpClient,
-    private credentials: any,
+    private credentials: ClientCredentials | undefined,
     private authProvider: any
   ) {
     this.process();
   }
 
   public process() {
-    console.log(`** initializing CredentialsAuth`);
     if (this.credentials) {
       if (this.authProvider && isFunction(this.authProvider.requires)) {
-        console.log(`processing credentials - requires`);
         this.authProvider.requires(this.credentials);
       } else {
-        console.log(`processing credentials - verifyCredentialsRequiredFields`);
         verifyCredentialsRequiredFields(this.credentials);
       }
 
@@ -76,7 +71,9 @@ export class CredentialsAuth {
       );
     }
 
-    if (this.authProvider !== undefined) {
+    if (this.authProvider === undefined) return;
+
+    if (this.credentials) {
       if (
         !this.credentials.authContext &&
         !this.authProvider.load(true, true).method &&
@@ -113,12 +110,10 @@ export class CredentialsAuth {
       }
 
       if (!this.credentials.authContext) {
-        // @ts-ignore
         this.tokenCredentials = await this.authProvider
           .load(this.credentials.method, this.credentials)
           .login(this.isRefreshToken());
       } else {
-        // @ts-ignore
         this.tokenCredentials = await this.authProvider
           .load(this.credentials.method, this.credentials.authContext)
           .login(this.isRefreshToken());
@@ -139,20 +134,20 @@ export class CredentialsAuth {
 
       return token;
     } catch (e) {
-      console.log(`An error ocurred while attempting to authenticate`, e);
+      console.error(`An error ocurred while attempting to authenticate`, e);
       return;
     }
   };
 
   private isRefreshToken(): any {
     return (
-      (this.credentials.method === 'device' ||
-        this.credentials.method === 'pkce') &&
+      (this.credentials?.method === 'device' ||
+        this.credentials?.method === 'pkce') &&
       this.tokenCredentials.refresh_token
     );
   }
 
   public isApiKeyMode(): boolean {
-    return this.credentials.method === 'api';
+    return this.credentials?.method === 'api';
   }
 }

@@ -3,6 +3,106 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.9.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.5...@cognite/sdk@7.9.6) (2022-10-04)
+
+
+### Bug Fixes
+
+* move `@types/geojson` to depedencies ([#897](https://github.com/cognitedata/cognite-sdk-js/issues/897)) ([66b3bb0](https://github.com/cognitedata/cognite-sdk-js/commit/66b3bb0b8d37d814d5bb0dcc35b576fe924abce3))
+
+
+
+
+
+## [7.9.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.4...@cognite/sdk@7.9.5) (2022-09-26)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.9.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.3...@cognite/sdk@7.9.4) (2022-09-23)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.9.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.2...@cognite/sdk@7.9.3) (2022-09-23)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.9.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.1...@cognite/sdk@7.9.2) (2022-09-23)
+
+
+### Bug Fixes
+
+* ensure response ordering matches request when chunking a request ([#893](https://github.com/cognitedata/cognite-sdk-js/issues/893)) ([77eb797](https://github.com/cognitedata/cognite-sdk-js/commit/77eb7976abb21029c22a16c0ceeb22d577d1ce68))
+
+
+
+
+
+## [7.9.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.0...@cognite/sdk@7.9.1) (2022-09-12)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [7.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.7...@cognite/sdk@7.9.0) (2022-09-12)
+
+
+### Features
+
+*  move vision extract api to v1 ([#872](https://github.com/cognitedata/cognite-sdk-js/issues/872)) ([23d0218](https://github.com/cognitedata/cognite-sdk-js/commit/23d021863020bc3e8caf2ad94caafefe1d1e405a)), closes [#873](https://github.com/cognitedata/cognite-sdk-js/issues/873)
+
+
+
+
+
+## [7.8.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.6...@cognite/sdk@7.8.7) (2022-09-07)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.8.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.5...@cognite/sdk@7.8.6) (2022-09-07)
+
+
+### Bug Fixes
+
+* don't retry 401 requests ([#868](https://github.com/cognitedata/cognite-sdk-js/issues/868)) ([4d17461](https://github.com/cognitedata/cognite-sdk-js/commit/4d174616ccf8ddfafed8a45b64d99e5ceaa06ce7))
+
+
+
+
+
+## [7.8.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.4...@cognite/sdk@7.8.5) (2022-09-06)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.8.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.3...@cognite/sdk@7.8.4) (2022-08-31)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
 ## [7.8.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.2...@cognite/sdk@7.8.3) (2022-08-21)
 
 **Note:** Version bump only for package @cognite/sdk

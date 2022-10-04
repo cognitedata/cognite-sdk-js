@@ -3,11 +3,12 @@
 import inRange from 'lodash/inRange';
 import some from 'lodash/some';
 
-import { HttpMethod, HttpRequest, HttpResponse } from './basicHttpClient';
+import { HttpMethod, HttpResponse } from './basicHttpClient';
+import { RetryableHttpRequest } from './retryableHttpClient';
 
 /** @hidden */
 export type RetryValidator = (
-  request: HttpRequest,
+  request: RetryableHttpRequest,
   response: HttpResponse<any>,
   retryCount: number
 ) => boolean;
@@ -15,15 +16,15 @@ export type RetryValidator = (
 /** @hidden */
 export type EndpointList = { [key in HttpMethod]?: string[] };
 
-const DEFAULT_MAX_RETRY_ATTEMPTS = 5;
+export const MAX_RETRY_ATTEMPTS = 5;
 
 export const createRetryValidator = (
   endpointsToRetry: EndpointList,
-  maxRetries: number = DEFAULT_MAX_RETRY_ATTEMPTS
+  maxRetries: number = MAX_RETRY_ATTEMPTS
 ): RetryValidator => {
   const universalRetryValidator = createUniversalRetryValidator(maxRetries);
   return (
-    request: HttpRequest,
+    request: RetryableHttpRequest,
     response: HttpResponse<any>,
     retryCount: number
   ) => {
@@ -45,7 +46,7 @@ export const createRetryValidator = (
 };
 
 export const createUniversalRetryValidator =
-  (maxRetries: number = DEFAULT_MAX_RETRY_ATTEMPTS): RetryValidator =>
+  (maxRetries: number = MAX_RETRY_ATTEMPTS): RetryValidator =>
   (request, response, retryCount) => {
     if (retryCount >= maxRetries) {
       return false;

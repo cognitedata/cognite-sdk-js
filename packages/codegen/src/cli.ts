@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
 import yargs, { CommandModule, Options } from 'yargs';
-import { createConfiguration } from './configuration';
+import { cleanupService, createConfiguration } from './configuration';
 import { generateTypes } from './generate';
 import { updateSnapshot } from './snapshot';
 
@@ -33,10 +33,9 @@ const generateTypesCommand: CommandModule = {
   },
 };
 
-const configureCommand: CommandModule = {
-  command: 'configure',
-  describe:
-    'Create configuration file to enable type generation for a package or service',
+const enableCommand: CommandModule = {
+  command: 'enable',
+  describe: 'Enable a package or service for type generation',
   builder: (yargs) =>
     yargs
       .option('package', packageOptions)
@@ -57,6 +56,22 @@ const configureCommand: CommandModule = {
   },
 };
 
+const disableCommand: CommandModule = {
+  command: 'disable',
+  describe: 'Disable type generation for a service',
+  builder: (yargs) =>
+    yargs.option('package', packageOptions).option('service', {
+      describe: 'REST service to disable type generation for',
+      type: 'string',
+    }),
+  handler: async (argv) => {
+    await cleanupService({
+      package: argv.package as string,
+      service: argv.service as string,
+    });
+  },
+};
+
 async function main(): Promise<void> {
   await yargs(process.argv.slice(2))
     .version(false)
@@ -65,7 +80,8 @@ async function main(): Promise<void> {
     .recommendCommands()
     .command(fetchLatestCommand)
     .command(generateTypesCommand)
-    .command(configureCommand)
+    .command(enableCommand)
+    .command(disableCommand)
     .demandCommand()
     .strict()
     .parse();
