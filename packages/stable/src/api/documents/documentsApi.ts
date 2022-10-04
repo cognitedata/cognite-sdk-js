@@ -60,31 +60,17 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
    * });
    * ```
    */
-  public search = (
-    query: DocumentSearchRequest
-  ): Promise<DocumentSearchResponse> => {
-    return this.searchDocuments<DocumentSearchResponse>(query);
+  public search = (request: DocumentSearchRequest): DocumentSearchResponse => {
+    return this.searchEndpoint(request);
   };
 
-  public list = (
-    request: DocumentListRequest
-  ): Promise<DocumentListResponse> => {
+  public list = (request: DocumentListRequest): DocumentListResponse => {
     return this.listEndpoint(this.callListEndpointWithPost, request);
   };
 
   public content = (id: CogniteInternalId): Promise<string> => {
     return this.documentContent(id);
   };
-
-  private async searchDocuments<ResponseType>(
-    query: DocumentSearchRequest
-  ): Promise<ResponseType> {
-    const response = await this.post<ResponseType>(this.searchUrl, {
-      data: query,
-    });
-
-    return this.addToMapAndReturn(response.data, response);
-  }
 
   private async documentContent(id: CogniteInternalId): Promise<string> {
     const response = await this.get<string>(this.url(`${id}/content`), {

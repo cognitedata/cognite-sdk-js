@@ -2,7 +2,6 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
   CursorResponse,
   FilterQuery,
   HttpResponse,
@@ -10,6 +9,7 @@ import {
 } from '@cognite/sdk-core';
 import {
   DocumentsAggregateAllUniqueValuesItem,
+  DocumentsAggregateAllUniqueValuesResponse,
   DocumentsAggregateAllUniqueValuesRequest,
   DocumentsAggregateCountItem,
   DocumentsAggregateCountRequest,
@@ -45,7 +45,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
 
   public allUniqueValues = (
     request: Omit<DocumentsAggregateAllUniqueValuesRequest, 'aggregate'>
-  ): CursorAndAsyncIterator<DocumentsAggregateAllUniqueValuesItem> => {
+  ): DocumentsAggregateAllUniqueValuesResponse => {
     return this.cursorBasedEndpoint<
       DocumentsAggregateAllUniqueValuesRequest,
       DocumentsAggregateAllUniqueValuesItem
