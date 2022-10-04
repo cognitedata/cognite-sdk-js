@@ -5,66 +5,51 @@
 export interface StatusSchema {
   /** The status of the job. */
   status: JobStatus;
-
   /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
   createdTime: EpochTimestamp;
-
   /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
   startTime: EpochTimestamp;
-
   /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
   statusTime: EpochTimestamp;
 }
-
 /**
  * Contextualization job ID.
  * @format int64
  * @example 123
  */
 export type JobId = number;
-
 export interface VisionExtractItem {
   /** The ID of a file in CDF. */
   fileId: VisionFileId;
-
   /** The external ID of a file in CDF. */
   fileExternalId?: VisionFileExternalId;
-
   /** Detected features in images. New fields may appear in case new feature extractors are add. */
   predictions: VisionExtractPredictions;
 }
-
 /**
  * List of the items and the corresponding error message(s) per failed batch.
  */
 export interface FailedBatch {
   /** The error message(s) of the failed batch. */
   errorMessage?: string;
-
   /** List of the items in the failed batch. */
   items?: VisionAllOfFileId[];
 }
-
 /**
  * Feature-specific parameters. New feature extractor parameters may appear.
  */
 export interface FeatureParameters {
   /** Parameters for text detection */
   textDetectionParameters?: TextDetectionParameters;
-
   /** Parameters for asset tag detection. */
   assetTagDetectionParameters?: AssetTagDetectionParameters;
-
   /** Parameters for people detection. */
   peopleDetectionParameters?: PeopleDetectionParameters;
-
   /** Parameters for industrial object detection. In beta. Available only when the `cdf-version: beta` header is provided. */
   industrialObjectDetectionParameters?: IndustrialObjectDetectionParameters;
-
   /** Parameters for industrial personal protective equipment detection. In beta. Available only when the `cdf-version: beta` header is provided. */
   personalProtectiveEquipmentDetectionParameters?: PersonalProtectiveEquipmentDetectionParameters;
 }
-
 /**
  * Parameters for text detection
  */
@@ -76,7 +61,6 @@ export interface TextDetectionParameters {
    */
   threshold?: ThresholdParameter;
 }
-
 /**
  * Parameters for asset tag detection.
  */
@@ -87,7 +71,6 @@ export interface AssetTagDetectionParameters {
    *
    */
   threshold?: ThresholdParameter;
-
   /**
    * Allow partial (fuzzy) matching of detected external IDs in the file.
    * Will only match when it is possible to do so unambiguously.
@@ -95,7 +78,6 @@ export interface AssetTagDetectionParameters {
    * @example true
    */
   partialMatch?: boolean;
-
   /**
    * Search for external ID or name of assets that are in a subtree rooted at one of
    * the assetSubtreeIds (including the roots given).
@@ -104,7 +86,6 @@ export interface AssetTagDetectionParameters {
    */
   assetSubtreeIds?: number[];
 }
-
 /**
  * Parameters for people detection.
  */
@@ -116,7 +97,6 @@ export interface PeopleDetectionParameters {
    */
   threshold?: ThresholdParameter;
 }
-
 /**
  * Parameters for industrial object detection. In beta. Available only when the `cdf-version: beta` header is provided.
  */
@@ -128,7 +108,6 @@ export interface IndustrialObjectDetectionParameters {
    */
   threshold?: ThresholdParameter;
 }
-
 /**
  * Parameters for industrial personal protective equipment detection. In beta. Available only when the `cdf-version: beta` header is provided.
  */
@@ -140,37 +119,31 @@ export interface PersonalProtectiveEquipmentDetectionParameters {
    */
   threshold?: ThresholdParameter;
 }
-
 /**
-* The confidence threshold returns predictions as positive if their confidence score is the selected value or higher. 
+* The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
 A higher confidence threshold increases precision but lowers recall, and vice versa.
 * @min 0
 * @max 1
 * @example 0.8
 */
 export type ThresholdParameter = number;
-
 export interface VisionAllOfFileId {
   /** The ID of a file in CDF. */
   fileId: VisionFileId;
-
   /** The external ID of a file in CDF. */
   fileExternalId?: VisionFileExternalId;
 }
-
 /**
  * The ID of a file in CDF.
  * @format int64
  * @example 1234
  */
 export type VisionFileId = number;
-
 /**
  * The external ID of a file in CDF.
  * @example 1234
  */
 export type VisionFileExternalId = string;
-
 /**
  * Detected features in images. New fields may appear in case new feature extractors are add.
  */
@@ -178,14 +151,11 @@ export interface VisionExtractPredictions {
   textPredictions?: AnnotationsTextRegion[];
   assetTagPredictions?: AnnotationsCogniteAnnotationTypesImagesAssetLink[];
   peoplePredictions?: AnnotationsObjectDetection[];
-
   /** In beta. Available only when the `cdf-version: beta` header is provided. */
   industrialObjectPredictions?: AnnotationsObjectDetection[];
-
   /** In beta. Available only when the `cdf-version: beta` header is provided. */
   personalProtectiveEquipmentPredictions?: AnnotationsObjectDetection[];
 }
-
 /**
  * Models an extracted text region in an image
  */
@@ -196,14 +166,11 @@ export interface AnnotationsTextRegion {
    * @max 1
    */
   confidence?: number;
-
   /** The extracted text */
   text: string;
-
   /** The location of the extracted text */
   textRegion: AnnotationsBoundingBox;
 }
-
 /**
  * Models a link to a CDF Asset referenced in an image
  */
@@ -214,17 +181,13 @@ export interface AnnotationsCogniteAnnotationTypesImagesAssetLink {
    * @max 1
    */
   confidence?: number;
-
   /** The asset this annotation is pointing to */
   assetRef: AnnotationsAssetRef;
-
   /** The extracted text */
   text: string;
-
   /** The location of the text mentioning the asset */
   textRegion: AnnotationsBoundingBox;
 }
-
 /**
 * Models an image object detection represented by a label, a geometry, and
 optionally a confidence value.
@@ -232,19 +195,15 @@ optionally a confidence value.
 export interface AnnotationsObjectDetection {
   /** A plain rectangle */
   boundingBox?: AnnotationsBoundingBox;
-
   /**
    * A _closed_ polygon represented by _n_ vertices. In other words, we assume
    * that the first and last vertex are connected.
    */
   polygon?: AnnotationsPolygon;
-
   /** A polygonal chain consisting of _n_ vertices */
   polyline?: AnnotationsPolyLine;
-
   /** The label describing what type of object it is */
   label: string;
-
   /**
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
@@ -252,7 +211,6 @@ export interface AnnotationsObjectDetection {
    */
   confidence?: number;
 }
-
 /**
  * A plain rectangle
  */
@@ -263,28 +221,24 @@ export interface AnnotationsBoundingBox {
    * @max 1
    */
   confidence?: number;
-
   /**
    * Minimum abscissa of the bounding box (left edge). Must be strictly less than x_max.
    * @min 0
    * @max 1
    */
   xMin: number;
-
   /**
    * Maximum abscissa of the bounding box (right edge). Must be strictly more than x_min.
    * @min 0
    * @max 1
    */
   xMax: number;
-
   /**
    * Minimum ordinate of the bounding box (bottom edge). Must be strictly less than y_max.
    * @min 0
    * @max 1
    */
   yMin: number;
-
   /**
    * Maximum ordinate of the bounding box (top edge). Must be strictly more than y_min.
    * @min 0
@@ -292,7 +246,6 @@ export interface AnnotationsBoundingBox {
    */
   yMax: number;
 }
-
 /**
 * A _closed_ polygon represented by _n_ vertices. In other words, we assume
 that the first and last vertex are connected.
@@ -306,7 +259,6 @@ export interface AnnotationsPolygon {
   confidence?: number;
   vertices: AnnotationsPoint[];
 }
-
 /**
  * A polygonal chain consisting of _n_ vertices
  */
@@ -319,7 +271,6 @@ export interface AnnotationsPolyLine {
   confidence?: number;
   vertices: AnnotationsPoint[];
 }
-
 /**
  * Point in a 2D-Cartesian coordinate system with origin at the top-left corner of the page
  */
@@ -330,14 +281,12 @@ export interface AnnotationsPoint {
    * @max 1
    */
   confidence?: number;
-
   /**
    * The abscissa of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).
    * @min 0
    * @max 1
    */
   x: number;
-
   /**
    * The ordinate of the point in a coordinate system with origin at the top-left corner of the page. Normalized in (0,1).
    * @min 0
@@ -345,71 +294,66 @@ export interface AnnotationsPoint {
    */
   y: number;
 }
-
 /**
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
-export type AnnotationsAssetRef = { id?: number; externalId?: string };
-
+export type AnnotationsAssetRef = {
+  id?: number;
+  externalId?: string;
+};
 /**
  * The status of the job.
  */
 export type JobStatus = 'Queued' | 'Running' | 'Completed' | 'Failed';
-
 /**
  * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
  * @format int64
  * @min 0
  */
 export type EpochTimestamp = number;
-
 export type VisionExtractFeature =
   | TextDetection
   | AssetTagDetection
   | PeopleDetection
   | IndustrialObjectDetection
   | PersonalProtectiveEquipmentDetection;
-
 /**
  * Detect text in images.
  */
 export type TextDetection = 'TextDetection';
-
 /**
  * Detect external ID or name of assets (from your CDF projects) in images. Usage of this feature requires `["assetsAcl:READ"]` capability.
  */
 export type AssetTagDetection = 'AssetTagDetection';
-
 /**
  * Detect people in images.
  */
 export type PeopleDetection = 'PeopleDetection';
-
 /**
  * Detect industrial objects such as gauges and valves in images. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export type IndustrialObjectDetection = 'IndustrialObjectDetection';
-
 /**
  * Detect personal protective equipment, such as helmet, protective eyewear, and mask in images. In beta. Available only when the `cdf-version: beta` header is provided.
  */
 export type PersonalProtectiveEquipmentDetection =
   'PersonalProtectiveEquipmentDetection';
-
 /**
  * An object containing file (external) id.
  */
 export type FileReference =
-  | { fileId: VisionFileId }
-  | { fileExternalId: VisionFileExternalId };
-
+  | {
+      fileId: VisionFileId;
+    }
+  | {
+      fileExternalId: VisionFileExternalId;
+    };
 export type VisionExtractPostResponse = StatusSchema & {
   jobId: JobId;
   items: VisionAllOfFileId[];
   features: VisionExtractFeature[];
   parameters?: FeatureParameters;
 };
-
 export type VisionExtractGetResponse = StatusSchema & {
   jobId: JobId;
   items: VisionExtractItem[];
