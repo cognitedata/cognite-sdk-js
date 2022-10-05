@@ -10,7 +10,6 @@ import { OpenApiSnapshotManager } from '../snapshot';
 import { promises as fs } from 'fs';
 
 import { AcacodeOpenApiGenerator } from '../generator/acacode';
-import exp from 'constants';
 
 describe('code generation', () => {
   const testFolder = __dirname;
