@@ -81,6 +81,16 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.classifiersAPI;
   }
 
+  private async searchDocuments<ResponseType>(
+    query: DocumentsSearchRequest
+  ): Promise<ResponseType> {
+    const response = await this.post<ResponseType>(this.searchUrl, {
+      data: query,
+    });
+
+    return response.data;
+  }
+
   private async documentContent<ResponseType>(
     ids: DocumentId[],
     ignoreUnknownIds?: boolean
@@ -92,16 +102,6 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
         ignoreUnknownIds,
       },
     });
-    return response.data;
-  }
-
-  private async searchDocuments<ResponseType>(
-    query: DocumentsSearchRequest
-  ): Promise<ResponseType> {
-    const response = await this.post<ResponseType>(this.searchUrl, {
-      data: query,
-    });
-
     return response.data;
   }
 }
