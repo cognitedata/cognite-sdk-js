@@ -2,12 +2,15 @@ import {
   CodeGen,
   passThroughFilter,
   createServiceNameFilter,
+  createPathFilter,
+  StringFilter,
 } from '../codegen';
 import { OpenApiDocument } from '../openapi';
 import { OpenApiSnapshotManager } from '../snapshot';
 import { promises as fs } from 'fs';
 
 import { AcacodeOpenApiGenerator } from '../generator/acacode';
+import exp from 'constants';
 
 describe('code generation', () => {
   const testFolder = __dirname;
@@ -79,6 +82,57 @@ describe('code generation', () => {
       expect(Object.keys(basicSnapshot.paths).length).toBeGreaterThan(4);
       const paths = gen['filterPaths'](basicSnapshot.paths);
       expect(Object.keys(paths)).toHaveLength(4);
+    });
+
+    test('ignore filter', async () => {
+      const filter = (
+        data: Record<string, object>,
+        predicate: StringFilter
+      ): object => {
+        return Object.keys(data)
+          .filter(predicate)
+          .reduce((acc, path) => {
+            return Object.assign(acc, { [path]: data[path] });
+          }, {});
+      };
+
+      const base = '/api/v1/projects/{project}';
+      const data = {
+        [`${base}/serviceA`]: {},
+        [`${base}/serviceB`]: {},
+        [`${base}/serviceA/serviceC`]: {},
+        [`${base}/serviceA/serviceD`]: {},
+      };
+
+      const predicateServiceA = createPathFilter(
+        [createServiceNameFilter('serviceA')],
+        []
+      );
+      expect(Object.keys(filter(data, predicateServiceA))).toEqual([
+        data[0],
+        data[2],
+        data[3],
+      ]);
+
+      const predicateServiceAAndC = createPathFilter(
+        [createServiceNameFilter('serviceA')],
+        [createServiceNameFilter('serviceA/serviceD')]
+      );
+      expect(Object.keys(filter(data, predicateServiceAAndC))).toEqual([
+        data[0],
+        data[2],
+      ]);
+
+      const predicateServiceAOnly = createPathFilter(
+        [createServiceNameFilter('serviceA')],
+        [
+          createServiceNameFilter('serviceA/serviceC'),
+          createServiceNameFilter('serviceA/serviceD'),
+        ]
+      );
+      expect(Object.keys(filter(data, predicateServiceAOnly))).toEqual([
+        data[0],
+      ]);
     });
   });
 

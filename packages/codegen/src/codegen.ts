@@ -24,9 +24,19 @@ export type StringFilter = (str: string) => boolean;
 
 export const passThroughFilter: StringFilter = (): boolean => true;
 
+const createServiceNameRegex = (name: string): RegExp => {
+  return new RegExp(`^/api/.+/projects/{project}/${name}($|/)`);
+};
+
 export const createServiceNameFilter = (service: string): StringFilter => {
-  const r = new RegExp(`^/api/.+/projects/{project}/${service}($|/)`);
+  const r = createServiceNameRegex(service);
   return (path: string): boolean => r.test(path);
+};
+
+export const createServiceNameIgnoreFilters = (
+  services: string[]
+): StringFilter[] => {
+  return services.map(createServiceNameFilter);
 };
 
 export interface CodeGenOptions extends AutoNameInlinedRequestOption {
@@ -36,6 +46,27 @@ export interface CodeGenOptions extends AutoNameInlinedRequestOption {
   };
   outputDir: string;
 }
+
+export const createPathFilter = (
+  includePredicates: StringFilter[],
+  ignorePredicates: StringFilter[]
+): StringFilter => {
+  return (service: string): boolean => {
+    for (const predicate of includePredicates) {
+      if (predicate(service)) {
+        for (const ignorePredicate of ignorePredicates) {
+          if (ignorePredicate(service)) {
+            return false;
+          }
+        }
+
+        return true;
+      }
+    }
+
+    return false;
+  };
+};
 
 export class CodeGen {
   static outputFileName = 'types.gen.ts';
