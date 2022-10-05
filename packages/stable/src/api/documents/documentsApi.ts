@@ -60,8 +60,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
    * });
    * ```
    */
-  public search = (request: DocumentSearchRequest): DocumentSearchResponse => {
-    return this.searchEndpoint(request);
+   public search = (
+    query: DocumentSearchRequest
+  ): Promise<DocumentSearchResponse> => {
+    return this.searchDocuments<DocumentSearchResponse>(query);
   };
 
   public list = (request: DocumentListRequest): DocumentListResponse => {
@@ -79,5 +81,15 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
       },
     });
     return response.data;
+  }
+
+  private async searchDocuments<ResponseType>(
+    query: DocumentSearchRequest
+  ): Promise<ResponseType> {
+    const response = await this.post<ResponseType>(this.searchUrl, {
+      data: query,
+    });
+
+    return this.addToMapAndReturn(response.data, response);
   }
 }
