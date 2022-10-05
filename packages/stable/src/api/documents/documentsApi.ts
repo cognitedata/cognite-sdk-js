@@ -60,7 +60,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
    * });
    * ```
    */
-   public search = (
+  public search = (
     query: DocumentSearchRequest
   ): Promise<DocumentSearchResponse> => {
     return this.searchDocuments<DocumentSearchResponse>(query);
