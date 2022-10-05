@@ -533,8 +533,11 @@ export interface DocumentSearchCountAggregatesGroup {
      */
     property: DocumentFilterProperty;
 }
-export interface DocumentSearchResponse extends CursorAndAsyncIterator<DocumentSearchItem> {
+export interface DocumentSearchResponse {
+    items: DocumentSearchItem[];
     aggregates?: DocumentSearchAggregate[];
+    /** The cursor to get the next page of results (if available). The search endpoint only gives a limited number of results. A missing nextCursor does not imply there are no more results for the provided search. */
+    nextCursor?: string;
 }
 export type DocumentsAggregateResponse = DocumentsAggregateCountResponse | DocumentsAggregateUniqueValuesResponse | DocumentsAggregateAllUniqueValuesResponse;
 export interface DocumentListResponse extends CursorAndAsyncIterator<Document> {

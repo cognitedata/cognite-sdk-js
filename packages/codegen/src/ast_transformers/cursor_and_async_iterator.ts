@@ -23,12 +23,7 @@ const memberName = (member: ts.TypeElement): string | undefined => {
 const interfaceDeclarationHasRequiredMembers = (
   node: ts.InterfaceDeclaration
 ): boolean => {
-  const memberNames = node.members
-    .map(memberName)
-    .filter(
-      (member) =>
-        member != undefined && Array.from(targetMemberNames).includes(member)
-    );
+  const memberNames = node.members.map(memberName);
   return isEqual(targetMemberNames, new Set(memberNames));
 };
 
