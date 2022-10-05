@@ -33,7 +33,7 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
   return (sourceFile) => {
     const removeTargetMembers = (node: ts.Node): ts.Node | undefined => {
       if (ts.isPropertySignature(node) && ts.isIdentifier(node.name)) {
-        if (targetMemberNames.has(node.name.escapedText!)) {
+        if (targetMemberNames.has(node.name.escapedText as string)) {
           return undefined;
         }
       }
