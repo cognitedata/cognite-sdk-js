@@ -108,9 +108,9 @@ describe('code generation', () => {
         []
       );
       expect(Object.keys(filter(data, predicateServiceA))).toEqual([
-        data[0],
-        data[2],
-        data[3],
+        `${base}/serviceA`,
+        `${base}/serviceA/serviceC`,
+        `${base}/serviceA/serviceD`,
       ]);
 
       const predicateServiceAAndC = createPathFilter(
@@ -118,8 +118,8 @@ describe('code generation', () => {
         [createServiceNameFilter('serviceA/serviceD')]
       );
       expect(Object.keys(filter(data, predicateServiceAAndC))).toEqual([
-        data[0],
-        data[2],
+        `${base}/serviceA`,
+        `${base}/serviceA/serviceC`,
       ]);
 
       const predicateServiceAOnly = createPathFilter(
@@ -130,7 +130,7 @@ describe('code generation', () => {
         ]
       );
       expect(Object.keys(filter(data, predicateServiceAOnly))).toEqual([
-        data[0],
+        `${base}/serviceA`,
       ]);
     });
   });
