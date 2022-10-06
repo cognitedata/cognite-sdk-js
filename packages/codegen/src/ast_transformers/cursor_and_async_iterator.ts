@@ -77,7 +77,7 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
           removeTargetMembers,
           context
         );
-        const newNode = ts.updateInterfaceDeclaration(
+        return ts.updateInterfaceDeclaration(
           transformedNode,
           transformedNode.decorators,
           transformedNode.modifiers,
@@ -86,8 +86,6 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
           [hc, ...existingHeritageClauses],
           transformedNode.members
         );
-
-        return newNode;
       }
 
       return ts.visitEachChild(node, visitor, context);
