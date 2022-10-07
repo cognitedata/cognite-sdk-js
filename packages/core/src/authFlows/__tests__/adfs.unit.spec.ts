@@ -21,6 +21,7 @@ describe('ADFS', () => {
   beforeEach(() => {
     window.history.pushState({}, '', '');
     nock.cleanAll();
+    sessionStorage.clear();
   });
 
   describe('login', () => {
@@ -42,7 +43,7 @@ describe('ADFS', () => {
       window.location = location;
     });
 
-    test('should redirect to specific url', done => {
+    test('should redirect to specific url', (done) => {
       const silentLogin = jest
         .spyOn(loginUtils, 'silentLoginViaIframe')
         .mockRejectedValueOnce('Can not login silently');
@@ -82,7 +83,7 @@ describe('ADFS', () => {
         .mockReturnValueOnce(iframe);
       const spiedAppendChild = jest
         .spyOn(document.body, 'appendChild')
-        .mockImplementation(iframe => {
+        .mockImplementation((iframe) => {
           // @ts-ignore
           iframe.onload();
           return iframe;
@@ -114,15 +115,16 @@ describe('ADFS', () => {
         .mockResolvedValueOnce({
           accessToken,
           idToken,
-          expiredIn: Date.now() + 3600 * 1000,
+          expiresIn: Date.now() + 3600 * 1000,
         })
         .mockResolvedValueOnce({
           accessToken: updatedAccessToken,
           idToken: updatedIdToken,
-          expiredIn: Date.now() + 3600 * 1000,
+          expiresIn: Date.now() + 3600 * 1000,
         });
 
       const cdfTokenAfterLogin = await adfsClient.login();
+      sessionStorage.clear(); // force silent login
       const updatedCdfToken = await adfsClient.getCDFToken();
 
       expect(silentLogin).toHaveBeenCalledTimes(2);
@@ -136,16 +138,17 @@ describe('ADFS', () => {
         .mockResolvedValueOnce({
           accessToken,
           idToken,
-          expiredIn: Date.now() + 3600 * 1000,
+          expiresIn: Date.now() + 3600 * 1000,
         })
         .mockRejectedValueOnce(
           'Failed to acquire token silently due X-Frame-Options header deny'
         );
 
       const cdfTokenAfterLogin = await adfsClient.login();
-      const updatedCdfToken = await adfsClient.getCDFToken();
+      const anotherAdfsClient = new ADFS({ authority, requestParams });
+      const updatedCdfToken = await anotherAdfsClient.getCDFToken();
 
-      expect(silentLogin).toHaveBeenCalledTimes(2);
+      expect(silentLogin).toHaveBeenCalledTimes(1);
       expect(cdfTokenAfterLogin).toEqual(accessToken);
       expect(updatedCdfToken).toEqual(accessToken);
     });

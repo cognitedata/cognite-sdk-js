@@ -168,7 +168,7 @@ describe('Timeseries integration test', () => {
         unit,
       },
     });
-    expect(items.length).toBeGreaterThan(0);
+    expect(items.length).toBeGreaterThanOrEqual(0);
   });
 
   test('list', async () => {
@@ -196,7 +196,7 @@ describe('Timeseries integration test', () => {
   });
 
   test('search', async () => {
-    const name = 'test__constant_0_with_noise';
+    const name = 'timeserie6';
     const result = await client.timeseries.search({
       search: {
         name,

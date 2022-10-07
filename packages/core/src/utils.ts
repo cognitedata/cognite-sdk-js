@@ -41,7 +41,7 @@ export function isBrowser() {
 
 export function clearParametersFromUrl(...params: string[]): void {
   let url = window.location.href;
-  params.forEach(param => {
+  params.forEach((param) => {
     url = removeQueryParameterFromUrl(url, param);
   });
   window.history.replaceState(null, '', url);
@@ -74,7 +74,7 @@ export function isJson(data: any) {
 
 /** @hidden */
 export function sleepPromise(durationInMs: number) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, durationInMs);
   });
 }
@@ -88,7 +88,7 @@ export function promiseCache<ReturnValue>(
     if (unresolvedPromise) {
       return unresolvedPromise;
     }
-    return (unresolvedPromise = promiseFn().then(res => {
+    return (unresolvedPromise = promiseFn().then((res) => {
       unresolvedPromise = null;
       return res;
     }));
@@ -108,20 +108,35 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
   const responses: ResponseType[] = [];
   const errors: (Error | CogniteError)[] = [];
 
-  const promises = inputs.map(input => promiser(input));
+  const promises = inputs.map(promiser);
 
-  const wrappedPromises = promises.map((promise, index) =>
-    promise
-      .then(result => {
-        succeded.push(inputs[index]);
-        responses.push(result);
-      })
-      .catch(error => {
-        failed.push(inputs[index]);
-        errors.push(error);
+  type SingleResult = {
+    succeded?: RequestType;
+    response?: ResponseType;
+    failed?: RequestType;
+    error?: Error | CogniteError;
+  };
+
+  const wrappedPromises: Promise<SingleResult>[] = promises.map(
+    (promise, index) =>
+      new Promise<SingleResult>((resolve) => {
+        promise
+          .then((result) => {
+            resolve({ succeded: inputs[index], response: result });
+          })
+          .catch((error) => {
+            resolve({ failed: inputs[index], error });
+          });
       })
   );
-  await Promise.all(wrappedPromises);
+
+  const results = await Promise.all(wrappedPromises);
+  results.forEach((res) => {
+    failed.push(...(res.failed ? [res.failed] : []));
+    succeded.push(...(res.succeded ? [res.succeded] : []));
+    responses.push(...(res.response ? [res.response] : []));
+    errors.push(...(res.error ? [res.error] : []));
+  });
   if (failed.length) {
     throw {
       succeded,

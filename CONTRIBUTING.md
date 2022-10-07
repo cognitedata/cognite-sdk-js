@@ -1,5 +1,4 @@
-Contributing
-============
+# Contributing
 
 Contributions are welcome, and this document details how changes can be made and submitted,
 and eventually included in a release. We use monorepo tooling, and a git setup for automatically releasing
@@ -8,6 +7,7 @@ new versions based on commit messages.
 Please note we have a [code of conduct](./CODE_OF_CONDUCT.md).
 
 ## Making changes
+
 Make the changes to the package(s) you want to change, and commit them to a fork or branch. Commits
 need to follow [proper commit
 messages](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular).
@@ -17,10 +17,10 @@ releasing changes.
 
 We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
 
- - For fixes, start the commit with `fix: msg` or `fix(topic): msg`. This will bump PATCH.
- - For features, start the commit with `feat: msg` or `feat(topic): msg`. This will bump MINOR.
- - For changes that break backwards compatibility, add `BREAKING CHANGE: description` to the footer.
-   This will bump MAJOR version.
+- For fixes, start the commit with `fix: msg` or `fix(topic): msg`. This will bump PATCH.
+- For features, start the commit with `feat: msg` or `feat(topic): msg`. This will bump MINOR.
+- For changes that break backwards compatibility, add `BREAKING CHANGE: description` to the footer.
+  This will bump MAJOR version.
 
 Note that using `<type>!: msg` **is not supported**, it will actually break the semantics of some
 types. `feat!: msg` will result in a _patch_ release, not major. `<type>!: msg` [is a
@@ -28,46 +28,60 @@ thing](https://www.conventionalcommits.org/en/v1.0.0/) but that is _not_ support
 implementation used in this repo.
 
 Also note that a major version upgrades are _not_ propagated up the dependency tree. If you do a
-breaking change in `@cognite/sdk-core` it will get a major version bump, if you use the `BREAKING
-CHANGE: desc` footer. However, packages that depends on `@cognite/sdk-core` will only get a patch
+breaking change in `@cognite/sdk-core` it will get a major version bump, if you use the `BREAKING CHANGE: desc` footer. However, packages that depends on `@cognite/sdk-core` will only get a patch
 upgrade. So if you do a breaking change to a non-top level package and also want to get major
 version bump of the upstream packages you have to ensure that manually. This can be done in two
 ways, run `lerna version major` or do a inconsequential change to the top level packages. If you do
 _any_ change to the top packages (including the smallest white space cleanup), it will all be
 covered by the `BREAKING CHANGE: msg` commit, leading them to all get a major version bump.
 
- - For extra details in the changelog, you can specify a scope like so: `feat(assets): `.
- - For other changes there are types without version bumping semantics:
-   - `docs: ` changes to documentation
-   - `build: ` changes to build scripts and config
-   - `ci: ` changes to ci scripts and pipeline
-   - `refactor: ` code moving and renaming
-   - `style: ` fixes to code style
-   - `test: ` changes to tests
-   - `perf: ` changes to improve performance
-   - `revert: ` changing things back
-   - `chore: ` miscelanious changes
+- For extra details in the changelog, you can specify a scope like so: `feat(assets): `.
+- For other changes there are types without version bumping semantics:
+  - `docs: ` changes to documentation
+  - `build: ` changes to build scripts and config
+  - `ci: ` changes to ci scripts and pipeline
+  - `refactor: ` code moving and renaming
+  - `style: ` fixes to code style
+  - `test: ` changes to tests
+  - `perf: ` changes to improve performance
+  - `revert: ` changing things back
+  - `chore: ` miscelanious changes
 
 #### Example
+
 ```
 docs(contributing-readme): add example of commit with subject line
 ```
 
 A commit hook makes sure the syntax is followed. Automated commit messages such as `Merge pull request` are handled.
 
+## Code generation
+
+This SDK support generating TypeScript types from the Cognite OpenAPI document.
+The idea is to use the OpenAPI document as a source of truth and to automate
+part of the process. Any incorrect or missing types should be fixed/added
+in the OpenAPI document instead of manually adjusting the generated types.
+This also helps to keep documentation up to date.
+
+Use the command `yarn codegen` for available commands.
+
+More details are documented in the [codegen README](packages/codegen/README.md).
+
 ## Pull request
+
 Make a pull request from your branch to the main branch. When merging the pull request,
 only use squashing if the resulting squash commit can accurately describe the change as a single conventional commit.
 Once the change is pushed to the main branch, it is time for a release.
 
 ## Releases & Versioning
+
 Releases are done from the main branch, so when a pull request is merged,
 CI/CD will run tests, and if successful, do deploys.
 Documentation is built and deployed, and code snippets
 are exported to the service contract repo as a pull request.
 
 Updating and uploading npm packages only happens if the HEAD commit of the main branch
-contains `[release]` in its description or the PR title starts with `feat` or `fix`. 
+contains `[release]` in its description or the PR title starts with `feat` or `fix`.
 When CI/CD sees this, it will use lerna to update
 package versions of changed packages based on commit messages, and add the
 changes to the changelogs. The changes are comitted to the main branch
@@ -79,12 +93,13 @@ cause a PATCH bump. Markdown files and tests are ignored, but changing anything 
 like a comment in a source file, will trigger a new version,
 irrespective of conventional commits.
 
-This does *not* mean you should store unfinished work on the main branch.
+This does _not_ mean you should store unfinished work on the main branch.
 Another package may be ready for release, and once a `[release]`
 commit is pushed, all changed packages are updated.
 Repository administrators should be in control of `[release]` commits.
 
 To add a release commit to a clean working tree, use the command
+
 ```bash
 git checkout master
 git pull
@@ -96,8 +111,8 @@ If you want to push the empty commit to master via a pull request,
 use a squash merge (not rebase+ff). Otherwise GitHub will ignore the empty PR.
 
 Also, keep in mind that the `[release]` commit has to be the HEAD of
-main, and travis only runs on the HEAD. If HEAD has changed by the time
-the versioning happens, travis will fail.
+main, and Github Action only runs on the HEAD. If HEAD has changed by the time
+the versioning happens, Github Action will fail.
 
 ## Patching older major versions
 
@@ -108,6 +123,7 @@ Let's say you want to make a fix to `@cognite/sdk-core@2`,
 after `@cognite/sdk-core@3.0.0` is already published.
 
 First check if there already is a backporting branch called `@cognite/sdk-core@2.x`.
+
 ```bash
 git fetch
 git checkout @cognite/sdk-core@2.x
@@ -115,6 +131,7 @@ git checkout @cognite/sdk-core@2.x
 
 If there isn't, make it based on the latest release of MAJOR version 2.
 You can look at git tags to find the last release.
+
 ```bash
 git fetch --all --tags
 git tag | grep @cognite/sdk-core@2.
@@ -134,12 +151,14 @@ see automated tests run on the branch. Make sure they pass!
 
 Once you are ready to make the new version, and have pushed everything to git,
 open a terminal in the root of the project and run:
+
 ```bash
 yarn
 yarn build
 ```
 
 Then go to `packages/core` (or whatever package you are backporting to), and run:
+
 ```bash
 npm version patch -m "backport fix to %s for reasons"
 npm publish

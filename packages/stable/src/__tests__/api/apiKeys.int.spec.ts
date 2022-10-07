@@ -44,7 +44,7 @@ describe('API keys integration test', () => {
   });
 
   test('delete', async () => {
-    const response = await client.apiKeys.delete(apiKeys.map(key => key.id));
+    const response = await client.apiKeys.delete(apiKeys.map((key) => key.id));
     expect(response).toEqual({});
   });
 });

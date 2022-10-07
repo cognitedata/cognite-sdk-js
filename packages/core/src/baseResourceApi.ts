@@ -135,18 +135,18 @@ export abstract class BaseResourceAPI<ResponseType> {
   ) {
     return this.callEndpointWithMergeAndTransform(
       items,
-      data => this.callCreateEndpoint(data, path),
+      (data) => this.callCreateEndpoint(data, path),
       preRequestModifier,
       postRequestModifier
     );
   }
 
-  protected listEndpoint<QueryType extends FilterQuery>(
-    endpointCaller: ListEndpoint<QueryType, ResponseType[]>,
+  protected cursorBasedEndpoint<QueryType extends FilterQuery, Item>(
+    endpointCaller: ListEndpoint<QueryType, Item[]>,
     scope?: QueryType
-  ): CursorAndAsyncIterator<ResponseType> {
-    const listPromise = endpointCaller(scope).then(transformedResponse =>
-      this.addNextPageFunction<QueryType>(
+  ): CursorAndAsyncIterator<Item> {
+    const listPromise = endpointCaller(scope).then((transformedResponse) =>
+      this.addNextPageFunction<QueryType, Item>(
         endpointCaller.bind(this),
         transformedResponse.data,
         scope
@@ -156,13 +156,23 @@ export abstract class BaseResourceAPI<ResponseType> {
     return Object.assign(listPromise, autoPaginationMethods);
   }
 
-  protected async retrieveEndpoint<RequestParams extends object>(
-    ids: IdEither[],
+  protected listEndpoint<QueryType extends FilterQuery>(
+    endpointCaller: ListEndpoint<QueryType, ResponseType[]>,
+    scope?: QueryType
+  ): CursorAndAsyncIterator<ResponseType> {
+    return this.cursorBasedEndpoint<QueryType, ResponseType>(
+      endpointCaller,
+      scope
+    );
+  }
+
+  protected async retrieveEndpoint<RequestParams extends object, T = IdEither>(
+    ids: T[],
     params?: RequestParams,
     path?: string
   ) {
-    return this.callEndpointWithMergeAndTransform(ids, request =>
-      this.callRetrieveEndpoint(request, path, params)
+    return this.callEndpointWithMergeAndTransform(ids, (request) =>
+      this.callRetrieveEndpoint<RequestParams, T>(request, path, params)
     );
   }
 
@@ -170,7 +180,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     changes: ChangeType[],
     path?: string
   ) {
-    return this.callEndpointWithMergeAndTransform(changes, data =>
+    return this.callEndpointWithMergeAndTransform(changes, (data) =>
       this.callUpdateEndpoint(data, path)
     );
   }
@@ -180,7 +190,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     path?: string,
     queryParams?: HttpQueryParams
   ) {
-    return this.callEndpointWithTransform(query, data =>
+    return this.callEndpointWithTransform(query, (data) =>
       this.callSearchEndpoint(data, path, queryParams)
     );
   }
@@ -195,12 +205,13 @@ export abstract class BaseResourceAPI<ResponseType> {
   }
 
   protected async aggregateEndpoint<QueryType, AggregateResponse>(
-    query: QueryType
+    query: QueryType,
+    path?: string
   ) {
     const response = await this.callAggregateEndpoint<
       QueryType,
       AggregateResponse
-    >(query);
+    >(query, path);
     return this.addToMapAndReturn(response.data.items, response);
   }
 
@@ -228,11 +239,10 @@ export abstract class BaseResourceAPI<ResponseType> {
     return response;
   };
 
-  protected async callRetrieveEndpoint<RequestParams extends object>(
-    items: IdEither[],
-    path: string = this.byIdsUrl,
-    params?: RequestParams
-  ) {
+  protected async callRetrieveEndpoint<
+    RequestParams extends object,
+    T = IdEither
+  >(items: T[], path: string = this.byIdsUrl, params?: RequestParams) {
     return this.postInParallelWithAutomaticChunking({ params, path, items });
   }
 
@@ -264,9 +274,10 @@ export abstract class BaseResourceAPI<ResponseType> {
   }
 
   protected async callAggregateEndpoint<QueryType, AggregateResponse>(
-    query: QueryType
+    query: QueryType,
+    path: string = this.aggregateUrl
   ) {
-    return this.post<ItemsWrapper<AggregateResponse[]>>(this.aggregateUrl, {
+    return this.post<ItemsWrapper<AggregateResponse[]>>(path, {
       data: query,
     });
   }
@@ -307,19 +318,19 @@ export abstract class BaseResourceAPI<ResponseType> {
     responses: HttpResponse<ItemsWrapper<T[]>>[]
   ): T[] {
     return responses
-      .map(response => response.data.items)
+      .map((response) => response.data.items)
       .reduce((a, b) => [...a, ...b], []);
   }
 
-  protected addNextPageFunction<QueryType extends FilterQuery>(
-    endpoint: ListEndpoint<QueryType, ResponseType[]>,
-    cursorResponse: CursorResponse<ResponseType[]>,
+  protected addNextPageFunction<QueryType extends FilterQuery, Item>(
+    endpoint: ListEndpoint<QueryType, Item[]>,
+    cursorResponse: CursorResponse<Item[]>,
     query: QueryType = {} as QueryType
-  ): ListResponse<ResponseType[]> {
+  ): ListResponse<Item[]> {
     const { nextCursor } = cursorResponse;
     const next = nextCursor
       ? () =>
-          endpoint({ ...query, cursor: nextCursor }).then(response =>
+          endpoint({ ...query, cursor: nextCursor }).then((response) =>
             this.addNextPageFunction(endpoint, response.data, query)
           )
       : undefined;
@@ -341,7 +352,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   }: PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType>) {
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, chunkSize),
-      singleChunk =>
+      (singleChunk) =>
         this.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { ...params, items: singleChunk },
           params: queryParams,
@@ -366,7 +377,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   >(path: string, items: RequestType[], params?: ParamsType) {
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, 1000),
-      singleChunk =>
+      (singleChunk) =>
         this.post<ItemsWrapper<ResponseType[]>>(path, {
           data: { items: singleChunk },
           params,

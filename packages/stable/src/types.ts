@@ -34,7 +34,9 @@ export {
   AutoPagingToArray,
 } from '@cognite/sdk-core';
 
-export * from './api/spatial/types';
+export * from './exports.gen';
+
+export * from './api/geospatial/types';
 
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
@@ -903,10 +905,6 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
    * Asset External IDs of related equipment that this event relates to.
    */
   assetExternalIds?: CogniteExternalId[];
-  /**
-   * Only include events that have a related asset in a tree rooted at any of these root assetIds.
-   */
-  rootAssetIds?: IdEither[];
   /**
    * Only include events that reference these specific dataSet IDs
    */
@@ -1881,6 +1879,13 @@ export interface RelationshipsFilterRequest extends FilterQuery {
    * If the filter is not specified it default to an empty filter.
    */
   filter?: RelationshipsFilter;
+
+  /**
+   * If true, will try to fetch the resources referred to in the relationship,
+   * based on the users access rights. Will silently fail to attatch the resources
+   * if the user lacks access to some of them.
+   */
+  fetchResources?: boolean;
 }
 
 export interface RelationshipsFilter extends CreatedAndLastUpdatedTimeFilter {
@@ -2076,6 +2081,15 @@ export interface Sequence
     InternalId,
     CreatedAndLastUpdatedTime {
   columns: SequenceColumn[];
+}
+
+/**
+ * A sequence row values with row number and columns information
+ */
+export interface SequenceRow {
+  rowNumber: number;
+  values: SequenceItem[];
+  columns: SequenceColumnBasicInfo[];
 }
 
 interface SequenceBase {
@@ -2606,7 +2620,8 @@ export type EntityMatchingFeatureType =
 export const EntityMatchingFeatureType = {
   SIMPLE: 'simple' as EntityMatchingFeatureType,
   BIGRAM: 'bigram' as EntityMatchingFeatureType,
-  FREQUENCY_WEIGHTED_BIGRAM: 'frequencyweightedbigram' as EntityMatchingFeatureType,
+  FREQUENCY_WEIGHTED_BIGRAM:
+    'frequencyweightedbigram' as EntityMatchingFeatureType,
   BIGRAM_EXTRA_TOKENIZERS: 'bigramextratokenizers' as EntityMatchingFeatureType,
   BIGRAM_COMBO: 'bigramcombo' as EntityMatchingFeatureType,
 };
@@ -2622,7 +2637,8 @@ export const EntityMatchingClassifier = {
   RANDOM_FOREST: 'randomforest' as EntityMatchingClassifier,
   DECISION_TREE: 'decisiontree' as EntityMatchingClassifier,
   LOGISTIC_REGRESSION: 'logisticregression' as EntityMatchingClassifier,
-  AUGMENTED_LOGISTIC_REGRESSION: 'augmentedlogisticregression' as EntityMatchingClassifier,
+  AUGMENTED_LOGISTIC_REGRESSION:
+    'augmentedlogisticregression' as EntityMatchingClassifier,
   AUGMENTED_RANDOM_FOREST: 'augmentedrandomforest' as EntityMatchingClassifier,
 };
 
@@ -3182,3 +3198,67 @@ export type GraphQlError = {
   path: string[];
   locations: { line: number; column: number }[];
 };
+
+export interface RelationshipsRetrieveParams extends IgnoreUnknownIds {
+  /**
+   * If true, will try to fetch the resources referred to in the relationship,
+   * based on the users access rights. Will silently fail to attatch the resources
+   * if the user lacks access to some of them.
+   */
+  fetchResources?: boolean;
+}
+
+export type AnnotatedResourceType = 'file';
+export type AnnotationStatus = 'suggested' | 'approved' | 'rejected';
+
+// TODO [CXT-463] Use annotation-types package definitions
+export type AnnotationType = string;
+export type AnnotationPayload = object;
+
+export interface AnnotationModel extends AnnotationCreate {
+  id: CogniteInternalId;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+}
+
+export interface AnnotationCreate extends AnnotationSuggest {
+  status: AnnotationStatus;
+}
+
+export interface AnnotationSuggest {
+  annotatedResourceType: AnnotatedResourceType;
+  annotatedResourceId: CogniteInternalId;
+  annotationType: AnnotationType;
+  creatingApp: string;
+  creatingAppVersion: string;
+  creatingUser: string | null;
+  data: AnnotationPayload;
+}
+
+export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
+
+export interface AnnotationUpdate {
+  update: {
+    annotationType?: SetField<AnnotationType>;
+    data?: SetField<AnnotationPayload>;
+    status?: SetField<AnnotationStatus>;
+  };
+}
+
+export interface AnnotationFilterRequest
+  extends AnnotationFilter,
+    FilterQuery {}
+export interface AnnotationFilter {
+  filter: AnnotationFilterProps;
+}
+
+export interface AnnotationFilterProps {
+  annotatedResourceType: AnnotatedResourceType;
+  annotatedResourceIds: IdEither[];
+  annotationType?: AnnotationType;
+  creatingApp?: string;
+  creatingAppVersion?: string;
+  creatingUser?: string | null;
+  status?: AnnotationStatus;
+  data?: AnnotationPayload;
+}

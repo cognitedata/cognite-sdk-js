@@ -37,7 +37,7 @@ interface ADFSRequestParamsWithDefaults {
 }
 
 type ADFSRequestParamsMapping = {
-  [key in keyof ADFSRequestParamsWithDefaults]: keyof ADFSQueryParams
+  [key in keyof ADFSRequestParamsWithDefaults]: keyof ADFSQueryParams;
 };
 
 const adfsRequestParamsMapping: ADFSRequestParamsMapping = {
@@ -59,17 +59,19 @@ const LOGIN_IFRAME_NAME = 'adfsSilentLoginIframe';
 export class ADFS {
   private readonly authority: string;
   private readonly queryParams: ADFSQueryParams;
+  private readonly sessionKey: string;
   private token: ADFSToken | null = null;
 
   constructor({ authority, requestParams }: ADFSConfig) {
     this.authority = authority;
     this.queryParams = this.getADFSQueryParams(requestParams);
+    this.sessionKey = `${authority}_${requestParams.clientId}_${requestParams.resource}`;
   }
 
   public async login(): Promise<string | void> {
     const token = await this.acquireTokenSilently();
 
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (token) {
         resolve(token.accessToken);
       }
@@ -99,7 +101,7 @@ export class ADFS {
         SCOPE,
         TOKEN_TYPE
       );
-      this.token = token;
+      this.setToken(token);
 
       return token;
     } catch (e) {
@@ -115,8 +117,8 @@ export class ADFS {
     return token
       ? token.accessToken
       : this.token
-        ? this.token.accessToken
-        : null;
+      ? this.token.accessToken
+      : null;
   }
 
   public async getIdToken(): Promise<string | null> {
@@ -132,11 +134,14 @@ export class ADFS {
    * (using implicit grant flow)
    */
   private async acquireTokenSilently(): Promise<ADFSToken | null> {
+    let token = this.getToken();
+    if (token) {
+      return token;
+    }
+
     const url = `${this.authority}?prompt=none&${this.getADFSQueryParamString(
       this.queryParams
     )}`;
-
-    let token: ADFSToken | null = null;
 
     try {
       token = await silentLoginViaIframe<ADFSToken | null>(
@@ -149,7 +154,7 @@ export class ADFS {
     }
 
     if (token) {
-      this.token = token;
+      this.setToken(token);
     }
 
     return token;
@@ -189,6 +194,33 @@ export class ADFS {
       return `${result}${result.length > 1 ? '&' : ''}${key}=${value}`;
     }, '');
   }
+
+  private setToken(token: ADFSToken | null) {
+    this.token = token;
+    if (token) {
+      sessionStorage.setItem(this.sessionKey, JSON.stringify(token));
+    } else {
+      sessionStorage.removeItem(this.sessionKey);
+    }
+  }
+
+  private getToken(): ADFSToken | null {
+    const value = sessionStorage.getItem(this.sessionKey);
+    if (!value) {
+      return null;
+    }
+    try {
+      const token = JSON.parse(value) as ADFSToken;
+      if (token.expiresIn <= Date.now()) {
+        throw new Error(`token expired ${token.expiresIn}`);
+      }
+      return token;
+    } catch (err) {
+      console.error(err);
+      sessionStorage.removeItem(this.sessionKey);
+      return null;
+    }
+  }
 }
 
 export function extractADFSToken(query: string): ADFSToken | null {
@@ -202,7 +234,7 @@ export function extractADFSToken(query: string): ADFSToken | null {
     return {
       accessToken,
       idToken,
-      expiresIn: Date.now() + Number(expiresIn),
+      expiresIn: Date.now() + Number(expiresIn) * 1000,
     };
   }
 

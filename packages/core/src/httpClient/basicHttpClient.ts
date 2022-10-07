@@ -5,6 +5,7 @@ import { stringify } from 'query-string';
 import { isJson } from '../utils';
 import { HttpError } from './httpError';
 import { DEFAULT_DOMAIN } from '../constants';
+import { HttpHeaders } from './httpHeaders';
 
 export class BasicHttpClient {
   private static validateStatusCode(status: number) {
@@ -23,17 +24,17 @@ export class BasicHttpClient {
   private static textResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
-    return (res.text() as unknown) as Promise<ResponseType>;
+    return res.text() as unknown as Promise<ResponseType>;
   }
 
   private static arrayBufferResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
-    return (res
+    return res
       .blob()
-      .then(blob => new Response(blob).arrayBuffer()) as unknown) as Promise<
-      ResponseType
-    >;
+      .then((blob) =>
+        new Response(blob).arrayBuffer()
+      ) as unknown as Promise<ResponseType>;
   }
 
   private static getResponseHandler<ResponseType>(
@@ -159,7 +160,8 @@ export class BasicHttpClient {
 
   protected async postRequest<T>(
     response: HttpResponse<T>,
-    _: HttpRequest // eslint-disable-line
+    _: HttpRequest, // eslint-disable-line
+    __: HttpRequest // eslint-disable-line
   ): Promise<HttpResponse<T>> {
     const requestIsOk = BasicHttpClient.validateStatusCode(response.status);
     if (!requestIsOk) {
@@ -202,7 +204,7 @@ export class BasicHttpClient {
     const resClone = res.clone();
     const [data, textFallback] = await Promise.all([
       responseHandler(res).catch(() => undefined),
-      (resClone.text() as unknown) as Promise<ResponseType>,
+      resClone.text() as unknown as Promise<ResponseType>,
     ]);
     return {
       headers: BasicHttpClient.convertFetchHeaders(res.headers),
@@ -214,7 +216,7 @@ export class BasicHttpClient {
   protected async request<ResponseType>(request: HttpRequest) {
     const mutatedRequest = await this.preRequest(request);
     const rawResponse = await this.rawRequest<ResponseType>(mutatedRequest);
-    return this.postRequest(rawResponse, request);
+    return this.postRequest(rawResponse, request, mutatedRequest);
   }
 
   private constructUrl(path: string, params: HttpQueryParams = {}) {
@@ -292,10 +294,6 @@ export const HttpResponseType = {
 
 export interface HttpQueryParams {
   [key: string]: any;
-}
-
-export interface HttpHeaders {
-  [key: string]: string;
 }
 
 type ResponseHandler<ResponseType> = (res: Response) => Promise<ResponseType>;

@@ -5,18 +5,14 @@ import CogniteClient from '../cogniteClient';
 import { Asset, ItemsWrapper } from '../types';
 import {
   mockBaseUrl,
+  setupClientWithNonExistingApiKey,
   setupLoggedInClient,
   setupMockableClient,
 } from './testUtils';
 
 describe('createClientWithApiKey - integration', () => {
   test('handle non-existing api-key', async () => {
-    const client = new CogniteClient({
-      appId: 'JS Integration test',
-      project: process.env.COGNITE_PROJECT as string,
-      apiKeyMode: true,
-      getToken: () => Promise.resolve('non-existing-api-key'),
-    });
+    const client = setupClientWithNonExistingApiKey();
     await expect(
       client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -30,7 +26,6 @@ describe('http methods - integration', () => {
   const project = process.env.COGNITE_PROJECT as string;
   beforeAll(async () => {
     client = setupLoggedInClient();
-    await client.authenticate();
   });
   test('post method', async () => {
     const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
@@ -53,18 +48,9 @@ describe('api endpoints smoke test', () => {
     nock.cleanAll();
     client = setupMockableClient();
     const emptyResponse = { items: [] };
-    nock(mockBaseUrl)
-      .post(/.*/)
-      .times(Infinity)
-      .reply(200, emptyResponse);
-    nock(mockBaseUrl)
-      .get(/.*/)
-      .times(Infinity)
-      .reply(200, emptyResponse);
-    nock(mockBaseUrl)
-      .put(/.*/)
-      .once()
-      .reply(200, emptyResponse);
+    nock(mockBaseUrl).post(/.*/).times(Infinity).reply(200, emptyResponse);
+    nock(mockBaseUrl).get(/.*/).times(Infinity).reply(200, emptyResponse);
+    nock(mockBaseUrl).put(/.*/).once().reply(200, emptyResponse);
   });
 
   test('call (some) endpoints with a null context', async () => {
@@ -83,9 +69,7 @@ describe('api endpoints smoke test', () => {
     async function callEndpoint(endpoint: (a: any[]) => any, param: any) {
       if (endpoint) {
         const mockFn = jest.fn();
-        await endpoint
-          .bind(null)(param)
-          .catch(mockFn);
+        await endpoint.bind(null)(param).catch(mockFn);
         expect(mockFn).not.toBeCalled();
       }
     }

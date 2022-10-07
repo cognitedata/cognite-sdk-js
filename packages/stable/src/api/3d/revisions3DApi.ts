@@ -63,7 +63,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     filter?: Revision3DListRequest
   ): CursorAndAsyncIterator<Revision3D> => {
     const path = this.url(`${modelId}/revisions`);
-    return super.listEndpoint(params => this.get(path, { params }), filter);
+    return super.listEndpoint((params) => this.get(path, { params }), filter);
   };
 
   /**

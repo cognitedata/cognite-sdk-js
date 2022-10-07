@@ -3,6 +3,448 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.9.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.5...@cognite/sdk@7.9.6) (2022-10-04)
+
+
+### Bug Fixes
+
+* move `@types/geojson` to depedencies ([#897](https://github.com/cognitedata/cognite-sdk-js/issues/897)) ([66b3bb0](https://github.com/cognitedata/cognite-sdk-js/commit/66b3bb0b8d37d814d5bb0dcc35b576fe924abce3))
+
+
+
+
+
+## [7.9.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.4...@cognite/sdk@7.9.5) (2022-09-26)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.9.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.3...@cognite/sdk@7.9.4) (2022-09-23)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.9.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.2...@cognite/sdk@7.9.3) (2022-09-23)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.9.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.1...@cognite/sdk@7.9.2) (2022-09-23)
+
+
+### Bug Fixes
+
+* ensure response ordering matches request when chunking a request ([#893](https://github.com/cognitedata/cognite-sdk-js/issues/893)) ([77eb797](https://github.com/cognitedata/cognite-sdk-js/commit/77eb7976abb21029c22a16c0ceeb22d577d1ce68))
+
+
+
+
+
+## [7.9.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.0...@cognite/sdk@7.9.1) (2022-09-12)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [7.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.7...@cognite/sdk@7.9.0) (2022-09-12)
+
+
+### Features
+
+*  move vision extract api to v1 ([#872](https://github.com/cognitedata/cognite-sdk-js/issues/872)) ([23d0218](https://github.com/cognitedata/cognite-sdk-js/commit/23d021863020bc3e8caf2ad94caafefe1d1e405a)), closes [#873](https://github.com/cognitedata/cognite-sdk-js/issues/873)
+
+
+
+
+
+## [7.8.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.6...@cognite/sdk@7.8.7) (2022-09-07)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.8.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.5...@cognite/sdk@7.8.6) (2022-09-07)
+
+
+### Bug Fixes
+
+* don't retry 401 requests ([#868](https://github.com/cognitedata/cognite-sdk-js/issues/868)) ([4d17461](https://github.com/cognitedata/cognite-sdk-js/commit/4d174616ccf8ddfafed8a45b64d99e5ceaa06ce7))
+
+
+
+
+
+## [7.8.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.4...@cognite/sdk@7.8.5) (2022-09-06)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.8.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.3...@cognite/sdk@7.8.4) (2022-08-31)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.8.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.2...@cognite/sdk@7.8.3) (2022-08-21)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.8.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.1...@cognite/sdk@7.8.2) (2022-08-15)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.8.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.8.0...@cognite/sdk@7.8.1) (2022-08-05)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [7.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.7.1...@cognite/sdk@7.8.0) (2022-07-25)
+
+
+### Features
+
+* code generation for types based on openapi doc ([#801](https://github.com/cognitedata/cognite-sdk-js/issues/801)) ([07eb308](https://github.com/cognitedata/cognite-sdk-js/commit/07eb3087705c550758fcc9e1b12ea43428ecf79d)), closes [#820](https://github.com/cognitedata/cognite-sdk-js/issues/820)
+
+
+
+
+
+## [7.7.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.7.0...@cognite/sdk@7.7.1) (2022-07-07)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [7.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.6.2...@cognite/sdk@7.7.0) (2022-06-20)
+
+
+### Features
+
+* **annotations:** move annotations to stable ([#823](https://github.com/cognitedata/cognite-sdk-js/issues/823)) ([b453685](https://github.com/cognitedata/cognite-sdk-js/commit/b4536855ad62e9888af11419b89af1621a50a7ff))
+
+
+
+
+
+## [7.6.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.6.1...@cognite/sdk@7.6.2) (2022-06-17)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.6.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.6.0...@cognite/sdk@7.6.1) (2022-06-09)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [7.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.5.1...@cognite/sdk@7.6.0) (2022-06-02)
+
+
+### Features
+
+* automatic token management with @cognite/auth-wrapper  ([#796](https://github.com/cognitedata/cognite-sdk-js/issues/796)) ([d13c53f](https://github.com/cognitedata/cognite-sdk-js/commit/d13c53f9d5a5e65d6e2fc7d1a0e2efe2d36e678c))
+* automatic token management with @cognite/auth-wrapper  ([#814](https://github.com/cognitedata/cognite-sdk-js/issues/814)) ([d2c3a30](https://github.com/cognitedata/cognite-sdk-js/commit/d2c3a3083746e234f5dfc3e290188414d9ea17a6))
+
+
+### Reverts
+
+* Revert "feat: automatic token management with @cognite/auth-wrapper  (#796)" (#813) ([0a8a61c](https://github.com/cognitedata/cognite-sdk-js/commit/0a8a61c2b2c3d992f80b40f6282b20595537edac)), closes [#796](https://github.com/cognitedata/cognite-sdk-js/issues/796) [#813](https://github.com/cognitedata/cognite-sdk-js/issues/813)
+
+
+
+
+
+## [7.5.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.5.0...@cognite/sdk@7.5.1) (2022-05-27)
+
+
+### Bug Fixes
+
+* **documents:** label type in documents ([#809](https://github.com/cognitedata/cognite-sdk-js/issues/809)) ([fd5dcf6](https://github.com/cognitedata/cognite-sdk-js/commit/fd5dcf6ba6401eade7ad4e9c1f970494223a8b4a))
+
+
+
+
+
+# [7.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.4.0...@cognite/sdk@7.5.0) (2022-05-27)
+
+
+### Features
+
+* **documents:** aggregate api ([#793](https://github.com/cognitedata/cognite-sdk-js/issues/793)) ([445c39f](https://github.com/cognitedata/cognite-sdk-js/commit/445c39ff90822a357e20e624828bcd6e2ee36369))
+
+
+
+
+
+# [7.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.4...@cognite/sdk@7.4.0) (2022-05-25)
+
+
+### Features
+
+* add fetchResources to relationships api ([#808](https://github.com/cognitedata/cognite-sdk-js/issues/808)) ([b37fdd2](https://github.com/cognitedata/cognite-sdk-js/commit/b37fdd230043c8c24af1e1fe6df339064d722636))
+
+
+
+
+
+## [7.3.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.3...@cognite/sdk@7.3.4) (2022-05-23)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.3.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.2...@cognite/sdk@7.3.3) (2022-05-20)
+
+
+### Bug Fixes
+
+* 401 not authorized ([#804](https://github.com/cognitedata/cognite-sdk-js/issues/804)) ([0b4d8be](https://github.com/cognitedata/cognite-sdk-js/commit/0b4d8beb666aff24dbb1309b552193cdd1d80f94))
+
+
+
+
+
+## [7.3.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.1...@cognite/sdk@7.3.2) (2022-05-20)
+
+
+### Bug Fixes
+
+* **geospatial:** change feature search stream response ([#805](https://github.com/cognitedata/cognite-sdk-js/issues/805)) ([4e207aa](https://github.com/cognitedata/cognite-sdk-js/commit/4e207aa41eab84a40968b9aed826ac29da7700d1))
+
+
+### Reverts
+
+* Revert "fix: fixing 401 problem (#800)" (#802) ([341b68d](https://github.com/cognitedata/cognite-sdk-js/commit/341b68dd271b7781489343637c861921d647b483)), closes [#800](https://github.com/cognitedata/cognite-sdk-js/issues/800) [#802](https://github.com/cognitedata/cognite-sdk-js/issues/802)
+
+
+
+
+
+## [7.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.3.0...@cognite/sdk@7.3.1) (2022-05-19)
+
+
+### Bug Fixes
+
+* fixing 401 problem ([#800](https://github.com/cognitedata/cognite-sdk-js/issues/800)) ([b5789b1](https://github.com/cognitedata/cognite-sdk-js/commit/b5789b1a15ed9fb574c636c5515c85a2868b60a2))
+
+
+
+
+
+# [7.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.5...@cognite/sdk@7.3.0) (2022-05-18)
+
+
+### Features
+
+* **documents:** content and list endpoints + stricter types ([#792](https://github.com/cognitedata/cognite-sdk-js/issues/792)) ([e906571](https://github.com/cognitedata/cognite-sdk-js/commit/e906571f0501312315b4a20909fb302ebc8a8827))
+
+
+
+
+
+## [7.2.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.4...@cognite/sdk@7.2.5) (2022-05-16)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [7.2.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.3...@cognite/sdk@7.2.4) (2022-05-16)
+
+
+### Bug Fixes
+
+* use `type` field instead of instanceOf ([#761](https://github.com/cognitedata/cognite-sdk-js/issues/761)) ([45c5ca8](https://github.com/cognitedata/cognite-sdk-js/commit/45c5ca8a26f8dc6cbbd0efd9172d0fb1d7a842de))
+
+
+
+
+
+## [7.2.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.2...@cognite/sdk@7.2.3) (2022-05-13)
+
+
+### Bug Fixes
+
+* adding @types/geojson to core package ([#780](https://github.com/cognitedata/cognite-sdk-js/issues/780)) ([b8b5715](https://github.com/cognitedata/cognite-sdk-js/commit/b8b57155f1e40df33743a61bad8fce63fe2d247f))
+
+
+
+
+
+## [7.2.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.2.0...@cognite/sdk@7.2.2) (2022-04-12)
+
+
+### Bug Fixes
+
+* adding geojson to fix import problems ([#779](https://github.com/cognitedata/cognite-sdk-js/issues/779)) ([14d437a](https://github.com/cognitedata/cognite-sdk-js/commit/14d437af5e027ec7ef69b87442f1c0552fec7ee6))
+
+
+
+
+
+# [7.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.1.1...@cognite/sdk@7.2.0) (2022-04-08)
+
+
+### Features
+
+* **documents:** add documents preview to stable ([#776](https://github.com/cognitedata/cognite-sdk-js/issues/776)) ([49f45f1](https://github.com/cognitedata/cognite-sdk-js/commit/49f45f1164f9af932eba56989172890ae2a55831))
+
+
+
+
+
+## [7.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.1.0...@cognite/sdk@7.1.1) (2022-03-01)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [7.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.0.0...@cognite/sdk@7.1.0) (2022-02-09)
+
+
+### Features
+
+* **documents:** add document search API to stable ([#749](https://github.com/cognitedata/cognite-sdk-js/issues/749)) ([28c0a08](https://github.com/cognitedata/cognite-sdk-js/commit/28c0a0860e5d8ff1c8c1e6f48936eb4dec14341a)), closes [#753](https://github.com/cognitedata/cognite-sdk-js/issues/753) [#754](https://github.com/cognitedata/cognite-sdk-js/issues/754)
+
+
+
+
+
+# [7.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.3.3...@cognite/sdk@7.0.0) (2022-01-10)
+
+
+### chore
+
+* **geospatial:** updates spatial to geospatial & type name changes ([#720](https://github.com/cognitedata/cognite-sdk-js/issues/720)) ([2e93d8b](https://github.com/cognitedata/cognite-sdk-js/commit/2e93d8b23de443e845eef1aa8dc9200483d27e76))
+
+
+### Features
+
+* **geospatial:** updates spatial to geospatial & type name ([#727](https://github.com/cognitedata/cognite-sdk-js/issues/727)) ([ad05a88](https://github.com/cognitedata/cognite-sdk-js/commit/ad05a885b6a16bd2ae5636fd2cbed2649dad5023))
+
+
+### BREAKING CHANGES
+
+* **geospatial:** updates spatial to geospatial & type name
+
+* chore(geospatial): updates spatial to geospatial & types updated
+
+* feat(geospatial): adds update api to featureType
+
+* feat(geospatial): refactor feature APIs, filter types ,aggregateEndpoint
+
+* chore(geospatial): place geojson type in stable package
+
+* chore(geospatial): update types for breaking API changes
+
+* chore(geospatial): updates Geospatial type
+
+* chore(geospatial): remove filter bifurcation
+
+* chore(geospatial): updates searchSpec
+
+* chore(geospatial): adds crs & js code examples
+
+* chore(geospatial): change generic id type for retrieve
+
+* chore(geospatial): remove output params from delete feature
+
+* chore(geospatial): change crs endpoint
+
+* chore(geospatial): add more filters
+
+* chore(geospatial): fix examples
+* **geospatial:** changes api name from spatial to geospatial, features to feature & featureTypes to featureType
+
+* feat(geospatial): adds update api to featureType
+
+* feat(geospatial): refactor feature APIs, filter types ,aggregateEndpoint
+
+* chore(geospatial): place geojson type in stable package
+
+* chore(geospatial): update types for breaking API changes
+
+* chore(geospatial): updates Geospatial type
+
+* chore(geospatial): remove filter bifurcation
+
+* chore(geospatial): updates searchSpec
+
+* chore(geospatial): adds crs & js code examples
+
+* chore(geospatial): change generic id type for retrieve
+
+* chore(geospatial): remove output params from delete feature
+
+* chore(geospatial): change crs endpoint
+
+* chore(geospatial): add more filters
+
+* chore(geospatial): fix example
+
+* chore(geospatial): fix examples
+
+
+
+
+
+## [6.3.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.3.2...@cognite/sdk@6.3.3) (2022-01-10)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+## [6.3.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.3.1...@cognite/sdk@6.3.2) (2021-12-21)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
 ## [6.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@6.3.0...@cognite/sdk@6.3.1) (2021-12-07)
 
 **Note:** Version bump only for package @cognite/sdk
@@ -684,7 +1126,7 @@ For replacements, see [MIGRATION_GUIDE_2xx_3xx.md](https://docs.cognite.com/dev/
 ### Features
 
 
-* Introduce support for Data sets. Document and track data lineage, ensure data integrity, and allow 3rd parties to write their insights securely back to your Cognite Data Fusion (CDF) project. Learn more about data sets [here.](https://docs.cognite.com/blog/2020/03/01/data-sets/)
+* Introduce support for Data sets. Document and track data lineage, ensure data integrity, and allow 3rd parties to write their insights securely back to your Cognite Data Fusion (CDF) project. Learn more about data sets [here.](https://hub.cognite.com/product-updates/cognite-data-fusion-introducing-data-sets-369)
 
 # [2.22.0](https://github.com/cognitedata/cognite-sdk-js/compare/v2.21.0...v2.22.0) (2020-03-05)
 

@@ -86,7 +86,7 @@ function makeAutoPagingToArray<T>(autoPagingEach: AutoPagingEach<T>) {
       limit = Infinity;
     }
     const items: T[] = [];
-    await autoPagingEach(async item => {
+    await autoPagingEach(async (item) => {
       items.push(item);
       if (items.length >= limit) {
         return false;

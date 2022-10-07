@@ -15,6 +15,7 @@ import { ApiKeysAPI } from './api/apiKeys/apiKeysApi';
 import { AssetsAPI } from './api/assets/assetsApi';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
+import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
 import { FilesAPI } from './api/files/filesApi';
@@ -26,7 +27,9 @@ import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
 import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
-import { SpatialAPI } from './api/spatial/spatialAPI';
+import { GeospatialAPI } from './api/geospatial/geospatialAPI';
+import { AnnotationsAPI } from './api/annotations/annotationsApi';
+import { VisionAPI } from './api/vision/visionApi';
 import {
   TemplateGraphQlApi,
   TemplateGroupsApi,
@@ -101,8 +104,17 @@ export default class CogniteClient extends BaseCogniteClient {
   public get entityMatching() {
     return accessApi(this.entityMatchingApi);
   }
-  public get spatial() {
-    return accessApi(this.spatialApi);
+  public get geospatial() {
+    return accessApi(this.geospatialApi);
+  }
+  public get documents() {
+    return accessApi(this.documentsApi);
+  }
+  public get annotations() {
+    return accessApi(this.annotationsApi);
+  }
+  public get vision() {
+    return accessApi(this.visionApi);
   }
   public get templates() {
     return {
@@ -165,7 +177,10 @@ export default class CogniteClient extends BaseCogniteClient {
   private assetMappings3DApi?: AssetMappings3DAPI;
   private viewer3DApi?: Viewer3DAPI;
   private apiKeysApi?: ApiKeysAPI;
-  private spatialApi?: SpatialAPI;
+  private geospatialApi?: GeospatialAPI;
+  private documentsApi?: DocumentsAPI;
+  private annotationsApi?: AnnotationsAPI;
+  private visionApi?: VisionAPI;
 
   protected get version() {
     return version;
@@ -215,7 +230,10 @@ export default class CogniteClient extends BaseCogniteClient {
       this.httpClient,
       this.metadataMap
     );
-    this.spatialApi = this.apiFactory(SpatialAPI, 'spatial');
+    this.geospatialApi = this.apiFactory(GeospatialAPI, 'geospatial');
+    this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
+    this.annotationsApi = this.apiFactory(AnnotationsAPI, 'annotations');
+    this.visionApi = this.apiFactory(VisionAPI, 'context/vision');
   }
 
   static urlEncodeExternalId(externalId: string): string {

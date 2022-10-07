@@ -13,7 +13,8 @@ import {
 } from '../utils';
 import { CogniteLoginError } from '../loginError';
 import { AUTHORIZATION_HEADER } from '../constants';
-import { HttpCall, HttpHeaders } from '../httpClient/basicHttpClient';
+import { HttpCall } from '../httpClient/basicHttpClient';
+import { HttpHeaders } from '../httpClient/httpHeaders';
 import * as LoginUtils from '../loginUtils';
 import {
   ACCESS_TOKEN_PARAM,
@@ -108,14 +109,14 @@ export class CogniteAuthentication {
       onAuthMethod === POPUP
         ? onAuthenticateWithPopup
         : isFunction(onAuthMethod)
-          ? onAuthMethod
-          : onAuthenticateWithRedirect;
+        ? onAuthMethod
+        : onAuthenticateWithRedirect;
     return new Promise((resolve, reject) => {
       const login: OnAuthenticateLoginObject = {
         skip: () => {
           resolve(null);
         },
-        redirect: params => {
+        redirect: (params) => {
           const authorizeParams = {
             baseUrl: this.baseUrl,
             project: this.project,
@@ -123,7 +124,7 @@ export class CogniteAuthentication {
           };
           LoginUtils.loginWithRedirect(authorizeParams).catch(reject);
         },
-        popup: async params => {
+        popup: async (params) => {
           const authorizeParams = {
             baseUrl: this.baseUrl,
             project: this.project,

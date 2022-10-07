@@ -6,6 +6,7 @@ import * as TestUtils from './testUtils';
 export * from './types';
 
 export { CogniteAuthentication } from './authFlows/legacy';
+export { ADFS } from './authFlows/adfs';
 
 export { MetadataMap } from './metadata';
 export { BaseResourceAPI } from './baseResourceApi';
@@ -22,12 +23,12 @@ export { CogniteLoginError } from './loginError';
 export { HttpError } from './httpClient/httpError';
 export {
   HttpResponse,
-  HttpHeaders,
   HttpResponseType,
   HttpQueryParams,
   HttpRequestOptions,
   HttpMethod,
 } from './httpClient/basicHttpClient';
+export { HttpHeaders } from './httpClient/httpHeaders';
 export {
   createUniversalRetryValidator,
   createRetryValidator,

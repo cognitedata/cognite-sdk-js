@@ -106,7 +106,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
   public list = (
     query?: TemplateInstanceFilterQuery
   ): CursorAndAsyncIterator<TemplateInstance> => {
-    return super.listEndpoint(async scope => {
+    return super.listEndpoint(async (scope) => {
       const res = await this.callListEndpointWithPost(scope);
       return {
         ...res,
@@ -142,7 +142,7 @@ class TemplateInstanceCodec {
   static encodeTemplateInstances(
     templateInstances: ExternalTemplateInstance[]
   ): ExternalTemplateInstance[] {
-    return templateInstances.map(item => {
+    return templateInstances.map((item) => {
       return {
         ...item,
         fieldResolvers: TemplateInstanceCodec.encodeFieldResolvers(
@@ -178,9 +178,9 @@ class TemplateInstanceCodec {
     };
   }
 
-  static encodeFieldResolvers(
-    fieldResolvers: { [K in string]: FieldResolver | {} }
-  ): { [K in string]: FieldResolver } {
+  static encodeFieldResolvers(fieldResolvers: {
+    [K in string]: FieldResolver | {};
+  }): { [K in string]: FieldResolver } {
     const mappedResolvers = toPairs(fieldResolvers).map(
       ([name, fieldResolver]) => {
         if (
@@ -201,7 +201,7 @@ class TemplateInstanceCodec {
   static decodeTemplateInstances(
     templateInstances: TemplateInstance[]
   ): TemplateInstance[] {
-    return templateInstances.map(item => {
+    return templateInstances.map((item) => {
       return {
         ...item,
         fieldResolvers: TemplateInstanceCodec.decodeFieldResolvers(
@@ -211,9 +211,9 @@ class TemplateInstanceCodec {
     });
   }
 
-  static decodeFieldResolvers(
-    fieldResolvers: { [K in string]: FieldResolver | {} }
-  ): { [K in string]: FieldResolver | {} } {
+  static decodeFieldResolvers(fieldResolvers: {
+    [K in string]: FieldResolver | {};
+  }): { [K in string]: FieldResolver | {} } {
     const mappedResolvers = toPairs(fieldResolvers).map(
       ([name, fieldResolver]) => {
         return [
@@ -254,12 +254,12 @@ class TemplateInstanceCodec {
     }
   }
 
-  static isFieldResolver(fieldResolver: FieldResolver | {}) {
+  static isFieldResolver(fieldResolver: any) {
     return (
-      fieldResolver instanceof ConstantResolver ||
-      fieldResolver instanceof RawResolver ||
-      fieldResolver instanceof SyntheticTimeSeriesResolver ||
-      fieldResolver instanceof ViewResolver
+      fieldResolver.type === 'constant' ||
+      fieldResolver.type === 'raw' ||
+      fieldResolver.type === 'syntheticTimeSeries' ||
+      fieldResolver.type === 'view'
     );
   }
 }

@@ -38,32 +38,24 @@ describe('BasicHttpClient', () => {
 
   describe('get', () => {
     test('use correct base url', async () => {
-      nock(baseUrl)
-        .get('/')
-        .reply(200, {});
+      nock(baseUrl).get('/').reply(200, {});
       await client.get('');
     });
 
     test('use correct path', async () => {
       const path = '/abc/def';
-      nock(baseUrl)
-        .get(path)
-        .reply(200, {});
+      nock(baseUrl).get(path).reply(200, {});
       await client.get(path);
     });
 
     test('handle json response', async () => {
-      nock(baseUrl)
-        .get('/')
-        .reply(200, { a: 42 });
+      nock(baseUrl).get('/').reply(200, { a: 42 });
       const response = await client.get<any>('/');
       expect(response.data).toEqual({ a: 42 });
     });
 
     test('handle text response', async () => {
-      nock(baseUrl)
-        .get('/')
-        .reply(200, 'hello');
+      nock(baseUrl).get('/').reply(200, 'hello');
       const response = await client.get<string>('/', {
         responseType: HttpResponseType.Text,
       });
@@ -72,9 +64,7 @@ describe('BasicHttpClient', () => {
 
     test('handle arraybuffer response', async () => {
       const buffer = new ArrayBuffer(42);
-      nock(baseUrl)
-        .get('/')
-        .reply(200, buffer);
+      nock(baseUrl).get('/').reply(200, buffer);
       const response = await client.get<string>('/', {
         responseType: HttpResponseType.ArrayBuffer,
       });
@@ -82,18 +72,13 @@ describe('BasicHttpClient', () => {
     });
 
     test('handle json errors and fallback to text response', async () => {
-      nock(baseUrl)
-        .get('/')
-        .reply(200, '');
+      nock(baseUrl).get('/').reply(200, '');
       const response = await client.get<any>('/');
       expect(response.data).toEqual('');
     });
 
     test('handle query params', async () => {
-      nock(baseUrl)
-        .get('/')
-        .query({ assetId: 123 })
-        .reply(200, {});
+      nock(baseUrl).get('/').query({ assetId: 123 }).reply(200, {});
       await client.get('/', { params: { assetId: 123 } });
     });
 
@@ -113,9 +98,7 @@ describe('BasicHttpClient', () => {
     });
 
     test('override base url in a single request', async () => {
-      nock('https://another-domain')
-        .get('/abc')
-        .reply(200, {});
+      nock('https://another-domain').get('/abc').reply(200, {});
       await client.get('https://another-domain/abc');
     });
 
@@ -131,9 +114,7 @@ describe('BasicHttpClient', () => {
     });
 
     test('expose status code in throwed error', async () => {
-      nock(baseUrl)
-        .get('/')
-        .reply(500, {});
+      nock(baseUrl).get('/').reply(500, {});
       expect.assertions(1);
       try {
         await client.get('/');
@@ -155,9 +136,7 @@ describe('BasicHttpClient', () => {
     });
 
     test('expose body in throwed error', async () => {
-      nock(baseUrl)
-        .get('/')
-        .reply(500, { a: 42 });
+      nock(baseUrl).get('/').reply(500, { a: 42 });
       expect.assertions(1);
       try {
         await client.get('/');
@@ -167,18 +146,14 @@ describe('BasicHttpClient', () => {
     });
 
     test('throw on request error', async () => {
-      nock(baseUrl)
-        .get('/')
-        .replyWithError('Unknown error');
+      nock(baseUrl).get('/').replyWithError('Unknown error');
       await expect(client.get('/')).rejects.toThrowError();
     });
   });
 
   describe('post', () => {
     test('send request body', async () => {
-      nock(baseUrl)
-        .post('/', { a: 42 })
-        .reply(200, {});
+      nock(baseUrl).post('/', { a: 42 }).reply(200, {});
       await client.post('/', { data: { a: 42 } });
     });
 
@@ -193,9 +168,7 @@ describe('BasicHttpClient', () => {
   describe('baseUrl', () => {
     test('should handle baseUrl with path', async () => {
       const customClient = new BasicHttpClient('https://example.com/some/path');
-      nock('https://example.com/some/path')
-        .get('/abc')
-        .reply(200, {});
+      nock('https://example.com/some/path').get('/abc').reply(200, {});
       await customClient.get('/abc');
     });
   });

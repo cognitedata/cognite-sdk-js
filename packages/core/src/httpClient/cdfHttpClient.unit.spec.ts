@@ -19,10 +19,7 @@ describe('CDFHttpClient', () => {
 
   describe('get', () => {
     test('convert query parameter arrays to json', async () => {
-      nock(baseUrl)
-        .get('/')
-        .query({ assetIds: '[123,456]' })
-        .reply(200, {});
+      nock(baseUrl).get('/').query({ assetIds: '[123,456]' }).reply(200, {});
       await client.get('/', { params: { assetIds: [123, 456] } });
     });
 
@@ -83,9 +80,7 @@ describe('CDFHttpClient', () => {
     });
 
     test('throw custom cognite http error', async () => {
-      nock(baseUrl)
-        .get('/')
-        .reply(400, error400);
+      nock(baseUrl).get('/').reply(400, error400);
       expect.assertions(1);
       try {
         await client.get('/');
@@ -95,18 +90,14 @@ describe('CDFHttpClient', () => {
     });
 
     test('throw custom cognite error with populated message', async () => {
-      nock(baseUrl)
-        .get('/')
-        .reply(400, error400);
+      nock(baseUrl).get('/').reply(400, error400);
       await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
         `"Some message | code: 400"`
       );
     });
 
     test('throw custom cognite error with populated status code', async () => {
-      nock(baseUrl)
-        .get('/')
-        .reply(400, error400);
+      nock(baseUrl).get('/').reply(400, error400);
       expect.assertions(1);
       try {
         await client.get('/');
@@ -117,9 +108,7 @@ describe('CDFHttpClient', () => {
 
     describe('response401Handler', () => {
       test('throw on 401 with default handler', async () => {
-        nock(baseUrl)
-          .get('/')
-          .reply(401, error401);
+        nock(baseUrl).get('/').reply(401, error401);
         expect.assertions(1);
         try {
           await client.get('/');
@@ -128,11 +117,9 @@ describe('CDFHttpClient', () => {
         }
       });
 
-      test('set custom 401 handler', async done => {
-        nock(baseUrl)
-          .get('/')
-          .reply(401, error401);
-        client.set401ResponseHandler(err => {
+      test('set custom 401 handler', async (done) => {
+        nock(baseUrl).get('/').reply(401, error401);
+        client.set401ResponseHandler((err) => {
           expect(err.status).toBe(401);
           done();
         });
@@ -140,10 +127,8 @@ describe('CDFHttpClient', () => {
       });
 
       test('respect reject call', async () => {
-        nock(baseUrl)
-          .get('/')
-          .reply(401, error401);
-        client.set401ResponseHandler((_, __, reject) => {
+        nock(baseUrl).get('/').reply(401, error401);
+        client.set401ResponseHandler((_, __, ___, reject) => {
           reject();
         });
         await expect(client.get('/')).rejects.toMatchInlineSnapshot(
@@ -152,13 +137,9 @@ describe('CDFHttpClient', () => {
       });
 
       test('respect retry call', async () => {
-        const scope = nock(baseUrl)
-          .get('/')
-          .reply(401, error401);
-        nock(baseUrl)
-          .get('/')
-          .reply(200, {});
-        client.set401ResponseHandler((_, retry) => {
+        const scope = nock(baseUrl).get('/').reply(401, error401);
+        nock(baseUrl).get('/').reply(200, {});
+        client.set401ResponseHandler((_, __, retry) => {
           retry();
         });
         expect((await client.get('/')).status).toBe(200);
@@ -167,9 +148,7 @@ describe('CDFHttpClient', () => {
 
       function checkIfThrows401(url: string) {
         return async () => {
-          nock(baseUrl)
-            .get(url)
-            .reply(401, error401);
+          nock(baseUrl).get(url).reply(401, error401);
           const mockFn = jest.fn();
           client.set401ResponseHandler(mockFn);
           await expect(

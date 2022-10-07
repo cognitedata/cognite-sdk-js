@@ -10,12 +10,12 @@ export function enrichAssetsWithTheirParents(
   assets: ReadonlyArray<ExternalAssetItem>
 ): Node<ExternalAssetItem>[] {
   const externalIdMap = new Map<string, Node<ExternalAssetItem>>();
-  const nodes: Node<ExternalAssetItem>[] = assets.map(asset => ({
+  const nodes: Node<ExternalAssetItem>[] = assets.map((asset) => ({
     data: asset,
   }));
 
   // find all new exteralIds and map the new externalId to the asset
-  nodes.forEach(node => {
+  nodes.forEach((node) => {
     const { externalId } = node.data;
     if (externalId) {
       externalIdMap.set(externalId, node);
@@ -23,7 +23,7 @@ export function enrichAssetsWithTheirParents(
   });
 
   // set correct Node.parentNode
-  nodes.forEach(node => {
+  nodes.forEach((node) => {
     const { parentExternalId } = node.data;
     // has an internal parent
     if (parentExternalId && externalIdMap.has(parentExternalId)) {
@@ -40,5 +40,5 @@ export function sortAssetCreateItems(
 ): ExternalAssetItem[] {
   const nodes = enrichAssetsWithTheirParents(assets);
   const sortedNodes = GraphUtils.topologicalSort(nodes);
-  return sortedNodes.map(node => node.data);
+  return sortedNodes.map((node) => node.data);
 }

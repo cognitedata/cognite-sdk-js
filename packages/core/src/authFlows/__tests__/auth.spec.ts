@@ -65,10 +65,7 @@ describe('Cognite Auth', () => {
       });
 
       test('not authorised (401) getIdInfo', async () => {
-        nock(mockBaseUrl)
-          .get(statusPath)
-          .once()
-          .reply(401, response401);
+        nock(mockBaseUrl).get(statusPath).once().reply(401, response401);
         await expect(
           getIdInfo(httpClient.get.bind(httpClient), {})
         ).resolves.toBeNull();
@@ -76,9 +73,7 @@ describe('Cognite Auth', () => {
 
       test('getIdInfo - not logged in', async () => {
         const token = 'abc123';
-        nock(mockBaseUrl)
-          .get(statusPath)
-          .reply(200, notLoggedInResponse);
+        nock(mockBaseUrl).get(statusPath).reply(200, notLoggedInResponse);
         await expect(
           getIdInfo(httpClient.get.bind(httpClient), {
             [AUTHORIZATION_HEADER]: bearerString(token),
@@ -91,10 +86,7 @@ describe('Cognite Auth', () => {
       const successResponse = { data: { url } };
 
       test('successful getLogoutUrl', async () => {
-        nock(mockBaseUrl)
-          .get(logoutPath)
-          .once()
-          .reply(200, successResponse);
+        nock(mockBaseUrl).get(logoutPath).once().reply(200, successResponse);
 
         await expect(
           getLogoutUrl(httpClient.get.bind(httpClient), {})
@@ -102,10 +94,7 @@ describe('Cognite Auth', () => {
       });
 
       test('unauthorised getLogoutUrl', async () => {
-        nock(mockBaseUrl)
-          .get(logoutPath)
-          .once()
-          .reply(401, response401);
+        nock(mockBaseUrl).get(logoutPath).once().reply(401, response401);
 
         await expect(
           getLogoutUrl(httpClient.get.bind(httpClient), {})
@@ -150,9 +139,7 @@ describe('Cognite Auth', () => {
         window.history.pushState(
           {},
           '',
-          `/some/random/path?query=true&access_token=${
-            authTokens.accessToken
-          }&id_token=${authTokens.idToken}&random=123`
+          `/some/random/path?query=true&access_token=${authTokens.accessToken}&id_token=${authTokens.idToken}&random=123`
         );
         nock(mockBaseUrl, {
           reqheaders: {
@@ -244,7 +231,7 @@ describe('Cognite Auth', () => {
         window.location = location;
       });
 
-      test('redirects', async done => {
+      test('redirects', async (done) => {
         const spiedLocationAssign = jest
           .spyOn(window.location, 'assign')
           .mockImplementation();

@@ -69,7 +69,7 @@ describe.skip('Asset integration test', () => {
       ],
       responses: [],
     });
-    await client.assets.create([]).catch(e => {
+    await client.assets.create([]).catch((e) => {
       expect(e.missing).toEqual(err.missing);
       expect(e.failed).toEqual(err.failed);
       expect(e.succeded).toEqual(err.succeded);
@@ -286,11 +286,8 @@ describe.skip('Asset integration test', () => {
     const root2 = { name: 'root-2', externalId: 'root-2' + randomInt() };
     const child1 = { name: 'child-1', parentExternalId: root1.externalId };
     const child2 = { name: 'child-2', parentExternalId: root2.externalId };
-    [
-      createdChild1,
-      createdRoot1,
-      ...createdAssets2
-    ] = await client.assets.create([child1, root1, root2, child2]);
+    [createdChild1, createdRoot1, ...createdAssets2] =
+      await client.assets.create([child1, root1, root2, child2]);
 
     const nonRootAssets = await client.assets
       .list({
