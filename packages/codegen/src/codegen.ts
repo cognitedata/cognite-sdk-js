@@ -19,7 +19,6 @@ import {
   OpenApiParameters,
   OpenApiReference,
 } from './openapi';
-import { sortOpenApiJson } from './utils';
 import { AutoNameInlinedRequestOption } from './utils';
 import { TypeGenerator, TypeGeneratorResult } from './generator/generator';
 import sorterTransformer from './ast_transformers/sorter';
@@ -280,9 +279,7 @@ export class CodeGen {
     );
 
     const docJson = JSON.stringify(doc);
-    const sortedJson = sortOpenApiJson(docJson);
-
-    const result = await this.generator.generateTypes(sortedJson);
+    const result = await this.generator.generateTypes(docJson);
     result.astProcessedCode = this.astPostProcessing(result.code);
 
     return result;
