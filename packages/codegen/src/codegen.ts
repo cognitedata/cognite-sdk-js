@@ -22,6 +22,7 @@ import {
 import { sortOpenApiJson } from './utils';
 import { AutoNameInlinedRequestOption } from './utils';
 import { TypeGenerator, TypeGeneratorResult } from './generator/generator';
+import sorterTransformer from './ast_transformers/sorter';
 
 export type StringFilter = (str: string) => boolean;
 
@@ -43,7 +44,7 @@ export interface CodeGenOptions extends AutoNameInlinedRequestOption {
 export class CodeGen {
   static outputFileName = 'types.gen.ts';
 
-  astTransformers = [cursorAndAsyncIteratorTransformer];
+  astTransformers = [cursorAndAsyncIteratorTransformer, sorterTransformer];
 
   constructor(
     readonly generator: TypeGenerator,
