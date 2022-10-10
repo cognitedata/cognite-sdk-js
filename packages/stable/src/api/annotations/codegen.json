@@ -1,0 +1,9 @@
+{
+  "service": "annotations",
+  "filter": {
+    "serviceName": "annotations"
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}

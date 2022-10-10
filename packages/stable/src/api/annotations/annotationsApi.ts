@@ -7,14 +7,14 @@ import {
 } from '@cognite/sdk-core';
 
 import {
-  AnnotationChangeById,
-  AnnotationCreate,
-  AnnotationSuggest,
-  AnnotationFilterRequest,
-  AnnotationModel,
-} from '../../types';
+  AnnotationsV2CreateSchema,
+  AnnotationsV2FilterSchema,
+  AnnotationsV2ResponseSchema,
+  AnnotationsV2SuggestSchema,
+  AnnotationsV2UpdateDataSchema,
+} from './types.gen';
 
-export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
+export class AnnotationsAPI extends BaseResourceAPI<AnnotationsV2ResponseSchema> {
   /**
    * Specify that dates should be parsed in requests and responses
    * @hidden
@@ -30,14 +30,14 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Create annotations](https://docs.cognite.com/api/playground/#operation/annotationsCreate)
    */
-  public create = (items: AnnotationCreate[]) => {
+  public create = (items: AnnotationsV2CreateSchema[]) => {
     return this.createEndpoint(items);
   };
 
   /**
    * [Suggest annotations](https://docs.cognite.com/api/playground/#operation/annotationsSuggest)
    */
-  public suggest = (items: AnnotationSuggest[]) => {
+  public suggest = (items: AnnotationsV2SuggestSchema[]) => {
     return this.createEndpoint(items, this.suggestUrl);
   };
 
@@ -54,8 +54,8 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * [Advanced list of annotations](https://docs.cognite.com/api/playground/#operation/annotationsFilter)
    */
   public list = (
-    filter: AnnotationFilterRequest
-  ): CursorAndAsyncIterator<AnnotationModel> => {
+    filter: AnnotationsV2FilterSchema
+  ): CursorAndAsyncIterator<AnnotationsV2ResponseSchema> => {
     return this.listEndpoint(this.callListEndpointWithPost, filter);
   };
 
@@ -69,7 +69,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Update annotations](https://docs.cognite.com/api/playground/#operation/annotationsUpdate)
    */
-  public update = (changes: AnnotationChangeById[]) => {
+  public update = (changes: AnnotationsV2UpdateDataSchema[]) => {
     return this.updateEndpoint(changes);
   };
 }
