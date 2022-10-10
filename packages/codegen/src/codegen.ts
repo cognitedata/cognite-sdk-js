@@ -43,7 +43,11 @@ export interface CodeGenOptions extends AutoNameInlinedRequestOption {
 export class CodeGen {
   static outputFileName = 'types.gen.ts';
 
-  astTransformers = [cursorAndAsyncIteratorTransformer, sorterTransformer];
+  // Ordering matters! "sorterTransformer" must be the last transformer specified.
+  astTransformers = [
+    cursorAndAsyncIteratorTransformer,
+    sorterTransformer, // must be last
+  ];
 
   constructor(
     readonly generator: TypeGenerator,
