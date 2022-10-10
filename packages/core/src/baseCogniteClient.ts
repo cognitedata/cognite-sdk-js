@@ -26,7 +26,6 @@ import {
   RetryValidator,
 } from './httpClient/retryValidator';
 import { verifyOptionsRequiredFields } from './loginUtils';
-// eslint-disable-next-line lodash/import-scope
 import { CredentialsAuth, ClientCredentials } from './credentialsAuth';
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
@@ -81,6 +80,7 @@ export default class BaseCogniteClient {
    * over (e.g api-keys) there isn't a point retrying. previousToken is used to keep track of that,
    * comparing new tokens to one tried the last time.
    */
+  private previousToken: string | undefined;
   private readonly getToken: () => Promise<string | undefined>;
   private readonly apiKeyMode: boolean;
   private readonly noAuthMode?: boolean;
@@ -120,7 +120,7 @@ export default class BaseCogniteClient {
 
     this.http = this.initializeCDFHttpClient(baseUrl, options);
 
-    if (options && options.authentication) {
+    if (options.authentication) {
       const { credentials, provider } = options.authentication;
 
       this.credentialsAuth = new CredentialsAuth(
@@ -154,10 +154,11 @@ export default class BaseCogniteClient {
     try {
       let token = await this.authenticateGetToken();
 
-      if (token !== undefined) return token;
+      if (token !== undefined) {
+        return token;
+      }
 
       token = await this.credentialsAuth?.authenticate();
-
       return token;
     } catch (e) {
       return;
@@ -202,14 +203,11 @@ export default class BaseCogniteClient {
         `CogniteJavaScriptSDK:${this.version}`
       );
 
-    httpClient.set401ResponseHandler(async (httpError, retry, reject) => {
+    httpClient.set401ResponseHandler(async (_, retry, reject) => {
       try {
-        const previousToken = this.retrieveTokenValueFromHeader(
-          httpError.headers
-        );
-
         const newToken = await this.authenticate();
-        if (newToken && newToken !== previousToken) {
+        if (newToken && newToken !== this.previousToken) {
+          this.previousToken = newToken;
           retry();
         } else {
           reject();
@@ -220,24 +218,6 @@ export default class BaseCogniteClient {
     });
 
     return httpClient;
-  }
-
-  /**
-   * It retrieves the previous token from header
-   * @returns string
-   */
-  private retrieveTokenValueFromHeader(headers: HttpHeaders): string {
-    let previousToken;
-
-    if (this.credentialsAuth?.isApiKeyMode() || this.apiKeyMode) {
-      previousToken = headers[API_KEY_HEADER];
-    } else {
-      previousToken = headers[AUTHORIZATION_HEADER];
-    }
-
-    return previousToken !== undefined
-      ? previousToken.replace('Bearer ', '')
-      : previousToken;
   }
 
   /**

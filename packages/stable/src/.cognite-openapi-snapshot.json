@@ -9670,7 +9670,7 @@
         ]
       }
     },
-    "/api/v1/projects/{project}/context/vision/extract": {
+    "/api/playground/projects/{project}/context/vision/extract": {
       "post": {
         "tags": [
           "Vision"
@@ -9704,17 +9704,17 @@
           {
             "lang": "JavaScript",
             "label": "JavaScript SDK",
-            "source": "const job = await client.vision.extract(['TextDetection', 'AssetTagDetection', 'PeopleDetection'], [{ fileId: 1234 }]);"
+            "source": "const job = await client.vision.extract(['PeopleDetection'], [{ fileId: 123 }]);"
           },
           {
             "lang": "Python",
             "label": "Python SDK",
-            "source": "from cognite.experimental.data_classes.vision import VisionFeature\n\nextract_job = client.vision.extract(features=[VisionFeature.TEXT_DETECTION, VisionFeature.ASSET_TAG_DETECTION, VisionFeature.PEOPLE_DETECTION], file_ids=[1234])"
+            "source": "from cognite.experimental.data_classes.vision import Feature\n\nextract_job = client.vision.extract(features=Feature.ASSET_TAG_DETECTION, file_ids=[1])"
           }
         ]
       }
     },
-    "/api/v1/projects/{project}/context/vision/extract/{jobId}": {
+    "/api/playground/projects/{project}/context/vision/extract/{jobId}": {
       "get": {
         "tags": [
           "Vision"
@@ -10492,6 +10492,101 @@
         },
         "x-capability": [
           "geospatialAcl:WRITE"
+        ]
+      },
+      "get": {
+        "tags": [
+          "Geospatial"
+        ],
+        "summary": "Get features",
+        "description": "Get features with paging support",
+        "operationId": "getFeatures",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/geospatialFeatureTypeExternalId"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "$ref": "#/components/schemas/SearchLimit"
+            }
+          },
+          {
+            "in": "query",
+            "name": "allowCrsTransformation",
+            "schema": {
+              "$ref": "#/components/schemas/GeospatialAllowCrsTransformation"
+            }
+          },
+          {
+            "in": "query",
+            "name": "allowDimensionalityMismatch",
+            "schema": {
+              "$ref": "#/components/schemas/GeospatialAllowDimensionalityMismatch"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GeospatialFeaturesWithCursorResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/GeospatialErrorResponse"
+          }
+        },
+        "x-capability": [
+          "geospatialAcl:READ"
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/geospatial/featuretypes/{featureTypeExternalId}/features/list": {
+      "post": {
+        "tags": [
+          "Geospatial"
+        ],
+        "summary": "Filter all features",
+        "description": "List features based on the feature property filter passed in the body of the  request. This operation supports pagination by cursor.",
+        "operationId": "listFeatures",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/geospatialFeatureTypeExternalId"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeospatialFeatureListRequest"
+              },
+              "examples": {
+                "GeospatialFeatureExternalIdsExample": {
+                  "$ref": "#/components/examples/GeospatialListExample"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GeospatialFeaturesWithCursorResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/GeospatialErrorResponse"
+          }
+        },
+        "x-capability": [
+          "geospatialAcl:READ"
         ]
       },
       "get": {
@@ -11599,228 +11694,6 @@
         ]
       }
     },
-    "/api/v1/projects/{project}/extpipes/config": {
-      "get": {
-        "tags": [
-          "Extraction Pipelines Config"
-        ],
-        "summary": "Get a single configuration revision",
-        "description": "Retrieves a single configuration revision. By default, the latest revision is retrieved.",
-        "operationId": "getExtPipeConfigRevision",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          },
-          {
-            "name": "externalId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "revision",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "activeAtTime",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "format": "int64",
-              "default": 0
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Response with the retrieved configuration revision",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfigResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Response for a failed request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DefaultError"
-                }
-              }
-            }
-          }
-        },
-        "x-capability": [
-          "extractionconfigsAcl:READ"
-        ]
-      },
-      "post": {
-        "tags": [
-          "Extraction Pipelines Config"
-        ],
-        "summary": "Create extraction configuration revision",
-        "description": "Creates a configuration revision for the given extraction pipeline.",
-        "operationId": "createExtPipeConfig",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateConfigRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Response with the created configuration revision",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfigResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Response for a failed request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DefaultError"
-                }
-              }
-            }
-          }
-        },
-        "x-capability": [
-          "extractionconfigsAcl:WRITE"
-        ]
-      }
-    },
-    "/api/v1/projects/{project}/extpipes/config/revisions": {
-      "get": {
-        "tags": [
-          "Extraction Pipelines Config"
-        ],
-        "summary": "List configuration revisions",
-        "description": "Lists configuration revisions for the given extraction pipeline.",
-        "operationId": "listExtPipeConfigRevisions",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          },
-          {
-            "name": "externalId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "$ref": "#/components/parameters/Limit"
-          },
-          {
-            "$ref": "#/components/parameters/Cursor"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Response with the retrieved configuration revisions and an optional cursor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ItemsResponse_ListConfigResponse_"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Response for a failed request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DefaultError"
-                }
-              }
-            }
-          }
-        },
-        "x-capability": [
-          "extractionconfigsAcl:READ"
-        ]
-      }
-    },
-    "/api/v1/projects/{project}/extpipes/config/revert": {
-      "post": {
-        "tags": [
-          "Extraction Pipelines Config"
-        ],
-        "summary": "Revert configuration revision",
-        "description": "Reverts the latest configuration revision to an older revision. Equivalent to creating a new revision identical to the old revision.",
-        "operationId": "revertExtPipeConfigRevision",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RevertConfigRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Response with the new latest configuration revision",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ConfigResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Response for a failed request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DefaultError"
-                }
-              }
-            }
-          }
-        },
-        "x-capability": [
-          "extractionconfigsAcl:WRITE"
-        ]
-      }
-    },
     "/api/v1/projects/{project}/extpipes/runs": {
       "get": {
         "tags": [
@@ -12880,28 +12753,14 @@
                         "missing": {
                           "type": "array",
                           "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
+                            "$ref": "#/components/schemas/CogniteId"
                           },
                           "description": "List of lookup objects that do not match any results."
                         },
                         "duplicated": {
                           "type": "array",
                           "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
+                            "$ref": "#/components/schemas/CogniteId"
                           },
                           "description": "List of objects that are not unique."
                         }
@@ -12940,28 +12799,14 @@
                         "missing": {
                           "type": "array",
                           "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
+                            "$ref": "#/components/schemas/CogniteId"
                           },
                           "description": "List of lookup objects that do not match any results."
                         },
                         "duplicated": {
                           "type": "array",
                           "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
+                            "$ref": "#/components/schemas/CogniteId"
                           },
                           "description": "List of objects that are not unique."
                         }
@@ -13000,28 +12845,14 @@
                         "missing": {
                           "type": "array",
                           "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
+                            "$ref": "#/components/schemas/CogniteId"
                           },
                           "description": "List of lookup objects that do not match any results."
                         },
                         "duplicated": {
                           "type": "array",
                           "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
+                            "$ref": "#/components/schemas/CogniteId"
                           },
                           "description": "List of objects that are not unique."
                         }
@@ -13296,14 +13127,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                  },
-                  {
-                    "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                  }
-                ]
+                "$ref": "#/components/schemas/CogniteId"
               }
             }
           },
@@ -13316,377 +13140,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JobRead"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "The response for a failed request.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "required": [
-                    "error"
-                  ],
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "required": [
-                        "code",
-                        "message"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "integer",
-                          "description": "HTTP status code."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "Error message."
-                        },
-                        "missing": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of lookup objects that do not match any results."
-                        },
-                        "duplicated": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of objects that are not unique."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "The response for a forbidden request.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "required": [
-                    "error"
-                  ],
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "required": [
-                        "code",
-                        "message"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "integer",
-                          "description": "HTTP status code."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "Error message."
-                        },
-                        "missing": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of lookup objects that do not match any results."
-                        },
-                        "duplicated": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of objects that are not unique."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-capability": "transformationsAcl:WRITE",
-        "x-code-samples": [
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "res = client.transformations.run(transformation_id = 1)\n\nres = client.transformations.run(transformation_id = 1, wait = False)\nimport asyncio\nasync def run_transformation():\n    res = await c.transformations.run_async(id = 1)\nloop = asyncio.get_event_loop()\nloop.run_until_complete(run_transformation())\nloop.close()\n"
-          }
-        ]
-      }
-    },
-    "/api/v1/projects/{project}/transformations/jobs": {
-      "get": {
-        "tags": [
-          "Transformation Jobs"
-        ],
-        "summary": "List jobs",
-        "operationId": "getTransformationJobs",
-        "parameters": [
-          {
-            "name": "project",
-            "in": "path",
-            "description": "The project name.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "transformationId",
-            "in": "query",
-            "description": "List only jobs for the specified transformation. The transformation is identified by ID.",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "transformationExternalId",
-            "in": "query",
-            "description": "List only jobs for the specified transformation. The transformation is identified by external ID.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Limits the number of results to be returned. The maximum is 1000, default limit is 100.",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "minimum": 1,
-              "maximum": 1000
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "description": "Cursor for paging through results.",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Response with list of jobs.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ItemsWithCursor_JobRead"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "The response for a failed request.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "required": [
-                    "error"
-                  ],
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "required": [
-                        "code",
-                        "message"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "integer",
-                          "description": "HTTP status code."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "Error message."
-                        },
-                        "missing": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of lookup objects that do not match any results."
-                        },
-                        "duplicated": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of objects that are not unique."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "The response for a forbidden request.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "required": [
-                    "error"
-                  ],
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "required": [
-                        "code",
-                        "message"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "integer",
-                          "description": "HTTP status code."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "Error message."
-                        },
-                        "missing": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of lookup objects that do not match any results."
-                        },
-                        "duplicated": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of objects that are not unique."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-capability": "transformationsAcl:READ",
-        "x-code-samples": [
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "transformation_jobs_list = client.transformations.jobs.list()\n\ntransformation_jobs_list = client.transformations.jobs.list(transformation_id = 1)\n"
-          }
-        ]
-      }
-    },
-    "/api/v1/projects/{project}/transformations/jobs/byids": {
-      "post": {
-        "tags": [
-          "Transformation Jobs"
-        ],
-        "summary": "Retrieve jobs by ids",
-        "description": "Retrieve a maximum of 1000 jobs by ids per request.",
-        "operationId": "getTransformationJobsByIds",
-        "parameters": [
-          {
-            "name": "project",
-            "in": "path",
-            "description": "The project name.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ItemsWithIgnoreUnknownIds_CogniteInternalId"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Response with list of jobs.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Items_JobRead"
                 }
               }
             }
@@ -13861,6 +13314,461 @@
                                 "$ref": "#/components/schemas/TransformationCogniteInternalId"
                               }
                             ]
+                          },
+                          "description": "List of objects that are not unique."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.transformations.run(transformation_id = 1)\n\nres = client.transformations.run(transformation_id = 1, wait = False)\nimport asyncio\nasync def run_transformation():\n    res = await c.transformations.run_async(id = 1)\nloop = asyncio.get_event_loop()\nloop.run_until_complete(run_transformation())\nloop.close()\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/transformations/jobs": {
+      "get": {
+        "tags": [
+          "Transformation Jobs"
+        ],
+        "summary": "List jobs",
+        "operationId": "getTransformationJobs",
+        "parameters": [
+          {
+            "name": "project",
+            "in": "path",
+            "description": "The project name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transformationId",
+            "in": "query",
+            "description": "List only jobs for the specified transformation. The transformation is identified by ID.",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "transformationExternalId",
+            "in": "query",
+            "description": "List only jobs for the specified transformation. The transformation is identified by external ID.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limits the number of results to be returned. The maximum is 1000, default limit is 100.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Cursor for paging through results.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response with list of jobs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsWithCursor_JobRead"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The response for a failed request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "error"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP status code."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message."
+                        },
+                        "missing": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
+                              },
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
+                              }
+                            ]
+                          },
+                          "description": "List of lookup objects that do not match any results."
+                        },
+                        "duplicated": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
+                              },
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
+                              }
+                            ]
+                          },
+                          "description": "List of objects that are not unique."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The response for a forbidden request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "error"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP status code."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message."
+                        },
+                        "missing": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
+                              },
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
+                              }
+                            ]
+                          },
+                          "description": "List of lookup objects that do not match any results."
+                        },
+                        "duplicated": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
+                              },
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
+                              }
+                            ]
+                          },
+                          "description": "List of objects that are not unique."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "transformation_jobs_list = client.transformations.jobs.list()\n\ntransformation_jobs_list = client.transformations.jobs.list(transformation_id = 1)\n"
+          }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/transformations/jobs/byids": {
+      "post": {
+        "tags": [
+          "Transformation Jobs"
+        ],
+        "summary": "Retrieve jobs by ids",
+        "description": "Retrieve a maximum of 1000 jobs by ids per request.",
+        "operationId": "getTransformationJobsByIds",
+        "parameters": [
+          {
+            "name": "project",
+            "in": "path",
+            "description": "The project name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transformationId",
+            "in": "query",
+            "description": "List only jobs for the specified transformation. The transformation is identified by ID.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "transformationExternalId",
+            "in": "query",
+            "description": "List only jobs for the specified transformation. The transformation is identified by external ID.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limits the number of results to be returned. The maximum is 1000, default limit is 100.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "description": "Cursor for paging through results.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemsWithIgnoreUnknownIds_CogniteInternalId"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Response with list of jobs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Items_JobRead"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The response for a failed request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "error"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP status code."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message."
+                        },
+                        "missing": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
+                              },
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
+                              }
+                            ]
+                          },
+                          "description": "List of lookup objects that do not match any results."
+                        },
+                        "duplicated": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
+                              },
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
+                              }
+                            ]
+                          },
+                          "description": "List of objects that are not unique."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The response for a forbidden request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "error"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP status code."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message."
+                        },
+                        "missing": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
+                              },
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
+                              }
+                            ]
+                          },
+                          "description": "List of lookup objects that do not match any results."
+                        },
+                        "duplicated": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
+                              },
+                              {
+                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
+                              }
+                            ]
+                          },
+                          "description": "List of objects that are not unique."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The response for a conflict.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "error"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "integer",
+                          "description": "HTTP status code."
+                        },
+                        "message": {
+                          "type": "string",
+                          "description": "Error message."
+                        },
+                        "missing": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/CogniteId"
+                          },
+                          "description": "List of lookup objects that do not match any results."
+                        },
+                        "duplicated": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/CogniteId"
                           },
                           "description": "List of objects that are not unique."
                         }
@@ -16026,14 +15934,7 @@
                         "missing": {
                           "type": "array",
                           "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
+                            "$ref": "#/components/schemas/CogniteId"
                           },
                           "description": "List of lookup objects that do not match any results."
                         },
@@ -16067,169 +15968,6 @@
             "source": "client.transformations.notifications.delete(id=[1,2,3])\n"
           }
         ]
-      }
-    },
-    "/api/v1/projects/{project}/transformations/schema/sequence_rows": {
-      "get": {
-        "tags": [
-          "Schema"
-        ],
-        "summary": "Get the schema of a sequence",
-        "operationId": "getTransformationSequenceRowSchema",
-        "parameters": [
-          {
-            "name": "project",
-            "in": "path",
-            "description": "The project name.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "externalId",
-            "in": "query",
-            "description": "External ID of the Sequence",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 1
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Response with the schema columns of the target schema type",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Items_ColumnType"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "The response for a failed request.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "required": [
-                    "error"
-                  ],
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "required": [
-                        "code",
-                        "message"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "integer",
-                          "description": "HTTP status code."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "Error message."
-                        },
-                        "missing": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of lookup objects that do not match any results."
-                        },
-                        "duplicated": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of objects that are not unique."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "The response for a forbidden request.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "required": [
-                    "error"
-                  ],
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "required": [
-                        "code",
-                        "message"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "code": {
-                          "type": "integer",
-                          "description": "HTTP status code."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "Error message."
-                        },
-                        "missing": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of lookup objects that do not match any results."
-                        },
-                        "duplicated": {
-                          "type": "array",
-                          "items": {
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteExternalId"
-                              },
-                              {
-                                "$ref": "#/components/schemas/TransformationCogniteInternalId"
-                              }
-                            ]
-                          },
-                          "description": "List of objects that are not unique."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-capability": "transformationsAcl:READ"
       }
     },
     "/api/v1/projects/{project}/transformations/schema/{schemaType}": {
@@ -30951,22 +30689,6 @@
           "personalProtectiveEquipmentDetectionParameters": {
             "$ref": "#/components/schemas/PersonalProtectiveEquipmentDetectionParameters"
           }
-        },
-        "example": {
-          "textDetectionParameters": {
-            "threshold": 0.8
-          },
-          "assetTagDetectionParameters": {
-            "threshold": 0.8,
-            "partialMatch": true,
-            "assetSubtreeIds": [
-              1,
-              2
-            ]
-          },
-          "peopleDetectionParameters": {
-            "threshold": 0.8
-          }
         }
       },
       "VisionExtractPredictions": {
@@ -31006,47 +30728,6 @@
               "$ref": "#/components/schemas/Annotations.ObjectDetection"
             }
           }
-        },
-        "example": {
-          "textPredictions": [
-            {
-              "confidence": 0.9,
-              "text": "string",
-              "textRegion": {
-                "xMin": 0.5,
-                "xMax": 0.9,
-                "yMin": 0.5,
-                "yMax": 0.9
-              }
-            }
-          ],
-          "assetTagPredictions": [
-            {
-              "confidence": 0.9,
-              "assetRef": {
-                "id": 1233
-              },
-              "text": "string",
-              "textRegion": {
-                "xMin": 0.5,
-                "xMax": 0.9,
-                "yMin": 0.5,
-                "yMax": 0.9
-              }
-            }
-          ],
-          "peoplePredictions\"": [
-            {
-              "label": "person",
-              "confidence": 0.8,
-              "boundingBox": {
-                "xMin": 0.5,
-                "xMax": 0.9,
-                "yMin": 0.5,
-                "yMax": 0.9
-              }
-            }
-          ]
         }
       },
       "VisionExtractItem": {
@@ -33105,7 +32786,6 @@
       },
       "GeospatialFeatureProperties": {
         "type": "object",
-        "maxProperties": 200,
         "additionalProperties": {
           "oneOf": [
             {
@@ -33174,7 +32854,6 @@
           "MULTILINESTRINGZM",
           "MULTIPOLYGONZM",
           "GEOMETRYCOLLECTIONZM",
-          "RASTER",
           "JSON",
           "LONGARRAY"
         ]
@@ -33687,269 +33366,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "output": {
-            "$ref": "#/components/schemas/GeospatialAggregateOutput"
-          }
-        }
-      },
-      "GeospatialRasterOutputSpec": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/GeospatialRasterCommonOutputSpec"
-          },
-          {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/GeospatialRasterXyzOutputSpec"
-              },
-              {
-                "$ref": "#/components/schemas/GeospatialRasterGtiffOutputSpec"
-              }
-            ]
-          }
-        ]
-      },
-      "GeospatialRasterCommonOutputSpec": {
-        "type": "object",
-        "properties": {
-          "srid": {
-            "$ref": "#/components/schemas/GeospatialReferenceId"
-          },
-          "scaleX": {
-            "type": "number",
-            "format": "double"
-          },
-          "scaleY": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "GeospatialRasterXyzOutputSpec": {
-        "type": "object",
-        "description": "XYZ specification for the output raster",
-        "required": [
-          "format"
-        ],
-        "properties": {
-          "format": {
-            "type": "string",
-            "enum": [
-              "XYZ"
-            ]
-          },
-          "options": {
-            "type": "object",
-            "properties": {
-              "SIGNIFICANT_DIGITS": {
-                "type": "integer"
-              },
-              "DECIMAL_PRECISION": {
-                "type": "integer"
-              }
-            }
-          }
-        }
-      },
-      "GeospatialRasterGtiffOutputSpec": {
-        "type": "object",
-        "description": "GTiff specification for the output raster",
-        "required": [
-          "format"
-        ],
-        "properties": {
-          "format": {
-            "type": "string",
-            "enum": [
-              "GTiff"
-            ]
-          },
-          "options": {
-            "type": "object",
-            "properties": {
-              "JPEG_QUALITY": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 100
-              }
-            }
-          }
-        }
-      },
-      "GeospatialAggregateOutput": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/GeospatialAggregateOutputSpec"
-        },
-        "description": "A list of aggregations which are requested."
-      },
-      "GeospatialAggregateOutputSpec": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/GeospatialMaxAggregationOutput"
-          },
-          {
-            "$ref": "#/components/schemas/GeospatialMinAggregationOutput"
-          },
-          {
-            "$ref": "#/components/schemas/GeospatialSumAggregationOutput"
-          },
-          {
-            "$ref": "#/components/schemas/GeospatialCountAggregationOutput"
-          },
-          {
-            "$ref": "#/components/schemas/GeospatialAvgAggregationOutput"
-          },
-          {
-            "$ref": "#/components/schemas/GeospatialVarianceAggregationOutput"
-          },
-          {
-            "$ref": "#/components/schemas/GeospatialCentroidAggregationOutput"
-          },
-          {
-            "$ref": "#/components/schemas/GeospatialCollectAggregationOutput"
-          },
-          {
-            "$ref": "#/components/schemas/GeospatialConvexHullAggregationOutput"
-          },
-          {
-            "$ref": "#/components/schemas/GeospatialIntersectionAggregationOutput"
-          },
-          {
-            "$ref": "#/components/schemas/GeospatialUnionAggregationOutput"
-          }
-        ]
-      },
-      "GeospatialMaxAggregationOutput": {
-        "type": "object",
-        "required": [
-          "max"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "max": {
-            "$ref": "#/components/schemas/GeospatialProperty"
-          }
-        }
-      },
-      "GeospatialMinAggregationOutput": {
-        "type": "object",
-        "required": [
-          "min"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "min": {
-            "$ref": "#/components/schemas/GeospatialProperty"
-          }
-        }
-      },
-      "GeospatialSumAggregationOutput": {
-        "type": "object",
-        "required": [
-          "sum"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "sum": {
-            "$ref": "#/components/schemas/GeospatialProperty"
-          }
-        }
-      },
-      "GeospatialCountAggregationOutput": {
-        "type": "object",
-        "required": [
-          "count"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "count": {
-            "$ref": "#/components/schemas/GeospatialProperty"
-          }
-        }
-      },
-      "GeospatialAvgAggregationOutput": {
-        "type": "object",
-        "required": [
-          "avg"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "avg": {
-            "$ref": "#/components/schemas/GeospatialProperty"
-          }
-        }
-      },
-      "GeospatialVarianceAggregationOutput": {
-        "type": "object",
-        "required": [
-          "variance"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "variance": {
-            "$ref": "#/components/schemas/GeospatialProperty"
-          }
-        }
-      },
-      "GeospatialCentroidAggregationOutput": {
-        "type": "object",
-        "required": [
-          "stCentroid"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "stCentroid": {
-            "$ref": "#/components/schemas/GeospatialProperty"
-          }
-        }
-      },
-      "GeospatialCollectAggregationOutput": {
-        "type": "object",
-        "required": [
-          "stCollect"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "stCollect": {
-            "$ref": "#/components/schemas/GeospatialProperty"
-          }
-        }
-      },
-      "GeospatialConvexHullAggregationOutput": {
-        "type": "object",
-        "required": [
-          "stConvexHull"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "stConvexHull": {
-            "$ref": "#/components/schemas/GeospatialProperty"
-          }
-        }
-      },
-      "GeospatialIntersectionAggregationOutput": {
-        "type": "object",
-        "required": [
-          "stIntersection"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "stIntersection": {
-            "$ref": "#/components/schemas/GeospatialProperty"
-          }
-        }
-      },
-      "GeospatialUnionAggregationOutput": {
-        "type": "object",
-        "required": [
-          "stUnion"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "stUnion": {
-            "$ref": "#/components/schemas/GeospatialProperty"
           }
         }
       },
@@ -34128,47 +33544,6 @@
         "type": "boolean",
         "example": true,
         "description": "Optional parameter indicating if input geometry properties should be transformed into the respective Coordinate Reference Systems defined in the feature type specification. If the parameter is true, then input geometries will be transformed when the input and output Coordinate Reference Systems differ. When it is false, then requests with geometries in Coordinate Reference System different from the ones defined in the feature type will result in bad request response code. Transformations apply to property geometries in case of create and update feature, as well as to geometries in spatial filters in search endpoints."
-      },
-      "GeospatialRasterMetadata": {
-        "type": "object",
-        "properties": {
-          "srid": {
-            "type": "integer"
-          },
-          "width": {
-            "type": "integer"
-          },
-          "height": {
-            "type": "integer"
-          },
-          "numBands": {
-            "type": "integer"
-          },
-          "scaleX": {
-            "type": "number",
-            "format": "double"
-          },
-          "scaleY": {
-            "type": "number",
-            "format": "double"
-          },
-          "skewX": {
-            "type": "number",
-            "format": "double"
-          },
-          "skewY": {
-            "type": "number",
-            "format": "double"
-          },
-          "upperLeftX": {
-            "type": "number",
-            "format": "double"
-          },
-          "upperLeftY": {
-            "type": "number",
-            "format": "double"
-          }
-        }
       },
       "GeospatialAllowDimensionalityMismatch": {
         "type": "boolean",
@@ -35098,124 +34473,22 @@
         }
       },
       "ExtPipesFilter": {
-        "type": "object",
-        "properties": {
-          "externalIdPrefix": {
-            "maxLength": 255,
-            "minLength": 1,
-            "type": "string",
-            "description": "Filter by this (case-sensitive) prefix for the external ID."
-          },
-          "name": {
-            "maxLength": 140,
-            "minLength": 1,
-            "type": "string",
-            "description": "Name of Extraction Pipeline"
-          },
-          "description": {
-            "maxLength": 500,
-            "type": "string",
-            "description": "Description of Extraction Pipeline"
-          },
-          "dataSetIds": {
-            "maxItems": 100,
-            "minItems": 1,
-            "type": "array",
-            "description": "DataSetId list",
-            "items": {
-              "$ref": "#/components/schemas/DataSetIdEither"
-            }
-          },
-          "schedule": {
-            "pattern": "^(On trigger|Continuous|Null)|(@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\\d+(ns|us|µs|ms|s|m|h))+)|((((\\d+,)+\\d+|(\\d+([/\\-])\\d+)|\\d+|\\*(/\\d+)?) ?){5,7})$",
-            "type": "string",
-            "description": "Possible values: “On trigger”, “Continuous” or cron expression. If empty then “Null“"
-          },
-          "contacts": {
-            "type": "array",
-            "description": "Contacts list.",
-            "items": {
-              "$ref": "#/components/schemas/Contact"
-            }
-          },
-          "rawTables": {
-            "type": "array",
-            "description": "Raw tables",
-            "items": {
-              "$ref": "#/components/schemas/RawTable"
-            }
-          },
-          "metadata": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Custom, application specific metadata. String key -> String value. Limits: Key are at most 128 bytes. Values are at most 10240 bytes. Up to 256 key-value pairs. Total size is at most 10240.",
-            "example": {
-              "property1": "string",
-              "property2": "string"
-            }
-          },
-          "source": {
-            "maxLength": 255,
-            "minLength": 1,
-            "type": "string",
-            "description": "Source for Extraction Pipeline"
-          },
-          "documentation": {
-            "maxLength": 10000,
-            "minLength": 1,
-            "type": "string",
-            "description": "Documentation text field"
-          },
-          "createdBy": {
-            "maxLength": 255,
-            "minLength": 1,
-            "type": "string",
-            "description": "Extraction Pipeline creator. Usually user email is expected here"
-          },
-          "createdTime": {
-            "$ref": "#/components/schemas/EpochTimestampRange"
-          },
-          "lastUpdatedTime": {
-            "$ref": "#/components/schemas/EpochTimestampRange"
-          }
-        }
+        "type": "object"
       },
-      "ConfigResponse": {
-        "required": [
-          "externalId",
-          "revision"
-        ],
-        "type": "object",
-        "properties": {
-          "externalId": {
-            "maxLength": 255,
-            "minLength": 1,
-            "required": [
-              "true"
-            ],
-            "type": "string",
-            "description": "External ID of the extraction pipeline this configuration revision belongs to."
+      "CreateExtPipeRunResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ExtPipeRunResponse"
           },
-          "config": {
-            "type": "string",
-            "description": "Configuration revision contents."
-          },
-          "revision": {
-            "maximum": 2147483647,
-            "minimum": 0,
-            "type": "integer",
-            "description": "Revision number of this configuration.",
-            "format": "int32"
-          },
-          "createdTime": {
-            "$ref": "#/components/schemas/EpochTimestamp"
-          },
-          "description": {
-            "type": "string",
-            "description": "A description of this config revision.",
-            "nullable": true
+          {
+            "type": "object",
+            "properties": {
+              "externalId": {
+                "type": "string",
+                "description": "Extraction Pipeline external Id."
+              }
+            },
+            "description": "Create Extraction Pipeline Runs response."
           }
         }
       },
@@ -36146,6 +35419,22 @@
           }
         }
       },
+      "NotificationCreate": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/NotificationCreateWithExternalId"
+          },
+          "nonce": {
+            "type": "string"
+          },
+          "cdfProjectName": {
+            "type": "string"
+          },
+          "clientId": {
+            "type": "string"
+          }
+        }
+      },
       "NotificationCreateWithExternalId": {
         "required": [
           "destination",
@@ -36554,6 +35843,17 @@
           }
         }
       },
+      "SetValue_String": {
+        "required": [
+          "set"
+        ],
+        "type": "object",
+        "properties": {
+          "set": {
+            "$ref": "#/components/schemas/NonceCredentials"
+          }
+        }
+      },
       "SetValue_Seq_String": {
         "type": "object",
         "properties": {
@@ -36570,17 +35870,27 @@
           }
         }
       },
-      "SetValue_String": {
-        "required": [
-          "set"
-        ],
-        "type": "object",
-        "properties": {
-          "set": {
-            "type": "string"
+      "Setter_NonceCredentials": {
+        "description": "Bind to a new source CDF session, or remove it",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/SetNull_NonceCredentials"
+          },
+          {
+            "$ref": "#/components/schemas/SetValue_NonceCredentials"
           }
-        },
-        "description": "Set a new value for the transformation name."
+        ]
+      },
+      "Setter_String": {
+        "description": "Set a new value for the transformation source api key, or remove it.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/SetNull_String"
+          },
+          {
+            "$ref": "#/components/schemas/SetValue_String"
+          }
+        ]
       },
       "TransformBlockedInfo": {
         "required": [
@@ -36954,37 +36264,13 @@
             ]
           },
           "destinationOidcCredentials": {
-            "description": "Set a new value for the transformation destination OIDC credentials, or remove it.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SetNull_FlatOidcCredentialsUpdate"
-              },
-              {
-                "$ref": "#/components/schemas/SetValue_FlatOidcCredentialsUpdate"
-              }
-            ]
+            "$ref": "#/components/schemas/Setter_FlatOidcCredentialsUpdate"
           },
           "sourceNonce": {
-            "description": "Bind to a new source CDF session, or remove it",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SetNull_NonceCredentials"
-              },
-              {
-                "$ref": "#/components/schemas/SetValue_NonceCredentials"
-              }
-            ]
+            "$ref": "#/components/schemas/Setter_NonceCredentials"
           },
           "destinationNonce": {
-            "description": "Bind to a new destination session, or remove it",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SetNull_NonceCredentials"
-              },
-              {
-                "$ref": "#/components/schemas/SetValue_NonceCredentials"
-              }
-            ]
+            "$ref": "#/components/schemas/Setter_NonceCredentials"
           },
           "sourceApiKey": {
             "description": "Set a new value for the transformation source api key, or remove it.",
@@ -39590,7 +38876,9 @@
                       "example": [
                         "TextDetection",
                         "AssetTagDetection",
-                        "PeopleDetection"
+                        "IndustrialObjectDetection",
+                        "PeopleDetection",
+                        "PersonalProtectiveEquipmentDetection"
                       ]
                     },
                     "parameters": {
@@ -40039,7 +39327,9 @@
                   "example": [
                     "TextDetection",
                     "AssetTagDetection",
-                    "PeopleDetection"
+                    "IndustrialObjectDetection",
+                    "PeopleDetection",
+                    "PersonalProtectiveEquipmentDetection"
                   ]
                 },
                 "parameters": {
@@ -40500,19 +39790,7 @@
           "sort": [
             "average:ASC",
             "category:DESC"
-          ],
-          "output": {
-            "min_temperature": {
-              "min": {
-                "property": "temperature"
-              }
-            },
-            "max_speed": {
-              "max": {
-                "property": "speed"
-              }
-            }
-          }
+          ]
         }
       },
       "GeospatialCreateCoordinateReferenceSystemsExample": {

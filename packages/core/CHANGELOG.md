@@ -3,6 +3,61 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.6.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.5...@cognite/sdk-core@4.6.6) (2022-09-12)
+
+
+### Bug Fixes
+
+* expired token check for adfs ([#874](https://github.com/cognitedata/cognite-sdk-js/issues/874)) ([af03c73](https://github.com/cognitedata/cognite-sdk-js/commit/af03c73fd9d69671dc7bd1c3169eee9ae17e61fe))
+
+
+
+
+
+## [4.6.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.4...@cognite/sdk-core@4.6.5) (2022-09-07)
+
+
+### Bug Fixes
+
+* make sure sessionKey for adfs is consistent across class instances ([#865](https://github.com/cognitedata/cognite-sdk-js/issues/865)) ([31e0d1e](https://github.com/cognitedata/cognite-sdk-js/commit/31e0d1ec961b49a4f3cf06e07f6b2642dc1f81f6))
+
+
+
+
+
+## [4.6.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.3...@cognite/sdk-core@4.6.4) (2022-09-07)
+
+
+### Bug Fixes
+
+* don't retry 401 requests ([#868](https://github.com/cognitedata/cognite-sdk-js/issues/868)) ([4d17461](https://github.com/cognitedata/cognite-sdk-js/commit/4d174616ccf8ddfafed8a45b64d99e5ceaa06ce7))
+
+
+
+
+
+## [4.6.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.2...@cognite/sdk-core@4.6.3) (2022-09-06)
+
+
+### Bug Fixes
+
+* removing messages from authentication ([#866](https://github.com/cognitedata/cognite-sdk-js/issues/866)) ([cc61fce](https://github.com/cognitedata/cognite-sdk-js/commit/cc61fce8557039e8fb4e0cf3fe57deacdb3b0402))
+
+
+
+
+
+## [4.6.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.1...@cognite/sdk-core@4.6.2) (2022-08-31)
+
+
+### Bug Fixes
+
+* adfs login when iframe doesn't work by storing tokens ([#864](https://github.com/cognitedata/cognite-sdk-js/issues/864)) ([c9e1860](https://github.com/cognitedata/cognite-sdk-js/commit/c9e1860a598dd8f4a8f91ef538306f03e9a3f709))
+
+
+
+
+
 ## [4.6.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.0...@cognite/sdk-core@4.6.1) (2022-08-21)
 
 **Note:** Version bump only for package @cognite/sdk-core

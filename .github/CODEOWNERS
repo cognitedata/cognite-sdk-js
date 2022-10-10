@@ -1,12 +1,9 @@
-* @cognitedata/developer-tooling
-
-/packages/codegen* @cognitedata/developer-tooling @andersfylling
-/packages/playground* @cognitedata/developer-tooling @andersfylling
-/packages/stable* @cognitedata/developer-tooling @andersfylling
+* @cognitedata/development-experiences @BugGambit @andersfylling @polomani
 
 /packages/playground/src/api/documents @cognitedata/grep
 /packages/playground/src/__tests__/api/documents* @cognitedata/grep
 /packages/stable/src/api/documents @cognitedata/grep
 /packages/stable/src/__tests__/api/documents* @cognitedata/grep
-/packages/playground/src/api/vision @cognitedata/vision-team
-/packages/stable/src/api/annotations @cognitedata/???
+
+/packages/stable/src/api/vision @cognitedata/vision-team
+/packages/stable/src/api/annotations @cognitedata/reveal

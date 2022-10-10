@@ -3,6 +3,71 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.9.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.9.0...@cognite/sdk-playground@5.9.1) (2022-09-12)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
+# [5.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.8.4...@cognite/sdk-playground@5.9.0) (2022-09-12)
+
+
+### Features
+
+*  move vision extract api to v1 ([#872](https://github.com/cognitedata/cognite-sdk-js/issues/872)) ([23d0218](https://github.com/cognitedata/cognite-sdk-js/commit/23d021863020bc3e8caf2ad94caafefe1d1e405a)), closes [#873](https://github.com/cognitedata/cognite-sdk-js/issues/873)
+
+
+
+
+
+## [5.8.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.8.3...@cognite/sdk-playground@5.8.4) (2022-09-07)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
+## [5.8.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.8.2...@cognite/sdk-playground@5.8.3) (2022-09-07)
+
+
+### Bug Fixes
+
+* don't retry 401 requests ([#868](https://github.com/cognitedata/cognite-sdk-js/issues/868)) ([4d17461](https://github.com/cognitedata/cognite-sdk-js/commit/4d174616ccf8ddfafed8a45b64d99e5ceaa06ce7))
+
+
+
+
+
+## [5.8.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.8.1...@cognite/sdk-playground@5.8.2) (2022-09-06)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
+## [5.8.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.8.0...@cognite/sdk-playground@5.8.1) (2022-08-31)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+
+
+
+
+# [5.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.7.0...@cognite/sdk-playground@5.8.0) (2022-08-24)
+
+
+### Features
+
+* add parameter support in vision extract ([#863](https://github.com/cognitedata/cognite-sdk-js/issues/863)) ([6d58704](https://github.com/cognitedata/cognite-sdk-js/commit/6d58704efa4521d50362b3bbdfabeba333db8582))
+
+
+
+
+
 # [5.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.6.2...@cognite/sdk-playground@5.7.0) (2022-08-21)
 
 
