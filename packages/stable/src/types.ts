@@ -3262,3 +3262,9 @@ export interface AnnotationFilterProps {
   status?: AnnotationStatus;
   data?: AnnotationPayload;
 }
+
+export interface UnitConverterOptions {
+  outputUnit: string;
+  precision?: number;
+  continueIfConversionFails?: boolean;
+}

@@ -39,32 +39,11 @@ async function quickstart() {
 
   await client.authenticate();
 
-  // const timeseries = client.timeseries.list({
-  //   from: 'US_bbl_oil/s',
-  //   to: 'US_gallon/s',
-  //   scale: 6,
-  // });
+  const convertedDatapoints = await client.datapoints.retrieve({
+    items: [{ id: 6522584026758 }, { outputUnit: 'US_bbl_oil/d' }],
+  });
 
-  const converter = new Converter(new UnitDictionariesProcessorImpl());
-
-  const input_unit = 'US_bbl_oil/s';
-  const output_unit = 'US_gallon/s';
-
-  const res = converter.unitConvert(1, input_unit, output_unit).toPrecision(6);
-
-  console.log(`res=${res}`);
-
-  // const info = (await client.get('/api/v1/token/inspect')).data;
-
-  // console.log('tokenInfo', JSON.stringify(info, null, 2));
-
-  // try {
-  //   const assets = await client.assets.list();
-  //   console.log(assets);
-  // } catch (e) {
-  //   console.log('asset error');
-  //   console.log(e);
-  // } //
+  console.log(`converted data points: \n ${convertedDatapoints}`);
 }
 
 quickstart()

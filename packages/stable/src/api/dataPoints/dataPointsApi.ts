@@ -11,7 +11,10 @@ import {
   LatestDataBeforeRequest,
   ExternalDatapointsQuery,
   DatapointInfo,
+  UnitConverterOptions,
 } from '../../types';
+
+import dataPointsUnitsConverter from '../utils/dataPointsUnitConverter';
 
 export class DataPointsAPI extends BaseResourceAPI<
   DatapointAggregates | Datapoints
@@ -45,9 +48,20 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```
    */
   public retrieve = (
-    query: DatapointsMultiQuery
+    query: DatapointsMultiQuery,
+    unitsConversionOptions?: UnitConverterOptions
   ): Promise<DatapointAggregates[] | Datapoints[]> => {
-    return this.retrieveDatapointsEndpoint(query);
+    if (!unitsConversionOptions) {
+      return this.retrieveDatapointsEndpoint(query);
+    }
+
+    const retrievedDataPoints = this.retrieveDatapointsEndpoint(query);
+
+    const convertedDataPoints = retrievedDataPoints.then((dataPointsData) =>
+      dataPointsUnitsConverter(dataPointsData, unitsConversionOptions)
+    );
+
+    return convertedDataPoints;
   };
 
   /**
@@ -68,9 +82,20 @@ export class DataPointsAPI extends BaseResourceAPI<
    */
   public retrieveLatest = (
     items: LatestDataBeforeRequest[],
-    params: LatestDataParams = {}
+    params: LatestDataParams = {},
+    unitsConversionOptions?: UnitConverterOptions
   ): Promise<Datapoints[]> => {
-    return this.retrieveLatestEndpoint(items, params);
+    if (!unitsConversionOptions) {
+      return this.retrieveLatestEndpoint(items, params);
+    }
+
+    const retrievedDataPoints = this.retrieveLatestEndpoint(items, params);
+
+    const convertedDataPoints = retrievedDataPoints.then((dataPointsData) =>
+      dataPointsUnitsConverter(dataPointsData, unitsConversionOptions)
+    );
+
+    return convertedDataPoints;
   };
 
   /**

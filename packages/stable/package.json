@@ -25,6 +25,7 @@
   "dependencies": {
     "@cognite/sdk-core": "^4.6.6",
     "geojson": "^0.5.0",
+    "@cognite-ornellas/units": "^1",
     "lodash": "^4.17.11"
   },
   "devDependencies": {

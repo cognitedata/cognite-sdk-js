@@ -62,24 +62,9 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * ```
    */
   public list = (
-    scope?: TimeseriesFilterQuery,
-    unitConvert?: {
-      from: string;
-      to: string;
-    }
+    scope?: TimeseriesFilterQuery
   ): CursorAndAsyncIterator<Timeseries> => {
-    if (unitConvert) {
-      // const converter = new Converter(new UnitDictionariesProcessorImpl());
-      // return super.listEndpoint(this.callListEndpointWithPost, scope).autoPagingToArray().map();
-      return super
-        .listEndpoint(this.callListEndpointWithPost, scope)
-        .autoPagingEach((item) => {
-          const converter = new Converter(new UnitDictionariesProcessorImpl());
-          const newVal = converter
-            .unitConvert(item.value, unitConvert.from, unitConvert.to)
-            .toPrecision(unitConvert.scale);
-        });
-    }
+    return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
 
   /**
