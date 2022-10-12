@@ -57,11 +57,22 @@ export class DataPointsAPI extends BaseResourceAPI<
 
     const retrievedDataPoints = this.retrieveDatapointsEndpoint(query);
 
-    const convertedDataPoints = retrievedDataPoints.then((dataPointsData) =>
-      dataPointsUnitsConverter(dataPointsData, unitsConversionOptions)
-    );
+    try {
+      const convertedDataPoints = retrievedDataPoints.then((dataPointsData) =>
+        dataPointsUnitsConverter(
+          dataPointsData as Datapoints[],
+          unitsConversionOptions
+        )
+      );
 
-    return convertedDataPoints;
+      return convertedDataPoints;
+    } catch (e) {
+      console.warn(
+        `It wasn't possible to run units conversion. The retrieved data type for unit conversion must be Datapoints[]`
+      );
+    }
+
+    return retrievedDataPoints;
   };
 
   /**

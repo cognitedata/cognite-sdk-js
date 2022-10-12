@@ -1,7 +1,5 @@
 import {
-  DatapointAggregates,
   Datapoints,
-  DatapointAggregate,
   StringDatapoint,
   DoubleDatapoint,
   UnitConverterOptions,
@@ -21,9 +19,9 @@ import convertUnit from './unitConverter';
  * @returns dataPointsData that were possible to convert
  */
 const dataPointsUnitsConverter = (
-  dataPointsData: DatapointAggregates[] | Datapoints[],
+  dataPointsData: Datapoints[],
   unitsConversionOptions: UnitConverterOptions
-) => {
+): Datapoints[] => {
   const converted = dataPointsData?.map((data) =>
     processDataPointsData(data, unitsConversionOptions)
   );
@@ -32,9 +30,9 @@ const dataPointsUnitsConverter = (
 };
 
 function processDataPointsData(
-  data: DatapointAggregates | Datapoints,
+  data: Datapoints,
   unitsConversionOptions: UnitConverterOptions
-): any {
+): Datapoints {
   if (data.unit && unitsConversionOptions.continueIfConversionFails) {
     try {
       return convertDataPoints(data, unitsConversionOptions);
@@ -64,13 +62,11 @@ function processDataPointsData(
  * @returns converted data points
  */
 function convertDataPoints(
-  data: DatapointAggregates | Datapoints,
+  data: Datapoints,
   unitsConversionOptions: UnitConverterOptions
-): DatapointAggregates | Datapoints {
-  const convertedDataPoints:
-    | DatapointAggregate[]
-    | StringDatapoint[]
-    | DoubleDatapoint[] = processDataPoints(data, unitsConversionOptions);
+): Datapoints {
+  const convertedDataPoints: StringDatapoint[] | DoubleDatapoint[] =
+    processDataPoints(data, unitsConversionOptions);
 
   const newData = Object.assign({}, data);
   newData.datapoints = convertedDataPoints;
@@ -79,26 +75,26 @@ function convertDataPoints(
 }
 
 function processDataPoints(
-  data: DatapointAggregates | Datapoints,
+  data: Datapoints,
   unitsConversionOptions: UnitConverterOptions
-): DatapointAggregate[] | StringDatapoint[] | DoubleDatapoint[] {
-  return data.datapoints?.map((dataPoint: any) => {
-    if ('value' in dataPoint) {
-      const convertedValue = convertUnit(
-        dataPoint['value'],
-        data.unit!,
-        unitsConversionOptions.outputUnit,
-        unitsConversionOptions.precision
-      );
+): StringDatapoint[] | DoubleDatapoint[] {
+  const datapoints: (StringDatapoint | DoubleDatapoint)[] = [];
 
-      const newDataPoint = Object.assign({}, dataPoint);
-      newDataPoint.value = convertedValue;
+  for (const dataPoint of data.datapoints) {
+    const convertedValue = convertUnit(
+      dataPoint.value,
+      data.unit!,
+      unitsConversionOptions.outputUnit,
+      unitsConversionOptions.precision
+    );
 
-      return newDataPoint;
-    }
+    const newDataPoint = Object.assign({}, dataPoint);
+    newDataPoint.value = convertedValue;
 
-    return dataPoint;
-  });
+    datapoints.push(newDataPoint);
+  }
+
+  return datapoints as StringDatapoint[] | DoubleDatapoint[];
 }
 
 export default dataPointsUnitsConverter;
