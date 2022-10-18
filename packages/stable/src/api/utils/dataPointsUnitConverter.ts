@@ -70,6 +70,7 @@ function convertDataPoints(
 
   const newData = Object.assign({}, data);
   newData.datapoints = convertedDataPoints;
+  newData.unit = unitsConversionOptions.outputUnit;
 
   return newData;
 }
