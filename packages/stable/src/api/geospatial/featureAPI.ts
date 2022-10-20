@@ -8,6 +8,7 @@ import {
   FeatureAggregateParams,
   GeospatialFeature,
   GeospatialOutput,
+  GeospatialFeatureListFilter,
   GeospatialFeatureSearchFilter,
   GeospatialFeatureSearchStreamFilter,
   GeospatialFeatureSearchStreamResponse,
@@ -189,5 +190,32 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
       params,
       this.url(`${featureTypeExternalId}/features/aggregate`)
     );
+  };
+
+  /**
+   * [List features](https://docs.cognite.com/api/v1/#tag/Geospatial/operation/listFeatures)
+   *
+   * ```js
+   * const searchParams = {
+   *  filter: {
+   *    and: [
+   *      { range:{ property: 'temperature', gt:4.54 } },
+   *      { stWithin: { property:'location', value:'POLYGON((60.547602 -5.423433, 60.547602 -6.474416, 60.585858 -5.423433, 60.547602 -5.423433))' } }
+   *   ]
+   *  },
+   * };
+   *
+   * const allFeaturesList = await client.geospatial.feature.list('ocean_temperature', searchParams);
+   * ```
+   */
+  public list = (
+    featureTypeExternalId: CogniteExternalId,
+    filterParams: GeospatialFeatureListFilter = {}
+  ) => {
+    const path = this.url(`${featureTypeExternalId}/features/list`);
+    return this.listEndpoint(
+      async (params) => this.post(path, { data: params }),
+      filterParams
+    ).autoPagingToArray({ limit: Infinity });
   };
 }
