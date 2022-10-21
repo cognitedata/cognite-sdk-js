@@ -216,6 +216,6 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
     return this.listEndpoint(
       async (params) => this.post(path, { data: params }),
       filterParams
-    ).autoPagingToArray({ limit: Infinity });
+    );
   };
 }
