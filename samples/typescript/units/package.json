@@ -8,9 +8,9 @@
     "start": "yarn tsc && node build/quickstart.js"
   },
   "dependencies": {
-    "@cognite/sdk": "^7",
     "@cognite/auth-wrapper": "^1",
-    "@cognite-ornellas/units": "^1"
+    "@cognite/sdk": "^7",
+    "@cognite/units": "^1.0.2"
   },
   "devDependencies": {
     "@types/node": "^16.7",
