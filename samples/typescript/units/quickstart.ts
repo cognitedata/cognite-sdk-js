@@ -1,10 +1,6 @@
 // Copyright 2020 Cognite AS
 import { CogniteClient } from '@cognite/sdk';
 import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
-import {
-  Converter,
-  UnitDictionariesProcessorImpl,
-} from '@cognite/units';
 
 const project: string = process.env.COGNITE_PROJECT!;
 const clientId: string = process.env.CLIENT_ID!;
