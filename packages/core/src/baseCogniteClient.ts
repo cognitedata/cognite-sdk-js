@@ -8,7 +8,7 @@ import {
   X_CDF_SDK_HEADER,
   API_KEY_HEADER,
 } from './constants';
-import { HttpRequestOptions, HttpResponse } from './httpClient/basicHttpClient';
+import { HttpResponse } from './httpClient/basicHttpClient';
 import { HttpHeaders } from './httpClient/httpHeaders';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import { MetadataMap } from './metadata';
@@ -27,6 +27,7 @@ import {
 } from './httpClient/retryValidator';
 import { verifyOptionsRequiredFields } from './loginUtils';
 import { CredentialsAuth, ClientCredentials } from './credentialsAuth';
+import { RetryableHttpRequestOptions } from './httpClient/retryableHttpClient';
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
   appId: string;
@@ -75,18 +76,20 @@ export default class BaseCogniteClient {
   private readonly metadata: MetadataMap;
   private readonly loginApi: LoginAPI;
   private readonly logoutApi: LogoutApi;
-  /**
-   * On 401 it might be possible to get a new token, but if `getToken` returns the same over and
-   * over (e.g api-keys) there isn't a point retrying. previousToken is used to keep track of that,
-   * comparing new tokens to one tried the last time.
-   */
-  private previousToken: string | undefined;
   private readonly getToken: () => Promise<string | undefined>;
   private readonly apiKeyMode: boolean;
   private readonly noAuthMode?: boolean;
   readonly project: string;
 
   private readonly credentialsAuth?: CredentialsAuth;
+
+  /**
+   * To prevent calling `getToken` method multiple times in parallel, we set
+   * the promise that `getToken` returns to a variable and check its existence
+   * on function calls for `authenticate`.
+   */
+  private tokenPromise?: Promise<string | undefined>;
+  private isTokenPromiseFulfilled?: boolean;
 
   /**
    * Create a new SDK client
@@ -168,7 +171,12 @@ export default class BaseCogniteClient {
   private authenticateGetToken: () => Promise<string | undefined> =
     async () => {
       try {
-        const token = await this.getToken();
+        if (!this.tokenPromise || this.isTokenPromiseFulfilled) {
+          this.isTokenPromiseFulfilled = false;
+          this.tokenPromise = this.getToken();
+        }
+        const token = await this.tokenPromise;
+        this.isTokenPromiseFulfilled = true;
 
         if (token === undefined) return token;
 
@@ -203,11 +211,16 @@ export default class BaseCogniteClient {
         `CogniteJavaScriptSDK:${this.version}`
       );
 
-    httpClient.set401ResponseHandler(async (_, retry, reject) => {
+    httpClient.set401ResponseHandler(async (_, request, retry, reject) => {
       try {
-        const newToken = await this.authenticate();
-        if (newToken && newToken !== this.previousToken) {
-          this.previousToken = newToken;
+        const requestToken = this.retrieveTokenValueFromHeader(request.headers);
+        const currentToken = await this.tokenPromise;
+        const newToken =
+          currentToken !== requestToken
+            ? currentToken
+            : await this.authenticate();
+
+        if (newToken && newToken !== requestToken) {
           retry();
         } else {
           reject();
@@ -218,6 +231,24 @@ export default class BaseCogniteClient {
     });
 
     return httpClient;
+  }
+
+  /**
+   * It retrieves the previous token from header
+   * @returns string
+   */
+  private retrieveTokenValueFromHeader(
+    headers?: HttpHeaders
+  ): string | undefined {
+    let token;
+
+    if (this.apiKeyMode) {
+      token = headers?.[API_KEY_HEADER];
+    } else {
+      token = headers?.[AUTHORIZATION_HEADER];
+    }
+
+    return token !== undefined ? token.replace('Bearer ', '') : token;
   }
 
   /**
@@ -263,7 +294,7 @@ export default class BaseCogniteClient {
    * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
    * ```
    */
-  public get = <T = any>(path: string, options?: HttpRequestOptions) =>
+  public get = <T = any>(path: string, options?: RetryableHttpRequestOptions) =>
     this.httpClient.get<T>(path, options);
 
   /**
@@ -276,7 +307,7 @@ export default class BaseCogniteClient {
    * const response = await client.put('someUrl');
    * ```
    */
-  public put = <T = any>(path: string, options?: HttpRequestOptions) =>
+  public put = <T = any>(path: string, options?: RetryableHttpRequestOptions) =>
     this.httpClient.put<T>(path, options);
 
   /**
@@ -290,8 +321,10 @@ export default class BaseCogniteClient {
    * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
    * ```
    */
-  public post = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.post<T>(path, options);
+  public post = <T = any>(
+    path: string,
+    options?: RetryableHttpRequestOptions
+  ) => this.httpClient.post<T>(path, options);
 
   /**
    * Basic HTTP method for DELETE
@@ -302,8 +335,10 @@ export default class BaseCogniteClient {
    * const response = await client.delete('someUrl');
    * ```
    */
-  public delete = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.delete<T>(path, options);
+  public delete = <T = any>(
+    path: string,
+    options?: RetryableHttpRequestOptions
+  ) => this.httpClient.delete<T>(path, options);
 
   /**
    * Basic HTTP method for PATCH
@@ -314,8 +349,10 @@ export default class BaseCogniteClient {
    * const response = await client.patch('someUrl');
    * ```
    */
-  public patch = <T = any>(path: string, options?: HttpRequestOptions) =>
-    this.httpClient.patch<T>(path, options);
+  public patch = <T = any>(
+    path: string,
+    options?: RetryableHttpRequestOptions
+  ) => this.httpClient.patch<T>(path, options);
 
   protected initAPIs() {
     // will be overritten by subclasses
@@ -361,5 +398,5 @@ export default class BaseCogniteClient {
   }
 }
 
-export type BaseRequestOptions = HttpRequestOptions;
+export type BaseRequestOptions = RetryableHttpRequestOptions;
 export type Response = HttpResponse<any>;
