@@ -4,8 +4,7 @@
         "baseUrl": "packages",
         "paths": {
           "@cognite/sdk-*": ["*/src"],
-          "@cognite/sdk": ["stable/src"],
-          "tslib" : ["path/to/node_modules/tslib/tslib.d.ts"]
+          "@cognite/sdk": ["stable/src"]
         }
     }
 }
