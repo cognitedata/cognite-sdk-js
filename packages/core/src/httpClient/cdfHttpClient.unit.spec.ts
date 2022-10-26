@@ -128,7 +128,7 @@ describe('CDFHttpClient', () => {
 
       test('respect reject call', async () => {
         nock(baseUrl).get('/').reply(401, error401);
-        client.set401ResponseHandler((_, __, reject) => {
+        client.set401ResponseHandler((_, __, ___, reject) => {
           reject();
         });
         await expect(client.get('/')).rejects.toMatchInlineSnapshot(
@@ -139,7 +139,7 @@ describe('CDFHttpClient', () => {
       test('respect retry call', async () => {
         const scope = nock(baseUrl).get('/').reply(401, error401);
         nock(baseUrl).get('/').reply(200, {});
-        client.set401ResponseHandler((_, retry) => {
+        client.set401ResponseHandler((_, __, retry) => {
           retry();
         });
         expect((await client.get('/')).status).toBe(200);

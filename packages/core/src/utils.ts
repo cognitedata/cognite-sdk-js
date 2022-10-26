@@ -108,20 +108,35 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
   const responses: ResponseType[] = [];
   const errors: (Error | CogniteError)[] = [];
 
-  const promises = inputs.map((input) => promiser(input));
+  const promises = inputs.map(promiser);
 
-  const wrappedPromises = promises.map((promise, index) =>
-    promise
-      .then((result) => {
-        succeded.push(inputs[index]);
-        responses.push(result);
-      })
-      .catch((error) => {
-        failed.push(inputs[index]);
-        errors.push(error);
+  type SingleResult = {
+    succeded?: RequestType;
+    response?: ResponseType;
+    failed?: RequestType;
+    error?: Error | CogniteError;
+  };
+
+  const wrappedPromises: Promise<SingleResult>[] = promises.map(
+    (promise, index) =>
+      new Promise<SingleResult>((resolve) => {
+        promise
+          .then((result) => {
+            resolve({ succeded: inputs[index], response: result });
+          })
+          .catch((error) => {
+            resolve({ failed: inputs[index], error });
+          });
       })
   );
-  await Promise.all(wrappedPromises);
+
+  const results = await Promise.all(wrappedPromises);
+  results.forEach((res) => {
+    failed.push(...(res.failed ? [res.failed] : []));
+    succeded.push(...(res.succeded ? [res.succeded] : []));
+    responses.push(...(res.response ? [res.response] : []));
+    errors.push(...(res.error ? [res.error] : []));
+  });
   if (failed.length) {
     throw {
       succeded,
