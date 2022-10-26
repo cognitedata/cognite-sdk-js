@@ -1,7 +1,7 @@
 import {
   Converter,
   UnitDictionariesProcessorImpl,
-} from '@cognite-ornellas/units/';
+} from '@cognite/units/';
 
 const converter = new Converter(new UnitDictionariesProcessorImpl());
 
