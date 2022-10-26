@@ -1174,6 +1174,7 @@ export interface DatapointAggregate extends DatapointInfo {
 
 export interface DatapointInfo {
   timestamp: Date;
+  value: number | string;
 }
 
 export interface DoubleDatapoint extends DatapointInfo {

@@ -81,5 +81,14 @@
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "dependencies": {
+    "@cognite/sdk-core": "^4.8.1",
+    "@cognite/units": "^1.0.2",
+    "@types/geojson": "^7946.0.10",
+    "cross-fetch": "^3.1.5",
+    "geojson": "^0.5.0",
+    "is-buffer": "^2.0.5",
+    "tslib": "^2.4.0"
   }
 }

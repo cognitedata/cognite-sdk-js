@@ -9,7 +9,7 @@
   "version": "7.9.1",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
-    "test": "jest --config=../../jest.config.js --testPathPattern=/stable/",
+    "test": "jest --config=../../jest.config.js --testPathPattern=/stable/src/__tests__/api/datapoints.int.spec.ts",
     "test:debug": "node --inspect-brk ../../node_modules/.bin/jest --config=../../jest.config.js --testPathPattern=/stable/ --runInBand",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
@@ -24,8 +24,8 @@
   },
   "dependencies": {
     "@cognite/sdk-core": "^4.6.6",
-    "@cognite/units": "^1.0.2",
     "geojson": "^0.5.0",
+    "@cognite/units": "^1",
     "lodash": "^4.17.11"
   },
   "devDependencies": {

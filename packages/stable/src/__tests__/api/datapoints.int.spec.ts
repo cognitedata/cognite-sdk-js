@@ -52,8 +52,6 @@ describe('Datapoints integration test', () => {
       end: new Date(),
     });
 
-    response.forEach((item: any) => console.log(item));
-
     expect(response[0].datapoints.length).toBeGreaterThan(0);
     expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
     expect(response[0].isString).toBe(false);
@@ -66,9 +64,6 @@ describe('Datapoints integration test', () => {
         id: timeserie.id,
       },
     ]);
-
-    console.log('Unconverted retrieve latest values: ');
-    response.forEach((item: any) => console.log(item));
 
     expect(response[0].datapoints.length).toBeGreaterThan(0);
     expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
@@ -86,13 +81,10 @@ describe('Datapoints integration test', () => {
       }
     );
 
-    console.log('Converted retrieve values: ');
-
-    response.forEach((item: any) => console.log(item));
-
     expect(response[0].datapoints.length).toBeGreaterThan(0);
     expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
-    expect(response[0].isString).toBe(false);
+    expect(response[0].datapoints[0].value).toBe('153885');
+    expect(response[0].datapoints[1].value).toBe('15388.5');
   });
 
   test('retrieve latest with conversion', async () => {
@@ -108,16 +100,15 @@ describe('Datapoints integration test', () => {
         outputUnit: 'US_bbl_oil/d',
       }
     );
-    console.log('Converted retrieve latest values: ');
-
-    response.forEach((item: any) => {
-      expect(
-        unitConverter(item.datapoints[0].value, 'US_bbl_oil/d', 'ft3/s', 1)
-      ).toBe('1');
-    });
 
     expect(response[0].datapoints.length).toBeGreaterThan(0);
     expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
+    expect(
+      unitConverter(response[0].datapoints[0].value, 'ft3/s', 'US_bbl_oil/d')
+    ).toBe('2.36805e+8');
+    expect(
+      unitConverter(response[0].datapoints[0].value, 'ft3/s', 'US_bbl_oil/d', 1)
+    ).toBe('2e+8');
   });
 
   test('failing retrieve latest with conversion', async () => {
@@ -134,12 +125,11 @@ describe('Datapoints integration test', () => {
         continueIfConversionFails: true,
       }
     );
-    console.log('Failed converting retrieve latest values: ');
-
-    response.forEach((item: any) => console.log(item));
 
     expect(response[0].datapoints.length).toBeGreaterThan(0);
     expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
+    expect(response[0].datapoints[0].value).toBe(1);
+    expect(response[0].unit).toBe('ft3/s');
   });
 
   test('synthetic query', async () => {
