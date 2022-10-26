@@ -91,6 +91,10 @@ class ConfigManager<T> {
     return config;
   };
 
+  public configPath = (): string => {
+    return this.path;
+  };
+
   public write = async (config: T): Promise<void> => {
     await this.validate(config);
     const json = JSON.stringify(config, null, 2);
@@ -205,4 +209,22 @@ export async function createConfiguration(options: CreateConfigOptions) {
   }
 
   await mngr.writeDefaultConfig(options);
+}
+
+interface CleanupServiceOptions extends PackageOption, ServiceOption {}
+
+export async function cleanupService(options: CleanupServiceOptions) {
+  const directory = await closestConfigDirectoryPath(options);
+  const option = { directory: directory };
+  const mngr = new ServiceConfigManager(option);
+  if (!(await mngr.exists())) {
+    throw new Error(
+      `Service is not configured for code generation - manual cleanup required`
+    );
+  }
+
+  fs.unlink(mngr.configPath());
+  console.info(
+    `updated service - remember to regenerate package types: yarn codegen generate-types --package=${options.package} --service=${options.service}`
+  );
 }

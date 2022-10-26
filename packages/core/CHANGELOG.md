@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.8.0...@cognite/sdk-core@4.8.1) (2022-09-26)
+
+
+### Bug Fixes
+
+* override auth header while retrying ([#896](https://github.com/cognitedata/cognite-sdk-js/issues/896)) ([25592fe](https://github.com/cognitedata/cognite-sdk-js/commit/25592fe990e315bb2aa976f428b2cba88448a580))
+
+
+
+
+
+# [4.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.7.0...@cognite/sdk-core@4.8.0) (2022-09-23)
+
+
+### Features
+
+* allow overriding retry validator at request level ([#876](https://github.com/cognitedata/cognite-sdk-js/issues/876)) ([39807e9](https://github.com/cognitedata/cognite-sdk-js/commit/39807e9e2b2380fcc8d842e8634f13d10f181e25))
+
+
+
+
+
+# [4.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.7...@cognite/sdk-core@4.7.0) (2022-09-23)
+
+
+### Features
+
+* update 401 handler logic ([#878](https://github.com/cognitedata/cognite-sdk-js/issues/878)) ([aa40002](https://github.com/cognitedata/cognite-sdk-js/commit/aa40002f0384c6146f63d2a80a8fe2c0cbdef40f))
+
+
+
+
+
+## [4.6.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.6...@cognite/sdk-core@4.6.7) (2022-09-23)
+
+
+### Bug Fixes
+
+* ensure response ordering matches request when chunking a request ([#893](https://github.com/cognitedata/cognite-sdk-js/issues/893)) ([77eb797](https://github.com/cognitedata/cognite-sdk-js/commit/77eb7976abb21029c22a16c0ceeb22d577d1ce68))
+
+
+
+
+
 ## [4.6.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.6.5...@cognite/sdk-core@4.6.6) (2022-09-12)
 
 
