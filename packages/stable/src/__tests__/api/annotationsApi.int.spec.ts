@@ -213,7 +213,7 @@ describe('Annotations API', () => {
           ...fileFilter(annotatedFileId),
           data: {
             assetRef: { externalId: 'def' },
-            region: []
+            region: [],
           },
         },
       })

@@ -158,7 +158,6 @@ describe('code generation', () => {
       expect(generatedFile).toEqual(cyclicReferencesGenFile);
     });
 
-
     test('restrict to relevant definitions', async () => {
       const snapshotMngr = new OpenApiSnapshotManager({ directory: '.' });
       const snapshot = await snapshotMngr.downloadFromPath({
@@ -174,7 +173,9 @@ describe('code generation', () => {
         },
       });
 
-      const typeNames = await gen.generateTypes(snapshot, ['FunctionListScope']);
+      const typeNames = await gen.generateTypes(snapshot, [
+        'FunctionListScope',
+      ]);
 
       expect(typeNames).toEqual([
         'CogniteExternalId',
@@ -186,7 +187,7 @@ describe('code generation', () => {
         'FunctionName',
         'FunctionOwner',
         'FunctionStatus',
-        'LimitList'
+        'LimitList',
       ]);
     });
   });
