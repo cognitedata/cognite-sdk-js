@@ -53,7 +53,7 @@ describe('Datapoints integration test', () => {
     });
 
     response.forEach((item: any) => console.log(item));
-    
+
     expect(response[0].datapoints.length).toBeGreaterThan(0);
     expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
     expect(response[0].isString).toBe(false);
@@ -67,7 +67,6 @@ describe('Datapoints integration test', () => {
       },
     ]);
 
-    console.log('Unconverted retrieve latest values: ');
     response.forEach((item: any) => console.log(item));
 
     expect(response[0].datapoints.length).toBeGreaterThan(0);
@@ -85,8 +84,6 @@ describe('Datapoints integration test', () => {
         outputUnit: 'US_bbl_oil/d',
       }
     );
-
-    console.log('Converted retrieve values: ');
 
     response.forEach((item: any) => console.log(item));
 
@@ -108,7 +105,6 @@ describe('Datapoints integration test', () => {
         outputUnit: 'US_bbl_oil/d',
       }
     );
-    console.log('Converted retrieve latest values: ');
 
     response.forEach((item: any) => {
       expect(
@@ -134,7 +130,6 @@ describe('Datapoints integration test', () => {
         continueIfConversionFails: true,
       }
     );
-    console.log('Failed converting retrieve latest values: ');
 
     response.forEach((item: any) => console.log(item));
 
