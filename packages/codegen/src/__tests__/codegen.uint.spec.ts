@@ -110,7 +110,7 @@ describe('code generation', () => {
         'LimitList',
       ];
 
-      const typeNames = await gen.generateTypes(basicSnapshot);
+      const typeNames = await gen.generateTypes(basicSnapshot, []);
       expect(typeNames).toEqual(wants);
 
       const generatedFile = (
@@ -128,7 +128,7 @@ describe('code generation', () => {
         },
       });
 
-      const typeNames = await gen.generateTypes(basicSnapshot);
+      const typeNames = await gen.generateTypes(basicSnapshot, []);
       expect(typeNames.includes('SomeUnusedOpenApiSchema')).toBeFalsy();
     });
 
@@ -149,13 +149,45 @@ describe('code generation', () => {
 
       const wants = ['CyclicResponse', 'Filter', 'FilterOption'];
 
-      const typeNames = await gen.generateTypes(snapshot);
+      const typeNames = await gen.generateTypes(snapshot, []);
       expect(typeNames).toEqual(wants);
 
       const generatedFile = (
         await fs.readFile(CodeGen.outputFileName)
       ).toString();
       expect(generatedFile).toEqual(cyclicReferencesGenFile);
+    });
+
+
+    test('restrict to relevant definitions', async () => {
+      const snapshotMngr = new OpenApiSnapshotManager({ directory: '.' });
+      const snapshot = await snapshotMngr.downloadFromPath({
+        path: testFolder + '/testdata',
+        filename: '8-paths.json',
+      });
+
+      const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
+        autoNameInlinedRequest: false,
+        outputDir: process.cwd(),
+        filter: {
+          path: passThroughFilter,
+        },
+      });
+
+      const typeNames = await gen.generateTypes(snapshot, ['FunctionListScope']);
+
+      expect(typeNames).toEqual([
+        'CogniteExternalId',
+        'CogniteInternalId',
+        'EpochTimestamp',
+        'FunctionFileId',
+        'FunctionFilter',
+        'FunctionListScope',
+        'FunctionName',
+        'FunctionOwner',
+        'FunctionStatus',
+        'LimitList'
+      ]);
     });
   });
 });
