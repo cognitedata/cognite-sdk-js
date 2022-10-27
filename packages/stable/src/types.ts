@@ -3260,5 +3260,5 @@ export interface AnnotationFilterProps {
   creatingAppVersion?: string;
   creatingUser?: string | null;
   status?: AnnotationStatus;
-  data?: AnnotationData;
+  data?: Partial<AnnotationData>;
 }
