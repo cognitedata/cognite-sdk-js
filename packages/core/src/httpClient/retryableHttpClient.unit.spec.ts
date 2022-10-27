@@ -41,4 +41,27 @@ describe('RetryableHttpClient', () => {
       );
     }
   });
+
+  test('respect when a boolean is passed as retryValidator', async () => {
+    const scope = nock(baseUrl).get('/').times(1).reply(401);
+    try {
+      const promise = client.get('/', { retryValidator: false });
+      await promise;
+    } catch (err) {
+      expect(err.status).toBe(401);
+    }
+    expect(scope.isDone()).toBe(true);
+  });
+
+  test('respect when a function is passed as retryValidator', async () => {
+    const scope = nock(baseUrl).get('/').times(2).reply(401);
+    try {
+      await client.get('/', {
+        retryValidator: (_, __, retryCount) => retryCount < 1,
+      });
+    } catch (err) {
+      expect(err.status).toBe(401);
+    }
+    expect(scope.isDone()).toBe(true);
+  });
 });

@@ -9,10 +9,13 @@ import {
 } from '../constants';
 import { handleErrorResponse } from '../error';
 import { bearerString, isJson } from '../utils';
-import { HttpQueryParams, HttpRequest, HttpResponse } from './basicHttpClient';
+import { HttpQueryParams, HttpResponse } from './basicHttpClient';
 import { HttpHeaders } from './httpHeaders';
 import { HttpError } from './httpError';
-import { RetryableHttpClient } from './retryableHttpClient';
+import {
+  RetryableHttpClient,
+  RetryableHttpRequest,
+} from './retryableHttpClient';
 import { RetryValidator } from './retryValidator';
 
 export class CDFHttpClient extends RetryableHttpClient {
@@ -69,7 +72,9 @@ export class CDFHttpClient extends RetryableHttpClient {
     this.response401Handler = handler;
   }
 
-  protected async preRequest(request: HttpRequest): Promise<HttpRequest> {
+  protected async preRequest(
+    request: RetryableHttpRequest
+  ): Promise<RetryableHttpRequest> {
     const headersWithDefaultHeaders = this.populateDefaultHeaders(
       request.headers
     );
@@ -86,17 +91,18 @@ export class CDFHttpClient extends RetryableHttpClient {
     };
   }
 
-  protected async request<ResponseType>(request: HttpRequest) {
+  protected async request<ResponseType>(request: RetryableHttpRequest) {
     request.headers = this.enrichWithOneTimeHeaders(request.headers);
     return super.request<ResponseType>(request);
   }
 
   protected async postRequest<T>(
     response: HttpResponse<T>,
-    request: HttpRequest
+    request: RetryableHttpRequest,
+    mutatedRequest: RetryableHttpRequest
   ): Promise<HttpResponse<T>> {
     try {
-      return await super.postRequest(response, request);
+      return await super.postRequest(response, request, mutatedRequest);
     } catch (err) {
       if (
         err.status === 401 &&
@@ -106,7 +112,7 @@ export class CDFHttpClient extends RetryableHttpClient {
         return new Promise((resolvePromise, rejectPromise) => {
           const retry = () => resolvePromise(this.request(request));
           const reject = () => rejectPromise(err);
-          this.response401Handler(err, retry, reject);
+          this.response401Handler(err, mutatedRequest, retry, reject);
         });
       }
       throw handleErrorResponse(err);
@@ -122,7 +128,8 @@ export class CDFHttpClient extends RetryableHttpClient {
     };
   }
 
-  private response401Handler: Response401Handler = (_, __, reject) => reject();
+  private response401Handler: Response401Handler = (_, __, ___, reject) =>
+    reject();
 
   private preventTokenLeakage(headers: HttpHeaders, path: string) {
     if (CDFHttpClient.isSameOrigin(this.baseUrl, path)) {
@@ -152,6 +159,7 @@ export class CDFHttpClient extends RetryableHttpClient {
 
 type Response401Handler = (
   err: HttpError,
+  request: RetryableHttpRequest,
   retry: () => void,
   reject: () => void
 ) => void;

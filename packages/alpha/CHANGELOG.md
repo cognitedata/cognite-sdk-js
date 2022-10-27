@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.12](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.1.11...@cognite/sdk-alpha@0.1.12) (2022-10-04)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+## [0.1.11](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.1.10...@cognite/sdk-alpha@0.1.11) (2022-09-26)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+## [0.1.10](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.1.9...@cognite/sdk-alpha@0.1.10) (2022-09-23)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+## [0.1.9](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.1.8...@cognite/sdk-alpha@0.1.9) (2022-09-23)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
+## [0.1.8](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.1.7...@cognite/sdk-alpha@0.1.8) (2022-09-23)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
 ## [0.1.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.1.6...@cognite/sdk-alpha@0.1.7) (2022-09-12)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
