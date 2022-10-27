@@ -4,7 +4,7 @@ import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import {
   Converter,
   UnitDictionariesProcessorImpl,
-} from '@cognite-ornellas/units/';
+} from '@cognite/units/';
 
 const project: string = process.env.COGNITE_PROJECT!;
 const clientId: string = process.env.CLIENT_ID!;
@@ -39,9 +39,12 @@ async function quickstart() {
 
   await client.authenticate();
 
-  const convertedDatapoints = await client.datapoints.retrieve({
-    items: [{ id: 6522584026758 }, { outputUnit: 'US_bbl_oil/d' }],
-  });
+  const convertedDatapoints = await client.datapoints.retrieve(
+    {
+      items: [{ id: 6522584026758 }],
+    },
+    { outputUnit: 'US_bbl_oil/d' }
+  );
 
   console.log(`converted data points: \n ${convertedDatapoints}`);
 }
