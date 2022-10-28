@@ -19,24 +19,31 @@ const statementName = (statement: ts.Statement): string => {
   return identifierName(nameIdentifier);
 };
 
-/** sorterTransformer sorts all the declarations alphabetically to avoid horrible git diffs. */
+const sortElementsByName = (
+  elements: ts.NodeArray<ts.TypeElement>
+): ts.NodeArray<ts.TypeElement> => {
+  const sorted = Array.from(elements).sort((a, b) => {
+    if (
+      a.name != undefined &&
+      ts.isIdentifier(a.name) &&
+      b.name != undefined &&
+      ts.isIdentifier(b.name)
+    ) {
+      return identifierName(a.name).localeCompare(identifierName(b.name));
+    }
+
+    throw new TypeError('expected identifiers...');
+  });
+  return ts.createNodeArray(sorted);
+};
+
+/** sorterTransformer sorts all the declarations alphabetically to produce deterministic outputs. */
 const sorterTransformer: ts.TransformerFactory<ts.SourceFile> = (context) => {
   return (sourceFile) => {
     const visitor = (node: ts.Node): ts.Node => {
       if (ts.isInterfaceDeclaration(node)) {
-        const sortedMembers = Array.from(node.members).sort((a, b) => {
-          if (
-            a.name != undefined &&
-            ts.isIdentifier(a.name) &&
-            b.name != undefined &&
-            ts.isIdentifier(b.name)
-          ) {
-            return identifierName(a.name).localeCompare(identifierName(b.name));
-          }
-
-          throw new TypeError('expected identifiers...');
-        });
-        node.members = ts.createNodeArray(sortedMembers);
+        // sort every field alphabetically
+        node.members = sortElementsByName(node.members);
         return node;
       }
       return ts.visitEachChild(node, visitor, context);
