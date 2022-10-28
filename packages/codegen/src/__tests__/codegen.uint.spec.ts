@@ -157,5 +157,38 @@ describe('code generation', () => {
       ).toString();
       expect(generatedFile).toEqual(cyclicReferencesGenFile);
     });
+
+    test('restrict to relevant definitions', async () => {
+      const snapshotMngr = new OpenApiSnapshotManager({ directory: '.' });
+      const snapshot = await snapshotMngr.downloadFromPath({
+        path: testFolder + '/testdata',
+        filename: '8-paths.json',
+      });
+
+      const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
+        autoNameInlinedRequest: false,
+        outputDir: process.cwd(),
+        filter: {
+          path: passThroughFilter,
+        },
+      });
+
+      const typeNames = await gen.generateTypes(snapshot, [
+        'FunctionListScope',
+      ]);
+
+      expect(typeNames).toEqual([
+        'CogniteExternalId',
+        'CogniteInternalId',
+        'EpochTimestamp',
+        'FunctionFileId',
+        'FunctionFilter',
+        'FunctionListScope',
+        'FunctionName',
+        'FunctionOwner',
+        'FunctionStatus',
+        'LimitList',
+      ]);
+    });
   });
 });
