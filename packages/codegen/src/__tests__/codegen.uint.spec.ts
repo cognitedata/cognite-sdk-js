@@ -110,7 +110,7 @@ describe('code generation', () => {
         'LimitList',
       ];
 
-      const typeNames = await gen.generateTypes(basicSnapshot, []);
+      const typeNames = await gen.generateTypes(basicSnapshot);
       expect(typeNames).toEqual(wants);
 
       const generatedFile = (
@@ -128,7 +128,7 @@ describe('code generation', () => {
         },
       });
 
-      const typeNames = await gen.generateTypes(basicSnapshot, []);
+      const typeNames = await gen.generateTypes(basicSnapshot);
       expect(typeNames.includes('SomeUnusedOpenApiSchema')).toBeFalsy();
     });
 
@@ -149,7 +149,7 @@ describe('code generation', () => {
 
       const wants = ['CyclicResponse', 'Filter', 'FilterOption'];
 
-      const typeNames = await gen.generateTypes(snapshot, []);
+      const typeNames = await gen.generateTypes(snapshot);
       expect(typeNames).toEqual(wants);
 
       const generatedFile = (
