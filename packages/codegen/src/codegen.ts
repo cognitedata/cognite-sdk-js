@@ -18,7 +18,6 @@ import {
   OpenApiParameters,
   OpenApiReference,
 } from './openapi';
-import { sortOpenApiJson } from './utils';
 import { AutoNameInlinedRequestOption } from './utils';
 import { TypeGenerator, TypeGeneratorResult } from './generator/generator';
 import sorterTransformer from './ast_transformer/sorter';
