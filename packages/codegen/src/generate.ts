@@ -52,7 +52,7 @@ async function generateServiceTypes(
     const snapshot = await snapshotMngr.read();
     const generatedTypeNames = await gen.generateTypes(
       snapshot,
-      configFile.filter.relevantReferenceNames ?? []
+      configFile.filter.relevantReferenceNames
     );
     return generatedTypeNames;
   } catch (error) {

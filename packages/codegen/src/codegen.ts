@@ -323,7 +323,7 @@ export class CodeGen {
    */
   public generateTypes = async (
     openApiDoc: OpenApiDocument,
-    relevantReferenceNames: string[]
+    relevantReferenceNames?: string[]
   ): Promise<string[]> => {
     // deep copy
     openApiDoc = JSON.parse(JSON.stringify(openApiDoc)) as OpenApiDocument;
