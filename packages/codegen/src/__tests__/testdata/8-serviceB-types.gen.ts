@@ -5,181 +5,180 @@
 /**
  * External Id provided by client. Should be unique within a given project/resource combination.
  */
- export type CogniteExternalId = string;
- /**
-  * A server-generated ID for the object.
-  * @format int64
-  * @min 1
-  * @max 9007199254740991
-  */
- export type CogniteInternalId = number;
- /**
-  * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
-  * @format int64
-  * @min 0
-  * @example 1638795554528
-  */
- export type EpochTimestamp = number;
- export interface Function {
-     /**
-      * (Deprecated) API key that can be used inside the function to access data in CDF. This is deprecated and will be replaced by OIDC tokens. With OIDC tokens, a session is created on behalf of the user/service principal at the point when either (1) the function is called directly, or (2) when a schedule is created for the function.
-      * @example ***
-      */
-     apiKey?: string;
-     /**
-      * Number of CPU cores per function (not available in Azure). Defaults to 0.25. Allowed values are in the range [0.1, 0.6].
-      * @format float
-      */
-     cpu?: number;
-     /** @example 123455234 */
-     createdTime: EpochTimestamp;
-     /**
-      * Description of the function.
-      * @example My fantastic function with advanced ML
-      */
-     description?: string;
-     /**
-      * Object with environment variables as key/value pairs. Keys can contain only letters, numbers or the underscore character. You can create at most 100 environment variables.
-      * @example {"MyKey":"MyValue"}
-      */
-     envVars?: object;
-     error?: FunctionBuildError;
-     /** External Id provided by client. Should be unique within a given project/resource combination. */
-     externalId?: CogniteExternalId;
-     /**
-      * Extra package index URLs to use when building the function, allowing for packages published in private repositories.
-      * Supports basic HTTP authentication as described in [pip basic
-      * authentication](https://pip.pypa.io/en/stable/topics/authentication/#basic-http-authentication).
-      * See the
-      * [documentation](https://docs.cognite.com/cdf/functions/#additional-arguments)
-      * for additional information related to the security risks of using this
-      * option.
-      * @example ["https://username:password@pypi.company.com/simple","https://token@pypi.company.com/simple","https://pypi.company.com/simple"]
-      */
-     extraIndexUrls?: string[];
-     /**
-      * The file ID to a file uploaded to Cognite's Files API. This file must be a zip file and contain a file called `handler.py` (unless otherwise specified through the `functionPath` argument). This file must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets` and `function_call_info`, which are passed into the function. The zip file can contain other files as well (model binary data, libraries etc).
-      *
-      * Custom packages can be pip installed by providing a requirements.txt file in the root of the zip file. The latest version of the Cognite Python SDK is automatically installed. If a specific version is needed, please specify this in the requirements.txt file.
-      */
-     fileId: FunctionFileId;
-     /**
-      * Relative path from the root folder to the file containing the `handle` function. Defaults to `handler.py`. Must be on POSIX path format.
-      * @example myfunction/handler.py
-      */
-     functionPath?: string;
-     id: CogniteInternalId;
-     /**
-      * Specify a different python package index, allowing for packages published in private repositories.
-      * Supports basic HTTP authentication as described in [pip basic authentication](https://pip.pypa.io/en/stable/topics/authentication/#basic-http-authentication).
-      * See the
-      * [documentation](https://docs.cognite.com/cdf/functions/#additional-arguments)
-      * for additional information related to the security risks of using this
-      * option.
-      * @example https://username:password@pypi.company.com/simple
-      */
-     indexUrl?: string;
-     /**
-      * Memory per function measured in GB (not available in Azure). Defaults to 1. Allowed values are in the range [0.1, 2.5].
-      * @format float
-      */
-     memory?: number;
-     /** Custom, application specific metadata. String key -> String value. Limits: Maximum length of key is 32, value 512 characters, up to 16 key-value pairs. Maximum size of entire metadata is 4096 bytes. */
-     metadata?: Record<string, string>;
-     /** The name of the function. */
-     name: FunctionName;
-     /** Owner of this function. Typically used to know who created it. */
-     owner?: FunctionOwner;
-     /**
-      * The runtime of the function. Runtime "py3x" translates to the latest version of the Python 3.x.y series.
-      * @example py38
-      */
-     runtime?: "py37" | "py38" | "py39";
-     /**
-      * Object with additional secrets as key/value pairs. These can e.g. password to simulators or other data sources. Keys must be lowercase characters, numbers or dashes (-) and at most 15 characters. You can create at most 30 secrets, all keys must be unique, and cannot be `apikey`, `indexUrl` or `extraIndexUrls`.
-      * @example {"MySecret":"***"}
-      */
-     secrets?: object;
-     status: FunctionStatus;
- }
- /**
-  * Cognite Function API error.
-  */
- export interface FunctionBuildError {
-     /**
-      * HTTP status code.
-      * @format int32
-      * @example 400
-      */
-     code: number;
-     /**
-      * Error message.
-      * @example Could not build function.
-      */
-     message: string;
- }
- /**
-  * Cognite Function API error.
-  */
- export interface FunctionErrorBasic {
-     /**
-      * HTTP status code.
-      * @format int32
-      * @example 400
-      */
-     code: number;
-     /**
-      * Error message.
-      * @example Could not authenticate.
-      */
-     message: string;
- }
- export interface FunctionErrorResponse {
-     /** Cognite Function API error. */
-     error: FunctionErrorBasic;
- }
- /**
- * The file ID to a file uploaded to Cognite's Files API. This file must be a zip file and contain a file called `handler.py` (unless otherwise specified through the `functionPath` argument). This file must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets` and `function_call_info`, which are passed into the function. The zip file can contain other files as well (model binary data, libraries etc).
- 
- Custom packages can be pip installed by providing a requirements.txt file in the root of the zip file. The latest version of the Cognite Python SDK is automatically installed. If a specific version is needed, please specify this in the requirements.txt file.
+export type CogniteExternalId = string;
+/**
+ * A server-generated ID for the object.
+ * @format int64
+ * @min 1
+ * @max 9007199254740991
  */
- export type FunctionFileId = CogniteInternalId;
- export interface FunctionFilter {
-     /** FunctionFilter */
-     filter?: {
-         name?: FunctionName;
-         owner?: FunctionOwner;
-         fileId?: FunctionFileId;
-         status?: FunctionStatus;
-         externalIdPrefix?: CogniteExternalId;
-         createdTime?: EpochTimestamp;
-     };
- }
- export interface FunctionListResponse {
-     items: Function[];
- }
- export type FunctionListScope = FunctionFilter & LimitList;
- /**
-  * The name of the function.
-  * @example myfunction
-  */
- export type FunctionName = string;
- /**
-  * Owner of this function. Typically used to know who created it.
-  * @example anders.hafreager@cognite.com
-  */
- export type FunctionOwner = string;
- /**
-  * Status of the function. It starts in a Queued state, is then Deploying before it is either Ready or Failed. If the function is Ready, it can be called.
-  * @example Queued
-  */
- export type FunctionStatus = "Queued" | "Deploying" | "Ready" | "Failed";
- export interface LimitList {
-     /**
-      * Limits the number of results to be returned.
-      * @format int32
-      * @min 1
-      */
-     limit?: number;
- }
- 
+export type CogniteInternalId = number;
+/**
+ * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
+ * @format int64
+ * @min 0
+ * @example 1638795554528
+ */
+export type EpochTimestamp = number;
+export interface Function {
+    /**
+     * (Deprecated) API key that can be used inside the function to access data in CDF. This is deprecated and will be replaced by OIDC tokens. With OIDC tokens, a session is created on behalf of the user/service principal at the point when either (1) the function is called directly, or (2) when a schedule is created for the function.
+     * @example ***
+     */
+    apiKey?: string;
+    /**
+     * Number of CPU cores per function (not available in Azure). Defaults to 0.25. Allowed values are in the range [0.1, 0.6].
+     * @format float
+     */
+    cpu?: number;
+    /** @example 123455234 */
+    createdTime: EpochTimestamp;
+    /**
+     * Description of the function.
+     * @example My fantastic function with advanced ML
+     */
+    description?: string;
+    /**
+     * Object with environment variables as key/value pairs. Keys can contain only letters, numbers or the underscore character. You can create at most 100 environment variables.
+     * @example {"MyKey":"MyValue"}
+     */
+    envVars?: object;
+    error?: FunctionBuildError;
+    /** External Id provided by client. Should be unique within a given project/resource combination. */
+    externalId?: CogniteExternalId;
+    /**
+     * Extra package index URLs to use when building the function, allowing for packages published in private repositories.
+     * Supports basic HTTP authentication as described in [pip basic
+     * authentication](https://pip.pypa.io/en/stable/topics/authentication/#basic-http-authentication).
+     * See the
+     * [documentation](https://docs.cognite.com/cdf/functions/#additional-arguments)
+     * for additional information related to the security risks of using this
+     * option.
+     * @example ["https://username:password@pypi.company.com/simple","https://token@pypi.company.com/simple","https://pypi.company.com/simple"]
+     */
+    extraIndexUrls?: string[];
+    /**
+     * The file ID to a file uploaded to Cognite's Files API. This file must be a zip file and contain a file called `handler.py` (unless otherwise specified through the `functionPath` argument). This file must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets` and `function_call_info`, which are passed into the function. The zip file can contain other files as well (model binary data, libraries etc).
+     *
+     * Custom packages can be pip installed by providing a requirements.txt file in the root of the zip file. The latest version of the Cognite Python SDK is automatically installed. If a specific version is needed, please specify this in the requirements.txt file.
+     */
+    fileId: FunctionFileId;
+    /**
+     * Relative path from the root folder to the file containing the `handle` function. Defaults to `handler.py`. Must be on POSIX path format.
+     * @example myfunction/handler.py
+     */
+    functionPath?: string;
+    id: CogniteInternalId;
+    /**
+     * Specify a different python package index, allowing for packages published in private repositories.
+     * Supports basic HTTP authentication as described in [pip basic authentication](https://pip.pypa.io/en/stable/topics/authentication/#basic-http-authentication).
+     * See the
+     * [documentation](https://docs.cognite.com/cdf/functions/#additional-arguments)
+     * for additional information related to the security risks of using this
+     * option.
+     * @example https://username:password@pypi.company.com/simple
+     */
+    indexUrl?: string;
+    /**
+     * Memory per function measured in GB (not available in Azure). Defaults to 1. Allowed values are in the range [0.1, 2.5].
+     * @format float
+     */
+    memory?: number;
+    /** Custom, application specific metadata. String key -> String value. Limits: Maximum length of key is 32, value 512 characters, up to 16 key-value pairs. Maximum size of entire metadata is 4096 bytes. */
+    metadata?: Record<string, string>;
+    /** The name of the function. */
+    name: FunctionName;
+    /** Owner of this function. Typically used to know who created it. */
+    owner?: FunctionOwner;
+    /**
+     * The runtime of the function. Runtime "py3x" translates to the latest version of the Python 3.x.y series.
+     * @example py38
+     */
+    runtime?: "py37" | "py38" | "py39";
+    /**
+     * Object with additional secrets as key/value pairs. These can e.g. password to simulators or other data sources. Keys must be lowercase characters, numbers or dashes (-) and at most 15 characters. You can create at most 30 secrets, all keys must be unique, and cannot be `apikey`, `indexUrl` or `extraIndexUrls`.
+     * @example {"MySecret":"***"}
+     */
+    secrets?: object;
+    status: FunctionStatus;
+}
+/**
+ * Cognite Function API error.
+ */
+export interface FunctionBuildError {
+    /**
+     * HTTP status code.
+     * @format int32
+     * @example 400
+     */
+    code: number;
+    /**
+     * Error message.
+     * @example Could not build function.
+     */
+    message: string;
+}
+/**
+ * Cognite Function API error.
+ */
+export interface FunctionErrorBasic {
+    /**
+     * HTTP status code.
+     * @format int32
+     * @example 400
+     */
+    code: number;
+    /**
+     * Error message.
+     * @example Could not authenticate.
+     */
+    message: string;
+}
+export interface FunctionErrorResponse {
+    /** Cognite Function API error. */
+    error: FunctionErrorBasic;
+}
+/**
+* The file ID to a file uploaded to Cognite's Files API. This file must be a zip file and contain a file called `handler.py` (unless otherwise specified through the `functionPath` argument). This file must contain a function named `handle` with any of the following arguments: `data`, `client`, `secrets` and `function_call_info`, which are passed into the function. The zip file can contain other files as well (model binary data, libraries etc).
+
+Custom packages can be pip installed by providing a requirements.txt file in the root of the zip file. The latest version of the Cognite Python SDK is automatically installed. If a specific version is needed, please specify this in the requirements.txt file.
+*/
+export type FunctionFileId = CogniteInternalId;
+export interface FunctionFilter {
+    /** FunctionFilter */
+    filter?: {
+        name?: FunctionName;
+        owner?: FunctionOwner;
+        fileId?: FunctionFileId;
+        status?: FunctionStatus;
+        externalIdPrefix?: CogniteExternalId;
+        createdTime?: EpochTimestamp;
+    };
+}
+export interface FunctionListResponse {
+    items: Function[];
+}
+export type FunctionListScope = FunctionFilter & LimitList;
+/**
+ * The name of the function.
+ * @example myfunction
+ */
+export type FunctionName = string;
+/**
+ * Owner of this function. Typically used to know who created it.
+ * @example anders.hafreager@cognite.com
+ */
+export type FunctionOwner = string;
+/**
+ * Status of the function. It starts in a Queued state, is then Deploying before it is either Ready or Failed. If the function is Ready, it can be called.
+ * @example Queued
+ */
+export type FunctionStatus = "Queued" | "Deploying" | "Ready" | "Failed";
+export interface LimitList {
+    /**
+     * Limits the number of results to be returned.
+     * @format int32
+     * @min 1
+     */
+    limit?: number;
+}
