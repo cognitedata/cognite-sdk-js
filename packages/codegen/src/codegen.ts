@@ -21,6 +21,7 @@ import {
 import { AutoNameInlinedRequestOption } from './utils';
 import { TypeGenerator, TypeGeneratorResult } from './generator/generator';
 import sorterTransformer from './ast_transformer/sorter';
+import cursorAndAsyncIteratorTransformer from './ast_transformer/cursor_and_async_iterator';
 
 export type StringFilter = (str: string) => boolean;
 
@@ -44,6 +45,7 @@ export class CodeGen {
 
   // Ordering matters! "sorterTransformer" must be the last transformer specified.
   astTransformers = [
+    cursorAndAsyncIteratorTransformer,
     sorterTransformer, // must be last
   ];
 
