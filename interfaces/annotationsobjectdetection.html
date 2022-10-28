@@ -70,6 +70,8 @@
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
 						<p>Models an image object detection represented by a label, a geometry, and
+							optionally a confidence value.
+							Models an image object detection represented by a label, a geometry, and
 						optionally a confidence value.</p>
 					</div>
 				</div>
@@ -107,12 +109,14 @@
 					<div class="tsd-signature tsd-kind-icon">bounding<wbr>Box<span class="tsd-signature-symbol">:</span> <a href="annotationsboundingbox.html" class="tsd-signature-type">AnnotationsBoundingBox</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/66b3bb0b8/packages/stable/src/api/vision/types.gen.ts#L234">packages/stable/src/api/vision/types.gen.ts:234</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/990ea8fda/packages/stable/src/api/annotations/types.gen.ts#L32">packages/stable/src/api/annotations/types.gen.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/990ea8fda/packages/stable/src/api/vision/types.gen.ts#L236">packages/stable/src/api/vision/types.gen.ts:236</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A plain rectangle</p>
+							<p>A plain rectangle
+							A plain rectangle</p>
 						</div>
 					</div>
 				</section>
@@ -122,14 +126,22 @@
 					<div class="tsd-signature tsd-kind-icon">confidence<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/66b3bb0b8/packages/stable/src/api/vision/types.gen.ts#L253">packages/stable/src/api/vision/types.gen.ts:253</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/990ea8fda/packages/stable/src/api/annotations/types.gen.ts#L51">packages/stable/src/api/annotations/types.gen.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/990ea8fda/packages/stable/src/api/vision/types.gen.ts#L255">packages/stable/src/api/vision/types.gen.ts:255</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The confidence score for the primitive. It should be between 0 and 1.</p>
+							<p>The confidence score for the primitive. It should be between 0 and 1.
+							The confidence score for the primitive. It should be between 0 and 1.</p>
 						</div>
 						<dl class="tsd-comment-tags">
+							<dt>min</dt>
+							<dd><p>0</p>
+							</dd>
+							<dt>max</dt>
+							<dd><p>1</p>
+							</dd>
 							<dt>min</dt>
 							<dd><p>0</p>
 							</dd>
@@ -145,12 +157,14 @@
 					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/66b3bb0b8/packages/stable/src/api/vision/types.gen.ts#L246">packages/stable/src/api/vision/types.gen.ts:246</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/990ea8fda/packages/stable/src/api/annotations/types.gen.ts#L44">packages/stable/src/api/annotations/types.gen.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/990ea8fda/packages/stable/src/api/vision/types.gen.ts#L248">packages/stable/src/api/vision/types.gen.ts:248</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The label describing what type of object it is</p>
+							<p>The label describing what type of object it is
+							The label describing what type of object it is</p>
 						</div>
 					</div>
 				</section>
@@ -160,12 +174,15 @@
 					<div class="tsd-signature tsd-kind-icon">polygon<span class="tsd-signature-symbol">:</span> <a href="annotationspolygon.html" class="tsd-signature-type">AnnotationsPolygon</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/66b3bb0b8/packages/stable/src/api/vision/types.gen.ts#L240">packages/stable/src/api/vision/types.gen.ts:240</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/990ea8fda/packages/stable/src/api/annotations/types.gen.ts#L38">packages/stable/src/api/annotations/types.gen.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/990ea8fda/packages/stable/src/api/vision/types.gen.ts#L242">packages/stable/src/api/vision/types.gen.ts:242</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>A <em>closed</em> polygon represented by <em>n</em> vertices. In other words, we assume
+								that the first and last vertex are connected.
+								A <em>closed</em> polygon represented by <em>n</em> vertices. In other words, we assume
 							that the first and last vertex are connected.</p>
 						</div>
 					</div>
@@ -176,12 +193,14 @@
 					<div class="tsd-signature tsd-kind-icon">polyline<span class="tsd-signature-symbol">:</span> <a href="annotationspolyline.html" class="tsd-signature-type">AnnotationsPolyLine</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/66b3bb0b8/packages/stable/src/api/vision/types.gen.ts#L243">packages/stable/src/api/vision/types.gen.ts:243</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/990ea8fda/packages/stable/src/api/annotations/types.gen.ts#L41">packages/stable/src/api/annotations/types.gen.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/990ea8fda/packages/stable/src/api/vision/types.gen.ts#L245">packages/stable/src/api/vision/types.gen.ts:245</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A polygonal chain consisting of <em>n</em> vertices</p>
+							<p>A polygonal chain consisting of <em>n</em> vertices
+							A polygonal chain consisting of <em>n</em> vertices</p>
 						</div>
 					</div>
 				</section>
