@@ -37,6 +37,7 @@ export interface ServiceConfig {
   };
   filter: {
     serviceName?: string;
+    relevantReferenceNames?: string[];
   };
 }
 

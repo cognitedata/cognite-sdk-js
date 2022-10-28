@@ -10,6 +10,7 @@ import {
   InternalId,
   Limit,
 } from '@cognite/sdk-core';
+import { AnnotationData } from './api/annotations/types.gen';
 
 export {
   ListResponse,
@@ -3208,12 +3209,11 @@ export interface RelationshipsRetrieveParams extends IgnoreUnknownIds {
   fetchResources?: boolean;
 }
 
-export type AnnotatedResourceType = 'file';
+export type AnnotatedResourceType = 'file' | 'threedmodel';
 export type AnnotationStatus = 'suggested' | 'approved' | 'rejected';
 
 // TODO [CXT-463] Use annotation-types package definitions
 export type AnnotationType = string;
-export type AnnotationPayload = object;
 
 export interface AnnotationModel extends AnnotationCreate {
   id: CogniteInternalId;
@@ -3232,7 +3232,7 @@ export interface AnnotationSuggest {
   creatingApp: string;
   creatingAppVersion: string;
   creatingUser: string | null;
-  data: AnnotationPayload;
+  data: AnnotationData;
 }
 
 export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
@@ -3240,7 +3240,7 @@ export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
 export interface AnnotationUpdate {
   update: {
     annotationType?: SetField<AnnotationType>;
-    data?: SetField<AnnotationPayload>;
+    data?: SetField<AnnotationData>;
     status?: SetField<AnnotationStatus>;
   };
 }
@@ -3260,5 +3260,5 @@ export interface AnnotationFilterProps {
   creatingAppVersion?: string;
   creatingUser?: string | null;
   status?: AnnotationStatus;
-  data?: AnnotationPayload;
+  data?: Partial<AnnotationData>;
 }

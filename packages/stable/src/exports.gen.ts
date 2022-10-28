@@ -3,6 +3,35 @@ export {
   EpochTimestamp
 } from './types.gen';
 export {
+  AnnotationData,
+  AnnotationsAssetRef,
+  AnnotationsBoolean,
+  AnnotationsBoundingBox,
+  AnnotationsBoundingVolume,
+  AnnotationsBox,
+  AnnotationsClassification,
+  AnnotationsCogniteAnnotationTypesDiagramsAssetLink,
+  AnnotationsCogniteAnnotationTypesImagesAssetLink,
+  AnnotationsCylinder,
+  AnnotationsDetection,
+  AnnotationsExtractedText,
+  AnnotationsFileLink,
+  AnnotationsFileRef,
+  AnnotationsGeometry,
+  AnnotationsJunction,
+  AnnotationsKeypoint,
+  AnnotationsKeypointCollection,
+  AnnotationsLine,
+  AnnotationsNumerical,
+  AnnotationsObjectDetection,
+  AnnotationsPoint,
+  AnnotationsPolyLine,
+  AnnotationsPolygon,
+  AnnotationsTextRegion,
+  AnnotationsUnhandledSymbolObject,
+  AnnotationsUnhandledTextObject
+} from './api/annotations/types.gen';
+export {
   CogniteExternalId,
   CogniteInternalId,
   Document,
@@ -61,14 +90,6 @@ export {
   LabelList
 } from './api/documents/types.gen';
 export {
-  AnnotationsAssetRef,
-  AnnotationsBoundingBox,
-  AnnotationsCogniteAnnotationTypesImagesAssetLink,
-  AnnotationsObjectDetection,
-  AnnotationsPoint,
-  AnnotationsPolyLine,
-  AnnotationsPolygon,
-  AnnotationsTextRegion,
   AssetTagDetection,
   AssetTagDetectionParameters,
   FailedBatch,
