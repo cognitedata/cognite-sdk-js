@@ -34,7 +34,7 @@ function setupLoggedInClient() {
   });
 }
 
-function setupClientWithToken() {
+function _setupClientWithToken() {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
