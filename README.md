@@ -77,6 +77,9 @@ Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revis
 
 We use `jest` to run tests, see [their documentation](https://github.com/facebook/jest) for more information.
 
+We can use any project & token to run tests locally.
+Just remove `apiKeyMode` usage from setupClient & add stripped token to `COGNITE_CREDENTIALS`.
+
 ### Versioning
 
 The libraries follow [Semantic Versioning](https://semver.org/).
