@@ -107,7 +107,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [Search features](https://docs.cognite.com/api/v1/#operation/searchFeatures)
    *
    * ```js
-   * const searchParams = {
+   * const params = {
    *  filter: {
    *    and: [
    *      { range:{ property: 'temperature', gt:4.54 } },
@@ -118,7 +118,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *  sort: [ 'temperature:ASC','location']
    * };
    *
-   * const searchedFeatures = await client.geospatial.feature.search('ocean_temperature', searchParams);
+   * const searchedFeatures = await client.geospatial.feature.search('ocean_temperature', params);
    * ```
    */
   public search = (
@@ -135,7 +135,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [Search and stream features](https://docs.cognite.com/api/v1/#operation/searchFeaturesStreaming)
    *
    * ```js
-   * const searchParams = {
+   * const params = {
    *  filter: {
    *    and: [
    *      { range:{ property: 'temperature', gt:4.54 } },
@@ -146,7 +146,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *  output: { jsonStreamFormat: 'NEW_LINE_DELIMITED' as const }
    * };
    *
-   * const featureStreamString = await client.geospatial.feature.searchStream('ocean_temperature', searchParams);
+   * const featureStreamString = await client.geospatial.feature.searchStream('ocean_temperature', params);
    * ```
    */
   public searchStream = (
@@ -196,7 +196,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [List features](https://docs.cognite.com/api/v1/#tag/Geospatial/operation/listFeatures)
    *
    * ```js
-   * const searchParams = {
+   * const params = {
    *  filter: {
    *    and: [
    *      { range:{ property: 'temperature', gt:4.54 } },
@@ -205,7 +205,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *  },
    * };
    *
-   * const allFeaturesList = await client.geospatial.feature.list('ocean_temperature', searchParams);
+   * const allFeaturesList = await client.geospatial.feature.list('ocean_temperature', params);
    * ```
    */
   public list = (
