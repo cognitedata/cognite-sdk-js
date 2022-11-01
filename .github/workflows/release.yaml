@@ -80,7 +80,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        run: yarn lerna publish from-package --yes --no-git-reset
+        run: yarn lerna publish from-package --yes --no-git-reset --no-verify-access
 
       - name: Publish documentation
         uses: JamesIves/github-pages-deploy-action@releases/v3
