@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.10.0...@cognite/sdk@7.11.0) (2022-11-02)
+
+
+### Features
+
+* **geospatial:** add feature list ([#900](https://github.com/cognitedata/cognite-sdk-js/issues/900)) ([fa71394](https://github.com/cognitedata/cognite-sdk-js/commit/fa71394748f661a79c62707f97ba671d9563e01a))
+
+
+
+
+
 # [7.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.6...@cognite/sdk@7.10.0) (2022-10-28)
 
 
