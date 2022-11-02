@@ -92,6 +92,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_stable_src_api_geospatial_featureapi_.featureapi.html#aggregate" class="tsd-kind-icon">aggregate</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_stable_src_api_geospatial_featureapi_.featureapi.html#create" class="tsd-kind-icon">create</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_stable_src_api_geospatial_featureapi_.featureapi.html#delete" class="tsd-kind-icon">delete</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_stable_src_api_geospatial_featureapi_.featureapi.html#list" class="tsd-kind-icon">list</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_stable_src_api_geospatial_featureapi_.featureapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_stable_src_api_geospatial_featureapi_.featureapi.html#search" class="tsd-kind-icon">search</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_stable_src_api_geospatial_featureapi_.featureapi.html#searchstream" class="tsd-kind-icon">search<wbr>Stream</a></li>
@@ -113,7 +114,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/06230c24e/packages/stable/src/api/geospatial/featureAPI.ts#L184">packages/stable/src/api/geospatial/featureAPI.ts:184</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fa71394748/packages/stable/src/api/geospatial/featureAPI.ts#L185">packages/stable/src/api/geospatial/featureAPI.ts:185</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -157,7 +158,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/06230c24e/packages/stable/src/api/geospatial/featureAPI.ts#L29">packages/stable/src/api/geospatial/featureAPI.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fa71394748/packages/stable/src/api/geospatial/featureAPI.ts#L30">packages/stable/src/api/geospatial/featureAPI.ts:30</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -194,7 +195,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/06230c24e/packages/stable/src/api/geospatial/featureAPI.ts#L94">packages/stable/src/api/geospatial/featureAPI.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fa71394748/packages/stable/src/api/geospatial/featureAPI.ts#L95">packages/stable/src/api/geospatial/featureAPI.ts:95</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -219,6 +220,47 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="list" class="tsd-anchor"></a>
+					<h3>list</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>featureTypeExternalId<span class="tsd-signature-symbol">: </span><a href="../modules/_core_src_types_.html#cogniteexternalid" class="tsd-signature-type">CogniteExternalId</a>, filterParams<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_stable_src_api_geospatial_types_.geospatialfeaturelistfilter.html" class="tsd-signature-type">GeospatialFeatureListFilter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_stable_src_api_geospatial_types_.geospatialfeatureresponse.html" class="tsd-signature-type">GeospatialFeatureResponse</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/_core_src_types_.cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_stable_src_api_geospatial_types_.geospatialfeatureresponse.html" class="tsd-signature-type">GeospatialFeatureResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fa71394748/packages/stable/src/api/geospatial/featureAPI.ts#L211">packages/stable/src/api/geospatial/featureAPI.ts:211</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://docs.cognite.com/api/v1/#tag/Geospatial/operation/listFeatures">List features</a></p>
+								</div>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> params = {
+ <span class="hljs-attr">filter</span>: {
+   <span class="hljs-attr">and</span>: [
+     { <span class="hljs-attr">range</span>:{ <span class="hljs-attr">property</span>: <span class="hljs-string">&#x27;temperature&#x27;</span>, <span class="hljs-attr">gt</span>:<span class="hljs-number">4.54</span> } },
+     { <span class="hljs-attr">stWithin</span>: { <span class="hljs-attr">property</span>:<span class="hljs-string">&#x27;location&#x27;</span>, <span class="hljs-attr">value</span>:<span class="hljs-string">&#x27;POLYGON((60.547602 -5.423433, 60.547602 -6.474416, 60.585858 -5.423433, 60.547602 -5.423433))&#x27;</span> } }
+  ]
+ },
+};
+
+<span class="hljs-keyword">const</span> allFeaturesList = <span class="hljs-keyword">await</span> client.geospatial.feature.list(<span class="hljs-string">&#x27;ocean_temperature&#x27;</span>, params);</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>featureTypeExternalId: <a href="../modules/_core_src_types_.html#cogniteexternalid" class="tsd-signature-type">CogniteExternalId</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> filterParams: <a href="../interfaces/_stable_src_api_geospatial_types_.geospatialfeaturelistfilter.html" class="tsd-signature-type">GeospatialFeatureListFilter</a><span class="tsd-signature-symbol"> = {}</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_stable_src_api_geospatial_types_.geospatialfeatureresponse.html" class="tsd-signature-type">GeospatialFeatureResponse</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/_core_src_types_.cogniteasynciterator.html" class="tsd-signature-type">CogniteAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_stable_src_api_geospatial_types_.geospatialfeatureresponse.html" class="tsd-signature-type">GeospatialFeatureResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="retrieve" class="tsd-anchor"></a>
 					<h3>retrieve</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
@@ -228,7 +270,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/06230c24e/packages/stable/src/api/geospatial/featureAPI.ts#L49">packages/stable/src/api/geospatial/featureAPI.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fa71394748/packages/stable/src/api/geospatial/featureAPI.ts#L50">packages/stable/src/api/geospatial/featureAPI.ts:50</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -266,14 +308,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/06230c24e/packages/stable/src/api/geospatial/featureAPI.ts#L123">packages/stable/src/api/geospatial/featureAPI.ts:123</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fa71394748/packages/stable/src/api/geospatial/featureAPI.ts#L124">packages/stable/src/api/geospatial/featureAPI.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/searchFeatures">Search features</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> searchParams = {
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> params = {
  <span class="hljs-attr">filter</span>: {
    <span class="hljs-attr">and</span>: [
      { <span class="hljs-attr">range</span>:{ <span class="hljs-attr">property</span>: <span class="hljs-string">&#x27;temperature&#x27;</span>, <span class="hljs-attr">gt</span>:<span class="hljs-number">4.54</span> } },
@@ -284,7 +326,7 @@
  <span class="hljs-attr">sort</span>: [ <span class="hljs-string">&#x27;temperature:ASC&#x27;</span>,<span class="hljs-string">&#x27;location&#x27;</span>]
 };
 
-<span class="hljs-keyword">const</span> searchedFeatures = <span class="hljs-keyword">await</span> client.geospatial.feature.search(<span class="hljs-string">&#x27;ocean_temperature&#x27;</span>, searchParams);</code></pre>
+<span class="hljs-keyword">const</span> searchedFeatures = <span class="hljs-keyword">await</span> client.geospatial.feature.search(<span class="hljs-string">&#x27;ocean_temperature&#x27;</span>, params);</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -309,14 +351,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/06230c24e/packages/stable/src/api/geospatial/featureAPI.ts#L151">packages/stable/src/api/geospatial/featureAPI.ts:151</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fa71394748/packages/stable/src/api/geospatial/featureAPI.ts#L152">packages/stable/src/api/geospatial/featureAPI.ts:152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/searchFeaturesStreaming">Search and stream features</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> searchParams = {
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> params = {
  <span class="hljs-attr">filter</span>: {
    <span class="hljs-attr">and</span>: [
      { <span class="hljs-attr">range</span>:{ <span class="hljs-attr">property</span>: <span class="hljs-string">&#x27;temperature&#x27;</span>, <span class="hljs-attr">gt</span>:<span class="hljs-number">4.54</span> } },
@@ -327,7 +369,7 @@
  <span class="hljs-attr">output</span>: { <span class="hljs-attr">jsonStreamFormat</span>: <span class="hljs-string">&#x27;NEW_LINE_DELIMITED&#x27;</span> <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span> }
 };
 
-<span class="hljs-keyword">const</span> featureStreamString = <span class="hljs-keyword">await</span> client.geospatial.feature.searchStream(<span class="hljs-string">&#x27;ocean_temperature&#x27;</span>, searchParams);</code></pre>
+<span class="hljs-keyword">const</span> featureStreamString = <span class="hljs-keyword">await</span> client.geospatial.feature.searchStream(<span class="hljs-string">&#x27;ocean_temperature&#x27;</span>, params);</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -352,7 +394,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/06230c24e/packages/stable/src/api/geospatial/featureAPI.ts#L75">packages/stable/src/api/geospatial/featureAPI.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/fa71394748/packages/stable/src/api/geospatial/featureAPI.ts#L76">packages/stable/src/api/geospatial/featureAPI.ts:76</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -407,6 +449,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_stable_src_api_geospatial_featureapi_.featureapi.html#delete" class="tsd-kind-icon">delete</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_stable_src_api_geospatial_featureapi_.featureapi.html#list" class="tsd-kind-icon">list</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_stable_src_api_geospatial_featureapi_.featureapi.html#retrieve" class="tsd-kind-icon">retrieve</a>
