@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.9.8...@cognite/sdk-playground@5.10.0) (2022-11-09)
+
+
+### Features
+
+* **documents:** add field errorMessage to list document classifiers ([#917](https://github.com/cognitedata/cognite-sdk-js/issues/917)) ([864ebc8](https://github.com/cognitedata/cognite-sdk-js/commit/864ebc8210c5e52e5e55daca5e5609ceff5aca00))
+
+
+
+
+
 ## [5.9.8](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.9.7...@cognite/sdk-playground@5.9.8) (2022-11-02)
 
 **Note:** Version bump only for package @cognite/sdk-playground
