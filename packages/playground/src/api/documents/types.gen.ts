@@ -10,7 +10,7 @@ export type DocumentsSearchRequest = DocumentsFilterOption &
 
 export type DocumentsFilterRequest = DocumentsFilterOption &
   DocumentsLimit &
-  Cursor;
+  DocumentsCursor;
 
 export type DocumentContentRequest = DocumentContentRequestItems &
   IgnoreUnknownIdsField;
@@ -106,6 +106,11 @@ export interface DocumentsClassifierItems {
   items: DocumentsClassifier[];
 }
 
+export interface DocumentsNextCursor {
+  /** The cursor to get the next page of results (if available). */
+  nextCursor?: string;
+}
+
 export interface DocumentsClassifier {
   /** Project id */
   projectId: CogniteInternalId;
@@ -134,6 +139,9 @@ export interface DocumentsClassifier {
    * @format int64
    */
   trainingSetSize?: number;
+
+  /** Reason why the classifier cannot be created */
+  errorMessage?: string;
 }
 
 export interface DocumentsClassifierMetrics {
@@ -159,6 +167,36 @@ export interface DocumentsClassifierListByIdsItems {
 export interface DocumentsClassifierListByIds {
   /** A server-generated ID for the object. */
   id?: CogniteInternalId;
+}
+
+/**
+ * A list of classifiers.
+ */
+export interface DocumentsClassifierCreateResponseItems {
+  items: DocumentsClassifierCreateResponse[];
+}
+
+export interface DocumentsClassifierCreateResponse {
+  /** Project id */
+  projectId: CogniteInternalId;
+
+  /** Name of the classifier */
+  name: string;
+
+  /**
+   * Timestamp when the classifier is created
+   * @format int64
+   */
+  createdAt: number;
+
+  /** Status of the creating classifier job. Can be one of `QUEUING`, `TRAINING`, `FINISHED`, `FAILED` */
+  status: string;
+
+  /** Whether the classifier is currently used for predicting labels */
+  active: boolean;
+
+  /** Classifier id */
+  id: CogniteInternalId;
 }
 
 export interface DocumentsClassifierCreate {
@@ -777,7 +815,7 @@ export interface DocumentsLimit {
   limit?: number;
 }
 
-export interface Cursor {
+export interface DocumentsCursor {
   /** Cursor for paging through results. */
   cursor?: string;
 }
@@ -1151,7 +1189,11 @@ export interface DocumentsTemporaryPreviewLinkResponse {
   temporaryLink?: string;
 }
 
-export type DocumentsClassifiersResponse = DocumentsClassifierItems;
+export type DocumentsClassifiersCreateResponse =
+  DocumentsClassifierCreateResponseItems & DocumentsNextCursor;
+
+export type DocumentsClassifiersResponse = DocumentsClassifierItems &
+  DocumentsNextCursor;
 
 export interface FeedbackStatusQueryParameter {
   /**
@@ -1169,6 +1211,10 @@ export interface FeedbackStatusQueryParameter {
    * - If the action was `DETACH`, and the label is not attached to the file anymore.
    */
   status?: FeedbackStatus;
+}
+
+export interface CursorQueryParameter {
+  cursor?: string;
 }
 
 export interface DocumentsDeletePipelinesRequest {
