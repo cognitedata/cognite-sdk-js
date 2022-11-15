@@ -299,4 +299,3 @@ export interface GeospatialComputedItemList {
 export interface GeospatialJsonComputeOutput {
   output: Record<string, GeospatialComputeFunction>;
 }
-
