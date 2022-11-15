@@ -289,8 +289,7 @@ describe('Geospatial integration test', () => {
             }
           }
         }
-      }
-      );
+      });
       const items = response.items;
       expect(items.length == 1).toBeTruthy();
       expect(items[0]["output"]["srid"]).toEqual(4326);
