@@ -292,12 +292,8 @@ export interface GeospatialExtendedWellKnownText {
   ewkt: string;
 }
 
-export interface GeospatialComputedItem {
-  item: Record<string, any>;
-}
-
 export interface GeospatialComputedItemList {
-  items: GeospatialComputedItem[];
+  items: Record<string, any>[];
 }
 
 export interface GeospatialJsonComputeOutput {
