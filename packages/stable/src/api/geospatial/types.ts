@@ -49,22 +49,22 @@ export type GeospatialPropertyType =
 
 export type GeospatialFeatureTypeProperty =
   | {
-      type: Exclude<GeospatialPropertyType, GeometryPropertyType | 'STRING'>;
-      description?: string;
-      optional?: boolean;
-    }
+    type: Exclude<GeospatialPropertyType, GeometryPropertyType | 'STRING'>;
+    description?: string;
+    optional?: boolean;
+  }
   | {
-      type: GeometryPropertyType;
-      srid?: number;
-      description?: string;
-      optional?: boolean;
-    }
+    type: GeometryPropertyType;
+    srid?: number;
+    description?: string;
+    optional?: boolean;
+  }
   | {
-      type: 'STRING';
-      size: number;
-      description?: string;
-      optional?: boolean;
-    };
+    type: 'STRING';
+    size: number;
+    description?: string;
+    optional?: boolean;
+  };
 
 type Properties = Record<string, GeospatialFeatureTypeProperty>;
 
@@ -116,16 +116,16 @@ export interface GeospatialCreateFeatureType extends ExternalId {
 
 export interface GeospatialUpdateFeatureType extends ExternalId {
   update:
+  | {
+    properties: { add: Properties } | { remove: string[] };
+  }
+  | {
+    searchSpec:
     | {
-        properties: { add: Properties } | { remove: string[] };
-      }
-    | {
-        searchSpec:
-          | {
-              add: { [indexName: string]: { properties: string[] } };
-            }
-          | { remove: string[] };
-      };
+      add: { [indexName: string]: { properties: string[] } };
+    }
+    | { remove: string[] };
+  };
 }
 
 export interface GeospatialRecursiveDelete {
@@ -134,12 +134,12 @@ export interface GeospatialRecursiveDelete {
 
 export interface GeospatialOutput {
   output?:
-    | {
-        geometryFormat: GeometryType;
-      }
-    | {
-        properties: Record<string, unknown>;
-      };
+  | {
+    geometryFormat: GeometryType;
+  }
+  | {
+    properties: Record<string, unknown>;
+  };
 }
 
 interface GeospatialPropertyAndValue {
@@ -161,80 +161,80 @@ interface GeospatialAllowDimensionalityMismatch {
 
 type GeospatialFeatureFilter =
   | {
-      or: GeospatialFeatureFilter[];
-    }
+    or: GeospatialFeatureFilter[];
+  }
   | {
-      and: GeospatialFeatureFilter[];
-    }
+    and: GeospatialFeatureFilter[];
+  }
   | {
-      not: GeospatialFeatureFilter;
-    }
+    not: GeospatialFeatureFilter;
+  }
   | {
-      equals: GeospatialPropertyAndValue;
-    }
+    equals: GeospatialPropertyAndValue;
+  }
   | {
-      missing: { property: string };
-    }
+    missing: { property: string };
+  }
   | {
-      like: GeospatialPropertyAndPattern;
-    }
+    like: GeospatialPropertyAndPattern;
+  }
   | {
-      regex: GeospatialPropertyAndPattern;
-    }
+    regex: GeospatialPropertyAndPattern;
+  }
   | {
-      range:
-        | { property: string; gt: string | number }
-        | { property: string; lt: string | number }
-        | { property: string; gte: string | number }
-        | { property: string; lte: string | number };
-    }
+    range:
+    | { property: string; gt: string | number }
+    | { property: string; lt: string | number }
+    | { property: string; gte: string | number }
+    | { property: string; lte: string | number };
+  }
   | {
-      stWithin: GeospatialPropertyAndValue;
-    }
+    stWithin: GeospatialPropertyAndValue;
+  }
   | {
-      stContains: GeospatialPropertyAndValue;
-    }
+    stContains: GeospatialPropertyAndValue;
+  }
   | {
-      stIntersects: GeospatialPropertyAndValue;
-    }
+    stIntersects: GeospatialPropertyAndValue;
+  }
   | {
-      stContainsProperly: GeospatialPropertyAndValue;
-    }
+    stContainsProperly: GeospatialPropertyAndValue;
+  }
   | {
-      stWithinProperly: GeospatialPropertyAndValue;
-    }
+    stWithinProperly: GeospatialPropertyAndValue;
+  }
   | {
-      stWithinDistance: GeospatialPropertyAndValue & { distance: number };
-    };
+    stWithinDistance: GeospatialPropertyAndValue & { distance: number };
+  };
 
 export interface GeospatialFeatureSearchFilter
   extends GeospatialAllowCrsTransformation,
-    GeospatialAllowDimensionalityMismatch,
-    Limit,
-    GeospatialOutput {
+  GeospatialAllowDimensionalityMismatch,
+  Limit,
+  GeospatialOutput {
   filter?: GeospatialFeatureFilter;
   sort?: string[];
 }
 
 export interface GeospatialFeatureSearchStreamFilter
   extends GeospatialAllowCrsTransformation,
-    GeospatialAllowDimensionalityMismatch,
-    Limit {
+  GeospatialAllowDimensionalityMismatch,
+  Limit {
   filter?: GeospatialFeatureFilter;
   output?:
-    | GeospatialOutput['output']
-    | {
-        jsonStreamFormat:
-          | 'LENGTH_PREFIXED'
-          | 'NEW_LINE_DELIMITED'
-          | 'CONCATENATED'
-          | 'RECORD_SEPARATOR_DELIMITED';
-      };
+  | GeospatialOutput['output']
+  | {
+    jsonStreamFormat:
+    | 'LENGTH_PREFIXED'
+    | 'NEW_LINE_DELIMITED'
+    | 'CONCATENATED'
+    | 'RECORD_SEPARATOR_DELIMITED';
+  };
 }
 
 export interface GeospatialFeatureListFilter
   extends GeospatialFeatureSearchStreamFilter,
-    Cursor {}
+  Cursor { }
 
 /**
  * Search stream returns a string of delimited json of features (GeospatialFeatureResponse[]).
@@ -304,6 +304,3 @@ export interface GeospatialJsonComputeOutput {
   output: Record<string, GeospatialComputeFunction>;
 }
 
-export interface GeospatialComputeResponse {
-  items: GeospatialComputedItemList;
-}
