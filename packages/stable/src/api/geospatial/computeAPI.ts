@@ -1,7 +1,7 @@
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import {
-  GeospatialComputeRequest,
-  GeospatialComputeResponse
+  GeospatialJsonComputeOutput,
+  GeospatialComputeResponse,
 } from './types';
 
 export class ComputeAPI extends BaseResourceAPI<GeospatialComputeResponse> {
@@ -10,12 +10,12 @@ export class ComputeAPI extends BaseResourceAPI<GeospatialComputeResponse> {
    *
    */
   public compute = async (
-    request: GeospatialComputeRequest
+    request: GeospatialJsonComputeOutput
   ): Promise<GeospatialComputeResponse> => {
     const path = this.url();
     const response = await this.post<GeospatialComputeResponse>(path, {
-      data: request
+      data: request,
     });
-    return response.data
+    return response.data;
   };
 }

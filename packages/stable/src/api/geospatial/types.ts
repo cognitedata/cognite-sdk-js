@@ -279,21 +279,16 @@ export interface GeospatialSridId {
   srid: number;
 }
 
-export type GeospatialComputeFunction =
-  | {
-      stTransform: GeospatialGeometryTransformComputeFunction;
-    };
+export type GeospatialComputeFunction = {
+  stTransform: GeospatialGeometryTransformComputeFunction;
+};
 
 export interface GeospatialGeometryTransformComputeFunction {
-  geometry: GeospatialGeometryComputeFunction;
+  geometry: GeospatialExtendedWellKnownText;
   srid: number;
 }
 
-export interface GeospatialGeometryComputeFunction  {
-
-}
-
-export interface GeospatialExtendedWellKnownText extends GeospatialGeometryComputeFunction {
+export interface GeospatialExtendedWellKnownText {
   ewkt: string;
 }
 
@@ -305,12 +300,8 @@ export interface GeospatialComputedItemList {
   items: GeospatialComputedItem[];
 }
 
-interface GeospatialJsonComputeOutput {
-  output: Record<string, GeospatialComputeFunction>
-}
-
-export interface GeospatialComputeRequest extends GeospatialJsonComputeOutput {
-
+export interface GeospatialJsonComputeOutput {
+  output: Record<string, GeospatialComputeFunction>;
 }
 
 export interface GeospatialComputeResponse {
