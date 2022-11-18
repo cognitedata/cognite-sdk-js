@@ -138,6 +138,9 @@ export interface AnnotationsTextRegion {
  * Models a link to a CDF Asset referenced in an engineering diagram
  */
 export interface AnnotationsCogniteAnnotationTypesDiagramsAssetLink {
+  /** The description of a primitive */
+  description?: string;
+
   /**
    * The number of the page on which this annotation is located. The first page has number 1.
    * @min 1
@@ -165,6 +168,9 @@ export interface AnnotationsCogniteAnnotationTypesDiagramsAssetLink {
  * Models a link to a CDF File referenced in an engineering diagram
  */
 export interface AnnotationsFileLink {
+  /** The description of a primitive */
+  description?: string;
+
   /**
    * The number of the page on which this annotation is located. The first page has number 1.
    * @min 1
@@ -192,6 +198,9 @@ export interface AnnotationsFileLink {
  * Models an extracted text region in an engineering diagram
  */
 export interface AnnotationsUnhandledTextObject {
+  /** The description of a primitive */
+  description?: string;
+
   /**
    * The number of the page on which this annotation is located. The first page has number 1.
    * @min 1
@@ -210,6 +219,9 @@ export interface AnnotationsUnhandledTextObject {
  * Models an extracted symbol region in an engineering diagram
  */
 export interface AnnotationsUnhandledSymbolObject {
+  /** The description of a primitive */
+  description?: string;
+
   /**
    * The number of the page on which this annotation is located. The first page has number 1.
    * @min 1
