@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.11.1...@cognite/sdk@7.12.0) (2022-11-18)
+
+
+### Features
+
+* **annotations:** add `description` ([#918](https://github.com/cognitedata/cognite-sdk-js/issues/918)) ([aefa215](https://github.com/cognitedata/cognite-sdk-js/commit/aefa215f8a78cc8ee370098757b2f65948648425))
+
+
+
+
+
 ## [7.11.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.11.0...@cognite/sdk@7.11.1) (2022-11-17)
 
 **Note:** Version bump only for package @cognite/sdk
