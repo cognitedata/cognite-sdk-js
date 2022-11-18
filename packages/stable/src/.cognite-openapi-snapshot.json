@@ -5113,7 +5113,7 @@
           "Time series"
         ],
         "summary": "Retrieve data points",
-        "description": "Retrieves a list of data points from multiple time series in a project.\nThis operation supports aggregation, but not pagination.\nA detailed description of how aggregates work can be found at [our concept guide for aggregation](<https://docs.cognite.com/dev/concepts/aggregation/>).\n\nNote: when the 'start' is not specified neither in top level and for individual item it will default to epoch 0 which is Jan 1st, 1970 thus,\nexcluding potential existent datapoints before 1970. 'start' needs to be specified to get datapoints before 1970.",
+        "description": "Retrieves a list of data points from multiple time series in a project.\nThis operation supports aggregation and pagination.\nA detailed description of how aggregates work can be found at [our concept guide for aggregation](<https://docs.cognite.com/dev/concepts/aggregation/>).\n\nNote: when the 'start' is not specified neither in top level and for individual item it will default to epoch 0 which is Jan 1st, 1970 thus,\nexcluding potential existent datapoints before 1970. 'start' needs to be specified to get datapoints before 1970.",
         "operationId": "getMultiTimeSeriesDatapoints",
         "parameters": [
           {
@@ -12466,6 +12466,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "from cognite.client.data_classes import Transformation, TransformationDestination\ntransformations = [\n    Transformation(\n        name=\"transformation1\",\n        destination=TransformationDestination.assets()\n    ),\n    Transformation(\n        name=\"transformation2\",\n        destination=TransformationDestination.raw(\"myDatabase\", \"myTable\"),\n    ),\n]\nres = client.transformations.create(transformations)\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "Transformation.Builder builder = Transformation.newBuilder() \n          .setName(\"TransformationTestSDK-\") \n          .setQuery(\"select * from teste\") \n          .setConflictMode(\"upsert\") \n          .setIsPublic(true) \n          .setExternalId(\"TestSKD-\") \n          .setIgnoreNullFields(true) \n          .setDataSetId(dataSetId) \n          .setDestination(Transformation.Destination.newBuilder() \n               .setType(\"raw\") \n               .setDatabase(\"Test\") \n               .setTable(\"Test\") \n               .build() \n          ) \n          .setSourceApiKey(\"TestApiKey\") \n          .setDestinationApiKey(\"TestApiKey\"); \nList<Transformation> createdList = client.transformations().upsert(List.of(builder.build())); \n\n"
           }
         ]
       }
@@ -12697,6 +12702,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "res = client.transformations.retrieve(id=1)\n\nres = client.transformations.retrieve(external_id=\"1\")\nres = client.transformations.retrieve_multiple(ids=[1,2,3], external_ids=['transform-1','transform-2'])\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Item> byExternalIds = List.of(Item.newBuilder() \n          .setExternalId(\"10\") \n          .build()); \nclient.transformations().retrieve(byExternalIds);"
           }
         ]
       }
@@ -12862,7 +12872,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:READ"
+        "x-capability": "transformationsAcl:READ",
+        "x-code-samples": [
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Transformation> listTransformationResults = new ArrayList<>(); \nclient.transformations()\n          .list(Request.create().withFilterParameter(\"isPublic\", true))\n          .forEachRemaining(listTransformationResults::addAll); \n\n"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/delete": {
@@ -13092,6 +13109,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "client.transformations.delete(id=[1,2,3], external_id=\"function3\")\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Item> deleteByExternalIds = List.of(Item.newBuilder() \n          .setExternalId(\"10\") \n          .build()); \n\nList<Item> deleteItemsResults = client.transformations().delete(deleteByExternalIds);\n\n"
           }
         ]
       }
@@ -13323,6 +13345,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "transformation = client.transformations.retrieve(id=1)\ntransformation.query = \"SELECT * FROM _cdf.assets\"\nres = client.transformations.update(transformation)\n\nfrom cognite.client.data_classes import TransformationUpdate\nmy_update = TransformationUpdate(id=1).query.set(\"SELECT * FROM _cdf.assets\").is_public.set(False)\nres = client.transformations.update(my_update)\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Transformation> editedInput = // List of Transformations \nList<Transformation> updatedList = client.transformations().upsert(editedInput);\n\n"
           }
         ]
       }
@@ -13500,6 +13527,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "res = client.transformations.run(transformation_id = 1)\n\nres = client.transformations.run(transformation_id = 1, wait = False)\nimport asyncio\nasync def run_transformation():\n    res = await c.transformations.run_async(id = 1)\nloop = asyncio.get_event_loop()\nloop.run_until_complete(run_transformation())\nloop.close()\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "Transformation.Job jobRead =  \n          client.transformations().jobs().run(10L);"
           }
         ]
       }
@@ -13700,6 +13732,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "transformation_jobs_list = client.transformations.jobs.list()\n\ntransformation_jobs_list = client.transformations.jobs.list(transformation_id = 1)\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "Iterator<List<Transformation.Job>> listJobs =   \n          client.transformations().jobs().list();  \n\n client.  \n          transformations()  \n          .jobs()  \n          .list(Request.create()  \n              .withRootParameter(\"transformationId\", 10)); \n\n client  \n          .transformations()  \n          .jobs()  \n          .list(Request.create()  \n              .withRootParameter(\"transformationExternalId\", 10)); \n\n"
           }
         ]
       }
@@ -13931,6 +13968,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "res = client.transformations.jobs.retrieve(id=1)\nres = client.transformations.jobs.retrieve_multiple(ids=[1, 2, 3])\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Item> retrieveItems = new ArrayList<>(); \nretrieveItems.add(Item.newBuilder()  \n          .setId(10)  \n          .build()); \nList<Transformation.Job> retrievedItems =  \n          client.transformations().jobs().retrieve(retrieveItems); \n\n"
           }
         ]
       }
@@ -14101,6 +14143,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "res = client.transformations.jobs.list_metrics(id=1)\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "Iterator<List<Transformation.Job.Metric>> it =   \n          client.transformations().jobs().metrics().list(10); \n\n"
           }
         ]
       }
@@ -14272,7 +14319,14 @@
             }
           }
         },
-        "x-capability": "transformationsAcl:WRITE"
+        "x-capability": "transformationsAcl:WRITE",
+        "x-code-samples": [
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "Boolean jobResult1 =  \n          client.transformations().jobs().cancel(10L);"
+          }
+        ]
       }
     },
     "/api/v1/projects/{project}/transformations/schedules": {
@@ -14522,6 +14576,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "schedules_list = client.transformations.schedules.list()\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "Iterator<List<Transformation.Schedule>> it =   \n          client.transformations().schedules().list();\n\n"
           }
         ]
       },
@@ -14752,6 +14811,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "from cognite.client.data_classes import TransformationSchedule\nschedules = [TransformationSchedule(id = 1, interval = \"0 * * * *\"), TransformationSchedule(external_id=\"transformation2\", interval = \"5 * * * *\"))]\nres = client.transformations.schedules.create(schedules)\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Transformation.Schedule> objects = new ArrayList<>(); \nobjects.add(Transformation.Schedule.newBuilder()  \n          .setExternalId(\"10\")  \n          .setInterval(\"*/5 * * * *\")  \n          .setIsPaused(false)  \n          .build());\nList<Transformation.Schedule> createdListSchedules =  \n          client.transformations().schedules().schedule(objects);\n\n"
           }
         ]
       }
@@ -14984,6 +15048,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "res = client.transformations.schedules.retrieve(id=1)\n\nres = client.transformations.schedules.retrieve(external_id=\"1\")\nres = client.transformations.schedules.retrieve_multiple(ids=[1, 2, 3])\n\nres = client.transformations.schedules.retrieve_multiple(external_ids=[\"t1\", \"t2\"])\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Item> itemsToRetrieve = List.of(Item.newBuilder()   \n          .setExternalId(\"10\")   \n          .build());\nList<Transformation.Schedule> retrievedItems =   \n          client.transformations().schedules().retrieve(itemsToRetrieve);\n\n"
           }
         ]
       }
@@ -15216,6 +15285,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "client.transformations.schedules.delete(id=[1,2,3], external_id=\"3\")\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Item> deleteSchedule = List.of(Item.newBuilder()   \n          .setExternalId(\"10\")   \n          .build());\nBoolean isUnSchedule =   \n          client.transformations().schedules().unSchedule(deleteSchedule);\n\n"
           }
         ]
       }
@@ -15447,6 +15521,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "transformation_schedule = client.transformations.schedules.retrieve(id=1)\ntransformation_schedule.is_paused = True\nres = client.transformations.update(transformation)\n\nfrom cognite.client.data_classes import TransformationScheduleUpdate\nmy_update = TransformationScheduleUpdate(id=1).interval.set(\"0 * * * *\").is_paused.set(False)\nres = client.transformations.schedules.update(my_update)\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Transformation.Schedule> editedInput = List.of(Transformation.Schedule.newBuilder()   \n          .setExternalId(\"10\")   \n          .setIsPaused(true)   \n          .setInterval(\"*/10 * * * *\")   \n          .build());\nList<Transformation.Schedule> updatedList =   \n          client.transformations().schedules().schedule(editedInput);\n\n"
           }
         ]
       }
@@ -15656,6 +15735,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "notifications_list = client.transformations.notifications.list()\n\nnotifications_list = client.transformations.notifications.list(transformation_id = 1)\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "Iterator<List<Transformation.Notification>> itNotifications =   \n          client.transformations().notifications().list();\n\n"
           }
         ]
       },
@@ -15886,6 +15970,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "from cognite.client.data_classes import TransformationNotification\nnotifications = [TransformationNotification(transformation_id = 1, destination=\"my@email.com\"), TransformationNotification(transformation_external_id=\"transformation2\", destination=\"other@email.com\"))]\nres = client.transformations.notifications.create(notifications)\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Transformation.Notification.Subscription> subscribes =  \n          List.of(Transformation.Notification.Subscription.newBuilder()  \n          .setDestination(\"test@test.com\")  \n          .setTransformationId(10)  \n          .build());\nList<Transformation.Notification> createdSubscribes =  \n          client.transformations().notifications().subscribe(subscribes);\n\n"
           }
         ]
       }
@@ -16118,6 +16207,11 @@
             "lang": "Python",
             "label": "Python SDK",
             "source": "client.transformations.notifications.delete(id=[1,2,3])\n"
+          },
+          {
+            "lang": "Java",
+            "label": "Java SDK",
+            "source": "List<Item> deleteNotification = List.of(Item.newBuilder()  \n          .setId(10)  \n          .build());\nList<Item> deletedItems =   \n          client.transformations().notifications().delete(deleteNotification);\n\n"
           }
         ]
       }
@@ -22631,7 +22725,7 @@
               },
               "aggregates": {
                 "type": "array",
-                "description": "Specify the aggregates to return, or an empty array if this sub-query should return datapoints without aggregation. This value overrides a top-level default aggregates list.",
+                "description": "Specify the aggregates to return. Omit to return datapoints without aggregation.",
                 "minItems": 1,
                 "maxItems": 10,
                 "uniqueItems": true,
@@ -22646,7 +22740,7 @@
               },
               "includeOutsidePoints": {
                 "type": "boolean",
-                "description": "Whether to include the last datapoint before the requested time period, and the first one after. This option can be useful for interpolating data. It is not available for aggregates. Note: If there are more than `limit` datapoints in the time period, we will omit the excess datapoints, and then append the first datapoint after the time period, thus causing a gap with omitted datapoints. When this is the case, we return up to `limit+2` datapoints. Paging should be done from the second to last datapoint. That is, from the last datapoint in the requested time period.\n",
+                "description": "Whether to include the last datapoint before the requested time period, and the first one after. This option can be useful for interpolating data. It is not available for aggregates or for cursors. Note: If there are more than `limit` datapoints in the time period, we will omit the excess datapoints, and then append the first datapoint after the time period, thus causing a gap with omitted datapoints. When this is the case, we return up to `limit+2` datapoints. Paging should be done from the second to last datapoint. That is, from the last datapoint in the requested time period.\n",
                 "default": false
               }
             }
@@ -22713,7 +22807,7 @@
           },
           "aggregates": {
             "type": "array",
-            "description": "Specify the aggregates to return. Use default if null.",
+            "description": "Specify the aggregates to return. Omit to use top-level value.",
             "minItems": 1,
             "maxItems": 10,
             "uniqueItems": true,
@@ -22723,13 +22817,17 @@
           },
           "granularity": {
             "type": "string",
-            "description": "The granularity size and granularity of the aggregates.",
+            "description": "The granularity size and granularity of the aggregates. Omit to use top-level value.",
             "example": "1h"
           },
           "includeOutsidePoints": {
             "type": "boolean",
-            "description": "Whether to include the last datapoint before the requested time period, and the first one after. This option can be useful for interpolating data. It is not available for aggregates. Note: If there are more than `limit` datapoints in the time period, we will omit the excess datapoints, and then append the first datapoint after the time period, thus causing a gap with omitted datapoints. When this is the case, we always return `limit+2` datapoints. Paging should be done from the second to last datapoint. That is, from the last datapoint in the requested time period.\n",
+            "description": "Whether to include the last datapoint before the requested time period, and the first one after. This option can be useful for interpolating data. It is not available for aggregates or with cursors. Note: If there are more than `limit` datapoints in the time period, we will omit the excess datapoints, and then append the first datapoint after the time period, thus causing a gap with omitted datapoints. When this is the case, we return up to `limit+2` datapoints. Paging should be done from the second to last datapoint. That is, from the last datapoint in the requested time period.\n",
             "default": false
+          },
+          "cursor": {
+            "type": "string",
+            "description": "To retrieve next page, insert the `nextCursor` from a previous response. Be sure to match with the corresponding time series. Not compatible with `includeOutsidePoints`.\n"
           }
         }
       },
@@ -23459,6 +23557,10 @@
                 "type": "string",
                 "description": "The physical unit of the time series."
               },
+              "nextCursor": {
+                "type": "string",
+                "description": "The cursor to get the next page of results (if available).\n`nextCursor` will be omitted when the next datapoint is after the end of the\ninterval. Increase start/end to fetch more data\n"
+              },
               "datapoints": {
                 "type": "array",
                 "description": "The list of datapoints.",
@@ -23494,6 +23596,10 @@
                 "maxLength": 32,
                 "type": "string",
                 "description": "The physical unit of the time series."
+              },
+              "nextCursor": {
+                "type": "string",
+                "description": "The cursor to get the next page of results (if available).\n`nextCursor` will be omitted when the next datapoint is after the end of the\ninterval. Increase start/end to fetch more data\n"
               },
               "datapoints": {
                 "type": "array",
@@ -23554,6 +23660,10 @@
                 "maxLength": 32,
                 "type": "string",
                 "description": "The physical unit of the time series."
+              },
+              "nextCursor": {
+                "type": "string",
+                "description": "The cursor to get the next page of results (if available).\n`nextCursor` will be omitted when the next aggregate datapoint is after the end\nof the interval. Increase start/end to fetch more data\n"
               },
               "datapoints": {
                 "type": "array",
@@ -32879,7 +32989,7 @@
         "properties": {
           "items": {
             "type": "array",
-            "minItems": 1,
+            "minItems": 0,
             "maxItems": 100,
             "items": {
               "$ref": "#/components/schemas/GeospatialFeatureType"
@@ -38185,6 +38295,79 @@
           }
         ]
       },
+      "Annotations.ConfidenceMixin": {
+        "title": "primitives.confidence.ConfidenceMixin",
+        "description": "Mixin that can be used to add confidence score to a thing",
+        "type": "object",
+        "properties": {
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Annotations.OptionalLabelMixin": {
+        "title": "primitives.label.OptionalLabelMixin",
+        "description": "Mixin that can be used to add an *optional* label string to a thing",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Annotations.RequiredLabelMixin": {
+        "title": "primitives.label.RequiredLabelMixin",
+        "description": "Mixin that can be used to add a *required* label string to a thing",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "Annotations.DescriptionMixin": {
+        "title": "primitives.description.DescriptionMixin",
+        "description": "Mixin that can be used to add a description to a thing",
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "The description of a primitive",
+            "maxLength": 500,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Annotations.PageInformationMixin": {
+        "title": "primitives.page.PageInformationMixin",
+        "description": "Mixin that can be used to add page number information",
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "description": "The number of the page on which this annotation is located. The first page has number 1.",
+            "default": 1,
+            "minimum": 1,
+            "maximum": 2048,
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
       "Annotations.ObjectDetection": {
         "title": "images.ObjectDetection",
         "description": "Models an image object detection represented by a label, a geometry, and\noptionally a confidence value.",
@@ -38370,6 +38553,11 @@
         "description": "Models a link to a CDF Asset referenced in an engineering diagram",
         "type": "object",
         "properties": {
+          "description": {
+            "description": "The description of a primitive",
+            "maxLength": 500,
+            "type": "string"
+          },
           "pageNumber": {
             "description": "The number of the page on which this annotation is located. The first page has number 1.",
             "default": 1,
@@ -38425,6 +38613,11 @@
         "description": "Models a link to a CDF File referenced in an engineering diagram",
         "type": "object",
         "properties": {
+          "description": {
+            "description": "The description of a primitive",
+            "maxLength": 500,
+            "type": "string"
+          },
           "pageNumber": {
             "description": "The number of the page on which this annotation is located. The first page has number 1.",
             "default": 1,
@@ -38480,6 +38673,11 @@
         "description": "Models an extracted text region in an engineering diagram",
         "type": "object",
         "properties": {
+          "description": {
+            "description": "The description of a primitive",
+            "maxLength": 500,
+            "type": "string"
+          },
           "pageNumber": {
             "description": "The number of the page on which this annotation is located. The first page has number 1.",
             "default": 1,
@@ -38513,6 +38711,11 @@
         "description": "Models an extracted symbol region in an engineering diagram",
         "type": "object",
         "properties": {
+          "description": {
+            "description": "The description of a primitive",
+            "maxLength": 500,
+            "type": "string"
+          },
           "pageNumber": {
             "description": "The number of the page on which this annotation is located. The first page has number 1.",
             "default": 1,
