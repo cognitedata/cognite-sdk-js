@@ -129,14 +129,47 @@ export class CodeGen {
     return inlined;
   };
 
-  private removeUnusedDefinitions = (doc: OpenApiDocument): OpenApiDocument => {
+  private getOnlyDefinitionsUsedByRefs = (
+    originalDefinitions: string[],
+    relevantReferenceNames: string[],
+    walker: ReferenceWalker
+  ): string[] => {
+    const relevantReferencePredicate = (reference: string) =>
+      relevantReferenceNames.some((refName) =>
+        reference.endsWith('/' + refName)
+      );
+
+    const referenceSubsetRoots = originalDefinitions.filter(
+      relevantReferencePredicate
+    );
+    if (referenceSubsetRoots.length > 0) {
+      // Restrict set of references to those reachable from the filter names
+      return walker.walk(referenceSubsetRoots);
+    }
+
+    return originalDefinitions;
+  };
+
+  private findAllDefinitionsRecursively = (
+    doc: OpenApiDocument,
+    relevantReferenceNames: string[] = []
+  ): OpenApiDocument => {
     const walker = new ReferenceWalker(doc);
 
     const referencesInOperations = Object.values(doc.paths)
       .map(walker.references)
       .reduce((acc, v) => acc.concat(v), []);
 
-    const references = walker.walk(referencesInOperations);
+    let references = walker.walk(referencesInOperations);
+
+    if (relevantReferenceNames.length > 0) {
+      references = this.getOnlyDefinitionsUsedByRefs(
+        references,
+        relevantReferenceNames,
+        walker
+      );
+    }
+
     const filteredDoc: any = references
       .map(walker.splitReference)
       .reduce((acc, location) => {
@@ -310,12 +343,17 @@ export class CodeGen {
    * @returns names of generated types
    */
   public generateTypes = async (
-    openApiDoc: OpenApiDocument
+    openApiDoc: OpenApiDocument,
+    relevantReferenceNames?: string[]
   ): Promise<string[]> => {
     // deep copy
     openApiDoc = JSON.parse(JSON.stringify(openApiDoc)) as OpenApiDocument;
     openApiDoc.paths = this.filterPaths(openApiDoc.paths);
-    openApiDoc = this.removeUnusedDefinitions(openApiDoc);
+
+    openApiDoc = this.findAllDefinitionsRecursively(
+      openApiDoc,
+      relevantReferenceNames
+    );
 
     for (const [typeName, schema] of this.transformResponsesToSchemas(
       openApiDoc.components?.responses

@@ -50,7 +50,10 @@ async function generateServiceTypes(
 
   try {
     const snapshot = await snapshotMngr.read();
-    const generatedTypeNames = await gen.generateTypes(snapshot);
+    const generatedTypeNames = await gen.generateTypes(
+      snapshot,
+      configFile.filter.relevantReferenceNames
+    );
     return generatedTypeNames;
   } catch (error) {
     throw new Error(

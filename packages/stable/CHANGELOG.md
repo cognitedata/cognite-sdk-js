@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.12.0...@cognite/sdk@7.13.0) (2022-11-21)
+
+
+### Features
+
+* geospatial compute endpoint ([#899](https://github.com/cognitedata/cognite-sdk-js/issues/899)) ([7496ad0](https://github.com/cognitedata/cognite-sdk-js/commit/7496ad023b970baac0857ea35dd7356d6fbebeee))
+
+
+
+
+
+# [7.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.11.1...@cognite/sdk@7.12.0) (2022-11-18)
+
+
+### Features
+
+* **annotations:** add `description` ([#918](https://github.com/cognitedata/cognite-sdk-js/issues/918)) ([aefa215](https://github.com/cognitedata/cognite-sdk-js/commit/aefa215f8a78cc8ee370098757b2f65948648425))
+
+
+
+
+
+## [7.11.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.11.0...@cognite/sdk@7.11.1) (2022-11-17)
+
+**Note:** Version bump only for package @cognite/sdk
+
+
+
+
+
+# [7.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.10.0...@cognite/sdk@7.11.0) (2022-11-02)
+
+
+### Features
+
+* **geospatial:** add feature list ([#900](https://github.com/cognitedata/cognite-sdk-js/issues/900)) ([fa71394](https://github.com/cognitedata/cognite-sdk-js/commit/fa71394748f661a79c62707f97ba671d9563e01a))
+
+
+
+
+
+# [7.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.6...@cognite/sdk@7.10.0) (2022-10-28)
+
+
+### Features
+
+* **annotations:** add annotation payload types ([#905](https://github.com/cognitedata/cognite-sdk-js/issues/905)) ([990ea8f](https://github.com/cognitedata/cognite-sdk-js/commit/990ea8fda85bc26e9a50bd9160c6b8a76e26ed55))
+
+
+
+
+
 ## [7.9.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.9.5...@cognite/sdk@7.9.6) (2022-10-04)
 
 

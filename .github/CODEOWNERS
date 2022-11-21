@@ -1,4 +1,4 @@
-* @cognitedata/development-experiences @BugGambit @andersfylling @polomani
+* @cognitedata/development-experiences @BugGambit @andersfylling
 
 /packages/playground/src/api/documents @cognitedata/grep
 /packages/playground/src/__tests__/api/documents* @cognitedata/grep
