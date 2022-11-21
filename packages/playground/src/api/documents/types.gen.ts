@@ -522,7 +522,7 @@ export interface DocumentsFilterOption {
     /** Filter with exact match */
     filter?: DocumentsFilter;
 }
-export type DocumentsFilterRequest = DocumentsFilterOption & DocumentsLimit & Cursor;
+export type DocumentsFilterRequest = DocumentsFilterOption & DocumentsLimit & DocumentsCursor;
 export interface DocumentsFilterResponse extends CursorAndAsyncIterator<Document> {
 }
 /**
