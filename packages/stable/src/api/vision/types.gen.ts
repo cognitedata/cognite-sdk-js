@@ -193,6 +193,7 @@ export interface FailedBatch {
 }
 /**
  * Feature-specific parameters. New feature extractor parameters may appear.
+ * @example {"textDetectionParameters":{"threshold":0.8},"assetTagDetectionParameters":{"threshold":0.8,"partialMatch":true,"assetSubtreeIds":[1,2]},"peopleDetectionParameters":{"threshold":0.8}}
  */
 export interface FeatureParameters {
     /** Parameters for asset tag detection. */
@@ -331,6 +332,7 @@ export type VisionExtractPostResponse = StatusSchema & {
 };
 /**
  * Detected features in images. New fields may appear in case new feature extractors are add.
+ * @example {"textPredictions":[{"confidence":0.9,"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"assetTagPredictions":[{"confidence":0.9,"assetRef":{"id":1233},"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"peoplePredictions\"":[{"label":"person","confidence":0.8,"boundingBox":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}]}
  */
 export interface VisionExtractPredictions {
     assetTagPredictions?: AnnotationsCogniteAnnotationTypesImagesAssetLink[];

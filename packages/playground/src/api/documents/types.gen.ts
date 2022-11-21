@@ -64,8 +64,7 @@ export interface ContainsAnyId {
     /** Values for this field must match with at least one of the values in this array */
     containsAny?: CogniteInternalId[];
 }
-export interface Cursor {
-    /** Cursor for paging through results. */
+export interface CursorQueryParameter {
     cursor?: string;
 }
 /**
@@ -346,6 +345,8 @@ export interface DocumentsClassifier {
      * @format int64
      */
     createdAt: number;
+    /** Reason why the classifier cannot be created */
+    errorMessage?: string;
     /** Classifier id */
     id: CogniteInternalId;
     metrics?: DocumentsClassifierMetrics;
@@ -369,6 +370,29 @@ export interface DocumentsClassifierCreate {
  */
 export interface DocumentsClassifierCreateItems {
     items: DocumentsClassifierCreate[];
+}
+export interface DocumentsClassifierCreateResponse {
+    /** Whether the classifier is currently used for predicting labels */
+    active: boolean;
+    /**
+     * Timestamp when the classifier is created
+     * @format int64
+     */
+    createdAt: number;
+    /** Classifier id */
+    id: CogniteInternalId;
+    /** Name of the classifier */
+    name: string;
+    /** Project id */
+    projectId: CogniteInternalId;
+    /** Status of the creating classifier job. Can be one of `QUEUING`, `TRAINING`, `FINISHED`, `FAILED` */
+    status: string;
+}
+/**
+ * A list of classifiers.
+ */
+export interface DocumentsClassifierCreateResponseItems {
+    items: DocumentsClassifierCreateResponse[];
 }
 export interface DocumentsClassifierDelete {
     /** A server-generated ID for the object. */
@@ -408,7 +432,8 @@ export interface DocumentsClassifierMetrics {
     /** @format float */
     recall?: number;
 }
-export type DocumentsClassifiersResponse = DocumentsClassifierItems;
+export type DocumentsClassifiersCreateResponse = DocumentsClassifierCreateResponseItems & DocumentsNextCursor;
+export type DocumentsClassifiersResponse = DocumentsClassifierItems & DocumentsNextCursor;
 export interface DocumentsCountAggregate {
     /**
      * count
@@ -419,6 +444,10 @@ export interface DocumentsCountAggregate {
     groupBy?: string[];
     /** User defined name for this aggregate */
     name: string;
+}
+export interface DocumentsCursor {
+    /** Cursor for paging through results. */
+    cursor?: string;
 }
 export interface DocumentsDateHistogramAggregate {
     /**
@@ -492,7 +521,7 @@ export interface DocumentsFilterOption {
     /** Filter with exact match */
     filter?: DocumentsFilter;
 }
-export type DocumentsFilterRequest = DocumentsFilterOption & DocumentsLimit & Cursor;
+export type DocumentsFilterRequest = DocumentsFilterOption & DocumentsLimit & DocumentsCursor;
 export interface DocumentsFilterResponse {
     items: Document[];
     /** The cursor to get the next page of results (if available). */
@@ -510,6 +539,10 @@ export interface DocumentsLimit {
      * @max 1000
      */
     limit?: number;
+}
+export interface DocumentsNextCursor {
+    /** The cursor to get the next page of results (if available). */
+    nextCursor?: string;
 }
 /**
  * The source file that this document is derived from.

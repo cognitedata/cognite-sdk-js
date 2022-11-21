@@ -1,0 +1,10 @@
+{
+  "service": "annotations",
+  "filter": {
+    "serviceName": "annotations",
+    "relevantReferenceNames": ["AnnotationData"]
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}
