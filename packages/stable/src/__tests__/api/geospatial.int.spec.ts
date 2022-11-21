@@ -275,4 +275,27 @@ describe('Geospatial integration test', () => {
       ).toBeTruthy();
     });
   });
+
+  describe('compute', () => {
+    test('crs', async () => {
+      const response = await client.geospatial.compute.compute({
+        output: {
+          output: {
+            stTransform: {
+              geometry: {
+                ewkt: 'SRID=4326;POLYGON((0 0,10 0,10 10,0 10,0 0))',
+              },
+              srid: 4326,
+            },
+          },
+        },
+      });
+      const items = response.items;
+      expect(items.length == 1).toBeTruthy();
+      expect(items[0]['output']['srid']).toEqual(4326);
+      expect(items[0]['output']['wkt']).toEqual(
+        'POLYGON((0 0,10 0,10 10,0 10,0 0))'
+      );
+    });
+  });
 });
