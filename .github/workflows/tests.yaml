@@ -138,9 +138,6 @@ jobs:
       - name: Install 🔧
         run: yarn install --frozen-lockfile
 
-        # tests pushed git commits
-      - uses: wagoid/commitlint-github-action@v3
-
       - name: validateDocLinks
         run: yarn validateDocLinks
 
