@@ -25,7 +25,7 @@ describe('alerts api', () => {
   });
 
   itif(client)('create channels with deduplication params', async () => {
-    const channelExternalIdWithDeduplication = channelExternalId + "_dedup"
+    const channelExternalIdWithDeduplication = channelExternalId + '_dedup';
     const response = await client!.alerts.createChannels([
       {
         externalId: channelExternalIdWithDeduplication,
@@ -33,15 +33,18 @@ describe('alerts api', () => {
         description: 'test with deduplication params',
         alertRules: {
           deduplication: {
-            activationInterval: "10m",
-            mergeInterval: "1m"
-          }
-        }
+            activationInterval: '10m',
+            mergeInterval: '1m',
+          },
+        },
       },
     ]);
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(channelExternalIdWithDeduplication);
-    expect(response[0].alertRules?.deduplication).toEqual({ activationInterval: "10m", mergeInterval: "1m" });
+    expect(response[0].alertRules?.deduplication).toEqual({
+      activationInterval: '10m',
+      mergeInterval: '1m',
+    });
   });
 
   itif(client)('list channels', async () => {
