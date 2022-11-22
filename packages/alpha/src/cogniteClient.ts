@@ -5,10 +5,10 @@ import {
 } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
-import { AlertingAPI } from './api/alerts/alertingApi';
+import { AlertsAPI } from './api/alerts/alertsApi';
 
 export default class CogniteClientAlpha extends CogniteClientStable {
-  private alertingApi?: AlertingAPI;
+  private alertsApi?: AlertsAPI;
 
   /**
    * Create a new SDK client (alpha)
@@ -19,7 +19,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
   }
 
   public get alerts() {
-    return accessApi(this.alertingApi);
+    return accessApi(this.alertsApi);
   }
 
   protected initAPIs() {
@@ -27,7 +27,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
 
     this.httpClient.setDefaultHeader('cdf-version', 'alpha');
 
-    this.alertingApi = this.apiFactory(AlertingAPI, 'alerts');
+    this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
   }
 
   protected get version() {
