@@ -17,6 +17,53 @@ import {
 
 export * from '@cognite/sdk';
 
+export interface MonitoringTaskParametersCreate {
+  timeseriesExternalId: CogniteExternalId;
+  granularity?: string;
+  threshold: number;
+}
+
+export interface MonitoringTaskParameters {
+  timeseriesExternalId: CogniteInternalId;
+  granularity?: string;
+  threshold: number;
+}
+
+export interface MonitoringTaskCreate {
+  externalId: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  channelId: CogniteInternalId;
+  interval: number;
+  overlap: number;
+  parameters: MonitoringTaskParametersCreate;
+  nonce: string;
+}
+
+export interface MonitoringTask {
+  id: CogniteInternalId;
+  externalId?: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  channelId: CogniteInternalId;
+  interval: number;
+  overlap: number;
+  parameters: MonitoringTaskParameters;
+}
+
+export interface MonitoringTaskParametersFilter {
+  timeseriesExternalId: CogniteInternalId;
+}
+
+export interface MonitoringTaskFilter {
+  externalIds?: CogniteExternalId[];
+  ids?: CogniteInternalId[];
+  channelIds?: CogniteInternalId[];
+  parameters?: MonitoringTaskParametersFilter;
+}
+
+export interface MonitoringTaskFilterQuery extends FilterQuery {
+  filter?: MonitoringTaskFilter;
+}
+
 export interface AlertFilter {
   channelIds?: CogniteInternalId[];
   channelExternalIds?: CogniteExternalId[];
