@@ -3,6 +3,7 @@ import {
   Subscription,
   SubscriptionCreate,
   SubscriptionDelete,
+  SubscriptionFilterQuery,
 } from '../../types';
 
 export class SubscriptionsAPI extends BaseResourceAPI<Subscription> {
@@ -16,5 +17,12 @@ export class SubscriptionsAPI extends BaseResourceAPI<Subscription> {
 
   public delete = async (items: SubscriptionDelete[]) => {
     return this.deleteEndpoint(items);
+  };
+
+  public list = async (filter?: SubscriptionFilterQuery) => {
+    return this.listEndpoint<SubscriptionFilterQuery>(
+      this.callListEndpointWithPost,
+      filter
+    );
   };
 }
