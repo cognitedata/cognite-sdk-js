@@ -97,7 +97,16 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#close" class="tsd-kind-icon">close</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#create" class="tsd-kind-icon">create</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#createchannels" class="tsd-kind-icon">create<wbr>Channels</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#createsubscribers" class="tsd-kind-icon">create<wbr>Subscribers</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#createsubscriptions" class="tsd-kind-icon">create<wbr>Subscriptions</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#deletechannels" class="tsd-kind-icon">delete<wbr>Channels</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#deletesubscription" class="tsd-kind-icon">delete<wbr>Subscription</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#listchannels" class="tsd-kind-icon">list<wbr>Channels</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#listsubscribers" class="tsd-kind-icon">list<wbr>Subscribers</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#listsubscriptions" class="tsd-kind-icon">list<wbr>Subscriptions</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#updatechannels" class="tsd-kind-icon">update<wbr>Channels</a></li>
 							</ul>
 						</section>
 					</div>
@@ -116,7 +125,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides BaseResourceAPI.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7496ad023b/packages/alpha/src/api/alerts/alertsApi.ts#L5">packages/alpha/src/api/alerts/alertsApi.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L23">packages/alpha/src/api/alerts/alertsApi.ts:23</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -142,7 +151,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7496ad023b/packages/alpha/src/api/alerts/alertsApi.ts#L21">packages/alpha/src/api/alerts/alertsApi.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L58">packages/alpha/src/api/alerts/alertsApi.ts:58</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -165,7 +174,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7496ad023b/packages/alpha/src/api/alerts/alertsApi.ts#L10">packages/alpha/src/api/alerts/alertsApi.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L47">packages/alpha/src/api/alerts/alertsApi.ts:47</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -179,25 +188,232 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
-					<a name="list" class="tsd-anchor"></a>
-					<h3>list</h3>
+					<a name="createchannels" class="tsd-anchor"></a>
+					<h3>create<wbr>Channels</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>filter<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_alpha_src_types_.alertfilter.html" class="tsd-signature-type">AlertFilter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.alert.html" class="tsd-signature-type">Alert</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Channels<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../interfaces/_alpha_src_types_.channelcreate.html" class="tsd-signature-type">ChannelCreate</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.channel.html" class="tsd-signature-type">Channel</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7496ad023b/packages/alpha/src/api/alerts/alertsApi.ts#L14">packages/alpha/src/api/alerts/alertsApi.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L71">packages/alpha/src/api/alerts/alertsApi.ts:71</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <a href="../interfaces/_alpha_src_types_.alertfilter.html" class="tsd-signature-type">AlertFilter</a></h5>
+									<h5>items: <a href="../interfaces/_alpha_src_types_.channelcreate.html" class="tsd-signature-type">ChannelCreate</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.channel.html" class="tsd-signature-type">Channel</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="createsubscribers" class="tsd-anchor"></a>
+					<h3>create<wbr>Subscribers</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Subscribers<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../interfaces/_alpha_src_types_.subscribercreate.html" class="tsd-signature-type">SubscriberCreate</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.subscriber.html" class="tsd-signature-type">Subscriber</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L83">packages/alpha/src/api/alerts/alertsApi.ts:83</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <a href="../interfaces/_alpha_src_types_.subscribercreate.html" class="tsd-signature-type">SubscriberCreate</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.subscriber.html" class="tsd-signature-type">Subscriber</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="createsubscriptions" class="tsd-anchor"></a>
+					<h3>create<wbr>Subscriptions</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Subscriptions<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../interfaces/_alpha_src_types_.subscriptioncreate.html" class="tsd-signature-type">SubscriptionCreate</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.subscription.html" class="tsd-signature-type">Subscription</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L91">packages/alpha/src/api/alerts/alertsApi.ts:91</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <a href="../interfaces/_alpha_src_types_.subscriptioncreate.html" class="tsd-signature-type">SubscriptionCreate</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.subscription.html" class="tsd-signature-type">Subscription</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="deletechannels" class="tsd-anchor"></a>
+					<h3>delete<wbr>Channels</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Channels<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../modules/_core_src_types_.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L75">packages/alpha/src/api/alerts/alertsApi.ts:75</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <a href="../modules/_core_src_types_.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="deletesubscription" class="tsd-anchor"></a>
+					<h3>delete<wbr>Subscription</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Subscription<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../interfaces/_alpha_src_types_.subscriptiondelete.html" class="tsd-signature-type">SubscriptionDelete</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L99">packages/alpha/src/api/alerts/alertsApi.ts:99</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <a href="../interfaces/_alpha_src_types_.subscriptiondelete.html" class="tsd-signature-type">SubscriptionDelete</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="list" class="tsd-anchor"></a>
+					<h3>list</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">(</span>filter<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_alpha_src_types_.alertfilterquery.html" class="tsd-signature-type">AlertFilterQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.alert.html" class="tsd-signature-type">Alert</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L51">packages/alpha/src/api/alerts/alertsApi.ts:51</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <a href="../interfaces/_alpha_src_types_.alertfilterquery.html" class="tsd-signature-type">AlertFilterQuery</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.alert.html" class="tsd-signature-type">Alert</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="listchannels" class="tsd-anchor"></a>
+					<h3>list<wbr>Channels</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">list<wbr>Channels<span class="tsd-signature-symbol">(</span>filter<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_alpha_src_types_.channelfilterquery.html" class="tsd-signature-type">ChannelFilterQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.channel.html" class="tsd-signature-type">Channel</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L67">packages/alpha/src/api/alerts/alertsApi.ts:67</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <a href="../interfaces/_alpha_src_types_.channelfilterquery.html" class="tsd-signature-type">ChannelFilterQuery</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.channel.html" class="tsd-signature-type">Channel</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="listsubscribers" class="tsd-anchor"></a>
+					<h3>list<wbr>Subscribers</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">list<wbr>Subscribers<span class="tsd-signature-symbol">(</span>filter<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_alpha_src_types_.subscriberfilterquery.html" class="tsd-signature-type">SubscriberFilterQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.subscriber.html" class="tsd-signature-type">Subscriber</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L87">packages/alpha/src/api/alerts/alertsApi.ts:87</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <a href="../interfaces/_alpha_src_types_.subscriberfilterquery.html" class="tsd-signature-type">SubscriberFilterQuery</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.subscriber.html" class="tsd-signature-type">Subscriber</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="listsubscriptions" class="tsd-anchor"></a>
+					<h3>list<wbr>Subscriptions</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">list<wbr>Subscriptions<span class="tsd-signature-symbol">(</span>filter<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_alpha_src_types_.subscriptionfilterquery.html" class="tsd-signature-type">SubscriptionFilterQuery</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.subscription.html" class="tsd-signature-type">Subscription</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L95">packages/alpha/src/api/alerts/alertsApi.ts:95</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <a href="../interfaces/_alpha_src_types_.subscriptionfilterquery.html" class="tsd-signature-type">SubscriptionFilterQuery</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_types_.listresponse.html" class="tsd-signature-type">ListResponse</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.subscription.html" class="tsd-signature-type">Subscription</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="updatechannels" class="tsd-anchor"></a>
+					<h3>update<wbr>Channels</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Channels<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><a href="../modules/_alpha_src_types_.html#channelchange" class="tsd-signature-type">ChannelChange</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.channel.html" class="tsd-signature-type">Channel</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/ae6b04b115/packages/alpha/src/api/alerts/alertsApi.ts#L79">packages/alpha/src/api/alerts/alertsApi.ts:79</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <a href="../modules/_alpha_src_types_.html#channelchange" class="tsd-signature-type">ChannelChange</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_alpha_src_types_.channel.html" class="tsd-signature-type">Channel</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -231,7 +447,34 @@
 								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#create" class="tsd-kind-icon">create</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#createchannels" class="tsd-kind-icon">create<wbr>Channels</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#createsubscribers" class="tsd-kind-icon">create<wbr>Subscribers</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#createsubscriptions" class="tsd-kind-icon">create<wbr>Subscriptions</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#deletechannels" class="tsd-kind-icon">delete<wbr>Channels</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#deletesubscription" class="tsd-kind-icon">delete<wbr>Subscription</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#list" class="tsd-kind-icon">list</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#listchannels" class="tsd-kind-icon">list<wbr>Channels</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#listsubscribers" class="tsd-kind-icon">list<wbr>Subscribers</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#listsubscriptions" class="tsd-kind-icon">list<wbr>Subscriptions</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="_alpha_src_api_alerts_alertsapi_.alertsapi.html#updatechannels" class="tsd-kind-icon">update<wbr>Channels</a>
 							</li>
 						</ul>
 					</li>
