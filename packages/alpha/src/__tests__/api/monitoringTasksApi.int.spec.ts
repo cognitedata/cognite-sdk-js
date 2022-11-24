@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2022 Cognite AS
 
 import { Channel } from 'alpha/src/types';
 import CogniteClientAlpha from '../../cogniteClient';

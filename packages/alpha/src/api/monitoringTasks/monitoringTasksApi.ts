@@ -1,3 +1,5 @@
+// Copyright 2022 Cognite AS
+
 import { BaseResourceAPI, IdEither } from '@cognite/sdk-core';
 import {
   MonitoringTask,
