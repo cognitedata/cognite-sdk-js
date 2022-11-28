@@ -21,4 +21,4 @@ The CogniteClientAlpha can be initialized/configured in the same manner as the o
 
 ## Documentation
 
- - here [cognitedata.github.io/cognite-sdk-js/alpha](https://cognitedata.github.io/cognite-sdk-js/alpha/classes/_alpha_src_cogniteclient_.cogniteclientalpha.html)
+[cognitedata.github.io/cognite-sdk-js/alpha](https://cognitedata.github.io/cognite-sdk-js/alpha/classes/_alpha_src_cogniteclient_.cogniteclientalpha.html)
