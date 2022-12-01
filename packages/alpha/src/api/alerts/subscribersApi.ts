@@ -1,6 +1,11 @@
 // Copyright 2022 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import {
+  BaseResourceAPI,
+  CDFHttpClient,
+  IdEither,
+  MetadataMap,
+} from '@cognite/sdk-core';
 import {
   Subscriber,
   SubscriberCreate,
@@ -21,5 +26,9 @@ export class SubscribersAPI extends BaseResourceAPI<Subscriber> {
       this.callListEndpointWithPost,
       filter
     );
+  };
+
+  public delete = async (ids: IdEither[]) => {
+    return this.deleteEndpoint(ids);
   };
 }
