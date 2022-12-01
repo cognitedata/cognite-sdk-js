@@ -81,7 +81,8 @@ const DUMMY_TEST_FEATURE: GeospatialFeature[] = [
   },
 ];
 
-describe('Geospatial integration test', () => {
+// re-enable this when geospacial is back to life
+describe.skip('Geospatial integration test', () => {
   let client: CogniteClient;
   let featureType: FeatureType;
 

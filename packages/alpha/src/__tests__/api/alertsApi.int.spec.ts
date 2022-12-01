@@ -139,4 +139,13 @@ describe('alerts api', () => {
     ]);
     expect(response).toEqual({});
   });
+
+  itif(client)('delete channel', async () => {
+    const response = await client!.alerts.deleteChannels([
+      {
+        externalId: channelExternalId,
+      },
+    ]);
+    expect(response).toEqual({});
+  });
 });
