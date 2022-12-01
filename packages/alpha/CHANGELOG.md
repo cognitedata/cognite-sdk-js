@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.2.0...@cognite/sdk-alpha@0.3.0) (2022-12-01)
+
+
+### Features
+
+* **alpha:** monitoring tasks api ([#921](https://github.com/cognitedata/cognite-sdk-js/issues/921)) ([9161a69](https://github.com/cognitedata/cognite-sdk-js/commit/9161a69e2b0f4093099e0f36a79c0abefce6723c))
+
+
+
+
+
 # [0.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.1.17...@cognite/sdk-alpha@0.2.0) (2022-11-23)
 
 
