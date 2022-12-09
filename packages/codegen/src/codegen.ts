@@ -2,6 +2,8 @@
 import { promises as fs } from 'fs';
 import * as pathUtil from 'path';
 
+import * as ts from 'typescript';
+
 import {
   OpenApiDocument,
   OpenApiSchema,
@@ -16,9 +18,10 @@ import {
   OpenApiParameters,
   OpenApiReference,
 } from './openapi';
-import { sortOpenApiJson } from './utils';
 import { AutoNameInlinedRequestOption } from './utils';
 import { TypeGenerator, TypeGeneratorResult } from './generator/generator';
+import sorterTransformer from './ast_transformer/sorter';
+import cursorAndAsyncIteratorTransformer from './ast_transformer/cursor_and_async_iterator';
 
 export type StringFilter = (str: string) => boolean;
 
@@ -40,6 +43,12 @@ export interface CodeGenOptions extends AutoNameInlinedRequestOption {
 export class CodeGen {
   static outputFileName = 'types.gen.ts';
 
+  // Ordering matters! "sorterTransformer" must be the last transformer specified.
+  astTransformers = [
+    cursorAndAsyncIteratorTransformer,
+    sorterTransformer, // must be last
+  ];
+
   constructor(
     readonly generator: TypeGenerator,
     readonly options: CodeGenOptions
@@ -57,7 +66,7 @@ export class CodeGen {
 
     await fs.writeFile(
       pathUtil.resolve(this.options.outputDir, CodeGen.outputFileName),
-      fileComment + result.code
+      fileComment + result.astProcessedCode
     );
   };
 
@@ -307,11 +316,23 @@ export class CodeGen {
     );
 
     const docJson = JSON.stringify(doc);
-    const sortedJson = sortOpenApiJson(docJson);
-
-    const result = await this.generator.generateTypes(sortedJson);
+    const result = await this.generator.generateTypes(docJson);
+    result.astProcessedCode = this.astPostProcessing(result.code);
 
     return result;
+  };
+
+  private astPostProcessing = (code: string): string => {
+    const src = ts.createSourceFile(
+      'generated.ts',
+      code,
+      ts.ScriptTarget.ES2015,
+      false,
+      ts.ScriptKind.TS
+    );
+    const result = ts.transform<ts.SourceFile>(src, this.astTransformers);
+    const printer = ts.createPrinter();
+    return printer.printFile(result.transformed[0]);
   };
 
   /**

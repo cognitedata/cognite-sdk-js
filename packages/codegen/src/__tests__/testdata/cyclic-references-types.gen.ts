@@ -6,11 +6,9 @@
  * A response with cyclic references
  */
 export type CyclicResponse = Filter;
-
 export interface Filter {
-  filter?: FilterOption;
+    filter?: FilterOption;
 }
-
 export interface FilterOption {
-  option?: Filter;
+    option?: Filter;
 }
