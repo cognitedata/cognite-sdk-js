@@ -99,13 +99,13 @@
 					<a name="extract" class="tsd-anchor"></a>
 					<h3>extract</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">extract<span class="tsd-signature-symbol">(</span>features<span class="tsd-signature-symbol">: </span><a href="../globals.html#visionextractfeature" class="tsd-signature-type">VisionExtractFeature</a><span class="tsd-signature-symbol">[]</span>, ids<span class="tsd-signature-symbol">: </span><a href="../globals.html#filereference" class="tsd-signature-type">FileReference</a><span class="tsd-signature-symbol">[]</span>, parameters<span class="tsd-signature-symbol">?: </span><a href="../interfaces/featureparameters.html" class="tsd-signature-type">FeatureParameters</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#visionextractpostresponse" class="tsd-signature-type">VisionExtractPostResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">extract<span class="tsd-signature-symbol">(</span>features<span class="tsd-signature-symbol">: </span><a href="../globals.html#visionextractfeature" class="tsd-signature-type">VisionExtractFeature</a><span class="tsd-signature-symbol">[]</span>, ids<span class="tsd-signature-symbol">: </span><a href="../globals.html#filereference" class="tsd-signature-type">FileReference</a><span class="tsd-signature-symbol">[]</span>, parameters<span class="tsd-signature-symbol">?: </span><a href="../interfaces/featureparameters.html" class="tsd-signature-type">FeatureParameters</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#visionextractpostresponse" class="tsd-signature-type">VisionExtractPostResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d5b9390dcb/packages/stable/src/api/vision/visionApi.ts#L29">packages/stable/src/api/vision/visionApi.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3cde0d3df8/packages/stable/src/api/vision/visionApi.ts#L29">packages/stable/src/api/vision/visionApi.ts:29</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -126,7 +126,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parameters: <a href="../interfaces/featureparameters.html" class="tsd-signature-type">FeatureParameters</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#visionextractpostresponse" class="tsd-signature-type">VisionExtractPostResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#visionextractpostresponse" class="tsd-signature-type">VisionExtractPostResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -134,13 +134,13 @@
 					<a name="getextractjob" class="tsd-anchor"></a>
 					<h3>get<wbr>Extract<wbr>Job</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Extract<wbr>Job<span class="tsd-signature-symbol">(</span>jobId<span class="tsd-signature-symbol">: </span><a href="../globals.html#jobid" class="tsd-signature-type">JobId</a>, waitForCompletion<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, pollingTimeMs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, maxRetries<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#visionextractgetresponse" class="tsd-signature-type">VisionExtractGetResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Extract<wbr>Job<span class="tsd-signature-symbol">(</span>jobId<span class="tsd-signature-symbol">: </span><a href="../globals.html#jobid" class="tsd-signature-type">JobId</a>, waitForCompletion<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, pollingTimeMs<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, maxRetries<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#visionextractgetresponse" class="tsd-signature-type">VisionExtractGetResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/d5b9390dcb/packages/stable/src/api/vision/visionApi.ts#L59">packages/stable/src/api/vision/visionApi.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/3cde0d3df8/packages/stable/src/api/vision/visionApi.ts#L59">packages/stable/src/api/vision/visionApi.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -164,7 +164,7 @@
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> maxRetries: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 600</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#visionextractgetresponse" class="tsd-signature-type">VisionExtractGetResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#visionextractgetresponse" class="tsd-signature-type">VisionExtractGetResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
