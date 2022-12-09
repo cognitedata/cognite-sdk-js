@@ -36,7 +36,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
     this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
     this.monitoringTasksApi = this.apiFactory(
       MonitoringTasksAPI,
-      'monitoringtask'
+      'monitoringtasks'
     );
   }
 
