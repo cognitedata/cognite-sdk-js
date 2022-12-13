@@ -17,47 +17,64 @@ import {
 
 export * from '@cognite/sdk';
 
-export interface MonitoringTaskParametersCreate {
-  timeseriesExternalId: CogniteExternalId;
-  granularity?: string;
-  threshold: number;
+enum ModelExternalId {
+  Threshold = 'threshold',
 }
 
-export interface MonitoringTaskParameters {
-  timeseriesExternalId: CogniteInternalId;
+export interface Model {
+  readonly externalId: ModelExternalId;
+}
+
+export class MonitoringTaskThresholdModelCreate implements Model {
+  externalId: ModelExternalId = ModelExternalId.Threshold;
+  timeseriesExternalId: CogniteExternalId;
+  threshold: number;
+  granularity?: string;
+  constructor(
+    timeseriesExternalId: CogniteExternalId,
+    threshold: number,
+    granularity?: string
+  ) {
+    this.timeseriesExternalId = timeseriesExternalId;
+    this.granularity = granularity;
+    this.threshold = threshold;
+  }
+}
+
+export interface MonitoringTaskThresholdModel {
+  externalId: 'threshold';
+  timeseriesId: CogniteInternalId;
   granularity?: string;
   threshold: number;
 }
 
 export interface MonitoringTaskCreate {
   externalId: CogniteExternalId;
-  modelExternalId: CogniteExternalId;
   channelId: CogniteInternalId;
   interval: number;
   overlap: number;
-  parameters: MonitoringTaskParametersCreate;
+  model: MonitoringTaskThresholdModelCreate;
   nonce: string;
 }
 
 export interface MonitoringTask {
   id: CogniteInternalId;
   externalId?: CogniteExternalId;
-  modelExternalId: CogniteExternalId;
   channelId: CogniteInternalId;
   interval: number;
   overlap: number;
-  parameters: MonitoringTaskParameters;
+  model: MonitoringTaskThresholdModel;
 }
 
-export interface MonitoringTaskParametersFilter {
-  timeseriesExternalId: CogniteInternalId;
+export interface MonitoringTaskModelFilter {
+  timeseriesId: CogniteInternalId;
 }
 
 export interface MonitoringTaskFilter {
   externalIds?: CogniteExternalId[];
   ids?: CogniteInternalId[];
   channelIds?: CogniteInternalId[];
-  parameters?: MonitoringTaskParametersFilter;
+  model?: MonitoringTaskModelFilter;
 }
 
 export interface MonitoringTaskFilterQuery extends FilterQuery {
