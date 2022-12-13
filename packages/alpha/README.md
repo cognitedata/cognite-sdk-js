@@ -5,11 +5,11 @@ When a resource is removed from the alpha it _may_ be found in the beta or stabl
 
 install instructions:
 ```
-yarn add @cognite/sdk@npm:@cognite/sdk-alpha
+yarn add @cognite/sdk-alpha
 ```
 or with npm
 ```
-npm install @cognite/sdk@npm:@cognite/sdk-alpha --save
+npm install @cognite/sdk-alpha --save
 ```
 
 This will download `@cognite/sdk-alpha`. Import the `CogniteClientAlpha`:
