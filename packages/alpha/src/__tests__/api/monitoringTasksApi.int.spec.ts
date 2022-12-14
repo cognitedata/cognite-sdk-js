@@ -1,6 +1,10 @@
 // Copyright 2022 Cognite AS
 
-import { Channel, MonitoringTaskThresholdModelCreate } from 'alpha/src/types';
+import {
+  Channel,
+  ModelExternalId,
+  MonitoringTaskThresholdModelCreate,
+} from 'alpha/src/types';
 import CogniteClientAlpha from '../../cogniteClient';
 import {
   CLIENT_ID,
@@ -21,8 +25,8 @@ describe('monitoring tasks api', () => {
   const monitoringTaskExternalId = `test_mt_${ts}`;
   const channelExternalId = `test_channel_mt_${ts}`;
   const sessionsApi = `/api/v1/projects/${TEST_PROJECT}/sessions`;
-  const testMtModel = {
-    externalId: 'threshold',
+  const testMtModel: MonitoringTaskThresholdModelCreate = {
+    externalId: ModelExternalId.THRESHOLD,
     timeseriesExternalId: 'test-functions',
     threshold: 50.1,
     granularity: '1m',
@@ -64,7 +68,7 @@ describe('monitoring tasks api', () => {
         interval: testMtInterval,
         nonce: sessionsRes?.data?.items[0]?.nonce,
         overlap: testMtOverlap,
-        model: testMtModel as MonitoringTaskThresholdModelCreate,
+        model: testMtModel,
       },
     ]);
     expect(response.length).toBe(1);

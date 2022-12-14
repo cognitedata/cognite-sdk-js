@@ -17,6 +17,12 @@ import {
 
 export * from '@cognite/sdk';
 
+export type ModelExternalId = 'threshold';
+
+export const ModelExternalId = {
+  THRESHOLD: 'threshold' as ModelExternalId,
+};
+
 export interface MonitoringTaskThresholdModelCreate {
   externalId: 'threshold';
   timeseriesExternalId: CogniteExternalId;
