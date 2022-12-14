@@ -4,7 +4,7 @@ import {
   Channel,
   ModelExternalId,
   MonitoringTaskThresholdModelCreate,
-} from 'alpha/src/types';
+} from '../../types';
 import CogniteClientAlpha from '../../cogniteClient';
 import {
   CLIENT_ID,
