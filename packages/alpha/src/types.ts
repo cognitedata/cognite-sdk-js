@@ -17,36 +17,12 @@ import {
 
 export * from '@cognite/sdk';
 
-// enum ModelExternalId {
-//   Threshold = 'threshold',
-// }
-//
-// export interface Model {
-//   readonly externalId: ModelExternalId;
-// }
-
 export interface MonitoringTaskThresholdModelCreate {
   externalId: 'threshold';
   timeseriesExternalId: CogniteExternalId;
   threshold: number;
   granularity?: string;
 }
-
-// export class MonitoringTaskThresholdModelCreate implements Model {
-//   externalId: ModelExternalId = ModelExternalId.Threshold;
-//   timeseriesExternalId: CogniteExternalId;
-//   threshold: number;
-//   granularity?: string;
-//   constructor(
-//     timeseriesExternalId: CogniteExternalId,
-//     threshold: number,
-//     granularity?: string
-//   ) {
-//     this.timeseriesExternalId = timeseriesExternalId;
-//     this.granularity = granularity;
-//     this.threshold = threshold;
-//   }
-// }
 
 export interface MonitoringTaskThresholdModel {
   externalId: 'threshold';

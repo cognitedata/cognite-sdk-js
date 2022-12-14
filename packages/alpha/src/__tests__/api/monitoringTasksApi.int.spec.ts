@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
 
-import {Channel, MonitoringTaskThresholdModelCreate} from 'alpha/src/types';
+import { Channel, MonitoringTaskThresholdModelCreate } from 'alpha/src/types';
 import CogniteClientAlpha from '../../cogniteClient';
 import {
   CLIENT_ID,
