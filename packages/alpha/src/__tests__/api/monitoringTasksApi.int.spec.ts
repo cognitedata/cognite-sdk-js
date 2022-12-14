@@ -27,7 +27,7 @@ describe('monitoring tasks api', () => {
   const sessionsApi = `/api/v1/projects/${TEST_PROJECT}/sessions`;
   const testMtModel: MonitoringTaskThresholdModelCreate = {
     externalId: ModelExternalId.THRESHOLD,
-    timeseriesExternalId: 'test-functions',
+    timeseriesExternalId: 'test_functions',
     threshold: 50.1,
     granularity: '1m',
   };
