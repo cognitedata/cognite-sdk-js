@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.10.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.10.3...@cognite/sdk-playground@5.10.4) (2022-12-09)
+
+
+### Bug Fixes
+
+* add codegen support for CusrorAndAsyncIterator  ([#907](https://github.com/cognitedata/cognite-sdk-js/issues/907)) ([3cde0d3](https://github.com/cognitedata/cognite-sdk-js/commit/3cde0d3df8a4135f38849a2cd6408ded32246065)), closes [#908](https://github.com/cognitedata/cognite-sdk-js/issues/908)
+
+
+
+
+
 ## [5.10.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.10.2...@cognite/sdk-playground@5.10.3) (2022-11-21)
 
 **Note:** Version bump only for package @cognite/sdk-playground

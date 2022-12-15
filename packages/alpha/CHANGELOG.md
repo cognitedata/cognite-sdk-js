@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.3.2...@cognite/sdk-alpha@0.3.3) (2022-12-13)
+
+
+### Bug Fixes
+
+* **alpha:** export cognite client properly ([#931](https://github.com/cognitedata/cognite-sdk-js/issues/931)) ([c4399eb](https://github.com/cognitedata/cognite-sdk-js/commit/c4399ebdfacbcc41ba14e35f90b3de8be1918462))
+
+
+
+
+
+## [0.3.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.3.1...@cognite/sdk-alpha@0.3.2) (2022-12-09)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+
+
+
+
 ## [0.3.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.3.0...@cognite/sdk-alpha@0.3.1) (2022-12-02)
 
 
