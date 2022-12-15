@@ -140,6 +140,21 @@ describe('alerts api', () => {
     expect(response).toEqual({});
   });
 
+  itif(client)('delete subscriber', async () => {
+    const response = await client!.alerts.deleteSubscribers([
+      {
+        externalId: email,
+      },
+    ]);
+    expect(response).toEqual({});
+    const emptyRes = await client!.alerts.listSubscribers({
+      filter: {
+        email,
+      },
+    });
+    expect(emptyRes.items.length).toBe(0);
+  });
+
   itif(client)('delete channel', async () => {
     const response = await client!.alerts.deleteChannels([
       {
