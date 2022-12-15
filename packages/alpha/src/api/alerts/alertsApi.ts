@@ -90,6 +90,10 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
     return this.subscribersApi.list(filter);
   };
 
+  public deleteSubscribers = async (items: IdEither[]) => {
+    return this.subscribersApi.delete(items);
+  };
+
   public createSubscriptions = async (items: SubscriptionCreate[]) => {
     return this.subscriptionsApi.create(items);
   };
