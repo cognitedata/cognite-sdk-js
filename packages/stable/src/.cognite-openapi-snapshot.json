@@ -40147,6 +40147,10 @@
             "schema": {
               "description": "A temporary link to download a preview of the document. The link is reachable without additional authentication details for a limited time.\n",
               "type": "object",
+              "required": [
+                "temporaryLink",
+                "expirationTime"
+              ],
               "properties": {
                 "temporaryLink": {
                   "type": "string"
