@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.3.3...@cognite/sdk-alpha@0.4.0) (2022-12-15)
+
+
+### Features
+
+* **alpha:** add alert subscribers delete ([#923](https://github.com/cognitedata/cognite-sdk-js/issues/923)) ([0f378ca](https://github.com/cognitedata/cognite-sdk-js/commit/0f378caf1cf68acd9dcd2bfc289dd23aa40076fb))
+
+
+
+
+
 ## [0.3.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.3.2...@cognite/sdk-alpha@0.3.3) (2022-12-13)
 
 
