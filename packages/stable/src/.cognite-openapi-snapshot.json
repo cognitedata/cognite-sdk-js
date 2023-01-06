@@ -308,7 +308,6 @@
           "Assets"
         ],
         "summary": "Filter assets",
-        "description": "Use advanced filtering options to find assets.",
         "operationId": "listAssets",
         "parameters": [
           {
@@ -335,6 +334,7 @@
         "x-capability": [
           "assetsAcl:READ"
         ],
+        "description": "Use advanced filtering options to find assets.",
         "x-code-samples": [
           {
             "lang": "JavaScript",
@@ -931,7 +931,6 @@
           "Events"
         ],
         "summary": "Filter all events",
-        "description": "Retrieve a list of all events in the same project. This operation supports pagination by cursor. Criteria can be applied to select a subset of events.",
         "operationId": "advancedListEvents",
         "parameters": [
           {
@@ -958,6 +957,7 @@
         "x-capability": [
           "eventsAcl:READ"
         ],
+        "description": "Retrieve a list of all events in the same project. This operation supports pagination by cursor. Criteria can be applied to select a subset of events.",
         "x-code-samples": [
           {
             "lang": "JavaScript",
@@ -5849,7 +5849,7 @@
           {
             "name": "limit",
             "in": "query",
-            "description": "Limit the number of results.",
+            "description": "Limit the number of results. The API may return fewer than the specified limit.",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -19229,10 +19229,6 @@
       "AssetListScope": {
         "allOf": [
           {
-            "type": "object",
-            "properties": {}
-          },
-          {
             "$ref": "#/components/schemas/AssetFilter"
           },
           {
@@ -19832,7 +19828,6 @@
         }
       },
       "EventFilterRequest": {
-        "description": "Filter request for events. Filters exact field matching or timestamp ranges inclusive min and max.",
         "type": "object",
         "oneOf": [
           {
@@ -19854,11 +19849,11 @@
                     "default": 100
                   },
                   "sort": {
-                    "description": "Sort by array of selected properties. `order` field is optional and defaults to `asc`.\nSorting can be done on the following properties:\n  `externalId`,\n  `type`,\n  `subtype`,\n  `startTime`,\n  `endTime`,\n  `createdTime`,\n  `lastUpdatedTime`,\n  `source`,\n  `description`,\n  `metadata`.\nPartitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.\nExample:\n```\n[\n  {\n    \"property\" : [\"createdTime\"],\n    \"order\": \"desc\"\n  },\n  {\n    \"property\" : [\"metadata\", \"FooBar\"]\n  }\n]\n```\n",
                     "type": "array",
                     "items": {
                       "$ref": "#/components/schemas/SortProperty"
-                    }
+                    },
+                    "description": "Sort by array of selected properties.\n`order` field is optional and defaults to `asc`.\n`nulls` field is optional and defaults to `auto`.\n`auto` is translated to `last` for `asc` order and to `first` for `desc` order by the service.\nSorting can be done on the following properties:\n  `externalId`,\n  `type`,\n  `subtype`,\n  `startTime`,\n  `endTime`,\n  `createdTime`,\n  `lastUpdatedTime`,\n  `source`,\n  `description`,\n  `metadata`.\nPartitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.\nExample:\n```\n[\n  {\n    \"property\" : [\"createdTime\"],\n    \"order\": \"desc\"\n  },\n  {\n    \"property\" : [\"metadata\", \"FooBar\"],\n    \"nulls\": \"first\"\n  }\n]\n```\n"
                   }
                 }
               },
@@ -19925,6 +19920,15 @@
               "desc"
             ],
             "default": "asc"
+          },
+          "nulls": {
+            "type": "string",
+            "enum": [
+              "first",
+              "last",
+              "auto"
+            ],
+            "default": "auto"
           }
         }
       },
@@ -23188,7 +23192,7 @@
             "properties": {
               "timestamp": {
                 "minimum": -2208988800000,
-                "maximum": 2556144000000,
+                "maximum": 2556143999999,
                 "description": "The timestamp in milliseconds since the epoch (Jan 1, 1970). Must be between 1900 and 2050, inclusive"
               },
               "value": {
@@ -23207,7 +23211,7 @@
             "properties": {
               "timestamp": {
                 "minimum": -2208988800000,
-                "maximum": 2556140400000,
+                "maximum": 2556143999999,
                 "description": "The timestamp in milliseconds since the epoch (Jan 1, 1970). Must be between 1900 and 2050, inclusive"
               },
               "value": {
@@ -23338,7 +23342,7 @@
         ],
         "properties": {
           "timestamp": {
-            "$ref": "#/components/schemas/EpochTimestamp"
+            "$ref": "#/components/schemas/TimeseriesEpochTimestamp"
           }
         }
       },
@@ -40143,6 +40147,10 @@
             "schema": {
               "description": "A temporary link to download a preview of the document. The link is reachable without additional authentication details for a limited time.\n",
               "type": "object",
+              "required": [
+                "temporaryLink",
+                "expirationTime"
+              ],
               "properties": {
                 "temporaryLink": {
                   "type": "string"
