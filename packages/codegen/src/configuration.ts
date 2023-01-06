@@ -69,6 +69,7 @@ export interface ServiceConfig {
   filter: {
     serviceName?: string;
     ignore?: string[];
+    relevantReferenceNames?: string[];
   };
 }
 

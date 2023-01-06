@@ -2,7 +2,6 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
   CursorResponse,
   FilterQuery,
   HttpResponse,
@@ -11,6 +10,7 @@ import {
 import {
   DocumentsAggregateAllUniqueValuesItem,
   DocumentsAggregateAllUniqueValuesRequest,
+  DocumentsAggregateAllUniqueValuesResponse,
   DocumentsAggregateCountItem,
   DocumentsAggregateCountRequest,
   DocumentsAggregateRequest,
@@ -45,7 +45,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
 
   public allUniqueValues = (
     request: Omit<DocumentsAggregateAllUniqueValuesRequest, 'aggregate'>
-  ): CursorAndAsyncIterator<DocumentsAggregateAllUniqueValuesItem> => {
+  ): DocumentsAggregateAllUniqueValuesResponse => {
     return this.cursorBasedEndpoint<
       DocumentsAggregateAllUniqueValuesRequest,
       DocumentsAggregateAllUniqueValuesItem

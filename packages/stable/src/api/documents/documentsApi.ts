@@ -66,9 +66,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.searchDocuments<DocumentSearchResponse>(query);
   };
 
-  public list = (
-    request: DocumentListRequest
-  ): Promise<DocumentListResponse> => {
+  public list = (request: DocumentListRequest): DocumentListResponse => {
     return this.listEndpoint(this.callListEndpointWithPost, request);
   };
 

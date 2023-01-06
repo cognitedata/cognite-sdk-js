@@ -8,6 +8,7 @@ import {
   FeatureAggregateParams,
   GeospatialFeature,
   GeospatialOutput,
+  GeospatialFeatureListFilter,
   GeospatialFeatureSearchFilter,
   GeospatialFeatureSearchStreamFilter,
   GeospatialFeatureSearchStreamResponse,
@@ -106,7 +107,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [Search features](https://docs.cognite.com/api/v1/#operation/searchFeatures)
    *
    * ```js
-   * const searchParams = {
+   * const params = {
    *  filter: {
    *    and: [
    *      { range:{ property: 'temperature', gt:4.54 } },
@@ -117,7 +118,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *  sort: [ 'temperature:ASC','location']
    * };
    *
-   * const searchedFeatures = await client.geospatial.feature.search('ocean_temperature', searchParams);
+   * const searchedFeatures = await client.geospatial.feature.search('ocean_temperature', params);
    * ```
    */
   public search = (
@@ -134,7 +135,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    * [Search and stream features](https://docs.cognite.com/api/v1/#operation/searchFeaturesStreaming)
    *
    * ```js
-   * const searchParams = {
+   * const params = {
    *  filter: {
    *    and: [
    *      { range:{ property: 'temperature', gt:4.54 } },
@@ -145,7 +146,7 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    *  output: { jsonStreamFormat: 'NEW_LINE_DELIMITED' as const }
    * };
    *
-   * const featureStreamString = await client.geospatial.feature.searchStream('ocean_temperature', searchParams);
+   * const featureStreamString = await client.geospatial.feature.searchStream('ocean_temperature', params);
    * ```
    */
   public searchStream = (
@@ -188,6 +189,33 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
     return this.aggregateEndpoint(
       params,
       this.url(`${featureTypeExternalId}/features/aggregate`)
+    );
+  };
+
+  /**
+   * [List features](https://docs.cognite.com/api/v1/#tag/Geospatial/operation/listFeatures)
+   *
+   * ```js
+   * const params = {
+   *  filter: {
+   *    and: [
+   *      { range:{ property: 'temperature', gt:4.54 } },
+   *      { stWithin: { property:'location', value:'POLYGON((60.547602 -5.423433, 60.547602 -6.474416, 60.585858 -5.423433, 60.547602 -5.423433))' } }
+   *   ]
+   *  },
+   * };
+   *
+   * const allFeaturesList = await client.geospatial.feature.list('ocean_temperature', params);
+   * ```
+   */
+  public list = (
+    featureTypeExternalId: CogniteExternalId,
+    filterParams: GeospatialFeatureListFilter = {}
+  ) => {
+    const path = this.url(`${featureTypeExternalId}/features/list`);
+    return this.listEndpoint(
+      async (params) => this.post(path, { data: params }),
+      filterParams
     );
   };
 }

@@ -1144,140 +1144,6 @@
         }
       }
     },
-    "/api/playground/projects/{project}/3d/pathfinder/transit": {
-      "post": {
-        "tags": [
-          "3D"
-        ],
-        "summary": "Find transit path",
-        "description": "Find a path from one place to another",
-        "requestBody": {
-          "description": "Transit query",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PathTransitQuery"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "The identified paths",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PathResultList"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/playground/projects/{project}/3d/pathfinder/roundtrip": {
-      "post": {
-        "tags": [
-          "3D"
-        ],
-        "summary": "Find roundtrip path",
-        "description": "Try to find an efficient path starting and ending at a base, and visiting all the target positions.",
-        "requestBody": {
-          "description": "Roundtrip query",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PathRoundtripRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "The identified path",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PathResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/playground/projects/{project}/3d/raycast": {
-      "post": {
-        "tags": [
-          "3D"
-        ],
-        "summary": "Ray cast",
-        "description": "Find the ray–point intersection.",
-        "requestBody": {
-          "description": "Raycast query",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RaycastRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "The ray–surface intersection",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RayCastResultList"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/playground/projects/{project}/3d/pointcloud/cropbox": {
-      "post": {
-        "tags": [
-          "3D"
-        ],
-        "summary": "Retrieve points within a bounding box in a point cloud model",
-        "description": "Retrieve points within a bounding box in a point cloud model.",
-        "requestBody": {
-          "description": "Cropbox query",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CropboxRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Point cloud data for the bounding box",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string",
-                  "description": "The raw contents of the file.",
-                  "format": "binary"
-                }
-              }
-            },
-            "headers": {
-              "Content-Type": {
-                "schema": {
-                  "type": "string"
-                },
-                "description": "The media type of the file."
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/playground/projects/{project}/3d/v2/models": {
       "get": {
         "tags": [
@@ -2054,6 +1920,98 @@
                     },
                     {
                       "$ref": "#/components/schemas/DiagramDetectConfig"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "assetsAcl:READ",
+          "filesAcl:READ"
+        ]
+      }
+    },
+    "/api/playground/projects/{project}/context/diagram/detect/status": {
+      "post": {
+        "tags": [
+          "Engineering diagrams"
+        ],
+        "summary": "Retrieve multiple engineering diagram detect statuses",
+        "description": "Retrieve multiple engineering diagram detect statuses.",
+        "operationId": "diagramDetectMultipleResults",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "items"
+                ],
+                "allOf": [
+                  {
+                    "properties": {
+                      "items": {
+                        "type": "array",
+                        "description": "Job ids to retrieve",
+                        "minItems": 1,
+                        "maxItems": 50,
+                        "items": {
+                          "$ref": "#/components/schemas/JobId"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "items"
+                  ],
+                  "allOf": [
+                    {
+                      "properties": {
+                        "items": {
+                          "type": "array",
+                          "description": "List of job statuses",
+                          "minItems": 1,
+                          "maxItems": 50,
+                          "items": {
+                            "type": "object",
+                            "description": "Job status objects",
+                            "allOf": [
+                              {
+                                "properties": {
+                                  "jobId": {
+                                    "$ref": "#/components/schemas/JobId"
+                                  }
+                                }
+                              },
+                              {
+                                "$ref": "#/components/schemas/StatusSchema"
+                              }
+                            ]
+                          }
+                        }
+                      }
                     }
                   ]
                 }
@@ -5765,7 +5723,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/DocumentsClassifiersResponse"
+            "$ref": "#/components/responses/DocumentsClassifiersCreateResponse"
           },
           "400": {
             "$ref": "#/components/responses/ErrorResponse"
@@ -5785,6 +5743,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/cursor"
           }
         ],
         "responses": {
@@ -9909,6 +9870,19 @@
             "items": {
               "$ref": "#/components/schemas/Label"
             }
+          }
+        }
+      },
+      "MatchAllFilter": {
+        "type": "object",
+        "title": "matchAll",
+        "required": [
+          "matchAll"
+        ],
+        "properties": {
+          "matchAll": {
+            "description": "Matches all items.",
+            "type": "object"
           }
         }
       },
@@ -15348,6 +15322,46 @@
         ],
         "additionalProperties": false
       },
+      "Annotations.BoundingVolume": {
+        "title": "pointcloud.BoundingVolume",
+        "description": "A bounding volume represents a region in a point cloud",
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The label describing what type of object it is",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "confidence": {
+            "description": "The confidence score for the primitive. It should be between 0 and 1.",
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "assetRef": {
+            "description": "The asset this annotation is pointing to",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.AssetRef"
+              }
+            ]
+          },
+          "region": {
+            "description": "The region of the annotation defined by a list of geometry primitives (cylinder and box).",
+            "minItems": 1,
+            "maxItems": 1000,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Annotations.Geometry"
+            }
+          }
+        },
+        "required": [
+          "region"
+        ],
+        "additionalProperties": false
+      },
       "Annotations.Detection": {
         "title": "forms.Detection",
         "description": "Represents a detection of a field value in a form.\nA field is identified by a field_name, optionally component_name and component_type if the field belongs to a subcomponent.\nThe bounding_box indicates the position of the detection. The content of the field is given by the value, and optionally\nan unnormalized_value and the unit.",
@@ -15444,7 +15458,7 @@
             "$ref": "#/components/schemas/DocumentsLimit"
           },
           {
-            "$ref": "#/components/schemas/Cursor"
+            "$ref": "#/components/schemas/DocumentsCursor"
           }
         ]
       },
@@ -15516,6 +15530,24 @@
             "$ref": "#/components/schemas/IgnoreUnknownIdsField"
           }
         ]
+      },
+      "DocumentsCursor": {
+        "type": "object",
+        "properties": {
+          "cursor": {
+            "description": "Cursor for paging through results.",
+            "type": "string"
+          }
+        }
+      },
+      "DocumentsNextCursor": {
+        "type": "object",
+        "properties": {
+          "nextCursor": {
+            "description": "The cursor to get the next page of results (if available).",
+            "type": "string"
+          }
+        }
       },
       "DocumentsLimit": {
         "type": "object",
@@ -17188,6 +17220,48 @@
             "type": "number",
             "format": "int64",
             "description": "The number of documents used for training the classifier"
+          },
+          "errorMessage": {
+            "type": "string",
+            "description": "Reason why the classifier cannot be created"
+          }
+        }
+      },
+      "DocumentsClassifierCreateResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "projectId",
+          "name",
+          "createdAt",
+          "status",
+          "active"
+        ],
+        "properties": {
+          "projectId": {
+            "$ref": "#/components/schemas/CogniteInternalId",
+            "description": "Project id"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the classifier"
+          },
+          "createdAt": {
+            "type": "number",
+            "format": "int64",
+            "description": "Timestamp when the classifier is created"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the creating classifier job. Can be one of `QUEUING`, `TRAINING`, `FINISHED`, `FAILED`"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether the classifier is currently used for predicting labels"
+          },
+          "id": {
+            "$ref": "#/components/schemas/CogniteInternalId",
+            "description": "Classifier id"
           }
         }
       },
@@ -17235,6 +17309,21 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DocumentsClassifier"
+            }
+          }
+        }
+      },
+      "DocumentsClassifierCreateResponseItems": {
+        "description": "A list of classifiers.",
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DocumentsClassifierCreateResponse"
             }
           }
         }
@@ -18623,6 +18712,15 @@
           "$ref": "#/components/schemas/FeedbackStatus"
         }
       },
+      "cursor": {
+        "name": "cursor",
+        "in": "query",
+        "description": "Cursor for paging through results.",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
       "seismicId": {
         "in": "path",
         "name": "seismic_id",
@@ -19066,11 +19164,35 @@
         }
       },
       "DocumentsClassifiersResponse": {
-        "description": "The response for a successful classifier create/list/update operation.",
+        "description": "The response for a successful classifier list/update operation.",
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/DocumentsClassifierItems"
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/DocumentsClassifierItems"
+                },
+                {
+                  "$ref": "#/components/schemas/DocumentsNextCursor"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "DocumentsClassifiersCreateResponse": {
+        "description": "The response for a successful classifier create operation.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/DocumentsClassifierCreateResponseItems"
+                },
+                {
+                  "$ref": "#/components/schemas/DocumentsNextCursor"
+                }
+              ]
             }
           }
         }
@@ -19431,7 +19553,8 @@
       "name": "Extraction Pipelines",
       "tags": [
         "Extraction Pipelines",
-        "Extraction Pipelines Runs"
+        "Extraction Pipelines Runs",
+        "Extraction Pipelines Config"
       ]
     },
     {
