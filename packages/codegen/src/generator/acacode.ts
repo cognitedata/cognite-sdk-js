@@ -35,6 +35,7 @@ export class AcacodeOpenApiGenerator {
     const result: TypeGeneratorResult = {
       typeNames: typeNames,
       code: code,
+      astProcessedCode: '',
     };
 
     await file.cleanup();
