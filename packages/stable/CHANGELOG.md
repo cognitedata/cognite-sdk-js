@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.14.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.14.0...@cognite/sdk@7.14.1) (2023-01-06)
+
+
+### Bug Fixes
+
+* **stable:** document preview fields that were optional ([#933](https://github.com/cognitedata/cognite-sdk-js/issues/933)) ([f011dad](https://github.com/cognitedata/cognite-sdk-js/commit/f011dad9554d04619a4a0ce05242c49c8cf6d463))
+
+
+
+
+
 # [7.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.13.0...@cognite/sdk@7.14.0) (2022-12-09)
 
 
