@@ -29,6 +29,37 @@ export interface PackageConfig {
   snapshot: SnapshotVersion | SnapshotPath;
 }
 
+/**
+ * ServiceConfig is the config structure for any given service, for a package config see `PackageConfig`.
+ *
+ * @interface ServiceConfig
+ * @member {SnapshotPath} snapshot overrides the package dedicated snapshot. This is helpful when you're working on the open api docs locally and want to see how openapi changes affects the generated types.
+ *  Note that only json files are supported. Example:
+ *  {
+ *    "snapshot": {
+ *      "path": "/home/anders/custom-openapi-file.json",
+ *    }
+ *  }
+ * @member {string} service represents a service name, usually the same as the folder name.
+ * @member {interface} inlinedSchemas holds some magical abilities to help ease generation. Such as auto naming inlined request types.
+ * @member {interface} filter isolates service specific endpoint definitions. "serviceName" always adds the postfix "/api/{package}/projects/{project}", so you only have to specify your service name.
+ *  Example for the documents service:
+ *  {
+ *    "filter": {
+ *      "serviceName": "/documents"
+ *    }
+ *  }
+ *
+ *  In some cases, multiple services may share the same service name as a base. In this case you can specify a list of names to ignore:
+ *  {
+ *    "filter": {
+ *      "serviceName": "/context",
+ *      "ignore": [
+ *        "/context/vision"
+ *      ]
+ *    }
+ *  }
+ */
 export interface ServiceConfig {
   snapshot?: SnapshotPath;
   service: string;
@@ -37,6 +68,7 @@ export interface ServiceConfig {
   };
   filter: {
     serviceName?: string;
+    ignore?: string[];
     relevantReferenceNames?: string[];
   };
 }

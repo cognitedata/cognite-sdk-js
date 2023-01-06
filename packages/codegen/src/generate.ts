@@ -7,7 +7,13 @@ import {
   ServiceOption,
   closestConfigDirectoryPath,
 } from './utils';
-import { CodeGen, createServiceNameFilter, passThroughFilter } from './codegen';
+import {
+  CodeGen,
+  createPathFilter,
+  createServiceNameFilter,
+  createServiceNameIgnoreFilters,
+  passThroughFilter,
+} from './codegen';
 import { PackageConfigManager, ServiceConfigManager } from './configuration';
 import { AcacodeOpenApiGenerator } from './generator/acacode';
 
@@ -36,10 +42,16 @@ async function generateServiceTypes(
     path: configFile.snapshot?.path,
   });
 
-  const predicate =
+  const includePredicates = [
     configFile.filter.serviceName == null
       ? passThroughFilter
-      : createServiceNameFilter(configFile.filter.serviceName);
+      : createServiceNameFilter(configFile.filter.serviceName),
+  ];
+  const ignorePredicates = createServiceNameIgnoreFilters(
+    configFile.filter.ignore || []
+  );
+  const predicate = createPathFilter(includePredicates, ignorePredicates);
+
   const gen = new CodeGen(new AcacodeOpenApiGenerator(), {
     autoNameInlinedRequest: configFile.inlinedSchemas.autoNameRequest,
     outputDir: directory,
