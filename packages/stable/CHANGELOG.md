@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.14.1...@cognite/sdk@7.15.0) (2023-01-09)
+
+
+### Features
+
+* **documents:** add asset subtree filter ([#935](https://github.com/cognitedata/cognite-sdk-js/issues/935)) ([ba5e6a1](https://github.com/cognitedata/cognite-sdk-js/commit/ba5e6a1510fa7f14399c4400d37600b2042b9e45))
+
+
+
+
+
 ## [7.14.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.14.0...@cognite/sdk@7.14.1) (2023-01-06)
 
 
