@@ -2,6 +2,8 @@ import {
   CodeGen,
   passThroughFilter,
   createServiceNameFilter,
+  createPathFilter,
+  StringFilter,
 } from '../codegen';
 import { OpenApiDocument } from '../openapi';
 import { OpenApiSnapshotManager } from '../snapshot';
@@ -79,6 +81,57 @@ describe('code generation', () => {
       expect(Object.keys(basicSnapshot.paths).length).toBeGreaterThan(4);
       const paths = gen['filterPaths'](basicSnapshot.paths);
       expect(Object.keys(paths)).toHaveLength(4);
+    });
+
+    test('ignore filter', async () => {
+      const filter = (
+        data: Record<string, object>,
+        predicate: StringFilter
+      ): object => {
+        return Object.keys(data)
+          .filter(predicate)
+          .reduce((acc, path) => {
+            return Object.assign(acc, { [path]: data[path] });
+          }, {});
+      };
+
+      const base = '/api/v1/projects/{project}';
+      const data = {
+        [`${base}/serviceA`]: {},
+        [`${base}/serviceB`]: {},
+        [`${base}/serviceA/serviceC`]: {},
+        [`${base}/serviceA/serviceD`]: {},
+      };
+
+      const predicateServiceA = createPathFilter(
+        [createServiceNameFilter('serviceA')],
+        []
+      );
+      expect(Object.keys(filter(data, predicateServiceA))).toEqual([
+        `${base}/serviceA`,
+        `${base}/serviceA/serviceC`,
+        `${base}/serviceA/serviceD`,
+      ]);
+
+      const predicateServiceAAndC = createPathFilter(
+        [createServiceNameFilter('serviceA')],
+        [createServiceNameFilter('serviceA/serviceD')]
+      );
+      expect(Object.keys(filter(data, predicateServiceAAndC))).toEqual([
+        `${base}/serviceA`,
+        `${base}/serviceA/serviceC`,
+      ]);
+
+      const predicateServiceAOnly = createPathFilter(
+        [createServiceNameFilter('serviceA')],
+        [
+          createServiceNameFilter('serviceA/serviceC'),
+          createServiceNameFilter('serviceA/serviceD'),
+        ]
+      );
+      expect(Object.keys(filter(data, predicateServiceAOnly))).toEqual([
+        `${base}/serviceA`,
+      ]);
     });
   });
 
