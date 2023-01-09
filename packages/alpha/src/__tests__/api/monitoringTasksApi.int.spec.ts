@@ -34,7 +34,7 @@ describe('monitoring tasks api', () => {
   const testMtOverlap = 1000 * 60;
   const testMtInterval = 5 * 60 * 1000;
   const expectedResponseModel = {
-    externalId: "threshold",
+    externalId: 'threshold',
     timeseriesId: 4944699311094690,
     granularity: testMtModel.granularity,
     threshold: testMtModel.threshold,
