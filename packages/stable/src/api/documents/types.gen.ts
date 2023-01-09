@@ -190,10 +190,20 @@ export interface DocumentFilterIn {
         values: DocumentFilterValueList;
     };
 }
+export interface DocumentFilterInAssetSubtree {
+    /**
+     * Matches items where the property contains one or more assets in a subtree rooted at any of the given values
+     * @example {"property":["assetIds"],"values":[51276,94287]}
+     */
+    inAssetSubtree: {
+        property: DocumentFilterProperty;
+        values: DocumentFilterValueList;
+    };
+}
 /**
  * Leaf filter
  */
-export type DocumentFilterLeaf = DocumentFilterEquals | DocumentFilterIn | DocumentFilterContainsAny | DocumentFilterContainsAll | DocumentFilterRange | DocumentFilterPrefix | DocumentFilterExists | DocumentFilterGeoJsonIntersects | DocumentFilterGeoJsonDisjoint | DocumentFilterGeoJsonWithin;
+export type DocumentFilterLeaf = DocumentFilterEquals | DocumentFilterIn | DocumentFilterContainsAny | DocumentFilterContainsAll | DocumentFilterRange | DocumentFilterPrefix | DocumentFilterExists | DocumentFilterGeoJsonIntersects | DocumentFilterGeoJsonDisjoint | DocumentFilterGeoJsonWithin | DocumentFilterInAssetSubtree;
 export interface DocumentFilterPrefix {
     /**
      * Matches items that contain a specific prefix in the provided property.
