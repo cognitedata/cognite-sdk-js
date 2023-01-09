@@ -378,7 +378,7 @@
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/AssetAggregateResponse"
+            "$ref": "#/components/responses/AggregateResponse"
           },
           "400": {
             "$ref": "#/components/responses/ErrorResponse"
@@ -4460,6 +4460,47 @@
             "label": "Java SDK",
             "source": " Request request1 = \n          Request.create().withFilterParameter(\"assetIds\", List.of(1L, 2L)); \nIterator<List<ThreeDAssetMapping>> itFilter1 = client.threeD() \n          .models() \n          .revisions() \n          .assetMappings() \n          .filter(model.getId(), revision.getId(), request1); \n\n"
           }
+        ]
+      }
+    },
+    "/api/v1/projects/{project}/3d/mappings/{assetId}/modelnodes": {
+      "get": {
+        "tags": [
+          "Availability 3D Asset Mapping"
+        ],
+        "summary": "List 3D Availability of Assets. Retrieves a list of nodes from the hierarchy in the 3D model which are mapped to supplied asset ids. If the Node that is mapped to asset is invalid or doesn not exist anymore, it will be omitted from results.",
+        "description": "Lists 3D assets mappings that match the specified asset id parameter.\n\n\nAsset references obtained from a mapping - through asset id - may be\ninvalid, simply by the non-transactional nature of HTTP.\nThey are NOT maintained by any means from CDF, meaning they will be stored until the\nreference is removed through the delete endpoint of 3d asset mappings.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/project"
+          },
+          {
+            "$ref": "#/components/parameters/AssetId"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of mappings between assets and 3D valid nodes and revisions in which exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectAssetMapping3DList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse"
+          }
+        },
+        "x-capability": [
+          "threedAcl:READ"
         ]
       }
     },
@@ -9773,7 +9814,7 @@
           "Documents"
         ],
         "summary": "Search for documents",
-        "description": "This endpoint lets you search for documents by using advanced filters and free text queries.\nFree text queries are matched against the documents' filenames and contents.\n\n### Free text search\n\n#### Boolean operators\nThe `+` symbol signifies an AND operation, and the `|` symbol signifies an OR.\nSearching for `lorem + ipsum` will match documents containing both \"lorem\" AND \"ipsum\" in the filename or content.\nSimilarly, searching for `lorem | ipsum` will match documents containing either \"lorem\" OR \"ipsum\" in the filename or content.\n\nThe default operator between the search keywords is AND.\nThat means that searching for two terms without any operator, like so: `lorem ipsum`, will\nmatch documents containing both the words \"lorem\" and \"ipsum\" in the filename or content.\n\nTo exclude documents containing a specific word, you can use the operator `-`.\nFor instance, the search `lorem -ipsum` will match documents that contain the word \"lorem\", but does NOT contain the word \"ipsum\".\n\n#### Phrases\nEnclose multiple words inside double quotes `\"` to group these words together.\nNormally, the search query `lorem ipsum` will match not only \"lorem ipsum\" but also \"lorem cognite ipsum\",\nand in general there can be any number of words between the two words in the query.\nThe search query `\"lorem ipsum\"`, however, will match only exactly \"lorem ipsum\" and not \"lorem cognite ipsum\".\n\n#### Escape\nTo search for the special characters (`+`, `|`, `-`, `\"`. `\\`), escape with a preceding backslash (\\).\n\n#### Ordering\nWhen you search for a term, we try to return the most relevant documents first, and less relevant documents further down the list.\nThere are a few factors that determine the relevance of a document:\n- If the search terms are found multiple times within a document, the relevance of that document is higher.\n- For searches with multiple terms, documents that contain all of the terms are considered more relevant than documents that only contain some of the terms.\n- Matches of the terms in the filename field of the document, count for more than matches in the content of the document.\n\n#### Examples\n```\n{\n    \"search\": {\n        \"query\": \"cognite \\\"lorem ipsum\\\"\"\n    }\n}\n```\nThis request will return documents matching the search query, where the query behaves as described above.\n\n\n```\n{\n    \"search\": {\n        \"query\": \"cognite \\\"lorem ipsum\\\"\"\n    },\n    \"filter\": {\n        \"prefix\": {\n            \"property\": [\"externalId\"],\n            \"value\": \"1\"\n        }\n    }\n}\n```\nThis example combines a query with a filter.\nThis search request will return documents matching the search query, and where `externalId` starts with \"1\".\nThe results will be ordered by how well they match the query string.\n\n### Filtering\nFiltering is done by using a special JSON filtering language.\nIt is quite flexible and consists of a number of different \"leaf\" filters which can be combined\ntogether arbitrarily using the boolean clauses `and`, `or` and `not`.\n\nThe available leaf filters are: `equals`, `in`, `containsAny`, `containsAll`, `range`, `prefix`, `exists`, `geojsonIntersects`, `geojsonDisjoint` and `geojsonWithin`.\n\n#### Properties\nBelow is an overview of all the properties that can be filtered on, and which filters are applicable to each property.\n\n| Property                               | Type              | Applicable filters                                        |\n|----------------------------------------|-------------------|-----------------------------------------------------------|\n| `[\"id\"]`                               | integer           | equals, in, range, exists                                 |\n| `[\"externalId\"]`                       | string            | equals, in, prefix, exists                                |\n| `[\"title\"]`                            | string            | equals, in, prefix, exists                                |\n| `[\"author\"]`                           | string            | equals, in, prefix, exists                                |\n| `[\"createdTime\"]`                      | integer           | equals, in, range, exists                                 |\n| `[\"modifiedTime\"]`                     | integer           | equals, in, range, exists                                 |\n| `[\"lastIndexedTime\"]`                  | integer           | equals, in, range, exists                                 |\n| `[\"mimeType\"]`                         | string            | equals, in, prefix, exists                                |\n| `[\"extension\"]`                        | string            | equals, in, prefix, exists                                |\n| `[\"pageCount\"]`                        | integer           | equals, in, range, exists                                 |\n| `[\"type\"]`                             | string            | equals, in, prefix, exists                                |\n| `[\"geoLocation\"]`                      | geometry object   | geojsonIntersects, geojsonDisjoint, geojsonWithin, exists |\n| `[\"language\"]`                         | string            | equals, in, prefix, exists                                |\n| `[\"assetIds\"]`                         | array of integers | containsAny, containsAll, exists                          |\n| `[\"assetExternalIds\"]`                 | array of strings  | containsAny, containsAll, exists                          |\n| `[\"labels\"]`                           | array of Labels   | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"name\"]`               | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"mimeType\"]`           | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"size\"]`               | integer           | equals, in, range, exists                                 |\n| `[\"sourceFile\", \"source\"]`             | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"directory\"]`          | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"assetIds\"]`           | array of integers | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"assetExternalIds\"]`   | array of strings  | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"datasetId\"]`          | integer           | equals, in, range, exists                                 |\n| `[\"sourceFile\", \"securityCategories\"]` | array of integers | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"geoLocation\"]`        | geometry object   | geojsonIntersects, geojsonDisjoint, geojsonWithin, exists |\n| `[\"sourceFile\", \"labels\"]`             | array of Labels   | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"metadata\", *]`        | string            | equals, in, prefix, exists                                |\n\nAll filtering is done in a case-sensitive manner against the resource data.\nNote that some properties holds normalized data. E.g. a document with source file name\n`FILE.PDF` will have the `extension` property be `pdf`. A filter for extension equals\nto `PDF` will not match this document, as it must be specified as `pdf`.\n\n#### Example\n```\n{\n    \"filter\": {\n        \"and\": [\n            {\n                \"or\": [\n                    {\n                        \"equals\": {\n                            \"property\": [\"type\"],\n                            \"value\": \"PDF\"\n                        }\n                    },\n                    {\n                        \"prefix\": {\n                            \"property\": [\"externalId\"],\n                            \"value\": \"hello\"\n                        }\n                    }\n                ]\n            },\n            {\n                \"range\": {\n                    \"property\": [\"createdTime\"],\n                    \"lte\": 1519862400000\n                }\n            },\n            {\n                \"not\": {\n                    \"in\": {\n                        \"property\": [\"sourceFile\", \"name\"],\n                        \"values\": [\"My Document.doc\", \"My Other Document.docx\"]\n                    }\n                }\n            }\n        ]\n    }\n}\n```\n\n### Aggregations\n> Deprecated: use the aggregates endpoint for aggregations instead.\n\nAggregations can help provide useful information about your search results and about your whole data set.\nThey can help answer questions such as *\"How many documents are there in total?\"* or *\"How many PDF documents matches my current query?\"*\n\nThe Documents API only supports one type of aggregation at the moment; the `count` aggregation.\nThe `count` aggregation can give you a count of how many documents exist for the different values of a given property.\nIf no property is given, the `count` aggregation gives you the total count of documents.\nMore aggregation types may be added in the future.\n\n### Highlights\nWhen you enable highlights for your search query, the response contains an additional highlight field for each\nsearch hit that includes the highlighted fragments for your query matches. However, this is a costly operation and we therefore\nlimit the results to 20 documents.\n\n#### Properties\nBelow is an overview of all the properties that can be aggregated on, and which aggregate is applicable to each property.\n\n| Property                     | Applicable aggregation |\n|------------------------------|------------------------|\n| `[\"mimeType\"]`               | count                  |\n| `[\"pageCount\"]`              | count                  |\n| `[\"type\"]`                   | count                  |\n| `[\"extension\"]`              | count                  |\n| `[\"author\"]`                 | count                  |\n| `[\"language\"]`               | count                  |\n| `[\"sourceFile\", \"source\"]`   | count                  |\n| `[\"sourceFile\", \"mimeType\"]` | count                  |\n| `[\"sourceFile\", \"labels\"]`   | count                  |\n\n#### Example\n```\n{\n    \"aggregates\": [\n        {\n            \"name\": \"countPerType\",\n            \"aggregate\": \"count\",\n            \"groupBy\": [\n                {\n                    \"property\": [\"type\"]\n                }\n            ]\n        }\n    ]\n}\n```\n\n### Sorting\nSearch results are by default ordered by relevance, meaning how well they match the given query string.\nHowever, it is possible to specify a different property to sort by.\nSorting can be ascending or descending. The default sort order is ascending, in case none is specified.\n\n#### Properties\nBelow is an overview of all the properties that can be sorted on.\n\n| Property                        |\n|---------------------------------|\n| `[\"id\"]`                        |\n| `[\"externalId\"]`                |\n| `[\"mimeType\"]`                  |\n| `[\"extension\"]`                 |\n| `[\"pageCount\"]`                 |\n| `[\"author\"]`                    |\n| `[\"title\"]`                     |\n| `[\"language\"]`                  |\n| `[\"type\"]`                      |\n| `[\"createdTime\"]`               |\n| `[\"modifiedTime\"]`              |\n| `[\"lastIndexedTime\"]`           |\n| `[\"sourceFile\", \"name\"]`        |\n| `[\"sourceFile\", \"mimeType\"]`    |\n| `[\"sourceFile\", \"size\"]`        |\n| `[\"sourceFile\", \"source\"]`      |\n| `[\"sourceFile\", \"datasetId\"]`   |\n| `[\"sourceFile\", \"metadata\", *]` |\n\n#### Example\n```\n{\n    \"sort\": [\n        {\n            \"property\": [\"createdTime\"],\n            \"order\": \"asc\",\n        }\n    ]\n}\n```",
+        "description": "This endpoint lets you search for documents by using advanced filters and free text queries.\nFree text queries are matched against the documents' filenames and contents.\n\n### Free text search\n\n#### Boolean operators\nThe `+` symbol signifies an AND operation, and the `|` symbol signifies an OR.\nSearching for `lorem + ipsum` will match documents containing both \"lorem\" AND \"ipsum\" in the filename or content.\nSimilarly, searching for `lorem | ipsum` will match documents containing either \"lorem\" OR \"ipsum\" in the filename or content.\n\nThe default operator between the search keywords is AND.\nThat means that searching for two terms without any operator, like so: `lorem ipsum`, will\nmatch documents containing both the words \"lorem\" and \"ipsum\" in the filename or content.\n\nTo exclude documents containing a specific word, you can use the operator `-`.\nFor instance, the search `lorem -ipsum` will match documents that contain the word \"lorem\", but does NOT contain the word \"ipsum\".\n\n#### Phrases\nEnclose multiple words inside double quotes `\"` to group these words together.\nNormally, the search query `lorem ipsum` will match not only \"lorem ipsum\" but also \"lorem cognite ipsum\",\nand in general there can be any number of words between the two words in the query.\nThe search query `\"lorem ipsum\"`, however, will match only exactly \"lorem ipsum\" and not \"lorem cognite ipsum\".\n\n#### Escape\nTo search for the special characters (`+`, `|`, `-`, `\"`. `\\`), escape with a preceding backslash (\\).\n\n#### Ordering\nWhen you search for a term, we try to return the most relevant documents first, and less relevant documents further down the list.\nThere are a few factors that determine the relevance of a document:\n- If the search terms are found multiple times within a document, the relevance of that document is higher.\n- For searches with multiple terms, documents that contain all of the terms are considered more relevant than documents that only contain some of the terms.\n- Matches of the terms in the filename field of the document, count for more than matches in the content of the document.\n\n#### Examples\n```\n{\n    \"search\": {\n        \"query\": \"cognite \\\"lorem ipsum\\\"\"\n    }\n}\n```\nThis request will return documents matching the search query, where the query behaves as described above.\n\n\n```\n{\n    \"search\": {\n        \"query\": \"cognite \\\"lorem ipsum\\\"\"\n    },\n    \"filter\": {\n        \"prefix\": {\n            \"property\": [\"externalId\"],\n            \"value\": \"1\"\n        }\n    }\n}\n```\nThis example combines a query with a filter.\nThis search request will return documents matching the search query, and where `externalId` starts with \"1\".\nThe results will be ordered by how well they match the query string.\n\n### Filtering\nFiltering is done by using a special JSON filtering language.\nIt is quite flexible and consists of a number of different \"leaf\" filters which can be combined\ntogether arbitrarily using the boolean clauses `and`, `or` and `not`.\n\nThe available leaf filters are: `equals`, `in`, `containsAny`, `containsAll`, `range`, `prefix`, `exists`, `geojsonIntersects`, `geojsonDisjoint` and `geojsonWithin`.\n\n#### Properties\nBelow is an overview of all the properties that can be filtered on, and which filters are applicable to each property.\n\n| Property                               | Type              | Applicable filters                                        |\n|----------------------------------------|-------------------|-----------------------------------------------------------|\n| `[\"id\"]`                               | integer           | equals, in, range, exists                                 |\n| `[\"externalId\"]`                       | string            | equals, in, prefix, exists                                |\n| `[\"title\"]`                            | string            | equals, in, prefix, exists                                |\n| `[\"author\"]`                           | string            | equals, in, prefix, exists                                |\n| `[\"createdTime\"]`                      | integer           | equals, in, range, exists                                 |\n| `[\"modifiedTime\"]`                     | integer           | equals, in, range, exists                                 |\n| `[\"lastIndexedTime\"]`                  | integer           | equals, in, range, exists                                 |\n| `[\"mimeType\"]`                         | string            | equals, in, prefix, exists                                |\n| `[\"extension\"]`                        | string            | equals, in, prefix, exists                                |\n| `[\"pageCount\"]`                        | integer           | equals, in, range, exists                                 |\n| `[\"type\"]`                             | string            | equals, in, prefix, exists                                |\n| `[\"geoLocation\"]`                      | geometry object   | geojsonIntersects, geojsonDisjoint, geojsonWithin, exists |\n| `[\"language\"]`                         | string            | equals, in, prefix, exists                                |\n| `[\"assetIds\"]`                         | array of integers | containsAny, containsAll, exists, inAssetSubtree          |\n| `[\"assetExternalIds\"]`                 | array of strings  | containsAny, containsAll, exists, inAssetSubtree          |\n| `[\"labels\"]`                           | array of Labels   | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"name\"]`               | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"mimeType\"]`           | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"size\"]`               | integer           | equals, in, range, exists                                 |\n| `[\"sourceFile\", \"source\"]`             | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"directory\"]`          | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"assetIds\"]`           | array of integers | containsAny, containsAll, exists, inAssetSubtree          |\n| `[\"sourceFile\", \"assetExternalIds\"]`   | array of strings  | containsAny, containsAll, exists, inAssetSubtree          |\n| `[\"sourceFile\", \"datasetId\"]`          | integer           | equals, in, range, exists                                 |\n| `[\"sourceFile\", \"securityCategories\"]` | array of integers | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"geoLocation\"]`        | geometry object   | geojsonIntersects, geojsonDisjoint, geojsonWithin, exists |\n| `[\"sourceFile\", \"labels\"]`             | array of Labels   | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"metadata\", <key>]`    | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"metadata\"]`           | string            | equals, in, prefix, exists<br><br>This is a special filter field that targets all metadata values. <br>An alternative to creating a filter for each key in the metadata field. |\n\nAll filtering is done in a case-sensitive manner against the resource data.\nNote that some properties holds normalized data. E.g. a document with source file name\n`FILE.PDF` will have the `extension` property be `pdf`. A filter for extension equals\nto `PDF` will not match this document, as it must be specified as `pdf`.\n\n#### Example\n```\n{\n    \"filter\": {\n        \"and\": [\n            {\n                \"or\": [\n                    {\n                        \"equals\": {\n                            \"property\": [\"type\"],\n                            \"value\": \"PDF\"\n                        }\n                    },\n                    {\n                        \"prefix\": {\n                            \"property\": [\"externalId\"],\n                            \"value\": \"hello\"\n                        }\n                    }\n                ]\n            },\n            {\n                \"range\": {\n                    \"property\": [\"createdTime\"],\n                    \"lte\": 1519862400000\n                }\n            },\n            {\n                \"not\": {\n                    \"in\": {\n                        \"property\": [\"sourceFile\", \"name\"],\n                        \"values\": [\"My Document.doc\", \"My Other Document.docx\"]\n                    }\n                }\n            }\n        ]\n    }\n}\n```\n\n### Aggregations\n> Deprecated: use the aggregates endpoint for aggregations instead.\n\nAggregations can help provide useful information about your search results and about your whole data set.\nThey can help answer questions such as *\"How many documents are there in total?\"* or *\"How many PDF documents matches my current query?\"*\n\nThe Documents API only supports one type of aggregation at the moment; the `count` aggregation.\nThe `count` aggregation can give you a count of how many documents exist for the different values of a given property.\nIf no property is given, the `count` aggregation gives you the total count of documents.\nMore aggregation types may be added in the future.\n\n### Highlights\nWhen you enable highlights for your search query, the response contains an additional highlight field for each\nsearch hit that includes the highlighted fragments for your query matches. However, this is a costly operation and we therefore\nlimit the results to 20 documents.\n\n#### Properties\nBelow is an overview of all the properties that can be aggregated on, and which aggregate is applicable to each property.\n\n| Property                     | Applicable aggregation |\n|------------------------------|------------------------|\n| `[\"mimeType\"]`               | count                  |\n| `[\"pageCount\"]`              | count                  |\n| `[\"type\"]`                   | count                  |\n| `[\"extension\"]`              | count                  |\n| `[\"author\"]`                 | count                  |\n| `[\"language\"]`               | count                  |\n| `[\"sourceFile\", \"source\"]`   | count                  |\n| `[\"sourceFile\", \"mimeType\"]` | count                  |\n| `[\"sourceFile\", \"labels\"]`   | count                  |\n\n#### Example\n```\n{\n    \"aggregates\": [\n        {\n            \"name\": \"countPerType\",\n            \"aggregate\": \"count\",\n            \"groupBy\": [\n                {\n                    \"property\": [\"type\"]\n                }\n            ]\n        }\n    ]\n}\n```\n\n### Sorting\nSearch results are by default ordered by relevance, meaning how well they match the given query string.\nHowever, it is possible to specify a different property to sort by.\nSorting can be ascending or descending. The default sort order is ascending, in case none is specified.\n\n#### Properties\nBelow is an overview of all the properties that can be sorted on.\n\n| Property                        |\n|---------------------------------|\n| `[\"id\"]`                        |\n| `[\"externalId\"]`                |\n| `[\"mimeType\"]`                  |\n| `[\"extension\"]`                 |\n| `[\"pageCount\"]`                 |\n| `[\"author\"]`                    |\n| `[\"title\"]`                     |\n| `[\"language\"]`                  |\n| `[\"type\"]`                      |\n| `[\"createdTime\"]`               |\n| `[\"modifiedTime\"]`              |\n| `[\"lastIndexedTime\"]`           |\n| `[\"sourceFile\", \"name\"]`        |\n| `[\"sourceFile\", \"mimeType\"]`    |\n| `[\"sourceFile\", \"size\"]`        |\n| `[\"sourceFile\", \"source\"]`      |\n| `[\"sourceFile\", \"datasetId\"]`   |\n| `[\"sourceFile\", \"metadata\", *]` |\n\n#### Example\n```\n{\n    \"sort\": [\n        {\n            \"property\": [\"createdTime\"],\n            \"order\": \"asc\",\n        }\n    ]\n}\n```",
         "operationId": "documentsSearch",
         "parameters": [
           {
@@ -18387,7 +18428,8 @@
         "description": "Get datapoints up to, but excluding, this point in time. Same format as for start. Note that when using aggregates, the end will be rounded up such that the last aggregate represents a full aggregation interval containing the original end, where the interval is the granularity unit times the granularity multiplier. For granularity 2d, the aggregation interval is 2 days, if end was originally 3 days after the start, it will be rounded to 4 days after the start."
       },
       "CountAggregateResult": {
-        "description": "Count aggregation result.",
+        "description": "Common aggregate structure to represent aggregate result which have one count for filter resultset (Documents Count, Property Cardinality, etc).",
+        "title": "CountResult",
         "type": "object",
         "required": [
           "items"
@@ -18432,6 +18474,23 @@
           }
         }
       },
+      "StringValues": {
+        "description": "An array of unique string values in the property.",
+        "type": "object",
+        "required": [
+          "values"
+        ],
+        "properties": {
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "IntegerValue": {
         "description": "A unique integer value in the field.",
         "type": "object",
@@ -18445,8 +18504,27 @@
           }
         }
       },
+      "IntegerValues": {
+        "description": "An array of unique integer values in the property.",
+        "type": "object",
+        "required": [
+          "values"
+        ],
+        "properties": {
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
       "ValuesAggregateResult": {
-        "description": "Values aggregation result.",
+        "description": "Common aggregate structure to represent aggregate result which have count buckets for filter resultset (Unique Property Values, Not Null Document Properties, etc).",
+        "title": "BucketsResult",
         "type": "object",
         "required": [
           "items"
@@ -18670,7 +18748,7 @@
         ],
         "properties": {
           "matchAll": {
-            "description": "Matches all items.",
+            "description": "All the listed items must match the clause.",
             "type": "object"
           }
         }
@@ -18932,20 +19010,6 @@
           }
         ]
       },
-      "AssetAggregate": {
-        "description": "Aggregation group of assets",
-        "type": "object",
-        "required": [
-          "count"
-        ],
-        "properties": {
-          "count": {
-            "type": "integer",
-            "description": "Size of the aggregation group",
-            "format": "int64"
-          }
-        }
-      },
       "AggregateResultItem": {
         "description": "Aggregated metrics of the asset",
         "type": "object",
@@ -18981,22 +19045,6 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Asset"
-            }
-          }
-        }
-      },
-      "DataAssetAggregate": {
-        "type": "object",
-        "required": [
-          "items"
-        ],
-        "properties": {
-          "items": {
-            "type": "array",
-            "minItems": 1,
-            "maxItems": 1,
-            "items": {
-              "$ref": "#/components/schemas/AssetAggregate"
             }
           }
         }
@@ -19757,57 +19805,57 @@
         "description": "An event represents something that happened at a given interval in time, e.g a failure, a work order etc."
       },
       "EventAggregateRequest": {
-        "description": "Aggregation request of events. Filters exact field matching or timestamp ranges inclusive min and max. Default aggregation is `count`.",
+        "description": "Aggregation request of events. Filters behave the same way as for the `list` endpoint. Default aggregation is `count`.",
         "type": "object",
         "oneOf": [
           {
-            "$ref": "#/components/schemas/UniqueValuesAggregate"
+            "$ref": "#/components/schemas/EventCountAggregate"
           },
           {
-            "$ref": "#/components/schemas/CountAggregate"
+            "$ref": "#/components/schemas/UniqueValues"
           }
         ]
       },
-      "CountAggregate": {
-        "description": "Default aggregation to count.",
+      "EventCountAggregate": {
         "type": "object",
+        "title": "Count",
+        "description": "Request aggregate to count number of Events matching filters. Default aggregate for the endpoint.",
         "properties": {
           "filter": {
             "$ref": "#/components/schemas/EventFilter"
           }
         }
       },
-      "UniqueValuesAggregate": {
+      "UniqueValues": {
         "allOf": [
-          {},
-          {
-            "$ref": "#/components/schemas/LegacyAggregationFields"
-          },
           {
             "type": "object",
-            "description": "Request aggregation on a specific field.",
+            "title": "UniqueValues",
+            "description": "Request unique value backets aggregate on a specific Event property.",
             "required": [
               "aggregate"
             ],
             "properties": {
-              "filter": {
-                "$ref": "#/components/schemas/EventFilter"
-              },
               "aggregate": {
-                "description": "Type of aggregation to apply.\n`uniqueValues` - Get unique values (upto max 1000) in the specified field ordered by frequency.\n",
+                "description": "Type of aggregation to apply.\n`uniqueValues` - Get unique values (upto max 1000) in the specified property ordered by frequency.\n",
                 "type": "string",
                 "enum": [
                   "uniqueValues"
                 ]
+              },
+              "filter": {
+                "$ref": "#/components/schemas/EventFilter"
               }
             }
+          },
+          {},
+          {
+            "$ref": "#/components/schemas/LegacyAggregationFields"
           }
         ]
       },
       "LegacyAggregationFields": {
         "type": "object",
-        "title": "legacy",
-        "deprecated": true,
         "required": [
           "fields"
         ],
@@ -22624,6 +22672,48 @@
         },
         "description": "Request body for the updateModelRevisionThumbnail endpoint."
       },
+      "ProjectAssetMapping3DList": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Node3DAssetMapping"
+            }
+          }
+        }
+      },
+      "Node3DAssetMapping": {
+        "type": "object",
+        "required": [
+          "modelId",
+          "revisionId",
+          "nodeId"
+        ],
+        "properties": {
+          "modelId": {
+            "type": "integer",
+            "description": "The ID of the associated model",
+            "format": "int64",
+            "example": 3001
+          },
+          "revisionId": {
+            "type": "integer",
+            "description": "The ID of the associated revision",
+            "format": "int64",
+            "example": 3001
+          },
+          "nodeId": {
+            "type": "integer",
+            "description": "The ID of the node.",
+            "format": "int64",
+            "example": 1003
+          }
+        }
+      },
       "TimeSeriesResponse": {
         "$ref": "#/components/schemas/DataGetTimeSeriesMetadataDTO"
       },
@@ -23192,8 +23282,8 @@
             "properties": {
               "timestamp": {
                 "minimum": -2208988800000,
-                "maximum": 2556143999999,
-                "description": "The timestamp in milliseconds since the epoch (Jan 1, 1970). Must be between 1900 and 2050, inclusive"
+                "maximum": 4102444799999,
+                "description": "The timestamp in milliseconds since the Epoch (Jan 1, 1970). The timestamp must be from a year between 1900 and 2099, inclusive. Use a negative number for timestamps before 1970."
               },
               "value": {
                 "type": "number",
@@ -23211,8 +23301,8 @@
             "properties": {
               "timestamp": {
                 "minimum": -2208988800000,
-                "maximum": 2556143999999,
-                "description": "The timestamp in milliseconds since the epoch (Jan 1, 1970). Must be between 1900 and 2050, inclusive"
+                "maximum": 4102444799999,
+                "description": "The timestamp in milliseconds since the Epoch (Jan 1, 1970). The timestamp must be from a year between 1900 and 2099, inclusive. Use a negative number for timestamps before 1970."
               },
               "value": {
                 "maxLength": 255,
@@ -32001,6 +32091,9 @@
           },
           {
             "$ref": "#/components/schemas/DocumentFilterGeoJsonWithin"
+          },
+          {
+            "$ref": "#/components/schemas/DocumentFilterInAssetSubtree"
           }
         ]
       },
@@ -32348,6 +32441,40 @@
               "geometry": {
                 "$ref": "#/components/schemas/DocumentGeoJsonGeometry"
               }
+            }
+          }
+        }
+      },
+      "DocumentFilterInAssetSubtree": {
+        "type": "object",
+        "title": "inAssetSubtree",
+        "required": [
+          "inAssetSubtree"
+        ],
+        "properties": {
+          "inAssetSubtree": {
+            "required": [
+              "property",
+              "values"
+            ],
+            "description": "Matches items where the property contains one or more assets in a subtree rooted at any of the given values",
+            "type": "object",
+            "properties": {
+              "property": {
+                "$ref": "#/components/schemas/DocumentFilterProperty"
+              },
+              "values": {
+                "$ref": "#/components/schemas/DocumentFilterValueList"
+              }
+            },
+            "example": {
+              "property": [
+                "assetIds"
+              ],
+              "values": [
+                51276,
+                94287
+              ]
             }
           }
         }
@@ -39091,6 +39218,16 @@
           "format": "int64"
         }
       },
+      "AssetId": {
+        "name": "assetId",
+        "in": "path",
+        "description": "Asset ID.",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
       "modelId": {
         "in": "path",
         "name": "modelId",
@@ -39311,16 +39448,6 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/DataAsset"
-            }
-          }
-        }
-      },
-      "AssetAggregateResponse": {
-        "description": "Response with asset aggregates.",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/DataAssetAggregate"
             }
           }
         }
@@ -41163,7 +41290,7 @@
     },
     {
       "name": "Time series",
-      "description": "A time series consists of a sequence of data points connected to a single asset. \n\nFor example: A water pump asset can have a temperature time series that records a data point in units of °C every second. \n\nA single asset can have several time series. The water pump could have additional time series measuring pressure within the pump, rpm, flow volume, power consumption, and more.\n\nTime series store data points as either number or strings. This is controlled by the is_string flag on the time series object. Numerical data points can be aggregated before they are returned from a query (e.g., to find the average temperature for a day). String data points, on the other hand, cannot be aggregated by CDF, but can store arbitrary information like states (e.g. “open”/”closed”) or more complex information (JSON).\n\nCognite stores discrete data points, but the underlying process measured by the data points can vary continuously. When interpolating between data points, we can either assume that each value stays the same until the next measurement, or that it linearly changes between the two measurements. This is controlled by the is_step flag on the time series object. For example, if we estimate the average over a time containing two data points, the average will either be close to the first (is step) or close to the mean of the two (not is step).\n\nA data point stores a single piece of information, a number or a string, associated with a specific time. Data points are identified by their timestamps, measured in milliseconds since the unix epoch -- 00:00, January 1st, 1970. Timestamps are in the range from 00:00, January 1st, 1900 to 23:59, December 31st, 2050. Negative timestamps are used to define dates before 1970. Milliseconds is the finest time resolution supported by CDF i.e. fractional milliseconds are not supported. Leap seconds are not counted.\n\nNumerical data points can be aggregated before they are retrieved from CDF. This allows for faster queries by reducing the amount of data transferred. You can aggregate data points by specifying one or more aggregates (e.g. average, minimum, maximum) as well as the time granularity over which the aggregates should be applied (e.g. “1h” for one hour).\n\nAggregates are aligned to the start time modulo the granularity unit. For example, if you ask for daily average temperatures since Monday afternoon last week, the first aggregated data point will contain averages for Monday, the second for Tuesday, etc. Determining aggregate alignment without considering data point timestamps allows CDF to pre-calculate aggregates (e.g. to quickly return daily average temperatures for a year). As a consequence, aggregating over 60 minutes can return a different result that aggregating over 1 hour because the two queries will be aligned differently. \n\nAsset references obtained from a time series - through its asset id - may be invalid, simply by the non-transactional nature of HTTP. They are maintained in an eventual consistent manner."
+      "description": "A time series consists of a sequence of data points connected to a single asset. \n\nFor example: A water pump asset can have a temperature time series that records a data point in units of °C every second. \n\nA single asset can have several time series. The water pump could have additional time series measuring pressure within the pump, rpm, flow volume, power consumption, and more.\n\nTime series store data points as either number or strings. This is controlled by the is_string flag on the time series object. Numerical data points can be aggregated before they are returned from a query (e.g., to find the average temperature for a day). String data points, on the other hand, cannot be aggregated by CDF, but can store arbitrary information like states (e.g. “open”/”closed”) or more complex information (JSON).\n\nCognite stores discrete data points, but the underlying process measured by the data points can vary continuously. When interpolating between data points, we can either assume that each value stays the same until the next measurement, or that it linearly changes between the two measurements. This is controlled by the is_step flag on the time series object. For example, if we estimate the average over a time containing two data points, the average will either be close to the first (is step) or close to the mean of the two (not is step).\n\nA data point stores a single piece of information, a number or a string, associated with a specific time. Data points are identified by their timestamps, measured in milliseconds since the unix epoch -- 00:00:00.000, January 1st, 1970. The time series service accepts timestamps in the range from 00:00:00.000, January 1st, 1900 through 23:59:59.999, December 31st, 2099 (in other words, every millisecond in the two centuries from 1900 to but not including 2100). Negative timestamps are used to define dates before 1970. Milliseconds is the finest time resolution supported by CDF, i.e. fractional milliseconds are not supported. Leap seconds are not counted.\n\nNumerical data points can be aggregated before they are retrieved from CDF. This allows for faster queries by reducing the amount of data transferred. You can aggregate data points by specifying one or more aggregates (e.g. average, minimum, maximum) as well as the time granularity over which the aggregates should be applied (e.g. “1h” for one hour).\n\nAggregates are aligned to the start time modulo the granularity unit. For example, if you ask for daily average temperatures since Monday afternoon last week, the first aggregated data point will contain averages for Monday, the second for Tuesday, etc. Determining aggregate alignment without considering data point timestamps allows CDF to pre-calculate aggregates (e.g. to quickly return daily average temperatures for a year). As a consequence, aggregating over 60 minutes can return a different result that aggregating over 1 hour because the two queries will be aligned differently. \n\nAsset references obtained from a time series - through its asset id - may be invalid, simply by the non-transactional nature of HTTP. They are maintained in an eventual consistent manner."
     },
     {
       "name": "Synthetic Time Series",

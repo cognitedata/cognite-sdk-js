@@ -46,6 +46,7 @@ export {
   DocumentFilterGeoJsonIntersects,
   DocumentFilterGeoJsonWithin,
   DocumentFilterIn,
+  DocumentFilterInAssetSubtree,
   DocumentFilterLeaf,
   DocumentFilterPrefix,
   DocumentFilterProperty,
