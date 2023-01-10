@@ -156,7 +156,7 @@ jobs:
         node-version: [14, 16]
 
     env:
-      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_PROJECT: ${{secrets.COGNITE_OIDC_PROJECT}}
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
       COGNITE_CLIENT_SECRET: ${{secrets.COGNITE_CLIENT_SECRET}}
       COGNITE_CLIENT_ID: ${{secrets.COGNITE_CLIENT_ID}}
