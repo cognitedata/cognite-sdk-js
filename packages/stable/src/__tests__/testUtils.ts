@@ -43,7 +43,7 @@ function setupLoggedInClient() {
     // apiKeyMode: true,
     getToken: () =>
       CCA.acquireTokenByClientCredential({ scopes, authority }).then(
-        (response) => JSON.stringify(response?.accessToken)
+        (response) => response?.accessToken as string
       ),
     // getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
   });
