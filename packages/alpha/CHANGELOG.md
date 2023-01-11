@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.4.2...@cognite/sdk-alpha@0.5.0) (2023-01-11)
+
+
+### Features
+
+* **alpha:** monitoring task listing and model change ([#932](https://github.com/cognitedata/cognite-sdk-js/issues/932)) ([c415feb](https://github.com/cognitedata/cognite-sdk-js/commit/c415feb360b2848fe38139eb909ef773a460b2e3))
+
+
+
+
+
 ## [0.4.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.4.1...@cognite/sdk-alpha@0.4.2) (2023-01-09)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
