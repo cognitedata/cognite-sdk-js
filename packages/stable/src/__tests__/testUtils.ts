@@ -25,28 +25,31 @@ function setupClientWithNonExistingApiKey() {
   });
 }
 
-function setupLoggedInClient() {
+async function setupLoggedInClient() {
+  const authority = `https://login.microsoftonline.com/${process.env.COGNITE_AZURE_TENANT_ID}`;
+
   const CCA = new ConfidentialClientApplication({
     auth: {
       clientId: process.env.COGNITE_CLIENT_ID as string,
       clientSecret: process.env.COGNITE_CLIENT_SECRET as string,
+      authority,
     },
     // cacheOptions, we can later add them to read from msal-common package
   });
   const scopes = [`${Constants.BASE_URL}/.default`, 'offline_access'];
-  const authority = `https://login.microsoftonline.com/${process.env.COGNITE_AZURE_TENANT_ID}`;
-
-  return new CogniteClient({
+  const client = new CogniteClient({
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
     baseUrl: Constants.BASE_URL,
     // apiKeyMode: true,
     getToken: () =>
-      CCA.acquireTokenByClientCredential({ scopes, authority }).then(
+      CCA.acquireTokenByClientCredential({ scopes }).then(
         (response) => response?.accessToken as string
       ),
     // getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
   });
+  await client.authenticate();
+  return client;
 }
 
 function setupMockableClient() {
