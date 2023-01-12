@@ -25,7 +25,7 @@ function setupClientWithNonExistingApiKey() {
   });
 }
 
-async function setupLoggedInClient() {
+function setupLoggedInClient() {
   const authority = `https://login.microsoftonline.com/${process.env.COGNITE_AZURE_TENANT_ID}`;
 
   const CCA = new ConfidentialClientApplication({
@@ -48,7 +48,8 @@ async function setupLoggedInClient() {
       ),
     // getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
   });
-  await client.authenticate();
+
+  client.authenticate();
   return client;
 }
 
