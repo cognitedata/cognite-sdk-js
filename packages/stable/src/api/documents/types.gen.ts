@@ -203,7 +203,7 @@ export interface DocumentFilterInAssetSubtree {
 /**
  * Leaf filter
  */
-export type DocumentFilterLeaf = DocumentFilterEquals | DocumentFilterIn | DocumentFilterContainsAny | DocumentFilterContainsAll | DocumentFilterRange | DocumentFilterPrefix | DocumentFilterExists | DocumentFilterGeoJsonIntersects | DocumentFilterGeoJsonDisjoint | DocumentFilterGeoJsonWithin | DocumentFilterInAssetSubtree;
+export type DocumentFilterLeaf = DocumentFilterEquals | DocumentFilterIn | DocumentFilterContainsAny | DocumentFilterContainsAll | DocumentFilterRange | DocumentFilterPrefix | DocumentFilterSearch | DocumentFilterExists | DocumentFilterGeoJsonIntersects | DocumentFilterGeoJsonDisjoint | DocumentFilterGeoJsonWithin | DocumentFilterInAssetSubtree;
 export interface DocumentFilterPrefix {
     /**
      * Matches items that contain a specific prefix in the provided property.
@@ -244,6 +244,16 @@ export interface DocumentFilterRange {
  * Value you wish to find in the provided property using a range clause.
  */
 export type DocumentFilterRangeValue = number;
+export interface DocumentFilterSearch {
+    /**
+     * Matches items that contains the search query.
+     * @example {"property":["content"],"value":"Report"}
+     */
+    search: {
+        property: DocumentFilterProperty;
+        value: string;
+    };
+}
 /**
  * Value you wish to find in the provided property.
  */
@@ -314,11 +324,7 @@ export interface DocumentsAggregateAllUniqueValuesItem {
 /**
  * Paginated list of all unique values for given properties.
  */
-export type DocumentsAggregateAllUniqueValuesRequest = {
-    search?: {
-        query: string;
-    };
-} & DocumentSearchFilter & {
+export type DocumentsAggregateAllUniqueValuesRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
     aggregate?: "allUniqueValues";
     properties?: {
         property: DocumentFilterProperty;
@@ -332,6 +338,31 @@ export type DocumentsAggregateAllUniqueValuesRequest = {
  */
 export interface DocumentsAggregateAllUniqueValuesResponse extends CursorAndAsyncIterator<DocumentsAggregateAllUniqueValuesItem> {
 }
+export interface DocumentsAggregateApproximateCardinalityItem {
+    /**
+     * Number of items in this aggregation group.
+     * @format int64
+     */
+    count: number;
+}
+/**
+ * Find approximate number of unique values.
+ */
+export type DocumentsAggregateApproximateCardinalityRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
+    aggregate: "approximateCardinality";
+    properties: {
+        property: DocumentFilterProperty;
+    }[];
+    limit?: number;
+    cursor?: string;
+};
+/**
+ * Response for approximateCardinality aggregate.
+ * @example {"items":[{"count":10}]}
+ */
+export interface DocumentsAggregateApproximateCardinalityResponse {
+    items: DocumentsAggregateApproximateCardinalityItem[];
+}
 export interface DocumentsAggregateCountItem {
     /**
      * Number of items in this aggregation group.
@@ -342,11 +373,7 @@ export interface DocumentsAggregateCountItem {
 /**
  * Count of documents.
  */
-export type DocumentsAggregateCountRequest = {
-    search?: {
-        query: string;
-    };
-} & DocumentSearchFilter & {
+export type DocumentsAggregateCountRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
     aggregate?: "count";
 };
 /**
@@ -356,8 +383,34 @@ export type DocumentsAggregateCountRequest = {
 export interface DocumentsAggregateCountResponse {
     items: DocumentsAggregateCountItem[];
 }
-export type DocumentsAggregateRequest = DocumentsAggregateCountRequest | DocumentsAggregateUniqueValuesRequest | DocumentsAggregateAllUniqueValuesRequest;
-export type DocumentsAggregateResponse = DocumentsAggregateCountResponse | DocumentsAggregateUniqueValuesResponse | DocumentsAggregateAllUniqueValuesResponse;
+export type DocumentsAggregateRequest = DocumentsAggregateCountRequest | DocumentsAggregateUniqueValuesRequest | DocumentsAggregateUniquePropertiesRequest | DocumentsAggregateAllUniqueValuesRequest | DocumentsAggregateApproximateCardinalityRequest;
+export type DocumentsAggregateResponse = DocumentsAggregateCountResponse | DocumentsAggregateUniqueValuesResponse | DocumentsAggregateUniquePropertiesResponse | DocumentsAggregateAllUniqueValuesResponse | DocumentsAggregateApproximateCardinalityResponse;
+export interface DocumentsAggregateUniquePropertiesItem {
+    /**
+     * Number of properties with this name
+     * @format int64
+     */
+    count: number;
+    /** A property name */
+    values: string[];
+}
+/**
+ * Find all metadata property names
+ */
+export type DocumentsAggregateUniquePropertiesRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
+    aggregate: "uniqueProperties";
+    properties: {
+        property: DocumentFilterProperty;
+    }[];
+    limit?: number;
+    cursor?: string;
+};
+/**
+ * Response for the uniqueProperties aggregate.
+ * @example {"items":[{"count":4,"values":["hello"]},{"count":33,"values":["world"]}]}
+ */
+export interface DocumentsAggregateUniquePropertiesResponse extends CursorAndAsyncIterator<DocumentsAggregateUniquePropertiesItem> {
+}
 export interface DocumentsAggregateUniqueValuesItem {
     /**
      * Number of items in this aggregation group.
@@ -370,11 +423,7 @@ export interface DocumentsAggregateUniqueValuesItem {
 /**
  * Top unique values for given properties.
  */
-export type DocumentsAggregateUniqueValuesRequest = {
-    search?: {
-        query: string;
-    };
-} & DocumentSearchFilter & {
+export type DocumentsAggregateUniqueValuesRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
     aggregate?: "uniqueValues";
     properties?: {
         property: DocumentFilterProperty;
@@ -452,6 +501,11 @@ export interface DocumentSearchFilter {
      *
      */
     filter?: DocumentFilter;
+}
+export interface DocumentSearchInAggregate {
+    search?: {
+        query: string;
+    };
 }
 export interface DocumentSearchItem {
     /** Highlighted snippets from name and content fields which show where the query matches are. The matched terms will be placed inside <em> tags */
