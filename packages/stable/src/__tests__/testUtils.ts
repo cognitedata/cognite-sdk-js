@@ -27,7 +27,7 @@ function setupClientWithNonExistingApiKey() {
 
 function setupLoggedInClient() {
   const authority = `https://login.microsoftonline.com/${process.env.COGNITE_AZURE_TENANT_ID}`;
-
+  const URL = 'https://greenfield.cognitedata.com';
   const CCA = new ConfidentialClientApplication({
     auth: {
       clientId: process.env.COGNITE_CLIENT_ID as string,
@@ -36,17 +36,15 @@ function setupLoggedInClient() {
     },
     // cacheOptions, we can later add them to read from msal-common package
   });
-  const scopes = [`${Constants.BASE_URL}/.default`, 'offline_access'];
+  const scopes = [`${URL}/.default`];
   const client = new CogniteClient({
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
-    baseUrl: Constants.BASE_URL,
-    // apiKeyMode: true,
+    baseUrl: URL,
     getToken: () =>
       CCA.acquireTokenByClientCredential({ scopes }).then(
         (response) => response?.accessToken as string
       ),
-    // getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
   });
 
   client.authenticate();
