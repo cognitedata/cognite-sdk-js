@@ -1,12 +1,13 @@
 // Copyright 2020 Cognite AS
 
-import { Constants } from '@cognite/sdk-core';
 import { TestUtils } from '@cognite/sdk-core';
 import CogniteClient from '../cogniteClient';
 import { ExternalFileInfo } from '../types';
 import { ConfidentialClientApplication } from '@azure/msal-node';
 
-function setupClient(baseUrl: string = Constants.BASE_URL) {
+const BASE_URL = 'https://greenfield.cognitedata.com';
+
+function setupClient(baseUrl: string = BASE_URL) {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
     project: 'unit-test',
@@ -26,10 +27,10 @@ function setupLoggedInClient() {
     // cacheOptions, we can later add them to read from msal-common package
   });
 
-  const scopes = [`${Constants.BASE_URL}/.default`];
+  const scopes = [`${BASE_URL}/.default`];
   const client = new CogniteClient({
     appId: 'JS SDK integration tests',
-    baseUrl: Constants.BASE_URL,
+    baseUrl: BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
     getToken: () =>
       CCA.acquireTokenByClientCredential({ scopes }).then((response) => {
