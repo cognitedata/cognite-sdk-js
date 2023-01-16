@@ -11,12 +11,11 @@ import {
 
 describe('http methods - integration', () => {
   let client: CogniteClient;
-  const project = 'platypus'; //process.env.COGNITE_PROJECT as string;
+  const project = process.env.COGNITE_PROJECT as string;
   beforeAll(async () => {
     client = setupLoggedInClient();
   });
   test('post method', async () => {
-    console.log('@TESTs');
     const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
     const response = await client.post<ItemsWrapper<Asset[]>>(
       `/api/v1/projects/${project}/assets`,

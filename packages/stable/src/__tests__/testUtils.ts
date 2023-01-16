@@ -11,23 +11,12 @@ function setupClient(baseUrl: string = Constants.BASE_URL) {
     appId: 'JS SDK integration tests',
     project: 'unit-test',
     baseUrl,
-    apiKeyMode: true,
     getToken: () => Promise.resolve('not logged in'),
-  });
-}
-
-function setupClientWithNonExistingApiKey() {
-  return new CogniteClient({
-    appId: 'JS Integration test',
-    project: process.env.COGNITE_PROJECT as string,
-    apiKeyMode: true,
-    getToken: () => Promise.reject('non-existing-api-key'),
   });
 }
 
 function setupLoggedInClient() {
   const authority = `https://login.microsoftonline.com/${process.env.COGNITE_AZURE_TENANT_ID}`;
-  const URL = 'https://greenfield.cognitedata.com';
   const CCA = new ConfidentialClientApplication({
     auth: {
       clientId: process.env.COGNITE_CLIENT_ID as string,
@@ -36,28 +25,26 @@ function setupLoggedInClient() {
     },
     // cacheOptions, we can later add them to read from msal-common package
   });
-  const scopes = [`${URL}/.default`];
+
+  const scopes = [`${Constants.BASE_URL}/.default`];
   const client = new CogniteClient({
     appId: 'JS SDK integration tests',
+    baseUrl: Constants.BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
-    baseUrl: URL,
     getToken: () =>
-      CCA.acquireTokenByClientCredential({ scopes }).then(
-        (response) => response?.accessToken as string
-      ),
+      CCA.acquireTokenByClientCredential({ scopes }).then((response) => {
+        return response?.accessToken as string;
+      }),
   });
-
-  client.authenticate();
   return client;
 }
 
 function setupMockableClient() {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
-    project: process.env.COGNITE_PROJECT as string,
+    project: 'platypus',
     baseUrl: mockBaseUrl,
-    apiKeyMode: true,
-    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
+    getToken: () => Promise.resolve('test accessToken'),
   });
 }
 
@@ -95,7 +82,6 @@ export const {
 
 export {
   setupClient,
-  setupClientWithNonExistingApiKey,
   setupLoggedInClient,
   setupMockableClient,
   getFileCreateArgs,
