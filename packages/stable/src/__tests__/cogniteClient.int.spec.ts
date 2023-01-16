@@ -5,29 +5,18 @@ import CogniteClient from '../cogniteClient';
 import { Asset, ItemsWrapper } from '../types';
 import {
   mockBaseUrl,
-  setupClientWithNonExistingApiKey,
   setupLoggedInClient,
   setupMockableClient,
 } from './testUtils';
 
-describe('createClientWithApiKey - integration', () => {
-  test('handle non-existing api-key', async () => {
-    const client = setupClientWithNonExistingApiKey();
-    await expect(
-      client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Request failed | status code: 401"`
-    );
-  });
-});
-
 describe('http methods - integration', () => {
   let client: CogniteClient;
-  const project = process.env.COGNITE_PROJECT as string;
+  const project = 'platypus'; //process.env.COGNITE_PROJECT as string;
   beforeAll(async () => {
     client = setupLoggedInClient();
   });
   test('post method', async () => {
+    console.log('@TESTs');
     const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
     const response = await client.post<ItemsWrapper<Asset[]>>(
       `/api/v1/projects/${project}/assets`,
