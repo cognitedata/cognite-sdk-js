@@ -40,7 +40,6 @@ describe('api endpoints smoke test', () => {
     await Promise.all(
       [
         client.assets,
-        client.apiKeys,
         client.assets,
         client.datapoints,
         client.events,
@@ -53,7 +52,6 @@ describe('api endpoints smoke test', () => {
         client.projects,
         client.raw,
         client.securityCategories,
-        client.serviceAccounts,
         client.timeseries,
         client.viewer3D,
       ].map(callApi)
