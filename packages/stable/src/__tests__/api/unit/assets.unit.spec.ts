@@ -6,11 +6,11 @@ import {
   promiseEachInSequence,
 } from '@cognite/sdk-core';
 import nock from 'nock';
-import { enrichAssetsWithTheirParents } from '../../api/assets/assetUtils';
-import CogniteClient from '../../cogniteClient';
-import { ExternalAssetItem } from '../../types';
-import { setupMockableClient } from '../testUtils';
-import { mockBaseUrl } from '../testUtils';
+import { enrichAssetsWithTheirParents } from '../../../api/assets/assetUtils';
+import CogniteClient from '../../../cogniteClient';
+import { ExternalAssetItem } from '../../../types';
+import { setupMockableClient } from '../../testUtils';
+import { mockBaseUrl } from '../../testUtils';
 
 describe('Assets unit test', () => {
   let client: CogniteClient;

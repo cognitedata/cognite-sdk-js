@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
+import CogniteClient from '../../../cogniteClient';
 import {
   Model3D,
   Node3D,
@@ -10,13 +10,13 @@ import {
   RevealSector3D,
   Revision3D,
   UnrealRevision3D,
-} from '../../types';
+} from '../../../types';
 import {
   mockBaseUrl,
   randomInt,
   setupMockableClient,
   string2arrayBuffer,
-} from '../testUtils';
+} from '../../testUtils';
 import { DateParser } from '@cognite/sdk-core';
 
 describe('3D mocked', () => {

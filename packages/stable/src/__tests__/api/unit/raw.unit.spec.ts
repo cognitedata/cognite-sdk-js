@@ -1,8 +1,8 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
-import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import CogniteClient from '../../../cogniteClient';
+import { mockBaseUrl, setupMockableClient } from '../../testUtils';
 
 describe('raw unit tests', () => {
   let client: CogniteClient;

@@ -1,8 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../cogniteClient';
-import { Asset, ItemsWrapper } from '../types';
-import { setupLoggedInClient } from './testUtils';
+import CogniteClient from '../../cogniteClient';
+import { Asset, ItemsWrapper } from '../../types';
+import { setupLoggedInClient } from '../testUtils';
 
 describe('http methods - integration', () => {
   let client: CogniteClient;
