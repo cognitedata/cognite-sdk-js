@@ -240,6 +240,40 @@ describeIfCondition(
     );
 
     test(
+      'filter 3d nodes on names',
+      async (done) => {
+        const namesFilter: Filter3DNodesQuery = {
+          filter: {
+            names: ["RootNode"],
+          },
+        };
+        nodes3D = await client.revisions3D
+          .filter3DNodes(model.id, revisions[0].id, namesFilter)
+          .autoPagingToArray();
+        expect(nodes3D).toHaveLength(1);
+        done();
+      },
+      5 * 60 * 1000
+    );
+
+    test(
+      'filter 3d nodes on bogus names',
+      async (done) => {
+        const namesFilter: Filter3DNodesQuery = {
+          filter: {
+            names: ["Totally-Not-A-Valid-Name", "Another-Weird-Name"],
+          },
+        };
+        nodes3D = await client.revisions3D
+          .filter3DNodes(model.id, revisions[0].id, namesFilter)
+          .autoPagingToArray();
+        expect(nodes3D.length).toHaveLength(0);
+        done();
+      },
+      5 * 60 * 1000
+    );
+
+    test(
       'filter 3d nodes (non-existent properties)',
       async (done) => {
         const propertiesFilter: Filter3DNodesQuery = {
