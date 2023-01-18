@@ -157,10 +157,11 @@ jobs:
 
     env:
       COGNITE_PROJECT: platypus
-      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
-      COGNITE_CLIENT_SECRET: ${{secrets.COGNITE_CLIENT_SECRET}}
-      COGNITE_CLIENT_ID: ${{secrets.COGNITE_CLIENT_ID}}
-      COGNITE_AZURE_TENANT_ID: ${{secrets.COGNITE_AZURE_TENANT_ID}}
+      COGNITE_CREDENTIALS: ${{ secrets.COGNITE_CREDENTIALS }}
+      COGNITE_CLIENT_SECRET: ${{ secrets.COGNITE_CLIENT_SECRET }}
+      COGNITE_CLIENT_ID: ${{ secrets.COGNITE_CLIENT_ID }}
+      COGNITE_AZURE_TENANT_ID: ${{ secrets.COGNITE_AZURE_TENANT_ID }}
+
     steps:
       - uses: actions/checkout@v2
         with:
