@@ -244,7 +244,7 @@ describeIfCondition(
       async (done) => {
         const namesFilter: Filter3DNodesQuery = {
           filter: {
-            names: ["RootNode"],
+            names: ['RootNode'],
           },
         };
         nodes3D = await client.revisions3D
@@ -261,7 +261,7 @@ describeIfCondition(
       async (done) => {
         const namesFilter: Filter3DNodesQuery = {
           filter: {
-            names: ["Totally-Not-A-Valid-Name", "Another-Weird-Name"],
+            names: ['Totally-Not-A-Valid-Name', 'Another-Weird-Name'],
           },
         };
         nodes3D = await client.revisions3D

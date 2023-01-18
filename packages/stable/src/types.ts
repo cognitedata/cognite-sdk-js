@@ -1481,7 +1481,7 @@ export interface Filter3DNodesQuery extends FilterQuery {
   /**
    * List filter
    */
-  filter: Filter3DNodesByProperty | Filter3DNodesByNames
+  filter: Filter3DNodesByProperty | Filter3DNodesByNames;
   /**
    * Partition specifier of the form "n/m". It will return the n'th (1-indexed) part of the result divided into m parts.
    */
