@@ -37,6 +37,13 @@ function setupLoggedInClient() {
         return response?.accessToken as string;
       }),
   });
+  console.log(
+    '@ENVs',
+    process.env.COGNITE_AZURE_TENANT_ID?.substring(0, 5),
+    process.env.COGNITE_CLIENT_ID?.substring(0, 5),
+    process.env.COGNITE_CLIENT_SECRET?.substring(0, 5),
+    process.env.COGNITE_PROJECT
+  );
   return client;
 }
 
