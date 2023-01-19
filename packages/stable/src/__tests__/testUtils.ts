@@ -3,7 +3,7 @@
 import { TestUtils } from '@cognite/sdk-core';
 import CogniteClient from '../cogniteClient';
 import { ExternalFileInfo } from '../types';
-import { ConfidentialClientApplication } from '@azure/msal-node';
+import { login } from './login';
 
 const BASE_URL = 'https://greenfield.cognitedata.com';
 
@@ -17,31 +17,14 @@ function setupClient(baseUrl: string = BASE_URL) {
 }
 
 function setupLoggedInClient() {
-  const authority = `https://login.microsoftonline.com/${process.env.COGNITE_AZURE_TENANT_ID}`;
-  const CCA = new ConfidentialClientApplication({
-    auth: {
-      clientId: process.env.COGNITE_CLIENT_ID as string,
-      clientSecret: process.env.COGNITE_CLIENT_SECRET as string,
-      knownAuthorities: [authority],
-      authority,
-    },
-    // cacheOptions, we can later add them to read from msal-common package
-  });
-
-  const scopes = [`${BASE_URL}/.default`];
   const client = new CogniteClient({
     appId: 'JS SDK integration tests',
     baseUrl: BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
-    //@ts-ignore
     getToken: () =>
-      CCA.acquireTokenByClientCredential({ scopes })
-        .then((response) => {
-          return response?.accessToken as string;
-        })
-        .catch((error) => {
-          console.error(error);
-        }),
+      login().then((account) => {
+        return account.access_token;
+      }),
   });
   return client;
 }
