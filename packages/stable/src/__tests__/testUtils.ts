@@ -32,10 +32,15 @@ function setupLoggedInClient() {
     appId: 'JS SDK integration tests',
     baseUrl: BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
+    //@ts-ignore
     getToken: () =>
-      CCA.acquireTokenByClientCredential({ scopes }).then((response) => {
-        return response?.accessToken as string;
-      }),
+      CCA.acquireTokenByClientCredential({ scopes })
+        .then((response) => {
+          return response?.accessToken as string;
+        })
+        .catch((error) => {
+          console.error(error);
+        }),
   });
   console.log(
     '@ENVs',
