@@ -22,7 +22,7 @@ function setupLoggedInClient() {
     auth: {
       clientId: process.env.COGNITE_CLIENT_ID as string,
       clientSecret: process.env.COGNITE_CLIENT_SECRET as string,
-      knownAuthorities: [],
+      knownAuthorities: [authority],
       authority,
     },
     // cacheOptions, we can later add them to read from msal-common package
