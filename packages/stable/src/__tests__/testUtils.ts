@@ -22,6 +22,7 @@ function setupLoggedInClient() {
     auth: {
       clientId: process.env.COGNITE_CLIENT_ID as string,
       clientSecret: process.env.COGNITE_CLIENT_SECRET as string,
+      knownAuthorities: ['https://login.microsoftonline.com'],
       authority,
     },
     // cacheOptions, we can later add them to read from msal-common package
@@ -42,13 +43,6 @@ function setupLoggedInClient() {
           console.error(error);
         }),
   });
-  console.log(
-    '@ENVs',
-    process.env.COGNITE_AZURE_TENANT_ID?.substring(0, 5),
-    process.env.COGNITE_CLIENT_ID?.substring(0, 5),
-    process.env.COGNITE_CLIENT_SECRET?.substring(0, 5),
-    process.env.COGNITE_PROJECT
-  );
   return client;
 }
 
