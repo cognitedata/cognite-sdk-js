@@ -8,7 +8,7 @@ import {
   setupLoggedInClient,
 } from '../testUtils';
 
-const testDataSetId = 7268396229058705;
+const testDataSetId = 2128956100044005;
 
 describe('Groups integration test', () => {
   let client: CogniteClient;
