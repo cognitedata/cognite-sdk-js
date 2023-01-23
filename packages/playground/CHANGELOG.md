@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.10.7...@cognite/sdk-playground@6.0.0) (2023-01-23)
+
+
+### Features
+
+* **functions:** remove functions from playground deprecated ([#943](https://github.com/cognitedata/cognite-sdk-js/issues/943)) ([f9ca097](https://github.com/cognitedata/cognite-sdk-js/commit/f9ca097209adf796e3dafc3d336e0a12cd77a752))
+
+
+### BREAKING CHANGES
+
+* **functions:** remove functions from playground deprecated
+
+
+
+
+
 ## [5.10.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@5.10.6...@cognite/sdk-playground@5.10.7) (2023-01-23)
 
 **Note:** Version bump only for package @cognite/sdk-playground
