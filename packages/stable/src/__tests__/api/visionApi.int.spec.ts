@@ -6,7 +6,7 @@ import { BETA_FEATURES } from '../../api/vision/visionApi';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('Vision API', () => {
-  const TEST_IMAGE_ID = 4745168244986665;
+  const TEST_IMAGE_ID = 3285495312337188;
   let client: CogniteClient;
   let consoleSpy: jest.SpyInstance;
   let extractJob: VisionExtractPostResponse;
