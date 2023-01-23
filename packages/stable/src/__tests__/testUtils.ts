@@ -1,37 +1,30 @@
 // Copyright 2020 Cognite AS
 
-import { Constants } from '@cognite/sdk-core';
 import { TestUtils } from '@cognite/sdk-core';
 import CogniteClient from '../cogniteClient';
 import { ExternalFileInfo } from '../types';
+import { login } from './login';
 
-function setupClient(baseUrl: string = Constants.BASE_URL) {
+function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
     project: 'unit-test',
     baseUrl,
-    apiKeyMode: true,
     getToken: () => Promise.resolve('not logged in'),
   });
 }
 
-function setupClientWithNonExistingApiKey() {
-  return new CogniteClient({
-    appId: 'JS Integration test',
-    project: process.env.COGNITE_PROJECT as string,
-    apiKeyMode: true,
-    getToken: () => Promise.reject('non-existing-api-key'),
-  });
-}
-
 function setupLoggedInClient() {
-  return new CogniteClient({
+  const client = new CogniteClient({
     appId: 'JS SDK integration tests',
+    baseUrl: process.env.COGNITE_BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
-    baseUrl: Constants.BASE_URL,
-    apiKeyMode: true,
-    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
+    getToken: () =>
+      login().then((account) => {
+        return account.access_token;
+      }),
   });
+  return client;
 }
 
 function setupMockableClient() {
@@ -39,8 +32,7 @@ function setupMockableClient() {
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
     baseUrl: mockBaseUrl,
-    apiKeyMode: true,
-    getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
+    getToken: () => Promise.resolve('test accessToken'),
   });
 }
 
@@ -78,7 +70,6 @@ export const {
 
 export {
   setupClient,
-  setupClientWithNonExistingApiKey,
   setupLoggedInClient,
   setupMockableClient,
   getFileCreateArgs,

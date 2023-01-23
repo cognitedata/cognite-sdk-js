@@ -1999,6 +1999,16 @@ export interface Revision3D {
    * The rotation is expressed by Euler angles in radians and in XYZ order.
    */
   rotation?: Tuple3<number>;
+  /**
+   * Global translation to be applied to the entire model.
+   * The translation is expressed in meters.
+   */
+  translation?: Tuple3<number>;
+  /**
+   * Global scale to be applied to the entire model.
+   * The scale is expressed as scale along the X, Y and Z axes.
+   */
+  scale?: Tuple3<number>;
   camera?: RevisionCameraProperties;
   /**
    * The status of the revision.
@@ -2534,6 +2544,16 @@ export interface UpdateRevision3D {
      * The rotation is expressed by Euler angles in radians and in XYZ order.
      */
     rotation?: SetField<Tuple3<number>>;
+    /**
+     * Global translation to be applied to the entire model.
+     * The translation is expressed in meters.
+     */
+    translation?: SetField<Tuple3<number>>;
+    /**
+     * Global scale to be applied to the entire model.
+     * The scale is expressed as scale along the X, Y and Z axes.
+     */
+    scale?: SetField<Tuple3<number>>;
     /**
      * Initial camera target.
      */

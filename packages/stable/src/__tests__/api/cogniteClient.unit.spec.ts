@@ -1,45 +1,8 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import CogniteClient from '../cogniteClient';
-import { Asset, ItemsWrapper } from '../types';
-import {
-  mockBaseUrl,
-  setupClientWithNonExistingApiKey,
-  setupLoggedInClient,
-  setupMockableClient,
-} from './testUtils';
-
-describe('createClientWithApiKey - integration', () => {
-  test('handle non-existing api-key', async () => {
-    const client = setupClientWithNonExistingApiKey();
-    await expect(
-      client.assets.list({ limit: 1 }).autoPagingToArray({ limit: 1 })
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"Request failed | status code: 401"`
-    );
-  });
-});
-
-describe('http methods - integration', () => {
-  let client: CogniteClient;
-  const project = process.env.COGNITE_PROJECT as string;
-  beforeAll(async () => {
-    client = setupLoggedInClient();
-  });
-  test('post method', async () => {
-    const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
-    const response = await client.post<ItemsWrapper<Asset[]>>(
-      `/api/v1/projects/${project}/assets`,
-      { data: { items: assets } }
-    );
-    expect(response.data.items).toHaveLength(2);
-  });
-  test('get method', async () => {
-    const response = await client.get(`/api/v1/projects/${project}/assets`);
-    expect(response.data).toHaveProperty('items');
-  });
-});
+import CogniteClient from '../../cogniteClient';
+import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('api endpoints smoke test', () => {
   let client: CogniteClient;
@@ -77,7 +40,6 @@ describe('api endpoints smoke test', () => {
     await Promise.all(
       [
         client.assets,
-        client.apiKeys,
         client.assets,
         client.datapoints,
         client.events,
@@ -90,7 +52,6 @@ describe('api endpoints smoke test', () => {
         client.projects,
         client.raw,
         client.securityCategories,
-        client.serviceAccounts,
         client.timeseries,
         client.viewer3D,
       ].map(callApi)
