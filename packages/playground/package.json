@@ -6,7 +6,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
-  "version": "5.10.6",
+  "version": "5.10.7",
   "scripts": {
     "clean": "rm -rf dist/ docs/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/playground/",
@@ -22,7 +22,7 @@
     "test-snippets": ""
   },
   "dependencies": {
-    "@cognite/sdk": "^7.15.0",
+    "@cognite/sdk": "^7.16.0",
     "@cognite/sdk-core": "^4.8.2"
   },
   "files": [
