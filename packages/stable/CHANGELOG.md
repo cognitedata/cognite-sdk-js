@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.15.0...@cognite/sdk@7.16.0) (2023-01-23)
+
+
+### Features
+
+* translation and scale for 3D revisions [release] ([#938](https://github.com/cognitedata/cognite-sdk-js/issues/938)) ([30921ee](https://github.com/cognitedata/cognite-sdk-js/commit/30921ee6bdaa167a9f42e2c3bbc968084e549a5c))
+
+
+
+
+
 # [7.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.14.1...@cognite/sdk@7.15.0) (2023-01-09)
 
 

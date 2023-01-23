@@ -91,6 +91,12 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    *  update: {
    *    rotation: {
    *      set: [1, 2, 3]
+   *    },
+   *    translation: {
+   *      set: [4, 5, 6]
+   *    },
+   *    scale: {
+   *      set: [0.5, 0.3, 0.2]
    *    }
    *  }
    * }];

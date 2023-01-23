@@ -41,6 +41,7 @@
     "codegen": "ts-node packages/codegen/src/cli.ts"
   },
   "devDependencies": {
+    "@azure/msal-node": "^1.14.5",
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@rollup/plugin-alias": "^3.1.1",
