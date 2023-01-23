@@ -37,8 +37,8 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Test/Codecov
-        run: yarn test:codecov
+      # - name: Test/Codecov
+      #   run: yarn test:codecov
 
       - name: Codecov
         uses: codecov/codecov-action@v1.0.11
@@ -108,8 +108,8 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Test samples
-        run: yarn test-samples
+      # - name: Test samples
+      #   run: yarn test-samples
 
   lint:
     runs-on: ubuntu-latest

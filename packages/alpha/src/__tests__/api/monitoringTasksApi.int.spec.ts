@@ -1,6 +1,10 @@
 // Copyright 2022 Cognite AS
 
-import { Channel } from 'alpha/src/types';
+import {
+  Channel,
+  MonitoringTaskModelExternalId,
+  MonitoringTaskThresholdModelCreate,
+} from '../../types';
 import CogniteClientAlpha from '../../cogniteClient';
 import {
   CLIENT_ID,
@@ -21,14 +25,21 @@ describe('monitoring tasks api', () => {
   const monitoringTaskExternalId = `test_mt_${ts}`;
   const channelExternalId = `test_channel_mt_${ts}`;
   const sessionsApi = `/api/v1/projects/${TEST_PROJECT}/sessions`;
-  const testMtParams = {
-    threshold: 50.1,
+  const testMtModel: MonitoringTaskThresholdModelCreate = {
+    externalId: MonitoringTaskModelExternalId.THRESHOLD,
     timeseriesExternalId: 'test_functions',
+    threshold: 50.1,
     granularity: '1m',
   };
   const testMtOverlap = 1000 * 60;
   const testMtInterval = 5 * 60 * 1000;
-  const testMtModelExternalId = 'air-upper-threshold';
+  const expectedResponseModel = {
+    externalId: 'threshold',
+    timeseriesId: 4944699311094690,
+    granularity: testMtModel.granularity,
+    threshold: testMtModel.threshold,
+  };
+
   let channel: Channel;
 
   itif(client)('create monitoring task', async () => {
@@ -57,9 +68,8 @@ describe('monitoring tasks api', () => {
         channelId: channel.id,
         interval: testMtInterval,
         nonce: sessionsRes?.data?.items[0]?.nonce,
-        modelExternalId: testMtModelExternalId,
         overlap: testMtOverlap,
-        parameters: testMtParams,
+        model: testMtModel,
       },
     ]);
     expect(response.length).toBe(1);
@@ -79,10 +89,9 @@ describe('monitoring tasks api', () => {
     });
     expect(response.items.length).toBe(1);
     expect(response.items[0].externalId).toEqual(monitoringTaskExternalId);
-    expect(response.items[0].parameters).toEqual(testMtParams);
+    expect(response.items[0].model).toEqual(expectedResponseModel);
     expect(response.items[0].interval).toEqual(testMtInterval);
     expect(response.items[0].overlap).toEqual(testMtOverlap);
-    expect(response.items[0].modelExternalId).toEqual(testMtModelExternalId);
   });
 
   itif(client)('list created monitoring task by channel', async () => {
