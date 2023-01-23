@@ -17,47 +17,53 @@ import {
 
 export * from '@cognite/sdk';
 
-export interface MonitoringTaskParametersCreate {
+export type MonitoringTaskModelExternalId = 'threshold';
+
+export const MonitoringTaskModelExternalId = {
+  THRESHOLD: 'threshold' as MonitoringTaskModelExternalId,
+};
+
+export interface MonitoringTaskThresholdModelCreate {
+  externalId: MonitoringTaskModelExternalId;
   timeseriesExternalId: CogniteExternalId;
-  granularity?: string;
   threshold: number;
+  granularity?: string;
 }
 
-export interface MonitoringTaskParameters {
-  timeseriesExternalId: CogniteInternalId;
+export interface MonitoringTaskThresholdModel {
+  externalId: MonitoringTaskModelExternalId;
+  timeseriesId: CogniteInternalId;
   granularity?: string;
   threshold: number;
 }
 
 export interface MonitoringTaskCreate {
   externalId: CogniteExternalId;
-  modelExternalId: CogniteExternalId;
   channelId: CogniteInternalId;
   interval: number;
   overlap: number;
-  parameters: MonitoringTaskParametersCreate;
+  model: MonitoringTaskThresholdModelCreate;
   nonce: string;
 }
 
 export interface MonitoringTask {
   id: CogniteInternalId;
   externalId?: CogniteExternalId;
-  modelExternalId: CogniteExternalId;
   channelId: CogniteInternalId;
   interval: number;
   overlap: number;
-  parameters: MonitoringTaskParameters;
+  model: MonitoringTaskThresholdModel;
 }
 
-export interface MonitoringTaskParametersFilter {
-  timeseriesExternalId: CogniteInternalId;
+export interface MonitoringTaskModelFilter {
+  timeseriesId: CogniteInternalId;
 }
 
 export interface MonitoringTaskFilter {
   externalIds?: CogniteExternalId[];
   ids?: CogniteInternalId[];
   channelIds?: CogniteInternalId[];
-  parameters?: MonitoringTaskParametersFilter;
+  model?: MonitoringTaskModelFilter;
 }
 
 export interface MonitoringTaskFilterQuery extends FilterQuery {
