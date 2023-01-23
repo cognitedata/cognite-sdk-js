@@ -15,7 +15,7 @@ export const login = async () => {
           grant_type: 'client_credentials',
           client_id: process.env.COGNITE_CLIENT_ID,
           client_secret: process.env.COGNITE_CLIENT_SECRET,
-          scope: 'https://greenfield.cognitedata.com/.default',
+          scope: `${process.env.COGNITE_BASE_URL}/.default`,
         }).toString(),
         headers,
       }

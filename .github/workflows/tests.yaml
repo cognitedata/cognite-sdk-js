@@ -157,6 +157,7 @@ jobs:
 
     env:
       COGNITE_PROJECT: platypus
+      COGNITE_BASE_URL: https://greenfield.cognitedata.com
       COGNITE_CREDENTIALS: ${{ secrets.COGNITE_CREDENTIALS }}
       COGNITE_CLIENT_SECRET: ${{ secrets.COGNITE_CLIENT_SECRET }}
       COGNITE_CLIENT_ID: ${{ secrets.COGNITE_CLIENT_ID }}

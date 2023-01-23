@@ -5,9 +5,7 @@ import CogniteClient from '../cogniteClient';
 import { ExternalFileInfo } from '../types';
 import { login } from './login';
 
-const BASE_URL = 'https://greenfield.cognitedata.com';
-
-function setupClient(baseUrl: string = BASE_URL) {
+function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
     project: 'unit-test',
@@ -19,7 +17,7 @@ function setupClient(baseUrl: string = BASE_URL) {
 function setupLoggedInClient() {
   const client = new CogniteClient({
     appId: 'JS SDK integration tests',
-    baseUrl: BASE_URL,
+    baseUrl: process.env.COGNITE_BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
     getToken: () =>
       login().then((account) => {
@@ -32,7 +30,7 @@ function setupLoggedInClient() {
 function setupMockableClient() {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
-    project: 'platypus',
+    project: process.env.COGNITE_PROJECT as string,
     baseUrl: mockBaseUrl,
     getToken: () => Promise.resolve('test accessToken'),
   });
