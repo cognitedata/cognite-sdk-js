@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 import nock from 'nock';
-import { CogniteClient, ExternalLabelDefinition } from '../../..';
+import { CogniteClient, ExternalLabelDefinition } from '../..';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('Labels unit test', () => {
