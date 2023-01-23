@@ -3,10 +3,12 @@
 import CogniteClient from '../cogniteClient';
 import { setupLoggedInClient } from './testUtils';
 
+const BASE_URL = 'https://greenfield.cognitedata.com';
+
 describe('beta integration', () => {
   let client: CogniteClient;
   beforeAll(async () => {
-    client = setupLoggedInClient();
+    client = setupLoggedInClient(BASE_URL);
   });
   test('assets list', async () => {
     const response = await client.assets.list();
