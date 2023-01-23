@@ -3,11 +3,9 @@
 import { accessApi, ClientOptions, BaseCogniteClient } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { DocumentsAPI } from './api/documents/documentsApi';
-import { FunctionsAPI } from './api/functions/functionsApi';
 
 export default class CogniteClientPlayground extends BaseCogniteClient {
   private documentsApi?: DocumentsAPI;
-  private functionsApi?: FunctionsAPI;
 
   /**
    * Create a new SDK client (playground)
@@ -32,10 +30,6 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
     return accessApi(this.documentsApi);
   }
 
-  public get functions() {
-    return accessApi(this.functionsApi);
-  }
-
   protected get version() {
     return `${version}-playground`;
   }
@@ -44,6 +38,5 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
     super.initAPIs();
 
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
-    this.functionsApi = this.apiFactory(FunctionsAPI, 'functions');
   }
 }
