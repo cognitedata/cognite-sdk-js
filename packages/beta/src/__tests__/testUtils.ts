@@ -3,6 +3,7 @@
 import { Constants } from '@cognite/sdk-core';
 import CogniteClient from '../cogniteClient';
 import { apiKey, mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
+import { login } from './login';
 
 export function setupClient(baseUrl: string = Constants.BASE_URL) {
   return new CogniteClient({
