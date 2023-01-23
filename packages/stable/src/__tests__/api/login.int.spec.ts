@@ -11,12 +11,10 @@ describe('Login-api integration test', () => {
 
   describe('status', () => {
     test('logged in', async () => {
-      await client.authenticate();
-      const status = await client.login.status();
-      expect(status).toBeDefined();
-      expect(status!.project).toBeDefined();
-      expect(status!.user).toBeDefined();
-      expect(typeof status!.projectId).toBe('number');
+      const token = await client.authenticate();
+      const inspect = (await client.get('/api/v1/token/inspect')).data;
+      expect(token).toBeDefined();
+      expect(inspect.projects[0].projectUrlName).toBeDefined();
     });
 
     test('not logged in', async () => {

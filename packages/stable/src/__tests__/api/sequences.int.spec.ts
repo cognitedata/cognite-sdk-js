@@ -1,6 +1,5 @@
 // Copyright 2020 Cognite AS
 
-import nock from 'nock';
 import { Asset } from '../../types';
 import CogniteClient from '../../cogniteClient';
 import {
@@ -56,7 +55,6 @@ describe('Sequences integration test', () => {
   let asset: Asset;
   beforeAll(async () => {
     client = setupLoggedInClient();
-    nock.cleanAll();
     [asset] = await client.assets.create([
       {
         name: 'asset_' + randomInt(),
