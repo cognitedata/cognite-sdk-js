@@ -6,7 +6,7 @@ import { setupLoggedInClient } from '../testUtils';
 
 describe('http methods - integration', () => {
   let client: CogniteClient;
-  const project = 'platypus'; //process.env.COGNITE_PROJECT as string;
+  const project = process.env.COGNITE_PROJECT as string;
   beforeAll(async () => {
     client = setupLoggedInClient();
   });
