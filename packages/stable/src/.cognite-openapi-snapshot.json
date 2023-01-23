@@ -360,7 +360,7 @@
           "Assets"
         ],
         "summary": "Aggregate assets",
-        "description": "Use advanced filtering options to agggregate assets.",
+        "description": "Use advanced filtering options to agggregate assets. Filters behave the same way as for the `list` endpoint. Default aggregation is `count`.",
         "operationId": "aggregateAssets",
         "parameters": [
           {
@@ -3993,7 +3993,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Node3DFilterBody"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/Node3DPropertyFilterBody"
+                  },
+                  {
+                    "$ref": "#/components/schemas/Node3DNameFilterBody"
+                  }
+                ]
               }
             }
           },
@@ -4466,10 +4473,10 @@
     "/api/v1/projects/{project}/3d/mappings/{assetId}/modelnodes": {
       "get": {
         "tags": [
-          "Availability 3D Asset Mapping"
+          "3D Asset Mapping"
         ],
-        "summary": "List 3D Availability of Assets. Retrieves a list of nodes from the hierarchy in the 3D model which are mapped to supplied asset ids. If the Node that is mapped to asset is invalid or doesn not exist anymore, it will be omitted from results.",
-        "description": "Lists 3D assets mappings that match the specified asset id parameter.\n\n\nAsset references obtained from a mapping - through asset id - may be\ninvalid, simply by the non-transactional nature of HTTP.\nThey are NOT maintained by any means from CDF, meaning they will be stored until the\nreference is removed through the delete endpoint of 3d asset mappings.",
+        "summary": "List mappings for one assetID across all 3D models",
+        "description": "Retrieves a list of `node IDs` from the hierarchy of all available 3D models which are mapped to the supplied `asset ID`. If a `node ID` is mapped to the `asset ID` but is invalid or does not exist anymore, it will be omitted from the results.\n\n\nAsset references obtained from a mapping - through asset id - may be\ninvalid, simply by the non-transactional nature of HTTP.\nThey are NOT maintained by any means from CDF, meaning they will be stored until the\nreference is removed through the delete endpoint of 3d asset mappings.",
         "parameters": [
           {
             "$ref": "#/components/parameters/project"
@@ -6231,193 +6238,6 @@
         ]
       }
     },
-    "/login/status": {
-      "get": {
-        "tags": [
-          "Login"
-        ],
-        "summary": "Verify login status",
-        "description": "Returns the authentication information about the asking entity.",
-        "operationId": "status",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/LoginStatusResponse"
-          }
-        },
-        "security": [
-          {
-            "api-key": []
-          }
-        ],
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "const status = await client.login.status();\n// if status === null means you are not logged in"
-          },
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "login_status = client.login.status()\nproject = login_status.project\n"
-          },
-          {
-            "lang": "Java",
-            "label": "Java SDK",
-            "source": "LoginStatus loginStatus = client.login().loginStatusByApiKey(); \n\n"
-          }
-        ]
-      }
-    },
-    "/login/redirect": {
-      "get": {
-        "tags": [
-          "Login"
-        ],
-        "summary": "Login with redirect",
-        "description": "Redirects to a login URL. This endpoint is typically used by front-end services acting on behalf of users to log them in.",
-        "operationId": "redirectUrl",
-        "parameters": [
-          {
-            "name": "project",
-            "in": "query",
-            "description": "The project to login to.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "redirectUrl",
-            "in": "query",
-            "description": "The url to send the user to after the login is successful.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "errorRedirectUrl",
-            "in": "query",
-            "description": "The url to send the user to if the login fails or is aborted. If this is not passed in, the value of the redirectUrl will be used.",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [],
-        "responses": {
-          "303": {
-            "description": "Redirection to the login url"
-          }
-        },
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "import { CogniteClient, REDIRECT } from '@cognite/sdk';\n\nconst client = new CogniteClient({ appId: '[YOUR APP NAME]' });\n\n// using Cognite authentication flow\nclient.loginWithOAuth({\n  project: '[PROJECT]',\n  onAuthenticate: REDIRECT // optional, REDIRECT is by default\n});\n\n// or you can sign in using AzureAD authentication flow (in case your projects supports it)\nclient.loginWithOAuth({\n  cluster: '[CLUSTER]',\n  clientId: '[CLIENT_ID]', // client id of your AzureAD application\n  tenantId: '[TENANT_ID]', // tenant id of your AzureAD tenant. Will be set to 'common' if not provided\n});\n\n// you also have ability to sign in using ADFS\nclient.loginWithOAuth({\n  authority: https://example.com/adfs/oauth2/authorize,\n  requestParams: {\n    cluster: 'cluster-name',\n    clientId: 'adfs-client-id',\n  },\n});\n\n// after sign in you can do calls with the client\n(async () => {\n  await client.authenticate();\n  client.setProject('project-name');\n  const createdAsset = await client.assets.create([{ name: 'My first asset' }]);\n})();"
-          }
-        ]
-      }
-    },
-    "/login/userinfo": {
-      "get": {
-        "tags": [
-          "Login"
-        ],
-        "summary": "Obtain user information",
-        "operationId": "userinfo",
-        "description": "Ask this with any valid credentials to obtain information about the current authenticated entity. The response is a decoded ID token.",
-        "responses": {
-          "200": {
-            "description": "User information.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IdToken"
-                }
-              }
-            }
-          }
-        },
-        "security": []
-      }
-    },
-    "/logout": {
-      "get": {
-        "tags": [
-          "Logout"
-        ],
-        "summary": "Logout",
-        "description": "Invalidates a session and returns the authentication status of the asking entity.",
-        "operationId": "logout",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/LoginStatusResponse"
-          }
-        },
-        "security": []
-      }
-    },
-    "/logout/url": {
-      "get": {
-        "tags": [
-          "Logout"
-        ],
-        "summary": "Retrieve a logout url",
-        "description": "Get logout url of the given project.",
-        "operationId": "logoutUrl",
-        "parameters": [
-          {
-            "name": "redirectUrl",
-            "in": "query",
-            "description": "The url to send the user to after the logout is successful. If no url is passed, you will end up at the IdP's log out page.",
-            "schema": {
-              "type": "string"
-            },
-            "example": "https://mysite.com/loggedout"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Logout URL.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "data"
-                  ],
-                  "properties": {
-                    "data": {
-                      "title": "URL Response",
-                      "description": "Object containing the log out URL",
-                      "type": "object",
-                      "required": [
-                        "url"
-                      ],
-                      "properties": {
-                        "url": {
-                          "type": "string",
-                          "example": "https://accounts.google.com/logout",
-                          "description": "The url to send the user to in order to log out"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "// You can specify the url to send the user to after the logout is successful.\n// If no url is passed, you will end up at the IDPs log out page.\nconst logoutUrl = await client.logout.getUrl({ redirectUrl: '[url to redirect]' });"
-          }
-        ]
-      }
-    },
     "/api/v1/projects/{project}/groups": {
       "parameters": [
         {
@@ -6429,7 +6249,7 @@
           "Groups"
         ],
         "summary": "List groups",
-        "description": "Retrieves a list of groups the asking service account is a member of. Service accounts with groups:list capability can optionally ask for all groups in a project.",
+        "description": "Retrieves a list of groups the asking principal a member of. Principals with groups:list capability can optionally ask for all groups in a project.",
         "operationId": "getGroups",
         "parameters": [
           {
@@ -6566,175 +6386,6 @@
         ]
       }
     },
-    "/api/v1/projects/{project}/groups/{groupId}/serviceaccounts": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/project"
-        }
-      ],
-      "get": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "List service accounts in a group",
-        "description": "Retrieve a list of service accounts that are members of the group with the given ID.",
-        "operationId": "getMembersOfGroups",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "description": "ID of the group",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/ServiceAccountResponse"
-          }
-        },
-        "security": [
-          {
-            "api-key": []
-          }
-        ],
-        "x-capability": [
-          "groupsAcl:READ"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "const serviceAccounts = await client.groups.listServiceAccounts(921923342342323);"
-          },
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "res = client.iam.groups.list_service_accounts(1)\n"
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Add service accounts to a group",
-        "description": "Grant the service accounts with the given IDs membership in a group.\nThis operation is not idempotent: if any of the given service accounts is already a member of the group, the operation will fail.\nNote that linking a service account to more than 20 groups is not supported and may result in login issues.\n",
-        "operationId": "addServiceAccountsToGroup",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "description": "ID of the group",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "IDs of service accounts to add",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DataLong"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Empty response."
-          },
-          "400": {
-            "$ref": "#/components/responses/MissingField"
-          }
-        },
-        "security": [
-          {
-            "api-key": []
-          }
-        ],
-        "x-capability": [
-          "groupsAcl:UPDATE"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "await client.groups.addServiceAccounts(921923342342323, [123312763989213, 23232789217132]);"
-          },
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "res = client.iam.groups.add_service_account(id=1, service_account_id=1)\n"
-          }
-        ]
-      }
-    },
-    "/api/v1/projects/{project}/groups/{groupId}/serviceaccounts/remove": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/project"
-        }
-      ],
-      "post": {
-        "tags": [
-          "Groups"
-        ],
-        "summary": "Remove service accounts from a group",
-        "description": "Revoke membership in a group from the given service accounts.",
-        "operationId": "removeServiceAccountsFromGroup",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "description": "ID of the group",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "requestBody": {
-          "description": "List of service account IDs to remove",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DataLong"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Empty response."
-          }
-        },
-        "x-capability": [
-          "groupsAcl:UPDATE"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "await client.groups.removeServiceAccounts(921923342342323, [123312763989213, 23232789217132]);"
-          },
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "res = client.iam.groups.remove_service_account(id=1, service_account_id=1)\n"
-          }
-        ]
-      }
-    },
     "/api/v1/projects": {
       "get": {
         "tags": [
@@ -6826,336 +6477,6 @@
         },
         "x-capability": [
           "projectsAcl:UPDATE"
-        ]
-      }
-    },
-    "/api/v1/projects/{project}/serviceaccounts": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/project"
-        }
-      ],
-      "get": {
-        "tags": [
-          "Service accounts"
-        ],
-        "summary": "List service accounts",
-        "description": "Lists all the service accounts of the project.",
-        "operationId": "getServiceAccounts",
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/ServiceAccountResponse"
-          }
-        },
-        "security": [
-          {
-            "api-key": []
-          }
-        ],
-        "x-capability": [
-          "usersAcl:LIST"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "const serviceaccounts = await client.serviceAccounts.list();"
-          },
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "res = client.iam.service_accounts.list()\n"
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Service accounts"
-        ],
-        "summary": "Create service accounts",
-        "description": "Creates new service accounts with the given names and group memberships.\nThe names of the service accounts have to be unique.\nIf any of the provided group IDs are not valid group IDs, the request will fail and no service accounts will be created.\n",
-        "operationId": "createServiceAccounts",
-        "requestBody": {
-          "description": "List of service accounts to create.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "items"
-                ],
-                "properties": {
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/ServiceAccountInput"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "$ref": "#/components/responses/ServiceAccountResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/MissingField"
-          }
-        },
-        "security": [
-          {
-            "api-key": []
-          }
-        ],
-        "x-capability": [
-          "usersAcl:CREATE"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "const serviceAccounts = [\n  { name: 'Data extractor' },\n  { name: 'Monitor', groups: [123, 456] },\n];\nconst createdServiceAccounts = await client.serviceAccounts.create(serviceAccounts);"
-          },
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "from cognite.client.data_classes import ServiceAccount\nmy_account = ServiceAccount(name=\"my@service.com\", groups=[1, 2, 3])\nres = client.iam.service_accounts.create(my_account)\n"
-          }
-        ]
-      }
-    },
-    "/api/v1/projects/{project}/serviceaccounts/delete": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/project"
-        }
-      ],
-      "post": {
-        "tags": [
-          "Service accounts"
-        ],
-        "summary": "Delete service accounts",
-        "description": "Deletes the service accounts identified by the given IDs.\nAPI keys associated with those service accounts will also be deleted.\nIf any of the provided IDs are not valid service account IDs, the request will fail and no resources will be deleted.\n",
-        "operationId": "deleteServiceAccounts",
-        "requestBody": {
-          "description": "List of service account IDs to delete",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DataLong"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/EmptyResponse"
-          }
-        },
-        "security": [
-          {
-            "api-key": []
-          }
-        ],
-        "x-capability": [
-          "usersAcl:DELETE"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "await client.serviceAccounts.delete([123, 456]);"
-          },
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "client.iam.service_accounts.delete(1)\n"
-          }
-        ]
-      }
-    },
-    "/api/v1/projects/{project}/apikeys": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/project"
-        }
-      ],
-      "get": {
-        "tags": [
-          "API keys"
-        ],
-        "summary": "List API keys",
-        "description": "Retrieves a list of all API keys connected to the current service account. Administrators can optionally list keys for all or individual service accounts that are not their own.",
-        "operationId": "getApiKeys",
-        "parameters": [
-          {
-            "name": "all",
-            "in": "query",
-            "description": "Only available with users:list ACL, returns all API keys for the project.",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "serviceAccountId",
-            "in": "query",
-            "description": "Get API keys for a specific service account, only available to admin users.",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
-            "name": "includeDeleted",
-            "in": "query",
-            "description": "Whether to include deleted API keys, or not.\nDeleted API keys can be listed for up to 90 days after deletion.\n",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of API keys.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiKeyResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "api-key": []
-          }
-        ],
-        "x-capability": [
-          "apikeysAcl:LIST"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "const apiKeys = await client.apiKeys.list({ all: true });"
-          },
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "res = client.iam.api_keys.list()\n"
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "API keys"
-        ],
-        "summary": "Create API keys",
-        "description": "Creates one API key for each service account.\nIf the ID of one service account appears multiple times in the request, then multiple API keys will be created for that service account.\n",
-        "operationId": "createApiKeys",
-        "requestBody": {
-          "description": "List of the service accounts to create API keys for.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DataApiKeyRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "A list of the created API keys.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NewApiKeyResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/MissingField"
-          }
-        },
-        "security": [
-          {
-            "api-key": []
-          }
-        ],
-        "x-capability": [
-          "apikeysAcl:CREATE"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "const createdApiKeys = await client.apiKeys.create([{ serviceAccountId: 123 }]);"
-          },
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "res = client.iam.api_keys.create(1)\n"
-          }
-        ]
-      }
-    },
-    "/api/v1/projects/{project}/apikeys/delete": {
-      "post": {
-        "tags": [
-          "API keys"
-        ],
-        "summary": "Delete API keys",
-        "description": "Deletes one or more API keys with the specified API key IDs. The API key IDs were returned when the keys were\ncreated, or can be obtained by listing all API keys. Deleted API keys can be listed for up to 90 days after\ndeletion.\n",
-        "operationId": "deleteApiKeys",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/project"
-          }
-        ],
-        "requestBody": {
-          "description": "List of the IDs of the API keys to delete.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DataLong"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/EmptyResponse"
-          }
-        },
-        "security": [
-          {
-            "api-key": []
-          }
-        ],
-        "x-capability": [
-          "apikeysAcl:DELETE"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "JavaScript",
-            "label": "JavaScript SDK",
-            "source": "await client.apiKeys.delete([123, 456]);"
-          },
-          {
-            "lang": "Python",
-            "label": "Python SDK",
-            "source": "client.iam.api_keys.delete(1)\n"
-          }
         ]
       }
     },
@@ -8735,7 +8056,7 @@
                         "minItems": 1,
                         "maxItems": 50,
                         "items": {
-                          "$ref": "#/components/schemas/OneOfFileId"
+                          "$ref": "#/components/schemas/FileReferenceWithPageRange"
                         }
                       },
                       "entities": {
@@ -8768,7 +8089,7 @@
                         "items": {
                           "type": "array",
                           "items": {
-                            "$ref": "#/components/schemas/OneOfFileId"
+                            "$ref": "#/components/schemas/FileReferenceWithPageRange"
                           }
                         },
                         "jobId": {
@@ -9814,7 +9135,7 @@
           "Documents"
         ],
         "summary": "Search for documents",
-        "description": "This endpoint lets you search for documents by using advanced filters and free text queries.\nFree text queries are matched against the documents' filenames and contents.\n\n### Free text search\n\n#### Boolean operators\nThe `+` symbol signifies an AND operation, and the `|` symbol signifies an OR.\nSearching for `lorem + ipsum` will match documents containing both \"lorem\" AND \"ipsum\" in the filename or content.\nSimilarly, searching for `lorem | ipsum` will match documents containing either \"lorem\" OR \"ipsum\" in the filename or content.\n\nThe default operator between the search keywords is AND.\nThat means that searching for two terms without any operator, like so: `lorem ipsum`, will\nmatch documents containing both the words \"lorem\" and \"ipsum\" in the filename or content.\n\nTo exclude documents containing a specific word, you can use the operator `-`.\nFor instance, the search `lorem -ipsum` will match documents that contain the word \"lorem\", but does NOT contain the word \"ipsum\".\n\n#### Phrases\nEnclose multiple words inside double quotes `\"` to group these words together.\nNormally, the search query `lorem ipsum` will match not only \"lorem ipsum\" but also \"lorem cognite ipsum\",\nand in general there can be any number of words between the two words in the query.\nThe search query `\"lorem ipsum\"`, however, will match only exactly \"lorem ipsum\" and not \"lorem cognite ipsum\".\n\n#### Escape\nTo search for the special characters (`+`, `|`, `-`, `\"`. `\\`), escape with a preceding backslash (\\).\n\n#### Ordering\nWhen you search for a term, we try to return the most relevant documents first, and less relevant documents further down the list.\nThere are a few factors that determine the relevance of a document:\n- If the search terms are found multiple times within a document, the relevance of that document is higher.\n- For searches with multiple terms, documents that contain all of the terms are considered more relevant than documents that only contain some of the terms.\n- Matches of the terms in the filename field of the document, count for more than matches in the content of the document.\n\n#### Examples\n```\n{\n    \"search\": {\n        \"query\": \"cognite \\\"lorem ipsum\\\"\"\n    }\n}\n```\nThis request will return documents matching the search query, where the query behaves as described above.\n\n\n```\n{\n    \"search\": {\n        \"query\": \"cognite \\\"lorem ipsum\\\"\"\n    },\n    \"filter\": {\n        \"prefix\": {\n            \"property\": [\"externalId\"],\n            \"value\": \"1\"\n        }\n    }\n}\n```\nThis example combines a query with a filter.\nThis search request will return documents matching the search query, and where `externalId` starts with \"1\".\nThe results will be ordered by how well they match the query string.\n\n### Filtering\nFiltering is done by using a special JSON filtering language.\nIt is quite flexible and consists of a number of different \"leaf\" filters which can be combined\ntogether arbitrarily using the boolean clauses `and`, `or` and `not`.\n\nThe available leaf filters are: `equals`, `in`, `containsAny`, `containsAll`, `range`, `prefix`, `exists`, `geojsonIntersects`, `geojsonDisjoint` and `geojsonWithin`.\n\n#### Properties\nBelow is an overview of all the properties that can be filtered on, and which filters are applicable to each property.\n\n| Property                               | Type              | Applicable filters                                        |\n|----------------------------------------|-------------------|-----------------------------------------------------------|\n| `[\"id\"]`                               | integer           | equals, in, range, exists                                 |\n| `[\"externalId\"]`                       | string            | equals, in, prefix, exists                                |\n| `[\"title\"]`                            | string            | equals, in, prefix, exists                                |\n| `[\"author\"]`                           | string            | equals, in, prefix, exists                                |\n| `[\"createdTime\"]`                      | integer           | equals, in, range, exists                                 |\n| `[\"modifiedTime\"]`                     | integer           | equals, in, range, exists                                 |\n| `[\"lastIndexedTime\"]`                  | integer           | equals, in, range, exists                                 |\n| `[\"mimeType\"]`                         | string            | equals, in, prefix, exists                                |\n| `[\"extension\"]`                        | string            | equals, in, prefix, exists                                |\n| `[\"pageCount\"]`                        | integer           | equals, in, range, exists                                 |\n| `[\"type\"]`                             | string            | equals, in, prefix, exists                                |\n| `[\"geoLocation\"]`                      | geometry object   | geojsonIntersects, geojsonDisjoint, geojsonWithin, exists |\n| `[\"language\"]`                         | string            | equals, in, prefix, exists                                |\n| `[\"assetIds\"]`                         | array of integers | containsAny, containsAll, exists, inAssetSubtree          |\n| `[\"assetExternalIds\"]`                 | array of strings  | containsAny, containsAll, exists, inAssetSubtree          |\n| `[\"labels\"]`                           | array of Labels   | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"name\"]`               | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"mimeType\"]`           | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"size\"]`               | integer           | equals, in, range, exists                                 |\n| `[\"sourceFile\", \"source\"]`             | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"directory\"]`          | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"assetIds\"]`           | array of integers | containsAny, containsAll, exists, inAssetSubtree          |\n| `[\"sourceFile\", \"assetExternalIds\"]`   | array of strings  | containsAny, containsAll, exists, inAssetSubtree          |\n| `[\"sourceFile\", \"datasetId\"]`          | integer           | equals, in, range, exists                                 |\n| `[\"sourceFile\", \"securityCategories\"]` | array of integers | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"geoLocation\"]`        | geometry object   | geojsonIntersects, geojsonDisjoint, geojsonWithin, exists |\n| `[\"sourceFile\", \"labels\"]`             | array of Labels   | containsAny, containsAll, exists                          |\n| `[\"sourceFile\", \"metadata\", <key>]`    | string            | equals, in, prefix, exists                                |\n| `[\"sourceFile\", \"metadata\"]`           | string            | equals, in, prefix, exists<br><br>This is a special filter field that targets all metadata values. <br>An alternative to creating a filter for each key in the metadata field. |\n\nAll filtering is done in a case-sensitive manner against the resource data.\nNote that some properties holds normalized data. E.g. a document with source file name\n`FILE.PDF` will have the `extension` property be `pdf`. A filter for extension equals\nto `PDF` will not match this document, as it must be specified as `pdf`.\n\n#### Example\n```\n{\n    \"filter\": {\n        \"and\": [\n            {\n                \"or\": [\n                    {\n                        \"equals\": {\n                            \"property\": [\"type\"],\n                            \"value\": \"PDF\"\n                        }\n                    },\n                    {\n                        \"prefix\": {\n                            \"property\": [\"externalId\"],\n                            \"value\": \"hello\"\n                        }\n                    }\n                ]\n            },\n            {\n                \"range\": {\n                    \"property\": [\"createdTime\"],\n                    \"lte\": 1519862400000\n                }\n            },\n            {\n                \"not\": {\n                    \"in\": {\n                        \"property\": [\"sourceFile\", \"name\"],\n                        \"values\": [\"My Document.doc\", \"My Other Document.docx\"]\n                    }\n                }\n            }\n        ]\n    }\n}\n```\n\n### Aggregations\n> Deprecated: use the aggregates endpoint for aggregations instead.\n\nAggregations can help provide useful information about your search results and about your whole data set.\nThey can help answer questions such as *\"How many documents are there in total?\"* or *\"How many PDF documents matches my current query?\"*\n\nThe Documents API only supports one type of aggregation at the moment; the `count` aggregation.\nThe `count` aggregation can give you a count of how many documents exist for the different values of a given property.\nIf no property is given, the `count` aggregation gives you the total count of documents.\nMore aggregation types may be added in the future.\n\n### Highlights\nWhen you enable highlights for your search query, the response contains an additional highlight field for each\nsearch hit that includes the highlighted fragments for your query matches. However, this is a costly operation and we therefore\nlimit the results to 20 documents.\n\n#### Properties\nBelow is an overview of all the properties that can be aggregated on, and which aggregate is applicable to each property.\n\n| Property                     | Applicable aggregation |\n|------------------------------|------------------------|\n| `[\"mimeType\"]`               | count                  |\n| `[\"pageCount\"]`              | count                  |\n| `[\"type\"]`                   | count                  |\n| `[\"extension\"]`              | count                  |\n| `[\"author\"]`                 | count                  |\n| `[\"language\"]`               | count                  |\n| `[\"sourceFile\", \"source\"]`   | count                  |\n| `[\"sourceFile\", \"mimeType\"]` | count                  |\n| `[\"sourceFile\", \"labels\"]`   | count                  |\n\n#### Example\n```\n{\n    \"aggregates\": [\n        {\n            \"name\": \"countPerType\",\n            \"aggregate\": \"count\",\n            \"groupBy\": [\n                {\n                    \"property\": [\"type\"]\n                }\n            ]\n        }\n    ]\n}\n```\n\n### Sorting\nSearch results are by default ordered by relevance, meaning how well they match the given query string.\nHowever, it is possible to specify a different property to sort by.\nSorting can be ascending or descending. The default sort order is ascending, in case none is specified.\n\n#### Properties\nBelow is an overview of all the properties that can be sorted on.\n\n| Property                        |\n|---------------------------------|\n| `[\"id\"]`                        |\n| `[\"externalId\"]`                |\n| `[\"mimeType\"]`                  |\n| `[\"extension\"]`                 |\n| `[\"pageCount\"]`                 |\n| `[\"author\"]`                    |\n| `[\"title\"]`                     |\n| `[\"language\"]`                  |\n| `[\"type\"]`                      |\n| `[\"createdTime\"]`               |\n| `[\"modifiedTime\"]`              |\n| `[\"lastIndexedTime\"]`           |\n| `[\"sourceFile\", \"name\"]`        |\n| `[\"sourceFile\", \"mimeType\"]`    |\n| `[\"sourceFile\", \"size\"]`        |\n| `[\"sourceFile\", \"source\"]`      |\n| `[\"sourceFile\", \"datasetId\"]`   |\n| `[\"sourceFile\", \"metadata\", *]` |\n\n#### Example\n```\n{\n    \"sort\": [\n        {\n            \"property\": [\"createdTime\"],\n            \"order\": \"asc\",\n        }\n    ]\n}\n```",
+        "description": "This endpoint lets you search for documents by using advanced filters and free text queries.\nFree text queries are matched against the documents' filenames and contents.\n\n### Free text search\n\n#### Boolean operators\n\nThe `+` symbol signifies an AND operation, and the `|` symbol signifies an OR.\nSearching for `lorem + ipsum` will match documents containing both \"lorem\" AND \"ipsum\" in the filename or content.\nSimilarly, searching for `lorem | ipsum` will match documents containing either \"lorem\" OR \"ipsum\" in the filename or\ncontent.\n\nThe default operator between the search keywords is AND.\nThat means that searching for two terms without any operator, like so: `lorem ipsum`, will\nmatch documents containing both the words \"lorem\" and \"ipsum\" in the filename or content.\n\nTo exclude documents containing a specific word, you can use the operator `-`.\nFor instance, the search `lorem -ipsum` will match documents that contain the word \"lorem\", but does NOT contain the\nword \"ipsum\".\n\n#### Phrases\n\nEnclose multiple words inside double quotes `\"` to group these words together.\nNormally, the search query `lorem ipsum` will match not only \"lorem ipsum\" but also \"lorem cognite ipsum\",\nand in general there can be any number of words between the two words in the query.\nThe search query `\"lorem ipsum\"`, however, will match only exactly \"lorem ipsum\" and not \"lorem cognite ipsum\".\n\n#### Escape\n\nTo search for the special characters (`+`, `|`, `-`, `\"`. `\\`), escape with a preceding backslash (\\).\n\n#### Ordering\n\nWhen you search for a term, we try to return the most relevant documents first, and less relevant documents further down\nthe list.\nThere are a few factors that determine the relevance of a document:\n\n- If the search terms are found multiple times within a document, the relevance of that document is higher.\n- For searches with multiple terms, documents that contain all the terms are considered more relevant than documents\n  that only contain some of the terms.\n- Matches of the terms in the filename field of the document, count for more than matches in the content of the\n  document.\n\n#### Examples\n\n```\n{\n  \"search\": {\n    \"query\": \"cognite \\\"lorem ipsum\\\"\"\n   }\n}\n ```\n\nThis request will return documents matching the search query, where the query behaves as described above.\n\n```\n{\n    \"search\":{\n        \"query\":\"cognite \\\"lorem ipsum\\\"\"\n    },\n    \"filter\":{\n        \"prefix\":{\n            \"property\":[\n                \"externalId\"\n            ],\n            \"value\":\"1\"\n        }\n    }\n}\n```\n\nThis example combines a query with a filter.\nThis search request will return documents matching the search query, and where `externalId` starts with \"1\".\nThe results will be ordered by how well they match the query string.\n\n### Highlights\nWhen you enable highlights for your search query, the response contains an additional highlight field for each\nsearch hit that includes the highlighted fragments for your query matches. However, this is a costly operation, and we therefore\nlimit the results to 20 documents.\n\n### Filtering\n\nFiltering is done by using a special JSON filtering language.\nIt is quite flexible and consists of a number of different \"leaf\" filters which can be combined arbitrarily using the boolean clauses `and`, `or` and `not`.\n\n#### Supported leaf filters\n\n<table>\n<tr>\n<th> <div style=\"width:150px\"> Leaf filter </div> </th> \n<th> <div style=\"width:200px\"> Supported fields </div> </th> \n<th> Description  </th>\n</tr>\n\n<tr>\n<td> <code>equals</code> </td> <td> Non-array type fields </td> <td> Only includes results that are equal to the specified value. \n\n```\n{\n    \"equals\":{\n        \"property\":[\n            \"property\"\n        ],\n        \"value\":\"example\"\n    }\n}\n```\n</td>\n</tr>\n\n<tr>\n<td> <code>in</code> </td> <td> Non-array type fields </td> <td> Only includes results that are equal to one of the specified values.  \n\n```\n{\n    \"in\":{\n        \"property\":[\n            \"property\"\n        ],\n        \"values\":[\n            1,\n            2,\n            3\n        ]\n    }\n}\n```\n</td>\n</tr>\n\n<td> <code>containsAll</code> </td> <td> Array type fields </td> <td> Only includes results which contain all of the specified values.  \n\n```\n{\n    \"containsAll\":{\n        \"property\":[\n            \"property\"\n        ],\n        \"values\":[\n            1,\n            2,\n            3\n        ]\n    }\n}\n```\n</td>\n<tr>\n\n<td> <code>containsAny</code> </td> <td> Array type fields </td> <td> Only includes results which contain all of the specified values.  \n\n```\n{\n    \"containsAny\":{\n        \"property\":[\n            \"property\"\n        ],\n        \"values\":[\n            1,\n            2,\n            3\n        ]\n    }\n}\n```\n</td>\n\n<tr>\n<td> <code>exists</code> </td> <td> All fields </td> <td> Only includes results where the specified property exists (has value).  \n\n```\n{\n    \"exists\":{\n        \"property\":[\n            \"property\"\n        ]\n    }\n}\n```\n</td>\n</tr>\n\n<tr>\n<td> <code>prefix</code> </td> <td> String type fields </td> <td> Only includes results which start with the specified value. \n\n```\n{\n    \"prefix\":{\n        \"property\":[\n            \"property\"\n        ],\n        \"value\":\"example\"\n    }\n}\n```\n</td>\n</tr>\n\n<tr>\n<td> <code>range</code> </td> <td> Non-array type fields </td> <td> Only includes results that fall within the specified range. \n\nSupported operators: <code>gt</code>, <code>lt</code>, <code>gte</code>, <code>lte</code>\n\n```\n{\n    \"range\":{\n        \"property\":[\n            \"property\"\n        ],\n        \"gt\":1,\n        \"lte\":5\n    }\n}\n```\n</td>\n</tr>\n\n<tr>\n<td> <code>geojsonIntersects</code> </td> <td> <code>geoLocation</code> </td> <td> Only includes results whose geoshape intersect the specified geometry.\n\n```\n{\n    \"geojsonIntersects\":{\n        \"property\":[\n            \"sourceFile\",\n            \"geoLocation\"\n        ],\n        \"geometry\":{\n            \"type\":\"Polygon\",\n            \"coordinates\": [[[30, 10], [40, 40], [20, 40], [10, 20], [30, 10]]],\n        }\n    }\n}\n```\n</td>\n</tr>\n\n<tr>\n<td> <code>geojsonDisjoint</code> </td> <td> <code>geoLocation</code> </td> <td> Only includes results whose geoshape has nothing in common with the specified geometry.\n\n```\n{\n    \"geojsonDisjoint\":{\n        \"property\":[\n            \"sourceFile\",\n            \"geoLocation\"\n        ],\n        \"geometry\":{\n            \"type\":\"Polygon\",\n            \"coordinates\": [[[30, 10], [40, 40], [20, 40], [10, 20], [30, 10]]],\n        }\n    }\n}\n```\n</td>\n</tr>\n\n<tr>\n<td> <code>geojsonWithin</code> </td> <td> <code>geoLocation</code> </td> <td> Only includes results whose geoshape fall within the specified geometry.\n\n```\n{\n    \"geojsonWithin\":{\n        \"property\":[\n            \"sourceFile\",\n            \"geoLocation\"\n        ],\n        \"geometry\":{\n            \"type\":\"Polygon\",\n            \"coordinates\": [[[30, 10], [40, 40], [20, 40], [10, 20], [30, 10]]],\n        }\n    }\n}\n```\n</td>\n</tr>\n\n<tr>\n<td> <code>inAssetSubtree</code> </td> <td> <code>assetIds</code>, <code>assetExternalIds</code> </td> <td> Only includes results that have a related asset in a subtree rooted at any of the specified IDs.\n\n```\n{\n    \"filter\":{\n        \"inAssetSubtree\":{\n            \"property\":[\n                \"sourceFile\",\n                \"assetIds\"\n            ],\n            \"values\":[\n                1,\n                2,\n                3\n            ]\n        }\n    }\n}\n```\n</td>\n</tr>\n\n<tr>\n<td> <code>search</code> </td> <td> <code>name</code>, <code>content</code> </td> <td>\n\n```\n{\n    \"search\":{\n        \"property\":[\n            \"property\"\n        ],\n        \"value\":\"example\"\n    }\n}\n```\n</td>\n</tr>\n\n</table>\n\n#### Properties\nBelow is an overview of all the properties that can be filtered on, and which filters are applicable to each property.\n\n| Property                                 | Type                | Applicable filters                                                                                                                                                             |\n|------------------------------------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n| `[\"id\"]`                                 | integer             | equals, in, range, exists                                                                                                                                                      |\n| `[\"externalId\"]`                         | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"title\"]`                              | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"author\"]`                             | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"createdTime\"]`                        | integer             | equals, in, range, exists                                                                                                                                                      |\n| `[\"modifiedTime\"]`                       | integer             | equals, in, range, exists                                                                                                                                                      |\n| `[\"lastIndexedTime\"]`                    | integer             | equals, in, range, exists                                                                                                                                                      |\n| `[\"mimeType\"]`                           | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"extension\"]`                          | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"pageCount\"]`                          | integer             | equals, in, range, exists                                                                                                                                                      |\n| `[\"type\"]`                               | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"geoLocation\"]`                        | geometry object     | geojsonIntersects, geojsonDisjoint, geojsonWithin, exists                                                                                                                      |\n| `[\"language\"]`                           | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"assetIds\"]`                           | array of integers   | containsAny, containsAll, exists, inAssetSubtree                                                                                                                               |\n| `[\"assetExternalIds\"]`                   | array of strings    | containsAny, containsAll, exists, inAssetSubtree                                                                                                                               |\n| `[\"labels\"]`                             | array of Labels     | containsAny, containsAll, exists                                                                                                                                               |\n| `[\"content\"]`                            | string              | search                                                                                                                                                                         |\n| `[\"sourceFile\", \"name\"]`                 | string              | equals, in, prefix, exists, search                                                                                                                                             |\n| `[\"sourceFile\", \"mimeType\"]`             | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"sourceFile\", \"size\"]`                 | integer             | equals, in, range, exists                                                                                                                                                      |\n| `[\"sourceFile\", \"source\"]`               | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"sourceFile\", \"directory\"]`            | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"sourceFile\", \"assetIds\"]`             | array of integers   | containsAny, containsAll, exists, inAssetSubtree                                                                                                                               |\n| `[\"sourceFile\", \"assetExternalIds\"]`     | array of strings    | containsAny, containsAll, exists, inAssetSubtree                                                                                                                               |\n| `[\"sourceFile\", \"datasetId\"]`            | integer             | equals, in, range, exists                                                                                                                                                      |\n| `[\"sourceFile\", \"securityCategories\"]`   | array of integers   | containsAny, containsAll, exists                                                                                                                                               |\n| `[\"sourceFile\", \"geoLocation\"]`          | geometry object     | geojsonIntersects, geojsonDisjoint, geojsonWithin, exists                                                                                                                      |\n| `[\"sourceFile\", \"labels\"]`               | array of Labels     | containsAny, containsAll, exists                                                                                                                                               |\n| `[\"sourceFile\", \"metadata\", <key>]`      | string              | equals, in, prefix, exists                                                                                                                                                     |\n| `[\"sourceFile\", \"metadata\"]`             | string              | equals, in, prefix, exists<br><br>This is a special filter field that targets all metadata values. <br>An alternative to creating a filter for each key in the metadata field. |\n\n#### Full example\n```\n{\n   \"filter\": {\n      \"and\": [\n         {\n            \"or\": [\n               {\n                  \"equals\": {\n                     \"property\": [\n                        \"type\"\n                     ],\n                     \"value\": \"PDF\"\n                  }\n               },\n               {\n                  \"prefix\": {\n                     \"property\": [\n                        \"externalId\"\n                     ],\n                     \"value\": \"hello\"\n                  }\n               }\n            ]\n         },\n         {\n            \"range\": {\n               \"property\": [\n                  \"createdTime\"\n               ],\n               \"lte\": 1519862400000\n            }\n         },\n         {\n            \"not\": {\n               \"in\": {\n                  \"property\": [\n                     \"sourceFile\",\n                     \"name\"\n                  ],\n                  \"values\": [\n                     \"My Document.doc\",\n                     \"My Other Document.docx\"\n                  ]\n               }\n            }\n         }\n      ]\n   }\n}\n ```\n\n### Sorting\nSearch results are by default ordered by relevance, meaning how well they match the given query string.\nHowever, it is possible to specify a different property to sort by.\nSorting can be ascending or descending. The default sort order is ascending, in case none is specified.\n\n#### Properties\nBelow is an overview of all the properties that can be sorted on.\n\n| Property                        |\n|---------------------------------|\n| `[\"id\"]`                        |\n| `[\"externalId\"]`                |\n| `[\"mimeType\"]`                  |\n| `[\"extension\"]`                 |\n| `[\"pageCount\"]`                 |\n| `[\"author\"]`                    |\n| `[\"title\"]`                     |\n| `[\"language\"]`                  |\n| `[\"type\"]`                      |\n| `[\"createdTime\"]`               |\n| `[\"modifiedTime\"]`              |\n| `[\"lastIndexedTime\"]`           |\n| `[\"sourceFile\", \"name\"]`        |\n| `[\"sourceFile\", \"mimeType\"]`    |\n| `[\"sourceFile\", \"size\"]`        |\n| `[\"sourceFile\", \"source\"]`      |\n| `[\"sourceFile\", \"datasetId\"]`   |\n| `[\"sourceFile\", \"metadata\", *]` |\n\n#### Example\n```\n{\n    \"sort\":[\n        {\n            \"property\":[\n                \"createdTime\"\n            ],\n            \"order\":\"asc\",\n            \n        }\n    ]\n}\n ```\n",
         "operationId": "documentsSearch",
         "parameters": [
           {
@@ -9858,7 +9179,7 @@
           "Documents"
         ],
         "summary": "Aggregate documents",
-        "description": "The aggregation API allows you to compute aggregated results on documents\nlike getting the count of all documents in a project or checking what are all the\ndifferent authors of documents in a project, along with the count of documents in\neach of those aggregations. By specifying an additional filter or search, you can\nalso aggregate only among documents matching the specified filter or search.\n\nThe default behavior, when you do not specify the `aggregate` field in the request\nbody, is to return the count of all matched documents.\n\nSetting `aggregate` to `uniqueValues` will return top unique values (up to the\nrequested limit) and the count of each in the property specified in\n`properties`. The list will have the highest count first. For example:\n\n```\n{\n  \"aggregate\": \"uniqueValues\",\n  \"properties\": [\n    {\n      \"property\": [\"author\"]\n    }\n  ]\n}\n```\n\nwill return the top unique authors in the documents in your project.\nIf the number of unique authors is less than the requested limit you will\nbe receiving all unique authors ordered by the most frequent first.\n\nSimilarly,\n\n```\n{\n  \"aggregate\": \"uniqueValues\",\n  \"properties\": [\n    {\n      \"property\": [\"author\"]\n    }\n  ],\n  \"filter\": {\n      \"equals\": {\n          \"property\": [\"type\"],\n          \"value\": \"PDF\"\n      }\n  }\n}\n```\n\nwill return top unique authors in PDF documents.\n\nSetting `aggregate` to `allUniqueValues` will return all unique values\nand the count of each. The response contains a cursor that must be used\nto fetch all pages of data. The data is not ordered by the count. This\nallows to retrieve all unique values for more than 10000 items.\n",
+        "description": "The aggregation API allows you to compute aggregated results on documents\nlike getting the count of all documents in a project or checking what are all the\ndifferent authors of documents in a project, along with the count of documents in\neach of those aggregations. By specifying an additional filter or search, you can\nalso aggregate only among documents matching the specified filter or search.\n\nThe default behavior, when you do not specify the `aggregate` field in the request\nbody, is to return the count of all matched documents.\n\n### Supported aggregates\n\n<table>\n\n<tr>\n<th> <div style=\"width:200px\"> Aggregate </div> </th> \n<th> <div style=\"width:350px\"> Description </div> </th> \n<th> Example  </th>\n</tr>\n\n<tr>\n<td> <code>count</code> </td> <td> Count of documents matching the specified filters and search. </td> <td>  \n\n```\n{\n    \"search\":{\n        \"query\":\"example\",\n        \n    },\n    \"aggregate\":\"count\",\n    \n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>uniqueValues</code> </td> <td> Returns top unique values for specified properties (up to the\nrequested limit) and the count of each in the property specified in <code>properties</code>. \nThe list will have the highest count first. </td> <td>  \n\n```\n{\n    \"aggregate\":\"uniqueValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"author\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>uniqueProperties</code> </td> <td> Returns unique properties values for the specified properties. \nCurrently, <code>uniqueProperties</code> aggregate is only supported for property \n<code>[\"sourceFile\", \"metadata\"]</code> </td> <td>  \n\n```\n{\n    \"aggregate\":\"uniqueProperties\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"sourceFile\",\n                \"metadata\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>allUniqueValues</code> </td> <td> Returns all unique values\nand the count of each. The response contains a cursor that must be used\nto fetch all pages of data. The data is not ordered by the count. This\nallows to retrieve all unique values for more than 10000 items. </td> <td>  \n\n```\n{\n    \"aggregate\":\"allUniqueValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"author\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>approximateCardinality</code> </td> <td> Returns an approximate count of \ndistinct values for the specified properties. </td> <td>  \n\n```\n{\n    \"aggregate\":\"approximateCardinality\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"mimeType\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n</table>\n\n### Metadata aggregation\n\nAggregation on metadata behaves differently. Supported aggregate operations:\n\n| Property                            | Applicable aggregation               |\n|-------------------------------------|--------------------------------------|\n| `[\"sourceFile\", \"metadata\", <key>]` | uniqueValues, approximateCardinality |\n| `[\"sourceFile\", \"metadata\"]`        | uniqueProperties                     |",
         "operationId": "documentsAggregate",
         "parameters": [
           {
@@ -9877,7 +9198,13 @@
                     "$ref": "#/components/schemas/DocumentsAggregateUniqueValuesRequest"
                   },
                   {
+                    "$ref": "#/components/schemas/DocumentsAggregateUniquePropertiesRequest"
+                  },
+                  {
                     "$ref": "#/components/schemas/DocumentsAggregateAllUniqueValuesRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DocumentsAggregateApproximateCardinalityRequest"
                   }
                 ]
               },
@@ -16966,12 +16293,6 @@
   },
   "components": {
     "securitySchemes": {
-      "api-key": {
-        "type": "apiKey",
-        "description": "An admin can create API keys in the Cognite console.",
-        "name": "api-key",
-        "in": "header"
-      },
       "oidc-token": {
         "type": "http",
         "description": "Access token issued by the CDF project's configured identity provider. Access token must be an OpenID Connect token, and the project must be configured to accept OpenID Connect tokens. Use a header key of 'Authorization' with a value of 'Bearer $accesstoken'",
@@ -17079,17 +16400,6 @@
             }
           },
           {
-            "title": "Users Capability",
-            "properties": {
-              "usersAcl": {
-                "$ref": "#/components/schemas/cogniteusers_aclAcl"
-              },
-              "projectScope": {
-                "$ref": "#/components/schemas/ProjectScope"
-              }
-            }
-          },
-          {
             "title": "Projects Capability",
             "properties": {
               "projectsAcl": {
@@ -17130,14 +16440,6 @@
               },
               "projectScope": {
                 "$ref": "#/components/schemas/ProjectScope"
-              }
-            }
-          },
-          {
-            "title": "Api Keys Capability",
-            "properties": {
-              "apikeysAcl": {
-                "$ref": "#/components/schemas/cogniteapikeys_aclAcl"
               }
             }
           },
@@ -19818,7 +19120,7 @@
       },
       "EventCountAggregate": {
         "type": "object",
-        "title": "Count",
+        "title": "EventCount",
         "description": "Request aggregate to count number of Events matching filters. Default aggregate for the endpoint.",
         "properties": {
           "filter": {
@@ -21964,7 +21266,42 @@
               "type": "number",
               "description": "Global rotation to be applied to the entire model. The rotation is expressed by Euler angles in radians and in XYZ order.",
               "format": "double"
-            }
+            },
+            "example": [
+              0,
+              0,
+              0
+            ]
+          },
+          "scale": {
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "number",
+              "description": "Global scale to be applied to the entire model. The scale is expressed by units in XYZ order.",
+              "format": "double"
+            },
+            "example": [
+              1,
+              1,
+              1
+            ]
+          },
+          "translation": {
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "number",
+              "description": "Global translation to be applied to the entire model, to offset the position. The translation is expressed by units in XYZ order.",
+              "format": "double"
+            },
+            "example": [
+              0,
+              0,
+              0
+            ]
           },
           "camera": {
             "$ref": "#/components/schemas/RevisionCameraProperties"
@@ -22076,7 +21413,42 @@
               "type": "number",
               "description": "Global rotation to be applied to the entire model. The rotation is expressed by Euler angles in radians and in XYZ order.",
               "format": "double"
-            }
+            },
+            "example": [
+              0,
+              0,
+              0
+            ]
+          },
+          "scale": {
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "number",
+              "description": "Global scale to be applied to the entire model. The scale is expressed by units in XYZ order.",
+              "format": "double"
+            },
+            "example": [
+              1,
+              1,
+              1
+            ]
+          },
+          "translation": {
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "number",
+              "description": "Global translation to be applied to the entire model. The translation is expressed by units in XYZ order.",
+              "format": "double"
+            },
+            "example": [
+              0,
+              0,
+              0
+            ]
           },
           "metadata": {
             "$ref": "#/components/schemas/Metadata3D"
@@ -22113,6 +21485,12 @@
                   },
                   "rotation": {
                     "$ref": "#/components/schemas/SetRevisionRotation"
+                  },
+                  "scale": {
+                    "$ref": "#/components/schemas/SetRevisionScale"
+                  },
+                  "translation": {
+                    "$ref": "#/components/schemas/SetRevisionTranslation"
                   },
                   "camera": {
                     "$ref": "#/components/schemas/SetRevisionCameraProperties"
@@ -22191,6 +21569,36 @@
             "items": {
               "type": "number",
               "description": "Global rotation to be applied to the entire model. The rotation is expressed by Euler angles in radians and in XYZ order.",
+              "format": "double"
+            }
+          }
+        }
+      },
+      "SetRevisionScale": {
+        "type": "object",
+        "properties": {
+          "set": {
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "number",
+              "description": "Global scale to be applied to the entire model. The scale is expressed by units in XYZ order.",
+              "format": "double"
+            }
+          }
+        }
+      },
+      "SetRevisionTranslation": {
+        "type": "object",
+        "properties": {
+          "set": {
+            "maxItems": 3,
+            "minItems": 3,
+            "type": "array",
+            "items": {
+              "type": "number",
+              "description": "Global translation to be applied to the entire model, to offset the position. The translation is expressed by units in XYZ order.",
               "format": "double"
             }
           }
@@ -22383,6 +21791,26 @@
         },
         "description": "The bounding box of the subtree with this sector as the root sector. Is null if there are no geometries in the subtree."
       },
+      "Node3DNameFilter": {
+        "type": "object",
+        "description": "Filter used in searching for nodes by name.",
+        "properties": {
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "The names of the nodes you want returned",
+              "maxItems": 1000,
+              "minItems": 1
+            },
+            "example": [
+              "PIPE-9MM-HG",
+              "VALVE-HL3",
+              "US-DIV-2"
+            ]
+          }
+        }
+      },
       "Node3DPropertyFilter": {
         "type": "object",
         "description": "Filters used in the search.",
@@ -22407,7 +21835,29 @@
           }
         }
       },
-      "Node3DFilterBody": {
+      "Node3DNameFilterBody": {
+        "description": "Filter request for nodes. Filters nodes with properties matching ones in a list of alternatives.",
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "filter": {
+                "$ref": "#/components/schemas/Node3DNameFilter"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/Limit"
+          },
+          {
+            "$ref": "#/components/schemas/Cursor"
+          },
+          {
+            "$ref": "#/components/schemas/PartitionObject"
+          }
+        ]
+      },
+      "Node3DPropertyFilterBody": {
         "description": "Filter request for nodes. Filters nodes with properties matching ones in a list of alternatives.",
         "allOf": [
           {
@@ -24556,144 +24006,6 @@
         },
         "description": "A row key"
       },
-      "TokenStatusDTO": {
-        "type": "object",
-        "required": [
-          "token",
-          "valid",
-          "expired"
-        ],
-        "properties": {
-          "token": {
-            "type": "string",
-            "description": "The token that was sent for validation",
-            "example": "ewogICJhbGciOiAiUlMyNTYiLAogICJ0eXAiOiAiSldUIgp9.ewogICJhY2NvdW50X3R5cGUiOiAidXNlcl9hY2NvdW50IiwKICAicHJvamVjdF9pZCI6IDI5MzgyOTU3MjA2NzUzNTMsCiAgInVuaXF1ZV9uYW1lIjogIm1hcnRpbi5yb2VkQGNvZ25pdGUuY29tIiwKICAic2Vzc2lvblRpY2tldCI6ICJDQUlTSkdKa04yUmxZMkUyTFRkbFltSXROR1E1TlMxaU16QmtMVFF4T1dRMFlUSTVaRGRqTkJvRFFWQkpJa01hRjIxaGNuUnBiaTV5YjJWa1FHTnZaMjVwZEdVdVkyOXRJSm1RdE1YVWk1d0ZLaC9vbjQ3QzE5Uld0TXZQMkpYTGd3YTVrNm0wbHMvS0NMVHB5SWFDcEpBTEtnTkJVRWtxREVGVlZFZ3RVMFZTVmtsRFJUSU1DTnlkdCtVRkVNQ2c0ck1CT2d3STZMSzM1UVVRd0tEaXN3RkNEQWpjbmJmbEJSREFvT0t6QVVvTUlnb0lBUklDQUFFYUFnb0FTZzhxRFFnQkVnVUFBUUlEQkJvQ0dnQktDeW9KQ0FFU0FRQWFBaW9BU2d3eUNnZ0JFZ0lBQVJvQ0NnQktERG9LQ0FFU0FnQUJHZ0lLQUVvTVFnb0lBUklDQUFFYUFnb0FTZzlLRFFnQkVnVUFBUUlFQXhvQ0dnQktERklLQ0FFU0FnRURHZ0lhQUVvT1dnd0lBUklFQVFRQ0FCb0NDZ0JLRFdJTENBRVNBd0lCQUJvQ0NnQktER29LQ0FFU0FnQUJHZ0lLQUVvTGNna0lBUklCQUJvQ0tnQktEM0lOQ0FFU0JRQUJBZ01FR2dJYUFFb09lZ3dJQVJJRUFBRUNBeG9DR2dCS0RZSUJDZ2dCRWdJQUFSb0NDZ0JLRFlvQkNnZ0JFZ0lBQVJvQ0NnQktEcElCQ3dnQkVnTUFBZ0VhQWdvQVNncWFBUWNTQVFBYUFob0EiLAogICJzaWduaW5nX2tleSI6ICIyZTAyMGM3NS1kODcwLTQxNWItYTY2Ny02OGZiODk0MTgwZjEiLAogICJleHBpcmVfdGltZSI6IDE1NTQ4OTcyNTYKfQ==.WNTT7qvdj4KUbIwo8x4Upq3Ki/X9rd0lqMbcIlLCDwjqrH2OH4jc/CgE/Uk9z9HeCCSWDDwJYGXOiIc+bZGQdzuYDPd5LYN8SaT1bDfa5mkAaPpk7f0KSBqp5FceNWSqjh1/mevX0OhNMbB6z5KXU9t7EDgNFWgMT2zUpfll0nNYhAgJBU1MeGtxVZcRLIP2iAEmFR4XlLlxc+bi0SxGGUZHPn2AQq5jitbJAdjnwf5KCr+2HH1Dww75q7qiGZ7NsO7ipTGdO/KaaTvlLp90k5jT4a7fPqCuMWS25NgJK4dQIEqtCvHaqnMV1Q+G6WtdEy+Qcx581H8J3A2LV1pQYA=="
-          },
-          "valid": {
-            "type": "boolean",
-            "description": "Whether this token is valid"
-          },
-          "expired": {
-            "type": "boolean",
-            "description": "Whether this token has expired"
-          }
-        }
-      },
-      "SingleTokenStatusDTOResponse": {
-        "type": "object",
-        "required": [
-          "data"
-        ],
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/TokenStatusDTO"
-          }
-        }
-      },
-      "IdToken": {
-        "type": "object",
-        "required": [
-          "sub",
-          "project_name",
-          "groups",
-          "signing_key",
-          "exp"
-        ],
-        "properties": {
-          "sub": {
-            "type": "string",
-            "description": "The subject of the token",
-            "example": "tom@example.com"
-          },
-          "project_name": {
-            "type": "string",
-            "description": "Which CDF project the subject is in",
-            "example": "digitalrevolution"
-          },
-          "groups": {
-            "type": "array",
-            "description": "Which groups (by ID) the subject is in",
-            "items": {
-              "type": "integer",
-              "description": "Which groups (by ID) the subject is in",
-              "format": "int64"
-            },
-            "example": [
-              123982398,
-              123981283723,
-              7283273927
-            ]
-          },
-          "signing_key": {
-            "type": "string",
-            "description": "The signing key ID",
-            "example": "a769f8ef-d5e3-4cf7-b914-2a6de189d942"
-          },
-          "exp": {
-            "type": "integer",
-            "description": "The expiration time of the token in seconds (unix)",
-            "format": "int64",
-            "example": 1554897484
-          }
-        },
-        "description": "An ID JWT token"
-      },
-      "LoginUrlResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/LoginUrlDTO"
-          }
-        }
-      },
-      "LoginUrlDTO": {
-        "type": "object",
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "The url where the user can be redirected to sign in."
-          }
-        },
-        "description": "Represents an url where the user can be redirected to sign in."
-      },
-      "LoginStatusDTO": {
-        "type": "object",
-        "required": [
-          "user",
-          "loggedIn",
-          "project",
-          "projectId"
-        ],
-        "properties": {
-          "user": {
-            "type": "string",
-            "description": "The user principal, e.g john.doe@corporation.com.",
-            "example": "tom@example.com"
-          },
-          "loggedIn": {
-            "type": "boolean",
-            "description": "Whether the user is logged in or not.",
-            "example": true
-          },
-          "project": {
-            "type": "string",
-            "description": "Name of project user belongs to",
-            "example": "digitalrevolution"
-          },
-          "projectId": {
-            "type": "integer",
-            "description": "Internal project ID of the project",
-            "format": "int64",
-            "example": 137238723719
-          },
-          "apiKeyId": {
-            "type": "integer",
-            "format": "int64",
-            "description": "ID of the api key making the request. This is optional and only present if an api key is used as authentication."
-          }
-        },
-        "description": "Represents the current authentication status of the request"
-      },
       "GroupName": {
         "type": "string",
         "description": "Name of the group",
@@ -24702,7 +24014,7 @@
       },
       "GroupSourceId": {
         "type": "string",
-        "description": "ID of the group in the source. If this is the same ID as a group in the IdP, a service account in that group will implicitly be a part of this group as well.",
+        "description": "ID of the group in the source. If this is the same ID as a group in the IdP, a principal in that group will implicitly be a part of this group as well.",
         "example": "b7c9a5a4-99c2-4785-bed3-5e6ad9a78603"
       },
       "Group": {
@@ -24836,17 +24148,6 @@
               }
             },
             {
-              "title": "usersAcl",
-              "required": [
-                "usersAcl"
-              ],
-              "properties": {
-                "usersAcl": {
-                  "$ref": "#/components/schemas/cogniteusers_aclAcl"
-                }
-              }
-            },
-            {
               "title": "projectsAcl",
               "required": [
                 "projectsAcl"
@@ -24887,17 +24188,6 @@
               "properties": {
                 "timeSeriesAcl": {
                   "$ref": "#/components/schemas/cognitetimeseries_aclAcl"
-                }
-              }
-            },
-            {
-              "title": "apikeysAcl",
-              "required": [
-                "apikeysAcl"
-              ],
-              "properties": {
-                "apikeysAcl": {
-                  "$ref": "#/components/schemas/cogniteapikeys_aclAcl"
                 }
               }
             },
@@ -24997,6 +24287,17 @@
               "properties": {
                 "seismicAcl": {
                   "$ref": "#/components/schemas/cogniteseismic_aclAcl"
+                }
+              }
+            },
+            {
+              "title": "wellsAcl",
+              "required": [
+                "wellsAcl"
+              ],
+              "properties": {
+                "wellsAcl": {
+                  "$ref": "#/components/schemas/cognitewells_aclAcl"
                 }
               }
             },
@@ -25139,89 +24440,6 @@
           }
         },
         "title": "Analytics:Scope"
-      },
-      "cogniteapikeys_aclAcl": {
-        "type": "object",
-        "required": [
-          "actions",
-          "scope"
-        ],
-        "properties": {
-          "actions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/cogniteapikeys_aclAction"
-            }
-          },
-          "scope": {
-            "$ref": "#/components/schemas/cogniteapikeys_aclScope"
-          }
-        },
-        "title": "Acl:Apikey"
-      },
-      "cogniteapikeys_aclAction": {
-        "type": "string",
-        "enum": [
-          "LIST",
-          "CREATE",
-          "DELETE"
-        ],
-        "default": "LIST",
-        "title": "Apikey:Action"
-      },
-      "cogniteapikeys_aclScope": {
-        "type": "object",
-        "oneOf": [
-          {
-            "title": "all",
-            "properties": {
-              "all": {
-                "$ref": "#/components/schemas/generic_aclAllScope"
-              }
-            }
-          },
-          {
-            "title": "currentuserscope",
-            "properties": {
-              "currentuserscope": {
-                "title": "apikeys owned by the service account making the request",
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/generic_aclCurrentUserScope"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "idscope",
-            "properties": {
-              "idscope": {
-                "title": "apikeys owned by the service account with the specified ID",
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/cogniteapikeys_aclIdScope"
-                  }
-                ]
-              }
-            }
-          }
-        ],
-        "title": "Apikey:Scope"
-      },
-      "cogniteapikeys_aclIdScope": {
-        "type": "object",
-        "properties": {
-          "ids": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uint64"
-            },
-            "title": "service account IDs"
-          }
-        },
-        "title": "Scope:ApikeyIdScope"
       },
       "cogniteassets_aclAcl": {
         "type": "object",
@@ -25531,7 +24749,7 @@
                     "$ref": "#/components/schemas/generic_aclCurrentUserScope"
                   }
                 ],
-                "title": "groups the current principal (service account or user) is in"
+                "title": "groups the current principal is in"
               }
             }
           }
@@ -25921,6 +25139,43 @@
           }
         },
         "title": "Seismic:Scope"
+      },
+      "cognitewells_aclAcl": {
+        "type": "object",
+        "required": [
+          "actions",
+          "scope"
+        ],
+        "properties": {
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/cognitewells_aclAction"
+            }
+          },
+          "scope": {
+            "$ref": "#/components/schemas/cognitewells_aclScope"
+          }
+        },
+        "title": "Acl:Wells"
+      },
+      "cognitewells_aclAction": {
+        "type": "string",
+        "enum": [
+          "READ",
+          "WRITE"
+        ],
+        "default": "READ",
+        "title": "Wells:Action"
+      },
+      "cognitewells_aclScope": {
+        "type": "object",
+        "properties": {
+          "all": {
+            "$ref": "#/components/schemas/generic_aclAllScope"
+          }
+        },
+        "title": "Wells:Scope"
       },
       "cognitegeospatial_aclAcl": {
         "type": "object",
@@ -26339,67 +25594,6 @@
           }
         ],
         "title": "Labels:Scope"
-      },
-      "cogniteusers_aclAcl": {
-        "type": "object",
-        "required": [
-          "actions",
-          "scope"
-        ],
-        "properties": {
-          "actions": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/cogniteusers_aclAction"
-            }
-          },
-          "scope": {
-            "$ref": "#/components/schemas/cogniteusers_aclScope"
-          }
-        },
-        "title": "Acl:User"
-      },
-      "cogniteusers_aclAction": {
-        "type": "string",
-        "enum": [
-          "LIST",
-          "CREATE",
-          "DELETE"
-        ],
-        "default": "LIST",
-        "title": "User:Action"
-      },
-      "cogniteusers_aclScope": {
-        "type": "object",
-        "oneOf": [
-          {
-            "title": "all",
-            "properties": {
-              "all": {
-                "title": "all service accounts",
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/generic_aclAllScope"
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "title": "currentuserscope",
-            "properties": {
-              "currentuserscope": {
-                "title": "the current principal (user or service account) making the request",
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/generic_aclCurrentUserScope"
-                  }
-                ]
-              }
-            }
-          }
-        ],
-        "title": "User:Scope"
       },
       "extractionpipelines_aclAcl": {
         "type": "object",
@@ -27242,201 +26436,6 @@
           "clientSecret": {
             "type": "string",
             "description": "Client secret. Your OAuth2 provider should give you this when registering your client."
-          }
-        }
-      },
-      "serviceAccountName": {
-        "type": "string",
-        "description": "Unique name of the service account",
-        "example": "some-internal-service@example.com",
-        "title": "name"
-      },
-      "groups": {
-        "type": "array",
-        "description": "List of group IDs",
-        "items": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "example": [
-          238712387,
-          1283712837,
-          1238712387
-        ]
-      },
-      "ServiceAccountInput": {
-        "type": "object",
-        "required": [
-          "name"
-        ],
-        "properties": {
-          "name": {
-            "$ref": "#/components/schemas/serviceAccountName"
-          },
-          "groups": {
-            "$ref": "#/components/schemas/groups"
-          }
-        }
-      },
-      "ServiceAccount": {
-        "required": [
-          "name",
-          "id",
-          "groups",
-          "isDeleted"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "$ref": "#/components/schemas/serviceAccountName"
-          },
-          "groups": {
-            "$ref": "#/components/schemas/groups"
-          },
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "description": "Unique ID of the service account"
-          },
-          "isDeleted": {
-            "type": "boolean",
-            "example": false,
-            "description": "If this service account has been logically deleted"
-          },
-          "deletedTime": {
-            "type": "integer",
-            "format": "int64",
-            "description": "Time of deletion"
-          }
-        }
-      },
-      "NewApiKeyResponse": {
-        "type": "object",
-        "required": [
-          "items"
-        ],
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/NewApiKeyResponseDTO"
-            }
-          }
-        }
-      },
-      "NewApiKeyResponseDTO": {
-        "type": "object",
-        "required": [
-          "id",
-          "serviceAccountId",
-          "createdTime",
-          "status",
-          "value"
-        ],
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "description": "The internal ID for the API key."
-          },
-          "serviceAccountId": {
-            "type": "integer",
-            "format": "int64",
-            "description": "The ID of the service account."
-          },
-          "createdTime": {
-            "type": "integer",
-            "format": "int64",
-            "description": "The time of creation in Unix milliseconds."
-          },
-          "status": {
-            "type": "string",
-            "description": "The status of the API key.",
-            "enum": [
-              "ACTIVE",
-              "DELETED"
-            ],
-            "default": "ACTIVE"
-          },
-          "value": {
-            "type": "string",
-            "description": "The API key to be used against the API.",
-            "example": "MQ23y87QSDKIJSd87287sdJkjsd"
-          }
-        }
-      },
-      "DataApiKeyRequest": {
-        "type": "object",
-        "required": [
-          "items"
-        ],
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ApiKeyRequest"
-            }
-          }
-        }
-      },
-      "ApiKeyRequest": {
-        "required": [
-          "serviceAccountId"
-        ],
-        "type": "object",
-        "properties": {
-          "serviceAccountId": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
-      "ApiKeyResponse": {
-        "type": "object",
-        "title": "ApiKeyResponse",
-        "required": [
-          "items"
-        ],
-        "properties": {
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "title": "ApiKeyObject",
-              "required": [
-                "id",
-                "serviceAccountId",
-                "createdTime",
-                "status"
-              ],
-              "properties": {
-                "id": {
-                  "type": "integer",
-                  "format": "int64",
-                  "example": 91723917823,
-                  "description": "The ID of the API key."
-                },
-                "serviceAccountId": {
-                  "type": "integer",
-                  "format": "int64",
-                  "example": 1283712837,
-                  "description": "The ID of the service account."
-                },
-                "createdTime": {
-                  "type": "integer",
-                  "format": "int64",
-                  "description": "The time of creation in Unix milliseconds.",
-                  "example": 1554897980221
-                },
-                "status": {
-                  "type": "string",
-                  "enum": [
-                    "ACTIVE",
-                    "DELETED"
-                  ]
-                }
-              }
-            }
           }
         }
       },
@@ -30589,7 +29588,7 @@
           "fileId",
           "fileExternalId"
         ],
-        "description": "An object containg file (external) id. The file can only have maximum 50 pages.",
+        "description": "An object containing file (external) id. The file can have at most 50 pages.",
         "oneOf": [
           {
             "properties": {
@@ -30607,6 +29606,57 @@
           }
         ]
       },
+      "PageRange": {
+        "type": "object",
+        "required": [
+          "begin",
+          "end"
+        ],
+        "description": "An inclusive range of up to 50 pages, starting at 1. For example, the first 10 pages are given by begin=1, end=10. Page ranges only apply to PDF files.",
+        "properties": {
+          "begin": {
+            "type": "integer",
+            "description": "The first page of the page range.",
+            "minimum": 1,
+            "example": 51
+          },
+          "end": {
+            "type": "integer",
+            "description": "The last page of the page range, must be greater than or equal to begin.",
+            "minimum": 1,
+            "example": 100
+          }
+        }
+      },
+      "FileReferenceWithPageRange": {
+        "type": "object",
+        "required": [
+          "fileId",
+          "fileExternalId"
+        ],
+        "description": "Either file id or file external id, and optionally a page range. At most 50 pages can be given",
+        "oneOf": [
+          {
+            "properties": {
+              "fileId": {
+                "$ref": "#/components/schemas/DiagramFileId"
+              }
+            }
+          },
+          {
+            "properties": {
+              "fileExternalId": {
+                "$ref": "#/components/schemas/DiagramFileExternalId"
+              }
+            }
+          }
+        ],
+        "properties": {
+          "pageRange": {
+            "$ref": "#/components/schemas/PageRange"
+          }
+        }
+      },
       "AllOfFileId": {
         "type": "object",
         "required": [
@@ -30620,6 +29670,31 @@
             "$ref": "#/components/schemas/DiagramFileExternalId"
           }
         }
+      },
+      "AllOfFileIdWithPageRange": {
+        "type": "object",
+        "required": [
+          "fileId"
+        ],
+        "properties": {
+          "fileId": {
+            "$ref": "#/components/schemas/DiagramFileId"
+          },
+          "fileExternalId": {
+            "$ref": "#/components/schemas/DiagramFileExternalId"
+          },
+          "pageRange": {
+            "$ref": "#/components/schemas/PageRange"
+          },
+          "pageCount": {
+            "$ref": "#/components/schemas/PageCount"
+          }
+        }
+      },
+      "PageCount": {
+        "type": "integer",
+        "description": "The total number of pages in the file, returned if page range was provided.",
+        "example": 51
       },
       "DiagramDetectEntities": {
         "type": "array",
@@ -30663,7 +29738,6 @@
         "type": "integer",
         "example": 1,
         "description": "The page of the file where the annotations in `annotations` were detected.",
-        "maximum": 50,
         "minimum": 1
       },
       "DiagramDetectConfig": {
@@ -30801,7 +29875,7 @@
             {
               "allOf": [
                 {
-                  "$ref": "#/components/schemas/AllOfFileId"
+                  "$ref": "#/components/schemas/AllOfFileIdWithPageRange"
                 },
                 {
                   "properties": {
@@ -31462,6 +30536,25 @@
           }
         }
       },
+      "DocumentSearchInAggregate": {
+        "type": "object",
+        "properties": {
+          "search": {
+            "type": "object",
+            "required": [
+              "query"
+            ],
+            "properties": {
+              "query": {
+                "type": "string",
+                "description": "The free text search query as described in detail above.",
+                "maxLength": 1000,
+                "example": "cognite \"lorem ipsum\""
+              }
+            }
+          }
+        }
+      },
       "DocumentSearch": {
         "type": "object",
         "properties": {
@@ -32081,6 +31174,9 @@
             "$ref": "#/components/schemas/DocumentFilterPrefix"
           },
           {
+            "$ref": "#/components/schemas/DocumentFilterSearch"
+          },
+          {
             "$ref": "#/components/schemas/DocumentFilterExists"
           },
           {
@@ -32301,6 +31397,37 @@
           }
         }
       },
+      "DocumentFilterSearch": {
+        "type": "object",
+        "title": "search",
+        "required": [
+          "search"
+        ],
+        "properties": {
+          "search": {
+            "required": [
+              "property",
+              "value"
+            ],
+            "description": "Matches items that contains the search query.",
+            "type": "object",
+            "properties": {
+              "property": {
+                "$ref": "#/components/schemas/DocumentFilterProperty"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "example": {
+              "property": [
+                "content"
+              ],
+              "value": "Report"
+            }
+          }
+        }
+      },
       "DocumentFilterExists": {
         "type": "object",
         "title": "exists",
@@ -32485,23 +31612,7 @@
         "type": "object",
         "allOf": [
           {
-            "type": "object",
-            "properties": {
-              "search": {
-                "type": "object",
-                "required": [
-                  "query"
-                ],
-                "properties": {
-                  "query": {
-                    "type": "string",
-                    "description": "The free text search query as described in detail above.",
-                    "maxLength": 1000,
-                    "example": "cognite \"lorem ipsum\""
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/schemas/DocumentSearchInAggregate"
           },
           {
             "$ref": "#/components/schemas/DocumentSearchFilter"
@@ -32510,6 +31621,7 @@
             "type": "object",
             "properties": {
               "aggregate": {
+                "description": "Count of documents matching the specified filters and search.",
                 "type": "string",
                 "enum": [
                   "count"
@@ -32568,23 +31680,7 @@
         ],
         "allOf": [
           {
-            "type": "object",
-            "properties": {
-              "search": {
-                "type": "object",
-                "required": [
-                  "query"
-                ],
-                "properties": {
-                  "query": {
-                    "type": "string",
-                    "description": "The free text search query as described in detail above.",
-                    "maxLength": 1000,
-                    "example": "cognite \"lorem ipsum\""
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/schemas/DocumentSearchInAggregate"
           },
           {
             "$ref": "#/components/schemas/DocumentSearchFilter"
@@ -32687,6 +31783,127 @@
           }
         }
       },
+      "DocumentsAggregateUniquePropertiesRequest": {
+        "title": "Unique properties",
+        "description": "Find all metadata property names",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DocumentSearchInAggregate"
+          },
+          {
+            "$ref": "#/components/schemas/DocumentSearchFilter"
+          },
+          {
+            "type": "object",
+            "required": [
+              "aggregate",
+              "properties"
+            ],
+            "properties": {
+              "aggregate": {
+                "type": "string",
+                "enum": [
+                  "uniqueProperties"
+                ]
+              },
+              "properties": {
+                "type": "array",
+                "description": "List of properties for which you want to get the nested property names. The only supported property is currently `[\"sourceFile\", \"metadata\"]`.",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "property"
+                  ],
+                  "properties": {
+                    "property": {
+                      "description": "The property to list nested properties for",
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/DocumentFilterProperty"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "limit": {
+                "description": "Maximum number of items.",
+                "type": "integer",
+                "format": "int32",
+                "minimum": 1,
+                "maximum": 10000,
+                "default": 100
+              },
+              "cursor": {
+                "description": "Cursor for paging through results.",
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "DocumentsAggregateUniquePropertiesResponse": {
+        "title": "Unique properties",
+        "description": "Response for the uniqueProperties aggregate.",
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 10000,
+            "items": {
+              "$ref": "#/components/schemas/DocumentsAggregateUniquePropertiesItem"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "description": "The cursor to get the next page of results (if available)."
+          }
+        },
+        "example": {
+          "items": [
+            {
+              "count": 4,
+              "values": [
+                "hello"
+              ]
+            },
+            {
+              "count": 33,
+              "values": [
+                "world"
+              ]
+            }
+          ]
+        }
+      },
+      "DocumentsAggregateUniquePropertiesItem": {
+        "type": "object",
+        "required": [
+          "count",
+          "values"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Number of properties with this name",
+            "format": "int64"
+          },
+          "values": {
+            "type": "array",
+            "description": "A property name",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "DocumentsAggregateAllUniqueValuesRequest": {
         "title": "All unique values",
         "description": "Paginated list of all unique values for given properties.",
@@ -32697,23 +31914,7 @@
         ],
         "allOf": [
           {
-            "type": "object",
-            "properties": {
-              "search": {
-                "type": "object",
-                "required": [
-                  "query"
-                ],
-                "properties": {
-                  "query": {
-                    "type": "string",
-                    "description": "The free text search query as described in detail above.",
-                    "maxLength": 1000,
-                    "example": "cognite \"lorem ipsum\""
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/schemas/DocumentSearchInAggregate"
           },
           {
             "$ref": "#/components/schemas/DocumentSearchFilter"
@@ -32821,6 +32022,106 @@
             "items": {
               "$ref": "#/components/schemas/DocumentFilterValue"
             }
+          }
+        }
+      },
+      "DocumentsAggregateApproximateCardinalityRequest": {
+        "title": "Approximate cardinality",
+        "description": "Find approximate number of unique values.",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DocumentSearchInAggregate"
+          },
+          {
+            "$ref": "#/components/schemas/DocumentSearchFilter"
+          },
+          {
+            "type": "object",
+            "required": [
+              "aggregate",
+              "properties"
+            ],
+            "properties": {
+              "aggregate": {
+                "type": "string",
+                "enum": [
+                  "approximateCardinality"
+                ]
+              },
+              "properties": {
+                "type": "array",
+                "description": "List of properties for which you want to get the approximate number of unique values.",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "property"
+                  ],
+                  "properties": {
+                    "property": {
+                      "description": "The property to get the approximate number of unique values for",
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/DocumentFilterProperty"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "limit": {
+                "description": "Maximum number of items.",
+                "type": "integer",
+                "format": "int32",
+                "minimum": 1,
+                "maximum": 10000,
+                "default": 100
+              },
+              "cursor": {
+                "description": "Cursor for paging through results.",
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "DocumentsAggregateApproximateCardinalityResponse": {
+        "title": "Approximate cardinality",
+        "type": "object",
+        "description": "Response for approximateCardinality aggregate.",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/DocumentsAggregateApproximateCardinalityItem"
+            }
+          }
+        },
+        "example": {
+          "items": [
+            {
+              "count": 10
+            }
+          ]
+        }
+      },
+      "DocumentsAggregateApproximateCardinalityItem": {
+        "type": "object",
+        "required": [
+          "count"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Number of items in this aggregation group.",
+            "format": "int64"
           }
         }
       },
@@ -39853,25 +39154,6 @@
           }
         }
       },
-      "LoginStatusResponse": {
-        "description": "Information about the current logged in entity",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "title": "LoginStatusResponse",
-              "required": [
-                "data"
-              ],
-              "properties": {
-                "data": {
-                  "$ref": "#/components/schemas/LoginStatusDTO"
-                }
-              }
-            }
-          }
-        }
-      },
       "ProjectResponse": {
         "description": "Information about the project.",
         "content": {
@@ -39926,28 +39208,6 @@
                         "$ref": "#/components/schemas/UrlName"
                       }
                     }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "ServiceAccountResponse": {
-        "description": "List of service accounts",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "items"
-              ],
-              "properties": {
-                "items": {
-                  "type": "array",
-                  "description": "List of service accounts",
-                  "items": {
-                    "$ref": "#/components/schemas/ServiceAccount"
                   }
                 }
               }
@@ -40235,7 +39495,13 @@
                   "$ref": "#/components/schemas/DocumentsAggregateUniqueValuesResponse"
                 },
                 {
+                  "$ref": "#/components/schemas/DocumentsAggregateUniquePropertiesResponse"
+                },
+                {
                   "$ref": "#/components/schemas/DocumentsAggregateAllUniqueValuesResponse"
+                },
+                {
+                  "$ref": "#/components/schemas/DocumentsAggregateApproximateCardinalityResponse"
                 }
               ]
             }
@@ -41155,27 +40421,15 @@
   },
   "security": [
     {
-      "api-key": []
-    },
-    {
       "oidc-token": []
     }
   ],
   "x-tagGroups": [
     {
-      "name": "Authentication",
-      "tags": [
-        "Login",
-        "Logout"
-      ]
-    },
-    {
       "name": "Identity and access management",
       "tags": [
         "Projects",
         "Groups",
-        "Service accounts",
-        "API keys",
         "Security categories",
         "Sessions",
         "Token"
@@ -41301,28 +40555,12 @@
       "description": "Manage data in the raw NoSQL database. Each project will have a variable number of raw databases, each of which will have a variable number of tables, each of which will have a variable number of key-value objects. Only queries on key are supported through this API."
     },
     {
-      "name": "Login",
-      "description": "A user that is only manifested in an external IdP needs to authenticate towards that IdP and not Cognite directly. Our login endpoints gives some mechanism for both redirecting to the IdP for a given project as well as getting information about the currently authenticated user. For a service account manifested in CDF, there's no reason to logging in. To validate that the key is valid, you can ask for authentication information about the logged in entity.\n"
-    },
-    {
-      "name": "Logout",
-      "description": "Logging out a user means invalidating the token granted by CDF on the behalf of the external IdP. Optionally, you can also get a logout url to log out of the IdP itself (Azure AD, Google etc.). Logging out is only effective for tokens (not api keys).\n"
-    },
-    {
       "name": "Groups",
-      "description": "Groups are used to give principals (service accounts or users) the capabilities to access CDF resources.\nOne principal can be a member in multiple groups and one group can have multiple members. Note that having more than 20 groups per principal is not supported and may result in login issues.\n"
+      "description": "Groups are used to give principals the capabilities to access CDF resources.\nOne principal can be a member in multiple groups and one group can have multiple members. Note that having more than 20 groups per principal is not supported and may result in login issues.\n"
     },
     {
       "name": "Projects",
       "description": "Projects are used to isolate data in CDF from each other. All objects in CDF belong to a single project, and objects in different projects are generally isolated from each other.\n"
-    },
-    {
-      "name": "Service accounts",
-      "description": "Manage service accounts for a specific project.\nA service account can be used to give applications access to CDF through the use of API keys.\n"
-    },
-    {
-      "name": "API keys",
-      "description": "Manage API keys for a specific project.\nAPI keys are used to give service accounts access to the CDF API.\n"
     },
     {
       "name": "Security categories",
@@ -41353,7 +40591,7 @@
     },
     {
       "name": "Documents",
-      "description": "A document is a file that has been indexed by the document search engine.\nEvery time a file is uploaded, updated or deleted in the Files API, it will also\nbe scheduled for processing by the document search engine. After some processing,\nit will be possible to search for the file in the document search API.\n\nThe document search engine is able to extract content from a variety of document\ntypes, and perform classification, contextualization and other operations on the\nfile. This extracted and derived information is made available in the form of a\n`Document` object.\n\nThe document structure consists of a selection of derived fields, such as the\n`title`, `author` and `language` of the document, plus some of the original fields\nfrom the raw file. The fields from the raw file can be found in the\n`sourceFile` structure.\n\n### File type support\nDocuments can be created from the following types of files:\n- PDF files\n- Spreadsheets, documents, and presentations from the Microsoft, Libre Office and macOS office suites\n- Plain text files\n- Images"
+      "description": "A document is a file that has been indexed by the document search engine.\nEvery time a file is uploaded, updated or deleted in the Files API, it will also\nbe scheduled for processing by the document search engine. After some processing,\nit will be possible to search for the file in the document search API.\n\nThe document search engine is able to extract content from a variety of document\ntypes, and perform classification, contextualization and other operations on the\nfile. This extracted and derived information is made available in the form of a\n`Document` object.\n\nThe document structure consists of a selection of derived fields, such as the\n`title`, `author` and `language` of the document, plus some of the original fields\nfrom the raw file. The fields from the raw file can be found in the\n`sourceFile` structure.\n\n### File type support\n\nWe create a document for each uploaded file, but only derive data from certain files.\n\nThe following file types are eligible for further data extraction & enrichment:\n- PDF files\n- Spreadsheets, documents, and presentations from the Microsoft, Libre Office and macOS office suites\n- Plain text files\n- Images"
     },
     {
       "name": "Document preview",
