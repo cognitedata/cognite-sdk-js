@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.18.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.17.0...@cognite/sdk@7.18.0) (2023-01-24)
+
+
+### Features
+
+* support names filter for 3D list nodes endpoint [release] ([#939](https://github.com/cognitedata/cognite-sdk-js/issues/939)) ([3a3e03f](https://github.com/cognitedata/cognite-sdk-js/commit/3a3e03f9c9a6e13b365362694c0720d8894bad2b))
+
+
+
+
+
 # [7.17.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.16.0...@cognite/sdk@7.17.0) (2023-01-23)
 
 
