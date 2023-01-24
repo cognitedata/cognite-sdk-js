@@ -1463,16 +1463,25 @@ export interface List3DNodesQuery extends FilterQuery {
   sortByNodeId?: boolean;
 }
 
+export interface Filter3DNodesByNames {
+  /**
+   * Name filter. Nodes satisfy the filter if, the name of the node exists in the provided array.
+   */
+  names: string[];
+}
+
+export interface Filter3DNodesByProperty {
+  /**
+   * Property filters. Nodes satisfy the filter if, for each property in the nested map(s), they have a value corresponding to that property that is contained within the list associated with that property in the map.
+   */
+  properties: { [key: string]: { [key: string]: string[] } };
+}
+
 export interface Filter3DNodesQuery extends FilterQuery {
   /**
    * List filter
    */
-  filter: {
-    /**
-     * Property filters. Nodes satisfy the filter if, for each property in the nested map(s), they have a value corresponding to that property that is contained within the list associated with that property in the map.
-     */
-    properties: { [key: string]: { [key: string]: string[] } };
-  };
+  filter: Filter3DNodesByProperty | Filter3DNodesByNames;
   /**
    * Partition specifier of the form "n/m". It will return the n'th (1-indexed) part of the result divided into m parts.
    */
