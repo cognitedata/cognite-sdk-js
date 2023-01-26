@@ -1,4 +1,4 @@
-import { InternalId, Limit, ExternalId } from '@cognite/sdk-core';
+import { InternalId, Limit, Cursor, ExternalId } from '@cognite/sdk-core';
 
 import { Geometry, GeoJSON } from 'geojson';
 
@@ -155,6 +155,9 @@ interface GeospatialPropertyAndPattern {
 interface GeospatialAllowCrsTransformation {
   allowCrsTransformation?: boolean;
 }
+interface GeospatialAllowDimensionalityMismatch {
+  allowDimensionalityMismatch?: boolean;
+}
 
 type GeospatialFeatureFilter =
   | {
@@ -206,6 +209,7 @@ type GeospatialFeatureFilter =
 
 export interface GeospatialFeatureSearchFilter
   extends GeospatialAllowCrsTransformation,
+    GeospatialAllowDimensionalityMismatch,
     Limit,
     GeospatialOutput {
   filter?: GeospatialFeatureFilter;
@@ -214,6 +218,7 @@ export interface GeospatialFeatureSearchFilter
 
 export interface GeospatialFeatureSearchStreamFilter
   extends GeospatialAllowCrsTransformation,
+    GeospatialAllowDimensionalityMismatch,
     Limit {
   filter?: GeospatialFeatureFilter;
   output?:
@@ -226,6 +231,10 @@ export interface GeospatialFeatureSearchStreamFilter
           | 'RECORD_SEPARATOR_DELIMITED';
       };
 }
+
+export interface GeospatialFeatureListFilter
+  extends GeospatialFeatureSearchStreamFilter,
+    Cursor {}
 
 /**
  * Search stream returns a string of delimited json of features (GeospatialFeatureResponse[]).
@@ -268,4 +277,25 @@ export interface GeospatialCRSResponse
 
 export interface GeospatialSridId {
   srid: number;
+}
+
+export type GeospatialComputeFunction = {
+  stTransform: GeospatialGeometryTransformComputeFunction;
+};
+
+export interface GeospatialGeometryTransformComputeFunction {
+  geometry: GeospatialExtendedWellKnownText;
+  srid: number;
+}
+
+export interface GeospatialExtendedWellKnownText {
+  ewkt: string;
+}
+
+export interface GeospatialComputedItemList {
+  items: Record<string, any>[];
+}
+
+export interface GeospatialJsonComputeOutput {
+  output: Record<string, GeospatialComputeFunction>;
 }

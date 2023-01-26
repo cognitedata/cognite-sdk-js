@@ -27,13 +27,13 @@ jobs:
 
   publish:
     if: |-
-      ${{ 
-        !contains(github.event.commits[0].message, '[skip-ci]') && 
+      ${{
+        !contains(github.event.commits[0].message, '[skip-ci]') &&
         (
           startsWith(github.event.commits[0].message, 'fix:') ||
-          startsWith(github.event.commits[0].message, 'fix(') || 
+          startsWith(github.event.commits[0].message, 'fix(') ||
           startsWith(github.event.commits[0].message, 'feat:') ||
-          startsWith(github.event.commits[0].message, 'feat(') || 
+          startsWith(github.event.commits[0].message, 'feat(') ||
           contains(github.event.commits[0].message, '[release]')
         )
       }}
@@ -60,7 +60,6 @@ jobs:
           git config --global user.name "Cognite CICD"
           git remote set-url origin "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" > /dev/null 2>&1
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
-          npm whoami
         env:
           NPM_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
           GITHUB_TOKEN: ${{secrets.GH_LERNA_TOKEN}} # Temporary fix to make lerna able to push the new versions commit to master
@@ -81,7 +80,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        run: yarn lerna publish from-package --yes --no-git-reset
+        run: yarn lerna publish from-package --yes --no-git-reset --no-verify-access
 
       - name: Publish documentation
         uses: JamesIves/github-pages-deploy-action@releases/v3

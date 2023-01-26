@@ -10,6 +10,7 @@ import {
   InternalId,
   Limit,
 } from '@cognite/sdk-core';
+import { AnnotationData } from './api/annotations/types.gen';
 
 export {
   ListResponse,
@@ -34,7 +35,8 @@ export {
   AutoPagingToArray,
 } from '@cognite/sdk-core';
 
-export * from './api/documents/types.gen';
+export * from './exports.gen';
+
 export * from './api/geospatial/types';
 
 export interface Acl<ActionsType, ScopeType> {
@@ -905,10 +907,6 @@ export interface EventFilter extends CreatedAndLastUpdatedTimeFilter {
    */
   assetExternalIds?: CogniteExternalId[];
   /**
-   * Only include events that have a related asset in a tree rooted at any of these root assetIds.
-   */
-  rootAssetIds?: IdEither[];
-  /**
    * Only include events that reference these specific dataSet IDs
    */
   dataSetIds?: IdEither[];
@@ -1465,16 +1463,25 @@ export interface List3DNodesQuery extends FilterQuery {
   sortByNodeId?: boolean;
 }
 
+export interface Filter3DNodesByNames {
+  /**
+   * Name filter. Nodes satisfy the filter if, the name of the node exists in the provided array.
+   */
+  names: string[];
+}
+
+export interface Filter3DNodesByProperty {
+  /**
+   * Property filters. Nodes satisfy the filter if, for each property in the nested map(s), they have a value corresponding to that property that is contained within the list associated with that property in the map.
+   */
+  properties: { [key: string]: { [key: string]: string[] } };
+}
+
 export interface Filter3DNodesQuery extends FilterQuery {
   /**
    * List filter
    */
-  filter: {
-    /**
-     * Property filters. Nodes satisfy the filter if, for each property in the nested map(s), they have a value corresponding to that property that is contained within the list associated with that property in the map.
-     */
-    properties: { [key: string]: { [key: string]: string[] } };
-  };
+  filter: Filter3DNodesByProperty | Filter3DNodesByNames;
   /**
    * Partition specifier of the form "n/m". It will return the n'th (1-indexed) part of the result divided into m parts.
    */
@@ -1992,6 +1999,16 @@ export interface Revision3D {
    * The rotation is expressed by Euler angles in radians and in XYZ order.
    */
   rotation?: Tuple3<number>;
+  /**
+   * Global translation to be applied to the entire model.
+   * The translation is expressed in meters.
+   */
+  translation?: Tuple3<number>;
+  /**
+   * Global scale to be applied to the entire model.
+   * The scale is expressed as scale along the X, Y and Z axes.
+   */
+  scale?: Tuple3<number>;
   camera?: RevisionCameraProperties;
   /**
    * The status of the revision.
@@ -2084,6 +2101,15 @@ export interface Sequence
     InternalId,
     CreatedAndLastUpdatedTime {
   columns: SequenceColumn[];
+}
+
+/**
+ * A sequence row values with row number and columns information
+ */
+export interface SequenceRow {
+  rowNumber: number;
+  values: SequenceItem[];
+  columns: SequenceColumnBasicInfo[];
 }
 
 interface SequenceBase {
@@ -2518,6 +2544,16 @@ export interface UpdateRevision3D {
      * The rotation is expressed by Euler angles in radians and in XYZ order.
      */
     rotation?: SetField<Tuple3<number>>;
+    /**
+     * Global translation to be applied to the entire model.
+     * The translation is expressed in meters.
+     */
+    translation?: SetField<Tuple3<number>>;
+    /**
+     * Global scale to be applied to the entire model.
+     * The scale is expressed as scale along the X, Y and Z axes.
+     */
+    scale?: SetField<Tuple3<number>>;
     /**
      * Initial camera target.
      */
@@ -3202,12 +3238,11 @@ export interface RelationshipsRetrieveParams extends IgnoreUnknownIds {
   fetchResources?: boolean;
 }
 
-export type AnnotatedResourceType = 'file';
+export type AnnotatedResourceType = 'file' | 'threedmodel';
 export type AnnotationStatus = 'suggested' | 'approved' | 'rejected';
 
 // TODO [CXT-463] Use annotation-types package definitions
 export type AnnotationType = string;
-export type AnnotationPayload = object;
 
 export interface AnnotationModel extends AnnotationCreate {
   id: CogniteInternalId;
@@ -3226,7 +3261,7 @@ export interface AnnotationSuggest {
   creatingApp: string;
   creatingAppVersion: string;
   creatingUser: string | null;
-  data: AnnotationPayload;
+  data: AnnotationData;
 }
 
 export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
@@ -3234,7 +3269,7 @@ export interface AnnotationChangeById extends InternalId, AnnotationUpdate {}
 export interface AnnotationUpdate {
   update: {
     annotationType?: SetField<AnnotationType>;
-    data?: SetField<AnnotationPayload>;
+    data?: SetField<AnnotationData>;
     status?: SetField<AnnotationStatus>;
   };
 }
@@ -3254,5 +3289,5 @@ export interface AnnotationFilterProps {
   creatingAppVersion?: string;
   creatingUser?: string | null;
   status?: AnnotationStatus;
-  data?: AnnotationPayload;
+  data?: Partial<AnnotationData>;
 }

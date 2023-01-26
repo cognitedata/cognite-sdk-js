@@ -5,14 +5,15 @@ import { useQuery, useMutation } from "react-query";
 import { getToken, baseUrl } from "./auth";
 
 const project = process.env.REACT_APP_CDF_PROJECT!;
+const appId = process.env.REACT_APP_AZURE_APP_ID!;
 
 export default function ListAssets() {
   const masl = useMsal();
 
   const [sdk] = useState(
     new CogniteClient({
-      project,
-      appId: "masl-demo",
+      project: project,
+      appId: appId,
       baseUrl,
       getToken,
     })
