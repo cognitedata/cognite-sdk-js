@@ -1,10 +1,12 @@
+// Copyright 2022 Cognite AS
+
 import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
 import { IdEither } from '@cognite/sdk';
 import {
   Channel,
   ChannelChange,
   ChannelCreate,
-  ChannelFilter,
+  ChannelFilterQuery,
 } from '../../types';
 
 export class ChannelsAPI extends BaseResourceAPI<Channel> {
@@ -16,11 +18,8 @@ export class ChannelsAPI extends BaseResourceAPI<Channel> {
     return this.createEndpoint(items);
   };
 
-  public list = async (filter?: ChannelFilter) => {
-    return this.listEndpoint<ChannelFilter>(
-      this.callListEndpointWithPost,
-      filter
-    );
+  public list = async (filter?: ChannelFilterQuery) => {
+    return this.listEndpoint(this.callListEndpointWithPost, filter);
   };
 
   public update = async (changes: ChannelChange[]) => {

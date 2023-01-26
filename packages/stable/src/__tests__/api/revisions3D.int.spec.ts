@@ -119,10 +119,14 @@ describeIfCondition(
       expect(retrieved.fileId).toBe(file.id);
       expect(retrieved.published).toBeFalsy();
       expect(retrieved.rotation).not.toBeDefined();
+      expect(retrieved.translation).not.toBeDefined();
+      expect(retrieved.scale).not.toBeDefined();
     });
 
     test('update', async () => {
       const newRotation: Tuple3<number> = [3, 14, 15];
+      const newTranslation: Tuple3<number> = [4, 2, -2];
+      const newScale: Tuple3<number> = [1.0, 4.0, 0.5];
       const newCameraTarget: Tuple3<number> = [1, 2, 3];
       const newCameraPosition: Tuple3<number> = [3, 2, 1];
       const newMetadata: { [key: string]: string } = {
@@ -135,6 +139,12 @@ describeIfCondition(
           update: {
             rotation: {
               set: newRotation,
+            },
+            translation: {
+              set: newTranslation,
+            },
+            scale: {
+              set: newScale,
             },
             camera: {
               set: {
@@ -154,6 +164,12 @@ describeIfCondition(
       );
       updatedRevisions.forEach((revision) =>
         expect(revision.rotation).toEqual(newRotation)
+      );
+      updatedRevisions.forEach((revision) =>
+        expect(revision.translation).toEqual(newTranslation)
+      );
+      updatedRevisions.forEach((revision) =>
+        expect(revision.scale).toEqual(newScale)
       );
       updatedRevisions.forEach((revision) =>
         expect(revision.camera && revision.camera.target).toEqual(
@@ -234,6 +250,40 @@ describeIfCondition(
           .filter3DNodes(model.id, revisions[0].id, propertiesFilter)
           .autoPagingToArray();
         expect(nodes3D.length).toBeGreaterThan(0);
+        done();
+      },
+      5 * 60 * 1000
+    );
+
+    test(
+      'filter 3d nodes on names',
+      async (done) => {
+        const namesFilter: Filter3DNodesQuery = {
+          filter: {
+            names: ['RootNode'],
+          },
+        };
+        nodes3D = await client.revisions3D
+          .filter3DNodes(model.id, revisions[0].id, namesFilter)
+          .autoPagingToArray();
+        expect(nodes3D).toHaveLength(1);
+        done();
+      },
+      5 * 60 * 1000
+    );
+
+    test(
+      'filter 3d nodes on bogus names',
+      async (done) => {
+        const namesFilter: Filter3DNodesQuery = {
+          filter: {
+            names: ['Totally-Not-A-Valid-Name', 'Another-Weird-Name'],
+          },
+        };
+        nodes3D = await client.revisions3D
+          .filter3DNodes(model.id, revisions[0].id, namesFilter)
+          .autoPagingToArray();
+        expect(nodes3D.length).toHaveLength(0);
         done();
       },
       5 * 60 * 1000

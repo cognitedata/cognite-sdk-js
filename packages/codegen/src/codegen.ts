@@ -2,6 +2,8 @@
 import { promises as fs } from 'fs';
 import * as pathUtil from 'path';
 
+import * as ts from 'typescript';
+
 import {
   OpenApiDocument,
   OpenApiSchema,
@@ -16,17 +18,28 @@ import {
   OpenApiParameters,
   OpenApiReference,
 } from './openapi';
-import { sortOpenApiJson } from './utils';
 import { AutoNameInlinedRequestOption } from './utils';
 import { TypeGenerator, TypeGeneratorResult } from './generator/generator';
+import sorterTransformer from './ast_transformer/sorter';
+import cursorAndAsyncIteratorTransformer from './ast_transformer/cursor_and_async_iterator';
 
 export type StringFilter = (str: string) => boolean;
 
 export const passThroughFilter: StringFilter = (): boolean => true;
 
+const createServiceNameRegex = (name: string): RegExp => {
+  return new RegExp(`^/api/.+/projects/{project}/${name}($|/)`);
+};
+
 export const createServiceNameFilter = (service: string): StringFilter => {
-  const r = new RegExp(`^/api/.+/projects/{project}/${service}($|/)`);
+  const r = createServiceNameRegex(service);
   return (path: string): boolean => r.test(path);
+};
+
+export const createServiceNameIgnoreFilters = (
+  services: string[]
+): StringFilter[] => {
+  return services.map(createServiceNameFilter);
 };
 
 export interface CodeGenOptions extends AutoNameInlinedRequestOption {
@@ -37,8 +50,35 @@ export interface CodeGenOptions extends AutoNameInlinedRequestOption {
   outputDir: string;
 }
 
+export const createPathFilter = (
+  includePredicates: StringFilter[],
+  ignorePredicates: StringFilter[]
+): StringFilter => {
+  return (service: string): boolean => {
+    for (const predicate of includePredicates) {
+      if (predicate(service)) {
+        for (const ignorePredicate of ignorePredicates) {
+          if (ignorePredicate(service)) {
+            return false;
+          }
+        }
+
+        return true;
+      }
+    }
+
+    return false;
+  };
+};
+
 export class CodeGen {
   static outputFileName = 'types.gen.ts';
+
+  // Ordering matters! "sorterTransformer" must be the last transformer specified.
+  astTransformers = [
+    cursorAndAsyncIteratorTransformer,
+    sorterTransformer, // must be last
+  ];
 
   constructor(
     readonly generator: TypeGenerator,
@@ -57,7 +97,7 @@ export class CodeGen {
 
     await fs.writeFile(
       pathUtil.resolve(this.options.outputDir, CodeGen.outputFileName),
-      fileComment + result.code
+      fileComment + result.astProcessedCode
     );
   };
 
@@ -120,14 +160,47 @@ export class CodeGen {
     return inlined;
   };
 
-  private removeUnusedDefinitions = (doc: OpenApiDocument): OpenApiDocument => {
+  private getOnlyDefinitionsUsedByRefs = (
+    originalDefinitions: string[],
+    relevantReferenceNames: string[],
+    walker: ReferenceWalker
+  ): string[] => {
+    const relevantReferencePredicate = (reference: string) =>
+      relevantReferenceNames.some((refName) =>
+        reference.endsWith('/' + refName)
+      );
+
+    const referenceSubsetRoots = originalDefinitions.filter(
+      relevantReferencePredicate
+    );
+    if (referenceSubsetRoots.length > 0) {
+      // Restrict set of references to those reachable from the filter names
+      return walker.walk(referenceSubsetRoots);
+    }
+
+    return originalDefinitions;
+  };
+
+  private findAllDefinitionsRecursively = (
+    doc: OpenApiDocument,
+    relevantReferenceNames: string[] = []
+  ): OpenApiDocument => {
     const walker = new ReferenceWalker(doc);
 
     const referencesInOperations = Object.values(doc.paths)
       .map(walker.references)
       .reduce((acc, v) => acc.concat(v), []);
 
-    const references = walker.walk(referencesInOperations);
+    let references = walker.walk(referencesInOperations);
+
+    if (relevantReferenceNames.length > 0) {
+      references = this.getOnlyDefinitionsUsedByRefs(
+        references,
+        relevantReferenceNames,
+        walker
+      );
+    }
+
     const filteredDoc: any = references
       .map(walker.splitReference)
       .reduce((acc, location) => {
@@ -274,11 +347,23 @@ export class CodeGen {
     );
 
     const docJson = JSON.stringify(doc);
-    const sortedJson = sortOpenApiJson(docJson);
-
-    const result = await this.generator.generateTypes(sortedJson);
+    const result = await this.generator.generateTypes(docJson);
+    result.astProcessedCode = this.astPostProcessing(result.code);
 
     return result;
+  };
+
+  private astPostProcessing = (code: string): string => {
+    const src = ts.createSourceFile(
+      'generated.ts',
+      code,
+      ts.ScriptTarget.ES2015,
+      false,
+      ts.ScriptKind.TS
+    );
+    const result = ts.transform<ts.SourceFile>(src, this.astTransformers);
+    const printer = ts.createPrinter();
+    return printer.printFile(result.transformed[0]);
   };
 
   /**
@@ -289,12 +374,17 @@ export class CodeGen {
    * @returns names of generated types
    */
   public generateTypes = async (
-    openApiDoc: OpenApiDocument
+    openApiDoc: OpenApiDocument,
+    relevantReferenceNames?: string[]
   ): Promise<string[]> => {
     // deep copy
     openApiDoc = JSON.parse(JSON.stringify(openApiDoc)) as OpenApiDocument;
     openApiDoc.paths = this.filterPaths(openApiDoc.paths);
-    openApiDoc = this.removeUnusedDefinitions(openApiDoc);
+
+    openApiDoc = this.findAllDefinitionsRecursively(
+      openApiDoc,
+      relevantReferenceNames
+    );
 
     for (const [typeName, schema] of this.transformResponsesToSchemas(
       openApiDoc.components?.responses

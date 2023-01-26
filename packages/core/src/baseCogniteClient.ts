@@ -133,7 +133,7 @@ export default class BaseCogniteClient {
       );
     }
 
-    if (isBrowser() && !isUsingSSL()) {
+    if (isBrowser() && !isUsingSSL() && !options.noAuthMode) {
       console.warn(
         'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
       );

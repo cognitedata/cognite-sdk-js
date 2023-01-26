@@ -15,7 +15,7 @@ npm install @cognite/sdk@npm:@cognite/sdk-playground --save
 
 This will download `@cognite/sdk-playground`. Import the `CogniteClientPlayground`:
 ```js
-import { CogniteClientPlayground } from '@congite/sdk-playground';
+import { CogniteClientPlayground } from '@cognite/sdk-playground';
 ```
 
 The CogniteClientPlayground can be initialized/configured in the same manner as the other packages (eg. stable, beta, etc.).
