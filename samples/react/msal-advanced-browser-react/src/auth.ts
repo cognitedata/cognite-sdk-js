@@ -1,6 +1,7 @@
 import { Configuration, PublicClientApplication } from "@azure/msal-browser";
 
-export const baseUrl = "https://greenfield.cognitedata.com";
+const cluster = process.env.REACT_APP_CLUSTER || "api";
+export const baseUrl = `https://${cluster}.cognitedata.com`;
 export const scopes = [
   `${baseUrl}/DATA.VIEW`,
   `${baseUrl}/DATA.CHANGE`,
