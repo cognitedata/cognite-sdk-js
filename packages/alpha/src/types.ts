@@ -120,6 +120,7 @@ export interface Alert {
   metadata?: Metadata;
   acknowledged: boolean;
   closed: boolean;
+  status: 'FIRING' | 'PENDING' | 'NORMAL';
 }
 
 export interface ChannelCreate {
@@ -163,8 +164,8 @@ export interface ChannelPatch {
   };
 }
 
-export interface ChannelChangeById extends ChannelPatch, InternalId {}
-export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId {}
+export interface ChannelChangeById extends ChannelPatch, InternalId { }
+export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId { }
 export type ChannelChange = ChannelChangeById | ChannelChangeByExternalId;
 
 export interface SubscriberCreate {
