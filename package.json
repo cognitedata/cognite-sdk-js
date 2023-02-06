@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "@azure/msal-node": "^1.14.5",
-    "@commitlint/cli": "^8.1.0",
-    "@commitlint/config-conventional": "^8.1.0",
+    "@commitlint/cli": "^17.0.0",
+    "@commitlint/config-conventional": "^17.0.0",
     "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-typescript": "^5.0.2",
