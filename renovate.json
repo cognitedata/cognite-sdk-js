@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base", "schedule:earlyMondays"],
+  "extends": ["config:base"],
+  "schedule": ["every weekend"],
   "timezone": "Europe/Oslo",
   "rebaseWhen": "behind-base-branch",
   "prCreation": "not-pending",
