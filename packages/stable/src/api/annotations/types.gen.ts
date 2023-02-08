@@ -78,8 +78,10 @@ export interface AnnotationsBoundingVolume {
     region: AnnotationsGeometry[];
 }
 /**
-* A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates and
-translates a unit box centered at the origin to it's location and orientation in 3D space.
+* A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
+translates and scales a box centered at the origin to its location and orientation in 3D space.
+The box that is transformed is the axis-aligned cube spanning the volume between
+the points (-1, -1, -1) and (1, 1, 1).
 */
 export interface AnnotationsBox {
     /**
@@ -148,7 +150,7 @@ export interface AnnotationsCogniteAnnotationTypesImagesAssetLink {
     textRegion: AnnotationsBoundingBox;
 }
 /**
- * A cylinder in 3D space, defined by the centers of two sides and the radius.
+ * A cylinder in 3D space, defined by the centers of the two end surfaces and the radius.
  */
 export interface AnnotationsCylinder {
     /** The center of the first cap. */
@@ -253,11 +255,13 @@ export type AnnotationsFileRef = {
  */
 export interface AnnotationsGeometry {
     /**
-     * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates and
-     * translates a unit box centered at the origin to it's location and orientation in 3D space.
+     * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
+     * translates and scales a box centered at the origin to its location and orientation in 3D space.
+     * The box that is transformed is the axis-aligned cube spanning the volume between
+     * the points (-1, -1, -1) and (1, 1, 1).
      */
     box?: AnnotationsBox;
-    /** A cylinder in 3D space, defined by the centers of two sides and the radius. */
+    /** A cylinder in 3D space, defined by the centers of the two end surfaces and the radius. */
     cylinder?: AnnotationsCylinder;
 }
 /**
