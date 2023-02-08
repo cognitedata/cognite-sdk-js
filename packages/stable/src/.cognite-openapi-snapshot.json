@@ -24066,6 +24066,9 @@
           },
           "capabilities": {
             "$ref": "#/components/schemas/CogniteCapability"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/GroupMetadata"
           }
         },
         "description": "A specification for creating a new group"
@@ -30434,6 +30437,9 @@
           },
           {
             "$ref": "#/components/schemas/DocumentCursor"
+          },
+          {
+            "$ref": "#/components/schemas/DocumentSearchHighlight"
           }
         ]
       },
@@ -30536,6 +30542,15 @@
           }
         }
       },
+      "DocumentSearchHighlight": {
+        "type": "object",
+        "properties": {
+          "highlight": {
+            "description": "Whether or not matches in search results should be highlighted",
+            "type": "boolean"
+          }
+        }
+      },
       "DocumentSearchInAggregate": {
         "type": "object",
         "properties": {
@@ -30571,6 +30586,7 @@
                 "example": "cognite \"lorem ipsum\""
               },
               "highlight": {
+                "deprecated": true,
                 "type": "boolean",
                 "description": "Whether or not matches in search results should be highlighted.",
                 "default": false
@@ -37577,7 +37593,7 @@
       },
       "Annotations.Box": {
         "title": "primitives.geometry3d.Box",
-        "description": "A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates and\ntranslates a unit box centered at the origin to it's location and orientation in 3D space.",
+        "description": "A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,\ntranslates and scales a box centered at the origin to its location and orientation in 3D space.\nThe box that is transformed is the axis-aligned cube spanning the volume between\nthe points (-1, -1, -1) and (1, 1, 1).",
         "type": "object",
         "properties": {
           "label": {
@@ -37609,7 +37625,7 @@
       },
       "Annotations.Cylinder": {
         "title": "primitives.geometry3d.Cylinder",
-        "description": "A cylinder in 3D space, defined by the centers of two sides and the radius.",
+        "description": "A cylinder in 3D space, defined by the centers of the two end surfaces and the radius.",
         "type": "object",
         "properties": {
           "label": {

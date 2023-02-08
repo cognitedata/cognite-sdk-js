@@ -69,6 +69,7 @@ export {
   DocumentSearchCountAggregate,
   DocumentSearchCountAggregatesGroup,
   DocumentSearchFilter,
+  DocumentSearchHighlight,
   DocumentSearchInAggregate,
   DocumentSearchItem,
   DocumentSearchLimit,
