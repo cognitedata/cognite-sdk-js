@@ -11,6 +11,6 @@
     "test-for-await": "if yarn run check-node-version --node '>= 10'; then node for-await.js; else true; fi"
   },
   "devDependencies": {
-    "check-node-version": "^3.3.0"
+    "check-node-version": "^4.0.0"
   }
 }
