@@ -502,6 +502,10 @@ export interface DocumentSearchFilter {
      */
     filter?: DocumentFilter;
 }
+export interface DocumentSearchHighlight {
+    /** Whether or not matches in search results should be highlighted */
+    highlight?: boolean;
+}
 export interface DocumentSearchInAggregate {
     search?: {
         query: string;
@@ -522,7 +526,7 @@ export interface DocumentSearchLimit {
      */
     limit?: number;
 }
-export type DocumentSearchRequest = DocumentSearch & DocumentSearchFilter & DocumentSearchAggregates & DocumentSort & DocumentSearchLimit & DocumentCursor;
+export type DocumentSearchRequest = DocumentSearch & DocumentSearchFilter & DocumentSearchAggregates & DocumentSort & DocumentSearchLimit & DocumentCursor & DocumentSearchHighlight;
 export interface DocumentSearchResponse {
     aggregates?: DocumentSearchAggregate[];
     items: DocumentSearchItem[];

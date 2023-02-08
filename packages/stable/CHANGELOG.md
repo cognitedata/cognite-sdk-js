@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.19.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.18.0...@cognite/sdk@7.19.0) (2023-02-08)
+
+
+### Features
+
+* **documents:** add `highlight` field for document search ([#977](https://github.com/cognitedata/cognite-sdk-js/issues/977)) ([8a02727](https://github.com/cognitedata/cognite-sdk-js/commit/8a02727aaa4344232c815d884e02b385b9e3915a))
+
+
+
+
+
 # [7.18.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.17.0...@cognite/sdk@7.18.0) (2023-01-24)
 
 
