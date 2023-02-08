@@ -15289,7 +15289,7 @@ nock@^10.0.6:
     lodash "^4.17.5"
     mkdirp "^0.5.0"
     propagate "^1.0.0"
-    qs "^6.5.1"
+    qs "^6.5.3"
     semver "^5.5.0"
 
 node-addon-api@^3.2.1:
@@ -18801,7 +18801,7 @@ request@^2.88.2:
     mime-types "~2.1.19"
     oauth-sign "~0.9.0"
     performance-now "^2.1.0"
-    qs "~6.5.2"
+    qs "~6.5.3"
     safe-buffer "^5.1.2"
     tough-cookie "~2.5.0"
     tunnel-agent "^0.6.0"
