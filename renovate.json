@@ -5,6 +5,7 @@
   "timezone": "Europe/Oslo",
   "rebaseWhen": "behind-base-branch",
   "prCreation": "not-pending",
+  "labels": ["dependencies"],
   "packageRules": [
     {
       "matchDatasources": ["npm"],
