@@ -19,6 +19,7 @@ export default {
     typescript({
       tsconfig: './tsconfig.build.json',
       typescript: require('typescript'),
+      include: ['./src/**/*.ts'],
       exclude: '**/__tests__/**',
     }),
     json({
