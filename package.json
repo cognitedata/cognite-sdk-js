@@ -72,7 +72,7 @@
     "rollup": "^2.22.2",
     "swagger-typescript-api-nextgen": "^10.0.1",
     "tmp-promise": "^3.0.3",
-    "ts-jest": "^26.1",
+    "ts-jest": "^27.0.0",
     "ts-node": "^10.8.0",
     "typedoc": "^0.17.8",
     "typescript": "^4.4",
