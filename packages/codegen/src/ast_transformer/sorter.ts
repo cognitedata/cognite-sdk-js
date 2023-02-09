@@ -34,7 +34,7 @@ const sortElementsByName = (
 
     throw new TypeError('expected identifiers...');
   });
-  return ts.createNodeArray(sorted);
+  return ts.factory.createNodeArray(sorted);
 };
 
 /** sorterTransformer sorts all the declarations alphabetically to produce deterministic outputs. */
@@ -43,8 +43,14 @@ const sorterTransformer: ts.TransformerFactory<ts.SourceFile> = (context) => {
     const visitor = (node: ts.Node): ts.Node => {
       if (ts.isInterfaceDeclaration(node)) {
         // sort every field alphabetically
-        node.members = sortElementsByName(node.members);
-        return node;
+        return ts.factory.updateInterfaceDeclaration(
+          node,
+          node.modifiers,
+          node.name,
+          node.typeParameters,
+          node.heritageClauses,
+          sortElementsByName(node.members)
+        );
       }
       return ts.visitEachChild(node, visitor, context);
     };
@@ -55,8 +61,11 @@ const sorterTransformer: ts.TransformerFactory<ts.SourceFile> = (context) => {
         return statementName(a).localeCompare(statementName(b));
       }
     );
-    sourceFile.statements = ts.createNodeArray(sortedStatements);
-    return sourceFile;
+
+    return ts.factory.updateSourceFile(
+      transformedSourceFile,
+      ts.factory.createNodeArray(sortedStatements)
+    );
   };
 };
 
