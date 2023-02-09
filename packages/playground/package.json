@@ -28,7 +28,7 @@
   "files": [
     "dist"
   ],
-  "type": "module",
+  "type": "json",
   "publishConfig": {
     "access": "public"
   }
