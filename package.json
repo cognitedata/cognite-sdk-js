@@ -63,7 +63,7 @@
     "eslint-plugin-lodash": "^7.1.0",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^3.0.2",
-    "jest": "^26.1",
+    "jest": "^27.0.0",
     "lerna": "^6.0.0",
     "markdown-link-check": "^3.8.1",
     "nock": "^10.0.6",

@@ -79,7 +79,7 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
           removeTargetMembers,
           context
         );
-        return ts.updateInterfaceDeclaration(
+        return ts.factory.updateInterfaceDeclaration(
           transformedNode,
           transformedNode.decorators,
           transformedNode.modifiers,
@@ -106,13 +106,13 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
     };
 
     const cursorAndAsyncIteratorImport = ts.factory.createImportDeclaration(
+      /* decorator */ undefined,
       /* modifiers */ undefined,
       ts.factory.createImportClause(
         false,
         undefined,
         ts.factory.createNamedImports([
           ts.factory.createImportSpecifier(
-            false,
             undefined,
             ts.factory.createIdentifier('CursorAndAsyncIterator')
           ),
