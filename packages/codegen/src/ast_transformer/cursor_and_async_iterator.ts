@@ -1,4 +1,4 @@
-import * as ts from 'typescript';
+import ts from 'typescript';
 import isEqual from 'lodash/isEqual';
 
 const targetMemberNames = new Set(['items', 'nextCursor']);
@@ -54,7 +54,7 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
           ) {
             const typeName = member.type.elementType.typeName
               .escapedText as string;
-            return ts.createTypeReferenceNode(typeName, undefined);
+            return ts.factory.createTypeReferenceNode(typeName, undefined);
           }
         }
       }
@@ -66,8 +66,10 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
         interfaceDeclarationHasRequiredMembers(node)
       ) {
         const itemsType = getItemsType(node);
-        const id = ts.createIdentifier('CursorAndAsyncIterator');
-        const types = ts.createExpressionWithTypeArguments([itemsType], id);
+        const id = ts.factory.createIdentifier('CursorAndAsyncIterator');
+        const types = ts.factory.createExpressionWithTypeArguments(id, [
+          itemsType,
+        ]);
         const hc = ts.createHeritageClause(ts.SyntaxKind.ExtendsKeyword, [
           types,
         ]);
@@ -103,26 +105,27 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
       return false;
     };
 
-    const cursorAndAsyncIteratorImport = ts.createImportDeclaration(
-      /* decorators */ undefined,
+    const cursorAndAsyncIteratorImport = ts.factory.createImportDeclaration(
       /* modifiers */ undefined,
-      ts.createImportClause(
+      ts.factory.createImportClause(
+        false,
         undefined,
-        ts.createNamedImports([
-          ts.createImportSpecifier(
+        ts.factory.createNamedImports([
+          ts.factory.createImportSpecifier(
+            false,
             undefined,
-            ts.createIdentifier('CursorAndAsyncIterator')
+            ts.factory.createIdentifier('CursorAndAsyncIterator')
           ),
         ])
       ),
-      ts.createLiteral('@cognite/sdk-core')
+      ts.factory.createStringLiteral('@cognite/sdk-core')
     );
 
     const additionalImports = containsCursorAndAsyncIteratorDeclaration()
       ? [cursorAndAsyncIteratorImport]
       : [];
     const transformedSourceFile = ts.visitNode(sourceFile, visitor);
-    return ts.updateSourceFileNode(transformedSourceFile, [
+    return ts.factory.updateSourceFile(transformedSourceFile, [
       ...additionalImports,
       ...transformedSourceFile.statements,
     ]);
