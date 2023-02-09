@@ -202,7 +202,7 @@ Search for files:
 ```ts
 const filters: FilesSearchFilter = [
     {
-        filter: { mimeType: 'image/jpg' },
+        filter: { mimeType: 'image/jpeg' },
         search: { name: 'Pump' }
     }
 ];
@@ -293,13 +293,13 @@ Uploading files with fileContent:
 const fileContent: FileContent = 'file data here'; // can also be of type ArrayBuffer, Buffer, Blob, File or any
 
 const file: Promise<FileUploadResponse | FileInfo> = await client.files
-    .upload({name: 'examplefile.jpg', mimeType: 'image/jpg'}, fileContent);
+    .upload({name: 'examplefile.jpg', mimeType: 'image/jpeg'}, fileContent);
 ```
 
 Uploading files with manually:
 
 ```ts
 const file: Promise<FileUploadResponse | FileInfo> = await client.files
-    .upload({name: 'examplefile.jpg', mimeType: 'image/jpg'});
+    .upload({name: 'examplefile.jpg', mimeType: 'image/jpeg'});
 // then upload using the file.uploadUrl
 ```
