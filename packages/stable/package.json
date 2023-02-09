@@ -31,7 +31,6 @@
   "files": [
     "dist"
   ],
-  "type": "json",
   "publishConfig": {
     "access": "public"
   }
