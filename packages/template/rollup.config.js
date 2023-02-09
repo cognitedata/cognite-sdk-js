@@ -4,17 +4,6 @@ import json from '@rollup/plugin-json';
 
 export default {
   input: 'src/index.ts',
-  output: [
-    {
-      dir: 'dist',
-      format: 'cjs',
-      sourcemap: true,
-    },
-  ],
-  external: [
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.peerDependencies || {}),
-  ],
   plugins: [
     typescript({
       tsconfig: './tsconfig.build.json',
@@ -41,5 +30,16 @@ export default {
       // generate a named export for every property of the JSON object
       namedExports: true, // Default: true
     }),
+  ],
+  output: [
+    {
+      dir: 'dist',
+      format: 'cjs',
+      sourcemap: true,
+    },
+  ],
+  external: [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.peerDependencies || {}),
   ],
 };
