@@ -34,6 +34,7 @@
   "files": [
     "dist"
   ],
+  "type": "module",
   "devDependencies": {
     "@types/geojson": "^7946.0.8",
     "@types/is-buffer": "^2.0.0"
