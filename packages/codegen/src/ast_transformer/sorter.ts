@@ -45,6 +45,7 @@ const sorterTransformer: ts.TransformerFactory<ts.SourceFile> = (context) => {
         // sort every field alphabetically
         return ts.factory.updateInterfaceDeclaration(
           node,
+          node.decorators,
           node.modifiers,
           node.name,
           node.typeParameters,
