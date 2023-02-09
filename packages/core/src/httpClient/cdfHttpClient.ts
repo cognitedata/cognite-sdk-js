@@ -103,7 +103,7 @@ export class CDFHttpClient extends RetryableHttpClient {
   ): Promise<HttpResponse<T>> {
     try {
       return await super.postRequest(response, request, mutatedRequest);
-    } catch (err) {
+    } catch (err: any) {
       if (
         err.status === 401 &&
         !this.isLoginOrLogoutApi(request.path) &&

@@ -51,7 +51,7 @@ export async function retryInSeconds<ResponseType>(
   while (Date.now() - timeStart < finishAfterSeconds * 1000) {
     try {
       return await func();
-    } catch (error) {
+    } catch (error: any) {
       if (Number(error.status) !== statusCodeToRetry) {
         throw error;
       }

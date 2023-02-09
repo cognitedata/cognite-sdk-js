@@ -72,7 +72,7 @@ export function loginPopupHandler() {
   try {
     const tokens = parseTokenQueryParameters(window.location.search);
     window.opener.postMessage(tokens);
-  } catch (err) {
+  } catch (err: any) {
     window.opener.postMessage({ error: err.message });
   } finally {
     window.close();
@@ -86,7 +86,7 @@ export async function getLogoutUrl(get: HttpCall, params: HttpQueryParams) {
       params,
     });
     return response.data.data.url;
-  } catch (err) {
+  } catch (err: any) {
     if (err.status === 401) {
       return null;
     }

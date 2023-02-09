@@ -75,7 +75,7 @@ export async function getIdInfo(
       project,
       projectId,
     };
-  } catch (err) {
+  } catch (err: any) {
     if (err.status === 401) {
       return null;
     }
