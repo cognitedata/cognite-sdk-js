@@ -14,9 +14,9 @@
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn build",
-    "build": "yarn clean && yarn rollup -c -bundleConfigAsCjs && yarn esCheck",
-    "build:watch": "yarn rollup -w -c -bundleConfigAsCjs",
-    "watch": "rollup -cw -bundleConfigAsCjs",
+    "build": "yarn clean && yarn rollup -c --bundleConfigAsCjs && yarn esCheck",
+    "build:watch": "yarn rollup -w -c --bundleConfigAsCjs",
+    "watch": "rollup -cw --bundleConfigAsCjs",
     "esCheck": "es-check es5 './dist/index.js'",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
     "docs:bundle": "yarn docs && mkdir -p ../../docs/core && cp -r docs/* ../../docs/core/"
