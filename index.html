@@ -104,40 +104,36 @@
 				<pre><code class="language-js"><span class="hljs-keyword">import</span> { CogniteClient, CogniteAuthentication } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>;
 
 <span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">quickstart</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> project = <span class="hljs-string">&#x27;publicdata&#x27;</span>;
+  <span class="hljs-keyword">const</span> legacyInstance = <span class="hljs-keyword">new</span> CogniteAuthentication({
+    project,
+  });
 
-<span class="hljs-keyword">const</span> project = <span class="hljs-string">&quot;publicdata&quot;</span>;
-<span class="hljs-keyword">const</span> legacyInstance = <span class="hljs-keyword">new</span> CogniteAuthentication({
-  project,
-});
-
-<span class="hljs-keyword">const</span> getToken = <span class="hljs-keyword">async</span> () =&gt; {
-  <span class="hljs-keyword">await</span> legacyInstance.handleLoginRedirect();
-  <span class="hljs-keyword">let</span> token = <span class="hljs-keyword">await</span> legacyInstance.getCDFToken();
-  <span class="hljs-keyword">if</span> (token) {
-    <span class="hljs-keyword">return</span> token.accessToken;
-  }
-  token = <span class="hljs-keyword">await</span> legacyInstance.login({ <span class="hljs-attr">onAuthenticate</span>: <span class="hljs-string">&quot;REDIRECT&quot;</span> });
-  <span class="hljs-keyword">if</span> (token) {
-    <span class="hljs-keyword">return</span> token.accessToken;
-  }
-  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&quot;error&quot;</span>);
-};
-
+  <span class="hljs-keyword">const</span> getToken = <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">await</span> legacyInstance.handleLoginRedirect();
+    <span class="hljs-keyword">let</span> token = <span class="hljs-keyword">await</span> legacyInstance.getCDFToken();
+    <span class="hljs-keyword">if</span> (token) {
+      <span class="hljs-keyword">return</span> token.accessToken;
+    }
+    token = <span class="hljs-keyword">await</span> legacyInstance.login({ <span class="hljs-attr">onAuthenticate</span>: <span class="hljs-string">&#x27;REDIRECT&#x27;</span> });
+    <span class="hljs-keyword">if</span> (token) {
+      <span class="hljs-keyword">return</span> token.accessToken;
+    }
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">&#x27;error&#x27;</span>);
+  };
 
   <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> CogniteClient({
     <span class="hljs-attr">appId</span>: <span class="hljs-string">&#x27;YOUR APPLICATION NAME&#x27;</span>,
     project,
-    getToken
+    getToken,
   });
 
-  <span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets
-    .list()
-    .autoPagingToArray({ <span class="hljs-attr">limit</span>: <span class="hljs-number">100</span> });
+  <span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.list().autoPagingToArray({ <span class="hljs-attr">limit</span>: <span class="hljs-number">100</span> });
 }
 quickstart();</code></pre>
 				<blockquote>
 					<p>For more details about SDK authentication see this <a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/authentication.md">document</a>.
-					Also, more comprehensive intro guide with a demo app can be found <a href="https://github.com/cognitedata/javascript-getting-started/tree/master/sdk-auth-and-fetch-data">here</a></p>
+					Also, more comprehensive intro guide can be found <a href="https://docs.cognite.com/dev/guides/sdk/js/">here</a></p>
 				</blockquote>
 				<a href="#backend" id="backend" style="color: inherit; text-decoration: none;">
 					<h3>Backend</h3>
@@ -148,12 +144,10 @@ quickstart();</code></pre>
   <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> CogniteClient({
     <span class="hljs-attr">appId</span>: <span class="hljs-string">&#x27;YOUR APPLICATION NAME&#x27;</span>,
     <span class="hljs-attr">apiKeyMode</span>: <span class="hljs-literal">true</span>,
-    <span class="hljs-attr">getToken</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">Promise</span>.resolve(<span class="hljs-string">&#x27;YOUR_SECRET_API_KEY&#x27;</span>)
+    <span class="hljs-attr">getToken</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-built_in">Promise</span>.resolve(<span class="hljs-string">&#x27;YOUR_SECRET_API_KEY&#x27;</span>),
   });
 
-  <span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets
-    .list()
-    .autoPagingToArray({ <span class="hljs-attr">limit</span>: <span class="hljs-number">100</span> });
+  <span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.list().autoPagingToArray({ <span class="hljs-attr">limit</span>: <span class="hljs-number">100</span> });
 }
 quickstart();</code></pre>
 				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
