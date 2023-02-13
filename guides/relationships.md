@@ -13,7 +13,7 @@ The [**Relationships**](https://docs.cognite.com/dev/concepts/resource_types/rel
   - [Retrieve a relationship by id](#retrieve-a-relationship-by-id)
   - [Retrieve multiple relationships by id](#retrieve-multiple-relationships-by-id)
   - [List relationships](#list-relationships)
-  - [Create relationship](#create-relationships)
+  - [Create relationship](#create-relationship)
   - [Delete relationships](#delete-relationships)
 
 ## Retrieve a relationship by id
