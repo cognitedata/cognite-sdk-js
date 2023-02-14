@@ -69,6 +69,7 @@ async function quickstart() {
     const client = new CogniteClient({
       appId: 'Cognite SDK samples',
       project,
+      baseUrl: 'https://api.cognitedata.com',
       getToken: () =>
         pca
           .acquireTokenByClientCredential({
