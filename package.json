@@ -65,7 +65,7 @@
     "husky": "^3.0.2",
     "jest": "^26.1",
     "lerna": "^6.0.0",
-    "markdown-link-check": "^3.8.1",
+    "markdown-link-check": "^3.10.3",
     "nock": "^10.0.6",
     "openapi-types": "^11.0.1",
     "prettier": "^2.5.1",
@@ -74,7 +74,7 @@
     "tmp-promise": "^3.0.3",
     "ts-jest": "^26.1",
     "ts-node": "^10.8.0",
-    "typedoc": "^0.17.8",
+    "typedoc": "^0.19.2",
     "typescript": "^3.9",
     "yargs": "^17.5.1"
   },
