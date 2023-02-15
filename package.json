@@ -64,7 +64,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^3.0.2",
     "jest": "^26.1",
-    "lerna": "^3.22.1",
+    "lerna": "^6.0.0",
     "markdown-link-check": "^3.8.1",
     "nock": "^10.0.6",
     "openapi-types": "^11.0.1",
@@ -77,6 +77,27 @@
     "typedoc": "^0.17.8",
     "typescript": "^3.9",
     "yargs": "^17.5.1"
+  },
+  "resolutions": {
+    "loader-utils": "^1.4.2",
+    "node-fetch": "^2.6.8",
+    "node-forge": "^1.0.0",
+    "ansi-html": "^0.0.8",
+    "browserslist": "^4.16.5",
+    "eta": "^2.0.0",
+    "ejs": "^3.1.7",
+    "glob-parent": "^5.1.2",
+    "immer": "^9.0.6",
+    "json-schema": "^0.4.0",
+    "jsonwebtoken": "^9.0.0",
+    "markdown-link-extractor": "^3.0.2",
+    "minimatch": "^3.0.5",
+    "node-notifier": "8.0.1",
+    "nth-check": "^2.0.1",
+    "qs": "^6.5.3",
+    "set-value": "^2.0.1",
+    "shell-quote": "^1.7.3",
+    "is-svg": "^4.3.0"
   },
   "husky": {
     "hooks": {
