@@ -71,6 +71,7 @@ async function deviceCodeGrantExample() {
   const client = new CogniteClient({
     appId: 'Cognite SDK samples',
     project,
+    baseUrl: 'https://api.cognitedata.com',
     getToken: () =>
       pca
         .acquireTokenByDeviceCode({
