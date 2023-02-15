@@ -110,7 +110,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/geospatial/crsAPI.ts#L22">packages/stable/src/api/geospatial/crsAPI.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/geospatial/crsAPI.ts#L22">packages/stable/src/api/geospatial/crsAPI.ts:22</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -123,7 +123,8 @@
  <span class="hljs-attr">projString</span>: <span class="hljs-string">&#x27;+proj=longlat +datum=WGS84 +no_defs \&quot;\&quot;&#x27;</span>
  }];
 
-<span class="hljs-keyword">const</span> createdCRS = <span class="hljs-keyword">await</span> client.geospatial.crs.create(crsToCreate);</code></pre>
+<span class="hljs-keyword">const</span> createdCRS = <span class="hljs-keyword">await</span> client.geospatial.crs.create(crsToCreate);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -145,14 +146,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/geospatial/crsAPI.ts#L65">packages/stable/src/api/geospatial/crsAPI.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/geospatial/crsAPI.ts#L65">packages/stable/src/api/geospatial/crsAPI.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/deleteGeospatialCoordinateReferenceSystems">Delete Coordinate Reference Systems</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.geospatial.crs.delete([{ <span class="hljs-attr">srid</span>: <span class="hljs-number">4326</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.geospatial.crs.delete([{ <span class="hljs-attr">srid</span>: <span class="hljs-number">4326</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -174,14 +176,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/geospatial/crsAPI.ts#L49">packages/stable/src/api/geospatial/crsAPI.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/geospatial/crsAPI.ts#L49">packages/stable/src/api/geospatial/crsAPI.ts:49</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/listGeospatialCoordinateReferenceSystems">List Coordinate Reference Systems</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> allCRS = <span class="hljs-keyword">await</span> client.geospatial.crs.list({ <span class="hljs-attr">filterOnlyCustom</span> : <span class="hljs-literal">true</span> });</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> allCRS = <span class="hljs-keyword">await</span> client.geospatial.crs.list({ <span class="hljs-attr">filterOnlyCustom</span> : <span class="hljs-literal">true</span> });
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -203,14 +206,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/geospatial/crsAPI.ts#L35">packages/stable/src/api/geospatial/crsAPI.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/geospatial/crsAPI.ts#L35">packages/stable/src/api/geospatial/crsAPI.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/getCoordinateReferenceSystem">Get Coordinate Reference Systems</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> retrievedCRS = <span class="hljs-keyword">await</span> client.geospatial.crs.retrieve([{ <span class="hljs-attr">srid</span>: <span class="hljs-number">4326</span> }]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> retrievedCRS = <span class="hljs-keyword">await</span> client.geospatial.crs.retrieve([{ <span class="hljs-attr">srid</span>: <span class="hljs-number">4326</span> }]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

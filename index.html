@@ -81,16 +81,21 @@
 					</a>
 				</p>
 				<p>Install the package with yarn:</p>
-				<pre><code><span class="hljs-variable">$ </span>yarn add <span class="hljs-variable">@cognite</span>/sdk</code></pre><p>or npm</p>
-				<pre><code>$ <span class="hljs-built_in">npm</span> install @cognite/sdk --save</code></pre>
+				<pre><code><span class="hljs-variable">$ </span>yarn add <span class="hljs-variable">@cognite</span>/sdk
+</code></pre>
+				<p>or npm</p>
+				<pre><code>$ <span class="hljs-built_in">npm</span> install @cognite/sdk --save
+</code></pre>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
 				</a>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> { CogniteClient } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>);</code></pre>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> { CogniteClient } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>);
+</code></pre>
 				<a href="#using-es-modules" id="using-es-modules" style="color: inherit; text-decoration: none;">
 					<h3>Using ES modules</h3>
 				</a>
-				<pre><code class="language-js"><span class="hljs-keyword">import</span> { CogniteClient } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>;</code></pre>
+				<pre><code class="language-js"><span class="hljs-keyword">import</span> { CogniteClient } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>;
+</code></pre>
 				<a href="#using-typescript" id="using-typescript" style="color: inherit; text-decoration: none;">
 					<h3>Using typescript</h3>
 				</a>
@@ -130,7 +135,8 @@
 
   <span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.list().autoPagingToArray({ <span class="hljs-attr">limit</span>: <span class="hljs-number">100</span> });
 }
-quickstart();</code></pre>
+quickstart();
+</code></pre>
 				<blockquote>
 					<p>For more details about SDK authentication see this <a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/guides/authentication.md">document</a>.
 					Also, more comprehensive intro guide can be found <a href="https://docs.cognite.com/dev/guides/sdk/js/">here</a></p>
@@ -149,7 +155,8 @@ quickstart();</code></pre>
 
   <span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.list().autoPagingToArray({ <span class="hljs-attr">limit</span>: <span class="hljs-number">100</span> });
 }
-quickstart();</code></pre>
+quickstart();
+</code></pre>
 				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
 					<h2>Documentation</h2>
 				</a>
@@ -169,14 +176,20 @@ quickstart();</code></pre>
 				<pre><code><span class="hljs-keyword">import</span> { CogniteAsyncIterator } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk/dist/src/autoPagination&#x27;</span>; <span class="hljs-comment">// ❌</span>
 <span class="hljs-keyword">import</span> { AssetsAPI } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk/dist/src/resources/assets/assetsApi&#x27;</span>; <span class="hljs-comment">// ❌</span>
 
-<span class="hljs-keyword">let</span> assetsApi: AssetsAPI; <span class="hljs-comment">// ❌</span></code></pre><p><strong>Good:</strong></p>
+<span class="hljs-keyword">let</span> assetsApi: AssetsAPI; <span class="hljs-comment">// ❌</span>
+</code></pre>
+				<p><strong>Good:</strong></p>
 				<pre><code><span class="hljs-keyword">import</span> { CogniteAsyncIterator } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>; <span class="hljs-comment">// ✅</span>
 
-<span class="hljs-keyword">let</span> assetsApi: CogniteClient[<span class="hljs-string">&#x27;assets&#x27;</span>]; <span class="hljs-comment">// ✅</span></code></pre><p>We recommend the usage of <a href="https://eslint.org/docs/rules/no-restricted-imports">eslint</a> to ensure this best practice is enforced without having to memorize the patterns:</p>
+<span class="hljs-keyword">let</span> assetsApi: CogniteClient[<span class="hljs-string">&#x27;assets&#x27;</span>]; <span class="hljs-comment">// ✅</span>
+</code></pre>
+				<p>We recommend the usage of <a href="https://eslint.org/docs/rules/no-restricted-imports">eslint</a> to ensure this best practice is enforced without having to memorize the patterns:</p>
 				<p><strong>.eslintrc.json:</strong></p>
 				<pre><code><span class="hljs-string">&quot;rules&quot;</span>: {
   <span class="hljs-string">&quot;no-restricted-imports&quot;</span>: [<span class="hljs-string">&quot;error&quot;</span>, { <span class="hljs-string">&quot;patterns&quot;</span>: [<span class="hljs-string">&quot;@cognite/sdk/**&quot;</span>] }]
-}</code></pre><p>The API reference documentation contains snippets for each endpoint,
+}
+</code></pre>
+				<p>The API reference documentation contains snippets for each endpoint,
 				giving examples of SDK use. See also the <a href="https://github.com/cognitedata/cognite-sdk-js#samples">samples section</a> in this repo.</p>
 				<a href="#guides" id="guides" style="color: inherit; text-decoration: none;">
 					<h2>Guides</h2>

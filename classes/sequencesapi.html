@@ -113,7 +113,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/sequences/sequencesApi.ts#L103">packages/stable/src/api/sequences/sequencesApi.ts:103</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/sequences/sequencesApi.ts#L103">packages/stable/src/api/sequences/sequencesApi.ts:103</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -121,7 +121,8 @@
 									<p><a href="https://docs.cognite.com/api/v1/#operation/aggregateSequences">Aggregate sequences</a></p>
 								</div>
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> aggregates = <span class="hljs-keyword">await</span> client.sequences.aggregate({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Well&quot;</span> } });
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Number of sequences named Well: &#x27;</span>, aggregates[<span class="hljs-number">0</span>].count)</code></pre>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Number of sequences named Well: &#x27;</span>, aggregates[<span class="hljs-number">0</span>].count)
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -143,7 +144,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/sequences/sequencesApi.ts#L77">packages/stable/src/api/sequences/sequencesApi.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/sequences/sequencesApi.ts#L77">packages/stable/src/api/sequences/sequencesApi.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -168,7 +169,8 @@
   ]
  }
 ];
-<span class="hljs-keyword">const</span> [sequence] = <span class="hljs-keyword">await</span> client.sequences.create(sequences);</code></pre>
+<span class="hljs-keyword">const</span> [sequence] = <span class="hljs-keyword">await</span> client.sequences.create(sequences);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -190,14 +192,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/sequences/sequencesApi.ts#L157">packages/stable/src/api/sequences/sequencesApi.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/sequences/sequencesApi.ts#L157">packages/stable/src/api/sequences/sequencesApi.ts:157</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/deleteSequences">Delete sequences</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.sequences.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.sequences.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -219,14 +222,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/sequences/sequencesApi.ts#L197">packages/stable/src/api/sequences/sequencesApi.ts:197</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/sequences/sequencesApi.ts#L197">packages/stable/src/api/sequences/sequencesApi.ts:197</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/deleteSequenceData">Delete rows</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.sequences.deleteRows([{ <span class="hljs-attr">id</span>: <span class="hljs-number">32423849</span>, <span class="hljs-attr">rows</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>] }]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.sequences.deleteRows([{ <span class="hljs-attr">id</span>: <span class="hljs-number">32423849</span>, <span class="hljs-attr">rows</span>: [<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>] }]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -248,7 +252,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/sequences/sequencesApi.ts#L173">packages/stable/src/api/sequences/sequencesApi.ts:173</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/sequences/sequencesApi.ts#L173">packages/stable/src/api/sequences/sequencesApi.ts:173</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -260,7 +264,8 @@
  { <span class="hljs-attr">rowNumber</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">values</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2.2</span>, <span class="hljs-string">&#x27;three&#x27;</span>] },
  { <span class="hljs-attr">rowNumber</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">values</span>: [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;six&#x27;</span>] }
 ];
-<span class="hljs-keyword">await</span> client.sequences.insertRows([{ <span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, rows, <span class="hljs-attr">columns</span>: [<span class="hljs-string">&#x27;one&#x27;</span>, <span class="hljs-string">&#x27;two&#x27;</span>, <span class="hljs-string">&#x27;three&#x27;</span>] }]);</code></pre>
+<span class="hljs-keyword">await</span> client.sequences.insertRows([{ <span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, rows, <span class="hljs-attr">columns</span>: [<span class="hljs-string">&#x27;one&#x27;</span>, <span class="hljs-string">&#x27;two&#x27;</span>, <span class="hljs-string">&#x27;three&#x27;</span>] }]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -282,7 +287,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/sequences/sequencesApi.ts#L89">packages/stable/src/api/sequences/sequencesApi.ts:89</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/sequences/sequencesApi.ts#L89">packages/stable/src/api/sequences/sequencesApi.ts:89</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -290,7 +295,8 @@
 									<p><a href="https://docs.cognite.com/api/v1/#operation/advancedListSequences">List sequences</a></p>
 									<!-- or [similar](https://docs.cognite.com/api/v1/#operation/listSequences) -->
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> sequences = <span class="hljs-keyword">await</span> client.sequences.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;sequence_name&#x27;</span> } });</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> sequences = <span class="hljs-keyword">await</span> client.sequences.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;sequence_name&#x27;</span> } });
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -312,14 +318,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/sequences/sequencesApi.ts#L114">packages/stable/src/api/sequences/sequencesApi.ts:114</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/sequences/sequencesApi.ts#L114">packages/stable/src/api/sequences/sequencesApi.ts:114</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/getSequenceById">Retrieve sequences</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> [sequence1, sequence2] = <span class="hljs-keyword">await</span> client.sequences.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> [sequence1, sequence2] = <span class="hljs-keyword">await</span> client.sequences.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -344,14 +351,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/sequences/sequencesApi.ts#L184">packages/stable/src/api/sequences/sequencesApi.ts:184</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/sequences/sequencesApi.ts#L184">packages/stable/src/api/sequences/sequencesApi.ts:184</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/getSequenceData">Retrieve rows</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> rows = <span class="hljs-keyword">await</span> client.sequences.retrieveRows({ <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;sequence1&#x27;</span> }).autoPagingToArray({ <span class="hljs-attr">limit</span>: <span class="hljs-number">100</span> });</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> rows = <span class="hljs-keyword">await</span> client.sequences.retrieveRows({ <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;sequence1&#x27;</span> }).autoPagingToArray({ <span class="hljs-attr">limit</span>: <span class="hljs-number">100</span> });
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -373,7 +381,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/sequences/sequencesApi.ts#L146">packages/stable/src/api/sequences/sequencesApi.ts:146</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/sequences/sequencesApi.ts#L146">packages/stable/src/api/sequences/sequencesApi.ts:146</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -387,7 +395,8 @@
   <span class="hljs-attr">search</span>: {
     <span class="hljs-attr">query</span>: <span class="hljs-string">&#x27;n*m* desc*ion&#x27;</span>
   }
-});</code></pre>
+});
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -409,14 +418,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/sequences/sequencesApi.ts#L128">packages/stable/src/api/sequences/sequencesApi.ts:128</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/sequences/sequencesApi.ts#L128">packages/stable/src/api/sequences/sequencesApi.ts:128</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/updateSequences">Update sequences</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> [updatedSequence] = <span class="hljs-keyword">await</span> client.sequences.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">name</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">&#x27;New name&#x27;</span>}}}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> [updatedSequence] = <span class="hljs-keyword">await</span> client.sequences.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">name</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">&#x27;New name&#x27;</span>}}}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

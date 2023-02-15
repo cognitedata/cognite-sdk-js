@@ -109,7 +109,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/labels/labelsApi.ts#L30">packages/stable/src/api/labels/labelsApi.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/labels/labelsApi.ts#L30">packages/stable/src/api/labels/labelsApi.ts:30</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -120,7 +120,8 @@
   { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;PUMP&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Pump&quot;</span> },
   { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;ROTATING_EQUIPMENT&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Rotating equipment&#x27;</span>, <span class="hljs-attr">description</span>: <span class="hljs-string">&#x27;Asset with rotating parts&#x27;</span> }
 ];
-<span class="hljs-keyword">const</span> createdLabels = <span class="hljs-keyword">await</span> client.labels.create(labels);</code></pre>
+<span class="hljs-keyword">const</span> createdLabels = <span class="hljs-keyword">await</span> client.labels.create(labels);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -142,14 +143,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/labels/labelsApi.ts#L56">packages/stable/src/api/labels/labelsApi.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/labels/labelsApi.ts#L56">packages/stable/src/api/labels/labelsApi.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteLabels">Delete labels</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.labels.delete([{<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;PUMP&#x27;</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;VALVE&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.labels.delete([{<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;PUMP&#x27;</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;VALVE&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -171,14 +173,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/labels/labelsApi.ts#L43">packages/stable/src/api/labels/labelsApi.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/labels/labelsApi.ts#L43">packages/stable/src/api/labels/labelsApi.ts:43</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/listLabels">List labels</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> labels = <span class="hljs-keyword">await</span> client.labels.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">externalIdPrefix</span>: <span class="hljs-string">&#x27;Pu&#x27;</span>}});</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> labels = <span class="hljs-keyword">await</span> client.labels.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">externalIdPrefix</span>: <span class="hljs-string">&#x27;Pu&#x27;</span>}});
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

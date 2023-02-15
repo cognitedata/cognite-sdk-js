@@ -113,7 +113,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/assets/assetsApi.ts#L64">packages/stable/src/api/assets/assetsApi.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/assets/assetsApi.ts#L64">packages/stable/src/api/assets/assetsApi.ts:64</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -121,7 +121,8 @@
 									<p><a href="https://docs.cognite.com/api/v1/#operation/aggregateAssets">Aggregate assets</a></p>
 								</div>
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> aggregates = <span class="hljs-keyword">await</span> client.assets.aggregate({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">root</span>: <span class="hljs-literal">true</span> } });
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Number of root assets: &#x27;</span>, aggregates[<span class="hljs-number">0</span>].count)</code></pre>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Number of root assets: &#x27;</span>, aggregates[<span class="hljs-number">0</span>].count)
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -143,7 +144,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/assets/assetsApi.ts#L39">packages/stable/src/api/assets/assetsApi.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/assets/assetsApi.ts#L39">packages/stable/src/api/assets/assetsApi.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -155,7 +156,8 @@
   { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Second asset&#x27;</span>, <span class="hljs-attr">description</span>: <span class="hljs-string">&#x27;Another asset&#x27;</span>, <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;anotherAsset&#x27;</span> },
   { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Child asset&#x27;</span>, <span class="hljs-attr">parentExternalId</span>: <span class="hljs-string">&#x27;anotherAsset&#x27;</span>},
 ];
-<span class="hljs-keyword">const</span> createdAssets = <span class="hljs-keyword">await</span> client.assets.create(assets);</code></pre>
+<span class="hljs-keyword">const</span> createdAssets = <span class="hljs-keyword">await</span> client.assets.create(assets);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -177,14 +179,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/assets/assetsApi.ts#L121">packages/stable/src/api/assets/assetsApi.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/assets/assetsApi.ts#L121">packages/stable/src/api/assets/assetsApi.ts:121</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteAssets">Delete assets</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.assets.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.assets.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -209,7 +212,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/assets/assetsApi.ts#L52">packages/stable/src/api/assets/assetsApi.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/assets/assetsApi.ts#L52">packages/stable/src/api/assets/assetsApi.ts:52</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -217,7 +220,8 @@
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/listAssets">List assets</a></p>
 									<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getAssets) -->
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;21PT1019&#x27;</span> } });</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;21PT1019&#x27;</span> } });
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -239,7 +243,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/assets/assetsApi.ts#L78">packages/stable/src/api/assets/assetsApi.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/assets/assetsApi.ts#L78">packages/stable/src/api/assets/assetsApi.ts:78</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -247,7 +251,8 @@
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/byIdsAssets">Retrieve assets</a></p>
 									<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getAsset) -->
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -272,7 +277,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/assets/assetsApi.ts#L110">packages/stable/src/api/assets/assetsApi.ts:110</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/assets/assetsApi.ts#L110">packages/stable/src/api/assets/assetsApi.ts:110</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -286,7 +291,8 @@
   <span class="hljs-attr">search</span>: {
     <span class="hljs-attr">query</span>: <span class="hljs-string">&#x27;21PT1019&#x27;</span>
   }
-});</code></pre>
+});
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -308,14 +314,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/assets/assetsApi.ts#L92">packages/stable/src/api/assets/assetsApi.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/assets/assetsApi.ts#L92">packages/stable/src/api/assets/assetsApi.ts:92</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/updateAssets">Update assets</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">name</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">&#x27;New name&#x27;</span>}}}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> assets = <span class="hljs-keyword">await</span> client.assets.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">name</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">&#x27;New name&#x27;</span>}}}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

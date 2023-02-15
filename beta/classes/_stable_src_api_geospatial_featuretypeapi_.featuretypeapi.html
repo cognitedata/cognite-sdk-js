@@ -111,7 +111,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/geospatial/featureTypeAPI.ts#L28">packages/stable/src/api/geospatial/featureTypeAPI.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/geospatial/featureTypeAPI.ts#L28">packages/stable/src/api/geospatial/featureTypeAPI.ts:28</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -125,7 +125,8 @@
      <span class="hljs-attr">searchSpec</span>: { <span class="hljs-attr">location_idx</span>: { <span class="hljs-attr">properties</span> : [<span class="hljs-string">&#x27;location&#x27;</span>] } }
   }
 ];
-<span class="hljs-keyword">const</span> createdFeatureTypes = <span class="hljs-keyword">await</span> client.geospatial.featureType.create(featureTypes);</code></pre>
+<span class="hljs-keyword">const</span> createdFeatureTypes = <span class="hljs-keyword">await</span> client.geospatial.featureType.create(featureTypes);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -147,14 +148,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/geospatial/featureTypeAPI.ts#L63">packages/stable/src/api/geospatial/featureTypeAPI.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/geospatial/featureTypeAPI.ts#L63">packages/stable/src/api/geospatial/featureTypeAPI.ts:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/GeospatialDeleteFeatureTypes">Delete feature types</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.geospatial.featureType.delete([{ <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;ocean_temperature&#x27;</span>}], { <span class="hljs-attr">recursive</span> : <span class="hljs-literal">true</span> });</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.geospatial.featureType.delete([{ <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;ocean_temperature&#x27;</span>}], { <span class="hljs-attr">recursive</span> : <span class="hljs-literal">true</span> });
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -179,14 +181,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/geospatial/featureTypeAPI.ts#L52">packages/stable/src/api/geospatial/featureTypeAPI.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/geospatial/featureTypeAPI.ts#L52">packages/stable/src/api/geospatial/featureTypeAPI.ts:52</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/listFeatureTypes">List feature types</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> allFeatureTypes = <span class="hljs-keyword">await</span> client.geospatial.featureType.list();</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> allFeatureTypes = <span class="hljs-keyword">await</span> client.geospatial.featureType.list();
+</code></pre>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../modules/_core_src_types_.html#cursorandasynciterator" class="tsd-signature-type">CursorAndAsyncIterator</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_stable_src_api_geospatial_types_.featuretype.html" class="tsd-signature-type">FeatureType</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
@@ -202,14 +205,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/geospatial/featureTypeAPI.ts#L41">packages/stable/src/api/geospatial/featureTypeAPI.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/geospatial/featureTypeAPI.ts#L41">packages/stable/src/api/geospatial/featureTypeAPI.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/getFeatureTypesByIds">Retrieve feature types</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> retrievedFeatureTypes = <span class="hljs-keyword">await</span> client.geospatial.featureType.retrieve([ { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;ocean_temperature&#x27;</span> } ]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> retrievedFeatureTypes = <span class="hljs-keyword">await</span> client.geospatial.featureType.retrieve([ { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;ocean_temperature&#x27;</span> } ]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -231,7 +235,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/geospatial/featureTypeAPI.ts#L86">packages/stable/src/api/geospatial/featureTypeAPI.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/geospatial/featureTypeAPI.ts#L86">packages/stable/src/api/geospatial/featureTypeAPI.ts:86</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -247,7 +251,8 @@
    }
  }
 ];
-<span class="hljs-keyword">const</span> updatedFeatureTypes = <span class="hljs-keyword">await</span> client.geospatial.featureType.update(featureTypesToUpdate);</code></pre>
+<span class="hljs-keyword">const</span> updatedFeatureTypes = <span class="hljs-keyword">await</span> client.geospatial.featureType.update(featureTypesToUpdate);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

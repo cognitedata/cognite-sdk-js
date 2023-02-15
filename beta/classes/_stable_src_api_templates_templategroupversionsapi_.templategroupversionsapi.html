@@ -109,14 +109,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/templates/templateGroupVersionsApi.ts#L48">packages/stable/src/api/templates/templateGroupVersionsApi.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/templates/templateGroupVersionsApi.ts#L48">packages/stable/src/api/templates/templateGroupVersionsApi.ts:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroupsDelete">Delete a Template Group version</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).versions.delete(<span class="hljs-number">1</span>);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).versions.delete(<span class="hljs-number">1</span>);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -138,14 +139,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/templates/templateGroupVersionsApi.ts#L35">packages/stable/src/api/templates/templateGroupVersionsApi.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/templates/templateGroupVersionsApi.ts#L35">packages/stable/src/api/templates/templateGroupVersionsApi.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroupsExternalidVersionsList">List Template Group versions</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> versions = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).versions.list( { <span class="hljs-attr">minVersion</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">maxVersion</span>: <span class="hljs-number">4</span> } );</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> versions = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).versions.list( { <span class="hljs-attr">minVersion</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">maxVersion</span>: <span class="hljs-number">4</span> } );
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -167,7 +169,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/templates/templateGroupVersionsApi.ts#L20">packages/stable/src/api/templates/templateGroupVersionsApi.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/templates/templateGroupVersionsApi.ts#L20">packages/stable/src/api/templates/templateGroupVersionsApi.ts:20</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -176,7 +178,8 @@
 									Create or update a Template Group version.</p>
 								</div>
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> version = { <span class="hljs-attr">schema</span>: <span class="hljs-string">&quot;type MyType @template { someField: String }&quot;</span>, <span class="hljs-attr">conflictMode</span>: ConflictMode.Patch };
-<span class="hljs-keyword">const</span> newVersion = <span class="hljs-keyword">await</span> client.group(<span class="hljs-string">&quot;myGroup&quot;</span>).versions.upsert(version);</code></pre>
+<span class="hljs-keyword">const</span> newVersion = <span class="hljs-keyword">await</span> client.group(<span class="hljs-string">&quot;myGroup&quot;</span>).versions.upsert(version);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

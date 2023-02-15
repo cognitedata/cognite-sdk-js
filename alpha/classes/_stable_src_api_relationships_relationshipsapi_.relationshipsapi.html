@@ -110,7 +110,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/relationships/relationshipsApi.ts#L40">packages/stable/src/api/relationships/relationshipsApi.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/relationships/relationshipsApi.ts#L40">packages/stable/src/api/relationships/relationshipsApi.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -126,7 +126,8 @@
      <span class="hljs-attr">targetType</span>: <span class="hljs-string">&#x27;event&#x27;</span> <span class="hljs-keyword">as</span> <span class="hljs-keyword">const</span>
   }
 ];
-<span class="hljs-keyword">const</span> createdRelationships = <span class="hljs-keyword">await</span> client.relationships.create(relationships);</code></pre>
+<span class="hljs-keyword">const</span> createdRelationships = <span class="hljs-keyword">await</span> client.relationships.create(relationships);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -148,14 +149,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/relationships/relationshipsApi.ts#L78">packages/stable/src/api/relationships/relationshipsApi.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/relationships/relationshipsApi.ts#L78">packages/stable/src/api/relationships/relationshipsApi.ts:78</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteRelationships">Delete relationships</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.relationships.delete([{<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;def&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.relationships.delete([{<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;def&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -180,14 +182,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/relationships/relationshipsApi.ts#L51">packages/stable/src/api/relationships/relationshipsApi.ts:51</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/relationships/relationshipsApi.ts#L51">packages/stable/src/api/relationships/relationshipsApi.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/listRelationships">List relationships</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> relationships = <span class="hljs-keyword">await</span> client.relationships.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">createdTime</span>: { <span class="hljs-attr">min</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2018&#x27;</span>), <span class="hljs-attr">max</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2019&#x27;</span>) }}});</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> relationships = <span class="hljs-keyword">await</span> client.relationships.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">createdTime</span>: { <span class="hljs-attr">min</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2018&#x27;</span>), <span class="hljs-attr">max</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2019&#x27;</span>) }}});
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -209,14 +212,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/relationships/relationshipsApi.ts#L64">packages/stable/src/api/relationships/relationshipsApi.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/relationships/relationshipsApi.ts#L64">packages/stable/src/api/relationships/relationshipsApi.ts:64</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/byidsRelationships">Retrieve relationships</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> relationships = <span class="hljs-keyword">await</span> client.relationships.retrieve([{<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;def&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> relationships = <span class="hljs-keyword">await</span> client.relationships.retrieve([{<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;def&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

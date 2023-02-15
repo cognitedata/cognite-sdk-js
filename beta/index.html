@@ -70,13 +70,20 @@
 				<p>The package <code>@cognite/sdk-beta</code> provides convenient access to the beta version of the Cognite API.
 					Setup is very similar to <a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md">stable</a>,
 				but use the following command to install:</p>
-				<pre><code>yarn <span class="hljs-keyword">add</span> <span class="hljs-title">@cognite</span>/sdk<span class="hljs-title">@npm</span>:<span class="hljs-title">@cognite</span>/sdk-beta</code></pre><p>or with npm</p>
-				<pre><code><span class="hljs-built_in">npm</span> install @cognite/sdk@npm:@cognite/sdk-beta --save</code></pre><p>This will install the package <code>@cognite/sdk-beta</code> as a dependency, but aliased as <code>@cognite/sdk</code>.
+				<pre><code>yarn <span class="hljs-keyword">add</span> <span class="hljs-title">@cognite</span>/sdk<span class="hljs-title">@npm</span>:<span class="hljs-title">@cognite</span>/sdk-beta
+</code></pre>
+				<p>or with npm</p>
+				<pre><code><span class="hljs-built_in">npm</span> install @cognite/sdk@npm:@cognite/sdk-beta --save
+</code></pre>
+				<p>This will install the package <code>@cognite/sdk-beta</code> as a dependency, but aliased as <code>@cognite/sdk</code>.
 				In <code>package.json</code>, it will look like this:</p>
-				<pre><code>    <span class="hljs-string">&quot;@cognite/sdk&quot;</span>: <span class="hljs-string">&quot;npm:@cognite/sdk-beta@^X.X.X&quot;</span></code></pre><p>This will download <code>@cognite/sdk-beta</code> and pretend it is <code>@cognite/sdk</code>.
+				<pre><code>    <span class="hljs-string">&quot;@cognite/sdk&quot;</span>: <span class="hljs-string">&quot;npm:@cognite/sdk-beta@^X.X.X&quot;</span>
+</code></pre>
+				<p>This will download <code>@cognite/sdk-beta</code> and pretend it is <code>@cognite/sdk</code>.
 					With the beta package installed under an alias, you don&#39;t need to modify your code
 				to access beta features. Import the <code>CogniteClient</code> as you normally would:</p>
-				<pre><code class="language-js"><span class="hljs-keyword">import</span> { CogniteClient } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>;</code></pre>
+				<pre><code class="language-js"><span class="hljs-keyword">import</span> { CogniteClient } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@cognite/sdk&#x27;</span>;
+</code></pre>
 				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
 					<h2>Documentation</h2>
 				</a>

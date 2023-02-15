@@ -112,7 +112,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/templates/templateInstancesApi.ts#L34">packages/stable/src/api/templates/templateInstancesApi.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/templates/templateInstancesApi.ts#L34">packages/stable/src/api/templates/templateInstancesApi.ts:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -123,7 +123,8 @@
   { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;Well_a&#x27;</span>, <span class="hljs-attr">templateName</span>: <span class="hljs-string">&quot;Well&quot;</span>, <span class="hljs-attr">fieldResolvers</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Underwater P23&quot;</span>, <span class="hljs-attr">pressure</span>: <span class="hljs-string">&quot;21_PT19&quot;</span> } },
   { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;Well_b&#x27;</span>, <span class="hljs-attr">templateName</span>: <span class="hljs-string">&quot;Well&quot;</span>, <span class="hljs-attr">fieldResolvers</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Underwater P01&quot;</span> } },
 ];
-<span class="hljs-keyword">const</span> createdInstances = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).version(<span class="hljs-number">1</span>).create(instances);</code></pre>
+<span class="hljs-keyword">const</span> createdInstances = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).version(<span class="hljs-number">1</span>).create(instances);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -145,14 +146,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/templates/templateInstancesApi.ts#L128">packages/stable/src/api/templates/templateInstancesApi.ts:128</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/templates/templateInstancesApi.ts#L128">packages/stable/src/api/templates/templateInstancesApi.ts:128</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroupsExternalidVersionsVersionInstancesDelete">Delete Template Instances</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> instances = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).version(<span class="hljs-number">1</span>).delete([{ <span class="hljs-attr">externalId</span>: [<span class="hljs-string">&quot;Well_a&quot;</span>] }]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> instances = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).version(<span class="hljs-number">1</span>).delete([{ <span class="hljs-attr">externalId</span>: [<span class="hljs-string">&quot;Well_a&quot;</span>] }]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -177,14 +179,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/templates/templateInstancesApi.ts#L106">packages/stable/src/api/templates/templateInstancesApi.ts:106</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/templates/templateInstancesApi.ts#L106">packages/stable/src/api/templates/templateInstancesApi.ts:106</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroupsExternalidVersionsVersionInstancesList">List Template Instances</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> instances = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).version(<span class="hljs-number">1</span>).list( { <span class="hljs-attr">templateNames</span>: [<span class="hljs-string">&quot;Well&quot;</span>] } );</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> instances = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).version(<span class="hljs-number">1</span>).list( { <span class="hljs-attr">templateNames</span>: [<span class="hljs-string">&quot;Well&quot;</span>] } );
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -200,20 +203,21 @@
 					<a name="retrieve" class="tsd-anchor"></a>
 					<h3>retrieve</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../interfaces/_core_src_types_.externalid.html" class="tsd-signature-type">ExternalId</a><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>ignoreUnknownIds<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><a href="../interfaces/_stable_src_types_.externaltemplateinstance.html" class="tsd-signature-type">ExternalTemplateInstance</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>createdTime<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#timestamp" class="tsd-signature-type">Timestamp</a><span class="tsd-signature-symbol">; </span>lastUpdatedTime<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#timestamp" class="tsd-signature-type">Timestamp</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../interfaces/_core_src_types_.externalid.html" class="tsd-signature-type">ExternalId</a><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>ignoreUnknownIds<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_stable_src_types_.html#templateinstance" class="tsd-signature-type">TemplateInstance</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/templates/templateInstancesApi.ts#L90">packages/stable/src/api/templates/templateInstancesApi.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/templates/templateInstancesApi.ts#L90">packages/stable/src/api/templates/templateInstancesApi.ts:90</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroupsExternalidVersionsVersionInstancesByids">Retrieve Template Instances</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> instances = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).version(<span class="hljs-number">1</span>).retrieve([ { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;Well } ]);</span></code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> instances = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).version(<span class="hljs-number">1</span>).retrieve([ { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;Well } ]);</span>
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -224,7 +228,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>ignoreUnknownIds<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><a href="../interfaces/_stable_src_types_.externaltemplateinstance.html" class="tsd-signature-type">ExternalTemplateInstance</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>createdTime<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#timestamp" class="tsd-signature-type">Timestamp</a><span class="tsd-signature-symbol">; </span>lastUpdatedTime<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#timestamp" class="tsd-signature-type">Timestamp</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_stable_src_types_.html#templateinstance" class="tsd-signature-type">TemplateInstance</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -232,13 +236,13 @@
 					<a name="update" class="tsd-anchor"></a>
 					<h3>update</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span>changes<span class="tsd-signature-symbol">: </span><a href="../interfaces/_stable_src_types_.templateinstancepatch.html" class="tsd-signature-type">TemplateInstancePatch</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><a href="../interfaces/_stable_src_types_.externaltemplateinstance.html" class="tsd-signature-type">ExternalTemplateInstance</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>createdTime<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#timestamp" class="tsd-signature-type">Timestamp</a><span class="tsd-signature-symbol">; </span>lastUpdatedTime<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#timestamp" class="tsd-signature-type">Timestamp</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">update<span class="tsd-signature-symbol">(</span>changes<span class="tsd-signature-symbol">: </span><a href="../interfaces/_stable_src_types_.templateinstancepatch.html" class="tsd-signature-type">TemplateInstancePatch</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_stable_src_types_.html#templateinstance" class="tsd-signature-type">TemplateInstance</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/templates/templateInstancesApi.ts#L77">packages/stable/src/api/templates/templateInstancesApi.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/templates/templateInstancesApi.ts#L77">packages/stable/src/api/templates/templateInstancesApi.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -251,7 +255,8 @@
       <span class="hljs-attr">myStringField</span>: <span class="hljs-string">&quot;My Field&quot;</span>
     }
   }
-}, <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;someExtId&#x27;</span> }] );</code></pre>
+}, <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;someExtId&#x27;</span> }] );
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -259,7 +264,7 @@
 									<h5>changes: <a href="../interfaces/_stable_src_types_.templateinstancepatch.html" class="tsd-signature-type">TemplateInstancePatch</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><a href="../interfaces/_stable_src_types_.externaltemplateinstance.html" class="tsd-signature-type">ExternalTemplateInstance</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>createdTime<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#timestamp" class="tsd-signature-type">Timestamp</a><span class="tsd-signature-symbol">; </span>lastUpdatedTime<span class="tsd-signature-symbol">: </span><a href="../modules/_stable_src_types_.html#timestamp" class="tsd-signature-type">Timestamp</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_stable_src_api_documents_types_gen_.documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_stable_src_types_.html#templateinstance" class="tsd-signature-type">TemplateInstance</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -273,7 +278,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/templates/templateInstancesApi.ts#L53">packages/stable/src/api/templates/templateInstancesApi.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/templates/templateInstancesApi.ts#L53">packages/stable/src/api/templates/templateInstancesApi.ts:53</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -284,7 +289,8 @@
   { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&quot;Well_a&quot;</span>, <span class="hljs-attr">templateName</span>: <span class="hljs-string">&quot;Well&quot;</span>, <span class="hljs-attr">fieldResolvers</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Underwater P23&quot;</span>, <span class="hljs-attr">pressure</span>: <span class="hljs-string">&quot;21_PT19&quot;</span> } },
   { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&quot;Well_b&quot;</span>, <span class="hljs-attr">templateName</span>: <span class="hljs-string">&quot;Well&quot;</span>, <span class="hljs-attr">fieldResolvers</span>: { <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Underwater P01&quot;</span> } },
 ];
-<span class="hljs-keyword">const</span> createdInstances = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).version(<span class="hljs-number">1</span>).upsert(instances);</code></pre>
+<span class="hljs-keyword">const</span> createdInstances = <span class="hljs-keyword">await</span> client.templates.group(<span class="hljs-string">&quot;myGroup&quot;</span>).version(<span class="hljs-number">1</span>).upsert(instances);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

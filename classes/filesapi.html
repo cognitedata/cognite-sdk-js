@@ -111,7 +111,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/files/filesApi.ts#L93">packages/stable/src/api/files/filesApi.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/files/filesApi.ts#L93">packages/stable/src/api/files/filesApi.ts:93</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -119,7 +119,8 @@
 									<p><a href="https://docs.cognite.com/api/v1/#operation/aggregateFiles">Aggregate files</a></p>
 								</div>
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> aggregates = <span class="hljs-keyword">await</span> client.files.aggregate({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">uploaded</span>: <span class="hljs-literal">true</span> } });
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Number of uploaded files: &#x27;</span>, aggregates[<span class="hljs-number">0</span>].count)</code></pre>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Number of uploaded files: &#x27;</span>, aggregates[<span class="hljs-number">0</span>].count)
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -141,14 +142,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/files/filesApi.ts#L153">packages/stable/src/api/files/filesApi.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/files/filesApi.ts#L153">packages/stable/src/api/files/filesApi.ts:153</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteFiles">Delete files</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -164,20 +166,21 @@
 					<a name="getdownloadurls" class="tsd-anchor"></a>
 					<h3>get<wbr>Download<wbr>Urls</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Download<wbr>Urls<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../globals.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><a href="../interfaces/filelink.html" class="tsd-signature-type">FileLink</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/internalid.html" class="tsd-signature-type">InternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><a href="../interfaces/filelink.html" class="tsd-signature-type">FileLink</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/externalid.html" class="tsd-signature-type">ExternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Download<wbr>Urls<span class="tsd-signature-symbol">(</span>ids<span class="tsd-signature-symbol">: </span><a href="../globals.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><a href="../interfaces/filelink.html" class="tsd-signature-type">FileLink</a><span class="tsd-signature-symbol"> &amp; </span><a href="../globals.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/files/filesApi.ts#L164">packages/stable/src/api/files/filesApi.ts:164</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/files/filesApi.ts#L164">packages/stable/src/api/files/filesApi.ts:164</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/downloadLinks">Get download urls</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files.getDownloadUrls([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.files.getDownloadUrls([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -185,7 +188,7 @@
 									<h5>ids: <a href="../globals.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><a href="../interfaces/filelink.html" class="tsd-signature-type">FileLink</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/internalid.html" class="tsd-signature-type">InternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><a href="../interfaces/filelink.html" class="tsd-signature-type">FileLink</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/externalid.html" class="tsd-signature-type">ExternalId</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">(</span><a href="../interfaces/filelink.html" class="tsd-signature-type">FileLink</a><span class="tsd-signature-symbol"> &amp; </span><a href="../globals.html#ideither" class="tsd-signature-type">IdEither</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -199,7 +202,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/files/filesApi.ts#L79">packages/stable/src/api/files/filesApi.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/files/filesApi.ts#L79">packages/stable/src/api/files/filesApi.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -207,7 +210,8 @@
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/advancedListFiles">List files</a></p>
 									<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listFiles) -->
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.list({<span class="hljs-attr">filter</span>: {<span class="hljs-attr">mimeType</span>: <span class="hljs-string">&#x27;image/png&#x27;</span>}});</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.list({<span class="hljs-attr">filter</span>: {<span class="hljs-attr">mimeType</span>: <span class="hljs-string">&#x27;image/png&#x27;</span>}});
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -229,7 +233,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/files/filesApi.ts#L105">packages/stable/src/api/files/filesApi.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/files/filesApi.ts#L105">packages/stable/src/api/files/filesApi.ts:105</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -237,7 +241,8 @@
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/byIdsFiles">Retrieve files</a></p>
 									<!-- or [just one](https://doc.cognitedata.com/api/v1/#operation/getFileByInternalId) -->
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> files = <span class="hljs-keyword">await</span> client.files.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -262,7 +267,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/files/filesApi.ts#L142">packages/stable/src/api/files/filesApi.ts:142</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/files/filesApi.ts#L142">packages/stable/src/api/files/filesApi.ts:142</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -276,7 +281,8 @@
   <span class="hljs-attr">search</span>: {
     <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Pump&#x27;</span>
   }
-});</code></pre>
+});
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -298,7 +304,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/files/filesApi.ts#L124">packages/stable/src/api/files/filesApi.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/files/filesApi.ts#L124">packages/stable/src/api/files/filesApi.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -310,7 +316,8 @@
   <span class="hljs-attr">update</span>: {
     <span class="hljs-attr">source</span>: { <span class="hljs-attr">set</span>: <span class="hljs-string">&#x27;new source&#x27;</span> }
   }
-}]);</code></pre>
+}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -332,7 +339,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/files/filesApi.ts#L57">packages/stable/src/api/files/filesApi.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/files/filesApi.ts#L57">packages/stable/src/api/files/filesApi.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -345,7 +352,8 @@
 
 <span class="hljs-comment">// manual with uploadUrl:</span>
 <span class="hljs-keyword">const</span> file2 = <span class="hljs-keyword">await</span> client.files.upload({<span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;examplefile.jpg&#x27;</span>, <span class="hljs-attr">mimeType</span>: <span class="hljs-string">&#x27;image/jpg&#x27;</span>});
-<span class="hljs-comment">// then upload using the file.uploadUrl</span></code></pre>
+<span class="hljs-comment">// then upload using the file.uploadUrl</span>
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

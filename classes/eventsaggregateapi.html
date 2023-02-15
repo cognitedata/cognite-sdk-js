@@ -105,7 +105,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/events/eventsAggregateApi.ts#L20">packages/stable/src/api/events/eventsAggregateApi.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/events/eventsAggregateApi.ts#L20">packages/stable/src/api/events/eventsAggregateApi.ts:20</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -113,7 +113,8 @@
 									<p><a href="https://docs.cognite.com/api/v1/#operation/aggregateEvents">Aggregate events</a></p>
 								</div>
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> aggregates = <span class="hljs-keyword">await</span> client.events.aggregate.count({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">assetIds</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>] } });
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Number of events: &#x27;</span>, aggregates[<span class="hljs-number">0</span>].count)</code></pre>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Number of events: &#x27;</span>, aggregates[<span class="hljs-number">0</span>].count)
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -135,7 +136,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/events/eventsAggregateApi.ts#L32">packages/stable/src/api/events/eventsAggregateApi.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/events/eventsAggregateApi.ts#L32">packages/stable/src/api/events/eventsAggregateApi.ts:32</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -143,7 +144,8 @@
 									<p><a href="https://docs.cognite.com/api/v1/#operation/aggregateEvents">Aggregate events</a></p>
 								</div>
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> uniqueValues = <span class="hljs-keyword">await</span> client.events.aggregate.uniqueValues({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">assetIds</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>] }, <span class="hljs-attr">fields</span>: [<span class="hljs-string">&#x27;subtype&#x27;</span>] });
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Unique values: &#x27;</span>, uniqueValues)</code></pre>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Unique values: &#x27;</span>, uniqueValues)
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

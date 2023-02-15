@@ -125,7 +125,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides BaseResourceAPI.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/events/eventsApi.ts#L22">packages/stable/src/api/events/eventsApi.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/events/eventsApi.ts#L22">packages/stable/src/api/events/eventsApi.ts:22</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -151,7 +151,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/events/eventsApi.ts#L125">packages/stable/src/api/events/eventsApi.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/events/eventsApi.ts#L125">packages/stable/src/api/events/eventsApi.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -179,7 +179,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/events/eventsApi.ts#L47">packages/stable/src/api/events/eventsApi.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/events/eventsApi.ts#L47">packages/stable/src/api/events/eventsApi.ts:47</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -190,7 +190,8 @@
   { <span class="hljs-attr">description</span>: <span class="hljs-string">&#x27;Workorder pump abc&#x27;</span>, <span class="hljs-attr">startTime</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;22 jan 2019&#x27;</span>) },
   { <span class="hljs-attr">description</span>: <span class="hljs-string">&#x27;Broken rule&#x27;</span>, <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;rule123&#x27;</span>, <span class="hljs-attr">startTime</span>: <span class="hljs-number">1557346524667000</span> },
 ];
-<span class="hljs-keyword">const</span> createdEvents = <span class="hljs-keyword">await</span> client.events.create(events);</code></pre>
+<span class="hljs-keyword">const</span> createdEvents = <span class="hljs-keyword">await</span> client.events.create(events);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -212,14 +213,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/events/eventsApi.ts#L115">packages/stable/src/api/events/eventsApi.ts:115</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/events/eventsApi.ts#L115">packages/stable/src/api/events/eventsApi.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/deleteEvents">Delete events</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.events.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">await</span> client.events.delete([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -241,7 +243,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/events/eventsApi.ts#L59">packages/stable/src/api/events/eventsApi.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/events/eventsApi.ts#L59">packages/stable/src/api/events/eventsApi.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -249,7 +251,8 @@
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/advancedListEvents">List events</a></p>
 									<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/listEvents) -->
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">startTime</span>: { <span class="hljs-attr">min</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2018&#x27;</span>) }, <span class="hljs-attr">endTime</span>: { <span class="hljs-attr">max</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2019&#x27;</span>) } } });</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">startTime</span>: { <span class="hljs-attr">min</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2018&#x27;</span>) }, <span class="hljs-attr">endTime</span>: { <span class="hljs-attr">max</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2019&#x27;</span>) } } });
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -271,7 +274,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/events/eventsApi.ts#L75">packages/stable/src/api/events/eventsApi.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/events/eventsApi.ts#L75">packages/stable/src/api/events/eventsApi.ts:75</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -279,7 +282,8 @@
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/byIdsEvents">Retrieve events</a></p>
 									<!-- or [similar](https://doc.cognitedata.com/api/v1/#operation/getEventByInternalId) -->
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -304,7 +308,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/events/eventsApi.ts#L104">packages/stable/src/api/events/eventsApi.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/events/eventsApi.ts#L104">packages/stable/src/api/events/eventsApi.ts:104</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -318,7 +322,8 @@
   <span class="hljs-attr">search</span>: {
     <span class="hljs-attr">description</span>: <span class="hljs-string">&#x27;Pump&#x27;</span>
   }
-});</code></pre>
+});
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -340,14 +345,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/events/eventsApi.ts#L86">packages/stable/src/api/events/eventsApi.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/events/eventsApi.ts#L86">packages/stable/src/api/events/eventsApi.ts:86</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://doc.cognitedata.com/api/v1/#operation/updateEvents">Update events</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">description</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">&#x27;New description&#x27;</span>}}}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> events = <span class="hljs-keyword">await</span> client.events.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">description</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">&#x27;New description&#x27;</span>}}}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

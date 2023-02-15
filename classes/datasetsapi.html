@@ -108,7 +108,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/datasets/datasetsApi.ts#L58">packages/stable/src/api/datasets/datasetsApi.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/datasets/datasetsApi.ts#L58">packages/stable/src/api/datasets/datasetsApi.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -116,7 +116,8 @@
 									<p><a href="https://docs.cognite.com/api/v1/#operation/aggregateDataSets">Aggregate datasets</a></p>
 								</div>
 								<pre><code class="language-js"><span class="hljs-keyword">const</span> aggregates = <span class="hljs-keyword">await</span> client.datasets.aggregate({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">writeProtected</span>: <span class="hljs-literal">true</span> } });
-<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Number of write protected datasets: &#x27;</span>, aggregates[<span class="hljs-number">0</span>].count)</code></pre>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Number of write protected datasets: &#x27;</span>, aggregates[<span class="hljs-number">0</span>].count)
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -138,7 +139,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/datasets/datasetsApi.ts#L33">packages/stable/src/api/datasets/datasetsApi.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/datasets/datasetsApi.ts#L33">packages/stable/src/api/datasets/datasetsApi.ts:33</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -149,7 +150,8 @@
   { <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;sensitiveData&#x27;</span> },
   { <span class="hljs-attr">writeProtected</span>: <span class="hljs-literal">true</span> }
 ];
-<span class="hljs-keyword">const</span> createdDatasets = <span class="hljs-keyword">await</span> client.datasets.create(datasets);</code></pre>
+<span class="hljs-keyword">const</span> createdDatasets = <span class="hljs-keyword">await</span> client.datasets.create(datasets);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -171,14 +173,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/datasets/datasetsApi.ts#L44">packages/stable/src/api/datasets/datasetsApi.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/datasets/datasetsApi.ts#L44">packages/stable/src/api/datasets/datasetsApi.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/listDataSets">List data sets</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> dataSets = <span class="hljs-keyword">await</span> client.datasets.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">createdTime</span>: { <span class="hljs-attr">min</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2018&#x27;</span>), <span class="hljs-attr">max</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2019&#x27;</span>) }}});</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> dataSets = <span class="hljs-keyword">await</span> client.datasets.list({ <span class="hljs-attr">filter</span>: { <span class="hljs-attr">createdTime</span>: { <span class="hljs-attr">min</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2018&#x27;</span>), <span class="hljs-attr">max</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;1 jan 2019&#x27;</span>) }}});
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -200,14 +203,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/datasets/datasetsApi.ts#L71">packages/stable/src/api/datasets/datasetsApi.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/datasets/datasetsApi.ts#L71">packages/stable/src/api/datasets/datasetsApi.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/getDataSets">Retrieve data sets</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> dataSets = <span class="hljs-keyword">await</span> client.datasets.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> dataSets = <span class="hljs-keyword">await</span> client.datasets.retrieve([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>}, {<span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;abc&#x27;</span>}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -229,14 +233,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/291da7af69/packages/stable/src/api/datasets/datasetsApi.ts#L82">packages/stable/src/api/datasets/datasetsApi.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e7f4bce8a6/packages/stable/src/api/datasets/datasetsApi.ts#L82">packages/stable/src/api/datasets/datasetsApi.ts:82</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#operation/updateDataSets">Update data sets</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> dataSets = <span class="hljs-keyword">await</span> client.datasets.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">description</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">&#x27;New description&#x27;</span>}}}]);</code></pre>
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> dataSets = <span class="hljs-keyword">await</span> client.datasets.update([{<span class="hljs-attr">id</span>: <span class="hljs-number">123</span>, <span class="hljs-attr">update</span>: {<span class="hljs-attr">description</span>: {<span class="hljs-attr">set</span>: <span class="hljs-string">&#x27;New description&#x27;</span>}}}]);
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
