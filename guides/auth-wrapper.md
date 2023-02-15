@@ -10,7 +10,7 @@ Cognite's **auth wrapper** enables you to authenticate a solution with minimal c
 
 # Authentication
 
-- [Get started with Auth wrapper](#get-started-with-auth-wrapper​)
+- [Get started with Auth wrapper](#get-started-with-auth-wrapper)
 - [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
 - [Access different clusters](#access-different-clusters)
 - [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
