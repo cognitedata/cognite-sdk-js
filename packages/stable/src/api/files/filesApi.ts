@@ -47,10 +47,10 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * ```js
    * const fileContent = 'file data here'; // can also be of type ArrayBuffer, Buffer, Blob, File or any
    * // automatic upload:
-   * const file = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpg'}, fileContent);
+   * const file = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpeg'}, fileContent);
    *
    * // manual with uploadUrl:
-   * const file2 = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpg'});
+   * const file2 = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpeg'});
    * // then upload using the file.uploadUrl
    * ```
    */
@@ -131,7 +131,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * ```js
    * const files = await client.files.search({
    *   filter: {
-   *     mimeType: 'image/jpg',
+   *     mimeType: 'image/jpeg',
    *   },
    *   search: {
    *     name: 'Pump'
