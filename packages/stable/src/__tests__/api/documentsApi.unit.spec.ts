@@ -461,6 +461,29 @@ describe('Documents unit test', () => {
     });
   });
 
+  test('document aggregate uniqueProperties', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/aggregate'), {
+        aggregate: 'uniqueProperties',
+        properties: [{ property: ['metadata'] }],
+      })
+      .once()
+      .reply(200, {
+        items: [
+          { count: 12, values: ['test'] },
+          { count: 55, values: ['description'] },
+        ],
+      });
+
+    const resp = await client.documents.aggregate.uniqueProperties({
+      properties: [{ property: ['metadata'] }],
+    });
+    expect(resp).toStrictEqual([
+      { count: 12, values: ['test'] },
+      { count: 55, values: ['description'] },
+    ]);
+  });
+
   test('document aggregate allUniqueValues all pages', async () => {
     const firstCursor = 'first-cursor-value';
 
