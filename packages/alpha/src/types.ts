@@ -39,6 +39,7 @@ export interface MonitoringTaskThresholdModel {
 
 export interface MonitoringTaskCreate {
   externalId: CogniteExternalId;
+  name: string;
   channelId: CogniteInternalId;
   interval: number;
   overlap: number;
@@ -49,6 +50,7 @@ export interface MonitoringTaskCreate {
 export interface MonitoringTask {
   id: CogniteInternalId;
   externalId?: CogniteExternalId;
+  name: String;
   channelId: CogniteInternalId;
   interval: number;
   overlap: number;
@@ -163,8 +165,8 @@ export interface ChannelPatch {
   };
 }
 
-export interface ChannelChangeById extends ChannelPatch, InternalId {}
-export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId {}
+export interface ChannelChangeById extends ChannelPatch, InternalId { }
+export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId { }
 export type ChannelChange = ChannelChangeById | ChannelChangeByExternalId;
 
 export interface SubscriberCreate {
