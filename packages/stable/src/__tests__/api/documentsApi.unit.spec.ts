@@ -462,6 +462,8 @@ describe('Documents unit test', () => {
   });
 
   test('document aggregate uniqueProperties', async () => {
+    const nextCursor = 'next-cursor-value';
+
     nock(mockBaseUrl)
       .post(new RegExp('/documents/aggregate'), {
         aggregate: 'uniqueProperties',
@@ -473,15 +475,20 @@ describe('Documents unit test', () => {
           { count: 12, values: ['test'] },
           { count: 55, values: ['description'] },
         ],
+        nextCursor,
       });
 
     const resp = await client.documents.aggregate.uniqueProperties({
       properties: [{ property: ['metadata'] }],
     });
-    expect(resp).toStrictEqual([
-      { count: 12, values: ['test'] },
-      { count: 55, values: ['description'] },
-    ]);
+    expect(resp).toEqual({
+      items: [
+        { count: 12, values: ['test'] },
+        { count: 55, values: ['description'] },
+      ],
+      next: expect.any(Function),
+      nextCursor,
+    });
   });
 
   test('document aggregate allUniqueValues all pages', async () => {
