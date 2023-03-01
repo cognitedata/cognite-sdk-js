@@ -23,6 +23,7 @@ describe('monitoring tasks api', () => {
   const client: CogniteClientAlpha | null = setupLoggedInClient();
   const ts = Date.now();
   const monitoringTaskExternalId = `test_mt_${ts}`;
+  const monitoringTaskName = `test_mt_${ts}`;
   const channelExternalId = `test_channel_mt_${ts}`;
   const sessionsApi = `/api/v1/projects/${TEST_PROJECT}/sessions`;
   const testMtModel: MonitoringTaskThresholdModelCreate = {
@@ -65,6 +66,7 @@ describe('monitoring tasks api', () => {
     const response = await client!.monitoringTasks.create([
       {
         externalId: monitoringTaskExternalId,
+        name: monitoringTaskName,
         channelId: channel.id,
         interval: testMtInterval,
         nonce: sessionsRes?.data?.items[0]?.nonce,
@@ -89,6 +91,7 @@ describe('monitoring tasks api', () => {
     });
     expect(response.items.length).toBe(1);
     expect(response.items[0].externalId).toEqual(monitoringTaskExternalId);
+    expect(response.items[0].name).toEqual(monitoringTaskName);
     expect(response.items[0].model).toEqual(expectedResponseModel);
     expect(response.items[0].interval).toEqual(testMtInterval);
     expect(response.items[0].overlap).toEqual(testMtOverlap);
