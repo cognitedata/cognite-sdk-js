@@ -17,24 +17,48 @@ import {
 
 export * from '@cognite/sdk';
 
-export type MonitoringTaskModelExternalId = 'threshold';
+export type MonitoringTaskModelExternalId = 'threshold' | 'double_threshold';
 
 export const MonitoringTaskModelExternalId = {
-  THRESHOLD: 'threshold' as MonitoringTaskModelExternalId,
+  THRESHOLD: 'threshold' as const,
+  DOUBLE_THRESHOLD: 'double_threshold' as const,
 };
 
-export interface MonitoringTaskThresholdModelCreate {
+export interface MonitoringTaskThresholdModelCreateBase {
   externalId: MonitoringTaskModelExternalId;
-  timeseriesExternalId: CogniteExternalId;
+}
+export interface MonitoringTaskThresholdModelCreate
+  extends MonitoringTaskThresholdModelCreateBase {
+  externalId: 'threshold';
+  timeseriesExternalId?: CogniteExternalId;
+  timeseriesId?: CogniteInternalId;
   threshold: number;
   granularity?: string;
 }
 
+export interface MonitoringTaskDoubleThresholdModelCreate
+  extends MonitoringTaskThresholdModelCreateBase {
+  externalId: 'double_threshold';
+  timeseriesExternalId?: CogniteExternalId;
+  timeseriesId?: CogniteInternalId;
+  lowerThreshold?: number;
+  upperThreshold?: number;
+  granularity?: string;
+}
+
 export interface MonitoringTaskThresholdModel {
-  externalId: MonitoringTaskModelExternalId;
+  externalId: 'threshold';
   timeseriesId: CogniteInternalId;
   granularity?: string;
   threshold: number;
+}
+
+export interface MonitoringTaskDoubleThresholdModel {
+  externalId: 'double_threshold';
+  timeseriesId: CogniteInternalId;
+  granularity?: string;
+  lowerThreshold?: number;
+  upperThreshold?: number;
 }
 
 export interface MonitoringTaskCreate {
@@ -43,7 +67,9 @@ export interface MonitoringTaskCreate {
   channelId: CogniteInternalId;
   interval: number;
   overlap: number;
-  model: MonitoringTaskThresholdModelCreate;
+  model:
+    | MonitoringTaskThresholdModelCreate
+    | MonitoringTaskDoubleThresholdModelCreate;
   nonce: string;
 }
 
@@ -54,7 +80,7 @@ export interface MonitoringTask {
   channelId: CogniteInternalId;
   interval: number;
   overlap: number;
-  model: MonitoringTaskThresholdModel;
+  model: MonitoringTaskThresholdModel | MonitoringTaskDoubleThresholdModel;
 }
 
 export interface MonitoringTaskModelFilter {
