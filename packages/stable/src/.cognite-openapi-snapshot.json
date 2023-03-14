@@ -9179,7 +9179,7 @@
           "Documents"
         ],
         "summary": "Aggregate documents",
-        "description": "The aggregation API allows you to compute aggregated results on documents\nlike getting the count of all documents in a project or checking what are all the\ndifferent authors of documents in a project, along with the count of documents in\neach of those aggregations. By specifying an additional filter or search, you can\nalso aggregate only among documents matching the specified filter or search.\n\nThe default behavior, when you do not specify the `aggregate` field in the request\nbody, is to return the count of all matched documents.\n\n### Supported aggregates\n\n<table>\n\n<tr>\n<th> <div style=\"width:200px\"> Aggregate </div> </th> \n<th> <div style=\"width:350px\"> Description </div> </th> \n<th> Example  </th>\n</tr>\n\n<tr>\n<td> <code>count</code> </td> <td> Count of documents matching the specified filters and search. </td> <td>  \n\n```\n{\n    \"search\":{\n        \"query\":\"example\",\n        \n    },\n    \"aggregate\":\"count\",\n    \n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>uniqueValues</code> </td> <td> Returns top unique values for specified properties (up to the\nrequested limit) and the count of each in the property specified in <code>properties</code>. \nThe list will have the highest count first. </td> <td>  \n\n```\n{\n    \"aggregate\":\"uniqueValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"author\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>uniqueProperties</code> </td> <td> Returns top unique properties values for specified properties (up to the\nrequested limit) and the count of each in the property specified in <code>properties</code>. \nThe list will have the highest count first.\n\nCurrently, <code>uniqueProperties</code> aggregate is only supported for property \n<code>[\"sourceFile\", \"metadata\"]</code> </td> <td>  \n\n```\n{\n    \"aggregate\":\"uniqueProperties\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"sourceFile\",\n                \"metadata\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>allUniqueValues</code> </td> <td> Returns all unique values\nand the count of each. The response contains a cursor that must be used\nto fetch all pages of data. The data is not ordered by the count. This\nallows to retrieve all unique values for more than 10000 items. </td> <td>  \n\n```\n{\n    \"aggregate\":\"allUniqueValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"author\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>allUniqueProperties</code> </td> <td> Returns all unique properties values\nand the count of each. The response contains a cursor that must be used\nto fetch all pages of data. The data is not ordered by the count. This\nallows to retrieve all unique properties values for more than 10000 items.\n\nCurrently, <code>allUniqueProperties</code> aggregate is only supported for property\n<code>[\"sourceFile\", \"metadata\"]</code>.\n </td> <td>  \n\n```\n{\n    \"aggregate\":\"allUniqueProperties\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"sourceFile\",\n                \"metadata\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>approximateCardinality</code> </td> <td> Returns an approximate count of \ndistinct values for the specified properties. </td> <td>  \n\n```\n{\n    \"aggregate\":\"approximateCardinality\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"mimeType\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n</table>\n\n### Metadata aggregation\n\nAggregation on metadata behaves differently. Supported aggregate operations:\n\n| Property                            | Applicable aggregation               |\n|-------------------------------------|--------------------------------------|\n| `[\"sourceFile\", \"metadata\", <key>]` | uniqueValues, approximateCardinality |\n| `[\"sourceFile\", \"metadata\"]`        | uniqueProperties                     |",
+        "description": "The aggregation API allows you to compute aggregated results on documents\nlike getting the count of all documents in a project or checking what are all the\ndifferent authors of documents in a project, along with the count of documents in\neach of those aggregations. By specifying an additional filter or search, you can\nalso aggregate only among documents matching the specified filter or search.\n\nThe default behavior, when you do not specify the `aggregate` field in the request\nbody, is to return the count of all matched documents.\n\n### Supported aggregates\n\n<table>\n\n<tr>\n<th> <div style=\"width:200px\"> Aggregate </div> </th> \n<th> <div style=\"width:350px\"> Description </div> </th> \n<th> Example  </th>\n</tr>\n\n<tr>\n<td> <code>count</code> </td> <td> Count of documents matching the specified filters and search. </td> <td>  \n\n```\n{\n    \"search\":{\n        \"query\":\"example\",\n        \n    },\n    \"aggregate\":\"count\",\n    \n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>uniqueValues</code> </td> <td> Returns top unique values for specified properties (up to the\nrequested limit) and the count of each in the property specified in <code>properties</code>. \nThe list will have the highest count first. </td> <td>  \n\n```\n{\n    \"aggregate\":\"uniqueValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"author\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>uniqueProperties</code> </td> <td> Returns top unique properties values for specified properties (up to the\nrequested limit) and the count of each in the property specified in <code>properties</code>. \nThe list will have the highest count first.\n\nCurrently, <code>uniqueProperties</code> aggregate is only supported for property \n<code>[\"sourceFile\", \"metadata\"]</code> </td> <td>  \n\n```\n{\n    \"aggregate\":\"uniqueProperties\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"sourceFile\",\n                \"metadata\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>allUniqueValues</code> </td> <td> Returns all unique values\nand the count of each. The response contains a cursor that must be used\nto fetch all pages of data. The data is not ordered by the count. This\nallows to retrieve all unique values for more than 10000 items. </td> <td>  \n\n```\n{\n    \"aggregate\":\"allUniqueValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"author\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>allUniqueProperties</code> </td> <td> Returns all unique properties values\nand the count of each. The response contains a cursor that must be used\nto fetch all pages of data. The data is not ordered by the count. This\nallows to retrieve all unique properties values for more than 10000 items.\n\nCurrently, <code>allUniqueProperties</code> aggregate is only supported for property\n<code>[\"sourceFile\", \"metadata\"]</code>.\n </td> <td>  \n\n```\n{\n    \"aggregate\":\"allUniqueProperties\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"sourceFile\",\n                \"metadata\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>cardinalityValues</code> </td> <td> Returns an approximate count of \ndistinct values for the specified properties. </td> <td>  \n\n```\n{\n    \"aggregate\":\"cardinalityValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"mimeType\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n</table>\n\n### Metadata aggregation\n\nAggregation on metadata behaves differently. Supported aggregate operations:\n\n| Property                            | Applicable aggregation               |\n|-------------------------------------|--------------------------------------|\n| `[\"sourceFile\", \"metadata\", <key>]` | uniqueValues, cardinalityValues,     |\n| `[\"sourceFile\", \"metadata\"]`        | uniqueProperties                     |",
         "operationId": "documentsAggregate",
         "parameters": [
           {
@@ -9199,6 +9199,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/DocumentsAggregateUniquePropertiesRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/DocumentsAggregateAllUniquePropertiesRequest"
                   },
                   {
                     "$ref": "#/components/schemas/DocumentsAggregateAllUniqueValuesRequest"
@@ -31506,6 +31509,19 @@
           }
         ]
       },
+      "DocumentAggregateValue": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "$ref": "#/components/schemas/Label"
+          }
+        ]
+      },
       "DocumentFilterValueList": {
         "description": "One or more values you wish to find in the provided property.",
         "type": "array",
@@ -31800,7 +31816,7 @@
             "type": "array",
             "description": "A unique value found in the specified properties. Each item is a value for the specified property with same index.",
             "items": {
-              "$ref": "#/components/schemas/DocumentFilterValue"
+              "$ref": "#/components/schemas/DocumentAggregateValue"
             }
           }
         }
@@ -31981,7 +31997,7 @@
         ]
       },
       "DocumentsAggregateAllUniquePropertiesResponse": {
-        "title": "Unique properties",
+        "title": "All unique properties",
         "description": "Response for the allUniqueProperties aggregate.",
         "type": "object",
         "required": [
@@ -32155,7 +32171,7 @@
             "type": "array",
             "description": "A unique value found in the specified properties. Each item is a value for the specified property with same index.",
             "items": {
-              "$ref": "#/components/schemas/DocumentFilterValue"
+              "$ref": "#/components/schemas/DocumentAggregateValue"
             }
           }
         }
@@ -32199,7 +32215,7 @@
                       "description": "The property to get the approximate number of unique values for",
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/DocumentFilterProperty"
+                          "$ref": "#/components/schemas/DocumentAggregateValue"
                         }
                       ]
                     }
@@ -39631,6 +39647,9 @@
                 },
                 {
                   "$ref": "#/components/schemas/DocumentsAggregateUniquePropertiesResponse"
+                },
+                {
+                  "$ref": "#/components/schemas/DocumentsAggregateAllUniquePropertiesResponse"
                 },
                 {
                   "$ref": "#/components/schemas/DocumentsAggregateAllUniqueValuesResponse"
