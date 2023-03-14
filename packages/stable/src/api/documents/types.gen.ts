@@ -101,6 +101,7 @@ export interface Document {
      */
     type?: string;
 }
+export type DocumentAggregateValue = string | number | Label;
 export interface DocumentCursor {
     /** Cursor for paging through results */
     cursor?: string;
@@ -312,6 +313,32 @@ export interface DocumentListLimit {
 export type DocumentListRequest = DocumentListFilter & DocumentListLimit & DocumentCursor;
 export interface DocumentListResponse extends CursorAndAsyncIterator<Document> {
 }
+export interface DocumentsAggregateAllUniquePropertiesItem {
+    /**
+     * Number of properties with this name
+     * @format int64
+     */
+    count: number;
+    /** A property name */
+    values: string[];
+}
+/**
+ * Find all metadata property names
+ */
+export type DocumentsAggregateAllUniquePropertiesRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
+    aggregate: "allUniqueProperties";
+    properties: {
+        property: DocumentFilterProperty;
+    }[];
+    limit?: number;
+    cursor?: string;
+};
+/**
+ * Response for the allUniqueProperties aggregate.
+ * @example {"items":[{"count":4,"values":["hello"]},{"count":33,"values":["world"]}]}
+ */
+export interface DocumentsAggregateAllUniquePropertiesResponse extends CursorAndAsyncIterator<DocumentsAggregateAllUniquePropertiesItem> {
+}
 export interface DocumentsAggregateAllUniqueValuesItem {
     /**
      * Number of items in this aggregation group.
@@ -319,7 +346,7 @@ export interface DocumentsAggregateAllUniqueValuesItem {
      */
     count: number;
     /** A unique value found in the specified properties. Each item is a value for the specified property with same index. */
-    values: DocumentFilterValue[];
+    values: DocumentAggregateValue[];
 }
 /**
  * Paginated list of all unique values for given properties.
@@ -351,7 +378,7 @@ export interface DocumentsAggregateCardinalityValuesItem {
 export type DocumentsAggregateCardinalityValuesRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
     aggregate: "cardinalityValues";
     properties: {
-        property: DocumentFilterProperty;
+        property: DocumentAggregateValue;
     }[];
     limit?: number;
     cursor?: string;
@@ -383,8 +410,8 @@ export type DocumentsAggregateCountRequest = DocumentSearchInAggregate & Documen
 export interface DocumentsAggregateCountResponse {
     items: DocumentsAggregateCountItem[];
 }
-export type DocumentsAggregateRequest = DocumentsAggregateCountRequest | DocumentsAggregateUniqueValuesRequest | DocumentsAggregateUniquePropertiesRequest | DocumentsAggregateAllUniqueValuesRequest | DocumentsAggregateCardinalityValuesRequest;
-export type DocumentsAggregateResponse = DocumentsAggregateCountResponse | DocumentsAggregateUniqueValuesResponse | DocumentsAggregateUniquePropertiesResponse | DocumentsAggregateAllUniqueValuesResponse | DocumentsAggregateCardinalityValuesResponse;
+export type DocumentsAggregateRequest = DocumentsAggregateCountRequest | DocumentsAggregateUniqueValuesRequest | DocumentsAggregateUniquePropertiesRequest | DocumentsAggregateAllUniquePropertiesRequest | DocumentsAggregateAllUniqueValuesRequest | DocumentsAggregateCardinalityValuesRequest;
+export type DocumentsAggregateResponse = DocumentsAggregateCountResponse | DocumentsAggregateUniqueValuesResponse | DocumentsAggregateUniquePropertiesResponse | DocumentsAggregateAllUniquePropertiesResponse | DocumentsAggregateAllUniqueValuesResponse | DocumentsAggregateCardinalityValuesResponse;
 export interface DocumentsAggregateUniquePropertiesItem {
     /**
      * Number of properties with this name
@@ -418,7 +445,7 @@ export interface DocumentsAggregateUniqueValuesItem {
      */
     count: number;
     /** A unique value found in the specified properties. Each item is a value for the specified property with same index. */
-    values: DocumentFilterValue[];
+    values: DocumentAggregateValue[];
 }
 /**
  * Top unique values for given properties.
