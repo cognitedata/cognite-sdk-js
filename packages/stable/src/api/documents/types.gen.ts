@@ -378,7 +378,7 @@ export interface DocumentsAggregateCardinalityValuesItem {
 export type DocumentsAggregateCardinalityValuesRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
     aggregate: "cardinalityValues";
     properties: {
-        property: DocumentAggregateValue;
+        property: DocumentFilterProperty;
     }[];
     limit?: number;
     cursor?: string;
