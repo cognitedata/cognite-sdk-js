@@ -478,12 +478,10 @@ describe('Documents unit test', () => {
     const resp = await client.documents.aggregate.uniqueProperties({
       properties: [{ property: ['metadata'] }],
     });
-    expect(resp).toEqual({
-      items: [
-        { count: 12, values: ['test'] },
-        { count: 55, values: ['description'] },
-      ],
-    });
+    expect(resp).toEqual([
+      { count: 12, values: ['test'] },
+      { count: 55, values: ['description'] },
+    ]);
   });
 
   test('document aggregate allUniqueProperties', async () => {
