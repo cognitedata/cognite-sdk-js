@@ -78,7 +78,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
       DocumentsAggregateAllUniquePropertiesItem
     >(this.callAggregateCursorEndpointWithPost, {
       ...request,
-      aggregate: 'uniqueProperties',
+      aggregate: 'uniqueAllProperties',
     });
   };
 
