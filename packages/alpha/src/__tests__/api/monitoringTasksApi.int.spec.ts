@@ -3,7 +3,7 @@
 import {
   Channel,
   MonitoringTaskModelExternalId,
-  MonitoringTaskThresholdModelCreate,
+  MonitoringTaskDoubleThresholdModelCreate,
 } from '../../types';
 import CogniteClientAlpha from '../../cogniteClient';
 import {
@@ -23,21 +23,24 @@ describe('monitoring tasks api', () => {
   const client: CogniteClientAlpha | null = setupLoggedInClient();
   const ts = Date.now();
   const monitoringTaskExternalId = `test_mt_${ts}`;
+  const monitoringTaskName = `test_mt_${ts}`;
   const channelExternalId = `test_channel_mt_${ts}`;
   const sessionsApi = `/api/v1/projects/${TEST_PROJECT}/sessions`;
-  const testMtModel: MonitoringTaskThresholdModelCreate = {
-    externalId: MonitoringTaskModelExternalId.THRESHOLD,
+  const testMtModel: MonitoringTaskDoubleThresholdModelCreate = {
+    externalId: MonitoringTaskModelExternalId.DOUBLE_THRESHOLD,
+    lowerThreshold: -100,
     timeseriesExternalId: 'test_functions',
-    threshold: 50.1,
+    upperThreshold: 100,
     granularity: '1m',
   };
   const testMtOverlap = 1000 * 60;
   const testMtInterval = 5 * 60 * 1000;
   const expectedResponseModel = {
-    externalId: 'threshold',
+    externalId: MonitoringTaskModelExternalId.DOUBLE_THRESHOLD,
     timeseriesId: 4944699311094690,
     granularity: testMtModel.granularity,
-    threshold: testMtModel.threshold,
+    lowerThreshold: testMtModel.lowerThreshold,
+    upperThreshold: testMtModel.upperThreshold,
   };
 
   let channel: Channel;
@@ -65,6 +68,7 @@ describe('monitoring tasks api', () => {
     const response = await client!.monitoringTasks.create([
       {
         externalId: monitoringTaskExternalId,
+        name: monitoringTaskName,
         channelId: channel.id,
         interval: testMtInterval,
         nonce: sessionsRes?.data?.items[0]?.nonce,
@@ -89,6 +93,7 @@ describe('monitoring tasks api', () => {
     });
     expect(response.items.length).toBe(1);
     expect(response.items[0].externalId).toEqual(monitoringTaskExternalId);
+    expect(response.items[0].name).toEqual(monitoringTaskName);
     expect(response.items[0].model).toEqual(expectedResponseModel);
     expect(response.items[0].interval).toEqual(testMtInterval);
     expect(response.items[0].overlap).toEqual(testMtOverlap);
