@@ -17,7 +17,6 @@ import {
   DocumentsAggregateUniqueValuesItem,
   DocumentsAggregateUniqueValuesRequest,
   DocumentsAggregateUniquePropertiesRequest,
-  DocumentsAggregateUniquePropertiesResponse,
   DocumentsAggregateUniquePropertiesItem,
   DocumentsAggregateAllUniquePropertiesRequest,
   DocumentsAggregateAllUniquePropertiesResponse,
@@ -78,7 +77,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
       DocumentsAggregateAllUniquePropertiesItem
     >(this.callAggregateCursorEndpointWithPost, {
       ...request,
-      aggregate: 'uniqueAllProperties',
+      aggregate: 'allUniqueProperties',
     });
   };
 
