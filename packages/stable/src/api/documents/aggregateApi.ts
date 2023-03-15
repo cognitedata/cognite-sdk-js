@@ -19,6 +19,9 @@ import {
   DocumentsAggregateUniquePropertiesRequest,
   DocumentsAggregateUniquePropertiesResponse,
   DocumentsAggregateUniquePropertiesItem,
+  DocumentsAggregateAllUniquePropertiesRequest,
+  DocumentsAggregateAllUniquePropertiesResponse,
+  DocumentsAggregateAllUniquePropertiesItem,
 } from '../../types';
 
 /**
@@ -60,10 +63,19 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
 
   public uniqueProperties = (
     request: Omit<DocumentsAggregateUniquePropertiesRequest, 'aggregate'>
-  ): DocumentsAggregateUniquePropertiesResponse => {
+  ): Promise<DocumentsAggregateUniquePropertiesItem[]> => {
+    return this.aggregate<DocumentsAggregateUniquePropertiesItem>({
+      ...request,
+      aggregate: 'uniqueProperties',
+    });
+  };
+
+  public allUniqueProperties = (
+    request: Omit<DocumentsAggregateAllUniquePropertiesRequest, 'aggregate'>
+  ): DocumentsAggregateAllUniquePropertiesResponse => {
     return this.cursorBasedEndpoint<
-      DocumentsAggregateUniquePropertiesRequest,
-      DocumentsAggregateUniquePropertiesItem
+      DocumentsAggregateAllUniquePropertiesRequest,
+      DocumentsAggregateAllUniquePropertiesItem
     >(this.callAggregateCursorEndpointWithPost, {
       ...request,
       aggregate: 'uniqueProperties',
