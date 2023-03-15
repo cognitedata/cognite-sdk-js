@@ -1313,7 +1313,7 @@
           {
             "lang": "JavaScript",
             "label": "JavaScript SDK",
-            "source": "const fileContent = 'file data here'; // can also be of type ArrayBuffer, Buffer, Blob, File or any\n// automatic upload:\nconst file = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpg'}, fileContent);\n\n// manual with uploadUrl:\nconst file2 = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpg'});\n// then upload using the file.uploadUrl"
+            "source": "const fileContent = 'file data here'; // can also be of type ArrayBuffer, Buffer, Blob, File or any\n// automatic upload:\nconst file = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpeg'}, fileContent);\n\n// manual with uploadUrl:\nconst file2 = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpeg'});\n// then upload using the file.uploadUrl"
           },
           {
             "lang": "Python",
@@ -1723,7 +1723,7 @@
           {
             "lang": "JavaScript",
             "label": "JavaScript SDK",
-            "source": "const files = await client.files.search({\n  filter: {\n    mimeType: 'image/jpg',\n  },\n  search: {\n    name: 'Pump'\n  }\n});"
+            "source": "const files = await client.files.search({\n  filter: {\n    mimeType: 'image/jpeg',\n  },\n  search: {\n    name: 'Pump'\n  }\n});"
           },
           {
             "lang": "Python",
@@ -32215,7 +32215,7 @@
                       "description": "The property to get the approximate number of unique values for",
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/DocumentAggregateValue"
+                          "$ref": "#/components/schemas/DocumentFilterProperty"
                         }
                       ]
                     }
