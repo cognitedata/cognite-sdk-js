@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.6.0...@cognite/sdk-alpha@0.7.0) (2023-03-07)
+
+### Features
+
+- **alpha:** monitoring task double threshold model ([#996](https://github.com/cognitedata/cognite-sdk-js/issues/996)) ([7ce4c61](https://github.com/cognitedata/cognite-sdk-js/commit/7ce4c610d7bdb39761c1a1d9ea73cf874b1dade1))
+
 # [0.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.5.4...@cognite/sdk-alpha@0.6.0) (2023-03-01)
 
 ### Features

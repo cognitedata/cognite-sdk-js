@@ -3,7 +3,7 @@
 import {
   Channel,
   MonitoringTaskModelExternalId,
-  MonitoringTaskThresholdModelCreate,
+  MonitoringTaskDoubleThresholdModelCreate,
 } from '../../types';
 import CogniteClientAlpha from '../../cogniteClient';
 import {
@@ -26,19 +26,21 @@ describe('monitoring tasks api', () => {
   const monitoringTaskName = `test_mt_${ts}`;
   const channelExternalId = `test_channel_mt_${ts}`;
   const sessionsApi = `/api/v1/projects/${TEST_PROJECT}/sessions`;
-  const testMtModel: MonitoringTaskThresholdModelCreate = {
-    externalId: MonitoringTaskModelExternalId.THRESHOLD,
+  const testMtModel: MonitoringTaskDoubleThresholdModelCreate = {
+    externalId: MonitoringTaskModelExternalId.DOUBLE_THRESHOLD,
+    lowerThreshold: -100,
     timeseriesExternalId: 'test_functions',
-    threshold: 50.1,
+    upperThreshold: 100,
     granularity: '1m',
   };
   const testMtOverlap = 1000 * 60;
   const testMtInterval = 5 * 60 * 1000;
   const expectedResponseModel = {
-    externalId: 'threshold',
+    externalId: MonitoringTaskModelExternalId.DOUBLE_THRESHOLD,
     timeseriesId: 4944699311094690,
     granularity: testMtModel.granularity,
-    threshold: testMtModel.threshold,
+    lowerThreshold: testMtModel.lowerThreshold,
+    upperThreshold: testMtModel.upperThreshold,
   };
 
   let channel: Channel;
