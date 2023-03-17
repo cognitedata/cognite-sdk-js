@@ -8,13 +8,6 @@ See [Authentication Guide](https://github.com/cognitedata/cognite-sdk-js/blob/v1
 
 ## Installation
 
-<p align="right">
-  <a href="https://youtu.be/29Cuv6OhBmA">
-    Video quickstart<br />
-    <img src="https://img.youtube.com/vi/29Cuv6OhBmA/3.jpg" alt="Cognite JS SDK video guide" title="Watch our video guide" align="right" />
-  </a>
-</p>
-
 Install the package with yarn:
 
 ```
