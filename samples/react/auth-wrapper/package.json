@@ -1,5 +1,5 @@
 {
-  "name": "react-auth-wrapper-example",
+  "name": "auth-wrapper-react-sample",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@cognite/react-auth-wrapper": "^1",
-    "@cognite/sdk": "^7",
+    "@cognite/sdk": "*",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",

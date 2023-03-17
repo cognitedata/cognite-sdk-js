@@ -1,10 +1,10 @@
 {
-  "name": "nodejs-sample",
+  "name": "legacy-auth-js-nodejs-sample",
   "version": "1.0.0",
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
-    "@cognite/sdk": "^7"
+    "@cognite/sdk": "*"
   },
   "scripts": {
     "test": "node quickstart.js && yarn test-for-await",

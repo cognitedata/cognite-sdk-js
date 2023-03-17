@@ -23,7 +23,7 @@
     "test-snippets": "yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json"
   },
   "dependencies": {
-    "@cognite/sdk-core": "^4.8.2",
+    "@cognite/sdk-core": "*",
     "@types/geojson": "^7946.0.8",
     "geojson": "^0.5.0",
     "lodash": "^4.17.11"
@@ -32,6 +32,7 @@
     "dist"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

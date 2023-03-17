@@ -1,5 +1,5 @@
 {
-  "name": "typescript-sample",
+  "name": "legacy-auth-typescript-nodejs-sample",
   "version": "1.0.0",
   "private": true,
   "license": "Apache-2.0",
@@ -8,7 +8,7 @@
     "test": "yarn tsc && node build/quickstart.js"
   },
   "dependencies": {
-    "@cognite/sdk": "^7"
+    "@cognite/sdk": "*"
   },
   "devDependencies": {
     "@types/node": "^16.7",

@@ -7,29 +7,6 @@ on:
       - 'release-*'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Cache node_modules
-        id: cache-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
-
-      - name: Install 🔧 # Installs dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build
-        run: yarn build
-
   publish:
     if: |-
       ${{
@@ -48,20 +25,20 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-          
+
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-
-      - name: Cache node_modules
-        id: cache-modules
+          
+      - name: Cache dependencies
+        id: cache-dependencies
         uses: actions/cache@v3
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
-
-      - name: Install 🔧 # Installs dependencies
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Lerna env config
@@ -90,7 +67,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        run: yarn lerna publish from-package --yes --no-git-reset --no-verify-access
+        run: yarn publish:ci
+
+      - name: Lerna Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: yarn publish:ci
 
       - name: Publish documentation
         uses: JamesIves/github-pages-deploy-action@releases/v3

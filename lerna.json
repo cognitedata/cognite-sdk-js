@@ -2,6 +2,7 @@
   "useWorkspaces": true,
   "version": "independent",
   "npmClient": "yarn",
+  "useNx": true,
   "command": {
     "version": {
       "ignoreChanges": ["**/*.md", "**/__tests__/**", "**/*.spec.ts", "**/*.test.ts"],
