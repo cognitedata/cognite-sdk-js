@@ -7,6 +7,25 @@ on:
       - release-*
 
 jobs:
+  install-dependencies:
+    runs-on: ubuntu-latest
+    env:
+      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Cache dependencies
+        id: cache-dependencies
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
   codecov:
     runs-on: ubuntu-latest
 
@@ -24,14 +43,14 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Cache node_modules
-        id: cache-modules
+      - name: Cache dependencies
+        id: cache-dependencies
         uses: actions/cache@v3
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
-
-      - name: Install 🔧
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Build
@@ -62,14 +81,14 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Cache node_modules
-        id: cache-modules
+      - name: Cache dependencies
+        id: cache-dependencies
         uses: actions/cache@v3
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
-
-      - name: Install 🔧
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Build
@@ -95,14 +114,14 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Cache node_modules
-        id: cache-modules
+      - name: Cache dependencies
+        id: cache-dependencies
         uses: actions/cache@v3
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
-
-      - name: Install 🔧
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Build
@@ -128,14 +147,14 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Cache node_modules
-        id: cache-modules
+      - name: Cache dependencies
+        id: cache-dependencies
         uses: actions/cache@v3
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
-
-      - name: Install 🔧
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: validateDocLinks
@@ -172,14 +191,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Cache node_modules
-        id: cache-modules
+      - name: Cache dependencies
+        id: cache-dependencies
         uses: actions/cache@v3
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
-
-      - name: Install 🔧
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('yarn.lock') }}
+      - name: Install
+        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
       - name: Build
