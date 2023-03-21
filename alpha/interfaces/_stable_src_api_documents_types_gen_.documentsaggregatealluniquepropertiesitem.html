@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DocumentsAggregateApproximateCardinalityItem | Cognite JavaScript SDK</title>
+	<title>DocumentsAggregateAllUniquePropertiesItem | Cognite JavaScript SDK</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -59,10 +59,10 @@
 					<a href="../modules/_stable_src_api_documents_types_gen_.html">&quot;stable/src/api/documents/types.gen&quot;</a>
 				</li>
 				<li>
-					<a href="_stable_src_api_documents_types_gen_.documentsaggregateapproximatecardinalityitem.html">DocumentsAggregateApproximateCardinalityItem</a>
+					<a href="_stable_src_api_documents_types_gen_.documentsaggregatealluniquepropertiesitem.html">DocumentsAggregateAllUniquePropertiesItem</a>
 				</li>
 			</ul>
-			<h1>Interface DocumentsAggregateApproximateCardinalityItem</h1>
+			<h1>Interface DocumentsAggregateAllUniquePropertiesItem</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">DocumentsAggregateApproximateCardinalityItem</span>
+						<span class="target">DocumentsAggregateAllUniquePropertiesItem</span>
 					</li>
 				</ul>
 			</section>
@@ -84,7 +84,8 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_api_documents_types_gen_.documentsaggregateapproximatecardinalityitem.html#count" class="tsd-kind-icon">count</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_api_documents_types_gen_.documentsaggregatealluniquepropertiesitem.html#count" class="tsd-kind-icon">count</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_api_documents_types_gen_.documentsaggregatealluniquepropertiesitem.html#values" class="tsd-kind-icon">values</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,18 +99,33 @@
 					<div class="tsd-signature tsd-kind-icon">count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7ce4c610d7/packages/stable/src/api/documents/types.gen.ts#L346">packages/stable/src/api/documents/types.gen.ts:346</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e9dfbc611d/packages/stable/src/api/documents/types.gen.ts#L321">packages/stable/src/api/documents/types.gen.ts:321</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Number of items in this aggregation group.</p>
+							<p>Number of properties with this name</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>format</dt>
 							<dd><p>int64</p>
 							</dd>
 						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="values" class="tsd-anchor"></a>
+					<h3>values</h3>
+					<div class="tsd-signature tsd-kind-icon">values<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e9dfbc611d/packages/stable/src/api/documents/types.gen.ts#L323">packages/stable/src/api/documents/types.gen.ts:323</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A property name</p>
+						</div>
 					</div>
 				</section>
 			</section>
@@ -130,10 +146,13 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_stable_src_api_documents_types_gen_.documentsaggregateapproximatecardinalityitem.html" class="tsd-kind-icon">Documents<wbr>Aggregate<wbr>Approximate<wbr>Cardinality<wbr>Item</a>
+						<a href="_stable_src_api_documents_types_gen_.documentsaggregatealluniquepropertiesitem.html" class="tsd-kind-icon">Documents<wbr>Aggregate<wbr>All<wbr>Unique<wbr>Properties<wbr>Item</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_stable_src_api_documents_types_gen_.documentsaggregateapproximatecardinalityitem.html#count" class="tsd-kind-icon">count</a>
+								<a href="_stable_src_api_documents_types_gen_.documentsaggregatealluniquepropertiesitem.html#count" class="tsd-kind-icon">count</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_stable_src_api_documents_types_gen_.documentsaggregatealluniquepropertiesitem.html#values" class="tsd-kind-icon">values</a>
 							</li>
 						</ul>
 					</li>
