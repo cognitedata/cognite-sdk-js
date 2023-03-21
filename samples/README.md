@@ -2,8 +2,7 @@
     <img src="../cognite_logo.png" alt="Cognite logo" title="Cognite" align="right" height="80" />
 </a>
 
-JS SDK Examples
-==========================
+# JS SDK Examples
 
 This folder contains examples on how to use the SDK in different frameworks.
 
@@ -17,12 +16,8 @@ This folder contains examples on how to use the SDK in different frameworks.
 ## Examples
 
 - NodeJS
-  - [NodeJS using API keys ](./nodejs/legacy-auth-js)
-  - [Typescript using API keys ](./nodejs/legacy-auth-typescript)
   - [Typescript using client credentials ](./nodejs/oidc-typescript)
   - [Typescript using client device grant flow ](./nodejs/public-client-device-grant-flow)
 - React
-  - [Legacy Authentication](./react/legacy-auth-redirect)
-  - [Legacy Authentication w pop up](./react/legacy-auth-popup)
   - [Azure Active Directory Authentication ](./react/msal-browser-react)
   - [Azure Active Directory Authentication Advanced](./react/msal-advanced-browser-react)
