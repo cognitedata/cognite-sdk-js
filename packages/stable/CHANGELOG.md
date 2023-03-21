@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.19.1...@cognite/sdk@8.0.0) (2023-03-21)
+
+### Features
+
+- **documents:** update uniqueProperties and allUniqueProperties ([#992](https://github.com/cognitedata/cognite-sdk-js/issues/992)) ([e9dfbc6](https://github.com/cognitedata/cognite-sdk-js/commit/e9dfbc611d870c1efcc81f6eedd57daa25fa3129))
+
+### BREAKING CHANGES
+
+- **documents:** uniqueProperties has a different value type and no longer supports CursorAndAsyncIterator. Please use allUniqueProperties for pagination instead.
+
 ## [7.19.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@7.19.0...@cognite/sdk@7.19.1) (2023-03-01)
 
 **Note:** Version bump only for package @cognite/sdk
