@@ -461,6 +461,59 @@ describe('Documents unit test', () => {
     });
   });
 
+  test('document aggregate uniqueProperties', async () => {
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/aggregate'), {
+        aggregate: 'uniqueProperties',
+        properties: [{ property: ['metadata'] }],
+      })
+      .once()
+      .reply(200, {
+        items: [
+          { count: 12, values: ['test'] },
+          { count: 55, values: ['description'] },
+        ],
+      });
+
+    const resp = await client.documents.aggregate.uniqueProperties({
+      properties: [{ property: ['metadata'] }],
+    });
+    expect(resp).toEqual([
+      { count: 12, values: ['test'] },
+      { count: 55, values: ['description'] },
+    ]);
+  });
+
+  test('document aggregate allUniqueProperties', async () => {
+    const nextCursor = 'next-cursor-value';
+
+    nock(mockBaseUrl)
+      .post(new RegExp('/documents/aggregate'), {
+        aggregate: 'allUniqueProperties',
+        properties: [{ property: ['metadata'] }],
+      })
+      .once()
+      .reply(200, {
+        items: [
+          { count: 12, values: ['test'] },
+          { count: 55, values: ['description'] },
+        ],
+        nextCursor,
+      });
+
+    const resp = await client.documents.aggregate.allUniqueProperties({
+      properties: [{ property: ['metadata'] }],
+    });
+    expect(resp).toEqual({
+      items: [
+        { count: 12, values: ['test'] },
+        { count: 55, values: ['description'] },
+      ],
+      next: expect.any(Function),
+      nextCursor,
+    });
+  });
+
   test('document aggregate allUniqueValues all pages', async () => {
     const firstCursor = 'first-cursor-value';
 
