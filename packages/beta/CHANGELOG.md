@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.28](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.2.27...@cognite/sdk-beta@5.2.28) (2023-03-21)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
 ## [5.2.27](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.2.26...@cognite/sdk-beta@5.2.27) (2023-03-01)
 
 **Note:** Version bump only for package @cognite/sdk-beta

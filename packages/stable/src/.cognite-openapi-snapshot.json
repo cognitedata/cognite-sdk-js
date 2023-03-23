@@ -360,7 +360,7 @@
           "Assets"
         ],
         "summary": "Aggregate assets",
-        "description": "Use advanced filtering options to agggregate assets. Filters behave the same way as for the `list` endpoint. Default aggregation is `count`.",
+        "description": "The aggregation API allows you to compute aggregated results on Assets  like getting the count of all Assets in a project or checking what are all the  different names and descriptions of Assets in your project, etc. Filters behave the same way as for the `list` endpoint. Also, in the case of text properties, the values are aggregated in a case-insensitive manner.",
         "operationId": "aggregateAssets",
         "parameters": [
           {
@@ -843,7 +843,7 @@
           {
             "in": "query",
             "name": "sort",
-            "description": "Sort by array of selected fields. Syntax: `[\"<fieldname>:asc|desc\"]`. Default sort order is `asc` with short syntax: `[\"<fieldname>\"]`.\nFilter accepts the following field names:\n  `externalId`,\n  `type`,\n  `subtype`,\n  `startTime`,\n  `endTime`,\n  `createdTime`,\n  `lastUpdatedTime`,\n  `source`,\n  `description`,\n  `metadata`.\nPartitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.\n",
+            "description": "Sort by array of selected fields. Syntax: `[\"<fieldname>:asc|desc\"]`. Default sort order is `asc` with short syntax: `[\"<fieldname>\"]`.\nFilter accepts the following field names:\n  `dataSetId`,\n  `externalId`,\n  `type`,\n  `subtype`,\n  `startTime`,\n  `endTime`,\n  `createdTime`,\n  `lastUpdatedTime`,\n  `source`,\n  `description`,\n  `metadata`.\nPartitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.\n",
             "example": [
               "endTime:desc"
             ],
@@ -3976,7 +3976,7 @@
           "3D Model Revisions"
         ],
         "summary": "Filter 3D nodes",
-        "description": "List nodes in a project, filtered by node property values specified by supplied filters. This operation supports pagination and partitions.",
+        "description": "List nodes in a project, filtered by node names or node property values specified by supplied filters. This operation supports pagination and partitions.",
         "operationId": "filter3DNodes",
         "parameters": [
           {
@@ -4761,7 +4761,6 @@
           "Time series"
         ],
         "summary": "Filter time series",
-        "description": "Retrieves a list of time series matching the specified criteria. This operation supports pagination by cursor. Criteria can be applied to select a subset of time series.",
         "operationId": "listTimeSeries",
         "parameters": [
           {
@@ -4792,6 +4791,7 @@
         "x-capability": [
           "timeSeriesAcl:READ"
         ],
+        "description": "Retrieves a list of time series matching the specified criteria. This operation supports pagination by cursor. Criteria can be applied to select a subset of time series.",
         "x-code-samples": [
           {
             "lang": "Python",
@@ -7055,7 +7055,6 @@
           "Sequences"
         ],
         "summary": "Filter sequences",
-        "description": "Retrieves a list of sequences matching the given criteria.",
         "operationId": "advancedListSequences",
         "parameters": [
           {
@@ -7087,6 +7086,7 @@
         "x-capability": [
           "sequencesAcl:READ"
         ],
+        "description": "Retrieves a list of sequences matching the given criteria.",
         "x-code-samples": [
           {
             "lang": "JavaScript",
@@ -9179,7 +9179,7 @@
           "Documents"
         ],
         "summary": "Aggregate documents",
-        "description": "The aggregation API allows you to compute aggregated results on documents\nlike getting the count of all documents in a project or checking what are all the\ndifferent authors of documents in a project, along with the count of documents in\neach of those aggregations. By specifying an additional filter or search, you can\nalso aggregate only among documents matching the specified filter or search.\n\nThe default behavior, when you do not specify the `aggregate` field in the request\nbody, is to return the count of all matched documents.\n\n### Supported aggregates\n\n<table>\n\n<tr>\n<th> <div style=\"width:200px\"> Aggregate </div> </th> \n<th> <div style=\"width:350px\"> Description </div> </th> \n<th> Example  </th>\n</tr>\n\n<tr>\n<td> <code>count</code> </td> <td> Count of documents matching the specified filters and search. </td> <td>  \n\n```\n{\n    \"search\":{\n        \"query\":\"example\",\n        \n    },\n    \"aggregate\":\"count\",\n    \n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>uniqueValues</code> </td> <td> Returns top unique values for specified properties (up to the\nrequested limit) and the count of each in the property specified in <code>properties</code>. \nThe list will have the highest count first. </td> <td>  \n\n```\n{\n    \"aggregate\":\"uniqueValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"author\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>uniqueProperties</code> </td> <td> Returns unique properties values for the specified properties. \nCurrently, <code>uniqueProperties</code> aggregate is only supported for property \n<code>[\"sourceFile\", \"metadata\"]</code> </td> <td>  \n\n```\n{\n    \"aggregate\":\"uniqueProperties\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"sourceFile\",\n                \"metadata\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>allUniqueValues</code> </td> <td> Returns all unique values\nand the count of each. The response contains a cursor that must be used\nto fetch all pages of data. The data is not ordered by the count. This\nallows to retrieve all unique values for more than 10000 items. </td> <td>  \n\n```\n{\n    \"aggregate\":\"allUniqueValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"author\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>approximateCardinality</code> </td> <td> Returns an approximate count of \ndistinct values for the specified properties. </td> <td>  \n\n```\n{\n    \"aggregate\":\"approximateCardinality\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"mimeType\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n</table>\n\n### Metadata aggregation\n\nAggregation on metadata behaves differently. Supported aggregate operations:\n\n| Property                            | Applicable aggregation               |\n|-------------------------------------|--------------------------------------|\n| `[\"sourceFile\", \"metadata\", <key>]` | uniqueValues, approximateCardinality |\n| `[\"sourceFile\", \"metadata\"]`        | uniqueProperties                     |",
+        "description": "The aggregation API allows you to compute aggregated results on documents\nlike getting the count of all documents in a project or checking what are all the\ndifferent authors of documents in a project, along with the count of documents in\neach of those aggregations. By specifying an additional filter or search, you can\nalso aggregate only among documents matching the specified filter or search.\n\nThe default behavior, when you do not specify the `aggregate` field in the request\nbody, is to return the count of all matched documents.\n\n### Supported aggregates\n\n<table>\n\n<tr>\n<th> <div style=\"width:200px\"> Aggregate </div> </th> \n<th> <div style=\"width:350px\"> Description </div> </th> \n<th> Example  </th>\n</tr>\n\n<tr>\n<td> <code>count</code> </td> <td> Count of documents matching the specified filters and search. </td> <td>  \n\n```\n{\n    \"search\":{\n        \"query\":\"example\",\n        \n    },\n    \"aggregate\":\"count\",\n    \n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>uniqueValues</code> </td> <td> Returns top unique values for specified properties (up to the\nrequested limit) and the count of each in the property specified in <code>properties</code>. \nThe list will have the highest count first. </td> <td>  \n\n```\n{\n    \"aggregate\":\"uniqueValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"author\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>uniqueProperties</code> </td> <td> Returns top unique properties values for specified properties (up to the\nrequested limit) and the count of each in the property specified in <code>properties</code>. \nThe list will have the highest count first.\n\nCurrently, <code>uniqueProperties</code> aggregate is only supported for property \n<code>[\"sourceFile\", \"metadata\"]</code> </td> <td>  \n\n```\n{\n    \"aggregate\":\"uniqueProperties\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"sourceFile\",\n                \"metadata\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>allUniqueValues</code> </td> <td> Returns all unique values\nand the count of each. The response contains a cursor that must be used\nto fetch all pages of data. The data is not ordered by the count. This\nallows to retrieve all unique values for more than 10000 items. </td> <td>  \n\n```\n{\n    \"aggregate\":\"allUniqueValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"author\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>allUniqueProperties</code> </td> <td> Returns all unique properties values\nand the count of each. The response contains a cursor that must be used\nto fetch all pages of data. The data is not ordered by the count. This\nallows to retrieve all unique properties values for more than 10000 items.\n\nCurrently, <code>allUniqueProperties</code> aggregate is only supported for property\n<code>[\"sourceFile\", \"metadata\"]</code>.\n </td> <td>  \n\n```\n{\n    \"aggregate\":\"allUniqueProperties\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"sourceFile\",\n                \"metadata\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n\n<tr>\n<td> <code>cardinalityValues</code> </td> <td> Returns an approximate count of \ndistinct values for the specified properties. </td> <td>  \n\n```\n{\n    \"aggregate\":\"cardinalityValues\",\n    \"properties\":[\n        {\n            \"property\":[\n                \"mimeType\"\n            ]\n        }\n    ]\n}\n```\n\n</td>\n</tr>\n</table>\n\n### Metadata aggregation\n\nAggregation on metadata behaves differently. Supported aggregate operations:\n\n| Property                            | Applicable aggregation               |\n|-------------------------------------|--------------------------------------|\n| `[\"sourceFile\", \"metadata\", <key>]` | uniqueValues, cardinalityValues,     |\n| `[\"sourceFile\", \"metadata\"]`        | uniqueProperties                     |",
         "operationId": "documentsAggregate",
         "parameters": [
           {
@@ -9201,10 +9201,13 @@
                     "$ref": "#/components/schemas/DocumentsAggregateUniquePropertiesRequest"
                   },
                   {
+                    "$ref": "#/components/schemas/DocumentsAggregateAllUniquePropertiesRequest"
+                  },
+                  {
                     "$ref": "#/components/schemas/DocumentsAggregateAllUniqueValuesRequest"
                   },
                   {
-                    "$ref": "#/components/schemas/DocumentsAggregateApproximateCardinalityRequest"
+                    "$ref": "#/components/schemas/DocumentsAggregateCardinalityValuesRequest"
                   }
                 ]
               },
@@ -19133,13 +19136,13 @@
           {
             "type": "object",
             "title": "UniqueValues",
-            "description": "Request unique value backets aggregate on a specific Event property.",
+            "description": "Request unique value buckets aggregate on a specific Event property. Each bucket is defined by `values` array and has the number of the `values` occurrences.",
             "required": [
               "aggregate"
             ],
             "properties": {
               "aggregate": {
-                "description": "Type of aggregation to apply.\n`uniqueValues` - Get unique values (upto max 1000) in the specified property ordered by frequency.\n",
+                "description": "Type of aggregation to apply.\n`uniqueValues` - Get unique values (up to max 1000) in the specified property ordered by the frequency.\nNote: When aggregate on `[\"metadata\"]` property, a value may occur multiple times in one Event for different metadata keys.\nEach occurrence is counted.\n",
                 "type": "string",
                 "enum": [
                   "uniqueValues"
@@ -19203,7 +19206,7 @@
                     "items": {
                       "$ref": "#/components/schemas/SortProperty"
                     },
-                    "description": "Sort by array of selected properties.\n`order` field is optional and defaults to `asc`.\n`nulls` field is optional and defaults to `auto`.\n`auto` is translated to `last` for `asc` order and to `first` for `desc` order by the service.\nSorting can be done on the following properties:\n  `externalId`,\n  `type`,\n  `subtype`,\n  `startTime`,\n  `endTime`,\n  `createdTime`,\n  `lastUpdatedTime`,\n  `source`,\n  `description`,\n  `metadata`.\nPartitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.\nExample:\n```\n[\n  {\n    \"property\" : [\"createdTime\"],\n    \"order\": \"desc\"\n  },\n  {\n    \"property\" : [\"metadata\", \"FooBar\"],\n    \"nulls\": \"first\"\n  }\n]\n```\n"
+                    "description": "Sort by array of selected properties.\n`order` field is optional and defaults to `asc`.\n`nulls` field is optional and defaults to `auto`.\n`auto` is translated to `last` for `asc` order and to `first` for `desc` order by the service.\nSorting can be done on the following properties:\n  `dataSetId`,\n  `externalId`,\n  `type`,\n  `subtype`,\n  `startTime`,\n  `endTime`,\n  `createdTime`,\n  `lastUpdatedTime`,\n  `source`,\n  `description`,\n  `metadata`.\nPartitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.\nExample:\n```\n[\n  {\n    \"property\" : [\"createdTime\"],\n    \"order\": \"desc\"\n  },\n  {\n    \"property\" : [\"metadata\", \"FooBar\"],\n    \"nulls\": \"first\"\n  }\n]\n```\n"
                   }
                 }
               },
@@ -19283,7 +19286,7 @@
         }
       },
       "SortSpecString": {
-        "description": "Sort by array of selected fields. Syntax: `[\"<fieldname>:asc|desc\"]`. Default sort order is `asc` with short syntax: `[\"<fieldname>\"]`.\nFilter accepts the following field names:\n  `externalId`,\n  `type`,\n  `subtype`,\n  `startTime`,\n  `endTime`,\n  `createdTime`,\n  `lastUpdatedTime`,\n  `source`,\n  `description`,\n  `metadata`.\nPartitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.\n",
+        "description": "Sort by array of selected fields. Syntax: `[\"<fieldname>:asc|desc\"]`. Default sort order is `asc` with short syntax: `[\"<fieldname>\"]`.\nFilter accepts the following field names:\n  `dataSetId`,\n  `externalId`,\n  `type`,\n  `subtype`,\n  `startTime`,\n  `endTime`,\n  `createdTime`,\n  `lastUpdatedTime`,\n  `source`,\n  `description`,\n  `metadata`.\nPartitions are done independently of sorting, there is no guarantee on sort order between elements from different partitions.\n",
         "example": [
           "endTime:desc"
         ],
@@ -20747,7 +20750,12 @@
                 "$ref": "#/components/schemas/CogniteExternalId"
               },
               "sessionId": {
-                "$ref": "#/components/schemas/SessionId"
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/SessionId"
+                  }
+                ],
+                "readOnly": true
               },
               "data": {
                 "allOf": [
@@ -21939,19 +21947,6 @@
             "description": "The ID of the associated asset (Cognite's Assets API).",
             "format": "int64",
             "example": 3001
-          },
-          "treeIndex": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "A number describing the position of this node in the 3D hierarchy, starting from 0. The tree is traversed in a depth-first order.",
-            "format": "int64",
-            "example": 5
-          },
-          "subtreeSize": {
-            "type": "integer",
-            "description": "The number of nodes in the subtree of this node (this number included the node itself).",
-            "format": "int64",
-            "example": 7
           }
         }
       },
@@ -22516,10 +22511,10 @@
         ],
         "properties": {
           "inclusiveBegin": {
-            "$ref": "#/components/schemas/TimeseriesEpochTimestamp"
+            "$ref": "#/components/schemas/TimeSeriesEpochTimestamp"
           },
           "exclusiveEnd": {
-            "$ref": "#/components/schemas/TimeseriesEpochTimestamp"
+            "$ref": "#/components/schemas/TimeSeriesEpochTimestamp"
           }
         }
       },
@@ -22882,7 +22877,7 @@
         ],
         "properties": {
           "timestamp": {
-            "$ref": "#/components/schemas/TimeseriesEpochTimestamp"
+            "$ref": "#/components/schemas/TimeSeriesEpochTimestamp"
           }
         }
       },
@@ -23650,7 +23645,7 @@
           }
         }
       },
-      "TimeseriesEpochTimestamp": {
+      "TimeSeriesEpochTimestamp": {
         "description": "The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. Can be negative to define dates before 1970, up to 1900.",
         "type": "integer",
         "minimum": -2208988800000,
@@ -24017,6 +24012,17 @@
         "description": "ID of the group in the source. If this is the same ID as a group in the IdP, a principal in that group will implicitly be a part of this group as well.",
         "example": "b7c9a5a4-99c2-4785-bed3-5e6ad9a78603"
       },
+      "GroupMetadata": {
+        "type": "object",
+        "description": "Custom, immutable application specific metadata. String key -> String value. Limits: Key are at most 32 bytes. Values are at most 512 bytes. Up to 16 key-value pairs. Total size is at most 4096.",
+        "additionalProperties": {
+          "type": "string",
+          "maxLength": 512
+        },
+        "x-maxKeyLength": 32,
+        "x-maxTotalSize": 4096,
+        "maxProperties": 16
+      },
       "Group": {
         "type": "object",
         "required": [
@@ -24033,6 +24039,9 @@
           },
           "capabilities": {
             "$ref": "#/components/schemas/CogniteCapability"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/GroupMetadata"
           },
           "id": {
             "type": "integer",
@@ -31500,6 +31509,19 @@
           }
         ]
       },
+      "DocumentAggregateValue": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "$ref": "#/components/schemas/Label"
+          }
+        ]
+      },
       "DocumentFilterValueList": {
         "description": "One or more values you wish to find in the provided property.",
         "type": "array",
@@ -31794,14 +31816,14 @@
             "type": "array",
             "description": "A unique value found in the specified properties. Each item is a value for the specified property with same index.",
             "items": {
-              "$ref": "#/components/schemas/DocumentFilterValue"
+              "$ref": "#/components/schemas/DocumentAggregateValue"
             }
           }
         }
       },
       "DocumentsAggregateUniquePropertiesRequest": {
         "title": "Unique properties",
-        "description": "Find all metadata property names",
+        "description": "Top unique metadata property names",
         "type": "object",
         "allOf": [
           {
@@ -31852,10 +31874,6 @@
                 "minimum": 1,
                 "maximum": 10000,
                 "default": 100
-              },
-              "cursor": {
-                "description": "Cursor for paging through results.",
-                "type": "string"
               }
             }
           }
@@ -31875,6 +31893,123 @@
             "maxItems": 10000,
             "items": {
               "$ref": "#/components/schemas/DocumentsAggregateUniquePropertiesItem"
+            }
+          }
+        },
+        "example": {
+          "items": [
+            {
+              "count": 4,
+              "values": [
+                "hello"
+              ]
+            },
+            {
+              "count": 33,
+              "values": [
+                "world"
+              ]
+            }
+          ]
+        }
+      },
+      "DocumentsAggregateUniquePropertiesItem": {
+        "type": "object",
+        "required": [
+          "count",
+          "values"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Number of properties with this name",
+            "format": "int64"
+          },
+          "values": {
+            "type": "array",
+            "description": "A property name",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DocumentsAggregateAllUniquePropertiesRequest": {
+        "title": "All unique properties",
+        "description": "Find all metadata property names",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DocumentSearchInAggregate"
+          },
+          {
+            "$ref": "#/components/schemas/DocumentSearchFilter"
+          },
+          {
+            "type": "object",
+            "required": [
+              "aggregate",
+              "properties"
+            ],
+            "properties": {
+              "aggregate": {
+                "type": "string",
+                "enum": [
+                  "allUniqueProperties"
+                ]
+              },
+              "properties": {
+                "type": "array",
+                "description": "List of properties for which you want to get the nested property names. The only supported property is currently `[\"sourceFile\", \"metadata\"]`.",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "property"
+                  ],
+                  "properties": {
+                    "property": {
+                      "description": "The property to list nested properties for",
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/DocumentFilterProperty"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "limit": {
+                "description": "Maximum number of items.",
+                "type": "integer",
+                "format": "int32",
+                "minimum": 1,
+                "maximum": 10000,
+                "default": 100
+              },
+              "cursor": {
+                "description": "Cursor for paging through results.",
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "DocumentsAggregateAllUniquePropertiesResponse": {
+        "title": "All unique properties",
+        "description": "Response for the allUniqueProperties aggregate.",
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 10000,
+            "items": {
+              "$ref": "#/components/schemas/DocumentsAggregateAllUniquePropertiesItem"
             }
           },
           "nextCursor": {
@@ -31899,7 +32034,7 @@
           ]
         }
       },
-      "DocumentsAggregateUniquePropertiesItem": {
+      "DocumentsAggregateAllUniquePropertiesItem": {
         "type": "object",
         "required": [
           "count",
@@ -32036,13 +32171,13 @@
             "type": "array",
             "description": "A unique value found in the specified properties. Each item is a value for the specified property with same index.",
             "items": {
-              "$ref": "#/components/schemas/DocumentFilterValue"
+              "$ref": "#/components/schemas/DocumentAggregateValue"
             }
           }
         }
       },
-      "DocumentsAggregateApproximateCardinalityRequest": {
-        "title": "Approximate cardinality",
+      "DocumentsAggregateCardinalityValuesRequest": {
+        "title": "Cardinality values",
         "description": "Find approximate number of unique values.",
         "type": "object",
         "allOf": [
@@ -32062,7 +32197,7 @@
               "aggregate": {
                 "type": "string",
                 "enum": [
-                  "approximateCardinality"
+                  "cardinalityValues"
                 ]
               },
               "properties": {
@@ -32103,10 +32238,10 @@
           }
         ]
       },
-      "DocumentsAggregateApproximateCardinalityResponse": {
-        "title": "Approximate cardinality",
+      "DocumentsAggregateCardinalityValuesResponse": {
+        "title": "Cardinality values",
         "type": "object",
-        "description": "Response for approximateCardinality aggregate.",
+        "description": "Response for cardinalityValues aggregate.",
         "required": [
           "items"
         ],
@@ -32116,7 +32251,7 @@
             "minItems": 1,
             "maxItems": 1,
             "items": {
-              "$ref": "#/components/schemas/DocumentsAggregateApproximateCardinalityItem"
+              "$ref": "#/components/schemas/DocumentsAggregateCardinalityValuesItem"
             }
           }
         },
@@ -32128,7 +32263,7 @@
           ]
         }
       },
-      "DocumentsAggregateApproximateCardinalityItem": {
+      "DocumentsAggregateCardinalityValuesItem": {
         "type": "object",
         "required": [
           "count"
@@ -39514,10 +39649,13 @@
                   "$ref": "#/components/schemas/DocumentsAggregateUniquePropertiesResponse"
                 },
                 {
+                  "$ref": "#/components/schemas/DocumentsAggregateAllUniquePropertiesResponse"
+                },
+                {
                   "$ref": "#/components/schemas/DocumentsAggregateAllUniqueValuesResponse"
                 },
                 {
-                  "$ref": "#/components/schemas/DocumentsAggregateApproximateCardinalityResponse"
+                  "$ref": "#/components/schemas/DocumentsAggregateCardinalityValuesResponse"
                 }
               ]
             }
@@ -40612,7 +40750,7 @@
     {
       "name": "Document preview",
       "x-displayName": "Preview",
-      "description": "The document preview service is a utility API that can render most document types as an image or PDF.\nThis can be very helpful if you want to display a preview of a file in a frontend, or for other\ntasks that require one of these formats.\n\nFor both rendered formats there is a concept of a page. The actual meaning of a page depends on\nthe source document. E.g. an image will always have exactly one page, while a spreadsheet\nwill typically have one page representing each individual sheet.\n\nThe document preview service can only generate preview for document sizes that do not\nexceed 150 MiB. Trying to preview a larger document will give an error.\n\n### File type support\nPreviews can be created for the following types of files:\n- PDF files\n- Spreadsheets, documents and presentations from the Microsoft and Libre Office office suites\n- Images\n- CAD files (In beta. Available only when the `cdf-version: beta` header is provided.)"
+      "description": "The document preview service is a utility API that can render most document types as an image or PDF.\nThis can be very helpful if you want to display a preview of a file in a frontend, or for other\ntasks that require one of these formats.\n\nFor both rendered formats there is a concept of a page. The actual meaning of a page depends on\nthe source document. E.g. an image will always have exactly one page, while a spreadsheet\nwill typically have one page representing each individual sheet.\n\nThe document preview service can only generate preview for document sizes that do not\nexceed 150 MiB. Trying to preview a larger document will give an error.\n\n### File type support\nPreviews can be created for the following types of files:\n- PDF files\n- Spreadsheets, documents and presentations from the Microsoft and Libre Office office suites\n- Images"
     },
     {
       "name": "Geospatial",
