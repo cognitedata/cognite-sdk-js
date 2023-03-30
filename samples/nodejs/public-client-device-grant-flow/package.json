@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "tsc": "tsc",
-    "start": "yarn tsc && node build/quickstart.js"
+    "start": "yarn tsc && node build/device_grant.js"
   },
   "dependencies": {
     "open": "^8.3.0",
