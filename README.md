@@ -74,8 +74,13 @@ For details about commiting changes, type generation, automated versioning and r
 
 This repo contains some integration tests that relies on OIDC specifically `msal-node` library. 
 
+**Important to know**: 
+- Some of the integration tests could be eventually consistent 
+- Some of test cases are skipped due to expensive and heavy API calls which only need to run once
+- `packages/stable/src/__tests__/api/groups.int.spec.ts` test relies on specific `testDataSetId`
+
 Talk to any of the contributors or leave an issue and it'll get sorted.
-GitHub Action will run the test and has its own API key.
+GitHub Action will run the test and has its own secrets set.
 
 Run tests:
 
