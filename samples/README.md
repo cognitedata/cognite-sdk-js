@@ -10,8 +10,9 @@ This folder contains examples on how to use the SDK in different frameworks.
 
 - Clone this repository locally. See guide [here](https://www.tutorialspoint.com/how-to-clone-a-github-repository).
 - Install NodeJS on your machine. You can download NodeJS [here](https://nodejs.org/en/download/).
+- Install dependencies by running `yarn`.
+- Build sdk by running `yarn build`.
 - Open one of the sample project directories in a terminal.
-- Install dependencies by running `npm install`, or with yarn `yarn`.
 
 ## Examples
 
