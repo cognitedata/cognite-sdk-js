@@ -26,8 +26,24 @@ The samples' [README.md](./samples/README.md) has instructions for running the s
 
 ## Authentication
 
-We offer two ways to sign in to our SDK. The first and recommended approach is using [@cognite/auth-wrapper](./guides/auth-wrapper.md)
-and the second is using [Microsoft MSAL Library](./guides/auth-wrapper.md)
+This section provides guidance on how to integrate and use the authentication feature for our SDK, leveraging OpenID Connect (OIDC) as the primary authentication protocol. The OIDC implementation ensures a secure and reliable user authentication process, enhancing the security of your application.
+
+### Prerequisites
+Before you begin, ensure that you have the following:
+
+- Access to an OpenID Connect (OIDC) compatible Identity Provider (IdP) for authentication (e.g., MSAL, Auth0).
+- A valid client ID and client secret provided by your OIDC IdP.
+- The redirect_uri registered with your OIDC IdP for your application.
+- Our SDK installed and integrated into your application.
+
+
+### Setting up OIDC Authentication
+
+- Initialize the SDK: Import and initialize the SDK in your application, providing the necessary configuration options such as the client ID, client secret, and redirect URI obtained from your OIDC IdP.
+- Pass your authentication method to `getToken` property of SDK.
+
+For code example you can check [quickstart.ts](https://github.com/cognitedata/cognite-sdk-js/blob/master/samples/nodejs/oidc-typescript/quickstart.ts#L1)
+
 
 ## Response header & http status
 
@@ -56,9 +72,15 @@ For details about commiting changes, type generation, automated versioning and r
 
 ### Testing
 
-This repo contains some integration tests that require a CDF API key for [cognitesdk-js](https://cognite.fusion.cognite.com/cognitesdk-js/) project.
+This repo contains some integration tests that relies on OIDC specifically `msal-node` library. 
+
+**Important to know**: 
+- Some of the integration tests could be eventually consistent 
+- Some of test cases are skipped due to expensive and heavy API calls which only need to run once
+- `packages/stable/src/__tests__/api/groups.int.spec.ts` test relies on specific `testDataSetId`
+
 Talk to any of the contributors or leave an issue and it'll get sorted.
-GitHub Action will run the test and has its own API key.
+GitHub Action will run the test and has its own secrets set.
 
 Run tests:
 
@@ -70,15 +92,16 @@ yarn test --since master
 
 To run integration tests, you would have to pass the following environment variables:
 
-- **COGNITE_PROJECT**: the CDF project to test against, typically [cognitesdk-js](https://cognite.fusion.cognite.com/cognitesdk-js/).
-- **COGNITE_CREDENTIALS**: an API key for the CDF project.
+- **COGNITE_PROJECT**
+- **COGNITE_BASE_URL**
+- **COGNITE_CLIENT_SECRET**
+- **COGNITE_CLIENT_ID**
+- **COGNITE_AZURE_TENANT_ID**
 
 Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revision integration tests.
 
 We use `jest` to run tests, see [their documentation](https://github.com/facebook/jest) for more information.
 
-We can use any project & token to run tests locally.
-Just remove `apiKeyMode` usage from setupClient & add stripped token to `COGNITE_CREDENTIALS`.
 
 ### Versioning
 
