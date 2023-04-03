@@ -4,9 +4,13 @@ This example was built using a react auth-wrapper which can be found [here](http
 
 The next sections will cover exactly what was done in the current example. It will also be based in authentication using Azure AD, which is the cognite's standard, tough you can you any OIDC based identity provider.
 
+## Prerequisite
+
+Make sure you have read the [prerequisite-guide](../../README.md#prerequisites) before continuing. You may also need to create a SPA app registration in Azure Active Directory for the necessary environment variables.
+
 ## Installation
 
-Before moving on, you'll need to install the react auth-wrapper as the examble bellow:
+Before moving on, you'll need to install the react auth-wrapper as the example below:
 
 Using [npm](https://npmjs.org/)
 
@@ -20,31 +24,33 @@ Configure the library by wrapping your application in `ReactCogniteAuthProvider`
 
 ```jsx
 // src/index.jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { ReactCogniteAuthProvider } from "@cognite/react-auth-wrapper";
-import App from "./App";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { ReactCogniteAuthProvider } from '@cognite/react-auth-wrapper';
+import App from './App';
 
 const oidcConfig = {
-  authority: "<your authority>",
-  client_id: "<your client id>",
-  redirect_uri: "<your redirect uri",
-  scope: "<your token scopes>",
+  authority: '<your authority>',
+  client_id: '<your client id>',
+  redirect_uri: '<your redirect uri',
+  scope: '<your token scopes>',
   /*
     we are using metadata because the default token and authorization endpoints in azure ad
-    contains '/oauth2/v2.0/' wich differs from default '/oauth2/token'
+    contains '/oauth2/v2.0/' which differs from default '/oauth2/token'
    */
   metadata: {
-      'token_endpoint': "https://login.microsoftonline.com/<your tenant>/oauth2/v2.0/token",
-      'authorization_endpoint': "https://login.microsoftonline.com/<your tenant/oauth2/v2.0/authorize",
-  }
+    token_endpoint:
+      'https://login.microsoftonline.com/<your tenant>/oauth2/v2.0/token',
+    authorization_endpoint:
+      'https://login.microsoftonline.com/<your tenant/oauth2/v2.0/authorize',
+  },
 };
 
 ReactDOM.render(
   <ReactCogniteAuthProvider {...oidcConfig}>
     <App />
   </ReactCogniteAuthProvider>,
-  document.getElementById("app")
+  document.getElementById('app')
 );
 ```
 
@@ -57,17 +63,17 @@ we're going to connect to CDF and render some Assets.
 
 ```jsx
 // src/App.jsx
-import React from "react";
-import { useCogAuth } from "@cognite/react-auth-wrapper";
+import React from 'react';
+import { useCogAuth } from '@cognite/react-auth-wrapper';
 import ListAssets from './ListAssets';
 
 function App() {
   const auth = useCogAuth();
 
   switch (auth.activeNavigator) {
-    case "signinSilent":
+    case 'signinSilent':
       return <div>Signing you in...</div>;
-    case "signoutRedirect":
+    case 'signoutRedirect':
       return <div>Signing you out...</div>;
   }
 
@@ -82,7 +88,7 @@ function App() {
   if (auth.isAuthenticated) {
     return (
       <div>
-       <ListAssets/>
+        <ListAssets />
       </div>
     );
   }
@@ -165,4 +171,4 @@ export default ListAssets;
 
 ### More...
 
-For more information about the use of react-auth-wrapper, please refer to [react-auth-wrapper] npm package (https://npm.im/@cognite/react-auth-wrapper)
+For more information about the use of react-auth-wrapper, please refer to [react-auth-wrapper](https://npm.im/@cognite/react-auth-wrapper) npm package
