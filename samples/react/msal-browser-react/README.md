@@ -12,7 +12,7 @@ This kind of authentication will redirect you to the login page to enter your cr
 
 ## Prerequisite
 
-Make sure you have read the [prerequisite-guide](../../README.md#prerequisite) before continuing.
+Make sure you have read the [prerequisite-guide](../../README.md#prerequisites) before continuing. You may also need to create a SPA app registration in Azure Active Directory for the necessary environment variables.
 
 ## Install
 
@@ -83,7 +83,8 @@ if (!clientId || !tenantId) {
 }
 ```
 
-6. Instanciate a new `PublicClientApplication` class with the configurations.
+6. Instantiate a new `PublicClientApplication` class with the configurations.
+
 ```ts
 export const pca = new PublicClientApplication(configuration);
 ```
@@ -92,23 +93,23 @@ export const pca = new PublicClientApplication(configuration);
 
 ```ts
 export const getToken = async () => {
-	// Verify if account are setted.
-    const accountId = sessionStorage.getItem("account");
+  // Verify if account are setted.
+  const accountId = sessionStorage.getItem("account");
 
-    if (!accountId) throw new Error("no user_id found");
+  if (!accountId) throw new Error("no user_id found");
 
-	// Get account by ID.
-    const account = pca.getAccountByLocalId(accountId);
+  // Get account by ID.
+  const account = pca.getAccountByLocalId(accountId);
 
-    if (!account) throw new Error("no user found");
+  if (!account) throw new Error("no user found");
 
-	// Get token information.
-    const token = await pca.acquireTokenSilent({
-      account,
-      scopes,
-    });
+  // Get token information.
+  const token = await pca.acquireTokenSilent({
+    account,
+    scopes,
+  });
 
-    return token.accessToken;
+  return token.accessToken;
 };
 ```
 
@@ -140,7 +141,7 @@ function App() {
 }
 ```
 
-10. Now you are able to use the `MsalProvider` around all your code with `AuthenticatedTemplate`, `UnauthenticatedTemplate` and the new `PublicClientApplication` that you already have instanciated all of this inside your default function.
+10. Now you are able to use the `MsalProvider` around all your code with `AuthenticatedTemplate`, `UnauthenticatedTemplate` and the new `PublicClientApplication` that you already have instantiated all of this inside your default function.
 
 ```ts
 function App() {
@@ -152,7 +153,7 @@ function App() {
             <AuthenticatedTemplate>
             ...
             </AuthenticatedTemplate>
-            
+
             <UnauthenticatedTemplate>
             ...
             </UnauthenticatedTemplate>
@@ -169,15 +170,15 @@ instance.logoutPopup();
 
 // For login
 instance
-	.loginPopup({
-    	prompt: "select_account",
-        scopes,
-    })
-    .then((r) => {
-    	if (r.account?.localAccountId) {
-        	sessionStorage.setItem("account", r.account?.localAccountId);
-        }
-});
+  .loginPopup({
+    prompt: "select_account",
+    scopes,
+  })
+  .then((r) => {
+    if (r.account?.localAccountId) {
+      sessionStorage.setItem("account", r.account?.localAccountId);
+    }
+  });
 ```
 
 12. Now, you can run your code.
