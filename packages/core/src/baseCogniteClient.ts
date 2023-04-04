@@ -48,6 +48,7 @@ export interface ClientOptions {
     /** IdP Credentials */
     credentials?: ClientCredentials;
   };
+  retryValidator?: RetryValidator;
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -201,7 +202,7 @@ export default class BaseCogniteClient {
   ) {
     const httpClient = new CDFHttpClient(
       getBaseUrl(baseUrl),
-      this.getRetryValidator()
+      options.retryValidator || this.getRetryValidator()
     );
 
     httpClient
