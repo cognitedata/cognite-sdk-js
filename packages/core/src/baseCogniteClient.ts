@@ -91,7 +91,7 @@ export default class BaseCogniteClient {
    */
   private tokenPromise?: Promise<string | undefined>;
   private isTokenPromiseFulfilled?: boolean;
-
+  private retryValidator: RetryValidator;
   /**
    * Create a new SDK client
    *
@@ -120,6 +120,7 @@ export default class BaseCogniteClient {
       );
     }
 
+
     const { baseUrl } = options;
 
     this.http = this.initializeCDFHttpClient(baseUrl, options);
@@ -147,6 +148,7 @@ export default class BaseCogniteClient {
     this.project = options.project;
     this.apiKeyMode = !!options.apiKeyMode;
     this.noAuthMode = !!options.noAuthMode;
+    this.retryValidator = options.retryValidator || createUniversalRetryValidator();
     this.getToken = async () => {
       return options.getToken ? options.getToken() : undefined;
     };
@@ -202,7 +204,7 @@ export default class BaseCogniteClient {
   ) {
     const httpClient = new CDFHttpClient(
       getBaseUrl(baseUrl),
-      options.retryValidator || this.getRetryValidator()
+      this.getRetryValidator()
     );
 
     httpClient
@@ -364,7 +366,7 @@ export default class BaseCogniteClient {
    * Override to provide a better validator
    */
   protected getRetryValidator(): RetryValidator {
-    return createUniversalRetryValidator();
+    return this.retryValidator;
   }
 
   protected get version() {
