@@ -120,7 +120,6 @@ export default class BaseCogniteClient {
       );
     }
 
-
     const { baseUrl } = options;
 
     this.http = this.initializeCDFHttpClient(baseUrl, options);
