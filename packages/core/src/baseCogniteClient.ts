@@ -83,6 +83,7 @@ export default class BaseCogniteClient {
   readonly project: string;
 
   private readonly credentialsAuth?: CredentialsAuth;
+  private retryValidator: RetryValidator;
 
   /**
    * To prevent calling `getToken` method multiple times in parallel, we set
@@ -91,7 +92,6 @@ export default class BaseCogniteClient {
    */
   private tokenPromise?: Promise<string | undefined>;
   private isTokenPromiseFulfilled?: boolean;
-  private retryValidator: RetryValidator;
   /**
    * Create a new SDK client
    *
