@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
-import { setupClient, setupLoggedInClient } from '../testUtils';
+import { setupLoggedInClient } from '../testUtils';
 
 describe('Login-api integration test', () => {
   let client: CogniteClient;
