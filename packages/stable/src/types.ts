@@ -1707,6 +1707,7 @@ export interface ProjectResponse {
   defaultGroupId?: DefaultGroupId;
   authentication?: OutputProjectAuthentication;
   oidcConfiguration?: OidcConfiguration;
+  userProfilesConfiguration: UserProfilesConfiguration;
 }
 
 export interface ProjectUpdate {
@@ -1749,6 +1750,7 @@ export interface ProjectUpdateObject {
   azureADConfiguration?: SinglePatch<AzureADConfiguration>;
   oAuth2Configuration?: SinglePatch<OAuth2Configuration>;
   oidcConfiguration?: OidcConfigurationUpdate;
+  userProfilesConfiguration?: UserProfilesConfigurationUpdate;
 }
 
 export interface OidcConfiguration {
@@ -1760,6 +1762,19 @@ export interface OidcConfiguration {
   accessClaims: ClaimName[];
   scopeClaims: ClaimName[];
   logClaims: ClaimName[];
+}
+
+export interface UserProfilesConfiguration {
+  enabled: boolean;
+}
+
+export interface UserProfilesConfigurationUpdateModify {
+  enabled?: SinglePatch<boolean>;
+}
+
+export interface UserProfilesConfigurationUpdate {
+  modify?: UserProfilesConfigurationUpdateModify;
+  set?: UserProfilesConfiguration;
 }
 
 export type READ = 'READ';
