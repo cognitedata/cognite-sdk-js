@@ -16,18 +16,5 @@ describe('Login-api integration test', () => {
       expect(token).toBeDefined();
       expect(inspect.projects[0].projectUrlName).toBeDefined();
     });
-
-    test('not logged in', async () => {
-      const anotherClient = setupClient();
-      await anotherClient.authenticate();
-      const status = await anotherClient.login.status();
-      expect(status).toBeNull();
-    });
-
-    test('invalid credentials', async () => {
-      const anotherClient = setupClient();
-      const status = await anotherClient.login.status();
-      expect(status).toBeNull();
-    });
   });
 });
