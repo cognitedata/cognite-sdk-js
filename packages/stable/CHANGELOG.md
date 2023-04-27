@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.0.1...@cognite/sdk@8.1.0) (2023-04-27)
+
+### Features
+
+- **project:** project update user profiles ([#1009](https://github.com/cognitedata/cognite-sdk-js/issues/1009)) ([ee3d952](https://github.com/cognitedata/cognite-sdk-js/commit/ee3d952635580c87624a48b480d1c2cc1a73817c))
+
 ## [8.0.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.0.0...@cognite/sdk@8.0.1) (2023-04-20)
 
 **Note:** Version bump only for package @cognite/sdk
