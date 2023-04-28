@@ -6,6 +6,7 @@ import BaseCogniteClient from '../baseCogniteClient';
 import { API_KEY_HEADER, BASE_URL } from '../constants';
 import { apiKey, project } from '../testUtils';
 import { sleepPromise } from '../utils';
+import { createUniversalRetryValidator } from '../httpClient/retryValidator';
 
 const mockBaseUrl = 'https://example.com';
 
@@ -80,6 +81,26 @@ describe('CogniteClient', () => {
         // @ts-ignore
         setupNoAuthClient(true);
       }).not.toThrow();
+    });
+
+    test('custom validator retries set to 1 should prevent from retrying a failed call', async () => {
+      const scope = nock(mockBaseUrl).get('/').times(2).reply(500, {});
+      nock(mockBaseUrl).get('/').reply(200, { a: 42 });
+      const client = new BaseCogniteClient({
+        appId: 'unit-test',
+        project: 'unit-test',
+        baseUrl: mockBaseUrl,
+        getToken: jest.fn(async () => 'test-token'),
+        retryValidator: createUniversalRetryValidator(1),
+      });
+      try {
+        await client.get('/');
+      } catch (err) {
+        expect(err.message).toMatchInlineSnapshot(
+          `"Request failed | status code: 500"`
+        );
+        expect(scope.isDone()).toBeTruthy();
+      }
     });
 
     describe('credentials', () => {

@@ -48,6 +48,7 @@ export interface ClientOptions {
     /** IdP Credentials */
     credentials?: ClientCredentials;
   };
+  retryValidator?: RetryValidator;
 }
 
 export function accessApi<T>(api: T | undefined): T {
@@ -82,6 +83,7 @@ export default class BaseCogniteClient {
   readonly project: string;
 
   private readonly credentialsAuth?: CredentialsAuth;
+  private retryValidator: RetryValidator;
 
   /**
    * To prevent calling `getToken` method multiple times in parallel, we set
@@ -90,7 +92,6 @@ export default class BaseCogniteClient {
    */
   private tokenPromise?: Promise<string | undefined>;
   private isTokenPromiseFulfilled?: boolean;
-
   /**
    * Create a new SDK client
    *
@@ -121,6 +122,8 @@ export default class BaseCogniteClient {
 
     const { baseUrl } = options;
 
+    this.retryValidator =
+      options.retryValidator ?? createUniversalRetryValidator();
     this.http = this.initializeCDFHttpClient(baseUrl, options);
 
     if (options.authentication) {
@@ -363,7 +366,7 @@ export default class BaseCogniteClient {
    * Override to provide a better validator
    */
   protected getRetryValidator(): RetryValidator {
-    return createUniversalRetryValidator();
+    return this.retryValidator;
   }
 
   protected get version() {
