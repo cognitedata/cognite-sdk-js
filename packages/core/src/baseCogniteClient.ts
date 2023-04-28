@@ -122,6 +122,8 @@ export default class BaseCogniteClient {
 
     const { baseUrl } = options;
 
+    this.retryValidator =
+      options.retryValidator ?? createUniversalRetryValidator();
     this.http = this.initializeCDFHttpClient(baseUrl, options);
 
     if (options.authentication) {
@@ -147,7 +149,6 @@ export default class BaseCogniteClient {
     this.project = options.project;
     this.apiKeyMode = !!options.apiKeyMode;
     this.noAuthMode = !!options.noAuthMode;
-    this.retryValidator = options.retryValidator || createUniversalRetryValidator();
     this.getToken = async () => {
       return options.getToken ? options.getToken() : undefined;
     };
