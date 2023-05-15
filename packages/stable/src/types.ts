@@ -3306,3 +3306,17 @@ export interface AnnotationFilterProps {
   status?: AnnotationStatus;
   data?: Partial<AnnotationData>;
 }
+
+export interface AnnotationReverseLookupRequest
+  extends AnnotationReverseLookupFilter,
+    FilterQuery {}
+
+export interface AnnotationReverseLookupFilter {
+  filter: AnnotationReverseLookupFilterProps;
+}
+
+export interface AnnotationReverseLookupFilterProps {
+  annotatedResourceType: AnnotatedResourceType;
+  annotationType: AnnotationType;
+  data?: Record<string, any>;
+}

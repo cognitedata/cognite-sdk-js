@@ -3,6 +3,7 @@
 import {
   BaseResourceAPI,
   CursorAndAsyncIterator,
+  CursorResponse,
   InternalId,
 } from '@cognite/sdk-core';
 
@@ -12,6 +13,8 @@ import {
   AnnotationSuggest,
   AnnotationFilterRequest,
   AnnotationModel,
+  AnnotationReverseLookupRequest,
+  AnnotationsAssetRef,
 } from '../../types';
 
 export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
@@ -139,5 +142,33 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    */
   public update = (changes: AnnotationChangeById[]) => {
     return this.updateEndpoint(changes);
+  };
+
+  /**
+   * [Reverse lookup resources](TODO: use API Doc link when ready)
+   * const assetQueryData = {
+   *   limit: -1,
+   *   filter: {
+   *     annotatedResourceType: 'file' as const,
+   *     annotationType: 'images.AssetLink',
+   *     data: {
+   *       { id: 123 }
+   *     }
+   *   }
+   * };
+   *
+   * const resourceIdsResponse = this._client.annotations.reverseLookup(assetQuerydata);
+   */
+  public reverseLookup = (
+    filter: AnnotationReverseLookupRequest
+  ): CursorAndAsyncIterator<AnnotationsAssetRef> => {
+    const path = this.url(`reverselookup`);
+    return this.cursorBasedEndpoint(
+      (params) =>
+        this.post<CursorResponse<AnnotationsAssetRef[]>>(path, {
+          data: params,
+        }),
+      filter
+    );
   };
 }
