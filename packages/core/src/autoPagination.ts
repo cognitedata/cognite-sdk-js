@@ -81,7 +81,7 @@ function makeAutoPagingEach<T>(
 
 function makeAutoPagingToArray<T>(autoPagingEach: AutoPagingEach<T>) {
   return async function autoPagingToArray(options?: AutoPagingToArrayOptions) {
-    let limit = (options && options.limit) || 25;
+    let limit = (options && options.limit) || Infinity;
     if (limit === -1) {
       limit = Infinity;
     }
