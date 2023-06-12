@@ -149,7 +149,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * const assetQueryData = {
    *   limit: -1,
    *   filter: {
-   *     annotatedResourceType: 'file' as const,
+   *     annotatedResourceType: 'file',
    *     annotationType: 'images.AssetLink',
    *     data: {
    *       { id: 123 }
