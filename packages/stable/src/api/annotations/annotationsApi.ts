@@ -145,7 +145,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   };
 
   /**
-   * [Reverse lookup resources](TODO: use API Doc link when ready)
+   * [Reverse lookup](https://developer.cognite.com/api/v1-beta/#tag/Annotations/operation/annotationsReverseLookup)
    * const assetQueryData = {
    *   limit: -1,
    *   filter: {
