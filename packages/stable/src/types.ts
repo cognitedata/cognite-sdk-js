@@ -3317,6 +3317,10 @@ export interface AnnotationReverseLookupFilter {
 
 export interface AnnotationReverseLookupFilterProps {
   annotatedResourceType: AnnotatedResourceType;
-  annotationType: AnnotationType;
+  annotationType?: AnnotationType;
+  creatingApp?: string;
+  creatingAppVersion?: string;
+  creatingUser?: string;
+  status?: AnnotationStatus;
   data?: Record<string, any>;
 }
