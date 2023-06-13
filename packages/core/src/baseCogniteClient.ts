@@ -403,5 +403,3 @@ export default class BaseCogniteClient {
 
 export type BaseRequestOptions = RetryableHttpRequestOptions;
 export type Response = HttpResponse<any>;
-
-export { makeAutoPaginationMethods } from './autoPagination';
