@@ -8,8 +8,8 @@ import {
   InternalId,
   ListResponse,
 } from '@cognite/sdk-core';
-import { AnnotatedResourceType } from '@cognite/sdk-stable';
-import { makeAutoPaginationMethods } from 'core/src/autoPagination';
+import { AnnotatedResourceType } from '../../types';
+import { makeAutoPaginationMethods } from '@cognite/sdk-core';
 
 import {
   AnnotationChangeById,
