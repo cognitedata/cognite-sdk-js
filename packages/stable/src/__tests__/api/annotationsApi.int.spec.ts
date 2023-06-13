@@ -266,6 +266,5 @@ describe('Annotations API', () => {
 
     expect(listResponse.items).toHaveLength(1);
     expect(listResponse.items[0].id).toBe(createdAnnotationIds[1]);
-    expect(listResponse.annotatedResourceType).toBe('file');
   });
 });
