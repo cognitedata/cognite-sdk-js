@@ -2,14 +2,9 @@
 
 import {
   BaseResourceAPI,
-  CogniteAsyncIterator,
   CursorAndAsyncIterator,
-  CursorResponse,
   InternalId,
-  ListResponse,
 } from '@cognite/sdk-core';
-import { AnnotatedResourceType } from '../../types';
-import { makeAutoPaginationMethods } from '@cognite/sdk-core';
 
 import {
   AnnotationChangeById,
@@ -17,8 +12,6 @@ import {
   AnnotationSuggest,
   AnnotationFilterRequest,
   AnnotationModel,
-  AnnotationReverseLookupRequest,
-  AnnotationsAssetRef,
 } from '../../types';
 
 export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
