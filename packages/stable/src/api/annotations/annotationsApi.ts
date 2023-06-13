@@ -8,7 +8,6 @@ import {
   InternalId,
   ListResponse,
 } from '@cognite/sdk-core';
-import { AnnotationsAssetRef } from '@cognite/sdk-stable';
 
 import {
   AnnotationChangeById,
@@ -17,6 +16,7 @@ import {
   AnnotationFilterRequest,
   AnnotationReverseLookupRequest,
   AnnotationModel,
+  AnnotationsAssetRef,
 } from '../../types';
 
 export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
