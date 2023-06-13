@@ -251,4 +251,21 @@ describe('Annotations API', () => {
     expect(updatedData.textRegion.yMin).toEqual(data.textRegion.yMin);
     expect(updatedData.textRegion.yMax).toEqual(data.textRegion.yMax);
   });
+
+  test('reverse lookup annotation', async () => {
+    const listResponse = await client.annotations.reverseLookup({
+      filter: {
+        annotatedResourceType: 'file',
+        data: {
+          assetRef: {
+            externalId: 'def',
+          },
+        },
+      },
+    });
+
+    expect(listResponse.items).toHaveLength(1);
+    expect(listResponse.items[0].id).toBe(createdAnnotationIds[1]);
+    expect(listResponse.annotatedResourceType).toBe('file');
+  });
 });
