@@ -2,10 +2,14 @@
 
 import {
   BaseResourceAPI,
+  CogniteAsyncIterator,
   CursorAndAsyncIterator,
   CursorResponse,
   InternalId,
+  ListResponse,
 } from '@cognite/sdk-core';
+import { AnnotatedResourceType } from '@cognite/sdk-stable';
+import { makeAutoPaginationMethods } from 'core/src/autoPagination';
 
 import {
   AnnotationChangeById,
@@ -161,14 +165,33 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    */
   public reverseLookup = (
     filter: AnnotationReverseLookupRequest
-  ): CursorAndAsyncIterator<AnnotationsAssetRef> => {
+  ): Promise<
+    ListResponse<AnnotationsAssetRef[]> & {
+      annotatedResourceType: AnnotatedResourceType;
+    }
+  > &
+    CogniteAsyncIterator<AnnotationsAssetRef> => {
     const path = this.url(`reverselookup`);
-    return this.cursorBasedEndpoint(
-      (params) =>
-        this.post<CursorResponse<AnnotationsAssetRef[]>>(path, {
-          data: params,
-        }),
-      filter
-    );
+    const endPointCaller = (params?: AnnotationReverseLookupRequest) =>
+      this.post<
+        CursorResponse<AnnotationsAssetRef[]> & {
+          annotatedResourceType: AnnotatedResourceType;
+        }
+      >(path, {
+        data: params,
+      });
+
+    const listPromise = endPointCaller(filter).then((transformedResponse) => {
+      const pager = this.addNextPageFunction(
+        endPointCaller.bind(this),
+        transformedResponse.data,
+        filter
+      );
+      return Object.assign(pager, {
+        annotatedResourceType: transformedResponse.data.annotatedResourceType,
+      });
+    });
+    const autoPaginationMethods = makeAutoPaginationMethods(listPromise);
+    return Object.assign(listPromise, autoPaginationMethods);
   };
 }
