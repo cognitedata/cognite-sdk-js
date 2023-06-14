@@ -220,6 +220,33 @@ describe('Annotations API', () => {
     expect(items).toHaveLength(1);
   });
 
+  test('reverse lookup annotation', async () => {
+    /* const retrievedAnnotations = await client.annotations
+      .list({ filter: fileFilter(annotatedFileId) })
+      .autoPagingToArray();
+
+    console.log(
+      'Retrieved annotations: ',
+      JSON.stringify(retrievedAnnotations)
+    ); */
+
+    const listResponse = await client.annotations.reverseLookup({
+      filter: {
+        annotatedResourceType: 'file',
+        data: {
+          assetRef: {
+            externalId: 'def',
+          },
+        },
+      },
+    });
+
+    console.log('Response from list query', JSON.stringify(listResponse));
+
+    expect(listResponse.items).toHaveLength(1);
+    expect(listResponse.items[0].id).toBe(createdAnnotationIds[1]);
+  });
+
   test('update annotation', async () => {
     const listResponse = await client.annotations.retrieve([
       createdAnnotationIds[0],
@@ -250,33 +277,5 @@ describe('Annotations API', () => {
     expect(updatedData.textRegion.xMax).toEqual(data.textRegion.xMax);
     expect(updatedData.textRegion.yMin).toEqual(data.textRegion.yMin);
     expect(updatedData.textRegion.yMax).toEqual(data.textRegion.yMax);
-  });
-
-  test('reverse lookup annotation', async () => {
-    const retrievedAnnotations = await client.annotations
-      .list({ filter: fileFilter(annotatedFileId) })
-      .autoPagingToArray();
-
-    console.log(
-      'Retrieved annotations: ',
-      JSON.stringify(retrievedAnnotations)
-    );
-
-    const listResponse = await client.annotations.reverseLookup({
-      filter: {
-        annotatedResourceType: 'file',
-        status: 'suggested',
-        data: {
-          assetRef: {
-            externalId: 'def',
-          },
-        },
-      },
-    });
-
-    console.log('Response from list query', JSON.stringify(listResponse));
-
-    expect(listResponse.items).toHaveLength(1);
-    expect(listResponse.items[0].id).toBe(createdAnnotationIds[1]);
   });
 });
