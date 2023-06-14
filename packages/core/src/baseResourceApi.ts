@@ -107,7 +107,7 @@ export abstract class BaseResourceAPI<ResponseType> {
         'Calling request with path = ',
         path,
         ', options = ',
-        options
+        JSON.stringify(options)
       );
       if (options !== undefined)
         options = {

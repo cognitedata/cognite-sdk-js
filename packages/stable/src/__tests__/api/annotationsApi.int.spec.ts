@@ -221,14 +221,14 @@ describe('Annotations API', () => {
   });
 
   test('reverse lookup annotation', async () => {
-    /* const retrievedAnnotations = await client.annotations
+    const retrievedAnnotations = await client.annotations
       .list({ filter: fileFilter(annotatedFileId) })
       .autoPagingToArray();
 
     console.log(
       'Retrieved annotations: ',
       JSON.stringify(retrievedAnnotations)
-    ); */
+    );
 
     const listResponse = await client.annotations.reverseLookup({
       filter: {
@@ -241,7 +241,7 @@ describe('Annotations API', () => {
       },
     });
 
-    console.log('Response from list query', JSON.stringify(listResponse));
+    console.log('Response from reverse query', JSON.stringify(listResponse));
 
     expect(listResponse.items).toHaveLength(1);
     expect(listResponse.items[0].id).toBe(createdAnnotationIds[1]);
