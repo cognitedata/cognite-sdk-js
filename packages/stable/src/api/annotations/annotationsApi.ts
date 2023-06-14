@@ -154,7 +154,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    *     annotatedResourceType: 'file',
    *     annotationType: 'images.AssetLink',
    *     data: {
-   *       { id: 123 }
+   *       assetRef: { id: 123 }
    *     }
    *   }
    * };
