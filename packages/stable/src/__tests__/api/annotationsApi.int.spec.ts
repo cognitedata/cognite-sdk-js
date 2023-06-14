@@ -265,6 +265,7 @@ describe('Annotations API', () => {
     const listResponse = await client.annotations.reverseLookup({
       filter: {
         annotatedResourceType: 'file',
+        status: 'suggested',
         data: {
           assetRef: {
             externalId: 'def',
