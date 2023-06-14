@@ -103,6 +103,12 @@ export abstract class BaseResourceAPI<ResponseType> {
       path: string,
       options?: HttpRequestOptions
     ): Promise<HttpResponse<ResponseType>> => {
+      console.log(
+        'Calling request with path = ',
+        path,
+        ', options = ',
+        options
+      );
       if (options !== undefined)
         options = {
           ...options,
