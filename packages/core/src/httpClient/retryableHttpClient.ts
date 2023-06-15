@@ -32,6 +32,7 @@ export class RetryableHttpClient extends BasicHttpClient {
     path: string,
     options: RetryableHttpRequestOptions = {}
   ) {
+    console.log('Running http post with options', JSON.stringify(options));
     return super.post<ResponseType>(path, options);
   }
 
