@@ -116,6 +116,7 @@ export abstract class BaseResourceAPI<ResponseType> {
           data: DateParser.parseFromDates(options.data),
         };
       const response = await request<ResponseType>(path, options);
+      console.log('Response from request = ', JSON.stringify(response));
       return {
         ...response,
         data: this.dateParser.parseToDates(response.data),
