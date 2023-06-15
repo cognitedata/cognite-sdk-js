@@ -234,9 +234,7 @@ describe('Annotations API', () => {
       filter: {
         annotatedResourceType: 'file',
         data: {
-          assetRef: {
-            externalId: 'def',
-          },
+          pageNumber: 42,
         },
       },
     });
