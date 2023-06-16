@@ -231,9 +231,12 @@ describe('Annotations API', () => {
     );
 
     const listResponse = await client.annotations.reverseLookup({
+      limit: 1000,
       filter: {
         annotatedResourceType: 'file',
+        annotationType: 'diagrams.FileLink',
         data: {
+          pageNumber: 7,
           fileRef: { externalId: 'abc' },
         },
       },
