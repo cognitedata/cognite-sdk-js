@@ -8,6 +8,7 @@ import {
   AnnotationFilterProps,
   InternalId,
 } from '../../types';
+import { AnnotationsCogniteAnnotationTypesDiagramsAssetLink } from 'stable/src/api/annotations/types.gen';
 
 const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();
@@ -230,11 +231,30 @@ describe('Annotations API', () => {
       JSON.stringify(retrievedAnnotations)
     );
 
+    const retrievedDocuments = await client.documents
+      .list({
+        filter: {
+          containsAny: {
+            property: ['id'],
+            values: retrievedAnnotations
+              .map(
+                (d) =>
+                  (d.data as AnnotationsCogniteAnnotationTypesDiagramsAssetLink)
+                    .assetRef?.id
+              )
+              .filter((id): id is number => id !== undefined),
+          },
+        },
+      })
+      .autoPagingToArray({ limit: Infinity });
+
+    console.log('Retrieved documents: ', retrievedDocuments);
+
     const listResponse = await client.annotations.reverseLookup({
       filter: {
         annotatedResourceType: 'file',
         data: {
-          pageNumber: 42,
+          assetRef: { externalId: 'def' },
         },
       },
     });
