@@ -238,14 +238,7 @@ describe('Annotations API', () => {
       limit: 1000,
       filter: {
         annotatedResourceType: 'file',
-        data: {
-          assetRef: {
-            id: (
-              retrievedAnnotations[0]
-                .data as AnnotationsCogniteAnnotationTypesDiagramsAssetLink
-            ).assetRef.id,
-          },
-        },
+        data: retrievedAnnotations[1].data,
       },
     });
 
