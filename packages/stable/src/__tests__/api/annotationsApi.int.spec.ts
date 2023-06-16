@@ -8,7 +8,6 @@ import {
   AnnotationFilterProps,
   InternalId,
 } from '../../types';
-import { AnnotationsCogniteAnnotationTypesDiagramsAssetLink } from 'stable/src/api/annotations/types.gen';
 
 const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();
