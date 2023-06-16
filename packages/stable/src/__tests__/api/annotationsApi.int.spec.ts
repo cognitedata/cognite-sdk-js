@@ -231,30 +231,11 @@ describe('Annotations API', () => {
       JSON.stringify(retrievedAnnotations)
     );
 
-    const retrievedDocuments = await client.documents
-      .list({
-        filter: {
-          containsAny: {
-            property: ['id'],
-            values: retrievedAnnotations
-              .map(
-                (d) =>
-                  (d.data as AnnotationsCogniteAnnotationTypesDiagramsAssetLink)
-                    .assetRef?.id
-              )
-              .filter((id): id is number => id !== undefined),
-          },
-        },
-      })
-      .autoPagingToArray({ limit: Infinity });
-
-    console.log('Retrieved documents: ', retrievedDocuments);
-
     const listResponse = await client.annotations.reverseLookup({
       filter: {
         annotatedResourceType: 'file',
         data: {
-          assetRef: { externalId: 'def' },
+          fileRef: { externalId: 'abc' },
         },
       },
     });
