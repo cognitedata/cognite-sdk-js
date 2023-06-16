@@ -61,6 +61,8 @@ describe('Annotations API', () => {
   beforeAll(async () => {
     client = setupLoggedInClient();
 
+    jest.setTimeout(5 * 60 * 1000);
+
     const fileInfo = await client.files.upload({
       externalId: ANNOTATED_FILE_EXTERNAL_ID,
       name: ANNOTATED_FILE_EXTERNAL_ID,
