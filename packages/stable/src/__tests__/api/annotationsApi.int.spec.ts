@@ -8,6 +8,7 @@ import {
   AnnotationFilterProps,
   InternalId,
 } from '../../types';
+import { AnnotationsCogniteAnnotationTypesDiagramsAssetLink } from '@cognite/sdk-stable/dist';
 
 const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();
@@ -221,6 +222,7 @@ describe('Annotations API', () => {
   });
 
   test('reverse lookup annotation', async () => {
+    await new Promise((resolve) => setTimeout(resolve, 30000));
     const retrievedAnnotations = await client.annotations
       .list({ filter: fileFilter(annotatedFileId) })
       .autoPagingToArray();
@@ -234,10 +236,13 @@ describe('Annotations API', () => {
       limit: 1000,
       filter: {
         annotatedResourceType: 'file',
-        annotationType: 'diagrams.FileLink',
         data: {
-          pageNumber: 7,
-          fileRef: { externalId: 'abc' },
+          assetRef: {
+            id: (
+              retrievedAnnotations[0]
+                .data as AnnotationsCogniteAnnotationTypesDiagramsAssetLink
+            ).assetRef.id,
+          },
         },
       },
     });
