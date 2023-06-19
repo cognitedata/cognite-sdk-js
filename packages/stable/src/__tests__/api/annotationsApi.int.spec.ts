@@ -8,7 +8,6 @@ import {
   AnnotationFilterProps,
   InternalId,
 } from '../../types';
-import { AnnotationsCogniteAnnotationTypesDiagramsAssetLink } from '@cognite/sdk-stable/dist';
 
 const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();
@@ -63,10 +62,13 @@ describe('Annotations API', () => {
 
     jest.setTimeout(5 * 60 * 1000);
 
-    const fileInfo = await client.files.upload({
-      externalId: ANNOTATED_FILE_EXTERNAL_ID,
-      name: ANNOTATED_FILE_EXTERNAL_ID,
-    });
+    const fileInfo = await client.files.upload(
+      {
+        externalId: ANNOTATED_FILE_EXTERNAL_ID,
+        name: ANNOTATED_FILE_EXTERNAL_ID,
+      },
+      'This is the content of the Cognite JS SDK Annotations API test file'
+    );
     annotatedFileId = fileInfo.id;
     const annotations = baseAnnotations(annotatedFileId);
     const created = await client.annotations.create(annotations);
