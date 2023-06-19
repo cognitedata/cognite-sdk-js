@@ -240,14 +240,18 @@ describe('Annotations API', () => {
       limit: 1000,
       filter: {
         annotatedResourceType: 'file',
-        data: retrievedAnnotations[1].data,
+        data: {
+          assetRef: {
+            externalId: 'def',
+          },
+        },
       },
     });
 
     console.log('Response from reverse query', JSON.stringify(listResponse));
 
     expect(listResponse.items).toHaveLength(1);
-    expect(listResponse.items[0].id).toBe(createdAnnotationIds[1]);
+    expect(listResponse.items[0].id).toBe(annotatedFileId);
   });
 
   test('update annotation', async () => {
