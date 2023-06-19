@@ -13,7 +13,7 @@ const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();
 
 const UNIQUE_ASSET_EXTERNAL_ID =
-  'asset-external-ref-' + new new Date().toISOString();
+  'asset-external-ref-' + new Date().toISOString();
 
 function fileFilter(annotatedResourceId: number): AnnotationFilterProps {
   return {
