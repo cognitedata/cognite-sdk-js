@@ -103,12 +103,6 @@ export abstract class BaseResourceAPI<ResponseType> {
       path: string,
       options?: HttpRequestOptions
     ): Promise<HttpResponse<ResponseType>> => {
-      console.log(
-        'Calling request with path = ',
-        path,
-        ', options = ',
-        JSON.stringify(options)
-      );
       if (options !== undefined)
         options = {
           ...options,
@@ -116,7 +110,6 @@ export abstract class BaseResourceAPI<ResponseType> {
           data: DateParser.parseFromDates(options.data),
         };
       const response = await request<ResponseType>(path, options);
-      console.log('Response from request = ', JSON.stringify(response));
       return {
         ...response,
         data: this.dateParser.parseToDates(response.data),

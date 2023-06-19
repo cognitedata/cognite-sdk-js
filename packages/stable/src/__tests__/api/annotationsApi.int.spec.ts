@@ -63,8 +63,6 @@ describe('Annotations API', () => {
   beforeAll(async () => {
     client = setupLoggedInClient();
 
-    jest.setTimeout(5 * 60 * 1000);
-
     const fileInfo = await client.files.upload(
       {
         externalId: ANNOTATED_FILE_EXTERNAL_ID,
@@ -229,16 +227,6 @@ describe('Annotations API', () => {
   });
 
   test('reverse lookup annotation', async () => {
-    await new Promise((resolve) => setTimeout(resolve, 30000));
-    const retrievedAnnotations = await client.annotations
-      .list({ filter: fileFilter(annotatedFileId) })
-      .autoPagingToArray();
-
-    console.log(
-      'Retrieved annotations: ',
-      JSON.stringify(retrievedAnnotations)
-    );
-
     const listResponse = await client.annotations.reverseLookup({
       limit: 1000,
       filter: {
@@ -250,8 +238,6 @@ describe('Annotations API', () => {
         },
       },
     });
-
-    console.log('Response from reverse query', JSON.stringify(listResponse));
 
     expect(listResponse.items).toHaveLength(1);
     expect(listResponse.items[0].id).toBe(annotatedFileId);
