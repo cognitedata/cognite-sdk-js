@@ -12,6 +12,9 @@ import {
 const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();
 
+const UNIQUE_ASSET_EXTERNAL_ID =
+  'asset-external-ref-' + new new Date().toISOString();
+
 function fileFilter(annotatedResourceId: number): AnnotationFilterProps {
   return {
     annotatedResourceType: 'file',
@@ -45,7 +48,7 @@ function baseAnnotations(annotatedResourceId: number): AnnotationCreate[] {
       status: 'suggested',
       data: {
         pageNumber: 42,
-        assetRef: { externalId: 'def' },
+        assetRef: { externalId: UNIQUE_ASSET_EXTERNAL_ID },
         textRegion: { xMax: 0.15, xMin: 0.1, yMax: 0.15, yMin: 0.1 },
       },
     },
@@ -217,7 +220,7 @@ describe('Annotations API', () => {
         filter: {
           ...fileFilter(annotatedFileId),
           data: {
-            assetRef: { externalId: 'def' },
+            assetRef: { externalId: UNIQUE_ASSET_EXTERNAL_ID },
           },
         },
       })
@@ -242,7 +245,7 @@ describe('Annotations API', () => {
         annotatedResourceType: 'file',
         data: {
           assetRef: {
-            externalId: 'def',
+            externalId: UNIQUE_ASSET_EXTERNAL_ID,
           },
         },
       },
