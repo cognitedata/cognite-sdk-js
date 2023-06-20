@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.1.1...@cognite/sdk@8.2.0) (2023-06-20)
+
+### Features
+
+- annotation reverse-lookup [release] ([#1010](https://github.com/cognitedata/cognite-sdk-js/issues/1010)) ([8e8844d](https://github.com/cognitedata/cognite-sdk-js/commit/8e8844d46d16cbc7278ccf92b605248ed32604a2))
+
 ## [8.1.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.1.0...@cognite/sdk@8.1.1) (2023-04-28)
 
 **Note:** Version bump only for package @cognite/sdk
