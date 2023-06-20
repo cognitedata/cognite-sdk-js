@@ -2,8 +2,11 @@
 
 import {
   BaseResourceAPI,
+  CogniteAsyncIterator,
   CursorAndAsyncIterator,
+  CursorResponse,
   InternalId,
+  ListResponse,
 } from '@cognite/sdk-core';
 
 import {
@@ -11,7 +14,9 @@ import {
   AnnotationCreate,
   AnnotationSuggest,
   AnnotationFilterRequest,
+  AnnotationReverseLookupRequest,
   AnnotationModel,
+  AnnotationsAssetRef,
 } from '../../types';
 
 export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
@@ -139,5 +144,35 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    */
   public update = (changes: AnnotationChangeById[]) => {
     return this.updateEndpoint(changes);
+  };
+
+  /**
+   * [Reverse lookup](https://developer.cognite.com/api/v1-beta/#tag/Annotations/operation/annotationsReverseLookup)
+   * const assetQueryData = {
+   *   limit: -1,
+   *   filter: {
+   *     annotatedResourceType: 'file',
+   *     annotationType: 'images.AssetLink',
+   *     data: {
+   *       assetRef: { id: 123 }
+   *     }
+   *   }
+   * };
+   *
+   * const resourceIdsResponse = this._client.annotations.reverseLookup(assetQuerydata);
+   */
+  public reverseLookup = (
+    filter: AnnotationReverseLookupRequest
+  ): Promise<ListResponse<AnnotationsAssetRef[]>> &
+    CogniteAsyncIterator<AnnotationsAssetRef> => {
+    console.log('Aaaaaaah, in reverse lookup');
+    const path = this.url(`reverselookup`);
+    return this.cursorBasedEndpoint(
+      (params) =>
+        this.post<CursorResponse<AnnotationsAssetRef[]>>(path, {
+          data: params,
+        }),
+      filter
+    );
   };
 }

@@ -12,6 +12,9 @@ import {
 const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();
 
+const UNIQUE_ASSET_EXTERNAL_ID =
+  'asset-external-ref-' + new Date().toISOString();
+
 function fileFilter(annotatedResourceId: number): AnnotationFilterProps {
   return {
     annotatedResourceType: 'file',
@@ -45,7 +48,7 @@ function baseAnnotations(annotatedResourceId: number): AnnotationCreate[] {
       status: 'suggested',
       data: {
         pageNumber: 42,
-        assetRef: { externalId: 'def' },
+        assetRef: { externalId: UNIQUE_ASSET_EXTERNAL_ID },
         textRegion: { xMax: 0.15, xMin: 0.1, yMax: 0.15, yMin: 0.1 },
       },
     },
@@ -60,10 +63,13 @@ describe('Annotations API', () => {
   beforeAll(async () => {
     client = setupLoggedInClient();
 
-    const fileInfo = await client.files.upload({
-      externalId: ANNOTATED_FILE_EXTERNAL_ID,
-      name: ANNOTATED_FILE_EXTERNAL_ID,
-    });
+    const fileInfo = await client.files.upload(
+      {
+        externalId: ANNOTATED_FILE_EXTERNAL_ID,
+        name: ANNOTATED_FILE_EXTERNAL_ID,
+      },
+      'This is the content of the Cognite JS SDK Annotations API test file'
+    );
     annotatedFileId = fileInfo.id;
     const annotations = baseAnnotations(annotatedFileId);
     const created = await client.annotations.create(annotations);
@@ -212,12 +218,29 @@ describe('Annotations API', () => {
         filter: {
           ...fileFilter(annotatedFileId),
           data: {
-            assetRef: { externalId: 'def' },
+            assetRef: { externalId: UNIQUE_ASSET_EXTERNAL_ID },
           },
         },
       })
       .autoPagingToArray();
     expect(items).toHaveLength(1);
+  });
+
+  test('reverse lookup annotation', async () => {
+    const listResponse = await client.annotations.reverseLookup({
+      limit: 1000,
+      filter: {
+        annotatedResourceType: 'file',
+        data: {
+          assetRef: {
+            externalId: UNIQUE_ASSET_EXTERNAL_ID,
+          },
+        },
+      },
+    });
+
+    expect(listResponse.items).toHaveLength(1);
+    expect(listResponse.items[0].id).toBe(annotatedFileId);
   });
 
   test('update annotation', async () => {
