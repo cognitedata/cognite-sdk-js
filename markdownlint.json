@@ -1,24 +1,29 @@
 {
   "ignorePatterns": [
     {
-      "pattern": "^https:\/\/github.com\/cognitedata\/.+\/issues\/.+"
+      "pattern": "^https://github.com/cognitedata/.+/issues/.+"
     },
     {
-      "pattern": "^https:\/\/github.com\/cognitedata\/.+\/compare\/.+"
+      "pattern": "^https://github.com/cognitedata/.+/compare/.+"
     },
     {
-      "pattern": "^https:\/\/github.com\/cognitedata\/.+\/commit\/.+"
+      "pattern": "^https://github.com/cognitedata/.+/commit/.+"
     },
     {
-      "pattern": "^http:\/\/localhost.+"
+      "pattern": "^http://localhost.+"
     },
     {
-      "pattern": "^https:\/\/localhost.+"
+      "pattern": "^https://localhost.+"
     },
     {
       "pattern": "^mailto:.+"
+    },
+    {
+      "pattern": "^https://doc.cognitedata.com+"
+    },
+    {
+      "pattern": "^https://docs.cognite.com+"
     }
-
   ],
   "retryOn429": true
 }
