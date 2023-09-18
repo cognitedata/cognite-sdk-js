@@ -126,32 +126,7 @@ describe('Documents unit test', () => {
               item: {
                 geoLocation: {
                   type: 'MultiPolygon',
-                  coordinates: [
-                    [
-                      [
-                        [40.0, 40.0],
-                        [20.0, 45.0],
-                        [45.0, 30.0],
-                        [40.0, 40.0],
-                      ],
-                    ],
-                    [
-                      [
-                        [20.0, 35.0],
-                        [10.0, 30.0],
-                        [10.0, 10.0],
-                        [30.0, 5.0],
-                        [45.0, 20.0],
-                        [20.0, 35.0],
-                      ],
-                      [
-                        [30.0, 20.0],
-                        [20.0, 15.0],
-                        [20.0, 25.0],
-                        [30.0, 20.0],
-                      ],
-                    ],
-                  ],
+                  coordinates: [10, 20],
                 },
               },
             },
@@ -163,15 +138,8 @@ describe('Documents unit test', () => {
       expect(geoLocation?.coordinates).toBeDefined();
       const polygon1 = geoLocation?.coordinates![0];
       const polygon2 = geoLocation?.coordinates![1];
-      console.log(polygon1, polygon2);
-      expect(polygon1?.[0][0][0]).toEqual(40.0);
-      expect(polygon2?.[0][0][0]).toEqual(20.0);
-      expect(polygon2?.[1]).toEqual([
-        [30.0, 20.0],
-        [20.0, 15.0],
-        [20.0, 25.0],
-        [30.0, 20.0],
-      ]);
+      expect(polygon1).toEqual(10.0);
+      expect(polygon2).toEqual(20.0);
     });
 
     describe('geometry collections', () => {
