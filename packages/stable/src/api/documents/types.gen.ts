@@ -78,6 +78,8 @@ export interface Document {
      * @example 2
      */
     pageCount?: number;
+    /** The producer of the document. Many document types contain metadata indicating what software or system was used to create the document. */
+    producer?: any;
     /** The source file that this document is derived from. */
     sourceFile: DocumentSourceFile;
     /**
@@ -101,9 +103,37 @@ export interface Document {
      */
     type?: string;
 }
+/**
+ * A JSON based filtering language. See detailed documentation above.
+ */
+export type DocumentAggregateFilter = DocumentAggregateFilterBool | DocumentAggregateFilterLeaf;
+/**
+* A query that matches items matching boolean combinations of other queries.
+It is built using one or more boolean clauses, which can be of types: `and`, `or` or `not`
+*/
+export type DocumentAggregateFilterBool = {
+    and: DocumentAggregateFilter[];
+} | {
+    or: DocumentAggregateFilter[];
+} | {
+    not: DocumentAggregateFilter;
+};
+/**
+ * Leaf filter
+ */
+export type DocumentAggregateFilterLeaf = DocumentAggregateFilterPrefix;
+export interface DocumentAggregateFilterPrefix {
+    /**
+     * Matches items that contain a specific prefix in the provided property.
+     * @example {"property":["name"],"value":"Report"}
+     */
+    prefix: {
+        value: DocumentFilterValue;
+    };
+}
 export type DocumentAggregateValue = string | number | Label;
 export interface DocumentCursor {
-    /** Cursor for paging through results */
+    /** Cursor for paging through results. */
     cursor?: string;
 }
 /**
@@ -272,7 +302,7 @@ export interface DocumentGeoJsonGeometry {
      * Coordinates of the geometry.
      * @example [10.74609,59.91273]
      */
-    coordinates?: any[];
+    coordinates?: number[];
     /** List of geometries for a GeometryCollection. Nested GeometryCollection is not supported */
     geometries?: DocumentGeoJsonGeometry[];
     /**
@@ -365,6 +395,28 @@ export type DocumentsAggregateAllUniqueValuesRequest = DocumentSearchInAggregate
  */
 export interface DocumentsAggregateAllUniqueValuesResponse extends CursorAndAsyncIterator<DocumentsAggregateAllUniqueValuesItem> {
 }
+export interface DocumentsAggregateCardinalityPropertiesItem {
+    /**
+     * Number of items in this aggregation group.
+     * @format int64
+     */
+    count: number;
+}
+/**
+ * Find approximate number of unique properties.
+ */
+export type DocumentsAggregateCardinalityPropertiesRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
+    aggregate: "cardinalityProperties";
+    aggregateFilter?: DocumentAggregateFilter;
+    path: "metadata"[];
+};
+/**
+ * Response for cardinalityProperties aggregate.
+ * @example {"items":[{"count":10}]}
+ */
+export interface DocumentsAggregateCardinalityPropertiesResponse {
+    items: DocumentsAggregateCardinalityPropertiesItem[];
+}
 export interface DocumentsAggregateCardinalityValuesItem {
     /**
      * Number of items in this aggregation group.
@@ -377,11 +429,10 @@ export interface DocumentsAggregateCardinalityValuesItem {
  */
 export type DocumentsAggregateCardinalityValuesRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
     aggregate: "cardinalityValues";
+    aggregateFilter?: DocumentAggregateFilter;
     properties: {
         property: DocumentFilterProperty;
     }[];
-    limit?: number;
-    cursor?: string;
 };
 /**
  * Response for cardinalityValues aggregate.
@@ -410,8 +461,8 @@ export type DocumentsAggregateCountRequest = DocumentSearchInAggregate & Documen
 export interface DocumentsAggregateCountResponse {
     items: DocumentsAggregateCountItem[];
 }
-export type DocumentsAggregateRequest = DocumentsAggregateCountRequest | DocumentsAggregateUniqueValuesRequest | DocumentsAggregateUniquePropertiesRequest | DocumentsAggregateAllUniquePropertiesRequest | DocumentsAggregateAllUniqueValuesRequest | DocumentsAggregateCardinalityValuesRequest;
-export type DocumentsAggregateResponse = DocumentsAggregateCountResponse | DocumentsAggregateUniqueValuesResponse | DocumentsAggregateUniquePropertiesResponse | DocumentsAggregateAllUniquePropertiesResponse | DocumentsAggregateAllUniqueValuesResponse | DocumentsAggregateCardinalityValuesResponse;
+export type DocumentsAggregateRequest = DocumentsAggregateCountRequest | DocumentsAggregateCardinalityValuesRequest | DocumentsAggregateCardinalityPropertiesRequest | DocumentsAggregateUniqueValuesRequest | DocumentsAggregateUniquePropertiesRequest | DocumentsAggregateAllUniquePropertiesRequest | DocumentsAggregateAllUniqueValuesRequest;
+export type DocumentsAggregateResponse = DocumentsAggregateCountResponse | DocumentsAggregateCardinalityValuesResponse | DocumentsAggregateCardinalityPropertiesResponse | DocumentsAggregateUniqueValuesResponse | DocumentsAggregateUniquePropertiesResponse | DocumentsAggregateAllUniquePropertiesResponse | DocumentsAggregateAllUniqueValuesResponse;
 export interface DocumentsAggregateUniquePropertiesItem {
     /**
      * Number of properties with this name
@@ -426,6 +477,7 @@ export interface DocumentsAggregateUniquePropertiesItem {
  */
 export type DocumentsAggregateUniquePropertiesRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
     aggregate: "uniqueProperties";
+    aggregateFilter?: DocumentAggregateFilter;
     properties: {
         property: DocumentFilterProperty;
     }[];
@@ -452,6 +504,7 @@ export interface DocumentsAggregateUniqueValuesItem {
  */
 export type DocumentsAggregateUniqueValuesRequest = DocumentSearchInAggregate & DocumentSearchFilter & {
     aggregate?: "uniqueValues";
+    aggregateFilter?: DocumentAggregateFilter;
     properties?: {
         property: DocumentFilterProperty;
     }[];
@@ -507,7 +560,7 @@ export interface DocumentSearchCountAggregate {
      * @example count
      */
     aggregate: "count";
-    /** List of properties to group the count by. It is currently only possible to group by 0 or 1 properties. If grouping by 0 properties, the aggregate value is the total count of all documents. */
+    /** List of properties to group the count by. It's currently only possible to group by 0 or 1 properties. If grouping by 0 properties, the aggregate value is the total count of all documents. */
     groupBy?: DocumentSearchCountAggregatesGroup[];
     /** User defined name for this aggregate */
     name: string;
@@ -530,7 +583,7 @@ export interface DocumentSearchFilter {
     filter?: DocumentFilter;
 }
 export interface DocumentSearchHighlight {
-    /** Whether or not matches in search results should be highlighted */
+    /** Whether or not matches in search results should be highlighted. */
     highlight?: boolean;
 }
 export interface DocumentSearchInAggregate {
@@ -591,6 +644,11 @@ export interface DocumentSourceFile {
     directory?: string;
     /** GeoJSON Geometry. */
     geoLocation?: DocumentGeoJsonGeometry;
+    /**
+     * The hash of the source file. This is a SHA256 hash of the original file. The hash only covers the file content, and not other CDF metadata.
+     * @example 23203f9264161714cdb8d2f474b9b641e6a735f8cea4098c40a3cab8743bd749
+     */
+    hash?: string;
     /** A list of labels associated with this document's source file in CDF. */
     labels?: LabelList;
     metadata?: Record<string, string>;
