@@ -17,12 +17,6 @@
     },
     {
       "pattern": "^mailto:.+"
-    },
-    {
-      "pattern": "^https://doc.cognitedata.com+"
-    },
-    {
-      "pattern": "^https://docs.cognite.com+"
     }
   ],
   "retryOn429": true
