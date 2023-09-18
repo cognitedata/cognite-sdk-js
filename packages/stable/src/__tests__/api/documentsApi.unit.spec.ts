@@ -163,9 +163,10 @@ describe('Documents unit test', () => {
       expect(geoLocation?.coordinates).toBeDefined();
       const polygon1 = geoLocation?.coordinates![0];
       const polygon2 = geoLocation?.coordinates![1];
-      expect(polygon1[0][0][0]).toEqual(40.0);
-      expect(polygon2[0][0][0]).toEqual(20.0);
-      expect(polygon2[1]).toEqual([
+      console.log(polygon1, polygon2);
+      expect(polygon1?.[0][0][0]).toEqual(40.0);
+      expect(polygon2?.[0][0][0]).toEqual(20.0);
+      expect(polygon2?.[1]).toEqual([
         [30.0, 20.0],
         [20.0, 15.0],
         [20.0, 25.0],

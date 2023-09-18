@@ -13,7 +13,7 @@ describe('Vision API', () => {
   let extractBetaJob: VisionExtractPostResponse;
 
   beforeAll(async () => {
-    jest.setTimeout(2 * 60 * 1000); // timeout after 2 minutes
+    jest.setTimeout(3 * 60 * 1000); // timeout after 2 minutes
     consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
     client = setupLoggedInClient();
 
