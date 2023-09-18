@@ -30,6 +30,7 @@ import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
 import { GeospatialAPI } from './api/geospatial/geospatialAPI';
 import { AnnotationsAPI } from './api/annotations/annotationsApi';
 import { VisionAPI } from './api/vision/visionApi';
+import { ProfilesAPI } from './api/userProfiles/profilesApi';
 import {
   TemplateGraphQlApi,
   TemplateGroupsApi,
@@ -116,6 +117,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get vision() {
     return accessApi(this.visionApi);
   }
+  public get profiles() {
+    return accessApi(this.profilesApi);
+  }
   public get templates() {
     return {
       groups: accessApi(this.apiFactory(TemplateGroupsApi, 'templategroups')),
@@ -181,6 +185,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private documentsApi?: DocumentsAPI;
   private annotationsApi?: AnnotationsAPI;
   private visionApi?: VisionAPI;
+  private profilesApi?: ProfilesAPI;
 
   protected get version() {
     return version;
@@ -234,6 +239,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
     this.annotationsApi = this.apiFactory(AnnotationsAPI, 'annotations');
     this.visionApi = this.apiFactory(VisionAPI, 'context/vision');
+    this.profilesApi = this.apiFactory(ProfilesAPI, 'profiles');
   }
 
   static urlEncodeExternalId(externalId: string): string {

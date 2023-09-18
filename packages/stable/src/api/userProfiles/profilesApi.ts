@@ -5,6 +5,7 @@ import {
   UserProfileItem,
   UserIdentifier,
   UserProfilesSearchRequest,
+  UserProfilesListResponse,
 } from '../../types';
 
 export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {
@@ -29,10 +30,10 @@ export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {
    * const response = await client.profiles.list({ limit: 1000, nextCursor: 'abc' });
    * ```
    */
-  public list = (scope: {
-    limit: number;
-    cursor: string;
-  }): CursorAndAsyncIterator<UserProfileItem> => {
+  public list = (scope?: {
+    limit?: number;
+    cursor?: string;
+  }): UserProfilesListResponse => {
     return super.listEndpoint(this.callListEndpointWithGet, scope);
   };
 
