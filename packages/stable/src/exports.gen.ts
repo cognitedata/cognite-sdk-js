@@ -116,6 +116,18 @@ export {
   LabelList
 } from './api/documents/types.gen';
 export {
+  CursorQueryParameter,
+  UserIdentifier,
+  UserProfileItem,
+  UserProfilesByIdsRequest,
+  UserProfilesByIdsResponse,
+  UserProfilesErrorResponse,
+  UserProfilesListResponse,
+  UserProfilesNotFoundResponse,
+  UserProfilesSearchRequest,
+  UserProfilesSearchResponse
+} from './api/userProfiles/types.gen';
+export {
   AssetTagDetection,
   AssetTagDetectionParameters,
   FailedBatch,

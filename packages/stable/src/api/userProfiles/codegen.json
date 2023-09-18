@@ -1,0 +1,9 @@
+{
+  "service": "profiles",
+  "filter": {
+    "serviceName": "profiles"
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}
