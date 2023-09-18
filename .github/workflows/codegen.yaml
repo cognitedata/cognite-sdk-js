@@ -1,7 +1,7 @@
 name: Code Generation
 
 on:
- pull_request:
+  pull_request:
     branches:
       - master
     types: [opened, edited, synchronize, reopened]
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: ["stable", "playground"]
+        package: ['stable']
 
     steps:
       - uses: actions/checkout@v3
