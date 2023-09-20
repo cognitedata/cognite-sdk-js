@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.7.5...@cognite/sdk-alpha@0.8.0) (2023-09-20)
+
+### Features
+
+- **alpha:** monitoring task add source and sourceId props - [AH-1863] ([#1020](https://github.com/cognitedata/cognite-sdk-js/issues/1020)) ([506ad9b](https://github.com/cognitedata/cognite-sdk-js/commit/506ad9be6368322f08ac606642414a37f37cec67))
+
 ## [0.7.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.7.4...@cognite/sdk-alpha@0.7.5) (2023-06-20)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
