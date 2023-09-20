@@ -441,4 +441,4 @@ await client.authenticate(); // Returns the received token
 ​
 ## Next steps
 ​
-To read more about authentication, see [authentication process](https://doc.cognitedata.com/dev/guides/iam/external-application.html#tokens).
+To read more about authentication, see [authentication process](https://developer.cognite.com/dev/guides/iam/external-application/#tokens).
