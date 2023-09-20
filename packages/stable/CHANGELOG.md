@@ -695,7 +695,7 @@ Co-authored-by: Vegard Økland <vegard.okland@cognite.com>
   - TimeseriesClass
   - TimeSeriesList
 
-For replacements, see [MIGRATION_GUIDE_2xx_3xx.md](https://developer.cognite.com/sdks/js/migration.html#upgrade-javascript-sdk-2x-to-3x)
+For replacements, see [MIGRATION_GUIDE_2xx_3xx.md](https://developer.cognite.com/sdks/js/migration/#upgrade-javascript-sdk-2x-to-3x)
 
 - Interfaces renamed:
 
