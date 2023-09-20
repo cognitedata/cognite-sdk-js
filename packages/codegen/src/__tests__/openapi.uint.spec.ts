@@ -32,10 +32,7 @@ describe('openapi', () => {
         '#/components/schemas/FunctionListScope',
       ];
 
-      const path =
-        walker.document.paths?.[
-          '/api/playground/projects/{project}/serviceB/list'
-        ];
+      const path = walker.document.paths?.['/serviceB/list'];
       const operation = path!.post;
       const got = walker['references'](operation);
       expect(got).toEqual(wants);
