@@ -71,6 +71,8 @@ export interface MonitoringTaskCreate {
     | MonitoringTaskThresholdModelCreate
     | MonitoringTaskDoubleThresholdModelCreate;
   nonce: string;
+  source?: string;
+  sourceId?: string;
 }
 
 export interface MonitoringTask {
@@ -81,6 +83,8 @@ export interface MonitoringTask {
   interval: number;
   overlap: number;
   model: MonitoringTaskThresholdModel | MonitoringTaskDoubleThresholdModel;
+  source?: string;
+  sourceId?: string;
 }
 
 export interface MonitoringTaskModelFilter {
