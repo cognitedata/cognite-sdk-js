@@ -231,6 +231,7 @@ describe('Annotations API', () => {
       limit: 1000,
       filter: {
         annotatedResourceType: 'file',
+        annotationType: 'diagrams.AssetLink',
         data: {
           assetRef: {
             externalId: UNIQUE_ASSET_EXTERNAL_ID,
