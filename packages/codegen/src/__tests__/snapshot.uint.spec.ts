@@ -19,7 +19,7 @@ describe('snapshot manager', () => {
 
     const snapshot = await snapshotMngr.downloadFromPath({ path: testFolder });
     expect(snapshot).toBeDefined();
-    expect(snapshot.info.title).toEqual('Cognite playground APIs');
+    expect(snapshot.info.title).toEqual('Cognite API');
   });
 
   test('load from local json snapshot without filter', async () => {

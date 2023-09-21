@@ -10,6 +10,16 @@ export type AnnotationsAssetRef = {
     externalId?: string;
 };
 /**
+ * The boolean value of something
+ */
+export interface AnnotationsBoolean {
+    /** The description of a primitive */
+    description?: string;
+    type: "boolean";
+    /** The boolean value */
+    value: boolean;
+}
+/**
  * A plain rectangle
  */
 export interface AnnotationsBoundingBox {
@@ -56,16 +66,46 @@ export interface AnnotationsCogniteAnnotationTypesImagesAssetLink {
      * @max 1
      */
     confidence?: number;
+    /** The region of the object representing the asset */
+    objectRegion?: AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry;
     /** The extracted text */
     text: string;
     /** The location of the text mentioning the asset */
     textRegion: AnnotationsBoundingBox;
 }
 /**
+* A geometry represented by exactly *one of* ` bounding_box`, `polygon` and
+`polyline` which, respectively, represents a BoundingBox, Polygon and
+PolyLine.
+*/
+export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry {
+    /** A plain rectangle */
+    boundingBox?: AnnotationsBoundingBox;
+    /**
+     * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+     * that the first and last vertex are connected.
+     */
+    polygon?: AnnotationsPolygon;
+    /** A polygonal chain consisting of _n_ vertices */
+    polyline?: AnnotationsPolyLine;
+}
+/**
+ * The numerical value of something
+ */
+export interface AnnotationsNumerical {
+    /** The description of a primitive */
+    description?: string;
+    type: "numerical";
+    /** The numerical value */
+    value: number | number;
+}
+/**
 * Models an image object detection represented by a label, a geometry, and
 optionally a confidence value.
 */
 export interface AnnotationsObjectDetection {
+    /** Additional attributes data for a compound. */
+    attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
     /** A plain rectangle */
     boundingBox?: AnnotationsBoundingBox;
     /**
