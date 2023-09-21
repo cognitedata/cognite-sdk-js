@@ -28,7 +28,7 @@ export type StringFilter = (str: string) => boolean;
 export const passThroughFilter: StringFilter = (): boolean => true;
 
 const createServiceNameRegex = (name: string): RegExp => {
-  return new RegExp(`^/${name}($|/)`);
+  return new RegExp(`^/api/.+/projects/{project}/${name}($|/)`);
 };
 
 export const createServiceNameFilter = (service: string): StringFilter => {
@@ -190,7 +190,9 @@ export class CodeGen {
     const referencesInOperations = Object.values(doc.paths)
       .map(walker.references)
       .reduce((acc, v) => acc.concat(v), []);
+
     let references = walker.walk(referencesInOperations);
+
     if (relevantReferenceNames.length > 0) {
       references = this.getOnlyDefinitionsUsedByRefs(
         references,
