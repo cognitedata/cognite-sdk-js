@@ -77,6 +77,7 @@ describe('code generation', () => {
           path: createServiceNameFilter('serviceC'),
         },
       });
+
       expect(Object.keys(basicSnapshot.paths).length).toBeGreaterThan(4);
       const paths = gen['filterPaths'](basicSnapshot.paths);
       expect(Object.keys(paths)).toHaveLength(4);
@@ -94,7 +95,7 @@ describe('code generation', () => {
           }, {});
       };
 
-      const base = '';
+      const base = '/api/v1/projects/{project}';
       const data = {
         [`${base}/serviceA`]: {},
         [`${base}/serviceB`]: {},

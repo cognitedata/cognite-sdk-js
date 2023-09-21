@@ -51,21 +51,19 @@ npm install @cognite/sdk
 
 1. Have knowledge of NPM, Typescript, and Vanilla JS
 2. Install the below packages as developer dependencies:
-
-- @types/node
-- typescript
-
+  - @types/node
+  - typescript
 3. Add the two entries within the `scripts` object in `package.json`:
 
-```bash
-...
-"scripts": {
+  ```bash
   ...
-  "build": "tsc",
-  "start": "node quickstart.js"
-},
-...
-```
+  "scripts": {
+    ...
+    "build": "tsc",
+    "start": "node quickstart.js"
+  },
+  ...
+  ```
 
 ### Build and run auth wrapper
 
@@ -116,7 +114,6 @@ export default new MyProjectTest().run();
 ```bash
   npm run build
 ```
-
 Once the build is successful, enter the command:
 
 ```bash
@@ -126,7 +123,6 @@ Once the build is successful, enter the command:
 You will be able to view the list of assests in the console.
 
 ## Use access tokens instead of API keys
-
 ​
 Instead of API keys, we strongly recommend you use **access tokens**. These are short-lived tokens that grant the user access to CDF. The application gets an access token by requesting the user (or client credential) to sign in to a CDF project's identity provider (Google, Azure Active Directory, etc).
 
@@ -135,11 +131,9 @@ The access token expires after a time, and as a result, the user will get `401` 
 We do not recommend the use of API keys in web applications since the API keys are easily readable by everyone with access to the application. Another restriction is that all the app users share the same API key. All users will have the same access level, and you lose tracing/auditing per user, and keys are not time-limited, etc.
 
 ## Access different clusters
-
 ​
 The default cluster for Cognite is `api.cognitedata.com`. To override this cluster and to access projects on a different cluster, use the [baseUrl](https://cognitedata.github.io/cognite-sdk-js/interfaces/clientoptions.html#baseurl) parameter in the SDK constructor.
 ​
-
 ```js
 // Specify the cluster `bluefield`
 const client = new CogniteClient({
@@ -149,33 +143,24 @@ const client = new CogniteClient({
   getToken: Promise.resolve(...)
 });
 ```
-
 ​
-
 ## How to authenticate with the SDK?
-
 ​
 There are two ways to authenticate with the SDK.
 ​
-
-1. Using the `getToken` method: Use the `getToken` method as a parameter on CogniteClient which will act as a callback to the SDK to retrieve and renew tokens whenever required. `getToken` method is used to authenticate with API keys or OIDC directly by making use of identity providers like Azure AD, Auth0, etc.
-   Check out the [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library.
-   ​
-   > NOTE: The SDK comes with an implementation of the Cognite legacy authentication flow, _but it does not come with an implementation for all IDPs_. This method will be deprecated soon.
-   > ​
-2. Using the `credentials` field: Use the `credentials` field as a parameter since the SDK makes use of [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) internally to manage the authentication life cycle from the beginning until token refresh.
-   ​
-
-## OpenID Connect (OIDC) with `getToken`
-
+1. Using the `getToken` method: Use the `getToken` method as a parameter on CogniteClient which will act as a callback to the SDK to retrieve and renew tokens whenever required. `getToken` method is used to authenticate with API keys or OIDC directly by making use of identity providers like Azure AD, Auth0, etc. 
+Check out the [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library.
 ​
-
+> NOTE: The SDK comes with an implementation of the Cognite legacy authentication flow, _but it does not come with an implementation for all IDPs_. This method will be deprecated soon.
+​
+2. Using the `credentials` field: Use the `credentials` field as a parameter since the SDK makes use of [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) internally to manage the authentication life cycle from the beginning until token refresh.
+​
+## OpenID Connect (OIDC) with `getToken`
+​
 ### OIDC using getToken with Client credentials flow
-
 ​
 The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure AD on behalf of a user using the [Client credentials flow](https://oauth.net/2/grant-types/client-credentials/):
 ​
-
 ```js
 import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
@@ -195,15 +180,11 @@ const client = new CogniteClient({
 });
 ​
 ```
-
 ​
-
 ### OIDC using getToken with Device code flow
-
 ​
 The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure AD on behalf of a user using the [Device code flow](https://oauth.net/2/grant-types/device-code/):
 ​
-
 ```js
 import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
@@ -223,15 +204,11 @@ const client = new CogniteClient({
 });
 ​
 ```
-
 ​
-
 ### OIDC using getToken with Device code flow with refresh token
-
 ​
 The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure AD on behalf of a user using the [Device code flow](https://oauth.net/2/grant-types/device-code/):
 ​
-
 ```js
 import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
@@ -256,15 +233,11 @@ const client = new CogniteClient({
 });
 ​
 ```
-
 ​
-
 ### OIDC using getToken with Implicit flow
-
 ​
 The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure AD on behalf of a user using the [Implicit flow](https://oauth.net/2/grant-types/implicit/):
 ​
-
 ```js
 import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
@@ -284,15 +257,11 @@ const client = new CogniteClient({
 });
 ​
 ```
-
 ​
-
 ### OIDC using getToken with PKCE flow
-
 ​
 The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure AD on behalf of a user using the [Authorization code flow](https://oauth.net/2/grant-types/authorization-code/) with [PKCE](https://oauth.net/2/pkce/):
 ​
-
 ```js
 import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
@@ -311,15 +280,11 @@ const client = new CogniteClient({
 });
 ​
 ```
-
 ​
-
 ### OIDC using getToken with PKCE flow with refresh token
-
 ​
 The example below shows how to use the Cognite [@cognite/auth-wrapper](https://www.npmjs.com/package/@cognite/auth-wrapper) library to get a token from Azure AD on behalf of a user using the [Authorization code flow](https://oauth.net/2/grant-types/authorization-code/) with [PKCE](https://oauth.net/2/pkce/):
 ​
-
 ```js
 import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
@@ -346,19 +311,13 @@ const client = new CogniteClient({
 });
 ​
 ```
-
 ​
-
 ## OpenID Connect (OIDC) with `credentials`
-
 ​
-
 ### OIDC using credentials with Client credentials flow
-
 ​
 The example below shows how to use only an SDK to get a token from Azure AD on behalf of a user using the [Client credentials flow](https://oauth.net/2/grant-types/client-credentials/):
 ​
-
 ```js
 import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
@@ -380,17 +339,13 @@ const client = new CogniteClient({
 });
 ​
 ```
-
 ​
 Take a look at the full sample application [here](https://github.com/cognitedata/cognite-sdk-js/blob/feat/auth-wrapper-samples/samples/nodejs/auth-wrapper/quickstart.ts).
 ​
-
 ### OIDC using credentials with Device code flow
-
 ​
 The example below shows how to use only an SDK to get a token from Azure AD on behalf of a user using the [Device code flow](https://oauth.net/2/grant-types/device-code/):
 ​
-
 ```js
 import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
@@ -411,15 +366,11 @@ const client = new CogniteClient({
 });
 ​
 ```
-
 ​
-
 ### OIDC using credentials with PKCE flow
-
 ​
 The example below shows how to use only an SDK to get a token from Azure AD on behalf of a user using the [PKCE flow](https://oauth.net/2/pkce/):
 ​
-
 ```js
 import { CogniteAuthWrapper } from '@cognite/auth-wrapper';
 import { CogniteClient } from "@cognite/sdk";
@@ -441,21 +392,15 @@ const client = new CogniteClient({
 });
 ​
 ```
-
 ​​
-
 ## API keys
-
 ​
-
 ### getToken method
-
 ​
 The `getToken` method lets you write your logic on how the SDK should retrieve the token. The classic usage is an implementation that returns a static value, but you can create a logic that will test your token and change it for another one if anything goes wrong.
 
 > Note: If you want to use an API key explicitly, set an additional flag `apiKeyMode` to `true` so that the SDK can set the headers correctly.
-> ​
-
+​
 ```js
 const client = new CogniteClient({
   appId: 'api-key-app',
@@ -464,18 +409,13 @@ const client = new CogniteClient({
   getToken: () => Promise.resolve('API_KEY_HERE'),
 });
 ```
-
 ​
-
 > NOTE: This method will be deprecated soon.
-> ​
-
+​
 ### credentials method
-
 ​
 The `credentials` method is an alternative way to authenticate using the SDK. It's the recommended approach if you don't need to implement a specific logic for retrieving the token. To use the API `credentials,` set the credentials `method` property to `api` so that the SDK can set the headers correctly.
 ​
-
 ```js
 const client = new CogniteClient({
   appId: 'api-key-app',
@@ -483,30 +423,22 @@ const client = new CogniteClient({
   authentication: {
     credentials: {
       method: 'api',
-      apiKey: 'API_KEY_HERE',
-    },
+      apiKey: 'API_KEY_HERE'
+    }
   },
 });
 ```
-
 ​
-
 ## Manually trigger authentication
-
 ​
 Instead of waiting for the first `401` response, you can trigger the authentication flow manually like this:
 ​
-
 ```js
 ​
 const client = new CogniteClient({ ... });
 await client.authenticate(); // Returns the received token
 ```
-
 ​
-
 ## Next steps
-
 ​
-
-To read more about authentication, see [authentication process](https://developer.cognite.com/dev/guides/iam/external-application#tokens).
+To read more about authentication, see [authentication process](https://developer.cognite.com/dev/guides/iam/external-application/#tokens).
