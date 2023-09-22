@@ -165,7 +165,6 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
     filter: AnnotationReverseLookupRequest
   ): Promise<ListResponse<AnnotationsAssetRef[]>> &
     CogniteAsyncIterator<AnnotationsAssetRef> => {
-    console.log('Aaaaaaah, in reverse lookup');
     const path = this.url(`reverselookup`);
     return this.cursorBasedEndpoint(
       (params) =>
