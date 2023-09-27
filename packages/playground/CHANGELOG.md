@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.10](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@6.0.9...@cognite/sdk-playground@6.0.10) (2023-09-27)
+
+### Reverts
+
+- "feat: update openapi spec to bump types fo docs, annotations and vision" ([#1021](https://github.com/cognitedata/cognite-sdk-js/issues/1021)) ([b908def](https://github.com/cognitedata/cognite-sdk-js/commit/b908defed27eb610c8c7b97d2c24013da735422f))
+
 ## [6.0.9](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@6.0.8...@cognite/sdk-playground@6.0.9) (2023-06-20)
 
 **Note:** Version bump only for package @cognite/sdk-playground
