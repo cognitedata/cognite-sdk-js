@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2023 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
@@ -11,8 +11,8 @@ describe('User Profiles unit test', () => {
 
   describe('client.profiles.me', () => {
     test('fetch me', async () => {
-      const profile = await client.profiles.me();
-      expect(profile).toBeDefined();
+      const profiles = await client.profiles.me();
+      expect(profiles).toBeDefined();
     });
   });
 
@@ -28,30 +28,20 @@ describe('User Profiles unit test', () => {
 
   describe('client.profiles.list', () => {
     test('fetch list of users', async () => {
-      const profile = await client.profiles.list();
-      expect(profile).toBeDefined();
+      const profiles = await client.profiles.list();
+      expect(profiles).toBeDefined();
     });
 
     test('fetch list of users with limit = 2 + cursors', async () => {
-      const profile = await client.profiles.list({ limit: 2 });
-      expect(profile.items.length).toBe(2);
+      const profiles = await client.profiles.list({ limit: 2 });
+      expect(profiles.items.length).toBe(2);
 
       const nextProfiles = await client.profiles.list({
         limit: 2,
-        cursor: profile.nextCursor,
+        cursor: profiles.nextCursor,
       });
       expect(nextProfiles.items.length).toBe(2);
-    });
-
-    test('fetch list of users with limit = 2 + cursors', async () => {
-      const profile = await client.profiles.list({ limit: 2 });
-      expect(profile.items.length).toBe(2);
-
-      const nextProfiles = await client.profiles.list({
-        limit: 2,
-        cursor: profile.nextCursor,
-      });
-      expect(nextProfiles.items.length).toBe(2);
+      expect(nextProfiles).not.toEqual(profiles);
     });
   });
 
@@ -62,7 +52,6 @@ describe('User Profiles unit test', () => {
       const searchForMe = await client.profiles.search({
         search: { name: me.displayName || '' },
       });
-      console.log(searchForMe);
       expect(searchForMe.length).toBe(1);
     });
   });

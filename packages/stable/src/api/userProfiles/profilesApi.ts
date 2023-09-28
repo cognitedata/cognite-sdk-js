@@ -1,4 +1,4 @@
-// Copyright 2022 Cognite AS
+// Copyright 2023 Cognite AS
 
 import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
