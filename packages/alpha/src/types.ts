@@ -56,6 +56,7 @@ export interface MonitoringTaskThresholdModel {
 export interface MonitoringTaskDoubleThresholdModel {
   externalId: 'double_threshold';
   timeseriesId: CogniteInternalId;
+  timeseriesExternalId?: CogniteExternalId;
   granularity?: string;
   lowerThreshold?: number;
   upperThreshold?: number;
@@ -71,6 +72,8 @@ export interface MonitoringTaskCreate {
     | MonitoringTaskThresholdModelCreate
     | MonitoringTaskDoubleThresholdModelCreate;
   nonce: string;
+  source?: string;
+  sourceId?: string;
 }
 
 export interface MonitoringTask {
@@ -81,6 +84,8 @@ export interface MonitoringTask {
   interval: number;
   overlap: number;
   model: MonitoringTaskThresholdModel | MonitoringTaskDoubleThresholdModel;
+  source?: string;
+  sourceId?: string;
 }
 
 export interface MonitoringTaskModelFilter {

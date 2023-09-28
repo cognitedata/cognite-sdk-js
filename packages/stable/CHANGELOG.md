@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.2.0...@cognite/sdk@8.3.0) (2023-09-27)
+
+### Features
+
+- **alpha:** monitoring task add source and sourceId props - [AH-1863] ([#1020](https://github.com/cognitedata/cognite-sdk-js/issues/1020)) ([506ad9b](https://github.com/cognitedata/cognite-sdk-js/commit/506ad9be6368322f08ac606642414a37f37cec67))
+
+### Reverts
+
+- "feat: update openapi spec to bump types fo docs, annotations and vision" ([#1021](https://github.com/cognitedata/cognite-sdk-js/issues/1021)) ([b908def](https://github.com/cognitedata/cognite-sdk-js/commit/b908defed27eb610c8c7b97d2c24013da735422f))
+
 # [8.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.1.1...@cognite/sdk@8.2.0) (2023-06-20)
 
 ### Features
@@ -695,7 +705,7 @@ Co-authored-by: Vegard Økland <vegard.okland@cognite.com>
   - TimeseriesClass
   - TimeSeriesList
 
-For replacements, see [MIGRATION_GUIDE_2xx_3xx.md](https://developer.cognite.com/sdks/js/migration/#upgrade-javascript-sdk-2-x-to-3-x)
+For replacements, see [MIGRATION_GUIDE_2xx_3xx.md](https://developer.cognite.com/sdks/js/migration/#upgrade-javascript-sdk-2x-to-3x)
 
 - Interfaces renamed:
 
