@@ -46,6 +46,9 @@ export default class CogniteClient extends CogniteClientCleaned {
 
   protected initAPIs() {
     super.initAPIs();
+
+    this.httpClient.setDefaultHeader('cdf-version', 'beta');
+
     this.unitsApi = this.apiFactory(UnitsAPI, 'units');
   }
 }
