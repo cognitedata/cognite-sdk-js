@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.8.0...@cognite/sdk-alpha@0.9.0) (2023-09-27)
+
+### Features
+
+- **alpha:** add optional timeseriesExternalId type to monitoring task ([#1025](https://github.com/cognitedata/cognite-sdk-js/issues/1025)) ([45fb525](https://github.com/cognitedata/cognite-sdk-js/commit/45fb5255c53116a668a62760097b3a8272c51e03))
+
 # [0.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.7.5...@cognite/sdk-alpha@0.8.0) (2023-09-20)
 
 ### Features
