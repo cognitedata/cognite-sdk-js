@@ -35,7 +35,7 @@ export interface ContainsAnyIds {
 }
 
 export interface Unit {
-  externalId: string;
+  externalId: CogniteInternalId;
   name: string;
   longName: string;
   symbol: string;
@@ -53,7 +53,7 @@ export interface UnitConversion {
 
 export interface UnitSystemQuantity {
   name: string;
-  unitExternalId: string;
+  unitExternalId: CogniteInternalId;
 }
 
 export interface UnitSystem {

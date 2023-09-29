@@ -1,5 +1,5 @@
-import CogniteClientBeta from '../cogniteClient';
-import { setupLoggedInClient, itif } from './testUtils';
+import CogniteClientBeta from '../../cogniteClient';
+import { setupLoggedInClient, itif } from '../testUtils';
 
 describe('units api', () => {
   const client: CogniteClientBeta | null = setupLoggedInClient();
