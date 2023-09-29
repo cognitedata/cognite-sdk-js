@@ -9,7 +9,10 @@ import {
   Timeseries,
 } from '@cognite/sdk';
 import { setupLoggedInClient } from '../testUtils';
-import { randomInt } from '@cognite/sdk-core/src/testUtils';
+import {
+  randomInt,
+  runTestWithRetryWhenFailing,
+} from '@cognite/sdk-core/src/testUtils';
 
 describe('Timeseries integration test', () => {
   const client: CogniteClient | null = setupLoggedInClient();
@@ -45,13 +48,15 @@ describe('Timeseries integration test', () => {
   });
 
   test('list with filter by unitExternalId', async () => {
-    const { items } = await client!.timeseries.list({
-      filter: {
-        unitExternalId: 'temperature:deg_c',
-      },
+    await runTestWithRetryWhenFailing(async () => {
+      const { items } = await client!.timeseries.list({
+        filter: {
+          unitExternalId: 'temperature:deg_c',
+        },
+      });
+      expect(items.length).toBeGreaterThan(0);
+      expect(items[0].unitExternalId).toBe('temperature:deg_c');
     });
-    expect(items.length).toBeGreaterThan(0);
-    expect(items[0].unitExternalId).toBe('temperature:deg_c');
   });
 
   test('retrieve', async () => {

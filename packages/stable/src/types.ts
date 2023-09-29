@@ -741,7 +741,7 @@ export interface DatapointAggregates extends DatapointsMetadata {
   /**
    * The physical unit of the time series (reference to unit catalog). Replaced with target unit if data points were converted.
    */
-  unitExternalId?: CogniteExternalId
+  unitExternalId?: CogniteExternalId;
 }
 
 export type Datapoints = StringDatapoints | DoubleDatapoints;
@@ -759,7 +759,7 @@ export interface DoubleDatapoints extends DatapointsMetadata {
   /**
    * The physical unit of the time series (reference to unit catalog). Replaced with target unit if data points were converted.
    */
-  unitExternalId?: CogniteExternalId
+  unitExternalId?: CogniteExternalId;
 }
 
 export interface StringDatapoints extends DatapointsMetadata {
@@ -1233,7 +1233,7 @@ export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
   /**
    * The physical unit of the time series (reference to unit catalog).
    */
-  unitExternalId?: CogniteExternalId
+  unitExternalId?: CogniteExternalId;
 }
 
 export interface ExternalTimeseries {
@@ -1281,10 +1281,10 @@ export interface ExternalTimeseries {
    * Security categories required in order to access this time series."
    */
   securityCategories?: number[];
-   /**
+  /**
    * The physical unit of the time series (reference to unit catalog).
    */
-  unitExternalId?: CogniteExternalId
+  unitExternalId?: CogniteExternalId;
 }
 
 export type FileGeoLocationType = 'Feature';
