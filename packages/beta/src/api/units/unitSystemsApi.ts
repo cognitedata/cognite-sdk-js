@@ -1,4 +1,4 @@
-// Copyright 2022 Cognite AS
+// Copyright 2023 Cognite AS
 
 import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
 import { UnitSystem } from '../../types';
