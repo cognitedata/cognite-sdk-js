@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+// Copyright 2023 Cognite AS
 
 import CogniteClient from '../../cogniteClient';
 import {
