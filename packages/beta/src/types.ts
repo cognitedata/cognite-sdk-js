@@ -33,3 +33,30 @@ export interface ContainsAllIds {
 export interface ContainsAnyIds {
   containsAny: CogniteInternalId[];
 }
+
+export interface Unit {
+  externalId: string;
+  name: string;
+  longName: string;
+  symbol: string;
+  aliasNames: string[];
+  quantity: string;
+  conversion: UnitConversion;
+  source?: string;
+  sourceReference?: string;
+}
+
+export interface UnitConversion {
+  multiplier: number;
+  offset: number;
+}
+
+export interface UnitSystemQuantity {
+  name: string;
+  unitExternalId: string;
+}
+
+export interface UnitSystem {
+  name: string;
+  quantities: UnitSystemQuantity[];
+}

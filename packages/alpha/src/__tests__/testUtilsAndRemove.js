@@ -3,11 +3,10 @@ import CogniteClient from '../cogniteClient';
 import { name } from '../../package.json';
 import { ConfidentialClientApplication } from '@azure/msal-node';
 
-export const TEST_PROJECT = process.env.COGNITE_PROJECT!;
-export const CLIENT_ID = process.env.COGNITE_CLIENT_ID!;
-export const CLIENT_SECRET = process.env.COGNITE_CLIENT_SECRET!;
-const azureTenant = process.env.COGNITE_AZURE_TENANT_ID!;
-const COGNITE_BASE_URL = process.env.COGNITE_BASE_URL!;
+export const TEST_PROJECT = process.env.COGNITE_PROJECT_ALERTS_API!;
+export const CLIENT_ID = process.env.COGNITE_CLIENT_ID_ALERTS_API!;
+export const CLIENT_SECRET = process.env.COGNITE_CLIENT_SECRET_ALERTS_API!;
+const azureTenant = process.env.COGNITE_TENANT_ID_ALERTS_API!;
 
 export function setupLoggedInClient() {
   if (TEST_PROJECT && CLIENT_ID && CLIENT_SECRET && azureTenant) {
@@ -21,12 +20,12 @@ export function setupLoggedInClient() {
 
     const client = new CogniteClient({
       project: TEST_PROJECT,
-      baseUrl: COGNITE_BASE_URL,
+      baseUrl: 'https://azure-dev.cognitedata.com',
       appId: `JS SDK integration tests (${name})`,
       getToken: () =>
         pca
           .acquireTokenByClientCredential({
-            scopes: [`${COGNITE_BASE_URL}/.default`],
+            scopes: ['https://azure-dev.cognitedata.com/.default'],
             skipCache: true,
           })
           .then((response) => response?.accessToken as string),
@@ -37,5 +36,3 @@ export function setupLoggedInClient() {
     return null;
   }
 }
-
-export const itif = (condition: any) => (condition ? it : it.skip);
