@@ -1,3 +1,4 @@
+// Copyright 2023 Cognite AS
 import CogniteClientBeta from '../../cogniteClient';
 import { setupLoggedInClient, itif } from '../testUtils';
 
