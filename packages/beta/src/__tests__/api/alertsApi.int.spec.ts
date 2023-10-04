@@ -3,8 +3,6 @@
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-const itif = (condition: any) => (condition ? it : it.skip);
-
 describe('alerts api', () => {
   const client: CogniteClient = setupLoggedInClient();
   const ts = Date.now();
