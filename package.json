@@ -38,7 +38,8 @@
     "validateDocLinks": "find . -name \\*.md -not -path '*/node_modules/*' -print0 | xargs -0 -n1 yarn markdown-link-check -c ./markdownlint.json",
     "test-snippets": "yarn allsdk test-snippets --stream",
     "test-samples": "SKIP_PREFLIGHT_CHECK=true yarn allsamples test --stream",
-    "codegen": "ts-node packages/codegen/src/cli.ts"
+    "codegen": "ts-node packages/codegen/src/cli.ts",
+    "detect": "jest --detectOpenHandles"
   },
   "devDependencies": {
     "@azure/msal-node": "^1.14.5",
