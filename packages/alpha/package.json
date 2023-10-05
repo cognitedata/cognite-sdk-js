@@ -9,7 +9,6 @@
   "version": "0.9.0",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
-    "test": "jest --config=../../jest.config.js --testPathPattern=/alpha/ --env=node",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn build",

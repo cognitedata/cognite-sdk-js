@@ -15,15 +15,15 @@ export function setupClient(baseUrl: string = Constants.BASE_URL) {
   });
 }
 
-export function setupLoggedInClient(baseUrl: string = Constants.BASE_URL) {
+export function setupLoggedInClient() {
   return new CogniteClient({
     appId: 'JS SDK integration tests (beta)',
+    baseUrl: process.env.COGNITE_BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
     getToken: () =>
       login().then((account) => {
         return account.access_token;
       }),
-    baseUrl,
   });
 }
 

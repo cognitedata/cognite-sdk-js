@@ -12,8 +12,6 @@ import { setupLoggedInClient } from '../testUtils';
 //   items: [{ nonce: string; status: string }];
 // };
 
-const itif = (condition: any) => (condition ? it : it.skip);
-
 describe('monitoring tasks api', () => {
   const client: CogniteClient = setupLoggedInClient();
   const ts = Date.now();
@@ -41,7 +39,7 @@ describe('monitoring tasks api', () => {
   let channel: Channel;
 
   test('create monitoring task', async () => {
-    // const sessionsRes = await client!.post<SessionsResponse>(sessionsApi, {
+    // const sessionsRes = await client.post<SessionsResponse>(sessionsApi, {
     //   data: {
     //     items: [
     //       {
@@ -51,7 +49,7 @@ describe('monitoring tasks api', () => {
     //     ],
     //   },
     // });
-    const res = await client!.alerts.createChannels([
+    const res = await client.alerts.createChannels([
       {
         externalId: channelExternalId,
         name: channelExternalId,
@@ -60,8 +58,8 @@ describe('monitoring tasks api', () => {
     ]);
     channel = res[0];
     expect(channel).toBeTruthy();
-    const token = await client!.authenticate();
-    const response = await client!.monitoringTasks.create([
+    const token = await client.authenticate();
+    const response = await client.monitoringTasks.create([
       {
         externalId: monitoringTaskExternalId,
         name: monitoringTaskName,
@@ -77,14 +75,14 @@ describe('monitoring tasks api', () => {
   });
 
   test('list all monitoring tasks', async () => {
-    const response = await client!.monitoringTasks.list({
+    const response = await client.monitoringTasks.list({
       filter: {},
     });
     expect(response.items.length).toBeGreaterThan(0);
   });
 
   test('list created monitoring task', async () => {
-    const response = await client!.monitoringTasks.list({
+    const response = await client.monitoringTasks.list({
       filter: { externalIds: [monitoringTaskExternalId] },
     });
     expect(response.items.length).toBe(1);
@@ -96,7 +94,7 @@ describe('monitoring tasks api', () => {
   });
 
   test('list created monitoring task by channel', async () => {
-    const response = await client!.monitoringTasks.list({
+    const response = await client.monitoringTasks.list({
       filter: { channelIds: [channel.id] },
     });
     expect(response.items.length).toBe(1);
@@ -105,7 +103,7 @@ describe('monitoring tasks api', () => {
   });
 
   test('delete monitoring task', async () => {
-    const response = await client!.monitoringTasks.delete([
+    const response = await client.monitoringTasks.delete([
       {
         externalId: monitoringTaskExternalId,
       },
@@ -114,7 +112,7 @@ describe('monitoring tasks api', () => {
   });
 
   test('delete channel', async () => {
-    const response = await client!.alerts.deleteChannels([
+    const response = await client.alerts.deleteChannels([
       {
         externalId: channelExternalId,
       },
