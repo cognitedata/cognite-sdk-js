@@ -1,6 +1,11 @@
 // Copyright 2023 Cognite AS
 
-import { BaseResourceAPI, IdEither, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import {
+  BaseResourceAPI,
+  IdEither,
+  CDFHttpClient,
+  MetadataMap,
+} from '@cognite/sdk-core';
 import {
   MonitoringTask,
   MonitoringTaskCreate,

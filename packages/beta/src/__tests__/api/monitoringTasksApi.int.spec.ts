@@ -74,7 +74,7 @@ describe('monitoring tasks api', () => {
         description: 'test',
       },
     ]);
-    
+
     channel = res[0];
     expect(channel).toBeTruthy();
     // const response = await client.monitoringTasks.create([
@@ -89,24 +89,27 @@ describe('monitoring tasks api', () => {
     //   },
     // ]);
     console.log(sessionsRes?.data?.items[0]?.nonce);
-    const response = await client.post<MonitoringTask>(`/api/v1/projects/${process.env.COGNITE_PROJECT}/monitoringtasks`, {
-      data: {
-        items: [
-          {
-            externalId: monitoringTaskExternalId,
-            name: monitoringTaskName,
-            channelId: channel.id,
-            interval: testMtInterval,
-            nonce: sessionsRes?.data?.items[0]?.nonce,
-            overlap: testMtOverlap,
-            model: testMtModel,
-          }
-        ]
-      },
-      headers: {
-        'cdf-version': 'beta',
-      },
-    });
+    const response = await client.post<MonitoringTask>(
+      `/api/v1/projects/${process.env.COGNITE_PROJECT}/monitoringtasks`,
+      {
+        data: {
+          items: [
+            {
+              externalId: monitoringTaskExternalId,
+              name: monitoringTaskName,
+              channelId: channel.id,
+              interval: testMtInterval,
+              nonce: sessionsRes?.data?.items[0]?.nonce,
+              overlap: testMtOverlap,
+              model: testMtModel,
+            },
+          ],
+        },
+        headers: {
+          'cdf-version': 'beta',
+        },
+      }
+    );
     console.log(response);
     // expect(response.length).toBe(1);
     // expect(response[0].externalId).toBe(monitoringTaskExternalId);
