@@ -4,7 +4,6 @@ import {
   Channel,
   MonitoringTaskModelExternalId,
   MonitoringTaskDoubleThresholdModelCreate,
-  MonitoringTask,
 } from '../../types';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
@@ -77,90 +76,68 @@ describe('monitoring tasks api', () => {
 
     channel = res[0];
     expect(channel).toBeTruthy();
-    // const response = await client.monitoringTasks.create([
-    //   {
-    //     externalId: monitoringTaskExternalId,
-    //     name: monitoringTaskName,
-    //     channelId: channel.id,
-    //     interval: testMtInterval,
-    //     nonce: sessionsRes?.data?.items[0]?.nonce,
-    //     overlap: testMtOverlap,
-    //     model: testMtModel,
-    //   },
-    // ]);
-    console.log(sessionsRes?.data?.items[0]?.nonce);
-    const response = await client.post<MonitoringTask>(
-      `/api/v1/projects/${process.env.COGNITE_PROJECT}/monitoringtasks`,
+    const response = await client.monitoringTasks.create([
       {
-        data: {
-          items: [
-            {
-              externalId: monitoringTaskExternalId,
-              name: monitoringTaskName,
-              channelId: channel.id,
-              interval: testMtInterval,
-              nonce: sessionsRes?.data?.items[0]?.nonce,
-              overlap: testMtOverlap,
-              model: testMtModel,
-            },
-          ],
-        },
-        headers: {
-          'cdf-version': 'beta',
-        },
-      }
-    );
-    console.log(response);
-    // expect(response.length).toBe(1);
-    // expect(response[0].externalId).toBe(monitoringTaskExternalId);
+        externalId: monitoringTaskExternalId,
+        name: monitoringTaskName,
+        channelId: channel.id,
+        interval: testMtInterval,
+        nonce: sessionsRes?.data?.items[0]?.nonce,
+        overlap: testMtOverlap,
+        model: testMtModel,
+      },
+    ]);
+
+    expect(response.length).toBe(1);
+    expect(response[0].externalId).toBe(monitoringTaskExternalId);
     done();
-  }, 180000);
+  }, 10000);
 
-  // test('list all monitoring tasks', async () => {
-  //   const response = await client.monitoringTasks.list({
-  //     filter: {},
-  //   });
-  //   expect(response.items.length).toBeGreaterThan(0);
-  // });
+  test('list all monitoring tasks', async () => {
+    const response = await client.monitoringTasks.list({
+      filter: {},
+    });
+    expect(response.items.length).toBeGreaterThan(0);
+  });
 
-  // test('list created monitoring task', async () => {
-  //   const response = await client.monitoringTasks.list({
-  //     filter: { externalIds: [monitoringTaskExternalId] },
-  //   });
-  //   expect(response.items.length).toBe(1);
-  //   expect(response.items[0].externalId).toEqual(monitoringTaskExternalId);
-  //   expect(response.items[0].name).toEqual(monitoringTaskName);
-  //   expect(response.items[0].model).toEqual(
-  //     expect.objectContaining(expectedResponseModel)
-  //   );
-  //   expect(response.items[0].interval).toEqual(testMtInterval);
-  //   expect(response.items[0].overlap).toEqual(testMtOverlap);
-  // });
+  test('list created monitoring task', async () => {
+    const response = await client.monitoringTasks.list({
+      filter: { externalIds: [monitoringTaskExternalId] },
+    });
+    expect(response.items.length).toBe(1);
+    expect(response.items[0].externalId).toEqual(monitoringTaskExternalId);
+    expect(response.items[0].name).toEqual(monitoringTaskName);
+    expect(response.items[0].model).toEqual(
+      expect.objectContaining(expectedResponseModel)
+    );
+    expect(response.items[0].interval).toEqual(testMtInterval);
+    expect(response.items[0].overlap).toEqual(testMtOverlap);
+  });
 
-  // test('list created monitoring task by channel', async () => {
-  //   const response = await client.monitoringTasks.list({
-  //     filter: { channelIds: [channel.id] },
-  //   });
-  //   expect(response.items.length).toBe(1);
-  //   expect(response.items[0].externalId).toEqual(monitoringTaskExternalId);
-  //   expect(response.items[0].channelId).toEqual(channel.id);
-  // });
+  test('list created monitoring task by channel', async () => {
+    const response = await client.monitoringTasks.list({
+      filter: { channelIds: [channel.id] },
+    });
+    expect(response.items.length).toBe(1);
+    expect(response.items[0].externalId).toEqual(monitoringTaskExternalId);
+    expect(response.items[0].channelId).toEqual(channel.id);
+  });
 
-  // test('delete monitoring task', async () => {
-  //   const response = await client.monitoringTasks.delete([
-  //     {
-  //       externalId: monitoringTaskExternalId,
-  //     },
-  //   ]);
-  //   expect(response).toEqual({});
-  // });
+  test('delete monitoring task', async () => {
+    const response = await client.monitoringTasks.delete([
+      {
+        externalId: monitoringTaskExternalId,
+      },
+    ]);
+    expect(response).toEqual({});
+  });
 
-  // test('delete channel', async () => {
-  //   const response = await client.alerts.deleteChannels([
-  //     {
-  //       externalId: channelExternalId,
-  //     },
-  //   ]);
-  //   expect(response).toEqual({});
-  // });
+  test('delete channel', async () => {
+    const response = await client.alerts.deleteChannels([
+      {
+        externalId: channelExternalId,
+      },
+    ]);
+    expect(response).toEqual({});
+  });
 });
