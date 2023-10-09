@@ -11,7 +11,7 @@ describe('alerts api', () => {
   const email = `ivan.polomanyi+${ts}@cognite.com`;
 
   test('create channels', async () => {
-    const response = await client!.alerts.createChannels([
+    const response = await client.alerts.createChannels([
       {
         externalId: channelExternalId,
         name: channelExternalId,
@@ -24,7 +24,7 @@ describe('alerts api', () => {
 
   test('create channels with deduplication params', async () => {
     const channelExternalIdWithDeduplication = channelExternalId + '_dedup';
-    const response = await client!.alerts.createChannels([
+    const response = await client.alerts.createChannels([
       {
         externalId: channelExternalIdWithDeduplication,
         name: channelExternalIdWithDeduplication,
@@ -46,7 +46,7 @@ describe('alerts api', () => {
   });
 
   test('list channels', async () => {
-    const response = await client!.alerts.listChannels({
+    const response = await client.alerts.listChannels({
       filter: { externalIds: [channelExternalId] },
     });
     expect(response.items.length).toEqual(1);
@@ -54,7 +54,7 @@ describe('alerts api', () => {
   });
 
   test('create alerts', async () => {
-    const response = await client!.alerts.create([
+    const response = await client.alerts.create([
       {
         source: 'smth',
         channelExternalId,
@@ -66,7 +66,7 @@ describe('alerts api', () => {
   });
 
   test('close alerts', async () => {
-    const response = await client!.alerts.close([
+    const response = await client.alerts.close([
       {
         externalId: alertExternalId,
       },
@@ -75,7 +75,7 @@ describe('alerts api', () => {
   });
 
   test('list alerts', async () => {
-    const response = await client!.alerts.list({
+    const response = await client.alerts.list({
       filter: {
         channelExternalIds: [channelExternalId],
       },
@@ -84,7 +84,7 @@ describe('alerts api', () => {
   });
 
   test('create subscribers', async () => {
-    const response = await client!.alerts.createSubscribers([
+    const response = await client.alerts.createSubscribers([
       {
         email,
         externalId: email,
@@ -94,7 +94,7 @@ describe('alerts api', () => {
   });
 
   test('list subscribers', async () => {
-    const response = await client!.alerts.listSubscribers({
+    const response = await client.alerts.listSubscribers({
       filter: {
         email,
         externalIds: [email],
@@ -105,7 +105,7 @@ describe('alerts api', () => {
   });
 
   test('create subscriptions', async () => {
-    const response = await client!.alerts.createSubscriptions([
+    const response = await client.alerts.createSubscriptions([
       {
         channelExternalId,
         subscriberExternalId: email,
@@ -117,7 +117,7 @@ describe('alerts api', () => {
   });
 
   test('list subscriptions', async () => {
-    const response = await client!.alerts.listSubscriptions({
+    const response = await client.alerts.listSubscriptions({
       filter: {
         channelExternalIds: [channelExternalId],
         subscriberExternalIds: [email],
@@ -130,7 +130,7 @@ describe('alerts api', () => {
   });
 
   test('delete subscriptions', async () => {
-    const response = await client!.alerts.deleteSubscription([
+    const response = await client.alerts.deleteSubscription([
       {
         externalId: email,
       },
@@ -139,13 +139,13 @@ describe('alerts api', () => {
   });
 
   test('delete subscriber', async () => {
-    const response = await client!.alerts.deleteSubscribers([
+    const response = await client.alerts.deleteSubscribers([
       {
         externalId: email,
       },
     ]);
     expect(response).toEqual({});
-    const emptyRes = await client!.alerts.listSubscribers({
+    const emptyRes = await client.alerts.listSubscribers({
       filter: {
         email,
       },
@@ -154,7 +154,7 @@ describe('alerts api', () => {
   });
 
   test('delete channel', async () => {
-    const response = await client!.alerts.deleteChannels([
+    const response = await client.alerts.deleteChannels([
       {
         externalId: channelExternalId,
       },
