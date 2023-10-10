@@ -73,7 +73,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>example</dt>
-						<dd><p>{&quot;textPredictions&quot;:[{&quot;confidence&quot;:0.9,&quot;text&quot;:&quot;string&quot;,&quot;textRegion&quot;:{&quot;xMin&quot;:0.5,&quot;xMax&quot;:0.9,&quot;yMin&quot;:0.5,&quot;yMax&quot;:0.9}}],&quot;assetTagPredictions&quot;:[{&quot;confidence&quot;:0.9,&quot;assetRef&quot;:{&quot;id&quot;:1233},&quot;text&quot;:&quot;string&quot;,&quot;textRegion&quot;:{&quot;xMin&quot;:0.5,&quot;xMax&quot;:0.9,&quot;yMin&quot;:0.5,&quot;yMax&quot;:0.9}}],&quot;peoplePredictions&quot;&quot;:[{&quot;label&quot;:&quot;person&quot;,&quot;confidence&quot;:0.8,&quot;boundingBox&quot;:{&quot;xMin&quot;:0.5,&quot;xMax&quot;:0.9,&quot;yMin&quot;:0.5,&quot;yMax&quot;:0.9}}]}</p>
+						<dd><p>{&quot;textPredictions&quot;:[{&quot;confidence&quot;:0.9,&quot;text&quot;:&quot;string&quot;,&quot;textRegion&quot;:{&quot;xMin&quot;:0.5,&quot;xMax&quot;:0.9,&quot;yMin&quot;:0.5,&quot;yMax&quot;:0.9}}],&quot;assetTagPredictions&quot;:[{&quot;confidence&quot;:0.9,&quot;assetRef&quot;:{&quot;id&quot;:1233},&quot;text&quot;:&quot;string&quot;,&quot;textRegion&quot;:{&quot;xMin&quot;:0.5,&quot;xMax&quot;:0.9,&quot;yMin&quot;:0.5,&quot;yMax&quot;:0.9}}],&quot;peoplePredictions&quot;:[{&quot;label&quot;:&quot;person&quot;,&quot;confidence&quot;:0.8,&quot;boundingBox&quot;:{&quot;xMin&quot;:0.5,&quot;xMax&quot;:0.9,&quot;yMin&quot;:0.5,&quot;yMax&quot;:0.9}}]}</p>
 						</dd>
 					</dl>
 				</div>
@@ -94,10 +94,14 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="visionextractpredictions.html#assettagpredictions" class="tsd-kind-icon">asset<wbr>Tag<wbr>Predictions</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="visionextractpredictions.html#dialgaugepredictions" class="tsd-kind-icon">dial<wbr>Gauge<wbr>Predictions</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="visionextractpredictions.html#digitalgaugepredictions" class="tsd-kind-icon">digital<wbr>Gauge<wbr>Predictions</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="visionextractpredictions.html#industrialobjectpredictions" class="tsd-kind-icon">industrial<wbr>Object<wbr>Predictions</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="visionextractpredictions.html#levelgaugepredictions" class="tsd-kind-icon">level<wbr>Gauge<wbr>Predictions</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="visionextractpredictions.html#peoplepredictions" class="tsd-kind-icon">people<wbr>Predictions</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="visionextractpredictions.html#personalprotectiveequipmentpredictions" class="tsd-kind-icon">personal<wbr>Protective<wbr>Equipment<wbr>Predictions</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="visionextractpredictions.html#textpredictions" class="tsd-kind-icon">text<wbr>Predictions</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="visionextractpredictions.html#valvepredictions" class="tsd-kind-icon">valve<wbr>Predictions</a></li>
 							</ul>
 						</section>
 					</div>
@@ -111,9 +115,39 @@
 					<div class="tsd-signature tsd-kind-icon">asset<wbr>Tag<wbr>Predictions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AnnotationsCogniteAnnotationTypesImagesAssetLink</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/45fb5255c5/packages/stable/src/api/vision/types.gen.ts#L338">packages/stable/src/api/vision/types.gen.ts:338</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/vision/types.gen.ts#L534">packages/stable/src/api/vision/types.gen.ts:534</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="dialgaugepredictions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> dial<wbr>Gauge<wbr>Predictions</h3>
+					<div class="tsd-signature tsd-kind-icon">dial<wbr>Gauge<wbr>Predictions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>keypointCollection<span class="tsd-signature-symbol">?: </span><a href="annotationskeypointcollection.html" class="tsd-signature-type">AnnotationsKeypointCollection</a><span class="tsd-signature-symbol">; </span>objectDetection<span class="tsd-signature-symbol">?: </span><a href="annotationsobjectdetection.html" class="tsd-signature-type">AnnotationsObjectDetection</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/vision/types.gen.ts#L536">packages/stable/src/api/vision/types.gen.ts:536</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>In beta. Available only when the <code>cdf-version: beta</code> header is provided.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="digitalgaugepredictions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> digital<wbr>Gauge<wbr>Predictions</h3>
+					<div class="tsd-signature tsd-kind-icon">digital<wbr>Gauge<wbr>Predictions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AnnotationsObjectDetection</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/vision/types.gen.ts#L541">packages/stable/src/api/vision/types.gen.ts:541</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>In beta. Available only when the <code>cdf-version: beta</code> header is provided.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="industrialobjectpredictions" class="tsd-anchor"></a>
@@ -121,7 +155,22 @@
 					<div class="tsd-signature tsd-kind-icon">industrial<wbr>Object<wbr>Predictions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AnnotationsObjectDetection</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/45fb5255c5/packages/stable/src/api/vision/types.gen.ts#L340">packages/stable/src/api/vision/types.gen.ts:340</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/vision/types.gen.ts#L543">packages/stable/src/api/vision/types.gen.ts:543</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>In beta. Available only when the <code>cdf-version: beta</code> header is provided.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="levelgaugepredictions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> level<wbr>Gauge<wbr>Predictions</h3>
+					<div class="tsd-signature tsd-kind-icon">level<wbr>Gauge<wbr>Predictions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>keypointCollection<span class="tsd-signature-symbol">?: </span><a href="annotationskeypointcollection.html" class="tsd-signature-type">AnnotationsKeypointCollection</a><span class="tsd-signature-symbol">; </span>objectDetection<span class="tsd-signature-symbol">?: </span><a href="annotationsobjectdetection.html" class="tsd-signature-type">AnnotationsObjectDetection</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/vision/types.gen.ts#L545">packages/stable/src/api/vision/types.gen.ts:545</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -136,7 +185,7 @@
 					<div class="tsd-signature tsd-kind-icon">people<wbr>Predictions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AnnotationsObjectDetection</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/45fb5255c5/packages/stable/src/api/vision/types.gen.ts#L341">packages/stable/src/api/vision/types.gen.ts:341</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/vision/types.gen.ts#L549">packages/stable/src/api/vision/types.gen.ts:549</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -146,7 +195,7 @@
 					<div class="tsd-signature tsd-kind-icon">personal<wbr>Protective<wbr>Equipment<wbr>Predictions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AnnotationsObjectDetection</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/45fb5255c5/packages/stable/src/api/vision/types.gen.ts#L343">packages/stable/src/api/vision/types.gen.ts:343</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/vision/types.gen.ts#L551">packages/stable/src/api/vision/types.gen.ts:551</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -161,9 +210,24 @@
 					<div class="tsd-signature tsd-kind-icon">text<wbr>Predictions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AnnotationsTextRegion</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/45fb5255c5/packages/stable/src/api/vision/types.gen.ts#L344">packages/stable/src/api/vision/types.gen.ts:344</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/vision/types.gen.ts#L552">packages/stable/src/api/vision/types.gen.ts:552</a></li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="valvepredictions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> valve<wbr>Predictions</h3>
+					<div class="tsd-signature tsd-kind-icon">valve<wbr>Predictions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>keypointCollection<span class="tsd-signature-symbol">?: </span><a href="annotationskeypointcollection.html" class="tsd-signature-type">AnnotationsKeypointCollection</a><span class="tsd-signature-symbol">; </span>objectDetection<span class="tsd-signature-symbol">?: </span><a href="annotationsobjectdetection.html" class="tsd-signature-type">AnnotationsObjectDetection</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/vision/types.gen.ts#L554">packages/stable/src/api/vision/types.gen.ts:554</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>In beta. Available only when the <code>cdf-version: beta</code> header is provided.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -186,7 +250,16 @@
 								<a href="visionextractpredictions.html#assettagpredictions" class="tsd-kind-icon">asset<wbr>Tag<wbr>Predictions</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="visionextractpredictions.html#dialgaugepredictions" class="tsd-kind-icon">dial<wbr>Gauge<wbr>Predictions</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="visionextractpredictions.html#digitalgaugepredictions" class="tsd-kind-icon">digital<wbr>Gauge<wbr>Predictions</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="visionextractpredictions.html#industrialobjectpredictions" class="tsd-kind-icon">industrial<wbr>Object<wbr>Predictions</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="visionextractpredictions.html#levelgaugepredictions" class="tsd-kind-icon">level<wbr>Gauge<wbr>Predictions</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="visionextractpredictions.html#peoplepredictions" class="tsd-kind-icon">people<wbr>Predictions</a>
@@ -196,6 +269,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="visionextractpredictions.html#textpredictions" class="tsd-kind-icon">text<wbr>Predictions</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="visionextractpredictions.html#valvepredictions" class="tsd-kind-icon">valve<wbr>Predictions</a>
 							</li>
 						</ul>
 					</li>

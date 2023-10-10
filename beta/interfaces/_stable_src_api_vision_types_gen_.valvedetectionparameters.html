@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AnnotationsGeometry | Cognite JavaScript SDK</title>
-	<meta name="description" content="Documentation for Cognite JavaScript SDK">
+	<title>ValveDetectionParameters | Cognite JavaScript SDK (beta)</title>
+	<meta name="description" content="Documentation for Cognite JavaScript SDK (beta)">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">Cognite JavaScript SDK</a>
+					<a href="../index.html" class="title">Cognite JavaScript SDK (beta)</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -56,10 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="annotationsgeometry.html">AnnotationsGeometry</a>
+					<a href="../modules/_stable_src_api_vision_types_gen_.html">&quot;stable/src/api/vision/types.gen&quot;</a>
+				</li>
+				<li>
+					<a href="_stable_src_api_vision_types_gen_.valvedetectionparameters.html">ValveDetectionParameters</a>
 				</li>
 			</ul>
-			<h1>Interface AnnotationsGeometry</h1>
+			<h1>Interface ValveDetectionParameters</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A 3D geometry model represented by exactly <em>one of</em> <code>cylinder</code> and <code>box</code>.</p>
+						<p>Parameters for detecting and reading the state of a valve. In beta. Available only when the <code>cdf-version: beta</code> header is provided.</p>
 					</div>
 				</div>
 			</section>
@@ -77,7 +80,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AnnotationsGeometry</span>
+						<span class="target">ValveDetectionParameters</span>
 					</li>
 				</ul>
 			</section>
@@ -88,8 +91,7 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="annotationsgeometry.html#box" class="tsd-kind-icon">box</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="annotationsgeometry.html#cylinder" class="tsd-kind-icon">cylinder</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_api_vision_types_gen_.valvedetectionparameters.html#threshold" class="tsd-kind-icon">threshold</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,35 +100,18 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="box" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> box</h3>
-					<div class="tsd-signature tsd-kind-icon">box<span class="tsd-signature-symbol">:</span> <a href="annotationsbox.html" class="tsd-signature-type">AnnotationsBox</a></div>
+					<a name="threshold" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> threshold</h3>
+					<div class="tsd-signature tsd-kind-icon">threshold<span class="tsd-signature-symbol">:</span> <a href="../modules/_stable_src_api_vision_types_gen_.html#thresholdparameter" class="tsd-signature-type">ThresholdParameter</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/45fb5255c5/packages/stable/src/api/annotations/types.gen.ts#L263">packages/stable/src/api/annotations/types.gen.ts:263</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/vision/types.gen.ts#L500">packages/stable/src/api/vision/types.gen.ts:500</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
-								translates and scales a box centered at the origin to its location and orientation in 3D space.
-								The box that is transformed is the axis-aligned cube spanning the volume between
-							the points (-1, -1, -1) and (1, 1, 1).</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="cylinder" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cylinder</h3>
-					<div class="tsd-signature tsd-kind-icon">cylinder<span class="tsd-signature-symbol">:</span> <a href="annotationscylinder.html" class="tsd-signature-type">AnnotationsCylinder</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/45fb5255c5/packages/stable/src/api/annotations/types.gen.ts#L265">packages/stable/src/api/annotations/types.gen.ts:265</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>A cylinder in 3D space, defined by the centers of the two end surfaces and the radius.</p>
+							<p>The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
+							A higher confidence threshold increases precision but lowers recall, and vice versa.</p>
 						</div>
 					</div>
 				</section>
@@ -138,20 +123,20 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class="current tsd-kind-module tsd-is-external">
+						<a href="../modules/_stable_src_api_vision_types_gen_.html">&quot;stable/src/api/vision/types.gen&quot;</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-is-external">
-						<a href="annotationsgeometry.html" class="tsd-kind-icon">Annotations<wbr>Geometry</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_stable_src_api_vision_types_gen_.valvedetectionparameters.html" class="tsd-kind-icon">Valve<wbr>Detection<wbr>Parameters</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="annotationsgeometry.html#box" class="tsd-kind-icon">box</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="annotationsgeometry.html#cylinder" class="tsd-kind-icon">cylinder</a>
+								<a href="_stable_src_api_vision_types_gen_.valvedetectionparameters.html#threshold" class="tsd-kind-icon">threshold</a>
 							</li>
 						</ul>
 					</li>

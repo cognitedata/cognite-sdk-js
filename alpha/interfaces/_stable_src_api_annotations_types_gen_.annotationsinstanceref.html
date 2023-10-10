@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AnnotationsGeometry | Cognite JavaScript SDK</title>
+	<title>AnnotationsInstanceRef | Cognite JavaScript SDK</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -59,10 +59,10 @@
 					<a href="../modules/_stable_src_api_annotations_types_gen_.html">&quot;stable/src/api/annotations/types.gen&quot;</a>
 				</li>
 				<li>
-					<a href="_stable_src_api_annotations_types_gen_.annotationsgeometry.html">AnnotationsGeometry</a>
+					<a href="_stable_src_api_annotations_types_gen_.annotationsinstanceref.html">AnnotationsInstanceRef</a>
 				</li>
 			</ul>
-			<h1>Interface AnnotationsGeometry</h1>
+			<h1>Interface AnnotationsInstanceRef</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,9 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A 3D geometry model represented by exactly <em>one of</em> <code>cylinder</code> and <code>box</code>.</p>
+						<p>A reference to an DMS instance,
+							defined by the instance itself and the sources (views)
+						that define how the data should be interpreted</p>
 					</div>
 				</div>
 			</section>
@@ -80,7 +82,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AnnotationsGeometry</span>
+						<span class="target">AnnotationsInstanceRef</span>
 					</li>
 				</ul>
 			</section>
@@ -91,8 +93,10 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_api_annotations_types_gen_.annotationsgeometry.html#box" class="tsd-kind-icon">box</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_api_annotations_types_gen_.annotationsgeometry.html#cylinder" class="tsd-kind-icon">cylinder</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_api_annotations_types_gen_.annotationsinstanceref.html#externalid" class="tsd-kind-icon">external<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_api_annotations_types_gen_.annotationsinstanceref.html#instancetype" class="tsd-kind-icon">instance<wbr>Type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_api_annotations_types_gen_.annotationsinstanceref.html#sources" class="tsd-kind-icon">sources</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_api_annotations_types_gen_.annotationsinstanceref.html#space" class="tsd-kind-icon">space</a></li>
 							</ul>
 						</section>
 					</div>
@@ -101,36 +105,73 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="box" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> box</h3>
-					<div class="tsd-signature tsd-kind-icon">box<span class="tsd-signature-symbol">:</span> <a href="_stable_src_api_annotations_types_gen_.annotationsbox.html" class="tsd-signature-type">AnnotationsBox</a></div>
+					<a name="externalid" class="tsd-anchor"></a>
+					<h3>external<wbr>Id</h3>
+					<div class="tsd-signature tsd-kind-icon">external<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/45fb5255c5/packages/stable/src/api/annotations/types.gen.ts#L263">packages/stable/src/api/annotations/types.gen.ts:263</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/annotations/types.gen.ts#L335">packages/stable/src/api/annotations/types.gen.ts:335</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
-								translates and scales a box centered at the origin to its location and orientation in 3D space.
-								The box that is transformed is the axis-aligned cube spanning the volume between
-							the points (-1, -1, -1) and (1, 1, 1).</p>
+							<p>External id of the instance</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>pattern</dt>
+							<dd><p>^[^\x00]{1,255}$</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="instancetype" class="tsd-anchor"></a>
+					<h3>instance<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">instance<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"node"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"edge"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/annotations/types.gen.ts#L337">packages/stable/src/api/annotations/types.gen.ts:337</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The type of instance, an edge or a node.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="cylinder" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cylinder</h3>
-					<div class="tsd-signature tsd-kind-icon">cylinder<span class="tsd-signature-symbol">:</span> <a href="_stable_src_api_annotations_types_gen_.annotationscylinder.html" class="tsd-signature-type">AnnotationsCylinder</a></div>
+					<a name="sources" class="tsd-anchor"></a>
+					<h3>sources</h3>
+					<div class="tsd-signature tsd-kind-icon">sources<span class="tsd-signature-symbol">:</span> <a href="_stable_src_api_annotations_types_gen_.annotationsview.html" class="tsd-signature-type">AnnotationsView</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/45fb5255c5/packages/stable/src/api/annotations/types.gen.ts#L265">packages/stable/src/api/annotations/types.gen.ts:265</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/annotations/types.gen.ts#L339">packages/stable/src/api/annotations/types.gen.ts:339</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A cylinder in 3D space, defined by the centers of the two end surfaces and the radius.</p>
+							<p>References to views</p>
 						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="space" class="tsd-anchor"></a>
+					<h3>space</h3>
+					<div class="tsd-signature tsd-kind-icon">space<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/e337d73c9e/packages/stable/src/api/annotations/types.gen.ts#L344">packages/stable/src/api/annotations/types.gen.ts:344</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Id of the space that the instance belongs to</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>pattern</dt>
+							<dd><p>^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 			</section>
@@ -167,7 +208,19 @@
 						<a href="_stable_src_api_annotations_types_gen_.annotationscogniteannotationtypesdiagramsassetlink.html" class="tsd-kind-icon">Annotations<wbr>Cognite<wbr>Annotation<wbr>Types<wbr>Diagrams<wbr>Asset<wbr>Link</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_stable_src_api_annotations_types_gen_.annotationscogniteannotationtypesdiagramsinstancelink.html" class="tsd-kind-icon">Annotations<wbr>Cognite<wbr>Annotation<wbr>Types<wbr>Diagrams<wbr>Instance<wbr>Link</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="_stable_src_api_annotations_types_gen_.annotationscogniteannotationtypesimagesassetlink.html" class="tsd-kind-icon">Annotations<wbr>Cognite<wbr>Annotation<wbr>Types<wbr>Images<wbr>Asset<wbr>Link</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_stable_src_api_annotations_types_gen_.annotationscogniteannotationtypesimagesinstancelink.html" class="tsd-kind-icon">Annotations<wbr>Cognite<wbr>Annotation<wbr>Types<wbr>Images<wbr>Instance<wbr>Link</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_stable_src_api_annotations_types_gen_.annotationscogniteannotationtypesprimitivesgeometry2dgeometry.html" class="tsd-kind-icon">Annotations<wbr>Cognite<wbr>Annotation<wbr>Types<wbr>Primitives<wbr>Geometry2DGeometry</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_stable_src_api_annotations_types_gen_.annotationscogniteannotationtypesprimitivesgeometry3dgeometry.html" class="tsd-kind-icon">Annotations<wbr>Cognite<wbr>Annotation<wbr>Types<wbr>Primitives<wbr>Geometry3DGeometry</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="_stable_src_api_annotations_types_gen_.annotationscylinder.html" class="tsd-kind-icon">Annotations<wbr>Cylinder</a>
@@ -184,13 +237,19 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_stable_src_api_annotations_types_gen_.annotationsgeometry.html" class="tsd-kind-icon">Annotations<wbr>Geometry</a>
+						<a href="_stable_src_api_annotations_types_gen_.annotationsinstanceref.html" class="tsd-kind-icon">Annotations<wbr>Instance<wbr>Ref</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_stable_src_api_annotations_types_gen_.annotationsgeometry.html#box" class="tsd-kind-icon">box</a>
+								<a href="_stable_src_api_annotations_types_gen_.annotationsinstanceref.html#externalid" class="tsd-kind-icon">external<wbr>Id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_stable_src_api_annotations_types_gen_.annotationsgeometry.html#cylinder" class="tsd-kind-icon">cylinder</a>
+								<a href="_stable_src_api_annotations_types_gen_.annotationsinstanceref.html#instancetype" class="tsd-kind-icon">instance<wbr>Type</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_stable_src_api_annotations_types_gen_.annotationsinstanceref.html#sources" class="tsd-kind-icon">sources</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_stable_src_api_annotations_types_gen_.annotationsinstanceref.html#space" class="tsd-kind-icon">space</a>
 							</li>
 						</ul>
 					</li>
@@ -231,6 +290,9 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="_stable_src_api_annotations_types_gen_.annotationsunhandledtextobject.html" class="tsd-kind-icon">Annotations<wbr>Unhandled<wbr>Text<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
+						<a href="_stable_src_api_annotations_types_gen_.annotationsview.html" class="tsd-kind-icon">Annotations<wbr>View</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
 						<a href="../modules/_stable_src_api_annotations_types_gen_.html#annotationdata" class="tsd-kind-icon">Annotation<wbr>Data</a>
