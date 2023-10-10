@@ -90,6 +90,41 @@ export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry {
     polyline?: AnnotationsPolyLine;
 }
 /**
+* A point attached with additional information such as a confidence value and
+various attribute(s).
+*/
+export interface AnnotationsKeypoint {
+    /** Additional attributes data for a compound. */
+    attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The position of the keypoint */
+    point: AnnotationsPoint;
+}
+/**
+* Models a collection of keypoints represented by a label, a dictionary of
+keypoints (mapping from a (unique) label name to a keypoint), and
+optionally a confidence value and an attributes dictionary.
+*/
+export interface AnnotationsKeypointCollection {
+    /** Additional attributes data for a compound. */
+    attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+    /**
+     * The confidence score for the primitive. It should be between 0 and 1.
+     * @min 0
+     * @max 1
+     */
+    confidence?: number;
+    /** The detected keypoints */
+    keypoints: Record<string, AnnotationsKeypoint>;
+    /** The label describing what type of object it is */
+    label: string;
+}
+/**
  * The numerical value of something
  */
 export interface AnnotationsNumerical {
@@ -188,7 +223,7 @@ export interface AnnotationsTextRegion {
     textRegion: AnnotationsBoundingBox;
 }
 /**
- * Detect external ID or name of assets (from your CDF projects) in images. Usage of this feature requires `["assetsAcl:READ"]` capability.
+ * Detect external ID or name of assets (from your CDF projects) in images. Usage of this feature requires `['assetsAcl:READ']` capability.
  */
 export type AssetTagDetection = "AssetTagDetection";
 /**
@@ -209,6 +244,60 @@ export interface AssetTagDetectionParameters {
      * @example true
      */
     partialMatch?: boolean;
+    /**
+     * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
+     * A higher confidence threshold increases precision but lowers recall, and vice versa.
+     *
+     */
+    threshold?: ThresholdParameter;
+}
+/**
+ * Number of digits after comma in a digital gauge.
+ * @example 3
+ */
+export type CommaPos = number;
+/**
+ * The angle between the start and end point on the bottom part of an analog gauge, measured in degrees.
+ * @example 60
+ */
+export type DeadAngle = number;
+/**
+ * Detect and read value of dial gauges in images. In beta. Available only when the `cdf-version: beta` header is provided.
+ */
+export type DialGaugeDetection = "DialGaugeDetection";
+/**
+ * Parameters for dial gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided.
+ */
+export interface DialGaugeDetectionParameters {
+    /** The angle between the start and end point on the bottom part of an analog gauge, measured in degrees. */
+    deadAngle?: DeadAngle;
+    /** The max value of the gauge. */
+    maxLevel?: MaxLevel;
+    /** The min value of the gauge. */
+    minLevel?: MinLevel;
+    /** If the gauge is nonlinear, the non-linear angle from the metadata is used to part the scale in two separate linear scales. The first scale goes from min to 0. The second from 0 to max. The needle angle determines which scale is used. */
+    nonLinAngle?: NonLinAngle;
+    /**
+     * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
+     * A higher confidence threshold increases precision but lowers recall, and vice versa.
+     *
+     */
+    threshold?: ThresholdParameter;
+}
+/**
+ * Detect and read value of digital gauges in images. In beta. Available only when the `cdf-version: beta` header is provided.
+ */
+export type DigitalGaugeDetection = "DigitalGaugeDetection";
+/**
+ * Parameters for digital gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided.
+ */
+export interface DigitalGaugeDetectionParameters {
+    /** Number of digits after comma in a digital gauge. */
+    commaPos?: CommaPos;
+    /** Maximum number of digits on a digital gauge. */
+    maxNumDigits?: MaxNumDigits;
+    /** Minimum number of digits on a digital gauge. */
+    minNumDigits?: MinNumDigits;
     /**
      * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
      * A higher confidence threshold increases precision but lowers recall, and vice versa.
@@ -238,14 +327,22 @@ export interface FailedBatch {
 export interface FeatureParameters {
     /** Parameters for asset tag detection. */
     assetTagDetectionParameters?: AssetTagDetectionParameters;
+    /** Parameters for dial gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided. */
+    dialGaugeDetectionParameters?: DialGaugeDetectionParameters;
+    /** Parameters for digital gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided. */
+    digitalGaugeDetectionParameters?: DigitalGaugeDetectionParameters;
     /** Parameters for industrial object detection. In beta. Available only when the `cdf-version: beta` header is provided. */
     industrialObjectDetectionParameters?: IndustrialObjectDetectionParameters;
+    /** Parameters for level gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided. */
+    levelGaugeDetectionParameters?: LevelGaugeDetectionParameters;
     /** Parameters for people detection. */
     peopleDetectionParameters?: PeopleDetectionParameters;
     /** Parameters for industrial personal protective equipment detection. In beta. Available only when the `cdf-version: beta` header is provided. */
     personalProtectiveEquipmentDetectionParameters?: PersonalProtectiveEquipmentDetectionParameters;
     /** Parameters for text detection */
     textDetectionParameters?: TextDetectionParameters;
+    /** Parameters for detecting and reading the state of a valve. In beta. Available only when the `cdf-version: beta` header is provided. */
+    valveDetectionParameters?: ValveDetectionParameters;
 }
 /**
  * An object containing file (external) id.
@@ -280,6 +377,50 @@ export type JobId = number;
  * The status of the job.
  */
 export type JobStatus = "Queued" | "Running" | "Completed" | "Failed";
+/**
+ * Detect and read value of level gauges in images. In beta. Available only when the `cdf-version: beta` header is provided.
+ */
+export type LevelGaugeDetection = "LevelGaugeDetection";
+/**
+ * Parameters for level gauge detection and reading. In beta. Available only when the `cdf-version: beta` header is provided.
+ */
+export interface LevelGaugeDetectionParameters {
+    /** The max value of the gauge. */
+    maxLevel?: MaxLevel;
+    /** The min value of the gauge. */
+    minLevel?: MinLevel;
+    /**
+     * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
+     * A higher confidence threshold increases precision but lowers recall, and vice versa.
+     *
+     */
+    threshold?: ThresholdParameter;
+}
+/**
+ * The max value of the gauge.
+ * @example 100
+ */
+export type MaxLevel = number;
+/**
+ * Maximum number of digits on a digital gauge.
+ * @example 5
+ */
+export type MaxNumDigits = number;
+/**
+ * The min value of the gauge.
+ * @example 0
+ */
+export type MinLevel = number;
+/**
+ * Minimum number of digits on a digital gauge.
+ * @example 2
+ */
+export type MinNumDigits = number;
+/**
+ * If the gauge is nonlinear, the non-linear angle from the metadata is used to part the scale in two separate linear scales. The first scale goes from min to 0. The second from 0 to max. The needle angle determines which scale is used.
+ * @example 60
+ */
+export type NonLinAngle = number;
 /**
  * Detect people in images.
  */
@@ -343,13 +484,28 @@ A higher confidence threshold increases precision but lowers recall, and vice ve
 * @example 0.8
 */
 export type ThresholdParameter = number;
+/**
+ * Detect and read state of a valve in an image. In beta. Available only when the `cdf-version: beta` header is provided.
+ */
+export type ValveDetection = "ValveDetection";
+/**
+ * Parameters for detecting and reading the state of a valve. In beta. Available only when the `cdf-version: beta` header is provided.
+ */
+export interface ValveDetectionParameters {
+    /**
+     * The confidence threshold returns predictions as positive if their confidence score is the selected value or higher.
+     * A higher confidence threshold increases precision but lowers recall, and vice versa.
+     *
+     */
+    threshold?: ThresholdParameter;
+}
 export interface VisionAllOfFileId {
     /** The external ID of a file in CDF. */
     fileExternalId?: VisionFileExternalId;
     /** The ID of a file in CDF. */
     fileId: VisionFileId;
 }
-export type VisionExtractFeature = TextDetection | AssetTagDetection | PeopleDetection | IndustrialObjectDetection | PersonalProtectiveEquipmentDetection;
+export type VisionExtractFeature = TextDetection | AssetTagDetection | PeopleDetection | IndustrialObjectDetection | PersonalProtectiveEquipmentDetection | DialGaugeDetection | LevelGaugeDetection | DigitalGaugeDetection | ValveDetection;
 export type VisionExtractGetResponse = StatusSchema & {
     jobId: JobId;
     items: VisionExtractItem[];
@@ -372,16 +528,33 @@ export type VisionExtractPostResponse = StatusSchema & {
 };
 /**
  * Detected features in images. New fields may appear in case new feature extractors are add.
- * @example {"textPredictions":[{"confidence":0.9,"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"assetTagPredictions":[{"confidence":0.9,"assetRef":{"id":1233},"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"peoplePredictions\"":[{"label":"person","confidence":0.8,"boundingBox":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}]}
+ * @example {"textPredictions":[{"confidence":0.9,"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"assetTagPredictions":[{"confidence":0.9,"assetRef":{"id":1233},"text":"string","textRegion":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}],"peoplePredictions":[{"label":"person","confidence":0.8,"boundingBox":{"xMin":0.5,"xMax":0.9,"yMin":0.5,"yMax":0.9}}]}
  */
 export interface VisionExtractPredictions {
     assetTagPredictions?: AnnotationsCogniteAnnotationTypesImagesAssetLink[];
     /** In beta. Available only when the `cdf-version: beta` header is provided. */
+    dialGaugePredictions?: {
+        objectDetection?: AnnotationsObjectDetection;
+        keypointCollection?: AnnotationsKeypointCollection;
+    }[];
+    /** In beta. Available only when the `cdf-version: beta` header is provided. */
+    digitalGaugePredictions?: AnnotationsObjectDetection[];
+    /** In beta. Available only when the `cdf-version: beta` header is provided. */
     industrialObjectPredictions?: AnnotationsObjectDetection[];
+    /** In beta. Available only when the `cdf-version: beta` header is provided. */
+    levelGaugePredictions?: {
+        objectDetection?: AnnotationsObjectDetection;
+        keypointCollection?: AnnotationsKeypointCollection;
+    }[];
     peoplePredictions?: AnnotationsObjectDetection[];
     /** In beta. Available only when the `cdf-version: beta` header is provided. */
     personalProtectiveEquipmentPredictions?: AnnotationsObjectDetection[];
     textPredictions?: AnnotationsTextRegion[];
+    /** In beta. Available only when the `cdf-version: beta` header is provided. */
+    valvePredictions?: {
+        objectDetection?: AnnotationsObjectDetection;
+        keypointCollection?: AnnotationsKeypointCollection;
+    }[];
 }
 /**
  * The external ID of a file in CDF.
