@@ -110,7 +110,7 @@ describe.skip('AssetMappings3D integration test', () => {
       model.id,
       revision.id,
       {
-        filter: { treeIndexes: [assetMapping.treeIndex] },
+        filter: { treeIndexes: [assetMapping.treeIndex!] },
       }
     );
     expect(response.items.length).toBeGreaterThanOrEqual(1); // Test data might contain more than one mapping
