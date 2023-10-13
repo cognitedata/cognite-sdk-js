@@ -1,4 +1,4 @@
-* @cognitedata/cdf-user-experience @BugGambit @andersfylling
+* @cognitedata/cdf-user-experience @BugGambit
 
 /packages/alpha @cognitedata/airviz
 /packages/beta @cognitedata/deg-code-owners
@@ -9,3 +9,5 @@
 /packages/stable/src/__tests__/api/documents* @cognitedata/matchmakers
 
 /packages/stable/src/api/vision @cognitedata/vision-team
+
+/packages/codegen @andersfylling
