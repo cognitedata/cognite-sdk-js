@@ -11,11 +11,9 @@
     }
   ],
   "paths": {
-    "/api/playground/projects/{project}/serviceA": {
+    "/serviceA": {
       "get": {
-        "tags": [
-          "Functions"
-        ],
+        "tags": ["Functions"],
         "summary": "List functions",
         "operationId": "get-function",
         "parameters": [
@@ -34,9 +32,7 @@
             "$ref": "#/components/responses/FunctionErrorResponse"
           }
         },
-        "x-capability": [
-          "functionsAcl:READ"
-        ]
+        "x-capability": ["functionsAcl:READ"]
       },
       "post": {
         "summary": "Create functions",
@@ -71,9 +67,7 @@
                     }
                   }
                 },
-                "required": [
-                  "items"
-                ]
+                "required": ["items"]
               },
               "examples": {
                 "Minimal function": {
@@ -139,19 +133,13 @@
             "api-key": []
           }
         ],
-        "tags": [
-          "Functions"
-        ],
-        "x-capability": [
-          "functionsAcl:WRITE"
-        ]
+        "tags": ["Functions"],
+        "x-capability": ["functionsAcl:WRITE"]
       }
     },
-    "/api/playground/projects/{project}/serviceA/limits": {
+    "/serviceA/limits": {
       "get": {
-        "tags": [
-          "Functions"
-        ],
+        "tags": ["Functions"],
         "summary": "Functions limits",
         "description": "Service limits for the associated project.",
         "operationId": "get-functions-limits",
@@ -168,12 +156,10 @@
             "$ref": "#/components/responses/FunctionErrorResponse"
           }
         },
-        "x-capability": [
-          "functionsAcl:READ"
-        ]
+        "x-capability": ["functionsAcl:READ"]
       }
     },
-    "/api/playground/projects/{project}/serviceB/list": {
+    "/serviceB/list": {
       "parameters": [
         {
           "$ref": "#/components/parameters/project"
@@ -209,12 +195,10 @@
             }
           }
         },
-        "tags": [
-          "Functions"
-        ]
+        "tags": ["Functions"]
       }
     },
-    "/api/playground/projects/{project}/serviceC/delete": {
+    "/serviceC/delete": {
       "parameters": [
         {
           "$ref": "#/components/parameters/project"
@@ -241,15 +225,11 @@
             }
           }
         },
-        "tags": [
-          "Functions"
-        ],
-        "x-capability": [
-          "functionsAcl:WRITE"
-        ]
+        "tags": ["Functions"],
+        "x-capability": ["functionsAcl:WRITE"]
       }
     },
-    "/api/playground/projects/{project}/serviceC/{functionId}/call": {
+    "/serviceC/{functionId}/call": {
       "parameters": [
         {
           "$ref": "#/components/parameters/project"
@@ -259,12 +239,8 @@
         }
       ],
       "post": {
-        "tags": [
-          "Function calls"
-        ],
-        "x-capability": [
-          "functionsAcl:WRITE"
-        ],
+        "tags": ["Function calls"],
+        "x-capability": ["functionsAcl:WRITE"],
         "summary": "Call a function asynchronously",
         "operationId": "post-api-playground-projects-project-functions-function_name-call",
         "responses": {
@@ -287,7 +263,7 @@
         }
       }
     },
-    "/api/playground/projects/{project}/serviceC/{functionId}/calls": {
+    "/serviceC/{functionId}/calls": {
       "parameters": [
         {
           "$ref": "#/components/parameters/project"
@@ -314,15 +290,11 @@
         },
         "operationId": "get-api-playground-projects-project-functions-function_name-calls",
         "description": "List all function calls.",
-        "tags": [
-          "Function calls"
-        ],
-        "x-capability": [
-          "functionsAcl:READ"
-        ]
+        "tags": ["Function calls"],
+        "x-capability": ["functionsAcl:READ"]
       }
     },
-    "/api/playground/projects/{project}/serviceC/{functionId}/calls/byids": {
+    "/serviceC/{functionId}/calls/byids": {
       "parameters": [
         {
           "$ref": "#/components/parameters/project"
@@ -361,15 +333,11 @@
         },
         "operationId": "byidsFunctionCalls",
         "description": "Retrieve function calls by call ids.",
-        "tags": [
-          "Function calls"
-        ],
-        "x-capability": [
-          "functionsAcl:READ"
-        ]
+        "tags": ["Function calls"],
+        "x-capability": ["functionsAcl:READ"]
       }
     },
-    "/api/playground/projects/{project}/serviceD/{functionId}/calls/{callId}": {
+    "/serviceD/{functionId}/calls/{callId}": {
       "parameters": [
         {
           "$ref": "#/components/parameters/project"
@@ -384,12 +352,8 @@
       "get": {
         "operationId": "get-api-playground-projects-project-functions-function_name-calls-call_id",
         "description": "Retrieve function calls.",
-        "tags": [
-          "Function calls"
-        ],
-        "x-capability": [
-          "functionsAcl:READ"
-        ],
+        "tags": ["Function calls"],
+        "x-capability": ["functionsAcl:READ"],
         "summary": "Retrieve a function call by its id",
         "responses": {
           "200": {
@@ -432,11 +396,7 @@
       "CPURange": {
         "type": "object",
         "description": "The number of CPU cores per function exectuion (i.e. function call).",
-        "required": [
-          "min",
-          "max",
-          "default"
-        ],
+        "required": ["min", "max", "default"],
         "properties": {
           "min": {
             "type": "number",
@@ -458,11 +418,7 @@
       "MemoryRange": {
         "type": "object",
         "description": "The amount of available memory in GB per function execution (i.e. function call).",
-        "required": [
-          "min",
-          "max",
-          "default"
-        ],
+        "required": ["min", "max", "default"],
         "properties": {
           "min": {
             "type": "number",
@@ -503,10 +459,7 @@
       },
       "FunctionBuildError": {
         "type": "object",
-        "required": [
-          "code",
-          "message"
-        ],
+        "required": ["code", "message"],
         "description": "Cognite Function API error.",
         "properties": {
           "code": {
@@ -524,10 +477,7 @@
       },
       "FunctionErrorBasic": {
         "type": "object",
-        "required": [
-          "code",
-          "message"
-        ],
+        "required": ["code", "message"],
         "description": "Cognite Function API error.",
         "properties": {
           "code": {
@@ -545,10 +495,7 @@
       },
       "FunctionCallError": {
         "type": "object",
-        "required": [
-          "code",
-          "message"
-        ],
+        "required": ["code", "message"],
         "description": "Error occuring due to user's function code.",
         "properties": {
           "trace": {
@@ -597,9 +544,7 @@
       },
       "FunctionId": {
         "type": "object",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "id": {
             "$ref": "#/components/schemas/CogniteInternalId"
@@ -609,9 +554,7 @@
       },
       "FunctionExternalId": {
         "type": "object",
-        "required": [
-          "externalId"
-        ],
+        "required": ["externalId"],
         "properties": {
           "externalId": {
             "$ref": "#/components/schemas/CogniteExternalId"
@@ -621,9 +564,7 @@
       },
       "FunctionCallId": {
         "type": "object",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "id": {
             "$ref": "#/components/schemas/CogniteInternalId"
@@ -635,9 +576,7 @@
         "allOf": [
           {
             "type": "object",
-            "required": [
-              "items"
-            ],
+            "required": ["items"],
             "properties": {
               "items": {
                 "type": "array",
@@ -653,9 +592,7 @@
       },
       "FunctionScheduleId": {
         "type": "object",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "id": {
             "$ref": "#/components/schemas/CogniteInternalId"
@@ -678,17 +615,13 @@
         "allOf": [
           {
             "type": "object",
-            "required": [
-              "items"
-            ],
+            "required": ["items"],
             "properties": {
               "items": {
                 "type": "array",
                 "items": {
                   "type": "object",
-                  "required": [
-                    "id"
-                  ],
+                  "required": ["id"],
                   "properties": {
                     "id": {
                       "allOf": [
@@ -709,22 +642,12 @@
       "FunctionCallStatus": {
         "type": "string",
         "description": "Status of the function call.",
-        "enum": [
-          "Running",
-          "Completed",
-          "Failed",
-          "Timeout"
-        ],
+        "enum": ["Running", "Completed", "Failed", "Timeout"],
         "example": "Running"
       },
       "FunctionStatus": {
         "type": "string",
-        "enum": [
-          "Queued",
-          "Deploying",
-          "Ready",
-          "Failed"
-        ],
+        "enum": ["Queued", "Deploying", "Ready", "Failed"],
         "example": "Queued",
         "description": "Status of the function. It starts in a Queued state, is then Deploying before it is either Ready or Failed. If the function is Ready, it can be called."
       },
@@ -855,9 +778,7 @@
       },
       "FunctionScheduleIdArray": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -874,9 +795,7 @@
         "allOf": [
           {
             "type": "object",
-            "required": [
-              "items"
-            ],
+            "required": ["items"],
             "properties": {
               "items": {
                 "type": "array",
@@ -943,12 +862,7 @@
             }
           }
         ],
-        "required": [
-          "id",
-          "name",
-          "createdTime",
-          "cronExpression"
-        ]
+        "required": ["id", "name", "createdTime", "cronExpression"]
       },
       "FunctionCallLogEntry": {
         "title": "FunctionCallLogEntry",
@@ -967,12 +881,7 @@
       "FunctionCall": {
         "title": "FunctionCall",
         "type": "object",
-        "required": [
-          "id",
-          "status",
-          "startTime",
-          "functionId"
-        ],
+        "required": ["id", "status", "startTime", "functionId"],
         "properties": {
           "id": {
             "$ref": "#/components/schemas/CogniteInternalId"
@@ -1002,9 +911,7 @@
       },
       "FunctionCalls": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -1016,9 +923,7 @@
       },
       "FunctionCallsWithCursor": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -1044,9 +949,7 @@
             }
           }
         },
-        "required": [
-          "items"
-        ]
+        "required": ["items"]
       },
       "FunctionCallRequest": {
         "type": "object",
@@ -1069,13 +972,7 @@
       },
       "Function": {
         "type": "object",
-        "required": [
-          "id",
-          "createdTime",
-          "status",
-          "name",
-          "fileId"
-        ],
+        "required": ["id", "createdTime", "status", "name", "fileId"],
         "properties": {
           "id": {
             "allOf": [
@@ -1169,11 +1066,7 @@
             "type": "string",
             "example": "py38",
             "default": "py38",
-            "enum": [
-              "py37",
-              "py38",
-              "py39"
-            ],
+            "enum": ["py37", "py38", "py39"],
             "description": "The runtime of the function. Runtime \"py3x\" translates to the latest version of the Python 3.x.y series."
           },
           "error": {
@@ -1284,12 +1177,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "Queued",
-              "Processing",
-              "Done",
-              "Failed"
-            ],
+            "enum": ["Queued", "Processing", "Done", "Failed"],
             "description": "The status of the revision.",
             "example": "Done"
           },
@@ -1440,11 +1328,7 @@
       "RaycastRequest": {
         "type": "object",
         "description": "Set of raycasting queries on a model",
-        "required": [
-          "modelId",
-          "items",
-          "tolerance"
-        ],
+        "required": ["modelId", "items", "tolerance"],
         "properties": {
           "model": {
             "description": "Internal or external identifier of the model",
@@ -1467,10 +1351,7 @@
       },
       "RaycastRequestItems": {
         "type": "object",
-        "required": [
-          "origin",
-          "direction"
-        ],
+        "required": ["origin", "direction"],
         "example": {
           "origin": {
             "x": 0,
@@ -1506,10 +1387,7 @@
       "CropboxRequest": {
         "type": "object",
         "description": "Cropbox request",
-        "required": [
-          "modelId",
-          "boundingBox"
-        ],
+        "required": ["modelId", "boundingBox"],
         "properties": {
           "model": {
             "description": "Internal or external identifier of the model",
@@ -1534,10 +1412,7 @@
       "PathTransitQuery": {
         "type": "object",
         "description": "Set of transit queries on a model",
-        "required": [
-          "modelId",
-          "items"
-        ],
+        "required": ["modelId", "items"],
         "properties": {
           "modelId": {
             "type": "integer",
@@ -1558,10 +1433,7 @@
       },
       "PathTransitRequest": {
         "type": "object",
-        "required": [
-          "from",
-          "to"
-        ],
+        "required": ["from", "to"],
         "properties": {
           "from": {
             "$ref": "#/components/schemas/PathRequestItem"
@@ -1576,11 +1448,7 @@
       },
       "PathRoundtripRequest": {
         "type": "object",
-        "required": [
-          "modelId",
-          "base",
-          "visit"
-        ],
+        "required": ["modelId", "base", "visit"],
         "properties": {
           "modelId": {
             "type": "integer",
@@ -1618,9 +1486,7 @@
       },
       "NodeId": {
         "type": "object",
-        "required": [
-          "nodeId"
-        ],
+        "required": ["nodeId"],
         "properties": {
           "nodeId": {
             "type": "integer",
@@ -1631,10 +1497,7 @@
       "PathRequestObjectSize": {
         "type": "object",
         "description": "Optional object size. If not set, assumes height 2.10 and diameter 0.50",
-        "required": [
-          "diameter",
-          "height"
-        ],
+        "required": ["diameter", "height"],
         "properties": {
           "diameter": {
             "type": "number",
@@ -1688,10 +1551,7 @@
       },
       "PathPassage": {
         "type": "object",
-        "required": [
-          "point1",
-          "point2"
-        ],
+        "required": ["point1", "point2"],
         "properties": {
           "point1": {
             "$ref": "#/components/schemas/Point3D"
@@ -1753,11 +1613,7 @@
       },
       "Point3D": {
         "type": "object",
-        "required": [
-          "x",
-          "y",
-          "z"
-        ],
+        "required": ["x", "y", "z"],
         "properties": {
           "x": {
             "type": "number",
@@ -1792,9 +1648,7 @@
         "oneOf": [
           {
             "type": "object",
-            "required": [
-              "id"
-            ],
+            "required": ["id"],
             "properties": {
               "id": {
                 "type": "integer",
@@ -1804,9 +1658,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "externalId"
-            ],
+            "required": ["externalId"],
             "properties": {
               "externalId": {
                 "type": "string"
@@ -1817,12 +1669,7 @@
       },
       "Model3D": {
         "type": "object",
-        "required": [
-          "id",
-          "name",
-          "source",
-          "createdTime"
-        ],
+        "required": ["id", "name", "source", "createdTime"],
         "properties": {
           "id": {
             "type": "integer",
@@ -1852,13 +1699,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "None",
-              "Queued",
-              "Processing",
-              "Done",
-              "Failed"
-            ]
+            "enum": ["None", "Queued", "Processing", "Done", "Failed"]
           }
         }
       },
@@ -1866,9 +1707,7 @@
         "oneOf": [
           {
             "type": "object",
-            "required": [
-              "fileId"
-            ],
+            "required": ["fileId"],
             "properties": {
               "fileId": {
                 "type": "integer",
@@ -1878,9 +1717,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "fileIds"
-            ],
+            "required": ["fileIds"],
             "properties": {
               "fileIds": {
                 "type": "array",
@@ -1895,17 +1732,13 @@
       },
       "Model3DPipeline": {
         "type": "object",
-        "required": [
-          "stages"
-        ],
+        "required": ["stages"],
         "properties": {
           "stages": {
             "type": "array",
             "items": {
               "type": "object",
-              "required": [
-                "name"
-              ],
+              "required": ["name"],
               "properties": {
                 "name": {
                   "type": "string"
@@ -1915,13 +1748,7 @@
                 },
                 "status": {
                   "type": "string",
-                  "enum": [
-                    "None",
-                    "Queued",
-                    "Processing",
-                    "Done",
-                    "Failed"
-                  ]
+                  "enum": ["None", "Queued", "Processing", "Done", "Failed"]
                 }
               }
             }
@@ -1930,9 +1757,7 @@
       },
       "Model3DList": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -1975,9 +1800,7 @@
           {
             "type": "object",
             "title": "set",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "type": "string"
@@ -1987,9 +1810,7 @@
           {
             "title": "remove",
             "type": "object",
-            "required": [
-              "setNull"
-            ],
+            "required": ["setNull"],
             "properties": {
               "setNull": {
                 "type": "boolean",
@@ -2011,9 +1832,7 @@
       },
       "Model3DUpdateList": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -2025,10 +1844,7 @@
       },
       "Model3DUpload": {
         "type": "object",
-        "required": [
-          "name",
-          "source"
-        ],
+        "required": ["name", "source"],
         "properties": {
           "externalId": {
             "type": "string"
@@ -2052,9 +1868,7 @@
       },
       "Model3DOutputRequestList": {
         "type": "object",
-        "required": [
-          "models"
-        ],
+        "required": ["models"],
         "properties": {
           "models": {
             "description": "Array of model identifiers to list outputs for",
@@ -2079,9 +1893,7 @@
           },
           "formats": {
             "description": "A list of named output formats to retrieve. Omit parameter to return list of public formats.",
-            "example": [
-              "ept-pointcloud"
-            ],
+            "example": ["ept-pointcloud"],
             "type": "array",
             "items": {
               "type": "string"
@@ -2091,19 +1903,14 @@
       },
       "Model3DOutputResponseList": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "description": "One item per model in the request payload.",
             "type": "array",
             "items": {
               "type": "object",
-              "required": [
-                "model",
-                "outputs"
-              ],
+              "required": ["model", "outputs"],
               "properties": {
                 "model": {
                   "allOf": [
@@ -2120,11 +1927,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "format",
-                      "version",
-                      "blobId"
-                    ],
+                    "required": ["format", "version", "blobId"],
                     "properties": {
                       "format": {
                         "description": "Format identifier, e.g. 'ept-pointcloud' (point cloud).",
@@ -2150,9 +1953,7 @@
       },
       "Model3DUploadList": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -2164,13 +1965,7 @@
       },
       "Node3D": {
         "type": "object",
-        "required": [
-          "id",
-          "treeIndex",
-          "subtreeSize",
-          "depth",
-          "name"
-        ],
+        "required": ["id", "treeIndex", "subtreeSize", "depth", "name"],
         "properties": {
           "id": {
             "type": "integer",
@@ -2221,16 +2016,8 @@
         "description": "Property specification in filter, with property categories containing a list of filter values for each property.",
         "example": {
           "PDMS": {
-            "Area": [
-              "AB76",
-              "AB77",
-              "AB78"
-            ],
-            "Type": [
-              "PIPE",
-              "BEND",
-              "PIPESUP"
-            ]
+            "Area": ["AB76", "AB77", "AB78"],
+            "Type": ["PIPE", "BEND", "PIPESUP"]
           }
         }
       },
@@ -2256,9 +2043,7 @@
       },
       "Node3DList": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -2270,9 +2055,7 @@
       },
       "Node3DFilterBody": {
         "type": "object",
-        "required": [
-          "filters"
-        ],
+        "required": ["filters"],
         "properties": {
           "filter": {
             "$ref": "#/components/schemas/Node3DFilter"
@@ -2281,9 +2064,7 @@
       },
       "Node3DBoundingBoxFilterBody": {
         "type": "object",
-        "required": [
-          "boundingBox"
-        ],
+        "required": ["boundingBox"],
         "properties": {
           "boundingBox": {
             "$ref": "#/components/schemas/BoundingBox3D"
@@ -2297,9 +2078,7 @@
       },
       "Model3DOutput": {
         "type": "object",
-        "required": [
-          "versions"
-        ],
+        "required": ["versions"],
         "properties": {
           "versions": {
             "type": "array",
@@ -2311,10 +2090,7 @@
       },
       "Model3DOutputVersion": {
         "type": "object",
-        "required": [
-          "version",
-          "blobs"
-        ],
+        "required": ["version", "blobs"],
         "properties": {
           "version": {
             "type": "integer",
@@ -2331,11 +2107,7 @@
       },
       "Sector3D": {
         "type": "object",
-        "required": [
-          "id",
-          "path",
-          "depth"
-        ],
+        "required": ["id", "path", "depth"],
         "properties": {
           "id": {
             "type": "integer",
@@ -2365,20 +2137,13 @@
       },
       "BoundingBox3D": {
         "type": "object",
-        "required": [
-          "min",
-          "max"
-        ],
+        "required": ["min", "max"],
         "properties": {
           "min": {
             "type": "array",
             "minLength": 3,
             "maxLength": 3,
-            "example": [
-              0,
-              1,
-              2
-            ],
+            "example": [0, 1, 2],
             "items": {
               "type": "number"
             }
@@ -2387,11 +2152,7 @@
             "type": "array",
             "minLength": 3,
             "maxLength": 3,
-            "example": [
-              3,
-              4,
-              5
-            ],
+            "example": [3, 4, 5],
             "items": {
               "type": "number"
             }
@@ -2406,17 +2167,11 @@
       },
       "DataLong": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
-            "example": [
-              23872937137,
-              1238712837,
-              128371973
-            ],
+            "example": [23872937137, 1238712837, 128371973],
             "minItems": 1,
             "uniqueItems": true,
             "items": {
@@ -2428,10 +2183,7 @@
       },
       "Error": {
         "type": "object",
-        "required": [
-          "code",
-          "message"
-        ],
+        "required": ["code", "message"],
         "description": "Cognite API error",
         "properties": {
           "code": {
@@ -2465,9 +2217,7 @@
       },
       "ArrayPatchLongSet": {
         "type": "object",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "uniqueItems": true,
@@ -2514,9 +2264,7 @@
       },
       "SinglePatchBoolean": {
         "type": "object",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "type": "boolean"
@@ -2538,9 +2286,7 @@
       "ObjectPatchSet": {
         "title": "set",
         "type": "object",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "uniqueItems": true,
@@ -2576,10 +2322,7 @@
             "uniqueItems": true,
             "type": "array",
             "description": "Remove the key-value pairs with the specified keys.",
-            "example": [
-              "value1",
-              "value2"
-            ],
+            "example": ["value1", "value2"],
             "items": {
               "type": "string"
             }
@@ -2601,9 +2344,7 @@
       "ObjectPatchEventSet": {
         "title": "set",
         "type": "object",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "uniqueItems": true,
@@ -2647,10 +2388,7 @@
             "uniqueItems": true,
             "type": "array",
             "description": "Remove the key-value pairs with the specified keys.",
-            "example": [
-              "value1",
-              "value2"
-            ],
+            "example": ["value1", "value2"],
             "items": {
               "type": "string"
             }
@@ -2660,11 +2398,7 @@
       "JsonArrayInt64": {
         "type": "string",
         "format": "jsonArray(int64)",
-        "example": [
-          1238712837,
-          238712361376,
-          23786237623
-        ]
+        "example": [1238712837, 238712361376, 23786237623]
       },
       "JsonArrayString": {
         "type": "string",
@@ -2720,9 +2454,7 @@
       },
       "InternalIdList": {
         "type": "object",
-        "required": [
-          "internalIds"
-        ],
+        "required": ["internalIds"],
         "properties": {
           "internalIds": {
             "type": "array",
@@ -2736,9 +2468,7 @@
       },
       "ExternalIdList": {
         "type": "object",
-        "required": [
-          "externalIds"
-        ],
+        "required": ["externalIds"],
         "properties": {
           "externalIds": {
             "type": "array",
@@ -2752,18 +2482,11 @@
       },
       "ResourceType": {
         "type": "string",
-        "enum": [
-          "asset",
-          "event",
-          "timeseries",
-          "sequence"
-        ]
+        "enum": ["asset", "event", "timeseries", "sequence"]
       },
       "ResourceInternalId": {
         "type": "object",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "resourceType": {
             "$ref": "#/components/schemas/ResourceType"
@@ -2823,9 +2546,7 @@
       "CountAggregateResult": {
         "description": "Count aggregation result.",
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -2833,9 +2554,7 @@
             "maxItems": 1,
             "items": {
               "type": "object",
-              "required": [
-                "count"
-              ],
+              "required": ["count"],
               "properties": {
                 "count": {
                   "type": "integer",
@@ -2857,9 +2576,7 @@
       "StringValue": {
         "description": "A unique string value in the field.",
         "type": "object",
-        "required": [
-          "value"
-        ],
+        "required": ["value"],
         "properties": {
           "value": {
             "type": "string"
@@ -2869,9 +2586,7 @@
       "IntegerValue": {
         "description": "A unique integer value in the field.",
         "type": "object",
-        "required": [
-          "value"
-        ],
+        "required": ["value"],
         "properties": {
           "value": {
             "type": "integer",
@@ -2882,9 +2597,7 @@
       "ValuesAggregateResult": {
         "description": "Values aggregation result.",
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -2895,9 +2608,7 @@
               "allOf": [
                 {
                   "type": "object",
-                  "required": [
-                    "count"
-                  ],
+                  "required": ["count"],
                   "properties": {
                     "count": {
                       "description": "Number of items in this aggregation group.",
@@ -2964,9 +2675,7 @@
       "ObjectPatchSetAsset": {
         "title": "set",
         "type": "object",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "uniqueItems": true,
@@ -3010,10 +2719,7 @@
             "uniqueItems": true,
             "type": "array",
             "description": "Remove the key-value pairs with the specified keys.",
-            "example": [
-              "value1",
-              "value2"
-            ],
+            "example": ["value1", "value2"],
             "items": {
               "type": "string"
             }
@@ -3035,9 +2741,7 @@
       "ObjectPatchSetDataSet": {
         "title": "set",
         "type": "object",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "uniqueItems": true,
@@ -3081,10 +2785,7 @@
             "uniqueItems": true,
             "type": "array",
             "description": "Remove the key-value pairs with the specified keys.",
-            "example": [
-              "value1",
-              "value2"
-            ],
+            "example": ["value1", "value2"],
             "items": {
               "type": "string"
             }
@@ -3094,9 +2795,7 @@
       "ArrayPatchStringSet": {
         "title": "set",
         "type": "object",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "uniqueItems": true,
@@ -3159,9 +2858,7 @@
       },
       "SetLongField": {
         "type": "object",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "type": "integer",
@@ -3172,9 +2869,7 @@
       "SetStringField": {
         "type": "object",
         "title": "set",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "type": "string"
@@ -3184,9 +2879,7 @@
       "SetIntegerField": {
         "type": "object",
         "title": "set",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "type": "integer"
@@ -3196,9 +2889,7 @@
       "SetBooleanField": {
         "type": "object",
         "title": "set",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "type": "boolean"
@@ -3208,18 +2899,11 @@
       "GeoLocationFilter": {
         "description": "Only include files matching the specified geographic relation.",
         "type": "object",
-        "required": [
-          "relation",
-          "shape"
-        ],
+        "required": ["relation", "shape"],
         "properties": {
           "relation": {
             "type": "string",
-            "enum": [
-              "INTERSECTS",
-              "DISJOINT",
-              "WITHIN"
-            ],
+            "enum": ["INTERSECTS", "DISJOINT", "WITHIN"],
             "description": "One of the supported queries."
           },
           "shape": {
@@ -3250,9 +2934,7 @@
       },
       "GeoLocationGeometry": {
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "description": "Represents the points, curves and surfaces in the coordinate space.",
         "oneOf": [
           {
@@ -3280,16 +2962,11 @@
       },
       "Point": {
         "type": "object",
-        "required": [
-          "type",
-          "coordinates"
-        ],
+        "required": ["type", "coordinates"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "Point"
-            ]
+            "enum": ["Point"]
           },
           "coordinates": {
             "$ref": "#/components/schemas/PointCoordinates"
@@ -3307,16 +2984,11 @@
       },
       "LineString": {
         "type": "object",
-        "required": [
-          "type",
-          "coordinates"
-        ],
+        "required": ["type", "coordinates"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "LineString"
-            ]
+            "enum": ["LineString"]
           },
           "coordinates": {
             "$ref": "#/components/schemas/LineStringCoordinates"
@@ -3333,16 +3005,11 @@
       },
       "Polygon": {
         "type": "object",
-        "required": [
-          "type",
-          "coordinates"
-        ],
+        "required": ["type", "coordinates"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "Polygon"
-            ]
+            "enum": ["Polygon"]
           },
           "coordinates": {
             "$ref": "#/components/schemas/PolygonCoordinates"
@@ -3359,16 +3026,11 @@
       },
       "MultiPoint": {
         "type": "object",
-        "required": [
-          "type",
-          "coordinates"
-        ],
+        "required": ["type", "coordinates"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "MultiPoint"
-            ]
+            "enum": ["MultiPoint"]
           },
           "coordinates": {
             "$ref": "#/components/schemas/MultiPointCoordinates"
@@ -3384,16 +3046,11 @@
       },
       "MultiLineString": {
         "type": "object",
-        "required": [
-          "type",
-          "coordinates"
-        ],
+        "required": ["type", "coordinates"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "MultiLineString"
-            ]
+            "enum": ["MultiLineString"]
           },
           "coordinates": {
             "$ref": "#/components/schemas/MultiLineStringCoordinates"
@@ -3409,16 +3066,11 @@
       },
       "MultiPolygon": {
         "type": "object",
-        "required": [
-          "type",
-          "coordinates"
-        ],
+        "required": ["type", "coordinates"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "MultiPolygon"
-            ]
+            "enum": ["MultiPolygon"]
           },
           "coordinates": {
             "$ref": "#/components/schemas/MultiPolygonCoordinates"
@@ -3434,17 +3086,12 @@
       },
       "GeoLocation": {
         "description": "The geographic metadata of the file.",
-        "required": [
-          "type",
-          "geometry"
-        ],
+        "required": ["type", "geometry"],
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "Feature"
-            ],
+            "enum": ["Feature"],
             "description": "One of the GeoJSON types. Currently only the 'Feature' type is supported."
           },
           "geometry": {
@@ -3472,9 +3119,7 @@
       "SetGeoLocation": {
         "title": "set",
         "type": "object",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "$ref": "#/components/schemas/GeoLocation"
@@ -3484,9 +3129,7 @@
       "RemoveField": {
         "title": "remove",
         "type": "object",
-        "required": [
-          "setNull"
-        ],
+        "required": ["setNull"],
         "properties": {
           "setNull": {
             "type": "boolean",
@@ -3497,9 +3140,7 @@
       "SetExternalId": {
         "type": "object",
         "title": "set",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "$ref": "#/components/schemas/CogniteExternalId"
@@ -3508,9 +3149,7 @@
       },
       "SetDataSetId": {
         "type": "object",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "$ref": "#/components/schemas/DataSetId"
@@ -3520,9 +3159,7 @@
       "SetDescription": {
         "type": "object",
         "title": "set",
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "properties": {
           "set": {
             "$ref": "#/components/schemas/ResourceDescription"
@@ -3627,16 +3264,12 @@
           }
         },
         "description": "Set a new value for the string.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "DataSetInternalId": {
         "type": "object",
         "title": "DataSetInternalId",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "id": {
             "$ref": "#/components/schemas/CogniteInternalId"
@@ -3646,9 +3279,7 @@
       "DataSetExternalId": {
         "type": "object",
         "title": "DataSetExternalId",
-        "required": [
-          "externalId"
-        ],
+        "required": ["externalId"],
         "properties": {
           "externalId": {
             "$ref": "#/components/schemas/CogniteExternalId"
@@ -3705,9 +3336,7 @@
       "Label": {
         "type": "object",
         "title": "Label",
-        "required": [
-          "externalId"
-        ],
+        "required": ["externalId"],
         "description": "A label assigned to a resource.",
         "properties": {
           "externalId": {
@@ -3743,9 +3372,7 @@
       },
       "LabelContainsAnyFilter": {
         "type": "object",
-        "required": [
-          "containsAny"
-        ],
+        "required": ["containsAny"],
         "properties": {
           "containsAny": {
             "description": "The resource item contains at least one of the listed labels.",
@@ -3760,9 +3387,7 @@
       },
       "LabelContainsAllFilter": {
         "type": "object",
-        "required": [
-          "containsAll"
-        ],
+        "required": ["containsAll"],
         "properties": {
           "containsAll": {
             "description": "The resource item contains at least all the listed labels.",
@@ -3777,9 +3402,7 @@
       },
       "LabelDefinitionExternalId": {
         "type": "object",
-        "required": [
-          "externalId"
-        ],
+        "required": ["externalId"],
         "properties": {
           "externalId": {
             "$ref": "#/components/schemas/CogniteExternalId"
@@ -3788,9 +3411,7 @@
       },
       "LabelDefinitionExternalIdList": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -3861,10 +3482,7 @@
       "DigitalTwinConfig": {
         "type": "object",
         "description": "Digital twin resource.",
-        "required": [
-          "id",
-          "data"
-        ],
+        "required": ["id", "data"],
         "properties": {
           "id": {
             "type": "integer",
@@ -3879,9 +3497,7 @@
       "CreateDigitalTwinConfig": {
         "type": "object",
         "description": "Digital twin resource.",
-        "required": [
-          "data"
-        ],
+        "required": ["data"],
         "properties": {
           "data": {
             "$ref": "#/components/schemas/TwinConfiguration"
@@ -3891,10 +3507,7 @@
       "UpdateDigitalTwinConfig": {
         "type": "object",
         "description": "Digital twin resource.",
-        "required": [
-          "id",
-          "data"
-        ],
+        "required": ["id", "data"],
         "properties": {
           "id": {
             "type": "integer",
@@ -3909,9 +3522,7 @@
       "DigitalTwinConfigList": {
         "type": "object",
         "description": "List of digital twins.",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -3923,11 +3534,7 @@
       },
       "TwinConfiguration": {
         "description": "Data structure that fully defines a digital twin in the Cognite Digital Twin Application.",
-        "required": [
-          "header",
-          "assets",
-          "scenes"
-        ],
+        "required": ["header", "assets", "scenes"],
         "type": "object",
         "properties": {
           "header": {
@@ -3965,10 +3572,7 @@
       "Simulation": {
         "type": "object",
         "description": "Data structure that defines a simulation.",
-        "required": [
-          "displayName",
-          "timeseriesMappings"
-        ],
+        "required": ["displayName", "timeseriesMappings"],
         "properties": {
           "displayName": {
             "description": "Name of the simulation, to be shown in the user interface.",
@@ -3990,10 +3594,7 @@
       "TimeSeriesMapping": {
         "description": "Mapping between time series in a simulation.",
         "type": "object",
-        "required": [
-          "mappingFrom",
-          "mappingTo"
-        ],
+        "required": ["mappingFrom", "mappingTo"],
         "properties": {
           "mappingFrom": {
             "$ref": "#/components/schemas/ExtendedTimeSeriesId"
@@ -4123,9 +3724,7 @@
       },
       "Header": {
         "description": "Header containing basic information and metadata about the twin.",
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "type": "object",
         "properties": {
           "name": {
@@ -4162,10 +3761,7 @@
       "GeometryData": {
         "description": "A 3D model asset used by this twin. Contains IDs referencing a 3D model file in the 3D API, and optionally applies a transform to the model. <br> Additional field usage information:\n  * `colorOverride` - color to apply on this 3d model. This color will override any texture information.\n  * `photogrammetryLightingOverride` - Override for how photogrammetry meshes (if any) in this model are affected by lighting.\n",
         "type": "object",
-        "required": [
-          "modelId",
-          "revisionId"
-        ],
+        "required": ["modelId", "revisionId"],
         "properties": {
           "modelId": {
             "description": "3D API ID of the model.",
@@ -4194,19 +3790,13 @@
       },
       "SplineDataFormat": {
         "type": "string",
-        "enum": [
-          "noTangents",
-          "withTangents"
-        ],
+        "enum": ["noTangents", "withTangents"],
         "description": "Describes the format of spline data:\n  * `noTangents` - Sequence of X, Y, Z coordinates for spline points, in centimeters in the local coordinate system of the spline.\n  * `withTangents ` - Sequence of spline points, where each point in the sequence is represented with 9 floating point numbers; all in the local coordinate system of the spline: <br> - X, Y, Z coordinates of the spline point in centimeters. <br> - X, Y, Z components of incoming tangent vector. <br> - X, Y, Z components of outgoing tangent vector.\n"
       },
       "SplineData": {
         "description": "Spline data used by this twin.",
         "type": "object",
-        "required": [
-          "splinePoints",
-          "splineDataFormat"
-        ],
+        "required": ["splinePoints", "splineDataFormat"],
         "properties": {
           "splineDataFormat": {
             "$ref": "#/components/schemas/SplineDataFormat"
@@ -4223,26 +3813,18 @@
       },
       "MenuHierarchyType": {
         "type": "string",
-        "enum": [
-          "fullAssetHierarchy",
-          "customHierarchy"
-        ],
+        "enum": ["fullAssetHierarchy", "customHierarchy"],
         "description": "Source of the hierarchy for the navigation menu:\n  * `fullAssetHierarchy` - \"Full asset hierarchy for the current tenant. Should only be used on tenants with very small asset hierarchies.\"\n  * `customHierarchy` - \"Custom made hierarchy, defined in this file.\"\n"
       },
       "PhotogrammetryLightingType": {
         "type": "string",
-        "enum": [
-          "unlitRendering",
-          "litRendering"
-        ],
+        "enum": ["unlitRendering", "litRendering"],
         "description": "Lighting style for photogrammetry models:\n  * `unlitRendering` - Unlit rendering: The models will not be affected by the lighting in the scene. This is the default setting.\n  * `litRendering` - Lit rendering: The models will be affected by lights and shadows in the scene. This is not recommended, as photogrammetry textures usually have lighting baked into them.\n"
       },
       "GeographicLocation": {
         "description": "Describes a global position using a set of coordinates and an optional Coordinate Reference System (CRS). If no CRS is given, coordinates are assumed to be local Unreal Engine 4 coordinates.",
         "type": "object",
-        "required": [
-          "coordinates"
-        ],
+        "required": ["coordinates"],
         "properties": {
           "crs": {
             "description": "A Proj.4 formatted string describing a Coordinate Reference System (CRS). Currently, only longlat and utm (for WGS84) are supported.",
@@ -4300,9 +3882,7 @@
             "customHierarchy": "#/components/schemas/CustomMenuHierarchy"
           }
         },
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "properties": {
           "type": {
             "$ref": "#/components/schemas/MenuHierarchyType"
@@ -4335,9 +3915,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "rootNodes"
-            ],
+            "required": ["rootNodes"],
             "properties": {
               "rootNodes": {
                 "description": "Root nodes of the hierarchy.",
@@ -4377,10 +3955,7 @@
         "allOf": [
           {
             "type": "object",
-            "required": [
-              "min",
-              "max"
-            ],
+            "required": ["min", "max"],
             "properties": {
               "min": {
                 "$ref": "#/components/schemas/GeographicLocation"
@@ -4462,9 +4037,7 @@
       },
       "Terrain": {
         "type": "object",
-        "required": [
-          "transform"
-        ],
+        "required": ["transform"],
         "properties": {
           "transform": {
             "$ref": "#/components/schemas/AbsoluteTransform"
@@ -4541,11 +4114,7 @@
       },
       "WidgetType": {
         "type": "string",
-        "enum": [
-          "text",
-          "bar",
-          "discreteTimeSeries"
-        ],
+        "enum": ["text", "bar", "discreteTimeSeries"],
         "description": "Describes a type of a widget\n  * `text` - A widget displaying a single string of text.\n  * `bar` - A 3D grapical bar representing a value.\n  * `discreteTimeSeries` - A widget displaying discrete time series in the format of a heading, content based on user defined enums and a possible image.\n"
       },
       "BarFillType": {
@@ -4562,10 +4131,7 @@
       "WidgetMaterialType": {
         "description": "Controls the translucency of a widget\n  * 'masked' - the widget will use a masked material, with sharp cutoff in opacity.\n  * 'translucent' - the widget uses a translucent material. Required if the widgets should fade out smoothly with distance.\n",
         "type": "string",
-        "enum": [
-          "translucent",
-          "masked"
-        ]
+        "enum": ["translucent", "masked"]
       },
       "WidgetBase": {
         "description": "Base class for widgets (texts, images, etc) that appear in a scene.",
@@ -4577,9 +4143,7 @@
             "discreteTimeSeries": "#/components/schemas/WidgetDiscreteTimeSeries"
           }
         },
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "properties": {
           "type": {
             "$ref": "#/components/schemas/WidgetType"
@@ -4646,9 +4210,7 @@
           {
             "type": "object",
             "description": "Widget for creating text labels in the 3D scene.",
-            "required": [
-              "content"
-            ],
+            "required": ["content"],
             "properties": {
               "content": {
                 "description": "String content of the text widget. Supports inline time series, see example for syntax.",
@@ -4702,10 +4264,7 @@
           {
             "type": "object",
             "description": "Widget for creating graphical bars in the 3D scene.",
-            "required": [
-              "minValue",
-              "maxValue"
-            ],
+            "required": ["minValue", "maxValue"],
             "properties": {
               "heading": {
                 "description": "Displayed heading for the bar widget. Will use timeseries name if not specified.",
@@ -4779,9 +4338,7 @@
       },
       "DiscreteTimeSeriesEnums": {
         "description": "User defined content based on discrete time series enums.",
-        "required": [
-          "content"
-        ],
+        "required": ["content"],
         "properties": {
           "content": {
             "description": "user defined message to be displayed once the enum is triggered by discrete time series content from the CDF",
@@ -4802,10 +4359,7 @@
           {
             "type": "object",
             "description": "Widget for creating discrete time series labels in the 3D scene.",
-            "required": [
-              "heading",
-              "timeSeries"
-            ],
+            "required": ["heading", "timeSeries"],
             "properties": {
               "heading": {
                 "description": "String with the containing header for displaying the discrete time series content.",
@@ -4931,9 +4485,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "properties": {
           "type": {
             "$ref": "#/components/schemas/TransformControllerType"
@@ -4942,11 +4494,7 @@
       },
       "HeightTrackingMode": {
         "type": "string",
-        "enum": [
-          "none",
-          "constantValue",
-          "heightmapData"
-        ],
+        "enum": ["none", "constantValue", "heightmapData"],
         "description": "Determines how the vertical position of an actor will be adjusted by a transform controller:\n  * `none` - The vertical position of the actor will not be affected by the controller.\n  * `constantValue` - The actor will be placed at a fixed height.\n  * `heightmapData` - The vertical position of the actor is determined by a height map.\n"
       },
       "LatLongSeparateController": {
@@ -5018,11 +4566,7 @@
         "allOf": [
           {
             "type": "object",
-            "required": [
-              "xTimeSeries",
-              "yTimeSeries",
-              "zTimeSeries"
-            ],
+            "required": ["xTimeSeries", "yTimeSeries", "zTimeSeries"],
             "properties": {
               "xTimeSeries": {
                 "$ref": "#/components/schemas/ExtendedTimeSeriesIdOrConstant"
@@ -5042,10 +4586,7 @@
         "allOf": [
           {
             "type": "object",
-            "required": [
-              "xTimeSeries",
-              "yTimeSeries"
-            ],
+            "required": ["xTimeSeries", "yTimeSeries"],
             "properties": {
               "xTimeSeries": {
                 "$ref": "#/components/schemas/ExtendedTimeSeriesIdOrConstant"
@@ -5059,9 +4600,7 @@
       },
       "BasicMeshType": {
         "type": "string",
-        "enum": [
-          "plane"
-        ],
+        "enum": ["plane"],
         "description": "Specifies the type of the basic mesh to add to the scene\n   * `plane` - generates a plane of 1x1 m that will have applied the transform.\n"
       },
       "Material": {
@@ -5107,9 +4646,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "meshType"
-            ],
+            "required": ["meshType"],
             "properties": {
               "meshType": {
                 "$ref": "#/components/schemas/BasicMeshType"
@@ -5126,11 +4663,7 @@
         "allOf": [
           {
             "type": "object",
-            "required": [
-              "timeSeries",
-              "minimumCondition",
-              "maximumCondition"
-            ],
+            "required": ["timeSeries", "minimumCondition", "maximumCondition"],
             "properties": {
               "timeSeries": {
                 "$ref": "#/components/schemas/ExtendedTimeSeriesIdOrConstant"
@@ -5207,18 +4740,13 @@
       },
       "RotationUnitsType": {
         "type": "string",
-        "enum": [
-          "degree",
-          "radians"
-        ],
+        "enum": ["degree", "radians"],
         "description": "Specifies the unit of a rotation time series\n   * `degree` - yaw pitch and roll rotations will be considered as degrees, degrees/s in case of used as angular speed.\n   * `radians` - yaw pitch and roll rotations will be considered as radians, radians/s in case of used as angular speed.\n   \n"
       },
       "PositionTimeSeries": {
         "description": "Controls the position of the actor it is attached to with 3 time series that maps X, Y and Z.\n",
         "type": "object",
-        "required": [
-          "xyzTimeSeries"
-        ],
+        "required": ["xyzTimeSeries"],
         "properties": {
           "xyzTimeSeries": {
             "$ref": "#/components/schemas/vec3TimeSeries"
@@ -5228,9 +4756,7 @@
       "VelocityTimeSeries": {
         "description": "Controls the velocity of the actor it is attached to with 3 time series that maps X, Y and Z.\n",
         "type": "object",
-        "required": [
-          "xyzTimeSeries"
-        ],
+        "required": ["xyzTimeSeries"],
         "properties": {
           "xyzTimeSeries": {
             "$ref": "#/components/schemas/vec3TimeSeries"
@@ -5240,10 +4766,7 @@
       "AngularVelocityTimeSeriesBase": {
         "description": "Controls the rotation velocity of the actor it is attached to in rpm.\n",
         "type": "object",
-        "required": [
-          "rpmTimeSeries",
-          "axisRotation"
-        ],
+        "required": ["rpmTimeSeries", "axisRotation"],
         "properties": {
           "rpmTimeSeries": {
             "$ref": "#/components/schemas/ExtendedTimeSeriesIdOrConstant"
@@ -5271,10 +4794,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "type",
-          "unitsType"
-        ],
+        "required": ["type", "unitsType"],
         "properties": {
           "type": {
             "$ref": "#/components/schemas/RotationTimeSeriesType"
@@ -5292,9 +4812,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "quaternionTimeSeries"
-            ],
+            "required": ["quaternionTimeSeries"],
             "properties": {
               "quaternionTimeSeries": {
                 "$ref": "#/components/schemas/vec4TimeSeries"
@@ -5316,9 +4834,7 @@
       "Component": {
         "description": "Base class for different types of components that can be attached to actors.",
         "type": "object",
-        "required": [
-          "componentType"
-        ],
+        "required": ["componentType"],
         "discriminator": {
           "propertyName": "componentType",
           "mapping": {
@@ -5342,9 +4858,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "geometryDataID"
-            ],
+            "required": ["geometryDataID"],
             "properties": {
               "geometryDataID": {
                 "description": "Name of geometry listed in 'assets' section that this actor should use",
@@ -5362,9 +4876,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "widget"
-            ],
+            "required": ["widget"],
             "properties": {
               "widget": {
                 "$ref": "#/components/schemas/WidgetBase"
@@ -5381,11 +4893,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "splineDataID",
-              "radius",
-              "color"
-            ],
+            "required": ["splineDataID", "radius", "color"],
             "properties": {
               "splineDataID": {
                 "description": "Name of spline asset listed in 'assets' section that this actor should use",
@@ -5411,10 +4919,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "decalHeight",
-              "imageId"
-            ],
+            "required": ["decalHeight", "imageId"],
             "properties": {
               "decalHeight": {
                 "description": "The height of the box volume which contains and restricts the projected texture. <br> It determines the height range across which the projected image is applied.",
@@ -5436,9 +4941,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "components"
-            ],
+            "required": ["components"],
             "properties": {
               "components": {
                 "description": "Array of all components attached to this actor.",
@@ -5459,9 +4962,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "yawPitchRollTimeSeries"
-            ],
+            "required": ["yawPitchRollTimeSeries"],
             "properties": {
               "yawPitchRollTimeSeries": {
                 "$ref": "#/components/schemas/vec3TimeSeries"
@@ -5478,10 +4979,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "rotationTimeSeries",
-              "axisRotation"
-            ],
+            "required": ["rotationTimeSeries", "axisRotation"],
             "properties": {
               "rotationTimeSeries": {
                 "$ref": "#/components/schemas/ExtendedTimeSeriesIdOrConstant"
@@ -5505,11 +5003,7 @@
         "allOf": [
           {
             "type": "object",
-            "required": [
-              "translation",
-              "rotation",
-              "unitScale"
-            ],
+            "required": ["translation", "rotation", "unitScale"],
             "properties": {
               "translation": {
                 "description": "The translation of the target object to be converted to world space coordinates from unreal. Expects an array of three numbers describing the X, Y and Z translation.",
@@ -5575,9 +5069,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "matrixTransformToWorld"
-            ],
+            "required": ["matrixTransformToWorld"],
             "properties": {
               "matrixTransformToWorld": {
                 "$ref": "#/components/schemas/LocalToWorldTransform"
@@ -5600,10 +5092,7 @@
       },
       "ActorType": {
         "type": "string",
-        "enum": [
-          "basicMeshActor",
-          "actor"
-        ]
+        "enum": ["basicMeshActor", "actor"]
       },
       "ActorBase": {
         "description": "Abstract base class for objects (actors) that can appear in scene.",
@@ -5615,11 +5104,7 @@
           }
         },
         "type": "object",
-        "required": [
-          "name",
-          "transform",
-          "type"
-        ],
+        "required": ["name", "transform", "type"],
         "properties": {
           "type": {
             "$ref": "#/components/schemas/ActorType"
@@ -5657,11 +5142,7 @@
       },
       "HeightRenderer": {
         "type": "object",
-        "required": [
-          "location",
-          "orthoWidth",
-          "textureSize"
-        ],
+        "required": ["location", "orthoWidth", "textureSize"],
         "properties": {
           "location": {
             "description": "Determines where in the scene the heightmap is captured from.",
@@ -5770,10 +5251,7 @@
       "VisibilityLayers": {
         "description": "A view mode determines the visibility of a set of objects in the scene.<br> If a view mode is toggled, then it toggles the visibility of all its referenced objects.",
         "type": "object",
-        "required": [
-          "name",
-          "actorNames"
-        ],
+        "required": ["name", "actorNames"],
         "properties": {
           "name": {
             "description": "The name of the view mode as it appears in the user interface",
@@ -5790,10 +5268,7 @@
       },
       "AbsoluteTransformType": {
         "type": "string",
-        "enum": [
-          "unrealTransform",
-          "universalTransform"
-        ],
+        "enum": ["unrealTransform", "universalTransform"],
         "description": "Specification of the format or coordinate system of a (world space) transform:\n   * `unrealTransform` - Coordinates are given in the Unreal Engine 4 coordinate system.\n   * `universalTransform` - Coordinates are given in a geographic coordinate system described by a CRS.\n"
       },
       "DirLightSettings": {
@@ -5810,11 +5285,7 @@
           "rotation": {
             "description": "Rotates the target light. Expects an array of three numbers describing the Pitch, Yaw and Roll angles in degrees. This corresponds to rotation around its local Y, X and Z axes respectively. A value of [0.0, 0.0, 0.0] corresponds to no change.",
             "type": "array",
-            "example": [
-              -90,
-              0,
-              180
-            ],
+            "example": [-90, 0, 180],
             "minItems": 3,
             "maxItems": 3,
             "items": {
@@ -5826,18 +5297,13 @@
       },
       "TimeseriesFilterType": {
         "type": "string",
-        "enum": [
-          "nameRegex",
-          "metadataExactMatch"
-        ],
+        "enum": ["nameRegex", "metadataExactMatch"],
         "description": "Describes which predicate type to use in filtering the timeseries.\n  * `nameRegex` - The filter will only keep timeseries in which the name field is accepted by the specified regular expression string.\n  * `metadataExactMatch` - THe filter will only keep timeseries in which the metadata field contains a given key-value pair of strings.\n"
       },
       "AbsoluteTransform": {
         "description": "A world space transform - a transformation of position, rotation and scale in the coordinate system of the 3D scene.<br> Variants:\n  * `unrealTransform` - A world space transform represented in the Unreal Engine 4 coordinate system.\n  * `universalTransform` - A world space transform represented geographic coordinate system described by a CRS. For this to work correctly, the scene must be set up with proper geographic coordinates.\n",
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "discriminator": {
           "propertyName": "type",
           "mapping": {
@@ -5859,11 +5325,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "position",
-              "rotation",
-              "scale"
-            ],
+            "required": ["position", "rotation", "scale"],
             "properties": {
               "position": {
                 "description": "The position of the target object in the scene coordinate system. Expects an array of three numbers for position (in centimeters) along the XYZ-axes.",
@@ -5907,11 +5369,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "location",
-              "rotation",
-              "scale"
-            ],
+            "required": ["location", "rotation", "scale"],
             "properties": {
               "location": {
                 "$ref": "#/components/schemas/GeographicLocation"
@@ -5943,20 +5401,12 @@
       "RelativeTransform": {
         "description": "A transformation in an object's local coordinate system. This is primarily used for changing the origin, scale or default orientation of a 3D model.",
         "type": "object",
-        "required": [
-          "position",
-          "rotation",
-          "scale"
-        ],
+        "required": ["position", "rotation", "scale"],
         "properties": {
           "position": {
             "description": "Offsets the position of the target object in its local coordinate system. This is equivalent to changing the origin of the object. Expects an array of three numbers, corresponding to offsets along the XYZ-axes. A value of [0.0, 0.0, 0.0] corresponds to no change.",
             "type": "array",
-            "example": [
-              100,
-              0,
-              -50
-            ],
+            "example": [100, 0, -50],
             "minItems": 3,
             "maxItems": 3,
             "items": {
@@ -5967,11 +5417,7 @@
           "rotation": {
             "description": "Rotates the target object in its local coordinate system. Expects an array of three numbers describing the Pitch, Yaw and Roll angles in degrees. This corresponds to rotation around its local Y, X and Z axes respectively. A value of [0.0, 0.0, 0.0] corresponds to no change.",
             "type": "array",
-            "example": [
-              -90,
-              0,
-              180
-            ],
+            "example": [-90, 0, 180],
             "minItems": 3,
             "maxItems": 3,
             "items": {
@@ -5982,11 +5428,7 @@
           "scale": {
             "description": "Scales the target object along each axis in its local coordinate system. Expects an array of three numbers describing scale multipliers along the XYZ-axes. A value of [1.0, 1.0, 1.0] corresponds to the original scale. Note that not all objects support non-uniform scaling (different scale values along each axis).",
             "type": "array",
-            "example": [
-              0.5,
-              0.5,
-              0.5
-            ],
+            "example": [0.5, 0.5, 0.5],
             "minItems": 3,
             "maxItems": 3,
             "items": {
@@ -6004,9 +5446,7 @@
       "TimeseriesFilter": {
         "description": "The base class of all timeseries filter implementations.\n  * `type` The predicate type to use for filtering timeseries.\n",
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "properties": {
           "type": {
             "$ref": "#/components/schemas/TimeseriesFilterType"
@@ -6028,9 +5468,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "regexString"
-            ],
+            "required": ["regexString"],
             "properties": {
               "regexString": {
                 "type": "string"
@@ -6048,10 +5486,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "key",
-              "value"
-            ],
+            "required": ["key", "value"],
             "properties": {
               "key": {
                 "type": "string"
@@ -6124,12 +5559,7 @@
           "tipX": 0.3,
           "tipY": 0.4
         },
-        "required": [
-          "startX",
-          "startY",
-          "tipX",
-          "tipY"
-        ],
+        "required": ["startX", "startY", "tipX", "tipY"],
         "properties": {
           "startX": {
             "type": "number"
@@ -6154,10 +5584,7 @@
             "ignoredfield": "AA11"
           },
           {
-            "name": [
-              "21PT1017-A",
-              "21PT1017-B"
-            ]
+            "name": ["21PT1017-A", "21PT1017-B"]
           }
         ],
         "description": "A list of entities to look for in the P&ID. For example, all the assets under a root node. The entities can either be strings or objects. If objects, the searchField determines which string or strings that identify the entities. The value of an entity searchField could be a string or a list of strings, and if one of the strings is detected, the entity will be added to the detection result. ",
@@ -6216,12 +5643,7 @@
           "yMax": 0.3737254901960784,
           "yMin": 0.3611764705882352
         },
-        "required": [
-          "xMax",
-          "xMin",
-          "yMax",
-          "yMin"
-        ],
+        "required": ["xMax", "xMin", "yMax", "yMin"],
         "properties": {
           "xMax": {
             "type": "number"
@@ -6240,12 +5662,7 @@
       "Annotation": {
         "description": "Annotation representing a detected entity.",
         "type": "object",
-        "required": [
-          "text",
-          "boundingBox",
-          "confidence",
-          "type"
-        ],
+        "required": ["text", "boundingBox", "confidence", "type"],
         "properties": {
           "text": {
             "description": "The text extracted by the engine.",
@@ -6271,10 +5688,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "word",
-              "paragraph"
-            ]
+            "enum": ["word", "paragraph"]
           }
         }
       },
@@ -6285,10 +5699,7 @@
           "x": 0.58,
           "y": 0.12
         },
-        "required": [
-          "x",
-          "y"
-        ],
+        "required": ["x", "y"],
         "properties": {
           "x": {
             "type": "number",
@@ -6307,20 +5718,12 @@
       "Region": {
         "description": "Shape and coordinates of the detected entity in the image.",
         "type": "object",
-        "required": [
-          "shape",
-          "vertices"
-        ],
+        "required": ["shape", "vertices"],
         "properties": {
           "shape": {
             "type": "string",
             "description": "The geometrical shape of the image region to which a detected entity belongs.",
-            "enum": [
-              "points",
-              "rectangle",
-              "polyline",
-              "polygon"
-            ]
+            "enum": ["points", "rectangle", "polyline", "polygon"]
           },
           "vertices": {
             "type": "array",
@@ -6335,17 +5738,12 @@
       "DiagramRegion": {
         "description": "Shape and coordinates of the detected entity in the image.",
         "type": "object",
-        "required": [
-          "shape",
-          "vertices"
-        ],
+        "required": ["shape", "vertices"],
         "properties": {
           "shape": {
             "type": "string",
             "description": "The geometrical shape of the image region to which a detected entity belongs.",
-            "enum": [
-              "rectangle"
-            ]
+            "enum": ["rectangle"]
           },
           "vertices": {
             "type": "array",
@@ -6368,12 +5766,7 @@
       "JobStatus": {
         "description": "The status of the job.",
         "type": "string",
-        "enum": [
-          "Queued",
-          "Running",
-          "Completed",
-          "Failed"
-        ]
+        "enum": ["Queued", "Running", "Completed", "Failed"]
       },
       "BatchJobStatus": {
         "description": "The status of the job.",
@@ -6453,10 +5846,7 @@
         "description": "List of pairs of fields from the target and source items used to calculate features. All source and target items should have all the `source` and `target` fields specified here.",
         "items": {
           "type": "object",
-          "required": [
-            "source",
-            "target"
-          ],
+          "required": ["source", "target"],
           "properties": {
             "source": {
               "type": "string"
@@ -6492,11 +5882,7 @@
         "description": "Replace strings in entity fields. You can use this field to add input naming variations to the entity matching model to improve the suggested matches, for example, 'pmp' for 'pump' and 'bhp' for 'bottom hole pressure'. To avoid false positives, we recommend using the longer string as 'string' and the shorter as 'replacement'.",
         "items": {
           "type": "object",
-          "required": [
-            "field",
-            "string",
-            "replacement"
-          ],
+          "required": ["field", "string", "replacement"],
           "properties": {
             "field": {
               "type": "string",
@@ -6698,10 +6084,7 @@
       },
       "ContextJobSchema": {
         "type": "object",
-        "required": [
-          "jobId",
-          "status"
-        ],
+        "required": ["jobId", "status"],
         "properties": {
           "jobId": {
             "$ref": "#/components/schemas/JobId"
@@ -6817,12 +6200,7 @@
       },
       "StatusSchema": {
         "type": "object",
-        "required": [
-          "status",
-          "createdTime",
-          "startTime",
-          "statusTime"
-        ],
+        "required": ["status", "createdTime", "startTime", "statusTime"],
         "properties": {
           "status": {
             "$ref": "#/components/schemas/JobStatus"
@@ -6854,9 +6232,7 @@
           }
         },
         "description": "Set a new value for name.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "SinglePatchRequiredDescription": {
         "title": "Description",
@@ -6867,9 +6243,7 @@
           }
         },
         "description": "Set a new value for description.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "SinglePatchRequiredModelParameters": {
         "title": "ModelParameters",
@@ -6880,9 +6254,7 @@
           }
         },
         "description": "Set a new value for modelParameters.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "SinglePatchRequiredSources": {
         "title": "Sources",
@@ -6893,9 +6265,7 @@
           }
         },
         "description": "Set a new value for Sources.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "SinglePatchRequiredTargets": {
         "title": "Targets",
@@ -6906,9 +6276,7 @@
           }
         },
         "description": "Set a new value for Targets.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "SinglePatchRequiredRules": {
         "title": "Rules",
@@ -6919,9 +6287,7 @@
           }
         },
         "description": "Set a new value for Rules.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "SinglePatchRequiredConfirmedMatches": {
         "title": "TrueMatches",
@@ -6932,9 +6298,7 @@
           }
         },
         "description": "Set a new value for confirmedMatches.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "SinglePatchRequiredRejectedMatches": {
         "title": "RejectedMatches",
@@ -6945,9 +6309,7 @@
           }
         },
         "description": "Set a new value for rejectedMatches.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "SinglePatchRequiredScoreThreshold": {
         "title": "ScoreThreshold",
@@ -6958,9 +6320,7 @@
           }
         },
         "description": "Set a new value for scoreThreshold.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "SinglePatchRequiredUseExistingMatches": {
         "title": "UseExistingMatches",
@@ -6971,9 +6331,7 @@
           }
         },
         "description": "Set a new value for useExistingMatches.",
-        "required": [
-          "set"
-        ]
+        "required": ["set"]
       },
       "PipelineChange": {
         "oneOf": [
@@ -6992,9 +6350,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "id"
-            ],
+            "required": ["id"],
             "properties": {
               "id": {
                 "$ref": "#/components/schemas/CogniteInternalId"
@@ -7010,9 +6366,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "externalId"
-            ],
+            "required": ["externalId"],
             "properties": {
               "externalId": {
                 "$ref": "#/components/schemas/CogniteExternalId"
@@ -7024,9 +6378,7 @@
       "PipelinePatch": {
         "type": "object",
         "description": "Changes applied to model",
-        "required": [
-          "update"
-        ],
+        "required": ["update"],
         "properties": {
           "update": {
             "type": "object",
@@ -7067,11 +6419,7 @@
       },
       "PipelineSources": {
         "type": "object",
-        "required": [
-          "dataSetIds",
-          "assetSubtreeIds",
-          "entities"
-        ],
+        "required": ["dataSetIds", "assetSubtreeIds", "entities"],
         "oneOf": [
           {
             "properties": {
@@ -7124,11 +6472,7 @@
       },
       "PipelineTargets": {
         "type": "object",
-        "required": [
-          "dataSetIds",
-          "assetSubtreeIds",
-          "entities"
-        ],
+        "required": ["dataSetIds", "assetSubtreeIds", "entities"],
         "oneOf": [
           {
             "properties": {
@@ -7193,13 +6537,7 @@
         "type": "string",
         "description": "Resource type.",
         "example": "assets",
-        "enum": [
-          "assets",
-          "time_series",
-          "events",
-          "files",
-          "sequences"
-        ],
+        "enum": ["assets", "time_series", "events", "files", "sequences"],
         "default": "time_series"
       },
       "AvgScore": {
@@ -7212,11 +6550,7 @@
       },
       "ApplyPriorityRulesRequest": {
         "type": "object",
-        "required": [
-          "sources",
-          "targets",
-          "rules"
-        ],
+        "required": ["sources", "targets", "rules"],
         "properties": {
           "sources": {
             "type": "array",
@@ -7279,10 +6613,7 @@
       "MatchRule": {
         "description": "An entity matching rule matches source entities with target entities based on a pattern defined by the rule. A rule has extractors that both require entities to follow a certain format, and produce lists of features. For a regex extractor, a specific field must match a pattern, and parts of the pattern become the features. The conditions of a rule express which extracted features must be equal for two entities to match. Since extractors restrict the scopes of rules to entities that conform with patterns, two rules will often not have entities in common that they apply to. But if they do, the more specific rule is given higher priority. If one rule is not a special case of the other, they may be inconsistent (conflict) or redundant (overlap).",
         "type": "object",
-        "required": [
-          "extractors",
-          "conditions"
-        ],
+        "required": ["extractors", "conditions"],
         "example": {
           "extractors": [
             {
@@ -7302,14 +6633,8 @@
             {
               "conditionType": "equals",
               "arguments": [
-                [
-                  0,
-                  0
-                ],
-                [
-                  1,
-                  0
-                ]
+                [0, 0],
+                [1, 0]
               ]
             }
           ],
@@ -7341,28 +6666,18 @@
       },
       "RegexExtractor": {
         "type": "object",
-        "required": [
-          "entitySet",
-          "extractorType",
-          "field",
-          "pattern"
-        ],
+        "required": ["entitySet", "extractorType", "field", "pattern"],
         "description": "An extractor that acts on entities from 'entitySet'. An entity must have a value of 'field' that matches the regular expression 'pattern' to get features. The features are the catching groups of the pattern, that is the parts that are in parenthesis. E.g. ([A-Z])-00([0-9]) applied to A-007 produces [A, 7] as features.",
         "properties": {
           "entitySet": {
             "type": "string",
             "description": "Which set of entities the extractor will extract features from.",
-            "enum": [
-              "sources",
-              "targets"
-            ]
+            "enum": ["sources", "targets"]
           },
           "extractorType": {
             "type": "string",
             "description": "The type of extractor. Currently,  we only support \"regex\".",
-            "enum": [
-              "regex"
-            ]
+            "enum": ["regex"]
           },
           "field": {
             "type": "string",
@@ -7376,17 +6691,12 @@
       },
       "MatchCondition": {
         "type": "object",
-        "required": [
-          "conditionType",
-          "arguments"
-        ],
+        "required": ["conditionType", "arguments"],
         "properties": {
           "conditionType": {
             "type": "string",
             "description": "The type of condition. Currently, we only support the 'equals' condition. It requires all features referenced by its arguments to be equal.",
-            "enum": [
-              "equals"
-            ]
+            "enum": ["equals"]
           },
           "arguments": {
             "type": "array",
@@ -7417,21 +6727,12 @@
             },
             "example": [
               {
-                "sources": [
-                  "odour"
-                ],
-                "targets": [
-                  "odor"
-                ]
+                "sources": ["odour"],
+                "targets": ["odor"]
               },
               {
-                "sources": [
-                  "petrol"
-                ],
-                "targets": [
-                  "gas",
-                  "gasoline"
-                ]
+                "sources": ["petrol"],
+                "targets": ["gas", "gasoline"]
               }
             ]
           }
@@ -7459,11 +6760,7 @@
       },
       "SuggestPriorityRulesRequest": {
         "type": "object",
-        "required": [
-          "sources",
-          "targets",
-          "matches"
-        ],
+        "required": ["sources", "targets", "matches"],
         "properties": {
           "sources": {
             "example": [
@@ -7578,9 +6875,7 @@
             "description": "An array of flags resulting from applying this rule. If a rule has more matches than there are source entities, it will yield no matches and get the flag \"Too many matches\".",
             "items": {
               "type": "string",
-              "enum": [
-                "Too many matches"
-              ]
+              "enum": ["Too many matches"]
             }
           },
           "numberOfMatches": {
@@ -7681,14 +6976,8 @@
               {
                 "conditionType": "equals",
                 "arguments": [
-                  [
-                    0,
-                    0
-                  ],
-                  [
-                    1,
-                    0
-                  ]
+                  [0, 0],
+                  [1, 0]
                 ]
               }
             ],
@@ -7750,9 +7039,7 @@
         "additionalProperties": {
           "type": "object",
           "description": "property of the template",
-          "required": [
-            "items"
-          ],
+          "required": ["items"],
           "properties": {
             "items": {
               "type": "array",
@@ -7867,10 +7154,7 @@
       },
       "OneOfFileId": {
         "type": "object",
-        "required": [
-          "fileId",
-          "fileExternalId"
-        ],
+        "required": ["fileId", "fileExternalId"],
         "description": "An object containg file (external) id. The file can only have maximum 50 pages.",
         "oneOf": [
           {
@@ -7891,9 +7175,7 @@
       },
       "AllOfFileId": {
         "type": "object",
-        "required": [
-          "fileId"
-        ],
+        "required": ["fileId"],
         "properties": {
           "fileId": {
             "$ref": "#/components/schemas/ContextFileId"
@@ -7911,10 +7193,7 @@
             "ignoredField": "AA11"
           },
           {
-            "userDefinedField": [
-              "21PT1017-A",
-              "21PT1017-B"
-            ]
+            "userDefinedField": ["21PT1017-A", "21PT1017-B"]
           }
         ],
         "description": "A list of entities to look for. For example, all the assets under a root node. The `searchField` determines the strings that identify the entities.",
@@ -7978,10 +7257,7 @@
       },
       "NewAnnotation": {
         "type": "object",
-        "required": [
-          "text",
-          "region"
-        ],
+        "required": ["text", "region"],
         "properties": {
           "text": {
             "description": "The text and entities detected by the service.",
@@ -7996,11 +7272,7 @@
             "maximum": 1
           },
           "region": {
-            "required": [
-              "shape",
-              "vertices",
-              "page"
-            ],
+            "required": ["shape", "vertices", "page"],
             "allOf": [
               {
                 "$ref": "#/components/schemas/DiagramRegion"
@@ -8024,10 +7296,7 @@
             "ignoredField": "AA11"
           },
           {
-            "userDefinedField": [
-              "21PT1017-A",
-              "21PT1017-B"
-            ]
+            "userDefinedField": ["21PT1017-A", "21PT1017-B"]
           }
         ],
         "description": "A list of entities detected per annotation.",
@@ -8076,9 +7345,7 @@
                   }
                 }
               ],
-              "required": [
-                "annotations"
-              ]
+              "required": ["annotations"]
             },
             {
               "allOf": [
@@ -8094,9 +7361,7 @@
                   }
                 }
               ],
-              "required": [
-                "errorMessage"
-              ]
+              "required": ["errorMessage"]
             }
           ]
         }
@@ -8120,11 +7385,7 @@
                 "description": "A signed URL to a PNG version of the engineering diagram (valid for 10 minutes)."
               }
             },
-            "required": [
-              "page",
-              "svgUrl",
-              "pngUrl"
-            ]
+            "required": ["page", "svgUrl", "pngUrl"]
           },
           {
             "properties": {
@@ -8136,10 +7397,7 @@
                 "description": "The error message for the page and file."
               }
             },
-            "required": [
-              "page",
-              "errorMessage"
-            ]
+            "required": ["page", "errorMessage"]
           }
         ]
       },
@@ -8166,9 +7424,7 @@
                   }
                 }
               ],
-              "required": [
-                "results"
-              ]
+              "required": ["results"]
             },
             {
               "allOf": [
@@ -8184,9 +7440,7 @@
                   }
                 }
               ],
-              "required": [
-                "errorMessage"
-              ]
+              "required": ["errorMessage"]
             }
           ]
         }
@@ -8198,9 +7452,7 @@
         "minItems": 1,
         "items": {
           "type": "object",
-          "required": [
-            "annotations"
-          ],
+          "required": ["annotations"],
           "allOf": [
             {
               "$ref": "#/components/schemas/OneOfFileId"
@@ -8243,9 +7495,7 @@
       "VisionAnnotation": {
         "description": "Annotation representing a detected entity.",
         "type": "object",
-        "required": [
-          "text"
-        ],
+        "required": ["text"],
         "properties": {
           "text": {
             "description": "The entity (e.g. a valve, a pump or text) detected by a computer vision model.",
@@ -8267,16 +7517,10 @@
       "GaugeReadingAnnotation": {
         "description": "Annotation representing a detected valve.",
         "type": "object",
-        "required": [
-          "attributes",
-          "region"
-        ],
+        "required": ["attributes", "region"],
         "properties": {
           "attributes": {
-            "required": [
-              "description",
-              "gaugeValue"
-            ],
+            "required": ["description", "gaugeValue"],
             "properties": {
               "description": {
                 "description": "Type of gauge",
@@ -8298,10 +7542,7 @@
       "VisionTagDetectionAnnotation": {
         "description": "Annotation representing detected entities.",
         "type": "object",
-        "required": [
-          "text",
-          "assetIds"
-        ],
+        "required": ["text", "assetIds"],
         "properties": {
           "text": {
             "description": "The matched string which corresponds to either the name or the external id of the matched assets.",
@@ -8314,10 +7555,7 @@
             "items": {
               "$ref": "#/components/schemas/CogniteInternalId"
             },
-            "example": [
-              1234,
-              8888
-            ]
+            "example": [1234, 8888]
           },
           "confidence": {
             "type": "number",
@@ -8334,11 +7572,7 @@
       "ValveReadingAnnotation": {
         "description": "Annotation representing a detected valve.",
         "type": "object",
-        "required": [
-          "description",
-          "data",
-          "region"
-        ],
+        "required": ["description", "data", "region"],
         "properties": {
           "description": {
             "description": "valve",
@@ -8346,19 +7580,13 @@
             "example": "valve"
           },
           "data": {
-            "required": [
-              "state"
-            ],
+            "required": ["state"],
             "properties": {
               "state": {
                 "description": "The predicted state of the valve.",
                 "type": "string",
                 "example": "on",
-                "enum": [
-                  "on",
-                  "off",
-                  "undefined"
-                ]
+                "enum": ["on", "off", "undefined"]
               }
             }
           },
@@ -8402,10 +7630,7 @@
       },
       "ModelEvaluationSchema": {
         "type": "object",
-        "required": [
-          "meanAveragePrecision",
-          "metrics"
-        ],
+        "required": ["meanAveragePrecision", "metrics"],
         "properties": {
           "iouThreshold": {
             "type": "number",
@@ -8464,9 +7689,7 @@
       },
       "DocumentContentRequestItems": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -8568,9 +7791,7 @@
             "items": {
               "type": "string"
             },
-            "example": [
-              "externalId:desc"
-            ]
+            "example": ["externalId:desc"]
           }
         }
       },
@@ -8855,10 +8076,7 @@
       },
       "DocumentsCountAggregate": {
         "type": "object",
-        "required": [
-          "name",
-          "aggregate"
-        ],
+        "required": ["name", "aggregate"],
         "properties": {
           "name": {
             "type": "string",
@@ -8882,12 +8100,7 @@
       },
       "DocumentsDateHistogramAggregate": {
         "type": "object",
-        "required": [
-          "name",
-          "aggregate",
-          "field",
-          "interval"
-        ],
+        "required": ["name", "aggregate", "field", "interval"],
         "properties": {
           "name": {
             "type": "string",
@@ -8911,9 +8124,7 @@
       },
       "DocumentContent": {
         "type": "object",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "id": {
             "$ref": "#/components/schemas/DocumentId"
@@ -8930,10 +8141,7 @@
       },
       "Document": {
         "type": "object",
-        "required": [
-          "id",
-          "sourceFile"
-        ],
+        "required": ["id", "sourceFile"],
         "description": "A document",
         "properties": {
           "id": {
@@ -8998,10 +8206,7 @@
           "assetIds": {
             "description": "The ids of any assets referred to in the document",
             "type": "array",
-            "example": [
-              42,
-              101
-            ],
+            "example": [42, 101],
             "items": {
               "$ref": "#/components/schemas/CogniteInternalId"
             }
@@ -9042,9 +8247,7 @@
       "DocumentSourceFile": {
         "type": "object",
         "description": "The source file that this document is derived from.",
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "properties": {
           "name": {
             "type": "string",
@@ -9172,11 +8375,7 @@
         "maxItems": 100,
         "uniqueItems": true,
         "description": "IDs of assets related to the file.",
-        "example": [
-          363848954441724,
-          793045462540095,
-          1261042166839739
-        ],
+        "example": [363848954441724, 793045462540095, 1261042166839739],
         "items": {
           "$ref": "#/components/schemas/CogniteInternalId"
         }
@@ -9294,17 +8493,13 @@
                 "$ref": "#/components/schemas/Relation"
               }
             },
-            "required": [
-              "shape"
-            ]
+            "required": ["shape"]
           }
         ]
       },
       "IntIn": {
         "type": "object",
-        "required": [
-          "in"
-        ],
+        "required": ["in"],
         "properties": {
           "in": {
             "type": "array",
@@ -9320,9 +8515,7 @@
       },
       "StringIn": {
         "type": "object",
-        "required": [
-          "in"
-        ],
+        "required": ["in"],
         "properties": {
           "in": {
             "type": "array",
@@ -9338,9 +8531,7 @@
       },
       "StringEquals": {
         "type": "object",
-        "required": [
-          "equals"
-        ],
+        "required": ["equals"],
         "properties": {
           "equals": {
             "type": "string",
@@ -9350,9 +8541,7 @@
       },
       "ValueMissing": {
         "type": "object",
-        "required": [
-          "missing"
-        ],
+        "required": ["missing"],
         "properties": {
           "missing": {
             "type": "boolean",
@@ -9362,9 +8551,7 @@
       },
       "IntEquals": {
         "type": "object",
-        "required": [
-          "equals"
-        ],
+        "required": ["equals"],
         "properties": {
           "equals": {
             "type": "integer",
@@ -9511,9 +8698,7 @@
           {
             "title": "setter",
             "type": "object",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "$ref": "#/components/schemas/DocumentsPipelineArrayOf1To10Strings"
@@ -9539,9 +8724,7 @@
           {
             "title": "setter",
             "type": "object",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "$ref": "#/components/schemas/DocumentsPipelineArrayOf1To10ExternalIds"
@@ -9605,27 +8788,13 @@
           }
         },
         "example": {
-          "title": [
-            "TERMS"
-          ],
-          "author": [
-            "TERMS"
-          ],
-          "type": [
-            "TERMS",
-            "TYPES"
-          ],
+          "title": ["TERMS"],
+          "author": ["TERMS"],
+          "type": ["TERMS", "TYPES"],
           "sourceFile": {
-            "name": [
-              "TERMS"
-            ],
-            "content": [
-              "TERMS",
-              "TYPES"
-            ],
-            "directory": [
-              "DIRECTORIES"
-            ]
+            "name": ["TERMS"],
+            "content": ["TERMS", "TYPES"],
+            "directory": ["DIRECTORIES"]
           }
         }
       },
@@ -9636,18 +8805,9 @@
             "type": "object",
             "description": "Dictionary object. Name of match lists as keys, lists of matching words as values.",
             "example": {
-              "DIRECTORIES": [
-                "secret"
-              ],
-              "TYPES": [
-                "contracts",
-                "emails"
-              ],
-              "TERMS": [
-                "secret",
-                "confidential",
-                "sensitive"
-              ]
+              "DIRECTORIES": ["secret"],
+              "TYPES": ["contracts", "emails"],
+              "TERMS": ["secret", "confidential", "sensitive"]
             },
             "additionalProperties": {
               "type": "array",
@@ -9731,9 +8891,7 @@
           {
             "title": "setter",
             "type": "object",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "$ref": "#/components/schemas/LabelList"
@@ -9759,9 +8917,7 @@
           {
             "title": "setter",
             "type": "object",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "$ref": "#/components/schemas/DocumentsPipelineSourceFile"
@@ -9771,9 +8927,7 @@
           {
             "title": "modifier",
             "type": "object",
-            "required": [
-              "modify"
-            ],
+            "required": ["modify"],
             "properties": {
               "modify": {
                 "type": "object",
@@ -9792,9 +8946,7 @@
                       {
                         "title": "setter",
                         "type": "object",
-                        "required": [
-                          "set"
-                        ],
+                        "required": ["set"],
                         "description": "Replaces all metadata values",
                         "properties": {
                           "set": {
@@ -9843,9 +8995,7 @@
           {
             "title": "setter",
             "type": "object",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "$ref": "#/components/schemas/DocumentsPipelineFieldMappings"
@@ -9855,9 +9005,7 @@
           {
             "title": "modifier",
             "type": "object",
-            "required": [
-              "modify"
-            ],
+            "required": ["modify"],
             "properties": {
               "modify": {
                 "type": "object",
@@ -9891,9 +9039,7 @@
           {
             "title": "setter",
             "type": "object",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "$ref": "#/components/schemas/DocumentsPipelineSensitivityMatcher"
@@ -9903,9 +9049,7 @@
           {
             "title": "modifier",
             "type": "object",
-            "required": [
-              "modify"
-            ],
+            "required": ["modify"],
             "properties": {
               "modify": {
                 "type": "object",
@@ -9918,9 +9062,7 @@
                       {
                         "title": "setter",
                         "type": "object",
-                        "required": [
-                          "set"
-                        ],
+                        "required": ["set"],
                         "properties": {
                           "set": {
                             "type": "object",
@@ -9958,9 +9100,7 @@
                   },
                   "filterPasswords": {
                     "type": "object",
-                    "required": [
-                      "set"
-                    ],
+                    "required": ["set"],
                     "properties": {
                       "set": {
                         "type": "boolean"
@@ -9972,9 +9112,7 @@
                       {
                         "title": "setter",
                         "type": "object",
-                        "required": [
-                          "set"
-                        ],
+                        "required": ["set"],
                         "properties": {
                           "set": {
                             "type": "integer",
@@ -9986,9 +9124,7 @@
                       {
                         "title": "nullSetter",
                         "type": "object",
-                        "required": [
-                          "setNull"
-                        ],
+                        "required": ["setNull"],
                         "properties": {
                           "setNull": {
                             "type": "boolean",
@@ -10003,9 +9139,7 @@
                       {
                         "title": "setter",
                         "type": "object",
-                        "required": [
-                          "set"
-                        ],
+                        "required": ["set"],
                         "properties": {
                           "set": {
                             "type": "array",
@@ -10046,9 +9180,7 @@
           {
             "title": "setter",
             "type": "object",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "$ref": "#/components/schemas/DocumentsPipelineClassifier"
@@ -10058,18 +9190,14 @@
           {
             "title": "modifier",
             "type": "object",
-            "required": [
-              "modify"
-            ],
+            "required": ["modify"],
             "properties": {
               "modify": {
                 "type": "object",
                 "properties": {
                   "name": {
                     "type": "object",
-                    "required": [
-                      "set"
-                    ],
+                    "required": ["set"],
                     "properties": {
                       "set": {
                         "type": "string",
@@ -10085,9 +9213,7 @@
                       {
                         "title": "setter",
                         "type": "object",
-                        "required": [
-                          "set"
-                        ],
+                        "required": ["set"],
                         "properties": {
                           "set": {
                             "$ref": "#/components/schemas/CogniteInternalId"
@@ -10097,9 +9223,7 @@
                       {
                         "title": "nullSetter",
                         "type": "object",
-                        "required": [
-                          "setNull"
-                        ],
+                        "required": ["setNull"],
                         "properties": {
                           "setNull": {
                             "type": "boolean"
@@ -10116,10 +9240,7 @@
       },
       "DocumentsPipelineUpdate": {
         "type": "object",
-        "required": [
-          "externalId",
-          "update"
-        ],
+        "required": ["externalId", "update"],
         "properties": {
           "externalId": {
             "$ref": "#/components/schemas/CogniteExternalId"
@@ -10140,9 +9261,7 @@
       "DocumentsPipelineItemsUpdate": {
         "description": "A list of update pipeline configuration objects.",
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -10234,9 +9353,7 @@
       "DocumentsClassifierItems": {
         "description": "A list of classifiers.",
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -10248,9 +9365,7 @@
       },
       "DocumentsClassifierCreate": {
         "type": "object",
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "properties": {
           "name": {
             "type": "string"
@@ -10260,9 +9375,7 @@
       "DocumentsClassifierCreateItems": {
         "description": "A list of classifiers.",
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -10283,9 +9396,7 @@
       "DocumentsClassifierListByIdsItems": {
         "description": "A list of classifier ids.",
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -10297,9 +9408,7 @@
       },
       "DocumentsClassifierDelete": {
         "type": "object",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "id": {
             "$ref": "#/components/schemas/CogniteInternalId"
@@ -10309,9 +9418,7 @@
       "DocumentsClassifierDeleteItems": {
         "description": "A list of classifier ids.",
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -10343,19 +9450,11 @@
       "FeedbackAction": {
         "type": "string",
         "description": "What to do with the label on the file",
-        "enum": [
-          "ATTACH",
-          "DETACH"
-        ]
+        "enum": ["ATTACH", "DETACH"]
       },
       "FeedbackStatus": {
         "type": "string",
-        "enum": [
-          "CREATED",
-          "ACCEPTED",
-          "REJECTED",
-          "STALE"
-        ],
+        "enum": ["CREATED", "ACCEPTED", "REJECTED", "STALE"],
         "example": "ACCEPTED",
         "description": "Status of the feedback, complying with the lifecycle described below.\n\n## Feedback lifecycle\n- It is initially `CREATED`.\n- If the administrator accepts the feedback, it moves to `ACCEPTED`.\n  Once in this state, it cannot move to another state.\n- If the administrator rejects the feedback, it moves to `REJECTED`.\n  Once in this state, it cannot move to another state.\n- If the feedback object has become _invalid_, it moves to `STALE`.\n  Once in this state, it cannot move to another state.\n\n## Definition of feedback _invalidity_\n- If the action was `ATTACH`, and the label to attach does not exist anymore.\n- If the action was `ATTACH`, and the label is already attached to the file.\n- If the action was `DETACH`, and the label is not attached to the file anymore."
       },
@@ -10368,9 +9467,7 @@
       "DocumentFeedbackCreateRequest": {
         "description": "A list of feedback objects, not yet written to the API",
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -10383,11 +9480,7 @@
       "DocumentFeedbackCreateItem": {
         "description": "A new feedback object, not yet written to the API",
         "type": "object",
-        "required": [
-          "documentId",
-          "label",
-          "action"
-        ],
+        "required": ["documentId", "label", "action"],
         "properties": {
           "documentId": {
             "$ref": "#/components/schemas/DocumentId"
@@ -10449,18 +9542,13 @@
       "AggregateField": {
         "type": "string",
         "description": "A feedback field to aggregate on.\n\nYou can find extensive description of the available fields in the\n[List Feedback](#operation/documentsListFeedback) endpoint response.",
-        "enum": [
-          "action",
-          "status"
-        ],
+        "enum": ["action", "status"],
         "example": "action"
       },
       "DocumentFeedbackAggregateRequest": {
         "description": "A query object for the aggregation endpoint",
         "type": "object",
-        "required": [
-          "field"
-        ],
+        "required": ["field"],
         "properties": {
           "field": {
             "$ref": "#/components/schemas/AggregateField"
@@ -10470,10 +9558,7 @@
       "AggregateGroup": {
         "description": "A value/count aggregation object",
         "type": "object",
-        "required": [
-          "value",
-          "count"
-        ],
+        "required": ["value", "count"],
         "properties": {
           "value": {
             "type": "string",
@@ -10488,9 +9573,7 @@
       "DocumentFeedbackAcceptRejectRequest": {
         "description": "A query object for the accept/reject endpoints",
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -10503,9 +9586,7 @@
       "DocumentFeedbackAcceptRejectItem": {
         "description": "An id of the accepted / rejected feedback",
         "type": "object",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "id": {
             "$ref": "#/components/schemas/FeedbackId"
@@ -10554,9 +9635,7 @@
           },
           {
             "type": "object",
-            "required": [
-              "status"
-            ],
+            "required": ["status"],
             "properties": {
               "status": {
                 "$ref": "#/components/schemas/Status"
@@ -10567,9 +9646,7 @@
       },
       "AnnotationsV2ListResponseSchema": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -10633,9 +9710,7 @@
       "AnnotationsV2ReferenceSchema": {
         "type": "object",
         "description": "A reference to an existing annotation",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "id": {
             "$ref": "#/components/schemas/AnnotationId"
@@ -10645,10 +9720,7 @@
       "AnnotationsV2FilterSchema": {
         "type": "object",
         "description": "A filter to apply on annotations",
-        "required": [
-          "annotatedResourceType",
-          "annotatedResourceIds"
-        ],
+        "required": ["annotatedResourceType", "annotatedResourceIds"],
         "properties": {
           "annotatedResourceType": {
             "$ref": "#/components/schemas/AnnotatedResourceType"
@@ -10689,9 +9761,7 @@
         },
         "example": {
           "annotatedResourceType": "file",
-          "annotatedResourceIds": [
-            "abc-1066"
-          ],
+          "annotatedResourceIds": ["abc-1066"],
           "status": "approved",
           "data": {
             "label": "cat"
@@ -10701,9 +9771,7 @@
       "AnnotationsV2CursoredListResponseSchema": {
         "type": "object",
         "description": "A cursored list of existing annotations",
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "properties": {
           "items": {
             "type": "array",
@@ -10725,10 +9793,7 @@
       "AnnotationsV2UpdateItemSchema": {
         "type": "object",
         "description": "An update object to apply to an annotation",
-        "required": [
-          "id",
-          "update"
-        ],
+        "required": ["id", "update"],
         "properties": {
           "id": {
             "$ref": "#/components/schemas/AnnotationId"
@@ -10744,9 +9809,7 @@
         "properties": {
           "annotationType": {
             "type": "object",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "$ref": "#/components/schemas/AnnotationType"
@@ -10755,9 +9818,7 @@
           },
           "data": {
             "type": "object",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "$ref": "#/components/schemas/AnnotationData"
@@ -10766,9 +9827,7 @@
           },
           "status": {
             "type": "object",
-            "required": [
-              "set"
-            ],
+            "required": ["set"],
             "properties": {
               "set": {
                 "$ref": "#/components/schemas/Status"
@@ -10802,9 +9861,7 @@
       "AnnotatedResourceType": {
         "type": "string",
         "description": "The annotated CDF resource. Files are supported.",
-        "enum": [
-          "file"
-        ],
+        "enum": ["file"],
         "example": "file"
       },
       "AnnotatedResourceId": {
@@ -10958,11 +10015,7 @@
       "Status": {
         "type": "string",
         "description": "The status of the annotation",
-        "enum": [
-          "suggested",
-          "approved",
-          "rejected"
-        ],
+        "enum": ["suggested", "approved", "rejected"],
         "example": "approved"
       },
       "Annotations.Point": {
@@ -10989,10 +10042,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "x",
-          "y"
-        ],
+        "required": ["x", "y"],
         "additionalProperties": false
       },
       "Annotations.Boolean": {
@@ -11006,9 +10056,7 @@
             "type": "string"
           },
           "type": {
-            "enum": [
-              "boolean"
-            ],
+            "enum": ["boolean"],
             "type": "string"
           },
           "value": {
@@ -11016,10 +10064,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "type",
-          "value"
-        ],
+        "required": ["type", "value"],
         "additionalProperties": false
       },
       "Annotations.Numerical": {
@@ -11033,9 +10078,7 @@
             "type": "string"
           },
           "type": {
-            "enum": [
-              "numerical"
-            ],
+            "enum": ["numerical"],
             "type": "string"
           },
           "value": {
@@ -11050,10 +10093,7 @@
             ]
           }
         },
-        "required": [
-          "type",
-          "value"
-        ],
+        "required": ["type", "value"],
         "additionalProperties": false
       },
       "Annotations.Keypoint": {
@@ -11090,9 +10130,7 @@
             ]
           }
         },
-        "required": [
-          "point"
-        ],
+        "required": ["point"],
         "additionalProperties": false
       },
       "Annotations.BoundingBox": {
@@ -11131,12 +10169,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "xMin",
-          "xMax",
-          "yMin",
-          "yMax"
-        ],
+        "required": ["xMin", "xMax", "yMin", "yMax"],
         "additionalProperties": false
       },
       "Annotations.Polygon": {
@@ -11159,9 +10192,7 @@
             }
           }
         },
-        "required": [
-          "vertices"
-        ],
+        "required": ["vertices"],
         "additionalProperties": false
       },
       "Annotations.PolyLine": {
@@ -11184,9 +10215,7 @@
             }
           }
         },
-        "required": [
-          "vertices"
-        ],
+        "required": ["vertices"],
         "additionalProperties": false
       },
       "Annotations.Box": {
@@ -11216,9 +10245,7 @@
             }
           }
         },
-        "required": [
-          "matrix"
-        ],
+        "required": ["matrix"],
         "additionalProperties": false
       },
       "Annotations.Cylinder": {
@@ -11262,11 +10289,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "centerA",
-          "centerB",
-          "radius"
-        ],
+        "required": ["centerA", "centerB", "radius"],
         "additionalProperties": false
       },
       "Annotations.Geometry": {
@@ -11301,14 +10324,10 @@
         "additionalProperties": false,
         "oneOf": [
           {
-            "required": [
-              "id"
-            ]
+            "required": ["id"]
           },
           {
-            "required": [
-              "externalId"
-            ]
+            "required": ["externalId"]
           }
         ]
       },
@@ -11330,14 +10349,10 @@
         "additionalProperties": false,
         "oneOf": [
           {
-            "required": [
-              "id"
-            ]
+            "required": ["id"]
           },
           {
-            "required": [
-              "externalId"
-            ]
+            "required": ["externalId"]
           }
         ]
       },
@@ -11368,9 +10383,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "label"
-        ],
+        "required": ["label"],
         "additionalProperties": false
       },
       "Annotations.Classification": {
@@ -11391,9 +10404,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "label"
-        ],
+        "required": ["label"],
         "additionalProperties": false
       },
       "Annotations.KeypointCollection": {
@@ -11435,10 +10446,7 @@
             }
           }
         },
-        "required": [
-          "label",
-          "keypoints"
-        ],
+        "required": ["label", "keypoints"],
         "additionalProperties": false
       },
       "Annotations.cognite__annotation_types__images__AssetLink": {
@@ -11475,11 +10483,7 @@
             ]
           }
         },
-        "required": [
-          "assetRef",
-          "text",
-          "textRegion"
-        ],
+        "required": ["assetRef", "text", "textRegion"],
         "additionalProperties": false
       },
       "Annotations.TextRegion": {
@@ -11508,10 +10512,7 @@
             ]
           }
         },
-        "required": [
-          "text",
-          "textRegion"
-        ],
+        "required": ["text", "textRegion"],
         "additionalProperties": false
       },
       "Annotations.cognite__annotation_types__diagrams__AssetLink": {
@@ -11563,10 +10564,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "assetRef",
-          "textRegion"
-        ],
+        "required": ["assetRef", "textRegion"],
         "additionalProperties": false
       },
       "Annotations.FileLink": {
@@ -11618,10 +10616,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "fileRef",
-          "textRegion"
-        ],
+        "required": ["fileRef", "textRegion"],
         "additionalProperties": false
       },
       "Annotations.UnhandledTextObject": {
@@ -11651,10 +10646,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "textRegion",
-          "text"
-        ],
+        "required": ["textRegion", "text"],
         "additionalProperties": false
       },
       "Annotations.UnhandledSymbolObject": {
@@ -11684,10 +10676,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "symbolRegion",
-          "symbol"
-        ],
+        "required": ["symbolRegion", "symbol"],
         "additionalProperties": false
       },
       "Annotations.PipeSymbol": {
@@ -11711,9 +10700,7 @@
             ]
           }
         },
-        "required": [
-          "polyline"
-        ],
+        "required": ["polyline"],
         "additionalProperties": false
       },
       "Annotations.ExtractedText": {
@@ -11743,10 +10730,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "textRegion",
-          "extractedText"
-        ],
+        "required": ["textRegion", "extractedText"],
         "additionalProperties": false
       },
       "Annotations.Line": {
@@ -11776,10 +10760,7 @@
             ]
           }
         },
-        "required": [
-          "label",
-          "polyline"
-        ],
+        "required": ["label", "polyline"],
         "additionalProperties": false
       },
       "Annotations.Junction": {
@@ -11803,9 +10784,7 @@
             ]
           }
         },
-        "required": [
-          "position"
-        ],
+        "required": ["position"],
         "additionalProperties": false
       },
       "Annotations.Detection": {
@@ -11869,11 +10848,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "boundingBox",
-          "fieldName",
-          "value"
-        ],
+        "required": ["boundingBox", "fieldName", "value"],
         "additionalProperties": false
       },
       "RevokeSessionRequestList": {
@@ -11891,9 +10866,7 @@
       "RevokeSessionRequest": {
         "description": "",
         "type": "object",
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "properties": {
           "id": {
             "description": "ID of the session",
@@ -11924,10 +10897,7 @@
             "description": "Values reserved for future use",
             "anyOf": [
               {
-                "enum": [
-                  "CLIENT_CREDENTIALS",
-                  "TOKEN_EXCHANGE"
-                ]
+                "enum": ["CLIENT_CREDENTIALS", "TOKEN_EXCHANGE"]
               }
             ]
           },
@@ -11967,10 +10937,7 @@
         }
       },
       "RawTable": {
-        "required": [
-          "dbName",
-          "tableName"
-        ],
+        "required": ["dbName", "tableName"],
         "type": "object",
         "properties": {
           "dbName": {
@@ -12014,28 +10981,20 @@
         }
       },
       "CreateExtPipe": {
-        "required": [
-          "dataSetId",
-          "externalId",
-          "name"
-        ],
+        "required": ["dataSetId", "externalId", "name"],
         "type": "object",
         "properties": {
           "externalId": {
             "maxLength": 255,
             "minLength": 1,
-            "required": [
-              "true"
-            ],
+            "required": ["true"],
             "type": "string",
             "description": "External Id provided by client. Should be unique within the project."
           },
           "name": {
             "maxLength": 140,
             "minLength": 1,
-            "required": [
-              "true"
-            ],
+            "required": ["true"],
             "type": "string",
             "description": "Name of Extraction Pipeline"
           },
@@ -12048,9 +11007,7 @@
           "dataSetId": {
             "maximum": 9007199254740991,
             "minimum": 0,
-            "required": [
-              "true"
-            ],
+            "required": ["true"],
             "type": "integer",
             "description": "DataSet ID",
             "format": "int64"
@@ -12166,17 +11123,13 @@
         "type": "object",
         "properties": {
           "code": {
-            "required": [
-              "true"
-            ],
+            "required": ["true"],
             "type": "integer",
             "description": "HTTP status code",
             "format": "int32"
           },
           "message": {
-            "required": [
-              "true"
-            ],
+            "required": ["true"],
             "type": "string",
             "description": "Error message"
           },
@@ -12198,9 +11151,7 @@
         "description": "Cognite API error"
       },
       "ItemsRequest_CreateExtPipe_": {
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "type": "object",
         "properties": {
           "items": {
@@ -12214,9 +11165,7 @@
         }
       },
       "ItemsRequest_ExtPipeId_": {
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "type": "object",
         "properties": {
           "items": {
@@ -12230,9 +11179,7 @@
         }
       },
       "ExtPipeInternalId": {
-        "required": [
-          "id"
-        ],
+        "required": ["id"],
         "type": "object",
         "properties": {
           "id": {
@@ -12245,9 +11192,7 @@
         }
       },
       "ExtPipeExternalId": {
-        "required": [
-          "externalId"
-        ],
+        "required": ["externalId"],
         "type": "object",
         "properties": {
           "externalId": {
@@ -12270,9 +11215,7 @@
         ]
       },
       "ItemsRequest_ExtPipeUpdate_": {
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "type": "object",
         "properties": {
           "items": {
@@ -12286,9 +11229,7 @@
         }
       },
       "ExternalIdUpdateField": {
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "type": "object",
         "properties": {
           "set": {
@@ -12301,9 +11242,7 @@
         "description": "Set a new value for the externalId. Must be unique for the resource type."
       },
       "NameUpdateField": {
-        "required": [
-          "set"
-        ],
+        "required": ["set"],
         "type": "object",
         "properties": {
           "set": {
@@ -12333,9 +11272,7 @@
           "set": {
             "maximum": 9007199254740991,
             "minimum": 0,
-            "required": [
-              "true"
-            ],
+            "required": ["true"],
             "type": "integer",
             "description": "DataSet ID",
             "format": "int64"
@@ -12594,9 +11531,7 @@
         ]
       },
       "ExtendedItemsRequest_ExtPipeId_": {
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "type": "object",
         "properties": {
           "items": {
@@ -12666,9 +11601,7 @@
         "description": "Response with a list of elements."
       },
       "ItemsRequest_ExtPipeRunRequest_": {
-        "required": [
-          "items"
-        ],
+        "required": ["items"],
         "type": "object",
         "properties": {
           "items": {
@@ -12683,25 +11616,16 @@
       },
       "ExtPipeRunStatus": {
         "type": "string",
-        "enum": [
-          "success",
-          "failure",
-          "seen"
-        ]
+        "enum": ["success", "failure", "seen"]
       },
       "ExtPipeRunRequest": {
-        "required": [
-          "externalId",
-          "status"
-        ],
+        "required": ["externalId", "status"],
         "type": "object",
         "properties": {
           "externalId": {
             "maxLength": 255,
             "minLength": 1,
-            "required": [
-              "true"
-            ],
+            "required": ["true"],
             "type": "string",
             "description": "Extraction pipeline external Id provided by client. Should be unique within the project."
           },
@@ -12724,9 +11648,7 @@
         "description": "Status of the extraction pipeline."
       },
       "RunsFilterRequest": {
-        "required": [
-          "filter"
-        ],
+        "required": ["filter"],
         "type": "object",
         "properties": {
           "filter": {
@@ -12746,17 +11668,13 @@
         }
       },
       "RunsFilter": {
-        "required": [
-          "externalId"
-        ],
+        "required": ["externalId"],
         "type": "object",
         "properties": {
           "externalId": {
             "maxLength": 255,
             "minLength": 1,
-            "required": [
-              "true"
-            ],
+            "required": ["true"],
             "type": "string",
             "description": "Extraction pipeline external Id provided by client."
           },
@@ -12785,9 +11703,7 @@
         }
       },
       "ExtPipeRunResponse": {
-        "required": [
-          "status"
-        ],
+        "required": ["status"],
         "type": "object",
         "properties": {
           "id": {
@@ -12799,9 +11715,7 @@
           },
           "status": {
             "minLength": 1,
-            "required": [
-              "true"
-            ],
+            "required": ["true"],
             "type": "string",
             "description": "Extraction Pipeline status."
           },
@@ -13011,10 +11925,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "id",
-                "data"
-              ],
+              "required": ["id", "data"],
               "properties": {
                 "id": {
                   "$ref": "#/components/schemas/CogniteInternalId"
@@ -13033,9 +11944,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "error"
-              ],
+              "required": ["error"],
               "properties": {
                 "error": {
                   "$ref": "#/components/schemas/FunctionErrorBasic"
@@ -13051,11 +11960,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "response",
-                "functionId",
-                "callId"
-              ],
+              "required": ["response", "functionId", "callId"],
               "description": "The function response.",
               "properties": {
                 "response": {
@@ -13088,9 +11993,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13109,9 +12012,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13140,9 +12041,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13197,9 +12096,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13244,11 +12141,7 @@
                   "description": "Available runtimes. Runtime \"py3x\" translates to the latest version of the Python 3.x.y series.",
                   "items": {
                     "type": "string",
-                    "example": [
-                      "py37",
-                      "py38",
-                      "py39"
-                    ]
+                    "example": ["py37", "py38", "py39"]
                   }
                 },
                 "responseSizeMb": {
@@ -13267,11 +12160,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "project",
-                "requested",
-                "activated"
-              ],
+              "required": ["project", "requested", "activated"],
               "properties": {
                 "project": {
                   "type": "string",
@@ -13297,9 +12186,7 @@
             "schema": {
               "type": "object",
               "description": "Some required fields are missing.",
-              "required": [
-                "count"
-              ],
+              "required": ["count"],
               "properties": {
                 "count": {
                   "type": "integer",
@@ -13329,11 +12216,7 @@
             "schema": {
               "type": "object",
               "description": "Some required fields are missing.",
-              "required": [
-                "code",
-                "message",
-                "missingFields"
-              ],
+              "required": ["code", "message", "missingFields"],
               "properties": {
                 "code": {
                   "type": "integer",
@@ -13375,9 +12258,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "error"
-              ],
+              "required": ["error"],
               "properties": {
                 "error": {
                   "$ref": "#/components/schemas/Error"
@@ -13393,9 +12274,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "error"
-              ],
+              "required": ["error"],
               "properties": {
                 "error": {
                   "$ref": "#/components/schemas/Error"
@@ -13411,9 +12290,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "error"
-              ],
+              "required": ["error"],
               "properties": {
                 "error": {
                   "$ref": "#/components/schemas/Error"
@@ -13429,9 +12306,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "error"
-              ],
+              "required": ["error"],
               "properties": {
                 "error": {
                   "$ref": "#/components/schemas/Error"
@@ -13447,9 +12322,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "error"
-              ],
+              "required": ["error"],
               "properties": {
                 "error": {
                   "$ref": "#/components/schemas/Error"
@@ -13501,9 +12374,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13562,9 +12433,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13584,11 +12453,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "field",
-                "groups",
-                "total"
-              ],
+              "required": ["field", "groups", "total"],
               "properties": {
                 "field": {
                   "$ref": "#/components/schemas/AggregateField"
@@ -13628,9 +12493,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13653,9 +12516,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13674,17 +12535,13 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "item"
-                    ],
+                    "required": ["item"],
                     "properties": {
                       "highlight": {
                         "$ref": "#/components/schemas/Highlight"
@@ -13699,11 +12556,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "name",
-                      "groups",
-                      "total"
-                    ],
+                    "required": ["name", "groups", "total"],
                     "properties": {
                       "name": {
                         "type": "string",
@@ -13813,9 +12666,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13838,9 +12689,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13863,9 +12712,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13888,9 +12735,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "filter"
-              ],
+              "required": ["filter"],
               "properties": {
                 "cursor": {
                   "allOf": [
@@ -13921,9 +12766,7 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": [
-                "items"
-              ],
+              "required": ["items"],
               "properties": {
                 "items": {
                   "type": "array",
@@ -13971,10 +12814,7 @@
     },
     {
       "name": "Identity and Access Management",
-      "tags": [
-        "Sessions",
-        "Projects"
-      ]
+      "tags": ["Sessions", "Projects"]
     },
     {
       "name": "Contextualization",
@@ -13988,22 +12828,15 @@
     },
     {
       "name": "Vision",
-      "tags": [
-        "Vision",
-        "Vision AutoML"
-      ]
+      "tags": ["Vision", "Vision AutoML"]
     },
     {
       "name": "Digital Twin",
-      "tags": [
-        "Digital Twin"
-      ]
+      "tags": ["Digital Twin"]
     },
     {
       "name": "Data organization",
-      "tags": [
-        "Annotations"
-      ]
+      "tags": ["Annotations"]
     },
     {
       "name": "Documents",
@@ -14016,18 +12849,11 @@
     },
     {
       "name": "Extraction Pipelines",
-      "tags": [
-        "Extraction Pipelines",
-        "Extraction Pipelines Runs"
-      ]
+      "tags": ["Extraction Pipelines", "Extraction Pipelines Runs"]
     },
     {
       "name": "Functions",
-      "tags": [
-        "Functions",
-        "Function calls",
-        "Function schedules"
-      ]
+      "tags": ["Functions", "Function calls", "Function schedules"]
     }
   ],
   "tags": [

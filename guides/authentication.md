@@ -181,4 +181,4 @@ const client = new CogniteClient({
 
 ## More
 
-Read more about the [authentication process](https://developer.cognite.com/dev/guides/iam/external-application/#tokens).
+Read more about the [authentication process](https://developer.cognite.com/dev/guides/iam/external-application#tokens).
