@@ -1,6 +1,11 @@
-// Copyright 2022 Cognite AS
+// Copyright 2023 Cognite AS
 
-import { BaseResourceAPI, IdEither } from '@cognite/sdk-core';
+import {
+  BaseResourceAPI,
+  IdEither,
+  CDFHttpClient,
+  MetadataMap,
+} from '@cognite/sdk-core';
 import {
   MonitoringTask,
   MonitoringTaskCreate,
@@ -8,6 +13,10 @@ import {
 } from '../../types';
 
 export class MonitoringTasksAPI extends BaseResourceAPI<MonitoringTask> {
+  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
+    super(...args);
+  }
+
   public create = async (items: MonitoringTaskCreate[]) => {
     return this.createEndpoint(items);
   };
