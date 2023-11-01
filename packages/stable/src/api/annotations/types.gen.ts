@@ -7,7 +7,7 @@
 attribute.
 * @example {"assetRef":{"externalId":"abc"},"symbolRegion":{"xMin":0.1,"xMax":0.2,"yMin":0.1,"yMax":0.2},"textRegion":{"xMin":0.2,"xMax":0.3,"yMin":0.2,"yMax":0.3},"pageNumber":43}
 */
-export type AnnotationData = AnnotationsObjectDetection | AnnotationsClassification | AnnotationsKeypointCollection | AnnotationsCogniteAnnotationTypesImagesAssetLink | AnnotationsTextRegion | AnnotationsCogniteAnnotationTypesImagesInstanceLink | AnnotationsCogniteAnnotationTypesDiagramsAssetLink | AnnotationsFileLink | AnnotationsCogniteAnnotationTypesDiagramsInstanceLink | AnnotationsUnhandledTextObject | AnnotationsUnhandledSymbolObject | AnnotationsExtractedText | AnnotationsLine | AnnotationsJunction | AnnotationsBoundingVolume | AnnotationsDetection;
+export type AnnotationData = AnnotationsObjectDetection | AnnotationsClassification | AnnotationsKeypointCollection | AnnotationsCogniteAnnotationTypesImagesAssetLink | AnnotationsTextRegion | AnnotationsCogniteAnnotationTypesImagesInstanceLink | AnnotationsIsoPlanAnnotation | AnnotationsCogniteAnnotationTypesDiagramsAssetLink | AnnotationsFileLink | AnnotationsCogniteAnnotationTypesDiagramsInstanceLink | AnnotationsUnhandledTextObject | AnnotationsUnhandledSymbolObject | AnnotationsExtractedText | AnnotationsLine | AnnotationsJunction | AnnotationsBoundingVolume | AnnotationsDetection;
 /**
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
@@ -342,6 +342,37 @@ export interface AnnotationsInstanceRef {
      * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
      */
     space: string;
+}
+/**
+ * Model a custom link in a engineering diagram where it capture details from the texts and linked to assets when necessary
+ */
+export interface AnnotationsIsoPlanAnnotation {
+    /** The asset this annotation is pointing to */
+    assetRef?: AnnotationsAssetRef;
+    /** Detail describing the equipment, not identifying it. E..g 12V12 for a valve. */
+    detail?: string;
+    /** indirectExternalId is the external id of the equipment used to identify the hotspot indirectly. E.g. this is the <indirectRelation> of <indirectExternalId> */
+    indirectExternalId?: AnnotationsAssetRef;
+    /** Relation connecting this hotspot to a tag in case the hotspot has no tag. E.g. 'second valve upstreams of'. This references the 'indirectExternalId' */
+    indirectRelation?: string;
+    /** The id of the Pipe that the hotspot belongs to */
+    lineExternalId?: AnnotationsAssetRef;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 2048
+     */
+    pageNumber?: number;
+    /** Indicate the relative position of an annotation */
+    relativePosition?: string;
+    /** Keeps track of the modification to an annotation */
+    revision?: string;
+    /** The text input */
+    text?: string;
+    /** The location of the hotspot represented with a bounding box */
+    textRegion?: AnnotationsBoundingBox;
+    /** Type of equipment, valve, pump etc. */
+    type?: string;
 }
 /**
  * Models a junction between lines in an engineering diagram
