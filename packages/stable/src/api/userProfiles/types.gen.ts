@@ -13,6 +13,22 @@ export interface CursorQueryParameter {
  * @min 0
  */
 export type EpochTimestamp = number;
+/**
+* The identity type field indicates the type of principal.
+- `USER`: Human user.
+- `SERVICE_PRINCIPAL`: Service account.
+- `INTERNAL_SERVICE`: Internal CDF service.
+*/
+export type IdentityType = "USER" | "SERVICE_PRINCIPAL" | "INTERNAL_SERVICE";
+/**
+* The identity type filter field indicates the type of principal the request should be filtered to show.
+If no value is specified, the default value is `USER`.
+- `ALL`: All types of principals.
+- `USER`: Human user.
+- `SERVICE_PRINCIPAL`: Service account.
+- `INTERNAL_SERVICE`: Internal CDF service.
+*/
+export type IdentityTypeFilter = "ALL" | "USER" | "SERVICE_PRINCIPAL" | "INTERNAL_SERVICE";
 export interface UserIdentifier {
     /** @example abcd */
     userIdentifier: string;
@@ -37,6 +53,14 @@ export interface UserProfileItem {
      * @example Jane
      */
     givenName?: string | null;
+    /**
+     * The identity type field indicates the type of principal.
+     * - `USER`: Human user.
+     * - `SERVICE_PRINCIPAL`: Service account.
+     * - `INTERNAL_SERVICE`: Internal CDF service.
+     *
+     */
+    identityType?: IdentityType;
     /**
      * The user's job title.
      * @example Software Engineer

@@ -22,6 +22,7 @@ export {
   AnnotationsFileLink,
   AnnotationsFileRef,
   AnnotationsInstanceRef,
+  AnnotationsIsoPlanAnnotation,
   AnnotationsJunction,
   AnnotationsKeypoint,
   AnnotationsKeypointCollection,
@@ -117,6 +118,8 @@ export {
 } from './api/documents/types.gen';
 export {
   CursorQueryParameter,
+  IdentityType,
+  IdentityTypeFilter,
   UserIdentifier,
   UserProfileItem,
   UserProfilesByIdsRequest,
