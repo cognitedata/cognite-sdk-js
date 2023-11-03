@@ -1,6 +1,7 @@
 * @cognitedata/cdf-user-experience @BugGambit @andersfylling
 
 /packages/alpha @cognitedata/airviz
+/packages/beta @cognitedata/deg-code-owners
 
 /packages/playground/src/api/documents @cognitedata/matchmakers
 /packages/playground/src/__tests__/api/documents* @cognitedata/matchmakers

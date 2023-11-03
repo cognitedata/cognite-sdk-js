@@ -6,7 +6,7 @@ import { setupLoggedInClient } from './testUtils';
 describe('beta integration', () => {
   let client: CogniteClient;
   beforeAll(async () => {
-    client = setupLoggedInClient(process.env.COGNITE_BASE_URL);
+    client = setupLoggedInClient();
   });
   test('assets list', async () => {
     const response = await client.assets.list();
