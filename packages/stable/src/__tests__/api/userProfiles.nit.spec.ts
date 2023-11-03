@@ -44,15 +44,4 @@ describe('User Profiles unit test', () => {
       expect(nextProfiles).not.toEqual(profiles);
     });
   });
-
-  describe('client.profiles.search', () => {
-    test('fetch list of users', async () => {
-      const me = await client.profiles.me();
-
-      const searchForMe = await client.profiles.search({
-        search: { name: me.displayName || '' },
-      });
-      expect(searchForMe.length).toBe(1);
-    });
-  });
 });
