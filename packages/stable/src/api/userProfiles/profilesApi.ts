@@ -1,6 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
+import { BaseResourceAPI } from '@cognite/sdk-core';
 import {
   UserProfileItem,
   UserIdentifier,
