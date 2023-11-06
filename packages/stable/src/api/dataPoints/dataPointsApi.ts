@@ -11,6 +11,7 @@ import {
   LatestDataBeforeRequest,
   ExternalDatapointsQuery,
   DatapointInfo,
+  Timestamp,
 } from '../../types';
 
 export class DataPointsAPI extends BaseResourceAPI<
@@ -47,6 +48,58 @@ export class DataPointsAPI extends BaseResourceAPI<
   public retrieve = (
     query: DatapointsMultiQuery
   ): Promise<DatapointAggregates[] | Datapoints[]> => {
+    return this.retrieveDatapointsEndpoint(query);
+  };
+
+  /**
+   * [Retrieve data points](https://doc.cognitedata.com/api/v1/#operation/getMultiTimeSeriesDatapoints)
+   *
+   * ```js
+   * const data = await client.datapoints.retrieve({ items: [{ id: 123 }] });
+   * ```
+   */
+  public retrieveMonthlyGranularity = (
+    query: Omit<DatapointsMultiQuery, "granularity">
+  ): Promise<DatapointAggregates[] | Datapoints[]> => {
+
+    // Find the start and end dates from the query
+    const startDate = query.start;
+    const endDate = query.end;
+
+    if (startDate && endDate) {
+      // Get the months between the start and end dates
+      const months = getMonthsBetweenDates(startDate, endDate);
+
+      // Create a array of promises for each month
+      const promises = months.map(month => {
+        // Create a new query for each month
+        const newQuery = {
+          ...query,
+          start: month.start_date,
+          end: month.end_date,
+          granularity: `${month.number_of_days}d`,
+        };
+
+        // Return a promise for each month
+        return this.retrieveDatapointsEndpoint(newQuery);
+      });
+
+      // Call the API for each month in parallel and save it in a variable
+      const results = Promise.all(promises);
+
+      // Format the data in Promise<DatapointAggregates[] | Datapoints[]>
+      return results.then((data) => {
+        // Flatten the array of arrays
+        const flattenedData = data.flat();
+
+        // Return the data
+        return flattenedData;
+      });
+
+    }
+
+
+
     return this.retrieveDatapointsEndpoint(query);
   };
 
@@ -119,6 +172,38 @@ export class DataPointsAPI extends BaseResourceAPI<
     });
     return {};
   }
+}
+
+interface MonthInfo {
+  start_date: Timestamp;
+  end_date: Timestamp;
+  number_of_days: number;
+}
+
+const getMonthsBetweenDates = (startDate: Timestamp | string, endDate: Timestamp | string): MonthInfo[] => {
+  const result: MonthInfo[] = [];
+
+  let currentMonth = new Date(startDate);
+  endDate = new Date(endDate);
+
+  while (currentMonth <= endDate) {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth() + 1; // Months are zero-indexed
+
+    const firstDay = new Date(year, month - 1, 1);
+    const lastDay = new Date(year, month, 0);
+
+    result.push({
+      start_date: firstDay.getTime(),
+      end_date: lastDay.getTime(),
+      number_of_days: lastDay.getDate() - firstDay.getDate() + 1,
+    });
+
+    // Move to the next month
+    currentMonth.setMonth(currentMonth.getMonth() + 1);
+  }
+
+  return result;
 }
 
 export type LatestDataParams = IgnoreUnknownIds;
