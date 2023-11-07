@@ -12,6 +12,7 @@ import {
   ExternalDatapointsQuery,
   DatapointInfo,
   Timestamp,
+  DatapointsMonthlyGranularityMultiQuery,
 } from '../../types';
 
 export class DataPointsAPI extends BaseResourceAPI<
@@ -58,10 +59,9 @@ export class DataPointsAPI extends BaseResourceAPI<
    * const data = await client.datapoints.retrieve({ items: [{ id: 123 }] });
    * ```
    */
-  public retrieveMonthlyGranularity = (
-    query: Omit<DatapointsMultiQuery, "granularity">
+  public retrieveMonthlyGranularity = async (
+    query: DatapointsMonthlyGranularityMultiQuery
   ): Promise<DatapointAggregates[] | Datapoints[]> => {
-
     // Find the start and end dates from the query
     const startDate = query.start;
     const endDate = query.end;
@@ -71,13 +71,13 @@ export class DataPointsAPI extends BaseResourceAPI<
       const months = getMonthsBetweenDates(startDate, endDate);
 
       // Create a array of promises for each month
-      const promises = months.map(month => {
+      const promises = months.map((month) => {
         // Create a new query for each month
         const newQuery = {
           ...query,
-          start: month.start_date,
-          end: month.end_date,
-          granularity: `${month.number_of_days}d`,
+          start: month.startDate,
+          end: month.endDate,
+          granularity: `${month.numberOfDays}d`,
         };
 
         // Return a promise for each month
@@ -85,20 +85,28 @@ export class DataPointsAPI extends BaseResourceAPI<
       });
 
       // Call the API for each month in parallel and save it in a variable
-      const results = Promise.all(promises);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const results = await Promise.all(promises);
 
-      // Format the data in Promise<DatapointAggregates[] | Datapoints[]>
-      return results.then((data) => {
-        // Flatten the array of arrays
-        const flattenedData = data.flat();
+      // Merge the datapoints into a single array
+      const mergedDatapoints = [];
 
-        // Return the data
-        return flattenedData;
-      });
+      for (const result of results) {
+        // Check if the array contains data before pushing it to the merged datapoints array
+        if (Array.isArray(result) && result.length === 1) {
+          const datapoints = result[0].datapoints;
+          // Merge the datapoints into the result array
+          mergedDatapoints.push(...datapoints);
+        }
+      }
 
+      // Clone the first item from the results array
+      const firstItem = results[0][0] as DatapointAggregates;
+      // replace the merged datapoints with the datapoints from the first item
+      firstItem.datapoints = mergedDatapoints;
+
+      return [firstItem];
     }
-
-
 
     return this.retrieveDatapointsEndpoint(query);
   };
@@ -175,15 +183,18 @@ export class DataPointsAPI extends BaseResourceAPI<
 }
 
 interface MonthInfo {
-  start_date: Timestamp;
-  end_date: Timestamp;
-  number_of_days: number;
+  startDate: Timestamp;
+  endDate: Timestamp;
+  numberOfDays: number;
 }
 
-const getMonthsBetweenDates = (startDate: Timestamp | string, endDate: Timestamp | string): MonthInfo[] => {
+const getMonthsBetweenDates = (
+  startDate: Timestamp | string,
+  endDate: Timestamp | string
+): MonthInfo[] => {
   const result: MonthInfo[] = [];
 
-  let currentMonth = new Date(startDate);
+  const currentMonth = new Date(startDate);
   endDate = new Date(endDate);
 
   while (currentMonth <= endDate) {
@@ -194,9 +205,9 @@ const getMonthsBetweenDates = (startDate: Timestamp | string, endDate: Timestamp
     const lastDay = new Date(year, month, 0);
 
     result.push({
-      start_date: firstDay.getTime(),
-      end_date: lastDay.getTime(),
-      number_of_days: lastDay.getDate() - firstDay.getDate() + 1,
+      startDate: firstDay.getTime(),
+      endDate: lastDay.getTime(),
+      numberOfDays: lastDay.getDate() - firstDay.getDate() + 1,
     });
 
     // Move to the next month
@@ -204,6 +215,6 @@ const getMonthsBetweenDates = (startDate: Timestamp | string, endDate: Timestamp
   }
 
   return result;
-}
+};
 
 export type LatestDataParams = IgnoreUnknownIds;
