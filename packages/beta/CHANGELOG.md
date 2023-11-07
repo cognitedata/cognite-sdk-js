@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.3.0...@cognite/sdk-beta@5.4.0) (2023-11-01)
+
+### Features
+
+- **beta:** add alertContext to monitoring create type ([#1032](https://github.com/cognitedata/cognite-sdk-js/issues/1032)) ([ab21181](https://github.com/cognitedata/cognite-sdk-js/commit/ab211812f93a45fa2485a5d5464c30392d49f110))
+
 # [5.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.2.34...@cognite/sdk-beta@5.3.0) (2023-10-17)
 
 ### Features

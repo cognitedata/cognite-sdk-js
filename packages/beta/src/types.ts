@@ -106,6 +106,10 @@ export interface MonitoringTaskCreate {
   nonce: string;
   source?: string;
   sourceId?: string;
+  alertContext?: {
+    unsubscribeUrl: string;
+    investigateUrl: string;
+  };
 }
 
 export interface MonitoringTask {
