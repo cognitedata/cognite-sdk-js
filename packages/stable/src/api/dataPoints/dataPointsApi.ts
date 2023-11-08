@@ -61,7 +61,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    */
   public retrieveMonthlyGranularity = async (
     query: DatapointsMonthlyGranularityMultiQuery
-  ): Promise<DatapointAggregates[]> => {
+  ): Promise<DatapointAggregates[] | Datapoints[]> => {
     // Find the start and end dates from the query
     const startDate = query.start;
     const endDate = query.end;
