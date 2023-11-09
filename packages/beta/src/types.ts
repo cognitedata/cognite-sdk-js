@@ -5,7 +5,6 @@ import {
   MetadataPatch,
   SinglePatchRequiredString,
   SinglePatchString,
-  SinglePatch,
   Timestamp,
 } from '@cognite/sdk';
 import {
