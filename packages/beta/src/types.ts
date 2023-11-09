@@ -5,6 +5,7 @@ import {
   MetadataPatch,
   SinglePatchRequiredString,
   SinglePatchString,
+  SinglePatch,
   Timestamp,
 } from '@cognite/sdk';
 import {
@@ -101,8 +102,8 @@ export interface MonitoringTaskCreate {
   interval: number;
   overlap: number;
   model:
-    | MonitoringTaskThresholdModelCreate
-    | MonitoringTaskDoubleThresholdModelCreate;
+  | MonitoringTaskThresholdModelCreate
+  | MonitoringTaskDoubleThresholdModelCreate;
   nonce: string;
   source?: string;
   sourceId?: string;
@@ -232,8 +233,8 @@ export interface ChannelPatch {
   };
 }
 
-export interface ChannelChangeById extends ChannelPatch, InternalId {}
-export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId {}
+export interface ChannelChangeById extends ChannelPatch, InternalId { }
+export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId { }
 export type ChannelChange = ChannelChangeById | ChannelChangeByExternalId;
 
 export interface SubscriberCreate {
