@@ -125,6 +125,46 @@ describe.skip('simulator integrations api', () => {
     expect(response[0].isBoundaryConditionsEnabled).toBe(false);
   });
 
+  test('update simulators', async () => {
+    const patch = {
+      isBoundaryConditionsEnabled: {
+        set: true,
+      },
+      fileExtensionTypes: {
+        set: ['py'],
+      },
+      boundaryConditions: {
+        set: [
+          {
+            name: 'test_update',
+            address: 'a.b.c',
+            key: 'test_update',
+          },
+        ],
+      },
+      modelTypes: { set: [] },
+      // units: { set: {} },
+      stepFields: { set: [] },
+    };
+    const response = await client.simulators.update([
+      {
+        id: simulatorId,
+        update: patch,
+      },
+    ]);
+    expect(response.length).toBe(1);
+    expect(response[0].isBoundaryConditionsEnabled).toBe(true);
+    expect(response[0].fileExtensionTypes).toEqual(
+      patch.fileExtensionTypes.set
+    );
+    expect(response[0].boundaryConditions).toEqual(
+      patch.boundaryConditions.set
+    );
+    expect(response[0].modelTypes).toEqual(patch.modelTypes.set);
+    // expect(response[0].units).toEqual(patch.units.set);
+    expect(response[0].stepFields).toEqual(patch.stepFields.set);
+  });
+
   test('list simulators', async () => {
     const response = await client.simulators.list({
       filter: { enabled: true },

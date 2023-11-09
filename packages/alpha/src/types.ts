@@ -63,7 +63,7 @@ export interface Simulator {
   modelTypes: SimulatorModelType[];
   enabled: boolean;
   stepFields?: SimulatorStep[];
-  units?: SimulatorUnits[];
+  units?: SimulatorUnits;
   createdTime: Timestamp;
   lastUpdatedTime: Timestamp;
 }
@@ -135,7 +135,7 @@ export interface SimulatorPatch {
     modelTypes?: SinglePatch<SimulatorModelType[]>;
     enabled?: SinglePatch<boolean>;
     stepFields?: SinglePatch<SimulatorStep[]>;
-    units?: SinglePatch<SimulatorUnits[]>;
+    units?: SinglePatch<SimulatorUnits>;
   };
 }
 
