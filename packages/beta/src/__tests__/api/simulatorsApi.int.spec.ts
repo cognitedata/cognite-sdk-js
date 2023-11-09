@@ -38,16 +38,16 @@ describe.skip('simulator integrations api', () => {
           value: 'activity',
         },
       ],
-    }
-  }
+    },
+  };
   const unitSystem = {
     default: {
       label: 'default',
-      defaultUnits: { 
-        accel: 'm/s2'
-      }
-    }
-  }
+      defaultUnits: {
+        accel: 'm/s2',
+      },
+    },
+  };
   const stepFields = [
     {
       stepType: 'get/set',
@@ -80,22 +80,23 @@ describe.skip('simulator integrations api', () => {
         },
       ],
     },
-  ]
-  const modelTypes = [{
-    key: 'test',
-    name: 'test',
-  }]
+  ];
+  const modelTypes = [
+    {
+      key: 'test',
+      name: 'test',
+    },
+  ];
   const boundaryConditions = [
     {
       name: 'test',
       address: 'x.y.z',
       key: 'test',
-    }
-  ]
-  const fileExtensionTypes =  ['csv', 'yaml']
+    },
+  ];
+  const fileExtensionTypes = ['csv', 'yaml'];
 
   test('create simulators', async () => {
-    
     const response = await client.simulators.create([
       {
         externalId: simulatorExternalId,
@@ -104,7 +105,7 @@ describe.skip('simulator integrations api', () => {
         stepFields,
         units: {
           unitsMap,
-          unitSystem
+          unitSystem,
         },
         modelTypes,
         boundaryConditions,
@@ -128,11 +129,13 @@ describe.skip('simulator integrations api', () => {
   });
 
   test('list simulators', async () => {
-   const response = await client.simulators.list({
+    const response = await client.simulators.list({
       filter: { enabled: true },
     });
     expect(response.items.length).toBeGreaterThan(0);
-    const simulatorFound = response.items.find((item) => item.externalId === simulatorExternalId);
+    const simulatorFound = response.items.find(
+      (item) => item.externalId === simulatorExternalId
+    );
     expect(simulatorFound?.externalId).toBe(simulatorExternalId);
   });
 
@@ -146,8 +149,10 @@ describe.skip('simulator integrations api', () => {
       expect(response).toEqual({});
       const responseAfterDelete = await client.simulators.list();
       expect(
-        responseAfterDelete.items.filter(res => res.externalId == simulatorExternalId
-      ).length).toBe(0);
+        responseAfterDelete.items.filter(
+          (res) => res.externalId == simulatorExternalId
+        ).length
+      ).toBe(0);
     }
   });
 });
