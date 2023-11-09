@@ -101,8 +101,8 @@ export interface MonitoringTaskCreate {
   interval: number;
   overlap: number;
   model:
-    | MonitoringTaskThresholdModelCreate
-    | MonitoringTaskDoubleThresholdModelCreate;
+  | MonitoringTaskThresholdModelCreate
+  | MonitoringTaskDoubleThresholdModelCreate;
   nonce: string;
   source?: string;
   sourceId?: string;
@@ -232,8 +232,8 @@ export interface ChannelPatch {
   };
 }
 
-export interface ChannelChangeById extends ChannelPatch, InternalId {}
-export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId {}
+export interface ChannelChangeById extends ChannelPatch, InternalId { }
+export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId { }
 export type ChannelChange = ChannelChangeById | ChannelChangeByExternalId;
 
 export interface SubscriberCreate {
@@ -304,3 +304,133 @@ export interface Subscription {
   subscriberExternalId?: CogniteExternalId;
   metadata?: Metadata;
 }
+
+export interface SimulatorUnitRecord {
+  label: string;
+  value: string;
+}
+export interface SimulatorUnitSystem {
+  label: string;
+  defaultUnits: Record<string, string>;
+}
+
+export interface SimulatorUnitsMap {
+  label: string;
+  units: SimulatorUnitRecord[];
+}
+
+export interface SimulatorUnits {
+  unitsMap?: Record<string, SimulatorUnitsMap>;
+  unitSystem?: Record<string, SimulatorUnitSystem>;
+}
+
+export interface SimulatorBoundaryCondition {
+  name: string;
+  address: string;
+  key: string;
+}
+
+export interface SimulatorModelType {
+  name: string;
+  key: string;
+}
+
+export interface SimulatorStepField {
+  name: string;
+  label: string;
+  info: string;
+}
+
+export interface SimulatorStep {
+  stepType: string;
+  fields: SimulatorStepField[];
+}
+export interface SimulatorResource {
+  id: CogniteInternalId;
+  externalId?: CogniteExternalId;
+  fileExtensionTypes: string[];
+  isBoundaryConditionsEnabled: boolean;
+  boundaryConditions: SimulatorBoundaryCondition[];
+  isCalculationsEnabled: boolean;
+  modelTypes: SimulatorModelType[];
+  enabled: boolean;
+  stepFields?: SimulatorStep[];
+  units?: SimulatorUnits[];
+  createdTime: Timestamp;
+  lastUpdatedTime: Timestamp;
+}
+
+export interface SimulatorResourceFilter {
+  externalIds?: CogniteExternalId[];
+}
+
+export interface SimulatorResourceFilterQuery extends FilterQuery {
+  filter?: SimulatorResourceFilter;
+}
+
+export interface SimulatorResourceCreate {
+  externalId?: CogniteExternalId;
+  fileExtensionTypes?: string[];
+  isBoundaryConditionsEnabled?: boolean;
+  boundaryConditions?: SimulatorBoundaryCondition[];
+  isCalculationsEnabled?: boolean;
+  modelTypes?: SimulatorModelType[];
+  enabled?: boolean;
+  stepFields?: SimulatorStep[];
+  units?: SimulatorUnits[];
+}
+
+export interface SimulatorIntegration {
+  id: CogniteInternalId;
+  externalId?: CogniteExternalId;
+  simulatorExternalId?: CogniteExternalId;
+  heartbeat: Timestamp;
+  dataSetId: CogniteInternalId;
+  connectorVersion: string;
+  simulatorVersion: string;
+  runApiEnabled: boolean;
+  licenseStatus: string;
+  licenseLastCheckedTime: Timestamp;
+  connectorStatus: string;
+  connectorStatusUpdatedTime: Timestamp;
+  createdTime: Timestamp;
+  lastUpdatedTime: Timestamp;
+}
+
+export interface SimulatorIntegrationCreate {
+  externalId?: CogniteExternalId;
+  simulatorExternalId?: CogniteExternalId;
+  dataSetId?: CogniteInternalId;
+  connectorVersion?: string;
+  simulatorVersion?: string;
+  runApiEnabled?: boolean;
+  licenseStatus?: string;
+  licenseLastCheckedTime?: Timestamp;
+  connectorStatus?: string;
+  connectorStatusUpdatedTime?: Timestamp;
+}
+
+export interface SimulatorIntegrationFilter {
+  simulatorExternalIds?: CogniteExternalId[];
+}
+
+export interface SimulatorIntegrationFilterQuery extends FilterQuery {
+  filter?: SimulatorIntegrationFilter;
+}
+
+export interface SimulatorResourcePatch {
+  update: {
+    fileExtensionTypes?: string[];
+    isBoundaryConditionsEnabled?: boolean;
+    boundaryConditions?: SimulatorBoundaryCondition[];
+    isCalculationsEnabled?: boolean;
+    modelTypes?: SimulatorModelType[];
+    enabled?: boolean;
+    stepFields?: SimulatorStep[];
+    units?: SimulatorUnits[];
+  };
+}
+
+export interface SimulatorResourceChange
+  extends SimulatorResourcePatch,
+  InternalId { }
