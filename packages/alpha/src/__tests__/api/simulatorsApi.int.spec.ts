@@ -1,5 +1,6 @@
 // Copyright 2023 Cognite AS
 
+import { SimulatorPatch } from 'alpha/src/types';
 import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
@@ -115,10 +116,10 @@ describe.skip('simulator integrations api', () => {
     expect(response[0].fileExtensionTypes).toEqual(['csv', 'yaml']);
     expect(response[0].enabled).toBe(true);
     // expect(response[0].stepFields).toEqual(stepFields);
-    // expect(response[0].units).toEqual([{
+    // expect(response[0].units).toEqual({
     //   unitsMap,
     //   unitSystem
-    // }]);
+    // });
     expect(response[0].modelTypes).toEqual(modelTypes);
     expect(response[0].boundaryConditions).toEqual(boundaryConditions);
     expect(response[0].isCalculationsEnabled).toBe(true);
@@ -126,7 +127,7 @@ describe.skip('simulator integrations api', () => {
   });
 
   test('update simulators', async () => {
-    const patch = {
+    const patch: SimulatorPatch['update'] = {
       isBoundaryConditionsEnabled: {
         set: true,
       },
@@ -142,9 +143,44 @@ describe.skip('simulator integrations api', () => {
           },
         ],
       },
-      modelTypes: { set: [] },
-      // units: { set: {} },
-      stepFields: { set: [] },
+      modelTypes: {
+        set: [
+          {
+            key: 'test_update',
+            name: 'test_update',
+          },
+        ],
+      },
+      units: {
+        set: {
+          unitsMap: {
+            activityUpdated: {
+              label: 'Activity',
+              units: [
+                {
+                  label: 'activity',
+                  value: 'activity',
+                },
+              ],
+            },
+          },
+          unitSystem: {},
+        },
+      },
+      stepFields: {
+        set: [
+          {
+            fields: [
+              {
+                info: 'test_update',
+                label: 'test_update',
+                name: 'test_update',
+              },
+            ],
+            stepType: 'get/set-updated',
+          },
+        ],
+      },
     };
     const response = await client.simulators.update([
       {
@@ -155,14 +191,14 @@ describe.skip('simulator integrations api', () => {
     expect(response.length).toBe(1);
     expect(response[0].isBoundaryConditionsEnabled).toBe(true);
     expect(response[0].fileExtensionTypes).toEqual(
-      patch.fileExtensionTypes.set
+      (patch.fileExtensionTypes as any).set
     );
     expect(response[0].boundaryConditions).toEqual(
-      patch.boundaryConditions.set
+      (patch.boundaryConditions as any).set
     );
-    expect(response[0].modelTypes).toEqual(patch.modelTypes.set);
-    // expect(response[0].units).toEqual(patch.units.set);
-    expect(response[0].stepFields).toEqual(patch.stepFields.set);
+    expect(response[0].modelTypes).toEqual((patch.modelTypes as any).set);
+    expect(response[0].units).toEqual((patch.units as any).set);
+    expect(response[0].stepFields).toEqual((patch.stepFields as any).set);
   });
 
   test('list simulators', async () => {
