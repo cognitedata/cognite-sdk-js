@@ -1,6 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import { SimulatorPatch } from 'alpha/src/types';
+import { SimulatorPatch } from '../../types';
 import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
