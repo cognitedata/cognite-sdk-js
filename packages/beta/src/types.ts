@@ -361,7 +361,7 @@ export interface SimulatorResource {
 }
 
 export interface SimulatorResourceFilter {
-  externalIds?: CogniteExternalId[];
+  enabled?: boolean;
 }
 
 export interface SimulatorResourceFilterQuery extends FilterQuery {
@@ -377,7 +377,7 @@ export interface SimulatorResourceCreate {
   modelTypes?: SimulatorModelType[];
   enabled?: boolean;
   stepFields?: SimulatorStep[];
-  units?: SimulatorUnits[];
+  units?: SimulatorUnits;
 }
 
 export interface SimulatorIntegration {
