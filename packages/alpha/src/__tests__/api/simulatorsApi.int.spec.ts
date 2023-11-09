@@ -1,13 +1,10 @@
 // Copyright 2023 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
+import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 describe.skip('simulator integrations api', () => {
-  const client: CogniteClient = setupLoggedInClient();
-
-  /* @ts-ignore */
-  client.httpClient.setDefaultHeader('cdf-version', 'alpha'); // TODO, move api to alpha
+  const client: CogniteClientAlpha = setupLoggedInClient();
 
   const ts = Date.now();
   const simulatorExternalId = `test_sim_${ts}`;

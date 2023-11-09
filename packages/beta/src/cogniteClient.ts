@@ -7,7 +7,6 @@ import {
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AlertsAPI } from './api/alerts/alertsApi';
-import { SimulatorsAPI } from './api/simulators/simulatorsApi';
 import { MonitoringTasksAPI } from './api/monitoringTasks/monitoringTasksApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
@@ -17,7 +16,6 @@ class CogniteClientCleaned extends CogniteClientStable {
 export default class CogniteClient extends CogniteClientCleaned {
   private alertsApi?: AlertsAPI;
   private monitoringTasksApi?: MonitoringTasksAPI;
-  private simulatorsApi?: SimulatorsAPI;
 
   /**
    * Create a new SDK client (beta)
@@ -48,10 +46,6 @@ export default class CogniteClient extends CogniteClientCleaned {
     return accessApi(this.monitoringTasksApi);
   }
 
-  public get simulators() {
-    return accessApi(this.simulatorsApi);
-  }
-
   protected get version() {
     return `${version}-beta`;
   }
@@ -61,7 +55,6 @@ export default class CogniteClient extends CogniteClientCleaned {
 
     this.httpClient.setDefaultHeader('cdf-version', 'beta');
 
-    this.simulatorsApi = this.apiFactory(SimulatorsAPI, 'simulators');
     this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
     this.monitoringTasksApi = this.apiFactory(
       MonitoringTasksAPI,
