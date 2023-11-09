@@ -5,6 +5,7 @@ import {
   MetadataPatch,
   SinglePatchRequiredString,
   SinglePatchString,
+  SinglePatch,
   Timestamp,
 } from '@cognite/sdk';
 import {
@@ -101,8 +102,8 @@ export interface MonitoringTaskCreate {
   interval: number;
   overlap: number;
   model:
-    | MonitoringTaskThresholdModelCreate
-    | MonitoringTaskDoubleThresholdModelCreate;
+  | MonitoringTaskThresholdModelCreate
+  | MonitoringTaskDoubleThresholdModelCreate;
   nonce: string;
   source?: string;
   sourceId?: string;
@@ -232,8 +233,8 @@ export interface ChannelPatch {
   };
 }
 
-export interface ChannelChangeById extends ChannelPatch, InternalId {}
-export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId {}
+export interface ChannelChangeById extends ChannelPatch, InternalId { }
+export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId { }
 export type ChannelChange = ChannelChangeById | ChannelChangeByExternalId;
 
 export interface SubscriberCreate {
@@ -345,9 +346,9 @@ export interface SimulatorStep {
   stepType: string;
   fields: SimulatorStepField[];
 }
-export interface SimulatorResource {
+export interface Simulator {
   id: CogniteInternalId;
-  externalId?: CogniteExternalId;
+  externalId: CogniteExternalId;
   fileExtensionTypes: string[];
   isBoundaryConditionsEnabled: boolean;
   boundaryConditions: SimulatorBoundaryCondition[];
@@ -360,17 +361,17 @@ export interface SimulatorResource {
   lastUpdatedTime: Timestamp;
 }
 
-export interface SimulatorResourceFilter {
+export interface SimulatorFilter {
   enabled?: boolean;
 }
 
-export interface SimulatorResourceFilterQuery extends FilterQuery {
-  filter?: SimulatorResourceFilter;
+export interface SimulatorFilterQuery extends FilterQuery {
+  filter?: SimulatorFilter;
 }
 
-export interface SimulatorResourceCreate {
-  externalId?: CogniteExternalId;
-  fileExtensionTypes?: string[];
+export interface SimulatorCreate {
+  externalId: CogniteExternalId;
+  fileExtensionTypes: string[];
   isBoundaryConditionsEnabled?: boolean;
   boundaryConditions?: SimulatorBoundaryCondition[];
   isCalculationsEnabled?: boolean;
@@ -418,19 +419,17 @@ export interface SimulatorIntegrationFilterQuery extends FilterQuery {
   filter?: SimulatorIntegrationFilter;
 }
 
-export interface SimulatorResourcePatch {
+export interface SimulatorPatch {
   update: {
-    fileExtensionTypes?: string[];
-    isBoundaryConditionsEnabled?: boolean;
-    boundaryConditions?: SimulatorBoundaryCondition[];
-    isCalculationsEnabled?: boolean;
-    modelTypes?: SimulatorModelType[];
-    enabled?: boolean;
-    stepFields?: SimulatorStep[];
-    units?: SimulatorUnits[];
+    fileExtensionTypes?: SinglePatch<string[]>;
+    isBoundaryConditionsEnabled?: SinglePatch<boolean>;
+    boundaryConditions?: SinglePatch<SimulatorBoundaryCondition[]>;
+    isCalculationsEnabled?: SinglePatch<boolean>;
+    modelTypes?: SinglePatch<SimulatorModelType[]>;
+    enabled?: SinglePatch<boolean>;
+    stepFields?: SinglePatch<SimulatorStep[]>;
+    units?: SinglePatch<SimulatorUnits[]>;
   };
 }
 
-export interface SimulatorResourceChange
-  extends SimulatorResourcePatch,
-    InternalId {}
+export interface SimulatorResourceChange extends SimulatorPatch, InternalId { }
