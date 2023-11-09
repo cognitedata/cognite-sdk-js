@@ -7,7 +7,7 @@ import {
   SimulatorIntegrationFilterQuery,
   SimulatorResourceFilterQuery,
   SimulatorResourceChange,
-} from 'beta/src/types';
+} from '../../types';
 import { IntegrationsAPI } from './integrationsApi';
 
 export class SimulatorsAPI extends BaseResourceAPI<SimulatorResource> {
