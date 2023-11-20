@@ -140,24 +140,28 @@ describe('Datapoints integration test for monthly granularity', () => {
   });
 
   test('retrieve monthly granularity for two consecutive months in same year', async () => {
-    const response = await client.datapoints.retrieveMonthlyGranularity({
-      items: [{ id: timeserie.id }],
-      start: new Date(2022, 9, 1),
-      end: new Date(2022, 10, 15),
-      aggregates: ['sum'],
-    });
+    const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
+      {
+        items: [{ id: timeserie.id }],
+        start: new Date(2022, 9, 1),
+        end: new Date(2022, 10, 15),
+        aggregates: ['sum'],
+      }
+    );
 
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);
   });
 
   test('retrieve monthly granularity for two consecutive months in different years', async () => {
-    const response = await client.datapoints.retrieveMonthlyGranularity({
-      items: [{ id: timeserie.id }],
-      start: new Date(2022, 11, 1),
-      end: new Date(2023, 2, 15),
-      aggregates: ['sum'],
-    });
+    const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
+      {
+        items: [{ id: timeserie.id }],
+        start: new Date(2022, 11, 1),
+        end: new Date(2023, 2, 15),
+        aggregates: ['sum'],
+      }
+    );
 
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(110);
@@ -165,12 +169,14 @@ describe('Datapoints integration test for monthly granularity', () => {
   });
 
   test('retrieve monthly granularity for two non-consecutive months in same year', async () => {
-    const response = await client.datapoints.retrieveMonthlyGranularity({
-      items: [{ id: timeserie.id }],
-      start: new Date(2022, 9, 1),
-      end: new Date(2022, 11, 15),
-      aggregates: ['sum'],
-    });
+    const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
+      {
+        items: [{ id: timeserie.id }],
+        start: new Date(2022, 9, 1),
+        end: new Date(2022, 11, 15),
+        aggregates: ['sum'],
+      }
+    );
 
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);
@@ -179,12 +185,14 @@ describe('Datapoints integration test for monthly granularity', () => {
   });
 
   test('retrieve monthly granularity when there is a data gap between months', async () => {
-    const response = await client.datapoints.retrieveMonthlyGranularity({
-      items: [{ id: timeserie.id }],
-      start: new Date(2022, 9, 1),
-      end: new Date(2023, 2, 15),
-      aggregates: ['sum'],
-    });
+    const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
+      {
+        items: [{ id: timeserie.id }],
+        start: new Date(2022, 9, 1),
+        end: new Date(2023, 2, 15),
+        aggregates: ['sum'],
+      }
+    );
 
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);

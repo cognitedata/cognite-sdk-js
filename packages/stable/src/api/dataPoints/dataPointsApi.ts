@@ -56,10 +56,10 @@ export class DataPointsAPI extends BaseResourceAPI<
    * [Retrieve data points](https://doc.cognitedata.com/api/v1/#operation/getMultiTimeSeriesDatapoints)
    *
    * ```js
-   * const data = await client.datapoints.retrieveMonthlyGranularity({ items: [{ id: 123 }] });
+   * const monthlyAggregatesData = await client.datapoints.retrieveDatapointMonthlyAggregates({ items: [{ id: 123 }] });
    * ```
    */
-  public retrieveMonthlyGranularity = async (
+  public retrieveDatapointMonthlyAggregates = async (
     query: DatapointsMonthlyGranularityMultiQuery
   ): Promise<DatapointAggregates[] | Datapoints[]> => {
     // Find the start and end dates from the query
@@ -93,7 +93,7 @@ export class DataPointsAPI extends BaseResourceAPI<
 
       for (const result of results) {
         // Check if the array contains data before pushing it to the merged datapoints array
-        if (Array.isArray(result) && result.length === 1) {
+        if (result?.length && result[0]?.datapoints) {
           const datapoints = result[0].datapoints;
           // Merge the datapoints into the result array
           mergedDatapoints.push(...datapoints);
