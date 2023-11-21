@@ -199,5 +199,7 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
     expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110);
     expect((response[0].datapoints[3] as DatapointAggregate).sum).toBe(150);
+    expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(0);
+    expect((response[0].datapoints[5] as DatapointAggregate).sum).toBe(190);
   });
 });
