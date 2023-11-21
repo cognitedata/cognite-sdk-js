@@ -60,7 +60,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    */
   public retrieveDatapointMonthlyAggregates = async (
     query: DatapointsMonthlyGranularityMultiQuery
-  ): Promise<DatapointAggregates[] | Datapoints[]> => {
+  ): Promise<DatapointAggregates[]> => {
     // Find the start and end dates from the query
     const startDate = query.start;
     const endDate = query.end;
@@ -84,7 +84,6 @@ export class DataPointsAPI extends BaseResourceAPI<
       });
 
       // Call the API for each month in parallel and save it in a variable
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const results = await Promise.all(promises);
 
       // Merge the datapoints into a single array
@@ -107,7 +106,7 @@ export class DataPointsAPI extends BaseResourceAPI<
       return [firstItem];
     }
 
-    return this.retrieveDatapointsEndpoint(query);
+    return this.retrieveDatapointsEndpoint<DatapointAggregates[]>(query);
   };
 
   /**
@@ -150,11 +149,13 @@ export class DataPointsAPI extends BaseResourceAPI<
     return {};
   }
 
-  private async retrieveDatapointsEndpoint(query: DatapointsMultiQuery) {
+  private async retrieveDatapointsEndpoint<
+    T extends DatapointAggregates[] | Datapoints[] =
+      | DatapointAggregates[]
+      | Datapoints[]
+  >(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
-    const response = await this.post<
-      ItemsWrapper<DatapointAggregates[] | Datapoints[]>
-    >(path, {
+    const response = await this.post<ItemsWrapper<T>>(path, {
       data: query,
     });
     return this.addToMapAndReturn(response.data.items, response);
