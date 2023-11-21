@@ -202,7 +202,6 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(190);
   });
 
-
   test('retrieve monthly average granularity when there is a data gap between months', async () => {
     const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
       {
