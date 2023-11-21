@@ -454,6 +454,11 @@ export interface PersonalProtectiveEquipmentDetectionParameters {
 export interface StatusSchema {
     /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
     createdTime: EpochTimestamp;
+    /**
+     * If the job failed, some more information about the error cause.
+     * @example null
+     */
+    errorMessage?: string;
     /** The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds. */
     startTime: EpochTimestamp;
     /** The status of the job. */
