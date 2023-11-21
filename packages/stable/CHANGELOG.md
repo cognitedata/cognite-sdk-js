@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.0.0...@cognite/sdk@9.1.0) (2023-11-21)
+
+### Features
+
+- **monthly aggregate:** retrieve datapoints where granularity set as month ([#1034](https://github.com/cognitedata/cognite-sdk-js/issues/1034)) ([4e4145d](https://github.com/cognitedata/cognite-sdk-js/commit/4e4145d8d4c560779b847d530311820723950a19))
+
 # [9.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.3.0...@cognite/sdk@9.0.0) (2023-10-10)
 
 ### Features
