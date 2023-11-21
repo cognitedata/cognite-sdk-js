@@ -199,7 +199,25 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
     expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110);
     expect((response[0].datapoints[3] as DatapointAggregate).sum).toBe(150);
-    expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(0);
-    expect((response[0].datapoints[5] as DatapointAggregate).sum).toBe(190);
+    expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(190);
+  });
+
+
+  test('retrieve monthly average granularity when there is a data gap between months', async () => {
+    const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
+      {
+        items: [{ id: timeserie.id }],
+        start: new Date(2022, 9, 1),
+        end: new Date(2023, 2, 15),
+        aggregates: ['average'],
+      }
+    );
+
+    // Check that the response contains the correct number of data points
+    expect((response[0].datapoints[0] as DatapointAggregate).average).toBe(15);
+    expect((response[0].datapoints[1] as DatapointAggregate).average).toBe(35);
+    expect((response[0].datapoints[2] as DatapointAggregate).average).toBe(55);
+    expect((response[0].datapoints[3] as DatapointAggregate).average).toBe(75);
+    expect((response[0].datapoints[4] as DatapointAggregate).average).toBe(95);
   });
 });
