@@ -105,8 +105,5 @@
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },
-  "dependencies": {
-    "@cognite/sdk": "9.0.0"
   }
 }

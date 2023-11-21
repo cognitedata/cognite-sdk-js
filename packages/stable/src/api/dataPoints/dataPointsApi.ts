@@ -53,7 +53,6 @@ export class DataPointsAPI extends BaseResourceAPI<
   };
 
   /**
-   * [Retrieve data points](https://doc.cognitedata.com/api/v1/#operation/getMultiTimeSeriesDatapointsMonthly)
    *
    * ```js
    * const monthlyAggregatesData = await client.datapoints.retrieveDatapointMonthlyAggregates({ items: [{ id: 123 }] });
