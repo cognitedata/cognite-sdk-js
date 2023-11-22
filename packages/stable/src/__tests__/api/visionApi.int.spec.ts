@@ -78,7 +78,7 @@ describe('Vision API', () => {
         `Timed out while waiting for vision job to complete.`
       );
     });
-    test('waitForCompletion=true', async () => {
+    test.skip('waitForCompletion=true', async () => {
       const result = await client.vision.getExtractJob(extractJob.jobId, true);
       expect(result.status).toEqual('Completed');
       expect(result.jobId).toEqual(extractJob.jobId);

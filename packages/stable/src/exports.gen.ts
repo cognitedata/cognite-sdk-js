@@ -22,6 +22,7 @@ export {
   AnnotationsFileLink,
   AnnotationsFileRef,
   AnnotationsInstanceRef,
+  AnnotationsIsoPlanAnnotation,
   AnnotationsJunction,
   AnnotationsKeypoint,
   AnnotationsKeypointCollection,
