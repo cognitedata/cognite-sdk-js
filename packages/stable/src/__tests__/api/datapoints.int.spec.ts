@@ -154,12 +154,11 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
     // Check timestamps
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toBe(
-      "2022-09-01T00:00:00.000Z"
-      );
+      '2022-10-01T00:00:00.000Z'
+    );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toBe(
-      "2022-10-01T00:00:00.000Z"
-      );
-
+      '2022-11-01T00:00:00.000Z'
+    );
   });
 
   test('retrieve monthly granularity for two consecutive months in different years', async () => {
