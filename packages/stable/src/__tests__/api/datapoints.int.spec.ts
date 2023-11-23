@@ -255,7 +255,7 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: Date.parse('2022-01-01T00:00:00Z'),
-        end: Date.parse('2023-12-15T23:59:59Z'),
+        end: Date.parse('2022-12-15T23:59:59Z'),
         aggregates: ['sum'],
       }
     );
@@ -320,7 +320,7 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: Date.parse('2022-01-01T00:00:00+0100'),
-        end: Date.parse('2023-12-12T00:00:00+0100'),
+        end: Date.parse('2022-12-12T00:00:00+0100'),
         aggregates: ['sum'],
       }
     );
@@ -346,7 +346,7 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: Date.parse('2022-01-01T00:00:00-0600'),
-        end: Date.parse('2023-12-12T00:00:00-0600'),
+        end: Date.parse('2022-12-12T00:00:00-0600'),
         aggregates: ['sum'],
       }
     );
