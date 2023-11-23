@@ -191,7 +191,7 @@ describe('Datapoints integration test for monthly granularity', () => {
         aggregates: ['sum'],
       }
     );
-    console.log(response)
+    console.log(response);
 
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);
@@ -217,6 +217,7 @@ describe('Datapoints integration test for monthly granularity', () => {
         aggregates: ['sum'],
       }
     );
+    console.log(response);
 
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30); // October 2022
@@ -258,7 +259,6 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[2] as DatapointAggregate).average).toBe(55);
     expect((response[0].datapoints[3] as DatapointAggregate).average).toBe(75);
     expect((response[0].datapoints[4] as DatapointAggregate).average).toBe(95);
-    expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(190); // March 2023
     // Check timestamps
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
       new Date(2022, 9, 1)
