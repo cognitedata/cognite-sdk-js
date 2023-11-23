@@ -151,6 +151,11 @@ describe('Datapoints integration test for monthly granularity', () => {
 
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);
+    expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
+    // Check timestamps
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toBe(new Date(2022, 9, 1));
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toBe(new Date(2022, 10, 1));
+
   });
 
   test('retrieve monthly granularity for two consecutive months in different years', async () => {
