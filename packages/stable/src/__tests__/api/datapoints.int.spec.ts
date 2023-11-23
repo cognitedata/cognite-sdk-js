@@ -174,6 +174,12 @@ describe('Datapoints integration test for monthly granularity', () => {
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(110);
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(150);
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2023, 0, 1)
+    );
   });
 
   test('retrieve monthly granularity for two non-consecutive months in same year', async () => {
@@ -190,6 +196,15 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
     expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110);
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
   });
 
   test('retrieve monthly granularity when there is a data gap between months', async () => {
@@ -242,5 +257,22 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[2] as DatapointAggregate).average).toBe(55);
     expect((response[0].datapoints[3] as DatapointAggregate).average).toBe(75);
     expect((response[0].datapoints[4] as DatapointAggregate).average).toBe(95);
+    expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(190); // March 2023
+    // Check timestamps
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2023, 0, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2023, 2, 1)
+    );
   });
 });
