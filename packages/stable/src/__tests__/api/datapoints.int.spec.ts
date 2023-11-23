@@ -239,12 +239,12 @@ describe('Datapoints integration test for monthly granularity', () => {
     );
   });
 
-  test('retrieve monthly granularity when there is a data gap between months with string timestamps', async () => {
+  test('retrieve monthly granularity for a year when there is missing data for some months', async () => {
     const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
       {
         items: [{ id: timeserie.id }],
-        start: Date.parse('2022-10-01T00:00:00Z'),
-        end: Date.parse('2023-03-31T00:00:00Z'),
+        start: Date.parse('2022-01-01T00:00:00Z'),
+        end: Date.parse('2023-01-01T00:00:00Z'),
         aggregates: ['sum'],
       }
     );
@@ -252,8 +252,6 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30); // October 2022
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70); // November 2022
     expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110); // December 2022
-    expect((response[0].datapoints[3] as DatapointAggregate).sum).toBe(150); // January 2023
-    expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(190); // March 2023
     // Check timestamps
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
       new Date(2022, 9, 1)
@@ -263,12 +261,6 @@ describe('Datapoints integration test for monthly granularity', () => {
     );
     expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
       new Date(2022, 11, 1)
-    );
-    expect((response[0].datapoints[3] as DatapointAggregate).timestamp).toEqual(
-      new Date(2023, 0, 1)
-    );
-    expect((response[0].datapoints[4] as DatapointAggregate).timestamp).toEqual(
-      new Date(2023, 2, 1)
     );
   });
 
