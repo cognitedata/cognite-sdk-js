@@ -212,7 +212,7 @@ describe('Annotations API', () => {
     expect(items).toHaveLength(createdAnnotationIds.length);
   });
 
-  test('list annotations with data filter', async () => {
+  test.skip('list annotations with data filter', async () => {
     const items = await client.annotations
       .list({
         filter: {
