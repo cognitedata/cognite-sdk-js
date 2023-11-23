@@ -216,13 +216,13 @@ describe('Datapoints integration test for monthly granularity', () => {
       new Date(2022, 10, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 12, 1)
+      new Date(2022, 11, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
       new Date(2023, 0, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2023, 3, 1)
+      new Date(2023, 2, 1)
     );
   });
 
