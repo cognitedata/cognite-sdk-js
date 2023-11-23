@@ -212,7 +212,7 @@ describe('Annotations API', () => {
     expect(items).toHaveLength(createdAnnotationIds.length);
   });
 
-  test.skip('list annotations with data filter', async () => {
+  test('list annotations with data filter', async () => {
     const items = await client.annotations
       .list({
         filter: {
@@ -226,7 +226,7 @@ describe('Annotations API', () => {
     expect(items).toHaveLength(1);
   });
 
-  test.skip('reverse lookup annotation', async () => {
+  test('reverse lookup annotation', async () => {
     const listResponse = await client.annotations.reverseLookup({
       limit: 1000,
       filter: {
