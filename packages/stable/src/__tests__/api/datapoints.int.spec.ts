@@ -153,8 +153,12 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
     // Check timestamps
-    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toBe(new Date(2022, 9, 1));
-    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toBe(new Date(2022, 10, 1));
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toBe(
+      "2022-09-01T00:00:00.000Z"
+      );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toBe(
+      "2022-10-01T00:00:00.000Z"
+      );
 
   });
 
