@@ -191,7 +191,9 @@ describe('Datapoints integration test for monthly granularity', () => {
         aggregates: ['sum'],
       }
     );
-    console.log(response);
+    console.log(response[0].datapoints[0]);
+    console.log(response[0].datapoints[1]);
+    console.log(response[0].datapoints[2]);
 
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);
@@ -217,7 +219,11 @@ describe('Datapoints integration test for monthly granularity', () => {
         aggregates: ['sum'],
       }
     );
-    console.log(response);
+    console.log(response[0].datapoints[0]);
+    console.log(response[0].datapoints[1]);
+    console.log(response[0].datapoints[2]);
+    console.log(response[0].datapoints[3]);
+    console.log(response[0].datapoints[4]);
 
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30); // October 2022
