@@ -144,7 +144,7 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: new Date(2022, 9, 1),
-        end: new Date(2022, 10, 31),
+        end: new Date(2022, 10, 30),
         aggregates: ['sum'],
       }
     );
@@ -169,7 +169,7 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: new Date(2022, 11, 1),
-        end: new Date(2023, 2, 29),
+        end: new Date(2023, 0, 15),
         aggregates: ['sum'],
       }
     );
@@ -219,7 +219,7 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: new Date(2022, 9, 1),
-        end: new Date(2023, 2, 29),
+        end: new Date(2023, 2, 15),
         aggregates: ['sum'],
       }
     );
@@ -255,7 +255,7 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: Date.parse('2022-01-01T00:00:00Z'),
-        end: Date.parse('2023-31-12T23:59:59Z'),
+        end: Date.parse('2023-12-15T23:59:59Z'),
         aggregates: ['sum'],
       }
     );
@@ -284,7 +284,7 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: new Date(2022, 9, 1),
-        end: new Date(2023, 2, 29),
+        end: new Date(2023, 2, 15),
         aggregates: ['average'],
       }
     );
