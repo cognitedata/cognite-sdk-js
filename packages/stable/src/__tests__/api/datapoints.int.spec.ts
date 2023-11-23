@@ -154,10 +154,10 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
     // Check timestamps
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 0, 1)
+      new Date(2022, 9, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 0, 1)
+      new Date(2022, 10, 1)
     );
   });
 
@@ -208,6 +208,22 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110);
     expect((response[0].datapoints[3] as DatapointAggregate).sum).toBe(150);
     expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(190);
+      // Check timestamps
+      expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+        new Date(2022, 9, 1)
+      );
+      expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+        new Date(2022, 10, 1)
+      );
+      expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+        new Date(2022, 12, 1)
+      );
+      expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+        new Date(2023, 0, 1)
+      );
+      expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+        new Date(2023, 3, 1)
+      );
   });
 
   test('retrieve monthly average granularity when there is a data gap between months', async () => {
