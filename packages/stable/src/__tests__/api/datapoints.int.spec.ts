@@ -243,8 +243,8 @@ describe('Datapoints integration test for monthly granularity', () => {
     const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
       {
         items: [{ id: timeserie.id }],
-        start: Date.parse("2022-10-01T00:00:00Z"),
-        end: Date.parse("2023-03-31T00:00:00Z"),
+        start: Date.parse('2022-10-01T00:00:00Z'),
+        end: Date.parse('2023-03-31T00:00:00Z'),
         aggregates: ['sum'],
       }
     );
