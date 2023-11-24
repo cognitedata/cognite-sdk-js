@@ -148,4 +148,4 @@ export interface SimulatorPatch {
   };
 }
 
-export interface SimulatorChange extends SimulatorPatch, InternalId { }
+export interface SimulatorChange extends SimulatorPatch, InternalId {}
