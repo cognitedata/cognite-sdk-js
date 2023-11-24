@@ -3320,7 +3320,6 @@ export interface AnnotationUpdate {
     status?: SetField<AnnotationStatus>;
   };
 }
-
 export interface AnnotationFilterRequest
   extends AnnotationFilter,
     FilterQuery {}
@@ -3355,4 +3354,31 @@ export interface AnnotationReverseLookupFilterProps {
   creatingUser?: string;
   status?: AnnotationStatus;
   data?: Record<string, any>;
+}
+
+export interface Unit {
+  externalId: CogniteInternalId;
+  name: string;
+  longName: string;
+  symbol: string;
+  aliasNames: string[];
+  quantity: string;
+  conversion: UnitConversion;
+  source?: string;
+  sourceReference?: string;
+}
+
+export interface UnitConversion {
+  multiplier: number;
+  offset: number;
+}
+
+export interface UnitSystemQuantity {
+  name: string;
+  unitExternalId: CogniteInternalId;
+}
+
+export interface UnitSystem {
+  name: string;
+  quantities: UnitSystemQuantity[];
 }

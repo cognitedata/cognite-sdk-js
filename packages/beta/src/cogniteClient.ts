@@ -5,8 +5,6 @@ import {
   CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
 import { version } from '../package.json';
-import { UnitsAPI } from './api/units/unitsApi';
-import { accessApi } from '@cognite/sdk-core';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
@@ -34,21 +32,13 @@ export default class CogniteClient extends CogniteClientCleaned {
     super(options);
   }
 
-  private unitsApi?: UnitsAPI;
-
   protected get version() {
     return `${version}-beta`;
-  }
-
-  public get units() {
-    return accessApi(this.unitsApi);
   }
 
   protected initAPIs() {
     super.initAPIs();
 
     this.httpClient.setDefaultHeader('cdf-version', 'beta');
-
-    this.unitsApi = this.apiFactory(UnitsAPI, 'units');
   }
 }

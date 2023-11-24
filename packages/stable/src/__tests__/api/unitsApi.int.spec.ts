@@ -1,23 +1,23 @@
 // Copyright 2023 Cognite AS
 import CogniteClientBeta from '../../cogniteClient';
-import { setupLoggedInClient, itif } from '../testUtils';
+import { setupLoggedInClient } from '../testUtils';
 
 describe('units api', () => {
   const client: CogniteClientBeta | null = setupLoggedInClient();
 
-  itif(client)('list unit systems', async () => {
+  it('list unit systems', async () => {
     const response = await client!.units.listUnitSystems();
     expect(response.items.length).toBeGreaterThan(0);
     expect(response.items[0].name).toBeDefined();
   });
 
-  itif(client)('list units', async () => {
+  it('list units', async () => {
     const response = await client!.units.list();
     expect(response.items.length).toBeGreaterThan(0);
     expect(response.items[0].externalId).toBeDefined();
   });
 
-  itif(client)('retrieve units', async () => {
+  it('retrieve units', async () => {
     const response = await client!.units.retrieve([
       { externalId: 'temperature:deg_c' },
     ]);
