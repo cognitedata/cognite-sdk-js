@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.1.0...@cognite/sdk@9.2.0) (2023-11-23)
+
+### Features
+
+- **stable:** generate new types ([#1039](https://github.com/cognitedata/cognite-sdk-js/issues/1039)) ([4dd4e5c](https://github.com/cognitedata/cognite-sdk-js/commit/4dd4e5c594d2db01d7d5051a4b96d01212122f84))
+
 # [9.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.0.0...@cognite/sdk@9.1.0) (2023-11-21)
 
 ### Features
