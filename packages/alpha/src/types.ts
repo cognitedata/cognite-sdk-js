@@ -137,7 +137,7 @@ export interface SimulatorIntegrationFilterQuery extends FilterQuery {
 export interface SimulatorPatch {
   update: {
     fileExtensionTypes?: SinglePatch<string[]>;
-    name: SinglePatch<string>;
+    name?: SinglePatch<string>;
     isBoundaryConditionsEnabled?: SinglePatch<boolean>;
     boundaryConditions?: SinglePatch<SimulatorBoundaryCondition[]>;
     isCalculationsEnabled?: SinglePatch<boolean>;
