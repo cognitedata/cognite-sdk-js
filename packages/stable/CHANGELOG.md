@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.2.0...@cognite/sdk@9.2.1) (2023-11-24)
+
+### Bug Fixes
+
+- use UTC timezone regardless of client time zone ([#1040](https://github.com/cognitedata/cognite-sdk-js/issues/1040)) ([ad717bd](https://github.com/cognitedata/cognite-sdk-js/commit/ad717bd96ad4c3a5dbb6019b418417b23098c689))
+
 # [9.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.1.0...@cognite/sdk@9.2.0) (2023-11-23)
 
 ### Features
