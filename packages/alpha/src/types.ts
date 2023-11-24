@@ -43,10 +43,16 @@ export interface SimulatorModelType {
   key: string;
 }
 
+export interface SimulatorStepFieldOption {
+  label: string;
+  value: string;
+}
+
 export interface SimulatorStepField {
   name: string;
   label: string;
   info: string;
+  options?: SimulatorStepFieldOption[];
 }
 
 export interface SimulatorStep {
@@ -56,6 +62,7 @@ export interface SimulatorStep {
 export interface Simulator {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
+  name: string;
   fileExtensionTypes: string[];
   isBoundaryConditionsEnabled: boolean;
   boundaryConditions: SimulatorBoundaryCondition[];
@@ -108,6 +115,7 @@ export interface SimulatorIntegration {
 export interface SimulatorIntegrationCreate {
   externalId?: CogniteExternalId;
   simulatorExternalId?: CogniteExternalId;
+  name?: string;
   dataSetId?: CogniteInternalId;
   connectorVersion?: string;
   simulatorVersion?: string;
@@ -129,6 +137,7 @@ export interface SimulatorIntegrationFilterQuery extends FilterQuery {
 export interface SimulatorPatch {
   update: {
     fileExtensionTypes?: SinglePatch<string[]>;
+    name: SinglePatch<string>;
     isBoundaryConditionsEnabled?: SinglePatch<boolean>;
     boundaryConditions?: SinglePatch<SimulatorBoundaryCondition[]>;
     isCalculationsEnabled?: SinglePatch<boolean>;
@@ -139,4 +148,4 @@ export interface SimulatorPatch {
   };
 }
 
-export interface SimulatorChange extends SimulatorPatch, InternalId {}
+export interface SimulatorChange extends SimulatorPatch, InternalId { }
