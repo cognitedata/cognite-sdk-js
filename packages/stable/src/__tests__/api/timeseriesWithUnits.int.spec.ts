@@ -9,10 +9,7 @@ import {
   Timeseries,
 } from '@cognite/sdk';
 import { setupLoggedInClient } from '../testUtils';
-import {
-  randomInt,
-  runTestWithRetryWhenFailing,
-} from '@cognite/sdk-core/src/testUtils';
+import { randomInt, runTestWithRetryWhenFailing } from '../testUtils';
 
 describe('Timeseries integration test', () => {
   const client: CogniteClient | null = setupLoggedInClient();
