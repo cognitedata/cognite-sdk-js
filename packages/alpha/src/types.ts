@@ -115,7 +115,6 @@ export interface SimulatorIntegration {
 export interface SimulatorIntegrationCreate {
   externalId?: CogniteExternalId;
   simulatorExternalId?: CogniteExternalId;
-  name?: string;
   dataSetId?: CogniteInternalId;
   connectorVersion?: string;
   simulatorVersion?: string;
@@ -148,4 +147,4 @@ export interface SimulatorPatch {
   };
 }
 
-export interface SimulatorChange extends SimulatorPatch, InternalId {}
+export interface SimulatorChange extends SimulatorPatch, InternalId { }
