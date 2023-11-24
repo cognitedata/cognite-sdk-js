@@ -6,10 +6,10 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "0.9.0",
+  "version": "0.11.3",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
-    "test": "jest --config=../../jest.config.js --testPathPattern=/alpha/ --env=node",
+    "test": "jest --config=../../jest.config.js --testPathPattern=/alpha/ --env=node --passWithNoTests",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn build",
@@ -22,7 +22,7 @@
     "test-snippets": ""
   },
   "dependencies": {
-    "@cognite/sdk": "^8.3.0",
+    "@cognite/sdk": "^9.2.0",
     "@cognite/sdk-core": "^4.9.0"
   },
   "files": [

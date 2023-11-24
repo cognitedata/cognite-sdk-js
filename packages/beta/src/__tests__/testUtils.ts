@@ -18,7 +18,7 @@ export function setupLoggedInClient() {
         authority: `https://login.microsoftonline.com/${azureTenant}`,
       },
     });
-
+    
     const client = new CogniteClient({
       project: TEST_PROJECT,
       baseUrl: COGNITE_BASE_URL,
