@@ -198,22 +198,22 @@ const getMonthsBetweenDates = (
   endDate = new Date(endDate);
 
   while (currentMonth <= endDate) {
-    const year = currentMonth.getFullYear();
-    const month = currentMonth.getMonth() + 1; // Months are zero-indexed
-
-    const firstDay = new Date(year, month - 1, 1);
-    const lastDay = new Date(year, month, 0);
+    const firstDay = new Date(
+      Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), 1, 0)
+    );
+    const lastDay = new Date(
+      Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1, 0)
+    );
 
     result.push({
       startDate: firstDay.getTime(),
       endDate: lastDay.getTime(),
-      numberOfDays: lastDay.getDate() - firstDay.getDate() + 1,
+      numberOfDays:
+        (lastDay.getTime() - firstDay.getTime()) / (24 * 3600 * 1000),
     });
-
     // Move to the next month
     currentMonth.setMonth(currentMonth.getMonth() + 1);
   }
-
   return result;
 };
 

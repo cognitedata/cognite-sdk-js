@@ -144,13 +144,22 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: new Date(2022, 9, 1),
-        end: new Date(2022, 10, 15),
+        end: new Date(2022, 10, 30),
         aggregates: ['sum'],
       }
     );
 
+    expect(response[0].datapoints.length).toBe(2);
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);
+    expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
+    // Check timestamps
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
   });
 
   test('retrieve monthly granularity for two consecutive months in different years', async () => {
@@ -158,14 +167,20 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: new Date(2022, 11, 1),
-        end: new Date(2023, 2, 15),
+        end: new Date(2023, 0, 15),
         aggregates: ['sum'],
       }
     );
-
+    expect(response[0].datapoints.length).toBe(2);
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(110);
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(150);
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2023, 0, 1)
+    );
   });
 
   test('retrieve monthly granularity for two non-consecutive months in same year', async () => {
@@ -173,15 +188,24 @@ describe('Datapoints integration test for monthly granularity', () => {
       {
         items: [{ id: timeserie.id }],
         start: new Date(2022, 9, 1),
-        end: new Date(2022, 11, 15),
+        end: new Date(2022, 11, 30),
         aggregates: ['sum'],
       }
     );
-
+    expect(response[0].datapoints.length).toBe(3);
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
     expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110);
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
+    expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
   });
 
   test('retrieve monthly granularity when there is a data gap between months', async () => {
@@ -193,13 +217,57 @@ describe('Datapoints integration test for monthly granularity', () => {
         aggregates: ['sum'],
       }
     );
+    expect(response[0].datapoints.length).toBe(5);
 
     // Check that the response contains the correct number of data points
-    expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30);
-    expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
-    expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110);
-    expect((response[0].datapoints[3] as DatapointAggregate).sum).toBe(150);
-    expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(190);
+    expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30); // October 2022
+    expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70); // November 2022
+    expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110); // December 2022
+    expect((response[0].datapoints[3] as DatapointAggregate).sum).toBe(150); // January 2023
+    expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(190); // March 2023
+    // Check timestamps
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
+    expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
+    expect((response[0].datapoints[3] as DatapointAggregate).timestamp).toEqual(
+      new Date(2023, 0, 1)
+    );
+    expect((response[0].datapoints[4] as DatapointAggregate).timestamp).toEqual(
+      new Date(2023, 2, 1)
+    );
+  });
+
+  test('retrieve monthly granularity for a year when there is missing data for some months', async () => {
+    const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
+      {
+        items: [{ id: timeserie.id }],
+        start: Date.parse('2022-01-01T00:00:00Z'),
+        end: Date.parse('2022-12-15T23:59:59Z'),
+        aggregates: ['sum'],
+      }
+    );
+    expect(response[0].datapoints.length).toBe(3);
+
+    // Check that the response contains the correct number of data points
+    expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30); // October 2022
+    expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70); // November 2022
+    expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110); // December 2022
+    // Check timestamps
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
+    expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
   });
 
   test('retrieve monthly average granularity when there is a data gap between months', async () => {
@@ -211,6 +279,7 @@ describe('Datapoints integration test for monthly granularity', () => {
         aggregates: ['average'],
       }
     );
+    expect(response[0].datapoints.length).toBe(5);
 
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).average).toBe(15);
@@ -218,5 +287,72 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[2] as DatapointAggregate).average).toBe(55);
     expect((response[0].datapoints[3] as DatapointAggregate).average).toBe(75);
     expect((response[0].datapoints[4] as DatapointAggregate).average).toBe(95);
+    // Check timestamps
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
+    expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
+    expect((response[0].datapoints[3] as DatapointAggregate).timestamp).toEqual(
+      new Date(2023, 0, 1)
+    );
+    expect((response[0].datapoints[4] as DatapointAggregate).timestamp).toEqual(
+      new Date(2023, 2, 1)
+    );
+  });
+
+  test('retrieve monthly granularity with local time zone in start/end - +0100', async () => {
+    const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
+      {
+        items: [{ id: timeserie.id }],
+        start: Date.parse('2022-01-01T00:00:00+0100'),
+        end: Date.parse('2022-12-12T00:00:00+0100'),
+        aggregates: ['sum'],
+      }
+    );
+    expect(response[0].datapoints.length).toBe(3);
+    // Check that the response contains the correct number of data points
+    expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30); // October 2022
+    expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70); // November 2022
+    expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110); // December 2022
+    // Check timestamps
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
+    expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
+  });
+  test('retrieve monthly granularity with local time zone in start/end - -0600', async () => {
+    const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
+      {
+        items: [{ id: timeserie.id }],
+        start: Date.parse('2022-01-01T00:00:00-0600'),
+        end: Date.parse('2022-12-12T00:00:00-0600'),
+        aggregates: ['sum'],
+      }
+    );
+    expect(response[0].datapoints.length).toBe(3);
+    // Check that the response contains the correct number of data points
+    expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(30); // October 2022
+    expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70); // November 2022
+    expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110); // December 2022
+    // Check timestamps
+    expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
+    expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
   });
 });
