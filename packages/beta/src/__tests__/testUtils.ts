@@ -1,41 +1,33 @@
 // Copyright 2020 Cognite AS
+
+import { Constants } from '@cognite/sdk-core';
 import CogniteClient from '../cogniteClient';
-import { name } from '../../package.json';
-import { ConfidentialClientApplication } from '@azure/msal-node';
+import { apiKey, mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
+import { login } from './login';
 
-export const TEST_PROJECT = process.env.COGNITE_PROJECT!;
-export const CLIENT_ID = process.env.COGNITE_CLIENT_ID!;
-export const CLIENT_SECRET = process.env.COGNITE_CLIENT_SECRET!;
-const azureTenant = process.env.COGNITE_AZURE_TENANT_ID!;
-const COGNITE_BASE_URL = process.env.COGNITE_BASE_URL!;
-
-export function setupLoggedInClient() {
-  if (TEST_PROJECT && CLIENT_ID && CLIENT_SECRET && azureTenant) {
-    const pca = new ConfidentialClientApplication({
-      auth: {
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        authority: `https://login.microsoftonline.com/${azureTenant}`,
-      },
-    });
-    
-    const client = new CogniteClient({
-      project: TEST_PROJECT,
-      baseUrl: COGNITE_BASE_URL,
-      appId: `JS SDK integration tests (${name})`,
-      getToken: () =>
-        pca
-          .acquireTokenByClientCredential({
-            scopes: [`${COGNITE_BASE_URL}/.default`],
-            skipCache: true,
-          })
-          .then((response) => response?.accessToken as string),
-    });
-
-    return client;
-  } else {
-    return null;
-  }
+export function setupClient(baseUrl: string = Constants.BASE_URL) {
+  return new CogniteClient({
+    appId: 'JS SDK integration tests (beta)',
+    project: process.env.COGNITE_PROJECT || (project as string),
+    apiKeyMode: true,
+    getToken: () => Promise.resolve(apiKey as string),
+    baseUrl,
+  });
 }
 
-export const itif = (condition: any) => (condition ? it : it.skip);
+export function setupLoggedInClient() {
+  return new CogniteClient({
+    appId: 'JS SDK integration tests (beta)',
+    baseUrl: process.env.COGNITE_BASE_URL,
+    project: process.env.COGNITE_PROJECT as string,
+    getToken: () =>
+      login().then((account) => {
+        return account.access_token;
+      }),
+  });
+}
+
+export function setupMockableClient() {
+  const client = setupClient(mockBaseUrl);
+  return client;
+}
