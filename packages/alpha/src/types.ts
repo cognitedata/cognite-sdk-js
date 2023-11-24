@@ -86,6 +86,7 @@ export interface SimulatorFilterQuery extends FilterQuery {
 export interface SimulatorCreate {
   externalId: CogniteExternalId;
   fileExtensionTypes: string[];
+  name: string;
   isBoundaryConditionsEnabled?: boolean;
   boundaryConditions?: SimulatorBoundaryCondition[];
   isCalculationsEnabled?: boolean;
