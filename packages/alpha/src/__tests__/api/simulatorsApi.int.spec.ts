@@ -9,6 +9,7 @@ describe.skip('simulator integrations api', () => {
 
   const ts = Date.now();
   const simulatorExternalId = `test_sim_${ts}`;
+  const simulatorName = `TestSim - ${ts}`;
   let simulatorId: number;
   const unitsMap = {
     accel: {
@@ -98,6 +99,7 @@ describe.skip('simulator integrations api', () => {
     const response = await client.simulators.create([
       {
         externalId: simulatorExternalId,
+        name: simulatorName,
         fileExtensionTypes,
         enabled: true,
         stepFields,
