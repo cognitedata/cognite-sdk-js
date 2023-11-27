@@ -16,7 +16,7 @@ describe('monitoring tasks api', () => {
   const client: CogniteClient = setupLoggedInClient();
   const ts = Date.now();
   const monitoringTaskExternalId = `test_mt_${ts}`;
-  const monitoringTaskName = `test_mt_${ts}`;
+  let monitoringTaskName = `test_mt_${ts}`;
   const channelExternalId = `test_channel_mt_${ts}`;
   const sessionsApi = `/api/v1/projects/${process.env.COGNITE_PROJECT}/sessions`;
   const testMtModel: MonitoringTaskDoubleThresholdModelCreate = {
@@ -92,6 +92,33 @@ describe('monitoring tasks api', () => {
     expect(response[0].externalId).toBe(monitoringTaskExternalId);
     done();
   }, 10000);
+
+  test('upsert monitoring task', async () => {
+    const sessionsRes = await client.post<SessionsResponse>(sessionsApi, {
+      data: {
+        items: [
+          {
+            clientId: process.env.COGNITE_CLIENT_ID,
+            clientSecret: process.env.COGNITE_CLIENT_SECRET,
+          },
+        ],
+      },
+    });
+
+    monitoringTaskName = monitoringTaskName + '_updated';
+    const response = await client.monitoringTasks.upsert([
+      {
+        externalId: monitoringTaskExternalId,
+        name: monitoringTaskName,
+        channelId: channel.id,
+        model: testMtModel,
+        nonce: sessionsRes?.data?.items[0]?.nonce,
+      }
+    ]);
+
+    expect(response.length).toBe(1);
+    expect(response[name]).toBe(monitoringTaskName);
+  });
 
   test('list all monitoring tasks', async () => {
     const response = await client.monitoringTasks.list({

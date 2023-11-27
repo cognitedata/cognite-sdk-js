@@ -31,4 +31,8 @@ export class MonitoringTasksAPI extends BaseResourceAPI<MonitoringTask> {
   public delete = async (ids: IdEither[]) => {
     return this.deleteEndpoint(ids);
   };
+
+  public upsert = async (items: MonitoringTaskCreate[]) => {
+    return this.upsertEndpoint(items);
+  }
 }
