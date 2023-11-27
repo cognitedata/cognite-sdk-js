@@ -113,7 +113,7 @@ describe('monitoring tasks api', () => {
         channelId: channel.id,
         model: testMtModel,
         nonce: sessionsRes?.data?.items[0]?.nonce,
-      }
+      },
     ]);
 
     expect(response.length).toBe(1);

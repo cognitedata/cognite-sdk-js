@@ -46,21 +46,21 @@ describe('alerts api', () => {
   });
 
   test('update channel name', async () => {
-      const updatedName = channelExternalId + '_updated';
-      const response = await client.alerts.updateChannels([
-        {
-          externalId: channelExternalId,
-          update: {
-            name: {
-              set: updatedName,
-            },
-          }
-        }]);
+    const updatedName = channelExternalId + '_updated';
+    const response = await client.alerts.updateChannels([
+      {
+        externalId: channelExternalId,
+        update: {
+          name: {
+            set: updatedName,
+          },
+        },
+      },
+    ]);
 
-      expect(response.length).toBe(1);
-      expect(response[0].name).toBe(updatedName);
-    }
-  )
+    expect(response.length).toBe(1);
+    expect(response[0].name).toBe(updatedName);
+  });
 
   test('list channels', async () => {
     const response = await client.alerts.listChannels({

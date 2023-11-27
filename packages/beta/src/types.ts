@@ -2,7 +2,8 @@
 
 import {
   Metadata,
-  MetadataPatch, SinglePatchRequired,
+  MetadataPatch,
+  SinglePatchRequired,
   SinglePatchRequiredString,
   SinglePatchString,
   Timestamp,
@@ -234,11 +235,9 @@ export interface ChannelPatch {
   };
 }
 
-export interface ChannelChangeById extends ChannelPatch, InternalId {
-}
+export interface ChannelChangeById extends ChannelPatch, InternalId {}
 
-export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId {
-}
+export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId {}
 
 export type ChannelChange = ChannelChangeById | ChannelChangeByExternalId;
 

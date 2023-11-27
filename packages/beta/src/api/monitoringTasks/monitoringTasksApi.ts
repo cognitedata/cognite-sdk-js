@@ -34,5 +34,5 @@ export class MonitoringTasksAPI extends BaseResourceAPI<MonitoringTask> {
 
   public upsert = async (items: MonitoringTaskCreate[]) => {
     return this.upsertEndpoint(items);
-  }
+  };
 }
