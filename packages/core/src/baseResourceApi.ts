@@ -20,6 +20,7 @@ import {
 } from './types';
 import { applyIfApplicable, promiseAllWithData } from './utils';
 import DateParser from './dateParser';
+
 /** @hidden */
 export abstract class BaseResourceAPI<ResponseType> {
   protected get listGetUrl() {
@@ -147,13 +148,12 @@ export abstract class BaseResourceAPI<ResponseType> {
 
   protected async upsertEndpoint<RequestType>(
     items: RequestType[],
-    path: string = this.url(),
     preRequestModifier?: (items: RequestType[]) => RequestType[],
     postRequestModifier?: (items: ResponseType[]) => ResponseType[]
   ) {
     return this.callEndpointWithMergeAndTransform(
       items,
-      (data) => this.callUpsertEndpoint(data, path),
+      (data) => this.callUpsertEndpoint(data),
       preRequestModifier,
       postRequestModifier
     );
