@@ -23,7 +23,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    * [Extract features from image](https://docs.cognite.com/api/v1/#tag/Vision/operation/postVisionExtract)
    *
    * ```js
-   * const response = await client.vision.extract(["TextDetection"], [{id: 1234}], {textDetectionParameters: {threshold: 0.4}});
+   * const response = await client.vision.extract(["TextDetection"], [{ fileId: 1234}], {textDetectionParameters: {threshold: 0.4}});
    * ```
    */
   public extract = async (
