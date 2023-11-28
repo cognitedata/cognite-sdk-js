@@ -11,6 +11,8 @@ import {
   LatestDataBeforeRequest,
   ExternalDatapointsQuery,
   DatapointInfo,
+  Timestamp,
+  DatapointsMonthlyGranularityMultiQuery,
 } from '../../types';
 
 export class DataPointsAPI extends BaseResourceAPI<
@@ -48,6 +50,63 @@ export class DataPointsAPI extends BaseResourceAPI<
     query: DatapointsMultiQuery
   ): Promise<DatapointAggregates[] | Datapoints[]> => {
     return this.retrieveDatapointsEndpoint(query);
+  };
+
+  /**
+   *
+   * ```js
+   * const monthlyAggregatesData = await client.datapoints.retrieveDatapointMonthlyAggregates({ items: [{ id: 123 }] });
+   * ```
+   */
+  public retrieveDatapointMonthlyAggregates = async (
+    query: DatapointsMonthlyGranularityMultiQuery
+  ): Promise<DatapointAggregates[]> => {
+    // Find the start and end dates from the query
+    const startDate = query.start;
+    const endDate = query.end;
+
+    if (startDate && endDate) {
+      // Get the months between the start and end dates
+      const months = getMonthsBetweenDates(startDate, endDate);
+
+      // Create a array of promises for each month
+      const promises = months.map((month) => {
+        // Create a new query for each month
+        const newQuery = {
+          ...query,
+          start: month.startDate,
+          end: month.endDate,
+          granularity: `${month.numberOfDays}d`,
+        };
+
+        // Return a promise for each month
+        return this.retrieveDatapointsEndpoint(newQuery);
+      });
+
+      // Call the API for each month in parallel and save it in a variable
+      const results = await Promise.all(promises);
+
+      // Merge the datapoints into a single array
+      const mergedDatapoints = [];
+
+      for (const result of results) {
+        // Check if the array contains data before pushing it to the merged datapoints array
+        if (result?.length && result[0]?.datapoints) {
+          const datapoints = result[0].datapoints;
+          // Merge the datapoints into the result array
+          mergedDatapoints.push(...datapoints);
+        }
+      }
+
+      // Clone the first item from the results array
+      const firstItem = results[0][0] as DatapointAggregates;
+      // replace the merged datapoints with the datapoints from the first item
+      firstItem.datapoints = mergedDatapoints;
+
+      return [firstItem];
+    }
+
+    return this.retrieveDatapointsEndpoint<DatapointAggregates[]>(query);
   };
 
   /**
@@ -90,11 +149,13 @@ export class DataPointsAPI extends BaseResourceAPI<
     return {};
   }
 
-  private async retrieveDatapointsEndpoint(query: DatapointsMultiQuery) {
+  private async retrieveDatapointsEndpoint<
+    T extends DatapointAggregates[] | Datapoints[] =
+      | DatapointAggregates[]
+      | Datapoints[]
+  >(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
-    const response = await this.post<
-      ItemsWrapper<DatapointAggregates[] | Datapoints[]>
-    >(path, {
+    const response = await this.post<ItemsWrapper<T>>(path, {
       data: query,
     });
     return this.addToMapAndReturn(response.data.items, response);
@@ -120,5 +181,40 @@ export class DataPointsAPI extends BaseResourceAPI<
     return {};
   }
 }
+
+interface MonthInfo {
+  startDate: Timestamp;
+  endDate: Timestamp;
+  numberOfDays: number;
+}
+
+const getMonthsBetweenDates = (
+  startDate: Timestamp | string,
+  endDate: Timestamp | string
+): MonthInfo[] => {
+  const result: MonthInfo[] = [];
+
+  const currentMonth = new Date(startDate);
+  endDate = new Date(endDate);
+
+  while (currentMonth <= endDate) {
+    const firstDay = new Date(
+      Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), 1, 0)
+    );
+    const lastDay = new Date(
+      Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1, 0)
+    );
+
+    result.push({
+      startDate: firstDay.getTime(),
+      endDate: lastDay.getTime(),
+      numberOfDays:
+        (lastDay.getTime() - firstDay.getTime()) / (24 * 3600 * 1000),
+    });
+    // Move to the next month
+    currentMonth.setMonth(currentMonth.getMonth() + 1);
+  }
+  return result;
+};
 
 export type LatestDataParams = IgnoreUnknownIds;

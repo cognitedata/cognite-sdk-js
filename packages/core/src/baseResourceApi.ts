@@ -20,6 +20,7 @@ import {
 } from './types';
 import { applyIfApplicable, promiseAllWithData } from './utils';
 import DateParser from './dateParser';
+
 /** @hidden */
 export abstract class BaseResourceAPI<ResponseType> {
   protected get listGetUrl() {
@@ -44,6 +45,10 @@ export abstract class BaseResourceAPI<ResponseType> {
 
   protected get deleteUrl() {
     return this.url('delete');
+  }
+
+  protected get upsertUrl() {
+    return this.url('upsert');
   }
 
   protected get aggregateUrl() {
@@ -136,6 +141,19 @@ export abstract class BaseResourceAPI<ResponseType> {
     return this.callEndpointWithMergeAndTransform(
       items,
       (data) => this.callCreateEndpoint(data, path),
+      preRequestModifier,
+      postRequestModifier
+    );
+  }
+
+  protected async upsertEndpoint<RequestType>(
+    items: RequestType[],
+    preRequestModifier?: (items: RequestType[]) => RequestType[],
+    postRequestModifier?: (items: ResponseType[]) => ResponseType[]
+  ) {
+    return this.callEndpointWithMergeAndTransform(
+      items,
+      (data) => this.callUpsertEndpoint(data),
       preRequestModifier,
       postRequestModifier
     );
@@ -364,6 +382,16 @@ export abstract class BaseResourceAPI<ResponseType> {
   private async callCreateEndpoint<RequestType>(
     items: RequestType[],
     path: string
+  ) {
+    return this.postInSequenceWithAutomaticChunking<
+      RequestType,
+      ItemsWrapper<ResponseType>
+    >(path, items);
+  }
+
+  private async callUpsertEndpoint<RequestType>(
+    items: RequestType[],
+    path: string = this.upsertUrl
   ) {
     return this.postInSequenceWithAutomaticChunking<
       RequestType,

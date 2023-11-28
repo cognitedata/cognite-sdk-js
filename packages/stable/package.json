@@ -6,7 +6,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "9.0.0",
+  "version": "9.3.0",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/stable/",
@@ -23,7 +23,7 @@
     "test-snippets": "yarn extract-snippets && yarn tsc -p codeSnippets/tsconfig.build.json"
   },
   "dependencies": {
-    "@cognite/sdk-core": "^4.9.0",
+    "@cognite/sdk-core": "^4.10.0",
     "@types/geojson": "^7946.0.8",
     "geojson": "^0.5.0",
     "lodash": "^4.17.11"

@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.12.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.12.0...@cognite/sdk-alpha@0.12.1) (2023-11-28)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+# [0.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.11.4...@cognite/sdk-alpha@0.12.0) (2023-11-27)
+
+### Features
+
+- add options field to simulator steps and name to simulator DM ([#1041](https://github.com/cognitedata/cognite-sdk-js/issues/1041)) ([8d4f872](https://github.com/cognitedata/cognite-sdk-js/commit/8d4f872edd0a63ecfee2afbd5c7e644c222739e1))
+
+## [0.11.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.11.3...@cognite/sdk-alpha@0.11.4) (2023-11-24)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+## [0.11.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.11.2...@cognite/sdk-alpha@0.11.3) (2023-11-23)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+## [0.11.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.11.1...@cognite/sdk-alpha@0.11.2) (2023-11-21)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+## [0.11.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.11.0...@cognite/sdk-alpha@0.11.1) (2023-11-09)
+
+### Bug Fixes
+
+- **alpha:** export types for simint API ([#1036](https://github.com/cognitedata/cognite-sdk-js/issues/1036)) ([2677fe6](https://github.com/cognitedata/cognite-sdk-js/commit/2677fe61e2c89d3284f6187c4d56d384cfabdc6f))
+
+# [0.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.10.0...@cognite/sdk-alpha@0.11.0) (2023-11-09)
+
+### Features
+
+- **alpha:** simulator integration API ([#1035](https://github.com/cognitedata/cognite-sdk-js/issues/1035)) ([010e5f1](https://github.com/cognitedata/cognite-sdk-js/commit/010e5f14259e6dd3caede8cfbe87adde1b0d80cf))
+
 # [0.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.9.1...@cognite/sdk-alpha@0.10.0) (2023-10-17)
 
 ### Features
