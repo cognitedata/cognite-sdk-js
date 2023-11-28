@@ -108,14 +108,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7e0e24cfb5/packages/stable/src/api/vision/visionApi.ts#L29">packages/stable/src/api/vision/visionApi.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/89cffa8d7a/packages/stable/src/api/vision/visionApi.ts#L29">packages/stable/src/api/vision/visionApi.ts:29</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#tag/Vision/operation/postVisionExtract">Extract features from image</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.vision.extract([<span class="hljs-string">&quot;TextDetection&quot;</span>], [{<span class="hljs-attr">id</span>: <span class="hljs-number">1234</span>}], {<span class="hljs-attr">textDetectionParameters</span>: {<span class="hljs-attr">threshold</span>: <span class="hljs-number">0.4</span>}});
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> job = <span class="hljs-keyword">await</span> client.vision.extract([<span class="hljs-string">&#x27;TextDetection&#x27;</span>, <span class="hljs-string">&#x27;AssetTagDetection&#x27;</span>, <span class="hljs-string">&#x27;PeopleDetection&#x27;</span>], [{ <span class="hljs-attr">fileId</span>: <span class="hljs-number">1234</span> }]);
 </code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -144,14 +144,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7e0e24cfb5/packages/stable/src/api/vision/visionApi.ts#L59">packages/stable/src/api/vision/visionApi.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/89cffa8d7a/packages/stable/src/api/vision/visionApi.ts#L62">packages/stable/src/api/vision/visionApi.ts:62</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/v1/#tag/Vision/operation/getVisionExtract">Retrieve extract job</a></p>
 								</div>
-								<pre><code class="language-js"><span class="hljs-keyword">const</span> job = <span class="hljs-keyword">await</span> client.vision.getExtractJob(<span class="hljs-number">12345678</span>);
+								<pre><code class="language-js"><span class="hljs-keyword">const</span> { items } = <span class="hljs-keyword">await</span> client.vision.getExtractJob(<span class="hljs-number">12345678</span>, <span class="hljs-literal">true</span>); <span class="hljs-comment">// get an existing job, wait for it to complete, and get the results</span>
+items.forEach(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> {
+ <span class="hljs-keyword">const</span> predictions = item.predictions <span class="hljs-comment">// do something with the predictions</span>
+});
 </code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>

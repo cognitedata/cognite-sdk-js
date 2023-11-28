@@ -110,7 +110,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7e0e24cfb5/packages/stable/src/api/annotations/annotationsApi.ts#L57">packages/stable/src/api/annotations/annotationsApi.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/89cffa8d7a/packages/stable/src/api/annotations/annotationsApi.ts#L56">packages/stable/src/api/annotations/annotationsApi.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -122,17 +122,17 @@
 									textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
 									extractedText: &#39;i am your father&#39;,
 									};
-									const partial: AnnotationCreate = {
-									annotatedResourceType: &#39;file&#39;,
+									const annotation = {
+									annotatedResourceType: &#39;file&#39; as const,
 									annotatedResourceId: 1,
 									annotationType: &#39;documents.ExtractedText&#39;,
 									creatingApp: &#39;integration-tests&#39;,
 									creatingAppVersion: &#39;0.0.1&#39;,
 									creatingUser: &#39;integration-tests&#39;,
-									status: &#39;suggested&#39;,
+									status: &#39;suggested&#39; as const,
 									data,
-								};</p>
-								<p>const created = await client.annotations.create([partial]);</p>
+									};
+								const created = await client.annotations.create([annotation]);</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -154,14 +154,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7e0e24cfb5/packages/stable/src/api/annotations/annotationsApi.ts#L120">packages/stable/src/api/annotations/annotationsApi.ts:120</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/89cffa8d7a/packages/stable/src/api/annotations/annotationsApi.ts#L123">packages/stable/src/api/annotations/annotationsApi.ts:123</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/playground/#operation/annotationsDelete">Delete annotations</a></p>
 								</div>
-								<p>const annotationIds: InternalId[] = [1,2];</p>
+								<p>const annotationIds = [{ id: 1 }, { id: 2 }];</p>
 								<p>await client.annotations.delete(annotationIds);</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -184,16 +184,20 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7e0e24cfb5/packages/stable/src/api/annotations/annotationsApi.ts#L107">packages/stable/src/api/annotations/annotationsApi.ts:107</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/89cffa8d7a/packages/stable/src/api/annotations/annotationsApi.ts#L110">packages/stable/src/api/annotations/annotationsApi.ts:110</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://docs.cognite.com/api/playground/#operation/annotationsFilter">Advanced list of annotations</a></p>
 								</div>
-								<p>const limitOne = await client.annotations.list({
+								<p>const annotatedFileId = 1;
+									const limitOne = await client.annotations.list({
 									limit: 1,
-									filter: fileFilter(annotatedFileId),
+									filter: {
+									annotatedResourceType: &#39;file&#39;,
+									annotatedResourceIds: [{ id: 1 }],
+									},
 								});</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -216,7 +220,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7e0e24cfb5/packages/stable/src/api/annotations/annotationsApi.ts#L94">packages/stable/src/api/annotations/annotationsApi.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/89cffa8d7a/packages/stable/src/api/annotations/annotationsApi.ts#L93">packages/stable/src/api/annotations/annotationsApi.ts:93</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -225,7 +229,7 @@
 										or <a href="https://docs.cognite.com/api/playground/#operation/annotationsGet">Get an</a>
 									annotation</p>
 								</div>
-								<p>const annotationIds: InternalId[] = [1,2];</p>
+								<p>const annotationIds = [{ id: 1 }, { id: 2 }];</p>
 								<p>const response = await client.annotations.retrieve(annotationIds);</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -248,24 +252,24 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7e0e24cfb5/packages/stable/src/api/annotations/annotationsApi.ts#L164">packages/stable/src/api/annotations/annotationsApi.ts:164</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/89cffa8d7a/packages/stable/src/api/annotations/annotationsApi.ts#L167">packages/stable/src/api/annotations/annotationsApi.ts:167</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p><a href="https://developer.cognite.com/api/v1-beta/#tag/Annotations/operation/annotationsReverseLookup">Reverse lookup</a>
-										const assetQueryData = {
-										limit: -1,
-										filter: {
-										annotatedResourceType: &#39;file&#39;,
-										annotationType: &#39;images.AssetLink&#39;,
-										data: {
-										assetRef: { id: 123 }
-										}
-										}
-									};</p>
+									<p><a href="https://developer.cognite.com/api/v1-beta/#tag/Annotations/operation/annotationsReverseLookup">Reverse lookup</a></p>
 								</div>
-								<p>const resourceIdsResponse = this._client.annotations.reverseLookup(assetQuerydata);</p>
+								<p>const assetQueryData = {
+									limit: -1,
+									filter: {
+									annotatedResourceType: &#39;file&#39; as const,
+									annotationType: &#39;images.AssetLink&#39;,
+									data: {
+									assetRef: { id: 123 }
+									}
+									}
+									};
+								const resourceIdsResponse = client.annotations.reverseLookup(assetQueryData);</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -287,7 +291,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7e0e24cfb5/packages/stable/src/api/annotations/annotationsApi.ts#L81">packages/stable/src/api/annotations/annotationsApi.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/89cffa8d7a/packages/stable/src/api/annotations/annotationsApi.ts#L80">packages/stable/src/api/annotations/annotationsApi.ts:80</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -299,8 +303,8 @@
 									textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
 									extractedText: &#39;i am your father&#39;,
 									};
-									const partial: AnnotationSuggest = {
-									annotatedResourceType: &#39;file&#39;,
+									const partial = {
+									annotatedResourceType: &#39;file&#39; as const,
 									annotatedResourceId: 1,
 									annotationType: &#39;documents.ExtractedText&#39;,
 									creatingApp: &#39;integration-tests&#39;,
@@ -330,7 +334,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/7e0e24cfb5/packages/stable/src/api/annotations/annotationsApi.ts#L145">packages/stable/src/api/annotations/annotationsApi.ts:145</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/89cffa8d7a/packages/stable/src/api/annotations/annotationsApi.ts#L148">packages/stable/src/api/annotations/annotationsApi.ts:148</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -342,7 +346,7 @@
 									fileRef: { externalId: &#39;def_file_changed&#39; },
 									textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
 									};
-									const changes: AnnotationChangeById[] = [
+									const changes = [
 									{
 									id: 1,
 									update: {
