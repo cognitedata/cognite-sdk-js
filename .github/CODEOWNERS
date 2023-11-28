@@ -7,5 +7,7 @@
 /packages/playground/src/__tests__/api/documents* @cognitedata/matchmakers
 /packages/stable/src/api/documents @cognitedata/matchmakers
 /packages/stable/src/__tests__/api/documents* @cognitedata/matchmakers
+/packages/stable/src/api/units @cognitedata/simulator-integration
+/packages/stable/src/__tests__/api/*units* @cognitedata/simulator-integration
 
 /packages/stable/src/api/vision @cognitedata/vision-team
