@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.3.0...@cognite/sdk@9.4.0) (2023-11-28)
+
+### Features
+
+- add units catalog and timeseries unit conversion ([#1027](https://github.com/cognitedata/cognite-sdk-js/issues/1027)) ([89cffa8](https://github.com/cognitedata/cognite-sdk-js/commit/89cffa8d7a1401274f52008b7bd7745683a2d817))
+
 # [9.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.2.1...@cognite/sdk@9.3.0) (2023-11-28)
 
 ### Features
