@@ -3,7 +3,7 @@
 import {
   BaseResourceAPI,
   CDFHttpClient,
-  IdEither,
+  ExternalId,
   MetadataMap,
 } from '@cognite/sdk-core';
 import { Unit } from '../../types';
@@ -41,7 +41,7 @@ export class UnitsAPI extends BaseResourceAPI<Unit> {
    * const units = await client.units.retrieve([{ externalId: 'temperature:deg_c' }, { externalId: 'pressure:bar' }]);
    * ```
    */
-  public retrieve = async (ids: IdEither[]): Promise<Unit[]> => {
+  public retrieve = async (ids: ExternalId[]): Promise<Unit[]> => {
     return this.retrieveEndpoint(ids);
   };
 

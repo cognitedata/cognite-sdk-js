@@ -23,7 +23,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    * [Extract features from image](https://docs.cognite.com/api/v1/#tag/Vision/operation/postVisionExtract)
    *
    * ```js
-   * const response = await client.vision.extract(["TextDetection"], [{ fileId: 1234}], {textDetectionParameters: {threshold: 0.4}});
+   * const job = await client.vision.extract(['TextDetection', 'AssetTagDetection', 'PeopleDetection'], [{ fileId: 1234 }]);
    * ```
    */
   public extract = async (
@@ -53,7 +53,10 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    * [Retrieve extract job](https://docs.cognite.com/api/v1/#tag/Vision/operation/getVisionExtract)
    *
    * ```js
-   * const job = await client.vision.getExtractJob(12345678);
+   * const { items } = await client.vision.getExtractJob(12345678, true); // get an existing job, wait for it to complete, and get the results
+   * items.forEach((item) => {
+   *  const predictions = item.predictions // do something with the predictions
+   * });
    * ```
    */
   public getExtractJob = async (
