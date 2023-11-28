@@ -3,6 +3,7 @@
 import {
   Metadata,
   MetadataPatch,
+  SinglePatchRequired,
   SinglePatchRequiredString,
   SinglePatchString,
   Timestamp,
@@ -59,6 +60,7 @@ export const MonitoringTaskModelExternalId = {
 export interface MonitoringTaskThresholdModelCreateBase {
   externalId: MonitoringTaskModelExternalId;
 }
+
 export interface MonitoringTaskThresholdModelCreate
   extends MonitoringTaskThresholdModelCreateBase {
   externalId: 'threshold';
@@ -98,8 +100,8 @@ export interface MonitoringTaskCreate {
   externalId: CogniteExternalId;
   name: string;
   channelId: CogniteInternalId;
-  interval: number;
-  overlap: number;
+  interval?: number;
+  overlap?: number;
   model:
     | MonitoringTaskThresholdModelCreate
     | MonitoringTaskDoubleThresholdModelCreate;
@@ -228,12 +230,15 @@ export interface ChannelPatch {
     externalId?: SinglePatchString;
     name?: SinglePatchRequiredString;
     description?: SinglePatchString;
+    parentId?: SinglePatchRequired<number>;
     metadata?: MetadataPatch;
   };
 }
 
 export interface ChannelChangeById extends ChannelPatch, InternalId {}
+
 export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId {}
+
 export type ChannelChange = ChannelChangeById | ChannelChangeByExternalId;
 
 export interface SubscriberCreate {

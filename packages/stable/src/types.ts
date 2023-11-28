@@ -2380,6 +2380,7 @@ export type SingleCogniteCapability =
   | { templateInstancesAcl: AclTemplateInstances };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };
+export type SinglePatchRequired<T> = { set: T };
 
 export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
