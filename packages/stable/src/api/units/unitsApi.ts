@@ -46,7 +46,7 @@ export class UnitsAPI extends BaseResourceAPI<Unit> {
   };
 
   /**
-   * [List all supported unit systems](List all supported unit systems <https://developer.cognite.com/api#tag/Unit-Systems/operation/listUnitSystem)
+   * [List all supported unit systems](List all supported unit systems <https://developer.cognite.com/api#tag/Unit-Systems/operation/listUnitSystems)
    *
    * ```js
    * const units = await client.units.listUnitSystems();
