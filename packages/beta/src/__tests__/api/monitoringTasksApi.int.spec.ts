@@ -111,13 +111,15 @@ describe('monitoring tasks api', () => {
         externalId: monitoringTaskExternalId,
         name: monitoringTaskNameUpdated,
         channelId: channel.id,
-        model: testMtModel,
+        interval: testMtInterval,
         nonce: sessionsRes?.data?.items[0]?.nonce,
+        overlap: testMtOverlap,
+        model: testMtModel,
       },
     ]);
 
     expect(response.length).toBe(1);
-    expect(response[name]).toBe(monitoringTaskNameUpdated);
+    expect(response[0].name).toBe(monitoringTaskNameUpdated);
   });
 
   test('list all monitoring tasks', async () => {
@@ -137,6 +139,7 @@ describe('monitoring tasks api', () => {
     expect(response.items[0].model).toEqual(
       expect.objectContaining(expectedResponseModel)
     );
+
     expect(response.items[0].interval).toEqual(testMtInterval);
     expect(response.items[0].overlap).toEqual(testMtOverlap);
   });
