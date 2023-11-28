@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.2.1...@cognite/sdk@9.3.0) (2023-11-28)
+
+### Features
+
+- monitoring tasks upsert ([#1042](https://github.com/cognitedata/cognite-sdk-js/issues/1042)) ([7e0e24c](https://github.com/cognitedata/cognite-sdk-js/commit/7e0e24cfb5c4d91302e54a270457b8d9b914ffd4))
+
 ## [9.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.2.0...@cognite/sdk@9.2.1) (2023-11-24)
 
 ### Bug Fixes
