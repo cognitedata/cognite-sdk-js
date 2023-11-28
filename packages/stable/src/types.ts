@@ -738,6 +738,10 @@ export interface DatapointAggregates extends DatapointsMetadata {
    */
   isStep: boolean;
   datapoints: DatapointAggregate[];
+  /**
+   * The physical unit of the time series (reference to unit catalog). Replaced with target unit if data points were converted.
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export type Datapoints = StringDatapoints | DoubleDatapoints;
@@ -752,6 +756,10 @@ export interface DoubleDatapoints extends DatapointsMetadata {
    * The list of datapoints
    */
   datapoints: DoubleDatapoint[];
+  /**
+   * The physical unit of the time series (reference to unit catalog). Replaced with target unit if data points were converted.
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export interface StringDatapoints extends DatapointsMetadata {
@@ -854,6 +862,17 @@ export interface DatapointsQueryProperties extends Limit {
    * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
    */
   includeOutsidePoints?: boolean;
+  /**
+   * The unit externalId of the data points returned.
+   * If the time series does not have a unitExternalId that
+   * can be converted to the targetUnit,
+   * an error will be returned. Cannot be used with targetUnitSystem.
+   */
+  targetUnit?: CogniteExternalId;
+  /**
+   * The unit system of the data points returned. Cannot be used with targetUnit.
+   */
+  targetUnitSystem?: CogniteExternalId;
 }
 
 export type DateRange = Range<Timestamp>;
@@ -1216,6 +1235,10 @@ export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
    * Security categories required in order to access this time series.
    */
   securityCategories?: number[];
+  /**
+   * The physical unit of the time series (reference to unit catalog).
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export interface ExternalTimeseries {
@@ -1263,6 +1286,10 @@ export interface ExternalTimeseries {
    * Security categories required in order to access this time series."
    */
   securityCategories?: number[];
+  /**
+   * The physical unit of the time series (reference to unit catalog).
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export type FileGeoLocationType = 'Feature';
@@ -2437,6 +2464,7 @@ export interface TimeSeriesPatch {
     dataSetId?: NullableSinglePatchLong;
     description?: NullableSinglePatchString;
     securityCategories?: ArrayPatchLong;
+    unitExternalId?: NullableSinglePatchString;
   };
 }
 
@@ -2498,6 +2526,10 @@ export interface TimeseriesFilter extends CreatedAndLastUpdatedTimeFilter {
    */
   assetSubtreeIds?: IdEither[];
   externalIdPrefix?: ExternalIdPrefix;
+  /**
+   * The physical unit of the time series (reference to unit catalog).
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export interface TimeseriesFilterQuery extends FilterQuery {
@@ -3294,7 +3326,6 @@ export interface AnnotationUpdate {
     status?: SetField<AnnotationStatus>;
   };
 }
-
 export interface AnnotationFilterRequest
   extends AnnotationFilter,
     FilterQuery {}
@@ -3329,4 +3360,31 @@ export interface AnnotationReverseLookupFilterProps {
   creatingUser?: string;
   status?: AnnotationStatus;
   data?: Record<string, any>;
+}
+
+export interface Unit {
+  externalId: CogniteInternalId;
+  name: string;
+  longName: string;
+  symbol: string;
+  aliasNames: string[];
+  quantity: string;
+  conversion: UnitConversion;
+  source?: string;
+  sourceReference?: string;
+}
+
+export interface UnitConversion {
+  multiplier: number;
+  offset: number;
+}
+
+export interface UnitSystemQuantity {
+  name: string;
+  unitExternalId: CogniteInternalId;
+}
+
+export interface UnitSystem {
+  name: string;
+  quantities: UnitSystemQuantity[];
 }
