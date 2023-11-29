@@ -10,7 +10,7 @@ import {
 
 export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {
   /**
-   * [Get the user profile of the principal issuing the request](https://api-docs.cognite.com/20230101/tag/User-profiles/operation/getRequesterUserProfile)
+   * [Get the user profile of the principal issuing the request](https://developer.cognite.com/api#tag/User-profiles/operation/getRequesterUserProfile)
    *
    * ```js
    * const response = await client.profiles.me();
@@ -24,7 +24,7 @@ export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {
   };
 
   /**
-   * [List all user profiles](https://api-docs.cognite.com/20230101/tag/User-profiles/operation/listUserProfiles)
+   * [List all user profiles](https://developer.cognite.com/api#tag/User-profiles/operation/listUserProfiles)
    *
    * ```js
    * const response = await client.profiles.list({ limit: 1000, nextCursor: 'abc' });
@@ -38,7 +38,7 @@ export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {
   };
 
   /**
-   * [Retrieve one or more user profiles by ID](https://api-docs.cognite.com/20230101/tag/User-profiles/operation/getUserProfilesByIds)
+   * [Retrieve one or more user profiles by ID](https://developer.cognite.com/api#tag/User-profiles/operation/getUserProfilesByIds)
    *
    * ```js
    * const response = await client.profiles.retrieve([{ userIdentifier: 'abcd' }]);
@@ -50,7 +50,7 @@ export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {
     return super.retrieveEndpoint(userIdentifiers);
   };
   /**
-   * [Search user profiles](https://api-docs.cognite.com/20230101/tag/User-profiles/operation/userProfilesSearch)
+   * [Search user profiles](https://developer.cognite.com/api#tag/User-profiles/operation/userProfilesSearch)
    *
    * ```js
    * const response = await client.profiles.search({ search: { name: 'John' } });
