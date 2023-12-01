@@ -30,11 +30,8 @@ export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {
    * const response = await client.profiles.list({ limit: 1000, cursor: 'abc' });
    * ```
    */
-  public list = (scope?: {
-    limit?: number;
-    cursor?: string;
-  }): UserProfilesListResponse => {
-    return super.listEndpoint(this.callListEndpointWithGet, scope);
+  public list = (scope?: FilterQuery): UserProfilesListResponse => {
+    return this.listEndpoint(this.callListEndpointWithGet, scope);
   };
 
   /**
