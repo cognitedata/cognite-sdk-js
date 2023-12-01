@@ -27,7 +27,7 @@ export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {
    * [List all user profiles](https://developer.cognite.com/api#tag/User-profiles/operation/listUserProfiles)
    *
    * ```js
-   * const response = await client.profiles.list({ limit: 1000, nextCursor: 'abc' });
+   * const response = await client.profiles.list({ limit: 1000, cursor: 'abc' });
    * ```
    */
   public list = (scope?: {
