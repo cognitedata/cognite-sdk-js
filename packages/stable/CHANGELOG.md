@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.3.0...@cognite/sdk@9.4.0) (2023-11-28)
+
+### Features
+
+- add units catalog and timeseries unit conversion ([#1027](https://github.com/cognitedata/cognite-sdk-js/issues/1027)) ([89cffa8](https://github.com/cognitedata/cognite-sdk-js/commit/89cffa8d7a1401274f52008b7bd7745683a2d817))
+
+# [9.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.2.1...@cognite/sdk@9.3.0) (2023-11-28)
+
+### Features
+
+- monitoring tasks upsert ([#1042](https://github.com/cognitedata/cognite-sdk-js/issues/1042)) ([7e0e24c](https://github.com/cognitedata/cognite-sdk-js/commit/7e0e24cfb5c4d91302e54a270457b8d9b914ffd4))
+
+## [9.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.2.0...@cognite/sdk@9.2.1) (2023-11-24)
+
+### Bug Fixes
+
+- use UTC timezone regardless of client time zone ([#1040](https://github.com/cognitedata/cognite-sdk-js/issues/1040)) ([ad717bd](https://github.com/cognitedata/cognite-sdk-js/commit/ad717bd96ad4c3a5dbb6019b418417b23098c689))
+
+# [9.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.1.0...@cognite/sdk@9.2.0) (2023-11-23)
+
+### Features
+
+- **stable:** generate new types ([#1039](https://github.com/cognitedata/cognite-sdk-js/issues/1039)) ([4dd4e5c](https://github.com/cognitedata/cognite-sdk-js/commit/4dd4e5c594d2db01d7d5051a4b96d01212122f84))
+
+# [9.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.0.0...@cognite/sdk@9.1.0) (2023-11-21)
+
+### Features
+
+- **monthly aggregate:** retrieve datapoints where granularity set as month ([#1034](https://github.com/cognitedata/cognite-sdk-js/issues/1034)) ([4e4145d](https://github.com/cognitedata/cognite-sdk-js/commit/4e4145d8d4c560779b847d530311820723950a19))
+
 # [9.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.3.0...@cognite/sdk@9.0.0) (2023-10-10)
 
 ### Features
