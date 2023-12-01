@@ -32,6 +32,7 @@ export {
   AnnotationsPoint,
   AnnotationsPolyLine,
   AnnotationsPolygon,
+  AnnotationsSizeAndClassType,
   AnnotationsTextRegion,
   AnnotationsUnhandledSymbolObject,
   AnnotationsUnhandledTextObject,
