@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.4.0...@cognite/sdk@9.5.0) (2023-12-01)
+
+### Features
+
+- **annotations:** generate annotations for isolation planning app ([#1033](https://github.com/cognitedata/cognite-sdk-js/issues/1033)) ([30418ac](https://github.com/cognitedata/cognite-sdk-js/commit/30418acb31d4a553a0c0d9174d5ae50c8b1c8d8e))
+
 # [9.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.3.0...@cognite/sdk@9.4.0) (2023-11-28)
 
 ### Features

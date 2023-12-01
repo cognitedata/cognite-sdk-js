@@ -6,7 +6,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/alpha/ --env=node --passWithNoTests",
@@ -22,7 +22,7 @@
     "test-snippets": ""
   },
   "dependencies": {
-    "@cognite/sdk": "^9.4.0",
+    "@cognite/sdk": "^9.5.0",
     "@cognite/sdk-core": "^4.10.0"
   },
   "files": [
