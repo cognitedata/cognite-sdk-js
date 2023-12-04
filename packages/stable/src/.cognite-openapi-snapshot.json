@@ -895,38 +895,6 @@
         ]
       }
     },
-    "/models/datamodels/list": {
-      "post": {
-        "tags": [
-          "Data models"
-        ],
-        "summary": "Filter data models",
-        "description": "List data models in a project when they match a given filter.",
-        "operationId": "advancedListDataModels",
-        "requestBody": {
-          "description": "Filter based on name, externalIds, versions and space. It also supports sorting and pagination.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DataModelsListRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "x-capability": [
-          "DataModelsAcl:READ"
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/DataModelCollectionResponseWithCursor"
-          },
-          "400": {
-            "$ref": "#/components/responses/ErrorResponse"
-          }
-        }
-      }
-    },
     "/models/datamodels/byids": {
       "post": {
         "tags": [
@@ -1439,7 +1407,7 @@
           "Instances"
         ],
         "summary": "Create or update nodes/edges",
-        "description": "Create or update nodes and edges in a transaction. The ```items``` field of the payload is an array of objects\nwhere each object describes a node or an edge to create, patch or replace. The ```instanceType``` field of\neach object must be ```node``` or ```edge``` and determines how the rest of the object is interpreted.\n\nThis operation is currently limited to 1000 nodes and/or edges at a time.\n\nIndividual nodes and edges are uniquely identified by their externalId and space.\n\n### Creating new instances\n\nWhen there is no node or edge with the given externalId in the given space, a node will be created and the\nproperties provided for each of the containers or views in the ```sources``` array will be populated for the\nnode/edge. Nodes can also be created implicitly when an edge between them is created (if\n```autoCreateStartNodes``` and/or ``` autoCreateEndNodes``` is set), or when a direct relation\nproperty is set, the target node does not exist and ```autoCreateDirectRelations``` is set.\n\nTo add a node or edge, the user must have capabilities to access (write to) both the view(s) referenced in\n```sources``` and the container(s) underlying these views, as well as any directly referenced containers.\n\n### Updating (patching) or replacing instances\n\nWhen a node or edge (instance) with the given externalId already exists in a space, the\nproperties named in the ```sources``` field will be written to the instance. Other properties will remain\nunchanged. To replace the whole set of properties for an instance (a node or an edge) rather than patch the\ninstance, set the ```replace``` parameter to ```true```.\n\nIf you use a writable view to update properties (that is, the source you are referring to in ```sources```\nis a view), you must have write access to the view as well as all of its backing containers.\n\n### No-change patch operations\nWhen a node/edge item has no changes compared to the existing instance - that is, when the supplied property\nvalues are equal to the corresponding values in the existing node/edge, the node/edge will stay unchanged.\nIn this case, the ```lastUpdatedTime``` values for the nodes/edges in question will not change.\n",
+        "description": "Create or update nodes and edges in a transaction. The ```items``` field of the payload is an array of objects\nwhere each object describes a node or an edge to create, patch or replace. The ```instanceType``` field of\neach object must be ```node``` or ```edge``` and determines how the rest of the object is interpreted.\n\nThis operation is currently limited to 1000 nodes and/or edges at a time.\n\nIndividual nodes and edges are uniquely identified by their externalId and space.\n\nFor more details on ingesting instances into a graph, see [Ingesting instances] \n(https://docs.cognite.com/cdf/dm/dm_concepts/dm_ingestion).\n\n### Creating new instances\n\nWhen there is no node or edge with the given externalId in the given space, a node will be created and the\nproperties provided for each of the containers or views in the ```sources``` array will be populated for the\nnode/edge. Nodes can also be created implicitly when an edge between them is created (if\n```autoCreateStartNodes``` and/or ``` autoCreateEndNodes``` is set), or when a direct relation\nproperty is set, the target node does not exist and ```autoCreateDirectRelations``` is set.\n\nTo add a node or edge, the user must have capabilities to access (write to) both the view(s) referenced in\n```sources``` and the container(s) underlying these views, as well as any directly referenced containers.\n\n### Updating (patching) or replacing instances\n\nWhen a node or edge (instance) with the given externalId already exists in a space, the\nproperties named in the ```sources``` field will be written to the instance. Other properties will remain\nunchanged. To replace the whole set of properties for an instance (a node or an edge) rather than patch the\ninstance, set the ```replace``` parameter to ```true```.\n\nIf you use a writable view to update properties (that is, the source you are referring to in ```sources```\nis a view), you must have write access to the view as well as all of its backing containers.\n\n### No-change patch operations\nWhen a node/edge item has no changes compared to the existing instance - that is, when the supplied property\nvalues are equal to the corresponding values in the existing node/edge, the node/edge will stay unchanged.\nIn this case, the ```lastUpdatedTime``` values for the nodes/edges in question will not change.\n",
         "operationId": "applyNodeAndEdges",
         "requestBody": {
           "description": "Nodes/edges to add or update.",
@@ -1683,7 +1651,7 @@
           "Instances"
         ],
         "summary": "Query nodes/edges",
-        "description": "# Querying\n\nThe Data Modelling API exposes an advanced query interface. The query interface supports parameterization, \nrecursive edge traversal, chaining of result sets, and granular property selection.\n\nA query is composed of a with section defining result set expressions that describe the input to the query, \na set of optional parameter placeholders if the query is parameterized, and then the select section that defines \nwhich properties are to be returned back as part of the result.\n\nImagine you have a data set with airplanes and airports, represented as two sets of nodes with edges between them\nindicating in which airports the airplanes land. Here is an example of a query which fetches a specific airplane as \nwell as the airports it lands in:\n\n```yaml\nwith:\n    airplanes:\n        nodes:\n            filter:\n                equals:\n                    property: [\"node\", \"externalId\"]\n                    value: {\"parameter\": \"airplaneExternalId\"}\n        limit: 1\n    lands_in_airports:\n        edges:\n            from: airplanes\n            maxDistance: 1\n            direction: outwards\n            filter:\n                equals:\n                    property: [\"edge\", \"type\"]\n                    value: [\"aviation\", \"lands-in\"]\n    airports:\n        nodes:\n            from: lands_in_airports\nparameters:\n    airplaneExternalId: myFavouriteAirplane\nselect:\n    airplanes: {}\n    airports: {}\n```\n\n## Result Set Expressions\n\nResult set expressions appear directly below `with` in a query, and define a set of either nodes or edges. \nThe set may be used to return results, as stepping stones to derive other sets from, or both.\nResult set expressions are named and can be chained as we'll see examples of later.\n\nA result set expression may also define `sort` order and a `limit`. See [sorting](#sorting-and-limiting) for more \ndetails.\n\nWhile result set expressions may relate to each other via chaining, they don't have to. You can query for \nentirely unrelated things in the same query, but different sets are generally used to power graph traversals.\n\nA set either queries nodes _or_ it queries edges, possibly recursively.\n\nAll fields:\n- `nodes`: An object to specify a result set of matching nodes.\n- `edges`: An object to specify a result set of matching edges.\n- `sort`: A list of sort configurations\n- `limit`: How many nodes or edges to return in the result. Default: 100\n\n### Pagination\nThe max limit you can set for any table expression is 10,000. In order to support retrieving the entire result set, \npagination cursors are emitted for each result set expression, allowing you to page through everything. Pagination \ncursors cannot be combined with custom sorts. If no pagination cursor is present for a given result set expression \nin the response, then there is guaranteed no more data that matches.\n\n### Node result set expressions\nA `nodes` statement in your result set expression will make the set contain nodes. \n\nA node result set can be chained off both node and edge result set expressions. When chaining off another node result \nset you will retrieve the nodes pointed to by a given direct relation property, this direct relation \nproperty is defined using the `through` field. When chaining off an edge result set, you will retrieve the end nodes \ndefined by the edges in the set.\n\n- `from`: A different result set expression to chain from\n- `through`: What property to join the `from` \"through\". The `through` property must be a direct relation.\n- `chainTo`: Control which side of the edge to chain to. This option is only applicable if the view referenced in the `from` field consists of edges. `chainTo` can be one of:\n\n    - `source` will chain to `start` if you're following edges outwards i.e `direction=outwards`. If you're following edges inwards i.e `direction=inwards`, it will chain to `end`.\n\n    - `destination (default)` will chain to `end` if you're following edges outwards i.e `direction=outwards`. If you're following edges inwards i.e `direction=inwards`, it will chain to `start`.\n\n- `filter`: A filter to determine which nodes to match and thus be returned in the respective result set.\n\n### Edge result set expressions\n\nAn `edges` statement in a result set expression will make the set contain edges, and the statement defines the rules \nthe graph traversal will follow.\n\nA graph traversal can start from some initial set. This can be defined by `from`, which will name another result \nset expression.\n\nThe graph traversal follows edges in a particular direction, controlled by `direction`, which defaults to `outwards`.\n\n```\n    Alice -is_parent-> Bob\n    Bob -fancies-> Mallory\n```\n\nGiven the above graph, if you follow any edge from `Bob` _outwards_ (which is default), you'll get the edges \n`Bob -fancies-> Mallory`. If you follow edges inwards, i.e. `direction=inwards`, you'll get `Alice -is-parent-> Bob`.\n\nThe traversal happens breadth first. See [limitations](#limitations) for more details.\n\nA traversal is defined by what edges to follow, what nodes to match, and what nodes to terminate traversal at.\n\nThis is controlled by `filter`, `nodeFilter` and `terminationFilter`.\n\n`filter` is a filter on edges. You would typically filter on the property `[edge, type]`, but any property on an edge \ncan be filtered on.\n\n`nodeFilter` is a node filter, which the node on the \"other\" side must match. With `direction: outwards`, that means \nthe \"end node\" of the edge must match. With `direction: inwards`, the \"start node\" must match.\n\n`terminationFilter` is similar to `nodeFilter`, except if it matches, traversal will end. A node must also match \n`nodeFilter` (if any) to steer the traversal to the node to terminate at in the first place.\n\n`maxDistance` controls how many hops away from the initial set traversal will go. `maxDistance` defaults to unlimited \n(but the set must respect its `limit`, defined on the result set expression). If `maxDistance` is 1, execution might \nbe faster, so if you know there will only be one level, it's worth configuring `maxDistance: 1`.\n\nFull options:\n\n- `from`: Result set expression to chain from.\n- `filter`: Edges traversed must match this filter.\n- `nodeFilter`: Nodes on the \"other\" side of the edge must match this filter.\n- `terminationFilter`. Do not traverse beyond nodes matching this filter.\n- `maxDistance`: How many levels to traverse. Default unlimited.\n- `direction`: Whether to traverse edges pointing out of the initial set, or _into_ the initial set.\n- `limitEach`: Limit the number of returned edges for each of the source nodes in the result set. The indicated uniform\nlimit applies to the result set from the referenced from. limitEach only has meaning when you also specify \nmaxDistance=1 and from.\n\n## Selects\nSelect configurations appear directly below `select` in a query. These specify which data to retrieve for the respective\nresult set expression. It specifies a number of sources (views) and a property selector for each of these. The property\nselectors define which view properties will be emitted in the query result.\n\nIt's possible to have sets whose properties are not emitted. This can be useful if the sets are necessary for chaining,\nbut not actually interesting to include in the final results. Sets that are neither chained nor selected\nwill not be executed (but will cause very slight query processing overhead)\n\nResults are grouped by their respective sets, and the results contain properties that match the property selectors for\nthe set.\n\n\n## Filters\n\nFilters define what a part of the query matches. Filters are tree structures where the operator comes first, and then \nthe parameters for that operator.\n\nA simple example is the `in` filter:\n\n```yaml\nin:\n    property: [node, name]\n    values: [movie]\n```\n\nIf the property `node.name`, which is text property, is equal to any of the values in the provided list, the node will \nmatch. Properties are typed. What query operators you can use on a property depends on its type.\n\nAn exhaustive list of filters and their descriptions can be found by examining the request body schema below.\n\n### Compound filters\n\nFilters can be combined with `and`/`or`/`not`:\n\n```yaml\nand:\n    - not:\n        in:\n            property: [node, type]\n            values: [movie]\n    - range:\n        property: [imdb, movie, released]\n        gte: {parameter: start}\n```\n\nThis would correspond to `(NOT node.type in ('movie')) AND imdb.movie.released >= $start`.\n\n### HasData filter\nAlthough this filter is documentented in the request body schema, it merits a more detailed explanation. \nA `hasData` filters will match if data is present in a given set of containers or views.\n\nThere is an implicit `AND` between the containers and views referenced in the filter, so the filter will match\nif and only if the node/edge has data in _all_ of the specified containers and views.\n\nWhen a container is specified, the filter will match if the instance has all required properties populated\nfor that particular container. \n\nWhen a view is specified, the filter will match nodes with data in all of the containers which the view references \nthrough properties, respecting the filters of the view if defined (and the filters of views implemented by the view).\n\nExample:\n\n```yaml\nhasData:\n    - type: container\n      space: my_space\n      externalId: my_container\n    - type: view\n      space: my_space\n      externalId: my_view\n      version: v1\n```\n\nIf `my_space.my_view.v1` maps properties in the containers `my_space.c1` and `my_space.c2`. The filter will match\nif there is data in `my_space.my_container AND (my_space.c1 AND my_space.c2)` if there is no filter defined on \n`my_space.my_view.v1`, and `my_space.my_container AND my_space.my_view.v1.filter` if there is a filter defined on\n`my_space.my_view.v1`.\n\n### Parameters\n\nValues in filters can be parameterised. Parameters are provided as part of the query object, and not in the filter \nitself.\n\nThis filter is parameterised:\n\n```yaml\nrange:\n    property: [imdb, movie, released]\n    gte: {parameter: start}\n```\n\nA query containing this filter will only run if the parameter `start` is provided. The parameter must be compatible \nwith all the types and operators that refer to the parameter. In the above example, the \"released\" property is a date. \nThus, the start parameter must be compatible with the date type, or the query will fail completely, even if the range \nfilter is optional because it's OR-ed\n___\n**TIP**\n\n    Parameterise your filters!\nIt's a best practice to parameterise queries that take user input. This enables reusing query plans across queries, \nwhich will be noticable with read-heavy workloads.\n___\n\n\n## Sorting and Limiting\n\nSorting and limiting can happen in multiple places in a query:\n\n- In the result set expression, i.e. in the `with` object that defines a node or edge set.\n- In the result selection, i.e. under `select` where defined sets can be emitted as results.\n\nSorting and limiting the set definitions under `with` will transitively affect dependent sets.\n\nChanges to a set defined under `with` will naturally affect sets that depend on it, transitively. If you only change \nthe sort order of a `with` expression, dependent sets will not (necessarily) change (based on how the dependent sets \nare defined), but if you put a limit on an expression, all dependent sets will inherit this and change as a consequence.\n\nThis is also true for sets that aren't actually emitted via `select`, i.e. sets that are only defined as stepping-stones\nfor other sets.\n\nSorts and limits defined under `select` changes the result appearing order for that set only, and _not_ for depending \nsets.\n\nExample:\n\n```yaml\nwith:\n    some_nodes:\n        … # omitted. No sort here\n    some_edges:\n        from: some_nodes\n        # omitted. also no sorting\n    target_nodes:\n        from: some_edges\n        # …\nselect:\n    some_nodes:\n        properties: ...\n        sort:\n            - {property: [node, created], direction: descending}\n        limit: 100\n```\n\nThe above query would still let `some_edges` and `target_nodes` pull from the full amount of nodes in `some_nodes`, \neven though what's returned as a result for `some_nodes` is capped at 100.\n\n### Order of sorting and limiting\n\n---\n**NOTE**\n\n    A limit in an edge traversal applies to when to start traversing, which happens before sorting.\n\n---\nNodes and edges have subtly different sorting and limiting behaviour: Nodes sort and limit simultaneously, while \nrecursive edge exploration do limited traversal, _then_ sort.\n\nThe top-n set of nodes sorted by some property will be guaranteed to have the top-n of that property for the set.\n\nFor edges found through traversal, i.e. via `edges`, the `limit` applies to how many edges to discover. This may not \nbe all the edges that _could_ have been discovered in a full traversal. If you start traversing from some node and ask\nfor 100 edges sorted by creation timestamp, the 100 edges discovered before traversal stops get sorted. The full graph \nis _not_ traversed in order to find the 100 newest edges that exist in the graph defined by the traversal filters.\n\nTherefore, to do sorting with a recursive graph traversal, you'll need to specify the sort configuration via `postSort`.\n\nAn edge traversal with `maxDistance=1` can take a normal `sort` configuration, however.\n\n\n## Limitations\n\n### Graph traversal\nAny query that involves a graph traversal will force nested loop-style execution. This will work well enough for \ntraversals limited to a few hundred thousand unique paths.\n\nThe graph traversal is breadth first. All possible paths are traversed. This is important to keep in mind with \ntraversals across loops. For example, a fully connected graph will not do well in a query that follows all possible \npaths, and is very likely to be terminated due to constraints on either time, memory, or temporary disk usage.\n\n### Timeout errors\n\nQueries get cancelled with a 408 Request Timeout error if they take longer than the timeout.\nIf hitting a timeout like this you will need to reduce load or contention, or optimise your query.",
+        "description": "Specification of query endpoint. For more information, see [Query language](https://docs.cognite.com/cdf/dm/dm_concepts/dm_querying).",
         "operationId": "queryContent",
         "requestBody": {
           "description": "Query specification.",
@@ -1722,7 +1690,7 @@
           "Instances"
         ],
         "summary": "Sync nodes/edges",
-        "description": "Subscribe to changes for nodes and edges in a project, matching a supplied filter.  This endpoint will always  return a ```NextCursor```.  The sync specification mirrors the query interface, but sorting is not currently  supported.",
+        "description": "Subscribe to changes for nodes and edges in a project, matching a supplied filter.  This endpoint will always  return a ```NextCursor```.  The sync specification mirrors the query interface, but sorting is not currently  supported. For more information, see [Query language](https://docs.cognite.com/cdf/dm/dm_concepts/dm_querying).",
         "operationId": "syncContent",
         "requestBody": {
           "description": "Change filter specification",
@@ -4690,7 +4658,7 @@
           {
             "lang": "JavaScript",
             "label": "JavaScript SDK",
-            "source": "const revisionsToUpdate = [{\n id: 6305529564379596,\n update: {\n   rotation: {\n     set: [1, 2, 3]\n   }\n }\n}];\nconst updated = await client.revisions3D.update(8252999965991682, revisionsToUpdate);"
+            "source": "const revisionsToUpdate = [{\n id: 6305529564379596,\n update: {\n   rotation: {\n     set: [1, 2, 3]\n   },\n   translation: {\n     set: [4, 5, 6]\n   },\n   scale: {\n     set: [0.5, 0.3, 0.2]\n   }\n }\n}];\nconst updated = await client.revisions3D.update(8252999965991682, revisionsToUpdate);"
           },
           {
             "lang": "Python",
@@ -5099,6 +5067,11 @@
           "threedAcl:READ"
         ],
         "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const query = {\n filter: {\n   properties: {\n     Items: {\n       Type: [\"Cylinder\"]\n     }\n   }\n },\n partition: \"1/10\"\n};\nconst nodes3d = await client.revisions3D.filter3DNodes(8252999965991682, 4190022127342195, query);"
+          },
           {
             "lang": "Python",
             "label": "Python SDK",
@@ -7498,6 +7471,13 @@
         },
         "x-capability": [
           "projectsAcl:UPDATE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "await client.projects.updateProject('new-project-name', {\n  update: {\n    name: {\n      set: 'New project display name',\n    }\n  }\n})"
+          }
         ]
       }
     },
@@ -9843,6 +9823,13 @@
         "x-capability": [
           "assetsAcl:READ",
           "entitymatchingAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const { status, items } = await client.entityMatching.predictResult(12345678);"
+          }
         ]
       }
     },
@@ -9972,7 +9959,7 @@
           {
             "lang": "JavaScript",
             "label": "JavaScript SDK",
-            "source": "// get an existing job, wait for it to complete, and get the results\nconst { items } = await client.vision.getExtractJob(1, true);\nitems.forEach((item) => {\n  const predictions = item.predictions;\n  // do something with the predictions\n})"
+            "source": "const { items } = await client.vision.getExtractJob(12345678, true); // get an existing job, wait for it to complete, and get the results\nitems.forEach((item) => {\n const predictions = item.predictions // do something with the predictions\n});"
           },
           {
             "lang": "Python",
@@ -10033,6 +10020,11 @@
           "filesAcl:READ"
         ],
         "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const documents = await client.documents.search({\n  search: {\n    query: 'Stuck pipe'\n  },\n  filter: {\n    in: {\n      property: ['type'],\n      values: ['Document', 'PDF']\n    }\n  },\n  limit: 5\n});"
+          },
           {
             "lang": "Python",
             "label": "Python SDK",
@@ -10402,6 +10394,13 @@
         },
         "x-capability": [
           "geospatialCrsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const allCRS = await client.geospatial.crs.list({ filterOnlyCustom : true });"
+          }
         ]
       },
       "post": {
@@ -10437,6 +10436,13 @@
         },
         "x-capability": [
           "geospatialCrsAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const crsToCreate = [{\n srid: 456789,\n wkt: 'GEOGCS[\\\"WGS 84\\\",DATUM[\\\"WGS_1984\\\",SPHEROID[\\\"WGS 84\\\",6378137,298.257223563,AUTHORITY[\\\"EPSG\\\",\\\"7030\\\"]],AUTHORITY[\\\"EPSG\\\",\\\"6326\\\"]],PRIMEM[\\\"Greenwich\\\",0,AUTHORITY[\\\"EPSG\\\",\\\"8901\\\"]],UNIT[\\\"degree\\\",0.0174532925199433,AUTHORITY[\\\"EPSG\\\",\\\"9122\\\"]],AUTHORITY[\\\"EPSG\\\",\\\"4326\\\"]]',\n projString: '+proj=longlat +datum=WGS84 +no_defs \\\"\\\"'\n }];\n\nconst createdCRS = await client.geospatial.crs.create(crsToCreate);"
+          }
         ]
       }
     },
@@ -10472,6 +10478,13 @@
         },
         "x-capability": [
           "geospatialCrsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const retrievedCRS = await client.geospatial.crs.retrieve([{ srid: 4326 }]);"
+          }
         ]
       }
     },
@@ -10508,6 +10521,13 @@
         },
         "x-capability": [
           "geospatialCrsAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "await client.geospatial.crs.delete([{ srid: 4326}]);"
+          }
         ]
       }
     },
@@ -10545,6 +10565,13 @@
         },
         "x-capability": [
           "geospatialAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const featureTypes = [\n  {\n     externalId: 'ocean_temperature',\n     properties: { temperature: { type: 'DOUBLE' as const }, location: { type: 'POINT' as const, srid: 4326 } } ,\n     searchSpec: { location_idx: { properties : ['location'] } }\n  }\n];\nconst createdFeatureTypes = await client.geospatial.featureType.create(featureTypes);"
+          }
         ]
       }
     },
@@ -10581,6 +10608,13 @@
         },
         "x-capability": [
           "geospatialAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const retrievedFeatureTypes = await client.geospatial.featureType.retrieve([ { externalId: 'ocean_temperature' } ]);"
+          }
         ]
       }
     },
@@ -10602,6 +10636,13 @@
         },
         "x-capability": [
           "geospatialAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const allFeatureTypes = await client.geospatial.featureType.list();"
+          }
         ]
       }
     },
@@ -10640,6 +10681,13 @@
         "x-capability": [
           "geospatialAcl:READ",
           "geospatialAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const featureTypesToUpdate = [\n {\n   externalId: 'ocean_temperature',\n   update: {\n       properties: { add: { depth: { type: 'DOUBLE'} }, remove: ['temperature'] },\n       searchSpec: { add: { depth_idx: { properties: ['depth'] } } }\n   }\n }\n];\nconst updatedFeatureTypes = await client.geospatial.featureType.update(featureTypesToUpdate);"
+          }
         ]
       }
     },
@@ -10677,6 +10725,13 @@
         },
         "x-capability": [
           "geospatialAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "await client.geospatial.featureType.delete([{ externalId: 'ocean_temperature'}], { recursive : true });"
+          }
         ]
       }
     },
@@ -10719,6 +10774,13 @@
         "x-capability": [
           "geospatialAcl:READ",
           "geospatialAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const featureTypeExternalId = 'ocean_temperature';\nconst features = [\n  { externalId: 'measurement_point_765', temperature: 5.65, location: { wkt: 'POINT(60.547602 -5.423433)' }},\n  { externalId: 'measurement_point_863', temperature: 5.03, location: { wkt: 'POINT(60.585858 -6.474416)' }},\n];\nconst createdFeatures = await client.geospatial.feature.create(featureTypeExternalId, features);"
+          }
         ]
       },
       "get": {
@@ -10808,6 +10870,13 @@
         },
         "x-capability": [
           "geospatialAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const params = {\n filter: {\n   and: [\n     { range:{ property: 'temperature', gt:4.54 } },\n     { stWithin: { property:'location', value:'POLYGON((60.547602 -5.423433, 60.547602 -6.474416, 60.585858 -5.423433, 60.547602 -5.423433))' } }\n  ]\n },\n};\n\nconst allFeaturesList = await client.geospatial.feature.list('ocean_temperature', params);"
+          }
         ]
       }
     },
@@ -10849,6 +10918,13 @@
         },
         "x-capability": [
           "geospatialAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const featuresToRetrieve = [{ externalId: 'measurement_point_765' }, { externalId: 'measurement_point_765' }];\nconst outputParams = { output: { geometryFormat: 'GEOJSON' as const } };\n\nconst retrievedFeatures = await client.geospatial.feature.retrieve('ocean_temperature', featuresToRetrieve, outputParams);"
+          }
         ]
       }
     },
@@ -10892,6 +10968,13 @@
         "x-capability": [
           "geospatialAcl:READ",
           "geospatialAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const featuresToDelete = [{ externalId: 'measurement_point_765' }, { externalId: 'measurement_point_765' }];\n\nawait client.geospatial.feature.delete('ocean_temperature', featuresToDelete);\n\nconst featuresToUpdate = [\n{ externalId: 'measurement_point_765', temperature: 5.65, location: { wkt: 'POINT(60.547602 -5.423433)' } },\n{ externalId: 'measurement_point_863', temperature: 5.03, location: { wkt: 'POINT(60.585858 -6.474416)' } }\n];\n\nconst updatedFeatures = await client.geospatial.feature.update('ocean_temperature', featuresToUpdate);"
+          }
         ]
       }
     },
@@ -10975,6 +11058,13 @@
         },
         "x-capability": [
           "geospatialAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const params = {\n filter: {\n   and: [\n     { range:{ property: 'temperature', gt:4.54 } },\n     { stWithin: { property:'location', value:'POLYGON((60.547602 -5.423433, 60.547602 -6.474416, 60.585858 -5.423433, 60.547602 -5.423433))' } }\n  ]\n },\n limit: 100,\n sort: [ 'temperature:ASC','location']\n};\n\nconst searchedFeatures = await client.geospatial.feature.search('ocean_temperature', params);"
+          }
         ]
       }
     },
@@ -11015,6 +11105,13 @@
         },
         "x-capability": [
           "geospatialAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const params = {\n filter: {\n   and: [\n     { range:{ property: 'temperature', gt:4.54 } },\n     { stWithin: { property:'location', value:'POLYGON((60.547602 -5.423433, 60.547602 -6.474416, 60.585858 -5.423433, 60.547602 -5.423433))' } }\n  ]\n },\n limit: 100,\n output: { jsonStreamFormat: 'NEW_LINE_DELIMITED' as const }\n};\n\nconst featureStreamString = await client.geospatial.feature.searchStream('ocean_temperature', params);"
+          }
         ]
       }
     },
@@ -11055,6 +11152,13 @@
         },
         "x-capability": [
           "geospatialAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const aggregateParams = {\n filter: {\n   and: [\n     { range:{ property: 'temperature', gt:4.54 } },\n     { stWithin: { property:'location', value:'POLYGON((60.547602 -5.423433, 60.547602 -6.474416, 60.585858 -5.423433, 60.547602 -5.423433))' } }\n  ]\n },\n property: 'temperature',\n aggregates: ['min', 'max', 'average'],\n groupBy: ['category']\n};\n\nconst featureStream = await client.geospatial.feature.searchStream('ocean_temperature', aggregateParams);"
+          }
         ]
       }
     },
@@ -11088,6 +11192,13 @@
         "x-capability": [
           "geospatialAcl:READ",
           "geospatialCrsAcl:READ"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const response = await client.geospatial.compute.compute({\n  output: {\n    \"output\": {\n      stTransform: {\n        geometry: {\n          ewkt: \"SRID=4326;POLYGON((0 0,10 0,10 10,0 10,0 0))\"\n        },\n        srid: 4326,\n      }\n    }\n  }\n});"
+          }
         ]
       }
     },
@@ -17137,6 +17248,13 @@
         },
         "x-capability": [
           "annotationsAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const data = {\n  pageNumber: 7,\n  textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },\n  extractedText: 'i am your father',\n};\nconst annotation = {\n  annotatedResourceType: 'file' as const,\n  annotatedResourceId: 1,\n  annotationType: 'documents.ExtractedText',\n  creatingApp: 'integration-tests',\n  creatingAppVersion: '0.0.1',\n  creatingUser: 'integration-tests',\n  status: 'suggested' as const,\n  data,\n};\nconst created = await client.annotations.create([annotation]);"
+          }
         ]
       }
     },
@@ -17161,6 +17279,13 @@
         },
         "x-capability": [
           "annotationsAcl:SUGGEST"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const data = {\n  pageNumber: 7,\n  textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },\n  extractedText: 'i am your father',\n};\nconst partial = {\n  annotatedResourceType: 'file' as const,\n  annotatedResourceId: 1,\n  annotationType: 'documents.ExtractedText',\n  creatingApp: 'integration-tests',\n  creatingAppVersion: '0.0.1',\n  creatingUser: 'integration-tests',\n  data,\n};\n\nconst created = await client.annotations.suggest([partial]);"
+          }
         ]
       }
     },
@@ -17184,7 +17309,14 @@
           "400": {
             "$ref": "#/components/responses/ErrorResponse"
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const annotationIds = [{ id: 1 }, { id: 2 }];\n\nconst response = await client.annotations.retrieve(annotationIds);"
+          }
+        ]
       }
     },
     "/annotations/list": {
@@ -17205,7 +17337,14 @@
           "400": {
             "$ref": "#/components/responses/ErrorResponse"
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const annotatedFileId = 1;\nconst limitOne = await client.annotations.list({\n  limit: 1,\n  filter: {\n   annotatedResourceType: 'file',\n   annotatedResourceIds: [{ id: 1 }],\n },\n});"
+          }
+        ]
       }
     },
     "/annotations/byids": {
@@ -17226,7 +17365,14 @@
           "400": {
             "$ref": "#/components/responses/ErrorResponse"
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const annotationIds = [{ id: 1 }, { id: 2 }];\n\nconst response = await client.annotations.retrieve(annotationIds);"
+          }
+        ]
       }
     },
     "/annotations/delete": {
@@ -17250,6 +17396,13 @@
         },
         "x-capability": [
           "annotationsAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const annotationIds = [{ id: 1 }, { id: 2 }];\n\nawait client.annotations.delete(annotationIds);"
+          }
         ]
       }
     },
@@ -17274,6 +17427,13 @@
         },
         "x-capability": [
           "annotationsAcl:WRITE"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const data = {\n  pageNumber: 8,\n  fileRef: { externalId: 'def_file_changed' },\n  textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },\n};\nconst changes = [\n  {\n    id: 1,\n    update: {\n      data: {\n        set: data,\n      },\n    },\n  },\n];\n\nconst updatedResp = await client.annotations.update(changes);"
+          }
         ]
       }
     },
@@ -17359,6 +17519,7 @@
         "tags": [
           "User profiles"
         ],
+        "operationId": "listUserProfiles",
         "summary": "List all user profiles",
         "description": "List all user profiles in the current project. This operation supports pagination by cursor.\nThe results are ordered alphabetically by name.",
         "parameters": [
@@ -17395,7 +17556,19 @@
               }
             }
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const response = await client.profiles.list({ limit: 1000 });"
+          },
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.iam.user_profiles.list(limit=None)\n"
+          }
+        ]
       }
     },
     "/profiles/me": {
@@ -17406,6 +17579,7 @@
         "tags": [
           "User profiles"
         ],
+        "operationId": "getRequesterUserProfile",
         "summary": "Get the user profile of the principal issuing the request",
         "description": "Retrieves the user profile of the principal issuing the request.\nIf a principal doesn't have a user profile, you get a not found (404) response code.",
         "responses": {
@@ -17429,7 +17603,19 @@
               }
             }
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const response = await client.profiles.me();"
+          },
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.iam.user_profiles.me()\n"
+          }
+        ]
       }
     },
     "/profiles/byids": {
@@ -17440,6 +17626,7 @@
         "tags": [
           "User profiles"
         ],
+        "operationId": "getUserProfilesByIds",
         "summary": "Retrieve one or more user profiles by ID",
         "description": "Retrieve one or more user profiles indexed by the user identifier in the same CDF project.",
         "requestBody": {
@@ -17473,7 +17660,19 @@
               }
             }
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const response = await client.profiles.retrieve([{ userIdentifier: 'abcd' }]);"
+          },
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.iam.user_profiles.retrieve(\"foo\")\n\nres = client.iam.user_profiles.retrieve([\"bar\", \"baz\"])\n"
+          }
+        ]
       }
     },
     "/profiles/search": {
@@ -17484,6 +17683,7 @@
         "tags": [
           "User profiles"
         ],
+        "operationId": "userProfilesSearch",
         "summary": "Search user profiles",
         "description": "Search user profiles in the current project. The result set ordering and match criteria \nthreshold may change over time. This operation does not support pagination.",
         "requestBody": {
@@ -17507,7 +17707,19 @@
               }
             }
           }
-        }
+        },
+        "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const response = await client.profiles.search({ search: { name: 'John' } });"
+          },
+          {
+            "lang": "Python",
+            "label": "Python SDK",
+            "source": "res = client.iam.user_profiles.search(name=\"Alex\")\n"
+          }
+        ]
       }
     },
     "/hostedextractors/destinations": {
@@ -18530,6 +18742,11 @@
         },
         "x-code-samples": [
           {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const units = await client.units.retrieve([{ externalId: 'temperature:deg_c' }, { externalId: 'pressure:bar' }]);"
+          },
+          {
             "lang": "Python",
             "label": "Python SDK",
             "source": "res = client.units.retrieve('temperature:deg_c')\n\nres = client.units.retrieve(['temperature:deg_c', 'pressure:bar'])\n"
@@ -18558,6 +18775,11 @@
           }
         },
         "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const units = await client.units.listUnitSystems();"
+          },
           {
             "lang": "Python",
             "label": "Python SDK",
@@ -18632,6 +18854,11 @@
           }
         },
         "x-code-samples": [
+          {
+            "lang": "JavaScript",
+            "label": "JavaScript SDK",
+            "source": "const units = await client.units.list();"
+          },
           {
             "lang": "Python",
             "label": "Python SDK",
@@ -23530,7 +23757,7 @@
         "properties": {
           "connectionType": {
             "type": "string",
-            "description": "The type of connection. The ```single_edge_connection``` type is used to indicate that only a single direct relation pointing to an instance read through this view is expected to exist. The ```multi_edge_connection``` type is used to indicate that multiple direct relations are expected to exist.",
+            "description": "The type of connection. The ```single_reverse_direct_relation``` type is used to indicate that only a single direct relation is expected to exist. The ```multi_reverse_direct_relation``` type is used to indicate that multiple direct relations are expected to exist.",
             "enum": [
               "single_reverse_direct_relation",
               "multi_reverse_direct_relation"
@@ -23547,7 +23774,7 @@
             "maxLength": 1024
           },
           "source": {
-            "description": "The node(s) having direct relation(s) to instances read through this view can be read through the view specified in 'source'.",
+            "description": "The node(s) containing the direct relation property can be read through the view specified in 'source'.",
             "allOf": [
               {
                 "$ref": "#/components/schemas/ViewReference"
@@ -52886,6 +53113,30 @@
         },
         "additionalProperties": false
       },
+      "Annotations.SizeAndClassType": {
+        "title": "primitives.dimensions.SizeAndClassType",
+        "description": "Store the dimension, units and class of a given annotation",
+        "type": "object",
+        "properties": {
+          "size": {
+            "description": "The size of the valve or spade",
+            "type": "number"
+          },
+          "unit": {
+            "description": "The units of the size (mm/inches)",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "classType": {
+            "description": "The class type of the valve or spade",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
       "Annotations.ObjectDetection": {
         "title": "images.ObjectDetection",
         "description": "Models an image object detection represented by a label, a geometry, and\noptionally a confidence value.",
@@ -53209,6 +53460,14 @@
             "maxLength": 128,
             "minLength": 1,
             "type": "string"
+          },
+          "sizeAndClass": {
+            "description": "Store the dimensions of a valve or spade",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Annotations.SizeAndClassType"
+              }
+            ]
           }
         },
         "additionalProperties": false
@@ -53931,6 +54190,64 @@
           "INTERNAL_SERVICE"
         ]
       },
+      "CertificateDetails": {
+        "additionalProperties": false,
+        "title": "CertificatDetails",
+        "type": "object",
+        "description": "Excerpt of certificate details",
+        "properties": {
+          "thumbprint": {
+            "title": "Thumbprint",
+            "type": "string",
+            "description": "A thumbprint of the certificate provided",
+            "maxLength": 50
+          },
+          "expiresAt": {
+            "title": "ExpiresAt",
+            "type": "integer",
+            "description": "The expiry date of the certificate"
+          }
+        },
+        "required": [
+          "thumbprint",
+          "expiresAt"
+        ]
+      },
+      "AuthCertificate": {
+        "additionalProperties": false,
+        "title": "AuthenticationCertificate",
+        "type": "object",
+        "description": "Authentication certificate (if configured) used to authenticate to source.",
+        "properties": {
+          "key": {
+            "title": "Certificate key",
+            "type": "string",
+            "description": "The key for the certificate",
+            "maxLength": 100000
+          },
+          "keyPassword": {
+            "title": "Certificate key password",
+            "type": "string",
+            "description": "The password for the certificate key",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "type": {
+            "$ref": "#/components/schemas/CertificateType"
+          },
+          "certificate": {
+            "title": "Certificate",
+            "type": "string",
+            "description": "Base 64 encoded der certificate, or a pem certificate with headers.",
+            "maxLength": 100000
+          }
+        },
+        "required": [
+          "type",
+          "certificate",
+          "key"
+        ]
+      },
       "CACertificate": {
         "additionalProperties": false,
         "properties": {
@@ -54110,7 +54427,7 @@
         }
       },
       "JobConfig": {
-        "description": "Source specific job configuration. The type depends on the type of source, and is required for some sources.",
+        "description": "Source specific job configuration. The type depends on the type of source, and is required for some sources.\n",
         "title": "Job Config",
         "oneOf": [
           {
@@ -54234,6 +54551,9 @@
           },
           "caCertificate": {
             "$ref": "#/components/schemas/CACertificate"
+          },
+          "authCertificate": {
+            "$ref": "#/components/schemas/AuthCertificate"
           }
         },
         "required": [
@@ -54291,6 +54611,9 @@
           },
           "caCertificate": {
             "$ref": "#/components/schemas/CACertificate"
+          },
+          "authCertificate": {
+            "$ref": "#/components/schemas/AuthCertificate"
           }
         },
         "required": [
@@ -54393,8 +54716,8 @@
           },
           "files": {
             "type": "array",
-            "maxLength": 20,
-            "minLength": 1,
+            "maxItems": 20,
+            "minItems": 1,
             "items": {
               "$ref": "#/components/schemas/CreateProtoFile"
             }
@@ -54455,8 +54778,8 @@
           },
           "files": {
             "type": "array",
-            "maxLength": 20,
-            "minLength": 1,
+            "maxItems": 20,
+            "minItems": 1,
             "items": {
               "$ref": "#/components/schemas/ProtoFile"
             }
@@ -54729,8 +55052,8 @@
             },
             "title": "Items",
             "type": "array",
-            "maxLength": 100,
-            "minLength": 1
+            "maxItems": 100,
+            "minItems": 1
           },
           "ignoreUnknownIds": {
             "type": "boolean",
@@ -54753,8 +55076,8 @@
             },
             "title": "Items",
             "type": "array",
-            "maxLength": 100,
-            "minLength": 1
+            "maxItems": 100,
+            "minItems": 1
           },
           "ignoreUnknownIds": {
             "type": "boolean",
@@ -54800,8 +55123,8 @@
             },
             "title": "Items",
             "type": "array",
-            "minLength": 1,
-            "maxLength": 100
+            "minItems": 1,
+            "maxItems": 100
           }
         },
         "required": [
@@ -54837,8 +55160,8 @@
             },
             "title": "Items",
             "type": "array",
-            "maxLength": 100,
-            "minLength": 0
+            "maxItems": 100,
+            "minItems": 0
           }
         },
         "required": [
@@ -54874,8 +55197,8 @@
             },
             "title": "Items",
             "type": "array",
-            "maxLength": 100,
-            "minLength": 0
+            "maxItems": 100,
+            "minItems": 0
           },
           "nextCursor": {
             "type": "string",
@@ -54916,8 +55239,8 @@
             },
             "title": "Items",
             "type": "array",
-            "minLength": 1,
-            "maxLength": 100
+            "minItems": 1,
+            "maxItems": 100
           }
         },
         "required": [
@@ -54954,8 +55277,8 @@
             },
             "title": "Items",
             "type": "array",
-            "minLength": 1,
-            "maxLength": 100
+            "minItems": 1,
+            "maxItems": 100
           }
         },
         "required": [
@@ -54992,8 +55315,8 @@
             },
             "title": "Items",
             "type": "array",
-            "maxLength": 100,
-            "minLength": 1
+            "maxItems": 100,
+            "minItems": 1
           }
         },
         "required": [
@@ -55011,8 +55334,8 @@
             },
             "title": "Items",
             "type": "array",
-            "maxLength": 100,
-            "minLength": 0
+            "maxItems": 100,
+            "minItems": 0
           }
         },
         "required": [
@@ -55030,8 +55353,8 @@
             },
             "title": "Items",
             "type": "array",
-            "maxLength": 100,
-            "minLength": 0
+            "maxItems": 100,
+            "minItems": 0
           },
           "nextCursor": {
             "type": "string",
@@ -55097,8 +55420,8 @@
             },
             "title": "Items",
             "type": "array",
-            "minLength": 1,
-            "maxLength": 100
+            "minItems": 1,
+            "maxItems": 100
           }
         },
         "required": [
@@ -55116,8 +55439,8 @@
             },
             "title": "Items",
             "type": "array",
-            "maxLength": 100,
-            "minLength": 0
+            "maxItems": 100,
+            "minItems": 0
           }
         },
         "required": [
@@ -55135,8 +55458,8 @@
             },
             "title": "Items",
             "type": "array",
-            "maxLength": 100,
-            "minLength": 0
+            "maxItems": 100,
+            "minItems": 0
           },
           "nextCursor": {
             "type": "string",
@@ -55197,8 +55520,8 @@
             },
             "title": "Items",
             "type": "array",
-            "maxLength": 1000,
-            "minLength": 0
+            "maxItems": 1000,
+            "minItems": 0
           }
         },
         "required": [
@@ -55478,6 +55801,12 @@
           },
           "lastUpdatedTime": {
             "$ref": "#/components/schemas/EpochTimestamp"
+          },
+          "caCertificate": {
+            "$ref": "#/components/schemas/CertificateDetails"
+          },
+          "authCertificate": {
+            "$ref": "#/components/schemas/CertificateDetails"
           }
         },
         "required": [
@@ -55534,6 +55863,12 @@
           },
           "lastUpdatedTime": {
             "$ref": "#/components/schemas/EpochTimestamp"
+          },
+          "caCertificate": {
+            "$ref": "#/components/schemas/CertificateDetails"
+          },
+          "authCertificate": {
+            "$ref": "#/components/schemas/CertificateDetails"
           }
         },
         "required": [
@@ -55881,6 +56216,20 @@
         "type": "object",
         "description": "Set a new format."
       },
+      "UpdateItem_AuthCertificate_": {
+        "additionalProperties": false,
+        "properties": {
+          "set": {
+            "$ref": "#/components/schemas/AuthCertificate"
+          }
+        },
+        "required": [
+          "set"
+        ],
+        "title": "UpdateItem_AuthCertificate",
+        "type": "object",
+        "description": "Set a new authentication certificate."
+      },
       "UpdateItem_CACertificate_": {
         "additionalProperties": false,
         "properties": {
@@ -56141,7 +56490,24 @@
             "description": "Enable or disable TLS to the MQTT broker."
           },
           "caCertificate": {
-            "$ref": "#/components/schemas/UpdateItem_CACertificate_"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UpdateItem_CACertificate_"
+              },
+              {
+                "$ref": "#/components/schemas/UpdateSetNull"
+              }
+            ]
+          },
+          "authCertificate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UpdateItem_AuthCertificate_"
+              },
+              {
+                "$ref": "#/components/schemas/UpdateSetNull"
+              }
+            ]
           }
         },
         "title": "UpdateMqttV3Source",
@@ -56230,7 +56596,24 @@
             "description": "Enable or disable TLS to the MQTT broker."
           },
           "caCertificate": {
-            "$ref": "#/components/schemas/UpdateItem_CACertificate_"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UpdateItem_CACertificate_"
+              },
+              {
+                "$ref": "#/components/schemas/UpdateSetNull"
+              }
+            ]
+          },
+          "authCertificate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UpdateItem_AuthCertificate_"
+              },
+              {
+                "$ref": "#/components/schemas/UpdateSetNull"
+              }
+            ]
           }
         },
         "title": "UpdateMqttV5Source",
@@ -56469,8 +56852,8 @@
           "maxLength": 200
         },
         "description": "List of redundant kafka brokers to connect to",
-        "maxLength": 8,
-        "minLength": 1
+        "minItems": 1,
+        "maxItems": 8
       },
       "KafkaSource": {
         "type": "object",
@@ -56496,19 +56879,22 @@
             "description": "Username used for authenticating with the broker.",
             "maxLength": 200
           },
-          "partitions": {
-            "type": "integer",
-            "title": "Partitions",
-            "description": "The number of partiitons in the broker",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 1
-          },
           "createdTime": {
             "$ref": "#/components/schemas/EpochTimestamp"
           },
           "lastUpdatedTime": {
             "$ref": "#/components/schemas/EpochTimestamp"
+          },
+          "caCertificate": {
+            "$ref": "#/components/schemas/CertificateDetails"
+          },
+          "authCertificate": {
+            "$ref": "#/components/schemas/CertificateDetails"
+          },
+          "useTls": {
+            "type": "boolean",
+            "title": "UseTLS",
+            "description": "Indicates whether TLS will be used for connection to broker."
           }
         },
         "required": [
@@ -56540,8 +56926,8 @@
               "maxLength": 200
             },
             "description": "List of redundant kafka brokers to connect to",
-            "maxLength": 8,
-            "minLength": 1
+            "minItems": 1,
+            "maxItems": 8
           },
           "username": {
             "type": "string",
@@ -56549,19 +56935,22 @@
             "description": "Username used for authenticating with the broker.",
             "maxLength": 200
           },
-          "partitions": {
-            "type": "integer",
-            "title": "Partitions",
-            "description": "The number of partiitons in the broker",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 1
-          },
           "password": {
             "type": "string",
             "title": "Password",
             "description": "Password used for authenticating with the broker.",
             "maxLength": 200
+          },
+          "useTls": {
+            "type": "boolean",
+            "title": "UseTLS",
+            "description": "If true, use TLS when connecting to the broker"
+          },
+          "caCertificate": {
+            "$ref": "#/components/schemas/CACertificate"
+          },
+          "authCertificate": {
+            "$ref": "#/components/schemas/AuthCertificate"
           }
         },
         "required": [
@@ -56633,10 +57022,34 @@
             "title": "Password",
             "description": "Set or remove the password used for authentication."
           },
-          "partitions": {
+          "useTls": {
+            "additionalProperties": false,
+            "properties": {
+              "set": {
+                "title": "Set",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "set"
+            ],
+            "type": "object",
+            "description": "Enable or disable TLS to the Kafka broker."
+          },
+          "caCertificate": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/UpdateItem_Partitions_"
+                "$ref": "#/components/schemas/UpdateItem_CACertificate_"
+              },
+              {
+                "$ref": "#/components/schemas/UpdateSetNull"
+              }
+            ]
+          },
+          "authCertificate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UpdateItem_AuthCertificate_"
               },
               {
                 "$ref": "#/components/schemas/UpdateSetNull"
@@ -60468,7 +60881,7 @@
   "tags": [
     {
       "name": "Changelog",
-      "description": "This article documents all notable changes to the Cognite Data Fusion (CDF) API v1.\n\n<!--\nGroup changes by release (and date), API area, and these types of changes:\n\n - **Added** for new features.\n - **Changed** for changes in existing functionality.\n - **Deprecated** for soon-to-be removed features.\n - **Removed** for now removed features.\n - **Fixed** for any bug fixes.\n - **Security** in case of vulnerabilities.-\n\nUse[ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) for dates: 2019-06-20\n\nAdd entries for new features on top of this page. Newest release goes on top.\nChanges only for API v1 series\n\nTemplate:\n\n## <YYYY-MM-DD>\n\n### <Core resource name>\n\n#### <Group name -- see top of the page>\n\n    - <my change>\n    - <my change>\n\n#### <Group name -- see top of the page>\n\n    - <my change>\n    - <my change>\n-->\n\n## 2023-11-21\n\n### Units Catalog\n\n#### Added\n\n- Added the [Units Catalog](https://docs.cognite.com/api/20230101/#tag/Units-Catalog) API. The Units Catalog is a collection of units of measurement and their conversion factors. The Units Catalog is used within Cognite Data Fusion to easily convert between different units and unit systems when retrieving Time Series and Data Models.\n\n## 2023-11-17\n\n### Documents\n\n#### Added\n\n- Added support for sorting in the `/documents/list` endpoint. It works exactly the same as the sorting\n  in `/documents/search` except that you can not sort on search relevance.\n\n## 2023-11-08\n\n### Engineering diagrams\n\n#### Changed\n\n- Optional token mechanism for accessing detected results of engineering diagrams without read all access to assets.\n  See [diagram/detect](https://api-docs.cognite.com/20230101/tag/Engineering-diagrams/operation/diagramDetect) for details.\n  \n## 2023-10-23\n\n### Files\n\n#### Added\n\n- Added multipart upload endpoints for the files API. This enables upload of files larger than 5 GiB, in a uniform way for all CDF cloud environments.\n  Optionally use parallel part upload, for greater upload speed.\n  See the documentation for the new endpoints at:\n  - [Upload multipart file](https://docs.cognite.com/api/20230101/#tag/Files/operation/initMultiPartUpload) and\n  - [Complete multipart upload](https://docs.cognite.com/api/20230101/#tag/Files/operation/completeMultiPartUpload) endpoints.\n\n## 2023-10-17\n### Events\n#### Added\n- New and old but previously undocumented API rate and concurrency limits have been documented. \nOverrides have been specified for existing customers, so that the new limits would not affect them.\n  - Service layer request rate and concurrency limits added. \n  - CRUD endpoints request rate and concurrency and items rate limits added\n\n## 2023-10-10\n\n### Entity matching\n\n#### Added\n\n- Entity matching pipelines are now in v1. We resuscitated the old playground API and made some changes.\n  We will keep the new v1 API in beta for the foreseeable future.\n\n### Vision (Contextualization)\n\n#### Added\n\n- New computer vision models (beta) are available in Vision extract service, including digital, dial and level gauge readers, valve state detection (open/closed) and model to segment objects in images.\n\n## 2023-10-05\n\n### Hosted extractors\n\n#### Added\n\n- Hosted extractors API (Beta)\n  - Use the new [Hosted extractors](https://docs.cognite.com/cdf/integration/guides/extraction/hosted_extractors)\n    feature to create simple streaming extractors running inside CDF, streaming data from sources available on the internet\n    directly into CDF.\n    Currently supports Azure Event Hub and MQTT. Support is planned for Kafka and REST APIs.\n\n## 2023-09-27\n\n### 3D\n\n#### Changed\n\n- If the 3d model processing is ongoing or has failed, the 3d api nodes endpoints will now return error code 400 with the response body \"Revision processing is not yet complete\" or \"Revision processing failed\" respectively.\n  The previous behavior was to return an empty or partial items list in these cases.\n  Before calling any 3d api nodes endpoints, clients should check that the model revision has \"status\":\"Done\".\n\n## 2023-08-25\n\n### Transformations\n\n#### Changed\n\n- Fixed wrong description for fields in \"transformations/update\" and \"/transformations/schedules/update\"\n\n## 2023-08-22\n\n### Functions\n\n#### Changed\n\n- Remove Functions runtime \"py37\".\n\n## 2023-08-22\n\n### Time series\n\n#### Added\n\n- Data point subscriptions (Beta)\n  - Use the new [Data point subscriptions](https://developer.cognite.com/dev/concepts/data_point_subscriptions/)\n    feature to configure a subscription to listen to changes in one or more\n    time series (in ingestion order).\n    The feature is intended to be used where data points consumers need to keep up to date with\n    changes to one or more time series without the need to read the entire time series again. (Beta)\n\n## 2023-08-10\n\n### Time series\n\n#### Added\n\n- Advanced query language support reaches General Availability (GA).\n  - Advanced search, filtering, and sorting capabilities in the [Filter time series](https://docs.cognite.com/api/20230101/#tag/Time-series/operation/listTimeSeries) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate time series](https://docs.cognite.com/api/20230101/#tag/Time-series/operation/aggregateTimeSeries) endpoint.\n\n### Sequences\n\n#### Added\n\n- Advanced query language support reaches General Availability (GA).\n  - Advanced search, filtering, and sorting capabilities in the [Filter sequences](https://docs.cognite.com/api/20230101/#tag/Sequences/operation/advancedListSequences) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate sequences](https://docs.cognite.com/api/20230101/#tag/Sequences/operation/aggregateSequences) endpoint.\n\n## 2023-08-08\n\n### Assets\n\n#### Added\n\n- Advanced query language support reaches General Availability (GA).\n  - Advanced search, filtering, and sorting capabilities in the [Filter assets](https://docs.cognite.com/api/20230101/#tag/Assets/operation/listAssets) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate assets](https://docs.cognite.com/api/20230101/#tag/Assets/operation/aggregateAssets) endpoint.\n\n### Events\n\n#### Added\n\n- Advanced query language support reaches General Availability (GA).\n  - Advanced search, filtering, and sorting capabilities in the [Filter events](https://docs.cognite.com/api/20230101/#tag/Events/operation/advancedListEvents) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate events](https://docs.cognite.com/api/20230101/#tag/Events/operation/aggregateEvents) endpoint.\n\n### Documents\n\n#### Added\n\n- Advanced query language support reaches General Availability (GA).\n  - Advanced aggregation capabilities in the [Aggregate documents](https://docs.cognite.com/api/20230101/#tag/Documents/operation/documentsAggregate) endpoint.\n\n## 2023-06-27\n\n### IAM (Identity and access management)\n\n#### Changed\n\n- Identity providers (IdP) are required to be compatible with the [OpenID Connect Discovery 1.0](https://openid.net/specs/openid-connect-discovery-1_0.html) standard, and compliance will now be enforced by the [Projects](tag/Projects) API.\n  - The `oidcConfiguration.jwksUrl` and `oidcConfiguration.tokenUrl` can be entirely omitted when updating the OIDC configuration for a project.\n  - The `oidcConfiguration.jwksUrl` and `oidcConfiguration.tokenUrl` are preserved for backwards compatibility of the API. However, if these are specified as part of the request body, the value must match excatly the values that are specified in the OpenID provider configuration document for the configured issuer (can be found at `https://{issuer-url}/.well-known/openid-configuration`). If the values does not match, the API will return an error message.\n\n- The `oidcConfiguration.skewMs` has been deprecated but remains part of the API for backwards compatibility. It can be omitted from the request. If included, it must always be set to `0`.\n\n- The `oidcConfiguration.isGroupCallbackEnabled` has been deprecated but remains part of the API for backwards compatibility. It can be omitted from the request.\n  - For projects configured to use Azure Active Directory as the identity provider, if this value is specified in the request, it must always be set to `true`.\n\n## 2023-06-05\n\n### Data Modeling\n\n#### Added\n\n- Added support for an `autoCreateDirectRelations` option on the endpoint for ingesting instances.\nThis option lets the user specify whether to create missing target nodes of direct relations.\n\n#### Removed\n\n- Removed support for the deprecated per-item `sources` field on the `/instances/byids` endpoint.\n\n### Time series\n\n#### Added\n\n- Added advanced query language support (Beta).\n  - Advanced search, filtering, and sorting capabilities in the [Filter time series](tag/Time-series/operation/listTimeSeries) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate time series](tag/Time-series/operation/aggregateTimeSeries) endpoint.\n\n### Sequences\n\n#### Added\n\n- Added advanced query language support (Beta).\n  - Advanced search, filtering, and sorting capabilities in the [Filter sequences](tag/Sequences/operation/advancedListSequences) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate sequences](tag/Sequences/operation/aggregateSequences) endpoint.\n\n## 2023-05-19\n\n### Transformations\n\n#### Added\n\n- Adding support for data model centric and view centric schema.\n\n## 2023-04-24\n\n### Transformations\n\n#### Removed\n\n- Removing support for authentication via API keys when creating or updating transformations.\n\n## 2023-05-04\n\n### Annotations\n\n#### Added\n\n- Added `image.InstanceLink` and `diagrams.InstanceLink` annotation types to allow you to link from objects discovered in images and engineering diagrams to data model instances.\n\n## 2023-04-18\n\n### All resources\n\n#### Added\n\n- Added information about [Requests throttling](section/Requests-throttling).\n\n#### Changed\n\n- Updated the [Parallel retrieval](section/Parallel-retrieval) documentation.\n- Aligned endpoint naming within Assets, Data sets, Events, and Files.\n\n### Assets\n\n#### Added\n\n- Added advanced query language support (Beta).\n  - Advanced search, filtering, and sorting capabilities in the [Filter assets](https://docs.cognite.com/api/20230101-beta/#tag/Assets/operation/listAssets) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate assets](https://docs.cognite.com/api/20230101-beta/#tag/Assets/operation/aggregateAssets) endpoint.\n\n### Events\n\n#### Added\n\n- Added advanced query language support (Beta).\n  - Advanced search, filtering, and sorting capabilities in the [Filter events](https://docs.cognite.com/api/20230101-beta/#tag/Events/operation/advancedListEvents) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate events](https://docs.cognite.com/api/20230101-beta/#tag/Events/operation/aggregateEvents) endpoint.\n\n### Documents\n\n#### Added\n\n- Added advanced query language support (Beta).\n  - Advanced aggregation capabilities in the [Aggregate documents](https://docs.cognite.com/api/20230101-beta/#tag/Documents/operation/documentsAggregate) endpoint.\n\n## 2023-04-12\n\n### Sessions\n\n#### Fixed\n\n- Fixed the API documentation for the request body of the [POST /projects/{project}/sessions/byids](tag/Sessions/operation/getSessionsByIds) endpoint.\nThe documentation incorrectly stated the request body schema as specifying the list of session IDs to retrieve, in the form `{\"items\": [42]}` - it should in fact be `{\"items\": [{\"id\": 42}]}`. The documentation has been updated to reflect this.\n\n- Fixed the API documentation for the response body of the [POST /projects/{project}/sessions/byids](tag/Sessions/operation/getSessionsByIds) endpoint.\nThe documentation incorrectly stated `nextCursor` and `previousCursor` fields as being returned from the response, which was not the case, and these fields have now been removed from the API documentation.\n\n## 2023-04-04\n\n### Transformations\n\n#### Change\n\n- Transformations support new target types for view-centric data model instances.\n\n#### Added\n\n- Added target types `nodes` and `edges`.\n\n## 2023-03-06\n\n### Documents\n\n#### Change\n\n- Renamed \"approximateCardinality\" aggregate to \"cardinalityValues\" to unify the search spec in Cognite.\n- \"uniqueProperties\" aggregate no longer supports pagination. It returns unique properties (up to 10000) in the specified path. The results are sorted by frequency.\n\n#### Added\n\n- Added \"allUniqueProperties\" aggregate that returns all unique properties. The response contains a cursor that can be used to fetch all pages of data.\n\n## 2023-02-03\n\n### Seismic\n\n#### Added\n\n- Batch downloading of seismics as a ZIP archive is now an experimental v1 endpoint. A user requires the experimental ACL to use this endpoint, and any other ACLs and scopes to read the downloadable seismics.\n\n#### Fixed\n\n- The documentation for downloading seismics as SEG-Y files is part of v1. The API documentation didn't reflect that the endpoint had been promoted to version 1.\n\n## 2023-02-07\n\n### Documents\n\n#### Added\n\n- Added `highlight` field in the `search` endpoint to indicate whether matches in search results should be highlighted.\n\n## 2023-01-18\n\n### 3D\n\n#### Added\n\n- Added support for using names filter in list nodes endpoint.\n\n## 2023-01-17\n\n### Authentication\n\n#### Removed\n\nWe've removed authentication via CDF service accounts and API keys, and user sign-in via `/login`.\n\n### 3D\n\n#### Added\n\n- Added support for storing translation and scale for model revision.\n\n## 2023-01-12\n\n### Documents\n\n#### Added\n\n- Added support for approximateCardinality aggregate.\n\n## 2023-01-10\n\n### Documents\n\n#### Added\n\n- Added the search leaf filter, to allow filtering by searching through specified properties.\n\n## 2023-01-09\n\n### Documents\n\n#### Added\n\n- Added the uniqueProperties aggregation, which can be used to find all the metadata keys in use.\n\n## 2023-01-06\n\n### Documents\n\n#### Added\n\n- Added inAssetSubtree filter to filter documents that have a related asset in a subtree rooted at any of the specified IDs.\n\n## 2023-01-02\n\n### Documents\n\n#### Added\n\n- Added advanced filters for metadata (prefix, in, equals)\n\n## 2022-12-06\n\n### 3D\n\n#### Added\n\n- Added get3DNodesById endpoint to be able to fetch 3D nodes mapped to an asset.\n\n## 2022-12-16\n\n### Time series\n\n#### Changed\n\n- Timestamps of data points may now be as large as 4102444799999 (23:59:59.999, December 31, 2099). The previous limit was the year 2050.\n\n## 2022-11-29\n\n### Events\n\n#### Added\n\n- Added `nulls` field to the sort property specification\n\n## 2022-11-17\n\n### Time series\n\n#### Added\n\n- Added `nextCursor` field to [Retrieve data points](tag/Time-series/operation/getMultiTimeSeriesDatapoints), to support cursor pagination\n\n## 2022-10-14\n\n### Geospatial\n\n#### Added\n\n- Added the [POST /projects/{project}/geospatial/compute](tag/Geospatial/operation/compute) endpoint.\n\n## 2022-10-11\n\n### Transformations\n\n#### Added\n\n- Added capability to run a transformation with Nonce credentials provided through the Run endpoint.\n\n## 2022-10-06\n\n### IAM (Identity and access management)\n\n#### Added\n\n- Added the [POST /projects/{project}/sessions/byids](tag/Sessions/operation/getSessionsByIds) endpoint.\n\n## 2022-09-09\n\n### Vision (Contextualization)\n\n#### Added\n\n- Move Vision extract service from playground to V1.\n\n## 2022-08-12\n\n### Time series\n\n#### Changed\n\n- Updated datapoints timestamp range from 1971 - 2050 to 1900 - 2050.\n  Affected endpoints:\n  - [Insert data points](tag//Time-series/operation/postMultiTimeSeriesDatapoints)\n  - [Retrieve data points](tag//Time-series/operation/getMultiTimeSeriesDatapoints)\n  - [Delete data points](tag//Time-series/operation/deleteDatapoints)\n  - [Retrieve latest data point](tag//Time-series/operation/getLatest)\n  - [Synthetic query](tag//Synthetic-Time-Series/operation/querySyntheticTimeseries)\n\n## 2022-07-21\n\n### Transformations\n\n#### Added\n\n- Added authentication using nonce for transformation's exisiting endpoints.\n\n## 2022-06-21\n\n### Annotations (Data organization)\n\n#### Added\n\n- Moved the annotation service from playground to v1.\n\n## 2022-07-07\n\n### Events\n\n#### Removed\n\n- End-of-life for [filter.rootAssetIds](tag/Events/operation/advancedListEvents) filtering attribute.\n\n## 2022-06-13\n\n### IAM (Identity and access management)\n\n#### Added\n\n- Added the [POST /projects/{project}/sessions/revoke](tag/Sessions/operation/revokeSessions) endpoint.\n\n## 2022-05-20\n\n### Documents\n\n#### Added\n\n- Added the `POST /documents/aggregate` endpoint. The endpoint allows you to count documents optionally grouped by a property and also to retrieve all unique values of a property.\n\n## 2022-05-12\n\n### Documents\n\n#### Added\n\n- Added the `POST /documents/list` endpoint. The endpoint allows you to iterate through all the documents in a project.\n- Added the `POST /documents/{documentId}/content` endpoint. The endpoint lets you download the entire extracted plain text of a document.\n\n## 2022-04-11\n\n### Documents\n\n#### Added\n\n- Added the [GET /documents/{documentId}/preview/image/pages/{pageNumber}](tag/Document-preview/operation/documentsPreviewImagePage) endpoint.\n- Added the [GET /documents/{documentId}/preview/pdf](tag/Document-preview/operation/documentsPreviewPdf) endpoint.\n- Added the [GET /documents/{documentId}/preview/pdf/temporarylink](tag/Document-preview/operation/documentsPreviewPdfTemporaryLink) endpoint.\n\n## 2022-03-15\n\n### Sequences\n\n#### Changed\n\n- Changed sequences column limits. Old limit of maximum total 200 columns limits is updated to maximum 400 total columns, maximum 400 numeric columns and maximum 200 string columns.\n\n## 2022-03-02\n\n### Sequences\n\n#### Added\n\n- Added the [POST /sequences/data/latest](tag/Sequences/operation/getLatestSequenceRow) endpoint.\n\n## 2022-02-08\n\n### Time series\n\n#### Changed\n\n- Marked `isStep` parameter to be editable (i.e. removed description stating it is not updatable) in [POST /timeseries/create](tag/Time-series/operation/postTimeSeries).\n\n#### Added\n\n- Added `isStep` parameter to the `TimeSeriesPatch` object used in [POST /timeseries/update](tag/Time-series/operation/alterTimeSeries)\n\n## 2022-02-07\n\n### Documents\n\n#### Added\n\n- The [POST /documents/search](tag/Documents/operation/documentsSearch) endpoint now supports pagination.\n\n## 2022-01-25\n\n### Documents\n\n#### Added\n\n- Added the [POST /documents/search](tag/Documents/operation/documentsSearch) endpoint.\n\n## 2022-01-24\n\n### Time series\n\n#### Added\n\n- Added optional `ignoreUnknownIds` parameter to [POST /sequences/delete](tag/Sequences/operation/deleteSequences). Setting this to true will prevent the operation from failing if one or more of the given sequences do not exist; instead, those given sequences that do exist will be deleted.\n\n## 2021-12-07\n\n### Transformations\n\n#### Added\n\n- New [Transformations](tag//Transformations) APIs to v1 to create,retrieve,list and delete transformations\n- New [Transformation Jobs](tag//Transformation-Jobs) APIs to v1 to retrieve and list transformation jobs or job metrics\n- New [Transformation Schedule](tag//Transformation-Schedules) APIs to v1 to manage schedules of transformations\n- New [Transformation Notifications](tag//Transformation-Notifications) APIs to v1 to manage notifications from transformation job\n\n## 2021-11-22\n\n### Contextualization\n\n#### Added\n\n- Added [diagram detect](tag/Engineering-diagrams/operation/diagramDetect) endpoint to v1 to detect annotations in engineering diagrams\n- Added [diagram detect results](tag/Engineering-diagrams/operation/diagramDetectResults) endpoint to v1 to get the results from an engineering diagram detect job\n- Added [diagram convert](tag/Engineering-diagrams/operation/diagramConvert) endpoint to v1 to create interactive engineering diagrams in SVG format with highlighted annotations\n- Added [diagram convert results](tag/Engineering-diagrams/operation/diagramConvertResults) endpoint to v1 to get the results for a job converting engineering diagrams to SVGs\n\n## 2021-11-17\n\n### 3D\n\n#### Added\n\n- Added `dataSetId` support to 3D models enabling data access scoping of 3D data\n\n## 2021-10-13\n\n### Raw\n\n#### Changed\n\n- To align with Microsoft Azure clusters, table and database names are now sensitive to trailing spaces also in Google Cloud Platform clusters.\n\n## 2021-10-05\n\n### Extraction Pipelines\n\n#### Added\n\n- New [Extraction Pipelines](tag//Extraction-Pipelines) resource to document extractors and monitor the status of data ingestion to make sure reliable and trustworthy data are flowing into the CDF data sets.\n- API endpoints for creating, managing, and deleting extraction pipelines. Capture common attributes around extractors such as owners, contacts, schedule, destination RAW databases, and data set. Document structured metadata in the form of key-value attributes as well unstructured `documentation` attribute that supports Markdown (rendered as Markdown in Fusion).\n- Extraction Pipelines Runs are CDF objects to store statuses related to an extraction pipeline. The supported statuses are: `success`, `failure` and `seen`. They enable extractor developers to report status and error message after ingesting data. As well enables for reporting heartbeat through `seen` status by the extractor to easily identify issues related to crushed applications and scheduling issues.\n\n## 2021-09-28\n\n### Sequences\n\n#### Added\n\n- Added `partition` parameter to the [GET /sequences](tag/Sequences/operation/listSequences) endpoint to support [parallel retrieval](section/Parallel-retrieval).\n- [POST /sequences/list](tag/Sequences/operation/advancedListSequences) now supports [parallel retrieval](section/Parallel-retrieval).\n\n### Time series\n\n#### Added\n\n- Added `partition` parameter to the [GET /timeseries](tag/Time-series/operation/getTimeSeries) endpoint to support [parallel retrieval](section/Parallel-retrieval).\n\n## 2021-08-18\n\n### IAM (Identity and access management)\n\n#### Added\n\nAdded sessions to [v1](tag//Sessions). Sessions let you securely delegate access to CDF resources for CDF services (such as Functions) by an external principal and for an extended time.\n\n## 2021-08-12\n\n### Relationships\n\n#### Added\n\n- Relationships now support [Parallel Retrieval](section/Parallel-retrieval)\n\n## 2021-07-01\n\n### 3D\n\n#### Added\n\n- Added filter3dNodes endpoint to allow for more advanced filtering on node metadata\n\n## 2021-06-29\n\n### Labels\n\n#### Added\n\n- [Dataset scoping](tag/Labels/operation/listLabels) based on `dataSetIds`.\n\n## 2021-06-08\n\n### Sequences\n\n#### Added\n\n- Added [syntax for updating columns](tag/Sequences/operation/updateSequences) of existing sequences. Can `remove` columns, `modify` existing columns, and `add` new columns as well.\n\n## 2021-06-01\n\n### Assets\n\n#### Added\n\n- Added labels replace (set) method for [assets update](tag/Assets/operation/updateAssets).\n\n## 2021-04-28\n\n### Time series\n\n#### Changed granularity limits on hour aggreagates\n\nYou can now ask for a [granularity](https://docs.cognite.com/dev/concepts/aggregation/#granularity)\nof up to 100000 hours (previously 48 hours), both in normal aggregates and in synthetic time series.\n\n## 2021-04-12\n\n### IAM (Identity and access management)\n\n#### Added\n\n- Added a [projects list](tag/Projects/operation/listProjects) endpoint to v1\n- Added a [token inspection](tag/Token/operation/inspectToken) endpoint to v1\n\n## 2021-04-06\n\n### Authentication\n\n#### Deprecated\n\nWe are deprecating authentication via CDF service accounts and API keys, and user sign-in via `/login`, in favor of registering applications and services with your IdP (identity provider) and [using OpenID Connect](https://docs.cognite.com/cdf/access/) and the IdP framework to manage CDF access securely.\n\nThe legacy authentication flow is available for customers using Cognite Data Fusion (CDF) on GCP until further notice. We strongly encourage customers to adopt [the new authentication flows](https://docs.cognite.com/cdf/access/) as soon as possible.\n\nThe following API endpoints are deprecated:\n\n- `/api/v1/projects/*/apikeys`\n- `/api/v1/projects/*/serviceaccounts`\n- `/login`\n- `/logout`\n- `/api/v1/projects/*/groups/serviceaccounts` <sup>\\*</sup>\n\n<sup>\\*</sup>only the sub-resources for listing, adding, and removing members of groups.\n\n## 2021-03-22\n\nCDF API 0.5, 0.6 reached their end-of-life after its initial deprecation announcement in Summer 2019.\n\n## 2021-03-10\n\n### 3D\n\n#### Added\n\n- Added `partition` parameter to the List 3D Nodes endpoint for supporting parallel requests.\n- Added `sortByNodeId` parameter to the List 3D Nodes endpoint, improving request latency in most cases if set to `true`.\n\n## 2021-02-26\n\n### Entity matching\n\n#### Fixed\n\n- Fixed a bug in the documentation for Entity matching. The (job) `status` shall be capitalized string.\n\n## 2020-12-22\n\n### Files\n\n#### Added\n\n- New field `fileType` inside `derivedFields` to refer to a pre-defined subset of MIME types.\n- New filter `fileType` inside `derivedFields` to find files with a pre-defined subset of MIME types.\n\n## 2020-10-20\n\n### Files\n\n#### Added\n\n- New field `geoLocation` to refer to the geographic location of the file.\n- New filter `geoLocation` to find files matching a certain geographic location.\n\nTo learn how to leverage new geoLocation features, [follow our guide](https://developer.cognite.com/dev/concepts/resource_types/files.html).\n\n## 2020-08-29\n\n### Files\n\n#### Added\n\n- New field `directory` referring to the directory in the source containing the file.\n- New filter `directoryPrefix` allows you to find Files matching a certain directory prefix.\n\n## 2020-08-05\n\n### Files\n\n#### Added\n\n- New field `labels` allows you to attach labels to Files upon creation or updating.\n- New filter `labels` allows you to find Files that have been annotated with specific labels.\n\n## 2020-07-08\n\n### IAM (Identity and access management)\n\n#### Added\n\n- New project field `applicationDomains`. If this field is set, users only sign in to the project through applications hosted on\n  a whitelisted domain. [Read more](https://developer.cognite.com/dev/guides/iam/#application-domains).\n\n## 2020-07-01\n\n### Events\n\n#### Added\n\n- New aggregation [`uniqueValues`](tag/Events/operation/aggregateEvents) allows you to find different types, subtypes of events in your project.\n\n## 2020-06-29\n\n### Labels\n\n#### Added\n\n- New data organization resource: [labels](tag//Labels). Manage terms that you can use to annotate and group assets.\n\n### Assets\n\n#### Added\n\n- New filter `labels` allows you to find resources that have been annotated with specific labels.\n\n### Time series\n\n#### Added\n\n- Combine various input time series, constants and operators with on-the-fly [synthetic time series](https://developer.cognite.com/dev/concepts/resource_types/synthetic_timeseries.html).\n\n## 2020-04-28\n\n### Events\n\n#### Added\n\n- New filtering capabilities to find open events [`endTime=null`](tag/Events/operation/advancedListEvents).\n- New filtering capabilities to find all events intersecting a timespan using [activeAtTime](tag/Events/operation/advancedListEvents).\n\n## 2020-03-12\n\n### General\n\n#### Added\n\n- New data organization resource: [data sets](tag//Data-sets). Document and track data lineage, ensure data integrity, and allow 3rd parties to write their insights securely back to your Cognite Data Fusion (CDF) project.\n- New attribute `datasetId` introduced in assets, files, events, time series and sequences.\n- New filter `dataSetIds` allows you to narrow down results to resources containing `datasetId` by a list of ids or externalIds of a data set. Supported by assets, files, events, time series and sequences.\n- We have added a new aggregation endpoint for [time series](tag/Files/operation/aggregateFiles). With this endpoint, you can find out how many results in a tenant meet the criteria of a filter. We will expand this feature to add more aggregates than `count`.\n\n### Groups\n\n#### Added\n\n- Introduced a new capability: `datasetsAcl` for managing access to data set resources.\n- New scope `datasetScope` for assets, files, events, time series and sequences ACLs. Allows you to scope down access to resources contained within a specified set of data sets.\n\n## 2020-03-10\n\n### 3D\n\n#### Fixed\n\n- We fixed a bug in the documentation of [3D model revisions](tag/3D-Model-Revisions/operation/get3DNodesById). Applications should anticipate that 3D nodes may not have a bounding box.\n\n## 2020-02-25\n\n### Assets\n\n#### Added\n\n- We have added a new [aggregation endpoint](tag/Assets/operation/aggregateAssets) for assets. With this endpoint, you can find out how many assets in a tenant meet the criteria of a filter. We will expand this feature to add more aggregates than `count`.\n\n### Events\n\n#### Added\n\n- We have added a new [aggregation endpoint](tag/Events/operation/aggregateEvents) for events. With this endpoint, you can find out how many events in a tenant meet the criteria of a filter. We will expand this feature to add more aggregates than `count`.\n\n## 2020-02-12\n\n### Assets\n\n#### Added\n\n- We have added new aggregation properties: `depth` and `path`. You can use the properties in the filter and retrieve endpoints.\n\n## 2020-02-10\n\n### Assets\n\n#### Added\n\n- Added the property `parentExternalId` which is returned for all assets which have a parent with a defined `externalId`.\n\n## 2019-12-09\n\n### General\n\n#### Added\n\n- Added `assetSubtreeIds` as a parameter to filter, search, and list endpoints for all core resources. `assetSubtreeIds` allows you to specify assets that are subtree roots, and then only retrieve resources that are related to assets within those subtrees.\n\n## 2019-12-04\n\n### Assets\n\n#### Added\n\n- Added the ability to [filter](tag/Assets/operation/searchAssets) assets by parent external IDs.\n\n## 2019-11-18\n\n### Events\n\n#### Added\n\n- [Added the ability to filter events by the external ID of linked assets](tag/Events/operation/advancedListEvents)\n\n## 2019-11-12\n\n### Access control\n\n#### Removed\n\n- Groups can no longer be created with a permissions field in v0.5.\n\n## 2019-10-31\n\n### Assets\n\n#### Added\n\n- [Asset search](/api/v1/#operation/searchAssets) now has a `search.query` parameter. This uses an improved search algorithm that tries a wider range of variations of the input terms and gives much better relevancy ranking than the existing `search.name` and `search.description` fields.\n\n### Time Series\n\n#### Changed\n\n- The `search.query` parameter for [time series search](/api/v1/#operation/searchTimeSeries) now uses an improved search algorithm that tries a wider range of variations of the input terms, and gives much better relevancy ranking.\n\n## 2019-10-23\n\n### Files\n\n#### Added\n\n- Added support for updating the `mimeType` for existing files in files/update requests.\n\n## 2019-10-18\n\n### Time Series\n\n#### Added\n\n- Time series expanded their filtering capabilities with new `Filter time series` endpoint, allowing for additional filtering by:\n\n  - Name\n  - Unit\n  - Type of time series: string or step series\n  - Metadata objects\n  - ExternalId prefix filtering\n  - Create and last updated time ranges\n\n  Endpoint in addition support pagination and partitioning. Check out detailed API documentation [here](/api/v1/#operation/listTimeSeries).\n\n## 2019-10-16\n\n### Events\n\n#### Added\n\n- [Added the ability to sort events on startTime, endTime, createdTime, and lastUpdatedTime](tag/Events/operation/advancedListEvents)\n\n## 2019-10-02\n\n### Sequences\n\n#### Added\n\n- Introducing the new **sequences** core resource type that lets you store numerically indexed multi-column rows of data. Connect your sequences to physical assets and to their source systems through `externalId` and metadata support. Read more [here](https://developer.cognite.com/dev/concepts/resource_types/sequences.html).\n\n## 2019-09-30\n\n### 3D\n\n#### Added\n\n- Added endpoint to get multiple nodes for a 3D model by their IDs.\n- Added endpoint to get asset mappings for multiple node IDs or asset IDs.\n\n## 2019-09-23\n\n### Files\n\n#### Added\n\n- Added support for filter on `rootAssetIds` in files GET /files (using query parameter) and POST /files/list (in request body).\n\n## 2019-09-16\n\n### Assets and Events\n\n#### Added\n\n- Added support for `partition` in `/assets` and `/events` to support parallel retrieval. See guide for usage [here](./concepts/pagination)\n\n## 2019-08-22\n\n### 3D\n\n#### Added\n\n- Added the query parameter `intersectsBoundingBox` to the list asset mappings endpoint. The parameter filters asset mappings to the assets where the bounding box intersects (or is contained within) the specified bounding box.\n\n## 2019-08-21\n\n### Files\n\n#### Added\n\n- Added support for sourceCreatedTime and sourceModifiedTime fields in files v1 endpoints.\n\n### Assets\n\n#### Added\n\n- Allow the parent asset ID to be updated. The root asset ID must be preserved, and you can not convert a non-root asset to a root asset or vice versa.\n- Support for ignoreUnknownIds when deleting assets.\n\n## 2019-08-15\n\n### 3D\n\n#### Added\n\n- Properties field for 3D nodes, extracted from uploaded 3D files.\n- Ability to filter nodes with a specific set of properties.\n\n## 2019-07-24\n\n### Files\n\n#### Changed\n\n- Allow lookup of names with length up to 256 characters (was 50) for GET /files and POST /files/search operations.\n- Allow creating and retrieving files with mimeType length up to 256 characters (was 64).\n\n## 2019-07-15\n\n### Time series\n\n#### Added\n\n- Added query parameter `rootAssetIds` to list time series endpoint. Returns time series that are linked to an asset that has one of the root assets as an ancestor.\n\n## 2019-07-11\n\nList of changes for initial API v1 release in comparison to previous version - API 0.5\n\n### General\n\n#### Added\n\n- Support for `externalId` added across resource types. `externalId` lets you define a unique ID for a data object. Learn more: [External IDs](https://developer.cognite.com/dev/concepts/external_id.html)\n- `externalIdPrefix` added as a parameter to the list events, assets and files operations.\n- Richer filtering on the list assets, files and events operations.\n- Search, list and filter operations for assets, events and files now support filtering on source and metadata field values.\n\n#### Changed\n\n- Core resources standardize on HTTP methods and URI naming for common operations such as search, partial updates, delete, list and filter\n- API responses are no longer wrapped in a top level `data` object.\n- Standardized pagination across resources through `limit`, `cursor` and `nextCursor` parameters.\n- The `limit` parameter no longer implicitly rounds down requested page size to maximum page size.\n- Standardized error responses and codes across all resources. Errors across CDF can be parsed into a single model.\n- Overall improvements to reference documentation. Including documented input constraints, required fields, individual attribute descriptions.\n\n#### Removed\n\n- The `sourceId` field has been removed from resources. Use `externalId` instead of `sourceId`+`source` to define unique IDs for data objects.\n- Sorting is removed from the search operations for files, assets, events and time series. Results are sorted by relevance.\n- `offset` and `previousCursor` parameters are no longer supported for pagination across resources.\n- Fetching an asset subtree is no longer supported by files, assets, events and time series.\n\n### Assets\n\n#### Added\n\n- Ability to select only root assets though new `root` filter.\n- Added the `rootId` field to specify the top element in an asset hierarchy.\n- Added the ability to filter by the root asset ID. This allows you to scope queries for one or many asset hierarchies.\n- List Assets allows for filtering assets belonging to set of root assets, specified by list of asset internal ids. New query parameter: `rootIds`.\n- Filter and Search Assets allows or filtering assets belonging to a set of root assets, specified by combination of internal and external asset identifiers. New body attribute: `rootIds`.\n\n#### Changed\n\n- Updating a single asset is no longer supported through a separate endpoint. Use the update multiple endpoint instead.\n- Delete assets by default removes only leaf assets (assets without children). New parameter 'recursive' allows for enabling recursive removal of the entire subtree of the asset pointed by ID (API 0.5 behaviour).\n\n#### Removed\n\n- Overwriting assets is no longer supported.\n- Filtering assets by their complete description is no longer supported.\n- Locating assets fuzzily by name has been removed. Instead, search for assets on the `name` property.\n- When searching assets, querying over both name and description in the same query is no longer supported.\n- The experimental query parameter `boostName` has been removed from the search for assets operation.\n- Removed the `path` and `depth` fields.\n\n### Events\n\n#### Added\n\n- Events can now be filtered on asset ID in combination with other filters.\n- New filter `rootAssetIds` allows for narrowing down events belonging only to list or specified root assets. Supported by Filter and Search API\n\n#### Removed\n\n- Events can no longer be filtered by empty description.\n- The 'dir' parameter has been removed from the search events operation.\n\n### Files\n\n#### Added\n\n- Filtering files by `assetIds` in list files operations now support multiple assets in the same request.\n\n#### Changed\n\n- Download file content has changed from HTTP GET to HTTP POST method.\n- We have renamed the `fileType` field to `mimeType`. The field now requires a MIME formatted string (e.g. `text/plain`).\n- We have renamed the `uploadedAt` field to `uploadedTime`.\n- Resumable is now the default behavior for file uploads.\n- Update metadata for single files is no longer supported by a separate operation. Instead, use the update multiple operation.\n\n#### Removed\n\n- Replace files metadata endpoint has been removed.\n- Directory has been removed as a property of files.\n- Updating the `name` or `mimeType` of a file through the update multiple files operation is no longer supported.\n- Query parameter for specifying the sort direction has been removed from list all files operations.\n\n### Raw\n\n#### Changed\n\n- Raw has changed structure to become resource-oriented. The URL structure has changed.\n- Recursively delete of tables and rows when deleting a database is now the default behavior without a control parameter.\n\n### Time series\n\n#### Added\n\n- Support for adding datapoints by `id` and `externalId` of time series. Adding datapoints to time series by `name` has been removed.\n- Add ability to update the new `externalId` attribute for time series.\n- Allow to set `externalId` during creation of time series. `ExternalId` requires uniqueness across time series.\n- Consolidate multiple APIs to allow adding datapoints into a single endpoint. Allows datapoints to be added to multiple time series at the same time.\n- Retrieve data points by using `id` and `externalId` of the time series.\n- Time series created through API v1 are not discoverable by API 0.3, 0.4, 0.5 and 0.6 by default. Introduce the option to enable this compatibility by setting new attribute - `legacyName` on time series creation. Value is required to be unique.\n\n#### Changed\n\n- Get latest datapoints has been reworked. Introduces support for `id` and `externalId` lookup as well retrieval for multiple time series within the same request.\n- Time series name is no longer limited by uniqueness. Note that time series (meta objects) created by API v1 will not be discoverable by older API versions.\n- Delete time series endpoint has been redesigned to allow deletion of multiple time series by `id` and `externalId`.\n- Delete single and multiple datapoints endpoint has been redesigned and consolidated into a single endpoint. New delete allows selection of multiple time series and time ranges by `id` and `externalId`. Selecting by `name` is no longer available.\n- Update multiple time series restructured to support lookup by `externalId`.\n- Retrieve time series by ID endpoint restructured adding the ability to get time series by `externalId`.\n- Set limit for data point value to min -1E100, max 1E100.\n\n#### Removed\n\n- Experimental feature for performing calculations across multiple time series (synthetic time series), function and alias attributes are no longer available.\n- The experimental query parameter `boostName` has been removed from search operation.\n- Short names for aggregate functions are no longer supported.\n- Ability to remove time series by `name` have been removed as names are no longer unique identifiers.\n- Select multiple time series and time ranges by `name` is no longer available.\n- The ability to update `isString` and `isStep` attributes is removed. The attributes are not intended to be modified after creation of time series.\n- The endpoint for updating single time series is removed. Use the update multiple time series endpoint instead.\n- Remove ability to overwrite time series object by `id`. Use the update multiple time series endpoint instead.\n- The ability to retrieve time series matching by `name` has been removed. Use `externalId` instead.\n- The ability to retrieve by `id` from a single time series has been removed. Use retrieve multiple datapoints for multiple time series instead.\n- The ability to retrieve time-aligned datapoints through \"dataframe\" API has been removed. Similar functionality is available through our supported SDKs.\n- The ability to add datapoints to time series by `name` has been removed.\n- The ability to look up by time series `name` has been removed.\n\n### IAM (Identity and access management)\n\n#### Added\n\n- The login status endpoint includes the ID of the API key making the request (new attribute: `apiKeyId`), if the request used an API key.\n\n#### Changed\n\n- The user resource type has been replaced with service accounts. Users from previous API versions are equivalent to service accounts.\n- Adding, listing and removing users from a group has been replaced by equivalent operations for service accounts.\n- Retrieve project returns a single object instead of a list.\n- API keys endpoints for list/create rename `userId` attribute to `serviceAccountId`.\n\n#### Removed\n\n- List and create groups no longer use the `permissions` and `source` attributes.\n\n### 3D\n\n#### Added\n\n- New 3D API lets you upload and process 3D models. Supported format: FBX.\n- Ability to create and maintain multiple revisions for the 3D models.\n- API for mapping relationships between 3D model nodes and asset hierarchy.\n"
+      "description": "This article documents all notable changes to the Cognite Data Fusion (CDF) API v1.\n\n<!--\nGroup changes by release (and date), API area, and these types of changes:\n\n - **Added** for new features.\n - **Changed** for changes in existing functionality.\n - **Deprecated** for soon-to-be removed features.\n - **Removed** for now removed features.\n - **Fixed** for any bug fixes.\n - **Security** in case of vulnerabilities.-\n\nUse[ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) for dates: 2019-06-20\n\nAdd entries for new features on top of this page. Newest release goes on top.\nChanges only for API v1 series\n\nTemplate:\n\n## <YYYY-MM-DD>\n\n### <Core resource name>\n\n#### <Group name -- see top of the page>\n\n    - <my change>\n    - <my change>\n\n#### <Group name -- see top of the page>\n\n    - <my change>\n    - <my change>\n-->\n\n## 2023-11-30\n\n### Hosted extractors\n\n#### Changed\n\n- Hosted extractors API (Beta)\n  - Updates hosted extractor schema with tls certificate details hence users can now provide CA and authentication certificates for connection to MQTT brokers.\n  - Now includes schema requirements for connection to Kafka brokers i.e. connection to and extraction from Kafka brokers to Cognie Data fusion is not possible.\n\n## 2023-11-21\n\n### Units Catalog\n\n#### Added\n\n- Added the [Units Catalog](https://docs.cognite.com/api/20230101/#tag/Units-Catalog) API. The Units Catalog is a collection of units of measurement and their conversion factors. The Units Catalog is used within Cognite Data Fusion to easily convert between different units and unit systems when retrieving Time Series and Data Models.\n\n## 2023-11-17\n\n### Documents\n\n#### Added\n\n- Added support for sorting in the `/documents/list` endpoint. It works exactly the same as the sorting\n  in `/documents/search` except that you can not sort on search relevance.\n\n## 2023-11-08\n\n### Engineering diagrams\n\n#### Changed\n\n- Optional token mechanism for accessing detected results of engineering diagrams without read all access to assets.\n  See [diagram/detect](https://api-docs.cognite.com/20230101/tag/Engineering-diagrams/operation/diagramDetect) for details.\n  \n## 2023-10-23\n\n### Files\n\n#### Added\n\n- Added multipart upload endpoints for the files API. This enables upload of files larger than 5 GiB, in a uniform way for all CDF cloud environments.\n  Optionally use parallel part upload, for greater upload speed.\n  See the documentation for the new endpoints at:\n  - [Upload multipart file](https://docs.cognite.com/api/20230101/#tag/Files/operation/initMultiPartUpload) and\n  - [Complete multipart upload](https://docs.cognite.com/api/20230101/#tag/Files/operation/completeMultiPartUpload) endpoints.\n\n## 2023-10-17\n### Events\n#### Added\n- New and old but previously undocumented API rate and concurrency limits have been documented. \nOverrides have been specified for existing customers, so that the new limits would not affect them.\n  - Service layer request rate and concurrency limits added. \n  - CRUD endpoints request rate and concurrency and items rate limits added\n\n## 2023-10-10\n\n### Entity matching\n\n#### Added\n\n- Entity matching pipelines are now in v1. We resuscitated the old playground API and made some changes.\n  We will keep the new v1 API in beta for the foreseeable future.\n\n### Vision (Contextualization)\n\n#### Added\n\n- New computer vision models (beta) are available in Vision extract service, including digital, dial and level gauge readers, valve state detection (open/closed) and model to segment objects in images.\n\n## 2023-10-05\n\n### Hosted extractors\n\n#### Added\n\n- Hosted extractors API (Beta)\n  - Use the new [Hosted extractors](https://docs.cognite.com/cdf/integration/guides/extraction/hosted_extractors)\n    feature to create simple streaming extractors running inside CDF, streaming data from sources available on the internet\n    directly into CDF.\n    Currently supports Azure Event Hub and MQTT. Support is planned for Kafka and REST APIs.\n\n## 2023-09-27\n\n### 3D\n\n#### Changed\n\n- If the 3d model processing is ongoing or has failed, the 3d api nodes endpoints will now return error code 400 with the response body \"Revision processing is not yet complete\" or \"Revision processing failed\" respectively.\n  The previous behavior was to return an empty or partial items list in these cases.\n  Before calling any 3d api nodes endpoints, clients should check that the model revision has \"status\":\"Done\".\n\n## 2023-08-25\n\n### Transformations\n\n#### Changed\n\n- Fixed wrong description for fields in \"transformations/update\" and \"/transformations/schedules/update\"\n\n## 2023-08-22\n\n### Functions\n\n#### Changed\n\n- Remove Functions runtime \"py37\".\n\n## 2023-08-22\n\n### Time series\n\n#### Added\n\n- Data point subscriptions (Beta)\n  - Use the new [Data point subscriptions](https://developer.cognite.com/dev/concepts/data_point_subscriptions/)\n    feature to configure a subscription to listen to changes in one or more\n    time series (in ingestion order).\n    The feature is intended to be used where data points consumers need to keep up to date with\n    changes to one or more time series without the need to read the entire time series again. (Beta)\n\n## 2023-08-10\n\n### Time series\n\n#### Added\n\n- Advanced query language support reaches General Availability (GA).\n  - Advanced search, filtering, and sorting capabilities in the [Filter time series](https://docs.cognite.com/api/20230101/#tag/Time-series/operation/listTimeSeries) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate time series](https://docs.cognite.com/api/20230101/#tag/Time-series/operation/aggregateTimeSeries) endpoint.\n\n### Sequences\n\n#### Added\n\n- Advanced query language support reaches General Availability (GA).\n  - Advanced search, filtering, and sorting capabilities in the [Filter sequences](https://docs.cognite.com/api/20230101/#tag/Sequences/operation/advancedListSequences) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate sequences](https://docs.cognite.com/api/20230101/#tag/Sequences/operation/aggregateSequences) endpoint.\n\n## 2023-08-08\n\n### Assets\n\n#### Added\n\n- Advanced query language support reaches General Availability (GA).\n  - Advanced search, filtering, and sorting capabilities in the [Filter assets](https://docs.cognite.com/api/20230101/#tag/Assets/operation/listAssets) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate assets](https://docs.cognite.com/api/20230101/#tag/Assets/operation/aggregateAssets) endpoint.\n\n### Events\n\n#### Added\n\n- Advanced query language support reaches General Availability (GA).\n  - Advanced search, filtering, and sorting capabilities in the [Filter events](https://docs.cognite.com/api/20230101/#tag/Events/operation/advancedListEvents) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate events](https://docs.cognite.com/api/20230101/#tag/Events/operation/aggregateEvents) endpoint.\n\n### Documents\n\n#### Added\n\n- Advanced query language support reaches General Availability (GA).\n  - Advanced aggregation capabilities in the [Aggregate documents](https://docs.cognite.com/api/20230101/#tag/Documents/operation/documentsAggregate) endpoint.\n\n## 2023-06-27\n\n### IAM (Identity and access management)\n\n#### Changed\n\n- Identity providers (IdP) are required to be compatible with the [OpenID Connect Discovery 1.0](https://openid.net/specs/openid-connect-discovery-1_0.html) standard, and compliance will now be enforced by the [Projects](tag/Projects) API.\n  - The `oidcConfiguration.jwksUrl` and `oidcConfiguration.tokenUrl` can be entirely omitted when updating the OIDC configuration for a project.\n  - The `oidcConfiguration.jwksUrl` and `oidcConfiguration.tokenUrl` are preserved for backwards compatibility of the API. However, if these are specified as part of the request body, the value must match excatly the values that are specified in the OpenID provider configuration document for the configured issuer (can be found at `https://{issuer-url}/.well-known/openid-configuration`). If the values does not match, the API will return an error message.\n\n- The `oidcConfiguration.skewMs` has been deprecated but remains part of the API for backwards compatibility. It can be omitted from the request. If included, it must always be set to `0`.\n\n- The `oidcConfiguration.isGroupCallbackEnabled` has been deprecated but remains part of the API for backwards compatibility. It can be omitted from the request.\n  - For projects configured to use Azure Active Directory as the identity provider, if this value is specified in the request, it must always be set to `true`.\n\n## 2023-06-05\n\n### Data Modeling\n\n#### Added\n\n- Added support for an `autoCreateDirectRelations` option on the endpoint for ingesting instances.\nThis option lets the user specify whether to create missing target nodes of direct relations.\n\n#### Removed\n\n- Removed support for the deprecated per-item `sources` field on the `/instances/byids` endpoint.\n\n### Time series\n\n#### Added\n\n- Added advanced query language support (Beta).\n  - Advanced search, filtering, and sorting capabilities in the [Filter time series](tag/Time-series/operation/listTimeSeries) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate time series](tag/Time-series/operation/aggregateTimeSeries) endpoint.\n\n### Sequences\n\n#### Added\n\n- Added advanced query language support (Beta).\n  - Advanced search, filtering, and sorting capabilities in the [Filter sequences](tag/Sequences/operation/advancedListSequences) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate sequences](tag/Sequences/operation/aggregateSequences) endpoint.\n\n## 2023-05-19\n\n### Transformations\n\n#### Added\n\n- Adding support for data model centric and view centric schema.\n\n## 2023-04-24\n\n### Transformations\n\n#### Removed\n\n- Removing support for authentication via API keys when creating or updating transformations.\n\n## 2023-05-04\n\n### Annotations\n\n#### Added\n\n- Added `image.InstanceLink` and `diagrams.InstanceLink` annotation types to allow you to link from objects discovered in images and engineering diagrams to data model instances.\n\n## 2023-04-18\n\n### All resources\n\n#### Added\n\n- Added information about [Requests throttling](section/Requests-throttling).\n\n#### Changed\n\n- Updated the [Parallel retrieval](section/Parallel-retrieval) documentation.\n- Aligned endpoint naming within Assets, Data sets, Events, and Files.\n\n### Assets\n\n#### Added\n\n- Added advanced query language support (Beta).\n  - Advanced search, filtering, and sorting capabilities in the [Filter assets](https://docs.cognite.com/api/20230101-beta/#tag/Assets/operation/listAssets) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate assets](https://docs.cognite.com/api/20230101-beta/#tag/Assets/operation/aggregateAssets) endpoint.\n\n### Events\n\n#### Added\n\n- Added advanced query language support (Beta).\n  - Advanced search, filtering, and sorting capabilities in the [Filter events](https://docs.cognite.com/api/20230101-beta/#tag/Events/operation/advancedListEvents) endpoint.\n  - Advanced aggregation capabilities in the [Aggregate events](https://docs.cognite.com/api/20230101-beta/#tag/Events/operation/aggregateEvents) endpoint.\n\n### Documents\n\n#### Added\n\n- Added advanced query language support (Beta).\n  - Advanced aggregation capabilities in the [Aggregate documents](https://docs.cognite.com/api/20230101-beta/#tag/Documents/operation/documentsAggregate) endpoint.\n\n## 2023-04-12\n\n### Sessions\n\n#### Fixed\n\n- Fixed the API documentation for the request body of the [POST /projects/{project}/sessions/byids](tag/Sessions/operation/getSessionsByIds) endpoint.\nThe documentation incorrectly stated the request body schema as specifying the list of session IDs to retrieve, in the form `{\"items\": [42]}` - it should in fact be `{\"items\": [{\"id\": 42}]}`. The documentation has been updated to reflect this.\n\n- Fixed the API documentation for the response body of the [POST /projects/{project}/sessions/byids](tag/Sessions/operation/getSessionsByIds) endpoint.\nThe documentation incorrectly stated `nextCursor` and `previousCursor` fields as being returned from the response, which was not the case, and these fields have now been removed from the API documentation.\n\n## 2023-04-04\n\n### Transformations\n\n#### Change\n\n- Transformations support new target types for view-centric data model instances.\n\n#### Added\n\n- Added target types `nodes` and `edges`.\n\n## 2023-03-06\n\n### Documents\n\n#### Change\n\n- Renamed \"approximateCardinality\" aggregate to \"cardinalityValues\" to unify the search spec in Cognite.\n- \"uniqueProperties\" aggregate no longer supports pagination. It returns unique properties (up to 10000) in the specified path. The results are sorted by frequency.\n\n#### Added\n\n- Added \"allUniqueProperties\" aggregate that returns all unique properties. The response contains a cursor that can be used to fetch all pages of data.\n\n## 2023-02-03\n\n### Seismic\n\n#### Added\n\n- Batch downloading of seismics as a ZIP archive is now an experimental v1 endpoint. A user requires the experimental ACL to use this endpoint, and any other ACLs and scopes to read the downloadable seismics.\n\n#### Fixed\n\n- The documentation for downloading seismics as SEG-Y files is part of v1. The API documentation didn't reflect that the endpoint had been promoted to version 1.\n\n## 2023-02-07\n\n### Documents\n\n#### Added\n\n- Added `highlight` field in the `search` endpoint to indicate whether matches in search results should be highlighted.\n\n## 2023-01-18\n\n### 3D\n\n#### Added\n\n- Added support for using names filter in list nodes endpoint.\n\n## 2023-01-17\n\n### Authentication\n\n#### Removed\n\nWe've removed authentication via CDF service accounts and API keys, and user sign-in via `/login`.\n\n### 3D\n\n#### Added\n\n- Added support for storing translation and scale for model revision.\n\n## 2023-01-12\n\n### Documents\n\n#### Added\n\n- Added support for approximateCardinality aggregate.\n\n## 2023-01-10\n\n### Documents\n\n#### Added\n\n- Added the search leaf filter, to allow filtering by searching through specified properties.\n\n## 2023-01-09\n\n### Documents\n\n#### Added\n\n- Added the uniqueProperties aggregation, which can be used to find all the metadata keys in use.\n\n## 2023-01-06\n\n### Documents\n\n#### Added\n\n- Added inAssetSubtree filter to filter documents that have a related asset in a subtree rooted at any of the specified IDs.\n\n## 2023-01-02\n\n### Documents\n\n#### Added\n\n- Added advanced filters for metadata (prefix, in, equals)\n\n## 2022-12-06\n\n### 3D\n\n#### Added\n\n- Added get3DNodesById endpoint to be able to fetch 3D nodes mapped to an asset.\n\n## 2022-12-16\n\n### Time series\n\n#### Changed\n\n- Timestamps of data points may now be as large as 4102444799999 (23:59:59.999, December 31, 2099). The previous limit was the year 2050.\n\n## 2022-11-29\n\n### Events\n\n#### Added\n\n- Added `nulls` field to the sort property specification\n\n## 2022-11-17\n\n### Time series\n\n#### Added\n\n- Added `nextCursor` field to [Retrieve data points](tag/Time-series/operation/getMultiTimeSeriesDatapoints), to support cursor pagination\n\n## 2022-10-14\n\n### Geospatial\n\n#### Added\n\n- Added the [POST /projects/{project}/geospatial/compute](tag/Geospatial/operation/compute) endpoint.\n\n## 2022-10-11\n\n### Transformations\n\n#### Added\n\n- Added capability to run a transformation with Nonce credentials provided through the Run endpoint.\n\n## 2022-10-06\n\n### IAM (Identity and access management)\n\n#### Added\n\n- Added the [POST /projects/{project}/sessions/byids](tag/Sessions/operation/getSessionsByIds) endpoint.\n\n## 2022-09-09\n\n### Vision (Contextualization)\n\n#### Added\n\n- Move Vision extract service from playground to V1.\n\n## 2022-08-12\n\n### Time series\n\n#### Changed\n\n- Updated datapoints timestamp range from 1971 - 2050 to 1900 - 2050.\n  Affected endpoints:\n  - [Insert data points](tag//Time-series/operation/postMultiTimeSeriesDatapoints)\n  - [Retrieve data points](tag//Time-series/operation/getMultiTimeSeriesDatapoints)\n  - [Delete data points](tag//Time-series/operation/deleteDatapoints)\n  - [Retrieve latest data point](tag//Time-series/operation/getLatest)\n  - [Synthetic query](tag//Synthetic-Time-Series/operation/querySyntheticTimeseries)\n\n## 2022-07-21\n\n### Transformations\n\n#### Added\n\n- Added authentication using nonce for transformation's exisiting endpoints.\n\n## 2022-06-21\n\n### Annotations (Data organization)\n\n#### Added\n\n- Moved the annotation service from playground to v1.\n\n## 2022-07-07\n\n### Events\n\n#### Removed\n\n- End-of-life for [filter.rootAssetIds](tag/Events/operation/advancedListEvents) filtering attribute.\n\n## 2022-06-13\n\n### IAM (Identity and access management)\n\n#### Added\n\n- Added the [POST /projects/{project}/sessions/revoke](tag/Sessions/operation/revokeSessions) endpoint.\n\n## 2022-05-20\n\n### Documents\n\n#### Added\n\n- Added the `POST /documents/aggregate` endpoint. The endpoint allows you to count documents optionally grouped by a property and also to retrieve all unique values of a property.\n\n## 2022-05-12\n\n### Documents\n\n#### Added\n\n- Added the `POST /documents/list` endpoint. The endpoint allows you to iterate through all the documents in a project.\n- Added the `POST /documents/{documentId}/content` endpoint. The endpoint lets you download the entire extracted plain text of a document.\n\n## 2022-04-11\n\n### Documents\n\n#### Added\n\n- Added the [GET /documents/{documentId}/preview/image/pages/{pageNumber}](tag/Document-preview/operation/documentsPreviewImagePage) endpoint.\n- Added the [GET /documents/{documentId}/preview/pdf](tag/Document-preview/operation/documentsPreviewPdf) endpoint.\n- Added the [GET /documents/{documentId}/preview/pdf/temporarylink](tag/Document-preview/operation/documentsPreviewPdfTemporaryLink) endpoint.\n\n## 2022-03-15\n\n### Sequences\n\n#### Changed\n\n- Changed sequences column limits. Old limit of maximum total 200 columns limits is updated to maximum 400 total columns, maximum 400 numeric columns and maximum 200 string columns.\n\n## 2022-03-02\n\n### Sequences\n\n#### Added\n\n- Added the [POST /sequences/data/latest](tag/Sequences/operation/getLatestSequenceRow) endpoint.\n\n## 2022-02-08\n\n### Time series\n\n#### Changed\n\n- Marked `isStep` parameter to be editable (i.e. removed description stating it is not updatable) in [POST /timeseries/create](tag/Time-series/operation/postTimeSeries).\n\n#### Added\n\n- Added `isStep` parameter to the `TimeSeriesPatch` object used in [POST /timeseries/update](tag/Time-series/operation/alterTimeSeries)\n\n## 2022-02-07\n\n### Documents\n\n#### Added\n\n- The [POST /documents/search](tag/Documents/operation/documentsSearch) endpoint now supports pagination.\n\n## 2022-01-25\n\n### Documents\n\n#### Added\n\n- Added the [POST /documents/search](tag/Documents/operation/documentsSearch) endpoint.\n\n## 2022-01-24\n\n### Time series\n\n#### Added\n\n- Added optional `ignoreUnknownIds` parameter to [POST /sequences/delete](tag/Sequences/operation/deleteSequences). Setting this to true will prevent the operation from failing if one or more of the given sequences do not exist; instead, those given sequences that do exist will be deleted.\n\n## 2021-12-07\n\n### Transformations\n\n#### Added\n\n- New [Transformations](tag//Transformations) APIs to v1 to create,retrieve,list and delete transformations\n- New [Transformation Jobs](tag//Transformation-Jobs) APIs to v1 to retrieve and list transformation jobs or job metrics\n- New [Transformation Schedule](tag//Transformation-Schedules) APIs to v1 to manage schedules of transformations\n- New [Transformation Notifications](tag//Transformation-Notifications) APIs to v1 to manage notifications from transformation job\n\n## 2021-11-22\n\n### Contextualization\n\n#### Added\n\n- Added [diagram detect](tag/Engineering-diagrams/operation/diagramDetect) endpoint to v1 to detect annotations in engineering diagrams\n- Added [diagram detect results](tag/Engineering-diagrams/operation/diagramDetectResults) endpoint to v1 to get the results from an engineering diagram detect job\n- Added [diagram convert](tag/Engineering-diagrams/operation/diagramConvert) endpoint to v1 to create interactive engineering diagrams in SVG format with highlighted annotations\n- Added [diagram convert results](tag/Engineering-diagrams/operation/diagramConvertResults) endpoint to v1 to get the results for a job converting engineering diagrams to SVGs\n\n## 2021-11-17\n\n### 3D\n\n#### Added\n\n- Added `dataSetId` support to 3D models enabling data access scoping of 3D data\n\n## 2021-10-13\n\n### Raw\n\n#### Changed\n\n- To align with Microsoft Azure clusters, table and database names are now sensitive to trailing spaces also in Google Cloud Platform clusters.\n\n## 2021-10-05\n\n### Extraction Pipelines\n\n#### Added\n\n- New [Extraction Pipelines](tag//Extraction-Pipelines) resource to document extractors and monitor the status of data ingestion to make sure reliable and trustworthy data are flowing into the CDF data sets.\n- API endpoints for creating, managing, and deleting extraction pipelines. Capture common attributes around extractors such as owners, contacts, schedule, destination RAW databases, and data set. Document structured metadata in the form of key-value attributes as well unstructured `documentation` attribute that supports Markdown (rendered as Markdown in Fusion).\n- Extraction Pipelines Runs are CDF objects to store statuses related to an extraction pipeline. The supported statuses are: `success`, `failure` and `seen`. They enable extractor developers to report status and error message after ingesting data. As well enables for reporting heartbeat through `seen` status by the extractor to easily identify issues related to crushed applications and scheduling issues.\n\n## 2021-09-28\n\n### Sequences\n\n#### Added\n\n- Added `partition` parameter to the [GET /sequences](tag/Sequences/operation/listSequences) endpoint to support [parallel retrieval](section/Parallel-retrieval).\n- [POST /sequences/list](tag/Sequences/operation/advancedListSequences) now supports [parallel retrieval](section/Parallel-retrieval).\n\n### Time series\n\n#### Added\n\n- Added `partition` parameter to the [GET /timeseries](tag/Time-series/operation/getTimeSeries) endpoint to support [parallel retrieval](section/Parallel-retrieval).\n\n## 2021-08-18\n\n### IAM (Identity and access management)\n\n#### Added\n\nAdded sessions to [v1](tag//Sessions). Sessions let you securely delegate access to CDF resources for CDF services (such as Functions) by an external principal and for an extended time.\n\n## 2021-08-12\n\n### Relationships\n\n#### Added\n\n- Relationships now support [Parallel Retrieval](section/Parallel-retrieval)\n\n## 2021-07-01\n\n### 3D\n\n#### Added\n\n- Added filter3dNodes endpoint to allow for more advanced filtering on node metadata\n\n## 2021-06-29\n\n### Labels\n\n#### Added\n\n- [Dataset scoping](tag/Labels/operation/listLabels) based on `dataSetIds`.\n\n## 2021-06-08\n\n### Sequences\n\n#### Added\n\n- Added [syntax for updating columns](tag/Sequences/operation/updateSequences) of existing sequences. Can `remove` columns, `modify` existing columns, and `add` new columns as well.\n\n## 2021-06-01\n\n### Assets\n\n#### Added\n\n- Added labels replace (set) method for [assets update](tag/Assets/operation/updateAssets).\n\n## 2021-04-28\n\n### Time series\n\n#### Changed granularity limits on hour aggreagates\n\nYou can now ask for a [granularity](https://docs.cognite.com/dev/concepts/aggregation/#granularity)\nof up to 100000 hours (previously 48 hours), both in normal aggregates and in synthetic time series.\n\n## 2021-04-12\n\n### IAM (Identity and access management)\n\n#### Added\n\n- Added a [projects list](tag/Projects/operation/listProjects) endpoint to v1\n- Added a [token inspection](tag/Token/operation/inspectToken) endpoint to v1\n\n## 2021-04-06\n\n### Authentication\n\n#### Deprecated\n\nWe are deprecating authentication via CDF service accounts and API keys, and user sign-in via `/login`, in favor of registering applications and services with your IdP (identity provider) and [using OpenID Connect](https://docs.cognite.com/cdf/access/) and the IdP framework to manage CDF access securely.\n\nThe legacy authentication flow is available for customers using Cognite Data Fusion (CDF) on GCP until further notice. We strongly encourage customers to adopt [the new authentication flows](https://docs.cognite.com/cdf/access/) as soon as possible.\n\nThe following API endpoints are deprecated:\n\n- `/api/v1/projects/*/apikeys`\n- `/api/v1/projects/*/serviceaccounts`\n- `/login`\n- `/logout`\n- `/api/v1/projects/*/groups/serviceaccounts` <sup>\\*</sup>\n\n<sup>\\*</sup>only the sub-resources for listing, adding, and removing members of groups.\n\n## 2021-03-22\n\nCDF API 0.5, 0.6 reached their end-of-life after its initial deprecation announcement in Summer 2019.\n\n## 2021-03-10\n\n### 3D\n\n#### Added\n\n- Added `partition` parameter to the List 3D Nodes endpoint for supporting parallel requests.\n- Added `sortByNodeId` parameter to the List 3D Nodes endpoint, improving request latency in most cases if set to `true`.\n\n## 2021-02-26\n\n### Entity matching\n\n#### Fixed\n\n- Fixed a bug in the documentation for Entity matching. The (job) `status` shall be capitalized string.\n\n## 2020-12-22\n\n### Files\n\n#### Added\n\n- New field `fileType` inside `derivedFields` to refer to a pre-defined subset of MIME types.\n- New filter `fileType` inside `derivedFields` to find files with a pre-defined subset of MIME types.\n\n## 2020-10-20\n\n### Files\n\n#### Added\n\n- New field `geoLocation` to refer to the geographic location of the file.\n- New filter `geoLocation` to find files matching a certain geographic location.\n\nTo learn how to leverage new geoLocation features, [follow our guide](https://developer.cognite.com/dev/concepts/resource_types/files.html).\n\n## 2020-08-29\n\n### Files\n\n#### Added\n\n- New field `directory` referring to the directory in the source containing the file.\n- New filter `directoryPrefix` allows you to find Files matching a certain directory prefix.\n\n## 2020-08-05\n\n### Files\n\n#### Added\n\n- New field `labels` allows you to attach labels to Files upon creation or updating.\n- New filter `labels` allows you to find Files that have been annotated with specific labels.\n\n## 2020-07-08\n\n### IAM (Identity and access management)\n\n#### Added\n\n- New project field `applicationDomains`. If this field is set, users only sign in to the project through applications hosted on\n  a whitelisted domain. [Read more](https://developer.cognite.com/dev/guides/iam/#application-domains).\n\n## 2020-07-01\n\n### Events\n\n#### Added\n\n- New aggregation [`uniqueValues`](tag/Events/operation/aggregateEvents) allows you to find different types, subtypes of events in your project.\n\n## 2020-06-29\n\n### Labels\n\n#### Added\n\n- New data organization resource: [labels](tag//Labels). Manage terms that you can use to annotate and group assets.\n\n### Assets\n\n#### Added\n\n- New filter `labels` allows you to find resources that have been annotated with specific labels.\n\n### Time series\n\n#### Added\n\n- Combine various input time series, constants and operators with on-the-fly [synthetic time series](https://developer.cognite.com/dev/concepts/resource_types/synthetic_timeseries.html).\n\n## 2020-04-28\n\n### Events\n\n#### Added\n\n- New filtering capabilities to find open events [`endTime=null`](tag/Events/operation/advancedListEvents).\n- New filtering capabilities to find all events intersecting a timespan using [activeAtTime](tag/Events/operation/advancedListEvents).\n\n## 2020-03-12\n\n### General\n\n#### Added\n\n- New data organization resource: [data sets](tag//Data-sets). Document and track data lineage, ensure data integrity, and allow 3rd parties to write their insights securely back to your Cognite Data Fusion (CDF) project.\n- New attribute `datasetId` introduced in assets, files, events, time series and sequences.\n- New filter `dataSetIds` allows you to narrow down results to resources containing `datasetId` by a list of ids or externalIds of a data set. Supported by assets, files, events, time series and sequences.\n- We have added a new aggregation endpoint for [time series](tag/Files/operation/aggregateFiles). With this endpoint, you can find out how many results in a tenant meet the criteria of a filter. We will expand this feature to add more aggregates than `count`.\n\n### Groups\n\n#### Added\n\n- Introduced a new capability: `datasetsAcl` for managing access to data set resources.\n- New scope `datasetScope` for assets, files, events, time series and sequences ACLs. Allows you to scope down access to resources contained within a specified set of data sets.\n\n## 2020-03-10\n\n### 3D\n\n#### Fixed\n\n- We fixed a bug in the documentation of [3D model revisions](tag/3D-Model-Revisions/operation/get3DNodesById). Applications should anticipate that 3D nodes may not have a bounding box.\n\n## 2020-02-25\n\n### Assets\n\n#### Added\n\n- We have added a new [aggregation endpoint](tag/Assets/operation/aggregateAssets) for assets. With this endpoint, you can find out how many assets in a tenant meet the criteria of a filter. We will expand this feature to add more aggregates than `count`.\n\n### Events\n\n#### Added\n\n- We have added a new [aggregation endpoint](tag/Events/operation/aggregateEvents) for events. With this endpoint, you can find out how many events in a tenant meet the criteria of a filter. We will expand this feature to add more aggregates than `count`.\n\n## 2020-02-12\n\n### Assets\n\n#### Added\n\n- We have added new aggregation properties: `depth` and `path`. You can use the properties in the filter and retrieve endpoints.\n\n## 2020-02-10\n\n### Assets\n\n#### Added\n\n- Added the property `parentExternalId` which is returned for all assets which have a parent with a defined `externalId`.\n\n## 2019-12-09\n\n### General\n\n#### Added\n\n- Added `assetSubtreeIds` as a parameter to filter, search, and list endpoints for all core resources. `assetSubtreeIds` allows you to specify assets that are subtree roots, and then only retrieve resources that are related to assets within those subtrees.\n\n## 2019-12-04\n\n### Assets\n\n#### Added\n\n- Added the ability to [filter](tag/Assets/operation/searchAssets) assets by parent external IDs.\n\n## 2019-11-18\n\n### Events\n\n#### Added\n\n- [Added the ability to filter events by the external ID of linked assets](tag/Events/operation/advancedListEvents)\n\n## 2019-11-12\n\n### Access control\n\n#### Removed\n\n- Groups can no longer be created with a permissions field in v0.5.\n\n## 2019-10-31\n\n### Assets\n\n#### Added\n\n- [Asset search](/api/v1/#operation/searchAssets) now has a `search.query` parameter. This uses an improved search algorithm that tries a wider range of variations of the input terms and gives much better relevancy ranking than the existing `search.name` and `search.description` fields.\n\n### Time Series\n\n#### Changed\n\n- The `search.query` parameter for [time series search](/api/v1/#operation/searchTimeSeries) now uses an improved search algorithm that tries a wider range of variations of the input terms, and gives much better relevancy ranking.\n\n## 2019-10-23\n\n### Files\n\n#### Added\n\n- Added support for updating the `mimeType` for existing files in files/update requests.\n\n## 2019-10-18\n\n### Time Series\n\n#### Added\n\n- Time series expanded their filtering capabilities with new `Filter time series` endpoint, allowing for additional filtering by:\n\n  - Name\n  - Unit\n  - Type of time series: string or step series\n  - Metadata objects\n  - ExternalId prefix filtering\n  - Create and last updated time ranges\n\n  Endpoint in addition support pagination and partitioning. Check out detailed API documentation [here](/api/v1/#operation/listTimeSeries).\n\n## 2019-10-16\n\n### Events\n\n#### Added\n\n- [Added the ability to sort events on startTime, endTime, createdTime, and lastUpdatedTime](tag/Events/operation/advancedListEvents)\n\n## 2019-10-02\n\n### Sequences\n\n#### Added\n\n- Introducing the new **sequences** core resource type that lets you store numerically indexed multi-column rows of data. Connect your sequences to physical assets and to their source systems through `externalId` and metadata support. Read more [here](https://developer.cognite.com/dev/concepts/resource_types/sequences.html).\n\n## 2019-09-30\n\n### 3D\n\n#### Added\n\n- Added endpoint to get multiple nodes for a 3D model by their IDs.\n- Added endpoint to get asset mappings for multiple node IDs or asset IDs.\n\n## 2019-09-23\n\n### Files\n\n#### Added\n\n- Added support for filter on `rootAssetIds` in files GET /files (using query parameter) and POST /files/list (in request body).\n\n## 2019-09-16\n\n### Assets and Events\n\n#### Added\n\n- Added support for `partition` in `/assets` and `/events` to support parallel retrieval. See guide for usage [here](./concepts/pagination)\n\n## 2019-08-22\n\n### 3D\n\n#### Added\n\n- Added the query parameter `intersectsBoundingBox` to the list asset mappings endpoint. The parameter filters asset mappings to the assets where the bounding box intersects (or is contained within) the specified bounding box.\n\n## 2019-08-21\n\n### Files\n\n#### Added\n\n- Added support for sourceCreatedTime and sourceModifiedTime fields in files v1 endpoints.\n\n### Assets\n\n#### Added\n\n- Allow the parent asset ID to be updated. The root asset ID must be preserved, and you can not convert a non-root asset to a root asset or vice versa.\n- Support for ignoreUnknownIds when deleting assets.\n\n## 2019-08-15\n\n### 3D\n\n#### Added\n\n- Properties field for 3D nodes, extracted from uploaded 3D files.\n- Ability to filter nodes with a specific set of properties.\n\n## 2019-07-24\n\n### Files\n\n#### Changed\n\n- Allow lookup of names with length up to 256 characters (was 50) for GET /files and POST /files/search operations.\n- Allow creating and retrieving files with mimeType length up to 256 characters (was 64).\n\n## 2019-07-15\n\n### Time series\n\n#### Added\n\n- Added query parameter `rootAssetIds` to list time series endpoint. Returns time series that are linked to an asset that has one of the root assets as an ancestor.\n\n## 2019-07-11\n\nList of changes for initial API v1 release in comparison to previous version - API 0.5\n\n### General\n\n#### Added\n\n- Support for `externalId` added across resource types. `externalId` lets you define a unique ID for a data object. Learn more: [External IDs](https://developer.cognite.com/dev/concepts/external_id.html)\n- `externalIdPrefix` added as a parameter to the list events, assets and files operations.\n- Richer filtering on the list assets, files and events operations.\n- Search, list and filter operations for assets, events and files now support filtering on source and metadata field values.\n\n#### Changed\n\n- Core resources standardize on HTTP methods and URI naming for common operations such as search, partial updates, delete, list and filter\n- API responses are no longer wrapped in a top level `data` object.\n- Standardized pagination across resources through `limit`, `cursor` and `nextCursor` parameters.\n- The `limit` parameter no longer implicitly rounds down requested page size to maximum page size.\n- Standardized error responses and codes across all resources. Errors across CDF can be parsed into a single model.\n- Overall improvements to reference documentation. Including documented input constraints, required fields, individual attribute descriptions.\n\n#### Removed\n\n- The `sourceId` field has been removed from resources. Use `externalId` instead of `sourceId`+`source` to define unique IDs for data objects.\n- Sorting is removed from the search operations for files, assets, events and time series. Results are sorted by relevance.\n- `offset` and `previousCursor` parameters are no longer supported for pagination across resources.\n- Fetching an asset subtree is no longer supported by files, assets, events and time series.\n\n### Assets\n\n#### Added\n\n- Ability to select only root assets though new `root` filter.\n- Added the `rootId` field to specify the top element in an asset hierarchy.\n- Added the ability to filter by the root asset ID. This allows you to scope queries for one or many asset hierarchies.\n- List Assets allows for filtering assets belonging to set of root assets, specified by list of asset internal ids. New query parameter: `rootIds`.\n- Filter and Search Assets allows or filtering assets belonging to a set of root assets, specified by combination of internal and external asset identifiers. New body attribute: `rootIds`.\n\n#### Changed\n\n- Updating a single asset is no longer supported through a separate endpoint. Use the update multiple endpoint instead.\n- Delete assets by default removes only leaf assets (assets without children). New parameter 'recursive' allows for enabling recursive removal of the entire subtree of the asset pointed by ID (API 0.5 behaviour).\n\n#### Removed\n\n- Overwriting assets is no longer supported.\n- Filtering assets by their complete description is no longer supported.\n- Locating assets fuzzily by name has been removed. Instead, search for assets on the `name` property.\n- When searching assets, querying over both name and description in the same query is no longer supported.\n- The experimental query parameter `boostName` has been removed from the search for assets operation.\n- Removed the `path` and `depth` fields.\n\n### Events\n\n#### Added\n\n- Events can now be filtered on asset ID in combination with other filters.\n- New filter `rootAssetIds` allows for narrowing down events belonging only to list or specified root assets. Supported by Filter and Search API\n\n#### Removed\n\n- Events can no longer be filtered by empty description.\n- The 'dir' parameter has been removed from the search events operation.\n\n### Files\n\n#### Added\n\n- Filtering files by `assetIds` in list files operations now support multiple assets in the same request.\n\n#### Changed\n\n- Download file content has changed from HTTP GET to HTTP POST method.\n- We have renamed the `fileType` field to `mimeType`. The field now requires a MIME formatted string (e.g. `text/plain`).\n- We have renamed the `uploadedAt` field to `uploadedTime`.\n- Resumable is now the default behavior for file uploads.\n- Update metadata for single files is no longer supported by a separate operation. Instead, use the update multiple operation.\n\n#### Removed\n\n- Replace files metadata endpoint has been removed.\n- Directory has been removed as a property of files.\n- Updating the `name` or `mimeType` of a file through the update multiple files operation is no longer supported.\n- Query parameter for specifying the sort direction has been removed from list all files operations.\n\n### Raw\n\n#### Changed\n\n- Raw has changed structure to become resource-oriented. The URL structure has changed.\n- Recursively delete of tables and rows when deleting a database is now the default behavior without a control parameter.\n\n### Time series\n\n#### Added\n\n- Support for adding datapoints by `id` and `externalId` of time series. Adding datapoints to time series by `name` has been removed.\n- Add ability to update the new `externalId` attribute for time series.\n- Allow to set `externalId` during creation of time series. `ExternalId` requires uniqueness across time series.\n- Consolidate multiple APIs to allow adding datapoints into a single endpoint. Allows datapoints to be added to multiple time series at the same time.\n- Retrieve data points by using `id` and `externalId` of the time series.\n- Time series created through API v1 are not discoverable by API 0.3, 0.4, 0.5 and 0.6 by default. Introduce the option to enable this compatibility by setting new attribute - `legacyName` on time series creation. Value is required to be unique.\n\n#### Changed\n\n- Get latest datapoints has been reworked. Introduces support for `id` and `externalId` lookup as well retrieval for multiple time series within the same request.\n- Time series name is no longer limited by uniqueness. Note that time series (meta objects) created by API v1 will not be discoverable by older API versions.\n- Delete time series endpoint has been redesigned to allow deletion of multiple time series by `id` and `externalId`.\n- Delete single and multiple datapoints endpoint has been redesigned and consolidated into a single endpoint. New delete allows selection of multiple time series and time ranges by `id` and `externalId`. Selecting by `name` is no longer available.\n- Update multiple time series restructured to support lookup by `externalId`.\n- Retrieve time series by ID endpoint restructured adding the ability to get time series by `externalId`.\n- Set limit for data point value to min -1E100, max 1E100.\n\n#### Removed\n\n- Experimental feature for performing calculations across multiple time series (synthetic time series), function and alias attributes are no longer available.\n- The experimental query parameter `boostName` has been removed from search operation.\n- Short names for aggregate functions are no longer supported.\n- Ability to remove time series by `name` have been removed as names are no longer unique identifiers.\n- Select multiple time series and time ranges by `name` is no longer available.\n- The ability to update `isString` and `isStep` attributes is removed. The attributes are not intended to be modified after creation of time series.\n- The endpoint for updating single time series is removed. Use the update multiple time series endpoint instead.\n- Remove ability to overwrite time series object by `id`. Use the update multiple time series endpoint instead.\n- The ability to retrieve time series matching by `name` has been removed. Use `externalId` instead.\n- The ability to retrieve by `id` from a single time series has been removed. Use retrieve multiple datapoints for multiple time series instead.\n- The ability to retrieve time-aligned datapoints through \"dataframe\" API has been removed. Similar functionality is available through our supported SDKs.\n- The ability to add datapoints to time series by `name` has been removed.\n- The ability to look up by time series `name` has been removed.\n\n### IAM (Identity and access management)\n\n#### Added\n\n- The login status endpoint includes the ID of the API key making the request (new attribute: `apiKeyId`), if the request used an API key.\n\n#### Changed\n\n- The user resource type has been replaced with service accounts. Users from previous API versions are equivalent to service accounts.\n- Adding, listing and removing users from a group has been replaced by equivalent operations for service accounts.\n- Retrieve project returns a single object instead of a list.\n- API keys endpoints for list/create rename `userId` attribute to `serviceAccountId`.\n\n#### Removed\n\n- List and create groups no longer use the `permissions` and `source` attributes.\n\n### 3D\n\n#### Added\n\n- New 3D API lets you upload and process 3D models. Supported format: FBX.\n- Ability to create and maintain multiple revisions for the 3D models.\n- API for mapping relationships between 3D model nodes and asset hierarchy.\n"
     },
     {
       "name": "Token",
@@ -60480,7 +60893,7 @@
     },
     {
       "name": "Data Modeling",
-      "description": "Use the Data Model Storage API to manage your data in CDF.\n\nYou define a data model  with views and data containers.  Data containers specify how the service stores data.  \nViews define the logical view of the stored data.  Nodes and edges are representations of data containers. \nWe call these node and edge representations \"instances\".  Each node or edge can hold one or more data \ncontainers.  You can query nodes and edges using views. Views combine data from one or more data containers.\n\nA container represents a bag of properties.  These properties have a type. They also have optional constraints, \ndefault values, and you can choose to index them.\n\nEach data container has a default view available so you can query all its properties.\n\nA data model is a collection (set) of views. Use the data model to group and structure views into a \nrecognizable, and understood model. The model represents a reusable collection of data.\n\nEach data model has a version. A data model can also import other data models, so you can reuse views.\n\nAll resources described have to belong to a space.  You use a space to create a logical grouping of your \nresources, and to act as a governance boundary.  A space defines a namespace. \n\nYou use the space (name) and the external-id - externalId - for the resource to identify it.  For view or \ncontainer properties, the external-id for the view - or container - is part of the identifier. This means you \ncan have resources using the exact external-id in two different spaces.\n"
+      "description": "Use the Data Modeling Service to build industrial knowledge graphs. For more information, see [Data modeling](https://docs.cognite.com/cdf/dm).\n\nThis page contains the specifications for the 5 core data modeling resources:\n  - Spaces\n  - Instances (Nodes & Edges)\n  - Containers\n  - Views\n  - Data Models\n"
     },
     {
       "name": "Events",

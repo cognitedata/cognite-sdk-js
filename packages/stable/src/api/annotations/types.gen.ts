@@ -367,6 +367,8 @@ export interface AnnotationsIsoPlanAnnotation {
     relativePosition?: string;
     /** Keeps track of the modification to an annotation */
     revision?: string;
+    /** Store the dimensions of a valve or spade */
+    sizeAndClass?: AnnotationsSizeAndClassType;
     /** The text input */
     text?: string;
     /** The location of the hotspot represented with a bounding box */
@@ -519,6 +521,17 @@ export interface AnnotationsPolyLine {
      */
     confidence?: number;
     vertices: AnnotationsPoint[];
+}
+/**
+ * Store the dimension, units and class of a given annotation
+ */
+export interface AnnotationsSizeAndClassType {
+    /** The class type of the valve or spade */
+    classType?: string;
+    /** The size of the valve or spade */
+    size?: number;
+    /** The units of the size (mm/inches) */
+    unit?: string;
 }
 /**
  * Models an extracted text region in an image
