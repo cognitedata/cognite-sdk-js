@@ -3,7 +3,7 @@
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-describe('User Profiles unit test', () => {
+describe('User Profiles', () => {
   let client: CogniteClient;
   beforeEach(() => {
     client = setupLoggedInClient();
