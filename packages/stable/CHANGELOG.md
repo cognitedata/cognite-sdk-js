@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.5.0...@cognite/sdk@9.6.0) (2023-12-06)
+
+### Features
+
+- user profiles api ([#1019](https://github.com/cognitedata/cognite-sdk-js/issues/1019)) ([33eee73](https://github.com/cognitedata/cognite-sdk-js/commit/33eee73e40d8306ee145301641d7af1cdba2e3c5))
+
 # [9.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.4.0...@cognite/sdk@9.5.0) (2023-12-01)
 
 ### Features
