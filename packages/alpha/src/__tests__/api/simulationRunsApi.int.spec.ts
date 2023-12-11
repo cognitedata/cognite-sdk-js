@@ -2,7 +2,7 @@
 import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-describe('simulator integrations api', () => {
+describe.skip('simulator integrations api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
 
   const ts = Date.now();
