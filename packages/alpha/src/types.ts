@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { SinglePatch, Timestamp } from '@cognite/sdk';
+import { SinglePatch, SortOrder, Timestamp } from '@cognite/sdk';
 import {
   CogniteExternalId,
   CogniteInternalId,
@@ -98,8 +98,8 @@ export interface SimulatorCreate {
 
 export interface SimulatorIntegration {
   id: CogniteInternalId;
-  externalId?: CogniteExternalId;
-  simulatorExternalId?: CogniteExternalId;
+  externalId: CogniteExternalId;
+  simulatorExternalId: CogniteExternalId;
   heartbeat: Timestamp;
   dataSetId: CogniteInternalId;
   connectorVersion: string;
@@ -114,8 +114,8 @@ export interface SimulatorIntegration {
 }
 
 export interface SimulatorIntegrationCreate {
-  externalId?: CogniteExternalId;
-  simulatorExternalId?: CogniteExternalId;
+  externalId: CogniteExternalId;
+  simulatorExternalId: CogniteExternalId;
   dataSetId?: CogniteInternalId;
   connectorVersion?: string;
   simulatorVersion?: string;
@@ -138,11 +138,17 @@ export interface SimulationRunFilter {
   simulatorName?: string;
   modelName?: string;
   routineName?: string;
-  status?: string;
+  status?: SimulationRunStatus;
 }
 
-export interface SimulationRunsFilterQuery extends FilterQuery {
+export interface SortItem {
+  property: string;
+  order: SortOrder;
+}
+
+export interface SimulationRunFilterQuery extends FilterQuery {
   filter?: SimulationRunFilter;
+  sort?: SortItem[];
 }
 
 export interface SimulatorPatch {
@@ -159,33 +165,45 @@ export interface SimulatorPatch {
   };
 }
 
-export interface SimulatorChange extends SimulatorPatch, InternalId { }
+export interface SimulatorChange extends SimulatorPatch, InternalId {}
 
-/*
-modelName and routineName will have to be updated in the future to reference the API Resources
-i.e modelId and routineId
-*/
+export type SimulationRunType = 'external' | 'manual' | 'scheduled';
+
+export const SimulationRunType = {
+  external: 'external' as SimulationRunType,
+  manual: 'manual' as SimulationRunType,
+  scheduled: 'scheduled' as SimulationRunType,
+};
 
 export interface SimulationRunCreate {
   simulatorName: string;
   modelName: string;
   routineName: string;
-  runType: string;
-  validationEndTime: Timestamp;
-  queue: boolean;
+  runType: SimulationRunType;
+  validationEndTime?: Date;
+  queue?: boolean;
 }
+
+export type SimulationRunStatus = 'ready' | 'running' | 'success' | 'failure';
+
+export const SimulationRunStatus = {
+  ready: 'ready' as SimulationRunStatus,
+  running: 'running' as SimulationRunStatus,
+  success: 'success' as SimulationRunStatus,
+  failure: 'failure' as SimulationRunStatus,
+};
 
 export interface SimulationRun {
   id: CogniteInternalId;
   simulatorName: string;
   modelName: string;
   routineName: string;
-  status: string;
-  validationEndTime: Timestamp;
-  statusMessage: string;
-  eventId: number;
-  runType: string;
-  userId: string;
-  createdTime: Timestamp;
-  lastUpdatedTime: Timestamp;
+  status: SimulationRunStatus;
+  validationEndTime?: Date;
+  statusMessage?: string;
+  eventId?: CogniteInternalId;
+  runType: SimulationRunType;
+  userId?: string;
+  createdTime: Date;
+  lastUpdatedTime: Date;
 }
