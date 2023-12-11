@@ -134,6 +134,20 @@ export interface SimulatorIntegrationFilterQuery extends FilterQuery {
   filter?: SimulatorIntegrationFilter;
 }
 
+// test yalc
+export interface SimulationRunFilter {
+  simulatorName?: string;
+  modelName?: string;
+  routineName?: string;
+  status?: string;
+}
+
+export interface SimulationRunsFilterQuery extends FilterQuery {
+  filter?: SimulationRunFilter;
+}
+
+/// end test yalc
+
 export interface SimulatorPatch {
   update: {
     fileExtensionTypes?: SinglePatch<string[]>;
@@ -148,4 +162,33 @@ export interface SimulatorPatch {
   };
 }
 
-export interface SimulatorChange extends SimulatorPatch, InternalId {}
+export interface SimulatorChange extends SimulatorPatch, InternalId { }
+
+/*
+modelName and routineName will have to be updated in the future to reference the API Resources
+i.e modelId and routineId
+*/
+
+export interface SimulationRunCreate {
+  simulatorName: string;
+  modelName: string;
+  routineName: string;
+  runType: string;
+  validationEndTime: Timestamp;
+  queue: boolean;
+}
+
+export interface SimulationRun {
+  id: CogniteInternalId;
+  simulatorName: string;
+  modelName: string;
+  routineName: string;
+  status: string;
+  validationEndTime: Timestamp;
+  statusMessage: string;
+  eventId: number;
+  runType: string;
+  userId: string;
+  createdTime: Timestamp;
+  lastUpdatedTime: Timestamp;
+}

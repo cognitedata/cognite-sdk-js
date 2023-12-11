@@ -7,11 +7,14 @@ import {
   SimulatorIntegrationFilterQuery,
   SimulatorFilterQuery,
   SimulatorChange,
+  SimulationRunsFilterQuery,
 } from '../../types';
 import { IntegrationsAPI } from './integrationsApi';
+import { SimulationRunsAPI } from './simulationRunsApi';
 
 export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   private integrationsApi: IntegrationsAPI;
+  private runsApi: SimulationRunsAPI;
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
 
@@ -19,6 +22,12 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
 
     this.integrationsApi = new IntegrationsAPI(
       `${resourcePath}/integrations`,
+      client,
+      metadataMap
+    );
+
+    this.runsApi = new SimulationRunsAPI(
+      `${resourcePath}/runs`,
       client,
       metadataMap
     );
@@ -52,5 +61,13 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
 
   public deleteIntegrations = async (ids: IdEither[]) => {
     return this.integrationsApi.delete(ids);
+  };
+
+  public listRuns = async (filter?: SimulationRunsFilterQuery) => {
+    return this.runsApi.list(filter);
+  };
+
+  public createRuns = async (items: any[]) => {
+    return this.runsApi.create(items);
   };
 }
