@@ -1,4 +1,9 @@
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import {
+  BaseResourceAPI,
+  CDFHttpClient,
+  CogniteInternalId,
+  MetadataMap,
+} from '@cognite/sdk-core';
 import { IdEither } from '@cognite/sdk';
 import {
   Simulator,
@@ -7,7 +12,8 @@ import {
   SimulatorIntegrationFilterQuery,
   SimulatorFilterQuery,
   SimulatorChange,
-  SimulationRunsFilterQuery,
+  SimulationRunCreate,
+  SimulationRunFilterQuery,
 } from '../../types';
 import { IntegrationsAPI } from './integrationsApi';
 import { SimulationRunsAPI } from './simulationRunsApi';
@@ -63,11 +69,15 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     return this.integrationsApi.delete(ids);
   };
 
-  public listRuns = async (filter?: SimulationRunsFilterQuery) => {
+  public listRuns = async (filter?: SimulationRunFilterQuery) => {
     return this.runsApi.list(filter);
   };
 
-  public createRuns = async (items: any[]) => {
-    return this.runsApi.create(items);
+  public runSimulation = async (items: SimulationRunCreate[]) => {
+    return this.runsApi.run(items);
+  };
+
+  public retrieveRuns = async (ids: CogniteInternalId[]) => {
+    return this.runsApi.retrieve(ids);
   };
 }
