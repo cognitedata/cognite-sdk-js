@@ -134,7 +134,6 @@ export interface SimulatorIntegrationFilterQuery extends FilterQuery {
   filter?: SimulatorIntegrationFilter;
 }
 
-// test yalc
 export interface SimulationRunFilter {
   simulatorName?: string;
   modelName?: string;
@@ -145,8 +144,6 @@ export interface SimulationRunFilter {
 export interface SimulationRunsFilterQuery extends FilterQuery {
   filter?: SimulationRunFilter;
 }
-
-/// end test yalc
 
 export interface SimulatorPatch {
   update: {
