@@ -9,6 +9,11 @@ Types are written to `types.gen.ts` for each service (e.g. `documents`)
 and automatically exported. Only services configured via a `codegen.json`
 file is processed, and will generate types for its given configuration.
 
+## Things to be aware of
+
+1. **Date based fields will be a numeric type**. This can be solved through AST manipulation, and may be fixed in the future.
+2. **Changes like renaming component definition in the service-contract/openapi spec, will cause a breaking change in the cognite-sdk-js**. Essentially names are copied from the openapi spec. Treat your openapi spec with a strict fashion to avoid unecesarry brekaing changes in the cognite-sdk-js. e.g. renaming your MyBadlyNamedResponse to something more suitable, will result in a breaking change and is discourage.
+
 ## OpenAPI document snapshot
 
 In order to have build reproducability we keep a copy of the OpenAPI document
