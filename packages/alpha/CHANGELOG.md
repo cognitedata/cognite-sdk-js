@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.12.4...@cognite/sdk-alpha@0.13.0) (2023-12-14)
+
+### Features
+
+- **alpha:** add simulation runs ([#1043](https://github.com/cognitedata/cognite-sdk-js/issues/1043)) ([6a2d518](https://github.com/cognitedata/cognite-sdk-js/commit/6a2d518209f782439583e0eba2c54fea05016614))
+
 ## [0.12.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.12.3...@cognite/sdk-alpha@0.12.4) (2023-12-06)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
