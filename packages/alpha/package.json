@@ -14,6 +14,7 @@
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn build",
     "build": "yarn clean && rollup -c && yarn esCheck",
+    "local-publish": "yarn build && yalc push",
     "watch": "rollup -cw",
     "esCheck": "es-check es5 './dist/index.js'",
     "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",

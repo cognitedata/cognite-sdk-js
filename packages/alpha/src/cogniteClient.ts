@@ -4,8 +4,8 @@ import {
   CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
 import { version } from '../package.json';
-import { SimulatorsAPI } from './api/simulators/simulatorsApi';
 import { accessApi } from '@cognite/sdk-core';
+import { SimulatorsAPI } from './api/simulators/simulatorsApi';
 
 export default class CogniteClientAlpha extends CogniteClientStable {
   private simulatorsApi?: SimulatorsAPI;
