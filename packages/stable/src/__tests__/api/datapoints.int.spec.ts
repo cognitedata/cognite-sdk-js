@@ -143,7 +143,6 @@ describe('Datapoints integration test for monthly granularity', () => {
         datapoints,
       },
     ]);
-
   });
   afterAll(async () => {
     await client.timeseries.delete([{ id: timeserie.id }]);
@@ -184,8 +183,6 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[1].datapoints[1] as DatapointAggregate).timestamp).toEqual(
       new Date(2022, 10, 1)
     );
-
-
   });
 
   test('retrieve monthly granularity for two consecutive months in different years', async () => {

@@ -4,6 +4,7 @@ import { BaseResourceAPI } from '@cognite/sdk-core';
 import {
   DatapointsDeleteRequest,
   DatapointAggregates,
+  DatapointAggregate,
   Datapoints,
   DatapointsMultiQuery,
   IgnoreUnknownIds,
@@ -13,6 +14,8 @@ import {
   DatapointInfo,
   Timestamp,
   DatapointsMonthlyGranularityMultiQuery,
+  DoubleDatapoint,
+  StringDatapoint
 } from '../../types';
 
 export class DataPointsAPI extends BaseResourceAPI<
@@ -86,24 +89,35 @@ export class DataPointsAPI extends BaseResourceAPI<
       // Call the API for each month in parallel and save it in a variable
       const results = await Promise.all(promises);
 
-      // Merge the datapoints into a single array
-      const mergedDatapoints = [];
+      // Merge the datapoints into a single item per time series
+      const mergedDatapoints: { [id: number]: DatapointAggregate[] | DoubleDatapoint[] | StringDatapoint[]; } = {};
+      const mergedTimeseries: { [id: number]: Datapoints | DatapointAggregates; } = {};
 
       for (const result of results) {
-        // Check if the array contains data before pushing it to the merged datapoints array
-        if (result?.length && result[0]?.datapoints) {
-          const datapoints = result[0].datapoints;
-          // Merge the datapoints into the result array
-          mergedDatapoints.push(...datapoints);
+        // There can be multiple time series in a response, so we need to loop through each item
+        for (const item of result) {
+          if(!mergedTimeseries[item.id]) {
+            mergedTimeseries[item.id] = item;
+          }
+          if (item?.datapoints?.length) {
+            if (!mergedDatapoints[item.id]) {
+              mergedDatapoints[item.id] = item.datapoints;
+            } else {
+              mergedDatapoints[item.id].concat(item.datapoints);
+            }
+          }
         }
+
+      }
+      const resultSet: DatapointAggregates[] = []
+
+      for(const key in mergedTimeseries) {
+        const item = mergedTimeseries[key];
+        item.datapoints = mergedDatapoints[key];
+        resultSet.push(item as DatapointAggregates);
       }
 
-      // Clone the first item from the results array
-      const firstItem = results[0][0] as DatapointAggregates;
-      // replace the merged datapoints with the datapoints from the first item
-      firstItem.datapoints = mergedDatapoints;
-
-      return [firstItem];
+      return resultSet;
     }
 
     return this.retrieveDatapointsEndpoint<DatapointAggregates[]>(query);
