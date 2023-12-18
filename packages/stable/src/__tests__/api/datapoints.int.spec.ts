@@ -76,6 +76,7 @@ describe('Datapoints integration test', () => {
 describe('Datapoints integration test for monthly granularity', () => {
   let client: CogniteClient;
   let timeserie: Timeseries;
+  let timeserie2: Timeseries;
 
   const datapoints = [
     // Create two data points in October 2022
@@ -134,15 +135,25 @@ describe('Datapoints integration test for monthly granularity', () => {
         datapoints,
       },
     ]);
+
+    [timeserie2] = await client.timeseries.create([{ name: 'tmp2' }]);
+    await client.datapoints.insert([
+      {
+        id: timeserie2.id,
+        datapoints,
+      },
+    ]);
+
   });
   afterAll(async () => {
     await client.timeseries.delete([{ id: timeserie.id }]);
+    await client.timeseries.delete([{ id: timeserie2.id }]);
   });
 
   test('retrieve monthly granularity for two consecutive months in same year', async () => {
     const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
       {
-        items: [{ id: timeserie.id }],
+        items: [{ id: timeserie.id }, { id: timeserie2.id }],
         start: new Date(2022, 9, 1),
         end: new Date(2022, 10, 30),
         aggregates: ['sum'],
@@ -160,6 +171,21 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
       new Date(2022, 10, 1)
     );
+
+    // check that there is two timeseries in the response
+    expect(response[1].datapoints.length).toBe(2);
+    // Check that the response contains the correct number of data points
+    expect((response[1].datapoints[0] as DatapointAggregate).sum).toBe(30);
+    expect((response[1].datapoints[1] as DatapointAggregate).sum).toBe(70);
+    // Check timestamps
+    expect((response[1].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[1].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
+
+
   });
 
   test('retrieve monthly granularity for two consecutive months in different years', async () => {
