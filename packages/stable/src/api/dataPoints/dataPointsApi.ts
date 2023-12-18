@@ -15,7 +15,7 @@ import {
   Timestamp,
   DatapointsMonthlyGranularityMultiQuery,
   DoubleDatapoint,
-  StringDatapoint
+  StringDatapoint,
 } from '../../types';
 
 export class DataPointsAPI extends BaseResourceAPI<
@@ -90,13 +90,20 @@ export class DataPointsAPI extends BaseResourceAPI<
       const results = await Promise.all(promises);
 
       // Merge the datapoints into a single item per time series
-      const mergedDatapoints: { [id: number]: DatapointAggregate[] | DoubleDatapoint[] | StringDatapoint[]; } = {};
-      const mergedTimeseries: { [id: number]: Datapoints | DatapointAggregates; } = {};
+      const mergedDatapoints: {
+        [id: number]:
+          | DatapointAggregate[]
+          | DoubleDatapoint[]
+          | StringDatapoint[];
+      } = {};
+      const mergedTimeseries: {
+        [id: number]: Datapoints | DatapointAggregates;
+      } = {};
 
       for (const result of results) {
         // There can be multiple time series in a response, so we need to loop through each item
         for (const item of result) {
-          if(!mergedTimeseries[item.id]) {
+          if (!mergedTimeseries[item.id]) {
             mergedTimeseries[item.id] = item;
           }
           if (item?.datapoints?.length) {
@@ -107,11 +114,10 @@ export class DataPointsAPI extends BaseResourceAPI<
             }
           }
         }
-
       }
-      const resultSet: DatapointAggregates[] = []
+      const resultSet: DatapointAggregates[] = [];
 
-      for(const key in mergedTimeseries) {
+      for (const key in mergedTimeseries) {
         const item = mergedTimeseries[key];
         item.datapoints = mergedDatapoints[key];
         resultSet.push(item as DatapointAggregates);
