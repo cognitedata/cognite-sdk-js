@@ -169,7 +169,7 @@ export class DataPointsAPI extends BaseResourceAPI<
   private async retrieveDatapointsEndpoint<
     T extends DatapointAggregates[] | Datapoints[] =
       | DatapointAggregates[]
-      | Datapoints[]
+      | Datapoints[],
   >(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
     const response = await this.post<ItemsWrapper<T>>(path, {
