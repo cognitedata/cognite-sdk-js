@@ -105,9 +105,7 @@ export class DataPointsAPI extends BaseResourceAPI<
             if (!mergedDatapoints[item.id]) {
               mergedDatapoints[item.id] = item.datapoints;
             } else {
-              mergedDatapoints[item.id] = mergedDatapoints[item.id].concat(
-                item.datapoints
-              );
+              mergedDatapoints[item.id].push(...item.datapoints);
             }
           }
         }
