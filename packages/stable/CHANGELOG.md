@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.6.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.6.0...@cognite/sdk@9.6.1) (2023-12-19)
+
+### Bug Fixes
+
+- return all time series when asking for multiple time series of monthly aggregates ([#1045](https://github.com/cognitedata/cognite-sdk-js/issues/1045)) ([129de8b](https://github.com/cognitedata/cognite-sdk-js/commit/129de8be32f4cd8c6c2bb0910accd17df618f7d9))
+
 # [9.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.5.0...@cognite/sdk@9.6.0) (2023-12-06)
 
 ### Features
