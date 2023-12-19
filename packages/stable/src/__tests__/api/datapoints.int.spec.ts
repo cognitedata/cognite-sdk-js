@@ -171,8 +171,6 @@ describe('Datapoints integration test for monthly granularity', () => {
     },
   ];
 
-
-
   beforeAll(async () => {
     client = setupLoggedInClient();
     [timeserie] = await client.timeseries.create([{ name: 'tmp' }]);
@@ -281,7 +279,7 @@ describe('Datapoints integration test for monthly granularity', () => {
   test('retrieve monthly granularity when there is a data gap between months', async () => {
     const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
       {
-        items: [{ id: timeserie.id }],
+        items: [{ id: timeserie.id }, { id: timeserie2.id }],
         start: new Date(2022, 9, 1),
         end: new Date(2023, 2, 15),
         aggregates: ['sum'],
@@ -336,7 +334,6 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[4] as DatapointAggregate).timestamp).toEqual(
       new Date(2023, 2, 1)
     );
-
   });
 
   test('retrieve monthly granularity for a year when there is missing data for some months', async () => {
