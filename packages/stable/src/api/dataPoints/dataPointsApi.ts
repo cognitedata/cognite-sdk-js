@@ -14,8 +14,6 @@ import {
   DatapointInfo,
   Timestamp,
   DatapointsMonthlyGranularityMultiQuery,
-  DoubleDatapoint,
-  StringDatapoint,
 } from '../../types';
 
 export class DataPointsAPI extends BaseResourceAPI<
@@ -91,26 +89,25 @@ export class DataPointsAPI extends BaseResourceAPI<
 
       // Merge the datapoints into a single item per time series
       const mergedDatapoints: {
-        [id: number]:
-          | DatapointAggregate[]
-          | DoubleDatapoint[]
-          | StringDatapoint[];
+        [id: number]: DatapointAggregate[];
       } = {};
       const mergedTimeseries: {
-        [id: number]: Datapoints | DatapointAggregates;
+        [id: number]: DatapointAggregates;
       } = {};
 
       for (const result of results) {
         // There can be multiple time series in a response, so we need to loop through each item
         for (const item of result) {
           if (!mergedTimeseries[item.id]) {
-            mergedTimeseries[item.id] = item;
+            mergedTimeseries[item.id] = item as DatapointAggregates;
           }
           if (item?.datapoints?.length) {
             if (!mergedDatapoints[item.id]) {
               mergedDatapoints[item.id] = item.datapoints;
             } else {
-              mergedDatapoints[item.id].concat(item.datapoints);
+              mergedDatapoints[item.id] = mergedDatapoints[item.id].concat(
+                item.datapoints
+              );
             }
           }
         }
