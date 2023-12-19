@@ -77,7 +77,6 @@ describe('Datapoints integration test for monthly granularity', () => {
   let client: CogniteClient;
   let timeserie: Timeseries;
   let timeserie2: Timeseries;
-
   const datapoints = [
     // Create two data points in October 2022
     {
@@ -125,6 +124,54 @@ describe('Datapoints integration test for monthly granularity', () => {
       value: 100,
     },
   ];
+  const datapoints2 = [
+    // Create two data points in October 2022
+    {
+      timestamp: new Date(2022, 9, 1),
+      value: 0,
+    },
+    {
+      timestamp: new Date(2022, 9, 2),
+      value: 10,
+    },
+    // Create two data points in November 2022
+    {
+      timestamp: new Date(2022, 10, 1),
+      value: 20,
+    },
+    {
+      timestamp: new Date(2022, 10, 2),
+      value: 30,
+    },
+    // Create two data points in December 2022
+    {
+      timestamp: new Date(2022, 11, 1),
+      value: 40,
+    },
+    {
+      timestamp: new Date(2022, 11, 2),
+      value: 50,
+    },
+    // Create a missing month in between, populated with data points in Feb 2023
+    {
+      timestamp: new Date(2023, 1, 1),
+      value: 60,
+    },
+    {
+      timestamp: new Date(2023, 1, 2),
+      value: 70,
+    },
+    {
+      timestamp: new Date(2023, 2, 1),
+      value: 80,
+    },
+    {
+      timestamp: new Date(2023, 2, 2),
+      value: 90,
+    },
+  ];
+
+
 
   beforeAll(async () => {
     client = setupLoggedInClient();
@@ -132,7 +179,7 @@ describe('Datapoints integration test for monthly granularity', () => {
     await client.datapoints.insert([
       {
         id: timeserie.id,
-        datapoints,
+        datapoints: datapoints,
       },
     ]);
 
@@ -140,7 +187,7 @@ describe('Datapoints integration test for monthly granularity', () => {
     await client.datapoints.insert([
       {
         id: timeserie2.id,
-        datapoints,
+        datapoints: datapoints2,
       },
     ]);
   });
@@ -174,8 +221,8 @@ describe('Datapoints integration test for monthly granularity', () => {
     // check that there is two timeseries in the response
     expect(response[1].datapoints.length).toBe(2);
     // Check that the response contains the correct number of data points
-    expect((response[1].datapoints[0] as DatapointAggregate).sum).toBe(30);
-    expect((response[1].datapoints[1] as DatapointAggregate).sum).toBe(70);
+    expect((response[1].datapoints[0] as DatapointAggregate).sum).toBe(10);
+    expect((response[1].datapoints[1] as DatapointAggregate).sum).toBe(50);
     // Check timestamps
     expect((response[1].datapoints[0] as DatapointAggregate).timestamp).toEqual(
       new Date(2022, 9, 1)
@@ -264,6 +311,32 @@ describe('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[4] as DatapointAggregate).timestamp).toEqual(
       new Date(2023, 2, 1)
     );
+
+    expect(response[1].datapoints.length).toBe(5);
+
+    // Check that the response contains the correct number of data points
+    expect((response[1].datapoints[0] as DatapointAggregate).sum).toBe(10); // October 2022
+    expect((response[1].datapoints[1] as DatapointAggregate).sum).toBe(50); // November 2022
+    expect((response[1].datapoints[2] as DatapointAggregate).sum).toBe(90); // December 2022
+    expect((response[1].datapoints[3] as DatapointAggregate).sum).toBe(130); // February 2023
+    expect((response[1].datapoints[4] as DatapointAggregate).sum).toBe(170); // March 2023
+    // Check timestamps
+    expect((response[1].datapoints[0] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 9, 1)
+    );
+    expect((response[1].datapoints[1] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 10, 1)
+    );
+    expect((response[1].datapoints[2] as DatapointAggregate).timestamp).toEqual(
+      new Date(2022, 11, 1)
+    );
+    expect((response[1].datapoints[3] as DatapointAggregate).timestamp).toEqual(
+      new Date(2023, 1, 1)
+    );
+    expect((response[0].datapoints[4] as DatapointAggregate).timestamp).toEqual(
+      new Date(2023, 2, 1)
+    );
+
   });
 
   test('retrieve monthly granularity for a year when there is missing data for some months', async () => {
