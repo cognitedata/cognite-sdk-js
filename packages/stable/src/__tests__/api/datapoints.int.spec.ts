@@ -460,6 +460,5 @@ describe('Datapoints integration test for monthly granularity', () => {
 
     expect(response[0].datapoints.length).toBe(0);
     expect(response[1].datapoints.length).toBe(0);
-    });
-
+  });
 });
