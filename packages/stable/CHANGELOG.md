@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.6.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.6.1...@cognite/sdk@9.6.2) (2023-12-22)
+
+### Bug Fixes
+
+- set empty array for no results ([#1046](https://github.com/cognitedata/cognite-sdk-js/issues/1046)) ([0ae93aa](https://github.com/cognitedata/cognite-sdk-js/commit/0ae93aa0e0ba55db9741138fc9b046a26e755883))
+
 ## [9.6.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.6.0...@cognite/sdk@9.6.1) (2023-12-19)
 
 ### Bug Fixes
