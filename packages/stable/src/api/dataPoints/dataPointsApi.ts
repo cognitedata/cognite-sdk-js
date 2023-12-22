@@ -114,7 +114,11 @@ export class DataPointsAPI extends BaseResourceAPI<
 
       for (const key in mergedTimeseries) {
         const item = mergedTimeseries[key];
-        item.datapoints = mergedDatapoints[key];
+        if (key in mergedDatapoints) {
+          item.datapoints = mergedDatapoints[key];
+        } else {
+          item.datapoints = [];
+        }
         resultSet.push(item as DatapointAggregates);
       }
 

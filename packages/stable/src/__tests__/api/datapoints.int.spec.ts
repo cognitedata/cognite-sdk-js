@@ -448,4 +448,17 @@ describe('Datapoints integration test for monthly granularity', () => {
       new Date(2022, 11, 1)
     );
   });
+  test('retrieve monthly granularity with empty result ste', async () => {
+    const response = await client.datapoints.retrieveDatapointMonthlyAggregates(
+      {
+        items: [{ id: timeserie.id }, { id: timeserie2.id }],
+        start: new Date(2020, 9, 1),
+        end: new Date(2020, 10, 30),
+        aggregates: ['sum'],
+      }
+    );
+
+    expect(response[0].datapoints.length).toBe(0);
+    expect(response[1].datapoints.length).toBe(0);
+  });
 });
