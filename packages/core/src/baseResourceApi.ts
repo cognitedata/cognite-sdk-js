@@ -264,7 +264,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     return this.postInParallelWithAutomaticChunking({
       queryParams: params,
       path: path,
-      items: items
+      items: items,
     });
   }
 
