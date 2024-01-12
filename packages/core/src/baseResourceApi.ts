@@ -261,8 +261,10 @@ export abstract class BaseResourceAPI<ResponseType> {
     RequestParams extends object,
     T = IdEither
   >(items: T[], path: string = this.byIdsUrl, params?: RequestParams) {
-    return this.postInParallelWithAutomaticChunking({ 
-      queryParams: params, path: path, items: items 
+    return this.postInParallelWithAutomaticChunking({
+      queryParams: params,
+      path: path,
+      items: items
     });
   }
 
