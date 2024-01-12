@@ -1,4 +1,4 @@
-// Copyright 2022 Cognite AS
+// Copyright 2024 Cognite AS
 
 import { ViewReference } from 'stable/src/api/instances/types.gen';
 import CogniteClient from '../../cogniteClient';
@@ -55,6 +55,6 @@ describe('Instances integration test', () => {
       response.items[0].properties![describable.space][
         `${describable.externalId}/${describable.version}`
       ]['title'].toString();
-    expect(title.includes('a'));
+    expect(title.startsWith('a'));
   });
 });
