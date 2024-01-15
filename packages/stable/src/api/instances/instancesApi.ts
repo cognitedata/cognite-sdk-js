@@ -18,18 +18,12 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   public search = async (
     params: NodeOrEdgeSearchRequest
   ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
-    return this.searchInstances<NodeAndEdgeCollectionResponseV3Response>(
-      params
+    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
+      this.searchUrl,
+      {
+        data: params,
+      }
     );
-  };
-
-  private async searchInstances<ResponseType>(
-    params: NodeOrEdgeSearchRequest
-  ): Promise<ResponseType> {
-    const response = await this.post<ResponseType>(this.searchUrl, {
-      data: params,
-    });
-
     return response.data;
-  }
+  };
 }
