@@ -4,12 +4,63 @@ import { ViewReference } from 'stable/src/api/instances/types.gen';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
+type SpaceDefinition = {
+  space: string;
+  name: string;
+  description: string;
+};
+
+type Describable = {
+  externalId: string;
+  space: string;
+  title: string;
+  description: string;
+  labels: string[];
+};
+
+const upsertSpace = async (client: CogniteClient, space: SpaceDefinition) => {
+  await client.post(`/api/v1/projects/${client.project}/models/spaces`, {
+    data: {
+      items: [space],
+    },
+  });
+};
+
+const upsertDescribable = async (
+  client: CogniteClient,
+  describable: Describable
+) => {
+  await client.post(`/api/v1/projects/${client.project}/models/instances`, {
+    data: {
+      items: [
+        {
+          instanceType: 'node',
+          externalId: describable.externalId,
+          space: describable.space,
+          sources: [{ source: view }],
+          properties: {
+            title: describable.title,
+            description: describable.description,
+            labels: describable.labels,
+          },
+        },
+      ],
+    },
+  });
+};
+
 describe('Instances integration test', () => {
   let client: CogniteClient;
   const timestamp = Date.now();
-  const describable = {
+  const testSpace: SpaceDefinition = {
+    space: `test_data_space`,
+    name: 'test_data_space',
+    description: 'Instance space used for integration tests.',
+  };
+
+  const describable: Describable = {
     externalId: `describable_${timestamp}`,
-    space: 'cdf_core',
+    space: testSpace.space,
     title: `title ${timestamp}`,
     description: `description ${timestamp}`,
     labels: [`label1`, 'label2'],
@@ -21,37 +72,10 @@ describe('Instances integration test', () => {
     version: 'v1',
   };
 
-  const testSpace = {
-    space: `test_data_space`,
-    name: 'test_data_space',
-    description: 'Instance space used for integration tests.',
-  };
-
   beforeAll(async () => {
     client = setupLoggedInClient();
-    await client.post(`/api/v1/projects/${client.project}/models/spaces`, {
-      data: {
-        items: [testSpace],
-      },
-    });
-
-    await client.post(`/api/v1/projects/${client.project}/models/instances`, {
-      data: {
-        items: [
-          {
-            instanceType: 'node',
-            externalId: describable.externalId,
-            space: testSpace.space,
-            sources: [{ source: view }],
-            properties: {
-              title: describable.title,
-              description: describable.description,
-              labels: describable.labels,
-            },
-          },
-        ],
-      },
-    });
+    await upsertSpace(client, testSpace);
+    await upsertDescribable(client, describable);
   });
 
   afterAll(async () => {
