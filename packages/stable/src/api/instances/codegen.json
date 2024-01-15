@@ -1,7 +1,7 @@
 {
   "service": "instances",
   "filter": {
-    "serviceName": "models/instances/search" 
+    "serviceName": "models/instances" 
   },
   "inlinedSchemas": {
     "autoNameRequest": true
