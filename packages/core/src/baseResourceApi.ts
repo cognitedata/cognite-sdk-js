@@ -260,11 +260,12 @@ export abstract class BaseResourceAPI<ResponseType> {
   protected async callRetrieveEndpoint<
     RequestParams extends object,
     T = IdEither
-  >(items: T[], path: string = this.byIdsUrl, params?: RequestParams) {
+  >(items: T[], path: string = this.byIdsUrl, params?: RequestParams, queryParams?: RequestParams) {
     return this.postInParallelWithAutomaticChunking({
-      queryParams: params,
+      payload: params,
       path: path,
       items: items,
+      queryParams: queryParams,
     });
   }
 
@@ -291,7 +292,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     return this.postInParallelWithAutomaticChunking({
       path,
       items: ids,
-      params,
+      payload: params,
     });
   }
 
@@ -368,7 +369,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   >({
     path,
     items,
-    params,
+    payload,
     queryParams,
     chunkSize = 1000,
   }: PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType>) {
@@ -376,7 +377,7 @@ export abstract class BaseResourceAPI<ResponseType> {
       BaseResourceAPI.chunk(items, chunkSize),
       (singleChunk) =>
         this.post<ItemsWrapper<ResponseType[]>>(path, {
-          data: { ...params, items: singleChunk },
+          data: { ...payload, items: singleChunk },
           params: queryParams,
         }),
       false
@@ -426,7 +427,7 @@ type ListEndpoint<QueryType extends FilterQuery, ResponseType> = (
 interface PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType> {
   path: string;
   items: RequestType[];
-  params?: ParamsType;
+  payload?: ParamsType;
   queryParams?: ParamsType;
   chunkSize?: number;
 }
