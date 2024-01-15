@@ -28,14 +28,9 @@ const upsertSpace = async (client: CogniteClient, space: SpaceDefinition) => {
 
 const upsertDescribable = async (
   client: CogniteClient,
-  describable: Describable
+  describable: Describable,
+  view: ViewReference
 ) => {
-  const view: ViewReference = {
-    externalId: 'Describable',
-    space: 'cdf_core',
-    type: 'view',
-    version: 'v1',
-  };
   await client.post(`/api/v1/projects/${client.project}/models/instances`, {
     data: {
       items: [
@@ -58,12 +53,18 @@ const upsertDescribable = async (
 describe('Instances integration test', () => {
   let client: CogniteClient;
   const timestamp = Date.now();
+
   const testSpace: SpaceDefinition = {
     space: `test_data_space`,
     name: 'test_data_space',
     description: 'Instance space used for integration tests.',
   };
-
+  const view: ViewReference = {
+    externalId: 'Describable',
+    space: 'cdf_core',
+    type: 'view',
+    version: 'v1',
+  };
   const describable: Describable = {
     externalId: `describable_${timestamp}`,
     space: testSpace.space,
@@ -75,7 +76,7 @@ describe('Instances integration test', () => {
   beforeAll(async () => {
     client = setupLoggedInClient();
     await upsertSpace(client, testSpace);
-    await upsertDescribable(client, describable);
+    await upsertDescribable(client, describable, view);
   });
 
   afterAll(async () => {
