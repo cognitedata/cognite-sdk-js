@@ -30,6 +30,12 @@ const upsertDescribable = async (
   client: CogniteClient,
   describable: Describable
 ) => {
+  const view: ViewReference = {
+    externalId: 'Describable',
+    space: 'cdf_core',
+    type: 'view',
+    version: 'v1',
+  };
   await client.post(`/api/v1/projects/${client.project}/models/instances`, {
     data: {
       items: [
@@ -64,12 +70,6 @@ describe('Instances integration test', () => {
     title: `title ${timestamp}`,
     description: `description ${timestamp}`,
     labels: [`label1`, 'label2'],
-  };
-  const view: ViewReference = {
-    externalId: 'Describable',
-    space: 'cdf_core',
-    type: 'view',
-    version: 'v1',
   };
 
   beforeAll(async () => {
