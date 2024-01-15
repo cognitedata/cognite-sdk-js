@@ -6,45 +6,98 @@ import { setupLoggedInClient } from '../testUtils';
 
 describe('Instances integration test', () => {
   let client: CogniteClient;
-  const describable: ViewReference = {
+  const timestamp = Date.now();
+  const describable = {
+    externalId: `describable_${timestamp}`,
+    space: 'cdf_core',
+    title: `title ${timestamp}`,
+    description: `description ${timestamp}`,
+    labels: [`label1`, 'label2'],
+  };
+  const view: ViewReference = {
     externalId: 'Describable',
     space: 'cdf_core',
     type: 'view',
     version: 'v1',
   };
 
+  const testSpace = {
+    space: `test_data_space`,
+    name: 'test_data_space',
+    description: 'Instance space used for integration tests.',
+  };
+
   beforeAll(async () => {
     client = setupLoggedInClient();
-  });
-
-  test('search nodes with limit 2', async () => {
-    const response = await client.instances.search({
-      view: describable,
-      instanceType: 'node',
-      limit: 2,
+    await client.post(`/api/v1/projects/${client.project}/models/spaces`, {
+      data: {
+        items: [testSpace],
+      },
     });
-    expect(response.items).toHaveLength(2);
-    expect(response.items[0].externalId).toBeDefined();
-    expect(response.items[1].externalId).toBeDefined();
+
+    await client.post(`/api/v1/projects/${client.project}/models/instances`, {
+      data: {
+        items: [
+          {
+            instanceType: 'node',
+            externalId: describable.externalId,
+            space: testSpace.space,
+            sources: [{ source: view }],
+            properties: {
+              title: describable.title,
+              description: describable.description,
+              labels: describable.labels,
+            },
+          },
+        ],
+      },
+    });
   });
 
-  test('search with query', async () => {
+  afterAll(async () => {
+    await client.post(
+      `/api/v1/projects/${client.project}/models/instances/delete`,
+      {
+        data: {
+          items: [
+            {
+              instanceType: 'node',
+              externalId: describable.externalId,
+              space: testSpace.space,
+            },
+          ],
+        },
+      }
+    );
+  });
+
+  test('search nodes with limit 1', async () => {
     const response = await client.instances.search({
-      view: describable,
-      query: 'a',
+      view,
+      instanceType: 'node',
       limit: 1,
     });
     expect(response.items).toHaveLength(1);
     expect(response.items[0].externalId).toBeDefined();
   });
 
+  test('search with query', async () => {
+    const response = await client.instances.search({
+      view,
+      query: describable.description,
+      limit: 1,
+    });
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0].externalId).toBe(describable.externalId);
+  });
+
   test('search with filter', async () => {
     const response = await client.instances.search({
-      view: describable,
+      view,
       filter: {
         prefix: {
           property: ['title'],
-          value: 'a',
+          value: 'titl',
         },
       },
       limit: 1,
@@ -52,9 +105,9 @@ describe('Instances integration test', () => {
     expect(response.items).toHaveLength(1);
     expect(response.items[0].properties);
     const title =
-      response.items[0].properties![describable.space][
-        `${describable.externalId}/${describable.version}`
+      response.items[0].properties![view.space][
+        `${view.externalId}/${view.version}`
       ]['title'].toString();
-    expect(title.startsWith('a'));
+    expect(title.startsWith('titl'));
   });
 });
