@@ -39,8 +39,46 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
       }
       return node;
     };
-    const getItemsType = (node: ts.InterfaceDeclaration): ts.TypeNode => {
+    const getItemsType = (
+      node: ts.InterfaceDeclaration,
+      debug: boolean
+    ): ts.TypeNode => {
       for (const member of node.members) {
+        if (debug) {
+          console.log(
+            member.name,
+            member,
+            ts.isPropertySignature(member),
+            ts.isPropertySignature(member) && member.type != null,
+            ts.isPropertySignature(member) &&
+              member.type != null &&
+              ts.isIdentifier(member.name),
+            ts.isPropertySignature(member) &&
+              member.type != null &&
+              ts.isIdentifier(member.name) &&
+              ts.isArrayTypeNode(member.type)
+          );
+        }
+        if (
+          ts.isPropertySignature(member) &&
+          member.type != null &&
+          ts.isIdentifier(member.name) &&
+          ts.isTypeReferenceNode(member.type)
+        ) {
+          console.log(
+            // @ts-ignore
+            member.type.typeArguments[1].elementType.typeName.escapedText,
+            ts.createTypeReferenceNode(member.type.typeName, undefined)
+          );
+          console.log('....', ts.visitEachChild(member, visitor, context));
+
+          return ts.createTypeReferenceNode(
+            // We would like it to return Record<string, NodeOrEdge[]>.
+            //member.type.typeArguments[1].elementType.typeName,
+            member.type.typeName,
+            undefined
+          );
+        }
         if (
           ts.isPropertySignature(member) &&
           member.type != null &&
@@ -65,7 +103,11 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
         ts.isInterfaceDeclaration(node) &&
         interfaceDeclarationHasRequiredMembers(node)
       ) {
-        const itemsType = getItemsType(node);
+        console.log(node.name.escapedText);
+        const itemsType = getItemsType(
+          node,
+          node.name.escapedText == 'QueryResponse'
+        );
         const id = ts.createIdentifier('CursorAndAsyncIterator');
         const types = ts.createExpressionWithTypeArguments([itemsType], id);
         const hc = ts.createHeritageClause(ts.SyntaxKind.ExtendsKeyword, [

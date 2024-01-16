@@ -57975,6 +57975,18 @@
                       }
                     ]
                   }
+                },
+                "nextCursor": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "x-additionalPropertiesName": "cursor-name",
+                    "allOf": [
+                      {
+                        "type": "string",
+                        "description": "The value to use for the cursor"
+                      }
+                    ]
+                  }
                 }
               }
             }
