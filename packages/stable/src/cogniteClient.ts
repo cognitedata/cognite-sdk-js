@@ -250,7 +250,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.visionApi = this.apiFactory(VisionAPI, 'context/vision');
     this.profilesApi = this.apiFactory(ProfilesAPI, 'profiles');
     this.unitsApi = this.apiFactory(UnitsAPI, 'units');
-    this.instancesApi = this.apiFactory(InstancesAPI, 'instances');
+    this.instancesApi = this.apiFactory(InstancesAPI, 'models/instances');
   }
 
   static urlEncodeExternalId(externalId: string): string {
