@@ -5,6 +5,7 @@ import {
   NodeAndEdgeCollectionResponseV3Response,
   NodeAndEdgeCollectionResponseWithCursorV3Response,
   NodeOrEdge,
+  ListOfSpaceExternalIdsRequestWithTyping,
   NodeOrEdgeListRequestV3,
   NodeOrEdgeSearchRequest,
 } from './types.gen';
@@ -91,4 +92,26 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
       );
     return response.data;
   };
+
+  public retrieve = async (
+    params: ListOfSpaceExternalIdsRequestWithTyping
+  ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
+    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
+      this.byIdsUrl,
+      {
+        data: params,
+      }
+    );
+    return response.data;
+  };
+
+  public delete = async (
+    params: ListOfSpaceExternalIdsRequestWithTyping
+  ) => {
+    await this.delete(
+      params);
+  }
+
 }
+
+
