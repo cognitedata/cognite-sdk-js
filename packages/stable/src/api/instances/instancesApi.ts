@@ -18,9 +18,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Search instances](https://developer.cognite.com/api#tag/Instances/operation/searchInstances)
    *
    * ```js
-   *  import { ViewReference } from 'stable/src/types';
-   *
-   *  const view: ViewReference = {
+   *  const view = {
    *    externalId: 'Describable',
    *    space: 'cdf_core',
    *    type: 'view',
@@ -55,9 +53,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [List instances](https://developer.cognite.com/api#tag/Instances/operation/advancedListInstance)
    *
    * ```js
-   *  import { ViewReference } from 'stable/src/types';
-   *
-   *  const view: ViewReference = {
+   *  const view = {
    *    externalId: 'Describable',
    *    space: 'cdf_core',
    *    type: 'view',
