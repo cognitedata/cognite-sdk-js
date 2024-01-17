@@ -26,15 +26,15 @@ const upsertSpace = async (client: CogniteClient, space: SpaceDefinition) => {
   });
 };
 
-const upsertDescribable = async (
+const upsertDescribables = async (
   client: CogniteClient,
-  describable: Describable,
+  describables: Describable[],
   view: ViewReference
 ) => {
   await client.post(`/api/v1/projects/${client.project}/models/instances`, {
     data: {
       items: [
-        {
+        describables.map((describable) => ({
           instanceType: 'node',
           externalId: describable.externalId,
           space: describable.space,
@@ -44,7 +44,7 @@ const upsertDescribable = async (
             description: describable.description,
             labels: describable.labels,
           },
-        },
+        })),
       ],
     },
   });
@@ -65,18 +65,26 @@ describe('Instances integration test', () => {
     type: 'view',
     version: 'v1',
   };
-  const describable: Describable = {
-    externalId: `describable_${timestamp}`,
+
+  const describable1: Describable = {
+    externalId: `describable_1_${timestamp}`,
     space: testSpace.space,
-    title: `title ${timestamp}`,
-    description: `description ${timestamp}`,
+    title: `title_1_${timestamp}`,
+    description: `description_1_${timestamp}`,
+    labels: [`label1`, 'label2'],
+  };
+  const describable2: Describable = {
+    externalId: `describable_2_${timestamp}`,
+    space: testSpace.space,
+    title: `title_2_${timestamp}`,
+    description: `description_2_${timestamp}`,
     labels: [`label1`, 'label2'],
   };
 
   beforeAll(async () => {
     client = setupLoggedInClient();
     await upsertSpace(client, testSpace);
-    await upsertDescribable(client, describable, view);
+    await upsertDescribables(client, [describable1, describable2], view);
   });
 
   afterAll(async () => {
@@ -87,7 +95,7 @@ describe('Instances integration test', () => {
           items: [
             {
               instanceType: 'node',
-              externalId: describable.externalId,
+              externalId: describable1.externalId,
               space: testSpace.space,
             },
           ],
@@ -96,24 +104,116 @@ describe('Instances integration test', () => {
     );
   });
 
-  test('search nodes with limit 1', async () => {
+  test('list nodes from a single view with limit 1', async () => {
+    const response = await client.instances.list({
+      sources: [{ source: view }],
+      instanceType: 'node',
+      limit: 1,
+    });
+    expect(response.items).toHaveLength(2);
+    expect(response.items[0].externalId).toBeDefined();
+    expect(response.items[1].externalId).toBeDefined();
+  });
+
+  test('list nodes with a filter that returns 1 result', async () => {
+    const response = await client.instances.list({
+      sources: [{ source: view }],
+      filter: {
+        equals: {
+          property: ['title'],
+          value: describable1.title,
+        },
+      },
+      instanceType: 'node',
+      limit: 1000,
+    });
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0].externalId).toBeDefined();
+    expect(response.items[0].externalId).toBe(describable1.externalId);
+  });
+
+  test('list nodes with a filter that returns no results', async () => {
+    const response = await client.instances.list({
+      sources: [{ source: view }],
+      filter: {
+        equals: {
+          property: ['title'],
+          value: 'No describable has this title',
+        },
+      },
+      instanceType: 'node',
+      limit: 1000,
+    });
+    expect(response.items).toHaveLength(0);
+  });
+
+  test('list nodes sorted in ascending order', async () => {
+    const response = await client.instances.list({
+      sources: [{ source: view }],
+      sort: [
+        { property: ['title'], direction: 'ascending', nullsFirst: false },
+      ],
+      instanceType: 'node',
+      limit: 2,
+    });
+    expect(response.items).toHaveLength(2);
+    expect(response.items[0].externalId).toBeDefined();
+    expect(response.items[1].externalId).toBeDefined();
+
+    const title1 =
+      response.items[0].properties![view.space][
+        `${view.externalId}/${view.version}`
+      ]['title'].toString();
+    const title2 =
+      response.items[0].properties![view.space][
+        `${view.externalId}/${view.version}`
+      ]['title'].toString();
+    expect(title1 < title2);
+  });
+
+  test('list nodes sorted in descending order', async () => {
+    const response = await client.instances.list({
+      sources: [{ source: view }],
+      sort: [
+        { property: ['title'], direction: 'descending', nullsFirst: false },
+      ],
+      instanceType: 'node',
+      limit: 2,
+    });
+    expect(response.items).toHaveLength(2);
+    expect(response.items[0].externalId).toBeDefined();
+    expect(response.items[1].externalId).toBeDefined();
+
+    const title1 =
+      response.items[0].properties![view.space][
+        `${view.externalId}/${view.version}`
+      ]['title'].toString();
+    const title2 =
+      response.items[0].properties![view.space][
+        `${view.externalId}/${view.version}`
+      ]['title'].toString();
+    expect(title1 > title2);
+  });
+
+  test('search nodes with limit 2', async () => {
     const response = await client.instances.search({
       view,
       instanceType: 'node',
       limit: 1,
     });
-    expect(response.items).toHaveLength(1);
+    expect(response.items).toHaveLength(2);
     expect(response.items[0].externalId).toBeDefined();
+    expect(response.items[1].externalId).toBeDefined();
   });
 
   test('search with query', async () => {
     const response = await client.instances.search({
       view,
-      query: describable.description,
+      query: describable1.description,
       limit: 1,
     });
     expect(response.items).toHaveLength(1);
-    expect(response.items[0].externalId).toBe(describable.externalId);
+    expect(response.items[0].externalId).toBe(describable1.externalId);
   });
 
   test('search with filter', async () => {
