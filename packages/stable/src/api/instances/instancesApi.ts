@@ -37,7 +37,20 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [List instances](https://developer.cognite.com/api#tag/Instances/operation/advancedListInstance)
    *
    * ```js
-   * // TODO: Write example code here
+   *  const response = await client.instances.list({
+   *    instanceType: 'node',
+   *    sources: [{ source: viewReference }],
+   *    filter: {
+   *      equals: {
+   *        property: ['title'],
+   *         value: 'your title',
+   *      },
+   *    },
+   *    sort: [
+   *      { property: ['title'], direction: 'ascending', nullsFirst: false },
+   *    ],
+   *    limit: 1000,
+   *});
    * ```
    */
   public list = async (
