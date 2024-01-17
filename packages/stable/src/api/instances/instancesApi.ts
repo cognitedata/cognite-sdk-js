@@ -18,7 +18,25 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Search instances](https://developer.cognite.com/api#tag/Instances/operation/searchInstances)
    *
    * ```js
-   * // TODO: Write example code here
+   *  import { ViewReference } from 'stable/src/types';
+   *
+   *  const view: ViewReference = {
+   *    externalId: 'Describable',
+   *    space: 'cdf_core',
+   *    type: 'view',
+   *    version: 'v1',
+   *  };
+   *  const response = await client.instances.search({
+   *    view,
+   *    query: 'your_query',
+   *    filter: {
+   *      equals: {
+   *        property: ['title'],
+   *         value: 'your title',
+   *      },
+   *    },
+   *    limit: 1000,
+   *  });
    * ```
    */
   public search = async (
@@ -37,9 +55,17 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [List instances](https://developer.cognite.com/api#tag/Instances/operation/advancedListInstance)
    *
    * ```js
+   *  import { ViewReference } from 'stable/src/types';
+   *
+   *  const view: ViewReference = {
+   *    externalId: 'Describable',
+   *    space: 'cdf_core',
+   *    type: 'view',
+   *    version: 'v1',
+   *  };
    *  const response = await client.instances.list({
    *    instanceType: 'node',
-   *    sources: [{ source: viewReference }],
+   *    sources: [{ source: view }],
    *    filter: {
    *      equals: {
    *        property: ['title'],

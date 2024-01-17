@@ -1,6 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import { ViewReference } from 'stable/src/api/instances/types.gen';
+import { ViewReference } from 'stable/src/types';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
