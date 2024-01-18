@@ -33,19 +33,17 @@ const upsertDescribables = async (
 ) => {
   await client.post(`/api/v1/projects/${client.project}/models/instances`, {
     data: {
-      items: [
-        describables.map((describable) => ({
-          instanceType: 'node',
-          externalId: describable.externalId,
-          space: describable.space,
-          sources: [{ source: view }],
-          properties: {
-            title: describable.title,
-            description: describable.description,
-            labels: describable.labels,
-          },
-        })),
-      ],
+      items: describables.map((describable) => ({
+        instanceType: 'node',
+        externalId: describable.externalId,
+        space: describable.space,
+        sources: [{ source: view }],
+        properties: {
+          title: describable.title,
+          description: describable.description,
+          labels: describable.labels,
+        },
+      })),
     },
   });
 };
