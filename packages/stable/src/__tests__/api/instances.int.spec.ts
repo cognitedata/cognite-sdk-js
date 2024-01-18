@@ -37,12 +37,16 @@ const upsertDescribables = async (
         instanceType: 'node',
         externalId: describable.externalId,
         space: describable.space,
-        sources: [{ source: view }],
-        properties: {
-          title: describable.title,
-          description: describable.description,
-          labels: describable.labels,
-        },
+        sources: [
+          {
+            source: view,
+            properties: {
+              title: describable.title,
+              description: describable.description,
+              labels: describable.labels,
+            },
+          },
+        ],
       })),
     },
   });
@@ -149,7 +153,11 @@ describe('Instances integration test', () => {
     const response = await client.instances.list({
       sources: [{ source: view }],
       sort: [
-        { property: ['title'], direction: 'ascending', nullsFirst: false },
+        {
+          property: ['node', 'title'],
+          direction: 'ascending',
+          nullsFirst: false,
+        },
       ],
       instanceType: 'node',
       limit: 2,
@@ -173,7 +181,11 @@ describe('Instances integration test', () => {
     const response = await client.instances.list({
       sources: [{ source: view }],
       sort: [
-        { property: ['title'], direction: 'descending', nullsFirst: false },
+        {
+          property: ['node', 'title'],
+          direction: 'descending',
+          nullsFirst: false,
+        },
       ],
       instanceType: 'node',
       limit: 2,

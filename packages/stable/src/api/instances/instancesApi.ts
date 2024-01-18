@@ -18,14 +18,13 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Search instances](https://developer.cognite.com/api#tag/Instances/operation/searchInstances)
    *
    * ```js
-   *  const view = {
-   *    externalId: 'Describable',
-   *    space: 'cdf_core',
-   *    type: 'view',
-   *    version: 'v1',
-   *  };
    *  const response = await client.instances.search({
-   *    view,
+   *    view: {
+   *      externalId: 'Describable',
+   *      space: 'cdf_core',
+   *      type: 'view',
+   *      version: 'v1',
+   *    },
    *    query: 'your_query',
    *    filter: {
    *      equals: {
@@ -61,7 +60,14 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *  };
    *  const response = await client.instances.list({
    *    instanceType: 'node',
-   *    sources: [{ source: view }],
+   *    sources: [{
+   *      source: {
+   *        externalId: 'Describable',
+   *        space: 'cdf_core',
+   *        type: 'view',
+   *        version: 'v1',
+   *      },
+   *    }],
    *    filter: {
    *      equals: {
    *        property: ['title'],
