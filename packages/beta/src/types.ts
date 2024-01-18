@@ -110,7 +110,8 @@ export interface MonitoringTaskCreate {
   sourceId?: string;
   alertContext?: {
     unsubscribeUrl: string;
-    investigateUrl: string;
+    investigateUrl?: string;
+    editUrl?: string;
   };
 }
 
