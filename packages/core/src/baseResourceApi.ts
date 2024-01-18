@@ -187,10 +187,16 @@ export abstract class BaseResourceAPI<ResponseType> {
   protected async retrieveEndpoint<RequestParams extends object, T = IdEither>(
     ids: T[],
     params?: RequestParams,
-    path?: string
+    path?: string,
+    queryParams?: RequestParams
   ) {
     return this.callEndpointWithMergeAndTransform(ids, (request) =>
-      this.callRetrieveEndpoint<RequestParams, T>(request, path, params)
+      this.callRetrieveEndpoint<RequestParams, T>(
+        request,
+        path,
+        params,
+        queryParams
+      )
     );
   }
 
@@ -260,7 +266,12 @@ export abstract class BaseResourceAPI<ResponseType> {
   protected async callRetrieveEndpoint<
     RequestParams extends object,
     T = IdEither
-  >(items: T[], path: string = this.byIdsUrl, params?: RequestParams, queryParams?: RequestParams) {
+  >(
+    items: T[],
+    path: string = this.byIdsUrl,
+    params?: RequestParams,
+    queryParams?: RequestParams
+  ) {
     return this.postInParallelWithAutomaticChunking({
       params,
       path,
