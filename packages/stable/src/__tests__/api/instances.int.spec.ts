@@ -100,6 +100,11 @@ describe('Instances integration test', () => {
               externalId: describable1.externalId,
               space: testSpace.space,
             },
+            {
+              instanceType: 'node',
+              externalId: describable2.externalId,
+              space: testSpace.space,
+            },
           ],
         },
       }
@@ -122,8 +127,8 @@ describe('Instances integration test', () => {
       sources: [{ source: view }],
       filter: {
         equals: {
-          property: ['node', 'title'],
-          value: describable1.title,
+          property: ['node', 'externalId'],
+          value: describable2.externalId,
         },
       },
       instanceType: 'node',
@@ -131,7 +136,7 @@ describe('Instances integration test', () => {
     });
     expect(response.items).toHaveLength(1);
     expect(response.items[0].externalId).toBeDefined();
-    expect(response.items[0].externalId).toBe(describable1.externalId);
+    expect(response.items[0].externalId).toBe(describable2.externalId);
   });
 
   test('list nodes with a filter that returns no results', async () => {
@@ -139,7 +144,7 @@ describe('Instances integration test', () => {
       sources: [{ source: view }],
       filter: {
         equals: {
-          property: ['node', 'title'],
+          property: ['node', 'externalId'],
           value: 'No describable has this title',
         },
       },
