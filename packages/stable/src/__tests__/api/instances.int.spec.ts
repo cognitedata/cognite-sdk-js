@@ -106,11 +106,11 @@ describe('Instances integration test', () => {
     );
   });
 
-  test('list nodes from a single view with limit 1', async () => {
+  test('list nodes from a single view with limit 2', async () => {
     const response = await client.instances.list({
       sources: [{ source: view }],
       instanceType: 'node',
-      limit: 1,
+      limit: 2,
     });
     expect(response.items).toHaveLength(2);
     expect(response.items[0].externalId).toBeDefined();
@@ -122,7 +122,7 @@ describe('Instances integration test', () => {
       sources: [{ source: view }],
       filter: {
         equals: {
-          property: ['title'],
+          property: ['node', 'title'],
           value: describable1.title,
         },
       },
@@ -139,7 +139,7 @@ describe('Instances integration test', () => {
       sources: [{ source: view }],
       filter: {
         equals: {
-          property: ['title'],
+          property: ['node', 'title'],
           value: 'No describable has this title',
         },
       },
@@ -154,7 +154,7 @@ describe('Instances integration test', () => {
       sources: [{ source: view }],
       sort: [
         {
-          property: ['node', 'title'],
+          property: [view.space, `${view.externalId}/${view.version}`, 'title'],
           direction: 'ascending',
           nullsFirst: false,
         },
@@ -182,7 +182,7 @@ describe('Instances integration test', () => {
       sources: [{ source: view }],
       sort: [
         {
-          property: ['node', 'title'],
+          property: [view.space, `${view.externalId}/${view.version}`, 'title'],
           direction: 'descending',
           nullsFirst: false,
         },
@@ -209,7 +209,7 @@ describe('Instances integration test', () => {
     const response = await client.instances.search({
       view,
       instanceType: 'node',
-      limit: 1,
+      limit: 2,
     });
     expect(response.items).toHaveLength(2);
     expect(response.items[0].externalId).toBeDefined();
