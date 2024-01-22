@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.10.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.10.0...@cognite/sdk-core@4.10.1) (2024-01-22)
+
+### Bug Fixes
+
+- use named parameters for postInParallelWithAutomaticChunking ([#1048](https://github.com/cognitedata/cognite-sdk-js/issues/1048)) ([db561d0](https://github.com/cognitedata/cognite-sdk-js/commit/db561d0d2891a0ed61d2116cba86bd256211547a))
+
 # [4.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.9.0...@cognite/sdk-core@4.10.0) (2023-11-28)
 
 ### Features
