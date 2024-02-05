@@ -42,6 +42,7 @@ import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 import { retryValidator } from './retryValidator';
 import { UnitsAPI } from './api/units/unitsApi';
 import { InstancesAPI } from './api/instances/instancesApi';
+import { SpacesAPI } from './api/spaces/spacesApi';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
@@ -167,6 +168,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get instances() {
     return accessApi(this.instancesApi);
   }
+  public get spaces() {
+    return accessApi(this.spacesApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   private dataPointsApi?: DataPointsAPI;
@@ -195,6 +199,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private profilesApi?: ProfilesAPI;
   private unitsApi?: UnitsAPI;
   private instancesApi?: InstancesAPI;
+  private spacesApi?: SpacesAPI;
 
   protected get version() {
     return version;
@@ -251,6 +256,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.profilesApi = this.apiFactory(ProfilesAPI, 'profiles');
     this.unitsApi = this.apiFactory(UnitsAPI, 'units');
     this.instancesApi = this.apiFactory(InstancesAPI, 'models/instances');
+    this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
   }
 
   static urlEncodeExternalId(externalId: string): string {
