@@ -114,8 +114,8 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
   public retrieve = async (
     params: (ListOfVersionReferences | ListOfAllVersionsReferences)['items'],
     options: IncludeInheritedPropertiesQueryParameter = {}
-  ): Promise<ViewDefinition[]> => {
-    const response = await this.post<ViewDefinition[]>(this.byIdsUrl, {
+  ): Promise<ViewCollectionResponse> => {
+    const response = await this.post<ViewCollectionResponse>(this.byIdsUrl, {
       data: { items: params, ...options },
     });
     return response.data;

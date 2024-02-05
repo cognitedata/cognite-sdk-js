@@ -77,7 +77,7 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
     const response = await this.post<ListOfSpaceExternalIdsResponse>(
       this.deleteUrl,
       {
-        data: params,
+        data: { items: params },
       }
     );
     return response.data;
@@ -112,7 +112,7 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
     params: ListOfSpaceExternalIdsRequest['items']
   ): Promise<ContainerDefinition[]> => {
     const response = await this.post<ContainerDefinition[]>(this.byIdsUrl, {
-      data: params,
+      data: { items: params },
     });
     return response.data;
   };

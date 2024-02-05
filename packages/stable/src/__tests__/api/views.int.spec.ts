@@ -140,9 +140,9 @@ describe('Views integration test', () => {
         externalId: viewCreationDefinition2.externalId,
       },
     ]);
-    expect(views.length).toBe(2);
-    expect(views[0].name).toEqual(viewCreationDefinition.name);
-    expect(views[1].name).toEqual(viewCreationDefinition2.name);
+    expect(views.items.length).toBe(2);
+    expect(views.items[0].name).toEqual(viewCreationDefinition.name);
+    expect(views.items[1].name).toEqual(viewCreationDefinition2.name);
   });
 
   it('should successfully delete Views', async () => {
