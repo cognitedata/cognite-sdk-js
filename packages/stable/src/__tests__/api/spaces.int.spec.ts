@@ -61,8 +61,6 @@ describe('Spaces integration test', () => {
       limit: 1000,
     });
     const globalSpace = spaces.items.find((space) => space.isGlobal);
-    console.log(spaces.items);
-    console.log(globalSpace);
     expect(globalSpace).toBeDefined();
   });
 
