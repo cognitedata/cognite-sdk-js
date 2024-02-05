@@ -1,6 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import { ContainerCreateDefinition } from 'stable/src/types';
+import { ContainerCreateDefinition } from '../../api/containers/types.gen';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 

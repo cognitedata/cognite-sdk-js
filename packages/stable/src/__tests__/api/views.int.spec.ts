@@ -1,6 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import { ViewCreateDefinition } from 'stable/src/types';
+import { ViewCreateDefinition } from '../../api/views/types.gen';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
