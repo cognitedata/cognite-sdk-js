@@ -34,6 +34,7 @@ describe('Containers integration test', () => {
   };
 
   beforeAll(async () => {
+    jest.setTimeout(30 * 1000);
     client = setupLoggedInClient();
     await client.spaces.upsert([
       {
@@ -133,7 +134,7 @@ describe('Containers integration test', () => {
     expect(response.items).toHaveLength(2);
 
     // Eventual consistency - wait for the delete to propagate
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await new Promise((resolve) => setTimeout(resolve, 20 * 1000));
 
     const containers = await client.containers.list({ limit: 1000 });
     expect(
