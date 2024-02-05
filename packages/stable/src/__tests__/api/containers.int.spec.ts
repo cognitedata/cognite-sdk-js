@@ -132,6 +132,9 @@ describe('Containers integration test', () => {
     ]);
     expect(response.items).toHaveLength(2);
 
+    // Eventual consistency - wait for the delete to propagate
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+
     const containers = await client.containers.list({ limit: 1000 });
     expect(
       containers.items.find(
