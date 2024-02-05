@@ -1,18 +1,5 @@
 // Copyright 2022 Cognite AS
-export {
-  CDFExternalIdReference,
-  ContainerReference,
-  CorePropertyDefinition,
-  DMSExternalId,
-  DirectNodeRelation,
-  EpochTimestamp,
-  NextCursorV3,
-  PrimitiveProperty,
-  SpaceSpecification,
-  TextProperty,
-  UpsertConflict,
-  UsedFor
-} from './types.gen';
+export { EpochTimestamp } from './types.gen';
 export {
   AnnotationData,
   AnnotationsAssetRef,
@@ -47,7 +34,7 @@ export {
   AnnotationsTextRegion,
   AnnotationsUnhandledSymbolObject,
   AnnotationsUnhandledTextObject,
-  AnnotationsView
+  AnnotationsView,
 } from './api/annotations/types.gen';
 export {
   BtreeIndex,
@@ -70,7 +57,7 @@ export {
   ReducedLimitQueryParameter,
   RequiresConstraintDefinition,
   SpaceQueryParameter,
-  UniquenessConstraintDefinition
+  UniquenessConstraintDefinition,
 } from './api/containers/types.gen';
 export {
   CogniteExternalId,
@@ -149,7 +136,7 @@ export {
   DocumentsAggregateUniqueValuesResponse,
   DocumentsPreviewTemporaryLinkResponse,
   Label,
-  LabelList
+  LabelList,
 } from './api/documents/types.gen';
 export {
   ListOfSpaceIdsRequest,
@@ -158,7 +145,7 @@ export {
   SpaceCollectionResponseWithCursorResponse,
   SpaceCreateCollection,
   SpaceCreateDefinition,
-  SpaceDefinition
+  SpaceDefinition,
 } from './api/spaces/types.gen';
 export {
   IdentityType,
@@ -171,7 +158,7 @@ export {
   UserProfilesListResponse,
   UserProfilesNotFoundResponse,
   UserProfilesSearchRequest,
-  UserProfilesSearchResponse
+  UserProfilesSearchResponse,
 } from './api/userProfiles/types.gen';
 export {
   AllVersionsQueryParameter,
@@ -223,7 +210,7 @@ export {
   ViewDefinitionProperty,
   ViewDirectNodeRelation,
   ViewPropertyDefinition,
-  ViewReference
+  ViewReference,
 } from './api/views/types.gen';
 export {
   AssetTagDetection,
@@ -265,5 +252,5 @@ export {
   VisionExtractPostResponse,
   VisionExtractPredictions,
   VisionFileExternalId,
-  VisionFileId
+  VisionFileId,
 } from './api/vision/types.gen';
