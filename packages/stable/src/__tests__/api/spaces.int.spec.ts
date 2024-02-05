@@ -58,6 +58,8 @@ describe('Spaces integration test', () => {
   it('should successfully list global spaces', async () => {
     const spaces = await client.spaces.list({ includeGlobal: true });
     const globalSpace = spaces.items.find((space) => space.isGlobal);
+    console.log(spaces.items);
+    console.log(globalSpace);
     expect(globalSpace).toBeDefined();
   });
 

@@ -57,7 +57,7 @@ export class SpacesAPI extends BaseResourceAPI<SpaceDefinition> {
    */
   public delete = async (params: string[]): Promise<{ items: string[] }> => {
     const response = await this.post<{ items: string[] }>(this.deleteUrl, {
-      data: { items: params },
+      data: { items: params.map((space) => ({ space })) },
     });
     return response.data;
   };
@@ -92,7 +92,7 @@ export class SpacesAPI extends BaseResourceAPI<SpaceDefinition> {
     const response = await this.post<SpaceCollectionResponseV3Response>(
       this.byIdsUrl,
       {
-        data: { items: params },
+        data: { items: params.map((space) => ({ space })) },
       }
     );
     return response.data;
