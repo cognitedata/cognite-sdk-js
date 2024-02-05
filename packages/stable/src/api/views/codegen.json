@@ -1,0 +1,9 @@
+{
+  "service": "models/views",
+  "filter": {
+    "serviceName": "models/views"
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}

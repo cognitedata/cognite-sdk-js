@@ -1,7 +1,5 @@
 // Copyright 2022 Cognite AS
-export {
-  EpochTimestamp
-} from './types.gen';
+export { EpochTimestamp } from './types.gen';
 export {
   AnnotationData,
   AnnotationsAssetRef,
@@ -36,8 +34,31 @@ export {
   AnnotationsTextRegion,
   AnnotationsUnhandledSymbolObject,
   AnnotationsUnhandledTextObject,
-  AnnotationsView
+  AnnotationsView,
 } from './api/annotations/types.gen';
+export {
+  BtreeIndex,
+  ConstraintDefinition,
+  ContainerCollectionResponse,
+  ContainerCollectionResponseWithCursorResponse,
+  ContainerCorePropertyDefinition,
+  ContainerCreateCollection,
+  ContainerCreateDefinition,
+  ContainerDefinition,
+  ContainerPropertyDefinition,
+  CursorQueryParameter,
+  IncludeGlobalQueryParameter,
+  IndexDefinition,
+  InvertedIndex,
+  ListOfContainerSubObjectIdentifierRequest,
+  ListOfContainerSubObjectIdentifierResponse,
+  ListOfSpaceExternalIdsRequest,
+  ListOfSpaceExternalIdsResponse,
+  ReducedLimitQueryParameter,
+  RequiresConstraintDefinition,
+  SpaceQueryParameter,
+  UniquenessConstraintDefinition,
+} from './api/containers/types.gen';
 export {
   CogniteExternalId,
   CogniteInternalId,
@@ -115,10 +136,9 @@ export {
   DocumentsAggregateUniqueValuesResponse,
   DocumentsPreviewTemporaryLinkResponse,
   Label,
-  LabelList
+  LabelList,
 } from './api/documents/types.gen';
 export {
-  CursorQueryParameter,
   IdentityType,
   IdentityTypeFilter,
   UserIdentifier,
@@ -129,8 +149,60 @@ export {
   UserProfilesListResponse,
   UserProfilesNotFoundResponse,
   UserProfilesSearchRequest,
-  UserProfilesSearchResponse
+  UserProfilesSearchResponse,
 } from './api/userProfiles/types.gen';
+export {
+  AllVersionsQueryParameter,
+  ConnectionDefinition,
+  ContainsAllFilterV3,
+  ContainsAnyFilterV3,
+  CreateViewProperty,
+  DMSExistsFilter,
+  DMSFilterProperty,
+  DMSVersion,
+  DataModelsBoolFilter,
+  DataModelsLeafFilter,
+  DataModelsNestedFilter,
+  DirectRelationReference,
+  EdgeConnection,
+  EqualsFilterV3,
+  FilterDefinition,
+  FilterValue,
+  FilterValueList,
+  FilterValueRange,
+  HasExistingDataFilterV3,
+  InFilterV3,
+  IncludeInheritedPropertiesQueryParameter,
+  ListOfAllVersionsReferences,
+  ListOfVersionReferences,
+  MatchAllFilter,
+  NodeOrEdgeExternalId,
+  OverlapsFilterV3,
+  ParameterizedPropertyValueV3,
+  PrefixFilterV3,
+  PropertyIdentifierV3,
+  RangeFilterV3,
+  RangeValue,
+  RawPropertyValueListV3,
+  RawPropertyValueV3,
+  ReferencedPropertyValueV3,
+  ReverseDirectRelationConnection,
+  SourceReference,
+  ThroughReference,
+  VersionReferencesCollectionResponse,
+  ViewCollectionResponse,
+  ViewCollectionResponseWithCursorResponse,
+  ViewCommon,
+  ViewCorePropertyDefinition,
+  ViewCreateCollection,
+  ViewCreateDefinition,
+  ViewCreateDefinitionProperty,
+  ViewDefinition,
+  ViewDefinitionProperty,
+  ViewDirectNodeRelation,
+  ViewPropertyDefinition,
+  ViewReference,
+} from './api/views/types.gen';
 export {
   AssetTagDetection,
   AssetTagDetectionParameters,
@@ -171,5 +243,5 @@ export {
   VisionExtractPostResponse,
   VisionExtractPredictions,
   VisionFileExternalId,
-  VisionFileId
+  VisionFileId,
 } from './api/vision/types.gen';

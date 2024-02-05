@@ -1,0 +1,9 @@
+{
+  "service": "models/containers",
+  "filter": {
+    "serviceName": "models/containers"
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}

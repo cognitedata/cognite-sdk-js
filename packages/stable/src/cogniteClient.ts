@@ -42,6 +42,8 @@ import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 import { retryValidator } from './retryValidator';
 import { UnitsAPI } from './api/units/unitsApi';
 import { InstancesAPI } from './api/instances/instancesApi';
+import { ContainersAPI } from './api/containers/containersApi';
+import { ViewsAPI } from './api/views/viewsApi';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
@@ -167,6 +169,12 @@ export default class CogniteClient extends BaseCogniteClient {
   public get instances() {
     return accessApi(this.instancesApi);
   }
+  public get containers() {
+    return accessApi(this.containersApi);
+  }
+  public get views() {
+    return accessApi(this.viewsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   private dataPointsApi?: DataPointsAPI;
@@ -195,6 +203,8 @@ export default class CogniteClient extends BaseCogniteClient {
   private profilesApi?: ProfilesAPI;
   private unitsApi?: UnitsAPI;
   private instancesApi?: InstancesAPI;
+  private containersApi?: ContainersAPI;
+  private viewsApi?: ViewsAPI;
 
   protected get version() {
     return version;
@@ -251,6 +261,8 @@ export default class CogniteClient extends BaseCogniteClient {
     this.profilesApi = this.apiFactory(ProfilesAPI, 'profiles');
     this.unitsApi = this.apiFactory(UnitsAPI, 'units');
     this.instancesApi = this.apiFactory(InstancesAPI, 'models/instances');
+    this.containersApi = this.apiFactory(ContainersAPI, 'models/containers');
+    this.viewsApi = this.apiFactory(ViewsAPI, 'models/views');
   }
 
   static urlEncodeExternalId(externalId: string): string {
