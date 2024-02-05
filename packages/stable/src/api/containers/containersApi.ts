@@ -110,10 +110,13 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
    */
   public retrieve = async (
     params: ListOfSpaceExternalIdsRequest['items']
-  ): Promise<ContainerDefinition[]> => {
-    const response = await this.post<ContainerDefinition[]>(this.byIdsUrl, {
-      data: { items: params },
-    });
+  ): Promise<ContainerCollectionResponse> => {
+    const response = await this.post<ContainerCollectionResponse>(
+      this.byIdsUrl,
+      {
+        data: { items: params },
+      }
+    );
     return response.data;
   };
 }

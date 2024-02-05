@@ -11,7 +11,7 @@ describe('Containers integration test', () => {
   const TEST_SPACE_NAME = `Containers_integration_test_${timestamp}`;
 
   const containerCreationDefinition: ContainerCreateDefinition = {
-    externalId: 'test_container',
+    externalId: `test_container_${timestamp}`,
     space: TEST_SPACE_NAME,
     name: 'test_data_space',
     description: 'Instance space used for integration tests.',
@@ -22,7 +22,7 @@ describe('Containers integration test', () => {
     },
   };
   const containerCreationDefinition2: ContainerCreateDefinition = {
-    externalId: 'test_container_2',
+    externalId: `test_container_2_${timestamp}`,
     space: TEST_SPACE_NAME,
     name: 'test_data_space_2',
     description: 'Instance space used for integration tests.',
@@ -114,9 +114,9 @@ describe('Containers integration test', () => {
         externalId: containerCreationDefinition2.externalId,
       },
     ]);
-    expect(containers.length).toBe(2);
-    expect(containers[0].name).toEqual(containerCreationDefinition.name);
-    expect(containers[1].name).toEqual(containerCreationDefinition2.name);
+    expect(containers.items.length).toBe(2);
+    expect(containers.items[0].name).toEqual(containerCreationDefinition.name);
+    expect(containers.items[1].name).toEqual(containerCreationDefinition2.name);
   });
 
   it('should successfully delete Containers', async () => {
