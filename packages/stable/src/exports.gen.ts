@@ -119,6 +119,20 @@ export {
 } from './api/documents/types.gen';
 export {
   CursorQueryParameter,
+  IncludeGlobalQueryParameter,
+  ListOfSpaceIdsRequest,
+  ListOfSpaceIdsResponse,
+  NextCursorV3,
+  ReducedLimitQueryParameter,
+  SpaceCollectionResponseV3Response,
+  SpaceCollectionResponseWithCursorResponse,
+  SpaceCreateCollection,
+  SpaceCreateDefinition,
+  SpaceDefinition,
+  SpaceSpecification,
+  UpsertConflict
+} from './api/spaces/types.gen';
+export {
   IdentityType,
   IdentityTypeFilter,
   UserIdentifier,
