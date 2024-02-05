@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.7.1...@cognite/sdk@9.8.0) (2024-02-05)
+
+### Features
+
+- add spaces to js sdk ([#1055](https://github.com/cognitedata/cognite-sdk-js/issues/1055)) ([3840acf](https://github.com/cognitedata/cognite-sdk-js/commit/3840acfa19b17be13729a55efdee118e6f66bfe6))
+
 ## [9.7.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.7.0...@cognite/sdk@9.7.1) (2024-01-22)
 
 **Note:** Version bump only for package @cognite/sdk
