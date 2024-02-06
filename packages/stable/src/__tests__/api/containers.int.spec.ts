@@ -13,8 +13,8 @@ describe('Containers integration test', () => {
   const containerCreationDefinition: ContainerCreateDefinition = {
     externalId: `test_container_${timestamp}`,
     space: TEST_SPACE_NAME,
-    name: 'test_data_space',
-    description: 'Instance space used for integration tests.',
+    name: 'test_container',
+    description: 'Container used for integration tests.',
     properties: {
       test: {
         type: { type: 'text' },

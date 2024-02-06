@@ -14,7 +14,7 @@ describe('Views integration test', () => {
   const viewCreationDefinition: ViewCreateDefinition = {
     externalId: 'test_view',
     space: TEST_SPACE_NAME,
-    name: 'test_data_space',
+    name: 'test_view',
     description: 'Instance space used for integration tests.',
     version: '1',
     properties: {
@@ -59,7 +59,7 @@ describe('Views integration test', () => {
       {
         externalId: TEST_CONTAINER_NAME,
         space: TEST_SPACE_NAME,
-        name: TEST_SPACE_NAME,
+        name: TEST_CONTAINER_NAME,
         description: 'Instance space used for views integration tests.',
         properties: {
           test: {
