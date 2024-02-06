@@ -12,10 +12,10 @@ describe('Views integration test', () => {
   const TEST_CONTAINER_NAME = `Views_integration_test_container${timestamp}`;
 
   const viewCreationDefinition: ViewCreateDefinition = {
-    externalId: 'test_view',
+    externalId: `test_view_${timestamp}`,
     space: TEST_SPACE_NAME,
     name: 'test_view',
-    description: 'Instance space used for integration tests.',
+    description: 'View used for integration tests.',
     version: '1',
     properties: {
       test: {
@@ -71,10 +71,10 @@ describe('Views integration test', () => {
   });
   afterAll(async () => {
     client = setupLoggedInClient();
-    await client.spaces.delete([TEST_SPACE_NAME]);
     await client.containers.delete([
       { externalId: TEST_CONTAINER_NAME, space: TEST_SPACE_NAME },
     ]);
+    await client.spaces.delete([TEST_SPACE_NAME]);
   });
 
   it('should successfully upsert views', async () => {
@@ -103,19 +103,19 @@ describe('Views integration test', () => {
     const view1 = views.items.find(
       (view) => view.externalId === viewCreationDefinition.externalId
     );
-    const View2 = views.items.find(
+    const view2 = views.items.find(
       (view) => view.externalId === viewCreationDefinition2.externalId
     );
     expect(view1).toBeDefined();
-    expect(View2).toBeDefined();
+    expect(view2).toBeDefined();
   });
 
   it('should successfully list global Views', async () => {
-    const Views = await client.views.list({
+    const views = await client.views.list({
       includeGlobal: true,
       limit: 1000,
     });
-    const globalView = Views.items.find((view) => view.isGlobal);
+    const globalView = views.items.find((view) => view.isGlobal);
     expect(globalView).toBeDefined();
   });
 

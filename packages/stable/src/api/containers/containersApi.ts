@@ -104,7 +104,12 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
    * [Retrieve containers](https://api-docs.cognite.com/20230101/tag/Containers/operation/byExternalIdsContainers)
    *
    * ```js
-   *  const response = await client.containers.retrieve(["my_space"]);
+   *  const response = await client.containers.retrieve([
+   *   {
+   *    space: "my_space",
+   *    externalId: "my_external_id"
+   *   }
+   * ]);
    *
    * ```
    */

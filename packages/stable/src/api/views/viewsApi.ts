@@ -107,7 +107,13 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
    * [Retrieve Views](https://api-docs.cognite.com/20230101/tag/Views/operation/byExternalIdsViews)
    *
    * ```js
-   *  const response = await client.views.retrieve(["my_space"]);
+   *  const response = await client.views.retrieve([
+   *  {
+   *   space: "my_space",
+   *   externalId: "my_external_id",
+   *   version: "my_optional_version"
+   *  }
+   * ]);
    *
    * ```
    */
