@@ -1,0 +1,10 @@
+{
+  "_": "Due to issue with codegen duplicating types, we skip this for now.",
+  "service": "models/views",
+  "filter": {
+    "serviceName": "models/views"
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}
