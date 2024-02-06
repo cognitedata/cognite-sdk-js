@@ -6,6 +6,7 @@ import {
   CogniteInternalId,
   FilterQuery,
   InternalId,
+  ExternalId,
 } from '@cognite/sdk-core';
 
 export * from '@cognite/sdk';
@@ -13,6 +14,14 @@ export * from '@cognite/sdk';
 // This file is here mostly to allow apis to import { ... } from '../../types';
 // Overriding types should probably be done in their respective API endpoint files, where possible
 
+export type ArrayPatchExternalIds =
+  | { set: ExternalId[] }
+  | { add?: ExternalId[]; remove?: ExternalId[] };
+
+export interface TimestampRange {
+  min?: Timestamp;
+  max?: Timestamp;
+}
 export interface SimulatorUnitRecord {
   label: string;
   value: string;
@@ -206,4 +215,107 @@ export interface SimulationRun {
   userId?: string;
   createdTime: Date;
   lastUpdatedTime: Date;
+}
+
+export interface SimulatorModel {
+  id: CogniteInternalId;
+  externalId: CogniteExternalId;
+  simulatorExternalId: CogniteExternalId;
+  name: string;
+  description: string;
+  dataSetId: CogniteInternalId;
+  labels: ExternalId[];
+  type: string;
+  unitSystem: string;
+  createdTime: Timestamp;
+  lastUpdatedTime: Timestamp;
+}
+
+export interface SimulatorModelCreate {
+  externalId: CogniteExternalId;
+  simulatorExternalId: CogniteExternalId;
+  name: string;
+  description: string;
+  dataSetId: CogniteInternalId;
+  labels: ExternalId[];
+  type: string;
+  unitSystem: string;
+}
+
+export interface SimulatorModelFilter {
+  simulatorExternalIds?: CogniteExternalId[];
+}
+
+export interface SimulatorModelFilterQuery extends FilterQuery {
+  filter?: SimulatorModelFilter;
+}
+
+export interface SimulatorModelPatch {
+  update: {
+    name?: SinglePatch<string>;
+    description?: SinglePatch<string>;
+    labels?: ArrayPatchExternalIds;
+  };
+}
+
+export interface SimulatorModelChange extends SimulatorModelPatch, InternalId {}
+
+interface SimulatorModelBoundaryCondition {
+  key: string;
+  name: string;
+  address: string;
+  timeseriesExternalId: string;
+}
+
+export interface SimulatorModelRevision {
+  id: CogniteInternalId;
+  externalId: CogniteExternalId;
+  simulatorExternalId: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  description: string;
+  dataSetId: CogniteInternalId;
+  fileId: CogniteInternalId;
+  createdByUserId: string;
+  status: string;
+  statusMessage: string;
+  boundaryConditions?: SimulatorModelBoundaryCondition[];
+  boundaryConditionsStatus: string;
+  versionNumber: number;
+  metadata: Record<string, any>;
+  createdTime: Timestamp;
+  lastUpdatedTime: Timestamp;
+}
+
+export interface SimulatorModelRevisionCreate {
+  externalId: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  description?: string;
+  fileId: CogniteInternalId;
+  boundaryConditions?: SimulatorModelBoundaryCondition[];
+  metadata?: Record<string, any>;
+}
+
+export interface SimulatorModelRevisionPatch {
+  update: {
+    status?: SinglePatch<string>;
+    statusMessage?: SinglePatch<string>;
+    boundaryConditions?: SinglePatch<SimulatorModelBoundaryCondition[]>;
+    boundaryConditionsStatus?: SinglePatch<string>;
+  };
+}
+
+export interface SimulatorModelRevisionChange
+  extends SimulatorModelRevisionPatch,
+    InternalId {}
+
+export interface SimulatorModelRevisionFilter {
+  modelExternalIds?: CogniteExternalId[];
+  createdTime?: TimestampRange;
+  lastUpdatedTime?: TimestampRange;
+}
+
+export interface SimulatorModelRevisionFilterQuery extends FilterQuery {
+  filter?: SimulatorModelRevisionFilter;
+  sort?: SortItem[];
+  limit?: number;
 }
