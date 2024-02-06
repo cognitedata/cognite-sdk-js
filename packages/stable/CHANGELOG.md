@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.8.0...@cognite/sdk@9.9.0) (2024-02-06)
+
+### Features
+
+- add containers and views to the SDK ([#1056](https://github.com/cognitedata/cognite-sdk-js/issues/1056)) ([c05cc57](https://github.com/cognitedata/cognite-sdk-js/commit/c05cc57851e4a2f4df0a566f6fe1926da9eeeb93))
+
 # [9.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.7.1...@cognite/sdk@9.8.0) (2024-02-05)
 
 ### Features
