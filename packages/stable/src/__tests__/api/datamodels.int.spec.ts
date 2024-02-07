@@ -53,7 +53,7 @@ describe('Data models integration test', () => {
 
     await client.views.upsert([
       {
-        externalId: `test_view_${timestamp}`,
+        externalId: TEST_VIEW_NAME,
         space: TEST_SPACE_NAME,
         name: 'test_view',
         description: 'View used for integration tests.',
@@ -143,7 +143,7 @@ describe('Data models integration test', () => {
         version: '1',
       },
     ]);
-    expect(response.items).toHaveLength(2);
+    expect(response.items).toHaveLength(1);
 
     // Eventual consistency - wait for the delete to propagate
     await new Promise((resolve) => setTimeout(resolve, 20 * 1000));
