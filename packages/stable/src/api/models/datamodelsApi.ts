@@ -59,7 +59,7 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
     params: ListOfVersionReferences['items']
   ): Promise<ListOfVersionReferences> => {
     const response = await this.post<ListOfVersionReferences>(this.deleteUrl, {
-      data: { items: params.map((space) => ({ space })) },
+      data: { items: params },
     });
     return response.data;
   };
