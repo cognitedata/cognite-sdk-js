@@ -1,61 +1,6 @@
 // Copyright 2022 Cognite AS
 export {
-  CDFExternalIdReference,
-  ConnectionDefinition,
-  ContainerReference,
-  ContainsAllFilterV3,
-  ContainsAnyFilterV3,
-  CorePropertyDefinition,
-  CreateViewProperty,
-  DMSExistsFilter,
-  DMSExternalId,
-  DMSFilterProperty,
-  DMSVersion,
-  DataModelsBoolFilter,
-  DataModelsLeafFilter,
-  DataModelsNestedFilter,
-  DirectNodeRelation,
-  DirectRelationReference,
-  EdgeConnection,
-  EpochTimestamp,
-  EqualsFilterV3,
-  FilterDefinition,
-  FilterValue,
-  FilterValueList,
-  FilterValueRange,
-  HasExistingDataFilterV3,
-  InFilterV3,
-  ListOfAllVersionsReferences,
-  ListOfVersionReferences,
-  MatchAllFilter,
-  NextCursorV3,
-  NodeOrEdgeExternalId,
-  OverlapsFilterV3,
-  ParameterizedPropertyValueV3,
-  PrefixFilterV3,
-  PrimitiveProperty,
-  PropertyIdentifierV3,
-  RangeFilterV3,
-  RangeValue,
-  RawPropertyValueListV3,
-  RawPropertyValueV3,
-  ReferencedPropertyValueV3,
-  ReverseDirectRelationConnection,
-  SourceReference,
-  SpaceSpecification,
-  TextProperty,
-  ThroughReference,
-  UpsertConflict,
-  UsedFor,
-  ViewCommon,
-  ViewCorePropertyDefinition,
-  ViewCreateDefinition,
-  ViewCreateDefinitionProperty,
-  ViewDefinition,
-  ViewDefinitionProperty,
-  ViewDirectNodeRelation,
-  ViewPropertyDefinition,
-  ViewReference
+  EpochTimestamp
 } from './types.gen';
 export {
   AnnotationData,
@@ -93,29 +38,6 @@ export {
   AnnotationsUnhandledTextObject,
   AnnotationsView
 } from './api/annotations/types.gen';
-export {
-  BtreeIndex,
-  ConstraintDefinition,
-  ContainerCollectionResponse,
-  ContainerCollectionResponseWithCursorResponse,
-  ContainerCorePropertyDefinition,
-  ContainerCreateCollection,
-  ContainerCreateDefinition,
-  ContainerDefinition,
-  ContainerPropertyDefinition,
-  CursorQueryParameter,
-  IncludeGlobalQueryParameter,
-  IndexDefinition,
-  InvertedIndex,
-  ListOfContainerSubObjectIdentifierRequest,
-  ListOfContainerSubObjectIdentifierResponse,
-  ListOfSpaceExternalIdsRequest,
-  ListOfSpaceExternalIdsResponse,
-  ReducedLimitQueryParameter,
-  RequiresConstraintDefinition,
-  SpaceQueryParameter,
-  UniquenessConstraintDefinition
-} from './api/containers/types.gen';
 export {
   CogniteExternalId,
   CogniteInternalId,
@@ -196,26 +118,19 @@ export {
   LabelList
 } from './api/documents/types.gen';
 export {
-  AllVersionsQueryParameter,
-  DataModel,
-  DataModelCollectionResponse,
-  DataModelCollectionResponseWithCursorResponse,
-  DataModelCore,
-  DataModelCreate,
-  DataModelCreateCollection,
-  DataModelCreateProperty,
-  DataModelProperty,
-  InlineViewsQueryParameter,
-  VersionReferencesCollectionResponse
-} from './api/models/types.gen';
-export {
+  CursorQueryParameter,
+  IncludeGlobalQueryParameter,
   ListOfSpaceIdsRequest,
   ListOfSpaceIdsResponse,
+  NextCursorV3,
+  ReducedLimitQueryParameter,
   SpaceCollectionResponseV3Response,
   SpaceCollectionResponseWithCursorResponse,
   SpaceCreateCollection,
   SpaceCreateDefinition,
-  SpaceDefinition
+  SpaceDefinition,
+  SpaceSpecification,
+  UpsertConflict
 } from './api/spaces/types.gen';
 export {
   IdentityType,
@@ -230,12 +145,6 @@ export {
   UserProfilesSearchRequest,
   UserProfilesSearchResponse
 } from './api/userProfiles/types.gen';
-export {
-  IncludeInheritedPropertiesQueryParameter,
-  ViewCollectionResponse,
-  ViewCollectionResponseWithCursorResponse,
-  ViewCreateCollection
-} from './api/views/types.gen';
 export {
   AssetTagDetection,
   AssetTagDetectionParameters,
