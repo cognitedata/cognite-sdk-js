@@ -1,6 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import { DataModelCreate } from 'stable/src/types';
+import { DataModelCreate, ViewCreateDefinition } from 'stable/src/types';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
@@ -27,6 +27,24 @@ describe('Data models integration test', () => {
     ],
   };
 
+  const viewCreationDefinition: ViewCreateDefinition = {
+    externalId: TEST_VIEW_NAME,
+    space: TEST_SPACE_NAME,
+    name: 'test_view',
+    description: 'View used for integration tests.',
+    version: '1',
+    properties: {
+      test: {
+        container: {
+          type: 'container',
+          externalId: TEST_CONTAINER_NAME,
+          space: TEST_SPACE_NAME,
+        },
+        containerPropertyIdentifier: 'test',
+      },
+    },
+  };
+
   beforeAll(async () => {
     jest.setTimeout(30 * 1000);
     client = setupLoggedInClient();
@@ -51,25 +69,7 @@ describe('Data models integration test', () => {
       },
     ]);
 
-    await client.views.upsert([
-      {
-        externalId: TEST_VIEW_NAME,
-        space: TEST_SPACE_NAME,
-        name: 'test_view',
-        description: 'View used for integration tests.',
-        version: '1',
-        properties: {
-          test: {
-            container: {
-              type: 'container',
-              externalId: TEST_CONTAINER_NAME,
-              space: TEST_SPACE_NAME,
-            },
-            containerPropertyIdentifier: 'test',
-          },
-        },
-      },
-    ]);
+    await client.views.upsert([viewCreationDefinition]);
   });
   afterAll(async () => {
     client = setupLoggedInClient();
