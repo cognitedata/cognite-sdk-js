@@ -23,6 +23,7 @@ describe('Data models integration test', () => {
         externalId: TEST_VIEW_NAME,
         space: TEST_SPACE_NAME,
         version: '1',
+        type: 'view',
       },
     ],
   };
