@@ -1,6 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import { DataModelCreate } from 'stable/src/exports.gen';
+import { DataModelCreate } from 'stable/src/types';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
