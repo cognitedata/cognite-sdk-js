@@ -3511,3 +3511,17 @@ export {
   ViewPropertyReference,
   ViewReference,
 } from './api/instances/types.gen';
+
+export {
+  ListOfAllVersionsReferences,
+  ListOfVersionReferences,
+  ReverseDirectRelationConnection,
+  ThroughReference,
+  UsedFor,
+  ViewCommon,
+  ViewCreateDefinition,
+  ViewCreateDefinitionProperty,
+  ViewDefinition,
+  ViewDefinitionProperty,
+  ViewPropertyDefinition,
+} from './api/models/types.gen';
