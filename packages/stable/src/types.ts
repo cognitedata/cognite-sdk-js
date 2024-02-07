@@ -3513,6 +3513,8 @@ export {
 } from './api/instances/types.gen';
 
 export {
+  DataModel,
+  DataModelCreate,
   ListOfAllVersionsReferences,
   ListOfVersionReferences,
   ReverseDirectRelationConnection,
