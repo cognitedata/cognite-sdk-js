@@ -47,6 +47,7 @@ describe('Data models integration test', () => {
 
   beforeAll(async () => {
     jest.setTimeout(30 * 1000);
+    console.log('setup');
     client = setupLoggedInClient();
     await client.spaces.upsert([
       {
@@ -55,6 +56,7 @@ describe('Data models integration test', () => {
         description: 'Instance space used for datamodels integration tests.',
       },
     ]);
+    console.log('space');
     await client.containers.upsert([
       {
         externalId: TEST_CONTAINER_NAME,
@@ -68,8 +70,10 @@ describe('Data models integration test', () => {
         },
       },
     ]);
-
+    console.log('container');
+    console.log(JSON.stringify(viewCreationDefinition));
     await client.views.upsert([viewCreationDefinition]);
+    console.log('views');
   });
   afterAll(async () => {
     client = setupLoggedInClient();
@@ -87,6 +91,8 @@ describe('Data models integration test', () => {
   });
 
   it('should successfully upsert datamodels', async () => {
+    console.log('upsert');
+    console.log(JSON.stringify(datamodelCreationDefinition));
     const createdModelResponse = await client.dataModels.upsert([
       datamodelCreationDefinition,
     ]);
