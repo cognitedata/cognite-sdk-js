@@ -47,6 +47,7 @@ describe('Views integration test', () => {
   };
 
   beforeAll(async () => {
+    jest.setTimeout(30 * 1000);
     client = setupLoggedInClient();
     await client.spaces.upsert([
       {
@@ -159,6 +160,9 @@ describe('Views integration test', () => {
       },
     ]);
     expect(response.items).toHaveLength(2);
+
+    // Eventual consistency - wait for the delete to propagate
+    await new Promise((resolve) => setTimeout(resolve, 20 * 1000));
 
     const views = await client.views.list({ limit: 1000 });
     expect(
