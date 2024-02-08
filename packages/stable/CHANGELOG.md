@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.9.0...@cognite/sdk@9.10.0) (2024-02-08)
+
+### Features
+
+- introduce datamodels endpoints + export types correctly ([#1058](https://github.com/cognitedata/cognite-sdk-js/issues/1058)) ([0c3405f](https://github.com/cognitedata/cognite-sdk-js/commit/0c3405f3f842c203b79726d541be11379274d064))
+
 # [9.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.8.0...@cognite/sdk@9.9.0) (2024-02-06)
 
 ### Features
