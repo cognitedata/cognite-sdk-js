@@ -95,13 +95,16 @@
 					<div class="tsd-signature tsd-kind-icon">nested<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>filter<span class="tsd-signature-symbol">: </span><a href="../globals.html#filterdefinition" class="tsd-signature-type">FilterDefinition</a><span class="tsd-signature-symbol">; </span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c05cc57851/packages/stable/src/api/instances/types.gen.ts#L213">packages/stable/src/api/instances/types.gen.ts:213</a></li>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c05cc57851/packages/stable/src/api/views/types.gen.ts#L118">packages/stable/src/api/views/types.gen.ts:118</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0c3405f3f8/packages/stable/src/api/instances/types.gen.ts#L213">packages/stable/src/api/instances/types.gen.ts:213</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0c3405f3f8/packages/stable/src/api/models/types.gen.ts#L151">packages/stable/src/api/models/types.gen.ts:151</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/0c3405f3f8/packages/stable/src/api/views/types.gen.ts#L118">packages/stable/src/api/views/types.gen.ts:118</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Use <code>nested</code> to apply the properties of the direct relation as the filter.  <code>scope</code> specifies the direct
+								relation property you want use as the filtering property.
+								Use <code>nested</code> to apply the properties of the direct relation as the filter.  <code>scope</code> specifies the direct
 								relation property you want use as the filtering property.
 								Use <code>nested</code> to apply the properties of the direct relation as the filter.  <code>scope</code> specifies the direct
 							relation property you want use as the filtering property.</p>
@@ -132,6 +135,19 @@
 							}
 							}
 						}</p>
+						<p>Example:</p>
+						<pre><code>  {
+    <span class="hljs-attr">&quot;nested&quot;</span>: {
+      <span class="hljs-attr">&quot;scope&quot;</span>: [<span class="hljs-string">&quot;some&quot;</span>, <span class="hljs-string">&quot;direct_relation&quot;</span>, <span class="hljs-string">&quot;property&quot;</span>],
+      <span class="hljs-attr">&quot;filter&quot;</span>: {
+        <span class="hljs-attr">&quot;equals&quot;</span>: {
+          <span class="hljs-attr">&quot;property&quot;</span>: [<span class="hljs-string">&quot;node&quot;</span>, <span class="hljs-string">&quot;name&quot;</span>],
+          <span class="hljs-attr">&quot;value&quot;</span>: <span class="hljs-string">&quot;ACME&quot;</span>
+        }
+      }
+    }
+  }
+</code></pre>
 					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
