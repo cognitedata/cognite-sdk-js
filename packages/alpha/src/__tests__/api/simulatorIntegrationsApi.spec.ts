@@ -2,7 +2,14 @@
 
 import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-import { fileExtensionTypes, stepFields, unitsMap, unitSystem, modelTypes, boundaryConditions } from './mocks';
+import {
+  fileExtensionTypes,
+  stepFields,
+  unitsMap,
+  unitSystem,
+  modelTypes,
+  boundaryConditions,
+} from './mocks';
 
 describe('simulator integrations api', () => {
   const ts = Date.now();
@@ -14,29 +21,27 @@ describe('simulator integrations api', () => {
 
   test('create simulator', async () => {
     const response = await client.simulators.create([
-        {
-          externalId: simulatorExternalId,
-          name: simulatorName,
-          fileExtensionTypes,
-          enabled: true,
-          stepFields,
-          units: {
-            unitsMap,
-            unitSystem,
-          },
-          modelTypes,
-          boundaryConditions,
-          isCalculationsEnabled: true,
+      {
+        externalId: simulatorExternalId,
+        name: simulatorName,
+        fileExtensionTypes,
+        enabled: true,
+        stepFields,
+        units: {
+          unitsMap,
+          unitSystem,
         },
-      ]);
-      simulatorId = response[0].id;
-      expect(response.length).toBe(1);
-      expect(response[0].externalId).toBe(simulatorExternalId);
-
+        modelTypes,
+        boundaryConditions,
+        isCalculationsEnabled: true,
+      },
+    ]);
+    simulatorId = response[0].id;
+    expect(response.length).toBe(1);
+    expect(response[0].externalId).toBe(simulatorExternalId);
   });
 
   test('create integration', async () => {
-
     const response = await client.simulators.createIntegrations([
       {
         externalId: simulatorIntegrationExternalId,
@@ -49,14 +54,12 @@ describe('simulator integrations api', () => {
         licenseStatus: 'active',
         licenseLastCheckedTime: 0,
         connectorStatus: 'unknown',
-        connectorStatusUpdatedTime: 0
-      }      
-    ])
+        connectorStatusUpdatedTime: 0,
+      },
+    ]);
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(simulatorIntegrationExternalId);
-
   });
-
 
   test('list integrations', async () => {
     const list_response = await client.simulators.listIntegrations();
@@ -65,12 +68,9 @@ describe('simulator integrations api', () => {
       (item) => item.externalId === simulatorIntegrationExternalId
     );
     expect(integrationFound?.externalId).toBe(simulatorIntegrationExternalId);
-
   });
 
-  test('create model revision', async () => {
-
-  });
+  test('create model revision', async () => {});
 
   test('delete simulators', async () => {
     if (simulatorId) {
@@ -87,7 +87,8 @@ describe('simulator integrations api', () => {
         ).length
       ).toBe(0);
 
-      const responseAfterSimulatorDelete = await client.simulators.listIntegrations();
+      const responseAfterSimulatorDelete =
+        await client.simulators.listIntegrations();
       expect(
         responseAfterSimulatorDelete.items.filter(
           (res) => res.externalId == simulatorIntegrationExternalId
@@ -95,5 +96,4 @@ describe('simulator integrations api', () => {
       ).toBe(0);
     }
   });
-
 });

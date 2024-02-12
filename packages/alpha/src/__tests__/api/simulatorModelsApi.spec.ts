@@ -2,7 +2,14 @@
 
 import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-import { fileExtensionTypes, stepFields, unitsMap, unitSystem, modelTypes, boundaryConditions } from './mocks';
+import {
+  fileExtensionTypes,
+  stepFields,
+  unitsMap,
+  unitSystem,
+  modelTypes,
+  boundaryConditions,
+} from './mocks';
 
 describe('simulator models api', () => {
   const ts = Date.now();
@@ -15,44 +22,42 @@ describe('simulator models api', () => {
 
   test('create simulator', async () => {
     const response = await client.simulators.create([
-        {
-          externalId: simulatorExternalId,
-          name: simulatorName,
-          fileExtensionTypes,
-          enabled: true,
-          stepFields,
-          units: {
-            unitsMap,
-            unitSystem,
-          },
-          modelTypes,
-          boundaryConditions,
-          isCalculationsEnabled: true,
+      {
+        externalId: simulatorExternalId,
+        name: simulatorName,
+        fileExtensionTypes,
+        enabled: true,
+        stepFields,
+        units: {
+          unitsMap,
+          unitSystem,
         },
-      ]);
-      simulatorId = response[0].id;
-      expect(response.length).toBe(1);
-      expect(response[0].externalId).toBe(simulatorExternalId);
-
+        modelTypes,
+        boundaryConditions,
+        isCalculationsEnabled: true,
+      },
+    ]);
+    simulatorId = response[0].id;
+    expect(response.length).toBe(1);
+    expect(response[0].externalId).toBe(simulatorExternalId);
   });
 
   test('create model', async () => {
     const res = await client.simulators.createModel([
-        {
-            externalId: modelExternalId,
-            simulatorExternalId,
-            name: 'Test Simulator Model',
-            description: 'Test Simulator Model Desc',
-            dataSetId: 4097666328084896,
-            labels: [ { externalId: 'air-quality-po-1' } ],
-            type: 'string',
-            unitSystem: 'SI'
-          }
+      {
+        externalId: modelExternalId,
+        simulatorExternalId,
+        name: 'Test Simulator Model',
+        description: 'Test Simulator Model Desc',
+        dataSetId: 4097666328084896,
+        labels: [{ externalId: 'air-quality-po-1' }],
+        type: 'string',
+        unitSystem: 'SI',
+      },
     ]);
     expect(res.length).toBe(1);
     expect(res[0].externalId).toBe(modelExternalId);
   });
-
 
   test('list models', async () => {
     const list_response = await client.simulators.listModels();
@@ -71,25 +76,25 @@ describe('simulator models api', () => {
         description: 'test sim model revision description',
         fileId: 3747718694331206,
         boundaryConditions: [],
-        metadata: {}
-      }
+        metadata: {},
+      },
     ]);
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(modelRevisionExternalId);
-
   });
 
   test('delete model', async () => {
-      const response = await client.simulators.deleteModel([{ externalId: modelExternalId }]);
-      expect(response).toEqual({});
-      const responseAfterDelete = await client.simulators.listModels();
-      expect(
-          responseAfterDelete.items.filter(
-          (res) => res.externalId == modelExternalId
-          ).length
-      ).toBe(0);
+    const response = await client.simulators.deleteModel([
+      { externalId: modelExternalId },
+    ]);
+    expect(response).toEqual({});
+    const responseAfterDelete = await client.simulators.listModels();
+    expect(
+      responseAfterDelete.items.filter(
+        (res) => res.externalId == modelExternalId
+      ).length
+    ).toBe(0);
   });
-
 
   test('delete simulator and integrationns', async () => {
     // Since we do not have a delete endpoint for integrations, if we delete the simulator, the integrations will be deleted as well
@@ -106,8 +111,6 @@ describe('simulator models api', () => {
           (res) => res.externalId == simulatorExternalId
         ).length
       ).toBe(0);
-
     }
   });
-
 });

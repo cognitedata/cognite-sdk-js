@@ -3,7 +3,14 @@
 import { SimulatorPatch } from '../../types';
 import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-import { fileExtensionTypes, stepFields, unitsMap, unitSystem, modelTypes, boundaryConditions } from './mocks';
+import {
+  fileExtensionTypes,
+  stepFields,
+  unitsMap,
+  unitSystem,
+  modelTypes,
+  boundaryConditions,
+} from './mocks';
 
 describe('simulator integrations api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
@@ -12,7 +19,6 @@ describe('simulator integrations api', () => {
   const simulatorExternalId = `test_sim_${ts}`;
   const simulatorName = `TestSim - ${ts}`;
   let simulatorId: number;
-  
 
   test('create simulators', async () => {
     const response = await client.simulators.create([
