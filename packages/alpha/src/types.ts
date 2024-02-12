@@ -61,7 +61,7 @@ export interface SimulatorStepField {
   name: string;
   label: string;
   info: string;
-  options?: SimulatorStepFieldOption[];
+  options?: SimulatorStepFieldOption[] | null;
 }
 
 export interface SimulatorStep {
@@ -126,6 +126,7 @@ export interface SimulatorIntegrationCreate {
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
   dataSetId?: CogniteInternalId;
+  heartbeat?: Timestamp;
   connectorVersion?: string;
   simulatorVersion?: string;
   runApiEnabled?: boolean;
