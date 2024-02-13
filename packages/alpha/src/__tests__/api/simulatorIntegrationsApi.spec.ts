@@ -11,7 +11,11 @@ import {
   boundaryConditions,
 } from './mocks';
 
-describe('simulator integrations api', () => {
+const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
+
+const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
+
+describeIf('simulator integrations api', () => {
   const ts = Date.now();
   const simulatorExternalId = `test_sim_${ts}`;
   const simulatorIntegrationExternalId = `test_sim_integration_${ts}`;

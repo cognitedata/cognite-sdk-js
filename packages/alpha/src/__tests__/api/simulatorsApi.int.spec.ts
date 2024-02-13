@@ -12,7 +12,11 @@ import {
   boundaryConditions,
 } from './mocks';
 
-describe('simulator integrations api', () => {
+const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
+
+const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
+
+describeIf('simulator integrations api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
 
   const ts = Date.now();
