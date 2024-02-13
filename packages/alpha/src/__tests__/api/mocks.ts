@@ -1,3 +1,5 @@
+import { RoutineRevisionConfiguration, RoutineScript } from 'alpha/src/types';
+
 export const unitsMap = {
   accel: {
     label: 'Acceleration',
@@ -81,3 +83,87 @@ export const boundaryConditions = [
   },
 ];
 export const fileExtensionTypes = ['csv', 'yaml'];
+
+export const routineRevisionConfiguration: RoutineRevisionConfiguration = {
+  schedule: { enabled: false },
+  dataSampling: {
+    validationWindow: 0,
+    samplingWindow: 0,
+    granularity: 0,
+    validationEndOffset: '9s',
+  },
+  logicalCheck: { enabled: false },
+  steadyStateDetection: { enabled: false },
+  inputTimeseries: [
+    {
+      name: 'string',
+      referenceId: 'string',
+      unit: 'string',
+      unitType: 'string',
+      sourceExternalId: 'string',
+      aggregate: 'average',
+      saveTimeseriesExternalId: 'PROSPER-INPUT-ChokeDp-THP-Well_A2',
+    },
+  ],
+  outputTimeseries: [
+    {
+      name: 'string',
+      referenceId: 'string',
+      unit: 'string',
+      unitType: 'string',
+      saveTimeseriesExternalId: 'string',
+    },
+  ],
+  inputConstants: [
+    {
+      name: 'string',
+      saveTimeseriesExternalId: 'string',
+      value: 'string',
+      unit: 'string',
+      unitType: 'string',
+      referenceId: 'string',
+    },
+  ],
+};
+
+export const routineRevisionScript: RoutineScript[] = [
+  {
+    order: 1,
+    description: 'string',
+    steps: [
+      {
+        order: 1,
+        stepType: 'Get',
+        description: 'string',
+        arguments: {
+          argumentType: 'outputTimeSeries',
+          objectName: 'WELL.A2',
+          objectProperty: 'Tempretature',
+          referenceId: 'CWTC',
+        },
+      },
+      {
+        order: 2,
+        stepType: 'Set',
+        description: 'string',
+        arguments: {
+          argumentType: 'inputConstant',
+          objectName: 'WELL.A2',
+          objectProperty: 'Tempretature',
+          referenceId: 'CWTC',
+        },
+      },
+      {
+        order: 3,
+        stepType: 'Command',
+        description: 'string',
+        arguments: {
+          argumentType: 'outputTimeSeries',
+          objectName: 'WELL.A2',
+          objectProperty: 'Tempretature',
+          referenceId: 'CWTC',
+        },
+      },
+    ],
+  },
+];

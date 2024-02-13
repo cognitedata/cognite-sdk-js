@@ -70,8 +70,6 @@ describe('simulator integrations api', () => {
     expect(integrationFound?.externalId).toBe(simulatorIntegrationExternalId);
   });
 
-  test('create model revision', async () => {});
-
   test('delete simulators', async () => {
     if (simulatorId) {
       const response = await client.simulators.delete([

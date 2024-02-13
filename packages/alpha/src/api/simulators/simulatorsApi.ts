@@ -13,24 +13,31 @@ import {
   SimulatorFilterQuery,
   SimulatorChange,
   SimulatorModelRevisionCreate,
+  SimulatorRoutineCreate,
   SimulationRunCreate,
   SimulationRunFilterQuery,
   SimulatorModelFilterQuery,
+  SimulatorRoutineFilterQuery,
   SimulatorModelCreate,
   SimulatorModelChange,
   SimulatorModelRevisionFilterQuery,
   SimulatorModelRevisionChange,
+  SimulatorRoutineRevisionCreate,
 } from '../../types';
 import { IntegrationsAPI } from './integrationsApi';
 import { SimulationRunsAPI } from './simulationRunsApi';
 import { ModelsAPI } from './modelsApi';
 import { ModelRevisionsAPI } from './modelRevisionsApi';
+import { RoutinesAPI } from './routinesApi';
+import { RoutineRevisionsAPI } from './routinesRevisionsAPI';
 
 export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   private integrationsApi: IntegrationsAPI;
   private runsApi: SimulationRunsAPI;
   private modelsApi: ModelsAPI;
   private modelRevisionsApi: ModelRevisionsAPI;
+  private routinesApi: RoutinesAPI;
+  private routineRevisionsApi: RoutineRevisionsAPI;
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
 
@@ -56,6 +63,18 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
 
     this.modelRevisionsApi = new ModelRevisionsAPI(
       `${resourcePath}/models/revisions`,
+      client,
+      metadataMap
+    );
+
+    this.routinesApi = new RoutinesAPI(
+      `${resourcePath}/routines`,
+      client,
+      metadataMap
+    );
+
+    this.routineRevisionsApi = new RoutineRevisionsAPI(
+      `${resourcePath}/routines/revisions`,
       client,
       metadataMap
     );
@@ -139,5 +158,23 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     changes: SimulatorModelRevisionChange[]
   ) => {
     return this.modelRevisionsApi.update(changes);
+  };
+
+  public listRoutines = async (filter?: SimulatorRoutineFilterQuery) => {
+    return this.routinesApi.list(filter);
+  };
+
+  public createRoutines = async (items: SimulatorRoutineCreate[]) => {
+    return this.routinesApi.create(items);
+  };
+
+  public deleteRoutines = async (ids: IdEither[]) => {
+    return this.routinesApi.delete(ids);
+  };
+
+  public createRoutineRevisions = async (
+    items: SimulatorRoutineRevisionCreate[]
+  ) => {
+    return this.routineRevisionsApi.create(items);
   };
 }
