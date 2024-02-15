@@ -47,7 +47,7 @@ describeIf('simulator models api', () => {
   });
 
   test('create model', async () => {
-    const res = await client.simulators.createModel([
+    const res = await client.simulators.createModels([
       {
         externalId: modelExternalId,
         simulatorExternalId,
@@ -88,7 +88,7 @@ describeIf('simulator models api', () => {
   });
 
   test('delete model', async () => {
-    const response = await client.simulators.deleteModel([
+    const response = await client.simulators.deleteModels([
       { externalId: modelExternalId },
     ]);
     expect(response).toEqual({});

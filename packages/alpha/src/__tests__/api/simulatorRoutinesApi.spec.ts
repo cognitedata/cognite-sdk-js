@@ -72,7 +72,7 @@ describeIf('simulator routines api', () => {
   });
 
   test('create model', async () => {
-    const res = await client.simulators.createModel([
+    const res = await client.simulators.createModels([
       {
         externalId: modelExternalId,
         simulatorExternalId,

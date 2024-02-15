@@ -126,15 +126,15 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     return this.modelsApi.list(filter);
   };
 
-  public createModel = async (items: SimulatorModelCreate[]) => {
+  public createModels = async (items: SimulatorModelCreate[]) => {
     return this.modelsApi.create(items);
   };
 
-  public deleteModel = async (ids: IdEither[]) => {
+  public deleteModels = async (ids: IdEither[]) => {
     return this.modelsApi.delete(ids);
   };
 
-  public updateModel = async (changes: SimulatorModelChange[]) => {
+  public updateModels = async (changes: SimulatorModelChange[]) => {
     return this.modelsApi.update(changes);
   };
 

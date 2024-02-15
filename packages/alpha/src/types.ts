@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { SinglePatch, SortOrder, Timestamp } from '@cognite/sdk';
+import { SinglePatch, SortOrder, Timestamp, DateRange } from '@cognite/sdk';
 import {
   CogniteExternalId,
   CogniteInternalId,
@@ -18,10 +18,6 @@ export type ArrayPatchExternalIds =
   | { set: ExternalId[] }
   | { add?: ExternalId[]; remove?: ExternalId[] };
 
-export interface TimestampRange {
-  min?: Timestamp;
-  max?: Timestamp;
-}
 export interface SimulatorUnitRecord {
   label: string;
   value: string;
@@ -61,7 +57,7 @@ export interface SimulatorStepField {
   name: string;
   label: string;
   info: string;
-  options?: SimulatorStepFieldOption[] | null;
+  options?: SimulatorStepFieldOption[];
 }
 
 export interface SimulatorStep {
@@ -311,8 +307,8 @@ export interface SimulatorModelRevisionChange
 
 export interface SimulatorModelRevisionFilter {
   modelExternalIds?: CogniteExternalId[];
-  createdTime?: TimestampRange;
-  lastUpdatedTime?: TimestampRange;
+  createdTime?: DateRange;
+  lastUpdatedTime?: DateRange;
 }
 
 export interface SimulatorModelRevisionFilterQuery extends FilterQuery {
@@ -498,7 +494,7 @@ export interface SimulatorRoutineRevisionslFilter {
   modelExternalIds?: CogniteExternalId[];
   simulatorIntegrationExternalIds?: CogniteExternalId[];
   simulatorExternalIds?: CogniteExternalId[];
-  createdTime?: TimestampRange;
+  createdTime?: DateRange;
 }
 
 export interface SimulatorRoutineRevisionslFilterQuery extends FilterQuery {

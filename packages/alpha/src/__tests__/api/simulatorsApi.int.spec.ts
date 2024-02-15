@@ -106,7 +106,6 @@ describeIf('simulator integrations api', () => {
                 info: 'test_update',
                 label: 'test_update',
                 name: 'test_update',
-                options: null,
               },
             ],
             stepType: 'get/set-updated',
