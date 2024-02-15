@@ -57,7 +57,7 @@ export interface SimulatorStepField {
   name: string;
   label: string;
   info: string;
-  options?: SimulatorStepFieldOption[];
+  options?: SimulatorStepFieldOption[] | null;
 }
 
 export interface SimulatorStep {
@@ -346,7 +346,7 @@ export interface SimulatorRoutine {
   simulatorIntegrationExternalId: CogniteExternalId;
   name: string;
   dataSetId: number;
-  description: string;
+  description?: string;
   createdTime: Timestamp;
   lastUpdatedTime: Timestamp;
 }
@@ -407,20 +407,20 @@ interface RoutineInputConstant {
   name: string;
   saveTimeseriesExternalId: CogniteExternalId;
   value: string;
-  unit: string;
-  unitType: string;
+  unit?: string;
+  unitType?: string;
   referenceId: string;
 }
 
-interface RoutineTimeSerie {
+interface RoutineTimeSeries {
   name: string;
   referenceId: string;
-  unit: string;
-  unitType: string;
+  unit?: string;
+  unitType?: string;
   saveTimeseriesExternalId: CogniteExternalId;
 }
 
-interface RoutineInputTimeserie extends RoutineTimeSerie {
+interface RoutineInputTimeseries extends RoutineTimeSeries {
   sourceExternalId: string;
   aggregate: DataPointsAggregate;
 }
@@ -446,13 +446,13 @@ interface RoutineScriptStepArguments {
 interface RoutineScriptStep {
   order: number;
   stepType: string;
-  description: string;
+  description?: string;
   arguments: RoutineScriptStepArguments;
 }
 
 export interface RoutineScript {
   order: number;
-  description: string;
+  description?: string;
   steps: RoutineScriptStep[];
 }
 export interface RoutineRevisionConfiguration {
@@ -462,8 +462,8 @@ export interface RoutineRevisionConfiguration {
   logicalCheck: RoutineConfigDisabled | RoutineLogicalCheck;
   inputConstants: RoutineInputConstant[];
   outputSequences?: RoutineOutputSequence[];
-  inputTimeseries: RoutineInputTimeserie[];
-  outputTimeseries: RoutineTimeSerie[];
+  inputTimeseries: RoutineInputTimeseries[];
+  outputTimeseries: RoutineTimeSeries[];
   extraOptions?: RoutineGaugeDepth;
 }
 export interface SimulatorRoutineRevision {

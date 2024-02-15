@@ -16,7 +16,7 @@ const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
 
 const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 
-describeIf('simulator integrations api', () => {
+describeIf('simulators api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
 
   const ts = Date.now();
@@ -106,6 +106,7 @@ describeIf('simulator integrations api', () => {
                 info: 'test_update',
                 label: 'test_update',
                 name: 'test_update',
+                options: null
               },
             ],
             stepType: 'get/set-updated',
