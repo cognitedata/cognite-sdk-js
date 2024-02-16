@@ -110,10 +110,10 @@ export interface SimulatorIntegration {
   connectorVersion: string;
   simulatorVersion: string;
   runApiEnabled: boolean;
-  licenseStatus: string;
-  licenseLastCheckedTime: Date;
-  connectorStatus: string;
-  connectorStatusUpdatedTime: Date;
+  licenseStatus?: string;
+  licenseLastCheckedTime?: Date;
+  connectorStatus?: string;
+  connectorStatusUpdatedTime?: Date;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
