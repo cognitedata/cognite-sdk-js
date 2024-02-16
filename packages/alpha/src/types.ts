@@ -219,11 +219,11 @@ export interface SimulatorModel {
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
   name: string;
-  description: string;
+  description?: string;
   dataSetId: CogniteInternalId;
-  labels: ExternalId[];
-  type: string;
-  unitSystem: string;
+  labels?: ExternalId[];
+  type?: string;
+  unitSystem?: string;
   createdTime: Timestamp;
   lastUpdatedTime: Timestamp;
 }
@@ -232,11 +232,11 @@ export interface SimulatorModelCreate {
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
   name: string;
-  description: string;
+  description?: string;
   dataSetId: CogniteInternalId;
-  labels: ExternalId[];
-  type: string;
-  unitSystem: string;
+  labels?: ExternalId[];
+  type?: string;
+  unitSystem?: string;
 }
 
 export interface SimulatorModelFilter {
@@ -269,16 +269,16 @@ export interface SimulatorModelRevision {
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
   modelExternalId: CogniteExternalId;
-  description: string;
+  description?: string;
   dataSetId: CogniteInternalId;
   fileId: CogniteInternalId;
-  createdByUserId: string;
+  createdByUserId?: string;
   status: string;
-  statusMessage: string;
+  statusMessage?: string;
   boundaryConditions?: SimulatorModelBoundaryCondition[];
-  boundaryConditionsStatus: string;
+  boundaryConditionsStatus?: string;
   versionNumber: number;
-  metadata: Record<string, any>;
+  metadata?: Record<string, string>;
   createdTime: Timestamp;
   lastUpdatedTime: Timestamp;
 }
@@ -438,8 +438,7 @@ interface RoutineGaugeDepth {
 
 interface RoutineScriptStepArguments {
   argumentType: string;
-  objectName: string;
-  objectProperty: string;
+  [s: string]: string;
   referenceId: string;
 }
 
