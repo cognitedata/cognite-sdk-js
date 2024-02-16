@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.15.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.15.0...@cognite/sdk-alpha@0.15.1) (2024-02-16)
+
+### Bug Fixes
+
+- **alpha:** simulator integration optional props ([#1060](https://github.com/cognitedata/cognite-sdk-js/issues/1060)) ([26bd5c3](https://github.com/cognitedata/cognite-sdk-js/commit/26bd5c30beb0e04c483698e61fc2671be9e4f28e))
+
 # [0.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.14.0...@cognite/sdk-alpha@0.15.0) (2024-02-16)
 
 ### Features
