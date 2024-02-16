@@ -19,12 +19,7 @@ export class SimulationRunsAPI extends BaseResourceAPI<SimulationRun> {
   protected getDateProps() {
     return this.pickDateProps(
       ['items'],
-      [
-        'createdTime',
-        'lastUpdatedTime',
-        'validationEndTime',
-        'simulationTime'
-      ]
+      ['createdTime', 'lastUpdatedTime', 'validationEndTime', 'simulationTime']
     );
   }
 

@@ -49,7 +49,7 @@ describeIf('simulators api', () => {
     expect(response[0].stepFields).toEqual(stepFields);
     expect(response[0].units).toEqual({
       unitsMap,
-      unitSystem
+      unitSystem,
     });
     expect(response[0].modelTypes).toEqual(modelTypes);
     expect(response[0].boundaryConditions).toEqual(boundaryConditions);

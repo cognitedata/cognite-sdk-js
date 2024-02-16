@@ -17,15 +17,8 @@ export class RoutineRevisionsAPI extends BaseResourceAPI<SimulatorRoutineRevisio
    * @hidden
    */
   protected getDateProps() {
-    return this.pickDateProps(
-      ['items'],
-      [
-        'createdTime',
-        'lastUpdatedTime',
-      ]
-    );
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
   }
-
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);

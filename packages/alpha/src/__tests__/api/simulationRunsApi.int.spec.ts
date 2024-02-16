@@ -46,12 +46,14 @@ describeIf('simulator integrations api', () => {
         status: 'success',
         createdTime: {
           max: new Date(),
-        }
+        },
       },
-      sort: [{
-        property: 'createdTime',
-        order: 'desc',
-      }]
+      sort: [
+        {
+          property: 'createdTime',
+          order: 'desc',
+        },
+      ],
     });
 
     expect(res).toBeDefined();

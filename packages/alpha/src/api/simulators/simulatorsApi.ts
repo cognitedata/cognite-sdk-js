@@ -43,13 +43,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
    * @hidden
    */
   protected getDateProps() {
-    return this.pickDateProps(
-      ['items'],
-      [
-        'createdTime',
-        'lastUpdatedTime',
-      ]
-    );
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
   }
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
