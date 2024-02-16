@@ -14,6 +14,13 @@ import {
 } from '../../types';
 
 export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
+  /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
+  }
+
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
   }

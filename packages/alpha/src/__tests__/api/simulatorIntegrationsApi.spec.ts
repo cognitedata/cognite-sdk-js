@@ -17,7 +17,7 @@ const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 
 describeIf('simulator integrations api', () => {
   const ts = Date.now();
-  const simulatorExternalId = `test_sim_${ts}`;
+  const simulatorExternalId = `test_sim_${ts}_a`;
   const simulatorIntegrationExternalId = `test_sim_integration_${ts}`;
   const simulatorName = `TestSim - ${ts}`;
   const client: CogniteClientAlpha = setupLoggedInClient();
@@ -50,15 +50,15 @@ describeIf('simulator integrations api', () => {
       {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
-        heartbeat: ts,
+        heartbeat: new Date(ts),
         dataSetId: 4097666328084896,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',
         runApiEnabled: true,
         licenseStatus: 'active',
-        licenseLastCheckedTime: 0,
+        licenseLastCheckedTime: new Date(),
         connectorStatus: 'unknown',
-        connectorStatusUpdatedTime: 0,
+        connectorStatusUpdatedTime: new Date(),
       },
     ]);
     expect(response.length).toBe(1);

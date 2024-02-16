@@ -13,6 +13,13 @@ import {
 } from '../../types';
 
 export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
+  /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
+  }
+
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
   }

@@ -20,7 +20,7 @@ describeIf('simulators api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
 
   const ts = Date.now();
-  const simulatorExternalId = `test_sim_${ts}`;
+  const simulatorExternalId = `test_sim_${ts}_d`;
   const simulatorName = `TestSim - ${ts}`;
   let simulatorId: number;
 
@@ -46,11 +46,11 @@ describeIf('simulators api', () => {
     expect(response[0].externalId).toBe(simulatorExternalId);
     expect(response[0].fileExtensionTypes).toEqual(['csv', 'yaml']);
     expect(response[0].enabled).toBe(true);
-    // expect(response[0].stepFields).toEqual(stepFields);
-    // expect(response[0].units).toEqual({
-    //   unitsMap,
-    //   unitSystem
-    // });
+    expect(response[0].stepFields).toEqual(stepFields);
+    expect(response[0].units).toEqual({
+      unitsMap,
+      unitSystem,
+    });
     expect(response[0].modelTypes).toEqual(modelTypes);
     expect(response[0].boundaryConditions).toEqual(boundaryConditions);
     expect(response[0].isCalculationsEnabled).toBe(true);

@@ -15,9 +15,7 @@ describeIf('simulator integrations api', () => {
   test('run a simulation', async () => {
     const res = await client.simulators.runSimulation([
       {
-        simulatorName: 'DWSIM',
-        modelName: 'ShowerMixerIntegrationTest',
-        routineName: 'ShowerMixerCalculation',
+        routineExternalId: 'ShowerMixerIntegrationTestConstInputs',
         runType: 'external',
         validationEndTime: new Date(ts),
         queue: true,
@@ -33,7 +31,7 @@ describeIf('simulator integrations api', () => {
 
     expect(item.simulatorName).toBe('DWSIM');
     expect(item.modelName).toBe('ShowerMixerIntegrationTest');
-    expect(item.routineName).toBe('ShowerMixerCalculation');
+    expect(item.routineName).toBe('ShowerMixerIntegrationTest');
     expect(item.status).toBe('ready');
     expect(item.runType).toBe('external');
     expect(item.validationEndTime?.valueOf()).toBe(ts);
@@ -46,7 +44,16 @@ describeIf('simulator integrations api', () => {
       filter: {
         simulatorName: 'DWSIM',
         status: 'success',
+        createdTime: {
+          max: new Date(),
+        },
       },
+      sort: [
+        {
+          property: 'createdTime',
+          order: 'desc',
+        },
+      ],
     });
 
     expect(res).toBeDefined();

@@ -17,7 +17,7 @@ const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 
 describeIf('simulator models api', () => {
   const ts = Date.now();
-  const simulatorExternalId = `test_sim_${ts}`;
+  const simulatorExternalId = `test_sim_${ts}_b`;
   const modelExternalId = `test_sim_model_${ts}`;
   const modelRevisionExternalId = `test_sim_model_revision_${ts}`;
   const simulatorName = `TestSim - ${ts}`;
