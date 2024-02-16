@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.13.7...@cognite/sdk-alpha@0.14.0) (2024-02-16)
+
+### Features
+
+- add support for SimInt models and routines ([#1057](https://github.com/cognitedata/cognite-sdk-js/issues/1057)) ([c7a0e2d](https://github.com/cognitedata/cognite-sdk-js/commit/c7a0e2da6c3dd7edbe094cd85e87e4d07cd8905b))
+
 ## [0.13.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.13.6...@cognite/sdk-alpha@0.13.7) (2024-02-08)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
