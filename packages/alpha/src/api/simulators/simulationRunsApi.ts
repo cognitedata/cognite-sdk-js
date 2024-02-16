@@ -23,7 +23,7 @@ export class SimulationRunsAPI extends BaseResourceAPI<SimulationRun> {
         'createdTime',
         'lastUpdatedTime',
         'validationEndTime',
-        'validationEndTime',
+        'simulationTime'
       ]
     );
   }

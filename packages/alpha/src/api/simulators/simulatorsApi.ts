@@ -38,6 +38,20 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   private modelRevisionsApi: ModelRevisionsAPI;
   private routinesApi: RoutinesAPI;
   private routineRevisionsApi: RoutineRevisionsAPI;
+
+  /**
+   * @hidden
+   */
+  protected getDateProps() {
+    return this.pickDateProps(
+      ['items'],
+      [
+        'createdTime',
+        'lastUpdatedTime',
+      ]
+    );
+  }
+
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
 

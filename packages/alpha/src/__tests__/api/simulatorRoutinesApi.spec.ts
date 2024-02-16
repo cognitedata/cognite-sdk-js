@@ -19,7 +19,7 @@ const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 
 describeIf('simulator routines api', () => {
   const ts = Date.now();
-  const simulatorExternalId = `test_sim_${ts}`;
+  const simulatorExternalId = `test_sim_${ts}_c`;
   const modelExternalId = `test_sim_model_${ts}`;
   const modelRevisionExternalId = `test_sim_model_revision_${ts}`;
   const routineExternalId = `test_sim_routine_${ts}`;
@@ -56,15 +56,13 @@ describeIf('simulator routines api', () => {
       {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
-        heartbeat: ts,
+        heartbeat: new Date(ts),
         dataSetId: 4097666328084896,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',
         runApiEnabled: true,
         licenseStatus: 'active',
-        licenseLastCheckedTime: 0,
         connectorStatus: 'unknown',
-        connectorStatusUpdatedTime: 0,
       },
     ]);
     expect(response.length).toBe(1);

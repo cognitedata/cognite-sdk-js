@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { SinglePatch, SortOrder, Timestamp, DateRange } from '@cognite/sdk';
+import { SinglePatch, SortOrder, DateRange } from '@cognite/sdk';
 import {
   CogniteExternalId,
   CogniteInternalId,
@@ -76,8 +76,8 @@ export interface Simulator {
   enabled: boolean;
   stepFields?: SimulatorStep[];
   units?: SimulatorUnits;
-  createdTime: Timestamp;
-  lastUpdatedTime: Timestamp;
+  createdTime: Date;
+  lastUpdatedTime: Date;
 }
 
 export interface SimulatorFilter {
@@ -105,31 +105,31 @@ export interface SimulatorIntegration {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
-  heartbeat: Timestamp;
+  heartbeat: Date;
   dataSetId: CogniteInternalId;
   connectorVersion: string;
   simulatorVersion: string;
   runApiEnabled: boolean;
   licenseStatus: string;
-  licenseLastCheckedTime: Timestamp;
+  licenseLastCheckedTime: Date;
   connectorStatus: string;
-  connectorStatusUpdatedTime: Timestamp;
-  createdTime: Timestamp;
-  lastUpdatedTime: Timestamp;
+  connectorStatusUpdatedTime: Date;
+  createdTime: Date;
+  lastUpdatedTime: Date;
 }
 
 export interface SimulatorIntegrationCreate {
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
   dataSetId?: CogniteInternalId;
-  heartbeat?: Timestamp;
+  heartbeat?: Date;
   connectorVersion?: string;
   simulatorVersion?: string;
   runApiEnabled?: boolean;
   licenseStatus?: string;
-  licenseLastCheckedTime?: Timestamp;
+  licenseLastCheckedTime?: Date;
   connectorStatus?: string;
-  connectorStatusUpdatedTime?: Timestamp;
+  connectorStatusUpdatedTime?: Date;
 }
 
 export interface SimulatorIntegrationFilter {
@@ -145,6 +145,12 @@ export interface SimulationRunFilter {
   modelName?: string;
   routineName?: string;
   status?: SimulationRunStatus;
+  simulatorIntegrationExternalIds?: CogniteExternalId[];
+  simulatorExternalIds?: CogniteExternalId[];
+  routineRevisionExternalIds?: CogniteExternalId[];
+  modelRevisionExternalIds?: CogniteExternalId[];
+  createdTime?: DateRange;
+  simulationTime?: DateRange;
 }
 
 export interface SortItem {
@@ -182,10 +188,8 @@ export const SimulationRunType = {
 };
 
 export interface SimulationRunCreate {
-  simulatorName: string;
-  modelName: string;
-  routineName: string;
-  runType: SimulationRunType;
+  routineExternalId: CogniteExternalId;
+  runType?: SimulationRunType;
   validationEndTime?: Date;
   queue?: boolean;
 }
@@ -204,9 +208,15 @@ export interface SimulationRun {
   simulatorName: string;
   modelName: string;
   routineName: string;
+  simulatorExternalId: CogniteExternalId;
+  simulatorIntegrationExternalId: CogniteExternalId;
+  modelRevisionExternalId: CogniteExternalId;
+  routineRevisionExternalId: CogniteExternalId;
   status: SimulationRunStatus;
   validationEndTime?: Date;
+  simulationTime?: Date;
   statusMessage?: string;
+  dataSetId?: CogniteInternalId;
   eventId?: CogniteInternalId;
   runType: SimulationRunType;
   userId?: string;
@@ -224,8 +234,8 @@ export interface SimulatorModel {
   labels?: ExternalId[];
   type?: string;
   unitSystem?: string;
-  createdTime: Timestamp;
-  lastUpdatedTime: Timestamp;
+  createdTime: Date;
+  lastUpdatedTime: Date;
 }
 
 export interface SimulatorModelCreate {
@@ -279,8 +289,8 @@ export interface SimulatorModelRevision {
   boundaryConditionsStatus?: string;
   versionNumber: number;
   metadata?: Record<string, string>;
-  createdTime: Timestamp;
-  lastUpdatedTime: Timestamp;
+  createdTime: Date;
+  lastUpdatedTime: Date;
 }
 
 export interface SimulatorModelRevisionCreate {
@@ -347,8 +357,8 @@ export interface SimulatorRoutine {
   name: string;
   dataSetId: number;
   description?: string;
-  createdTime: Timestamp;
-  lastUpdatedTime: Timestamp;
+  createdTime: Date;
+  lastUpdatedTime: Date;
 }
 
 export interface SimulatorRoutineCreate {
@@ -474,8 +484,8 @@ export interface SimulatorRoutineRevision {
   modelExternalId: CogniteExternalId;
   dataSetId: CogniteInternalId;
   createdByUserId: string;
-  createdTime: Timestamp;
-  lastUpdatedTime: Timestamp;
+  createdTime: Date;
+  lastUpdatedTime: Date;
   configuration: RoutineRevisionConfiguration;
   script: RoutineScript[];
   calculationType?: CalculationType;
