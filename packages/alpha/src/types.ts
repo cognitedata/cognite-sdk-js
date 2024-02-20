@@ -57,7 +57,7 @@ export interface SimulatorStepField {
   name: string;
   label: string;
   info: string;
-  options?: SimulatorStepFieldOption[] | null;
+  options?: SimulatorStepFieldOption[];
 }
 
 export interface SimulatorStep {

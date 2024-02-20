@@ -44,13 +44,11 @@ export const stepFields = [
         name: 'objectName',
         label: 'Simulation Object Name',
         info: 'Enter the name of the DWSIM object, i.e. Feed',
-        options: null,
       },
       {
         name: 'objectProperty',
         label: 'Simulation Object Property',
         info: 'Enter the property of the DWSIM object, i.e. Temperature',
-        options: null,
       },
     ],
   },
