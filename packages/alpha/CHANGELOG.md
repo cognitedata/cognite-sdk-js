@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.15.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.15.1...@cognite/sdk-alpha@0.15.2) (2024-02-20)
+
+### Bug Fixes
+
+- **alpha:** simint nullable types ([#1061](https://github.com/cognitedata/cognite-sdk-js/issues/1061)) ([f633820](https://github.com/cognitedata/cognite-sdk-js/commit/f6338205f6657c67cb43733ab3ebdd277047eb80))
+
 ## [0.15.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.15.0...@cognite/sdk-alpha@0.15.1) (2024-02-16)
 
 ### Bug Fixes
