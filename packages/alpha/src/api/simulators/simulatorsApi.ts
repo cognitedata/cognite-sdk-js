@@ -136,7 +136,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
 
   public retrieveModels = async (items: IdEither[]) => {
     return this.modelsApi.retrieve(items);
-  }
+  };
 
   public createModels = async (items: SimulatorModelCreate[]) => {
     return this.modelsApi.create(items);

@@ -72,9 +72,10 @@ describeIf('simulator models api', () => {
     expect(modelFound?.externalId).toBe(modelExternalId);
   });
 
-
   test('retrieve model by id', async () => {
-    const retrieve_response = await client.simulators.retrieveModels([{ externalId: modelExternalId }]);
+    const retrieve_response = await client.simulators.retrieveModels([
+      { externalId: modelExternalId },
+    ]);
     expect(retrieve_response.length).toBeGreaterThan(0);
     const modelFound = retrieve_response.find(
       (item) => item.externalId === modelExternalId
