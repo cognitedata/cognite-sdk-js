@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.15.2...@cognite/sdk-alpha@0.16.0) (2024-02-20)
+
+### Features
+
+- add query byids for simulator models ([#1062](https://github.com/cognitedata/cognite-sdk-js/issues/1062)) ([1c174be](https://github.com/cognitedata/cognite-sdk-js/commit/1c174beebfc32ef54eb754ebd0f3bab62f7c69de))
+
 ## [0.15.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.15.1...@cognite/sdk-alpha@0.15.2) (2024-02-20)
 
 ### Bug Fixes
