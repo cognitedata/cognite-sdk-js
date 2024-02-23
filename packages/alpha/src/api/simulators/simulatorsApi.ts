@@ -156,6 +156,10 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     return this.modelRevisionsApi.list(filter);
   };
 
+  public retrieveModelRevisions = async (items: IdEither[]) => {
+    return this.modelRevisionsApi.retrieve(items);
+  };
+
   public createModelRevisions = async (
     items: SimulatorModelRevisionCreate[]
   ) => {

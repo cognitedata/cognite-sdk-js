@@ -98,6 +98,17 @@ describeIf('simulator models api', () => {
     expect(response[0].externalId).toBe(modelRevisionExternalId);
   });
 
+  test('retrieve model revision by id', async () => {
+    const retrieve_response = await client.simulators.retrieveModelRevisions([
+      { externalId: modelRevisionExternalId },
+    ]);
+    expect(retrieve_response.length).toBeGreaterThan(0);
+    const modelRevisionFound = retrieve_response.find(
+      (item) => item.externalId === modelRevisionExternalId
+    );
+    expect(modelRevisionFound?.externalId).toBe(modelRevisionExternalId);
+  });
+
   test('delete model', async () => {
     const response = await client.simulators.deleteModels([
       { externalId: modelExternalId },

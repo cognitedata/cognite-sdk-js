@@ -36,6 +36,10 @@ export class ModelRevisionsAPI extends BaseResourceAPI<SimulatorModelRevision> {
     );
   };
 
+  public retrieve(items: IdEither[]) {
+    return this.retrieveEndpoint(items);
+  }
+
   public update = async (changes: SimulatorModelRevisionChange[]) => {
     return this.updateEndpoint(changes);
   };
