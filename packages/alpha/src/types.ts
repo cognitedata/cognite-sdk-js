@@ -277,9 +277,9 @@ interface SimulatorModelBoundaryCondition {
 export type SimulatorModelRevisionStatus = 'unknown' | 'success' | 'failure';
 
 export const SimulatorModelRevisionStatus = {
-  unknown: 'unknown' as SimulationRunStatus,
-  success: 'success' as SimulationRunStatus,
-  failure: 'failure' as SimulationRunStatus,
+  unknown: 'unknown' as SimulatorModelRevisionStatus,
+  success: 'success' as SimulatorModelRevisionStatus,
+  failure: 'failure' as SimulatorModelRevisionStatus,
 };
 
 export interface SimulatorModelRevision {
