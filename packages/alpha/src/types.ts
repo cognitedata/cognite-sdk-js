@@ -274,6 +274,14 @@ interface SimulatorModelBoundaryCondition {
   timeseriesExternalId: string;
 }
 
+export type SimulatorModelRevisionStatus = 'unknown' | 'success' | 'failure';
+
+export const SimulatorModelRevisionStatus = {
+  unknown: 'unknown' as SimulationRunStatus,
+  success: 'success' as SimulationRunStatus,
+  failure: 'failure' as SimulationRunStatus,
+};
+
 export interface SimulatorModelRevision {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
@@ -283,10 +291,10 @@ export interface SimulatorModelRevision {
   dataSetId: CogniteInternalId;
   fileId: CogniteInternalId;
   createdByUserId?: string;
-  status: string;
+  status: SimulatorModelRevisionStatus;
   statusMessage?: string;
   boundaryConditions?: SimulatorModelBoundaryCondition[];
-  boundaryConditionsStatus?: string;
+  boundaryConditionsStatus?: SimulatorModelRevisionStatus;
   versionNumber: number;
   metadata?: Record<string, string>;
   createdTime: Date;
