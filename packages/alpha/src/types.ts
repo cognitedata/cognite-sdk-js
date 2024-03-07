@@ -225,7 +225,7 @@ export interface SimulationRun {
   eventId?: CogniteInternalId;
   runType: SimulationRunType;
   userId?: string;
-  logId?: number;
+  logId?: CogniteInternalId;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
