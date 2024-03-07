@@ -145,8 +145,11 @@ export interface SimulationRunFilter {
   modelName?: string;
   routineName?: string;
   status?: SimulationRunStatus;
+  runType?: SimulationRunType;
   simulatorIntegrationExternalIds?: CogniteExternalId[];
   simulatorExternalIds?: CogniteExternalId[];
+  modelExternalIds?: CogniteExternalId[];
+  routineExternalIds?: CogniteExternalId[];
   routineRevisionExternalIds?: CogniteExternalId[];
   modelRevisionExternalIds?: CogniteExternalId[];
   createdTime?: DateRange;
@@ -208,10 +211,12 @@ export interface SimulationRun {
   simulatorName: string;
   modelName: string;
   routineName: string;
-  simulatorExternalId: CogniteExternalId;
-  simulatorIntegrationExternalId: CogniteExternalId;
-  modelRevisionExternalId: CogniteExternalId;
-  routineRevisionExternalId: CogniteExternalId;
+  simulatorExternalId?: CogniteExternalId;
+  simulatorIntegrationExternalId?: CogniteExternalId;
+  modelExternalId?: CogniteExternalId;
+  modelRevisionExternalId?: CogniteExternalId;
+  routineExternalId?: CogniteExternalId;
+  routineRevisionExternalId?: CogniteExternalId;
   status: SimulationRunStatus;
   validationEndTime?: Date;
   simulationTime?: Date;
@@ -220,6 +225,7 @@ export interface SimulationRun {
   eventId?: CogniteInternalId;
   runType: SimulationRunType;
   userId?: string;
+  logId?: CogniteInternalId;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
