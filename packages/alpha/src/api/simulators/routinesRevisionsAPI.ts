@@ -35,6 +35,10 @@ export class RoutineRevisionsAPI extends BaseResourceAPI<SimulatorRoutineRevisio
     );
   };
 
+  public retrieve(items: IdEither[]) {
+    return this.retrieveEndpoint(items);
+  }
+
   public delete = async (ids: IdEither[]) => {
     return this.deleteEndpoint(ids);
   };

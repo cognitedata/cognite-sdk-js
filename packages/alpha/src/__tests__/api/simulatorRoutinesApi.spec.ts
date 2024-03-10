@@ -139,6 +139,37 @@ describeIf('simulator routines api', () => {
     );
   });
 
+
+  test('list routine revision', async () => {
+    const list_response = await client.simulators.listRoutineRevisions();
+    expect(list_response.items.length).toBeGreaterThan(0);
+    const routineRevisionFound = list_response.items.find(
+      (item) => item.externalId === routineRevisionExternalId
+    );
+    expect(routineRevisionFound?.externalId).toBe(routineRevisionExternalId);
+  });
+  
+
+  test('list routine revision w filters', async () => {
+    const list_filter_response = await client.simulators.listRoutineRevisions({ filter: { routineExternalIds: [routineExternalId] }});
+    expect(list_filter_response.items.length).toBe(1);
+    const routineRevisionFound = list_filter_response.items.find(
+      (item) => item.externalId === routineRevisionExternalId
+    );
+    expect(routineRevisionFound?.externalId).toBe(routineRevisionExternalId);
+  });
+
+  test('retrieve routine revision by id', async () => {
+    const retrieve_response = await client.simulators.retrieveRoutineRevisions([
+      { externalId: routineRevisionExternalId },
+    ]);
+    expect(retrieve_response.length).toBeGreaterThan(0);
+    const routineRevisionFound = retrieve_response.find(
+      (item) => item.externalId === routineRevisionExternalId
+    );
+    expect(routineRevisionFound?.externalId).toBe(routineRevisionExternalId);
+  });
+
   test('delete simulator and integrationns', async () => {
     // Since we do not have a delete endpoint for integrations, if we delete the simulator, the integrations will be deleted as well
     if (simulatorId) {

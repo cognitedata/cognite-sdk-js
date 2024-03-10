@@ -384,7 +384,8 @@ export interface SimulatorRoutineCreate {
 }
 
 export interface SimulatorRoutineFilter {
-  simulatorExternalIds?: CogniteExternalId[];
+  simulatorIntegrationExternalIds?: CogniteExternalId[];
+  modelExternalIds?: CogniteExternalId[];
 }
 
 export interface SimulatorRoutineFilterQuery extends FilterQuery {
