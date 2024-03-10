@@ -139,7 +139,6 @@ describeIf('simulator routines api', () => {
     );
   });
 
-
   test('list routine revision', async () => {
     const list_response = await client.simulators.listRoutineRevisions();
     expect(list_response.items.length).toBeGreaterThan(0);
@@ -148,10 +147,11 @@ describeIf('simulator routines api', () => {
     );
     expect(routineRevisionFound?.externalId).toBe(routineRevisionExternalId);
   });
-  
 
   test('list routine revision w filters', async () => {
-    const list_filter_response = await client.simulators.listRoutineRevisions({ filter: { routineExternalIds: [routineExternalId] }});
+    const list_filter_response = await client.simulators.listRoutineRevisions({
+      filter: { routineExternalIds: [routineExternalId] },
+    });
     expect(list_filter_response.items.length).toBe(1);
     const routineRevisionFound = list_filter_response.items.find(
       (item) => item.externalId === routineRevisionExternalId

@@ -23,7 +23,7 @@ import {
   SimulatorModelRevisionFilterQuery,
   SimulatorModelRevisionChange,
   SimulatorRoutineRevisionCreate,
-  SimulatorRoutineRevisionslFilterQuery
+  SimulatorRoutineRevisionslFilterQuery,
 } from '../../types';
 import { IntegrationsAPI } from './integrationsApi';
 import { SimulationRunsAPI } from './simulationRunsApi';
@@ -193,7 +193,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     filter?: SimulatorRoutineRevisionslFilterQuery
   ) => {
     return this.routineRevisionsApi.list(filter);
-  }
+  };
 
   public retrieveRoutineRevisions = async (items: IdEither[]) => {
     return this.routineRevisionsApi.retrieve(items);
