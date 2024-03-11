@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.19.0...@cognite/sdk-alpha@0.20.0) (2024-03-11)
+
+### Features
+
+- improve filtering for routine and routine revisions ([#1067](https://github.com/cognitedata/cognite-sdk-js/issues/1067)) ([9de2470](https://github.com/cognitedata/cognite-sdk-js/commit/9de2470f08a1977d1545d108969f494715094836))
+
 # [0.19.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.18.1...@cognite/sdk-alpha@0.19.0) (2024-03-07)
 
 ### Features
