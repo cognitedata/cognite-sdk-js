@@ -341,7 +341,7 @@ export interface SimulatorModelRevisionFilterQuery extends FilterQuery {
   limit?: number;
 }
 
-type CalculationType =
+export type CalculationType =
   | 'IPR/VLP'
   | 'ChokeDp'
   | 'VLP'
@@ -349,8 +349,8 @@ type CalculationType =
   | 'BhpFromRate'
   | 'BhpFromGradientTraverse'
   | 'BhpFromGaugeBhp';
-type RoutineOperator = 'eq' | 'ne' | 'gt' | 'ge' | 'lt' | 'le';
-type DataPointsAggregate =
+export type RoutineOperator = 'eq' | 'ne' | 'gt' | 'ge' | 'lt' | 'le';
+export type DataPointsAggregate =
   | 'average'
   | 'max'
   | 'min'
@@ -394,24 +394,24 @@ export interface SimulatorRoutineFilterQuery extends FilterQuery {
 
 /* Routine revisions */
 
-interface RoutineDataSampling {
+export interface RoutineDataSampling {
   validationWindow: number;
   samplingWindow: number;
   granularity: number;
   validationEndOffset: string;
 }
 
-interface RoutineConfigDisabled {
+export interface RoutineConfigDisabled {
   enabled: boolean;
 }
 
-interface RoutineSchedule {
+export interface RoutineSchedule {
   enabled: boolean;
   startTime: number;
   repeat: string;
 }
 
-interface RoutineSteadyStateDetection {
+export interface RoutineSteadyStateDetection {
   enabled: boolean;
   timeseriesExternalId: CogniteExternalId;
   aggregate: DataPointsAggregate;
@@ -420,7 +420,7 @@ interface RoutineSteadyStateDetection {
   slopeThreshold: number;
 }
 
-interface RoutineLogicalCheck {
+export interface RoutineLogicalCheck {
   enabled: boolean;
   timeseriesExternalId: CogniteExternalId;
   aggregate: DataPointsAggregate;
@@ -428,7 +428,7 @@ interface RoutineLogicalCheck {
   value: number;
 }
 
-interface RoutineInputConstant {
+export interface RoutineInputConstant {
   name: string;
   saveTimeseriesExternalId: CogniteExternalId;
   value: string;
@@ -437,7 +437,7 @@ interface RoutineInputConstant {
   referenceId: string;
 }
 
-interface RoutineTimeSeries {
+export interface RoutineTimeSeries {
   name: string;
   referenceId: string;
   unit?: string;
@@ -445,29 +445,29 @@ interface RoutineTimeSeries {
   saveTimeseriesExternalId: CogniteExternalId;
 }
 
-interface RoutineInputTimeseries extends RoutineTimeSeries {
+export interface RoutineInputTimeseries extends RoutineTimeSeries {
   sourceExternalId: string;
   aggregate: DataPointsAggregate;
 }
 
-interface RoutineOutputSequence {
+export interface RoutineOutputSequence {
   name: string;
   referenceId: string;
 }
 
-interface RoutineGaugeDepth {
+export interface RoutineGaugeDepth {
   value: number;
   unit: string;
   unitType: string;
 }
 
-interface RoutineScriptStepArguments {
+export interface RoutineScriptStepArguments {
   argumentType: string;
   [s: string]: string;
   referenceId: string;
 }
 
-interface RoutineScriptStep {
+export interface RoutineScriptStep {
   order: number;
   stepType: string;
   description?: string;
