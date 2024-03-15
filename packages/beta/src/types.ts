@@ -7,6 +7,7 @@ import {
   SinglePatchRequiredString,
   SinglePatchString,
   Timestamp,
+  DateRange,
 } from '@cognite/sdk';
 import {
   CogniteExternalId,
@@ -62,12 +63,6 @@ export type AlertStatus = 'FIRING' | 'PENDING';
 export const AlertStatus = {
   FIRING: 'FIRING' as AlertStatus,
   PENDING: 'PENDING' as AlertStatus,
-};
-
-export interface StartTime {
-  min?: number;
-  max?: number;
-
 };
 
 export interface MonitoringTaskThresholdModelCreateBase {
@@ -159,7 +154,7 @@ export interface AlertFilter {
   channelIds?: CogniteInternalId[];
   channelExternalIds?: CogniteExternalId[];
   closed?: boolean;
-  startTime?: StartTime;
+  startTime?: DateRange;
   status?: AlertStatus[];
 }
 
