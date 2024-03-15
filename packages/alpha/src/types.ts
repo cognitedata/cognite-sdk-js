@@ -341,7 +341,7 @@ export interface SimulatorModelRevisionFilterQuery extends FilterQuery {
   limit?: number;
 }
 
-export type CalculationType =
+export type SimulatorCalculationType =
   | 'IPR/VLP'
   | 'ChokeDp'
   | 'VLP'
@@ -349,8 +349,8 @@ export type CalculationType =
   | 'BhpFromRate'
   | 'BhpFromGradientTraverse'
   | 'BhpFromGaugeBhp';
-export type RoutineOperator = 'eq' | 'ne' | 'gt' | 'ge' | 'lt' | 'le';
-export type DataPointsAggregate =
+export type SimulatorRoutineOperator = 'eq' | 'ne' | 'gt' | 'ge' | 'lt' | 'le';
+export type SimulatorDataPointsAggregate =
   | 'average'
   | 'max'
   | 'min'
@@ -380,7 +380,7 @@ export interface SimulatorRoutineCreate {
   modelExternalId: CogniteExternalId;
   simulatorIntegrationExternalId: CogniteExternalId;
   name: string;
-  calculationType?: CalculationType;
+  calculationType?: SimulatorCalculationType;
 }
 
 export interface SimulatorRoutineFilter {
@@ -394,41 +394,41 @@ export interface SimulatorRoutineFilterQuery extends FilterQuery {
 
 /* Routine revisions */
 
-export interface RoutineDataSampling {
+export interface SimulatorRoutineDataSampling {
   validationWindow: number;
   samplingWindow: number;
   granularity: number;
   validationEndOffset: string;
 }
 
-export interface RoutineConfigDisabled {
+export interface SimulatorRoutineConfigDisabled {
   enabled: boolean;
 }
 
-export interface RoutineSchedule {
+export interface SimulatorRoutineSchedule {
   enabled: boolean;
   startTime: number;
   repeat: string;
 }
 
-export interface RoutineSteadyStateDetection {
+export interface SimulatorRoutineSteadyStateDetection {
   enabled: boolean;
   timeseriesExternalId: CogniteExternalId;
-  aggregate: DataPointsAggregate;
+  aggregate: SimulatorDataPointsAggregate;
   minSectionSize: number;
   varThreshold: number;
   slopeThreshold: number;
 }
 
-export interface RoutineLogicalCheck {
+export interface SimulatorRoutineLogicalCheck {
   enabled: boolean;
   timeseriesExternalId: CogniteExternalId;
-  aggregate: DataPointsAggregate;
-  operator: RoutineOperator;
+  aggregate: SimulatorDataPointsAggregate;
+  operator: SimulatorRoutineOperator;
   value: number;
 }
 
-export interface RoutineInputConstant {
+export interface SimulatorRoutineInputConstant {
   name: string;
   saveTimeseriesExternalId: CogniteExternalId;
   value: string;
@@ -437,7 +437,7 @@ export interface RoutineInputConstant {
   referenceId: string;
 }
 
-export interface RoutineTimeSeries {
+export interface SimulatorRoutineTimeSeries {
   name: string;
   referenceId: string;
   unit?: string;
@@ -445,50 +445,53 @@ export interface RoutineTimeSeries {
   saveTimeseriesExternalId: CogniteExternalId;
 }
 
-export interface RoutineInputTimeseries extends RoutineTimeSeries {
+export interface SimulatorRoutineInputTimeseries
+  extends SimulatorRoutineTimeSeries {
   sourceExternalId: string;
-  aggregate: DataPointsAggregate;
+  aggregate: SimulatorDataPointsAggregate;
 }
 
-export interface RoutineOutputSequence {
+export interface SimulatorRoutineOutputSequence {
   name: string;
   referenceId: string;
 }
 
-export interface RoutineGaugeDepth {
+export interface SimulatorRoutineGaugeDepth {
   value: number;
   unit: string;
   unitType: string;
 }
 
-export interface RoutineScriptStepArguments {
+export interface SimulatorRoutineScriptStepArguments {
   argumentType: string;
   [s: string]: string;
   referenceId: string;
 }
 
-export interface RoutineScriptStep {
+export interface SimulatorRoutineScriptStep {
   order: number;
   stepType: string;
   description?: string;
-  arguments: RoutineScriptStepArguments;
+  arguments: SimulatorRoutineScriptStepArguments;
 }
 
-export interface RoutineScript {
+export interface SimulatorRoutineScript {
   order: number;
   description?: string;
-  steps: RoutineScriptStep[];
+  steps: SimulatorRoutineScriptStep[];
 }
-export interface RoutineRevisionConfiguration {
-  dataSampling: RoutineDataSampling;
-  schedule: RoutineConfigDisabled | RoutineSchedule;
-  steadyStateDetection: RoutineConfigDisabled | RoutineSteadyStateDetection;
-  logicalCheck: RoutineConfigDisabled | RoutineLogicalCheck;
-  inputConstants: RoutineInputConstant[];
-  outputSequences?: RoutineOutputSequence[];
-  inputTimeseries: RoutineInputTimeseries[];
-  outputTimeseries: RoutineTimeSeries[];
-  extraOptions?: RoutineGaugeDepth;
+export interface SimulatorRoutineRevisionConfiguration {
+  dataSampling: SimulatorRoutineDataSampling;
+  schedule: SimulatorRoutineConfigDisabled | SimulatorRoutineSchedule;
+  steadyStateDetection:
+    | SimulatorRoutineConfigDisabled
+    | SimulatorRoutineSteadyStateDetection;
+  logicalCheck: SimulatorRoutineConfigDisabled | SimulatorRoutineLogicalCheck;
+  inputConstants: SimulatorRoutineInputConstant[];
+  outputSequences?: SimulatorRoutineOutputSequence[];
+  inputTimeseries: SimulatorRoutineInputTimeseries[];
+  outputTimeseries: SimulatorRoutineTimeSeries[];
+  extraOptions?: SimulatorRoutineGaugeDepth;
 }
 export interface SimulatorRoutineRevision {
   id: CogniteInternalId;
@@ -501,16 +504,16 @@ export interface SimulatorRoutineRevision {
   createdByUserId: string;
   createdTime: Date;
   lastUpdatedTime: Date;
-  configuration: RoutineRevisionConfiguration;
-  script: RoutineScript[];
-  calculationType?: CalculationType;
+  configuration: SimulatorRoutineRevisionConfiguration;
+  script: SimulatorRoutineScript[];
+  calculationType?: SimulatorCalculationType;
 }
 
 export interface SimulatorRoutineRevisionCreate {
   externalId: CogniteExternalId;
   routineExternalId: CogniteExternalId;
-  configuration: RoutineRevisionConfiguration;
-  script: RoutineScript[];
+  configuration: SimulatorRoutineRevisionConfiguration;
+  script: SimulatorRoutineScript[];
 }
 
 export interface SimulatorRoutineRevisionslFilter {

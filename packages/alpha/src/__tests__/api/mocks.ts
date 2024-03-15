@@ -1,4 +1,7 @@
-import { RoutineRevisionConfiguration, RoutineScript } from 'alpha/src/types';
+import {
+  SimulatorRoutineRevisionConfiguration,
+  SimulatorRoutineScript,
+} from 'alpha/src/types';
 
 export const unitsMap = {
   accel: {
@@ -84,49 +87,50 @@ export const boundaryConditions = [
 ];
 export const fileExtensionTypes = ['csv', 'yaml'];
 
-export const routineRevisionConfiguration: RoutineRevisionConfiguration = {
-  schedule: { enabled: false },
-  dataSampling: {
-    validationWindow: 0,
-    samplingWindow: 0,
-    granularity: 0,
-    validationEndOffset: '9s',
-  },
-  logicalCheck: { enabled: false },
-  steadyStateDetection: { enabled: false },
-  inputTimeseries: [
-    {
-      name: 'string',
-      referenceId: 'string',
-      unit: 'string',
-      unitType: 'string',
-      sourceExternalId: 'string',
-      aggregate: 'average',
-      saveTimeseriesExternalId: 'PROSPER-INPUT-ChokeDp-THP-Well_A2',
+export const routineRevisionConfiguration: SimulatorRoutineRevisionConfiguration =
+  {
+    schedule: { enabled: false },
+    dataSampling: {
+      validationWindow: 0,
+      samplingWindow: 0,
+      granularity: 0,
+      validationEndOffset: '9s',
     },
-  ],
-  outputTimeseries: [
-    {
-      name: 'string',
-      referenceId: 'string',
-      unit: 'string',
-      unitType: 'string',
-      saveTimeseriesExternalId: 'string',
-    },
-  ],
-  inputConstants: [
-    {
-      name: 'string',
-      saveTimeseriesExternalId: 'string',
-      value: 'string',
-      unit: 'string',
-      unitType: 'string',
-      referenceId: 'string',
-    },
-  ],
-};
+    logicalCheck: { enabled: false },
+    steadyStateDetection: { enabled: false },
+    inputTimeseries: [
+      {
+        name: 'string',
+        referenceId: 'string',
+        unit: 'string',
+        unitType: 'string',
+        sourceExternalId: 'string',
+        aggregate: 'average',
+        saveTimeseriesExternalId: 'PROSPER-INPUT-ChokeDp-THP-Well_A2',
+      },
+    ],
+    outputTimeseries: [
+      {
+        name: 'string',
+        referenceId: 'string',
+        unit: 'string',
+        unitType: 'string',
+        saveTimeseriesExternalId: 'string',
+      },
+    ],
+    inputConstants: [
+      {
+        name: 'string',
+        saveTimeseriesExternalId: 'string',
+        value: 'string',
+        unit: 'string',
+        unitType: 'string',
+        referenceId: 'string',
+      },
+    ],
+  };
 
-export const routineRevisionScript: RoutineScript[] = [
+export const routineRevisionScript: SimulatorRoutineScript[] = [
   {
     order: 1,
     description: 'string',
