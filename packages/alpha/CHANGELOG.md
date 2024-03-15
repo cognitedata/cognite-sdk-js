@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.20.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.20.1...@cognite/sdk-alpha@0.20.2) (2024-03-15)
+
+### Bug Fixes
+
+- add prefix to simint types ([#1069](https://github.com/cognitedata/cognite-sdk-js/issues/1069)) ([cbaa5b7](https://github.com/cognitedata/cognite-sdk-js/commit/cbaa5b75c8431f4b2ea843410aef3c7dabd289e1))
+
 ## [0.20.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.20.0...@cognite/sdk-alpha@0.20.1) (2024-03-14)
 
 ### Bug Fixes
