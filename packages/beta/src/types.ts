@@ -57,6 +57,19 @@ export const MonitoringTaskModelExternalId = {
   DOUBLE_THRESHOLD: 'double_threshold' as const,
 };
 
+export type AlertStatus = 'FIRING' | 'PENDING';
+
+export const AlertStatus = {
+  FIRING: 'FIRING' as AlertStatus,
+  PENDING: 'PENDING' as AlertStatus,
+};
+
+export interface StartTime {
+  min?: number;
+  max?: number;
+
+};
+
 export interface MonitoringTaskThresholdModelCreateBase {
   externalId: MonitoringTaskModelExternalId;
 }
@@ -145,6 +158,9 @@ export interface MonitoringTaskFilterQuery extends FilterQuery {
 export interface AlertFilter {
   channelIds?: CogniteInternalId[];
   channelExternalIds?: CogniteExternalId[];
+  closed?: boolean;
+  startTime?: StartTime;
+  status?: AlertStatus[];
 }
 
 export interface AlertFilterQuery extends FilterQuery {
@@ -192,6 +208,7 @@ export interface Alert {
   metadata?: Metadata;
   acknowledged: boolean;
   closed: boolean;
+  status: AlertStatus;
 }
 
 export interface ChannelCreate {
