@@ -445,7 +445,8 @@ export interface SimulatorRoutineTimeSeries {
   saveTimeseriesExternalId: CogniteExternalId;
 }
 
-export interface SimulatorRoutineInputTimeseries extends SimulatorRoutineTimeSeries {
+export interface SimulatorRoutineInputTimeseries
+  extends SimulatorRoutineTimeSeries {
   sourceExternalId: string;
   aggregate: SimulatorDataPointsAggregate;
 }
@@ -482,7 +483,9 @@ export interface SimulatorRoutineScript {
 export interface SimulatorRoutineRevisionConfiguration {
   dataSampling: SimulatorRoutineDataSampling;
   schedule: SimulatorRoutineConfigDisabled | SimulatorRoutineSchedule;
-  steadyStateDetection: SimulatorRoutineConfigDisabled | SimulatorRoutineSteadyStateDetection;
+  steadyStateDetection:
+    | SimulatorRoutineConfigDisabled
+    | SimulatorRoutineSteadyStateDetection;
   logicalCheck: SimulatorRoutineConfigDisabled | SimulatorRoutineLogicalCheck;
   inputConstants: SimulatorRoutineInputConstant[];
   outputSequences?: SimulatorRoutineOutputSequence[];
