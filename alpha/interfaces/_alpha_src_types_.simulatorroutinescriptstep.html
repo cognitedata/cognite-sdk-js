@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RoutineScriptStepArguments | Cognite JavaScript SDK</title>
+	<title>SimulatorRoutineScriptStep | Cognite JavaScript SDK</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -59,10 +59,10 @@
 					<a href="../modules/_alpha_src_types_.html">&quot;alpha/src/types&quot;</a>
 				</li>
 				<li>
-					<a href="_alpha_src_types_.routinescriptsteparguments.html">RoutineScriptStepArguments</a>
+					<a href="_alpha_src_types_.simulatorroutinescriptstep.html">SimulatorRoutineScriptStep</a>
 				</li>
 			</ul>
-			<h1>Interface RoutineScriptStepArguments</h1>
+			<h1>Interface SimulatorRoutineScriptStep</h1>
 		</div>
 	</div>
 </header>
@@ -73,13 +73,9 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">RoutineScriptStepArguments</span>
+						<span class="target">SimulatorRoutineScriptStep</span>
 					</li>
 				</ul>
-			</section>
-			<section class="tsd-panel tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-				<h3 class="tsd-before-signature">Indexable</h3>
-				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>s: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">string</span></div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
@@ -88,8 +84,10 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.routinescriptsteparguments.html#argumenttype" class="tsd-kind-icon">argument<wbr>Type</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.routinescriptsteparguments.html#referenceid" class="tsd-kind-icon">reference<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.simulatorroutinescriptstep.html#arguments" class="tsd-kind-icon">arguments</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.simulatorroutinescriptstep.html#description" class="tsd-kind-icon">description</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.simulatorroutinescriptstep.html#order" class="tsd-kind-icon">order</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.simulatorroutinescriptstep.html#steptype" class="tsd-kind-icon">step<wbr>Type</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,22 +96,42 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="argumenttype" class="tsd-anchor"></a>
-					<h3>argument<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">argument<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="arguments" class="tsd-anchor"></a>
+					<h3>arguments</h3>
+					<div class="tsd-signature tsd-kind-icon">arguments<span class="tsd-signature-symbol">:</span> <a href="_alpha_src_types_.simulatorroutinescriptsteparguments.html" class="tsd-signature-type">SimulatorRoutineScriptStepArguments</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c5feec3b48/packages/alpha/src/types.ts#L465">packages/alpha/src/types.ts:465</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/cbaa5b75c8/packages/alpha/src/types.ts#L475">packages/alpha/src/types.ts:475</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="referenceid" class="tsd-anchor"></a>
-					<h3>reference<wbr>Id</h3>
-					<div class="tsd-signature tsd-kind-icon">reference<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="description" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> description</h3>
+					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c5feec3b48/packages/alpha/src/types.ts#L467">packages/alpha/src/types.ts:467</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/cbaa5b75c8/packages/alpha/src/types.ts#L474">packages/alpha/src/types.ts:474</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="order" class="tsd-anchor"></a>
+					<h3>order</h3>
+					<div class="tsd-signature tsd-kind-icon">order<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/cbaa5b75c8/packages/alpha/src/types.ts#L472">packages/alpha/src/types.ts:472</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="steptype" class="tsd-anchor"></a>
+					<h3>step<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">step<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/cbaa5b75c8/packages/alpha/src/types.ts#L473">packages/alpha/src/types.ts:473</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -135,13 +153,19 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_alpha_src_types_.routinescriptsteparguments.html" class="tsd-kind-icon">Routine<wbr>Script<wbr>Step<wbr>Arguments</a>
+						<a href="_alpha_src_types_.simulatorroutinescriptstep.html" class="tsd-kind-icon">Simulator<wbr>Routine<wbr>Script<wbr>Step</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_alpha_src_types_.routinescriptsteparguments.html#argumenttype" class="tsd-kind-icon">argument<wbr>Type</a>
+								<a href="_alpha_src_types_.simulatorroutinescriptstep.html#arguments" class="tsd-kind-icon">arguments</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_alpha_src_types_.routinescriptsteparguments.html#referenceid" class="tsd-kind-icon">reference<wbr>Id</a>
+								<a href="_alpha_src_types_.simulatorroutinescriptstep.html#description" class="tsd-kind-icon">description</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_alpha_src_types_.simulatorroutinescriptstep.html#order" class="tsd-kind-icon">order</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_alpha_src_types_.simulatorroutinescriptstep.html#steptype" class="tsd-kind-icon">step<wbr>Type</a>
 							</li>
 						</ul>
 					</li>

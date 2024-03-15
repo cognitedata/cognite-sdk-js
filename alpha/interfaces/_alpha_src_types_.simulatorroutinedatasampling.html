@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RoutineSchedule | Cognite JavaScript SDK</title>
+	<title>SimulatorRoutineDataSampling | Cognite JavaScript SDK</title>
 	<meta name="description" content="Documentation for Cognite JavaScript SDK">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -59,10 +59,10 @@
 					<a href="../modules/_alpha_src_types_.html">&quot;alpha/src/types&quot;</a>
 				</li>
 				<li>
-					<a href="_alpha_src_types_.routineschedule.html">RoutineSchedule</a>
+					<a href="_alpha_src_types_.simulatorroutinedatasampling.html">SimulatorRoutineDataSampling</a>
 				</li>
 			</ul>
-			<h1>Interface RoutineSchedule</h1>
+			<h1>Interface SimulatorRoutineDataSampling</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">RoutineSchedule</span>
+						<span class="target">SimulatorRoutineDataSampling</span>
 					</li>
 				</ul>
 			</section>
@@ -84,9 +84,10 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.routineschedule.html#enabled" class="tsd-kind-icon">enabled</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.routineschedule.html#repeat" class="tsd-kind-icon">repeat</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.routineschedule.html#starttime" class="tsd-kind-icon">start<wbr>Time</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.simulatorroutinedatasampling.html#granularity" class="tsd-kind-icon">granularity</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.simulatorroutinedatasampling.html#samplingwindow" class="tsd-kind-icon">sampling<wbr>Window</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.simulatorroutinedatasampling.html#validationendoffset" class="tsd-kind-icon">validation<wbr>End<wbr>Offset</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_alpha_src_types_.simulatorroutinedatasampling.html#validationwindow" class="tsd-kind-icon">validation<wbr>Window</a></li>
 							</ul>
 						</section>
 					</div>
@@ -95,32 +96,42 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="enabled" class="tsd-anchor"></a>
-					<h3>enabled</h3>
-					<div class="tsd-signature tsd-kind-icon">enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="granularity" class="tsd-anchor"></a>
+					<h3>granularity</h3>
+					<div class="tsd-signature tsd-kind-icon">granularity<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c5feec3b48/packages/alpha/src/types.ts#L409">packages/alpha/src/types.ts:409</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/cbaa5b75c8/packages/alpha/src/types.ts#L400">packages/alpha/src/types.ts:400</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="repeat" class="tsd-anchor"></a>
-					<h3>repeat</h3>
-					<div class="tsd-signature tsd-kind-icon">repeat<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="samplingwindow" class="tsd-anchor"></a>
+					<h3>sampling<wbr>Window</h3>
+					<div class="tsd-signature tsd-kind-icon">sampling<wbr>Window<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c5feec3b48/packages/alpha/src/types.ts#L411">packages/alpha/src/types.ts:411</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/cbaa5b75c8/packages/alpha/src/types.ts#L399">packages/alpha/src/types.ts:399</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="starttime" class="tsd-anchor"></a>
-					<h3>start<wbr>Time</h3>
-					<div class="tsd-signature tsd-kind-icon">start<wbr>Time<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="validationendoffset" class="tsd-anchor"></a>
+					<h3>validation<wbr>End<wbr>Offset</h3>
+					<div class="tsd-signature tsd-kind-icon">validation<wbr>End<wbr>Offset<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/c5feec3b48/packages/alpha/src/types.ts#L410">packages/alpha/src/types.ts:410</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/cbaa5b75c8/packages/alpha/src/types.ts#L401">packages/alpha/src/types.ts:401</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="validationwindow" class="tsd-anchor"></a>
+					<h3>validation<wbr>Window</h3>
+					<div class="tsd-signature tsd-kind-icon">validation<wbr>Window<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/cbaa5b75c8/packages/alpha/src/types.ts#L398">packages/alpha/src/types.ts:398</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -142,16 +153,19 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="_alpha_src_types_.routineschedule.html" class="tsd-kind-icon">Routine<wbr>Schedule</a>
+						<a href="_alpha_src_types_.simulatorroutinedatasampling.html" class="tsd-kind-icon">Simulator<wbr>Routine<wbr>Data<wbr>Sampling</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_alpha_src_types_.routineschedule.html#enabled" class="tsd-kind-icon">enabled</a>
+								<a href="_alpha_src_types_.simulatorroutinedatasampling.html#granularity" class="tsd-kind-icon">granularity</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_alpha_src_types_.routineschedule.html#repeat" class="tsd-kind-icon">repeat</a>
+								<a href="_alpha_src_types_.simulatorroutinedatasampling.html#samplingwindow" class="tsd-kind-icon">sampling<wbr>Window</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_alpha_src_types_.routineschedule.html#starttime" class="tsd-kind-icon">start<wbr>Time</a>
+								<a href="_alpha_src_types_.simulatorroutinedatasampling.html#validationendoffset" class="tsd-kind-icon">validation<wbr>End<wbr>Offset</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_alpha_src_types_.simulatorroutinedatasampling.html#validationwindow" class="tsd-kind-icon">validation<wbr>Window</a>
 							</li>
 						</ul>
 					</li>
