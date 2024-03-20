@@ -1,11 +1,19 @@
 // Copyright 2020 Cognite AS
 
 import {
+  Aggregate as AggregateStable,
+  DatapointAggregate as DatapointAggregateStable,
+  DatapointsMultiQuery as DataPointsMultiQueryStable,
+  DatapointsQueryProperties as DatapointsQueryPropertiesStable,
+  DoubleDatapoint as DoubleDatapointStable,
+  DoubleDatapoints as DoubleDatapointsStable,
   Metadata,
   MetadataPatch,
   SinglePatchRequired,
   SinglePatchRequiredString,
   SinglePatchString,
+  StringDatapoint as StringDatapointStable,
+  StringDatapoints as StringDatapointsStable,
   Timestamp,
 } from '@cognite/sdk';
 import {
@@ -309,4 +317,73 @@ export interface Subscription {
   subscriberId: CogniteInternalId;
   subscriberExternalId?: CogniteExternalId;
   metadata?: Metadata;
+}
+
+export interface DatapointsMultiQuery
+  extends Omit<DataPointsMultiQueryStable, 'items'> {
+  items: DatapointsQuery[];
+}
+
+export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
+
+export interface DatapointsQueryExternalId
+  extends DatapointsQueryProperties,
+    ExternalId {}
+
+export interface DatapointsQueryId
+  extends DatapointsQueryProperties,
+    InternalId {}
+
+export type Aggregate = AggregateStable | 'countUncertain' | 'countBad';
+export interface DatapointsQueryProperties
+  extends Omit<DatapointsQueryPropertiesStable, 'aggregates'> {
+  /**
+   * The aggregates to be returned. This value overrides top-level default aggregates list when set. Specify all aggregates to be retrieved here. Specify empty array if this sub-query needs to return datapoints without aggregation.
+   */
+  aggregates?: Aggregate[];
+  /**
+   * denotes that the status of the data point should be included in the response.
+   */
+  includeStatus?: boolean;
+  /**
+   * returns data points marked with the uncertain status code.
+   * The default behavior of the API is to treat them the same as bad data points and don't returned them.
+   */
+  treatUncertainAsBad?: boolean;
+  /**
+   * denotes that the API should return bad data points.
+   * Because the API treats uncertain data points as bad by default,
+   * this parameter includes both uncertain and bad data points.
+   */
+  ignoreBadDatapoints?: boolean;
+}
+
+export interface DatapointStatus {
+  code: number;
+  symbol: string;
+}
+
+export interface DatapointAggregate extends DatapointAggregateStable {
+  countUncertain?: number;
+  countBad?: number;
+}
+
+export type Datapoints = StringDatapoints | DoubleDatapoints;
+
+export interface DoubleDatapoints
+  extends Omit<DoubleDatapointsStable, 'datapoints'> {
+  datapoints: DoubleDatapoint[];
+}
+
+export interface StringDatapoints
+  extends Omit<StringDatapointsStable, 'datapoints'> {
+  datapoints: StringDatapoint[];
+}
+
+export interface DoubleDatapoint extends DoubleDatapointStable {
+  status?: DatapointStatus;
+}
+
+export interface StringDatapoint extends StringDatapointStable {
+  status?: DatapointStatus;
 }
