@@ -168,7 +168,7 @@ export class DataPointsAPI extends BaseResourceAPI<
     return {};
   }
 
-  private async retrieveDatapointsEndpoint<
+  protected async retrieveDatapointsEndpoint<
     T extends DatapointAggregates[] | Datapoints[] =
       | DatapointAggregates[]
       | Datapoints[]
