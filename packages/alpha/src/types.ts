@@ -526,4 +526,5 @@ export interface SimulatorRoutineRevisionslFilter {
 
 export interface SimulatorRoutineRevisionslFilterQuery extends FilterQuery {
   filter?: SimulatorRoutineRevisionslFilter;
+  sort?: SortItem[];
 }
