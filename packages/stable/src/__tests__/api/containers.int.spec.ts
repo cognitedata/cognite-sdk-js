@@ -36,6 +36,16 @@ describe('Containers integration test', () => {
   beforeAll(async () => {
     jest.setTimeout(30 * 1000);
     client = setupLoggedInClient();
+
+    const spaces = await client.spaces
+      .list({ limit: 1000 })
+      .autoPagingToArray();
+    const oldSpaces = spaces.filter(
+      // Filter spaces last updated more than 24 hours ago
+      (space) => space.lastUpdatedTime < Date.now() - 24 * 60 * 60 * 1000
+    );
+    await client.spaces.delete(oldSpaces.map((space) => space.space));
+
     await client.spaces.upsert([
       {
         space: TEST_SPACE_NAME,

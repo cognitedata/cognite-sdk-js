@@ -21,6 +21,15 @@ describe('Spaces integration test', () => {
 
   beforeAll(async () => {
     client = setupLoggedInClient();
+
+    const spaces = await client.spaces
+      .list({ limit: 1000 })
+      .autoPagingToArray();
+    const oldSpaces = spaces.filter(
+      // Filter spaces last updated more than 24 hours ago
+      (space) => space.lastUpdatedTime < Date.now() - 24 * 60 * 60 * 1000
+    );
+    await client.spaces.delete(oldSpaces.map((space) => space.space));
   });
   it('should successfully upsert spaces', async () => {
     const createdSpaceResponse = await client.spaces.upsert([
