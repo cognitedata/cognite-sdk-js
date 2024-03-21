@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.21.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.20.2...@cognite/sdk-alpha@0.21.0) (2024-03-21)
+
+### Features
+
+- **alpha:** add sort option for filtering simulation routine revision ([#1072](https://github.com/cognitedata/cognite-sdk-js/issues/1072)) ([6bbb200](https://github.com/cognitedata/cognite-sdk-js/commit/6bbb2001abe637919d3591635485c00c35056e24))
+
 ## [0.20.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.20.1...@cognite/sdk-alpha@0.20.2) (2024-03-15)
 
 ### Bug Fixes
