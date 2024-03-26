@@ -9,20 +9,23 @@ const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 describeIf('simulator logs api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
 
-  const ts = Date.now();
-
   test('retrieve simulator log by id', async () => {
-    const runSimulationRes = await client.simulators.runSimulation([
-      {
-        routineExternalId: 'ShowerMixerIntegrationTestConstInputs',
-        runType: 'external',
-        validationEndTime: new Date(ts),
-        queue: true,
+    // get the latest failed run which should have a logId
+    const filterSimulationRunsRes = await client.simulators.listRuns({
+      filter: {
+        status: 'failure',
+        simulatorExternalIds: ['DWSIM'],
       },
-    ]);
-    const runId = runSimulationRes[0].id;
-    const retrieveRunsResponse = await client.simulators.retrieveRuns([runId]);
-    const logId = retrieveRunsResponse[0].logId;
+      limit: 1,
+      sort: [
+        {
+          property: 'createdTime',
+          order: 'desc',
+        },
+      ],
+    });
+
+    const logId = filterSimulationRunsRes.items[0].logId;
 
     if (!logId) {
       throw new Error('No logId found');
@@ -43,6 +46,9 @@ describeIf('simulator logs api', () => {
     expect(item.dataSetId).toBeDefined();
     expect(item.id).toBe(logId);
     expect(item.lastUpdatedTime).toBeDefined();
-    expect(item.data).toBeInstanceOf(Array);
+
+    item.data.forEach((data) => {
+      expect(data.timestamp).toBeInstanceOf(Date);
+    });
   });
 });
