@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.22.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.21.0...@cognite/sdk-alpha@0.22.0) (2024-03-26)
+
+### Features
+
+- add simulator logs API ([#1073](https://github.com/cognitedata/cognite-sdk-js/issues/1073)) ([10bf22a](https://github.com/cognitedata/cognite-sdk-js/commit/10bf22ab81987e0a2f57facff53cbd90356aeceb))
+
 # [0.21.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.20.2...@cognite/sdk-alpha@0.21.0) (2024-03-21)
 
 ### Features
