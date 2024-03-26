@@ -10,4 +10,9 @@
 /packages/stable/src/api/units @cognitedata/simulator-integration
 /packages/stable/src/__tests__/api/*units* @cognitedata/simulator-integration
 
+/packages/stable/src/api/alerts @cognitedata/asset-health-services
+/packages/stable/src/__tests__/api/*alerts* @cognitedata/asset-health-services
+/packages/stable/src/api/monitoringTasks @cognitedata/asset-health-services
+/packages/stable/src/__tests__/api/*monitoringTasks* @cognitedata/asset-health-services
+
 /packages/stable/src/api/vision @cognitedata/vision-team

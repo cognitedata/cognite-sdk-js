@@ -46,6 +46,8 @@ import { ContainersAPI } from './api/containers/containersApi';
 import { ViewsAPI } from './api/views/viewsApi';
 import { SpacesAPI } from './api/spaces/spacesApi';
 import { DataModelsAPI } from './api/models/datamodelsApi';
+import { AlertsAPI } from './api/alerts/alertsApi';
+import { MonitoringTasksAPI } from './api/monitoringTasks/monitoringTasksApi';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
@@ -183,6 +185,16 @@ export default class CogniteClient extends BaseCogniteClient {
   public get dataModels() {
     return accessApi(this.dataModelsApi);
   }
+
+  public get alerts(){
+    return accessApi(this.alertsApi);
+  }
+
+  public get monitoringTasks(){
+    return accessApi(this.monitoringTasksApi)
+  }
+
+
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   private dataPointsApi?: DataPointsAPI;
@@ -215,6 +227,8 @@ export default class CogniteClient extends BaseCogniteClient {
   private viewsApi?: ViewsAPI;
   private spacesApi?: SpacesAPI;
   private dataModelsApi?: DataModelsAPI;
+  private alertsApi?: AlertsAPI;
+  private monitoringTasksApi?: MonitoringTasksAPI;
 
   protected get version() {
     return version;
@@ -275,6 +289,8 @@ export default class CogniteClient extends BaseCogniteClient {
     this.viewsApi = this.apiFactory(ViewsAPI, 'models/views');
     this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
     this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
+    this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
+    this.monitoringTasksApi = this.apiFactory(MonitoringTasksAPI, 'monitoringtasks');
   }
 
   static urlEncodeExternalId(externalId: string): string {

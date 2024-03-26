@@ -6,11 +6,7 @@ import {
   IdEither,
   MetadataMap,
 } from '@cognite/sdk-core';
-import {
-  Subscriber,
-  SubscriberCreate,
-  SubscriberFilterQuery,
-} from './types';
+import { Subscriber, SubscriberCreate, SubscriberFilterQuery } from './types';
 
 export class SubscribersAPI extends BaseResourceAPI<Subscriber> {
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
