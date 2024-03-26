@@ -4,7 +4,7 @@ import {
   CogniteInternalId,
   MetadataMap,
 } from '@cognite/sdk-core';
-import { IdEither } from '@cognite/sdk';
+import { IdEither, InternalId } from '@cognite/sdk';
 import {
   Simulator,
   SimulatorCreate,
@@ -31,6 +31,7 @@ import { ModelsAPI } from './modelsApi';
 import { ModelRevisionsAPI } from './modelRevisionsApi';
 import { RoutinesAPI } from './routinesApi';
 import { RoutineRevisionsAPI } from './routinesRevisionsAPI';
+import { LogsAPI } from './logsApi';
 
 export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   private integrationsApi: IntegrationsAPI;
@@ -39,6 +40,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   private modelRevisionsApi: ModelRevisionsAPI;
   private routinesApi: RoutinesAPI;
   private routineRevisionsApi: RoutineRevisionsAPI;
+  private logsApi: LogsAPI;
 
   /**
    * @hidden
@@ -87,6 +89,8 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
       client,
       metadataMap
     );
+
+    this.logsApi = new LogsAPI(`${resourcePath}/logs`, client, metadataMap);
   }
 
   public create = async (items: SimulatorCreate[]) => {
@@ -203,5 +207,9 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     items: SimulatorRoutineRevisionCreate[]
   ) => {
     return this.routineRevisionsApi.create(items);
+  };
+
+  public retrieveLogs = async (items: InternalId[]) => {
+    return this.logsApi.retrieve(items);
   };
 }
