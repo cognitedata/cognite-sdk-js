@@ -230,6 +230,33 @@ export interface SimulationRun {
   lastUpdatedTime: Date;
 }
 
+export type SimulatorLogSeverityLevel =
+  | 'Debug'
+  | 'Information'
+  | 'Warning'
+  | 'Error';
+
+export const SimulatorLogSeverityLevel = {
+  Debug: 'Debug' as SimulatorLogSeverityLevel,
+  Information: 'Information' as SimulatorLogSeverityLevel,
+  Warning: 'Warning' as SimulatorLogSeverityLevel,
+  Error: 'Error' as SimulatorLogSeverityLevel,
+};
+
+export interface SimulatorLogData {
+  timestamp: Date;
+  message: string;
+  severity: SimulatorLogSeverityLevel;
+}
+
+export interface SimulatorLog {
+  id: CogniteInternalId;
+  data: SimulatorLogData[];
+  dataSetId: CogniteInternalId;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+}
+
 export interface SimulatorModel {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
