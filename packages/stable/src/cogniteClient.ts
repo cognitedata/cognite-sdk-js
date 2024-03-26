@@ -185,15 +185,12 @@ export default class CogniteClient extends BaseCogniteClient {
   public get dataModels() {
     return accessApi(this.dataModelsApi);
   }
-
   public get alerts(){
     return accessApi(this.alertsApi);
   }
-
   public get monitoringTasks(){
-    return accessApi(this.monitoringTasksApi)
+    return accessApi(this.monitoringTasksApi);
   }
-
 
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;

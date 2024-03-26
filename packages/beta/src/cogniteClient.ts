@@ -6,16 +6,12 @@ import {
 } from '@cognite/sdk';
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
-import { AlertsAPI } from './api/alerts/alertsApi';
-import { MonitoringTasksAPI } from './api/monitoringTasks/monitoringTasksApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
 }
 
 export default class CogniteClient extends CogniteClientCleaned {
-  private alertsApi?: AlertsAPI;
-  private monitoringTasksApi?: MonitoringTasksAPI;
 
   /**
    * Create a new SDK client (beta)
@@ -38,14 +34,6 @@ export default class CogniteClient extends CogniteClientCleaned {
     super(options);
   }
 
-  public get alerts() {
-    return accessApi(this.alertsApi);
-  }
-
-  public get monitoringTasks() {
-    return accessApi(this.monitoringTasksApi);
-  }
-
   protected get version() {
     return `${version}-beta`;
   }
@@ -55,10 +43,5 @@ export default class CogniteClient extends CogniteClientCleaned {
 
     this.httpClient.setDefaultHeader('cdf-version', 'beta');
 
-    this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
-    this.monitoringTasksApi = this.apiFactory(
-      MonitoringTasksAPI,
-      'monitoringtasks'
-    );
   }
 }
