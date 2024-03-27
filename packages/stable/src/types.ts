@@ -39,6 +39,10 @@ export * from './exports.gen';
 
 export * from './api/geospatial/types';
 
+export * from './api/alerts/types';
+
+export * from './api/monitoringTasks/types';
+
 export interface Acl<ActionsType, ScopeType> {
   actions: ActionsType[];
   scope: ScopeType;

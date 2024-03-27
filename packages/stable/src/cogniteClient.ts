@@ -185,10 +185,10 @@ export default class CogniteClient extends BaseCogniteClient {
   public get dataModels() {
     return accessApi(this.dataModelsApi);
   }
-  public get alerts(){
+  public get alerts() {
     return accessApi(this.alertsApi);
   }
-  public get monitoringTasks(){
+  public get monitoringTasks() {
     return accessApi(this.monitoringTasksApi);
   }
 
@@ -287,7 +287,10 @@ export default class CogniteClient extends BaseCogniteClient {
     this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
     this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
     this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
-    this.monitoringTasksApi = this.apiFactory(MonitoringTasksAPI, 'monitoringtasks');
+    this.monitoringTasksApi = this.apiFactory(
+      MonitoringTasksAPI,
+      'monitoringtasks'
+    );
   }
 
   static urlEncodeExternalId(externalId: string): string {

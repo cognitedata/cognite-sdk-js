@@ -4,7 +4,6 @@ import {
   ClientOptions,
   CogniteClient as CogniteClientStable,
 } from '@cognite/sdk';
-import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 
 class CogniteClientCleaned extends CogniteClientStable {
@@ -12,7 +11,6 @@ class CogniteClientCleaned extends CogniteClientStable {
 }
 
 export default class CogniteClient extends CogniteClientCleaned {
-
   /**
    * Create a new SDK client (beta)
    *
@@ -42,6 +40,5 @@ export default class CogniteClient extends CogniteClientCleaned {
     super.initAPIs();
 
     this.httpClient.setDefaultHeader('cdf-version', 'beta');
-
   }
 }
