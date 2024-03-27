@@ -7,7 +7,7 @@ import {
   ChannelChange,
   ChannelCreate,
   ChannelFilterQuery,
-} from '../../types';
+} from './types';
 
 export class ChannelsAPI extends BaseResourceAPI<Channel> {
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {

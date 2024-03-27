@@ -14,7 +14,7 @@ import {
   SubscriptionCreate,
   SubscriptionDelete,
   SubscriptionFilterQuery,
-} from '../../types';
+} from './types';
 import { ChannelsAPI } from './channelsApi';
 import { SubscribersAPI } from './subscribersApi';
 import { SubscriptionsAPI } from './subscriptionsApi';
