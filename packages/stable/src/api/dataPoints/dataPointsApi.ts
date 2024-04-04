@@ -68,7 +68,7 @@ export class DataPointsAPI extends BaseResourceAPI<
 
     if (startDate && endDate) {
       // Get the months between the start and end dates
-      const months = getMonthsBetweenDates(startDate, endDate);
+      const months = this.getMonthsBetweenDates(startDate, endDate);
 
       // Create a array of promises for each month
       const promises = months.map((month) => {
@@ -199,6 +199,35 @@ export class DataPointsAPI extends BaseResourceAPI<
     });
     return {};
   }
+
+  protected getMonthsBetweenDates = (
+    startDate: Timestamp | string,
+    endDate: Timestamp | string
+  ): MonthInfo[] => {
+    const result: MonthInfo[] = [];
+
+    const currentMonth = new Date(startDate);
+    endDate = new Date(endDate);
+
+    while (currentMonth <= endDate) {
+      const firstDay = new Date(
+        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), 1, 0)
+      );
+      const lastDay = new Date(
+        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1, 0)
+      );
+
+      result.push({
+        startDate: firstDay.getTime(),
+        endDate: lastDay.getTime(),
+        numberOfDays:
+          (lastDay.getTime() - firstDay.getTime()) / (24 * 3600 * 1000),
+      });
+      // Move to the next month
+      currentMonth.setMonth(currentMonth.getMonth() + 1);
+    }
+    return result;
+  };
 }
 
 interface MonthInfo {
@@ -206,34 +235,5 @@ interface MonthInfo {
   endDate: Timestamp;
   numberOfDays: number;
 }
-
-const getMonthsBetweenDates = (
-  startDate: Timestamp | string,
-  endDate: Timestamp | string
-): MonthInfo[] => {
-  const result: MonthInfo[] = [];
-
-  const currentMonth = new Date(startDate);
-  endDate = new Date(endDate);
-
-  while (currentMonth <= endDate) {
-    const firstDay = new Date(
-      Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), 1, 0)
-    );
-    const lastDay = new Date(
-      Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1, 0)
-    );
-
-    result.push({
-      startDate: firstDay.getTime(),
-      endDate: lastDay.getTime(),
-      numberOfDays:
-        (lastDay.getTime() - firstDay.getTime()) / (24 * 3600 * 1000),
-    });
-    // Move to the next month
-    currentMonth.setMonth(currentMonth.getMonth() + 1);
-  }
-  return result;
-};
 
 export type LatestDataParams = IgnoreUnknownIds;
