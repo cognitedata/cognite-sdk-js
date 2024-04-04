@@ -3,8 +3,10 @@
 import {
   Aggregate as AggregateStable,
   DatapointAggregate as DatapointAggregateStable,
-  DatapointsMultiQuery as DataPointsMultiQueryStable,
+  DatapointAggregates as DatapointAggregatesStable,
+  DatapointsMultiQueryBase as DataPointsMultiQueryBaseStable,
   DatapointsQueryProperties as DatapointsQueryPropertiesStable,
+  DateRange,
   DoubleDatapoint as DoubleDatapointStable,
   DoubleDatapoints as DoubleDatapointsStable,
   Metadata,
@@ -15,7 +17,6 @@ import {
   StringDatapoint as StringDatapointStable,
   StringDatapoints as StringDatapointsStable,
   Timestamp,
-  DateRange,
 } from '@cognite/sdk';
 import {
   CogniteExternalId,
@@ -331,9 +332,20 @@ export interface Subscription {
   metadata?: Metadata;
 }
 
-export interface DatapointsMultiQuery
-  extends Omit<DataPointsMultiQueryStable, 'items'> {
+export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
   items: DatapointsQuery[];
+}
+
+export interface DatapointsMonthlyGranularityMultiQuery
+  extends Omit<DatapointsMultiQueryBase, 'granularity'> {
+  items: DatapointsQuery[];
+}
+export interface DatapointsMultiQueryBase
+  extends Omit<DataPointsMultiQueryBaseStable, 'aggregates'> {
+  /**
+   * The aggregates to be returned. This value overrides top-level default aggregates list when set. Specify all aggregates to be retrieved here. Specify empty array if this sub-query needs to return datapoints without aggregation.
+   */
+  aggregates?: Aggregate[];
 }
 
 export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
@@ -346,7 +358,15 @@ export interface DatapointsQueryId
   extends DatapointsQueryProperties,
     InternalId {}
 
-export type Aggregate = AggregateStable | 'countUncertain' | 'countBad';
+export type Aggregate =
+  | AggregateStable
+  | 'countGood'
+  | 'countUncertain'
+  | 'countBad'
+  | 'durationGood'
+  | 'durationUncertain'
+  | 'durationBad';
+
 export interface DatapointsQueryProperties
   extends Omit<DatapointsQueryPropertiesStable, 'aggregates'> {
   /**
@@ -375,9 +395,18 @@ export interface DatapointStatus {
   symbol: string;
 }
 
+export interface DatapointAggregates
+  extends Omit<DatapointAggregatesStable, 'datapoints'> {
+  datapoints: DatapointAggregate[];
+}
+
 export interface DatapointAggregate extends DatapointAggregateStable {
+  countGood?: number;
   countUncertain?: number;
   countBad?: number;
+  durationGood?: number;
+  durationUncertain?: number;
+  durationBad?: number;
 }
 
 export type Datapoints = StringDatapoints | DoubleDatapoints;
