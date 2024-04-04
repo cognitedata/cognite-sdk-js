@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.23.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.22.0...@cognite/sdk-alpha@0.23.0) (2024-04-04)
+
+### Features
+
+- add logId to SimulatorModelRevision ([#1075](https://github.com/cognitedata/cognite-sdk-js/issues/1075)) ([33b79ed](https://github.com/cognitedata/cognite-sdk-js/commit/33b79ed5df42f83265b99acb3b698d7151392d49))
+
 # [0.22.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.21.0...@cognite/sdk-alpha@0.22.0) (2024-03-26)
 
 ### Features
