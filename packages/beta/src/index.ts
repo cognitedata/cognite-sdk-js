@@ -6,8 +6,11 @@ export * from './types';
 export {
   Aggregate,
   DatapointAggregate,
+  DatapointAggregates,
   Datapoints,
+  DatapointsMonthlyGranularityMultiQuery,
   DatapointsMultiQuery,
+  DatapointsMultiQueryBase,
   DatapointsQuery,
   DatapointsQueryExternalId,
   DatapointsQueryId,
