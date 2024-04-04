@@ -332,6 +332,7 @@ export interface SimulatorModelRevision {
   metadata?: Record<string, string>;
   createdTime: Date;
   lastUpdatedTime: Date;
+  logId?: CogniteInternalId;
 }
 
 export interface SimulatorModelRevisionCreate {
