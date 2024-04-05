@@ -426,7 +426,6 @@ export interface SimulatorRoutineDataSampling {
   validationWindow: number;
   samplingWindow: number;
   granularity: number;
-  validationEndOffset: string;
 }
 
 export interface SimulatorRoutineConfigDisabled {
