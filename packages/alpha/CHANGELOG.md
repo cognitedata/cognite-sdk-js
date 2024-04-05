@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.23.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.23.0...@cognite/sdk-alpha@0.23.1) (2024-04-05)
+
+### Bug Fixes
+
+- fix simulator cron type ([#1078](https://github.com/cognitedata/cognite-sdk-js/issues/1078)) ([09c03e0](https://github.com/cognitedata/cognite-sdk-js/commit/09c03e0f0a907db9495ff9e8998732331842a301))
+
 # [0.23.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.22.0...@cognite/sdk-alpha@0.23.0) (2024-04-04)
 
 ### Features
