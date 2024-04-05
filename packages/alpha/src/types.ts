@@ -434,7 +434,7 @@ export interface SimulatorRoutineConfigDisabled {
 
 export interface SimulatorRoutineSchedule {
   enabled: boolean;
-  cron_expression: string;
+  cronExpression: string;
 }
 
 export interface SimulatorRoutineSteadyStateDetection {
