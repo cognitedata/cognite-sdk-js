@@ -94,10 +94,9 @@ export const routineRevisionConfiguration: SimulatorRoutineRevisionConfiguration
       validationWindow: 0,
       samplingWindow: 0,
       granularity: 0,
-      validationEndOffset: '9s',
     },
-    logicalCheck: { enabled: false },
-    steadyStateDetection: { enabled: false },
+    logicalCheck: [],
+    steadyStateDetection: [],
     inputTimeseries: [
       {
         name: 'string',

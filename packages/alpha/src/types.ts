@@ -426,7 +426,6 @@ export interface SimulatorRoutineDataSampling {
   validationWindow: number;
   samplingWindow: number;
   granularity: number;
-  validationEndOffset: string;
 }
 
 export interface SimulatorRoutineConfigDisabled {
@@ -435,8 +434,7 @@ export interface SimulatorRoutineConfigDisabled {
 
 export interface SimulatorRoutineSchedule {
   enabled: boolean;
-  startTime: number;
-  repeat: string;
+  cron_expression: string;
 }
 
 export interface SimulatorRoutineSteadyStateDetection {
@@ -511,10 +509,8 @@ export interface SimulatorRoutineScript {
 export interface SimulatorRoutineRevisionConfiguration {
   dataSampling: SimulatorRoutineDataSampling;
   schedule: SimulatorRoutineConfigDisabled | SimulatorRoutineSchedule;
-  steadyStateDetection:
-    | SimulatorRoutineConfigDisabled
-    | SimulatorRoutineSteadyStateDetection;
-  logicalCheck: SimulatorRoutineConfigDisabled | SimulatorRoutineLogicalCheck;
+  steadyStateDetection: SimulatorRoutineSteadyStateDetection[];
+  logicalCheck: SimulatorRoutineLogicalCheck[];
   inputConstants: SimulatorRoutineInputConstant[];
   outputSequences?: SimulatorRoutineOutputSequence[];
   inputTimeseries: SimulatorRoutineInputTimeseries[];
