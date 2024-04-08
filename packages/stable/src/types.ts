@@ -1386,9 +1386,13 @@ export interface FileGeoLocationFilter {
 
 export type FileGeoLocationPatch = SetField<FileGeoLocation> | RemoveField;
 
+export type PrincipalId = string;
+export type GroupMembers = PrincipalId[] | 'allUserAccounts';
+
 export interface Group {
   name: GroupName;
   sourceId?: GroupSourceId;
+  members?: GroupMembers;
   capabilities?: CogniteCapability;
   id: number;
   isDeleted: boolean;
@@ -1431,6 +1435,7 @@ export type GroupSourceId = string;
 export interface GroupSpec {
   name: GroupName;
   sourceId?: GroupSourceId;
+  members?: GroupMembers;
   capabilities?: CogniteCapability;
 }
 
