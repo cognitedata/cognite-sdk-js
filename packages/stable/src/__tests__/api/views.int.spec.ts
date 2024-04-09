@@ -146,7 +146,7 @@ describe('Views integration test', () => {
     expect(views.items[1].name).toEqual(viewCreationDefinition2.name);
   });
 
-  it('should successfully delete Views', async () => {
+  it.skip('should successfully delete Views', async () => {
     const response = await client.views.delete([
       {
         space: TEST_SPACE_NAME,

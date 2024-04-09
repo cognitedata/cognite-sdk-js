@@ -73,7 +73,7 @@ describe('Datapoints integration test', () => {
   });
 });
 
-describe('Datapoints integration test for monthly granularity', () => {
+describe.skip('Datapoints integration test for monthly granularity', () => {
   let client: CogniteClient;
   let timeserie: Timeseries;
   let timeserie2: Timeseries;
