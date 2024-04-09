@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.10.0...@cognite/sdk@9.11.0) (2024-04-09)
+
+### Features
+
+- group membership ([#1079](https://github.com/cognitedata/cognite-sdk-js/issues/1079)) ([4a7c24a](https://github.com/cognitedata/cognite-sdk-js/commit/4a7c24a260453495fdc1006660093b9f15f37ac5))
+
 # [9.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.9.0...@cognite/sdk@9.10.0) (2024-02-08)
 
 ### Features
