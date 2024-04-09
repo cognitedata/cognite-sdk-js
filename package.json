@@ -67,7 +67,7 @@
     "jest": "^26.1",
     "lerna": "^6.0.0",
     "markdown-link-check": "^3.10.3",
-    "nock": "^10.0.6",
+    "nock": "13.3.1",
     "openapi-types": "^11.0.1",
     "prettier": "^2.5.1",
     "rollup": "^2.22.2",

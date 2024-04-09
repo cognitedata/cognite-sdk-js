@@ -48,10 +48,6 @@ jobs:
   snippets:
     runs-on: ubuntu-latest
 
-    env:
-      COGNITE_PROJECT: cognitesdk-js
-      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
-
     steps:
       - uses: actions/checkout@v3
         with:
@@ -81,10 +77,6 @@ jobs:
   samples:
     runs-on: ubuntu-latest
 
-    env:
-      COGNITE_PROJECT: cognitesdk-js
-      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
-
     steps:
       - uses: actions/checkout@v3
         with:
@@ -108,15 +100,11 @@ jobs:
       - name: Build
         run: yarn build
 
-      # - name: Test samples
-      #   run: yarn test-samples
+      - name: Test samples
+        run: yarn test-samples
 
   lint:
     runs-on: ubuntu-latest
-
-    env:
-      COGNITE_PROJECT: cognitesdk-js
-      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
 
     steps:
       - uses: actions/checkout@v3
@@ -144,9 +132,6 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      - name: Build
-        run: yarn build
-
   tests:
 
     runs-on: ubuntu-latest
@@ -156,12 +141,11 @@ jobs:
         node-version: [14, 16]
 
     env:
-      COGNITE_PROJECT: platypus
-      COGNITE_BASE_URL: https://greenfield.cognitedata.com
-      COGNITE_CREDENTIALS: ${{ secrets.COGNITE_CREDENTIALS }}
+      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_BASE_URL: https://api.cognitedata.com
       COGNITE_CLIENT_SECRET: ${{ secrets.COGNITE_CLIENT_SECRET }}
-      COGNITE_CLIENT_ID: ${{ secrets.COGNITE_CLIENT_ID }}
-      COGNITE_AZURE_TENANT_ID: ${{ secrets.COGNITE_AZURE_TENANT_ID }}
+      COGNITE_CLIENT_ID: cb491d7a-c346-4910-9a10-1650df34fbbb
+      COGNITE_AZURE_TENANT_ID: cogniteappdev.onmicrosoft.com
 
     steps:
       - uses: actions/checkout@v3
