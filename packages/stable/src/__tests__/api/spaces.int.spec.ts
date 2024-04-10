@@ -2,19 +2,18 @@
 
 import { SpaceCreateDefinition } from 'stable/src/types';
 import CogniteClient from '../../cogniteClient';
-import { deleteOldSpaces, setupLoggedInClient } from '../testUtils';
+import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Spaces integration test', () => {
   let client: CogniteClient;
-  const timestamp = Date.now();
 
   const spaceCreationDefinition: SpaceCreateDefinition = {
-    space: `test_data_space_${timestamp}`,
+    space: `test_data_space_${randomInt()}`,
     name: 'test_data_space',
     description: 'Instance space used for integration tests.',
   };
   const spaceCreation2Definition: SpaceCreateDefinition = {
-    space: `test_data_space_2_${timestamp}`,
+    space: `test_data_space_2_${randomInt()}`,
     name: 'test_data_space_2',
     description: 'Instance space used for integration tests_2',
   };

@@ -2,17 +2,16 @@
 
 import { ViewCreateDefinition } from '../../api/views/types.gen';
 import CogniteClient from '../../cogniteClient';
-import { deleteOldSpaces, setupLoggedInClient } from '../testUtils';
+import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Views integration test', () => {
   let client: CogniteClient;
-  const timestamp = Date.now();
 
-  const TEST_SPACE_NAME = `Views_integration_test_${timestamp}`;
-  const TEST_CONTAINER_NAME = `Views_integration_test_container${timestamp}`;
+  const TEST_SPACE_NAME = `Views_integration_test_${randomInt()}`;
+  const TEST_CONTAINER_NAME = `Views_integration_test_container${randomInt()}`;
 
   const viewCreationDefinition: ViewCreateDefinition = {
-    externalId: `test_view_${timestamp}`,
+    externalId: `test_view_${randomInt()}`,
     space: TEST_SPACE_NAME,
     name: 'test_view',
     description: 'View used for integration tests.',
