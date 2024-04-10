@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.24.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.23.2...@cognite/sdk-alpha@0.24.0) (2024-04-10)
+
+### Features
+
+- add enabled property to data sampling ([#1081](https://github.com/cognitedata/cognite-sdk-js/issues/1081)) ([cf2c6c3](https://github.com/cognitedata/cognite-sdk-js/commit/cf2c6c3aac190ae67746750104bf752ce393a58f))
+
 ## [0.23.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.23.1...@cognite/sdk-alpha@0.23.2) (2024-04-09)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
