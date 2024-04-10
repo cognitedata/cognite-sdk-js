@@ -2,16 +2,15 @@
 
 import { ContainerCreateDefinition } from '../../api/containers/types.gen';
 import CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Containers integration test', () => {
   let client: CogniteClient;
-  const timestamp = Date.now();
 
-  const TEST_SPACE_NAME = `Containers_integration_test_${timestamp}`;
+  const TEST_SPACE_NAME = `Containers_integration_test_${randomInt()}`;
 
   const containerCreationDefinition: ContainerCreateDefinition = {
-    externalId: `test_container_${timestamp}`,
+    externalId: `test_container_${randomInt()}`,
     space: TEST_SPACE_NAME,
     name: 'test_container',
     description: 'Container used for integration tests.',
@@ -22,7 +21,7 @@ describe('Containers integration test', () => {
     },
   };
   const containerCreationDefinition2: ContainerCreateDefinition = {
-    externalId: `test_container_2_${timestamp}`,
+    externalId: `test_container_2_${randomInt()}`,
     space: TEST_SPACE_NAME,
     name: 'test_data_space_2',
     description: 'Instance space used for integration tests.',
@@ -36,6 +35,7 @@ describe('Containers integration test', () => {
   beforeAll(async () => {
     jest.setTimeout(30 * 1000);
     client = setupLoggedInClient();
+    await deleteOldSpaces(client);
     await client.spaces.upsert([
       {
         space: TEST_SPACE_NAME,

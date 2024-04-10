@@ -13,6 +13,7 @@ import {
   ListOfAllVersionsReferences,
   ListOfVersionReferences,
   ReducedLimitQueryParameter,
+  SpaceQueryParameter,
 } from './types.gen';
 
 export class DataModelsAPI extends BaseResourceAPI<DataModel> {
@@ -74,6 +75,7 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
    */
   public list = (
     params: IncludeGlobalQueryParameter &
+      SpaceQueryParameter &
       CursorQueryParameter &
       ReducedLimitQueryParameter &
       AllVersionsQueryParameter &
