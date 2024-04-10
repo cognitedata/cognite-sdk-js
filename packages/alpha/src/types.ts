@@ -423,6 +423,7 @@ export interface SimulatorRoutineFilterQuery extends FilterQuery {
 /* Routine revisions */
 
 export interface SimulatorRoutineDataSampling {
+  enabled: boolean;
   validationWindow: number;
   samplingWindow: number;
   granularity: number;
