@@ -1389,14 +1389,32 @@ export type FileGeoLocationPatch = SetField<FileGeoLocation> | RemoveField;
 export type PrincipalId = string;
 export type GroupMembers = PrincipalId[] | 'allUserAccounts';
 
-export interface Group {
+interface BaseGroup {
   name: GroupName;
-  sourceId?: GroupSourceId;
-  members?: GroupMembers;
   capabilities?: CogniteCapability;
   id: number;
   isDeleted: boolean;
   deletedTime?: Date;
+}
+
+export interface ManagedExternallyGroup extends BaseGroup {
+  sourceId?: GroupSourceId;
+}
+
+export interface ManagedInCDFGroup extends BaseGroup {
+  members: GroupMembers;
+}
+
+export type Group = ManagedInCDFGroup | ManagedExternallyGroup;
+
+export function isManagedInCDFGroup(group: Group): group is ManagedInCDFGroup {
+  return (group as ManagedInCDFGroup).members !== undefined;
+}
+
+export function isManagedExternallyGroup(
+  group: Group
+): group is ManagedExternallyGroup {
+  return !isManagedInCDFGroup(group);
 }
 
 /**
