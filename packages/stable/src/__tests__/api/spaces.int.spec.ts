@@ -2,7 +2,7 @@
 
 import { SpaceCreateDefinition } from 'stable/src/types';
 import CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { deleteOldSpaces, setupLoggedInClient } from '../testUtils';
 
 describe('Spaces integration test', () => {
   let client: CogniteClient;
@@ -21,6 +21,7 @@ describe('Spaces integration test', () => {
 
   beforeAll(async () => {
     client = setupLoggedInClient();
+    await deleteOldSpaces(client);
   });
   it('should successfully upsert spaces', async () => {
     const createdSpaceResponse = await client.spaces.upsert([

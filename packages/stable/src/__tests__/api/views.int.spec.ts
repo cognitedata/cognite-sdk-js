@@ -2,7 +2,7 @@
 
 import { ViewCreateDefinition } from '../../api/views/types.gen';
 import CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { deleteOldSpaces, setupLoggedInClient } from '../testUtils';
 
 describe('Views integration test', () => {
   let client: CogniteClient;
@@ -49,6 +49,7 @@ describe('Views integration test', () => {
   beforeAll(async () => {
     jest.setTimeout(30 * 1000);
     client = setupLoggedInClient();
+    await deleteOldSpaces(client);
     await client.spaces.upsert([
       {
         space: TEST_SPACE_NAME,

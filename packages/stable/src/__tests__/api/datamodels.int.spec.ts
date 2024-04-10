@@ -2,7 +2,7 @@
 
 import { DataModelCreate, ViewCreateDefinition } from 'stable/src/types';
 import CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { deleteOldSpaces, setupLoggedInClient } from '../testUtils';
 
 describe('Data models integration test', () => {
   let client: CogniteClient;
@@ -50,6 +50,7 @@ describe('Data models integration test', () => {
     jest.setTimeout(30 * 1000);
 
     client = setupLoggedInClient();
+    await deleteOldSpaces(client);
     await client.spaces.upsert([
       {
         space: TEST_SPACE_NAME,
