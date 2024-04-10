@@ -120,7 +120,7 @@ export interface AnnotationsCogniteAnnotationTypesDiagramsAssetLink {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The symbol representing the asset */
@@ -143,7 +143,7 @@ export interface AnnotationsCogniteAnnotationTypesDiagramsInstanceLink {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The symbol found in the file */
@@ -267,7 +267,7 @@ export interface AnnotationsDetection {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The unit of the value field. Optional. */
@@ -286,7 +286,7 @@ export interface AnnotationsExtractedText {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The location of the extracted text */
@@ -303,7 +303,7 @@ export interface AnnotationsFileLink {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The symbol found in the file */
@@ -360,7 +360,7 @@ export interface AnnotationsIsoPlanAnnotation {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** Indicate the relative position of an annotation */
@@ -383,7 +383,7 @@ export interface AnnotationsJunction {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The point representing the junction */
@@ -433,7 +433,7 @@ export interface AnnotationsLine {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The polyline representing the line */
@@ -557,7 +557,7 @@ export interface AnnotationsUnhandledSymbolObject {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The symbol found in the file */
@@ -574,7 +574,7 @@ export interface AnnotationsUnhandledTextObject {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The extracted text */

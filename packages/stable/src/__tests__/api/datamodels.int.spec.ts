@@ -2,18 +2,17 @@
 
 import { DataModelCreate, ViewCreateDefinition } from 'stable/src/types';
 import CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Data models integration test', () => {
   let client: CogniteClient;
-  const timestamp = Date.now();
 
-  const TEST_SPACE_NAME = `Datamodels_integration_test_${timestamp}`;
-  const TEST_CONTAINER_NAME = `Datamodels_integration_test_container${timestamp}`;
-  const TEST_VIEW_NAME = `Datamodels_integration_test_view${timestamp}`;
+  const TEST_SPACE_NAME = `Datamodels_integration_test_${randomInt()}`;
+  const TEST_CONTAINER_NAME = `Datamodels_integration_test_container${randomInt()}`;
+  const TEST_VIEW_NAME = `Datamodels_integration_test_view${randomInt()}`;
 
   const datamodelCreationDefinition: DataModelCreate = {
-    externalId: `test_datamodel_${timestamp}`,
+    externalId: `test_datamodel_${randomInt()}`,
     space: TEST_SPACE_NAME,
     name: 'test_datamodel',
     description: 'Data model used for integration tests.',
@@ -50,6 +49,7 @@ describe('Data models integration test', () => {
     jest.setTimeout(30 * 1000);
 
     client = setupLoggedInClient();
+    await deleteOldSpaces(client);
     await client.spaces.upsert([
       {
         space: TEST_SPACE_NAME,
@@ -72,20 +72,6 @@ describe('Data models integration test', () => {
       },
     ]);
     await client.views.upsert([viewCreationDefinition]);
-  });
-  afterAll(async () => {
-    client = setupLoggedInClient();
-    await client.views.delete([
-      {
-        space: TEST_SPACE_NAME,
-        externalId: `test_view_${timestamp}`,
-        version: '1',
-      },
-    ]);
-    await client.containers.delete([
-      { externalId: TEST_CONTAINER_NAME, space: TEST_SPACE_NAME },
-    ]);
-    await client.spaces.delete([TEST_SPACE_NAME]);
   });
 
   it('should successfully upsert datamodels', async () => {
