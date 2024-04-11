@@ -106,7 +106,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Retrieve instances](https://developer.cognite.com/api#tag/Instances/operation/byExternalIdsInstances)
    *
    * ```js
-   *  const view = {
+   *  const view: ViewReference = {
    *    externalId: 'Describable',
    *    space: 'cdf_core',
    *    type: 'view',
@@ -116,8 +116,8 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *    sources: [{ source: view }],
    *     items: [
    *       {
-   *         externalId: describable1.externalId,
-   *         space: testSpace.space,
+   *         externalId: "node-external-id",
+   *         space: "node-space",
    *         instanceType: 'node',
    *       },
    *     ],
@@ -149,15 +149,15 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *  await client.instances.upsert({
    *   items: describables.map((describable) => ({
    *       instanceType: 'node',
-   *       externalId: describable.externalId,
-   *       space: describable.space,
+   *       externalId: "node-external-id",
+   *       space: "node-space",
    *       sources: [
    *         {
    *           source: view,
    *           properties: {
-   *             title: describable.title,
-   *             description: describable.description,
-   *             labels: describable.labels,
+   *             title: "node-title",
+   *             description: "node-description",
+   *             labels: "node-labels",
    *           },
    *         },
    *       ],
@@ -185,12 +185,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *   items: [
    *      {
    *        instanceType: 'node',
-   *        externalId: describable1.externalId,
-   *        space: testSpace.space,
-   *      },
-   *      {
-   *        instanceType: 'node',
-   *        externalId: describable2.externalId,
+   *        externalId: "node-external-id",
    *        space: testSpace.space,
    *      },
    *    ],
@@ -205,7 +200,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Aggregate instances](https://developer.cognite.com/api#tag/Instances/operation/aggregateInstances)
    *
    * ```js
-   *  const view = {
+   *  const view: ViewReference = {
    *    externalId: 'Describable',
    *    space: 'cdf_core',
    *    type: 'view',
@@ -251,7 +246,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *           filter: {
    *             equals: {
    *               property: ['node', 'externalId'],
-   *               value: describable1.externalId,
+   *               value: "node-external-id",
    *             },
    *           },
    *         },
@@ -287,7 +282,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *           filter: {
    *             equals: {
    *               property: ['node', 'externalId'],
-   *               value: describable1.externalId,
+   *               value: "node-external-id",
    *             },
    *           },
    *         },
