@@ -84,20 +84,18 @@ describe('Instances integration test', () => {
   });
 
   afterAll(async () => {
-    await client.instances.delete({
-      items: [
-        {
-          instanceType: 'node',
-          externalId: describable1.externalId,
-          space: testSpace.space,
-        },
-        {
-          instanceType: 'node',
-          externalId: describable2.externalId,
-          space: testSpace.space,
-        },
-      ],
-    });
+    await client.instances.delete([
+      {
+        instanceType: 'node',
+        externalId: describable1.externalId,
+        space: testSpace.space,
+      },
+      {
+        instanceType: 'node',
+        externalId: describable2.externalId,
+        space: testSpace.space,
+      },
+    ]);
   });
 
   test('list nodes from a single view with limit 2', async () => {

@@ -1,11 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import {
-  BaseResourceAPI,
-  CDFHttpClient,
-  MetadataMap,
-  promiseAllWithData,
-} from '@cognite/sdk-core';
+import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
 import {
   AggregationResponse,
   ListOfSpaceExternalIdsRequestWithTyping,
@@ -66,12 +61,6 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [List instances](https://developer.cognite.com/api#tag/Instances/operation/advancedListInstance)
    *
    * ```js
-   *  const view = {
-   *    externalId: 'Describable',
-   *    space: 'cdf_core',
-   *    type: 'view',
-   *    version: 'v1',
-   *  };
    *  const response = await client.instances.list({
    *    instanceType: 'node',
    *    sources: [{
@@ -112,14 +101,15 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Retrieve instances](https://developer.cognite.com/api#tag/Instances/operation/byExternalIdsInstances)
    *
    * ```js
-   *  const view: ViewReference = {
-   *    externalId: 'Describable',
-   *    space: 'cdf_core',
-   *    type: 'view',
-   *    version: 'v1',
-   *  };
+   *  const view: ViewReference = ;
    *  const response = await client.instances.retrieve({
-   *    sources: [{ source: view }],
+   *    sources: [{ source: {
+   *          externalId: 'Describable',
+   *          space: 'cdf_core',
+   *          type: 'view',
+   *          version: 'v1',
+   *        }
+   *      }],
    *     items: [
    *       {
    *         externalId: "node-external-id",
@@ -146,20 +136,21 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Upsert instances](https://developer.cognite.com/api#tag/Instances/operation/applyNodeAndEdges)
    *
    * ```js
-   *  const view = {
-   *    externalId: 'Describable',
-   *    space: 'cdf_core',
-   *    type: 'view',
-   *    version: 'v1',
-   *  };
    *  await client.instances.upsert({
-   *   items: describables.map((describable) => ({
+   *   items: [{
    *       instanceType: 'node',
    *       externalId: "node-external-id",
    *       space: "node-space",
    *       sources: [
    *         {
-   *           source: view,
+   *           source: {
+   *            {
+   *              externalId: 'Describable',
+   *              space: 'cdf_core',
+   *              type: 'view',
+   *              version: 'v1',
+   *            }
+   *          },
    *           properties: {
    *             title: "node-title",
    *             description: "node-description",
@@ -167,7 +158,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *           },
    *         },
    *       ],
-   *     })),
+   *     }],
    *   });
    * ```
    */
@@ -190,9 +181,9 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *  await client.instances.delete({
    *   items: [
    *      {
-   *        instanceType: 'node',
+   *        instanceType: "node",
    *        externalId: "node-external-id",
-   *        space: testSpace.space,
+   *        space: "node-space",
    *      },
    *    ],
    *   })
@@ -206,14 +197,13 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Aggregate instances](https://developer.cognite.com/api#tag/Instances/operation/aggregateInstances)
    *
    * ```js
-   *  const view: ViewReference = {
-   *    externalId: 'Describable',
-   *    space: 'cdf_core',
-   *    type: 'view',
-   *    version: 'v1',
-   *  };
    *  const response = await client.instances.aggregate({
-   *     view,
+   *     view: {
+   *        externalId: 'Describable',
+   *        space: 'cdf_core',
+   *        type: 'view',
+   *        version: 'v1',
+   *     },
    *     groupBy: ['externalId'],
    *     aggregates: [{ count: { property: 'externalId' } }],
    *     filter: {
@@ -239,12 +229,6 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Query instances](https://developer.cognite.com/api#tag/Instances/operation/queryContent)
    *
    * ```js
-   *  const view = {
-   *    externalId: 'Describable',
-   *    space: 'cdf_core',
-   *    type: 'view',
-   *    version: 'v1',
-   *  };
    *  const response = await client.instances.query({
    *     with: {
    *       result_set_1: {
@@ -275,12 +259,6 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Sync instances](https://developer.cognite.com/api#tag/Instances/operation/syncContent)
    *
    * ```js
-   *  const view = {
-   *    externalId: 'Describable',
-   *    space: 'cdf_core',
-   *    type: 'view',
-   *    version: 'v1',
-   *  };
    *  const response = await client.instances.sync({
    *     with: {
    *       result_set_1: {
