@@ -177,15 +177,13 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Delete instances](https://developer.cognite.com/api#tag/Instances/operation/deleteBulk)
    *
    * ```js
-   *  await client.instances.delete({
-   *   items: [
+   *  await client.instances.delete([
    *      {
    *        instanceType: "node",
    *        externalId: "node-external-id",
    *        space: "node-space",
    *      },
-   *    ],
-   *   })
+   *    ]);
    * ```
    */
   public delete = async (items: NodeOrEdgeDeleteRequest['items']) => {
