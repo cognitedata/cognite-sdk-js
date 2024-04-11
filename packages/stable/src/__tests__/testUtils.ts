@@ -112,17 +112,12 @@ const deleteAllInstancesInSpace = async (
     .items;
 
   const deleteInstances = async (instances: NodeOrEdge[]) => {
-    await client.post(
-      `/api/v1/projects/${client.project}/models/instances/delete`,
-      {
-        data: {
-          items: instances.map((instance) => ({
-            instanceType: instance.instanceType,
-            externalId: instance.externalId,
-            space: instance.space,
-          })),
-        },
-      }
+    client.instances.delete(
+      instances.map((instance) => ({
+        instanceType: instance.instanceType,
+        externalId: instance.externalId,
+        space: instance.space,
+      }))
     );
   };
 
