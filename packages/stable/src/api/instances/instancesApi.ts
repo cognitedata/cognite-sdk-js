@@ -1,6 +1,11 @@
 // Copyright 2023 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import {
+  BaseResourceAPI,
+  CDFHttpClient,
+  MetadataMap,
+  promiseAllWithData,
+} from '@cognite/sdk-core';
 import {
   AggregationResponse,
   ListOfSpaceExternalIdsRequestWithTyping,
@@ -8,6 +13,7 @@ import {
   NodeAndEdgeCollectionResponseWithCursorV3Response,
   NodeAndEdgeCreateCollection,
   NodeOrEdge,
+  NodeOrEdgeDeleteRequest,
   NodeOrEdgeListRequestV3,
   NodeOrEdgeSearchRequest,
   QueryRequest,
@@ -192,8 +198,8 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *   })
    * ```
    */
-  public delete = async (params: ListOfSpaceExternalIdsRequestWithTyping) => {
-    await this.delete(params);
+  public delete = async (items: NodeOrEdgeDeleteRequest['items']) => {
+    return super.deleteEndpoint(items);
   };
 
   /**
