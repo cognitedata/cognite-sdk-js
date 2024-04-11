@@ -101,7 +101,6 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * [Retrieve instances](https://developer.cognite.com/api#tag/Instances/operation/byExternalIdsInstances)
    *
    * ```js
-   *  const view: ViewReference = ;
    *  const response = await client.instances.retrieve({
    *    sources: [{ source: {
    *          externalId: 'Describable',
@@ -137,29 +136,29 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *
    * ```js
    *  await client.instances.upsert({
-   *   items: [{
+   *  items: [
+   *    {
    *       instanceType: 'node',
-   *       externalId: "node-external-id",
-   *       space: "node-space",
+   *       externalId: 'node-external-id',
+   *       space: 'node-space',
    *       sources: [
-   *         {
-   *           source: {
-   *            {
-   *              externalId: 'Describable',
-   *              space: 'cdf_core',
-   *              type: 'view',
-   *              version: 'v1',
-   *            }
+   *        {
+   *            source: {
+   *             externalId: 'Describable',
+   *             space: 'cdf_core',
+   *             type: 'view',
+   *             version: 'v1',
    *          },
-   *           properties: {
-   *             title: "node-title",
-   *             description: "node-description",
-   *             labels: "node-labels",
+   *            properties: {
+   *             title: 'node-title',
+   *             description: 'node-description',
+   *             labels: 'node-labels',
    *           },
    *         },
    *       ],
-   *     }],
-   *   });
+   *     },
+   *   ],
+   * });
    * ```
    */
   public upsert = async (
