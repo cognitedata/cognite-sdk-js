@@ -1403,6 +1403,14 @@ export interface ManagedExternallyGroup extends BaseGroup {
 
 export interface ManagedInCDFGroup extends BaseGroup {
   members: GroupMembers;
+  // We are adding `sourceId: undefined` because this code:
+  // const foo(bar: Group) => console.log(bar.sourceId)
+  // yields the error:
+  // `Property 'sourceId' does not exist on type 'ManagedInCDFGroup'.`
+  // The Group type is defined as `type Group = ManagedInCDFGroup | ManagedExternallyGroup`
+  // and `sourceId` isn't defined on `ManagedInCDFGroup`.
+  // Typescript fails even though `sourceId` is an optional field on `ManagedExternallyGroup`.
+  sourceId: undefined;
 }
 
 export type Group = ManagedInCDFGroup | ManagedExternallyGroup;
