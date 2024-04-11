@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.7.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.7.2...@cognite/sdk-beta@5.7.3) (2024-04-11)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+## [5.7.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.7.1...@cognite/sdk-beta@5.7.2) (2024-04-10)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+## [5.7.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.7.0...@cognite/sdk-beta@5.7.1) (2024-04-09)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
+# [5.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.6.3...@cognite/sdk-beta@5.7.0) (2024-03-20)
+
+### Features
+
+- update alerts filter ([#1070](https://github.com/cognitedata/cognite-sdk-js/issues/1070)) ([078f396](https://github.com/cognitedata/cognite-sdk-js/commit/078f3960cb0077f17fd2d20eaf14395ab10b1038))
+
+## [5.6.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.6.2...@cognite/sdk-beta@5.6.3) (2024-02-08)
+
+**Note:** Version bump only for package @cognite/sdk-beta
+
 ## [5.6.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.6.1...@cognite/sdk-beta@5.6.2) (2024-02-06)
 
 **Note:** Version bump only for package @cognite/sdk-beta

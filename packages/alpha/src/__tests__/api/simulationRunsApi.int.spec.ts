@@ -2,7 +2,11 @@
 import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-describe.skip('simulator integrations api', () => {
+const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
+
+const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
+
+describeIf('simulator integrations api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
 
   const ts = Date.now();
@@ -11,9 +15,7 @@ describe.skip('simulator integrations api', () => {
   test('run a simulation', async () => {
     const res = await client.simulators.runSimulation([
       {
-        simulatorName: 'DWSIM',
-        modelName: 'ShowerMixerIntegrationTest',
-        routineName: 'ShowerMixerCalculation',
+        routineExternalId: 'ShowerMixerIntegrationTestConstInputs',
         runType: 'external',
         validationEndTime: new Date(ts),
         queue: true,
@@ -29,7 +31,7 @@ describe.skip('simulator integrations api', () => {
 
     expect(item.simulatorName).toBe('DWSIM');
     expect(item.modelName).toBe('ShowerMixerIntegrationTest');
-    expect(item.routineName).toBe('ShowerMixerCalculation');
+    expect(item.routineName).toBe('ShowerMixerIntegrationTest');
     expect(item.status).toBe('ready');
     expect(item.runType).toBe('external');
     expect(item.validationEndTime?.valueOf()).toBe(ts);
@@ -42,7 +44,16 @@ describe.skip('simulator integrations api', () => {
       filter: {
         simulatorName: 'DWSIM',
         status: 'success',
+        createdTime: {
+          max: new Date(),
+        },
       },
+      sort: [
+        {
+          property: 'createdTime',
+          order: 'desc',
+        },
+      ],
     });
 
     expect(res).toBeDefined();
