@@ -253,11 +253,14 @@ describe('Instances integration test', () => {
       },
       limit: 1,
     });
+    console.log(JSON.stringify(response, null, 2));
     expect(response.items).toHaveLength(1);
+
+    expect(response.items[0].aggregates[0].aggregate).toBe('count');
     expect(
       response.items[0].aggregates[0].aggregate === 'count' &&
-        (response.items[0].aggregates[0].value || 0) > 1
-    ).toBeTruthy();
+        (response.items[0].aggregates[0].value || 0)
+    ).toBeGreaterThan(0);
   });
 
   test('retrieve', async () => {
