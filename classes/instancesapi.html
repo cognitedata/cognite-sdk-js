@@ -92,8 +92,14 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="instancesapi.html#aggregate" class="tsd-kind-icon">aggregate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="instancesapi.html#delete" class="tsd-kind-icon">delete</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="instancesapi.html#list" class="tsd-kind-icon">list</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="instancesapi.html#query" class="tsd-kind-icon">query</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="instancesapi.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="instancesapi.html#search" class="tsd-kind-icon">search</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="instancesapi.html#sync" class="tsd-kind-icon">sync</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="instancesapi.html#upsert" class="tsd-kind-icon">upsert</a></li>
 							</ul>
 						</section>
 					</div>
@@ -112,7 +118,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides BaseResourceAPI.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/220b7c1b48/packages/stable/src/api/instances/instancesApi.ts#L12">packages/stable/src/api/instances/instancesApi.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/9969e47c23/packages/stable/src/api/instances/instancesApi.ts#L21">packages/stable/src/api/instances/instancesApi.ts:21</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -129,6 +135,88 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="aggregate" class="tsd-anchor"></a>
+					<h3>aggregate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">aggregate<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><a href="../globals.html#viewaggregationrequest" class="tsd-signature-type">ViewAggregationRequest</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#aggregationresponse" class="tsd-signature-type">AggregationResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/9969e47c23/packages/stable/src/api/instances/instancesApi.ts#L216">packages/stable/src/api/instances/instancesApi.ts:216</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://developer.cognite.com/api#tag/Instances/operation/aggregateInstances">Aggregate instances</a></p>
+								</div>
+								<pre><code class="language-js"> <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.instances.aggregate({
+    <span class="hljs-attr">view</span>: {
+       <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;Describable&#x27;</span>,
+       <span class="hljs-attr">space</span>: <span class="hljs-string">&#x27;cdf_core&#x27;</span>,
+       <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;view&#x27;</span>,
+       <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;v1&#x27;</span>,
+    },
+    <span class="hljs-attr">groupBy</span>: [<span class="hljs-string">&#x27;externalId&#x27;</span>],
+    <span class="hljs-attr">aggregates</span>: [{ <span class="hljs-attr">count</span>: { <span class="hljs-attr">property</span>: <span class="hljs-string">&#x27;externalId&#x27;</span> } }],
+    <span class="hljs-attr">filter</span>: {
+      <span class="hljs-attr">prefix</span>: {
+        <span class="hljs-attr">property</span>: [<span class="hljs-string">&#x27;title&#x27;</span>],
+        <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;titl&#x27;</span>,
+      },
+    },
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">1</span>,
+  });
+</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>params: <a href="../globals.html#viewaggregationrequest" class="tsd-signature-type">ViewAggregationRequest</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#aggregationresponse" class="tsd-signature-type">AggregationResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="delete" class="tsd-anchor"></a>
+					<h3>delete</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">(</span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NodeOrEdgeDeleteRequest</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"items"</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/9969e47c23/packages/stable/src/api/instances/instancesApi.ts#L189">packages/stable/src/api/instances/instancesApi.ts:189</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://developer.cognite.com/api#tag/Instances/operation/deleteBulk">Delete instances</a></p>
+								</div>
+								<pre><code class="language-js"> <span class="hljs-keyword">await</span> client.instances.delete([
+     {
+       <span class="hljs-attr">instanceType</span>: <span class="hljs-string">&quot;node&quot;</span>,
+       <span class="hljs-attr">externalId</span>: <span class="hljs-string">&quot;node-external-id&quot;</span>,
+       <span class="hljs-attr">space</span>: <span class="hljs-string">&quot;node-space&quot;</span>,
+     },
+   ]);
+</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>items: <span class="tsd-signature-type">NodeOrEdgeDeleteRequest</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">"items"</span><span class="tsd-signature-symbol">]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="list" class="tsd-anchor"></a>
 					<h3>list</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
@@ -138,20 +226,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/220b7c1b48/packages/stable/src/api/instances/instancesApi.ts#L84">packages/stable/src/api/instances/instancesApi.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/9969e47c23/packages/stable/src/api/instances/instancesApi.ts#L87">packages/stable/src/api/instances/instancesApi.ts:87</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p><a href="https://developer.cognite.com/api#tag/Instances/operation/advancedListInstance">List instances</a></p>
 								</div>
-								<pre><code class="language-js"> <span class="hljs-keyword">const</span> view = {
-   <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;Describable&#x27;</span>,
-   <span class="hljs-attr">space</span>: <span class="hljs-string">&#x27;cdf_core&#x27;</span>,
-   <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;view&#x27;</span>,
-   <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;v1&#x27;</span>,
- };
- <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.instances.list({
+								<pre><code class="language-js"> <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.instances.list({
    <span class="hljs-attr">instanceType</span>: <span class="hljs-string">&#x27;node&#x27;</span>,
    <span class="hljs-attr">sources</span>: [{
      <span class="hljs-attr">source</span>: {
@@ -185,6 +267,97 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="query" class="tsd-anchor"></a>
+					<h3>query</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">query<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><a href="../interfaces/queryrequest.html" class="tsd-signature-type">QueryRequest</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/queryresponse.html" class="tsd-signature-type">QueryResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/9969e47c23/packages/stable/src/api/instances/instancesApi.ts#L248">packages/stable/src/api/instances/instancesApi.ts:248</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://developer.cognite.com/api#tag/Instances/operation/queryContent">Query instances</a></p>
+								</div>
+								<pre><code class="language-js"> <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.instances.query({
+    <span class="hljs-attr">with</span>: {
+      <span class="hljs-attr">result_set_1</span>: {
+        <span class="hljs-attr">nodes</span>: {
+          <span class="hljs-attr">filter</span>: {
+            <span class="hljs-attr">equals</span>: {
+              <span class="hljs-attr">property</span>: [<span class="hljs-string">&#x27;node&#x27;</span>, <span class="hljs-string">&#x27;externalId&#x27;</span>],
+              <span class="hljs-attr">value</span>: <span class="hljs-string">&quot;node-external-id&quot;</span>,
+            },
+          },
+        },
+      },
+    },
+    <span class="hljs-attr">select</span>: {
+      <span class="hljs-attr">result_set_1</span>: {},
+    },
+  });
+</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>params: <a href="../interfaces/queryrequest.html" class="tsd-signature-type">QueryRequest</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/queryresponse.html" class="tsd-signature-type">QueryResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="retrieve" class="tsd-anchor"></a>
+					<h3>retrieve</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><a href="../interfaces/listofspaceexternalidsrequestwithtyping.html" class="tsd-signature-type">ListOfSpaceExternalIdsRequestWithTyping</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/nodeandedgecollectionresponsev3response.html" class="tsd-signature-type">NodeAndEdgeCollectionResponseV3Response</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/9969e47c23/packages/stable/src/api/instances/instancesApi.ts#L122">packages/stable/src/api/instances/instancesApi.ts:122</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://developer.cognite.com/api#tag/Instances/operation/byExternalIdsInstances">Retrieve instances</a></p>
+								</div>
+								<pre><code class="language-js"> <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.instances.retrieve({
+   <span class="hljs-attr">sources</span>: [{ <span class="hljs-attr">source</span>: {
+         <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;Describable&#x27;</span>,
+         <span class="hljs-attr">space</span>: <span class="hljs-string">&#x27;cdf_core&#x27;</span>,
+         <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;view&#x27;</span>,
+         <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;v1&#x27;</span>,
+       }
+     }],
+    <span class="hljs-attr">items</span>: [
+      {
+        <span class="hljs-attr">externalId</span>: <span class="hljs-string">&quot;node-external-id&quot;</span>,
+        <span class="hljs-attr">space</span>: <span class="hljs-string">&quot;node-space&quot;</span>,
+        <span class="hljs-attr">instanceType</span>: <span class="hljs-string">&#x27;node&#x27;</span>,
+      },
+    ],
+  });
+</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>params: <a href="../interfaces/listofspaceexternalidsrequestwithtyping.html" class="tsd-signature-type">ListOfSpaceExternalIdsRequestWithTyping</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/nodeandedgecollectionresponsev3response.html" class="tsd-signature-type">NodeAndEdgeCollectionResponseV3Response</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="search" class="tsd-anchor"></a>
 					<h3>search</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
@@ -194,7 +367,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/220b7c1b48/packages/stable/src/api/instances/instancesApi.ts#L39">packages/stable/src/api/instances/instancesApi.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/9969e47c23/packages/stable/src/api/instances/instancesApi.ts#L48">packages/stable/src/api/instances/instancesApi.ts:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -229,6 +402,105 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="sync" class="tsd-anchor"></a>
+					<h3>sync</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">sync<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><a href="../interfaces/syncrequest.html" class="tsd-signature-type">SyncRequest</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/queryresponse.html" class="tsd-signature-type">QueryResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/9969e47c23/packages/stable/src/api/instances/instancesApi.ts#L278">packages/stable/src/api/instances/instancesApi.ts:278</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://developer.cognite.com/api#tag/Instances/operation/syncContent">Sync instances</a></p>
+								</div>
+								<pre><code class="language-js"> <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> client.instances.sync({
+    <span class="hljs-attr">with</span>: {
+      <span class="hljs-attr">result_set_1</span>: {
+        <span class="hljs-attr">nodes</span>: {
+          <span class="hljs-attr">filter</span>: {
+            <span class="hljs-attr">equals</span>: {
+              <span class="hljs-attr">property</span>: [<span class="hljs-string">&#x27;node&#x27;</span>, <span class="hljs-string">&#x27;externalId&#x27;</span>],
+              <span class="hljs-attr">value</span>: <span class="hljs-string">&quot;node-external-id&quot;</span>,
+            },
+          },
+        },
+      },
+    },
+    <span class="hljs-attr">select</span>: {
+      <span class="hljs-attr">result_set_1</span>: {},
+    },
+  });
+</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>params: <a href="../interfaces/syncrequest.html" class="tsd-signature-type">SyncRequest</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/queryresponse.html" class="tsd-signature-type">QueryResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="upsert" class="tsd-anchor"></a>
+					<h3>upsert</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">upsert<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><a href="../interfaces/nodeandedgecreatecollection.html" class="tsd-signature-type">NodeAndEdgeCreateCollection</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/slimnodeandedgecollectionresponse.html" class="tsd-signature-type">SlimNodeAndEdgeCollectionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/9969e47c23/packages/stable/src/api/instances/instancesApi.ts#L164">packages/stable/src/api/instances/instancesApi.ts:164</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p><a href="https://developer.cognite.com/api#tag/Instances/operation/applyNodeAndEdges">Upsert instances</a></p>
+								</div>
+								<pre><code class="language-js"> <span class="hljs-keyword">await</span> client.instances.upsert({
+ <span class="hljs-attr">items</span>: [
+   {
+      <span class="hljs-attr">instanceType</span>: <span class="hljs-string">&#x27;node&#x27;</span>,
+      <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;node-external-id&#x27;</span>,
+      <span class="hljs-attr">space</span>: <span class="hljs-string">&#x27;node-space&#x27;</span>,
+      <span class="hljs-attr">sources</span>: [
+       {
+           <span class="hljs-attr">source</span>: {
+            <span class="hljs-attr">externalId</span>: <span class="hljs-string">&#x27;Describable&#x27;</span>,
+            <span class="hljs-attr">space</span>: <span class="hljs-string">&#x27;cdf_core&#x27;</span>,
+            <span class="hljs-attr">type</span>: <span class="hljs-string">&#x27;view&#x27;</span>,
+            <span class="hljs-attr">version</span>: <span class="hljs-string">&#x27;v1&#x27;</span>,
+         },
+           <span class="hljs-attr">properties</span>: {
+            <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;node-title&#x27;</span>,
+            <span class="hljs-attr">description</span>: <span class="hljs-string">&#x27;node-description&#x27;</span>,
+            <span class="hljs-attr">labels</span>: <span class="hljs-string">&#x27;node-labels&#x27;</span>,
+          },
+        },
+      ],
+    },
+  ],
+});
+</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>params: <a href="../interfaces/nodeandedgecreatecollection.html" class="tsd-signature-type">NodeAndEdgeCreateCollection</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/documentlistresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/slimnodeandedgecollectionresponse.html" class="tsd-signature-type">SlimNodeAndEdgeCollectionResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -250,10 +522,28 @@
 								<a href="instancesapi.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="instancesapi.html#aggregate" class="tsd-kind-icon">aggregate</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="instancesapi.html#delete" class="tsd-kind-icon">delete</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="instancesapi.html#list" class="tsd-kind-icon">list</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="instancesapi.html#query" class="tsd-kind-icon">query</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="instancesapi.html#retrieve" class="tsd-kind-icon">retrieve</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="instancesapi.html#search" class="tsd-kind-icon">search</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="instancesapi.html#sync" class="tsd-kind-icon">sync</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="instancesapi.html#upsert" class="tsd-kind-icon">upsert</a>
 							</li>
 						</ul>
 					</li>
