@@ -19,11 +19,7 @@ type Describable = {
 };
 
 const upsertSpace = async (client: CogniteClient, space: SpaceDefinition) => {
-  await client.post(`/api/v1/projects/${client.project}/models/spaces`, {
-    data: {
-      items: [space],
-    },
-  });
+  await client.spaces.upsert([space]);
 };
 
 const upsertDescribables = async (
@@ -31,24 +27,22 @@ const upsertDescribables = async (
   describables: Describable[],
   view: ViewReference
 ) => {
-  await client.post(`/api/v1/projects/${client.project}/models/instances`, {
-    data: {
-      items: describables.map((describable) => ({
-        instanceType: 'node',
-        externalId: describable.externalId,
-        space: describable.space,
-        sources: [
-          {
-            source: view,
-            properties: {
-              title: describable.title,
-              description: describable.description,
-              labels: describable.labels,
-            },
+  await client.instances.upsert({
+    items: describables.map((describable) => ({
+      instanceType: 'node',
+      externalId: describable.externalId,
+      space: describable.space,
+      sources: [
+        {
+          source: view,
+          properties: {
+            title: describable.title,
+            description: describable.description,
+            labels: describable.labels,
           },
-        ],
-      })),
-    },
+        },
+      ],
+    })),
   });
 };
 
@@ -90,25 +84,20 @@ describe('Instances integration test', () => {
   });
 
   afterAll(async () => {
-    await client.post(
-      `/api/v1/projects/${client.project}/models/instances/delete`,
-      {
-        data: {
-          items: [
-            {
-              instanceType: 'node',
-              externalId: describable1.externalId,
-              space: testSpace.space,
-            },
-            {
-              instanceType: 'node',
-              externalId: describable2.externalId,
-              space: testSpace.space,
-            },
-          ],
+    await client.instances.delete({
+      items: [
+        {
+          instanceType: 'node',
+          externalId: describable1.externalId,
+          space: testSpace.space,
         },
-      }
-    );
+        {
+          instanceType: 'node',
+          externalId: describable2.externalId,
+          space: testSpace.space,
+        },
+      ],
+    });
   });
 
   test('list nodes from a single view with limit 2', async () => {
@@ -249,5 +238,87 @@ describe('Instances integration test', () => {
         `${view.externalId}/${view.version}`
       ]['title'].toString();
     expect(title.startsWith('titl'));
+  });
+
+  test('aggregate', async () => {
+    const response = await client.instances.aggregate({
+      view,
+      groupBy: ['externalId'],
+      aggregates: [{ count: { property: 'externalId' } }],
+      filter: {
+        prefix: {
+          property: ['title'],
+          value: 'titl',
+        },
+      },
+      limit: 1,
+    });
+    expect(response.items).toHaveLength(1);
+    expect(
+      response.items[0].aggregates[0].aggregate === 'count' &&
+        (response.items[0].aggregates[0].value || 0) > 1
+    ).toBeTruthy();
+  });
+
+  test('retrieve', async () => {
+    const response = await client.instances.retrieve({
+      sources: [{ source: view }],
+      items: [
+        {
+          externalId: describable1.externalId,
+          space: testSpace.space,
+          instanceType: 'node',
+        },
+      ],
+    });
+    expect(response.items).toHaveLength(1);
+    expect(response.items[0].properties);
+    const title =
+      response.items[0].properties![view.space][
+        `${view.externalId}/${view.version}`
+      ]['title'].toString();
+    expect(title.startsWith('titl'));
+  });
+
+  test('query', async () => {
+    const response = await client.instances.query({
+      with: {
+        result_set_1: {
+          nodes: {
+            filter: {
+              equals: {
+                property: ['node', 'externalId'],
+                value: describable1.externalId,
+              },
+            },
+          },
+        },
+      },
+      select: {
+        result_set_1: {},
+      },
+    });
+    expect(response.items.result_set_1).toHaveLength(1);
+  });
+
+  test('sync', async () => {
+    const response = await client.instances.sync({
+      with: {
+        result_set_1: {
+          nodes: {
+            filter: {
+              equals: {
+                property: ['node', 'externalId'],
+                value: describable1.externalId,
+              },
+            },
+          },
+        },
+      },
+      select: {
+        result_set_1: {},
+      },
+    });
+    expect(response.items.result_set_1).toHaveLength(1);
   });
 });

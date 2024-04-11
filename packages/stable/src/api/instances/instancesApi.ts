@@ -2,11 +2,19 @@
 
 import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
 import {
+  AggregationResponse,
+  ListOfSpaceExternalIdsRequestWithTyping,
   NodeAndEdgeCollectionResponseV3Response,
   NodeAndEdgeCollectionResponseWithCursorV3Response,
+  NodeAndEdgeCreateCollection,
   NodeOrEdge,
   NodeOrEdgeListRequestV3,
   NodeOrEdgeSearchRequest,
+  QueryRequest,
+  QueryResponse,
+  SlimNodeAndEdgeCollectionResponse,
+  SyncRequest,
+  ViewAggregationRequest,
 } from './types.gen';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
@@ -91,6 +99,57 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
           data: params,
         }
       );
+    return response.data;
+  };
+
+  public retrieve = async (
+    params: ListOfSpaceExternalIdsRequestWithTyping
+  ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
+    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
+      this.byIdsUrl,
+      {
+        data: params,
+      }
+    );
+    return response.data;
+  };
+
+  public upsert = async (
+    params: NodeAndEdgeCreateCollection
+  ): Promise<SlimNodeAndEdgeCollectionResponse> => {
+    const response = await this.post<SlimNodeAndEdgeCollectionResponse>(
+      this.url(),
+      {
+        data: params,
+      }
+    );
+    return response.data;
+  };
+
+  public delete = async (params: ListOfSpaceExternalIdsRequestWithTyping) => {
+    await this.delete(params);
+  };
+
+  public aggregate = async (
+    params: ViewAggregationRequest
+  ): Promise<AggregationResponse> => {
+    const response = await this.post<AggregationResponse>(this.aggregateUrl, {
+      data: params,
+    });
+    return response.data;
+  };
+
+  public query = async (params: QueryRequest): Promise<QueryResponse> => {
+    const response = await this.post<QueryResponse>(this.url('query'), {
+      data: params,
+    });
+    return response.data;
+  };
+
+  public sync = async (params: SyncRequest): Promise<QueryResponse> => {
+    const response = await this.post<QueryResponse>(this.url('sync'), {
+      data: params,
+    });
     return response.data;
   };
 }
