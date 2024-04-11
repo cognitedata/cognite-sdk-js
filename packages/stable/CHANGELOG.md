@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.11.2...@cognite/sdk@9.12.0) (2024-04-11)
+
+### Features
+
+- introduce remaining instance endpoints ([#1085](https://github.com/cognitedata/cognite-sdk-js/issues/1085)) ([9969e47](https://github.com/cognitedata/cognite-sdk-js/commit/9969e47c23e03b0fd3ecfd93dda9dda3867fce32))
+
 ## [9.11.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.11.1...@cognite/sdk@9.11.2) (2024-04-11)
 
 ### Bug Fixes
