@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.11.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.11.1...@cognite/sdk@9.11.2) (2024-04-11)
+
+### Bug Fixes
+
+- **Group:** explicitly define sourceId for all group variants ([#1084](https://github.com/cognitedata/cognite-sdk-js/issues/1084)) ([220b7c1](https://github.com/cognitedata/cognite-sdk-js/commit/220b7c1b481c28c4115d6e3e55ed093074404ec9))
+
 ## [9.11.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.11.0...@cognite/sdk@9.11.1) (2024-04-10)
 
 ### Bug Fixes
