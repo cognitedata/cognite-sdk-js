@@ -1386,13 +1386,43 @@ export interface FileGeoLocationFilter {
 
 export type FileGeoLocationPatch = SetField<FileGeoLocation> | RemoveField;
 
-export interface Group {
+export type PrincipalId = string;
+export type GroupMembers = PrincipalId[] | 'allUserAccounts';
+
+interface BaseGroup {
   name: GroupName;
-  sourceId?: GroupSourceId;
   capabilities?: CogniteCapability;
   id: number;
   isDeleted: boolean;
   deletedTime?: Date;
+}
+
+export interface ManagedExternallyGroup extends BaseGroup {
+  sourceId?: GroupSourceId;
+}
+
+export interface ManagedInCDFGroup extends BaseGroup {
+  members: GroupMembers;
+  // We are adding `sourceId: undefined` because this code:
+  // const foo(bar: Group) => console.log(bar.sourceId)
+  // yields the error:
+  // `Property 'sourceId' does not exist on type 'ManagedInCDFGroup'.`
+  // The Group type is defined as `type Group = ManagedInCDFGroup | ManagedExternallyGroup`
+  // and `sourceId` isn't defined on `ManagedInCDFGroup`.
+  // Typescript fails even though `sourceId` is an optional field on `ManagedExternallyGroup`.
+  sourceId: undefined;
+}
+
+export type Group = ManagedInCDFGroup | ManagedExternallyGroup;
+
+export function isManagedInCDFGroup(group: Group): group is ManagedInCDFGroup {
+  return (group as ManagedInCDFGroup).members !== undefined;
+}
+
+export function isManagedExternallyGroup(
+  group: Group
+): group is ManagedExternallyGroup {
+  return !isManagedInCDFGroup(group);
 }
 
 /**
@@ -1431,6 +1461,7 @@ export type GroupSourceId = string;
 export interface GroupSpec {
   name: GroupName;
   sourceId?: GroupSourceId;
+  members?: GroupMembers;
   capabilities?: CogniteCapability;
 }
 
@@ -3511,3 +3542,19 @@ export {
   ViewPropertyReference,
   ViewReference,
 } from './api/instances/types.gen';
+
+export {
+  DataModel,
+  DataModelCreate,
+  ListOfAllVersionsReferences,
+  ListOfVersionReferences,
+  ReverseDirectRelationConnection,
+  ThroughReference,
+  UsedFor,
+  ViewCommon,
+  ViewCreateDefinition,
+  ViewCreateDefinitionProperty,
+  ViewDefinition,
+  ViewDefinitionProperty,
+  ViewPropertyDefinition,
+} from './api/models/types.gen';

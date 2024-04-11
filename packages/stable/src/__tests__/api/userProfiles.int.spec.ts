@@ -33,14 +33,14 @@ describe('User Profiles', () => {
     });
 
     test('fetch list of users with limit = 2 + cursors', async () => {
-      const profiles = await client.profiles.list({ limit: 2 });
-      expect(profiles.items.length).toBe(2);
+      const profiles = await client.profiles.list({ limit: 1 });
+      expect(profiles.items.length).toBe(1);
 
       const nextProfiles = await client.profiles.list({
-        limit: 2,
+        limit: 1,
         cursor: profiles.nextCursor,
       });
-      expect(nextProfiles.items.length).toBe(2);
+      expect(nextProfiles.items.length).toBe(1);
       expect(nextProfiles).not.toEqual(profiles);
     });
   });

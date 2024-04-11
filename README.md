@@ -96,7 +96,7 @@ To run integration tests, you would have to pass the following environment varia
 - **COGNITE_BASE_URL**
 - **COGNITE_CLIENT_SECRET**
 - **COGNITE_CLIENT_ID**
-- **COGNITE_AZURE_TENANT_ID**
+- **COGNITE_AZURE_DOMAIN**
 
 Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revision integration tests.
 

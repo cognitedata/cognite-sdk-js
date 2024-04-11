@@ -3,6 +3,124 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.24.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.24.1...@cognite/sdk-alpha@0.24.2) (2024-04-11)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+## [0.24.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.24.0...@cognite/sdk-alpha@0.24.1) (2024-04-10)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+# [0.24.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.23.2...@cognite/sdk-alpha@0.24.0) (2024-04-10)
+
+### Features
+
+- add enabled property to data sampling ([#1081](https://github.com/cognitedata/cognite-sdk-js/issues/1081)) ([cf2c6c3](https://github.com/cognitedata/cognite-sdk-js/commit/cf2c6c3aac190ae67746750104bf752ce393a58f))
+
+## [0.23.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.23.1...@cognite/sdk-alpha@0.23.2) (2024-04-09)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+## [0.23.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.23.0...@cognite/sdk-alpha@0.23.1) (2024-04-05)
+
+### Bug Fixes
+
+- fix simulator cron type ([#1078](https://github.com/cognitedata/cognite-sdk-js/issues/1078)) ([09c03e0](https://github.com/cognitedata/cognite-sdk-js/commit/09c03e0f0a907db9495ff9e8998732331842a301))
+
+# [0.23.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.22.0...@cognite/sdk-alpha@0.23.0) (2024-04-04)
+
+### Features
+
+- add logId to SimulatorModelRevision ([#1075](https://github.com/cognitedata/cognite-sdk-js/issues/1075)) ([33b79ed](https://github.com/cognitedata/cognite-sdk-js/commit/33b79ed5df42f83265b99acb3b698d7151392d49))
+
+# [0.22.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.21.0...@cognite/sdk-alpha@0.22.0) (2024-03-26)
+
+### Features
+
+- add simulator logs API ([#1073](https://github.com/cognitedata/cognite-sdk-js/issues/1073)) ([10bf22a](https://github.com/cognitedata/cognite-sdk-js/commit/10bf22ab81987e0a2f57facff53cbd90356aeceb))
+
+# [0.21.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.20.2...@cognite/sdk-alpha@0.21.0) (2024-03-21)
+
+### Features
+
+- **alpha:** add sort option for filtering simulation routine revision ([#1072](https://github.com/cognitedata/cognite-sdk-js/issues/1072)) ([6bbb200](https://github.com/cognitedata/cognite-sdk-js/commit/6bbb2001abe637919d3591635485c00c35056e24))
+
+## [0.20.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.20.1...@cognite/sdk-alpha@0.20.2) (2024-03-15)
+
+### Bug Fixes
+
+- add prefix to simint types ([#1069](https://github.com/cognitedata/cognite-sdk-js/issues/1069)) ([cbaa5b7](https://github.com/cognitedata/cognite-sdk-js/commit/cbaa5b75c8431f4b2ea843410aef3c7dabd289e1))
+
+## [0.20.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.20.0...@cognite/sdk-alpha@0.20.1) (2024-03-14)
+
+### Bug Fixes
+
+- export types for simint ([#1068](https://github.com/cognitedata/cognite-sdk-js/issues/1068)) ([c5feec3](https://github.com/cognitedata/cognite-sdk-js/commit/c5feec3b483f26e34980a6d37e26102214f02581))
+
+# [0.20.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.19.0...@cognite/sdk-alpha@0.20.0) (2024-03-11)
+
+### Features
+
+- improve filtering for routine and routine revisions ([#1067](https://github.com/cognitedata/cognite-sdk-js/issues/1067)) ([9de2470](https://github.com/cognitedata/cognite-sdk-js/commit/9de2470f08a1977d1545d108969f494715094836))
+
+# [0.19.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.18.1...@cognite/sdk-alpha@0.19.0) (2024-03-07)
+
+### Features
+
+- update simulation run and filter types ([#1066](https://github.com/cognitedata/cognite-sdk-js/issues/1066)) ([b8a0004](https://github.com/cognitedata/cognite-sdk-js/commit/b8a0004d07719dc825948104f2b5fef9953cb616))
+
+## [0.18.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.18.0...@cognite/sdk-alpha@0.18.1) (2024-02-23)
+
+### Bug Fixes
+
+- **alpha:** simint model status type ([#1065](https://github.com/cognitedata/cognite-sdk-js/issues/1065)) ([c315b40](https://github.com/cognitedata/cognite-sdk-js/commit/c315b40123c30836d266e9f791b8b9e0926483b3))
+
+# [0.18.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.17.0...@cognite/sdk-alpha@0.18.0) (2024-02-23)
+
+### Features
+
+- use enum for revision statuses in types ([#1064](https://github.com/cognitedata/cognite-sdk-js/issues/1064)) ([fe8eccd](https://github.com/cognitedata/cognite-sdk-js/commit/fe8eccd006eeb9c30bdf015c06df0f925798327e))
+
+# [0.17.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.16.0...@cognite/sdk-alpha@0.17.0) (2024-02-23)
+
+### Features
+
+- add simulator model revisions by IDs ([#1063](https://github.com/cognitedata/cognite-sdk-js/issues/1063)) ([2ffee72](https://github.com/cognitedata/cognite-sdk-js/commit/2ffee725b1c4c854d2db855d799e8b800f61c653))
+
+# [0.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.15.2...@cognite/sdk-alpha@0.16.0) (2024-02-20)
+
+### Features
+
+- add query byids for simulator models ([#1062](https://github.com/cognitedata/cognite-sdk-js/issues/1062)) ([1c174be](https://github.com/cognitedata/cognite-sdk-js/commit/1c174beebfc32ef54eb754ebd0f3bab62f7c69de))
+
+## [0.15.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.15.1...@cognite/sdk-alpha@0.15.2) (2024-02-20)
+
+### Bug Fixes
+
+- **alpha:** simint nullable types ([#1061](https://github.com/cognitedata/cognite-sdk-js/issues/1061)) ([f633820](https://github.com/cognitedata/cognite-sdk-js/commit/f6338205f6657c67cb43733ab3ebdd277047eb80))
+
+## [0.15.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.15.0...@cognite/sdk-alpha@0.15.1) (2024-02-16)
+
+### Bug Fixes
+
+- **alpha:** simulator integration optional props ([#1060](https://github.com/cognitedata/cognite-sdk-js/issues/1060)) ([26bd5c3](https://github.com/cognitedata/cognite-sdk-js/commit/26bd5c30beb0e04c483698e61fc2671be9e4f28e))
+
+# [0.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.14.0...@cognite/sdk-alpha@0.15.0) (2024-02-16)
+
+### Features
+
+- **alpha-simint:** update to the latest simint APIs ([#1059](https://github.com/cognitedata/cognite-sdk-js/issues/1059)) ([262f0de](https://github.com/cognitedata/cognite-sdk-js/commit/262f0de7b761aae41492aff98ea089ae09407c63))
+
+# [0.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.13.7...@cognite/sdk-alpha@0.14.0) (2024-02-16)
+
+### Features
+
+- add support for SimInt models and routines ([#1057](https://github.com/cognitedata/cognite-sdk-js/issues/1057)) ([c7a0e2d](https://github.com/cognitedata/cognite-sdk-js/commit/c7a0e2da6c3dd7edbe094cd85e87e4d07cd8905b))
+
+## [0.13.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.13.6...@cognite/sdk-alpha@0.13.7) (2024-02-08)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
 ## [0.13.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.13.5...@cognite/sdk-alpha@0.13.6) (2024-02-06)
 
 **Note:** Version bump only for package @cognite/sdk-alpha

@@ -3,97 +3,26 @@
 import { SimulatorPatch } from '../../types';
 import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
+import {
+  fileExtensionTypes,
+  stepFields,
+  unitsMap,
+  unitSystem,
+  modelTypes,
+  boundaryConditions,
+} from './mocks';
 
-describe.skip('simulator integrations api', () => {
+const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
+
+const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
+
+describeIf('simulators api', () => {
   const client: CogniteClientAlpha = setupLoggedInClient();
 
   const ts = Date.now();
-  const simulatorExternalId = `test_sim_${ts}`;
+  const simulatorExternalId = `test_sim_${ts}_d`;
   const simulatorName = `TestSim - ${ts}`;
   let simulatorId: number;
-  const unitsMap = {
-    accel: {
-      label: 'Acceleration',
-      units: [
-        {
-          label: 'm/s2',
-          value: 'm/s2',
-        },
-        {
-          label: 'cm/s2',
-          value: 'cm/s2',
-        },
-        {
-          label: 'ft/s2',
-          value: 'ft/s2',
-        },
-      ],
-    },
-    activity: {
-      label: 'Activity',
-      units: [
-        {
-          label: 'activity',
-          value: 'activity',
-        },
-      ],
-    },
-  };
-  const unitSystem = {
-    default: {
-      label: 'default',
-      defaultUnits: {
-        accel: 'm/s2',
-      },
-    },
-  };
-  const stepFields = [
-    {
-      stepType: 'get/set',
-      fields: [
-        {
-          name: 'objectName',
-          label: 'Simulation Object Name',
-          info: 'Enter the name of the DWSIM object, i.e. Feed',
-        },
-        {
-          name: 'objectProperty',
-          label: 'Simulation Object Property',
-          info: 'Enter the property of the DWSIM object, i.e. Temperature',
-        },
-      ],
-    },
-    {
-      stepType: 'command',
-      fields: [
-        {
-          name: 'type',
-          label: 'Command',
-          // options: [
-          //   {
-          //     label: 'Solve',
-          //     value: 'Solve',
-          //   },
-          // ],
-          info: 'Select a command',
-        },
-      ],
-    },
-  ];
-  const modelTypes = [
-    {
-      key: 'test',
-      name: 'test',
-    },
-  ];
-  const boundaryConditions = [
-    {
-      name: 'test',
-      address: 'x.y.z',
-      key: 'test',
-    },
-  ];
-  const fileExtensionTypes = ['csv', 'yaml'];
 
   test('create simulators', async () => {
     const response = await client.simulators.create([
@@ -117,11 +46,11 @@ describe.skip('simulator integrations api', () => {
     expect(response[0].externalId).toBe(simulatorExternalId);
     expect(response[0].fileExtensionTypes).toEqual(['csv', 'yaml']);
     expect(response[0].enabled).toBe(true);
-    // expect(response[0].stepFields).toEqual(stepFields);
-    // expect(response[0].units).toEqual({
-    //   unitsMap,
-    //   unitSystem
-    // });
+    expect(response[0].stepFields).toEqual(stepFields);
+    expect(response[0].units).toEqual({
+      unitsMap,
+      unitSystem,
+    });
     expect(response[0].modelTypes).toEqual(modelTypes);
     expect(response[0].boundaryConditions).toEqual(boundaryConditions);
     expect(response[0].isCalculationsEnabled).toBe(true);

@@ -1,17 +1,22 @@
 // Copyright 2020 Cognite AS
 
-import { SinglePatch, SortOrder, Timestamp } from '@cognite/sdk';
+import { SinglePatch, SortOrder, DateRange } from '@cognite/sdk';
 import {
   CogniteExternalId,
   CogniteInternalId,
   FilterQuery,
   InternalId,
+  ExternalId,
 } from '@cognite/sdk-core';
 
 export * from '@cognite/sdk';
 
 // This file is here mostly to allow apis to import { ... } from '../../types';
 // Overriding types should probably be done in their respective API endpoint files, where possible
+
+export type ArrayPatchExternalIds =
+  | { set: ExternalId[] }
+  | { add?: ExternalId[]; remove?: ExternalId[] };
 
 export interface SimulatorUnitRecord {
   label: string;
@@ -71,8 +76,8 @@ export interface Simulator {
   enabled: boolean;
   stepFields?: SimulatorStep[];
   units?: SimulatorUnits;
-  createdTime: Timestamp;
-  lastUpdatedTime: Timestamp;
+  createdTime: Date;
+  lastUpdatedTime: Date;
 }
 
 export interface SimulatorFilter {
@@ -100,30 +105,31 @@ export interface SimulatorIntegration {
   id: CogniteInternalId;
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
-  heartbeat: Timestamp;
+  heartbeat: Date;
   dataSetId: CogniteInternalId;
   connectorVersion: string;
   simulatorVersion: string;
   runApiEnabled: boolean;
-  licenseStatus: string;
-  licenseLastCheckedTime: Timestamp;
-  connectorStatus: string;
-  connectorStatusUpdatedTime: Timestamp;
-  createdTime: Timestamp;
-  lastUpdatedTime: Timestamp;
+  licenseStatus?: string;
+  licenseLastCheckedTime?: Date;
+  connectorStatus?: string;
+  connectorStatusUpdatedTime?: Date;
+  createdTime: Date;
+  lastUpdatedTime: Date;
 }
 
 export interface SimulatorIntegrationCreate {
   externalId: CogniteExternalId;
   simulatorExternalId: CogniteExternalId;
   dataSetId?: CogniteInternalId;
+  heartbeat?: Date;
   connectorVersion?: string;
   simulatorVersion?: string;
   runApiEnabled?: boolean;
   licenseStatus?: string;
-  licenseLastCheckedTime?: Timestamp;
+  licenseLastCheckedTime?: Date;
   connectorStatus?: string;
-  connectorStatusUpdatedTime?: Timestamp;
+  connectorStatusUpdatedTime?: Date;
 }
 
 export interface SimulatorIntegrationFilter {
@@ -139,6 +145,15 @@ export interface SimulationRunFilter {
   modelName?: string;
   routineName?: string;
   status?: SimulationRunStatus;
+  runType?: SimulationRunType;
+  simulatorIntegrationExternalIds?: CogniteExternalId[];
+  simulatorExternalIds?: CogniteExternalId[];
+  modelExternalIds?: CogniteExternalId[];
+  routineExternalIds?: CogniteExternalId[];
+  routineRevisionExternalIds?: CogniteExternalId[];
+  modelRevisionExternalIds?: CogniteExternalId[];
+  createdTime?: DateRange;
+  simulationTime?: DateRange;
 }
 
 export interface SortItem {
@@ -176,10 +191,8 @@ export const SimulationRunType = {
 };
 
 export interface SimulationRunCreate {
-  simulatorName: string;
-  modelName: string;
-  routineName: string;
-  runType: SimulationRunType;
+  routineExternalId: CogniteExternalId;
+  runType?: SimulationRunType;
   validationEndTime?: Date;
   queue?: boolean;
 }
@@ -198,12 +211,345 @@ export interface SimulationRun {
   simulatorName: string;
   modelName: string;
   routineName: string;
+  simulatorExternalId?: CogniteExternalId;
+  simulatorIntegrationExternalId?: CogniteExternalId;
+  modelExternalId?: CogniteExternalId;
+  modelRevisionExternalId?: CogniteExternalId;
+  routineExternalId?: CogniteExternalId;
+  routineRevisionExternalId?: CogniteExternalId;
   status: SimulationRunStatus;
   validationEndTime?: Date;
+  simulationTime?: Date;
   statusMessage?: string;
+  dataSetId?: CogniteInternalId;
   eventId?: CogniteInternalId;
   runType: SimulationRunType;
   userId?: string;
+  logId?: CogniteInternalId;
   createdTime: Date;
   lastUpdatedTime: Date;
+}
+
+export type SimulatorLogSeverityLevel =
+  | 'Debug'
+  | 'Information'
+  | 'Warning'
+  | 'Error';
+
+export const SimulatorLogSeverityLevel = {
+  Debug: 'Debug' as SimulatorLogSeverityLevel,
+  Information: 'Information' as SimulatorLogSeverityLevel,
+  Warning: 'Warning' as SimulatorLogSeverityLevel,
+  Error: 'Error' as SimulatorLogSeverityLevel,
+};
+
+export interface SimulatorLogData {
+  timestamp: Date;
+  message: string;
+  severity: SimulatorLogSeverityLevel;
+}
+
+export interface SimulatorLog {
+  id: CogniteInternalId;
+  data: SimulatorLogData[];
+  dataSetId: CogniteInternalId;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+}
+
+export interface SimulatorModel {
+  id: CogniteInternalId;
+  externalId: CogniteExternalId;
+  simulatorExternalId: CogniteExternalId;
+  name: string;
+  description?: string;
+  dataSetId: CogniteInternalId;
+  labels?: ExternalId[];
+  type?: string;
+  unitSystem?: string;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+}
+
+export interface SimulatorModelCreate {
+  externalId: CogniteExternalId;
+  simulatorExternalId: CogniteExternalId;
+  name: string;
+  description?: string;
+  dataSetId: CogniteInternalId;
+  labels?: ExternalId[];
+  type?: string;
+  unitSystem?: string;
+}
+
+export interface SimulatorModelFilter {
+  simulatorExternalIds?: CogniteExternalId[];
+}
+
+export interface SimulatorModelFilterQuery extends FilterQuery {
+  filter?: SimulatorModelFilter;
+}
+
+export interface SimulatorModelPatch {
+  update: {
+    name?: SinglePatch<string>;
+    description?: SinglePatch<string>;
+    labels?: ArrayPatchExternalIds;
+  };
+}
+
+export interface SimulatorModelChange extends SimulatorModelPatch, InternalId {}
+
+interface SimulatorModelBoundaryCondition {
+  key: string;
+  name: string;
+  address: string;
+  timeseriesExternalId: string;
+}
+
+export type SimulatorModelRevisionStatus = 'unknown' | 'success' | 'failure';
+
+export const SimulatorModelRevisionStatus = {
+  unknown: 'unknown' as SimulatorModelRevisionStatus,
+  success: 'success' as SimulatorModelRevisionStatus,
+  failure: 'failure' as SimulatorModelRevisionStatus,
+};
+
+export interface SimulatorModelRevision {
+  id: CogniteInternalId;
+  externalId: CogniteExternalId;
+  simulatorExternalId: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  description?: string;
+  dataSetId: CogniteInternalId;
+  fileId: CogniteInternalId;
+  createdByUserId?: string;
+  status: SimulatorModelRevisionStatus;
+  statusMessage?: string;
+  boundaryConditions?: SimulatorModelBoundaryCondition[];
+  boundaryConditionsStatus?: SimulatorModelRevisionStatus;
+  versionNumber: number;
+  metadata?: Record<string, string>;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+  logId: CogniteInternalId;
+}
+
+export interface SimulatorModelRevisionCreate {
+  externalId: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  description?: string;
+  fileId: CogniteInternalId;
+  boundaryConditions?: SimulatorModelBoundaryCondition[];
+  metadata?: Record<string, any>;
+}
+
+export interface SimulatorModelRevisionPatch {
+  update: {
+    status?: SinglePatch<string>;
+    statusMessage?: SinglePatch<string>;
+    boundaryConditions?: SinglePatch<SimulatorModelBoundaryCondition[]>;
+    boundaryConditionsStatus?: SinglePatch<string>;
+  };
+}
+
+export interface SimulatorModelRevisionChange
+  extends SimulatorModelRevisionPatch,
+    InternalId {}
+
+export interface SimulatorModelRevisionFilter {
+  modelExternalIds?: CogniteExternalId[];
+  createdTime?: DateRange;
+  lastUpdatedTime?: DateRange;
+}
+
+export interface SimulatorModelRevisionFilterQuery extends FilterQuery {
+  filter?: SimulatorModelRevisionFilter;
+  sort?: SortItem[];
+  limit?: number;
+}
+
+export type SimulatorCalculationType =
+  | 'IPR/VLP'
+  | 'ChokeDp'
+  | 'VLP'
+  | 'IPR'
+  | 'BhpFromRate'
+  | 'BhpFromGradientTraverse'
+  | 'BhpFromGaugeBhp';
+export type SimulatorRoutineOperator = 'eq' | 'ne' | 'gt' | 'ge' | 'lt' | 'le';
+export type SimulatorDataPointsAggregate =
+  | 'average'
+  | 'max'
+  | 'min'
+  | 'count'
+  | 'sum'
+  | 'interpolation'
+  | 'stepInterpolation'
+  | 'totalVariation'
+  | 'continuousVariance'
+  | 'discreteVariance';
+
+export interface SimulatorRoutine {
+  id: CogniteInternalId;
+  externalId: CogniteExternalId;
+  simulatorExternalId: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  simulatorIntegrationExternalId: CogniteExternalId;
+  name: string;
+  dataSetId: number;
+  description?: string;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+}
+
+export interface SimulatorRoutineCreate {
+  externalId: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  simulatorIntegrationExternalId: CogniteExternalId;
+  name: string;
+  calculationType?: SimulatorCalculationType;
+}
+
+export interface SimulatorRoutineFilter {
+  simulatorIntegrationExternalIds?: CogniteExternalId[];
+  modelExternalIds?: CogniteExternalId[];
+}
+
+export interface SimulatorRoutineFilterQuery extends FilterQuery {
+  filter?: SimulatorRoutineFilter;
+}
+
+/* Routine revisions */
+
+export interface SimulatorRoutineDataSampling {
+  enabled: boolean;
+  validationWindow: number;
+  samplingWindow: number;
+  granularity: number;
+}
+
+export interface SimulatorRoutineConfigDisabled {
+  enabled: boolean;
+}
+
+export interface SimulatorRoutineSchedule {
+  enabled: boolean;
+  cronExpression: string;
+}
+
+export interface SimulatorRoutineSteadyStateDetection {
+  enabled: boolean;
+  timeseriesExternalId: CogniteExternalId;
+  aggregate: SimulatorDataPointsAggregate;
+  minSectionSize: number;
+  varThreshold: number;
+  slopeThreshold: number;
+}
+
+export interface SimulatorRoutineLogicalCheck {
+  enabled: boolean;
+  timeseriesExternalId: CogniteExternalId;
+  aggregate: SimulatorDataPointsAggregate;
+  operator: SimulatorRoutineOperator;
+  value: number;
+}
+
+export interface SimulatorRoutineInputConstant {
+  name: string;
+  saveTimeseriesExternalId: CogniteExternalId;
+  value: string;
+  unit?: string;
+  unitType?: string;
+  referenceId: string;
+}
+
+export interface SimulatorRoutineTimeSeries {
+  name: string;
+  referenceId: string;
+  unit?: string;
+  unitType?: string;
+  saveTimeseriesExternalId: CogniteExternalId;
+}
+
+export interface SimulatorRoutineInputTimeseries
+  extends SimulatorRoutineTimeSeries {
+  sourceExternalId: string;
+  aggregate: SimulatorDataPointsAggregate;
+}
+
+export interface SimulatorRoutineOutputSequence {
+  name: string;
+  referenceId: string;
+}
+
+export interface SimulatorRoutineGaugeDepth {
+  value: number;
+  unit: string;
+  unitType: string;
+}
+
+export interface SimulatorRoutineScriptStepArguments {
+  argumentType: string;
+  [s: string]: string;
+  referenceId: string;
+}
+
+export interface SimulatorRoutineScriptStep {
+  order: number;
+  stepType: string;
+  description?: string;
+  arguments: SimulatorRoutineScriptStepArguments;
+}
+
+export interface SimulatorRoutineScript {
+  order: number;
+  description?: string;
+  steps: SimulatorRoutineScriptStep[];
+}
+export interface SimulatorRoutineRevisionConfiguration {
+  dataSampling: SimulatorRoutineDataSampling;
+  schedule: SimulatorRoutineConfigDisabled | SimulatorRoutineSchedule;
+  steadyStateDetection: SimulatorRoutineSteadyStateDetection[];
+  logicalCheck: SimulatorRoutineLogicalCheck[];
+  inputConstants: SimulatorRoutineInputConstant[];
+  outputSequences?: SimulatorRoutineOutputSequence[];
+  inputTimeseries: SimulatorRoutineInputTimeseries[];
+  outputTimeseries: SimulatorRoutineTimeSeries[];
+  extraOptions?: SimulatorRoutineGaugeDepth;
+}
+export interface SimulatorRoutineRevision {
+  id: CogniteInternalId;
+  externalId: CogniteExternalId;
+  simulatorExternalId: CogniteExternalId;
+  routineExternalId: CogniteExternalId;
+  simulatorIntegrationExternalId: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  dataSetId: CogniteInternalId;
+  createdByUserId: string;
+  createdTime: Date;
+  lastUpdatedTime: Date;
+  configuration: SimulatorRoutineRevisionConfiguration;
+  script: SimulatorRoutineScript[];
+  calculationType?: SimulatorCalculationType;
+}
+
+export interface SimulatorRoutineRevisionCreate {
+  externalId: CogniteExternalId;
+  routineExternalId: CogniteExternalId;
+  configuration: SimulatorRoutineRevisionConfiguration;
+  script: SimulatorRoutineScript[];
+}
+
+export interface SimulatorRoutineRevisionslFilter {
+  routineExternalIds?: CogniteExternalId[];
+  modelExternalIds?: CogniteExternalId[];
+  simulatorIntegrationExternalIds?: CogniteExternalId[];
+  simulatorExternalIds?: CogniteExternalId[];
+  createdTime?: DateRange;
+}
+
+export interface SimulatorRoutineRevisionslFilterQuery extends FilterQuery {
+  filter?: SimulatorRoutineRevisionslFilter;
+  sort?: SortItem[];
 }

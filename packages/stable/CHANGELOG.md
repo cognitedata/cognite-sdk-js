@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.11.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.11.1...@cognite/sdk@9.11.2) (2024-04-11)
+
+### Bug Fixes
+
+- **Group:** explicitly define sourceId for all group variants ([#1084](https://github.com/cognitedata/cognite-sdk-js/issues/1084)) ([220b7c1](https://github.com/cognitedata/cognite-sdk-js/commit/220b7c1b481c28c4115d6e3e55ed093074404ec9))
+
+## [9.11.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.11.0...@cognite/sdk@9.11.1) (2024-04-10)
+
+### Bug Fixes
+
+- **groups:** inconsistent types compared to the API spec ([#1082](https://github.com/cognitedata/cognite-sdk-js/issues/1082)) ([f07f136](https://github.com/cognitedata/cognite-sdk-js/commit/f07f13690dd5e10ba08bbec18b9d3f483eae60e0))
+
+# [9.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.10.0...@cognite/sdk@9.11.0) (2024-04-09)
+
+### Features
+
+- group membership ([#1079](https://github.com/cognitedata/cognite-sdk-js/issues/1079)) ([4a7c24a](https://github.com/cognitedata/cognite-sdk-js/commit/4a7c24a260453495fdc1006660093b9f15f37ac5))
+
+# [9.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.9.0...@cognite/sdk@9.10.0) (2024-02-08)
+
+### Features
+
+- introduce datamodels endpoints + export types correctly ([#1058](https://github.com/cognitedata/cognite-sdk-js/issues/1058)) ([0c3405f](https://github.com/cognitedata/cognite-sdk-js/commit/0c3405f3f842c203b79726d541be11379274d064))
+
 # [9.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.8.0...@cognite/sdk@9.9.0) (2024-02-06)
 
 ### Features

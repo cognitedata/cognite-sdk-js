@@ -7,6 +7,7 @@ import {
   SinglePatchRequiredString,
   SinglePatchString,
   Timestamp,
+  DateRange,
 } from '@cognite/sdk';
 import {
   CogniteExternalId,
@@ -55,6 +56,13 @@ export type MonitoringTaskModelExternalId = 'threshold' | 'double_threshold';
 export const MonitoringTaskModelExternalId = {
   THRESHOLD: 'threshold' as const,
   DOUBLE_THRESHOLD: 'double_threshold' as const,
+};
+
+export type AlertStatus = 'FIRING' | 'PENDING';
+
+export const AlertStatus = {
+  FIRING: 'FIRING' as AlertStatus,
+  PENDING: 'PENDING' as AlertStatus,
 };
 
 export interface MonitoringTaskThresholdModelCreateBase {
@@ -145,6 +153,9 @@ export interface MonitoringTaskFilterQuery extends FilterQuery {
 export interface AlertFilter {
   channelIds?: CogniteInternalId[];
   channelExternalIds?: CogniteExternalId[];
+  closed?: boolean;
+  startTime?: DateRange;
+  status?: AlertStatus[];
 }
 
 export interface AlertFilterQuery extends FilterQuery {
@@ -192,6 +203,7 @@ export interface Alert {
   metadata?: Metadata;
   acknowledged: boolean;
   closed: boolean;
+  status: AlertStatus;
 }
 
 export interface ChannelCreate {
