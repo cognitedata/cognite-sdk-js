@@ -340,7 +340,7 @@ export interface SimulatorModelRevisionCreate {
   modelExternalId: CogniteExternalId;
   description?: string;
   fileId: CogniteInternalId;
-  boundaryConditions?: SimulatorModelBoundaryCondition[];
+  boundaryConditions?: Pick<SimulatorModelBoundaryCondition, 'key'>[];
   metadata?: Record<string, any>;
 }
 
