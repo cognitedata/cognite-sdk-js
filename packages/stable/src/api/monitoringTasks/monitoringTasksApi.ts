@@ -10,7 +10,7 @@ import {
   MonitoringTask,
   MonitoringTaskCreate,
   MonitoringTaskFilterQuery,
-} from '../../types';
+} from './types';
 
 export class MonitoringTasksAPI extends BaseResourceAPI<MonitoringTask> {
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {

@@ -6,7 +6,7 @@ import {
   SubscriptionCreate,
   SubscriptionDelete,
   SubscriptionFilterQuery,
-} from '../../types';
+} from './types';
 
 export class SubscriptionsAPI extends BaseResourceAPI<Subscription> {
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
