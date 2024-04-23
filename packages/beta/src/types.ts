@@ -387,7 +387,7 @@ export interface DatapointsQueryProperties
    * Because the API treats uncertain data points as bad by default,
    * this parameter includes both uncertain and bad data points.
    */
-  ignoreBadDatapoints?: boolean;
+  ignoreBadDataPoints?: boolean;
 }
 
 export interface DatapointStatus {
