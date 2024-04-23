@@ -67,9 +67,6 @@ export default class CogniteClient extends CogniteClientCleaned {
       MonitoringTasksAPI,
       'monitoringtasks'
     );
-    this.dataPointsApi = this.apiFactory(
-      DataPointsAPI,
-      'timeseries/datapoints'
-    );
+    this.dataPointsApi = this.apiFactory(DataPointsAPI, 'timeseries/data');
   }
 }
