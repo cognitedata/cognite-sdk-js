@@ -7,7 +7,6 @@ import {
   MultiPartFileChunkResponse,
 } from '../../types';
 import {
-  setupMockableClient,
   divideFileIntoChunks,
   divideFileIntoStreams,
   getFileStats,

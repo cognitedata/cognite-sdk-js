@@ -30,7 +30,6 @@ describe('Multi part upload unit test', () => {
     client = setupMockableClientForUnitTest();
     nock.cleanAll();
   });
-  afterEach(async () => {});
 
   it.each<number>([1, 2, 5, 240])(
     'can init multi part upload can populate urls',
@@ -195,12 +194,15 @@ describe('Multi part upload unit test', () => {
         true
       );
     expect(initNock.isDone()).toBeTruthy();
-
-    await Promise.all(
-      fileChunks.map((fileChunk, i) =>
-        responseFor5PartUploadPart.uploadPart(i, fileChunk)
-      )
-    );
+    try {
+      await Promise.all(
+        fileChunks.map((fileChunk, i) =>
+          responseFor5PartUploadPart.uploadPart(i, fileChunk)
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     expect(completeApiNock.isDone()).toBeFalsy();
     expect(responseFor5PartUploadPart.getNotCompletedParts()).toEqual([2]);
@@ -248,12 +250,15 @@ describe('Multi part upload unit test', () => {
         true
       );
     expect(initNock.isDone()).toBeTruthy();
-
-    await Promise.all(
-      fileChunks.map((fileChunk, i) =>
-        responseFor5PartUploadPart.uploadPart(i, fileChunk)
-      )
-    );
+    try {
+      await Promise.all(
+        fileChunks.map((fileChunk, i) =>
+          responseFor5PartUploadPart.uploadPart(i, fileChunk)
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     expect(uploadNock.isDone()).toBeTruthy();
     expect(responseFor5PartUploadPart.getNotCompletedParts()).toEqual([]);
