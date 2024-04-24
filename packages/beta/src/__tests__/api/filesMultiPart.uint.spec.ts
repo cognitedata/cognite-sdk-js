@@ -197,13 +197,12 @@ describe('Multi part upload unit test', () => {
         true
       );
     expect(initNock.isDone()).toBeTruthy();
-    try {
-      await Promise.all(
-        fileChunks.map((fileChunk, i) =>
-          responseFor5PartUploadPart.uploadPart(i, fileChunk)
-        )
-      );
-    } catch (error) {}
+
+    await Promise.all(
+      fileChunks.map((fileChunk, i) =>
+        responseFor5PartUploadPart.uploadPart(i, fileChunk)
+      )
+    );
 
     expect(completeApiNock.isDone()).toBeFalsy();
     expect(responseFor5PartUploadPart.getNotCompletedParts()).toEqual([2]);
@@ -251,13 +250,13 @@ describe('Multi part upload unit test', () => {
         true
       );
     expect(initNock.isDone()).toBeTruthy();
-    try {
-      await Promise.all(
-        fileChunks.map((fileChunk, i) =>
-          responseFor5PartUploadPart.uploadPart(i, fileChunk)
-        )
-      );
-    } catch (error) {}
+
+    await Promise.all(
+      fileChunks.map((fileChunk, i) =>
+        responseFor5PartUploadPart.uploadPart(i, fileChunk)
+      )
+    );
+
     expect(uploadNock.isDone()).toBeTruthy();
     expect(responseFor5PartUploadPart.getNotCompletedParts()).toEqual([]);
     //api is fixed now
@@ -307,13 +306,12 @@ describe('Multi part upload unit test', () => {
         true
       );
 
-    try {
-      await Promise.all(
-        fileChunks.map((fileChunk, i) =>
-          responseFor5PartUploadPart.uploadPart(i, fileChunk)
-        )
-      );
-    } catch (error) {}
+    await Promise.all(
+      fileChunks.map((fileChunk, i) =>
+        responseFor5PartUploadPart.uploadPart(i, fileChunk)
+      )
+    );
+
     //2. run should throw exception
     await expect(
       Promise.all(
