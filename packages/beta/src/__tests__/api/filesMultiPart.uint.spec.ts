@@ -30,9 +30,7 @@ describe('Multi part upload unit test', () => {
     client = setupMockableClientForUnitTest();
     nock.cleanAll();
   });
-  afterEach(async () => {
-    console.log(`test run .`);
-  });
+  afterEach(async () => {});
 
   it.each<number>([1, 2, 5, 240])(
     'can init multi part upload can populate urls',

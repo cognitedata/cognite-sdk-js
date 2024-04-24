@@ -12,6 +12,7 @@ import {
   divideFileIntoStreams,
   getFileStats,
   toArrayBuffer,
+  setupMockableClientForIntegrationTests,
 } from '../testUtils';
 import path, { join } from 'path';
 import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
@@ -23,7 +24,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
   let label: LabelDefinition;
 
   beforeAll(async () => {
-    client = setupMockableClient();
+    client = setupMockableClientForIntegrationTests();
   });
 
   afterAll(async () => {

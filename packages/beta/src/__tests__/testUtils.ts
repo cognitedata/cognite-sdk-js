@@ -38,12 +38,16 @@ export function setupMockableClient() {
   const client = setupClient(mockBaseUrl);
   return client;
 }
+export function setupMockableClientForIntegrationTests() {
+  const client = setupClient(process.env.COGNITE_BASE_URL);
+  return client;
+}
 export function setupLoggedInClientForUnitTest(
   baseUrl: string = Constants.BASE_URL
 ) {
   return new CogniteClient({
     appId: 'JS SDK integration tests (beta)',
-    baseUrl: (process.env.COGNITE_BASE_URL as string) || baseUrl,
+    baseUrl: baseUrl || process.env.COGNITE_BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
     getToken: () =>
       login().then((account) => {
