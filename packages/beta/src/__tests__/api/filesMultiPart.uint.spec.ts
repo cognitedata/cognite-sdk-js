@@ -74,7 +74,6 @@ describe('Multi part upload unit test', () => {
   it.each<number>([1, 2, 5, 240])(
     'part uploads can be run sequential',
     async (numberOfParts) => {
-      var startTime = performance.now();
       const requestBody = {
         id: 1478836012846319,
         uploadId:
@@ -112,17 +111,12 @@ describe('Multi part upload unit test', () => {
       expect(completeApiNock.isDone()).toBeTruthy();
       expect(multiPartApiSession.getNotCompletedParts()).toEqual([]);
       expect(multiPartApiSession.getFinished()).toBeTruthy();
-      var endTime = performance.now();
-      console.log(
-        `Call to doSomething took ${endTime - startTime} milliseconds`
-      );
     }
   );
 
   it.each<number>([1, 2, 5, 100])(
     'part uploads can be run concurrently',
     async (numberOfParts) => {
-      var startTime = performance.now();
       const requestBody = {
         id: 1478836012846319,
         uploadId:
@@ -162,15 +156,10 @@ describe('Multi part upload unit test', () => {
       expect(completeApiNock.isDone()).toBeTruthy();
       expect(responseFor5PartUploadPart.getNotCompletedParts()).toEqual([]);
       expect(responseFor5PartUploadPart.getFinished()).toBeTruthy();
-      var endTime = performance.now();
-      console.log(
-        `Call to doSomething took ${endTime - startTime} milliseconds`
-      );
     }
   );
   test('if a concurrent upload call fails, we can resume that part', async () => {
     const numberOfParts = 5;
-    var startTime = performance.now();
     const requestBody = {
       id: 1478836012846319,
       uploadId:
@@ -229,8 +218,6 @@ describe('Multi part upload unit test', () => {
     );
     expect(uploadNock.isDone()).toBeTruthy();
     expect(responseFor5PartUploadPart.getNotCompletedParts()).toEqual([]);
-    var endTime = performance.now();
-    console.log(`Call to doSomething took ${endTime - startTime} milliseconds`);
   });
   test('if complete call fails, retrying uploadparts can complete the upload', async () => {
     const numberOfParts = 5;

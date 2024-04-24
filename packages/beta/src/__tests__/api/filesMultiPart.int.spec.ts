@@ -160,8 +160,6 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     }
   );
   test('can concurrently upload parts', async () => {
-    var startTime = performance.now();
-    //const smallFile = join(__dirname, '../test3dFile.fbx');
     const numberOfParts = 10;
     const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
     const response = await client.filesMultiPart.multipartUploadSession(
@@ -189,10 +187,6 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
       { id: response.multiPartFileUploadResponse.id },
     ]);
     expect(retrievedFile.uploaded).toBeTruthy();
-    var endTime = performance.now();
-    console.log(
-      `Call to multi-part upload took ${endTime - startTime} milliseconds`
-    );
   });
 
   test('can concurrently upload parts while slicing with streams', async () => {
