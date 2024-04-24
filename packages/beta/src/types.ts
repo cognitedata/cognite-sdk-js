@@ -8,6 +8,7 @@ import {
   SinglePatchString,
   Timestamp,
   DateRange,
+  FileInfo,
 } from '@cognite/sdk';
 import {
   CogniteExternalId,
@@ -321,4 +322,12 @@ export interface Subscription {
   subscriberId: CogniteInternalId;
   subscriberExternalId?: CogniteExternalId;
   metadata?: Metadata;
+}
+export interface MultiPartFileUploadResponse extends FileInfo {
+  uploadUrls: string[];
+  uploadId: string;
+}
+export interface MultiPartFileChunkResponse {
+  partNumber: number;
+  status: 'COMPLETED' | 'FAILED';
 }
