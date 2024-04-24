@@ -7,7 +7,6 @@
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
   "version": "5.7.4",
-  "version": "5.8.0",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/beta/",
