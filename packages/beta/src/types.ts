@@ -1,13 +1,22 @@
 // Copyright 2020 Cognite AS
 
 import {
+  Aggregate as AggregateStable,
+  DatapointAggregate as DatapointAggregateStable,
+  DatapointAggregates as DatapointAggregatesStable,
+  DatapointsMultiQueryBase as DataPointsMultiQueryBaseStable,
+  DatapointsQueryProperties as DatapointsQueryPropertiesStable,
+  DateRange,
+  DoubleDatapoint as DoubleDatapointStable,
+  DoubleDatapoints as DoubleDatapointsStable,
   Metadata,
   MetadataPatch,
   SinglePatchRequired,
   SinglePatchRequiredString,
   SinglePatchString,
+  StringDatapoint as StringDatapointStable,
+  StringDatapoints as StringDatapointsStable,
   Timestamp,
-  DateRange,
 } from '@cognite/sdk';
 import {
   CogniteExternalId,
@@ -321,4 +330,101 @@ export interface Subscription {
   subscriberId: CogniteInternalId;
   subscriberExternalId?: CogniteExternalId;
   metadata?: Metadata;
+}
+
+export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
+  items: DatapointsQuery[];
+}
+
+export interface DatapointsMonthlyGranularityMultiQuery
+  extends Omit<DatapointsMultiQueryBase, 'granularity'> {
+  items: DatapointsQuery[];
+}
+export interface DatapointsMultiQueryBase
+  extends Omit<DataPointsMultiQueryBaseStable, 'aggregates'> {
+  /**
+   * The aggregates to be returned. This value overrides top-level default aggregates list when set. Specify all aggregates to be retrieved here. Specify empty array if this sub-query needs to return datapoints without aggregation.
+   */
+  aggregates?: Aggregate[];
+}
+
+export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
+
+export interface DatapointsQueryExternalId
+  extends DatapointsQueryProperties,
+    ExternalId {}
+
+export interface DatapointsQueryId
+  extends DatapointsQueryProperties,
+    InternalId {}
+
+export type Aggregate =
+  | AggregateStable
+  | 'countGood'
+  | 'countUncertain'
+  | 'countBad'
+  | 'durationGood'
+  | 'durationUncertain'
+  | 'durationBad';
+
+export interface DatapointsQueryProperties
+  extends Omit<DatapointsQueryPropertiesStable, 'aggregates'> {
+  /**
+   * The aggregates to be returned. This value overrides top-level default aggregates list when set. Specify all aggregates to be retrieved here. Specify empty array if this sub-query needs to return datapoints without aggregation.
+   */
+  aggregates?: Aggregate[];
+  /**
+   * denotes that the status of the data point should be included in the response.
+   */
+  includeStatus?: boolean;
+  /**
+   * returns data points marked with the uncertain status code.
+   * The default behavior of the API is to treat them the same as bad data points and don't returned them.
+   */
+  treatUncertainAsBad?: boolean;
+  /**
+   * denotes that the API should return bad data points.
+   * Because the API treats uncertain data points as bad by default,
+   * this parameter includes both uncertain and bad data points.
+   */
+  ignoreBadDataPoints?: boolean;
+}
+
+export interface DatapointStatus {
+  code: number;
+  symbol: string;
+}
+
+export interface DatapointAggregates
+  extends Omit<DatapointAggregatesStable, 'datapoints'> {
+  datapoints: DatapointAggregate[];
+}
+
+export interface DatapointAggregate extends DatapointAggregateStable {
+  countGood?: number;
+  countUncertain?: number;
+  countBad?: number;
+  durationGood?: number;
+  durationUncertain?: number;
+  durationBad?: number;
+}
+
+export type Datapoints = StringDatapoints | DoubleDatapoints;
+
+export interface DoubleDatapoints
+  extends Omit<DoubleDatapointsStable, 'datapoints'> {
+  datapoints: DoubleDatapoint[];
+}
+
+export interface StringDatapoints
+  extends Omit<StringDatapointsStable, 'datapoints'> {
+  datapoints: StringDatapoint[];
+}
+
+export interface DoubleDatapoint extends DoubleDatapointStable {
+  status?: DatapointStatus;
+}
+
+export interface StringDatapoint extends StringDatapointStable {
+  status?: DatapointStatus;
 }
