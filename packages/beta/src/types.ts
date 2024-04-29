@@ -17,7 +17,6 @@ import {
   StringDatapoint as StringDatapointStable,
   StringDatapoints as StringDatapointsStable,
   Timestamp,
-  DateRange,
 } from '@cognite/sdk';
 import {
   CogniteExternalId,
