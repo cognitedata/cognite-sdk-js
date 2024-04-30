@@ -101,10 +101,13 @@ describe('alerts api', () => {
   });
 
   test('create subscribers', async () => {
+
+    const subscriberUserProfile = await client.profiles.search({search: {name: 'Charts Smoke Test User'}})
+    const subscriberExternalId = subscriberUserProfile[0].userIdentifier
+    
     const response = await client.alerts.createSubscribers([
       {
-        email,
-        externalId: email,
+        externalId: subscriberExternalId,
       },
     ]);
     expect(response.length).toBe(1);
@@ -156,9 +159,11 @@ describe('alerts api', () => {
   });
 
   test('delete subscriber', async () => {
+    const subscriberUserProfile = await client.profiles.search({search: {name: 'Charts Smoke Test User'}})
+    const subscriberExternalId = subscriberUserProfile[0].userIdentifier
     const response = await client.alerts.deleteSubscribers([
       {
-        externalId: email,
+        externalId: subscriberExternalId,
       },
     ]);
     expect(response).toEqual({});

@@ -263,11 +263,6 @@ export interface ChannelChangeByExternalId extends ChannelPatch, ExternalId {}
 
 export type ChannelChange = ChannelChangeById | ChannelChangeByExternalId;
 
-export interface SubscriberCreate {
-  externalId?: CogniteExternalId;
-  metadata?: Metadata;
-  email: string;
-}
 
 export interface SubscriberFilter {
   externalIds?: CogniteExternalId[];
@@ -288,9 +283,9 @@ export interface Subscriber {
 }
 
 export interface SubscriberCreate {
-  externalId?: CogniteExternalId;
+  externalId: CogniteExternalId;
   metadata?: Metadata;
-  email: string;
+  email?: string;
 }
 
 export interface SubscriptionCreate {
