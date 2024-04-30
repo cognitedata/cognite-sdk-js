@@ -78,7 +78,7 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
 
   public sortAlerts = async (sort: AlertSortQuery) => {
     return this.list(undefined, sort);
-  }
+  };
 
   public createChannels = async (items: ChannelCreate[]) => {
     return this.channelsApi.create(items);
