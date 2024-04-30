@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.12.0...@cognite/sdk@9.13.0) (2024-04-29)
+
+### Features
+
+- **datapoints:** add support for data quality (beta) ([#1071](https://github.com/cognitedata/cognite-sdk-js/issues/1071)) ([d414ae4](https://github.com/cognitedata/cognite-sdk-js/commit/d414ae43f62e45f975bbcffe178dfbc29d1f913e)), closes [#1070](https://github.com/cognitedata/cognite-sdk-js/issues/1070) [#1072](https://github.com/cognitedata/cognite-sdk-js/issues/1072) [#1073](https://github.com/cognitedata/cognite-sdk-js/issues/1073) [#1075](https://github.com/cognitedata/cognite-sdk-js/issues/1075) [#1076](https://github.com/cognitedata/cognite-sdk-js/issues/1076) [#1078](https://github.com/cognitedata/cognite-sdk-js/issues/1078) [#1080](https://github.com/cognitedata/cognite-sdk-js/issues/1080) [#1079](https://github.com/cognitedata/cognite-sdk-js/issues/1079) [#1081](https://github.com/cognitedata/cognite-sdk-js/issues/1081)
+
 # [9.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.11.2...@cognite/sdk@9.12.0) (2024-04-11)
 
 ### Features
