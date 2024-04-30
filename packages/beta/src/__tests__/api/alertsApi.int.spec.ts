@@ -103,7 +103,7 @@ describe('alerts api', () => {
   test('create subscribers', async () => {
 
     const subscriberUserProfile = await client.profiles.search({search: {name: 'Charts Smoke Test User'}})
-    const subscriberExternalId = subscriberUserProfile[0].userIdentifier
+    const subscriberExternalId = subscriberUserProfile[0]?.userIdentifier
     
     const response = await client.alerts.createSubscribers([
       {
@@ -160,7 +160,7 @@ describe('alerts api', () => {
 
   test('delete subscriber', async () => {
     const subscriberUserProfile = await client.profiles.search({search: {name: 'Charts Smoke Test User'}})
-    const subscriberExternalId = subscriberUserProfile[0].userIdentifier
+    const subscriberExternalId = subscriberUserProfile[0]?.userIdentifier
     const response = await client.alerts.deleteSubscribers([
       {
         externalId: subscriberExternalId,
