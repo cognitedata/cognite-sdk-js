@@ -24,9 +24,11 @@ import {
   SimulatorModelRevisionChange,
   SimulatorRoutineRevisionCreate,
   SimulatorRoutineRevisionslFilterQuery,
+  SimulationRunId,
 } from '../../types';
 import { IntegrationsAPI } from './integrationsApi';
 import { SimulationRunsAPI } from './simulationRunsApi';
+import { SimulationRunDataAPI } from './simulationRunDataApi';
 import { ModelsAPI } from './modelsApi';
 import { ModelRevisionsAPI } from './modelRevisionsApi';
 import { RoutinesAPI } from './routinesApi';
@@ -36,6 +38,7 @@ import { LogsAPI } from './logsApi';
 export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   private integrationsApi: IntegrationsAPI;
   private runsApi: SimulationRunsAPI;
+  private runDataApi: SimulationRunDataAPI;
   private modelsApi: ModelsAPI;
   private modelRevisionsApi: ModelRevisionsAPI;
   private routinesApi: RoutinesAPI;
@@ -62,6 +65,12 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
 
     this.runsApi = new SimulationRunsAPI(
       `${resourcePath}/runs`,
+      client,
+      metadataMap
+    );
+
+    this.runDataApi = new SimulationRunDataAPI(
+      `${resourcePath}/runs/data`,
       client,
       metadataMap
     );
@@ -125,6 +134,10 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
 
   public listRuns = async (filter?: SimulationRunFilterQuery) => {
     return this.runsApi.list(filter);
+  };
+
+  public listRunData = async (ids: SimulationRunId[]) => {
+    return this.runDataApi.retrieve(ids);
   };
 
   public runSimulation = async (items: SimulationRunCreate[]) => {
