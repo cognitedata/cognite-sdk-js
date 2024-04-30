@@ -230,6 +230,45 @@ export interface SimulationRun {
   lastUpdatedTime: Date;
 }
 
+export type SimulationRunDataValueType =
+  | 'STRING'
+  | 'DOUBLE'
+  | 'STRING_ARRAY'
+  | 'DOUBLE_ARRAY';
+
+export const SimulationRunDataValueType = {
+  STRING: 'STRING' as SimulationRunDataValueType,
+  DOUBLE: 'DOUBLE' as SimulationRunDataValueType,
+  STRING_ARRAY: 'STRING_ARRAY' as SimulationRunDataValueType,
+  DOUBLE_ARRAY: 'DOUBLE_ARRAY' as SimulationRunDataValueType,
+};
+
+export interface SimulationRunDataOutput {
+  referenceId: CogniteInternalId;
+  value: string | number | string[] | number[];
+  valueType: SimulationRunDataValueType;
+  unit: {
+    name: string;
+    externalId?: CogniteExternalId;
+  };
+  simulatorObjectReference?: Record<string, string>;
+  timeseriesExternalId: CogniteExternalId;
+}
+
+export interface SimulationRunDataInput extends SimulationRunDataOutput {
+  overridden?: boolean;
+}
+
+export interface SimulationRunId {
+  runId: CogniteInternalId;
+}
+
+export interface SimulationRunData {
+  runId: CogniteInternalId;
+  inputs: SimulationRunDataInput[];
+  outputs: SimulationRunDataOutput[];
+}
+
 export type SimulatorLogSeverityLevel =
   | 'Debug'
   | 'Information'
