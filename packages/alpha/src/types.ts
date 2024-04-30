@@ -247,12 +247,12 @@ export interface SimulationRunDataOutput {
   referenceId: CogniteInternalId;
   value: string | number | string[] | number[];
   valueType: SimulationRunDataValueType;
-  unit: {
+  unit?: {
     name: string;
     externalId?: CogniteExternalId;
   };
   simulatorObjectReference?: Record<string, string>;
-  timeseriesExternalId: CogniteExternalId;
+  timeseriesExternalId?: CogniteExternalId;
 }
 
 export interface SimulationRunDataInput extends SimulationRunDataOutput {
