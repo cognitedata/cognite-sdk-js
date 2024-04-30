@@ -74,6 +74,20 @@ export const AlertStatus = {
   PENDING: 'PENDING' as AlertStatus,
 };
 
+export type AlertSortProperty = 'createdTime' | 'lastTriggeredTime';
+
+export type AlertSortOrder = 'asc' | 'desc';
+
+export const AlertProperty = {
+  CREATED_TIME: 'createdTime' as AlertSortProperty,
+  LAST_TRIGGERED_TIME: 'lastTriggeredTime' as AlertSortProperty,
+};
+
+export const AlertSortOrder = {
+  ASC: 'asc' as AlertSortOrder,
+  DESC: 'desc' as AlertSortOrder,
+};
+
 export interface MonitoringTaskThresholdModelCreateBase {
   externalId: MonitoringTaskModelExternalId;
 }
@@ -167,9 +181,20 @@ export interface AlertFilter {
   status?: AlertStatus[];
 }
 
+export interface AlertSort {
+  order?: AlertSortOrder;
+  property?: AlertSortProperty;
+}
+
+export interface AlertSortQuery {
+  sort?: AlertSort;
+}
+
 export interface AlertFilterQuery extends FilterQuery {
   filter?: AlertFilter;
 }
+
+export interface AlertCombinedQuery extends AlertFilterQuery, AlertSortQuery {}
 
 export interface AlertDeduplicationRuleCreate {
   mergeInterval?: string;
