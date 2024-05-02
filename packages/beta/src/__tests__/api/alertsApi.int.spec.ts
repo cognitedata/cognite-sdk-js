@@ -1,8 +1,8 @@
 // Copyright 2020 Cognite AS
 
+import { CogniteError } from '@cognite/sdk-core';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-import { AxiosError } from 'axios';
 
 describe('alerts api', () => {
   const client: CogniteClient = setupLoggedInClient();
@@ -110,7 +110,7 @@ describe('alerts api', () => {
         },
       ]);
     } catch (error) {
-      expect((error as AxiosError).response?.status).toBe(400);
+      expect((error as CogniteError).status).toBe(400);
     }
   });
 
