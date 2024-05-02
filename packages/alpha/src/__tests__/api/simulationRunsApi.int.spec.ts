@@ -17,7 +17,7 @@ describeIf('simulator integrations api', () => {
       {
         routineExternalId: 'ShowerMixerIntegrationTestConstInputs',
         runType: 'external',
-        validationEndTime: new Date(ts),
+        runTime: new Date(ts),
         queue: true,
       },
     ]);
@@ -34,7 +34,7 @@ describeIf('simulator integrations api', () => {
     expect(item.routineName).toBe('ShowerMixerIntegrationTest');
     expect(item.status).toBe('ready');
     expect(item.runType).toBe('external');
-    expect(item.validationEndTime?.valueOf()).toBe(ts);
+    expect(item.runTime?.valueOf()).toBe(ts);
     expect(item.createdTime.valueOf()).toBeGreaterThanOrEqual(ts);
     expect(item.lastUpdatedTime.valueOf()).toBeGreaterThanOrEqual(ts);
   });
