@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.25.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.25.0...@cognite/sdk-alpha@0.25.1) (2024-05-02)
+
+### Bug Fixes
+
+- simulation run data api path ([#1102](https://github.com/cognitedata/cognite-sdk-js/issues/1102)) ([24ced6f](https://github.com/cognitedata/cognite-sdk-js/commit/24ced6f529452d5e7946edb1512d1b20cb965a3d))
+
 # [0.25.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.24.4...@cognite/sdk-alpha@0.25.0) (2024-04-30)
 
 ### Features
