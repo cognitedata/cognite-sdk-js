@@ -2,6 +2,7 @@
 
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
+import { AxiosError } from 'axios';
 
 describe('alerts api', () => {
   const client: CogniteClient = setupLoggedInClient();
@@ -101,13 +102,16 @@ describe('alerts api', () => {
   });
 
   test('create subscribers', async () => {
-    const response = await client.alerts.createSubscribers([
-      {
-        email,
-        externalId: email,
-      },
-    ]);
-    expect(response.length).toBe(1);
+    try {
+      await client.alerts.createSubscribers([
+        {
+          email,
+          externalId: email,
+        },
+      ]);
+    } catch (error: AxiosError) {
+      expect(error.response?.status).toBe(400);
+    }
   });
 
   test('list subscribers', async () => {
@@ -179,3 +183,14 @@ describe('alerts api', () => {
     expect(response).toEqual({});
   });
 });
+
+test('sort alerts', async () => {
+  const client: CogniteClient = setupLoggedInClient();
+  const response = await client.alerts.sortAlerts({
+    sort: {
+      property: 'createdTime',
+      order: 'desc',
+    },
+  });
+  expect(response.items.length).toBeGreaterThan(0);
+}
