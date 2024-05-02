@@ -186,11 +186,11 @@ describe('alerts api', () => {
 
 test('sort alerts', async () => {
   const client: CogniteClient = setupLoggedInClient();
-  const response = await client.alerts.sortAlerts({
+  const response = await client.alerts.list({
     sort: {
       property: 'createdTime',
       order: 'desc',
     },
   });
   expect(response.items.length).toBeGreaterThan(0);
-}
+});
