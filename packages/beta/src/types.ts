@@ -17,6 +17,7 @@ import {
   StringDatapoint as StringDatapointStable,
   StringDatapoints as StringDatapointsStable,
   Timestamp,
+  SortOrder,
 } from '@cognite/sdk';
 import {
   CogniteExternalId,
@@ -72,6 +73,13 @@ export type AlertStatus = 'FIRING' | 'PENDING';
 export const AlertStatus = {
   FIRING: 'FIRING' as AlertStatus,
   PENDING: 'PENDING' as AlertStatus,
+};
+
+export type AlertSortProperty = 'createdTime' | 'lastTriggeredTime';
+
+export const AlertSortProperty = {
+  CREATED_TIME: 'createdTime' as AlertSortProperty,
+  LAST_TRIGGERED_TIME: 'lastTriggeredTime' as AlertSortProperty,
 };
 
 export interface MonitoringTaskThresholdModelCreateBase {
@@ -167,8 +175,14 @@ export interface AlertFilter {
   status?: AlertStatus[];
 }
 
+export interface AlertSort {
+  order?: SortOrder;
+  property?: AlertSortProperty;
+}
+
 export interface AlertFilterQuery extends FilterQuery {
   filter?: AlertFilter;
+  sort?: AlertSort;
 }
 
 export interface AlertDeduplicationRuleCreate {
