@@ -193,7 +193,7 @@ export const SimulationRunType = {
 export interface SimulationRunCreate {
   routineExternalId: CogniteExternalId;
   runType?: SimulationRunType;
-  validationEndTime?: Date;
+  runTime?: Date;
   queue?: boolean;
 }
 
@@ -218,7 +218,7 @@ export interface SimulationRun {
   routineExternalId?: CogniteExternalId;
   routineRevisionExternalId?: CogniteExternalId;
   status: SimulationRunStatus;
-  validationEndTime?: Date;
+  runTime?: Date;
   simulationTime?: Date;
   statusMessage?: string;
   dataSetId?: CogniteInternalId;
