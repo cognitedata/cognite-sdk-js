@@ -4,10 +4,8 @@ import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
 import { IdEither } from '@cognite/sdk';
 import {
   Alert,
-  AlertCombinedQuery,
   AlertCreate,
   AlertFilterQuery,
-  AlertSortQuery,
   ChannelChange,
   ChannelCreate,
   ChannelFilterQuery,
@@ -52,15 +50,8 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
     return this.createEndpoint(items);
   };
 
-  public list = async (filter?: AlertFilterQuery, sort?: AlertSortQuery) => {
-    const combinedQuery: AlertCombinedQuery = {
-      ...filter,
-      ...sort,
-    };
-    return this.listEndpoint<AlertCombinedQuery>(
-      this.callListEndpointWithPost,
-      combinedQuery
-    );
+  public list = async (query?: AlertFilterQuery) => {
+    return this.listEndpoint(this.callListEndpointWithPost, query);
   };
 
   public close = async (items: IdEither[]) => {
@@ -74,10 +65,6 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
 
   public listChannels = async (filter?: ChannelFilterQuery) => {
     return this.channelsApi.list(filter);
-  };
-
-  public sortAlerts = async (sort: AlertSortQuery) => {
-    return this.list(undefined, sort);
   };
 
   public createChannels = async (items: ChannelCreate[]) => {
