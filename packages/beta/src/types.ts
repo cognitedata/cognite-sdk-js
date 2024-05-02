@@ -17,6 +17,7 @@ import {
   StringDatapoint as StringDatapointStable,
   StringDatapoints as StringDatapointsStable,
   Timestamp,
+  SortOrder,
 } from '@cognite/sdk';
 import {
   CogniteExternalId,
@@ -76,16 +77,9 @@ export const AlertStatus = {
 
 export type AlertSortProperty = 'createdTime' | 'lastTriggeredTime';
 
-export type AlertSortOrder = 'asc' | 'desc';
-
-export const AlertProperty = {
+export const AlertSortProperty = {
   CREATED_TIME: 'createdTime' as AlertSortProperty,
   LAST_TRIGGERED_TIME: 'lastTriggeredTime' as AlertSortProperty,
-};
-
-export const AlertSortOrder = {
-  ASC: 'asc' as AlertSortOrder,
-  DESC: 'desc' as AlertSortOrder,
 };
 
 export interface MonitoringTaskThresholdModelCreateBase {
@@ -182,19 +176,14 @@ export interface AlertFilter {
 }
 
 export interface AlertSort {
-  order?: AlertSortOrder;
+  order?: SortOrder;
   property?: AlertSortProperty;
-}
-
-export interface AlertSortQuery {
-  sort?: AlertSort;
 }
 
 export interface AlertFilterQuery extends FilterQuery {
   filter?: AlertFilter;
+  sort?: AlertSort;
 }
-
-export interface AlertCombinedQuery extends AlertFilterQuery, AlertSortQuery {}
 
 export interface AlertDeduplicationRuleCreate {
   mergeInterval?: string;
