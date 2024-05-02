@@ -15,7 +15,7 @@ describeIf('simulator integrations api', () => {
   test('run a simulation', async () => {
     const res = await client.simulators.runSimulation([
       {
-        routineExternalId: 'ShowerMixerIntegrationTestConstInputs',
+        routineExternalId: 'ShowerMixerWithExtendedIO',
         runType: 'external',
         runTime: new Date(ts),
         queue: true,
@@ -30,8 +30,10 @@ describeIf('simulator integrations api', () => {
     const item = res[0];
 
     expect(item.simulatorName).toBe('DWSIM');
-    expect(item.modelName).toBe('ShowerMixerIntegrationTest');
-    expect(item.routineName).toBe('ShowerMixerIntegrationTest');
+    expect(item.modelName).toBe('Shower Mixer');
+    expect(item.routineName).toBe(
+      'Shower Mixer With Extended Inputs / Outputs'
+    );
     expect(item.status).toBe('ready');
     expect(item.runType).toBe('external');
     expect(item.runTime?.valueOf()).toBe(ts);
