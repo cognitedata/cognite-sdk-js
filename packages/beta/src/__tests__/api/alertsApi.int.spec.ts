@@ -109,8 +109,8 @@ describe('alerts api', () => {
           externalId: email,
         },
       ]);
-    } catch (error: AxiosError) {
-      expect(error.response?.status).toBe(400);
+    } catch (error) {
+      expect((error as AxiosError).response?.status).toBe(400);
     }
   });
 
