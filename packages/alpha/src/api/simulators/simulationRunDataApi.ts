@@ -9,7 +9,7 @@ export class SimulationRunDataAPI extends BaseResourceAPI<SimulationRunData> {
   }
 
   public retrieve = async (ids: SimulationRunId[]) => {
-    const path = this.url('simulators/runs/data/list');
+    const path = this.url('list');
 
     return this.retrieveEndpoint(ids, {}, path);
   };
