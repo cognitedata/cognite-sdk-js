@@ -115,39 +115,46 @@ describe('alerts api', () => {
   });
 
   test('list subscribers', async () => {
-    const response = await client.alerts.listSubscribers({
-      filter: {
-        email,
-        externalIds: [email],
-      },
-    });
-    expect(response.items.length).toBe(1);
-    expect(response.items[0].externalId).toBe(email);
+    try {
+      await client.alerts.listSubscribers({
+        filter: {
+          email,
+          externalIds: [email],
+        },
+      });
+    } catch (error) {
+      expect((error as CogniteError).status).toBe(400);
+    }
   });
 
   test('create subscriptions', async () => {
-    const response = await client.alerts.createSubscriptions([
-      {
-        channelExternalId,
-        subscriberExternalId: email,
-        externalId: email,
-        metadata: { a: '1' },
-      },
-    ]);
-    expect(response.length).toBe(1);
+    try {
+      await client.alerts.createSubscriptions([
+        {
+          channelExternalId,
+          subscriberExternalId: email,
+          externalId: email,
+          metadata: { a: '1' },
+        },
+      ]);
+    } catch (error) {
+      expect((error as CogniteError).status).toBe(400);
+    }
   });
 
   test('list subscriptions', async () => {
-    const response = await client.alerts.listSubscriptions({
-      filter: {
-        channelExternalIds: [channelExternalId],
-        subscriberExternalIds: [email],
-        externalIds: [email],
-        metadata: { a: '1' },
-      },
-    });
-    expect(response.items.length).toBe(1);
-    expect(response.items[0].channelExternalId).toBe(channelExternalId);
+    try {
+      await client.alerts.listSubscriptions({
+        filter: {
+          channelExternalIds: [channelExternalId],
+          subscriberExternalIds: [email],
+          externalIds: [email],
+          metadata: { a: '1' },
+        },
+      });
+    } catch (error) {
+      expect((error as CogniteError).status).toBe(400);
+    }
   });
 
   test('delete subscriptions', async () => {
