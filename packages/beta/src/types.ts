@@ -329,5 +329,5 @@ export interface MultiPartFileUploadResponse extends FileInfo {
 }
 export interface MultiPartFileChunkResponse {
   partNumber: number;
-  status: 'COMPLETED' | 'FAILED';
+  status: number;
 }

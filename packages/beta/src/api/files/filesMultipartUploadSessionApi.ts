@@ -60,9 +60,9 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
         if (this.canCompleteUpload()) {
           await this.completeMultiPartUpload();
         }
-        return { partNumber, status: 'COMPLETED' };
+        return { partNumber, status: response.status };
       } else {
-        return { partNumber, status: 'FAILED' };
+        return { partNumber, status: response.status };
       }
     }
   }
