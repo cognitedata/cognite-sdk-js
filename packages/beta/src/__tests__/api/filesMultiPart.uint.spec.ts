@@ -384,7 +384,7 @@ describe('Multi part upload unit test', () => {
               Buffer.from(fileChunk),
               i,
               async (result: MultiPartFileChunkResponse) => {
-                if (result && result.status === 'COMPLETED') {
+                if (result && result.status === 200) {
                   numberOfCallsToCallback++;
                   totalSize += fileChunk.length;
                   console.log(

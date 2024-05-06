@@ -270,7 +270,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
             fileChunk,
             i,
             async (result: MultiPartFileChunkResponse) => {
-              if (result && result.status === 'COMPLETED') {
+              if (result && result.status === 200) {
                 numberOfCallsToCallback++;
                 totalSize += fileChunk.length;
                 console.log(
