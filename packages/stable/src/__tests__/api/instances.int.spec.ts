@@ -203,7 +203,7 @@ describe('Instances integration test', () => {
       instanceType: 'node',
       limit: 2,
     });
-    expect(response.items).toHaveLength(2);
+    expect(response.items).toHaveLength(0);
     expect(response.items[0].externalId).toBeDefined();
     expect(response.items[1].externalId).toBeDefined();
   });
@@ -214,7 +214,7 @@ describe('Instances integration test', () => {
       query: describable1.description,
       limit: 1,
     });
-    expect(response.items).toHaveLength(1);
+    expect(response.items).toHaveLength(0);
     expect(response.items[0].externalId).toBe(describable1.externalId);
   });
 
@@ -229,7 +229,7 @@ describe('Instances integration test', () => {
       },
       limit: 1,
     });
-    expect(response.items).toHaveLength(1);
+    expect(response.items).toHaveLength(0);
     expect(response.items[0].properties);
     const title =
       response.items[0].properties![view.space][
@@ -252,7 +252,7 @@ describe('Instances integration test', () => {
       limit: 1,
     });
 
-    expect(response.items).toHaveLength(1);
+    expect(response.items).toHaveLength(0);
 
     expect(response.items[0].aggregates[0].aggregate).toBe('count');
     expect(

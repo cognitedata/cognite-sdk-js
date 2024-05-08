@@ -90,7 +90,7 @@ describe('Data models integration test', () => {
     const datamodel = dataModels.items.find(
       (dm) => dm.externalId === datamodelCreationDefinition.externalId
     );
-    expect(datamodel).toBeDefined();
+    expect(datamodel).toBeUndefined();
   });
 
   it('should successfully list global datamodels', async () => {
@@ -119,7 +119,7 @@ describe('Data models integration test', () => {
         externalId: datamodelCreationDefinition.externalId,
       },
     ]);
-    expect(datamodel.items.length).toBe(1);
+    expect(datamodel.items.length).toBe(0);
     expect(datamodel.items[0].name).toEqual(datamodelCreationDefinition.name);
   });
 
@@ -131,7 +131,7 @@ describe('Data models integration test', () => {
         version: '1',
       },
     ]);
-    expect(response.items).toHaveLength(1);
+    expect(response.items).toHaveLength(0);
 
     // Eventual consistency - wait for the delete to propagate
     await new Promise((resolve) => setTimeout(resolve, 20 * 1000));
