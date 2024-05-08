@@ -79,8 +79,14 @@ export interface AnnotationsCogniteAnnotationTypesImagesAssetLink {
 PolyLine.
 */
 export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry {
+    /** A plain rectangle */
     boundingBox?: AnnotationsBoundingBox;
+    /**
+     * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+     * that the first and last vertex are connected.
+     */
     polygon?: AnnotationsPolygon;
+    /** A polygonal chain consisting of _n_ vertices */
     polyline?: AnnotationsPolyLine;
 }
 /**
@@ -135,6 +141,7 @@ optionally a confidence value.
 export interface AnnotationsObjectDetection {
     /** Additional attributes data for a compound. */
     attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+    /** A plain rectangle */
     boundingBox?: AnnotationsBoundingBox;
     /**
      * The confidence score for the primitive. It should be between 0 and 1.
@@ -144,7 +151,12 @@ export interface AnnotationsObjectDetection {
     confidence?: number;
     /** The label describing what type of object it is */
     label: string;
+    /**
+     * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+     * that the first and last vertex are connected.
+     */
     polygon?: AnnotationsPolygon;
+    /** A polygonal chain consisting of _n_ vertices */
     polyline?: AnnotationsPolyLine;
 }
 /**
