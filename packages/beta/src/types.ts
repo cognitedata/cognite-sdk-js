@@ -346,10 +346,12 @@ export interface Subscription {
   subscriberExternalId?: CogniteExternalId;
   metadata?: Metadata;
 }
+
 export interface MultiPartFileUploadResponse extends FileInfo {
   uploadUrls: string[];
   uploadId: string;
 }
+
 export interface MultiPartFileChunkResponse {
   partNumber: number;
   status: number;
