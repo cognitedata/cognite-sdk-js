@@ -50,11 +50,8 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
     return this.createEndpoint(items);
   };
 
-  public list = async (filter?: AlertFilterQuery) => {
-    return this.listEndpoint<AlertFilterQuery>(
-      this.callListEndpointWithPost,
-      filter
-    );
+  public list = async (query?: AlertFilterQuery) => {
+    return this.listEndpoint(this.callListEndpointWithPost, query);
   };
 
   public close = async (items: IdEither[]) => {

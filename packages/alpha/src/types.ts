@@ -193,7 +193,7 @@ export const SimulationRunType = {
 export interface SimulationRunCreate {
   routineExternalId: CogniteExternalId;
   runType?: SimulationRunType;
-  validationEndTime?: Date;
+  runTime?: Date;
   queue?: boolean;
 }
 
@@ -218,7 +218,7 @@ export interface SimulationRun {
   routineExternalId?: CogniteExternalId;
   routineRevisionExternalId?: CogniteExternalId;
   status: SimulationRunStatus;
-  validationEndTime?: Date;
+  runTime?: Date;
   simulationTime?: Date;
   statusMessage?: string;
   dataSetId?: CogniteInternalId;
@@ -228,6 +228,45 @@ export interface SimulationRun {
   logId?: CogniteInternalId;
   createdTime: Date;
   lastUpdatedTime: Date;
+}
+
+export type SimulationRunDataValueType =
+  | 'STRING'
+  | 'DOUBLE'
+  | 'STRING_ARRAY'
+  | 'DOUBLE_ARRAY';
+
+export const SimulationRunDataValueType = {
+  STRING: 'STRING' as SimulationRunDataValueType,
+  DOUBLE: 'DOUBLE' as SimulationRunDataValueType,
+  STRING_ARRAY: 'STRING_ARRAY' as SimulationRunDataValueType,
+  DOUBLE_ARRAY: 'DOUBLE_ARRAY' as SimulationRunDataValueType,
+};
+
+export interface SimulationRunDataOutput {
+  referenceId: CogniteInternalId;
+  value: string | number | string[] | number[];
+  valueType: SimulationRunDataValueType;
+  unit?: {
+    name: string;
+    externalId?: CogniteExternalId;
+  };
+  simulatorObjectReference?: Record<string, string>;
+  timeseriesExternalId?: CogniteExternalId;
+}
+
+export interface SimulationRunDataInput extends SimulationRunDataOutput {
+  overridden?: boolean;
+}
+
+export interface SimulationRunId {
+  runId: CogniteInternalId;
+}
+
+export interface SimulationRunData {
+  runId: CogniteInternalId;
+  inputs: SimulationRunDataInput[];
+  outputs: SimulationRunDataOutput[];
 }
 
 export type SimulatorLogSeverityLevel =

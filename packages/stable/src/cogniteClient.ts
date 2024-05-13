@@ -185,7 +185,7 @@ export default class CogniteClient extends BaseCogniteClient {
   }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
-  private dataPointsApi?: DataPointsAPI;
+  protected dataPointsApi?: DataPointsAPI;
   private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
   protected filesApi?: FilesAPI;
