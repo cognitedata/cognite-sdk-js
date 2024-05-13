@@ -40,7 +40,7 @@ describe('Multi part upload unit test', () => {
         .once()
         .reply(201, initResponseForNumberOfParts(numberOfParts));
 
-      const response = await client.filesMultiPart.multipartUploadSession(
+      const response = await client.files.multipartUploadSession(
         { name: 'test_fbx.fbx', externalId: 'external_id_value' },
         numberOfParts,
         true
@@ -59,7 +59,7 @@ describe('Multi part upload unit test', () => {
         .reply(201, initResponseForNumberOfParts(1));
 
       await expect(
-        client.filesMultiPart.multipartUploadSession(
+        client.files.multipartUploadSession(
           { name: 'test_fbx.fbx', externalId: 'external_id_value' },
           numberOfParts,
           true
@@ -94,12 +94,11 @@ describe('Multi part upload unit test', () => {
         .once()
         .reply(200);
 
-      const multiPartApiSession =
-        await client.filesMultiPart.multipartUploadSession(
-          { name: 'test_fbx.fbx', externalId: 'external_id_value' },
-          numberOfParts,
-          true
-        );
+      const multiPartApiSession = await client.files.multipartUploadSession(
+        { name: 'test_fbx.fbx', externalId: 'external_id_value' },
+        numberOfParts,
+        true
+      );
       expect(initNock.isDone()).toBeTruthy();
       for (let i = 0; i < numberOfParts; i++) {
         await multiPartApiSession.uploadPart(i, fileChunks[i]);
@@ -137,7 +136,7 @@ describe('Multi part upload unit test', () => {
         .once()
         .reply(200);
       const responseFor5PartUploadPart =
-        await client.filesMultiPart.multipartUploadSession(
+        await client.files.multipartUploadSession(
           { name: 'test_fbx.fbx', externalId: 'external_id_value' },
           numberOfParts,
           true
@@ -188,7 +187,7 @@ describe('Multi part upload unit test', () => {
       .once()
       .reply(200);
     const responseFor5PartUploadPart =
-      await client.filesMultiPart.multipartUploadSession(
+      await client.files.multipartUploadSession(
         { name: 'test_fbx.fbx', externalId: 'external_id_value' },
         numberOfParts,
         true
@@ -244,7 +243,7 @@ describe('Multi part upload unit test', () => {
       .delayConnection(500)
       .reply(408, 'timeout');
     const responseFor5PartUploadPart =
-      await client.filesMultiPart.multipartUploadSession(
+      await client.files.multipartUploadSession(
         { name: 'test_fbx.fbx', externalId: 'external_id_value' },
         numberOfParts,
         true
@@ -303,7 +302,7 @@ describe('Multi part upload unit test', () => {
       .once()
       .reply(200, 'success');
     const responseFor5PartUploadPart =
-      await client.filesMultiPart.multipartUploadSession(
+      await client.files.multipartUploadSession(
         { name: 'test_fbx.fbx', externalId: 'external_id_value' },
         numberOfParts,
         true
@@ -352,7 +351,7 @@ describe('Multi part upload unit test', () => {
         .once()
         .reply(200);
       const responseFor5PartUploadPart =
-        await client.filesMultiPart.multipartUploadSession(
+        await client.files.multipartUploadSession(
           { name: 'test_fbx.fbx', externalId: 'external_id_value' },
           numberOfParts,
           true

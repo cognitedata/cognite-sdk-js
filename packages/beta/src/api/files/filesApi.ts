@@ -1,11 +1,14 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
-import { MultiPartFileUploadResponse } from '../../types';
-import { ExternalFileInfo, FileInfo } from '@cognite/sdk/src/types';
+import { CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import {
+  FilesAPI as FilesAPIStable,
+  MultiPartFileUploadResponse,
+} from '../../types';
+import { ExternalFileInfo } from '@cognite/sdk/src/types';
 import { FilesMultipartUploadSessionAPI } from './filesMultipartUploadSessionApi';
 
-export class FilesMultiPartAPI extends BaseResourceAPI<FileInfo> {
+export class FilesAPI extends FilesAPIStable {
   private limits = {
     minimumNumberOfParts: 1,
     maxNumberOfParts: 250,

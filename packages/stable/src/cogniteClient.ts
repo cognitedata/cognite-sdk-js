@@ -188,7 +188,7 @@ export default class CogniteClient extends BaseCogniteClient {
   private dataPointsApi?: DataPointsAPI;
   private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
-  private filesApi?: FilesAPI;
+  protected filesApi?: FilesAPI;
   private labelsApi?: LabelsAPI;
   private rawApi?: RawAPI;
   private projectsApi?: ProjectsAPI;

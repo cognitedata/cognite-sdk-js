@@ -7,7 +7,7 @@ import {
 import { accessApi } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AlertsAPI } from './api/alerts/alertsApi';
-import { FilesMultiPartAPI } from './api/files/filesMultiPartApi';
+import { FilesAPI } from './api/files/filesApi';
 import { MonitoringTasksAPI } from './api/monitoringTasks/monitoringTasksApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
@@ -16,7 +16,7 @@ class CogniteClientCleaned extends CogniteClientStable {
 
 export default class CogniteClient extends CogniteClientCleaned {
   private alertsApi?: AlertsAPI;
-  private filesMultiPartApi?: FilesMultiPartAPI;
+  protected filesApi?: FilesAPI;
   private monitoringTasksApi?: MonitoringTasksAPI;
 
   /**
@@ -43,8 +43,8 @@ export default class CogniteClient extends CogniteClientCleaned {
   public get alerts() {
     return accessApi(this.alertsApi);
   }
-  public get filesMultiPart() {
-    return accessApi(this.filesMultiPartApi);
+  public get files() {
+    return accessApi(this.filesApi);
   }
 
   public get monitoringTasks() {
@@ -61,7 +61,7 @@ export default class CogniteClient extends CogniteClientCleaned {
     this.httpClient.setDefaultHeader('cdf-version', 'beta');
 
     this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
-    this.filesMultiPartApi = this.apiFactory(FilesMultiPartAPI, 'files');
+    this.filesApi = this.apiFactory(FilesAPI, 'files');
     this.monitoringTasksApi = this.apiFactory(
       MonitoringTasksAPI,
       'monitoringtasks'

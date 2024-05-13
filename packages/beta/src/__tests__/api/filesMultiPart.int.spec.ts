@@ -18,7 +18,7 @@ import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUp
 // file to upload for integration tests
 const testfile = join(__dirname, '../VAL.nwd');
 
-describe.skip('Files: Multi part Upload Integration Tests', () => {
+describe('Files: Multi part Upload Integration Tests', () => {
   let client: CogniteClient;
   let label: LabelDefinition;
 
@@ -58,7 +58,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
   };
 
   test('can create uploadurls', async () => {
-    const response = await client.filesMultiPart.multipartUploadSession(
+    const response = await client.files.multipartUploadSession(
       {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
       },
@@ -71,7 +71,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     'can upload and get the state',
     async (numberOfParts) => {
       const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
-      const response = await client.filesMultiPart.multipartUploadSession(
+      const response = await client.files.multipartUploadSession(
         {
           ...getFileCreateArgs({ name: testfile }).localFileMeta,
         },
@@ -101,7 +101,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     //const smallFile = join(__dirname, '../test3dFile.fbx');
     const numberOfParts = 5;
     const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
-    const response = await client.filesMultiPart.multipartUploadSession(
+    const response = await client.files.multipartUploadSession(
       {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
       },
@@ -121,7 +121,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     'can retry failed parts',
     async ({ numberOfParts, partsToFail }) => {
       const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
-      const response = await client.filesMultiPart.multipartUploadSession(
+      const response = await client.files.multipartUploadSession(
         {
           ...getFileCreateArgs({ name: testfile }).localFileMeta,
         },
@@ -162,7 +162,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
   test('can concurrently upload parts', async () => {
     const numberOfParts = 10;
     const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
-    const response = await client.filesMultiPart.multipartUploadSession(
+    const response = await client.files.multipartUploadSession(
       {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
       },
@@ -193,7 +193,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     const { fileSizeInBytes, chunkSize, numberOfParts } =
       getFileStats(testfile);
 
-    const response = await client.filesMultiPart.multipartUploadSession(
+    const response = await client.files.multipartUploadSession(
       {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
       },
@@ -233,7 +233,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
   test('can get chunk upload callback', async () => {
     const numberOfParts = 10;
     const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
-    const response = await client.filesMultiPart.multipartUploadSession(
+    const response = await client.files.multipartUploadSession(
       {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
       },
