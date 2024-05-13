@@ -1,5 +1,4 @@
 // Copyright 2020 Cognite AS
-import { sleepPromise } from '@cognite/sdk-core';
 import CogniteClient from '../../cogniteClient';
 import {
   ExternalFileInfo,
