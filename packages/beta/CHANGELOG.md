@@ -9,6 +9,8 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 - add sorting for alerts ([#1097](https://github.com/cognitedata/cognite-sdk-js/issues/1097)) ([1a08cca](https://github.com/cognitedata/cognite-sdk-js/commit/1a08ccaf7a2d0d16e057bcd8819774c3b5a513dd))
 
+- **files:** add support for multi part file upload ([#1088] closes (https://github.com/cognitedata/cognite-sdk-js/issues/1088))
+
 # [5.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.7.4...@cognite/sdk-beta@5.8.0) (2024-04-29)
 
 ### Features
