@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.9.0...@cognite/sdk-beta@5.10.0) (2024-05-13)
+
+### Features
+
+- **files-beta:** add multi part upload sdk and tests (BND3D-4012) ([#1088](https://github.com/cognitedata/cognite-sdk-js/issues/1088)) ([a2fbbe6](https://github.com/cognitedata/cognite-sdk-js/commit/a2fbbe67db54518f3de08ec03dd4c6898c43465a))
+
 # [5.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.8.0...@cognite/sdk-beta@5.9.0) (2024-05-02)
 
 ### Features
