@@ -1,44 +1,43 @@
 import {
   SimulatorRoutineRevisionConfiguration,
   SimulatorRoutineScript,
-} from 'alpha/src/types';
+  SimulatorUnitQuantity,
+} from '../../types';
 
-export const unitsMap = {
-  accel: {
+export const unitQuantities: SimulatorUnitQuantity[] = [
+  {
     label: 'Acceleration',
+    name: 'accel',
     units: [
       {
         label: 'm/s2',
-        value: 'm/s2',
+        name: 'm/s2',
       },
       {
         label: 'cm/s2',
-        value: 'cm/s2',
+        name: 'cm/s2',
       },
       {
         label: 'ft/s2',
-        value: 'ft/s2',
+        name: 'ft/s2',
       },
     ],
   },
-  activity: {
-    label: 'Activity',
+  {
+    label: 'Mass',
+    name: 'mass',
     units: [
       {
-        label: 'activity',
-        value: 'activity',
+        label: 'kg',
+        name: 'kg',
+      },
+      {
+        label: 'lb',
+        name: 'lb',
       },
     ],
   },
-};
-export const unitSystem = {
-  default: {
-    label: 'default',
-    defaultUnits: {
-      accel: 'm/s2',
-    },
-  },
-};
+];
 export const stepFields = [
   {
     stepType: 'get/set',

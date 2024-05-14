@@ -22,19 +22,20 @@ export interface SimulatorUnitRecord {
   label: string;
   value: string;
 }
-export interface SimulatorUnitSystem {
-  label: string;
-  defaultUnits: Record<string, string>;
-}
-
 export interface SimulatorUnitsMap {
   label: string;
   units: SimulatorUnitRecord[];
 }
 
-export interface SimulatorUnits {
-  unitsMap?: Record<string, SimulatorUnitsMap>;
-  unitSystem?: Record<string, SimulatorUnitSystem>;
+export interface SimulatorUnitEntry {
+  label: string;
+  name: string;
+}
+
+export interface SimulatorUnitQuantity {
+  name: string;
+  label: string;
+  units: SimulatorUnitEntry[];
 }
 
 export interface SimulatorBoundaryCondition {
@@ -75,7 +76,7 @@ export interface Simulator {
   modelTypes: SimulatorModelType[];
   enabled: boolean;
   stepFields?: SimulatorStep[];
-  units?: SimulatorUnits;
+  unitQuantities?: SimulatorUnitQuantity[];
   createdTime: Date;
   lastUpdatedTime: Date;
 }
@@ -98,7 +99,7 @@ export interface SimulatorCreate {
   modelTypes?: SimulatorModelType[];
   enabled?: boolean;
   stepFields?: SimulatorStep[];
-  units?: SimulatorUnits;
+  unitQuantities?: SimulatorUnitQuantity[];
 }
 
 export interface SimulatorIntegration {
@@ -176,7 +177,7 @@ export interface SimulatorPatch {
     modelTypes?: SinglePatch<SimulatorModelType[]>;
     enabled?: SinglePatch<boolean>;
     stepFields?: SinglePatch<SimulatorStep[]>;
-    units?: SinglePatch<SimulatorUnits>;
+    unitQuantities?: SinglePatch<SimulatorUnitQuantity[]>;
   };
 }
 
@@ -305,7 +306,6 @@ export interface SimulatorModel {
   dataSetId: CogniteInternalId;
   labels?: ExternalId[];
   type?: string;
-  unitSystem?: string;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
@@ -318,7 +318,6 @@ export interface SimulatorModelCreate {
   dataSetId: CogniteInternalId;
   labels?: ExternalId[];
   type?: string;
-  unitSystem?: string;
 }
 
 export interface SimulatorModelFilter {

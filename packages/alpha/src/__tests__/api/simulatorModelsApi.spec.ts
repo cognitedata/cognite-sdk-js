@@ -5,11 +5,10 @@ import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
   stepFields,
-  unitsMap,
-  unitSystem,
   modelTypes,
   boundaryConditions,
-} from './mocks';
+  unitQuantities,
+} from './seed';
 
 const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
 
@@ -32,10 +31,7 @@ describeIf('simulator models api', () => {
         fileExtensionTypes,
         enabled: true,
         stepFields,
-        units: {
-          unitsMap,
-          unitSystem,
-        },
+        unitQuantities,
         modelTypes,
         boundaryConditions,
         isCalculationsEnabled: true,
@@ -56,7 +52,6 @@ describeIf('simulator models api', () => {
         dataSetId: 4097666328084896,
         labels: [{ externalId: 'air-quality-po-1' }],
         type: 'string',
-        unitSystem: 'SI',
       },
     ]);
     expect(res.length).toBe(1);
