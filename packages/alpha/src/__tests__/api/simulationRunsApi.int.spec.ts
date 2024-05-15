@@ -31,9 +31,7 @@ describeIf('simulator integrations api', () => {
 
     expect(item.simulatorName).toBe('DWSIM');
     expect(item.modelName).toBe('Shower Mixer');
-    expect(item.routineName).toBe(
-      'Steady State Calculation'
-    );
+    expect(item.routineName).toBe('Steady State Calculation');
     expect(['ready', 'running']).toContain(item.status);
     expect(item.runType).toBe('external');
     expect(item.runTime?.valueOf()).toBe(ts);

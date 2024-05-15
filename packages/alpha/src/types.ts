@@ -512,7 +512,7 @@ export interface SimulatorRoutineRevisionConfiguration {
   schedule: SimulatorRoutineConfigDisabled | SimulatorRoutineSchedule;
   steadyStateDetection: SimulatorRoutineSteadyStateDetection[];
   logicalCheck: SimulatorRoutineLogicalCheck[];
-  
+
   // TODO: delete these 3
   inputConstants?: SimulatorRoutineInputConstant[];
   inputTimeseries?: SimulatorRoutineInputTimeseries[];
