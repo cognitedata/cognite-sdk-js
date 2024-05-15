@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.26.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.25.3...@cognite/sdk-alpha@0.26.0) (2024-05-15)
+
+### Features
+
+- **simint-alpha:** remove unit systems, rename unitQuantities ([#1104](https://github.com/cognitedata/cognite-sdk-js/issues/1104)) ([d7817c9](https://github.com/cognitedata/cognite-sdk-js/commit/d7817c933f2806b2e7da110aa2e8ef228313055a))
+
 ## [0.25.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.25.2...@cognite/sdk-alpha@0.25.3) (2024-05-15)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
