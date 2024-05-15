@@ -5,13 +5,11 @@ import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
   stepFields,
-  unitsMap,
-  unitSystem,
   modelTypes,
-  boundaryConditions,
   routineRevisionConfiguration,
   routineRevisionScript,
-} from './mocks';
+  unitQuantities,
+} from './seed';
 
 const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
 
@@ -20,11 +18,11 @@ const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 describeIf('simulator routines api', () => {
   const ts = Date.now();
   const simulatorExternalId = `test_sim_${ts}_c`;
-  const modelExternalId = `test_sim_model_${ts}`;
-  const modelRevisionExternalId = `test_sim_model_revision_${ts}`;
+  const modelExternalId = `test_sim_model_${ts}_2`;
+  const modelRevisionExternalId = `test_sim_model_revision_${ts}_2_1`;
   const routineExternalId = `test_sim_routine_${ts}`;
   const routineRevisionExternalId = `test_sim_routine_revision_${ts}`;
-  const simulatorIntegrationExternalId = `test_sim_integration_${ts}`;
+  const simulatorIntegrationExternalId = `test_sim_integration_${ts}_2`;
   const simulatorName = `TestSim - ${ts}`;
   const client: CogniteClientAlpha = setupLoggedInClient();
   let simulatorId: number;
@@ -37,13 +35,8 @@ describeIf('simulator routines api', () => {
         fileExtensionTypes,
         enabled: true,
         stepFields,
-        units: {
-          unitsMap,
-          unitSystem,
-        },
+        unitQuantities,
         modelTypes,
-        boundaryConditions,
-        isCalculationsEnabled: true,
       },
     ]);
     simulatorId = response[0].id;
@@ -79,7 +72,6 @@ describeIf('simulator routines api', () => {
         dataSetId: 4097666328084896,
         labels: [{ externalId: 'air-quality-po-1' }],
         type: 'string',
-        unitSystem: 'SI',
       },
     ]);
     expect(res.length).toBe(1);
@@ -93,7 +85,6 @@ describeIf('simulator routines api', () => {
         modelExternalId,
         description: 'test sim model revision description',
         fileId: 3747718694331206,
-        boundaryConditions: [],
         metadata: {},
       },
     ]);

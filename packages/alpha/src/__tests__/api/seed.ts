@@ -1,44 +1,43 @@
 import {
   SimulatorRoutineRevisionConfiguration,
   SimulatorRoutineScript,
-} from 'alpha/src/types';
+  SimulatorUnitQuantity,
+} from '../../types';
 
-export const unitsMap = {
-  accel: {
+export const unitQuantities: SimulatorUnitQuantity[] = [
+  {
     label: 'Acceleration',
+    name: 'accel',
     units: [
       {
         label: 'm/s2',
-        value: 'm/s2',
+        name: 'm/s2',
       },
       {
         label: 'cm/s2',
-        value: 'cm/s2',
+        name: 'cm/s2',
       },
       {
         label: 'ft/s2',
-        value: 'ft/s2',
+        name: 'ft/s2',
       },
     ],
   },
-  activity: {
-    label: 'Activity',
+  {
+    label: 'Mass',
+    name: 'mass',
     units: [
       {
-        label: 'activity',
-        value: 'activity',
+        label: 'kg',
+        name: 'kg',
+      },
+      {
+        label: 'lb',
+        name: 'lb',
       },
     ],
   },
-};
-export const unitSystem = {
-  default: {
-    label: 'default',
-    defaultUnits: {
-      accel: 'm/s2',
-    },
-  },
-};
+];
 export const stepFields = [
   {
     stepType: 'get/set',
@@ -78,13 +77,7 @@ export const modelTypes = [
     name: 'test',
   },
 ];
-export const boundaryConditions = [
-  {
-    name: 'test',
-    address: 'x.y.z',
-    key: 'test',
-  },
-];
+
 export const fileExtensionTypes = ['csv', 'yaml'];
 
 export const routineRevisionConfiguration: SimulatorRoutineRevisionConfiguration =
@@ -98,36 +91,37 @@ export const routineRevisionConfiguration: SimulatorRoutineRevisionConfiguration
     },
     logicalCheck: [],
     steadyStateDetection: [],
-    inputTimeseries: [
-      {
-        name: 'string',
-        referenceId: 'string',
-        unit: 'string',
-        unitType: 'string',
-        sourceExternalId: 'string',
-        aggregate: 'average',
-        saveTimeseriesExternalId: 'PROSPER-INPUT-ChokeDp-THP-Well_A2',
-      },
-    ],
-    outputTimeseries: [
-      {
-        name: 'string',
-        referenceId: 'string',
-        unit: 'string',
-        unitType: 'string',
-        saveTimeseriesExternalId: 'string',
-      },
-    ],
-    inputConstants: [
-      {
-        name: 'string',
-        saveTimeseriesExternalId: 'string',
-        value: 'string',
-        unit: 'string',
-        unitType: 'string',
-        referenceId: 'string',
-      },
-    ],
+    // TODO: use new inputs/ouputs
+    // inputTimeseries: [
+    //   {
+    //     name: 'string',
+    //     referenceId: 'string',
+    //     unit: 'string',
+    //     unitType: 'string',
+    //     sourceExternalId: 'string',
+    //     aggregate: 'average',
+    //     saveTimeseriesExternalId: 'PROSPER-INPUT-ChokeDp-THP-Well_A2',
+    //   },
+    // ],
+    // outputTimeseries: [
+    //   {
+    //     name: 'string',
+    //     referenceId: 'string',
+    //     unit: 'string',
+    //     unitType: 'string',
+    //     saveTimeseriesExternalId: 'string',
+    //   },
+    // ],
+    // inputConstants: [
+    //   {
+    //     name: 'string',
+    //     saveTimeseriesExternalId: 'string',
+    //     value: 'string',
+    //     unit: 'string',
+    //     unitType: 'string',
+    //     referenceId: 'string',
+    //   },
+    // ],
   };
 
 export const routineRevisionScript: SimulatorRoutineScript[] = [

@@ -5,11 +5,9 @@ import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
   stepFields,
-  unitsMap,
-  unitSystem,
   modelTypes,
-  boundaryConditions,
-} from './mocks';
+  unitQuantities,
+} from './seed';
 
 const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
 
@@ -31,13 +29,8 @@ describeIf('simulator integrations api', () => {
         fileExtensionTypes,
         enabled: true,
         stepFields,
-        units: {
-          unitsMap,
-          unitSystem,
-        },
+        unitQuantities,
         modelTypes,
-        boundaryConditions,
-        isCalculationsEnabled: true,
       },
     ]);
     simulatorId = response[0].id;

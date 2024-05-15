@@ -22,25 +22,20 @@ export interface SimulatorUnitRecord {
   label: string;
   value: string;
 }
-export interface SimulatorUnitSystem {
-  label: string;
-  defaultUnits: Record<string, string>;
-}
-
 export interface SimulatorUnitsMap {
   label: string;
   units: SimulatorUnitRecord[];
 }
 
-export interface SimulatorUnits {
-  unitsMap?: Record<string, SimulatorUnitsMap>;
-  unitSystem?: Record<string, SimulatorUnitSystem>;
+export interface SimulatorUnitEntry {
+  label: string;
+  name: string;
 }
 
-export interface SimulatorBoundaryCondition {
+export interface SimulatorUnitQuantity {
   name: string;
-  address: string;
-  key: string;
+  label: string;
+  units: SimulatorUnitEntry[];
 }
 
 export interface SimulatorModelType {
@@ -69,13 +64,10 @@ export interface Simulator {
   externalId: CogniteExternalId;
   name: string;
   fileExtensionTypes: string[];
-  isBoundaryConditionsEnabled: boolean;
-  boundaryConditions: SimulatorBoundaryCondition[];
-  isCalculationsEnabled: boolean;
   modelTypes: SimulatorModelType[];
   enabled: boolean;
   stepFields?: SimulatorStep[];
-  units?: SimulatorUnits;
+  unitQuantities?: SimulatorUnitQuantity[];
   createdTime: Date;
   lastUpdatedTime: Date;
 }
@@ -92,13 +84,10 @@ export interface SimulatorCreate {
   externalId: CogniteExternalId;
   fileExtensionTypes: string[];
   name: string;
-  isBoundaryConditionsEnabled?: boolean;
-  boundaryConditions?: SimulatorBoundaryCondition[];
-  isCalculationsEnabled?: boolean;
   modelTypes?: SimulatorModelType[];
   enabled?: boolean;
   stepFields?: SimulatorStep[];
-  units?: SimulatorUnits;
+  unitQuantities?: SimulatorUnitQuantity[];
 }
 
 export interface SimulatorIntegration {
@@ -170,13 +159,10 @@ export interface SimulatorPatch {
   update: {
     fileExtensionTypes?: SinglePatch<string[]>;
     name?: SinglePatch<string>;
-    isBoundaryConditionsEnabled?: SinglePatch<boolean>;
-    boundaryConditions?: SinglePatch<SimulatorBoundaryCondition[]>;
-    isCalculationsEnabled?: SinglePatch<boolean>;
     modelTypes?: SinglePatch<SimulatorModelType[]>;
     enabled?: SinglePatch<boolean>;
     stepFields?: SinglePatch<SimulatorStep[]>;
-    units?: SinglePatch<SimulatorUnits>;
+    unitQuantities?: SinglePatch<SimulatorUnitQuantity[]>;
   };
 }
 
@@ -305,7 +291,6 @@ export interface SimulatorModel {
   dataSetId: CogniteInternalId;
   labels?: ExternalId[];
   type?: string;
-  unitSystem?: string;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
@@ -318,7 +303,6 @@ export interface SimulatorModelCreate {
   dataSetId: CogniteInternalId;
   labels?: ExternalId[];
   type?: string;
-  unitSystem?: string;
 }
 
 export interface SimulatorModelFilter {
@@ -339,13 +323,6 @@ export interface SimulatorModelPatch {
 
 export interface SimulatorModelChange extends SimulatorModelPatch, InternalId {}
 
-interface SimulatorModelBoundaryCondition {
-  key: string;
-  name: string;
-  address: string;
-  timeseriesExternalId: string;
-}
-
 export type SimulatorModelRevisionStatus = 'unknown' | 'success' | 'failure';
 
 export const SimulatorModelRevisionStatus = {
@@ -365,8 +342,6 @@ export interface SimulatorModelRevision {
   createdByUserId?: string;
   status: SimulatorModelRevisionStatus;
   statusMessage?: string;
-  boundaryConditions?: SimulatorModelBoundaryCondition[];
-  boundaryConditionsStatus?: SimulatorModelRevisionStatus;
   versionNumber: number;
   metadata?: Record<string, string>;
   createdTime: Date;
@@ -379,7 +354,6 @@ export interface SimulatorModelRevisionCreate {
   modelExternalId: CogniteExternalId;
   description?: string;
   fileId: CogniteInternalId;
-  boundaryConditions?: SimulatorModelBoundaryCondition[];
   metadata?: Record<string, any>;
 }
 
@@ -387,8 +361,6 @@ export interface SimulatorModelRevisionPatch {
   update: {
     status?: SinglePatch<string>;
     statusMessage?: SinglePatch<string>;
-    boundaryConditions?: SinglePatch<SimulatorModelBoundaryCondition[]>;
-    boundaryConditionsStatus?: SinglePatch<string>;
   };
 }
 
@@ -517,17 +489,6 @@ export interface SimulatorRoutineInputTimeseries
   aggregate: SimulatorDataPointsAggregate;
 }
 
-export interface SimulatorRoutineOutputSequence {
-  name: string;
-  referenceId: string;
-}
-
-export interface SimulatorRoutineGaugeDepth {
-  value: number;
-  unit: string;
-  unitType: string;
-}
-
 export interface SimulatorRoutineScriptStepArguments {
   argumentType: string;
   [s: string]: string;
@@ -551,11 +512,11 @@ export interface SimulatorRoutineRevisionConfiguration {
   schedule: SimulatorRoutineConfigDisabled | SimulatorRoutineSchedule;
   steadyStateDetection: SimulatorRoutineSteadyStateDetection[];
   logicalCheck: SimulatorRoutineLogicalCheck[];
-  inputConstants: SimulatorRoutineInputConstant[];
-  outputSequences?: SimulatorRoutineOutputSequence[];
-  inputTimeseries: SimulatorRoutineInputTimeseries[];
-  outputTimeseries: SimulatorRoutineTimeSeries[];
-  extraOptions?: SimulatorRoutineGaugeDepth;
+
+  // TODO: delete these 3
+  inputConstants?: SimulatorRoutineInputConstant[];
+  inputTimeseries?: SimulatorRoutineInputTimeseries[];
+  outputTimeseries?: SimulatorRoutineTimeSeries[];
 }
 export interface SimulatorRoutineRevision {
   id: CogniteInternalId;
