@@ -6,7 +6,6 @@ import {
   fileExtensionTypes,
   stepFields,
   modelTypes,
-  boundaryConditions,
   unitQuantities,
 } from './seed';
 
@@ -32,8 +31,6 @@ describeIf('simulator integrations api', () => {
         stepFields,
         unitQuantities,
         modelTypes,
-        boundaryConditions,
-        isCalculationsEnabled: true,
       },
     ]);
     simulatorId = response[0].id;

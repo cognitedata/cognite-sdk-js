@@ -77,13 +77,7 @@ export const modelTypes = [
     name: 'test',
   },
 ];
-export const boundaryConditions = [
-  {
-    name: 'test',
-    address: 'x.y.z',
-    key: 'test',
-  },
-];
+
 export const fileExtensionTypes = ['csv', 'yaml'];
 
 export const routineRevisionConfiguration: SimulatorRoutineRevisionConfiguration =
@@ -97,36 +91,37 @@ export const routineRevisionConfiguration: SimulatorRoutineRevisionConfiguration
     },
     logicalCheck: [],
     steadyStateDetection: [],
-    inputTimeseries: [
-      {
-        name: 'string',
-        referenceId: 'string',
-        unit: 'string',
-        unitType: 'string',
-        sourceExternalId: 'string',
-        aggregate: 'average',
-        saveTimeseriesExternalId: 'PROSPER-INPUT-ChokeDp-THP-Well_A2',
-      },
-    ],
-    outputTimeseries: [
-      {
-        name: 'string',
-        referenceId: 'string',
-        unit: 'string',
-        unitType: 'string',
-        saveTimeseriesExternalId: 'string',
-      },
-    ],
-    inputConstants: [
-      {
-        name: 'string',
-        saveTimeseriesExternalId: 'string',
-        value: 'string',
-        unit: 'string',
-        unitType: 'string',
-        referenceId: 'string',
-      },
-    ],
+    // TODO: use new inputs/ouputs
+    // inputTimeseries: [
+    //   {
+    //     name: 'string',
+    //     referenceId: 'string',
+    //     unit: 'string',
+    //     unitType: 'string',
+    //     sourceExternalId: 'string',
+    //     aggregate: 'average',
+    //     saveTimeseriesExternalId: 'PROSPER-INPUT-ChokeDp-THP-Well_A2',
+    //   },
+    // ],
+    // outputTimeseries: [
+    //   {
+    //     name: 'string',
+    //     referenceId: 'string',
+    //     unit: 'string',
+    //     unitType: 'string',
+    //     saveTimeseriesExternalId: 'string',
+    //   },
+    // ],
+    // inputConstants: [
+    //   {
+    //     name: 'string',
+    //     saveTimeseriesExternalId: 'string',
+    //     value: 'string',
+    //     unit: 'string',
+    //     unitType: 'string',
+    //     referenceId: 'string',
+    //   },
+    // ],
   };
 
 export const routineRevisionScript: SimulatorRoutineScript[] = [

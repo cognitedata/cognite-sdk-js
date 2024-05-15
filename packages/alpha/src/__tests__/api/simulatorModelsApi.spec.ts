@@ -6,7 +6,6 @@ import {
   fileExtensionTypes,
   stepFields,
   modelTypes,
-  boundaryConditions,
   unitQuantities,
 } from './seed';
 
@@ -33,8 +32,6 @@ describeIf('simulator models api', () => {
         stepFields,
         unitQuantities,
         modelTypes,
-        boundaryConditions,
-        isCalculationsEnabled: true,
       },
     ]);
     simulatorId = response[0].id;
@@ -85,7 +82,6 @@ describeIf('simulator models api', () => {
         modelExternalId,
         description: 'test sim model revision description',
         fileId: 3747718694331206,
-        boundaryConditions: [],
         metadata: {},
       },
     ]);

@@ -7,7 +7,6 @@ import {
   fileExtensionTypes,
   stepFields,
   modelTypes,
-  boundaryConditions,
   unitQuantities,
 } from './seed';
 
@@ -33,8 +32,6 @@ describeIf('simulators api', () => {
         stepFields,
         unitQuantities,
         modelTypes,
-        boundaryConditions,
-        isCalculationsEnabled: true,
       },
     ]);
     simulatorId = response[0].id;
@@ -45,27 +42,12 @@ describeIf('simulators api', () => {
     expect(response[0].stepFields).toEqual(stepFields);
     expect(response[0].unitQuantities).toEqual(unitQuantities);
     expect(response[0].modelTypes).toEqual(modelTypes);
-    expect(response[0].boundaryConditions).toEqual(boundaryConditions);
-    expect(response[0].isCalculationsEnabled).toBe(true);
-    expect(response[0].isBoundaryConditionsEnabled).toBe(false);
   });
 
   test('update simulators', async () => {
     const patch: SimulatorPatch['update'] = {
-      isBoundaryConditionsEnabled: {
-        set: true,
-      },
       fileExtensionTypes: {
         set: ['py'],
-      },
-      boundaryConditions: {
-        set: [
-          {
-            name: 'test_update',
-            address: 'a.b.c',
-            key: 'test_update',
-          },
-        ],
       },
       modelTypes: {
         set: [
@@ -111,12 +93,8 @@ describeIf('simulators api', () => {
       },
     ]);
     expect(response.length).toBe(1);
-    expect(response[0].isBoundaryConditionsEnabled).toBe(true);
     expect(response[0].fileExtensionTypes).toEqual(
       (patch.fileExtensionTypes as any).set
-    );
-    expect(response[0].boundaryConditions).toEqual(
-      (patch.boundaryConditions as any).set
     );
     expect(response[0].modelTypes).toEqual((patch.modelTypes as any).set);
     expect(response[0].unitQuantities).toEqual(
