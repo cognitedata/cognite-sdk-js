@@ -29,9 +29,9 @@ describeIf('simulator integrations api', () => {
 
     const item = res[0];
 
-    expect(item.simulatorName).toBe('DWSIM');
-    expect(item.modelName).toBe('Shower Mixer');
-    expect(item.routineName).toBe('Steady State Calculation');
+    expect(item.simulatorExternalId).toBe('DWSIM');
+    expect(item.modelExternalId).toBe('DWSIM-ShowerMixer');
+    expect(item.routineExternalId).toBe('DWSIM-ShowerMixer-SteadyState');
     expect(['ready', 'running']).toContain(item.status);
     expect(item.runType).toBe('external');
     expect(item.runTime?.valueOf()).toBe(ts);
@@ -42,7 +42,7 @@ describeIf('simulator integrations api', () => {
   test('list simulation runs', async () => {
     const res = await client.simulators.listRuns({
       filter: {
-        simulatorName: 'DWSIM',
+        simulatorExternalIds: ['DWSIM'],
         status: 'success',
         createdTime: {
           max: new Date(),
@@ -61,7 +61,7 @@ describeIf('simulator integrations api', () => {
 
     const item = res.items[0];
 
-    expect(item.simulatorName).toBe('DWSIM');
+    expect(item.simulatorExternalId).toBe('DWSIM');
     expect(item.status).toBe('success');
     expect(item.createdTime.valueOf()).toBeGreaterThan(0);
     expect(item.lastUpdatedTime.valueOf()).toBeGreaterThan(0);
@@ -77,7 +77,7 @@ describeIf('simulator integrations api', () => {
 
     const item = res[0];
 
-    expect(item.simulatorName).toBe('DWSIM');
+    expect(item.simulatorExternalId).toBe('DWSIM');
     expect(['ready', 'running', 'success']).toContain(item.status);
     expect(item.id).toBe(runId);
   });

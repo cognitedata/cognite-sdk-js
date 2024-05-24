@@ -28,7 +28,6 @@ describeIf('simulators api', () => {
         externalId: simulatorExternalId,
         name: simulatorName,
         fileExtensionTypes,
-        enabled: true,
         stepFields,
         unitQuantities,
         modelTypes,
@@ -38,7 +37,6 @@ describeIf('simulators api', () => {
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(simulatorExternalId);
     expect(response[0].fileExtensionTypes).toEqual(['csv', 'yaml']);
-    expect(response[0].enabled).toBe(true);
     expect(response[0].stepFields).toEqual(stepFields);
     expect(response[0].unitQuantities).toEqual(unitQuantities);
     expect(response[0].modelTypes).toEqual(modelTypes);
@@ -104,9 +102,7 @@ describeIf('simulators api', () => {
   });
 
   test('list simulators', async () => {
-    const response = await client.simulators.list({
-      filter: { enabled: true },
-    });
+    const response = await client.simulators.list({});
     expect(response.items.length).toBeGreaterThan(0);
     const simulatorFound = response.items.find(
       (item) => item.externalId === simulatorExternalId
