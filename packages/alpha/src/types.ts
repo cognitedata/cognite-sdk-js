@@ -65,19 +65,14 @@ export interface Simulator {
   name: string;
   fileExtensionTypes: string[];
   modelTypes: SimulatorModelType[];
-  enabled: boolean;
   stepFields?: SimulatorStep[];
   unitQuantities?: SimulatorUnitQuantity[];
   createdTime: Date;
   lastUpdatedTime: Date;
 }
 
-export interface SimulatorFilter {
-  enabled?: boolean;
-}
-
 export interface SimulatorFilterQuery extends FilterQuery {
-  filter?: SimulatorFilter;
+  filter?: {};
 }
 
 export interface SimulatorCreate {
@@ -85,7 +80,6 @@ export interface SimulatorCreate {
   fileExtensionTypes: string[];
   name: string;
   modelTypes?: SimulatorModelType[];
-  enabled?: boolean;
   stepFields?: SimulatorStep[];
   unitQuantities?: SimulatorUnitQuantity[];
 }
@@ -98,7 +92,6 @@ export interface SimulatorIntegration {
   dataSetId: CogniteInternalId;
   connectorVersion: string;
   simulatorVersion: string;
-  runApiEnabled: boolean;
   licenseStatus?: string;
   licenseLastCheckedTime?: Date;
   connectorStatus?: string;
@@ -114,7 +107,6 @@ export interface SimulatorIntegrationCreate {
   heartbeat?: Date;
   connectorVersion?: string;
   simulatorVersion?: string;
-  runApiEnabled?: boolean;
   licenseStatus?: string;
   licenseLastCheckedTime?: Date;
   connectorStatus?: string;
@@ -130,9 +122,6 @@ export interface SimulatorIntegrationFilterQuery extends FilterQuery {
 }
 
 export interface SimulationRunFilter {
-  simulatorName?: string;
-  modelName?: string;
-  routineName?: string;
   status?: SimulationRunStatus;
   runType?: SimulationRunType;
   simulatorIntegrationExternalIds?: CogniteExternalId[];
@@ -160,7 +149,6 @@ export interface SimulatorPatch {
     fileExtensionTypes?: SinglePatch<string[]>;
     name?: SinglePatch<string>;
     modelTypes?: SinglePatch<SimulatorModelType[]>;
-    enabled?: SinglePatch<boolean>;
     stepFields?: SinglePatch<SimulatorStep[]>;
     unitQuantities?: SinglePatch<SimulatorUnitQuantity[]>;
   };
@@ -194,24 +182,22 @@ export const SimulationRunStatus = {
 
 export interface SimulationRun {
   id: CogniteInternalId;
-  simulatorName: string;
-  modelName: string;
-  routineName: string;
-  simulatorExternalId?: CogniteExternalId;
-  simulatorIntegrationExternalId?: CogniteExternalId;
-  modelExternalId?: CogniteExternalId;
-  modelRevisionExternalId?: CogniteExternalId;
-  routineExternalId?: CogniteExternalId;
-  routineRevisionExternalId?: CogniteExternalId;
+
+  simulatorExternalId: CogniteExternalId;
+  simulatorIntegrationExternalId: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  modelRevisionExternalId: CogniteExternalId;
+  routineExternalId: CogniteExternalId;
+  routineRevisionExternalId: CogniteExternalId;
   status: SimulationRunStatus;
   runTime?: Date;
   simulationTime?: Date;
   statusMessage?: string;
-  dataSetId?: CogniteInternalId;
+  dataSetId: CogniteInternalId;
   eventId?: CogniteInternalId;
   runType: SimulationRunType;
   userId?: string;
-  logId?: CogniteInternalId;
+  logId: CogniteInternalId;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
@@ -380,26 +366,11 @@ export interface SimulatorModelRevisionFilterQuery extends FilterQuery {
   limit?: number;
 }
 
-export type SimulatorCalculationType =
-  | 'IPR/VLP'
-  | 'ChokeDp'
-  | 'VLP'
-  | 'IPR'
-  | 'BhpFromRate'
-  | 'BhpFromGradientTraverse'
-  | 'BhpFromGaugeBhp';
 export type SimulatorRoutineOperator = 'eq' | 'ne' | 'gt' | 'ge' | 'lt' | 'le';
 export type SimulatorDataPointsAggregate =
   | 'average'
-  | 'max'
-  | 'min'
-  | 'count'
-  | 'sum'
   | 'interpolation'
-  | 'stepInterpolation'
-  | 'totalVariation'
-  | 'continuousVariance'
-  | 'discreteVariance';
+  | 'stepInterpolation';
 
 export interface SimulatorRoutine {
   id: CogniteInternalId;
@@ -419,7 +390,6 @@ export interface SimulatorRoutineCreate {
   modelExternalId: CogniteExternalId;
   simulatorIntegrationExternalId: CogniteExternalId;
   name: string;
-  calculationType?: SimulatorCalculationType;
 }
 
 export interface SimulatorRoutineFilter {
@@ -531,7 +501,6 @@ export interface SimulatorRoutineRevision {
   lastUpdatedTime: Date;
   configuration: SimulatorRoutineRevisionConfiguration;
   script: SimulatorRoutineScript[];
-  calculationType?: SimulatorCalculationType;
 }
 
 export interface SimulatorRoutineRevisionCreate {

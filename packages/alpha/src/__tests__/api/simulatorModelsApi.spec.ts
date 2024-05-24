@@ -28,7 +28,6 @@ describeIf('simulator models api', () => {
         externalId: simulatorExternalId,
         name: simulatorName,
         fileExtensionTypes,
-        enabled: true,
         stepFields,
         unitQuantities,
         modelTypes,
