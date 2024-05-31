@@ -404,18 +404,18 @@ export interface SimulatorRoutineFilterQuery extends FilterQuery {
 /* Routine revisions */
 
 export interface SimulatorRoutineDataSampling {
-  enabled: boolean;
+  enabled: true;
   validationWindow: number;
   samplingWindow: number;
   granularity: number;
 }
 
 export interface SimulatorRoutineConfigDisabled {
-  enabled: boolean;
+  enabled: false;
 }
 
 export interface SimulatorRoutineSchedule {
-  enabled: boolean;
+  enabled: true;
   cronExpression: string;
 }
 
@@ -478,7 +478,7 @@ export interface SimulatorRoutineScript {
   steps: SimulatorRoutineScriptStep[];
 }
 export interface SimulatorRoutineRevisionConfiguration {
-  dataSampling: SimulatorRoutineDataSampling;
+  dataSampling: SimulatorRoutineConfigDisabled | SimulatorRoutineDataSampling;
   schedule: SimulatorRoutineConfigDisabled | SimulatorRoutineSchedule;
   steadyStateDetection: SimulatorRoutineSteadyStateDetection[];
   logicalCheck: SimulatorRoutineLogicalCheck[];
