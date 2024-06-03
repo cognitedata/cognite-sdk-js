@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.28.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.27.1...@cognite/sdk-alpha@0.28.0) (2024-06-03)
+
+### Features
+
+- export const for two enum types ([#1107](https://github.com/cognitedata/cognite-sdk-js/issues/1107)) ([e346d92](https://github.com/cognitedata/cognite-sdk-js/commit/e346d92f9ea6ad31f472863092148ddee3dc3b71))
+
 ## [0.27.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.27.0...@cognite/sdk-alpha@0.27.1) (2024-05-31)
 
 ### Bug Fixes
