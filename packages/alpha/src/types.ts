@@ -367,10 +367,26 @@ export interface SimulatorModelRevisionFilterQuery extends FilterQuery {
 }
 
 export type SimulatorRoutineOperator = 'eq' | 'ne' | 'gt' | 'ge' | 'lt' | 'le';
+
+export const SimulatorRoutineOperator = {
+  eq: 'eq' as SimulatorRoutineOperator,
+  ne: 'ne' as SimulatorRoutineOperator,
+  gt: 'gt' as SimulatorRoutineOperator,
+  ge: 'ge' as SimulatorRoutineOperator,
+  lt: 'lt' as SimulatorRoutineOperator,
+  le: 'le' as SimulatorRoutineOperator,
+};
+
 export type SimulatorDataPointsAggregate =
   | 'average'
   | 'interpolation'
   | 'stepInterpolation';
+
+export const SimulatorDataPointsAggregate = {
+  average: 'average' as SimulatorDataPointsAggregate,
+  interpolation: 'interpolation' as SimulatorDataPointsAggregate,
+  stepInterpolation: 'stepInterpolation' as SimulatorDataPointsAggregate,
+};
 
 export interface SimulatorRoutine {
   id: CogniteInternalId;
