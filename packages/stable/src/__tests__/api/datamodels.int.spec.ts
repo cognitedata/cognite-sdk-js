@@ -126,6 +126,12 @@ describe('Data models integration test', () => {
     expect(datamodel.items.length).toBe(1);
     expect(datamodel.items[0].name).toEqual(datamodelCreationDefinition.name);
     expect(datamodel.items[0].views).toBeDefined();
+
+    // Incorrect type cast to check for negative case (ensuring no 'properties' field)
+    const view = datamodel.items?.[0]?.views?.[0] as ViewDefinition;
+    expect(view?.externalId).toEqual(TEST_VIEW_NAME);
+    expect(view?.space).toEqual(TEST_SPACE_NAME);
+    expect(view?.properties).not.toBeDefined();
   });
 
   it('should include views when retrieving datamodels', async () => {
