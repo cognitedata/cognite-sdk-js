@@ -123,6 +123,23 @@ describe('Data models integration test', () => {
     expect(datamodel.items[0].name).toEqual(datamodelCreationDefinition.name);
   });
 
+  it('should include views when retrieving datamodels', async () => {
+    const datamodel = await client.dataModels.retrieve(
+      [
+        {
+          space: TEST_SPACE_NAME,
+          externalId: datamodelCreationDefinition.externalId,
+        },
+      ],
+      {
+        inlineViews: true,
+      }
+    );
+    console.log('data model', datamodel);
+    expect(datamodel.items[0].views).toHaveLength(1);
+    // expect(datamodel.items[0].views[0].externalId).toEqual(TEST_VIEW_NAME);
+  });
+
   it('should successfully delete datamodels', async () => {
     const response = await client.dataModels.delete([
       {
