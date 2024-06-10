@@ -135,7 +135,8 @@ describe('Data models integration test', () => {
         inlineViews: true,
       }
     );
-    console.log('data model', datamodel);
+    console.log('data model', datamodel, datamodel.items[0].views);
+    expect(datamodel.items[0].views).toBeDefined();
     expect(datamodel.items[0].views).toHaveLength(1);
     // expect(datamodel.items[0].views[0].externalId).toEqual(TEST_VIEW_NAME);
   });
