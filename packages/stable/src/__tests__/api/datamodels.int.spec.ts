@@ -1,6 +1,10 @@
 // Copyright 2024 Cognite AS
 
-import { DataModelCreate, ViewCreateDefinition } from 'stable/src/types';
+import {
+  DataModelCreate,
+  ViewCreateDefinition,
+  ViewDefinition,
+} from 'stable/src/types';
 import CogniteClient from '../../cogniteClient';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
@@ -121,6 +125,37 @@ describe('Data models integration test', () => {
     ]);
     expect(datamodel.items.length).toBe(1);
     expect(datamodel.items[0].name).toEqual(datamodelCreationDefinition.name);
+    expect(datamodel.items[0].views).toBeDefined();
+
+    // Incorrect type cast to check for negative case (ensuring no 'properties' field)
+    const view = datamodel.items?.[0]?.views?.[0] as ViewDefinition;
+    expect(view?.externalId).toEqual(TEST_VIEW_NAME);
+    expect(view?.space).toEqual(TEST_SPACE_NAME);
+    expect(view?.properties).not.toBeDefined();
+  });
+
+  it('should include views when retrieving datamodels', async () => {
+    const datamodel = await client.dataModels.retrieve(
+      [
+        {
+          space: TEST_SPACE_NAME,
+          externalId: datamodelCreationDefinition.externalId,
+        },
+      ],
+      {
+        inlineViews: true,
+      }
+    );
+
+    expect(datamodel.items.length).toBe(1);
+    expect(datamodel.items[0].views).toBeDefined();
+    expect(datamodel.items[0].views).toHaveLength(1);
+
+    const view = datamodel.items?.[0]?.views?.[0] as ViewDefinition;
+
+    expect(view?.externalId).toEqual(TEST_VIEW_NAME);
+    expect(view?.space).toEqual(TEST_SPACE_NAME);
+    expect(view?.properties).toBeDefined();
   });
 
   it('should successfully delete datamodels', async () => {
