@@ -17,6 +17,7 @@ import {
   SyncRequest,
   ViewAggregationRequest,
 } from './types.gen';
+import { QueryResult, SelectSourceWithParams } from './query.types';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
@@ -245,8 +246,8 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *   });
    * ```
    */
-  public query = async (params: QueryRequest): Promise<QueryResponse> => {
-    const response = await this.post<QueryResponse>(this.url('query'), {
+  public query = async <T extends QueryRequest, L extends SelectSourceWithParams = SelectSourceWithParams> (params: T): Promise<QueryResult<T, L>> => {
+    const response = await this.post<QueryResult<T, L>>(this.url('query'), {
       data: params,
     });
     return response.data;
