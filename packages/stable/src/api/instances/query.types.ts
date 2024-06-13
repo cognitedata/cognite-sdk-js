@@ -18,21 +18,24 @@ type EXTERNALID = 'externalId';
 type VERSION = 'version';
 type ALLPROPERTIES = '*';
 
-type InstanceType<T extends QueryRequest, K extends keyof T[SELECT]> = Exclude<
-  keyof T[WITH][K],
-  LIMIT
-> extends NODES
+type InstanceType<
+  TQueryRequest extends QueryRequest,
+  SelectKey extends keyof TQueryRequest[SELECT]
+> = Exclude<keyof TQueryRequest[WITH][SelectKey], LIMIT> extends NODES
   ? Omit<NodeDefinition, PROPERTIES>
-  : Exclude<keyof T[WITH][K], LIMIT> extends EDGES
+  : Exclude<keyof TQueryRequest[WITH][SelectKey], LIMIT> extends EDGES
   ? Omit<EdgeDefinition, PROPERTIES>
   : Omit<NodeOrEdge, PROPERTIES>;
 
 type TypedSourceProperty<
-  Q extends NonNullable<
+  SelectSource extends NonNullable<
     QueryRequest[SELECT][keyof QueryRequest[SELECT]][SOURCES]
   >[number],
-  L extends SelectSourceWithParams = SelectSourceWithParams
-> = Extract<L[number], Pick<Q, SOURCE>>[PROPERTIES];
+  TypedSelectSourcePropertyMap extends SelectSourceWithParams = SelectSourceWithParams
+> = Extract<
+  TypedSelectSourcePropertyMap[number],
+  Pick<SelectSource, SOURCE>
+>[PROPERTIES];
 
 export type SelectSourceWithParams = Array<{
   source: {
