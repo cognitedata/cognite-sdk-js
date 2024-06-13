@@ -246,8 +246,15 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    *   });
    * ```
    */
-  public query = async <T extends QueryRequest, L extends SelectSourceWithParams = SelectSourceWithParams> (params: T): Promise<QueryResult<T, L>> => {
-    const response = await this.post<QueryResult<T, L>>(this.url('query'), {
+  public query = async <
+    TQueryRequest extends QueryRequest,
+    TypedSelectSources extends SelectSourceWithParams = SelectSourceWithParams
+  >(
+    params: TQueryRequest
+  ): Promise<QueryResult<TQueryRequest, TypedSelectSources>> => {
+    const response = await this.post<
+      QueryResult<TQueryRequest, TypedSelectSources>
+    >(this.url('query'), {
       data: params,
     });
     return response.data;

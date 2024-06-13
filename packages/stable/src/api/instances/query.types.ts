@@ -44,7 +44,7 @@ export type SelectSourceWithParams = Array<{
     externalId: string;
     version: string;
   };
-  properties: Record<string, any>;
+  properties: Record<string, unknown>;
 }>;
 
 export type QueryResult<
