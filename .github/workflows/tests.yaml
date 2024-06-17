@@ -1,7 +1,7 @@
 name: CI
 
 on:
- pull_request:
+  pull_request:
     branches:
       - master
       - release-*
@@ -133,12 +133,11 @@ jobs:
         run: yarn lint
 
   tests:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [14, 16]
+        node-version: [16, 18]
 
     env:
       COGNITE_PROJECT: cognitesdk-js
