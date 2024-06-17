@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.build",
   "compilerOptions": {
     "declarationDir": "dist",
-    "outDir": "dist"
+    "outDir": "dist",
+    "rootDir": "src"
   },
   "include": ["src/"]
 }
