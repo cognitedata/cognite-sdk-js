@@ -1,13 +1,16 @@
 # Authentication in browsers
 
-- [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
-- [Accessing different clusters](#accessing-different-clusters)
-- [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
-- [OpenID Connect (OIDC)](#openid-connect-oidc)
-  - [OIDC authentication using code authorization w pkce.](#oidc-authentication-using-code-authorization-w-pkce)
-  - [OIDC authentication using client credentials](#oidc-authentication-using-client-credentials)
-- [Manually trigger authentication](#manually-trigger-authentication)
-- [Cache access tokens](#cache-access-tokens)
+- [Authentication in browsers](#authentication-in-browsers)
+  - [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
+  - [Accessing different clusters](#accessing-different-clusters)
+  - [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
+  - [OpenID Connect (OIDC)](#openid-connect-oidc)
+    - [OIDC authentication using code authorization w pkce](#oidc-authentication-using-code-authorization-w-pkce)
+    - [OIDC authentication using client credentials](#oidc-authentication-using-client-credentials)
+      - [Example](#example)
+  - [Manually trigger authentication](#manually-trigger-authentication)
+  - [Cache access tokens](#cache-access-tokens)
+  - [More](#more)
 
 ## Use access tokens instead of API keys
 
@@ -44,7 +47,7 @@ via `getToken`.
 ## OpenID Connect (OIDC)
 
 See
-[this article](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc.html#design-principles-openid-connect-and-cdf)
+[this article](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc#design-principles-openid-connect-and-cdf)
 for details about OIDC and Cognite.
 
 ### OIDC authentication using code authorization w pkce
