@@ -161,7 +161,7 @@ describeIf('simulator runs api', () => {
   test('list simulation runs', async () => {
     const res = await client.simulators.listRuns({
       filter: {
-        simulatorExternalIds: [simulatorExternalId],
+        simulatorExternalIds: ['DWSIM'],
         status: 'success',
         createdTime: {
           max: new Date(),
@@ -180,7 +180,7 @@ describeIf('simulator runs api', () => {
 
     const item = res.items[0];
 
-    expect(item.simulatorExternalId).toBe(simulatorExternalId);
+    expect(item.simulatorExternalId).toBe('DWSIM');
     expect(item.status).toBe('success');
     expect(item.createdTime.valueOf()).toBeGreaterThan(0);
     expect(item.lastUpdatedTime.valueOf()).toBeGreaterThan(0);
