@@ -14,7 +14,6 @@ describeIf('simulator logs api', () => {
     const filterSimulationRunsRes = await client.simulators.listRuns({
       filter: {
         status: 'success',
-        simulatorExternalIds: ['PROSPER'],
       },
       limit: 1,
       sort: [
