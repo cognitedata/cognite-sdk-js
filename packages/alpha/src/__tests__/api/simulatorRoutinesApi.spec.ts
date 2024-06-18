@@ -127,7 +127,6 @@ describeIf('simulator routines api', () => {
     );
   });
 
-
   test('create routine revision', async () => {
     const revisionExternalId = `${routineRevisionExternalId}_2`;
     const response = await client.simulators.createRoutineRevisions([
@@ -169,7 +168,7 @@ describeIf('simulator routines api', () => {
 
   test('list routine revision w filters', async () => {
     const listFilterResponse = await client.simulators.listRoutineRevisions({
-      filter: { routineExternalIds: [routineExternalId], allVersions: true},
+      filter: { routineExternalIds: [routineExternalId], allVersions: true },
     });
     expect(listFilterResponse.items.length).toBe(2);
     const routineRevisionFound = listFilterResponse.items.find(

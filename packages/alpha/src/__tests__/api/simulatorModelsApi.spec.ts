@@ -87,7 +87,6 @@ describeIf('simulator models api', () => {
     expect(response[0].externalId).toBe(modelRevisionExternalId);
   });
 
-
   test('create model revision and list with versions filter', async () => {
     const revisionExternalId = `${modelRevisionExternalId}_2`;
     const response = await client.simulators.createModelRevisions([
@@ -106,7 +105,7 @@ describeIf('simulator models api', () => {
         modelExternalIds: [modelExternalId],
         allVersions: true,
       },
-    })
+    });
 
     const revisionFilter = listModelRevisions.items.filter(
       (item) => item.modelExternalId === modelExternalId

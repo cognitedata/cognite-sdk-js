@@ -250,7 +250,7 @@ export interface SimulatorRoutineInput extends SimulatorRoutineIO {
   value: string | number | string[] | number[];
 }
 
-export interface SimulatorRoutineOutput extends SimulatorRoutineIO {}
+export type SimulatorRoutineOutput = SimulatorRoutineIO;
 
 export interface SimulationRunData {
   runId: CogniteInternalId;
@@ -373,7 +373,7 @@ export interface SimulatorModelRevisionChange
 
 export interface SimulatorModelRevisionFilter {
   modelExternalIds?: CogniteExternalId[];
-  allVersions? : boolean;
+  allVersions?: boolean;
   createdTime?: DateRange;
   lastUpdatedTime?: DateRange;
 }
@@ -543,7 +543,7 @@ export interface SimulatorRoutineRevisionCreate {
 
 export interface SimulatorRoutineRevisionslFilter {
   routineExternalIds?: CogniteExternalId[];
-  allVersions? : boolean;
+  allVersions?: boolean;
   modelExternalIds?: CogniteExternalId[];
   simulatorIntegrationExternalIds?: CogniteExternalId[];
   simulatorExternalIds?: CogniteExternalId[];
