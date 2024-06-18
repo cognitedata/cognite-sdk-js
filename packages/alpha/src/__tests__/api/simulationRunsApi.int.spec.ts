@@ -1,8 +1,5 @@
 // Copyright 2023 Cognite AS
 
-
-// Copyright 2023 Cognite AS
-
 import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 import {
@@ -86,7 +83,6 @@ describeIf('simulator runs api', () => {
         modelExternalId,
         description: 'test sim model revision description',
         fileId: 6396395402204465,
-        metadata: {},
       },
     ]);
     expect(response.length).toBe(1);

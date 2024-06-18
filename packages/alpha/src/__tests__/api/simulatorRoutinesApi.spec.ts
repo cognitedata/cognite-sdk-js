@@ -83,7 +83,6 @@ describeIf('simulator routines api', () => {
         modelExternalId,
         description: 'test sim model revision description',
         fileId: 6396395402204465,
-        metadata: {},
       },
     ]);
     expect(response.length).toBe(1);
