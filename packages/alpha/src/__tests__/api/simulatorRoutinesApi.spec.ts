@@ -8,6 +8,7 @@ import {
   modelTypes,
   routineRevisionConfiguration,
   unitQuantities,
+  routineRevisionScript,
 } from './seed';
 
 const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
@@ -117,7 +118,7 @@ describeIf('simulator routines api', () => {
         externalId: routineRevisionExternalId,
         routineExternalId,
         configuration: routineRevisionConfiguration,
-        script: [],
+        script: routineRevisionScript,
       },
     ]);
     expect(response.length).toBe(1);
