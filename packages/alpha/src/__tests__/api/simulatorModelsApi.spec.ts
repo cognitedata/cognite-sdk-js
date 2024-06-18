@@ -88,6 +88,34 @@ describeIf('simulator models api', () => {
     expect(response[0].externalId).toBe(modelRevisionExternalId);
   });
 
+
+  test('create model revision and list with versions filter', async () => {
+    const revisionExternalId = `${modelRevisionExternalId}_2`;
+    const response = await client.simulators.createModelRevisions([
+      {
+        externalId: revisionExternalId,
+        modelExternalId,
+        description: 'test sim model revision description',
+        fileId: 6396395402204465,
+        metadata: {},
+      },
+    ]);
+    expect(response.length).toBe(1);
+    expect(response[0].externalId).toBe(revisionExternalId);
+
+    const listModelRevisions = await client.simulators.listModelRevisions({
+      filter: {
+        modelExternalIds: [modelExternalId],
+        allVersions: true,
+      },
+    })
+
+    const revisionFilter = listModelRevisions.items.filter(
+      (item) => item.modelExternalId === modelExternalId
+    );
+    expect(revisionFilter.length).toBe(2);
+  });
+
   test('retrieve model revision by id', async () => {
     const retrieve_response = await client.simulators.retrieveModelRevisions([
       { externalId: modelRevisionExternalId },

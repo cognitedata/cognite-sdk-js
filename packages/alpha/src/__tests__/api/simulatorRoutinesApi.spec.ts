@@ -127,6 +127,37 @@ describeIf('simulator routines api', () => {
     );
   });
 
+
+  test('create routine revision', async () => {
+    const revisionExternalId = `${routineRevisionExternalId}_2`;
+    const response = await client.simulators.createRoutineRevisions([
+      {
+        externalId: revisionExternalId,
+        routineExternalId,
+        configuration: routineRevisionConfiguration,
+        script: [],
+      },
+    ]);
+    expect(response.length).toBe(1);
+    expect(response[0].externalId).toBe(revisionExternalId);
+    expect(response[0].simulatorIntegrationExternalId).toBe(
+      simulatorIntegrationExternalId
+    );
+
+    const listRoutineRevisions = await client.simulators.listRoutineRevisions({
+      filter: {
+        routineExternalIds: [routineExternalId],
+        allVersions: false,
+      },
+    });
+
+    const revisionFilter = listRoutineRevisions.items.filter(
+      (item) => item.routineExternalId === routineExternalId
+    );
+
+    expect(revisionFilter.length).toBe(1);
+  });
+
   test('list routine revision', async () => {
     const listResponse = await client.simulators.listRoutineRevisions();
     expect(listResponse.items.length).toBeGreaterThan(0);
@@ -138,9 +169,9 @@ describeIf('simulator routines api', () => {
 
   test('list routine revision w filters', async () => {
     const listFilterResponse = await client.simulators.listRoutineRevisions({
-      filter: { routineExternalIds: [routineExternalId] },
+      filter: { routineExternalIds: [routineExternalId], allVersions: true},
     });
-    expect(listFilterResponse.items.length).toBe(1);
+    expect(listFilterResponse.items.length).toBe(2);
     const routineRevisionFound = listFilterResponse.items.find(
       (item) => item.externalId === routineRevisionExternalId
     );
