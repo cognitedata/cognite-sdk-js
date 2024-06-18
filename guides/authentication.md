@@ -44,7 +44,7 @@ via `getToken`.
 ## OpenID Connect (OIDC)
 
 See
-[this article](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc.html#design-principles-openid-connect-and-cdf)
+[this article](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc/)
 for details about OIDC and Cognite.
 
 ### OIDC authentication using code authorization w pkce
