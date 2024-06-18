@@ -36,7 +36,7 @@ describeIf('simulators api', () => {
     simulatorId = response[0].id;
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(simulatorExternalId);
-    expect(response[0].fileExtensionTypes).toEqual(['csv', 'yaml']);
+    expect(response[0].fileExtensionTypes).toEqual(['csv', 'yaml', 'dwxmz']);
     expect(response[0].stepFields).toEqual(stepFields);
     expect(response[0].unitQuantities).toEqual(unitQuantities);
     expect(response[0].modelTypes).toEqual(modelTypes);

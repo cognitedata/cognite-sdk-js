@@ -45,9 +45,9 @@ describeIf('simulator models api', () => {
         simulatorExternalId,
         name: 'Test Simulator Model',
         description: 'Test Simulator Model Desc',
-        dataSetId: 4097666328084896,
+        dataSetId: 97552494921583,
         labels: [{ externalId: 'air-quality-po-1' }],
-        type: 'string',
+        type: 'WaterWell',
       },
     ]);
     expect(res.length).toBe(1);
@@ -80,7 +80,7 @@ describeIf('simulator models api', () => {
         externalId: modelRevisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: 3747718694331206,
+        fileId: 6396395402204465,
         metadata: {},
       },
     ]);

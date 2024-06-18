@@ -356,6 +356,7 @@ export interface SimulatorModelRevisionChange
 
 export interface SimulatorModelRevisionFilter {
   modelExternalIds?: CogniteExternalId[];
+  allVersions? : boolean;
   createdTime?: DateRange;
   lastUpdatedTime?: DateRange;
 }
@@ -528,6 +529,7 @@ export interface SimulatorRoutineRevisionCreate {
 
 export interface SimulatorRoutineRevisionslFilter {
   routineExternalIds?: CogniteExternalId[];
+  allVersions? : boolean;
   modelExternalIds?: CogniteExternalId[];
   simulatorIntegrationExternalIds?: CogniteExternalId[];
   simulatorExternalIds?: CogniteExternalId[];

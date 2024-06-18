@@ -73,12 +73,12 @@ export const stepFields = [
 ];
 export const modelTypes = [
   {
-    key: 'test',
-    name: 'test',
+    key: 'WaterWell',
+    name: 'Water Well',
   },
 ];
 
-export const fileExtensionTypes = ['csv', 'yaml'];
+export const fileExtensionTypes = ['csv', 'yaml', 'dwxmz'];
 
 export const routineRevisionConfiguration: SimulatorRoutineRevisionConfiguration =
   {

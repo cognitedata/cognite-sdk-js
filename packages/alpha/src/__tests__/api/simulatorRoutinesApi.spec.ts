@@ -7,7 +7,6 @@ import {
   stepFields,
   modelTypes,
   routineRevisionConfiguration,
-  routineRevisionScript,
   unitQuantities,
 } from './seed';
 
@@ -49,11 +48,11 @@ describeIf('simulator routines api', () => {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
         heartbeat: new Date(ts),
-        dataSetId: 4097666328084896,
+        dataSetId: 97552494921583,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',
-        licenseStatus: 'active',
-        connectorStatus: 'unknown',
+        licenseStatus: 'UNKNOWN',
+        connectorStatus: 'IDLE',
       },
     ]);
     expect(response.length).toBe(1);
@@ -67,9 +66,9 @@ describeIf('simulator routines api', () => {
         simulatorExternalId,
         name: 'Test Simulator Model',
         description: 'Test Simulator Model Desc',
-        dataSetId: 4097666328084896,
+        dataSetId: 97552494921583,
         labels: [{ externalId: 'air-quality-po-1' }],
-        type: 'string',
+        type: 'WaterWell',
       },
     ]);
     expect(res.length).toBe(1);
@@ -82,7 +81,7 @@ describeIf('simulator routines api', () => {
         externalId: modelRevisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: 3747718694331206,
+        fileId: 6396395402204465,
         metadata: {},
       },
     ]);
@@ -118,7 +117,7 @@ describeIf('simulator routines api', () => {
         externalId: routineRevisionExternalId,
         routineExternalId,
         configuration: routineRevisionConfiguration,
-        script: routineRevisionScript,
+        script: [],
       },
     ]);
     expect(response.length).toBe(1);
