@@ -255,8 +255,9 @@ export interface SimulatorRoutineInputTs extends SimulatorRoutineIO {
   aggregate: SimulatorDataPointsAggregate;
 }
 
-export type SimulatorRoutineInput = SimulatorRoutineInputConst | SimulatorRoutineInputTs;
-
+export type SimulatorRoutineInput =
+  | SimulatorRoutineInputConst
+  | SimulatorRoutineInputTs;
 
 export type SimulatorRoutineOutput = SimulatorRoutineIO;
 
