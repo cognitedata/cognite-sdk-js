@@ -246,9 +246,17 @@ interface SimulatorRoutineIO {
   };
 }
 
-export interface SimulatorRoutineInput extends SimulatorRoutineIO {
+export interface SimulatorRoutineInputConst extends SimulatorRoutineIO {
   value: string | number | string[] | number[];
 }
+
+export interface SimulatorRoutineInputTs extends SimulatorRoutineIO {
+  sourceExternalId: string;
+  aggregate: SimulatorDataPointsAggregate;
+}
+
+export type SimulatorRoutineInput = SimulatorRoutineInputConst | SimulatorRoutineInputTs;
+
 
 export type SimulatorRoutineOutput = SimulatorRoutineIO;
 
