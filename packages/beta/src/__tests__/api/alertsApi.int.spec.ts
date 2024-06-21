@@ -201,3 +201,20 @@ test('sort alerts', async () => {
   });
   expect(response.items.length).toBeGreaterThan(0);
 });
+
+test('cursor pagination', async () => {
+  const client: CogniteClient = setupLoggedInClient();
+  const response = await client.alerts.list({
+    limit: 1,
+  });
+  expect(response.items.length).toBe(1);
+  expect(response.nextCursor).toBeDefined();
+
+
+  // test for more than 1000 items
+  const response2 = await client.alerts.list({
+    limit: 1001,
+  });
+  expect(response2.items.length).toBeGreaterThan(0);
+  expect(response2.nextCursor).toBeDefined();
+});
