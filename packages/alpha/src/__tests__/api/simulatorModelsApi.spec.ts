@@ -45,9 +45,9 @@ describeIf('simulator models api', () => {
         simulatorExternalId,
         name: 'Test Simulator Model',
         description: 'Test Simulator Model Desc',
-        dataSetId: 4097666328084896,
+        dataSetId: 97552494921583,
         labels: [{ externalId: 'air-quality-po-1' }],
-        type: 'string',
+        type: 'WaterWell',
       },
     ]);
     expect(res.length).toBe(1);
@@ -80,12 +80,37 @@ describeIf('simulator models api', () => {
         externalId: modelRevisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: 3747718694331206,
-        metadata: {},
+        fileId: 6396395402204465,
       },
     ]);
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(modelRevisionExternalId);
+  });
+
+  test('create model revision and list with versions filter', async () => {
+    const revisionExternalId = `${modelRevisionExternalId}_2`;
+    const response = await client.simulators.createModelRevisions([
+      {
+        externalId: revisionExternalId,
+        modelExternalId,
+        description: 'test sim model revision description',
+        fileId: 6396395402204465,
+      },
+    ]);
+    expect(response.length).toBe(1);
+    expect(response[0].externalId).toBe(revisionExternalId);
+
+    const listModelRevisions = await client.simulators.listModelRevisions({
+      filter: {
+        modelExternalIds: [modelExternalId],
+        allVersions: true,
+      },
+    });
+
+    const revisionFilter = listModelRevisions.items.filter(
+      (item) => item.modelExternalId === modelExternalId
+    );
+    expect(revisionFilter.length).toBe(2);
   });
 
   test('retrieve model revision by id', async () => {

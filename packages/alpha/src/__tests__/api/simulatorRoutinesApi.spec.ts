@@ -7,8 +7,8 @@ import {
   stepFields,
   modelTypes,
   routineRevisionConfiguration,
-  routineRevisionScript,
   unitQuantities,
+  routineRevisionScript,
 } from './seed';
 
 const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
@@ -49,11 +49,11 @@ describeIf('simulator routines api', () => {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
         heartbeat: new Date(ts),
-        dataSetId: 4097666328084896,
+        dataSetId: 97552494921583,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',
-        licenseStatus: 'active',
-        connectorStatus: 'unknown',
+        licenseStatus: 'UNKNOWN',
+        connectorStatus: 'IDLE',
       },
     ]);
     expect(response.length).toBe(1);
@@ -67,9 +67,9 @@ describeIf('simulator routines api', () => {
         simulatorExternalId,
         name: 'Test Simulator Model',
         description: 'Test Simulator Model Desc',
-        dataSetId: 4097666328084896,
+        dataSetId: 97552494921583,
         labels: [{ externalId: 'air-quality-po-1' }],
-        type: 'string',
+        type: 'WaterWell',
       },
     ]);
     expect(res.length).toBe(1);
@@ -82,8 +82,7 @@ describeIf('simulator routines api', () => {
         externalId: modelRevisionExternalId,
         modelExternalId,
         description: 'test sim model revision description',
-        fileId: 3747718694331206,
-        metadata: {},
+        fileId: 6396395402204465,
       },
     ]);
     expect(response.length).toBe(1);
@@ -128,6 +127,36 @@ describeIf('simulator routines api', () => {
     );
   });
 
+  test('create routine revision', async () => {
+    const revisionExternalId = `${routineRevisionExternalId}_2`;
+    const response = await client.simulators.createRoutineRevisions([
+      {
+        externalId: revisionExternalId,
+        routineExternalId,
+        configuration: routineRevisionConfiguration,
+        script: [],
+      },
+    ]);
+    expect(response.length).toBe(1);
+    expect(response[0].externalId).toBe(revisionExternalId);
+    expect(response[0].simulatorIntegrationExternalId).toBe(
+      simulatorIntegrationExternalId
+    );
+
+    const listRoutineRevisions = await client.simulators.listRoutineRevisions({
+      filter: {
+        routineExternalIds: [routineExternalId],
+        allVersions: false,
+      },
+    });
+
+    const revisionFilter = listRoutineRevisions.items.filter(
+      (item) => item.routineExternalId === routineExternalId
+    );
+
+    expect(revisionFilter.length).toBe(1);
+  });
+
   test('list routine revision', async () => {
     const listResponse = await client.simulators.listRoutineRevisions();
     expect(listResponse.items.length).toBeGreaterThan(0);
@@ -139,9 +168,9 @@ describeIf('simulator routines api', () => {
 
   test('list routine revision w filters', async () => {
     const listFilterResponse = await client.simulators.listRoutineRevisions({
-      filter: { routineExternalIds: [routineExternalId] },
+      filter: { routineExternalIds: [routineExternalId], allVersions: true },
     });
-    expect(listFilterResponse.items.length).toBe(1);
+    expect(listFilterResponse.items.length).toBe(2);
     const routineRevisionFound = listFilterResponse.items.find(
       (item) => item.externalId === routineRevisionExternalId
     );

@@ -235,6 +235,32 @@ export interface SimulationRunId {
   runId: CogniteInternalId;
 }
 
+interface SimulatorRoutineIO {
+  referenceId: string;
+  name: string;
+  valueType: SimulationRunDataValueType;
+  saveTimeseriesExternalId?: CogniteExternalId;
+  unit?: {
+    name: string;
+    quantity?: string;
+  };
+}
+
+export interface SimulatorRoutineInputConst extends SimulatorRoutineIO {
+  value: string | number | string[] | number[];
+}
+
+export interface SimulatorRoutineInputTs extends SimulatorRoutineIO {
+  sourceExternalId: string;
+  aggregate: SimulatorDataPointsAggregate;
+}
+
+export type SimulatorRoutineInput =
+  | SimulatorRoutineInputConst
+  | SimulatorRoutineInputTs;
+
+export type SimulatorRoutineOutput = SimulatorRoutineIO;
+
 export interface SimulationRunData {
   runId: CogniteInternalId;
   inputs: SimulationRunDataInput[];
@@ -356,6 +382,7 @@ export interface SimulatorModelRevisionChange
 
 export interface SimulatorModelRevisionFilter {
   modelExternalIds?: CogniteExternalId[];
+  allVersions?: boolean;
   createdTime?: DateRange;
   lastUpdatedTime?: DateRange;
 }
@@ -476,9 +503,8 @@ export interface SimulatorRoutineInputTimeseries
 }
 
 export interface SimulatorRoutineScriptStepArguments {
-  argumentType: string;
-  [s: string]: string;
-  referenceId: string;
+  [s: string]: string | undefined;
+  referenceId?: string;
 }
 
 export interface SimulatorRoutineScriptStep {
@@ -499,10 +525,8 @@ export interface SimulatorRoutineRevisionConfiguration {
   steadyStateDetection: SimulatorRoutineSteadyStateDetection[];
   logicalCheck: SimulatorRoutineLogicalCheck[];
 
-  // TODO: delete these 3
-  inputConstants?: SimulatorRoutineInputConstant[];
-  inputTimeseries?: SimulatorRoutineInputTimeseries[];
-  outputTimeseries?: SimulatorRoutineTimeSeries[];
+  inputs: SimulatorRoutineInput[];
+  outputs: SimulatorRoutineOutput[];
 }
 export interface SimulatorRoutineRevision {
   id: CogniteInternalId;
@@ -528,6 +552,7 @@ export interface SimulatorRoutineRevisionCreate {
 
 export interface SimulatorRoutineRevisionslFilter {
   routineExternalIds?: CogniteExternalId[];
+  allVersions?: boolean;
   modelExternalIds?: CogniteExternalId[];
   simulatorIntegrationExternalIds?: CogniteExternalId[];
   simulatorExternalIds?: CogniteExternalId[];

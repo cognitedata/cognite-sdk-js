@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.28.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.28.2...@cognite/sdk-alpha@0.28.3) (2024-06-20)
+
+### Bug Fixes
+
+- type for simulator routine input values ([#1115](https://github.com/cognitedata/cognite-sdk-js/issues/1115)) ([dc5c64d](https://github.com/cognitedata/cognite-sdk-js/commit/dc5c64d945d61da806cf1d235325c03507d8772f))
+
+## [0.28.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.28.1...@cognite/sdk-alpha@0.28.2) (2024-06-18)
+
+### Bug Fixes
+
+- **simint:** fix tests and update filter for routines and models ([#1114](https://github.com/cognitedata/cognite-sdk-js/issues/1114)) ([4c49ce2](https://github.com/cognitedata/cognite-sdk-js/commit/4c49ce2118f150558a9699e23f159a6a382ece14))
+
 ## [0.28.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.28.0...@cognite/sdk-alpha@0.28.1) (2024-06-10)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
