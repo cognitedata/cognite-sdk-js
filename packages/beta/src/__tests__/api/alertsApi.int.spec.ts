@@ -210,7 +210,6 @@ test('cursor pagination', async () => {
   expect(response.items.length).toBe(1);
   expect(response.nextCursor).toBeDefined();
 
-
   // test for more than 1000 items
   const response2 = await client.alerts.list({
     limit: 1001,
