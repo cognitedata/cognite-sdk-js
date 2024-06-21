@@ -222,7 +222,7 @@ test('cursor pagination', async () => {
       property: 'createdTime',
       order: 'desc',
     },
-    cursor: '',
+    cursor: response.nextCursor,
   });
   expect(response2.items.length).toBeGreaterThan(0);
   expect(response2.nextCursor).toBeDefined();
