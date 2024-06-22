@@ -184,7 +184,6 @@ export interface AlertSort {
 export interface AlertFilterQuery extends FilterQuery {
   filter?: AlertFilter;
   sort?: AlertSort;
-  cursor?: string;
 }
 
 export interface AlertDeduplicationRuleCreate {
