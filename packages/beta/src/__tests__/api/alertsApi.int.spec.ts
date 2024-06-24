@@ -201,3 +201,11 @@ test('sort alerts', async () => {
   });
   expect(response.items.length).toBeGreaterThan(0);
 });
+
+test('test limit', async () => {
+  const client: CogniteClient = setupLoggedInClient();
+  const response = await client.alerts.list({
+    limit: 1,
+  });
+  expect(response.items.length).toBe(1);
+});
