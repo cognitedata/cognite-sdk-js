@@ -189,23 +189,21 @@ describe('alerts api', () => {
     ]);
     expect(response).toEqual({});
   });
-});
 
-test('sort alerts', async () => {
-  const client: CogniteClient = setupLoggedInClient();
-  const response = await client.alerts.list({
-    sort: {
-      property: 'createdTime',
-      order: 'desc',
-    },
+  test('sort alerts', async () => {
+    const response = await client.alerts.list({
+      sort: {
+        property: 'createdTime',
+        order: 'desc',
+      },
+    });
+    expect(response.items.length).toBeGreaterThan(0);
   });
-  expect(response.items.length).toBeGreaterThan(0);
-});
-
-test('test limit', async () => {
-  const client: CogniteClient = setupLoggedInClient();
-  const response = await client.alerts.list({
-    limit: 1,
+  
+  test('test limit', async () => {
+    const response = await client.alerts.list({
+      limit: 1,
+    });
+    expect(response.items.length).toBe(1);
   });
-  expect(response.items.length).toBe(1);
 });
