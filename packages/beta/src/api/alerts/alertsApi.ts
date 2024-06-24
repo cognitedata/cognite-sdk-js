@@ -1,10 +1,9 @@
 // Copyright 2022 Cognite AS
-
-import { 
-  BaseResourceAPI, 
-  CDFHttpClient, 
-  CursorAndAsyncIterator, 
-  MetadataMap 
+import {
+  BaseResourceAPI,
+  CDFHttpClient,
+  CursorAndAsyncIterator,
+  MetadataMap,
 } from '@cognite/sdk-core';
 import { IdEither } from '@cognite/sdk';
 import {
