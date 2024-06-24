@@ -214,14 +214,12 @@ test('cursor pagination', async () => {
   });
   expect(response.items.length).toBe(1);
   // test for more than 1000 items
-  const response2 = await client.alerts.list({
-    limit: 1001,
+  const alerts = client.alerts.list({
     sort: {
       property: 'createdTime',
       order: 'desc',
     },
-    cursor: response.nextCursor,
-  });
-  expect(response2.items.length).toBeGreaterThan(0);
-  expect(response2.nextCursor).toBeDefined();
+    cursor: response?.nextCursor,
+  }).autoPagingToArray({ limit: 1001 });
+  expect((await alerts).length).toBeGreaterThan(0);
 });

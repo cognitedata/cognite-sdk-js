@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import { BaseResourceAPI, CDFHttpClient, CursorAndAsyncIterator, MetadataMap } from '@cognite/sdk-core';
 import { IdEither } from '@cognite/sdk';
 import {
   Alert,
@@ -50,7 +50,7 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
     return this.createEndpoint(items);
   };
 
-  public list = async (query?: AlertFilterQuery) => {
+  public list = (query?: AlertFilterQuery): CursorAndAsyncIterator<Alert> => {
     return this.listEndpoint(this.callListEndpointWithPost, query);
   };
 
