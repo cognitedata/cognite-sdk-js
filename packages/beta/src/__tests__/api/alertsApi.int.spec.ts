@@ -214,7 +214,15 @@ test('cursor pagination', async () => {
   });
   expect(response.items.length).toBe(1);
 
-  // test for more than 1000 items
+  // create 1001 alerts
+  await client.alerts.create(
+    Array.from({ length: 1001 }, (_, i) => ({
+      source: 'smth',
+      channelExternalId: 'test_channel',
+      externalId: `test_alert_${i}`,
+    }))
+  );
+
   const alerts = client.alerts
     .list({
       sort: {
@@ -225,5 +233,12 @@ test('cursor pagination', async () => {
     })
     .autoPagingToArray({ limit: 1001 });
 
-  expect((await alerts).length).toBeGreaterThan(0);
+  expect((await alerts).length).toBeGreaterThan(1000);
+
+  // clean up created alerts
+  await client.alerts.deleteChannels(
+    Array.from({ length: 1001 }, (_, i) => ({
+      externalId: `test_alert_${i}`,
+    }))
+  );
 });
