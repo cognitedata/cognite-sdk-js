@@ -201,9 +201,17 @@ describe('alerts api', () => {
   });
 
   test('test limit', async () => {
+    // create 10 alerts
+    const alerts = Array.from({ length: 10 }).map((_, i) => ({
+      source: 'smth',
+      channelExternalId,
+      externalId: `${alertExternalId}_${i}`,
+    }));
+    await client.alerts.create(alerts);
+    
     const response = await client.alerts.list({
-      limit: 1,
+      limit: 10,
     });
-    expect(response.items.length).toBe(1);
+    expect(response.items.length).toBe(10);
   });
 });
