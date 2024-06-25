@@ -199,7 +199,7 @@ describe('alerts api', () => {
     });
     expect(response.items.length).toBeGreaterThan(0);
   });
-  
+
   test('test limit', async () => {
     const response = await client.alerts.list({
       limit: 1,
