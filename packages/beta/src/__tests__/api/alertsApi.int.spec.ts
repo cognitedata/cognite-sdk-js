@@ -252,7 +252,7 @@ describe('alerts api', () => {
     const alertsToCreate = Array.from({ length: 1000 }, (_, i) => ({
       source: 'smth',
       channelExternalId,
-      externalId: `external_id_test_${i}`,
+      externalId: `external_id_test_cursor_${i}`,
     }));
 
     // function to create alerts in batches
@@ -271,7 +271,7 @@ describe('alerts api', () => {
       {
         source: 'smth',
         channelExternalId,
-        externalId: `external_id_test_1001`,
+        externalId: `external_id_test_cursor_1001`,
       },
     ]);
 
@@ -288,7 +288,7 @@ describe('alerts api', () => {
 
     // clean up created alerts
     const alertsToDelete = Array.from({ length: 1001 }, (_, i) => ({
-      externalId: `external_id_test_${i}`,
+      externalId: `external_id_test_cursor_${i}`,
     }));
     await client.alerts.deleteChannels(alertsToDelete);
   });
