@@ -228,10 +228,7 @@ describe('alerts api', () => {
     await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
   });
 
-  jest.setTimeout(30000); // 30 sec
-
   test('cursor pagination', async () => {
-    // create channel for the next test
     const channelsToCreate = [
       {
         externalId: channelExternalId,
@@ -250,23 +247,11 @@ describe('alerts api', () => {
     });
     expect(response.items.length).toBe(1);
 
-    // function to create alerts in batches
-    // const createAlerts = async (alerts: AlertCreate[]) => {
-    //   await client.alerts.create(alerts);
-    // };
-
     // create alerts in batches of 100
-    const totalAlerts = 1000; // Total number of alerts to create
-    const batchSize = 100; // Size of each batch
+    const totalAlerts = 1000;
+    const batchSize = 100;
 
-    // Generate and create alerts in batches
-    let alertCounter = Date.now(); // Counter to ensure unique externalId
-    // const batches = Array.from(
-    //   { length: Math.ceil(totalAlerts / batchSize) },
-    //   (_, i) => i * batchSize
-    // );
-
-    // Function to create a batch of alerts
+    let alertCounter = Date.now();
     const createBatch = async () => {
       const alerts = Array.from({ length: batchSize }, () => ({
         source: 'smth',
@@ -284,6 +269,7 @@ describe('alerts api', () => {
 
     // Wait for all batches to complete
     await Promise.all(batchPromises);
+
     // create one extra alert
     await client.alerts.create([
       {
