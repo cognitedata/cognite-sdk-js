@@ -208,7 +208,7 @@ describe('alerts api', () => {
       externalId: `${alertExternalId}_${i}`,
     }));
     await client.alerts.create(alerts);
-    
+
     const response = await client.alerts.list({
       limit: 10,
     });
