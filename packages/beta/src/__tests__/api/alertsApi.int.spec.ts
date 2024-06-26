@@ -201,7 +201,43 @@ describe('alerts api', () => {
     expect(response.items.length).toBeGreaterThan(0);
   });
 
+  test('test limit', async () => {
+    // create channel for the next test
+    const channelsToCreate = [
+      {
+        externalId: channelExternalId,
+        name: 'Test Channel',
+      },
+    ];
+    await client.alerts.createChannels(channelsToCreate);
+
+    // create 10 alerts
+    const alerts = Array.from({ length: 10 }).map((_, i) => ({
+      source: 'smth',
+      channelExternalId,
+      externalId: `test_limit_extId_${i}`,
+    }));
+    await client.alerts.create(alerts);
+
+    const response = await client.alerts.list({
+      limit: 10,
+    });
+    expect(response.items.length).toBe(10);
+
+    // delete the channel
+    await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
+  });
+
   test('cursor pagination', async () => {
+    // create channel for the next test
+    const channelsToCreate = [
+      {
+        externalId: channelExternalId,
+        name: 'Test Channel',
+      },
+    ];
+    await client.alerts.createChannels(channelsToCreate);
+
     const response = await client.alerts.list({
       limit: 1,
       sort: {
@@ -211,16 +247,6 @@ describe('alerts api', () => {
       cursor: '',
     });
     expect(response.items.length).toBe(1);
-
-    // create channel for the next test
-    const channelsToCreate = [
-      {
-        externalId: channelExternalId,
-        name: 'Test Channel',
-      },
-    ];
-    
-    await client.alerts.createChannels(channelsToCreate);
 
     // create 1000 alerts with 100 for each request
     const alertsToCreate = Array.from({ length: 1000 }, (_, i) => ({
@@ -261,9 +287,9 @@ describe('alerts api', () => {
     expect((await alerts).length).toBeGreaterThan(1000);
 
     // clean up created alerts
-  const alertsToDelete = Array.from({ length: 1001 }, (_, i) => ({
-    externalId: `external_id_test_${i}`,
-  }));
-  await client.alerts.deleteChannels(alertsToDelete);
+    const alertsToDelete = Array.from({ length: 1001 }, (_, i) => ({
+      externalId: `external_id_test_${i}`,
+    }));
+    await client.alerts.deleteChannels(alertsToDelete);
   });
 });
