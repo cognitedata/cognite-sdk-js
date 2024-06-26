@@ -266,7 +266,7 @@ describe('alerts api', () => {
         source: 'smth',
         channelExternalId,
         externalId: `external_id_test_cursor_${alertCounter++}`,
-        }));
+      }));
       await createAlerts(alertsToCreate);
     }
     // create one extra alert
