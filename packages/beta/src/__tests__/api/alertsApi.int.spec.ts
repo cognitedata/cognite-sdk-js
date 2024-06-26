@@ -211,12 +211,22 @@ describe('alerts api', () => {
     });
     expect(response.items.length).toBe(1);
 
-    // create 1001 alerts
-    await client.alerts.create(
-      Array.from({ length: 1001 }, (_, i) => ({
+    // create 1000 alerts with 100 for each request
+    for (let i = 0; i < 10; i++) {
+      await client.alerts.create(
+      Array.from({ length: 100 }, (_, j) => ({
         source: 'smth',
-        channelExternalId: 'test_channel',
-        externalId: `test_alert_${i}`,
+        channelExternalId,
+        externalId: `test_alert_${i}_${j}`,
+      }))
+      );
+    }
+    // create one extra alert
+    await client.alerts.create(
+      Array.from({ length: 1 }, (_, i) => ({
+      source: 'smth',
+      channelExternalId,
+      externalId: `test_alert_10_${i}`,
       }))
     );
 
