@@ -201,6 +201,15 @@ describe('alerts api', () => {
   });
 
   test('test limit', async () => {
+    // create channel for the next test
+    const channelsToCreate = [
+      {
+        externalId: 'test_channel_1719381884417',
+        name: 'Test Channel',
+      },
+    ];
+    await client.alerts.createChannels(channelsToCreate);
+
     // create 10 alerts
     const alerts = Array.from({ length: 10 }).map((_, i) => ({
       source: 'smth',
