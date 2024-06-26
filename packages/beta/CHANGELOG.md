@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.10.2...@cognite/sdk-beta@5.11.0) (2024-06-26)
+
+### Features
+
+- add test for limit ([#1117](https://github.com/cognitedata/cognite-sdk-js/issues/1117)) ([582891e](https://github.com/cognitedata/cognite-sdk-js/commit/582891ef7ce034425c500036af08d91964200a0f))
+- add test for pagination cursor ([#1116](https://github.com/cognitedata/cognite-sdk-js/issues/1116)) ([65fe563](https://github.com/cognitedata/cognite-sdk-js/commit/65fe56349905569d5a9961ce3ff4f4f8dc49ee19))
+
 ## [5.10.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.10.1...@cognite/sdk-beta@5.10.2) (2024-06-10)
 
 **Note:** Version bump only for package @cognite/sdk-beta
