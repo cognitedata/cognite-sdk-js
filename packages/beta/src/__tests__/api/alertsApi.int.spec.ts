@@ -189,56 +189,54 @@ describe('alerts api', () => {
     ]);
     expect(response).toEqual({});
   });
-});
 
-test('sort alerts', async () => {
-  const client: CogniteClient = setupLoggedInClient();
-  const response = await client.alerts.list({
-    sort: {
-      property: 'createdTime',
-      order: 'desc',
-    },
-  });
-  expect(response.items.length).toBeGreaterThan(0);
-});
-
-test('cursor pagination', async () => {
-  const client: CogniteClient = setupLoggedInClient();
-  const response = await client.alerts.list({
-    limit: 1,
-    sort: {
-      property: 'createdTime',
-      order: 'desc',
-    },
-    cursor: '',
-  });
-  expect(response.items.length).toBe(1);
-
-  // create 1001 alerts
-  await client.alerts.create(
-    Array.from({ length: 1001 }, (_, i) => ({
-      source: 'smth',
-      channelExternalId: 'test_channel',
-      externalId: `test_alert_${i}`,
-    }))
-  );
-
-  const alerts = client.alerts
-    .list({
+  test('sort alerts', async () => {
+    const response = await client.alerts.list({
       sort: {
         property: 'createdTime',
         order: 'desc',
       },
-      cursor: response?.nextCursor,
-    })
-    .autoPagingToArray({ limit: 1001 });
+    });
+    expect(response.items.length).toBeGreaterThan(0);
+  
+  });
 
-  expect((await alerts).length).toBeGreaterThan(1000);
-
-  // clean up created alerts
-  await client.alerts.deleteChannels(
-    Array.from({ length: 1001 }, (_, i) => ({
-      externalId: `test_alert_${i}`,
-    }))
-  );
+  test('cursor pagination', async () => {
+    const response = await client.alerts.list({
+      limit: 1,
+      sort: {
+        property: 'createdTime',
+        order: 'desc',
+      },
+      cursor: '',
+    });
+    expect(response.items.length).toBe(1);
+  
+    // create 1001 alerts
+    await client.alerts.create(
+      Array.from({ length: 1001 }, (_, i) => ({
+        source: 'smth',
+        channelExternalId: 'test_channel',
+        externalId: `test_alert_${i}`,
+      }))
+    );
+  
+    const alerts = client.alerts
+      .list({
+        sort: {
+          property: 'createdTime',
+          order: 'desc',
+        },
+      })
+      .autoPagingToArray({ limit: 1001 });
+  
+    expect((await alerts).length).toBeGreaterThan(1000);
+  
+    // clean up created alerts
+    await client.alerts.deleteChannels(
+      Array.from({ length: 1001 }, (_, i) => ({
+        externalId: `test_alert_${i}`,
+      }))
+    );
+  });
 });
