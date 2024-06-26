@@ -228,6 +228,8 @@ describe('alerts api', () => {
     await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
   });
 
+  jest.setTimeout(30000); // 30 sec
+
   test('cursor pagination', async () => {
     // create channel for the next test
     const channelsToCreate = [
