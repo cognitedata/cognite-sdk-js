@@ -251,9 +251,9 @@ describe('alerts api', () => {
     expect(response.items.length).toBe(1);
 
     // function to create alerts in batches
-    const createAlerts = async (alerts: AlertCreate[]) => {
-      await client.alerts.create(alerts);
-    };
+    // const createAlerts = async (alerts: AlertCreate[]) => {
+    //   await client.alerts.create(alerts);
+    // };
 
     // create alerts in batches of 100
     const totalAlerts = 1000; // Total number of alerts to create
@@ -267,7 +267,7 @@ describe('alerts api', () => {
         channelExternalId,
         externalId: `external_id_test_cursor_${alertCounter++}`,
       }));
-      await createAlerts(alertsToCreate);
+      await client.alerts.create(alertsToCreate);
     }
     // create one extra alert
     await client.alerts.create([
