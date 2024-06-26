@@ -198,7 +198,6 @@ describe('alerts api', () => {
       },
     });
     expect(response.items.length).toBeGreaterThan(0);
-  
   });
 
   test('cursor pagination', async () => {
@@ -211,7 +210,7 @@ describe('alerts api', () => {
       cursor: '',
     });
     expect(response.items.length).toBe(1);
-  
+
     // create 1001 alerts
     await client.alerts.create(
       Array.from({ length: 1001 }, (_, i) => ({
@@ -220,7 +219,7 @@ describe('alerts api', () => {
         externalId: `test_alert_${i}`,
       }))
     );
-  
+
     const alerts = client.alerts
       .list({
         sort: {
@@ -229,9 +228,9 @@ describe('alerts api', () => {
         },
       })
       .autoPagingToArray({ limit: 1001 });
-  
+
     expect((await alerts).length).toBeGreaterThan(1000);
-  
+
     // clean up created alerts
     await client.alerts.deleteChannels(
       Array.from({ length: 1001 }, (_, i) => ({
