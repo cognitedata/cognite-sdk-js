@@ -3,7 +3,7 @@
 import { CogniteError } from '@cognite/sdk-core';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-import { AlertCreate } from '@cognite/sdk-beta/dist';
+//import { AlertCreate } from '@cognite/sdk-beta/dist';
 
 describe('alerts api', () => {
   const client: CogniteClient = setupLoggedInClient();
