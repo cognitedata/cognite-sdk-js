@@ -189,15 +189,41 @@ describe('alerts api', () => {
     ]);
     expect(response).toEqual({});
   });
-});
 
-test('sort alerts', async () => {
-  const client: CogniteClient = setupLoggedInClient();
-  const response = await client.alerts.list({
-    sort: {
-      property: 'createdTime',
-      order: 'desc',
-    },
+  test('sort alerts', async () => {
+    const response = await client.alerts.list({
+      sort: {
+        property: 'createdTime',
+        order: 'desc',
+      },
+    });
+    expect(response.items.length).toBeGreaterThan(0);
   });
-  expect(response.items.length).toBeGreaterThan(0);
+
+  test('test limit', async () => {
+    // create channel for the next test
+    const channelsToCreate = [
+      {
+        externalId: channelExternalId,
+        name: 'Test Channel',
+      },
+    ];
+    await client.alerts.createChannels(channelsToCreate);
+
+    // create 10 alerts
+    const alerts = Array.from({ length: 10 }).map((_, i) => ({
+      source: 'smth',
+      channelExternalId,
+      externalId: `test_limit_extId_${i}`,
+    }));
+    await client.alerts.create(alerts);
+
+    const response = await client.alerts.list({
+      limit: 10,
+    });
+    expect(response.items.length).toBe(10);
+
+    // delete the channel
+    await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
+  });
 });
