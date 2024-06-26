@@ -214,7 +214,7 @@ describe('alerts api', () => {
     const alerts = Array.from({ length: 10 }).map((_, i) => ({
       source: 'smth',
       channelExternalId,
-      externalId: `test_limit_${i}`,
+      externalId: `test_limit_extId_${i}`,
     }));
     await client.alerts.create(alerts);
 
@@ -222,5 +222,8 @@ describe('alerts api', () => {
       limit: 10,
     });
     expect(response.items.length).toBe(10);
+
+    // delete the channel
+    await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
   });
 });
