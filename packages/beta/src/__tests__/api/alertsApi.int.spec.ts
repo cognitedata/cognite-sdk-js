@@ -261,19 +261,29 @@ describe('alerts api', () => {
 
     // Generate and create alerts in batches
     let alertCounter = Date.now(); // Counter to ensure unique externalId
-    const batches = Array.from(
-      { length: Math.ceil(totalAlerts / batchSize) },
-      (_, i) => i * batchSize
-    );
+    // const batches = Array.from(
+    //   { length: Math.ceil(totalAlerts / batchSize) },
+    //   (_, i) => i * batchSize
+    // );
 
-    for (let start of batches) {
-      const alertsToCreate = Array.from({ length: batchSize }, () => ({
+    // Function to create a batch of alerts
+    const createBatch = async () => {
+      const alerts = Array.from({ length: batchSize }, () => ({
         source: 'smth',
         channelExternalId,
         externalId: `external_id_test_cursor_${alertCounter++}`,
       }));
-      await client.alerts.create(alertsToCreate);
+      await client.alerts.create(alerts);
+    };
+
+    // Create alerts in batches
+    const batchPromises = [];
+    for (let i = 0; i < Math.floor(totalAlerts / batchSize); i++) {
+      batchPromises.push(createBatch());
     }
+
+    // Wait for all batches to complete
+    await Promise.all(batchPromises);
     // create one extra alert
     await client.alerts.create([
       {
