@@ -258,13 +258,13 @@ describe('alerts api', () => {
     const batchSize = 100; // Size of each batch
 
     // Generate and create alerts in batches
-    let alertCounter = 0; // Counter to ensure unique externalId
+    let alertCounter = Date.now(); // Counter to ensure unique externalId
     for (let i = 0; i < totalAlerts; i += batchSize) {
       const alertsToCreate = Array.from({ length: batchSize }, () => ({
-      source: 'smth',
-      channelExternalId,
-      externalId: `external_id_test_cursor_${alertCounter++}`,
-      }));
+        source: 'smth',
+        channelExternalId,
+        externalId: `external_id_test_cursor_${alertCounter++}`,
+        }));
       await createAlerts(alertsToCreate);
     }
     // create one extra alert
