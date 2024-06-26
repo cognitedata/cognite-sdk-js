@@ -3,6 +3,7 @@
 import { CogniteError } from '@cognite/sdk-core';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
+import { AlertCreate } from '@cognite/sdk-beta/dist';
 
 describe('alerts api', () => {
   const client: CogniteClient = setupLoggedInClient();
@@ -222,23 +223,31 @@ describe('alerts api', () => {
     await client.alerts.createChannels(channelsToCreate);
 
     // create 1000 alerts with 100 for each request
-    const alertsToCreate = [];
-    for (let i = 0; i < 10; i++) {
-      alertsToCreate.push(
-        ...Array.from({ length: 100 }, (_, j) => ({
-          source: 'smth',
-          channelExternalId,
-          externalId: `test_alert_${i}_${j}`,
-        }))
-      );
-    }
-    // create one extra alert
-    alertsToCreate.push({
+    const alertsToCreate = Array.from({ length: 1000 }, (_, i) => ({
       source: 'smth',
       channelExternalId,
-      externalId: `test_alert_10_0`,
-    });
-    await client.alerts.create(alertsToCreate);
+      externalId: `external_id_test_${i}`,
+    }));
+
+    // function to create alerts in batches
+    const createAlerts = async (alerts: AlertCreate[]) => {
+      await client.alerts.create(alerts);
+    };
+
+    // create alerts in batches of 100
+    const batchSize = 100;
+    for (let i = 0; i < alertsToCreate.length; i += batchSize) {
+      const batch = alertsToCreate.slice(i, i + batchSize);
+      await createAlerts(batch);
+    }
+    // create one extra alert
+    await client.alerts.create([
+      {
+        source: 'smth',
+        channelExternalId,
+        externalId: `external_id_test_1001`,
+      },
+    ]);
 
     const alerts = client.alerts
       .list({
@@ -251,18 +260,10 @@ describe('alerts api', () => {
 
     expect((await alerts).length).toBeGreaterThan(1000);
 
-    // clean up created alerts in batches of 100
-    const alertsToDelete = [];
-    for (let i = 0; i < 10; i++) {
-      alertsToDelete.push(
-        ...Array.from({ length: 1000 }, (_, j) => ({
-          externalId: `test_alert_${i}_${j}`,
-        }))
-      );
-    }
-    alertsToDelete.push({
-      externalId: `test_alert_10_0`,
-    });
-    await client.alerts.deleteChannels(alertsToDelete);
+    // clean up created alerts
+  const alertsToDelete = Array.from({ length: 1001 }, (_, i) => ({
+    externalId: `external_id_test_${i}`,
+  }));
+  await client.alerts.deleteChannels(alertsToDelete);
   });
 });
