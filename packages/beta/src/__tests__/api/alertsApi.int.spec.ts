@@ -212,9 +212,10 @@ describe('alerts api', () => {
     expect(response.items.length).toBe(1);
 
     // create 1000 alerts with 100 for each request
+    const alertsToCreate = [];
     for (let i = 0; i < 10; i++) {
-      await client.alerts.create(
-        Array.from({ length: 100 }, (_, j) => ({
+      alertsToCreate.push(
+        ...Array.from({ length: 100 }, (_, j) => ({
           source: 'smth',
           channelExternalId,
           externalId: `test_alert_${i}_${j}`,
@@ -222,13 +223,12 @@ describe('alerts api', () => {
       );
     }
     // create one extra alert
-    await client.alerts.create(
-      Array.from({ length: 1 }, (_, i) => ({
+    alertsToCreate.push({
       source: 'smth',
       channelExternalId,
-      externalId: `test_alert_10_${i}`,
-      }))
-    );
+      externalId: `test_alert_10_0`,
+    });
+    await client.alerts.create(alertsToCreate);
 
     const alerts = client.alerts
       .list({
@@ -241,11 +241,18 @@ describe('alerts api', () => {
 
     expect((await alerts).length).toBeGreaterThan(1000);
 
-    // clean up created alerts
-    await client.alerts.deleteChannels(
-      Array.from({ length: 1001 }, (_, i) => ({
-        externalId: `test_alert_${i}`,
-      }))
-    );
+    // clean up created alerts in batches of 100
+    const alertsToDelete = [];
+    for (let i = 0; i < 10; i++) {
+      alertsToDelete.push(
+        ...Array.from({ length: 1000 }, (_, j) => ({
+          externalId: `test_alert_${i}_${j}`,
+        }))
+      );
+    }
+    alertsToDelete.push({
+      externalId: `test_alert_10_0`,
+    });
+    await client.alerts.deleteChannels(alertsToDelete);
   });
 });
