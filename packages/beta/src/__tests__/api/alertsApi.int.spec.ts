@@ -265,7 +265,7 @@ describe('alerts api', () => {
       const alertsToCreate = Array.from({ length: batchSize }).map(() => ({
         source: 'smth',
         channelExternalId,
-        externalId: `external_id_test_cursor_${alertCounter}`,
+        externalId: `external_id_test_cursor_${alertCounter++}`,
       }));
       await createAlerts(alertsToCreate);
     }
