@@ -214,11 +214,11 @@ describe('alerts api', () => {
     // create 1000 alerts with 100 for each request
     for (let i = 0; i < 10; i++) {
       await client.alerts.create(
-      Array.from({ length: 100 }, (_, j) => ({
-        source: 'smth',
-        channelExternalId,
-        externalId: `test_alert_${i}_${j}`,
-      }))
+        Array.from({ length: 100 }, (_, j) => ({
+          source: 'smth',
+          channelExternalId,
+          externalId: `test_alert_${i}_${j}`,
+        }))
       );
     }
     // create one extra alert
