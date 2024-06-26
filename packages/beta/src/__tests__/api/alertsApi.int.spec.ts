@@ -211,6 +211,16 @@ describe('alerts api', () => {
     });
     expect(response.items.length).toBe(1);
 
+    // create channel for the next test
+    const channelsToCreate = [
+      {
+        externalId: channelExternalId,
+        name: 'Test Channel',
+      },
+    ];
+    
+    await client.alerts.createChannels(channelsToCreate);
+
     // create 1000 alerts with 100 for each request
     const alertsToCreate = [];
     for (let i = 0; i < 10; i++) {
