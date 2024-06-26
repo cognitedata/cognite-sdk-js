@@ -205,7 +205,7 @@ describe('alerts api', () => {
     const alerts = Array.from({ length: 10 }).map((_, i) => ({
       source: 'smth',
       channelExternalId,
-      externalId: `${alertExternalId}_${i}`,
+      externalId: `test_limit_${i}`,
     }));
     await client.alerts.create(alerts);
 
