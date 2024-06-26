@@ -254,17 +254,17 @@ describe('alerts api', () => {
     };
 
     // create alerts in batches of 100
-    const batchSize = 100;
-    for (let i = 0; i < 1000; i += batchSize) {
-      // create 1000 alerts with 100 for each request
-      const alertsToCreate = Array.from({ length: 1000 }, (_, j) => ({
+    const totalAlerts = 1000; // Total number of alerts to create
+    const batchSize = 100; // Size of each batch
+
+    // Generate and create alerts in batches
+    for (let i = 0; i < totalAlerts; i += batchSize) {
+      const alertsToCreate = Array.from({ length: batchSize }, (_, j) => ({
         source: 'smth',
         channelExternalId,
-        externalId: `external_id_test_cursor_${i}_${j}`,
+        externalId: `external_id_test_cursor_${i + j}`,
       }));
-      //create batches of 100 alerts
-      const batch = alertsToCreate.slice(i, i + batchSize);
-      await createAlerts(batch);
+      await createAlerts(alertsToCreate);
     }
     // create one extra alert
     await client.alerts.create([
