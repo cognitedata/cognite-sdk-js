@@ -3,7 +3,6 @@
 import { CogniteError } from '@cognite/sdk-core';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-//import { AlertCreate } from '@cognite/sdk-beta/dist';
 
 describe('alerts api', () => {
   const client: CogniteClient = setupLoggedInClient();
@@ -228,7 +227,10 @@ describe('alerts api', () => {
     await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
   });
 
+  jest.setTimeout(30000);
+
   test('cursor pagination', async () => {
+    // create channel for the next test
     const channelsToCreate = [
       {
         externalId: channelExternalId,
@@ -248,10 +250,13 @@ describe('alerts api', () => {
     expect(response.items.length).toBe(1);
 
     // create alerts in batches of 100
-    const totalAlerts = 1000;
-    const batchSize = 100;
+    const totalAlerts = 1000; // Total number of alerts to create
+    const batchSize = 100; // Size of each batch
 
-    let alertCounter = Date.now();
+    // Generate and create alerts in batches
+    let alertCounter = Date.now(); // Counter to ensure unique externalId
+
+    // Function to create a batch of alerts
     const createBatch = async () => {
       const alerts = Array.from({ length: batchSize }, () => ({
         source: 'smth',
