@@ -287,9 +287,6 @@ describe('alerts api', () => {
     expect((await alerts).length).toBeGreaterThan(1000);
 
     // clean up created alerts
-    const alertsToDelete = Array.from({ length: 1001 }, (_, i) => ({
-      externalId: channelExternalId,
-    }));
-    await client.alerts.deleteChannels(alertsToDelete);
+    await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
   });
 });
