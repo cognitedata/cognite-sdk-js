@@ -288,7 +288,7 @@ describe('alerts api', () => {
 
     // clean up created alerts
     const alertsToDelete = Array.from({ length: 1001 }, (_, i) => ({
-      externalId: `external_id_test_cursor_${i}`,
+      externalId: channelExternalId,
     }));
     await client.alerts.deleteChannels(alertsToDelete);
   });
