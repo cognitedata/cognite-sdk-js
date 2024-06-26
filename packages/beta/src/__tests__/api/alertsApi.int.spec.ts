@@ -226,4 +226,76 @@ describe('alerts api', () => {
     // delete the channel
     await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
   });
+
+  jest.setTimeout(30000);
+
+  test('cursor pagination', async () => {
+    // create channel for the next test
+    const channelsToCreate = [
+      {
+        externalId: channelExternalId,
+        name: 'Test Channel',
+      },
+    ];
+    await client.alerts.createChannels(channelsToCreate);
+
+    const response = await client.alerts.list({
+      limit: 1,
+      sort: {
+        property: 'createdTime',
+        order: 'desc',
+      },
+      cursor: '',
+    });
+    expect(response.items.length).toBe(1);
+
+    // create alerts in batches of 100
+    const totalAlerts = 1000; // Total number of alerts to create
+    const batchSize = 100; // Size of each batch
+
+    // Generate and create alerts in batches
+    let alertCounter = Date.now(); // Counter to ensure unique externalId
+
+    // Function to create a batch of alerts
+    const createBatch = async () => {
+      const alerts = Array.from({ length: batchSize }, () => ({
+        source: 'smth',
+        channelExternalId,
+        externalId: `external_id_test_cursor_${alertCounter++}`,
+      }));
+      await client.alerts.create(alerts);
+    };
+
+    // Create alerts in batches
+    const batchPromises = [];
+    for (let i = 0; i < Math.floor(totalAlerts / batchSize); i++) {
+      batchPromises.push(createBatch());
+    }
+
+    // Wait for all batches to complete
+    await Promise.all(batchPromises);
+
+    // create one extra alert
+    await client.alerts.create([
+      {
+        source: 'smth',
+        channelExternalId,
+        externalId: `external_id_test_cursor_${alertCounter}`,
+      },
+    ]);
+
+    const alerts = client.alerts
+      .list({
+        sort: {
+          property: 'createdTime',
+          order: 'desc',
+        },
+      })
+      .autoPagingToArray({ limit: 1001 });
+
+    expect((await alerts).length).toBeGreaterThan(1000);
+
+    // clean up created alerts
+    await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
+  });
 });
