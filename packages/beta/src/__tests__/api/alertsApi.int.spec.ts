@@ -204,7 +204,7 @@ describe('alerts api', () => {
     // create channel for the next test
     const channelsToCreate = [
       {
-        externalId: 'test_channel_1719381884417',
+        externalId: channelExternalId,
         name: 'Test Channel',
       },
     ];
