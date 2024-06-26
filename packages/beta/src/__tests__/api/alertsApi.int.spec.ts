@@ -261,8 +261,10 @@ describe('alerts api', () => {
 
     // Generate and create alerts in batches
     let alertCounter = Date.now(); // Counter to ensure unique externalId
-    for (let i = 0; i < totalAlerts; i += batchSize) {
-      const alertsToCreate = Array.from({ length: batchSize }).map(() => ({
+    const batches = Array.from({ length: Math.ceil(totalAlerts / batchSize) }, (_, i) => i * batchSize);
+
+    for (const _ of batches) {
+      const alertsToCreate = Array.from({ length: batchSize }, () => ({
         source: 'smth',
         channelExternalId,
         externalId: `external_id_test_cursor_${alertCounter++}`,
