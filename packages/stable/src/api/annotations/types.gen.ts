@@ -7,7 +7,7 @@
 attribute.
 * @example {"assetRef":{"externalId":"abc"},"symbolRegion":{"xMin":0.1,"xMax":0.2,"yMin":0.1,"yMax":0.2},"textRegion":{"xMin":0.2,"xMax":0.3,"yMin":0.2,"yMax":0.3},"pageNumber":43}
 */
-export type AnnotationData = AnnotationsBoundingVolume | AnnotationsClassification | AnnotationsDetection | AnnotationsExtractedText | AnnotationsFileLink | AnnotationsIsoPlanAnnotation | AnnotationsJunction | AnnotationsKeypointCollection | AnnotationsLine | AnnotationsObjectDetection | AnnotationsTextRegion | AnnotationsUnhandledSymbolObject | AnnotationsUnhandledTextObject | AnnotationsCogniteAnnotationTypesDiagramsAssetLink | AnnotationsCogniteAnnotationTypesDiagramsInstanceLink | AnnotationsCogniteAnnotationTypesImagesAssetLink | AnnotationsCogniteAnnotationTypesImagesInstanceLink;
+export type AnnotationData = AnnotationsObjectDetection | AnnotationsClassification | AnnotationsKeypointCollection | AnnotationsCogniteAnnotationTypesImagesAssetLink | AnnotationsTextRegion | AnnotationsCogniteAnnotationTypesImagesInstanceLink | AnnotationsIsoPlanAnnotation | AnnotationsCogniteAnnotationTypesDiagramsAssetLink | AnnotationsFileLink | AnnotationsCogniteAnnotationTypesDiagramsInstanceLink | AnnotationsUnhandledTextObject | AnnotationsUnhandledSymbolObject | AnnotationsExtractedText | AnnotationsLine | AnnotationsJunction | AnnotationsBoundingVolume | AnnotationsDetection;
 /**
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
@@ -197,15 +197,28 @@ export interface AnnotationsCogniteAnnotationTypesImagesInstanceLink {
 PolyLine.
 */
 export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry {
+    /** A plain rectangle */
     boundingBox?: AnnotationsBoundingBox;
+    /**
+     * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+     * that the first and last vertex are connected.
+     */
     polygon?: AnnotationsPolygon;
+    /** A polygonal chain consisting of _n_ vertices */
     polyline?: AnnotationsPolyLine;
 }
 /**
  * A 3D geometry model represented by exactly *one of* `cylinder` and `box`.
  */
 export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry3DGeometry {
+    /**
+     * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
+     * translates and scales a box centered at the origin to its location and orientation in 3D space.
+     * The box that is transformed is the axis-aligned cube spanning the volume between
+     * the points (-1, -1, -1) and (1, 1, 1).
+     */
     box?: AnnotationsBox;
+    /** A cylinder in 3D space, defined by the centers of the two end surfaces and the radius. */
     cylinder?: AnnotationsCylinder;
 }
 /**
@@ -334,48 +347,34 @@ export interface AnnotationsInstanceRef {
  * Model a custom link in a engineering diagram where it capture details from the texts and linked to assets when necessary
  */
 export interface AnnotationsIsoPlanAnnotation {
-    /** Detail describing the equipment. */
+    /** The asset this annotation is pointing to */
+    assetRef?: AnnotationsAssetRef;
+    /** Detail describing the equipment, not identifying it. E..g 12V12 for a valve. */
     detail?: string;
-    /** Contains a link to a file in CDF. This is used to navigate between files. */
-    fileRef?: AnnotationsFileRef;
-    /** The indirectExternalId is the external id of the equipment used to identify the hotspot indirectly. E.g. first valve upstreams of <indirectExternalId>. */
+    /** indirectExternalId is the external id of the equipment used to identify the hotspot indirectly. E.g. this is the <indirectRelation> of <indirectExternalId> */
     indirectExternalId?: AnnotationsAssetRef;
-    /** Relation connecting this hotspot to a tag in case the hotspot has no tag. E.g. 'upstreams of'. This references the 'indirectExternalId'. */
+    /** Relation connecting this hotspot to a tag in case the hotspot has no tag. E.g. 'second valve upstreams of'. This references the 'indirectExternalId' */
     indirectRelation?: string;
-    /** The id of the Pipe that the hotspot belongs to. */
+    /** The id of the Pipe that the hotspot belongs to */
     lineExternalId?: AnnotationsAssetRef;
-    /** Stores Functional Location (FLOC) external ID represented by the hotspot. */
-    linkedResourceExternalId?: string;
-    /** Stores the Functional Location (FLOC) ID represented by the hotspot. */
-    linkedResourceInternalId?: number;
-    /** Whether the hotspot represents an asset (FLOC) or file. */
-    linkedResourceType?: "asset" | "file";
-    /** Temporary field for migration purposes. Id of corresponding legacy annotation. */
-    oldAnnotationId?: string;
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
      * @max 100000
      */
     pageNumber?: number;
-    /** Relative position of the relation connecting the hotspot to a tag. E.g. '2nd'. This references the 'indirectExternalId'. */
+    /** Indicate the relative position of an annotation */
     relativePosition?: string;
-    /** Revision number of the P&ID file that the hotspot is valid for. */
+    /** Keeps track of the modification to an annotation */
     revision?: string;
-    /** Stores the dimensions of a valve or spade. */
+    /** Store the dimensions of a valve or spade */
     sizeAndClass?: AnnotationsSizeAndClassType;
-    /** Marks the hotspot as user created or detected via pipeline. */
-    sourceType?: "pipeline" | "user";
-    /** Additional details, the fluid code for pipes e.g. LO for Lube oil etc. */
-    subDetail?: string;
-    /** Text found in the area, might be a FLOC, valve detail, pipe or diagram name. */
+    /** The text input */
     text?: string;
-    /** The location of the hotspot represented with a bounding box. */
+    /** The location of the hotspot represented with a bounding box */
     textRegion?: AnnotationsBoundingBox;
     /** Type of equipment, valve, pump etc. */
     type?: string;
-    /** Stores the (x,y) coordinate pairs of a line or polyline. */
-    vertices?: AnnotationsPolyLine;
 }
 /**
  * Models a junction between lines in an engineering diagram
@@ -457,6 +456,7 @@ optionally a confidence value.
 export interface AnnotationsObjectDetection {
     /** Additional attributes data for a compound. */
     attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
+    /** A plain rectangle */
     boundingBox?: AnnotationsBoundingBox;
     /**
      * The confidence score for the primitive. It should be between 0 and 1.
@@ -466,7 +466,12 @@ export interface AnnotationsObjectDetection {
     confidence?: number;
     /** The label describing what type of object it is */
     label: string;
+    /**
+     * A _closed_ polygon represented by _n_ vertices. In other words, we assume
+     * that the first and last vertex are connected.
+     */
     polygon?: AnnotationsPolygon;
+    /** A polygonal chain consisting of _n_ vertices */
     polyline?: AnnotationsPolyLine;
 }
 /**
