@@ -6,11 +6,9 @@ import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
   stepFields,
-  unitsMap,
-  unitSystem,
   modelTypes,
-  boundaryConditions,
-} from './mocks';
+  unitQuantities,
+} from './seed';
 
 const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
 
@@ -30,49 +28,24 @@ describeIf('simulators api', () => {
         externalId: simulatorExternalId,
         name: simulatorName,
         fileExtensionTypes,
-        enabled: true,
         stepFields,
-        units: {
-          unitsMap,
-          unitSystem,
-        },
+        unitQuantities,
         modelTypes,
-        boundaryConditions,
-        isCalculationsEnabled: true,
       },
     ]);
     simulatorId = response[0].id;
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(simulatorExternalId);
-    expect(response[0].fileExtensionTypes).toEqual(['csv', 'yaml']);
-    expect(response[0].enabled).toBe(true);
+    expect(response[0].fileExtensionTypes).toEqual(['csv', 'yaml', 'dwxmz']);
     expect(response[0].stepFields).toEqual(stepFields);
-    expect(response[0].units).toEqual({
-      unitsMap,
-      unitSystem,
-    });
+    expect(response[0].unitQuantities).toEqual(unitQuantities);
     expect(response[0].modelTypes).toEqual(modelTypes);
-    expect(response[0].boundaryConditions).toEqual(boundaryConditions);
-    expect(response[0].isCalculationsEnabled).toBe(true);
-    expect(response[0].isBoundaryConditionsEnabled).toBe(false);
   });
 
   test('update simulators', async () => {
     const patch: SimulatorPatch['update'] = {
-      isBoundaryConditionsEnabled: {
-        set: true,
-      },
       fileExtensionTypes: {
         set: ['py'],
-      },
-      boundaryConditions: {
-        set: [
-          {
-            name: 'test_update',
-            address: 'a.b.c',
-            key: 'test_update',
-          },
-        ],
       },
       modelTypes: {
         set: [
@@ -82,21 +55,19 @@ describeIf('simulators api', () => {
           },
         ],
       },
-      units: {
-        set: {
-          unitsMap: {
-            activityUpdated: {
-              label: 'Activity',
-              units: [
-                {
-                  label: 'activity',
-                  value: 'activity',
-                },
-              ],
-            },
+      unitQuantities: {
+        set: [
+          {
+            name: 'test_update',
+            label: 'test_update',
+            units: [
+              {
+                label: 'test_update',
+                name: 'test_update',
+              },
+            ],
           },
-          unitSystem: {},
-        },
+        ],
       },
       stepFields: {
         set: [
@@ -120,22 +91,18 @@ describeIf('simulators api', () => {
       },
     ]);
     expect(response.length).toBe(1);
-    expect(response[0].isBoundaryConditionsEnabled).toBe(true);
     expect(response[0].fileExtensionTypes).toEqual(
       (patch.fileExtensionTypes as any).set
     );
-    expect(response[0].boundaryConditions).toEqual(
-      (patch.boundaryConditions as any).set
-    );
     expect(response[0].modelTypes).toEqual((patch.modelTypes as any).set);
-    expect(response[0].units).toEqual((patch.units as any).set);
+    expect(response[0].unitQuantities).toEqual(
+      (patch.unitQuantities as any).set
+    );
     expect(response[0].stepFields).toEqual((patch.stepFields as any).set);
   });
 
   test('list simulators', async () => {
-    const response = await client.simulators.list({
-      filter: { enabled: true },
-    });
+    const response = await client.simulators.list({});
     expect(response.items.length).toBeGreaterThan(0);
     const simulatorFound = response.items.find(
       (item) => item.externalId === simulatorExternalId

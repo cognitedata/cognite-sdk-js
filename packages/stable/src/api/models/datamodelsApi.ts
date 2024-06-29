@@ -99,7 +99,8 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
     const response = await this.post<DataModelCollectionResponse>(
       this.byIdsUrl,
       {
-        data: { items: params, ...options },
+        data: { items: params },
+        params: { ...options },
       }
     );
     return response.data;

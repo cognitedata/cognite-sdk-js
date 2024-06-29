@@ -22,25 +22,20 @@ export interface SimulatorUnitRecord {
   label: string;
   value: string;
 }
-export interface SimulatorUnitSystem {
-  label: string;
-  defaultUnits: Record<string, string>;
-}
-
 export interface SimulatorUnitsMap {
   label: string;
   units: SimulatorUnitRecord[];
 }
 
-export interface SimulatorUnits {
-  unitsMap?: Record<string, SimulatorUnitsMap>;
-  unitSystem?: Record<string, SimulatorUnitSystem>;
+export interface SimulatorUnitEntry {
+  label: string;
+  name: string;
 }
 
-export interface SimulatorBoundaryCondition {
+export interface SimulatorUnitQuantity {
   name: string;
-  address: string;
-  key: string;
+  label: string;
+  units: SimulatorUnitEntry[];
 }
 
 export interface SimulatorModelType {
@@ -69,36 +64,24 @@ export interface Simulator {
   externalId: CogniteExternalId;
   name: string;
   fileExtensionTypes: string[];
-  isBoundaryConditionsEnabled: boolean;
-  boundaryConditions: SimulatorBoundaryCondition[];
-  isCalculationsEnabled: boolean;
   modelTypes: SimulatorModelType[];
-  enabled: boolean;
   stepFields?: SimulatorStep[];
-  units?: SimulatorUnits;
+  unitQuantities?: SimulatorUnitQuantity[];
   createdTime: Date;
   lastUpdatedTime: Date;
 }
 
-export interface SimulatorFilter {
-  enabled?: boolean;
-}
-
 export interface SimulatorFilterQuery extends FilterQuery {
-  filter?: SimulatorFilter;
+  filter?: {};
 }
 
 export interface SimulatorCreate {
   externalId: CogniteExternalId;
   fileExtensionTypes: string[];
   name: string;
-  isBoundaryConditionsEnabled?: boolean;
-  boundaryConditions?: SimulatorBoundaryCondition[];
-  isCalculationsEnabled?: boolean;
   modelTypes?: SimulatorModelType[];
-  enabled?: boolean;
   stepFields?: SimulatorStep[];
-  units?: SimulatorUnits;
+  unitQuantities?: SimulatorUnitQuantity[];
 }
 
 export interface SimulatorIntegration {
@@ -109,7 +92,6 @@ export interface SimulatorIntegration {
   dataSetId: CogniteInternalId;
   connectorVersion: string;
   simulatorVersion: string;
-  runApiEnabled: boolean;
   licenseStatus?: string;
   licenseLastCheckedTime?: Date;
   connectorStatus?: string;
@@ -125,7 +107,6 @@ export interface SimulatorIntegrationCreate {
   heartbeat?: Date;
   connectorVersion?: string;
   simulatorVersion?: string;
-  runApiEnabled?: boolean;
   licenseStatus?: string;
   licenseLastCheckedTime?: Date;
   connectorStatus?: string;
@@ -141,9 +122,6 @@ export interface SimulatorIntegrationFilterQuery extends FilterQuery {
 }
 
 export interface SimulationRunFilter {
-  simulatorName?: string;
-  modelName?: string;
-  routineName?: string;
   status?: SimulationRunStatus;
   runType?: SimulationRunType;
   simulatorIntegrationExternalIds?: CogniteExternalId[];
@@ -170,13 +148,9 @@ export interface SimulatorPatch {
   update: {
     fileExtensionTypes?: SinglePatch<string[]>;
     name?: SinglePatch<string>;
-    isBoundaryConditionsEnabled?: SinglePatch<boolean>;
-    boundaryConditions?: SinglePatch<SimulatorBoundaryCondition[]>;
-    isCalculationsEnabled?: SinglePatch<boolean>;
     modelTypes?: SinglePatch<SimulatorModelType[]>;
-    enabled?: SinglePatch<boolean>;
     stepFields?: SinglePatch<SimulatorStep[]>;
-    units?: SinglePatch<SimulatorUnits>;
+    unitQuantities?: SinglePatch<SimulatorUnitQuantity[]>;
   };
 }
 
@@ -208,24 +182,22 @@ export const SimulationRunStatus = {
 
 export interface SimulationRun {
   id: CogniteInternalId;
-  simulatorName: string;
-  modelName: string;
-  routineName: string;
-  simulatorExternalId?: CogniteExternalId;
-  simulatorIntegrationExternalId?: CogniteExternalId;
-  modelExternalId?: CogniteExternalId;
-  modelRevisionExternalId?: CogniteExternalId;
-  routineExternalId?: CogniteExternalId;
-  routineRevisionExternalId?: CogniteExternalId;
+
+  simulatorExternalId: CogniteExternalId;
+  simulatorIntegrationExternalId: CogniteExternalId;
+  modelExternalId: CogniteExternalId;
+  modelRevisionExternalId: CogniteExternalId;
+  routineExternalId: CogniteExternalId;
+  routineRevisionExternalId: CogniteExternalId;
   status: SimulationRunStatus;
   runTime?: Date;
   simulationTime?: Date;
   statusMessage?: string;
-  dataSetId?: CogniteInternalId;
+  dataSetId: CogniteInternalId;
   eventId?: CogniteInternalId;
   runType: SimulationRunType;
   userId?: string;
-  logId?: CogniteInternalId;
+  logId: CogniteInternalId;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
@@ -262,6 +234,32 @@ export interface SimulationRunDataInput extends SimulationRunDataOutput {
 export interface SimulationRunId {
   runId: CogniteInternalId;
 }
+
+interface SimulatorRoutineIO {
+  referenceId: string;
+  name: string;
+  valueType: SimulationRunDataValueType;
+  saveTimeseriesExternalId?: CogniteExternalId;
+  unit?: {
+    name: string;
+    quantity?: string;
+  };
+}
+
+export interface SimulatorRoutineInputConst extends SimulatorRoutineIO {
+  value: string | number | string[] | number[];
+}
+
+export interface SimulatorRoutineInputTs extends SimulatorRoutineIO {
+  sourceExternalId: string;
+  aggregate: SimulatorDataPointsAggregate;
+}
+
+export type SimulatorRoutineInput =
+  | SimulatorRoutineInputConst
+  | SimulatorRoutineInputTs;
+
+export type SimulatorRoutineOutput = SimulatorRoutineIO;
 
 export interface SimulationRunData {
   runId: CogniteInternalId;
@@ -305,7 +303,6 @@ export interface SimulatorModel {
   dataSetId: CogniteInternalId;
   labels?: ExternalId[];
   type?: string;
-  unitSystem?: string;
   createdTime: Date;
   lastUpdatedTime: Date;
 }
@@ -318,7 +315,6 @@ export interface SimulatorModelCreate {
   dataSetId: CogniteInternalId;
   labels?: ExternalId[];
   type?: string;
-  unitSystem?: string;
 }
 
 export interface SimulatorModelFilter {
@@ -339,13 +335,6 @@ export interface SimulatorModelPatch {
 
 export interface SimulatorModelChange extends SimulatorModelPatch, InternalId {}
 
-interface SimulatorModelBoundaryCondition {
-  key: string;
-  name: string;
-  address: string;
-  timeseriesExternalId: string;
-}
-
 export type SimulatorModelRevisionStatus = 'unknown' | 'success' | 'failure';
 
 export const SimulatorModelRevisionStatus = {
@@ -365,8 +354,6 @@ export interface SimulatorModelRevision {
   createdByUserId?: string;
   status: SimulatorModelRevisionStatus;
   statusMessage?: string;
-  boundaryConditions?: SimulatorModelBoundaryCondition[];
-  boundaryConditionsStatus?: SimulatorModelRevisionStatus;
   versionNumber: number;
   metadata?: Record<string, string>;
   createdTime: Date;
@@ -379,7 +366,6 @@ export interface SimulatorModelRevisionCreate {
   modelExternalId: CogniteExternalId;
   description?: string;
   fileId: CogniteInternalId;
-  boundaryConditions?: SimulatorModelBoundaryCondition[];
   metadata?: Record<string, any>;
 }
 
@@ -387,8 +373,6 @@ export interface SimulatorModelRevisionPatch {
   update: {
     status?: SinglePatch<string>;
     statusMessage?: SinglePatch<string>;
-    boundaryConditions?: SinglePatch<SimulatorModelBoundaryCondition[]>;
-    boundaryConditionsStatus?: SinglePatch<string>;
   };
 }
 
@@ -398,6 +382,7 @@ export interface SimulatorModelRevisionChange
 
 export interface SimulatorModelRevisionFilter {
   modelExternalIds?: CogniteExternalId[];
+  allVersions?: boolean;
   createdTime?: DateRange;
   lastUpdatedTime?: DateRange;
 }
@@ -408,26 +393,27 @@ export interface SimulatorModelRevisionFilterQuery extends FilterQuery {
   limit?: number;
 }
 
-export type SimulatorCalculationType =
-  | 'IPR/VLP'
-  | 'ChokeDp'
-  | 'VLP'
-  | 'IPR'
-  | 'BhpFromRate'
-  | 'BhpFromGradientTraverse'
-  | 'BhpFromGaugeBhp';
 export type SimulatorRoutineOperator = 'eq' | 'ne' | 'gt' | 'ge' | 'lt' | 'le';
+
+export const SimulatorRoutineOperator = {
+  eq: 'eq' as SimulatorRoutineOperator,
+  ne: 'ne' as SimulatorRoutineOperator,
+  gt: 'gt' as SimulatorRoutineOperator,
+  ge: 'ge' as SimulatorRoutineOperator,
+  lt: 'lt' as SimulatorRoutineOperator,
+  le: 'le' as SimulatorRoutineOperator,
+};
+
 export type SimulatorDataPointsAggregate =
   | 'average'
-  | 'max'
-  | 'min'
-  | 'count'
-  | 'sum'
   | 'interpolation'
-  | 'stepInterpolation'
-  | 'totalVariation'
-  | 'continuousVariance'
-  | 'discreteVariance';
+  | 'stepInterpolation';
+
+export const SimulatorDataPointsAggregate = {
+  average: 'average' as SimulatorDataPointsAggregate,
+  interpolation: 'interpolation' as SimulatorDataPointsAggregate,
+  stepInterpolation: 'stepInterpolation' as SimulatorDataPointsAggregate,
+};
 
 export interface SimulatorRoutine {
   id: CogniteInternalId;
@@ -447,7 +433,6 @@ export interface SimulatorRoutineCreate {
   modelExternalId: CogniteExternalId;
   simulatorIntegrationExternalId: CogniteExternalId;
   name: string;
-  calculationType?: SimulatorCalculationType;
 }
 
 export interface SimulatorRoutineFilter {
@@ -462,18 +447,18 @@ export interface SimulatorRoutineFilterQuery extends FilterQuery {
 /* Routine revisions */
 
 export interface SimulatorRoutineDataSampling {
-  enabled: boolean;
+  enabled: true;
   validationWindow: number;
   samplingWindow: number;
   granularity: number;
 }
 
 export interface SimulatorRoutineConfigDisabled {
-  enabled: boolean;
+  enabled: false;
 }
 
 export interface SimulatorRoutineSchedule {
-  enabled: boolean;
+  enabled: true;
   cronExpression: string;
 }
 
@@ -517,21 +502,9 @@ export interface SimulatorRoutineInputTimeseries
   aggregate: SimulatorDataPointsAggregate;
 }
 
-export interface SimulatorRoutineOutputSequence {
-  name: string;
-  referenceId: string;
-}
-
-export interface SimulatorRoutineGaugeDepth {
-  value: number;
-  unit: string;
-  unitType: string;
-}
-
 export interface SimulatorRoutineScriptStepArguments {
-  argumentType: string;
-  [s: string]: string;
-  referenceId: string;
+  [s: string]: string | undefined;
+  referenceId?: string;
 }
 
 export interface SimulatorRoutineScriptStep {
@@ -547,15 +520,13 @@ export interface SimulatorRoutineScript {
   steps: SimulatorRoutineScriptStep[];
 }
 export interface SimulatorRoutineRevisionConfiguration {
-  dataSampling: SimulatorRoutineDataSampling;
+  dataSampling: SimulatorRoutineConfigDisabled | SimulatorRoutineDataSampling;
   schedule: SimulatorRoutineConfigDisabled | SimulatorRoutineSchedule;
   steadyStateDetection: SimulatorRoutineSteadyStateDetection[];
   logicalCheck: SimulatorRoutineLogicalCheck[];
-  inputConstants: SimulatorRoutineInputConstant[];
-  outputSequences?: SimulatorRoutineOutputSequence[];
-  inputTimeseries: SimulatorRoutineInputTimeseries[];
-  outputTimeseries: SimulatorRoutineTimeSeries[];
-  extraOptions?: SimulatorRoutineGaugeDepth;
+
+  inputs: SimulatorRoutineInput[];
+  outputs: SimulatorRoutineOutput[];
 }
 export interface SimulatorRoutineRevision {
   id: CogniteInternalId;
@@ -570,7 +541,6 @@ export interface SimulatorRoutineRevision {
   lastUpdatedTime: Date;
   configuration: SimulatorRoutineRevisionConfiguration;
   script: SimulatorRoutineScript[];
-  calculationType?: SimulatorCalculationType;
 }
 
 export interface SimulatorRoutineRevisionCreate {
@@ -582,6 +552,7 @@ export interface SimulatorRoutineRevisionCreate {
 
 export interface SimulatorRoutineRevisionslFilter {
   routineExternalIds?: CogniteExternalId[];
+  allVersions?: boolean;
   modelExternalIds?: CogniteExternalId[];
   simulatorIntegrationExternalIds?: CogniteExternalId[];
   simulatorExternalIds?: CogniteExternalId[];

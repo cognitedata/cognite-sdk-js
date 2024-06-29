@@ -13,8 +13,7 @@ describeIf('simulator logs api', () => {
     // get the latest failed run which should have a logId
     const filterSimulationRunsRes = await client.simulators.listRuns({
       filter: {
-        status: 'failure',
-        simulatorExternalIds: ['DWSIM'],
+        status: 'success',
       },
       limit: 1,
       sort: [

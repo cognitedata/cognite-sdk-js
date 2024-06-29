@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.15.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.0...@cognite/sdk@9.15.1) (2024-06-10)
+
+### Bug Fixes
+
+- **stable/models:** pass 'inlineViews' as params instead of request body for data models retrieve ([#1108](https://github.com/cognitedata/cognite-sdk-js/issues/1108)) ([2a9ca81](https://github.com/cognitedata/cognite-sdk-js/commit/2a9ca81016cdc2926b7d5a2996fe9ba289c640cd))
+
+# [9.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.14.0...@cognite/sdk@9.15.0) (2024-05-15)
+
+### Features
+
+- **annotations:** generate annotations for isolation planning app ([#1103](https://github.com/cognitedata/cognite-sdk-js/issues/1103)) ([3acda38](https://github.com/cognitedata/cognite-sdk-js/commit/3acda3806b324750680460005aedee7b83e453ca))
+
+# [9.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.13.0...@cognite/sdk@9.14.0) (2024-05-13)
+
+### Features
+
+- **files-beta:** add multi part upload sdk and tests (BND3D-4012) ([#1088](https://github.com/cognitedata/cognite-sdk-js/issues/1088)) ([a2fbbe6](https://github.com/cognitedata/cognite-sdk-js/commit/a2fbbe67db54518f3de08ec03dd4c6898c43465a))
+
 # [9.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.12.0...@cognite/sdk@9.13.0) (2024-04-29)
 
 ### Features

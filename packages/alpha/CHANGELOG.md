@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.28.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.28.2...@cognite/sdk-alpha@0.28.3) (2024-06-20)
+
+### Bug Fixes
+
+- type for simulator routine input values ([#1115](https://github.com/cognitedata/cognite-sdk-js/issues/1115)) ([dc5c64d](https://github.com/cognitedata/cognite-sdk-js/commit/dc5c64d945d61da806cf1d235325c03507d8772f))
+
+## [0.28.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.28.1...@cognite/sdk-alpha@0.28.2) (2024-06-18)
+
+### Bug Fixes
+
+- **simint:** fix tests and update filter for routines and models ([#1114](https://github.com/cognitedata/cognite-sdk-js/issues/1114)) ([4c49ce2](https://github.com/cognitedata/cognite-sdk-js/commit/4c49ce2118f150558a9699e23f159a6a382ece14))
+
+## [0.28.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.28.0...@cognite/sdk-alpha@0.28.1) (2024-06-10)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+# [0.28.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.27.1...@cognite/sdk-alpha@0.28.0) (2024-06-03)
+
+### Features
+
+- export const for two enum types ([#1107](https://github.com/cognitedata/cognite-sdk-js/issues/1107)) ([e346d92](https://github.com/cognitedata/cognite-sdk-js/commit/e346d92f9ea6ad31f472863092148ddee3dc3b71))
+
+## [0.27.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.27.0...@cognite/sdk-alpha@0.27.1) (2024-05-31)
+
+### Bug Fixes
+
+- allow data sampling to be disabled ([#1106](https://github.com/cognitedata/cognite-sdk-js/issues/1106)) ([a1fb47a](https://github.com/cognitedata/cognite-sdk-js/commit/a1fb47a3a5399ff5945243e89d5a03880b97f114))
+
+# [0.27.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.26.0...@cognite/sdk-alpha@0.27.0) (2024-05-24)
+
+### Features
+
+- **simint-alpha:** adopt breaking changes from the API ([#1105](https://github.com/cognitedata/cognite-sdk-js/issues/1105)) ([8f8dba6](https://github.com/cognitedata/cognite-sdk-js/commit/8f8dba6eababc86a16985f232980e7462cd79cec))
+
+# [0.26.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.25.3...@cognite/sdk-alpha@0.26.0) (2024-05-15)
+
+### Features
+
+- **simint-alpha:** remove unit systems, rename unitQuantities ([#1104](https://github.com/cognitedata/cognite-sdk-js/issues/1104)) ([d7817c9](https://github.com/cognitedata/cognite-sdk-js/commit/d7817c933f2806b2e7da110aa2e8ef228313055a))
+
+## [0.25.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.25.2...@cognite/sdk-alpha@0.25.3) (2024-05-15)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
+## [0.25.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.25.1...@cognite/sdk-alpha@0.25.2) (2024-05-13)
+
+**Note:** Version bump only for package @cognite/sdk-alpha
+
 ## [0.25.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.25.0...@cognite/sdk-alpha@0.25.1) (2024-05-02)
 
 ### Bug Fixes

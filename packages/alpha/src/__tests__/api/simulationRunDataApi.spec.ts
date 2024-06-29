@@ -12,7 +12,7 @@ describeIf('simulation run data api', () => {
   test('list simulation run data', async () => {
     const runs = await client.simulators.listRuns({
       filter: {
-        simulatorName: 'DWSIM',
+        simulatorExternalIds: ['DWSIM'],
         status: 'success',
       },
     });

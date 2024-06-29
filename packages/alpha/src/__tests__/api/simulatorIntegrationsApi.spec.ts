@@ -5,11 +5,9 @@ import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
   stepFields,
-  unitsMap,
-  unitSystem,
   modelTypes,
-  boundaryConditions,
-} from './mocks';
+  unitQuantities,
+} from './seed';
 
 const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
 
@@ -29,15 +27,9 @@ describeIf('simulator integrations api', () => {
         externalId: simulatorExternalId,
         name: simulatorName,
         fileExtensionTypes,
-        enabled: true,
         stepFields,
-        units: {
-          unitsMap,
-          unitSystem,
-        },
+        unitQuantities,
         modelTypes,
-        boundaryConditions,
-        isCalculationsEnabled: true,
       },
     ]);
     simulatorId = response[0].id;
@@ -51,13 +43,12 @@ describeIf('simulator integrations api', () => {
         externalId: simulatorIntegrationExternalId,
         simulatorExternalId: simulatorExternalId,
         heartbeat: new Date(ts),
-        dataSetId: 4097666328084896,
+        dataSetId: 97552494921583,
         connectorVersion: '1.0.0',
         simulatorVersion: '1.0.0',
-        runApiEnabled: true,
-        licenseStatus: 'active',
+        licenseStatus: 'UNKNOWN',
         licenseLastCheckedTime: new Date(),
-        connectorStatus: 'unknown',
+        connectorStatus: 'IDLE',
         connectorStatusUpdatedTime: new Date(),
       },
     ]);
