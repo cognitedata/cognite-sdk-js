@@ -15,6 +15,8 @@ import {
   SlimNodeAndEdgeCollectionResponse,
   SyncRequest,
   SearchResponse,
+  ByIdsResponse,
+  AggregationRequest,
 } from './types.gen';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
@@ -207,7 +209,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public aggregate = async (
-    params: ViewAggregationRequest
+    params: AggregationRequest
   ): Promise<AggregationResponse> => {
     const response = await this.post<AggregationResponse>(this.aggregateUrl, {
       data: params,
