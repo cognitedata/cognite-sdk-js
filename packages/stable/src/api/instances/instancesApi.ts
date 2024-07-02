@@ -4,7 +4,6 @@ import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
 import {
   AggregationResponse,
   ListOfSpaceExternalIdsRequestWithTyping,
-  NodeAndEdgeCollectionResponseV3Response,
   NodeAndEdgeCollectionResponseWithCursorV3Response,
   NodeAndEdgeCreateCollection,
   NodeOrEdge,
@@ -15,7 +14,7 @@ import {
   QueryResponse,
   SlimNodeAndEdgeCollectionResponse,
   SyncRequest,
-  ViewAggregationRequest,
+  SearchResponse,
 } from './types.gen';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
@@ -47,13 +46,10 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    */
   public search = async (
     params: NodeOrEdgeSearchRequest
-  ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
-    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
-      this.searchUrl,
-      {
-        data: params,
-      }
-    );
+  ): Promise<SearchResponse> => {
+    const response = await this.post<SearchResponse>(this.searchUrl, {
+      data: params,
+    });
     return response.data;
   };
 
@@ -121,13 +117,10 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    */
   public retrieve = async (
     params: ListOfSpaceExternalIdsRequestWithTyping
-  ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
-    const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
-      this.byIdsUrl,
-      {
-        data: params,
-      }
-    );
+  ): Promise<ByIdsResponse> => {
+    const response = await this.post<ByIdsResponse>(this.byIdsUrl, {
+      data: params,
+    });
     return response.data;
   };
 

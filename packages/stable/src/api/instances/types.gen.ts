@@ -51,9 +51,14 @@ export type AggregationDefinition =
   | MaxAggregateFunctionV3
   | SumAggregateFunctionV3
   | HistogramAggregateFunctionV3;
-export type AggregationRequest = ViewAggregationRequest;
+export type AggregationRequest = CommonAggregationRequest & {
+  instanceType?: InstanceType;
+  view: ViewReference;
+  targetUnits?: TargetUnits;
+  includeTyping?: IncludeTyping;
+};
 export type AggregationResponse = AggregatedResultItemCollection & {
-  typing?: TypeInformation;
+  typing?: TypeInformationOuter;
 };
 /**
  * Calculates the average from the data stored by the specified property. This aggregation uses an average mean  calculation, and not an integral mean.
@@ -62,6 +67,12 @@ export interface AvgAggregateFunctionV3 {
   avg: {
     property: string;
   };
+}
+export interface ByIdsResponse {
+  /** List of nodes and edges */
+  items: NodeOrEdge[];
+  /** Spaces for the requested view and containers */
+  typing?: TypeInformationOuter;
 }
 /**
 * An external-id reference to an existing CDF resource type item, such as a time series.
@@ -75,7 +86,7 @@ Currently, time series, sequence and file references are supported.
 */
 export interface CDFExternalIdReference {
   /**
-   * Specifies that the data type is a list of values.
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
    *
    */
   list?: boolean;
@@ -142,6 +153,8 @@ export interface CorePropertyDefinition {
   defaultValue?: string | number | boolean | object;
   /** Description of the content and suggested use for this property. */
   description?: string;
+  /** Should updates to this property be rejected after the initial population? */
+  immutable?: boolean;
   /** Readable property name. */
   name?: string;
   /** Does this property need to be set to a value, or not? */
@@ -221,6 +234,11 @@ export interface DataModelsNestedFilter {
 export interface DirectNodeRelation {
   /** The (optional) required type for the node the direct relation points to. If specified, the node must exist before the direct relation is referenced and of the specified type. If no container specification is used, the node will be auto created with the built-in ```node``` container type, and it does not explicitly have to be created before the node that references it. */
   container?: ContainerReference;
+  /**
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
+   *
+   */
+  list?: boolean;
   type: 'direct';
 }
 /**
@@ -308,7 +326,7 @@ export interface EdgeOrNodeData {
 export interface EdgeWrite {
   /** Reference to the node pointed to by the direct relation. The reference consists of a space and an external-id. */
   endNode: DirectRelationReference;
-  /** Fail the ingestion request if the edge's version is greater than or equal to this value. If no  existingVersion is specified, the ingestion will always overwrite any existing data for the edge (for the  specified container or view). If existingVersion is set to 0, the upsert will behave as an insert, so it  will fail the bulk if the item already exists. If skipOnVersionConflict is set on the ingestion request,  then the item will be skipped instead of failing the ingestion request. */
+  /** Fail the ingestion request if the edge's version is greater than this value. If no  existingVersion is specified, the ingestion will always overwrite any existing data for the edge (for the  specified container or view). If existingVersion is set to 0, the upsert will behave as an insert, so it  will fail the bulk if the item already exists. If skipOnVersionConflict is set on the ingestion request,  then the item will be skipped instead of failing the ingestion request. */
   existingVersion?: number;
   /** Unique alphanumeric identifier for the edge */
   externalId: NodeOrEdgeExternalId;
@@ -369,6 +387,36 @@ export interface InFilterV3 {
     values: FilterValueList;
   };
 }
+export interface InstanceInspectRequest {
+  inspectionOperations: {
+    involvedViews?: {
+      allVersions?: boolean;
+    };
+    involvedContainers?: {
+      allVersions?: boolean;
+    };
+  };
+  items: {
+    instanceType: InstanceType;
+    externalId: NodeOrEdgeExternalId;
+    space: SpaceSpecification;
+  }[];
+}
+export interface InstanceInspectResponse {
+  /** List of instance inspection results */
+  items: InstanceInspectResultItem[];
+}
+export interface InstanceInspectResultItem {
+  /** External ids for the requested items */
+  externalId: NodeOrEdgeExternalId;
+  inspectionResults: {
+    involvedViews?: ViewReference[];
+    involvedContainers?: ContainerReference[];
+  };
+  /** The type of instance being returned, an edge or a node. */
+  instanceType: InstanceType;
+  space: SpaceSpecification;
+}
 /**
  * The type of instance
  */
@@ -389,7 +437,7 @@ export interface ListOfSpaceExternalIdsRequestWithTyping {
     externalId: NodeOrEdgeExternalId;
     space: SpaceSpecification;
   }[];
-  /** Retrieve properties from the listed - by reference - views. */
+  /** The node/edge must have data in all the sources defined in the list */
   sources?: SourceSelectorWithoutPropertiesV3;
 }
 export interface MatchAllFilter {
@@ -416,12 +464,6 @@ export interface MinAggregateFunctionV3 {
  * The cursor value used to return (paginate to) the next page of results, when more data is available.
  */
 export type NextCursorV3 = string;
-export interface NodeAndEdgeCollectionResponseV3Response {
-  /** List of nodes and edges */
-  items: NodeOrEdge[];
-  /** Spaces for the requested view and containers */
-  typing?: TypeInformationOuter;
-}
 export interface NodeAndEdgeCollectionResponseWithCursorV3Response {
   /** List of nodes and edges */
   items: NodeOrEdge[];
@@ -483,7 +525,7 @@ export interface NodeOrEdgeDeleteResponse {
   }[];
 }
 /**
- * @pattern ^[^\\x00]{1,255}$
+ * @pattern ^[^\\x00]{1,256}$
  */
 export type NodeOrEdgeExternalId = string;
 export type NodeOrEdgeListRequestV3 = {
@@ -500,10 +542,16 @@ export type NodeOrEdgeListRequestV3 = {
  */
 export type NodeOrEdgeSearchRequest = SearchRequestV3;
 /**
+ * The view or container property to use when we traverse direct relations. Has to reference a direct relation property. Only applicable when `from` is specified.
+ */
+export type NodeTableExpressionThrough =
+  | ViewPropertyReference
+  | ThroughReference;
+/**
  * Node to create or update
  */
 export interface NodeWrite {
-  /** Fail the ingestion request if the node's version is greater than or equal to this value. If no  existingVersion is specified, the ingestion will always overwrite any existing data for the edge (for the  specified container or view). If existingVersion is set to 0, the upsert will behave as an insert, so it  will fail the bulk if the item already exists. If skipOnVersionConflict is set on the ingestion request,  then the item will be skipped instead of failing the ingestion request. */
+  /** Fail the ingestion request if the node's version is greater than this value. If no  existingVersion is specified, the ingestion will always overwrite any existing data for the edge (for the  specified container or view). If existingVersion is set to 0, the upsert will behave as an insert, so it  will fail the bulk if the item already exists. If skipOnVersionConflict is set on the ingestion request,  then the item will be skipped instead of failing the ingestion request. */
   existingVersion?: number;
   /** Unique identifier for the node */
   externalId: NodeOrEdgeExternalId;
@@ -544,12 +592,13 @@ export interface PrefixFilterV3 {
 
 We expect dates to be in the ISO-8601 format, while timestamps are expected to be an epoch value with
 millisecond precision. JSON values have to be valid JSON fragments. The maximum allowed size for a JSON
-object is 40960 bytes. The maximum allowed length of a key is 128, while the maximum allowed size of a value
-is 10240 bytes and you can have up to 256 key-value pairs.
+object is 40960 bytes. For list of json values, the size of the entire list must be within this limit.
+The maximum allowed length of a key is 128, while the maximum allowed size of a value is 10240 bytes
+and you can have up to 256 key-value pairs.
 */
 export interface PrimitiveProperty {
   /**
-   * Specifies that the data type is a list of values.
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
    *
    */
   list?: boolean;
@@ -562,6 +611,16 @@ export interface PrimitiveProperty {
     | 'timestamp'
     | 'date'
     | 'json';
+  /**
+   * The unit of the data stored in this property, can only be assign to type float32 or float64.
+   * ExternalId needs to match with a unit in the Cognite unit catalog.
+   *
+   * @example externalId: temperature:deg_c, sourceUnit: Celsius
+   */
+  unit?: {
+    externalId: NodeOrEdgeExternalId;
+    sourceUnit?: string;
+  };
 }
 /**
  * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
@@ -589,6 +648,7 @@ export interface PropertySortV3 {
 }
 /**
  * Group of property values indexed by a local unique identifier. The identifier has to have a length of between 1 and 255 characters.  It must also match the pattern ```^[a-zA-Z0-9][a-zA-Z0-9_-]{0,253}[a-zA-Z0-9]?$``` , and it cannot be any of the following reserved identifiers: ```space```, ```externalId```, ```createdTime```, ```lastUpdatedTime```, ```deletedTime```, and ```extensions```. The maximum number of properties depends on your subscription, and is by default 100.
+ * @example {"someStringProperty":"someStringValue","someDirectRelation":{"space":"mySpace","externalId":"someNode"},"someIntArrayProperty":[1,2,3,4]}
  */
 export type PropertyValueGroupV3 = Record<string, RawPropertyValueV3>;
 export interface QueryEdgeTableExpressionV3 {
@@ -602,7 +662,8 @@ export interface QueryEdgeTableExpressionV3 {
     terminationFilter?: TableExpressionFilterDefinition;
     limitEach?: number;
   };
-  limit?: number;
+  /** Limits the number of instances in the result set generated by this table expression. */
+  limit?: TableExpressionQueryLimit;
   postSort?: PropertySortV3[];
   sort?: PropertySortV3[];
 }
@@ -612,14 +673,16 @@ export interface QueryEdgeTableExpressionV3 {
 export interface QueryIntersectionTableExpressionV3 {
   except?: string[];
   intersection: (QuerySetOperationTableExpressionV3 | string)[];
-  limit?: number;
+  /** Limits the number of instances in the result set generated by this table expression. */
+  limit?: TableExpressionQueryLimit;
 }
 export interface QueryNodeTableExpressionV3 {
-  limit?: number;
+  /** Limits the number of instances in the result set generated by this table expression. */
+  limit?: TableExpressionQueryLimit;
   nodes: {
     from?: string;
     chainTo?: TableExpressionChainToDefinition;
-    through?: ViewPropertyReference;
+    through?: NodeTableExpressionThrough;
     direction?: 'outwards' | 'inwards';
     filter?: TableExpressionFilterDefinition;
   };
@@ -628,6 +691,8 @@ export interface QueryNodeTableExpressionV3 {
 export interface QueryRequest {
   /** Cursors returned from the previous query request. These cursors match the result set expressions you  specified in the ```with``` clause for the query. */
   cursors?: Record<string, NextCursorV3>;
+  /** Should we return property type information as part of the result? */
+  includeTyping?: IncludeTyping;
   /** Values in filters can be parameterised. Parameters are provided as part of the query  object, and referenced in the filter itself. */
   parameters?: Record<string, RawPropertyValueV3>;
   select: Record<string, QuerySelectV3>;
@@ -635,7 +700,9 @@ export interface QueryRequest {
 }
 export interface QueryResponse {
   items: Record<string, NodeOrEdge[]>;
-  nextCursor: Record<string, NextCursorV3>;
+  nextCursor: Record<string, any>;
+  /** Property type information for selected result expressions. */
+  typing?: Record<string, TypeInformationOuter>;
 }
 /**
  * Define which view to return properties for, and the properties to return. Up to 10 views can be specified per query.
@@ -659,7 +726,8 @@ result sets.  Note: The operation may return duplicate results since we do not p
 */
 export interface QueryUnionAllTableExpressionV3 {
   except?: string[];
-  limit?: number;
+  /** Limits the number of instances in the result set generated by this table expression. */
+  limit?: TableExpressionQueryLimit;
   unionAll: (QuerySetOperationTableExpressionV3 | string)[];
 }
 /**
@@ -673,7 +741,8 @@ n records.
 */
 export interface QueryUnionTableExpressionV3 {
   except?: string[];
-  limit?: number;
+  /** Limits the number of instances in the result set generated by this table expression. */
+  limit?: TableExpressionQueryLimit;
   union: (QuerySetOperationTableExpressionV3 | string)[];
 }
 export interface RangeFilterV3 {
@@ -726,8 +795,36 @@ export type SearchRequestV3 = {
   query?: string;
   instanceType?: InstanceType;
   properties?: string[];
+  targetUnits?: TargetUnits;
   filter?: FilterDefinition;
+  includeTyping?: IncludeTyping;
+  sort?: SearchSort[];
 } & LimitWithDefault1000;
+export interface SearchResponse {
+  /** List of nodes and edges */
+  items: NodeOrEdge[];
+  /** Spaces for the requested view and containers */
+  typing?: TypeInformationOuter;
+}
+export interface SearchSort {
+  direction?: 'ascending' | 'descending';
+  /**
+   * Property you want to filter. Use a list of strings to specify nested properties.
+   *
+   * <u>Example:</u>
+   * You have the object
+   * ```
+   * {
+   *   "room": {
+   *     "id": "b53"
+   *   },
+   *   "roomId": "a23"
+   * }
+   * Use `["room", "id"]` to return the value in the nested `id` property, which is a part of the `room` object.
+   * You can also read the value(s) in the standalone property `roomId` with `["roomId"]`.
+   */
+  property: DMSFilterProperty;
+}
 /**
  * Edge
  */
@@ -779,12 +876,14 @@ export type SourceReference = ViewReference | ContainerReference;
 export type SourceSelectorV3 = {
   source: ViewReference;
   properties: string[];
+  targetUnits?: TargetUnits;
 }[];
 /**
- * Retrieve properties from the listed - by reference - views.
+ * Retrieve properties from the listed - by reference - views. The node/edge must have data in all the sources defined in the list.
  */
 export type SourceSelectorWithoutPropertiesV3 = {
   source: ViewReference;
+  targetUnits?: TargetUnits;
 }[];
 /**
  * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
@@ -811,17 +910,19 @@ export interface SyncEdgeTableExpressionV3 {
     nodeFilter?: TableExpressionFilterDefinition;
     terminationFilter?: TableExpressionFilterDefinition;
   };
-  limit?: number;
+  /** Limits the number of instances in the result set generated by this table expression. */
+  limit?: TableExpressionSyncLimit;
 }
 /**
  * The synchronization query to use when we listen for changes to nodes.  The nodes must also match the  specified filter.
  */
 export interface SyncNodeTableExpressionV3 {
-  limit?: number;
+  /** Limits the number of instances in the result set generated by this table expression. */
+  limit?: TableExpressionSyncLimit;
   nodes: {
     from?: string;
     chainTo?: TableExpressionChainToDefinition;
-    through?: ViewPropertyReference;
+    through?: NodeTableExpressionThrough;
     direction?: 'outwards' | 'inwards';
     filter?: TableExpressionFilterDefinition;
   };
@@ -829,6 +930,8 @@ export interface SyncNodeTableExpressionV3 {
 export interface SyncRequest {
   /** Cursors returned from the previous sync request. These cursors match the result set expressions you  specified in the ```with``` clause for the sync. */
   cursors?: Record<string, NextCursorV3>;
+  /** Should we return property type information as part of the result? */
+  includeTyping?: IncludeTyping;
   /** Parameters to return */
   parameters?: Record<string, RawPropertyValueV3>;
   select: Record<string, SyncSelectV3>;
@@ -943,6 +1046,12 @@ export interface TableExpressionPrefixFilterV3 {
     value: TableExpressionFilterValue;
   };
 }
+/**
+ * Limits the number of instances in the result set generated by this table expression.
+ * @min 1
+ * @max 10000
+ */
+export type TableExpressionQueryLimit = number;
 export interface TableExpressionRangeFilterV3 {
   /**
    * Matches items that contain terms within the provided range.
@@ -962,6 +1071,24 @@ export interface TableExpressionRangeFilterV3 {
     lt?: TableExpressionFilterValueRange;
   };
 }
+/**
+ * Limits the number of instances in the result set generated by this table expression.
+ * @min 100
+ * @max 2000
+ */
+export type TableExpressionSyncLimit = number;
+/**
+ * Describes a target unit for a property.
+ */
+export interface TargetUnit {
+  property: string;
+  /** The external id of the target unit or unit system to convert to. */
+  unit: UnitReference | UnitSystemReference;
+}
+/**
+ * Properties to convert to another unit. The API can only convert to another unit, if a unit has been defined as part of the type on the underlying container being queried.
+ */
+export type TargetUnits = TargetUnit[];
 /**
  * Text type
  */
@@ -1753,11 +1880,16 @@ export interface TextProperty {
     | 'zu'
     | 'zu-ZA';
   /**
-   * Specifies that the data type is a list of values.
+   * Specifies that the data type is a list of values. The ordering of values is preserved.
    *
    */
   list?: boolean;
   type: 'text';
+}
+export interface ThroughReference {
+  identifier: PropertyIdentifierV3;
+  /** Reference to a view, or a container */
+  source: SourceReference;
 }
 /**
  * Type information for the returned properties (if requested)
@@ -1775,6 +1907,20 @@ export type TypePropertyDefinition = ViewCorePropertyDefinition;
  * View or container holding properties
  */
 export type TypingViewOrContainer = Record<string, TypeInformation>;
+/**
+ * Target unit reference.
+ */
+export interface UnitReference {
+  externalId: NodeOrEdgeExternalId;
+}
+/**
+* Target system to convert data to. Can be used instead of targetUnit to identify the unit to convert to.
+* @example Default, SI, Imperial
+
+*/
+export interface UnitSystemReference {
+  unitSystemName: string;
+}
 export interface UpsertConflict {
   /** Details about the error caused by the upsert/update. */
   error: {
@@ -1782,10 +1928,6 @@ export interface UpsertConflict {
     message: string;
   };
 }
-export type ViewAggregationRequest = CommonAggregationRequest & {
-  instanceType?: InstanceType;
-  view: ViewReference;
-};
 export type ViewCorePropertyDefinition = CorePropertyDefinition & {
   type:
     | TextProperty
@@ -1806,7 +1948,7 @@ export type ViewOrContainer = Record<string, PropertyValueGroupV3>;
 export interface ViewPropertyReference {
   /** The unique identifier, from the view, for the property */
   identifier: PropertyIdentifierV3;
-  /** Reference to a view */
+  /** Reference to a view - this is deprecated, use `source` with ViewReference instead */
   view: ViewReference;
 }
 /**
