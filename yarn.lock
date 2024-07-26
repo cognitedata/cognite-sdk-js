@@ -4607,9 +4607,9 @@
     "@types/node" "*"
 
 "@types/is-buffer@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/is-buffer/-/is-buffer-2.0.0.tgz#94de4d23540646de5f5df2cd346a1c162067ea5a"
-  integrity sha512-0f7N/e3BAz32qDYvgB4d2cqv1DqUwvGxHkXsrucICn8la1Vb6Yl6Eg8mPScGwUiqHJeE7diXlzaK+QMA9m4Gxw==
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@types/is-buffer/-/is-buffer-2.0.2.tgz#3dcd8e21e7d6c2d312d0b9f6cf23bb6ca1ef9f76"
+  integrity sha512-G6OXy83Va+xEo8XgqAJYOuvOMxeey9xM5XKkvwJNmN8rVdcB+r15HvHsG86hl86JvU0y1aa7Z2ERkNFYWw9ySg==
   dependencies:
     "@types/node" "*"
 
