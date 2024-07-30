@@ -841,7 +841,7 @@ export interface DatapointsQueryId
   extends DatapointsQueryProperties,
     InternalId {}
 
-export interface DatapointsQueryProperties extends Limit {
+export interface DatapointsQueryProperties extends Limit, Cursor {
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
    */
