@@ -3544,6 +3544,11 @@ export {
 } from './api/instances/types.gen';
 
 export {
+  QueryResult,
+  SelectSourceWithParams,
+} from './api/instances/query.types';
+
+export {
   DataModel,
   DataModelCreate,
   ListOfAllVersionsReferences,
