@@ -16,3 +16,6 @@ codeSnippets
 .vscode
 .env
 tmp/*
+.envrc
+.direnv/
+
