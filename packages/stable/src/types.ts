@@ -819,6 +819,11 @@ export interface DatapointsMultiQueryBase extends Limit, IgnoreUnknownIds {
    * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
    */
   includeOutsidePoints?: boolean;
+  /**
+    * Defaul "UTC" For aggregates of granularity 'hour' and longer, which time zone should we align to. Align to the start of the hour, start of the day or start of the month. For time zones of type Region/Location, the aggregate duration can vary, typically due to daylight saving time. For time zones of type UTC+/-HH:MM, use increments of 15 minutes.
+Note: Time zones with minute offsets (e.g. UTC+05:30 or Asia/Kolkata) may take longer to execute. Historical time zones, with offsets not multiples of 15 minutes, are not supported.
+   */
+  timeZone?: string;
 }
 
 export type ExternalDatapointsQuery =
@@ -873,6 +878,10 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
    * The unit system of the data points returned. Cannot be used with targetUnit.
    */
   targetUnitSystem?: CogniteExternalId;
+  /**
+   * Default: "UTC" Which time zone to align aggregates to. Omit to use top-level value.
+   */
+  timeZone?: string;
 }
 
 export type DateRange = Range<Timestamp>;
