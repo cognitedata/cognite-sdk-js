@@ -30,7 +30,7 @@ abstract class TextWithBoundingBox {
     top: number,
     bottom: number,
     page: number,
-    text: string,
+    text: string
   ) {
     this.left = left;
     this.right = right;
@@ -43,12 +43,12 @@ abstract class TextWithBoundingBox {
 
 class WordWithBoundingBox extends TextWithBoundingBox {
   constructor(word: DocumentWordElement) {
-    let left = word.characters[0].left;
-    let right = word.characters[word.characters.length - 1].right;
+    const left = word.characters[0].left;
+    const right = word.characters[word.characters.length - 1].right;
     let top = word.characters[0].top;
     let bottom = word.characters[0].bottom;
-    let page = word.characters[0].page;
-    let text = "";
+    const page = word.characters[0].page;
+    let text = '';
 
     for (const character of word.characters) {
       if (character.top < top) {
@@ -68,14 +68,14 @@ class LineWithBoundingBox extends TextWithBoundingBox {
   words: WordWithBoundingBox[];
 
   constructor(line: DocumentLineElement) {
-    let words = line.words.map((word) => new WordWithBoundingBox(word));
+    const words = line.words.map((word) => new WordWithBoundingBox(word));
 
-    let left = words[0].left;
-    let right = words[words.length - 1].right;
+    const left = words[0].left;
+    const right = words[words.length - 1].right;
     let top = words[0].top;
     let bottom = words[0].bottom;
-    let page = words[0].page;
-    let text = "";
+    const page = words[0].page;
+    let text = '';
 
     for (const word of words) {
       if (word.top < top) {
@@ -85,7 +85,7 @@ class LineWithBoundingBox extends TextWithBoundingBox {
         bottom = word.bottom;
       }
       if (text.length > 0) {
-        text += " ";
+        text += ' ';
       }
       text += word.text;
     }
@@ -101,10 +101,10 @@ class LinesWithBoundingBox extends TextWithBoundingBox {
   constructor(lines: LineWithBoundingBox[]) {
     let left = lines[0].left;
     let right = lines[0].right;
-    let top = lines[0].top;
-    let bottom = lines[lines.length - 1].bottom;
-    let page = lines[0].page;
-    let text = "";
+    const top = lines[0].top;
+    const bottom = lines[lines.length - 1].bottom;
+    const page = lines[0].page;
+    let text = '';
 
     for (const line of lines) {
       if (line.left < left) {
@@ -114,7 +114,7 @@ class LinesWithBoundingBox extends TextWithBoundingBox {
         right = line.right;
       }
       if (text.length > 0) {
-        text += "\n";
+        text += '\n';
       }
       text += line.text;
     }
@@ -126,21 +126,21 @@ class LinesWithBoundingBox extends TextWithBoundingBox {
 
 class ParagraphWithBoundingBox extends LinesWithBoundingBox {
   constructor(element: DocumentParagraphElement) {
-    let lines = element.lines.map((line) => new LineWithBoundingBox(line));
+    const lines = element.lines.map((line) => new LineWithBoundingBox(line));
     super(lines);
   }
 }
 
 class TableOfContentsWithBoundingBox extends LinesWithBoundingBox {
   constructor(element: DocumentTableOfContentsElement) {
-    let lines = element.lines.map((line) => new LineWithBoundingBox(line));
+    const lines = element.lines.map((line) => new LineWithBoundingBox(line));
     super(lines);
   }
 }
 
 class ListWithBoundingBox extends LinesWithBoundingBox {
   constructor(element: DocumentListElement) {
-    let lines = element.lines.map((line) => new LineWithBoundingBox(line));
+    const lines = element.lines.map((line) => new LineWithBoundingBox(line));
     super(lines);
   }
 }
@@ -149,8 +149,8 @@ class TitleWithBoundingBox extends LinesWithBoundingBox {
   level: number;
 
   constructor(element: DocumentTitleElement) {
-    let level = element.level || 3;
-    let lines = element.lines.map((line) => new LineWithBoundingBox(line));
+    const level = element.level || 3;
+    const lines = element.lines.map((line) => new LineWithBoundingBox(line));
     super(lines);
     this.level = level;
   }
@@ -158,7 +158,7 @@ class TitleWithBoundingBox extends LinesWithBoundingBox {
 
 class CellWithBoundingBox extends LinesWithBoundingBox {
   constructor(element: DocumentCellElement) {
-    let lines = element.lines.map((line) => new LineWithBoundingBox(line));
+    const lines = element.lines.map((line) => new LineWithBoundingBox(line));
     super(lines);
   }
 }
@@ -169,13 +169,15 @@ class TableWithBoundingBox extends LinesWithBoundingBox {
   rows: (CellWithBoundingBox | null)[][];
 
   constructor(element: DocumentTableElement) {
-    let rows = element.rows.map((cells) => cells.map(
-      (cell) => cell.lines.length > 0 ? new CellWithBoundingBox(cell) : null
-    ));
-    let lines = [];
+    const rows = element.rows.map((cells) =>
+      cells.map((cell) =>
+        cell.lines.length > 0 ? new CellWithBoundingBox(cell) : null
+      )
+    );
+    const lines = [];
     for (const cells of rows) {
       for (const cell of cells) {
-        if (cell === null) continue
+        if (cell === null) continue;
 
         lines.push(...cell.lines);
       }
@@ -187,7 +189,12 @@ class TableWithBoundingBox extends LinesWithBoundingBox {
   }
 }
 
-export type ElementWithBoundingBox = TitleWithBoundingBox | ParagraphWithBoundingBox | ListWithBoundingBox | TableOfContentsWithBoundingBox | TableWithBoundingBox;
+export type ElementWithBoundingBox =
+  | TitleWithBoundingBox
+  | ParagraphWithBoundingBox
+  | ListWithBoundingBox
+  | TableOfContentsWithBoundingBox
+  | TableWithBoundingBox;
 
 export class DocumentElementsResponseWithHelpers {
   elements: DocumentElement[];
@@ -211,33 +218,41 @@ export class DocumentElementsResponseWithHelpers {
       }
     }
 
-    throw new Error("Unable to determine page for element");
+    throw new Error('Unable to determine page for element');
   }
 
-  public* getElements(fromPage?: number, toPage?: number): Generator<ElementWithBoundingBox, void> {
+  public *getElements(
+    fromPage?: number,
+    toPage?: number
+  ): Generator<ElementWithBoundingBox, void> {
     for (const element of this.elements) {
-      let page = this.getElementPage(element);
+      const page = this.getElementPage(element);
       if (fromPage !== undefined && page < fromPage) {
         continue;
       }
       if (toPage !== undefined && page > toPage) {
-        return
+        return;
       }
-      if (element.type == "table") {
+      if (element.type == 'table') {
         yield new TableWithBoundingBox(element as DocumentTableElement);
-      } else if (element.type == "title") {
+      } else if (element.type == 'title') {
         yield new TitleWithBoundingBox(element as DocumentTitleElement);
-      } else if (element.type == "list") {
+      } else if (element.type == 'list') {
         yield new ListWithBoundingBox(element as DocumentListElement);
-      } else if (element.type == "toc") {
-        yield new TableOfContentsWithBoundingBox(element as DocumentTableOfContentsElement);
+      } else if (element.type == 'toc') {
+        yield new TableOfContentsWithBoundingBox(
+          element as DocumentTableOfContentsElement
+        );
       } else {
         yield new ParagraphWithBoundingBox(element as DocumentParagraphElement);
       }
     }
   }
 
-  public* getLines(fromPage?: number, toPage?: number): Generator<LineWithBoundingBox, void> {
+  public *getLines(
+    fromPage?: number,
+    toPage?: number
+  ): Generator<LineWithBoundingBox, void> {
     for (const element of this.getElements(fromPage, toPage)) {
       for (const line of element.lines) {
         yield line;
@@ -245,22 +260,31 @@ export class DocumentElementsResponseWithHelpers {
     }
   }
 
-  public* getWords(fromPage?: number, toPage?: number): Generator<WordWithBoundingBox, void> {
+  public *getWords(
+    fromPage?: number,
+    toPage?: number
+  ): Generator<WordWithBoundingBox, void> {
     for (const line of this.getLines(fromPage, toPage)) {
       for (const word of line.words) {
         yield word;
       }
     }
   }
-};
+}
 
 export class DocumentsAPIAlpha extends DocumentsAPI {
-  public elements = (id: CogniteInternalId): Promise<DocumentElementsResponseWithHelpers> => {
+  public elements = (
+    id: CogniteInternalId
+  ): Promise<DocumentElementsResponseWithHelpers> => {
     return this.documentElements(id);
   };
 
-  private async documentElements(id: CogniteInternalId): Promise<DocumentElementsResponseWithHelpers> {
-    const response = await this.get<DocumentElementsResponse>(this.url(`${id}/elements`));
+  private async documentElements(
+    id: CogniteInternalId
+  ): Promise<DocumentElementsResponseWithHelpers> {
+    const response = await this.get<DocumentElementsResponse>(
+      this.url(`${id}/elements`)
+    );
     return new DocumentElementsResponseWithHelpers(response.data);
-  };
-};
+  }
+}

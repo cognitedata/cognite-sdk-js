@@ -37,7 +37,4 @@ export const {
   simpleCompare,
 } = TestUtils;
 
-export {
-  setupLoggedInClient,
-  setupMockableClient,
-};
+export { setupLoggedInClient, setupMockableClient };

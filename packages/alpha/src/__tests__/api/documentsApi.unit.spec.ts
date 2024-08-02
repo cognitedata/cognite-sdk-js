@@ -29,9 +29,12 @@ describe('Documents unit test', () => {
       .reply(200, elements);
 
     const response = await client.documentsAlpha.elements(123);
-    expect(
-      response.elements.map((e) => e.type)
-    ).toEqual(['title', 'paragraph', 'paragraph', 'table'])
+    expect(response.elements.map((e) => e.type)).toEqual([
+      'title',
+      'paragraph',
+      'paragraph',
+      'table',
+    ]);
   });
 
   test('get elements', async () => {
@@ -43,10 +46,10 @@ describe('Documents unit test', () => {
     const response = await client.documentsAlpha.elements(123);
     const elementTexts = Array.from(response.getElements()).map((e) => e.text);
     expect(elementTexts.length).toEqual(4);
-    expect(elementTexts[0]).toEqual("Simple title");
-    expect(elementTexts[1]).toContain("Paragraph number 1");
-    expect(elementTexts[2]).toEqual("Paragraph number 2");
-    expect(elementTexts[3]).toContain("Change");
+    expect(elementTexts[0]).toEqual('Simple title');
+    expect(elementTexts[1]).toContain('Paragraph number 1');
+    expect(elementTexts[2]).toEqual('Paragraph number 2');
+    expect(elementTexts[3]).toContain('Change');
   });
 
   test('get words', async () => {
@@ -56,9 +59,22 @@ describe('Documents unit test', () => {
       .reply(200, elements);
 
     const response = await client.documentsAlpha.elements(123);
-    expect(
-      Array.from(response.getWords(1, 1)).map((w) => w.text)
-    ).toEqual(['Simple', 'title', 'Paragraph', 'number', '1', 'The', 'first', 'paragraph', 'has', '2', 'lines', 'Paragraph', 'number', '2'])
+    expect(Array.from(response.getWords(1, 1)).map((w) => w.text)).toEqual([
+      'Simple',
+      'title',
+      'Paragraph',
+      'number',
+      '1',
+      'The',
+      'first',
+      'paragraph',
+      'has',
+      '2',
+      'lines',
+      'Paragraph',
+      'number',
+      '2',
+    ]);
   });
 
   test('get lines', async () => {
@@ -68,8 +84,11 @@ describe('Documents unit test', () => {
       .reply(200, elements);
 
     const response = await client.documentsAlpha.elements(123);
-    expect(
-      Array.from(response.getLines(1, 1)).map((l) => l.text)
-    ).toEqual(['Simple title', 'Paragraph number 1', 'The first paragraph has 2 lines', 'Paragraph number 2'])
+    expect(Array.from(response.getLines(1, 1)).map((l) => l.text)).toEqual([
+      'Simple title',
+      'Paragraph number 1',
+      'The first paragraph has 2 lines',
+      'Paragraph number 2',
+    ]);
   });
 });
