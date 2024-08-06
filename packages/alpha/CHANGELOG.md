@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.29.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.28.3...@cognite/sdk-alpha@0.29.0) (2024-08-06)
+
+### Features
+
+- remove valueType from input timeseries ([#1123](https://github.com/cognitedata/cognite-sdk-js/issues/1123)) ([cf1e5d1](https://github.com/cognitedata/cognite-sdk-js/commit/cf1e5d114278801cc7718c820fae98bb336ed197))
+
 ## [0.28.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.28.2...@cognite/sdk-alpha@0.28.3) (2024-06-20)
 
 ### Bug Fixes
