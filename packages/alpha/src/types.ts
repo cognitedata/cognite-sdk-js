@@ -238,7 +238,6 @@ export interface SimulationRunId {
 interface SimulatorRoutineIO {
   referenceId: string;
   name: string;
-  valueType: SimulationRunDataValueType;
   saveTimeseriesExternalId?: CogniteExternalId;
   unit?: {
     name: string;
@@ -248,6 +247,7 @@ interface SimulatorRoutineIO {
 
 export interface SimulatorRoutineInputConst extends SimulatorRoutineIO {
   value: string | number | string[] | number[];
+  valueType: SimulationRunDataValueType;
 }
 
 export interface SimulatorRoutineInputTs extends SimulatorRoutineIO {
@@ -259,7 +259,9 @@ export type SimulatorRoutineInput =
   | SimulatorRoutineInputConst
   | SimulatorRoutineInputTs;
 
-export type SimulatorRoutineOutput = SimulatorRoutineIO;
+export interface SimulatorRoutineOutput extends SimulatorRoutineIO {
+  valueType: SimulationRunDataValueType;
+}
 
 export interface SimulationRunData {
   runId: CogniteInternalId;
