@@ -731,7 +731,11 @@ export type DatapointsDeleteRequest =
   | (InternalId & DatapointsDeleteRange)
   | (ExternalId & DatapointsDeleteRange);
 
-export interface DatapointAggregates extends DatapointsMetadata {
+export interface NextCursor {
+  nextCursor?: string;
+}
+
+export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   isString: false;
   /**
    * Whether the timeseries is a step series or not
@@ -746,7 +750,7 @@ export interface DatapointAggregates extends DatapointsMetadata {
 
 export type Datapoints = StringDatapoints | DoubleDatapoints;
 
-export interface DoubleDatapoints extends DatapointsMetadata {
+export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
   isString: false;
   /**
    * Whether the timeseries is a step series or not
@@ -762,7 +766,7 @@ export interface DoubleDatapoints extends DatapointsMetadata {
   unitExternalId?: CogniteExternalId;
 }
 
-export interface StringDatapoints extends DatapointsMetadata {
+export interface StringDatapoints extends DatapointsMetadata, NextCursor {
   isString: true;
   /**
    * The list of datapoints
@@ -819,6 +823,11 @@ export interface DatapointsMultiQueryBase extends Limit, IgnoreUnknownIds {
    * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
    */
   includeOutsidePoints?: boolean;
+  /**
+    * Defaul "UTC" For aggregates of granularity 'hour' and longer, which time zone should we align to. Align to the start of the hour, start of the day or start of the month. For time zones of type Region/Location, the aggregate duration can vary, typically due to daylight saving time. For time zones of type UTC+/-HH:MM, use increments of 15 minutes.
+Note: Time zones with minute offsets (e.g. UTC+05:30 or Asia/Kolkata) may take longer to execute. Historical time zones, with offsets not multiples of 15 minutes, are not supported.
+   */
+  timeZone?: string;
 }
 
 export type ExternalDatapointsQuery =
@@ -841,7 +850,7 @@ export interface DatapointsQueryId
   extends DatapointsQueryProperties,
     InternalId {}
 
-export interface DatapointsQueryProperties extends Limit {
+export interface DatapointsQueryProperties extends Limit, Cursor {
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
    */
@@ -873,6 +882,10 @@ export interface DatapointsQueryProperties extends Limit {
    * The unit system of the data points returned. Cannot be used with targetUnit.
    */
   targetUnitSystem?: CogniteExternalId;
+  /**
+   * Default: "UTC" Which time zone to align aggregates to. Omit to use top-level value.
+   */
+  timeZone?: string;
 }
 
 export type DateRange = Range<Timestamp>;
