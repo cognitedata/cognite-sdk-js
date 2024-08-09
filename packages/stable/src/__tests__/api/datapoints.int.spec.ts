@@ -62,7 +62,7 @@ describe('Datapoints integration test', () => {
 
   test('retrieve with cursor', async () => {
     const queryTimeRange = {
-      start: '2d-ago',
+      start: '3d-ago',
       end: new Date(),
     };
     const response = await client.datapoints.retrieve({
@@ -71,15 +71,15 @@ describe('Datapoints integration test', () => {
     });
 
     expect(response[0].datapoints.length).toBe(1);
+    expect(response[0].nextCursor).toBeDefined();
 
     const nextResponse = await client.datapoints.retrieve({
-      items: [{ id: timeserie.id, limit: 1, cursor: response.nextCursor }],
+      items: [{ id: timeserie.id, limit: 1, cursor: response[0].nextCursor }],
       ...queryTimeRange,
     });
 
     expect(nextResponse[0].datapoints.length).toBe(1);
-
-    expect(nextResponse).not.toEqual(response);
+    expect(nextResponse[0].datapoints).not.toEqual(response);
   });
 
   test('synthetic query', async () => {

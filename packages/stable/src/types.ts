@@ -731,7 +731,11 @@ export type DatapointsDeleteRequest =
   | (InternalId & DatapointsDeleteRange)
   | (ExternalId & DatapointsDeleteRange);
 
-export interface DatapointAggregates extends DatapointsMetadata {
+export interface NextCursor {
+  nextCursor?: string;
+}
+
+export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   isString: false;
   /**
    * Whether the timeseries is a step series or not
@@ -746,7 +750,7 @@ export interface DatapointAggregates extends DatapointsMetadata {
 
 export type Datapoints = StringDatapoints | DoubleDatapoints;
 
-export interface DoubleDatapoints extends DatapointsMetadata {
+export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
   isString: false;
   /**
    * Whether the timeseries is a step series or not
@@ -762,7 +766,7 @@ export interface DoubleDatapoints extends DatapointsMetadata {
   unitExternalId?: CogniteExternalId;
 }
 
-export interface StringDatapoints extends DatapointsMetadata {
+export interface StringDatapoints extends DatapointsMetadata, NextCursor {
   isString: true;
   /**
    * The list of datapoints
