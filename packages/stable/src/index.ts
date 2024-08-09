@@ -39,6 +39,7 @@ export { ApiKeysAPI } from './api/apiKeys/apiKeysApi';
 export { AssetsAPI } from './api/assets/assetsApi';
 export { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 export { DataSetsAPI } from './api/datasets/datasetsApi';
+export { DocumentsAPI } from './api/documents/documentsApi';
 export { EventsAggregateAPI } from './api/events/eventsAggregateApi';
 export { EventsAPI } from './api/events/eventsApi';
 export { FilesAPI } from './api/files/filesApi';

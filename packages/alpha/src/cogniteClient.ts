@@ -5,9 +5,11 @@ import {
 } from '@cognite/sdk';
 import { version } from '../package.json';
 import { accessApi } from '@cognite/sdk-core';
+import { DocumentsAPIAlpha } from './api/documents/documentsApi';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
 
 export default class CogniteClientAlpha extends CogniteClientStable {
+  private documentsApiAlpha?: DocumentsAPIAlpha;
   private simulatorsApi?: SimulatorsAPI;
 
   /**
@@ -16,6 +18,10 @@ export default class CogniteClientAlpha extends CogniteClientStable {
    */
   constructor(options: ClientOptions) {
     super(options);
+  }
+
+  public get documentsAlpha() {
+    return accessApi(this.documentsApiAlpha);
   }
 
   public get simulators() {
@@ -27,6 +33,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
 
     this.httpClient.setDefaultHeader('cdf-version', 'alpha');
 
+    this.documentsApiAlpha = this.apiFactory(DocumentsAPIAlpha, 'documents');
     this.simulatorsApi = this.apiFactory(SimulatorsAPI, 'simulators');
   }
 
