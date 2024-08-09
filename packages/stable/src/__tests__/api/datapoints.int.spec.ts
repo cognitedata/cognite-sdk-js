@@ -60,6 +60,28 @@ describe('Datapoints integration test', () => {
     expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
   });
 
+  test('retrieve with cursor', async () => {
+    const queryTimeRange = {
+      start: '2d-ago',
+      end: new Date(),
+    };
+    const response = await client.datapoints.retrieve({
+      items: [{ id: timeserie.id, limit: 1 }],
+      ...queryTimeRange,
+    });
+
+    expect(response[0].datapoints.length).toBe(1);
+
+    const nextResponse = await client.datapoints.retrieve({
+      items: [{ id: timeserie.id, limit: 1, cursor: response.nextCursor }],
+      ...queryTimeRange,
+    });
+
+    expect(nextResponse[0].datapoints.length).toBe(1);
+
+    expect(nextResponse).not.toEqual(response);
+  });
+
   test('synthetic query', async () => {
     const result = await client.timeseries.syntheticQuery([
       {
