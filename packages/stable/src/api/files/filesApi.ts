@@ -24,6 +24,10 @@ import {
 } from '../../types';
 
 export class FilesAPI extends BaseResourceAPI<FileInfo> {
+  private limits = {
+    minimumNumberOfParts: 1,
+    maxNumberOfParts: 250,
+  };
   /**
    * Specify that dates should be parsed in requests and responses
    * @hidden
@@ -232,6 +236,52 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
       { data: { items } }
     );
     return this.addToMapAndReturn(response.data.items, response);
+  }
+  /**
+   * [Init a multipart file upload](https://api-docs.cognite.com/20230101/tag/Files/operation/initMultiPartUpload)
+   *
+   * ```js
+   * const numberOfParts = 5;
+   * // automatic upload:
+   * const multiPartUploadApi = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpeg'}, numberOfParts);
+   * ```
+   */
+  public async multipartUploadSession(
+    fileInfo: ExternalFileInfo,
+    parts: number,
+    overwrite: boolean = false
+  ) {
+    const response = await this.getMultipartUploadSession(
+      fileInfo,
+      parts,
+      overwrite
+    );
+    const multipartUploadSession = new FilesMultipartUploadSessionAPI(
+      this._baseUrl,
+      this._client,
+      this._map,
+      response.data
+    );
+    return this.addToMapAndReturn(multipartUploadSession, response);
+  }
+  private async getMultipartUploadSession(
+    fileInfo: ExternalFileInfo,
+    parts: number,
+    overwrite: boolean = false
+  ) {
+    if (
+      parts < this.limits.minimumNumberOfParts ||
+      parts > this.limits.maxNumberOfParts
+    ) {
+      throw Error('parts must be greater than 0 and less than 250');
+    }
+    const path = this.url('initmultipartupload');
+    const params = { overwrite: overwrite, parts: parts };
+    const response = await this.post<MultiPartFileUploadResponse>(path, {
+      params,
+      data: fileInfo,
+    });
+    return response;
   }
 }
 
