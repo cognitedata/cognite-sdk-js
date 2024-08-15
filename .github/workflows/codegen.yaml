@@ -21,10 +21,10 @@ jobs:
       - name: configure node js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 20.x
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Run code generation for ${{ matrix.package }} package
         run: yarn codegen --package=${{ matrix.package }} generate-types

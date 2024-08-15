@@ -1,5 +1,4 @@
 {
-  "private": false,
   "name": "@cognite/sdk-playground",
   "license": "Apache-2.0",
   "repository": "cognitedata/cognite-sdk-js",
