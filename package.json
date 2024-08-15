@@ -23,8 +23,12 @@
     "samples/**"
   ],
   "scripts": {
-    "allsdk": "lerna run --ignore *-sample",
-    "allsamples": "lerna run --scope *-sample",
+    "g:rollup": "cd $INIT_CWD && rollup",
+    "g:es-check": "cd $INIT_CWD && es-check",
+    "g:typedoc": "cd $INIT_CWD && typedoc",
+    "g:tsc": "cd $INIT_CWD && tsc",
+    "allsdk": "lerna run --ignore \"*-sample\"",
+    "allsamples": "lerna run --scope \"*-sample\"",
     "clean": "lerna run clean && rm -rf docs/ coverage/",
     "test": "yarn allsdk test --stream",
     "test:codecov": "jest --config=jest.config.js --coverage=true",
