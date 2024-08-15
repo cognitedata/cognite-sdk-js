@@ -3279,7 +3279,6 @@ __metadata:
     "@types/yargs": "npm:^17.0.10"
     "@typescript-eslint/eslint-plugin": "npm:^3.4.0"
     "@typescript-eslint/parser": "npm:^3.4.0"
-    axios: "npm:^1.0.0"
     es-check: "npm:^7.0.0"
     eslint: "npm:^7.3.1"
     eslint-config-prettier: "npm:^6.11.0"
