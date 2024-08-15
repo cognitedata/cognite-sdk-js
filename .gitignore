@@ -16,3 +16,4 @@ codeSnippets
 .vscode
 .env
 tmp/*
+.yarn/install-state.gz
