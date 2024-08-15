@@ -22,8 +22,7 @@
   },
   "dependencies": {
     "cross-fetch": "^3.0.4",
-    "lodash": "^4.17.11",
-    "url": "^0.11.0"
+    "lodash": "^4.17.11"
   },
   "publishConfig": {
     "access": "public"

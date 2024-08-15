@@ -1,6 +1,5 @@
 // Copyright 2020 Cognite AS
 
-import * as Url from 'url';
 import {
   API_KEY_HEADER,
   AUTHORIZATION_HEADER,
@@ -30,8 +29,8 @@ export class CDFHttpClient extends RetryableHttpClient {
   }
 
   private static isSameOrigin(baseUrl: string, url: string) {
-    const { protocol: baseUrlProtocol, host: baseUrlHost } = Url.parse(baseUrl);
-    const { protocol, host } = Url.parse(Url.resolve(baseUrl, url));
+    const { protocol: baseUrlProtocol, host: baseUrlHost } = new URL(baseUrl);
+    const { protocol, host } = new URL(new URL(url, baseUrl));
     const hasSameProtocol = baseUrlProtocol === protocol;
     const hasSameHost = baseUrlHost === host;
     return hasSameProtocol && hasSameHost;
