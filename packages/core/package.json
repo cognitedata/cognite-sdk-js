@@ -22,9 +22,7 @@
   },
   "dependencies": {
     "cross-fetch": "^3.0.4",
-    "is-buffer": "^2.0.5",
     "lodash": "^4.17.11",
-    "query-string": "^5.1.1",
     "url": "^0.11.0"
   },
   "publishConfig": {
@@ -34,7 +32,6 @@
     "dist"
   ],
   "devDependencies": {
-    "@types/geojson": "^7946.0.8",
-    "@types/is-buffer": "^2.0.0"
+    "@types/geojson": "^7946.0.8"
   }
 }

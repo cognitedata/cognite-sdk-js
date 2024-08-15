@@ -2,7 +2,6 @@
 
 import { createInvisibleIframe, generatePopupWindow } from './utils';
 import { CogniteLoginError } from './loginError';
-import { parse, stringify } from 'query-string';
 import { HttpCall, HttpQueryParams } from './httpClient/basicHttpClient';
 import { LogoutUrlResponse } from './types';
 import isString from 'lodash/isString';
@@ -96,12 +95,11 @@ export async function getLogoutUrl(get: HttpCall, params: HttpQueryParams) {
 
 /** @hidden */
 export function parseTokenQueryParameters(query: string): null | AuthTokens {
-  const {
-    [ACCESS_TOKEN_PARAM]: accessToken,
-    [ID_TOKEN_PARAM]: idToken,
-    [ERROR_PARAM]: error,
-    [ERROR_DESCRIPTION_PARAM]: errorDescription,
-  } = parse(query);
+  const queryParams = new URLSearchParams(query);
+  const accessToken = queryParams.get(ACCESS_TOKEN_PARAM);
+  const idToken = queryParams.get(ID_TOKEN_PARAM);
+  const error = queryParams.get(ERROR_PARAM);
+  const errorDescription = queryParams.get(ERROR_DESCRIPTION_PARAM);
   if (error !== undefined) {
     throw Error(`${error}: ${errorDescription}`);
   }
@@ -185,7 +183,8 @@ function generateLoginUrl(params: AuthorizeParams): string {
     redirectUrl,
     errorRedirectUrl: errorRedirectUrl || redirectUrl,
   };
-  return `${baseUrl}/login/redirect?${stringify(queryParams)}`;
+  const search = new URLSearchParams(queryParams).toString();
+  return `${baseUrl}/login/redirect?${search}`;
 }
 
 /**

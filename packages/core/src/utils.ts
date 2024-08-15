@@ -2,7 +2,6 @@
 
 import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
-import isBuffer from 'is-buffer';
 import { BASE_URL } from './constants';
 import { CogniteError } from './error';
 import { CogniteMultiError } from './multiError';
@@ -36,6 +35,21 @@ export function bearerString(token: string) {
 export function isBrowser() {
   return (
     typeof window !== 'undefined' && typeof window.document !== 'undefined'
+  );
+}
+
+function isBuffer(obj: any): boolean {
+  type BufferConstructor = Function & {
+    isBuffer: Function;
+  };
+
+  // Taken from:
+  // https://github.com/feross/is-buffer/blob/ec4bf3415108e8971375e6717ad63dde752faebf/index.js#L8
+  return (
+    obj != null &&
+    obj.constructor != null &&
+    typeof (obj.constructor as BufferConstructor).isBuffer === 'function' &&
+    (obj.constructor as BufferConstructor).isBuffer(obj)
   );
 }
 

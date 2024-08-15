@@ -3256,11 +3256,8 @@ __metadata:
   resolution: "@cognite/sdk-core@workspace:packages/core"
   dependencies:
     "@types/geojson": "npm:^7946.0.8"
-    "@types/is-buffer": "npm:^2.0.0"
     cross-fetch: "npm:^3.0.4"
-    is-buffer: "npm:^2.0.5"
     lodash: "npm:^4.17.11"
-    query-string: "npm:^5.1.1"
     url: "npm:^0.11.0"
   languageName: unknown
   linkType: soft
@@ -3280,7 +3277,6 @@ __metadata:
     "@types/lodash": "npm:^4.14.158"
     "@types/nock": "npm:^10.0.3"
     "@types/node": "npm:^14.0.24"
-    "@types/query-string": "npm:^6.1.0"
     "@types/yargs": "npm:^17.0.10"
     "@typescript-eslint/eslint-plugin": "npm:^3.4.0"
     "@typescript-eslint/parser": "npm:^3.4.0"
@@ -6432,15 +6428,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/is-buffer@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@types/is-buffer@npm:2.0.0"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/f798fe4fcdfaf754c1eac8bc0e723f22df7777fdd2c6fc58b77705add309fe407c2454500a484a05bc534d70cecc9d6fcd1cece4eb81541c3c28ed4abb3704bd
-  languageName: node
-  linkType: hard
-
 "@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.0, @types/istanbul-lib-coverage@npm:^2.0.1":
   version: 2.0.3
   resolution: "@types/istanbul-lib-coverage@npm:2.0.3"
@@ -6638,13 +6625,6 @@ __metadata:
   version: 6.9.7
   resolution: "@types/qs@npm:6.9.7"
   checksum: 10c0/157eb05f4c75790b0ebdcf7b0547ff117feabc8cda03c3cac3d3ea82bb19a1912e76a411df3eb0bdd01026a9770f07bc0e7e3fbe39ebb31c1be4564c16be35f1
-  languageName: node
-  linkType: hard
-
-"@types/query-string@npm:^6.1.0":
-  version: 6.1.1
-  resolution: "@types/query-string@npm:6.1.1"
-  checksum: 10c0/18c69e688d0e99b6a9993306e3002b68b562390c04bd10d703433b527e8f00865e6cecabfb516037223c6f299cf3c029dcd5e8785ca6c951032d590c50ee8398
   languageName: node
   linkType: hard
 
@@ -13571,13 +13551,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-buffer@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "is-buffer@npm:2.0.5"
-  checksum: 10c0/e603f6fced83cf94c53399cff3bda1a9f08e391b872b64a73793b0928be3e5f047f2bcece230edb7632eaea2acdbfcb56c23b33d8a20c820023b230f1485679a
-  languageName: node
-  linkType: hard
-
 "is-builtin-module@npm:^1.0.0":
   version: 1.0.0
   resolution: "is-builtin-module@npm:1.0.0"
@@ -17273,7 +17246,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
+"object-assign@npm:^4.1.1":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
   checksum: 10c0/1f4df9945120325d041ccf7b86f31e8bcc14e73d29171e37a7903050e96b81323784ec59f93f102ec635bcf6fa8034ba3ea0a8c7e69fa202b87ae3b6cec5a414
@@ -19338,17 +19311,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"query-string@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "query-string@npm:5.1.1"
-  dependencies:
-    decode-uri-component: "npm:^0.2.0"
-    object-assign: "npm:^4.1.0"
-    strict-uri-encode: "npm:^1.0.0"
-  checksum: 10c0/25adf37fe9a5b749da55ef91192d190163c44283826b425fa86eeb1fa567cf500a32afc2c602d4f661839d86ca49c2f8d49433b3c1b44b9129a37a5d3da55f89
-  languageName: node
-  linkType: hard
-
 "querystring@npm:0.2.0":
   version: 0.2.0
   resolution: "querystring@npm:0.2.0"
@@ -21401,13 +21363,6 @@ __metadata:
   version: 1.5.0
   resolution: "statuses@npm:1.5.0"
   checksum: 10c0/e433900956357b3efd79b1c547da4d291799ac836960c016d10a98f6a810b1b5c0dcc13b5a7aa609a58239b5190e1ea176ad9221c2157d2fd1c747393e6b2940
-  languageName: node
-  linkType: hard
-
-"strict-uri-encode@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "strict-uri-encode@npm:1.1.0"
-  checksum: 10c0/eb8a4109ba2588239787389313ba58ec49e043d4c64a1d44716defe5821a68ae49abe0cdefed9946ca9fc2a4af7ecf321da92422b0a67258ec0a3638b053ae62
   languageName: node
   linkType: hard
 
