@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import isString from 'lodash/isString';
-import noop from 'lodash/noop';
+import { isString, noop } from 'lodash-es';
 import { silentLoginViaIframe } from '../loginUtils';
 import { clearParametersFromUrl } from '../utils';
 

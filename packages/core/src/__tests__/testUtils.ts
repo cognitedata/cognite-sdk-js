@@ -2,10 +2,10 @@
 
 import { vi } from 'vitest';
 
-import BaseCogniteClient from './baseCogniteClient';
-import { BASE_URL } from './constants';
-import { HttpError } from './httpClient/httpError';
-import { sleepPromise } from './utils';
+import BaseCogniteClient from '../baseCogniteClient';
+import { BASE_URL } from '../constants';
+import { HttpError } from '../httpClient/httpError';
+import { sleepPromise } from '../utils';
 export { sleepPromise };
 
 export const apiKey = 'TEST_KEY';

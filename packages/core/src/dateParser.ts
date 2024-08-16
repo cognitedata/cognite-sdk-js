@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import cloneDeepWith from 'lodash/cloneDeepWith';
+import { cloneDeepWith } from 'lodash-es';
 
 export default class DateParser {
   /**

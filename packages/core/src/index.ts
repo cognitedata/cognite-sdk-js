@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 import * as Constants from './constants';
 import * as GraphUtils from './graphUtils';
-import * as TestUtils from './testUtils';
 
 export * from './types';
 
@@ -59,4 +58,4 @@ export {
   promiseEachInSequence,
 } from './utils';
 
-export { TestUtils, Constants, GraphUtils };
+export { Constants, GraphUtils };

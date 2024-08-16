@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-import noop from 'lodash/noop';
+import { noop } from 'lodash-es';
 import nock from 'nock';
+import { sleepPromise } from '../../__tests__/testUtils';
 import * as loginUtils from '../../loginUtils';
-import { sleepPromise } from '../../testUtils';
 import { ADFS } from '../adfs';
 
 describe('ADFS', () => {

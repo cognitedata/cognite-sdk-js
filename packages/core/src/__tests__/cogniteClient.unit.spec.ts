@@ -7,8 +7,8 @@ import BaseCogniteClient from '../baseCogniteClient';
 
 import { API_KEY_HEADER, BASE_URL } from '../constants';
 import { createUniversalRetryValidator } from '../httpClient/retryValidator';
-import { apiKey, project } from '../testUtils';
 import { sleepPromise } from '../utils';
+import { apiKey, project } from './testUtils';
 
 const mockBaseUrl = 'https://example.com';
 

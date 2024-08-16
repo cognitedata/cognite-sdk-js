@@ -3,7 +3,7 @@
   "license": "Apache-2.0",
   "repository": "cognitedata/cognite-sdk-js",
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
   "version": "4.10.1",
   "type": "module",
@@ -17,19 +17,20 @@
     "build": "yarn clean && yarn g:tsc -p ./tsconfig.json && yarn g:vite build && yarn esCheck",
     "build:watch": "yarn g:rollup -w -c",
     "watch": "yarn g:rollup -cw",
-    "esCheck": "yarn g:es-check es6 './dist/index.cjs'",
+    "esCheck": "yarn g:es-check es6 --module './dist/index.js'",
     "docs": "yarn g:typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
     "docs:bundle": "yarn docs && mkdir -p ../../docs/core && cp -r docs/* ../../docs/core/"
   },
   "dependencies": {
     "cross-fetch": "^3.1.8",
-    "lodash": "^4.17.21"
+    "lodash-es": "^4.17.21"
   },
   "publishConfig": {
     "access": "public"
   },
   "files": ["dist"],
   "devDependencies": {
-    "@types/geojson": "^7946.0.14"
+    "@types/geojson": "^7946.0.14",
+    "@types/lodash-es": "^4"
   }
 }

@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import isArray from 'lodash/isArray';
-import isObject from 'lodash/isObject';
+import { isArray, isObject } from 'lodash-es';
 import { BASE_URL } from './constants';
 import type { CogniteError } from './error';
 import { CogniteMultiError, type MultiErrorRawSummary } from './multiError';

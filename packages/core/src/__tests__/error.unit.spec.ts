@@ -5,7 +5,7 @@ import { describe, expect, test } from 'vitest';
 import { X_REQUEST_ID } from '../constants';
 import { CogniteError, handleErrorResponse } from '../error';
 import { HttpError } from '../httpClient/httpError';
-import { createErrorResponse } from '../testUtils';
+import { createErrorResponse } from './testUtils';
 
 const internalIdObject = { id: 4190022127342195 };
 const externalIdObject = { externalId: 'abc' };

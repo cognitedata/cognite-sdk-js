@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import isObject from 'lodash/isObject';
-import isString from 'lodash/isString';
+import { isObject, isString } from 'lodash-es';
 import type { ClientOptions } from './baseCogniteClient';
 import type { ClientCredentials } from './credentialsAuth';
 import { CogniteError } from './error';

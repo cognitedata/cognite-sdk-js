@@ -12,7 +12,7 @@ export default defineConfig({
     sourcemap: true,
     target: 'es6',
     lib: {
-      formats: ['cjs'],
+      formats: ['es'],
       // Could also be a dictionary or array of multiple entry points
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'index',

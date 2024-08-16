@@ -3,11 +3,6 @@
 import { afterAll, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import nock from 'nock';
-import { AUTHORIZATION_HEADER } from '../../constants';
-import { CDFHttpClient } from '../../httpClient/cdfHttpClient';
-import { createUniversalRetryValidator } from '../../httpClient/retryValidator';
-import * as LoginUtils from '../../loginUtils';
-import { getLogoutUrl, loginWithRedirect } from '../../loginUtils';
 import {
   authTokens,
   loggedInResponse,
@@ -15,7 +10,12 @@ import {
   notLoggedInResponse,
   project,
   projectId,
-} from '../../testUtils';
+} from '../../__tests__/testUtils';
+import { AUTHORIZATION_HEADER } from '../../constants';
+import { CDFHttpClient } from '../../httpClient/cdfHttpClient';
+import { createUniversalRetryValidator } from '../../httpClient/retryValidator';
+import * as LoginUtils from '../../loginUtils';
+import { getLogoutUrl, loginWithRedirect } from '../../loginUtils';
 import * as Utils from '../../utils';
 import { bearerString } from '../../utils';
 import { CogniteAuthentication, POPUP, REDIRECT, getIdInfo } from '../legacy';
