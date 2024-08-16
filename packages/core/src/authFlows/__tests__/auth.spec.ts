@@ -1,22 +1,24 @@
 // Copyright 2020 Cognite AS
 
+import { afterAll, beforeEach, describe, expect, test, vi } from 'vitest';
+
 import nock from 'nock';
 import { AUTHORIZATION_HEADER } from '../../constants';
 import { CDFHttpClient } from '../../httpClient/cdfHttpClient';
-import { CogniteAuthentication, getIdInfo, POPUP, REDIRECT } from '../legacy';
+import { createUniversalRetryValidator } from '../../httpClient/retryValidator';
 import * as LoginUtils from '../../loginUtils';
 import { getLogoutUrl, loginWithRedirect } from '../../loginUtils';
-import * as Utils from '../../utils';
-import { bearerString } from '../../utils';
 import {
   authTokens,
   loggedInResponse,
+  mockBaseUrl,
   notLoggedInResponse,
   project,
   projectId,
-  mockBaseUrl,
 } from '../../testUtils';
-import { createUniversalRetryValidator } from '../../httpClient/retryValidator';
+import * as Utils from '../../utils';
+import { bearerString } from '../../utils';
+import { CogniteAuthentication, POPUP, REDIRECT, getIdInfo } from '../legacy';
 
 describe('Cognite Auth', () => {
   const response401 = { error: { code: 401, message: '' } };
@@ -24,7 +26,7 @@ describe('Cognite Auth', () => {
   const logoutPath = '/logout/url';
   const httpClient = new CDFHttpClient(
     mockBaseUrl,
-    createUniversalRetryValidator()
+    createUniversalRetryValidator(),
   );
 
   beforeEach(() => {
@@ -60,14 +62,14 @@ describe('Cognite Auth', () => {
         await expect(
           getIdInfo(httpClient.get.bind(httpClient), {
             [AUTHORIZATION_HEADER]: bearerString(token),
-          })
+          }),
         ).resolves.toEqual(idInfo);
       });
 
       test('not authorised (401) getIdInfo', async () => {
         nock(mockBaseUrl).get(statusPath).once().reply(401, response401);
         await expect(
-          getIdInfo(httpClient.get.bind(httpClient), {})
+          getIdInfo(httpClient.get.bind(httpClient), {}),
         ).resolves.toBeNull();
       });
 
@@ -77,7 +79,7 @@ describe('Cognite Auth', () => {
         await expect(
           getIdInfo(httpClient.get.bind(httpClient), {
             [AUTHORIZATION_HEADER]: bearerString(token),
-          })
+          }),
         ).resolves.toBeNull();
       });
     });
@@ -89,7 +91,7 @@ describe('Cognite Auth', () => {
         nock(mockBaseUrl).get(logoutPath).once().reply(200, successResponse);
 
         await expect(
-          getLogoutUrl(httpClient.get.bind(httpClient), {})
+          getLogoutUrl(httpClient.get.bind(httpClient), {}),
         ).resolves.toEqual(url);
       });
 
@@ -97,7 +99,7 @@ describe('Cognite Auth', () => {
         nock(mockBaseUrl).get(logoutPath).once().reply(401, response401);
 
         await expect(
-          getLogoutUrl(httpClient.get.bind(httpClient), {})
+          getLogoutUrl(httpClient.get.bind(httpClient), {}),
         ).resolves.toBeNull();
       });
     });
@@ -111,7 +113,7 @@ describe('Cognite Auth', () => {
     });
 
     describe('handle login redirect', () => {
-      const isLocalhost = jest
+      const isLocalhost = vi
         .spyOn(Utils, 'isLocalhost')
         .mockImplementation(() => true);
 
@@ -128,18 +130,20 @@ describe('Cognite Auth', () => {
         window.history.pushState(
           {},
           '',
-          `/some/random/path?query=true&error=failed&error_description=message`
+          '/some/random/path?query=true&error=failed&error_description=message',
         );
         await expect(
-          authClient.handleLoginRedirect()
-        ).rejects.toThrowErrorMatchingInlineSnapshot(`"failed: message"`);
+          authClient.handleLoginRedirect(),
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '[Error: failed: message]',
+        );
       });
 
       test('valid tokens in url', async () => {
         window.history.pushState(
           {},
           '',
-          `/some/random/path?query=true&access_token=${authTokens.accessToken}&id_token=${authTokens.idToken}&random=123`
+          `/some/random/path?query=true&access_token=${authTokens.accessToken}&id_token=${authTokens.idToken}&random=123`,
         );
         nock(mockBaseUrl, {
           reqheaders: {
@@ -152,32 +156,16 @@ describe('Cognite Auth', () => {
         const tokens = await authClient.handleLoginRedirect();
         expect(tokens).toEqual(authTokens);
         expect(window.location.href).toMatchInlineSnapshot(
-          `"https://localhost/some/random/path?query=true&random=123"`
+          `"https://localhost/some/random/path?query=true&random=123"`,
         );
         await expect(authClient.getCDFToken()).resolves.toEqual(authTokens);
       });
     });
     describe('login', () => {
-      const { location } = window;
-
-      beforeAll(() => {
-        delete window.location;
-        window.location = {
-          ...location,
-          hostname: 'localhost',
-          href: 'https://localhost',
-          reload: jest.fn(),
-        };
-      });
-
-      afterAll(() => {
-        window.location = location;
-      });
-
       test('login with redirect', () => {
         const onAuthenticate = REDIRECT;
         const baseUrl = httpClient.getBaseUrl();
-        const spiedLoginWithRedirect = jest
+        const spiedLoginWithRedirect = vi
           .spyOn(LoginUtils, 'loginWithRedirect')
           .mockResolvedValueOnce();
 
@@ -193,7 +181,7 @@ describe('Cognite Auth', () => {
       test('login with popup', async () => {
         const onAuthenticate = POPUP;
         const baseUrl = httpClient.getBaseUrl();
-        const spiedLoginWithPopUp = jest
+        const spiedLoginWithPopUp = vi
           .spyOn(LoginUtils, 'loginWithPopup')
           .mockResolvedValueOnce(authTokens);
         const tokens = await authClient.login({ onAuthenticate });
@@ -206,9 +194,7 @@ describe('Cognite Auth', () => {
         expect(tokens).toEqual(authTokens);
       });
       test('login with custom function', async () => {
-        const onAuthenticate = jest
-          .fn()
-          .mockImplementation(({ skip }) => skip());
+        const onAuthenticate = vi.fn().mockImplementation(({ skip }) => skip());
         const tokens = await authClient.login({ onAuthenticate });
 
         expect(onAuthenticate).toHaveBeenCalledTimes(1);
@@ -216,25 +202,15 @@ describe('Cognite Auth', () => {
       });
     });
     describe('loginWithRedirect', () => {
-      const { location } = window;
-
-      beforeAll(() => {
-        delete window.location;
-        window.location = {
-          ...location,
-          hostname: 'localhost',
-          reload: jest.fn(),
-        };
-      });
-
-      afterAll(() => {
-        window.location = location;
-      });
-
-      test('redirects', async (done) => {
-        const spiedLocationAssign = jest
-          .spyOn(window.location, 'assign')
-          .mockImplementation();
+      test('redirects', async () => {
+        const spiedLocationAssign = vi.fn();
+        Object.defineProperty(window, 'location', {
+          value: {
+            ...window.location,
+            assign: spiedLocationAssign,
+          },
+          writable: true,
+        });
         let isPromiseResolved = false;
         loginWithRedirect({
           baseUrl: 'https://example.com',
@@ -246,12 +222,10 @@ describe('Cognite Auth', () => {
         });
         expect(spiedLocationAssign).toBeCalledTimes(1);
         expect(spiedLocationAssign.mock.calls[0][0]).toMatchInlineSnapshot(
-          `"https://example.com/login/redirect?project=my-tenant&redirectUrl=https%3A%2F%2Fredirect.com&errorRedirectUrl=https%3A%2F%2Ferror-redirect.com"`
+          `"https://example.com/login/redirect?project=my-tenant&redirectUrl=https%3A%2F%2Fredirect.com&errorRedirectUrl=https%3A%2F%2Ferror-redirect.com"`,
         );
-        setTimeout(() => {
-          expect(isPromiseResolved).toBe(false);
-          done();
-        }, 1000);
+        await Utils.sleepPromise(1000);
+        expect(isPromiseResolved).toBe(false);
       });
     });
   });

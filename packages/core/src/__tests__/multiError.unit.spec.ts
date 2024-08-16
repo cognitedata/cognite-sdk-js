@@ -1,14 +1,24 @@
-import { CogniteMultiError } from '../multiError';
+import { describe, expect, test } from 'vitest';
+
 import { CogniteError } from '../error';
+import { CogniteMultiError } from '../multiError';
 
 describe('Cognite multi error', () => {
   test('create with 2 fails and 1 success', () => {
     const errMsg = 'createAssets.arg0.items: size must be between 1 and 1000';
     const nestedErr = new CogniteError(errMsg, 400, 'r1', {
-      missing: ['something'],
+      missing: [
+        {
+          id: 'something',
+        },
+      ],
     });
     const nestedErr2 = new CogniteError(errMsg, 500, 'r2', {
-      missing: ['more'],
+      missing: [
+        {
+          externalId: 'more',
+        },
+      ],
       duplicated: ['this one'],
     });
     const err = new CogniteMultiError({
@@ -25,7 +35,7 @@ describe('Cognite multi error', () => {
     expect(err.requestId).toEqual('r1');
     expect(err.errors).toEqual([nestedErr, nestedErr2]);
     expect(err.message).toMatchSnapshot();
-    expect(err.missing).toEqual(['something', 'more']);
+    expect(err.missing).toEqual([{ id: 'something' }, { externalId: 'more' }]);
     expect(err.duplicated).toEqual(['this one']);
     expect(err.requestIds).toEqual(['r1', 'r2']);
   });

@@ -1,11 +1,11 @@
 // Copyright 2020 Cognite AS
 
+import { type IdInfo, getIdInfo } from '../../authFlows/legacy';
 import { BaseResourceAPI } from '../../baseResourceApi';
-import { CDFHttpClient } from '../../httpClient/cdfHttpClient';
-import { getIdInfo, IdInfo } from '../../authFlows/legacy';
-import { MetadataMap } from '../../metadata';
+import type { CDFHttpClient } from '../../httpClient/cdfHttpClient';
+import type { MetadataMap } from '../../metadata';
 
-export class LoginAPI extends BaseResourceAPI<any> {
+export class LoginAPI extends BaseResourceAPI<unknown> {
   /** @hidden */
   constructor(httpClient: CDFHttpClient, map: MetadataMap) {
     super('', httpClient, map);

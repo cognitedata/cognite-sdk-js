@@ -1,5 +1,5 @@
 // Copyright 2020 Cognite AS
-import { HttpResponse } from './httpClient/basicHttpClient';
+import type { HttpResponse } from './httpClient/basicHttpClient';
 
 export interface Metadata {
   status: number;
@@ -8,12 +8,15 @@ export interface Metadata {
 
 /** @hidden */
 export class MetadataMap {
-  private map: WeakMap<any, Metadata>;
+  private map: WeakMap<object, Metadata>;
   constructor() {
     this.map = new WeakMap();
   }
 
-  public addAndReturn<T, V>(value: T, metadata: HttpResponse<V>): T {
+  public addAndReturn<T extends object, V>(
+    value: T,
+    metadata: HttpResponse<V>,
+  ): T {
     this.map.set(value, {
       // we extract out only what is necessary
       status: metadata.status,
@@ -22,7 +25,7 @@ export class MetadataMap {
     return value;
   }
 
-  public get(value: any): undefined | Metadata {
+  public get(value: object): undefined | Metadata {
     return this.map.get(value);
   }
 }

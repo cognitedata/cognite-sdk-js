@@ -7,12 +7,15 @@ export default class DateParser {
    * @param path keys that lead to datePropNames
    * @param datePropNames keys that contain date strings or numbers representing milliseconds since epoch
    */
-  constructor(private path: string[], private datePropNames: string[]) {}
+  constructor(
+    private path: string[],
+    private datePropNames: string[],
+  ) {}
 
   private isDatePropName = (key: string | number | undefined) =>
-    typeof key === 'string' && this.datePropNames.indexOf(key) != -1;
+    typeof key === 'string' && this.datePropNames.indexOf(key) !== -1;
   private isPath = (key: string | number | undefined) =>
-    typeof key === 'string' && this.path.indexOf(key) != -1;
+    typeof key === 'string' && this.path.indexOf(key) !== -1;
 
   /**
    * Goes through data, converting all fields with paths matching
@@ -24,11 +27,7 @@ export default class DateParser {
   parseToDates<T>(data: T): T {
     return cloneDeepWith(data, (value, key, object) => {
       if (this.isDatePropName(key)) return new Date(value);
-      if (
-        key !== undefined &&
-        !this.isPath(key) &&
-        !(object instanceof Array)
-      ) {
+      if (key !== undefined && !this.isPath(key) && !Array.isArray(object)) {
         // There is a key, but it is not in lead.
         // The key is not the index of an array.
         // Return the value as is, without looking for dates

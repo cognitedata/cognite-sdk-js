@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import {
+import type {
   AutoPagingEach,
   AutoPagingEachHandler,
   AutoPagingToArrayOptions,
@@ -8,33 +8,29 @@ import {
   ListResponse,
 } from './types';
 
-// polyfill
-if (Symbol.asyncIterator === undefined) {
-  (Symbol as any).asyncIterator = Symbol.for('asyncIterator');
-}
-
 /** @hidden */
 export function makeAutoPaginationMethods<T>(
-  firstPagePromise: Promise<ListResponse<T[]>>
+  firstPagePromise: Promise<ListResponse<T[]>>,
 ) {
   let listPromise = firstPagePromise;
   let i = 0;
 
   function iterate(
-    listResult: ListResponse<T[]>
+    listResult: ListResponse<T[]>,
   ): IteratorResult<T> | Promise<IteratorResult<T>> {
     if (i < listResult.items.length) {
       return {
         value: listResult.items[i++],
         done: false,
       };
-    } else if (listResult.next) {
+    }
+    if (listResult.next) {
       // reset counter, request next page, and recurse.
       i = 0;
       listPromise = listResult.next();
       return listPromise.then(iterate);
     }
-    return { value: undefined!, done: true }; // https://github.com/Microsoft/TypeScript/issues/11375#issuecomment-413037242
+    return { value: undefined, done: true };
   }
 
   async function asyncIteratorNext(): Promise<IteratorResult<T>> {
@@ -50,6 +46,7 @@ export function makeAutoPaginationMethods<T>(
 
     // Async iterator functions:
     next: asyncIteratorNext,
+    // biome-ignore lint/suspicious/noExplicitAny: didn't find the right type in reasonable timeframe
     return(): any {
       // This is required for `break`.
       return {};
@@ -60,7 +57,7 @@ export function makeAutoPaginationMethods<T>(
 }
 
 function makeAutoPagingEach<T>(
-  asyncIteratorNext: () => Promise<IteratorResult<T>>
+  asyncIteratorNext: () => Promise<IteratorResult<T>>,
 ): AutoPagingEach<T> {
   return async function autoPagingEach(handler: AutoPagingEachHandler<T>) {
     async function iterate() {
@@ -81,9 +78,9 @@ function makeAutoPagingEach<T>(
 
 function makeAutoPagingToArray<T>(autoPagingEach: AutoPagingEach<T>) {
   return async function autoPagingToArray(options?: AutoPagingToArrayOptions) {
-    let limit = (options && options.limit) || 25;
+    let limit = options?.limit || 25;
     if (limit === -1) {
-      limit = Infinity;
+      limit = Number.POSITIVE_INFINITY;
     }
     const items: T[] = [];
     await autoPagingEach(async (item) => {

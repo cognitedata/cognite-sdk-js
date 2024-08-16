@@ -1,38 +1,42 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Cognite multi error create with 2 fails and 1 success 1`] = `
+exports[`Cognite multi error > create with 2 fails and 1 success 1`] = `
 "The API Failed to process some items
 {
-  \\"succeded\\": [
+  "succeded": [
     [
       2
     ]
   ],
-  \\"responses\\": [],
-  \\"failed\\": [
+  "responses": [],
+  "failed": [
     [
       0,
       1
     ]
   ],
-  \\"errors\\": [
+  "errors": [
     {
-      \\"status\\": 400,
-      \\"message\\": \\"createAssets.arg0.items: size must be between 1 and 1000\\",
-      \\"requestId\\": \\"r1\\",
-      \\"missing\\": [
-        \\"something\\"
+      "status": 400,
+      "message": "createAssets.arg0.items: size must be between 1 and 1000",
+      "requestId": "r1",
+      "missing": [
+        {
+          "id": "something"
+        }
       ]
     },
     {
-      \\"status\\": 500,
-      \\"message\\": \\"createAssets.arg0.items: size must be between 1 and 1000\\",
-      \\"requestId\\": \\"r2\\",
-      \\"missing\\": [
-        \\"more\\"
+      "status": 500,
+      "message": "createAssets.arg0.items: size must be between 1 and 1000",
+      "requestId": "r2",
+      "missing": [
+        {
+          "externalId": "more"
+        }
       ],
-      \\"duplicated\\": [
-        \\"this one\\"
+      "duplicated": [
+        "this one"
       ]
     }
   ]

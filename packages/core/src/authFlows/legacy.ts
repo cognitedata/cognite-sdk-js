@@ -13,13 +13,13 @@ import {
 } from '../utils';
 import { CogniteLoginError } from '../loginError';
 import { AUTHORIZATION_HEADER } from '../constants';
-import { HttpCall } from '../httpClient/basicHttpClient';
-import { HttpHeaders } from '../httpClient/httpHeaders';
+import type { HttpCall } from '../httpClient/basicHttpClient';
+import type { HttpHeaders } from '../httpClient/httpHeaders';
 import * as LoginUtils from '../loginUtils';
 import {
   ACCESS_TOKEN_PARAM,
-  AuthorizeOptions,
-  AuthTokens,
+  type AuthorizeOptions,
+  type AuthTokens,
   ERROR_DESCRIPTION_PARAM,
   ERROR_PARAM,
   ID_TOKEN_PARAM,

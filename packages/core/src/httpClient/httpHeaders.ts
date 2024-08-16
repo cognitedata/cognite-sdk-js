@@ -5,12 +5,12 @@ export interface HttpHeaders {
 /** @hidden */
 export function getHeaderField(
   headers: HttpHeaders,
-  key: string
+  key: string,
 ): string | undefined {
   const lowercaseKey = key.toLowerCase();
 
   for (const headerKey in headers) {
-    if (headerKey.toLowerCase() == lowercaseKey) {
+    if (headerKey.toLowerCase() === lowercaseKey) {
       return headers[headerKey];
     }
   }

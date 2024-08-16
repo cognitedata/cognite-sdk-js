@@ -1,5 +1,9 @@
 // Copyright 2020 Cognite AS
+
+import { beforeEach, describe, expect, test } from 'vitest';
+
 import nock from 'nock';
+import { HttpError } from './httpError';
 import { RetryableHttpClient } from './retryableHttpClient';
 
 describe('RetryableHttpClient', () => {
@@ -8,7 +12,7 @@ describe('RetryableHttpClient', () => {
   beforeEach(() => {
     client = new RetryableHttpClient(
       baseUrl,
-      (_, response) => response.status === 500
+      (_, response) => response.status === 500,
     );
     nock.cleanAll();
   });
@@ -33,21 +37,21 @@ describe('RetryableHttpClient', () => {
     expect.assertions(1);
     nock(baseUrl).get('/').times(2).reply(500, {});
     nock(baseUrl).get('/').reply(400, { a: 42 });
-    try {
-      await client.get('/');
-    } catch (err) {
-      expect(err.message).toMatchInlineSnapshot(
-        `"Request failed | status code: 400"`
-      );
-    }
+    await expect(client.get('/')).rejects.toThrow(
+      'Request failed | status code: 400',
+    );
   });
 
   test('respect when a boolean is passed as retryValidator', async () => {
     const scope = nock(baseUrl).get('/').times(1).reply(401);
+    expect.assertions(2);
     try {
       const promise = client.get('/', { retryValidator: false });
       await promise;
     } catch (err) {
+      if (!(err instanceof HttpError)) {
+        throw err;
+      }
       expect(err.status).toBe(401);
     }
     expect(scope.isDone()).toBe(true);
@@ -55,11 +59,15 @@ describe('RetryableHttpClient', () => {
 
   test('respect when a function is passed as retryValidator', async () => {
     const scope = nock(baseUrl).get('/').times(2).reply(401);
+    expect.assertions(2);
     try {
       await client.get('/', {
         retryValidator: (_, __, retryCount) => retryCount < 1,
       });
     } catch (err) {
+      if (!(err instanceof HttpError)) {
+        throw err;
+      }
       expect(err.status).toBe(401);
     }
     expect(scope.isDone()).toBe(true);

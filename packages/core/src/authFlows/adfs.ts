@@ -2,8 +2,8 @@
 
 import isString from 'lodash/isString';
 import noop from 'lodash/noop';
-import { clearParametersFromUrl } from '../utils';
 import { silentLoginViaIframe } from '../loginUtils';
+import { clearParametersFromUrl } from '../utils';
 
 export interface ADFSConfig {
   authority: string;
@@ -67,7 +67,7 @@ export class ADFS {
     this.sessionKey = `${authority}_${requestParams.clientId}_${requestParams.resource}`;
   }
 
-  public async login(): Promise<string | void> {
+  public async login(): Promise<string | undefined> {
     const token = await this.acquireTokenSilently();
 
     return new Promise((resolve) => {
@@ -76,7 +76,7 @@ export class ADFS {
       }
 
       const url = `${this.authority}?${this.getADFSQueryParamString(
-        this.queryParams
+        this.queryParams,
       )}`;
 
       window.location.href = url;
@@ -98,7 +98,7 @@ export class ADFS {
         ID_TOKEN,
         EXPIRES_IN,
         SCOPE,
-        TOKEN_TYPE
+        TOKEN_TYPE,
       );
       this.setToken(token);
 
@@ -116,8 +116,8 @@ export class ADFS {
     return token
       ? token.accessToken
       : this.token
-      ? this.token.accessToken
-      : null;
+        ? this.token.accessToken
+        : null;
   }
 
   public async getIdToken(): Promise<string | null> {
@@ -139,14 +139,14 @@ export class ADFS {
     }
 
     const url = `${this.authority}?prompt=none&${this.getADFSQueryParamString(
-      this.queryParams
+      this.queryParams,
     )}`;
 
     try {
       token = await silentLoginViaIframe<ADFSToken | null>(
         url,
         extractADFSToken,
-        LOGIN_IFRAME_NAME
+        LOGIN_IFRAME_NAME,
       );
     } catch (e) {
       noop();
@@ -165,7 +165,7 @@ export class ADFS {
   }: ADFSRequestParams): ADFSQueryParams {
     const responseMode = 'fragment';
     const responseType = 'id_token token';
-    const scope = `user_impersonation IDENTITY`;
+    const scope = 'user_impersonation IDENTITY';
     const redirectUri = window.location.href;
     const params = {
       clientId,
@@ -184,7 +184,7 @@ export class ADFS {
 
         return result;
       },
-      {} as ADFSQueryParams
+      {} as ADFSQueryParams,
     );
   }
 

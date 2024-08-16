@@ -1,10 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
+import isObject from 'lodash/isObject';
 import { BASE_URL } from './constants';
-import { CogniteError } from './error';
-import { CogniteMultiError, MultiErrorRawSummary } from './multiError';
+import type { CogniteError } from './error';
+import { CogniteMultiError, type MultiErrorRawSummary } from './multiError';
 
 /** @hidden */
 export type CogniteAPIVersion = 'v1' | 'playground';
@@ -21,7 +21,7 @@ export const apiUrl = (apiVersion: CogniteAPIVersion = 'v1') =>
 /** @hidden */
 export function projectUrl(
   project: string,
-  apiVersion: CogniteAPIVersion = 'v1'
+  apiVersion: CogniteAPIVersion = 'v1',
 ) {
   return `${apiUrl(apiVersion)}/projects/${encodeURIComponent(project)}`;
 }
@@ -38,9 +38,9 @@ export function isBrowser() {
   );
 }
 
-function isBuffer(obj: any): boolean {
-  type BufferConstructor = Function & {
-    isBuffer: Function;
+function isBuffer(obj: unknown): boolean {
+  type BufferConstructor = (() => void) & {
+    isBuffer: (x: unknown) => boolean;
   };
 
   // Taken from:
@@ -55,20 +55,20 @@ function isBuffer(obj: any): boolean {
 
 export function clearParametersFromUrl(...params: string[]): void {
   let url = window.location.href;
-  params.forEach((param) => {
+  for (const param of params) {
     url = removeQueryParameterFromUrl(url, param);
-  });
+  }
   window.history.replaceState(null, '', url);
 }
 
 /** @hidden */
 export function removeQueryParameterFromUrl(
   url: string,
-  parameter: string
+  parameter: string,
 ): string {
   return url
-    .replace(new RegExp('[?#&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
-    .replace(new RegExp('([?#&])' + parameter + '=[^&]*&'), '$1');
+    .replace(new RegExp(`[?#&]${parameter}=[^&#]*(#.*)?$`), '$1')
+    .replace(new RegExp(`([?#&])${parameter}=[^&]*&`), '$1');
 }
 
 /** @hidden */
@@ -77,7 +77,7 @@ export function convertToTimestampToDateTime(timestamp: number): Date {
 }
 
 /** @hidden */
-export function isJson(data: any) {
+export function isJson(data: unknown) {
   return (
     (isArray(data) || isObject(data)) &&
     !isBuffer(data) &&
@@ -95,17 +95,18 @@ export function sleepPromise(durationInMs: number) {
 
 /** @hidden */
 export function promiseCache<ReturnValue>(
-  promiseFn: () => Promise<ReturnValue>
+  promiseFn: () => Promise<ReturnValue>,
 ) {
   let unresolvedPromise: Promise<ReturnValue> | null = null;
   return () => {
     if (unresolvedPromise) {
       return unresolvedPromise;
     }
-    return (unresolvedPromise = promiseFn().then((res) => {
+    unresolvedPromise = promiseFn().then((res) => {
       unresolvedPromise = null;
       return res;
-    }));
+    });
+    return unresolvedPromise;
   };
 }
 
@@ -115,7 +116,7 @@ export function promiseCache<ReturnValue>(
 /** @hidden */
 export async function promiseAllAtOnce<RequestType, ResponseType>(
   inputs: RequestType[],
-  promiser: (input: RequestType) => Promise<ResponseType>
+  promiser: (input: RequestType) => Promise<ResponseType>,
 ) {
   const failed: RequestType[] = [];
   const succeded: RequestType[] = [];
@@ -141,16 +142,16 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
           .catch((error) => {
             resolve({ failed: inputs[index], error });
           });
-      })
+      }),
   );
 
   const results = await Promise.all(wrappedPromises);
-  results.forEach((res) => {
+  for (const res of results) {
     failed.push(...(res.failed ? [res.failed] : []));
     succeded.push(...(res.succeded ? [res.succeded] : []));
     responses.push(...(res.response ? [res.response] : []));
     errors.push(...(res.error ? [res.error] : []));
-  });
+  }
   if (failed.length) {
     throw {
       succeded,
@@ -167,17 +168,16 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
 export async function promiseAllWithData<RequestType, ResponseType>(
   inputs: RequestType[],
   promiser: (input: RequestType) => Promise<ResponseType>,
-  runSequentially: boolean
+  runSequentially: boolean,
 ) {
   try {
     if (runSequentially) {
       return await promiseEachInSequence(inputs, promiser);
-    } else {
-      return await promiseAllAtOnce(inputs, promiser);
     }
+    return await promiseAllAtOnce(inputs, promiser);
   } catch (err) {
     throw new CogniteMultiError(
-      err as MultiErrorRawSummary<RequestType, ResponseType>
+      err as MultiErrorRawSummary<RequestType, ResponseType>,
     );
   }
 }
@@ -188,7 +188,7 @@ export async function promiseAllWithData<RequestType, ResponseType>(
 /** @hidden */
 export async function promiseEachInSequence<RequestType, ResponseType>(
   inputs: RequestType[],
-  promiser: (input: RequestType) => Promise<ResponseType>
+  promiser: (input: RequestType) => Promise<ResponseType>,
 ) {
   return inputs.reduce(async (previousPromise, input, index) => {
     const prevResult = await previousPromise;
@@ -213,7 +213,7 @@ export function isSameProject(project1: string, project2: string): boolean {
 /** @hidden */
 export function applyIfApplicable<ArgumentType, ResultType>(
   args: ArgumentType,
-  action?: (input: ArgumentType) => ResultType
+  action?: (input: ArgumentType) => ResultType,
 ) {
   if (action) {
     return action(args);
@@ -227,14 +227,14 @@ export function generatePopupWindow(url: string, name: string) {
     url,
     name,
     // https://www.quackit.com/javascript/popup_windows.cfm
-    'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes'
+    'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes',
   );
 }
 
 /** @hidden */
 export function createInvisibleIframe(
   url: string,
-  name: string
+  name: string,
 ): HTMLIFrameElement {
   const iframe = document.createElement('iframe');
   iframe.name = name;

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+  "organizeImports": {
+    "enabled": true,
+    "ignore": [
+      "**/dist/**/*",
+      "packages/core/src/credentialsAuth.ts",
+      "packages/core/src/authFlows/legacy.ts"
+    ]
+  },
+  "linter": {
+    "ignore": [
+      "**/dist/**/*",
+      "packages/core/src/credentialsAuth.ts",
+      "packages/core/src/authFlows/legacy.ts"
+    ],
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "ignore": [
+      "**/dist/**/*",
+      "packages/core/src/credentialsAuth.ts",
+      "packages/core/src/authFlows/legacy.ts"
+    ]
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  }
+}

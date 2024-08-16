@@ -1,27 +1,29 @@
 // Copyright 2020 Cognite AS
 
+import { describe, expect, test } from 'vitest';
+
 import {
+  type CogniteAPIVersion,
+  apiUrl,
   convertToTimestampToDateTime,
+  isJson,
   isSameProject,
   isUsingSSL,
   projectUrl,
-  promiseCache,
-  sleepPromise,
-  promiseEachInSequence,
   promiseAllAtOnce,
-  isJson,
-  CogniteAPIVersion,
-  apiUrl,
+  promiseCache,
+  promiseEachInSequence,
+  sleepPromise,
 } from '../utils';
 
 describe('utils', () => {
   test('projectUrl', () => {
     expect(projectUrl('my-tenant')).toMatchInlineSnapshot(
-      `"/api/v1/projects/my-tenant"`
+      `"/api/v1/projects/my-tenant"`,
     );
 
     expect(projectUrl('my-special-tenønt')).toMatchInlineSnapshot(
-      `"/api/v1/projects/my-special-ten%C3%B8nt"`
+      `"/api/v1/projects/my-special-ten%C3%B8nt"`,
     );
   });
 
@@ -35,10 +37,10 @@ describe('utils', () => {
 
   test('convertToTimestampToDateTime', () => {
     expect(
-      convertToTimestampToDateTime(1524812400000).toUTCString()
+      convertToTimestampToDateTime(1524812400000).toUTCString(),
     ).toMatchInlineSnapshot(`"Fri, 27 Apr 2018 07:00:00 GMT"`);
     expect(
-      convertToTimestampToDateTime(1524373706000).toUTCString()
+      convertToTimestampToDateTime(1524373706000).toUTCString(),
     ).toMatchInlineSnapshot(`"Sun, 22 Apr 2018 05:08:26 GMT"`);
   });
 
@@ -72,9 +74,9 @@ describe('utils', () => {
       await expect(
         promiseAllAtOnce(data, (input) =>
           input === 'x'
-            ? Promise.reject(input + 'x')
-            : Promise.resolve(input + 'r')
-        )
+            ? Promise.reject(`${input}x`)
+            : Promise.resolve(`${input}r`),
+        ),
       ).rejects.toEqual({
         failed: ['x'],
         succeded: ['a', 'b', 'c'],
@@ -99,7 +101,7 @@ describe('utils', () => {
     test('promiseAllAtOnce: success', async () => {
       const data = ['a', 'b', 'c'];
       await expect(
-        promiseAllAtOnce(data, (input) => Promise.resolve(input))
+        promiseAllAtOnce(data, (input) => Promise.resolve(input)),
       ).resolves.toEqual(['a', 'b', 'c']);
     });
 
@@ -114,21 +116,21 @@ describe('utils', () => {
 
     test('promiseEachInSequence', async () => {
       expect(
-        await promiseEachInSequence([], (input) => Promise.resolve(input))
+        await promiseEachInSequence([], (input) => Promise.resolve(input)),
       ).toEqual([]);
 
       expect(
-        await promiseEachInSequence([1], (input) => Promise.resolve(input))
+        await promiseEachInSequence([1], (input) => Promise.resolve(input)),
       ).toEqual([1]);
 
       expect(
         await promiseEachInSequence([1, 2, 3], (input) =>
-          Promise.resolve(input)
-        )
+          Promise.resolve(input),
+        ),
       ).toEqual([1, 2, 3]);
 
       await expect(
-        promiseEachInSequence([1, 2], () => Promise.reject('reject'))
+        promiseEachInSequence([1, 2], () => Promise.reject('reject')),
       ).rejects.toEqual({
         failed: [1, 2],
         succeded: [],
@@ -138,8 +140,8 @@ describe('utils', () => {
 
       await expect(
         promiseEachInSequence([1, 0, 2, 3], (input) =>
-          input ? Promise.resolve(input) : Promise.reject('x')
-        )
+          input ? Promise.resolve(input) : Promise.reject('x'),
+        ),
       ).rejects.toEqual({
         failed: [0, 2, 3],
         succeded: [1],
@@ -149,8 +151,8 @@ describe('utils', () => {
 
       await expect(
         promiseEachInSequence([1, 2, 0, 3, 0], (input) =>
-          input ? Promise.resolve(input + 'r') : Promise.reject('x')
-        )
+          input ? Promise.resolve(`${input}r`) : Promise.reject('x'),
+        ),
       ).rejects.toEqual({
         failed: [0, 3, 0],
         succeded: [1, 2],

@@ -1,13 +1,14 @@
 // Copyright 2020 Cognite AS
 
+import { describe, expect, test } from 'vitest';
 import { makeAutoPaginationMethods } from '../autoPagination';
-import { ListResponse } from '../types';
+import type { ListResponse } from '../types';
 import { sleepPromise } from '../utils';
 
 async function fibListResponse() {
   const generateResponse = async (
     a: number,
-    b: number
+    b: number,
   ): Promise<ListResponse<number[]>> => {
     await sleepPromise(100);
     let first = a;
@@ -46,14 +47,14 @@ describe('makeAutoPaginationMethods', () => {
     expect(firstFibArray.length).toBe(limit);
 
     const secondFibArray = await makeAutoPaginationMethods(
-      fibListResponse()
+      fibListResponse(),
     ).autoPagingToArray({ limit });
     expect(secondFibArray).toMatchSnapshot();
     expect(secondFibArray).toEqual(firstFibArray);
 
     const maxArraySize = 10000;
     const thirdFibArray = await makeAutoPaginationMethods(
-      fibListResponse()
+      fibListResponse(),
     ).autoPagingToArray({ limit: maxArraySize });
     expect(thirdFibArray.length).toBeGreaterThan(firstFibArray.length);
     expect(thirdFibArray.length).toBeLessThan(maxArraySize); // fib generator will not produce 10K numbers (check that this works)
@@ -61,7 +62,7 @@ describe('makeAutoPaginationMethods', () => {
 
   test('has default limit', async () => {
     const arr = await makeAutoPaginationMethods(
-      fibListResponse()
+      fibListResponse(),
     ).autoPagingToArray();
     expect(arr.length).toBe(25);
   });

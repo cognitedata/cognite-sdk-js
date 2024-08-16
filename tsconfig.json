@@ -1,6 +1,7 @@
 {
     "extends": "./tsconfig.common",
     "compilerOptions": {
+        "useDefineForClassFields": false,
         "baseUrl": "packages",
         "paths": {
           "@cognite/sdk-*": ["*/src"],

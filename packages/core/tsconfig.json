@@ -1,3 +1,9 @@
 {
   "extends": "../../tsconfig",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "declarationDir": "dist",
+    "outDir": "dist"
+  },
+  "include": ["src/"]
 }

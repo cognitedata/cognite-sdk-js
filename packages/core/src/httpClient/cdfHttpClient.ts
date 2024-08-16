@@ -8,18 +8,17 @@ import {
 } from '../constants';
 import { handleErrorResponse } from '../error';
 import { bearerString, isJson } from '../utils';
-import { HttpQueryParams, HttpResponse } from './basicHttpClient';
-import { HttpHeaders } from './httpHeaders';
+import type { HttpQueryParams, HttpResponse } from './basicHttpClient';
 import { HttpError } from './httpError';
+import type { HttpHeaders } from './httpHeaders';
 import {
   RetryableHttpClient,
-  RetryableHttpRequest,
+  type RetryableHttpRequest,
 } from './retryableHttpClient';
-import { RetryValidator } from './retryValidator';
 
 export class CDFHttpClient extends RetryableHttpClient {
   private static serializeQueryParameters(
-    params: HttpQueryParams = {}
+    params: HttpQueryParams = {},
   ): HttpQueryParams {
     return Object.keys(params).reduce((serializedParams, key) => {
       const param = params[key];
@@ -40,7 +39,7 @@ export class CDFHttpClient extends RetryableHttpClient {
     return names.reduce(
       (partiallyFilteredHeaders, headerName) =>
         CDFHttpClient.filterHeader(partiallyFilteredHeaders, headerName),
-      headers
+      headers,
     );
   }
 
@@ -53,10 +52,6 @@ export class CDFHttpClient extends RetryableHttpClient {
   }
 
   private oneTimeHeaders: HttpHeaders = {};
-
-  constructor(baseUrl: string, retryValidator: RetryValidator) {
-    super(baseUrl, retryValidator);
-  }
 
   public addOneTimeHeader(name: string, value: string) {
     this.oneTimeHeaders[name] = value;
@@ -72,10 +67,10 @@ export class CDFHttpClient extends RetryableHttpClient {
   }
 
   protected async preRequest(
-    request: RetryableHttpRequest
+    request: RetryableHttpRequest,
   ): Promise<RetryableHttpRequest> {
     const headersWithDefaultHeaders = this.populateDefaultHeaders(
-      request.headers
+      request.headers,
     );
     const headers = request.withCredentials
       ? headersWithDefaultHeaders
@@ -98,7 +93,7 @@ export class CDFHttpClient extends RetryableHttpClient {
   protected async postRequest<T>(
     response: HttpResponse<T>,
     request: RetryableHttpRequest,
-    mutatedRequest: RetryableHttpRequest
+    mutatedRequest: RetryableHttpRequest,
   ): Promise<HttpResponse<T>> {
     try {
       return await super.postRequest(response, request, mutatedRequest);
@@ -163,5 +158,5 @@ type Response401Handler = (
   err: HttpError,
   request: RetryableHttpRequest,
   retry: () => void,
-  reject: () => void
+  reject: () => void,
 ) => void;

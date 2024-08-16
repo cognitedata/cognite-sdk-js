@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { CogniteError } from './error';
-import { HttpResponse } from './httpClient/basicHttpClient';
+import type { HttpResponse } from './httpClient/basicHttpClient';
 
 /** @hidden */
 export interface MultiErrorRawSummary<RequestType, ResponseType> {
@@ -28,7 +28,7 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
   public status?: number;
   public requestId?: string;
   public missing: object[] = [];
-  public duplicated: any[] = [];
+  public duplicated: unknown[] = [];
   public statuses: number[] = [];
   public requestIds: string[] = [];
   public responses: ResponseType[] = [];
@@ -49,8 +49,8 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
           errors: serialiseErrors(errors),
         },
         null,
-        2
-      )}`
+        2,
+      )}`,
     );
     Object.setPrototypeOf(this, CogniteMultiError.prototype); // https://stackoverflow.com/questions/51229574/why-instanceof-returns-false-for-a-child-object-in-javascript
 

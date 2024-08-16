@@ -1,33 +1,33 @@
 // Copyright 2020 Cognite AS
 
+import { version } from '../package.json';
 import { LoginAPI } from './api/login/loginApi';
 import { LogoutApi } from './api/logout/logoutApi';
 import {
+  API_KEY_HEADER,
   AUTHORIZATION_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
-  API_KEY_HEADER,
 } from './constants';
-import { HttpResponse } from './httpClient/basicHttpClient';
-import { HttpHeaders } from './httpClient/httpHeaders';
+import { type ClientCredentials, CredentialsAuth } from './credentialsAuth';
+import type { HttpResponse } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
+import type { HttpHeaders } from './httpClient/httpHeaders';
+import {
+  type RetryValidator,
+  createUniversalRetryValidator,
+} from './httpClient/retryValidator';
+import type { RetryableHttpRequestOptions } from './httpClient/retryableHttpClient';
+import { verifyOptionsRequiredFields } from './loginUtils';
 import { MetadataMap } from './metadata';
 import {
+  type CogniteAPIVersion,
   bearerString,
   getBaseUrl,
+  isBrowser,
   isUsingSSL,
   projectUrl,
-  isBrowser,
-  CogniteAPIVersion,
 } from './utils';
-import { version } from '../package.json';
-import {
-  createUniversalRetryValidator,
-  RetryValidator,
-} from './httpClient/retryValidator';
-import { verifyOptionsRequiredFields } from './loginUtils';
-import { CredentialsAuth, ClientCredentials } from './credentialsAuth';
-import { RetryableHttpRequestOptions } from './httpClient/retryableHttpClient';
 export interface ClientOptions {
   /** App identifier (ex: 'FileExtractor') */
   appId: string;
@@ -44,7 +44,7 @@ export interface ClientOptions {
   /** OIDC/API auth */
   authentication?: {
     /** Provider to do the auth job, recommended: @cognite/auth-wrapper */
-    provider?: any;
+    provider?: unknown;
     /** IdP Credentials */
     credentials?: ClientCredentials;
   };
@@ -116,7 +116,7 @@ export default class BaseCogniteClient {
       !options.noAuthMode
     ) {
       throw Error(
-        'options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>'
+        'options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>',
       );
     }
 
@@ -132,13 +132,13 @@ export default class BaseCogniteClient {
       this.credentialsAuth = new CredentialsAuth(
         this.httpClient,
         credentials,
-        provider
+        provider,
       );
     }
 
     if (isBrowser() && !isUsingSSL() && !options.noAuthMode) {
       console.warn(
-        'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
+        'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site',
       );
     }
 
@@ -185,14 +185,14 @@ export default class BaseCogniteClient {
 
         if (this.noAuthMode) {
           return token;
-        } else if (this.apiKeyMode) {
+        }
+        if (this.apiKeyMode) {
           this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
           return token;
-        } else {
-          const bearer = bearerString(token);
-          this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
-          return token;
         }
+        const bearer = bearerString(token);
+        this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
+        return token;
       } catch {
         return;
       }
@@ -200,18 +200,18 @@ export default class BaseCogniteClient {
 
   private initializeCDFHttpClient(
     baseUrl: string | undefined,
-    options: ClientOptions
+    options: ClientOptions,
   ) {
     const httpClient = new CDFHttpClient(
       getBaseUrl(baseUrl),
-      this.getRetryValidator()
+      this.getRetryValidator(),
     );
 
     httpClient
       .setDefaultHeader(X_CDF_APP_HEADER, options.appId)
       .setDefaultHeader(
         X_CDF_SDK_HEADER,
-        `CogniteJavaScriptSDK:${this.version}`
+        `CogniteJavaScriptSDK:${this.version}`,
       );
 
     httpClient.set401ResponseHandler(async (_, request, retry, reject) => {
@@ -241,9 +241,9 @@ export default class BaseCogniteClient {
    * @returns string
    */
   private retrieveTokenValueFromHeader(
-    headers?: HttpHeaders
+    headers?: HttpHeaders,
   ): string | undefined {
-    let token;
+    let token: string | undefined;
 
     if (this.apiKeyMode) {
       token = headers?.[API_KEY_HEADER];
@@ -285,7 +285,7 @@ export default class BaseCogniteClient {
    * const metadata = client.getMetadata(createdAsset);
    * ```
    */
-  public getMetadata = (value: any) => this.metadataMap.get(value);
+  public getMetadata = (value: object) => this.metadataMap.get(value);
 
   /**
    * Basic HTTP method for GET
@@ -297,8 +297,10 @@ export default class BaseCogniteClient {
    * const response = await client.get('/api/v1/projects/{project}/assets', { params: { limit: 50 }});
    * ```
    */
-  public get = <T = any>(path: string, options?: RetryableHttpRequestOptions) =>
-    this.httpClient.get<T>(path, options);
+  public get = <T = unknown>(
+    path: string,
+    options?: RetryableHttpRequestOptions,
+  ) => this.httpClient.get<T>(path, options);
 
   /**
    * Basic HTTP method for PUT
@@ -310,8 +312,10 @@ export default class BaseCogniteClient {
    * const response = await client.put('someUrl');
    * ```
    */
-  public put = <T = any>(path: string, options?: RetryableHttpRequestOptions) =>
-    this.httpClient.put<T>(path, options);
+  public put = <T = unknown>(
+    path: string,
+    options?: RetryableHttpRequestOptions,
+  ) => this.httpClient.put<T>(path, options);
 
   /**
    * Basic HTTP method for POST
@@ -324,9 +328,9 @@ export default class BaseCogniteClient {
    * const response = await client.post('/api/v1/projects/{project}/assets', { data: { items: assets } });
    * ```
    */
-  public post = <T = any>(
+  public post = <T = unknown>(
     path: string,
-    options?: RetryableHttpRequestOptions
+    options?: RetryableHttpRequestOptions,
   ) => this.httpClient.post<T>(path, options);
 
   /**
@@ -338,9 +342,9 @@ export default class BaseCogniteClient {
    * const response = await client.delete('someUrl');
    * ```
    */
-  public delete = <T = any>(
+  public delete = <T = unknown>(
     path: string,
-    options?: RetryableHttpRequestOptions
+    options?: RetryableHttpRequestOptions,
   ) => this.httpClient.delete<T>(path, options);
 
   /**
@@ -352,9 +356,9 @@ export default class BaseCogniteClient {
    * const response = await client.patch('someUrl');
    * ```
    */
-  public patch = <T = any>(
+  public patch = <T = unknown>(
     path: string,
-    options?: RetryableHttpRequestOptions
+    options?: RetryableHttpRequestOptions,
   ) => this.httpClient.patch<T>(path, options);
 
   protected initAPIs() {
@@ -377,14 +381,14 @@ export default class BaseCogniteClient {
     api: new (
       relativePath: string,
       httpClient: CDFHttpClient,
-      map: MetadataMap
+      map: MetadataMap,
     ) => ApiType,
-    relativePath: string
+    relativePath: string,
   ) => {
     return new api(
       `${this.projectUrl}/${relativePath}`,
       this.httpClient,
-      this.metadataMap
+      this.metadataMap,
     );
   };
 
@@ -402,4 +406,4 @@ export default class BaseCogniteClient {
 }
 
 export type BaseRequestOptions = RetryableHttpRequestOptions;
-export type Response = HttpResponse<any>;
+export type Response = HttpResponse<unknown>;

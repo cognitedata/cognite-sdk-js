@@ -1,5 +1,7 @@
 // Copyright 2020 Cognite AS
 
+import { describe, expect, test } from 'vitest';
+
 import { Queue } from '../queue';
 
 describe('Queue', () => {

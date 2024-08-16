@@ -1,6 +1,10 @@
 // Copyright 2020 Cognite AS
+
+import { beforeEach, describe, expect, test } from 'vitest';
+
 import nock from 'nock';
 import { BasicHttpClient, HttpResponseType } from './basicHttpClient';
+import { HttpError } from './httpError';
 
 describe('BasicHttpClient', () => {
   const baseUrl = 'https://example.com';
@@ -50,7 +54,7 @@ describe('BasicHttpClient', () => {
 
     test('handle json response', async () => {
       nock(baseUrl).get('/').reply(200, { a: 42 });
-      const response = await client.get<any>('/');
+      const response = await client.get('/');
       expect(response.data).toEqual({ a: 42 });
     });
 
@@ -73,7 +77,7 @@ describe('BasicHttpClient', () => {
 
     test('handle json errors and fallback to text response', async () => {
       nock(baseUrl).get('/').reply(200, '');
-      const response = await client.get<any>('/');
+      const response = await client.get('/');
       expect(response.data).toEqual('');
     });
 
@@ -109,7 +113,7 @@ describe('BasicHttpClient', () => {
           error: { code: 500, message: 'Internal server error' },
         });
       await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"Request failed | status code: 500"`
+        '[Error: Request failed | status code: 500]',
       );
     });
 
@@ -119,6 +123,9 @@ describe('BasicHttpClient', () => {
       try {
         await client.get('/');
       } catch (err) {
+        if (!(err instanceof HttpError)) {
+          throw err;
+        }
         expect(err.status).toBe(500);
       }
     });
@@ -131,6 +138,9 @@ describe('BasicHttpClient', () => {
       try {
         await client.get('/');
       } catch (err) {
+        if (!(err instanceof HttpError)) {
+          throw err;
+        }
         expect(err.headers[header.name]).toBe(header.value);
       }
     });
@@ -141,6 +151,9 @@ describe('BasicHttpClient', () => {
       try {
         await client.get('/');
       } catch (err) {
+        if (!(err instanceof HttpError)) {
+          throw err;
+        }
         expect(err.data).toEqual({ a: 42 });
       }
     });

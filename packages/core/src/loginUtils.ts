@@ -1,14 +1,14 @@
 // Copyright 2020 Cognite AS
 
-import { createInvisibleIframe, generatePopupWindow } from './utils';
-import { CogniteLoginError } from './loginError';
-import { HttpCall, HttpQueryParams } from './httpClient/basicHttpClient';
-import { LogoutUrlResponse } from './types';
-import isString from 'lodash/isString';
-import { ClientOptions } from './baseCogniteClient';
 import isObject from 'lodash/isObject';
-import { ClientCredentials } from './credentialsAuth';
+import isString from 'lodash/isString';
+import type { ClientOptions } from './baseCogniteClient';
+import type { ClientCredentials } from './credentialsAuth';
 import { CogniteError } from './error';
+import type { HttpCall, HttpQueryParams } from './httpClient/basicHttpClient';
+import { CogniteLoginError } from './loginError';
+import type { LogoutUrlResponse } from './types';
+import { createInvisibleIframe, generatePopupWindow } from './utils';
 
 const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
 const LOGIN_IFRAME_NAME = 'silentLoginIframe';
@@ -128,7 +128,7 @@ export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
 
 /** @hidden */
 export function loginWithPopup(
-  params: AuthorizeParams
+  params: AuthorizeParams,
 ): Promise<null | AuthTokens> {
   return new Promise((resolve, reject) => {
     const url = generateLoginUrl(params);
@@ -157,15 +157,18 @@ export async function silentLoginViaIframe<TokenType>(
   url: string,
   extractor: (query: string) => TokenType,
   iframeName: string = LOGIN_IFRAME_NAME,
-  locationPart: 'hash' | 'search' = 'hash'
+  locationPart: 'hash' | 'search' = 'hash',
 ): Promise<TokenType> {
   return new Promise<TokenType>((resolve, reject) => {
     const iframe = createInvisibleIframe(url, iframeName);
 
     iframe.onload = () => {
       try {
+        if (!iframe.contentWindow) {
+          throw Error('Failed to login silently');
+        }
         const authTokens = extractor(
-          iframe.contentWindow!.location[locationPart]
+          iframe.contentWindow.location[locationPart],
         );
         if (authTokens === null) {
           throw Error('Failed to login silently');
@@ -197,15 +200,15 @@ function generateLoginUrl(params: AuthorizeParams): string {
  * @param credentials ClientCredentials
  */
 export function verifyCredentialsRequiredFields(
-  credentials: ClientCredentials
-): Error | void {
+  credentials: ClientCredentials,
+): void {
   if (!isObject(credentials)) {
     throw Error('options.credentials is required');
   }
 
   if (!credentials.method) {
     throw Error(
-      'options.credentials.method is required and must be of type string with one of this values: api, client_credentials, device, implicit, pkce'
+      'options.credentials.method is required and must be of type string with one of this values: api, client_credentials, device, implicit, pkce',
     );
   }
 
@@ -219,7 +222,7 @@ export function verifyCredentialsRequiredFields(
       !credentials[field.field]
     ) {
       throw Error(
-        `options.credentials.${field.field} is required and must be of type string`
+        `options.credentials.${field.field} is required and must be of type string`,
       );
     }
   }
@@ -229,9 +232,7 @@ export function verifyCredentialsRequiredFields(
  * It verify if options contain require fields .
  * @param credentials ClientCredentials
  */
-export function verifyOptionsRequiredFields(
-  options: ClientOptions
-): Error | void {
+export function verifyOptionsRequiredFields(options: ClientOptions): void {
   if (!isObject(options)) {
     throw Error('`CogniteClient` is missing parameter `options`');
   }

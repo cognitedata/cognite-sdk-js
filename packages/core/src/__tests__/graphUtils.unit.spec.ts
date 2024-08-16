@@ -1,6 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import { Node, topologicalSort } from '../graphUtils';
+import { describe, expect, test } from 'vitest';
+
+import { type Node, topologicalSort } from '../graphUtils';
 
 describe('Graph utils', () => {
   describe('topologicalSort', () => {
@@ -27,13 +29,13 @@ describe('Graph utils', () => {
       const inputOrder = [nodeAB, nodeAAA, nodeA, nodeAAB, nodeAA];
       const outputOrder = topologicalSort(inputOrder);
       const visitedNodes = new Set();
-      outputOrder.forEach((node) => {
+      for (const node of outputOrder) {
         const { parentNode } = node;
         if (parentNode) {
           expect(visitedNodes.has(parentNode)).toBeTruthy();
         }
         visitedNodes.add(node);
-      });
+      }
     });
 
     test('cycle', () => {
@@ -42,9 +44,9 @@ describe('Graph utils', () => {
       const nodeAAA = { data: null, parentNode: nodeAA };
       nodeA.parentNode = nodeAAA;
       expect(() =>
-        topologicalSort([nodeA, nodeAA, nodeAAA])
+        topologicalSort([nodeA, nodeAA, nodeAAA]),
       ).toThrowErrorMatchingInlineSnapshot(
-        `"Impossible to topological sort nodes"`
+        '[Error: Impossible to topological sort nodes]',
       );
     });
   });
