@@ -8,7 +8,7 @@
   "version": "4.10.1",
   "scripts": {
     "clean": "rm -rf dist/ docs/",
-    "test": "jest --config=../../jest.config.js --testPathPattern=/core/",
+    "test": "yarn g:jest --config=../../jest.config.js --testPathPattern=/core/",
     "test:debug": "node --inspect-brk ../../node_modules/.bin/jest --config=../../jest.config.js --testPathPattern=/core/ --runInBand",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
@@ -22,10 +22,7 @@
   },
   "dependencies": {
     "cross-fetch": "^3.0.4",
-    "is-buffer": "^2.0.5",
-    "lodash": "^4.17.11",
-    "query-string": "^5.1.1",
-    "url": "^0.11.0"
+    "lodash": "^4.17.11"
   },
   "publishConfig": {
     "access": "public"
@@ -34,7 +31,6 @@
     "dist"
   ],
   "devDependencies": {
-    "@types/geojson": "^7946.0.8",
-    "@types/is-buffer": "^2.0.0"
+    "@types/geojson": "^7946.0.8"
   }
 }
