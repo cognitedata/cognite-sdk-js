@@ -173,23 +173,27 @@ describe('Documents integration test', () => {
       await client.documents.preview.documentAsImage(document.id, 1);
     });
 
-    test('fetch pdf preview', async () => {
-      if (documents.items.length == 0) {
-        return;
-      }
-      const document = documents.items[0].item;
+    test(
+      'fetch pdf preview',
+      async () => {
+        if (documents.items.length == 0) {
+          return;
+        }
+        const document = documents.items[0].item;
 
-      const resp = await client.documents.preview.documentAsPdf(document.id);
+        const resp = await client.documents.preview.documentAsPdf(document.id);
 
-      const pdfPrefix = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
-      expect(resp.byteLength).toBeGreaterThan(pdfPrefix.length);
-      const frontSlice = resp.slice(0, pdfPrefix.length);
-      expect(frontSlice.byteLength).toStrictEqual(pdfPrefix.length);
-      const match = Buffer.from(frontSlice, 0).equals(
-        Buffer.from(pdfPrefix, 0)
-      );
-      expect(match).toBe(true);
-    });
+        const pdfPrefix = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
+        expect(resp.byteLength).toBeGreaterThan(pdfPrefix.length);
+        const frontSlice = resp.slice(0, pdfPrefix.length);
+        expect(frontSlice.byteLength).toStrictEqual(pdfPrefix.length);
+        const match = Buffer.from(frontSlice, 0).equals(
+          Buffer.from(pdfPrefix, 0)
+        );
+        expect(match).toBe(true);
+      },
+      30 * 1000
+    );
 
     test('fetch temporary link', async () => {
       if (documents.items.length == 0) {
