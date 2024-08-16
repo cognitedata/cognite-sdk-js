@@ -4,7 +4,7 @@ import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
 import { BASE_URL } from './constants';
 import { CogniteError } from './error';
-import { CogniteMultiError } from './multiError';
+import { CogniteMultiError, MultiErrorRawSummary } from './multiError';
 
 /** @hidden */
 export type CogniteAPIVersion = 'v1' | 'playground';
@@ -176,9 +176,9 @@ export async function promiseAllWithData<RequestType, ResponseType>(
       return await promiseAllAtOnce(inputs, promiser);
     }
   } catch (err) {
-    console.log('her!: ', err);
-    // @ts-ignore
-    throw new CogniteMultiError(err);
+    throw new CogniteMultiError(
+      err as MultiErrorRawSummary<RequestType, ResponseType>
+    );
   }
 }
 
