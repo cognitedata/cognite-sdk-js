@@ -26,6 +26,7 @@ import {
   parseTokenQueryParameters,
 } from '../loginUtils';
 import { createUniversalRetryValidator } from '../httpClient/retryValidator';
+import { CogniteError } from '../error';
 
 export const REDIRECT = 'REDIRECT';
 export const POPUP = 'POPUP';
@@ -76,7 +77,7 @@ export async function getIdInfo(
       projectId,
     };
   } catch (err) {
-    if (err.status === 401) {
+    if (err instanceof CogniteError && err.status === 401) {
       return null;
     }
     throw err;

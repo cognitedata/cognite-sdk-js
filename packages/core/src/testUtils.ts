@@ -2,6 +2,7 @@
 
 import BaseCogniteClient from './baseCogniteClient';
 import { BASE_URL } from './constants';
+import { HttpError } from './httpClient/httpError';
 import { sleepPromise } from './utils';
 
 export const apiKey = 'TEST_KEY';
@@ -52,7 +53,7 @@ export async function retryInSeconds<ResponseType>(
     try {
       return await func();
     } catch (error) {
-      if (Number(error.status) !== statusCodeToRetry) {
+      if (error instanceof HttpError && error.status !== statusCodeToRetry) {
         throw error;
       }
       await sleepPromise(secondsBetweenRetries * 1000);

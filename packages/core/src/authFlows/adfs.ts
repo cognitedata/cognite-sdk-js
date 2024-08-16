@@ -222,7 +222,8 @@ export class ADFS {
   }
 }
 
-export function extractADFSToken(query: string): ADFSToken | null {
+export function extractADFSToken(fragment: string): ADFSToken | null {
+  const query = fragment.replace(/^#/, '?');
   const queryParams = new URLSearchParams(query);
   const accessToken = queryParams.get(ACCESS_TOKEN);
   const idToken = queryParams.get(ID_TOKEN);

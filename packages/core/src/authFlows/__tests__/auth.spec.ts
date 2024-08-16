@@ -246,7 +246,7 @@ describe('Cognite Auth', () => {
         });
         expect(spiedLocationAssign).toBeCalledTimes(1);
         expect(spiedLocationAssign.mock.calls[0][0]).toMatchInlineSnapshot(
-          `"https://example.com/login/redirect?errorRedirectUrl=https%3A%2F%2Ferror-redirect.com&project=my-tenant&redirectUrl=https%3A%2F%2Fredirect.com"`
+          `"https://example.com/login/redirect?project=my-tenant&redirectUrl=https%3A%2F%2Fredirect.com&errorRedirectUrl=https%3A%2F%2Ferror-redirect.com"`
         );
         setTimeout(() => {
           expect(isPromiseResolved).toBe(false);

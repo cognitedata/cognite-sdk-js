@@ -30,7 +30,7 @@ export class CDFHttpClient extends RetryableHttpClient {
 
   private static isSameOrigin(baseUrl: string, url: string) {
     const { protocol: baseUrlProtocol, host: baseUrlHost } = new URL(baseUrl);
-    const { protocol, host } = new URL(new URL(url, baseUrl));
+    const { protocol, host } = new URL(new URL(url, baseUrl).toString());
     const hasSameProtocol = baseUrlProtocol === protocol;
     const hasSameHost = baseUrlHost === host;
     return hasSameProtocol && hasSameHost;
@@ -103,6 +103,9 @@ export class CDFHttpClient extends RetryableHttpClient {
     try {
       return await super.postRequest(response, request, mutatedRequest);
     } catch (err) {
+      if (!(err instanceof HttpError)) {
+        throw err;
+      }
       if (
         err.status === 401 &&
         !this.isLoginOrLogoutApi(request.path) &&

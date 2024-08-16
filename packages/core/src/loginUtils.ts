@@ -8,6 +8,7 @@ import isString from 'lodash/isString';
 import { ClientOptions } from './baseCogniteClient';
 import isObject from 'lodash/isObject';
 import { ClientCredentials } from './credentialsAuth';
+import { CogniteError } from './error';
 
 const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
 const LOGIN_IFRAME_NAME = 'silentLoginIframe';
@@ -72,7 +73,11 @@ export function loginPopupHandler() {
     const tokens = parseTokenQueryParameters(window.location.search);
     window.opener.postMessage(tokens);
   } catch (err) {
-    window.opener.postMessage({ error: err.message });
+    if (err instanceof Error) {
+      window.opener.postMessage({ error: err.message });
+    } else {
+      throw err;
+    }
   } finally {
     window.close();
   }
@@ -86,7 +91,7 @@ export async function getLogoutUrl(get: HttpCall, params: HttpQueryParams) {
     });
     return response.data.data.url;
   } catch (err) {
-    if (err.status === 401) {
+    if (err instanceof CogniteError && err.status === 401) {
       return null;
     }
     throw err;
@@ -100,7 +105,7 @@ export function parseTokenQueryParameters(query: string): null | AuthTokens {
   const idToken = queryParams.get(ID_TOKEN_PARAM);
   const error = queryParams.get(ERROR_PARAM);
   const errorDescription = queryParams.get(ERROR_DESCRIPTION_PARAM);
-  if (error !== undefined) {
+  if (error !== null) {
     throw Error(`${error}: ${errorDescription}`);
   }
   if (isString(accessToken) && isString(idToken)) {

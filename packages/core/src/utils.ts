@@ -176,6 +176,8 @@ export async function promiseAllWithData<RequestType, ResponseType>(
       return await promiseAllAtOnce(inputs, promiser);
     }
   } catch (err) {
+    console.log('her!: ', err);
+    // @ts-ignore
     throw new CogniteMultiError(err);
   }
 }
