@@ -2,15 +2,15 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  ExternalId,
+  type CursorAndAsyncIterator,
+  type ExternalId,
 } from '@cognite/sdk-core';
 
-import { DocumentsPipeline, DocumentsPipelineUpdate } from '../../types';
+import type { DocumentsPipeline, DocumentsPipelineUpdate } from '../../types';
 
 export class PipelinesAPI extends BaseResourceAPI<DocumentsPipeline> {
   public create = (
-    request: DocumentsPipeline[]
+    request: DocumentsPipeline[],
   ): Promise<DocumentsPipeline[]> => {
     return this.createEndpoint(request);
   };
@@ -20,7 +20,7 @@ export class PipelinesAPI extends BaseResourceAPI<DocumentsPipeline> {
   };
 
   public update = (
-    changes: DocumentsPipelineUpdate[]
+    changes: DocumentsPipelineUpdate[],
   ): Promise<DocumentsPipeline[]> => {
     return this.updateEndpoint<DocumentsPipelineUpdate>(changes);
   };

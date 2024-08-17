@@ -1,11 +1,15 @@
 // Copyright 2020 Cognite AS
 
+import {
+  apiKey,
+  mockBaseUrl,
+  project,
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 import CogniteClientPlayground from '../cogniteClientPlayground';
-import { apiKey, mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
 import { login } from './login';
 
 export function setupLoggedInClient(
-  baseUrl: string = process.env.COGNITE_BASE_URL as string
+  baseUrl: string = process.env.COGNITE_BASE_URL as string,
 ) {
   return new CogniteClientPlayground({
     appId: 'JS SDK integration tests (playground)',

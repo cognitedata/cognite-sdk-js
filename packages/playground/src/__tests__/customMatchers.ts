@@ -12,29 +12,28 @@ export const matchers = {
   toContainObject(
     this: jest.MatcherContext,
     received: object[],
-    argument: object
+    argument: object,
   ) {
     const pass = this.equals(
       received,
-      expect.arrayContaining([expect.objectContaining(argument)])
+      expect.arrayContaining([expect.objectContaining(argument)]),
     );
 
     if (pass) {
       return {
         message: () =>
           `expected ${this.utils.printReceived(
-            received
+            received,
           )} not to contain object ${this.utils.printExpected(argument)}`,
         pass: true,
       };
-    } else {
-      return {
-        message: () =>
-          `expected ${this.utils.printReceived(
-            received
-          )} to contain object ${this.utils.printExpected(argument)}`,
-        pass: false,
-      };
     }
+    return {
+      message: () =>
+        `expected ${this.utils.printReceived(
+          received,
+        )} to contain object ${this.utils.printExpected(argument)}`,
+      pass: false,
+    };
   },
 };

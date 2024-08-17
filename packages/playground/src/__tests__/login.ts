@@ -1,5 +1,5 @@
+import { URLSearchParams } from 'node:url';
 import fetch from 'cross-fetch';
-import { URLSearchParams } from 'url';
 
 const headers = new Headers({
   'Content-Type': 'application/x-www-form-urlencoded',
@@ -13,12 +13,12 @@ export const login = async () => {
         method: 'POST',
         body: new URLSearchParams({
           grant_type: 'client_credentials',
-          client_id: process.env.COGNITE_CLIENT_ID,
-          client_secret: process.env.COGNITE_CLIENT_SECRET,
+          client_id: process.env.COGNITE_CLIENT_ID || '',
+          client_secret: process.env.COGNITE_CLIENT_SECRET || '',
           scope: `${process.env.COGNITE_BASE_URL}/.default`,
         }).toString(),
         headers,
-      }
+      },
     );
     const account = await response.json();
     return account;

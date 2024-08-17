@@ -2,39 +2,39 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  FilterQuery,
+  type CursorAndAsyncIterator,
+  type FilterQuery,
 } from '@cognite/sdk-core';
 
-import {
+import type {
   AggregateField,
   DocumentFeedback,
+  DocumentFeedbackAcceptRejectItem,
   DocumentFeedbackAcceptRejectRequest,
   DocumentFeedbackAggregateRequest,
   DocumentFeedbackAggregateResponse,
   DocumentFeedbackListResponse,
-  DocumentFeedbackAcceptRejectItem,
-  FeedbackStatusQueryParameter,
   FeedbackStatus,
+  FeedbackStatusQueryParameter,
 } from '../../types';
-import { DocumentFeedbackCreateItem } from './types.gen';
+import type { DocumentFeedbackCreateItem } from './types.gen';
 
 export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   public aggregates = (
-    fieldName: AggregateField
+    fieldName: AggregateField,
   ): Promise<DocumentFeedbackAggregateResponse> => {
     const content: DocumentFeedbackAggregateRequest = { field: fieldName };
     return this.aggregateFeedbacks<DocumentFeedbackAggregateResponse>(content);
   };
 
   public create = (
-    feedbacks: DocumentFeedbackCreateItem[]
+    feedbacks: DocumentFeedbackCreateItem[],
   ): Promise<DocumentFeedback[]> => {
     return this.createEndpoint<DocumentFeedbackCreateItem>(feedbacks);
   };
 
   public list = (
-    status?: FeedbackStatus
+    status?: FeedbackStatus,
   ): CursorAndAsyncIterator<DocumentFeedback> => {
     const parameter: FeedbackStatusQueryParameter & FilterQuery = {
       status: status,
@@ -52,7 +52,7 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
 
   private async postAcceptRejectFeedback(
     ids: number[],
-    endpoint: acceptRejectEndpoint
+    endpoint: acceptRejectEndpoint,
   ) {
     const feedbackIds: DocumentFeedbackAcceptRejectItem[] = ids.map((id) => ({
       id,
@@ -68,7 +68,7 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   }
 
   private async aggregateFeedbacks<ResponseType>(
-    request: DocumentFeedbackAggregateRequest
+    request: DocumentFeedbackAggregateRequest,
   ): Promise<ResponseType> {
     const response = await this.post<ResponseType>(this.url('aggregates'), {
       data: request,

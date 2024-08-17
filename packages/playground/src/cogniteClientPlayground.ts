@@ -1,6 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import { accessApi, ClientOptions, BaseCogniteClient } from '@cognite/sdk-core';
+import {
+  BaseCogniteClient,
+  type ClientOptions,
+  accessApi,
+} from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { DocumentsAPI } from './api/documents/documentsApi';
 

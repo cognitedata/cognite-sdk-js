@@ -1,9 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClientPlayground from '../../cogniteClientPlayground';
+import type { ListResponse } from '@cognite/sdk-core';
+import type { Document, DocumentFeedback } from '@cognite/sdk-playground';
+import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupLoggedInClient } from '../testUtils';
-import { ListResponse } from '@cognite/sdk-core';
-import { Document, DocumentFeedback } from '@cognite/sdk-playground';
 
 // TODO: Fix the test
 describe.skip('documents api', () => {
@@ -99,7 +100,7 @@ describe.skip('documents api', () => {
     });
 
     test('fetch image preview', async () => {
-      if (documents.items.length == 0) {
+      if (documents.items.length === 0) {
         return;
       }
       const document = documents.items[0];
@@ -108,7 +109,7 @@ describe.skip('documents api', () => {
     });
 
     test('fetch pdf preview', async () => {
-      if (documents.items.length == 0) {
+      if (documents.items.length === 0) {
         return;
       }
       const document = documents.items[0];
@@ -119,14 +120,12 @@ describe.skip('documents api', () => {
       expect(resp.byteLength).toBeGreaterThan(pdfPrefix.length);
       const frontSlice = resp.slice(0, pdfPrefix.length);
       expect(frontSlice.byteLength).toStrictEqual(pdfPrefix.length);
-      const match = Buffer.from(frontSlice, 0).equals(
-        Buffer.from(pdfPrefix, 0)
-      );
+      const match = Buffer.from(frontSlice, 0).equals(Buffer.from(pdfPrefix));
       expect(match).toBe(true);
     });
 
     test('fetch temporary link', async () => {
-      if (documents.items.length == 0) {
+      if (documents.items.length === 0) {
         return;
       }
       const document = documents.items[0];
