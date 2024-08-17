@@ -4,6 +4,7 @@
     "enabled": true,
     "ignore": [
       "**/dist/**/*",
+      "samples/**/*",
       "packages/core/src/credentialsAuth.ts",
       "packages/core/src/authFlows/legacy.ts",
       ".cognite-openapi-snapshot.json"
@@ -12,6 +13,7 @@
   "linter": {
     "ignore": [
       "**/dist/**/*",
+      "samples/**/*",
       "packages/core/src/credentialsAuth.ts",
       "packages/core/src/authFlows/legacy.ts",
       ".cognite-openapi-snapshot.json"
@@ -26,9 +28,12 @@
     "indentStyle": "space",
     "ignore": [
       "**/dist/**/*",
+      "samples/**/*",
       "packages/core/src/credentialsAuth.ts",
       "packages/core/src/authFlows/legacy.ts",
-      ".cognite-openapi-snapshot.json"
+      ".cognite-openapi-snapshot.json",
+      "packages/codegen/src/__tests__/testdata/cyclic-references-types.gen.ts",
+      "packages/codegen/src/__tests__/testdata/8-serviceB-types.gen.ts"
     ]
   },
   "javascript": {

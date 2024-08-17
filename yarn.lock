@@ -68,7 +68,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@azure/msal-node@npm:^1.18.4":
+"@azure/msal-node@npm:^1.18.4, @azure/msal-node@npm:^1.3.2":
   version: 1.18.4
   resolution: "@azure/msal-node@npm:1.18.4"
   dependencies:
@@ -6245,6 +6245,13 @@ __metadata:
   version: 20.5.1
   resolution: "@types/node@npm:20.5.1"
   checksum: 10c0/b5aeaeb489842081190f8c2c09e923ff7b1b4ee3ecfceba12ba1030ce7750909a1b3c0f5372bd60cbe955e48a9889f416522e8a96697ad7209317752f395e3e5
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^16.7":
+  version: 16.18.105
+  resolution: "@types/node@npm:16.18.105"
+  checksum: 10c0/c206e3a7c150ec858d8f9ed5a7f125cf31559db088d6133f98bdddfcee13ab3fc293203a3e355bdccda91cc85c232f471213d9f3f8253fe4b6b9c330d52f32e4
   languageName: node
   linkType: hard
 
@@ -16679,10 +16686,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "oidc-client-credentials-sample@workspace:samples/nodejs/oidc-typescript"
   dependencies:
-    "@azure/msal-node": "npm:^1.18.4"
+    "@azure/msal-node": "npm:^1.3.2"
     "@cognite/sdk": "npm:^9"
-    "@types/node": "npm:^22.3.0"
-    typescript: "npm:^5.5.4"
+    "@types/node": "npm:^16.7"
+    typescript: "npm:^4.4"
   languageName: unknown
   linkType: soft
 
@@ -21785,7 +21792,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^3 || ^4":
+"typescript@npm:^3 || ^4, typescript@npm:^4.4":
   version: 4.9.5
   resolution: "typescript@npm:4.9.5"
   bin:
@@ -21825,7 +21832,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^3 || ^4#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^3 || ^4#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^4.4#optional!builtin<compat/typescript>":
   version: 4.9.5
   resolution: "typescript@patch:typescript@npm%3A4.9.5#optional!builtin<compat/typescript>::version=4.9.5&hash=289587"
   bin:

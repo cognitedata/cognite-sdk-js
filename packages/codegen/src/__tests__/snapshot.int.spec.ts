@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { OpenApiSnapshotManager } from '../snapshot';
 
 describe('version file manager', () => {
@@ -7,7 +8,7 @@ describe('version file manager', () => {
     });
 
     const doc = await snapshotMngr.downloadFromUrl(
-      'https://storage.googleapis.com/cognitedata-api-docs/dist/playground.json'
+      'https://storage.googleapis.com/cognitedata-api-docs/dist/playground.json',
     );
     expect(doc).toBeDefined();
     expect(doc.info.title).toEqual('Cognite playground APIs');
@@ -19,7 +20,7 @@ describe('version file manager', () => {
     });
 
     const wants = await snapshotMngr.downloadFromUrl(
-      'https://storage.googleapis.com/cognitedata-api-docs/dist/playground.json'
+      'https://storage.googleapis.com/cognitedata-api-docs/dist/playground.json',
     );
 
     const got = await snapshotMngr.downloadFromUrl();

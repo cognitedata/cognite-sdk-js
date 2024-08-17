@@ -1,6 +1,7 @@
 // Copyright 2022 Cognite AS
-import path from 'path';
-import { promises as fs } from 'fs';
+
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 
 export interface PackageOption {
   package: string;
@@ -40,7 +41,7 @@ const createPath = (options: PackageServiceOptions): string => {
 };
 
 export const closestConfigDirectoryPath = async (
-  options: PackageServiceOptions
+  options: PackageServiceOptions,
 ): Promise<string> => {
   const directory = createPath(options);
   try {

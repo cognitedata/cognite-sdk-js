@@ -13,11 +13,7 @@
   "repository": "cognitedata/cognite-sdk-js",
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "private": true,
-  "keywords": [
-    "cognite",
-    "sdk",
-    "typescript"
-  ],
+  "keywords": ["cognite", "sdk", "typescript"],
   "workspaces": [
     "packages/alpha",
     "packages/beta",
@@ -43,8 +39,8 @@
     "clean": "lerna run clean && rm -rf docs/ coverage/",
     "test": "yarn allsdk test --stream",
     "test:codecov": "jest --config=jest.config.js --coverage=true",
-    "lint": "yarn allsdk lint --stream",
-    "lint:fix": "yarn allsdk lint:fix --stream",
+    "lint": "yarn g:biome ci",
+    "lint:fix": "yarn g:biome lint --fix && yarn g:biome format --fix && yarn g:biome check --fix",
     "commit": "yarn lint:fix --since master && yarn test --since master && git commit -a && git push",
     "build": "yarn allsdk build --stream",
     "watch": "yarn allsdk watch --parallel",

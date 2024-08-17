@@ -1,12 +1,6 @@
+import { promises as fs } from 'node:fs';
 // Copyright 2022 Cognite AS
-import path from 'path';
-import { promises as fs } from 'fs';
-import { OpenApiSnapshotManager } from './snapshot';
-import {
-  PackageOption,
-  ServiceOption,
-  closestConfigDirectoryPath,
-} from './utils';
+import path from 'node:path';
 import {
   CodeGen,
   createPathFilter,
@@ -16,6 +10,12 @@ import {
 } from './codegen';
 import { PackageConfigManager, ServiceConfigManager } from './configuration';
 import { AcacodeOpenApiGenerator } from './generator/acacode';
+import { OpenApiSnapshotManager } from './snapshot';
+import {
+  type PackageOption,
+  type ServiceOption,
+  closestConfigDirectoryPath,
+} from './utils';
 
 type GenerateOptions = PackageOption;
 interface GenerateServiceOptions extends PackageOption, ServiceOption {}
@@ -25,7 +25,7 @@ export async function generateTypes(options: GenerateOptions) {
 }
 
 async function generateServiceTypes(
-  options: GenerateServiceOptions
+  options: GenerateServiceOptions,
 ): Promise<string[]> {
   const directory = await closestConfigDirectoryPath(options);
   const config = new ServiceConfigManager({
@@ -48,7 +48,7 @@ async function generateServiceTypes(
       : createServiceNameFilter(configFile.filter.serviceName),
   ];
   const ignorePredicates = createServiceNameIgnoreFilters(
-    configFile.filter.ignore || []
+    configFile.filter.ignore || [],
   );
   const predicate = createPathFilter(includePredicates, ignorePredicates);
 
@@ -64,12 +64,12 @@ async function generateServiceTypes(
     const snapshot = await snapshotMngr.read();
     const generatedTypeNames = await gen.generateTypes(
       snapshot,
-      configFile.filter.relevantReferenceNames
+      configFile.filter.relevantReferenceNames,
     );
     return generatedTypeNames;
   } catch (error) {
     throw new Error(
-      `Unable to generate types for service "${options.service}": ${error}`
+      `Unable to generate types for service "${options.service}": ${error}`,
     );
   }
 }
@@ -100,7 +100,7 @@ async function generateForAllServices(options: GenerateOptions) {
     const { code, skipped } = createExportStatementForService(
       service,
       types,
-      blacklist
+      blacklist,
     );
     exportStatements.push(code);
     blacklist.push(...types);
@@ -109,7 +109,7 @@ async function generateForAllServices(options: GenerateOptions) {
 
   const exportFilePath = path.resolve(directory, 'exports.gen.ts');
   const fileContent = `// Copyright 2022 Cognite AS\n${exportStatements.join(
-    '\n'
+    '\n',
   )}`;
 
   await fs.writeFile(exportFilePath, fileContent);
@@ -117,11 +117,11 @@ async function generateForAllServices(options: GenerateOptions) {
 
 async function generateSharedTypes(
   serviceTypesRecord: Record<string, string[]>,
-  packageDirectory: string
+  packageDirectory: string,
 ): Promise<string[]> {
   const types = Object.values(serviceTypesRecord).reduce(
     (acc, v) => acc.concat(v),
-    []
+    [],
   );
 
   // find shared types across services
@@ -156,7 +156,7 @@ async function generateSharedTypes(
   const generated = await gen.generateTypesFromSchemas(
     snapshot.openapi,
     snapshot.components?.schemas,
-    (schemaName) => sharedTypes.has(schemaName)
+    (schemaName) => sharedTypes.has(schemaName),
   );
   return generated.typeNames;
 }
@@ -164,12 +164,12 @@ async function generateSharedTypes(
 function createExportStatement(
   fromDirectory: string,
   types: string[],
-  blacklist: string[]
+  blacklist: string[],
 ): { code: string; skipped: string[] } {
   const skipped = types.filter((t) => blacklist.includes(t));
   const typesFormat = types.filter((t) => !blacklist.includes(t)).join(',\n  ');
   const moduleName = path.parse(CodeGen.outputFileName).name;
-  const code = `export {\n  ${typesFormat}\n} from '${fromDirectory}/${moduleName}';`;
+  const code = `export type {\n  ${typesFormat}\n} from '${fromDirectory}/${moduleName}';`;
   return {
     code: types.length > 0 ? code : '',
     skipped: skipped,
@@ -179,16 +179,16 @@ function createExportStatement(
 function createExportStatementForService(
   service: string,
   types: string[],
-  blacklist: string[]
+  blacklist: string[],
 ): { code: string; skipped: string[] } {
   return createExportStatement(`./api/${service}`, types, blacklist);
 }
 
 function createExportStatementForPackage(
   types: string[],
-  blacklist: string[]
+  blacklist: string[],
 ): { code: string; skipped: string[] } {
-  return createExportStatement(`.`, types, blacklist);
+  return createExportStatement('.', types, blacklist);
 }
 
 async function listConfiguredServices(directory: string): Promise<string[]> {
@@ -200,7 +200,7 @@ async function listConfiguredServices(directory: string): Promise<string[]> {
     const configFilePath = path.resolve(
       apiDirectory,
       service,
-      ServiceConfigManager.filename
+      ServiceConfigManager.filename,
     );
     try {
       await fs.stat(configFilePath);

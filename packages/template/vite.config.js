@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [
     dts({
       exclude: ['**/__tests__/**/*'],
+      entryRoot: '.',
     }),
   ],
   build: {
