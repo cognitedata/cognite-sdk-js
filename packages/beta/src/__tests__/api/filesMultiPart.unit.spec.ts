@@ -1,10 +1,11 @@
-import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
-import { setupMockableClientForUnitTest } from '../testUtils';
-import { mockBaseUrl } from '@cognite/sdk-core/src/testUtils';
 import { sleepPromise } from '@cognite/sdk-core';
-import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
-import { MultiPartFileChunkResponse } from '../../types';
+import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
+import nock from 'nock';
+import { beforeEach, describe, expect, it, test } from 'vitest';
+import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
+import type CogniteClient from '../../cogniteClient';
+import type { MultiPartFileChunkResponse } from '../../types';
+import { setupMockableClientForUnitTest } from '../testUtils';
 
 describe('Multi part upload unit test', () => {
   let client: CogniteClient;
@@ -22,7 +23,7 @@ describe('Multi part upload unit test', () => {
         'QUJQbnptN1hhWTc2ZXUyWXdfQ29tV0NMTXlqaURiZ2NYd2NURnIxcGtrVHZwQ3oxSmNDRnVxdExTRUxvd3c6NQ==',
       uploadUrls: Array.from(
         { length: numberOfParts },
-        (_, i) => `${mockBaseUrl}/uploadurl${i}`
+        (_, i) => `${mockBaseUrl}/uploadurl${i}`,
       ),
     };
   }
@@ -35,7 +36,7 @@ describe('Multi part upload unit test', () => {
     'can init multi part upload can populate urls',
     async (numberOfParts) => {
       const initAPiNock = nock(mockBaseUrl)
-        .post(new RegExp('/files/initmultipartupload'))
+        .post(/\/files\/initmultipartupload/)
         .query({ overwrite: true, parts: numberOfParts })
         .once()
         .reply(201, initResponseForNumberOfParts(numberOfParts));
@@ -43,17 +44,17 @@ describe('Multi part upload unit test', () => {
       const response = await client.files.multipartUploadSession(
         { name: 'test_fbx.fbx', externalId: 'external_id_value' },
         numberOfParts,
-        true
+        true,
       );
       expect(initAPiNock.isDone()).toBeTruthy();
       expect(response.getNotCompletedParts().length).toEqual(numberOfParts);
-    }
+    },
   );
   it.each<number>([0, 260, 1000])(
     'can not init multi part upload with more than 250 urls',
     async (numberOfParts) => {
       const initAPiNock = nock(mockBaseUrl)
-        .post(new RegExp('/files/initmultipartupload'))
+        .post(/\/files\/initmultipartupload/)
         .query({ overwrite: true, parts: numberOfParts })
         .once()
         .reply(201, initResponseForNumberOfParts(1));
@@ -62,11 +63,11 @@ describe('Multi part upload unit test', () => {
         client.files.multipartUploadSession(
           { name: 'test_fbx.fbx', externalId: 'external_id_value' },
           numberOfParts,
-          true
-        )
+          true,
+        ),
       ).rejects.toThrowError('parts must be greater than 0 and less than 250');
       expect(initAPiNock.isDone()).toBeFalsy();
-    }
+    },
   );
   it.each<number>([1, 2, 5, 240])(
     'part uploads can be run sequential',
@@ -77,27 +78,27 @@ describe('Multi part upload unit test', () => {
           'QUJQbnptN1hhWTc2ZXUyWXdfQ29tV0NMTXlqaURiZ2NYd2NURnIxcGtrVHZwQ3oxSmNDRnVxdExTRUxvd3c6NQ==',
       };
       const fileChunks = Array.from({ length: numberOfParts }).map(
-        (_, i) => `part${i}`
+        (_, i) => `part${i}`,
       );
       const initNock = nock(mockBaseUrl)
-        .post(new RegExp('/files/initmultipartupload'))
+        .post(/\/files\/initmultipartupload/)
         .query({ overwrite: true, parts: numberOfParts })
         .once()
         .reply(201, initResponseForNumberOfParts(numberOfParts));
       //mock upload urls
       const uploadNock = nock(mockBaseUrl)
-        .put(new RegExp('/uploadurl'))
+        .put(/\/uploadurl/)
         .times(numberOfParts)
         .reply(200);
       const completeApiNock = nock(mockBaseUrl)
-        .post(new RegExp('/completemultipartupload'), requestBody)
+        .post(/\/completemultipartupload/, requestBody)
         .once()
         .reply(200);
 
       const multiPartApiSession = await client.files.multipartUploadSession(
         { name: 'test_fbx.fbx', externalId: 'external_id_value' },
         numberOfParts,
-        true
+        true,
       );
       expect(initNock.isDone()).toBeTruthy();
       for (let i = 0; i < numberOfParts; i++) {
@@ -107,7 +108,7 @@ describe('Multi part upload unit test', () => {
       expect(completeApiNock.isDone()).toBeTruthy();
       expect(multiPartApiSession.getNotCompletedParts()).toEqual([]);
       expect(multiPartApiSession.getFinished()).toBeTruthy();
-    }
+    },
   );
 
   it.each<number>([1, 2, 5, 100])(
@@ -119,40 +120,40 @@ describe('Multi part upload unit test', () => {
           'QUJQbnptN1hhWTc2ZXUyWXdfQ29tV0NMTXlqaURiZ2NYd2NURnIxcGtrVHZwQ3oxSmNDRnVxdExTRUxvd3c6NQ==',
       };
       const fileChunks = Array.from({ length: numberOfParts }).map(
-        (_, i) => `part${i}`
+        (_, i) => `part${i}`,
       );
       const initNock = nock(mockBaseUrl)
-        .post(new RegExp('/files/initmultipartupload'))
+        .post(/\/files\/initmultipartupload/)
         .query({ overwrite: true, parts: numberOfParts })
         .once()
         .reply(201, initResponseForNumberOfParts(numberOfParts));
       //mock upload urls
       const uploadNock = nock(mockBaseUrl)
-        .put(new RegExp('/uploadurl'))
+        .put(/\/uploadurl/)
         .times(numberOfParts)
         .reply(200);
       const completeApiNock = nock(mockBaseUrl)
-        .post(new RegExp('/completemultipartupload'), requestBody)
+        .post(/\/completemultipartupload/, requestBody)
         .once()
         .reply(200);
       const responseFor5PartUploadPart =
         await client.files.multipartUploadSession(
           { name: 'test_fbx.fbx', externalId: 'external_id_value' },
           numberOfParts,
-          true
+          true,
         );
       expect(initNock.isDone()).toBeTruthy();
       await Promise.all(
         fileChunks.map((fileChunk, i) =>
-          responseFor5PartUploadPart.uploadPart(i, fileChunk)
-        )
+          responseFor5PartUploadPart.uploadPart(i, fileChunk),
+        ),
       );
       expect(uploadNock.isDone()).toBeTruthy();
 
       expect(completeApiNock.isDone()).toBeTruthy();
       expect(responseFor5PartUploadPart.getNotCompletedParts()).toEqual([]);
       expect(responseFor5PartUploadPart.getFinished()).toBeTruthy();
-    }
+    },
   );
   test('if a concurrent upload call fails, we can resume that part', async () => {
     const numberOfParts = 5;
@@ -162,10 +163,10 @@ describe('Multi part upload unit test', () => {
         'QUJQbnptN1hhWTc2ZXUyWXdfQ29tV0NMTXlqaURiZ2NYd2NURnIxcGtrVHZwQ3oxSmNDRnVxdExTRUxvd3c6NQ==',
     };
     const fileChunks = Array.from({ length: numberOfParts }).map(
-      (_, i) => `part${i}`
+      (_, i) => `part${i}`,
     );
     const initNock = nock(mockBaseUrl)
-      .post(new RegExp('/files/initmultipartupload'))
+      .post(/\/files\/initmultipartupload/)
       .query({ overwrite: true, parts: numberOfParts })
       .once()
       .reply(201, initResponseForNumberOfParts(numberOfParts));
@@ -183,21 +184,21 @@ describe('Multi part upload unit test', () => {
       .delay(100)
       .reply(408, 'timeout');
     const completeApiNock = nock(mockBaseUrl)
-      .post(new RegExp('/completemultipartupload'), requestBody)
+      .post(/\/completemultipartupload/, requestBody)
       .once()
       .reply(200);
     const responseFor5PartUploadPart =
       await client.files.multipartUploadSession(
         { name: 'test_fbx.fbx', externalId: 'external_id_value' },
         numberOfParts,
-        true
+        true,
       );
     expect(initNock.isDone()).toBeTruthy();
     try {
       await Promise.all(
         fileChunks.map((fileChunk, i) =>
-          responseFor5PartUploadPart.uploadPart(i, fileChunk)
-        )
+          responseFor5PartUploadPart.uploadPart(i, fileChunk),
+        ),
       );
     } catch (error) {
       console.log(error);
@@ -211,8 +212,8 @@ describe('Multi part upload unit test', () => {
     // it wont upload completed parts again
     await Promise.all(
       fileChunks.map((fileChunk, i) =>
-        responseFor5PartUploadPart.uploadPart(i, fileChunk)
-      )
+        responseFor5PartUploadPart.uploadPart(i, fileChunk),
+      ),
     );
     expect(uploadNock.isDone()).toBeTruthy();
     expect(responseFor5PartUploadPart.getNotCompletedParts()).toEqual([]);
@@ -225,20 +226,20 @@ describe('Multi part upload unit test', () => {
         'QUJQbnptN1hhWTc2ZXUyWXdfQ29tV0NMTXlqaURiZ2NYd2NURnIxcGtrVHZwQ3oxSmNDRnVxdExTRUxvd3c6NQ==',
     };
     const fileChunks = Array.from({ length: numberOfParts }).map(
-      (_, i) => `part${i}`
+      (_, i) => `part${i}`,
     );
     const initNock = nock(mockBaseUrl)
-      .post(new RegExp('/files/initmultipartupload'))
+      .post(/\/files\/initmultipartupload/)
       .query({ overwrite: true, parts: numberOfParts })
       .once()
       .reply(201, initResponseForNumberOfParts(numberOfParts));
     //mock upload urls
     const uploadNock = nock(mockBaseUrl)
-      .put(new RegExp('/uploadurl'))
+      .put(/\/uploadurl/)
       .times(numberOfParts)
       .reply(200);
     const completeApiNockFailsOnce = nock(mockBaseUrl)
-      .post(new RegExp('/completemultipartupload'), requestBody)
+      .post(/\/completemultipartupload/, requestBody)
       .once()
       .delayConnection(500)
       .reply(408, 'timeout');
@@ -246,14 +247,14 @@ describe('Multi part upload unit test', () => {
       await client.files.multipartUploadSession(
         { name: 'test_fbx.fbx', externalId: 'external_id_value' },
         numberOfParts,
-        true
+        true,
       );
     expect(initNock.isDone()).toBeTruthy();
     try {
       await Promise.all(
         fileChunks.map((fileChunk, i) =>
-          responseFor5PartUploadPart.uploadPart(i, fileChunk)
-        )
+          responseFor5PartUploadPart.uploadPart(i, fileChunk),
+        ),
       );
     } catch (error) {
       console.log(error);
@@ -265,15 +266,15 @@ describe('Multi part upload unit test', () => {
     nock.cleanAll();
     await sleepPromise(100);
     completeApiNockFailsOnce
-      .post(new RegExp('/completemultipartupload'), requestBody)
+      .post(/\/completemultipartupload/, requestBody)
       .once()
       .reply(200)
       .persist();
 
     await Promise.all(
       fileChunks.map((fileChunk, i) =>
-        responseFor5PartUploadPart.uploadPart(i, fileChunk)
-      )
+        responseFor5PartUploadPart.uploadPart(i, fileChunk),
+      ),
     );
     expect(completeApiNockFailsOnce.isDone()).toBeTruthy();
   });
@@ -285,33 +286,33 @@ describe('Multi part upload unit test', () => {
         'QUJQbnptN1hhWTc2ZXUyWXdfQ29tV0NMTXlqaURiZ2NYd2NURnIxcGtrVHZwQ3oxSmNDRnVxdExTRUxvd3c6NQ==',
     };
     const fileChunks = Array.from({ length: numberOfParts }).map(
-      (_, i) => `part${i}`
+      (_, i) => `part${i}`,
     );
     nock(mockBaseUrl)
-      .post(new RegExp('/files/initmultipartupload'))
+      .post(/\/files\/initmultipartupload/)
       .query({ overwrite: true, parts: numberOfParts })
       .once()
       .reply(201, initResponseForNumberOfParts(numberOfParts));
 
     nock(mockBaseUrl)
-      .put(new RegExp('/uploadurl'))
+      .put(/\/uploadurl/)
       .times(numberOfParts)
       .reply(200);
     nock(mockBaseUrl)
-      .post(new RegExp('/completemultipartupload'), requestBody)
+      .post(/\/completemultipartupload/, requestBody)
       .once()
       .reply(200, 'success');
     const responseFor5PartUploadPart =
       await client.files.multipartUploadSession(
         { name: 'test_fbx.fbx', externalId: 'external_id_value' },
         numberOfParts,
-        true
+        true,
       );
 
     await Promise.all(
       fileChunks.map((fileChunk, i) =>
-        responseFor5PartUploadPart.uploadPart(i, fileChunk)
-      )
+        responseFor5PartUploadPart.uploadPart(i, fileChunk),
+      ),
     );
 
     //2. run should throw exception
@@ -319,9 +320,9 @@ describe('Multi part upload unit test', () => {
       Promise.all(
         fileChunks.map(
           async (fileChunk, i) =>
-            await responseFor5PartUploadPart.uploadPart(i, fileChunk)
-        )
-      )
+            await responseFor5PartUploadPart.uploadPart(i, fileChunk),
+        ),
+      ),
     ).rejects.toThrowError('Upload has already finished');
   });
 
@@ -334,27 +335,27 @@ describe('Multi part upload unit test', () => {
           'QUJQbnptN1hhWTc2ZXUyWXdfQ29tV0NMTXlqaURiZ2NYd2NURnIxcGtrVHZwQ3oxSmNDRnVxdExTRUxvd3c6NQ==',
       };
       const fileChunks = Array.from({ length: numberOfParts }).map(
-        (_, i) => `part${i}`
+        (_, i) => `part${i}`,
       );
       nock(mockBaseUrl)
-        .post(new RegExp('/files/initmultipartupload'))
+        .post(/\/files\/initmultipartupload/)
         .query({ overwrite: true, parts: numberOfParts })
         .once()
         .reply(201, initResponseForNumberOfParts(numberOfParts));
       //mock upload urls
       const uploadNock = nock(mockBaseUrl)
-        .put(new RegExp('/uploadurl'))
+        .put(/\/uploadurl/)
         .times(numberOfParts)
         .reply(200);
       const completeApiNock = nock(mockBaseUrl)
-        .post(new RegExp('/completemultipartupload'), requestBody)
+        .post(/\/completemultipartupload/, requestBody)
         .once()
         .reply(200);
       const responseFor5PartUploadPart =
         await client.files.multipartUploadSession(
           { name: 'test_fbx.fbx', externalId: 'external_id_value' },
           numberOfParts,
-          true
+          true,
         );
       const uploadPartWithCallback = async (
         api: FilesMultipartUploadSessionAPI,
@@ -362,18 +363,18 @@ describe('Multi part upload unit test', () => {
         i: number,
         callback = (result: MultiPartFileChunkResponse): void => {
           console.log(result);
-        }
+        },
       ) => {
         const result = await api.uploadPart(i, fileChunk);
         if (result) {
           return callback(result);
         }
       };
-      let totalSize: number = 0;
+      let totalSize = 0;
       let numberOfCallsToCallback = 0;
       const expectedTotalSize = fileChunks.reduce(
         (acc, fileChunk) => acc + fileChunk.length,
-        0
+        0,
       );
       await Promise.all(
         fileChunks.map(
@@ -387,12 +388,12 @@ describe('Multi part upload unit test', () => {
                   numberOfCallsToCallback++;
                   totalSize += fileChunk.length;
                   console.log(
-                    `Uploaded part ${result.partNumber} with ${fileChunk.length} length uploaded. completed ${totalSize}/${expectedTotalSize} bytes `
+                    `Uploaded part ${result.partNumber} with ${fileChunk.length} length uploaded. completed ${totalSize}/${expectedTotalSize} bytes `,
                   );
                 }
-              }
-            )
-        )
+              },
+            ),
+        ),
       );
 
       expect(uploadNock.isDone()).toBeTruthy();
@@ -401,6 +402,6 @@ describe('Multi part upload unit test', () => {
       expect(completeApiNock.isDone()).toBeTruthy();
       expect(responseFor5PartUploadPart.getNotCompletedParts()).toEqual([]);
       expect(responseFor5PartUploadPart.getFinished()).toBeTruthy();
-    }
+    },
   );
 });

@@ -1,11 +1,12 @@
 // Copyright 2022 Cognite AS
 
+import { describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import {
-  Channel,
+  type Channel,
+  type MonitoringTaskDoubleThresholdModelCreate,
   MonitoringTaskModelExternalId,
-  MonitoringTaskDoubleThresholdModelCreate,
 } from '../../types';
-import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 type SessionsResponse = {
@@ -17,7 +18,7 @@ describe('monitoring tasks api', () => {
   const ts = Date.now();
   const monitoringTaskExternalId = `test_mt_${ts}`;
   const monitoringTaskName = `test_mt_${ts}`;
-  const monitoringTaskNameUpdated = monitoringTaskName + '_updated';
+  const monitoringTaskNameUpdated = `${monitoringTaskName}_updated`;
   const channelExternalId = `test_channel_mt_${ts}`;
   const sessionsApi = `/api/v1/projects/${process.env.COGNITE_PROJECT}/sessions`;
   const testMtModel: MonitoringTaskDoubleThresholdModelCreate = {
@@ -39,7 +40,7 @@ describe('monitoring tasks api', () => {
 
   let channel: Channel;
 
-  test('create monitoring task', async (done) => {
+  test('create monitoring task', async () => {
     const timeseries = {
       name: 'test ts for beta sdk',
       externalId: 'test_external_id_beta_sdk',
@@ -50,9 +51,9 @@ describe('monitoring tasks api', () => {
 
     const tsResponse = await client.timeseries.retrieve(
       [{ externalId: 'test_external_id_beta_sdk' }],
-      { ignoreUnknownIds: true }
+      { ignoreUnknownIds: true },
     );
-    if (tsResponse.length == 0) {
+    if (tsResponse.length === 0) {
       await client.timeseries.create([timeseries]);
     }
 
@@ -91,7 +92,6 @@ describe('monitoring tasks api', () => {
 
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(monitoringTaskExternalId);
-    done();
   }, 10000);
 
   test('upsert monitoring task', async () => {
@@ -137,7 +137,7 @@ describe('monitoring tasks api', () => {
     expect(response.items[0].externalId).toEqual(monitoringTaskExternalId);
     expect(response.items[0].name).toEqual(monitoringTaskNameUpdated);
     expect(response.items[0].model).toEqual(
-      expect.objectContaining(expectedResponseModel)
+      expect.objectContaining(expectedResponseModel),
     );
 
     expect(response.items[0].interval).toEqual(testMtInterval);

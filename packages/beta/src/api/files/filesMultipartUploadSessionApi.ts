@@ -1,6 +1,10 @@
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
-import { FileContent, FileInfo } from '@cognite/sdk/src/types';
 import {
+  BaseResourceAPI,
+  type CDFHttpClient,
+  type MetadataMap,
+} from '@cognite/sdk-core';
+import type { FileContent, FileInfo } from '@cognite/sdk/src/types';
+import type {
   MultiPartFileChunkResponse,
   MultiPartFileUploadResponse,
 } from '../../types';
@@ -18,15 +22,15 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
     [, , , this.multiPartFileUploadResponse] = args;
 
     this.uploadedUrls = this.multiPartFileUploadResponse.uploadUrls.map(
-      (_) => false
+      (_) => false,
     );
     this.finished = false;
   }
 
   public async uploadPart(
     partNumber: number,
-    fileContent: FileContent
-  ): Promise<void | MultiPartFileChunkResponse> {
+    fileContent: FileContent,
+  ): Promise<undefined | MultiPartFileChunkResponse> {
     const hasFileContent = fileContent != null;
     if (!hasFileContent) {
       throw Error('you are uploading an empty content');
@@ -52,7 +56,7 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
         this.multiPartFileUploadResponse.uploadUrls[partNumber],
         {
           data: fileContent,
-        }
+        },
       );
 
       if (response.status === 200 || response.status === 201) {
@@ -61,9 +65,8 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
           await this.completeMultiPartUpload();
         }
         return { partNumber, status: response.status };
-      } else {
-        return { partNumber, status: response.status };
       }
+      return { partNumber, status: response.status };
     }
   }
 

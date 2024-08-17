@@ -1,11 +1,11 @@
 // Copyright 2020 Cognite AS
 
-import { CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import type { CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
+import type { ExternalFileInfo } from '@cognite/sdk/src/types';
 import {
   FilesAPI as FilesAPIStable,
-  MultiPartFileUploadResponse,
+  type MultiPartFileUploadResponse,
 } from '../../types';
-import { ExternalFileInfo } from '@cognite/sdk/src/types';
 import { FilesMultipartUploadSessionAPI } from './filesMultipartUploadSessionApi';
 
 export class FilesAPI extends FilesAPIStable {
@@ -33,25 +33,25 @@ export class FilesAPI extends FilesAPIStable {
   public async multipartUploadSession(
     fileInfo: ExternalFileInfo,
     parts: number,
-    overwrite: boolean = false
+    overwrite = false,
   ) {
     const response = await this.getMultipartUploadSession(
       fileInfo,
       parts,
-      overwrite
+      overwrite,
     );
     const multipartUploadSession = new FilesMultipartUploadSessionAPI(
       this._baseUrl,
       this._client,
       this._map,
-      response.data
+      response.data,
     );
     return this.addToMapAndReturn(multipartUploadSession, response);
   }
   private async getMultipartUploadSession(
     fileInfo: ExternalFileInfo,
     parts: number,
-    overwrite: boolean = false
+    overwrite = false,
   ) {
     if (
       parts < this.limits.minimumNumberOfParts ||

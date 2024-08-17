@@ -1,7 +1,7 @@
 // Copyright 2022 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
-import {
+import { BaseResourceAPI } from '@cognite/sdk-core';
+import type {
   Subscription,
   SubscriptionCreate,
   SubscriptionDelete,
@@ -9,10 +9,6 @@ import {
 } from '../../types';
 
 export class SubscriptionsAPI extends BaseResourceAPI<Subscription> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   public create = async (items: SubscriptionCreate[]) => {
     return this.createEndpoint(items);
   };
@@ -24,7 +20,7 @@ export class SubscriptionsAPI extends BaseResourceAPI<Subscription> {
   public list = async (filter?: SubscriptionFilterQuery) => {
     return this.listEndpoint<SubscriptionFilterQuery>(
       this.callListEndpointWithPost,
-      filter
+      filter,
     );
   };
 }

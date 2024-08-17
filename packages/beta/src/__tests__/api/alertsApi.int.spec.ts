@@ -1,7 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import { CogniteError } from '@cognite/sdk-core';
-import CogniteClient from '../../cogniteClient';
+import type { CogniteError } from '@cognite/sdk-core';
+import { describe, expect, test, vi } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('alerts api', () => {
@@ -24,7 +25,7 @@ describe('alerts api', () => {
   });
 
   test('create channels with deduplication params', async () => {
-    const channelExternalIdWithDeduplication = channelExternalId + '_dedup';
+    const channelExternalIdWithDeduplication = `${channelExternalId}_dedup`;
     const response = await client.alerts.createChannels([
       {
         externalId: channelExternalIdWithDeduplication,
@@ -47,7 +48,7 @@ describe('alerts api', () => {
   });
 
   test('update channel name', async () => {
-    const updatedName = channelExternalId + '_updated';
+    const updatedName = `${channelExternalId}_updated`;
     const response = await client.alerts.updateChannels([
       {
         externalId: channelExternalId,
@@ -227,7 +228,7 @@ describe('alerts api', () => {
     await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
   });
 
-  jest.setTimeout(30000);
+  vi.setConfig({ testTimeout: 30_000 });
 
   test('cursor pagination', async () => {
     // create channel for the next test

@@ -1,12 +1,12 @@
+import type { IdEither } from '@cognite/sdk';
 // Copyright 2022 Cognite AS
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import { IdEither } from '@cognite/sdk';
-import {
+import type {
   Alert,
   AlertCreate,
   AlertFilterQuery,
@@ -36,17 +36,17 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
     this.channelsApi = new ChannelsAPI(
       `${resourcePath}/channels`,
       client,
-      metadataMap
+      metadataMap,
     );
     this.subscribersApi = new SubscribersAPI(
       `${resourcePath}/subscribers`,
       client,
-      metadataMap
+      metadataMap,
     );
     this.subscriptionsApi = new SubscriptionsAPI(
       `${resourcePath}/subscriptions`,
       client,
-      metadataMap
+      metadataMap,
     );
   }
 
@@ -59,7 +59,7 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
   };
 
   public close = async (items: IdEither[]) => {
-    const res = await this.post<{}>(this.url('close'), {
+    const res = await this.post<object>(this.url('close'), {
       data: {
         items,
       },

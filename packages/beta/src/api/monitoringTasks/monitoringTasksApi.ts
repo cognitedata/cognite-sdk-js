@@ -1,22 +1,13 @@
 // Copyright 2023 Cognite AS
 
-import {
-  BaseResourceAPI,
-  IdEither,
-  CDFHttpClient,
-  MetadataMap,
-} from '@cognite/sdk-core';
-import {
+import { BaseResourceAPI, type IdEither } from '@cognite/sdk-core';
+import type {
   MonitoringTask,
   MonitoringTaskCreate,
   MonitoringTaskFilterQuery,
 } from '../../types';
 
 export class MonitoringTasksAPI extends BaseResourceAPI<MonitoringTask> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   public create = async (items: MonitoringTaskCreate[]) => {
     return this.createEndpoint(items);
   };
@@ -24,7 +15,7 @@ export class MonitoringTasksAPI extends BaseResourceAPI<MonitoringTask> {
   public list = async (filter?: MonitoringTaskFilterQuery) => {
     return this.listEndpoint<MonitoringTaskFilterQuery>(
       this.callListEndpointWithPost,
-      filter
+      filter,
     );
   };
 

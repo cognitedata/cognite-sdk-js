@@ -1,19 +1,19 @@
 import {
   DataPointsAPI as DataPointsAPIStable,
-  ItemsWrapper,
+  type ItemsWrapper,
 } from '@cognite/sdk';
 
-import {
-  DatapointsMultiQuery,
+import type {
+  DatapointAggregate,
   DatapointAggregates,
   Datapoints,
   DatapointsMonthlyGranularityMultiQuery,
-  DatapointAggregate,
+  DatapointsMultiQuery,
 } from '../../types';
 
 export class DataPointsAPI extends DataPointsAPIStable {
   public retrieve = (
-    query: DatapointsMultiQuery
+    query: DatapointsMultiQuery,
   ): Promise<DatapointAggregates[] | Datapoints[]> => {
     return this.retrieveDatapointsEndpoint(query);
   };
@@ -21,7 +21,7 @@ export class DataPointsAPI extends DataPointsAPIStable {
   protected async retrieveDatapointsEndpoint<
     T extends DatapointAggregates[] | Datapoints[] =
       | DatapointAggregates[]
-      | Datapoints[]
+      | Datapoints[],
   >(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
     const response = await this.post<ItemsWrapper<T>>(path, {
@@ -37,7 +37,7 @@ export class DataPointsAPI extends DataPointsAPIStable {
    * ```
    */
   public retrieveDatapointMonthlyAggregates = async (
-    query: DatapointsMonthlyGranularityMultiQuery
+    query: DatapointsMonthlyGranularityMultiQuery,
   ): Promise<DatapointAggregates[]> => {
     // Find the start and end dates from the query
     const startDate = query.start;

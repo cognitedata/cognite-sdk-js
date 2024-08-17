@@ -1,7 +1,8 @@
 /// Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Timeseries, Datapoints } from '../../types';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { Datapoints, Timeseries } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
 const Status = {
@@ -97,7 +98,7 @@ describe('Datapoints integration test for quality indicators', () => {
         start: new Date(2020, 0, 1),
         end: new Date(2023, 3, 1),
         aggregates: ['countGood', 'countUncertain', 'countBad'],
-      }
+      },
     );
 
     expect(response[0].datapoints[0].countGood).toBe(2);

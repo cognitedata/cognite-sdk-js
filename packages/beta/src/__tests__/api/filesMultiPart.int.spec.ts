@@ -1,6 +1,11 @@
 // Copyright 2020 Cognite AS
-import CogniteClient from '../../cogniteClient';
-import {
+
+import path, { join } from 'node:path';
+import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
+import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';
+import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
+import type CogniteClient from '../../cogniteClient';
+import type {
   ExternalFileInfo,
   LabelDefinition,
   MultiPartFileChunkResponse,
@@ -9,12 +14,9 @@ import {
   divideFileIntoChunks,
   divideFileIntoStreams,
   getFileStats,
-  toArrayBuffer,
   setupMockableClientForIntegrationTests,
+  toArrayBuffer,
 } from '../testUtils';
-import path, { join } from 'path';
-import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
-import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';
 // file to upload for integration tests
 const testfile = join(__dirname, '../VAL.nwd');
 
@@ -40,7 +42,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
   });
 
   const getFileCreateArgs = (
-    additionalFields: Partial<ExternalFileInfo> = {}
+    additionalFields: Partial<ExternalFileInfo> = {},
   ) => {
     const sourceCreatedTime = new Date();
     const fileName = path.parse(additionalFields.name ?? 'filename_0').base;
@@ -63,7 +65,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
       },
       5,
-      false
+      false,
     );
     expect(response.getNotCompletedParts().length).toEqual(5);
   });
@@ -76,7 +78,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
           ...getFileCreateArgs({ name: testfile }).localFileMeta,
         },
         numberOfParts,
-        false
+        false,
       );
       for (let i = 0; i < numberOfParts; i++) {
         try {
@@ -88,9 +90,9 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
       }
       await assertFileUploadedWithRetry(client, response);
       console.log(
-        `Uploaded file  ${response.multiPartFileUploadResponse.id} successfully.`
+        `Uploaded file  ${response.multiPartFileUploadResponse.id} successfully.`,
       );
-    }
+    },
   );
 
   test('trying already uploaded parts do not throw: is an idempotent call ', async () => {
@@ -102,7 +104,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
       },
       numberOfParts,
-      false
+      false,
     );
 
     await expect(response.uploadPart(0, fileChunks[0])).resolves.not.toThrow();
@@ -122,7 +124,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
           ...getFileCreateArgs({ name: testfile }).localFileMeta,
         },
         numberOfParts,
-        false
+        false,
       );
       const allParts = Array.from({ length: numberOfParts }, (_, i) => i);
       expect(response.getNotCompletedParts()).toEqual(allParts);
@@ -146,10 +148,10 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
       await response.uploadPart(partsToFail, fileChunks[partsToFail]);
       expect(response.getNotCompletedParts()).toEqual([]);
       console.log(
-        `Uploaded file  ${response.multiPartFileUploadResponse.id} successfully.`
+        `Uploaded file  ${response.multiPartFileUploadResponse.id} successfully.`,
       );
       await assertFileUploadedWithRetry(client, response);
-    }
+    },
   );
   test('can concurrently upload parts', async () => {
     const numberOfParts = 10;
@@ -159,20 +161,20 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
       },
       numberOfParts,
-      false
+      false,
     );
     const allParts = Array.from({ length: numberOfParts }, (_, i) => i);
     expect(response.getNotCompletedParts()).toEqual(allParts);
 
     await Promise.all(
       fileChunks.map(
-        async (fileChunk, i) => await response.uploadPart(i, fileChunk)
-      )
+        async (fileChunk, i) => await response.uploadPart(i, fileChunk),
+      ),
     );
 
     expect(response.getNotCompletedParts()).toEqual([]);
     console.log(
-      `Uploaded file  ${response.multiPartFileUploadResponse.id} successfully.`
+      `Uploaded file  ${response.multiPartFileUploadResponse.id} successfully.`,
     );
     await assertFileUploadedWithRetry(client, response);
   });
@@ -186,12 +188,12 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
       },
       numberOfParts,
-      false
+      false,
     );
     for await (const e of await divideFileIntoStreams(
       testfile,
       fileSizeInBytes,
-      chunkSize
+      chunkSize,
     )) {
       console.log(`Uploading part ${e.chunkNumber}`);
       // const { done, value } = await e.stream.read();
@@ -209,7 +211,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     }
     expect(response.getNotCompletedParts()).toEqual([]);
     console.log(
-      `Uploaded file  ${response.multiPartFileUploadResponse.id} successfully.`
+      `Uploaded file  ${response.multiPartFileUploadResponse.id} successfully.`,
     );
     await assertFileUploadedWithRetry(client, response);
   });
@@ -222,7 +224,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
       },
       numberOfParts,
-      false
+      false,
     );
     const allParts = Array.from({ length: numberOfParts }, (_, i) => i);
     expect(response.getNotCompletedParts()).toEqual(allParts);
@@ -232,7 +234,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
       i: number,
       callback = (result: MultiPartFileChunkResponse): void => {
         console.log(result);
-      }
+      },
     ) => {
       const data = new Uint8Array(fileChunk).buffer;
       const result = await api.uploadPart(i, data);
@@ -240,11 +242,11 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
         return callback(result);
       }
     };
-    let totalSize: number = 0;
+    let totalSize = 0;
     let numberOfCallsToCallback = 0;
     const expectedTotalSize = fileChunks.reduce(
       (acc, fileChunk) => acc + fileChunk.length,
-      0
+      0,
     );
     await Promise.all(
       fileChunks.map(
@@ -258,17 +260,17 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
                 numberOfCallsToCallback++;
                 totalSize += fileChunk.length;
                 console.log(
-                  `Uploaded part ${result.partNumber} with ${fileChunk.length} length uploaded. completed ${totalSize}/${expectedTotalSize} bytes `
+                  `Uploaded part ${result.partNumber} with ${fileChunk.length} length uploaded. completed ${totalSize}/${expectedTotalSize} bytes `,
                 );
               }
-            }
-          )
-      )
+            },
+          ),
+      ),
     );
 
     expect(response.getNotCompletedParts()).toEqual([]);
     console.log(
-      `Uploaded file  ${response.multiPartFileUploadResponse.id} successfully.`
+      `Uploaded file  ${response.multiPartFileUploadResponse.id} successfully.`,
     );
     await assertFileUploadedWithRetry(client, response);
     expect(numberOfParts).toEqual(numberOfCallsToCallback);
@@ -276,7 +278,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
 });
 async function assertFileUploadedWithRetry(
   client: CogniteClient,
-  response: FilesMultipartUploadSessionAPI
+  response: FilesMultipartUploadSessionAPI,
 ) {
   const request = async () => {
     const [retrievedFile] = await client.files.retrieve([
