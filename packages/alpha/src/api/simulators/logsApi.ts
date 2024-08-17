@@ -1,12 +1,7 @@
 // Copyright 2024 Cognite AS
 
-import {
-  BaseResourceAPI,
-  CDFHttpClient,
-  InternalId,
-  MetadataMap,
-} from '@cognite/sdk-core';
-import { SimulatorLog, SimulatorLogData } from '../../types';
+import { BaseResourceAPI, type InternalId } from '@cognite/sdk-core';
+import type { SimulatorLog, SimulatorLogData } from '../../types';
 
 export class LogsAPI extends BaseResourceAPI<SimulatorLog> {
   /**
@@ -15,12 +10,8 @@ export class LogsAPI extends BaseResourceAPI<SimulatorLog> {
   protected getDateProps() {
     return this.pickDateProps<SimulatorLog & SimulatorLogData>(
       ['items', 'data'],
-      ['createdTime', 'lastUpdatedTime', 'timestamp']
+      ['createdTime', 'lastUpdatedTime', 'timestamp'],
     );
-  }
-
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
   }
 
   public retrieve(items: InternalId[]) {

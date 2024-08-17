@@ -1,16 +1,17 @@
 // Copyright 2023 Cognite AS
 
-import { SimulatorPatch } from '../../types';
-import CogniteClientAlpha from '../../cogniteClient';
+import { describe, expect, test } from 'vitest';
+import type CogniteClientAlpha from '../../cogniteClient';
+import type { SimulatorPatch } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
-  stepFields,
   modelTypes,
+  stepFields,
   unitQuantities,
 } from './seed';
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
+const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
 
 const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 
@@ -43,46 +44,50 @@ describeIf('simulators api', () => {
   });
 
   test('update simulators', async () => {
+    const fileExtensionTypes = {
+      set: ['py'],
+    };
+    const modelTypes = {
+      set: [
+        {
+          key: 'test_update',
+          name: 'test_update',
+        },
+      ],
+    };
+    const unitQuantities = {
+      set: [
+        {
+          name: 'test_update',
+          label: 'test_update',
+          units: [
+            {
+              label: 'test_update',
+              name: 'test_update',
+            },
+          ],
+        },
+      ],
+    };
+    const stepFields = {
+      set: [
+        {
+          fields: [
+            {
+              info: 'test_update',
+              label: 'test_update',
+              name: 'test_update',
+            },
+          ],
+          stepType: 'get/set-updated',
+        },
+      ],
+    };
     const patch: SimulatorPatch['update'] = {
-      fileExtensionTypes: {
-        set: ['py'],
-      },
-      modelTypes: {
-        set: [
-          {
-            key: 'test_update',
-            name: 'test_update',
-          },
-        ],
-      },
-      unitQuantities: {
-        set: [
-          {
-            name: 'test_update',
-            label: 'test_update',
-            units: [
-              {
-                label: 'test_update',
-                name: 'test_update',
-              },
-            ],
-          },
-        ],
-      },
-      stepFields: {
-        set: [
-          {
-            fields: [
-              {
-                info: 'test_update',
-                label: 'test_update',
-                name: 'test_update',
-              },
-            ],
-            stepType: 'get/set-updated',
-          },
-        ],
-      },
+      fileExtensionTypes,
+      modelTypes,
+      unitQuantities,
+      stepFields,
     };
     const response = await client.simulators.update([
       {
@@ -91,21 +96,17 @@ describeIf('simulators api', () => {
       },
     ]);
     expect(response.length).toBe(1);
-    expect(response[0].fileExtensionTypes).toEqual(
-      (patch.fileExtensionTypes as any).set
-    );
-    expect(response[0].modelTypes).toEqual((patch.modelTypes as any).set);
-    expect(response[0].unitQuantities).toEqual(
-      (patch.unitQuantities as any).set
-    );
-    expect(response[0].stepFields).toEqual((patch.stepFields as any).set);
+    expect(response[0].fileExtensionTypes).toEqual(fileExtensionTypes.set);
+    expect(response[0].modelTypes).toEqual(modelTypes.set);
+    expect(response[0].unitQuantities).toEqual(unitQuantities.set);
+    expect(response[0].stepFields).toEqual(stepFields.set);
   });
 
   test('list simulators', async () => {
     const response = await client.simulators.list({});
     expect(response.items.length).toBeGreaterThan(0);
     const simulatorFound = response.items.find(
-      (item) => item.externalId === simulatorExternalId
+      (item) => item.externalId === simulatorExternalId,
     );
     expect(simulatorFound?.externalId).toBe(simulatorExternalId);
   });
@@ -121,8 +122,8 @@ describeIf('simulators api', () => {
       const responseAfterDelete = await client.simulators.list();
       expect(
         responseAfterDelete.items.filter(
-          (res) => res.externalId == simulatorExternalId
-        ).length
+          (res) => res.externalId === simulatorExternalId,
+        ).length,
       ).toBe(0);
     }
   });

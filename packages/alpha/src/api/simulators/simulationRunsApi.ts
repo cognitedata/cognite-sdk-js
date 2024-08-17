@@ -1,14 +1,9 @@
 // Copyright 2023 Cognite AS
 
-import {
-  BaseResourceAPI,
-  CDFHttpClient,
-  CogniteInternalId,
-  MetadataMap,
-} from '@cognite/sdk-core';
-import {
-  SimulationRunCreate,
+import { BaseResourceAPI, type CogniteInternalId } from '@cognite/sdk-core';
+import type {
   SimulationRun,
+  SimulationRunCreate,
   SimulationRunFilterQuery,
 } from '../../types';
 
@@ -19,12 +14,8 @@ export class SimulationRunsAPI extends BaseResourceAPI<SimulationRun> {
   protected getDateProps() {
     return this.pickDateProps(
       ['items'],
-      ['createdTime', 'lastUpdatedTime', 'runTime', 'simulationTime']
+      ['createdTime', 'lastUpdatedTime', 'runTime', 'simulationTime'],
     );
-  }
-
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
   }
 
   public run = async (items: SimulationRunCreate[]) => {
@@ -35,7 +26,7 @@ export class SimulationRunsAPI extends BaseResourceAPI<SimulationRun> {
   public list = async (filter?: SimulationRunFilterQuery) => {
     return this.listEndpoint<SimulationRunFilterQuery>(
       this.callListEndpointWithPost,
-      filter
+      filter,
     );
   };
 

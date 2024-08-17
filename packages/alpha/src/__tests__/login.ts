@@ -1,7 +1,7 @@
 // Copyright 2023 Cognite AS
 
+import { URLSearchParams } from 'node:url';
 import fetch from 'cross-fetch';
-import { URLSearchParams } from 'url';
 
 export const login = async () => {
   try {
@@ -11,14 +11,14 @@ export const login = async () => {
         method: 'POST',
         body: new URLSearchParams({
           grant_type: 'client_credentials',
-          client_id: process.env.COGNITE_CLIENT_ID,
-          client_secret: process.env.COGNITE_CLIENT_SECRET,
+          client_id: process.env.COGNITE_CLIENT_ID || '',
+          client_secret: process.env.COGNITE_CLIENT_SECRET || '',
           scope: `${process.env.COGNITE_BASE_URL}/.default`,
         }).toString(),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-      }
+      },
     );
     const account = await response.json();
     return account;

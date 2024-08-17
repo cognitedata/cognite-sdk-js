@@ -1,16 +1,17 @@
 // Copyright 2023 Cognite AS
 
-import CogniteClientAlpha from '../../cogniteClient';
+import { describe, expect, test } from 'vitest';
+import type CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
-  stepFields,
   modelTypes,
   routineRevisionConfiguration,
+  stepFields,
   unitQuantities,
 } from './seed';
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
+const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
 
 const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 
@@ -106,7 +107,7 @@ describeIf('simulator runs api', () => {
     const listResponse = await client.simulators.listRoutines();
     expect(listResponse.items.length).toBeGreaterThan(0);
     const routineFound = listResponse.items.find(
-      (item) => item.externalId === routineExternalId
+      (item) => item.externalId === routineExternalId,
     );
     expect(routineFound?.externalId).toBe(routineExternalId);
   });
@@ -123,7 +124,7 @@ describeIf('simulator runs api', () => {
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(routineRevisionExternalId);
     expect(response[0].simulatorIntegrationExternalId).toBe(
-      simulatorIntegrationExternalId
+      simulatorIntegrationExternalId,
     );
   });
 
@@ -209,8 +210,8 @@ describeIf('simulator runs api', () => {
       const responseAfterDelete = await client.simulators.list();
       expect(
         responseAfterDelete.items.filter(
-          (res) => res.externalId == simulatorExternalId
-        ).length
+          (res) => res.externalId === simulatorExternalId,
+        ).length,
       ).toBe(0);
     }
   });

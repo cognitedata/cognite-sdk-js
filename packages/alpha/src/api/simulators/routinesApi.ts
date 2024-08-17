@@ -1,15 +1,10 @@
 // Copyright 2024 Cognite AS
 
-import {
-  BaseResourceAPI,
-  CDFHttpClient,
-  IdEither,
-  MetadataMap,
-} from '@cognite/sdk-core';
-import {
+import { BaseResourceAPI, type IdEither } from '@cognite/sdk-core';
+import type {
   SimulatorRoutine,
-  SimulatorRoutineFilterQuery,
   SimulatorRoutineCreate,
+  SimulatorRoutineFilterQuery,
 } from '../../types';
 
 export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
@@ -20,10 +15,6 @@ export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
     return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
   }
 
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   public create = async (items: SimulatorRoutineCreate[]) => {
     return this.createEndpoint(items);
   };
@@ -31,7 +22,7 @@ export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
   public list = async (filter?: SimulatorRoutineFilterQuery) => {
     return this.listEndpoint<SimulatorRoutineFilterQuery>(
       this.callListEndpointWithPost,
-      filter
+      filter,
     );
   };
 

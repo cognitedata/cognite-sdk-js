@@ -1,8 +1,10 @@
 // Copyright 2023 Cognite AS
-import CogniteClientAlpha from '../../cogniteClient';
+
+import { describe, expect, test } from 'vitest';
+import type CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
+const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
 
 const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 
@@ -46,8 +48,8 @@ describeIf('simulator logs api', () => {
     expect(item.id).toBe(logId);
     expect(item.lastUpdatedTime).toBeDefined();
 
-    item.data.forEach((data) => {
+    for (const data of item.data) {
       expect(data.timestamp).toBeInstanceOf(Date);
-    });
+    }
   });
 });
