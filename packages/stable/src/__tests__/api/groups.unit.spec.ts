@@ -1,7 +1,8 @@
 // Copyright 2024 Cognite AS
 
 import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
+import { beforeEach, describe, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl } from '../testUtils';
 
@@ -14,7 +15,7 @@ describe('Groups unit test', () => {
 
   test('can create a CDF managed allUserAccounts group', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/groups'), {
+      .post(/\/groups/, {
         items: [{ name: 'test-group', members: 'allUserAccounts' }],
       })
       .once()
@@ -31,7 +32,7 @@ describe('Groups unit test', () => {
 
   test('can create a CDF managed group', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/groups'), {
+      .post(/\/groups/, {
         items: [
           {
             name: 'test-group',

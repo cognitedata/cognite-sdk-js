@@ -1,8 +1,9 @@
 // Copyright 2020 Cognite AS
 
-import { TemplateGroup, ExternalTemplateGroup } from '../../types';
-import { randomInt } from '@cognite/sdk-core/src/testUtils';
-import CogniteClient from '../../cogniteClient';
+import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { ExternalTemplateGroup, TemplateGroup } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('template group test', () => {
@@ -41,21 +42,21 @@ describe('template group test', () => {
   it('should create template groups', async () => {
     const result = await client.templates.groups.create(templateGroups);
     expect(result.map(toExternalTemplateGroup)).toEqual(
-      expect.arrayContaining(expectedTemplateGroups)
+      expect.arrayContaining(expectedTemplateGroups),
     );
   });
 
   it('should upsert template groups', async () => {
     const result = await client.templates.groups.upsert(templateGroups);
     expect(result.map(toExternalTemplateGroup)).toEqual(
-      expect.arrayContaining(expectedTemplateGroups)
+      expect.arrayContaining(expectedTemplateGroups),
     );
   });
 
   it('should retrieve template groups', async () => {
     const result = await client.templates.groups.retrieve(templateGroups);
     expect(result.map(toExternalTemplateGroup)).toEqual(
-      expect.arrayContaining(expectedTemplateGroups)
+      expect.arrayContaining(expectedTemplateGroups),
     );
   });
 
@@ -64,20 +65,20 @@ describe('template group test', () => {
       .list()
       .autoPagingToArray({ limit: -1 });
     expect(result.map(toExternalTemplateGroup)).toEqual(
-      expect.arrayContaining(expectedTemplateGroups)
+      expect.arrayContaining(expectedTemplateGroups),
     );
   });
 
   it('should delete template groups', async () => {
     const result = await client.templates.groups.delete(
       [...templateGroups, { externalId: 'MISSING' }],
-      { ignoreUnknownIds: true }
+      { ignoreUnknownIds: true },
     );
     expect(result).toEqual({});
   });
 
   function toExternalTemplateGroup(
-    templateGroup: TemplateGroup
+    templateGroup: TemplateGroup,
   ): ExternalTemplateGroup {
     return {
       externalId: templateGroup.externalId,

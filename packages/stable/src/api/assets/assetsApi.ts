@@ -1,8 +1,11 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
-import { RevertableArraySorter } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import { RevertableArraySorter } from '@cognite/sdk-core';
+import type {
   Asset,
   AssetAggregate,
   AssetAggregateQuery,
@@ -62,7 +65,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    * ```
    */
   public aggregate = (
-    query: AssetAggregateQuery
+    query: AssetAggregateQuery,
   ): Promise<AssetAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
@@ -77,7 +80,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    */
   public retrieve = (
     ids: IdEither[],
-    params: AssetRetrieveParams = {}
+    params: AssetRetrieveParams = {},
   ): Promise<Asset[]> => {
     return super.retrieveEndpoint(ids, params);
   };

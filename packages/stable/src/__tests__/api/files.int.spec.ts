@@ -1,10 +1,16 @@
 // Copyright 2020 Cognite AS
 
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { HttpResponseType } from '@cognite/sdk-core';
-import { readFileSync } from 'fs';
-import CogniteClient from '../../cogniteClient';
-import { FileInfo, Asset, LabelDefinition, FileGeoLocation } from '../../types';
-import { join } from 'path';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type {
+  Asset,
+  FileGeoLocation,
+  FileInfo,
+  LabelDefinition,
+} from '../../types';
 import {
   getFileCreateArgs,
   randomInt,
@@ -23,12 +29,12 @@ describe.skip('Files integration test', () => {
     client = setupLoggedInClient();
     [asset] = await client.assets.create([
       {
-        name: 'asset_' + randomInt(),
+        name: `asset_${randomInt()}`,
       },
     ]);
     [label] = await client.labels.create([
       {
-        externalId: 'test-file-lable-' + randomInt(),
+        externalId: `test-file-lable-${randomInt()}`,
         name: 'file-label',
         description: 'test label',
       },
@@ -64,7 +70,7 @@ describe.skip('Files integration test', () => {
       },
       fileContent,
       false,
-      true
+      true,
     );
   });
 
@@ -249,7 +255,7 @@ describe.skip('Files integration test', () => {
 
   describe('binary file', () => {
     const binaryFileMeta = {
-      name: 'filename_1_' + postfix,
+      name: `filename_1_${postfix}`,
       mimeType: 'application/octet-stream',
     };
     const fileContentBinary = readFileSync(testfile);
@@ -260,7 +266,7 @@ describe.skip('Files integration test', () => {
         binaryFileMeta,
         fileContentBinary,
         false,
-        true
+        true,
       );
     });
 

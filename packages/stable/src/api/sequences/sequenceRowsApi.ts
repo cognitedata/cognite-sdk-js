@@ -2,20 +2,20 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  HttpResponse,
+  type CursorAndAsyncIterator,
+  type HttpResponse,
 } from '@cognite/sdk-core';
-import {
+import type {
   CursorResponse,
+  SequenceRow,
   SequenceRowsDelete,
   SequenceRowsInsert,
   SequenceRowsResponseData,
   SequenceRowsRetrieve,
-  SequenceRow,
 } from '../../types';
 
 export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
-  public async insert(items: SequenceRowsInsert[]): Promise<{}> {
+  public async insert(items: SequenceRowsInsert[]): Promise<object> {
     await this.postInParallelWithAutomaticChunking({
       path: this.url(),
       items,
@@ -25,23 +25,23 @@ export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
   }
 
   public retrieve(
-    query: SequenceRowsRetrieve
+    query: SequenceRowsRetrieve,
   ): CursorAndAsyncIterator<SequenceRow> {
     return super.listEndpoint(
       (data) =>
         this.post<SequenceRowsResponseData>(this.listPostUrl, { data }).then(
-          this.transformRetrieveResponse
+          this.transformRetrieveResponse,
         ),
-      query
+      query,
     );
   }
 
-  public delete(items: SequenceRowsDelete[]): Promise<{}> {
+  public delete(items: SequenceRowsDelete[]): Promise<object> {
     return this.deleteEndpoint(items);
   }
 
   private transformRetrieveResponse(
-    response: HttpResponse<SequenceRowsResponseData>
+    response: HttpResponse<SequenceRowsResponseData>,
   ): HttpResponse<CursorResponse<SequenceRow[]>> {
     const { rows, nextCursor, columns } = response.data;
 

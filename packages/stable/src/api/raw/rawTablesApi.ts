@@ -1,18 +1,21 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
-  RawDBTableName,
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
   CursorResponse,
   ListRawTables,
   RawDBTable,
+  RawDBTableName,
 } from '../../types';
 
 export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
   public async create(
     databaseName: string,
     items: RawDBTableName[],
-    ensureParent: boolean = false
+    ensureParent = false,
   ): Promise<RawDBTable[]> {
     const path = `${this.encodeUrl(databaseName)}/tables`;
     const responses = await this.postInParallelWithAutomaticChunking({
@@ -25,7 +28,7 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
 
   public list(
     databaseName: string,
-    scope?: ListRawTables
+    scope?: ListRawTables,
   ): CursorAndAsyncIterator<RawDBTable> {
     const path = `${this.encodeUrl(databaseName)}/tables`;
     return super.listEndpoint(
@@ -33,7 +36,7 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
         this.get<CursorResponse<RawDBTable[]>>(path, {
           params,
         }),
-      scope
+      scope,
     );
   }
 

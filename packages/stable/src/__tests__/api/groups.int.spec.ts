@@ -1,14 +1,15 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Group, GroupSpec } from '../../types';
+import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { Group, GroupSpec } from '../../types';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
 } from '../testUtils';
 
-let testDataSetId: number = -1;
+let testDataSetId = -1;
 
 describe('Groups integration test', () => {
   let client: CogniteClient;
@@ -18,7 +19,7 @@ describe('Groups integration test', () => {
     const datasetExternalId = 'groups-integration-test-data-set';
     const datasets = await client.datasets.retrieve(
       [{ externalId: datasetExternalId }],
-      { ignoreUnknownIds: true }
+      { ignoreUnknownIds: true },
     );
     if (datasets.length === 0) {
       const [dataset] = await client.datasets.create([
@@ -105,7 +106,7 @@ describe('Groups integration test', () => {
   test('delete', async () => {
     await runTestWithRetryWhenFailing(async () => {
       const response = await client.groups.delete(
-        groupsToDelete.map((g) => g.id)
+        groupsToDelete.map((g) => g.id),
       );
       expect(response).toEqual({});
     });

@@ -1,19 +1,19 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import {
-  DatapointsDeleteRequest,
-  DatapointAggregates,
+import type {
   DatapointAggregate,
+  DatapointAggregates,
+  DatapointInfo,
   Datapoints,
+  DatapointsDeleteRequest,
+  DatapointsMonthlyGranularityMultiQuery,
   DatapointsMultiQuery,
+  ExternalDatapointsQuery,
   IgnoreUnknownIds,
   ItemsWrapper,
   LatestDataBeforeRequest,
-  ExternalDatapointsQuery,
-  DatapointInfo,
   Timestamp,
-  DatapointsMonthlyGranularityMultiQuery,
 } from '../../types';
 
 export class DataPointsAPI extends BaseResourceAPI<
@@ -25,7 +25,7 @@ export class DataPointsAPI extends BaseResourceAPI<
   protected getDateProps() {
     return this.pickDateProps<DatapointInfo>(
       ['items', 'datapoints'],
-      ['timestamp']
+      ['timestamp'],
     );
   }
 
@@ -36,7 +36,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
    */
-  public insert = (items: ExternalDatapointsQuery[]): Promise<{}> => {
+  public insert = (items: ExternalDatapointsQuery[]): Promise<object> => {
     return this.insertEndpoint(items);
   };
 
@@ -48,7 +48,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```
    */
   public retrieve = (
-    query: DatapointsMultiQuery
+    query: DatapointsMultiQuery,
   ): Promise<DatapointAggregates[] | Datapoints[]> => {
     return this.retrieveDatapointsEndpoint(query);
   };
@@ -60,7 +60,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```
    */
   public retrieveDatapointMonthlyAggregates = async (
-    query: DatapointsMonthlyGranularityMultiQuery
+    query: DatapointsMonthlyGranularityMultiQuery,
   ): Promise<DatapointAggregates[]> => {
     // Find the start and end dates from the query
     const startDate = query.start;
@@ -146,7 +146,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    */
   public retrieveLatest = (
     items: LatestDataBeforeRequest[],
-    params: LatestDataParams = {}
+    params: LatestDataParams = {},
   ): Promise<Datapoints[]> => {
     return this.retrieveLatestEndpoint(items, params);
   };
@@ -158,7 +158,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * await client.datapoints.delete([{id: 123, inclusiveBegin: new Date('1 jan 2019')}]);
    * ```
    */
-  public delete = (items: DatapointsDeleteRequest[]): Promise<{}> => {
+  public delete = (items: DatapointsDeleteRequest[]): Promise<object> => {
     return this.deleteDatapointsEndpoint(items);
   };
 
@@ -171,7 +171,7 @@ export class DataPointsAPI extends BaseResourceAPI<
   protected async retrieveDatapointsEndpoint<
     T extends DatapointAggregates[] | Datapoints[] =
       | DatapointAggregates[]
-      | Datapoints[]
+      | Datapoints[],
   >(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
     const response = await this.post<ItemsWrapper<T>>(path, {
@@ -182,7 +182,7 @@ export class DataPointsAPI extends BaseResourceAPI<
 
   private async retrieveLatestEndpoint(
     items: LatestDataBeforeRequest[],
-    params: LatestDataParams
+    params: LatestDataParams,
   ) {
     const path = this.url('latest');
     const response = await this.post<ItemsWrapper<Datapoints[]>>(path, {
@@ -202,19 +202,18 @@ export class DataPointsAPI extends BaseResourceAPI<
 
   protected getMonthsBetweenDates = (
     startDate: Timestamp | string,
-    endDate: Timestamp | string
+    endDate: Timestamp | string,
   ): MonthInfo[] => {
     const result: MonthInfo[] = [];
 
     const currentMonth = new Date(startDate);
-    endDate = new Date(endDate);
 
-    while (currentMonth <= endDate) {
+    while (currentMonth <= new Date(endDate)) {
       const firstDay = new Date(
-        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), 1, 0)
+        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), 1, 0),
       );
       const lastDay = new Date(
-        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1, 0)
+        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1, 0),
       );
 
       result.push({

@@ -1,7 +1,8 @@
 // Copyright 2024 Cognite AS
 
-import { ViewCreateDefinition } from '../../api/views/types.gen';
-import CogniteClient from '../../cogniteClient';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import type { ViewCreateDefinition } from '../../api/views/types.gen';
+import type CogniteClient from '../../cogniteClient';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Views integration test', () => {
@@ -46,7 +47,7 @@ describe('Views integration test', () => {
   };
 
   beforeAll(async () => {
-    jest.setTimeout(30 * 1000);
+    vi.setConfig({ testTimeout: 30 * 1000 });
     client = setupLoggedInClient();
     await deleteOldSpaces(client);
     await client.spaces.upsert([
@@ -71,11 +72,9 @@ describe('Views integration test', () => {
     ]);
   });
   afterAll(async () => {
-    client = setupLoggedInClient();
     await client.containers.delete([
       { externalId: TEST_CONTAINER_NAME, space: TEST_SPACE_NAME },
     ]);
-    await client.spaces.delete([TEST_SPACE_NAME]);
   });
 
   it('should successfully upsert views', async () => {
@@ -86,26 +85,26 @@ describe('Views integration test', () => {
 
     expect(createdViewResponse.items).toHaveLength(2);
     expect(createdViewResponse.items[0].name).toEqual(
-      viewCreationDefinition.name
+      viewCreationDefinition.name,
     );
     expect(createdViewResponse.items[0].externalId).toEqual(
-      viewCreationDefinition.externalId
+      viewCreationDefinition.externalId,
     );
     expect(createdViewResponse.items[1].name).toEqual(
-      viewCreationDefinition2.name
+      viewCreationDefinition2.name,
     );
     expect(createdViewResponse.items[1].externalId).toEqual(
-      viewCreationDefinition2.externalId
+      viewCreationDefinition2.externalId,
     );
   });
 
   it('should successfully list Views', async () => {
     const views = await client.views.list({ limit: 1000 });
     const view1 = views.items.find(
-      (view) => view.externalId === viewCreationDefinition.externalId
+      (view) => view.externalId === viewCreationDefinition.externalId,
     );
     const view2 = views.items.find(
-      (view) => view.externalId === viewCreationDefinition2.externalId
+      (view) => view.externalId === viewCreationDefinition2.externalId,
     );
     expect(view1).toBeDefined();
     expect(view2).toBeDefined();
@@ -167,13 +166,13 @@ describe('Views integration test', () => {
     const views = await client.views.list({ limit: 1000 });
     expect(
       views.items.find(
-        (view) => view.externalId === viewCreationDefinition.externalId
-      )
+        (view) => view.externalId === viewCreationDefinition.externalId,
+      ),
     ).toBeUndefined();
     expect(
       views.items.find(
-        (view) => view.externalId === viewCreationDefinition2.externalId
-      )
+        (view) => view.externalId === viewCreationDefinition2.externalId,
+      ),
     ).toBeUndefined();
   });
 });

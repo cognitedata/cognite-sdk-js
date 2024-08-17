@@ -2,27 +2,21 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
-import {
+import type {
+  ContainerCollectionResponse,
+  ContainerCreateDefinition,
+  ContainerDefinition,
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
-  ReducedLimitQueryParameter,
-  ContainerCreateDefinition,
-  ContainerCollectionResponse,
-  ListOfSpaceExternalIdsResponse,
   ListOfSpaceExternalIdsRequest,
-  ContainerDefinition,
+  ListOfSpaceExternalIdsResponse,
+  ReducedLimitQueryParameter,
   SpaceQueryParameter,
 } from './types.gen';
 
 export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   /**
    * [Upsert containers](https://api-docs.cognite.com/20230101/tag/Containers/operation/ApplyContainers)
    *
@@ -52,7 +46,7 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
    * ```
    */
   public upsert = async (
-    params: ContainerCreateDefinition[]
+    params: ContainerCreateDefinition[],
   ): Promise<ContainerCollectionResponse> => {
     const response = await this.post<ContainerCollectionResponse>(this.url(), {
       data: { items: params },
@@ -72,13 +66,13 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
    * ```
    */
   public delete = async (
-    params: ListOfSpaceExternalIdsRequest['items']
+    params: ListOfSpaceExternalIdsRequest['items'],
   ): Promise<ListOfSpaceExternalIdsResponse> => {
     const response = await this.post<ListOfSpaceExternalIdsResponse>(
       this.deleteUrl,
       {
         data: { items: params },
-      }
+      },
     );
     return response.data;
   };
@@ -95,7 +89,7 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
     params: IncludeGlobalQueryParameter &
       CursorQueryParameter &
       ReducedLimitQueryParameter &
-      SpaceQueryParameter = { includeGlobal: false }
+      SpaceQueryParameter = { includeGlobal: false },
   ): CursorAndAsyncIterator<ContainerDefinition> => {
     return super.listEndpoint(this.callListEndpointWithGet, params);
   };
@@ -114,13 +108,13 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
    * ```
    */
   public retrieve = async (
-    params: ListOfSpaceExternalIdsRequest['items']
+    params: ListOfSpaceExternalIdsRequest['items'],
   ): Promise<ContainerCollectionResponse> => {
     const response = await this.post<ContainerCollectionResponse>(
       this.byIdsUrl,
       {
         data: { items: params },
-      }
+      },
     );
     return response.data;
   };

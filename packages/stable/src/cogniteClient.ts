@@ -1,9 +1,9 @@
 // Copyright 2020 Cognite AS
 import {
+  BaseCogniteClient,
+  type RetryValidator,
   accessApi,
   apiUrl,
-  BaseCogniteClient,
-  RetryValidator,
 } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';
@@ -11,41 +11,41 @@ import { Files3DAPI } from './api/3d/files3DApi';
 import { Models3DAPI } from './api/3d/models3DApi';
 import { Revisions3DAPI } from './api/3d/revisions3DApi';
 import { Viewer3DAPI } from './api/3d/viewer3DApi';
+import { AnnotationsAPI } from './api/annotations/annotationsApi';
 import { ApiKeysAPI } from './api/apiKeys/apiKeysApi';
 import { AssetsAPI } from './api/assets/assetsApi';
+import { ContainersAPI } from './api/containers/containersApi';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
 import { FilesAPI } from './api/files/filesApi';
+import { GeospatialAPI } from './api/geospatial/geospatialAPI';
 import { GroupsAPI } from './api/groups/groupsApi';
+import { InstancesAPI } from './api/instances/instancesApi';
 import { LabelsAPI } from './api/labels/labelsApi';
+import { DataModelsAPI } from './api/models/datamodelsApi';
 import { ProjectsAPI } from './api/projects/projectsApi';
 import { RawAPI } from './api/raw/rawApi';
 import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
 import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
-import { GeospatialAPI } from './api/geospatial/geospatialAPI';
-import { AnnotationsAPI } from './api/annotations/annotationsApi';
-import { VisionAPI } from './api/vision/visionApi';
-import { ProfilesAPI } from './api/userProfiles/profilesApi';
+import { SpacesAPI } from './api/spaces/spacesApi';
 import {
   TemplateGraphQlApi,
-  TemplateGroupsApi,
   TemplateGroupVersionsApi,
+  TemplateGroupsApi,
   TemplateInstancesApi,
   ViewsApi,
 } from './api/templates';
 import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
-import { retryValidator } from './retryValidator';
 import { UnitsAPI } from './api/units/unitsApi';
-import { InstancesAPI } from './api/instances/instancesApi';
-import { ContainersAPI } from './api/containers/containersApi';
+import { ProfilesAPI } from './api/userProfiles/profilesApi';
 import { ViewsAPI } from './api/views/viewsApi';
-import { SpacesAPI } from './api/spaces/spacesApi';
-import { DataModelsAPI } from './api/models/datamodelsApi';
+import { VisionAPI } from './api/vision/visionApi';
+import { retryValidator } from './retryValidator';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
@@ -134,30 +134,30 @@ export default class CogniteClient extends BaseCogniteClient {
         const baseVersionsUrl = `templategroups/${urlsafeExternalId}/versions`;
         return {
           versions: accessApi(
-            this.apiFactory(TemplateGroupVersionsApi, baseVersionsUrl)
+            this.apiFactory(TemplateGroupVersionsApi, baseVersionsUrl),
           ),
           version: (version: number) => {
             const baseGroupUrl = `${baseVersionsUrl}/${version}`;
             const graphQlApi = this.apiFactory(
               TemplateGraphQlApi,
-              `${baseGroupUrl}/graphql`
+              `${baseGroupUrl}/graphql`,
             );
             return {
               instances: accessApi(
                 this.apiFactory(
                   TemplateInstancesApi,
-                  `${baseGroupUrl}/instances`
-                )
+                  `${baseGroupUrl}/instances`,
+                ),
               ),
               runQuery: async <
-                TVariables extends Record<string, unknown>
+                TVariables extends Record<string, unknown>,
               >(graphQlParams: {
                 query: string;
                 variables?: TVariables;
                 operationName?: string;
               }) => graphQlApi.runQuery(graphQlParams),
               views: accessApi(
-                this.apiFactory(ViewsApi, `${baseGroupUrl}/views`)
+                this.apiFactory(ViewsApi, `${baseGroupUrl}/views`),
               ),
             };
           },
@@ -242,18 +242,18 @@ export default class CogniteClient extends BaseCogniteClient {
     this.groupsApi = this.apiFactory(GroupsAPI, 'groups');
     this.securityCategoriesApi = this.apiFactory(
       SecurityCategoriesAPI,
-      'securitycategories'
+      'securitycategories',
     );
     this.serviceAccountsApi = this.apiFactory(
       ServiceAccountsAPI,
-      'serviceaccounts'
+      'serviceaccounts',
     );
     this.apiKeysApi = this.apiFactory(ApiKeysAPI, 'apikeys');
     this.models3DApi = this.apiFactory(Models3DAPI, models3DPath);
     this.relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
     this.entityMatchingApi = this.apiFactory(
       EntityMatchingApi,
-      'context/entitymatching'
+      'context/entitymatching',
     );
     this.revisions3DApi = this.apiFactory(Revisions3DAPI, models3DPath);
     this.files3DApi = this.apiFactory(Files3DAPI, '3d/files');
@@ -262,7 +262,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.projectsApi = new ProjectsAPI(
       apiUrl(),
       this.httpClient,
-      this.metadataMap
+      this.metadataMap,
     );
     this.geospatialApi = this.apiFactory(GeospatialAPI, 'geospatial');
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');

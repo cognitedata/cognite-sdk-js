@@ -2,10 +2,10 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  ExternalId,
+  type CursorAndAsyncIterator,
+  type ExternalId,
 } from '@cognite/sdk-core';
-import {
+import type {
   ExternalTemplateGroup,
   TemplateGroup,
   TemplateGroupFilterQuery,
@@ -23,7 +23,7 @@ export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
    * ```
    */
   public create = (
-    items: ExternalTemplateGroup[]
+    items: ExternalTemplateGroup[],
   ): Promise<TemplateGroup[]> => {
     return super.createEndpoint(items);
   };
@@ -39,7 +39,7 @@ export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
    * ```
    */
   public upsert = (
-    items: ExternalTemplateGroup[]
+    items: ExternalTemplateGroup[],
   ): Promise<TemplateGroup[]> => {
     return super.createEndpoint(items, this.url('upsert'));
   };
@@ -53,7 +53,7 @@ export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
    */
   public retrieve = (
     ids: ExternalId[],
-    options?: { ignoreUnknownIds: boolean }
+    options?: { ignoreUnknownIds: boolean },
   ) => {
     return super.retrieveEndpoint(ids, options || { ignoreUnknownIds: false });
   };
@@ -66,7 +66,7 @@ export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
    * ```
    */
   public list = (
-    query?: TemplateGroupFilterQuery
+    query?: TemplateGroupFilterQuery,
   ): CursorAndAsyncIterator<TemplateGroup> => {
     return super.listEndpoint(this.callListEndpointWithPost, query);
   };
@@ -80,13 +80,13 @@ export class TemplateGroupsApi extends BaseResourceAPI<TemplateGroup> {
    */
   public delete = (
     ids: ExternalId[],
-    options?: { ignoreUnknownIds: boolean }
+    options?: { ignoreUnknownIds: boolean },
   ) => {
     return super.deleteEndpoint(
       ids,
       options || {
         ignoreUnknownIds: false,
-      }
+      },
     );
   };
 }

@@ -1,5 +1,11 @@
 // Copyright 2024 Cognite AS
-import { Group, isManagedInCDFGroup, isManagedExternallyGroup } from './types';
+import {
+  type Group,
+  isManagedExternallyGroup,
+  isManagedInCDFGroup,
+} from './types';
+
+import { describe, expect, it } from 'vitest';
 
 describe('group types', () => {
   describe('isManagedInCDFGroup', () => {

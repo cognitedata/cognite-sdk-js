@@ -1,7 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { SecurityCategory } from '../../types';
+import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { SecurityCategory } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Security categories integration test', () => {
@@ -13,11 +14,11 @@ describe('Security categories integration test', () => {
 
   test('create', async () => {
     const securityCategoriesToCreate = [
-      { name: 'Security category 1 ' + randomInt() },
-      { name: 'Security category 2 ' + randomInt() },
+      { name: `Security category 1 ${randomInt()}` },
+      { name: `Security category 2 ${randomInt()}` },
     ];
     securityCategories = await client.securityCategories.create(
-      securityCategoriesToCreate
+      securityCategoriesToCreate,
     );
     expect(securityCategories.length).toBe(securityCategoriesToCreate.length);
     expect(securityCategories[0].name).toBeDefined();
@@ -35,7 +36,7 @@ describe('Security categories integration test', () => {
 
   test('delete', async () => {
     const response = await client.securityCategories.delete(
-      securityCategories.map((category) => category.id)
+      securityCategories.map((category) => category.id),
     );
     expect(response).toEqual({});
   });

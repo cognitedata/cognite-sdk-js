@@ -1,6 +1,6 @@
-import { InternalId, Limit, Cursor, ExternalId } from '@cognite/sdk-core';
+import type { Cursor, ExternalId, InternalId, Limit } from '@cognite/sdk-core';
 
-import { Geometry, GeoJSON } from 'geojson';
+import { GeoJSON, type Geometry } from 'geojson';
 
 export { GeoJSON };
 
@@ -293,7 +293,7 @@ export interface GeospatialExtendedWellKnownText {
 }
 
 export interface GeospatialComputedItemList {
-  items: Record<string, any>[];
+  items: Record<string, unknown>[];
 }
 
 export interface GeospatialJsonComputeOutput {

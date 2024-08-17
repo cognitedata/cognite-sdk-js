@@ -1,13 +1,15 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import {
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type {
   FeatureType,
+  GeospatialCoordinateReferenceSystem,
   GeospatialCreateFeatureType,
-  GeospatialUpdateFeatureType,
   GeospatialFeature,
+  GeospatialUpdateFeatureType,
 } from '../../types';
-import { setupLoggedInClient, randomInt } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 const FEATURE_TYPE_EXTERNAL_ID = `sdk_test_${randomInt()}`;
 const DUMMY_FEATURE_TYPE_CREATE_DELETE = `sdk_test_dummy_${randomInt()}`;
@@ -101,7 +103,7 @@ describe.skip('Geospatial integration test', () => {
     try {
       await client.geospatial.featureType.delete(
         [{ externalId: featureType.externalId }],
-        { recursive: true }
+        { recursive: true },
       );
     } catch (e) {
       console.error(e);
@@ -114,11 +116,11 @@ describe.skip('Geospatial integration test', () => {
         TEST_FEATURE_TYPES[1],
       ]);
       expect(dummyFeatureType.externalId).toEqual(
-        TEST_FEATURE_TYPES[1].externalId
+        TEST_FEATURE_TYPES[1].externalId,
       );
       const deleteResponse = await client.geospatial.featureType.delete(
         [{ externalId: dummyFeatureType.externalId }],
-        { recursive: true }
+        { recursive: true },
       );
       expect(deleteResponse).toEqual(expect.objectContaining({}));
     });
@@ -136,9 +138,8 @@ describe.skip('Geospatial integration test', () => {
     });
 
     test('update', async () => {
-      const [updatedFeatureType] = await client.geospatial.featureType.update(
-        UPDATE_FEATURE_TYPE
-      );
+      const [updatedFeatureType] =
+        await client.geospatial.featureType.update(UPDATE_FEATURE_TYPE);
       expect(updatedFeatureType.properties.depth).toBeDefined();
     });
   });
@@ -151,7 +152,7 @@ describe.skip('Geospatial integration test', () => {
       try {
         [feature1, feature2] = await client.geospatial.feature.create(
           featureType.externalId,
-          TEST_FEATURES
+          TEST_FEATURES,
         );
       } catch (e) {
         console.error(e);
@@ -172,14 +173,14 @@ describe.skip('Geospatial integration test', () => {
     test('create & delete', async () => {
       const [dummyTestFeature] = await client.geospatial.feature.create(
         featureType.externalId,
-        DUMMY_TEST_FEATURE
+        DUMMY_TEST_FEATURE,
       );
       expect(dummyTestFeature.externalId).toBe(
-        DUMMY_TEST_FEATURE[0].externalId
+        DUMMY_TEST_FEATURE[0].externalId,
       );
       const deleteResponse = await client.geospatial.feature.delete(
         featureType.externalId,
-        [{ externalId: dummyTestFeature.externalId }]
+        [{ externalId: dummyTestFeature.externalId }],
       );
 
       expect(deleteResponse).toEqual(expect.objectContaining({}));
@@ -193,7 +194,7 @@ describe.skip('Geospatial integration test', () => {
             { externalId: feature1.externalId },
             { externalId: feature2.externalId },
           ],
-          { output: { geometryFormat: 'GEOJSON' } }
+          { output: { geometryFormat: 'GEOJSON' } },
         );
       expect(feature1.externalId).toBe(retrievedFeature1.externalId);
       expect(feature1.temperature).toBe(retrievedFeature1.temperature);
@@ -204,25 +205,25 @@ describe.skip('Geospatial integration test', () => {
           coordinates: [60.547602, -5.423433],
           crs: { properties: { name: 'EPSG:4326' }, type: 'name' },
           type: 'Point',
-        })
+        }),
       );
       expect(retrievedFeature2.location).toEqual(
         expect.objectContaining({
           coordinates: [60.585858, -6.474416],
           crs: { properties: { name: 'EPSG:4326' }, type: 'name' },
           type: 'Point',
-        })
+        }),
       );
     });
 
     test('update', async () => {
       await client.geospatial.feature.create(
         featureType.externalId,
-        TEST_FEATURE
+        TEST_FEATURE,
       );
       const [updatedFeature] = await client.geospatial.feature.update(
         featureType.externalId,
-        UPDATE_FEATURE
+        UPDATE_FEATURE,
       );
       expect(updatedFeature.temperature).toBe(UPDATE_FEATURE[0].temperature);
       expect(updatedFeature.depth).toBe(UPDATE_FEATURE[0].depth);
@@ -237,7 +238,7 @@ describe.skip('Geospatial integration test', () => {
           },
           limit: 100,
           sort: ['temperature:ASC', 'location'],
-        }
+        },
       );
       expect(searchedFeature.temperature).toBe(TEST_FEATURES[0].temperature);
     });
@@ -270,9 +271,9 @@ describe.skip('Geospatial integration test', () => {
           .some((feature) =>
             // check if searched features has existing test features
             TEST_FEATURES.map((testFeature) => testFeature.externalId).includes(
-              feature.externalId
-            )
-          )
+              feature.externalId,
+            ),
+          ),
       ).toBeTruthy();
     });
   });
@@ -292,11 +293,10 @@ describe.skip('Geospatial integration test', () => {
         },
       });
       const items = response.items;
-      expect(items.length == 1).toBeTruthy();
-      expect(items[0]['output']['srid']).toEqual(4326);
-      expect(items[0]['output']['wkt']).toEqual(
-        'POLYGON((0 0,10 0,10 10,0 10,0 0))'
-      );
+      expect(items.length === 1).toBeTruthy();
+      const output = items[0].output as GeospatialCoordinateReferenceSystem;
+      expect(output.srid).toEqual(4326);
+      expect(output.wkt).toEqual('POLYGON((0 0,10 0,10 10,0 10,0 0))');
     });
   });
 });

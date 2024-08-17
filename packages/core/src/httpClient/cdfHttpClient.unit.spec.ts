@@ -27,6 +27,21 @@ describe('CDFHttpClient', () => {
       await client.get('/', { params: { assetIds: [123, 456] } });
     });
 
+    test('convert query parameter boolean', async () => {
+      nock(baseUrl).get('/').query({ foo: 'true' }).reply(200, {});
+      await client.get('/', { params: { foo: true } });
+    });
+
+    test('convert query parameter of object', async () => {
+      nock(baseUrl)
+        .get('/')
+        .query({ properties: '{"category1":{"property1":"value1"}}' })
+        .reply(200, {});
+      await client.get('/', {
+        params: { properties: { category1: { property1: 'value1' } } },
+      });
+    });
+
     test('use configured bearer token', async () => {
       const token = 'abc';
       client.setBearerToken(token);

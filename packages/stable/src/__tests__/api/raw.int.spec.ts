@@ -1,7 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { RawDB, RawDBTable } from '../../types';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { RawDB, RawDBTable } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 let index = 0;
@@ -97,7 +98,7 @@ describe('Raw integration test', () => {
       [table] = await client.raw.createTables(database.name, [createTable()]);
     });
     afterAll(async () => {
-      await client.raw.deleteDatabases([database]);
+      await client.raw.deleteDatabases([database], { recursive: true });
     });
 
     const rows = [createRow(), createRow()];
@@ -105,7 +106,7 @@ describe('Raw integration test', () => {
       const result = await client.raw.insertRows(
         database.name,
         table.name,
-        rows
+        rows,
       );
       expect(result).toEqual({});
     });
@@ -154,7 +155,7 @@ describe('Raw integration test', () => {
       const row = await client.raw.retrieveRow(
         database.name,
         table.name,
-        rows[0].key
+        rows[0].key,
       );
       expect(row.lastUpdatedTime).toBeInstanceOf(Date);
       expect(row).toEqual({
@@ -178,7 +179,7 @@ describe('Raw integration test', () => {
         tmpDatabase.name,
         tmpTable.name,
         [tmpRow],
-        true
+        true,
       );
       await expect(client.raw.deleteDatabases([tmpDatabase])).rejects.toThrow();
       // clean up

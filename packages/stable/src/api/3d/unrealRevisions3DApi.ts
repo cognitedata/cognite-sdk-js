@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import { CogniteInternalId, UnrealRevision3D } from '../../types';
+import type { CogniteInternalId, UnrealRevision3D } from '../../types';
 
 export class UnrealRevisions3DAPI extends BaseResourceAPI<UnrealRevision3D> {
   /**
@@ -13,7 +13,7 @@ export class UnrealRevisions3DAPI extends BaseResourceAPI<UnrealRevision3D> {
 
   public async retrieve(
     modelId: CogniteInternalId,
-    revisionId: CogniteInternalId
+    revisionId: CogniteInternalId,
   ): Promise<UnrealRevision3D> {
     const path = this.url(`models/${modelId}/revisions/${revisionId}`);
     const response = await this.get<UnrealRevision3D>(path);

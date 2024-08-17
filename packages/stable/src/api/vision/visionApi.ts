@@ -1,14 +1,14 @@
 // Copyright 2022 Cognite AS
 
 import { BaseResourceAPI, sleepPromise } from '@cognite/sdk-core';
-import {
+import type {
+  FeatureParameters,
+  FileReference,
+  JobId,
+  JobStatus,
+  VisionExtractFeature,
   VisionExtractGetResponse,
   VisionExtractPostResponse,
-  VisionExtractFeature,
-  FileReference,
-  JobStatus,
-  JobId,
-  FeatureParameters,
 } from '../../types';
 
 const JOB_COMPLETE_STATES: JobStatus[] = ['Completed', 'Failed'];
@@ -29,7 +29,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
   public extract = async (
     features: VisionExtractFeature[],
     ids: FileReference[],
-    parameters?: FeatureParameters
+    parameters?: FeatureParameters,
   ): Promise<VisionExtractPostResponse> => {
     const path = this.url('extract');
 
@@ -37,7 +37,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
     const betaFeatures = features.filter((f) => BETA_FEATURES.includes(f));
     if (betaFeatures.length > 0) {
       console.warn(
-        `Features '${betaFeatures}' are in beta and are still in development`
+        `Features '${betaFeatures}' are in beta and are still in development`,
       );
       headers = { ...headers, 'cdf-version': 'beta' };
     }
@@ -61,9 +61,9 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    */
   public getExtractJob = async (
     jobId: JobId,
-    waitForCompletion: boolean = true,
-    pollingTimeMs: number = 1000,
-    maxRetries: number = 600
+    waitForCompletion = true,
+    pollingTimeMs = 1000,
+    maxRetries = 600,
   ): Promise<VisionExtractGetResponse> => {
     const path = this.url(`extract/${jobId}`);
     const getJobResult = async () => {
@@ -78,7 +78,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
           getJobResult,
           isJobCompleted,
           pollingTimeMs,
-          maxRetries
+          maxRetries,
         )
       : getJobResult();
   };
@@ -87,7 +87,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
     getJobResult: () => Promise<T>,
     isJobCompleted: (result: T) => boolean,
     pollingTimeMs: number,
-    maxRetries: number
+    maxRetries: number,
   ) {
     let retryCount = 0;
     do {
@@ -99,6 +99,6 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
       await sleepPromise(pollingTimeMs);
       retryCount++;
     } while (retryCount < maxRetries);
-    throw new Error(`Timed out while waiting for vision job to complete.`);
+    throw new Error('Timed out while waiting for vision job to complete.');
   }
 }

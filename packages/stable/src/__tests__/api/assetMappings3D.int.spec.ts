@@ -1,13 +1,14 @@
 // Copyright 2020 Cognite AS
 
-import {
+import type {
   Asset,
   AssetMapping3D,
   Model3D,
   Node3D,
   Revision3D,
 } from 'stable/src/types';
-import CogniteClient from '../../cogniteClient';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 describe.skip('AssetMappings3D integration test', () => {
@@ -45,7 +46,7 @@ describe.skip('AssetMappings3D integration test', () => {
     ).items;
     if (node === undefined) {
       fail(
-        `Could not find any nodes for 3D model ${model.id}/${revision.id} in the test data`
+        `Could not find any nodes for 3D model ${model.id}/${revision.id} in the test data`,
       );
     }
 
@@ -79,9 +80,9 @@ describe.skip('AssetMappings3D integration test', () => {
     await expect(
       client.assetMappings3D.list(model.id, revision.id, {
         intersectsBoundingBox: { min: [], max: [] },
-      })
+      }),
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"max and min must have length 3 | code: 400"`
+      `"max and min must have length 3 | code: 400"`,
     );
   });
 
@@ -89,7 +90,7 @@ describe.skip('AssetMappings3D integration test', () => {
     const response = await client.assetMappings3D.filter(
       model.id,
       revision.id,
-      {}
+      {},
     );
     expect(response.items.length).toBeGreaterThanOrEqual(1);
   });
@@ -100,7 +101,7 @@ describe.skip('AssetMappings3D integration test', () => {
       revision.id,
       {
         filter: { nodeIds: [assetMapping.nodeId] },
-      }
+      },
     );
     expect(response.items.length).toBeGreaterThanOrEqual(1); // Test data might contain more than one mapping
   });
@@ -111,7 +112,7 @@ describe.skip('AssetMappings3D integration test', () => {
       revision.id,
       {
         filter: { treeIndexes: [assetMapping.treeIndex] },
-      }
+      },
     );
     expect(response.items.length).toBeGreaterThanOrEqual(1); // Test data might contain more than one mapping
   });
@@ -122,7 +123,7 @@ describe.skip('AssetMappings3D integration test', () => {
       revision.id,
       {
         filter: { assetIds: [assetMapping.assetId] },
-      }
+      },
     );
     expect(response.items.length).toBeGreaterThanOrEqual(1); // Test data might contain more than one mapping
   });

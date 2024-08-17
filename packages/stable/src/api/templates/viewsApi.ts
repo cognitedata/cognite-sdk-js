@@ -1,12 +1,12 @@
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  CursorResponse,
-  ExternalId,
+  type CursorAndAsyncIterator,
+  type CursorResponse,
+  type ExternalId,
 } from '@cognite/sdk-core';
-import {
-  View,
+import type {
   ExternalView,
+  View,
   ViewFilterQuery,
   ViewResolveRequest,
 } from '../../types';
@@ -25,32 +25,33 @@ export class ViewsApi extends BaseResourceAPI<View> {
   };
 
   public resolve = <T>(
-    resolveRequest: ViewResolveRequest
+    resolveRequest: ViewResolveRequest,
   ): CursorAndAsyncIterator<T> => {
     const resolveFetch = async (filter?: ViewResolveRequest) => {
       const response = await this.post<CursorResponse<ResponseType[]>>(
         this.url('resolve'),
         {
           data: filter || {},
-        }
+        },
       );
       return response;
     };
     return this.listEndpoint(
+      // biome-ignore lint/suspicious/noExplicitAny: didn't manage to type this properly within reasonable time
       resolveFetch as any,
-      resolveRequest
+      resolveRequest,
     ) as unknown as CursorAndAsyncIterator<T>;
   };
 
   public delete = (
     ids: ExternalId[],
-    options?: { ignoreUnknownIds: boolean }
+    options?: { ignoreUnknownIds: boolean },
   ) => {
     return super.deleteEndpoint(
       ids,
       options || {
         ignoreUnknownIds: false,
-      }
+      },
     );
   };
 }

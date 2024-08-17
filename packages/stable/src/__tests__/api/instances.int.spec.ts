@@ -1,7 +1,8 @@
 // Copyright 2024 Cognite AS
 
-import { ViewReference } from 'stable/src/types';
-import CogniteClient from '../../cogniteClient';
+import type { ViewReference } from 'stable/src/types';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 type SpaceDefinition = {
@@ -25,7 +26,7 @@ const upsertSpace = async (client: CogniteClient, space: SpaceDefinition) => {
 const upsertDescribables = async (
   client: CogniteClient,
   describables: Describable[],
-  view: ViewReference
+  view: ViewReference,
 ) => {
   await client.instances.upsert({
     items: describables.map((describable) => ({
@@ -51,7 +52,7 @@ describe('Instances integration test', () => {
   const timestamp = Date.now();
 
   const testSpace: SpaceDefinition = {
-    space: `test_data_space`,
+    space: 'test_data_space',
     name: 'test_data_space',
     description: 'Instance space used for integration tests.',
   };
@@ -67,14 +68,14 @@ describe('Instances integration test', () => {
     space: testSpace.space,
     title: `title_1_${timestamp}`,
     description: `description_1_${timestamp}`,
-    labels: [`label1`, 'label2'],
+    labels: ['label1', 'label2'],
   };
   const describable2: Describable = {
     externalId: `describable_2_${timestamp}`,
     space: testSpace.space,
     title: `title_2_${timestamp}`,
     description: `description_2_${timestamp}`,
-    labels: [`label1`, 'label2'],
+    labels: ['label1', 'label2'],
   };
 
   beforeAll(async () => {
@@ -159,13 +160,13 @@ describe('Instances integration test', () => {
     expect(response.items[1].externalId).toBeDefined();
 
     const title1 =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString() || '';
     const title2 =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString() || '';
     expect(title1 < title2);
   });
 
@@ -187,13 +188,13 @@ describe('Instances integration test', () => {
     expect(response.items[1].externalId).toBeDefined();
 
     const title1 =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString() || '';
     const title2 =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString() || '';
     expect(title1 > title2);
   });
 
@@ -232,9 +233,9 @@ describe('Instances integration test', () => {
     expect(response.items).toHaveLength(1);
     expect(response.items[0].properties);
     const title =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString() || '';
     expect(title.startsWith('titl'));
   });
 
@@ -257,7 +258,7 @@ describe('Instances integration test', () => {
     expect(response.items[0].aggregates[0].aggregate).toBe('count');
     expect(
       response.items[0].aggregates[0].aggregate === 'count' &&
-        (response.items[0].aggregates[0].value || 0)
+        (response.items[0].aggregates[0].value || 0),
     ).toBeGreaterThan(0);
   });
 
@@ -275,9 +276,9 @@ describe('Instances integration test', () => {
     expect(response.items).toHaveLength(1);
     expect(response.items[0].properties);
     const title =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString() || '';
     expect(title.startsWith('titl'));
   });
 

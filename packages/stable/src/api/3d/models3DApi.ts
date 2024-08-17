@@ -1,7 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
   CogniteInternalId,
   CreateModel3D,
   InternalId,
@@ -41,7 +44,7 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ```
    */
   public list = (
-    scope?: Model3DListRequest
+    scope?: Model3DListRequest,
   ): CursorAndAsyncIterator<Model3D> => {
     return super.listEndpoint(this.callListEndpointWithGet, scope);
   };

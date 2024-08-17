@@ -5,14 +5,16 @@
     "ignore": [
       "**/dist/**/*",
       "packages/core/src/credentialsAuth.ts",
-      "packages/core/src/authFlows/legacy.ts"
+      "packages/core/src/authFlows/legacy.ts",
+      ".cognite-openapi-snapshot.json"
     ]
   },
   "linter": {
     "ignore": [
       "**/dist/**/*",
       "packages/core/src/credentialsAuth.ts",
-      "packages/core/src/authFlows/legacy.ts"
+      "packages/core/src/authFlows/legacy.ts",
+      ".cognite-openapi-snapshot.json"
     ],
     "enabled": true,
     "rules": {
@@ -25,7 +27,8 @@
     "ignore": [
       "**/dist/**/*",
       "packages/core/src/credentialsAuth.ts",
-      "packages/core/src/authFlows/legacy.ts"
+      "packages/core/src/authFlows/legacy.ts",
+      ".cognite-openapi-snapshot.json"
     ]
   },
   "javascript": {

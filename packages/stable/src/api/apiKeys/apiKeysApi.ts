@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import {
+import type {
   ApiKeyListScope,
   ApiKeyObject,
   ApiKeyRequest,
@@ -51,7 +51,7 @@ export class ApiKeysAPI extends BaseResourceAPI<NewApiKeyResponse> {
    * await client.apiKeys.delete([123, 456]);
    * ```
    */
-  public delete = (ids: CogniteInternalId[]): Promise<{}> => {
+  public delete = (ids: CogniteInternalId[]): Promise<object> => {
     return super.deleteEndpoint(ids);
   };
 }

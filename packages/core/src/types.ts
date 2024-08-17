@@ -15,9 +15,7 @@ export interface ItemsWrapper<T> {
   items: T;
 }
 
-export interface FilterQuery extends Cursor, Limit {
-  [key: string]: string | number | undefined;
-}
+export interface FilterQuery extends Cursor, Limit {}
 
 /**
  * Cursor for paging through results

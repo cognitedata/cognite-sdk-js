@@ -2,11 +2,11 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  CDFHttpClient,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
+import type {
   CogniteEvent,
   EventChange,
   EventFilterRequest,
@@ -57,7 +57,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * ```
    */
   public list = (
-    scope?: EventFilterRequest
+    scope?: EventFilterRequest,
   ): CursorAndAsyncIterator<CogniteEvent> => {
     const { sort: sortObject = {}, ...rest } = scope || {};
     const query = { sort: this.convertSortObjectToArray(sortObject), ...rest };
@@ -128,7 +128,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
 
   private convertSortObjectToArray(sortObject: EventSort) {
     return Object.entries(sortObject).map(
-      ([prop, order]) => `${prop}:${order}`
+      ([prop, order]) => `${prop}:${order}`,
     );
   }
 }

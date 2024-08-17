@@ -2,29 +2,23 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
-import {
+import type {
+  AllVersionsQueryParameter,
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
-  ReducedLimitQueryParameter,
-  ViewCreateDefinition,
-  ViewCollectionResponse,
-  ViewDefinition,
-  SpaceQueryParameter,
-  ListOfVersionReferences,
-  AllVersionsQueryParameter,
   IncludeInheritedPropertiesQueryParameter,
   ListOfAllVersionsReferences,
+  ListOfVersionReferences,
+  ReducedLimitQueryParameter,
+  SpaceQueryParameter,
+  ViewCollectionResponse,
+  ViewCreateDefinition,
+  ViewDefinition,
 } from './types.gen';
 
 export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   /**
    * [Upsert Views](https://api-docs.cognite.com/20230101/tag/Views/operation/ApplyViews)
    *
@@ -55,7 +49,7 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
    * ```
    */
   public upsert = async (
-    params: ViewCreateDefinition[]
+    params: ViewCreateDefinition[],
   ): Promise<ViewCollectionResponse> => {
     const response = await this.post<ViewCollectionResponse>(this.url(), {
       data: { items: params },
@@ -76,7 +70,7 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
    * ```
    */
   public delete = async (
-    params: ListOfVersionReferences['items']
+    params: ListOfVersionReferences['items'],
   ): Promise<ListOfVersionReferences> => {
     const response = await this.post<ListOfVersionReferences>(this.deleteUrl, {
       data: { items: params },
@@ -98,7 +92,7 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
       ReducedLimitQueryParameter &
       SpaceQueryParameter &
       IncludeInheritedPropertiesQueryParameter &
-      AllVersionsQueryParameter = { includeGlobal: false }
+      AllVersionsQueryParameter = { includeGlobal: false },
   ): CursorAndAsyncIterator<ViewDefinition> => {
     return super.listEndpoint(this.callListEndpointWithGet, params);
   };
@@ -119,7 +113,7 @@ export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
    */
   public retrieve = async (
     params: (ListOfVersionReferences | ListOfAllVersionsReferences)['items'],
-    options: IncludeInheritedPropertiesQueryParameter = {}
+    options: IncludeInheritedPropertiesQueryParameter = {},
   ): Promise<ViewCollectionResponse> => {
     const response = await this.post<ViewCollectionResponse>(this.byIdsUrl, {
       data: { items: params, ...options },

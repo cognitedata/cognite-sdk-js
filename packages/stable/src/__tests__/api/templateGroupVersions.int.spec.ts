@@ -1,9 +1,10 @@
 // Copyright 2020 Cognite AS
 
+import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { ConflictMode } from '../../types';
-import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-import { randomInt } from '@cognite/sdk-core/src/testUtils';
 
 describe('template group versions test', () => {
   let client: CogniteClient;
@@ -68,7 +69,7 @@ describe('template group versions test', () => {
       .autoPagingToArray({ limit: -1 });
 
     expect(result).toEqual(
-      expectedVersions.slice(2, 6).sort((a, b) => b.version - a.version)
+      expectedVersions.slice(2, 6).sort((a, b) => b.version - a.version),
     );
   }, 10000);
 

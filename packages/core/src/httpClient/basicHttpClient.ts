@@ -223,9 +223,9 @@ export class BasicHttpClient {
     return this.postRequest(rawResponse, request, mutatedRequest);
   }
 
-  private constructUrl(path: string, params: HttpQueryParams = {}) {
+  private constructUrl<T extends object>(path: string, params?: T) {
     let url = path;
-    const hasQueryParams = Object.keys(params).length > 0;
+    const hasQueryParams = !!params && Object.keys(params).length > 0;
     if (hasQueryParams) {
       const normalizedParams: Record<string, string> = Object.entries(
         params,
@@ -246,6 +246,11 @@ export class BasicHttpClient {
                 acc[key] = `[${value.join(',')}]`;
               }
               return acc;
+            }
+            default: {
+              throw new Error(
+                `Unsupported value query parameter type: ${typeof value}, ${key}: ${value}`,
+              );
             }
           }
         },
@@ -313,7 +318,7 @@ export enum HttpMethod {
   Patch = 'PATCH',
 }
 
-export type HttpResponseType = 'json' | 'arraybuffer' | 'text';
+type HttpResponseType = 'json' | 'arraybuffer' | 'text';
 
 export const HttpResponseType = {
   Json: 'json' as HttpResponseType,
@@ -321,9 +326,7 @@ export const HttpResponseType = {
   Text: 'text' as HttpResponseType,
 };
 
-export type HttpQueryParams = {
-  [key: string]: string | number | string[] | number[] | undefined;
-};
+export type HttpQueryParams = object;
 
 type ResponseHandler<ResponseType> = (res: Response) => Promise<ResponseType>;
 

@@ -1,7 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import { CursorAndAsyncIterator, BaseResourceAPI } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
   ExternalId,
   ExternalLabelDefinition,
   LabelDefinition,
@@ -28,7 +31,7 @@ export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
    * ```
    */
   public create = (
-    items: ExternalLabelDefinition[]
+    items: ExternalLabelDefinition[],
   ): Promise<LabelDefinition[]> => {
     return super.createEndpoint(items);
   };
@@ -41,7 +44,7 @@ export class LabelsAPI extends BaseResourceAPI<LabelDefinition> {
    * ```
    */
   public list = (
-    query?: LabelDefinitionFilterRequest
+    query?: LabelDefinitionFilterRequest,
   ): CursorAndAsyncIterator<LabelDefinition> => {
     return super.listEndpoint(this.callListEndpointWithPost, query);
   };

@@ -2,21 +2,21 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  MetadataMap,
-  CogniteInternalId,
+  type CDFHttpClient,
+  type CogniteInternalId,
+  type MetadataMap,
 } from '@cognite/sdk-core';
 
-import {
+import type {
   Document,
-  DocumentSearchResponse,
-  DocumentSearchRequest,
   DocumentListRequest,
   DocumentListResponse,
+  DocumentSearchRequest,
+  DocumentSearchResponse,
 } from '../../types';
 
-import { PreviewAPI } from './previewApi';
 import { DocumentsAggregateAPI } from './aggregateApi';
+import { PreviewAPI } from './previewApi';
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
   private readonly previewAPI: PreviewAPI;
@@ -28,9 +28,9 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     const [baseUrl, httpClient, map] = args;
     this.previewAPI = new PreviewAPI(baseUrl, httpClient, map);
     this.aggregateAPI = new DocumentsAggregateAPI(
-      baseUrl + '/aggregate',
+      `${baseUrl}/aggregate`,
       httpClient,
-      map
+      map,
     );
   }
 
@@ -61,7 +61,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
    * ```
    */
   public search = (
-    query: DocumentSearchRequest
+    query: DocumentSearchRequest,
   ): Promise<DocumentSearchResponse> => {
     return this.searchDocuments<DocumentSearchResponse>(query);
   };
@@ -74,8 +74,8 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.documentContent(id);
   };
 
-  private async searchDocuments<ResponseType>(
-    query: DocumentSearchRequest
+  private async searchDocuments<ResponseType extends object>(
+    query: DocumentSearchRequest,
   ): Promise<ResponseType> {
     const response = await this.post<ResponseType>(this.searchUrl, {
       data: query,

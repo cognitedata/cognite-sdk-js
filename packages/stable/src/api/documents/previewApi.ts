@@ -3,28 +3,28 @@
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import { HttpResponseType } from '@cognite/sdk-core';
 
-import {
+import type {
   CogniteInternalId,
   DocumentsPreviewTemporaryLinkResponse,
 } from '../../types';
 
-export class PreviewAPI extends BaseResourceAPI<any> {
+export class PreviewAPI extends BaseResourceAPI<unknown> {
   public documentAsPdf = (id: CogniteInternalId): Promise<ArrayBuffer> => {
     return this.pdfPreviewEndpoint<ArrayBuffer>(id);
   };
 
   public documentAsImage = (
     id: CogniteInternalId,
-    page: number
+    page: number,
   ): Promise<ArrayBuffer> => {
     return this.imagePreviewEndpoint<ArrayBuffer>(id, page);
   };
 
   public pdfTemporaryLink = (
-    id: CogniteInternalId
+    id: CogniteInternalId,
   ): Promise<DocumentsPreviewTemporaryLinkResponse> => {
     return this.pdfTemporaryLinkEndpoint<DocumentsPreviewTemporaryLinkResponse>(
-      id
+      id,
     );
   };
 
@@ -33,7 +33,7 @@ export class PreviewAPI extends BaseResourceAPI<any> {
   };
 
   private async pdfPreviewEndpoint<ResponseType>(
-    id: CogniteInternalId
+    id: CogniteInternalId,
   ): Promise<ResponseType> {
     const uri = this.pdfBuildPreviewURI(id);
     const response = await this.get<ResponseType>(uri, {
@@ -46,16 +46,13 @@ export class PreviewAPI extends BaseResourceAPI<any> {
     return response.data;
   }
 
-  public imageBuildPreviewURI = (
-    id: CogniteInternalId,
-    page: number = 1
-  ): string => {
+  public imageBuildPreviewURI = (id: CogniteInternalId, page = 1): string => {
     return `${this.url()}${id.toString()}/preview/image/pages/${page.toString()}`;
   };
 
   private async imagePreviewEndpoint<ResponseType>(
     id: CogniteInternalId,
-    page: number = 1
+    page = 1,
   ): Promise<ResponseType> {
     const uri = this.imageBuildPreviewURI(id, page);
     const response = await this.get<ResponseType>(uri, {
@@ -73,7 +70,7 @@ export class PreviewAPI extends BaseResourceAPI<any> {
   };
 
   private async pdfTemporaryLinkEndpoint<ResponseType>(
-    id: CogniteInternalId
+    id: CogniteInternalId,
   ): Promise<ResponseType> {
     const uri = this.pdfBuildTemporaryLinkURI(id);
     const response = await this.get<ResponseType>(uri);

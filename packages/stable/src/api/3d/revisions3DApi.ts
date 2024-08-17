@@ -2,11 +2,11 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
+import type {
   CogniteInternalId,
   CreateRevision3D,
   Filter3DNodesQuery,
@@ -24,7 +24,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
   constructor(
     resourcePath: string,
     httpClient: CDFHttpClient,
-    map: MetadataMap
+    map: MetadataMap,
   ) {
     super(resourcePath, httpClient, map);
     this.nodes3DApi = new Nodes3DAPI(resourcePath, httpClient, map);
@@ -46,7 +46,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    */
   public create = (
     modelId: CogniteInternalId,
-    items: CreateRevision3D[]
+    items: CreateRevision3D[],
   ): Promise<Revision3D[]> => {
     return super.createEndpoint(items, this.url(`${modelId}/revisions`));
   };
@@ -60,7 +60,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    */
   public list = (
     modelId: CogniteInternalId,
-    filter?: Revision3DListRequest
+    filter?: Revision3DListRequest,
   ): CursorAndAsyncIterator<Revision3D> => {
     const path = this.url(`${modelId}/revisions`);
     return super.listEndpoint((params) => this.get(path, { params }), filter);
@@ -75,7 +75,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    */
   public retrieve = async (
     modelId: CogniteInternalId,
-    revisionId: CogniteInternalId
+    revisionId: CogniteInternalId,
   ): Promise<Revision3D> => {
     const path = this.url(`${modelId}/revisions/${revisionId}`);
     const response = await this.get<Revision3D>(path);
@@ -105,7 +105,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    */
   public update = (
     modelId: CogniteInternalId,
-    items: UpdateRevision3D[]
+    items: UpdateRevision3D[],
   ): Promise<Revision3D[]> => {
     const path = this.url(`${modelId}/revisions/update`);
     return super.updateEndpoint(items, path);
@@ -120,8 +120,8 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
    */
   public delete = (
     modelId: CogniteInternalId,
-    ids: InternalId[]
-  ): Promise<{}> => {
+    ids: InternalId[],
+  ): Promise<object> => {
     const path = this.url(`${modelId}/revisions/delete`);
     return super.deleteEndpoint(ids, undefined, path);
   };
@@ -136,10 +136,10 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
   public updateThumbnail = async (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
-    fileId: CogniteInternalId
-  ): Promise<{}> => {
+    fileId: CogniteInternalId,
+  ): Promise<object> => {
     const path = this.url(`${modelId}/revisions/${revisionId}/thumbnail`);
-    const response = await this.post<{}>(path, { data: { fileId } });
+    const response = await this.post<object>(path, { data: { fileId } });
     return this.addToMapAndReturn({}, response);
   };
 
@@ -153,7 +153,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
   public list3DNodes = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
-    query?: List3DNodesQuery
+    query?: List3DNodesQuery,
   ): CursorAndAsyncIterator<Node3D> => {
     return this.nodes3DApi.list(modelId, revisionId, query);
   };
@@ -178,7 +178,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
   public filter3DNodes = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
-    query?: Filter3DNodesQuery
+    query?: Filter3DNodesQuery,
   ): CursorAndAsyncIterator<Node3D> => {
     return this.nodes3DApi.filter(modelId, revisionId, query);
   };
@@ -193,7 +193,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
   public retrieve3DNodes = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
-    ids: InternalId[]
+    ids: InternalId[],
   ): Promise<Node3D[]> => {
     return this.nodes3DApi.retrieve(modelId, revisionId, ids);
   };
@@ -209,7 +209,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     nodeId: CogniteInternalId,
-    query?: List3DNodesQuery
+    query?: List3DNodesQuery,
   ): CursorAndAsyncIterator<Node3D> => {
     return this.nodes3DApi.listAncestors(modelId, revisionId, nodeId, query);
   };

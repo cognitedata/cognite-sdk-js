@@ -1,5 +1,8 @@
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
   GeospatialCRSResponse,
   GeospatialCoordinateReferenceSystem,
   GeospatialSridId,
@@ -20,7 +23,7 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * ```
    */
   public create = (
-    crs: GeospatialCoordinateReferenceSystem[]
+    crs: GeospatialCoordinateReferenceSystem[],
   ): Promise<GeospatialCRSResponse[]> => {
     return this.createEndpoint<GeospatialCoordinateReferenceSystem>(crs);
   };
@@ -33,7 +36,7 @@ export class CrsAPI extends BaseResourceAPI<GeospatialCRSResponse> {
    * ```
    */
   public retrieve = (
-    srids: GeospatialSridId[]
+    srids: GeospatialSridId[],
   ): Promise<GeospatialCRSResponse[]> => {
     // @ts-ignore geospatial team should accept ids probably to be in synergy with sdk
     return this.retrieveEndpoint<object, GeospatialSridId>(srids);

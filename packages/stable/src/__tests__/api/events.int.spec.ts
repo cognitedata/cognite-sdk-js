@@ -1,7 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Asset, CogniteEvent, SortOrder } from '../../types';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import { type Asset, type CogniteEvent, SortOrder } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Events integration test', () => {
@@ -109,7 +110,7 @@ describe('Events integration test', () => {
 
   test('delete', async () => {
     await client.events.delete(
-      createdEvents.map((event) => ({ id: event.id }))
+      createdEvents.map((event) => ({ id: event.id })),
     );
   });
 
@@ -137,7 +138,7 @@ describe('Events integration test', () => {
             startTime: 'asc',
             lastUpdatedTime: 'desc',
           },
-        })
+        }),
       ).resolves.toBeDefined();
     });
   });
@@ -149,7 +150,7 @@ describe('Events integration test', () => {
           filter: {
             startTime: {
               min: events[0].startTime - 1,
-              max: events[0].endTime! + 1,
+              max: (events[0].endTime ?? 0) + 1,
             },
           },
           // partition: '1/10', TODO: Test why events with partition are not passing
@@ -177,7 +178,7 @@ describe('Events integration test', () => {
     test('externalIdPrefix', async () => {
       const { items } = await client.events.list({
         filter: {
-          assetExternalIds: [asset.externalId!],
+          assetExternalIds: [asset.externalId || ''],
         },
         limit: 1,
       });

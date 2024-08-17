@@ -20,13 +20,13 @@ export { CogniteError } from './error';
 export { CogniteMultiError } from './multiError';
 export { CogniteLoginError } from './loginError';
 export { HttpError } from './httpClient/httpError';
+export { HttpResponseType } from './httpClient/basicHttpClient';
 export type {
   HttpResponse,
-  HttpResponseType,
   HttpQueryParams,
   HttpRequestOptions,
-  HttpMethod,
 } from './httpClient/basicHttpClient';
+export { HttpMethod } from './httpClient/basicHttpClient';
 export type { HttpHeaders } from './httpClient/httpHeaders';
 export {
   createUniversalRetryValidator,

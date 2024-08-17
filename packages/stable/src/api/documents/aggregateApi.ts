@@ -2,25 +2,25 @@
 
 import {
   BaseResourceAPI,
-  CursorResponse,
-  FilterQuery,
-  HttpResponse,
-  ItemsWrapper,
+  type CursorResponse,
+  type FilterQuery,
+  type HttpResponse,
+  type ItemsWrapper,
 } from '@cognite/sdk-core';
-import {
+import type {
+  DocumentsAggregateAllUniquePropertiesItem,
+  DocumentsAggregateAllUniquePropertiesRequest,
+  DocumentsAggregateAllUniquePropertiesResponse,
   DocumentsAggregateAllUniqueValuesItem,
   DocumentsAggregateAllUniqueValuesRequest,
   DocumentsAggregateAllUniqueValuesResponse,
   DocumentsAggregateCountItem,
   DocumentsAggregateCountRequest,
   DocumentsAggregateRequest,
+  DocumentsAggregateUniquePropertiesItem,
+  DocumentsAggregateUniquePropertiesRequest,
   DocumentsAggregateUniqueValuesItem,
   DocumentsAggregateUniqueValuesRequest,
-  DocumentsAggregateUniquePropertiesRequest,
-  DocumentsAggregateUniquePropertiesItem,
-  DocumentsAggregateAllUniquePropertiesRequest,
-  DocumentsAggregateAllUniquePropertiesResponse,
-  DocumentsAggregateAllUniquePropertiesItem,
 } from '../../types';
 
 /**
@@ -31,7 +31,7 @@ import {
  */
 export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
   public count = (
-    request: Omit<DocumentsAggregateCountRequest, 'aggregate'>
+    request: Omit<DocumentsAggregateCountRequest, 'aggregate'>,
   ): Promise<number> => {
     return this.aggregate<DocumentsAggregateCountItem>({
       ...request,
@@ -40,7 +40,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
   };
 
   public uniqueValues = (
-    request: Omit<DocumentsAggregateUniqueValuesRequest, 'aggregate'>
+    request: Omit<DocumentsAggregateUniqueValuesRequest, 'aggregate'>,
   ): Promise<DocumentsAggregateUniqueValuesItem[]> => {
     return this.aggregate<DocumentsAggregateUniqueValuesItem>({
       ...request,
@@ -49,7 +49,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
   };
 
   public allUniqueValues = (
-    request: Omit<DocumentsAggregateAllUniqueValuesRequest, 'aggregate'>
+    request: Omit<DocumentsAggregateAllUniqueValuesRequest, 'aggregate'>,
   ): DocumentsAggregateAllUniqueValuesResponse => {
     return this.cursorBasedEndpoint<
       DocumentsAggregateAllUniqueValuesRequest,
@@ -61,7 +61,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
   };
 
   public uniqueProperties = (
-    request: Omit<DocumentsAggregateUniquePropertiesRequest, 'aggregate'>
+    request: Omit<DocumentsAggregateUniquePropertiesRequest, 'aggregate'>,
   ): Promise<DocumentsAggregateUniquePropertiesItem[]> => {
     return this.aggregate<DocumentsAggregateUniquePropertiesItem>({
       ...request,
@@ -70,7 +70,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
   };
 
   public allUniqueProperties = (
-    request: Omit<DocumentsAggregateAllUniquePropertiesRequest, 'aggregate'>
+    request: Omit<DocumentsAggregateAllUniquePropertiesRequest, 'aggregate'>,
   ): DocumentsAggregateAllUniquePropertiesResponse => {
     return this.cursorBasedEndpoint<
       DocumentsAggregateAllUniquePropertiesRequest,
@@ -83,9 +83,9 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
 
   private callAggregateCursorEndpointWithPost = async <
     QueryType extends FilterQuery,
-    Item
+    Item,
   >(
-    scope?: QueryType
+    scope?: QueryType,
   ): Promise<HttpResponse<CursorResponse<Item[]>>> => {
     const response = await this.post<CursorResponse<Item[]>>(this.url(), {
       data: scope,
@@ -94,7 +94,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
   };
 
   private async aggregate<Item>(
-    request: DocumentsAggregateRequest
+    request: DocumentsAggregateRequest,
   ): Promise<Item[]> {
     const response = await this.post<ItemsWrapper<Item[]>>(this.url(), {
       data: request,

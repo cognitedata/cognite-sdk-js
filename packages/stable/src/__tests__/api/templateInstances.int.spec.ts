@@ -1,9 +1,21 @@
 // Copyright 2020 Cognite AS
 
-import { ExternalTemplateInstance, TemplateInstance } from '../../types';
-import CogniteClient from '../../cogniteClient';
+// @ts-nocheck
+
+import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  test,
+} from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { ExternalTemplateInstance, TemplateInstance } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
-import { randomInt } from '@cognite/sdk-core/src/testUtils';
 
 describe('template instances test', () => {
   let client: CogniteClient;
@@ -181,7 +193,7 @@ describe('template instances test', () => {
   });
 
   function toExternalTemplateInstance(
-    instance: TemplateInstance
+    instance: TemplateInstance,
   ): ExternalTemplateInstance {
     return {
       externalId: instance.externalId,

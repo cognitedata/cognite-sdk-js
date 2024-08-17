@@ -19,12 +19,14 @@ import {
 export class CDFHttpClient extends RetryableHttpClient {
   private static serializeQueryParameters(
     params: HttpQueryParams = {},
-  ): HttpQueryParams {
-    return Object.keys(params).reduce((serializedParams, key) => {
-      const param = params[key];
-      serializedParams[key] = isJson(param) ? JSON.stringify(param) : param;
-      return serializedParams;
-    }, {} as HttpQueryParams);
+  ): Record<string, string> {
+    return Object.entries(params).reduce(
+      (serializedParams, [key, value]) => {
+        serializedParams[key] = isJson(value) ? JSON.stringify(value) : value;
+        return serializedParams;
+      },
+      {} as Record<string, string>,
+    );
   }
 
   private static isSameOrigin(baseUrl: string, url: string) {

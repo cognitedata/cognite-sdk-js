@@ -2,25 +2,25 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  HttpHeaders,
+  type CursorAndAsyncIterator,
+  type HttpHeaders,
   sleepPromise,
 } from '@cognite/sdk-core';
-import {
+import type {
   CogniteInternalId,
   ExternalFileInfo,
   FileAggregate,
   FileAggregateQuery,
   FileChangeUpdate,
   FileContent,
+  FileInfo,
   FileLink,
   FileRequestFilter,
-  FileInfo,
+  FileUploadResponse,
   FilesSearchFilter,
   IdEither,
   IgnoreUnknownIds,
   ItemsWrapper,
-  FileUploadResponse,
 } from '../../types';
 
 export class FilesAPI extends BaseResourceAPI<FileInfo> {
@@ -37,7 +37,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
         'sourceCreatedTime',
         'sourceModifiedTime',
         'uploadedTime',
-      ]
+      ],
     );
   }
 
@@ -57,14 +57,14 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
   public upload = (
     fileInfo: ExternalFileInfo,
     fileContent?: FileContent,
-    overwrite: boolean = false,
-    waitUntilAcknowledged: boolean = false
+    overwrite = false,
+    waitUntilAcknowledged = false,
   ): Promise<FileUploadResponse | FileInfo> => {
     return this.uploadEndpoint(
       fileInfo,
       fileContent,
       overwrite,
-      waitUntilAcknowledged
+      waitUntilAcknowledged,
     );
   };
 
@@ -77,7 +77,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * ```
    */
   public list = (
-    scope?: FileRequestFilter
+    scope?: FileRequestFilter,
   ): CursorAndAsyncIterator<FileInfo> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
@@ -104,7 +104,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    */
   public retrieve = (
     ids: IdEither[],
-    params: FileRetrieveParams = {}
+    params: FileRetrieveParams = {},
   ): Promise<FileInfo[]> => {
     return super.retrieveEndpoint(ids, params);
   };
@@ -162,7 +162,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * ```
    */
   public getDownloadUrls = (
-    ids: IdEither[]
+    ids: IdEither[],
   ): Promise<(FileLink & IdEither)[]> => {
     return this.getDownloadUrlsEndpoint(ids);
   };
@@ -170,13 +170,13 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
   private async uploadEndpoint(
     fileInfo: ExternalFileInfo,
     fileContent?: FileContent,
-    overwrite: boolean = false,
-    waitUntilAcknowledged: boolean = false
+    overwrite = false,
+    waitUntilAcknowledged = false,
   ) {
     const hasFileContent = fileContent != null;
     if (!hasFileContent && waitUntilAcknowledged) {
       throw Error(
-        "Don't set waitUntilAcknowledged to true when you are not uploading a file"
+        "Don't set waitUntilAcknowledged to true when you are not uploading a file",
       );
     }
 
@@ -209,7 +209,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
 
   // TODO: refactor - similar to RetryableHttpClient.rawRequest
   private async waitUntilFileIsUploaded(
-    fileId: CogniteInternalId
+    fileId: CogniteInternalId,
   ): Promise<FileInfo> {
     const MAX_RETRIES = 10;
     const DELAY_IN_MS = 500;
@@ -229,7 +229,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
     const path = this.url('downloadlink');
     const response = await this.post<ItemsWrapper<(FileLink & IdEither)[]>>(
       path,
-      { data: { items } }
+      { data: { items } },
     );
     return this.addToMapAndReturn(response.data.items, response);
   }

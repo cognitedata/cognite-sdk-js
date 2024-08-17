@@ -2,20 +2,20 @@
 
 import {
   BaseResourceAPI,
-  CogniteAsyncIterator,
-  CursorAndAsyncIterator,
-  CursorResponse,
-  InternalId,
-  ListResponse,
+  type CogniteAsyncIterator,
+  type CursorAndAsyncIterator,
+  type CursorResponse,
+  type InternalId,
+  type ListResponse,
 } from '@cognite/sdk-core';
 
-import {
+import type {
   AnnotationChangeById,
   AnnotationCreate,
-  AnnotationSuggest,
   AnnotationFilterRequest,
-  AnnotationReverseLookupRequest,
   AnnotationModel,
+  AnnotationReverseLookupRequest,
+  AnnotationSuggest,
   AnnotationsAssetRef,
 } from '../../types';
 
@@ -108,7 +108,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    *
    */
   public list = (
-    filter: AnnotationFilterRequest
+    filter: AnnotationFilterRequest,
   ): CursorAndAsyncIterator<AnnotationModel> => {
     return this.listEndpoint(this.callListEndpointWithPost, filter);
   };
@@ -165,16 +165,16 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * const resourceIdsResponse = client.annotations.reverseLookup(assetQueryData);
    */
   public reverseLookup = (
-    filter: AnnotationReverseLookupRequest
+    filter: AnnotationReverseLookupRequest,
   ): Promise<ListResponse<AnnotationsAssetRef[]>> &
     CogniteAsyncIterator<AnnotationsAssetRef> => {
-    const path = this.url(`reverselookup`);
+    const path = this.url('reverselookup');
     return this.cursorBasedEndpoint(
       (params) =>
         this.post<CursorResponse<AnnotationsAssetRef[]>>(path, {
           data: params,
         }),
-      filter
+      filter,
     );
   };
 }

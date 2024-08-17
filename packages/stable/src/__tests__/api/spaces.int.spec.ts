@@ -1,7 +1,8 @@
 // Copyright 2024 Cognite AS
 
-import { SpaceCreateDefinition } from 'stable/src/types';
-import CogniteClient from '../../cogniteClient';
+import type { SpaceCreateDefinition } from 'stable/src/types';
+import { beforeAll, describe, expect, it } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Spaces integration test', () => {
@@ -30,26 +31,26 @@ describe('Spaces integration test', () => {
 
     expect(createdSpaceResponse.items).toHaveLength(2);
     expect(createdSpaceResponse.items[0].name).toEqual(
-      spaceCreationDefinition.name
+      spaceCreationDefinition.name,
     );
     expect(createdSpaceResponse.items[0].space).toEqual(
-      spaceCreationDefinition.space
+      spaceCreationDefinition.space,
     );
     expect(createdSpaceResponse.items[1].name).toEqual(
-      spaceCreation2Definition.name
+      spaceCreation2Definition.name,
     );
     expect(createdSpaceResponse.items[1].space).toEqual(
-      spaceCreation2Definition.space
+      spaceCreation2Definition.space,
     );
   });
 
   it('should successfully list spaces', async () => {
     const spaces = await client.spaces.list({ limit: 1000 });
     const space1 = spaces.items.find(
-      (space) => space.space === spaceCreationDefinition.space
+      (space) => space.space === spaceCreationDefinition.space,
     );
     const space2 = spaces.items.find(
-      (space) => space.space === spaceCreation2Definition.space
+      (space) => space.space === spaceCreation2Definition.space,
     );
     expect(space1).toBeDefined();
     expect(space2).toBeDefined();
@@ -91,13 +92,13 @@ describe('Spaces integration test', () => {
     const spaces = await client.spaces.list({ limit: 1000 });
     expect(
       spaces.items.find(
-        (space) => space.space === spaceCreationDefinition.space
-      )
+        (space) => space.space === spaceCreationDefinition.space,
+      ),
     ).toBeUndefined();
     expect(
       spaces.items.find(
-        (space) => space.space === spaceCreation2Definition.space
-      )
+        (space) => space.space === spaceCreation2Definition.space,
+      ),
     ).toBeUndefined();
   });
 });

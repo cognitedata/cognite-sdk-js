@@ -1,6 +1,7 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
+import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('Projects integration test', () => {

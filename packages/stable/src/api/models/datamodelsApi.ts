@@ -1,7 +1,7 @@
 // Copyright 2023 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
-import {
+import { BaseResourceAPI } from '@cognite/sdk-core';
+import type {
   AllVersionsQueryParameter,
   CursorQueryParameter,
   DataModel,
@@ -17,10 +17,6 @@ import {
 } from './types.gen';
 
 export class DataModelsAPI extends BaseResourceAPI<DataModel> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   /**
    * [Upsert datamodels](https://api-docs.cognite.com/20230101/tag/Data-models/operation/createDataModels)
    *
@@ -40,7 +36,7 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
    * ```
    */
   public upsert = async (
-    params: DataModelCreate[]
+    params: DataModelCreate[],
   ): Promise<DataModelCollectionResponse> => {
     const response = await this.post<DataModelCollectionResponse>(this.url(), {
       data: { items: params },
@@ -57,7 +53,7 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
    * ```
    */
   public delete = async (
-    params: ListOfVersionReferences['items']
+    params: ListOfVersionReferences['items'],
   ): Promise<ListOfVersionReferences> => {
     const response = await this.post<ListOfVersionReferences>(this.deleteUrl, {
       data: { items: params },
@@ -79,7 +75,7 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
       CursorQueryParameter &
       ReducedLimitQueryParameter &
       AllVersionsQueryParameter &
-      InlineViewsQueryParameter = { includeGlobal: false }
+      InlineViewsQueryParameter = { includeGlobal: false },
   ): DataModelCollectionResponseWithCursorResponse => {
     return super.listEndpoint(this.callListEndpointWithGet, params);
   };
@@ -94,14 +90,14 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
    */
   public retrieve = async (
     params: (ListOfVersionReferences | ListOfAllVersionsReferences)['items'],
-    options: InlineViewsQueryParameter = {}
+    options: InlineViewsQueryParameter = {},
   ): Promise<DataModelCollectionResponse> => {
     const response = await this.post<DataModelCollectionResponse>(
       this.byIdsUrl,
       {
         data: { items: params },
         params: { ...options },
-      }
+      },
     );
     return response.data;
   };

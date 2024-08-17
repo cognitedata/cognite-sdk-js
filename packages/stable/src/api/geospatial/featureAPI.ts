@@ -1,17 +1,17 @@
 import {
   BaseResourceAPI,
-  CogniteExternalId,
-  ExternalId,
+  type CogniteExternalId,
+  type ExternalId,
 } from '@cognite/sdk-core';
-import {
-  GeospatialFeatureResponse,
+import type {
   FeatureAggregateParams,
   GeospatialFeature,
-  GeospatialOutput,
   GeospatialFeatureListFilter,
+  GeospatialFeatureResponse,
   GeospatialFeatureSearchFilter,
   GeospatialFeatureSearchStreamFilter,
   GeospatialFeatureSearchStreamResponse,
+  GeospatialOutput,
 } from './types';
 
 export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
@@ -29,11 +29,11 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    */
   public create = (
     featureTypeExternalId: CogniteExternalId,
-    features: GeospatialFeature[]
+    features: GeospatialFeature[],
   ): Promise<GeospatialFeatureResponse[]> => {
     return this.createEndpoint<GeospatialFeature>(
       features,
-      this.url(`${featureTypeExternalId}/features`)
+      this.url(`${featureTypeExternalId}/features`),
     );
   };
 
@@ -50,14 +50,14 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
   public retrieve = (
     featureTypeExternalId: CogniteExternalId,
     externalIds: ExternalId[],
-    params?: GeospatialOutput
+    params?: GeospatialOutput,
   ): Promise<GeospatialFeatureResponse[]> => {
     return this.callEndpointWithMergeAndTransform(externalIds, (request) =>
       this.postInParallelWithAutomaticChunking({
         path: this.url(`${featureTypeExternalId}/features/byids`),
         items: request,
         params,
-      })
+      }),
     );
   };
 
@@ -75,11 +75,11 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    */
   public update = (
     featureTypeExternalId: CogniteExternalId,
-    changes: GeospatialFeature[]
+    changes: GeospatialFeature[],
   ): Promise<GeospatialFeatureResponse[]> => {
     return this.updateEndpoint(
       changes,
-      this.url(`${featureTypeExternalId}/features/update`)
+      this.url(`${featureTypeExternalId}/features/update`),
     );
   };
 
@@ -94,12 +94,12 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    */
   public delete = (
     featureTypeExternalId: CogniteExternalId,
-    externalIds: ExternalId[]
+    externalIds: ExternalId[],
   ) => {
     return this.deleteEndpoint(
       externalIds,
       {},
-      this.url(`${featureTypeExternalId}/features/delete`)
+      this.url(`${featureTypeExternalId}/features/delete`),
     );
   };
 
@@ -123,11 +123,11 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    */
   public search = (
     featureTypeExternalId: CogniteExternalId,
-    params: GeospatialFeatureSearchFilter = {}
+    params: GeospatialFeatureSearchFilter = {},
   ): Promise<GeospatialFeatureResponse[]> => {
     return this.searchEndpoint(
       params,
-      this.url(`${featureTypeExternalId}/features/search`)
+      this.url(`${featureTypeExternalId}/features/search`),
     );
   };
 
@@ -151,14 +151,14 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    */
   public searchStream = (
     featureTypeExternalId: CogniteExternalId,
-    params: GeospatialFeatureSearchStreamFilter = {}
+    params: GeospatialFeatureSearchStreamFilter = {},
   ): Promise<GeospatialFeatureSearchStreamResponse> => {
     return this.callSearchEndpoint<
       GeospatialFeatureSearchStreamFilter,
       GeospatialFeatureSearchStreamResponse
     >(
       params,
-      this.url(`${featureTypeExternalId}/features/search-streaming`)
+      this.url(`${featureTypeExternalId}/features/search-streaming`),
       // not using addToMapAndReturn in then as WeakMap does not accept primitive values as key and we've string as our response
     ).then((response) => response.data);
   };
@@ -184,11 +184,11 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    */
   public aggregate = (
     featureTypeExternalId: CogniteExternalId,
-    params?: FeatureAggregateParams
+    params?: FeatureAggregateParams,
   ) => {
     return this.aggregateEndpoint(
       params,
-      this.url(`${featureTypeExternalId}/features/aggregate`)
+      this.url(`${featureTypeExternalId}/features/aggregate`),
     );
   };
 
@@ -210,12 +210,12 @@ export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {
    */
   public list = (
     featureTypeExternalId: CogniteExternalId,
-    filterParams: GeospatialFeatureListFilter = {}
+    filterParams: GeospatialFeatureListFilter = {},
   ) => {
     const path = this.url(`${featureTypeExternalId}/features/list`);
     return this.listEndpoint(
       async (params) => this.post(path, { data: params }),
-      filterParams
+      filterParams,
     );
   };
 }

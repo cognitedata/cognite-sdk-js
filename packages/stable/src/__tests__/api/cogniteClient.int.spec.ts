@@ -1,7 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Asset, ItemsWrapper } from '../../types';
+import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { Asset, ItemsWrapper } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('http methods - integration', () => {
@@ -14,7 +15,7 @@ describe('http methods - integration', () => {
     const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
     const response = await client.post<ItemsWrapper<Asset[]>>(
       `/api/v1/projects/${project}/assets`,
-      { data: { items: assets } }
+      { data: { items: assets } },
     );
     expect(response.data.items).toHaveLength(2);
   });

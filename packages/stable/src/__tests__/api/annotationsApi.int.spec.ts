@@ -1,19 +1,21 @@
 // Copyright 2022 Cognite AS
-import CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
-import {
+
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type {
   AnnotationChangeById,
   AnnotationCreate,
-  AnnotationSuggest,
   AnnotationFilterProps,
+  AnnotationSuggest,
+  AnnotationsExtractedText,
+  AnnotationsFileLink,
   InternalId,
 } from '../../types';
+import { setupLoggedInClient } from '../testUtils';
 
-const ANNOTATED_FILE_EXTERNAL_ID =
-  'sdk-integration-tests-file-' + new Date().toISOString();
+const ANNOTATED_FILE_EXTERNAL_ID = `sdk-integration-tests-file-${new Date().toISOString()}`;
 
-const UNIQUE_ASSET_EXTERNAL_ID =
-  'asset-external-ref-' + new Date().toISOString();
+const UNIQUE_ASSET_EXTERNAL_ID = `asset-external-ref-${new Date().toISOString()}`;
 
 function fileFilter(annotatedResourceId: number): AnnotationFilterProps {
   return {
@@ -68,14 +70,14 @@ describe('Annotations API', () => {
         externalId: ANNOTATED_FILE_EXTERNAL_ID,
         name: ANNOTATED_FILE_EXTERNAL_ID,
       },
-      'This is the content of the Cognite JS SDK Annotations API test file'
+      'This is the content of the Cognite JS SDK Annotations API test file',
     );
     annotatedFileId = fileInfo.id;
     const annotations = baseAnnotations(annotatedFileId);
     const created = await client.annotations.create(annotations);
-    created.forEach((annotation) =>
-      createdAnnotationIds.push({ id: annotation.id })
-    );
+    for (const annotation of created) {
+      createdAnnotationIds.push({ id: annotation.id });
+    }
   });
 
   afterAll(async () => {
@@ -112,7 +114,7 @@ describe('Annotations API', () => {
     expect(annotation).toHaveProperty('createdTime');
     expect(annotation).toHaveProperty('lastUpdatedTime');
     expect(annotation.annotatedResourceType).toEqual(
-      partial.annotatedResourceType
+      partial.annotatedResourceType,
     );
     expect(annotation.annotatedResourceId).toEqual(partial.annotatedResourceId);
     expect(annotation.annotationType).toEqual(partial.annotationType);
@@ -120,7 +122,7 @@ describe('Annotations API', () => {
     expect(annotation.creatingAppVersion).toEqual(partial.creatingAppVersion);
     expect(annotation.status).toEqual(partial.status);
     expect(annotation).toHaveProperty('data');
-    const annotationData: any = annotation.data;
+    const annotationData = annotation.data as AnnotationsExtractedText;
     expect(annotationData.pageNumber).toEqual(data.pageNumber);
     expect(annotationData.textRegion.xMin).toEqual(data.textRegion.xMin);
     expect(annotationData.textRegion.xMax).toEqual(data.textRegion.xMax);
@@ -267,7 +269,7 @@ describe('Annotations API', () => {
     const updatedResp = await client.annotations.update(changes);
     const updated = updatedResp[0];
     expect(updated).toHaveProperty('data');
-    const updatedData: any = updated.data;
+    const updatedData = updated.data as AnnotationsFileLink;
     expect(updatedData.pageNumber).toEqual(data.pageNumber);
     expect(updatedData.fileRef.externalId).toEqual(data.fileRef.externalId);
     expect(updatedData.textRegion.xMin).toEqual(data.textRegion.xMin);

@@ -1,7 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
   DataSet,
   DataSetAggregate,
   DataSetAggregateQuery,
@@ -43,7 +46,7 @@ export class DataSetsAPI extends BaseResourceAPI<DataSet> {
    * ```
    */
   public list = (
-    query?: DataSetFilterRequest
+    query?: DataSetFilterRequest,
   ): CursorAndAsyncIterator<DataSet> => {
     return super.listEndpoint(this.callListEndpointWithPost, query);
   };
@@ -57,7 +60,7 @@ export class DataSetsAPI extends BaseResourceAPI<DataSet> {
    * ```
    */
   public aggregate = (
-    query: DataSetAggregateQuery
+    query: DataSetAggregateQuery,
   ): Promise<DataSetAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
@@ -71,7 +74,7 @@ export class DataSetsAPI extends BaseResourceAPI<DataSet> {
    */
   public retrieve = (
     ids: IdEither[],
-    params?: IgnoreUnknownIds
+    params?: IgnoreUnknownIds,
   ): Promise<DataSet[]> => {
     return super.retrieveEndpoint(ids, params);
   };
