@@ -13,7 +13,11 @@
   "repository": "cognitedata/cognite-sdk-js",
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "private": true,
-  "keywords": ["cognite", "sdk", "typescript"],
+  "keywords": [
+    "cognite",
+    "sdk",
+    "typescript"
+  ],
   "workspaces": [
     "packages/alpha",
     "packages/beta",

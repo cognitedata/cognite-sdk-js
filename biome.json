@@ -27,6 +27,7 @@
     "enabled": true,
     "indentStyle": "space",
     "ignore": [
+      "**/package.json",
       "**/dist/**/*",
       "samples/**/*",
       "packages/core/src/credentialsAuth.ts",
