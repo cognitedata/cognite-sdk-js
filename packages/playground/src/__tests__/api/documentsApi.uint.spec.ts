@@ -764,16 +764,16 @@ describe('Documents unit test', () => {
 
     const preview = client.documents.preview;
     expect(preview.buildPreviewURI(1, 'image/png')).toEqual(
-      base('/preview/?documentId=1&page=0'),
+      base('/preview/?documentId=1&page=0')
     );
     expect(preview.buildPreviewURI(4, 'application/pdf')).toEqual(
-      base('/preview/?documentId=4'),
+      base('/preview/?documentId=4')
     );
     expect(preview.buildPreviewURI(4, 'image/png')).toEqual(
-      base('/preview/?documentId=4&page=0'),
+      base('/preview/?documentId=4&page=0')
     );
     expect(preview.buildPreviewURI(4, 'image/png', 2)).toEqual(
-      base('/preview/?documentId=4&page=2'),
+      base('/preview/?documentId=4&page=2')
     );
   });
 
@@ -848,7 +848,7 @@ describe('Documents unit test', () => {
         });
       const resp = await client.documents.classifiers.listByIds(
         [1, 2, 3],
-        true,
+        true
       );
       expect(resp.items[0].id).toEqual(1);
     });

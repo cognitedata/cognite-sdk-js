@@ -44,7 +44,7 @@ export class Models3DAPI extends BaseResourceAPI<Model3D> {
    * ```
    */
   public list = (
-    scope?: Model3DListRequest,
+    scope?: Model3DListRequest
   ): CursorAndAsyncIterator<Model3D> => {
     return super.listEndpoint(this.callListEndpointWithGet, scope);
   };

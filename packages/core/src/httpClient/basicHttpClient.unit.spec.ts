@@ -113,7 +113,7 @@ describe('BasicHttpClient', () => {
           error: { code: 500, message: 'Internal server error' },
         });
       await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
-        '[Error: Request failed | status code: 500]',
+        '[Error: Request failed | status code: 500]'
       );
     });
 

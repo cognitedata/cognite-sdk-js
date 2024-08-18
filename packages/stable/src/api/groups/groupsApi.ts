@@ -71,7 +71,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    * ```
    */
   public listServiceAccounts = async (
-    groupId: CogniteInternalId,
+    groupId: CogniteInternalId
   ): Promise<GroupServiceAccount[]> => {
     const path = this.encodeServiceAccountUrl(groupId);
     const response = await this.get<ItemsWrapper<GroupServiceAccount[]>>(path);
@@ -87,7 +87,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    */
   public addServiceAccounts = async (
     groupId: CogniteInternalId,
-    serviceAccountIds: CogniteInternalId[],
+    serviceAccountIds: CogniteInternalId[]
   ): Promise<object> => {
     const path = this.encodeServiceAccountUrl(groupId);
     const response = await this.post<object>(path, {
@@ -105,7 +105,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    */
   public removeServiceAccounts = async (
     groupId: CogniteInternalId,
-    serviceAccountIds: CogniteInternalId[],
+    serviceAccountIds: CogniteInternalId[]
   ): Promise<object> => {
     const path = `${this.encodeServiceAccountUrl(groupId)}/remove`;
     const response = await this.post<object>(path, {

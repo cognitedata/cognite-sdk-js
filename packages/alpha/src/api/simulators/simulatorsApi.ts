@@ -60,43 +60,43 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
     this.integrationsApi = new IntegrationsAPI(
       `${resourcePath}/integrations`,
       client,
-      metadataMap,
+      metadataMap
     );
 
     this.runsApi = new SimulationRunsAPI(
       `${resourcePath}/runs`,
       client,
-      metadataMap,
+      metadataMap
     );
 
     this.runDataApi = new SimulationRunDataAPI(
       `${resourcePath}/runs/data`,
       client,
-      metadataMap,
+      metadataMap
     );
 
     this.modelsApi = new ModelsAPI(
       `${resourcePath}/models`,
       client,
-      metadataMap,
+      metadataMap
     );
 
     this.modelRevisionsApi = new ModelRevisionsAPI(
       `${resourcePath}/models/revisions`,
       client,
-      metadataMap,
+      metadataMap
     );
 
     this.routinesApi = new RoutinesAPI(
       `${resourcePath}/routines`,
       client,
-      metadataMap,
+      metadataMap
     );
 
     this.routineRevisionsApi = new RoutineRevisionsAPI(
       `${resourcePath}/routines/revisions`,
       client,
-      metadataMap,
+      metadataMap
     );
 
     this.logsApi = new LogsAPI(`${resourcePath}/logs`, client, metadataMap);
@@ -119,7 +119,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   };
 
   public listIntegrations = async (
-    filter?: SimulatorIntegrationFilterQuery,
+    filter?: SimulatorIntegrationFilterQuery
   ) => {
     return this.integrationsApi.list(filter);
   };
@@ -169,7 +169,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   };
 
   public listModelRevisions = async (
-    filter?: SimulatorModelRevisionFilterQuery,
+    filter?: SimulatorModelRevisionFilterQuery
   ) => {
     return this.modelRevisionsApi.list(filter);
   };
@@ -179,7 +179,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   };
 
   public createModelRevisions = async (
-    items: SimulatorModelRevisionCreate[],
+    items: SimulatorModelRevisionCreate[]
   ) => {
     return this.modelRevisionsApi.create(items);
   };
@@ -189,7 +189,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   };
 
   public updateModelRevisions = async (
-    changes: SimulatorModelRevisionChange[],
+    changes: SimulatorModelRevisionChange[]
   ) => {
     return this.modelRevisionsApi.update(changes);
   };
@@ -207,7 +207,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   };
 
   public listRoutineRevisions = async (
-    filter?: SimulatorRoutineRevisionslFilterQuery,
+    filter?: SimulatorRoutineRevisionslFilterQuery
   ) => {
     return this.routineRevisionsApi.list(filter);
   };
@@ -217,7 +217,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   };
 
   public createRoutineRevisions = async (
-    items: SimulatorRoutineRevisionCreate[],
+    items: SimulatorRoutineRevisionCreate[]
   ) => {
     return this.routineRevisionsApi.create(items);
   };

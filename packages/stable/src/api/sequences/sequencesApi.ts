@@ -29,13 +29,13 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
   constructor(
     resourcePath: string,
     httpClient: CDFHttpClient,
-    map: MetadataMap,
+    map: MetadataMap
   ) {
     super(resourcePath, httpClient, map);
     this.sequenceRowsAPI = new SequenceRowsAPI(
       `${this.url()}data`,
       httpClient,
-      map,
+      map
     );
   }
 
@@ -45,7 +45,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
   protected getDateProps() {
     return this.pickDateProps(
       ['items', 'columns'],
-      ['createdTime', 'lastUpdatedTime'],
+      ['createdTime', 'lastUpdatedTime']
     );
   }
 
@@ -87,7 +87,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * ```
    */
   public list = (
-    scope?: SequenceListScope,
+    scope?: SequenceListScope
   ): CursorAndAsyncIterator<Sequence> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
@@ -113,7 +113,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    */
   public retrieve = (
     ids: IdEither[],
-    params: SequenceRetrieveParams = {},
+    params: SequenceRetrieveParams = {}
   ): Promise<Sequence[]> => {
     return super.retrieveEndpoint(ids, params);
   };
@@ -182,7 +182,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * ```
    */
   public retrieveRows = (
-    query: SequenceRowsRetrieve,
+    query: SequenceRowsRetrieve
   ): CursorAndAsyncIterator<SequenceRow> => {
     return this.sequenceRowsAPI.retrieve(query);
   };

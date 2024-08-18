@@ -26,7 +26,7 @@ const upsertSpace = async (client: CogniteClient, space: SpaceDefinition) => {
 const upsertDescribables = async (
   client: CogniteClient,
   describables: Describable[],
-  view: ViewReference,
+  view: ViewReference
 ) => {
   await client.instances.upsert({
     items: describables.map((describable) => ({
@@ -258,7 +258,7 @@ describe('Instances integration test', () => {
     expect(response.items[0].aggregates[0].aggregate).toBe('count');
     expect(
       response.items[0].aggregates[0].aggregate === 'count' &&
-        (response.items[0].aggregates[0].value || 0),
+        (response.items[0].aggregates[0].value || 0)
     ).toBeGreaterThan(0);
   });
 

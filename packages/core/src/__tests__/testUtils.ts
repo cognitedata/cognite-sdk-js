@@ -51,7 +51,7 @@ export async function retryInSeconds<ResponseType>(
   func: () => Promise<ResponseType>,
   secondsBetweenRetries = 3,
   statusCodeToRetry = 404,
-  finishAfterSeconds = 300,
+  finishAfterSeconds = 300
 ): Promise<ResponseType> {
   const timeStart = Date.now();
   while (Date.now() - timeStart < finishAfterSeconds * 1000) {
@@ -68,7 +68,7 @@ export async function retryInSeconds<ResponseType>(
 }
 
 export async function runTestWithRetryWhenFailing(
-  testFunction: () => Promise<void>,
+  testFunction: () => Promise<void>
 ) {
   vi.setConfig({
     testTimeout: 3 * 60 * 1000,
@@ -95,7 +95,7 @@ export async function runTestWithRetryWhenFailing(
 export function createErrorResponse(
   status: number,
   message: string,
-  extra: object = {},
+  extra: object = {}
 ) {
   return {
     error: {

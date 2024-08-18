@@ -32,7 +32,7 @@ describe('Labels unit test', () => {
         /\/labels/,
         matches({
           items: externalLabels,
-        }),
+        })
       )
       .once()
       .reply(201, {

@@ -15,7 +15,7 @@ export class MetadataMap {
 
   public addAndReturn<T extends object, V>(
     value: T,
-    metadata: HttpResponse<V>,
+    metadata: HttpResponse<V>
   ): T {
     this.map.set(value, {
       // we extract out only what is necessary

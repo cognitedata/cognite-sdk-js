@@ -10,7 +10,7 @@ export class LogsAPI extends BaseResourceAPI<SimulatorLog> {
   protected getDateProps() {
     return this.pickDateProps<SimulatorLog & SimulatorLogData>(
       ['items', 'data'],
-      ['createdTime', 'lastUpdatedTime', 'timestamp'],
+      ['createdTime', 'lastUpdatedTime', 'timestamp']
     );
   }
 

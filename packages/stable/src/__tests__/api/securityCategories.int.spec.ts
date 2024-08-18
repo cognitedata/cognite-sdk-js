@@ -18,7 +18,7 @@ describe('Security categories integration test', () => {
       { name: `Security category 2 ${randomInt()}` },
     ];
     securityCategories = await client.securityCategories.create(
-      securityCategoriesToCreate,
+      securityCategoriesToCreate
     );
     expect(securityCategories.length).toBe(securityCategoriesToCreate.length);
     expect(securityCategories[0].name).toBeDefined();
@@ -36,7 +36,7 @@ describe('Security categories integration test', () => {
 
   test('delete', async () => {
     const response = await client.securityCategories.delete(
-      securityCategories.map((category) => category.id),
+      securityCategories.map((category) => category.id)
     );
     expect(response).toEqual({});
   });

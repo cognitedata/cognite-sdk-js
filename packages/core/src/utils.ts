@@ -21,7 +21,7 @@ export const apiUrl = (apiVersion: CogniteAPIVersion = 'v1') =>
 /** @hidden */
 export function projectUrl(
   project: string,
-  apiVersion: CogniteAPIVersion = 'v1',
+  apiVersion: CogniteAPIVersion = 'v1'
 ) {
   return `${apiUrl(apiVersion)}/projects/${encodeURIComponent(project)}`;
 }
@@ -64,7 +64,7 @@ export function clearParametersFromUrl(...params: string[]): void {
 /** @hidden */
 export function removeQueryParameterFromUrl(
   url: string,
-  parameter: string,
+  parameter: string
 ): string {
   return url
     .replace(new RegExp(`[?#&]${parameter}=[^&#]*(#.*)?$`), '$1')
@@ -95,7 +95,7 @@ export function sleepPromise(durationInMs: number) {
 
 /** @hidden */
 export function promiseCache<ReturnValue>(
-  promiseFn: () => Promise<ReturnValue>,
+  promiseFn: () => Promise<ReturnValue>
 ) {
   let unresolvedPromise: Promise<ReturnValue> | null = null;
   return () => {
@@ -116,7 +116,7 @@ export function promiseCache<ReturnValue>(
 /** @hidden */
 export async function promiseAllAtOnce<RequestType, ResponseType>(
   inputs: RequestType[],
-  promiser: (input: RequestType) => Promise<ResponseType>,
+  promiser: (input: RequestType) => Promise<ResponseType>
 ) {
   const failed: RequestType[] = [];
   const succeded: RequestType[] = [];
@@ -142,7 +142,7 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
           .catch((error) => {
             resolve({ failed: inputs[index], error });
           });
-      }),
+      })
   );
 
   const results = await Promise.all(wrappedPromises);
@@ -168,7 +168,7 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
 export async function promiseAllWithData<RequestType, ResponseType>(
   inputs: RequestType[],
   promiser: (input: RequestType) => Promise<ResponseType>,
-  runSequentially: boolean,
+  runSequentially: boolean
 ) {
   try {
     if (runSequentially) {
@@ -177,7 +177,7 @@ export async function promiseAllWithData<RequestType, ResponseType>(
     return await promiseAllAtOnce(inputs, promiser);
   } catch (err) {
     throw new CogniteMultiError(
-      err as MultiErrorRawSummary<RequestType, ResponseType>,
+      err as MultiErrorRawSummary<RequestType, ResponseType>
     );
   }
 }
@@ -188,7 +188,7 @@ export async function promiseAllWithData<RequestType, ResponseType>(
 /** @hidden */
 export async function promiseEachInSequence<RequestType, ResponseType>(
   inputs: RequestType[],
-  promiser: (input: RequestType) => Promise<ResponseType>,
+  promiser: (input: RequestType) => Promise<ResponseType>
 ) {
   return inputs.reduce(async (previousPromise, input, index) => {
     const prevResult = await previousPromise;
@@ -213,7 +213,7 @@ export function isSameProject(project1: string, project2: string): boolean {
 /** @hidden */
 export function applyIfApplicable<ArgumentType, ResultType>(
   args: ArgumentType,
-  action?: (input: ArgumentType) => ResultType,
+  action?: (input: ArgumentType) => ResultType
 ) {
   if (action) {
     return action(args);
@@ -227,14 +227,14 @@ export function generatePopupWindow(url: string, name: string) {
     url,
     name,
     // https://www.quackit.com/javascript/popup_windows.cfm
-    'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes',
+    'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes'
   );
 }
 
 /** @hidden */
 export function createInvisibleIframe(
   url: string,
-  name: string,
+  name: string
 ): HTMLIFrameElement {
   const iframe = document.createElement('iframe');
   iframe.name = name;

@@ -30,7 +30,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     this.aggregateAPI = new DocumentsAggregateAPI(
       `${baseUrl}/aggregate`,
       httpClient,
-      map,
+      map
     );
   }
 
@@ -61,7 +61,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
    * ```
    */
   public search = (
-    query: DocumentSearchRequest,
+    query: DocumentSearchRequest
   ): Promise<DocumentSearchResponse> => {
     return this.searchDocuments<DocumentSearchResponse>(query);
   };
@@ -75,7 +75,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   };
 
   private async searchDocuments<ResponseType extends object>(
-    query: DocumentSearchRequest,
+    query: DocumentSearchRequest
   ): Promise<ResponseType> {
     const response = await this.post<ResponseType>(this.searchUrl, {
       data: query,

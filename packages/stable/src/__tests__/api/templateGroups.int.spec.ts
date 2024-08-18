@@ -42,21 +42,21 @@ describe('template group test', () => {
   it('should create template groups', async () => {
     const result = await client.templates.groups.create(templateGroups);
     expect(result.map(toExternalTemplateGroup)).toEqual(
-      expect.arrayContaining(expectedTemplateGroups),
+      expect.arrayContaining(expectedTemplateGroups)
     );
   });
 
   it('should upsert template groups', async () => {
     const result = await client.templates.groups.upsert(templateGroups);
     expect(result.map(toExternalTemplateGroup)).toEqual(
-      expect.arrayContaining(expectedTemplateGroups),
+      expect.arrayContaining(expectedTemplateGroups)
     );
   });
 
   it('should retrieve template groups', async () => {
     const result = await client.templates.groups.retrieve(templateGroups);
     expect(result.map(toExternalTemplateGroup)).toEqual(
-      expect.arrayContaining(expectedTemplateGroups),
+      expect.arrayContaining(expectedTemplateGroups)
     );
   });
 
@@ -65,20 +65,20 @@ describe('template group test', () => {
       .list()
       .autoPagingToArray({ limit: -1 });
     expect(result.map(toExternalTemplateGroup)).toEqual(
-      expect.arrayContaining(expectedTemplateGroups),
+      expect.arrayContaining(expectedTemplateGroups)
     );
   });
 
   it('should delete template groups', async () => {
     const result = await client.templates.groups.delete(
       [...templateGroups, { externalId: 'MISSING' }],
-      { ignoreUnknownIds: true },
+      { ignoreUnknownIds: true }
     );
     expect(result).toEqual({});
   });
 
   function toExternalTemplateGroup(
-    templateGroup: TemplateGroup,
+    templateGroup: TemplateGroup
   ): ExternalTemplateGroup {
     return {
       externalId: templateGroup.externalId,

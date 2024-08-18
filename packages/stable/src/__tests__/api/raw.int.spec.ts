@@ -106,7 +106,7 @@ describe('Raw integration test', () => {
       const result = await client.raw.insertRows(
         database.name,
         table.name,
-        rows,
+        rows
       );
       expect(result).toEqual({});
     });
@@ -155,7 +155,7 @@ describe('Raw integration test', () => {
       const row = await client.raw.retrieveRow(
         database.name,
         table.name,
-        rows[0].key,
+        rows[0].key
       );
       expect(row.lastUpdatedTime).toBeInstanceOf(Date);
       expect(row).toEqual({
@@ -179,7 +179,7 @@ describe('Raw integration test', () => {
         tmpDatabase.name,
         tmpTable.name,
         [tmpRow],
-        true,
+        true
       );
       await expect(client.raw.deleteDatabases([tmpDatabase])).rejects.toThrow();
       // clean up

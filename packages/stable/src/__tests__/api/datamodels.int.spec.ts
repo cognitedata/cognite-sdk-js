@@ -86,14 +86,14 @@ describe('Data models integration test', () => {
 
     expect(createdModelResponse.items).toHaveLength(1);
     expect(createdModelResponse.items[0].name).toEqual(
-      datamodelCreationDefinition.name,
+      datamodelCreationDefinition.name
     );
   });
 
   it('should successfully list datamodels', async () => {
     const dataModels = await client.dataModels.list({ limit: 1000 });
     const datamodel = dataModels.items.find(
-      (dm) => dm.externalId === datamodelCreationDefinition.externalId,
+      (dm) => dm.externalId === datamodelCreationDefinition.externalId
     );
     expect(datamodel).toBeDefined();
   });
@@ -145,7 +145,7 @@ describe('Data models integration test', () => {
       ],
       {
         inlineViews: true,
-      },
+      }
     );
 
     expect(datamodel.items.length).toBe(1);
@@ -177,16 +177,16 @@ describe('Data models integration test', () => {
           const dataModels = await client.dataModels.list({ limit: 1000 });
           expect(
             dataModels.items.find(
-              (dm) => dm.externalId === datamodelCreationDefinition.externalId,
-            ),
+              (dm) => dm.externalId === datamodelCreationDefinition.externalId
+            )
           ).toBeUndefined();
         },
         {
           timeout: 25 * 1000,
           interval: 1000,
-        },
+        }
       );
     },
-    25 * 1000,
+    25 * 1000
   );
 });

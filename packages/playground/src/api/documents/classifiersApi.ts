@@ -15,7 +15,7 @@ import type {
 
 export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
   public create = (
-    classifierConfigurations: DocumentsClassifierCreate[],
+    classifierConfigurations: DocumentsClassifierCreate[]
   ): Promise<DocumentsClassifier[]> => {
     return this.createEndpoint(classifierConfigurations);
   };
@@ -26,11 +26,11 @@ export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
 
   public listByIds = (
     ids: CogniteInternalId[],
-    ignoreUnknownIds = false,
+    ignoreUnknownIds = false
   ): Promise<DocumentsClassifiersResponse> => {
     return this.classifiersListByIds<DocumentsClassifiersResponse>(
       ids,
-      ignoreUnknownIds,
+      ignoreUnknownIds
     );
   };
 
@@ -42,7 +42,7 @@ export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
 
   private async classifiersListByIds<ResponseType extends object>(
     ids: CogniteInternalId[],
-    ignoreUnknownIds: boolean,
+    ignoreUnknownIds: boolean
   ): Promise<ResponseType> {
     const request: DocumentsClassifierListByIdsRequest = {
       items: ids.map((id) => ({ id })),
@@ -53,7 +53,7 @@ export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
     });
     return this.addToMapAndReturn<ResponseType, unknown>(
       response.data,
-      response,
+      response
     );
   }
 }

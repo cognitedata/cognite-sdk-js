@@ -95,7 +95,7 @@ class ConfigManager<T> {
   protected validateSnapshot = async (
     snapshot: SnapshotVersion | SnapshotPath,
     legalKeys: string[],
-    source: string,
+    source: string
   ): Promise<void> => {
     const snapshotKeys = Object.keys(snapshot);
     if (snapshotKeys.length !== 1) {
@@ -106,8 +106,8 @@ class ConfigManager<T> {
       const encapsulatedKeys = legalKeys.map((key) => `"${key}"`);
       throw new Error(
         `A ${source} config can only define ${encapsulatedKeys.join(
-          ' or ',
-        )} within "snapshot". Got "${snapshotKeys[0]}" instead`,
+          ' or '
+        )} within "snapshot". Got "${snapshotKeys[0]}" instead`
       );
     }
 
@@ -158,30 +158,30 @@ class ConfigManager<T> {
 
 export class PackageConfigManager extends ConfigManager<PackageConfig> {
   public writeDefaultConfig = async (
-    options: PackageOption & VersionOption,
+    options: PackageOption & VersionOption
   ): Promise<void> => {
     const config = this.defaultConfig(options);
     await this.write(config);
   };
 
   protected validate = async (
-    config: PackageConfig,
+    config: PackageConfig
   ): Promise<PackageConfig> => {
     await this.validateSnapshot(
       config.snapshot,
       ['version', 'path'],
-      'package',
+      'package'
     );
 
     return config;
   };
 
   public defaultConfig = (
-    options: PackageOption & VersionOption,
+    options: PackageOption & VersionOption
   ): PackageConfig => {
     if (options.version == null) {
       throw new Error(
-        '"Version" must be defined when creating a package config',
+        '"Version" must be defined when creating a package config'
       );
     }
 
@@ -195,14 +195,14 @@ export class PackageConfigManager extends ConfigManager<PackageConfig> {
 
 export class ServiceConfigManager extends ConfigManager<ServiceConfig> {
   public writeDefaultConfig = async (
-    options: PackageOption & ServiceOption,
+    options: PackageOption & ServiceOption
   ): Promise<void> => {
     const config = this.defaultConfig(options);
     await this.write(config);
   };
 
   protected validate = async (
-    config: ServiceConfig,
+    config: ServiceConfig
   ): Promise<ServiceConfig> => {
     if (config.service == null) {
       throw new Error('A service config must have "service" defined');
@@ -215,7 +215,7 @@ export class ServiceConfigManager extends ConfigManager<ServiceConfig> {
   };
 
   private defaultConfig = (
-    options: PackageOption & ServiceOption,
+    options: PackageOption & ServiceOption
   ): ServiceConfig => {
     return {
       service: options.service,
@@ -256,12 +256,12 @@ export async function cleanupService(options: CleanupServiceOptions) {
   const mngr = new ServiceConfigManager(option);
   if (!(await mngr.exists())) {
     throw new Error(
-      'Service is not configured for code generation - manual cleanup required',
+      'Service is not configured for code generation - manual cleanup required'
     );
   }
 
   fs.unlink(mngr.configPath());
   console.info(
-    `updated service - remember to regenerate package types: yarn codegen generate-types --package=${options.package} --service=${options.service}`,
+    `updated service - remember to regenerate package types: yarn codegen generate-types --package=${options.package} --service=${options.service}`
   );
 }

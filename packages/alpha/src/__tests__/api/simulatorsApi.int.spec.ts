@@ -106,7 +106,7 @@ describeIf('simulators api', () => {
     const response = await client.simulators.list({});
     expect(response.items.length).toBeGreaterThan(0);
     const simulatorFound = response.items.find(
-      (item) => item.externalId === simulatorExternalId,
+      (item) => item.externalId === simulatorExternalId
     );
     expect(simulatorFound?.externalId).toBe(simulatorExternalId);
   });
@@ -122,8 +122,8 @@ describeIf('simulators api', () => {
       const responseAfterDelete = await client.simulators.list();
       expect(
         responseAfterDelete.items.filter(
-          (res) => res.externalId === simulatorExternalId,
-        ).length,
+          (res) => res.externalId === simulatorExternalId
+        ).length
       ).toBe(0);
     }
   });

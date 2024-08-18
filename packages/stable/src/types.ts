@@ -1420,7 +1420,7 @@ export function isManagedInCDFGroup(group: Group): group is ManagedInCDFGroup {
 }
 
 export function isManagedExternallyGroup(
-  group: Group,
+  group: Group
 ): group is ManagedExternallyGroup {
   return !isManagedInCDFGroup(group);
 }
@@ -3244,7 +3244,7 @@ export class RawResolver implements FieldResolver {
     dbName: string,
     tableName: string,
     rowKey?: string,
-    columnName?: string,
+    columnName?: string
   ) {
     this.dbName = dbName;
     this.tableName = tableName;
@@ -3270,7 +3270,7 @@ export class SyntheticTimeSeriesResolver implements FieldResolver {
     description?: string,
     isStep?: boolean,
     isString?: boolean,
-    unit?: string,
+    unit?: string
   ) {
     this.expression = expression;
     this.name = name;

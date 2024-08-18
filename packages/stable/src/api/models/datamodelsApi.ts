@@ -36,7 +36,7 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
    * ```
    */
   public upsert = async (
-    params: DataModelCreate[],
+    params: DataModelCreate[]
   ): Promise<DataModelCollectionResponse> => {
     const response = await this.post<DataModelCollectionResponse>(this.url(), {
       data: { items: params },
@@ -53,7 +53,7 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
    * ```
    */
   public delete = async (
-    params: ListOfVersionReferences['items'],
+    params: ListOfVersionReferences['items']
   ): Promise<ListOfVersionReferences> => {
     const response = await this.post<ListOfVersionReferences>(this.deleteUrl, {
       data: { items: params },
@@ -75,7 +75,7 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
       CursorQueryParameter &
       ReducedLimitQueryParameter &
       AllVersionsQueryParameter &
-      InlineViewsQueryParameter = { includeGlobal: false },
+      InlineViewsQueryParameter = { includeGlobal: false }
   ): DataModelCollectionResponseWithCursorResponse => {
     return super.listEndpoint(this.callListEndpointWithGet, params);
   };
@@ -90,14 +90,14 @@ export class DataModelsAPI extends BaseResourceAPI<DataModel> {
    */
   public retrieve = async (
     params: (ListOfVersionReferences | ListOfAllVersionsReferences)['items'],
-    options: InlineViewsQueryParameter = {},
+    options: InlineViewsQueryParameter = {}
   ): Promise<DataModelCollectionResponse> => {
     const response = await this.post<DataModelCollectionResponse>(
       this.byIdsUrl,
       {
         data: { items: params },
         params: { ...options },
-      },
+      }
     );
     return response.data;
   };

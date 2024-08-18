@@ -10,13 +10,13 @@ import type {
 
 /** @hidden */
 export function makeAutoPaginationMethods<T>(
-  firstPagePromise: Promise<ListResponse<T[]>>,
+  firstPagePromise: Promise<ListResponse<T[]>>
 ) {
   let listPromise = firstPagePromise;
   let i = 0;
 
   function iterate(
-    listResult: ListResponse<T[]>,
+    listResult: ListResponse<T[]>
   ): IteratorResult<T> | Promise<IteratorResult<T>> {
     if (i < listResult.items.length) {
       return {
@@ -57,7 +57,7 @@ export function makeAutoPaginationMethods<T>(
 }
 
 function makeAutoPagingEach<T>(
-  asyncIteratorNext: () => Promise<IteratorResult<T>>,
+  asyncIteratorNext: () => Promise<IteratorResult<T>>
 ): AutoPagingEach<T> {
   return async function autoPagingEach(handler: AutoPagingEachHandler<T>) {
     async function iterate() {

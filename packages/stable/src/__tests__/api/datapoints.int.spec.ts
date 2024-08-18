@@ -202,7 +202,7 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
         start: new Date(2022, 9, 1),
         end: new Date(2022, 10, 30),
         aggregates: ['sum'],
-      },
+      }
     );
 
     expect(response[0].datapoints.length).toBe(2);
@@ -211,10 +211,10 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
     // Check timestamps
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 9, 1),
+      new Date(2022, 9, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 10, 1),
+      new Date(2022, 10, 1)
     );
 
     // check that there is two timeseries in the response
@@ -224,10 +224,10 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
     expect((response[1].datapoints[1] as DatapointAggregate).sum).toBe(50);
     // Check timestamps
     expect((response[1].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 9, 1),
+      new Date(2022, 9, 1)
     );
     expect((response[1].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 10, 1),
+      new Date(2022, 10, 1)
     );
   });
 
@@ -238,17 +238,17 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
         start: new Date(2022, 11, 1),
         end: new Date(2023, 0, 15),
         aggregates: ['sum'],
-      },
+      }
     );
     expect(response[0].datapoints.length).toBe(2);
     // Check that the response contains the correct number of data points
     expect((response[0].datapoints[0] as DatapointAggregate).sum).toBe(110);
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(150);
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 11, 1),
+      new Date(2022, 11, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2023, 0, 1),
+      new Date(2023, 0, 1)
     );
   });
 
@@ -259,7 +259,7 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
         start: new Date(2022, 9, 1),
         end: new Date(2022, 11, 30),
         aggregates: ['sum'],
-      },
+      }
     );
     expect(response[0].datapoints.length).toBe(3);
     // Check that the response contains the correct number of data points
@@ -267,13 +267,13 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[1] as DatapointAggregate).sum).toBe(70);
     expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110);
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 9, 1),
+      new Date(2022, 9, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 10, 1),
+      new Date(2022, 10, 1)
     );
     expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 11, 1),
+      new Date(2022, 11, 1)
     );
   });
 
@@ -284,7 +284,7 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
         start: new Date(2022, 9, 1),
         end: new Date(2023, 2, 15),
         aggregates: ['sum'],
-      },
+      }
     );
     expect(response[0].datapoints.length).toBe(5);
 
@@ -296,19 +296,19 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[4] as DatapointAggregate).sum).toBe(190); // March 2023
     // Check timestamps
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 9, 1),
+      new Date(2022, 9, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 10, 1),
+      new Date(2022, 10, 1)
     );
     expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 11, 1),
+      new Date(2022, 11, 1)
     );
     expect((response[0].datapoints[3] as DatapointAggregate).timestamp).toEqual(
-      new Date(2023, 0, 1),
+      new Date(2023, 0, 1)
     );
     expect((response[0].datapoints[4] as DatapointAggregate).timestamp).toEqual(
-      new Date(2023, 2, 1),
+      new Date(2023, 2, 1)
     );
 
     expect(response[1].datapoints.length).toBe(5);
@@ -321,19 +321,19 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
     expect((response[1].datapoints[4] as DatapointAggregate).sum).toBe(170); // March 2023
     // Check timestamps
     expect((response[1].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 9, 1),
+      new Date(2022, 9, 1)
     );
     expect((response[1].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 10, 1),
+      new Date(2022, 10, 1)
     );
     expect((response[1].datapoints[2] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 11, 1),
+      new Date(2022, 11, 1)
     );
     expect((response[1].datapoints[3] as DatapointAggregate).timestamp).toEqual(
-      new Date(2023, 1, 1),
+      new Date(2023, 1, 1)
     );
     expect((response[0].datapoints[4] as DatapointAggregate).timestamp).toEqual(
-      new Date(2023, 2, 1),
+      new Date(2023, 2, 1)
     );
   });
 
@@ -344,7 +344,7 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
         start: Date.parse('2022-01-01T00:00:00Z'),
         end: Date.parse('2022-12-15T23:59:59Z'),
         aggregates: ['sum'],
-      },
+      }
     );
     expect(response[0].datapoints.length).toBe(3);
 
@@ -354,13 +354,13 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110); // December 2022
     // Check timestamps
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 9, 1),
+      new Date(2022, 9, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 10, 1),
+      new Date(2022, 10, 1)
     );
     expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 11, 1),
+      new Date(2022, 11, 1)
     );
   });
 
@@ -371,7 +371,7 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
         start: new Date(2022, 9, 1),
         end: new Date(2023, 2, 15),
         aggregates: ['average'],
-      },
+      }
     );
     expect(response[0].datapoints.length).toBe(5);
 
@@ -383,19 +383,19 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[4] as DatapointAggregate).average).toBe(95);
     // Check timestamps
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 9, 1),
+      new Date(2022, 9, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 10, 1),
+      new Date(2022, 10, 1)
     );
     expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 11, 1),
+      new Date(2022, 11, 1)
     );
     expect((response[0].datapoints[3] as DatapointAggregate).timestamp).toEqual(
-      new Date(2023, 0, 1),
+      new Date(2023, 0, 1)
     );
     expect((response[0].datapoints[4] as DatapointAggregate).timestamp).toEqual(
-      new Date(2023, 2, 1),
+      new Date(2023, 2, 1)
     );
   });
 
@@ -406,7 +406,7 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
         start: Date.parse('2022-01-01T00:00:00+0100'),
         end: Date.parse('2022-12-12T00:00:00+0100'),
         aggregates: ['sum'],
-      },
+      }
     );
     expect(response[0].datapoints.length).toBe(3);
     // Check that the response contains the correct number of data points
@@ -415,13 +415,13 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110); // December 2022
     // Check timestamps
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 9, 1),
+      new Date(2022, 9, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 10, 1),
+      new Date(2022, 10, 1)
     );
     expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 11, 1),
+      new Date(2022, 11, 1)
     );
   });
   test('retrieve monthly granularity with local time zone in start/end - -0600', async () => {
@@ -431,7 +431,7 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
         start: Date.parse('2022-01-01T00:00:00-0600'),
         end: Date.parse('2022-12-12T00:00:00-0600'),
         aggregates: ['sum'],
-      },
+      }
     );
     expect(response[0].datapoints.length).toBe(3);
     // Check that the response contains the correct number of data points
@@ -440,13 +440,13 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
     expect((response[0].datapoints[2] as DatapointAggregate).sum).toBe(110); // December 2022
     // Check timestamps
     expect((response[0].datapoints[0] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 9, 1),
+      new Date(2022, 9, 1)
     );
     expect((response[0].datapoints[1] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 10, 1),
+      new Date(2022, 10, 1)
     );
     expect((response[0].datapoints[2] as DatapointAggregate).timestamp).toEqual(
-      new Date(2022, 11, 1),
+      new Date(2022, 11, 1)
     );
   });
   test('retrieve monthly granularity with empty result ste', async () => {
@@ -456,7 +456,7 @@ describe.skip('Datapoints integration test for monthly granularity', () => {
         start: new Date(2020, 9, 1),
         end: new Date(2020, 10, 30),
         aggregates: ['sum'],
-      },
+      }
     );
 
     expect(response[0].datapoints.length).toBe(0);

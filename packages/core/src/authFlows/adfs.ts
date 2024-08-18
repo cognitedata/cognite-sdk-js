@@ -76,7 +76,7 @@ export class ADFS {
       }
 
       const url = `${this.authority}?${this.getADFSQueryParamString(
-        this.queryParams,
+        this.queryParams
       )}`;
 
       window.location.href = url;
@@ -98,7 +98,7 @@ export class ADFS {
         ID_TOKEN,
         EXPIRES_IN,
         SCOPE,
-        TOKEN_TYPE,
+        TOKEN_TYPE
       );
       this.setToken(token);
 
@@ -139,14 +139,14 @@ export class ADFS {
     }
 
     const url = `${this.authority}?prompt=none&${this.getADFSQueryParamString(
-      this.queryParams,
+      this.queryParams
     )}`;
 
     try {
       token = await silentLoginViaIframe<ADFSToken | null>(
         url,
         extractADFSToken,
-        LOGIN_IFRAME_NAME,
+        LOGIN_IFRAME_NAME
       );
     } catch (e) {
       noop();
@@ -184,7 +184,7 @@ export class ADFS {
 
         return result;
       },
-      {} as ADFSQueryParams,
+      {} as ADFSQueryParams
     );
   }
 

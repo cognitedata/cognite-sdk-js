@@ -32,7 +32,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    * ```
    */
   public create = (
-    items: ExternalTemplateInstance[],
+    items: ExternalTemplateInstance[]
   ): Promise<TemplateInstance[]> => {
     return super
       .createEndpoint(TemplateInstanceCodec.encodeTemplateInstances(items))
@@ -51,12 +51,12 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    * ```
    */
   public upsert = (
-    items: ExternalTemplateInstance[],
+    items: ExternalTemplateInstance[]
   ): Promise<TemplateInstance[]> => {
     return super
       .createEndpoint(
         TemplateInstanceCodec.encodeTemplateInstances(items),
-        this.url('upsert'),
+        this.url('upsert')
       )
       .then(TemplateInstanceCodec.decodeTemplateInstances);
   };
@@ -89,7 +89,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    */
   public retrieve = (
     ids: ExternalId[],
-    options?: { ignoreUnknownIds: boolean },
+    options?: { ignoreUnknownIds: boolean }
   ) => {
     return super
       .retrieveEndpoint(ids, options || { ignoreUnknownIds: false })
@@ -104,7 +104,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    * ```
    */
   public list = (
-    query?: TemplateInstanceFilterQuery,
+    query?: TemplateInstanceFilterQuery
   ): CursorAndAsyncIterator<TemplateInstance> => {
     return super.listEndpoint(async (scope) => {
       const res = await this.callListEndpointWithPost(scope);
@@ -127,13 +127,13 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
    */
   public delete = (
     ids: ExternalId[],
-    options?: { ignoreUnknownIds: boolean },
+    options?: { ignoreUnknownIds: boolean }
   ) => {
     return super.deleteEndpoint(
       ids,
       options || {
         ignoreUnknownIds: false,
-      },
+      }
     );
   };
 }
@@ -141,13 +141,13 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
 // biome-ignore lint/complexity/noStaticOnlyClass: not worth changing
 class TemplateInstanceCodec {
   static encodeTemplateInstances(
-    templateInstances: ExternalTemplateInstance[],
+    templateInstances: ExternalTemplateInstance[]
   ): ExternalTemplateInstance[] {
     return templateInstances.map((item) => {
       return {
         ...item,
         fieldResolvers: TemplateInstanceCodec.encodeFieldResolvers(
-          item.fieldResolvers,
+          item.fieldResolvers
         ),
       };
     });
@@ -161,7 +161,7 @@ class TemplateInstanceCodec {
           add:
             'add' in patch.update.fieldResolvers
               ? TemplateInstanceCodec.encodeFieldResolvers(
-                  patch.update.fieldResolvers.add,
+                  patch.update.fieldResolvers.add
                 )
               : // biome-ignore lint/style/noNonNullAssertion: couldn't find correct type definition.
                 undefined!,
@@ -173,7 +173,7 @@ class TemplateInstanceCodec {
           set:
             'set' in patch.update.fieldResolvers
               ? TemplateInstanceCodec.encodeFieldResolvers(
-                  patch.update.fieldResolvers.set,
+                  patch.update.fieldResolvers.set
                 )
               : // biome-ignore lint/style/noNonNullAssertion: couldn't find correct type definition.
                 undefined!,
@@ -185,7 +185,7 @@ class TemplateInstanceCodec {
   static encodeFieldResolvers(
     fieldResolvers: {
       [K in string]: FieldResolver | object;
-    },
+    }
   ): { [K in string]: FieldResolver } {
     const mappedResolvers = toPairs(fieldResolvers).map(
       ([name, fieldResolver]) => {
@@ -197,20 +197,20 @@ class TemplateInstanceCodec {
           return [name, new ConstantResolver(fieldResolver)];
         }
         return [name, fieldResolver];
-      },
+      }
     );
 
     return fromPairs(mappedResolvers);
   }
 
   static decodeTemplateInstances(
-    templateInstances: TemplateInstance[],
+    templateInstances: TemplateInstance[]
   ): TemplateInstance[] {
     return templateInstances.map((item) => {
       return {
         ...item,
         fieldResolvers: TemplateInstanceCodec.decodeFieldResolvers(
-          item.fieldResolvers,
+          item.fieldResolvers
         ),
       };
     });
@@ -219,7 +219,7 @@ class TemplateInstanceCodec {
   static decodeFieldResolvers(
     fieldResolvers: {
       [K in string]: FieldResolver | object;
-    },
+    }
   ): { [K in string]: FieldResolver | object } {
     const mappedResolvers = toPairs(fieldResolvers).map(
       ([name, fieldResolver]) => {
@@ -228,7 +228,7 @@ class TemplateInstanceCodec {
           // biome-ignore lint/suspicious/noExplicitAny: couldn't find correct type definition.
           TemplateInstanceCodec.decodeFieldResolver(fieldResolver as any),
         ];
-      },
+      }
     );
 
     return fromPairs(mappedResolvers);
@@ -244,7 +244,7 @@ class TemplateInstanceCodec {
           fieldResolver.dbName,
           fieldResolver.tableName,
           fieldResolver.rowKey,
-          fieldResolver.columnName,
+          fieldResolver.columnName
         );
       case 'syntheticTimeSeries':
         return new SyntheticTimeSeriesResolver(
@@ -254,7 +254,7 @@ class TemplateInstanceCodec {
           fieldResolver.description,
           fieldResolver.isStep,
           fieldResolver.isString,
-          fieldResolver.unit,
+          fieldResolver.unit
         );
       case 'view':
         return new ViewResolver(fieldResolver.externalId, fieldResolver.input);

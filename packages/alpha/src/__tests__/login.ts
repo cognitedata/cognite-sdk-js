@@ -18,7 +18,7 @@ export const login = async () => {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-      },
+      }
     );
     const account = await response.json();
     return account;

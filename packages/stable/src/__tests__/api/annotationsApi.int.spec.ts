@@ -70,7 +70,7 @@ describe('Annotations API', () => {
         externalId: ANNOTATED_FILE_EXTERNAL_ID,
         name: ANNOTATED_FILE_EXTERNAL_ID,
       },
-      'This is the content of the Cognite JS SDK Annotations API test file',
+      'This is the content of the Cognite JS SDK Annotations API test file'
     );
     annotatedFileId = fileInfo.id;
     const annotations = baseAnnotations(annotatedFileId);
@@ -114,7 +114,7 @@ describe('Annotations API', () => {
     expect(annotation).toHaveProperty('createdTime');
     expect(annotation).toHaveProperty('lastUpdatedTime');
     expect(annotation.annotatedResourceType).toEqual(
-      partial.annotatedResourceType,
+      partial.annotatedResourceType
     );
     expect(annotation.annotatedResourceId).toEqual(partial.annotatedResourceId);
     expect(annotation.annotationType).toEqual(partial.annotationType);

@@ -15,7 +15,7 @@ describe('http methods - integration', () => {
     const assets = [{ name: 'First asset' }, { name: 'Second asset' }];
     const response = await client.post<ItemsWrapper<Asset[]>>(
       `/api/v1/projects/${project}/assets`,
-      { data: { items: assets } },
+      { data: { items: assets } }
     );
     expect(response.data.items).toHaveLength(2);
   });

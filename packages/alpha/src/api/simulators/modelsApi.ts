@@ -23,7 +23,7 @@ export class ModelsAPI extends BaseResourceAPI<SimulatorModel> {
   public list = async (filter?: SimulatorModelFilterQuery) => {
     return this.listEndpoint<SimulatorModelFilterQuery>(
       this.callListEndpointWithPost,
-      filter,
+      filter
     );
   };
 

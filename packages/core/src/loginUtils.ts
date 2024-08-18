@@ -128,7 +128,7 @@ export function loginWithRedirect(params: AuthorizeParams): Promise<void> {
 
 /** @hidden */
 export function loginWithPopup(
-  params: AuthorizeParams,
+  params: AuthorizeParams
 ): Promise<null | AuthTokens> {
   return new Promise((resolve, reject) => {
     const url = generateLoginUrl(params);
@@ -157,7 +157,7 @@ export async function silentLoginViaIframe<TokenType>(
   url: string,
   extractor: (query: string) => TokenType,
   iframeName: string = LOGIN_IFRAME_NAME,
-  locationPart: 'hash' | 'search' = 'hash',
+  locationPart: 'hash' | 'search' = 'hash'
 ): Promise<TokenType> {
   return new Promise<TokenType>((resolve, reject) => {
     const iframe = createInvisibleIframe(url, iframeName);
@@ -168,7 +168,7 @@ export async function silentLoginViaIframe<TokenType>(
           throw Error('Failed to login silently');
         }
         const authTokens = extractor(
-          iframe.contentWindow.location[locationPart],
+          iframe.contentWindow.location[locationPart]
         );
         if (authTokens === null) {
           throw Error('Failed to login silently');
@@ -200,7 +200,7 @@ function generateLoginUrl(params: AuthorizeParams): string {
  * @param credentials ClientCredentials
  */
 export function verifyCredentialsRequiredFields(
-  credentials: ClientCredentials,
+  credentials: ClientCredentials
 ): void {
   if (!isObject(credentials)) {
     throw Error('options.credentials is required');
@@ -208,7 +208,7 @@ export function verifyCredentialsRequiredFields(
 
   if (!credentials.method) {
     throw Error(
-      'options.credentials.method is required and must be of type string with one of this values: api, client_credentials, device, implicit, pkce',
+      'options.credentials.method is required and must be of type string with one of this values: api, client_credentials, device, implicit, pkce'
     );
   }
 
@@ -222,7 +222,7 @@ export function verifyCredentialsRequiredFields(
       !credentials[field.field]
     ) {
       throw Error(
-        `options.credentials.${field.field} is required and must be of type string`,
+        `options.credentials.${field.field} is required and must be of type string`
       );
     }
   }

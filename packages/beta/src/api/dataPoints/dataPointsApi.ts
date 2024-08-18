@@ -13,7 +13,7 @@ import type {
 
 export class DataPointsAPI extends DataPointsAPIStable {
   public retrieve = (
-    query: DatapointsMultiQuery,
+    query: DatapointsMultiQuery
   ): Promise<DatapointAggregates[] | Datapoints[]> => {
     return this.retrieveDatapointsEndpoint(query);
   };
@@ -37,7 +37,7 @@ export class DataPointsAPI extends DataPointsAPIStable {
    * ```
    */
   public retrieveDatapointMonthlyAggregates = async (
-    query: DatapointsMonthlyGranularityMultiQuery,
+    query: DatapointsMonthlyGranularityMultiQuery
   ): Promise<DatapointAggregates[]> => {
     // Find the start and end dates from the query
     const startDate = query.start;

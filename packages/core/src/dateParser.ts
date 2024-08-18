@@ -9,7 +9,7 @@ export default class DateParser {
    */
   constructor(
     private path: string[],
-    private datePropNames: string[],
+    private datePropNames: string[]
   ) {}
 
   private isDatePropName = (key: string | number | undefined) =>

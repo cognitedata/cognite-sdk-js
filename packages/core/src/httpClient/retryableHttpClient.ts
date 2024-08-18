@@ -18,48 +18,48 @@ export class RetryableHttpClient extends BasicHttpClient {
 
   constructor(
     baseUrl: string,
-    private retryValidator: RetryValidator,
+    private retryValidator: RetryValidator
   ) {
     super(baseUrl);
   }
 
   public get<ResponseType>(
     path: string,
-    options: RetryableHttpRequestOptions = {},
+    options: RetryableHttpRequestOptions = {}
   ) {
     return super.get<ResponseType>(path, options);
   }
 
   public post<ResponseType>(
     path: string,
-    options: RetryableHttpRequestOptions = {},
+    options: RetryableHttpRequestOptions = {}
   ) {
     return super.post<ResponseType>(path, options);
   }
 
   public put<ResponseType>(
     path: string,
-    options: RetryableHttpRequestOptions = {},
+    options: RetryableHttpRequestOptions = {}
   ) {
     return super.put<ResponseType>(path, options);
   }
 
   public delete<ResponseType>(
     path: string,
-    options: RetryableHttpRequestOptions = {},
+    options: RetryableHttpRequestOptions = {}
   ) {
     return super.delete<ResponseType>(path, options);
   }
 
   public patch<ResponseType>(
     path: string,
-    options: RetryableHttpRequestOptions = {},
+    options: RetryableHttpRequestOptions = {}
   ) {
     return super.patch<ResponseType>(path, options);
   }
 
   protected async preRequest(
-    request: RetryableHttpRequest,
+    request: RetryableHttpRequest
   ): Promise<RetryableHttpRequest> {
     return super.preRequest(request);
   }
@@ -67,13 +67,13 @@ export class RetryableHttpClient extends BasicHttpClient {
   protected async postRequest<T>(
     response: HttpResponse<T>,
     request: RetryableHttpRequest,
-    mutatedRequest: RetryableHttpRequest,
+    mutatedRequest: RetryableHttpRequest
   ): Promise<HttpResponse<T>> {
     return super.postRequest<T>(response, request, mutatedRequest);
   }
 
   protected async rawRequest<ResponseType>(
-    request: RetryableHttpRequest,
+    request: RetryableHttpRequest
   ): Promise<HttpResponse<ResponseType>> {
     let retryCount = 0;
     // eslint-disable-next-line no-constant-condition

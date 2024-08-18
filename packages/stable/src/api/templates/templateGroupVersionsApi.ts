@@ -21,7 +21,7 @@ Create or update a Template Group version.
    * ```
    */
   public upsert = (
-    item: ExternalTemplateGroupVersion,
+    item: ExternalTemplateGroupVersion
   ): Promise<TemplateGroupVersion> => {
     return this.post(this.url('upsert'), {
       data: item,
@@ -36,7 +36,7 @@ Create or update a Template Group version.
    * ```
    */
   public list = (
-    query?: TemplateGroupVersionFilterQuery,
+    query?: TemplateGroupVersionFilterQuery
   ): CursorAndAsyncIterator<TemplateGroupVersion> => {
     return super.listEndpoint(this.callListEndpointWithPost, query);
   };

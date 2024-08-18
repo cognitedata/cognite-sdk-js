@@ -18,7 +18,7 @@ export class HttpError extends Error {
   constructor(
     public status: number,
     public data: HttpErrorData,
-    public headers: HttpHeaders,
+    public headers: HttpHeaders
   ) {
     super(`Request failed | status code: ${status}`);
     Object.setPrototypeOf(this, HttpError.prototype); // https://stackoverflow.com/questions/51229574/why-instanceof-returns-false-for-a-child-object-in-javascript

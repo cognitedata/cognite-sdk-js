@@ -33,25 +33,25 @@ export class FilesAPI extends FilesAPIStable {
   public async multipartUploadSession(
     fileInfo: ExternalFileInfo,
     parts: number,
-    overwrite = false,
+    overwrite = false
   ) {
     const response = await this.getMultipartUploadSession(
       fileInfo,
       parts,
-      overwrite,
+      overwrite
     );
     const multipartUploadSession = new FilesMultipartUploadSessionAPI(
       this._baseUrl,
       this._client,
       this._map,
-      response.data,
+      response.data
     );
     return this.addToMapAndReturn(multipartUploadSession, response);
   }
   private async getMultipartUploadSession(
     fileInfo: ExternalFileInfo,
     parts: number,
-    overwrite = false,
+    overwrite = false
   ) {
     if (
       parts < this.limits.minimumNumberOfParts ||

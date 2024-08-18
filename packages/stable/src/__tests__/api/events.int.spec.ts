@@ -110,7 +110,7 @@ describe('Events integration test', () => {
 
   test('delete', async () => {
     await client.events.delete(
-      createdEvents.map((event) => ({ id: event.id })),
+      createdEvents.map((event) => ({ id: event.id }))
     );
   });
 
@@ -138,7 +138,7 @@ describe('Events integration test', () => {
             startTime: 'asc',
             lastUpdatedTime: 'desc',
           },
-        }),
+        })
       ).resolves.toBeDefined();
     });
   });

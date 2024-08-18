@@ -23,7 +23,7 @@ export class RevertableArraySorter<InputType> {
     }
     if (arrayToUnsort.length !== this.originalArray.length) {
       throw Error(
-        'Impossible to unsort. Input array has a different length from original.',
+        'Impossible to unsort. Input array has a different length from original.'
       );
     }
 

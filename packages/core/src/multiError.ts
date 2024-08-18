@@ -49,8 +49,8 @@ export class CogniteMultiError<RequestType, ResponseType> extends Error {
           errors: serialiseErrors(errors),
         },
         null,
-        2,
-      )}`,
+        2
+      )}`
     );
     Object.setPrototypeOf(this, CogniteMultiError.prototype); // https://stackoverflow.com/questions/51229574/why-instanceof-returns-false-for-a-child-object-in-javascript
 

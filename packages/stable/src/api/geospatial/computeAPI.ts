@@ -25,7 +25,7 @@ export class ComputeAPI extends BaseResourceAPI<GeospatialComputedItemList> {
    * ```
    */
   public compute = async (
-    request: GeospatialJsonComputeOutput,
+    request: GeospatialJsonComputeOutput
   ): Promise<GeospatialComputedItemList> => {
     const path = this.url();
     const response = await this.post<GeospatialComputedItemList>(path, {

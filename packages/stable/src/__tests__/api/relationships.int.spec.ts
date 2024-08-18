@@ -126,7 +126,7 @@ describe('relationships integration test', () => {
     test('should ignore unknown ids if provided', async () => {
       const result = await client.relationships.retrieve(
         [{ externalId: relationshipId }, { externalId: 'unknown_external_id' }],
-        { ignoreUnknownIds: true },
+        { ignoreUnknownIds: true }
       );
 
       expect(result.length).toBe(1);

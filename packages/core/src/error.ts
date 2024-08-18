@@ -19,7 +19,7 @@ export class CogniteError extends Error {
       missing?: object[];
       duplicated?: unknown[];
       extra?: unknown;
-    } = {},
+    } = {}
   ) {
     let message = `${errorMessage} | code: ${status}`;
     if (requestId) {

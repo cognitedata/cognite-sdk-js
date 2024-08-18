@@ -85,26 +85,26 @@ describe('Views integration test', () => {
 
     expect(createdViewResponse.items).toHaveLength(2);
     expect(createdViewResponse.items[0].name).toEqual(
-      viewCreationDefinition.name,
+      viewCreationDefinition.name
     );
     expect(createdViewResponse.items[0].externalId).toEqual(
-      viewCreationDefinition.externalId,
+      viewCreationDefinition.externalId
     );
     expect(createdViewResponse.items[1].name).toEqual(
-      viewCreationDefinition2.name,
+      viewCreationDefinition2.name
     );
     expect(createdViewResponse.items[1].externalId).toEqual(
-      viewCreationDefinition2.externalId,
+      viewCreationDefinition2.externalId
     );
   });
 
   it('should successfully list Views', async () => {
     const views = await client.views.list({ limit: 1000 });
     const view1 = views.items.find(
-      (view) => view.externalId === viewCreationDefinition.externalId,
+      (view) => view.externalId === viewCreationDefinition.externalId
     );
     const view2 = views.items.find(
-      (view) => view.externalId === viewCreationDefinition2.externalId,
+      (view) => view.externalId === viewCreationDefinition2.externalId
     );
     expect(view1).toBeDefined();
     expect(view2).toBeDefined();
@@ -166,13 +166,13 @@ describe('Views integration test', () => {
     const views = await client.views.list({ limit: 1000 });
     expect(
       views.items.find(
-        (view) => view.externalId === viewCreationDefinition.externalId,
-      ),
+        (view) => view.externalId === viewCreationDefinition.externalId
+      )
     ).toBeUndefined();
     expect(
       views.items.find(
-        (view) => view.externalId === viewCreationDefinition2.externalId,
-      ),
+        (view) => view.externalId === viewCreationDefinition2.externalId
+      )
     ).toBeUndefined();
   });
 });

@@ -25,12 +25,12 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   public list = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
-    scope?: AssetMappings3DListFilter,
+    scope?: AssetMappings3DListFilter
   ): CursorAndAsyncIterator<AssetMapping3D> => {
     const path = this.encodeUrl(modelId, revisionId);
     return super.listEndpoint(
       (params) => this.get<CursorResponse<AssetMapping3D[]>>(path, { params }),
-      scope,
+      scope
     );
   };
 
@@ -48,13 +48,13 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   public filter = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
-    query: Filter3DAssetMappingsQuery,
+    query: Filter3DAssetMappingsQuery
   ): CursorAndAsyncIterator<AssetMapping3D> => {
     const path = `${this.encodeUrl(modelId, revisionId)}/list`;
     return super.listEndpoint(
       (params) =>
         this.post<CursorResponse<AssetMapping3D[]>>(path, { data: params }),
-      query,
+      query
     );
   };
 
@@ -82,7 +82,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   public create = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
-    items: CreateAssetMapping3D[],
+    items: CreateAssetMapping3D[]
   ): Promise<AssetMapping3D[]> => {
     const path = this.encodeUrl(modelId, revisionId);
     return super.createEndpoint(items, path);
@@ -108,7 +108,7 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
   public delete = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
-    ids: DeleteAssetMapping3D[],
+    ids: DeleteAssetMapping3D[]
   ): Promise<object> => {
     const path = `${this.encodeUrl(modelId, revisionId)}/delete`;
     return super.deleteEndpoint(ids, undefined, path);

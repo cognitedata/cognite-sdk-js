@@ -34,7 +34,7 @@ export class OpenApiSnapshotManager {
   constructor(readonly options: OpenApiSnapshotManagerOptions) {
     if (options.directory == null && options.path == null) {
       throw new Error(
-        'SnapshotManager must have either a "path" or "directory" specified',
+        'SnapshotManager must have either a "path" or "directory" specified'
       );
     }
 
@@ -45,7 +45,7 @@ export class OpenApiSnapshotManager {
   }
 
   public downloadFromPath = async (
-    options: ServiceOpenApiOptions,
+    options: ServiceOpenApiOptions
   ): Promise<OpenApiDocument> => {
     const filename = options.filename || defaultFilename;
     const path = `${options.path}/${filename}`.replace('//', '/');

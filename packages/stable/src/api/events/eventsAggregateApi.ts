@@ -30,7 +30,7 @@ export class EventsAggregateAPI extends BaseResourceAPI<unknown> {
    * ```
    */
   public uniqueValues = (
-    query: EventUniqueValuesAggregate,
+    query: EventUniqueValuesAggregate
   ): Promise<UniqueValuesAggregateResponse[]> => {
     return super.aggregateEndpoint({
       ...query,

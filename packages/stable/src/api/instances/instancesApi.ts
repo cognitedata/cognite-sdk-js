@@ -42,13 +42,13 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public search = async (
-    params: NodeOrEdgeSearchRequest,
+    params: NodeOrEdgeSearchRequest
   ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
     const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
       this.searchUrl,
       {
         data: params,
-      },
+      }
     );
     return response.data;
   };
@@ -81,14 +81,14 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public list = async (
-    params: NodeOrEdgeListRequestV3,
+    params: NodeOrEdgeListRequestV3
   ): Promise<NodeAndEdgeCollectionResponseWithCursorV3Response> => {
     const response =
       await this.post<NodeAndEdgeCollectionResponseWithCursorV3Response>(
         this.listPostUrl,
         {
           data: params,
-        },
+        }
       );
     return response.data;
   };
@@ -116,13 +116,13 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public retrieve = async (
-    params: ListOfSpaceExternalIdsRequestWithTyping,
+    params: ListOfSpaceExternalIdsRequestWithTyping
   ): Promise<NodeAndEdgeCollectionResponseV3Response> => {
     const response = await this.post<NodeAndEdgeCollectionResponseV3Response>(
       this.byIdsUrl,
       {
         data: params,
-      },
+      }
     );
     return response.data;
   };
@@ -158,13 +158,13 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public upsert = async (
-    params: NodeAndEdgeCreateCollection,
+    params: NodeAndEdgeCreateCollection
   ): Promise<SlimNodeAndEdgeCollectionResponse> => {
     const response = await this.post<SlimNodeAndEdgeCollectionResponse>(
       this.url(),
       {
         data: params,
-      },
+      }
     );
     return response.data;
   };
@@ -210,7 +210,7 @@ export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
    * ```
    */
   public aggregate = async (
-    params: ViewAggregationRequest,
+    params: ViewAggregationRequest
   ): Promise<AggregationResponse> => {
     const response = await this.post<AggregationResponse>(this.aggregateUrl, {
       data: params,

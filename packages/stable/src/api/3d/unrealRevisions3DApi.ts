@@ -13,7 +13,7 @@ export class UnrealRevisions3DAPI extends BaseResourceAPI<UnrealRevision3D> {
 
   public async retrieve(
     modelId: CogniteInternalId,
-    revisionId: CogniteInternalId,
+    revisionId: CogniteInternalId
   ): Promise<UnrealRevision3D> {
     const path = this.url(`models/${modelId}/revisions/${revisionId}`);
     const response = await this.get<UnrealRevision3D>(path);

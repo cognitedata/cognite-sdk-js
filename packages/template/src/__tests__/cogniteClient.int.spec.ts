@@ -16,7 +16,7 @@ describe('derived integration', () => {
   });
   test('raw get assets', async () => {
     const response = await client.get(
-      `/api/v1/projects/${process.env.COGNITE_PROJECT}/assets`,
+      `/api/v1/projects/${process.env.COGNITE_PROJECT}/assets`
     );
     expect(response.data).toHaveProperty('items');
   });

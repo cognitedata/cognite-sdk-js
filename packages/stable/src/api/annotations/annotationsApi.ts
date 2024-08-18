@@ -114,7 +114,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * ```
    */
   public list = (
-    filter: AnnotationFilterRequest,
+    filter: AnnotationFilterRequest
   ): CursorAndAsyncIterator<AnnotationModel> => {
     return this.listEndpoint(this.callListEndpointWithPost, filter);
   };
@@ -176,7 +176,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * ```
    */
   public reverseLookup = (
-    filter: AnnotationReverseLookupRequest,
+    filter: AnnotationReverseLookupRequest
   ): Promise<ListResponse<AnnotationsAssetRef[]>> &
     CogniteAsyncIterator<AnnotationsAssetRef> => {
     const path = this.url('reverselookup');
@@ -185,7 +185,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
         this.post<CursorResponse<AnnotationsAssetRef[]>>(path, {
           data: params,
         }),
-      filter,
+      filter
     );
   };
 }

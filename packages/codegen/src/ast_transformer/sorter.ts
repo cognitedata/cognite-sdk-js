@@ -20,7 +20,7 @@ const statementName = (statement: ts.Statement): string => {
 };
 
 const sortElementsByName = (
-  elements: ts.NodeArray<ts.TypeElement>,
+  elements: ts.NodeArray<ts.TypeElement>
 ): ts.NodeArray<ts.TypeElement> => {
   const sorted = Array.from(elements).sort((a, b) => {
     if (
@@ -54,12 +54,12 @@ const sorterTransformer: ts.TransformerFactory<ts.SourceFile> = (context) => {
 
     const transformedSourceFile = ts.visitNode(
       sourceFile,
-      visitor,
+      visitor
     ) as ts.SourceFile;
     const sortedStatements = Array.from(transformedSourceFile.statements).sort(
       (a, b) => {
         return statementName(a).localeCompare(statementName(b));
-      },
+      }
     );
     return {
       ...sourceFile,

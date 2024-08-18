@@ -46,7 +46,7 @@ export function setupMockableClientForIntegrationTests() {
   return client;
 }
 export function setupLoggedInClientForUnitTest(
-  baseUrl: string = Constants.BASE_URL,
+  baseUrl: string = Constants.BASE_URL
 ) {
   return new CogniteClient({
     appId: 'JS SDK integration tests (beta)',
@@ -98,7 +98,7 @@ function getFileStats(filePath: string) {
   const maxChunks = 250;
   const chunkSize = Math.max(
     minChunkSize,
-    Math.ceil(fileSizeInBytes / maxChunks),
+    Math.ceil(fileSizeInBytes / maxChunks)
   );
   const numberOfParts = Math.ceil(fileSizeInBytes / chunkSize);
   return { fileSizeInBytes, chunkSize, numberOfParts };
@@ -106,7 +106,7 @@ function getFileStats(filePath: string) {
 async function* divideFileIntoStreams(
   filePath: string,
   fileSizeInBytes: number,
-  chunkSize: number,
+  chunkSize: number
 ) {
   let bytesRead = 0;
   let chunkNumber = 0;

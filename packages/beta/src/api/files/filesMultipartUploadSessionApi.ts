@@ -22,14 +22,14 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
     [, , , this.multiPartFileUploadResponse] = args;
 
     this.uploadedUrls = this.multiPartFileUploadResponse.uploadUrls.map(
-      (_) => false,
+      (_) => false
     );
     this.finished = false;
   }
 
   public async uploadPart(
     partNumber: number,
-    fileContent: FileContent,
+    fileContent: FileContent
   ): Promise<undefined | MultiPartFileChunkResponse> {
     const hasFileContent = fileContent != null;
     if (!hasFileContent) {
@@ -56,7 +56,7 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
         this.multiPartFileUploadResponse.uploadUrls[partNumber],
         {
           data: fileContent,
-        },
+        }
       );
 
       if (response.status === 200 || response.status === 201) {

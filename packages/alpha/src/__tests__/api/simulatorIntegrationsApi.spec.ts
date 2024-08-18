@@ -61,7 +61,7 @@ describeIf('simulator integrations api', () => {
     const list_response = await client.simulators.listIntegrations();
     expect(list_response.items.length).toBeGreaterThan(0);
     const integrationFound = list_response.items.find(
-      (item) => item.externalId === simulatorIntegrationExternalId,
+      (item) => item.externalId === simulatorIntegrationExternalId
     );
     expect(integrationFound?.externalId).toBe(simulatorIntegrationExternalId);
   });
@@ -77,16 +77,16 @@ describeIf('simulator integrations api', () => {
       const responseAfterDelete = await client.simulators.list();
       expect(
         responseAfterDelete.items.filter(
-          (res) => res.externalId === simulatorExternalId,
-        ).length,
+          (res) => res.externalId === simulatorExternalId
+        ).length
       ).toBe(0);
 
       const responseAfterSimulatorDelete =
         await client.simulators.listIntegrations();
       expect(
         responseAfterSimulatorDelete.items.filter(
-          (res) => res.externalId === simulatorIntegrationExternalId,
-        ).length,
+          (res) => res.externalId === simulatorIntegrationExternalId
+        ).length
       ).toBe(0);
     }
   });

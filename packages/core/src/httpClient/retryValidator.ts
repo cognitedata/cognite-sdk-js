@@ -10,7 +10,7 @@ import type { RetryableHttpRequest } from './retryableHttpClient';
 export type RetryValidator = (
   request: RetryableHttpRequest,
   response: HttpResponse<unknown>,
-  retryCount: number,
+  retryCount: number
 ) => boolean;
 
 /** @hidden */
@@ -20,13 +20,13 @@ export const MAX_RETRY_ATTEMPTS = 5;
 
 export const createRetryValidator = (
   endpointsToRetry: EndpointList,
-  maxRetries: number = MAX_RETRY_ATTEMPTS,
+  maxRetries: number = MAX_RETRY_ATTEMPTS
 ): RetryValidator => {
   const universalRetryValidator = createUniversalRetryValidator(maxRetries);
   return (
     request: RetryableHttpRequest,
     response: HttpResponse<unknown>,
-    retryCount: number,
+    retryCount: number
   ) => {
     if (retryCount >= maxRetries) {
       return false;

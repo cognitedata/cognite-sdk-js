@@ -8,7 +8,7 @@ import { setupLoggedInClient } from '../testUtils';
 
 const getFileId = async (
   client: CogniteClient,
-  deadline = 15000,
+  deadline = 15000
 ): Promise<number> => {
   // Use a previous uploaded file/document if available,
   // otherwise ingest a new file.
@@ -33,7 +33,7 @@ const getFileId = async (
     },
     fileContent,
     false,
-    true,
+    true
   );
 
   // It takes some time for a uploaded file to become available
@@ -52,7 +52,7 @@ const getFileId = async (
   }
 
   throw new Error(
-    'unable to ingest a file into the documents service within time',
+    'unable to ingest a file into the documents service within time'
   );
 };
 
@@ -193,7 +193,7 @@ describe('Documents integration test', () => {
         const match = Buffer.from(frontSlice, 0).equals(Buffer.from(pdfPrefix));
         expect(match).toBe(true);
       },
-      30 * 1000,
+      30 * 1000
     );
 
     test('fetch temporary link', async () => {

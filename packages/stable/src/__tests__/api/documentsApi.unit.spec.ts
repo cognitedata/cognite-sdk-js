@@ -295,10 +295,10 @@ describe('Documents unit test', () => {
 
     const preview = client.documents.preview;
     expect(preview.imageBuildPreviewURI(1)).toEqual(
-      base('/1/preview/image/pages/1'),
+      base('/1/preview/image/pages/1')
     );
     expect(preview.imageBuildPreviewURI(1, 4)).toEqual(
-      base('/1/preview/image/pages/4'),
+      base('/1/preview/image/pages/4')
     );
   });
 
@@ -309,10 +309,10 @@ describe('Documents unit test', () => {
 
     const preview = client.documents.preview;
     expect(preview.pdfBuildTemporaryLinkURI(1)).toEqual(
-      base('/1/preview/pdf/temporarylink'),
+      base('/1/preview/pdf/temporarylink')
     );
     expect(preview.pdfBuildTemporaryLinkURI(4)).toEqual(
-      base('/4/preview/pdf/temporarylink'),
+      base('/4/preview/pdf/temporarylink')
     );
   });
 

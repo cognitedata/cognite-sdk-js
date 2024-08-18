@@ -11,7 +11,7 @@ describe('DateParser', () => {
   beforeEach(() => {
     dateParser = new DateParser(
       ['items', 'columns'],
-      ['createdTime', 'deletedTime'],
+      ['createdTime', 'deletedTime']
     );
   });
 

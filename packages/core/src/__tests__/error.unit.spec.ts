@@ -39,7 +39,7 @@ describe('CogniteError', () => {
     expect(() => {
       throw error;
     }).toThrowErrorMatchingInlineSnapshot(
-      '[Error: Abc | code: 500 | X-Request-ID: def]',
+      '[Error: Abc | code: 500 | X-Request-ID: def]'
     );
   });
 
@@ -72,7 +72,7 @@ describe('handleErrorResponse', () => {
     expect(() => {
       handleErrorResponse(httpError);
     }).toThrowErrorMatchingInlineSnapshot(
-      '[Error: abc | code: 500 | X-Request-ID: def]',
+      '[Error: abc | code: 500 | X-Request-ID: def]'
     );
   });
 
@@ -87,7 +87,7 @@ describe('handleErrorResponse', () => {
         duplicated: [event],
         extra: { extraErrorInformation: 'test' },
       }),
-      { [X_REQUEST_ID]: xRequestId },
+      { [X_REQUEST_ID]: xRequestId }
     );
     expect.assertions(6);
     expect(() => {
@@ -104,7 +104,7 @@ describe('handleErrorResponse', () => {
       expect(e.requestId).toBe(xRequestId);
       expect(e.duplicated).toEqual([event]);
       expect((e.extra as Record<string, string>).extraErrorInformation).toBe(
-        'test',
+        'test'
       );
       expect(e.missing).toEqual([internalIdObject, externalIdObject]);
     }

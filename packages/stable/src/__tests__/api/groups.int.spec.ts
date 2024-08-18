@@ -19,7 +19,7 @@ describe('Groups integration test', () => {
     const datasetExternalId = 'groups-integration-test-data-set';
     const datasets = await client.datasets.retrieve(
       [{ externalId: datasetExternalId }],
-      { ignoreUnknownIds: true },
+      { ignoreUnknownIds: true }
     );
     if (datasets.length === 0) {
       const [dataset] = await client.datasets.create([
@@ -106,7 +106,7 @@ describe('Groups integration test', () => {
   test('delete', async () => {
     await runTestWithRetryWhenFailing(async () => {
       const response = await client.groups.delete(
-        groupsToDelete.map((g) => g.id),
+        groupsToDelete.map((g) => g.id)
       );
       expect(response).toEqual({});
     });

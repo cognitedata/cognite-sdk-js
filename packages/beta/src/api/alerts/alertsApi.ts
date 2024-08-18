@@ -37,17 +37,17 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
     this.channelsApi = new ChannelsAPI(
       `${resourcePath}/channels`,
       client,
-      metadataMap,
+      metadataMap
     );
     this.subscribersApi = new SubscribersAPI(
       `${resourcePath}/subscribers`,
       client,
-      metadataMap,
+      metadataMap
     );
     this.subscriptionsApi = new SubscriptionsAPI(
       `${resourcePath}/subscriptions`,
       client,
-      metadataMap,
+      metadataMap
     );
   }
 

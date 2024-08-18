@@ -47,7 +47,7 @@ describe('api endpoints smoke test', () => {
 
     async function callEndpoint<T>(
       endpoint: ((a: T) => Promise<T>) | undefined,
-      param: T,
+      param: T
     ) {
       if (endpoint) {
         const mockFn = vi.fn();
@@ -73,7 +73,7 @@ describe('api endpoints smoke test', () => {
         client.timeseries,
         client.viewer3D,
         // @ts-ignore
-      ].map(callApi),
+      ].map(callApi)
     );
   });
 });

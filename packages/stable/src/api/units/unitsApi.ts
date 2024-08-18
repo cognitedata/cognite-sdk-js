@@ -19,7 +19,7 @@ export class UnitsAPI extends BaseResourceAPI<Unit> {
     this.unitSystemsApi = new UnitSystemsAPI(
       `${resourcePath}/systems`,
       client,
-      metadataMap,
+      metadataMap
     );
   }
 

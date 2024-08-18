@@ -27,7 +27,7 @@ export class GeospatialAPI extends BaseResourceAPI<Geospatial> {
     this.featureTypeAPI = new FeatureTypeAPI(
       this.url('featuretypes'),
       httpClient,
-      map,
+      map
     );
 
     this.featureAPI = new FeatureAPI(this.url('featuretypes'), httpClient, map);

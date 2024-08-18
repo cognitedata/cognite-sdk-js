@@ -22,7 +22,7 @@ describe('basicHttpClient', () => {
       const alteredEmptyHeaders = headersWithDefaultField(
         emptyHeaders,
         'Accept',
-        'application/json',
+        'application/json'
       );
       expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
       expect('Accept' in alteredEmptyHeaders).toBeTruthy();
@@ -35,7 +35,7 @@ describe('basicHttpClient', () => {
       const alteredEmptyHeaders = headersWithDefaultField(
         emptyHeaders,
         'Accept',
-        'application/json',
+        'application/json'
       );
       expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
       expect('Accept' in alteredEmptyHeaders).toBeTruthy();
@@ -49,7 +49,7 @@ describe('basicHttpClient', () => {
       const alteredEmptyHeaders = headersWithDefaultField(
         emptyHeaders,
         'Accept',
-        'application/json',
+        'application/json'
       );
       expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
       expect('accept' in alteredEmptyHeaders).toBeTruthy();

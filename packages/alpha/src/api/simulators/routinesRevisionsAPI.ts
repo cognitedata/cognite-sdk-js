@@ -22,7 +22,7 @@ export class RoutineRevisionsAPI extends BaseResourceAPI<SimulatorRoutineRevisio
   public list = async (filter?: SimulatorRoutineRevisionslFilterQuery) => {
     return this.listEndpoint<SimulatorRoutineRevisionslFilterQuery>(
       this.callListEndpointWithPost,
-      filter,
+      filter
     );
   };
 

@@ -70,7 +70,7 @@ describe.skip('Files integration test', () => {
       },
       fileContent,
       false,
-      true,
+      true
     );
   });
 
@@ -266,7 +266,7 @@ describe.skip('Files integration test', () => {
         binaryFileMeta,
         fileContentBinary,
         false,
-        true,
+        true
       );
     });
 

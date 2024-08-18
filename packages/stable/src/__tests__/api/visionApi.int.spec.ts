@@ -27,7 +27,7 @@ describe('Vision API', () => {
     const testFileExternalId = 'vision_extract_test_image';
     const files = await client.files.retrieve(
       [{ externalId: testFileExternalId }],
-      { ignoreUnknownIds: true },
+      { ignoreUnknownIds: true }
     );
     if (files.length === 0) {
       const fileContent = readFile('./vision-integration-test-file.png');
@@ -37,7 +37,7 @@ describe('Vision API', () => {
           mimeType: 'image/png',
           externalId: testFileExternalId,
         },
-        fileContent,
+        fileContent
       );
       TEST_IMAGE_ID = uploadedFile.id;
     } else {
@@ -47,7 +47,7 @@ describe('Vision API', () => {
     extractJob = await client.vision.extract(
       ['TextDetection'],
       [{ fileId: TEST_IMAGE_ID }],
-      { textDetectionParameters: { threshold: 0.4 } },
+      { textDetectionParameters: { threshold: 0.4 } }
     );
     extractBetaJob = await client.vision.extract(BETA_FEATURES, [
       { fileId: TEST_IMAGE_ID },
@@ -80,7 +80,7 @@ describe('Vision API', () => {
     expect(metadata).toBeDefined();
     expect(metadata?.status).toEqual(200);
     expect(consoleSpy).toBeCalledWith(
-      `Features '${BETA_FEATURES}' are in beta and are still in development`,
+      `Features '${BETA_FEATURES}' are in beta and are still in development`
     );
     // Only care that the job is queued with the correct feature. The other
     // properties are checked for in the test above.
@@ -92,7 +92,7 @@ describe('Vision API', () => {
     test('waitForCompletion=false', async () => {
       const result = await client.vision.getExtractJob(extractJob.jobId, false);
       expect(result.status === 'Queued' || result.status === 'Running').toBe(
-        true,
+        true
       );
       expect(result.jobId).toEqual(extractJob.jobId);
       expect(result.createdTime).toEqual(extractJob.createdTime);
@@ -100,9 +100,9 @@ describe('Vision API', () => {
     });
     test('waitForCompletion=true, should timeout', async () => {
       await expect(
-        client.vision.getExtractJob(extractJob.jobId, true, 1000, 0),
+        client.vision.getExtractJob(extractJob.jobId, true, 1000, 0)
       ).rejects.toThrowError(
-        'Timed out while waiting for vision job to complete.',
+        'Timed out while waiting for vision job to complete.'
       );
     });
     test.skip('waitForCompletion=true', async () => {

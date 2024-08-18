@@ -65,7 +65,7 @@ describe.skip('Asset integration test', () => {
       errors: [
         new CogniteError(
           'Request had 1 constraint violations. Please fix the request and try again. [items size must be between 1 and 1000]',
-          400,
+          400
         ),
       ],
       responses: [],
@@ -110,7 +110,7 @@ describe.skip('Asset integration test', () => {
         await client.assets.delete(
           e.responses[0].items.map((asset: Asset) => ({
             id: asset.id,
-          })),
+          }))
         );
       }
     }
@@ -192,7 +192,7 @@ describe.skip('Asset integration test', () => {
       {
         ignoreUnknownIds: true,
         aggregatedProperties: ['childCount'],
-      },
+      }
     );
     expect(response).toHaveLength(0);
   });
@@ -421,8 +421,8 @@ describe.skip('Asset integration test', () => {
   test('delete', async () => {
     await client.assets.delete(
       [createdChild1, createdRoot1, ...createdAssets2, ...assets].map(
-        ({ id }) => ({ id }),
-      ),
+        ({ id }) => ({ id })
+      )
     );
   });
 });

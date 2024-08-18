@@ -65,7 +65,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    * ```
    */
   public aggregate = (
-    query: AssetAggregateQuery,
+    query: AssetAggregateQuery
   ): Promise<AssetAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
@@ -80,7 +80,7 @@ export class AssetsAPI extends BaseResourceAPI<Asset> {
    */
   public retrieve = (
     ids: IdEither[],
-    params: AssetRetrieveParams = {},
+    params: AssetRetrieveParams = {}
   ): Promise<Asset[]> => {
     return super.retrieveEndpoint(ids, params);
   };

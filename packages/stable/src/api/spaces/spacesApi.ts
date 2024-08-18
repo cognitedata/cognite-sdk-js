@@ -30,13 +30,13 @@ export class SpacesAPI extends BaseResourceAPI<SpaceDefinition> {
    * ```
    */
   public upsert = async (
-    params: SpaceCreateDefinition[],
+    params: SpaceCreateDefinition[]
   ): Promise<SpaceCollectionResponseV3Response> => {
     const response = await this.post<SpaceCollectionResponseV3Response>(
       this.url(),
       {
         data: { items: params },
-      },
+      }
     );
     return response.data;
   };
@@ -67,7 +67,7 @@ export class SpacesAPI extends BaseResourceAPI<SpaceDefinition> {
   public list = (
     params: IncludeGlobalQueryParameter &
       CursorQueryParameter &
-      ReducedLimitQueryParameter = { includeGlobal: false },
+      ReducedLimitQueryParameter = { includeGlobal: false }
   ): CursorAndAsyncIterator<SpaceDefinition> => {
     return super.listEndpoint(this.callListEndpointWithGet, params);
   };
@@ -81,13 +81,13 @@ export class SpacesAPI extends BaseResourceAPI<SpaceDefinition> {
    * ```
    */
   public retrieve = async (
-    params: string[],
+    params: string[]
   ): Promise<SpaceCollectionResponseV3Response> => {
     const response = await this.post<SpaceCollectionResponseV3Response>(
       this.byIdsUrl,
       {
         data: { items: params.map((space) => ({ space })) },
-      },
+      }
     );
     return response.data;
   };

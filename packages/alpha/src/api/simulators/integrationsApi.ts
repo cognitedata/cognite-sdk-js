@@ -15,7 +15,7 @@ export class IntegrationsAPI extends BaseResourceAPI<SimulatorIntegration> {
   public list = async (filter?: SimulatorIntegrationFilterQuery) => {
     return this.listEndpoint<SimulatorIntegrationFilterQuery>(
       this.callListEndpointWithPost,
-      filter,
+      filter
     );
   };
 

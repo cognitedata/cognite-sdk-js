@@ -51,7 +51,7 @@ describe('monitoring tasks api', () => {
 
     const tsResponse = await client.timeseries.retrieve(
       [{ externalId: 'test_external_id_beta_sdk' }],
-      { ignoreUnknownIds: true },
+      { ignoreUnknownIds: true }
     );
     if (tsResponse.length === 0) {
       await client.timeseries.create([timeseries]);
@@ -137,7 +137,7 @@ describe('monitoring tasks api', () => {
     expect(response.items[0].externalId).toEqual(monitoringTaskExternalId);
     expect(response.items[0].name).toEqual(monitoringTaskNameUpdated);
     expect(response.items[0].model).toEqual(
-      expect.objectContaining(expectedResponseModel),
+      expect.objectContaining(expectedResponseModel)
     );
 
     expect(response.items[0].interval).toEqual(testMtInterval);

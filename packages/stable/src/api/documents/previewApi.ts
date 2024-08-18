@@ -15,16 +15,16 @@ export class PreviewAPI extends BaseResourceAPI<unknown> {
 
   public documentAsImage = (
     id: CogniteInternalId,
-    page: number,
+    page: number
   ): Promise<ArrayBuffer> => {
     return this.imagePreviewEndpoint<ArrayBuffer>(id, page);
   };
 
   public pdfTemporaryLink = (
-    id: CogniteInternalId,
+    id: CogniteInternalId
   ): Promise<DocumentsPreviewTemporaryLinkResponse> => {
     return this.pdfTemporaryLinkEndpoint<DocumentsPreviewTemporaryLinkResponse>(
-      id,
+      id
     );
   };
 
@@ -33,7 +33,7 @@ export class PreviewAPI extends BaseResourceAPI<unknown> {
   };
 
   private async pdfPreviewEndpoint<ResponseType>(
-    id: CogniteInternalId,
+    id: CogniteInternalId
   ): Promise<ResponseType> {
     const uri = this.pdfBuildPreviewURI(id);
     const response = await this.get<ResponseType>(uri, {
@@ -52,7 +52,7 @@ export class PreviewAPI extends BaseResourceAPI<unknown> {
 
   private async imagePreviewEndpoint<ResponseType>(
     id: CogniteInternalId,
-    page = 1,
+    page = 1
   ): Promise<ResponseType> {
     const uri = this.imageBuildPreviewURI(id, page);
     const response = await this.get<ResponseType>(uri, {
@@ -70,7 +70,7 @@ export class PreviewAPI extends BaseResourceAPI<unknown> {
   };
 
   private async pdfTemporaryLinkEndpoint<ResponseType>(
-    id: CogniteInternalId,
+    id: CogniteInternalId
   ): Promise<ResponseType> {
     const uri = this.pdfBuildTemporaryLinkURI(id);
     const response = await this.get<ResponseType>(uri);

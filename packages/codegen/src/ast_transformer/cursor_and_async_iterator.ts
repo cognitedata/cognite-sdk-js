@@ -21,7 +21,7 @@ const memberName = (member: ts.TypeElement): string | undefined => {
 };
 
 const interfaceDeclarationHasRequiredMembers = (
-  node: ts.InterfaceDeclaration,
+  node: ts.InterfaceDeclaration
 ): boolean => {
   const memberNames = node.members.map(memberName);
   return isEqual(targetMemberNames, new Set(memberNames));
@@ -72,13 +72,13 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
         ]);
         const hc = ts.factory.createHeritageClause(
           ts.SyntaxKind.ExtendsKeyword,
-          [types],
+          [types]
         );
         const existingHeritageClauses = node.heritageClauses || [];
         const transformedNode = ts.visitEachChild(
           node,
           removeTargetMembers,
-          context,
+          context
         );
         return ts.factory.updateInterfaceDeclaration(
           transformedNode,
@@ -86,7 +86,7 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
           transformedNode.name,
           transformedNode.typeParameters,
           [hc, ...existingHeritageClauses],
-          transformedNode.members,
+          transformedNode.members
         );
       }
 
@@ -114,11 +114,11 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
           ts.factory.createImportSpecifier(
             false,
             undefined,
-            ts.factory.createIdentifier('CursorAndAsyncIterator'),
+            ts.factory.createIdentifier('CursorAndAsyncIterator')
           ),
-        ]),
+        ])
       ),
-      ts.factory.createStringLiteral('@cognite/sdk-core'),
+      ts.factory.createStringLiteral('@cognite/sdk-core')
     );
 
     const additionalImports = containsCursorAndAsyncIteratorDeclaration()
@@ -126,7 +126,7 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
       : [];
     const transformedSourceFile = ts.visitNode(
       sourceFile,
-      visitor,
+      visitor
     ) as ts.SourceFile;
     return ts.factory.updateSourceFile(transformedSourceFile, [
       ...additionalImports,

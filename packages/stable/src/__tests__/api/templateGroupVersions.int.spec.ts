@@ -69,7 +69,7 @@ describe('template group versions test', () => {
       .autoPagingToArray({ limit: -1 });
 
     expect(result).toEqual(
-      expectedVersions.slice(2, 6).sort((a, b) => b.version - a.version),
+      expectedVersions.slice(2, 6).sort((a, b) => b.version - a.version)
     );
   }, 10000);
 

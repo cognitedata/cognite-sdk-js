@@ -18,7 +18,7 @@ export const login = async () => {
           scope: `${process.env.COGNITE_BASE_URL}/.default`,
         }).toString(),
         headers,
-      },
+      }
     );
     const account = await response.json();
     return account;

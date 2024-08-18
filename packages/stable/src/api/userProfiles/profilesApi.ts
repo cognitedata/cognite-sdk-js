@@ -42,7 +42,7 @@ export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {
    * ```
    */
   public retrieve = async (
-    userIdentifiers: UserIdentifier[],
+    userIdentifiers: UserIdentifier[]
   ): Promise<UserProfileItem[]> => {
     return super.retrieveEndpoint(userIdentifiers);
   };
@@ -54,7 +54,7 @@ export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {
    * ```
    */
   public search = async (
-    query: UserProfilesSearchRequest,
+    query: UserProfilesSearchRequest
   ): Promise<UserProfileItem[]> => {
     return super.searchEndpoint(query);
   };

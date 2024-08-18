@@ -49,7 +49,7 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    * ```
    */
   public list = (
-    query?: RelationshipsFilterRequest,
+    query?: RelationshipsFilterRequest
   ): CursorAndAsyncIterator<Relationship> => {
     return super.listEndpoint(this.callListEndpointWithPost, query);
   };
@@ -63,7 +63,7 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    */
   public retrieve = (
     ids: ExternalId[],
-    params: RelationshipsRetrieveParams = {},
+    params: RelationshipsRetrieveParams = {}
   ): Promise<Relationship[]> => {
     return super.retrieveEndpoint(ids, params);
   };
@@ -77,7 +77,7 @@ export class RelationshipsApi extends BaseResourceAPI<Relationship> {
    */
   public delete = (
     ids: ExternalId[],
-    params: RelationshipsDeleteParams = {},
+    params: RelationshipsDeleteParams = {}
   ) => {
     return super.deleteEndpoint(ids, params);
   };

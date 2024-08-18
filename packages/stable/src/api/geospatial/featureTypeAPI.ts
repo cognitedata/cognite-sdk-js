@@ -26,7 +26,7 @@ export class FeatureTypeAPI extends BaseResourceAPI<FeatureType> {
    * ```
    */
   public create = (
-    featureTypes: GeospatialCreateFeatureType[],
+    featureTypes: GeospatialCreateFeatureType[]
   ): Promise<FeatureType[]> => {
     return this.createEndpoint<GeospatialCreateFeatureType>(featureTypes);
   };
@@ -62,7 +62,7 @@ export class FeatureTypeAPI extends BaseResourceAPI<FeatureType> {
    */
   public delete = (
     externalIds: ExternalId[],
-    params: GeospatialRecursiveDelete = {},
+    params: GeospatialRecursiveDelete = {}
   ) => {
     return this.deleteEndpoint(externalIds, params);
   };

@@ -9,7 +9,7 @@ import CogniteClientPlayground from '../cogniteClientPlayground';
 import { login } from './login';
 
 export function setupLoggedInClient(
-  baseUrl: string = process.env.COGNITE_BASE_URL as string,
+  baseUrl: string = process.env.COGNITE_BASE_URL as string
 ) {
   return new CogniteClientPlayground({
     appId: 'JS SDK integration tests (playground)',

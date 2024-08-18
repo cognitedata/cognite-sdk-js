@@ -26,7 +26,7 @@ describe('Cognite Auth', () => {
   const logoutPath = '/logout/url';
   const httpClient = new CDFHttpClient(
     mockBaseUrl,
-    createUniversalRetryValidator(),
+    createUniversalRetryValidator()
   );
 
   beforeEach(() => {
@@ -62,14 +62,14 @@ describe('Cognite Auth', () => {
         await expect(
           getIdInfo(httpClient.get.bind(httpClient), {
             [AUTHORIZATION_HEADER]: bearerString(token),
-          }),
+          })
         ).resolves.toEqual(idInfo);
       });
 
       test('not authorised (401) getIdInfo', async () => {
         nock(mockBaseUrl).get(statusPath).once().reply(401, response401);
         await expect(
-          getIdInfo(httpClient.get.bind(httpClient), {}),
+          getIdInfo(httpClient.get.bind(httpClient), {})
         ).resolves.toBeNull();
       });
 
@@ -79,7 +79,7 @@ describe('Cognite Auth', () => {
         await expect(
           getIdInfo(httpClient.get.bind(httpClient), {
             [AUTHORIZATION_HEADER]: bearerString(token),
-          }),
+          })
         ).resolves.toBeNull();
       });
     });
@@ -91,7 +91,7 @@ describe('Cognite Auth', () => {
         nock(mockBaseUrl).get(logoutPath).once().reply(200, successResponse);
 
         await expect(
-          getLogoutUrl(httpClient.get.bind(httpClient), {}),
+          getLogoutUrl(httpClient.get.bind(httpClient), {})
         ).resolves.toEqual(url);
       });
 
@@ -99,7 +99,7 @@ describe('Cognite Auth', () => {
         nock(mockBaseUrl).get(logoutPath).once().reply(401, response401);
 
         await expect(
-          getLogoutUrl(httpClient.get.bind(httpClient), {}),
+          getLogoutUrl(httpClient.get.bind(httpClient), {})
         ).resolves.toBeNull();
       });
     });
@@ -130,12 +130,12 @@ describe('Cognite Auth', () => {
         window.history.pushState(
           {},
           '',
-          '/some/random/path?query=true&error=failed&error_description=message',
+          '/some/random/path?query=true&error=failed&error_description=message'
         );
         await expect(
-          authClient.handleLoginRedirect(),
+          authClient.handleLoginRedirect()
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          '[Error: failed: message]',
+          '[Error: failed: message]'
         );
       });
 
@@ -143,7 +143,7 @@ describe('Cognite Auth', () => {
         window.history.pushState(
           {},
           '',
-          `/some/random/path?query=true&access_token=${authTokens.accessToken}&id_token=${authTokens.idToken}&random=123`,
+          `/some/random/path?query=true&access_token=${authTokens.accessToken}&id_token=${authTokens.idToken}&random=123`
         );
         nock(mockBaseUrl, {
           reqheaders: {
@@ -156,7 +156,7 @@ describe('Cognite Auth', () => {
         const tokens = await authClient.handleLoginRedirect();
         expect(tokens).toEqual(authTokens);
         expect(window.location.href).toMatchInlineSnapshot(
-          `"https://localhost/some/random/path?query=true&random=123"`,
+          `"https://localhost/some/random/path?query=true&random=123"`
         );
         await expect(authClient.getCDFToken()).resolves.toEqual(authTokens);
       });
@@ -222,7 +222,7 @@ describe('Cognite Auth', () => {
         });
         expect(spiedLocationAssign).toBeCalledTimes(1);
         expect(spiedLocationAssign.mock.calls[0][0]).toMatchInlineSnapshot(
-          `"https://example.com/login/redirect?project=my-tenant&redirectUrl=https%3A%2F%2Fredirect.com&errorRedirectUrl=https%3A%2F%2Ferror-redirect.com"`,
+          `"https://example.com/login/redirect?project=my-tenant&redirectUrl=https%3A%2F%2Fredirect.com&errorRedirectUrl=https%3A%2F%2Ferror-redirect.com"`
         );
         await Utils.sleepPromise(1000);
         expect(isPromiseResolved).toBe(false);

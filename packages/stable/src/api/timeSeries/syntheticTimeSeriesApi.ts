@@ -14,12 +14,12 @@ export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryRespon
   protected getDateProps() {
     return this.pickDateProps<DatapointInfo>(
       ['items', 'datapoints'],
-      ['timestamp'],
+      ['timestamp']
     );
   }
 
   public query = (
-    items: SyntheticQuery[],
+    items: SyntheticQuery[]
   ): Promise<SyntheticQueryResponse[]> => {
     return this.querySyntheticEndpoint(items);
   };
@@ -31,7 +31,7 @@ export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryRespon
         path,
         items: data,
         chunkSize: 10,
-      }),
+      })
     );
   }
 }

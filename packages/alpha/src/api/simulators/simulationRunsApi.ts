@@ -14,7 +14,7 @@ export class SimulationRunsAPI extends BaseResourceAPI<SimulationRun> {
   protected getDateProps() {
     return this.pickDateProps(
       ['items'],
-      ['createdTime', 'lastUpdatedTime', 'runTime', 'simulationTime'],
+      ['createdTime', 'lastUpdatedTime', 'runTime', 'simulationTime']
     );
   }
 
@@ -26,7 +26,7 @@ export class SimulationRunsAPI extends BaseResourceAPI<SimulationRun> {
   public list = async (filter?: SimulationRunFilterQuery) => {
     return this.listEndpoint<SimulationRunFilterQuery>(
       this.callListEndpointWithPost,
-      filter,
+      filter
     );
   };
 

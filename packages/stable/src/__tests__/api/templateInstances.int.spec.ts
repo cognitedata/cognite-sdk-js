@@ -193,7 +193,7 @@ describe('template instances test', () => {
   });
 
   function toExternalTemplateInstance(
-    instance: TemplateInstance,
+    instance: TemplateInstance
   ): ExternalTemplateInstance {
     return {
       externalId: instance.externalId,

@@ -15,7 +15,7 @@ export class MonitoringTasksAPI extends BaseResourceAPI<MonitoringTask> {
   public list = async (filter?: MonitoringTaskFilterQuery) => {
     return this.listEndpoint<MonitoringTaskFilterQuery>(
       this.callListEndpointWithPost,
-      filter,
+      filter
     );
   };
 

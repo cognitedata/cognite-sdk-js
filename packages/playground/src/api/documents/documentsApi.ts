@@ -36,23 +36,23 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     this.pipelinesAPI = new PipelinesAPI(
       `${baseUrl}/pipelines`,
       httpClient,
-      map,
+      map
     );
     this.classifiersAPI = new ClassifiersAPI(
       `${baseUrl}/classifiers`,
       httpClient,
-      map,
+      map
     );
   }
 
   public search = (
-    query: DocumentsSearchRequest,
+    query: DocumentsSearchRequest
   ): Promise<DocumentsSearchResponse> => {
     return this.searchDocuments<DocumentsSearchResponse>(query);
   };
 
   public list = (
-    scope?: DocumentsFilterRequest,
+    scope?: DocumentsFilterRequest
   ): CursorAndAsyncIterator<Document> => {
     return this.listEndpoint(this.callListEndpointWithPost, scope);
   };
@@ -60,7 +60,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   // https://docs.cognite.com/api/playground/#operation/documentsContent
   public content = (
     ids: DocumentId[],
-    ignoreUnknownIds?: boolean,
+    ignoreUnknownIds?: boolean
   ): Promise<DocumentContentResponse> => {
     return this.documentContent<DocumentContentResponse>(ids, ignoreUnknownIds);
   };
@@ -82,7 +82,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   }
 
   private async searchDocuments<ResponseType>(
-    query: DocumentsSearchRequest,
+    query: DocumentsSearchRequest
   ): Promise<ResponseType> {
     const response = await this.post<ResponseType>(this.searchUrl, {
       data: query,
@@ -93,7 +93,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
 
   private async documentContent<ResponseType>(
     ids: DocumentId[],
-    ignoreUnknownIds?: boolean,
+    ignoreUnknownIds?: boolean
   ): Promise<ResponseType> {
     const documentIds = ids.map((id) => ({ id }));
     const response = await this.post<ResponseType>(this.url('content'), {

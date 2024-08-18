@@ -24,7 +24,7 @@ export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
    * ```
    */
   public create = (
-    items: SecurityCategorySpec[],
+    items: SecurityCategorySpec[]
   ): Promise<SecurityCategory[]> => {
     return this.createEndpoint(items);
   };
@@ -37,7 +37,7 @@ export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
    * ```
    */
   public list = (
-    query?: ListSecurityCategories,
+    query?: ListSecurityCategories
   ): CursorAndAsyncIterator<SecurityCategory> => {
     return super.listEndpoint(this.callListEndpointWithGet, query);
   };

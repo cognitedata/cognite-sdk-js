@@ -15,7 +15,7 @@ export class SubscribersAPI extends BaseResourceAPI<Subscriber> {
   public list = async (filter?: SubscriberFilterQuery) => {
     return this.listEndpoint<SubscriberFilterQuery>(
       this.callListEndpointWithPost,
-      filter,
+      filter
     );
   };
 

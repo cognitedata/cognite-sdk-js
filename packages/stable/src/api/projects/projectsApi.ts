@@ -33,7 +33,7 @@ export class ProjectsAPI extends BaseResourceAPI<unknown> {
    */
   public update = async (
     projectName: string,
-    replacement: ProjectUpdate,
+    replacement: ProjectUpdate
   ): Promise<ProjectResponse> => {
     const path = this.encodeUrl(projectName);
     const response = await this.put<ProjectResponse>(path, {
@@ -57,7 +57,7 @@ export class ProjectsAPI extends BaseResourceAPI<unknown> {
    */
   public updateProject = async (
     projectName: string,
-    replacement: PartialProjectUpdate,
+    replacement: PartialProjectUpdate
   ): Promise<ProjectResponse> => {
     const path = `${this.encodeUrl(projectName)}/update`;
     const response = await this.post<ProjectResponse>(path, {

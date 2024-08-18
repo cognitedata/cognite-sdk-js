@@ -28,7 +28,7 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
   constructor(
     resourcePath: string,
     httpClient: CDFHttpClient,
-    map: MetadataMap,
+    map: MetadataMap
   ) {
     super(resourcePath, httpClient, map);
     const revealPath = `${resourcePath}/reveal`;
@@ -36,18 +36,18 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
     this.revealRevisions3DAPI = new RevealRevisions3DAPI(
       revealPath,
       httpClient,
-      map,
+      map
     );
     this.revealNodes3DAPI = new RevealNodes3DAPI(revealPath, httpClient, map);
     this.revealSectors3DAPI = new RevealSectors3DAPI(
       revealPath,
       httpClient,
-      map,
+      map
     );
     this.unrealRevisions3DAPI = new UnrealRevisions3DAPI(
       unrealPath,
       httpClient,
-      map,
+      map
     );
   }
 
@@ -60,7 +60,7 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
    */
   public retrieveRevealRevision3D = (
     modelId: CogniteInternalId,
-    revisionId: CogniteInternalId,
+    revisionId: CogniteInternalId
   ): Promise<RevealRevision3D> => {
     return this.revealRevisions3DAPI.retrieve(modelId, revisionId);
   };
@@ -77,7 +77,7 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
   public listRevealNodes3D = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
-    query?: List3DNodesQuery,
+    query?: List3DNodesQuery
   ): CursorAndAsyncIterator<RevealNode3D> => {
     return this.revealNodes3DAPI.list(modelId, revisionId, query);
   };
@@ -95,13 +95,13 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     nodeId: CogniteInternalId,
-    query?: List3DNodesQuery,
+    query?: List3DNodesQuery
   ): CursorAndAsyncIterator<RevealNode3D> => {
     return this.revealNodes3DAPI.listAncestors(
       modelId,
       revisionId,
       nodeId,
-      query,
+      query
     );
   };
 
@@ -117,7 +117,7 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
   public listRevealSectors3D = (
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
-    query?: ListRevealSectors3DQuery,
+    query?: ListRevealSectors3DQuery
   ): CursorAndAsyncIterator<RevealSector3D> => {
     return this.revealSectors3DAPI.list(modelId, revisionId, query);
   };
@@ -131,7 +131,7 @@ export class Viewer3DAPI extends BaseResourceAPI<unknown> {
    */
   public retrieveUnrealRevision3D = (
     modelId: CogniteInternalId,
-    revisionId: CogniteInternalId,
+    revisionId: CogniteInternalId
   ): Promise<RevealRevision3D> => {
     return this.unrealRevisions3DAPI.retrieve(modelId, revisionId);
   };

@@ -63,7 +63,7 @@ describeIfCondition(
           },
           fileContent,
           false,
-          true,
+          true
         ),
         // create assets
         client.assets.create([childAsset, rootAsset]),
@@ -90,7 +90,7 @@ describeIfCondition(
       const req = async () => {
         const processingRevision = await client.revisions3D.retrieve(
           model.id,
-          revisions[0].id,
+          revisions[0].id
         );
         if (
           ['Queued', 'Processing'].indexOf(processingRevision.status) !== -1
@@ -109,7 +109,7 @@ describeIfCondition(
     test('retrieve', async () => {
       const retrieved = await client.revisions3D.retrieve(
         model.id,
-        revisions[0].id,
+        revisions[0].id
       );
       expect(retrieved.fileId).toBe(file.id);
       expect(retrieved.published).toBeFalsy();
@@ -151,11 +151,11 @@ describeIfCondition(
               set: newMetadata,
             },
           },
-        }),
+        })
       );
       const updatedRevisions = await client.revisions3D.update(
         model.id,
-        revisionsToUpdate,
+        revisionsToUpdate
       );
       for (const revision of updatedRevisions) {
         expect(revision.rotation).toEqual(newRotation);
@@ -173,7 +173,7 @@ describeIfCondition(
     test('list', async () => {
       const list = await client.revisions3D.list(model.id).autoPagingToArray();
       expect(revisions.map((r) => r.id).sort()).toEqual(
-        list.map((r) => r.id).sort(),
+        list.map((r) => r.id).sort()
       );
     });
 
@@ -185,7 +185,7 @@ describeIfCondition(
           .autoPagingToArray();
         expect(nodes3D.map((n) => n.name)).toContain('RootNode');
       },
-      5 * 60 * 1000,
+      5 * 60 * 1000
     );
 
     test(
@@ -197,13 +197,13 @@ describeIfCondition(
         const nodes = await client.revisions3D.retrieve3DNodes(
           model.id,
           revisions[0].id,
-          nodes3D.map((node) => ({ id: node.id })),
+          nodes3D.map((node) => ({ id: node.id }))
         );
         expect(nodes.length).toBe(2);
         expect(nodes[0]).toEqual(nodes3D[0]);
         expect(nodes[1]).toEqual(nodes3D[1]);
       },
-      5 * 60 * 1000,
+      5 * 60 * 1000
     );
 
     test(
@@ -214,7 +214,7 @@ describeIfCondition(
           .autoPagingToArray();
         expect(nodes3D.map((n) => n.name)).toContain('RootNode');
       },
-      5 * 60 * 1000,
+      5 * 60 * 1000
     );
 
     test(
@@ -230,7 +230,7 @@ describeIfCondition(
           .autoPagingToArray();
         expect(nodes3D.length).toBeGreaterThan(0);
       },
-      5 * 60 * 1000,
+      5 * 60 * 1000
     );
 
     test(
@@ -246,7 +246,7 @@ describeIfCondition(
           .autoPagingToArray();
         expect(nodes3D).toHaveLength(1);
       },
-      5 * 60 * 1000,
+      5 * 60 * 1000
     );
 
     test(
@@ -262,7 +262,7 @@ describeIfCondition(
           .autoPagingToArray();
         expect(nodes3D.length).toHaveLength(0);
       },
-      5 * 60 * 1000,
+      5 * 60 * 1000
     );
 
     test(
@@ -278,7 +278,7 @@ describeIfCondition(
           .autoPagingToArray();
         expect(nodes3D).toHaveLength(0);
       },
-      5 * 60 * 1000,
+      5 * 60 * 1000
     );
 
     let assetMappingsToCreate: CreateAssetMapping3D[];
@@ -290,10 +290,10 @@ describeIfCondition(
       assetMappings = await client.assetMappings3D.create(
         model.id,
         revisions[0].id,
-        assetMappingsToCreate,
+        assetMappingsToCreate
       );
       expect(assetMappings.map((t) => t.assetId).sort()).toEqual(
-        assetMappingsToCreate.map((t) => t.assetId).sort(),
+        assetMappingsToCreate.map((t) => t.assetId).sort()
       );
       expect(assetMappings.length).toBe(2);
     });
@@ -304,10 +304,10 @@ describeIfCondition(
         .autoPagingToArray({ limit: 2 });
 
       expect(list.map((t) => t.assetId).sort()).toEqual(
-        assetMappingsToCreate.map((t) => t.assetId).sort(),
+        assetMappingsToCreate.map((t) => t.assetId).sort()
       );
       expect(list.map((t) => t.nodeId).sort()).toEqual(
-        assetMappingsToCreate.map((t) => t.nodeId).sort(),
+        assetMappingsToCreate.map((t) => t.nodeId).sort()
       );
       expect(list.length).toBe(2);
     });
@@ -316,7 +316,7 @@ describeIfCondition(
       const deleted = await client.assetMappings3D.delete(
         model.id,
         revisions[0].id,
-        assetMappingsToCreate,
+        assetMappingsToCreate
       );
       expect(deleted).toEqual({});
     });
@@ -331,7 +331,7 @@ describeIfCondition(
     test('retrieve a 3d revision (reveal)', async () => {
       const response = await client.viewer3D.retrieveRevealRevision3D(
         model.id,
-        revisions[0].id,
+        revisions[0].id
       );
       expect(response.sceneThreedFiles.length).toBeTruthy();
     });
@@ -339,7 +339,7 @@ describeIfCondition(
     test('retrieve a 3d revision (unreal)', async () => {
       const response = await client.viewer3D.retrieveUnrealRevision3D(
         model.id,
-        revisions[0].id,
+        revisions[0].id
       );
       expect(response.sceneThreedFiles.length).toBeTruthy();
     });
@@ -347,7 +347,7 @@ describeIfCondition(
     test('retrieve 3d reveal node list', async () => {
       const response = await client.viewer3D.listRevealNodes3D(
         model.id,
-        revisions[0].id,
+        revisions[0].id
       );
       expect(response.items.length).toBeTruthy();
     });
@@ -355,7 +355,7 @@ describeIfCondition(
     test('retrieve 3d reveal 3d sectors', async () => {
       const response = await client.viewer3D.listRevealSectors3D(
         model.id,
-        revisions[0].id,
+        revisions[0].id
       );
       expect(response.items.length).toBeTruthy();
     });
@@ -363,7 +363,7 @@ describeIfCondition(
     test('delete revisions', async () => {
       const deleted = await client.revisions3D.delete(
         model.id,
-        revisions.map((r) => ({ id: r.id })),
+        revisions.map((r) => ({ id: r.id }))
       );
       expect(deleted).toEqual({});
     });
@@ -372,5 +372,5 @@ describeIfCondition(
       const list = await client.revisions3D.list(model.id).autoPagingToArray();
       expect(list).toEqual([]);
     });
-  },
+  }
 );

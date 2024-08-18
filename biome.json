@@ -5,6 +5,7 @@
     "ignore": [
       "**/dist/**/*",
       "**/docs/**/*",
+      "**/codeSnippets/**/*",
       "samples/**/*",
       "packages/core/src/credentialsAuth.ts",
       "packages/core/src/authFlows/legacy.ts",
@@ -15,6 +16,7 @@
     "ignore": [
       "**/dist/**/*",
       "**/docs/**/*",
+      "**/codeSnippets/**/*",
       "samples/**/*",
       "packages/core/src/credentialsAuth.ts",
       "packages/core/src/authFlows/legacy.ts",
@@ -32,6 +34,7 @@
       "**/package.json",
       "**/dist/**/*",
       "**/docs/**/*",
+      "**/codeSnippets/**/*",
       "samples/**/*",
       "packages/core/src/credentialsAuth.ts",
       "packages/core/src/authFlows/legacy.ts",
@@ -42,6 +45,7 @@
   },
   "javascript": {
     "formatter": {
+      "trailingCommas": "es5",
       "quoteStyle": "single"
     }
   }

@@ -22,7 +22,7 @@ export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
   public list = async (filter?: SimulatorRoutineFilterQuery) => {
     return this.listEndpoint<SimulatorRoutineFilterQuery>(
       this.callListEndpointWithPost,
-      filter,
+      filter
     );
   };
 

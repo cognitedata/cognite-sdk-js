@@ -52,7 +52,7 @@ describe('ADFS', () => {
       expect(promiseResolved).toBe(false);
       expect(silentLogin).toHaveBeenCalledTimes(1);
       expect(window.location.href).toMatchInlineSnapshot(
-        `"https://adfs.test.com/adfs?client_id=adfsClientId&scope=user_impersonation IDENTITY&response_mode=fragment&response_type=id_token token&resource=${mockBaseUrl}&redirect_uri=https://localhost/"`,
+        `"https://adfs.test.com/adfs?client_id=adfsClientId&scope=user_impersonation IDENTITY&response_mode=fragment&response_type=id_token token&resource=${mockBaseUrl}&redirect_uri=https://localhost/"`
       );
     });
 
@@ -71,7 +71,7 @@ describe('ADFS', () => {
         } as HTMLIFrameElement;
       }
       const iframe = createIframe(
-        `#access_token=${accessToken}&id_token=${idToken}&expires_in=${expiresIn}`,
+        `#access_token=${accessToken}&id_token=${idToken}&expires_in=${expiresIn}`
       );
       const spiedCreateElement = vi
         .spyOn(document, 'createElement')
@@ -97,7 +97,7 @@ describe('ADFS', () => {
       expect(spiedRemoveChild).toBeCalledTimes(1);
       expect(spiedRemoveChild).toBeCalledWith(iframe);
       expect(iframe.src).toMatchInlineSnapshot(
-        `"https://adfs.test.com/adfs?prompt=none&client_id=adfsClientId&scope=user_impersonation IDENTITY&response_mode=fragment&response_type=id_token token&resource=${mockBaseUrl}&redirect_uri=https://localhost/"`,
+        `"https://adfs.test.com/adfs?prompt=none&client_id=adfsClientId&scope=user_impersonation IDENTITY&response_mode=fragment&response_type=id_token token&resource=${mockBaseUrl}&redirect_uri=https://localhost/"`
       );
       expect(cdfToken).toEqual(accessToken);
     });
@@ -136,7 +136,7 @@ describe('ADFS', () => {
           expiresIn: Date.now() + 3600 * 1000,
         })
         .mockRejectedValueOnce(
-          'Failed to acquire token silently due X-Frame-Options header deny',
+          'Failed to acquire token silently due X-Frame-Options header deny'
         );
 
       const cdfTokenAfterLogin = await adfsClient.login();
@@ -161,7 +161,7 @@ describe('ADFS', () => {
       window.history.pushState(
         {},
         '',
-        `/some/random/path#access_token=${accessToken}&id_token=${idToken}&expires_in=${expiresIn}&random=123`,
+        `/some/random/path#access_token=${accessToken}&id_token=${idToken}&expires_in=${expiresIn}&random=123`
       );
       const token = adfsClient.handleLoginRedirect();
 
@@ -169,7 +169,7 @@ describe('ADFS', () => {
       expect(token?.accessToken).toEqual(accessToken);
       expect(token?.idToken).toEqual(idToken);
       expect(window.location.href).toMatchInlineSnapshot(
-        `"https://localhost/some/random/path#random=123"`,
+        `"https://localhost/some/random/path#random=123"`
       );
     });
     test('should return null if no token in URL', () => {

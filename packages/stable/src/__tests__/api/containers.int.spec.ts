@@ -56,16 +56,16 @@ describe('Containers integration test', () => {
 
     expect(createdContainerResponse.items).toHaveLength(2);
     expect(createdContainerResponse.items[0].name).toEqual(
-      containerCreationDefinition.name,
+      containerCreationDefinition.name
     );
     expect(createdContainerResponse.items[0].externalId).toEqual(
-      containerCreationDefinition.externalId,
+      containerCreationDefinition.externalId
     );
     expect(createdContainerResponse.items[1].name).toEqual(
-      containerCreationDefinition2.name,
+      containerCreationDefinition2.name
     );
     expect(createdContainerResponse.items[1].externalId).toEqual(
-      containerCreationDefinition2.externalId,
+      containerCreationDefinition2.externalId
     );
   });
 
@@ -73,11 +73,11 @@ describe('Containers integration test', () => {
     const Containers = await client.containers.list({ limit: 1000 });
     const Container1 = Containers.items.find(
       (container) =>
-        container.externalId === containerCreationDefinition.externalId,
+        container.externalId === containerCreationDefinition.externalId
     );
     const Container2 = Containers.items.find(
       (container) =>
-        container.externalId === containerCreationDefinition2.externalId,
+        container.externalId === containerCreationDefinition2.externalId
     );
     expect(Container1).toBeDefined();
     expect(Container2).toBeDefined();
@@ -89,7 +89,7 @@ describe('Containers integration test', () => {
       limit: 1000,
     });
     const globalContainer = Containers.items.find(
-      (container) => container.isGlobal,
+      (container) => container.isGlobal
     );
     expect(globalContainer).toBeDefined();
   });
@@ -144,23 +144,22 @@ describe('Containers integration test', () => {
           expect(
             containers.items.find(
               (container) =>
-                container.externalId === containerCreationDefinition.externalId,
-            ),
+                container.externalId === containerCreationDefinition.externalId
+            )
           ).toBeUndefined();
           expect(
             containers.items.find(
               (container) =>
-                container.externalId ===
-                containerCreationDefinition2.externalId,
-            ),
+                container.externalId === containerCreationDefinition2.externalId
+            )
           ).toBeUndefined();
         },
         {
           timeout: 25 * 1000,
           interval: 1000,
-        },
+        }
       );
     },
-    25 * 1000,
+    25 * 1000
   );
 });

@@ -22,7 +22,7 @@ export interface FilteredPathsObject {
 }
 
 export function isReferenceObject(
-  item: object,
+  item: object
 ): item is OpenAPIV3.ReferenceObject {
   return '$ref' in item;
 }
@@ -36,13 +36,13 @@ export function filterPaths(paths: OpenApiPathsObject): FilteredPathsObject {
 }
 
 export function operationsInPath(
-  pathItem: OpenApiPathItem,
+  pathItem: OpenApiPathItem
 ): OpenApiOperationObject[] {
   return Object.keys(pathItem)
     .filter((key) =>
       Object.values(OpenAPIV3.HttpMethods).includes(
-        key as OpenAPIV3.HttpMethods,
-      ),
+        key as OpenAPIV3.HttpMethods
+      )
     )
     .map((key) => key as keyof typeof pathItem)
     .map((key) => pathItem[key] as OpenApiOperationObject);
@@ -63,7 +63,7 @@ export class ReferenceWalker {
       | OpenAPIV3.CallbackObject
       | OpenAPIV3.SchemaObject
       | OpenAPIV3.HeaderObject
-      | undefined,
+      | undefined
   ): string[] => {
     const refs: string[] = [];
     for (const key in obj) {
@@ -99,7 +99,7 @@ export class ReferenceWalker {
     const a = ref.split('#').filter((str) => str.length > 0);
     if (a.length > 1) {
       throw new Error(
-        `A OpenAPI reference ($ref) is expected to only contain one hashtag, found ${a.length}.`,
+        `A OpenAPI reference ($ref) is expected to only contain one hashtag, found ${a.length}.`
       );
     }
 

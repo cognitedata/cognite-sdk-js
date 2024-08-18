@@ -134,20 +134,20 @@ export default class CogniteClient extends BaseCogniteClient {
         const baseVersionsUrl = `templategroups/${urlsafeExternalId}/versions`;
         return {
           versions: accessApi(
-            this.apiFactory(TemplateGroupVersionsApi, baseVersionsUrl),
+            this.apiFactory(TemplateGroupVersionsApi, baseVersionsUrl)
           ),
           version: (version: number) => {
             const baseGroupUrl = `${baseVersionsUrl}/${version}`;
             const graphQlApi = this.apiFactory(
               TemplateGraphQlApi,
-              `${baseGroupUrl}/graphql`,
+              `${baseGroupUrl}/graphql`
             );
             return {
               instances: accessApi(
                 this.apiFactory(
                   TemplateInstancesApi,
-                  `${baseGroupUrl}/instances`,
-                ),
+                  `${baseGroupUrl}/instances`
+                )
               ),
               runQuery: async <
                 TVariables extends Record<string, unknown>,
@@ -157,7 +157,7 @@ export default class CogniteClient extends BaseCogniteClient {
                 operationName?: string;
               }) => graphQlApi.runQuery(graphQlParams),
               views: accessApi(
-                this.apiFactory(ViewsApi, `${baseGroupUrl}/views`),
+                this.apiFactory(ViewsApi, `${baseGroupUrl}/views`)
               ),
             };
           },
@@ -242,18 +242,18 @@ export default class CogniteClient extends BaseCogniteClient {
     this.groupsApi = this.apiFactory(GroupsAPI, 'groups');
     this.securityCategoriesApi = this.apiFactory(
       SecurityCategoriesAPI,
-      'securitycategories',
+      'securitycategories'
     );
     this.serviceAccountsApi = this.apiFactory(
       ServiceAccountsAPI,
-      'serviceaccounts',
+      'serviceaccounts'
     );
     this.apiKeysApi = this.apiFactory(ApiKeysAPI, 'apikeys');
     this.models3DApi = this.apiFactory(Models3DAPI, models3DPath);
     this.relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
     this.entityMatchingApi = this.apiFactory(
       EntityMatchingApi,
-      'context/entitymatching',
+      'context/entitymatching'
     );
     this.revisions3DApi = this.apiFactory(Revisions3DAPI, models3DPath);
     this.files3DApi = this.apiFactory(Files3DAPI, '3d/files');
@@ -262,7 +262,7 @@ export default class CogniteClient extends BaseCogniteClient {
     this.projectsApi = new ProjectsAPI(
       apiUrl(),
       this.httpClient,
-      this.metadataMap,
+      this.metadataMap
     );
     this.geospatialApi = this.apiFactory(GeospatialAPI, 'geospatial');
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');

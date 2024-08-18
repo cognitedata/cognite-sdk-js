@@ -14,34 +14,34 @@ export class BasicHttpClient {
     throw new HttpError(
       response.status,
       response.data as HttpErrorData,
-      response.headers,
+      response.headers
     );
   }
 
   private static jsonResponseHandler<ResponseType>(
-    res: Response,
+    res: Response
   ): Promise<ResponseType> {
     return res.json() as Promise<ResponseType>;
   }
 
   private static textResponseHandler<ResponseType>(
-    res: Response,
+    res: Response
   ): Promise<ResponseType> {
     return res.text() as unknown as Promise<ResponseType>;
   }
 
   private static arrayBufferResponseHandler<ResponseType>(
-    res: Response,
+    res: Response
   ): Promise<ResponseType> {
     return res
       .blob()
       .then((blob) =>
-        new Response(blob).arrayBuffer(),
+        new Response(blob).arrayBuffer()
       ) as unknown as Promise<ResponseType>;
   }
 
   private static getResponseHandler<ResponseType>(
-    responseType?: HttpResponseType,
+    responseType?: HttpResponseType
   ): ResponseHandler<ResponseType> {
     switch (responseType) {
       case HttpResponseType.ArrayBuffer:
@@ -164,7 +164,7 @@ export class BasicHttpClient {
   protected async postRequest<T>(
     response: HttpResponse<T>,
     _: HttpRequest,
-    __: HttpRequest,
+    __: HttpRequest
   ): Promise<HttpResponse<T>> {
     const requestIsOk = BasicHttpClient.validateStatusCode(response.status);
     if (!requestIsOk) {
@@ -181,13 +181,13 @@ export class BasicHttpClient {
   }
 
   protected async rawRequest<ResponseType>(
-    request: HttpRequest,
+    request: HttpRequest
   ): Promise<HttpResponse<ResponseType>> {
     const url = this.constructUrl(request.path, request.params);
     const headers = headersWithDefaultField(
       request.headers || {},
       'Accept',
-      'application/json',
+      'application/json'
     );
     let body = request.data;
     if (isJson(body)) {
@@ -201,7 +201,7 @@ export class BasicHttpClient {
       headers,
     });
     const responseHandler = BasicHttpClient.getResponseHandler<ResponseType>(
-      request.responseType,
+      request.responseType
     );
     // Cloning to fallback on text response if response is failing the responsehandler.
     // node-fetch < 3.0 will hang on clone() for large responses, that is why the parallel promises https://github.com/node-fetch/node-fetch#custom-highwatermark
@@ -228,7 +228,7 @@ export class BasicHttpClient {
     const hasQueryParams = !!params && Object.keys(params).length > 0;
     if (hasQueryParams) {
       const normalizedParams: Record<string, string> = Object.entries(
-        params,
+        params
       ).reduce(
         (acc, [key, value]) => {
           switch (typeof value) {
@@ -249,12 +249,12 @@ export class BasicHttpClient {
             }
             default: {
               throw new Error(
-                `Unsupported value query parameter type: ${typeof value}, ${key}: ${value}`,
+                `Unsupported value query parameter type: ${typeof value}, ${key}: ${value}`
               );
             }
           }
         },
-        {} as Record<string, string>,
+        {} as Record<string, string>
       );
       const search = new URLSearchParams(normalizedParams).toString();
       url += `?${search}`;
@@ -278,7 +278,7 @@ function lowercaseHeadersKeys(headers: HttpHeaders): string[] {
 export function headersWithDefaultField(
   headers: HttpHeaders,
   fieldName: string,
-  fieldValue: string,
+  fieldValue: string
 ): HttpHeaders {
   const lowercaseHeaders = lowercaseHeadersKeys(headers);
   const lowercaseKey = fieldName.toLowerCase();
@@ -332,5 +332,5 @@ type ResponseHandler<ResponseType> = (res: Response) => Promise<ResponseType>;
 
 export type HttpCall = <ResponseType>(
   path: string,
-  options?: HttpRequestOptions,
+  options?: HttpRequestOptions
 ) => Promise<HttpResponse<ResponseType>>;

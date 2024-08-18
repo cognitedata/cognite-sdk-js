@@ -46,7 +46,7 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
    * ```
    */
   public upsert = async (
-    params: ContainerCreateDefinition[],
+    params: ContainerCreateDefinition[]
   ): Promise<ContainerCollectionResponse> => {
     const response = await this.post<ContainerCollectionResponse>(this.url(), {
       data: { items: params },
@@ -66,13 +66,13 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
    * ```
    */
   public delete = async (
-    params: ListOfSpaceExternalIdsRequest['items'],
+    params: ListOfSpaceExternalIdsRequest['items']
   ): Promise<ListOfSpaceExternalIdsResponse> => {
     const response = await this.post<ListOfSpaceExternalIdsResponse>(
       this.deleteUrl,
       {
         data: { items: params },
-      },
+      }
     );
     return response.data;
   };
@@ -89,7 +89,7 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
     params: IncludeGlobalQueryParameter &
       CursorQueryParameter &
       ReducedLimitQueryParameter &
-      SpaceQueryParameter = { includeGlobal: false },
+      SpaceQueryParameter = { includeGlobal: false }
   ): CursorAndAsyncIterator<ContainerDefinition> => {
     return super.listEndpoint(this.callListEndpointWithGet, params);
   };
@@ -108,13 +108,13 @@ export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
    * ```
    */
   public retrieve = async (
-    params: ListOfSpaceExternalIdsRequest['items'],
+    params: ListOfSpaceExternalIdsRequest['items']
   ): Promise<ContainerCollectionResponse> => {
     const response = await this.post<ContainerCollectionResponse>(
       this.byIdsUrl,
       {
         data: { items: params },
-      },
+      }
     );
     return response.data;
   };

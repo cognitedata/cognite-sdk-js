@@ -28,7 +28,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
     super(resourcePath, ...args);
     this.syntheticTimeseriesApi = new SyntheticTimeSeriesAPI(
       this.url('synthetic'),
-      ...args,
+      ...args
     );
   }
 
@@ -62,7 +62,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * ```
    */
   public list = (
-    scope?: TimeseriesFilterQuery,
+    scope?: TimeseriesFilterQuery
   ): CursorAndAsyncIterator<Timeseries> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
@@ -76,7 +76,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * ```
    */
   public aggregate = (
-    query: TimeseriesAggregateQuery,
+    query: TimeseriesAggregateQuery
   ): Promise<TimeseriesAggregate[]> => {
     return super.aggregateEndpoint(query);
   };
@@ -93,7 +93,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    */
   public retrieve = (
     ids: IdEither[],
-    params: TimeseriesRetrieveParams = {},
+    params: TimeseriesRetrieveParams = {}
   ) => {
     return super.retrieveEndpoint(ids, params);
   };

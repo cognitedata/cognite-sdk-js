@@ -41,7 +41,7 @@ const createPath = (options: PackageServiceOptions): string => {
 };
 
 export const closestConfigDirectoryPath = async (
-  options: PackageServiceOptions,
+  options: PackageServiceOptions
 ): Promise<string> => {
   const directory = createPath(options);
   try {

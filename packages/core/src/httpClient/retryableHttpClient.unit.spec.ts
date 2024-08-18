@@ -12,7 +12,7 @@ describe('RetryableHttpClient', () => {
   beforeEach(() => {
     client = new RetryableHttpClient(
       baseUrl,
-      (_, response) => response.status === 500,
+      (_, response) => response.status === 500
     );
     nock.cleanAll();
   });
@@ -38,7 +38,7 @@ describe('RetryableHttpClient', () => {
     nock(baseUrl).get('/').times(2).reply(500, {});
     nock(baseUrl).get('/').reply(400, { a: 42 });
     await expect(client.get('/')).rejects.toThrow(
-      'Request failed | status code: 400',
+      'Request failed | status code: 400'
     );
   });
 

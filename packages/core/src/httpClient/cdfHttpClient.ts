@@ -18,14 +18,14 @@ import {
 
 export class CDFHttpClient extends RetryableHttpClient {
   private static serializeQueryParameters(
-    params: HttpQueryParams = {},
+    params: HttpQueryParams = {}
   ): Record<string, string> {
     return Object.entries(params).reduce(
       (serializedParams, [key, value]) => {
         serializedParams[key] = isJson(value) ? JSON.stringify(value) : value;
         return serializedParams;
       },
-      {} as Record<string, string>,
+      {} as Record<string, string>
     );
   }
 
@@ -41,7 +41,7 @@ export class CDFHttpClient extends RetryableHttpClient {
     return names.reduce(
       (partiallyFilteredHeaders, headerName) =>
         CDFHttpClient.filterHeader(partiallyFilteredHeaders, headerName),
-      headers,
+      headers
     );
   }
 
@@ -69,10 +69,10 @@ export class CDFHttpClient extends RetryableHttpClient {
   }
 
   protected async preRequest(
-    request: RetryableHttpRequest,
+    request: RetryableHttpRequest
   ): Promise<RetryableHttpRequest> {
     const headersWithDefaultHeaders = this.populateDefaultHeaders(
-      request.headers,
+      request.headers
     );
     const headers = request.withCredentials
       ? headersWithDefaultHeaders
@@ -95,7 +95,7 @@ export class CDFHttpClient extends RetryableHttpClient {
   protected async postRequest<T>(
     response: HttpResponse<T>,
     request: RetryableHttpRequest,
-    mutatedRequest: RetryableHttpRequest,
+    mutatedRequest: RetryableHttpRequest
   ): Promise<HttpResponse<T>> {
     try {
       return await super.postRequest(response, request, mutatedRequest);
@@ -160,5 +160,5 @@ type Response401Handler = (
   err: HttpError,
   request: RetryableHttpRequest,
   retry: () => void,
-  reject: () => void,
+  reject: () => void
 ) => void;

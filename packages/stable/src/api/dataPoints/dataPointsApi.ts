@@ -25,7 +25,7 @@ export class DataPointsAPI extends BaseResourceAPI<
   protected getDateProps() {
     return this.pickDateProps<DatapointInfo>(
       ['items', 'datapoints'],
-      ['timestamp'],
+      ['timestamp']
     );
   }
 
@@ -48,7 +48,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```
    */
   public retrieve = (
-    query: DatapointsMultiQuery,
+    query: DatapointsMultiQuery
   ): Promise<DatapointAggregates[] | Datapoints[]> => {
     return this.retrieveDatapointsEndpoint(query);
   };
@@ -60,7 +60,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```
    */
   public retrieveDatapointMonthlyAggregates = async (
-    query: DatapointsMonthlyGranularityMultiQuery,
+    query: DatapointsMonthlyGranularityMultiQuery
   ): Promise<DatapointAggregates[]> => {
     // Find the start and end dates from the query
     const startDate = query.start;
@@ -146,7 +146,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    */
   public retrieveLatest = (
     items: LatestDataBeforeRequest[],
-    params: LatestDataParams = {},
+    params: LatestDataParams = {}
   ): Promise<Datapoints[]> => {
     return this.retrieveLatestEndpoint(items, params);
   };
@@ -182,7 +182,7 @@ export class DataPointsAPI extends BaseResourceAPI<
 
   private async retrieveLatestEndpoint(
     items: LatestDataBeforeRequest[],
-    params: LatestDataParams,
+    params: LatestDataParams
   ) {
     const path = this.url('latest');
     const response = await this.post<ItemsWrapper<Datapoints[]>>(path, {
@@ -202,7 +202,7 @@ export class DataPointsAPI extends BaseResourceAPI<
 
   protected getMonthsBetweenDates = (
     startDate: Timestamp | string,
-    endDate: Timestamp | string,
+    endDate: Timestamp | string
   ): MonthInfo[] => {
     const result: MonthInfo[] = [];
 
@@ -210,10 +210,10 @@ export class DataPointsAPI extends BaseResourceAPI<
 
     while (currentMonth <= new Date(endDate)) {
       const firstDay = new Date(
-        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), 1, 0),
+        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), 1, 0)
       );
       const lastDay = new Date(
-        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1, 0),
+        Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1, 0)
       );
 
       result.push({

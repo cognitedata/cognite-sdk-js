@@ -44,9 +44,9 @@ describe('Graph utils', () => {
       const nodeAAA = { data: null, parentNode: nodeAA };
       nodeA.parentNode = nodeAAA;
       expect(() =>
-        topologicalSort([nodeA, nodeAA, nodeAAA]),
+        topologicalSort([nodeA, nodeAA, nodeAAA])
       ).toThrowErrorMatchingInlineSnapshot(
-        '[Error: Impossible to topological sort nodes]',
+        '[Error: Impossible to topological sort nodes]'
       );
     });
   });

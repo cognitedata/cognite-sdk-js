@@ -47,7 +47,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient();
       }).toThrowErrorMatchingInlineSnapshot(
-        '[Error: `CogniteClient` is missing parameter `options`]',
+        '[Error: `CogniteClient` is missing parameter `options`]'
       );
     });
 
@@ -56,7 +56,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient({});
       }).toThrowErrorMatchingInlineSnapshot(
-        '[Error: options.appId is required and must be of type string]',
+        '[Error: options.appId is required and must be of type string]'
       );
     });
 
@@ -65,7 +65,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient({ appId: 12 });
       }).toThrowErrorMatchingInlineSnapshot(
-        '[Error: options.appId is required and must be of type string]',
+        '[Error: options.appId is required and must be of type string]'
       );
     });
 
@@ -74,7 +74,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient({ appId: 'unit-test' });
       }).toThrowErrorMatchingInlineSnapshot(
-        '[Error: options.project is required and must be of type string]',
+        '[Error: options.project is required and must be of type string]'
       );
     });
 
@@ -96,7 +96,7 @@ describe('CogniteClient', () => {
         retryValidator: createUniversalRetryValidator(1),
       });
       await expect(client.get('/')).rejects.toThrow(
-        'Request failed | status code: 500',
+        'Request failed | status code: 500'
       );
       expect(scope.isDone()).toBeTruthy();
     });
@@ -107,7 +107,7 @@ describe('CogniteClient', () => {
           // @ts-ignore
           new BaseCogniteClient({ appId: 'unit-test', project: 'unit-test' });
         }).toThrowErrorMatchingInlineSnapshot(
-          '[Error: options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>]',
+          '[Error: options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>]'
         );
       });
       test('call credentials on 401', async () => {
@@ -144,9 +144,9 @@ describe('CogniteClient', () => {
         });
 
         await expect(
-          client.get('/test'),
+          client.get('/test')
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          '[Error: Request failed | status code: 401]',
+          '[Error: Request failed | status code: 401]'
         );
 
         expect(getToken).toHaveBeenCalledTimes(1);
@@ -282,7 +282,7 @@ describe('CogniteClient', () => {
       const client = setupClient(mockBaseUrl);
       await client.authenticate();
       await expect(client.get('/test').then((r) => r.status)).resolves.toBe(
-        200,
+        200
       );
     });
 
@@ -292,9 +292,9 @@ describe('CogniteClient', () => {
       const client = setupClient(mockBaseUrl);
 
       await expect(
-        client.get('/test'),
+        client.get('/test')
       ).rejects.toThrowErrorMatchingInlineSnapshot(
-        '[Error: Request failed | status code: 401]',
+        '[Error: Request failed | status code: 401]'
       );
     });
 

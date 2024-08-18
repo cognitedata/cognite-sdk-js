@@ -98,7 +98,7 @@ describe('Datapoints integration test for quality indicators', () => {
         start: new Date(2020, 0, 1),
         end: new Date(2023, 3, 1),
         aggregates: ['countGood', 'countUncertain', 'countBad'],
-      },
+      }
     );
 
     expect(response[0].datapoints[0].countGood).toBe(2);

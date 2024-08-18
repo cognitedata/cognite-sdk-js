@@ -20,7 +20,7 @@ export class SubscriptionsAPI extends BaseResourceAPI<Subscription> {
   public list = async (filter?: SubscriptionFilterQuery) => {
     return this.listEndpoint<SubscriptionFilterQuery>(
       this.callListEndpointWithPost,
-      filter,
+      filter
     );
   };
 }

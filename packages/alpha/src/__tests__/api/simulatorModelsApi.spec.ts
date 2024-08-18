@@ -59,7 +59,7 @@ describeIf('simulator models api', () => {
     const list_response = await client.simulators.listModels();
     expect(list_response.items.length).toBeGreaterThan(0);
     const modelFound = list_response.items.find(
-      (item) => item.externalId === modelExternalId,
+      (item) => item.externalId === modelExternalId
     );
     expect(modelFound?.externalId).toBe(modelExternalId);
   });
@@ -70,7 +70,7 @@ describeIf('simulator models api', () => {
     ]);
     expect(retrieve_response.length).toBeGreaterThan(0);
     const modelFound = retrieve_response.find(
-      (item) => item.externalId === modelExternalId,
+      (item) => item.externalId === modelExternalId
     );
     expect(modelFound?.externalId).toBe(modelExternalId);
   });
@@ -109,7 +109,7 @@ describeIf('simulator models api', () => {
     });
 
     const revisionFilter = listModelRevisions.items.filter(
-      (item) => item.modelExternalId === modelExternalId,
+      (item) => item.modelExternalId === modelExternalId
     );
     expect(revisionFilter.length).toBe(2);
   });
@@ -120,7 +120,7 @@ describeIf('simulator models api', () => {
     ]);
     expect(retrieve_response.length).toBeGreaterThan(0);
     const modelRevisionFound = retrieve_response.find(
-      (item) => item.externalId === modelRevisionExternalId,
+      (item) => item.externalId === modelRevisionExternalId
     );
     expect(modelRevisionFound?.externalId).toBe(modelRevisionExternalId);
   });
@@ -133,8 +133,8 @@ describeIf('simulator models api', () => {
     const responseAfterDelete = await client.simulators.listModels();
     expect(
       responseAfterDelete.items.filter(
-        (res) => res.externalId === modelExternalId,
-      ).length,
+        (res) => res.externalId === modelExternalId
+      ).length
     ).toBe(0);
   });
 
@@ -150,8 +150,8 @@ describeIf('simulator models api', () => {
       const responseAfterDelete = await client.simulators.list();
       expect(
         responseAfterDelete.items.filter(
-          (res) => res.externalId === simulatorExternalId,
-        ).length,
+          (res) => res.externalId === simulatorExternalId
+        ).length
       ).toBe(0);
     }
   });

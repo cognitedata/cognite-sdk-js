@@ -85,7 +85,7 @@ describe('code generation', () => {
     test('ignore filter', async () => {
       const filter = (
         data: Record<string, object>,
-        predicate: StringFilter,
+        predicate: StringFilter
       ): object => {
         return Object.keys(data)
           .filter(predicate)
@@ -104,7 +104,7 @@ describe('code generation', () => {
 
       const predicateServiceA = createPathFilter(
         [createServiceNameFilter('serviceA')],
-        [],
+        []
       );
       expect(Object.keys(filter(data, predicateServiceA))).toEqual([
         `${base}/serviceA`,
@@ -114,7 +114,7 @@ describe('code generation', () => {
 
       const predicateServiceAAndC = createPathFilter(
         [createServiceNameFilter('serviceA')],
-        [createServiceNameFilter('serviceA/serviceD')],
+        [createServiceNameFilter('serviceA/serviceD')]
       );
       expect(Object.keys(filter(data, predicateServiceAAndC))).toEqual([
         `${base}/serviceA`,
@@ -126,7 +126,7 @@ describe('code generation', () => {
         [
           createServiceNameFilter('serviceA/serviceC'),
           createServiceNameFilter('serviceA/serviceD'),
-        ],
+        ]
       );
       expect(Object.keys(filter(data, predicateServiceAOnly))).toEqual([
         `${base}/serviceA`,

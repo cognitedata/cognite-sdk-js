@@ -15,23 +15,23 @@ export class PreviewAPI extends BaseResourceAPI<unknown> {
 
   public documentAsImage = (
     id: DocumentId,
-    page: number,
+    page: number
   ): Promise<ArrayBuffer> => {
     return this.previewEndpoint<ArrayBuffer>(id, 'image/png', page);
   };
 
   public temporaryLink = (
-    documentId: DocumentId,
+    documentId: DocumentId
   ): Promise<DocumentsTemporaryPreviewLinkResponse> => {
     return this.temporaryLinkEndpoint<DocumentsTemporaryPreviewLinkResponse>(
-      documentId,
+      documentId
     );
   };
 
   public buildPreviewURI = (
     id: DocumentId,
     accept: AcceptType,
-    page = 0,
+    page = 0
   ): string => {
     let uri = `${this.url()}?documentId=${id.toString()}`;
     if (accept === 'image/png') {
@@ -44,7 +44,7 @@ export class PreviewAPI extends BaseResourceAPI<unknown> {
   private async previewEndpoint<ResponseType>(
     id: DocumentId,
     accept: AcceptType,
-    page = 0,
+    page = 0
   ): Promise<ResponseType> {
     const uri = this.buildPreviewURI(id, accept, page);
     const response = await this.get<ResponseType>(uri, {
@@ -58,7 +58,7 @@ export class PreviewAPI extends BaseResourceAPI<unknown> {
   }
 
   private async temporaryLinkEndpoint<ResponseType>(
-    documentId: DocumentId,
+    documentId: DocumentId
   ): Promise<ResponseType> {
     const response = await this.get<ResponseType>(this.url('temporaryLink'), {
       params: {

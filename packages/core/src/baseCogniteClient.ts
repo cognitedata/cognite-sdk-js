@@ -116,7 +116,7 @@ export default class BaseCogniteClient {
       !options.noAuthMode
     ) {
       throw Error(
-        'options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>',
+        'options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>'
       );
     }
 
@@ -132,13 +132,13 @@ export default class BaseCogniteClient {
       this.credentialsAuth = new CredentialsAuth(
         this.httpClient,
         credentials,
-        provider,
+        provider
       );
     }
 
     if (isBrowser() && !isUsingSSL() && !options.noAuthMode) {
       console.warn(
-        'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site',
+        'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
       );
     }
 
@@ -200,18 +200,18 @@ export default class BaseCogniteClient {
 
   private initializeCDFHttpClient(
     baseUrl: string | undefined,
-    options: ClientOptions,
+    options: ClientOptions
   ) {
     const httpClient = new CDFHttpClient(
       getBaseUrl(baseUrl),
-      this.getRetryValidator(),
+      this.getRetryValidator()
     );
 
     httpClient
       .setDefaultHeader(X_CDF_APP_HEADER, options.appId)
       .setDefaultHeader(
         X_CDF_SDK_HEADER,
-        `CogniteJavaScriptSDK:${this.version}`,
+        `CogniteJavaScriptSDK:${this.version}`
       );
 
     httpClient.set401ResponseHandler(async (_, request, retry, reject) => {
@@ -241,7 +241,7 @@ export default class BaseCogniteClient {
    * @returns string
    */
   private retrieveTokenValueFromHeader(
-    headers?: HttpHeaders,
+    headers?: HttpHeaders
   ): string | undefined {
     let token: string | undefined;
 
@@ -299,7 +299,7 @@ export default class BaseCogniteClient {
    */
   public get = <T = unknown>(
     path: string,
-    options?: RetryableHttpRequestOptions,
+    options?: RetryableHttpRequestOptions
   ) => this.httpClient.get<T>(path, options);
 
   /**
@@ -314,7 +314,7 @@ export default class BaseCogniteClient {
    */
   public put = <T = unknown>(
     path: string,
-    options?: RetryableHttpRequestOptions,
+    options?: RetryableHttpRequestOptions
   ) => this.httpClient.put<T>(path, options);
 
   /**
@@ -330,7 +330,7 @@ export default class BaseCogniteClient {
    */
   public post = <T = unknown>(
     path: string,
-    options?: RetryableHttpRequestOptions,
+    options?: RetryableHttpRequestOptions
   ) => this.httpClient.post<T>(path, options);
 
   /**
@@ -344,7 +344,7 @@ export default class BaseCogniteClient {
    */
   public delete = <T = unknown>(
     path: string,
-    options?: RetryableHttpRequestOptions,
+    options?: RetryableHttpRequestOptions
   ) => this.httpClient.delete<T>(path, options);
 
   /**
@@ -358,7 +358,7 @@ export default class BaseCogniteClient {
    */
   public patch = <T = unknown>(
     path: string,
-    options?: RetryableHttpRequestOptions,
+    options?: RetryableHttpRequestOptions
   ) => this.httpClient.patch<T>(path, options);
 
   protected initAPIs() {
@@ -381,14 +381,14 @@ export default class BaseCogniteClient {
     api: new (
       relativePath: string,
       httpClient: CDFHttpClient,
-      map: MetadataMap,
+      map: MetadataMap
     ) => ApiType,
-    relativePath: string,
+    relativePath: string
   ) => {
     return new api(
       `${this.projectUrl}/${relativePath}`,
       this.httpClient,
-      this.metadataMap,
+      this.metadataMap
     );
   };
 

@@ -25,14 +25,14 @@ export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
   }
 
   public retrieve(
-    query: SequenceRowsRetrieve,
+    query: SequenceRowsRetrieve
   ): CursorAndAsyncIterator<SequenceRow> {
     return super.listEndpoint(
       (data) =>
         this.post<SequenceRowsResponseData>(this.listPostUrl, { data }).then(
-          this.transformRetrieveResponse,
+          this.transformRetrieveResponse
         ),
-      query,
+      query
     );
   }
 
@@ -41,7 +41,7 @@ export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
   }
 
   private transformRetrieveResponse(
-    response: HttpResponse<SequenceRowsResponseData>,
+    response: HttpResponse<SequenceRowsResponseData>
   ): HttpResponse<CursorResponse<SequenceRow[]>> {
     const { rows, nextCursor, columns } = response.data;
 

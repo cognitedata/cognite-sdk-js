@@ -177,7 +177,7 @@ describe('Sequences integration test', () => {
           externalId: testExternalId,
           rows: testRows,
           columns: sequences[1].columns.map(
-            ({ externalId }) => externalId || '',
+            ({ externalId }) => externalId || ''
           ),
         },
         {
@@ -203,7 +203,7 @@ describe('Sequences integration test', () => {
 
         expect(result.items).toHaveLength(testRows.length);
         expect(result.items[0].columns[0].externalId).toEqual(
-          sequencesToCreate[1].columns[0].externalId,
+          sequencesToCreate[1].columns[0].externalId
         );
       });
     });

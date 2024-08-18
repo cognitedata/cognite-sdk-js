@@ -26,7 +26,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
   protected getDateProps() {
     return this.pickDateProps(
       ['items'],
-      ['createdTime', 'startTime', 'statusTime'],
+      ['createdTime', 'startTime', 'statusTime']
     );
   }
 
@@ -43,7 +43,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * ```
    */
   public create = async (
-    scope: EntityMatchingCreateRequest,
+    scope: EntityMatchingCreateRequest
   ): Promise<EntityMatchingCreateResponse> => {
     const path = this.url();
     const response = await this.post<EntityMatchingCreateResponse>(path, {
@@ -71,7 +71,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * ```
    */
   public list = (
-    scope?: EntityMatchingFilterRequest,
+    scope?: EntityMatchingFilterRequest
   ): CursorAndAsyncIterator<EntityMatchingModel> => {
     return super.listEndpoint(this.callListEndpointWithPost, scope);
   };
@@ -87,7 +87,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * ```
    */
   public update = (
-    changes: EntityMatchingChange[],
+    changes: EntityMatchingChange[]
   ): Promise<EntityMatchingModel[]> => {
     return super.updateEndpoint(changes);
   };
@@ -115,7 +115,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * ```
    */
   public predict = async (
-    scope: EntityMatchingPredictRequest,
+    scope: EntityMatchingPredictRequest
   ): Promise<EntityMatchingPredictResponse> => {
     const path = this.url('predict');
     const response = await this.post<EntityMatchingPredictResponse>(path, {
@@ -132,7 +132,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * ```
    */
   public predictResult = async (
-    jobId: ContextJobId,
+    jobId: ContextJobId
   ): Promise<EntityMatchingPredictions> => {
     const path = this.url(`jobs/${jobId}`);
     const response = await this.get<EntityMatchingPredictions>(path);
@@ -153,7 +153,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * ```
    */
   public refit = async (
-    scope: EntityMatchingRefitRequest,
+    scope: EntityMatchingRefitRequest
   ): Promise<EntityMatchingRefitResponse> => {
     const path = this.url('refit');
     const response = await this.post<EntityMatchingRefitResponse>(path, {

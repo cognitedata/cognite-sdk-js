@@ -7,7 +7,7 @@ import type { TypeGeneratorResult } from './generator';
 
 export class AcacodeOpenApiGenerator {
   public generateTypes = async (
-    openApiJson: string,
+    openApiJson: string
   ): Promise<TypeGeneratorResult> => {
     const file = await tmp.file({ postfix: '.json' });
     await fs.writeFile(file.path, openApiJson);

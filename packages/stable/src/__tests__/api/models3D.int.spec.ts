@@ -19,7 +19,7 @@ describe('Model3d integration test', () => {
     ];
     models = await client.models3D.create(modelsToCreate);
     expect(models.map((t) => t.name).sort()).toEqual(
-      modelsToCreate.map((t) => t.name).sort(),
+      modelsToCreate.map((t) => t.name).sort()
     );
   });
 
@@ -51,7 +51,7 @@ describe('Model3d integration test', () => {
 
   test('delete', async () => {
     const deleted = await client.models3D.delete(
-      models.map((model) => ({ id: model.id })),
+      models.map((model) => ({ id: model.id }))
     );
     expect(deleted).toEqual({});
   });
