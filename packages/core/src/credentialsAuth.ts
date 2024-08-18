@@ -1,7 +1,7 @@
 // Copyright 2022 Cognite AS
 
 import { verifyCredentialsRequiredFields } from './loginUtils';
-import { isFunction } from 'lodash-es';
+import isFunction from 'lodash/isFunction';
 import type { BasicHttpClient } from './httpClient/basicHttpClient';
 
 import { AUTHORIZATION_HEADER, API_KEY_HEADER } from './constants';

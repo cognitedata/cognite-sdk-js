@@ -1,6 +1,7 @@
 // Copyright 2020 Cognite AS
 
-import { inRange, some } from 'lodash-es';
+import inRange from 'lodash/inRange';
+import some from 'lodash/some';
 
 import type { HttpMethod, HttpResponse } from './basicHttpClient';
 import type { RetryableHttpRequest } from './retryableHttpClient';

@@ -1,6 +1,7 @@
 // Copyright 2020 Cognite AS
 
-import {isString, isFunction} from 'lodash-es';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 import { CDFHttpClient } from '../httpClient/cdfHttpClient';
 import {
   bearerString,

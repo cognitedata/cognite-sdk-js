@@ -12,6 +12,23 @@ class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
 }
 
+/**
+ * SDK client (beta)
+ *
+ * For smooth transition between stable sdk and beta, you may create an alias
+ * `"@cognite/sdk": "@cognite/sdk-beta@^<version>"` in `package.json`
+ * The beta SDK exports the client with the same name as stable, meaning you don't need to change any imports.
+ * ```js
+ * import { CogniteClient } from '@cognite/sdk';
+ *
+ * const client = new CogniteClient({ appId: 'YOUR APPLICATION NAME' });
+ *
+ * // can also specify a base URL
+ * const client = new CogniteClient({ ..., baseUrl: 'https://greenfield.cognitedata.com' });
+ * ```
+ *
+ * @param options Client options
+ */
 export default class CogniteClient extends CogniteClientCleaned {
   private alertsApi?: AlertsAPI;
   protected filesApi?: FilesAPI;

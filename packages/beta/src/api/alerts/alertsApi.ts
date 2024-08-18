@@ -1,5 +1,6 @@
-import type { IdEither } from '@cognite/sdk';
 // Copyright 2022 Cognite AS
+
+import type { IdEither } from '@cognite/sdk';
 import {
   BaseResourceAPI,
   type CDFHttpClient,
