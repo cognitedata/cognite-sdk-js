@@ -1,4 +1,7 @@
 {
   "extends": "./tsconfig.common",
-  "exclude": ["**/__tests__/**", "**/*.spec.ts", "**/*.test.ts"]
+  "exclude": ["**/__tests__/**", "**/*.spec.ts", "**/*.test.ts"],
+  "compilerOptions": {
+    "skipLibCheck": true
+  }
 }

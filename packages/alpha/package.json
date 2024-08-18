@@ -17,7 +17,7 @@
     "local-publish": "yarn build && yalc push",
     "watch": "yarn g:vite build --watch",
     "esCheck": "yarn g:es-check es6 --module './dist/index.js'",
-    "docs": "yarn g:typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
+    "docs": "yarn g:typedoc --options ./typedoc.cjs --tsconfig tsconfig.json src/index.ts",
     "docs:bundle": "yarn docs && mkdir -p ../../docs/alpha && cp -r docs/* ../../docs/alpha/",
     "extract-snippets": "",
     "test-snippets": ""

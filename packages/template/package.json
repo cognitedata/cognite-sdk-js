@@ -17,7 +17,7 @@
     "build": "yarn clean && yarn g:tsc -p ./tsconfig.json && yarn g:vite build && yarn esCheck",
     "watch": "yarn g:vite build --watch",
     "esCheck": "yarn g:es-check es6 --module './dist/index.js'",
-    "docs": "yarn g:typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
+    "docs": "yarn g:typedoc --options ./typedoc.cjs --tsconfig tsconfig.build.json src/index.ts",
     "extract-snippets": "rm -rf codeSnippets/ && yarn docs --json codeSnippets/docs.json && node ../../scripts/extractCodeSnippets.js",
     "test-snippets": "yarn extract-snippets && yarn g:tsc -p codeSnippets/tsconfig.build.json"
   },

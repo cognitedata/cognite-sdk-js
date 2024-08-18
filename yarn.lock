@@ -3354,6 +3354,7 @@ __metadata:
     tmp-promise: "npm:^3.0.3"
     ts-node: "npm:^10.9.2"
     typedoc: "npm:^0.26.5"
+    typedoc-plugin-missing-exports: "npm:^3.0.0"
     typescript: "npm:^5.5.4"
     vite: "npm:^5.4.1"
     vite-plugin-dts: "npm:^4.0.3"
@@ -21760,6 +21761,15 @@ __metadata:
   version: 0.0.6
   resolution: "typedarray@npm:0.0.6"
   checksum: 10c0/6005cb31df50eef8b1f3c780eb71a17925f3038a100d82f9406ac2ad1de5eb59f8e6decbdc145b3a1f8e5836e17b0c0002fb698b9fe2516b8f9f9ff602d36412
+  languageName: node
+  linkType: hard
+
+"typedoc-plugin-missing-exports@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "typedoc-plugin-missing-exports@npm:3.0.0"
+  peerDependencies:
+    typedoc: 0.26.x
+  checksum: 10c0/d6eada4e10198641ae70db70fdd2e48f74d2d57b61e0e3096cc83542c95f842a70b0c604cb3bad223b447a650a875507ad51189a5adbb87ff1dfb9e318d7dd48
   languageName: node
   linkType: hard
 
