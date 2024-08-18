@@ -1,6 +1,9 @@
 {
   "extends": "./tsconfig.common",
   "compilerOptions": {
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "skipLibCheck": true,
+    "declarationDir": "dist",
+    "outDir": "dist"
   }
 }
