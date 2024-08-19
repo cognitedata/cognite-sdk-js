@@ -109,7 +109,9 @@ describe('BasicHttpClient', () => {
         .reply(500, {
           error: { code: 500, message: 'Internal server error' },
         });
-      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Request failed | status code: 500]`);
+      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
+        `[Error: Request failed | status code: 500]`
+      );
     });
 
     test('expose status code in throwed error', async () => {

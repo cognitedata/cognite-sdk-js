@@ -10,11 +10,15 @@ describe('revertable array sorter', () => {
     );
     expect(() =>
       revertableSorter.unsort(['a'])
-    ).toThrowErrorMatchingInlineSnapshot(`[Error: Impossible to unsort. Call sort(...) first.]`);
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: Impossible to unsort. Call sort(...) first.]`
+    );
     expect(revertableSorter.sort([1, 2, 3])).toEqual([3, 2, 1]);
     expect(revertableSorter.unsort(['a', 'b', 'c'])).toEqual(['c', 'b', 'a']);
     expect(() =>
       revertableSorter.unsort(['a', 'b'])
-    ).toThrowErrorMatchingInlineSnapshot(`[Error: Impossible to unsort. Input array has a different length from original.]`);
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: Impossible to unsort. Input array has a different length from original.]`
+    );
   });
 });

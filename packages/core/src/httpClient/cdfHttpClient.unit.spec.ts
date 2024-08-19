@@ -92,7 +92,9 @@ describe('CDFHttpClient', () => {
 
     test('throw custom cognite error with populated message', async () => {
       nock(baseUrl).get('/').reply(400, error400);
-      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Some message | code: 400]`);
+      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
+        `[Error: Some message | code: 400]`
+      );
     });
 
     test('throw custom cognite error with populated status code', async () => {
@@ -131,7 +133,9 @@ describe('CDFHttpClient', () => {
         client.set401ResponseHandler((_, __, ___, reject) => {
           reject();
         });
-        await expect(client.get('/')).rejects.toMatchInlineSnapshot(`[Error: Request failed | status code: 401]`);
+        await expect(client.get('/')).rejects.toMatchInlineSnapshot(
+          `[Error: Request failed | status code: 401]`
+        );
       });
 
       test('respect retry call', async () => {
@@ -151,7 +155,9 @@ describe('CDFHttpClient', () => {
           client.set401ResponseHandler(mockFn);
           await expect(
             client.get(url)
-          ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Some message | code: 401]`);
+          ).rejects.toThrowErrorMatchingInlineSnapshot(
+            `[Error: Some message | code: 401]`
+          );
           expect(mockFn).not.toBeCalled();
         };
       }

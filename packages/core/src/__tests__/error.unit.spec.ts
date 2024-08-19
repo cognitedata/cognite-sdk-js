@@ -37,7 +37,9 @@ describe('CogniteError', () => {
     expect(error.requestId).toBe(requestId);
     expect(() => {
       throw error;
-    }).toThrowErrorMatchingInlineSnapshot(`[Error: Abc | code: 500 | X-Request-ID: def]`);
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: Abc | code: 500 | X-Request-ID: def]`
+    );
   });
 
   test('extra field', () => {
@@ -68,7 +70,9 @@ describe('handleErrorResponse', () => {
     });
     expect(() => {
       handleErrorResponse(httpError);
-    }).toThrowErrorMatchingInlineSnapshot(`[Error: abc | code: 500 | X-Request-ID: def]`);
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: abc | code: 500 | X-Request-ID: def]`
+    );
   });
 
   test('extra fields', () => {

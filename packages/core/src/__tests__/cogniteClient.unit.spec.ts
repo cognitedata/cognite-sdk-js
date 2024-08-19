@@ -45,28 +45,36 @@ describe('CogniteClient', () => {
       expect(() => {
         // @ts-ignore
         new BaseCogniteClient();
-      }).toThrowErrorMatchingInlineSnapshot(`[Error: \`CogniteClient\` is missing parameter \`options\`]`);
+      }).toThrowErrorMatchingInlineSnapshot(
+        `[Error: \`CogniteClient\` is missing parameter \`options\`]`
+      );
     });
 
     test('missing appId', () => {
       expect(() => {
         // @ts-ignore
         new BaseCogniteClient({});
-      }).toThrowErrorMatchingInlineSnapshot(`[Error: options.appId is required and must be of type string]`);
+      }).toThrowErrorMatchingInlineSnapshot(
+        `[Error: options.appId is required and must be of type string]`
+      );
     });
 
     test('invalid appId', () => {
       expect(() => {
         // @ts-ignore
         new BaseCogniteClient({ appId: 12 });
-      }).toThrowErrorMatchingInlineSnapshot(`[Error: options.appId is required and must be of type string]`);
+      }).toThrowErrorMatchingInlineSnapshot(
+        `[Error: options.appId is required and must be of type string]`
+      );
     });
 
     test('missing project', () => {
       expect(() => {
         // @ts-ignore
         new BaseCogniteClient({ appId: 'unit-test' });
-      }).toThrowErrorMatchingInlineSnapshot(`[Error: options.project is required and must be of type string]`);
+      }).toThrowErrorMatchingInlineSnapshot(
+        `[Error: options.project is required and must be of type string]`
+      );
     });
 
     test('not throw errors when running in noAuthMode', () => {
@@ -86,7 +94,9 @@ describe('CogniteClient', () => {
         getToken: vi.fn(async () => 'test-token'),
         retryValidator: createUniversalRetryValidator(1),
       });
-      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Request failed | status code: 500]`);
+      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
+        `[Error: Request failed | status code: 500]`
+      );
       expect(scope.isDone()).toBeTruthy();
     });
 
@@ -95,7 +105,9 @@ describe('CogniteClient', () => {
         expect(() => {
           // @ts-ignore
           new BaseCogniteClient({ appId: 'unit-test', project: 'unit-test' });
-        }).toThrowErrorMatchingInlineSnapshot(`[Error: options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>]`);
+        }).toThrowErrorMatchingInlineSnapshot(
+          `[Error: options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>]`
+        );
       });
       test('call credentials on 401', async () => {
         nock(mockBaseUrl)
@@ -132,7 +144,9 @@ describe('CogniteClient', () => {
 
         await expect(
           client.get('/test')
-        ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Request failed | status code: 401]`);
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          `[Error: Request failed | status code: 401]`
+        );
 
         expect(getToken).toHaveBeenCalledTimes(1);
       });
@@ -278,7 +292,9 @@ describe('CogniteClient', () => {
 
       await expect(
         client.get('/test')
-      ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Request failed | status code: 401]`);
+      ).rejects.toThrowErrorMatchingInlineSnapshot(
+        `[Error: Request failed | status code: 401]`
+      );
     });
 
     test('apiKeyMode should change request header and token preable', async () => {

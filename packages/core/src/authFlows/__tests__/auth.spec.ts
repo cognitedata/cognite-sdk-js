@@ -133,7 +133,9 @@ describe('Cognite Auth', () => {
         );
         await expect(
           authClient.handleLoginRedirect()
-        ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: failed: message]`);
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          `[Error: failed: message]`
+        );
       });
 
       test('valid tokens in url', async () => {

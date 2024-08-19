@@ -9,6 +9,8 @@
     "node": ">=14"
   },
   "scripts": {
-    "test": "yarn g:vitest run"
+    "test": "yarn g:vitest run",
+    "lint": "eslint 'src/**/*.ts'",
+    "lint:fix": "yarn lint --fix"
   }
 }

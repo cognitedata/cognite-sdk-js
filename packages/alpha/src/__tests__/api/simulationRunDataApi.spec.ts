@@ -1,5 +1,6 @@
-import { describe, expect, test } from 'vitest';
 // Copyright 2023 Cognite AS
+
+import { describe, expect, test } from 'vitest';
 import CogniteClientAlpha from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
