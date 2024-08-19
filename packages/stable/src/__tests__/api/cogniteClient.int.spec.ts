@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Asset, ItemsWrapper } from '../../types';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('http methods - integration', () => {

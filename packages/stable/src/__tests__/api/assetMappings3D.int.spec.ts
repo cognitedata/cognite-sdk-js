@@ -7,7 +7,7 @@ import {
   Node3D,
   Revision3D,
 } from 'stable/src/types';
-import CogniteClient from '../../cogniteClient';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 describe.skip('AssetMappings3D integration test', () => {

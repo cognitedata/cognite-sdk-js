@@ -1,7 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import { SpaceCreateDefinition } from 'stable/src/types';
-import CogniteClient from '../../cogniteClient';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Spaces integration test', () => {

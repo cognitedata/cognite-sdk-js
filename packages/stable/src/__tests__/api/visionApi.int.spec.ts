@@ -3,7 +3,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { VisionExtractPostResponse } from '@cognite/sdk';
-import CogniteClient from '../../cogniteClient';
+import { beforeAll, describe, expect, test, vi } from 'vitest';
 import { BETA_FEATURES } from '../../api/vision/visionApi';
 import { setupLoggedInClient } from '../testUtils';
 
@@ -19,8 +19,8 @@ describe('Vision API', () => {
   let extractBetaJob: VisionExtractPostResponse;
 
   beforeAll(async () => {
-    jest.setTimeout(3 * 60 * 1000); // timeout after 3 minutes
-    consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+    vi.setConfig({ testTimeout: 3 * 60 * 1000 }); // timeout after 3 minutes
+    consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     client = setupLoggedInClient();
 
     const testFileExternalId = 'vision_extract_test_image';

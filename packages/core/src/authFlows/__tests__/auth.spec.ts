@@ -1,4 +1,5 @@
 // Copyright 2020 Cognite AS
+import { afterAll, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import nock from 'nock';
 import { AUTHORIZATION_HEADER } from '../../constants';
@@ -15,7 +16,7 @@ import {
   project,
   projectId,
   mockBaseUrl,
-} from '../../testUtils';
+} from '../../__tests__/testUtils';
 import { createUniversalRetryValidator } from '../../httpClient/retryValidator';
 
 describe('Cognite Auth', () => {
@@ -111,7 +112,7 @@ describe('Cognite Auth', () => {
     });
 
     describe('handle login redirect', () => {
-      const isLocalhost = jest
+      const isLocalhost = vi
         .spyOn(Utils, 'isLocalhost')
         .mockImplementation(() => true);
 
@@ -132,7 +133,7 @@ describe('Cognite Auth', () => {
         );
         await expect(
           authClient.handleLoginRedirect()
-        ).rejects.toThrowErrorMatchingInlineSnapshot(`"failed: message"`);
+        ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: failed: message]`);
       });
 
       test('valid tokens in url', async () => {
@@ -158,26 +159,10 @@ describe('Cognite Auth', () => {
       });
     });
     describe('login', () => {
-      const { location } = window;
-
-      beforeAll(() => {
-        delete window.location;
-        window.location = {
-          ...location,
-          hostname: 'localhost',
-          href: 'https://localhost',
-          reload: jest.fn(),
-        };
-      });
-
-      afterAll(() => {
-        window.location = location;
-      });
-
       test('login with redirect', () => {
         const onAuthenticate = REDIRECT;
         const baseUrl = httpClient.getBaseUrl();
-        const spiedLoginWithRedirect = jest
+        const spiedLoginWithRedirect = vi
           .spyOn(LoginUtils, 'loginWithRedirect')
           .mockResolvedValueOnce();
 
@@ -193,7 +178,7 @@ describe('Cognite Auth', () => {
       test('login with popup', async () => {
         const onAuthenticate = POPUP;
         const baseUrl = httpClient.getBaseUrl();
-        const spiedLoginWithPopUp = jest
+        const spiedLoginWithPopUp = vi
           .spyOn(LoginUtils, 'loginWithPopup')
           .mockResolvedValueOnce(authTokens);
         const tokens = await authClient.login({ onAuthenticate });
@@ -206,9 +191,7 @@ describe('Cognite Auth', () => {
         expect(tokens).toEqual(authTokens);
       });
       test('login with custom function', async () => {
-        const onAuthenticate = jest
-          .fn()
-          .mockImplementation(({ skip }) => skip());
+        const onAuthenticate = vi.fn().mockImplementation(({ skip }) => skip());
         const tokens = await authClient.login({ onAuthenticate });
 
         expect(onAuthenticate).toHaveBeenCalledTimes(1);
@@ -216,25 +199,15 @@ describe('Cognite Auth', () => {
       });
     });
     describe('loginWithRedirect', () => {
-      const { location } = window;
-
-      beforeAll(() => {
-        delete window.location;
-        window.location = {
-          ...location,
-          hostname: 'localhost',
-          reload: jest.fn(),
-        };
-      });
-
-      afterAll(() => {
-        window.location = location;
-      });
-
-      test('redirects', async (done) => {
-        const spiedLocationAssign = jest
-          .spyOn(window.location, 'assign')
-          .mockImplementation();
+      test('redirects', async () => {
+        const spiedLocationAssign = vi.fn();
+        Object.defineProperty(window, 'location', {
+          value: {
+            ...window.location,
+            assign: spiedLocationAssign,
+          },
+          writable: true,
+        });
         let isPromiseResolved = false;
         loginWithRedirect({
           baseUrl: 'https://example.com',
@@ -248,10 +221,8 @@ describe('Cognite Auth', () => {
         expect(spiedLocationAssign.mock.calls[0][0]).toMatchInlineSnapshot(
           `"https://example.com/login/redirect?project=my-tenant&redirectUrl=https%3A%2F%2Fredirect.com&errorRedirectUrl=https%3A%2F%2Ferror-redirect.com"`
         );
-        setTimeout(() => {
-          expect(isPromiseResolved).toBe(false);
-          done();
-        }, 1000);
+        await Utils.sleepPromise(1000);
+        expect(isPromiseResolved).toBe(false);
       });
     });
   });

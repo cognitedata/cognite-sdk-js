@@ -1,5 +1,5 @@
 import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
+import { beforeEach, describe, expect, it, test } from 'vitest';
 import { setupMockableClientForUnitTest } from '../testUtils';
 import { mockBaseUrl } from '@cognite/sdk-core/src/testUtils';
 import { sleepPromise } from '@cognite/sdk-core';

@@ -1,9 +1,9 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
-import { Sequence, SequenceValueType } from '../../types';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
+import { SequenceValueType } from '../../types';
 
 describe('Sequences unit test', () => {
   let mockedClient: CogniteClient;

@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import {
   Asset,
   CogniteEvent,

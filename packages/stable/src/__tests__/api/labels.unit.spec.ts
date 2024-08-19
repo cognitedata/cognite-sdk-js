@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 import nock from 'nock';
-import { CogniteClient, ExternalLabelDefinition } from '../..';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 import matches from 'lodash/matches';
 

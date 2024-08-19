@@ -1,9 +1,10 @@
 // Copyright 2020 Cognite AS
 
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { ConflictMode } from '../../types';
 import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
-import { randomInt } from '@cognite/sdk-core/src/testUtils';
+import { randomInt } from '../testUtils';
 
 describe('template group versions test', () => {
   let client: CogniteClient;

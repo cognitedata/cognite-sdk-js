@@ -1,6 +1,5 @@
 // Copyright 2022 Cognite AS
-import CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import {
   AnnotationChangeById,
   AnnotationCreate,
@@ -8,6 +7,7 @@ import {
   AnnotationFilterProps,
   InternalId,
 } from '../../types';
+import { setupLoggedInClient } from '../testUtils';
 
 const ANNOTATED_FILE_EXTERNAL_ID =
   'sdk-integration-tests-file-' + new Date().toISOString();

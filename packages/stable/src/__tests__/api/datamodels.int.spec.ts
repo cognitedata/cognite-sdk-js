@@ -5,7 +5,7 @@ import {
   ViewCreateDefinition,
   ViewDefinition,
 } from 'stable/src/types';
-import CogniteClient from '../../cogniteClient';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Data models integration test', () => {
@@ -50,7 +50,7 @@ describe('Data models integration test', () => {
   };
 
   beforeAll(async () => {
-    jest.setTimeout(30 * 1000);
+    vi.setConfig({ testTimeout: 30 * 1000 });
 
     client = setupLoggedInClient();
     await deleteOldSpaces(client);
@@ -158,24 +158,34 @@ describe('Data models integration test', () => {
     expect(view?.properties).toBeDefined();
   });
 
-  it('should successfully delete datamodels', async () => {
-    const response = await client.dataModels.delete([
-      {
-        space: TEST_SPACE_NAME,
-        externalId: datamodelCreationDefinition.externalId,
-        version: '1',
-      },
-    ]);
-    expect(response.items).toHaveLength(1);
+  it(
+    'should successfully delete datamodels',
+    async () => {
+      const response = await client.dataModels.delete([
+        {
+          space: TEST_SPACE_NAME,
+          externalId: datamodelCreationDefinition.externalId,
+          version: '1',
+        },
+      ]);
+      expect(response.items).toHaveLength(1);
 
-    // Eventual consistency - wait for the delete to propagate
-    await new Promise((resolve) => setTimeout(resolve, 20 * 1000));
-
-    const dataModels = await client.dataModels.list({ limit: 1000 });
-    expect(
-      dataModels.items.find(
-        (dm) => dm.externalId === datamodelCreationDefinition.externalId
-      )
-    ).toBeUndefined();
-  });
+      // Eventual consistency
+      vi.waitFor(
+        async () => {
+          const dataModels = await client.dataModels.list({ limit: 1000 });
+          expect(
+            dataModels.items.find(
+              (dm) => dm.externalId === datamodelCreationDefinition.externalId
+            )
+          ).toBeUndefined();
+        },
+        {
+          timeout: 25 * 1000,
+          interval: 1000,
+        }
+      );
+    },
+    25 * 1000
+  );
 });

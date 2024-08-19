@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('api endpoints smoke test', () => {
@@ -31,7 +31,7 @@ describe('api endpoints smoke test', () => {
 
     async function callEndpoint(endpoint: (a: any[]) => any, param: any) {
       if (endpoint) {
-        const mockFn = jest.fn();
+        const mockFn = vi.fn();
         await endpoint.bind(null)(param).catch(mockFn);
         expect(mockFn).not.toBeCalled();
       }

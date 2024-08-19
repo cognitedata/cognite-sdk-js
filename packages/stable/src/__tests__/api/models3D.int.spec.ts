@@ -1,12 +1,7 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Model3D } from '../../types';
-import {
-  getSortedPropInArray,
-  randomInt,
-  setupLoggedInClient,
-} from '../testUtils';
+import { beforeAll, describe, expect, test } from 'vitest';
+import { getSortedPropInArray, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Model3d integration test', () => {
   let client: CogniteClient;

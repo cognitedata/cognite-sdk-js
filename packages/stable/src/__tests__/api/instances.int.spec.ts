@@ -1,7 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import { ViewReference } from 'stable/src/types';
-import CogniteClient from '../../cogniteClient';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 type SpaceDefinition = {

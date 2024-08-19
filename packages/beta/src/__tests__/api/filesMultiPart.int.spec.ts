@@ -1,6 +1,5 @@
 // Copyright 2020 Cognite AS
-import CogniteClient from '../../cogniteClient';
-import {
+import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
   ExternalFileInfo,
   LabelDefinition,
   MultiPartFileChunkResponse,

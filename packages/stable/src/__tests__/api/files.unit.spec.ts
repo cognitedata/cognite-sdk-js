@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl } from '../testUtils';
 

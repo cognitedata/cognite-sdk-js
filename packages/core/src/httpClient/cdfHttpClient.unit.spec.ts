@@ -1,4 +1,5 @@
 // Copyright 2020 Cognite AS
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import nock from 'nock';
 import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
 import { CogniteError } from '../error';
@@ -91,9 +92,7 @@ describe('CDFHttpClient', () => {
 
     test('throw custom cognite error with populated message', async () => {
       nock(baseUrl).get('/').reply(400, error400);
-      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"Some message | code: 400"`
-      );
+      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Some message | code: 400]`);
     });
 
     test('throw custom cognite error with populated status code', async () => {
@@ -117,23 +116,22 @@ describe('CDFHttpClient', () => {
         }
       });
 
-      test('set custom 401 handler', async (done) => {
-        nock(baseUrl).get('/').reply(401, error401);
-        client.set401ResponseHandler((err) => {
-          expect(err.status).toBe(401);
-          done();
-        });
-        client.get('/');
-      });
+      test('set custom 401 handler', () =>
+        new Promise((done) => {
+          nock(baseUrl).get('/').reply(401, error401);
+          client.set401ResponseHandler((err) => {
+            expect(err.status).toBe(401);
+            done(null);
+          });
+          client.get('/');
+        }));
 
       test('respect reject call', async () => {
         nock(baseUrl).get('/').reply(401, error401);
         client.set401ResponseHandler((_, __, ___, reject) => {
           reject();
         });
-        await expect(client.get('/')).rejects.toMatchInlineSnapshot(
-          `[Error: Request failed | status code: 401]`
-        );
+        await expect(client.get('/')).rejects.toMatchInlineSnapshot(`[Error: Request failed | status code: 401]`);
       });
 
       test('respect retry call', async () => {
@@ -149,13 +147,11 @@ describe('CDFHttpClient', () => {
       function checkIfThrows401(url: string) {
         return async () => {
           nock(baseUrl).get(url).reply(401, error401);
-          const mockFn = jest.fn();
+          const mockFn = vi.fn();
           client.set401ResponseHandler(mockFn);
           await expect(
             client.get(url)
-          ).rejects.toThrowErrorMatchingInlineSnapshot(
-            `"Some message | code: 401"`
-          );
+          ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Some message | code: 401]`);
           expect(mockFn).not.toBeCalled();
         };
       }
