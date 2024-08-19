@@ -2,22 +2,22 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  ExternalId,
+  type CursorAndAsyncIterator,
+  type ExternalId,
 } from '@cognite/sdk-core';
-import {
-  ConstantResolver,
-  ExternalTemplateInstance,
-  FieldResolver,
-  RawResolver,
-  SyntheticTimeSeriesResolver,
-  TemplateInstance,
-  TemplateInstanceFilterQuery,
-  TemplateInstancePatch,
-  ViewResolver,
-} from '../../types';
 import fromPairs from 'lodash/fromPairs';
 import toPairs from 'lodash/toPairs';
+import {
+  ConstantResolver,
+  type ExternalTemplateInstance,
+  type FieldResolver,
+  RawResolver,
+  SyntheticTimeSeriesResolver,
+  type TemplateInstance,
+  type TemplateInstanceFilterQuery,
+  type TemplateInstancePatch,
+  ViewResolver,
+} from '../../types';
 
 export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
   /**
@@ -138,6 +138,7 @@ export class TemplateInstancesApi extends BaseResourceAPI<TemplateInstance> {
   };
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: not worth changing
 class TemplateInstanceCodec {
   static encodeTemplateInstances(
     templateInstances: ExternalTemplateInstance[]
@@ -162,36 +163,40 @@ class TemplateInstanceCodec {
               ? TemplateInstanceCodec.encodeFieldResolvers(
                   patch.update.fieldResolvers.add
                 )
-              : undefined!,
+              : // biome-ignore lint/style/noNonNullAssertion: couldn't find correct type definition.
+                undefined!,
           remove:
             'remove' in patch.update.fieldResolvers
               ? patch.update.fieldResolvers.remove
-              : undefined!,
+              : // biome-ignore lint/style/noNonNullAssertion: couldn't find correct type definition.
+                undefined!,
           set:
             'set' in patch.update.fieldResolvers
               ? TemplateInstanceCodec.encodeFieldResolvers(
                   patch.update.fieldResolvers.set
                 )
-              : undefined!,
+              : // biome-ignore lint/style/noNonNullAssertion: couldn't find correct type definition.
+                undefined!,
         },
       },
     };
   }
 
-  static encodeFieldResolvers(fieldResolvers: {
-    [K in string]: FieldResolver | {};
-  }): { [K in string]: FieldResolver } {
+  static encodeFieldResolvers(
+    fieldResolvers: {
+      [K in string]: FieldResolver | object;
+    }
+  ): { [K in string]: FieldResolver } {
     const mappedResolvers = toPairs(fieldResolvers).map(
       ([name, fieldResolver]) => {
         if (
           fieldResolver !== undefined &&
-          !this.isFieldResolver(fieldResolver)
+          !TemplateInstanceCodec.isFieldResolver(fieldResolver)
         ) {
           // Auto-wrap objects, numbers etc. as ConstantResolver.
           return [name, new ConstantResolver(fieldResolver)];
-        } else {
-          return [name, fieldResolver];
         }
+        return [name, fieldResolver];
       }
     );
 
@@ -211,13 +216,16 @@ class TemplateInstanceCodec {
     });
   }
 
-  static decodeFieldResolvers(fieldResolvers: {
-    [K in string]: FieldResolver | {};
-  }): { [K in string]: FieldResolver | {} } {
+  static decodeFieldResolvers(
+    fieldResolvers: {
+      [K in string]: FieldResolver | object;
+    }
+  ): { [K in string]: FieldResolver | object } {
     const mappedResolvers = toPairs(fieldResolvers).map(
       ([name, fieldResolver]) => {
         return [
           name,
+          // biome-ignore lint/suspicious/noExplicitAny: couldn't find correct type definition.
           TemplateInstanceCodec.decodeFieldResolver(fieldResolver as any),
         ];
       }
@@ -226,7 +234,8 @@ class TemplateInstanceCodec {
     return fromPairs(mappedResolvers);
   }
 
-  static decodeFieldResolver(fieldResolver: any): FieldResolver | {} {
+  // biome-ignore lint/suspicious/noExplicitAny: couldn't find correct type definition.
+  static decodeFieldResolver(fieldResolver: any): FieldResolver | object {
     switch (fieldResolver.type) {
       case 'constant':
         return fieldResolver.value;
@@ -254,6 +263,7 @@ class TemplateInstanceCodec {
     }
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: couldn't find correct type definition.
   static isFieldResolver(fieldResolver: any) {
     return (
       fieldResolver.type === 'constant' ||

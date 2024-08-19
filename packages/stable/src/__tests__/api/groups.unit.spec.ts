@@ -14,7 +14,7 @@ describe('Groups unit test', () => {
 
   test('can create a CDF managed allUserAccounts group', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/groups'), {
+      .post(/\/groups/, {
         items: [{ name: 'test-group', members: 'allUserAccounts' }],
       })
       .once()
@@ -31,7 +31,7 @@ describe('Groups unit test', () => {
 
   test('can create a CDF managed group', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/groups'), {
+      .post(/\/groups/, {
         items: [
           {
             name: 'test-group',

@@ -1,19 +1,19 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import {
-  DatapointsDeleteRequest,
-  DatapointAggregates,
+import type {
   DatapointAggregate,
+  DatapointAggregates,
+  DatapointInfo,
   Datapoints,
+  DatapointsDeleteRequest,
+  DatapointsMonthlyGranularityMultiQuery,
   DatapointsMultiQuery,
+  ExternalDatapointsQuery,
   IgnoreUnknownIds,
   ItemsWrapper,
   LatestDataBeforeRequest,
-  ExternalDatapointsQuery,
-  DatapointInfo,
   Timestamp,
-  DatapointsMonthlyGranularityMultiQuery,
 } from '../../types';
 
 export class DataPointsAPI extends BaseResourceAPI<
@@ -36,7 +36,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * await client.datapoints.insert([{ id: 123, datapoints: [{timestamp: 1557320284000, value: -2}] }]);
    * ```
    */
-  public insert = (items: ExternalDatapointsQuery[]): Promise<{}> => {
+  public insert = (items: ExternalDatapointsQuery[]): Promise<object> => {
     return this.insertEndpoint(items);
   };
 
@@ -158,7 +158,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * await client.datapoints.delete([{id: 123, inclusiveBegin: new Date('1 jan 2019')}]);
    * ```
    */
-  public delete = (items: DatapointsDeleteRequest[]): Promise<{}> => {
+  public delete = (items: DatapointsDeleteRequest[]): Promise<object> => {
     return this.deleteDatapointsEndpoint(items);
   };
 
@@ -171,7 +171,7 @@ export class DataPointsAPI extends BaseResourceAPI<
   protected async retrieveDatapointsEndpoint<
     T extends DatapointAggregates[] | Datapoints[] =
       | DatapointAggregates[]
-      | Datapoints[]
+      | Datapoints[],
   >(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
     const response = await this.post<ItemsWrapper<T>>(path, {
@@ -207,9 +207,8 @@ export class DataPointsAPI extends BaseResourceAPI<
     const result: MonthInfo[] = [];
 
     const currentMonth = new Date(startDate);
-    endDate = new Date(endDate);
 
-    while (currentMonth <= endDate) {
+    while (currentMonth <= new Date(endDate)) {
       const firstDay = new Date(
         Date.UTC(currentMonth.getFullYear(), currentMonth.getMonth(), 1, 0)
       );

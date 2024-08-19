@@ -1,14 +1,14 @@
 import {
   DataPointsAPI as DataPointsAPIStable,
-  ItemsWrapper,
+  type ItemsWrapper,
 } from '@cognite/sdk';
 
-import {
-  DatapointsMultiQuery,
+import type {
+  DatapointAggregate,
   DatapointAggregates,
   Datapoints,
   DatapointsMonthlyGranularityMultiQuery,
-  DatapointAggregate,
+  DatapointsMultiQuery,
 } from '../../types';
 
 export class DataPointsAPI extends DataPointsAPIStable {
@@ -21,7 +21,7 @@ export class DataPointsAPI extends DataPointsAPIStable {
   protected async retrieveDatapointsEndpoint<
     T extends DatapointAggregates[] | Datapoints[] =
       | DatapointAggregates[]
-      | Datapoints[]
+      | Datapoints[],
   >(query: DatapointsMultiQuery) {
     const path = this.listPostUrl;
     const response = await this.post<ItemsWrapper<T>>(path, {

@@ -1,6 +1,10 @@
 // Copyright 2020 Cognite AS
+
+import path, { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
-import {
+import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';
+import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
+import type {
   ExternalFileInfo,
   LabelDefinition,
   MultiPartFileChunkResponse,
@@ -9,12 +13,9 @@ import {
   divideFileIntoChunks,
   divideFileIntoStreams,
   getFileStats,
-  toArrayBuffer,
   setupMockableClientForIntegrationTests,
+  toArrayBuffer,
 } from '../testUtils';
-import path, { join } from 'path';
-import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
-import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';
 // file to upload for integration tests
 const testfile = join(__dirname, '../VAL.nwd');
 
@@ -240,7 +241,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
         return callback(result);
       }
     };
-    let totalSize: number = 0;
+    let totalSize = 0;
     let numberOfCallsToCallback = 0;
     const expectedTotalSize = fileChunks.reduce(
       (acc, fileChunk) => acc + fileChunk.length,

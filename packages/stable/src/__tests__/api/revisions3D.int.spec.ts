@@ -1,7 +1,8 @@
 // Copyright 2020 Cognite AS
 
+import { readFileSync } from 'node:fs';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
-import {
+import type {
   Asset,
   AssetMapping3D,
   CreateAssetMapping3D,
@@ -45,11 +46,11 @@ describeIfCondition(
       jest.setTimeout(5 * 60 * 1000);
 
       const rootAsset = {
-        name: 'test-root' + randomInt(),
-        externalId: 'test-root' + randomInt(),
+        name: `test-root${randomInt()}`,
+        externalId: `test-root${randomInt()}`,
       };
       const childAsset = {
-        name: 'test-child' + randomInt(),
+        name: `test-child${randomInt()}`,
         parentExternalId: rootAsset.externalId,
       };
 
@@ -161,31 +162,17 @@ describeIfCondition(
         model.id,
         revisionsToUpdate
       );
-      updatedRevisions.forEach((revision) =>
-        expect(revision.rotation).toEqual(newRotation)
-      );
-      updatedRevisions.forEach((revision) =>
-        expect(revision.translation).toEqual(newTranslation)
-      );
-      updatedRevisions.forEach((revision) =>
-        expect(revision.scale).toEqual(newScale)
-      );
-      updatedRevisions.forEach((revision) =>
-        expect(revision.camera && revision.camera.target).toEqual(
-          newCameraTarget
-        )
-      );
-      updatedRevisions.forEach((revision) =>
-        expect(revision.camera && revision.camera.position).toEqual(
-          newCameraPosition
-        )
-      );
-      updatedRevisions.forEach((revision) => {
+      for (const revision of updatedRevisions) {
+        expect(revision.rotation).toEqual(newRotation);
+        expect(revision.translation).toEqual(newTranslation);
+        expect(revision.scale).toEqual(newScale);
+        expect(revision.camera?.target).toEqual(newCameraTarget);
+        expect(revision.camera?.position).toEqual(newCameraPosition);
         expect(revision.metadata).toBeDefined();
         for (const property in revision.metadata) {
           expect(revision.metadata[property]).toEqual(newMetadata[property]);
         }
-      });
+      }
     });
 
     test('list', async () => {

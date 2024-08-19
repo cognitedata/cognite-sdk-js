@@ -1,12 +1,12 @@
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  CursorResponse,
-  ExternalId,
+  type CursorAndAsyncIterator,
+  type CursorResponse,
+  type ExternalId,
 } from '@cognite/sdk-core';
-import {
-  View,
+import type {
   ExternalView,
+  View,
   ViewFilterQuery,
   ViewResolveRequest,
 } from '../../types';
@@ -37,6 +37,7 @@ export class ViewsApi extends BaseResourceAPI<View> {
       return response;
     };
     return this.listEndpoint(
+      // biome-ignore lint/suspicious/noExplicitAny: didn't manage to type this properly within reasonable time
       resolveFetch as any,
       resolveRequest
     ) as unknown as CursorAndAsyncIterator<T>;

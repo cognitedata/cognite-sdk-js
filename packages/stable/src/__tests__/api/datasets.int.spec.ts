@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
-import {
+import type {
   Asset,
   CogniteEvent,
   CogniteInternalId,

@@ -23,7 +23,7 @@ describe('alerts api', () => {
   });
 
   test('create channels with deduplication params', async () => {
-    const channelExternalIdWithDeduplication = channelExternalId + '_dedup';
+    const channelExternalIdWithDeduplication = `${channelExternalId}_dedup`;
     const response = await client.alerts.createChannels([
       {
         externalId: channelExternalIdWithDeduplication,
@@ -46,7 +46,7 @@ describe('alerts api', () => {
   });
 
   test('update channel name', async () => {
-    const updatedName = channelExternalId + '_updated';
+    const updatedName = `${channelExternalId}_updated`;
     const response = await client.alerts.updateChannels([
       {
         externalId: channelExternalId,

@@ -2,13 +2,13 @@
 
 import nock from 'nock';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
 import { SequenceValueType } from '../../types';
+import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
 
 describe('Sequences unit test', () => {
   let mockedClient: CogniteClient;
   const testValues = [1, 1.5, 'two'];
-  const testExternalId = 'sequence' + randomInt();
+  const testExternalId = `sequence${randomInt()}`;
   const now = new Date(Date.now());
   const sequence: Sequence = {
     id: 4782634,
@@ -61,7 +61,7 @@ describe('Sequences unit test', () => {
 
   test('retrieve rows', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/sequences/data/list'), {
+      .post(/\/sequences\/data\/list/, {
         externalId: testExternalId,
       })
       .once()

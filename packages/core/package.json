@@ -9,8 +9,8 @@
   "scripts": {
     "clean": "rm -rf dist/ docs/",
     "test": "yarn g:vitest run",
-    "lint": "eslint 'src/**/*.{js,ts}'",
-    "lint:fix": "yarn lint --fix",
+    "lint": "yarn g:biome ci",
+    "lint:fix": "yarn g:biome lint --fix && yarn g:biome format --fix && yarn g:biome check --fix",
     "prepublishOnly": "yarn build",
     "build": "yarn clean && yarn g:rollup -c && yarn esCheck",
     "build:watch": "yarn g:rollup -w -c",

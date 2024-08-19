@@ -7,7 +7,7 @@ import {
   setupLoggedInClient,
 } from '../testUtils';
 
-let testDataSetId: number = -1;
+let testDataSetId = -1;
 
 describe('Groups integration test', () => {
   let client: CogniteClient;

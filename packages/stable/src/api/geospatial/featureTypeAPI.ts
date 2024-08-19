@@ -1,13 +1,13 @@
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  ExternalId,
+  type CursorAndAsyncIterator,
+  type ExternalId,
 } from '@cognite/sdk-core';
-import {
+import type {
   FeatureType,
   GeospatialCreateFeatureType,
-  GeospatialUpdateFeatureType,
   GeospatialRecursiveDelete,
+  GeospatialUpdateFeatureType,
 } from './types';
 
 export class FeatureTypeAPI extends BaseResourceAPI<FeatureType> {

@@ -1,10 +1,10 @@
+import { sleepPromise } from '@cognite/sdk-core';
+import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
 import nock from 'nock';
 import { beforeEach, describe, expect, it, test } from 'vitest';
+import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
+import type { MultiPartFileChunkResponse } from '../../types';
 import { setupMockableClientForUnitTest } from '../testUtils';
-import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
-import { sleepPromise } from '@cognite/sdk-core';
-import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
-import { MultiPartFileChunkResponse } from '../../types';
 
 describe('Multi part upload unit test', () => {
   let client: CogniteClient;
@@ -35,7 +35,7 @@ describe('Multi part upload unit test', () => {
     'can init multi part upload can populate urls',
     async (numberOfParts) => {
       const initAPiNock = nock(mockBaseUrl)
-        .post(new RegExp('/files/initmultipartupload'))
+        .post(/\/files\/initmultipartupload/)
         .query({ overwrite: true, parts: numberOfParts })
         .once()
         .reply(201, initResponseForNumberOfParts(numberOfParts));
@@ -53,7 +53,7 @@ describe('Multi part upload unit test', () => {
     'can not init multi part upload with more than 250 urls',
     async (numberOfParts) => {
       const initAPiNock = nock(mockBaseUrl)
-        .post(new RegExp('/files/initmultipartupload'))
+        .post(/\/files\/initmultipartupload/)
         .query({ overwrite: true, parts: numberOfParts })
         .once()
         .reply(201, initResponseForNumberOfParts(1));
@@ -80,17 +80,17 @@ describe('Multi part upload unit test', () => {
         (_, i) => `part${i}`
       );
       const initNock = nock(mockBaseUrl)
-        .post(new RegExp('/files/initmultipartupload'))
+        .post(/\/files\/initmultipartupload/)
         .query({ overwrite: true, parts: numberOfParts })
         .once()
         .reply(201, initResponseForNumberOfParts(numberOfParts));
       //mock upload urls
       const uploadNock = nock(mockBaseUrl)
-        .put(new RegExp('/uploadurl'))
+        .put(/\/uploadurl/)
         .times(numberOfParts)
         .reply(200);
       const completeApiNock = nock(mockBaseUrl)
-        .post(new RegExp('/completemultipartupload'), requestBody)
+        .post(/\/completemultipartupload/, requestBody)
         .once()
         .reply(200);
 
@@ -122,17 +122,17 @@ describe('Multi part upload unit test', () => {
         (_, i) => `part${i}`
       );
       const initNock = nock(mockBaseUrl)
-        .post(new RegExp('/files/initmultipartupload'))
+        .post(/\/files\/initmultipartupload/)
         .query({ overwrite: true, parts: numberOfParts })
         .once()
         .reply(201, initResponseForNumberOfParts(numberOfParts));
       //mock upload urls
       const uploadNock = nock(mockBaseUrl)
-        .put(new RegExp('/uploadurl'))
+        .put(/\/uploadurl/)
         .times(numberOfParts)
         .reply(200);
       const completeApiNock = nock(mockBaseUrl)
-        .post(new RegExp('/completemultipartupload'), requestBody)
+        .post(/\/completemultipartupload/, requestBody)
         .once()
         .reply(200);
       const responseFor5PartUploadPart =
@@ -165,7 +165,7 @@ describe('Multi part upload unit test', () => {
       (_, i) => `part${i}`
     );
     const initNock = nock(mockBaseUrl)
-      .post(new RegExp('/files/initmultipartupload'))
+      .post(/\/files\/initmultipartupload/)
       .query({ overwrite: true, parts: numberOfParts })
       .once()
       .reply(201, initResponseForNumberOfParts(numberOfParts));
@@ -183,7 +183,7 @@ describe('Multi part upload unit test', () => {
       .delay(100)
       .reply(408, 'timeout');
     const completeApiNock = nock(mockBaseUrl)
-      .post(new RegExp('/completemultipartupload'), requestBody)
+      .post(/\/completemultipartupload/, requestBody)
       .once()
       .reply(200);
     const responseFor5PartUploadPart =
@@ -228,17 +228,17 @@ describe('Multi part upload unit test', () => {
       (_, i) => `part${i}`
     );
     const initNock = nock(mockBaseUrl)
-      .post(new RegExp('/files/initmultipartupload'))
+      .post(/\/files\/initmultipartupload/)
       .query({ overwrite: true, parts: numberOfParts })
       .once()
       .reply(201, initResponseForNumberOfParts(numberOfParts));
     //mock upload urls
     const uploadNock = nock(mockBaseUrl)
-      .put(new RegExp('/uploadurl'))
+      .put(/\/uploadurl/)
       .times(numberOfParts)
       .reply(200);
     const completeApiNockFailsOnce = nock(mockBaseUrl)
-      .post(new RegExp('/completemultipartupload'), requestBody)
+      .post(/\/completemultipartupload/, requestBody)
       .once()
       .delayConnection(500)
       .reply(408, 'timeout');
@@ -265,7 +265,7 @@ describe('Multi part upload unit test', () => {
     nock.cleanAll();
     await sleepPromise(100);
     completeApiNockFailsOnce
-      .post(new RegExp('/completemultipartupload'), requestBody)
+      .post(/\/completemultipartupload/, requestBody)
       .once()
       .reply(200)
       .persist();
@@ -288,17 +288,17 @@ describe('Multi part upload unit test', () => {
       (_, i) => `part${i}`
     );
     nock(mockBaseUrl)
-      .post(new RegExp('/files/initmultipartupload'))
+      .post(/\/files\/initmultipartupload/)
       .query({ overwrite: true, parts: numberOfParts })
       .once()
       .reply(201, initResponseForNumberOfParts(numberOfParts));
 
     nock(mockBaseUrl)
-      .put(new RegExp('/uploadurl'))
+      .put(/\/uploadurl/)
       .times(numberOfParts)
       .reply(200);
     nock(mockBaseUrl)
-      .post(new RegExp('/completemultipartupload'), requestBody)
+      .post(/\/completemultipartupload/, requestBody)
       .once()
       .reply(200, 'success');
     const responseFor5PartUploadPart =
@@ -337,17 +337,17 @@ describe('Multi part upload unit test', () => {
         (_, i) => `part${i}`
       );
       nock(mockBaseUrl)
-        .post(new RegExp('/files/initmultipartupload'))
+        .post(/\/files\/initmultipartupload/)
         .query({ overwrite: true, parts: numberOfParts })
         .once()
         .reply(201, initResponseForNumberOfParts(numberOfParts));
       //mock upload urls
       const uploadNock = nock(mockBaseUrl)
-        .put(new RegExp('/uploadurl'))
+        .put(/\/uploadurl/)
         .times(numberOfParts)
         .reply(200);
       const completeApiNock = nock(mockBaseUrl)
-        .post(new RegExp('/completemultipartupload'), requestBody)
+        .post(/\/completemultipartupload/, requestBody)
         .once()
         .reply(200);
       const responseFor5PartUploadPart =
@@ -369,7 +369,7 @@ describe('Multi part upload unit test', () => {
           return callback(result);
         }
       };
-      let totalSize: number = 0;
+      let totalSize = 0;
       let numberOfCallsToCallback = 0;
       const expectedTotalSize = fileChunks.reduce(
         (acc, fileChunk) => acc + fileChunk.length,

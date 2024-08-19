@@ -1,7 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
   CogniteInternalId,
   ListSecurityCategories,
   SecurityCategory,
@@ -46,7 +49,7 @@ export class SecurityCategoriesAPI extends BaseResourceAPI<SecurityCategory> {
    * await client.securityCategories.delete([123, 456]);
    * ```
    */
-  public delete = (ids: CogniteInternalId[]): Promise<{}> => {
+  public delete = (ids: CogniteInternalId[]): Promise<object> => {
     return super.deleteEndpoint(ids);
   };
 }

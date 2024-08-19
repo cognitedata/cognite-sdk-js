@@ -13,7 +13,7 @@ describe('Documents unit test', () => {
 
   test('search with query', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/search'), {
+      .post(/\/documents\/search/, {
         search: {
           query: 'test',
         },
@@ -28,7 +28,7 @@ describe('Documents unit test', () => {
   describe('geo location', () => {
     test('point', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/search'), {})
+        .post(/\/documents\/search/, {})
         .once()
         .reply(200, {
           items: [
@@ -46,13 +46,13 @@ describe('Documents unit test', () => {
       const geoLocation = response.items[0].item.geoLocation;
       expect(geoLocation?.type).toEqual('Point');
       expect(geoLocation?.coordinates).toBeDefined();
-      expect(geoLocation?.coordinates![0]).toEqual(2.324);
-      expect(geoLocation?.coordinates![1]).toEqual(23.1);
+      expect(geoLocation?.coordinates?.[0]).toEqual(2.324);
+      expect(geoLocation?.coordinates?.[1]).toEqual(23.1);
     });
 
     test('MultiPoint / LineString', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/search'), {})
+        .post(/\/documents\/search/, {})
         .once()
         .reply(200, {
           items: [
@@ -73,13 +73,13 @@ describe('Documents unit test', () => {
       const geoLocation = response.items[0].item.geoLocation;
       expect(geoLocation?.type).toEqual('MultiPoint');
       expect(geoLocation?.coordinates).toBeDefined();
-      expect(geoLocation?.coordinates![0]).toEqual([2.324, 23.1]);
-      expect(geoLocation?.coordinates![1]).toEqual([2, 7]);
+      expect(geoLocation?.coordinates?.[0]).toEqual([2.324, 23.1]);
+      expect(geoLocation?.coordinates?.[1]).toEqual([2, 7]);
     });
 
     test('MultiLineString', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/search'), {})
+        .post(/\/documents\/search/, {})
         .once()
         .reply(200, {
           items: [
@@ -106,11 +106,11 @@ describe('Documents unit test', () => {
       const geoLocation = response.items[0].item.geoLocation;
       expect(geoLocation?.type).toEqual('MultiLineString');
       expect(geoLocation?.coordinates).toBeDefined();
-      expect(geoLocation?.coordinates![0]).toEqual([
+      expect(geoLocation?.coordinates?.[0]).toEqual([
         [2.324, 23.1],
         [2, 7],
       ]);
-      expect(geoLocation?.coordinates![1]).toEqual([
+      expect(geoLocation?.coordinates?.[1]).toEqual([
         [3, 4],
         [2, 1],
       ]);
@@ -118,7 +118,7 @@ describe('Documents unit test', () => {
 
     test.skip('MultiPolygon', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/search'), {})
+        .post(/\/documents\/search/, {})
         .once()
         .reply(200, {
           items: [
@@ -161,8 +161,8 @@ describe('Documents unit test', () => {
       const geoLocation = response.items[0].item.geoLocation;
       expect(geoLocation?.type).toEqual('MultiPolygon');
       expect(geoLocation?.coordinates).toBeDefined();
-      const polygon1 = geoLocation?.coordinates![0] as unknown as number[][][];
-      const polygon2 = geoLocation?.coordinates![1] as unknown as number[][][];
+      const polygon1 = geoLocation?.coordinates?.[0] as unknown as number[][][];
+      const polygon2 = geoLocation?.coordinates?.[1] as unknown as number[][][];
       expect(polygon1?.[0][0][0]).toEqual(40.0);
       expect(polygon2?.[0][0][0]).toEqual(20.0);
       expect(polygon2?.[1]).toEqual([
@@ -176,7 +176,7 @@ describe('Documents unit test', () => {
     describe('geometry collections', () => {
       test('Point & LineString', async () => {
         nock(mockBaseUrl)
-          .post(new RegExp('/documents/search'), {})
+          .post(/\/documents\/search/, {})
           .once()
           .reply(200, {
             items: [
@@ -208,8 +208,8 @@ describe('Documents unit test', () => {
         expect(geoLocation?.coordinates).toBeUndefined();
         expect(geoLocation?.geometries).toBeDefined();
 
-        const first = geoLocation?.geometries![0];
-        const second = geoLocation?.geometries![1];
+        const first = geoLocation?.geometries?.[0];
+        const second = geoLocation?.geometries?.[1];
 
         expect(first?.type).toEqual('LineString');
         expect(first?.coordinates).toEqual([
@@ -225,7 +225,7 @@ describe('Documents unit test', () => {
 
   test('search with filter', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/search'), {
+      .post(/\/documents\/search/, {
         search: {
           query: 'test',
         },
@@ -251,7 +251,7 @@ describe('Documents unit test', () => {
 
   test('search with size range', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/search'), {
+      .post(/\/documents\/search/, {
         search: {
           query: 'test',
         },
@@ -317,7 +317,7 @@ describe('Documents unit test', () => {
 
   test('document preview pdf', async () => {
     nock(mockBaseUrl)
-      .get(new RegExp('/documents/1/preview/pdf'))
+      .get(/\/documents\/1\/preview\/pdf/)
       .matchHeader('Accept', 'application/pdf')
       .once()
       .reply(200);
@@ -326,7 +326,7 @@ describe('Documents unit test', () => {
 
   test('document preview image', async () => {
     nock(mockBaseUrl)
-      .get(new RegExp('/documents/1/preview/image/pages/1'))
+      .get(/\/documents\/1\/preview\/image\/pages\/1/)
       .matchHeader('Accept', 'image/png')
       .once()
       .reply(200);
@@ -337,7 +337,7 @@ describe('Documents unit test', () => {
     const link = 'just-testing';
     const expirationTime = 1519862400000;
     nock(mockBaseUrl)
-      .get(new RegExp('/documents/1/preview/pdf/temporarylink'))
+      .get(/\/documents\/1\/preview\/pdf\/temporarylink/)
       .once()
       .reply(200, { temporaryLink: link, expirationTime: expirationTime });
     const resp = await client.documents.preview.pdfTemporaryLink(1);
@@ -347,7 +347,7 @@ describe('Documents unit test', () => {
 
   test('document content', async () => {
     nock(mockBaseUrl)
-      .get(new RegExp('/documents/5/content'))
+      .get(/\/documents\/5\/content/)
       .matchHeader('accept', 'text/plain')
       .once()
       .reply(200, 'lorem ipsum');
@@ -358,7 +358,7 @@ describe('Documents unit test', () => {
 
   test('document list', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/list'), {
+      .post(/\/documents\/list/, {
         limit: 5,
         filter: {
           equals: {
@@ -387,7 +387,7 @@ describe('Documents unit test', () => {
 
   test('document aggregate count', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/aggregate'), {
+      .post(/\/documents\/aggregate/, {
         filter: {
           equals: {
             property: ['sourceFile', 'name'],
@@ -414,7 +414,7 @@ describe('Documents unit test', () => {
 
   test('document aggregate uniqueValues', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/aggregate'), {
+      .post(/\/documents\/aggregate/, {
         aggregate: 'uniqueValues',
         properties: [{ property: ['extension'] }],
       })
@@ -439,7 +439,7 @@ describe('Documents unit test', () => {
     const nextCursor = 'next-cursor-value';
 
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/aggregate'), {
+      .post(/\/documents\/aggregate/, {
         aggregate: 'allUniqueValues',
         properties: [{ property: ['extension'] }],
         limit: 67,
@@ -463,7 +463,7 @@ describe('Documents unit test', () => {
 
   test('document aggregate uniqueProperties', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/aggregate'), {
+      .post(/\/documents\/aggregate/, {
         aggregate: 'uniqueProperties',
         properties: [{ property: ['metadata'] }],
       })
@@ -488,7 +488,7 @@ describe('Documents unit test', () => {
     const nextCursor = 'next-cursor-value';
 
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/aggregate'), {
+      .post(/\/documents\/aggregate/, {
         aggregate: 'allUniqueProperties',
         properties: [{ property: ['metadata'] }],
       })
@@ -518,7 +518,7 @@ describe('Documents unit test', () => {
     const firstCursor = 'first-cursor-value';
 
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/aggregate'), {
+      .post(/\/documents\/aggregate/, {
         aggregate: 'allUniqueValues',
         properties: [{ property: ['extension'] }],
         limit: 1,
@@ -530,7 +530,7 @@ describe('Documents unit test', () => {
       });
 
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/aggregate'), {
+      .post(/\/documents\/aggregate/, {
         aggregate: 'allUniqueValues',
         properties: [{ property: ['extension'] }],
         limit: 1,

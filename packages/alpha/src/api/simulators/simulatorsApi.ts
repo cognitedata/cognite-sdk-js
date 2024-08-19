@@ -1,39 +1,39 @@
+import type { IdEither, InternalId } from '@cognite/sdk';
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CogniteInternalId,
-  MetadataMap,
+  type CDFHttpClient,
+  type CogniteInternalId,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import { IdEither, InternalId } from '@cognite/sdk';
-import {
-  Simulator,
-  SimulatorCreate,
-  SimulatorIntegrationCreate,
-  SimulatorIntegrationFilterQuery,
-  SimulatorFilterQuery,
-  SimulatorChange,
-  SimulatorModelRevisionCreate,
-  SimulatorRoutineCreate,
+import type {
   SimulationRunCreate,
   SimulationRunFilterQuery,
-  SimulatorModelFilterQuery,
-  SimulatorRoutineFilterQuery,
-  SimulatorModelCreate,
+  SimulationRunId,
+  Simulator,
+  SimulatorChange,
+  SimulatorCreate,
+  SimulatorFilterQuery,
+  SimulatorIntegrationCreate,
+  SimulatorIntegrationFilterQuery,
   SimulatorModelChange,
-  SimulatorModelRevisionFilterQuery,
+  SimulatorModelCreate,
+  SimulatorModelFilterQuery,
   SimulatorModelRevisionChange,
+  SimulatorModelRevisionCreate,
+  SimulatorModelRevisionFilterQuery,
+  SimulatorRoutineCreate,
+  SimulatorRoutineFilterQuery,
   SimulatorRoutineRevisionCreate,
   SimulatorRoutineRevisionslFilterQuery,
-  SimulationRunId,
 } from '../../types';
 import { IntegrationsAPI } from './integrationsApi';
-import { SimulationRunsAPI } from './simulationRunsApi';
-import { SimulationRunDataAPI } from './simulationRunDataApi';
-import { ModelsAPI } from './modelsApi';
+import { LogsAPI } from './logsApi';
 import { ModelRevisionsAPI } from './modelRevisionsApi';
+import { ModelsAPI } from './modelsApi';
 import { RoutinesAPI } from './routinesApi';
 import { RoutineRevisionsAPI } from './routinesRevisionsAPI';
-import { LogsAPI } from './logsApi';
+import { SimulationRunDataAPI } from './simulationRunDataApi';
+import { SimulationRunsAPI } from './simulationRunsApi';
 
 export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   private integrationsApi: IntegrationsAPI;

@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import {
+import type {
   Asset,
   AssetMapping3D,
   Model3D,

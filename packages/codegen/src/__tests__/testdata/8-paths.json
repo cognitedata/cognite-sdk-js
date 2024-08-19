@@ -6632,10 +6632,7 @@
           "conditions": [
             {
               "conditionType": "equals",
-              "arguments": [
-                [0, 0],
-                [1, 0]
-              ]
+              "arguments": [[0, 0], [1, 0]]
             }
           ],
           "priority": 10
@@ -6975,10 +6972,7 @@
             "conditions": [
               {
                 "conditionType": "equals",
-                "arguments": [
-                  [0, 0],
-                  [1, 0]
-                ]
+                "arguments": [[0, 0], [1, 0]]
               }
             ],
             "priority": 10

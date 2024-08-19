@@ -1,7 +1,7 @@
 // Copyright 2023 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
-import {
+import { BaseResourceAPI } from '@cognite/sdk-core';
+import type {
   AggregationResponse,
   ListOfSpaceExternalIdsRequestWithTyping,
   NodeAndEdgeCollectionResponseV3Response,
@@ -19,10 +19,6 @@ import {
 } from './types.gen';
 
 export class InstancesAPI extends BaseResourceAPI<NodeOrEdge> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   /**
    * [Search instances](https://developer.cognite.com/api#tag/Instances/operation/searchInstances)
    *

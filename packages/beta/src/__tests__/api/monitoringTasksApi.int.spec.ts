@@ -1,12 +1,12 @@
 // Copyright 2022 Cognite AS
 
 import { describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import {
-  Channel,
+  type Channel,
+  type MonitoringTaskDoubleThresholdModelCreate,
   MonitoringTaskModelExternalId,
-  MonitoringTaskDoubleThresholdModelCreate,
 } from '../../types';
-import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 type SessionsResponse = {
@@ -18,7 +18,7 @@ describe('monitoring tasks api', () => {
   const ts = Date.now();
   const monitoringTaskExternalId = `test_mt_${ts}`;
   const monitoringTaskName = `test_mt_${ts}`;
-  const monitoringTaskNameUpdated = monitoringTaskName + '_updated';
+  const monitoringTaskNameUpdated = `${monitoringTaskName}_updated`;
   const channelExternalId = `test_channel_mt_${ts}`;
   const sessionsApi = `/api/v1/projects/${process.env.COGNITE_PROJECT}/sessions`;
   const testMtModel: MonitoringTaskDoubleThresholdModelCreate = {
@@ -53,7 +53,7 @@ describe('monitoring tasks api', () => {
       [{ externalId: 'test_external_id_beta_sdk' }],
       { ignoreUnknownIds: true }
     );
-    if (tsResponse.length == 0) {
+    if (tsResponse.length === 0) {
       await client.timeseries.create([timeseries]);
     }
 

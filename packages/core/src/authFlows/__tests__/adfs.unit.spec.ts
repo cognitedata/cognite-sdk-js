@@ -1,8 +1,8 @@
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import noop from 'lodash/noop';
+import nock from 'nock';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { sleepPromise } from '../../__tests__/testUtils';
 import * as loginUtils from '../../loginUtils';
-import nock from 'nock';
 import { ADFS } from '../adfs';
 
 describe('ADFS', () => {
@@ -165,8 +165,8 @@ describe('ADFS', () => {
       const token = adfsClient.handleLoginRedirect();
 
       expect(token).toBeTruthy();
-      expect(token!.accessToken).toEqual(accessToken);
-      expect(token!.idToken).toEqual(idToken);
+      expect(token?.accessToken).toEqual(accessToken);
+      expect(token?.idToken).toEqual(idToken);
       expect(window.location.href).toMatchInlineSnapshot(
         `"https://localhost/some/random/path#random=123"`
       );

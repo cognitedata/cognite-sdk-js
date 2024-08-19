@@ -1,7 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
   AssetMapping3D,
   AssetMappings3DListFilter,
   CogniteInternalId,
@@ -106,8 +109,8 @@ export class AssetMappings3DAPI extends BaseResourceAPI<AssetMapping3D> {
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     ids: DeleteAssetMapping3D[]
-  ): Promise<{}> => {
-    const path = this.encodeUrl(modelId, revisionId) + '/delete';
+  ): Promise<object> => {
+    const path = `${this.encodeUrl(modelId, revisionId)}/delete`;
     return super.deleteEndpoint(ids, undefined, path);
   };
 

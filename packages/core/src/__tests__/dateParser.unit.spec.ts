@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
-import DateParser from '../dateParser';
 import { beforeEach, describe, expect, test } from 'vitest';
+import DateParser from '../dateParser';
 
 describe('DateParser', () => {
   const now = new Date();

@@ -4,12 +4,12 @@ import { describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,
-  stepFields,
   modelTypes,
+  stepFields,
   unitQuantities,
 } from './seed';
 
-const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS == 'true';
+const SHOULD_RUN_TESTS = process.env.RUN_SDK_SIMINT_TESTS === 'true';
 
 const describeIf = SHOULD_RUN_TESTS ? describe : describe.skip;
 
@@ -132,7 +132,7 @@ describeIf('simulator models api', () => {
     const responseAfterDelete = await client.simulators.listModels();
     expect(
       responseAfterDelete.items.filter(
-        (res) => res.externalId == modelExternalId
+        (res) => res.externalId === modelExternalId
       ).length
     ).toBe(0);
   });
@@ -149,7 +149,7 @@ describeIf('simulator models api', () => {
       const responseAfterDelete = await client.simulators.list();
       expect(
         responseAfterDelete.items.filter(
-          (res) => res.externalId == simulatorExternalId
+          (res) => res.externalId === simulatorExternalId
         ).length
       ).toBe(0);
     }

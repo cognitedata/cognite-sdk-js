@@ -2,27 +2,21 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
-import {
+import type {
+  ContainerCollectionResponse,
+  ContainerCreateDefinition,
+  ContainerDefinition,
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
-  ReducedLimitQueryParameter,
-  ContainerCreateDefinition,
-  ContainerCollectionResponse,
-  ListOfSpaceExternalIdsResponse,
   ListOfSpaceExternalIdsRequest,
-  ContainerDefinition,
+  ListOfSpaceExternalIdsResponse,
+  ReducedLimitQueryParameter,
   SpaceQueryParameter,
 } from './types.gen';
 
 export class ContainersAPI extends BaseResourceAPI<ContainerDefinition> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   /**
    * [Upsert containers](https://api-docs.cognite.com/20230101/tag/Containers/operation/ApplyContainers)
    *

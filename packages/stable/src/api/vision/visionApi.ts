@@ -1,14 +1,14 @@
 // Copyright 2022 Cognite AS
 
 import { BaseResourceAPI, sleepPromise } from '@cognite/sdk-core';
-import {
+import type {
+  FeatureParameters,
+  FileReference,
+  JobId,
+  JobStatus,
+  VisionExtractFeature,
   VisionExtractGetResponse,
   VisionExtractPostResponse,
-  VisionExtractFeature,
-  FileReference,
-  JobStatus,
-  JobId,
-  FeatureParameters,
 } from '../../types';
 
 const JOB_COMPLETE_STATES: JobStatus[] = ['Completed', 'Failed'];
@@ -61,9 +61,9 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    */
   public getExtractJob = async (
     jobId: JobId,
-    waitForCompletion: boolean = true,
-    pollingTimeMs: number = 1000,
-    maxRetries: number = 600
+    waitForCompletion = true,
+    pollingTimeMs = 1000,
+    maxRetries = 600
   ): Promise<VisionExtractGetResponse> => {
     const path = this.url(`extract/${jobId}`);
     const getJobResult = async () => {
@@ -99,6 +99,6 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
       await sleepPromise(pollingTimeMs);
       retryCount++;
     } while (retryCount < maxRetries);
-    throw new Error(`Timed out while waiting for vision job to complete.`);
+    throw new Error('Timed out while waiting for vision job to complete.');
   }
 }

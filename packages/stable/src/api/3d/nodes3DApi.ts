@@ -1,12 +1,15 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
   CogniteInternalId,
   CursorResponse,
+  Filter3DNodesQuery,
   InternalId,
   List3DNodesQuery,
-  Filter3DNodesQuery,
   Node3D,
 } from '../../types';
 

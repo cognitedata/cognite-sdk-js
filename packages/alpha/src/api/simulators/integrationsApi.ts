@@ -1,22 +1,13 @@
 // Copyright 2023 Cognite AS
 
-import {
-  BaseResourceAPI,
-  CDFHttpClient,
-  IdEither,
-  MetadataMap,
-} from '@cognite/sdk-core';
-import {
+import { BaseResourceAPI, type IdEither } from '@cognite/sdk-core';
+import type {
   SimulatorIntegration,
-  SimulatorIntegrationFilterQuery,
   SimulatorIntegrationCreate,
+  SimulatorIntegrationFilterQuery,
 } from '../../types';
 
 export class IntegrationsAPI extends BaseResourceAPI<SimulatorIntegration> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   public create = async (items: SimulatorIntegrationCreate[]) => {
     return this.createEndpoint(items);
   };

@@ -12,8 +12,8 @@ describe('Security categories integration test', () => {
 
   test('create', async () => {
     const securityCategoriesToCreate = [
-      { name: 'Security category 1 ' + randomInt() },
-      { name: 'Security category 2 ' + randomInt() },
+      { name: `Security category 1 ${randomInt()}` },
+      { name: `Security category 2 ${randomInt()}` },
     ];
     securityCategories = await client.securityCategories.create(
       securityCategoriesToCreate

@@ -1,14 +1,14 @@
 // Copyright 2020 Cognite AS
 
+import { createReadStream, readFileSync, statSync } from 'node:fs';
+import { PassThrough } from 'node:stream';
 import { Constants } from '@cognite/sdk-core';
-import CogniteClient from '../cogniteClient';
 import {
   mockBaseUrl,
   project,
 } from '@cognite/sdk-core/src/__tests__/testUtils';
+import CogniteClient from '../cogniteClient';
 import { login } from './login';
-import { PassThrough } from 'stream';
-import { createReadStream, readFileSync, statSync } from 'fs';
 
 export function setupClient(baseUrl: string = Constants.BASE_URL) {
   return new CogniteClient({

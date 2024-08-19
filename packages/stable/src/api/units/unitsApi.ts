@@ -2,11 +2,11 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  ExternalId,
-  MetadataMap,
+  type CDFHttpClient,
+  type ExternalId,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import { Unit } from '../../types';
+import type { Unit } from '../../types';
 import { UnitSystemsAPI } from './unitSystemsApi';
 
 export class UnitsAPI extends BaseResourceAPI<Unit> {

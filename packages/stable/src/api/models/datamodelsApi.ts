@@ -1,7 +1,7 @@
 // Copyright 2023 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
-import {
+import { BaseResourceAPI } from '@cognite/sdk-core';
+import type {
   AllVersionsQueryParameter,
   CursorQueryParameter,
   DataModel,
@@ -17,10 +17,6 @@ import {
 } from './types.gen';
 
 export class DataModelsAPI extends BaseResourceAPI<DataModel> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   /**
    * [Upsert datamodels](https://api-docs.cognite.com/20230101/tag/Data-models/operation/createDataModels)
    *

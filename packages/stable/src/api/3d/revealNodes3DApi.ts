@@ -1,7 +1,14 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
-import { CogniteInternalId, List3DNodesQuery, RevealNode3D } from '../../types';
+import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
+  CogniteInternalId,
+  List3DNodesQuery,
+  RevealNode3D,
+} from '../../types';
 
 export class RevealNodes3DAPI extends BaseResourceAPI<RevealNode3D> {
   public list(
@@ -19,7 +26,7 @@ export class RevealNodes3DAPI extends BaseResourceAPI<RevealNode3D> {
     nodeId: CogniteInternalId,
     scope?: List3DNodesQuery
   ): CursorAndAsyncIterator<RevealNode3D> {
-    const path = this.encodeUrl(modelId, revisionId) + `/${nodeId}/ancestors`;
+    const path = `${this.encodeUrl(modelId, revisionId)}/${nodeId}/ancestors`;
     return super.listEndpoint((params) => this.get(path, { params }), scope);
   }
 

@@ -1,6 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import {
+import type {
   DataModelCreate,
   ViewCreateDefinition,
   ViewDefinition,

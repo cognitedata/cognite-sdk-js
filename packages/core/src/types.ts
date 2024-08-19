@@ -98,7 +98,7 @@ export interface CogniteAsyncIterator<T> extends AsyncIterableIterator<T> {
 
 export type AutoPagingEachHandler<T> = (
   item: T
-) => (void | boolean) | Promise<void | boolean>;
+) => (undefined | boolean) | Promise<undefined | boolean>;
 
 export type AutoPagingEach<T> = (
   handler: AutoPagingEachHandler<T>
