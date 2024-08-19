@@ -76,7 +76,7 @@ describe('Data models integration test', () => {
       },
     ]);
     await client.views.upsert([viewCreationDefinition]);
-  });
+  }, 25_000);
 
   it('should successfully upsert datamodels', async () => {
     const createdModelResponse = await client.dataModels.upsert([

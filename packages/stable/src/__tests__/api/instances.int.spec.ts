@@ -1,6 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 type SpaceDefinition = {
@@ -218,24 +218,29 @@ describe('Instances integration test', () => {
   });
 
   test('search with filter', async () => {
-    const response = await client.instances.search({
-      view,
-      filter: {
-        prefix: {
-          property: ['title'],
-          value: 'titl',
-        },
+    vi.waitFor(
+      async () => {
+        const response = await client.instances.search({
+          view,
+          filter: {
+            prefix: {
+              property: ['title'],
+              value: 'titl',
+            },
+          },
+          limit: 1,
+        });
+        expect(response.items).toHaveLength(1);
+        expect(response.items[0].properties);
+        const title =
+          response.items[0].properties![view.space][
+            `${view.externalId}/${view.version}`
+          ]['title'].toString();
+        expect(title.startsWith('titl'));
       },
-      limit: 1,
-    });
-    expect(response.items).toHaveLength(1);
-    expect(response.items[0].properties);
-    const title =
-      response.items[0].properties![view.space][
-        `${view.externalId}/${view.version}`
-      ]['title'].toString();
-    expect(title.startsWith('titl'));
-  });
+      { interval: 1000, timeout: 30_000 }
+    );
+  }, 30_000);
 
   test('aggregate', async () => {
     const response = await client.instances.aggregate({

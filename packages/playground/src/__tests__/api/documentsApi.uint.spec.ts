@@ -3,7 +3,10 @@
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { setupMockableClient } from '../testUtils';
-import { mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
+import {
+  mockBaseUrl,
+  project,
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 
 const baseUrl = mockBaseUrl + `/api/playground/projects/${project}`;
 

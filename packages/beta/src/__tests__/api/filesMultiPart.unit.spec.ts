@@ -1,7 +1,7 @@
 import nock from 'nock';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { setupMockableClientForUnitTest } from '../testUtils';
-import { mockBaseUrl } from '@cognite/sdk-core/src/testUtils';
+import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
 import { sleepPromise } from '@cognite/sdk-core';
 import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
 import { MultiPartFileChunkResponse } from '../../types';
