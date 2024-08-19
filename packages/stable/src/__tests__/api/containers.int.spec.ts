@@ -136,7 +136,7 @@ describe('Containers integration test', () => {
       // Eventual consistency - wait for the delete to propagate
       await new Promise((resolve) => setTimeout(resolve, 20 * 1000));
 
-      vi.waitFor(
+      await vi.waitFor(
         async () => {
           const containers = await client.containers.list({ limit: 1000 });
           expect(
