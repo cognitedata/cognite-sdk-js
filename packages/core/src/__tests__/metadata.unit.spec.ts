@@ -1,5 +1,6 @@
 // Copyright 2020 Cognite AS
 
+import { expect, test } from 'vitest';
 import { MetadataMap } from '../metadata';
 import { HttpResponse } from '../httpClient/basicHttpClient';
 

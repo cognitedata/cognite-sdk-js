@@ -14,7 +14,7 @@ function findAllCodeSnippetsInJsDoc(jsDoc) {
   const codeSnippets = new Map(); // string => string[]
   _.cloneDeepWith(jsDoc, (value, _, object) => {
     const docRegEx =
-      /https:\/\/(doc.cognitedata.com|docs.cognite.com)\/api\/v1\/#operation\/([a-zA-Z0-9]+)/g;
+      /https:\/\/(doc\.cognitedata\.com|docs\.cognite\.com|developer\.cognite\.com)\/api.*operation\/([a-zA-Z0-9]+)/g;
     let matches;
     while ((matches = docRegEx.exec(value))) {
       const operationId = matches[2];

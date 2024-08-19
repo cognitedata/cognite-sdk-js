@@ -20,6 +20,7 @@ import {
 } from './types';
 import { applyIfApplicable, promiseAllWithData } from './utils';
 import DateParser from './dateParser';
+
 /** @hidden */
 export abstract class BaseResourceAPI<ResponseType> {
   protected get listGetUrl() {
@@ -44,6 +45,10 @@ export abstract class BaseResourceAPI<ResponseType> {
 
   protected get deleteUrl() {
     return this.url('delete');
+  }
+
+  protected get upsertUrl() {
+    return this.url('upsert');
   }
 
   protected get aggregateUrl() {
@@ -141,6 +146,19 @@ export abstract class BaseResourceAPI<ResponseType> {
     );
   }
 
+  protected async upsertEndpoint<RequestType>(
+    items: RequestType[],
+    preRequestModifier?: (items: RequestType[]) => RequestType[],
+    postRequestModifier?: (items: ResponseType[]) => ResponseType[]
+  ) {
+    return this.callEndpointWithMergeAndTransform(
+      items,
+      (data) => this.callUpsertEndpoint(data),
+      preRequestModifier,
+      postRequestModifier
+    );
+  }
+
   protected cursorBasedEndpoint<QueryType extends FilterQuery, Item>(
     endpointCaller: ListEndpoint<QueryType, Item[]>,
     scope?: QueryType
@@ -169,10 +187,16 @@ export abstract class BaseResourceAPI<ResponseType> {
   protected async retrieveEndpoint<RequestParams extends object, T = IdEither>(
     ids: T[],
     params?: RequestParams,
-    path?: string
+    path?: string,
+    queryParams?: RequestParams
   ) {
     return this.callEndpointWithMergeAndTransform(ids, (request) =>
-      this.callRetrieveEndpoint<RequestParams, T>(request, path, params)
+      this.callRetrieveEndpoint<RequestParams, T>(
+        request,
+        path,
+        params,
+        queryParams
+      )
     );
   }
 
@@ -242,8 +266,18 @@ export abstract class BaseResourceAPI<ResponseType> {
   protected async callRetrieveEndpoint<
     RequestParams extends object,
     T = IdEither
-  >(items: T[], path: string = this.byIdsUrl, params?: RequestParams) {
-    return this.postInParallelWithAutomaticChunking({ params, path, items });
+  >(
+    items: T[],
+    path: string = this.byIdsUrl,
+    params?: RequestParams,
+    queryParams?: RequestParams
+  ) {
+    return this.postInParallelWithAutomaticChunking({
+      params,
+      path,
+      items,
+      queryParams,
+    });
   }
 
   protected async callUpdateEndpoint<ChangeType>(
@@ -364,6 +398,16 @@ export abstract class BaseResourceAPI<ResponseType> {
   private async callCreateEndpoint<RequestType>(
     items: RequestType[],
     path: string
+  ) {
+    return this.postInSequenceWithAutomaticChunking<
+      RequestType,
+      ItemsWrapper<ResponseType>
+    >(path, items);
+  }
+
+  private async callUpsertEndpoint<RequestType>(
+    items: RequestType[],
+    path: string = this.upsertUrl
   ) {
     return this.postInSequenceWithAutomaticChunking<
       RequestType,

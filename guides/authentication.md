@@ -44,7 +44,7 @@ via `getToken`.
 ## OpenID Connect (OIDC)
 
 See
-[this article](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc.html#design-principles-openid-connect-and-cdf)
+[this article](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc/)
 for details about OIDC and Cognite.
 
 ### OIDC authentication using code authorization w pkce
@@ -125,6 +125,7 @@ async function quickstart() {
   const client = new CogniteClient({
     appId: 'Cognite SDK samples',
     project,
+    baseUrl: "https://api.cognitedata.com",
     getToken: () =>
       pca
         .acquireTokenByClientCredential({

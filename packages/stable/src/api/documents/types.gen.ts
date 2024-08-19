@@ -343,7 +343,7 @@ export interface DocumentListLimit {
      */
     limit?: number;
 }
-export type DocumentListRequest = DocumentListFilter & DocumentListLimit & DocumentCursor;
+export type DocumentListRequest = DocumentListFilter & DocumentSort & DocumentListLimit & DocumentCursor;
 export interface DocumentListResponse extends CursorAndAsyncIterator<Document> {
 }
 export interface DocumentsAggregateAllUniquePropertiesItem {

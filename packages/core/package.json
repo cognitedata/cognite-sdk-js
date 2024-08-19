@@ -1,32 +1,27 @@
 {
-  "private": false,
   "name": "@cognite/sdk-core",
   "license": "Apache-2.0",
   "repository": "cognitedata/cognite-sdk-js",
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "4.9.0",
+  "version": "4.10.2",
   "scripts": {
     "clean": "rm -rf dist/ docs/",
-    "test": "jest --config=../../jest.config.js --testPathPattern=/core/",
-    "test:debug": "node --inspect-brk ../../node_modules/.bin/jest --config=../../jest.config.js --testPathPattern=/core/ --runInBand",
+    "test": "yarn g:vitest run",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn build",
-    "build": "yarn clean && yarn rollup -c && yarn esCheck",
-    "build:watch": "yarn rollup -w -c",
-    "watch": "rollup -cw",
-    "esCheck": "es-check es5 './dist/index.js'",
-    "docs": "typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
+    "build": "yarn clean && yarn g:rollup -c && yarn esCheck",
+    "build:watch": "yarn g:rollup -w -c",
+    "watch": "yarn g:rollup -cw",
+    "esCheck": "yarn g:es-check es5 './dist/index.js'",
+    "docs": "yarn g:typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
     "docs:bundle": "yarn docs && mkdir -p ../../docs/core && cp -r docs/* ../../docs/core/"
   },
   "dependencies": {
     "cross-fetch": "^3.0.4",
-    "is-buffer": "^2.0.5",
-    "lodash": "^4.17.11",
-    "query-string": "^5.1.1",
-    "url": "^0.11.0"
+    "lodash": "^4.17.11"
   },
   "publishConfig": {
     "access": "public"
@@ -36,6 +31,6 @@
   ],
   "devDependencies": {
     "@types/geojson": "^7946.0.8",
-    "@types/is-buffer": "^2.0.0"
+    "happy-dom": "^14.12.3"
   }
 }

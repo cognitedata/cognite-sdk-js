@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Asset, Timeseries } from '../../types';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
@@ -192,6 +191,7 @@ describe('Timeseries integration test', () => {
       filter: { assetSubtreeIds: [{ id: asset.id }] },
       limit: 1,
     });
+    expect(items.length).toBe(1);
     expect(items[0].id).toBe(createdTimeseries[0].id);
   });
 

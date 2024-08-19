@@ -1,22 +1,10 @@
 // Copyright 2020 Cognite AS
+import { describe, expect, test } from 'vitest';
 
 import { X_REQUEST_ID } from '../constants';
 import { CogniteError, handleErrorResponse } from '../error';
 import { HttpError } from '../httpClient/httpError';
-
-export function createErrorResponse(
-  status: number,
-  message: string,
-  extra: any = {}
-) {
-  return {
-    error: {
-      code: status,
-      message,
-      ...extra,
-    },
-  };
-}
+import { createErrorResponse } from './testUtils';
 
 const internalIdObject = { id: 4190022127342195 };
 const externalIdObject = { externalId: 'abc' };
@@ -37,7 +25,7 @@ describe('CogniteError', () => {
     expect(error.requestId).toBeUndefined();
     expect(() => {
       throw error;
-    }).toThrowErrorMatchingInlineSnapshot(`"Abc | code: 500"`);
+    }).toThrowErrorMatchingInlineSnapshot(`[Error: Abc | code: 500]`);
   });
 
   test('with requestId', () => {
@@ -50,7 +38,7 @@ describe('CogniteError', () => {
     expect(() => {
       throw error;
     }).toThrowErrorMatchingInlineSnapshot(
-      `"Abc | code: 500 | X-Request-ID: def"`
+      `[Error: Abc | code: 500 | X-Request-ID: def]`
     );
   });
 
@@ -73,7 +61,7 @@ describe('handleErrorResponse', () => {
     const httpError = new HttpError(500, createErrorResponse(500, 'abc'), {});
     expect(() => {
       handleErrorResponse(httpError);
-    }).toThrowErrorMatchingInlineSnapshot(`"abc | code: 500"`);
+    }).toThrowErrorMatchingInlineSnapshot(`[Error: abc | code: 500]`);
   });
 
   test('with requestId', () => {
@@ -83,7 +71,7 @@ describe('handleErrorResponse', () => {
     expect(() => {
       handleErrorResponse(httpError);
     }).toThrowErrorMatchingInlineSnapshot(
-      `"abc | code: 500 | X-Request-ID: def"`
+      `[Error: abc | code: 500 | X-Request-ID: def]`
     );
   });
 
@@ -100,7 +88,7 @@ describe('handleErrorResponse', () => {
       }),
       { [X_REQUEST_ID]: xRequestId }
     );
-
+    expect.assertions(6);
     expect(() => {
       handleErrorResponse(httpError);
     }).toThrowErrorMatchingSnapshot();

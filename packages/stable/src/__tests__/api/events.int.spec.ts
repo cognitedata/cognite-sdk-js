@@ -1,8 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Asset, CogniteEvent, SortOrder } from '../../types';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { randomInt, setupLoggedInClient } from '../testUtils';
+import { Asset, CogniteEvent, SortOrder } from '../../types';
 
 describe('Events integration test', () => {
   let client: CogniteClient;

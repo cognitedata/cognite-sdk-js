@@ -7,7 +7,7 @@
 attribute.
 * @example {"assetRef":{"externalId":"abc"},"symbolRegion":{"xMin":0.1,"xMax":0.2,"yMin":0.1,"yMax":0.2},"textRegion":{"xMin":0.2,"xMax":0.3,"yMin":0.2,"yMax":0.3},"pageNumber":43}
 */
-export type AnnotationData = AnnotationsObjectDetection | AnnotationsClassification | AnnotationsKeypointCollection | AnnotationsCogniteAnnotationTypesImagesAssetLink | AnnotationsTextRegion | AnnotationsCogniteAnnotationTypesImagesInstanceLink | AnnotationsCogniteAnnotationTypesDiagramsAssetLink | AnnotationsFileLink | AnnotationsCogniteAnnotationTypesDiagramsInstanceLink | AnnotationsUnhandledTextObject | AnnotationsUnhandledSymbolObject | AnnotationsExtractedText | AnnotationsLine | AnnotationsJunction | AnnotationsBoundingVolume | AnnotationsDetection;
+export type AnnotationData = AnnotationsBoundingVolume | AnnotationsClassification | AnnotationsDetection | AnnotationsExtractedText | AnnotationsFileLink | AnnotationsIsoPlanAnnotation | AnnotationsJunction | AnnotationsKeypointCollection | AnnotationsLine | AnnotationsObjectDetection | AnnotationsTextRegion | AnnotationsUnhandledSymbolObject | AnnotationsUnhandledTextObject | AnnotationsCogniteAnnotationTypesDiagramsAssetLink | AnnotationsCogniteAnnotationTypesDiagramsInstanceLink | AnnotationsCogniteAnnotationTypesImagesAssetLink | AnnotationsCogniteAnnotationTypesImagesInstanceLink;
 /**
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
@@ -120,7 +120,7 @@ export interface AnnotationsCogniteAnnotationTypesDiagramsAssetLink {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The symbol representing the asset */
@@ -143,7 +143,7 @@ export interface AnnotationsCogniteAnnotationTypesDiagramsInstanceLink {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The symbol found in the file */
@@ -197,28 +197,15 @@ export interface AnnotationsCogniteAnnotationTypesImagesInstanceLink {
 PolyLine.
 */
 export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry {
-    /** A plain rectangle */
     boundingBox?: AnnotationsBoundingBox;
-    /**
-     * A _closed_ polygon represented by _n_ vertices. In other words, we assume
-     * that the first and last vertex are connected.
-     */
     polygon?: AnnotationsPolygon;
-    /** A polygonal chain consisting of _n_ vertices */
     polyline?: AnnotationsPolyLine;
 }
 /**
  * A 3D geometry model represented by exactly *one of* `cylinder` and `box`.
  */
 export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry3DGeometry {
-    /**
-     * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
-     * translates and scales a box centered at the origin to its location and orientation in 3D space.
-     * The box that is transformed is the axis-aligned cube spanning the volume between
-     * the points (-1, -1, -1) and (1, 1, 1).
-     */
     box?: AnnotationsBox;
-    /** A cylinder in 3D space, defined by the centers of the two end surfaces and the radius. */
     cylinder?: AnnotationsCylinder;
 }
 /**
@@ -267,7 +254,7 @@ export interface AnnotationsDetection {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The unit of the value field. Optional. */
@@ -286,7 +273,7 @@ export interface AnnotationsExtractedText {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The location of the extracted text */
@@ -303,7 +290,7 @@ export interface AnnotationsFileLink {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The symbol found in the file */
@@ -344,13 +331,60 @@ export interface AnnotationsInstanceRef {
     space: string;
 }
 /**
+ * Model a custom link in a engineering diagram where it capture details from the texts and linked to assets when necessary
+ */
+export interface AnnotationsIsoPlanAnnotation {
+    /** Detail describing the equipment. */
+    detail?: string;
+    /** Contains a link to a file in CDF. This is used to navigate between files. */
+    fileRef?: AnnotationsFileRef;
+    /** The indirectExternalId is the external id of the equipment used to identify the hotspot indirectly. E.g. first valve upstreams of <indirectExternalId>. */
+    indirectExternalId?: AnnotationsAssetRef;
+    /** Relation connecting this hotspot to a tag in case the hotspot has no tag. E.g. 'upstreams of'. This references the 'indirectExternalId'. */
+    indirectRelation?: string;
+    /** The id of the Pipe that the hotspot belongs to. */
+    lineExternalId?: AnnotationsAssetRef;
+    /** Stores Functional Location (FLOC) external ID represented by the hotspot. */
+    linkedResourceExternalId?: string;
+    /** Stores the Functional Location (FLOC) ID represented by the hotspot. */
+    linkedResourceInternalId?: number;
+    /** Whether the hotspot represents an asset (FLOC) or file. */
+    linkedResourceType?: "asset" | "file";
+    /** Temporary field for migration purposes. Id of corresponding legacy annotation. */
+    oldAnnotationId?: string;
+    /**
+     * The number of the page on which this annotation is located. The first page has number 1.
+     * @min 1
+     * @max 100000
+     */
+    pageNumber?: number;
+    /** Relative position of the relation connecting the hotspot to a tag. E.g. '2nd'. This references the 'indirectExternalId'. */
+    relativePosition?: string;
+    /** Revision number of the P&ID file that the hotspot is valid for. */
+    revision?: string;
+    /** Stores the dimensions of a valve or spade. */
+    sizeAndClass?: AnnotationsSizeAndClassType;
+    /** Marks the hotspot as user created or detected via pipeline. */
+    sourceType?: "pipeline" | "user";
+    /** Additional details, the fluid code for pipes e.g. LO for Lube oil etc. */
+    subDetail?: string;
+    /** Text found in the area, might be a FLOC, valve detail, pipe or diagram name. */
+    text?: string;
+    /** The location of the hotspot represented with a bounding box. */
+    textRegion?: AnnotationsBoundingBox;
+    /** Type of equipment, valve, pump etc. */
+    type?: string;
+    /** Stores the (x,y) coordinate pairs of a line or polyline. */
+    vertices?: AnnotationsPolyLine;
+}
+/**
  * Models a junction between lines in an engineering diagram
  */
 export interface AnnotationsJunction {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The point representing the junction */
@@ -400,7 +434,7 @@ export interface AnnotationsLine {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The polyline representing the line */
@@ -423,7 +457,6 @@ optionally a confidence value.
 export interface AnnotationsObjectDetection {
     /** Additional attributes data for a compound. */
     attributes?: Record<string, AnnotationsBoolean | AnnotationsNumerical>;
-    /** A plain rectangle */
     boundingBox?: AnnotationsBoundingBox;
     /**
      * The confidence score for the primitive. It should be between 0 and 1.
@@ -433,12 +466,7 @@ export interface AnnotationsObjectDetection {
     confidence?: number;
     /** The label describing what type of object it is */
     label: string;
-    /**
-     * A _closed_ polygon represented by _n_ vertices. In other words, we assume
-     * that the first and last vertex are connected.
-     */
     polygon?: AnnotationsPolygon;
-    /** A polygonal chain consisting of _n_ vertices */
     polyline?: AnnotationsPolyLine;
 }
 /**
@@ -490,6 +518,17 @@ export interface AnnotationsPolyLine {
     vertices: AnnotationsPoint[];
 }
 /**
+ * Store the dimension, units and class of a given annotation
+ */
+export interface AnnotationsSizeAndClassType {
+    /** The class type of the valve or spade */
+    classType?: string;
+    /** The size of the valve or spade */
+    size?: number;
+    /** The units of the size (mm/inches) */
+    unit?: string;
+}
+/**
  * Models an extracted text region in an image
  */
 export interface AnnotationsTextRegion {
@@ -513,7 +552,7 @@ export interface AnnotationsUnhandledSymbolObject {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The symbol found in the file */
@@ -530,7 +569,7 @@ export interface AnnotationsUnhandledTextObject {
     /**
      * The number of the page on which this annotation is located. The first page has number 1.
      * @min 1
-     * @max 2048
+     * @max 100000
      */
     pageNumber?: number;
     /** The extracted text */

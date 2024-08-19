@@ -20,7 +20,6 @@ export default {
     typescript({
       tsconfig: './tsconfig.build.json',
       typescript: require('typescript'),
-      exclude: '**/__tests__/**',
     }),
     json({
       // All JSON files will be parsed by default,

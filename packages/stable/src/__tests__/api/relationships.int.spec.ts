@@ -1,9 +1,14 @@
 // Copyright 2020 Cognite AS
 
-import { Asset, CogniteEvent, DataSet, Label } from '@cognite/sdk';
-import { randomInt } from '@cognite/sdk-core/src/testUtils';
-import CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient } from '../testUtils';
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+} from 'vitest';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('relationships integration test', () => {
   const end = Date.now();

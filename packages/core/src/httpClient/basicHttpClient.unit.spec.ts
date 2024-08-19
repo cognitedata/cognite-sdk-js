@@ -1,4 +1,5 @@
 // Copyright 2020 Cognite AS
+import { beforeEach, describe, expect, test } from 'vitest';
 import nock from 'nock';
 import { BasicHttpClient, HttpResponseType } from './basicHttpClient';
 
@@ -109,7 +110,7 @@ describe('BasicHttpClient', () => {
           error: { code: 500, message: 'Internal server error' },
         });
       await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"Request failed | status code: 500"`
+        `[Error: Request failed | status code: 500]`
       );
     });
 

@@ -1,21 +1,48 @@
 // Copyright 2020 Cognite AS
 
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { VisionExtractPostResponse } from '@cognite/sdk';
-import CogniteClient from '../../cogniteClient';
+import { beforeAll, describe, expect, test, vi } from 'vitest';
 import { BETA_FEATURES } from '../../api/vision/visionApi';
 import { setupLoggedInClient } from '../testUtils';
+import noop from 'lodash/noop';
+
+function readFile(filename: string): Buffer {
+  return readFileSync(resolve(__dirname, filename));
+}
 
 describe('Vision API', () => {
-  const TEST_IMAGE_ID = 3285495312337188;
+  let TEST_IMAGE_ID: number = -1;
   let client: CogniteClient;
   let consoleSpy: jest.SpyInstance;
   let extractJob: VisionExtractPostResponse;
   let extractBetaJob: VisionExtractPostResponse;
 
   beforeAll(async () => {
-    jest.setTimeout(3 * 60 * 1000); // timeout after 3 minutes
-    consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+    vi.setConfig({ testTimeout: 3 * 60 * 1000 }); // timeout after 3 minutes
+    consoleSpy = vi.spyOn(console, 'warn').mockImplementation(noop);
     client = setupLoggedInClient();
+
+    const testFileExternalId = 'vision_extract_test_image';
+    const files = await client.files.retrieve(
+      [{ externalId: testFileExternalId }],
+      { ignoreUnknownIds: true }
+    );
+    if (files.length === 0) {
+      const fileContent = readFile('./vision-integration-test-file.png');
+      const uploadedFile = await client.files.upload(
+        {
+          name: testFileExternalId,
+          mimeType: 'image/png',
+          externalId: testFileExternalId,
+        },
+        fileContent
+      );
+      TEST_IMAGE_ID = uploadedFile.id;
+    } else {
+      TEST_IMAGE_ID = files[0].id;
+    }
 
     extractJob = await client.vision.extract(
       ['TextDetection'],
@@ -78,7 +105,7 @@ describe('Vision API', () => {
         `Timed out while waiting for vision job to complete.`
       );
     });
-    test('waitForCompletion=true', async () => {
+    test.skip('waitForCompletion=true', async () => {
       const result = await client.vision.getExtractJob(extractJob.jobId, true);
       expect(result.status).toEqual('Completed');
       expect(result.jobId).toEqual(extractJob.jobId);

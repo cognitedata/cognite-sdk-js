@@ -14,7 +14,7 @@ npm install @cognite/sdk-alpha --save
 
 This will download `@cognite/sdk-alpha`. Import the `CogniteClientAlpha`:
 ```js
-import CogniteClientAlpha from '@congite/sdk-alpha';
+import CogniteClientAlpha from '@cognite/sdk-alpha';
 ```
 
 The CogniteClientAlpha can be initialized/configured in the same manner as the other packages (eg. stable, beta, etc.).

@@ -3,6 +3,162 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.15.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.1...@cognite/sdk@9.15.2) (2024-08-19)
+
+**Note:** Version bump only for package @cognite/sdk
+
+## [9.15.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.0...@cognite/sdk@9.15.1) (2024-06-10)
+
+### Bug Fixes
+
+- **stable/models:** pass 'inlineViews' as params instead of request body for data models retrieve ([#1108](https://github.com/cognitedata/cognite-sdk-js/issues/1108)) ([2a9ca81](https://github.com/cognitedata/cognite-sdk-js/commit/2a9ca81016cdc2926b7d5a2996fe9ba289c640cd))
+
+# [9.15.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.14.0...@cognite/sdk@9.15.0) (2024-05-15)
+
+### Features
+
+- **annotations:** generate annotations for isolation planning app ([#1103](https://github.com/cognitedata/cognite-sdk-js/issues/1103)) ([3acda38](https://github.com/cognitedata/cognite-sdk-js/commit/3acda3806b324750680460005aedee7b83e453ca))
+
+# [9.14.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.13.0...@cognite/sdk@9.14.0) (2024-05-13)
+
+### Features
+
+- **files-beta:** add multi part upload sdk and tests (BND3D-4012) ([#1088](https://github.com/cognitedata/cognite-sdk-js/issues/1088)) ([a2fbbe6](https://github.com/cognitedata/cognite-sdk-js/commit/a2fbbe67db54518f3de08ec03dd4c6898c43465a))
+
+# [9.13.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.12.0...@cognite/sdk@9.13.0) (2024-04-29)
+
+### Features
+
+- **datapoints:** add support for data quality (beta) ([#1071](https://github.com/cognitedata/cognite-sdk-js/issues/1071)) ([d414ae4](https://github.com/cognitedata/cognite-sdk-js/commit/d414ae43f62e45f975bbcffe178dfbc29d1f913e)), closes [#1070](https://github.com/cognitedata/cognite-sdk-js/issues/1070) [#1072](https://github.com/cognitedata/cognite-sdk-js/issues/1072) [#1073](https://github.com/cognitedata/cognite-sdk-js/issues/1073) [#1075](https://github.com/cognitedata/cognite-sdk-js/issues/1075) [#1076](https://github.com/cognitedata/cognite-sdk-js/issues/1076) [#1078](https://github.com/cognitedata/cognite-sdk-js/issues/1078) [#1080](https://github.com/cognitedata/cognite-sdk-js/issues/1080) [#1079](https://github.com/cognitedata/cognite-sdk-js/issues/1079) [#1081](https://github.com/cognitedata/cognite-sdk-js/issues/1081)
+
+# [9.12.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.11.2...@cognite/sdk@9.12.0) (2024-04-11)
+
+### Features
+
+- introduce remaining instance endpoints ([#1085](https://github.com/cognitedata/cognite-sdk-js/issues/1085)) ([9969e47](https://github.com/cognitedata/cognite-sdk-js/commit/9969e47c23e03b0fd3ecfd93dda9dda3867fce32))
+
+## [9.11.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.11.1...@cognite/sdk@9.11.2) (2024-04-11)
+
+### Bug Fixes
+
+- **Group:** explicitly define sourceId for all group variants ([#1084](https://github.com/cognitedata/cognite-sdk-js/issues/1084)) ([220b7c1](https://github.com/cognitedata/cognite-sdk-js/commit/220b7c1b481c28c4115d6e3e55ed093074404ec9))
+
+## [9.11.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.11.0...@cognite/sdk@9.11.1) (2024-04-10)
+
+### Bug Fixes
+
+- **groups:** inconsistent types compared to the API spec ([#1082](https://github.com/cognitedata/cognite-sdk-js/issues/1082)) ([f07f136](https://github.com/cognitedata/cognite-sdk-js/commit/f07f13690dd5e10ba08bbec18b9d3f483eae60e0))
+
+# [9.11.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.10.0...@cognite/sdk@9.11.0) (2024-04-09)
+
+### Features
+
+- group membership ([#1079](https://github.com/cognitedata/cognite-sdk-js/issues/1079)) ([4a7c24a](https://github.com/cognitedata/cognite-sdk-js/commit/4a7c24a260453495fdc1006660093b9f15f37ac5))
+
+# [9.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.9.0...@cognite/sdk@9.10.0) (2024-02-08)
+
+### Features
+
+- introduce datamodels endpoints + export types correctly ([#1058](https://github.com/cognitedata/cognite-sdk-js/issues/1058)) ([0c3405f](https://github.com/cognitedata/cognite-sdk-js/commit/0c3405f3f842c203b79726d541be11379274d064))
+
+# [9.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.8.0...@cognite/sdk@9.9.0) (2024-02-06)
+
+### Features
+
+- add containers and views to the SDK ([#1056](https://github.com/cognitedata/cognite-sdk-js/issues/1056)) ([c05cc57](https://github.com/cognitedata/cognite-sdk-js/commit/c05cc57851e4a2f4df0a566f6fe1926da9eeeb93))
+
+# [9.8.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.7.1...@cognite/sdk@9.8.0) (2024-02-05)
+
+### Features
+
+- add spaces to js sdk ([#1055](https://github.com/cognitedata/cognite-sdk-js/issues/1055)) ([3840acf](https://github.com/cognitedata/cognite-sdk-js/commit/3840acfa19b17be13729a55efdee118e6f66bfe6))
+
+## [9.7.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.7.0...@cognite/sdk@9.7.1) (2024-01-22)
+
+**Note:** Version bump only for package @cognite/sdk
+
+# [9.7.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.6.2...@cognite/sdk@9.7.0) (2024-01-18)
+
+### Features
+
+- instances/search and instances/list ([#1047](https://github.com/cognitedata/cognite-sdk-js/issues/1047)) ([84e5ea2](https://github.com/cognitedata/cognite-sdk-js/commit/84e5ea23f265a54aeafc0aa83e4607a7d1262d7c))
+
+## [9.6.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.6.1...@cognite/sdk@9.6.2) (2023-12-22)
+
+### Bug Fixes
+
+- set empty array for no results ([#1046](https://github.com/cognitedata/cognite-sdk-js/issues/1046)) ([0ae93aa](https://github.com/cognitedata/cognite-sdk-js/commit/0ae93aa0e0ba55db9741138fc9b046a26e755883))
+
+## [9.6.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.6.0...@cognite/sdk@9.6.1) (2023-12-19)
+
+### Bug Fixes
+
+- return all time series when asking for multiple time series of monthly aggregates ([#1045](https://github.com/cognitedata/cognite-sdk-js/issues/1045)) ([129de8b](https://github.com/cognitedata/cognite-sdk-js/commit/129de8be32f4cd8c6c2bb0910accd17df618f7d9))
+
+# [9.6.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.5.0...@cognite/sdk@9.6.0) (2023-12-06)
+
+### Features
+
+- user profiles api ([#1019](https://github.com/cognitedata/cognite-sdk-js/issues/1019)) ([33eee73](https://github.com/cognitedata/cognite-sdk-js/commit/33eee73e40d8306ee145301641d7af1cdba2e3c5))
+
+# [9.5.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.4.0...@cognite/sdk@9.5.0) (2023-12-01)
+
+### Features
+
+- **annotations:** generate annotations for isolation planning app ([#1033](https://github.com/cognitedata/cognite-sdk-js/issues/1033)) ([30418ac](https://github.com/cognitedata/cognite-sdk-js/commit/30418acb31d4a553a0c0d9174d5ae50c8b1c8d8e))
+
+# [9.4.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.3.0...@cognite/sdk@9.4.0) (2023-11-28)
+
+### Features
+
+- add units catalog and timeseries unit conversion ([#1027](https://github.com/cognitedata/cognite-sdk-js/issues/1027)) ([89cffa8](https://github.com/cognitedata/cognite-sdk-js/commit/89cffa8d7a1401274f52008b7bd7745683a2d817))
+
+# [9.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.2.1...@cognite/sdk@9.3.0) (2023-11-28)
+
+### Features
+
+- monitoring tasks upsert ([#1042](https://github.com/cognitedata/cognite-sdk-js/issues/1042)) ([7e0e24c](https://github.com/cognitedata/cognite-sdk-js/commit/7e0e24cfb5c4d91302e54a270457b8d9b914ffd4))
+
+## [9.2.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.2.0...@cognite/sdk@9.2.1) (2023-11-24)
+
+### Bug Fixes
+
+- use UTC timezone regardless of client time zone ([#1040](https://github.com/cognitedata/cognite-sdk-js/issues/1040)) ([ad717bd](https://github.com/cognitedata/cognite-sdk-js/commit/ad717bd96ad4c3a5dbb6019b418417b23098c689))
+
+# [9.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.1.0...@cognite/sdk@9.2.0) (2023-11-23)
+
+### Features
+
+- **stable:** generate new types ([#1039](https://github.com/cognitedata/cognite-sdk-js/issues/1039)) ([4dd4e5c](https://github.com/cognitedata/cognite-sdk-js/commit/4dd4e5c594d2db01d7d5051a4b96d01212122f84))
+
+# [9.1.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.0.0...@cognite/sdk@9.1.0) (2023-11-21)
+
+### Features
+
+- **monthly aggregate:** retrieve datapoints where granularity set as month ([#1034](https://github.com/cognitedata/cognite-sdk-js/issues/1034)) ([4e4145d](https://github.com/cognitedata/cognite-sdk-js/commit/4e4145d8d4c560779b847d530311820723950a19))
+
+# [9.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.3.0...@cognite/sdk@9.0.0) (2023-10-10)
+
+### Features
+
+- update openapi spec to bump types for docs, annotations and vision ([#1021](https://github.com/cognitedata/cognite-sdk-js/issues/1021)) ([#1024](https://github.com/cognitedata/cognite-sdk-js/issues/1024)) ([e337d73](https://github.com/cognitedata/cognite-sdk-js/commit/e337d73c9e6a1888e165d8b4a59bfe94b522bbb3))
+
+### BREAKING CHANGES
+
+- documents, annotations and vision types have been updated
+
+Thanks to @danlevings for his work in commit: https://github.com/cognitedata/cognite-sdk-js/commit/ac6efec6e884d0cb436be7c2e91f3aa78bfbe15c
+
+# [8.3.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.2.0...@cognite/sdk@8.3.0) (2023-09-27)
+
+### Features
+
+- **alpha:** monitoring task add source and sourceId props - [AH-1863] ([#1020](https://github.com/cognitedata/cognite-sdk-js/issues/1020)) ([506ad9b](https://github.com/cognitedata/cognite-sdk-js/commit/506ad9be6368322f08ac606642414a37f37cec67))
+
+### Reverts
+
+- "feat: update openapi spec to bump types fo docs, annotations and vision" ([#1021](https://github.com/cognitedata/cognite-sdk-js/issues/1021)) ([b908def](https://github.com/cognitedata/cognite-sdk-js/commit/b908defed27eb610c8c7b97d2c24013da735422f))
+
 # [8.2.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@8.1.1...@cognite/sdk@8.2.0) (2023-06-20)
 
 ### Features

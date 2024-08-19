@@ -1,7 +1,8 @@
 // Copyright 2020 Cognite AS
 import nock from 'nock';
-import { CogniteClient, ExternalLabelDefinition } from '../..';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import matches from 'lodash/matches';
 
 describe('Labels unit test', () => {
   let client: CogniteClient;
@@ -25,9 +26,12 @@ describe('Labels unit test', () => {
   });
   test('create', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/labels'), {
-        items: externalLabels,
-      })
+      .post(
+        new RegExp('/labels'),
+        matches({
+          items: externalLabels,
+        })
+      )
       .once()
       .reply(201, {
         items: labels,

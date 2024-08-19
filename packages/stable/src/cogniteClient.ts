@@ -30,6 +30,7 @@ import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
 import { GeospatialAPI } from './api/geospatial/geospatialAPI';
 import { AnnotationsAPI } from './api/annotations/annotationsApi';
 import { VisionAPI } from './api/vision/visionApi';
+import { ProfilesAPI } from './api/userProfiles/profilesApi';
 import {
   TemplateGraphQlApi,
   TemplateGroupsApi,
@@ -39,6 +40,12 @@ import {
 } from './api/templates';
 import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 import { retryValidator } from './retryValidator';
+import { UnitsAPI } from './api/units/unitsApi';
+import { InstancesAPI } from './api/instances/instancesApi';
+import { ContainersAPI } from './api/containers/containersApi';
+import { ViewsAPI } from './api/views/viewsApi';
+import { SpacesAPI } from './api/spaces/spacesApi';
+import { DataModelsAPI } from './api/models/datamodelsApi';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
@@ -116,6 +123,9 @@ export default class CogniteClient extends BaseCogniteClient {
   public get vision() {
     return accessApi(this.visionApi);
   }
+  public get profiles() {
+    return accessApi(this.profilesApi);
+  }
   public get templates() {
     return {
       groups: accessApi(this.apiFactory(TemplateGroupsApi, 'templategroups')),
@@ -155,13 +165,30 @@ export default class CogniteClient extends BaseCogniteClient {
       },
     };
   }
-
+  public get units() {
+    return accessApi(this.unitsApi);
+  }
+  public get instances() {
+    return accessApi(this.instancesApi);
+  }
+  public get containers() {
+    return accessApi(this.containersApi);
+  }
+  public get views() {
+    return accessApi(this.viewsApi);
+  }
+  public get spaces() {
+    return accessApi(this.spacesApi);
+  }
+  public get dataModels() {
+    return accessApi(this.dataModelsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
-  private dataPointsApi?: DataPointsAPI;
+  protected dataPointsApi?: DataPointsAPI;
   private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
-  private filesApi?: FilesAPI;
+  protected filesApi?: FilesAPI;
   private labelsApi?: LabelsAPI;
   private rawApi?: RawAPI;
   private projectsApi?: ProjectsAPI;
@@ -181,6 +208,13 @@ export default class CogniteClient extends BaseCogniteClient {
   private documentsApi?: DocumentsAPI;
   private annotationsApi?: AnnotationsAPI;
   private visionApi?: VisionAPI;
+  private profilesApi?: ProfilesAPI;
+  private unitsApi?: UnitsAPI;
+  private instancesApi?: InstancesAPI;
+  private containersApi?: ContainersAPI;
+  private viewsApi?: ViewsAPI;
+  private spacesApi?: SpacesAPI;
+  private dataModelsApi?: DataModelsAPI;
 
   protected get version() {
     return version;
@@ -234,6 +268,13 @@ export default class CogniteClient extends BaseCogniteClient {
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
     this.annotationsApi = this.apiFactory(AnnotationsAPI, 'annotations');
     this.visionApi = this.apiFactory(VisionAPI, 'context/vision');
+    this.profilesApi = this.apiFactory(ProfilesAPI, 'profiles');
+    this.unitsApi = this.apiFactory(UnitsAPI, 'units');
+    this.instancesApi = this.apiFactory(InstancesAPI, 'models/instances');
+    this.containersApi = this.apiFactory(ContainersAPI, 'models/containers');
+    this.viewsApi = this.apiFactory(ViewsAPI, 'models/views');
+    this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
+    this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
   }
 
   static urlEncodeExternalId(externalId: string): string {

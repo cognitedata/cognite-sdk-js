@@ -738,6 +738,10 @@ export interface DatapointAggregates extends DatapointsMetadata {
    */
   isStep: boolean;
   datapoints: DatapointAggregate[];
+  /**
+   * The physical unit of the time series (reference to unit catalog). Replaced with target unit if data points were converted.
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export type Datapoints = StringDatapoints | DoubleDatapoints;
@@ -752,6 +756,10 @@ export interface DoubleDatapoints extends DatapointsMetadata {
    * The list of datapoints
    */
   datapoints: DoubleDatapoint[];
+  /**
+   * The physical unit of the time series (reference to unit catalog). Replaced with target unit if data points were converted.
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export interface StringDatapoints extends DatapointsMetadata {
@@ -782,6 +790,11 @@ export interface DatapointsMetadata extends InternalId {
 }
 
 export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
+  items: DatapointsQuery[];
+}
+
+export interface DatapointsMonthlyGranularityMultiQuery
+  extends Omit<DatapointsMultiQueryBase, 'granularity'> {
   items: DatapointsQuery[];
 }
 
@@ -849,6 +862,17 @@ export interface DatapointsQueryProperties extends Limit {
    * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
    */
   includeOutsidePoints?: boolean;
+  /**
+   * The unit externalId of the data points returned.
+   * If the time series does not have a unitExternalId that
+   * can be converted to the targetUnit,
+   * an error will be returned. Cannot be used with targetUnitSystem.
+   */
+  targetUnit?: CogniteExternalId;
+  /**
+   * The unit system of the data points returned. Cannot be used with targetUnit.
+   */
+  targetUnitSystem?: CogniteExternalId;
 }
 
 export type DateRange = Range<Timestamp>;
@@ -1211,6 +1235,10 @@ export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
    * Security categories required in order to access this time series.
    */
   securityCategories?: number[];
+  /**
+   * The physical unit of the time series (reference to unit catalog).
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export interface ExternalTimeseries {
@@ -1258,6 +1286,10 @@ export interface ExternalTimeseries {
    * Security categories required in order to access this time series."
    */
   securityCategories?: number[];
+  /**
+   * The physical unit of the time series (reference to unit catalog).
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export type FileGeoLocationType = 'Feature';
@@ -1354,13 +1386,43 @@ export interface FileGeoLocationFilter {
 
 export type FileGeoLocationPatch = SetField<FileGeoLocation> | RemoveField;
 
-export interface Group {
+export type PrincipalId = string;
+export type GroupMembers = PrincipalId[] | 'allUserAccounts';
+
+interface BaseGroup {
   name: GroupName;
-  sourceId?: GroupSourceId;
   capabilities?: CogniteCapability;
   id: number;
   isDeleted: boolean;
   deletedTime?: Date;
+}
+
+export interface ManagedExternallyGroup extends BaseGroup {
+  sourceId?: GroupSourceId;
+}
+
+export interface ManagedInCDFGroup extends BaseGroup {
+  members: GroupMembers;
+  // We are adding `sourceId: undefined` because this code:
+  // const foo(bar: Group) => console.log(bar.sourceId)
+  // yields the error:
+  // `Property 'sourceId' does not exist on type 'ManagedInCDFGroup'.`
+  // The Group type is defined as `type Group = ManagedInCDFGroup | ManagedExternallyGroup`
+  // and `sourceId` isn't defined on `ManagedInCDFGroup`.
+  // Typescript fails even though `sourceId` is an optional field on `ManagedExternallyGroup`.
+  sourceId: undefined;
+}
+
+export type Group = ManagedInCDFGroup | ManagedExternallyGroup;
+
+export function isManagedInCDFGroup(group: Group): group is ManagedInCDFGroup {
+  return (group as ManagedInCDFGroup).members !== undefined;
+}
+
+export function isManagedExternallyGroup(
+  group: Group
+): group is ManagedExternallyGroup {
+  return !isManagedInCDFGroup(group);
 }
 
 /**
@@ -1399,6 +1461,7 @@ export type GroupSourceId = string;
 export interface GroupSpec {
   name: GroupName;
   sourceId?: GroupSourceId;
+  members?: GroupMembers;
   capabilities?: CogniteCapability;
 }
 
@@ -2375,6 +2438,7 @@ export type SingleCogniteCapability =
   | { templateInstancesAcl: AclTemplateInstances };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };
+export type SinglePatchRequired<T> = { set: T };
 
 export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
@@ -2431,6 +2495,7 @@ export interface TimeSeriesPatch {
     dataSetId?: NullableSinglePatchLong;
     description?: NullableSinglePatchString;
     securityCategories?: ArrayPatchLong;
+    unitExternalId?: NullableSinglePatchString;
   };
 }
 
@@ -2492,6 +2557,10 @@ export interface TimeseriesFilter extends CreatedAndLastUpdatedTimeFilter {
    */
   assetSubtreeIds?: IdEither[];
   externalIdPrefix?: ExternalIdPrefix;
+  /**
+   * The physical unit of the time series (reference to unit catalog).
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export interface TimeseriesFilterQuery extends FilterQuery {
@@ -3288,7 +3357,6 @@ export interface AnnotationUpdate {
     status?: SetField<AnnotationStatus>;
   };
 }
-
 export interface AnnotationFilterRequest
   extends AnnotationFilter,
     FilterQuery {}
@@ -3324,3 +3392,169 @@ export interface AnnotationReverseLookupFilterProps {
   status?: AnnotationStatus;
   data?: Record<string, any>;
 }
+
+export interface Unit {
+  externalId: CogniteInternalId;
+  name: string;
+  longName: string;
+  symbol: string;
+  aliasNames: string[];
+  quantity: string;
+  conversion: UnitConversion;
+  source?: string;
+  sourceReference?: string;
+}
+
+export interface UnitConversion {
+  multiplier: number;
+  offset: number;
+}
+
+export interface UnitSystemQuantity {
+  name: string;
+  unitExternalId: CogniteInternalId;
+}
+
+export interface UnitSystem {
+  name: string;
+  quantities: UnitSystemQuantity[];
+}
+
+export {
+  AggregatedHistogramValue,
+  AggregatedNumberValue,
+  AggregatedResultItem,
+  AggregatedResultItemCollection,
+  AggregatedValueItem,
+  AggregationDefinition,
+  AggregationRequest,
+  AggregationResponse,
+  AvgAggregateFunctionV3,
+  CDFExternalIdReference,
+  CommonAggregationRequest,
+  ContainerReference,
+  ContainsAllFilterV3,
+  ContainsAnyFilterV3,
+  CorePropertyDefinition,
+  CountAggregateFunctionV3,
+  DMSExistsFilter,
+  DMSExternalId,
+  DMSFilterProperty,
+  DMSVersion,
+  DataModelsBoolFilter,
+  DataModelsLeafFilter,
+  DataModelsNestedFilter,
+  DirectNodeRelation,
+  DirectRelationReference,
+  EdgeDefinition,
+  EdgeOrNodeData,
+  EdgeWrite,
+  EqualsFilterV3,
+  FilterDefinition,
+  FilterValue,
+  FilterValueList,
+  FilterValueRange,
+  HasExistingDataFilterV3,
+  HistogramAggregateFunctionV3,
+  InFilterV3,
+  IncludeTyping,
+  InstanceType,
+  LimitWithDefault1000,
+  ListOfSpaceExternalIdsRequestWithTyping,
+  MatchAllFilter,
+  MaxAggregateFunctionV3,
+  MinAggregateFunctionV3,
+  NextCursorV3,
+  NodeAndEdgeCollectionResponseV3Response,
+  NodeAndEdgeCollectionResponseWithCursorV3Response,
+  NodeAndEdgeCreateCollection,
+  NodeDefinition,
+  NodeOrEdge,
+  NodeOrEdgeCreate,
+  NodeOrEdgeDeleteRequest,
+  NodeOrEdgeDeleteResponse,
+  NodeOrEdgeExternalId,
+  NodeOrEdgeListRequestV3,
+  NodeOrEdgeSearchRequest,
+  NodeWrite,
+  OverlapsFilterV3,
+  ParameterizedPropertyValueV3,
+  PrefixFilterV3,
+  PrimitiveProperty,
+  PropertyIdentifierV3,
+  PropertySortV3,
+  PropertyValueGroupV3,
+  QueryEdgeTableExpressionV3,
+  QueryIntersectionTableExpressionV3,
+  QueryNodeTableExpressionV3,
+  QueryRequest,
+  QueryResponse,
+  QuerySelectV3,
+  QuerySetOperationTableExpressionV3,
+  QueryTableExpressionV3,
+  QueryUnionAllTableExpressionV3,
+  QueryUnionTableExpressionV3,
+  RangeFilterV3,
+  RangeValue,
+  RawPropertyValueListV3,
+  RawPropertyValueV3,
+  ReferencedPropertyValueV3,
+  SearchRequestV3,
+  SlimEdgeDefinition,
+  SlimNodeAndEdgeCollectionResponse,
+  SlimNodeDefinition,
+  SlimNodeOrEdge,
+  SortV3,
+  SourceReference,
+  SourceSelectorV3,
+  SourceSelectorWithoutPropertiesV3,
+  SpaceSpecification,
+  SumAggregateFunctionV3,
+  SyncEdgeTableExpressionV3,
+  SyncNodeTableExpressionV3,
+  SyncRequest,
+  SyncSelectV3,
+  SyncTableExpressionV3,
+  TableExpressionChainToDefinition,
+  TableExpressionContainsAllFilterV3,
+  TableExpressionContainsAnyFilterV3,
+  TableExpressionDataModelsBoolFilter,
+  TableExpressionEqualsFilterV3,
+  TableExpressionFilterDefinition,
+  TableExpressionFilterValue,
+  TableExpressionFilterValueList,
+  TableExpressionFilterValueRange,
+  TableExpressionInFilterV3,
+  TableExpressionLeafFilter,
+  TableExpressionOverlapsFilterV3,
+  TableExpressionPrefixFilterV3,
+  TableExpressionRangeFilterV3,
+  TextProperty,
+  TypeInformation,
+  TypeInformationOuter,
+  TypePropertyDefinition,
+  TypingViewOrContainer,
+  UpsertConflict,
+  ViewAggregationRequest,
+  ViewCorePropertyDefinition,
+  ViewDirectNodeRelation,
+  ViewOrContainer,
+  ViewPropertyReference,
+  ViewReference,
+} from './api/instances/types.gen';
+
+export {
+  DataModel,
+  DataModelCreate,
+  ListOfAllVersionsReferences,
+  ListOfVersionReferences,
+  ReverseDirectRelationConnection,
+  ThroughReference,
+  UsedFor,
+  ViewCommon,
+  ViewCreateDefinition,
+  ViewCreateDefinitionProperty,
+  ViewDefinition,
+  ViewDefinitionProperty,
+  ViewPropertyDefinition,
+} from './api/models/types.gen';
