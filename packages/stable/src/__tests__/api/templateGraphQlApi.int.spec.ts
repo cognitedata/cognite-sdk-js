@@ -1,12 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import {
-  afterAll,
-  beforeAll,
-  describe,
-  expect,
-  it,
-} from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe.skip('template group test', () => {

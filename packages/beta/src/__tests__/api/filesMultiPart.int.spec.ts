@@ -1,5 +1,6 @@
 // Copyright 2020 Cognite AS
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
+import {
   ExternalFileInfo,
   LabelDefinition,
   MultiPartFileChunkResponse,

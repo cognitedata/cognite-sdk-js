@@ -2,7 +2,7 @@
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { randomInt, setupLoggedInClient } from '../testUtils';
-import { type Asset, type CogniteEvent, SortOrder } from '../../types';
+import { Asset, CogniteEvent, SortOrder } from '../../types';
 
 describe('Events integration test', () => {
   let client: CogniteClient;

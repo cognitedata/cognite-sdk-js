@@ -2,7 +2,10 @@
 
 import CogniteClient from '../cogniteClient';
 import { ExternalFileInfo, NodeOrEdge } from '../types';
-import { mockBaseUrl, randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import {
+  mockBaseUrl,
+  randomInt,
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 import { login } from './login';
 
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
@@ -194,7 +197,7 @@ export {
   getSortedPropInArray,
   retryInSeconds,
   simpleCompare,
-} from "@cognite/sdk-core/src/__tests__/testUtils";
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 
 export {
   setupClient,

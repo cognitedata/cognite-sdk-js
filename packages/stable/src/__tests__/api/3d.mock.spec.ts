@@ -2,7 +2,7 @@
 
 import nock from 'nock';
 import { beforeAll, describe, expect, test } from 'vitest';
-import {  
+import {
   Model3D,
   Node3D,
   RevealNode3D,

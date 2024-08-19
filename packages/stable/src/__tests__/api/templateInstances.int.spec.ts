@@ -1,12 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import {
-  afterAll,
-  beforeAll,
-  describe,
-  expect,
-  it,
-} from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 import { randomInt } from '../testUtils';
 
