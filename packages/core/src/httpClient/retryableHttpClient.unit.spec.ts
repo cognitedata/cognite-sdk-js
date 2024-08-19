@@ -1,8 +1,7 @@
 // Copyright 2020 Cognite AS
 
-import { beforeEach, describe, expect, test } from 'vitest';
-
 import nock from 'nock';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { HttpError } from './httpError';
 import { RetryableHttpClient } from './retryableHttpClient';
 

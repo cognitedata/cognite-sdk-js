@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
 import { expect, test } from 'vitest';
-
 import type { HttpResponse } from '../httpClient/basicHttpClient';
 import { MetadataMap } from '../metadata';
 

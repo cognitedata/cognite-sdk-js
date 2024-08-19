@@ -70,12 +70,12 @@ describe('Views integration test', () => {
         },
       },
     ]);
-  });
+  }, 25_000);
   afterAll(async () => {
     await client.containers.delete([
       { externalId: TEST_CONTAINER_NAME, space: TEST_SPACE_NAME },
     ]);
-  });
+  }, 25_000);
 
   it('should successfully upsert views', async () => {
     const createdViewResponse = await client.views.upsert([

@@ -96,6 +96,7 @@ export interface SimulatorIntegration {
   licenseLastCheckedTime?: Date;
   connectorStatus?: string;
   connectorStatusUpdatedTime?: Date;
+  logId: CogniteInternalId;
   createdTime: Date;
   lastUpdatedTime: Date;
 }

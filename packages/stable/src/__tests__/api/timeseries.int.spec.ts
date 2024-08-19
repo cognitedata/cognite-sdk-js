@@ -194,6 +194,7 @@ describe('Timeseries integration test', () => {
       filter: { assetSubtreeIds: [{ id: asset.id }] },
       limit: 1,
     });
+    expect(items.length).toBe(1);
     expect(items[0].id).toBe(createdTimeseries[0].id);
   });
 

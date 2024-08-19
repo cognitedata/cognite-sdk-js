@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
 import { describe, expect, test } from 'vitest';
-
 import { type Node, topologicalSort } from '../graphUtils';
 
 describe('Graph utils', () => {

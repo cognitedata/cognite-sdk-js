@@ -1,8 +1,7 @@
 // Copyright 2020 Cognite AS
 
-import { afterAll, beforeEach, describe, expect, test, vi } from 'vitest';
-
 import nock from 'nock';
+import { afterAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import {
   authTokens,
   loggedInResponse,

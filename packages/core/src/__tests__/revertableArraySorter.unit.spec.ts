@@ -1,7 +1,5 @@
 // Copyright 2020 Cognite AS
-
 import { describe, expect, test } from 'vitest';
-
 import { RevertableArraySorter } from '../revertableArraySorter';
 
 describe('revertable array sorter', () => {

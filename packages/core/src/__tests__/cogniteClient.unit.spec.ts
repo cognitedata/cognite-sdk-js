@@ -1,5 +1,4 @@
 // Copyright 2020 Cognite AS
-
 import { beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import nock from 'nock';
