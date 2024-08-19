@@ -5,7 +5,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
-  "version": "5.11.0",
+  "version": "5.11.1",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "test": "jest --config=../../jest.config.js --testPathPattern=/beta/",
@@ -21,8 +21,8 @@
     "test-snippets": "yarn extract-snippets && yarn g:tsc -p codeSnippets/tsconfig.build.json"
   },
   "dependencies": {
-    "@cognite/sdk": "^9.15.1",
-    "@cognite/sdk-core": "^4.10.1"
+    "@cognite/sdk": "^9.15.2",
+    "@cognite/sdk-core": "^4.10.2"
   },
   "files": [
     "dist"
