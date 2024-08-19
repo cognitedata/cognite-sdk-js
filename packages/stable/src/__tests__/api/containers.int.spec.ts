@@ -41,11 +41,11 @@ describe('Containers integration test', () => {
         description: 'Instance space used for containers integration tests.',
       },
     ]);
-  });
+  }, 25_000);
   afterAll(async () => {
     client = setupLoggedInClient();
     await client.spaces.delete([TEST_SPACE_NAME]);
-  });
+  }, 25_000);
   it('should successfully upsert containers', async () => {
     const createdContainerResponse = await client.containers.upsert([
       containerCreationDefinition,
