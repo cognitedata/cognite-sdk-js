@@ -14,7 +14,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: npm install @commitlint/config-conventional
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+
+      - name: Install 🔧
+        run: yarn install --immutable
 
       - uses: JulienKode/pull-request-name-linter-action@v0.5.0
