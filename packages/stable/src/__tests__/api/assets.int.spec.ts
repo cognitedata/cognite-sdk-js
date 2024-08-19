@@ -1,8 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { CogniteError, CogniteMultiError } from '@cognite/sdk-core';
-import CogniteClient from '../../cogniteClient';
-import { Asset, LabelDefinition } from '../../types';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import {
   randomInt,
   runTestWithRetryWhenFailing,

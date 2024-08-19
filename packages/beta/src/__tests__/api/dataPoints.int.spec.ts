@@ -1,7 +1,6 @@
 /// Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Timeseries, Datapoints } from '../../types';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 const Status = {

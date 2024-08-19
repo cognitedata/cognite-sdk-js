@@ -8,8 +8,7 @@
   "version": "4.10.2",
   "scripts": {
     "clean": "rm -rf dist/ docs/",
-    "test": "yarn g:jest --config=../../jest.config.js --testPathPattern=/core/",
-    "test:debug": "node --inspect-brk ../../node_modules/.bin/jest --config=../../jest.config.js --testPathPattern=/core/ --runInBand",
+    "test": "yarn g:vitest run",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "yarn lint --fix",
     "prepublishOnly": "yarn build",
@@ -31,6 +30,7 @@
     "dist"
   ],
   "devDependencies": {
-    "@types/geojson": "^7946.0.8"
+    "@types/geojson": "^7946.0.8",
+    "happy-dom": "^14.12.3"
   }
 }

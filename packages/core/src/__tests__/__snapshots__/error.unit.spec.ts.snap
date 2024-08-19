@@ -1,51 +1,51 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CogniteError extra field 1`] = `
-"Abc | code: 500
+exports[`CogniteError > extra field 1`] = `
+[Error: Abc | code: 500
 {
-  \\"missing\\": [
+  "missing": [
     {
-      \\"id\\": 4190022127342195
+      "id": 4190022127342195
     },
     {
-      \\"externalId\\": \\"abc\\"
+      "externalId": "abc"
     }
   ],
-  \\"duplicated\\": [
+  "duplicated": [
     {
-      \\"externalId\\": \\"string\\",
-      \\"startTime\\": 0,
-      \\"endTime\\": 0,
-      \\"description\\": \\"string\\",
-      \\"source\\": \\"string\\"
+      "externalId": "string",
+      "startTime": 0,
+      "endTime": 0,
+      "description": "string",
+      "source": "string"
     }
   ],
-  \\"extra\\": \\"Extra log information\\"
-}"
+  "extra": "Extra log information"
+}]
 `;
 
-exports[`handleErrorResponse extra fields 1`] = `
-"abc | code: 500 | X-Request-ID: def
+exports[`handleErrorResponse > extra fields 1`] = `
+[Error: abc | code: 500 | X-Request-ID: def
 {
-  \\"duplicated\\": [
+  "duplicated": [
     {
-      \\"externalId\\": \\"string\\",
-      \\"startTime\\": 0,
-      \\"endTime\\": 0,
-      \\"description\\": \\"string\\",
-      \\"source\\": \\"string\\"
+      "externalId": "string",
+      "startTime": 0,
+      "endTime": 0,
+      "description": "string",
+      "source": "string"
     }
   ],
-  \\"extra\\": {
-    \\"extraErrorInformation\\": \\"test\\"
+  "extra": {
+    "extraErrorInformation": "test"
   },
-  \\"missing\\": [
+  "missing": [
     {
-      \\"id\\": 4190022127342195
+      "id": 4190022127342195
     },
     {
-      \\"externalId\\": \\"abc\\"
+      "externalId": "abc"
     }
   ]
-}"
+}]
 `;

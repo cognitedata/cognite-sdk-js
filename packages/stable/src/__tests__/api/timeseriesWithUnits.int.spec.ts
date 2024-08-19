@@ -8,6 +8,7 @@ import {
   ExternalTimeseries,
   Timeseries,
 } from '@cognite/sdk';
+import { describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 import { randomInt, runTestWithRetryWhenFailing } from '../testUtils';
 

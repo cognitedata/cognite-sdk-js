@@ -6,6 +6,7 @@ import {
   promiseEachInSequence,
 } from '@cognite/sdk-core';
 import nock from 'nock';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { enrichAssetsWithTheirParents } from '../../api/assets/assetUtils';
 import CogniteClient from '../../cogniteClient';
 import { ExternalAssetItem } from '../../types';

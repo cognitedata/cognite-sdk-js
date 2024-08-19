@@ -1,4 +1,5 @@
 // Copyright 2020 Cognite AS
+import { beforeEach, describe, expect, test } from 'vitest';
 import nock from 'nock';
 import { RetryableHttpClient } from './retryableHttpClient';
 
@@ -33,13 +34,9 @@ describe('RetryableHttpClient', () => {
     expect.assertions(1);
     nock(baseUrl).get('/').times(2).reply(500, {});
     nock(baseUrl).get('/').reply(400, { a: 42 });
-    try {
-      await client.get('/');
-    } catch (err) {
-      expect(err.message).toMatchInlineSnapshot(
-        `"Request failed | status code: 400"`
-      );
-    }
+    await expect(client.get('/')).rejects.toThrow(
+      'Request failed | status code: 400'
+    );
   });
 
   test('respect when a boolean is passed as retryValidator', async () => {

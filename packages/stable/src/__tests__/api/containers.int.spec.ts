@@ -1,7 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import { ContainerCreateDefinition } from '../../api/containers/types.gen';
-import CogniteClient from '../../cogniteClient';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Containers integration test', () => {
@@ -33,7 +32,6 @@ describe('Containers integration test', () => {
   };
 
   beforeAll(async () => {
-    jest.setTimeout(30 * 1000);
     client = setupLoggedInClient();
     await deleteOldSpaces(client);
     await client.spaces.upsert([
@@ -120,34 +118,46 @@ describe('Containers integration test', () => {
     expect(containers.items[1].name).toEqual(containerCreationDefinition2.name);
   });
 
-  it('should successfully delete Containers', async () => {
-    const response = await client.containers.delete([
-      {
-        space: TEST_SPACE_NAME,
-        externalId: containerCreationDefinition.externalId,
-      },
-      {
-        space: TEST_SPACE_NAME,
-        externalId: containerCreationDefinition2.externalId,
-      },
-    ]);
-    expect(response.items).toHaveLength(2);
+  it(
+    'should successfully delete Containers',
+    async () => {
+      const response = await client.containers.delete([
+        {
+          space: TEST_SPACE_NAME,
+          externalId: containerCreationDefinition.externalId,
+        },
+        {
+          space: TEST_SPACE_NAME,
+          externalId: containerCreationDefinition2.externalId,
+        },
+      ]);
+      expect(response.items).toHaveLength(2);
 
-    // Eventual consistency - wait for the delete to propagate
-    await new Promise((resolve) => setTimeout(resolve, 20 * 1000));
+      // Eventual consistency - wait for the delete to propagate
+      await new Promise((resolve) => setTimeout(resolve, 20 * 1000));
 
-    const containers = await client.containers.list({ limit: 1000 });
-    expect(
-      containers.items.find(
-        (container) =>
-          container.externalId === containerCreationDefinition.externalId
-      )
-    ).toBeUndefined();
-    expect(
-      containers.items.find(
-        (container) =>
-          container.externalId === containerCreationDefinition2.externalId
-      )
-    ).toBeUndefined();
-  });
+      vi.waitFor(
+        async () => {
+          const containers = await client.containers.list({ limit: 1000 });
+          expect(
+            containers.items.find(
+              (container) =>
+                container.externalId === containerCreationDefinition.externalId
+            )
+          ).toBeUndefined();
+          expect(
+            containers.items.find(
+              (container) =>
+                container.externalId === containerCreationDefinition2.externalId
+            )
+          ).toBeUndefined();
+        },
+        {
+          timeout: 25 * 1000,
+          interval: 1000,
+        }
+      );
+    },
+    25 * 1000
+  );
 });

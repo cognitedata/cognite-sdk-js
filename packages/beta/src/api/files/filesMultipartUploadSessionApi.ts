@@ -18,7 +18,7 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
     [, , , this.multiPartFileUploadResponse] = args;
 
     this.uploadedUrls = this.multiPartFileUploadResponse.uploadUrls.map(
-      (_) => false
+      () => false
     );
     this.finished = false;
   }

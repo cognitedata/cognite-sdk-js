@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 import { DocumentSearchResponse } from '@cognite/sdk-stable';
 import { TextEncoder } from 'util';

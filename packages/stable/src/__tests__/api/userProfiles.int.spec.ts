@@ -1,6 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('User Profiles', () => {

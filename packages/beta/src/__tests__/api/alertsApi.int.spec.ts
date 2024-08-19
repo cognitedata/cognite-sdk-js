@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { CogniteError } from '@cognite/sdk-core';
-import CogniteClient from '../../cogniteClient';
+import { describe, expect, test, vi } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('alerts api', () => {
@@ -227,7 +226,7 @@ describe('alerts api', () => {
     await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
   });
 
-  jest.setTimeout(30000);
+  vi.setConfig({ testTimeout: 30_000 });
 
   test('cursor pagination', async () => {
     // create channel for the next test
