@@ -3,9 +3,8 @@
 import {
   randomInt,
   runTestWithRetryWhenFailing,
-} from '@cognite/sdk-core/src/testUtils';
-import { ExternalEntityToMatch } from '../../types';
-import CogniteClient from '../../cogniteClient';
+} from '@cognite/sdk-core/src/__tests__/testUtils';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 describe.skip('context integration test', () => {

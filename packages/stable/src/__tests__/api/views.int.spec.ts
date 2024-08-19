@@ -1,7 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import { ViewCreateDefinition } from '../../api/views/types.gen';
-import CogniteClient from '../../cogniteClient';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Views integration test', () => {
@@ -46,7 +45,7 @@ describe('Views integration test', () => {
   };
 
   beforeAll(async () => {
-    jest.setTimeout(30 * 1000);
+    vi.setConfig({ testTimeout: 30 * 1000 });
     client = setupLoggedInClient();
     await deleteOldSpaces(client);
     await client.spaces.upsert([
@@ -69,14 +68,13 @@ describe('Views integration test', () => {
         },
       },
     ]);
-  });
+  }, 25_000);
   afterAll(async () => {
     client = setupLoggedInClient();
     await client.containers.delete([
       { externalId: TEST_CONTAINER_NAME, space: TEST_SPACE_NAME },
     ]);
-    await client.spaces.delete([TEST_SPACE_NAME]);
-  });
+  }, 25_000);
 
   it('should successfully upsert views', async () => {
     const createdViewResponse = await client.views.upsert([

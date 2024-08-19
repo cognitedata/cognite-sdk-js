@@ -1,8 +1,11 @@
 // Copyright 2020 Cognite AS
 
-import { TestUtils } from '@cognite/sdk-core';
 import CogniteClient from '../cogniteClient';
 import { ExternalFileInfo, NodeOrEdge } from '../types';
+import {
+  mockBaseUrl,
+  randomInt,
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 import { login } from './login';
 
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
@@ -184,7 +187,7 @@ const getFileCreateArgs = (
   return { postfix, fileContent, sourceCreatedTime, localFileMeta };
 };
 
-export const {
+export {
   apiKey,
   mockBaseUrl,
   project,
@@ -194,7 +197,7 @@ export const {
   getSortedPropInArray,
   retryInSeconds,
   simpleCompare,
-} = TestUtils;
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 
 export {
   setupClient,

@@ -9,8 +9,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "test": "jest --config=../../jest.config.js --testPathPattern=/codegen/",
-    "test:debug": "node --inspect-brk ../../node_modules/.bin/jest --config=../../jest.config.js --testPathPattern=/codegen/ --runInBand",
+    "test": "yarn g:vitest run",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "yarn lint --fix"
   }

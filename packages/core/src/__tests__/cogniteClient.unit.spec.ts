@@ -1,10 +1,11 @@
 // Copyright 2020 Cognite AS
+import { beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import nock from 'nock';
 import BaseCogniteClient from '../baseCogniteClient';
 
 import { API_KEY_HEADER, BASE_URL } from '../constants';
-import { apiKey, project } from '../testUtils';
+import { apiKey, project } from './testUtils';
 import { sleepPromise } from '../utils';
 import { createUniversalRetryValidator } from '../httpClient/retryValidator';
 
@@ -45,7 +46,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient();
       }).toThrowErrorMatchingInlineSnapshot(
-        `"\`CogniteClient\` is missing parameter \`options\`"`
+        `[Error: \`CogniteClient\` is missing parameter \`options\`]`
       );
     });
 
@@ -54,7 +55,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient({});
       }).toThrowErrorMatchingInlineSnapshot(
-        `"options.appId is required and must be of type string"`
+        `[Error: options.appId is required and must be of type string]`
       );
     });
 
@@ -63,7 +64,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient({ appId: 12 });
       }).toThrowErrorMatchingInlineSnapshot(
-        `"options.appId is required and must be of type string"`
+        `[Error: options.appId is required and must be of type string]`
       );
     });
 
@@ -72,7 +73,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient({ appId: 'unit-test' });
       }).toThrowErrorMatchingInlineSnapshot(
-        `"options.project is required and must be of type string"`
+        `[Error: options.project is required and must be of type string]`
       );
     });
 
@@ -90,17 +91,13 @@ describe('CogniteClient', () => {
         appId: 'unit-test',
         project: 'unit-test',
         baseUrl: mockBaseUrl,
-        getToken: jest.fn(async () => 'test-token'),
+        getToken: vi.fn(async () => 'test-token'),
         retryValidator: createUniversalRetryValidator(1),
       });
-      try {
-        await client.get('/');
-      } catch (err) {
-        expect(err.message).toMatchInlineSnapshot(
-          `"Request failed | status code: 500"`
-        );
-        expect(scope.isDone()).toBeTruthy();
-      }
+      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
+        `[Error: Request failed | status code: 500]`
+      );
+      expect(scope.isDone()).toBeTruthy();
     });
 
     describe('credentials', () => {
@@ -109,7 +106,7 @@ describe('CogniteClient', () => {
           // @ts-ignore
           new BaseCogniteClient({ appId: 'unit-test', project: 'unit-test' });
         }).toThrowErrorMatchingInlineSnapshot(
-          `"options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>"`
+          `[Error: options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>]`
         );
       });
       test('call credentials on 401', async () => {
@@ -133,7 +130,7 @@ describe('CogniteClient', () => {
       });
 
       test('getToken rejection should reject sdk requests', async () => {
-        const getToken = jest.fn().mockRejectedValue(new Error('auth error'));
+        const getToken = vi.fn().mockRejectedValue(new Error('auth error'));
 
         nock(mockBaseUrl).get('/test').reply(401, {});
 
@@ -148,7 +145,7 @@ describe('CogniteClient', () => {
         await expect(
           client.get('/test')
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"Request failed | status code: 401"`
+          `[Error: Request failed | status code: 401]`
         );
 
         expect(getToken).toHaveBeenCalledTimes(1);
@@ -158,7 +155,7 @@ describe('CogniteClient', () => {
         nock(mockBaseUrl).get('/test').thrice().reply(401);
         nock(mockBaseUrl).get('/test').thrice().reply(200);
 
-        const mockGetToken = jest.fn(async () => {
+        const mockGetToken = vi.fn(async () => {
           await sleepPromise(100);
           return 'test-token';
         });
@@ -186,7 +183,7 @@ describe('CogniteClient', () => {
         nock(mockBaseUrl).get('/test').twice().reply(200);
         nock(mockBaseUrl).get('/test-with-delay').reply(200);
 
-        const mockGetToken = jest.fn(async () => {
+        const mockGetToken = vi.fn(async () => {
           await sleepPromise(100);
           return 'test-token';
         });
@@ -215,7 +212,7 @@ describe('CogniteClient', () => {
         nock(mockBaseUrl).get('/test').reply(200);
 
         let tokenCount = 0;
-        const mockGetToken = jest.fn(async () => {
+        const mockGetToken = vi.fn(async () => {
           await sleepPromise(100);
           return `test-token${tokenCount++}`;
         });
@@ -260,7 +257,7 @@ describe('CogniteClient', () => {
           });
 
         let tokenCount = 0;
-        const mockGetToken = jest.fn(async () => `test-token${tokenCount++}`);
+        const mockGetToken = vi.fn(async () => `test-token${tokenCount++}`);
 
         const client = new BaseCogniteClient({
           project,
@@ -296,7 +293,7 @@ describe('CogniteClient', () => {
       await expect(
         client.get('/test')
       ).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"Request failed | status code: 401"`
+        `[Error: Request failed | status code: 401]`
       );
     });
 

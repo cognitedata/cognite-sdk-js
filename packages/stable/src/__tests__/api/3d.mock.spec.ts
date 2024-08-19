@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
+import { beforeAll, describe, expect, test } from 'vitest';
 import {
   Model3D,
   Node3D,

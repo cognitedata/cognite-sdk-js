@@ -1,5 +1,6 @@
 // Copyright 2022 Cognite AS
 
+import { describe, expect, test } from 'vitest';
 import {
   Channel,
   MonitoringTaskModelExternalId,
@@ -39,7 +40,7 @@ describe('monitoring tasks api', () => {
 
   let channel: Channel;
 
-  test('create monitoring task', async (done) => {
+  test('create monitoring task', async () => {
     const timeseries = {
       name: 'test ts for beta sdk',
       externalId: 'test_external_id_beta_sdk',
@@ -91,7 +92,6 @@ describe('monitoring tasks api', () => {
 
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(monitoringTaskExternalId);
-    done();
   }, 10000);
 
   test('upsert monitoring task', async () => {

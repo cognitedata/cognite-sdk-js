@@ -1,4 +1,5 @@
 // Copyright 2020 Cognite AS
+import { describe, expect, test } from 'vitest';
 
 // @ts-ignore
 import { headersWithDefaultField } from '../../httpClient/basicHttpClient';

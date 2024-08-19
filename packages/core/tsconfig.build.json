@@ -1,8 +1,12 @@
 {
   "extends": "../../tsconfig.build",
   "compilerOptions": {
+    "skipLibCheck": true,
     "declarationDir": "dist",
     "outDir": "dist"
   },
-  "include": ["src/"]
+  "include": [
+    "src/",
+    "src/__tests__/"
+  ],
 }

@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
 import fetch, { Response } from 'cross-fetch';
-import { stringify } from 'query-string';
 import { isJson } from '../utils';
 import { HttpError } from './httpError';
 import { DEFAULT_DOMAIN } from '../constants';
@@ -223,7 +222,8 @@ export class BasicHttpClient {
     let url = path;
     const hasQueryParams = Object.keys(params).length > 0;
     if (hasQueryParams) {
-      url += `?${stringify(params)}`;
+      const search = new URLSearchParams(params).toString();
+      url += `?${search}`;
     }
     const urlContainsHost = url.match(/^https?:\/\//i) !== null;
     if (urlContainsHost) {

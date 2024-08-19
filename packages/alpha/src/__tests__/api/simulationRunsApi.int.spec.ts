@@ -1,6 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import CogniteClientAlpha from '../../cogniteClient';
+import { describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 import {
   fileExtensionTypes,

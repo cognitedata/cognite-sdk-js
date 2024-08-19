@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { readFileSync } from 'fs';
-import CogniteClient from '../../cogniteClient';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import {
   Asset,
   AssetMapping3D,
@@ -198,12 +197,11 @@ describeIfCondition(
 
     test(
       'list 3d nodes',
-      async (done) => {
+      async () => {
         nodes3D = await client.revisions3D
           .list3DNodes(model.id, revisions[0].id)
           .autoPagingToArray();
         expect(nodes3D.map((n) => n.name)).toContain('RootNode');
-        done();
       },
       5 * 60 * 1000
     );
@@ -228,19 +226,18 @@ describeIfCondition(
 
     test(
       'filter 3d nodes (empty query)',
-      async (done) => {
+      async () => {
         nodes3D = await client.revisions3D
           .filter3DNodes(model.id, revisions[0].id)
           .autoPagingToArray();
         expect(nodes3D.map((n) => n.name)).toContain('RootNode');
-        done();
       },
       5 * 60 * 1000
     );
 
     test(
       'filter 3d nodes on properties',
-      async (done) => {
+      async () => {
         const propertiesFilter: Filter3DNodesQuery = {
           filter: {
             properties: { CogniteClient: { InheritType: ['1'] } },
@@ -250,14 +247,13 @@ describeIfCondition(
           .filter3DNodes(model.id, revisions[0].id, propertiesFilter)
           .autoPagingToArray();
         expect(nodes3D.length).toBeGreaterThan(0);
-        done();
       },
       5 * 60 * 1000
     );
 
     test(
       'filter 3d nodes on names',
-      async (done) => {
+      async () => {
         const namesFilter: Filter3DNodesQuery = {
           filter: {
             names: ['RootNode'],
@@ -267,14 +263,13 @@ describeIfCondition(
           .filter3DNodes(model.id, revisions[0].id, namesFilter)
           .autoPagingToArray();
         expect(nodes3D).toHaveLength(1);
-        done();
       },
       5 * 60 * 1000
     );
 
     test(
       'filter 3d nodes on bogus names',
-      async (done) => {
+      async () => {
         const namesFilter: Filter3DNodesQuery = {
           filter: {
             names: ['Totally-Not-A-Valid-Name', 'Another-Weird-Name'],
@@ -284,14 +279,13 @@ describeIfCondition(
           .filter3DNodes(model.id, revisions[0].id, namesFilter)
           .autoPagingToArray();
         expect(nodes3D.length).toHaveLength(0);
-        done();
       },
       5 * 60 * 1000
     );
 
     test(
       'filter 3d nodes (non-existent properties)',
-      async (done) => {
+      async () => {
         const propertiesFilter: Filter3DNodesQuery = {
           filter: {
             properties: { Item: { Type: ['something weird'] } },
@@ -301,7 +295,6 @@ describeIfCondition(
           .filter3DNodes(model.id, revisions[0].id, propertiesFilter)
           .autoPagingToArray();
         expect(nodes3D).toHaveLength(0);
-        done();
       },
       5 * 60 * 1000
     );

@@ -1,5 +1,6 @@
-import path from 'path';
+import { describe, expect, test } from 'vitest';
 import { OpenApiSnapshotManager } from '../snapshot';
+import path from 'path';
 
 describe('snapshot manager', () => {
   const testFolder = __dirname;

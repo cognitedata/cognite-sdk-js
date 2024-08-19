@@ -5,7 +5,7 @@ export const DEFAULT_CLUSTER = 'api';
 /** @hidden */
 export const DEFAULT_DOMAIN = 'cognitedata.com';
 /** @hidden */
-export const BASE_URL: string = `https://${DEFAULT_CLUSTER}.${DEFAULT_DOMAIN}`;
+export const BASE_URL = `https://${DEFAULT_CLUSTER}.${DEFAULT_DOMAIN}`;
 
 /** @hidden */
 export const AUTHORIZATION_HEADER = 'Authorization';
