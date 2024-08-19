@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 import * as Constants from './constants';
 import * as GraphUtils from './graphUtils';
-import * as TestUtils from './testUtils';
+import * as TestUtils from './__tests__/testUtils';
 
 export * from './types';
 
