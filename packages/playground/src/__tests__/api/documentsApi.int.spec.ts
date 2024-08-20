@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClientPlayground from '../../cogniteClientPlayground';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 import { ListResponse } from '@cognite/sdk-core';
 import { Document, DocumentFeedback } from '@cognite/sdk-playground';

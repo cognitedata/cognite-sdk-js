@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Group, GroupSpec } from '../../types';
+import { beforeAll, describe, expect, test } from 'vitest';
 import {
   randomInt,
   runTestWithRetryWhenFailing,

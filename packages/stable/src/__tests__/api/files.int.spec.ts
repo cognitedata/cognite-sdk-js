@@ -1,16 +1,15 @@
 // Copyright 2020 Cognite AS
 
 import { HttpResponseType } from '@cognite/sdk-core';
-import { readFileSync } from 'fs';
-import CogniteClient from '../../cogniteClient';
-import { FileInfo, Asset, LabelDefinition, FileGeoLocation } from '../../types';
-import { join } from 'path';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import {
   getFileCreateArgs,
   randomInt,
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
 } from '../testUtils';
+import { join } from 'path';
+import { readFileSync } from 'fs';
 
 const testfile = join(__dirname, '../test3dFile.fbx');
 

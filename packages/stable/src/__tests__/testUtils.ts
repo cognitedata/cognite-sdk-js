@@ -2,6 +2,10 @@
 
 import CogniteClient from '../cogniteClient';
 import { ExternalFileInfo, NodeOrEdge } from '../types';
+import {
+  mockBaseUrl,
+  randomInt,
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 import { login } from './login';
 import { PassThrough } from 'stream';
 import { createReadStream, readFileSync, statSync } from 'fs';
@@ -279,7 +283,7 @@ export {
   toArrayBuffer,
 };
 
-export const {
+export {
   apiKey,
   mockBaseUrl,
   project,
@@ -289,7 +293,7 @@ export const {
   getSortedPropInArray,
   retryInSeconds,
   simpleCompare,
-} = TestUtils;
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 
 export {
   setupClient,

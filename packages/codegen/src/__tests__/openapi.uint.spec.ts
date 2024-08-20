@@ -1,5 +1,6 @@
-import { OpenApiDocument, ReferenceWalker } from '../openapi';
+import { beforeAll, describe, expect, test } from 'vitest';
 import { OpenApiSnapshotManager } from '../snapshot';
+import { ReferenceWalker } from '../openapi';
 
 describe('openapi', () => {
   const testFolder = __dirname;

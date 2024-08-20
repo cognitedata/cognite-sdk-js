@@ -1,8 +1,12 @@
 // Copyright 2020 Cognite AS
 
-import BaseCogniteClient from './baseCogniteClient';
-import { BASE_URL } from './constants';
-import { sleepPromise } from './utils';
+import { vi } from 'vitest';
+
+import BaseCogniteClient from '../baseCogniteClient';
+import { BASE_URL } from '../constants';
+import { HttpError } from '../httpClient/httpError';
+import { sleepPromise } from '../utils';
+export { sleepPromise };
 
 export const apiKey = 'TEST_KEY';
 export const project = 'TEST_PROJECT';
@@ -31,7 +35,9 @@ export function setupClient(baseUrl: string = BASE_URL) {
 }
 
 export function setupLoggedInClient() {
-  jest.setTimeout(60 * 1000);
+  vi.setConfig({
+    testTimeout: 60 * 1000,
+  });
   const client = setupClient();
   return client;
 }
@@ -45,14 +51,14 @@ export async function retryInSeconds<ResponseType>(
   func: () => Promise<ResponseType>,
   secondsBetweenRetries = 3,
   statusCodeToRetry = 404,
-  finishAfterSeconds: number = 300
+  finishAfterSeconds = 300
 ): Promise<ResponseType> {
   const timeStart = Date.now();
   while (Date.now() - timeStart < finishAfterSeconds * 1000) {
     try {
       return await func();
     } catch (error) {
-      if (Number(error.status) !== statusCodeToRetry) {
+      if (error instanceof HttpError && error.status !== statusCodeToRetry) {
         throw error;
       }
       await sleepPromise(secondsBetweenRetries * 1000);
@@ -64,12 +70,14 @@ export async function retryInSeconds<ResponseType>(
 export async function runTestWithRetryWhenFailing(
   testFunction: () => Promise<void>
 ) {
-  jest.setTimeout(3 * 60 * 1000);
+  vi.setConfig({
+    testTimeout: 3 * 60 * 1000,
+  });
   const maxNumberOfRetries = 15;
   const delayFactor = 2;
   let delayInMs = 500;
   let numberOfRetries = 0;
-  let error;
+  let error: unknown;
   do {
     try {
       await testFunction();
@@ -91,6 +99,20 @@ export function getSortedPropInArray<T extends { [key: string]: any }>(
   propName: string
 ) {
   return arr.map((elem) => elem[propName]).sort(simpleCompare);
+}
+
+export function createErrorResponse(
+  status: number,
+  message: string,
+  extra: object = {}
+) {
+  return {
+    error: {
+      code: status,
+      message,
+      ...extra,
+    },
+  };
 }
 
 export function string2arrayBuffer(str: string) {

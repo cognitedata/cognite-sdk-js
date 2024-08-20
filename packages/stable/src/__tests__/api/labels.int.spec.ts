@@ -1,6 +1,5 @@
-import { ExternalLabelDefinition } from '@cognite/sdk';
-import CogniteClient from '../../cogniteClient';
-import { setupLoggedInClient, randomInt } from '../testUtils';
+import { beforeAll, describe, expect, test } from 'vitest';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Labels integration test', () => {
   let client: CogniteClient;

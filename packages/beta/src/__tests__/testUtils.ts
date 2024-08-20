@@ -2,7 +2,10 @@
 
 import { Constants } from '@cognite/sdk-core';
 import CogniteClient from '../cogniteClient';
-import { mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
+import {
+  mockBaseUrl,
+  project,
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 import { login } from './login';
 import { PassThrough } from 'stream';
 import { createReadStream, readFileSync, statSync } from 'fs';

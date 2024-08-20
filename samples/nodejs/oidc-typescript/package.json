@@ -5,11 +5,11 @@
   "license": "Apache-2.0",
   "scripts": {
     "tsc": "tsc",
-    "start": "yarn tsc && node build/quickstart.js"
+    "start": "yarn g:tsc && node build/quickstart.js"
   },
   "dependencies": {
-    "@cognite/sdk": "^7",
-    "@azure/msal-node": "^1.3.2"
+    "@azure/msal-node": "^1.3.2",
+    "@cognite/sdk": "^9"
   },
   "devDependencies": {
     "@types/node": "^16.7",

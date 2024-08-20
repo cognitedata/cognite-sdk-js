@@ -1,6 +1,5 @@
 // Copyright 2020 Cognite AS
 
-import { parse } from 'query-string';
 import isString from 'lodash/isString';
 import noop from 'lodash/noop';
 import { clearParametersFromUrl } from '../utils';
@@ -223,12 +222,12 @@ export class ADFS {
   }
 }
 
-export function extractADFSToken(query: string): ADFSToken | null {
-  const {
-    [ACCESS_TOKEN]: accessToken,
-    [ID_TOKEN]: idToken,
-    [EXPIRES_IN]: expiresIn,
-  } = parse(query);
+export function extractADFSToken(fragment: string): ADFSToken | null {
+  const query = fragment.replace(/^#/, '?');
+  const queryParams = new URLSearchParams(query);
+  const accessToken = queryParams.get(ACCESS_TOKEN);
+  const idToken = queryParams.get(ID_TOKEN);
+  const expiresIn = queryParams.get(EXPIRES_IN);
 
   if (isString(accessToken) && isString(idToken)) {
     return {

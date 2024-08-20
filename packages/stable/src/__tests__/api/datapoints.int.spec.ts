@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { DatapointAggregate, Timeseries } from '../../types';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('Datapoints integration test', () => {
@@ -58,6 +57,28 @@ describe('Datapoints integration test', () => {
     ]);
     expect(response[0].datapoints.length).toBeGreaterThan(0);
     expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
+  });
+
+  test('retrieve with cursor', async () => {
+    const queryTimeRange = {
+      start: '3d-ago',
+      end: new Date(),
+    };
+    const response = await client.datapoints.retrieve({
+      items: [{ id: timeserie.id, limit: 1 }],
+      ...queryTimeRange,
+    });
+
+    expect(response[0].datapoints.length).toBe(1);
+    expect(response[0].nextCursor).toBeDefined();
+
+    const nextResponse = await client.datapoints.retrieve({
+      items: [{ id: timeserie.id, limit: 1, cursor: response[0].nextCursor }],
+      ...queryTimeRange,
+    });
+
+    expect(nextResponse[0].datapoints.length).toBe(1);
+    expect(nextResponse[0].datapoints).not.toEqual(response);
   });
 
   test('synthetic query', async () => {
