@@ -74,6 +74,9 @@
 				<ul class="tsd-hierarchy">
 					<li>
 						<a href="_core_src_types_.limit.html" class="tsd-signature-type">Limit</a>
+					</li>
+					<li>
+						<a href="_core_src_types_.cursor.html" class="tsd-signature-type">Cursor</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">DatapointsQueryProperties</span>
@@ -98,6 +101,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.datapointsqueryproperties.html#aggregates" class="tsd-kind-icon">aggregates</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="_stable_src_types_.datapointsqueryproperties.html#cursor" class="tsd-kind-icon">cursor</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.datapointsqueryproperties.html#end" class="tsd-kind-icon">end</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.datapointsqueryproperties.html#granularity" class="tsd-kind-icon">granularity</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.datapointsqueryproperties.html#includeoutsidepoints" class="tsd-kind-icon">include<wbr>Outside<wbr>Points</a></li>
@@ -105,6 +109,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.datapointsqueryproperties.html#start" class="tsd-kind-icon">start</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.datapointsqueryproperties.html#targetunit" class="tsd-kind-icon">target<wbr>Unit</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.datapointsqueryproperties.html#targetunitsystem" class="tsd-kind-icon">target<wbr>Unit<wbr>System</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_stable_src_types_.datapointsqueryproperties.html#timezone" class="tsd-kind-icon">time<wbr>Zone</a></li>
 							</ul>
 						</section>
 					</div>
@@ -118,7 +123,7 @@
 					<div class="tsd-signature tsd-kind-icon">aggregates<span class="tsd-signature-symbol">:</span> <a href="../modules/_stable_src_types_.html#aggregate" class="tsd-signature-type">Aggregate</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/defee1fd43/packages/stable/src/types.ts#L856">packages/stable/src/types.ts:856</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/stable/src/types.ts#L865">packages/stable/src/types.ts:865</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -127,13 +132,24 @@
 						</div>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="cursor" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cursor</h3>
+					<div class="tsd-signature tsd-kind-icon">cursor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_core_src_types_.filterquery.html">FilterQuery</a>.<a href="_core_src_types_.filterquery.html#cursor">cursor</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/types.ts#L24">packages/core/src/types.ts:24</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="end" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> end</h3>
 					<div class="tsd-signature tsd-kind-icon">end<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../modules/_stable_src_types_.html#timestamp" class="tsd-signature-type">Timestamp</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/defee1fd43/packages/stable/src/types.ts#L852">packages/stable/src/types.ts:852</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/stable/src/types.ts#L861">packages/stable/src/types.ts:861</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -148,7 +164,7 @@
 					<div class="tsd-signature tsd-kind-icon">granularity<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/defee1fd43/packages/stable/src/types.ts#L860">packages/stable/src/types.ts:860</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/stable/src/types.ts#L869">packages/stable/src/types.ts:869</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -163,7 +179,7 @@
 					<div class="tsd-signature tsd-kind-icon">include<wbr>Outside<wbr>Points<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/defee1fd43/packages/stable/src/types.ts#L864">packages/stable/src/types.ts:864</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/stable/src/types.ts#L873">packages/stable/src/types.ts:873</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -179,7 +195,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_core_src_types_.filterquery.html">FilterQuery</a>.<a href="_core_src_types_.filterquery.html#limit">limit</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/defee1fd43/packages/core/src/types.ts#L28">packages/core/src/types.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/types.ts#L28">packages/core/src/types.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -189,7 +205,7 @@
 					<div class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../modules/_stable_src_types_.html#timestamp" class="tsd-signature-type">Timestamp</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/defee1fd43/packages/stable/src/types.ts#L848">packages/stable/src/types.ts:848</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/stable/src/types.ts#L857">packages/stable/src/types.ts:857</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -204,7 +220,7 @@
 					<div class="tsd-signature tsd-kind-icon">target<wbr>Unit<span class="tsd-signature-symbol">:</span> <a href="../modules/_stable_src_types_.html#cogniteexternalid" class="tsd-signature-type">CogniteExternalId</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/defee1fd43/packages/stable/src/types.ts#L871">packages/stable/src/types.ts:871</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/stable/src/types.ts#L880">packages/stable/src/types.ts:880</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -222,12 +238,27 @@
 					<div class="tsd-signature tsd-kind-icon">target<wbr>Unit<wbr>System<span class="tsd-signature-symbol">:</span> <a href="../modules/_stable_src_types_.html#cogniteexternalid" class="tsd-signature-type">CogniteExternalId</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/defee1fd43/packages/stable/src/types.ts#L875">packages/stable/src/types.ts:875</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/stable/src/types.ts#L884">packages/stable/src/types.ts:884</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The unit system of the data points returned. Cannot be used with targetUnit.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="timezone" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> time<wbr>Zone</h3>
+					<div class="tsd-signature tsd-kind-icon">time<wbr>Zone<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/stable/src/types.ts#L888">packages/stable/src/types.ts:888</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Default: &quot;UTC&quot; Which time zone to align aggregates to. Omit to use top-level value.</p>
 						</div>
 					</div>
 				</section>
@@ -254,6 +285,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_stable_src_types_.datapointsqueryproperties.html#aggregates" class="tsd-kind-icon">aggregates</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="_stable_src_types_.datapointsqueryproperties.html#cursor" class="tsd-kind-icon">cursor</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_stable_src_types_.datapointsqueryproperties.html#end" class="tsd-kind-icon">end</a>
 							</li>
@@ -274,6 +308,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="_stable_src_types_.datapointsqueryproperties.html#targetunitsystem" class="tsd-kind-icon">target<wbr>Unit<wbr>System</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_stable_src_types_.datapointsqueryproperties.html#timezone" class="tsd-kind-icon">time<wbr>Zone</a>
 							</li>
 						</ul>
 					</li>
