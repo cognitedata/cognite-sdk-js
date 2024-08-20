@@ -2,8 +2,10 @@
 
 import {
   BaseResourceAPI,
+  CDFHttpClient,
   CursorAndAsyncIterator,
   HttpHeaders,
+  MetadataMap,
   sleepPromise,
 } from '@cognite/sdk-core';
 import {
@@ -21,13 +23,22 @@ import {
   IgnoreUnknownIds,
   ItemsWrapper,
   FileUploadResponse,
+  MultiPartFileUploadResponse,
 } from '../../types';
+import { FilesMultipartUploadSessionAPI } from './filesMultipartUploadSessionApi';
 
 export class FilesAPI extends BaseResourceAPI<FileInfo> {
   private limits = {
     minimumNumberOfParts: 1,
     maxNumberOfParts: 250,
   };
+  private _client: CDFHttpClient;
+  private _map: MetadataMap;
+  private _baseUrl: string;
+  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
+    super(...args);
+    [this._baseUrl, this._client, this._map] = args;
+  }
   /**
    * Specify that dates should be parsed in requests and responses
    * @hidden

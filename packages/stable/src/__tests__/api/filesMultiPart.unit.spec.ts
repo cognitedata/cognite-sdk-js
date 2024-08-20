@@ -1,6 +1,6 @@
 import nock from 'nock';
 import CogniteClient from '../../cogniteClient';
-import { setupMockableClientForUnitTest } from '../testUtils';
+import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl } from '@cognite/sdk-core/src/testUtils';
 import { sleepPromise } from '@cognite/sdk-core';
 import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
@@ -27,7 +27,7 @@ describe('Multi part upload unit test', () => {
     };
   }
   beforeEach(() => {
-    client = setupMockableClientForUnitTest();
+    client = setupMockableClient();
     nock.cleanAll();
   });
 

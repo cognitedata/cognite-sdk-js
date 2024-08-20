@@ -10,7 +10,7 @@ import {
   divideFileIntoStreams,
   getFileStats,
   toArrayBuffer,
-  setupMockableClientForIntegrationTests,
+  setupLoggedInClient,
 } from '../testUtils';
 import path, { join } from 'path';
 import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
@@ -18,12 +18,12 @@ import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';
 // file to upload for integration tests
 const testfile = join(__dirname, '../VAL.nwd');
 
-describe.skip('Files: Multi part Upload Integration Tests', () => {
+describe('Files: Multi part Upload Integration Tests', () => {
   let client: CogniteClient;
   let label: LabelDefinition;
 
   beforeAll(async () => {
-    client = setupMockableClientForIntegrationTests();
+    client = setupLoggedInClient();
   });
 
   afterAll(async () => {
