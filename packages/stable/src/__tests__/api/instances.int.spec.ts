@@ -80,7 +80,7 @@ describe('Instances integration test', () => {
     client = setupLoggedInClient();
     await upsertSpace(client, testSpace);
     await upsertDescribables(client, [describable1, describable2], view);
-  });
+  }, 10000);
 
   afterAll(async () => {
     await client.instances.delete([
@@ -95,7 +95,7 @@ describe('Instances integration test', () => {
         space: testSpace.space,
       },
     ]);
-  });
+  }, 10000);
 
   test('list nodes from a single view with limit 2', async () => {
     const response = await client.instances.list({
