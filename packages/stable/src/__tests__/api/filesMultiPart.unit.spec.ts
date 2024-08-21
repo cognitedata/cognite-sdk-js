@@ -1,4 +1,5 @@
 import nock from 'nock';
+import { describe, expect, it, test } from 'vitest';
 import CogniteClient from '../../cogniteClient';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl } from '../testUtils';
