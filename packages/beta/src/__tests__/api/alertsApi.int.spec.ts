@@ -1,38 +1,38 @@
 // Copyright 2020 Cognite AS
 
-import { describe, expect, test, vi } from "vitest";
-import { setupLoggedInClient } from "../testUtils";
+import { describe, expect, test, vi } from 'vitest';
+import { setupLoggedInClient } from '../testUtils';
 
-describe("alerts api", () => {
+describe('alerts api', () => {
   const client: CogniteClient = setupLoggedInClient();
   const ts = Date.now();
   const channelExternalId = `test_channel_${ts}`;
   const alertExternalId = `test_alert_${ts}`;
   const email = `ivan.polomanyi+${ts}@cognite.com`;
 
-  test("create channels", async () => {
+  test('create channels', async () => {
     const response = await client.alerts.createChannels([
       {
         externalId: channelExternalId,
         name: channelExternalId,
-        description: "test",
+        description: 'test',
       },
     ]);
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(channelExternalId);
   });
 
-  test("create channels with deduplication params", async () => {
+  test('create channels with deduplication params', async () => {
     const channelExternalIdWithDeduplication = `${channelExternalId}_dedup`;
     const response = await client.alerts.createChannels([
       {
         externalId: channelExternalIdWithDeduplication,
         name: channelExternalIdWithDeduplication,
-        description: "test with deduplication params",
+        description: 'test with deduplication params',
         alertRules: {
           deduplication: {
-            activationInterval: "10m",
-            mergeInterval: "1m",
+            activationInterval: '10m',
+            mergeInterval: '1m',
           },
         },
       },
@@ -40,12 +40,12 @@ describe("alerts api", () => {
     expect(response.length).toBe(1);
     expect(response[0].externalId).toBe(channelExternalIdWithDeduplication);
     expect(response[0].alertRules?.deduplication).toEqual({
-      activationInterval: "10m",
-      mergeInterval: "1m",
+      activationInterval: '10m',
+      mergeInterval: '1m',
     });
   });
 
-  test("update channel name", async () => {
+  test('update channel name', async () => {
     const updatedName = `${channelExternalId}_updated`;
     const response = await client.alerts.updateChannels([
       {
@@ -62,7 +62,7 @@ describe("alerts api", () => {
     expect(response[0].name).toBe(updatedName);
   });
 
-  test("list channels", async () => {
+  test('list channels', async () => {
     const response = await client.alerts.listChannels({
       filter: { externalIds: [channelExternalId] },
     });
@@ -70,19 +70,19 @@ describe("alerts api", () => {
     expect(response.items[0].externalId).toBe(channelExternalId);
   });
 
-  test("create alerts", async () => {
+  test('create alerts', async () => {
     const response = await client.alerts.create([
       {
-        source: "smth",
+        source: 'smth',
         channelExternalId,
         externalId: alertExternalId,
-        level: "DEBUG",
+        level: 'DEBUG',
       },
     ]);
     expect(response.length).toBe(1);
   });
 
-  test("close alerts", async () => {
+  test('close alerts', async () => {
     const response = await client.alerts.close([
       {
         externalId: alertExternalId,
@@ -91,7 +91,7 @@ describe("alerts api", () => {
     expect(response).toEqual({});
   });
 
-  test("list alerts", async () => {
+  test('list alerts', async () => {
     const response = await client.alerts.list({
       filter: {
         channelExternalIds: [channelExternalId],
@@ -100,7 +100,7 @@ describe("alerts api", () => {
     expect(response.items.length).toEqual(1);
   });
 
-  test("create subscribers", async () => {
+  test('create subscribers', async () => {
     try {
       await client.alerts.createSubscribers([
         {
@@ -113,7 +113,7 @@ describe("alerts api", () => {
     }
   });
 
-  test("list subscribers", async () => {
+  test('list subscribers', async () => {
     try {
       await client.alerts.listSubscribers({
         filter: {
@@ -126,14 +126,14 @@ describe("alerts api", () => {
     }
   });
 
-  test("create subscriptions", async () => {
+  test('create subscriptions', async () => {
     try {
       await client.alerts.createSubscriptions([
         {
           channelExternalId,
           subscriberExternalId: email,
           externalId: email,
-          metadata: { a: "1" },
+          metadata: { a: '1' },
         },
       ]);
     } catch (error) {
@@ -141,14 +141,14 @@ describe("alerts api", () => {
     }
   });
 
-  test("list subscriptions", async () => {
+  test('list subscriptions', async () => {
     try {
       await client.alerts.listSubscriptions({
         filter: {
           channelExternalIds: [channelExternalId],
           subscriberExternalIds: [email],
           externalIds: [email],
-          metadata: { a: "1" },
+          metadata: { a: '1' },
         },
       });
     } catch (error) {
@@ -156,7 +156,7 @@ describe("alerts api", () => {
     }
   });
 
-  test("delete subscriptions", async () => {
+  test('delete subscriptions', async () => {
     const response = await client.alerts.deleteSubscription([
       {
         externalId: email,
@@ -165,7 +165,7 @@ describe("alerts api", () => {
     expect(response).toEqual({});
   });
 
-  test("delete subscriber", async () => {
+  test('delete subscriber', async () => {
     const response = await client.alerts.deleteSubscribers([
       {
         externalId: email,
@@ -180,7 +180,7 @@ describe("alerts api", () => {
     expect(emptyRes.items.length).toBe(0);
   });
 
-  test("delete channel", async () => {
+  test('delete channel', async () => {
     const response = await client.alerts.deleteChannels([
       {
         externalId: channelExternalId,
@@ -189,29 +189,29 @@ describe("alerts api", () => {
     expect(response).toEqual({});
   });
 
-  test("sort alerts", async () => {
+  test('sort alerts', async () => {
     const response = await client.alerts.list({
       sort: {
-        property: "createdTime",
-        order: "desc",
+        property: 'createdTime',
+        order: 'desc',
       },
     });
     expect(response.items.length).toBeGreaterThan(0);
   });
 
-  test("test limit", async () => {
+  test('test limit', async () => {
     // create channel for the next test
     const channelsToCreate = [
       {
         externalId: channelExternalId,
-        name: "Test Channel",
+        name: 'Test Channel',
       },
     ];
     await client.alerts.createChannels(channelsToCreate);
 
     // create 10 alerts
     const alerts = Array.from({ length: 10 }).map((_, i) => ({
-      source: "smth",
+      source: 'smth',
       channelExternalId,
       externalId: `test_limit_extId_${ts}_${i}`,
     }));
@@ -228,12 +228,12 @@ describe("alerts api", () => {
 
   vi.setConfig({ testTimeout: 30_000 });
 
-  test("cursor pagination", async () => {
+  test('cursor pagination', async () => {
     // create channel for the next test
     const channelsToCreate = [
       {
         externalId: channelExternalId,
-        name: "Test Channel",
+        name: 'Test Channel',
       },
     ];
     await client.alerts.createChannels(channelsToCreate);
@@ -241,10 +241,10 @@ describe("alerts api", () => {
     const response = await client.alerts.list({
       limit: 1,
       sort: {
-        property: "createdTime",
-        order: "desc",
+        property: 'createdTime',
+        order: 'desc',
       },
-      cursor: "",
+      cursor: '',
     });
     expect(response.items.length).toBe(1);
 
@@ -258,7 +258,7 @@ describe("alerts api", () => {
     // Function to create a batch of alerts
     const createBatch = async () => {
       const alerts = Array.from({ length: batchSize }, () => ({
-        source: "smth",
+        source: 'smth',
         channelExternalId,
         externalId: `external_id_test_cursor_${alertCounter++}`,
       }));
@@ -277,7 +277,7 @@ describe("alerts api", () => {
     // create one extra alert
     await client.alerts.create([
       {
-        source: "smth",
+        source: 'smth',
         channelExternalId,
         externalId: `external_id_test_cursor_${alertCounter}`,
       },
@@ -286,8 +286,8 @@ describe("alerts api", () => {
     const alerts = client.alerts
       .list({
         sort: {
-          property: "createdTime",
-          order: "desc",
+          property: 'createdTime',
+          order: 'desc',
         },
       })
       .autoPagingToArray({ limit: 1001 });
