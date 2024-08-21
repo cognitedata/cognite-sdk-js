@@ -1,12 +1,11 @@
 import { sleepPromise } from '@cognite/sdk-core';
-import {
-  mockBaseUrl,
-  setupMockableClient,
-} from '@cognite/sdk-core/src/__tests__/testUtils';
+import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
 import nock from 'nock';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
 import type { MultiPartFileChunkResponse } from '../../types';
+import { setupMockableClientForUnitTest } from '../testUtils';
+
 describe('Multi part upload unit test', () => {
   let client: CogniteClient;
 
@@ -28,7 +27,7 @@ describe('Multi part upload unit test', () => {
     };
   }
   beforeEach(() => {
-    client = setupMockableClient();
+    client = setupMockableClientForUnitTest();
     nock.cleanAll();
   });
 
