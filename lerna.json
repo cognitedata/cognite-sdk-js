@@ -4,7 +4,12 @@
   "npmClient": "yarn",
   "command": {
     "version": {
-      "ignoreChanges": ["**/*.md", "**/__tests__/**", "**/*.spec.ts", "**/*.test.ts"],
+      "ignoreChanges": [
+        "**/*.md",
+        "**/__tests__/**",
+        "**/*.spec.ts",
+        "**/*.test.ts"
+      ],
       "message": "chore(release): publish new package versions [skip ci]",
       "allowBranch": "master"
     }

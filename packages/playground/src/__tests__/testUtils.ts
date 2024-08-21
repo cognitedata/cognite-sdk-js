@@ -1,11 +1,11 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClientPlayground from '../cogniteClientPlayground';
 import {
   apiKey,
   mockBaseUrl,
   project,
 } from '@cognite/sdk-core/src/__tests__/testUtils';
+import CogniteClientPlayground from '../cogniteClientPlayground';
 import { login } from './login';
 
 export function setupLoggedInClient(

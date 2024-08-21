@@ -2,10 +2,10 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  ExternalId,
+  type CursorAndAsyncIterator,
+  type ExternalId,
 } from '@cognite/sdk-core';
-import {
+import type {
   ExternalTemplateGroup,
   TemplateGroup,
   TemplateGroupFilterQuery,

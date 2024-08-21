@@ -2,10 +2,10 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  HttpHeaders,
+  type CursorAndAsyncIterator,
+  type HttpHeaders,
 } from '@cognite/sdk-core';
-import {
+import type {
   CursorResponse,
   ListRawRows,
   RawDBRow,
@@ -25,8 +25,8 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     databaseName: string,
     tableName: string,
     items: RawDBRowInsert[],
-    ensureParent: boolean = false
-  ): Promise<{}> {
+    ensureParent = false
+  ): Promise<object> {
     const path = `${this.encodeUrl(databaseName, tableName)}/rows`;
     await this.postInParallelWithAutomaticChunking({
       path,

@@ -1,17 +1,21 @@
 // Copyright 2020 Cognite AS
 
 import fetch, { Response } from 'cross-fetch';
-import { isJson } from '../utils';
-import { HttpError } from './httpError';
 import { DEFAULT_DOMAIN } from '../constants';
-import { HttpHeaders } from './httpHeaders';
+import { isJson } from '../utils';
+import { HttpError, type HttpErrorData } from './httpError';
+import type { HttpHeaders } from './httpHeaders';
 
 export class BasicHttpClient {
   private static validateStatusCode(status: number) {
     return status >= 200 && status < 300;
   }
   private static throwCustomErrorResponse<T>(response: HttpResponse<T>) {
-    throw new HttpError(response.status, response.data, response.headers);
+    throw new HttpError(
+      response.status,
+      response.data as HttpErrorData,
+      response.headers
+    );
   }
 
   private static jsonResponseHandler<ResponseType>(
@@ -57,7 +61,7 @@ export class BasicHttpClient {
     return headers;
   }
 
-  private static transformRequestBody(data: any) {
+  private static transformRequestBody(data: unknown) {
     const isJSONStringifyable = isJson(data);
     if (isJSONStringifyable) {
       return JSON.stringify(data, null, 2);
@@ -159,8 +163,8 @@ export class BasicHttpClient {
 
   protected async postRequest<T>(
     response: HttpResponse<T>,
-    _: HttpRequest, // eslint-disable-line
-    __: HttpRequest // eslint-disable-line
+    _: HttpRequest,
+    __: HttpRequest
   ): Promise<HttpResponse<T>> {
     const requestIsOk = BasicHttpClient.validateStatusCode(response.status);
     if (!requestIsOk) {
@@ -181,7 +185,7 @@ export class BasicHttpClient {
   ): Promise<HttpResponse<ResponseType>> {
     const url = this.constructUrl(request.path, request.params);
     const headers = headersWithDefaultField(
-      request.headers,
+      request.headers || {},
       'Accept',
       'application/json'
     );
@@ -191,6 +195,7 @@ export class BasicHttpClient {
       headers['Content-Type'] = 'application/json';
     }
     const res = await fetch(url, {
+      // @ts-ignore
       body,
       method: request.method,
       headers,
@@ -218,11 +223,40 @@ export class BasicHttpClient {
     return this.postRequest(rawResponse, request, mutatedRequest);
   }
 
-  private constructUrl(path: string, params: HttpQueryParams = {}) {
+  private constructUrl<T extends object>(path: string, params?: T) {
     let url = path;
-    const hasQueryParams = Object.keys(params).length > 0;
+    const hasQueryParams = !!params && Object.keys(params).length > 0;
     if (hasQueryParams) {
-      const search = new URLSearchParams(params).toString();
+      const normalizedParams: Record<string, string> = Object.entries(
+        params
+      ).reduce(
+        (acc, [key, value]) => {
+          switch (typeof value) {
+            case 'undefined': {
+              return acc;
+            }
+            case 'string':
+            case 'number':
+            case 'boolean': {
+              acc[key] = `${value}`;
+              return acc;
+            }
+            case 'object': {
+              if (Array.isArray(value)) {
+                acc[key] = `[${value.join(',')}]`;
+              }
+              return acc;
+            }
+            default: {
+              throw new Error(
+                `Unsupported value query parameter type: ${typeof value}, ${key}: ${value}`
+              );
+            }
+          }
+        },
+        {} as Record<string, string>
+      );
+      const search = new URLSearchParams(normalizedParams).toString();
       url += `?${search}`;
     }
     const urlContainsHost = url.match(/^https?:\/\//i) !== null;
@@ -242,7 +276,7 @@ function lowercaseHeadersKeys(headers: HttpHeaders): string[] {
 }
 
 export function headersWithDefaultField(
-  headers: HttpHeaders = {},
+  headers: HttpHeaders,
   fieldName: string,
   fieldValue: string
 ): HttpHeaders {
@@ -260,7 +294,7 @@ export interface HttpRequest extends HttpRequestOptions {
 }
 
 export interface HttpRequestOptions {
-  data?: any;
+  data?: unknown | null | undefined;
   params?: HttpQueryParams;
   headers?: HttpHeaders;
   responseType?: HttpResponseType;
@@ -284,7 +318,7 @@ export enum HttpMethod {
   Patch = 'PATCH',
 }
 
-export type HttpResponseType = 'json' | 'arraybuffer' | 'text';
+type HttpResponseType = 'json' | 'arraybuffer' | 'text';
 
 export const HttpResponseType = {
   Json: 'json' as HttpResponseType,
@@ -292,9 +326,7 @@ export const HttpResponseType = {
   Text: 'text' as HttpResponseType,
 };
 
-export interface HttpQueryParams {
-  [key: string]: any;
-}
+export type HttpQueryParams = object;
 
 type ResponseHandler<ResponseType> = (res: Response) => Promise<ResponseType>;
 

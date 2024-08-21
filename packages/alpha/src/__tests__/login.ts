@@ -1,7 +1,7 @@
 // Copyright 2023 Cognite AS
 
+import { URLSearchParams } from 'node:url';
 import fetch from 'cross-fetch';
-import { URLSearchParams } from 'url';
 
 export const login = async () => {
   try {

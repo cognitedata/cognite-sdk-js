@@ -2,12 +2,12 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  ExternalId,
+  type CursorAndAsyncIterator,
+  type ExternalId,
 } from '@cognite/sdk-core';
-import {
-  IgnoreUnknownIds,
+import type {
   ExternalRelationship,
+  IgnoreUnknownIds,
   Relationship,
   RelationshipsFilterRequest,
   RelationshipsRetrieveParams,

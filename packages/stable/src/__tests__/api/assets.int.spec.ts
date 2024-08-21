@@ -16,7 +16,7 @@ describe.skip('Asset integration test', () => {
     client = setupLoggedInClient();
     [label] = await client.labels.create([
       {
-        externalId: 'test-asset-lable-' + randomInt(),
+        externalId: `test-asset-lable-${randomInt()}`,
         name: 'asset-label',
         description: 'test label',
       },
@@ -33,7 +33,7 @@ describe.skip('Asset integration test', () => {
     metadata: {
       refId: 'test-root',
     },
-    externalId: 'test-root' + randomInt(),
+    externalId: `test-root${randomInt()}`,
   };
 
   const childAsset = {
@@ -53,7 +53,7 @@ describe.skip('Asset integration test', () => {
     ]);
     expect(assets[0].createdTime).toBeInstanceOf(Date);
     expect(assets[0].lastUpdatedTime).toBeInstanceOf(Date);
-    expect(assets[0].labels!.length).toBe(1);
+    expect(assets[0].labels?.length).toBe(1);
   });
 
   test('create empty asset array', async () => {
@@ -81,7 +81,7 @@ describe.skip('Asset integration test', () => {
   test('create 1001 assets (1 corrupted): error handling', async () => {
     const newRootAsset = {
       ...rootAsset,
-      externalId: 'test-root' + randomInt(),
+      externalId: `test-root${randomInt()}`,
     };
     const corruptedChild = {
       ...childAsset,
@@ -106,7 +106,9 @@ describe.skip('Asset integration test', () => {
         expect(e.errors.length).toBe(1);
         expect(e.responses.length).toBe(1);
         await client.assets.delete(
-          e.responses[0].items.map((asset: any) => ({ id: asset.id }))
+          e.responses[0].items.map((asset: Asset) => ({
+            id: asset.id,
+          }))
         );
       }
     }
@@ -116,7 +118,7 @@ describe.skip('Asset integration test', () => {
   test('create 1001 assets sequencially', async () => {
     const newRootAsset = {
       ...rootAsset,
-      externalId: 'test-root' + randomInt(),
+      externalId: `test-root${randomInt()}`,
     };
     const newChildAsset = {
       ...childAsset,
@@ -136,7 +138,7 @@ describe.skip('Asset integration test', () => {
   test('return parentExternalId', async () => {
     const newRootAsset = {
       ...rootAsset,
-      externalId: 'test-root' + randomInt(),
+      externalId: `test-root${randomInt()}`,
     };
     const newChildAsset = {
       ...childAsset,
@@ -156,7 +158,7 @@ describe.skip('Asset integration test', () => {
     await runTestWithRetryWhenFailing(async () => {
       const newRootAsset = {
         ...rootAsset,
-        externalId: 'test-root' + randomInt(),
+        externalId: `test-root${randomInt()}`,
       };
       const newChildAsset = {
         ...childAsset,
@@ -220,7 +222,7 @@ describe.skip('Asset integration test', () => {
       },
     ]);
 
-    expect(metadata![key]).toEqual(updatedMetadata[key]);
+    expect(metadata[key]).toEqual(updatedMetadata[key]);
 
     const [{ metadata: wipedMetadata }] = await client.assets.update([
       {
@@ -244,9 +246,9 @@ describe.skip('Asset integration test', () => {
           },
         })
         .autoPagingToArray({ limit: 1 });
-      expect(assetInfo.aggregates!.childCount).toBe(1);
-      expect(assetInfo.aggregates!.depth).toBe(0);
-      expect(assetInfo.aggregates!.path).toEqual([{ id: assetInfo.id }]);
+      expect(assetInfo.aggregates?.childCount).toBe(1);
+      expect(assetInfo.aggregates?.depth).toBe(0);
+      expect(assetInfo.aggregates?.path).toEqual([{ id: assetInfo.id }]);
     });
   });
 
@@ -264,7 +266,7 @@ describe.skip('Asset integration test', () => {
   test('list.next', async () => {
     const response = await client.assets.list({ limit: 1 });
     expect(response.next).toBeDefined();
-    const nextPage = await response.next!();
+    const nextPage = await response.next?.();
     expect(nextPage.items[0]).toBeTruthy();
   });
 
@@ -281,8 +283,8 @@ describe.skip('Asset integration test', () => {
 
   let [createdChild1, createdRoot1, ...createdAssets2]: Asset[] = [];
   test('filter rootIds', async () => {
-    const root1 = { name: 'root-1', externalId: 'root-1' + randomInt() };
-    const root2 = { name: 'root-2', externalId: 'root-2' + randomInt() };
+    const root1 = { name: 'root-1', externalId: `root-1${randomInt()}` };
+    const root2 = { name: 'root-2', externalId: `root-2${randomInt()}` };
     const child1 = { name: 'child-1', parentExternalId: root1.externalId };
     const child2 = { name: 'child-2', parentExternalId: root2.externalId };
     [createdChild1, createdRoot1, ...createdAssets2] =
@@ -326,7 +328,7 @@ describe.skip('Asset integration test', () => {
       const { items } = await client.assets.list({
         limit: 1,
         filter: {
-          parentExternalIds: [createdRoot1.externalId!],
+          parentExternalIds: [createdRoot1.externalId],
         },
       });
       expect(items[0].id).toEqual(createdChild1.id);
@@ -350,7 +352,7 @@ describe.skip('Asset integration test', () => {
   test('count aggregate', async () => {
     const aggregates = await client.assets.aggregate({
       filter: {
-        parentExternalIds: [createdRoot1.externalId!],
+        parentExternalIds: [createdRoot1.externalId],
       },
     });
     expect(aggregates.length).toBe(1);

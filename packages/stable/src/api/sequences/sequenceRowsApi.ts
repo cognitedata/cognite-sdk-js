@@ -2,20 +2,20 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  HttpResponse,
+  type CursorAndAsyncIterator,
+  type HttpResponse,
 } from '@cognite/sdk-core';
-import {
+import type {
   CursorResponse,
+  SequenceRow,
   SequenceRowsDelete,
   SequenceRowsInsert,
   SequenceRowsResponseData,
   SequenceRowsRetrieve,
-  SequenceRow,
 } from '../../types';
 
 export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
-  public async insert(items: SequenceRowsInsert[]): Promise<{}> {
+  public async insert(items: SequenceRowsInsert[]): Promise<object> {
     await this.postInParallelWithAutomaticChunking({
       path: this.url(),
       items,
@@ -36,7 +36,7 @@ export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
     );
   }
 
-  public delete(items: SequenceRowsDelete[]): Promise<{}> {
+  public delete(items: SequenceRowsDelete[]): Promise<object> {
     return this.deleteEndpoint(items);
   }
 

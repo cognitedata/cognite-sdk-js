@@ -25,7 +25,7 @@ describe('CogniteError', () => {
     expect(error.requestId).toBeUndefined();
     expect(() => {
       throw error;
-    }).toThrowErrorMatchingInlineSnapshot(`[Error: Abc | code: 500]`);
+    }).toThrowErrorMatchingInlineSnapshot('[Error: Abc | code: 500]');
   });
 
   test('with requestId', () => {
@@ -38,7 +38,7 @@ describe('CogniteError', () => {
     expect(() => {
       throw error;
     }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: Abc | code: 500 | X-Request-ID: def]`
+      '[Error: Abc | code: 500 | X-Request-ID: def]'
     );
   });
 
@@ -61,7 +61,7 @@ describe('handleErrorResponse', () => {
     const httpError = new HttpError(500, createErrorResponse(500, 'abc'), {});
     expect(() => {
       handleErrorResponse(httpError);
-    }).toThrowErrorMatchingInlineSnapshot(`[Error: abc | code: 500]`);
+    }).toThrowErrorMatchingInlineSnapshot('[Error: abc | code: 500]');
   });
 
   test('with requestId', () => {
@@ -71,7 +71,7 @@ describe('handleErrorResponse', () => {
     expect(() => {
       handleErrorResponse(httpError);
     }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: abc | code: 500 | X-Request-ID: def]`
+      '[Error: abc | code: 500 | X-Request-ID: def]'
     );
   });
 
@@ -96,10 +96,15 @@ describe('handleErrorResponse', () => {
     try {
       handleErrorResponse(httpError);
     } catch (e) {
+      if (!(e instanceof CogniteError)) {
+        throw e;
+      }
       expect(e.status).toBe(status);
       expect(e.requestId).toBe(xRequestId);
       expect(e.duplicated).toEqual([event]);
-      expect(e.extra.extraErrorInformation).toBe('test');
+      expect((e.extra as Record<string, string>).extraErrorInformation).toBe(
+        'test'
+      );
       expect(e.missing).toEqual([internalIdObject, externalIdObject]);
     }
   });

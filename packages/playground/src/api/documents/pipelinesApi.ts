@@ -2,11 +2,11 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  ExternalId,
+  type CursorAndAsyncIterator,
+  type ExternalId,
 } from '@cognite/sdk-core';
 
-import { DocumentsPipeline, DocumentsPipelineUpdate } from '../../types';
+import type { DocumentsPipeline, DocumentsPipelineUpdate } from '../../types';
 
 export class PipelinesAPI extends BaseResourceAPI<DocumentsPipeline> {
   public create = (

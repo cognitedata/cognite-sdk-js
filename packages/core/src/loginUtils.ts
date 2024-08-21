@@ -1,14 +1,14 @@
 // Copyright 2020 Cognite AS
 
-import { createInvisibleIframe, generatePopupWindow } from './utils';
-import { CogniteLoginError } from './loginError';
-import { HttpCall, HttpQueryParams } from './httpClient/basicHttpClient';
-import { LogoutUrlResponse } from './types';
-import isString from 'lodash/isString';
-import { ClientOptions } from './baseCogniteClient';
 import isObject from 'lodash/isObject';
-import { ClientCredentials } from './credentialsAuth';
+import isString from 'lodash/isString';
+import type { ClientOptions } from './baseCogniteClient';
+import type { ClientCredentials } from './credentialsAuth';
 import { CogniteError } from './error';
+import type { HttpCall, HttpQueryParams } from './httpClient/basicHttpClient';
+import { CogniteLoginError } from './loginError';
+import type { LogoutUrlResponse } from './types';
+import { createInvisibleIframe, generatePopupWindow } from './utils';
 
 const LOGIN_POPUP_NAME = 'cognite-js-sdk-auth-popup';
 const LOGIN_IFRAME_NAME = 'silentLoginIframe';
@@ -164,8 +164,11 @@ export async function silentLoginViaIframe<TokenType>(
 
     iframe.onload = () => {
       try {
+        if (!iframe.contentWindow) {
+          throw Error('Failed to login silently');
+        }
         const authTokens = extractor(
-          iframe.contentWindow!.location[locationPart]
+          iframe.contentWindow.location[locationPart]
         );
         if (authTokens === null) {
           throw Error('Failed to login silently');
@@ -198,7 +201,7 @@ function generateLoginUrl(params: AuthorizeParams): string {
  */
 export function verifyCredentialsRequiredFields(
   credentials: ClientCredentials
-): Error | void {
+): void {
   if (!isObject(credentials)) {
     throw Error('options.credentials is required');
   }
@@ -229,9 +232,7 @@ export function verifyCredentialsRequiredFields(
  * It verify if options contain require fields .
  * @param credentials ClientCredentials
  */
-export function verifyOptionsRequiredFields(
-  options: ClientOptions
-): Error | void {
+export function verifyOptionsRequiredFields(options: ClientOptions): void {
   if (!isObject(options)) {
     throw Error('`CogniteClient` is missing parameter `options`');
   }

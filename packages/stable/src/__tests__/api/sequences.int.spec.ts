@@ -2,9 +2,9 @@
 
 import { beforeAll, describe, expect, test } from 'vitest';
 import {
-  ExternalSequence,
-  Sequence,
-  SequenceRowsInsert,
+  type ExternalSequence,
+  type Sequence,
+  type SequenceRowsInsert,
   SequenceValueType,
 } from '../../types';
 import {
@@ -17,7 +17,7 @@ describe('Sequences integration test', () => {
   let client: CogniteClient;
   let sequences: Sequence[];
   const testValues = [1, 1.5, 'two'];
-  const testExternalId = 'sequence' + randomInt();
+  const testExternalId = `sequence${randomInt()}`;
   let sequenceToCreate: ExternalSequence = {
     name: 'sequence1',
     description: 'description',
@@ -56,7 +56,7 @@ describe('Sequences integration test', () => {
     client = setupLoggedInClient();
     [asset] = await client.assets.create([
       {
-        name: 'asset_' + randomInt(),
+        name: `asset_${randomInt()}`,
       },
     ]);
     sequenceToCreate = {
@@ -174,7 +174,9 @@ describe('Sequences integration test', () => {
         {
           externalId: testExternalId,
           rows: testRows,
-          columns: sequences[1].columns.map(({ externalId }) => externalId!),
+          columns: sequences[1].columns.map(
+            ({ externalId }) => externalId || ''
+          ),
         },
         {
           id: sequences[0].id,

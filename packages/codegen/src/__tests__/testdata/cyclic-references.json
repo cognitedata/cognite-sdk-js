@@ -13,9 +13,7 @@
   "paths": {
     "/api/custom/projects/{project}/cyclicService": {
       "get": {
-        "tags": [
-          "cyclic"
-        ],
+        "tags": ["cyclic"],
         "summary": "Summary",
         "operationId": "cyclic",
         "responses": {
@@ -31,9 +29,7 @@
       "CyclicResponse": {
         "type": "object",
         "description": "A response with cyclic references",
-        "oneOf": [
-          {"$ref": "#/components/schemas/Filter"}
-        ]
+        "oneOf": [{ "$ref": "#/components/schemas/Filter" }]
       },
       "Filter": {
         "type": "object",

@@ -2,21 +2,21 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
-  RawDBName,
-  RawDBTableName,
+import type {
   ListRawDatabases,
   ListRawRows,
   ListRawTables,
   RawDB,
+  RawDBName,
   RawDBRow,
   RawDBRowInsert,
   RawDBRowKey,
   RawDBTable,
+  RawDBTableName,
 } from '../../types';
 import { RawRowsAPI } from './rawRowsApi';
 import { RawTablesAPI } from './rawTablesApi';
@@ -86,7 +86,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
   public createTables = (
     databaseName: string,
     items: RawDBTableName[],
-    ensureParent: boolean = false
+    ensureParent = false
   ): Promise<RawDBTable[]> => {
     return this.rawTablesApi.create(databaseName, items, ensureParent);
   };
@@ -115,7 +115,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
   public deleteTables = (
     databaseName: string,
     items: RawDBTableName[]
-  ): Promise<{}> => {
+  ): Promise<object> => {
     return this.rawTablesApi.delete(databaseName, items);
   };
 
@@ -130,8 +130,8 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     databaseName: string,
     tableName: string,
     items: RawDBRowInsert[],
-    ensureParent: boolean = false
-  ): Promise<{}> => {
+    ensureParent = false
+  ): Promise<object> => {
     return this.rawRowsApi.insert(databaseName, tableName, items, ensureParent);
   };
 
@@ -176,7 +176,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     databaseName: string,
     tableName: string,
     items: RawDBRowKey[]
-  ): Promise<{}> => {
+  ): Promise<object> => {
     return this.rawRowsApi.delete(databaseName, tableName, items);
   };
 }

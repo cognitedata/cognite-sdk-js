@@ -2,13 +2,13 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CogniteInternalId,
-  MetadataMap,
+  type CDFHttpClient,
+  type CogniteInternalId,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
-  SimulationRunCreate,
+import type {
   SimulationRun,
+  SimulationRunCreate,
   SimulationRunFilterQuery,
 } from '../../types';
 
@@ -21,10 +21,6 @@ export class SimulationRunsAPI extends BaseResourceAPI<SimulationRun> {
       ['items'],
       ['createdTime', 'lastUpdatedTime', 'runTime', 'simulationTime']
     );
-  }
-
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
   }
 
   public run = async (items: SimulationRunCreate[]) => {

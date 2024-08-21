@@ -1,5 +1,5 @@
+import { URLSearchParams } from 'node:url';
 import fetch from 'cross-fetch';
-import { URLSearchParams } from 'url';
 
 const headers = new Headers({
   'Content-Type': 'application/x-www-form-urlencoded',

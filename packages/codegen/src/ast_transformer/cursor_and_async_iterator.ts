@@ -1,5 +1,5 @@
-import * as ts from 'typescript';
 import isEqual from 'lodash/isEqual';
+import * as ts from 'typescript';
 
 const targetMemberNames = new Set(['items', 'nextCursor']);
 
@@ -7,10 +7,10 @@ const memberName = (member: ts.TypeElement): string | undefined => {
   if (member.name === null) {
     return undefined;
   }
-  if (!ts.isPropertySignature(member!)) {
+  if (!ts.isPropertySignature(member)) {
     return undefined;
   }
-  if (!ts.isIdentifier(member.name!)) {
+  if (!ts.isIdentifier(member.name)) {
     return undefined;
   }
   if (typeof member.name.escapedText !== 'string') {
@@ -48,7 +48,7 @@ const cursorAndAsyncIteratorTransformer: ts.TransformerFactory<
           ts.isArrayTypeNode(member.type)
         ) {
           if (
-            member.name.escapedText == 'items' &&
+            member.name.escapedText === 'items' &&
             ts.isTypeReferenceNode(member.type.elementType) &&
             ts.isIdentifier(member.type.elementType.typeName)
           ) {

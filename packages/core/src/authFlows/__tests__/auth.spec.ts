@@ -2,22 +2,22 @@
 import { afterAll, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import nock from 'nock';
+import {
+  authTokens,
+  loggedInResponse,
+  mockBaseUrl,
+  notLoggedInResponse,
+  project,
+  projectId,
+} from '../../__tests__/testUtils';
 import { AUTHORIZATION_HEADER } from '../../constants';
 import { CDFHttpClient } from '../../httpClient/cdfHttpClient';
-import { CogniteAuthentication, getIdInfo, POPUP, REDIRECT } from '../legacy';
+import { createUniversalRetryValidator } from '../../httpClient/retryValidator';
 import * as LoginUtils from '../../loginUtils';
 import { getLogoutUrl, loginWithRedirect } from '../../loginUtils';
 import * as Utils from '../../utils';
 import { bearerString } from '../../utils';
-import {
-  authTokens,
-  loggedInResponse,
-  notLoggedInResponse,
-  project,
-  projectId,
-  mockBaseUrl,
-} from '../../__tests__/testUtils';
-import { createUniversalRetryValidator } from '../../httpClient/retryValidator';
+import { CogniteAuthentication, POPUP, REDIRECT, getIdInfo } from '../legacy';
 
 describe('Cognite Auth', () => {
   const response401 = { error: { code: 401, message: '' } };
@@ -129,12 +129,12 @@ describe('Cognite Auth', () => {
         window.history.pushState(
           {},
           '',
-          `/some/random/path?query=true&error=failed&error_description=message`
+          '/some/random/path?query=true&error=failed&error_description=message'
         );
         await expect(
           authClient.handleLoginRedirect()
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `[Error: failed: message]`
+          '[Error: failed: message]'
         );
       });
 

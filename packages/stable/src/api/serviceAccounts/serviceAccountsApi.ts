@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import {
+import type {
   CogniteInternalId,
   ItemsWrapper,
   ServiceAccount,
@@ -51,7 +51,7 @@ export class ServiceAccountsAPI extends BaseResourceAPI<ServiceAccount> {
    * await client.serviceAccounts.delete([123, 456]);
    * ```
    */
-  public delete = (ids: CogniteInternalId[]): Promise<{}> => {
+  public delete = (ids: CogniteInternalId[]): Promise<object> => {
     return super.deleteEndpoint(ids);
   };
 }

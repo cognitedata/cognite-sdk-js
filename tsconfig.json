@@ -1,10 +1,10 @@
 {
-    "extends": "./tsconfig.common",
-    "compilerOptions": {
-        "baseUrl": "packages",
-        "paths": {
-          "@cognite/sdk-*": ["*/src"],
-          "@cognite/sdk": ["stable/src"]
-        }
+  "extends": "./tsconfig.common",
+  "compilerOptions": {
+    "baseUrl": "packages",
+    "paths": {
+      "@cognite/sdk-*": ["*/src"],
+      "@cognite/sdk": ["stable/src"]
     }
+  }
 }

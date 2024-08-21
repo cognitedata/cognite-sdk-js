@@ -1,10 +1,11 @@
+import nock from 'nock';
 // Copyright 2020 Cognite AS
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import nock from 'nock';
 import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
 import { CogniteError } from '../error';
 import { bearerString } from '../utils';
 import { CDFHttpClient } from './cdfHttpClient';
+import { HttpError } from './httpError';
 import { createUniversalRetryValidator } from './retryValidator';
 
 describe('CDFHttpClient', () => {
@@ -22,6 +23,21 @@ describe('CDFHttpClient', () => {
     test('convert query parameter arrays to json', async () => {
       nock(baseUrl).get('/').query({ assetIds: '[123,456]' }).reply(200, {});
       await client.get('/', { params: { assetIds: [123, 456] } });
+    });
+
+    test('convert query parameter boolean', async () => {
+      nock(baseUrl).get('/').query({ foo: 'true' }).reply(200, {});
+      await client.get('/', { params: { foo: true } });
+    });
+
+    test('convert query parameter of object', async () => {
+      nock(baseUrl)
+        .get('/')
+        .query({ properties: '{"category1":{"property1":"value1"}}' })
+        .reply(200, {});
+      await client.get('/', {
+        params: { properties: { category1: { property1: 'value1' } } },
+      });
     });
 
     test('use configured bearer token', async () => {
@@ -93,7 +109,7 @@ describe('CDFHttpClient', () => {
     test('throw custom cognite error with populated message', async () => {
       nock(baseUrl).get('/').reply(400, error400);
       await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
-        `[Error: Some message | code: 400]`
+        '[Error: Some message | code: 400]'
       );
     });
 
@@ -103,6 +119,9 @@ describe('CDFHttpClient', () => {
       try {
         await client.get('/');
       } catch (err) {
+        if (!(err instanceof CogniteError)) {
+          throw err;
+        }
         expect(err.status).toBe(400);
       }
     });
@@ -114,6 +133,9 @@ describe('CDFHttpClient', () => {
         try {
           await client.get('/');
         } catch (err) {
+          if (!(err instanceof HttpError)) {
+            throw err;
+          }
           expect(err.status).toBe(401);
         }
       });
@@ -134,7 +156,7 @@ describe('CDFHttpClient', () => {
           reject();
         });
         await expect(client.get('/')).rejects.toMatchInlineSnapshot(
-          `[Error: Request failed | status code: 401]`
+          '[Error: Request failed | status code: 401]'
         );
       });
 
@@ -156,7 +178,7 @@ describe('CDFHttpClient', () => {
           await expect(
             client.get(url)
           ).rejects.toThrowErrorMatchingInlineSnapshot(
-            `[Error: Some message | code: 401]`
+            '[Error: Some message | code: 401]'
           );
           expect(mockFn).not.toBeCalled();
         };

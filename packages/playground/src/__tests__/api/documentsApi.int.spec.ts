@@ -1,9 +1,9 @@
 // Copyright 2020 Cognite AS
 
+import type { ListResponse } from '@cognite/sdk-core';
+import type { Document, DocumentFeedback } from '@cognite/sdk-playground';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
-import { ListResponse } from '@cognite/sdk-core';
-import { Document, DocumentFeedback } from '@cognite/sdk-playground';
 
 // TODO: Fix the test
 describe.skip('documents api', () => {
@@ -99,7 +99,7 @@ describe.skip('documents api', () => {
     });
 
     test('fetch image preview', async () => {
-      if (documents.items.length == 0) {
+      if (documents.items.length === 0) {
         return;
       }
       const document = documents.items[0];
@@ -108,7 +108,7 @@ describe.skip('documents api', () => {
     });
 
     test('fetch pdf preview', async () => {
-      if (documents.items.length == 0) {
+      if (documents.items.length === 0) {
         return;
       }
       const document = documents.items[0];
@@ -126,7 +126,7 @@ describe.skip('documents api', () => {
     });
 
     test('fetch temporary link', async () => {
-      if (documents.items.length == 0) {
+      if (documents.items.length === 0) {
         return;
       }
       const document = documents.items[0];

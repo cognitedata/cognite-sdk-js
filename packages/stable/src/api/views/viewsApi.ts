@@ -2,29 +2,23 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
-import {
+import type {
+  AllVersionsQueryParameter,
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
-  ReducedLimitQueryParameter,
-  ViewCreateDefinition,
-  ViewCollectionResponse,
-  ViewDefinition,
-  SpaceQueryParameter,
-  ListOfVersionReferences,
-  AllVersionsQueryParameter,
   IncludeInheritedPropertiesQueryParameter,
   ListOfAllVersionsReferences,
+  ListOfVersionReferences,
+  ReducedLimitQueryParameter,
+  SpaceQueryParameter,
+  ViewCollectionResponse,
+  ViewCreateDefinition,
+  ViewDefinition,
 } from './types.gen';
 
 export class ViewsAPI extends BaseResourceAPI<ViewDefinition> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   /**
    * [Upsert Views](https://api-docs.cognite.com/20230101/tag/Views/operation/ApplyViews)
    *

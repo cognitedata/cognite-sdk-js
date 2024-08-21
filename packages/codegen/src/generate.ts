@@ -1,12 +1,7 @@
 // Copyright 2022 Cognite AS
-import path from 'path';
-import { promises as fs } from 'fs';
-import { OpenApiSnapshotManager } from './snapshot';
-import {
-  PackageOption,
-  ServiceOption,
-  closestConfigDirectoryPath,
-} from './utils';
+
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import {
   CodeGen,
   createPathFilter,
@@ -16,6 +11,9 @@ import {
 } from './codegen';
 import { PackageConfigManager, ServiceConfigManager } from './configuration';
 import { AcacodeOpenApiGenerator } from './generator/acacode';
+import { OpenApiSnapshotManager } from './snapshot';
+import type { PackageOption, ServiceOption } from './utils';
+import { closestConfigDirectoryPath } from './utils';
 
 type GenerateOptions = PackageOption;
 interface GenerateServiceOptions extends PackageOption, ServiceOption {}
@@ -188,7 +186,7 @@ function createExportStatementForPackage(
   types: string[],
   blacklist: string[]
 ): { code: string; skipped: string[] } {
-  return createExportStatement(`.`, types, blacklist);
+  return createExportStatement('.', types, blacklist);
 }
 
 async function listConfiguredServices(directory: string): Promise<string[]> {

@@ -1,15 +1,15 @@
 // Copyright 2020 Cognite AS
 
 import {
-  GraphUtils,
+  type GraphUtils,
   promiseAllAtOnce,
   promiseEachInSequence,
 } from '@cognite/sdk-core';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { enrichAssetsWithTheirParents } from '../../api/assets/assetUtils';
-import CogniteClient from '../../cogniteClient';
-import { ExternalAssetItem } from '../../types';
+import type CogniteClient from '../../cogniteClient';
+import type { ExternalAssetItem } from '../../types';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl } from '../testUtils';
 
@@ -23,7 +23,7 @@ describe('Assets unit test', () => {
   test('delete with ignoreUnknownIds', async () => {
     const assetIds = [{ id: 123 }];
     nock(mockBaseUrl)
-      .post(new RegExp('/assets/delete'), {
+      .post(/\/assets\/delete/, {
         ignoreUnknownIds: true,
         items: [{ id: 123 }],
       })
@@ -42,7 +42,7 @@ describe('Assets unit test', () => {
 
     test('add label on create', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/assets'), {
+        .post(/\/assets/, {
           items: externalAssets,
         })
         .once()
@@ -54,7 +54,7 @@ describe('Assets unit test', () => {
 
     test('filter assets by labels', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/assets/list'), {
+        .post(/\/assets\/list/, {
           filter: { labels: { containsAny: [{ externalId: 'PUMP' }] } },
         })
         .once()
@@ -74,7 +74,7 @@ describe('Assets unit test', () => {
 
     test('attach/detach labels to asset', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/assets/update'), {
+        .post(/\/assets\/update/, {
           items: [
             {
               id: 123,
@@ -111,8 +111,8 @@ describe('Assets unit test', () => {
       await expect(
         promiseAllAtOnce(data, (input) =>
           input === 'x'
-            ? Promise.reject(input + 'x')
-            : Promise.resolve(input + 'r')
+            ? Promise.reject(`${input}x`)
+            : Promise.resolve(`${input}r`)
         )
       ).rejects.toEqual({
         failed: ['x'],
@@ -179,7 +179,7 @@ describe('Assets unit test', () => {
 
       await expect(
         promiseEachInSequence([1, 2, 0, 3, 0], (input) =>
-          input ? Promise.resolve(input + 'r') : Promise.reject('x')
+          input ? Promise.resolve(`${input}r`) : Promise.reject('x')
         )
       ).rejects.toEqual({
         failed: [0, 3, 0],
@@ -265,13 +265,13 @@ describe('Assets unit test', () => {
 
       const visitedAssets = new Set();
 
-      nodes.forEach((node) => {
+      for (const node of nodes) {
         const dependency = dependencies.get(node);
         if (dependency) {
           expect(visitedAssets.has(dependency)).toBeTruthy();
         }
         visitedAssets.add(node);
-      });
+      }
     });
   });
 
@@ -288,7 +288,7 @@ describe('Assets unit test', () => {
     beforeEach(() => {
       nock.cleanAll();
       nock(mockBaseUrl)
-        .post(new RegExp('/assets/list'))
+        .post(/\/assets\/list/)
         .thrice()
         .reply(200, { items });
     });

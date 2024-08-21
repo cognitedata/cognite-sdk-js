@@ -14,8 +14,8 @@ describe('Timeseries integration test', () => {
     client = setupLoggedInClient();
     [asset] = await client.assets.create([
       {
-        name: 'asset_' + randomInt(),
-        externalId: 'external_' + randomInt(),
+        name: `asset_${randomInt()}`,
+        externalId: `external_${randomInt()}`,
       },
     ]);
   });
@@ -27,7 +27,7 @@ describe('Timeseries integration test', () => {
   const timeseries = [
     {
       name: 'timeserie1',
-      externalId: 'external_' + randomInt(),
+      externalId: `external_${randomInt()}`,
       metadata: {
         createdTime: 'now',
       },
@@ -95,7 +95,7 @@ describe('Timeseries integration test', () => {
     createdTimeseries = await client.timeseries.create(timeseries);
     expect(createdTimeseries[0].id).toBeDefined();
     expect(createdTimeseries[0].lastUpdatedTime).toBeInstanceOf(Date);
-    expect(createdTimeseries[0].metadata!.createdTime).not.toBeInstanceOf(Date);
+    expect(createdTimeseries[0].metadata?.createdTime).not.toBeInstanceOf(Date);
   });
 
   test('retrieve', async () => {
@@ -141,7 +141,7 @@ describe('Timeseries integration test', () => {
     await runTestWithRetryWhenFailing(async () => {
       const result = await client.timeseries
         .list({ filter: { assetIds: [asset.id] } })
-        .autoPagingToArray({ limit: Infinity });
+        .autoPagingToArray({ limit: Number.POSITIVE_INFINITY });
       expect(result.length).toBe(1);
       expect(result[0].id).toBe(createdTimeseries[0].id);
     });
@@ -180,7 +180,7 @@ describe('Timeseries integration test', () => {
 
   test('list with assetExternalIds', async () => {
     const { items } = await client.timeseries.list({
-      filter: { assetExternalIds: [asset.externalId!] },
+      filter: { assetExternalIds: [asset.externalId] },
       limit: 1,
     });
     expect(items[0].id).toBe(createdTimeseries[0].id);

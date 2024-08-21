@@ -14,7 +14,7 @@ describe('Files unit test', () => {
 
   test('filter with directoryPrefix', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/files/list'), {
+      .post(/\/files\/list/, {
         filter: {
           directoryPrefix: '/test',
         },

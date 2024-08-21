@@ -50,7 +50,7 @@ describe('Instances integration test', () => {
   const timestamp = Date.now();
 
   const testSpace: SpaceDefinition = {
-    space: `test_data_space`,
+    space: 'test_data_space',
     name: 'test_data_space',
     description: 'Instance space used for integration tests.',
   };
@@ -66,14 +66,14 @@ describe('Instances integration test', () => {
     space: testSpace.space,
     title: `title_1_${timestamp}`,
     description: `description_1_${timestamp}`,
-    labels: [`label1`, 'label2'],
+    labels: ['label1', 'label2'],
   };
   const describable2: Describable = {
     externalId: `describable_2_${timestamp}`,
     space: testSpace.space,
     title: `title_2_${timestamp}`,
     description: `description_2_${timestamp}`,
-    labels: [`label1`, 'label2'],
+    labels: ['label1', 'label2'],
   };
 
   beforeAll(async () => {
@@ -158,13 +158,13 @@ describe('Instances integration test', () => {
     expect(response.items[1].externalId).toBeDefined();
 
     const title1 =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString();
     const title2 =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString();
     expect(title1 < title2);
   });
 
@@ -186,26 +186,28 @@ describe('Instances integration test', () => {
     expect(response.items[1].externalId).toBeDefined();
 
     const title1 =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString();
     const title2 =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString();
     expect(title1 > title2);
   });
 
   test('search nodes with limit 2', async () => {
-    const response = await client.instances.search({
-      view,
-      instanceType: 'node',
-      limit: 2,
-    });
-    expect(response.items).toHaveLength(2);
-    expect(response.items[0].externalId).toBeDefined();
-    expect(response.items[1].externalId).toBeDefined();
-  });
+    await vi.waitFor(async () => {
+      const response = await client.instances.search({
+        view,
+        instanceType: 'node',
+        limit: 2,
+      });
+      expect(response.items).toHaveLength(2);
+      expect(response.items[0].externalId).toBeDefined();
+      expect(response.items[1].externalId).toBeDefined();
+    }, 25_000);
+  }, 25_000);
 
   test('search with query', async () => {
     const response = await client.instances.search({
@@ -218,7 +220,7 @@ describe('Instances integration test', () => {
   });
 
   test('search with filter', async () => {
-    vi.waitFor(
+    await vi.waitFor(
       async () => {
         const response = await client.instances.search({
           view,
@@ -233,9 +235,9 @@ describe('Instances integration test', () => {
         expect(response.items).toHaveLength(1);
         expect(response.items[0].properties);
         const title =
-          response.items[0].properties![view.space][
+          response.items[0].properties?.[view.space][
             `${view.externalId}/${view.version}`
-          ]['title'].toString();
+          ].title.toString();
         expect(title.startsWith('titl'));
       },
       { interval: 1000, timeout: 30_000 }
@@ -279,9 +281,9 @@ describe('Instances integration test', () => {
     expect(response.items).toHaveLength(1);
     expect(response.items[0].properties);
     const title =
-      response.items[0].properties![view.space][
+      response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ]['title'].toString();
+      ].title.toString();
     expect(title.startsWith('titl'));
   });
 

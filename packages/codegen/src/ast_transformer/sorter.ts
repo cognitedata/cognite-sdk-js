@@ -24,9 +24,9 @@ const sortElementsByName = (
 ): ts.NodeArray<ts.TypeElement> => {
   const sorted = Array.from(elements).sort((a, b) => {
     if (
-      a.name != undefined &&
+      a.name !== undefined &&
       ts.isIdentifier(a.name) &&
-      b.name != undefined &&
+      b.name !== undefined &&
       ts.isIdentifier(b.name)
     ) {
       return identifierName(a.name).localeCompare(identifierName(b.name));

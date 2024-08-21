@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { CogniteMultiError } from '../multiError';
 import { CogniteError } from '../error';
+import { CogniteMultiError } from '../multiError';
 
 describe('Cognite multi error', () => {
   test('create with 2 fails and 1 success', () => {

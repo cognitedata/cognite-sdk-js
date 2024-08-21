@@ -58,9 +58,9 @@ Deleting files.
 
 **_Returns_**
 
-| Return        | Type        |
-| ------------- | ----------- |
-| Empty Promise | Promise<{}> |
+| Return        | Type            |
+| ------------- | --------------- |
+| Empty Promise | Promise<object> |
 
 **_Examples_**
 

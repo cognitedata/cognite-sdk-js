@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import {
+import type {
   CogniteInternalId,
   Group,
   GroupServiceAccount,
@@ -59,7 +59,7 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
    * await client.groups.delete([921923342342323, 871621872721323]);
    * ```
    */
-  public delete = (ids: CogniteInternalId[]): Promise<{}> => {
+  public delete = (ids: CogniteInternalId[]): Promise<object> => {
     return super.deleteEndpoint(ids);
   };
 
@@ -88,9 +88,9 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
   public addServiceAccounts = async (
     groupId: CogniteInternalId,
     serviceAccountIds: CogniteInternalId[]
-  ): Promise<{}> => {
+  ): Promise<object> => {
     const path = this.encodeServiceAccountUrl(groupId);
-    const response = await this.post<{}>(path, {
+    const response = await this.post<object>(path, {
       data: { items: serviceAccountIds },
     });
     return this.addToMapAndReturn({}, response);
@@ -106,9 +106,9 @@ export class GroupsAPI extends BaseResourceAPI<Group> {
   public removeServiceAccounts = async (
     groupId: CogniteInternalId,
     serviceAccountIds: CogniteInternalId[]
-  ): Promise<{}> => {
-    const path = this.encodeServiceAccountUrl(groupId) + '/remove';
-    const response = await this.post<{}>(path, {
+  ): Promise<object> => {
+    const path = `${this.encodeServiceAccountUrl(groupId)}/remove`;
+    const response = await this.post<object>(path, {
       data: { items: serviceAccountIds },
     });
     return this.addToMapAndReturn({}, response);

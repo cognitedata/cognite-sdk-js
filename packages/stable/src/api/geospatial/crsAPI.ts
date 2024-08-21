@@ -1,5 +1,8 @@
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
   GeospatialCRSResponse,
   GeospatialCoordinateReferenceSystem,
   GeospatialSridId,

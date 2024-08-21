@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import { createRetryValidator, EndpointList } from '@cognite/sdk-core';
+import { type EndpointList, createRetryValidator } from '@cognite/sdk-core';
 import { HttpMethod } from '@cognite/sdk-core';
 
 const ENDPOINTS_TO_RETRY: EndpointList = {
