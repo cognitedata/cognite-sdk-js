@@ -18,7 +18,7 @@ describe('Data models integration test', () => {
   const datamodelCreationDefinition: DataModelCreate = {
     externalId: `test_datamodel_${randomInt()}`,
     space: TEST_SPACE_NAME,
-    name: 'test_datamodel',
+    name: 'test_data_model',
     description: 'Data model used for integration tests.',
     version: '1',
     views: [
