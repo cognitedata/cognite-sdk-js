@@ -1,7 +1,7 @@
 import nock from 'nock';
 import CogniteClient from '../../cogniteClient';
 import { setupMockableClient } from '../testUtils';
-import { mockBaseUrl } from '@cognite/sdk-core/src/testUtils';
+import { mockBaseUrl } from '../testUtils';
 import { sleepPromise } from '@cognite/sdk-core';
 import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
 import { MultiPartFileChunkResponse } from '../../types';

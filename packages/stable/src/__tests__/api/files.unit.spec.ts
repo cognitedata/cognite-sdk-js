@@ -2,8 +2,7 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
-import { setupMockableClient } from '../testUtils';
-import { mockBaseUrl } from '../testUtils';
+import { setupMockableClient, mockBaseUrl } from '../testUtils';
 
 describe('Files unit test', () => {
   let client: CogniteClient;

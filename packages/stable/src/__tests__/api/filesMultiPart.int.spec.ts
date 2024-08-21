@@ -1,5 +1,6 @@
 // Copyright 2020 Cognite AS
 import CogniteClient from '../../cogniteClient';
+import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
 import {
   ExternalFileInfo,
   LabelDefinition,
