@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 import { X_REQUEST_ID } from './constants';
-import { HttpError } from './httpClient/httpError';
+import type { HttpError } from './httpClient/httpError';
 import { getHeaderField } from './httpClient/httpHeaders';
 
 export class CogniteError extends Error {
@@ -8,14 +8,18 @@ export class CogniteError extends Error {
   public errorMessage: string;
   public requestId?: string;
   public missing?: object[];
-  public duplicated?: any[];
-  public extra?: any;
+  public duplicated?: unknown[];
+  public extra?: unknown;
   /** @hidden */
   constructor(
     errorMessage: string,
     status: number,
     requestId?: string,
-    otherFields: any = {}
+    otherFields: {
+      missing?: object[];
+      duplicated?: unknown[];
+      extra?: unknown;
+    } = {}
   ) {
     let message = `${errorMessage} | code: ${status}`;
     if (requestId) {
@@ -41,7 +45,7 @@ export class CogniteError extends Error {
   }
 
   public toJSON() {
-    const jsonObject: { [key: string]: any } = {
+    const jsonObject: { [key: string]: unknown } = {
       status: this.status,
       message: this.errorMessage,
     };
@@ -63,18 +67,19 @@ export class CogniteError extends Error {
 
 /** @hidden */
 export function handleErrorResponse(err: HttpError) {
-  let code;
-  let duplicated;
-  let extra;
-  let message;
-  let missing;
-  let requestId;
+  let code: number;
+  let duplicated: object[] | undefined;
+  let extra: unknown;
+  let message: string;
+  let missing: object[] | undefined;
+  let requestId: string | undefined;
   try {
     code = err.status;
-    duplicated = err.data.error.duplicated;
-    message = err.data.error.message;
-    missing = err.data.error.missing;
-    extra = err.data.error.extra;
+    const data = err.data;
+    duplicated = data.error.duplicated;
+    message = data.error.message;
+    missing = data.error.missing;
+    extra = data.error.extra;
     requestId = getHeaderField(err.headers || {}, X_REQUEST_ID);
   } catch (_) {
     throw err;

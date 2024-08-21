@@ -1,10 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
+import isObject from 'lodash/isObject';
 import { BASE_URL } from './constants';
-import { CogniteError } from './error';
-import { CogniteMultiError, MultiErrorRawSummary } from './multiError';
+import type { CogniteError } from './error';
+import { CogniteMultiError, type MultiErrorRawSummary } from './multiError';
 
 /** @hidden */
 export type CogniteAPIVersion = 'v1' | 'playground';
@@ -38,9 +38,9 @@ export function isBrowser() {
   );
 }
 
-function isBuffer(obj: any): boolean {
-  type BufferConstructor = Function & {
-    isBuffer: Function;
+function isBuffer(obj: unknown): boolean {
+  type BufferConstructor = (() => void) & {
+    isBuffer: (x: unknown) => boolean;
   };
 
   // Taken from:
@@ -55,9 +55,9 @@ function isBuffer(obj: any): boolean {
 
 export function clearParametersFromUrl(...params: string[]): void {
   let url = window.location.href;
-  params.forEach((param) => {
+  for (const param of params) {
     url = removeQueryParameterFromUrl(url, param);
-  });
+  }
   window.history.replaceState(null, '', url);
 }
 
@@ -67,8 +67,8 @@ export function removeQueryParameterFromUrl(
   parameter: string
 ): string {
   return url
-    .replace(new RegExp('[?#&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
-    .replace(new RegExp('([?#&])' + parameter + '=[^&]*&'), '$1');
+    .replace(new RegExp(`[?#&]${parameter}=[^&#]*(#.*)?$`), '$1')
+    .replace(new RegExp(`([?#&])${parameter}=[^&]*&`), '$1');
 }
 
 /** @hidden */
@@ -77,7 +77,7 @@ export function convertToTimestampToDateTime(timestamp: number): Date {
 }
 
 /** @hidden */
-export function isJson(data: any) {
+export function isJson(data: unknown) {
   return (
     (isArray(data) || isObject(data)) &&
     !isBuffer(data) &&
@@ -102,10 +102,11 @@ export function promiseCache<ReturnValue>(
     if (unresolvedPromise) {
       return unresolvedPromise;
     }
-    return (unresolvedPromise = promiseFn().then((res) => {
+    unresolvedPromise = promiseFn().then((res) => {
       unresolvedPromise = null;
       return res;
-    }));
+    });
+    return unresolvedPromise;
   };
 }
 
@@ -145,12 +146,12 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
   );
 
   const results = await Promise.all(wrappedPromises);
-  results.forEach((res) => {
+  for (const res of results) {
     failed.push(...(res.failed ? [res.failed] : []));
     succeded.push(...(res.succeded ? [res.succeded] : []));
     responses.push(...(res.response ? [res.response] : []));
     errors.push(...(res.error ? [res.error] : []));
-  });
+  }
   if (failed.length) {
     throw {
       succeded,
@@ -172,9 +173,8 @@ export async function promiseAllWithData<RequestType, ResponseType>(
   try {
     if (runSequentially) {
       return await promiseEachInSequence(inputs, promiser);
-    } else {
-      return await promiseAllAtOnce(inputs, promiser);
     }
+    return await promiseAllAtOnce(inputs, promiser);
   } catch (err) {
     throw new CogniteMultiError(
       err as MultiErrorRawSummary<RequestType, ResponseType>

@@ -1,12 +1,12 @@
 // Copyright 2020 Cognite AS
 
-import { SinglePatch, SortOrder, DateRange } from '@cognite/sdk';
-import {
+import type { DateRange, SinglePatch, SortOrder } from '@cognite/sdk';
+import type {
   CogniteExternalId,
   CogniteInternalId,
+  ExternalId,
   FilterQuery,
   InternalId,
-  ExternalId,
 } from '@cognite/sdk-core';
 
 export * from '@cognite/sdk';
@@ -72,7 +72,7 @@ export interface Simulator {
 }
 
 export interface SimulatorFilterQuery extends FilterQuery {
-  filter?: {};
+  filter?: object;
 }
 
 export interface SimulatorCreate {
@@ -369,7 +369,7 @@ export interface SimulatorModelRevisionCreate {
   modelExternalId: CogniteExternalId;
   description?: string;
   fileId: CogniteInternalId;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface SimulatorModelRevisionPatch {

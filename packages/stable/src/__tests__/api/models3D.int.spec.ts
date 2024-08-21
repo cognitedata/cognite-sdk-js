@@ -46,7 +46,9 @@ describe('Model3d integration test', () => {
       },
     }));
     const updatedModels = await client.models3D.update(modelsToUpdate);
-    updatedModels.forEach((model) => expect(model.name).toContain('updated'));
+    for (const model of updatedModels) {
+      expect(model.name).toContain('updated');
+    }
   });
 
   test('delete', async () => {

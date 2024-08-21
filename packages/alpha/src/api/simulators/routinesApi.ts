@@ -2,14 +2,14 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  IdEither,
-  MetadataMap,
+  type CDFHttpClient,
+  type IdEither,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
+import type {
   SimulatorRoutine,
-  SimulatorRoutineFilterQuery,
   SimulatorRoutineCreate,
+  SimulatorRoutineFilterQuery,
 } from '../../types';
 
 export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
@@ -18,10 +18,6 @@ export class RoutinesAPI extends BaseResourceAPI<SimulatorRoutine> {
    */
   protected getDateProps() {
     return this.pickDateProps(['items'], ['createdTime', 'lastUpdatedTime']);
-  }
-
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
   }
 
   public create = async (items: SimulatorRoutineCreate[]) => {

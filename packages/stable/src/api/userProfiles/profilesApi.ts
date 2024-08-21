@@ -1,11 +1,11 @@
 // Copyright 2023 Cognite AS
 
-import { BaseResourceAPI, FilterQuery } from '@cognite/sdk-core';
-import {
-  UserProfileItem,
+import { BaseResourceAPI, type FilterQuery } from '@cognite/sdk-core';
+import type {
   UserIdentifier,
-  UserProfilesSearchRequest,
+  UserProfileItem,
   UserProfilesListResponse,
+  UserProfilesSearchRequest,
 } from '../../types';
 
 export class ProfilesAPI extends BaseResourceAPI<UserProfileItem> {

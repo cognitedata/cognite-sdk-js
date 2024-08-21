@@ -177,9 +177,9 @@ Delete one or more relationships.
 
 **_Returns_**
 
-| Return        | Type        |
-| ------------- | ----------- |
-| Empty promise | Promise<{}> |
+| Return        | Type            |
+| ------------- | --------------- |
+| Empty promise | Promise<object> |
 
 **_Examples_**
 

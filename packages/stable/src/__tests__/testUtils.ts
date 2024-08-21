@@ -1,11 +1,11 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../cogniteClient';
-import { ExternalFileInfo, NodeOrEdge } from '../types';
 import {
   mockBaseUrl,
   randomInt,
 } from '@cognite/sdk-core/src/__tests__/testUtils';
+import CogniteClient from '../cogniteClient';
+import type { ExternalFileInfo, NodeOrEdge } from '../types';
 import { login } from './login';
 import { PassThrough } from 'stream';
 import { createReadStream, readFileSync, statSync } from 'fs';
@@ -174,10 +174,10 @@ const getFileCreateArgs = (
   additionalFields: Partial<ExternalFileInfo> = {}
 ) => {
   const postfix = randomInt();
-  const fileContent = 'content_' + new Date();
+  const fileContent = `content_${new Date()}`;
   const sourceCreatedTime = new Date();
   const localFileMeta: ExternalFileInfo = {
-    name: 'filename_0_' + postfix,
+    name: `filename_0_${postfix}`,
     mimeType: 'text/plain;charset=UTF-8',
     directory: '/test/testing',
     metadata: {

@@ -1,25 +1,26 @@
 // Copyright 2020 Cognite AS
-import CogniteClient from '../../cogniteClient';
-import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
-import {
+import CogniteClient from "../../cogniteClient";
+
+import { afterAll, beforeAll, describe, expect, it, test } from "vitest";
+import { retryInSeconds } from "../../../../stable/src/__tests__/testUtils";
+import type { FilesMultipartUploadSessionAPI } from "../../api/files/filesMultipartUploadSessionApi";
+import type {
   ExternalFileInfo,
   LabelDefinition,
   MultiPartFileChunkResponse,
-} from '../../types';
+} from "../../types";
 import {
   divideFileIntoChunks,
   divideFileIntoStreams,
   getFileStats,
-  toArrayBuffer,
   setupLoggedInClient,
-} from '../testUtils';
-import path, { join } from 'path';
-import { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
-import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';
+  toArrayBuffer,
+} from "../testUtils";
+import path, { join } from "path";
 // file to upload for integration tests
-const testfile = join(__dirname, '../VAL.nwd');
+const testfile = join(__dirname, "../VAL.nwd");
 
-describe.skip('Files: Multi part Upload Integration Tests', () => {
+describe.skip("Files: Multi part Upload Integration Tests", () => {
   let client: CogniteClient;
   let label: LabelDefinition;
 
@@ -44,13 +45,13 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     additionalFields: Partial<ExternalFileInfo> = {}
   ) => {
     const sourceCreatedTime = new Date();
-    const fileName = path.parse(additionalFields.name ?? 'filename_0').base;
+    const fileName = path.parse(additionalFields.name ?? "filename_0").base;
     const localFileMeta: ExternalFileInfo = {
       name: fileName,
-      mimeType: 'application/octet-stream',
-      directory: '/test/testing',
+      mimeType: "application/octet-stream",
+      directory: "/test/testing",
       metadata: {
-        key: 'value',
+        key: "value",
       },
       sourceCreatedTime,
     };
@@ -58,7 +59,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     return { sourceCreatedTime, localFileMeta };
   };
 
-  test('can create uploadurls', async () => {
+  test("can create uploadurls", async () => {
     const response = await client.files.multipartUploadSession(
       {
         ...getFileCreateArgs({ name: testfile }).localFileMeta,
@@ -69,7 +70,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     expect(response.getNotCompletedParts().length).toEqual(5);
   });
   it.each<number>([3, 5])(
-    'can upload and get the state',
+    "can upload and get the state",
     async (numberOfParts) => {
       const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
       const response = await client.files.multipartUploadSession(
@@ -94,7 +95,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     }
   );
 
-  test('trying already uploaded parts do not throw: is an idempotent call ', async () => {
+  test("trying already uploaded parts do not throw: is an idempotent call ", async () => {
     //const smallFile = join(__dirname, '../test3dFile.fbx');
     const numberOfParts = 5;
     const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
@@ -115,7 +116,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     { numberOfParts: 10, partsToFail: 5 },
   ];
   it.each(retryCases)(
-    'can retry failed parts',
+    "can retry failed parts",
     async ({ numberOfParts, partsToFail }) => {
       const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
       const response = await client.files.multipartUploadSession(
@@ -152,7 +153,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
       await assertFileUploadedWithRetry(client, response);
     }
   );
-  test('can concurrently upload parts', async () => {
+  test("can concurrently upload parts", async () => {
     const numberOfParts = 10;
     const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
     const response = await client.files.multipartUploadSession(
@@ -178,7 +179,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     await assertFileUploadedWithRetry(client, response);
   });
 
-  test('can concurrently upload parts while slicing with streams', async () => {
+  test("can concurrently upload parts while slicing with streams", async () => {
     const { fileSizeInBytes, chunkSize, numberOfParts } =
       getFileStats(testfile);
 
@@ -198,11 +199,11 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
       // const { done, value } = await e.stream.read();
       const chunks: Buffer[] = [];
       const output = await new Promise<Buffer>((resolve, reject) => {
-        e.stream.on('data', (chunk) => {
+        e.stream.on("data", (chunk) => {
           chunks.push(Buffer.from(chunk));
         });
-        e.stream.on('error', (err) => reject(err));
-        e.stream.on('end', () => {
+        e.stream.on("error", (err) => reject(err));
+        e.stream.on("end", () => {
           resolve(Buffer.concat(chunks));
         });
       });
@@ -215,7 +216,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
     await assertFileUploadedWithRetry(client, response);
   });
 
-  test('can get chunk upload callback', async () => {
+  test("can get chunk upload callback", async () => {
     const numberOfParts = 10;
     const fileChunks = divideFileIntoChunks(testfile, numberOfParts);
     const response = await client.files.multipartUploadSession(
@@ -241,7 +242,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
         return callback(result);
       }
     };
-    let totalSize: number = 0;
+    let totalSize = 0;
     let numberOfCallsToCallback = 0;
     const expectedTotalSize = fileChunks.reduce(
       (acc, fileChunk) => acc + fileChunk.length,
@@ -284,7 +285,7 @@ async function assertFileUploadedWithRetry(
       { id: response.multiPartFileUploadResponse.id },
     ]);
     if (!retrievedFile.uploaded) {
-      const error = new Error('Still uploading');
+      const error = new Error("Still uploading");
       // @ts-ignore
       error.status = 500;
       throw error;

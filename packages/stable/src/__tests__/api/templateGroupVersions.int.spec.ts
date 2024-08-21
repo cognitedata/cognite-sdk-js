@@ -1,8 +1,8 @@
 // Copyright 2020 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { ConflictMode } from '../../types';
-import CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 import { randomInt } from '../testUtils';
 

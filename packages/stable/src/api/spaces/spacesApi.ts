@@ -2,11 +2,9 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CursorAndAsyncIterator,
 } from '@cognite/sdk-core';
-import {
+import type {
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
   ReducedLimitQueryParameter,
@@ -16,10 +14,6 @@ import {
 } from './types.gen';
 
 export class SpacesAPI extends BaseResourceAPI<SpaceDefinition> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   /**
    * [Upsert spaces](https://api-docs.cognite.com/20230101/tag/Spaces/operation/ApplySpaces)
    *

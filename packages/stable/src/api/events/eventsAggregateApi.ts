@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import {
+import type {
   AggregateResponse,
   EventAggregateQuery,
   EventUniqueValuesAggregate,

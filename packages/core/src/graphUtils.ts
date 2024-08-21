@@ -14,11 +14,11 @@ export function topologicalSort<T>(nodes: Node<T>[]): Node<T>[] {
   const childrenMap = getChildrenMap(nodes);
 
   // insert root nodes
-  nodes.forEach((node) => {
+  for (const node of nodes) {
     if (!node.parentNode) {
       queue.add(node);
     }
-  });
+  }
 
   while (queue.size() !== 0) {
     const node = queue.last();
@@ -40,16 +40,16 @@ export function topologicalSort<T>(nodes: Node<T>[]): Node<T>[] {
 
 function getChildrenMap<T>(nodes: Node<T>[]): Map<Node<T>, Node<T>[]> {
   const childrenMap = new Map();
-  nodes.forEach((node) => {
+  for (const node of nodes) {
     childrenMap.set(node, []);
-  });
+  }
 
-  nodes.forEach((node) => {
+  for (const node of nodes) {
     const { parentNode } = node;
     if (parentNode) {
       childrenMap.get(parentNode).push(node);
     }
-  });
+  }
 
   return childrenMap;
 }

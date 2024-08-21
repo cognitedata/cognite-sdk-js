@@ -2,21 +2,21 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
-  Timeseries,
+import type {
+  ExternalTimeseries,
   IdEither,
   IgnoreUnknownIds,
-  ExternalTimeseries,
   SyntheticQuery,
+  TimeSeriesUpdate,
+  Timeseries,
   TimeseriesAggregate,
   TimeseriesAggregateQuery,
   TimeseriesFilterQuery,
   TimeseriesSearchFilter,
-  TimeSeriesUpdate,
 } from '../../types';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 

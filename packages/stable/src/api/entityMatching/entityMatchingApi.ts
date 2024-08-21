@@ -2,21 +2,21 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  IdEither,
+  type CursorAndAsyncIterator,
+  type IdEither,
 } from '@cognite/sdk-core';
-import {
+import type {
+  ContextJobId,
+  EntityMatchingChange,
   EntityMatchingCreateRequest,
   EntityMatchingCreateResponse,
-  EntityMatchingRefitRequest,
-  EntityMatchingRefitResponse,
-  EntityMatchingChange,
+  EntityMatchingFilterRequest,
+  EntityMatchingModel,
   EntityMatchingPredictRequest,
   EntityMatchingPredictResponse,
-  ContextJobId,
   EntityMatchingPredictions,
-  EntityMatchingModel,
-  EntityMatchingFilterRequest,
+  EntityMatchingRefitRequest,
+  EntityMatchingRefitResponse,
 } from '../../types';
 
 export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
@@ -99,7 +99,7 @@ export class EntityMatchingApi extends BaseResourceAPI<EntityMatchingModel> {
    * await client.entityMatching.delete([{ externalId: 'model123' }]);
    * ```
    */
-  public delete = async (ids: IdEither[]): Promise<{}> => {
+  public delete = async (ids: IdEither[]): Promise<object> => {
     return super.deleteEndpoint(ids);
   };
 

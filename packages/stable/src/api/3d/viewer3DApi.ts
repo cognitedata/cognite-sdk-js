@@ -2,11 +2,11 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
+import type {
   CogniteInternalId,
   List3DNodesQuery,
   ListRevealSectors3DQuery,
@@ -19,7 +19,7 @@ import { RevealRevisions3DAPI } from './revealRevisions3DApi';
 import { RevealSectors3DAPI } from './revealSectors3DApi';
 import { UnrealRevisions3DAPI } from './unrealRevisions3DApi';
 
-export class Viewer3DAPI extends BaseResourceAPI<any> {
+export class Viewer3DAPI extends BaseResourceAPI<unknown> {
   private revealRevisions3DAPI: RevealRevisions3DAPI;
   private revealNodes3DAPI: RevealNodes3DAPI;
   private revealSectors3DAPI: RevealSectors3DAPI;
@@ -31,8 +31,8 @@ export class Viewer3DAPI extends BaseResourceAPI<any> {
     map: MetadataMap
   ) {
     super(resourcePath, httpClient, map);
-    const revealPath = resourcePath + '/reveal';
-    const unrealPath = resourcePath + '/unreal';
+    const revealPath = `${resourcePath}/reveal`;
+    const unrealPath = `${resourcePath}/unreal`;
     this.revealRevisions3DAPI = new RevealRevisions3DAPI(
       revealPath,
       httpClient,

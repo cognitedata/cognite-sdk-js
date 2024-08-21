@@ -1,9 +1,9 @@
 // Copyright 2022 Cognite AS
-import { promises as fs } from 'fs';
+import { promises as fs } from 'node:fs';
 import * as tmp from 'tmp-promise';
 
 import { generateApi } from 'swagger-typescript-api-nextgen';
-import { TypeGeneratorResult } from './generator';
+import type { TypeGeneratorResult } from './generator';
 
 export class AcacodeOpenApiGenerator {
   public generateTypes = async (

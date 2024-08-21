@@ -1,22 +1,13 @@
 // Copyright 2022 Cognite AS
 
-import {
-  BaseResourceAPI,
-  CDFHttpClient,
-  IdEither,
-  MetadataMap,
-} from '@cognite/sdk-core';
-import {
+import { BaseResourceAPI, type IdEither } from '@cognite/sdk-core';
+import type {
   Subscriber,
   SubscriberCreate,
   SubscriberFilterQuery,
 } from '../../types';
 
 export class SubscribersAPI extends BaseResourceAPI<Subscriber> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   public create = async (items: SubscriberCreate[]) => {
     return this.createEndpoint(items);
   };

@@ -33,8 +33,8 @@ describe.skip('context integration test', () => {
   });
 
   describe('Entity Matching', () => {
-    const modelExternalId = 'entity_matching_test_fit' + randomInt();
-    const newModelExternalId = 'entity_matching_test_refit' + randomInt();
+    const modelExternalId = `entity_matching_test_fit${randomInt()}`;
+    const newModelExternalId = `entity_matching_test_refit${randomInt()}`;
     test('create a model', async () => {
       const result = await client.entityMatching.create({
         name: modelExternalId,
@@ -89,9 +89,8 @@ describe.skip('context integration test', () => {
 
     test('retrieve predict result', async () => {
       await runTestWithRetryWhenFailing(async () => {
-        const { status } = await client.entityMatching.predictResult(
-          predictJobId
-        );
+        const { status } =
+          await client.entityMatching.predictResult(predictJobId);
         expect(status).toBe('Completed');
       });
       expect.hasAssertions();
@@ -100,8 +99,8 @@ describe.skip('context integration test', () => {
     test('refit model with some true matches', async () => {
       const trueMatches = [
         {
-          sourceExternalId: assetA.externalId!,
-          targetExternalId: tsA.externalId!,
+          sourceExternalId: assetA.externalId,
+          targetExternalId: tsA.externalId,
         },
       ];
       const refitResult = await client.entityMatching.refit({

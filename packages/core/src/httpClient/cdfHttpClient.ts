@@ -8,24 +8,25 @@ import {
 } from '../constants';
 import { handleErrorResponse } from '../error';
 import { bearerString, isJson } from '../utils';
-import { HttpQueryParams, HttpResponse } from './basicHttpClient';
-import { HttpHeaders } from './httpHeaders';
+import type { HttpQueryParams, HttpResponse } from './basicHttpClient';
 import { HttpError } from './httpError';
+import type { HttpHeaders } from './httpHeaders';
 import {
   RetryableHttpClient,
-  RetryableHttpRequest,
+  type RetryableHttpRequest,
 } from './retryableHttpClient';
-import { RetryValidator } from './retryValidator';
 
 export class CDFHttpClient extends RetryableHttpClient {
   private static serializeQueryParameters(
     params: HttpQueryParams = {}
-  ): HttpQueryParams {
-    return Object.keys(params).reduce((serializedParams, key) => {
-      const param = params[key];
-      serializedParams[key] = isJson(param) ? JSON.stringify(param) : param;
-      return serializedParams;
-    }, {} as HttpQueryParams);
+  ): Record<string, string> {
+    return Object.entries(params).reduce(
+      (serializedParams, [key, value]) => {
+        serializedParams[key] = isJson(value) ? JSON.stringify(value) : value;
+        return serializedParams;
+      },
+      {} as Record<string, string>
+    );
   }
 
   private static isSameOrigin(baseUrl: string, url: string) {
@@ -53,10 +54,6 @@ export class CDFHttpClient extends RetryableHttpClient {
   }
 
   private oneTimeHeaders: HttpHeaders = {};
-
-  constructor(baseUrl: string, retryValidator: RetryValidator) {
-    super(baseUrl, retryValidator);
-  }
 
   public addOneTimeHeader(name: string, value: string) {
     this.oneTimeHeaders[name] = value;

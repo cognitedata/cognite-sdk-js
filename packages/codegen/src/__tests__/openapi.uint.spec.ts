@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, test } from 'vitest';
-import { OpenApiSnapshotManager } from '../snapshot';
 import { ReferenceWalker } from '../openapi';
+import { OpenApiSnapshotManager } from '../snapshot';
 
 describe('openapi', () => {
   const testFolder = __dirname;
@@ -12,7 +12,7 @@ describe('openapi', () => {
     });
 
     basicbasicSnapshot = await snapshotMngr.downloadFromPath({
-      path: testFolder + '/testdata',
+      path: `${testFolder}/testdata`,
       filename: '8-paths.json',
     });
   });
@@ -34,8 +34,8 @@ describe('openapi', () => {
       ];
 
       const path = walker.document.paths?.['/serviceB/list'];
-      const operation = path!.post;
-      const got = walker['references'](operation);
+      const operation = path?.post;
+      const got = walker.references(operation);
       expect(got).toEqual(wants);
     });
   });

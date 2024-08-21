@@ -1,11 +1,11 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '../../baseResourceApi';
-import { CDFHttpClient } from '../../httpClient/cdfHttpClient';
+import type { CDFHttpClient } from '../../httpClient/cdfHttpClient';
 import { getLogoutUrl } from '../../loginUtils';
-import { MetadataMap } from '../../metadata';
+import type { MetadataMap } from '../../metadata';
 
-export class LogoutApi extends BaseResourceAPI<any> {
+export class LogoutApi extends BaseResourceAPI<unknown> {
   /** @hidden */
   constructor(httpClient: CDFHttpClient, map: MetadataMap) {
     super('', httpClient, map);

@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import { CogniteInternalId, UnrealRevision3D } from '../../types';
+import type { CogniteInternalId, UnrealRevision3D } from '../../types';
 
 export class UnrealRevisions3DAPI extends BaseResourceAPI<UnrealRevision3D> {
   /**

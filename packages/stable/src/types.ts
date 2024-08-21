@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import {
+import type {
   CogniteExternalId,
   CogniteInternalId,
   Cursor,
@@ -10,7 +10,7 @@ import {
   InternalId,
   Limit,
 } from '@cognite/sdk-core';
-import { AnnotationData } from './api/annotations/types.gen';
+import type { AnnotationData } from './api/annotations/types.gen';
 
 export {
   ListResponse,
@@ -109,7 +109,7 @@ export type AclTemplateInstances = Acl<
 >;
 
 export interface AclScopeAll {
-  all: {};
+  all: object;
 }
 
 export interface AclScopeIds {
@@ -131,7 +131,7 @@ export interface AclScopeAssetsId {
 }
 
 export interface AclScopeCurrentUser {
-  currentuserscope: {};
+  currentuserscope: object;
 }
 
 export type AclScopeDatasets = AclScopeAll | AclScopeIds;
@@ -1123,7 +1123,7 @@ export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
 
 export interface FileChangeUpdateById extends InternalId, FileChange {}
 
-export type FileContent = ArrayBuffer | Buffer | any;
+export type FileContent = ArrayBuffer | Buffer | unknown;
 
 export interface FileFilterProps {
   name?: FileName;
@@ -1342,7 +1342,7 @@ export interface FileGeoLocation {
   /**
    * Additional properties in a String key -> Object value format
    */
-  properties?: { [key: string]: any };
+  properties?: { [key: string]: unknown };
 }
 
 export type FileGeoLocationGeometry =
@@ -1885,7 +1885,7 @@ export interface RawDBRowInsert extends RawDBRowKey {
   /**
    * Row data stored as a JSON object.
    */
-  columns: Record<string, any>;
+  columns: Record<string, unknown>;
 }
 
 export interface RawDBRowKey {
@@ -3109,7 +3109,7 @@ export type ViewFilterQuery = FilterQuery;
 
 export interface ViewResolveRequest extends FilterQuery {
   externalId: string;
-  input?: { [K in string]: any };
+  input?: { [K in string]: unknown };
   cursor?: string;
   limit?: number;
 }
@@ -3212,7 +3212,7 @@ export interface TemplateGroupVersionFilterQuery extends FilterQuery {
 export interface ExternalTemplateInstance extends ExternalId {
   templateName: string;
   dataSetId?: number;
-  fieldResolvers: { [K in string]: FieldResolver | {} };
+  fieldResolvers: { [K in string]: FieldResolver | object };
 }
 
 export type TemplateInstance = ExternalTemplateInstance & {
@@ -3229,7 +3229,7 @@ export type TemplateInstance = ExternalTemplateInstance & {
 
 export interface TemplateInstancePatch extends ExternalId {
   update: {
-    fieldResolvers: ObjectPatch<FieldResolver | {}>;
+    fieldResolvers: ObjectPatch<FieldResolver | object>;
   };
 }
 
@@ -3239,9 +3239,9 @@ export interface FieldResolver {
 
 export class ConstantResolver implements FieldResolver {
   type = 'constant';
-  value: {};
+  value: object;
 
-  constructor(value: {}) {
+  constructor(value: object) {
     this.value = value;
   }
 }
@@ -3298,9 +3298,9 @@ export class SyntheticTimeSeriesResolver implements FieldResolver {
 export class ViewResolver implements FieldResolver {
   type = 'view';
   externalId: string;
-  input: { [K in string]: any };
+  input?: { [K in string]: unknown };
 
-  constructor(externalId: string, input: { [K in string]: any }) {
+  constructor(externalId: string, input: { [K in string]: unknown }) {
     this.externalId = externalId;
     this.input = input;
   }
@@ -3316,7 +3316,7 @@ export interface TemplateInstanceFilterQuery extends FilterQuery {
 }
 
 export type GraphQlResponse = {
-  data: any;
+  data: unknown;
   errors: GraphQlError[];
 };
 
@@ -3403,7 +3403,7 @@ export interface AnnotationReverseLookupFilterProps {
   creatingAppVersion?: string;
   creatingUser?: string;
   status?: AnnotationStatus;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
 
 export interface Unit {

@@ -100,7 +100,7 @@ To run integration tests, you would have to pass the following environment varia
 
 Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revision integration tests.
 
-We use `jest` to run tests, see [their documentation](https://github.com/facebook/jest) for more information.
+We use `vitest` to run tests, see [their documentation](https://vitest.dev/) for more information.
 
 
 ### Versioning

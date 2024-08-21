@@ -2,17 +2,17 @@
 import { describe, expect, test } from 'vitest';
 
 import {
+  type CogniteAPIVersion,
+  apiUrl,
   convertToTimestampToDateTime,
+  isJson,
   isSameProject,
   isUsingSSL,
   projectUrl,
-  promiseCache,
-  sleepPromise,
-  promiseEachInSequence,
   promiseAllAtOnce,
-  isJson,
-  CogniteAPIVersion,
-  apiUrl,
+  promiseCache,
+  promiseEachInSequence,
+  sleepPromise,
 } from '../utils';
 
 describe('utils', () => {
@@ -73,8 +73,8 @@ describe('utils', () => {
       await expect(
         promiseAllAtOnce(data, (input) =>
           input === 'x'
-            ? Promise.reject(input + 'x')
-            : Promise.resolve(input + 'r')
+            ? Promise.reject(`${input}x`)
+            : Promise.resolve(`${input}r`)
         )
       ).rejects.toEqual({
         failed: ['x'],
@@ -150,7 +150,7 @@ describe('utils', () => {
 
       await expect(
         promiseEachInSequence([1, 2, 0, 3, 0], (input) =>
-          input ? Promise.resolve(input + 'r') : Promise.reject('x')
+          input ? Promise.resolve(`${input}r`) : Promise.reject('x')
         )
       ).rejects.toEqual({
         failed: [0, 3, 0],

@@ -1,23 +1,24 @@
+import isFunction from 'lodash/isFunction';
 // Copyright 2020 Cognite AS
 import { sleepPromise } from '../utils';
 import {
   BasicHttpClient,
-  HttpRequest,
-  HttpRequestOptions,
-  HttpResponse,
+  type HttpRequest,
+  type HttpRequestOptions,
+  type HttpResponse,
 } from './basicHttpClient';
-import { MAX_RETRY_ATTEMPTS, RetryValidator } from './retryValidator';
-import isFunction from 'lodash/isFunction';
+import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
 
 export class RetryableHttpClient extends BasicHttpClient {
   private static calculateRetryDelayInMs(retryCount: number) {
     const INITIAL_RETRY_DELAY_IN_MS = 250;
-    return (
-      INITIAL_RETRY_DELAY_IN_MS + ((Math.pow(2, retryCount) - 1) / 2) * 1000
-    );
+    return INITIAL_RETRY_DELAY_IN_MS + ((2 ** retryCount - 1) / 2) * 1000;
   }
 
-  constructor(baseUrl: string, private retryValidator: RetryValidator) {
+  constructor(
+    baseUrl: string,
+    private retryValidator: RetryValidator
+  ) {
     super(baseUrl);
   }
 
@@ -74,7 +75,6 @@ export class RetryableHttpClient extends BasicHttpClient {
     request: RetryableHttpRequest
   ): Promise<HttpResponse<ResponseType>> {
     let retryCount = 0;
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const response = await super.rawRequest<ResponseType>(request);
 

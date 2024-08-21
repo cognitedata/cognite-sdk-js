@@ -27,7 +27,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Run code generation for ${{ matrix.package }} package
-        run: yarn codegen --package=${{ matrix.package }} generate-types
+        run: yarn codegen --package=${{ matrix.package }} generate-types && yarn lint:fix
 
       - name: Identify changed files
         id: changed_files

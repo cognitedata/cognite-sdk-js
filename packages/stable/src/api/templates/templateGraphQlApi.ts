@@ -1,9 +1,9 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import { GraphQlResponse } from '../../types';
+import type { GraphQlResponse } from '../../types';
 
-export class TemplateGraphQlApi extends BaseResourceAPI<any> {
+export class TemplateGraphQlApi extends BaseResourceAPI<unknown> {
   /**
    * [Run a GraphQL query](https://pr-1202.specs.preview.cogniteapp.com/v1.json.html#operation/postApiV1ProjectsProjectTemplategroupsExternalidVersionsVersionGraphql)
    *

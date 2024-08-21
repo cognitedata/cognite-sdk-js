@@ -1,7 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import {
+import type {
   DatapointAggregates,
   Datapoints,
   DoubleDatapoint,
@@ -9,15 +8,16 @@ import {
   Timeseries,
 } from '@cognite/sdk';
 import { describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 import { randomInt, runTestWithRetryWhenFailing } from '../testUtils';
 
 describe('Timeseries integration test', () => {
-  const client: CogniteClient | null = setupLoggedInClient();
+  const client: CogniteClient = setupLoggedInClient();
 
   const timeseries: ExternalTimeseries = {
     name: 'time_series_with_typed_unit',
-    externalId: 'ts_with_typed_unit' + randomInt(),
+    externalId: `ts_with_typed_unit${randomInt()}`,
     unitExternalId: 'temperature:deg_f',
   };
 
@@ -28,13 +28,13 @@ describe('Timeseries integration test', () => {
   });
 
   test('create', async () => {
-    [createdTimeseries] = await client!.timeseries.create([timeseries]);
+    [createdTimeseries] = await client.timeseries.create([timeseries]);
     expect(createdTimeseries.unitExternalId).toBe(timeseries.unitExternalId);
   });
 
   test('update', async () => {
     const newUnitExternalId = 'temperature:deg_c';
-    const [updateResult] = await client!.timeseries.update([
+    const [updateResult] = await client.timeseries.update([
       {
         id: createdTimeseries.id,
         update: {
@@ -47,7 +47,7 @@ describe('Timeseries integration test', () => {
 
   test('list with filter by unitExternalId', async () => {
     await runTestWithRetryWhenFailing(async () => {
-      const { items } = await client!.timeseries.list({
+      const { items } = await client.timeseries.list({
         filter: {
           unitExternalId: 'temperature:deg_c',
         },
@@ -58,7 +58,7 @@ describe('Timeseries integration test', () => {
   });
 
   test('retrieve', async () => {
-    const [retrievedTimeseries] = await client!.timeseries.retrieve([
+    const [retrievedTimeseries] = await client.timeseries.retrieve([
       { id: createdTimeseries.id },
     ]);
     expect(retrievedTimeseries.unitExternalId).toBe('temperature:deg_c');
@@ -73,7 +73,7 @@ describe('Timeseries integration test', () => {
     ];
     await client?.datapoints.insert([{ id: createdTimeseries.id, datapoints }]);
 
-    const resAggregate = (await client!.datapoints.retrieve({
+    const resAggregate = (await client.datapoints.retrieve({
       items: [
         {
           id: createdTimeseries.id,
@@ -86,7 +86,7 @@ describe('Timeseries integration test', () => {
     expect(resAggregate.length).toBe(1);
     expect(resAggregate[0].datapoints[0].min).toBe(212);
 
-    const res = (await client!.datapoints.retrieve({
+    const res = (await client.datapoints.retrieve({
       items: [{ id: createdTimeseries.id, targetUnit: 'temperature:deg_f' }],
     })) as Datapoints[];
 
@@ -103,7 +103,7 @@ describe('Timeseries integration test', () => {
     ];
     await client?.datapoints.insert([{ id: createdTimeseries.id, datapoints }]);
 
-    const res = await client!.datapoints.retrieve({
+    const res = await client.datapoints.retrieve({
       items: [{ id: createdTimeseries.id, targetUnitSystem: 'SI' }],
     });
     expect(res.length).toBe(1);
@@ -111,6 +111,6 @@ describe('Timeseries integration test', () => {
   });
 
   test('delete', async () => {
-    await client!.timeseries.delete([{ id: createdTimeseries.id }]);
+    await client.timeseries.delete([{ id: createdTimeseries.id }]);
   });
 });

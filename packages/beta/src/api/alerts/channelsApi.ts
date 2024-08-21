@@ -1,8 +1,8 @@
 // Copyright 2022 Cognite AS
 
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
-import { IdEither } from '@cognite/sdk';
-import {
+import type { IdEither } from '@cognite/sdk';
+import { BaseResourceAPI } from '@cognite/sdk-core';
+import type {
   Channel,
   ChannelChange,
   ChannelCreate,
@@ -10,10 +10,6 @@ import {
 } from '../../types';
 
 export class ChannelsAPI extends BaseResourceAPI<Channel> {
-  constructor(...args: [string, CDFHttpClient, MetadataMap]) {
-    super(...args);
-  }
-
   public create = async (items: ChannelCreate[]) => {
     return this.createEndpoint(items);
   };

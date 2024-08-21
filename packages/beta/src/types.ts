@@ -1,26 +1,26 @@
 // Copyright 2020 Cognite AS
 
-import {
+import type {
   Aggregate as AggregateStable,
+  DatapointsMultiQueryBase as DataPointsMultiQueryBaseStable,
   DatapointAggregate as DatapointAggregateStable,
   DatapointAggregates as DatapointAggregatesStable,
-  DatapointsMultiQueryBase as DataPointsMultiQueryBaseStable,
   DatapointsQueryProperties as DatapointsQueryPropertiesStable,
   DateRange,
   DoubleDatapoint as DoubleDatapointStable,
   DoubleDatapoints as DoubleDatapointsStable,
+  FileInfo,
   Metadata,
   MetadataPatch,
   SinglePatchRequired,
   SinglePatchRequiredString,
   SinglePatchString,
+  SortOrder,
   StringDatapoint as StringDatapointStable,
   StringDatapoints as StringDatapointsStable,
   Timestamp,
-  SortOrder,
-  FileInfo,
 } from '@cognite/sdk';
-import {
+import type {
   CogniteExternalId,
   CogniteInternalId,
   ExternalId,

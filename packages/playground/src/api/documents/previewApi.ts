@@ -3,9 +3,12 @@
 import { BaseResourceAPI } from '@cognite/sdk-core';
 import { HttpResponseType } from '@cognite/sdk-core';
 
-import { DocumentId, DocumentsTemporaryPreviewLinkResponse } from '../../types';
+import type {
+  DocumentId,
+  DocumentsTemporaryPreviewLinkResponse,
+} from '../../types';
 
-export class PreviewAPI extends BaseResourceAPI<any> {
+export class PreviewAPI extends BaseResourceAPI<unknown> {
   public documentAsPdf = (id: DocumentId): Promise<ArrayBuffer> => {
     return this.previewEndpoint<ArrayBuffer>(id, 'application/pdf');
   };
@@ -28,10 +31,10 @@ export class PreviewAPI extends BaseResourceAPI<any> {
   public buildPreviewURI = (
     id: DocumentId,
     accept: AcceptType,
-    page: number = 0
+    page = 0
   ): string => {
     let uri = `${this.url()}?documentId=${id.toString()}`;
-    if (accept == 'image/png') {
+    if (accept === 'image/png') {
       uri += `&page=${page.toString()}`;
     }
 
@@ -41,7 +44,7 @@ export class PreviewAPI extends BaseResourceAPI<any> {
   private async previewEndpoint<ResponseType>(
     id: DocumentId,
     accept: AcceptType,
-    page: number = 0
+    page = 0
   ): Promise<ResponseType> {
     const uri = this.buildPreviewURI(id, accept, page);
     const response = await this.get<ResponseType>(uri, {

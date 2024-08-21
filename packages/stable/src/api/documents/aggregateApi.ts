@@ -2,25 +2,25 @@
 
 import {
   BaseResourceAPI,
-  CursorResponse,
-  FilterQuery,
-  HttpResponse,
-  ItemsWrapper,
+  type CursorResponse,
+  type FilterQuery,
+  type HttpResponse,
+  type ItemsWrapper,
 } from '@cognite/sdk-core';
-import {
+import type {
+  DocumentsAggregateAllUniquePropertiesItem,
+  DocumentsAggregateAllUniquePropertiesRequest,
+  DocumentsAggregateAllUniquePropertiesResponse,
   DocumentsAggregateAllUniqueValuesItem,
   DocumentsAggregateAllUniqueValuesRequest,
   DocumentsAggregateAllUniqueValuesResponse,
   DocumentsAggregateCountItem,
   DocumentsAggregateCountRequest,
   DocumentsAggregateRequest,
+  DocumentsAggregateUniquePropertiesItem,
+  DocumentsAggregateUniquePropertiesRequest,
   DocumentsAggregateUniqueValuesItem,
   DocumentsAggregateUniqueValuesRequest,
-  DocumentsAggregateUniquePropertiesRequest,
-  DocumentsAggregateUniquePropertiesItem,
-  DocumentsAggregateAllUniquePropertiesRequest,
-  DocumentsAggregateAllUniquePropertiesResponse,
-  DocumentsAggregateAllUniquePropertiesItem,
 } from '../../types';
 
 /**
@@ -83,7 +83,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
 
   private callAggregateCursorEndpointWithPost = async <
     QueryType extends FilterQuery,
-    Item
+    Item,
   >(
     scope?: QueryType
   ): Promise<HttpResponse<CursorResponse<Item[]>>> => {

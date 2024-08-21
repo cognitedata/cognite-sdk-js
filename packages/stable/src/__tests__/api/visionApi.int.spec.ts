@@ -1,21 +1,21 @@
 // Copyright 2020 Cognite AS
 
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
-import { VisionExtractPostResponse } from '@cognite/sdk';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import type { VisionExtractPostResponse } from '@cognite/sdk';
+import noop from 'lodash/noop';
 import { beforeAll, describe, expect, test, vi } from 'vitest';
 import { BETA_FEATURES } from '../../api/vision/visionApi';
 import { setupLoggedInClient } from '../testUtils';
-import noop from 'lodash/noop';
 
 function readFile(filename: string): Buffer {
   return readFileSync(resolve(__dirname, filename));
 }
 
 describe('Vision API', () => {
-  let TEST_IMAGE_ID: number = -1;
+  let TEST_IMAGE_ID = -1;
   let client: CogniteClient;
-  let consoleSpy: jest.SpyInstance;
+  let consoleSpy: vi.SpyInstance;
   let extractJob: VisionExtractPostResponse;
   let extractBetaJob: VisionExtractPostResponse;
 
@@ -64,7 +64,7 @@ describe('Vision API', () => {
       { fileId: TEST_IMAGE_ID, fileExternalId: 'vision_extract_test_image' },
     ]);
     expect(extractJob.parameters).toBeDefined();
-    expect(extractJob.parameters!.textDetectionParameters).toEqual({
+    expect(extractJob.parameters?.textDetectionParameters).toEqual({
       threshold: 0.4,
     });
   });
@@ -91,7 +91,7 @@ describe('Vision API', () => {
   describe('retrieve extract job', () => {
     test('waitForCompletion=false', async () => {
       const result = await client.vision.getExtractJob(extractJob.jobId, false);
-      expect(result.status == 'Queued' || result.status == 'Running').toBe(
+      expect(result.status === 'Queued' || result.status === 'Running').toBe(
         true
       );
       expect(result.jobId).toEqual(extractJob.jobId);
@@ -102,7 +102,7 @@ describe('Vision API', () => {
       await expect(
         client.vision.getExtractJob(extractJob.jobId, true, 1000, 0)
       ).rejects.toThrowError(
-        `Timed out while waiting for vision job to complete.`
+        'Timed out while waiting for vision job to complete.'
       );
     });
     test.skip('waitForCompletion=true', async () => {
@@ -117,22 +117,22 @@ describe('Vision API', () => {
       // we care in the following checks is that the *data structure* is
       // correctly filled.
       expect(result.parameters).toBeDefined();
-      expect(result.parameters!.textDetectionParameters).toEqual({
+      expect(result.parameters.textDetectionParameters).toEqual({
         threshold: 0.4,
       });
 
       expect(result.items?.length).toBeGreaterThan(0);
-      const resultItem = result.items![0];
+      const resultItem = result.items[0];
       expect(resultItem.fileId).toEqual(TEST_IMAGE_ID);
 
       // Check if text prediction exist
       expect(resultItem.predictions.textPredictions?.length).toBeGreaterThan(0);
-      const textPrediction = resultItem.predictions.textPredictions![0];
+      const textPrediction = resultItem.predictions.textPredictions[0];
       // Check that its values are defined. D
       expect(textPrediction.confidence).toBeGreaterThanOrEqual(0.0);
       expect(textPrediction.text).toEqual('TEST');
       expect(textPrediction.textRegion).toBeDefined();
-      const textRegion = textPrediction.textRegion!;
+      const textRegion = textPrediction.textRegion;
       expect(textRegion.xMin).toBeGreaterThanOrEqual(0.0);
       expect(textRegion.xMax).toBeGreaterThanOrEqual(0.0);
       expect(textRegion.yMin).toBeGreaterThanOrEqual(0.0);

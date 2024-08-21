@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const path = require('path');
+const path = require('node:path');
 const snippetsFolder = path.join(process.cwd(), './codeSnippets');
-const jsDoc = require(snippetsFolder + '/docs.json');
-// eslint-disable-next-line lodash/import-scope
+const jsDoc = require(`${snippetsFolder}/docs.json`);
 const _ = require('lodash');
-const fs = require('fs');
+const fs = require('node:fs');
 
 function stripMarkdownCodeSnippet(rawCode) {
   return rawCode.replace('```js', '').replace('```', '').trim();
@@ -16,7 +14,11 @@ function findAllCodeSnippetsInJsDoc(jsDoc) {
     const docRegEx =
       /https:\/\/(doc\.cognitedata\.com|docs\.cognite\.com|developer\.cognite\.com)\/api.*operation\/([a-zA-Z0-9]+)/g;
     let matches;
-    while ((matches = docRegEx.exec(value))) {
+    while (true) {
+      matches = docRegEx.exec(value);
+      if (!matches) {
+        break;
+      }
       const operationId = matches[2];
       const rawCode = object.text;
       if (!codeSnippets.has(operationId)) {
@@ -26,7 +28,7 @@ function findAllCodeSnippetsInJsDoc(jsDoc) {
     }
   });
   // comments appears two times in jsdoc...
-  for (let operationId of codeSnippets.keys()) {
+  for (const operationId of codeSnippets.keys()) {
     codeSnippets.set(operationId, _.uniq(codeSnippets.get(operationId)));
   }
   return codeSnippets;
@@ -46,7 +48,7 @@ function writeCodeSnippetFile(codeSnippets, filepath) {
   codeSnippets.forEach((snippets, operationId) => {
     output.operations[operationId] = joinSnippets(snippets);
   });
-  fs.writeFileSync(filepath, JSON.stringify(output, null, 2) + '\n');
+  fs.writeFileSync(filepath, `${JSON.stringify(output, null, 2)}\n`);
 }
 
 const packageName =
@@ -84,6 +86,7 @@ const tsconfig = {};
 tsconfig.include = ['*.ts'];
 tsconfig.compilerOptions = {
   noUnusedLocals: false,
+  skipLibCheck: true,
   outDir: 'dist',
   declaration: false,
   sourceMap: false,
@@ -92,5 +95,5 @@ tsconfig.compilerOptions = {
 // We make a tsconfig.build.json that extends the normal tsconfig.build.json
 tsconfig.extends = '../../../tsconfig.build.json';
 const tsbuildconfigpath = path.join(snippetsFolder, './tsconfig.build.json');
-fs.writeFileSync(tsbuildconfigpath, JSON.stringify(tsconfig, null, 2) + '\n');
+fs.writeFileSync(tsbuildconfigpath, `${JSON.stringify(tsconfig, null, 2)}\n`);
 console.log(`TS build config for code snippets saved to: ${tsbuildconfigpath}`);

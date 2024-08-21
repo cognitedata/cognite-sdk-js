@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI, HttpResponseType } from '@cognite/sdk-core';
-import { CogniteInternalId } from '../../types';
+import type { CogniteInternalId } from '../../types';
 
 export class Files3DAPI extends BaseResourceAPI<unknown> {
   /**

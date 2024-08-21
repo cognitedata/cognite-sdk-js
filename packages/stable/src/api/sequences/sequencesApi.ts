@@ -1,11 +1,11 @@
 // Copyright 2020 Cognite AS
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
+import type {
   ExternalSequence,
   IdEither,
   IgnoreUnknownIds,
@@ -14,11 +14,11 @@ import {
   SequenceChange,
   SequenceFilter,
   SequenceListScope,
+  SequenceRow,
   SequenceRowsDelete,
   SequenceRowsInsert,
   SequenceRowsRetrieve,
   SequenceSearchFilter,
-  SequenceRow,
 } from '../../types';
 import { SequenceRowsAPI } from './sequenceRowsApi';
 
@@ -154,7 +154,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * await client.sequences.delete([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public delete = (ids: IdEither[]): Promise<{}> => {
+  public delete = (ids: IdEither[]): Promise<object> => {
     return super.deleteEndpoint(ids);
   };
 
@@ -170,7 +170,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * await client.sequences.insertRows([{ id: 123, rows, columns: ['one', 'two', 'three'] }]);
    * ```
    */
-  public insertRows = (items: SequenceRowsInsert[]): Promise<{}> => {
+  public insertRows = (items: SequenceRowsInsert[]): Promise<object> => {
     return this.sequenceRowsAPI.insert(items);
   };
 
@@ -194,7 +194,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * await client.sequences.deleteRows([{ id: 32423849, rows: [1,2,3] }]);
    * ```
    */
-  public deleteRows = (query: SequenceRowsDelete[]): Promise<{}> => {
+  public deleteRows = (query: SequenceRowsDelete[]): Promise<object> => {
     return this.sequenceRowsAPI.delete(query);
   };
 }

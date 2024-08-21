@@ -1,13 +1,13 @@
 // Copyright 2022 Cognite AS
 
+import { TextEncoder } from 'node:util';
+import type { DocumentSearchResponse } from '@cognite/sdk-stable';
 import { beforeAll, describe, expect, test } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
-import { DocumentSearchResponse } from '@cognite/sdk-stable';
-import { TextEncoder } from 'util';
 
 const getFileId = async (
   client: CogniteClient,
-  deadline: number = 15000
+  deadline = 15000
 ): Promise<number> => {
   // Use a previous uploaded file/document if available,
   // otherwise ingest a new file.
@@ -143,11 +143,11 @@ describe('Documents integration test', () => {
     });
     expect(response.items).toHaveLength(0);
     expect(response.aggregates).toHaveLength(1);
-    expect(response.aggregates![0].name).toBe('labels');
-    expect(response.aggregates![0].total).toBeGreaterThan(0);
-    expect(response.aggregates![0].groups.length).toBeGreaterThan(0);
-    expect(response.aggregates![0].groups[0].group).toHaveLength(1);
-    expect(response.aggregates![0].groups[0].group[0].property).toStrictEqual([
+    expect(response.aggregates[0].name).toBe('labels');
+    expect(response.aggregates[0].total).toBeGreaterThan(0);
+    expect(response.aggregates[0].groups.length).toBeGreaterThan(0);
+    expect(response.aggregates[0].groups[0].group).toHaveLength(1);
+    expect(response.aggregates[0].groups[0].group[0].property).toStrictEqual([
       'labels',
     ]);
   });
@@ -165,7 +165,7 @@ describe('Documents integration test', () => {
     });
 
     test('fetch image preview', async () => {
-      if (documents.items.length == 0) {
+      if (documents.items.length === 0) {
         return;
       }
       const document = documents.items[0].item;
@@ -176,7 +176,7 @@ describe('Documents integration test', () => {
     test(
       'fetch pdf preview',
       async () => {
-        if (documents.items.length == 0) {
+        if (documents.items.length === 0) {
           return;
         }
         const document = documents.items[0].item;
@@ -196,7 +196,7 @@ describe('Documents integration test', () => {
     );
 
     test('fetch temporary link', async () => {
-      if (documents.items.length == 0) {
+      if (documents.items.length === 0) {
         return;
       }
       const document = documents.items[0].item;

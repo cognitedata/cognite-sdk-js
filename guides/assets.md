@@ -10,13 +10,14 @@ In Cognite Data Fusion, the [asset](https://docs.cognite.com/dev/concepts/resour
 
 **In this article:**
 
-- [Aggregate assets](#aggregate-assets)
-- [Create a asset](#create-a-asset)
-- [Delete assets](#delete-assets)
-- [List assets](#list-assets)
-- [Retrieve assets by id](#retrieve-assets-by-id)
-- [Search for assets](#search-for-assets)
-- [Update assets](#update-assets)
+- [Assets](#assets)
+  - [Aggregate assets](#aggregate-assets)
+  - [Create a asset](#create-a-asset)
+  - [Delete assets](#delete-assets)
+  - [List assets](#list-assets)
+  - [Retrieve assets by id](#retrieve-assets-by-id)
+  - [Search for assets](#search-for-assets)
+  - [Update assets](#update-assets)
 
 ## Aggregate assets
 
@@ -107,9 +108,9 @@ Deleting assets.
 
 **_Returns_**
 
-| Return        | Type        |
-| ------------- | ----------- |
-| Empty Promise | Promise<{}> |
+| Return        | Type            |
+| ------------- | --------------- |
+| Empty Promise | Promise<object> |
 
 **_Examples_**
 

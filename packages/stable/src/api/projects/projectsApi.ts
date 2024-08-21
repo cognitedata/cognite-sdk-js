@@ -1,13 +1,13 @@
 // Copyright 2020 Cognite AS
 
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import {
+import type {
+  PartialProjectUpdate,
   ProjectResponse,
   ProjectUpdate,
-  PartialProjectUpdate,
 } from '../../types';
 
-export class ProjectsAPI extends BaseResourceAPI<any> {
+export class ProjectsAPI extends BaseResourceAPI<unknown> {
   /**
    * [Retrieve a project](https://doc.cognitedata.com/api/v1/#operation/getProject)
    *
@@ -59,7 +59,7 @@ export class ProjectsAPI extends BaseResourceAPI<any> {
     projectName: string,
     replacement: PartialProjectUpdate
   ): Promise<ProjectResponse> => {
-    const path = this.encodeUrl(projectName) + '/update';
+    const path = `${this.encodeUrl(projectName)}/update`;
     const response = await this.post<ProjectResponse>(path, {
       data: replacement,
     });

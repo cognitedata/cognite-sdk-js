@@ -14,7 +14,7 @@ describe('raw unit tests', () => {
 
   test('list rows with query params', async () => {
     nock(mockBaseUrl)
-      .get(new RegExp('/raw/dbs/1/tables/2/rows'))
+      .get(/\/raw\/dbs\/1\/tables\/2\/rows/)
       .query({ limit: 1 })
       .reply(200, {});
     const result = await client.raw.listRows('1', '2', { limit: 1 });
@@ -23,7 +23,7 @@ describe('raw unit tests', () => {
 
   test('list rows with no undefined params', async () => {
     nock(mockBaseUrl)
-      .get(new RegExp('/raw/dbs/1/tables/2/rows'))
+      .get(/\/raw\/dbs\/1\/tables\/2\/rows/)
       .reply(200, {});
     const result = await client.raw.listRows('1', '2', { limit: undefined });
     expect(result).toEqual({});

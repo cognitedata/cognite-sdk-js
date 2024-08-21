@@ -1,13 +1,13 @@
 // Copyright 2022 Cognite AS
-import { promises as fs } from 'fs';
-import {
-  closestConfigDirectoryPath,
+import { promises as fs } from 'node:fs';
+import type {
   DirectoryOption,
   PackageOption,
   PathOption,
   ServiceOption,
   VersionOption,
 } from './utils';
+import { closestConfigDirectoryPath } from './utils';
 
 /**
  * SnapshotPath allows you to work on a snapshot locally. Useful when you want to
@@ -93,12 +93,12 @@ class ConfigManager<T> {
   };
 
   protected validateSnapshot = async (
-    snapshot: any,
+    snapshot: SnapshotVersion | SnapshotPath,
     legalKeys: string[],
     source: string
   ): Promise<void> => {
     const snapshotKeys = Object.keys(snapshot);
-    if (snapshotKeys.length != 1) {
+    if (snapshotKeys.length !== 1) {
       throw new Error('Snapshot configuration must have exactly one setting');
     }
 
@@ -111,9 +111,9 @@ class ConfigManager<T> {
       );
     }
 
-    if (snapshotKeys[0] == 'path') {
+    if (snapshotKeys[0] === 'path') {
       try {
-        await fs.stat(snapshot.path);
+        await fs.stat(snapshot.path || '');
       } catch (error) {
         throw new Error(`Invalid snapshot path: ${error}`);
       }
@@ -157,7 +157,9 @@ class ConfigManager<T> {
 }
 
 export class PackageConfigManager extends ConfigManager<PackageConfig> {
-  public writeDefaultConfig = async (options: any): Promise<void> => {
+  public writeDefaultConfig = async (
+    options: PackageOption & VersionOption
+  ): Promise<void> => {
     const config = this.defaultConfig(options);
     await this.write(config);
   };
@@ -192,7 +194,9 @@ export class PackageConfigManager extends ConfigManager<PackageConfig> {
 }
 
 export class ServiceConfigManager extends ConfigManager<ServiceConfig> {
-  public writeDefaultConfig = async (options: any): Promise<void> => {
+  public writeDefaultConfig = async (
+    options: PackageOption & ServiceOption
+  ): Promise<void> => {
     const config = this.defaultConfig(options);
     await this.write(config);
   };
@@ -238,7 +242,7 @@ export async function createConfiguration(options: CreateConfigOptions) {
       ? new PackageConfigManager(option)
       : new ServiceConfigManager(option);
   if (await mngr.exists()) {
-    throw new Error(`Config already exists - did nothing`);
+    throw new Error('Config already exists - did nothing');
   }
 
   await mngr.writeDefaultConfig(options);
@@ -252,7 +256,7 @@ export async function cleanupService(options: CleanupServiceOptions) {
   const mngr = new ServiceConfigManager(option);
   if (!(await mngr.exists())) {
     throw new Error(
-      `Service is not configured for code generation - manual cleanup required`
+      'Service is not configured for code generation - manual cleanup required'
     );
   }
 

@@ -1,14 +1,14 @@
+import { promises as fs } from 'node:fs';
 import { afterEach, beforeAll, describe, expect, test } from 'vitest';
 import {
   CodeGen,
-  passThroughFilter,
-  createServiceNameFilter,
+  type StringFilter,
   createPathFilter,
-  StringFilter,
+  createServiceNameFilter,
+  passThroughFilter,
 } from '../codegen';
-import { OpenApiDocument } from '../openapi';
+import type { OpenApiDocument } from '../openapi';
 import { OpenApiSnapshotManager } from '../snapshot';
-import { promises as fs } from 'fs';
 
 import { AcacodeOpenApiGenerator } from '../generator/acacode';
 
@@ -24,23 +24,22 @@ describe('code generation', () => {
     });
 
     basicSnapshot = await snapshotMngr.downloadFromPath({
-      path: testFolder + '/testdata',
+      path: `${testFolder}/testdata`,
       filename: '8-paths.json',
     });
 
     basicTypesServiceBGenFile = (
-      await fs.readFile(testFolder + '/testdata/8-serviceB-types.gen.ts')
+      await fs.readFile(`${testFolder}/testdata/8-serviceB-types.gen.ts`)
     ).toString();
 
     cyclicReferencesGenFile = (
-      await fs.readFile(testFolder + '/testdata/cyclic-references-types.gen.ts')
+      await fs.readFile(`${testFolder}/testdata/cyclic-references-types.gen.ts`)
     ).toString();
   });
 
   afterEach(async () => {
     try {
       await fs.unlink(CodeGen.outputFileName);
-      // eslint-disable-next-line
     } catch (error) {}
   });
 
@@ -66,7 +65,7 @@ describe('code generation', () => {
       });
 
       const beforeFiltering = Object.keys(basicSnapshot.paths).length;
-      const paths = gen['filterPaths'](basicSnapshot.paths);
+      const paths = gen.filterPaths(basicSnapshot.paths);
       expect(Object.keys(paths)).toHaveLength(beforeFiltering);
     });
 
@@ -79,7 +78,7 @@ describe('code generation', () => {
         },
       });
       expect(Object.keys(basicSnapshot.paths).length).toBeGreaterThan(4);
-      const paths = gen['filterPaths'](basicSnapshot.paths);
+      const paths = gen.filterPaths(basicSnapshot.paths);
       expect(Object.keys(paths)).toHaveLength(4);
     });
 
@@ -188,7 +187,7 @@ describe('code generation', () => {
     test('cyclic references', async () => {
       const snapshotMngr = new OpenApiSnapshotManager({ directory: '.' });
       const snapshot = await snapshotMngr.downloadFromPath({
-        path: testFolder + '/testdata',
+        path: `${testFolder}/testdata`,
         filename: 'cyclic-references.json',
       });
 
@@ -214,7 +213,7 @@ describe('code generation', () => {
     test('restrict to relevant definitions', async () => {
       const snapshotMngr = new OpenApiSnapshotManager({ directory: '.' });
       const snapshot = await snapshotMngr.downloadFromPath({
-        path: testFolder + '/testdata',
+        path: `${testFolder}/testdata`,
         filename: '8-paths.json',
       });
 

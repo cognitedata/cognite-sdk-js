@@ -2,22 +2,22 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  FilterQuery,
+  type CursorAndAsyncIterator,
+  type FilterQuery,
 } from '@cognite/sdk-core';
 
-import {
+import type {
   AggregateField,
   DocumentFeedback,
+  DocumentFeedbackAcceptRejectItem,
   DocumentFeedbackAcceptRejectRequest,
   DocumentFeedbackAggregateRequest,
   DocumentFeedbackAggregateResponse,
   DocumentFeedbackListResponse,
-  DocumentFeedbackAcceptRejectItem,
-  FeedbackStatusQueryParameter,
   FeedbackStatus,
+  FeedbackStatusQueryParameter,
 } from '../../types';
-import { DocumentFeedbackCreateItem } from './types.gen';
+import type { DocumentFeedbackCreateItem } from './types.gen';
 
 export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   public aggregates = (

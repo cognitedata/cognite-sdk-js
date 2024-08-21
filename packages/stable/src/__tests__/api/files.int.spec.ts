@@ -1,5 +1,7 @@
 // Copyright 2020 Cognite AS
 
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { HttpResponseType } from '@cognite/sdk-core';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import {
@@ -8,8 +10,6 @@ import {
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
 } from '../testUtils';
-import { join } from 'path';
-import { readFileSync } from 'fs';
 
 const testfile = join(__dirname, '../test3dFile.fbx');
 
@@ -22,12 +22,12 @@ describe.skip('Files integration test', () => {
     client = setupLoggedInClient();
     [asset] = await client.assets.create([
       {
-        name: 'asset_' + randomInt(),
+        name: `asset_${randomInt()}`,
       },
     ]);
     [label] = await client.labels.create([
       {
-        externalId: 'test-file-lable-' + randomInt(),
+        externalId: `test-file-lable-${randomInt()}`,
         name: 'file-label',
         description: 'test label',
       },
@@ -248,7 +248,7 @@ describe.skip('Files integration test', () => {
 
   describe('binary file', () => {
     const binaryFileMeta = {
-      name: 'filename_1_' + postfix,
+      name: `filename_1_${postfix}`,
       mimeType: 'application/octet-stream',
     };
     const fileContentBinary = readFileSync(testfile);

@@ -1,11 +1,23 @@
 // Copyright 2020 Cognite AS
-import { HttpHeaders } from './httpHeaders';
+import type { HttpHeaders } from './httpHeaders';
+
+export interface HttpErrorData {
+  error: {
+    code: number;
+    message: string;
+    isAutoRetryable?: boolean;
+    missing?: object[];
+    duplicated?: object[];
+    forbidden?: object[];
+    extra?: unknown;
+  };
+}
 
 export class HttpError extends Error {
   /** @hidden */
   constructor(
     public status: number,
-    public data: any,
+    public data: HttpErrorData,
     public headers: HttpHeaders
   ) {
     super(`Request failed | status code: ${status}`);
