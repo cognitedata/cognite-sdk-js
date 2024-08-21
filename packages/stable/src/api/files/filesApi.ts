@@ -2,10 +2,10 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  HttpHeaders,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type HttpHeaders,
+  type MetadataMap,
   sleepPromise,
 } from '@cognite/sdk-core';
 import type {
@@ -260,7 +260,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
   public async multipartUploadSession(
     fileInfo: ExternalFileInfo,
     parts: number,
-    overwrite: boolean = false
+    overwrite = false
   ) {
     const response = await this.getMultipartUploadSession(
       fileInfo,
@@ -278,7 +278,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
   private async getMultipartUploadSession(
     fileInfo: ExternalFileInfo,
     parts: number,
-    overwrite: boolean = false
+    overwrite = false
   ) {
     if (
       parts < this.limits.minimumNumberOfParts ||

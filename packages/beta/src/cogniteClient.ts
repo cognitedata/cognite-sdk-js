@@ -1,11 +1,11 @@
 // Copyright 2020 Cognite AS
 
-import { CogniteClient as CogniteClientStable } from "@cognite/sdk";
-import { accessApi } from "@cognite/sdk-core";
-import { version } from "../package.json";
-import { AlertsAPI } from "./api/alerts/alertsApi";
-import { DataPointsAPI } from "./api/dataPoints/dataPointsApi";
-import { MonitoringTasksAPI } from "./api/monitoringTasks/monitoringTasksApi";
+import { CogniteClient as CogniteClientStable } from '@cognite/sdk';
+import { accessApi } from '@cognite/sdk-core';
+import { version } from '../package.json';
+import { AlertsAPI } from './api/alerts/alertsApi';
+import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
+import { MonitoringTasksAPI } from './api/monitoringTasks/monitoringTasksApi';
 
 class CogniteClientCleaned extends CogniteClientStable {
   // Remove type restrictions
@@ -52,13 +52,13 @@ export default class CogniteClient extends CogniteClientCleaned {
   protected initAPIs() {
     super.initAPIs();
 
-    this.httpClient.setDefaultHeader("cdf-version", "beta");
+    this.httpClient.setDefaultHeader('cdf-version', 'beta');
 
-    this.alertsApi = this.apiFactory(AlertsAPI, "alerts");
+    this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
     this.monitoringTasksApi = this.apiFactory(
       MonitoringTasksAPI,
-      "monitoringtasks"
+      'monitoringtasks'
     );
-    this.dataPointsApi = this.apiFactory(DataPointsAPI, "timeseries/data");
+    this.dataPointsApi = this.apiFactory(DataPointsAPI, 'timeseries/data');
   }
 }

@@ -1,4 +1,4 @@
-// Copyright 2020 Cognite AS
+import path, { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
 import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';
 import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
@@ -11,10 +11,8 @@ import {
   divideFileIntoChunks,
   divideFileIntoStreams,
   getFileStats,
-  setupLoggedInClient,
   toArrayBuffer,
 } from '../testUtils';
-import path, { join } from 'node:path';
 // file to upload for integration tests
 const testfile = join(__dirname, '../VAL.nwd');
 
