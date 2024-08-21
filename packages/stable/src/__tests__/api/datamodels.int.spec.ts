@@ -172,7 +172,7 @@ describe('Data models integration test', () => {
       expect(response.items).toHaveLength(1);
 
       // Eventual consistency
-      vi.waitFor(
+      await vi.waitFor(
         async () => {
           const dataModels = await client.dataModels.list({ limit: 1000 });
           expect(

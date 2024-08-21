@@ -39,7 +39,6 @@ describe('code generation', () => {
   afterEach(async () => {
     try {
       await fs.unlink(CodeGen.outputFileName);
-      // eslint-disable-next-line
     } catch (error) {}
   });
 

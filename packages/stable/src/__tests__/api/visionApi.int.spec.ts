@@ -4,7 +4,14 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { VisionExtractPostResponse } from '@cognite/sdk';
 import noop from 'lodash/noop';
-import { beforeAll, describe, expect, test, vi } from 'vitest';
+import {
+  type MockInstance,
+  beforeAll,
+  describe,
+  expect,
+  test,
+  vi,
+} from 'vitest';
 import { BETA_FEATURES } from '../../api/vision/visionApi';
 import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
@@ -16,7 +23,7 @@ function readFile(filename: string): Buffer {
 describe('Vision API', () => {
   let TEST_IMAGE_ID = -1;
   let client: CogniteClient;
-  let consoleSpy: jest.SpyInstance;
+  let consoleSpy: MockInstance;
   let extractJob: VisionExtractPostResponse;
   let extractBetaJob: VisionExtractPostResponse;
 

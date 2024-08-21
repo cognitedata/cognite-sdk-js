@@ -43,11 +43,11 @@ describe('Containers integration test', () => {
         description: 'Instance space used for containers integration tests.',
       },
     ]);
-  });
+  }, 25_000);
   afterAll(async () => {
     client = setupLoggedInClient();
     await client.spaces.delete([TEST_SPACE_NAME]);
-  });
+  }, 25_000);
   it('should successfully upsert containers', async () => {
     const createdContainerResponse = await client.containers.upsert([
       containerCreationDefinition,
@@ -138,7 +138,7 @@ describe('Containers integration test', () => {
       // Eventual consistency - wait for the delete to propagate
       await new Promise((resolve) => setTimeout(resolve, 20 * 1000));
 
-      vi.waitFor(
+      await vi.waitFor(
         async () => {
           const containers = await client.containers.list({ limit: 1000 });
           expect(

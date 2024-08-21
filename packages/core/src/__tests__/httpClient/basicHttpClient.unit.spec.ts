@@ -7,7 +7,6 @@ import type { HttpHeaders } from '../../httpClient/httpHeaders';
 
 function lengthOfHttpHeaders(headers?: HttpHeaders): number {
   let counter = 0;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   for (const _ in headers) {
     counter += 1;
   }

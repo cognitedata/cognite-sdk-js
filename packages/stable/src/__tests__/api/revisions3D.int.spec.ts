@@ -1,7 +1,7 @@
 // Copyright 2020 Cognite AS
 
 import { readFileSync } from 'node:fs';
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
 import type {
   Asset,
@@ -18,7 +18,6 @@ import type {
 } from '../../types';
 import { randomInt, retryInSeconds, setupLoggedInClient } from '../testUtils';
 
-// suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
   process.env.REVISION_3D_INTEGRATION_TEST === 'true'
     ? describe
@@ -38,7 +37,7 @@ describeIfCondition(
 
     beforeAll(async () => {
       client = setupLoggedInClient();
-      jest.setTimeout(5 * 60 * 1000);
+      vi.setConfig({ testTimeout: 5 * 60 * 1000 });
 
       const rootAsset = {
         name: `test-root${randomInt()}`,

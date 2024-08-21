@@ -41,11 +41,6 @@ To create a new package, copy the `packages/template` folder in place and give i
 Keep the package private until it's ready to be published, since CI will version and publish all public packages
 when releases are triggered.
 
-You should also update the `"test"` script to run the tests inside your newly created folder:
-```json
-        "test": "jest --config=../../jest.config.js --testPathPattern=/<folder name>/",
-```
-
 Finally, if you want docs from this SDK to appear as a subfolder on the reference docs,
 add the following script, which will run when docs are built for deployment:
 ```json

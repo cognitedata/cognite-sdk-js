@@ -23,7 +23,7 @@ describe('Spaces integration test', () => {
     client = setupLoggedInClient();
     await deleteOldSpaces(client);
   });
-  test('should successfully upsert spaces', async () => {
+  it('should successfully upsert spaces', async () => {
     const createdSpaceResponse = await client.spaces.upsert([
       spaceCreationDefinition,
       spaceCreation2Definition,

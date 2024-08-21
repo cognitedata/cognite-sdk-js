@@ -1,5 +1,6 @@
-import { promises as fs } from 'node:fs';
 // Copyright 2022 Cognite AS
+
+import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import {
   CodeGen,

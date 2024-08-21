@@ -103,6 +103,7 @@ const tsconfig = {};
 tsconfig.include = ['*.ts'];
 tsconfig.compilerOptions = {
   noUnusedLocals: false,
+  skipLibCheck: true,
   outDir: 'dist',
   declaration: false,
   sourceMap: false,

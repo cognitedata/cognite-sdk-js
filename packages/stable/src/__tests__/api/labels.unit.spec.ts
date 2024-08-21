@@ -1,4 +1,5 @@
 // Copyright 2020 Cognite AS
+
 import matches from 'lodash/matches';
 import nock from 'nock';
 import { beforeAll, describe, expect, test } from 'vitest';

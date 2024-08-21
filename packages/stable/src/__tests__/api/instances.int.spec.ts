@@ -82,7 +82,7 @@ describe('Instances integration test', () => {
     client = setupLoggedInClient();
     await upsertSpace(client, testSpace);
     await upsertDescribables(client, [describable1, describable2], view);
-  });
+  }, 10000);
 
   afterAll(async () => {
     await client.instances.delete([
@@ -97,7 +97,7 @@ describe('Instances integration test', () => {
         space: testSpace.space,
       },
     ]);
-  });
+  }, 10000);
 
   test('list nodes from a single view with limit 2', async () => {
     const response = await client.instances.list({
@@ -199,15 +199,17 @@ describe('Instances integration test', () => {
   });
 
   test('search nodes with limit 2', async () => {
-    const response = await client.instances.search({
-      view,
-      instanceType: 'node',
-      limit: 2,
-    });
-    expect(response.items).toHaveLength(2);
-    expect(response.items[0].externalId).toBeDefined();
-    expect(response.items[1].externalId).toBeDefined();
-  });
+    await vi.waitFor(async () => {
+      const response = await client.instances.search({
+        view,
+        instanceType: 'node',
+        limit: 2,
+      });
+      expect(response.items).toHaveLength(2);
+      expect(response.items[0].externalId).toBeDefined();
+      expect(response.items[1].externalId).toBeDefined();
+    }, 25_000);
+  }, 25_000);
 
   test('search with query', async () => {
     const response = await client.instances.search({
@@ -220,7 +222,7 @@ describe('Instances integration test', () => {
   });
 
   test('search with filter', async () => {
-    vi.waitFor(
+    await vi.waitFor(
       async () => {
         const response = await client.instances.search({
           view,
@@ -306,7 +308,7 @@ describe('Instances integration test', () => {
       },
     });
     expect(response.items.result_set_1).toHaveLength(1);
-  });
+  }, 10_000);
 
   test('sync', async () => {
     const response = await client.instances.sync({

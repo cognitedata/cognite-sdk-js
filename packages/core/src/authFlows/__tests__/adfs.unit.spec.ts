@@ -1,7 +1,6 @@
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
-
 import noop from 'lodash/noop';
 import nock from 'nock';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { sleepPromise } from '../../__tests__/testUtils';
 import * as loginUtils from '../../loginUtils';
 import { ADFS } from '../adfs';

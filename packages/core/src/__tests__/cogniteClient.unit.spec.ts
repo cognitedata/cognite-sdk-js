@@ -94,8 +94,8 @@ describe('CogniteClient', () => {
         getToken: vi.fn(async () => 'test-token'),
         retryValidator: createUniversalRetryValidator(1),
       });
-      await expect(client.get('/')).rejects.toThrow(
-        'Request failed | status code: 500'
+      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
+        '[Error: Request failed | status code: 500]'
       );
       expect(scope.isDone()).toBeTruthy();
     });

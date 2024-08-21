@@ -1,8 +1,8 @@
 import type { Cursor, ExternalId, InternalId, Limit } from '@cognite/sdk-core';
 
-import { GeoJSON, type Geometry } from 'geojson';
+import type { GeoJSON, Geometry } from 'geojson';
 
-export { GeoJSON };
+export type { GeoJSON };
 
 export type GeometryType = 'WKT' | 'GEOJSON';
 
