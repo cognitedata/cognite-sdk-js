@@ -1,5 +1,8 @@
 import { sleepPromise } from '@cognite/sdk-core';
-import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
+import {
+  mockBaseUrl,
+  setupMockableClient,
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 import nock from 'nock';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
