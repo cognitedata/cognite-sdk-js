@@ -7,9 +7,8 @@ import {
 import CogniteClient from '../cogniteClient';
 import type { ExternalFileInfo, NodeOrEdge } from '../types';
 import { login } from './login';
-import { PassThrough } from 'stream';
-import { createReadStream, readFileSync, statSync } from 'fs';
-import { TestUtils } from '@cognite/sdk-core';
+import { PassThrough } from 'node:stream';
+import { createReadStream, readFileSync, statSync } from 'node:fs';
 
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
   return new CogniteClient({
