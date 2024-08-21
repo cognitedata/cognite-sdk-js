@@ -7,7 +7,7 @@ import {
   HttpHeaders,
   MetadataMap,
   sleepPromise,
-} from "@cognite/sdk-core";
+} from '@cognite/sdk-core';
 import type {
   CogniteInternalId,
   ExternalFileInfo,
@@ -24,8 +24,8 @@ import type {
   IgnoreUnknownIds,
   ItemsWrapper,
   MultiPartFileUploadResponse,
-} from "../../types";
-import { FilesMultipartUploadSessionAPI } from "./filesMultipartUploadSessionApi";
+} from '../../types';
+import { FilesMultipartUploadSessionAPI } from './filesMultipartUploadSessionApi';
 
 export class FilesAPI extends BaseResourceAPI<FileInfo> {
   private limits = {
@@ -45,13 +45,13 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    */
   protected getDateProps() {
     return this.pickDateProps(
-      ["items"],
+      ['items'],
       [
-        "createdTime",
-        "lastUpdatedTime",
-        "sourceCreatedTime",
-        "sourceModifiedTime",
-        "uploadedTime",
+        'createdTime',
+        'lastUpdatedTime',
+        'sourceCreatedTime',
+        'sourceModifiedTime',
+        'uploadedTime',
       ]
     );
   }
@@ -214,7 +214,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
 
   private uploadFile(url: string, fileContent: FileContent, mimeType?: string) {
     const headers: HttpHeaders = {
-      "Content-Type": mimeType || "application/octet-stream",
+      'Content-Type': mimeType || 'application/octet-stream',
     };
     return this.put(url, {
       headers,
@@ -241,7 +241,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
   }
 
   private async getDownloadUrlsEndpoint(items: IdEither[]) {
-    const path = this.url("downloadlink");
+    const path = this.url('downloadlink');
     const response = await this.post<ItemsWrapper<(FileLink & IdEither)[]>>(
       path,
       { data: { items } }
@@ -284,9 +284,9 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
       parts < this.limits.minimumNumberOfParts ||
       parts > this.limits.maxNumberOfParts
     ) {
-      throw Error("parts must be greater than 0 and less than 250");
+      throw Error('parts must be greater than 0 and less than 250');
     }
-    const path = this.url("initmultipartupload");
+    const path = this.url('initmultipartupload');
     const params = { overwrite: overwrite, parts: parts };
     const response = await this.post<MultiPartFileUploadResponse>(path, {
       params,

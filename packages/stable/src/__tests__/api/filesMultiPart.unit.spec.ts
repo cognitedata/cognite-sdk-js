@@ -3,10 +3,9 @@ import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
 import nock from 'nock';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 
-import { setupMockableClient } from '../testUtils';
 import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
 import type { MultiPartFileChunkResponse } from '../../types';
-
+import { setupMockableClient } from '../testUtils';
 describe('Multi part upload unit test', () => {
   let client: CogniteClient;
 

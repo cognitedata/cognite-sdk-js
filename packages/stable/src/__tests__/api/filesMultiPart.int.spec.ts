@@ -1,6 +1,4 @@
 // Copyright 2020 Cognite AS
-import CogniteClient from '../../cogniteClient';
-
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
 import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';
 import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
