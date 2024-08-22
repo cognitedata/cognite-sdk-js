@@ -2,7 +2,7 @@
 import { createReadStream, readFileSync, statSync } from 'node:fs';
 import { PassThrough } from 'node:stream';
 import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
-import { randomInt } from 'core/dist/src/testUtils';
+import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
 import CogniteClient from '../cogniteClient';
 import { login } from './login';
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
