@@ -564,7 +564,7 @@ export interface SimulatorRoutineRevisionslFilter {
   createdTime?: DateRange;
 }
 
-export interface SimulatorRoutineRevisionslFilterQuery extends FilterQuery {
+export interface SimulatorRoutineRevisionsFilterQuery extends FilterQuery {
   filter?: SimulatorRoutineRevisionslFilter;
   sort?: SortItem[];
 }
