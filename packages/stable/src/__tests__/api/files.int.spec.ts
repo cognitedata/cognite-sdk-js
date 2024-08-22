@@ -4,6 +4,13 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { HttpResponseType } from '@cognite/sdk-core';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type {
+  Asset,
+  FileGeoLocation,
+  FileInfo,
+  LabelDefinition,
+} from '../../types';
 import {
   getFileCreateArgs,
   randomInt,

@@ -194,9 +194,7 @@ export {
   randomInt,
   runTestWithRetryWhenFailing,
   string2arrayBuffer,
-  getSortedPropInArray,
   retryInSeconds,
-  simpleCompare,
 } from '@cognite/sdk-core/src/__tests__/testUtils';
 
 export {

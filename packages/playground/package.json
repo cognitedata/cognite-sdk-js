@@ -5,6 +5,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
+  "type": "module",
   "version": "7.0.24",
   "scripts": {
     "clean": "rm -rf dist/ docs/",
@@ -12,10 +13,10 @@
     "lint": "yarn g:biome ci",
     "lint:fix": "yarn g:biome lint --fix && yarn g:biome format --fix && yarn g:biome check --fix",
     "prepublishOnly": "yarn build",
-    "build": "yarn clean && yarn g:rollup -c && yarn esCheck",
-    "watch": "yarn g:rollup -cw",
-    "esCheck": "yarn g:es-check es5 './dist/index.js'",
-    "docs": "yarn g:typedoc --options typedoc.js --tsconfig tsconfig.json src/index.ts",
+    "build": "yarn clean && yarn g:tsc -p ./tsconfig.json && yarn g:vite build && yarn esCheck",
+    "watch": "yarn g:vite build --watch",
+    "esCheck": "yarn g:es-check es6 --module './dist/index.js'",
+    "docs": "yarn g:typedoc --options ./typedoc.cjs --tsconfig tsconfig.json src/index.ts",
     "docs:bundle": "yarn docs && mkdir -p ../../docs/playground && cp -r docs/* ../../docs/playground/",
     "extract-snippets": "",
     "test-snippets": ""

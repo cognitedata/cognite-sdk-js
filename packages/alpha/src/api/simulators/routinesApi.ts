@@ -1,11 +1,6 @@
 // Copyright 2024 Cognite AS
 
-import {
-  BaseResourceAPI,
-  type CDFHttpClient,
-  type IdEither,
-  type MetadataMap,
-} from '@cognite/sdk-core';
+import { BaseResourceAPI, type IdEither } from '@cognite/sdk-core';
 import type {
   SimulatorRoutine,
   SimulatorRoutineCreate,

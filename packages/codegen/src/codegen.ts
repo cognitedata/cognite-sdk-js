@@ -7,17 +7,15 @@ import * as ts from 'typescript';
 import cursorAndAsyncIteratorTransformer from './ast_transformer/cursor_and_async_iterator';
 import sorterTransformer from './ast_transformer/sorter';
 import type { TypeGenerator, TypeGeneratorResult } from './generator/generator';
-import type {
-  OpenApiDocument,
-  OpenApiOperationObject,
-  OpenApiParameters,
-  OpenApiPathsObject,
-  OpenApiReference,
-  OpenApiResponses,
-  OpenApiSchema,
-  OpenApiSchemas,
-} from './openapi';
 import {
+  type OpenApiDocument,
+  type OpenApiOperationObject,
+  type OpenApiParameters,
+  type OpenApiPathsObject,
+  type OpenApiReference,
+  type OpenApiResponses,
+  type OpenApiSchema,
+  type OpenApiSchemas,
   ReferenceWalker,
   filterPaths,
   isReferenceObject,
@@ -203,6 +201,7 @@ export class CodeGen {
     const filteredDoc = references
       .map(walker.splitReference)
       .reduce((acc, location) => {
+        // @ts-ignore
         this.copyDefinitionsByLocation(acc, doc, location);
         return acc;
       }, {});
@@ -240,7 +239,7 @@ export class CodeGen {
     }
   };
 
-  private filterPaths = (paths: OpenApiPathsObject): OpenApiPathsObject => {
+  public filterPaths = (paths: OpenApiPathsObject): OpenApiPathsObject => {
     return Object.keys(paths)
       .filter(this.options.filter.path)
       .reduce((acc, path) => {

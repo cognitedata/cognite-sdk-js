@@ -1,6 +1,8 @@
 // Copyright 2020 Cognite AS
 
+import type { CogniteError } from '@cognite/sdk-core';
 import { describe, expect, test, vi } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('alerts api', () => {

@@ -1,6 +1,8 @@
 // Copyright 2020 Cognite AS
 
 import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { SecurityCategory } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Security categories integration test', () => {

@@ -7,8 +7,11 @@ import type {
   Node3D,
   Revision3D,
 } from 'stable/src/types';
-import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { assert, afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
+
+const { fail } = assert;
 
 describe.skip('AssetMappings3D integration test', () => {
   let client: CogniteClient;

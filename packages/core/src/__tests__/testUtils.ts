@@ -92,15 +92,6 @@ export async function runTestWithRetryWhenFailing(
   throw error;
 }
 
-export const simpleCompare = (a: number, b: number) => a - b;
-
-export function getSortedPropInArray<T extends { [key: string]: unknown }>(
-  arr: T[],
-  propName: string
-) {
-  return arr.map((elem) => elem[propName]).sort();
-}
-
 export function createErrorResponse(
   status: number,
   message: string,

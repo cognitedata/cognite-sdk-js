@@ -20,35 +20,34 @@ export { CogniteError } from './error';
 export { CogniteMultiError } from './multiError';
 export { CogniteLoginError } from './loginError';
 export { HttpError } from './httpClient/httpError';
-export {
+export { HttpResponseType } from './httpClient/basicHttpClient';
+export type {
   HttpResponse,
-  HttpResponseType,
   HttpQueryParams,
   HttpRequestOptions,
-  HttpMethod,
 } from './httpClient/basicHttpClient';
-export { HttpHeaders } from './httpClient/httpHeaders';
+export { HttpMethod } from './httpClient/basicHttpClient';
+export type { HttpHeaders } from './httpClient/httpHeaders';
 export {
   createUniversalRetryValidator,
   createRetryValidator,
-  EndpointList,
-  RetryValidator,
 } from './httpClient/retryValidator';
-export {
-  POPUP,
-  REDIRECT,
-  getIdInfo,
+export type { EndpointList, RetryValidator } from './httpClient/retryValidator';
+export { POPUP, REDIRECT, getIdInfo } from './authFlows/legacy';
+export type {
   AuthenticateParams,
   IdInfo,
   OnAuthenticateLoginObject,
 } from './authFlows/legacy';
 export {
-  AuthorizeOptions,
-  AuthorizeParams,
-  AuthTokens,
   loginPopupHandler,
   getLogoutUrl,
   isLoginPopupWindow,
+} from './loginUtils';
+export type {
+  AuthorizeOptions,
+  AuthorizeParams,
+  AuthTokens,
 } from './loginUtils';
 export { RevertableArraySorter } from './revertableArraySorter';
 export {

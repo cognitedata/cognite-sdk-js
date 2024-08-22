@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
-export { EpochTimestamp } from './types.gen';
-export {
+export type { EpochTimestamp } from './types.gen';
+export type {
   AnnotationData,
   AnnotationsAssetRef,
   AnnotationsBoolean,
@@ -36,7 +36,7 @@ export {
   AnnotationsUnhandledTextObject,
   AnnotationsView,
 } from './api/annotations/types.gen';
-export {
+export type {
   CogniteExternalId,
   CogniteInternalId,
   Document,
@@ -115,7 +115,7 @@ export {
   Label,
   LabelList,
 } from './api/documents/types.gen';
-export {
+export type {
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
   ListOfSpaceIdsRequest,
@@ -130,7 +130,7 @@ export {
   SpaceSpecification,
   UpsertConflict,
 } from './api/spaces/types.gen';
-export {
+export type {
   IdentityType,
   IdentityTypeFilter,
   UserIdentifier,
@@ -143,7 +143,7 @@ export {
   UserProfilesSearchRequest,
   UserProfilesSearchResponse,
 } from './api/userProfiles/types.gen';
-export {
+export type {
   AssetTagDetection,
   AssetTagDetectionParameters,
   CommaPos,

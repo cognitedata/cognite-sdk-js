@@ -1,6 +1,8 @@
 // Copyright 2020 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { Asset, Timeseries } from '../../types';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
@@ -180,9 +182,10 @@ describe('Timeseries integration test', () => {
 
   test('list with assetExternalIds', async () => {
     const { items } = await client.timeseries.list({
-      filter: { assetExternalIds: [asset.externalId] },
+      filter: { assetExternalIds: [asset.externalId || ''] },
       limit: 1,
     });
+    expect(items.length).toBe(1);
     expect(items[0].id).toBe(createdTimeseries[0].id);
   });
 

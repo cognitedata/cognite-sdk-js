@@ -1,6 +1,8 @@
-import nock from 'nock';
 // Copyright 2020 Cognite AS
+
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+
+import nock from 'nock';
 import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
 import { CogniteError } from '../error';
 import { bearerString } from '../utils';

@@ -1,6 +1,8 @@
 // Copyright 2024 Cognite AS
 
-import { beforeAll, describe, expect, it, test } from 'vitest';
+import type { SpaceCreateDefinition } from 'stable/src/types';
+import { beforeAll, describe, expect, it } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Spaces integration test', () => {
@@ -21,7 +23,7 @@ describe('Spaces integration test', () => {
     client = setupLoggedInClient();
     await deleteOldSpaces(client);
   });
-  test('should successfully upsert spaces', async () => {
+  it('should successfully upsert spaces', async () => {
     const createdSpaceResponse = await client.spaces.upsert([
       spaceCreationDefinition,
       spaceCreation2Definition,

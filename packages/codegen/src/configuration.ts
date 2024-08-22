@@ -1,13 +1,13 @@
 // Copyright 2022 Cognite AS
 import { promises as fs } from 'node:fs';
-import type {
-  DirectoryOption,
-  PackageOption,
-  PathOption,
-  ServiceOption,
-  VersionOption,
+import {
+  type DirectoryOption,
+  type PackageOption,
+  type PathOption,
+  type ServiceOption,
+  type VersionOption,
+  closestConfigDirectoryPath,
 } from './utils';
-import { closestConfigDirectoryPath } from './utils';
 
 /**
  * SnapshotPath allows you to work on a snapshot locally. Useful when you want to

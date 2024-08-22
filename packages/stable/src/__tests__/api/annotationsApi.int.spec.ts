@@ -1,5 +1,7 @@
 // Copyright 2022 Cognite AS
+
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import type {
   AnnotationChangeById,
   AnnotationCreate,

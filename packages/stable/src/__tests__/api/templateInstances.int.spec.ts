@@ -1,8 +1,21 @@
 // Copyright 2020 Cognite AS
 
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+// @ts-nocheck
+
+import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  test,
+} from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { ExternalTemplateInstance, TemplateInstance } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
-import { randomInt } from '../testUtils';
 
 describe('template instances test', () => {
   let client: CogniteClient;
