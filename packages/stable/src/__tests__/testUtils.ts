@@ -4,6 +4,7 @@ import { PassThrough } from 'node:stream';
 import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
 import CogniteClient from '../cogniteClient';
 import { login } from './login';
+import { randomInt } from 'core/dist/src/testUtils';
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
