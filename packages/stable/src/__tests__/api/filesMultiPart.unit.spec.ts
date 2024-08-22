@@ -4,7 +4,7 @@ import nock from 'nock';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
 import type { MultiPartFileChunkResponse } from '../../types';
-import { setupMockableClientForUnitTest } from '../testUtils';
+import { setupMockableClient } from '../testUtils';
 
 describe('Multi part upload unit test', () => {
   let client: CogniteClient;
@@ -27,7 +27,7 @@ describe('Multi part upload unit test', () => {
     };
   }
   beforeEach(() => {
-    client = setupMockableClientForUnitTest();
+    client = setupMockableClient();
     nock.cleanAll();
   });
 
