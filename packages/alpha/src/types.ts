@@ -326,6 +326,7 @@ export interface SimulatorModelFilter {
 
 export interface SimulatorModelFilterQuery extends FilterQuery {
   filter?: SimulatorModelFilter;
+  sort?: SortItem[];
 }
 
 export interface SimulatorModelPatch {
@@ -445,6 +446,7 @@ export interface SimulatorRoutineFilter {
 
 export interface SimulatorRoutineFilterQuery extends FilterQuery {
   filter?: SimulatorRoutineFilter;
+  sort?: SortItem[];
 }
 
 /* Routine revisions */
