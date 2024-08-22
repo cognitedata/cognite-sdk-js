@@ -85,7 +85,6 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-external"><a href="../interfaces/_core_src_httpclient_basichttpclient_.httpqueryparams.html" class="tsd-kind-icon">Http<wbr>Query<wbr>Params</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-external"><a href="../interfaces/_core_src_httpclient_basichttpclient_.httprequest.html" class="tsd-kind-icon">Http<wbr>Request</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-is-external"><a href="../interfaces/_core_src_httpclient_basichttpclient_.httprequestoptions.html" class="tsd-kind-icon">Http<wbr>Request<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-external"><a href="../interfaces/_core_src_httpclient_basichttpclient_.httpresponse.html" class="tsd-kind-icon">Http<wbr>Response</a></li>
@@ -95,6 +94,7 @@
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-is-external"><a href="_core_src_httpclient_basichttpclient_.html#httpcall" class="tsd-kind-icon">Http<wbr>Call</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-is-external"><a href="_core_src_httpclient_basichttpclient_.html#httpqueryparams" class="tsd-kind-icon">Http<wbr>Query<wbr>Params</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-is-external"><a href="_core_src_httpclient_basichttpclient_.html#httpresponsetype" class="tsd-kind-icon">Http<wbr>Response<wbr>Type</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-external tsd-is-not-exported"><a href="_core_src_httpclient_basichttpclient_.html#responsehandler" class="tsd-kind-icon">Response<wbr>Handler</a></li>
 							</ul>
@@ -123,7 +123,7 @@
 					<div class="tsd-signature tsd-kind-icon">Http<wbr>Call<span class="tsd-signature-symbol">:</span> &lt;ResponseType&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_core_src_httpclient_basichttpclient_.httprequestoptions.html" class="tsd-signature-type">HttpRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../interfaces/_playground_src_api_documents_types_gen_.documentsfilterresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_core_src_httpclient_basichttpclient_.httpresponse.html" class="tsd-signature-type">HttpResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ResponseType</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/httpClient/basicHttpClient.ts#L301">packages/core/src/httpClient/basicHttpClient.ts:301</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b293eee3fd/packages/core/src/httpClient/basicHttpClient.ts#L333">packages/core/src/httpClient/basicHttpClient.ts:333</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -158,12 +158,22 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
+					<a name="httpqueryparams" class="tsd-anchor"></a>
+					<h3>Http<wbr>Query<wbr>Params</h3>
+					<div class="tsd-signature tsd-kind-icon">Http<wbr>Query<wbr>Params<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b293eee3fd/packages/core/src/httpClient/basicHttpClient.ts#L329">packages/core/src/httpClient/basicHttpClient.ts:329</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
 					<a name="httpresponsetype" class="tsd-anchor"></a>
 					<h3>Http<wbr>Response<wbr>Type</h3>
 					<div class="tsd-signature tsd-kind-icon">Http<wbr>Response<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"json"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"arraybuffer"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"text"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/httpClient/basicHttpClient.ts#L287">packages/core/src/httpClient/basicHttpClient.ts:287</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b293eee3fd/packages/core/src/httpClient/basicHttpClient.ts#L321">packages/core/src/httpClient/basicHttpClient.ts:321</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -173,7 +183,7 @@
 					<div class="tsd-signature tsd-kind-icon">Response<wbr>Handler&lt;ResponseType&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../interfaces/_playground_src_api_documents_types_gen_.documentsfilterresponse.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ResponseType</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/httpClient/basicHttpClient.ts#L299">packages/core/src/httpClient/basicHttpClient.ts:299</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b293eee3fd/packages/core/src/httpClient/basicHttpClient.ts#L331">packages/core/src/httpClient/basicHttpClient.ts:331</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -211,19 +221,19 @@
 					<a name="headerswithdefaultfield" class="tsd-anchor"></a>
 					<h3>headers<wbr>With<wbr>Default<wbr>Field</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">headers<wbr>With<wbr>Default<wbr>Field<span class="tsd-signature-symbol">(</span>headers<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_core_src_httpclient_httpheaders_.httpheaders.html" class="tsd-signature-type">HttpHeaders</a>, fieldName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fieldValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_core_src_httpclient_httpheaders_.httpheaders.html" class="tsd-signature-type">HttpHeaders</a></li>
+						<li class="tsd-signature tsd-kind-icon">headers<wbr>With<wbr>Default<wbr>Field<span class="tsd-signature-symbol">(</span>headers<span class="tsd-signature-symbol">: </span><a href="../interfaces/_core_src_httpclient_httpheaders_.httpheaders.html" class="tsd-signature-type">HttpHeaders</a>, fieldName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fieldValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_core_src_httpclient_httpheaders_.httpheaders.html" class="tsd-signature-type">HttpHeaders</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/httpClient/basicHttpClient.ts#L244">packages/core/src/httpClient/basicHttpClient.ts:244</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b293eee3fd/packages/core/src/httpClient/basicHttpClient.ts#L278">packages/core/src/httpClient/basicHttpClient.ts:278</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> headers: <a href="../interfaces/_core_src_httpclient_httpheaders_.httpheaders.html" class="tsd-signature-type">HttpHeaders</a><span class="tsd-signature-symbol"> = {}</span></h5>
+									<h5>headers: <a href="../interfaces/_core_src_httpclient_httpheaders_.httpheaders.html" class="tsd-signature-type">HttpHeaders</a></h5>
 								</li>
 								<li>
 									<h5>fieldName: <span class="tsd-signature-type">string</span></h5>
@@ -246,7 +256,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/httpClient/basicHttpClient.ts#L236">packages/core/src/httpClient/basicHttpClient.ts:236</a></li>
+									<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b293eee3fd/packages/core/src/httpClient/basicHttpClient.ts#L270">packages/core/src/httpClient/basicHttpClient.ts:270</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -268,7 +278,7 @@
 					<div class="tsd-signature tsd-kind-icon">Http<wbr>Response<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/httpClient/basicHttpClient.ts#L289">packages/core/src/httpClient/basicHttpClient.ts:289</a></li>
+							<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b293eee3fd/packages/core/src/httpClient/basicHttpClient.ts#L323">packages/core/src/httpClient/basicHttpClient.ts:323</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal tsd-is-external">
@@ -277,7 +287,7 @@
 						<div class="tsd-signature tsd-kind-icon">Array<wbr>Buffer<span class="tsd-signature-symbol">:</span> <a href="_core_src_httpclient_basichttpclient_.html#httpresponsetype" class="tsd-signature-type">HttpResponseType</a><span class="tsd-signature-symbol"> = &#x27;arraybuffer&#x27; as HttpResponseType</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/httpClient/basicHttpClient.ts#L291">packages/core/src/httpClient/basicHttpClient.ts:291</a></li>
+								<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b293eee3fd/packages/core/src/httpClient/basicHttpClient.ts#L325">packages/core/src/httpClient/basicHttpClient.ts:325</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -287,7 +297,7 @@
 						<div class="tsd-signature tsd-kind-icon">Json<span class="tsd-signature-symbol">:</span> <a href="_core_src_httpclient_basichttpclient_.html#httpresponsetype" class="tsd-signature-type">HttpResponseType</a><span class="tsd-signature-symbol"> = &#x27;json&#x27; as HttpResponseType</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/httpClient/basicHttpClient.ts#L290">packages/core/src/httpClient/basicHttpClient.ts:290</a></li>
+								<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b293eee3fd/packages/core/src/httpClient/basicHttpClient.ts#L324">packages/core/src/httpClient/basicHttpClient.ts:324</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -297,7 +307,7 @@
 						<div class="tsd-signature tsd-kind-icon">Text<span class="tsd-signature-symbol">:</span> <a href="_core_src_httpclient_basichttpclient_.html#httpresponsetype" class="tsd-signature-type">HttpResponseType</a><span class="tsd-signature-symbol"> = &#x27;text&#x27; as HttpResponseType</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/42c31609a7/packages/core/src/httpClient/basicHttpClient.ts#L292">packages/core/src/httpClient/basicHttpClient.ts:292</a></li>
+								<li>Defined in <a href="https://github.com/cognitedata/cognite-sdk-js/blob/b293eee3fd/packages/core/src/httpClient/basicHttpClient.ts#L326">packages/core/src/httpClient/basicHttpClient.ts:326</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -324,9 +334,6 @@
 						<a href="../classes/_core_src_httpclient_basichttpclient_.basichttpclient.html" class="tsd-kind-icon">Basic<wbr>Http<wbr>Client</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
-						<a href="../interfaces/_core_src_httpclient_basichttpclient_.httpqueryparams.html" class="tsd-kind-icon">Http<wbr>Query<wbr>Params</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
 						<a href="../interfaces/_core_src_httpclient_basichttpclient_.httprequest.html" class="tsd-kind-icon">Http<wbr>Request</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-external">
@@ -337,6 +344,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
 						<a href="_core_src_httpclient_basichttpclient_.html#httpcall" class="tsd-kind-icon">Http<wbr>Call</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
+						<a href="_core_src_httpclient_basichttpclient_.html#httpqueryparams" class="tsd-kind-icon">Http<wbr>Query<wbr>Params</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-external">
 						<a href="_core_src_httpclient_basichttpclient_.html#httpresponsetype" class="tsd-kind-icon">Http<wbr>Response<wbr>Type</a>
