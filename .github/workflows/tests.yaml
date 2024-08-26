@@ -126,8 +126,8 @@ jobs:
       - name: Install 🔧
         run: yarn install --immutable
 
-      # - name: validateDocLinks
-      #   run: yarn validateDocLinks
+      - name: validateDocLinks
+        run: yarn validateDocLinks
 
       - name: Lint
         run: yarn lint
