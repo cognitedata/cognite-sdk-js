@@ -1,6 +1,444 @@
-<!DOCTYPE html><html class="default" lang="en"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Cognite JavaScript SDK core</title><meta name="description" content="Documentation for Cognite JavaScript SDK core"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">Cognite JavaScript SDK core</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h2>Cognite JavaScript SDK core</h2></div><div class="tsd-panel tsd-typography"><p>A core library used by Cognite Javascript SDKs, published as <code>@cognite/sdk-core</code>.
-It is used in the official stable and beta SDK and can also be used to create custom SDKs and alpha builds.</p>
-<p>See the repository README <a href="https://github.com/cognitedata/cognite-sdk-js#readme">here</a>.</p>
-<p>See the stable SDK (<code>@cognite/sdk</code>) <a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md">here</a>.</p>
-<p>See the beta SDK (<code>@cognite/sdk-beta</code>) <a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/beta/README.md">here</a>.</p>
-</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="assets/icons.svg#icon-1"></use></svg><span>Cognite JavaScript SDK core</span></a><ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="."><li>Loading...</li></ul></nav></div></div></div><footer></footer><div class="overlay"></div></body></html>
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Cognite JavaScript SDK core</title>
+	<meta name="description" content="Documentation for Cognite JavaScript SDK core">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">Cognite JavaScript SDK core</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>Cognite JavaScript SDK core</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<p>A core library used by Cognite Javascript SDKs, published as <code>@cognite/sdk-core</code>.
+				It is used in the official stable and beta SDK and can also be used to create custom SDKs and alpha builds.</p>
+				<p>See the repository README <a href="https://github.com/cognitedata/cognite-sdk-js#readme">here</a>.</p>
+				<p>See the stable SDK (<code>@cognite/sdk</code>) <a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/stable/README.md">here</a>.</p>
+				<p>See the beta SDK (<code>@cognite/sdk-beta</code>) <a href="https://github.com/cognitedata/cognite-sdk-js/blob/master/packages/beta/README.md">here</a>.</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-is-external">
+						<a href="enums/httpmethod.html" class="tsd-kind-icon">Http<wbr>Method</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/adfs.html" class="tsd-kind-icon">ADFS</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/basecogniteclient.html" class="tsd-kind-icon">Base<wbr>Cognite<wbr>Client</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/basichttpclient.html" class="tsd-kind-icon">Basic<wbr>Http<wbr>Client</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/cdfhttpclient.html" class="tsd-kind-icon">CDFHttp<wbr>Client</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/cogniteauthentication.html" class="tsd-kind-icon">Cognite<wbr>Authentication</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/cogniteerror.html" class="tsd-kind-icon">Cognite<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/cogniteloginerror.html" class="tsd-kind-icon">Cognite<wbr>Login<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-external">
+						<a href="classes/cognitemultierror.html" class="tsd-kind-icon">Cognite<wbr>Multi<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/credentialsauth.html" class="tsd-kind-icon">Credentials<wbr>Auth</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/dateparser.html" class="tsd-kind-icon">Date<wbr>Parser</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/httperror.html" class="tsd-kind-icon">Http<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/loginapi.html" class="tsd-kind-icon">LoginAPI</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/logoutapi.html" class="tsd-kind-icon">Logout<wbr>Api</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/retryablehttpclient.html" class="tsd-kind-icon">Retryable<wbr>Http<wbr>Client</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter tsd-is-external">
+						<a href="classes/revertablearraysorter.html" class="tsd-kind-icon">Revertable<wbr>Array<wbr>Sorter</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/adfsconfig.html" class="tsd-kind-icon">ADFSConfig</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/adfsqueryparams.html" class="tsd-kind-icon">ADFSQuery<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/adfsrequestparams.html" class="tsd-kind-icon">ADFSRequest<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/adfsrequestparamswithdefaults.html" class="tsd-kind-icon">ADFSRequest<wbr>Params<wbr>With<wbr>Defaults</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/adfstoken.html" class="tsd-kind-icon">ADFSToken</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/authoptions.html" class="tsd-kind-icon">Auth<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/autopagingtoarrayoptions.html" class="tsd-kind-icon">Auto<wbr>Paging<wbr>ToArray<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/clientcredentials.html" class="tsd-kind-icon">Client<wbr>Credentials</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/clientoptions.html" class="tsd-kind-icon">Client<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/cogniteasynciterator.html" class="tsd-kind-icon">Cognite<wbr>Async<wbr>Iterator</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/credentialsverification.html" class="tsd-kind-icon">Credentials<wbr>Verification</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/cursor.html" class="tsd-kind-icon">Cursor</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/cursorresponse.html" class="tsd-kind-icon">Cursor<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/externalid.html" class="tsd-kind-icon">External<wbr>Id</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/filterquery.html" class="tsd-kind-icon">Filter<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/httperrordata.html" class="tsd-kind-icon">Http<wbr>Error<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/httpheaders.html" class="tsd-kind-icon">Http<wbr>Headers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/httprequest.html" class="tsd-kind-icon">Http<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/httprequestoptions.html" class="tsd-kind-icon">Http<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/httpresponse.html" class="tsd-kind-icon">Http<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/idinfo.html" class="tsd-kind-icon">Id<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/internalid.html" class="tsd-kind-icon">Internal<wbr>Id</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/limit.html" class="tsd-kind-icon">Limit</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/listresponse.html" class="tsd-kind-icon">List<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/loginparams.html" class="tsd-kind-icon">Login<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/logouturlresponse.html" class="tsd-kind-icon">Logout<wbr>Url<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/metadata.html" class="tsd-kind-icon">Metadata</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/node.html" class="tsd-kind-icon">Node</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/onauthenticateloginobject.html" class="tsd-kind-icon">On<wbr>Authenticate<wbr>Login<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter tsd-is-external">
+						<a href="interfaces/postinparallelwithautomaticchunkingparams.html" class="tsd-kind-icon">Post<wbr>InParallel<wbr>With<wbr>Automatic<wbr>Chunking<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/tokencredentials.html" class="tsd-kind-icon">Token<wbr>Credentials</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#adfsrequestparamsmapping" class="tsd-kind-icon">ADFSRequest<wbr>Params<wbr>Mapping</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#autopagingeach" class="tsd-kind-icon">Auto<wbr>Paging<wbr>Each</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#autopagingeachhandler" class="tsd-kind-icon">Auto<wbr>Paging<wbr>Each<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#autopagingtoarray" class="tsd-kind-icon">Auto<wbr>Paging<wbr>ToArray</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#baserequestoptions" class="tsd-kind-icon">Base<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#cogniteexternalid" class="tsd-kind-icon">Cognite<wbr>External<wbr>Id</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#cogniteinternalid" class="tsd-kind-icon">Cognite<wbr>Internal<wbr>Id</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#cursorandasynciterator" class="tsd-kind-icon">Cursor<wbr>And<wbr>Async<wbr>Iterator</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#httpcall" class="tsd-kind-icon">Http<wbr>Call</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#httpqueryparams" class="tsd-kind-icon">Http<wbr>Query<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#httprequestretryvalidatoroptions" class="tsd-kind-icon">Http<wbr>Request<wbr>Retry<wbr>Validator<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#httpresponsetype" class="tsd-kind-icon">Http<wbr>Response<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#ideither" class="tsd-kind-icon">Id<wbr>Either</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#itemsresponse" class="tsd-kind-icon">Items<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#keysoftype" class="tsd-kind-icon">Keys<wbr>OfType</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#listendpoint" class="tsd-kind-icon">List<wbr>Endpoint</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#logouturl" class="tsd-kind-icon">Logout<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#noinfer" class="tsd-kind-icon">No<wbr>Infer</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#onauthenticate" class="tsd-kind-icon">On<wbr>Authenticate</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#ontokens" class="tsd-kind-icon">On<wbr>Tokens</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#response" class="tsd-kind-icon">Response</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#response401handler" class="tsd-kind-icon">Response401<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#responsehandler" class="tsd-kind-icon">Response<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#retryablehttprequest" class="tsd-kind-icon">Retryable<wbr>Http<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-is-external">
+						<a href="globals.html#retryablehttprequestoptions" class="tsd-kind-icon">Retryable<wbr>Http<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#access_token" class="tsd-kind-icon">ACCESS_<wbr>TOKEN</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#access_token_param" class="tsd-kind-icon">ACCESS_<wbr>TOKEN_<wbr>PARAM</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#credentials_required_fields" class="tsd-kind-icon">CREDENTIALS_<wbr>REQUIRED_<wbr>FIELDS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#error_description_param" class="tsd-kind-icon">ERROR_<wbr>DESCRIPTION_<wbr>PARAM</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#error_param" class="tsd-kind-icon">ERROR_<wbr>PARAM</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#expires_in" class="tsd-kind-icon">EXPIRES_<wbr>IN</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#id_token" class="tsd-kind-icon">ID_<wbr>TOKEN</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#id_token_param" class="tsd-kind-icon">ID_<wbr>TOKEN_<wbr>PARAM</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#login_iframe_name" class="tsd-kind-icon">LOGIN_<wbr>IFRAME_<wbr>NAME</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#login_popup_name" class="tsd-kind-icon">LOGIN_<wbr>POPUP_<wbr>NAME</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#max_retry_attempts" class="tsd-kind-icon">MAX_<wbr>RETRY_<wbr>ATTEMPTS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#options_required_fields" class="tsd-kind-icon">OPTIONS_<wbr>REQUIRED_<wbr>FIELDS</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#popup" class="tsd-kind-icon">POPUP</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#redirect" class="tsd-kind-icon">REDIRECT</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#scope" class="tsd-kind-icon">SCOPE</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-is-external">
+						<a href="globals.html#token_type" class="tsd-kind-icon">TOKEN_<wbr>TYPE</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#accessapi" class="tsd-kind-icon">access<wbr>Api</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#clearparametersfromurl" class="tsd-kind-icon">clear<wbr>Parameters<wbr>From<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#createretryvalidator" class="tsd-kind-icon">create<wbr>Retry<wbr>Validator</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#createuniversalretryvalidator" class="tsd-kind-icon">create<wbr>Universal<wbr>Retry<wbr>Validator</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#extractadfstoken" class="tsd-kind-icon">extractADFSToken</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#extracttokensfromurl" class="tsd-kind-icon">extract<wbr>Tokens<wbr>From<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#generateloginurl" class="tsd-kind-icon">generate<wbr>Login<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#getchildrenmap" class="tsd-kind-icon">get<wbr>Children<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#getidinfofromaccesstoken" class="tsd-kind-icon">get<wbr>IdInfo<wbr>From<wbr>Access<wbr>Token</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#headerswithdefaultfield" class="tsd-kind-icon">headers<wbr>With<wbr>Default<wbr>Field</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#isbuffer" class="tsd-kind-icon">is<wbr>Buffer</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#isloginpopupwindow" class="tsd-kind-icon">is<wbr>Login<wbr>Popup<wbr>Window</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#istokensvalid" class="tsd-kind-icon">is<wbr>Tokens<wbr>Valid</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#isvalidretrystatuscode" class="tsd-kind-icon">is<wbr>Valid<wbr>Retry<wbr>Status<wbr>Code</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#loginpopuphandler" class="tsd-kind-icon">login<wbr>Popup<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#lowercaseheaderskeys" class="tsd-kind-icon">lowercase<wbr>Headers<wbr>Keys</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#makeautopagingeach" class="tsd-kind-icon">make<wbr>Auto<wbr>Paging<wbr>Each</a>
+					</li>
+					<li class=" tsd-kind-function tsd-has-type-parameter tsd-is-external">
+						<a href="globals.html#makeautopagingtoarray" class="tsd-kind-icon">make<wbr>Auto<wbr>Paging<wbr>ToArray</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#matchpathwithendpoint" class="tsd-kind-icon">match<wbr>Path<wbr>With<wbr>Endpoint</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#matchpathwithendpoints" class="tsd-kind-icon">match<wbr>Path<wbr>With<wbr>Endpoints</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#onauthenticatewithpopup" class="tsd-kind-icon">on<wbr>Authenticate<wbr>With<wbr>Popup</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#onauthenticatewithredirect" class="tsd-kind-icon">on<wbr>Authenticate<wbr>With<wbr>Redirect</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#serialiseerrors" class="tsd-kind-icon">serialise<wbr>Errors</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#verifycredentialsrequiredfields" class="tsd-kind-icon">verify<wbr>Credentials<wbr>Required<wbr>Fields</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#verifyoptionsrequiredfields" class="tsd-kind-icon">verify<wbr>Options<wbr>Required<wbr>Fields</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#httpresponsetype" class="tsd-kind-icon">Http<wbr>Response<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#adfsrequestparamsmapping" class="tsd-kind-icon">adfs<wbr>Request<wbr>Params<wbr>Mapping</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+		</div>
+	</div>
+</footer>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
