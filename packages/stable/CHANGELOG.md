@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.15.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.4...@cognite/sdk@9.15.5) (2024-08-26)
+
+
+### Bug Fixes
+
+* **units:** correct external id type ([#1137](https://github.com/cognitedata/cognite-sdk-js/issues/1137)) ([80161a3](https://github.com/cognitedata/cognite-sdk-js/commit/80161a3e30595ecbd5a604522ffb3718829f984d))
+
+
+
+
+
 ## [9.15.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.3...@cognite/sdk@9.15.4) (2024-08-22)
 
 **Note:** Version bump only for package @cognite/sdk
