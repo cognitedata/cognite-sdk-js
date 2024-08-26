@@ -253,7 +253,7 @@ describe('alerts api', () => {
     let alertCounter = Date.now(); // Counter to ensure unique externalId
 
     // Create alerts
-    const createdAlerts = Array.from({ length: totalAlerts },  () => ({
+    const createdAlerts = Array.from({ length: totalAlerts }, () => ({
       source: 'smth',
       channelExternalId,
       externalId: `external_id_test_cursor_${alertCounter++}`,
@@ -271,7 +271,7 @@ describe('alerts api', () => {
       })
       .autoPagingToArray({ limit: 50 });
 
-    expect((await alerts).length).toBe(50)
+    expect((await alerts).length).toBe(50);
 
     // clean up created alerts
     await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
