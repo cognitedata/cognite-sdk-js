@@ -1,6 +1,8 @@
 // Copyright 2024 Cognite AS
 
+import type { ViewReference } from 'stable/src/types';
 import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 type SpaceDefinition = {
@@ -160,11 +162,11 @@ describe('Instances integration test', () => {
     const title1 =
       response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ].title.toString();
+      ].title.toString() || '';
     const title2 =
       response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ].title.toString();
+      ].title.toString() || '';
     expect(title1 < title2);
   });
 
@@ -188,11 +190,11 @@ describe('Instances integration test', () => {
     const title1 =
       response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ].title.toString();
+      ].title.toString() || '';
     const title2 =
       response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ].title.toString();
+      ].title.toString() || '';
     expect(title1 > title2);
   });
 
@@ -237,12 +239,12 @@ describe('Instances integration test', () => {
         const title =
           response.items[0].properties?.[view.space][
             `${view.externalId}/${view.version}`
-          ].title.toString();
+          ].title.toString() || '';
         expect(title.startsWith('titl'));
       },
-      { interval: 1000, timeout: 30_000 }
+      { interval: 1000, timeout: 25_000 }
     );
-  }, 30_000);
+  }, 25_000);
 
   test('aggregate', async () => {
     const response = await client.instances.aggregate({
@@ -283,7 +285,7 @@ describe('Instances integration test', () => {
     const title =
       response.items[0].properties?.[view.space][
         `${view.externalId}/${view.version}`
-      ].title.toString();
+      ].title.toString() || '';
     expect(title.startsWith('titl'));
   });
 
@@ -306,7 +308,7 @@ describe('Instances integration test', () => {
       },
     });
     expect(response.items.result_set_1).toHaveLength(1);
-  });
+  }, 10_000);
 
   test('sync', async () => {
     const response = await client.instances.sync({

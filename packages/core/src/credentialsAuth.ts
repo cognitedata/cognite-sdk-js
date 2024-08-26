@@ -2,7 +2,7 @@
 
 import { verifyCredentialsRequiredFields } from './loginUtils';
 import isFunction from 'lodash/isFunction';
-import { BasicHttpClient } from './httpClient/basicHttpClient';
+import type { BasicHttpClient } from './httpClient/basicHttpClient';
 
 import { AUTHORIZATION_HEADER, API_KEY_HEADER } from './constants';
 
@@ -82,7 +82,8 @@ export class CredentialsAuth {
         throw Error(
           'Please, use the recommended authProvider: @cognite/auth-wrapper'
         );
-      } else if (
+      }
+      if (
         this.credentials.authContext &&
         !this.authProvider.load(true, true).method &&
         !this.authProvider.load(true, true).authContext

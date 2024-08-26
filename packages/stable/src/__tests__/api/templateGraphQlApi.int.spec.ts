@@ -1,7 +1,21 @@
 // Copyright 2020 Cognite AS
 
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { randomInt, setupLoggedInClient } from '../testUtils';
+// @ts-nocheck
+
+import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  test,
+} from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { ExternalTemplateInstance } from '../../types';
+import { setupLoggedInClient } from '../testUtils';
 
 describe.skip('template group test', () => {
   let client: CogniteClient;
@@ -55,6 +69,9 @@ describe.skip('template group test', () => {
   });
 
   it('should run a GraphQL query', async () => {
+    type Result = {
+      testList: { a: number; b: string }[];
+    };
     const result = await client.templates
       .group(externalId)
       .version(1)
@@ -67,6 +84,6 @@ describe.skip('template group test', () => {
         }
       }`,
       });
-    expect(result.data.testList).toEqual([{ a: 10, b: 'test' }]);
+    expect((result.data as Result).testList).toEqual([{ a: 10, b: 'test' }]);
   });
 });

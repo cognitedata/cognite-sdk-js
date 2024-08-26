@@ -1,6 +1,8 @@
 // Copyright 2020 Cognite AS
 
 import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { Asset } from '../../types';
 import {
   type ExternalSequence,
   type Sequence,

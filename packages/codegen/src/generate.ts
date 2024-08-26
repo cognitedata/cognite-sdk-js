@@ -12,8 +12,11 @@ import {
 import { PackageConfigManager, ServiceConfigManager } from './configuration';
 import { AcacodeOpenApiGenerator } from './generator/acacode';
 import { OpenApiSnapshotManager } from './snapshot';
-import type { PackageOption, ServiceOption } from './utils';
-import { closestConfigDirectoryPath } from './utils';
+import {
+  type PackageOption,
+  type ServiceOption,
+  closestConfigDirectoryPath,
+} from './utils';
 
 type GenerateOptions = PackageOption;
 interface GenerateServiceOptions extends PackageOption, ServiceOption {}
@@ -167,7 +170,7 @@ function createExportStatement(
   const skipped = types.filter((t) => blacklist.includes(t));
   const typesFormat = types.filter((t) => !blacklist.includes(t)).join(',\n  ');
   const moduleName = path.parse(CodeGen.outputFileName).name;
-  const code = `export {\n  ${typesFormat}\n} from '${fromDirectory}/${moduleName}';`;
+  const code = `export type {\n  ${typesFormat}\n} from '${fromDirectory}/${moduleName}';`;
   return {
     code: types.length > 0 ? code : '',
     skipped: skipped,

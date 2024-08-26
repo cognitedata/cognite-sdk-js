@@ -6,7 +6,6 @@ export default defineWorkspace([
     test: {
       hookTimeout: 30_000,
       testTimeout: 25_000,
-      include: ['src/**/*.spec.ts'],
     },
   },
 ]);

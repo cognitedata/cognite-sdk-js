@@ -8,12 +8,6 @@ import type {
   ListResponse,
 } from './types';
 
-// polyfill
-if (Symbol.asyncIterator === undefined) {
-  // biome-ignore lint/suspicious/noExplicitAny: will deprecate soon when we move to es6
-  (Symbol as any).asyncIterator = Symbol.for('asyncIterator');
-}
-
 /** @hidden */
 export function makeAutoPaginationMethods<T>(
   firstPagePromise: Promise<ListResponse<T[]>>

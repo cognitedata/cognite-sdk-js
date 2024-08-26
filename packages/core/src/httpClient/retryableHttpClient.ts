@@ -1,5 +1,6 @@
-import isFunction from 'lodash/isFunction';
 // Copyright 2020 Cognite AS
+
+import isFunction from 'lodash/isFunction';
 import { sleepPromise } from '../utils';
 import {
   BasicHttpClient,

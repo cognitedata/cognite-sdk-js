@@ -40,7 +40,7 @@ export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
     });
   };
 
-  private async classifiersListByIds<ResponseType>(
+  private async classifiersListByIds<ResponseType extends object>(
     ids: CogniteInternalId[],
     ignoreUnknownIds: boolean
   ): Promise<ResponseType> {
@@ -51,6 +51,9 @@ export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
     const response = await this.post<ResponseType>(this.url('byids'), {
       data: request,
     });
-    return this.addToMapAndReturn(response.data, response);
+    return this.addToMapAndReturn<ResponseType, unknown>(
+      response.data,
+      response
+    );
   }
 }

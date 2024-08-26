@@ -2,7 +2,8 @@
 
 import nock from 'nock';
 import { beforeAll, describe, expect, test } from 'vitest';
-import { SequenceValueType } from '../../types';
+import type CogniteClient from '../../cogniteClient';
+import { type Sequence, SequenceValueType } from '../../types';
 import { mockBaseUrl, randomInt, setupMockableClient } from '../testUtils';
 
 describe('Sequences unit test', () => {

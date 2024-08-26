@@ -6,6 +6,7 @@ import {
 } from '@cognite/sdk-core/src/__tests__/testUtils';
 import nock from 'nock';
 import { beforeEach, describe, expect, test } from 'vitest';
+import type CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupMockableClient } from '../testUtils';
 
 const baseUrl = `${mockBaseUrl}/api/playground/projects/${project}`;

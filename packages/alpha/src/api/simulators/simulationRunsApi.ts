@@ -1,11 +1,6 @@
 // Copyright 2023 Cognite AS
 
-import {
-  BaseResourceAPI,
-  type CDFHttpClient,
-  type CogniteInternalId,
-  type MetadataMap,
-} from '@cognite/sdk-core';
+import { BaseResourceAPI, type CogniteInternalId } from '@cognite/sdk-core';
 import type {
   SimulationRun,
   SimulationRunCreate,

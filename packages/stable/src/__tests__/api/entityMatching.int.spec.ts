@@ -5,6 +5,8 @@ import {
   runTestWithRetryWhenFailing,
 } from '@cognite/sdk-core/src/__tests__/testUtils';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { ExternalEntityToMatch } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
 describe.skip('context integration test', () => {
@@ -99,8 +101,8 @@ describe.skip('context integration test', () => {
     test('refit model with some true matches', async () => {
       const trueMatches = [
         {
-          sourceExternalId: assetA.externalId,
-          targetExternalId: tsA.externalId,
+          sourceExternalId: assetA.externalId || '',
+          targetExternalId: tsA.externalId || '',
         },
       ];
       const refitResult = await client.entityMatching.refit({

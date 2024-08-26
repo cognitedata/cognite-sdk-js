@@ -1,4 +1,6 @@
+import type { ExternalLabelDefinition } from '@cognite/sdk';
 import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Labels integration test', () => {

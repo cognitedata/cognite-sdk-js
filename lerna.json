@@ -11,7 +11,7 @@
         "**/*.test.ts"
       ],
       "message": "chore(release): publish new package versions [skip ci]",
-      "allowBranch": "master"
+      "allowBranch": "release-v10"
     }
   }
 }

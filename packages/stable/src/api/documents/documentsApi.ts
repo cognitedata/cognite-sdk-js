@@ -74,7 +74,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.documentContent(id);
   };
 
-  private async searchDocuments<ResponseType>(
+  private async searchDocuments<ResponseType extends object>(
     query: DocumentSearchRequest
   ): Promise<ResponseType> {
     const response = await this.post<ResponseType>(this.searchUrl, {

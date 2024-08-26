@@ -12,7 +12,7 @@ import type {
 } from '@cognite/sdk-core';
 import type { AnnotationData } from './api/annotations/types.gen';
 
-export {
+export type {
   ListResponse,
   CursorResponse,
   ItemsResponse,
@@ -3298,7 +3298,7 @@ export class SyntheticTimeSeriesResolver implements FieldResolver {
 export class ViewResolver implements FieldResolver {
   type = 'view';
   externalId: string;
-  input?: { [K in string]: unknown };
+  input: { [K in string]: unknown };
 
   constructor(externalId: string, input: { [K in string]: unknown }) {
     this.externalId = externalId;
@@ -3433,7 +3433,7 @@ export interface UnitSystem {
   quantities: UnitSystemQuantity[];
 }
 
-export {
+export type {
   AggregatedHistogramValue,
   AggregatedNumberValue,
   AggregatedResultItem,
@@ -3556,7 +3556,7 @@ export {
   ViewReference,
 } from './api/instances/types.gen';
 
-export {
+export type {
   DataModel,
   DataModelCreate,
   ListOfAllVersionsReferences,

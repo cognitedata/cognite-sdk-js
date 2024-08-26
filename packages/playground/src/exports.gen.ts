@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
 
-export {
+export type {
   AggregateField,
   AggregateGroup,
   AssetExternalIdsFilter,
