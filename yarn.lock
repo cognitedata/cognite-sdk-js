@@ -3277,8 +3277,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-alpha@workspace:packages/alpha"
   dependencies:
-    "@cognite/sdk": "npm:^9.15.3"
-    "@cognite/sdk-core": "npm:^4.10.3"
+    "@cognite/sdk": "npm:^10.0.0-rc.0"
+    "@cognite/sdk-core": "npm:^5.0.0-rc.0"
   languageName: unknown
   linkType: soft
 
@@ -3286,8 +3286,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-beta@workspace:packages/beta"
   dependencies:
-    "@cognite/sdk": "npm:^9.15.3"
-    "@cognite/sdk-core": "npm:^4.10.3"
+    "@cognite/sdk": "npm:^10.0.0-rc.0"
+    "@cognite/sdk-core": "npm:^5.0.0-rc.0"
   languageName: unknown
   linkType: soft
 
@@ -3297,7 +3297,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk-core@npm:^4.10.3, @cognite/sdk-core@npm:^4.9.0, @cognite/sdk-core@workspace:packages/core":
+"@cognite/sdk-core@npm:^4.10.4, @cognite/sdk-core@npm:^4.9.0":
+  version: 4.10.4
+  resolution: "@cognite/sdk-core@npm:4.10.4"
+  dependencies:
+    cross-fetch: "npm:^3.0.4"
+    lodash: "npm:^4.17.11"
+  checksum: 10c0/b8d22fc471254d9016434b0569c8d0ab153a13054aad42b1948f15697e21f5856a019e1ae089e1342be52e4b368ccae86dd9d651a3beb4d0444c6a20bc97fe62
+  languageName: node
+  linkType: hard
+
+"@cognite/sdk-core@npm:^5.0.0-rc.0, @cognite/sdk-core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-core@workspace:packages/core"
   dependencies:
@@ -3344,8 +3354,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-playground@workspace:packages/playground"
   dependencies:
-    "@cognite/sdk": "npm:^9.15.3"
-    "@cognite/sdk-core": "npm:^4.10.3"
+    "@cognite/sdk": "npm:^10.0.0-rc.0"
+    "@cognite/sdk-core": "npm:^5.0.0-rc.0"
   languageName: unknown
   linkType: soft
 
@@ -3358,16 +3368,28 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk@npm:^9, @cognite/sdk@npm:^9.15.3, @cognite/sdk@workspace:packages/stable":
+"@cognite/sdk@npm:^10.0.0-rc.0, @cognite/sdk@workspace:packages/stable":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk@workspace:packages/stable"
   dependencies:
-    "@cognite/sdk-core": "npm:^4.10.3"
+    "@cognite/sdk-core": "npm:^5.0.0-rc.0"
     "@types/geojson": "npm:^7946.0.14"
     geojson: "npm:^0.5.0"
     lodash: "npm:^4.17.21"
   languageName: unknown
   linkType: soft
+
+"@cognite/sdk@npm:^9":
+  version: 9.15.5
+  resolution: "@cognite/sdk@npm:9.15.5"
+  dependencies:
+    "@cognite/sdk-core": "npm:^4.10.4"
+    "@types/geojson": "npm:^7946.0.8"
+    geojson: "npm:^0.5.0"
+    lodash: "npm:^4.17.11"
+  checksum: 10c0/dc355c860798109c41c139426452933214d26318300f5df26ae9ed826b9b4a8d9eb03ff768abd74ec017f0da3b25bdd4de7e88f68ebf115d13ae103b7bc709d8
+  languageName: node
+  linkType: hard
 
 "@colors/colors@npm:1.6.0, @colors/colors@npm:^1.6.0":
   version: 1.6.0
@@ -6024,7 +6046,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/geojson@npm:^7946.0.14":
+"@types/geojson@npm:^7946.0.14, @types/geojson@npm:^7946.0.8":
   version: 7946.0.14
   resolution: "@types/geojson@npm:7946.0.14"
   checksum: 10c0/54f3997708fa2970c03eeb31f7e4540a0eb6387b15e9f8a60513a1409c23cafec8d618525404573468b59c6fecbfd053724b3327f7fca416729c26271d799f55
@@ -9371,7 +9393,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-fetch@npm:^3.1.8":
+"cross-fetch@npm:^3.0.4, cross-fetch@npm:^3.1.8":
   version: 3.1.8
   resolution: "cross-fetch@npm:3.1.8"
   dependencies:
@@ -15241,7 +15263,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.7.0, lodash@npm:~4.17.15":
+"lodash@npm:^4.17.11, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.7.0, lodash@npm:~4.17.15":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c

@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-rc.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.10.3...@cognite/sdk-core@5.0.0-rc.0) (2024-08-26)
+
+
+### chore
+
+* upgrade to typescript 5 ([#1135](https://github.com/cognitedata/cognite-sdk-js/issues/1135)) ([1530809](https://github.com/cognitedata/cognite-sdk-js/commit/15308098e64ec27a6c33049b2712f9cbc49dac38))
+
+
+### BREAKING CHANGES
+
+* es6 module (vs es5) and typescript 3 -> 5
+
+* chore: release pre-release from the release-v10 branch
+
+* test: skip flaky alerts test
+
+
+
+
+
 ## [4.10.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.10.2...@cognite/sdk-core@4.10.3) (2024-08-20)
 
 **Note:** Version bump only for package @cognite/sdk-core
