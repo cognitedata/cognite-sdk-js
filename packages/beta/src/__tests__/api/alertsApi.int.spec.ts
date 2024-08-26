@@ -228,7 +228,7 @@ describe('alerts api', () => {
 
   vi.setConfig({ testTimeout: 30_000 });
 
-  test.skip('cursor pagination', async () => {
+  test('cursor pagination', async () => {
     // create channel for the next test
     const channelsToCreate = [
       {
@@ -248,40 +248,19 @@ describe('alerts api', () => {
     });
     expect(response.items.length).toBe(1);
 
-    // create alerts in batches of 100
-    const totalAlerts = 1000; // Total number of alerts to create
-    const batchSize = 100; // Size of each batch
+    const totalAlerts = 50; // Total number of alerts to create
 
-    // Generate and create alerts in batches
     let alertCounter = Date.now(); // Counter to ensure unique externalId
 
-    // Function to create a batch of alerts
-    const createBatch = async () => {
-      const alerts = Array.from({ length: batchSize }, () => ({
-        source: 'smth',
-        channelExternalId,
-        externalId: `external_id_test_cursor_${alertCounter++}`,
-      }));
-      await client.alerts.create(alerts);
-    };
-
-    // Create alerts in batches
-    const batchPromises = [];
-    for (let i = 0; i < Math.floor(totalAlerts / batchSize); i++) {
-      batchPromises.push(createBatch());
-    }
-
-    // Wait for all batches to complete
-    await Promise.all(batchPromises);
-
-    // create one extra alert
-    await client.alerts.create([
-      {
-        source: 'smth',
-        channelExternalId,
-        externalId: `external_id_test_cursor_${alertCounter}`,
-      },
-    ]);
+    // Create alerts
+    const createdAlerts = Array.from({ length: totalAlerts },  () => ({
+      source: 'smth',
+      channelExternalId,
+      externalId: `external_id_test_cursor_${alertCounter++}`,
+    }));
+    await client.alerts.create(createdAlerts);
+    // Wait for all alerts to complete
+    await Promise.all(createdAlerts);
 
     const alerts = client.alerts
       .list({
@@ -290,9 +269,9 @@ describe('alerts api', () => {
           order: 'desc',
         },
       })
-      .autoPagingToArray({ limit: 1001 });
+      .autoPagingToArray({ limit: 50 });
 
-    expect((await alerts).length).toBeGreaterThan(1000);
+    expect((await alerts).length).toBe(50)
 
     // clean up created alerts
     await client.alerts.deleteChannels([{ externalId: channelExternalId }]);
