@@ -238,7 +238,6 @@ describe('alerts api', () => {
     ];
     await client.alerts.createChannels(channelsToCreate);
 
-    // 
     const response = await client.alerts.list({
       limit: 1,
       sort: {
