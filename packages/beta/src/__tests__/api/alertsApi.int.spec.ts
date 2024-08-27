@@ -256,7 +256,6 @@ describe('alerts api', () => {
       source: 'smth',
       channelExternalId,
       externalId: `external_id_test_cursor_${alertCounter++}`,
-
     }));
     await client.alerts.create(createdAlerts);
     // Wait for all alerts to complete
