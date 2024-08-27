@@ -268,7 +268,7 @@ describe('alerts api', () => {
           order: 'desc',
         },
         cursor: response.nextCursor,
-        limit: [10],
+        limit: 10,
       })
       .autoPagingToArray({ limit: 50 });
 
