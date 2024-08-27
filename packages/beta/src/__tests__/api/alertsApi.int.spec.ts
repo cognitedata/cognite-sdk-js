@@ -2,6 +2,7 @@
 
 import { describe, expect, test, vi } from 'vitest';
 import { setupLoggedInClient } from '../testUtils';
+import { CogniteClient, CogniteError } from '@cognite/sdk-beta';
 
 describe('alerts api', () => {
   const client: CogniteClient = setupLoggedInClient();
@@ -245,6 +246,7 @@ describe('alerts api', () => {
         order: 'desc',
       },
     });
+    console.log(response);
     expect(response.items.length).toBe(1);
 
     const totalAlerts = 50; // Total number of alerts to create
@@ -257,11 +259,10 @@ describe('alerts api', () => {
       channelExternalId,
       externalId: `external_id_test_cursor_${alertCounter++}`,
     }));
-    await client.alerts.create(createdAlerts);
-    // Wait for all alerts to complete
-    await Promise.all(createdAlerts);
 
-    const alerts = client.alerts
+    await client.alerts.create(createdAlerts);
+
+    const alerts = await client.alerts
       .list({
         sort: {
           property: 'createdTime',
