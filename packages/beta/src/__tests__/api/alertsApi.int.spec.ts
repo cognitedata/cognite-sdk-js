@@ -238,13 +238,13 @@ describe('alerts api', () => {
     ];
     await client.alerts.createChannels(channelsToCreate);
 
+    // 
     const response = await client.alerts.list({
       limit: 1,
       sort: {
         property: 'createdTime',
         order: 'desc',
       },
-      cursor: '',
     });
     expect(response.items.length).toBe(1);
 
@@ -257,6 +257,7 @@ describe('alerts api', () => {
       source: 'smth',
       channelExternalId,
       externalId: `external_id_test_cursor_${alertCounter++}`,
+
     }));
     await client.alerts.create(createdAlerts);
     // Wait for all alerts to complete
@@ -268,6 +269,8 @@ describe('alerts api', () => {
           property: 'createdTime',
           order: 'desc',
         },
+        cursor: response.nextCursor,
+        limit: [10],
       })
       .autoPagingToArray({ limit: 50 });
 
