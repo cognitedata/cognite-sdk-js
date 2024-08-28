@@ -3407,7 +3407,7 @@ export interface AnnotationReverseLookupFilterProps {
 }
 
 export interface Unit {
-  externalId: CogniteInternalId;
+  externalId: CogniteExternalId;
   name: string;
   longName: string;
   symbol: string;
@@ -3425,7 +3425,7 @@ export interface UnitConversion {
 
 export interface UnitSystemQuantity {
   name: string;
-  unitExternalId: CogniteInternalId;
+  unitExternalId: CogniteExternalId;
 }
 
 export interface UnitSystem {
