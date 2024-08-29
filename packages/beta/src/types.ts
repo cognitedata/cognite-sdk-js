@@ -347,6 +347,16 @@ export interface Subscription {
   metadata?: Metadata;
 }
 
+export interface MultiPartFileUploadResponse extends FileInfo {
+  uploadUrls: string[];
+  uploadId: string;
+}
+
+export interface MultiPartFileChunkResponse {
+  partNumber: number;
+  status: number;
+}
+
 export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
   items: DatapointsQuery[];
 }
