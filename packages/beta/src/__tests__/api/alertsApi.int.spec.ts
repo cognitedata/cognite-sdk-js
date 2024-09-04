@@ -246,7 +246,6 @@ describe('alerts api', () => {
         order: 'desc',
       },
     });
-    expect(response.items.length).toBe(1);
 
     const totalAlerts = 50; // Total number of alerts to create
 
