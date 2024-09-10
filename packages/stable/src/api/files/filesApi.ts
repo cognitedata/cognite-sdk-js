@@ -254,7 +254,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * ```js
    * const numberOfParts = 5;
    * // automatic upload:
-   * const multiPartUploadApi = await client.files.upload({name: 'examplefile.jpg', mimeType: 'image/jpeg'}, numberOfParts);
+   * const multiPartUploadApi = await client.files.multipartUploadSession({name: 'examplefile.jpg', mimeType: 'image/jpeg'}, numberOfParts);
    * ```
    */
   public async multipartUploadSession(
