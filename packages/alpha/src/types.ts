@@ -542,7 +542,6 @@ export interface SimulatorRoutineRevision {
   dataSetId: CogniteInternalId;
   createdByUserId: string;
   createdTime: Date;
-  lastUpdatedTime: Date;
   configuration: SimulatorRoutineRevisionConfiguration;
   script: SimulatorRoutineScript[];
 }
