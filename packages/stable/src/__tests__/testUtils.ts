@@ -188,7 +188,6 @@ const getFileCreateArgs = (
 };
 
 export {
-  apiKey,
   mockBaseUrl,
   project,
   randomInt,

@@ -4,7 +4,7 @@ import { verifyCredentialsRequiredFields } from './loginUtils';
 import isFunction from 'lodash/isFunction';
 import type { BasicHttpClient } from './httpClient/basicHttpClient';
 
-import { AUTHORIZATION_HEADER, API_KEY_HEADER } from './constants';
+import { AUTHORIZATION_HEADER } from './constants';
 
 import { bearerString } from './utils';
 
@@ -24,8 +24,7 @@ export interface TokenCredentials {
 }
 
 export interface ClientCredentials {
-  method: 'api' | 'client_credentials' | 'device' | 'implicit' | 'pkce';
-  apiKey?: string;
+  method: 'client_credentials' | 'device' | 'implicit' | 'pkce';
   authority?: string;
   client_id?: string;
   client_secret?: string;
@@ -54,7 +53,7 @@ export class CredentialsAuth {
         verifyCredentialsRequiredFields(this.credentials);
       }
 
-      if (this.credentials?.method !== 'api' && !this.authProvider) {
+      if (!this.authProvider) {
         throw Error(
           'options.authentication.authProvider is required and must be a class that implements a static load method and can call a login method.'
         );
@@ -99,13 +98,6 @@ export class CredentialsAuth {
     try {
       if (!this.credentials) return;
 
-      if (this.credentials.method === 'api') {
-        const token: string = this.credentials.apiKey!;
-        this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
-
-        return token;
-      }
-
       if (this.tokenCredentials.refresh_token) {
         this.tokenCredentials.access_token = '';
       }
@@ -146,9 +138,5 @@ export class CredentialsAuth {
         this.credentials?.method === 'pkce') &&
       this.tokenCredentials.refresh_token
     );
-  }
-
-  public isApiKeyMode(): boolean {
-    return this.credentials?.method === 'api';
   }
 }

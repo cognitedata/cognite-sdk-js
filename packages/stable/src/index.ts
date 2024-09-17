@@ -35,7 +35,6 @@ export { RevealSectors3DAPI } from './api/3d/revealSectors3DApi';
 export { Revisions3DAPI } from './api/3d/revisions3DApi';
 export { UnrealRevisions3DAPI } from './api/3d/unrealRevisions3DApi';
 export { Viewer3DAPI } from './api/3d/viewer3DApi';
-export { ApiKeysAPI } from './api/apiKeys/apiKeysApi';
 export { AssetsAPI } from './api/assets/assetsApi';
 export { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 export { DataSetsAPI } from './api/datasets/datasetsApi';

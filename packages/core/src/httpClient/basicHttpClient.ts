@@ -299,7 +299,7 @@ export interface HttpRequestOptions {
   headers?: HttpHeaders;
   responseType?: HttpResponseType;
   /**
-   * Set this to 'true' if you want to send credentials (api-key, access token) with the request to other domains than the specified base url.
+   * Set this to 'true' if you want to send credentials (access token) with the request to other domains than the specified base url.
    */
   withCredentials?: boolean;
 }

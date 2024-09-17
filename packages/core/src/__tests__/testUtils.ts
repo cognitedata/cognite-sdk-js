@@ -8,10 +8,10 @@ import { HttpError } from '../httpClient/httpError';
 import { sleepPromise } from '../utils';
 export { sleepPromise };
 
-export const apiKey = 'TEST_KEY';
 export const project = 'TEST_PROJECT';
 export const projectId = 123;
 export const user = 'user@example.com';
+export const accessToken = 'access_token';
 export const loggedInResponse = {
   data: { loggedIn: true, user, project, projectId },
 };
@@ -28,7 +28,6 @@ export function setupClient(baseUrl: string = BASE_URL) {
   return new BaseCogniteClient({
     appId: 'JS SDK integration tests',
     project: process.env.COGNITE_PROJECT as string,
-    apiKeyMode: true,
     getToken: () => Promise.resolve(process.env.COGNITE_CREDENTIALS as string),
     baseUrl,
   });

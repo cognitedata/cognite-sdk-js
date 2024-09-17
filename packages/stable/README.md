@@ -3,7 +3,7 @@
 The package `@cognite/sdk` provides convenient access to the stable [Cognite API](https://doc.cognitedata.com/dev/)
 from applications written in client- or server-side javascript.
 
-The SDK supports authentication through api-keys (_for server-side applications_) and bearer tokens (for web applications).
+The SDK supports authentication through bearer tokens.
 See [Authentication Guide](https://github.com/cognitedata/cognite-sdk-js/blob/v1/guides/authentication.md).
 
 ## Installation
@@ -84,8 +84,7 @@ const { CogniteClient } = require('@cognite/sdk');
 async function quickstart() {
   const client = new CogniteClient({
     appId: 'YOUR APPLICATION NAME',
-    apiKeyMode: true,
-    getToken: () => Promise.resolve('YOUR_SECRET_API_KEY'),
+    getToken: () => Promise.resolve('YOUR_OIDC_ACCESS_TOKEN'),
   });
 
   const assets = await client.assets.list().autoPagingToArray({ limit: 100 });

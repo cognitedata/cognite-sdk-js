@@ -3,7 +3,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import nock from 'nock';
-import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
+import { AUTHORIZATION_HEADER } from '../constants';
 import { CogniteError } from '../error';
 import { bearerString } from '../utils';
 import { CDFHttpClient } from './cdfHttpClient';
@@ -59,29 +59,12 @@ describe('CDFHttpClient', () => {
       await client.get(anotherDomain);
     });
 
-    test('dont expose api-key to other domains', async () => {
-      client.setDefaultHeader(API_KEY_HEADER, '123');
-      nock(anotherDomain, { badheaders: [API_KEY_HEADER] })
-        .get('/')
-        .reply(200, {});
-      await client.get(anotherDomain);
-    });
-
     test('send bearer token to other doman when withCredentials == true', async () => {
       const token = 'abc';
       client.setBearerToken(token);
       nock(anotherDomain, {
         reqheaders: { [AUTHORIZATION_HEADER]: bearerString(token) },
       })
-        .get('/')
-        .reply(200, {});
-      await client.get(anotherDomain, { withCredentials: true });
-    });
-
-    test('send api-key to other doman when withCredentials == true', async () => {
-      const apiKey = '123';
-      client.setDefaultHeader(API_KEY_HEADER, apiKey);
-      nock(anotherDomain, { reqheaders: { [API_KEY_HEADER]: apiKey } })
         .get('/')
         .reply(200, {});
       await client.get(anotherDomain, { withCredentials: true });

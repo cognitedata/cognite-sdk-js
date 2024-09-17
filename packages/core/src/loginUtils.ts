@@ -26,7 +26,6 @@ interface CredentialsVerification {
 const OPTIONS_REQUIRED_FIELDS: string[] = ['appId', 'project'];
 
 const CREDENTIALS_REQUIRED_FIELDS: CredentialsVerification[] = [
-  { method: 'api', field: 'apiKey' },
   { method: 'client_credentials', field: 'authority' },
   { method: 'client_credentials', field: 'client_id' },
   { method: 'client_credentials', field: 'client_secret' },

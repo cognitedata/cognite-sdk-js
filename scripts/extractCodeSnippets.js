@@ -89,8 +89,7 @@ codeSnippets.forEach((snippets, operationId) => {
     const client = new CogniteClient({
       appId: '[APP NAME]',
       project: '[PROJECT]',
-      apiKeyMode: true,
-      getToken: () => Promise.resolve('[API_KEY]'),
+      getToken: () => Promise.resolve('[ACCESS_TOKEN]'),
     });
     (async () => {
       ${joinSnippets(snippets)}
