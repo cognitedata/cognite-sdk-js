@@ -544,6 +544,7 @@ export interface SimulatorRoutineRevision {
   createdTime: Date;
   configuration: SimulatorRoutineRevisionConfiguration;
   script: SimulatorRoutineScript[];
+  versionNumber: number;
 }
 
 export interface SimulatorRoutineRevisionCreate {
