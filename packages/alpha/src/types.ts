@@ -117,7 +117,7 @@ export interface SimulatorIntegrationCreate {
 
 export interface SimulatorIntegrationFilter {
   simulatorExternalIds?: CogniteExternalId[];
-  active: boolean;
+  active?: boolean;
 }
 
 export interface SimulatorIntegrationFilterQuery extends FilterQuery {
