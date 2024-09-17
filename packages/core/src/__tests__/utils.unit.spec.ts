@@ -7,7 +7,6 @@ import {
   convertToTimestampToDateTime,
   isJson,
   isSameProject,
-  isUsingSSL,
   projectUrl,
   promiseAllAtOnce,
   promiseCache,
@@ -159,10 +158,6 @@ describe('utils', () => {
         responses: ['1r', '2r'],
       });
     });
-  });
-
-  test('isUsingSSL', () => {
-    expect(isUsingSSL()).toBeTruthy();
   });
 
   test('should isJson returns false in case of ArrayBuffer', () => {

@@ -31,13 +31,6 @@ export function bearerString(token: string) {
   return `Bearer ${token}`;
 }
 
-/** @hidden */
-export function isBrowser() {
-  return (
-    typeof window !== 'undefined' && typeof window.document !== 'undefined'
-  );
-}
-
 function isBuffer(obj: unknown): boolean {
   type BufferConstructor = (() => void) & {
     isBuffer: (x: unknown) => boolean;
@@ -51,24 +44,6 @@ function isBuffer(obj: unknown): boolean {
     typeof (obj.constructor as BufferConstructor).isBuffer === 'function' &&
     (obj.constructor as BufferConstructor).isBuffer(obj)
   );
-}
-
-export function clearParametersFromUrl(...params: string[]): void {
-  let url = window.location.href;
-  for (const param of params) {
-    url = removeQueryParameterFromUrl(url, param);
-  }
-  window.history.replaceState(null, '', url);
-}
-
-/** @hidden */
-export function removeQueryParameterFromUrl(
-  url: string,
-  parameter: string
-): string {
-  return url
-    .replace(new RegExp(`[?#&]${parameter}=[^&#]*(#.*)?$`), '$1')
-    .replace(new RegExp(`([?#&])${parameter}=[^&]*&`), '$1');
 }
 
 /** @hidden */
@@ -219,44 +194,4 @@ export function applyIfApplicable<ArgumentType, ResultType>(
     return action(args);
   }
   return args;
-}
-
-/** @hidden */
-export function generatePopupWindow(url: string, name: string) {
-  return window.open(
-    url,
-    name,
-    // https://www.quackit.com/javascript/popup_windows.cfm
-    'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes'
-  );
-}
-
-/** @hidden */
-export function createInvisibleIframe(
-  url: string,
-  name: string
-): HTMLIFrameElement {
-  const iframe = document.createElement('iframe');
-  iframe.name = name;
-  iframe.style.width = '0';
-  iframe.style.height = '0';
-  iframe.style.border = '0';
-  iframe.style.border = 'none';
-  iframe.style.visibility = 'hidden';
-
-  iframe.setAttribute('id', name);
-  iframe.setAttribute('aria-hidden', 'true');
-
-  iframe.src = url;
-  return iframe;
-}
-
-/** @hidden */
-export function isUsingSSL() {
-  return isBrowser() && location.protocol.toLowerCase() === 'https:';
-}
-
-/** @hidden */
-export function isLocalhost(): boolean {
-  return isBrowser() && location.hostname === 'localhost';
 }

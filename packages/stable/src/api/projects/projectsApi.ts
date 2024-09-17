@@ -27,7 +27,6 @@ export class ProjectsAPI extends BaseResourceAPI<unknown> {
    * ```js
    * await client.projects.update('new-project-name', {
    *   name: 'New project display name',
-   *   defaultGroupId: 123,
    * });
    * ```
    */

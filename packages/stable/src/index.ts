@@ -1,8 +1,6 @@
 // Copyright 2020 Cognite AS
 
 export {
-  loginPopupHandler,
-  isLoginPopupWindow,
   HttpError,
   type HttpQueryParams,
   type HttpHeaders,
@@ -11,17 +9,7 @@ export {
   HttpResponseType,
   CogniteError,
   CogniteMultiError,
-  CogniteLoginError,
   type ClientOptions,
-  type AuthTokens,
-  type AuthenticateParams,
-  type AuthorizeOptions,
-  type AuthorizeParams,
-  type IdInfo,
-  type OnAuthenticateLoginObject,
-  POPUP,
-  REDIRECT,
-  CogniteAuthentication,
 } from '@cognite/sdk-core';
 export { default as CogniteClient } from './cogniteClient';
 
