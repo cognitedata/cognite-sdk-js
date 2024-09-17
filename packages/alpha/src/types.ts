@@ -99,6 +99,7 @@ export interface SimulatorIntegration {
   logId: CogniteInternalId;
   createdTime: Date;
   lastUpdatedTime: Date;
+  active: boolean;
 }
 
 export interface SimulatorIntegrationCreate {
@@ -116,6 +117,7 @@ export interface SimulatorIntegrationCreate {
 
 export interface SimulatorIntegrationFilter {
   simulatorExternalIds?: CogniteExternalId[];
+  active?: boolean;
 }
 
 export interface SimulatorIntegrationFilterQuery extends FilterQuery {
@@ -304,7 +306,6 @@ export interface SimulatorModel {
   name: string;
   description?: string;
   dataSetId: CogniteInternalId;
-  labels?: ExternalId[];
   type?: string;
   createdTime: Date;
   lastUpdatedTime: Date;
@@ -316,7 +317,6 @@ export interface SimulatorModelCreate {
   name: string;
   description?: string;
   dataSetId: CogniteInternalId;
-  labels?: ExternalId[];
   type?: string;
 }
 
@@ -333,7 +333,6 @@ export interface SimulatorModelPatch {
   update: {
     name?: SinglePatch<string>;
     description?: SinglePatch<string>;
-    labels?: ArrayPatchExternalIds;
   };
 }
 
@@ -543,9 +542,9 @@ export interface SimulatorRoutineRevision {
   dataSetId: CogniteInternalId;
   createdByUserId: string;
   createdTime: Date;
-  lastUpdatedTime: Date;
   configuration: SimulatorRoutineRevisionConfiguration;
   script: SimulatorRoutineScript[];
+  versionNumber: number;
 }
 
 export interface SimulatorRoutineRevisionCreate {
