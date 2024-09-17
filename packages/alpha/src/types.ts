@@ -304,7 +304,6 @@ export interface SimulatorModel {
   name: string;
   description?: string;
   dataSetId: CogniteInternalId;
-  labels?: ExternalId[];
   type?: string;
   createdTime: Date;
   lastUpdatedTime: Date;
@@ -316,7 +315,6 @@ export interface SimulatorModelCreate {
   name: string;
   description?: string;
   dataSetId: CogniteInternalId;
-  labels?: ExternalId[];
   type?: string;
 }
 
@@ -333,7 +331,6 @@ export interface SimulatorModelPatch {
   update: {
     name?: SinglePatch<string>;
     description?: SinglePatch<string>;
-    labels?: ArrayPatchExternalIds;
   };
 }
 
