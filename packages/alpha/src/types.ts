@@ -99,6 +99,7 @@ export interface SimulatorIntegration {
   logId: CogniteInternalId;
   createdTime: Date;
   lastUpdatedTime: Date;
+  active: boolean;
 }
 
 export interface SimulatorIntegrationCreate {
@@ -116,6 +117,7 @@ export interface SimulatorIntegrationCreate {
 
 export interface SimulatorIntegrationFilter {
   simulatorExternalIds?: CogniteExternalId[];
+  active: boolean;
 }
 
 export interface SimulatorIntegrationFilterQuery extends FilterQuery {
