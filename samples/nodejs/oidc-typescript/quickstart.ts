@@ -26,7 +26,7 @@ async function quickstart() {
     appId: 'Cognite SDK samples',
     project,
     baseUrl: 'https://api.cognitedata.com',
-    getToken: () =>
+    oidcTokenProvider: () =>
       pca
         .acquireTokenByClientCredential({
           scopes: ['https://api.cognitedata.com/.default'],

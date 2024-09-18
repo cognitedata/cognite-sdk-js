@@ -23,14 +23,33 @@ import {
   projectUrl,
 } from './utils';
 export interface ClientOptions {
-  /** App identifier (ex: 'FileExtractor') */
+  /**
+   * App identifier (ex: 'FileExtractor')
+   * This is a free-text string that will be used to identify your application.
+   */
   appId: string;
   /** URL to Cognite cluster, e.g 'https://greenfield.cognitedata.com' **/
   baseUrl?: string;
   /** Project name */
   project: string;
-  /** Can be used with @cognite/auth-wrapper, passing an api key or with MSAL Library */
+  /**
+   * @deprecated Use {@link oidcTokenProvider} instead.
+   */
   getToken?: () => Promise<string>;
+  /**
+   * Will be invoked when the SDK needs to authenticate against the CDF API.
+   * The function should return a valid access token to be used against the CDF API.
+   * The function will be called when the API returns 401 (Unauthorized) or when
+   * someone calls {@link BaseCogniteClient.authenticate}.
+   *
+   * It is the responsibility of the user to get hold of a valid access token to pass into the SDK.
+   *
+   * @returns A string representing the raw access token to be used against the CDF API.
+   */
+  oidcTokenProvider?: () => Promise<string>;
+  /**
+   * Used to override the default retry validator.
+   */
   retryValidator?: RetryValidator;
 }
 
@@ -44,7 +63,7 @@ export default class BaseCogniteClient {
   private readonly apiVersion: CogniteAPIVersion;
   private readonly http: CDFHttpClient;
   private readonly metadata: MetadataMap;
-  private readonly getToken: () => Promise<string | undefined>;
+  private readonly getOidcToken: () => Promise<string | undefined>;
   private readonly noAuthMode?: boolean;
   readonly project: string;
   private retryValidator: RetryValidator;
@@ -83,9 +102,21 @@ export default class BaseCogniteClient {
       throw Error('options.project is required and must be of type string');
     }
 
-    if (options && !options.getToken) {
+    if (options.getToken && options.oidcTokenProvider) {
       throw Error(
-        'options.getToken is required and must be of type () => Promise<string>'
+        'options.getToken and options.oidcTokenProvider are mutually exclusive. Please only provide options.oidcTokenProvider'
+      );
+    }
+
+    if (!options.getToken && !options.oidcTokenProvider) {
+      throw Error(
+        'options.oidcTokenProvider is required and must be of type () => Promise<string>'
+      );
+    }
+
+    if (options.getToken) {
+      console.warn(
+        'options.getToken is deprecated and has been renamed to `options.oidcTokenProvider`.'
       );
     }
 
@@ -98,43 +129,50 @@ export default class BaseCogniteClient {
     this.metadata = new MetadataMap();
     this.apiVersion = apiVersion;
     this.project = options.project;
-    this.getToken = async () =>
-      options.getToken ? options.getToken() : undefined;
+    this.getOidcToken = async () => {
+      if (options.oidcTokenProvider) {
+        return options.oidcTokenProvider();
+      }
+      if (options.getToken) {
+        return options.getToken();
+      }
+    };
 
     this.initAPIs();
   }
 
   public authenticate: () => Promise<string | undefined> = async () => {
     try {
-      const token = await this.authenticateGetToken();
+      const token = await this.authenticateUsingOidcTokenProvider();
       return token;
     } catch (e) {
       return;
     }
   };
 
-  private authenticateGetToken: () => Promise<string | undefined> =
-    async () => {
-      try {
-        if (!this.tokenPromise || this.isTokenPromiseFulfilled) {
-          this.isTokenPromiseFulfilled = false;
-          this.tokenPromise = this.getToken();
-        }
-        const token = await this.tokenPromise;
-        this.isTokenPromiseFulfilled = true;
-
-        if (token === undefined) return token;
-
-        if (this.noAuthMode) {
-          return token;
-        }
-        const bearer = bearerString(token);
-        this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
-        return token;
-      } catch {
-        return;
+  private authenticateUsingOidcTokenProvider: () => Promise<
+    string | undefined
+  > = async () => {
+    try {
+      if (!this.tokenPromise || this.isTokenPromiseFulfilled) {
+        this.isTokenPromiseFulfilled = false;
+        this.tokenPromise = this.getOidcToken();
       }
-    };
+      const token = await this.tokenPromise;
+      this.isTokenPromiseFulfilled = true;
+
+      if (token === undefined) return token;
+
+      if (this.noAuthMode) {
+        return token;
+      }
+      const bearer = bearerString(token);
+      this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
+      return token;
+    } catch {
+      return;
+    }
+  };
 
   private initializeCDFHttpClient(
     baseUrl: string | undefined,

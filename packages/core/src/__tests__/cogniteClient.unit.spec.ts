@@ -16,7 +16,7 @@ function setupClient(baseUrl: string = BASE_URL) {
     appId: 'JS SDK integration tests',
     project: 'test-project',
     baseUrl,
-    getToken: () => Promise.resolve(accessToken),
+    oidcTokenProvider: () => Promise.resolve(accessToken),
   });
 }
 
@@ -74,7 +74,7 @@ describe('CogniteClient', () => {
         appId: 'unit-test',
         project: 'unit-test',
         baseUrl: mockBaseUrl,
-        getToken: vi.fn(async () => 'test-token'),
+        oidcTokenProvider: vi.fn(async () => 'test-token'),
         retryValidator: createUniversalRetryValidator(1),
       });
       await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -83,8 +83,32 @@ describe('CogniteClient', () => {
       expect(scope.isDone()).toBeTruthy();
     });
 
-    describe('getToken', () => {
-      test('call getToken on 401', async () => {
+    describe('oidcTokenProvider', () => {
+      test('call oidcTokenProvider on 401', async () => {
+        nock(mockBaseUrl)
+          .get('/test')
+          .once()
+          .reply(401, { error: { message: 'unauthorized' } })
+          .get('/test')
+          .reply(200, { body: 'request ok' });
+
+        const oidcTokenProvider = vi.fn().mockResolvedValue('test-token');
+
+        const client = new BaseCogniteClient({
+          project,
+          appId: 'unit-test',
+          baseUrl: mockBaseUrl,
+          oidcTokenProvider,
+        });
+
+        const result = await client.get('/test');
+
+        expect(result.status).toEqual(200);
+        expect(result.data).toEqual({ body: 'request ok' });
+        expect(oidcTokenProvider).toHaveBeenCalledTimes(1);
+      });
+
+      test('ensure deprecated getToken still works', async () => {
         nock(mockBaseUrl)
           .get('/test')
           .once()
@@ -108,8 +132,10 @@ describe('CogniteClient', () => {
         expect(getToken).toHaveBeenCalledTimes(1);
       });
 
-      test('getToken rejection should reject sdk requests', async () => {
-        const getToken = vi.fn().mockRejectedValue(new Error('auth error'));
+      test('oidcTokenProvider rejection should reject sdk requests', async () => {
+        const oidcTokenProvider = vi
+          .fn()
+          .mockRejectedValue(new Error('auth error'));
 
         nock(mockBaseUrl).get('/test').reply(401, {});
 
@@ -117,7 +143,7 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          getToken,
+          oidcTokenProvider,
         });
 
         await expect(
@@ -126,14 +152,14 @@ describe('CogniteClient', () => {
           '[Error: Request failed | status code: 401]'
         );
 
-        expect(getToken).toHaveBeenCalledTimes(1);
+        expect(oidcTokenProvider).toHaveBeenCalledTimes(1);
       });
 
-      test('getToken should be called once for parallel 401s', async () => {
+      test('oidcTokenProvider should be called once for parallel 401s', async () => {
         nock(mockBaseUrl).get('/test').thrice().reply(401);
         nock(mockBaseUrl).get('/test').thrice().reply(200);
 
-        const mockGetToken = vi.fn(async () => {
+        const oidcTokenProvider = vi.fn(async () => {
           await sleepPromise(100);
           return 'test-token';
         });
@@ -142,7 +168,7 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          getToken: mockGetToken,
+          oidcTokenProvider,
         });
 
         await Promise.all([
@@ -151,16 +177,16 @@ describe('CogniteClient', () => {
           client.get('/test'),
         ]);
 
-        expect(mockGetToken).toBeCalledTimes(1);
+        expect(oidcTokenProvider).toBeCalledTimes(1);
       });
 
-      test('getToken should be called once for parallel 401s with different response times', async () => {
+      test('oidcTokenProvider should be called once for parallel 401s with different response times', async () => {
         nock(mockBaseUrl).get('/test').twice().reply(401);
         nock(mockBaseUrl).get('/test-with-delay').delay(200).reply(401);
         nock(mockBaseUrl).get('/test').twice().reply(200);
         nock(mockBaseUrl).get('/test-with-delay').reply(200);
 
-        const mockGetToken = vi.fn(async () => {
+        const oidcTokenProvider = vi.fn(async () => {
           await sleepPromise(100);
           return 'test-token';
         });
@@ -169,7 +195,7 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          getToken: mockGetToken,
+          oidcTokenProvider,
         });
 
         await Promise.all([
@@ -178,17 +204,17 @@ describe('CogniteClient', () => {
           client.get('/test-with-delay'),
         ]);
 
-        expect(mockGetToken).toBeCalledTimes(1);
+        expect(oidcTokenProvider).toBeCalledTimes(1);
       });
 
-      test('getToken should be called more than once for sequential 401s', async () => {
+      test('oidcTokenProvider should be called more than once for sequential 401s', async () => {
         nock(mockBaseUrl).get('/test').thrice().reply(401);
         nock(mockBaseUrl).get('/test').thrice().reply(200);
         nock(mockBaseUrl).get('/test').reply(401);
         nock(mockBaseUrl).get('/test').reply(200);
 
         let tokenCount = 0;
-        const mockGetToken = vi.fn(async () => {
+        const oidcTokenProvider = vi.fn(async () => {
           await sleepPromise(100);
           return `test-token${tokenCount++}`;
         });
@@ -197,7 +223,7 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          getToken: mockGetToken,
+          oidcTokenProvider,
         });
 
         await Promise.all([
@@ -208,7 +234,7 @@ describe('CogniteClient', () => {
 
         await client.get('/test');
 
-        expect(mockGetToken).toBeCalledTimes(2);
+        expect(oidcTokenProvider).toBeCalledTimes(2);
       });
 
       test('new token should be used on retry for 401s', async () => {
@@ -238,19 +264,21 @@ describe('CogniteClient', () => {
           });
 
         let tokenCount = 0;
-        const mockGetToken = vi.fn(async () => `test-token${tokenCount++}`);
+        const oidcTokenProvider = vi.fn(
+          async () => `test-token${tokenCount++}`
+        );
 
         const client = new BaseCogniteClient({
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          getToken: mockGetToken,
+          oidcTokenProvider,
         });
 
         await client.authenticate();
         await client.get('/test');
 
-        expect(mockGetToken).toBeCalledTimes(3);
+        expect(oidcTokenProvider).toBeCalledTimes(3);
       });
     });
   });

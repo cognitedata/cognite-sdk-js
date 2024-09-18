@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { CogniteClient } from "@cognite/sdk";
 import { useMsal } from "@azure/msal-react";
 import { useQuery, useMutation } from "react-query";
-import { getToken, baseUrl } from "./auth";
+import { oidcTokenProvider, baseUrl } from "./auth";
 
 const project = process.env.REACT_APP_CDF_PROJECT!;
 const appId = process.env.REACT_APP_AZURE_APP_ID!;
@@ -15,7 +15,7 @@ export default function ListAssets() {
       project: project,
       appId: appId,
       baseUrl,
-      getToken,
+      oidcTokenProvider,
     })
   );
 

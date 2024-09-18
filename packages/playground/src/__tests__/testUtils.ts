@@ -13,7 +13,7 @@ export function setupLoggedInClient(
 ) {
   return new CogniteClientPlayground({
     appId: 'JS SDK integration tests (playground)',
-    getToken: () =>
+    oidcTokenProvider: () =>
       login().then((account) => {
         return account.access_token;
       }),
@@ -25,7 +25,7 @@ export function setupLoggedInClient(
 export function setupMockableClient(baseUrl: string = mockBaseUrl) {
   return new CogniteClientPlayground({
     appId: 'JS SDK integration tests (playground)',
-    getToken: () => Promise.resolve(accessToken),
+    oidcTokenProvider: () => Promise.resolve(accessToken),
     project,
     baseUrl,
   });

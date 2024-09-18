@@ -40,7 +40,7 @@ Before you begin, ensure that you have the following:
 ### Setting up OIDC Authentication
 
 - Initialize the SDK: Import and initialize the SDK in your application, providing the necessary configuration options such as the client ID, client secret, and redirect URI obtained from your OIDC IdP.
-- Pass your authentication method to `getToken` property of SDK.
+- Setup a token provider using the `oidcTokenProvider` property of SDK. Here you can provide a valid access token for the CDF API.
 
 For code example you can check [quickstart.ts](https://github.com/cognitedata/cognite-sdk-js/blob/master/samples/nodejs/oidc-typescript/quickstart.ts#L1)
 
