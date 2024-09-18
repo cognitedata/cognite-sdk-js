@@ -1,7 +1,6 @@
 // Copyright 2020 Cognite AS
 
 import {
-  API_KEY_HEADER,
   AUTHORIZATION_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
@@ -136,7 +135,6 @@ export class CDFHttpClient extends RetryableHttpClient {
     }
     return CDFHttpClient.filterHeaders(headers, [
       AUTHORIZATION_HEADER,
-      API_KEY_HEADER,
       X_CDF_APP_HEADER,
       X_CDF_SDK_HEADER,
     ]);

@@ -4,10 +4,10 @@ import { beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 import nock from 'nock';
 import BaseCogniteClient from '../baseCogniteClient';
 
-import { API_KEY_HEADER, BASE_URL } from '../constants';
+import { AUTHORIZATION_HEADER, BASE_URL } from '../constants';
 import { createUniversalRetryValidator } from '../httpClient/retryValidator';
 import { sleepPromise } from '../utils';
-import { apiKey, project } from './testUtils';
+import { accessToken, project } from './testUtils';
 
 const mockBaseUrl = 'https://example.com';
 
@@ -16,8 +16,7 @@ function setupClient(baseUrl: string = BASE_URL) {
     appId: 'JS SDK integration tests',
     project: 'test-project',
     baseUrl,
-    apiKeyMode: true,
-    getToken: () => Promise.resolve(apiKey),
+    getToken: () => Promise.resolve(accessToken),
   });
 }
 
@@ -119,7 +118,6 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
           getToken: () => Promise.resolve('401-test-token'),
         });
 
@@ -138,7 +136,6 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
           getToken,
         });
 
@@ -164,7 +161,6 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
           getToken: mockGetToken,
         });
 
@@ -192,7 +188,6 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
           getToken: mockGetToken,
         });
 
@@ -221,7 +216,6 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
           getToken: mockGetToken,
         });
 
@@ -240,19 +234,25 @@ describe('CogniteClient', () => {
         nock(mockBaseUrl)
           .get('/test')
           .reply(function () {
-            expect(this.req.headers['api-key']).toStrictEqual(['test-token0']);
+            expect(this.req.headers[AUTHORIZATION_HEADER]).toStrictEqual([
+              'Bearer test-token0',
+            ]);
             return [401];
           });
         nock(mockBaseUrl)
           .get('/test')
           .reply(function () {
-            expect(this.req.headers['api-key']).toStrictEqual(['test-token1']);
+            expect(this.req.headers[AUTHORIZATION_HEADER]).toStrictEqual([
+              'Bearer test-token1',
+            ]);
             return [401];
           });
         nock(mockBaseUrl)
           .get('/test')
           .reply(function () {
-            expect(this.req.headers['api-key']).toStrictEqual(['test-token2']);
+            expect(this.req.headers[AUTHORIZATION_HEADER]).toStrictEqual([
+              'Bearer test-token2',
+            ]);
             return [200];
           });
 
@@ -263,7 +263,6 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
           getToken: mockGetToken,
         });
 
@@ -273,53 +272,13 @@ describe('CogniteClient', () => {
         expect(mockGetToken).toBeCalledTimes(3);
       });
     });
-
-    test('api-key: send api-key on first request', async () => {
-      nock(mockBaseUrl, { reqheaders: { 'api-key': apiKey } })
-        .get('/test')
-        .reply(200);
-      const client = setupClient(mockBaseUrl);
-      await client.authenticate();
-      await expect(client.get('/test').then((r) => r.status)).resolves.toBe(
-        200
-      );
-    });
-
-    test('api-key: 401 and getToken resolving to the same api-key should fail request', async () => {
-      nock(mockBaseUrl).get('/test').twice().reply(401, {});
-
-      const client = setupClient(mockBaseUrl);
-
-      await expect(
-        client.get('/test')
-      ).rejects.toThrowErrorMatchingInlineSnapshot(
-        '[Error: Request failed | status code: 401]'
-      );
-    });
-
-    test('apiKeyMode should change request header and token preable', async () => {
-      nock(mockBaseUrl).get('/test').reply(200, { body: 'api key request ok' });
-
-      const client = new BaseCogniteClient({
-        project,
-        appId: 'unit-test',
-        baseUrl: mockBaseUrl,
-        apiKeyMode: true,
-        getToken: () => Promise.resolve('test-api-key'),
-      });
-
-      const result = await client.get('/test');
-
-      expect(result.status).toEqual(200);
-      expect(result.data).toEqual({ body: 'api key request ok' });
-    });
   });
 
   test('getDefaultRequestHeaders() returns clone', () => {
     const client = setupMockableClient();
     const headers = client.getDefaultRequestHeaders();
-    headers[API_KEY_HEADER] = 'overriden';
-    const expectedHeaders = { [API_KEY_HEADER]: apiKey };
+    headers[AUTHORIZATION_HEADER] = 'overriden';
+    const expectedHeaders = { [AUTHORIZATION_HEADER]: accessToken };
     nock(mockBaseUrl, { reqheaders: expectedHeaders }).get('/').reply(200, {});
   });
 

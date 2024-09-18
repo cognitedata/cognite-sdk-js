@@ -50,8 +50,6 @@ export type AclAction3D = READ | CREATE | UPDATE | DELETE;
 
 export type AclActionAnalytics = READ | EXECUTE | LIST;
 
-export type AclActionApiKeys = LIST | CREATE | DELETE;
-
 export type AclActionAssets = READ | WRITE;
 
 export type AclActionDataSets = READ | WRITE | OWNER;
@@ -79,8 +77,6 @@ export type AclActionTimeseries = READ | WRITE;
 export type AclActionUsers = LIST | CREATE | DELETE;
 
 export type AclAnalytics = Acl<AclActionAnalytics, AclScopeAnalytics>;
-
-export type AclApiKeys = Acl<AclActionApiKeys, AclScopeApiKeys>;
 
 export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
 
@@ -119,8 +115,6 @@ export interface AclScopeIds {
 }
 
 export type AclScopeAnalytics = AclScopeAll;
-
-export type AclScopeApiKeys = AclScopeAll | AclScopeCurrentUser;
 
 export type AclScopeAssets = AclScopeAll | AclScopeDatasetsIds;
 
@@ -196,41 +190,6 @@ export type Aggregate =
   | 'totalVariation'
   | 'continuousVariance'
   | 'discreteVariance';
-
-export interface ApiKeyListScope {
-  /**
-   * Only available with users:list acl, returns all api keys for this project.
-   */
-  all?: boolean;
-  /**
-   * Get api keys for a specific service account, only available to admin users.
-   */
-  serviceAccountId?: CogniteInternalId;
-  /**
-   * Whether to include deleted api keys
-   */
-  includeDeleted?: boolean;
-}
-
-export interface ApiKeyObject {
-  /**
-   * Internal id for the api key
-   */
-  id: CogniteInternalId;
-  /**
-   * Id of the service account
-   */
-  serviceAccountId: CogniteInternalId;
-  createdTime: Date;
-  /**
-   * The status of the api key
-   */
-  status: 'ACTIVE' | 'DELETED';
-}
-
-export interface ApiKeyRequest {
-  serviceAccountId: CogniteInternalId;
-}
 
 export type ArrayPatchString =
   | { set: string[] }
@@ -1638,13 +1597,6 @@ export interface Model3DListRequest extends FilterQuery {
   published?: boolean;
 }
 
-export interface NewApiKeyResponse extends ApiKeyObject {
-  /**
-   * The api key to be used against the API
-   */
-  value: string;
-}
-
 export interface Node3D {
   /**
    * The ID of the node.
@@ -2442,7 +2394,6 @@ export type SingleCogniteCapability =
   | { securityCategoriesAcl: AclSecurityCategories }
   | { rawAcl: AclRaw }
   | { timeSeriesAcl: AclTimeseries }
-  | { apikeysAcl: AclApiKeys }
   | { threedAcl: Acl3D }
   | { sequencesAcl: AclSequences }
   | { analyticsAcl: AclAnalytics }

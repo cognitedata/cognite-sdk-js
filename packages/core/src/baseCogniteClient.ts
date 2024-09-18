@@ -4,7 +4,6 @@ import { version } from '../package.json';
 import { LoginAPI } from './api/login/loginApi';
 import { LogoutApi } from './api/logout/logoutApi';
 import {
-  API_KEY_HEADER,
   AUTHORIZATION_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
@@ -37,8 +36,6 @@ export interface ClientOptions {
   project: string;
   /** Can be used with @cognite/auth-wrapper, passing an api key or with MSAL Library */
   getToken?: () => Promise<string>;
-  /** Retrieve data with apiKey passed at getToken method */
-  apiKeyMode?: boolean;
   /** Retrieve data without any authentication headers */
   noAuthMode?: boolean;
   /** OIDC/API auth */
@@ -78,7 +75,6 @@ export default class BaseCogniteClient {
   private readonly loginApi: LoginAPI;
   private readonly logoutApi: LogoutApi;
   private readonly getToken: () => Promise<string | undefined>;
-  private readonly apiKeyMode: boolean;
   private readonly noAuthMode?: boolean;
   readonly project: string;
 
@@ -147,7 +143,6 @@ export default class BaseCogniteClient {
     this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
     this.apiVersion = apiVersion;
     this.project = options.project;
-    this.apiKeyMode = !!options.apiKeyMode;
     this.noAuthMode = !!options.noAuthMode;
     this.getToken = async () => {
       return options.getToken ? options.getToken() : undefined;
@@ -184,10 +179,6 @@ export default class BaseCogniteClient {
         if (token === undefined) return token;
 
         if (this.noAuthMode) {
-          return token;
-        }
-        if (this.apiKeyMode) {
-          this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
           return token;
         }
         const bearer = bearerString(token);
@@ -243,14 +234,7 @@ export default class BaseCogniteClient {
   private retrieveTokenValueFromHeader(
     headers?: HttpHeaders
   ): string | undefined {
-    let token: string | undefined;
-
-    if (this.apiKeyMode) {
-      token = headers?.[API_KEY_HEADER];
-    } else {
-      token = headers?.[AUTHORIZATION_HEADER];
-    }
-
+    const token = headers?.[AUTHORIZATION_HEADER];
     return token !== undefined ? token.replace('Bearer ', '') : token;
   }
 

@@ -8,9 +8,7 @@ export const DEFAULT_DOMAIN = 'cognitedata.com';
 export const BASE_URL = `https://${DEFAULT_CLUSTER}.${DEFAULT_DOMAIN}`;
 
 /** @hidden */
-export const AUTHORIZATION_HEADER = 'Authorization';
-/** @hidden */
-export const API_KEY_HEADER = 'api-key';
+export const AUTHORIZATION_HEADER = 'authorization';
 /** @hidden */
 export const X_CDF_APP_HEADER = 'x-cdp-app';
 /** @hidden */
