@@ -17,12 +17,4 @@ describe('Projects integration test', () => {
     expect(projectInfo.name.length).toBeGreaterThan(0);
     expect(projectInfo.urlName).toBe(project);
   });
-
-  test('deprecated update', () => {
-    // no tests because endpoint is overriding config
-  });
-
-  test('update', () => {
-    // no tests because endpoint is overriding config
-  });
 });
