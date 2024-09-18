@@ -1370,27 +1370,6 @@ export function isManagedExternallyGroup(
  */
 export type GroupName = string;
 
-export interface GroupServiceAccount {
-  /**
-   * Unique name of the service account
-   * @example some-internal-service@apple.com
-   */
-  name: string;
-  id: CogniteInternalId;
-  /**
-   * List of group ids
-   */
-  groups: CogniteInternalId[];
-  /**
-   * If this service account has been logically deleted
-   */
-  isDeleted: boolean;
-  /**
-   * Time of deletion
-   */
-  deletedTime?: Date;
-}
-
 /**
  * ID of the group in the source. If this is the same ID as a group in the IDP, a user in that group will implicitly be a part of this group as well.
  * @example b7c9a5a4-99c2-4785-bed3-5e6ad9a78603
@@ -2228,30 +2207,6 @@ export const SequenceValueType = {
  * @default STRING
  */
 export type SequenceValueType = 'STRING' | 'DOUBLE' | 'LONG';
-
-export interface ServiceAccount {
-  name: ServiceAccountName;
-  groups?: Groups;
-  id: CogniteInternalId;
-  /**
-   * If this service account has been logically deleted
-   */
-  isDeleted?: boolean;
-  /**
-   * Time of deletion
-   */
-  deletedTime?: Date;
-}
-
-export interface ServiceAccountInput {
-  name: ServiceAccountName;
-  groups?: Groups;
-}
-
-/**
- * Unique name of the service account
- */
-export type ServiceAccountName = string;
 
 export interface SetField<T> {
   set: T;
