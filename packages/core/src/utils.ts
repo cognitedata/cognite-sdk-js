@@ -1,11 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import isObject from 'lodash/isObject';
 import isArray from 'lodash/isArray';
-import isBuffer from 'is-buffer';
+import isObject from 'lodash/isObject';
 import { BASE_URL } from './constants';
-import { CogniteError } from './error';
-import { CogniteMultiError } from './multiError';
+import type { CogniteError } from './error';
+import { CogniteMultiError, type MultiErrorRawSummary } from './multiError';
 
 /** @hidden */
 export type CogniteAPIVersion = 'v1' | 'playground';
@@ -32,29 +31,19 @@ export function bearerString(token: string) {
   return `Bearer ${token}`;
 }
 
-/** @hidden */
-export function isBrowser() {
+function isBuffer(obj: unknown): boolean {
+  type BufferConstructor = (() => void) & {
+    isBuffer: (x: unknown) => boolean;
+  };
+
+  // Taken from:
+  // https://github.com/feross/is-buffer/blob/ec4bf3415108e8971375e6717ad63dde752faebf/index.js#L8
   return (
-    typeof window !== 'undefined' && typeof window.document !== 'undefined'
+    obj != null &&
+    obj.constructor != null &&
+    typeof (obj.constructor as BufferConstructor).isBuffer === 'function' &&
+    (obj.constructor as BufferConstructor).isBuffer(obj)
   );
-}
-
-export function clearParametersFromUrl(...params: string[]): void {
-  let url = window.location.href;
-  params.forEach((param) => {
-    url = removeQueryParameterFromUrl(url, param);
-  });
-  window.history.replaceState(null, '', url);
-}
-
-/** @hidden */
-export function removeQueryParameterFromUrl(
-  url: string,
-  parameter: string
-): string {
-  return url
-    .replace(new RegExp('[?#&]' + parameter + '=[^&#]*(#.*)?$'), '$1')
-    .replace(new RegExp('([?#&])' + parameter + '=[^&]*&'), '$1');
 }
 
 /** @hidden */
@@ -63,7 +52,7 @@ export function convertToTimestampToDateTime(timestamp: number): Date {
 }
 
 /** @hidden */
-export function isJson(data: any) {
+export function isJson(data: unknown) {
   return (
     (isArray(data) || isObject(data)) &&
     !isBuffer(data) &&
@@ -88,10 +77,11 @@ export function promiseCache<ReturnValue>(
     if (unresolvedPromise) {
       return unresolvedPromise;
     }
-    return (unresolvedPromise = promiseFn().then((res) => {
+    unresolvedPromise = promiseFn().then((res) => {
       unresolvedPromise = null;
       return res;
-    }));
+    });
+    return unresolvedPromise;
   };
 }
 
@@ -131,12 +121,12 @@ export async function promiseAllAtOnce<RequestType, ResponseType>(
   );
 
   const results = await Promise.all(wrappedPromises);
-  results.forEach((res) => {
+  for (const res of results) {
     failed.push(...(res.failed ? [res.failed] : []));
     succeded.push(...(res.succeded ? [res.succeded] : []));
     responses.push(...(res.response ? [res.response] : []));
     errors.push(...(res.error ? [res.error] : []));
-  });
+  }
   if (failed.length) {
     throw {
       succeded,
@@ -158,11 +148,12 @@ export async function promiseAllWithData<RequestType, ResponseType>(
   try {
     if (runSequentially) {
       return await promiseEachInSequence(inputs, promiser);
-    } else {
-      return await promiseAllAtOnce(inputs, promiser);
     }
+    return await promiseAllAtOnce(inputs, promiser);
   } catch (err) {
-    throw new CogniteMultiError(err);
+    throw new CogniteMultiError(
+      err as MultiErrorRawSummary<RequestType, ResponseType>
+    );
   }
 }
 
@@ -203,44 +194,4 @@ export function applyIfApplicable<ArgumentType, ResultType>(
     return action(args);
   }
   return args;
-}
-
-/** @hidden */
-export function generatePopupWindow(url: string, name: string) {
-  return window.open(
-    url,
-    name,
-    // https://www.quackit.com/javascript/popup_windows.cfm
-    'height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes'
-  );
-}
-
-/** @hidden */
-export function createInvisibleIframe(
-  url: string,
-  name: string
-): HTMLIFrameElement {
-  const iframe = document.createElement('iframe');
-  iframe.name = name;
-  iframe.style.width = '0';
-  iframe.style.height = '0';
-  iframe.style.border = '0';
-  iframe.style.border = 'none';
-  iframe.style.visibility = 'hidden';
-
-  iframe.setAttribute('id', name);
-  iframe.setAttribute('aria-hidden', 'true');
-
-  iframe.src = url;
-  return iframe;
-}
-
-/** @hidden */
-export function isUsingSSL() {
-  return isBrowser() && location.protocol.toLowerCase() === 'https:';
-}
-
-/** @hidden */
-export function isLocalhost(): boolean {
-  return isBrowser() && location.hostname === 'localhost';
 }

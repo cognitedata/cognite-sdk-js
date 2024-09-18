@@ -1,13 +1,16 @@
 # Authentication in browsers
 
-- [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
-- [Accessing different clusters](#accessing-different-clusters)
-- [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
-- [OpenID Connect (OIDC)](#openid-connect-oidc)
-  - [OIDC authentication using code authorization w pkce.](#oidc-authentication-using-code-authorization-w-pkce)
-  - [OIDC authentication using client credentials](#oidc-authentication-using-client-credentials)
-- [Manually trigger authentication](#manually-trigger-authentication)
-- [Cache access tokens](#cache-access-tokens)
+- [Authentication in browsers](#authentication-in-browsers)
+  - [Use access tokens instead of API keys](#use-access-tokens-instead-of-api-keys)
+  - [Accessing different clusters](#accessing-different-clusters)
+  - [How to authenticate with the SDK?](#how-to-authenticate-with-the-sdk)
+  - [OpenID Connect (OIDC)](#openid-connect-oidc)
+    - [OIDC authentication using code authorization w pkce](#oidc-authentication-using-code-authorization-w-pkce)
+    - [OIDC authentication using client credentials](#oidc-authentication-using-client-credentials)
+      - [Example](#example)
+  - [Manually trigger authentication](#manually-trigger-authentication)
+  - [Cache access tokens](#cache-access-tokens)
+  - [More](#more)
 
 ## Use access tokens instead of API keys
 
@@ -28,23 +31,21 @@ const client = new CogniteClient({
   appId: 'sample-app',
   baseUrl: 'https://bluefield.cognitedata.com',
   project: 'demo-project',
-  getToken: ...
+  oidcTokenProvider: ...
 });
 ```
 
 ## How to authenticate with the SDK?
 
-Quickly summarized, the application passes a `getToken` callback to the SDK and uses it to
-get and renew tokens as needed. **Note** that the SDK comes with an implementation of the Cognite legacy
-authentication flow, **but it does not come with an implementation for all IDPs**. If you need to
-integrate your application and the SDK with, for example, Azure Active Directory, use the appropriate library
+Quickly summarized, the application passes a `oidcTokenProvider` callback to the SDK and uses it to
+get and renew tokens as needed. If you need to integrate your application and the SDK with, for example, Azure Active Directory, use the appropriate library
 from Microsoft. If you need to integrate with Auth0, use their libraries and integrate with the SDK
-via `getToken`.
+via `oidcTokenProvider`.
 
 ## OpenID Connect (OIDC)
 
 See
-[this article](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc.html#design-principles-openid-connect-and-cdf)
+[this article](https://docs.cognite.com/cdf/access/concepts/best_practices_oidc/)
 for details about OIDC and Cognite.
 
 ### OIDC authentication using code authorization w pkce
@@ -73,7 +74,7 @@ const configuration: Configuration = {
 };
 
 const pca = new PublicClientApplication(configuration);
-const getToken = async () => {
+const oidcTokenProvider = async () => {
   const accountId = sessionStorage.getItem("account");
   const account = pca.getAccountByLocalId(accountId)!;
   const token = await pca.acquireTokenSilent({
@@ -92,7 +93,7 @@ const getToken = async () => {
 const client = new CogniteClient({
   project: "my-project",
   appId: "demo-sample",
-  getToken
+  oidcTokenProvider
 });
 
 ```
@@ -125,7 +126,8 @@ async function quickstart() {
   const client = new CogniteClient({
     appId: 'Cognite SDK samples',
     project,
-    getToken: () =>
+    baseUrl: "https://api.cognitedata.com",
+    oidcTokenProvider: () =>
       pca
         .acquireTokenByClientCredential({
           scopes: ['https://api.cognitedata.com/.default'],
@@ -175,10 +177,10 @@ If the token is invalid or timed out, the SDK triggers a standard auth-flow on t
 ```js
 const client = new CogniteClient({
   project: 'YOUR PROJECT NAME HERE',
-  getToken: () => Promise.resolve('ACCESS TOKEN FOR THE PROJECT HERE'),
+  oidcTokenProvider: () => Promise.resolve('ACCESS TOKEN FOR THE PROJECT HERE'),
 });
 ```
 
 ## More
 
-Read more about the [authentication process](https://developer.cognite.com/dev/guides/iam/external-application/#tokens).
+Read more about the [authentication process](https://developer.cognite.com/dev/guides/iam/external-application#tokens).

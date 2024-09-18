@@ -1,14 +1,14 @@
 // Copyright 2022 Cognite AS
 
 import { BaseResourceAPI, sleepPromise } from '@cognite/sdk-core';
-import {
+import type {
+  FeatureParameters,
+  FileReference,
+  JobId,
+  JobStatus,
+  VisionExtractFeature,
   VisionExtractGetResponse,
   VisionExtractPostResponse,
-  VisionExtractFeature,
-  FileReference,
-  JobStatus,
-  JobId,
-  FeatureParameters,
 } from '../../types';
 
 const JOB_COMPLETE_STATES: JobStatus[] = ['Completed', 'Failed'];
@@ -23,7 +23,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    * [Extract features from image](https://docs.cognite.com/api/v1/#tag/Vision/operation/postVisionExtract)
    *
    * ```js
-   * const response = await client.vision.extract(["TextDetection"], [{id: 1234}], {textDetectionParameters: {threshold: 0.4}});
+   * const job = await client.vision.extract(['TextDetection', 'AssetTagDetection', 'PeopleDetection'], [{ fileId: 1234 }]);
    * ```
    */
   public extract = async (
@@ -53,14 +53,17 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
    * [Retrieve extract job](https://docs.cognite.com/api/v1/#tag/Vision/operation/getVisionExtract)
    *
    * ```js
-   * const job = await client.vision.getExtractJob(12345678);
+   * const { items } = await client.vision.getExtractJob(12345678, true); // get an existing job, wait for it to complete, and get the results
+   * items.forEach((item) => {
+   *  const predictions = item.predictions // do something with the predictions
+   * });
    * ```
    */
   public getExtractJob = async (
     jobId: JobId,
-    waitForCompletion: boolean = true,
-    pollingTimeMs: number = 1000,
-    maxRetries: number = 600
+    waitForCompletion = true,
+    pollingTimeMs = 1000,
+    maxRetries = 600
   ): Promise<VisionExtractGetResponse> => {
     const path = this.url(`extract/${jobId}`);
     const getJobResult = async () => {
@@ -96,6 +99,6 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
       await sleepPromise(pollingTimeMs);
       retryCount++;
     } while (retryCount < maxRetries);
-    throw new Error(`Timed out while waiting for vision job to complete.`);
+    throw new Error('Timed out while waiting for vision job to complete.');
   }
 }

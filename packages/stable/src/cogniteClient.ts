@@ -1,9 +1,9 @@
 // Copyright 2020 Cognite AS
 import {
+  BaseCogniteClient,
+  type RetryValidator,
   accessApi,
   apiUrl,
-  BaseCogniteClient,
-  RetryValidator,
 } from '@cognite/sdk-core';
 import { version } from '../package.json';
 import { AssetMappings3DAPI } from './api/3d/assetMappings3DApi';
@@ -11,33 +11,38 @@ import { Files3DAPI } from './api/3d/files3DApi';
 import { Models3DAPI } from './api/3d/models3DApi';
 import { Revisions3DAPI } from './api/3d/revisions3DApi';
 import { Viewer3DAPI } from './api/3d/viewer3DApi';
-import { ApiKeysAPI } from './api/apiKeys/apiKeysApi';
+import { AnnotationsAPI } from './api/annotations/annotationsApi';
 import { AssetsAPI } from './api/assets/assetsApi';
+import { ContainersAPI } from './api/containers/containersApi';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 import { DataSetsAPI } from './api/datasets/datasetsApi';
 import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
 import { FilesAPI } from './api/files/filesApi';
+import { GeospatialAPI } from './api/geospatial/geospatialAPI';
 import { GroupsAPI } from './api/groups/groupsApi';
+import { InstancesAPI } from './api/instances/instancesApi';
 import { LabelsAPI } from './api/labels/labelsApi';
+import { DataModelsAPI } from './api/models/datamodelsApi';
 import { ProjectsAPI } from './api/projects/projectsApi';
 import { RawAPI } from './api/raw/rawApi';
 import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
-import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
-import { GeospatialAPI } from './api/geospatial/geospatialAPI';
-import { AnnotationsAPI } from './api/annotations/annotationsApi';
-import { VisionAPI } from './api/vision/visionApi';
+import { SpacesAPI } from './api/spaces/spacesApi';
 import {
   TemplateGraphQlApi,
-  TemplateGroupsApi,
   TemplateGroupVersionsApi,
+  TemplateGroupsApi,
   TemplateInstancesApi,
   ViewsApi,
 } from './api/templates';
 import { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
+import { UnitsAPI } from './api/units/unitsApi';
+import { ProfilesAPI } from './api/userProfiles/profilesApi';
+import { ViewsAPI } from './api/views/viewsApi';
+import { VisionAPI } from './api/vision/visionApi';
 import { retryValidator } from './retryValidator';
 
 export default class CogniteClient extends BaseCogniteClient {
@@ -74,9 +79,6 @@ export default class CogniteClient extends BaseCogniteClient {
   public get securityCategories() {
     return accessApi(this.securityCategoriesApi);
   }
-  public get serviceAccounts() {
-    return accessApi(this.serviceAccountsApi);
-  }
   public get models3D() {
     return accessApi(this.models3DApi);
   }
@@ -95,9 +97,6 @@ export default class CogniteClient extends BaseCogniteClient {
   public get viewer3D() {
     return accessApi(this.viewer3DApi);
   }
-  public get apiKeys() {
-    return accessApi(this.apiKeysApi);
-  }
   public get relationships() {
     return accessApi(this.relationshipsApi);
   }
@@ -115,6 +114,9 @@ export default class CogniteClient extends BaseCogniteClient {
   }
   public get vision() {
     return accessApi(this.visionApi);
+  }
+  public get profiles() {
+    return accessApi(this.profilesApi);
   }
   public get templates() {
     return {
@@ -140,7 +142,7 @@ export default class CogniteClient extends BaseCogniteClient {
                 )
               ),
               runQuery: async <
-                TVariables extends Record<string, unknown>
+                TVariables extends Record<string, unknown>,
               >(graphQlParams: {
                 query: string;
                 variables?: TVariables;
@@ -155,19 +157,35 @@ export default class CogniteClient extends BaseCogniteClient {
       },
     };
   }
-
+  public get units() {
+    return accessApi(this.unitsApi);
+  }
+  public get instances() {
+    return accessApi(this.instancesApi);
+  }
+  public get containers() {
+    return accessApi(this.containersApi);
+  }
+  public get views() {
+    return accessApi(this.viewsApi);
+  }
+  public get spaces() {
+    return accessApi(this.spacesApi);
+  }
+  public get dataModels() {
+    return accessApi(this.dataModelsApi);
+  }
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
-  private dataPointsApi?: DataPointsAPI;
+  protected dataPointsApi?: DataPointsAPI;
   private sequencesApi?: SequencesAPI;
   private eventsApi?: EventsAPI;
-  private filesApi?: FilesAPI;
+  protected filesApi?: FilesAPI;
   private labelsApi?: LabelsAPI;
   private rawApi?: RawAPI;
   private projectsApi?: ProjectsAPI;
   private groupsApi?: GroupsAPI;
   private securityCategoriesApi?: SecurityCategoriesAPI;
-  private serviceAccountsApi?: ServiceAccountsAPI;
   private models3DApi?: Models3DAPI;
   private relationshipsApi?: RelationshipsApi;
   private entityMatchingApi?: EntityMatchingApi;
@@ -176,11 +194,17 @@ export default class CogniteClient extends BaseCogniteClient {
   private datasetsApi?: DataSetsAPI;
   private assetMappings3DApi?: AssetMappings3DAPI;
   private viewer3DApi?: Viewer3DAPI;
-  private apiKeysApi?: ApiKeysAPI;
   private geospatialApi?: GeospatialAPI;
   private documentsApi?: DocumentsAPI;
   private annotationsApi?: AnnotationsAPI;
   private visionApi?: VisionAPI;
+  private profilesApi?: ProfilesAPI;
+  private unitsApi?: UnitsAPI;
+  private instancesApi?: InstancesAPI;
+  private containersApi?: ContainersAPI;
+  private viewsApi?: ViewsAPI;
+  private spacesApi?: SpacesAPI;
+  private dataModelsApi?: DataModelsAPI;
 
   protected get version() {
     return version;
@@ -210,11 +234,6 @@ export default class CogniteClient extends BaseCogniteClient {
       SecurityCategoriesAPI,
       'securitycategories'
     );
-    this.serviceAccountsApi = this.apiFactory(
-      ServiceAccountsAPI,
-      'serviceaccounts'
-    );
-    this.apiKeysApi = this.apiFactory(ApiKeysAPI, 'apikeys');
     this.models3DApi = this.apiFactory(Models3DAPI, models3DPath);
     this.relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
     this.entityMatchingApi = this.apiFactory(
@@ -234,6 +253,13 @@ export default class CogniteClient extends BaseCogniteClient {
     this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
     this.annotationsApi = this.apiFactory(AnnotationsAPI, 'annotations');
     this.visionApi = this.apiFactory(VisionAPI, 'context/vision');
+    this.profilesApi = this.apiFactory(ProfilesAPI, 'profiles');
+    this.unitsApi = this.apiFactory(UnitsAPI, 'units');
+    this.instancesApi = this.apiFactory(InstancesAPI, 'models/instances');
+    this.containersApi = this.apiFactory(ContainersAPI, 'models/containers');
+    this.viewsApi = this.apiFactory(ViewsAPI, 'models/views');
+    this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
+    this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
   }
 
   static urlEncodeExternalId(externalId: string): string {

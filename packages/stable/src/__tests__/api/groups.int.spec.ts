@@ -1,19 +1,37 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { Group, GroupSpec } from '../../types';
+import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { Group, GroupSpec } from '../../types';
 import {
   randomInt,
   runTestWithRetryWhenFailing,
   setupLoggedInClient,
 } from '../testUtils';
 
-const testDataSetId = 2128956100044005;
+let testDataSetId = -1;
 
 describe('Groups integration test', () => {
   let client: CogniteClient;
   beforeAll(async () => {
     client = setupLoggedInClient();
+    // upsert dataset
+    const datasetExternalId = 'groups-integration-test-data-set';
+    const datasets = await client.datasets.retrieve(
+      [{ externalId: datasetExternalId }],
+      { ignoreUnknownIds: true }
+    );
+    if (datasets.length === 0) {
+      const [dataset] = await client.datasets.create([
+        {
+          externalId: datasetExternalId,
+          name: 'Groups integration test data set',
+        },
+      ]);
+      testDataSetId = dataset.id;
+    } else {
+      testDataSetId = datasets[0].id;
+    }
   });
 
   let group: Group;

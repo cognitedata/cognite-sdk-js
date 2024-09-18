@@ -27,16 +27,16 @@ Retrieve a single or multiple sequences by external id.
 
 ***Parameters***
 
-| Properties | Definition |
-| ---------- | ---------- |
-| **ids** ([IdEither[]](https://cognitedata.github.io/cognite-sdk-js/globals.html#ideither)) | InternalId or ExternalId array. |
+| Properties                                                                                                              | Definition                                                    |
+| ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| **ids** ([IdEither[]](https://cognitedata.github.io/cognite-sdk-js/globals.html#ideither))                              | InternalId or ExternalId array.                               |
 | **params** ([SequenceRetrieveParams](https://cognitedata.github.io/cognite-sdk-js/globals.html#sequenceretrieveparams)) | *(Optional)*. Ignore IDs and external IDs that are not found. |
 
 ***Returns***
 
-| Return | Type |
-| ------- | ---- |
-| List of requested sequences |  Promise<[Sequence[]](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequence.html)> |
+| Return                      | Type                                                                                         |
+| --------------------------- | -------------------------------------------------------------------------------------------- |
+| List of requested sequences | Promise<[Sequence[]](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequence.html)> |
 
 ***Examples***
 
@@ -86,15 +86,15 @@ List sequences.
 
 ***Parameters***
 
-| Properties | Definition |
-| ---------- | ---------- |
+| Properties                                                                                                      | Definition                                          |
+| --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
 | **scope** ([SequenceListScope](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequencelistscope.html)) | (*Optional*). Query cursor, limit and some filters. |
 
 ***Returns***
 
-| Return | Type |
-| ------- | ---- |
-| List of requested sequences |  [CursorAndAsyncIterator](https://cognitedata.github.io/cognite-sdk-js/globals.html#cursorandasynciterator)<[Sequence](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequence.html)[]> |
+| Return                      | Type                                                                                                                                                                                            |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| List of requested sequences | [CursorAndAsyncIterator](https://cognitedata.github.io/cognite-sdk-js/globals.html#cursorandasynciterator)<[Sequence](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequence.html)[]> |
 
 ***Examples***
 
@@ -112,15 +112,15 @@ Aggregate sequences.
 
 ***Parameters***
 
-| Properties | Definition |
-| ---------- | ---------- |
-| **query** ([SequenceFilter](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequencefilter.html)) | Filters. |
+| Properties                                                                                                | Definition |
+| --------------------------------------------------------------------------------------------------------- | ---------- |
+| **query** ([SequenceFilter](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequencefilter.html)) | Filters.   |
 
 ***Returns***
 
-| Return | Type |
-| ------- | ---- |
-| List of sequence aggregates |  Promise<[SequenceAggregate](https://cognitedata.github.io/cognite-sdk-js/globals.html#sequenceaggregate)[]> |
+| Return                      | Type                                                                                                        |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| List of sequence aggregates | Promise<[SequenceAggregate](https://cognitedata.github.io/cognite-sdk-js/globals.html#sequenceaggregate)[]> |
 
 ***Examples***
 
@@ -140,15 +140,15 @@ Search sequences.
 
 ***Parameters***
 
-| Properties | Definition |
-| ---------- | ---------- |
-| **query** ([SequenceSearchFilter](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequencesearchfilter.html)) | Filters. |
+| Properties                                                                                                            | Definition |
+| --------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **query** ([SequenceSearchFilter](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequencesearchfilter.html)) | Filters.   |
 
 ***Returns***
 
-| Return | Type |
-| ------- | ---- |
-| List of searched sequences |  Promise<[Sequence](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequence.html)[]> |
+| Return                     | Type                                                                                         |
+| -------------------------- | -------------------------------------------------------------------------------------------- |
+| List of searched sequences | Promise<[Sequence](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequence.html)[]> |
 
 ***Examples***
 
@@ -171,15 +171,15 @@ Some description.
 
 ***Parameters***
 
-| Properties | Definition |
-| ---------- | ---------- |
+| Properties                                                                                                      | Definition           |
+| --------------------------------------------------------------------------------------------------------------- | -------------------- |
 | **items** ([ExternalSequence](https://cognitedata.github.io/cognite-sdk-js/interfaces/externalsequence.html)[]) | Sequence properties. |
 
 ***Returns***
 
-| Return | Type |
-| ------- | ---- |
-| List of requested sequences |  Promise<[Sequence](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequence.html)[]> |
+| Return                      | Type                                                                                         |
+| --------------------------- | -------------------------------------------------------------------------------------------- |
+| List of requested sequences | Promise<[Sequence](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequence.html)[]> |
 
 ***Examples***
 
@@ -231,15 +231,15 @@ Delete sequences.
 
 ***Parameters***
 
-| Properties | Definition |
-| ---------- | ---------- |
+| Properties                                                                                 | Definition                     |
+| ------------------------------------------------------------------------------------------ | ------------------------------ |
 | **ids** ([IdEither](https://cognitedata.github.io/cognite-sdk-js/globals.html#ideither)[]) | InternalId or ExternalId array |
 
 ***Returns***
 
-| Return | Type |
-| ------- | ---- |
-| Empty Promise |  Promise<{}> |
+| Return        | Type            |
+| ------------- | --------------- |
+| Empty Promise | Promise<object> |
 
 ***Examples***
 
@@ -281,15 +281,15 @@ Update sequences.
 
 ***Parameters***
 
-| Properties | Definition |
-| ---------- | ---------- |
+| Properties                                                                                                 | Definition      |
+| ---------------------------------------------------------------------------------------------------------- | --------------- |
 | **changes** ([SequenceChange](https://cognitedata.github.io/cognite-sdk-js/globals.html#sequencechange)[]) | Sequences data. |
 
 ***Returns***
 
-| Return | Type |
-| ------- | ---- |
-| List of updated sequences |  Promise<[Sequence](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequence.html)[]> |
+| Return                    | Type                                                                                         |
+| ------------------------- | -------------------------------------------------------------------------------------------- |
+| List of updated sequences | Promise<[Sequence](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequence.html)[]> |
 
 ***Examples***
 
@@ -337,15 +337,15 @@ Insert rows.
 
 ***Parameters***
 
-| Properties | Definition |
-| ---------- | ---------- |
+| Properties                                                                                                       | Definition                       |
+| ---------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | **items** ([SequenceRowsInsert](https://cognitedata.github.io/cognite-sdk-js/globals.html#sequencerowsinsert)[]) | A request for datapoints stored. |
 
 ***Returns***
 
-| Return | Type |
-| ------- | ---- |
-| Empty Promise | Promise<{}> |
+| Return        | Type            |
+| ------------- | --------------- |
+| Empty Promise | Promise<object> |
 
 ***Examples***
 
@@ -439,15 +439,15 @@ Delete rows.
 
 ***Parameters***
 
-| Properties | Definition |
-| ---------- | ---------- |
+| Properties                                                                                                       | Definition                      |
+| ---------------------------------------------------------------------------------------------------------------- | ------------------------------- |
 | **query** ([SequenceRowsDelete](https://cognitedata.github.io/cognite-sdk-js/globals.html#sequencerowsdelete)[]) | Rows to delete from a sequence. |
 
 ***Returns***
 
-| Return | Type |
-| ------- | ---- |
-| Empty Promise | Promise<{}> |
+| Return        | Type            |
+| ------------- | --------------- |
+| Empty Promise | Promise<object> |
 
 ***Examples***
 
@@ -495,15 +495,15 @@ Retrieve rows.
 
 ***Parameters***
 
-| Properties | Definition |
-| ---------- | ---------- |
+| Properties                                                                                                         | Definition                       |
+| ------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
 | **query** ([SequenceRowsRetrieve](https://cognitedata.github.io/cognite-sdk-js/globals.html#sequencerowsretrieve)) | A request for datapoints stored. |
 
 ***Returns***
 
-| Return | Type |
-| ------- | ---- |
-| List of requested sequence rows |  [CursorAndAsyncIterator](https://cognitedata.github.io/cognite-sdk-js/globals.html#cursorandasynciterator)<[SequenceRow](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequencerow.html)> |
+| Return                          | Type                                                                                                                                                                                                |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| List of requested sequence rows | [CursorAndAsyncIterator](https://cognitedata.github.io/cognite-sdk-js/globals.html#cursorandasynciterator)<[SequenceRow](https://cognitedata.github.io/cognite-sdk-js/interfaces/sequencerow.html)> |
 
 ***Examples***
 

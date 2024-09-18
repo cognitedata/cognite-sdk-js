@@ -1,7 +1,7 @@
 import { BaseResourceAPI } from '@cognite/sdk-core';
-import {
-  GeospatialJsonComputeOutput,
+import type {
   GeospatialComputedItemList,
+  GeospatialJsonComputeOutput,
 } from './types';
 
 export class ComputeAPI extends BaseResourceAPI<GeospatialComputedItemList> {

@@ -1,11 +1,15 @@
 // Copyright 2020 Cognite AS
 
+import {
+  mockBaseUrl,
+  project,
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 import nock from 'nock';
-import CogniteClientPlayground from '../../cogniteClientPlayground';
+import { beforeEach, describe, expect, test } from 'vitest';
+import type CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupMockableClient } from '../testUtils';
-import { mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
 
-const baseUrl = mockBaseUrl + `/api/playground/projects/${project}`;
+const baseUrl = `${mockBaseUrl}/api/playground/projects/${project}`;
 
 describe('Documents unit test', () => {
   let client: CogniteClientPlayground;
@@ -15,8 +19,8 @@ describe('Documents unit test', () => {
   });
 
   test('url', async () => {
-    nock(mockBaseUrl + '/api/playground/project/')
-      .post(new RegExp('/documents/search'), {
+    nock(`${mockBaseUrl}/api/playground/project/`)
+      .post(/\/documents\/search/, {
         search: {
           query: 'test',
         },
@@ -28,7 +32,7 @@ describe('Documents unit test', () => {
 
   test('search with query', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/search'), {
+      .post(/\/documents\/search/, {
         search: {
           query: 'test',
         },
@@ -43,7 +47,7 @@ describe('Documents unit test', () => {
   describe('pipeline', () => {
     test('create pipeline configuration', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/pipelines'), {
+        .post(/\/documents\/pipelines/, {
           items: [
             {
               externalId: 'default',
@@ -106,7 +110,7 @@ describe('Documents unit test', () => {
     });
     test('create pipeline configuration', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/pipelines'), {
+        .post(/\/documents\/pipelines/, {
           items: [
             {
               externalId: 'cognitesdk-js-test',
@@ -158,7 +162,7 @@ describe('Documents unit test', () => {
 
     test('get pipeline configuration', async () => {
       nock(mockBaseUrl)
-        .get(new RegExp('/documents/pipelines'))
+        .get(/\/documents\/pipelines/)
         .once()
         .reply(200, {});
       await client.documents.pipelines.list();
@@ -166,7 +170,7 @@ describe('Documents unit test', () => {
 
     test('update pipeline configuration', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/pipelines'), {
+        .post(/\/documents\/pipelines/, {
           items: [
             {
               externalId: 'cognitesdk-js-test',
@@ -248,7 +252,7 @@ describe('Documents unit test', () => {
 
     test('delete pipeline configuration', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/pipelines/delete'), {
+        .post(/\/documents\/pipelines\/delete/, {
           items: [{ externalId: 'test' }],
         })
         .once()
@@ -258,7 +262,7 @@ describe('Documents unit test', () => {
   });
   test('document content', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/content'), {
+      .post(/\/documents\/content/, {
         items: [{ id: 1 }, { id: 2 }, { id: 7 }],
       })
       .once()
@@ -277,7 +281,7 @@ describe('Documents unit test', () => {
   });
   test('document content, with unknown ids', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/content'), {
+      .post(/\/documents\/content/, {
         items: [{ id: 1 }, { id: 2 }, { id: 7 }],
         ignoreUnknownIds: true,
       })
@@ -295,7 +299,7 @@ describe('Documents unit test', () => {
   describe('geo location', () => {
     test('point', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/search'), {})
+        .post(/\/documents\/search/, {})
         .once()
         .reply(200, {
           items: [
@@ -321,7 +325,7 @@ describe('Documents unit test', () => {
 
     test('MultiPoint / LineString', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/search'), {})
+        .post(/\/documents\/search/, {})
         .once()
         .reply(200, {
           items: [
@@ -350,7 +354,7 @@ describe('Documents unit test', () => {
 
     test('MultiLineString', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/search'), {})
+        .post(/\/documents\/search/, {})
         .once()
         .reply(200, {
           items: [
@@ -391,7 +395,7 @@ describe('Documents unit test', () => {
 
     test('MultiPolygon', async () => {
       nock(mockBaseUrl)
-        .post(new RegExp('/documents/search'), {})
+        .post(/\/documents\/search/, {})
         .once()
         .reply(200, {
           items: [
@@ -454,7 +458,7 @@ describe('Documents unit test', () => {
     describe('geometry collections', () => {
       test('Point & LineString', async () => {
         nock(mockBaseUrl)
-          .post(new RegExp('/documents/search'), {})
+          .post(/\/documents\/search/, {})
           .once()
           .reply(200, {
             items: [
@@ -505,7 +509,7 @@ describe('Documents unit test', () => {
 
   test('search with filter', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/search'), {
+      .post(/\/documents\/search/, {
         search: {
           query: 'test',
         },
@@ -525,7 +529,7 @@ describe('Documents unit test', () => {
 
   test('filter documents', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/list'), {
+      .post(/\/documents\/list/, {
         filter: {
           author: {
             in: ['test1', 'test2'],
@@ -543,7 +547,7 @@ describe('Documents unit test', () => {
 
   test('filter documents by page count', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/list'), {
+      .post(/\/documents\/list/, {
         filter: {
           pageCount: {
             min: 3,
@@ -562,7 +566,7 @@ describe('Documents unit test', () => {
 
   test('search with size range', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/search'), {
+      .post(/\/documents\/search/, {
         search: {
           query: 'test',
         },
@@ -589,7 +593,7 @@ describe('Documents unit test', () => {
 
   test('search with asset subtree filter', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/search'), {
+      .post(/\/documents\/search/, {
         search: {
           query: 'test',
         },
@@ -615,7 +619,7 @@ describe('Documents unit test', () => {
 
   test('create feedback on document', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/feedback'), {
+      .post(/\/documents\/feedback/, {
         items: [
           {
             documentId: 1731129751740,
@@ -655,7 +659,7 @@ describe('Documents unit test', () => {
 
   test('list feedback', async () => {
     nock(mockBaseUrl)
-      .get(new RegExp('/documents/feedback'))
+      .get(/\/documents\/feedback/)
       .query({ status: 'CREATED' })
       .once()
       .reply(200, {
@@ -700,7 +704,7 @@ describe('Documents unit test', () => {
 
   test('aggregate feedbacks by field', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/feedback/aggregates'), {
+      .post(/\/documents\/feedback\/aggregates/, {
         field: 'action',
       })
       .once()
@@ -710,7 +714,7 @@ describe('Documents unit test', () => {
 
   test('accept feedbacks', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/feedback/accept'), {
+      .post(/\/documents\/feedback\/accept/, {
         items: [{ id: 1 }, { id: 3 }],
       })
       .once()
@@ -745,7 +749,7 @@ describe('Documents unit test', () => {
 
   test('reject feedbacks', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/documents/feedback/reject'), {
+      .post(/\/documents\/feedback\/reject/, {
         items: [{ id: 1 }],
       })
       .once()
@@ -775,7 +779,7 @@ describe('Documents unit test', () => {
 
   test('document preview pdf', async () => {
     nock(mockBaseUrl)
-      .get(new RegExp('/documents/preview'))
+      .get(/\/documents\/preview/)
       .matchHeader('Accept', 'application/pdf')
       .query({ documentId: 1 })
       .once()
@@ -785,7 +789,7 @@ describe('Documents unit test', () => {
 
   test('document preview image', async () => {
     nock(mockBaseUrl)
-      .get(new RegExp('/documents/preview'))
+      .get(/\/documents\/preview/)
       .matchHeader('Accept', 'image/png')
       .query({ documentId: 1, page: 0 })
       .once()
@@ -796,7 +800,7 @@ describe('Documents unit test', () => {
   test('document preview temporary link', async () => {
     const link = 'just-testing';
     nock(mockBaseUrl)
-      .get(new RegExp('/documents/preview/temporaryLink'))
+      .get(/\/documents\/preview\/temporaryLink/)
       .query({ documentId: 1 })
       .once()
       .reply(200, { temporaryLink: link });

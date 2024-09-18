@@ -1,9 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import { ExternalView, View } from '../../types';
-import CogniteClient from '../../cogniteClient';
+import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { ExternalView, View } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
-import { randomInt } from '@cognite/sdk-core/src/testUtils';
 
 describe('template view test', () => {
   let client: CogniteClient;

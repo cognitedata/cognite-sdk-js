@@ -3,9 +3,10 @@
 import {
   randomInt,
   runTestWithRetryWhenFailing,
-} from '@cognite/sdk-core/src/testUtils';
-import { ExternalEntityToMatch } from '../../types';
-import CogniteClient from '../../cogniteClient';
+} from '@cognite/sdk-core/src/__tests__/testUtils';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { ExternalEntityToMatch } from '../../types';
 import { setupLoggedInClient } from '../testUtils';
 
 describe.skip('context integration test', () => {
@@ -34,8 +35,8 @@ describe.skip('context integration test', () => {
   });
 
   describe('Entity Matching', () => {
-    const modelExternalId = 'entity_matching_test_fit' + randomInt();
-    const newModelExternalId = 'entity_matching_test_refit' + randomInt();
+    const modelExternalId = `entity_matching_test_fit${randomInt()}`;
+    const newModelExternalId = `entity_matching_test_refit${randomInt()}`;
     test('create a model', async () => {
       const result = await client.entityMatching.create({
         name: modelExternalId,
@@ -90,9 +91,8 @@ describe.skip('context integration test', () => {
 
     test('retrieve predict result', async () => {
       await runTestWithRetryWhenFailing(async () => {
-        const { status } = await client.entityMatching.predictResult(
-          predictJobId
-        );
+        const { status } =
+          await client.entityMatching.predictResult(predictJobId);
         expect(status).toBe('Completed');
       });
       expect.hasAssertions();
@@ -101,8 +101,8 @@ describe.skip('context integration test', () => {
     test('refit model with some true matches', async () => {
       const trueMatches = [
         {
-          sourceExternalId: assetA.externalId!,
-          targetExternalId: tsA.externalId!,
+          sourceExternalId: assetA.externalId || '',
+          targetExternalId: tsA.externalId || '',
         },
       ];
       const refitResult = await client.entityMatching.refit({

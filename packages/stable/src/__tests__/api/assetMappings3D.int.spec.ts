@@ -1,14 +1,17 @@
 // Copyright 2020 Cognite AS
 
-import {
+import type {
   Asset,
   AssetMapping3D,
   Model3D,
   Node3D,
   Revision3D,
 } from 'stable/src/types';
-import CogniteClient from '../../cogniteClient';
+import { assert, afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
+
+const { fail } = assert;
 
 describe.skip('AssetMappings3D integration test', () => {
   let client: CogniteClient;

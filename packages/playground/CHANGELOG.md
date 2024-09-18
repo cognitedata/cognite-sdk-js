@@ -3,6 +3,134 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0-rc.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.24...@cognite/sdk-playground@8.0.0-rc.0) (2024-08-26)
+
+
+### chore
+
+* upgrade to typescript 5 ([#1135](https://github.com/cognitedata/cognite-sdk-js/issues/1135)) ([1530809](https://github.com/cognitedata/cognite-sdk-js/commit/15308098e64ec27a6c33049b2712f9cbc49dac38))
+
+
+### BREAKING CHANGES
+
+* es6 module (vs es5) and typescript 3 -> 5
+
+* chore: release pre-release from the release-v10 branch
+
+* test: skip flaky alerts test
+
+
+
+
+
+## [7.0.24](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.23...@cognite/sdk-playground@7.0.24) (2024-08-20)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.23](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.22...@cognite/sdk-playground@7.0.23) (2024-08-19)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.22](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.21...@cognite/sdk-playground@7.0.22) (2024-06-10)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.21](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.20...@cognite/sdk-playground@7.0.21) (2024-05-15)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.20](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.19...@cognite/sdk-playground@7.0.20) (2024-05-13)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.19](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.18...@cognite/sdk-playground@7.0.19) (2024-04-29)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.18](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.17...@cognite/sdk-playground@7.0.18) (2024-04-11)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.17](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.16...@cognite/sdk-playground@7.0.17) (2024-04-11)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.16](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.15...@cognite/sdk-playground@7.0.16) (2024-04-10)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.15](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.14...@cognite/sdk-playground@7.0.15) (2024-04-09)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.14](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.13...@cognite/sdk-playground@7.0.14) (2024-02-08)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.13](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.12...@cognite/sdk-playground@7.0.13) (2024-02-06)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.12](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.11...@cognite/sdk-playground@7.0.12) (2024-02-05)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.11](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.10...@cognite/sdk-playground@7.0.11) (2024-01-22)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.10](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.9...@cognite/sdk-playground@7.0.10) (2024-01-18)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.9](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.8...@cognite/sdk-playground@7.0.9) (2023-12-22)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.8](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.7...@cognite/sdk-playground@7.0.8) (2023-12-19)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.6...@cognite/sdk-playground@7.0.7) (2023-12-06)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.5...@cognite/sdk-playground@7.0.6) (2023-12-01)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.4...@cognite/sdk-playground@7.0.5) (2023-11-28)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.3...@cognite/sdk-playground@7.0.4) (2023-11-28)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.2...@cognite/sdk-playground@7.0.3) (2023-11-24)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.1...@cognite/sdk-playground@7.0.2) (2023-11-23)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+## [7.0.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@7.0.0...@cognite/sdk-playground@7.0.1) (2023-11-21)
+
+**Note:** Version bump only for package @cognite/sdk-playground
+
+# [7.0.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@6.0.10...@cognite/sdk-playground@7.0.0) (2023-10-10)
+
+### Features
+
+- update openapi spec to bump types for docs, annotations and vision ([#1021](https://github.com/cognitedata/cognite-sdk-js/issues/1021)) ([#1024](https://github.com/cognitedata/cognite-sdk-js/issues/1024)) ([e337d73](https://github.com/cognitedata/cognite-sdk-js/commit/e337d73c9e6a1888e165d8b4a59bfe94b522bbb3))
+
+### BREAKING CHANGES
+
+- documents, annotations and vision types have been updated
+
+Thanks to @danlevings for his work in commit: https://github.com/cognitedata/cognite-sdk-js/commit/ac6efec6e884d0cb436be7c2e91f3aa78bfbe15c
+
 ## [6.0.10](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-playground@6.0.9...@cognite/sdk-playground@6.0.10) (2023-09-27)
 
 ### Reverts

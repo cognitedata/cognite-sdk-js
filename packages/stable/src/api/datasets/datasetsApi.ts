@@ -1,7 +1,10 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import type {
   DataSet,
   DataSetAggregate,
   DataSetAggregateQuery,
@@ -9,6 +12,7 @@ import {
   DataSetFilterRequest,
   ExternalDataSet,
   IdEither,
+  IgnoreUnknownIds,
 } from '../../types';
 
 export class DataSetsAPI extends BaseResourceAPI<DataSet> {
@@ -68,8 +72,11 @@ export class DataSetsAPI extends BaseResourceAPI<DataSet> {
    * const dataSets = await client.datasets.retrieve([{id: 123}, {externalId: 'abc'}]);
    * ```
    */
-  public retrieve = (ids: IdEither[]): Promise<DataSet[]> => {
-    return super.retrieveEndpoint(ids);
+  public retrieve = (
+    ids: IdEither[],
+    params?: IgnoreUnknownIds
+  ): Promise<DataSet[]> => {
+    return super.retrieveEndpoint(ids, params);
   };
 
   /**

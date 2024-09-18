@@ -1,8 +1,10 @@
 // Copyright 2020 Cognite AS
 
+import { DateParser } from '@cognite/sdk-core';
 import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
-import {
+import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type {
   Model3D,
   Node3D,
   RevealNode3D,
@@ -17,7 +19,6 @@ import {
   setupMockableClient,
   string2arrayBuffer,
 } from '../testUtils';
-import { DateParser } from '@cognite/sdk-core';
 
 describe('3D mocked', () => {
   let client: CogniteClient;
@@ -233,7 +234,7 @@ describe('3D mocked', () => {
   describe('files', () => {
     test('retrieve', async () => {
       const content = string2arrayBuffer('some content');
-      const regExp = new RegExp(`/3d/files/123`);
+      const regExp = /\/3d\/files\/123/;
       nock(mockBaseUrl).get(regExp).reply(200, content);
       const response = await client.files3D.retrieve(123);
       expect(response).toEqual(content);

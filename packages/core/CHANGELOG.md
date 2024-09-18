@@ -3,6 +3,46 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0-rc.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.10.3...@cognite/sdk-core@5.0.0-rc.0) (2024-08-26)
+
+
+### chore
+
+* upgrade to typescript 5 ([#1135](https://github.com/cognitedata/cognite-sdk-js/issues/1135)) ([1530809](https://github.com/cognitedata/cognite-sdk-js/commit/15308098e64ec27a6c33049b2712f9cbc49dac38))
+
+
+### BREAKING CHANGES
+
+* es6 module (vs es5) and typescript 3 -> 5
+
+* chore: release pre-release from the release-v10 branch
+
+* test: skip flaky alerts test
+
+
+
+
+
+## [4.10.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.10.2...@cognite/sdk-core@4.10.3) (2024-08-20)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+## [4.10.2](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.10.1...@cognite/sdk-core@4.10.2) (2024-08-19)
+
+**Note:** Version bump only for package @cognite/sdk-core
+
+## [4.10.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.10.0...@cognite/sdk-core@4.10.1) (2024-01-22)
+
+### Bug Fixes
+
+- use named parameters for postInParallelWithAutomaticChunking ([#1048](https://github.com/cognitedata/cognite-sdk-js/issues/1048)) ([db561d0](https://github.com/cognitedata/cognite-sdk-js/commit/db561d0d2891a0ed61d2116cba86bd256211547a))
+
+# [4.10.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.9.0...@cognite/sdk-core@4.10.0) (2023-11-28)
+
+### Features
+
+- monitoring tasks upsert ([#1042](https://github.com/cognitedata/cognite-sdk-js/issues/1042)) ([7e0e24c](https://github.com/cognitedata/cognite-sdk-js/commit/7e0e24cfb5c4d91302e54a270457b8d9b914ffd4))
+
 # [4.9.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-core@4.8.3...@cognite/sdk-core@4.9.0) (2023-04-28)
 
 ### Features

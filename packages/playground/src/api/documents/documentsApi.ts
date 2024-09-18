@@ -2,24 +2,24 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
 
-import {
+import type {
   Document,
   DocumentContentResponse,
   DocumentId,
-  DocumentsSearchResponse,
   DocumentsFilterRequest,
   DocumentsSearchRequest,
+  DocumentsSearchResponse,
 } from '../../types';
 
-import { PreviewAPI } from './previewApi';
+import { ClassifiersAPI } from './classifiersApi';
 import { FeedbackAPI } from './feedbackApi';
 import { PipelinesAPI } from './pipelinesApi';
-import { ClassifiersAPI } from './classifiersApi';
+import { PreviewAPI } from './previewApi';
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
   private readonly feedbackAPI: FeedbackAPI;
@@ -31,15 +31,15 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     super(...args);
 
     const [baseUrl, httpClient, map] = args;
-    this.previewAPI = new PreviewAPI(baseUrl + '/preview', httpClient, map);
-    this.feedbackAPI = new FeedbackAPI(baseUrl + '/feedback', httpClient, map);
+    this.previewAPI = new PreviewAPI(`${baseUrl}/preview`, httpClient, map);
+    this.feedbackAPI = new FeedbackAPI(`${baseUrl}/feedback`, httpClient, map);
     this.pipelinesAPI = new PipelinesAPI(
-      baseUrl + '/pipelines',
+      `${baseUrl}/pipelines`,
       httpClient,
       map
     );
     this.classifiersAPI = new ClassifiersAPI(
-      baseUrl + '/classifiers',
+      `${baseUrl}/classifiers`,
       httpClient,
       map
     );

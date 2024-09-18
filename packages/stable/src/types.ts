@@ -1,6 +1,6 @@
 // Copyright 2020 Cognite AS
 
-import {
+import type {
   CogniteExternalId,
   CogniteInternalId,
   Cursor,
@@ -10,9 +10,9 @@ import {
   InternalId,
   Limit,
 } from '@cognite/sdk-core';
-import { AnnotationData } from './api/annotations/types.gen';
+import type { AnnotationData } from './api/annotations/types.gen';
 
-export {
+export type {
   ListResponse,
   CursorResponse,
   ItemsResponse,
@@ -25,8 +25,6 @@ export {
   ExternalId,
   CogniteExternalId,
   CogniteInternalId,
-  LogoutUrl,
-  LogoutUrlResponse,
   CursorAndAsyncIterator,
   CogniteAsyncIterator,
   AutoPagingEachHandler,
@@ -49,8 +47,6 @@ export type Acl3D = Acl<AclAction3D, AclScope3D>;
 export type AclAction3D = READ | CREATE | UPDATE | DELETE;
 
 export type AclActionAnalytics = READ | EXECUTE | LIST;
-
-export type AclActionApiKeys = LIST | CREATE | DELETE;
 
 export type AclActionAssets = READ | WRITE;
 
@@ -80,8 +76,6 @@ export type AclActionUsers = LIST | CREATE | DELETE;
 
 export type AclAnalytics = Acl<AclActionAnalytics, AclScopeAnalytics>;
 
-export type AclApiKeys = Acl<AclActionApiKeys, AclScopeApiKeys>;
-
 export type AclAssets = Acl<AclActionAssets, AclScopeAssets>;
 
 export type AclDataSets = Acl<AclActionDataSets, AclScopeDatasets>;
@@ -109,7 +103,7 @@ export type AclTemplateInstances = Acl<
 >;
 
 export interface AclScopeAll {
-  all: {};
+  all: object;
 }
 
 export interface AclScopeIds {
@@ -120,8 +114,6 @@ export interface AclScopeIds {
 
 export type AclScopeAnalytics = AclScopeAll;
 
-export type AclScopeApiKeys = AclScopeAll | AclScopeCurrentUser;
-
 export type AclScopeAssets = AclScopeAll | AclScopeDatasetsIds;
 
 export interface AclScopeAssetsId {
@@ -131,7 +123,7 @@ export interface AclScopeAssetsId {
 }
 
 export interface AclScopeCurrentUser {
-  currentuserscope: {};
+  currentuserscope: object;
 }
 
 export type AclScopeDatasets = AclScopeAll | AclScopeIds;
@@ -197,41 +189,6 @@ export type Aggregate =
   | 'continuousVariance'
   | 'discreteVariance';
 
-export interface ApiKeyListScope {
-  /**
-   * Only available with users:list acl, returns all api keys for this project.
-   */
-  all?: boolean;
-  /**
-   * Get api keys for a specific service account, only available to admin users.
-   */
-  serviceAccountId?: CogniteInternalId;
-  /**
-   * Whether to include deleted api keys
-   */
-  includeDeleted?: boolean;
-}
-
-export interface ApiKeyObject {
-  /**
-   * Internal id for the api key
-   */
-  id: CogniteInternalId;
-  /**
-   * Id of the service account
-   */
-  serviceAccountId: CogniteInternalId;
-  createdTime: Date;
-  /**
-   * The status of the api key
-   */
-  status: 'ACTIVE' | 'DELETED';
-}
-
-export interface ApiKeyRequest {
-  serviceAccountId: CogniteInternalId;
-}
-
 export type ArrayPatchString =
   | { set: string[] }
   | { add?: string[]; remove?: string[] };
@@ -239,10 +196,6 @@ export type ArrayPatchString =
 export type ArrayPatchLong =
   | { set: number[] }
   | { add?: number[]; remove?: number[] };
-
-export type ArrayPatchClaimNames =
-  | { set: ClaimName[] }
-  | { add?: ClaimName[]; remove?: ClaimName[] };
 
 export interface Asset
   extends ExternalAsset,
@@ -509,28 +462,6 @@ export interface AssetSearchFilter extends AssetFilter {
 export type AssetSource = string;
 
 /**
- * Data specific to Azure AD authentication
- */
-export interface AzureADConfiguration {
-  /**
-   * Azure application ID. You get this when creating the Azure app.
-   */
-  appId?: string;
-  /**
-   * Azure application secret. You get this when creating the Azure app.
-   */
-  appSecret?: string;
-  /**
-   * Azure tenant ID.
-   */
-  tenantId?: string;
-  /**
-   * Resource to grant access to. This is usually (always?) 00000002-0000-0000-c000-000000000000
-   */
-  appResourceId?: string;
-}
-
-/**
  * The bounding box of the subtree with this sector as the root sector.
  * Is null if there are no geometries in the subtree.
  */
@@ -733,18 +664,26 @@ export type DatapointsDeleteRequest =
   | (InternalId & DatapointsDeleteRange)
   | (ExternalId & DatapointsDeleteRange);
 
-export interface DatapointAggregates extends DatapointsMetadata {
+export interface NextCursor {
+  nextCursor?: string;
+}
+
+export interface DatapointAggregates extends DatapointsMetadata, NextCursor {
   isString: false;
   /**
    * Whether the timeseries is a step series or not
    */
   isStep: boolean;
   datapoints: DatapointAggregate[];
+  /**
+   * The physical unit of the time series (reference to unit catalog). Replaced with target unit if data points were converted.
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export type Datapoints = StringDatapoints | DoubleDatapoints;
 
-export interface DoubleDatapoints extends DatapointsMetadata {
+export interface DoubleDatapoints extends DatapointsMetadata, NextCursor {
   isString: false;
   /**
    * Whether the timeseries is a step series or not
@@ -754,9 +693,13 @@ export interface DoubleDatapoints extends DatapointsMetadata {
    * The list of datapoints
    */
   datapoints: DoubleDatapoint[];
+  /**
+   * The physical unit of the time series (reference to unit catalog). Replaced with target unit if data points were converted.
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
-export interface StringDatapoints extends DatapointsMetadata {
+export interface StringDatapoints extends DatapointsMetadata, NextCursor {
   isString: true;
   /**
    * The list of datapoints
@@ -787,6 +730,11 @@ export interface DatapointsMultiQuery extends DatapointsMultiQueryBase {
   items: DatapointsQuery[];
 }
 
+export interface DatapointsMonthlyGranularityMultiQuery
+  extends Omit<DatapointsMultiQueryBase, 'granularity'> {
+  items: DatapointsQuery[];
+}
+
 export interface DatapointsMultiQueryBase extends Limit, IgnoreUnknownIds {
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in a Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
@@ -808,6 +756,11 @@ export interface DatapointsMultiQueryBase extends Limit, IgnoreUnknownIds {
    * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
    */
   includeOutsidePoints?: boolean;
+  /**
+    * Defaul "UTC" For aggregates of granularity 'hour' and longer, which time zone should we align to. Align to the start of the hour, start of the day or start of the month. For time zones of type Region/Location, the aggregate duration can vary, typically due to daylight saving time. For time zones of type UTC+/-HH:MM, use increments of 15 minutes.
+Note: Time zones with minute offsets (e.g. UTC+05:30 or Asia/Kolkata) may take longer to execute. Historical time zones, with offsets not multiples of 15 minutes, are not supported.
+   */
+  timeZone?: string;
 }
 
 export type ExternalDatapointsQuery =
@@ -830,7 +783,7 @@ export interface DatapointsQueryId
   extends DatapointsQueryProperties,
     InternalId {}
 
-export interface DatapointsQueryProperties extends Limit {
+export interface DatapointsQueryProperties extends Limit, Cursor {
   /**
    * Get datapoints after this time. Format is N[timeunit]-ago where timeunit is w,d,h,m,s. Example: '2d-ago' will get everything that is up to 2 days old. Can also send in Date object. Note that when using aggregates, the start time will be rounded down to a whole granularity unit (in UTC timezone). For granularity 2d it will be rounded to 0:00 AM on the same day, for 3h it will be rounded to the start of the hour, etc.
    */
@@ -851,14 +804,24 @@ export interface DatapointsQueryProperties extends Limit {
    * Whether to include the last datapoint before the requested time period,and the first one after the requested period. This can be useful for interpolating data. Not available for aggregates.
    */
   includeOutsidePoints?: boolean;
+  /**
+   * The unit externalId of the data points returned.
+   * If the time series does not have a unitExternalId that
+   * can be converted to the targetUnit,
+   * an error will be returned. Cannot be used with targetUnitSystem.
+   */
+  targetUnit?: CogniteExternalId;
+  /**
+   * The unit system of the data points returned. Cannot be used with targetUnit.
+   */
+  targetUnitSystem?: CogniteExternalId;
+  /**
+   * Default: "UTC" Which time zone to align aggregates to. Omit to use top-level value.
+   */
+  timeZone?: string;
 }
 
 export type DateRange = Range<Timestamp>;
-
-/**
- * A default group for all project users. Can be used to establish default capabilities. WARNING: this group may be logically deleted
- */
-export type DefaultGroupId = number;
 
 export type DeleteAssetMapping3D = AssetMapping3DBase;
 
@@ -1088,7 +1051,7 @@ export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
 
 export interface FileChangeUpdateById extends InternalId, FileChange {}
 
-export type FileContent = ArrayBuffer | Buffer | any;
+export type FileContent = ArrayBuffer | Buffer | unknown;
 
 export interface FileFilterProps {
   name?: FileName;
@@ -1213,6 +1176,10 @@ export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
    * Security categories required in order to access this time series.
    */
   securityCategories?: number[];
+  /**
+   * The physical unit of the time series (reference to unit catalog).
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export interface ExternalTimeseries {
@@ -1260,6 +1227,10 @@ export interface ExternalTimeseries {
    * Security categories required in order to access this time series."
    */
   securityCategories?: number[];
+  /**
+   * The physical unit of the time series (reference to unit catalog).
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export type FileGeoLocationType = 'Feature';
@@ -1299,7 +1270,7 @@ export interface FileGeoLocation {
   /**
    * Additional properties in a String key -> Object value format
    */
-  properties?: { [key: string]: any };
+  properties?: { [key: string]: unknown };
 }
 
 export type FileGeoLocationGeometry =
@@ -1356,13 +1327,43 @@ export interface FileGeoLocationFilter {
 
 export type FileGeoLocationPatch = SetField<FileGeoLocation> | RemoveField;
 
-export interface Group {
+export type PrincipalId = string;
+export type GroupMembers = PrincipalId[] | 'allUserAccounts';
+
+interface BaseGroup {
   name: GroupName;
-  sourceId?: GroupSourceId;
   capabilities?: CogniteCapability;
   id: number;
   isDeleted: boolean;
   deletedTime?: Date;
+}
+
+export interface ManagedExternallyGroup extends BaseGroup {
+  sourceId?: GroupSourceId;
+}
+
+export interface ManagedInCDFGroup extends BaseGroup {
+  members: GroupMembers;
+  // We are adding `sourceId: undefined` because this code:
+  // const foo(bar: Group) => console.log(bar.sourceId)
+  // yields the error:
+  // `Property 'sourceId' does not exist on type 'ManagedInCDFGroup'.`
+  // The Group type is defined as `type Group = ManagedInCDFGroup | ManagedExternallyGroup`
+  // and `sourceId` isn't defined on `ManagedInCDFGroup`.
+  // Typescript fails even though `sourceId` is an optional field on `ManagedExternallyGroup`.
+  sourceId: undefined;
+}
+
+export type Group = ManagedInCDFGroup | ManagedExternallyGroup;
+
+export function isManagedInCDFGroup(group: Group): group is ManagedInCDFGroup {
+  return (group as ManagedInCDFGroup).members !== undefined;
+}
+
+export function isManagedExternallyGroup(
+  group: Group
+): group is ManagedExternallyGroup {
+  return !isManagedInCDFGroup(group);
 }
 
 /**
@@ -1370,27 +1371,6 @@ export interface Group {
  * @example Production Engineers
  */
 export type GroupName = string;
-
-export interface GroupServiceAccount {
-  /**
-   * Unique name of the service account
-   * @example some-internal-service@apple.com
-   */
-  name: string;
-  id: CogniteInternalId;
-  /**
-   * List of group ids
-   */
-  groups: CogniteInternalId[];
-  /**
-   * If this service account has been logically deleted
-   */
-  isDeleted: boolean;
-  /**
-   * Time of deletion
-   */
-  deletedTime?: Date;
-}
 
 /**
  * ID of the group in the source. If this is the same ID as a group in the IDP, a user in that group will implicitly be a part of this group as well.
@@ -1401,6 +1381,7 @@ export type GroupSourceId = string;
 export interface GroupSpec {
   name: GroupName;
   sourceId?: GroupSourceId;
+  members?: GroupMembers;
   capabilities?: CogniteCapability;
 }
 
@@ -1412,16 +1393,6 @@ export interface IgnoreUnknownIds {
    * @default false
    */
   ignoreUnknownIds?: boolean;
-}
-
-/**
- * Data about how to authenticate and authorize users
- */
-export interface InputProjectAuthentication {
-  azureADConfiguration?: AzureADConfiguration;
-  validDomains?: ValidDomains;
-  oAuth2Configuration?: OAuth2Configuration;
-  applicationDomains?: ApplicationDomains;
 }
 
 /**
@@ -1564,13 +1535,6 @@ export interface Model3DListRequest extends FilterQuery {
   published?: boolean;
 }
 
-export interface NewApiKeyResponse extends ApiKeyObject {
-  /**
-   * The api key to be used against the API
-   */
-  value: string;
-}
-
 export interface Node3D {
   /**
    * The ID of the node.
@@ -1623,32 +1587,6 @@ export type NullableSinglePatchLong = { set: number } | { setNull: true };
 
 export type NullableSinglePatchString = { set: string } | { setNull: true };
 
-/**
- * Data related to generic OAuth2 authentication. Not used for Azure AD
- */
-export interface OAuth2Configuration {
-  /**
-   * Login URL of OAuth2 provider. E.g https://accounts.google.com/o/oauth2/v2/auth.
-   */
-  loginUrl?: string;
-  /**
-   * Logout URL of OAuth2 provider. E.g https://accounts.google.com/Logout.
-   */
-  logoutUrl?: string;
-  /**
-   * URL to get access token from OAuth2 provider. E.g https://www.googleapis.com/oauth2/v4/token.
-   */
-  tokenUrl?: string;
-  /**
-   * Client ID. You probably get this when registering your client with the OAuth2 provider.
-   */
-  clientId?: string;
-  /**
-   * Client secret. You probably get this when registering your client with the OAuth2 provider.
-   */
-  clientSecret?: string;
-}
-
 export type OWNER = 'OWNER';
 
 export type ObjectPatch<T> =
@@ -1670,14 +1608,6 @@ export type ObjectPatch<T> =
     };
 
 export type MetadataPatch = ObjectPatch<string>;
-
-/**
- * Data about how to authenticate and authorize users. The authentication configuration is hidden.
- */
-export interface OutputProjectAuthentication {
-  validDomains?: ValidDomains;
-  applicationDomains?: ApplicationDomains;
-}
 
 /**
  * Splits the data set into N partitions.
@@ -1706,53 +1636,16 @@ export type ProjectName = string;
 export interface ProjectResponse {
   name: ProjectName;
   urlName: UrlName;
-  defaultGroupId?: DefaultGroupId;
-  authentication?: OutputProjectAuthentication;
   oidcConfiguration?: OidcConfiguration;
   userProfilesConfiguration: UserProfilesConfiguration;
 }
 
-export interface ProjectUpdate {
-  name?: ProjectName;
-  defaultGroupId?: DefaultGroupId;
-  authentication?: InputProjectAuthentication;
-}
-
-export interface OidcConfigurationUpdate {
-  modify?: OidcConfigurationUpdateModify;
-  set?: OidcConfiguration;
-  setNull?: boolean;
+export interface UserProfilesConfiguration {
+  enabled: boolean;
 }
 
 export interface ClaimName {
   claimName: string;
-}
-
-export interface OidcConfigurationUpdateModify {
-  jwksUrl?: SetField<string>;
-  tokenUrl?: SinglePatchString;
-  issuer?: SetField<string>;
-  audience?: SetField<string>;
-  skewMs?: SinglePatch<number>;
-  accessClaims?: ArrayPatchClaimNames;
-  scopeClaims?: ArrayPatchClaimNames;
-  logClaims: ArrayPatchClaimNames;
-}
-
-export interface PartialProjectUpdate {
-  update: ProjectUpdateObject;
-}
-
-export interface ProjectUpdateObject {
-  name?: SinglePatchRequiredString;
-  defaultGroupId?: NullableSinglePatchLong;
-  validDomains?: ArrayPatchString;
-  applicationDomains?: ArrayPatchString;
-  authenticationProtocol?: SinglePatchRequiredString;
-  azureADConfiguration?: SinglePatch<AzureADConfiguration>;
-  oAuth2Configuration?: SinglePatch<OAuth2Configuration>;
-  oidcConfiguration?: OidcConfigurationUpdate;
-  userProfilesConfiguration?: UserProfilesConfigurationUpdate;
 }
 
 export interface OidcConfiguration {
@@ -1764,19 +1657,6 @@ export interface OidcConfiguration {
   accessClaims: ClaimName[];
   scopeClaims: ClaimName[];
   logClaims: ClaimName[];
-}
-
-export interface UserProfilesConfiguration {
-  enabled: boolean;
-}
-
-export interface UserProfilesConfigurationUpdateModify {
-  enabled?: SinglePatch<boolean>;
-}
-
-export interface UserProfilesConfigurationUpdate {
-  modify?: UserProfilesConfigurationUpdateModify;
-  set?: UserProfilesConfiguration;
 }
 
 export type READ = 'READ';
@@ -1811,7 +1691,7 @@ export interface RawDBRowInsert extends RawDBRowKey {
   /**
    * Row data stored as a JSON object.
    */
-  columns: Record<string, any>;
+  columns: Record<string, unknown>;
 }
 
 export interface RawDBRowKey {
@@ -2330,30 +2210,6 @@ export const SequenceValueType = {
  */
 export type SequenceValueType = 'STRING' | 'DOUBLE' | 'LONG';
 
-export interface ServiceAccount {
-  name: ServiceAccountName;
-  groups?: Groups;
-  id: CogniteInternalId;
-  /**
-   * If this service account has been logically deleted
-   */
-  isDeleted?: boolean;
-  /**
-   * Time of deletion
-   */
-  deletedTime?: Date;
-}
-
-export interface ServiceAccountInput {
-  name: ServiceAccountName;
-  groups?: Groups;
-}
-
-/**
- * Unique name of the service account
- */
-export type ServiceAccountName = string;
-
 export interface SetField<T> {
   set: T;
 }
@@ -2368,7 +2224,6 @@ export type SingleCogniteCapability =
   | { securityCategoriesAcl: AclSecurityCategories }
   | { rawAcl: AclRaw }
   | { timeSeriesAcl: AclTimeseries }
-  | { apikeysAcl: AclApiKeys }
   | { threedAcl: Acl3D }
   | { sequencesAcl: AclSequences }
   | { analyticsAcl: AclAnalytics }
@@ -2377,6 +2232,7 @@ export type SingleCogniteCapability =
   | { templateInstancesAcl: AclTemplateInstances };
 
 export type SinglePatch<T> = { set: T } | { setNull: boolean };
+export type SinglePatchRequired<T> = { set: T };
 
 export type SinglePatchDate = { set: Timestamp } | { setNull: boolean };
 
@@ -2433,6 +2289,7 @@ export interface TimeSeriesPatch {
     dataSetId?: NullableSinglePatchLong;
     description?: NullableSinglePatchString;
     securityCategories?: ArrayPatchLong;
+    unitExternalId?: NullableSinglePatchString;
   };
 }
 
@@ -2494,6 +2351,10 @@ export interface TimeseriesFilter extends CreatedAndLastUpdatedTimeFilter {
    */
   assetSubtreeIds?: IdEither[];
   externalIdPrefix?: ExternalIdPrefix;
+  /**
+   * The physical unit of the time series (reference to unit catalog).
+   */
+  unitExternalId?: CogniteExternalId;
 }
 
 export interface TimeseriesFilterQuery extends FilterQuery {
@@ -2591,16 +2452,6 @@ export interface FileUploadResponse extends FileInfo {
  * @example publicdata
  */
 export type UrlName = string;
-
-/**
- * List of valid domains. If left empty, any user registered with the OAuth2 provider will get access.
- */
-export type ValidDomains = string[];
-
-/**
- * List of domains permitted for redirects. Redirects as part of a login flow may only target a domain (or subdomain) on this list. If this list is set to be empty, it will not be possible to use a login flow.
- */
-export type ApplicationDomains = string[];
 
 /**
  * The file ID of the data file for this resource, with multiple versions supported.
@@ -3029,7 +2880,7 @@ export type ViewFilterQuery = FilterQuery;
 
 export interface ViewResolveRequest extends FilterQuery {
   externalId: string;
-  input?: { [K in string]: any };
+  input?: { [K in string]: unknown };
   cursor?: string;
   limit?: number;
 }
@@ -3132,7 +2983,7 @@ export interface TemplateGroupVersionFilterQuery extends FilterQuery {
 export interface ExternalTemplateInstance extends ExternalId {
   templateName: string;
   dataSetId?: number;
-  fieldResolvers: { [K in string]: FieldResolver | {} };
+  fieldResolvers: { [K in string]: FieldResolver | object };
 }
 
 export type TemplateInstance = ExternalTemplateInstance & {
@@ -3149,7 +3000,7 @@ export type TemplateInstance = ExternalTemplateInstance & {
 
 export interface TemplateInstancePatch extends ExternalId {
   update: {
-    fieldResolvers: ObjectPatch<FieldResolver | {}>;
+    fieldResolvers: ObjectPatch<FieldResolver | object>;
   };
 }
 
@@ -3159,9 +3010,9 @@ export interface FieldResolver {
 
 export class ConstantResolver implements FieldResolver {
   type = 'constant';
-  value: {};
+  value: object;
 
-  constructor(value: {}) {
+  constructor(value: object) {
     this.value = value;
   }
 }
@@ -3218,9 +3069,9 @@ export class SyntheticTimeSeriesResolver implements FieldResolver {
 export class ViewResolver implements FieldResolver {
   type = 'view';
   externalId: string;
-  input: { [K in string]: any };
+  input: { [K in string]: unknown };
 
-  constructor(externalId: string, input: { [K in string]: any }) {
+  constructor(externalId: string, input: { [K in string]: unknown }) {
     this.externalId = externalId;
     this.input = input;
   }
@@ -3236,7 +3087,7 @@ export interface TemplateInstanceFilterQuery extends FilterQuery {
 }
 
 export type GraphQlResponse = {
-  data: any;
+  data: unknown;
   errors: GraphQlError[];
 };
 
@@ -3290,7 +3141,6 @@ export interface AnnotationUpdate {
     status?: SetField<AnnotationStatus>;
   };
 }
-
 export interface AnnotationFilterRequest
   extends AnnotationFilter,
     FilterQuery {}
@@ -3324,5 +3174,171 @@ export interface AnnotationReverseLookupFilterProps {
   creatingAppVersion?: string;
   creatingUser?: string;
   status?: AnnotationStatus;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
 }
+
+export interface Unit {
+  externalId: CogniteInternalId;
+  name: string;
+  longName: string;
+  symbol: string;
+  aliasNames: string[];
+  quantity: string;
+  conversion: UnitConversion;
+  source?: string;
+  sourceReference?: string;
+}
+
+export interface UnitConversion {
+  multiplier: number;
+  offset: number;
+}
+
+export interface UnitSystemQuantity {
+  name: string;
+  unitExternalId: CogniteInternalId;
+}
+
+export interface UnitSystem {
+  name: string;
+  quantities: UnitSystemQuantity[];
+}
+
+export type {
+  AggregatedHistogramValue,
+  AggregatedNumberValue,
+  AggregatedResultItem,
+  AggregatedResultItemCollection,
+  AggregatedValueItem,
+  AggregationDefinition,
+  AggregationRequest,
+  AggregationResponse,
+  AvgAggregateFunctionV3,
+  CDFExternalIdReference,
+  CommonAggregationRequest,
+  ContainerReference,
+  ContainsAllFilterV3,
+  ContainsAnyFilterV3,
+  CorePropertyDefinition,
+  CountAggregateFunctionV3,
+  DMSExistsFilter,
+  DMSExternalId,
+  DMSFilterProperty,
+  DMSVersion,
+  DataModelsBoolFilter,
+  DataModelsLeafFilter,
+  DataModelsNestedFilter,
+  DirectNodeRelation,
+  DirectRelationReference,
+  EdgeDefinition,
+  EdgeOrNodeData,
+  EdgeWrite,
+  EqualsFilterV3,
+  FilterDefinition,
+  FilterValue,
+  FilterValueList,
+  FilterValueRange,
+  HasExistingDataFilterV3,
+  HistogramAggregateFunctionV3,
+  InFilterV3,
+  IncludeTyping,
+  InstanceType,
+  LimitWithDefault1000,
+  ListOfSpaceExternalIdsRequestWithTyping,
+  MatchAllFilter,
+  MaxAggregateFunctionV3,
+  MinAggregateFunctionV3,
+  NextCursorV3,
+  NodeAndEdgeCollectionResponseV3Response,
+  NodeAndEdgeCollectionResponseWithCursorV3Response,
+  NodeAndEdgeCreateCollection,
+  NodeDefinition,
+  NodeOrEdge,
+  NodeOrEdgeCreate,
+  NodeOrEdgeDeleteRequest,
+  NodeOrEdgeDeleteResponse,
+  NodeOrEdgeExternalId,
+  NodeOrEdgeListRequestV3,
+  NodeOrEdgeSearchRequest,
+  NodeWrite,
+  OverlapsFilterV3,
+  ParameterizedPropertyValueV3,
+  PrefixFilterV3,
+  PrimitiveProperty,
+  PropertyIdentifierV3,
+  PropertySortV3,
+  PropertyValueGroupV3,
+  QueryEdgeTableExpressionV3,
+  QueryIntersectionTableExpressionV3,
+  QueryNodeTableExpressionV3,
+  QueryRequest,
+  QueryResponse,
+  QuerySelectV3,
+  QuerySetOperationTableExpressionV3,
+  QueryTableExpressionV3,
+  QueryUnionAllTableExpressionV3,
+  QueryUnionTableExpressionV3,
+  RangeFilterV3,
+  RangeValue,
+  RawPropertyValueListV3,
+  RawPropertyValueV3,
+  ReferencedPropertyValueV3,
+  SearchRequestV3,
+  SlimEdgeDefinition,
+  SlimNodeAndEdgeCollectionResponse,
+  SlimNodeDefinition,
+  SlimNodeOrEdge,
+  SortV3,
+  SourceReference,
+  SourceSelectorV3,
+  SourceSelectorWithoutPropertiesV3,
+  SpaceSpecification,
+  SumAggregateFunctionV3,
+  SyncEdgeTableExpressionV3,
+  SyncNodeTableExpressionV3,
+  SyncRequest,
+  SyncSelectV3,
+  SyncTableExpressionV3,
+  TableExpressionChainToDefinition,
+  TableExpressionContainsAllFilterV3,
+  TableExpressionContainsAnyFilterV3,
+  TableExpressionDataModelsBoolFilter,
+  TableExpressionEqualsFilterV3,
+  TableExpressionFilterDefinition,
+  TableExpressionFilterValue,
+  TableExpressionFilterValueList,
+  TableExpressionFilterValueRange,
+  TableExpressionInFilterV3,
+  TableExpressionLeafFilter,
+  TableExpressionOverlapsFilterV3,
+  TableExpressionPrefixFilterV3,
+  TableExpressionRangeFilterV3,
+  TextProperty,
+  TypeInformation,
+  TypeInformationOuter,
+  TypePropertyDefinition,
+  TypingViewOrContainer,
+  UpsertConflict,
+  ViewAggregationRequest,
+  ViewCorePropertyDefinition,
+  ViewDirectNodeRelation,
+  ViewOrContainer,
+  ViewPropertyReference,
+  ViewReference,
+} from './api/instances/types.gen';
+
+export type {
+  DataModel,
+  DataModelCreate,
+  ListOfAllVersionsReferences,
+  ListOfVersionReferences,
+  ReverseDirectRelationConnection,
+  ThroughReference,
+  UsedFor,
+  ViewCommon,
+  ViewCreateDefinition,
+  ViewCreateDefinitionProperty,
+  ViewDefinition,
+  ViewDefinitionProperty,
+  ViewPropertyDefinition,
+} from './api/models/types.gen';

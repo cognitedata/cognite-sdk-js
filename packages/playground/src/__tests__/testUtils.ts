@@ -1,7 +1,11 @@
 // Copyright 2020 Cognite AS
 
+import {
+  accessToken,
+  mockBaseUrl,
+  project,
+} from '@cognite/sdk-core/src/__tests__/testUtils';
 import CogniteClientPlayground from '../cogniteClientPlayground';
-import { apiKey, mockBaseUrl, project } from '@cognite/sdk-core/src/testUtils';
 import { login } from './login';
 
 export function setupLoggedInClient(
@@ -9,7 +13,7 @@ export function setupLoggedInClient(
 ) {
   return new CogniteClientPlayground({
     appId: 'JS SDK integration tests (playground)',
-    getToken: () =>
+    oidcTokenProvider: () =>
       login().then((account) => {
         return account.access_token;
       }),
@@ -21,9 +25,8 @@ export function setupLoggedInClient(
 export function setupMockableClient(baseUrl: string = mockBaseUrl) {
   return new CogniteClientPlayground({
     appId: 'JS SDK integration tests (playground)',
-    getToken: () => Promise.resolve(apiKey),
+    oidcTokenProvider: () => Promise.resolve(accessToken),
     project,
     baseUrl,
-    apiKeyMode: true,
   });
 }

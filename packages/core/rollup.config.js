@@ -1,6 +1,6 @@
+import json from '@rollup/plugin-json';
 import typescript from '@rollup/plugin-typescript';
 import pkg from './package.json';
-import json from '@rollup/plugin-json';
 
 export default {
   input: 'src/index.ts',
@@ -20,7 +20,6 @@ export default {
     typescript({
       tsconfig: './tsconfig.build.json',
       typescript: require('typescript'),
-      exclude: '**/__tests__/**',
     }),
     json({
       // All JSON files will be parsed by default,

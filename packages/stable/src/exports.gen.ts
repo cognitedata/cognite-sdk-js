@@ -1,8 +1,6 @@
 // Copyright 2022 Cognite AS
-export {
-  EpochTimestamp
-} from './types.gen';
-export {
+export type { EpochTimestamp } from './types.gen';
+export type {
   AnnotationData,
   AnnotationsAssetRef,
   AnnotationsBoolean,
@@ -11,13 +9,18 @@ export {
   AnnotationsBox,
   AnnotationsClassification,
   AnnotationsCogniteAnnotationTypesDiagramsAssetLink,
+  AnnotationsCogniteAnnotationTypesDiagramsInstanceLink,
   AnnotationsCogniteAnnotationTypesImagesAssetLink,
+  AnnotationsCogniteAnnotationTypesImagesInstanceLink,
+  AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry,
+  AnnotationsCogniteAnnotationTypesPrimitivesGeometry3DGeometry,
   AnnotationsCylinder,
   AnnotationsDetection,
   AnnotationsExtractedText,
   AnnotationsFileLink,
   AnnotationsFileRef,
-  AnnotationsGeometry,
+  AnnotationsInstanceRef,
+  AnnotationsIsoPlanAnnotation,
   AnnotationsJunction,
   AnnotationsKeypoint,
   AnnotationsKeypointCollection,
@@ -27,14 +30,20 @@ export {
   AnnotationsPoint,
   AnnotationsPolyLine,
   AnnotationsPolygon,
+  AnnotationsSizeAndClassType,
   AnnotationsTextRegion,
   AnnotationsUnhandledSymbolObject,
-  AnnotationsUnhandledTextObject
+  AnnotationsUnhandledTextObject,
+  AnnotationsView,
 } from './api/annotations/types.gen';
-export {
+export type {
   CogniteExternalId,
   CogniteInternalId,
   Document,
+  DocumentAggregateFilter,
+  DocumentAggregateFilterBool,
+  DocumentAggregateFilterLeaf,
+  DocumentAggregateFilterPrefix,
   DocumentAggregateValue,
   DocumentCursor,
   DocumentFilter,
@@ -85,6 +94,9 @@ export {
   DocumentsAggregateAllUniqueValuesItem,
   DocumentsAggregateAllUniqueValuesRequest,
   DocumentsAggregateAllUniqueValuesResponse,
+  DocumentsAggregateCardinalityPropertiesItem,
+  DocumentsAggregateCardinalityPropertiesRequest,
+  DocumentsAggregateCardinalityPropertiesResponse,
   DocumentsAggregateCardinalityValuesItem,
   DocumentsAggregateCardinalityValuesRequest,
   DocumentsAggregateCardinalityValuesResponse,
@@ -101,11 +113,45 @@ export {
   DocumentsAggregateUniqueValuesResponse,
   DocumentsPreviewTemporaryLinkResponse,
   Label,
-  LabelList
+  LabelList,
 } from './api/documents/types.gen';
-export {
+export type {
+  CursorQueryParameter,
+  IncludeGlobalQueryParameter,
+  ListOfSpaceIdsRequest,
+  ListOfSpaceIdsResponse,
+  NextCursorV3,
+  ReducedLimitQueryParameter,
+  SpaceCollectionResponseV3Response,
+  SpaceCollectionResponseWithCursorResponse,
+  SpaceCreateCollection,
+  SpaceCreateDefinition,
+  SpaceDefinition,
+  SpaceSpecification,
+  UpsertConflict,
+} from './api/spaces/types.gen';
+export type {
+  IdentityType,
+  IdentityTypeFilter,
+  UserIdentifier,
+  UserProfileItem,
+  UserProfilesByIdsRequest,
+  UserProfilesByIdsResponse,
+  UserProfilesErrorResponse,
+  UserProfilesListResponse,
+  UserProfilesNotFoundResponse,
+  UserProfilesSearchRequest,
+  UserProfilesSearchResponse,
+} from './api/userProfiles/types.gen';
+export type {
   AssetTagDetection,
   AssetTagDetectionParameters,
+  CommaPos,
+  DeadAngle,
+  DialGaugeDetection,
+  DialGaugeDetectionParameters,
+  DigitalGaugeDetection,
+  DigitalGaugeDetectionParameters,
   FailedBatch,
   FeatureParameters,
   FileReference,
@@ -113,6 +159,13 @@ export {
   IndustrialObjectDetectionParameters,
   JobId,
   JobStatus,
+  LevelGaugeDetection,
+  LevelGaugeDetectionParameters,
+  MaxLevel,
+  MaxNumDigits,
+  MinLevel,
+  MinNumDigits,
+  NonLinAngle,
   PeopleDetection,
   PeopleDetectionParameters,
   PersonalProtectiveEquipmentDetection,
@@ -121,6 +174,8 @@ export {
   TextDetection,
   TextDetectionParameters,
   ThresholdParameter,
+  ValveDetection,
+  ValveDetectionParameters,
   VisionAllOfFileId,
   VisionExtractFeature,
   VisionExtractGetResponse,
@@ -128,5 +183,5 @@ export {
   VisionExtractPostResponse,
   VisionExtractPredictions,
   VisionFileExternalId,
-  VisionFileId
+  VisionFileId,
 } from './api/vision/types.gen';

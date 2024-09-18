@@ -1,15 +1,15 @@
 // Copyright 2022 Cognite AS
-import { promises as fs } from 'fs';
+import { promises as fs } from 'node:fs';
 import fetch from 'cross-fetch';
-import { OpenApiDocument } from './openapi';
-import {
-  closestConfigDirectoryPath,
-  DirectoryOption,
-  PackageOption,
-  PathOption,
-  VersionOption,
-} from './utils';
 import { PackageConfigManager } from './configuration';
+import type { OpenApiDocument } from './openapi';
+import {
+  type DirectoryOption,
+  type PackageOption,
+  type PathOption,
+  type VersionOption,
+  closestConfigDirectoryPath,
+} from './utils';
 
 /**
  * OpenApiSnapshotManagerOptions options for the snapshot.
@@ -62,10 +62,8 @@ export class OpenApiSnapshotManager {
   };
 
   public downloadFromUrl = async (url?: string): Promise<OpenApiDocument> => {
-    url = url || this.createUrl();
-
     try {
-      const response = await fetch(url);
+      const response = await fetch(url || this.createUrl());
       const json = await response.json();
       return json as OpenApiDocument;
     } catch (error) {

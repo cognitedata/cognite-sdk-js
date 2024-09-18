@@ -49,7 +49,7 @@ file in the project root. You only need to specify output folder in build config
 since your IDE will reference by source through path aliases.
 
 Tests are written in typescript, but are explicitly excluded in `tsconfig.build.json`.
-This means test are not compiled with the build, but by `jest` when tests are run.
+This means test are not compiled with the build, but by `vitest` when tests are run.
 To make the IDE experience better, tests are not excluded in `tsconfig.json`.
 This means you can still use Go To Definition from test into source, and even into other packages.
 When running tests, however, packages' `dist/index.js` files are used, so run `yarn build` first.

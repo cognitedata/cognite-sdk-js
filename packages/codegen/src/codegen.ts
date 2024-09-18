@@ -1,34 +1,34 @@
 // Copyright 2022 Cognite AS
-import { promises as fs } from 'fs';
-import * as pathUtil from 'path';
+import { promises as fs } from 'node:fs';
+import * as pathUtil from 'node:path';
 
 import * as ts from 'typescript';
 
-import {
-  OpenApiDocument,
-  OpenApiSchema,
-  OpenApiOperationObject,
-  isReferenceObject,
-  OpenApiPathsObject,
-  filterPaths,
-  operationsInPath,
-  ReferenceWalker,
-  OpenApiSchemas,
-  OpenApiResponses,
-  OpenApiParameters,
-  OpenApiReference,
-} from './openapi';
-import { AutoNameInlinedRequestOption } from './utils';
-import { TypeGenerator, TypeGeneratorResult } from './generator/generator';
-import sorterTransformer from './ast_transformer/sorter';
 import cursorAndAsyncIteratorTransformer from './ast_transformer/cursor_and_async_iterator';
+import sorterTransformer from './ast_transformer/sorter';
+import type { TypeGenerator, TypeGeneratorResult } from './generator/generator';
+import {
+  type OpenApiDocument,
+  type OpenApiOperationObject,
+  type OpenApiParameters,
+  type OpenApiPathsObject,
+  type OpenApiReference,
+  type OpenApiResponses,
+  type OpenApiSchema,
+  type OpenApiSchemas,
+  ReferenceWalker,
+  filterPaths,
+  isReferenceObject,
+  operationsInPath,
+} from './openapi';
+import type { AutoNameInlinedRequestOption } from './utils';
 
 export type StringFilter = (str: string) => boolean;
 
 export const passThroughFilter: StringFilter = (): boolean => true;
 
 const createServiceNameRegex = (name: string): RegExp => {
-  return new RegExp(`^/api/.+/projects/{project}/${name}($|/)`);
+  return new RegExp(`^/${name}($|/)`);
 };
 
 export const createServiceNameFilter = (service: string): StringFilter => {
@@ -144,8 +144,7 @@ export class CodeGen {
         operation.operationId.trim() === ''
       ) {
         throw new Error(
-          path +
-            ': inlined requests must have a operationId specified to automatically name the request type'
+          `${path}: inlined requests must have a operationId specified to automatically name the request type`
         );
       }
       const operationId = operation.operationId.trim();
@@ -167,7 +166,7 @@ export class CodeGen {
   ): string[] => {
     const relevantReferencePredicate = (reference: string) =>
       relevantReferenceNames.some((refName) =>
-        reference.endsWith('/' + refName)
+        reference.endsWith(`/${refName}`)
       );
 
     const referenceSubsetRoots = originalDefinitions.filter(
@@ -190,9 +189,7 @@ export class CodeGen {
     const referencesInOperations = Object.values(doc.paths)
       .map(walker.references)
       .reduce((acc, v) => acc.concat(v), []);
-
     let references = walker.walk(referencesInOperations);
-
     if (relevantReferenceNames.length > 0) {
       references = this.getOnlyDefinitionsUsedByRefs(
         references,
@@ -201,9 +198,10 @@ export class CodeGen {
       );
     }
 
-    const filteredDoc: any = references
+    const filteredDoc = references
       .map(walker.splitReference)
       .reduce((acc, location) => {
+        // @ts-ignore
         this.copyDefinitionsByLocation(acc, doc, location);
         return acc;
       }, {});
@@ -211,29 +209,37 @@ export class CodeGen {
     return {
       ...doc,
       components: {
+        // @ts-ignore
         ...filteredDoc.components,
       },
     };
   };
 
   private copyDefinitionsByLocation = (
-    dst: any,
-    src: any,
+    dst: unknown,
+    src: unknown,
     location: string[]
   ) => {
-    const next = location.shift()!;
-    if (location.length == 0) {
+    const next = location.shift();
+    if (!next) {
+      return;
+    }
+    if (location.length === 0) {
+      // @ts-ignore
       Object.assign(dst, { [next]: src[next] });
     } else {
+      // @ts-ignore
       if (!(next in dst)) {
+        // @ts-ignore
         dst[next] = {};
       }
 
+      // @ts-ignore
       this.copyDefinitionsByLocation(dst[next], src[next], location);
     }
   };
 
-  private filterPaths = (paths: OpenApiPathsObject): OpenApiPathsObject => {
+  public filterPaths = (paths: OpenApiPathsObject): OpenApiPathsObject => {
     return Object.keys(paths)
       .filter(this.options.filter.path)
       .reduce((acc, path) => {
@@ -256,7 +262,7 @@ export class CodeGen {
       }
 
       const missingResponseSuffix = !name.toLowerCase().endsWith('response');
-      const schemaName = missingResponseSuffix ? name + 'Response' : name;
+      const schemaName = missingResponseSuffix ? `${name}Response` : name;
       schemas[schemaName] = schema;
     }
 
@@ -272,7 +278,7 @@ export class CodeGen {
         continue;
       }
 
-      if (parameter.in != 'query' || parameter.schema == null) {
+      if (parameter.in !== 'query' || parameter.schema == null) {
         continue;
       }
 
@@ -280,10 +286,11 @@ export class CodeGen {
         type: 'object',
         properties: {},
       };
+      // biome-ignore lint/style/noNonNullAssertion: we define this property above
       schema.properties![parameter.name] = parameter.schema;
 
       const missingSuffix = !name.toLowerCase().endsWith('queryparameter');
-      const schemaName = missingSuffix ? name + 'QueryParameter' : name;
+      const schemaName = missingSuffix ? `${name}QueryParameter` : name;
       schemas[schemaName] = schema;
     }
 
@@ -323,28 +330,36 @@ export class CodeGen {
       JSON.stringify(strippedOpenApiDoc)
     ) as OpenApiDocument;
 
+    const { components } = doc;
+
+    if (!components) {
+      throw new Error('No components defined in the OpenAPI document');
+    }
+    if (!components.schemas) {
+      throw new Error('No schemas defined in the OpenAPI document');
+    }
+
     if (schemaFilter != null) {
-      doc.components!.schemas = Object.keys(doc.components!.schemas!)
+      components.schemas = Object.keys(components?.schemas)
         .filter(schemaFilter)
         .reduce(
           (acc, schemaName) =>
             Object.assign(acc, {
-              [schemaName]: doc.components!.schemas![schemaName],
+              [schemaName]: components.schemas?.[schemaName],
             }),
           {}
         );
     }
 
     // swagger generator capitalized the first letter
-    doc.components!.schemas = Object.keys(doc.components!.schemas!).reduce(
-      (acc, name) => {
-        const formattedName = this.capitalizeFirstLetter(name);
-        return Object.assign(acc, {
-          [formattedName]: doc.components!.schemas![name],
-        });
-      },
-      {} as OpenApiSchemas
-    );
+    components.schemas = Object.keys(components.schemas).reduce((acc, name) => {
+      const formattedName = this.capitalizeFirstLetter(name);
+      // @ts-ignore
+      return Object.assign(acc, {
+        // @ts-ignore
+        [formattedName]: components.schemas[name],
+      });
+    }, {} as OpenApiSchemas);
 
     const docJson = JSON.stringify(doc);
     const result = await this.generator.generateTypes(docJson);
@@ -378,48 +393,58 @@ export class CodeGen {
     relevantReferenceNames?: string[]
   ): Promise<string[]> => {
     // deep copy
-    openApiDoc = JSON.parse(JSON.stringify(openApiDoc)) as OpenApiDocument;
-    openApiDoc.paths = this.filterPaths(openApiDoc.paths);
+    let openApiDocCopy = JSON.parse(
+      JSON.stringify(openApiDoc)
+    ) as OpenApiDocument;
+    openApiDocCopy.paths = this.filterPaths(openApiDocCopy.paths);
 
-    openApiDoc = this.findAllDefinitionsRecursively(
-      openApiDoc,
+    openApiDocCopy = this.findAllDefinitionsRecursively(
+      openApiDocCopy,
       relevantReferenceNames
     );
 
+    const components = openApiDocCopy.components;
+    if (!components) {
+      throw new Error('No components defined in the OpenAPI document');
+    }
+    if (!components.schemas) {
+      throw new Error('No schemas defined in the OpenAPI document');
+    }
+
     for (const [typeName, schema] of this.transformResponsesToSchemas(
-      openApiDoc.components?.responses
+      openApiDocCopy.components?.responses
     )) {
-      if (typeName in openApiDoc.components!.schemas!) {
+      if (typeName in components.schemas) {
         throw new Error(
           `Unable to transform response to schema. Schema "${typeName}" already exists`
         );
       }
 
-      openApiDoc.components!.schemas![typeName] = schema;
+      components.schemas[typeName] = schema;
     }
 
     for (const [typeName, schema] of this.transformQueryParametersToSchemas(
-      openApiDoc.components?.parameters
+      components.parameters
     )) {
-      if (typeName in openApiDoc.components!.schemas!) {
+      if (typeName in components.schemas) {
         throw new Error(
           `Unable to transform parameter to schema. Schema "${typeName}" already exists`
         );
       }
 
-      openApiDoc.components!.schemas![typeName] = schema;
+      components.schemas[typeName] = schema;
     }
 
     for (const [typeName, schema] of this.autoNameInlinedRequests(
-      openApiDoc.paths
+      openApiDocCopy.paths
     )) {
-      if (typeName in openApiDoc.components!.schemas!) {
+      if (typeName in components.schemas) {
         throw new Error(
           `Unable to use automatic name for inlined request type. "${typeName}" already exists in the component schemas`
         );
       }
 
-      openApiDoc.components!.schemas![typeName] = schema;
+      components.schemas[typeName] = schema;
     }
 
     const skipTypes = [
@@ -434,8 +459,8 @@ export class CodeGen {
     ];
 
     const generated = await this.generateTypesFromSchemas(
-      openApiDoc.openapi,
-      openApiDoc.components?.schemas,
+      openApiDocCopy.openapi,
+      openApiDocCopy.components?.schemas,
       (name: string) => !skipTypes.includes(name)
     );
 

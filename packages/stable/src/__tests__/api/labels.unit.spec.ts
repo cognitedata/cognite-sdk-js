@@ -1,6 +1,9 @@
 // Copyright 2020 Cognite AS
+
+import matches from 'lodash/matches';
 import nock from 'nock';
-import { CogniteClient, ExternalLabelDefinition } from '../..';
+import { beforeAll, describe, expect, test } from 'vitest';
+import type { CogniteClient, ExternalLabelDefinition } from '../..';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('Labels unit test', () => {
@@ -25,9 +28,12 @@ describe('Labels unit test', () => {
   });
   test('create', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/labels'), {
-        items: externalLabels,
-      })
+      .post(
+        /\/labels/,
+        matches({
+          items: externalLabels,
+        })
+      )
       .once()
       .reply(201, {
         items: labels,
@@ -38,7 +44,7 @@ describe('Labels unit test', () => {
 
   test('list', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/labels/list'), {
+      .post(/\/labels\/list/, {
         filter: { name: labels[0].name },
         cursor: 'abc',
         limit: 123,
@@ -60,7 +66,7 @@ describe('Labels unit test', () => {
 
   test('list with next page', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/labels/list'), {
+      .post(/\/labels\/list/, {
         filter: { name: labels[0].name },
       })
       .once()
@@ -81,7 +87,7 @@ describe('Labels unit test', () => {
       return { externalId: label.externalId };
     });
     nock(mockBaseUrl)
-      .post(new RegExp('/labels/delete'), {
+      .post(/\/labels\/delete/, {
         items: externalIds,
       })
       .once()

@@ -1,4 +1,5 @@
-import path from 'path';
+import path from 'node:path';
+import { describe, expect, test } from 'vitest';
 import { OpenApiSnapshotManager } from '../snapshot';
 
 describe('snapshot manager', () => {
@@ -19,7 +20,7 @@ describe('snapshot manager', () => {
 
     const snapshot = await snapshotMngr.downloadFromPath({ path: testFolder });
     expect(snapshot).toBeDefined();
-    expect(snapshot.info.title).toEqual('Cognite playground APIs');
+    expect(snapshot.info.title).toEqual('Cognite API');
   });
 
   test('load from local json snapshot without filter', async () => {

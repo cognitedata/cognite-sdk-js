@@ -1,27 +1,15 @@
 // Copyright 2020 Cognite AS
 
 export {
-  loginPopupHandler,
-  isLoginPopupWindow,
   HttpError,
-  HttpQueryParams,
-  HttpHeaders,
-  HttpRequestOptions,
-  HttpResponse,
+  type HttpQueryParams,
+  type HttpHeaders,
+  type HttpRequestOptions,
+  type HttpResponse,
   HttpResponseType,
   CogniteError,
   CogniteMultiError,
-  CogniteLoginError,
-  ClientOptions,
-  AuthTokens,
-  AuthenticateParams,
-  AuthorizeOptions,
-  AuthorizeParams,
-  IdInfo,
-  OnAuthenticateLoginObject,
-  POPUP,
-  REDIRECT,
-  CogniteAuthentication,
+  type ClientOptions,
 } from '@cognite/sdk-core';
 export { default as CogniteClient } from './cogniteClient';
 
@@ -35,7 +23,6 @@ export { RevealSectors3DAPI } from './api/3d/revealSectors3DApi';
 export { Revisions3DAPI } from './api/3d/revisions3DApi';
 export { UnrealRevisions3DAPI } from './api/3d/unrealRevisions3DApi';
 export { Viewer3DAPI } from './api/3d/viewer3DApi';
-export { ApiKeysAPI } from './api/apiKeys/apiKeysApi';
 export { AssetsAPI } from './api/assets/assetsApi';
 export { DataPointsAPI } from './api/dataPoints/dataPointsApi';
 export { DataSetsAPI } from './api/datasets/datasetsApi';
@@ -53,7 +40,6 @@ export { RelationshipsApi } from './api/relationships/relationshipsApi';
 export { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 export { SequenceRowsAPI } from './api/sequences/sequenceRowsApi';
 export { SequencesAPI } from './api/sequences/sequencesApi';
-export { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
 export { SyntheticTimeSeriesAPI } from './api/timeSeries/syntheticTimeSeriesApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 export * from './api/templates';

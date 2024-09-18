@@ -1,37 +1,36 @@
 // Copyright 2020 Cognite AS
 
-import * as Url from 'url';
 import {
-  API_KEY_HEADER,
   AUTHORIZATION_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
 } from '../constants';
 import { handleErrorResponse } from '../error';
 import { bearerString, isJson } from '../utils';
-import { HttpQueryParams, HttpResponse } from './basicHttpClient';
-import { HttpHeaders } from './httpHeaders';
+import type { HttpQueryParams, HttpResponse } from './basicHttpClient';
 import { HttpError } from './httpError';
+import type { HttpHeaders } from './httpHeaders';
 import {
   RetryableHttpClient,
-  RetryableHttpRequest,
+  type RetryableHttpRequest,
 } from './retryableHttpClient';
-import { RetryValidator } from './retryValidator';
 
 export class CDFHttpClient extends RetryableHttpClient {
   private static serializeQueryParameters(
     params: HttpQueryParams = {}
-  ): HttpQueryParams {
-    return Object.keys(params).reduce((serializedParams, key) => {
-      const param = params[key];
-      serializedParams[key] = isJson(param) ? JSON.stringify(param) : param;
-      return serializedParams;
-    }, {} as HttpQueryParams);
+  ): Record<string, string> {
+    return Object.entries(params).reduce(
+      (serializedParams, [key, value]) => {
+        serializedParams[key] = isJson(value) ? JSON.stringify(value) : value;
+        return serializedParams;
+      },
+      {} as Record<string, string>
+    );
   }
 
   private static isSameOrigin(baseUrl: string, url: string) {
-    const { protocol: baseUrlProtocol, host: baseUrlHost } = Url.parse(baseUrl);
-    const { protocol, host } = Url.parse(Url.resolve(baseUrl, url));
+    const { protocol: baseUrlProtocol, host: baseUrlHost } = new URL(baseUrl);
+    const { protocol, host } = new URL(new URL(url, baseUrl).toString());
     const hasSameProtocol = baseUrlProtocol === protocol;
     const hasSameHost = baseUrlHost === host;
     return hasSameProtocol && hasSameHost;
@@ -54,10 +53,6 @@ export class CDFHttpClient extends RetryableHttpClient {
   }
 
   private oneTimeHeaders: HttpHeaders = {};
-
-  constructor(baseUrl: string, retryValidator: RetryValidator) {
-    super(baseUrl, retryValidator);
-  }
 
   public addOneTimeHeader(name: string, value: string) {
     this.oneTimeHeaders[name] = value;
@@ -104,11 +99,10 @@ export class CDFHttpClient extends RetryableHttpClient {
     try {
       return await super.postRequest(response, request, mutatedRequest);
     } catch (err) {
-      if (
-        err.status === 401 &&
-        !this.isLoginOrLogoutApi(request.path) &&
-        !this.isTokenInspect(request.path)
-      ) {
+      if (!(err instanceof HttpError)) {
+        throw err;
+      }
+      if (err.status === 401 && !this.isTokenInspect(request.path)) {
         return new Promise((resolvePromise, rejectPromise) => {
           const retry = () => resolvePromise(this.request(request));
           const reject = () => rejectPromise(err);
@@ -137,23 +131,14 @@ export class CDFHttpClient extends RetryableHttpClient {
     }
     return CDFHttpClient.filterHeaders(headers, [
       AUTHORIZATION_HEADER,
-      API_KEY_HEADER,
       X_CDF_APP_HEADER,
       X_CDF_SDK_HEADER,
     ]);
   }
 
-  private isLoginOrLogoutApi(url: string) {
-    const lowerCaseUrl = url.toLowerCase();
-    return (
-      lowerCaseUrl.indexOf('/logout/url') !== -1 ||
-      lowerCaseUrl.indexOf('/login/status') !== -1
-    );
-  }
-
-  private isTokenInspect(url: string) {
-    const lowerCaseUrl = url.toLowerCase();
-    return lowerCaseUrl.indexOf('/token/inspect') !== -1;
+  private isTokenInspect(path: string) {
+    const lowerCasePath = path.toLowerCase();
+    return lowerCasePath === '/api/v1/token/inspect';
   }
 }
 

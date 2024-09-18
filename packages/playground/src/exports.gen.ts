@@ -1,6 +1,6 @@
 // Copyright 2022 Cognite AS
 
-export {
+export type {
   AggregateField,
   AggregateGroup,
   AssetExternalIdsFilter,
@@ -113,5 +113,5 @@ export {
   StringIn,
   StringPredicate,
   UnprocessableEntityErrorResponse,
-  ValueMissing
+  ValueMissing,
 } from './api/documents/types.gen';

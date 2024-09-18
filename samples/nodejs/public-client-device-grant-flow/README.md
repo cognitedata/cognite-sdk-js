@@ -72,7 +72,7 @@ async function deviceCodeGrantExample() {
     appId: 'Cognite SDK samples',
     project,
     baseUrl: 'https://api.cognitedata.com',
-    getToken: () =>
+    oidcTokenProvider: () =>
       pca
         .acquireTokenByDeviceCode({
           deviceCodeCallback: ({ message, userCode, verificationUri }) => {

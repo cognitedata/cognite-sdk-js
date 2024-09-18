@@ -1,5 +1,11 @@
 // Copyright 2020 Cognite AS
-import { HttpMethod, HttpRequest, HttpResponse } from './basicHttpClient';
+
+import { describe, expect, test } from 'vitest';
+import {
+  HttpMethod,
+  type HttpRequest,
+  type HttpResponse,
+} from './basicHttpClient';
 import { createRetryValidator } from './retryValidator';
 
 describe('cdfRetryValidator', () => {
@@ -20,19 +26,19 @@ describe('cdfRetryValidator', () => {
     path: '/api/v1/projects/abc/assets/list',
   };
   const baseResponse = { data: null, headers: {} };
-  const response200: HttpResponse<any> = {
+  const response200: HttpResponse<unknown> = {
     ...baseResponse,
     status: 200,
   };
-  const response415: HttpResponse<any> = {
+  const response415: HttpResponse<unknown> = {
     ...baseResponse,
     status: 415,
   };
-  const response429: HttpResponse<any> = {
+  const response429: HttpResponse<unknown> = {
     ...baseResponse,
     status: 429,
   };
-  const response500: HttpResponse<any> = {
+  const response500: HttpResponse<unknown> = {
     ...baseResponse,
     status: 500,
   };

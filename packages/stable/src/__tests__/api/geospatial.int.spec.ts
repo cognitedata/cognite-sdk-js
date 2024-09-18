@@ -1,13 +1,15 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import {
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type {
   FeatureType,
+  GeospatialCoordinateReferenceSystem,
   GeospatialCreateFeatureType,
-  GeospatialUpdateFeatureType,
   GeospatialFeature,
+  GeospatialUpdateFeatureType,
 } from '../../types';
-import { setupLoggedInClient, randomInt } from '../testUtils';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 const FEATURE_TYPE_EXTERNAL_ID = `sdk_test_${randomInt()}`;
 const DUMMY_FEATURE_TYPE_CREATE_DELETE = `sdk_test_dummy_${randomInt()}`;
@@ -136,9 +138,8 @@ describe.skip('Geospatial integration test', () => {
     });
 
     test('update', async () => {
-      const [updatedFeatureType] = await client.geospatial.featureType.update(
-        UPDATE_FEATURE_TYPE
-      );
+      const [updatedFeatureType] =
+        await client.geospatial.featureType.update(UPDATE_FEATURE_TYPE);
       expect(updatedFeatureType.properties.depth).toBeDefined();
     });
   });
@@ -292,11 +293,10 @@ describe.skip('Geospatial integration test', () => {
         },
       });
       const items = response.items;
-      expect(items.length == 1).toBeTruthy();
-      expect(items[0]['output']['srid']).toEqual(4326);
-      expect(items[0]['output']['wkt']).toEqual(
-        'POLYGON((0 0,10 0,10 10,0 10,0 0))'
-      );
+      expect(items.length === 1).toBeTruthy();
+      const output = items[0].output as GeospatialCoordinateReferenceSystem;
+      expect(output.srid).toEqual(4326);
+      expect(output.wkt).toEqual('POLYGON((0 0,10 0,10 10,0 10,0 0))');
     });
   });
 });

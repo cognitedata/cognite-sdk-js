@@ -2,11 +2,11 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
+import type {
   CogniteInternalId,
   CreateRevision3D,
   Filter3DNodesQuery,
@@ -121,7 +121,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
   public delete = (
     modelId: CogniteInternalId,
     ids: InternalId[]
-  ): Promise<{}> => {
+  ): Promise<object> => {
     const path = this.url(`${modelId}/revisions/delete`);
     return super.deleteEndpoint(ids, undefined, path);
   };
@@ -137,9 +137,9 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     modelId: CogniteInternalId,
     revisionId: CogniteInternalId,
     fileId: CogniteInternalId
-  ): Promise<{}> => {
+  ): Promise<object> => {
     const path = this.url(`${modelId}/revisions/${revisionId}/thumbnail`);
-    const response = await this.post<{}>(path, { data: { fileId } });
+    const response = await this.post<object>(path, { data: { fileId } });
     return this.addToMapAndReturn({}, response);
   };
 

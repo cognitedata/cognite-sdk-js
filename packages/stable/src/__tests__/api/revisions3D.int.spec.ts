@@ -1,8 +1,9 @@
 // Copyright 2020 Cognite AS
 
-import { readFileSync } from 'fs';
-import CogniteClient from '../../cogniteClient';
-import {
+import { readFileSync } from 'node:fs';
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type {
   Asset,
   AssetMapping3D,
   CreateAssetMapping3D,
@@ -15,15 +16,8 @@ import {
   Tuple3,
   UpdateRevision3D,
 } from '../../types';
-import {
-  getSortedPropInArray,
-  randomInt,
-  retryInSeconds,
-  setupLoggedInClient,
-  simpleCompare,
-} from '../testUtils';
+import { randomInt, retryInSeconds, setupLoggedInClient } from '../testUtils';
 
-// suggested solution/hack for conditional tests: https://github.com/facebook/jest/issues/3652#issuecomment-385262455
 const describeIfCondition =
   process.env.REVISION_3D_INTEGRATION_TEST === 'true'
     ? describe
@@ -43,14 +37,14 @@ describeIfCondition(
 
     beforeAll(async () => {
       client = setupLoggedInClient();
-      jest.setTimeout(5 * 60 * 1000);
+      vi.setConfig({ testTimeout: 5 * 60 * 1000 });
 
       const rootAsset = {
-        name: 'test-root' + randomInt(),
-        externalId: 'test-root' + randomInt(),
+        name: `test-root${randomInt()}`,
+        externalId: `test-root${randomInt()}`,
       };
       const childAsset = {
-        name: 'test-child' + randomInt(),
+        name: `test-child${randomInt()}`,
         parentExternalId: rootAsset.externalId,
       };
 
@@ -162,48 +156,33 @@ describeIfCondition(
         model.id,
         revisionsToUpdate
       );
-      updatedRevisions.forEach((revision) =>
-        expect(revision.rotation).toEqual(newRotation)
-      );
-      updatedRevisions.forEach((revision) =>
-        expect(revision.translation).toEqual(newTranslation)
-      );
-      updatedRevisions.forEach((revision) =>
-        expect(revision.scale).toEqual(newScale)
-      );
-      updatedRevisions.forEach((revision) =>
-        expect(revision.camera && revision.camera.target).toEqual(
-          newCameraTarget
-        )
-      );
-      updatedRevisions.forEach((revision) =>
-        expect(revision.camera && revision.camera.position).toEqual(
-          newCameraPosition
-        )
-      );
-      updatedRevisions.forEach((revision) => {
+      for (const revision of updatedRevisions) {
+        expect(revision.rotation).toEqual(newRotation);
+        expect(revision.translation).toEqual(newTranslation);
+        expect(revision.scale).toEqual(newScale);
+        expect(revision.camera?.target).toEqual(newCameraTarget);
+        expect(revision.camera?.position).toEqual(newCameraPosition);
         expect(revision.metadata).toBeDefined();
         for (const property in revision.metadata) {
           expect(revision.metadata[property]).toEqual(newMetadata[property]);
         }
-      });
+      }
     });
 
     test('list', async () => {
       const list = await client.revisions3D.list(model.id).autoPagingToArray();
-      expect(revisions.map((r) => r.id).sort(simpleCompare)).toEqual(
-        list.map((r) => r.id).sort(simpleCompare)
+      expect(revisions.map((r) => r.id).sort()).toEqual(
+        list.map((r) => r.id).sort()
       );
     });
 
     test(
       'list 3d nodes',
-      async (done) => {
+      async () => {
         nodes3D = await client.revisions3D
           .list3DNodes(model.id, revisions[0].id)
           .autoPagingToArray();
         expect(nodes3D.map((n) => n.name)).toContain('RootNode');
-        done();
       },
       5 * 60 * 1000
     );
@@ -228,19 +207,18 @@ describeIfCondition(
 
     test(
       'filter 3d nodes (empty query)',
-      async (done) => {
+      async () => {
         nodes3D = await client.revisions3D
           .filter3DNodes(model.id, revisions[0].id)
           .autoPagingToArray();
         expect(nodes3D.map((n) => n.name)).toContain('RootNode');
-        done();
       },
       5 * 60 * 1000
     );
 
     test(
       'filter 3d nodes on properties',
-      async (done) => {
+      async () => {
         const propertiesFilter: Filter3DNodesQuery = {
           filter: {
             properties: { CogniteClient: { InheritType: ['1'] } },
@@ -250,14 +228,13 @@ describeIfCondition(
           .filter3DNodes(model.id, revisions[0].id, propertiesFilter)
           .autoPagingToArray();
         expect(nodes3D.length).toBeGreaterThan(0);
-        done();
       },
       5 * 60 * 1000
     );
 
     test(
       'filter 3d nodes on names',
-      async (done) => {
+      async () => {
         const namesFilter: Filter3DNodesQuery = {
           filter: {
             names: ['RootNode'],
@@ -267,14 +244,13 @@ describeIfCondition(
           .filter3DNodes(model.id, revisions[0].id, namesFilter)
           .autoPagingToArray();
         expect(nodes3D).toHaveLength(1);
-        done();
       },
       5 * 60 * 1000
     );
 
     test(
       'filter 3d nodes on bogus names',
-      async (done) => {
+      async () => {
         const namesFilter: Filter3DNodesQuery = {
           filter: {
             names: ['Totally-Not-A-Valid-Name', 'Another-Weird-Name'],
@@ -284,14 +260,13 @@ describeIfCondition(
           .filter3DNodes(model.id, revisions[0].id, namesFilter)
           .autoPagingToArray();
         expect(nodes3D.length).toHaveLength(0);
-        done();
       },
       5 * 60 * 1000
     );
 
     test(
       'filter 3d nodes (non-existent properties)',
-      async (done) => {
+      async () => {
         const propertiesFilter: Filter3DNodesQuery = {
           filter: {
             properties: { Item: { Type: ['something weird'] } },
@@ -301,7 +276,6 @@ describeIfCondition(
           .filter3DNodes(model.id, revisions[0].id, propertiesFilter)
           .autoPagingToArray();
         expect(nodes3D).toHaveLength(0);
-        done();
       },
       5 * 60 * 1000
     );
@@ -317,8 +291,8 @@ describeIfCondition(
         revisions[0].id,
         assetMappingsToCreate
       );
-      expect(getSortedPropInArray(assetMappings, 'assetId')).toEqual(
-        getSortedPropInArray(assetMappingsToCreate, 'assetId')
+      expect(assetMappings.map((t) => t.assetId).sort()).toEqual(
+        assetMappingsToCreate.map((t) => t.assetId).sort()
       );
       expect(assetMappings.length).toBe(2);
     });
@@ -328,11 +302,11 @@ describeIfCondition(
         .list(model.id, revisions[0].id)
         .autoPagingToArray({ limit: 2 });
 
-      expect(getSortedPropInArray(list, 'assetId')).toEqual(
-        getSortedPropInArray(assetMappingsToCreate, 'assetId')
+      expect(list.map((t) => t.assetId).sort()).toEqual(
+        assetMappingsToCreate.map((t) => t.assetId).sort()
       );
-      expect(getSortedPropInArray(list, 'nodeId')).toEqual(
-        getSortedPropInArray(list, 'nodeId')
+      expect(list.map((t) => t.nodeId).sort()).toEqual(
+        assetMappingsToCreate.map((t) => t.nodeId).sort()
       );
       expect(list.length).toBe(2);
     });

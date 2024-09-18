@@ -40,7 +40,7 @@ Before you begin, ensure that you have the following:
 ### Setting up OIDC Authentication
 
 - Initialize the SDK: Import and initialize the SDK in your application, providing the necessary configuration options such as the client ID, client secret, and redirect URI obtained from your OIDC IdP.
-- Pass your authentication method to `getToken` property of SDK.
+- Setup a token provider using the `oidcTokenProvider` property of SDK. Here you can provide a valid access token for the CDF API.
 
 For code example you can check [quickstart.ts](https://github.com/cognitedata/cognite-sdk-js/blob/master/samples/nodejs/oidc-typescript/quickstart.ts#L1)
 
@@ -96,11 +96,11 @@ To run integration tests, you would have to pass the following environment varia
 - **COGNITE_BASE_URL**
 - **COGNITE_CLIENT_SECRET**
 - **COGNITE_CLIENT_ID**
-- **COGNITE_AZURE_TENANT_ID**
+- **COGNITE_AZURE_DOMAIN**
 
 Set the environment variable `REVISION_3D_INTEGRATION_TEST=true` to run 3D revision integration tests.
 
-We use `jest` to run tests, see [their documentation](https://github.com/facebook/jest) for more information.
+We use `vitest` to run tests, see [their documentation](https://vitest.dev/) for more information.
 
 
 ### Versioning

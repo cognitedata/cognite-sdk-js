@@ -1,7 +1,8 @@
 // Copyright 2020 Cognite AS
 
+import { describe, expect, test } from 'vitest';
 import { makeAutoPaginationMethods } from '../autoPagination';
-import { ListResponse } from '../types';
+import type { ListResponse } from '../types';
 import { sleepPromise } from '../utils';
 
 async function fibListResponse() {

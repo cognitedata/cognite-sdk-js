@@ -1,12 +1,13 @@
 // Copyright 2020 Cognite AS
+import { beforeAll, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import nock from 'nock';
 import BaseCogniteClient from '../baseCogniteClient';
 
-import { API_KEY_HEADER, BASE_URL } from '../constants';
-import { apiKey, project } from '../testUtils';
-import { sleepPromise } from '../utils';
+import { AUTHORIZATION_HEADER, BASE_URL } from '../constants';
 import { createUniversalRetryValidator } from '../httpClient/retryValidator';
+import { sleepPromise } from '../utils';
+import { accessToken, project } from './testUtils';
 
 const mockBaseUrl = 'https://example.com';
 
@@ -15,17 +16,7 @@ function setupClient(baseUrl: string = BASE_URL) {
     appId: 'JS SDK integration tests',
     project: 'test-project',
     baseUrl,
-    apiKeyMode: true,
-    getToken: () => Promise.resolve(apiKey),
-  });
-}
-
-function setupNoAuthClient(noAuthMode = true) {
-  return new BaseCogniteClient({
-    appId: 'JS SDK integration tests',
-    project: 'test-project',
-    baseUrl: mockBaseUrl,
-    noAuthMode: noAuthMode,
+    oidcTokenProvider: () => Promise.resolve(accessToken),
   });
 }
 
@@ -45,7 +36,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient();
       }).toThrowErrorMatchingInlineSnapshot(
-        `"\`CogniteClient\` is missing parameter \`options\`"`
+        '[Error: `CogniteClient` is missing parameter `options`]'
       );
     });
 
@@ -54,7 +45,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient({});
       }).toThrowErrorMatchingInlineSnapshot(
-        `"options.appId is required and must be of type string"`
+        '[Error: options.appId is required and must be of type string]'
       );
     });
 
@@ -63,7 +54,7 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient({ appId: 12 });
       }).toThrowErrorMatchingInlineSnapshot(
-        `"options.appId is required and must be of type string"`
+        '[Error: options.appId is required and must be of type string]'
       );
     });
 
@@ -72,15 +63,8 @@ describe('CogniteClient', () => {
         // @ts-ignore
         new BaseCogniteClient({ appId: 'unit-test' });
       }).toThrowErrorMatchingInlineSnapshot(
-        `"options.project is required and must be of type string"`
+        '[Error: options.project is required and must be of type string]'
       );
-    });
-
-    test('not throw errors when running in noAuthMode', () => {
-      expect(() => {
-        // @ts-ignore
-        setupNoAuthClient(true);
-      }).not.toThrow();
     });
 
     test('custom validator retries set to 1 should prevent from retrying a failed call', async () => {
@@ -90,50 +74,68 @@ describe('CogniteClient', () => {
         appId: 'unit-test',
         project: 'unit-test',
         baseUrl: mockBaseUrl,
-        getToken: jest.fn(async () => 'test-token'),
+        oidcTokenProvider: vi.fn(async () => 'test-token'),
         retryValidator: createUniversalRetryValidator(1),
       });
-      try {
-        await client.get('/');
-      } catch (err) {
-        expect(err.message).toMatchInlineSnapshot(
-          `"Request failed | status code: 500"`
-        );
-        expect(scope.isDone()).toBeTruthy();
-      }
+      await expect(client.get('/')).rejects.toThrowErrorMatchingInlineSnapshot(
+        '[Error: Request failed | status code: 500]'
+      );
+      expect(scope.isDone()).toBeTruthy();
     });
 
-    describe('credentials', () => {
-      test('missing credentials', () => {
-        expect(() => {
-          // @ts-ignore
-          new BaseCogniteClient({ appId: 'unit-test', project: 'unit-test' });
-        }).toThrowErrorMatchingInlineSnapshot(
-          `"options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>"`
-        );
-      });
-      test('call credentials on 401', async () => {
+    describe('oidcTokenProvider', () => {
+      test('call oidcTokenProvider on 401', async () => {
         nock(mockBaseUrl)
-          .persist()
+          .get('/test')
+          .once()
+          .reply(401, { error: { message: 'unauthorized' } })
           .get('/test')
           .reply(200, { body: 'request ok' });
+
+        const oidcTokenProvider = vi.fn().mockResolvedValue('test-token');
 
         const client = new BaseCogniteClient({
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
-          getToken: () => Promise.resolve('401-test-token'),
+          oidcTokenProvider,
         });
 
         const result = await client.get('/test');
 
         expect(result.status).toEqual(200);
         expect(result.data).toEqual({ body: 'request ok' });
+        expect(oidcTokenProvider).toHaveBeenCalledTimes(1);
       });
 
-      test('getToken rejection should reject sdk requests', async () => {
-        const getToken = jest.fn().mockRejectedValue(new Error('auth error'));
+      test('ensure deprecated getToken still works', async () => {
+        nock(mockBaseUrl)
+          .get('/test')
+          .once()
+          .reply(401, { error: { message: 'unauthorized' } })
+          .get('/test')
+          .reply(200, { body: 'request ok' });
+
+        const getToken = vi.fn().mockResolvedValue('test-token');
+
+        const client = new BaseCogniteClient({
+          project,
+          appId: 'unit-test',
+          baseUrl: mockBaseUrl,
+          getToken,
+        });
+
+        const result = await client.get('/test');
+
+        expect(result.status).toEqual(200);
+        expect(result.data).toEqual({ body: 'request ok' });
+        expect(getToken).toHaveBeenCalledTimes(1);
+      });
+
+      test('oidcTokenProvider rejection should reject sdk requests', async () => {
+        const oidcTokenProvider = vi
+          .fn()
+          .mockRejectedValue(new Error('auth error'));
 
         nock(mockBaseUrl).get('/test').reply(401, {});
 
@@ -141,24 +143,23 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
-          getToken,
+          oidcTokenProvider,
         });
 
         await expect(
           client.get('/test')
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"Request failed | status code: 401"`
+          '[Error: Request failed | status code: 401]'
         );
 
-        expect(getToken).toHaveBeenCalledTimes(1);
+        expect(oidcTokenProvider).toHaveBeenCalledTimes(1);
       });
 
-      test('getToken should be called once for parallel 401s', async () => {
+      test('oidcTokenProvider should be called once for parallel 401s', async () => {
         nock(mockBaseUrl).get('/test').thrice().reply(401);
         nock(mockBaseUrl).get('/test').thrice().reply(200);
 
-        const mockGetToken = jest.fn(async () => {
+        const oidcTokenProvider = vi.fn(async () => {
           await sleepPromise(100);
           return 'test-token';
         });
@@ -167,8 +168,7 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
-          getToken: mockGetToken,
+          oidcTokenProvider,
         });
 
         await Promise.all([
@@ -177,16 +177,16 @@ describe('CogniteClient', () => {
           client.get('/test'),
         ]);
 
-        expect(mockGetToken).toBeCalledTimes(1);
+        expect(oidcTokenProvider).toBeCalledTimes(1);
       });
 
-      test('getToken should be called once for parallel 401s with different response times', async () => {
+      test('oidcTokenProvider should be called once for parallel 401s with different response times', async () => {
         nock(mockBaseUrl).get('/test').twice().reply(401);
         nock(mockBaseUrl).get('/test-with-delay').delay(200).reply(401);
         nock(mockBaseUrl).get('/test').twice().reply(200);
         nock(mockBaseUrl).get('/test-with-delay').reply(200);
 
-        const mockGetToken = jest.fn(async () => {
+        const oidcTokenProvider = vi.fn(async () => {
           await sleepPromise(100);
           return 'test-token';
         });
@@ -195,8 +195,7 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
-          getToken: mockGetToken,
+          oidcTokenProvider,
         });
 
         await Promise.all([
@@ -205,17 +204,17 @@ describe('CogniteClient', () => {
           client.get('/test-with-delay'),
         ]);
 
-        expect(mockGetToken).toBeCalledTimes(1);
+        expect(oidcTokenProvider).toBeCalledTimes(1);
       });
 
-      test('getToken should be called more than once for sequential 401s', async () => {
+      test('oidcTokenProvider should be called more than once for sequential 401s', async () => {
         nock(mockBaseUrl).get('/test').thrice().reply(401);
         nock(mockBaseUrl).get('/test').thrice().reply(200);
         nock(mockBaseUrl).get('/test').reply(401);
         nock(mockBaseUrl).get('/test').reply(200);
 
         let tokenCount = 0;
-        const mockGetToken = jest.fn(async () => {
+        const oidcTokenProvider = vi.fn(async () => {
           await sleepPromise(100);
           return `test-token${tokenCount++}`;
         });
@@ -224,8 +223,7 @@ describe('CogniteClient', () => {
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
-          getToken: mockGetToken,
+          oidcTokenProvider,
         });
 
         await Promise.all([
@@ -236,93 +234,60 @@ describe('CogniteClient', () => {
 
         await client.get('/test');
 
-        expect(mockGetToken).toBeCalledTimes(2);
+        expect(oidcTokenProvider).toBeCalledTimes(2);
       });
 
       test('new token should be used on retry for 401s', async () => {
         nock(mockBaseUrl)
           .get('/test')
           .reply(function () {
-            expect(this.req.headers['api-key']).toStrictEqual(['test-token0']);
+            expect(this.req.headers[AUTHORIZATION_HEADER]).toStrictEqual([
+              'Bearer test-token0',
+            ]);
             return [401];
           });
         nock(mockBaseUrl)
           .get('/test')
           .reply(function () {
-            expect(this.req.headers['api-key']).toStrictEqual(['test-token1']);
+            expect(this.req.headers[AUTHORIZATION_HEADER]).toStrictEqual([
+              'Bearer test-token1',
+            ]);
             return [401];
           });
         nock(mockBaseUrl)
           .get('/test')
           .reply(function () {
-            expect(this.req.headers['api-key']).toStrictEqual(['test-token2']);
+            expect(this.req.headers[AUTHORIZATION_HEADER]).toStrictEqual([
+              'Bearer test-token2',
+            ]);
             return [200];
           });
 
         let tokenCount = 0;
-        const mockGetToken = jest.fn(async () => `test-token${tokenCount++}`);
+        const oidcTokenProvider = vi.fn(
+          async () => `test-token${tokenCount++}`
+        );
 
         const client = new BaseCogniteClient({
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          apiKeyMode: true,
-          getToken: mockGetToken,
+          oidcTokenProvider,
         });
 
         await client.authenticate();
         await client.get('/test');
 
-        expect(mockGetToken).toBeCalledTimes(3);
+        expect(oidcTokenProvider).toBeCalledTimes(3);
       });
-    });
-
-    test('api-key: send api-key on first request', async () => {
-      nock(mockBaseUrl, { reqheaders: { 'api-key': apiKey } })
-        .get('/test')
-        .reply(200);
-      const client = setupClient(mockBaseUrl);
-      await client.authenticate();
-      await expect(client.get('/test').then((r) => r.status)).resolves.toBe(
-        200
-      );
-    });
-
-    test('api-key: 401 and getToken resolving to the same api-key should fail request', async () => {
-      nock(mockBaseUrl).get('/test').twice().reply(401, {});
-
-      const client = setupClient(mockBaseUrl);
-
-      await expect(
-        client.get('/test')
-      ).rejects.toThrowErrorMatchingInlineSnapshot(
-        `"Request failed | status code: 401"`
-      );
-    });
-
-    test('apiKeyMode should change request header and token preable', async () => {
-      nock(mockBaseUrl).get('/test').reply(200, { body: 'api key request ok' });
-
-      const client = new BaseCogniteClient({
-        project,
-        appId: 'unit-test',
-        baseUrl: mockBaseUrl,
-        apiKeyMode: true,
-        getToken: () => Promise.resolve('test-api-key'),
-      });
-
-      const result = await client.get('/test');
-
-      expect(result.status).toEqual(200);
-      expect(result.data).toEqual({ body: 'api key request ok' });
     });
   });
 
   test('getDefaultRequestHeaders() returns clone', () => {
     const client = setupMockableClient();
     const headers = client.getDefaultRequestHeaders();
-    headers[API_KEY_HEADER] = 'overriden';
-    const expectedHeaders = { [API_KEY_HEADER]: apiKey };
+    headers[AUTHORIZATION_HEADER] = 'overriden';
+    const expectedHeaders = { [AUTHORIZATION_HEADER]: accessToken };
     nock(mockBaseUrl, { reqheaders: expectedHeaders }).get('/').reply(200, {});
   });
 
@@ -331,40 +296,6 @@ describe('CogniteClient', () => {
 
     beforeAll(async () => {
       client = setupMockableClient();
-    });
-
-    test('get method', async () => {
-      nock(mockBaseUrl).get('/').once().reply(200, []);
-      const response = await client.get('/');
-      expect(response.data).toEqual([]);
-    });
-
-    test('post method', async () => {
-      nock(mockBaseUrl).post('/').once().reply(200, []);
-      const response = await client.post('/');
-      expect(response.data).toEqual([]);
-    });
-
-    test('put method', async () => {
-      nock(mockBaseUrl).put('/').once().reply(200, []);
-      const response = await client.put('/', {
-        responseType: 'json',
-      });
-      expect(response.data).toEqual([]);
-    });
-
-    test('delete method', async () => {
-      nock(mockBaseUrl).delete('/').once().reply(200, 'abc');
-      const response = await client.delete('/', { responseType: 'text' });
-      expect(response.data).toBe('abc');
-    });
-  });
-
-  describe('noAuthMode http requests', () => {
-    let client: BaseCogniteClient;
-
-    beforeAll(async () => {
-      client = setupNoAuthClient();
     });
 
     test('get method', async () => {

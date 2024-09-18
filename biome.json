@@ -1,0 +1,52 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+  "organizeImports": {
+    "enabled": true,
+    "ignore": [
+      "**/dist/**/*",
+      "**/docs/**/*",
+      "**/codeSnippets/**/*",
+      "samples/**/*",
+      "packages/core/src/credentialsAuth.ts",
+      "packages/core/src/authFlows/legacy.ts",
+      ".cognite-openapi-snapshot.json"
+    ]
+  },
+  "linter": {
+    "ignore": [
+      "**/dist/**/*",
+      "**/docs/**/*",
+      "**/codeSnippets/**/*",
+      "samples/**/*",
+      "packages/core/src/credentialsAuth.ts",
+      "packages/core/src/authFlows/legacy.ts",
+      ".cognite-openapi-snapshot.json"
+    ],
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "ignore": [
+      "**/package.json",
+      "**/dist/**/*",
+      "**/docs/**/*",
+      "**/codeSnippets/**/*",
+      "samples/**/*",
+      "packages/core/src/credentialsAuth.ts",
+      "packages/core/src/authFlows/legacy.ts",
+      ".cognite-openapi-snapshot.json",
+      "packages/codegen/src/__tests__/testdata/cyclic-references-types.gen.ts",
+      "packages/codegen/src/__tests__/testdata/8-serviceB-types.gen.ts"
+    ]
+  },
+  "javascript": {
+    "formatter": {
+      "trailingCommas": "es5",
+      "quoteStyle": "single"
+    }
+  }
+}

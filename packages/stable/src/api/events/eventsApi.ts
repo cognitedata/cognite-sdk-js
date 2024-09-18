@@ -2,11 +2,11 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  CDFHttpClient,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
+import type {
   CogniteEvent,
   EventChange,
   EventFilterRequest,

@@ -1,18 +1,26 @@
 // Copyright 2020 Cognite AS
 
-import { Asset, CogniteEvent, DataSet, Label } from '@cognite/sdk';
-import { randomInt } from '@cognite/sdk-core/src/testUtils';
-import CogniteClient from '../../cogniteClient';
+import type { Asset, CogniteEvent, DataSet, Label } from '@cognite/sdk';
+import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+} from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupLoggedInClient } from '../testUtils';
 
 describe('relationships integration test', () => {
   const end = Date.now();
   const start = end - 60 * 1000;
-  const assetName = 'relationship_test_asset' + randomInt();
-  const eventName = 'relationship_test_event' + randomInt();
-  const relationshipId = 'test_relationship' + randomInt();
-  const labelId = 'test_label' + randomInt();
-  const confidenceExternalId = 'relationship_test_confidence' + randomInt();
+  const assetName = `relationship_test_asset${randomInt()}`;
+  const eventName = `relationship_test_event${randomInt()}`;
+  const relationshipId = `test_relationship${randomInt()}`;
+  const labelId = `test_label${randomInt()}`;
+  const confidenceExternalId = `relationship_test_confidence${randomInt()}`;
   const relationshipConf = {
     externalId: relationshipId,
     sourceExternalId: assetName,

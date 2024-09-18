@@ -2,25 +2,25 @@
 
 import {
   BaseResourceAPI,
-  CursorAndAsyncIterator,
-  HttpHeaders,
+  type CursorAndAsyncIterator,
+  type HttpHeaders,
   sleepPromise,
 } from '@cognite/sdk-core';
-import {
+import type {
   CogniteInternalId,
   ExternalFileInfo,
   FileAggregate,
   FileAggregateQuery,
   FileChangeUpdate,
   FileContent,
+  FileInfo,
   FileLink,
   FileRequestFilter,
-  FileInfo,
+  FileUploadResponse,
   FilesSearchFilter,
   IdEither,
   IgnoreUnknownIds,
   ItemsWrapper,
-  FileUploadResponse,
 } from '../../types';
 
 export class FilesAPI extends BaseResourceAPI<FileInfo> {
@@ -57,8 +57,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
   public upload = (
     fileInfo: ExternalFileInfo,
     fileContent?: FileContent,
-    overwrite: boolean = false,
-    waitUntilAcknowledged: boolean = false
+    overwrite = false,
+    waitUntilAcknowledged = false
   ): Promise<FileUploadResponse | FileInfo> => {
     return this.uploadEndpoint(
       fileInfo,
@@ -170,8 +170,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
   private async uploadEndpoint(
     fileInfo: ExternalFileInfo,
     fileContent?: FileContent,
-    overwrite: boolean = false,
-    waitUntilAcknowledged: boolean = false
+    overwrite = false,
+    waitUntilAcknowledged = false
   ) {
     const hasFileContent = fileContent != null;
     if (!hasFileContent && waitUntilAcknowledged) {

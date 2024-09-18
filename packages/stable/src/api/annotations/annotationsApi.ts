@@ -2,20 +2,20 @@
 
 import {
   BaseResourceAPI,
-  CogniteAsyncIterator,
-  CursorAndAsyncIterator,
-  CursorResponse,
-  InternalId,
-  ListResponse,
+  type CogniteAsyncIterator,
+  type CursorAndAsyncIterator,
+  type CursorResponse,
+  type InternalId,
+  type ListResponse,
 } from '@cognite/sdk-core';
 
-import {
+import type {
   AnnotationChangeById,
   AnnotationCreate,
-  AnnotationSuggest,
   AnnotationFilterRequest,
-  AnnotationReverseLookupRequest,
   AnnotationModel,
+  AnnotationReverseLookupRequest,
+  AnnotationSuggest,
   AnnotationsAssetRef,
 } from '../../types';
 
@@ -35,24 +35,24 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Create annotations](https://docs.cognite.com/api/playground/#operation/annotationsCreate)
    *
+   * ```js
    * const data = {
    *   pageNumber: 7,
    *   textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
    *   extractedText: 'i am your father',
    * };
-   * const partial: AnnotationCreate = {
-   *   annotatedResourceType: 'file',
+   * const annotation = {
+   *   annotatedResourceType: 'file' as const,
    *   annotatedResourceId: 1,
    *   annotationType: 'documents.ExtractedText',
    *   creatingApp: 'integration-tests',
    *   creatingAppVersion: '0.0.1',
    *   creatingUser: 'integration-tests',
-   *   status: 'suggested',
+   *   status: 'suggested' as const,
    *   data,
    * };
-   *
-   * const created = await client.annotations.create([partial]);
-   *
+   * const created = await client.annotations.create([annotation]);
+   * ```
    */
   public create = (items: AnnotationCreate[]) => {
     return this.createEndpoint(items);
@@ -61,13 +61,14 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Suggest annotations](https://docs.cognite.com/api/playground/#operation/annotationsSuggest)
    *
+   * ```js
    * const data = {
    *   pageNumber: 7,
    *   textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
    *   extractedText: 'i am your father',
    * };
-   * const partial: AnnotationSuggest = {
-   *   annotatedResourceType: 'file',
+   * const partial = {
+   *   annotatedResourceType: 'file' as const,
    *   annotatedResourceId: 1,
    *   annotationType: 'documents.ExtractedText',
    *   creatingApp: 'integration-tests',
@@ -77,6 +78,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * };
    *
    * const created = await client.annotations.suggest([partial]);
+   * ```
    */
   public suggest = (items: AnnotationSuggest[]) => {
     return this.createEndpoint(items, this.suggestUrl);
@@ -87,9 +89,11 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * or [Get an](https://docs.cognite.com/api/playground/#operation/annotationsGet)
    * annotation
    *
-   * const annotationIds: InternalId[] = [1,2];
+   * ```js
+   * const annotationIds = [{ id: 1 }, { id: 2 }];
    *
    * const response = await client.annotations.retrieve(annotationIds);
+   * ```
    */
   public retrieve = (ids: InternalId[]) => {
     return this.retrieveEndpoint(ids);
@@ -98,11 +102,16 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Advanced list of annotations](https://docs.cognite.com/api/playground/#operation/annotationsFilter)
    *
+   * ```js
+   * const annotatedFileId = 1;
    * const limitOne = await client.annotations.list({
    *   limit: 1,
-   *   filter: fileFilter(annotatedFileId),
+   *   filter: {
+   *    annotatedResourceType: 'file',
+   *    annotatedResourceIds: [{ id: 1 }],
+   *  },
    * });
-   *
+   * ```
    */
   public list = (
     filter: AnnotationFilterRequest
@@ -113,9 +122,10 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Delete annotations](https://docs.cognite.com/api/playground/#operation/annotationsDelete)
    *
-   * const annotationIds: InternalId[] = [1,2];
-   *
+   * ```js
+   * const annotationIds = [{ id: 1 }, { id: 2 }];
    * await client.annotations.delete(annotationIds);
+   * ```
    */
   public delete = (ids: InternalId[]) => {
     return this.deleteEndpoint(ids);
@@ -124,12 +134,13 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
   /**
    * [Update annotations](https://docs.cognite.com/api/playground/#operation/annotationsUpdate)
    *
+   * ```js
    * const data = {
    *   pageNumber: 8,
    *   fileRef: { externalId: 'def_file_changed' },
    *   textRegion: { xMin: 0, xMax: 0.1, yMin: 0, yMax: 0.2 },
    * };
-   * const changes: AnnotationChangeById[] = [
+   * const changes = [
    *   {
    *     id: 1,
    *     update: {
@@ -141,6 +152,7 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
    * ];
    *
    * const updatedResp = await client.annotations.update(changes);
+   * ```
    */
   public update = (changes: AnnotationChangeById[]) => {
     return this.updateEndpoint(changes);
@@ -148,24 +160,26 @@ export class AnnotationsAPI extends BaseResourceAPI<AnnotationModel> {
 
   /**
    * [Reverse lookup](https://developer.cognite.com/api/v1-beta/#tag/Annotations/operation/annotationsReverseLookup)
+   *
+   * ```js
    * const assetQueryData = {
    *   limit: -1,
    *   filter: {
-   *     annotatedResourceType: 'file',
+   *     annotatedResourceType: 'file' as const,
    *     annotationType: 'images.AssetLink',
    *     data: {
    *       assetRef: { id: 123 }
    *     }
    *   }
    * };
-   *
-   * const resourceIdsResponse = this._client.annotations.reverseLookup(assetQuerydata);
+   * const resourceIdsResponse = client.annotations.reverseLookup(assetQueryData);
+   * ```
    */
   public reverseLookup = (
     filter: AnnotationReverseLookupRequest
   ): Promise<ListResponse<AnnotationsAssetRef[]>> &
     CogniteAsyncIterator<AnnotationsAssetRef> => {
-    const path = this.url(`reverselookup`);
+    const path = this.url('reverselookup');
     return this.cursorBasedEndpoint(
       (params) =>
         this.post<CursorResponse<AnnotationsAssetRef[]>>(path, {

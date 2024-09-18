@@ -46,19 +46,6 @@ export type CogniteExternalId = string;
 export type CogniteInternalId = number;
 
 /**
- * The url to send the user to in order to log out
- * @example https://accounts.google.com/logout
- */
-export type LogoutUrl = string;
-
-/**
- * Object containing the log out URL
- */
-export interface LogoutUrlResponse {
-  data: { url: LogoutUrl };
-}
-
-/**
  * A Promise to a response that can be awaited like normal,
  * but at the risk of not getting all results due to API limits.
  * In which case a nextCursor field is returned to request the next page.
@@ -98,7 +85,7 @@ export interface CogniteAsyncIterator<T> extends AsyncIterableIterator<T> {
 
 export type AutoPagingEachHandler<T> = (
   item: T
-) => (void | boolean) | Promise<void | boolean>;
+) => (undefined | boolean) | Promise<undefined | boolean>;
 
 export type AutoPagingEach<T> = (
   handler: AutoPagingEachHandler<T>

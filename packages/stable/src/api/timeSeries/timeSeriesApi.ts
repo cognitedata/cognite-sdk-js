@@ -2,21 +2,21 @@
 
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  CursorAndAsyncIterator,
-  MetadataMap,
+  type CDFHttpClient,
+  type CursorAndAsyncIterator,
+  type MetadataMap,
 } from '@cognite/sdk-core';
-import {
-  Timeseries,
+import type {
+  ExternalTimeseries,
   IdEither,
   IgnoreUnknownIds,
-  ExternalTimeseries,
   SyntheticQuery,
+  TimeSeriesUpdate,
+  Timeseries,
   TimeseriesAggregate,
   TimeseriesAggregateQuery,
   TimeseriesFilterQuery,
   TimeseriesSearchFilter,
-  TimeSeriesUpdate,
 } from '../../types';
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 
@@ -45,7 +45,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * ```js
    * const timeseries = [
    *   { name: 'Pressure sensor', assetId: 123 },
-   *   { name: 'Temprature sensor', description: 'Pump abc', unit: 'C' },
+   *   { name: 'Temperature sensor', description: 'Pump abc', unit: 'C' },
    * ];
    * const createdTimeseries = await client.timeseries.create(timeseries);
    * ```

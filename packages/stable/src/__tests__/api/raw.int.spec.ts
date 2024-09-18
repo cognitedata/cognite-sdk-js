@@ -1,7 +1,8 @@
 // Copyright 2020 Cognite AS
 
-import CogniteClient from '../../cogniteClient';
-import { RawDB, RawDBTable } from '../../types';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
+import type { RawDB, RawDBTable } from '../../types';
 import { randomInt, setupLoggedInClient } from '../testUtils';
 
 let index = 0;
@@ -97,7 +98,7 @@ describe('Raw integration test', () => {
       [table] = await client.raw.createTables(database.name, [createTable()]);
     });
     afterAll(async () => {
-      await client.raw.deleteDatabases([database]);
+      await client.raw.deleteDatabases([database], { recursive: true });
     });
 
     const rows = [createRow(), createRow()];

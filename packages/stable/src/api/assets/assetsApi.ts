@@ -1,8 +1,11 @@
 // Copyright 2020 Cognite AS
 
-import { BaseResourceAPI, CursorAndAsyncIterator } from '@cognite/sdk-core';
-import { RevertableArraySorter } from '@cognite/sdk-core';
 import {
+  BaseResourceAPI,
+  type CursorAndAsyncIterator,
+} from '@cognite/sdk-core';
+import { RevertableArraySorter } from '@cognite/sdk-core';
+import type {
   Asset,
   AssetAggregate,
   AssetAggregateQuery,

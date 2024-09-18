@@ -1,12 +1,12 @@
 // Copyright 2020 Cognite AS
+import { describe, expect, test } from 'vitest';
 
 // @ts-ignore
 import { headersWithDefaultField } from '../../httpClient/basicHttpClient';
-import { HttpHeaders } from '../../httpClient/httpHeaders';
+import type { HttpHeaders } from '../../httpClient/httpHeaders';
 
 function lengthOfHttpHeaders(headers?: HttpHeaders): number {
   let counter = 0;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   for (const _ in headers) {
     counter += 1;
   }
@@ -37,7 +37,7 @@ describe('basicHttpClient', () => {
       );
       expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
       expect('Accept' in alteredEmptyHeaders).toBeTruthy();
-      expect(alteredEmptyHeaders['Accept']).toEqual(mediaType);
+      expect(alteredEmptyHeaders.Accept).toEqual(mediaType);
     });
     test('to be case insensitive', () => {
       const mediaType = 'image/png';
@@ -51,7 +51,7 @@ describe('basicHttpClient', () => {
       );
       expect(lengthOfHttpHeaders(alteredEmptyHeaders)).toEqual(1);
       expect('accept' in alteredEmptyHeaders).toBeTruthy();
-      expect(alteredEmptyHeaders['accept']).toEqual(mediaType);
+      expect(alteredEmptyHeaders.accept).toEqual(mediaType);
     });
   });
 });

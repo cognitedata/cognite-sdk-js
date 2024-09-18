@@ -1,17 +1,17 @@
 // Copyright 2020 Cognite AS
+import { describe, expect, test } from 'vitest';
 
 import {
-  convertToTimestampToDateTime,
-  isSameProject,
-  isUsingSSL,
-  projectUrl,
-  promiseCache,
-  sleepPromise,
-  promiseEachInSequence,
-  promiseAllAtOnce,
-  isJson,
-  CogniteAPIVersion,
+  type CogniteAPIVersion,
   apiUrl,
+  convertToTimestampToDateTime,
+  isJson,
+  isSameProject,
+  projectUrl,
+  promiseAllAtOnce,
+  promiseCache,
+  promiseEachInSequence,
+  sleepPromise,
 } from '../utils';
 
 describe('utils', () => {
@@ -72,8 +72,8 @@ describe('utils', () => {
       await expect(
         promiseAllAtOnce(data, (input) =>
           input === 'x'
-            ? Promise.reject(input + 'x')
-            : Promise.resolve(input + 'r')
+            ? Promise.reject(`${input}x`)
+            : Promise.resolve(`${input}r`)
         )
       ).rejects.toEqual({
         failed: ['x'],
@@ -149,7 +149,7 @@ describe('utils', () => {
 
       await expect(
         promiseEachInSequence([1, 2, 0, 3, 0], (input) =>
-          input ? Promise.resolve(input + 'r') : Promise.reject('x')
+          input ? Promise.resolve(`${input}r`) : Promise.reject('x')
         )
       ).rejects.toEqual({
         failed: [0, 3, 0],
@@ -158,10 +158,6 @@ describe('utils', () => {
         responses: ['1r', '2r'],
       });
     });
-  });
-
-  test('isUsingSSL', () => {
-    expect(isUsingSSL()).toBeTruthy();
   });
 
   test('should isJson returns false in case of ArrayBuffer', () => {

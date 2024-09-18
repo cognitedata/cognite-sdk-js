@@ -1,17 +1,17 @@
 import {
   BaseResourceAPI,
-  CogniteExternalId,
-  ExternalId,
+  type CogniteExternalId,
+  type ExternalId,
 } from '@cognite/sdk-core';
-import {
-  GeospatialFeatureResponse,
+import type {
   FeatureAggregateParams,
   GeospatialFeature,
-  GeospatialOutput,
   GeospatialFeatureListFilter,
+  GeospatialFeatureResponse,
   GeospatialFeatureSearchFilter,
   GeospatialFeatureSearchStreamFilter,
   GeospatialFeatureSearchStreamResponse,
+  GeospatialOutput,
 } from './types';
 
 export class FeatureAPI extends BaseResourceAPI<GeospatialFeatureResponse> {

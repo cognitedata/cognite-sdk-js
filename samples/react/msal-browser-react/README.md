@@ -92,7 +92,7 @@ export const pca = new PublicClientApplication(configuration);
 7. Create a method that retrieve the access_token.
 
 ```ts
-export const getToken = async () => {
+export const oidcTokenProvider = async () => {
   // Verify if account are setted.
   const accountId = sessionStorage.getItem("account");
 

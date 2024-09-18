@@ -2,15 +2,16 @@
 
 import chunk from 'lodash/chunk';
 import { makeAutoPaginationMethods } from './autoPagination';
-import {
-  HttpResponse,
-  HttpRequestOptions,
+import DateParser from './dateParser';
+import type {
   HttpCall,
   HttpQueryParams,
+  HttpRequestOptions,
+  HttpResponse,
 } from './httpClient/basicHttpClient';
-import { CDFHttpClient } from './httpClient/cdfHttpClient';
-import { MetadataMap } from './metadata';
-import {
+import type { CDFHttpClient } from './httpClient/cdfHttpClient';
+import type { MetadataMap } from './metadata';
+import type {
   CursorAndAsyncIterator,
   CursorResponse,
   FilterQuery,
@@ -19,7 +20,7 @@ import {
   ListResponse,
 } from './types';
 import { applyIfApplicable, promiseAllWithData } from './utils';
-import DateParser from './dateParser';
+
 /** @hidden */
 export abstract class BaseResourceAPI<ResponseType> {
   protected get listGetUrl() {
@@ -44,6 +45,10 @@ export abstract class BaseResourceAPI<ResponseType> {
 
   protected get deleteUrl() {
     return this.url('delete');
+  }
+
+  protected get upsertUrl() {
+    return this.url('upsert');
   }
 
   protected get aggregateUrl() {
@@ -94,8 +99,8 @@ export abstract class BaseResourceAPI<ResponseType> {
     return [parents, props as string[]];
   }
 
-  protected url(path: string = '') {
-    return this.resourcePath + '/' + path;
+  protected url(path = '') {
+    return `${this.resourcePath}/${path}`;
   }
 
   private requestWrapper(request: HttpCall) {
@@ -103,13 +108,15 @@ export abstract class BaseResourceAPI<ResponseType> {
       path: string,
       options?: HttpRequestOptions
     ): Promise<HttpResponse<ResponseType>> => {
-      if (options !== undefined)
-        options = {
-          ...options,
-          params: DateParser.parseFromDates(options.params),
-          data: DateParser.parseFromDates(options.data),
-        };
-      const response = await request<ResponseType>(path, options);
+      const requestOptions =
+        options !== undefined
+          ? {
+              ...options,
+              params: DateParser.parseFromDates(options.params),
+              data: DateParser.parseFromDates(options.data),
+            }
+          : undefined;
+      const response = await request<ResponseType>(path, requestOptions);
       return {
         ...response,
         data: this.dateParser.parseToDates(response.data),
@@ -141,6 +148,19 @@ export abstract class BaseResourceAPI<ResponseType> {
     );
   }
 
+  protected async upsertEndpoint<RequestType>(
+    items: RequestType[],
+    preRequestModifier?: (items: RequestType[]) => RequestType[],
+    postRequestModifier?: (items: ResponseType[]) => ResponseType[]
+  ) {
+    return this.callEndpointWithMergeAndTransform(
+      items,
+      (data) => this.callUpsertEndpoint(data),
+      preRequestModifier,
+      postRequestModifier
+    );
+  }
+
   protected cursorBasedEndpoint<QueryType extends FilterQuery, Item>(
     endpointCaller: ListEndpoint<QueryType, Item[]>,
     scope?: QueryType
@@ -166,13 +186,22 @@ export abstract class BaseResourceAPI<ResponseType> {
     );
   }
 
-  protected async retrieveEndpoint<RequestParams extends object, T = IdEither>(
+  protected async retrieveEndpoint<
+    RequestParams extends HttpQueryParams,
+    T = IdEither,
+  >(
     ids: T[],
     params?: RequestParams,
-    path?: string
+    path?: string,
+    queryParams?: RequestParams
   ) {
     return this.callEndpointWithMergeAndTransform(ids, (request) =>
-      this.callRetrieveEndpoint<RequestParams, T>(request, path, params)
+      this.callRetrieveEndpoint<RequestParams, T>(
+        request,
+        path,
+        params,
+        queryParams
+      )
     );
   }
 
@@ -195,11 +224,10 @@ export abstract class BaseResourceAPI<ResponseType> {
     );
   }
 
-  protected async deleteEndpoint<RequestParams extends object, T = IdEither>(
-    ids: T[],
-    params?: RequestParams,
-    path?: string
-  ) {
+  protected async deleteEndpoint<
+    RequestParams extends HttpQueryParams,
+    T = IdEither,
+  >(ids: T[], params?: RequestParams, path?: string) {
     const responses = await this.callDeleteEndpoint(ids, params, path);
     return this.addToMapAndReturn({}, responses[0]);
   }
@@ -240,10 +268,20 @@ export abstract class BaseResourceAPI<ResponseType> {
   };
 
   protected async callRetrieveEndpoint<
-    RequestParams extends object,
-    T = IdEither
-  >(items: T[], path: string = this.byIdsUrl, params?: RequestParams) {
-    return this.postInParallelWithAutomaticChunking({ params, path, items });
+    RequestParams extends HttpQueryParams,
+    T = IdEither,
+  >(
+    items: T[],
+    path: string = this.byIdsUrl,
+    params?: RequestParams,
+    queryParams?: RequestParams
+  ) {
+    return this.postInParallelWithAutomaticChunking({
+      params,
+      path,
+      items,
+      queryParams,
+    });
   }
 
   protected async callUpdateEndpoint<ChangeType>(
@@ -261,11 +299,10 @@ export abstract class BaseResourceAPI<ResponseType> {
     return this.post<Response>(path, { data: query, params: queryParams });
   }
 
-  protected callDeleteEndpoint<ParamsType extends object, T = IdEither>(
-    ids: T[],
-    params?: ParamsType,
-    path: string = this.deleteUrl
-  ) {
+  protected callDeleteEndpoint<
+    ParamsType extends HttpQueryParams,
+    T = IdEither,
+  >(ids: T[], params?: ParamsType, path: string = this.deleteUrl) {
     return this.postInParallelWithAutomaticChunking({
       path,
       items: ids,
@@ -282,7 +319,10 @@ export abstract class BaseResourceAPI<ResponseType> {
     });
   }
 
-  protected addToMapAndReturn<T, R>(response: T, metadata: HttpResponse<R>) {
+  protected addToMapAndReturn<T extends object, R>(
+    response: T,
+    metadata: HttpResponse<R>
+  ) {
     return this.map.addAndReturn(response, metadata);
   }
 
@@ -319,7 +359,10 @@ export abstract class BaseResourceAPI<ResponseType> {
   ): T[] {
     return responses
       .map((response) => response.data.items)
-      .reduce((a, b) => [...a, ...b], []);
+      .reduce((acc, cur) => {
+        acc.push(...cur);
+        return acc;
+      }, []);
   }
 
   protected addNextPageFunction<QueryType extends FilterQuery, Item>(
@@ -342,7 +385,7 @@ export abstract class BaseResourceAPI<ResponseType> {
 
   protected postInParallelWithAutomaticChunking<
     RequestType,
-    ParamsType extends object = {}
+    ParamsType extends HttpQueryParams,
   >({
     path,
     items,
@@ -365,16 +408,21 @@ export abstract class BaseResourceAPI<ResponseType> {
     items: RequestType[],
     path: string
   ) {
-    return this.postInSequenceWithAutomaticChunking<
-      RequestType,
-      ItemsWrapper<ResponseType>
-    >(path, items);
+    return this.postInSequenceWithAutomaticChunking<RequestType>(path, items);
   }
 
-  private postInSequenceWithAutomaticChunking<
-    RequestType,
-    ParamsType extends object = {}
-  >(path: string, items: RequestType[], params?: ParamsType) {
+  private async callUpsertEndpoint<RequestType>(
+    items: RequestType[],
+    path: string = this.upsertUrl
+  ) {
+    return this.postInSequenceWithAutomaticChunking<RequestType>(path, items);
+  }
+
+  private postInSequenceWithAutomaticChunking<RequestType>(
+    path: string,
+    items: RequestType[],
+    params?: HttpQueryParams
+  ) {
     return promiseAllWithData(
       BaseResourceAPI.chunk(items, 1000),
       (singleChunk) =>
@@ -401,4 +449,4 @@ interface PostInParallelWithAutomaticChunkingParams<RequestType, ParamsType> {
 
 type KeysOfType<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T];
 
-type NoInfer<T> = [T][T extends any ? 0 : never];
+type NoInfer<T> = [T][T extends unknown ? 0 : never];

@@ -15,14 +15,14 @@ jobs:
       COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
 
       - name: Cache node_modules
         id: cache-modules
@@ -32,7 +32,7 @@ jobs:
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
 
       - name: Install 🔧
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Build
         run: yarn build
@@ -41,26 +41,22 @@ jobs:
       #   run: yarn test:codecov
 
       - name: Codecov
-        uses: codecov/codecov-action@v3.1.1
+        uses: codecov/codecov-action@v3.1.6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   snippets:
     runs-on: ubuntu-latest
 
-    env:
-      COGNITE_PROJECT: cognitesdk-js
-      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
 
       - name: Cache node_modules
         id: cache-modules
@@ -70,7 +66,7 @@ jobs:
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
 
       - name: Install 🔧
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Build
         run: yarn build
@@ -81,19 +77,15 @@ jobs:
   samples:
     runs-on: ubuntu-latest
 
-    env:
-      COGNITE_PROJECT: cognitesdk-js
-      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
 
       - name: Cache node_modules
         id: cache-modules
@@ -103,30 +95,26 @@ jobs:
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
 
       - name: Install 🔧
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Build
         run: yarn build
 
-      # - name: Test samples
-      #   run: yarn test-samples
+      - name: Test samples
+        run: yarn test-samples
 
   lint:
     runs-on: ubuntu-latest
 
-    env:
-      COGNITE_PROJECT: cognitesdk-js
-      COGNITE_CREDENTIALS: ${{secrets.COGNITE_CREDENTIALS}}
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
 
       - name: Cache node_modules
         id: cache-modules
@@ -136,7 +124,7 @@ jobs:
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
 
       - name: Install 🔧
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: validateDocLinks
         run: yarn validateDocLinks
@@ -144,31 +132,27 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      - name: Build
-        run: yarn build
-
   tests:
 
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [14, 16]
+        node-version: [18, 20]
 
     env:
-      COGNITE_PROJECT: platypus
-      COGNITE_BASE_URL: https://greenfield.cognitedata.com
-      COGNITE_CREDENTIALS: ${{ secrets.COGNITE_CREDENTIALS }}
+      COGNITE_PROJECT: cognitesdk-js
+      COGNITE_BASE_URL: https://api.cognitedata.com
       COGNITE_CLIENT_SECRET: ${{ secrets.COGNITE_CLIENT_SECRET }}
-      COGNITE_CLIENT_ID: ${{ secrets.COGNITE_CLIENT_ID }}
-      COGNITE_AZURE_TENANT_ID: ${{ secrets.COGNITE_AZURE_TENANT_ID }}
+      COGNITE_CLIENT_ID: cb491d7a-c346-4910-9a10-1650df34fbbb
+      COGNITE_AZURE_DOMAIN: cogniteappdev.onmicrosoft.com
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -180,7 +164,7 @@ jobs:
           key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
 
       - name: Install 🔧
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Build
         run: yarn build

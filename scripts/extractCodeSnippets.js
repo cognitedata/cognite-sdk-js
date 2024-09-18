@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const path = require('path');
+const path = require('node:path');
 const snippetsFolder = path.join(process.cwd(), './codeSnippets');
-const jsDoc = require(snippetsFolder + '/docs.json');
-// eslint-disable-next-line lodash/import-scope
+const jsDoc = require(`${snippetsFolder}/docs.json`);
 const _ = require('lodash');
-const fs = require('fs');
+const fs = require('node:fs');
 
 function stripMarkdownCodeSnippet(rawCode) {
   return rawCode.replace('```js', '').replace('```', '').trim();
@@ -12,13 +10,28 @@ function stripMarkdownCodeSnippet(rawCode) {
 
 function findAllCodeSnippetsInJsDoc(jsDoc) {
   const codeSnippets = new Map(); // string => string[]
-  _.cloneDeepWith(jsDoc, (value, _, object) => {
+  _.cloneDeepWith(jsDoc, (value, key, object) => {
+    if (key !== 'summary') {
+      return;
+    }
+    if (!Array.isArray(value) || value.length === 0) {
+      return;
+    }
+    if (value[0].kind !== 'text') {
+      return;
+    }
     const docRegEx =
-      /https:\/\/(doc.cognitedata.com|docs.cognite.com)\/api\/v1\/#operation\/([a-zA-Z0-9]+)/g;
-    let matches;
-    while ((matches = docRegEx.exec(value))) {
-      const operationId = matches[2];
-      const rawCode = object.text;
+      /https:\/\/(doc\.cognitedata\.com|docs\.cognite\.com|developer\.cognite\.com)\/api.*operation\/([a-zA-Z0-9]+)/g;
+    const matches = value[0].text.matchAll(docRegEx);
+    for (const match of matches) {
+      const operationId = match[2];
+      if (value.length !== 2) {
+        throw new Error('Unexpected length of summary');
+      }
+      if (value[1].kind !== 'code') {
+        throw new Error(`Expected code snippet, but got ${value[1].kind}`);
+      }
+      const rawCode = value[1].text;
       if (!codeSnippets.has(operationId)) {
         codeSnippets.set(operationId, []);
       }
@@ -26,7 +39,7 @@ function findAllCodeSnippetsInJsDoc(jsDoc) {
     }
   });
   // comments appears two times in jsdoc...
-  for (let operationId of codeSnippets.keys()) {
+  for (const operationId of codeSnippets.keys()) {
     codeSnippets.set(operationId, _.uniq(codeSnippets.get(operationId)));
   }
   return codeSnippets;
@@ -46,7 +59,13 @@ function writeCodeSnippetFile(codeSnippets, filepath) {
   codeSnippets.forEach((snippets, operationId) => {
     output.operations[operationId] = joinSnippets(snippets);
   });
-  fs.writeFileSync(filepath, JSON.stringify(output, null, 2) + '\n');
+  // sort operations by key
+  output.operations = _(output.operations)
+    .toPairs()
+    .sortBy(0)
+    .fromPairs()
+    .value();
+  fs.writeFileSync(filepath, `${JSON.stringify(output, null, 2)}\n`);
 }
 
 const packageName =
@@ -70,8 +89,7 @@ codeSnippets.forEach((snippets, operationId) => {
     const client = new CogniteClient({
       appId: '[APP NAME]',
       project: '[PROJECT]',
-      apiKeyMode: true,
-      getToken: () => Promise.resolve('[API_KEY]'),
+      oidcTokenProvider: () => Promise.resolve('[ACCESS_TOKEN]'),
     });
     (async () => {
       ${joinSnippets(snippets)}
@@ -84,6 +102,7 @@ const tsconfig = {};
 tsconfig.include = ['*.ts'];
 tsconfig.compilerOptions = {
   noUnusedLocals: false,
+  skipLibCheck: true,
   outDir: 'dist',
   declaration: false,
   sourceMap: false,
@@ -92,5 +111,5 @@ tsconfig.compilerOptions = {
 // We make a tsconfig.build.json that extends the normal tsconfig.build.json
 tsconfig.extends = '../../../tsconfig.build.json';
 const tsbuildconfigpath = path.join(snippetsFolder, './tsconfig.build.json');
-fs.writeFileSync(tsbuildconfigpath, JSON.stringify(tsconfig, null, 2) + '\n');
+fs.writeFileSync(tsbuildconfigpath, `${JSON.stringify(tsconfig, null, 2)}\n`);
 console.log(`TS build config for code snippets saved to: ${tsbuildconfigpath}`);

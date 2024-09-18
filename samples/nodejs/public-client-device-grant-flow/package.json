@@ -5,15 +5,15 @@
   "license": "Apache-2.0",
   "scripts": {
     "tsc": "tsc",
-    "start": "yarn tsc && node build/device_grant.js"
+    "start": "yarn g:tsc && node build/device_grant.js"
   },
   "dependencies": {
-    "open": "^8.3.0",
-    "@cognite/sdk": "^7",
-    "@azure/msal-node": "^1.3.2"
+    "@azure/msal-node": "^1.18.4",
+    "@cognite/sdk": "^9",
+    "open": "^8.4.2"
   },
   "devDependencies": {
-    "@types/node": "^16.7",
-    "typescript": "^4.4"
+    "@types/node": "^22.3.0",
+    "typescript": "^5.5.4"
   }
 }

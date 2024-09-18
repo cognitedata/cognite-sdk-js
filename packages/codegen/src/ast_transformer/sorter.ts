@@ -24,9 +24,9 @@ const sortElementsByName = (
 ): ts.NodeArray<ts.TypeElement> => {
   const sorted = Array.from(elements).sort((a, b) => {
     if (
-      a.name != undefined &&
+      a.name !== undefined &&
       ts.isIdentifier(a.name) &&
-      b.name != undefined &&
+      b.name !== undefined &&
       ts.isIdentifier(b.name)
     ) {
       return identifierName(a.name).localeCompare(identifierName(b.name));
@@ -34,7 +34,7 @@ const sortElementsByName = (
 
     throw new TypeError('expected identifiers...');
   });
-  return ts.createNodeArray(sorted);
+  return ts.factory.createNodeArray(sorted);
 };
 
 /** sorterTransformer sorts all the declarations alphabetically to produce deterministic outputs. */
@@ -43,20 +43,28 @@ const sorterTransformer: ts.TransformerFactory<ts.SourceFile> = (context) => {
     const visitor = (node: ts.Node): ts.Node => {
       if (ts.isInterfaceDeclaration(node)) {
         // sort every field alphabetically
-        node.members = sortElementsByName(node.members);
-        return node;
+        const interfaceDeclaration: ts.InterfaceDeclaration = {
+          ...node,
+          members: sortElementsByName(node.members),
+        };
+        return interfaceDeclaration;
       }
       return ts.visitEachChild(node, visitor, context);
     };
 
-    const transformedSourceFile = ts.visitNode(sourceFile, visitor);
+    const transformedSourceFile = ts.visitNode(
+      sourceFile,
+      visitor
+    ) as ts.SourceFile;
     const sortedStatements = Array.from(transformedSourceFile.statements).sort(
       (a, b) => {
         return statementName(a).localeCompare(statementName(b));
       }
     );
-    sourceFile.statements = ts.createNodeArray(sortedStatements);
-    return sourceFile;
+    return {
+      ...sourceFile,
+      statements: ts.factory.createNodeArray(sortedStatements),
+    };
   };
 };
 

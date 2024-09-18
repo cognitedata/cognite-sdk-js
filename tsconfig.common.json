@@ -3,7 +3,7 @@
     "transpileOnly": true,
     "compilerOptions": {
       "module": "CommonJS",
-      "lib": ["es2019"],
+      "lib": ["es2019"]
     }
   },
   "compilerOptions": {
@@ -21,7 +21,12 @@
     "noUnusedParameters": true,
     "noImplicitAny": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": "packages",
+    "paths": {
+      "@cognite/sdk-*": ["*/src"],
+      "@cognite/sdk": ["stable/src"]
+    }
   },
   "exclude": ["node_modules/"]
 }

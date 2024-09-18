@@ -1,7 +1,8 @@
 // Copyright 2020 Cognite AS
 
 import nock from 'nock';
-import CogniteClient from '../../cogniteClient';
+import { beforeEach, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { setupMockableClient } from '../testUtils';
 import { mockBaseUrl } from '../testUtils';
 
@@ -14,7 +15,7 @@ describe('Files unit test', () => {
 
   test('filter with directoryPrefix', async () => {
     nock(mockBaseUrl)
-      .post(new RegExp('/files/list'), {
+      .post(/\/files\/list/, {
         filter: {
           directoryPrefix: '/test',
         },
