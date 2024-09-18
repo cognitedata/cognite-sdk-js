@@ -109,6 +109,10 @@ describe.skip('AssetMappings3D integration test', () => {
   });
 
   test('filter with treeIndexes filter succeeds', async () => {
+    if (assetMapping.treeIndex === undefined) {
+      throw Error('Asset mapping tree index was undefined');
+    }
+
     const response = await client.assetMappings3D.filter(
       model.id,
       revision.id,

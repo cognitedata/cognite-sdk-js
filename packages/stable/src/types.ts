@@ -372,12 +372,14 @@ export interface AssetMapping3D extends AssetMapping3DBase {
   /**
    * A number describing the position of this node in the 3D hierarchy, starting from 0.
    * The tree is traversed in a depth-first order.
+   * Only present if the asset mapping's node ID is valid.
    */
-  treeIndex: number;
+  treeIndex?: number;
   /**
    * The number of nodes in the subtree of this node (this number included the node itself).
+   * Only present if the asset mapping's node ID is valid.
    */
-  subtreeSize: number;
+  subtreeSize?: number;
 }
 
 export interface AssetMapping3DBase {
