@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.0.0-rc.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.0.0-rc.0...@cognite/sdk@10.0.0-rc.1) (2024-09-18)
+
+
+### Bug Fixes
+
+* make unreliable AssetMapping fields optional ([#1029](https://github.com/cognitedata/cognite-sdk-js/issues/1029)) ([5e97292](https://github.com/cognitedata/cognite-sdk-js/commit/5e97292dba1c8367755e67711426f15df68e9973))
+
+
+
+
+
 # [10.0.0-rc.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.3...@cognite/sdk@10.0.0-rc.0) (2024-08-26)
 
 
