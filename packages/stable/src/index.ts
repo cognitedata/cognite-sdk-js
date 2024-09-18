@@ -40,7 +40,6 @@ export { RelationshipsApi } from './api/relationships/relationshipsApi';
 export { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 export { SequenceRowsAPI } from './api/sequences/sequenceRowsApi';
 export { SequencesAPI } from './api/sequences/sequencesApi';
-export { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
 export { SyntheticTimeSeriesAPI } from './api/timeSeries/syntheticTimeSeriesApi';
 export { TimeSeriesAPI } from './api/timeSeries/timeSeriesApi';
 export * from './api/templates';
