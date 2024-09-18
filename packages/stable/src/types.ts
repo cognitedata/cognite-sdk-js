@@ -197,10 +197,6 @@ export type ArrayPatchLong =
   | { set: number[] }
   | { add?: number[]; remove?: number[] };
 
-export type ArrayPatchClaimNames =
-  | { set: ClaimName[] }
-  | { add?: ClaimName[]; remove?: ClaimName[] };
-
 export interface Asset
   extends ExternalAsset,
     AssetInternalId,
@@ -1663,39 +1659,12 @@ export interface ProjectResponse {
   userProfilesConfiguration: UserProfilesConfiguration;
 }
 
-export interface ProjectUpdate {
-  name?: ProjectName;
-}
-
-export interface OidcConfigurationUpdate {
-  modify?: OidcConfigurationUpdateModify;
-  set?: OidcConfiguration;
-  setNull?: boolean;
+export interface UserProfilesConfiguration {
+  enabled: boolean;
 }
 
 export interface ClaimName {
   claimName: string;
-}
-
-export interface OidcConfigurationUpdateModify {
-  jwksUrl?: SetField<string>;
-  tokenUrl?: SinglePatchString;
-  issuer?: SetField<string>;
-  audience?: SetField<string>;
-  skewMs?: SinglePatch<number>;
-  accessClaims?: ArrayPatchClaimNames;
-  scopeClaims?: ArrayPatchClaimNames;
-  logClaims: ArrayPatchClaimNames;
-}
-
-export interface PartialProjectUpdate {
-  update: ProjectUpdateObject;
-}
-
-export interface ProjectUpdateObject {
-  name?: SinglePatchRequiredString;
-  oidcConfiguration?: OidcConfigurationUpdate;
-  userProfilesConfiguration?: UserProfilesConfigurationUpdate;
 }
 
 export interface OidcConfiguration {
@@ -1707,19 +1676,6 @@ export interface OidcConfiguration {
   accessClaims: ClaimName[];
   scopeClaims: ClaimName[];
   logClaims: ClaimName[];
-}
-
-export interface UserProfilesConfiguration {
-  enabled: boolean;
-}
-
-export interface UserProfilesConfigurationUpdateModify {
-  enabled?: SinglePatch<boolean>;
-}
-
-export interface UserProfilesConfigurationUpdate {
-  modify?: UserProfilesConfigurationUpdateModify;
-  set?: UserProfilesConfiguration;
 }
 
 export type READ = 'READ';
