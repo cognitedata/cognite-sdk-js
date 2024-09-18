@@ -30,7 +30,6 @@ import { RawAPI } from './api/raw/rawApi';
 import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
-import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
 import { SpacesAPI } from './api/spaces/spacesApi';
 import {
   TemplateGraphQlApi,
@@ -79,9 +78,6 @@ export default class CogniteClient extends BaseCogniteClient {
   }
   public get securityCategories() {
     return accessApi(this.securityCategoriesApi);
-  }
-  public get serviceAccounts() {
-    return accessApi(this.serviceAccountsApi);
   }
   public get models3D() {
     return accessApi(this.models3DApi);
@@ -190,7 +186,6 @@ export default class CogniteClient extends BaseCogniteClient {
   private projectsApi?: ProjectsAPI;
   private groupsApi?: GroupsAPI;
   private securityCategoriesApi?: SecurityCategoriesAPI;
-  private serviceAccountsApi?: ServiceAccountsAPI;
   private models3DApi?: Models3DAPI;
   private relationshipsApi?: RelationshipsApi;
   private entityMatchingApi?: EntityMatchingApi;
@@ -238,10 +233,6 @@ export default class CogniteClient extends BaseCogniteClient {
     this.securityCategoriesApi = this.apiFactory(
       SecurityCategoriesAPI,
       'securitycategories'
-    );
-    this.serviceAccountsApi = this.apiFactory(
-      ServiceAccountsAPI,
-      'serviceaccounts'
     );
     this.models3DApi = this.apiFactory(Models3DAPI, models3DPath);
     this.relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
