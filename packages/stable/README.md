@@ -41,31 +41,18 @@ The SDK is written in native typescript, so no extra types need to be defined.
 ### Web
 
 ```js
-import { CogniteClient, CogniteAuthentication } from '@cognite/sdk';
+import { CogniteClient } from '@cognite/sdk';
 
 async function quickstart() {
   const project = 'publicdata';
-  const legacyInstance = new CogniteAuthentication({
-    project,
-  });
-
-  const getToken = async () => {
-    await legacyInstance.handleLoginRedirect();
-    let token = await legacyInstance.getCDFToken();
-    if (token) {
-      return token.accessToken;
-    }
-    token = await legacyInstance.login({ onAuthenticate: 'REDIRECT' });
-    if (token) {
-      return token.accessToken;
-    }
-    throw new Error('error');
+  const oidcTokenProvider = async () => {
+    return 'YOUR_OIDC_ACCESS_TOKEN';
   };
 
   const client = new CogniteClient({
     appId: 'YOUR APPLICATION NAME',
     project,
-    getToken,
+    oidcTokenProvider,
   });
 
   const assets = await client.assets.list().autoPagingToArray({ limit: 100 });
@@ -84,7 +71,7 @@ const { CogniteClient } = require('@cognite/sdk');
 async function quickstart() {
   const client = new CogniteClient({
     appId: 'YOUR APPLICATION NAME',
-    getToken: () => Promise.resolve('YOUR_OIDC_ACCESS_TOKEN'),
+    oidcTokenProvider: () => Promise.resolve('YOUR_OIDC_ACCESS_TOKEN'),
   });
 
   const assets = await client.assets.list().autoPagingToArray({ limit: 100 });

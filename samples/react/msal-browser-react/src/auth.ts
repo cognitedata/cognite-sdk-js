@@ -25,7 +25,7 @@ if (!clientId || !tenantId) {
 }
 
 export const pca = new PublicClientApplication(configuration);
-export const getToken = async () => {
+export const oidcTokenProvider = async () => {
   const accountId = sessionStorage.getItem("account");
   if (!accountId) {
     throw new Error("no user_id found");
