@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.32.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.31.3...@cognite/sdk-alpha@0.32.0) (2024-09-17)
+
+
+### Features
+
+* **simint:** add and remove properties from simulators API ([#1147](https://github.com/cognitedata/cognite-sdk-js/issues/1147)) ([4cd6467](https://github.com/cognitedata/cognite-sdk-js/commit/4cd6467658fde491c20f274fbd8fa6af55610c60))
+
+
+
+
+
 ## [0.31.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.31.1...@cognite/sdk-alpha@0.31.3) (2024-08-26)
 
 
