@@ -2,11 +2,14 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
+const externals = ['@cognite/sdk', '@cognite/sdk-core'];
+
 export default defineConfig({
   plugins: [
     dts({
       exclude: ['**/__tests__/**/*'],
       entryRoot: '.',
+      aliasesExclude: externals,
     }),
   ],
   build: {
@@ -23,7 +26,7 @@ export default defineConfig({
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ['@cognite/sdk', '@cognite/sdk-core'],
+      external: externals,
     },
   },
 });

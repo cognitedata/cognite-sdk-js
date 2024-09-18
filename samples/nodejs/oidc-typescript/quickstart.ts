@@ -47,7 +47,7 @@ async function quickstart() {
   } catch (e) {
     console.log('asset error');
     console.log(e);
-  } //
+  }
 }
 
 quickstart()

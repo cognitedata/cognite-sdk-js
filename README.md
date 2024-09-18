@@ -44,6 +44,9 @@ Before you begin, ensure that you have the following:
 
 For code example you can check [quickstart.ts](https://github.com/cognitedata/cognite-sdk-js/blob/master/samples/nodejs/oidc-typescript/quickstart.ts#L1)
 
+### Browser authentication
+
+Please see [this guide](./guides/authentication.md) for a detailed guide.
 
 ## Response header & http status
 
