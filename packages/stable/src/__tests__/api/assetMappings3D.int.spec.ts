@@ -108,12 +108,16 @@ describe.skip('AssetMappings3D integration test', () => {
     expect(response.items.length).toBeGreaterThanOrEqual(1); // Test data might contain more than one mapping
   });
 
-  test('filter with treeIndexes filter succeeds', async () => {
+  test("filter with treeIndexes filter succeeds", async () => {
+    if (assetMapping.treeIndex === undefined) {
+      throw Error("Asset mapping tree index was undefined");
+    }
+
     const response = await client.assetMappings3D.filter(
       model.id,
       revision.id,
       {
-        filter: { treeIndexes: [assetMapping.treeIndex!] },
+        filter: { treeIndexes: [assetMapping.treeIndex] },
       }
     );
     expect(response.items.length).toBeGreaterThanOrEqual(1); // Test data might contain more than one mapping
