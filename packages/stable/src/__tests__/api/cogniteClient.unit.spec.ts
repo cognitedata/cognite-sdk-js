@@ -64,8 +64,6 @@ describe('api endpoints smoke test', () => {
         client.files,
         client.files3D,
         client.groups,
-        client.login,
-        client.logout,
         client.models3D,
         client.projects,
         client.raw,

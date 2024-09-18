@@ -12,14 +12,14 @@ interface TokenInspectResponse {
   ];
 }
 
-describe('Login-api integration test', () => {
+describe('Token inspect integration test', () => {
   let client: CogniteClient;
   beforeAll(async () => {
     client = setupLoggedInClient();
   });
 
   describe('status', () => {
-    test('logged in', async () => {
+    test('inspect', async () => {
       const token = await client.authenticate();
       const inspect = (
         await client.get<TokenInspectResponse>('/api/v1/token/inspect')

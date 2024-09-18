@@ -25,8 +25,6 @@ export type {
   ExternalId,
   CogniteExternalId,
   CogniteInternalId,
-  LogoutUrl,
-  LogoutUrlResponse,
   CursorAndAsyncIterator,
   CogniteAsyncIterator,
   AutoPagingEachHandler,
@@ -466,28 +464,6 @@ export interface AssetSearchFilter extends AssetFilter {
 export type AssetSource = string;
 
 /**
- * Data specific to Azure AD authentication
- */
-export interface AzureADConfiguration {
-  /**
-   * Azure application ID. You get this when creating the Azure app.
-   */
-  appId?: string;
-  /**
-   * Azure application secret. You get this when creating the Azure app.
-   */
-  appSecret?: string;
-  /**
-   * Azure tenant ID.
-   */
-  tenantId?: string;
-  /**
-   * Resource to grant access to. This is usually (always?) 00000002-0000-0000-c000-000000000000
-   */
-  appResourceId?: string;
-}
-
-/**
  * The bounding box of the subtree with this sector as the root sector.
  * Is null if there are no geometries in the subtree.
  */
@@ -848,11 +824,6 @@ export interface DatapointsQueryProperties extends Limit, Cursor {
 }
 
 export type DateRange = Range<Timestamp>;
-
-/**
- * A default group for all project users. Can be used to establish default capabilities. WARNING: this group may be logically deleted
- */
-export type DefaultGroupId = number;
 
 export type DeleteAssetMapping3D = AssetMapping3DBase;
 
@@ -1448,16 +1419,6 @@ export interface IgnoreUnknownIds {
 }
 
 /**
- * Data about how to authenticate and authorize users
- */
-export interface InputProjectAuthentication {
-  azureADConfiguration?: AzureADConfiguration;
-  validDomains?: ValidDomains;
-  oAuth2Configuration?: OAuth2Configuration;
-  applicationDomains?: ApplicationDomains;
-}
-
-/**
  * Range between two integers
  */
 export type IntegerRange = Range<number>;
@@ -1649,32 +1610,6 @@ export type NullableSinglePatchLong = { set: number } | { setNull: true };
 
 export type NullableSinglePatchString = { set: string } | { setNull: true };
 
-/**
- * Data related to generic OAuth2 authentication. Not used for Azure AD
- */
-export interface OAuth2Configuration {
-  /**
-   * Login URL of OAuth2 provider. E.g https://accounts.google.com/o/oauth2/v2/auth.
-   */
-  loginUrl?: string;
-  /**
-   * Logout URL of OAuth2 provider. E.g https://accounts.google.com/Logout.
-   */
-  logoutUrl?: string;
-  /**
-   * URL to get access token from OAuth2 provider. E.g https://www.googleapis.com/oauth2/v4/token.
-   */
-  tokenUrl?: string;
-  /**
-   * Client ID. You probably get this when registering your client with the OAuth2 provider.
-   */
-  clientId?: string;
-  /**
-   * Client secret. You probably get this when registering your client with the OAuth2 provider.
-   */
-  clientSecret?: string;
-}
-
 export type OWNER = 'OWNER';
 
 export type ObjectPatch<T> =
@@ -1696,14 +1631,6 @@ export type ObjectPatch<T> =
     };
 
 export type MetadataPatch = ObjectPatch<string>;
-
-/**
- * Data about how to authenticate and authorize users. The authentication configuration is hidden.
- */
-export interface OutputProjectAuthentication {
-  validDomains?: ValidDomains;
-  applicationDomains?: ApplicationDomains;
-}
 
 /**
  * Splits the data set into N partitions.
@@ -1732,16 +1659,12 @@ export type ProjectName = string;
 export interface ProjectResponse {
   name: ProjectName;
   urlName: UrlName;
-  defaultGroupId?: DefaultGroupId;
-  authentication?: OutputProjectAuthentication;
   oidcConfiguration?: OidcConfiguration;
   userProfilesConfiguration: UserProfilesConfiguration;
 }
 
 export interface ProjectUpdate {
   name?: ProjectName;
-  defaultGroupId?: DefaultGroupId;
-  authentication?: InputProjectAuthentication;
 }
 
 export interface OidcConfigurationUpdate {
@@ -1771,12 +1694,6 @@ export interface PartialProjectUpdate {
 
 export interface ProjectUpdateObject {
   name?: SinglePatchRequiredString;
-  defaultGroupId?: NullableSinglePatchLong;
-  validDomains?: ArrayPatchString;
-  applicationDomains?: ArrayPatchString;
-  authenticationProtocol?: SinglePatchRequiredString;
-  azureADConfiguration?: SinglePatch<AzureADConfiguration>;
-  oAuth2Configuration?: SinglePatch<OAuth2Configuration>;
   oidcConfiguration?: OidcConfigurationUpdate;
   userProfilesConfiguration?: UserProfilesConfigurationUpdate;
 }
@@ -2622,16 +2539,6 @@ export interface FileUploadResponse extends FileInfo {
  * @example publicdata
  */
 export type UrlName = string;
-
-/**
- * List of valid domains. If left empty, any user registered with the OAuth2 provider will get access.
- */
-export type ValidDomains = string[];
-
-/**
- * List of domains permitted for redirects. Redirects as part of a login flow may only target a domain (or subdomain) on this list. If this list is set to be empty, it will not be possible to use a login flow.
- */
-export type ApplicationDomains = string[];
 
 /**
  * The file ID of the data file for this resource, with multiple versions supported.

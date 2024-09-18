@@ -4,9 +4,6 @@ import * as GraphUtils from './graphUtils';
 
 export * from './types';
 
-export { CogniteAuthentication } from './authFlows/legacy';
-export { ADFS } from './authFlows/adfs';
-
 export { MetadataMap } from './metadata';
 export { BaseResourceAPI } from './baseResourceApi';
 export { default as BaseCogniteClient } from './baseCogniteClient';
@@ -18,7 +15,6 @@ export { RetryableHttpClient } from './httpClient/retryableHttpClient';
 export { CDFHttpClient } from './httpClient/cdfHttpClient';
 export { CogniteError } from './error';
 export { CogniteMultiError } from './multiError';
-export { CogniteLoginError } from './loginError';
 export { HttpError } from './httpClient/httpError';
 export { HttpResponseType } from './httpClient/basicHttpClient';
 export type {
@@ -33,22 +29,6 @@ export {
   createRetryValidator,
 } from './httpClient/retryValidator';
 export type { EndpointList, RetryValidator } from './httpClient/retryValidator';
-export { POPUP, REDIRECT, getIdInfo } from './authFlows/legacy';
-export type {
-  AuthenticateParams,
-  IdInfo,
-  OnAuthenticateLoginObject,
-} from './authFlows/legacy';
-export {
-  loginPopupHandler,
-  getLogoutUrl,
-  isLoginPopupWindow,
-} from './loginUtils';
-export type {
-  AuthorizeOptions,
-  AuthorizeParams,
-  AuthTokens,
-} from './loginUtils';
 export { RevertableArraySorter } from './revertableArraySorter';
 export {
   sleepPromise,

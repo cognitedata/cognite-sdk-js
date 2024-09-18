@@ -1,14 +1,12 @@
 // Copyright 2020 Cognite AS
 
+import isString from 'lodash/isString';
 import { version } from '../package.json';
-import { LoginAPI } from './api/login/loginApi';
-import { LogoutApi } from './api/logout/logoutApi';
 import {
   AUTHORIZATION_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
 } from './constants';
-import { type ClientCredentials, CredentialsAuth } from './credentialsAuth';
 import type { HttpResponse } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import type { HttpHeaders } from './httpClient/httpHeaders';
@@ -17,14 +15,11 @@ import {
   createUniversalRetryValidator,
 } from './httpClient/retryValidator';
 import type { RetryableHttpRequestOptions } from './httpClient/retryableHttpClient';
-import { verifyOptionsRequiredFields } from './loginUtils';
 import { MetadataMap } from './metadata';
 import {
   type CogniteAPIVersion,
   bearerString,
   getBaseUrl,
-  isBrowser,
-  isUsingSSL,
   projectUrl,
 } from './utils';
 export interface ClientOptions {
@@ -36,15 +31,6 @@ export interface ClientOptions {
   project: string;
   /** Can be used with @cognite/auth-wrapper, passing an api key or with MSAL Library */
   getToken?: () => Promise<string>;
-  /** Retrieve data without any authentication headers */
-  noAuthMode?: boolean;
-  /** OIDC/API auth */
-  authentication?: {
-    /** Provider to do the auth job, recommended: @cognite/auth-wrapper */
-    provider?: unknown;
-    /** IdP Credentials */
-    credentials?: ClientCredentials;
-  };
   retryValidator?: RetryValidator;
 }
 
@@ -55,30 +41,12 @@ export function accessApi<T>(api: T | undefined): T {
   return api;
 }
 export default class BaseCogniteClient {
-  /**
-   * @deprecated
-   */
-  public get login() {
-    return this.loginApi;
-  }
-
-  /**
-   * @deprecated
-   */
-  public get logout() {
-    return this.logoutApi;
-  }
-
   private readonly apiVersion: CogniteAPIVersion;
   private readonly http: CDFHttpClient;
   private readonly metadata: MetadataMap;
-  private readonly loginApi: LoginAPI;
-  private readonly logoutApi: LogoutApi;
   private readonly getToken: () => Promise<string | undefined>;
   private readonly noAuthMode?: boolean;
   readonly project: string;
-
-  private readonly credentialsAuth?: CredentialsAuth;
   private retryValidator: RetryValidator;
 
   /**
@@ -103,16 +71,21 @@ export default class BaseCogniteClient {
    * ```
    */
   constructor(options: ClientOptions, apiVersion: CogniteAPIVersion = 'v1') {
-    verifyOptionsRequiredFields(options);
+    if (!options) {
+      throw Error('`CogniteClient` is missing parameter `options`');
+    }
 
-    if (
-      options &&
-      !options.authentication?.credentials &&
-      !options.getToken &&
-      !options.noAuthMode
-    ) {
+    if (!isString(options.appId)) {
+      throw Error('options.appId is required and must be of type string');
+    }
+
+    if (!isString(options.project)) {
+      throw Error('options.project is required and must be of type string');
+    }
+
+    if (options && !options.getToken) {
       throw Error(
-        'options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>'
+        'options.getToken is required and must be of type () => Promise<string>'
       );
     }
 
@@ -122,44 +95,18 @@ export default class BaseCogniteClient {
       options.retryValidator ?? createUniversalRetryValidator();
     this.http = this.initializeCDFHttpClient(baseUrl, options);
 
-    if (options.authentication) {
-      const { credentials, provider } = options.authentication;
-
-      this.credentialsAuth = new CredentialsAuth(
-        this.httpClient,
-        credentials,
-        provider
-      );
-    }
-
-    if (isBrowser() && !isUsingSSL() && !options.noAuthMode) {
-      console.warn(
-        'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
-      );
-    }
-
     this.metadata = new MetadataMap();
-    this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
-    this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
     this.apiVersion = apiVersion;
     this.project = options.project;
-    this.noAuthMode = !!options.noAuthMode;
-    this.getToken = async () => {
-      return options.getToken ? options.getToken() : undefined;
-    };
+    this.getToken = async () =>
+      options.getToken ? options.getToken() : undefined;
 
     this.initAPIs();
   }
 
   public authenticate: () => Promise<string | undefined> = async () => {
     try {
-      let token = await this.authenticateGetToken();
-
-      if (token !== undefined) {
-        return token;
-      }
-
-      token = await this.credentialsAuth?.authenticate();
+      const token = await this.authenticateGetToken();
       return token;
     } catch (e) {
       return;

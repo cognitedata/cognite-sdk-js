@@ -20,15 +20,6 @@ function setupClient(baseUrl: string = BASE_URL) {
   });
 }
 
-function setupNoAuthClient(noAuthMode = true) {
-  return new BaseCogniteClient({
-    appId: 'JS SDK integration tests',
-    project: 'test-project',
-    baseUrl: mockBaseUrl,
-    noAuthMode: noAuthMode,
-  });
-}
-
 function setupMockableClient(base?: BaseCogniteClient) {
   const client = base || setupClient(mockBaseUrl);
   return client;
@@ -76,13 +67,6 @@ describe('CogniteClient', () => {
       );
     });
 
-    test('not throw errors when running in noAuthMode', () => {
-      expect(() => {
-        // @ts-ignore
-        setupNoAuthClient(true);
-      }).not.toThrow();
-    });
-
     test('custom validator retries set to 1 should prevent from retrying a failed call', async () => {
       const scope = nock(mockBaseUrl).get('/').times(2).reply(500, {});
       nock(mockBaseUrl).get('/').reply(200, { a: 42 });
@@ -99,32 +83,29 @@ describe('CogniteClient', () => {
       expect(scope.isDone()).toBeTruthy();
     });
 
-    describe('credentials', () => {
-      test('missing credentials', () => {
-        expect(() => {
-          // @ts-ignore
-          new BaseCogniteClient({ appId: 'unit-test', project: 'unit-test' });
-        }).toThrowErrorMatchingInlineSnapshot(
-          '[Error: options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>]'
-        );
-      });
-      test('call credentials on 401', async () => {
+    describe('getToken', () => {
+      test('call getToken on 401', async () => {
         nock(mockBaseUrl)
-          .persist()
+          .get('/test')
+          .once()
+          .reply(401, { error: { message: 'unauthorized' } })
           .get('/test')
           .reply(200, { body: 'request ok' });
+
+        const getToken = vi.fn().mockResolvedValue('test-token');
 
         const client = new BaseCogniteClient({
           project,
           appId: 'unit-test',
           baseUrl: mockBaseUrl,
-          getToken: () => Promise.resolve('401-test-token'),
+          getToken,
         });
 
         const result = await client.get('/test');
 
         expect(result.status).toEqual(200);
         expect(result.data).toEqual({ body: 'request ok' });
+        expect(getToken).toHaveBeenCalledTimes(1);
       });
 
       test('getToken rejection should reject sdk requests', async () => {
@@ -287,40 +268,6 @@ describe('CogniteClient', () => {
 
     beforeAll(async () => {
       client = setupMockableClient();
-    });
-
-    test('get method', async () => {
-      nock(mockBaseUrl).get('/').once().reply(200, []);
-      const response = await client.get('/');
-      expect(response.data).toEqual([]);
-    });
-
-    test('post method', async () => {
-      nock(mockBaseUrl).post('/').once().reply(200, []);
-      const response = await client.post('/');
-      expect(response.data).toEqual([]);
-    });
-
-    test('put method', async () => {
-      nock(mockBaseUrl).put('/').once().reply(200, []);
-      const response = await client.put('/', {
-        responseType: 'json',
-      });
-      expect(response.data).toEqual([]);
-    });
-
-    test('delete method', async () => {
-      nock(mockBaseUrl).delete('/').once().reply(200, 'abc');
-      const response = await client.delete('/', { responseType: 'text' });
-      expect(response.data).toBe('abc');
-    });
-  });
-
-  describe('noAuthMode http requests', () => {
-    let client: BaseCogniteClient;
-
-    beforeAll(async () => {
-      client = setupNoAuthClient();
     });
 
     test('get method', async () => {

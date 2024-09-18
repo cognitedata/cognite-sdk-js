@@ -169,9 +169,10 @@ describe('CDFHttpClient', () => {
         };
       }
 
-      test('ignore errors to /login/status', checkIfThrows401('/login/status'));
-
-      test('ignore errors to /logout/url', checkIfThrows401('/logout/url'));
+      test(
+        'ignore errors to /api/v1/token/inspect',
+        checkIfThrows401('/api/v1/token/inspect')
+      );
     });
   });
 
