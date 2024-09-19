@@ -188,24 +188,28 @@ describe('BasicHttpClient', () => {
 
   describe('resolveUrl', () => {
     test('should remove path trailing slashes', async () => {
-      // @ts-ignore
-      const path = BasicHttpClient.resolveUrl('', '/test///');
-      expect(path).toEqual('/test');
+      const client = new BasicHttpClient(baseUrl);
+      nock(baseUrl).get('/test').reply(201);
+      const response = await client.get('/test///');
+      expect(response.status).toBe(201);
     });
     test('should add uri slash prefix', async () => {
-      // @ts-ignore
-      const path = BasicHttpClient.resolveUrl('', 'test');
-      expect(path).toEqual('/test');
+      const client = new BasicHttpClient(baseUrl);
+      nock(baseUrl).get('/test').reply(201);
+      const response = await client.get('test');
+      expect(response.status).toBe(201);
     });
     test('should support multiple segments', async () => {
-      // @ts-ignore
-      const path = BasicHttpClient.resolveUrl('', 'test/te/st///');
-      expect(path).toEqual('/test/te/st');
+      const client = new BasicHttpClient(baseUrl);
+      nock(baseUrl).get('/test/te/st').reply(201);
+      const response = await client.get('test/te/st///');
+      expect(response.status).toBe(201);
     });
     test('should do nothing with valid uri', async () => {
-      // @ts-ignore
-      const path = BasicHttpClient.resolveUrl('', '/test');
-      expect(path).toEqual('/test');
+      const client = new BasicHttpClient(baseUrl);
+      nock(baseUrl).get('/test').reply(201);
+      const response = await client.get('/test');
+      expect(response.status).toBe(201);
     });
   });
 });
