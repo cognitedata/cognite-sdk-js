@@ -7,10 +7,10 @@ import { HttpError, type HttpErrorData } from './httpError';
 import type { HttpHeaders } from './httpHeaders';
 
 export class BasicHttpClient {
-  private static validateStatusCode(status: number) {
+  static #validateStatusCode(status: number) {
     return status >= 200 && status < 300;
   }
-  private static throwCustomErrorResponse<T>(response: HttpResponse<T>) {
+  static #throwCustomErrorResponse<T>(response: HttpResponse<T>) {
     throw new HttpError(
       response.status,
       response.data as HttpErrorData,
@@ -18,19 +18,19 @@ export class BasicHttpClient {
     );
   }
 
-  private static jsonResponseHandler<ResponseType>(
+  static #jsonResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
     return res.json() as Promise<ResponseType>;
   }
 
-  private static textResponseHandler<ResponseType>(
+  static #textResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
     return res.text() as unknown as Promise<ResponseType>;
   }
 
-  private static arrayBufferResponseHandler<ResponseType>(
+  static #arrayBufferResponseHandler<ResponseType>(
     res: Response
   ): Promise<ResponseType> {
     return res
@@ -40,20 +40,20 @@ export class BasicHttpClient {
       ) as unknown as Promise<ResponseType>;
   }
 
-  private static getResponseHandler<ResponseType>(
+  static #getResponseHandler<ResponseType>(
     responseType?: HttpResponseType
   ): ResponseHandler<ResponseType> {
     switch (responseType) {
       case HttpResponseType.ArrayBuffer:
-        return BasicHttpClient.arrayBufferResponseHandler;
+        return BasicHttpClient.#arrayBufferResponseHandler;
       case HttpResponseType.Text:
-        return BasicHttpClient.textResponseHandler;
+        return BasicHttpClient.#textResponseHandler;
       default:
-        return BasicHttpClient.jsonResponseHandler;
+        return BasicHttpClient.#jsonResponseHandler;
     }
   }
 
-  private static convertFetchHeaders(fetchHeaders: Headers) {
+  static #convertFetchHeaders(fetchHeaders: Headers) {
     const headers: HttpHeaders = {};
     fetchHeaders.forEach((value, key) => {
       headers[key] = value;
@@ -61,7 +61,7 @@ export class BasicHttpClient {
     return headers;
   }
 
-  private static transformRequestBody(data: unknown) {
+  static #transformRequestBody(data: unknown) {
     const isJSONStringifyable = isJson(data);
     if (isJSONStringifyable) {
       return JSON.stringify(data, null, 2);
@@ -69,13 +69,13 @@ export class BasicHttpClient {
     return data;
   }
 
-  private static resolveUrl(baseUrl: string, path: string) {
+  static #resolveUrl(baseUrl: string, path: string) {
     const trimmedBaseUrl = baseUrl.replace(/\/$/, '');
     const pathWithPrefix = (path[0] === '/' ? '' : '/') + path;
     return trimmedBaseUrl + pathWithPrefix.replace(/\/+$/, '');
   }
 
-  private defaultHeaders: HttpHeaders = {};
+  #defaultHeaders: HttpHeaders = {};
 
   /**
    * A basic http client with the option of adding default headers,
@@ -92,12 +92,12 @@ export class BasicHttpClient {
   constructor(protected baseUrl: string) {}
 
   public setDefaultHeader(name: string, value: string) {
-    this.defaultHeaders[name] = value;
+    this.#defaultHeaders[name] = value;
     return this;
   }
 
   public getDefaultHeaders(): HttpHeaders {
-    return { ...this.defaultHeaders };
+    return { ...this.#defaultHeaders };
   }
 
   public setBaseUrl(baseUrl: string) {
@@ -166,16 +166,16 @@ export class BasicHttpClient {
     _: HttpRequest,
     __: HttpRequest
   ): Promise<HttpResponse<T>> {
-    const requestIsOk = BasicHttpClient.validateStatusCode(response.status);
+    const requestIsOk = BasicHttpClient.#validateStatusCode(response.status);
     if (!requestIsOk) {
-      BasicHttpClient.throwCustomErrorResponse(response);
+      BasicHttpClient.#throwCustomErrorResponse(response);
     }
     return response;
   }
 
   protected populateDefaultHeaders(headers: HttpHeaders = {}) {
     return {
-      ...this.defaultHeaders,
+      ...this.#defaultHeaders,
       ...headers,
     };
   }
@@ -183,7 +183,7 @@ export class BasicHttpClient {
   protected async rawRequest<ResponseType>(
     request: HttpRequest
   ): Promise<HttpResponse<ResponseType>> {
-    const url = this.constructUrl(request.path, request.params);
+    const url = this.#constructUrl(request.path, request.params);
     const headers = headersWithDefaultField(
       request.headers || {},
       'Accept',
@@ -191,7 +191,7 @@ export class BasicHttpClient {
     );
     let body = request.data;
     if (isJson(body)) {
-      body = BasicHttpClient.transformRequestBody(body);
+      body = BasicHttpClient.#transformRequestBody(body);
       headers['Content-Type'] = 'application/json';
     }
     const res = await fetch(url, {
@@ -200,7 +200,7 @@ export class BasicHttpClient {
       method: request.method,
       headers,
     });
-    const responseHandler = BasicHttpClient.getResponseHandler<ResponseType>(
+    const responseHandler = BasicHttpClient.#getResponseHandler<ResponseType>(
       request.responseType
     );
     // Cloning to fallback on text response if response is failing the responsehandler.
@@ -211,7 +211,7 @@ export class BasicHttpClient {
       resClone.text() as unknown as Promise<ResponseType>,
     ]);
     return {
-      headers: BasicHttpClient.convertFetchHeaders(res.headers),
+      headers: BasicHttpClient.#convertFetchHeaders(res.headers),
       status: res.status,
       data: data || textFallback,
     };
@@ -223,7 +223,7 @@ export class BasicHttpClient {
     return this.postRequest(rawResponse, request, mutatedRequest);
   }
 
-  private constructUrl<T extends object>(path: string, params?: T) {
+  #constructUrl<T extends object>(path: string, params?: T) {
     let url = path;
     const hasQueryParams = !!params && Object.keys(params).length > 0;
     if (hasQueryParams) {
@@ -263,7 +263,7 @@ export class BasicHttpClient {
     if (urlContainsHost) {
       return url;
     }
-    return BasicHttpClient.resolveUrl(this.baseUrl, url);
+    return BasicHttpClient.#resolveUrl(this.baseUrl, url);
   }
 }
 

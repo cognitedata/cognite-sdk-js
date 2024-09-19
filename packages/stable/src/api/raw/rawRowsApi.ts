@@ -27,7 +27,7 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     items: RawDBRowInsert[],
     ensureParent = false
   ): Promise<object> {
-    const path = `${this.encodeUrl(databaseName, tableName)}/rows`;
+    const path = `${this.#encodeUrl(databaseName, tableName)}/rows`;
     await this.postInParallelWithAutomaticChunking({
       path,
       items,
@@ -51,7 +51,7 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
       query.columns = columns.join(',');
     }
 
-    const path = `${this.encodeUrl(databaseName, tableName)}/rows`;
+    const path = `${this.#encodeUrl(databaseName, tableName)}/rows`;
     return super.listEndpoint(
       async (params) =>
         this.get<CursorResponse<RawDBRow[]>>(path, {
@@ -66,7 +66,7 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     tableName: string,
     rowKey: string
   ): Promise<RawDBRow> {
-    const path = `${this.encodeUrl(
+    const path = `${this.#encodeUrl(
       databaseName,
       tableName
     )}/rows/${encodeURIComponent(rowKey)}`;
@@ -79,12 +79,12 @@ export class RawRowsAPI extends BaseResourceAPI<RawDBRow> {
     tableName: string,
     items: RawDBRowKey[]
   ) {
-    const path = `${this.encodeUrl(databaseName, tableName)}/rows/delete`;
+    const path = `${this.#encodeUrl(databaseName, tableName)}/rows/delete`;
     await this.postInParallelWithAutomaticChunking({ path, items });
     return {};
   }
 
-  private encodeUrl(databaseName: string, tableName: string) {
+  #encodeUrl(databaseName: string, tableName: string) {
     return this.url(
       `${encodeURIComponent(databaseName)}/tables/${encodeURIComponent(
         tableName

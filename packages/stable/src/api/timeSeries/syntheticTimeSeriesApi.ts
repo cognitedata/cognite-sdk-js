@@ -21,10 +21,10 @@ export class SyntheticTimeSeriesAPI extends BaseResourceAPI<SyntheticQueryRespon
   public query = (
     items: SyntheticQuery[]
   ): Promise<SyntheticQueryResponse[]> => {
-    return this.querySyntheticEndpoint(items);
+    return this.#querySyntheticEndpoint(items);
   };
 
-  private async querySyntheticEndpoint(items: SyntheticQuery[]) {
+  async #querySyntheticEndpoint(items: SyntheticQuery[]) {
     const path = this.url('query');
     return this.callEndpointWithMergeAndTransform(items, (data) =>
       this.postInParallelWithAutomaticChunking({

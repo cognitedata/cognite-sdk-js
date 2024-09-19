@@ -2,28 +2,28 @@
 
 /** @hidden */
 export class Queue<T> {
-  private data: T[];
+  #data: T[];
   constructor() {
-    this.data = [];
+    this.#data = [];
   }
 
   public add = (item: T) => {
-    this.data.unshift(item);
+    this.#data.unshift(item);
   };
 
   public remove = () => {
-    this.data.pop();
+    this.#data.pop();
   };
 
   public first = () => {
-    return this.data[0];
+    return this.#data[0];
   };
 
   public last = () => {
-    return this.data[this.data.length - 1];
+    return this.#data[this.#data.length - 1];
   };
 
   public size = () => {
-    return this.data.length;
+    return this.#data.length;
   };
 }

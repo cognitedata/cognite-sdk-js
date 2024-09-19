@@ -20,14 +20,14 @@ import type {
 import { Nodes3DAPI } from './nodes3DApi';
 
 export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
-  private nodes3DApi: Nodes3DAPI;
+  #nodes3DApi: Nodes3DAPI;
   constructor(
     resourcePath: string,
     httpClient: CDFHttpClient,
     map: MetadataMap
   ) {
     super(resourcePath, httpClient, map);
-    this.nodes3DApi = new Nodes3DAPI(resourcePath, httpClient, map);
+    this.#nodes3DApi = new Nodes3DAPI(resourcePath, httpClient, map);
   }
 
   /**
@@ -155,7 +155,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     revisionId: CogniteInternalId,
     query?: List3DNodesQuery
   ): CursorAndAsyncIterator<Node3D> => {
-    return this.nodes3DApi.list(modelId, revisionId, query);
+    return this.#nodes3DApi.list(modelId, revisionId, query);
   };
 
   /**
@@ -180,7 +180,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     revisionId: CogniteInternalId,
     query?: Filter3DNodesQuery
   ): CursorAndAsyncIterator<Node3D> => {
-    return this.nodes3DApi.filter(modelId, revisionId, query);
+    return this.#nodes3DApi.filter(modelId, revisionId, query);
   };
 
   /**
@@ -195,7 +195,7 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     revisionId: CogniteInternalId,
     ids: InternalId[]
   ): Promise<Node3D[]> => {
-    return this.nodes3DApi.retrieve(modelId, revisionId, ids);
+    return this.#nodes3DApi.retrieve(modelId, revisionId, ids);
   };
 
   /**
@@ -211,6 +211,6 @@ export class Revisions3DAPI extends BaseResourceAPI<Revision3D> {
     nodeId: CogniteInternalId,
     query?: List3DNodesQuery
   ): CursorAndAsyncIterator<Node3D> => {
-    return this.nodes3DApi.listAncestors(modelId, revisionId, nodeId, query);
+    return this.#nodes3DApi.listAncestors(modelId, revisionId, nodeId, query);
   };
 }

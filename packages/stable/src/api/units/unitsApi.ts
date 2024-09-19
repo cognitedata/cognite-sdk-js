@@ -10,13 +10,13 @@ import type { Unit } from '../../types';
 import { UnitSystemsAPI } from './unitSystemsApi';
 
 export class UnitsAPI extends BaseResourceAPI<Unit> {
-  private unitSystemsApi: UnitSystemsAPI;
+  #unitSystemsApi: UnitSystemsAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
     const [resourcePath, client, metadataMap] = args;
 
-    this.unitSystemsApi = new UnitSystemsAPI(
+    this.#unitSystemsApi = new UnitSystemsAPI(
       `${resourcePath}/systems`,
       client,
       metadataMap
@@ -53,6 +53,6 @@ export class UnitsAPI extends BaseResourceAPI<Unit> {
    * ```
    */
   public listUnitSystems = async () => {
-    return this.unitSystemsApi.list();
+    return this.#unitSystemsApi.list();
   };
 }

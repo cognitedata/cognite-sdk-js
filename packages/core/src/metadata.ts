@@ -8,16 +8,16 @@ export interface Metadata {
 
 /** @hidden */
 export class MetadataMap {
-  private map: WeakMap<object, Metadata>;
+  #map: WeakMap<object, Metadata>;
   constructor() {
-    this.map = new WeakMap();
+    this.#map = new WeakMap();
   }
 
   public addAndReturn<T extends object, V>(
     value: T,
     metadata: HttpResponse<V>
   ): T {
-    this.map.set(value, {
+    this.#map.set(value, {
       // we extract out only what is necessary
       status: metadata.status,
       headers: metadata.headers,
@@ -26,6 +26,6 @@ export class MetadataMap {
   }
 
   public get(value: object): undefined | Metadata {
-    return this.map.get(value);
+    return this.#map.get(value);
   }
 }

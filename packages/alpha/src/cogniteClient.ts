@@ -5,10 +5,10 @@ import { version } from '../package.json';
 import { SimulatorsAPI } from './api/simulators/simulatorsApi';
 
 export default class CogniteClientAlpha extends CogniteClientStable {
-  private simulatorsApi?: SimulatorsAPI;
+  #simulatorsApi?: SimulatorsAPI;
 
   public get simulators() {
-    return accessApi(this.simulatorsApi);
+    return accessApi(this.#simulatorsApi);
   }
 
   protected initAPIs() {
@@ -16,7 +16,7 @@ export default class CogniteClientAlpha extends CogniteClientStable {
 
     this.httpClient.setDefaultHeader('cdf-version', 'alpha');
 
-    this.simulatorsApi = this.apiFactory(SimulatorsAPI, 'simulators');
+    this.#simulatorsApi = this.apiFactory(SimulatorsAPI, 'simulators');
   }
 
   protected get version() {

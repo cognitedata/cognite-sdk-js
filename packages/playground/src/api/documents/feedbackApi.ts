@@ -24,7 +24,7 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
     fieldName: AggregateField
   ): Promise<DocumentFeedbackAggregateResponse> => {
     const content: DocumentFeedbackAggregateRequest = { field: fieldName };
-    return this.aggregateFeedbacks<DocumentFeedbackAggregateResponse>(content);
+    return this.#aggregateFeedbacks<DocumentFeedbackAggregateResponse>(content);
   };
 
   public create = (
@@ -43,14 +43,14 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
   };
 
   public accept = (ids: number[]) => {
-    return this.postAcceptRejectFeedback(ids, 'accept');
+    return this.#postAcceptRejectFeedback(ids, 'accept');
   };
 
   public reject = (ids: number[]) => {
-    return this.postAcceptRejectFeedback(ids, 'reject');
+    return this.#postAcceptRejectFeedback(ids, 'reject');
   };
 
-  private async postAcceptRejectFeedback(
+  async #postAcceptRejectFeedback(
     ids: number[],
     endpoint: acceptRejectEndpoint
   ) {
@@ -67,7 +67,7 @@ export class FeedbackAPI extends BaseResourceAPI<DocumentFeedback> {
     return this.addToMapAndReturn(response.data.items, response);
   }
 
-  private async aggregateFeedbacks<ResponseType>(
+  async #aggregateFeedbacks<ResponseType>(
     request: DocumentFeedbackAggregateRequest
   ): Promise<ResponseType> {
     const response = await this.post<ResponseType>(this.url('aggregates'), {

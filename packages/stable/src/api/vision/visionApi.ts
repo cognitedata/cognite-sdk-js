@@ -74,7 +74,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
       return JOB_COMPLETE_STATES.includes(result.status);
     };
     return waitForCompletion
-      ? this.waitForJobToCompleteAndReturn(
+      ? this.#waitForJobToCompleteAndReturn(
           getJobResult,
           isJobCompleted,
           pollingTimeMs,
@@ -83,7 +83,7 @@ export class VisionAPI extends BaseResourceAPI<VisionExtractGetResponse> {
       : getJobResult();
   };
 
-  private async waitForJobToCompleteAndReturn<T>(
+  async #waitForJobToCompleteAndReturn<T>(
     getJobResult: () => Promise<T>,
     isJobCompleted: (result: T) => boolean,
     pollingTimeMs: number,

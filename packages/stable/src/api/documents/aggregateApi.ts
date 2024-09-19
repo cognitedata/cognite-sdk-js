@@ -33,7 +33,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
   public count = (
     request: Omit<DocumentsAggregateCountRequest, 'aggregate'>
   ): Promise<number> => {
-    return this.aggregate<DocumentsAggregateCountItem>({
+    return this.#aggregate<DocumentsAggregateCountItem>({
       ...request,
       aggregate: 'count',
     }).then((response) => response[0].count);
@@ -42,7 +42,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
   public uniqueValues = (
     request: Omit<DocumentsAggregateUniqueValuesRequest, 'aggregate'>
   ): Promise<DocumentsAggregateUniqueValuesItem[]> => {
-    return this.aggregate<DocumentsAggregateUniqueValuesItem>({
+    return this.#aggregate<DocumentsAggregateUniqueValuesItem>({
       ...request,
       aggregate: 'uniqueValues',
     });
@@ -54,7 +54,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
     return this.cursorBasedEndpoint<
       DocumentsAggregateAllUniqueValuesRequest,
       DocumentsAggregateAllUniqueValuesItem
-    >(this.callAggregateCursorEndpointWithPost, {
+    >(this.#callAggregateCursorEndpointWithPost, {
       ...request,
       aggregate: 'allUniqueValues',
     });
@@ -63,7 +63,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
   public uniqueProperties = (
     request: Omit<DocumentsAggregateUniquePropertiesRequest, 'aggregate'>
   ): Promise<DocumentsAggregateUniquePropertiesItem[]> => {
-    return this.aggregate<DocumentsAggregateUniquePropertiesItem>({
+    return this.#aggregate<DocumentsAggregateUniquePropertiesItem>({
       ...request,
       aggregate: 'uniqueProperties',
     });
@@ -75,13 +75,13 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
     return this.cursorBasedEndpoint<
       DocumentsAggregateAllUniquePropertiesRequest,
       DocumentsAggregateAllUniquePropertiesItem
-    >(this.callAggregateCursorEndpointWithPost, {
+    >(this.#callAggregateCursorEndpointWithPost, {
       ...request,
       aggregate: 'allUniqueProperties',
     });
   };
 
-  private callAggregateCursorEndpointWithPost = async <
+  #callAggregateCursorEndpointWithPost = async <
     QueryType extends FilterQuery,
     Item,
   >(
@@ -93,9 +93,7 @@ export class DocumentsAggregateAPI extends BaseResourceAPI<unknown> {
     return response;
   };
 
-  private async aggregate<Item>(
-    request: DocumentsAggregateRequest
-  ): Promise<Item[]> {
+  async #aggregate<Item>(request: DocumentsAggregateRequest): Promise<Item[]> {
     const response = await this.post<ItemsWrapper<Item[]>>(this.url(), {
       data: request,
     });

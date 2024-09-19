@@ -19,11 +19,11 @@ import type {
 import { EventsAggregateAPI } from './eventsAggregateApi';
 
 export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
-  private aggregateAPI: EventsAggregateAPI;
+  #aggregateAPI: EventsAggregateAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
-    this.aggregateAPI = new EventsAggregateAPI(...args);
+    this.#aggregateAPI = new EventsAggregateAPI(...args);
   }
 
   /**
@@ -60,7 +60,7 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
     scope?: EventFilterRequest
   ): CursorAndAsyncIterator<CogniteEvent> => {
     const { sort: sortObject = {}, ...rest } = scope || {};
-    const query = { sort: this.convertSortObjectToArray(sortObject), ...rest };
+    const query = { sort: this.#convertSortObjectToArray(sortObject), ...rest };
     return super.listEndpoint(this.callListEndpointWithPost, query);
   };
 
@@ -123,10 +123,10 @@ export class EventsAPI extends BaseResourceAPI<CogniteEvent> {
    * By specifying an additional filter, you can also aggregate only among events matching the specified filter.
    */
   public get aggregate() {
-    return this.aggregateAPI;
+    return this.#aggregateAPI;
   }
 
-  private convertSortObjectToArray(sortObject: EventSort) {
+  #convertSortObjectToArray(sortObject: EventSort) {
     return Object.entries(sortObject).map(
       ([prop, order]) => `${prop}:${order}`
     );

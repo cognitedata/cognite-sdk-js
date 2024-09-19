@@ -10,20 +10,20 @@ import type {
 
 export class PreviewAPI extends BaseResourceAPI<unknown> {
   public documentAsPdf = (id: DocumentId): Promise<ArrayBuffer> => {
-    return this.previewEndpoint<ArrayBuffer>(id, 'application/pdf');
+    return this.#previewEndpoint<ArrayBuffer>(id, 'application/pdf');
   };
 
   public documentAsImage = (
     id: DocumentId,
     page: number
   ): Promise<ArrayBuffer> => {
-    return this.previewEndpoint<ArrayBuffer>(id, 'image/png', page);
+    return this.#previewEndpoint<ArrayBuffer>(id, 'image/png', page);
   };
 
   public temporaryLink = (
     documentId: DocumentId
   ): Promise<DocumentsTemporaryPreviewLinkResponse> => {
-    return this.temporaryLinkEndpoint<DocumentsTemporaryPreviewLinkResponse>(
+    return this.#temporaryLinkEndpoint<DocumentsTemporaryPreviewLinkResponse>(
       documentId
     );
   };
@@ -41,7 +41,7 @@ export class PreviewAPI extends BaseResourceAPI<unknown> {
     return uri;
   };
 
-  private async previewEndpoint<ResponseType>(
+  async #previewEndpoint<ResponseType>(
     id: DocumentId,
     accept: AcceptType,
     page = 0
@@ -57,7 +57,7 @@ export class PreviewAPI extends BaseResourceAPI<unknown> {
     return response.data;
   }
 
-  private async temporaryLinkEndpoint<ResponseType>(
+  async #temporaryLinkEndpoint<ResponseType>(
     documentId: DocumentId
   ): Promise<ResponseType> {
     const response = await this.get<ResponseType>(this.url('temporaryLink'), {

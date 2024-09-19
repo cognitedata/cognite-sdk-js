@@ -30,19 +30,19 @@ class CogniteClientCleaned extends CogniteClientStable {
  * @param options Client options
  */
 export default class CogniteClient extends CogniteClientCleaned {
-  private alertsApi?: AlertsAPI;
+  #alertsApi?: AlertsAPI;
+  #monitoringTasksApi?: MonitoringTasksAPI;
   protected filesApi?: FilesAPI;
-  private monitoringTasksApi?: MonitoringTasksAPI;
 
   public get alerts() {
-    return accessApi(this.alertsApi);
+    return accessApi(this.#alertsApi);
   }
   public get files() {
     return accessApi(this.filesApi);
   }
 
   public get monitoringTasks() {
-    return accessApi(this.monitoringTasksApi);
+    return accessApi(this.#monitoringTasksApi);
   }
 
   public get datapoints() {
@@ -60,9 +60,9 @@ export default class CogniteClient extends CogniteClientCleaned {
 
     this.httpClient.setDefaultHeader('cdf-version', 'beta');
 
-    this.alertsApi = this.apiFactory(AlertsAPI, 'alerts');
+    this.#alertsApi = this.apiFactory(AlertsAPI, 'alerts');
     this.filesApi = this.apiFactory(FilesAPI, 'files');
-    this.monitoringTasksApi = this.apiFactory(
+    this.#monitoringTasksApi = this.apiFactory(
       MonitoringTasksAPI,
       'monitoringtasks'
     );

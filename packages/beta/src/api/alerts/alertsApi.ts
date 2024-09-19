@@ -25,26 +25,26 @@ import { SubscribersAPI } from './subscribersApi';
 import { SubscriptionsAPI } from './subscriptionsApi';
 
 export class AlertsAPI extends BaseResourceAPI<Alert> {
-  private channelsApi: ChannelsAPI;
-  private subscribersApi: SubscribersAPI;
-  private subscriptionsApi: SubscriptionsAPI;
+  #channelsApi: ChannelsAPI;
+  #subscribersApi: SubscribersAPI;
+  #subscriptionsApi: SubscriptionsAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
 
     const [resourcePath, client, metadataMap] = args;
 
-    this.channelsApi = new ChannelsAPI(
+    this.#channelsApi = new ChannelsAPI(
       `${resourcePath}/channels`,
       client,
       metadataMap
     );
-    this.subscribersApi = new SubscribersAPI(
+    this.#subscribersApi = new SubscribersAPI(
       `${resourcePath}/subscribers`,
       client,
       metadataMap
     );
-    this.subscriptionsApi = new SubscriptionsAPI(
+    this.#subscriptionsApi = new SubscriptionsAPI(
       `${resourcePath}/subscriptions`,
       client,
       metadataMap
@@ -69,42 +69,42 @@ export class AlertsAPI extends BaseResourceAPI<Alert> {
   };
 
   public listChannels = async (filter?: ChannelFilterQuery) => {
-    return this.channelsApi.list(filter);
+    return this.#channelsApi.list(filter);
   };
 
   public createChannels = async (items: ChannelCreate[]) => {
-    return this.channelsApi.create(items);
+    return this.#channelsApi.create(items);
   };
 
   public deleteChannels = async (items: IdEither[]) => {
-    return this.channelsApi.delete(items);
+    return this.#channelsApi.delete(items);
   };
 
   public updateChannels = async (items: ChannelChange[]) => {
-    return this.channelsApi.update(items);
+    return this.#channelsApi.update(items);
   };
 
   public createSubscribers = async (items: SubscriberCreate[]) => {
-    return this.subscribersApi.create(items);
+    return this.#subscribersApi.create(items);
   };
 
   public listSubscribers = async (filter?: SubscriberFilterQuery) => {
-    return this.subscribersApi.list(filter);
+    return this.#subscribersApi.list(filter);
   };
 
   public deleteSubscribers = async (items: IdEither[]) => {
-    return this.subscribersApi.delete(items);
+    return this.#subscribersApi.delete(items);
   };
 
   public createSubscriptions = async (items: SubscriptionCreate[]) => {
-    return this.subscriptionsApi.create(items);
+    return this.#subscriptionsApi.create(items);
   };
 
   public listSubscriptions = async (filter?: SubscriptionFilterQuery) => {
-    return this.subscriptionsApi.list(filter);
+    return this.#subscriptionsApi.list(filter);
   };
 
   public deleteSubscription = async (items: SubscriptionDelete[]) => {
-    return this.subscriptionsApi.delete(items);
+    return this.#subscriptionsApi.delete(items);
   };
 }

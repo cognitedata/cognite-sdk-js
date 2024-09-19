@@ -16,7 +16,7 @@ export class RevealNodes3DAPI extends BaseResourceAPI<RevealNode3D> {
     revisionId: CogniteInternalId,
     scope?: List3DNodesQuery
   ): CursorAndAsyncIterator<RevealNode3D> {
-    const path = this.encodeUrl(modelId, revisionId);
+    const path = this.#encodeUrl(modelId, revisionId);
     return super.listEndpoint((params) => this.get(path, { params }), scope);
   }
 
@@ -26,11 +26,11 @@ export class RevealNodes3DAPI extends BaseResourceAPI<RevealNode3D> {
     nodeId: CogniteInternalId,
     scope?: List3DNodesQuery
   ): CursorAndAsyncIterator<RevealNode3D> {
-    const path = `${this.encodeUrl(modelId, revisionId)}/${nodeId}/ancestors`;
+    const path = `${this.#encodeUrl(modelId, revisionId)}/${nodeId}/ancestors`;
     return super.listEndpoint((params) => this.get(path, { params }), scope);
   }
 
-  private encodeUrl(modelId: CogniteInternalId, revisionId: CogniteInternalId) {
+  #encodeUrl(modelId: CogniteInternalId, revisionId: CogniteInternalId) {
     return this.url(`models/${modelId}/revisions/${revisionId}/nodes`);
   }
 }

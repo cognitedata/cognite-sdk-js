@@ -9,7 +9,7 @@ import { version } from '../package.json';
 import { DocumentsAPI } from './api/documents/documentsApi';
 
 export default class CogniteClientPlayground extends BaseCogniteClient {
-  private documentsApi?: DocumentsAPI;
+  #documentsApi?: DocumentsAPI;
 
   /**
    * Create a new SDK client (playground)
@@ -31,7 +31,7 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
   }
 
   public get documents() {
-    return accessApi(this.documentsApi);
+    return accessApi(this.#documentsApi);
   }
 
   protected get version() {
@@ -41,6 +41,6 @@ export default class CogniteClientPlayground extends BaseCogniteClient {
   protected initAPIs() {
     super.initAPIs();
 
-    this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
+    this.#documentsApi = this.apiFactory(DocumentsAPI, 'documents');
   }
 }

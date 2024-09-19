@@ -77,15 +77,15 @@ type ConfigManagerOptions = DirectoryOption;
 
 class ConfigManager<T> {
   public static readonly filename = 'codegen.json';
-  private path: string;
+  #path: string;
 
   constructor(readonly options: ConfigManagerOptions) {
-    this.path = `${options.directory}/${ConfigManager.filename}`;
+    this.#path = `${options.directory}/${ConfigManager.filename}`;
   }
 
   public exists = async (): Promise<boolean> => {
     try {
-      await fs.stat(this.path);
+      await fs.stat(this.#path);
       return true;
     } catch (error) {
       return false;
@@ -125,7 +125,7 @@ class ConfigManager<T> {
   };
 
   public configPath = (): string => {
-    return this.path;
+    return this.#path;
   };
 
   public write = async (config: T): Promise<void> => {
@@ -133,7 +133,7 @@ class ConfigManager<T> {
     const json = JSON.stringify(config, null, 2);
 
     try {
-      await fs.writeFile(this.path, json);
+      await fs.writeFile(this.#path, json);
     } catch (error) {
       throw new Error(`Unable to save config: ${error}`);
     }
@@ -148,7 +148,7 @@ class ConfigManager<T> {
 
   protected readFromJsonFile = async (): Promise<string> => {
     try {
-      const json = await fs.readFile(this.path, 'utf-8');
+      const json = await fs.readFile(this.#path, 'utf-8');
       return json;
     } catch (error) {
       throw new Error(`Unable to load config: ${error}`);
@@ -197,7 +197,7 @@ export class ServiceConfigManager extends ConfigManager<ServiceConfig> {
   public writeDefaultConfig = async (
     options: PackageOption & ServiceOption
   ): Promise<void> => {
-    const config = this.defaultConfig(options);
+    const config = this.#defaultConfig(options);
     await this.write(config);
   };
 
@@ -214,9 +214,7 @@ export class ServiceConfigManager extends ConfigManager<ServiceConfig> {
     return config;
   };
 
-  private defaultConfig = (
-    options: PackageOption & ServiceOption
-  ): ServiceConfig => {
+  #defaultConfig = (options: PackageOption & ServiceOption): ServiceConfig => {
     return {
       service: options.service,
       filter: {

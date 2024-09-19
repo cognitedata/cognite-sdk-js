@@ -60,21 +60,20 @@ export function accessApi<T>(api: T | undefined): T {
   return api;
 }
 export default class BaseCogniteClient {
-  private readonly apiVersion: CogniteAPIVersion;
-  private readonly http: CDFHttpClient;
-  private readonly metadata: MetadataMap;
-  private readonly getOidcToken: () => Promise<string | undefined>;
-  private readonly noAuthMode?: boolean;
+  readonly #apiVersion: CogniteAPIVersion;
+  protected readonly httpClient: CDFHttpClient;
+  protected readonly metadataMap: MetadataMap;
+  readonly #getOidcToken: () => Promise<string | undefined>;
   readonly project: string;
-  private retryValidator: RetryValidator;
+  #retryValidator: RetryValidator;
 
   /**
    * To prevent calling `getToken` method multiple times in parallel, we set
    * the promise that `getToken` returns to a variable and check its existence
    * on function calls for `authenticate`.
    */
-  private tokenPromise?: Promise<string | undefined>;
-  private isTokenPromiseFulfilled?: boolean;
+  #tokenPromise?: Promise<string | undefined>;
+  #isTokenPromiseFulfilled?: boolean;
   /**
    * Create a new SDK client
    *
@@ -122,14 +121,14 @@ export default class BaseCogniteClient {
 
     const { baseUrl } = options;
 
-    this.retryValidator =
+    this.#retryValidator =
       options.retryValidator ?? createUniversalRetryValidator();
-    this.http = this.initializeCDFHttpClient(baseUrl, options);
+    this.httpClient = this.#initializeCDFHttpClient(baseUrl, options);
 
-    this.metadata = new MetadataMap();
-    this.apiVersion = apiVersion;
+    this.metadataMap = new MetadataMap();
+    this.#apiVersion = apiVersion;
     this.project = options.project;
-    this.getOidcToken = async () => {
+    this.#getOidcToken = async () => {
       if (options.oidcTokenProvider) {
         return options.oidcTokenProvider();
       }
@@ -143,38 +142,33 @@ export default class BaseCogniteClient {
 
   public authenticate: () => Promise<string | undefined> = async () => {
     try {
-      const token = await this.authenticateUsingOidcTokenProvider();
+      const token = await this.#authenticateUsingOidcTokenProvider();
       return token;
     } catch (e) {
       return;
     }
   };
 
-  private authenticateUsingOidcTokenProvider: () => Promise<
-    string | undefined
-  > = async () => {
-    try {
-      if (!this.tokenPromise || this.isTokenPromiseFulfilled) {
-        this.isTokenPromiseFulfilled = false;
-        this.tokenPromise = this.getOidcToken();
-      }
-      const token = await this.tokenPromise;
-      this.isTokenPromiseFulfilled = true;
+  #authenticateUsingOidcTokenProvider: () => Promise<string | undefined> =
+    async () => {
+      try {
+        if (!this.#tokenPromise || this.#isTokenPromiseFulfilled) {
+          this.#isTokenPromiseFulfilled = false;
+          this.#tokenPromise = this.#getOidcToken();
+        }
+        const token = await this.#tokenPromise;
+        this.#isTokenPromiseFulfilled = true;
 
-      if (token === undefined) return token;
-
-      if (this.noAuthMode) {
+        if (token === undefined) return token;
+        const bearer = bearerString(token);
+        this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
         return token;
+      } catch {
+        return;
       }
-      const bearer = bearerString(token);
-      this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
-      return token;
-    } catch {
-      return;
-    }
-  };
+    };
 
-  private initializeCDFHttpClient(
+  #initializeCDFHttpClient(
     baseUrl: string | undefined,
     options: ClientOptions
   ) {
@@ -192,8 +186,10 @@ export default class BaseCogniteClient {
 
     httpClient.set401ResponseHandler(async (_, request, retry, reject) => {
       try {
-        const requestToken = this.retrieveTokenValueFromHeader(request.headers);
-        const currentToken = await this.tokenPromise;
+        const requestToken = this.#retrieveTokenValueFromHeader(
+          request.headers
+        );
+        const currentToken = await this.#tokenPromise;
         const newToken =
           currentToken !== requestToken
             ? currentToken
@@ -216,9 +212,7 @@ export default class BaseCogniteClient {
    * It retrieves the previous token from header
    * @returns string
    */
-  private retrieveTokenValueFromHeader(
-    headers?: HttpHeaders
-  ): string | undefined {
+  #retrieveTokenValueFromHeader(headers?: HttpHeaders): string | undefined {
     const token = headers?.[AUTHORIZATION_HEADER];
     return token !== undefined ? token.replace('Bearer ', '') : token;
   }
@@ -339,7 +333,7 @@ export default class BaseCogniteClient {
    * Override to provide a better validator
    */
   protected getRetryValidator(): RetryValidator {
-    return this.retryValidator;
+    return this.#retryValidator;
   }
 
   protected get version() {
@@ -362,15 +356,7 @@ export default class BaseCogniteClient {
   };
 
   protected get projectUrl() {
-    return projectUrl(this.project, this.apiVersion);
-  }
-
-  protected get metadataMap() {
-    return this.metadata;
-  }
-
-  protected get httpClient() {
-    return this.http;
+    return projectUrl(this.project, this.#apiVersion);
   }
 }
 

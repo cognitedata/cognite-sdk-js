@@ -28,7 +28,7 @@ export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
     ids: CogniteInternalId[],
     ignoreUnknownIds = false
   ): Promise<DocumentsClassifiersResponse> => {
-    return this.classifiersListByIds<DocumentsClassifiersResponse>(
+    return this.#classifiersListByIds<DocumentsClassifiersResponse>(
       ids,
       ignoreUnknownIds
     );
@@ -40,7 +40,7 @@ export class ClassifiersAPI extends BaseResourceAPI<DocumentsClassifier> {
     });
   };
 
-  private async classifiersListByIds<ResponseType extends object>(
+  async #classifiersListByIds<ResponseType extends object>(
     ids: CogniteInternalId[],
     ignoreUnknownIds: boolean
   ): Promise<ResponseType> {

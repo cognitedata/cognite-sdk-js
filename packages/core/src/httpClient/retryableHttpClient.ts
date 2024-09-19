@@ -11,7 +11,7 @@ import {
 import { MAX_RETRY_ATTEMPTS, type RetryValidator } from './retryValidator';
 
 export class RetryableHttpClient extends BasicHttpClient {
-  private static calculateRetryDelayInMs(retryCount: number) {
+  static #calculateRetryDelayInMs(retryCount: number) {
     const INITIAL_RETRY_DELAY_IN_MS = 250;
     return INITIAL_RETRY_DELAY_IN_MS + ((2 ** retryCount - 1) / 2) * 1000;
   }
@@ -90,7 +90,8 @@ export class RetryableHttpClient extends BasicHttpClient {
       if (!shouldRetry) {
         return response;
       }
-      const delayInMs = RetryableHttpClient.calculateRetryDelayInMs(retryCount);
+      const delayInMs =
+        RetryableHttpClient.#calculateRetryDelayInMs(retryCount);
       await sleepPromise(delayInMs);
       retryCount++;
     }

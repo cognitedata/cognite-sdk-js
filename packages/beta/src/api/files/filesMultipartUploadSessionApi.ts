@@ -12,8 +12,8 @@ import { UploadAlreadyFinishedError } from './errors';
 
 export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
   public multiPartFileUploadResponse: MultiPartFileUploadResponse;
-  private uploadedUrls: boolean[];
-  private finished: boolean;
+  #uploadedUrls: boolean[];
+  #finished: boolean;
 
   constructor(
     ...args: [string, CDFHttpClient, MetadataMap, MultiPartFileUploadResponse]
@@ -21,10 +21,10 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
     super(args[0], args[1], args[2]);
     [, , , this.multiPartFileUploadResponse] = args;
 
-    this.uploadedUrls = this.multiPartFileUploadResponse.uploadUrls.map(
+    this.#uploadedUrls = this.multiPartFileUploadResponse.uploadUrls.map(
       () => false
     );
-    this.finished = false;
+    this.#finished = false;
   }
 
   public async uploadPart(
@@ -41,11 +41,11 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
     ) {
       throw Error('part number is greater than the number of parts');
     }
-    if (this.canCompleteUpload()) {
-      await this.completeMultiPartUpload();
+    if (this.#canCompleteUpload()) {
+      await this.#completeMultiPartUpload();
       return;
     }
-    if (this.alreadyUploadedPart(partNumber)) {
+    if (this.#alreadyUploadedPart(partNumber)) {
       return;
     }
     if (this.multiPartFileUploadResponse.uploadUrls[partNumber] === null) {
@@ -60,9 +60,9 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
       );
 
       if (response.status === 200 || response.status === 201) {
-        this.uploadedUrls[partNumber] = true;
-        if (this.canCompleteUpload()) {
-          await this.completeMultiPartUpload();
+        this.#uploadedUrls[partNumber] = true;
+        if (this.#canCompleteUpload()) {
+          await this.#completeMultiPartUpload();
         }
         return { partNumber, status: response.status };
       }
@@ -70,21 +70,22 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
     }
   }
 
-  private alreadyUploadedPart(partNumber: number) {
-    return this.uploadedUrls[partNumber];
+  #alreadyUploadedPart(partNumber: number) {
+    return this.#uploadedUrls[partNumber];
   }
 
-  private canCompleteUpload() {
+  #canCompleteUpload() {
     return (
-      this.uploadedUrls.length !== 0 && this.getNotCompletedParts().length === 0
+      this.#uploadedUrls.length !== 0 &&
+      this.getNotCompletedParts().length === 0
     );
   }
 
-  private async completeMultiPartUpload() {
-    if (this.finished) {
+  async #completeMultiPartUpload() {
+    if (this.#finished) {
       throw new UploadAlreadyFinishedError();
     }
-    if (!this.canCompleteUpload()) {
+    if (!this.#canCompleteUpload()) {
       return;
     }
 
@@ -100,10 +101,10 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
     if (response.status !== 200) {
       throw Error('upload cannot be completed');
     }
-    this.finished = true;
+    this.#finished = true;
   }
   public getNotCompletedParts(): number[] {
-    return this.uploadedUrls.reduce((acc, curr, index) => {
+    return this.#uploadedUrls.reduce((acc, curr, index) => {
       if (curr === false) {
         acc.push(index);
       }
@@ -114,6 +115,6 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
     return this.multiPartFileUploadResponse.uploadId;
   }
   public getFinished() {
-    return this.finished;
+    return this.#finished;
   }
 }

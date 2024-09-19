@@ -21,12 +21,12 @@ import type {
 import { SyntheticTimeSeriesAPI } from './syntheticTimeSeriesApi';
 
 export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
-  private syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
+  #syntheticTimeseriesApi: SyntheticTimeSeriesAPI;
 
   /** @hidden */
   constructor(resourcePath: string, ...args: [CDFHttpClient, MetadataMap]) {
     super(resourcePath, ...args);
-    this.syntheticTimeseriesApi = new SyntheticTimeSeriesAPI(
+    this.#syntheticTimeseriesApi = new SyntheticTimeSeriesAPI(
       this.url('synthetic'),
       ...args
     );
@@ -161,7 +161,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * ```
    */
   public syntheticQuery = (items: SyntheticQuery[]) => {
-    return this.syntheticTimeseriesApi.query(items);
+    return this.#syntheticTimeseriesApi.query(items);
   };
 }
 

@@ -19,15 +19,15 @@ import { DocumentsAggregateAPI } from './aggregateApi';
 import { PreviewAPI } from './previewApi';
 
 export class DocumentsAPI extends BaseResourceAPI<Document> {
-  private readonly previewAPI: PreviewAPI;
-  private readonly aggregateAPI: DocumentsAggregateAPI;
+  readonly #previewAPI: PreviewAPI;
+  readonly #aggregateAPI: DocumentsAggregateAPI;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
 
     const [baseUrl, httpClient, map] = args;
-    this.previewAPI = new PreviewAPI(baseUrl, httpClient, map);
-    this.aggregateAPI = new DocumentsAggregateAPI(
+    this.#previewAPI = new PreviewAPI(baseUrl, httpClient, map);
+    this.#aggregateAPI = new DocumentsAggregateAPI(
       `${baseUrl}/aggregate`,
       httpClient,
       map
@@ -35,11 +35,11 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   }
 
   public get preview() {
-    return this.previewAPI;
+    return this.#previewAPI;
   }
 
   public get aggregate() {
-    return this.aggregateAPI;
+    return this.#aggregateAPI;
   }
 
   /**
@@ -63,7 +63,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   public search = (
     query: DocumentSearchRequest
   ): Promise<DocumentSearchResponse> => {
-    return this.searchDocuments<DocumentSearchResponse>(query);
+    return this.#searchDocuments<DocumentSearchResponse>(query);
   };
 
   public list = (request: DocumentListRequest): DocumentListResponse => {
@@ -71,10 +71,10 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
   };
 
   public content = (id: CogniteInternalId): Promise<string> => {
-    return this.documentContent(id);
+    return this.#documentContent(id);
   };
 
-  private async searchDocuments<ResponseType extends object>(
+  async #searchDocuments<ResponseType extends object>(
     query: DocumentSearchRequest
   ): Promise<ResponseType> {
     const response = await this.post<ResponseType>(this.searchUrl, {
@@ -84,7 +84,7 @@ export class DocumentsAPI extends BaseResourceAPI<Document> {
     return this.addToMapAndReturn(response.data, response);
   }
 
-  private async documentContent(id: CogniteInternalId): Promise<string> {
+  async #documentContent(id: CogniteInternalId): Promise<string> {
     const response = await this.get<string>(this.url(`${id}/content`), {
       headers: {
         accept: 'text/plain',

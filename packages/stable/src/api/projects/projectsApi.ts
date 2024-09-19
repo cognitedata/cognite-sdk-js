@@ -12,12 +12,12 @@ export class ProjectsAPI extends BaseResourceAPI<unknown> {
    * ```
    */
   public retrieve = async (projectName: string): Promise<ProjectResponse> => {
-    const path = this.encodeUrl(projectName);
+    const path = this.#encodeUrl(projectName);
     const response = await this.get<ProjectResponse>(path);
     return this.addToMapAndReturn(response.data, response);
   };
 
-  private encodeUrl(projectName: string) {
+  #encodeUrl(projectName: string) {
     return this.url(`projects/${encodeURIComponent(projectName)}`);
   }
 }

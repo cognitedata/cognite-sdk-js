@@ -37,7 +37,7 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```
    */
   public insert = (items: ExternalDatapointsQuery[]): Promise<object> => {
-    return this.insertEndpoint(items);
+    return this.#insertEndpoint(items);
   };
 
   /**
@@ -148,7 +148,7 @@ export class DataPointsAPI extends BaseResourceAPI<
     items: LatestDataBeforeRequest[],
     params: LatestDataParams = {}
   ): Promise<Datapoints[]> => {
-    return this.retrieveLatestEndpoint(items, params);
+    return this.#retrieveLatestEndpoint(items, params);
   };
 
   /**
@@ -159,10 +159,10 @@ export class DataPointsAPI extends BaseResourceAPI<
    * ```
    */
   public delete = (items: DatapointsDeleteRequest[]): Promise<object> => {
-    return this.deleteDatapointsEndpoint(items);
+    return this.#deleteDatapointsEndpoint(items);
   };
 
-  private async insertEndpoint(items: ExternalDatapointsQuery[]) {
+  async #insertEndpoint(items: ExternalDatapointsQuery[]) {
     const path = this.url();
     await this.postInParallelWithAutomaticChunking({ path, items });
     return {};
@@ -180,7 +180,7 @@ export class DataPointsAPI extends BaseResourceAPI<
     return this.addToMapAndReturn(response.data.items, response);
   }
 
-  private async retrieveLatestEndpoint(
+  async #retrieveLatestEndpoint(
     items: LatestDataBeforeRequest[],
     params: LatestDataParams
   ) {
@@ -191,7 +191,7 @@ export class DataPointsAPI extends BaseResourceAPI<
     return this.addToMapAndReturn(response.data.items, response);
   }
 
-  private async deleteDatapointsEndpoint(items: DatapointsDeleteRequest[]) {
+  async #deleteDatapointsEndpoint(items: DatapointsDeleteRequest[]) {
     await this.postInParallelWithAutomaticChunking({
       chunkSize: 10000,
       items,

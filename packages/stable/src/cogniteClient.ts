@@ -47,76 +47,76 @@ import { retryValidator } from './retryValidator';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
-    return accessApi(this.assetsApi);
+    return accessApi(this.#assetsApi);
   }
   public get timeseries() {
-    return accessApi(this.timeSeriesApi);
+    return accessApi(this.#timeSeriesApi);
   }
   public get datapoints() {
-    return accessApi(this.dataPointsApi);
+    return accessApi(this.#dataPointsApi);
   }
   public get sequences() {
-    return accessApi(this.sequencesApi);
+    return accessApi(this.#sequencesApi);
   }
   public get events() {
-    return accessApi(this.eventsApi);
+    return accessApi(this.#eventsApi);
   }
   public get files() {
-    return accessApi(this.filesApi);
+    return accessApi(this.#filesApi);
   }
   public get labels() {
-    return accessApi(this.labelsApi);
+    return accessApi(this.#labelsApi);
   }
   public get raw() {
-    return accessApi(this.rawApi);
+    return accessApi(this.#rawApi);
   }
   public get projects() {
-    return accessApi(this.projectsApi);
+    return accessApi(this.#projectsApi);
   }
   public get groups() {
-    return accessApi(this.groupsApi);
+    return accessApi(this.#groupsApi);
   }
   public get securityCategories() {
-    return accessApi(this.securityCategoriesApi);
+    return accessApi(this.#securityCategoriesApi);
   }
   public get models3D() {
-    return accessApi(this.models3DApi);
+    return accessApi(this.#models3DApi);
   }
   public get revisions3D() {
-    return accessApi(this.revisions3DApi);
+    return accessApi(this.#revisions3DApi);
   }
   public get files3D() {
-    return accessApi(this.files3DApi);
+    return accessApi(this.#files3DApi);
   }
   public get datasets() {
-    return accessApi(this.datasetsApi);
+    return accessApi(this.#datasetsApi);
   }
   public get assetMappings3D() {
-    return accessApi(this.assetMappings3DApi);
+    return accessApi(this.#assetMappings3DApi);
   }
   public get viewer3D() {
-    return accessApi(this.viewer3DApi);
+    return accessApi(this.#viewer3DApi);
   }
   public get relationships() {
-    return accessApi(this.relationshipsApi);
+    return accessApi(this.#relationshipsApi);
   }
   public get entityMatching() {
-    return accessApi(this.entityMatchingApi);
+    return accessApi(this.#entityMatchingApi);
   }
   public get geospatial() {
-    return accessApi(this.geospatialApi);
+    return accessApi(this.#geospatialApi);
   }
   public get documents() {
-    return accessApi(this.documentsApi);
+    return accessApi(this.#documentsApi);
   }
   public get annotations() {
-    return accessApi(this.annotationsApi);
+    return accessApi(this.#annotationsApi);
   }
   public get vision() {
-    return accessApi(this.visionApi);
+    return accessApi(this.#visionApi);
   }
   public get profiles() {
-    return accessApi(this.profilesApi);
+    return accessApi(this.#profilesApi);
   }
   public get templates() {
     return {
@@ -158,53 +158,53 @@ export default class CogniteClient extends BaseCogniteClient {
     };
   }
   public get units() {
-    return accessApi(this.unitsApi);
+    return accessApi(this.#unitsApi);
   }
   public get instances() {
-    return accessApi(this.instancesApi);
+    return accessApi(this.#instancesApi);
   }
   public get containers() {
-    return accessApi(this.containersApi);
+    return accessApi(this.#containersApi);
   }
   public get views() {
-    return accessApi(this.viewsApi);
+    return accessApi(this.#viewsApi);
   }
   public get spaces() {
-    return accessApi(this.spacesApi);
+    return accessApi(this.#spacesApi);
   }
   public get dataModels() {
-    return accessApi(this.dataModelsApi);
+    return accessApi(this.#dataModelsApi);
   }
-  private assetsApi?: AssetsAPI;
-  private timeSeriesApi?: TimeSeriesAPI;
-  protected dataPointsApi?: DataPointsAPI;
-  private sequencesApi?: SequencesAPI;
-  private eventsApi?: EventsAPI;
-  protected filesApi?: FilesAPI;
-  private labelsApi?: LabelsAPI;
-  private rawApi?: RawAPI;
-  private projectsApi?: ProjectsAPI;
-  private groupsApi?: GroupsAPI;
-  private securityCategoriesApi?: SecurityCategoriesAPI;
-  private models3DApi?: Models3DAPI;
-  private relationshipsApi?: RelationshipsApi;
-  private entityMatchingApi?: EntityMatchingApi;
-  private revisions3DApi?: Revisions3DAPI;
-  private files3DApi?: Files3DAPI;
-  private datasetsApi?: DataSetsAPI;
-  private assetMappings3DApi?: AssetMappings3DAPI;
-  private viewer3DApi?: Viewer3DAPI;
-  private geospatialApi?: GeospatialAPI;
-  private documentsApi?: DocumentsAPI;
-  private annotationsApi?: AnnotationsAPI;
-  private visionApi?: VisionAPI;
-  private profilesApi?: ProfilesAPI;
-  private unitsApi?: UnitsAPI;
-  private instancesApi?: InstancesAPI;
-  private containersApi?: ContainersAPI;
-  private viewsApi?: ViewsAPI;
-  private spacesApi?: SpacesAPI;
-  private dataModelsApi?: DataModelsAPI;
+  #assetsApi?: AssetsAPI;
+  #timeSeriesApi?: TimeSeriesAPI;
+  #dataPointsApi?: DataPointsAPI;
+  #sequencesApi?: SequencesAPI;
+  #eventsApi?: EventsAPI;
+  #filesApi?: FilesAPI;
+  #labelsApi?: LabelsAPI;
+  #rawApi?: RawAPI;
+  #projectsApi?: ProjectsAPI;
+  #groupsApi?: GroupsAPI;
+  #securityCategoriesApi?: SecurityCategoriesAPI;
+  #models3DApi?: Models3DAPI;
+  #relationshipsApi?: RelationshipsApi;
+  #entityMatchingApi?: EntityMatchingApi;
+  #revisions3DApi?: Revisions3DAPI;
+  #files3DApi?: Files3DAPI;
+  #datasetsApi?: DataSetsAPI;
+  #assetMappings3DApi?: AssetMappings3DAPI;
+  #viewer3DApi?: Viewer3DAPI;
+  #geospatialApi?: GeospatialAPI;
+  #documentsApi?: DocumentsAPI;
+  #annotationsApi?: AnnotationsAPI;
+  #visionApi?: VisionAPI;
+  #profilesApi?: ProfilesAPI;
+  #unitsApi?: UnitsAPI;
+  #instancesApi?: InstancesAPI;
+  #containersApi?: ContainersAPI;
+  #viewsApi?: ViewsAPI;
+  #spacesApi?: SpacesAPI;
+  #dataModelsApi?: DataModelsAPI;
 
   protected get version() {
     return version;
@@ -220,46 +220,49 @@ export default class CogniteClient extends BaseCogniteClient {
     // Lock version to the following date
     this.httpClient.setDefaultHeader('cdf-version', 'V20210406');
 
-    this.assetsApi = this.apiFactory(AssetsAPI, 'assets');
-    this.timeSeriesApi = this.apiFactory(TimeSeriesAPI, 'timeseries');
-    this.dataPointsApi = this.apiFactory(DataPointsAPI, 'timeseries/data');
-    this.sequencesApi = this.apiFactory(SequencesAPI, 'sequences');
-    this.eventsApi = this.apiFactory(EventsAPI, 'events');
-    this.filesApi = this.apiFactory(FilesAPI, 'files');
-    this.labelsApi = this.apiFactory(LabelsAPI, 'labels');
-    this.datasetsApi = this.apiFactory(DataSetsAPI, 'datasets');
-    this.rawApi = this.apiFactory(RawAPI, 'raw/dbs');
-    this.groupsApi = this.apiFactory(GroupsAPI, 'groups');
-    this.securityCategoriesApi = this.apiFactory(
+    this.#assetsApi = this.apiFactory(AssetsAPI, 'assets');
+    this.#timeSeriesApi = this.apiFactory(TimeSeriesAPI, 'timeseries');
+    this.#dataPointsApi = this.apiFactory(DataPointsAPI, 'timeseries/data');
+    this.#sequencesApi = this.apiFactory(SequencesAPI, 'sequences');
+    this.#eventsApi = this.apiFactory(EventsAPI, 'events');
+    this.#filesApi = this.apiFactory(FilesAPI, 'files');
+    this.#labelsApi = this.apiFactory(LabelsAPI, 'labels');
+    this.#datasetsApi = this.apiFactory(DataSetsAPI, 'datasets');
+    this.#rawApi = this.apiFactory(RawAPI, 'raw/dbs');
+    this.#groupsApi = this.apiFactory(GroupsAPI, 'groups');
+    this.#securityCategoriesApi = this.apiFactory(
       SecurityCategoriesAPI,
       'securitycategories'
     );
-    this.models3DApi = this.apiFactory(Models3DAPI, models3DPath);
-    this.relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
-    this.entityMatchingApi = this.apiFactory(
+    this.#models3DApi = this.apiFactory(Models3DAPI, models3DPath);
+    this.#relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
+    this.#entityMatchingApi = this.apiFactory(
       EntityMatchingApi,
       'context/entitymatching'
     );
-    this.revisions3DApi = this.apiFactory(Revisions3DAPI, models3DPath);
-    this.files3DApi = this.apiFactory(Files3DAPI, '3d/files');
-    this.assetMappings3DApi = this.apiFactory(AssetMappings3DAPI, models3DPath);
-    this.viewer3DApi = this.apiFactory(Viewer3DAPI, '3d');
-    this.projectsApi = new ProjectsAPI(
+    this.#revisions3DApi = this.apiFactory(Revisions3DAPI, models3DPath);
+    this.#files3DApi = this.apiFactory(Files3DAPI, '3d/files');
+    this.#assetMappings3DApi = this.apiFactory(
+      AssetMappings3DAPI,
+      models3DPath
+    );
+    this.#viewer3DApi = this.apiFactory(Viewer3DAPI, '3d');
+    this.#projectsApi = new ProjectsAPI(
       apiUrl(),
       this.httpClient,
       this.metadataMap
     );
-    this.geospatialApi = this.apiFactory(GeospatialAPI, 'geospatial');
-    this.documentsApi = this.apiFactory(DocumentsAPI, 'documents');
-    this.annotationsApi = this.apiFactory(AnnotationsAPI, 'annotations');
-    this.visionApi = this.apiFactory(VisionAPI, 'context/vision');
-    this.profilesApi = this.apiFactory(ProfilesAPI, 'profiles');
-    this.unitsApi = this.apiFactory(UnitsAPI, 'units');
-    this.instancesApi = this.apiFactory(InstancesAPI, 'models/instances');
-    this.containersApi = this.apiFactory(ContainersAPI, 'models/containers');
-    this.viewsApi = this.apiFactory(ViewsAPI, 'models/views');
-    this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
-    this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
+    this.#geospatialApi = this.apiFactory(GeospatialAPI, 'geospatial');
+    this.#documentsApi = this.apiFactory(DocumentsAPI, 'documents');
+    this.#annotationsApi = this.apiFactory(AnnotationsAPI, 'annotations');
+    this.#visionApi = this.apiFactory(VisionAPI, 'context/vision');
+    this.#profilesApi = this.apiFactory(ProfilesAPI, 'profiles');
+    this.#unitsApi = this.apiFactory(UnitsAPI, 'units');
+    this.#instancesApi = this.apiFactory(InstancesAPI, 'models/instances');
+    this.#containersApi = this.apiFactory(ContainersAPI, 'models/containers');
+    this.#viewsApi = this.apiFactory(ViewsAPI, 'models/views');
+    this.#spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
+    this.#dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
   }
 
   static urlEncodeExternalId(externalId: string): string {

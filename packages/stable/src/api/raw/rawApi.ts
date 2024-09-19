@@ -22,8 +22,8 @@ import { RawRowsAPI } from './rawRowsApi';
 import { RawTablesAPI } from './rawTablesApi';
 
 export class RawAPI extends BaseResourceAPI<RawDB> {
-  private rawTablesApi: RawTablesAPI;
-  private rawRowsApi: RawRowsAPI;
+  #rawTablesApi: RawTablesAPI;
+  #rawRowsApi: RawRowsAPI;
   /** @hidden */
   constructor(
     resourcePath: string,
@@ -31,8 +31,8 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     map: MetadataMap
   ) {
     super(resourcePath, httpClient, map);
-    this.rawTablesApi = new RawTablesAPI(resourcePath, httpClient, map);
-    this.rawRowsApi = new RawRowsAPI(resourcePath, httpClient, map);
+    this.#rawTablesApi = new RawTablesAPI(resourcePath, httpClient, map);
+    this.#rawRowsApi = new RawRowsAPI(resourcePath, httpClient, map);
   }
 
   /**
@@ -88,7 +88,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     items: RawDBTableName[],
     ensureParent = false
   ): Promise<RawDBTable[]> => {
-    return this.rawTablesApi.create(databaseName, items, ensureParent);
+    return this.#rawTablesApi.create(databaseName, items, ensureParent);
   };
 
   /**
@@ -102,7 +102,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     databaseName: string,
     scope?: ListRawTables
   ): CursorAndAsyncIterator<RawDBTable> => {
-    return this.rawTablesApi.list(databaseName, scope);
+    return this.#rawTablesApi.list(databaseName, scope);
   };
 
   /**
@@ -116,7 +116,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     databaseName: string,
     items: RawDBTableName[]
   ): Promise<object> => {
-    return this.rawTablesApi.delete(databaseName, items);
+    return this.#rawTablesApi.delete(databaseName, items);
   };
 
   /**
@@ -132,7 +132,12 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     items: RawDBRowInsert[],
     ensureParent = false
   ): Promise<object> => {
-    return this.rawRowsApi.insert(databaseName, tableName, items, ensureParent);
+    return this.#rawRowsApi.insert(
+      databaseName,
+      tableName,
+      items,
+      ensureParent
+    );
   };
 
   /**
@@ -147,7 +152,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     tableName: string,
     query?: ListRawRows
   ): CursorAndAsyncIterator<RawDBRow> => {
-    return this.rawRowsApi.list(databaseName, tableName, query);
+    return this.#rawRowsApi.list(databaseName, tableName, query);
   };
 
   /**
@@ -162,7 +167,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     tableName: string,
     rowKey: string
   ): Promise<RawDBRow> => {
-    return this.rawRowsApi.retrieve(databaseName, tableName, rowKey);
+    return this.#rawRowsApi.retrieve(databaseName, tableName, rowKey);
   };
 
   /**
@@ -177,7 +182,7 @@ export class RawAPI extends BaseResourceAPI<RawDB> {
     tableName: string,
     items: RawDBRowKey[]
   ): Promise<object> => {
-    return this.rawRowsApi.delete(databaseName, tableName, items);
+    return this.#rawRowsApi.delete(databaseName, tableName, items);
   };
 }
 

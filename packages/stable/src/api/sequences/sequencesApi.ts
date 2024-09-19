@@ -23,7 +23,7 @@ import type {
 import { SequenceRowsAPI } from './sequenceRowsApi';
 
 export class SequencesAPI extends BaseResourceAPI<Sequence> {
-  private sequenceRowsAPI: SequenceRowsAPI;
+  #sequenceRowsAPI: SequenceRowsAPI;
 
   /** @hidden */
   constructor(
@@ -32,7 +32,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
     map: MetadataMap
   ) {
     super(resourcePath, httpClient, map);
-    this.sequenceRowsAPI = new SequenceRowsAPI(
+    this.#sequenceRowsAPI = new SequenceRowsAPI(
       `${this.url()}data`,
       httpClient,
       map
@@ -171,7 +171,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * ```
    */
   public insertRows = (items: SequenceRowsInsert[]): Promise<object> => {
-    return this.sequenceRowsAPI.insert(items);
+    return this.#sequenceRowsAPI.insert(items);
   };
 
   /**
@@ -184,7 +184,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
   public retrieveRows = (
     query: SequenceRowsRetrieve
   ): CursorAndAsyncIterator<SequenceRow> => {
-    return this.sequenceRowsAPI.retrieve(query);
+    return this.#sequenceRowsAPI.retrieve(query);
   };
 
   /**
@@ -195,7 +195,7 @@ export class SequencesAPI extends BaseResourceAPI<Sequence> {
    * ```
    */
   public deleteRows = (query: SequenceRowsDelete[]): Promise<object> => {
-    return this.sequenceRowsAPI.delete(query);
+    return this.#sequenceRowsAPI.delete(query);
   };
 }
 

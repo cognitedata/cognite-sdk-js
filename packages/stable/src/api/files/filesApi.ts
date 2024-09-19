@@ -60,7 +60,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
     overwrite = false,
     waitUntilAcknowledged = false
   ): Promise<FileUploadResponse | FileInfo> => {
-    return this.uploadEndpoint(
+    return this.#uploadEndpoint(
       fileInfo,
       fileContent,
       overwrite,
@@ -164,10 +164,10 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
   public getDownloadUrls = (
     ids: IdEither[]
   ): Promise<(FileLink & IdEither)[]> => {
-    return this.getDownloadUrlsEndpoint(ids);
+    return this.#getDownloadUrlsEndpoint(ids);
   };
 
-  private async uploadEndpoint(
+  async #uploadEndpoint(
     fileInfo: ExternalFileInfo,
     fileContent?: FileContent,
     overwrite = false,
@@ -188,16 +188,16 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
     });
     const file = response.data;
     if (fileContent != null) {
-      await this.uploadFile(file.uploadUrl, fileContent, fileInfo.mimeType);
+      await this.#uploadFile(file.uploadUrl, fileContent, fileInfo.mimeType);
     }
     if (waitUntilAcknowledged) {
-      const uploadedFile = await this.waitUntilFileIsUploaded(file.id);
+      const uploadedFile = await this.#waitUntilFileIsUploaded(file.id);
       return this.addToMapAndReturn(uploadedFile, response);
     }
     return this.addToMapAndReturn(file, response);
   }
 
-  private uploadFile(url: string, fileContent: FileContent, mimeType?: string) {
+  #uploadFile(url: string, fileContent: FileContent, mimeType?: string) {
     const headers: HttpHeaders = {
       'Content-Type': mimeType || 'application/octet-stream',
     };
@@ -208,9 +208,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
   }
 
   // TODO: refactor - similar to RetryableHttpClient.rawRequest
-  private async waitUntilFileIsUploaded(
-    fileId: CogniteInternalId
-  ): Promise<FileInfo> {
+  async #waitUntilFileIsUploaded(fileId: CogniteInternalId): Promise<FileInfo> {
     const MAX_RETRIES = 10;
     const DELAY_IN_MS = 500;
     let retryCount = 0;
@@ -225,7 +223,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
     throw Error(`File never marked as 'uploaded'`);
   }
 
-  private async getDownloadUrlsEndpoint(items: IdEither[]) {
+  async #getDownloadUrlsEndpoint(items: IdEither[]) {
     const path = this.url('downloadlink');
     const response = await this.post<ItemsWrapper<(FileLink & IdEither)[]>>(
       path,

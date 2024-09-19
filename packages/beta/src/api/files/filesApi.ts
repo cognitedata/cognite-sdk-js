@@ -9,16 +9,16 @@ import {
 import { FilesMultipartUploadSessionAPI } from './filesMultipartUploadSessionApi';
 
 export class FilesAPI extends FilesAPIStable {
-  private limits = {
+  #limits = {
     minimumNumberOfParts: 1,
     maxNumberOfParts: 250,
   };
-  private _client: CDFHttpClient;
-  private _map: MetadataMap;
-  private _baseUrl: string;
+  #client: CDFHttpClient;
+  #map: MetadataMap;
+  #baseUrl: string;
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
-    [this._baseUrl, this._client, this._map] = args;
+    [this.#baseUrl, this.#client, this.#map] = args;
   }
 
   /**
@@ -35,27 +35,27 @@ export class FilesAPI extends FilesAPIStable {
     parts: number,
     overwrite = false
   ) {
-    const response = await this.getMultipartUploadSession(
+    const response = await this.#getMultipartUploadSession(
       fileInfo,
       parts,
       overwrite
     );
     const multipartUploadSession = new FilesMultipartUploadSessionAPI(
-      this._baseUrl,
-      this._client,
-      this._map,
+      this.#baseUrl,
+      this.#client,
+      this.#map,
       response.data
     );
     return this.addToMapAndReturn(multipartUploadSession, response);
   }
-  private async getMultipartUploadSession(
+  async #getMultipartUploadSession(
     fileInfo: ExternalFileInfo,
     parts: number,
     overwrite = false
   ) {
     if (
-      parts < this.limits.minimumNumberOfParts ||
-      parts > this.limits.maxNumberOfParts
+      parts < this.#limits.minimumNumberOfParts ||
+      parts > this.#limits.maxNumberOfParts
     ) {
       throw Error('parts must be greater than 0 and less than 250');
     }

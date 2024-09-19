@@ -29,7 +29,7 @@ const defaultFilename = '.cognite-openapi-snapshot.json';
  * OpenApiSnapshotManager handles creating and updating a service or package snapshot.
  */
 export class OpenApiSnapshotManager {
-  private path: string;
+  #path: string;
 
   constructor(readonly options: OpenApiSnapshotManagerOptions) {
     if (options.directory == null && options.path == null) {
@@ -38,7 +38,7 @@ export class OpenApiSnapshotManager {
       );
     }
 
-    this.path =
+    this.#path =
       options.path != null
         ? options.path
         : `${options.directory}/${defaultFilename}`;
@@ -54,7 +54,7 @@ export class OpenApiSnapshotManager {
     return JSON.parse(doc) as OpenApiDocument;
   };
 
-  private createUrl = (): string => {
+  #createUrl = (): string => {
     if (this.options.version == null) {
       throw new Error('Cognite API version was not configured');
     }
@@ -63,7 +63,7 @@ export class OpenApiSnapshotManager {
 
   public downloadFromUrl = async (url?: string): Promise<OpenApiDocument> => {
     try {
-      const response = await fetch(url || this.createUrl());
+      const response = await fetch(url || this.#createUrl());
       const json = await response.json();
       return json as OpenApiDocument;
     } catch (error) {
@@ -75,7 +75,7 @@ export class OpenApiSnapshotManager {
     const json = JSON.stringify(openapi, undefined, '  ');
 
     try {
-      await fs.writeFile(this.path, json);
+      await fs.writeFile(this.#path, json);
       return openapi;
     } catch (error) {
       throw new Error(`Unable to save snapshot: ${error}`);
@@ -84,7 +84,7 @@ export class OpenApiSnapshotManager {
 
   public read = async (): Promise<OpenApiDocument> => {
     try {
-      const data = await fs.readFile(this.path, 'utf-8');
+      const data = await fs.readFile(this.#path, 'utf-8');
       return JSON.parse(data) as OpenApiDocument;
     } catch (error) {
       throw new Error(`Unable to load snapshot: ${error}`);

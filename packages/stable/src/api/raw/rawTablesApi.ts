@@ -17,7 +17,7 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
     items: RawDBTableName[],
     ensureParent = false
   ): Promise<RawDBTable[]> {
-    const path = `${this.encodeUrl(databaseName)}/tables`;
+    const path = `${this.#encodeUrl(databaseName)}/tables`;
     const responses = await this.postInParallelWithAutomaticChunking({
       queryParams: { ensureParent },
       items,
@@ -30,7 +30,7 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
     databaseName: string,
     scope?: ListRawTables
   ): CursorAndAsyncIterator<RawDBTable> {
-    const path = `${this.encodeUrl(databaseName)}/tables`;
+    const path = `${this.#encodeUrl(databaseName)}/tables`;
     return super.listEndpoint(
       async (params) =>
         this.get<CursorResponse<RawDBTable[]>>(path, {
@@ -41,11 +41,11 @@ export class RawTablesAPI extends BaseResourceAPI<RawDBTable> {
   }
 
   public delete(databaseName: string, items: RawDBTableName[]) {
-    const path = `${this.encodeUrl(databaseName)}/tables/delete`;
+    const path = `${this.#encodeUrl(databaseName)}/tables/delete`;
     return this.deleteEndpoint(items, {}, path);
   }
 
-  private encodeUrl(databaseName: string) {
+  #encodeUrl(databaseName: string) {
     return this.url(`${encodeURIComponent(databaseName)}`);
   }
 }

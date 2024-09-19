@@ -30,7 +30,7 @@ export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
     return super.listEndpoint(
       (data) =>
         this.post<SequenceRowsResponseData>(this.listPostUrl, { data }).then(
-          this.transformRetrieveResponse
+          this.#transformRetrieveResponse
         ),
       query
     );
@@ -40,7 +40,7 @@ export class SequenceRowsAPI extends BaseResourceAPI<SequenceRow> {
     return this.deleteEndpoint(items);
   }
 
-  private transformRetrieveResponse(
+  #transformRetrieveResponse(
     response: HttpResponse<SequenceRowsResponseData>
   ): HttpResponse<CursorResponse<SequenceRow[]>> {
     const { rows, nextCursor, columns } = response.data;

@@ -66,15 +66,15 @@ export abstract class BaseResourceAPI<ResponseType> {
 
   /** @hidden */
   constructor(
-    private readonly resourcePath: string,
-    private readonly httpClient: CDFHttpClient,
-    private map: MetadataMap
+    private readonly _resourcePath: string,
+    private readonly _httpClient: CDFHttpClient,
+    private _map: MetadataMap
   ) {
     this.dateParser = new DateParser(...this.getDateProps());
   }
 
   protected getMetadataMap() {
-    return this.map;
+    return this._map;
   }
 
   /**
@@ -100,10 +100,10 @@ export abstract class BaseResourceAPI<ResponseType> {
   }
 
   protected url(path = '') {
-    return `${this.resourcePath}/${path}`;
+    return `${this._resourcePath}/${path}`;
   }
 
-  private requestWrapper(request: HttpCall) {
+  #requestWrapper(request: HttpCall) {
     return async <ResponseType>(
       path: string,
       options?: HttpRequestOptions
@@ -124,14 +124,14 @@ export abstract class BaseResourceAPI<ResponseType> {
     };
   }
 
-  protected get = this.requestWrapper(
-    this.httpClient.get.bind(this.httpClient)
+  protected get = this.#requestWrapper(
+    this._httpClient.get.bind(this._httpClient)
   );
-  protected post = this.requestWrapper(
-    this.httpClient.post.bind(this.httpClient)
+  protected post = this.#requestWrapper(
+    this._httpClient.post.bind(this._httpClient)
   );
-  protected put = this.requestWrapper(
-    this.httpClient.put.bind(this.httpClient)
+  protected put = this.#requestWrapper(
+    this._httpClient.put.bind(this._httpClient)
   );
 
   protected async createEndpoint<RequestType>(
@@ -142,7 +142,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   ) {
     return this.callEndpointWithMergeAndTransform(
       items,
-      (data) => this.callCreateEndpoint(data, path),
+      (data) => this.#callCreateEndpoint(data, path),
       preRequestModifier,
       postRequestModifier
     );
@@ -155,7 +155,7 @@ export abstract class BaseResourceAPI<ResponseType> {
   ) {
     return this.callEndpointWithMergeAndTransform(
       items,
-      (data) => this.callUpsertEndpoint(data),
+      (data) => this.#callUpsertEndpoint(data),
       preRequestModifier,
       postRequestModifier
     );
@@ -323,7 +323,7 @@ export abstract class BaseResourceAPI<ResponseType> {
     response: T,
     metadata: HttpResponse<R>
   ) {
-    return this.map.addAndReturn(response, metadata);
+    return this._map.addAndReturn(response, metadata);
   }
 
   protected async callEndpointWithMergeAndTransform<RequestType>(
@@ -404,21 +404,18 @@ export abstract class BaseResourceAPI<ResponseType> {
     );
   }
 
-  private async callCreateEndpoint<RequestType>(
-    items: RequestType[],
-    path: string
-  ) {
-    return this.postInSequenceWithAutomaticChunking<RequestType>(path, items);
+  async #callCreateEndpoint<RequestType>(items: RequestType[], path: string) {
+    return this.#postInSequenceWithAutomaticChunking<RequestType>(path, items);
   }
 
-  private async callUpsertEndpoint<RequestType>(
+  async #callUpsertEndpoint<RequestType>(
     items: RequestType[],
     path: string = this.upsertUrl
   ) {
-    return this.postInSequenceWithAutomaticChunking<RequestType>(path, items);
+    return this.#postInSequenceWithAutomaticChunking<RequestType>(path, items);
   }
 
-  private postInSequenceWithAutomaticChunking<RequestType>(
+  #postInSequenceWithAutomaticChunking<RequestType>(
     path: string,
     items: RequestType[],
     params?: HttpQueryParams
