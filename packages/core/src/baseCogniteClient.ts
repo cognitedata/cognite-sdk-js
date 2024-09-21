@@ -64,7 +64,6 @@ export default class BaseCogniteClient {
   private readonly http: CDFHttpClient;
   private readonly metadata: MetadataMap;
   private readonly getOidcToken: () => Promise<string | undefined>;
-  private readonly noAuthMode?: boolean;
   readonly project: string;
   private retryValidator: RetryValidator;
 
@@ -163,9 +162,6 @@ export default class BaseCogniteClient {
 
       if (token === undefined) return token;
 
-      if (this.noAuthMode) {
-        return token;
-      }
       const bearer = bearerString(token);
       this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
       return token;

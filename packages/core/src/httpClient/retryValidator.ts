@@ -51,10 +51,11 @@ export const createUniversalRetryValidator =
     if (retryCount >= maxRetries) {
       return false;
     }
-    // Always retry http 429 too many requests
+    // Always retry http 429 (Too Many Requests)
     if (response.status === 429) {
       return true;
     }
+    // By default, retry requests with HTTP verbs that are meant to be idempotent
     const httpMethodsToRetry = ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT'];
     const isRetryableHttpMethod =
       httpMethodsToRetry.indexOf(request.method.toUpperCase()) !== -1;

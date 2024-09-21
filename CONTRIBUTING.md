@@ -167,3 +167,71 @@ git push && git push --tags
 
 This will make a commit with the updated `package.json`, create a new git tag, and publish to npm.
 Make sure you are logged in to npm, talk to a maintainer.
+
+## Code overview
+
+### HTTP Client
+
+The core of the SDK is the HTTP client. The HTTP client is divided into multiple layers:
+
+1. [BasicHttpClient](./packages/core/src/httpClient/basicHttpClient.ts)
+2. [RetryableHttpClient](./packages/core/src/httpClient/retryableHttpClient.ts)
+3. [CDFHttpClient](./packages/core/src/httpClient/cdfHttpClient.ts)
+
+See each file for a description of what they do.
+
+### Pagination
+
+We have multiple utilities to easy pagination handling. The first entrypoint is [cursorBasedEndpoint](./packages/core/src/baseResourceApi.ts) which adds a `next()` function on the response to fetch the next page of result. Then we use [makeAutoPaginationMethods](./packages/core/src/autoPagination.ts) to add the following methods:
+
+- autoPagingToArray
+  ```ts
+  const assets = await client.assets.list().autoPagingToArray({ limit: 100 });
+  ```
+- autoPagingEach
+  ```ts
+  for await (const asset of client.assets.list().autoPagingEach({ limit: Infinity })) {
+    // ...
+  }
+  ```
+
+### Date parser
+
+Some API responses includes DateTime responses represented as UNIX timestamps. We have utility class to automatically translate the number response into a Javascript [Date instance](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date).
+
+See the [DateParser class](./packages/core/src/dateParser.ts).
+
+### Metadata
+
+We offer users to get hold of the HTTP response status code and headers through the [MetadataMap class](./packages/core/src/metadata.ts).
+
+### Core utilities
+
+- [promiseAllWithData](./packages/core/src/utils.ts)
+- [promiseCache](./packages/core/src/utils.ts)
+- [topologicalSort](./packages/core/src/graphUtils.ts)
+- [RevertableArraySorter](./packages/core/src/revertableArraySorter.ts)
+
+### Cognite Clients
+
+There is a Cognite Client per SDK package:
+- [Core](./packages/core/src/baseCogniteClient.ts)
+- [Stable](./packages/stable/src/cogniteClient.ts)
+- [Beta](./packages/beta/src/cogniteClient.ts)
+- [Alpha](./packages/alpha/src/cogniteClient.ts)
+- [Playground](./packages/playground/src/cogniteClientPlayground.ts)
+- [Template](./packages/template/src/cogniteClient.ts)
+
+The Core one is the base, meaning the others extends from it.
+
+
+#### Authentication
+
+The authentication logic lives in the [core BaseCogniteClient](./packages/core/src/baseCogniteClient.ts).
+The client constructor offer the field `oidcTokenProvider` (formely called `getToken`) where the SDK user will provide a valid access token.
+
+The SDK will call this method when:
+
+- The user calls `authenticate` on the client.
+- The SDK receives a 401 from the API.
+  When multiple requests receives a 401, then only a single call to `oidcTokenProvider` will be invoked. All requests will wait for `oidcTokenProvider` to resolve/reject. If it's resolved, then all the requests will retry before returning the response to the SDK caller. However, if the resolved access token matches the original access token, then no retry will be performed.
