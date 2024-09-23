@@ -1,3 +1,5 @@
+// Copyright 2020 Cognite AS
+
 import path, { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
 import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';

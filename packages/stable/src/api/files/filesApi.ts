@@ -252,6 +252,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * [Init a multipart file upload](https://api-docs.cognite.com/20230101/tag/Files/operation/initMultiPartUpload)
    *
    * ```js
+   * // Each file part must be larger than 5 MiB, and smaller than 4000 MiB. The file part for the last uploadURL can be smaller than 5 MiB.
    * const numberOfParts = 5;
    * // automatic upload:
    * const multiPartUploadApi = await client.files.multipartUploadSession({name: 'examplefile.jpg', mimeType: 'image/jpeg'}, numberOfParts);
@@ -284,7 +285,9 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
       parts < this.limits.minimumNumberOfParts ||
       parts > this.limits.maxNumberOfParts
     ) {
-      throw Error(`parts must be in range ${this.limits.minimumNumberOfParts} <= parts <= and less than ${this.limits.maxNumberOfParts}`);
+      throw Error(
+        `parts must be in range ${this.limits.minimumNumberOfParts} <= parts <= and less than ${this.limits.maxNumberOfParts}`
+      );
     }
     const path = this.url('initmultipartupload');
     const params = { overwrite: overwrite, parts: parts };

@@ -199,11 +199,6 @@ export function setupLoggedInClientForUnitTest() {
   });
 }
 
-export function setupMockableClientForUnitTest() {
-  const client = setupLoggedInClientForUnitTest();
-  return client;
-}
-
 function divideFileIntoChunks(file: string, numChunks: number) {
   // Read the binary file
   const fileContentBinary = readFileSync(file);
