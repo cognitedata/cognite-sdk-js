@@ -284,7 +284,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
       parts < this.limits.minimumNumberOfParts ||
       parts > this.limits.maxNumberOfParts
     ) {
-      throw Error('parts must be greater than 0 and less than 250');
+      throw Error(`parts must be in range ${this.limits.minimumNumberOfParts} <= parts <= and less than ${this.limits.maxNumberOfParts}`);
     }
     const path = this.url('initmultipartupload');
     const params = { overwrite: overwrite, parts: parts };
