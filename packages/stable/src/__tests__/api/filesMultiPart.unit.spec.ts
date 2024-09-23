@@ -1,3 +1,5 @@
+// Copyright 2020 Cognite AS
+
 import { sleepPromise } from '@cognite/sdk-core';
 import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
 import nock from 'nock';
@@ -64,7 +66,9 @@ describe('Multi part upload unit test', () => {
           numberOfParts,
           true
         )
-      ).rejects.toThrowError('parts must be greater than 0 and less than 250');
+      ).rejects.toThrowError(
+        'parts must be in range 0 <= parts <= and less than 250'
+      );
       expect(initAPiNock.isDone()).toBeFalsy();
     }
   );
