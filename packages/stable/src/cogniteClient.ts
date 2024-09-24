@@ -46,6 +46,8 @@ import { ProfilesAPI } from './api/userProfiles/profilesApi';
 import { ViewsAPI } from './api/views/viewsApi';
 import { VisionAPI } from './api/vision/visionApi';
 import { retryValidator } from './retryValidator';
+import { FunctionsAPI } from './api/functions/functionsApi';
+import { SessionsApi } from './api/sessions/sessionsApi';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
@@ -183,6 +185,15 @@ export default class CogniteClient extends BaseCogniteClient {
   public get dataModels() {
     return accessApi(this.dataModelsApi);
   }
+
+  public get functions() {
+    return accessApi(this.functionsApi);
+  }
+
+  public get sessions() {
+    return accessApi(this.sessionsApi);
+  }
+
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   protected dataPointsApi?: DataPointsAPI;
@@ -215,6 +226,8 @@ export default class CogniteClient extends BaseCogniteClient {
   private viewsApi?: ViewsAPI;
   private spacesApi?: SpacesAPI;
   private dataModelsApi?: DataModelsAPI;
+  private functionsApi?: FunctionsAPI;
+  private sessionsApi?: SessionsApi;
 
   protected get version() {
     return version;
@@ -275,6 +288,8 @@ export default class CogniteClient extends BaseCogniteClient {
     this.viewsApi = this.apiFactory(ViewsAPI, 'models/views');
     this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
     this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
+    this.functionsApi = this.apiFactory(FunctionsAPI, 'functions');
+    this.sessionsApi = this.apiFactory(SessionsApi, 'sessions');
   }
 
   static urlEncodeExternalId(externalId: string): string {

@@ -1,0 +1,29 @@
+{
+  "service": "functions",
+  "filter": {
+    "serviceName": "functions",
+    "relevantReferenceNames": [
+      "Function",
+      "FunctionList",
+      "FunctionsLimits",
+      "FunctionListScope",
+      "FunctionDeleteRequest",
+      "FunctionCall",
+      "FunctionCalled",
+      "FunctionCallRequest",
+      "FunctionCallResponse",
+      "FunctionCallListWithCursor",
+      "FunctionCallListScope",
+      "FunctionCallLog",
+      "FunctionsActivation",
+      "FunctionSchedule",
+      "FunctionScheduleList",
+      "FunctionScheduleIds",
+      "FunctionScheduleDataResponse",
+      "FunctionScheduleIdArray"
+    ]
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}

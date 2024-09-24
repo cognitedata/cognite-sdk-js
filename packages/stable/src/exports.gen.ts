@@ -1,5 +1,9 @@
 // Copyright 2022 Cognite AS
-export { EpochTimestamp } from './types.gen';
+export {
+  CogniteExternalId,
+  CogniteInternalId,
+  EpochTimestamp
+} from './types.gen';
 export {
   AnnotationData,
   AnnotationsAssetRef,
@@ -8,12 +12,12 @@ export {
   AnnotationsBoundingVolume,
   AnnotationsBox,
   AnnotationsClassification,
-  AnnotationsCogniteAnnotationTypesDiagramsAssetLink,
-  AnnotationsCogniteAnnotationTypesDiagramsInstanceLink,
-  AnnotationsCogniteAnnotationTypesImagesAssetLink,
-  AnnotationsCogniteAnnotationTypesImagesInstanceLink,
-  AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry,
-  AnnotationsCogniteAnnotationTypesPrimitivesGeometry3DGeometry,
+  AnnotationsCogmonoAnnotationTypesDiagramsAssetLink,
+  AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink,
+  AnnotationsCogmonoAnnotationTypesImagesAssetLink,
+  AnnotationsCogmonoAnnotationTypesImagesInstanceLink,
+  AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry,
+  AnnotationsCogmonoAnnotationTypesPrimitivesGeometry3DGeometry,
   AnnotationsCylinder,
   AnnotationsDetection,
   AnnotationsExtractedText,
@@ -34,11 +38,9 @@ export {
   AnnotationsTextRegion,
   AnnotationsUnhandledSymbolObject,
   AnnotationsUnhandledTextObject,
-  AnnotationsView,
+  AnnotationsView
 } from './api/annotations/types.gen';
 export {
-  CogniteExternalId,
-  CogniteInternalId,
   Document,
   DocumentAggregateFilter,
   DocumentAggregateFilterBool,
@@ -113,8 +115,76 @@ export {
   DocumentsAggregateUniqueValuesResponse,
   DocumentsPreviewTemporaryLinkResponse,
   Label,
-  LabelList,
+  LabelList
 } from './api/documents/types.gen';
+export {
+  ByIdsFunctionCallsRequest,
+  ByIdsFunctionSchedulesRequest,
+  CPURange,
+  Cursor,
+  Data,
+  EpochTimestampRange,
+  Function,
+  FunctionBuildError,
+  FunctionCall,
+  FunctionCallError,
+  FunctionCallFilter,
+  FunctionCallListScope,
+  FunctionCallListWithCursorResponse,
+  FunctionCallLogEntry,
+  FunctionCallLogResponse,
+  FunctionCallRequest,
+  FunctionCallResponse,
+  FunctionCallStatus,
+  FunctionCalledResponse,
+  FunctionCallsWithCursor,
+  FunctionDeleteRequest,
+  FunctionExternalId,
+  FunctionFileId,
+  FunctionFilter,
+  FunctionId,
+  FunctionIdEither,
+  FunctionListResponse,
+  FunctionListScope,
+  FunctionName,
+  FunctionOwner,
+  FunctionSchedule,
+  FunctionScheduleCronExpression,
+  FunctionScheduleDataResponse,
+  FunctionScheduleDescription,
+  FunctionScheduleId,
+  FunctionScheduleIdArray,
+  FunctionScheduleIds,
+  FunctionScheduleListResponse,
+  FunctionScheduleName,
+  FunctionScheduleWhen,
+  FunctionStatus,
+  FunctionsActivationResponse,
+  FunctionsLimitsResponse,
+  IgnoreUnknownIdsField,
+  LimitList,
+  MemoryRange,
+  MetaData,
+  Nonce,
+  PostFunctionSchedulesRequest,
+  PostFunctionsRequest,
+  SessionId
+} from './api/functions/types.gen';
+export {
+  CreateSessionRequest,
+  CreateSessionRequestList,
+  CreateSessionResponse,
+  CreateSessionResponseList,
+  CreateSessionWithClientCredentialsRequest,
+  CreateSessionWithOneshotTokenExchangeRequest,
+  CreateSessionWithTokenExchangeRequest,
+  RevokeSessionRequest,
+  RevokeSessionRequestList,
+  Session,
+  SessionByIds,
+  SessionList,
+  SessionReferenceIds
+} from './api/sessions/types.gen';
 export {
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
@@ -128,7 +198,7 @@ export {
   SpaceCreateDefinition,
   SpaceDefinition,
   SpaceSpecification,
-  UpsertConflict,
+  UpsertConflict
 } from './api/spaces/types.gen';
 export {
   IdentityType,
@@ -141,7 +211,7 @@ export {
   UserProfilesListResponse,
   UserProfilesNotFoundResponse,
   UserProfilesSearchRequest,
-  UserProfilesSearchResponse,
+  UserProfilesSearchResponse
 } from './api/userProfiles/types.gen';
 export {
   AssetTagDetection,
@@ -157,6 +227,8 @@ export {
   FileReference,
   IndustrialObjectDetection,
   IndustrialObjectDetectionParameters,
+  InstanceExternalId,
+  InstanceSpace,
   JobId,
   JobStatus,
   LevelGaugeDetection,
@@ -184,4 +256,5 @@ export {
   VisionExtractPredictions,
   VisionFileExternalId,
   VisionFileId,
+  VisionInstanceId
 } from './api/vision/types.gen';
