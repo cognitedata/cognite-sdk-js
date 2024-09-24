@@ -3368,7 +3368,7 @@ __metadata:
     markdown-link-check: "npm:^3.10.3"
     nock: "npm:13.3.1"
     openapi-types: "npm:^11.0.1"
-    rollup: "npm:^2.22.2"
+    rollup: "npm:^3.29.5"
     swagger-typescript-api-nextgen: "npm:^10.0.1"
     tmp-promise: "npm:^3.0.3"
     ts-node: "npm:^10.8.0"
@@ -11735,16 +11735,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@npm:~2.1.2":
-  version: 2.1.3
-  resolution: "fsevents@npm:2.1.3"
-  dependencies:
-    node-gyp: "npm:latest"
-  checksum: 10c0/87b5933c5e01d17883f5c6d8c84146dc12c75e7f349b465c9e41fb4efe9992cfc6f527e30ef5f96bc24f19ca36d9e7414c0fe2dcd519f6d7649c0668efe12556
-  conditions: os=darwin
-  languageName: node
-  linkType: hard
-
 "fsevents@npm:~2.3.3":
   version: 2.3.3
   resolution: "fsevents@npm:2.3.3"
@@ -11758,15 +11748,6 @@ __metadata:
 "fsevents@patch:fsevents@npm%3A^2.3.2#optional!builtin<compat/fsevents>, fsevents@patch:fsevents@npm%3A~2.3.2#optional!builtin<compat/fsevents>":
   version: 2.3.2
   resolution: "fsevents@patch:fsevents@npm%3A2.3.2#optional!builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
-  dependencies:
-    node-gyp: "npm:latest"
-  conditions: os=darwin
-  languageName: node
-  linkType: hard
-
-"fsevents@patch:fsevents@npm%3A~2.1.2#optional!builtin<compat/fsevents>":
-  version: 2.1.3
-  resolution: "fsevents@patch:fsevents@npm%3A2.1.3#optional!builtin<compat/fsevents>::version=2.1.3&hash=31d12a"
   dependencies:
     node-gyp: "npm:latest"
   conditions: os=darwin
@@ -18991,20 +18972,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.22.2":
-  version: 2.22.2
-  resolution: "rollup@npm:2.22.2"
-  dependencies:
-    fsevents: "npm:~2.1.2"
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  bin:
-    rollup: dist/bin/rollup
-  checksum: 10c0/7c9ba0a1d5e0a14b63e16d5790c1b8fefdb480df4cefc07fca32e28425151b503102b38a88c596116e78fe2e48d3e24f242966f1b24f8c9daa529198c0c0eb4c
-  languageName: node
-  linkType: hard
-
 "rollup@npm:^2.43.1":
   version: 2.79.0
   resolution: "rollup@npm:2.79.0"
@@ -19016,6 +18983,20 @@ __metadata:
   bin:
     rollup: dist/bin/rollup
   checksum: 10c0/dbabfe69bf370422de4356cbfd2611ff11efb69ceb52ade5567b752d728b4882a9db49434c978ba9d7be439967ad8832db4f7d4c7366dbaa668783a7fa8e2676
+  languageName: node
+  linkType: hard
+
+"rollup@npm:^3.29.5":
+  version: 3.29.5
+  resolution: "rollup@npm:3.29.5"
+  dependencies:
+    fsevents: "npm:~2.3.2"
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    rollup: dist/bin/rollup
+  checksum: 10c0/a1fa26f21f0d6cf93b6d05ea284ad5854905b585f28a14c27d439b0f9b859cba13ea25f376303d86770e59b4686bedc52b4706e57442514f0414c6fd3c5b8e71
   languageName: node
   linkType: hard
 
