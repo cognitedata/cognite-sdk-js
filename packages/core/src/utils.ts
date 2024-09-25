@@ -159,8 +159,9 @@ export async function promiseAllWithData<RequestType, ResponseType>(
 
 /**
  * Resolves Promises sequentially
+ *
+ * @hidden
  */
-/** @hidden */
 export async function promiseEachInSequence<RequestType, ResponseType>(
   inputs: RequestType[],
   promiser: (input: RequestType) => Promise<ResponseType>

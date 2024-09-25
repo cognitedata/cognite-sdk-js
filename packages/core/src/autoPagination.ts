@@ -8,7 +8,22 @@ import type {
   ListResponse,
 } from './types';
 
-/** @hidden */
+/**
+ * The `makeAutoPaginationMethods` function generates methods for automatically
+ * paginating through API responses. This is particularly useful when dealing with
+ * APIs that return large sets of data across multiple pages, allowing you to
+ * seamlessly iterate through all available data without manually handling pagination.
+ *
+ * This function typically creates methods that:
+ * - Fetch the next page of results based on the current page's metadata.
+ * - Aggregate results from multiple pages into a single iterable or array.
+ *
+ * @param apiClient - The API client instance used to make requests.
+ * @param initialRequest - The initial request object containing the parameters for the first page.
+ * @returns An iterable or async iterable that yields items from the paginated response.
+ *
+ * @hidden
+ */
 export function makeAutoPaginationMethods<T>(
   firstPagePromise: Promise<ListResponse<T[]>>
 ) {

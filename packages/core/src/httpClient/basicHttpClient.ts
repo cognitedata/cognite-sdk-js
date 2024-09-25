@@ -6,6 +6,31 @@ import { isJson } from '../utils';
 import { HttpError, type HttpErrorData } from './httpError';
 import type { HttpHeaders } from './httpHeaders';
 
+/**
+ * The `BasicHttpClient` class provides a simplified HTTP client for making
+ * requests to a server. It abstracts away the underlying HTTP client and
+ * the complexities of handling different response types and error handling,
+ * making it easier to interact with HTTP APIs.
+ *
+ * This class includes static methods for:
+ * - Validating HTTP status codes.
+ * - Throwing custom error responses.
+ * - Handling JSON, text, and array buffer responses.
+ * - Selecting the appropriate response handler based on the expected response type.
+ *
+ * The `BasicHttpClient` is designed to be used in scenarios where you need to
+ * make HTTP requests and handle responses in a consistent and predictable manner.
+ * It ensures that responses are correctly parsed and that errors are properly
+ * propagated, allowing for robust error handling.
+ *
+ * @remarks
+ * This class relies on the `cross-fetch` library for making HTTP requests,
+ * and it uses custom error and header types defined in the project.
+ *
+ * @see {@link HttpError}
+ * @see {@link HttpHeaders}
+ * @see {@link HttpResponseType}
+ */
 export class BasicHttpClient {
   private static validateStatusCode(status: number) {
     return status >= 200 && status < 300;
