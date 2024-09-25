@@ -1,7 +1,6 @@
 import {
   BaseResourceAPI,
-  CursorResponse,
-  type HttpResponse,
+  type HttpResponse
 } from '@cognite/sdk-core';
 import type {
   FunctionCall,
