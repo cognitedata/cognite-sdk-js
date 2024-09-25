@@ -7,9 +7,8 @@ import {
   type CreateSessionRequestList,
   type CreateSessionResponseList,
   type Session,
-  SessionByIds,
   type SessionList,
-  type SessionReferenceIds,
+  type SessionReferenceIds
 } from './types.gen';
 
 export class SessionsApi extends BaseResourceAPI<Session> {
@@ -20,6 +19,7 @@ export class SessionsApi extends BaseResourceAPI<Session> {
     const [baseUrl, _httpClient, _map] = args;
     this.baseUrl = baseUrl;
   }
+  
   /** Sessions are used to maintain access to CDF resources
    * for an extended period of time.
    *
@@ -30,9 +30,11 @@ export class SessionsApi extends BaseResourceAPI<Session> {
    * become invalid in the following cases 
    * 
    * Example:
+   * ```js
    * client.sessions.create({
-        items: [{ tokenExchange: true }],
-      })
+   *    items: [{ tokenExchange: true }],
+   *  })
+   * ```
    * */
   async create(request: CreateSessionRequestList) {
     return await this.post<CreateSessionResponseList>(this.baseUrl, {

@@ -91,7 +91,9 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    * Function source files stored in the Files API must be deleted separately.
    *
    * Example:
+   * ```js
    * client.functions.delete({ items: { id: [1,2,3] } })
+   * ```
    */
   async delete(
     scope?: IgnoreUnknownIdsField & { items: FunctionIdEither[] }
@@ -116,8 +118,9 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    * to "Create functions" for this purpose.
    * 
    * Example:
+   * ```js
    * client.functions.call( 123, { nonce: 'generated-session-token', data: {} })
-
+   * ```
    */
   async call(functionId: number, request: FunctionCallRequest) {
     return this.functionCallsAPI.call(functionId, request);

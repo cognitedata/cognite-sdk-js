@@ -28,7 +28,9 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
   /**
    * Use advanced filtering options to find function calls.
    *
+   * ```js
    * client.functions.calls.list(123, { filter: { status: "Running"} } )
+   * ```
    */
   async list(functionId: number, scope: FunctionCallListScope) {
     return await this.post<FunctionCallListWithCursorResponse>(
