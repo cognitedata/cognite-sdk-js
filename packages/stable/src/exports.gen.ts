@@ -1,7 +1,5 @@
 // Copyright 2022 Cognite AS
 export {
-  CogniteExternalId,
-  CogniteInternalId,
   EpochTimestamp
 } from './types.gen';
 export {
@@ -41,6 +39,8 @@ export {
   AnnotationsView
 } from './api/annotations/types.gen';
 export {
+  CogniteExternalId,
+  CogniteInternalId,
   Document,
   DocumentAggregateFilter,
   DocumentAggregateFilterBool,

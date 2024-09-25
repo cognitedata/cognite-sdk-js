@@ -24,6 +24,7 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
     super(...args);
 
     const [baseUrl, httpClient, map] = args;
+    console.log("baseUrl", baseUrl);
     this.functionCallsAPI = new FunctionCallsApi(baseUrl, httpClient, map);
   }
 
@@ -32,6 +33,7 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
   }
 
   async list(scope?: LimitList): Promise<HttpResponse<FunctionListResponse>> {
+    console.log("list", this.listPostUrl);
     return await this.post<FunctionListResponse>(this.listPostUrl, {
       data: scope || { limit: 100 }, // default limit
     });

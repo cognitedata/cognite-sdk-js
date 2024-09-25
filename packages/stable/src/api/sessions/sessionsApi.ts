@@ -47,7 +47,7 @@ export class SessionsApi extends BaseResourceAPI<Session> {
    * List of session IDs to retrieve
    */
   async retrieve(scope: SessionReferenceIds) {
-    return await this.post<SessionList>(`${this.baseUrl}`, { data: scope });
+    return await this.post<SessionList>(`${this.baseUrl}/byids`, { data: scope });
   }
 
   /** 
@@ -56,6 +56,6 @@ export class SessionsApi extends BaseResourceAPI<Session> {
    * Revocation of a session may in some cases take up to 1 hour to take effect.
    */
   async revoke(scope: SessionReferenceIds) {
-    return await this.post<SessionList>(`${this.baseUrl}`, { data: scope });
+    return await this.post<SessionList>(`${this.baseUrl}/revoke`, { data: scope });
   }
 }
