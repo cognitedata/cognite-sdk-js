@@ -1,8 +1,8 @@
-import { describe, test, expect, beforeAll, beforeEach } from 'vitest';
-import nock from 'nock';
-import { SessionsApi } from '../../api/sessions/sessionsApi';
 import { CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
-import {
+import nock from 'nock';
+import { beforeAll, beforeEach, describe, expect, test } from 'vitest';
+import { SessionsApi } from '../../api/sessions/sessionsApi';
+import type {
   CreateSessionRequestList,
   CreateSessionResponseList,
   SessionList,
@@ -10,9 +10,8 @@ import {
 } from '../../api/sessions/types.gen';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
-
 describe('SessionsApi', () => {
-    let client: CogniteClient;
+  let client: CogniteClient;
 
   beforeEach(() => {
     nock.cleanAll();
@@ -20,8 +19,12 @@ describe('SessionsApi', () => {
   });
 
   test('create', async () => {
-    const request: CreateSessionRequestList = { items: [{ tokenExchange: true }] };
-    const response: CreateSessionResponseList = { items: [{ id: 1, status: 'ACTIVE', nonce: 'abc' }] };
+    const request: CreateSessionRequestList = {
+      items: [{ tokenExchange: true }],
+    };
+    const response: CreateSessionResponseList = {
+      items: [{ id: 1, status: 'ACTIVE', nonce: 'abc' }],
+    };
 
     nock(mockBaseUrl)
       .post(/\/sessions/)

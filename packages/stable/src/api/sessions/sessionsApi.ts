@@ -1,12 +1,16 @@
-import { BaseResourceAPI, CDFHttpClient, MetadataMap } from "@cognite/sdk-core";
 import {
-  CreateSessionRequestList,
-  CreateSessionResponseList,
-  Session,
+  BaseResourceAPI,
+  type CDFHttpClient,
+  type MetadataMap,
+} from '@cognite/sdk-core';
+import {
+  type CreateSessionRequestList,
+  type CreateSessionResponseList,
+  type Session,
   SessionByIds,
-  SessionList,
-  SessionReferenceIds,
-} from "./types.gen";
+  type SessionList,
+  type SessionReferenceIds,
+} from './types.gen';
 
 export class SessionsApi extends BaseResourceAPI<Session> {
   private baseUrl: string;
@@ -43,19 +47,23 @@ export class SessionsApi extends BaseResourceAPI<Session> {
     return await this.get<SessionList>(`${this.baseUrl}`, { params });
   }
 
-  /** 
+  /**
    * List of session IDs to retrieve
    */
   async retrieve(scope: SessionReferenceIds) {
-    return await this.post<SessionList>(`${this.baseUrl}/byids`, { data: scope });
+    return await this.post<SessionList>(`${this.baseUrl}/byids`, {
+      data: scope,
+    });
   }
 
-  /** 
-   * Revoke access to a session. 
-   * Revocation is idempotent. 
+  /**
+   * Revoke access to a session.
+   * Revocation is idempotent.
    * Revocation of a session may in some cases take up to 1 hour to take effect.
    */
   async revoke(scope: SessionReferenceIds) {
-    return await this.post<SessionList>(`${this.baseUrl}/revoke`, { data: scope });
+    return await this.post<SessionList>(`${this.baseUrl}/revoke`, {
+      data: scope,
+    });
   }
 }

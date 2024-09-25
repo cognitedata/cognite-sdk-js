@@ -1,7 +1,5 @@
 // Copyright 2022 Cognite AS
-export {
-  EpochTimestamp
-} from './types.gen';
+export { EpochTimestamp } from './types.gen';
 export {
   AnnotationData,
   AnnotationsAssetRef,
@@ -36,7 +34,7 @@ export {
   AnnotationsTextRegion,
   AnnotationsUnhandledSymbolObject,
   AnnotationsUnhandledTextObject,
-  AnnotationsView
+  AnnotationsView,
 } from './api/annotations/types.gen';
 export {
   CogniteExternalId,
@@ -115,7 +113,7 @@ export {
   DocumentsAggregateUniqueValuesResponse,
   DocumentsPreviewTemporaryLinkResponse,
   Label,
-  LabelList
+  LabelList,
 } from './api/documents/types.gen';
 export {
   ByIdsFunctionCallsRequest,
@@ -168,7 +166,7 @@ export {
   Nonce,
   PostFunctionSchedulesRequest,
   PostFunctionsRequest,
-  SessionId
+  SessionId,
 } from './api/functions/types.gen';
 export {
   CreateSessionRequest,
@@ -183,7 +181,7 @@ export {
   Session,
   SessionByIds,
   SessionList,
-  SessionReferenceIds
+  SessionReferenceIds,
 } from './api/sessions/types.gen';
 export {
   CursorQueryParameter,
@@ -198,7 +196,7 @@ export {
   SpaceCreateDefinition,
   SpaceDefinition,
   SpaceSpecification,
-  UpsertConflict
+  UpsertConflict,
 } from './api/spaces/types.gen';
 export {
   IdentityType,
@@ -211,7 +209,7 @@ export {
   UserProfilesListResponse,
   UserProfilesNotFoundResponse,
   UserProfilesSearchRequest,
-  UserProfilesSearchResponse
+  UserProfilesSearchResponse,
 } from './api/userProfiles/types.gen';
 export {
   AssetTagDetection,
@@ -256,5 +254,5 @@ export {
   VisionExtractPredictions,
   VisionFileExternalId,
   VisionFileId,
-  VisionInstanceId
+  VisionInstanceId,
 } from './api/vision/types.gen';

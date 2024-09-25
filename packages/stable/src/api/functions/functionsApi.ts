@@ -1,11 +1,12 @@
 import {
   BaseResourceAPI,
-  CDFHttpClient,
-  HttpResponse,
-  MetadataMap,
-} from "@cognite/sdk-core";
-import {
-  Function,
+  type CDFHttpClient,
+  type HttpResponse,
+  type MetadataMap,
+} from '@cognite/sdk-core';
+import { FunctionCallsApi } from './functionCallsApi';
+import type {
+  Function as CogniteFunction,
   FunctionCallRequest,
   FunctionIdEither,
   FunctionListResponse,
@@ -14,17 +15,16 @@ import {
   FunctionsLimitsResponse,
   IgnoreUnknownIdsField,
   LimitList,
-} from "./types.gen";
-import { FunctionCallsApi } from "./functionCallsApi";
+} from './types.gen';
 
-export class FunctionsAPI extends BaseResourceAPI<Function> {
+export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
   private readonly functionCallsAPI: FunctionCallsApi;
 
   constructor(...args: [string, CDFHttpClient, MetadataMap]) {
     super(...args);
 
     const [baseUrl, httpClient, map] = args;
-    console.log("baseUrl", baseUrl);
+    console.log('baseUrl', baseUrl);
     this.functionCallsAPI = new FunctionCallsApi(baseUrl, httpClient, map);
   }
 
@@ -33,7 +33,7 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
   }
 
   async list(scope?: LimitList): Promise<HttpResponse<FunctionListResponse>> {
-    console.log("list", this.listPostUrl);
+    console.log('list', this.listPostUrl);
     return await this.post<FunctionListResponse>(this.listPostUrl, {
       data: scope || { limit: 100 }, // default limit
     });
@@ -61,29 +61,31 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
    */
   async getById(scope: {
     functionId: number;
-  }): Promise<HttpResponse<Function>> {
-    return await this.get<Function>(this.url(scope.functionId.toString()));
+  }): Promise<HttpResponse<CogniteFunction>> {
+    return await this.get<CogniteFunction>(
+      this.url(scope.functionId.toString())
+    );
   }
 
   /**
    * Get activation status
    */
   async status(): Promise<HttpResponse<FunctionsActivationResponse>> {
-    return await this.get<FunctionsActivationResponse>(this.url("status"));
+    return await this.get<FunctionsActivationResponse>(this.url('status'));
   }
 
   /**
    * Service limits for the associated project.
    * */
   async limits(): Promise<HttpResponse<FunctionsLimitsResponse>> {
-    return await this.get<FunctionsLimitsResponse>(this.url("limits"));
+    return await this.get<FunctionsLimitsResponse>(this.url('limits'));
   }
 
   /**
    * Activate Cognite Functions. This will create the necessary backend infrastructure for Cognite Functions.
    */
   async activate(): Promise<HttpResponse<FunctionsActivationResponse>> {
-    return await this.post<FunctionsActivationResponse>(this.url("status"));
+    return await this.post<FunctionsActivationResponse>(this.url('status'));
   }
 
   /**
@@ -96,7 +98,7 @@ export class FunctionsAPI extends BaseResourceAPI<Function> {
   async delete(
     scope?: IgnoreUnknownIdsField & { items: FunctionIdEither[] }
   ): Promise<HttpResponse<void>> {
-    return await this.post<void>(this.url("delete"), {
+    return await this.post<void>(this.url('delete'), {
       data: scope,
     });
   }

@@ -1,17 +1,17 @@
 import {
   BaseResourceAPI,
   CursorResponse,
-  HttpResponse,
-} from "@cognite/sdk-core";
-import {
+  type HttpResponse,
+} from '@cognite/sdk-core';
+import type {
   FunctionCall,
-  FunctionCalledResponse,
   FunctionCallListScope,
   FunctionCallListWithCursorResponse,
   FunctionCallLogResponse,
   FunctionCallRequest,
   FunctionCallResponse,
-} from "./types.gen";
+  FunctionCalledResponse,
+} from './types.gen';
 
 export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
   async call(
@@ -28,7 +28,7 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
 
   /**
    * Use advanced filtering options to find function calls.
-   * 
+   *
    * client.functions.calls.list(123, { filter: { status: "Running"} } )
    */
   async list(functionId: number, scope: FunctionCallListScope) {
@@ -39,7 +39,7 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
       }
     );
   }
-  
+
   /**
    * Get logs from a function call.
    */
@@ -57,5 +57,4 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
       this.url(`${functionId}/calls/${callId}/response`)
     );
   }
-
 }

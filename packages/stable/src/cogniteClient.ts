@@ -21,6 +21,7 @@ import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
 import { FilesAPI } from './api/files/filesApi';
+import { FunctionsAPI } from './api/functions/functionsApi';
 import { GeospatialAPI } from './api/geospatial/geospatialAPI';
 import { GroupsAPI } from './api/groups/groupsApi';
 import { InstancesAPI } from './api/instances/instancesApi';
@@ -32,6 +33,7 @@ import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
 import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
+import { SessionsApi } from './api/sessions/sessionsApi';
 import { SpacesAPI } from './api/spaces/spacesApi';
 import {
   TemplateGraphQlApi,
@@ -46,8 +48,6 @@ import { ProfilesAPI } from './api/userProfiles/profilesApi';
 import { ViewsAPI } from './api/views/viewsApi';
 import { VisionAPI } from './api/vision/visionApi';
 import { retryValidator } from './retryValidator';
-import { FunctionsAPI } from './api/functions/functionsApi';
-import { SessionsApi } from './api/sessions/sessionsApi';
 
 export default class CogniteClient extends BaseCogniteClient {
   public get assets() {
