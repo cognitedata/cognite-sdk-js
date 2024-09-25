@@ -3,12 +3,12 @@ import {
   type CDFHttpClient,
   type MetadataMap,
 } from '@cognite/sdk-core';
-import {
-  type CreateSessionRequestList,
-  type CreateSessionResponseList,
-  type Session,
-  type SessionList,
-  type SessionReferenceIds
+import type {
+  CreateSessionRequestList,
+  CreateSessionResponseList,
+  Session,
+  SessionList,
+  SessionReferenceIds,
 } from './types.gen';
 
 export class SessionsApi extends BaseResourceAPI<Session> {
@@ -19,7 +19,7 @@ export class SessionsApi extends BaseResourceAPI<Session> {
     const [baseUrl, _httpClient, _map] = args;
     this.baseUrl = baseUrl;
   }
-  
+
   /** Sessions are used to maintain access to CDF resources
    * for an extended period of time.
    *
@@ -27,8 +27,8 @@ export class SessionsApi extends BaseResourceAPI<Session> {
    * are client credentials and token exchange.
    *
    * Sessions depend on the project OIDC configuration and may
-   * become invalid in the following cases 
-   * 
+   * become invalid in the following cases
+   *
    * Example:
    * ```js
    * client.sessions.create({

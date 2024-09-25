@@ -116,7 +116,7 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
    *
    * There is a dedicated secrets object in the request body
    * to "Create functions" for this purpose.
-   * 
+   *
    * Example:
    * ```js
    * client.functions.call( 123, { nonce: 'generated-session-token', data: {} })

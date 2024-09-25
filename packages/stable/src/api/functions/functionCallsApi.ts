@@ -1,7 +1,4 @@
-import {
-  BaseResourceAPI,
-  type HttpResponse
-} from '@cognite/sdk-core';
+import { BaseResourceAPI, type HttpResponse } from '@cognite/sdk-core';
 import type {
   FunctionCall,
   FunctionCallListScope,
