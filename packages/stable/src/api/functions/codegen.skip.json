@@ -1,4 +1,5 @@
 {
+  "_": "Due to issue with codegen duplicating types, we skip this for now.",
   "service": "functions",
   "filter": {
     "serviceName": "functions",

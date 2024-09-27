@@ -27,16 +27,35 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
     this.functionCallsAPI = new FunctionCallsApi(baseUrl, httpClient, map);
   }
 
+  /**
+   * @hidden
+   */
   public get calls() {
     return this.functionCallsAPI;
   }
 
+  /**
+   * [List functions](https://api-docs.cognite.com/20230101/tag/Functions/operation/getFunctions)
+   * 
+   * ```js
+   * client.functions.list({ limit: 100 })
+   * ```
+   * 
+   */
   async list(scope?: LimitList): Promise<HttpResponse<FunctionListResponse>> {
     return await this.post<FunctionListResponse>(this.listPostUrl, {
       data: scope || { limit: 100 }, // default limit
     });
   }
 
+  /**
+   * [Filter functions](https://api-docs.cognite.com/20230101/tag/Functions/operation/listFunctions)
+   * 
+   * ```js
+   * client.functions.filter({ filter: { name: 'test' } })
+   * ```
+   * 
+   */
   async filter(
     scope?: FunctionListScope
   ): Promise<HttpResponse<FunctionListResponse>> {
@@ -45,6 +64,14 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
     });
   }
 
+  /**
+   * [Retrieve functions](https://api-docs.cognite.com/20230101/tag/Functions/operation/byIdsFunctions)
+   * 
+   * ```js
+   * client.functions.retrieve({ items: [{ id: '123' }] })
+   * ```
+   * 
+   */
   async retrieve(
     scope?: IgnoreUnknownIdsField & { items: FunctionIdEither[] }
   ): Promise<HttpResponse<FunctionListResponse>> {
@@ -54,8 +81,11 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
   }
 
   /**
-   * Retrieve a function by its id.
-   * If you want to retrieve functions by names, use Retrieve functions instead.
+   * [Retrieve a function by its id](https://api-docs.cognite.com/20230101/tag/Functions/operation/getFunction)
+   * 
+   * ```js
+   * client.functions.getById({ functionId: 1 })
+   * ```
    */
   async getById(scope: {
     functionId: number;
@@ -66,31 +96,37 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
   }
 
   /**
-   * Get activation status
+   * [Get activation status](https://api-docs.cognite.com/20230101/tag/Functions/operation/getFunctionsStatus)
+   * 
+   * ```js
+   * client.functions.status()
+   * ```
    */
   async status(): Promise<HttpResponse<FunctionsActivationResponse>> {
     return await this.get<FunctionsActivationResponse>(this.url('status'));
   }
 
   /**
-   * Service limits for the associated project.
-   * */
+   * @hidden
+   */
   async limits(): Promise<HttpResponse<FunctionsLimitsResponse>> {
     return await this.get<FunctionsLimitsResponse>(this.url('limits'));
   }
 
   /**
-   * Activate Cognite Functions. This will create the necessary backend infrastructure for Cognite Functions.
+   * [Activate Cognite Functions](https://api-docs.cognite.com/20230101/tag/Functions/operation/postFunctionsStatus)
+   * 
+   * ```js
+   * client.functions.activate()
+   * ```
    */
   async activate(): Promise<HttpResponse<FunctionsActivationResponse>> {
     return await this.post<FunctionsActivationResponse>(this.url('status'));
   }
 
   /**
-   * Delete functions. You can delete a maximum of 10 functions per request.
-   * Function source files stored in the Files API must be deleted separately.
-   *
-   * Example:
+   * [Delete functions](https://api-docs.cognite.com/20230101/tag/Functions/operation/deleteFunctions)
+   * 
    * ```js
    * client.functions.delete({ items: { id: [1,2,3] } })
    * ```
@@ -104,20 +140,8 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
   }
 
   /**
-   * Perform a function call. To provide input data to the function,
-   * add the data in an object called data in the request body.
-   *
-   * It will be available as the data argument into the function.
-   * Info about the function call at runtime can be obtained through
-   * the function_call_info argument if added in the function handle.
-   *
-   * WARNING: Secrets or other confidential information
-   * should not be passed via the data object.
-   *
-   * There is a dedicated secrets object in the request body
-   * to "Create functions" for this purpose.
-   *
-   * Example:
+   * [Call a function asynchronously](https://api-docs.cognite.com/20230101/tag/Function-calls/operation/postFunctionsCall)
+   * 
    * ```js
    * client.functions.call( 123, { nonce: 'generated-session-token', data: {} })
    * ```

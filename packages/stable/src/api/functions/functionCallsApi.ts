@@ -10,6 +10,10 @@ import type {
 } from './types.gen';
 
 export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
+
+  /**
+   * @hidden
+   */
   async call(
     functionId: number,
     request: FunctionCallRequest
@@ -23,7 +27,7 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
   }
 
   /**
-   * Use advanced filtering options to find function calls.
+   * [List function calls](https://api-docs.cognite.com/20230101/tag/Function-calls/operation/getFunctionCalls)
    *
    * ```js
    * client.functions.calls.list(123, { filter: { status: "Running"} } )
@@ -39,7 +43,11 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
   }
 
   /**
-   * Get logs from a function call.
+   * [Retrieve logs for function call](https://api-docs.cognite.com/20230101/tag/Function-calls/operation/getFunctionCallLogs)
+   * 
+   * ```js
+   * client.functions.calls.logs("123", "456")
+   * ```
    */
   async logs(callId: string, functionId: string) {
     return await this.get<FunctionCallLogResponse>(
@@ -48,7 +56,11 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
   }
 
   /**
-   * Retrieve response from a function call.
+   * [Retrieve response from a function call](https://api-docs.cognite.com/20230101/tag/Function-calls/operation/getFunctionCallResponse)
+   * 
+   * ```js
+   * client.functions.calls.response("123", "456")
+   * ```
    */
   async response(callId: string, functionId: string) {
     return await this.get<FunctionCallResponse>(

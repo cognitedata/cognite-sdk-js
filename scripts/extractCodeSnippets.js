@@ -24,7 +24,13 @@ function findAllCodeSnippetsInJsDoc(jsDoc) {
       if (!codeSnippets.has(operationId)) {
         codeSnippets.set(operationId, []);
       }
-      codeSnippets.get(operationId).push(stripMarkdownCodeSnippet(rawCode));
+
+      try {
+        codeSnippets.get(operationId).push(stripMarkdownCodeSnippet(rawCode));
+      } catch (e) {
+        console.error(`Error in operation ${operationId} with code snippet: ${rawCode}, value: ${value}`);
+      }
+      
     }
   });
   // comments appears two times in jsdoc...

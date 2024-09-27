@@ -75,7 +75,7 @@ export interface EpochTimestampRange {
 }
 export interface Function {
   /**
-   * Number of CPU cores per function. Allowed range and default value are given by the [limits endpoint](https://developer.cognite.com/api#tag/Functions/operation/functionsLimits). On Azure, only the default value is used.
+   * Number of CPU cores per function. Allowed range and default value are given by the [limits endpoint]
    * @format float
    * @example 1
    */
@@ -129,7 +129,7 @@ export interface Function {
    */
   indexUrl?: string;
   /**
-   * Memory per function measured in GB. Allowed range and default value are given by the [limits endpoint](https://developer.cognite.com/api#tag/Functions/operation/functionsLimits). On Azure, only the default value is used.
+   * Memory per function measured in GB. Allowed range and default value are given by the [limits endpoint]. On Azure, only the default value is used.
    * @format float
    * @example 1.5
    */
