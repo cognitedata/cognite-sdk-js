@@ -36,11 +36,11 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
 
   /**
    * [List functions](https://api-docs.cognite.com/20230101/tag/Functions/operation/getFunctions)
-   * 
+   *
    * ```js
    * client.functions.list({ limit: 100 })
    * ```
-   * 
+   *
    */
   async list(scope?: LimitList): Promise<HttpResponse<FunctionListResponse>> {
     return await this.post<FunctionListResponse>(this.listPostUrl, {
@@ -50,11 +50,11 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
 
   /**
    * [Filter functions](https://api-docs.cognite.com/20230101/tag/Functions/operation/listFunctions)
-   * 
+   *
    * ```js
    * client.functions.filter({ filter: { name: 'test' } })
    * ```
-   * 
+   *
    */
   async filter(
     scope?: FunctionListScope
@@ -66,11 +66,11 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
 
   /**
    * [Retrieve functions](https://api-docs.cognite.com/20230101/tag/Functions/operation/byIdsFunctions)
-   * 
+   *
    * ```js
    * client.functions.retrieve({ items: [{ id: '123' }] })
    * ```
-   * 
+   *
    */
   async retrieve(
     scope?: IgnoreUnknownIdsField & { items: FunctionIdEither[] }
@@ -82,7 +82,7 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
 
   /**
    * [Retrieve a function by its id](https://api-docs.cognite.com/20230101/tag/Functions/operation/getFunction)
-   * 
+   *
    * ```js
    * client.functions.getById({ functionId: 1 })
    * ```
@@ -97,7 +97,7 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
 
   /**
    * [Get activation status](https://api-docs.cognite.com/20230101/tag/Functions/operation/getFunctionsStatus)
-   * 
+   *
    * ```js
    * client.functions.status()
    * ```
@@ -115,7 +115,7 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
 
   /**
    * [Activate Cognite Functions](https://api-docs.cognite.com/20230101/tag/Functions/operation/postFunctionsStatus)
-   * 
+   *
    * ```js
    * client.functions.activate()
    * ```
@@ -126,7 +126,7 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
 
   /**
    * [Delete functions](https://api-docs.cognite.com/20230101/tag/Functions/operation/deleteFunctions)
-   * 
+   *
    * ```js
    * client.functions.delete({ items: { id: [1,2,3] } })
    * ```
@@ -141,7 +141,7 @@ export class FunctionsAPI extends BaseResourceAPI<CogniteFunction> {
 
   /**
    * [Call a function asynchronously](https://api-docs.cognite.com/20230101/tag/Function-calls/operation/postFunctionsCall)
-   * 
+   *
    * ```js
    * client.functions.call( 123, { nonce: 'generated-session-token', data: {} })
    * ```

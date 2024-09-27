@@ -9,12 +9,9 @@
  * @max 9007199254740991
  */
 export type CogniteInternalId = number;
-export type CreateSessionRequest =
-  | CreateSessionWithClientCredentialsRequest
-  | CreateSessionWithTokenExchangeRequest
-  | CreateSessionWithOneshotTokenExchangeRequest;
+export type CreateSessionRequest = CreateSessionWithClientCredentialsRequest | CreateSessionWithTokenExchangeRequest | CreateSessionWithOneshotTokenExchangeRequest;
 export interface CreateSessionRequestList {
-  items?: CreateSessionRequest[];
+    items?: CreateSessionRequest[];
 }
 /**
 * A response with the ID, nonce and other information related to the session. The nonce
@@ -22,49 +19,43 @@ is short-lived and should be immediately passed to the endpoint that will use
 the session.
 */
 export interface CreateSessionResponse {
-  /** Client ID in identity provider. Returned only if the session was created using client credentials */
-  clientId?: string;
-  /** ID of the session */
-  id: number;
-  /** Nonce to be passed to the internal service that will bind the session */
-  nonce: string;
-  /** Current status of the session */
-  status:
-    | 'READY'
-    | 'ACTIVE'
-    | 'CANCELLED'
-    | 'EXPIRED'
-    | 'REVOKED'
-    | 'ACCESS_LOST';
-  /** Values reserved for future use */
-  type?: 'CLIENT_CREDENTIALS' | 'TOKEN_EXCHANGE' | 'ONESHOT_TOKEN_EXCHANGE';
+    /** Client ID in identity provider. Returned only if the session was created using client credentials */
+    clientId?: string;
+    /** ID of the session */
+    id: number;
+    /** Nonce to be passed to the internal service that will bind the session */
+    nonce: string;
+    /** Current status of the session */
+    status: "READY" | "ACTIVE" | "CANCELLED" | "EXPIRED" | "REVOKED" | "ACCESS_LOST";
+    /** Values reserved for future use */
+    type?: "CLIENT_CREDENTIALS" | "TOKEN_EXCHANGE" | "ONESHOT_TOKEN_EXCHANGE";
 }
 export interface CreateSessionResponseList {
-  items?: CreateSessionResponse[];
+    items?: CreateSessionResponse[];
 }
 /**
  * Credentials for a session using client credentials from an identity provider.
  */
 export interface CreateSessionWithClientCredentialsRequest {
-  /** Client ID in identity provider */
-  clientId: string;
-  /** Client secret in identity provider */
-  clientSecret: string;
+    /** Client ID in identity provider */
+    clientId: string;
+    /** Client secret in identity provider */
+    clientSecret: string;
 }
 /**
 * Credentials for a session using one-shot token exchange to reuse the user's credentials.
 One-shot sessions are short-lived sessions that are not refreshed and do not require support for token exchange from the identity provider.
 */
 export interface CreateSessionWithOneshotTokenExchangeRequest {
-  /** Use one-shot token exchange for the session. Must be `true`. */
-  oneshotTokenExchange: true;
+    /** Use one-shot token exchange for the session. Must be `true`. */
+    oneshotTokenExchange: true;
 }
 /**
  * Credentials for a session using token exchange to reuse the user's credentials.
  */
 export interface CreateSessionWithTokenExchangeRequest {
-  /** Use token exchange for the session. Must be `true`. */
-  tokenExchange: true;
+    /** Use token exchange for the session. Must be `true`. */
+    tokenExchange: true;
 }
 /**
  * The number of milliseconds since 00:00:00 Thursday, 1 January 1970, Coordinated Universal Time (UTC), minus leap seconds.
@@ -73,44 +64,38 @@ export interface CreateSessionWithTokenExchangeRequest {
  */
 export type EpochTimestamp = number;
 export interface RevokeSessionRequest {
-  /** ID of the session */
-  id: number;
+    /** ID of the session */
+    id: number;
 }
 export interface RevokeSessionRequestList {
-  items?: RevokeSessionRequest[];
+    items?: RevokeSessionRequest[];
 }
 export interface Session {
-  /** Client ID in identity provider. Returned only if the session was created using client credentials */
-  clientId?: string;
-  /** Session creation time, in milliseconds since 1970 */
-  creationTime?: EpochTimestamp;
-  /** Session expiry time, in milliseconds since 1970. This value is updated on refreshing a token */
-  expirationTime?: EpochTimestamp;
-  /** ID of the session */
-  id?: number;
-  /** Current status of the session */
-  status?:
-    | 'READY'
-    | 'ACTIVE'
-    | 'CANCELLED'
-    | 'EXPIRED'
-    | 'REVOKED'
-    | 'ACCESS_LOST';
-  /** Values reserved for future use */
-  type?: 'CLIENT_CREDENTIALS' | 'TOKEN_EXCHANGE' | 'ONESHOT_TOKEN_EXCHANGE';
+    /** Client ID in identity provider. Returned only if the session was created using client credentials */
+    clientId?: string;
+    /** Session creation time, in milliseconds since 1970 */
+    creationTime?: EpochTimestamp;
+    /** Session expiry time, in milliseconds since 1970. This value is updated on refreshing a token */
+    expirationTime?: EpochTimestamp;
+    /** ID of the session */
+    id?: number;
+    /** Current status of the session */
+    status?: "READY" | "ACTIVE" | "CANCELLED" | "EXPIRED" | "REVOKED" | "ACCESS_LOST";
+    /** Values reserved for future use */
+    type?: "CLIENT_CREDENTIALS" | "TOKEN_EXCHANGE" | "ONESHOT_TOKEN_EXCHANGE";
 }
 export interface SessionByIds {
-  items?: Session[];
+    items?: Session[];
 }
 export interface SessionList {
-  items?: Session[];
-  /** Cursor to get the next page of results (if available). */
-  nextCursor?: string;
-  /** Cursor to get the previous page of results (if available). */
-  previousCursor?: string;
+    items?: Session[];
+    /** Cursor to get the next page of results (if available). */
+    nextCursor?: string;
+    /** Cursor to get the previous page of results (if available). */
+    previousCursor?: string;
 }
 export interface SessionReferenceIds {
-  items: {
-    id: CogniteInternalId;
-  }[];
+    items: {
+        id: CogniteInternalId;
+    }[];
 }

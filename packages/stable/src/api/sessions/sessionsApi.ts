@@ -20,9 +20,9 @@ export class SessionsApi extends BaseResourceAPI<Session> {
     this.baseUrl = baseUrl;
   }
 
-  /** 
+  /**
    * [Create a session](https://api-docs.cognite.com/20230101/tag/Sessions/operation/createSessions)
-   * 
+   *
    * ```js
    * client.sessions.create({
    *    items: [{ tokenExchange: true }],
@@ -37,7 +37,7 @@ export class SessionsApi extends BaseResourceAPI<Session> {
 
   /**
    * [List sessions](https://api-docs.cognite.com/20230101/tag/Sessions/operation/listSessions)
-   * 
+   *
    * ```js
    * client.sessions.list({ status: 'ACTIVE' })
    * ```
@@ -48,7 +48,7 @@ export class SessionsApi extends BaseResourceAPI<Session> {
 
   /**
    * [Retrieve sessions with given IDs](https://api-docs.cognite.com/20230101/tag/Sessions/operation/getSessionsByIds)
-   * 
+   *
    * ```js
    * client.sessions.retrieve({ items: [{ id: 1 }] })
    * ```
@@ -61,7 +61,7 @@ export class SessionsApi extends BaseResourceAPI<Session> {
 
   /**
    * [Revoke access to a session](https://api-docs.cognite.com/20230101/tag/Sessions/operation/revokeSessions)
-   * 
+   *
    * ```js
    * client.sessions.revoke({ items: [{ id: 1 }] })
    * ```

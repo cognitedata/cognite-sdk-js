@@ -1,5 +1,8 @@
 // Copyright 2022 Cognite AS
-export { EpochTimestamp } from './types.gen';
+export {
+  CogniteInternalId,
+  EpochTimestamp
+} from './types.gen';
 export {
   AnnotationData,
   AnnotationsAssetRef,
@@ -34,11 +37,10 @@ export {
   AnnotationsTextRegion,
   AnnotationsUnhandledSymbolObject,
   AnnotationsUnhandledTextObject,
-  AnnotationsView,
+  AnnotationsView
 } from './api/annotations/types.gen';
 export {
   CogniteExternalId,
-  CogniteInternalId,
   Document,
   DocumentAggregateFilter,
   DocumentAggregateFilterBool,
@@ -113,61 +115,8 @@ export {
   DocumentsAggregateUniqueValuesResponse,
   DocumentsPreviewTemporaryLinkResponse,
   Label,
-  LabelList,
+  LabelList
 } from './api/documents/types.gen';
-export {
-  ByIdsFunctionCallsRequest,
-  ByIdsFunctionSchedulesRequest,
-  CPURange,
-  Cursor,
-  Data,
-  EpochTimestampRange,
-  Function,
-  FunctionBuildError,
-  FunctionCall,
-  FunctionCallError,
-  FunctionCallFilter,
-  FunctionCallListScope,
-  FunctionCallListWithCursorResponse,
-  FunctionCallLogEntry,
-  FunctionCallLogResponse,
-  FunctionCallRequest,
-  FunctionCallResponse,
-  FunctionCallStatus,
-  FunctionCalledResponse,
-  FunctionCallsWithCursor,
-  FunctionDeleteRequest,
-  FunctionExternalId,
-  FunctionFileId,
-  FunctionFilter,
-  FunctionId,
-  FunctionIdEither,
-  FunctionListResponse,
-  FunctionListScope,
-  FunctionName,
-  FunctionOwner,
-  FunctionSchedule,
-  FunctionScheduleCronExpression,
-  FunctionScheduleDataResponse,
-  FunctionScheduleDescription,
-  FunctionScheduleId,
-  FunctionScheduleIdArray,
-  FunctionScheduleIds,
-  FunctionScheduleListResponse,
-  FunctionScheduleName,
-  FunctionScheduleWhen,
-  FunctionStatus,
-  FunctionsActivationResponse,
-  FunctionsLimitsResponse,
-  IgnoreUnknownIdsField,
-  LimitList,
-  MemoryRange,
-  MetaData,
-  Nonce,
-  PostFunctionSchedulesRequest,
-  PostFunctionsRequest,
-  SessionId,
-} from './api/functions/types.gen';
 export {
   CreateSessionRequest,
   CreateSessionRequestList,
@@ -181,7 +130,7 @@ export {
   Session,
   SessionByIds,
   SessionList,
-  SessionReferenceIds,
+  SessionReferenceIds
 } from './api/sessions/types.gen';
 export {
   CursorQueryParameter,
@@ -196,7 +145,7 @@ export {
   SpaceCreateDefinition,
   SpaceDefinition,
   SpaceSpecification,
-  UpsertConflict,
+  UpsertConflict
 } from './api/spaces/types.gen';
 export {
   IdentityType,
@@ -209,7 +158,7 @@ export {
   UserProfilesListResponse,
   UserProfilesNotFoundResponse,
   UserProfilesSearchRequest,
-  UserProfilesSearchResponse,
+  UserProfilesSearchResponse
 } from './api/userProfiles/types.gen';
 export {
   AssetTagDetection,
@@ -254,5 +203,5 @@ export {
   VisionExtractPredictions,
   VisionFileExternalId,
   VisionFileId,
-  VisionInstanceId,
+  VisionInstanceId
 } from './api/vision/types.gen';

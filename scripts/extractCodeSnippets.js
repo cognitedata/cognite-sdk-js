@@ -28,9 +28,10 @@ function findAllCodeSnippetsInJsDoc(jsDoc) {
       try {
         codeSnippets.get(operationId).push(stripMarkdownCodeSnippet(rawCode));
       } catch (e) {
-        console.error(`Error in operation ${operationId} with code snippet: ${rawCode}, value: ${value}`);
+        console.error(
+          `Error in operation ${operationId} with code snippet: ${rawCode}, value: ${value}`
+        );
       }
-      
     }
   });
   // comments appears two times in jsdoc...

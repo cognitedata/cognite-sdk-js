@@ -10,7 +10,6 @@ import type {
 } from './types.gen';
 
 export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
-
   /**
    * @hidden
    */
@@ -44,7 +43,7 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
 
   /**
    * [Retrieve logs for function call](https://api-docs.cognite.com/20230101/tag/Function-calls/operation/getFunctionCallLogs)
-   * 
+   *
    * ```js
    * client.functions.calls.logs("123", "456")
    * ```
@@ -57,7 +56,7 @@ export class FunctionCallsApi extends BaseResourceAPI<FunctionCall> {
 
   /**
    * [Retrieve response from a function call](https://api-docs.cognite.com/20230101/tag/Function-calls/operation/getFunctionCallResponse)
-   * 
+   *
    * ```js
    * client.functions.calls.response("123", "456")
    * ```
