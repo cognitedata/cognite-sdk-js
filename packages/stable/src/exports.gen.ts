@@ -1,6 +1,7 @@
 // Copyright 2022 Cognite AS
 export {
   CogniteInternalId,
+  CogniteExternalId,
   EpochTimestamp,
 } from './types.gen';
 export {
@@ -40,7 +41,6 @@ export {
   AnnotationsView,
 } from './api/annotations/types.gen';
 export {
-  CogniteExternalId,
   Document,
   DocumentAggregateFilter,
   DocumentAggregateFilterBool,
@@ -205,3 +205,16 @@ export {
   VisionFileId,
   VisionInstanceId,
 } from './api/vision/types.gen';
+
+export {
+  Function as CogniteFunction,
+  FunctionListResponse,
+  FunctionListScope,
+  FunctionsActivationResponse,
+  FunctionsLimitsResponse,
+  FunctionCallRequest,
+  FunctionCalledResponse,
+  FunctionCallListWithCursorResponse,
+  FunctionCallLogResponse,
+  FunctionCallResponse,
+} from './api/functions/types.gen';
