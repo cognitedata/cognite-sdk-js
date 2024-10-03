@@ -5,6 +5,7 @@ import { mockBaseUrl } from '@cognite/sdk-core/src/__tests__/testUtils';
 import { randomInt } from '@cognite/sdk-core/src/__tests__/testUtils';
 import CogniteClient from '../cogniteClient';
 import { login } from './login';
+
 function setupClient(baseUrl: string = process.env.COGNITE_BASE_URL as string) {
   return new CogniteClient({
     appId: 'JS SDK integration tests',
@@ -183,13 +184,15 @@ const getFileCreateArgs = (
 
   return { postfix, fileContent, sourceCreatedTime, localFileMeta };
 };
+
 export function setupMockableClientForIntegrationTests() {
   const client = setupClient(process.env.COGNITE_BASE_URL);
   return client;
 }
+
 export function setupLoggedInClientForUnitTest() {
   return new CogniteClient({
-    appId: 'JS SDK integration tests (beta)',
+    appId: 'JS SDK integration tests',
     baseUrl: process.env.COGNITE_BASE_URL,
     project: process.env.COGNITE_PROJECT as string,
     getToken: () =>
@@ -218,6 +221,7 @@ function divideFileIntoChunks(file: string, numChunks: number) {
 
   return chunks;
 }
+
 function toArrayBuffer(buffer: Buffer) {
   const arrayBuffer = new ArrayBuffer(buffer.length);
   const view = new Uint8Array(arrayBuffer);
@@ -226,6 +230,7 @@ function toArrayBuffer(buffer: Buffer) {
   }
   return arrayBuffer;
 }
+
 function getFileStats(filePath: string) {
   const fileStats = statSync(filePath);
   const fileSizeInBytes = fileStats.size;
@@ -238,6 +243,7 @@ function getFileStats(filePath: string) {
   const numberOfParts = Math.ceil(fileSizeInBytes / chunkSize);
   return { fileSizeInBytes, chunkSize, numberOfParts };
 }
+
 async function* divideFileIntoStreams(
   filePath: string,
   fileSizeInBytes: number,

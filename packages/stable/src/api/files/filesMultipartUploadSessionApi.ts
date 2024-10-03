@@ -33,13 +33,15 @@ export class FilesMultipartUploadSessionAPI extends BaseResourceAPI<FileInfo> {
   ): Promise<undefined | MultiPartFileChunkResponse> {
     const hasFileContent = fileContent != null;
     if (!hasFileContent) {
-      throw Error('you are uploading an empty content');
+      throw Error('you are uploading empty content');
     }
     if (
       partNumber < 0 ||
       partNumber >= this.multiPartFileUploadResponse.uploadUrls.length
     ) {
-      throw Error('part number is greater than the number of parts');
+      throw Error(
+        `part number is outside allowed range 0 to ${this.multiPartFileUploadResponse.uploadUrls.length - 1}`
+      );
     }
     if (this.canCompleteUpload()) {
       await this.completeMultiPartUpload();

@@ -66,9 +66,7 @@ describe('Multi part upload unit test', () => {
           numberOfParts,
           true
         )
-      ).rejects.toThrowError(
-        'parts must be in range 1 <= parts <= and less than 250'
-      );
+      ).rejects.toThrowError('parts must be in range 1 <= parts <= 250');
       expect(initAPiNock.isDone()).toBeFalsy();
     }
   );
