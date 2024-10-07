@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.16.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.7...@cognite/sdk@9.16.0) (2024-10-07)
+
+
+### Features
+
+* **files:** move multipart functionality to stable [BND3D-4545] ([#1132](https://github.com/cognitedata/cognite-sdk-js/issues/1132)) ([1e33003](https://github.com/cognitedata/cognite-sdk-js/commit/1e33003f364ad0932cca24ea2a9d457ac382f9ec))
+
+
+
+
+
 ## [9.15.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.5...@cognite/sdk@9.15.7) (2024-08-26)
 
 

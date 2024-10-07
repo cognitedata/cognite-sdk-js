@@ -5,7 +5,7 @@
   "homepage": "https://github.com/cognitedata/cognite-sdk-js#readme",
   "main": "dist/index.js",
   "types": "dist/src/index.d.js",
-  "version": "9.15.7",
+  "version": "9.16.0",
   "scripts": {
     "clean": "rm -rf dist/ docs/ codeSnippets/",
     "test": "yarn g:vitest run",
