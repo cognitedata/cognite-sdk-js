@@ -1,5 +1,8 @@
 // Copyright 2022 Cognite AS
-export { EpochTimestamp } from './types.gen';
+export {
+  CogniteInternalId,
+  EpochTimestamp,
+} from './types.gen';
 export {
   AnnotationData,
   AnnotationsAssetRef,
@@ -8,12 +11,12 @@ export {
   AnnotationsBoundingVolume,
   AnnotationsBox,
   AnnotationsClassification,
-  AnnotationsCogniteAnnotationTypesDiagramsAssetLink,
-  AnnotationsCogniteAnnotationTypesDiagramsInstanceLink,
-  AnnotationsCogniteAnnotationTypesImagesAssetLink,
-  AnnotationsCogniteAnnotationTypesImagesInstanceLink,
-  AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry,
-  AnnotationsCogniteAnnotationTypesPrimitivesGeometry3DGeometry,
+  AnnotationsCogmonoAnnotationTypesDiagramsAssetLink,
+  AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink,
+  AnnotationsCogmonoAnnotationTypesImagesAssetLink,
+  AnnotationsCogmonoAnnotationTypesImagesInstanceLink,
+  AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry,
+  AnnotationsCogmonoAnnotationTypesPrimitivesGeometry3DGeometry,
   AnnotationsCylinder,
   AnnotationsDetection,
   AnnotationsExtractedText,
@@ -38,7 +41,6 @@ export {
 } from './api/annotations/types.gen';
 export {
   CogniteExternalId,
-  CogniteInternalId,
   Document,
   DocumentAggregateFilter,
   DocumentAggregateFilterBool,
@@ -116,6 +118,21 @@ export {
   LabelList,
 } from './api/documents/types.gen';
 export {
+  CreateSessionRequest,
+  CreateSessionRequestList,
+  CreateSessionResponse,
+  CreateSessionResponseList,
+  CreateSessionWithClientCredentialsRequest,
+  CreateSessionWithOneshotTokenExchangeRequest,
+  CreateSessionWithTokenExchangeRequest,
+  RevokeSessionRequest,
+  RevokeSessionRequestList,
+  Session,
+  SessionByIds,
+  SessionList,
+  SessionReferenceIds,
+} from './api/sessions/types.gen';
+export {
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
   ListOfSpaceIdsRequest,
@@ -157,6 +174,8 @@ export {
   FileReference,
   IndustrialObjectDetection,
   IndustrialObjectDetectionParameters,
+  InstanceExternalId,
+  InstanceSpace,
   JobId,
   JobStatus,
   LevelGaugeDetection,
@@ -184,4 +203,5 @@ export {
   VisionExtractPredictions,
   VisionFileExternalId,
   VisionFileId,
+  VisionInstanceId,
 } from './api/vision/types.gen';

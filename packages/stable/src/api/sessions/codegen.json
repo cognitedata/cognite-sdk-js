@@ -1,0 +1,9 @@
+{
+  "service": "sessions",
+  "filter": {
+    "serviceName": "sessions"
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "_": "Due to issue with codegen duplicating types, we skip this for now.",
+  "service": "functions",
+  "filter": {
+    "serviceName": "functions",
+    "relevantReferenceNames": [
+      "Function",
+      "FunctionList",
+      "FunctionsLimits",
+      "FunctionListScope",
+      "FunctionDeleteRequest",
+      "FunctionCall",
+      "FunctionCalled",
+      "FunctionCallRequest",
+      "FunctionCallResponse",
+      "FunctionCallListWithCursor",
+      "FunctionCallListScope",
+      "FunctionCallLog",
+      "FunctionsActivation",
+      "FunctionSchedule",
+      "FunctionScheduleList",
+      "FunctionScheduleIds",
+      "FunctionScheduleDataResponse",
+      "FunctionScheduleIdArray"
+    ]
+  },
+  "inlinedSchemas": {
+    "autoNameRequest": true
+  }
+}
