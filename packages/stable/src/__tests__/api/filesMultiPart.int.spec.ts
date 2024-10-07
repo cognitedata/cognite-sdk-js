@@ -13,7 +13,6 @@ import {
   divideFileIntoChunks,
   divideFileIntoStreams,
   getFileStats,
-  setupMockableClientForIntegrationTests,
   toArrayBuffer,
 } from '../testUtils';
 // file to upload for integration tests
@@ -24,7 +23,7 @@ describe.skip('Files: Multi part Upload Integration Tests', () => {
   let label: LabelDefinition;
 
   beforeAll(async () => {
-    client = setupMockableClientForIntegrationTests();
+    client = setupLoggedInClient();
   });
 
   afterAll(async () => {

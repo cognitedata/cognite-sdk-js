@@ -3432,6 +3432,15 @@ export interface UnitSystem {
   name: string;
   quantities: UnitSystemQuantity[];
 }
+export interface MultiPartFileUploadResponse extends FileInfo {
+  uploadUrls: string[];
+  uploadId: string;
+}
+
+export interface MultiPartFileChunkResponse {
+  partNumber: number;
+  status: number;
+}
 
 export {
   AggregatedHistogramValue,
