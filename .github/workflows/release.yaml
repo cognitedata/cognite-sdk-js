@@ -85,9 +85,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
           GITHUB_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
-        run: yarn lerna version --conventional-commits --conventional-prerelease --preid rc --create-release github --no-private --yes
-
+        run: |
+          if [[ "${{contains(github.event.commits[0].message,'[release]')}}" == "true" ]]; then
+            if [[ "${{contains(github.event.commits[0].message,'[bump-version]')}}" == "true" ]]; then
+              yarn lerna version --conventional-commits --conventional-prerelease --preid rc --create-release github --no-private --yes
+            else:
+              yarn lerna version --no-git-tag-version --no-push --yes
+            fi
+          fi
       - name: Lerna Publish
+        if: contains(github.event.commits[0].message,'[release]')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
