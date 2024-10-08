@@ -35,11 +35,16 @@ jobs:
       ${{
         !contains(github.event.commits[0].message, '[skip-ci]') &&
         (
-          startsWith(github.event.commits[0].message, 'fix:') ||
-          startsWith(github.event.commits[0].message, 'fix(') ||
-          startsWith(github.event.commits[0].message, 'feat:') ||
-          startsWith(github.event.commits[0].message, 'feat(') ||
-          contains(github.event.commits[0].message, '[release]')
+        # if the branch is master and with [release tag]
+          (github.ref == 'ref/heads/master' && contains(github.event.commits[0].message, '[release]')) ||
+          # Or release branch with fix/feat/[release]
+          (startswith(github.ref, 'ref/heads/release-') &&
+            startsWith(github.event.commits[0].message, 'fix:')  ||
+            startsWith(github.event.commits[0].message, 'fix(')  ||
+            startsWith(github.event.commits[0].message, 'feat:') ||
+            startsWith(github.event.commits[0].message, 'feat(') ||
+            contains(github.event.commits[0].message, '[release]'))
+          )
         )
       }}
     runs-on: ubuntu-latest
@@ -86,11 +91,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
           GITHUB_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
         run: |
-          if [[ "${{contains(github.event.commits[0].message,'[release]')}}" == "true" ]]; then
-            if [[ "${{contains(github.event.commits[0].message,'[bump-version]')}}" == "true" ]]; then
+          if [[ "${{ github.ref }}" == "ref/head/master" ]]; then
+            yarn lerna version --conventional-commits --create-release github --no-private --yes
+          elif [[ "${{ github.ref }}" == ref/head/release-*  ]]; then
+            if [[ "${{ contains(github.event.commits[0].message, '[bump-version]') }}" == "true"]]; then
               yarn lerna version --conventional-commits --conventional-prerelease --preid rc --create-release github --no-private --yes
-            else:
-              yarn lerna version --no-git-tag-version --no-push --yes
             fi
           fi
       - name: Lerna Publish
@@ -98,7 +103,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        run: yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset --no-verify-access
+        run: |
+          if [[ "${{ github.ref }}" == "ref/head/master" ]]; then
+            yarn lerna publish from-package  --yes --no-git-reset --no-verify-access 
+          elif [[ "${{ github.ref }}" == ref/head/release-* ]]; then
+            yarn lerna publish from-package  --pre-dist-tag rc --yes --no-git-reset --no-verify-access
+          fi
 
       # - name: Publish documentation
       #   uses: JamesIves/github-pages-deploy-action@releases/v3
