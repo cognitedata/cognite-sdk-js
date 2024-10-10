@@ -93,7 +93,7 @@ jobs:
         run: |
           if [[ "${{ github.ref }}" == "ref/head/master" ]]; then
             if [[ "${{ contains(github.event.commits[0].message, '[bump-version]') }}" == "true"]]; then
-              yarn lerna version --conventional-commits --create-release github --no-private --yes
+              yarn lerna version patch --create-release github --no-private --yes
             fi
           elif [[ "${{ github.ref }}" == ref/head/release-*  ]]; then
             if [[ "${{ contains(github.event.commits[0].message, '[bump-version]') }}" == "true"]]; then
