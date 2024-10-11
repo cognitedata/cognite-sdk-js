@@ -3313,7 +3313,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-alpha@workspace:packages/alpha"
   dependencies:
-    "@cognite/sdk": "npm:^9.15.7"
+    "@cognite/sdk": "npm:^9.16.0"
     "@cognite/sdk-core": "npm:^4.10.6"
   languageName: unknown
   linkType: soft
@@ -3322,7 +3322,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-beta@workspace:packages/beta"
   dependencies:
-    "@cognite/sdk": "npm:^9.15.7"
+    "@cognite/sdk": "npm:^9.16.0"
     "@cognite/sdk-core": "npm:^4.10.6"
   languageName: unknown
   linkType: soft
@@ -3383,7 +3383,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@cognite/sdk-playground@workspace:packages/playground"
   dependencies:
-    "@cognite/sdk": "npm:^9.15.7"
+    "@cognite/sdk": "npm:^9.16.0"
     "@cognite/sdk-core": "npm:^4.10.6"
   languageName: unknown
   linkType: soft
@@ -3397,7 +3397,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@cognite/sdk@npm:^9, @cognite/sdk@npm:^9.15.7, @cognite/sdk@workspace:packages/stable":
+"@cognite/sdk@npm:^9, @cognite/sdk@npm:^9.16.0, @cognite/sdk@workspace:packages/stable":
   version: 0.0.0-use.local
   resolution: "@cognite/sdk@workspace:packages/stable"
   dependencies:
@@ -11146,9 +11146,9 @@ __metadata:
   linkType: hard
 
 "eta@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "eta@npm:2.0.0"
-  checksum: 10c0/21cecb358af121025966bcb23093f8d3e58607be8f5c92120bb4bd46893bf375e5f0d7850a8111bdd16009bb18d1585b1026edc1b008a813e98e1c6935b664b0
+  version: 2.2.0
+  resolution: "eta@npm:2.2.0"
+  checksum: 10c0/643b54d9539d2761bf6c5f4f48df1a5ea2d46c7f5a5fdc47a7d4802a8aa2b6262d4d61f724452e226c18cf82db02d48e65293fcc548f26a3f9d75a5ba7c3b859
   languageName: node
   linkType: hard
 
