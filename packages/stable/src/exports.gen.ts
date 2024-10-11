@@ -157,6 +157,8 @@ export type {
   FileReference,
   IndustrialObjectDetection,
   IndustrialObjectDetectionParameters,
+  InstanceExternalId,
+  InstanceSpace,
   JobId,
   JobStatus,
   LevelGaugeDetection,
@@ -184,4 +186,5 @@ export type {
   VisionExtractPredictions,
   VisionFileExternalId,
   VisionFileId,
+  VisionInstanceId,
 } from './api/vision/types.gen';
