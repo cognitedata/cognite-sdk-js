@@ -4,7 +4,9 @@
 
 # JS SDK Examples
 
-This folder contains examples on how to use the SDK in different frameworks.
+This folder contains an example on how to use the SDK in NodeJS.
+
+For browser environments, please take a look at [this guide](../guides/authentication.md).
 
 ## Prerequisites
 
@@ -12,13 +14,8 @@ This folder contains examples on how to use the SDK in different frameworks.
 - Install NodeJS on your machine. You can download NodeJS [here](https://nodejs.org/en/download/).
 - Install dependencies by running `yarn`.
 - Build sdk by running `yarn build`.
-- Open one of the sample project directories in a terminal.
 
 ## Examples
 
 - NodeJS
   - [Typescript using client credentials ](./nodejs/oidc-typescript)
-  - [Typescript using client device grant flow ](./nodejs/public-client-device-grant-flow)
-- React
-  - [Azure Active Directory Authentication ](./react/msal-browser-react)
-  - [Azure Active Directory Authentication Advanced](./react/msal-advanced-browser-react)

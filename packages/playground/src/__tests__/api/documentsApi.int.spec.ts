@@ -3,6 +3,7 @@
 import type { ListResponse } from '@cognite/sdk-core';
 import type { Document, DocumentFeedback } from '@cognite/sdk-playground';
 import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClientPlayground from '../../cogniteClientPlayground';
 import { setupLoggedInClient } from '../testUtils';
 
 // TODO: Fix the test
@@ -119,9 +120,7 @@ describe.skip('documents api', () => {
       expect(resp.byteLength).toBeGreaterThan(pdfPrefix.length);
       const frontSlice = resp.slice(0, pdfPrefix.length);
       expect(frontSlice.byteLength).toStrictEqual(pdfPrefix.length);
-      const match = Buffer.from(frontSlice, 0).equals(
-        Buffer.from(pdfPrefix, 0)
-      );
+      const match = Buffer.from(frontSlice, 0).equals(Buffer.from(pdfPrefix));
       expect(match).toBe(true);
     });
 

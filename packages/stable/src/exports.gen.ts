@@ -1,9 +1,6 @@
 // Copyright 2022 Cognite AS
-export {
-  CogniteInternalId,
-  EpochTimestamp,
-} from './types.gen';
-export {
+export type { EpochTimestamp } from './types.gen';
+export type {
   AnnotationData,
   AnnotationsAssetRef,
   AnnotationsBoolean,
@@ -39,7 +36,7 @@ export {
   AnnotationsUnhandledTextObject,
   AnnotationsView,
 } from './api/annotations/types.gen';
-export {
+export type {
   CogniteExternalId,
   Document,
   DocumentAggregateFilter,
@@ -117,22 +114,7 @@ export {
   Label,
   LabelList,
 } from './api/documents/types.gen';
-export {
-  CreateSessionRequest,
-  CreateSessionRequestList,
-  CreateSessionResponse,
-  CreateSessionResponseList,
-  CreateSessionWithClientCredentialsRequest,
-  CreateSessionWithOneshotTokenExchangeRequest,
-  CreateSessionWithTokenExchangeRequest,
-  RevokeSessionRequest,
-  RevokeSessionRequestList,
-  Session,
-  SessionByIds,
-  SessionList,
-  SessionReferenceIds,
-} from './api/sessions/types.gen';
-export {
+export type {
   CursorQueryParameter,
   IncludeGlobalQueryParameter,
   ListOfSpaceIdsRequest,
@@ -147,7 +129,7 @@ export {
   SpaceSpecification,
   UpsertConflict,
 } from './api/spaces/types.gen';
-export {
+export type {
   IdentityType,
   IdentityTypeFilter,
   UserIdentifier,
@@ -160,7 +142,7 @@ export {
   UserProfilesSearchRequest,
   UserProfilesSearchResponse,
 } from './api/userProfiles/types.gen';
-export {
+export type {
   AssetTagDetection,
   AssetTagDetectionParameters,
   CommaPos,
@@ -205,3 +187,18 @@ export {
   VisionFileId,
   VisionInstanceId,
 } from './api/vision/types.gen';
+export {
+  CreateSessionRequest,
+  CreateSessionRequestList,
+  CreateSessionResponse,
+  CreateSessionResponseList,
+  CreateSessionWithClientCredentialsRequest,
+  CreateSessionWithOneshotTokenExchangeRequest,
+  CreateSessionWithTokenExchangeRequest,
+  RevokeSessionRequest,
+  RevokeSessionRequestList,
+  Session,
+  SessionByIds,
+  SessionList,
+  SessionReferenceIds,
+} from './api/sessions/types.gen';

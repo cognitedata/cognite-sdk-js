@@ -3,31 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [9.15.7](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.5...@cognite/sdk@9.15.7) (2024-08-26)
+# [10.0.0-rc.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@10.0.0-rc.0...@cognite/sdk@10.0.0-rc.1) (2024-09-18)
 
 
 ### Bug Fixes
 
-* dummy release to override a bad one ([#1139](https://github.com/cognitedata/cognite-sdk-js/issues/1139)) ([5b036da](https://github.com/cognitedata/cognite-sdk-js/commit/5b036dabd4630b45d51558ee7f95d951c7227137))
+* make unreliable AssetMapping fields optional ([#1029](https://github.com/cognitedata/cognite-sdk-js/issues/1029)) ([5e97292](https://github.com/cognitedata/cognite-sdk-js/commit/5e97292dba1c8367755e67711426f15df68e9973))
 
 
 
 
 
-## [9.15.5](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.4...@cognite/sdk@9.15.5) (2024-08-26)
+# [10.0.0-rc.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.3...@cognite/sdk@10.0.0-rc.0) (2024-08-26)
 
 
-### Bug Fixes
+### chore
 
-* **units:** correct external id type ([#1137](https://github.com/cognitedata/cognite-sdk-js/issues/1137)) ([80161a3](https://github.com/cognitedata/cognite-sdk-js/commit/80161a3e30595ecbd5a604522ffb3718829f984d))
-
-
+* upgrade to typescript 5 ([#1135](https://github.com/cognitedata/cognite-sdk-js/issues/1135)) ([1530809](https://github.com/cognitedata/cognite-sdk-js/commit/15308098e64ec27a6c33049b2712f9cbc49dac38))
 
 
+### BREAKING CHANGES
 
-## [9.15.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk@9.15.3...@cognite/sdk@9.15.4) (2024-08-22)
+* es6 module (vs es5) and typescript 3 -> 5
 
-**Note:** Version bump only for package @cognite/sdk
+* chore: release pre-release from the release-v10 branch
+
+* test: skip flaky alerts test
 
 
 

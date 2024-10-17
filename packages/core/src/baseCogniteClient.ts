@@ -1,15 +1,12 @@
 // Copyright 2020 Cognite AS
 
+import isString from 'lodash/isString';
 import { version } from '../package.json';
-import { LoginAPI } from './api/login/loginApi';
-import { LogoutApi } from './api/logout/logoutApi';
 import {
-  API_KEY_HEADER,
   AUTHORIZATION_HEADER,
   X_CDF_APP_HEADER,
   X_CDF_SDK_HEADER,
 } from './constants';
-import { type ClientCredentials, CredentialsAuth } from './credentialsAuth';
 import type { HttpResponse } from './httpClient/basicHttpClient';
 import { CDFHttpClient } from './httpClient/cdfHttpClient';
 import type { HttpHeaders } from './httpClient/httpHeaders';
@@ -18,36 +15,41 @@ import {
   createUniversalRetryValidator,
 } from './httpClient/retryValidator';
 import type { RetryableHttpRequestOptions } from './httpClient/retryableHttpClient';
-import { verifyOptionsRequiredFields } from './loginUtils';
 import { MetadataMap } from './metadata';
 import {
   type CogniteAPIVersion,
   bearerString,
   getBaseUrl,
-  isBrowser,
-  isUsingSSL,
   projectUrl,
 } from './utils';
 export interface ClientOptions {
-  /** App identifier (ex: 'FileExtractor') */
+  /**
+   * App identifier (ex: 'FileExtractor')
+   * This is a free-text string that will be used to identify your application.
+   */
   appId: string;
   /** URL to Cognite cluster, e.g 'https://greenfield.cognitedata.com' **/
   baseUrl?: string;
   /** Project name */
   project: string;
-  /** Can be used with @cognite/auth-wrapper, passing an api key or with MSAL Library */
+  /**
+   * @deprecated Use {@link oidcTokenProvider} instead.
+   */
   getToken?: () => Promise<string>;
-  /** Retrieve data with apiKey passed at getToken method */
-  apiKeyMode?: boolean;
-  /** Retrieve data without any authentication headers */
-  noAuthMode?: boolean;
-  /** OIDC/API auth */
-  authentication?: {
-    /** Provider to do the auth job, recommended: @cognite/auth-wrapper */
-    provider?: unknown;
-    /** IdP Credentials */
-    credentials?: ClientCredentials;
-  };
+  /**
+   * Will be invoked when the SDK needs to authenticate against the CDF API.
+   * The function should return a valid access token to be used against the CDF API.
+   * The function will be called when the API returns 401 (Unauthorized) or when
+   * someone calls {@link BaseCogniteClient.authenticate}.
+   *
+   * It is the responsibility of the user to get hold of a valid access token to pass into the SDK.
+   *
+   * @returns A string representing the raw access token to be used against the CDF API.
+   */
+  oidcTokenProvider?: () => Promise<string>;
+  /**
+   * Used to override the default retry validator.
+   */
   retryValidator?: RetryValidator;
 }
 
@@ -58,31 +60,11 @@ export function accessApi<T>(api: T | undefined): T {
   return api;
 }
 export default class BaseCogniteClient {
-  /**
-   * @deprecated
-   */
-  public get login() {
-    return this.loginApi;
-  }
-
-  /**
-   * @deprecated
-   */
-  public get logout() {
-    return this.logoutApi;
-  }
-
   private readonly apiVersion: CogniteAPIVersion;
   private readonly http: CDFHttpClient;
   private readonly metadata: MetadataMap;
-  private readonly loginApi: LoginAPI;
-  private readonly logoutApi: LogoutApi;
-  private readonly getToken: () => Promise<string | undefined>;
-  private readonly apiKeyMode: boolean;
-  private readonly noAuthMode?: boolean;
+  private readonly getOidcToken: () => Promise<string | undefined>;
   readonly project: string;
-
-  private readonly credentialsAuth?: CredentialsAuth;
   private retryValidator: RetryValidator;
 
   /**
@@ -107,16 +89,33 @@ export default class BaseCogniteClient {
    * ```
    */
   constructor(options: ClientOptions, apiVersion: CogniteAPIVersion = 'v1') {
-    verifyOptionsRequiredFields(options);
+    if (!options) {
+      throw Error('`CogniteClient` is missing parameter `options`');
+    }
 
-    if (
-      options &&
-      !options.authentication?.credentials &&
-      !options.getToken &&
-      !options.noAuthMode
-    ) {
+    if (!isString(options.appId)) {
+      throw Error('options.appId is required and must be of type string');
+    }
+
+    if (!isString(options.project)) {
+      throw Error('options.project is required and must be of type string');
+    }
+
+    if (options.getToken && options.oidcTokenProvider) {
       throw Error(
-        'options.authentication.credentials is required or options.getToken is request and must be of type () => Promise<string>'
+        'options.getToken and options.oidcTokenProvider are mutually exclusive. Please only provide options.oidcTokenProvider'
+      );
+    }
+
+    if (!options.getToken && !options.oidcTokenProvider) {
+      throw Error(
+        'options.oidcTokenProvider is required and must be of type () => Promise<string>'
+      );
+    }
+
+    if (options.getToken) {
+      console.warn(
+        'options.getToken is deprecated and has been renamed to `options.oidcTokenProvider`.'
       );
     }
 
@@ -126,31 +125,16 @@ export default class BaseCogniteClient {
       options.retryValidator ?? createUniversalRetryValidator();
     this.http = this.initializeCDFHttpClient(baseUrl, options);
 
-    if (options.authentication) {
-      const { credentials, provider } = options.authentication;
-
-      this.credentialsAuth = new CredentialsAuth(
-        this.httpClient,
-        credentials,
-        provider
-      );
-    }
-
-    if (isBrowser() && !isUsingSSL() && !options.noAuthMode) {
-      console.warn(
-        'You should use SSL (https) when you login with OAuth since CDF only allows redirecting back to an HTTPS site'
-      );
-    }
-
     this.metadata = new MetadataMap();
-    this.loginApi = new LoginAPI(this.httpClient, this.metadataMap);
-    this.logoutApi = new LogoutApi(this.httpClient, this.metadataMap);
     this.apiVersion = apiVersion;
     this.project = options.project;
-    this.apiKeyMode = !!options.apiKeyMode;
-    this.noAuthMode = !!options.noAuthMode;
-    this.getToken = async () => {
-      return options.getToken ? options.getToken() : undefined;
+    this.getOidcToken = async () => {
+      if (options.oidcTokenProvider) {
+        return options.oidcTokenProvider();
+      }
+      if (options.getToken) {
+        return options.getToken();
+      }
     };
 
     this.initAPIs();
@@ -158,45 +142,33 @@ export default class BaseCogniteClient {
 
   public authenticate: () => Promise<string | undefined> = async () => {
     try {
-      let token = await this.authenticateGetToken();
-
-      if (token !== undefined) {
-        return token;
-      }
-
-      token = await this.credentialsAuth?.authenticate();
+      const token = await this.authenticateUsingOidcTokenProvider();
       return token;
     } catch (e) {
       return;
     }
   };
 
-  private authenticateGetToken: () => Promise<string | undefined> =
-    async () => {
-      try {
-        if (!this.tokenPromise || this.isTokenPromiseFulfilled) {
-          this.isTokenPromiseFulfilled = false;
-          this.tokenPromise = this.getToken();
-        }
-        const token = await this.tokenPromise;
-        this.isTokenPromiseFulfilled = true;
-
-        if (token === undefined) return token;
-
-        if (this.noAuthMode) {
-          return token;
-        }
-        if (this.apiKeyMode) {
-          this.httpClient.setDefaultHeader(API_KEY_HEADER, token);
-          return token;
-        }
-        const bearer = bearerString(token);
-        this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
-        return token;
-      } catch {
-        return;
+  private authenticateUsingOidcTokenProvider: () => Promise<
+    string | undefined
+  > = async () => {
+    try {
+      if (!this.tokenPromise || this.isTokenPromiseFulfilled) {
+        this.isTokenPromiseFulfilled = false;
+        this.tokenPromise = this.getOidcToken();
       }
-    };
+      const token = await this.tokenPromise;
+      this.isTokenPromiseFulfilled = true;
+
+      if (token === undefined) return token;
+
+      const bearer = bearerString(token);
+      this.httpClient.setDefaultHeader(AUTHORIZATION_HEADER, bearer);
+      return token;
+    } catch {
+      return;
+    }
+  };
 
   private initializeCDFHttpClient(
     baseUrl: string | undefined,
@@ -243,14 +215,7 @@ export default class BaseCogniteClient {
   private retrieveTokenValueFromHeader(
     headers?: HttpHeaders
   ): string | undefined {
-    let token: string | undefined;
-
-    if (this.apiKeyMode) {
-      token = headers?.[API_KEY_HEADER];
-    } else {
-      token = headers?.[AUTHORIZATION_HEADER];
-    }
-
+    const token = headers?.[AUTHORIZATION_HEADER];
     return token !== undefined ? token.replace('Bearer ', '') : token;
   }
 

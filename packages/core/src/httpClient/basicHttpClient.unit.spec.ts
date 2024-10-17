@@ -1,6 +1,8 @@
-import nock from 'nock';
 // Copyright 2020 Cognite AS
+
 import { beforeEach, describe, expect, test } from 'vitest';
+
+import nock from 'nock';
 import { BasicHttpClient, HttpResponseType } from './basicHttpClient';
 import { HttpError } from './httpError';
 

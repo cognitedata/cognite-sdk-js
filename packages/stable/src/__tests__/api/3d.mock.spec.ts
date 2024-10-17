@@ -3,6 +3,7 @@
 import { DateParser } from '@cognite/sdk-core';
 import nock from 'nock';
 import { beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import type {
   Model3D,
   Node3D,

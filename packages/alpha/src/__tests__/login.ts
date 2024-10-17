@@ -11,8 +11,8 @@ export const login = async () => {
         method: 'POST',
         body: new URLSearchParams({
           grant_type: 'client_credentials',
-          client_id: process.env.COGNITE_CLIENT_ID,
-          client_secret: process.env.COGNITE_CLIENT_SECRET,
+          client_id: process.env.COGNITE_CLIENT_ID || '',
+          client_secret: process.env.COGNITE_CLIENT_SECRET || '',
           scope: `${process.env.COGNITE_BASE_URL}/.default`,
         }).toString(),
         headers: {

@@ -10,17 +10,28 @@ function stripMarkdownCodeSnippet(rawCode) {
 
 function findAllCodeSnippetsInJsDoc(jsDoc) {
   const codeSnippets = new Map(); // string => string[]
-  _.cloneDeepWith(jsDoc, (value, _, object) => {
+  _.cloneDeepWith(jsDoc, (value, key, object) => {
+    if (key !== 'summary') {
+      return;
+    }
+    if (!Array.isArray(value) || value.length === 0) {
+      return;
+    }
+    if (value[0].kind !== 'text') {
+      return;
+    }
     const docRegEx =
       /https:\/\/(doc\.cognitedata\.com|docs\.cognite\.com|developer\.cognite\.com)\/api.*operation\/([a-zA-Z0-9]+)/g;
-    let matches;
-    while (true) {
-      matches = docRegEx.exec(value);
-      if (!matches) {
-        break;
+    const matches = value[0].text.matchAll(docRegEx);
+    for (const match of matches) {
+      const operationId = match[2];
+      if (value.length !== 2) {
+        throw new Error('Unexpected length of summary');
       }
-      const operationId = matches[2];
-      const rawCode = object.text;
+      if (value[1].kind !== 'code') {
+        throw new Error(`Expected code snippet, but got ${value[1].kind}`);
+      }
+      const rawCode = value[1].text;
       if (!codeSnippets.has(operationId)) {
         codeSnippets.set(operationId, []);
       }
@@ -55,6 +66,12 @@ function writeCodeSnippetFile(codeSnippets, filepath) {
   codeSnippets.forEach((snippets, operationId) => {
     output.operations[operationId] = joinSnippets(snippets);
   });
+  // sort operations by key
+  output.operations = _(output.operations)
+    .toPairs()
+    .sortBy(0)
+    .fromPairs()
+    .value();
   fs.writeFileSync(filepath, `${JSON.stringify(output, null, 2)}\n`);
 }
 
@@ -79,8 +96,7 @@ codeSnippets.forEach((snippets, operationId) => {
     const client = new CogniteClient({
       appId: '[APP NAME]',
       project: '[PROJECT]',
-      apiKeyMode: true,
-      getToken: () => Promise.resolve('[API_KEY]'),
+      oidcTokenProvider: () => Promise.resolve('[ACCESS_TOKEN]'),
     });
     (async () => {
       ${joinSnippets(snippets)}

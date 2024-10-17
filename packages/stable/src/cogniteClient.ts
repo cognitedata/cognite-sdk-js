@@ -12,7 +12,6 @@ import { Models3DAPI } from './api/3d/models3DApi';
 import { Revisions3DAPI } from './api/3d/revisions3DApi';
 import { Viewer3DAPI } from './api/3d/viewer3DApi';
 import { AnnotationsAPI } from './api/annotations/annotationsApi';
-import { ApiKeysAPI } from './api/apiKeys/apiKeysApi';
 import { AssetsAPI } from './api/assets/assetsApi';
 import { ContainersAPI } from './api/containers/containersApi';
 import { DataPointsAPI } from './api/dataPoints/dataPointsApi';
@@ -32,7 +31,6 @@ import { RawAPI } from './api/raw/rawApi';
 import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
-import { ServiceAccountsAPI } from './api/serviceAccounts/serviceAccountsApi';
 import { SessionsApi } from './api/sessions/sessionsApi';
 import { SpacesAPI } from './api/spaces/spacesApi';
 import {
@@ -83,9 +81,6 @@ export default class CogniteClient extends BaseCogniteClient {
   public get securityCategories() {
     return accessApi(this.securityCategoriesApi);
   }
-  public get serviceAccounts() {
-    return accessApi(this.serviceAccountsApi);
-  }
   public get models3D() {
     return accessApi(this.models3DApi);
   }
@@ -103,9 +98,6 @@ export default class CogniteClient extends BaseCogniteClient {
   }
   public get viewer3D() {
     return accessApi(this.viewer3DApi);
-  }
-  public get apiKeys() {
-    return accessApi(this.apiKeysApi);
   }
   public get relationships() {
     return accessApi(this.relationshipsApi);
@@ -205,7 +197,6 @@ export default class CogniteClient extends BaseCogniteClient {
   private projectsApi?: ProjectsAPI;
   private groupsApi?: GroupsAPI;
   private securityCategoriesApi?: SecurityCategoriesAPI;
-  private serviceAccountsApi?: ServiceAccountsAPI;
   private models3DApi?: Models3DAPI;
   private relationshipsApi?: RelationshipsApi;
   private entityMatchingApi?: EntityMatchingApi;
@@ -214,7 +205,6 @@ export default class CogniteClient extends BaseCogniteClient {
   private datasetsApi?: DataSetsAPI;
   private assetMappings3DApi?: AssetMappings3DAPI;
   private viewer3DApi?: Viewer3DAPI;
-  private apiKeysApi?: ApiKeysAPI;
   private geospatialApi?: GeospatialAPI;
   private documentsApi?: DocumentsAPI;
   private annotationsApi?: AnnotationsAPI;
@@ -257,11 +247,6 @@ export default class CogniteClient extends BaseCogniteClient {
       SecurityCategoriesAPI,
       'securitycategories'
     );
-    this.serviceAccountsApi = this.apiFactory(
-      ServiceAccountsAPI,
-      'serviceaccounts'
-    );
-    this.apiKeysApi = this.apiFactory(ApiKeysAPI, 'apikeys');
     this.models3DApi = this.apiFactory(Models3DAPI, models3DPath);
     this.relationshipsApi = this.apiFactory(RelationshipsApi, 'relationships');
     this.entityMatchingApi = this.apiFactory(

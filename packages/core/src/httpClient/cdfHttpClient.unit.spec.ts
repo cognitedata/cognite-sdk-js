@@ -1,7 +1,9 @@
-import nock from 'nock';
 // Copyright 2020 Cognite AS
+
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { API_KEY_HEADER, AUTHORIZATION_HEADER } from '../constants';
+
+import nock from 'nock';
+import { AUTHORIZATION_HEADER } from '../constants';
 import { CogniteError } from '../error';
 import { bearerString } from '../utils';
 import { CDFHttpClient } from './cdfHttpClient';
@@ -57,29 +59,12 @@ describe('CDFHttpClient', () => {
       await client.get(anotherDomain);
     });
 
-    test('dont expose api-key to other domains', async () => {
-      client.setDefaultHeader(API_KEY_HEADER, '123');
-      nock(anotherDomain, { badheaders: [API_KEY_HEADER] })
-        .get('/')
-        .reply(200, {});
-      await client.get(anotherDomain);
-    });
-
     test('send bearer token to other doman when withCredentials == true', async () => {
       const token = 'abc';
       client.setBearerToken(token);
       nock(anotherDomain, {
         reqheaders: { [AUTHORIZATION_HEADER]: bearerString(token) },
       })
-        .get('/')
-        .reply(200, {});
-      await client.get(anotherDomain, { withCredentials: true });
-    });
-
-    test('send api-key to other doman when withCredentials == true', async () => {
-      const apiKey = '123';
-      client.setDefaultHeader(API_KEY_HEADER, apiKey);
-      nock(anotherDomain, { reqheaders: { [API_KEY_HEADER]: apiKey } })
         .get('/')
         .reply(200, {});
       await client.get(anotherDomain, { withCredentials: true });
@@ -184,9 +169,10 @@ describe('CDFHttpClient', () => {
         };
       }
 
-      test('ignore errors to /login/status', checkIfThrows401('/login/status'));
-
-      test('ignore errors to /logout/url', checkIfThrows401('/logout/url'));
+      test(
+        'ignore errors to /api/v1/token/inspect',
+        checkIfThrows401('/api/v1/token/inspect')
+      );
     });
   });
 

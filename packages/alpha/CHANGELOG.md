@@ -3,29 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.32.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.31.3...@cognite/sdk-alpha@0.32.0) (2024-09-17)
-
-
-### Features
-
-* **simint:** add and remove properties from simulators API ([#1147](https://github.com/cognitedata/cognite-sdk-js/issues/1147)) ([4cd6467](https://github.com/cognitedata/cognite-sdk-js/commit/4cd6467658fde491c20f274fbd8fa6af55610c60))
-
-
-
-
-
-## [0.31.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.31.1...@cognite/sdk-alpha@0.31.3) (2024-08-26)
-
-
-### Bug Fixes
-
-* dummy release to override a bad one ([#1139](https://github.com/cognitedata/cognite-sdk-js/issues/1139)) ([5b036da](https://github.com/cognitedata/cognite-sdk-js/commit/5b036dabd4630b45d51558ee7f95d951c7227137))
-
-
-
-
-
-## [0.31.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.31.0...@cognite/sdk-alpha@0.31.1) (2024-08-26)
+# [1.0.0-rc.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@1.0.0-rc.0...@cognite/sdk-alpha@1.0.0-rc.1) (2024-09-18)
 
 **Note:** Version bump only for package @cognite/sdk-alpha
 
@@ -33,12 +11,21 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-# [0.31.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.30.1...@cognite/sdk-alpha@0.31.0) (2024-08-22)
+# [1.0.0-rc.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-alpha@0.30.1...@cognite/sdk-alpha@1.0.0-rc.0) (2024-08-26)
 
 
-### Features
+### chore
 
-* **simint:** add sort property to filter queries ([#1134](https://github.com/cognitedata/cognite-sdk-js/issues/1134)) ([b293eee](https://github.com/cognitedata/cognite-sdk-js/commit/b293eee3fdf1a931c9ed5ef555db488c3e7fc10c))
+* upgrade to typescript 5 ([#1135](https://github.com/cognitedata/cognite-sdk-js/issues/1135)) ([1530809](https://github.com/cognitedata/cognite-sdk-js/commit/15308098e64ec27a6c33049b2712f9cbc49dac38))
+
+
+### BREAKING CHANGES
+
+* es6 module (vs es5) and typescript 3 -> 5
+
+* chore: release pre-release from the release-v10 branch
+
+* test: skip flaky alerts test
 
 
 

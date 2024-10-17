@@ -1,8 +1,10 @@
 // Copyright 2020 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import type {
   FeatureType,
+  GeospatialCoordinateReferenceSystem,
   GeospatialCreateFeatureType,
   GeospatialFeature,
   GeospatialUpdateFeatureType,
@@ -292,8 +294,9 @@ describe.skip('Geospatial integration test', () => {
       });
       const items = response.items;
       expect(items.length === 1).toBeTruthy();
-      expect(items[0].output.srid).toEqual(4326);
-      expect(items[0].output.wkt).toEqual('POLYGON((0 0,10 0,10 10,0 10,0 0))');
+      const output = items[0].output as GeospatialCoordinateReferenceSystem;
+      expect(output.srid).toEqual(4326);
+      expect(output.wkt).toEqual('POLYGON((0 0,10 0,10 10,0 10,0 0))');
     });
   });
 });

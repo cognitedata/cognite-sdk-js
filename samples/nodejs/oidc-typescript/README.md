@@ -1,6 +1,6 @@
 # OIDC authentication sample w typescript
 
-Node.JS w typescript sample set up to use Cognite (OIDC) authentication.
+Node.JS Typescript sample set up to use OIDC authentication.
 
 ## Getting Started
 
@@ -70,7 +70,7 @@ async function quickstart() {
       appId: 'Cognite SDK samples',
       project,
       baseUrl: 'https://api.cognitedata.com',
-      getToken: () =>
+      oidcTokenProvider: () =>
         pca
           .acquireTokenByClientCredential({
             scopes: ['https://api.cognitedata.com/.default'],

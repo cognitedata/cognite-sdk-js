@@ -2,6 +2,7 @@
 
 import nock from 'nock';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
 
 describe('api endpoints smoke test', () => {
@@ -58,20 +59,18 @@ describe('api endpoints smoke test', () => {
     await Promise.all(
       [
         client.assets,
-        client.assets,
         client.datapoints,
         client.events,
         client.files,
         client.files3D,
         client.groups,
-        client.login,
-        client.logout,
         client.models3D,
         client.projects,
         client.raw,
         client.securityCategories,
         client.timeseries,
         client.viewer3D,
+        // @ts-ignore
       ].map(callApi)
     );
   });

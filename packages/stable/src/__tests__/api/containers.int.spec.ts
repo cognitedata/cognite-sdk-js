@@ -1,6 +1,8 @@
 // Copyright 2024 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import type { ContainerCreateDefinition } from '../../api/containers/types.gen';
+import type CogniteClient from '../../cogniteClient';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Containers integration test', () => {

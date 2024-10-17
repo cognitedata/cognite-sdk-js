@@ -1,4 +1,5 @@
 // Copyright 2020 Cognite AS
+
 import { beforeEach, describe, expect, test } from 'vitest';
 import DateParser from '../dateParser';
 

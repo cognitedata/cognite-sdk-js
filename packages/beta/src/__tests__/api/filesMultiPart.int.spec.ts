@@ -4,6 +4,7 @@ import path, { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it, test } from 'vitest';
 import { retryInSeconds } from '../../../../stable/src/__tests__/testUtils';
 import type { FilesMultipartUploadSessionAPI } from '../../api/files/filesMultipartUploadSessionApi';
+import type CogniteClient from '../../cogniteClient';
 import type {
   ExternalFileInfo,
   LabelDefinition,

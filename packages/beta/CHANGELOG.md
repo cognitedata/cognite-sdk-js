@@ -3,18 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [5.11.6](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.11.4...@cognite/sdk-beta@5.11.6) (2024-08-26)
-
-
-### Bug Fixes
-
-* dummy release to override a bad one ([#1139](https://github.com/cognitedata/cognite-sdk-js/issues/1139)) ([5b036da](https://github.com/cognitedata/cognite-sdk-js/commit/5b036dabd4630b45d51558ee7f95d951c7227137))
-
-
-
-
-
-## [5.11.4](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.11.3...@cognite/sdk-beta@5.11.4) (2024-08-26)
+# [6.0.0-rc.1](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@6.0.0-rc.0...@cognite/sdk-beta@6.0.0-rc.1) (2024-09-18)
 
 **Note:** Version bump only for package @cognite/sdk-beta
 
@@ -22,9 +11,21 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-## [5.11.3](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.11.2...@cognite/sdk-beta@5.11.3) (2024-08-22)
+# [6.0.0-rc.0](https://github.com/cognitedata/cognite-sdk-js/compare/@cognite/sdk-beta@5.11.2...@cognite/sdk-beta@6.0.0-rc.0) (2024-08-26)
 
-**Note:** Version bump only for package @cognite/sdk-beta
+
+### chore
+
+* upgrade to typescript 5 ([#1135](https://github.com/cognitedata/cognite-sdk-js/issues/1135)) ([1530809](https://github.com/cognitedata/cognite-sdk-js/commit/15308098e64ec27a6c33049b2712f9cbc49dac38))
+
+
+### BREAKING CHANGES
+
+* es6 module (vs es5) and typescript 3 -> 5
+
+* chore: release pre-release from the release-v10 branch
+
+* test: skip flaky alerts test
 
 
 

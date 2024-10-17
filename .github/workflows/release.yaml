@@ -85,17 +85,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
           GITHUB_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
-        run: yarn lerna version --conventional-commits --create-release github --no-private --yes
+        run: yarn lerna version --conventional-commits --conventional-prerelease --preid rc --create-release github --no-private --yes
 
       - name: Lerna Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        run: yarn lerna publish from-package --yes --no-git-reset --no-verify-access
+        run: yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset --no-verify-access
 
-      - name: Publish documentation
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: docs
+      # - name: Publish documentation
+      #   uses: JamesIves/github-pages-deploy-action@releases/v3
+      #   with:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     BRANCH: gh-pages # The branch the action should deploy to.
+      #     FOLDER: docs

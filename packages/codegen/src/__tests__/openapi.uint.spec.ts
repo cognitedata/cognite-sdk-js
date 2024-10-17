@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, test } from 'vitest';
-import { ReferenceWalker } from '../openapi';
+import { type OpenApiDocument, ReferenceWalker } from '../openapi';
 import { OpenApiSnapshotManager } from '../snapshot';
 
 describe('openapi', () => {

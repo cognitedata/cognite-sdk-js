@@ -1,6 +1,8 @@
 // Copyright 2024 Cognite AS
 
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import type { ViewCreateDefinition } from '../../api/views/types.gen';
+import type CogniteClient from '../../cogniteClient';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Views integration test', () => {
@@ -70,7 +72,6 @@ describe('Views integration test', () => {
     ]);
   }, 25_000);
   afterAll(async () => {
-    client = setupLoggedInClient();
     await client.containers.delete([
       { externalId: TEST_CONTAINER_NAME, space: TEST_SPACE_NAME },
     ]);

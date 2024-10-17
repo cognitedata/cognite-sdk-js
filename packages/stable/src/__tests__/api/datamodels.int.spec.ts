@@ -6,6 +6,7 @@ import type {
   ViewDefinition,
 } from 'stable/src/types';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
+import type CogniteClient from '../../cogniteClient';
 import { deleteOldSpaces, randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Data models integration test', () => {
