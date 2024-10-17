@@ -187,7 +187,7 @@ export type {
   VisionFileId,
   VisionInstanceId,
 } from './api/vision/types.gen';
-export {
+export type {
   CreateSessionRequest,
   CreateSessionRequestList,
   CreateSessionResponse,

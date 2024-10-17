@@ -8,6 +8,7 @@ import type {
   FunctionsActivationResponse,
   FunctionsLimitsResponse,
 } from '../../api/functions/types.gen';
+import type CogniteClient from '../../cogniteClient';
 
 describe('FunctionsAPI', () => {
   let client: CogniteClient;
@@ -72,7 +73,7 @@ describe('FunctionsAPI', () => {
       .post(/\/functions\/byids/, { items: [{ id: '123' }] })
       .reply(200, mockResponse);
 
-    const result = await client.functions.retrieve({ items: [{ id: '123' }] });
+    const result = await client.functions.retrieve({ items: [{ id: 123 }] });
     expect(result.data).toEqual(mockResponse);
   });
 
@@ -145,7 +146,7 @@ describe('FunctionsAPI', () => {
       .post(/\/functions\/123\/call/, { data: {} })
       .reply(200, response);
 
-    const result = await client.functions.call(123, { data: {} });
+    const result = await client.functions.call(123, { data: { }, nonce: 'abc' });
     expect(result.data).toEqual(response);
   });
 });

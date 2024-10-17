@@ -1,7 +1,5 @@
-import { CDFHttpClient, MetadataMap } from '@cognite/sdk-core';
 import nock from 'nock';
-import { beforeAll, beforeEach, describe, expect, test } from 'vitest';
-import { SessionsApi } from '../../api/sessions/sessionsApi';
+import { beforeEach, describe, expect, test } from 'vitest';
 import type {
   CreateSessionRequestList,
   CreateSessionResponseList,
@@ -9,6 +7,7 @@ import type {
   SessionReferenceIds,
 } from '../../api/sessions/types.gen';
 import { mockBaseUrl, setupMockableClient } from '../testUtils';
+import type CogniteClient from '../../cogniteClient';
 
 describe('SessionsApi', () => {
   let client: CogniteClient;
