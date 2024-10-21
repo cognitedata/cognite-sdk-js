@@ -353,21 +353,21 @@ export interface AnnotationsInstanceRef {
 export interface AnnotationsIsoPlanAnnotation {
   /** Detail describing the equipment. */
   detail?: string;
-  /** Contains a link to a file in CDF. This is used to navigate between files. */
+  /** The asset this annotation is pointing at. Store the id of the file assets to generate downloadable URL. */
   fileRef?: AnnotationsFileRef;
-  /** The indirectExternalId is the external id of the equipment used to identify the hotspot indirectly. E.g. first valve upstreams of <indirectExternalId>. */
+  /** The indirectExternalId is the external id of the equipment used to identify the hotspot indirectly. Exa. this is the <indirectRelation> of <indirectExternalId>. */
   indirectExternalId?: AnnotationsAssetRef;
-  /** Relation connecting this hotspot to a tag in case the hotspot has no tag. E.g. 'upstreams of'. This references the 'indirectExternalId'. */
+  /** Relation connecting this hotspot to a tag in case the hotspot has no tag. E.g. 'second valve upstreams of'. This references the 'indirectExternalId'. */
   indirectRelation?: string;
   /** The id of the Pipe that the hotspot belongs to. */
   lineExternalId?: AnnotationsAssetRef;
-  /** Stores Functional Location (FLOC) external ID represented by the hotspot. */
+  /** Stores Functional Locations (FLOC) external ID linked to the annotation. */
   linkedResourceExternalId?: string;
-  /** Stores the Functional Location (FLOC) ID represented by the hotspot. */
+  /** Stores Functional Locations' (FLOC) ID linked to the annotation. */
   linkedResourceInternalId?: number;
-  /** Whether the hotspot represents an asset (FLOC) or file. */
+  /** Stores Functional Location (FLOC) type the annotation linked to. */
   linkedResourceType?: 'asset' | 'file';
-  /** Temporary field for migration purposes. Id of corresponding legacy annotation. */
+  /** Keep track of data link with old annotations. */
   oldAnnotationId?: string;
   /**
    * The number of the page on which this annotation is located. The first page has number 1.
@@ -375,17 +375,17 @@ export interface AnnotationsIsoPlanAnnotation {
    * @max 100000
    */
   pageNumber?: number;
-  /** Relative position of the relation connecting the hotspot to a tag. E.g. '2nd'. This references the 'indirectExternalId'. */
+  /** Indicate the relative position of an annotation. */
   relativePosition?: string;
-  /** Revision number of the P&ID file that the hotspot is valid for. */
+  /** Keeps track of the modification to an annotation. */
   revision?: string;
   /** Stores the dimensions of a valve or spade. */
   sizeAndClass?: AnnotationsSizeAndClassType;
-  /** Marks the hotspot as user created or detected via pipeline. */
+  /** Use to identify whether the annotation is user created one or ditected via pipeline. */
   sourceType?: 'pipeline' | 'user';
-  /** Additional details, the fluid code for pipes e.g. LO for Lube oil etc. */
+  /** Use to save the fluid code of pipes Exa. LO for Lube oil and etc. */
   subDetail?: string;
-  /** Text found in the area, might be a FLOC, valve detail, pipe or diagram name. */
+  /** The pattern identified by the detection API results. */
   text?: string;
   /** The location of the hotspot represented with a bounding box. */
   textRegion?: AnnotationsBoundingBox;
