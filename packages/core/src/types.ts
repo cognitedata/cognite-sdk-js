@@ -38,6 +38,33 @@ export interface ExternalId {
   externalId: CogniteExternalId;
 }
 
+export type IdEitherWithInstance = InternalId | ExternalId | InstanceId;
+
+export interface InstanceId {
+  instanceId: CogniteInstanceId;
+}
+
+/**
+ * Unique identifier of an instance in Cognite Data Modeling
+ */
+export interface CogniteInstanceId {
+  externalId: InstanceExternalId;
+  space: InstanceSpace;
+}
+
+/**
+ * External id of an instance in Cognite Data Modeling
+ *
+ * @pattern ^[a-zA-Z]([a-zA-Z0-9_]{0,253}[a-zA-Z0-9])?$
+ */
+export type InstanceExternalId = string;
+/**
+ * Instance space of an instance in Cognite Data Modeling
+ *
+ * @pattern ^[a-zA-Z][a-zA-Z0-9_-]{0,41}[a-zA-Z0-9]?$
+ */
+export type InstanceSpace = string;
+
 /**
  * External Id provided by client. Should be unique within the project.
  */
