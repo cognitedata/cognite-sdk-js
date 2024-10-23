@@ -1065,26 +1065,28 @@ export interface FileChange {
 }
 
 export interface FileChangeByInstanceId {
-    update: {
-      externalId?: SinglePatchString;
-      metadata?: MetadataPatch;
-      assetIds?: ArrayPatchLong;
-      dataSetId?: NullableSinglePatchLong;
-      labels?: LabelsPatch;
-      geoLocation?: FileGeoLocationPatch;
-    };
-  }
+  update: {
+    externalId?: SinglePatchString;
+    metadata?: MetadataPatch;
+    assetIds?: ArrayPatchLong;
+    dataSetId?: NullableSinglePatchLong;
+    labels?: LabelsPatch;
+    geoLocation?: FileGeoLocationPatch;
+  };
+}
 
 export type FileChangeUpdate =
   | FileChangeUpdateById
   | FileChangeUpdateByExternalId
-  | FileChangeUpdateByInstanceId
+  | FileChangeUpdateByInstanceId;
 
 export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
 
 export interface FileChangeUpdateById extends InternalId, FileChange {}
 
-export interface FileChangeUpdateByInstanceId extends InstanceId, FileChangeByInstanceId {}
+export interface FileChangeUpdateByInstanceId
+  extends InstanceId,
+    FileChangeByInstanceId {}
 
 export type FileContent = ArrayBuffer | Buffer | unknown;
 
@@ -1147,7 +1149,7 @@ export interface FileRequestFilter extends FilterQuery, FileFilter {}
 
 export interface FileInfo extends ExternalFileInfo, CreatedAndLastUpdatedTime {
   id: CogniteInternalId;
-  instanceId?: CogniteInstanceId
+  instanceId?: CogniteInstanceId;
   /**
    * Whether or not the actual file is uploaded
    */
