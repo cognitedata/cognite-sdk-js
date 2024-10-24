@@ -2344,6 +2344,15 @@ export interface TimeSeriesPatchByInstanceId {
   update: TimeseriesUpdateCommonProperies;
 }
 
+export interface TimeSeriesPatchByInstanceId {
+  update: {
+    externalId?: NullableSinglePatchString;
+    metadata?: MetadataPatch;
+    assetId?: NullableSinglePatchLong;
+    dataSetId?: NullableSinglePatchLong;
+  };
+}
+
 export interface TimeseriesSearch {
   /**
    * Prefix and fuzzy search on name.
