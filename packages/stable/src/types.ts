@@ -1048,31 +1048,29 @@ interface ExternalSequenceColumnBase {
   metadata?: Metadata;
 }
 
+export type FileChangeCommonProperties = {
+  externalId?: SinglePatchString;
+  metadata?: MetadataPatch;
+  assetIds?: ArrayPatchLong;
+  dataSetId?: NullableSinglePatchLong;
+  labels?: LabelsPatch;
+  geoLocation?: FileGeoLocationPatch;
+};
+
+export type FileChangeAssetCentricProperties = FileChangeCommonProperties & {
+  source?: SinglePatchString;
+  mimeType?: SinglePatchString;
+  securityCategories?: ArrayPatchLong;
+  sourceCreatedTime?: SinglePatchDate;
+  sourceModifiedTime?: SinglePatchDate;
+};
+
 export interface FileChange {
-  update: {
-    externalId?: SinglePatchString;
-    source?: SinglePatchString;
-    mimeType?: SinglePatchString;
-    metadata?: MetadataPatch;
-    assetIds?: ArrayPatchLong;
-    securityCategories?: ArrayPatchLong;
-    sourceCreatedTime?: SinglePatchDate;
-    sourceModifiedTime?: SinglePatchDate;
-    dataSetId?: NullableSinglePatchLong;
-    labels?: LabelsPatch;
-    geoLocation?: FileGeoLocationPatch;
-  };
+  update: FileChangeAssetCentricProperties;
 }
 
 export interface FileChangeByInstanceId {
-  update: {
-    externalId?: SinglePatchString;
-    metadata?: MetadataPatch;
-    assetIds?: ArrayPatchLong;
-    dataSetId?: NullableSinglePatchLong;
-    labels?: LabelsPatch;
-    geoLocation?: FileGeoLocationPatch;
-  };
+  update: FileChangeCommonProperties;
 }
 
 export type FileChangeUpdate =
@@ -2322,27 +2320,28 @@ export interface SyntheticQueryResponse {
   datapoints: SyntheticDatapoint[];
 }
 
-export interface TimeSeriesPatch {
-  update: {
-    externalId?: NullableSinglePatchString;
+export type TimeseriesUpdateCommonProperies = {
+  externalId?: NullableSinglePatchString;
+  metadata?: MetadataPatch;
+  assetId?: NullableSinglePatchLong;
+  dataSetId?: NullableSinglePatchLong;
+};
+
+export type TimeseriesUpdateAssetCentricProperies =
+  TimeseriesUpdateCommonProperies & {
     name?: NullableSinglePatchString;
-    metadata?: MetadataPatch;
     unit?: NullableSinglePatchString;
-    assetId?: NullableSinglePatchLong;
-    dataSetId?: NullableSinglePatchLong;
     description?: NullableSinglePatchString;
     securityCategories?: ArrayPatchLong;
     unitExternalId?: NullableSinglePatchString;
   };
+
+export interface TimeSeriesPatch {
+  update: TimeseriesUpdateAssetCentricProperies;
 }
 
 export interface TimeSeriesPatchByInstanceId {
-  update: {
-    externalId?: NullableSinglePatchString;
-    metadata?: MetadataPatch;
-    assetId?: NullableSinglePatchLong;
-    dataSetId?: NullableSinglePatchLong;
-  };
+  update: TimeseriesUpdateCommonProperies;
 }
 
 export interface TimeseriesSearch {

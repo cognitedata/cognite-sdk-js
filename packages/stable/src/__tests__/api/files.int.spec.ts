@@ -135,36 +135,37 @@ describe('Files integration test', () => {
   });
 
   test('retrieve by instance id', async () => {
-    const [retrievedFile] = await client.files.retrieve([
-      { instanceId: fileCdmInstanceId },
-    ]);
-    expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
+    // Syncing from instance to files API is eventually consistant
+    await runTestWithRetryWhenFailing(async () => {
+      const [retrievedFile] = await client.files.retrieve([
+        { instanceId: fileCdmInstanceId },
+      ]);
+      expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
+    });
   });
 
   test('update by instance id', async () => {
-    const testMetadata = { testKey: 'testVal' };
-    const [retrievedFile] = await client.files.update([
-      {
-        instanceId: fileCdmInstanceId,
-        update: { metadata: { set: testMetadata } },
-      },
-    ]);
-    expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
-    expect(retrievedFile.metadata).toEqual(testMetadata);
+    // Syncing from instance to files API is eventually consistant
+    await runTestWithRetryWhenFailing(async () => {
+      const testMetadata = { testKey: 'testVal' };
+      const [retrievedFile] = await client.files.update([
+        {
+          instanceId: fileCdmInstanceId,
+          update: { metadata: { set: testMetadata } },
+        },
+      ]);
+      expect(retrievedFile.instanceId).toEqual(fileCdmInstanceId);
+      expect(retrievedFile.metadata).toEqual(testMetadata);
+    });
   });
 
   test('download by instance id', async () => {
-    try {
-      await client.files.getDownloadUrls([{ instanceId: fileCdmInstanceId }]);
-      throw new Error('This test should not succeed');
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        // We are happy as long as the API can identify the file and tell us it is not uploaded
-        expect(err.message).toMatch(/Files not uploaded/);
-      } else {
-        throw new Error('Unexpected error');
-      }
-    }
+    // Syncing from instance to files API is eventually consistant
+    await runTestWithRetryWhenFailing(async () => {
+      expect(
+        client.files.getDownloadUrls([{ instanceId: fileCdmInstanceId }])
+      ).rejects.toThrow(/Files not uploaded/);
+    });
   });
 
   test.skip('retrieve with non-existent id', async () => {
