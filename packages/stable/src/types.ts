@@ -1048,29 +1048,43 @@ interface ExternalSequenceColumnBase {
   metadata?: Metadata;
 }
 
+export type FileChangeCommonProperties = {
+  externalId?: SinglePatchString;
+  metadata?: MetadataPatch;
+  assetIds?: ArrayPatchLong;
+  dataSetId?: NullableSinglePatchLong;
+  labels?: LabelsPatch;
+  geoLocation?: FileGeoLocationPatch;
+};
+
+export type FileChangeAssetCentricProperties = FileChangeCommonProperties & {
+  source?: SinglePatchString;
+  mimeType?: SinglePatchString;
+  securityCategories?: ArrayPatchLong;
+  sourceCreatedTime?: SinglePatchDate;
+  sourceModifiedTime?: SinglePatchDate;
+};
+
 export interface FileChange {
-  update: {
-    externalId?: SinglePatchString;
-    source?: SinglePatchString;
-    mimeType?: SinglePatchString;
-    metadata?: MetadataPatch;
-    assetIds?: ArrayPatchLong;
-    securityCategories?: ArrayPatchLong;
-    sourceCreatedTime?: SinglePatchDate;
-    sourceModifiedTime?: SinglePatchDate;
-    dataSetId?: NullableSinglePatchLong;
-    labels?: LabelsPatch;
-    geoLocation?: FileGeoLocationPatch;
-  };
+  update: FileChangeAssetCentricProperties;
+}
+
+export interface FileChangeByInstanceId {
+  update: FileChangeCommonProperties;
 }
 
 export type FileChangeUpdate =
   | FileChangeUpdateById
-  | FileChangeUpdateByExternalId;
+  | FileChangeUpdateByExternalId
+  | FileChangeUpdateByInstanceId;
 
 export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
 
 export interface FileChangeUpdateById extends InternalId, FileChange {}
+
+export interface FileChangeUpdateByInstanceId
+  extends InstanceId,
+    FileChangeByInstanceId {}
 
 export type FileContent = ArrayBuffer | Buffer | unknown;
 
@@ -1133,6 +1147,7 @@ export interface FileRequestFilter extends FilterQuery, FileFilter {}
 
 export interface FileInfo extends ExternalFileInfo, CreatedAndLastUpdatedTime {
   id: CogniteInternalId;
+  instanceId?: CogniteInstanceId;
   /**
    * Whether or not the actual file is uploaded
    */
@@ -2305,18 +2320,28 @@ export interface SyntheticQueryResponse {
   datapoints: SyntheticDatapoint[];
 }
 
-export interface TimeSeriesPatch {
-  update: {
-    externalId?: NullableSinglePatchString;
+export type TimeseriesUpdateCommonProperies = {
+  externalId?: NullableSinglePatchString;
+  metadata?: MetadataPatch;
+  assetId?: NullableSinglePatchLong;
+  dataSetId?: NullableSinglePatchLong;
+};
+
+export type TimeseriesUpdateAssetCentricProperies =
+  TimeseriesUpdateCommonProperies & {
     name?: NullableSinglePatchString;
-    metadata?: MetadataPatch;
     unit?: NullableSinglePatchString;
-    assetId?: NullableSinglePatchLong;
-    dataSetId?: NullableSinglePatchLong;
     description?: NullableSinglePatchString;
     securityCategories?: ArrayPatchLong;
     unitExternalId?: NullableSinglePatchString;
   };
+
+export interface TimeSeriesPatch {
+  update: TimeseriesUpdateAssetCentricProperies;
+}
+
+export interface TimeSeriesPatchByInstanceId {
+  update: TimeseriesUpdateCommonProperies;
 }
 
 export interface TimeSeriesPatchByInstanceId {
