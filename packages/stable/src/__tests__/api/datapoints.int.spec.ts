@@ -2,12 +2,42 @@
 
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import type CogniteClient from '../../cogniteClient';
-import type { DatapointAggregate, Timeseries } from '../../types';
-import { setupLoggedInClient } from '../testUtils';
+import type { DatapointAggregate, NodeWrite, Timeseries } from '../../types';
+import { randomInt, setupLoggedInClient } from '../testUtils';
 
 describe('Datapoints integration test', () => {
   let client: CogniteClient;
   let timeserie: Timeseries;
+
+  const testSpace = {
+    space: 'test_data_space',
+    name: 'test_data_space',
+    description: 'Instance space used for integration tests.',
+  };
+
+  const timeseriesCdmInstance: NodeWrite = {
+    externalId: `external_${randomInt()}`,
+    space: testSpace.space,
+    instanceType: 'node',
+    sources: [
+      {
+        source: {
+          externalId: 'CogniteTimeSeries',
+          space: 'cdf_cdm',
+          type: 'view',
+          version: 'v1',
+        },
+        properties: {
+          type: 'numeric',
+        },
+      },
+    ],
+  };
+
+  const timeseriesCdmInstanceId = {
+    externalId: timeseriesCdmInstance.externalId,
+    space: timeseriesCdmInstance.space,
+  };
 
   const timestampFrom = Date.now() - 60 * 60 * 48 * 1000;
   const timestampTill = Date.now() - 60 * 60 * 24 * 1000;
@@ -25,9 +55,20 @@ describe('Datapoints integration test', () => {
   beforeAll(async () => {
     client = setupLoggedInClient();
     [timeserie] = await client.timeseries.create([{ name: 'tmp' }]);
+    await client.spaces.upsert([testSpace]);
+    await client.instances.upsert({
+      items: [timeseriesCdmInstance],
+    });
   });
   afterAll(async () => {
     await client.timeseries.delete([{ id: timeserie.id }]);
+    await client.instances.delete([
+      {
+        instanceType: 'node',
+        externalId: timeseriesCdmInstance.externalId,
+        space: timeseriesCdmInstance.space,
+      },
+    ]);
   });
 
   test('insert', async () => {
@@ -37,6 +78,16 @@ describe('Datapoints integration test', () => {
         datapoints,
       },
     ]);
+  });
+
+  test('insert by instance id', async () => {
+    const res = await client.datapoints.insert([
+      {
+        instanceId: timeseriesCdmInstanceId,
+        datapoints,
+      },
+    ]);
+    expect(res).toEqual({});
   });
 
   test('retrieve', async () => {
@@ -50,11 +101,33 @@ describe('Datapoints integration test', () => {
     expect(response[0].isString).toBe(false);
   });
 
+  test('retrieve by instance id', async () => {
+    const response = await client.datapoints.retrieve({
+      items: [{ instanceId: timeseriesCdmInstanceId }],
+      start: '2d-ago',
+      end: new Date(),
+    });
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+    expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
+    expect(response[0].isString).toBe(false);
+  });
+
   test('retrieve latest', async () => {
     const response = await client.datapoints.retrieveLatest([
       {
         before: '1d-ago',
         id: timeserie.id,
+      },
+    ]);
+    expect(response[0].datapoints.length).toBeGreaterThan(0);
+    expect(response[0].datapoints[0].timestamp).toBeInstanceOf(Date);
+  });
+
+  test('retrieve latest by instance id', async () => {
+    const response = await client.datapoints.retrieveLatest([
+      {
+        before: '1d-ago',
+        instanceId: timeseriesCdmInstanceId,
       },
     ]);
     expect(response[0].datapoints.length).toBeGreaterThan(0);
@@ -93,6 +166,16 @@ describe('Datapoints integration test', () => {
     ]);
     expect(result.length).toBe(1);
     expect(result[0].datapoints[0].timestamp).toBeInstanceOf(Date);
+  });
+
+  test('delete by instance id', async () => {
+    const res = await client.datapoints.delete([
+      {
+        instanceId: timeseriesCdmInstanceId,
+        inclusiveBegin: 0,
+      },
+    ]);
+    expect(res).toEqual({});
   });
 });
 
