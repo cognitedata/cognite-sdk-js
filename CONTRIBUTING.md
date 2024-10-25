@@ -17,10 +17,10 @@ releasing changes.
 
 We use semantic versioning, with versions `MAJOR.MINOR.PATCH`.
 
-- For fixes, start the commit with `fix: msg` or `fix(topic): msg`. This will bump PATCH.
-- For features, start the commit with `feat: msg` or `feat(topic): msg`. This will bump MINOR.
+- For fixes, start the commit with `fix: msg` or `fix(topic): msg [release] [bump-version]`. This will bump PATCH.
+- For features, start the commit with `feat: msg` or `feat(topic): msg [release] [bump-version]`. This will bump MINOR.
 - For changes that break backwards compatibility, add `BREAKING CHANGE: description` to the footer.
-  This will bump MAJOR version.
+  This will bump MAJOR version. And to release them add `[release] [bump-version]` keywords combined.
 
 Note that using `<type>!: msg` **is not supported**, it will actually break the semantics of some
 types. `feat!: msg` will result in a _patch_ release, not major. `<type>!: msg` [is a
@@ -33,7 +33,7 @@ upgrade. So if you do a breaking change to a non-top level package and also want
 version bump of the upstream packages you have to ensure that manually. This can be done in two
 ways, run `lerna version major` or do a inconsequential change to the top level packages. If you do
 _any_ change to the top packages (including the smallest white space cleanup), it will all be
-covered by the `BREAKING CHANGE: msg` commit, leading them to all get a major version bump.
+covered by the `BREAKING CHANGE: msg` commit, leading them to all get a major version bump. This behavor also make deterministic by using `[bump-version]` keyword in the CI process.
 
 - For extra details in the changelog, you can specify a scope like so: `feat(assets): `.
 - For other changes there are types without version bumping semantics:
@@ -80,18 +80,53 @@ CI/CD will run tests, and if successful, do deploys.
 Documentation is built and deployed, and code snippets
 are exported to the service contract repo as a pull request.
 
-Updating and uploading npm packages only happens if the HEAD commit of the main branch
-contains `[release]` in its description or the PR title starts with `feat` or `fix`.
+Updating and uploading npm packages only happens if the HEAD commit of the main branch or a release-* branch
+contain `[release]` and `[bump-version]` in its description and the PR title starts with `feat` or `fix`.
+
+#### Examples
+
+1. If you want to release a release candidate version to npm with version bump when you are commiting to a release-* branch.
+```bash
+  feat(dataParser): add xml support [release][bump-version]  
+  fix(graphUtils): circular path detection [release][bump-version] 
+```
+2. If you want to release a release candidate version to npm without version bump when you are commiting to a release-* branch.
+```bash
+  feat(dataParser): add xml support [release]
+  fix(graphUtils): circular path detection [release]
+```
+
+3. If you want to release a npm verison using master branch
+```bash
+  feat(dataParser): add xml support [release]
+  fix(graphUtils): circular path detection [release]
+```
+
+4. If you want to release a version bumped package from master branch
+```bash
+  feat(dataParser): add xml support [release][bump-version]  
+  fix(graphUtils): circular path detection [release][bump-version]
+```
+
+5. If you want to release a package to npm from master by merging the release branch to it while keeping the major version number in release condidate as it is.
+- Create a PR from release-* branch to master
+- Adjust the package version in package.json as follows, if 10.2.1-rc.1 is the version in release branch please set it to 10.0.0.
+- Also use chore as commit message to avoid version bump by lerna.
+```bash
+    chore(version_release): constant version as release branch [release]
+```
+
 When CI/CD sees this, it will use lerna to update
 package versions of changed packages based on commit messages, and add the
 changes to the changelogs. The changes are comitted to the main branch
 with the new versions as git tags, and the new package versions are uploaded to npm.
 
-We restrict new npm releases to `[release]`-tagged commits because lerna is
-quite aggressive in its versioning. Changes to any file not ignored by lerna will
-cause a PATCH bump. Markdown files and tests are ignored, but changing anything else,
-like a comment in a source file, will trigger a new version,
-irrespective of conventional commits.
+If wants to keep the version of npm package constant in the main or release-* branch then release the changes
+consider use of `[release]` in HEAD commits of the branches with PR titles start with `feat` or `fix`.
+
+We restrict new npm releases to `[release]` tagged commits because lerna is
+quite aggressive in its versioning. We also add `[bump-version]` to enable deterministic
+versioning strategy. 
 
 This does _not_ mean you should store unfinished work on the main branch.
 Another package may be ready for release, and once a `[release]`
@@ -111,7 +146,7 @@ If you want to push the empty commit to master via a pull request,
 use a squash merge (not rebase+ff). Otherwise GitHub will ignore the empty PR.
 
 Also, keep in mind that the `[release]` commit has to be the HEAD of
-main, and Github Action only runs on the HEAD. If HEAD has changed by the time
+main or release-* branch, and Github Action only runs on the HEAD. If HEAD has changed by the time
 the versioning happens, Github Action will fail.
 
 ## Patching older major versions
