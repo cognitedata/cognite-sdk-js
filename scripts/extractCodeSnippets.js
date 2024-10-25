@@ -42,6 +42,7 @@ function findAllCodeSnippetsInJsDoc(jsDoc) {
         console.error(
           `Error in operation ${operationId} with code snippet: ${rawCode}, value: ${value}`
         );
+        throw e;
       }
     }
   });
