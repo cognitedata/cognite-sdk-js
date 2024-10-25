@@ -2,11 +2,13 @@
 
 import type {
   CogniteExternalId,
+  CogniteInstanceId,
   CogniteInternalId,
   Cursor,
   ExternalId,
   FilterQuery,
   IdEither,
+  InstanceId,
   InternalId,
   Limit,
 } from '@cognite/sdk-core';
@@ -662,7 +664,8 @@ export interface DatapointsDeleteRange {
 
 export type DatapointsDeleteRequest =
   | (InternalId & DatapointsDeleteRange)
-  | (ExternalId & DatapointsDeleteRange);
+  | (ExternalId & DatapointsDeleteRange)
+  | (InstanceId & DatapointsDeleteRange);
 
 export interface NextCursor {
   nextCursor?: string;
@@ -716,6 +719,12 @@ export interface DatapointsMetadata extends InternalId {
    * External id of the timeseries the datapoints belong to.
    */
   externalId?: CogniteExternalId;
+
+  /**
+   * Instance id of the timeseries the datapoints belong to in Cognite Data Modeling.
+   */
+  instanceId?: CogniteInstanceId;
+
   /**
    * Whether or not the datapoints are string values.
    */
@@ -765,15 +774,23 @@ Note: Time zones with minute offsets (e.g. UTC+05:30 or Asia/Kolkata) may take l
 
 export type ExternalDatapointsQuery =
   | ExternalDatapointId
-  | ExternalDatapointExternalId;
+  | ExternalDatapointExternalId
+  | ExternalDatapointInstanceId;
 
 export interface ExternalDatapointExternalId
   extends ExternalDatapoints,
     ExternalId {}
 
+export interface ExternalDatapointInstanceId
+  extends ExternalDatapoints,
+    InstanceId {}
+
 export interface ExternalDatapointId extends ExternalDatapoints, InternalId {}
 
-export type DatapointsQuery = DatapointsQueryId | DatapointsQueryExternalId;
+export type DatapointsQuery =
+  | DatapointsQueryId
+  | DatapointsQueryExternalId
+  | DatapointsQueryInstanceId;
 
 export interface DatapointsQueryExternalId
   extends DatapointsQueryProperties,
@@ -782,6 +799,10 @@ export interface DatapointsQueryExternalId
 export interface DatapointsQueryId
   extends DatapointsQueryProperties,
     InternalId {}
+
+export interface DatapointsQueryInstanceId
+  extends DatapointsQueryProperties,
+    InstanceId {}
 
 export interface DatapointsQueryProperties extends Limit, Cursor {
   /**
@@ -1027,29 +1048,43 @@ interface ExternalSequenceColumnBase {
   metadata?: Metadata;
 }
 
+export type FileChangeCommonProperties = {
+  externalId?: SinglePatchString;
+  metadata?: MetadataPatch;
+  assetIds?: ArrayPatchLong;
+  dataSetId?: NullableSinglePatchLong;
+  labels?: LabelsPatch;
+  geoLocation?: FileGeoLocationPatch;
+};
+
+export type FileChangeAssetCentricProperties = FileChangeCommonProperties & {
+  source?: SinglePatchString;
+  mimeType?: SinglePatchString;
+  securityCategories?: ArrayPatchLong;
+  sourceCreatedTime?: SinglePatchDate;
+  sourceModifiedTime?: SinglePatchDate;
+};
+
 export interface FileChange {
-  update: {
-    externalId?: SinglePatchString;
-    source?: SinglePatchString;
-    mimeType?: SinglePatchString;
-    metadata?: MetadataPatch;
-    assetIds?: ArrayPatchLong;
-    securityCategories?: ArrayPatchLong;
-    sourceCreatedTime?: SinglePatchDate;
-    sourceModifiedTime?: SinglePatchDate;
-    dataSetId?: NullableSinglePatchLong;
-    labels?: LabelsPatch;
-    geoLocation?: FileGeoLocationPatch;
-  };
+  update: FileChangeAssetCentricProperties;
+}
+
+export interface FileChangeByInstanceId {
+  update: FileChangeCommonProperties;
 }
 
 export type FileChangeUpdate =
   | FileChangeUpdateById
-  | FileChangeUpdateByExternalId;
+  | FileChangeUpdateByExternalId
+  | FileChangeUpdateByInstanceId;
 
 export interface FileChangeUpdateByExternalId extends ExternalId, FileChange {}
 
 export interface FileChangeUpdateById extends InternalId, FileChange {}
+
+export interface FileChangeUpdateByInstanceId
+  extends InstanceId,
+    FileChangeByInstanceId {}
 
 export type FileContent = ArrayBuffer | Buffer | unknown;
 
@@ -1112,6 +1147,7 @@ export interface FileRequestFilter extends FilterQuery, FileFilter {}
 
 export interface FileInfo extends ExternalFileInfo, CreatedAndLastUpdatedTime {
   id: CogniteInternalId;
+  instanceId?: CogniteInstanceId;
   /**
    * Whether or not the actual file is uploaded
    */
@@ -1155,6 +1191,10 @@ export interface Timeseries extends InternalId, CreatedAndLastUpdatedTime {
    * Externally supplied id of the time series
    */
   externalId?: CogniteExternalId;
+  /**
+   * The ID of an instance in Cognite Data Models.
+   */
+  instanceId?: CogniteInstanceId;
   name?: TimeseriesName;
   isString: TimeseriesIsString;
   /**
@@ -1404,7 +1444,8 @@ export type LIST = 'LIST';
 
 export type LatestDataBeforeRequest =
   | (InternalId & LatestDataPropertyFilter)
-  | (ExternalId & LatestDataPropertyFilter);
+  | (ExternalId & LatestDataPropertyFilter)
+  | (InstanceId & LatestDataPropertyFilter);
 
 export interface LatestDataPropertyFilter {
   /**
@@ -2279,17 +2320,36 @@ export interface SyntheticQueryResponse {
   datapoints: SyntheticDatapoint[];
 }
 
-export interface TimeSeriesPatch {
-  update: {
-    externalId?: NullableSinglePatchString;
+export type TimeseriesUpdateCommonProperies = {
+  externalId?: NullableSinglePatchString;
+  metadata?: MetadataPatch;
+  assetId?: NullableSinglePatchLong;
+  dataSetId?: NullableSinglePatchLong;
+};
+
+export type TimeseriesUpdateAssetCentricProperies =
+  TimeseriesUpdateCommonProperies & {
     name?: NullableSinglePatchString;
-    metadata?: MetadataPatch;
     unit?: NullableSinglePatchString;
-    assetId?: NullableSinglePatchLong;
-    dataSetId?: NullableSinglePatchLong;
     description?: NullableSinglePatchString;
     securityCategories?: ArrayPatchLong;
     unitExternalId?: NullableSinglePatchString;
+  };
+
+export interface TimeSeriesPatch {
+  update: TimeseriesUpdateAssetCentricProperies;
+}
+
+export interface TimeSeriesPatchByInstanceId {
+  update: TimeseriesUpdateCommonProperies;
+}
+
+export interface TimeSeriesPatchByInstanceId {
+  update: {
+    externalId?: NullableSinglePatchString;
+    metadata?: MetadataPatch;
+    assetId?: NullableSinglePatchLong;
+    dataSetId?: NullableSinglePatchLong;
   };
 }
 
@@ -2315,13 +2375,18 @@ export interface TimeseriesSearchFilter extends Limit {
 
 export type TimeSeriesUpdate =
   | TimeSeriesUpdateById
-  | TimeSeriesUpdateByExternalId;
+  | TimeSeriesUpdateByExternalId
+  | TimeSeriesUpdateByInstanceId;
 
 export interface TimeSeriesUpdateByExternalId
   extends TimeSeriesPatch,
     ExternalId {}
 
 export interface TimeSeriesUpdateById extends TimeSeriesPatch, InternalId {}
+
+export interface TimeSeriesUpdateByInstanceId
+  extends TimeSeriesPatchByInstanceId,
+    InstanceId {}
 
 export interface TimeseriesFilter extends CreatedAndLastUpdatedTimeFilter {
   name?: TimeseriesName;

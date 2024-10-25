@@ -14,6 +14,7 @@ export {
   DatapointsMultiQueryBase,
   DatapointsQuery,
   DatapointsQueryExternalId,
+  DatapointsQueryInstanceId,
   DatapointsQueryId,
   DatapointsQueryProperties,
   DoubleDatapoint,

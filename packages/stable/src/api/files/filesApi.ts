@@ -4,6 +4,7 @@ import {
   BaseResourceAPI,
   type CursorAndAsyncIterator,
   type HttpHeaders,
+  type IdEitherWithInstance,
   sleepPromise,
 } from '@cognite/sdk-core';
 import type {
@@ -103,7 +104,7 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * ```
    */
   public retrieve = (
-    ids: IdEither[],
+    ids: IdEitherWithInstance[],
     params: FileRetrieveParams = {}
   ): Promise<FileInfo[]> => {
     return super.retrieveEndpoint(ids, params);
@@ -162,8 +163,8 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
    * ```
    */
   public getDownloadUrls = (
-    ids: IdEither[]
-  ): Promise<(FileLink & IdEither)[]> => {
+    ids: IdEitherWithInstance[]
+  ): Promise<(FileLink & IdEitherWithInstance)[]> => {
     return this.getDownloadUrlsEndpoint(ids);
   };
 
@@ -225,12 +226,11 @@ export class FilesAPI extends BaseResourceAPI<FileInfo> {
     throw Error(`File never marked as 'uploaded'`);
   }
 
-  private async getDownloadUrlsEndpoint(items: IdEither[]) {
+  private async getDownloadUrlsEndpoint(items: IdEitherWithInstance[]) {
     const path = this.url('downloadlink');
-    const response = await this.post<ItemsWrapper<(FileLink & IdEither)[]>>(
-      path,
-      { data: { items } }
-    );
+    const response = await this.post<
+      ItemsWrapper<(FileLink & IdEitherWithInstance)[]>
+    >(path, { data: { items } });
     return this.addToMapAndReturn(response.data.items, response);
   }
 }
