@@ -4,7 +4,7 @@ import { BaseResourceAPI, type IdEither } from '@cognite/sdk-core';
 import type {
   SimulatorRoutineRevision,
   SimulatorRoutineRevisionCreate,
-  SimulatorRoutineRevisionslFilterQuery,
+  SimulatorRoutineRevisionsFilterQuery,
 } from '../../types';
 
 export class RoutineRevisionsAPI extends BaseResourceAPI<SimulatorRoutineRevision> {
@@ -19,8 +19,8 @@ export class RoutineRevisionsAPI extends BaseResourceAPI<SimulatorRoutineRevisio
     return this.createEndpoint(items);
   };
 
-  public list = async (filter?: SimulatorRoutineRevisionslFilterQuery) => {
-    return this.listEndpoint<SimulatorRoutineRevisionslFilterQuery>(
+  public list = async (filter?: SimulatorRoutineRevisionsFilterQuery) => {
+    return this.listEndpoint<SimulatorRoutineRevisionsFilterQuery>(
       this.callListEndpointWithPost,
       filter
     );

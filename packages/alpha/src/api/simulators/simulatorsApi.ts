@@ -24,7 +24,7 @@ import type {
   SimulatorRoutineCreate,
   SimulatorRoutineFilterQuery,
   SimulatorRoutineRevisionCreate,
-  SimulatorRoutineRevisionslFilterQuery,
+  SimulatorRoutineRevisionsFilterQuery,
 } from '../../types';
 import { IntegrationsAPI } from './integrationsApi';
 import { LogsAPI } from './logsApi';
@@ -207,7 +207,7 @@ export class SimulatorsAPI extends BaseResourceAPI<Simulator> {
   };
 
   public listRoutineRevisions = async (
-    filter?: SimulatorRoutineRevisionslFilterQuery
+    filter?: SimulatorRoutineRevisionsFilterQuery
   ) => {
     return this.routineRevisionsApi.list(filter);
   };

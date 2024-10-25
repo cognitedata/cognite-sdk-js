@@ -20,6 +20,7 @@ import { DocumentsAPI } from './api/documents/documentsApi';
 import { EntityMatchingApi } from './api/entityMatching/entityMatchingApi';
 import { EventsAPI } from './api/events/eventsApi';
 import { FilesAPI } from './api/files/filesApi';
+import { FunctionsAPI } from './api/functions/functionsApi';
 import { GeospatialAPI } from './api/geospatial/geospatialAPI';
 import { GroupsAPI } from './api/groups/groupsApi';
 import { InstancesAPI } from './api/instances/instancesApi';
@@ -30,6 +31,7 @@ import { RawAPI } from './api/raw/rawApi';
 import { RelationshipsApi } from './api/relationships/relationshipsApi';
 import { SecurityCategoriesAPI } from './api/securityCategories/securityCategoriesApi';
 import { SequencesAPI } from './api/sequences/sequencesApi';
+import { SessionsApi } from './api/sessions/sessionsApi';
 import { SpacesAPI } from './api/spaces/spacesApi';
 import {
   TemplateGraphQlApi,
@@ -175,6 +177,15 @@ export default class CogniteClient extends BaseCogniteClient {
   public get dataModels() {
     return accessApi(this.dataModelsApi);
   }
+
+  public get functions() {
+    return accessApi(this.functionsApi);
+  }
+
+  public get sessions() {
+    return accessApi(this.sessionsApi);
+  }
+
   private assetsApi?: AssetsAPI;
   private timeSeriesApi?: TimeSeriesAPI;
   protected dataPointsApi?: DataPointsAPI;
@@ -205,6 +216,8 @@ export default class CogniteClient extends BaseCogniteClient {
   private viewsApi?: ViewsAPI;
   private spacesApi?: SpacesAPI;
   private dataModelsApi?: DataModelsAPI;
+  private functionsApi?: FunctionsAPI;
+  private sessionsApi?: SessionsApi;
 
   protected get version() {
     return version;
@@ -260,6 +273,8 @@ export default class CogniteClient extends BaseCogniteClient {
     this.viewsApi = this.apiFactory(ViewsAPI, 'models/views');
     this.spacesApi = this.apiFactory(SpacesAPI, 'models/spaces');
     this.dataModelsApi = this.apiFactory(DataModelsAPI, 'models/datamodels');
+    this.functionsApi = this.apiFactory(FunctionsAPI, 'functions');
+    this.sessionsApi = this.apiFactory(SessionsApi, 'sessions');
   }
 
   static urlEncodeExternalId(externalId: string): string {

@@ -21,10 +21,10 @@ export type AnnotationData =
   | AnnotationsTextRegion
   | AnnotationsUnhandledSymbolObject
   | AnnotationsUnhandledTextObject
-  | AnnotationsCogniteAnnotationTypesDiagramsAssetLink
-  | AnnotationsCogniteAnnotationTypesDiagramsInstanceLink
-  | AnnotationsCogniteAnnotationTypesImagesAssetLink
-  | AnnotationsCogniteAnnotationTypesImagesInstanceLink;
+  | AnnotationsCogmonoAnnotationTypesDiagramsAssetLink
+  | AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink
+  | AnnotationsCogmonoAnnotationTypesImagesAssetLink
+  | AnnotationsCogmonoAnnotationTypesImagesInstanceLink;
 /**
  * A reference to an asset. Either the internal ID or the external ID must be provided (exactly one).
  */
@@ -92,7 +92,7 @@ export interface AnnotationsBoundingVolume {
   /** The label describing what type of object it is */
   label?: string;
   /** The region of the annotation defined by a list of geometry primitives (cylinder and box). */
-  region: AnnotationsCogniteAnnotationTypesPrimitivesGeometry3DGeometry[];
+  region: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry3DGeometry[];
 }
 /**
 * A box in 3D space, defined by a 4x4 row-major homogeneous transformation matrix that rotates,
@@ -129,7 +129,7 @@ export interface AnnotationsClassification {
 /**
  * Models a link to a CDF Asset referenced in an engineering diagram
  */
-export interface AnnotationsCogniteAnnotationTypesDiagramsAssetLink {
+export interface AnnotationsCogmonoAnnotationTypesDiagramsAssetLink {
   /** The asset this annotation is pointing to */
   assetRef: AnnotationsAssetRef;
   /** The description of a primitive */
@@ -152,7 +152,7 @@ export interface AnnotationsCogniteAnnotationTypesDiagramsAssetLink {
 /**
  * Models a link to an FDM instance referenced in an engineering diagram
  */
-export interface AnnotationsCogniteAnnotationTypesDiagramsInstanceLink {
+export interface AnnotationsCogmonoAnnotationTypesDiagramsInstanceLink {
   /** The description of a primitive */
   description?: string;
   /** The FDM instance this annotation is pointing to */
@@ -175,7 +175,7 @@ export interface AnnotationsCogniteAnnotationTypesDiagramsInstanceLink {
 /**
  * Models a link to a CDF Asset referenced in an image
  */
-export interface AnnotationsCogniteAnnotationTypesImagesAssetLink {
+export interface AnnotationsCogmonoAnnotationTypesImagesAssetLink {
   /** The asset this annotation is pointing to */
   assetRef: AnnotationsAssetRef;
   /**
@@ -185,7 +185,7 @@ export interface AnnotationsCogniteAnnotationTypesImagesAssetLink {
    */
   confidence?: number;
   /** The region of the object representing the asset */
-  objectRegion?: AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry;
+  objectRegion?: AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry;
   /** The extracted text */
   text: string;
   /** The location of the text mentioning the asset */
@@ -194,7 +194,7 @@ export interface AnnotationsCogniteAnnotationTypesImagesAssetLink {
 /**
  * Models a link to an FDM instance referenced in an image
  */
-export interface AnnotationsCogniteAnnotationTypesImagesInstanceLink {
+export interface AnnotationsCogmonoAnnotationTypesImagesInstanceLink {
   /**
    * The confidence score for the primitive. It should be between 0 and 1.
    * @min 0
@@ -213,7 +213,7 @@ export interface AnnotationsCogniteAnnotationTypesImagesInstanceLink {
 `polyline` which, respectively, represents a BoundingBox, Polygon and
 PolyLine.
 */
-export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry {
+export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry2DGeometry {
   boundingBox?: AnnotationsBoundingBox;
   polygon?: AnnotationsPolygon;
   polyline?: AnnotationsPolyLine;
@@ -221,7 +221,7 @@ export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry2DGeometry {
 /**
  * A 3D geometry model represented by exactly *one of* `cylinder` and `box`.
  */
-export interface AnnotationsCogniteAnnotationTypesPrimitivesGeometry3DGeometry {
+export interface AnnotationsCogmonoAnnotationTypesPrimitivesGeometry3DGeometry {
   box?: AnnotationsBox;
   cylinder?: AnnotationsCylinder;
 }
