@@ -4,6 +4,7 @@ import {
   BaseResourceAPI,
   type CDFHttpClient,
   type CursorAndAsyncIterator,
+  type IdEitherWithInstance,
   type MetadataMap,
 } from '@cognite/sdk-core';
 import type {
@@ -92,7 +93,7 @@ export class TimeSeriesAPI extends BaseResourceAPI<Timeseries> {
    * ```
    */
   public retrieve = (
-    ids: IdEither[],
+    ids: IdEitherWithInstance[],
     params: TimeseriesRetrieveParams = {}
   ) => {
     return super.retrieveEndpoint(ids, params);
