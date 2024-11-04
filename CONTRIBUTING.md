@@ -102,7 +102,7 @@ contain `[release]` and `[bump-version]` in its description and the PR title sta
   fix(graphUtils): circular path detection [release]
 ```
 
-4. If you want to release a version bumped package from master branch
+4. If you want to release a patch or minor version update to the stable release from master branch
 ```bash
   feat(dataParser): add xml support [release][bump-version]  
   fix(graphUtils): circular path detection [release][bump-version]
